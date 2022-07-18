@@ -2,178 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBAE578A47
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2329A578A4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbiGRTEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
+        id S234750AbiGRTHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiGRTEG (ORCPT
+        with ESMTP id S229700AbiGRTHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:04:06 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07036BC37
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:04:04 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id z23so23033845eju.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:04:03 -0700 (PDT)
+        Mon, 18 Jul 2022 15:07:13 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5827BE08
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:07:11 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id bp15so23070029ejb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:07:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=JVQkrHrxRPCr+Ny6+I5UlfzO4AFjF6Jn/5OvpVMOOxQ=;
-        b=QKXxX5CURyVIGNN6i4XmcpMLtnldrmvr5YjWQGZHgGPon+K+ndKqHH83of1l5r1ZT6
-         dmyeXAa2EmL+UCMg1f78d2DdXlMV7XDtVC2UM8kMa07bP1CxJJbnB7wmppZWvG0hQ3Cg
-         UG4P6ONn51+TpC2C1wOCDbc+yCwrhNVuEW0a1Mkx0fmWkwj8WNlZQfk72ZOuhMbhABjF
-         otPkaoZ1qk87xQMvhnSk3Zr5R1JjIV43IxWw0JYE37yDwy+XLFfmm/RQOHuLhlE8Ibce
-         U15ZOdH+w2XKnCmm5l6NxQm11Vl6bUClyekWHILQBAMX+XoPnzAL4v7wkeuimJpUhiuF
-         NRFQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dgjsZTbvQJX6D56jQTPEYTM5n0l6iiehUHolgd4Ce9Q=;
+        b=hssRgYLn24Lw3qXe2EwOeLU2rpbVpcrr0gq1fZzk2oT4ZWnhDO4XXWRwks7LbqwMZd
+         i+6c82W3/dvuvhnSYGYsFgmVoj+Cjp0nbYF4M92SjvCJ4Ce5vOdmpXyYQ5OpL8MDtgiw
+         CWUZZi0MogKUpG4gNIMMisxiea+a5zCK8RaBg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=JVQkrHrxRPCr+Ny6+I5UlfzO4AFjF6Jn/5OvpVMOOxQ=;
-        b=th4+NrbRutX7KpLzPAh7FhBsQDF5jvkM+T0bLlGzK7J/ih42Hf9zroqN3cVhjcaDUz
-         maBAGnJqYscc7kUFJBfqpOqxwaBBG1mQuiXO5qw/m01e7FFXjEaGQpzmi79p6xRNruh5
-         DC7U5XigRI3rufnVKkqEX11Sg4u/JBDp4DAxB2uQ7am+LY5BYd+FEyEW3HUixyDmW2YO
-         I/p4+o6HQfi5EWsJ0hn9Bry7XFyV4luYaL/YU3Sc+pcdRBz8zZnlMGG9R3mW8qX4yPmv
-         bO5Py5ygyNO6rsHu5nDEUYvfKDOV7UJZGLcAa62g4vqOps4Dl6nG58lPq9XKrBCwnCTj
-         yZ8A==
-X-Gm-Message-State: AJIora/BpD6HcAtJHCZmdbGXa7LSdnKERl7G4pVZJgQyGHHJ/cMbmfai
-        ry2eMXYWFrM21SukesqwGyd+Aw==
-X-Google-Smtp-Source: AGRyM1uhpvTfV3iUPA04+PrxIHqKrVNfEC5+/WcT3cTJ6gdWOA6GHQ5RbM9juCSW9jT5HRVCF+lWoA==
-X-Received: by 2002:a17:907:9809:b0:72f:817:d433 with SMTP id ji9-20020a170907980900b0072f0817d433mr14202383ejc.483.1658171042458;
-        Mon, 18 Jul 2022 12:04:02 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id n8-20020a170906378800b00705976bcd01sm5765658ejc.206.2022.07.18.12.04.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Jul 2022 12:04:01 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
- missing in lower/upper fs
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-In-Reply-To: <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
-Date:   Mon, 18 Jul 2022 21:04:00 +0200
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dgjsZTbvQJX6D56jQTPEYTM5n0l6iiehUHolgd4Ce9Q=;
+        b=oU/McLuKPosVp9GpIiWSoTMDdniRAFgyXrDOM0uSzZ8rXy8kdIsqRSRFVH04asMCyQ
+         PVARCdMvm87HqXSopfEiICYWfHHgxGUWd9JGrp9Nkx3G3FK77Yz7BBBfy1Sos8KDZXpB
+         53iTSHZmsnkxwfkB4cO6HPGFVMrN/BcOtjq+7Owv1HvfCJSp5xM2gNko59udjLaBlvhB
+         6F2c7gX++k3kCCx3jhKOYftonJA4OPSu9uDZ85oNlY/a9KHtT6k7AeG43tWqeNMgzZrc
+         6Z1GNj4Fxe63KiAlttJu5JCaMwTba9R/z2Vyjn6eZUByD6qR7kOXzw0J6rYeWmJnIKPQ
+         1qnQ==
+X-Gm-Message-State: AJIora+pvC9aWkqOOoOwpIg5DjbS3RTBeX2125yAKBElILIBL8d1teP1
+        46AlphW4w/gyQVcTM51SlKZaWhHbILHYhIK66rA=
+X-Google-Smtp-Source: AGRyM1shW3unAnGjiGC7tsXHFsHxKNZKW2fQGOei9UidJWUAiDsMJGl6A8Ci8yJvHRlZojuha0ihyw==
+X-Received: by 2002:a17:906:7951:b0:72f:4733:5885 with SMTP id l17-20020a170906795100b0072f47335885mr2490662ejo.172.1658171230250;
+        Mon, 18 Jul 2022 12:07:10 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id s12-20020a1709064d8c00b006feec47dae9sm5816965eju.157.2022.07.18.12.07.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 12:07:09 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id ay11-20020a05600c1e0b00b003a3013da120so8519132wmb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:07:08 -0700 (PDT)
+X-Received: by 2002:a05:600c:2211:b0:3a3:2149:88e1 with SMTP id
+ z17-20020a05600c221100b003a3214988e1mr1387069wml.8.1658171228317; Mon, 18 Jul
+ 2022 12:07:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <Ys/aDKZNhhsENH9S@debian> <CADVatmO9XzFnX+N0TuOtr0FYyxKr1oe5RAhCEJjmnvjteT5QNw@mail.gmail.com>
+ <87cze3docs.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87cze3docs.fsf@mpe.ellerman.id.au>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 18 Jul 2022 12:06:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgJCTaY5FeNpcw6U-c1Z6c-A2WWQfCVa=1WW3Hdf9_eww@mail.gmail.com>
+Message-ID: <CAHk-=wgJCTaY5FeNpcw6U-c1Z6c-A2WWQfCVa=1WW3Hdf9_eww@mail.gmail.com>
+Subject: Re: mainline build failure of powerpc allmodconfig for prom_init_check
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Kees Cook <keescook@chromium.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com>
-References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
- <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
- <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com>
- <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
- <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com>
- <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
- <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com>
- <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
- <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 18.07.2022 um 20:29 schrieb Linus Torvalds =
-<torvalds@linux-foundation.org>:
->=20
-> On Mon, Jul 18, 2022 at 6:13 AM Miklos Szeredi <miklos@szeredi.hu> =
-wrote:
->>=20
->> Correct.  The question is whether any application would break in this
->> case.  I think not, but you are free to prove otherwise.
->=20
-> Most often, an error is "just an error", and most applications usually
-> won't care.
->=20
-> There are exceptions: some errors are very much "do something special"
-> (eg EAGAIN or EINTR _are_ often separately tested for and often mean
-> "just retry"). And permission error handling is often different from
-> EINVAL etc.
->=20
-> And ENOSYS can easily be such an error - people probing whether they
-> are running on a new kernel that supports a new system call or not.
->=20
-> And yeah, some of our ioctl's are odd, and we have a lot of drivers
-> (and driver infrastructure) that basically does "this device does not
-> support this ioctl, so return ENOSYS".
->=20
-> I don't think that's the right thing to do, but I think it's
-> understandable. The traditional error for "this device does not
-> support this ioctl" is ENOTTY, which sounds so crazy to non-tty people
-> that I understand why people have used ENOSYS instead.
->=20
-> It's sad that it's called "ENOTTY" and some (at least historical)
-> strerror() implementations will indeed return "Not a tty". Never mind
-> that modern ones will say "inappropriate ioctl for device" - even when
-> the string has been updated, the error number isn't called
-> EINAPPROPRAITEDEVICE.
->=20
-> But it is what it is, and so I think ENOTTY is understandably not used
-> in many situations just because it's such a senseless historical name.
->=20
-> And so if people don't use ENOSYS, they use EINVAL.
->=20
-> I *suspect* no application cares: partly because ioctl error numbers
-> are so random anyway, but also very much if this is a "without
-> overlayfs it does X, with overlayfs it does Y".
->=20
-> The sanest thing to do is likely to make ovl match what a non-ovl
-> setup would do in the same situation (_either_ of the overlaid
-> filesystems - there might be multiple cases).
->=20
-> But I'm missing the original report. It sounds like there was a
-> regression and we already have a case of "changing the error number
-> broke something". If so, that regression should be fixed.
->=20
-> In general, I'm perfectly happy with people fixing error numbers and
-> changing them.
->=20
-> The only thing I require is that if those cleanups and fixes are
-> reported to break something, people quickly revert (and preferably add
-> a big comment about "Use *this* error number, because while this
-> *other* error number would make sense, application XyZ expects AbC"..)
->=20
->             Linus
+On Sun, Jul 17, 2022 at 9:41 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> >         li 4,254                 #,
+>
+> Here we load 254 into r4, which is the 2nd parameter to memset (c).
 
-Thanks for clarifying, Linus!
+I love how even powerpc people know that "4" is bogus, and have to
+make it clear that it means "r4".
 
-The regression in question caused overlayfs to erroneously return ENOSYS =
-when one lower filesystem (e.g., davfs2) returned this upon checking =
-extended attributes (there were two relevant submissions triggering this =
-somewhere around 5.15, 5.16)
+I don't understand why the powerpc assembler is so messed up, and uses
+random integer constants for register "names".
 
-My original patch: =
-https://lore.kernel.org/lkml/4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschu=
-tter.com/T/
+And it gets even worse, when you start mixing FP, vector and integer "names".
 
-This was supposed to augment the following commit:
-=
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/=
-?id=3D5b0a414d06c3ed2097e32ef7944a4abb644b89bd
+I've seen many bad assemblers (in fact, I have *written* a couple of
+bad assemblers myself), but I have never seen anything quite that
+broken on any other architecture.
 
-There, checking for the exact error code indeed matters, because it is =
-supposed to swallow all conditions marking "no fileattr support" but =
-doesn't catch fuse's ENOSYS.
+Oddities, yes ("$" as a prefix for register? Alpha asm is also very
+odd), but nothing *quite* as broken as "simple constants have entirely
+different meanings depending on the exact instruction and argument
+position".
 
-You see similar code checking for ENOSYS appearing in other places, like =
-util-linux, for example
-here =
-https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=3D=
-f6385a6adeea6be255d68016977c5dd5eaab05da
-and there's of course EOPNOTSUPP as well, as in here =
-https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=3D=
-7b8fda2e8e7b1752cba1fab01d7f569b5d87e661
+It's not even an IBM thing. S390 uses perfectly sane register syntax,
+and calls things '%r4" etc.
 
-Best,
-Christian
+The human-written asm files have those #define's in headers just to
+make things slightly more legible, because apparently the assembler
+doesn't even *accept* the sane names. So it's not even a "the compiler
+generates this abbreviated illegible mess". It's literally that the
+assembler is so horrid.
 
+Why do people put up with that?
+
+               Linus

@@ -2,113 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E504577BD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37B7577BDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbiGRGmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 02:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S233595AbiGRGni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 02:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiGRGmq (ORCPT
+        with ESMTP id S230317AbiGRGnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 02:42:46 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88891DF6E
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:42:44 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LmXS417GGzFq85;
-        Mon, 18 Jul 2022 14:41:40 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Jul 2022 14:42:40 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Jul 2022 14:42:40 +0800
-Subject: Re: [PATCH -next] iommu/dma: Fix missing mutex_init() in
- iommu_get_msi_cookie()
-To:     Robin Murphy <robin.murphy@arm.com>, Joerg Roedel <joro@8bytes.org>
-CC:     <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-        <iommu@lists.linux-foundation.org>, <will@kernel.org>,
-        <yf.wang@mediatek.com>
-References: <20220627085533.1469141-1-yangyingliang@huawei.com>
- <YtEcB6717b3d5suQ@8bytes.org> <5d056fea-ee52-b7f8-a8c1-095f695ac805@arm.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <a3fd3fef-f5fc-d89c-99de-4e7870cc9974@huawei.com>
-Date:   Mon, 18 Jul 2022 14:42:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <5d056fea-ee52-b7f8-a8c1-095f695ac805@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 02:43:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF469BE2F
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:43:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65C63B80F02
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:43:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0789AC341C0;
+        Mon, 18 Jul 2022 06:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658126613;
+        bh=vrEY8SK/rT9NSw7YJe2xp+T7whLmeTCEA9XVPCHXbOc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Kbn83e+DUcZ1agpvjYuMt35qHGo6/QPQYXj/23ytlX393Hq935UBrAT3wb/tbeHVU
+         fKnlPFlaI/foBZN8bBlLXnru68DKvAXQZ2mjAky9neuXnVSf7AL6cF9Js1kP/ZUgEo
+         XHKaVHdhK78hw8KwqBbrZujrhuWdG4UHLehlk2OkFcieG2ewB8CogQSmy+0k5GKvlM
+         p0sM3EW5TbndryqCM74dbmBI4wrJSQBPYbMFOpUHG4raoHZpFgbcz1ZrLhtK7up4bS
+         ZvsaC9IS4Xm/5Oa0Zp2fTmGXo/kH4DzBwmKxQ2h+Vz1ScYHQaBApmzvkhYYSRDJlOI
+         buLMEETScIQ+Q==
+Received: from 82-132-227-210.dab.02.net ([82.132.227.210] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDKTa-00886G-Ji;
+        Mon, 18 Jul 2022 07:43:30 +0100
+Date:   Mon, 18 Jul 2022 07:43:20 +0100
+Message-ID: <87edyi53av.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
+In-Reply-To: <CAAhV-H74rSy3DkFFgyGwW-rGO5tVJhrthQ78vAztnzze7-NYrA@mail.gmail.com>
+References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+        <87less52bx.wl-maz@kernel.org>
+        <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
+        <87ilnw3vlg.wl-maz@kernel.org>
+        <20994a99-b5b1-442d-d23d-2a11ecef24a0@loongson.cn>
+        <CAAhV-H6CJ-aF2s9D4QJ5zYZGt_=C4QHFCzKByT6urcFMgWv+4g@mail.gmail.com>
+        <87y1wrzto7.wl-maz@kernel.org>
+        <CAAhV-H74rSy3DkFFgyGwW-rGO5tVJhrthQ78vAztnzze7-NYrA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.227.210
+X-SA-Exim-Rcpt-To: chenhuacai@kernel.org, lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, 18 Jul 2022 03:38:09 +0100,
+Huacai Chen <chenhuacai@kernel.org> wrote:
+> 
+> Hi, Marc,
+> 
+> On Sun, Jul 17, 2022 at 10:43 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Sun, 17 Jul 2022 15:08:14 +0100,
+> > Huacai Chen <chenhuacai@kernel.org> wrote:
+> > >
+> > > Hi, Marc, Jianmin,
+> > >
+> > > I have an idea but I don't know whether it is acceptable: Marc gives
+> > > an Acked-by for the whole series, then this irqchip series goes
+> > > through the loongarch tree together with the PCI patches, then we
+> > > don't need other hacks except the ACPI definitions.
+> >
+> > Not sure how this solves the original problem. PCI should never be
+> > mandatory (it is actually super useful to be able to build a very
+> > small kernel without too many drivers), and there shouldn't be
+> > configurations where the kernel doesn't build.
+> Now, the pci-loongson controller code (A) is in the PCI tree, the pci
+> enablement code (B) is in the LoongArch tree, and the irqchip code (C)
+> is in the irqchip tree. If the order for upstream is (A) --> (B) -->
+> (C), there will be no build error. My above idea is to make sure the
+> order of (B) and (C) is controlled in the same tree. PCI/MSI is a
+> mandatory requirement for LoongArch, so I want to avoid some
+> unnecessary #ifdefs.
+>
+> >
+> > It is also my own responsibility to merge these things, and I'd rather
+> > not delegate this, specially as it touches a bunch of other
+> > subsystems.
+> I know, this is reasonable. Then if we can control the order of
+> (A)(B)(C) in three trees, the build error can be avoided in the
+> linux-next tree.
 
-On 2022/7/15 17:28, Robin Murphy wrote:
-> On 2022-07-15 08:49, Joerg Roedel wrote:
->> Adding Robin.
->>
->> On Mon, Jun 27, 2022 at 04:55:33PM +0800, Yang Yingliang wrote:
->>> cookie_alloc() is called by iommu_get_dma_cookie() and 
->>> iommu_get_msi_cookie(),
->>> but the mutex is only initialized in iommu_get_dma_cookie(), move 
->>> mutex_init()
->>> into cookie_alloc() to make sure the mutex will be initialized.
->
-> The mutex is only used in iommu_dma_init_domain(), which is only 
-> called by iommu_setup_dma_ops() for IOMMU_DOMAIN_DMA domains. How is 
-> there a problem here?
-It's no problem now, but I thinks it's better to initialize the 'mutex' 
-in cookie_alloc() to make code stronger.
+This would require stable branches between all three trees, as we
+don't control the *order* of the merges. I'd have to carry (A) and (B)
+as part of (C), which is really over the top.
 
-Thanks,
-Yang
->
-> Robin.
->
->>> Fixes: ac9a5d522bb8 ("iommu/dma: Fix race condition during 
->>> iova_domain initialization")
->>> Reported-by: Hulk Robot <hulkci@huawei.com>
->>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->>> ---
->>>   drivers/iommu/dma-iommu.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
->>> index 1910f4f1612b..e29157380c48 100644
->>> --- a/drivers/iommu/dma-iommu.c
->>> +++ b/drivers/iommu/dma-iommu.c
->>> @@ -294,6 +294,7 @@ static struct iommu_dma_cookie 
->>> *cookie_alloc(enum iommu_dma_cookie_type type)
->>>       if (cookie) {
->>>           INIT_LIST_HEAD(&cookie->msi_page_list);
->>>           cookie->type = type;
->>> +        mutex_init(&cookie->mutex);
->>>       }
->>>       return cookie;
->>>   }
->>> @@ -311,7 +312,6 @@ int iommu_get_dma_cookie(struct iommu_domain 
->>> *domain)
->>>       if (!domain->iova_cookie)
->>>           return -ENOMEM;
->>>   -    mutex_init(&domain->iova_cookie->mutex);
->>>       return 0;
->>>   }
->>>   --
->>> 2.25.1
-> .
+Just queue a patch to remove the #ifdef once we're at -rc1 and that
+things have settled down. This will be simpler for everyone, and will
+allow everyone to have a clean tree without dragging tons of extra
+patches.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

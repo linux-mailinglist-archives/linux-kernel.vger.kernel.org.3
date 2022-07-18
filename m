@@ -2,170 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8507257854E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788AE578554
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235477AbiGROZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 10:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S235583AbiGRO1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 10:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235286AbiGROZb (ORCPT
+        with ESMTP id S235184AbiGRO1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:25:31 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E88E08F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:25:30 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id b11so21507739eju.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:25:30 -0700 (PDT)
+        Mon, 18 Jul 2022 10:27:02 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEC626FC
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:27:02 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31e45527da5so10394797b3.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=b6t/+N1+W4VgPAXHp/M2TXDSX6kb6MT08vG4t3aPV7Y=;
-        b=hYqn7R98IMdzc6HipEjUlR51NKcNaoBacjkT3TcxcxIuRdjAYzqdTrAGx0rFsnqUSI
-         TpsrZra4NWPfmdWwtUK1aDzL22O+cymCz6OvXo4T8Cp/D5ai3DOi+/t3GMnjpUKqZL62
-         j0HDmQc9IrLr1T2+YJreGR7BCgpandjjF8U+qRG5AlRFnzk385HkT2K0GyuPxDEMDPe4
-         bbBf4EOHNRy6rMmtvs9btboFHvlTYQK778xevsYj2hY4UiRyFUpIFX1wHOf0fCPQO1qE
-         fDmLydJk0lZl+80aSxdi2cIB61U3e33zYpCNr2LoKYBx408ckXRPDXZn/m33w0xsdyMY
-         YMLQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mtj0EAXN9U90VAEHDyJp+h4NOUaHKEG8aPk/GVml+8g=;
+        b=sdl0ANPhWcYPKRHeSiX1ABKy52Q5uvPDzWi8yihz91FuiqXXxpmBjVZ9WIUQy6cTHc
+         SVeSJDUI7mE0oz1+jwRcPlb5SNGDfV6W12sAtvt7t07e1nVG0CA7y1C5GJrYMdhOiTXQ
+         zZ94pG2BXNmmp3guQGPtbHGYaGZ6xiPeBWVZacMwDedrGf1lyWCFPkaki4fyOdCWuWhf
+         Hjw6S8dfyMpJeJXQ9A8p+Cuk9qR3a3Sjxx3KSzyTuA9O7XbyBemHwAdQGk8SOEsoT7LK
+         xd9g/XFSsdVj9oXrndkCoI96eLOyfjql8zI7+HdJ0er6oSeib3d2Gdn1G5gJfE3uIFFq
+         Zqug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=b6t/+N1+W4VgPAXHp/M2TXDSX6kb6MT08vG4t3aPV7Y=;
-        b=Zj9VR8+FhhuTkanQoNsKQqpZwiwu9K5GqRRFC9FUN6Pv2WIYsHvLFAhkWhUZh/iEiv
-         KQGqJ6nNPufGzJ9/7ZixLRigxFCUDBI+zyah8Gk+epCFkRmEBWkY0USt7+W5sLMhNGAS
-         EhHP+CsSqpdfDlldTCs0+wG8+YyAyMyS7iMBhCNoefrEUJrXv5WE+jK7Tsx9CH9tGxQl
-         W/uQKwGssRdg2rHWOinfkmgOmw8I0UAVbwEb6X9PpVg15qC0gWYGa2ujeShqwfktN6Dj
-         sfVX9nWTphul2h2oGUZLxrB7j69vtRX2S5ClcDCJnJLry+eaCDFbAcgI4qI34ggc5P9m
-         /mKg==
-X-Gm-Message-State: AJIora9G4f+GRzUNqiQ6HijQ8OK2W8nniYN6OMI9sUr0elyo6AvDFP+T
-        QEsNN5dFZn7LCqQGQK7ozT0p5w==
-X-Google-Smtp-Source: AGRyM1s3YCiSLu6Q+lwm6jJZnCAwBaMfFoNhVeKfCxoPL6URn0nvMrdPHNss2DkgRYaK39HWt1g24w==
-X-Received: by 2002:a17:906:5d08:b0:6ff:8ed:db63 with SMTP id g8-20020a1709065d0800b006ff08eddb63mr26256399ejt.408.1658154328599;
-        Mon, 18 Jul 2022 07:25:28 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id eg52-20020a05640228b400b0043a6fde6e7bsm8533243edb.19.2022.07.18.07.25.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Jul 2022 07:25:28 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
- missing in lower/upper fs
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-In-Reply-To: <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
-Date:   Mon, 18 Jul 2022 16:25:26 +0200
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0B8DA307-7E1F-4534-B864-BC2632740C89@kohlschutter.com>
-References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
- <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
- <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com>
- <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
- <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com>
- <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
- <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com>
- <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mtj0EAXN9U90VAEHDyJp+h4NOUaHKEG8aPk/GVml+8g=;
+        b=mEKntE6zR/zQ4HbRLpXgYY9hgg3Fryi9b+MKOv8tapdca6u82C/KYcAcVbANSlw+Pe
+         CMZhjbz/iEMGGPzniMvAVpOq47i76PG1bBkOoUeWz8tXZQsrKlvTqXBgmclLD9t5dhKm
+         0ut/Ey3d/zKVVFvvGSlNHzhVj0ne4kO+1n4SvicKlZMYpZhSgwjt7wvfHSgDIGwIG8yA
+         nZNR2fobtiq8CwkxHA4Elz4fBH1Lf1rrT7dtRZUQpfChEtwjWAkVfBeXwK/jzCQQSYBS
+         eRsVfwseCR4aOfiAEJm6M4cZk3J+nBB7DWwYA6+Slz4NsT3rijt/+/EvJxIJgutW77Lj
+         wxuA==
+X-Gm-Message-State: AJIora+BZ+JVS1xYGH/mzx1Lfi9FAYb/JU/1UVqa3MP/iTo7QIkQymMm
+        TrVpPVv9wZAqQpHSe3NQy0VTgrN9yDcgcOl7vKwo2w==
+X-Google-Smtp-Source: AGRyM1s20EyQDEGyRPBZ7Wv7r8r/+XMLmzdGIFx3v1owTss4vMR1A0bYTVN4giqCYWmMweRoaJzVLm5YlcC2vG/Heo0=
+X-Received: by 2002:a81:5a0a:0:b0:31d:ad7c:8fa5 with SMTP id
+ o10-20020a815a0a000000b0031dad7c8fa5mr30075011ywb.512.1658154421240; Mon, 18
+ Jul 2022 07:27:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220628113714.7792-1-yee.lee@mediatek.com> <20220628113714.7792-2-yee.lee@mediatek.com>
+ <CAMuHMdX=MTsmo5ZVa8ya3xmr4Mx7f0PB3gvFF42pdaTYB6-u5A@mail.gmail.com>
+ <20220715163305.e70c8542d5e7d96c5fd87185@linux-foundation.org> <CAMuHMdWSsibmL=LauLm+OTn0SByLA4tGsbhbMsnvSRdb381RTQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWSsibmL=LauLm+OTn0SByLA4tGsbhbMsnvSRdb381RTQ@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 18 Jul 2022 16:26:25 +0200
+Message-ID: <CANpmjNPhhPUZFSZaLbwyJfACWMOqFchvm-Sx+iwGSM3sxkky8Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] mm: kfence: apply kmemleak_ignore_phys on early
+ allocated pool
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, yee.lee@mediatek.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:KFENCE" <kasan-dev@googlegroups.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Am 18.07.2022 um 15:13 schrieb Miklos Szeredi <miklos@szeredi.hu>:
->=20
-> On Mon, 18 Jul 2022 at 15:03, Christian Kohlsch=C3=BCtter
-> <christian@kohlschutter.com> wrote:
->>=20
->> Am 18.07.2022 um 14:21 schrieb Miklos Szeredi <miklos@szeredi.hu>:
->>>=20
->>> On Mon, 18 Jul 2022 at 12:56, Christian Kohlsch=C3=BCtter
->>> <christian@kohlschutter.com> wrote:
->>>=20
->>>> However, users of fuse that have no business with overlayfs =
-suddenly see their ioctl return ENOTTY instead of ENOSYS.
->>>=20
->>> And returning ENOTTY is the correct behavior.  See this comment in
->>> <asm-generic/errrno.h>:
->>>=20
->>> /*
->>> * This error code is special: arch syscall entry code will return
->>> * -ENOSYS if users try to call a syscall that doesn't exist.  To =
-keep
->>> * failures of syscalls that really do exist distinguishable from
->>> * failures due to attempts to use a nonexistent syscall, syscall
->>> * implementations should refrain from returning -ENOSYS.
->>> */
->>> #define ENOSYS 38 /* Invalid system call number */
->>>=20
->>> Thanks,
->>> Miklos
->>=20
->> That ship is sailed since ENOSYS was returned to user-space for the =
-first time.
->>=20
->> It reminds me a bit of Linus' "we do not break userspace" email from =
-2012 [1, 2], where Linus wrote:
->>> Applications *do* care about error return values. There's no way in
->>> hell you can willy-nilly just change them. And if you do change =
-them,
->>> and applications break, there is no way in hell you can then blame =
-the
->>> application.
->=20
-> Correct.  The question is whether any application would break in this
-> case.  I think not, but you are free to prove otherwise.
->=20
-> Thanks,
-> Miklos
+On Sat, 16 Jul 2022 at 20:43, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+[...]
+> > - This patch has been accused of crashing the kernel:
+> >
+> >         https://lkml.kernel.org/r/YsFeUHkrFTQ7T51Q@xsang-OptiPlex-9020
+> >
+> >   Do we think that report is bogus?
+>
+> I think all of this is highly architecture-specific...
 
-I'm not going to do that since I expect any answer I give would not =
-change your position here. All I know is there is a non-zero chance such =
-programs exist.
+The report can be reproduced on i386 with CONFIG_X86_PAE=y. But e.g.
+mm/memblock.c:memblock_free() is also guilty of using __pa() on
+previously memblock_alloc()'d addresses. Looking at the phys addr
+before memblock_alloc() does virt_to_phys(), the result of __pa()
+looks correct even on PAE, at least for the purpose of passing it on
+to kmemleak(). So I don't know what that BUG_ON(slow_virt_to_phys() !=
+phys_addr) is supposed to tell us here.
 
-If you're willing to go ahead with the fuse change you proposed, I see =
-no purpose in debating with you further since you're the kernel =
-maintainer of both file systems.
-That change "fixes" the problem that I had seen in my setup; I do not =
-know the extent of side effects, but I expect some could surface =
-eventually.
-
-Once you're done fixing fuse, please also talk to the folks over at =
-https://github.com/trapexit/mergerfs who explicitly return ENOSYS upon =
-request. Who knows, maybe someone is audacious enough to try mergerfs as =
-a lower filesystem for overlay?
-
-Alas, I think this a clash between the philosophies of writing robust =
-code versus writing against a personal interpretation of some =
-specification.
-You refer to "asm-generic/errno.h" as the specification and rationale =
-for treating ENOSYS as sacrosanct. Note that the comment says "should =
-refrain from", it doesn't say "must not", and that's why we're in this =
-mess.
-
-It therefore wouldn't hurt to be lenient when a lower filesystem returns =
-an error code known to refer to "unsupported operation", and that's what =
-my original patch to ovl does.
-
-I thought this approach would resonate with you, since you must have =
-been following the same logic when you added the special-case check for =
-"EINVAL" as an exception for ntfs-3g in the commit that most likely =
-triggered the regression ("ovl: fix filattr copy-up failure") 9 months =
-ago.
-
-I honestly wonder why you're risking further breakage, having introduced =
-that regression only recently.
-
-So long,
-Christian
-
+Ideas?

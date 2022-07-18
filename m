@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E76E577EE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3C3577EE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiGRJqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S234217AbiGRJq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbiGRJqn (ORCPT
+        with ESMTP id S234166AbiGRJq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:46:43 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1ACC165B4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:46:42 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-10c0e6dd55eso22291074fac.7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:46:42 -0700 (PDT)
+        Mon, 18 Jul 2022 05:46:27 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC830DEE5;
+        Mon, 18 Jul 2022 02:46:26 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id p9so11207889pjd.3;
+        Mon, 18 Jul 2022 02:46:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U2yhmbyv01uOIjeRobhIVpb+L4tkyRO4O4gfBMzGBhI=;
-        b=lfPfnFdCPXV+PYM/byQameMx4f1n+wR1U6kVW+W7ZXvueXuwHTda2POXkZBbNuTwra
-         ZuHqWOD9twyWuEZd7kVrVCnDPgGzUXoSuqBlE2d8fGS6KrIssr2YGNi/2yhM8KYa2pr6
-         uoTWw57eDXSVvJeTXdngK3KyeLFB/MDfzXXtqQuGKOsMu+q5QPH0r7DL+Igz+IGwzHap
-         6vRXiCPKIQ0q8u3u/VA7ODLXI0jcxzEO2svrquiJEdfcinWaIu0XLoLgc9P+tgqvaBdi
-         YTAWDt096eIfN/D0tDzu5UT4XfLMhDh1EsICVvzwDdnx+4vKZFYpomAIXjxJYqbfhUVS
-         k+OQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ctJQ6AM/Pja5lnBjSFmOp+KisKGF44rmZ2m0JhEYL+4=;
+        b=JA6RPAAaoE0hcLLuOcByRxWP1D4RciL1PCAzlZaZ3yolVYFJqnGomFFhv5qlsqojXp
+         wEID1IYL6jEULP7YMNW08PVhVcKGS0Lf/bD4QRkxby+UP3kNrob5lUPutr1IR6UrCAVw
+         F9d2Ed72D/otfGChZ9W1/UdGtJmOdN1UpU2kKiLhwUCpz8NGWZZ1bLitRr0blvcAxLdJ
+         7kJsbt94mT4U54brrlxwnItd+6+LSKsGz9JbMlHuUOHDhXusN9s32qStvE7fMPm5fBe3
+         u7kK3+SBhktNiuqFgxwmNHjizjYw2ZfvtwrcHVbxjwCRsy2HdMP1LXpbr0j7wx9ULOfN
+         WbqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U2yhmbyv01uOIjeRobhIVpb+L4tkyRO4O4gfBMzGBhI=;
-        b=eGfIRSAr3KZXHIooUoxv+5DSZ117GOdbglsWhk9hOL4Jr9G6byzCNL47cDDSVDv9AR
-         RspA0tRmwu6bCPcdTadx9iRuiiZ4MC4NT+Eu9mi4otmxucGTPUrlhKkNGYzrm45cs15r
-         DZkf2cM6ITZUNWQ9Np+OAukYLtzlq8QIqTr9rRyMR/XVjx0FEKIEojI2JlDnMnWr8OCo
-         rTPw/oHUAYRuxgx8HV2bpzr4gk+Pj95IFxjzXd6KUETd8CAk0TPWTdlmkYbOultrh81U
-         5CwAqqWjHj2s8LhHf4Yji5oWxVK6MSYFbShPjvCnBuKRYU7x4GkN3vD+ctmcgYsjrxRk
-         vSOw==
-X-Gm-Message-State: AJIora/uKQ3XfHkp+YMiDhelOiQvq0L/AMHXEFZ9M73W8Tm6f28zG37g
-        Paw9St3+DMFiYLOEIb4XWpm0/yCHdX14SFIpc5xvoQ==
-X-Google-Smtp-Source: AGRyM1tiyXNFK3NUMUmemwqQqPJMdNJcCB/etqOMbIVxms1eVnfZb8oK+DYQrOYHFVrFuXShXg9xgeZXf0UF/AlVWfQ=
-X-Received: by 2002:a05:6808:1182:b0:32d:a9d3:4e0 with SMTP id
- j2-20020a056808118200b0032da9d304e0mr14930043oil.146.1658137602109; Mon, 18
- Jul 2022 02:46:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ctJQ6AM/Pja5lnBjSFmOp+KisKGF44rmZ2m0JhEYL+4=;
+        b=gb6szlkl2ok5Xx2uZL25uAzIGMqiRmo48b8VPzZ7xIF7Kbxx8VF6nZBaHYZGnipm27
+         9vViKuhudwB9KqNAAroOQQVS13b2Bd5JHTw3UpKCNExXr16kNl95NXmgIuQxHGgtbULB
+         BkrqwxNTkjSvk8O1obFp+yGLmdEJdSsVIfjbtCv1JXFycXSoUjyn0HYG0TW58Ixp9m12
+         hS95b4g4ODsF/IroefbEIZ82wj9lDPtLp4H8RoRQ34bPwOpzT69pRfQsucpVPY6SYJaK
+         huBPMfoNFUZXoTAuamvVIkyluAtHx0e/kPW5JhlA1BkP5ncTTEwekSnqEiQ4Xs/tePVX
+         YQhA==
+X-Gm-Message-State: AJIora8r6gcjWFGYxEFgOyuYuRJoElSKdBRJZPUntg6MESi07IzBWEpW
+        2QeTFlSxNeb/+XE98EIjiFo=
+X-Google-Smtp-Source: AGRyM1vb/qOuRFkQ0DKTrlZnnKSeyMmI0vvWIYM2p/kMT0u5Abjuq4SBCsyxGLpxIamV3rbvI3tdsg==
+X-Received: by 2002:a17:902:ea08:b0:16b:fdc3:8b3b with SMTP id s8-20020a170902ea0800b0016bfdc38b3bmr27436238plg.68.1658137586190;
+        Mon, 18 Jul 2022 02:46:26 -0700 (PDT)
+Received: from sol (110-174-58-111.static.tpgi.com.au. [110.174.58.111])
+        by smtp.gmail.com with ESMTPSA id b132-20020a621b8a000000b0052a75004c51sm9011478pfb.146.2022.07.18.02.46.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 02:46:25 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 17:46:20 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        brgl@bgdev.pl, dipenp@nvidia.com, andy.shevchenko@gmail.com
+Subject: Re: [PATCH v2 5/6] gpiolib: cdev: consolidate edge detector
+ configuration flags
+Message-ID: <20220718094620.GA96704@sol>
+References: <20220714020319.72952-1-warthog618@gmail.com>
+ <20220714020319.72952-6-warthog618@gmail.com>
+ <CACRpkdZ5O7iNOaJgq5D8hpQDO207DsQkqjRu_m1aZSPy5_qoJA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220715061027.1612149-1-kaleshsingh@google.com> <20220715061027.1612149-8-kaleshsingh@google.com>
-In-Reply-To: <20220715061027.1612149-8-kaleshsingh@google.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Mon, 18 Jul 2022 10:46:06 +0100
-Message-ID: <CA+EHjTxrdacNE-kd2kUSHRZXdgtLZkzwZcamiHaAW4=yfGWtwQ@mail.gmail.com>
-Subject: Re: [PATCH v4 07/18] KVM: arm64: On stack overflow switch to hyp overflow_stack
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     maz@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
-        madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
-        james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com,
-        andreyknvl@gmail.com, russell.king@oracle.com,
-        vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org,
-        drjones@redhat.com, wangkefeng.wang@huawei.com, elver@google.com,
-        keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org,
-        oupton@google.com, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        android-mm@google.com, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdZ5O7iNOaJgq5D8hpQDO207DsQkqjRu_m1aZSPy5_qoJA@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,79 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalesh,
+On Mon, Jul 18, 2022 at 11:33:48AM +0200, Linus Walleij wrote:
+> On Thu, Jul 14, 2022 at 4:04 AM Kent Gibson <warthog618@gmail.com> wrote:
+> 
+> > Combine the polarity_change flag, struct line eflags, and hte enable
+> > flag into a single flag variable.
+> >
+> > The combination of these flags describes the configuration state
+> > of the edge detector, so formalize and clarify that by combining
+> > them into a single variable, edflags, in struct line.
+> >
+> > The edflags is a subset of the GPIO_V2_LINE_FLAGsb relevant to
+> 
+> What is that "b" at the end of GPIO_V2_LINE_FLAGsb?
+> Oh well no big deal. Bart can fix when applying if it is disturbing.
+> 
 
-On Fri, Jul 15, 2022 at 7:11 AM Kalesh Singh <kaleshsingh@google.com> wrote:
->
-> On hyp stack overflow switch to 16-byte aligned secondary stack.
-> This provides us stack space to better handle overflows; and is
-> used in a subsequent patch to dump the hypervisor stacktrace.
->
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+Yeah, typo or something - no idea what that is doing there, but it has
+been there since v1. ¯\_(ツ)_/¯
+Bart - please do fix that if you don't mind.
 
-Reviewed-by: Fuad Tabba <tabba@google.com>
+Thanks for the review.
 
-Thanks,
-/fuad
+Cheers,
+Kent.
 
-
-> ---
->  arch/arm64/kvm/hyp/nvhe/Makefile     |  2 +-
->  arch/arm64/kvm/hyp/nvhe/host.S       |  9 ++-------
->  arch/arm64/kvm/hyp/nvhe/stacktrace.c | 11 +++++++++++
->  3 files changed, 14 insertions(+), 8 deletions(-)
->  create mode 100644 arch/arm64/kvm/hyp/nvhe/stacktrace.c
->
-> diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-> index f9fe4dc21b1f..524e7dad5739 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/Makefile
-> +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-> @@ -14,7 +14,7 @@ lib-objs := $(addprefix ../../../lib/, $(lib-objs))
->
->  obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o \
->          hyp-main.o hyp-smp.o psci-relay.o early_alloc.o page_alloc.o \
-> -        cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o
-> +        cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o stacktrace.o
->  obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
->          ../fpsimd.o ../hyp-entry.o ../exception.o ../pgtable.o
->  obj-$(CONFIG_DEBUG_LIST) += list_debug.o
-> diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
-> index ea6a397b64a6..b6c0188c4b35 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/host.S
-> +++ b/arch/arm64/kvm/hyp/nvhe/host.S
-> @@ -177,13 +177,8 @@ SYM_FUNC_END(__host_hvc)
->         b       hyp_panic
->
->  .L__hyp_sp_overflow\@:
-> -       /*
-> -        * Reset SP to the top of the stack, to allow handling the hyp_panic.
-> -        * This corrupts the stack but is ok, since we won't be attempting
-> -        * any unwinding here.
-> -        */
-> -       ldr_this_cpu    x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
-> -       mov     sp, x0
-> +       /* Switch to the overflow stack */
-> +       adr_this_cpu sp, overflow_stack + OVERFLOW_STACK_SIZE, x0
->
->         b       hyp_panic_bad_stack
->         ASM_BUG()
-> diff --git a/arch/arm64/kvm/hyp/nvhe/stacktrace.c b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
-> new file mode 100644
-> index 000000000000..a3d5b34e1249
-> --- /dev/null
-> +++ b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
-> @@ -0,0 +1,11 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * KVM nVHE hypervisor stack tracing support.
-> + *
-> + * Copyright (C) 2022 Google LLC
-> + */
-> +#include <asm/memory.h>
-> +#include <asm/percpu.h>
-> +
-> +DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
-> +       __aligned(16);
-> --
-> 2.37.0.170.g444d1eabd0-goog
->

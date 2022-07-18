@@ -2,69 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF388578B3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0497578B40
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236330AbiGRTsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        id S236321AbiGRTt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236338AbiGRTsq (ORCPT
+        with ESMTP id S231495AbiGRTt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:48:46 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A582732446;
-        Mon, 18 Jul 2022 12:48:40 -0700 (PDT)
+        Mon, 18 Jul 2022 15:49:27 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F70725DF;
+        Mon, 18 Jul 2022 12:49:26 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id sz17so23234159ejc.9;
+        Mon, 18 Jul 2022 12:49:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658173720; x=1689709720;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+QLW32BMrwF3EtzLa3vht6erk15xYFiOHNVwg4JneaM=;
-  b=O02kKZFspdraUEg72DjXtGalIb86bOehL7KObUs2Rt0SR8gnfoF3q/Y6
-   hW9NaMp+wXw8ikVWt6EDIKBouZ95WLw65WZdD6chR9FQreFM/goaNEwph
-   Wuf/fauI7CpJe1qD4GvXP7PUUqUgTxkDcz4J8j9i5FmHSpqO72B6cA4I9
-   M=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 Jul 2022 12:48:40 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:48:39 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 18 Jul 2022 12:48:39 -0700
-Received: from [10.110.0.218] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 18 Jul
- 2022 12:48:38 -0700
-Message-ID: <e341619e-bac3-710f-8f77-1addfffa9a16@quicinc.com>
-Date:   Mon, 18 Jul 2022 12:48:38 -0700
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HYS8d97OSWqWFt6qraEk8QQYqaDKoCu9P8dNF7MQV/I=;
+        b=RQqo5euyUNZsNSDq76e+Y6Cv3Yfw/KrbWFz3lAinvv27/90P/dhfgqzg2IbRDBN7O7
+         +VQ2m7hOk4ZGFrXCnHACMXuauL3TuF2vpfwKjpFKWjwdnfn/309SqQdCy4yBZ0kwbe48
+         ySQZzZVKf2rCRkw0109fbQrUt6mNVPt1Q694GFB6kgOTnazJYwfOj3zhUNXwVdXA9Y5R
+         s0d9rxiiWM9UHF4OArALxG7Bh9/uCQwNTXJ8vzSL681fvxc69wvWDo3+Upp7GKe7ANXz
+         pdTYA3bh6wgnCEFny2rthbqMJa3uJLnDwhUhifdCKoCbcaDCChcwEyd2KvDp9uUY/sBY
+         s8+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HYS8d97OSWqWFt6qraEk8QQYqaDKoCu9P8dNF7MQV/I=;
+        b=Vs515rMqaa57tra7WEOTWyyqrQJgak0m1JEgqjlM9LB01IUAvE8fcg+YRdR1dYnDW9
+         +SVUYQyqFPvDy4D36yfn+2GhgfdSgJmXB2oKK5rDorullaufZkqSm8fm4S/mJZ/nwyLr
+         RPrdAUrDX4w/SIamQh1CjkuIMIUAbkMdFHg6aDsY3EVAizjgD/3V1w7wDNWaamBbXLBW
+         O58+aq4sRgXU4tk+kKEEaTnjpunQZHQdO+hT4SkUs0+i5wY8Ljhph1+/ffErm5LedOMN
+         orqR+LzZoOCaMFGVO+JPIQPv48NSDlTkFISN1t/Gq/a84lJTpPqJv9/O1prrIlhJTBYl
+         iAFQ==
+X-Gm-Message-State: AJIora94BylGHrsOl5OhfQgfWBHEunzWHgwyoWeHbTkvIOlNQom1YLSx
+        MRvqloAeZehPBs4ffDpiaHs=
+X-Google-Smtp-Source: AGRyM1teajZoX5+KI3lN1KKf4u/ANfoSP5l4g1qk1vVWzKjnntOq9y9g7rs0LxxBLBs9tyWYsF2JHw==
+X-Received: by 2002:a17:907:a40f:b0:72b:64ee:5b2f with SMTP id sg15-20020a170907a40f00b0072b64ee5b2fmr28425844ejc.268.1658173764701;
+        Mon, 18 Jul 2022 12:49:24 -0700 (PDT)
+Received: from [192.168.0.104] ([77.126.166.31])
+        by smtp.gmail.com with ESMTPSA id g1-20020a17090604c100b0072afb6d4d6fsm5952705eja.171.2022.07.18.12.49.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 12:49:24 -0700 (PDT)
+Message-ID: <2fc99d26-f804-ad34-1fd7-90cfb123b426@gmail.com>
+Date:   Mon, 18 Jul 2022 22:49:21 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 2/2] power: reset: qcom-pon: add support for
- qcom,pmk8350-pon compatible string
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net-next V2 2/2] net/mlx5e: Improve remote NUMA
+ preferences used for the IRQ affinity hints
 Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-CC:     <corbet@lwn.net>, <robh+dt@kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <vkoul@kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220713193350.29796-1-quic_amelende@quicinc.com>
- <20220713193350.29796-3-quic_amelende@quicinc.com>
- <20220716215803.r3ldaswyhehfpcip@mercury.elektranox.org>
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-In-Reply-To: <20220716215803.r3ldaswyhehfpcip@mercury.elektranox.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Tariq Toukan <tariqt@nvidia.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220718124315.16648-1-tariqt@nvidia.com>
+ <20220718124315.16648-3-tariqt@nvidia.com>
+ <YtVlDiLTPxm312u+@worktop.programming.kicks-ass.net>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <YtVlDiLTPxm312u+@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,51 +88,154 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 7/16/2022 2:58 PM, Sebastian Reichel wrote:
-> Hi,
+On 7/18/2022 4:50 PM, Peter Zijlstra wrote:
+> On Mon, Jul 18, 2022 at 03:43:15PM +0300, Tariq Toukan wrote:
 > 
-> On Wed, Jul 13, 2022 at 12:33:51PM -0700, Anjelique Melendez wrote:
->> Add support for the new "qcom,pmk8350-pon" comptaible string.
->>
->> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>> Reviewed-by: Gal Pressman <gal@nvidia.com>
+>> Acked-by: Saeed Mahameed <saeedm@nvidia.com>
+>> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
 >> ---
->>  drivers/power/reset/qcom-pon.c | 1 +
->>  1 file changed, 1 insertion(+)
+>>   drivers/net/ethernet/mellanox/mlx5/core/eq.c | 62 +++++++++++++++++++-
+>>   1 file changed, 59 insertions(+), 3 deletions(-)
 >>
->> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
->> index 4a688741a88a..16bc01738be9 100644
->> --- a/drivers/power/reset/qcom-pon.c
->> +++ b/drivers/power/reset/qcom-pon.c
->> @@ -82,6 +82,7 @@ static const struct of_device_id pm8916_pon_id_table[] = {
->>  	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
->>  	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
->>  	{ .compatible = "qcom,pm8998-pon", .data = (void *)GEN2_REASON_SHIFT },
->> +	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN2_REASON_SHIFT },
->>  	{ }
->>  };
->>  MODULE_DEVICE_TABLE(of, pm8916_pon_id_table);
+>> v2:
+>> Separated the set_cpu operation into two functions, per Saeed's suggestion.
+>> Added Saeed's Acked-by signature.
+>>
+>> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eq.c b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+>> index 229728c80233..e72bdaaad84f 100644
+>> --- a/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+>> +++ b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+>> @@ -11,6 +11,9 @@
+>>   #ifdef CONFIG_RFS_ACCEL
+>>   #include <linux/cpu_rmap.h>
+>>   #endif
+>> +#ifdef CONFIG_NUMA
+>> +#include <linux/sched/topology.h>
+>> +#endif
+>>   #include "mlx5_core.h"
+>>   #include "lib/eq.h"
+>>   #include "fpga/core.h"
+>> @@ -806,13 +809,67 @@ static void comp_irqs_release(struct mlx5_core_dev *dev)
+>>   	kfree(table->comp_irqs);
+>>   }
+>>   
+>> +static void set_cpus_by_local_spread(struct mlx5_core_dev *dev, u16 *cpus,
+>> +				     int ncomp_eqs)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < ncomp_eqs; i++)
+>> +		cpus[i] = cpumask_local_spread(i, dev->priv.numa_node);
+>> +}
+>> +
+>> +static bool set_cpus_by_numa_distance(struct mlx5_core_dev *dev, u16 *cpus,
+>> +				      int ncomp_eqs)
+>> +{
+>> +#ifdef CONFIG_NUMA
+>> +	cpumask_var_t cpumask;
+>> +	int first;
+>> +	int i;
+>> +
+>> +	if (!zalloc_cpumask_var(&cpumask, GFP_KERNEL)) {
+>> +		mlx5_core_err(dev, "zalloc_cpumask_var failed\n");
+>> +		return false;
+>> +	}
+>> +	cpumask_copy(cpumask, cpu_online_mask);
+>> +
+>> +	first = cpumask_local_spread(0, dev->priv.numa_node);
 > 
-> No handling of the second register? Why is it needed in DT in the
-> first place?
+> Arguably you want something like:
 > 
-> -- Sebastian
+> 	first = cpumask_any(cpumask_of_node(dev->priv.numa_node));
 
-Hi Sebastian,
+Any doesn't sound like what I'm looking for, I'm looking for first.
+I do care about the order within the node, so it's more like 
+cpumask_first(cpumask_of_node(dev->priv.numa_node));
 
-The handling of the second register takes place in drivers/input/misc/pm8941-pwrkey.c.
-The patch that handles this change can be found at:
-https://lore.kernel.org/linux-arm-msm/20220422191239.6271-4-quic_amelende@quicinc.com/.
-This patch has been applied.
+Do you think this has any advantage over cpumask_local_spread, if used 
+only during the setup phase of the driver?
 
-Krzystof and I discuss the need for a new compatible string here:
-https://lore.kernel.org/all/99a5d9ac-9c20-b441-44af-26772a0e989d@linaro.org/.
+> 
+>> +
+>> +	for (i = 0; i < ncomp_eqs; i++) {
+>> +		int cpu;
+>> +
+>> +		cpu = sched_numa_find_closest(cpumask, first);
+>> +		if (cpu >= nr_cpu_ids) {
+>> +			mlx5_core_err(dev, "sched_numa_find_closest failed, cpu(%d) >= nr_cpu_ids(%d)\n",
+>> +				      cpu, nr_cpu_ids);
+>> +
+>> +			free_cpumask_var(cpumask);
+>> +			return false;
+> 
+> So this will fail when ncomp_eqs > cpumask_weight(online_cpus); is that
+> desired?
+> 
 
-In short, the gen1/gen2/gen3 children pon devices will use the "reg" address(es) defined
-from their parent. Currently, "qcom,pm8998-pon" is too generic as it is being used for
-both gen1/gen2 and gen3 children. So we must add the new "qcom,pmk8350-pon" compatible
-string to be used for gen3 children so that the second register can be defined. 
-
-Thanks,
-Anjelique
+Yes. ncomp_eqs does not exceed the num of online cores.
 
 
+>> +		}
+>> +		cpus[i] = cpu;
+>> +		cpumask_clear_cpu(cpu, cpumask);
+> 
+> Since there is no concurrency on this cpumask, you don't need atomic
+> ops:
+> 
+> 		__cpumask_clear_cpu(..);
+> 
+
+Right. I'll fix.
+
+>> +	}
+>> +
+>> +	free_cpumask_var(cpumask);
+>> +	return true;
+>> +#else
+>> +	return false;
+>> +#endif
+>> +}
+>> +
+>> +static void mlx5_set_eqs_cpus(struct mlx5_core_dev *dev, u16 *cpus, int ncomp_eqs)
+>> +{
+>> +	bool success = set_cpus_by_numa_distance(dev, cpus, ncomp_eqs);
+>> +
+>> +	if (!success)
+>> +		set_cpus_by_local_spread(dev, cpus, ncomp_eqs);
+>> +}
+>> +
+>>   static int comp_irqs_request(struct mlx5_core_dev *dev)
+>>   {
+>>   	struct mlx5_eq_table *table = dev->priv.eq_table;
+>>   	int ncomp_eqs = table->num_comp_eqs;
+>>   	u16 *cpus;
+>>   	int ret;
+>> -	int i;
+>>   
+>>   	ncomp_eqs = table->num_comp_eqs;
+>>   	table->comp_irqs = kcalloc(ncomp_eqs, sizeof(*table->comp_irqs), GFP_KERNEL);
+>> @@ -830,8 +887,7 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
+>>   		ret = -ENOMEM;
+>>   		goto free_irqs;
+>>   	}
+>> -	for (i = 0; i < ncomp_eqs; i++)
+>> -		cpus[i] = cpumask_local_spread(i, dev->priv.numa_node);
+>> +	mlx5_set_eqs_cpus(dev, cpus, ncomp_eqs);
+> 
+> So you change this for mlx5, what about the other users of
+> cpumask_local_spread() ?
+
+I took a look at the different netdev users.
+While some users have similar use case to ours (affinity hints), many 
+others use cpumask_local_spread in other flows (XPS setting, ring 
+allocations, etc..).
+
+Moving them to use the newly exposed API needs some deeper dive into 
+their code, especially due to the possible undesired side-effects.
+
+I prefer not to include these changes in my series for now, but probably 
+contribute it in a followup work.
+
+Regards,
+Tariq

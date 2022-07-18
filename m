@@ -2,96 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA5E577F75
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32269577F80
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234041AbiGRKSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        id S233907AbiGRKTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbiGRKST (ORCPT
+        with ESMTP id S230054AbiGRKTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:18:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15651C906;
-        Mon, 18 Jul 2022 03:18:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BBC860DE9;
-        Mon, 18 Jul 2022 10:18:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 927FFC341C0;
-        Mon, 18 Jul 2022 10:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658139497;
-        bh=h79OFukJERJpHUHGqLQ5gkpECc0RLNV6RnpIUFe0S5s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kesXvsM0/CCvD6AHRluFa8oXOEfFSbQbsSHqNhDNtaCXlWv1S3M7nzGMu2WAj6lGP
-         JwPAgiGtF/dBUgDnq+x+Xtc+GcLUCclwtRumX8knhjcPDpZugiElP9chKqE1dLHKlt
-         B0qISQgcluiu6Eov4wvoc/VZ60ZJzP+RwqN/YoCm9qBsAfO+nj1Pt+EFkVhW2WWp/f
-         hewKgd5RhOGk3v17a0p8QUevtkvP2g0oQke0ouiyy9LCfr7d1ixfkVc7fIKCNsLEZd
-         yTfBmj2cx4HEy1/woCOrNZ4QkqCuC9reiRDUv36QTsIMNEqk3iFDppmFRUd9ahnpl1
-         xVuR3H32SmZpQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oDNpL-0004jf-2j; Mon, 18 Jul 2022 12:18:11 +0200
-Date:   Mon, 18 Jul 2022 12:18:11 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Stanimir Varbanov <svarbanov@mm-sol.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] PCI: qcom: Add support for SC8280XP and SA8540P
-Message-ID: <YtUzY9eYM0uhT3jj@hovoldconsulting.com>
-References: <20220714071348.6792-1-johan+linaro@kernel.org>
- <aa11b2ec-7196-7423-151c-1797966d0cd2@mm-sol.com>
+        Mon, 18 Jul 2022 06:19:51 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A411C901;
+        Mon, 18 Jul 2022 03:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ijs/RSv7qHQbvm9v+Fy+Qzb4VPBB1zdP6a7q0FZ2hyY=; b=mMUTuFO2xqKNFtna0kmQNGmRa+
+        WQr6Gj2zDbk2LspuJH11pLa6ym0tcz0Ptv/eQ5EbMRdIqykF6+pi5NX/WeqNHzIW5QlUaAVHRMKkn
+        MrfgUjKSDUZ2WFBi8cOnM/rxYytl7+sk6K6zWdO+n78+VU/wBimLTaZyUBJ22l5P7zmiN7TyYXsMH
+        gOtvcXXNpFNDbeTpzoB3jfJIgeeUHAerDtDX1FpOfaFHaEqzFWja7M5rmLlTeACcYrdsDFL/ScYiJ
+        Qqj7OWkWp42t++1844ZuMsPoXFb5tPRpaTo0lmPJtB2Aout9jPZRjJvXyAc3evas6rGs7IuOQIx8i
+        WZXQuiRA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDNql-00CbGs-Kd; Mon, 18 Jul 2022 10:19:39 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 390EA980226; Mon, 18 Jul 2022 12:19:39 +0200 (CEST)
+Date:   Mon, 18 Jul 2022 12:19:39 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tariq Toukan <tariqt@nvidia.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] sched/topology: Expose
+ sched_numa_find_closest
+Message-ID: <YtUzu4d9F+V621tw@worktop.programming.kicks-ass.net>
+References: <20220717052301.19067-1-tariqt@nvidia.com>
+ <20220717052301.19067-2-tariqt@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aa11b2ec-7196-7423-151c-1797966d0cd2@mm-sol.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220717052301.19067-2-tariqt@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:49:40AM +0300, Stanimir Varbanov wrote:
-> Hi Johan,
+On Sun, Jul 17, 2022 at 08:23:00AM +0300, Tariq Toukan wrote:
+> This logic can help device drivers prefer some remote cpus
+> over others, according to the NUMA distance metrics.
 > 
-> Thank you for your work, especially for for the last three patches ;-)
+> Reviewed-by: Gal Pressman <gal@nvidia.com>
+> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+> ---
+>  include/linux/sched/topology.h | 2 ++
+>  kernel/sched/topology.c        | 1 +
+>  2 files changed, 3 insertions(+)
 > 
-> On 7/14/22 10:13, Johan Hovold wrote:
-> > This series adds support for the PCIe controllers found on SC8280XP and
-> > SA8540P.
-> > 
-> > Included are also three patches that clean up the way the driver handles
-> > different IP revisions (e.g. by modelling optional clocks as being truly
-> > optional).
+> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+> index 56cffe42abbc..d467c30bdbb9 100644
+> --- a/include/linux/sched/topology.h
+> +++ b/include/linux/sched/topology.h
+> @@ -61,6 +61,8 @@ static inline int cpu_numa_flags(void)
+>  {
+>  	return SD_NUMA;
+>  }
+> +
+> +int sched_numa_find_closest(const struct cpumask *cpus, int cpu);
+>  #endif
+>  
+>  extern int arch_asym_cpu_priority(int cpu);
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index 05b6c2ad90b9..688334ac4980 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -2066,6 +2066,7 @@ int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
+>  
+>  	return found;
+>  }
+> +EXPORT_SYMBOL(sched_numa_find_closest);
 
-> For the whole set:
-> 
-> Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
+EXPORT_SYMBOL_GPL() if anything.
 
-Thanks for the ack.
+Also, this thing will be subject to sched_domains, that means that if
+someone uses cpusets or other means to partition the machine, that
+effects the result.
 
-Could you take a look at Dmitry's MSI series that this series depends on
-as well?
-
-I saw you acking the binding, but not the rest of the series it seems:
-
-	https://lore.kernel.org/all/3f9e1c18-bc61-8690-5427-ba8dc5fad7ad@mm-sol.com/
-
-Johan
+Is that what you want?

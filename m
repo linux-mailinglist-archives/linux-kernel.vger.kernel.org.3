@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE3A578E68
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532E1578E6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234974AbiGRXm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 19:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S234678AbiGRXoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 19:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbiGRXmz (ORCPT
+        with ESMTP id S229478AbiGRXoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 19:42:55 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB02031902;
-        Mon, 18 Jul 2022 16:42:54 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id h145so10591887iof.9;
-        Mon, 18 Jul 2022 16:42:54 -0700 (PDT)
+        Mon, 18 Jul 2022 19:44:04 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1580BBE35;
+        Mon, 18 Jul 2022 16:44:03 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id m16so17424037edb.11;
+        Mon, 18 Jul 2022 16:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dLd8cOvv8HoVPf9Qd5agJOJR3BAYQw3KP1yEY5GxLrY=;
-        b=ftUYo9BBUYjPmllV0QRe7t51MrZmLBWSJeD7F/faBJfJeEgvajx4yrs1xFF2bFN2In
-         Sx9WchAnZHDlTxzt5GeXl5XNKQ4zxA9If1Lgz40WbWeEaboWSCRSXil77S2+pat/yDtU
-         u3DQY7P9l4TcmQVBCru3FBj6LEE4iT2GYNgATMs6F6vPEBu/D2YzTllow2Mko17P48Lr
-         j0EBqg4Om/QSWJJ4G01BxpfNnx6KLm4oSh8g/gHELZzyL+CKFLxmeq+JHxS5nT/Ovj4y
-         VrbGj7u2X/sK9rZmd89AJv2s6krS1uxysr5+E7bxvSsCYvZBWogVUy/qu183eVy4s/Kh
-         qcpQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kPb3YhbMUdbkmuU1gFasWy9cyqgwnfL3etorBN1mb+M=;
+        b=mTDamWof7J8gAVA6krQo9+JK1EZADqe0PLEUnSqzy13GRBuimv8LxommTWQEEyb9EN
+         uNIHvtYemDvlVa9Z02815G0UT6BAtM0OK/Qki859UWnFQiLvJ0W32eaOs8oJb0H8X6LB
+         p3KzeVyKOOT1/eSGKnsB7MIyqhlWuYryf9+r0KYHo5Ox4dELoNlQsOPaY4fndblMPl3k
+         mObhgKmJsJY8xoVJFs/OL8eithvoc0zK81rLxUkh16ov12tozMafTQ6q48/HEUSlvkEr
+         C05NMzLCGB4XrtDSv/CCNAlaP8vElMMNeTnpzX+X9Nrq8FoWiNco7weM+VjHCI72Mg8R
+         lNXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dLd8cOvv8HoVPf9Qd5agJOJR3BAYQw3KP1yEY5GxLrY=;
-        b=MV7t0ileUEmkUJrebdbeGa7fX+hMK/6w+aps1EIyfgWOUfix2lGnavnuX0Cv1gMlOD
-         kWyZql5iy+DGyIzVA9SFqvD5FK1M4lB9vy0/fYRR1i/dr7pyx4QufK7yEHQ+gX49B3+/
-         vLXIT2FbVw1Qty2P1/nva/v5DLMoq5pAQ/afqEWljaM0OeoAPvSqCtpdMxrXQNyiabUM
-         orT+ztHc97Zttx3Crtd3RVq199fnDUR9b5U3jiG9ngiqlEDIr0H0+kurud2Qs/77w9CB
-         ManMhfCvdVCQgmGLS6updXWjxZaHxvza5LJ01G4q1NrPsdhUwROUKyxvODigrPrBMR60
-         ExiQ==
-X-Gm-Message-State: AJIora/V3qV5HT4H6iNx6Dganj1BqcdIcXj3+eo+gm/9TEnPiYJvYjrU
-        tada3ihStTcPQfnsVf78XuTpYFFJ9WyVyw==
-X-Google-Smtp-Source: AGRyM1srhjBnWDzudsBq1Jm399+BkmywIX129CiWpjDmta8FzdwBdycuNdqBt+rw/UgVPr50G5N1oQ==
-X-Received: by 2002:a05:6602:1644:b0:678:8ba4:8df6 with SMTP id y4-20020a056602164400b006788ba48df6mr13933049iow.138.1658187774092;
-        Mon, 18 Jul 2022 16:42:54 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:71f7:9f7:a010:d581? ([2600:1700:2442:6db0:71f7:9f7:a010:d581])
-        by smtp.gmail.com with ESMTPSA id e12-20020a02860c000000b0032e21876ea8sm6042489jai.72.2022.07.18.16.42.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 16:42:53 -0700 (PDT)
-Message-ID: <d9f2ec3f-d531-80ef-d9cc-0926893d892f@gmail.com>
-Date:   Mon, 18 Jul 2022 18:42:52 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kPb3YhbMUdbkmuU1gFasWy9cyqgwnfL3etorBN1mb+M=;
+        b=5mPiC4uW7YiXNf5nPA0JjWEMPAPavk4Yt8REm4GndkmNW93Vb1CruUsrx/7jwG4Knx
+         P5H5JsJt+f7ADpA7ZDoXv9wwQfZv0f00bUVla1C9K2N0HHzIlY8DG2Fho6j7bwW5bIN8
+         hZcyk4JOkMJKgu9u6nHfTstU+LowuzDYGCbjrWiJNeyaL+Pm/PLh7xrdLB7lN7ZbQk9f
+         rv7EINXPSeQSqf/vgH/LKdkoiNIGzqjrVxLYrHnTZK22UeHVlWR68PMAYnOM1+JqfmOF
+         35llzBjPXZXTHUH88qtFyq7bZ7ghB4/zaUpAOIPG9JY5J/GjKiNdXKbR8AtwvwkdBae2
+         FAjQ==
+X-Gm-Message-State: AJIora+OGdDfTb01XNCBgihGdyB1Xn+zz9951JP3/xgmuviCEb3cMXTV
+        g+IoDk7l/iCuQFtASpV3QR4=
+X-Google-Smtp-Source: AGRyM1sPviCrBegbjjhEiOWO6V6gOvvD6bB0qzZWiuBbzJ2G9YDV2Ldc4Vt6HuH3wA1VNerR6aXdxw==
+X-Received: by 2002:aa7:c0c7:0:b0:43a:79b9:5cd1 with SMTP id j7-20020aa7c0c7000000b0043a79b95cd1mr39325013edp.282.1658187841458;
+        Mon, 18 Jul 2022 16:44:01 -0700 (PDT)
+Received: from skbuf ([188.25.231.190])
+        by smtp.gmail.com with ESMTPSA id d24-20020a50fb18000000b0043585bb803fsm9405069edq.25.2022.07.18.16.44.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 16:44:00 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 02:43:58 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 1/4] net: dsa: qca8k: drop
+ qca8k_read/write/rmw for regmap variant
+Message-ID: <20220718234358.27zv5ogeuvgmaud4@skbuf>
+References: <20220716174958.22542-1-ansuelsmth@gmail.com>
+ <20220716174958.22542-2-ansuelsmth@gmail.com>
+ <20220718180452.ysqaxzguqc3urgov@skbuf>
+ <62d5a291.1c69fb81.e8ebe.287f@mx.google.com>
+ <20220718184017.o2ogalgjt6zwwhq3@skbuf>
+ <62d5ad12.1c69fb81.2dfa5.a834@mx.google.com>
+ <20220718193521.ap3fc7mzkpstw727@skbuf>
+ <62d5b8f5.1c69fb81.ae62f.1177@mx.google.com>
+ <20220718203042.j3ahonkf3jhw7rg3@skbuf>
+ <62d5daa7.1c69fb81.111b1.97f2@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 0/2] of: overlay: Miscellaneous improvements
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1657893306.git.geert+renesas@glider.be>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <cover.1657893306.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62d5daa7.1c69fb81.111b1.97f2@mx.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,26 +89,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/15/22 09:03, Geert Uytterhoeven wrote:
-> 	Hi,
+On Mon, Jul 18, 2022 at 11:54:44PM +0200, Christian Marangi wrote:
+> On Mon, Jul 18, 2022 at 11:30:42PM +0300, Vladimir Oltean wrote:
+> > On Mon, Jul 18, 2022 at 09:30:58PM +0200, Christian Marangi wrote:
+> > > Tell me if I got this wrong.
+> > > 
+> > > The suggestion was to move the struct dsa_switch_ops to qca8k.h and add
+> > > in the specific code probe the needed ops to add to the generic
+> > > struct...
+> > 
+> > The declaration yes; the definition to qca8k-common.c. See for example
+> > where felix_switch_ops is, relative to felix_vsc9959.c, seville_vsc9953.c
+> > (users), felix.h (declaration), and felix.c (definition). Or how
+> > mv88e6xxx_switch_ops does things and still supports a gazillion of switches.
 > 
-> While performing the long-overdue rebase of my topic/overlays branch[1]
-> on top of the overlay rework in v5.19-rc1, I identified a few areas for
-> improvement in the upstream code.
-> 
-> Thanks for your comments!
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/?h=topic/overlays
-> 
-> Geert Uytterhoeven (2):
->   of: overlay: Move devicetree_corrupt() check up
->   of: overlay: Simplify of_overlay_fdt_apply() tail
-> 
->  drivers/of/overlay.c | 20 +++++++-------------
->  1 file changed, 7 insertions(+), 13 deletions(-)
-> 
+> Mhh I checked the example and they doesn't seems to be useful from my
+> problem. But I think it's better to discuss this to the patch directly
+> so you can better understand whay I intended with having dsa_switch_ops
+> set to const.
 
-The patches look good, based on a visual inspection.  I'll build the kernel
-and test the patches tomorrow morning.
+So you don't modify the common dsa_switch_ops from the switch-specific
+probe path, but rather, from the common dsa_switch_ops method, you call
+a second function pointer.
 
--Frank
+static void felix_phylink_validate(struct dsa_switch *ds, int port,
+				   unsigned long *supported,
+				   struct phylink_link_state *state)
+{
+	struct ocelot *ocelot = ds->priv;
+	struct felix *felix = ocelot_to_felix(ocelot);
+
+	if (felix->info->phylink_validate)
+		felix->info->phylink_validate(ocelot, port, supported, state);
+}

@@ -2,170 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8162578B91
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E59A578BAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234929AbiGRUO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 16:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S235465AbiGRUVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 16:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiGRUOy (ORCPT
+        with ESMTP id S231248AbiGRUVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 16:14:54 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD95DF3B
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:14:53 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id e15so16881781edj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mRyn3MyNya4veUrOXgtJFR/zBUEHQj0h1AhfGm3iIco=;
-        b=IvCsntT+j1o8ydquNf78ux6p0FEWCxes4Vy/KghbteDCngVUn4KGoDBYG0IZhJ9bID
-         qZuve7mxNdJwTBZDLVBmi8QC3hIbNkvj1Gd973nydY8GnmGJmz4FVs7ZpPEtNJorGML7
-         p1KmgXRb2qh5nwyei8Qi+xY/FKD4aUMqFk+FavBoqYx3iImvrxpUzprvnWID76ucPfhb
-         559nnaC73OOTg8dGV+RpB9d62tZ3NGKIPlgZ/as/2SJH0fVczLBkyONCzUxPhowGMjYo
-         53KOcK+QeWENhg+mt68F5X9vGJ3KtFKSBwBnSs5/dqSGTLsDNtbA2lyZmPh3xV/q2SiR
-         451g==
+        Mon, 18 Jul 2022 16:21:17 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EBE3056D;
+        Mon, 18 Jul 2022 13:21:16 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id w9so3123178ilg.1;
+        Mon, 18 Jul 2022 13:21:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mRyn3MyNya4veUrOXgtJFR/zBUEHQj0h1AhfGm3iIco=;
-        b=dwGq6H1MhQ1MTEQHo2rM3DRG1b1/NXSlmunZGl2qwMi1M860ZcIzaNp9uqA3ea/L76
-         TB/TqHvZ3uLXZquUWXL46iCfF6XHP/4Bb5pApUNC67CwdXD3qlWOQ3/qOfE60Z18mqTJ
-         j0Zdn63VllSrpW/Mjexrs96vzLfEvnxRJ9c22V8zF1iEFilg9m3Y4XPwKOLjrxd9ki2A
-         0nAYyfRSI+D7BnYeowcuceVuYjlKKk+gGqgzvC+5Et3xje0bE37aV6Td0zsVV1DQ235L
-         DJXt60Mcea2ewRuKvMpVcrt6EWZHElqPUAUx0nKakH5BHmHtza4AuNN6egHxUbx2GBQq
-         bxPw==
-X-Gm-Message-State: AJIora+e75WP5Vq+6JfQPj7MC9YQE5B107/oqeMMSlTQVHJedD4kHJ4F
-        N6e9TPwQo7UuWBnwRQnv+0ZvPbEjQHxP19S7xbQ=
-X-Google-Smtp-Source: AGRyM1ujH4q9O+GFp2uWJAq/DyFBbuRu/KGVUdEc1NNoa8rx3EWtW/29PG+u3BLLLD9Vp0I0fc2/Sw0OD3rPIgvKJew=
-X-Received: by 2002:a05:6402:c47:b0:437:ce2d:c30d with SMTP id
- cs7-20020a0564020c4700b00437ce2dc30dmr38710042edb.395.1658175292390; Mon, 18
- Jul 2022 13:14:52 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ynxFYeVYReMscKRbp1PGFWnDnfPfj0JbfYGgEj9QMa8=;
+        b=J+vrUYpQeZ/Cy0gkMY17/5bzKV7eaujoyI9bq2GFe+voqTqdoTeGpJocLQvNFZ7vQ0
+         ILgJA/GMVZHQOY92cHK/hcMmCiL+wpXnl1v24Sssfll6zfyATPLWenyP4aqq7hwtCwON
+         2pSXqoNTbEmK+vveBJXTZOXN0KFXWwV4sa5KkbDRLVopgUbQ5bD/6fI2cvTj/Dgqe4/x
+         C6soF3U6g/rPwJpbcQxVAlrF6Wg7D6PfA5EBNpI4FOSnFSI+y1MdDEBr9r2UrgEndjxp
+         CrUdvSNikdymQSZ/uBMvLa7ewD2kGrpVqHR+jI+miFOhilUVI1CD2Hb6sYdBCn/toF5g
+         PhRQ==
+X-Gm-Message-State: AJIora9d0irJ4GNdAWm43m/ikP0Zq1iOmJ6RIzAZNMAIDupkGQKvadve
+        8vQSOddRd5aflZ6qM7pmDw==
+X-Google-Smtp-Source: AGRyM1vaDDDUOeHt3lurvR3J3lSRNZ44pNwdJGSHidBa5vaIG068vrI+0SSo+eDbXIHdcLNloTdksA==
+X-Received: by 2002:a05:6e02:1688:b0:2dc:822e:7c63 with SMTP id f8-20020a056e02168800b002dc822e7c63mr14459068ila.205.1658175675865;
+        Mon, 18 Jul 2022 13:21:15 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id d190-20020a6bb4c7000000b0066961821575sm6327392iof.34.2022.07.18.13.21.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 13:21:14 -0700 (PDT)
+Received: (nullmailer pid 3481625 invoked by uid 1000);
+        Mon, 18 Jul 2022 20:21:09 -0000
+Date:   Mon, 18 Jul 2022 14:21:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, daniel@ffwll.ch,
+        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
+        airlied@linux.ie, msp@baylibre.com, granquet@baylibre.com,
+        jitao.shi@mediatek.com, wenst@chromium.org,
+        angelogioacchino.delregno@collabora.com, ck.hu@mediatek.com,
+        liangxu.xu@mediatek.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fbdev@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v14 01/10] dt-bindings: mediatek,dp: Add Display Port
+ binding
+Message-ID: <20220718202109.GA3465206-robh@kernel.org>
+References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
+ <20220712111223.13080-2-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-References: <20220718090050.2261-1-21cnbao@gmail.com> <YtWFHfs0mYonWBwH@casper.infradead.org>
-In-Reply-To: <YtWFHfs0mYonWBwH@casper.infradead.org>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Tue, 19 Jul 2022 08:14:41 +1200
-Message-ID: <CAGsJ_4z0z0mUfuEbyfj7HxB4pBNdkv5igi1rfccithnSB7Q5gA@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Steven Price <steven.price@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Ying Huang <ying.huang@intel.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712111223.13080-2-rex-bc.chen@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 4:06 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Mon, Jul 18, 2022 at 09:00:50PM +1200, Barry Song wrote:
-> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > index 1652a9800ebe..e1c540e80eec 100644
-> > --- a/arch/arm64/Kconfig
-> > +++ b/arch/arm64/Kconfig
-> > @@ -101,6 +101,7 @@ config ARM64
-> >       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-> >       select ARCH_WANT_LD_ORPHAN_WARN
-> >       select ARCH_WANTS_NO_INSTR
-> > +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
->
-> Can't you avoid all the other changes by simply doing:
->
->         select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES && !ARM64_MTE
->
-> >       select ARCH_HAS_UBSAN_SANITIZE_ALL
-> >       select ARM_AMBA
-> >       select ARM_ARCH_TIMER
+On Tue, Jul 12, 2022 at 07:12:14PM +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This controller is present on several mediatek hardware. Currently
+> mt8195 and mt8395 have this controller without a functional difference,
+> so only one compatible field is added.
+> 
+> The controller can have two forms, as a normal display port and as an
+> embedded display port.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>  .../display/mediatek/mediatek,dp.yaml         | 115 ++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> new file mode 100644
+> index 000000000000..e2d6cb314297
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+> @@ -0,0 +1,115 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,dp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek Display Port Controller
+> +
+> +maintainers:
+> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> +  - Jitao shi <jitao.shi@mediatek.com>
+> +
+> +description: |
+> +  Device tree bindings for the MediaTek display port TX (DP) and
+> +  embedded display port TX (eDP) controller present on some MediaTek SoCs.
+> +  MediaTek DP and eDP are different hardwares and they have different
+> +  base address for registers, so we need two different compatibles to
+> +  separate them.
 
-Nope. as we also enable ARM64_MTE on platforms without mte.
-ARMv8.5 based processors introduce the Memory Tagging Extension
-(MTE) feature but the Kconfig is default Y for platforms before 8.5.
+As I said before, 'different base address for registers' is not a reason 
+for different compatibles. If it was, then we'd never have a compatible 
+string appear more than once in a DT.
 
-arm64 usually detects the cpufeature rather than depending on
-static build configuration.
+Explain WHAT is different within the block. For example[1].
 
-> > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> > index 0b6632f18364..78d6f6014bfb 100644
-> > --- a/arch/arm64/include/asm/pgtable.h
-> > +++ b/arch/arm64/include/asm/pgtable.h
-> > @@ -45,6 +45,12 @@
-> >       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
-> >  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-> >
-> > +static inline bool arch_thp_swp_supported(void)
-> > +{
-> > +     return !system_supports_mte();
-> > +}
-> > +#define arch_thp_swp_supported arch_thp_swp_supported
-> > +
-> >  /*
-> >   * Outside of a few very special situations (e.g. hibernation), we always
-> >   * use broadcast TLB invalidation instructions, therefore a spurious page
-> > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> > index de29821231c9..4ddaf6ad73ef 100644
-> > --- a/include/linux/huge_mm.h
-> > +++ b/include/linux/huge_mm.h
-> > @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
-> >       return split_huge_page_to_list(&folio->page, list);
-> >  }
-> >
-> > +/*
-> > + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
-> > + * limitations in the implementation like arm64 MTE can override this to
-> > + * false
-> > + */
-> > +#ifndef arch_thp_swp_supported
-> > +static inline bool arch_thp_swp_supported(void)
-> > +{
-> > +     return true;
-> > +}
-> > +#endif
-> > +
-> >  #endif /* _LINUX_HUGE_MM_H */
-> > diff --git a/mm/swap_slots.c b/mm/swap_slots.c
-> > index 2a65a89b5b4d..10b94d64cc25 100644
-> > --- a/mm/swap_slots.c
-> > +++ b/mm/swap_slots.c
-> > @@ -307,7 +307,7 @@ swp_entry_t folio_alloc_swap(struct folio *folio)
-> >       entry.val = 0;
-> >
-> >       if (folio_test_large(folio)) {
-> > -             if (IS_ENABLED(CONFIG_THP_SWAP))
-> > +             if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
-> >                       get_swap_pages(1, &entry, folio_nr_pages(folio));
-> >               goto out;
-> >       }
-> > --
-> > 2.25.1
-> >
-> >
+Rob
 
-Thanks
-Barry
+[1] https://lore.kernel.org/all/20220710084133.30976-10-dmitry.baryshkov@linaro.org/
+
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8195-dp-tx
+> +      - mediatek,mt8195-edp-tx
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nvmem-cells:
+> +    maxItems: 1
+> +    description: efuse data for display port calibration
+> +
+> +  nvmem-cell-names:
+> +    const: dp_calibration_data
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Input endpoint of the controller, usually dp_intf
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description: Output endpoint of the controller
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +            properties:
+> +              data-lanes:
+> +                description: |
+> +                  number of lanes supported by the hardware.
+> +                  The possible values:
+> +                  0       - For 1 lane enabled in IP.
+> +                  0 1     - For 2 lanes enabled in IP.
+> +                  0 1 2 3 - For 4 lanes enabled in IP.
+> +                minItems: 1
+> +                maxItems: 4
+> +            required:
+> +              - data-lanes
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +  max-linkrate-mhz:
+> +    enum: [ 1620, 2700, 5400, 8100 ]
+> +    description: maximum link rate supported by the hardware.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - ports
+> +  - max-linkrate-mhz
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/power/mt8195-power.h>
+> +    dp_tx@1c600000 {
+> +        compatible = "mediatek,mt8195-dp-tx";
+> +        reg = <0x1c600000 0x8000>;
+> +        power-domains = <&spm MT8195_POWER_DOMAIN_DP_TX>;
+> +        interrupts = <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH 0>;
+> +        max-linkrate-mhz = <8100>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            port@0 {
+> +                reg = <0>;
+> +                dptx_in: endpoint {
+> +                    remote-endpoint = <&dp_intf0_out>;
+> +                };
+> +            };
+> +            port@1 {
+> +                reg = <1>;
+> +                dptx_out: endpoint {
+> +                    data-lanes = <0 1 2 3>;
+> +                };
+> +            };
+> +        };
+> +    };
+> -- 
+> 2.18.0
+> 
+> 

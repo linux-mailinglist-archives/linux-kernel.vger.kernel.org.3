@@ -2,97 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259E1578E6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82242578E72
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235050AbiGRXoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 19:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S234580AbiGRXqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 19:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbiGRXo2 (ORCPT
+        with ESMTP id S229615AbiGRXqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 19:44:28 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C7A3192D;
-        Mon, 18 Jul 2022 16:44:27 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id p81so10630119iod.2;
-        Mon, 18 Jul 2022 16:44:27 -0700 (PDT)
+        Mon, 18 Jul 2022 19:46:51 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20F933417
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:46:49 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so19774743pjn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bTJywUAqX3j6iJePWZLrUnkk/lwpRK52+zopJgYfdMg=;
-        b=ZzrnIuDDrStWpWKXGlfYH8jwB3wRvf5cbTYA/+IqCifYOJM1S0j1Uy4vcTgCMGKwzP
-         dSHtSWqJmEUgT1q+1BeoeC97j7KFCz57ZinZS72qvtDSG7ThxZr5PCG6a2peCH8Ku0Mz
-         jjobKwUZhocDwX16bBRY5Vwp2KwxfDMxqklKpkG4SKuPlZvMsrn8WNhjFDuFsmPp86MF
-         /EjD7KB5DEsTmDMab14aecaw9FDpfISMOd2blQ+rXiPfjq03OIvDLHqVIa1YyYOus8sn
-         4/7zHja54HzEsODNv+vINWVaQ6TuFoZm7l9BMGSpYxW/zgAPcc8UrmOiAyp9UgQzkXGv
-         N7Bw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=V+k5WNh4t1m32DC2xdn9fqss9Z9YPd/9WCm7Vf/65ew=;
+        b=IKcajPEAOoIJLsaEnsE29X545rHMn3JotFea30qeq9PiH2LmRPV0e2ppAntkVs3SbX
+         qNmZXVmRwcP+wgg79UgXOD28mrlAFYR4DY9Mhy2g8+P2Xld7JXlu7svBXo2lz2EgEVNl
+         efo6pQEuJOxxswIoQohjFg2GOpoeduYEm342e7MOPqLd+i+sbneveien6K40mVZBcUzN
+         Pj3QAC/hT4WpWaUYbdY5isGpRQUYYSuWP+E0ef0pCKjBbEf98jANV0nrgifcXwD5DiT7
+         osgc7gmGlWp3JNod5zpKbBzHK6DX1aWKdw/6HxZAxmcE2ke8+yE34zvOVgup4RY8O8K9
+         +ydQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bTJywUAqX3j6iJePWZLrUnkk/lwpRK52+zopJgYfdMg=;
-        b=DqP8U98vd7fnolMj11hBaWXzh/S2PYnWvkGAmG/UIGv/CVI4AhsaesnQuao8JKEtBe
-         nvIK2aw04XT/35qJtiKpHu5PAEJ7UOMmWgJ7hTH2s9seslJsWmaHNG4RcAUB72IbrgMS
-         0iw2qMST+tONgKH/UDZaC3qTq9qzeNQbNQlEBB4pPPD71X/yF6cvCfKk9ykLgqTY8XdJ
-         O1KRt2GU+IEtLI6lYwy2VPcvrOQ5+U1tfy5jtS6ltTLczNlP6aATx/DrOiznHtUBUt6y
-         Nf6taAihdXts1zFkpT4yaQuAwQ6R9E4HowHbTEC1ljS47ikUCDclAAidXZ/8cRhM9fnt
-         QesQ==
-X-Gm-Message-State: AJIora8AP7BXTpGn+W1vsQfupc6T9YKDeo/Je5Q/Kxg4P7I7XtofKq34
-        hJVGC8H3jDLv0XO1vYu8HNE=
-X-Google-Smtp-Source: AGRyM1ttUhenzTJiVmVOnzL8/ifpXfD1MqX6UtPYQTK96Gt2UOwRrC6FhJ0GfovX6/AxhVd4rwNyXw==
-X-Received: by 2002:a6b:c30c:0:b0:67b:963a:c6ef with SMTP id t12-20020a6bc30c000000b0067b963ac6efmr14712469iof.137.1658187866695;
-        Mon, 18 Jul 2022 16:44:26 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:71f7:9f7:a010:d581? ([2600:1700:2442:6db0:71f7:9f7:a010:d581])
-        by smtp.gmail.com with ESMTPSA id y2-20020a926402000000b002dc0ccc4cafsm5191201ilb.49.2022.07.18.16.44.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 16:44:26 -0700 (PDT)
-Message-ID: <725f870b-b927-352d-85ab-675b91b7c75a@gmail.com>
-Date:   Mon, 18 Jul 2022 18:44:24 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V+k5WNh4t1m32DC2xdn9fqss9Z9YPd/9WCm7Vf/65ew=;
+        b=5vM8uK0iz7XdJm80nTAIeWhmGu79IX8z2+fF88Yb1/jATiv5LVDfgOtO8b4b7e/xcV
+         4gmCAS3YnttojcpgHWhmDBC/VEwgU7o0wrAow7qFzfZjJD2GBPJlZchvGd/j+BY11pFW
+         XILUkxZosLIJbEZh++qo5ESQkL7DfP2SW26kAT55L315ZOhanDQsL7uR3I5+uCxQJE3d
+         +jqvearq2p4B7yzj/ZdCGbcWxhc6WqifmbAMDUYPMjWXNyluSMTvenjHxNIxDeRh899s
+         t+bviQfVtDaPBE6zNG71UxEtRhqo8XVNeEClFSdd1mCTVfaGpDUWBkqHzHlJFX91v6K0
+         zcxQ==
+X-Gm-Message-State: AJIora8jN74eUonryxdP0g/35DXBrKkWQf5VcS2QBpg6wNIzEcHnWWrs
+        ajz0GC0cmmr4zvRsmISUDcnJQQ==
+X-Google-Smtp-Source: AGRyM1tHTutF3/J1jx5hyumfSIH5Nny7tbSTVRFNGviIDr3edV8HTIveuVe3LoJ6y2mAcVox2RucNA==
+X-Received: by 2002:a17:90a:4e05:b0:1ec:8de4:1dd5 with SMTP id n5-20020a17090a4e0500b001ec8de41dd5mr34719549pjh.242.1658188009008;
+        Mon, 18 Jul 2022 16:46:49 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id c13-20020aa7952d000000b0052ac5e304d0sm10157638pfp.179.2022.07.18.16.46.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 16:46:48 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 23:46:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, oliver.upton@linux.dev,
+        shuah@kernel.org, maz@kernel.org, pbonzini@redhat.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH v3] KVM: selftests: Fix target thread to be migrated in
+ rseq_test
+Message-ID: <YtXw5DKI7z9s1TA6@google.com>
+References: <20220719013540.3477946-1-gshan@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/1] of: overlay: rename overlay source files from .dts
- to .dtso
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Jason Liu <jason.hui.liu@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-pci <linux-pci@vger.kernel.org>
-References: <20220503211954.1428919-1-frowand.list@gmail.com>
- <CAMuHMdWhn8cY4usyqao-osEcSCcmkU+NYg21co+GxVfvg5+dhw@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CAMuHMdWhn8cY4usyqao-osEcSCcmkU+NYg21co+GxVfvg5+dhw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719013540.3477946-1-gshan@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,47 +74,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/7/22 02:21, Geert Uytterhoeven wrote:
-> Hi Frank,
-> 
-> On Tue, May 3, 2022 at 11:20 PM <frowand.list@gmail.com> wrote:
->> From: Frank Rowand <frank.rowand@sony.com>
->>
->> In drivers/of/unittest-data/:
->>    - Rename .dts overlay source files to use .dtso suffix.
->>    - Add Makefile rule to build .dtbo.o assembly file from overlay
->>      .dtso source file.
->>    - Update Makefile to build .dtbo.o objects instead of .dtb.o from
->>      unittest overlay source files.
->>
->> Modify driver/of/unitest.c to use .dtbo.o based symbols instead of
->> .dtb.o
->>
->> Modify scripts/Makefile.lib %.dtbo rule to depend upon %.dtso instead
->> of %.dts
->>
->> Rename .dts overlay source files to use .dtso suffix in:
->>    arch/arm64/boot/dts/freescale/
->>    arch/arm64/boot/dts/xilinx/
->>
->> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> 
-> What is the status of this work?
-> Thanks!
+On Tue, Jul 19, 2022, Gavin Shan wrote:
+> ---
+> v3: Improved changelog (Oliver Upon)
 
-I'll work on this tomorrow after I test your overlay improvement patches.
+Sorry I didn't catch v3, I saw that you waited but just didn't get to this earlier :-/
 
--Frank
+> ---
+>  tools/testing/selftests/kvm/rseq_test.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+> index 4158da0da2bb..c83ac7b467f8 100644
+> --- a/tools/testing/selftests/kvm/rseq_test.c
+> +++ b/tools/testing/selftests/kvm/rseq_test.c
+> @@ -38,6 +38,7 @@ static __thread volatile struct rseq __rseq = {
+>   */
+>  #define NR_TASK_MIGRATIONS 100000
+>  
+> +static pid_t rseq_tid;
+>  static pthread_t migration_thread;
+>  static cpu_set_t possible_mask;
+>  static int min_cpu, max_cpu;
+> @@ -106,7 +107,8 @@ static void *migration_worker(void *ign)
 
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+Pass the target TID to the worker, then there's no need to use a global and no
+chance of consuming rseq_tid "uninitialized".  The casting to convert gettid() to
+a "void *" is annoying, but not the end of the world.
 
+>  		 * stable, i.e. while changing affinity is in-progress.
+>  		 */
+>  		smp_wmb();
+> -		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
+> +		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask),
+> +				      &allowed_mask);
+
+Eh, let this poke out, don't think it's worth wrapping here.
+
+E.g.
+
+---
+ tools/testing/selftests/kvm/rseq_test.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+index aba7be178dab..a54d4d05a058 100644
+--- a/tools/testing/selftests/kvm/rseq_test.c
++++ b/tools/testing/selftests/kvm/rseq_test.c
+@@ -80,8 +80,9 @@ static int next_cpu(int cpu)
+ 	return cpu;
+ }
+
+-static void *migration_worker(void *ign)
++static void *migration_worker(void *__rseq_tid)
+ {
++	pid_t rseq_tid = (pid_t)(unsigned long)__rseq_tid;
+ 	cpu_set_t allowed_mask;
+ 	int r, i, cpu;
+
+@@ -104,7 +105,7 @@ static void *migration_worker(void *ign)
+ 		 * stable, i.e. while changing affinity is in-progress.
+ 		 */
+ 		smp_wmb();
+-		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
++		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask), &allowed_mask);
+ 		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
+ 			    errno, strerror(errno));
+ 		smp_wmb();
+@@ -227,7 +228,8 @@ int main(int argc, char *argv[])
+ 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+ 	ucall_init(vm, NULL);
+
+-	pthread_create(&migration_thread, NULL, migration_worker, 0);
++	pthread_create(&migration_thread, NULL, migration_worker,
++		       (void *)(unsigned long)gettid());
+
+ 	for (i = 0; !done; i++) {
+ 		vcpu_run(vcpu);
+
+base-commit: ad6cb756bb497997032df2bda7cbdff076e4a66a
+--

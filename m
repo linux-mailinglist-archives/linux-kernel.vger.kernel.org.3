@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C928F578096
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573C0578099
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiGRLTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 07:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S232757AbiGRLUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 07:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiGRLTr (ORCPT
+        with ESMTP id S229799AbiGRLUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 07:19:47 -0400
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786DD1EEC6;
-        Mon, 18 Jul 2022 04:19:46 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id bk26so16519654wrb.11;
-        Mon, 18 Jul 2022 04:19:46 -0700 (PDT)
+        Mon, 18 Jul 2022 07:20:52 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE1AB4A5;
+        Mon, 18 Jul 2022 04:20:52 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id l11so8461412qvu.13;
+        Mon, 18 Jul 2022 04:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FTeMoAHtnCPt9zaBpC4a6d1gebz+vzJPv9Y27GinJbg=;
+        b=OYHy9I4Jf4Z/O9dNLuqv9E8TbczfHBclUfgxhCrXrmtkcbV3F9m4JX/AQROxDT/VWj
+         LQqOfdRgkmwqULlvunXTK96UGs3D6FfTCD+yDoWTxMpzCYSMjYhYWK06u1BcG+zvPl6w
+         ZS0WUjukvrHiU15GB1xBhwL+HMZOdZGYimKnUiwlDnIAOxRSPfH69jgb98iQS7dMsiHR
+         rVjJKTOp20O+KTz9onmRHUO5oMbMokQq3i77684N88AL41mpVGaaIfnDzL0sAbuO+JHD
+         CYOi6J16Q0NGOZM3gmhqQo9DQMqIbCFD5Lew4D3TLWnAjLYZBzA2Qa0fgtPdKoNR2NMW
+         VcdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lDWcJ/P2G+Efw9LFUp8QiMuMlTbsXBhsKq/bavJQHeM=;
-        b=g/Wn6E52h3yj2pIJtK+5/+7HE/4kdHPuNL7YtASO+gS3mOMVrblVs+QyoIiLCo02JM
-         5cZdMO4W6tZUNVqMCIM0+gxMBcu8XMC6mprdToqGcynjx8RVIA6zaNO7xZR5hQHkmKu+
-         4YCcaRQe4WrCLb+RkxAjoeVlmOi4FkR/JUUT86O3iu0iRUY8B4JmOW9uPBvvMeKtB4dh
-         9RKy6mh8g2Ao52DTY+DbYF8SIK3XoRvy37GzmeN29ygaPjnFvUNLOBMj7uKfYM5OPWm4
-         yc5iTu2wFXDzcXzhuNSzKfB1uHoOWGJ64urDhSU8LUQOVfvBcerL5f8K2M76ipFuf4gQ
-         ic0g==
-X-Gm-Message-State: AJIora8nVQgjj44WgSLT8P84OtxK2UX6wpbsBsFHRU2e4Sbj/+llDJho
-        9EiC3wUGwiQns1+r6y1CZ2w=
-X-Google-Smtp-Source: AGRyM1vtPvG/lF0R05NYGfGgpWHdLGsL96KB88LHSDGU386hRYmf4Z6F8FK3n+QRj0Z3SyCntVrwtw==
-X-Received: by 2002:a05:6000:60a:b0:21d:9451:e91 with SMTP id bn10-20020a056000060a00b0021d94510e91mr22963793wrb.73.1658143184963;
-        Mon, 18 Jul 2022 04:19:44 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id a16-20020adfdd10000000b0021d6e917442sm12515814wrm.72.2022.07.18.04.19.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 04:19:44 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 11:19:42 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     "K . Y . Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        linux-hyperv@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] Drivers: hv: Fix spelling mistake
- "total_pages_commited" -> "total_pages_committed"
-Message-ID: <20220718111942.nf22xsfikwzphfnp@liuwe-devbox-debian-v2>
-References: <20220714102634.22184-1-colin.i.king@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FTeMoAHtnCPt9zaBpC4a6d1gebz+vzJPv9Y27GinJbg=;
+        b=jOlbIPkzMO0tdcWTbOMj39UnPj1MZAwkcTQfXadV7lVPSg8cH0iabkUCT94yAhrnSa
+         xSe0+5M7MZi2UhkpMmQXl/SPhXtNtJqyYUh+MzeDr9zA4JEPqQ4sOzk44EM7gyNvOHJM
+         oKFztWaAiEl48N5QP99XxkhMgBdRHQKkfBAIqdmx5k1Z4WaiOAI5em2hwqRzAYaOKj4i
+         o5djUnbp3GmT7EH02h+x3+zGy7jsXlUOgXJTkBpjX7svcMJG55tDivui7pv3qAsYYItA
+         kvJ1TxAAXnjtnnJLPGBInRPy6SiWeAYXkqJABs036bWwDMGLqr9yqsaTGKhvY0xhSst7
+         U1Gw==
+X-Gm-Message-State: AJIora/Nu5MGlYFWnUK5MHnhVFrK2zaeBl18GkEb1/KaaCmPd3M3QD54
+        6in66TncLEIoxQvi7lAxFvntofNjOXEiqIqthJ2FssrF
+X-Google-Smtp-Source: AGRyM1t670FYwMUy+rWS1sJ649OLE9CeHki8pcOKdf5K9r1zXsVH7iZO4iRZJMvBejkuhjDtI+nNH5YT2fFcicR38gc=
+X-Received: by 2002:a0c:eb4a:0:b0:472:f936:3ea0 with SMTP id
+ c10-20020a0ceb4a000000b00472f9363ea0mr21197314qvq.43.1658143251297; Mon, 18
+ Jul 2022 04:20:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220714102634.22184-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220624195112.894916-1-robimarko@gmail.com> <CACRpkdZdccrfA4yHoVjzpsJesYshuP6PjtT=KTeEQgOdXR6_5w@mail.gmail.com>
+ <CACRpkdZ5P-U19wTnzsOr9o_XWn1rKqVSxc+YrYnKNJLTmJyYTg@mail.gmail.com>
+In-Reply-To: <CACRpkdZ5P-U19wTnzsOr9o_XWn1rKqVSxc+YrYnKNJLTmJyYTg@mail.gmail.com>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Mon, 18 Jul 2022 13:20:40 +0200
+Message-ID: <CAOX2RU5QuApQxo3f12iM8FEr59UuT=BBE1PqAWnKwK1e=sqO8Q@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: qcom: spmi-gpio: make the irqchip immutable
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-gpio@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 11:26:34AM +0100, Colin Ian King wrote:
-> There is a spelling mistake in a seq_printf message. Fix it.
-> 
-> Fixes: e237eed373cc ("Drivers: hv: Create debugfs file with hyper-v balloon usage information")
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+On Mon, 18 Jul 2022 at 11:59, Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Sun, Jul 10, 2022 at 1:05 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Fri, Jun 24, 2022 at 9:51 PM Robert Marko <robimarko@gmail.com> wrote:
+> >
+> > > Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
+> > > immutable") added a warning to indicate if the gpiolib is altering the
+> > > internals of irqchips.
+> > >
+> > > Following this change the following warning is now observed for the SPMI
+> > > PMIC pinctrl driver:
+> > > gpio gpiochip1: (200f000.spmi:pmic@0:gpio@c000): not an immutable chip, please consider fixing it!
+> > >
+> > > Fix this by making the irqchip in the SPMI PMIC pinctrl driver immutable.
+> > >
+> > > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> >
+> > Patch applied!
+>
+> Jumping the gun too quick.
+>
+> Reverted the patch following Marc's feedback.
 
-Good catch!
+Thanks for doing this, I was planning to send a revert patch.
 
-I've folded this into the original patch. Thanks.
-
-> ---
->  drivers/hv/hv_balloon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-> index ba52d3a3e3e3..fdf6decacf06 100644
-> --- a/drivers/hv/hv_balloon.c
-> +++ b/drivers/hv/hv_balloon.c
-> @@ -1892,7 +1892,7 @@ static int hv_balloon_debug_show(struct seq_file *f, void *offset)
->  	/* pages we have given back to host */
->  	seq_printf(f, "%-22s: %u\n", "pages_ballooned", dm->num_pages_ballooned);
->  
-> -	seq_printf(f, "%-22s: %lu\n", "total_pages_commited",
-> +	seq_printf(f, "%-22s: %lu\n", "total_pages_committed",
->  				get_pages_committed(dm));
->  
->  	seq_printf(f, "%-22s: %llu\n", "max_dynamic_page_count",
-> -- 
-> 2.35.3
-> 
+Regards,
+Robert
+>
+> Yours,
+> Linus Walleij

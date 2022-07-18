@@ -2,140 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1A25789D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06625789D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235750AbiGRSxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        id S235188AbiGRSxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235810AbiGRSxL (ORCPT
+        with ESMTP id S233750AbiGRSxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:53:11 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325242F38D
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658170390; x=1689706390;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ab0HUQfAeEYeW51NOZq+L53z0lf+uFBUJSdHTLaTBzQ=;
-  b=dU9HmotrN5ZzDcW37hgC9KsA6feoJDhSXReUznDzrAepv+c2u7K61STK
-   1TydAb+b41we2wk3j/piyL1GbToRnjZ/rYYuezIOclzMw59Dxebbn9jEj
-   hsBl6TxtU58HWmnnUSj6rfmFp75zHVYA5rPO75uNoypBAR1Tfj6FheMpq
-   6fjnZmVO8rMh9iZ5CaeVq88Dq6ZThyf+cAKV4SzUp3C5+CFjQ2LubYBbE
-   hr30VmYpWFNtIFCPNT3pckXU1lMUKaReoyyRt+XO+zeqezI0ItdsJdRdq
-   0LbjlB0aUzbkILOqRLHsO6qBcBpPTZjQVhu7LHfPb3F3DP7QtlwpljtCG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="347985674"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="347985674"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 11:53:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="665126077"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Jul 2022 11:53:07 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDVrf-0004ef-1t;
-        Mon, 18 Jul 2022 18:53:07 +0000
-Date:   Tue, 19 Jul 2022 02:53:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peng Zhang <zhangpeng.00@bytedance.com>, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        "zhangpeng.00" <zhangpeng.00@bytedance.com>
-Subject: Re: [PATCH] sched/fair: optimize entity_tick()
-Message-ID: <202207190234.1dmTZy65-lkp@intel.com>
-References: <20220718094937.37360-1-zhangpeng.00@bytedance.com>
+        Mon, 18 Jul 2022 14:53:43 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD302613F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:53:42 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id w12so16553539edd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:53:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QQCeFWAFeeYdE8AjB15uv+68TOpyaBwb6vwqnHcmGmg=;
+        b=OrKeVKLURvey9dO5WC2LaIReRqt7JeYxJsb/rxtAYnzaWF/YswmZK+RmgID5pk5hJ+
+         kwlW7xQy+/+uWXFRS9wo4msdp85Hp6C34wrtXKeRwWMqUr2My1sj8+3e3bEjU7jVOQI1
+         xktxra0gDL4AEWJ1Mdug6zemBkkhvI9b4OxuaHgQ36ncjSDTjolCYNKJJrsqyYmbuVQG
+         fZFtl8bNT1l/QlkNJ4uo65jqgfe+NYJP34lF0uZ2bse8xDLKSOEkBBwhiWWd5f3qIVz7
+         l8Ch2Ij6oDNz9+AFTY0Dqd851oN1jQu836XjaboYL3eT0qqK54oz20rGTXwlPP8zMCA7
+         /IVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QQCeFWAFeeYdE8AjB15uv+68TOpyaBwb6vwqnHcmGmg=;
+        b=Q4XaTO8pCHYKrQ2H6Kstc8edPBmqBxy21iU0BACtonSZUOqmpO60eYrkgqte6Fs2mI
+         SsmWu7t1DU+0q6vFhk5tcQZsMH1bP2a0116tHiv/muDd/j3RwPqlAa9QOFrUmt6u0CXI
+         Jh8ZodHpVnsQx5xv+zGZ2LiE+apts5Gtr0HhKVSL0cCjsO3aT8WXhvnmGg7zVTDPE/AI
+         FIyjQZ9SHpYlf98D438HZl2D2+bwIvWLH5hmuIGarJxzosWJAURrnIMqr6CQVN+2skaE
+         DNEMN9t307UefXoQvbiLSTv3bzaxRW+yLWadnk+fD3NGO3EWlh37RF/w9hUZ6dNALI9N
+         eDHw==
+X-Gm-Message-State: AJIora8xhAXigIYbBN1CsRHQtz5SFtYvh9capoQ32KJJxGMyvwCMz5+s
+        LWB6u8kSMR79YJZSpkL4YcvuRevAxuooPu2jZjo=
+X-Google-Smtp-Source: AGRyM1vFm/q16yDnNmxPJrCn+CGhjdvi5dklwjRveBxeTxdUBq2J0ybUbYU2ZNuqC3neB0Opwn5rrTn1N/7NR2hhiTg=
+X-Received: by 2002:a05:6402:2895:b0:43b:1e47:c132 with SMTP id
+ eg21-20020a056402289500b0043b1e47c132mr32853099edb.425.1658170421073; Mon, 18
+ Jul 2022 11:53:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718094937.37360-1-zhangpeng.00@bytedance.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714164507.561751-1-mairacanal@riseup.net> <20220714164507.561751-3-mairacanal@riseup.net>
+In-Reply-To: <20220714164507.561751-3-mairacanal@riseup.net>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 18 Jul 2022 14:53:29 -0400
+Message-ID: <CADnq5_NzUdMWL2Am6hPkZsthMu=ONPvb1Lu85v0f2PoqA5uWNw@mail.gmail.com>
+Subject: Re: [PATCH 03/12] drm/amd/display: Remove unused clk_src variable
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Magali Lemes <magalilemes00@gmail.com>,
+        Tales Lelo da Aparecida <tales.aparecida@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Melissa Wen <mwen@igalia.com>,
+        Isabella Basso <isabbasso@riseup.net>, andrealmeid@riseup.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+Applied.  Thanks!
 
-Thank you for the patch! Perhaps something to improve:
+Alex
 
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on linus/master v5.19-rc7 next-20220718]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Zhang/sched-fair-optimize-entity_tick/20220718-175245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 401e4963bf45c800e3e9ea0d3a0289d738005fd4
-config: nios2-randconfig-s042-20220718 (https://download.01.org/0day-ci/archive/20220719/202207190234.1dmTZy65-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/9dec20bda1c5d0d7a203d393fc1ffa6e296579a9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Zhang/sched-fair-optimize-entity_tick/20220718-175245
-        git checkout 9dec20bda1c5d0d7a203d393fc1ffa6e296579a9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/target/ kernel/sched/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-   kernel/sched/fair.c:927:34: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sched_entity *se @@     got struct sched_entity [noderef] __rcu * @@
-   kernel/sched/fair.c:927:34: sparse:     expected struct sched_entity *se
-   kernel/sched/fair.c:927:34: sparse:     got struct sched_entity [noderef] __rcu *
->> kernel/sched/fair.c:4760:75: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct task_struct *tsk @@     got struct task_struct [noderef] __rcu *curr @@
-   kernel/sched/fair.c:4760:75: sparse:     expected struct task_struct *tsk
-   kernel/sched/fair.c:4760:75: sparse:     got struct task_struct [noderef] __rcu *curr
-   kernel/sched/fair.c:5663:38: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct task_struct *curr @@     got struct task_struct [noderef] __rcu *curr @@
-   kernel/sched/fair.c:5663:38: sparse:     expected struct task_struct *curr
-   kernel/sched/fair.c:5663:38: sparse:     got struct task_struct [noderef] __rcu *curr
-   kernel/sched/fair.c:7232:38: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct task_struct *curr @@     got struct task_struct [noderef] __rcu *curr @@
-   kernel/sched/fair.c:7232:38: sparse:     expected struct task_struct *curr
-   kernel/sched/fair.c:7232:38: sparse:     got struct task_struct [noderef] __rcu *curr
-   kernel/sched/fair.c:7530:38: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct task_struct *curr @@     got struct task_struct [noderef] __rcu *curr @@
-   kernel/sched/fair.c:7530:38: sparse:     expected struct task_struct *curr
-   kernel/sched/fair.c:7530:38: sparse:     got struct task_struct [noderef] __rcu *curr
-   kernel/sched/fair.c:5592:35: sparse: sparse: marked inline, but without a definition
-   kernel/sched/fair.c: note: in included file:
-   kernel/sched/sched.h:2053:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2053:25: sparse:    struct task_struct [noderef] __rcu *
-   kernel/sched/sched.h:2053:25: sparse:    struct task_struct *
-   kernel/sched/sched.h:2210:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2210:9: sparse:    struct task_struct [noderef] __rcu *
-   kernel/sched/sched.h:2210:9: sparse:    struct task_struct *
-   kernel/sched/sched.h:2053:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2053:25: sparse:    struct task_struct [noderef] __rcu *
-   kernel/sched/sched.h:2053:25: sparse:    struct task_struct *
-   kernel/sched/sched.h:2053:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/sched/sched.h:2053:25: sparse:    struct task_struct [noderef] __rcu *
-   kernel/sched/sched.h:2053:25: sparse:    struct task_struct *
-
-vim +4760 kernel/sched/fair.c
-
-  4759	
-> 4760		if (cfs_rq->nr_running > 1 && !test_tsk_need_resched(rq_of(cfs_rq)->curr))
-  4761			check_preempt_tick(cfs_rq, curr);
-  4762	}
-  4763	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Thu, Jul 14, 2022 at 12:45 PM Ma=C3=ADra Canal <mairacanal@riseup.net> w=
+rote:
+>
+> Remove the variable clk_src from the function dcn3_get_pix_clk_dividers.
+>
+> This was pointed by clang with the following warning:
+>
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_clock_source.c:1279:25: =
+warning:
+> variable 'clk_src' set but not used [-Wunused-but-set-variable]
+>         struct dce110_clk_src *clk_src;
+>                                ^
+> 1 warning generated.
+>
+> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c b/driv=
+ers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
+> index 5cc7cc0b2f2d..d55da1ab1ac2 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
+> @@ -1276,9 +1276,7 @@ static uint32_t dcn3_get_pix_clk_dividers(
+>                 struct pll_settings *pll_settings)
+>  {
+>         unsigned long long actual_pix_clk_100Hz =3D pix_clk_params ? pix_=
+clk_params->requested_pix_clk_100hz : 0;
+> -       struct dce110_clk_src *clk_src;
+>
+> -       clk_src =3D TO_DCE110_CLK_SRC(cs);
+>         DC_LOGGER_INIT();
+>
+>         if (pix_clk_params =3D=3D NULL || pll_settings =3D=3D NULL
+> --
+> 2.36.1
+>

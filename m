@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC00E578AF2
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7F1578AF1
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236103AbiGRTdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S236056AbiGRTdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236181AbiGRTd1 (ORCPT
+        with ESMTP id S236187AbiGRTd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Jul 2022 15:33:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6925830F6C;
-        Mon, 18 Jul 2022 12:33:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C7C6B81742;
-        Mon, 18 Jul 2022 19:33:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB661C341C0;
-        Mon, 18 Jul 2022 19:32:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658172779;
-        bh=FMa1KhlAiwp2G1WhEAkwuw6/wN8S4rjQj7kD636hpCQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K4T3XGYkIt1++7T3uifcQ426CtNptZxWaZCOJrRNNldzsShwMlGDkFa8ZyYXykYHY
-         H2Hh5mJvvHuNXPrRivmLCk/1YaZ5nEzM4mkTK9cUa4A/KCIDiJswzjOIIU8uGg8He3
-         Ql4qtnLSJqf0Jh++KvGKmfovIIS0B1FAG0cRej8y/ZhFOqPT6i6B181nZ4clew/KJ8
-         itvrSpsploLChFRPWMRAWOoEWJIf80wUDul9nNJ7E+3wX2xVW8yscLXE92MeCjOFtj
-         l9BWTzGI1D+jiL4wRat4S0G+My6yZLZSWB5zJCAwJXnepkM3mLquhYGRwIgRiIhq5D
-         uuxw+n7FfZ2kw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6A08340374; Mon, 18 Jul 2022 16:32:56 -0300 (-03)
-Date:   Mon, 18 Jul 2022 16:32:56 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Blake Jones <blakejones@google.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] Add a "-m" option to "perf buildid-list".
-Message-ID: <YtW1aFY4MyeqxhdH@kernel.org>
-References: <20220629213632.3899212-1-blakejones@google.com>
- <Yr6u/jdLvg2TcT8s@krava>
- <YtVzVZoo5PTj0qXH@kernel.org>
- <CAP_z_CjUi-Uk_mftfw33+eac13sLyHMBtQJd8V393SaD4OocNg@mail.gmail.com>
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B0C313A5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:33:11 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id j1so14060560wrs.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=xwOi0/YqmOj47DIS9XkftfFeH7Ad13wjAtHDSHbI450=;
+        b=dGi9GSHC3uV2Tx+fDM28pxHAquxspdxN8voOAbb77fxkDwlidDStGMPx0u1hlsg0Tc
+         C+P8FNd53X+vyHsguz+nyUbW18/k6VGIdk3iNfN0FatsqpowDxnL+j1fGlibN7HP08pb
+         Nq4E1Pj9i3facXWRddVbV48qTk05INDrTnH9CWqUSzq+6gHvmerw3cDnOOHP8ZBySB+r
+         zyhEwqp0FIs2SMZ3sXpeJTXM8pDsZcIngeJ3uyb4XETFL7749EocVjR8JdjrTSJgMpPe
+         44SljfFn1L5ZFAfGPtSzw9MwV1EmBIa1U55qsvFPvibrwdS2u4b1cfgV6l307WeN0gd8
+         Ckzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xwOi0/YqmOj47DIS9XkftfFeH7Ad13wjAtHDSHbI450=;
+        b=RGnsJcfhv0VfCFq7mkDnToylCg8Ygbb1LmlrskPsmki657Eg7UNu0HOSZwmpmKvYRi
+         UtjKE3XcOn/tUB/P/XeJc6j7P5H7rEC6YAmSYHJeN7SryS21TPjY0jPMAyOmPntA0SLc
+         taut2ZjCgKJBzafuxKYMRH0K+q/JCv3tnpRgcEQ7E/KzkGu/N2S6KZLjZMoJr4GqMiBK
+         wr20sLShx9y/cjC2Slff1e6ksa86A5KqHB0k/t5bgfYY6i1f2KKq9fat1pI7PDZKnuz/
+         1BOcQah++Hima/Di3rCSqFecPN0qBpkk0Hpwj4u8u9ZkjW1shCSoWxReqyjrj60D4F36
+         IZKQ==
+X-Gm-Message-State: AJIora/R268xh+JTMqCkxJh3gITVukR6Oevz/F8Z2/9Ij3l0CZEVhsoe
+        KOiBaTV/Be8dHYWIoJMTVZU=
+X-Google-Smtp-Source: AGRyM1tZcdrTnOWuKMDCpj3dhGwlJ+rKD67mfQ2bDQGJl9jWR4hOcIzV8+LPffjMUcNiEGlPaGCjaQ==
+X-Received: by 2002:a05:6000:1ac8:b0:21d:b7d9:3c03 with SMTP id i8-20020a0560001ac800b0021db7d93c03mr23155250wry.149.1658172790485;
+        Mon, 18 Jul 2022 12:33:10 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f2e:6999:b072:faf1:1e0f:8765? (p200300c78f2e6999b072faf11e0f8765.dip0.t-ipconnect.de. [2003:c7:8f2e:6999:b072:faf1:1e0f:8765])
+        by smtp.gmail.com with ESMTPSA id m185-20020a1c26c2000000b003a302fb9df7sm16061235wmm.21.2022.07.18.12.33.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 12:33:10 -0700 (PDT)
+Message-ID: <adbd6481-4ea0-0e9b-5249-9ab2b843a450@gmail.com>
+Date:   Mon, 18 Jul 2022 21:33:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP_z_CjUi-Uk_mftfw33+eac13sLyHMBtQJd8V393SaD4OocNg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/7] staging: vt6655: Rename dwData to reg_value in four
+ macros
+Content-Language: en-US
+To:     Joe Perches <joe@perches.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1658094708.git.philipp.g.hortmann@gmail.com>
+ <b54577316eebdbb54e478fc51473eeba9d7eacae.1658094708.git.philipp.g.hortmann@gmail.com>
+ <c040cd03d04fb861b85b4f56cd04b473bb778ebd.camel@perches.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <c040cd03d04fb861b85b4f56cd04b473bb778ebd.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jul 18, 2022 at 10:07:32AM -0700, Blake Jones escreveu:
-> Fabulous, thanks!
+On 7/18/22 08:07, Joe Perches wrote:
+> Please remember that checkpatch is a stupid little scripted tool
+> and the actual goal is to have readable code.
+Understood.
 > 
-> On Mon, Jul 18, 2022 at 7:51 AM Arnaldo Carvalho de Melo <acme@kernel.org>
-> wrote:
-> > > > Signed-off-by: Blake Jones <blakejones@google.com>
-> > >
-> > > Acked-by: Jiri Olsa <jolsa@kernel.org>
-> >
-> > To clarify, b4 found v3 and that was the one applied.
+> Look a bit beyond the code and see if and how you could make the
+> code better.
+> 
+> All of these macros have the same form and logic.
+> 
+That is the reason why I put them all together in one static function:
+static void vt6655_mac_dma_ctl(void __iomem *iobase, u8 reg_index)
+{
+	unsigned long reg_value;
 
-Now fixing this:
+	reg_value = ioread32(iobase + reg_index);
+	if (reg_value & DMACTL_RUN)
+		iowrite32(DMACTL_WAKE, iobase + reg_index);
+	else
+		iowrite32(DMACTL_RUN, iobase + reg_index);
+}
 
-  28     5.28 debian:experimental-x-mips    : FAIL gcc version 11.2.0 (Debian 11.2.0-18)
-    builtin-buildid-list.c: In function 'buildid__map_cb':
-    builtin-buildid-list.c:32:24: error: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'u64' {aka 'long long unsigned int'} [-Werror=format=]
-       32 |         printf("%s %16lx %16lx", bid_buf, map->start, map->end);
-          |                    ~~~~^                  ~~~~~~~~~~
-          |                        |                     |
-          |                        long unsigned int     u64 {aka long long unsigned int}
-          |                    %16llx
-    builtin-buildid-list.c:32:30: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'u64' {aka 'long long unsigned int'} [-Werror=format=]
-       32 |         printf("%s %16lx %16lx", bid_buf, map->start, map->end);
-          |                          ~~~~^                        ~~~~~~~~
-          |                              |                           |
-          |                              long unsigned int           u64 {aka long long unsigned int}
-          |                          %16llx
-    cc1: all warnings being treated as errors
-  29    23.06 debian:experimental-x-mips64  : Ok   mips64-linux-gnuabi64-gcc (Debian 10.2.1-6) 10.2.1 20210110
-  30     6.08 debian:experimental-x-mipsel  : FAIL gcc version 11.2.0 (Debian 11.2.0-18)
-    builtin-buildid-list.c: In function 'buildid__map_cb':
-    builtin-buildid-list.c:32:24: error: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'u64' {aka 'long long unsigned int'} [-Werror=format=]
-       32 |         printf("%s %16lx %16lx", bid_buf, map->start, map->end);
-          |                    ~~~~^                  ~~~~~~~~~~
-          |                        |                     |
-          |                        long unsigned int     u64 {aka long long unsigned int}
-          |                    %16llx
-    builtin-buildid-list.c:32:30: error: format '%lx' expects argument of type 'long unsigned int', but argument 4 has type 'u64' {aka 'long long unsigned int'} [-Werror=format=]
-       32 |         printf("%s %16lx %16lx", bid_buf, map->start, map->end);
-          |                          ~~~~^                        ~~~~~~~~
-          |                              |                           |
-          |                              long unsigned int           u64 {aka long long unsigned int}
-          |                          %16llx
-    cc1: all warnings being treated as errors
+> Perhaps it'd be better to use another indirect macro and define
+> all of these with that new macro.
+> 
+> Something like:
+> 
+> #define mac_v(iobase, reg)						\
+> do {									\
+> 	void __iomem *addr = (iobase) + (reg);				\
+> 	iowrite32(ioread32(addr) & DMACTL_RUN ? DMACTL_WAKE : DMACTL_RUN,\
+> 		  addr);						\
+> } while (0)
+> 
+> #define MACvReceive0(iobase)	mac_v(iobase, MAC_REG_RXDMACTL0)
+> #define MACvReceive1(iobase)	mac_v(iobase, MAC_REG_RXDMACTL1)
+> #define MACvTransmit0(iobase)	mac_v(iobase, MAC_REG_TXDMACTL0)
+> #define MACvTransmitAC0(iobase)	mac_v(iobase, MAC_REG_AC0DMACTL)
 
-
-These should use PRIx64, etc.
-
-- Arnaldo
+That is an interesting solution. But for me this code is not as good 
+readable as my proposal. Reason is that I struggle with the function in 
+function with condition broken into two lines.

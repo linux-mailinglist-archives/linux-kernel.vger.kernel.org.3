@@ -2,404 +2,433 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224E0578659
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F31C578663
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235272AbiGRP2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 11:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S235510AbiGRP2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234064AbiGRP16 (ORCPT
+        with ESMTP id S235495AbiGRP23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:27:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BB928E2F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:27:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1163961315
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:27:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A70C341D1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658158075;
-        bh=f6aow2kzzAFSqfxYnbvxTpSUyhhJbIhqINsOZ2Zi7OE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ubi9tXLMN+BPZltFMlZ/qblsglLuBb0X7srXOzdx1nIdRM9iJ4ubA65qwQGtkHcX7
-         iQz7Vdc3ptzuiHABTdL9ZiNjrGQ0BM4aJ2PkmT38CO21YpbnxcEB2w5+SQsuYw965l
-         nomoF1SLpqdTfz6FA8GJS+3KLx1WM7HAZZ/4VJEKkAIUa+XCHrmAOJxGMdgqqhFQOH
-         w010yvL34g1JBrnuZF8HONfebrKyzRpFqPv8u11+D+INt2uNOlT9QHQe/d6n7R4kZq
-         PisqwlQEoJR9c2ZjZJgl6WLjXC9BZBlJ5I664F72cTLYm4XL+tdPMddvLduMdknH0U
-         2XIZ9L1a5ruEw==
-Received: by mail-vs1-f41.google.com with SMTP id 125so319326vsd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:27:55 -0700 (PDT)
-X-Gm-Message-State: AJIora9W+pUOiLRJypxyag9/bO0LTzjqZtB17Y8uLnMLR8ffrfq4T1iO
-        y1QT6InNVzvgcte/PPNJ7nawV2j+PXVGOZGx9SU=
-X-Google-Smtp-Source: AGRyM1sHfqJGafT5khvtKQm23L+QOj2Xe2+1hxQzetjlDIuNZBNanw5NbZa1jNnSpHvxNMZASk+rPfLSgJ7HrK5twUI=
-X-Received: by 2002:a05:6102:3543:b0:357:3ae7:bbd0 with SMTP id
- e3-20020a056102354300b003573ae7bbd0mr10065788vss.84.1658158074018; Mon, 18
- Jul 2022 08:27:54 -0700 (PDT)
+        Mon, 18 Jul 2022 11:28:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D0EF2983A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:28:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658158107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uJIggZCNpgwvaFQynG/gLraji0AFGkTGy1p5k+g0Igg=;
+        b=F3uBGlq5yOq1PR+Tu0K1jEIXrOmhncSJV/wGbQDiaa0AUQ3bbJFCrY7vgYCCHuMF9EeQR1
+        VSrrUU3KJuAE+TgZi4tJBfiSK6ymTrNxhFBHHRznpHTS7NdlhYt8ytDzmcTILfUTzJXhgP
+        reLvYt7cAFMTPRFr/g7/8TRzD6hKXy8=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-646--eQjfJplMHmeeWLQBmEjSA-1; Mon, 18 Jul 2022 11:28:20 -0400
+X-MC-Unique: -eQjfJplMHmeeWLQBmEjSA-1
+Received: by mail-pl1-f197.google.com with SMTP id w5-20020a170902e88500b0016ce31d1d79so3488094plg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:28:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uJIggZCNpgwvaFQynG/gLraji0AFGkTGy1p5k+g0Igg=;
+        b=Pnj88wZjdT8F/iIUM7rlgWfwR6sCBQfQDz9VugOSuVx1No7zjhNERWK0nrKgNtuZSx
+         iGSniExWuCA+8rHxXBGcE9HCSWfw+/MVY9j3KuBh29DGX7ulY8ycnJyWRV39o/K7BLSG
+         c0+pAhlTXCdeMfYq6UQE/xbUbUZm2WwtBao4qJzucSBGRFTaUu1BjlV0DwjrvzPwd5ZR
+         CHJF2dqMXGB82tdXaR7sDUDcvTb9yx3T1qqWinSb43bZXuvbAG9/wY5iy4kS7wGTdYGF
+         vI00HM3XEsmHnMxJxt7YF9KfSRBN1D4j2PwnkmdohAIfuXWhrXWT2WcdoaKRAw8abwEf
+         qj1g==
+X-Gm-Message-State: AJIora/7+J6EphF3RzBEBvMOOMGawmSOh0QUzWVtUswJsFtfpOakUKho
+        O7eykGILRM6dabw0vTTXda2qPhVGB0fnyiyZoS2SUFa6IL3HttypFaiCKLfS0Y96PrJz8YqkOQv
+        zQFmmLbtvpo09W+lbfoj8Shbkl8v3jpQDEZkAEoJy
+X-Received: by 2002:a17:90a:be0c:b0:1ef:accb:23a5 with SMTP id a12-20020a17090abe0c00b001efaccb23a5mr32798432pjs.113.1658158099086;
+        Mon, 18 Jul 2022 08:28:19 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s+Ciz742ji5v49qH2+CaRtPsbm4puQ49n/bD7wRBglNUoM2l/vpF6LbwM0y/LI3T+C+zgJdk/B++iZfksG+MQ=
+X-Received: by 2002:a17:90a:be0c:b0:1ef:accb:23a5 with SMTP id
+ a12-20020a17090abe0c00b001efaccb23a5mr32798384pjs.113.1658158098672; Mon, 18
+ Jul 2022 08:28:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <1658153621-40445-1-git-send-email-lvjianmin@loongson.cn> <1658153621-40445-9-git-send-email-lvjianmin@loongson.cn>
-In-Reply-To: <1658153621-40445-9-git-send-email-lvjianmin@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 18 Jul 2022 23:27:47 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4WQMjk+eU0C=j_XabDNJm5U+a_KGD4y1izgjk4qc-kCg@mail.gmail.com>
-Message-ID: <CAAhV-H4WQMjk+eU0C=j_XabDNJm5U+a_KGD4y1izgjk4qc-kCg@mail.gmail.com>
-Subject: Re: [PATCH V16 08/14] irqchip/loongson-pch-pic: Add ACPI init support
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+ <20220712145850.599666-6-benjamin.tissoires@redhat.com> <CAP01T77nCee6R9DL_gHJCrkVgcoJH9n52McKA87KqE3Ud8qwTg@mail.gmail.com>
+In-Reply-To: <CAP01T77nCee6R9DL_gHJCrkVgcoJH9n52McKA87KqE3Ud8qwTg@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 18 Jul 2022 17:28:07 +0200
+Message-ID: <CAO-hwJ+OvU_cn9zUY_4VuhZVLB566DpYmvr2TT+WmgChnfb7+g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 05/23] bpf/verifier: allow kfunc to return an
+ allocated mem
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jianmin,
+On Sat, Jul 16, 2022 at 10:33 PM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Tue, 12 Jul 2022 at 17:03, Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > When a kfunc is not returning a pointer to a struct but to a plain type,
+> > we can consider it is a valid allocated memory assuming that:
+> > - one of the arguments is either called rdonly_buf_size or
+> >   rdwr_buf_size
+> > - and this argument is a const from the caller point of view
+> >
+> > We can then use this parameter as the size of the allocated memory.
+> >
+> > The memory is either read-only or read-write based on the name
+> > of the size parameter.
+> >
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> >
+> > ---
+> >
+> > changes in v6:
+> > - code review from Kartikeya:
+> >   - remove comment change that had no reasons to be
+> >   - remove handling of PTR_TO_MEM with kfunc releases
+> >   - introduce struct bpf_kfunc_arg_meta
+> >   - do rdonly/rdwr_buf_size check in btf_check_kfunc_arg_match
+> >   - reverted most of the changes in verifier.c
+> >   - make sure kfunc acquire is using a struct pointer, not just a plain
+> >     pointer
+> >   - also forward ref_obj_id to PTR_TO_MEM in kfunc to not use after free
+> >     the allocated memory
+> >
+> > changes in v5:
+> > - updated PTR_TO_MEM comment in btf.c to match upstream
+> > - make it read-only or read-write based on the name of size
+> >
+> > new in v4
+> > ---
+> >  include/linux/bpf.h   | 10 ++++++-
+> >  include/linux/btf.h   | 12 ++++++++
+> >  kernel/bpf/btf.c      | 67 ++++++++++++++++++++++++++++++++++++++++---
+> >  kernel/bpf/verifier.c | 49 +++++++++++++++++++++++--------
+> >  4 files changed, 121 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 2b21f2a3452f..5b8eadb6e7bc 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -1916,12 +1916,20 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
+> >                            const char *func_name,
+> >                            struct btf_func_model *m);
+> >
+> > +struct bpf_kfunc_arg_meta {
+> > +       u64 r0_size;
+> > +       bool r0_rdonly;
+> > +       int ref_obj_id;
+> > +       bool multiple_ref_obj_id;
+> > +};
+> > +
+> >  struct bpf_reg_state;
+> >  int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+> >                                 struct bpf_reg_state *regs);
+> >  int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+> >                               const struct btf *btf, u32 func_id,
+> > -                             struct bpf_reg_state *regs);
+> > +                             struct bpf_reg_state *regs,
+> > +                             struct bpf_kfunc_arg_meta *meta);
+> >  int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
+> >                           struct bpf_reg_state *reg);
+> >  int btf_check_type_match(struct bpf_verifier_log *log, const struct bpf_prog *prog,
+> > diff --git a/include/linux/btf.h b/include/linux/btf.h
+> > index 1bfed7fa0428..31da4273c2ec 100644
+> > --- a/include/linux/btf.h
+> > +++ b/include/linux/btf.h
+> > @@ -420,4 +420,16 @@ static inline int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dt
+> >  }
+> >  #endif
+> >
+> > +static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type *t)
+> > +{
+> > +       /* t comes in already as a pointer */
+> > +       t = btf_type_by_id(btf, t->type);
+> > +
+> > +       /* allow const */
+> > +       if (BTF_INFO_KIND(t->info) == BTF_KIND_CONST)
+> > +               t = btf_type_by_id(btf, t->type);
+>
+> Any specific reason to not allow any other modifiers apart from const?
+> volatile, restrict, typedef..?
+> If not, just use btf_type_skip_modifiers instead.
 
-On Mon, Jul 18, 2022 at 10:14 PM Jianmin Lv <lvjianmin@loongson.cn> wrote:
->
-> From: Huacai Chen <chenhuacai@loongson.cn>
->
-> PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
-> Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
-> please refer Documentation/loongarch/irq-chip-model.rst.
->
-> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/loongarch/include/asm/irq.h            |   5 +-
->  arch/loongarch/kernel/irq.c                 |   1 -
->  arch/mips/include/asm/mach-loongson64/irq.h |   2 +-
->  drivers/irqchip/irq-loongson-pch-pic.c      | 178 +++++++++++++++++++++++-----
->  4 files changed, 151 insertions(+), 35 deletions(-)
->
-> diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-> index 48c0ce4..74fef60 100644
-> --- a/arch/loongarch/include/asm/irq.h
-> +++ b/arch/loongarch/include/asm/irq.h
-> @@ -108,8 +108,9 @@ int pch_lpc_acpi_init(struct irq_domain *parent,
->                                         struct acpi_madt_lpc_pic *acpi_pchlpc);
->  struct irq_domain *pch_msi_acpi_init(struct irq_domain *parent,
->                                         struct acpi_madt_msi_pic *acpi_pchmsi);
-> -struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
-> +int pch_pic_acpi_init(struct irq_domain *parent,
->                                         struct acpi_madt_bio_pic *acpi_pchpic);
-> +int find_pch_pic(u32 gsi);
->
->  extern struct acpi_madt_lio_pic *acpi_liointc;
->  extern struct acpi_madt_eio_pic *acpi_eiointc[MAX_IO_PICS];
-> @@ -123,7 +124,7 @@ struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
->  extern struct irq_domain *liointc_domain;
->  extern struct fwnode_handle *pch_lpc_handle;
->  extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
-> -extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
-> +extern struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
->
->  extern irqreturn_t loongson3_ipi_interrupt(int irq, void *dev);
->
-> diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
-> index 07d6059..866b2ee 100644
-> --- a/arch/loongarch/kernel/irq.c
-> +++ b/arch/loongarch/kernel/irq.c
-> @@ -28,7 +28,6 @@
->  struct irq_domain *cpu_domain;
->  struct irq_domain *liointc_domain;
->  struct irq_domain *pch_msi_domain[MAX_IO_PICS];
-> -struct irq_domain *pch_pic_domain[MAX_IO_PICS];
->
->  /*
->   * 'what should we do if we get a hw irq event on an illegal vector'.
-> diff --git a/arch/mips/include/asm/mach-loongson64/irq.h b/arch/mips/include/asm/mach-loongson64/irq.h
-> index 98ea977..55e0dee 100644
-> --- a/arch/mips/include/asm/mach-loongson64/irq.h
-> +++ b/arch/mips/include/asm/mach-loongson64/irq.h
-> @@ -7,7 +7,7 @@
->  #define NR_MIPS_CPU_IRQS       8
->  #define NR_MAX_CHAINED_IRQS    40 /* Chained IRQs means those not directly used by devices */
->  #define NR_IRQS                        (NR_IRQS_LEGACY + NR_MIPS_CPU_IRQS + NR_MAX_CHAINED_IRQS + 256)
-> -
-> +#define MAX_IO_PICS            1
->  #define MIPS_CPU_IRQ_BASE      NR_IRQS_LEGACY
->
->  #include <asm/mach-generic/irq.h>
-> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
-> index a4eb8a2..b6a73c8 100644
-> --- a/drivers/irqchip/irq-loongson-pch-pic.c
-> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
-> @@ -33,13 +33,40 @@
->  #define PIC_REG_IDX(irq_id)    ((irq_id) / PIC_COUNT_PER_REG)
->  #define PIC_REG_BIT(irq_id)    ((irq_id) % PIC_COUNT_PER_REG)
->
-> +static int nr_pics;
-> +
->  struct pch_pic {
->         void __iomem            *base;
->         struct irq_domain       *pic_domain;
->         u32                     ht_vec_base;
->         raw_spinlock_t          pic_lock;
-> +       u32                     vec_count;
-> +       u32                     gsi_base;
->  };
->
-> +static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
-> +
-> +struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
-> +
-> +int find_pch_pic(u32 gsi)
-> +{
-> +       int i;
-> +
-> +       /* Find the PCH_PIC that manages this GSI. */
-> +       for (i = 0; i < MAX_IO_PICS; i++) {
-> +               struct pch_pic *priv = pch_pic_priv[i];
-> +
-> +               if (!priv)
-> +                       return -1;
-> +
-> +               if (gsi >= priv->gsi_base && gsi < (priv->gsi_base + priv->vec_count))
-> +                       return i;
-> +       }
-> +
-> +       pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
-> +       return -1;
-> +}
-> +
->  static void pch_pic_bitset(struct pch_pic *priv, int offset, int bit)
->  {
->         u32 reg;
-> @@ -139,6 +166,28 @@ static void pch_pic_ack_irq(struct irq_data *d)
->         .irq_set_type           = pch_pic_set_type,
->  };
->
-> +static int pch_pic_domain_translate(struct irq_domain *d,
-> +                                       struct irq_fwspec *fwspec,
-> +                                       unsigned long *hwirq,
-> +                                       unsigned int *type)
-> +{
-> +       struct pch_pic *priv = d->host_data;
-> +       struct device_node *of_node = to_of_node(fwspec->fwnode);
-> +
-> +       if (fwspec->param_count < 1)
-> +               return -EINVAL;
-> +
-> +       if (of_node) {
-> +               *hwirq = fwspec->param[0] + priv->ht_vec_base;
-> +               *type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
-> +       } else {
-> +               *hwirq = fwspec->param[0] - priv->gsi_base;
-> +               *type = IRQ_TYPE_NONE;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
->                               unsigned int nr_irqs, void *arg)
->  {
-> @@ -149,13 +198,13 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
->         struct irq_fwspec parent_fwspec;
->         struct pch_pic *priv = domain->host_data;
->
-> -       err = irq_domain_translate_twocell(domain, fwspec, &hwirq, &type);
-> +       err = pch_pic_domain_translate(domain, fwspec, &hwirq, &type);
->         if (err)
->                 return err;
->
->         parent_fwspec.fwnode = domain->parent->fwnode;
->         parent_fwspec.param_count = 1;
-> -       parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
-> +       parent_fwspec.param[0] = hwirq;
->
->         err = irq_domain_alloc_irqs_parent(domain, virq, 1, &parent_fwspec);
->         if (err)
-> @@ -170,7 +219,7 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
->  }
->
->  static const struct irq_domain_ops pch_pic_domain_ops = {
-> -       .translate      = irq_domain_translate_twocell,
-> +       .translate      = pch_pic_domain_translate,
->         .alloc          = pch_pic_alloc,
->         .free           = irq_domain_free_irqs_parent,
->  };
-> @@ -180,7 +229,7 @@ static void pch_pic_reset(struct pch_pic *priv)
->         int i;
->
->         for (i = 0; i < PIC_COUNT; i++) {
-> -               /* Write vectored ID */
-> +               /* Write vector ID */
->                 writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(i));
->                 /* Hardcode route to HT0 Lo */
->                 writeb(1, priv->base + PCH_INT_ROUTE(i));
-> @@ -198,50 +247,37 @@ static void pch_pic_reset(struct pch_pic *priv)
->         }
->  }
->
-> -static int pch_pic_of_init(struct device_node *node,
-> -                               struct device_node *parent)
-> +static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
-> +                       struct irq_domain *parent_domain, struct fwnode_handle *domain_handle,
-> +                       u32 gsi_base)
->  {
->         struct pch_pic *priv;
-> -       struct irq_domain *parent_domain;
-> -       int err;
->
->         priv = kzalloc(sizeof(*priv), GFP_KERNEL);
->         if (!priv)
->                 return -ENOMEM;
->
->         raw_spin_lock_init(&priv->pic_lock);
-> -       priv->base = of_iomap(node, 0);
-> -       if (!priv->base) {
-> -               err = -ENOMEM;
-> +       priv->base = ioremap(addr, size);
-> +       if (!priv->base)
->                 goto free_priv;
-> -       }
-> -
-> -       parent_domain = irq_find_host(parent);
-> -       if (!parent_domain) {
-> -               pr_err("Failed to find the parent domain\n");
-> -               err = -ENXIO;
-> -               goto iounmap_base;
-> -       }
->
-> -       if (of_property_read_u32(node, "loongson,pic-base-vec",
-> -                               &priv->ht_vec_base)) {
-> -               pr_err("Failed to determine pic-base-vec\n");
-> -               err = -EINVAL;
-> -               goto iounmap_base;
-> -       }
-> +       priv->ht_vec_base = vec_base;
-> +       priv->vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
-> +       priv->gsi_base = gsi_base;
->
->         priv->pic_domain = irq_domain_create_hierarchy(parent_domain, 0,
-> -                                                      PIC_COUNT,
-> -                                                      of_node_to_fwnode(node),
-> -                                                      &pch_pic_domain_ops,
-> -                                                      priv);
-> +                                               priv->vec_count, domain_handle,
-> +                                               &pch_pic_domain_ops, priv);
-> +
->         if (!priv->pic_domain) {
->                 pr_err("Failed to create IRQ domain\n");
-> -               err = -ENOMEM;
->                 goto iounmap_base;
->         }
->
->         pch_pic_reset(priv);
-> +       pch_pic_handle[nr_pics] = domain_handle;
-> +       pch_pic_priv[nr_pics++] = priv;
->
->         return 0;
->
-> @@ -250,7 +286,87 @@ static int pch_pic_of_init(struct device_node *node,
->  free_priv:
->         kfree(priv);
->
-> -       return err;
-> +       return -EINVAL;
-> +}
-> +
-> +#ifdef CONFIG_OF
-> +
-> +static int pch_pic_of_init(struct device_node *node,
-> +                               struct device_node *parent)
-> +{
-> +       int err, vec_base;
-> +       struct resource res;
-> +       struct irq_domain *parent_domain;
-> +
-> +       if (of_address_to_resource(node, 0, &res))
-> +               return -EINVAL;
-> +
-> +       parent_domain = irq_find_host(parent);
-> +       if (!parent_domain) {
-> +               pr_err("Failed to find the parent domain\n");
-> +               return -ENXIO;
-> +       }
-> +
-> +       if (of_property_read_u32(node, "loongson,pic-base-vec", &vec_base)) {
-> +               pr_err("Failed to determine pic-base-vec\n");
-> +               return -EINVAL;
-> +       }
-> +
-> +       err = pch_pic_init(res.start, resource_size(&res), vec_base,
-> +                               parent_domain, of_node_to_fwnode(node), 0);
-> +       if (err < 0)
-> +               return err;
-> +
-> +       return 0;
->  }
->
->  IRQCHIP_DECLARE(pch_pic, "loongson,pch-pic-1.0", pch_pic_of_init);
-> +
-> +#endif
-> +
-> +#ifdef CONFIG_ACPI
-> +static int __init
-> +lpcintc_parse_madt(union acpi_subtable_headers *header,
-> +                      const unsigned long end)
-> +{
-> +       struct acpi_madt_lpc_pic *lpcintc_entry = (struct acpi_madt_lpc_pic *)header;
-For consistency, please use pch_lpc_parse_madt() and pchlpc_entry here, thanks.
+Good point. Fixed locally
 
-Huacai
-> +
-> +       return pch_lpc_acpi_init(pch_pic_priv[0]->pic_domain, lpcintc_entry);
-> +}
-> +
-> +static int __init acpi_cascade_irqdomain_init(void)
-> +{
-> +       acpi_table_parse_madt(ACPI_MADT_TYPE_LPC_PIC,
-> +                             lpcintc_parse_madt, 0);
-> +       return 0;
-> +}
-> +
-> +int __init pch_pic_acpi_init(struct irq_domain *parent,
-> +                                       struct acpi_madt_bio_pic *acpi_pchpic)
-> +{
-> +       int ret, vec_base;
-> +       struct fwnode_handle *domain_handle;
-> +
-> +       if (!acpi_pchpic)
-> +               return -EINVAL;
-> +
-> +       vec_base = acpi_pchpic->gsi_base - GSI_MIN_PCH_IRQ;
-> +
-> +       domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_pchpic);
-> +       if (!domain_handle) {
-> +               pr_err("Unable to allocate domain handle\n");
-> +               return -ENOMEM;
-> +       }
-> +
-> +       ret = pch_pic_init(acpi_pchpic->address, acpi_pchpic->size,
-> +                               vec_base, parent, domain_handle, acpi_pchpic->gsi_base);
-> +
-> +       if (!ret) {
-> +               if (acpi_pchpic->id == 0)
-> +                       acpi_cascade_irqdomain_init();
-> +       } else
-> +               irq_domain_free_fwnode(domain_handle);
-> +
-> +       return ret;
-> +}
-> +#endif
-> --
-> 1.8.3.1
 >
+> > +
+> > +       return btf_type_is_struct(t);
+> > +}
+> > +
+> >  #endif
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 4423045b8ff3..552d7bc05a0c 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+> > @@ -6168,10 +6168,36 @@ static bool is_kfunc_arg_mem_size(const struct btf *btf,
+> >         return true;
+> >  }
+> >
+> > +static bool btf_is_kfunc_arg_mem_size(const struct btf *btf,
+> > +                                     const struct btf_param *arg,
+> > +                                     const struct bpf_reg_state *reg,
+> > +                                     const char *name)
 >
+> It would be nicer if we could reuse some code from
+> is_kfunc_arg_mem_size, the only difference is matching suffix vs full
+> string. But don't feel too strongly about it.
+
+I'll see what I can do. There is indeed a lot of code duplication, but
+I wasn't sure how I could express the differences while making it
+obvious.
+
+>
+> > +{
+> > +       int len, target_len = strlen(name);
+> > +       const struct btf_type *t;
+> > +       const char *param_name;
+> > +
+> > +       t = btf_type_skip_modifiers(btf, arg->type, NULL);
+> > +       if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
+> > +               return false;
+> > +
+> > +       param_name = btf_name_by_offset(btf, arg->name_off);
+> > +       if (str_is_empty(param_name))
+> > +               return false;
+> > +       len = strlen(param_name);
+> > +       if (len != target_len)
+> > +               return false;
+> > +       if (strncmp(param_name, name, target_len))
+> > +               return false;
+> > +
+> > +       return true;
+> > +}
+> > +
+> >  static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> >                                     const struct btf *btf, u32 func_id,
+> >                                     struct bpf_reg_state *regs,
+> > -                                   bool ptr_to_mem_ok)
+> > +                                   bool ptr_to_mem_ok,
+> > +                                   struct bpf_kfunc_arg_meta *kfunc_meta)
+> >  {
+> >         enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+> >         struct bpf_verifier_log *log = &env->log;
+> > @@ -6225,6 +6251,30 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> >
+> >                 t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+> >                 if (btf_type_is_scalar(t)) {
+> > +                       if (is_kfunc && kfunc_meta) {
+> > +                               bool is_buf_size = false;
+> > +
+> > +                               /* check for any const scalar parameter of name "rdonly_buf_size"
+> > +                                * or "rdwr_buf_size"
+> > +                                */
+> > +                               if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
+> > +                                                             "rdonly_buf_size")) {
+> > +                                       kfunc_meta->r0_rdonly = true;
+> > +                                       is_buf_size = true;
+> > +                               } else if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
+> > +                                                                    "rdwr_buf_size"))
+> > +                                       is_buf_size = true;
+> > +
+> > +                               if (is_buf_size) {
+> > +                                       if (kfunc_meta->r0_size) {
+> > +                                               bpf_log(log, "2 or more rdonly/rdwr_buf_size parameters for kfunc");
+> > +                                               return -EINVAL;
+> > +                                       }
+> > +
+> > +                                       kfunc_meta->r0_size = reg->var_off.value;
+>
+> As Yonghong pointed out, you need to ensure the register holds a
+> constant value, by using tnum_is_const(reg->var_off), and giving an
+> error otherwise, because we need a constant size to be set for R0.
+
+Thanks for the hint on how to solve this. It saved me from doing
+searches in the archives :)
+
+As mentioned to Yonghong, I had it in a previous version, but the
+refactoring dropped it :(
+
+>
+> > +                               }
+> > +                       }
+> > +
+> >                         if (reg->type == SCALAR_VALUE)
+> >                                 continue;
+> >                         bpf_log(log, "R%d is not a scalar\n", regno);
+> > @@ -6246,6 +6296,14 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> >                 if (ret < 0)
+> >                         return ret;
+> >
+> > +               /* kptr_get is only valid for kfunc */
+>
+> Invalid comment
+
+oops
+
+>
+> > +               if (kfunc_meta && reg->ref_obj_id) {
+> > +                       /* check for any one ref_obj_id to keep track of memory */
+> > +                       if (kfunc_meta->ref_obj_id)
+> > +                               kfunc_meta->multiple_ref_obj_id = true;
+>
+> Why not just return the error here itself? And then no need to keep
+> the multiple_ref_obj_id member.
+> When you return the error here, you can move a similar check in the if
+> (reg->type == PTR_TO_BTF_ID) block to this place so that we don't do
+> it twice.
+
+Good point. I extracted the block from (reg->type == PTR_TO_BTF_ID)
+here, and at the end did a small "if (kfunc_meta && ref_obj_id)
+kfunc_meta->ref_obj_id = ref_obj_id"
+
+This way this path is done only once for all cases.
+
+Cheers,
+Benjamin
+
+>
+> > +                       kfunc_meta->ref_obj_id = reg->ref_obj_id;
+> > +               }
+> > +
+> >                 /* kptr_get is only true for kfunc */
+> >                 if (i == 0 && kptr_get) {
+> >                         struct bpf_map_value_off_desc *off_desc;
+> > @@ -6441,7 +6499,7 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+> >                 return -EINVAL;
+> >
+> >         is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
+> > -       err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global);
+> > +       err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, NULL);
+> >
+> >         /* Compiler optimizations can remove arguments from static functions
+> >          * or mismatched type can be passed into a global function.
+> > @@ -6454,9 +6512,10 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+> >
+> >  int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+> >                               const struct btf *btf, u32 func_id,
+> > -                             struct bpf_reg_state *regs)
+> > +                             struct bpf_reg_state *regs,
+> > +                             struct bpf_kfunc_arg_meta *meta)
+> >  {
+> > -       return btf_check_func_arg_match(env, btf, func_id, regs, true);
+> > +       return btf_check_func_arg_match(env, btf, func_id, regs, true, meta);
+> >  }
+> >
+> >  /* Convert BTF of a function into bpf_reg_state if possible
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 3adcc0d123af..77556132db15 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -7561,6 +7561,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >  {
+> >         const struct btf_type *t, *func, *func_proto, *ptr_type;
+> >         struct bpf_reg_state *regs = cur_regs(env);
+> > +       struct bpf_kfunc_arg_meta meta = { 0 };
+> >         const char *func_name, *ptr_type_name;
+> >         u32 i, nargs, func_id, ptr_type_id;
+> >         int err, insn_idx = *insn_idx_p;
+> > @@ -7592,7 +7593,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >                                         BTF_KFUNC_TYPE_ACQUIRE, func_id);
+> >
+> >         /* Check the arguments */
+> > -       err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs);
+> > +       err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs, &meta);
+> >         if (err < 0)
+> >                 return err;
+> >         /* In case of release function, we get register number of refcounted
+> > @@ -7613,7 +7614,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >         /* Check return type */
+> >         t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
+> >
+> > -       if (acq && !btf_type_is_ptr(t)) {
+> > +       if (acq && !btf_type_is_struct_ptr(desc_btf, t)) {
+> >                 verbose(env, "acquire kernel function does not return PTR_TO_BTF_ID\n");
+> >                 return -EINVAL;
+> >         }
+> > @@ -7625,17 +7626,41 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >                 ptr_type = btf_type_skip_modifiers(desc_btf, t->type,
+> >                                                    &ptr_type_id);
+> >                 if (!btf_type_is_struct(ptr_type)) {
+> > -                       ptr_type_name = btf_name_by_offset(desc_btf,
+> > -                                                          ptr_type->name_off);
+> > -                       verbose(env, "kernel function %s returns pointer type %s %s is not supported\n",
+> > -                               func_name, btf_type_str(ptr_type),
+> > -                               ptr_type_name);
+> > -                       return -EINVAL;
+> > +                       if (!meta.r0_size) {
+> > +                               ptr_type_name = btf_name_by_offset(desc_btf,
+> > +                                                                  ptr_type->name_off);
+> > +                               verbose(env,
+> > +                                       "kernel function %s returns pointer type %s %s is not supported\n",
+> > +                                       func_name,
+> > +                                       btf_type_str(ptr_type),
+> > +                                       ptr_type_name);
+> > +                               return -EINVAL;
+> > +                       }
+> > +
+> > +                       if (meta.multiple_ref_obj_id) {
+> > +                               verbose(env,
+> > +                                       "kernel function %s has multiple memory tracked objects\n",
+> > +                                       func_name);
+> > +                               return -EINVAL;
+> > +                       }
+> > +
+> > +                       mark_reg_known_zero(env, regs, BPF_REG_0);
+> > +                       regs[BPF_REG_0].type = PTR_TO_MEM;
+> > +                       regs[BPF_REG_0].mem_size = meta.r0_size;
+> > +
+> > +                       if (meta.r0_rdonly)
+> > +                               regs[BPF_REG_0].type |= MEM_RDONLY;
+> > +
+> > +                       /* Ensures we don't access the memory after a release_reference() */
+> > +                       if (meta.ref_obj_id)
+> > +                               regs[BPF_REG_0].ref_obj_id = meta.ref_obj_id;
+> > +               } else {
+> > +                       mark_reg_known_zero(env, regs, BPF_REG_0);
+> > +                       regs[BPF_REG_0].btf = desc_btf;
+> > +                       regs[BPF_REG_0].type = PTR_TO_BTF_ID;
+> > +                       regs[BPF_REG_0].btf_id = ptr_type_id;
+> >                 }
+> > -               mark_reg_known_zero(env, regs, BPF_REG_0);
+> > -               regs[BPF_REG_0].btf = desc_btf;
+> > -               regs[BPF_REG_0].type = PTR_TO_BTF_ID;
+> > -               regs[BPF_REG_0].btf_id = ptr_type_id;
+> > +
+> >                 if (btf_kfunc_id_set_contains(desc_btf, resolve_prog_type(env->prog),
+> >                                               BTF_KFUNC_TYPE_RET_NULL, func_id)) {
+> >                         regs[BPF_REG_0].type |= PTR_MAYBE_NULL;
+> > --
+> > 2.36.1
+> >
+>
+

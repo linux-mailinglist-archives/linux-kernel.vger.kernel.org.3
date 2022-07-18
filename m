@@ -2,151 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C8B577C4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB183577C52
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233775AbiGRHS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S233784AbiGRHSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbiGRHS1 (ORCPT
+        with ESMTP id S233771AbiGRHSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:18:27 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0392611804
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:18:26 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id v16so15665911wrd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:18:25 -0700 (PDT)
+        Mon, 18 Jul 2022 03:18:51 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B37F10DD
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:18:50 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id z22so4196272lfu.7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gW4rCz2Fitz5o6DAUQMXkszJ5QgTwpkr1x/wG9fwwys=;
-        b=WAfdEbULVsF5Oo7vSbNU8BB24raJXDQHcwUNULmxYsyUjA+q0FFnge4ehvHxoU9urU
-         HzjuUBe8R/xL3MgwxR2IevPYimacvL8XuQompMyWgX0ATptMMfS6+c8ze/WIf8Jx+pL4
-         iTtNK8vAPgNglwypSrHB+YpmYcIxS8gDOOH7WULeskhAMDiQTmtldoTdOQquoYqOwJK4
-         DHVkFlWIFZRZN2Q8jZnC/7BDyjxewn4//sp/grS5mRj1QEYwpGCYCaweiCo+AoeGMNYS
-         iJSVGdOznd3znMCqvOaPAZtgidh7T24R3ZMQ3D8naib1g+Ht/kQ8Ul9L9KPCKTkG+Jkf
-         tZrw==
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PyRXBleb1QpB4fKxelY4Fyd23fs+FV7dQ0emB1l5pSs=;
+        b=nJNtLHqOy2pMkzxMYFZ7yPppaJCLu+2xQxX810kBBcLldCzjw5A5bgcXpyd2E/Vso+
+         r58HSISLXELZ+9EhWEWCDeNc72YPVP6ccifkY/FRlERB4HumoWMg0GmAEWMMT+hEpuVQ
+         daVWOsv7mBT1o5sbym3CZ5nOWJD3Og5WNyI5s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gW4rCz2Fitz5o6DAUQMXkszJ5QgTwpkr1x/wG9fwwys=;
-        b=2Q3crOimHc7Jq7gVnskYM0EyX+nZ6KcaCc8Jt36bU/D2PJEs2yBtDd1EHQKfxFdSFR
-         u9sYfvjoLYJmbefDfV9W+M/z7KB8l4P1B60TNbuKvNXZQMwXfpWIcG9iuPmk3d2q7N4P
-         4unDcuMis3yxUsdBDJvoxQE6nmtWxUL3F5+7ceqEoRlqMLO5h5L82U4FzMkIYTwKwLMy
-         O+4QjPvcVU5R2c504jAygGps8H8Fq8KlaDcu1CwRQfanzW/eKX9KdXi7eKucs87CAvx6
-         dplwJCRubfx4siW3R6Rwqqk00ogGw6Ih/9gxILK5m816CYvs2GnxogNj/qVRYBrrhN7F
-         JWwg==
-X-Gm-Message-State: AJIora9SAtucDxG8Z1CDTF2190Oc7lXb3WbtFF590pvc9xv1TwBiNvJj
-        E9+QsqE+spryQ+6i0k3+ARj9UA==
-X-Google-Smtp-Source: AGRyM1t+UYLA0q90Sx0OLpN5vQr5rFVtNKJ4KmLAjLMTXPex06QR2HLZKDt4VaOjk1Ct9sezG3ASHA==
-X-Received: by 2002:a5d:4750:0:b0:21e:375:2825 with SMTP id o16-20020a5d4750000000b0021e03752825mr6200608wrs.42.1658128704615;
-        Mon, 18 Jul 2022 00:18:24 -0700 (PDT)
-Received: from [10.35.4.171] ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id c12-20020a5d4ccc000000b0021d6e758752sm10075729wrt.24.2022.07.18.00.18.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 00:18:24 -0700 (PDT)
-Message-ID: <869e52f5-e1bd-4d40-1ba8-a467a852c3ec@sifive.com>
-Date:   Mon, 18 Jul 2022 08:18:23 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PyRXBleb1QpB4fKxelY4Fyd23fs+FV7dQ0emB1l5pSs=;
+        b=KHNnGBFkvECgDZmyaYVbhK88Fu3BeKFik0XL1N/uxK5Helr33t6/x8gySLnAB1Y4sQ
+         yECqTZHTC46wwRV3B0ydQzohvPBug06LVah26r8j2wtcedaNAm8v4mkN0VjHSCKAAj+4
+         O8Qhh/o/sgexjJceFXhAcDneDeUPWiznmqDO0ZjQ/iHhJ5JLhGrLyvs47/fMMIzHhcqC
+         HPngYQy4eY3CU7f6Xczr57peYhOgg0NZ3d3SocdCEhydgh0pq2YcvIz59SAgzaTqmIHH
+         0mN8AgYWXwF0jvfRKF0MY63lxuyJFdrYSfm7ApPqQqgc+QYOG3d8NzCTfMkkWWsjK67k
+         +VmA==
+X-Gm-Message-State: AJIora+O8nVX/8CQmiGosrTKFXIVwQOfZRt3+VnzXDvoSygZfHC4bt63
+        LHTaQ0pz17X7z6dtvsFfz9bgPAdcsGkvZg7i+6EMdg==
+X-Google-Smtp-Source: AGRyM1uU27azdskip3dlgvLt74wyrnMbqEFBJQA/5XIeGmOG0T7mNyvF4bufdGwtDc+pgO4qXKoMvYE+/rSUQDev4eU=
+X-Received: by 2002:a05:6512:2610:b0:47f:74dc:3205 with SMTP id
+ bt16-20020a056512261000b0047f74dc3205mr13322511lfb.429.1658128728309; Mon, 18
+ Jul 2022 00:18:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 3/7] pwm: dwc: add of/platform support
-Content-Language: en-GB
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Rob Herring <robh@kernel.org>, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
- <20220712100113.569042-4-ben.dooks@sifive.com>
- <20220712221715.GT1823936-robh@kernel.org>
- <feaacf44-f9a8-b892-d8ba-8a396b49d56b@sifive.com>
- <20220713135230.gjbd3v6iih2uicpu@pengutronix.de>
- <7999fec2-847a-86ce-ed78-d2a9008bf654@sifive.com>
- <20220713150755.bimcq2yiuvxn6n6v@pengutronix.de>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <20220713150755.bimcq2yiuvxn6n6v@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220716170201.2020510-1-dario.binacchi@amarulasolutions.com> <20220717235000.247bfa42.max@enpas.org>
+In-Reply-To: <20220717235000.247bfa42.max@enpas.org>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Mon, 18 Jul 2022 09:18:37 +0200
+Message-ID: <CABGWkvpK25WGjp76_=Jfd9sMk5Dvj84VnVuc3iuroKR0tJEv+Q@mail.gmail.com>
+Subject: Re: [RFC PATCH] can: can327: remove useless header inclusions
+To:     Max Staudt <max@enpas.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 16:07, Uwe Kleine-König wrote:
-> On Wed, Jul 13, 2022 at 03:30:07PM +0100, Ben Dooks wrote:
->> On 13/07/2022 14:52, Uwe Kleine-König wrote:
->>> On Wed, Jul 13, 2022 at 12:56:55PM +0100, Ben Dooks wrote:
->>>> On 12/07/2022 23:17, Rob Herring wrote:
->>>>> On Tue, Jul 12, 2022 at 11:01:09AM +0100, Ben Dooks wrote:
->>>>>> The dwc pwm controller can be used in non-PCI systems, so allow
->>>>>> either platform or OF based probing.
->>>>>>
->>>>>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
->>
->> [snip]
->>
->>>>>> +properties:
->>>>>> +  "#pwm-cells":
->>>>>> +    description: |
->>>>>> +      See pwm.yaml in this directory for a description of the cells format.
->>>>>
->>>>> pwm.yaml doesn't define how many cells. You need to. And you don't need
->>>>> generic descriptions.
->>>>
->>>>    "#pwm-cells":
->>>>       const: 1
->>>>
->>>> should be sufficient then?
->>>
->>> I would expect a value of (at least) 2 or (better) 3.
->>
->> OOPS, forgot the phandle.
->>
->> I will have to check if we have any support yet for dealing
->> with any of the pwm flags yet.
-> 
-> I didn't double check, but given that the driver only supports inversed
-> polarity it might not even work without passing the flag for inversed
-> polarity. Having said that, I expect you have to only add "#pwm-cells =
-> <3>;" to your dts and then everything should work just fine.
+Hi Max,
 
-I've gone back over the documentation we have for the block, and it
-should have a count for high and a count for low in the PWM mode the
-driver puts it into. I have no idea /why/ the driver is reporting it
-as inversed, unless the PCI version has this automatically set....
+On Sun, Jul 17, 2022 at 11:50 PM Max Staudt <max@enpas.org> wrote:
+>
+> On Sat, 16 Jul 2022 19:02:01 +0200
+> Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+>
+> > -#include <linux/init.h>
+> >  #include <linux/module.h>
+> > -
+> > -#include <linux/bitops.h>
+> > -#include <linux/ctype.h>
+> > -#include <linux/errno.h>
+> > -#include <linux/kernel.h>
+> > -#include <linux/list.h>
+> > -#include <linux/lockdep.h>
+> > -#include <linux/netdevice.h>
+> > -#include <linux/skbuff.h>
+> > -#include <linux/spinlock.h>
+> > -#include <linux/string.h>
+> >  #include <linux/tty.h>
+> > -#include <linux/tty_ldisc.h>
+> > -#include <linux/workqueue.h>
+> > -
+> > -#include <uapi/linux/tty.h>
+> > -
+> > -#include <linux/can.h>
+> >  #include <linux/can/dev.h>
+> > -#include <linux/can/error.h>
+> >  #include <linux/can/rx-offload.h>
+>
+> AFAIK, the coding style is to not rely on headers including other
+> headers. Instead, the appropriate header for every symbol used should
+> be included.
 
-I will go back and talk with the engineer who did the testing of the
-PWM to get the test-bench re-set and check this, however my expectation
-is we could easily do both and for the of/plat case we should just
-report normal polarity (and we could deal with the inversed by simply
-swapping the low and high values).
+Thanks for the explanation.
 
-I also noted the v2 block supports 0 and 100% by setting a bit in the
-control and the timers to a given value, so that can also be added to
-the series (although this requires an IP generation option to be
-set) which we can also add.
+>
+> This is also valid for the similar patch you submitted for slcan.
 
-Thnak you for pointing this out, hopefully we can have this sorted
-today and if so we will need to change this to a range of 2..3 for
-the PWM cells.
+Probably something can be removed (if_arp.h, if_ether.h, ...).
+I will take can327.c as a reference.
+
+Thanks and regards,
+Dario
+
+>
+>
+> Unless something has changed, this is a NAK from me, sorry.
+>
+>
+> Max
 
 
-> Best regards
-> Uwe
-> 
 
+-- 
+
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com

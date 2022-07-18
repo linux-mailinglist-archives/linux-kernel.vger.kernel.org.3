@@ -2,147 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545F1578743
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29DB57871D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234998AbiGRQYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        id S235590AbiGRQT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234944AbiGRQYD (ORCPT
+        with ESMTP id S233584AbiGRQTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:24:03 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F334DF79;
-        Mon, 18 Jul 2022 09:24:02 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id v16so2000636wrr.6;
-        Mon, 18 Jul 2022 09:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nTuKiW+NEzqVP6Zl8LDwB5peMSvo60+Ram+tJ6Y05DI=;
-        b=KVdXvgqm89PHHATuLfHJBXQjSlaJg2b45TnP4lQ49H3b7w0xfNnKHmSL+ncPanyoqE
-         xkmO5zvTfvRgzQ3OQQXOJsLDdLVMmKbuPdec1ESnvLBm7EV9LghUpMEOm/12tTc6skrX
-         3jOur5sWHWm6JZiClL20+rTCWfzz3DatzPNSDdO6FWrDa+G59C2xVvZeWtHwiTF8RTfm
-         KcZQihURNLcoUElrmfxLTpd+dMhAR2oK8MwM5FfCmy0qxDriDD5cjMv0aYHo45cgq7FL
-         aZTGoxYsBlWSXGRRRcD5hQjxLL9CA5JFD1s/ZeorM1HO8zDx1oNJ36mjwdTLOxj1DL28
-         OZWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nTuKiW+NEzqVP6Zl8LDwB5peMSvo60+Ram+tJ6Y05DI=;
-        b=i31w1XiRIet9pkz5/t2JTNW+i1/Hnfow23DtTrf4navlMrM2+3cGyuUtx7PpJDNgVy
-         k5fXdwuPzVXD1dfDtvDOFOFe0C7Sm+cuwj7MZ2HG7aga74Lq9gdRZCOLZP/DvKGOAYfr
-         3fkt3u8A6JDiCTNVYDpub7ze/qjl8sqMKtuo3JnAFIfsv8IUO8pdy8GqWFkYVqkyN2jw
-         glRGvDwHUc72VI6QTO2KXhcwU/E14VVRvf/8fQYVvAhgcFUdW7FWtNXOl+lkyuoNEBmI
-         TIXtcInCV0F8JgiAHVOSIswvuBSE52pbm6BSkeaeDxcypYfjVF6ZQFBaDGlZgjBVriS5
-         cSgg==
-X-Gm-Message-State: AJIora/ZeXYewkcP3J10Q/5tcPcAojcsyNzF+ot9rsRfDiFpQsqfpP4z
-        KrQH/upMwVvZSwRNyezBDw0=
-X-Google-Smtp-Source: AGRyM1u/TPPPuglxmceIjz+V7UnT6FIlHw/IgtoQi0ZhumjIII6EjGfurB5hlUjahVYhCO2GYh5uqg==
-X-Received: by 2002:adf:fe81:0:b0:21b:88ea:6981 with SMTP id l1-20020adffe81000000b0021b88ea6981mr24744679wrr.616.1658161440708;
-        Mon, 18 Jul 2022 09:24:00 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id q6-20020a1cf306000000b003a2e92edeccsm19150824wmq.46.2022.07.18.09.23.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 09:24:00 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 3/3] ARM: dts: qcom: ipq8064: add ipq8065 variant
-Date:   Mon, 18 Jul 2022 18:18:26 +0200
-Message-Id: <20220718161826.4943-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220718161826.4943-1-ansuelsmth@gmail.com>
-References: <20220718161826.4943-1-ansuelsmth@gmail.com>
+        Mon, 18 Jul 2022 12:19:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D13225C5D;
+        Mon, 18 Jul 2022 09:19:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658161194; x=1689697194;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=wx+2tefsnxjC6/SPkWBMHDk4yQRZKqq/stF6GFC0Kjs=;
+  b=Qw0wdlxfHPJhqrpIIq+yC4fgAyCV8CEGjS/uUKcU1fZlPqysjA4bRY+e
+   ad3M8KbFUpxguja9+da7AcdF39F1FOE7Dl+66POl3xP3G3gB8bptbEJ6J
+   QDrEuzxUKMC30VXgFBMdUrSeg3MdBvNXJ7ScMwBWXBZSZOFhI8Sfq/HQp
+   +F50rVHxDvQmf7jQwClWNr0pCmoaMrtAjVqoof/m7Owvj1oVpS/7QSzae
+   iUuW3RNmYa9fJYVH6r4/aQ08rZovqhQObaqd1kHt3RYaVCKW2toeyDPHX
+   zjkj89udEpTdcSz9JR52dRj+5yCtFf1Fb5jv9Ej24qaUBPop7WFO1ZHiu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287004572"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="287004572"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 09:19:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="739527408"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga001.fm.intel.com with ESMTP; 18 Jul 2022 09:19:53 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 18 Jul 2022 09:19:53 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 18 Jul 2022 09:19:52 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
+ Mon, 18 Jul 2022 09:19:52 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Jane Chu <jane.chu@oracle.com>, "bp@alien8.de" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>
+Subject: RE: [PATCH v3] x86/mce: retrieve poison range from hardware
+Thread-Topic: [PATCH v3] x86/mce: retrieve poison range from hardware
+Thread-Index: AQHYmje+5joA3gBAok2TIuU+DOldN62ETyBg
+Date:   Mon, 18 Jul 2022 16:19:51 +0000
+Message-ID: <41db4a4b17a848798e487a058a2bc237@intel.com>
+References: <20220717234805.1084386-1-jane.chu@oracle.com>
+In-Reply-To: <20220717234805.1084386-1-jane.chu@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+x-originating-ip: [10.22.254.132]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ipq8065 SoC is based on ipq8064-v2.0 with a more clocked CPU and
-an increased voltage output with the smb208 regulators.
++	m.misc =3D (MCI_MISC_ADDR_PHYS << 6) | __ffs64(mem_err->physical_addr_mas=
+k);
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- arch/arm/boot/dts/qcom-ipq8065-smb208.dtsi | 37 ++++++++++++++++++++++
- arch/arm/boot/dts/qcom-ipq8065.dtsi        |  8 +++++
- 2 files changed, 45 insertions(+)
- create mode 100644 arch/arm/boot/dts/qcom-ipq8065-smb208.dtsi
- create mode 100644 arch/arm/boot/dts/qcom-ipq8065.dtsi
+Do we want to unconditionally trust the sanity of the BIOS provided physica=
+l_address_mask?
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8065-smb208.dtsi b/arch/arm/boot/dts/qcom-ipq8065-smb208.dtsi
-new file mode 100644
-index 000000000000..803e6ff99ef8
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-ipq8065-smb208.dtsi
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "qcom-ipq8065.dtsi"
-+
-+&rpm {
-+	smb208_regulators: regulators {
-+		compatible = "qcom,rpm-smb208-regulators";
-+
-+		smb208_s1a: s1a {
-+			regulator-min-microvolt = <1050000>;
-+			regulator-max-microvolt = <1150000>;
-+
-+			qcom,switch-mode-frequency = <1200000>;
-+		};
-+
-+		smb208_s1b: s1b {
-+			regulator-min-microvolt = <1050000>;
-+			regulator-max-microvolt = <1150000>;
-+
-+			qcom,switch-mode-frequency = <1200000>;
-+		};
-+
-+		smb208_s2a: s2a {
-+			regulator-min-microvolt = <775000>;
-+			regulator-max-microvolt = <1275000>;
-+
-+			qcom,switch-mode-frequency = <1200000>;
-+		};
-+
-+		smb208_s2b: s2b {
-+			regulator-min-microvolt = <775000>;
-+			regulator-max-microvolt = <1275000>;
-+
-+			qcom,switch-mode-frequency = <1200000>;
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/qcom-ipq8065.dtsi b/arch/arm/boot/dts/qcom-ipq8065.dtsi
-new file mode 100644
-index 000000000000..ea49f6cc416d
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-ipq8065.dtsi
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "qcom-ipq8064-v2.0.dtsi"
-+
-+/ {
-+	model = "Qualcomm Technologies, Inc. IPQ8065";
-+	compatible = "qcom,ipq8065", "qcom,ipq8064";
-+};
--- 
-2.36.1
+There's a warning comment on the kernel __ffs64() function:
 
+ * The result is not defined if no bits are set, so check that @word
+ * is non-zero before calling this.
+
+Otherwise, this looks like a good idea.
+
+-Tony

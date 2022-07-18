@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80DB5789B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B065789B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236047AbiGRSoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S236028AbiGRSoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236035AbiGRSoC (ORCPT
+        with ESMTP id S236046AbiGRSoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:44:02 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9E46313;
-        Mon, 18 Jul 2022 11:43:58 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id w9so2970117ilg.1;
-        Mon, 18 Jul 2022 11:43:58 -0700 (PDT)
+        Mon, 18 Jul 2022 14:44:18 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E8EDE9A;
+        Mon, 18 Jul 2022 11:44:14 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id n138so8763725iod.4;
+        Mon, 18 Jul 2022 11:44:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LD3jbsEBREK2eP4j8JRnU6BGqeHPwEv2Qmp6Ugb/5qQ=;
-        b=4KJ0HC7tmiypX1eTrjKhG6Ye9il5jBQyFKXnYIR2vbVrj7t2LKnV738+oWCmHqnHgM
-         D+hxNGlQnVX18BlSW3E3amp8BWQZwbcNIC6kVeqS/e/We6tgzBGUM+AvfNlMSYEqKYHe
-         Ue10xXaX87+UYfUss/aL/Eb4l22XBemlMN8CHVh4+YkxfsX1Cb33ig2+z2K2Zc40TLtr
-         dxdlsv+YZgN5xzIwhCahFT8pDB+WZxMQNJytRX6bZ9QgX/t1Nhumc0fI6SgLpMgnGv9c
-         xKs5JLv4eY7B2Ctu7dd2aZbgeR4+MfIlWh0kgBOuoEg0XXw1muhGAHjtX0uFk26pHn2i
-         qoDQ==
-X-Gm-Message-State: AJIora+hiVGOcnghGFS8W90xDf+sRo31dFXhdkHtYA4qi1YvXwB+/vWn
-        Ag8gy8rc6bgYa59ay12RGQ==
-X-Google-Smtp-Source: AGRyM1sfYtsdKVAWmLlEzocHZtR9Hf5/A/3tf8A57ZltfKBeCCy+zLJhYGsU+xCXjYyzTImCk0NIGg==
-X-Received: by 2002:a05:6e02:219e:b0:2dc:d166:f603 with SMTP id j30-20020a056e02219e00b002dcd166f603mr6367261ila.79.1658169838044;
-        Mon, 18 Jul 2022 11:43:58 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to;
+        bh=xT29dFQG9gO6zUOkC6HwFgLGzT9S34ngMonC+QSf2Mg=;
+        b=uCMqmlWqj0BietQUYb+YYdjAHxw5dNj1l8Xj706tDUjWZT4P36irDjqNEZQMFOpd++
+         g6fi3esd8cENAuAq37OufWYxWpoGdCFMHh9WCfZ34U58F4WuYdDn3hX0r65B5edcUW8A
+         s4G6L5uSIZYJdvc7j5ZsuHb/0PTb3ZDug/jV0U6ZfkaeC0jQWmQVwntO/j4rKjVxanjK
+         rH6Pxo9oFjc7GqR/YrMSnPw5SvfExEmw7THeiE+T59v+GTR6NojFi+VhOMhn6aN90WP7
+         89sKTjX+V1amoiFTKhdnkTbmg/qPsRCZX3ivyYt6K0greOFteaPUaX/GkTy5c59xSZ3a
+         9tmA==
+X-Gm-Message-State: AJIora9vV5LV3NSm+mOBkz4gtoSx+TQsgMys248A00YmERKGtKsj6dpK
+        sz8hs9A4UkLfq+9KCtLAVCS+cwPrmA==
+X-Google-Smtp-Source: AGRyM1s6VYhtM8AfinB2gMgIvElLBBuNUg5GEn+jv3VioD1/E3fdRmV5D0aWKyrIxBqsnn62hvzymw==
+X-Received: by 2002:a05:6638:272c:b0:33f:6fe4:b76f with SMTP id m44-20020a056638272c00b0033f6fe4b76fmr14884160jav.284.1658169853769;
+        Mon, 18 Jul 2022 11:44:13 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id bs20-20020a056638451400b00341523a2a32sm4076443jab.122.2022.07.18.11.43.56
+        by smtp.gmail.com with ESMTPSA id g26-20020a05663810fa00b00339d244c4a6sm5876544jae.23.2022.07.18.11.44.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 11:43:57 -0700 (PDT)
-Received: (nullmailer pid 3325584 invoked by uid 1000);
-        Mon, 18 Jul 2022 18:43:55 -0000
-Date:   Mon, 18 Jul 2022 12:43:55 -0600
+        Mon, 18 Jul 2022 11:44:13 -0700 (PDT)
+Received: (nullmailer pid 3326217 invoked by uid 1000);
+        Mon, 18 Jul 2022 18:44:11 -0000
+Date:   Mon, 18 Jul 2022 12:44:11 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     brcm80211-dev-list.pdl@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        SHA-cyfmac-dev-list@infineon.com, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, van Spriel <arend@broadcom.com>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Franky Lin <franky.lin@broadcom.com>, netdev@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Arend van Spriel <aspriel@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: bcm4329-fmac: add optional
- brcm,ccode-map-trivial
-Message-ID: <20220718184355.GA3325548-robh@kernel.org>
-References: <20220711123005.3055300-1-alvin@pqrs.dk>
- <20220711123005.3055300-2-alvin@pqrs.dk>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Xiandong Wang <xiandong.wang@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-mediatek@lists.infradead.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: soc: mediatek: add mdp3 mutex
+ support for mt8186
+Message-ID: <20220718184411.GA3326033-robh@kernel.org>
+References: <20220711123247.15807-1-allen-kh.cheng@mediatek.com>
+ <20220711123247.15807-2-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220711123005.3055300-2-alvin@pqrs.dk>
+In-Reply-To: <20220711123247.15807-2-allen-kh.cheng@mediatek.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -78,28 +71,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 14:30:03 +0200, Alvin Šipraga wrote:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On Mon, 11 Jul 2022 20:32:46 +0800, Allen-KH Cheng wrote:
+> Add mdp3 mutex compatible for mt8186 SoC.
 > 
-> The bindings already offer a brcm,ccode-map property to describe the
-> mapping between the kernel's ISO3166 alpha 2 country code string and the
-> firmware's country code string and revision number. This is a
-> board-specific property and determined by the CLM blob firmware provided
-> by the hardware vendor.
-> 
-> However, in some cases the firmware will also use ISO3166 country codes
-> internally, and the revision will always be zero. This implies a trivial
-> mapping: cc -> { cc, 0 }.
-> 
-> For such cases, add an optional property brcm,ccode-map-trivial which
-> obviates the need to describe every trivial country code mapping in the
-> device tree with the existing brcm,ccode-map property. The new property
-> is subordinate to the more explicit brcm,ccode-map property.
-> 
-> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Signed-off-by: Xiandong Wang <xiandong.wang@mediatek.com>
 > ---
->  .../bindings/net/wireless/brcm,bcm4329-fmac.yaml       | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml         | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>

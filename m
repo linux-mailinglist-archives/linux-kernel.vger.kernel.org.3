@@ -2,175 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA437578CD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07F0578CF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235786AbiGRVgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S236076AbiGRVhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbiGRVge (ORCPT
+        with ESMTP id S235865AbiGRVhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:36:34 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858E03245B;
-        Mon, 18 Jul 2022 14:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658180193; x=1689716193;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mNR9fZW5L/31bvz/gFxJvxCNXCRVmXZ4lg+FbtpuMEs=;
-  b=HMNBf9Xf716PcEy00NePo/c/6d45CmzWz9qd/HdOmFyOcAJ8xCCfQuLk
-   EKW0VMz3WtyF+PRuLKFavrzeZS0dmzroPQZBoem06mn3RvqTQH3TYuDMo
-   +Epk0tuQCxnTLO8Q+zOKC6ntLCa9FFdqJwqWAoSfphKOPkAki5KbvqbAR
-   WlRnL61w6/0zX2Y6bO86rhdv/j5kD8AItBtA4JrxIPHfmLFqg1wqmwBZQ
-   MeO6B6FCfifeTCXGs0TZNIkUDbVzGSaOU0OgKy4yXlCXUdBFPZDhRq/tx
-   kT/MvTi+2VyJnYaJzXqZO8wO3pWMTfpQMmQXhA+SoMkUY71gBhtLEsRwI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287068744"
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="287068744"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 14:36:33 -0700
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="597406476"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 14:36:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oDYPa-001OZo-1y;
-        Tue, 19 Jul 2022 00:36:18 +0300
-Date:   Tue, 19 Jul 2022 00:36:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Mel Gorman <mgorman@suse.de>, Miroslav Benes <mbenes@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Song Liu <songliubraving@fb.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
-        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 07/16] smp: optimize smp_call_function_many_cond()
-Message-ID: <YtXSUuGgjRkjhamA@smile.fi.intel.com>
-References: <20220718192844.1805158-1-yury.norov@gmail.com>
- <20220718192844.1805158-8-yury.norov@gmail.com>
+        Mon, 18 Jul 2022 17:37:12 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF1E2C645
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:37:10 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id r2so17896307wrs.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fcM5H7LuUZitM810U87o0MrCS82Ja03oEXoUJfTqLZY=;
+        b=VCNsKWDEVGSOr0DAmTVUV+kKqkmZzWwuFY+4pOy87ryML5i3PJS9d0BQOaglD3oPh7
+         nZ63sBJOqdDQURw0VKQvtr06U/Sa0Hb70A26EV6vK0klNSK1+vGCQdKeG+QRNjAzt+7V
+         QKdtwCdbxsStYu8Q/st3ILHBdpMnkv2v7N8kDo2bkmEnxgayPgq76ecjRxVWlmd773VE
+         q3OTRr7bIA/8KQ1dN+WkyfIqU1zg4aRMoyM8Mqg+mIOI3Kb3TwQLw1ExOgLVJXxMPSvC
+         yb3RY9poDsyWQ2Em31/WRcjRBiazUMYhtTPiK+wA5mkULPIjew5b0Zw7VXJLvTAn8xF9
+         JyPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fcM5H7LuUZitM810U87o0MrCS82Ja03oEXoUJfTqLZY=;
+        b=e8gk2PEAdOoYyBWdEgk/PC0h5gR+tH1iPzHRJhdCaCTNtKkQj/79c954WjggsatC7v
+         Cm+k3BQZYMf/iiB/B5ejCXynlZKP8Ac8WWefTR4dzeO8FcpNuxJfXIsRvi3bBqZw9ck3
+         sPLopWoNAWjS0xZo8k53O8b3bEtYywV7dro7A+7Eb6yp7pr0cIvXCo9tleJb75LH47ma
+         hGviCCt3QjIBvSOoXVD0y2cXAyCnrZ7NfjWIVcsV51bOZ8p0Ae9dcxwT1xs/FqBRHxBX
+         TXZ5aPzM+Cw/ONI9RTnqKZZpmAxBHQHZz6l0jcG8MUUmt45ahT16wQmtb9oDPkH6RdUi
+         T8Qg==
+X-Gm-Message-State: AJIora9cEvLcLLiNkcGYzJMRo5w7RmvyE7agZKgbmM3KbLJWL36cGQBg
+        H8GROEAHKkSWRUzFPD2sypUlFQ==
+X-Google-Smtp-Source: AGRyM1vBobWMgtTC2//bIax1kcof9pKqyUnqASrXceKn9r4UVb6G6Qqrt8Z2o3QIlsyhgI54nMvMIw==
+X-Received: by 2002:a05:6000:702:b0:21d:7f65:f1b5 with SMTP id bs2-20020a056000070200b0021d7f65f1b5mr24197748wrb.555.1658180228794;
+        Mon, 18 Jul 2022 14:37:08 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:496e:2d41:fd5a:4e5e])
+        by smtp.gmail.com with ESMTPSA id ay10-20020a05600c1e0a00b003a32167b8d4sm991527wmb.13.2022.07.18.14.37.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 14:37:08 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de
+Cc:     thierry.reding@gmail.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, kkartik@nvidia.com
+Subject: [PATCH] clocksource/drivers/tegra186: Put Kconfig option 'tristate' to 'bool'
+Date:   Mon, 18 Jul 2022 23:36:57 +0200
+Message-Id: <20220718213657.1303538-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718192844.1805158-8-yury.norov@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:28:35PM -0700, Yury Norov wrote:
-> smp_call_function_many_cond() is often passed with cpu_online_mask.
-> If this is the case, we can use num_online_cpus(), which is O(1)
-> instead of cpumask_{first,next}(), which is O(N).
-> 
-> It can be optimized further: if cpu_online_mask has 0 or single bit
-> set (depending on cpu_online(this_cpu), we can return result without
-> AND'ing with user's mask.
+The clocksource are built-in, not as module. We don't know if the core
+time framework is ready for that.
 
-> Caught with CONFIG_DEBUG_BITMAP:
-> [    7.830337] Call trace:
-> [    7.830397]  __bitmap_check_params+0x1d8/0x260
-> [    7.830499]  smp_call_function_many_cond+0x1e8/0x45c
-> [    7.830607]  kick_all_cpus_sync+0x44/0x80
-> [    7.830698]  bpf_int_jit_compile+0x34c/0x5cc
-> [    7.830796]  bpf_prog_select_runtime+0x118/0x190
-> [    7.830900]  bpf_prepare_filter+0x3dc/0x51c
-> [    7.830995]  __get_filter+0xd4/0x170
-> [    7.831145]  sk_attach_filter+0x18/0xb0
-> [    7.831236]  sock_setsockopt+0x5b0/0x1214
-> [    7.831330]  __sys_setsockopt+0x144/0x170
-> [    7.831431]  __arm64_sys_setsockopt+0x2c/0x40
-> [    7.831541]  invoke_syscall+0x48/0x114
-> [    7.831634]  el0_svc_common.constprop.0+0x44/0xfc
-> [    7.831745]  do_el0_svc+0x30/0xc0
-> [    7.831825]  el0_svc+0x2c/0x84
-> [    7.831899]  el0t_64_sync_handler+0xbc/0x140
-> [    7.831999]  el0t_64_sync+0x18c/0x190
-> [    7.832086] ---[ end trace 0000000000000000 ]---
-> [    7.832375] b1:		ffff24d1ffd98a48
-> [    7.832385] b2:		ffffa65533a29a38
-> [    7.832393] b3:		ffffa65533a29a38
-> [    7.832400] nbits:	256
-> [    7.832407] start:	0
-> [    7.832412] off:	0
-> [    7.832418] smp: Bitmap: parameters check failed
-> [    7.832432] smp: include/linux/bitmap.h [363]: bitmap_and
+Revert back this option to 'bool'.
 
-Documentation specifically says:
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/clocksource/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#backtraces-in-commit-mesages
-
-...
-
-> +	default:
-> +		if (mask == cpu_online_mask)
-> +			return true;
-
-Instead, put (missed) break; here and do "default" case together below.
-
-> +	cpu = cpumask_first_and(mask, cpu_online_mask);
-> +	if (cpu == this_cpu)
-> +		cpu = cpumask_next_and(cpu, mask, cpu_online_mask);
-> +
-> +	return cpu < nr_cpu_ids;
-
-...
-
-> +	run_remote = __need_remote_exec(mask, this_cpu);
-
->  
-
-Now you may remove this blank line.
-
->  	if (run_remote) {
-
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 2dcdf02239c3..d7c7912cdd78 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -151,7 +151,7 @@ config TEGRA_TIMER
+ 	  Enables support for the Tegra driver.
+ 
+ config TEGRA186_TIMER
+-	tristate "NVIDIA Tegra186 timer driver"
++	bool "NVIDIA Tegra186 timer driver"
+ 	depends on ARCH_TEGRA || COMPILE_TEST
+ 	depends on WATCHDOG && WATCHDOG_CORE
+ 	help
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 

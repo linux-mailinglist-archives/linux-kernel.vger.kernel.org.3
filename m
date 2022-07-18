@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9B55781EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC475781E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234900AbiGRMOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
+        id S234977AbiGRMOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbiGRMO2 (ORCPT
+        with ESMTP id S234954AbiGRMOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:14:28 -0400
+        Mon, 18 Jul 2022 08:14:25 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BABA23173
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:14:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C052219C2B
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:14:24 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oDPdh-0005d7-6Y; Mon, 18 Jul 2022 14:14:17 +0200
+        id 1oDPdg-0005d8-F0; Mon, 18 Jul 2022 14:14:16 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oDPde-001i3q-Sy; Mon, 18 Jul 2022 14:14:14 +0200
+        id 1oDPde-001i3u-VS; Mon, 18 Jul 2022 14:14:14 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1oDPde-005xVM-2R; Mon, 18 Jul 2022 14:14:14 +0200
+        id 1oDPde-005xVP-84; Mon, 18 Jul 2022 14:14:14 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/8] interconnect: imx: Ignore return value of icc_provider_del() in .remove()
-Date:   Mon, 18 Jul 2022 14:14:02 +0200
-Message-Id: <20220718121409.171773-2-u.kleine-koenig@pengutronix.de>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     kernel@pengutronix.de, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/8] interconnect: icc-rpm: Ignore return value of icc_provider_del() in .remove()
+Date:   Mon, 18 Jul 2022 14:14:03 +0200
+Message-Id: <20220718121409.171773-3-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220718121409.171773-1-u.kleine-koenig@pengutronix.de>
 References: <20220718121409.171773-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1010; h=from:subject; bh=5nfrAM364jApg4Q2MKumCrNEZPHrPDHSb2BBL1GlFyE=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi1U51Bo/VP+y2LBs+bQ2iRcEHbN/g7A/4uFcglu5y qC3AKbSJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtVOdQAKCRDB/BR4rcrsCZqvB/ 9hWfAifxAcGqp8Uiy8/z98ko8j0zZM/C09D66GMAFl1yTDfz2NvcwV52aphTRMrD8sS2Cgm9Y4r754 fGkfiGs4UlqQ/PAU8pT3aTW0xLWOqnYGEFDdWPtBU9+0aJuRh918sd/Axxf830NM9LgKzYZyRWCCVF fPze1raCc+1o4n/1u/MQ5b0C2paSy20X57zgAF3bgSskWBGhn28pQoHZ/D+pkzYIY5aDQ7gE6LBDdC mmdRkQetYH7MJYQsIQmsiG9bWeNSroz58NjYOSfS1XAZnW3X1eCmH7TH/E6KeqKabAQNSR9IZrMCRq j7u0merMlnMVnsbyv2XpZxZVMpEo5J
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1077; h=from:subject; bh=uiTryKzy9Ktzb3mNysXudEYw9T8hjrPFSFUDOIoCHGE=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi1U54DBHDAilwBL6MlUFk0KjKJ2pw2UfdD3SolwxQ kIZRiNyJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYtVOeAAKCRDB/BR4rcrsCSWMB/ 9DVXamekMik/9jBrdtZnmwsnE6Wr2RSV+lTWCIWpOg/L2UpBQyHst3hMG4iZejSgB+DNZKgamQ8icg /3aTQNJt2Ve97UjsVNIcWdrWAOouJWqZOvk9VCO8tNq8XYcLD8cQbc4cEYVI51I1pYJcqF0mIV0lYq 5hzPyC9vvwpWTue8sdElCN1uKHwf6bGPDMvfmGe5c4aSnTE6iLkhv17P0IzOTtQLQb9rdYPD6LVWGN CLPpiEkulhAYWXsyXKm9sPXYkCp/SNK1TlXUd9daS99VYGkDDseILdvnur/ucVXptKpe6khCsHUguy kdaKS1pY0QKp85YdQgUvD8gOe8uBy/
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -70,24 +70,23 @@ This is a preparation for making platform remove callbacks return void.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/interconnect/imx/imx.c | 4 +++-
+ drivers/interconnect/qcom/icc-rpm.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-index 249ca25d1d55..4c70530e3064 100644
---- a/drivers/interconnect/imx/imx.c
-+++ b/drivers/interconnect/imx/imx.c
-@@ -280,7 +280,9 @@ int imx_icc_unregister(struct platform_device *pdev)
+diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+index fb013191c29b..189c25f8207a 100644
+--- a/drivers/interconnect/qcom/icc-rpm.c
++++ b/drivers/interconnect/qcom/icc-rpm.c
+@@ -447,6 +447,8 @@ int qnoc_remove(struct platform_device *pdev)
  
- 	imx_icc_unregister_nodes(provider);
- 
--	return icc_provider_del(provider);
-+	icc_provider_del(provider);
+ 	icc_nodes_remove(&qp->provider);
+ 	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
+-	return icc_provider_del(&qp->provider);
++	icc_provider_del(&qp->provider);
 +
 +	return 0;
  }
- EXPORT_SYMBOL_GPL(imx_icc_unregister);
- 
+ EXPORT_SYMBOL(qnoc_remove);
 -- 
 2.36.1
 

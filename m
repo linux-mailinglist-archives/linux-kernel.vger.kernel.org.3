@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B3C578E4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4B7578E74
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbiGRXcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 19:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S234582AbiGRXtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 19:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234013AbiGRXca (ORCPT
+        with ESMTP id S229615AbiGRXth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 19:32:30 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837B220BC4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:32:29 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 64so23674953ybt.12
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:32:29 -0700 (PDT)
+        Mon, 18 Jul 2022 19:49:37 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC87A1B3;
+        Mon, 18 Jul 2022 16:49:36 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id o8so8032907wms.2;
+        Mon, 18 Jul 2022 16:49:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hfhcfJEtIEOv5/RbP8aWxiUol5MH91cRjA0pRO3p2Do=;
-        b=E8GPGArYRequLjAGkGzJuo7mmPtrq2YvlPe8RRaQ8b8rHsTNcJ8RfueX4LgVDgm4aB
-         iO9UmGQn2mkxNk75LsxjucgwIuj7WI7+50bQj4vRV7NWIgEJ25kU4RkKRLX/qW9+H+td
-         SuNhtFNytaFKBe644W3MoZryHUqLCIcz8SW/Qqq/KlVak4gkMqO7GM9zsRXI2zoVgdTJ
-         qc9r/Whf+qyeEeohUc+mvkoClakUllk5GMENmp9gPNkIv8k/q3mimTiabzRrUIC6nY4i
-         ri43dSa+JABF0B+eibe17SQ0ixXgj6uuTesCdN0QN+7Ncsv70PQvaX9oxjrYuglZQD25
-         Q/og==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iLn0NXzz1qwy3ndOt3BUE/qAWam0rAznbncz7Idd7u0=;
+        b=EwHX62FR5PBoHoMNkxDGBQ9xqeb8Duy6XJV7m30tw9SE+rrILmN4qsxcbldWLqDPDh
+         I8oP9o9+eEN1HaRTg+5alh2uyCZoSpXnc1xutwIn3gS71q/iQwwnWyqXvs7XazqV0ZEQ
+         7y4GD9U3n77FjhkyDaCiTy8enH8+lerrxEJM3Wkie9+ZyZkbz2r3walRN8LaK2HgrQOn
+         3v/IylMlheXP41F2ivpmT7PrY0+y0lGNOpqC19alcskaczy5M1iFDMWH5ac6lAIiwutJ
+         jMGq1ywY6G/nuAukt+NuIGc939HKim5Q+8scPH2F4E7wZ1is1TxlTu8jqGQZnT4Y0Gkl
+         S/CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hfhcfJEtIEOv5/RbP8aWxiUol5MH91cRjA0pRO3p2Do=;
-        b=WoGWP6Sd164Zr1cqyaMoeqSPxH4cjgKeB9b/rsPqHBmkPfsyarr82roTYR2LePbSGB
-         EvD/O1HaiDTnHIgYpsb9sRqClGWYaZngL1AvTPQSiYFnM5Mg9Z9wpN9l8g0YXzyUx0qp
-         Y+7vbgRdX+abQP8EeYxRWto5XrPRVlGrRKTYRS8o3kNh3eMrsFH1n+YObv3Lr3y+92Lq
-         7pefc3qMdO/dwS3bIMivUqt1uabPKA23UO27ySKwiI9QqZGR9YkGipi9z4JLTN+K9MrB
-         QSUcaPbGwXAYVeQB2sbw0CLfUpctO/7Rs05HomSG/lFaepgDTcEhe6bzIwdt7aXJ2bDV
-         6mHg==
-X-Gm-Message-State: AJIora8Ajmp2ObEJ6yfCI6O2Hqdvgjob+SKyshRtrGpfRQMHG0lXqxKX
-        0BGoowLq/CdEIIs/KtW9HAvTt85thz9Ld5VBklQgiQ==
-X-Google-Smtp-Source: AGRyM1uDqGJkW/LK2CJC2GR49ze3EpqjvilYu7i365psCPTzr/cZIWgOxjMR3E5AbePYdQJr4Xq1laFNiwWUOrzg3oE=
-X-Received: by 2002:a25:3b95:0:b0:66e:316c:159 with SMTP id
- i143-20020a253b95000000b0066e316c0159mr30295992yba.297.1658187148646; Mon, 18
- Jul 2022 16:32:28 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iLn0NXzz1qwy3ndOt3BUE/qAWam0rAznbncz7Idd7u0=;
+        b=q/Q75KOXLRHJYRZodBkwZS5oeHX/L8qglEHVhNhrzekuXmDJ7HIWnyUZWfRMjay0gz
+         2sZ5s5MSSEr0oXCQ/nvfI1wWwcSQpdoNflIyU8Y2j5ybLiRwHoGZdGMzgdRX3VA9ojXb
+         7sOTpklIMeNW0vpvYA6wkjGJAI0nw5rWGPBtfbypXdUdBfnVJC/YKepdg80/4vU6mIqN
+         xDUboPHhiPWAx7iEiaSibjeboFYDBQnOAhV2EQmb9trZs5gTJryy0Zrc5YOySX9T1n0q
+         lNGJtz4vD9GLsLgvhMhHQ4KPVnx48haz7iAWBQBcIBaLkvVgJb1k/6C/sZAvMUiiKfZj
+         jteA==
+X-Gm-Message-State: AJIora/tmqXxtq9zoFUmsViA4gz1QaqsShnbuPutKc96QIxAoh2PLTuY
+        wVk/YdO9kMZF/5TcQr95R+U=
+X-Google-Smtp-Source: AGRyM1vpuY6NLmRwScV7Ht0S7G8Ziutg6kU35pYhwKGbR320qhadWYQLFHpQjUrQSnqrepUhxTQqqA==
+X-Received: by 2002:a1c:f716:0:b0:3a1:8f0e:66b4 with SMTP id v22-20020a1cf716000000b003a18f0e66b4mr28371963wmh.140.1658188175212;
+        Mon, 18 Jul 2022 16:49:35 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id o17-20020a05600c4fd100b003a305c0ab06sm15975926wmq.31.2022.07.18.16.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 16:49:34 -0700 (PDT)
+Message-ID: <62d5f18e.1c69fb81.35e7.46fe@mx.google.com>
+X-Google-Original-Message-ID: <YtXtir8U4/bTR5SJ@Ansuel-xps.>
+Date:   Tue, 19 Jul 2022 01:32:26 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 1/4] net: dsa: qca8k: drop
+ qca8k_read/write/rmw for regmap variant
+References: <20220716174958.22542-2-ansuelsmth@gmail.com>
+ <20220718180452.ysqaxzguqc3urgov@skbuf>
+ <62d5a291.1c69fb81.e8ebe.287f@mx.google.com>
+ <20220718184017.o2ogalgjt6zwwhq3@skbuf>
+ <62d5ad12.1c69fb81.2dfa5.a834@mx.google.com>
+ <20220718193521.ap3fc7mzkpstw727@skbuf>
+ <62d5b8f5.1c69fb81.ae62f.1177@mx.google.com>
+ <20220718203042.j3ahonkf3jhw7rg3@skbuf>
+ <62d5daa7.1c69fb81.111b1.97f2@mx.google.com>
+ <20220718234358.27zv5ogeuvgmaud4@skbuf>
 MIME-Version: 1.0
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <CAMkAt6osbEGBFrgn=y1=x4mDHC1aL40BwaW0NdGHF8qmWd7ktA@mail.gmail.com>
- <20220627113019.3q62luiay7izhehr@black.fi.intel.com> <CAMj1kXHD5XBAS1aBjzg1RCeK6qgtanUSED_xyTZ0v1j+UShMKw@mail.gmail.com>
- <20220627122230.7eetepoufd5w3lxd@black.fi.intel.com> <CAMkAt6oJJaRM_dy=y2BP99VziPriVuA4jAmMc=G7njwJYKFgyg@mail.gmail.com>
- <CAMj1kXHpS2B9Q7AaQ1euGidZUEyR6gfi=e+t1J_Cr8bmK_9mTw@mail.gmail.com>
- <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com> <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
- <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
-In-Reply-To: <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Mon, 18 Jul 2022 16:32:17 -0700
-Message-ID: <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Peter Gonda <pgonda@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718234358.27zv5ogeuvgmaud4@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,51 +90,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I've talked with our firmware expert today and I think we have a problem
-> with the approach when kernel declaries support of unaccepted memory.
->
+On Tue, Jul 19, 2022 at 02:43:58AM +0300, Vladimir Oltean wrote:
+> On Mon, Jul 18, 2022 at 11:54:44PM +0200, Christian Marangi wrote:
+> > On Mon, Jul 18, 2022 at 11:30:42PM +0300, Vladimir Oltean wrote:
+> > > On Mon, Jul 18, 2022 at 09:30:58PM +0200, Christian Marangi wrote:
+> > > > Tell me if I got this wrong.
+> > > > 
+> > > > The suggestion was to move the struct dsa_switch_ops to qca8k.h and add
+> > > > in the specific code probe the needed ops to add to the generic
+> > > > struct...
+> > > 
+> > > The declaration yes; the definition to qca8k-common.c. See for example
+> > > where felix_switch_ops is, relative to felix_vsc9959.c, seville_vsc9953.c
+> > > (users), felix.h (declaration), and felix.c (definition). Or how
+> > > mv88e6xxx_switch_ops does things and still supports a gazillion of switches.
+> > 
+> > Mhh I checked the example and they doesn't seems to be useful from my
+> > problem. But I think it's better to discuss this to the patch directly
+> > so you can better understand whay I intended with having dsa_switch_ops
+> > set to const.
+> 
+> So you don't modify the common dsa_switch_ops from the switch-specific
+> probe path, but rather, from the common dsa_switch_ops method, you call
+> a second function pointer.
+> 
+> static void felix_phylink_validate(struct dsa_switch *ds, int port,
+> 				   unsigned long *supported,
+> 				   struct phylink_link_state *state)
+> {
+> 	struct ocelot *ocelot = ds->priv;
+> 	struct felix *felix = ocelot_to_felix(ocelot);
+> 
+> 	if (felix->info->phylink_validate)
+> 		felix->info->phylink_validate(ocelot, port, supported, state);
+> }
 
-Is this Jiewen Yao? I've been trying to design the UEFI spec change
-with him. The bootloader problem he commented with this morning was
-something I wasn't fully considering.
+Ohhh ok now it makes sense.
 
-> This apporach doesn't work if we include bootloader into the picture: if
-> EBS() called by bootloader we still cannot know if target kernel supports
-> unaccepted memory and we return to the square 1.
->
-> I think we should make it obvious from a kernel image if it supports
-> unaccepted memory (with UTS_VERSION or other way).
->
-> Any comments?
+If the ops is not supported should I return -ENOSUPP?
+Example some ops won't be supported like the get_phy_flags or
+connect_tag_protocol for example.
 
-Is this binary parsing trick already used in EDK2? If not, I wouldn't
-want to introduce an ABI-solidifying requirement like that.
+Anyway the series is ready, I was just pushing it... At the end it's 23
+patch big... (I know you will hate me but at least it's reviewable)
 
-A bit more cumbersome, but more flexible way to enable the feature is
-an idea I had in a meeting today:
-Make unaccepted memory support a feature-enabling EFI driver installed
-to the EFI system partition.
+My solution currently was this...
 
-* The first time you boot (setup mode), you install an EFI driver that
-just sets a feature Pcd to true (using a custom protocol as Ard had
-suggested above).
-* The second time you boot, if the feature Pcd is true, then the UEFI
-is free to not accept memory and use the unaccepted memory type. The
-bootloader will run after unaccepted memory has been allowed already,
-so there is no accept-all event.
+	ops = devm_kzalloc(&mdiodev->dev, sizeof(*ops), GFP_KERNEL);
+	if (!ops)
+		return -ENOMEM;
 
-The default behavior will be to accept all memory when GetMemoryMap is
-called unless the feature pcd is set to true.
+	/* Copy common ops */
+	memcpy(ops, &qca8k_switch_ops, sizeof(*ops));
 
-We can then say this driver isn't needed once some new generation of
-this technology comes along and we can require unaccepted memory
-support as part of that technology's baseline, or we manage to update
-the UEFI spec to have GetMemoryMapEx which has unaccepted memory
-support baked in and the bootloaders all know to use it.
+	/* Setup specific ops */
+	ops->get_tag_protocol = qca8k_get_tag_protocol;
+	ops->setup = qca8k_setup;
+	ops->phylink_get_caps = qca8k_phylink_get_caps;
+	ops->phylink_mac_select_pcs = qca8k_phylink_mac_select_pcs;
+	ops->phylink_mac_config = qca8k_phylink_mac_config;
+	ops->phylink_mac_link_down = qca8k_phylink_mac_link_down;
+	ops->phylink_mac_link_up = qca8k_phylink_mac_link_up;
+	ops->get_phy_flags = qca8k_get_phy_flags;
+	ops->master_state_change = qca8k_master_change;
+	ops->connect_tag_protocol = qca8k_connect_tag_protocol;
 
-The cloud experience will be, "is boot slow? Install this EFI driver
-from the cloud service provider" to tell the UEFI to enable unaccepted
-memory.
+	/* Assign the final ops */
+	priv->ds->ops = ops;
+
+Will wait your response on how to hanle ops that are not supported.
+(I assume dsa checks if an ops is declared and not if it does return
+ENOSUPP, so this is my concern your example)
 
 -- 
--Dionna Glaze, PhD (she/her)
+	Ansuel

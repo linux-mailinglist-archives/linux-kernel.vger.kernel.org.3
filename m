@@ -2,205 +2,481 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F15E57806A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426A657806B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbiGRLKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 07:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S234360AbiGRLKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 07:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiGRLJ7 (ORCPT
+        with ESMTP id S229890AbiGRLKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 07:09:59 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B470E0B8;
-        Mon, 18 Jul 2022 04:09:58 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26IB44Oq019928;
-        Mon, 18 Jul 2022 11:09:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2022-7-12;
- bh=wFrbxXwBB4zBgyn+WB+no3NE/1rNjdSMrZq6Lw2lI0o=;
- b=20jwU/zfcwWl2e8XdmXteF78nJOLne9/N5npvzXnFI75fvUO4jIXm9+7uefy6kQTcEmJ
- 4a+Ou8Ms1NJcB17IQDrGz8IHqvTNIczo0kr6II03PuTVFjKkyHdDjCDbLN4mw9M6wg47
- FRfyHRpCbI5pegmWdqf3UDiXDQaGmBJE3RI9PVULrakVpp5DMUZvZvon3RFvvfVYwSkB
- 2TbPWpR5cQsg3Hnq+kI/pLc1jXByaTyQbSzAAob6gtVSecTmTvg9XvC0PE6lSgMmu5CK
- X259EPmQvyEYVzr6BeCOJ/SmrQhef7U/K0P8beKHBGXF+o3eHIqiSiD1499GOZaVJvte 9w== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbnvtax5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jul 2022 11:09:46 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26I8XtZY003989;
-        Mon, 18 Jul 2022 11:09:46 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1k3qgdw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jul 2022 11:09:45 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H8CLsMmPUCxlv1oocv7gk2u7AaJjfSTPhpW3RvxB8lIBchQ7UunlRf2GorCvryxXBwkB49xrxCZu2cMgJWFBtDzqrAoWbtQfNNXmC5ykURYtSGt5N2A5nguCNkevhBZR9tPRPD2h8vIymQQk5e59id4wva4GOSUkoYbkl4252wj7drogvISGyLXwFILQae/Gb75pWKoEHjVF6DP9DEu4eU8tb9IdJiwPPAnQS+qrn57qteCZLfqqVfE/J+FrfgWkdmy6zcKmG7+jqAzq92lt6vOnQo4a+bjnGl+HyyFuCwSdSkrgbtA7eXcZzCsyAISJeaytZWzxqJqEu6rGRd4MfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wFrbxXwBB4zBgyn+WB+no3NE/1rNjdSMrZq6Lw2lI0o=;
- b=j41DLuVYHKcM1zBpFn4G3PkU4mGwG+nzEqFLbQDeHus7LWAdXbMQn7aY3Bbm+WXWXd7GMYeelEL5jyD26HFaILkS15T3F+PB0WoDNtOrTGcvP3IiKwcm2RAIqfxbUOsx8jWKLLwp9cyN0mgCfua+XWtxAfx5GYjaXXbvXEq/ha1BY5VVHH0mrGIYaRYvgB84neqYsMBq8a3G8c/WEtNplR+uq6j6gMKOD6Qo/ZqKlvnCXAsESdIk36T3T47D4P2waBu6eP7z/R3OM6LR6pGB85lsXQHLaLzQBHydB0jfZ+PwKUAJOCLjc7ZfAAYQFy2Fl5W2bl5lmXJ1sMymC7ATkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wFrbxXwBB4zBgyn+WB+no3NE/1rNjdSMrZq6Lw2lI0o=;
- b=sVkEhj6Qo36xnyNDHB4XBINzrDAHzIImE+ervPqfJqoZr3tf+CnZwllTcDX3lKjicfx6jrMJQB8UT7Ad5HhBtVdEXSa+vG7zxEXL6j4s965RgcIp8mNhmiCTtyGQ3qM0ebWhxz3pEznkk3z3irQzuXN4unEGQnxxVILPmTIHBu4=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CO1PR10MB4674.namprd10.prod.outlook.com
- (2603:10b6:303:9c::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Mon, 18 Jul
- 2022 11:09:43 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
- 11:09:43 +0000
-Date:   Mon, 18 Jul 2022 14:09:32 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: [PATCH 1/2] nvme-auth: Fix off by one checks
-Message-ID: <YtU/bFMYRCrx6tgp@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-ClientProxiedBy: ZRAP278CA0009.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:10::19) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        Mon, 18 Jul 2022 07:10:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092D21FCC9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 04:10:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9266F374AD;
+        Mon, 18 Jul 2022 11:09:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1658142574; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mOWkGdkPdnSHjk6WWsbFrQiHSPMve89NI0tJAUctd3c=;
+        b=n/AnYIQyY8zWRiNCuVQjFk4ag902SjhYdoPUnetyMSudH0TwHfAuZZcs6qXh7LVIxvydjA
+        V/2iw2ErYF580dBCWDFW1bOx3AkfDIwud1p0tfI9H/HQmwQbhrrxs03DuDmHKLPblixSLc
+        vC0bsgdcb/Mkdv4RxAqYV5uHI7BzfCM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1658142574;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mOWkGdkPdnSHjk6WWsbFrQiHSPMve89NI0tJAUctd3c=;
+        b=NIjt5efdUQDBLllmAUvykAp3Y85VdjkTEAaQOLNKrL7khinmDchveMH9g4dMNd5A5RKopZ
+        A5lXP4LZ429KcFAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D88713754;
+        Mon, 18 Jul 2022 11:09:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RfsXFm4/1WKRYAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 18 Jul 2022 11:09:34 +0000
+Message-ID: <69462916-2d1c-dd50-2e64-b31c2b61690e@suse.cz>
+Date:   Mon, 18 Jul 2022 13:09:34 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c27f8219-af0e-4c0a-0890-08da68ae043c
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4674:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7iHScYAkbqOyWOuYkt+eJ56kIDdeMdYBSxgkTurox0HwMz37yRzDYFILNAjoDxujrfjlWUkkoXYXH0BWYMuX50o9mF3eNmRJwYgiXatngadf2E/dmRJHJWiZ/jbxfhpKCYCzVvsjVbbT53Dxg66OedIBp/0BTDI01E7WxV5SfaIx8uHUDaEeQvZoDd3ke5nzjfAh7i+HERw3v3IaPUBgDuRrCkO4+fFPIHkXLoUYe/aF4aylYbwC8nGwTA+33GTW+iVcrVIuLEGBk3MTcD9hBJ1nwUgpEn88oJbui4sL/WPSHK5RgreeA1HdIq/kM9CnDnDzMkb/lMjhPHQuLx5aJXwhH/nRCS8osYqTjMx/jDjNh3aWkSqVJ0cXafZ6Kba4Tsxwgo7QZwV8VNrE3KjH2OtmVFmKYizFjeQgJz5MsfL/7Zg0bwvYjM9So6MiSeiqgiai6fr9PCUe6v6SGimzJKb/em2ipcqtNvnHjl9Ab+IQx9cb7dWwa8a3UOum5YMGPknv9RZBeMiRCIeV8zYnYgy+vY59/ePGITVgavgnzEWCjzgzaeYIs9EoS5/aoR8iqf7I6Dibo1LtVnoYSuhlzbF4J29ZWt4m6rZuAVyNImwaAQ9oMEoCttZ7ZX4LUTy2eOT2UgXBipUPzvgEzKbUPhZ5hJ0PMthw5kcT4Yi17MR8PZe47HUosvmn+hM4OX9GJs5P/CqoREvSNneNVJiKH+8nANP/FYJ3GWtEUt5mNrXh0Q/OFpHRpW6xqS7Ykby3PeQu9cwNWya6hwIB7onTnyTLea93SC44Vk0aWy1v5AMGL2ilJTLKOK51nN1FzziW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(136003)(366004)(346002)(376002)(39860400002)(41300700001)(6512007)(26005)(9686003)(38100700002)(6506007)(6666004)(2906002)(52116002)(38350700002)(186003)(83380400001)(33716001)(6916009)(316002)(5660300002)(66476007)(8936002)(478600001)(66556008)(86362001)(4326008)(8676002)(66946007)(6486002)(44832011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NJ6qrOLiVBXYpdyWnE1F6kBSHDOuzsQ7mA5BT7M3pakRmhLDBw2rbk5ztt+I?=
- =?us-ascii?Q?JiiwcDUUMQtzj1+84CQZqLR6ydSIN/tAeeCOYAXEEEOEup9fl2Z9PPmKKxy8?=
- =?us-ascii?Q?K4qVAL6WUN/Z5tnxA+K7UwKWdFwpBKekX4mUHcOuGSKOMmEU79vO6k6vY4gv?=
- =?us-ascii?Q?jZWJ70lm+Eqr0h8Vr6k4kE71CCrGL5FjKw91CQq65uYM06Wn+jroUXmnDK5T?=
- =?us-ascii?Q?eHYDa0lzyRzGRsRDgmHIc4xQwqxZvRj1pVsekibUdHPVe1nIqjImOUn1x5UA?=
- =?us-ascii?Q?a768SnMUmq1YTPk/Xl0EaS8xH878sYAs2wb2kVaTXSZhFnXlsfQ9a3sZJG4P?=
- =?us-ascii?Q?qhpb4hEFPMJXFuvGKNPOZ8xdC4EMTwZggE93xJAumyCZ341xw274C6J1DeZI?=
- =?us-ascii?Q?Jf50iODDwQLpCl6rnknyetBGkQTZI1YVrjP/B/hy4qMiXftzgfTqo3fDUK0F?=
- =?us-ascii?Q?X5oRXE4kfRBz/KOv/Eb2+8ExiKDYDwYJh21ui3UzdKw94eTAKEcyBP/EvduS?=
- =?us-ascii?Q?tAchyYerP+spCoUDO4nvxlugQ1/a99xBAQSOjbElJfMudC45+xoQj1Hp6gQT?=
- =?us-ascii?Q?whhdZtLlSOILxIfUSSUi5x0cawxevsFe19LREW6zUzR3sLXTCm7nlrxvTNt1?=
- =?us-ascii?Q?/AukX2gV6dHE+8oGO4ci66fH4VPIXqYMScGoG3T4cZY1yNEd5fpfTVR3LJFu?=
- =?us-ascii?Q?TtFWX4D6x7ezlEYYe9i27ipwuBq1gpUbGEtqrrllClKCyaP2X9ACXJ+4kPcE?=
- =?us-ascii?Q?Nij97EEcHbInWhYmw2+cYKZLQdXyrw81QVWWovjC87uD0J/LJTFebw1BMfmc?=
- =?us-ascii?Q?P18aJ8HEURcyo33ArkTnZjILrSNCuHvCgm3IM+aK1fCSDwMVkBBU+ymcAIBU?=
- =?us-ascii?Q?9PhTpemaVhS8OsaWhW/D8t0nf1UOOoMfnbKeo7CA/uxFqVHIwTDYA15CHwsv?=
- =?us-ascii?Q?s8bqx99QWoaW/ToXkg1gmsgz0ttKnB6U1SATNiF3jQFeQDgwXz8yyXEzFhzl?=
- =?us-ascii?Q?jSnADULUmz+KqZIDkbfFBRGG6ZoL2vLOMz61GH4q0Lbx3tOn3o0A9S5tza/k?=
- =?us-ascii?Q?2cT/QVN4AuuhXYjKgeswlrj8RFpvyXqAHmoMdRf18V7BDt9T4ahfq4jiErFj?=
- =?us-ascii?Q?b1Fe4JBBi6r/6+khz2up8v+f9fEJZMJn5LxelLPfIcd7vduSL6Vpfp/QnqTY?=
- =?us-ascii?Q?Jwt5zueB7zN5FEHcXHk1nb2TmZWgs90Eb1EyHHrS2iMusjroHtJA3Qtbi4UK?=
- =?us-ascii?Q?K4cIr0t7ZR9vjxLHI9ZrcHp7SENqUsOYa0uCA2bs6hzlyn9GUB7xAJBF1hK1?=
- =?us-ascii?Q?+4+lBqaeWWBcuko4BxEP+9hOigoDIrVZiWQ/gl+Rpygf/wQtzxCPZSntFWch?=
- =?us-ascii?Q?QBtOz5oJFrC8r4ABmB5RLnodonPk1QyGTGb0oNseUF6h4TLl6QhmynV6Fi60?=
- =?us-ascii?Q?iRiXY9Cv5okhZ+l62sJnu1pkXySKZ5XuSaTS/QJhgxdgaCeWzsHNHivvcPgd?=
- =?us-ascii?Q?PZDQzbM9NSWI8k5RFF7OlqMa82CfjAdpnN9XldOZF+lcEUnkPraER6CkFhRE?=
- =?us-ascii?Q?U31vcR9ts/i70rtoalZsZZWbu9Ij+VPoW1O6/L/H?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c27f8219-af0e-4c0a-0890-08da68ae043c
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2022 11:09:43.3487
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SijveKTochsgnpI79S1tYgxjZeEskqK41TWAfZTi12nNhbyAecrTASxGKRJ3S89Dx3aNrbfGPJdLZqNrwqBsCjA0TmekKPgfbwYkEFGBI/w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4674
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_10,2022-07-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 malwarescore=0 adultscore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207180048
-X-Proofpoint-GUID: 0l4PVSDrHu07ji-AQjnp1Y8n9-r5h9Tj
-X-Proofpoint-ORIG-GUID: 0l4PVSDrHu07ji-AQjnp1Y8n9-r5h9Tj
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] mm/slub: fix the race between validate_slab and
+ slab_free
+Content-Language: en-US
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        iamjoonsoo.kim@lge.com, rientjes@google.com, penberg@kernel.org,
+        cl@linux.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+References: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The > ARRAY_SIZE() checks need to be >= ARRAY_SIZE() to prevent reading
-one element beyond the end of the arrays.
 
-Fixes: a476416bb57b ("nvme: implement In-Band authentication")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+On 5/29/22 10:15, Rongwei Wang wrote:
+> In use cases where allocating and freeing slab frequently, some
+> error messages, such as "Left Redzone overwritten", "First byte
+> 0xbb instead of 0xcc" would be printed when validating slabs.
+> That's because an object has been filled with SLAB_RED_INACTIVE,
+> but has not been added to slab's freelist. And between these
+> two states, the behaviour of validating slab is likely to occur.
+> 
+> Actually, it doesn't mean the slab can not work stably. But, these
+> confusing messages will disturb slab debugging more or less.
+> 
+> Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+
+As I've said in the sub-thread I had the following kind of fix in mind. I
+think it should cover the cases from your patches 1/3 and 3/3.
+
+----8<----
+From c35fe2a781a7bc4ef37ef3ded289f4ced82562bd Mon Sep 17 00:00:00 2001
+From: Vlastimil Babka <vbabka@suse.cz>
+Date: Mon, 4 Jul 2022 14:09:09 +0200
+Subject: [RFC] mm, slub: restrict sysfs validation to debug caches and make
+ it safe
+
+Rongwei Wang reports [1] that cache validation triggered by writing to
+/sys/kernel/slab/<cache>/validate is racy against normal cache
+operations (e.g. freeing) in a way that can cause false positive
+inconsistency reports for caches with debugging enabled. The problem is
+that debugging actions that mark object free or active and actual
+freelist operations are not atomic, and the validation can see an
+inconsistent state.
+
+For caches that don't have debugging enabled, other races are possible
+that result in false reports of wrong slab counts.
+
+This patch attempts to solve these issues while not adding overhead to
+normal (especially fastpath) operations for caches that do not have
+debugging enabled, just to make possible userspace-triggered validation
+safe. Instead, disable the validation for caches that don't have
+debugging enabled and make the sysfs handler return -EINVAL.
+
+For caches that do have debugging enabled, we can instead extend the
+existing approach of not using percpu freelists to force all operations
+to the slow paths where debugging is checked for and processed.
+
+The processing on free in free_debug_processing() already happens under
+n->list_lock and slab_lock() so we can extend it to actually do the
+freeing as well and thus make it atomic against concurrent validation.
+
+The processing on alloc in alloc_debug_processing() currently doesn't
+take any locks, but we have to first allocate the object from a slab on
+the partial list (as percpu slabs are always non-existent) and thus take
+n->list_lock. Add a function alloc_single_from_partial() that
+additionally takes slab_lock() for the debug processing and then grabs
+just the allocated object instead of the whole freelist. This again
+makes it atomic against validation and it is also ultimately more
+efficient than the current grabbing of freelist immediately followed by
+slab deactivation.
+
+Neither of these changes affect the fast paths.
+
+The function free_debug_processing() was moved so that it is placed
+later than the definitions of add_partial(), remove_partial() and
+discard_slab().
+
+[1] https://lore.kernel.org/all/20220529081535.69275-1-rongwei.wang@linux.alibaba.com/
+
+Reported-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 ---
-The MAINTAINERS file needs to be updated for this new code.
+ mm/slub.c | 250 +++++++++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 174 insertions(+), 76 deletions(-)
 
- drivers/nvme/common/auth.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/nvme/common/auth.c b/drivers/nvme/common/auth.c
-index 0c86ebce59d2..bfb16fec0aed 100644
---- a/drivers/nvme/common/auth.c
-+++ b/drivers/nvme/common/auth.c
-@@ -55,7 +55,7 @@ static struct nvme_auth_dhgroup_map {
+diff --git a/mm/slub.c b/mm/slub.c
+index b1281b8654bd..954fe7ad5ee1 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -1324,17 +1324,14 @@ static inline int alloc_consistency_checks(struct kmem_cache *s,
+ }
  
- const char *nvme_auth_dhgroup_name(u8 dhgroup_id)
+ static noinline int alloc_debug_processing(struct kmem_cache *s,
+-					struct slab *slab,
+-					void *object, unsigned long addr)
++					struct slab *slab, void *object)
  {
--	if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
-+	if ((dhgroup_id >= ARRAY_SIZE(dhgroup_map)) ||
- 	    !dhgroup_map[dhgroup_id].name ||
- 	    !strlen(dhgroup_map[dhgroup_id].name))
- 		return NULL;
-@@ -65,7 +65,7 @@ EXPORT_SYMBOL_GPL(nvme_auth_dhgroup_name);
+ 	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+ 		if (!alloc_consistency_checks(s, slab, object))
+ 			goto bad;
+ 	}
  
- const char *nvme_auth_dhgroup_kpp(u8 dhgroup_id)
- {
--	if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
-+	if ((dhgroup_id >= ARRAY_SIZE(dhgroup_map)) ||
- 	    !dhgroup_map[dhgroup_id].kpp ||
- 	    !strlen(dhgroup_map[dhgroup_id].kpp))
- 		return NULL;
-@@ -113,7 +113,7 @@ static struct nvme_dhchap_hash_map {
+-	/* Success perform special debug activities for allocs */
+-	if (s->flags & SLAB_STORE_USER)
+-		set_track(s, object, TRACK_ALLOC, addr);
++	/* Success. Perform special debug activities for allocs */
+ 	trace(s, slab, object, 1);
+ 	init_object(s, object, SLUB_RED_ACTIVE);
+ 	return 1;
+@@ -1385,63 +1382,6 @@ static inline int free_consistency_checks(struct kmem_cache *s,
+ 	return 1;
+ }
  
- const char *nvme_auth_hmac_name(u8 hmac_id)
- {
--	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
-+	if ((hmac_id >= ARRAY_SIZE(hash_map)) ||
- 	    !hash_map[hmac_id].hmac ||
- 	    !strlen(hash_map[hmac_id].hmac))
- 		return NULL;
-@@ -123,7 +123,7 @@ EXPORT_SYMBOL_GPL(nvme_auth_hmac_name);
+-/* Supports checking bulk free of a constructed freelist */
+-static noinline int free_debug_processing(
+-	struct kmem_cache *s, struct slab *slab,
+-	void *head, void *tail, int bulk_cnt,
+-	unsigned long addr)
+-{
+-	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+-	void *object = head;
+-	int cnt = 0;
+-	unsigned long flags, flags2;
+-	int ret = 0;
+-	depot_stack_handle_t handle = 0;
+-
+-	if (s->flags & SLAB_STORE_USER)
+-		handle = set_track_prepare();
+-
+-	spin_lock_irqsave(&n->list_lock, flags);
+-	slab_lock(slab, &flags2);
+-
+-	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+-		if (!check_slab(s, slab))
+-			goto out;
+-	}
+-
+-next_object:
+-	cnt++;
+-
+-	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+-		if (!free_consistency_checks(s, slab, object, addr))
+-			goto out;
+-	}
+-
+-	if (s->flags & SLAB_STORE_USER)
+-		set_track_update(s, object, TRACK_FREE, addr, handle);
+-	trace(s, slab, object, 0);
+-	/* Freepointer not overwritten by init_object(), SLAB_POISON moved it */
+-	init_object(s, object, SLUB_RED_INACTIVE);
+-
+-	/* Reached end of constructed freelist yet? */
+-	if (object != tail) {
+-		object = get_freepointer(s, object);
+-		goto next_object;
+-	}
+-	ret = 1;
+-
+-out:
+-	if (cnt != bulk_cnt)
+-		slab_err(s, slab, "Bulk freelist count(%d) invalid(%d)\n",
+-			 bulk_cnt, cnt);
+-
+-	slab_unlock(slab, &flags2);
+-	spin_unlock_irqrestore(&n->list_lock, flags);
+-	if (!ret)
+-		slab_fix(s, "Object at 0x%p not freed", object);
+-	return ret;
+-}
+-
+ /*
+  * Parse a block of slub_debug options. Blocks are delimited by ';'
+  *
+@@ -1661,7 +1601,7 @@ static inline
+ void setup_slab_debug(struct kmem_cache *s, struct slab *slab, void *addr) {}
  
- const char *nvme_auth_digest_name(u8 hmac_id)
- {
--	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
-+	if ((hmac_id >= ARRAY_SIZE(hash_map)) ||
- 	    !hash_map[hmac_id].digest ||
- 	    !strlen(hash_map[hmac_id].digest))
- 		return NULL;
-@@ -148,7 +148,7 @@ EXPORT_SYMBOL_GPL(nvme_auth_hmac_id);
+ static inline int alloc_debug_processing(struct kmem_cache *s,
+-	struct slab *slab, void *object, unsigned long addr) { return 0; }
++	struct slab *slab, void *object) { return 0; }
  
- size_t nvme_auth_hmac_hash_len(u8 hmac_id)
+ static inline int free_debug_processing(
+ 	struct kmem_cache *s, struct slab *slab,
+@@ -2102,6 +2042,42 @@ static inline void remove_partial(struct kmem_cache_node *n,
+ 	n->nr_partial--;
+ }
+ 
++/*
++ * Called only for kmem_cache_debug() caches instead of acquire_slab(), with a
++ * slab from the n->partial list. Removes only a single object from the slab
++ * under slab_lock(), does the alloc_debug_processing() checks and leaves the
++ * slab on the list, or moves it to full list if it was the last object.
++ */
++static void *alloc_single_from_partial(struct kmem_cache *s,
++		struct kmem_cache_node *n, struct slab *slab)
++{
++	void *object;
++	unsigned long flags;
++
++	lockdep_assert_held(&n->list_lock);
++
++	slab_lock(slab, &flags);
++
++	object = slab->freelist;
++	slab->freelist = get_freepointer(s, object);
++	slab->inuse++;
++
++	if (!alloc_debug_processing(s, slab, object)) {
++		remove_partial(n, slab);
++		slab_unlock(slab, &flags);
++		return NULL;
++	}
++
++	if (slab->inuse == slab->objects) {
++		remove_partial(n, slab);
++		add_full(s, n, slab);
++	}
++
++	slab_unlock(slab, &flags);
++
++	return object;
++}
++
+ /*
+  * Remove slab from the partial list, freeze it and
+  * return the pointer to the freelist.
+@@ -2182,6 +2158,13 @@ static void *get_partial_node(struct kmem_cache *s, struct kmem_cache_node *n,
+ 		if (!pfmemalloc_match(slab, gfpflags))
+ 			continue;
+ 
++		if (kmem_cache_debug(s)) {
++			object = alloc_single_from_partial(s, n, slab);
++			if (object)
++				break;
++			continue;
++		}
++
+ 		t = acquire_slab(s, n, slab, object == NULL);
+ 		if (!t)
+ 			break;
+@@ -2788,6 +2771,104 @@ static inline unsigned long node_nr_objs(struct kmem_cache_node *n)
  {
--	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
-+	if ((hmac_id >= ARRAY_SIZE(hash_map)) ||
- 	    !hash_map[hmac_id].hmac ||
- 	    !strlen(hash_map[hmac_id].hmac))
- 		return 0;
+ 	return atomic_long_read(&n->total_objects);
+ }
++
++/* Supports checking bulk free of a constructed freelist */
++static noinline int free_debug_processing(
++	struct kmem_cache *s, struct slab *slab,
++	void *head, void *tail, int bulk_cnt,
++	unsigned long addr)
++{
++	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
++	struct slab *slab_to_discard = NULL;
++	void *object = head;
++	int cnt = 0;
++	unsigned long flags, flags2;
++	int ret = 0;
++	depot_stack_handle_t handle = 0;
++
++	if (s->flags & SLAB_STORE_USER)
++		handle = set_track_prepare();
++
++	spin_lock_irqsave(&n->list_lock, flags);
++	slab_lock(slab, &flags2);
++
++	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
++		if (!check_slab(s, slab))
++			goto out;
++	}
++
++	if (slab->inuse < bulk_cnt) {
++		slab_err(s, slab, "Slab has %d allocated objects but %d are to be freed\n",
++			 slab->inuse, bulk_cnt);
++		goto out;
++	}
++
++next_object:
++
++	if (++cnt > bulk_cnt)
++		goto out_cnt;
++
++	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
++		if (!free_consistency_checks(s, slab, object, addr))
++			goto out;
++	}
++
++	if (s->flags & SLAB_STORE_USER)
++		set_track_update(s, object, TRACK_FREE, addr, handle);
++	trace(s, slab, object, 0);
++	/* Freepointer not overwritten by init_object(), SLAB_POISON moved it */
++	init_object(s, object, SLUB_RED_INACTIVE);
++
++	/* Reached end of constructed freelist yet? */
++	if (object != tail) {
++		object = get_freepointer(s, object);
++		goto next_object;
++	}
++	ret = 1;
++
++out_cnt:
++	if (cnt != bulk_cnt)
++		slab_err(s, slab, "Bulk free expected %d objects but found %d\n",
++			 bulk_cnt, cnt);
++
++out:
++	if (ret) {
++		void *prior = slab->freelist;
++
++		/* Perform the actual freeing while we still hold the locks */
++		slab->inuse -= cnt;
++		set_freepointer(s, tail, prior);
++		slab->freelist = head;
++
++		/* Do we need to remove the slab from full or partial list? */
++		if (!prior) {
++			remove_full(s, n, slab);
++		} else if (slab->inuse == 0) {
++			remove_partial(n, slab);
++			stat(s, FREE_REMOVE_PARTIAL);
++		}
++
++		/* Do we need to discard the slab or add to partial list? */
++		if (slab->inuse == 0) {
++			slab_to_discard = slab;
++		} else if (!prior) {
++			add_partial(n, slab, DEACTIVATE_TO_TAIL);
++			stat(s, FREE_ADD_PARTIAL);
++		}
++
++	}
++
++	slab_unlock(slab, &flags2);
++	spin_unlock_irqrestore(&n->list_lock, flags);
++	if (!ret)
++		slab_fix(s, "Object at 0x%p not freed", object);
++	if (slab_to_discard) {
++		stat(s, FREE_SLAB);
++		discard_slab(s, slab);
++	}
++
++	return ret;
++}
+ #endif /* CONFIG_SLUB_DEBUG */
+ 
+ #if defined(CONFIG_SLUB_DEBUG) || defined(CONFIG_SYSFS)
+@@ -3045,19 +3126,35 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+ 
+ 	stat(s, ALLOC_SLAB);
+ 
+-check_new_slab:
+-
+ 	if (kmem_cache_debug(s)) {
+-		if (!alloc_debug_processing(s, slab, freelist, addr)) {
+-			/* Slab failed checks. Next slab needed */
+-			goto new_slab;
+-		} else {
++		if (!alloc_debug_processing(s, slab, freelist))
+ 			/*
+-			 * For debug case, we don't load freelist so that all
+-			 * allocations go through alloc_debug_processing()
++			 * It's not really expected that this would fail on a
++			 * freshly allocated slab, but a concurrent memory
++			 * corruption in theory could cause that.
+ 			 */
+-			goto return_single;
+-		}
++			goto new_slab;
++
++		/*
++		 * For debug caches we don't load the freelist so that all
++		 * allocations have to go through alloc_debug_processing()
++		 */
++		if (s->flags & SLAB_STORE_USER)
++			set_track(s, freelist, TRACK_ALLOC, addr);
++		goto return_single;
++	}
++
++check_new_slab:
++
++	if (kmem_cache_debug(s)) {
++		/*
++		 * For debug caches here we had to go through
++		 * alloc_single_from_partial() so just store the tracking info
++		 * and return the object
++		 */
++		if (s->flags & SLAB_STORE_USER)
++			set_track(s, freelist, TRACK_ALLOC, addr);
++		return freelist;
+ 	}
+ 
+ 	if (unlikely(!pfmemalloc_match(slab, gfpflags)))
+@@ -3341,9 +3438,10 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 	if (kfence_free(head))
+ 		return;
+ 
+-	if (kmem_cache_debug(s) &&
+-	    !free_debug_processing(s, slab, head, tail, cnt, addr))
++	if (kmem_cache_debug(s)) {
++		free_debug_processing(s, slab, head, tail, cnt, addr);
+ 		return;
++	}
+ 
+ 	do {
+ 		if (unlikely(n)) {
+@@ -5625,7 +5723,7 @@ static ssize_t validate_store(struct kmem_cache *s,
+ {
+ 	int ret = -EINVAL;
+ 
+-	if (buf[0] == '1') {
++	if (buf[0] == '1' && kmem_cache_debug(s)) {
+ 		ret = validate_slab_cache(s);
+ 		if (ret >= 0)
+ 			ret = length;
 -- 
-2.35.1
+2.36.1
 

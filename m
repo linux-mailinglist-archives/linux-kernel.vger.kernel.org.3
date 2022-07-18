@@ -2,129 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D5C578400
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12AA7578409
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234886AbiGRNmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
+        id S234888AbiGRNng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234659AbiGRNmI (ORCPT
+        with ESMTP id S231132AbiGRNnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:42:08 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072181F615;
-        Mon, 18 Jul 2022 06:42:07 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id q5so9035106plr.11;
-        Mon, 18 Jul 2022 06:42:06 -0700 (PDT)
+        Mon, 18 Jul 2022 09:43:33 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DAC21821
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:43:32 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id m8so1897046edd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:43:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5glw/sVKGgr66L6xdKScVn9xWukMCuFZ8q3nmTVvFE8=;
-        b=cuf5hUNtU0/KD49tulskC6amR8It/LlvQxClHQW7a95ejrXa0AMXXvDIVXFMdgWZGo
-         L4shcCbaKv4vbFfVBNWowQoIRv4WlZQnyOkBi36rsjENKDNwYeDN1K/ng0mBTntQdMWp
-         hZewgxuY8Iens+riIINMlpzMak4zzvQBoP/I7igoqcoEjS5eTYvq3yVXnb5JPAZYLkMi
-         DdCyqq8y1Z2wbWnhdKbbSoQ6F/FBVAlWxdoJxoZDUBLah+IZG9D/kk6RTI3rLn1rOKBm
-         COvpWZEXUaMOUV2J+ZTN9U+makeZYPFrf72PV8JSRQbg7f/ZdLs4gljTKLLUXV847sJO
-         2T1w==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hnfHfZxYNUZt/Px9ux9l14VbmfOCDnqYfPKEnB9z/no=;
+        b=AnHZKs0DXJjOJJ00mzghBpIrSTeMvfnlR9SpjD+0Ngy7A25lxpgsbgrTvYadxfFs3i
+         ekNFu09OZaRfC+OSxO0gfaj999gyBKfuM/LeR5If3pHoPFRtH4k1FZzxQy8nafE4J+13
+         1sOGaakvolq0P+RVcs1FvfHVBMtrxkF1vDqf8AtgQukbkKyygNZcQuIjluqtxl8uJn2T
+         UYvOqJCH7oWlseBBo5CXUoNga7xLCDXaMahcsx9QARuGoI40pngooYzijLG3ph1sCgqF
+         58neSor1L1qoO18p4hB3BdBt5Itakel5WNzZ1rNACC/791SYMzUDDsp3tYBr/9qUCSOJ
+         skMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5glw/sVKGgr66L6xdKScVn9xWukMCuFZ8q3nmTVvFE8=;
-        b=5oZA/H5s0KEXN80lbACVLaImIOo5+fDT4v3CP/I/hZ2T9hj4lmB7uMNlyZTgg1erhX
-         l2/aq8pMuK+1AaYR7DF5QIDx3Q4mkdvbG06xOZjrpL2TdEcY5xfSLHDzT5k3H2KFFz6J
-         V5lR+cAvsGwHR16mT7v6hxWJmfGn+/RjB2y4s9jkATjthGnGD9V3YQGEG6IcP9w5erG/
-         ehelvxTDmy9Gq9Cw3OWDuErwqJap30UouZForLTkTvMPCaKaJaAihEgc0iiL3y7d9gKp
-         nbKz7dlrxF0rGck8jKw1U2F3CytXrN7B7uFXIWt2rAOCJrwzcSvMVWEZGHRLI33xSTVl
-         QhEQ==
-X-Gm-Message-State: AJIora+0LmchGhq8ZEV9JKCB19XduoP3vK0hY6XJUIGk6Ef+JysB+C2s
-        7zBT/m8xoECSHPXqV4rf4rs=
-X-Google-Smtp-Source: AGRyM1vdWDP6toZwzfT59MCLzgbNBvctHq8GcsK2BIiEqY3q/W/oe43RyzEJa94BKciD5Fy66/oMsA==
-X-Received: by 2002:a17:903:31c9:b0:16c:3024:69c4 with SMTP id v9-20020a17090331c900b0016c302469c4mr28613487ple.81.1658151726421;
-        Mon, 18 Jul 2022 06:42:06 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id w29-20020a63491d000000b003fadd680908sm8169824pga.83.2022.07.18.06.42.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 06:42:06 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 06:42:03 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Divya Koppera <Divya.Koppera@microchip.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Madhuri.Sripada@microchip.com
-Subject: Re: [PATCH net-next] net: phy: micrel: Fix warn: passing zero to
- PTR_ERR
-Message-ID: <YtVjKzTOxdP9zm4u@hoboy.vegasvil.org>
-References: <20220718114333.4866-1-Divya.Koppera@microchip.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hnfHfZxYNUZt/Px9ux9l14VbmfOCDnqYfPKEnB9z/no=;
+        b=VrzHgU0s6wGJxQqK9oXEkX6SR0bWKZSKf+s8qfk0fWZ16VrXLYiwvFXb3AJ/K54OX5
+         2uhQC3+1sGjy5NI90VaCGpR7RxhkYjg7ZYS+VhArf8tDylhUNtTR5vvpTt/yBtXi9suM
+         R0c9Qh/domXwvpBdvoMUNZU6R1Nm9TPNX3L2R76tlOOZEi3UiWxCp+tuNDrvaPGMP46a
+         s5hV3EWpsVvcklSvkzAYcI/uTJfIsMHznz2I9dbnNISL9L2UlfZye84SSK5mintq5GaK
+         UljaX7E8zlGZ6alrQvtXSXWZJQN5yANOxG3wDOeQlFNKHzld6HfRAPJ5hDGpygqD1hFO
+         e81A==
+X-Gm-Message-State: AJIora/88VoJLYVeQvwrRaw6Vx2C94HUZa/9nHacqRreUT69kdu0fKM3
+        35v9E0TPS1DoPOrUvg0a3CB+CqJTdX2fC7UEV6eAww==
+X-Google-Smtp-Source: AGRyM1tUllg8yDsJKjb0ainm4ebnVZKH+EWWmJB7x63T+CXhnVAYvvjjahiW31mzwxL9T/Uk9p27OBGYW7hbzKVa2Kg=
+X-Received: by 2002:a05:6402:34ce:b0:43a:a4bb:27a6 with SMTP id
+ w14-20020a05640234ce00b0043aa4bb27a6mr36844792edc.158.1658151810702; Mon, 18
+ Jul 2022 06:43:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718114333.4866-1-Divya.Koppera@microchip.com>
+References: <20220716233745.1704677-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20220716233745.1704677-1-vladimir.oltean@nxp.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 18 Jul 2022 15:43:19 +0200
+Message-ID: <CACRpkdZ4tdKwYBaTGzc4DX6H8Bsib1cDLkTnpTiipCL7uFquXQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fix kernel splats on boot with armada-37xx irqchip driver
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     linux-arm-kernel@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 05:13:33PM +0530, Divya Koppera wrote:
-> Removing NULL check, as using it here is not valid
+On Sun, Jul 17, 2022 at 1:38 AM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
 
-NAK.
+> Due to these splats on boot, lockdep disables itself on Armada 37xx and
+> we fail to see further useful information about real deadlocks.
+>
+> For those in doubt, the approach to use raw spinlocks for irqchip
+> drivers has been previously discussed here and doesn't seem too
+> controversial.
+> https://lore.kernel.org/lkml/20210825205041.927788-1-vladimir.oltean@nxp.com/
+>
+> Tested on the Turris MOX board.
+>
+> Vladimir Oltean (2):
+>   pinctrl: armada-37xx: make irq_lock a raw spinlock to avoid invalid
+>     wait context
+>   pinctrl: armada-37xx: use raw spinlocks for regmap to avoid invalid
+>     wait context
 
-Please read the code:
+Patches applied for fixes so they get some rotation in linux-next.
 
- * ptp_clock_register() - register a PTP hardware clock driver
- *
- * @info:   Structure describing the new clock.
- * @parent: Pointer to the parent device of the new clock.
- *
- * Returns a valid pointer on success or PTR_ERR on failure.  If PHC
- * support is missing at the configuration level, this function
- * returns NULL, and drivers are expected to gracefully handle that
- * case separately.
+Reviewers have some days to react before I send this to Torvalds.
 
+Should these even be tagged for stable?
 
-You must handle the NULL pointer case.
-
-Thanks,
-Richard
-
-
-> 
-> Fixes New smatch warnings:
-> drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing zero to 'PTR_ERR'
-> 
-> vim +/PTR_ERR +2613 drivers/net/phy/micrel.c
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
-> Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
-> ---
->  drivers/net/phy/micrel.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-> index e78d0bf69bc3..04146b936786 100644
-> --- a/drivers/net/phy/micrel.c
-> +++ b/drivers/net/phy/micrel.c
-> @@ -2812,7 +2812,7 @@ static int lan8814_ptp_probe_once(struct phy_device *phydev)
->  
->  	shared->ptp_clock = ptp_clock_register(&shared->ptp_clock_info,
->  					       &phydev->mdio.dev);
-> -	if (IS_ERR_OR_NULL(shared->ptp_clock)) {
-> +	if (IS_ERR(shared->ptp_clock)) {
->  		phydev_err(phydev, "ptp_clock_register failed %lu\n",
->  			   PTR_ERR(shared->ptp_clock));
->  		return -EINVAL;
-> -- 
-> 2.17.1
-> 
+Yours,
+Linus Walleij

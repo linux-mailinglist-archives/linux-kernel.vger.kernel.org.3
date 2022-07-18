@@ -2,124 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FA1577928
+	by mail.lfdr.de (Postfix) with ESMTP id 91106577929
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbiGRBO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 21:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
+        id S232180AbiGRBOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 21:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGRBO1 (ORCPT
+        with ESMTP id S231937AbiGRBOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 21:14:27 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07D81147C
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658106866; x=1689642866;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LIxgYK4hpIPP4H96x0zldktrRVfeG45n3WLLDlupRTI=;
-  b=kPoeicUH7w2jLWc6h+HkSran0FgxKBxw120bQKGCUSNL4plQFw/BKvLb
-   5rEnhqsXpsISkVPeIjGfoDztzBHN5yKvB2PFzwQS2FreAzxIUUJlzGHip
-   ZQyye8a6OXryBM3B2HinrXwsFFkdOKPpaJkzB5tf4bhsiyN7urC+DtY+Y
-   IXCWWyblx4+wGH+U4jX4AUQ1Gmozx40tkSKaLMsrXnJk16K34dCLZzTC0
-   zcYwI/zmDoZPUSBIp2b9HFFND6UPgY9OWXQ2tVoHEXGr+D/ltOT0u/rzS
-   xwB/zCVaq7NncP/cMTcS72CVoSikm+AMJMI9FMcVzzDM31sgOyZc3PyPQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347794780"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="347794780"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:14:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="686562484"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Jul 2022 18:14:23 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDFL5-0003r0-A9;
-        Mon, 18 Jul 2022 01:14:23 +0000
-Date:   Mon, 18 Jul 2022 09:13:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Patricia Alfonso <trishalfonso@google.com>
-Cc:     kbuild-all@lists.01.org,
-        user-mode-linux-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        David Gow <davidgow@google.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>
-Subject: [rw-uml:linux-next 11/16] arch/um/os-Linux/mem.c:28:6: warning: no
- previous prototype for 'kasan_map_memory'
-Message-ID: <202207180935.daaJausv-lkp@intel.com>
+        Sun, 17 Jul 2022 21:14:50 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1C211801
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:14:49 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id c3so8459134pfb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eQAZ3O9SzuCt/F9lSSXScWHLuD4SVMp78IGm0SPE7gQ=;
+        b=oplNe3eVsGFmxpjamcsvfXuQqB7bMOQRGp/li++QcwqHYxmFMSLV0Gz2ek12DfzTCH
+         dyVKQYtS8ih5zzNKciGS9xdwrHQsKqmHV2d8BjA1zyhWkNvLedUeetol1/nqFiSXjEzQ
+         yqm17R1y80pDN++tZqvONJEH0mQjcAPVRcQJEjGetn97Ob9mBW1wZVhQvx+/gLDzvJyn
+         2dQYhWwimrteU97C+76r0DzVpc8341eBvZ/duATnloMMu1VhfS53iHdHQio1n5WaHsIY
+         UPPPUvM2BPPHbMwVsA8MhurbI4a6dItxgaFtleFGNKTiIRB++3jG6bOeX0fs43Kmz2L9
+         wRLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eQAZ3O9SzuCt/F9lSSXScWHLuD4SVMp78IGm0SPE7gQ=;
+        b=Fw6UznnOY3iNYfcMzXoIJCsEpLjE0Ni9jGOZVU5ctjvxrPd68a3e+/tbh6sTgKOdKm
+         SsdYC9/mZ/KuiqZmLwHWKvnaVL4j2N2r7lrl7X3x9e82ivwzbEVMZFKuEMD6dTaDBAyk
+         mK0oAFG9C6BEPdmzaF3CNtN/PdgK57KehRJexoo4qckn9fi02bVvcv7tI+U2UCzoYI2n
+         VD6NaSMdCuWHS6PSBeOZaOhSsnv9FRj7mdcB51Jy8rdJni4LHD7+AG6ZQArtqwnUK90A
+         DEoiyZhI6oJdh4Dx36Fmu8gw/QYW8X7ml3E4zk/0TMzh061zbEoeJR8fiijolSO26KIt
+         HTcw==
+X-Gm-Message-State: AJIora+AB/455pXCaNDSKRT7PILh69eVZ4g2gQ/Ykel0DBmKZ1dJej2P
+        9PIP7QGuKr6dCDsf1HqDL1E1Vybv7wX+zQ==
+X-Google-Smtp-Source: AGRyM1shEIaF4JG2n1WJHxPYM2A5LlhrO1uNTpcJbBZRIunLUiGHuqOG+hHn3pUqz4eltbC0PK4HrQ==
+X-Received: by 2002:a05:6a00:b4d:b0:52b:1eb1:218e with SMTP id p13-20020a056a000b4d00b0052b1eb1218emr20375015pfo.33.1658106889133;
+        Sun, 17 Jul 2022 18:14:49 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id t13-20020a62d14d000000b00528a4238eadsm8076255pfl.13.2022.07.17.18.14.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Jul 2022 18:14:48 -0700 (PDT)
+Message-ID: <2769e603-613e-0d61-0942-511bfb97760d@kernel.dk>
+Date:   Sun, 17 Jul 2022 19:14:47 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [LKP] Re: [io_uring] 584b0180f0:
+ phoronix-test-suite.fio.SequentialWrite.IO_uring.Yes.Yes.1MB.DefaultTestDirectory.mb_s
+ -10.2% regression
+Content-Language: en-US
+To:     Yin Fengwei <fengwei.yin@intel.com>,
+        kernel test robot <oliver.sang@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com
+References: <20220527092432.GE11731@xsang-OptiPlex-9020>
+ <2085bfef-a91c-8adb-402b-242e8c5d5c55@kernel.dk>
+ <0d60aa42-a519-12ad-3c69-72ed12398865@intel.com>
+ <26d913ea-7aa0-467d-4caf-a93f8ca5b3ff@kernel.dk>
+ <6d70460d-0a85-4104-9abc-dd100af99e6f@intel.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <6d70460d-0a85-4104-9abc-dd100af99e6f@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git linux-next
-head:   af3e16101cee95efaa72095fe06c15ec0b8eb195
-commit: 5b301409e8bc5d7fad2ee138be44c5c529dd0874 [11/16] UML: add support for KASAN under x86_64
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220718/202207180935.daaJausv-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git/commit/?id=5b301409e8bc5d7fad2ee138be44c5c529dd0874
-        git remote add rw-uml https://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git
-        git fetch --no-tags rw-uml linux-next
-        git checkout 5b301409e8bc5d7fad2ee138be44c5c529dd0874
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+On 7/17/22 6:58 PM, Yin Fengwei wrote:
+> 
+> 
+> On 7/15/2022 11:58 PM, Jens Axboe wrote:
+>> I can't really explain that either, at least not immediately. I tried
+>> running with and without that patch, and don't see any difference here.
+>> In terms of making this more obvious, does the below also fix it for
+>> you?
+> I will try the fix and let you know the result.
+> 
+>>
+>> And what filesystem is this being run on?
+> I am using ext4 and LKP are also using ext4. Thanks.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/um/os-Linux/mem.c:28:6: warning: no previous prototype for 'kasan_map_memory' [-Wmissing-prototypes]
-      28 | void kasan_map_memory(void *start, size_t len)
-         |      ^~~~~~~~~~~~~~~~
-   arch/um/os-Linux/mem.c:212:13: warning: no previous prototype for 'check_tmpexec' [-Wmissing-prototypes]
-     212 | void __init check_tmpexec(void)
-         |             ^~~~~~~~~~~~~
-
-
-vim +/kasan_map_memory +28 arch/um/os-Linux/mem.c
-
-    19	
-    20	/*
-    21	 * kasan_map_memory - maps memory from @start with a size of @len.
-    22	 * The allocated memory is filled with zeroes upon success.
-    23	 * @start: the start address of the memory to be mapped
-    24	 * @len: the length of the memory to be mapped
-    25	 *
-    26	 * This function is used to map shadow memory for KASAN in uml
-    27	 */
-  > 28	void kasan_map_memory(void *start, size_t len)
-    29	{
-    30		if (mmap(start,
-    31			 len,
-    32			 PROT_READ|PROT_WRITE,
-    33			 MAP_FIXED|MAP_ANONYMOUS|MAP_PRIVATE|MAP_NORESERVE,
-    34			 -1,
-    35			 0) == MAP_FAILED) {
-    36			os_info("Couldn't allocate shadow memory: %s\n.",
-    37				strerror(errno));
-    38			exit(1);
-    39		}
-    40	}
-    41	
+Thanks, I'll try ext4 as well (was on XFS).
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jens Axboe
+

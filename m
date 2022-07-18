@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4002E5783EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EC95783F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbiGRNkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
+        id S234491AbiGRNl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233697AbiGRNkJ (ORCPT
+        with ESMTP id S234435AbiGRNlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:40:09 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACD71A076
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:40:07 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id u13so19386080lfn.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qP9Fo5KBG1bSRd2Jktw44saL7dv2bZtKwCgW6wpScEo=;
-        b=LydNAbpiOiDlshy5VPw8GM+ohK5mAteiOjn9DViBMZcAdgGLZgOluNcnR2js6hMa2d
-         7hJ1zcRoNeGwk/OLqK/9NnXjVQillG9u7p5R1Wsyw2Rn6BE13YJO9Udn3uLjF1Fo41jf
-         bCcFwqcXI/WAJbdHXX5XBSPeCutlv07HBSTzrjpUCjAWfhO0cNUk05Vv1by2t8j9N/QS
-         Ne2YRcvdW8w42bnprFuMwwlZXMPD+viCFITy89/Toygy+8fWax3argEtwmAxhLksNAoP
-         ur5TUpos4VK+1Z3FJ+o+sfUEVSktZ7JbPQEtvAAi0HcATRTI0nQGEjg2hILU9NMYlHmB
-         EM6Q==
+        Mon, 18 Jul 2022 09:41:55 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF0E1DA42;
+        Mon, 18 Jul 2022 06:41:55 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id h132so10582900pgc.10;
+        Mon, 18 Jul 2022 06:41:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=qP9Fo5KBG1bSRd2Jktw44saL7dv2bZtKwCgW6wpScEo=;
-        b=64cMXBWccRNAnsZoyQZSnZG0L0fDLbO7RqunIF52hFhm6wSxigUf1jM9+99olPoVZT
-         9yHFpXZXKI+Za0lJIWDScKJNHD6WKwFVR1S0sMpyfG2ILrdfEvVq/unxwDfjLU7DnEiu
-         PFNnm3Z4+L+CWrNPPttXyQDiovwTy27HNjuB/JKl9SCAfuDroylrn9P+n+qxIS0C4Al3
-         CEl27wDzlwSHBEcdkKN43JaS6fQqflqCwf+Rlr3+9aLf45tftT1pnH+UUNbDg2ngp/cW
-         cv8cIfP3nyGnh+hjpqoxcRrHtnAZFDZQ1b0xUq+zshZ4Mp8wlMvIDtn71pIiJurZzuVq
-         I7kQ==
-X-Gm-Message-State: AJIora8a+SBAX4RR+Aw1Iupw/uLndDY+HO71O+Wh6+BJOt3j4+zYZ4cI
-        5llMTcZkkX9Ara+n0fskaqt63w==
-X-Google-Smtp-Source: AGRyM1s1qWe+cRpioSO8Ixn5A2yF3sZewgmBHH5fFTqKY8HJ5V1AGYKl/UMTkIk31fZ8gW3ypTjz3g==
-X-Received: by 2002:a05:6512:3b23:b0:48a:4a8c:2a27 with SMTP id f35-20020a0565123b2300b0048a4a8c2a27mr956367lfv.372.1658151605709;
-        Mon, 18 Jul 2022 06:40:05 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05651c048b00b0025d681fbebdsm2050116ljc.100.2022.07.18.06.40.04
+        bh=Rnjh/i5JdMf0J8B93u/CObaqJyaPuNqc0mMcjhYd/7c=;
+        b=UdUmwx8z6t1T5W1twXtmQ+4sWtICHFYFcqfdK1FC6W1nqsKt8g4tUW7B1gSh1Vk53F
+         vpnJ/VzDLFAVnggvC6dW+/EoNQ9fA5gDgr3Fr48RlZHhA0S+2nqkGU2UVdx/yfXN1Jbh
+         KcaxQa87EvtTTDbFasTW8irBZMXEDEH8/zpVj1wkHsQCL0JMf9NyEg5MNPkT1ojynFvT
+         QwrxVwYuZwZrRbjhTmeEtdR4JbrRO/k5DKdAI5mEPnXueyah4eW1QuO95Npi87kfcRLP
+         FKmf250XeZCBrPvTCM58aDjmToMquu87A4uLk7DtsaTpFfGayXXg0+3clq/8Ypco80/D
+         pz1w==
+X-Gm-Message-State: AJIora9+Db5AC36JWQEo2NIdBBzPY2AIGt4qRD4Hnx1f2s23eb0gd7ZS
+        0yu0so/p1oR1OMIc7dT3IvVaczG8jmg=
+X-Google-Smtp-Source: AGRyM1vaZgqSURLsI49S4CAXVaT+0OJ5kw/Xn9OoIvrsCVaaAcWfb25DQXgmenKH2fRDbtTR5uvA0w==
+X-Received: by 2002:a05:6a00:450d:b0:52b:84ca:9509 with SMTP id cw13-20020a056a00450d00b0052b84ca9509mr524383pfb.74.1658151714220;
+        Mon, 18 Jul 2022 06:41:54 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id w188-20020a6282c5000000b0052aee60e058sm9268784pfd.102.2022.07.18.06.41.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:40:05 -0700 (PDT)
-Message-ID: <0d758fae-efde-eb0c-5fc9-2407826ac163@linaro.org>
-Date:   Mon, 18 Jul 2022 15:40:03 +0200
+        Mon, 18 Jul 2022 06:41:53 -0700 (PDT)
+Message-ID: <5a245067-7adb-c482-3ea4-22beb81fa719@acm.org>
+Date:   Mon, 18 Jul 2022 06:41:52 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH V3 1/3] dt-bindings: net: fsl,fec: Add i.MX8ULP FEC items
+Subject: Re: [PATCH -next] blktrace: Fix some kernel-doc comments
 Content-Language: en-US
-To:     wei.fang@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, peng.fan@nxp.com,
-        ping.bai@nxp.com, sudeep.holla@arm.com,
-        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
-References: <20220718142257.556248-1-wei.fang@nxp.com>
- <20220718142257.556248-2-wei.fang@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220718142257.556248-2-wei.fang@nxp.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Yang Li <yang.lee@linux.alibaba.com>, rostedt@goodmis.org
+Cc:     axboe@kernel.dk, mingo@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20220718061755.114599-1-yang.lee@linux.alibaba.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220718061755.114599-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/07/2022 16:22, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
+On 7/17/22 23:17, Yang Li wrote:
+> Remove warnings found by running scripts/kernel-doc, which is caused by
+> using 'make W=1'.
+> kernel/trace/blktrace.c:1884: warning: Function parameter or member 'opf' not described in 'blk_fill_rwbs'
+> kernel/trace/blktrace.c:1884: warning: Excess function parameter 'op' description in 'blk_fill_rwbs'
 > 
-> Add fsl,imx8ulp-fec for i.MX8ULP platform.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>   kernel/trace/blktrace.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+> diff --git a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
+> index 150058f5daa9..5632b6159d88 100644
+> --- a/kernel/trace/blktrace.c
+> +++ b/kernel/trace/blktrace.c
+> @@ -1873,7 +1873,7 @@ static ssize_t sysfs_blk_trace_attr_store(struct device *dev,
+>   /**
+>    * blk_fill_rwbs - Fill the buffer rwbs by mapping op to character string.
+>    * @rwbs:	buffer to be filled
+> - * @op:		REQ_OP_XXX for the tracepoint
+> + * @opf:	a combination of a request operation and request flags
+>    *
+>    * Description:
+>    *     Maps the REQ_OP_XXX to character and fills the buffer provided by the
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+A patch similar to the above patch should already have been queued by 
+Jens Axboe. See also "[PATCH 0/2] Fix recently introduced kernel-doc 
+warnings" 
+(https://lore.kernel.org/all/165797480617.363028.4687340933765044343.b4-ty@kernel.dk/).
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+Thanks,
 
-If a tag was not added on purpose, please state why and what changed.
-
-
-
-Best regards,
-Krzysztof
+Bart.

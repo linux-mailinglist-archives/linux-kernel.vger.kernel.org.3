@@ -2,353 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E535577EED
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8628577EEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234239AbiGRJrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S234247AbiGRJrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233917AbiGRJrB (ORCPT
+        with ESMTP id S233917AbiGRJrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:47:01 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9BB1AF16
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:46:55 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id b11so20150402eju.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=xI9mJnc070F1Cnspd11RMCcRJh74q6YG25IRj9MrGkc=;
-        b=Xj9kernYJvIMwvQQsUXQWEltYFWdoipMN+Mq30lz2yfi0zWSUEjABvDAQPTUv2+QLs
-         bAt4HWCnG7uF11CbDpxTuiqzBKL0ChaSEcUi2aCLDxY2vd2xw8npZFP8xp+m9PUUOH0b
-         welRhmUTLSb81JlwuQ6PNmLGTceHebjWYc0DZ+IRyazkrNLlBIVgi9N0zkeSaNFwK1EO
-         ndjoQU/57BldCZM6udrWj2oQF94qCM5E2URlxXarf/BsqakixdHYkN8kwSbU5ZLRWum2
-         cJ/qotA5R+Whl96kRZfAoU6KbmCzDEPVUgGBMBJ+bvZPqjmj0tBvBdtppJoy3E31zigI
-         Ogkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=xI9mJnc070F1Cnspd11RMCcRJh74q6YG25IRj9MrGkc=;
-        b=nqIcOxxeVLon6FeywqEpjShsBUrwujtJlvVXxhhDw5If8WhIPNrkwV3N0ZCIPTMGy9
-         c5LRubc8707RSgrBf19O69DbnJ6DaKY8PAwCZwjdJvftwozeLEn5wD3an5gVW/RXxb0T
-         N8WPJEXkrXNkox74wxzFyzNsV5XcNIA1BoI72grCFh++l/jIGWWZXYW8cIzAOkUouyHA
-         DvO7+ecvEF6QW1vvP9uTfiZM3UDrjW4Sgq+TfaYfuV3SFMX/Nby0Ni/XvlEors3aX9qH
-         wn7UEdlRuvTokTFLkktiv8z1hMHXvs3mNSfrUo5FXgdURVHW0cuwpfwfP/kmJ69i+L4M
-         w7jQ==
-X-Gm-Message-State: AJIora85QezYFdH3LwnXgTw7/LlHcXAckheuTs5FxW6fioTYJRyBKJa+
-        tYn7+ZOyAhZ/4Xu07dtXuyluGA==
-X-Google-Smtp-Source: AGRyM1tz8gz1LaGnXhk6yS4lXBRV4qKP0KtylAmLK+qLBg+0tm19zLkpKlrOxD5AtYxeSsdonAkZTQ==
-X-Received: by 2002:a17:906:e9b:b0:72d:ec31:b037 with SMTP id p27-20020a1709060e9b00b0072dec31b037mr22337393ejf.595.1658137613718;
-        Mon, 18 Jul 2022 02:46:53 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id h5-20020a0564020e0500b0043b5adf54b3sm3418090edh.61.2022.07.18.02.46.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 02:46:52 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Mon, 18 Jul 2022 05:47:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD9281AF16
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:47:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F33031042;
+        Mon, 18 Jul 2022 02:47:48 -0700 (PDT)
+Received: from [10.32.33.51] (e121896.warwick.arm.com [10.32.33.51])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 68D643F70D;
+        Mon, 18 Jul 2022 02:47:47 -0700 (PDT)
+Message-ID: <9a5359f1-84e3-c436-b8d9-1f3c356f8804@arm.com>
+Date:   Mon, 18 Jul 2022 10:47:46 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3] drivers/perf: arm_spe: Fix consistency of
+ SYS_PMSCR_EL1.CX
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     german.gomez@arm.com, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220714061302.2715102-1-anshuman.khandual@arm.com>
+ <9b2982f1-023a-3499-7e87-f00b5a689ae9@arm.com>
+ <e3aef6fd-973b-d7ef-6d6a-10f9e8ac3b04@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <e3aef6fd-973b-d7ef-6d6a-10f9e8ac3b04@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 18 Jul 2022 11:46:52 +0200
-Message-Id: <CLIOQ73QARAO.C0NGVX11Q4LN@otso>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sm6350: Add interconnect
- support
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Georgi Djakov" <djakov@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>
-X-Mailer: aerc 0.9.0
-References: <20220525144404.200390-1-luca.weiss@fairphone.com>
- <20220525144404.200390-6-luca.weiss@fairphone.com>
- <22495dc6-0d55-70d0-d9f3-bcfafcae62d1@kernel.org>
-In-Reply-To: <22495dc6-0d55-70d0-d9f3-bcfafcae62d1@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Georgi,
 
-On Mon Jul 18, 2022 at 9:58 AM CEST, Georgi Djakov wrote:
-> On 25.05.22 17:44, Luca Weiss wrote:
-> > Add all the different NoC providers that are found in SM6350 and
-> > populate different nodes that use the interconnect properties.
-> >=20
-> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > ---
-> > Changes since v2:
-> > * none
-> >=20
-> >   arch/arm64/boot/dts/qcom/sm6350.dtsi | 109 ++++++++++++++++++++++++++=
-+
-> >   1 file changed, 109 insertions(+)
-> >=20
-> > diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts=
-/qcom/sm6350.dtsi
-> > index fb1a0f662575..119073f19285 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> > @@ -1,11 +1,13 @@
-> >   // SPDX-License-Identifier: BSD-3-Clause
-> >   /*
-> >    * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
-> > + * Copyright (c) 2022, Luca Weiss <luca.weiss@fairphone.com>
-> >    */
-> >  =20
-> >   #include <dt-bindings/clock/qcom,gcc-sm6350.h>
-> >   #include <dt-bindings/clock/qcom,rpmh.h>
-> >   #include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/interconnect/qcom,sm6350.h>
-> >   #include <dt-bindings/interrupt-controller/arm-gic.h>
-> >   #include <dt-bindings/mailbox/qcom-ipcc.h>
-> >   #include <dt-bindings/power/qcom-rpmpd.h>
-> > @@ -539,6 +541,10 @@ i2c0: i2c@880000 {
-> >   				interrupts =3D <GIC_SPI 601 IRQ_TYPE_LEVEL_HIGH>;
-> >   				#address-cells =3D <1>;
-> >   				#size-cells =3D <0>;
-> > +				interconnects =3D <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_Q=
-UP_CORE_0 0>,
-> > +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_0 0>,
-> > +						<&aggre1_noc MASTER_QUP_0 0 &clk_virt SLAVE_EBI_CH0 0>;
-> > +				interconnect-names =3D "qup-core", "qup-config", "qup-memory";
-> >   				status =3D "disabled";
-> >   			};
-> >  =20
-> > @@ -552,6 +558,10 @@ i2c2: i2c@888000 {
-> >   				interrupts =3D <GIC_SPI 603 IRQ_TYPE_LEVEL_HIGH>;
-> >   				#address-cells =3D <1>;
-> >   				#size-cells =3D <0>;
-> > +				interconnects =3D <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_Q=
-UP_CORE_0 0>,
-> > +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_0 0>,
-> > +						<&aggre1_noc MASTER_QUP_0 0 &clk_virt SLAVE_EBI_CH0 0>;
-> > +				interconnect-names =3D "qup-core", "qup-config", "qup-memory";
-> >   				status =3D "disabled";
-> >   			};
-> >   		};
-> > @@ -578,6 +588,10 @@ i2c6: i2c@980000 {
-> >   				interrupts =3D <GIC_SPI 353 IRQ_TYPE_LEVEL_HIGH>;
-> >   				#address-cells =3D <1>;
-> >   				#size-cells =3D <0>;
-> > +				interconnects =3D <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_Q=
-UP_CORE_1 0>,
-> > +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-> > +						<&aggre2_noc MASTER_QUP_1 0 &clk_virt SLAVE_EBI_CH0 0>;
-> > +				interconnect-names =3D "qup-core", "qup-config", "qup-memory";
-> >   				status =3D "disabled";
-> >   			};
-> >  =20
-> > @@ -591,6 +605,10 @@ i2c7: i2c@984000 {
-> >   				interrupts =3D <GIC_SPI 354 IRQ_TYPE_LEVEL_HIGH>;
-> >   				#address-cells =3D <1>;
-> >   				#size-cells =3D <0>;
-> > +				interconnects =3D <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_Q=
-UP_CORE_1 0>,
-> > +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-> > +						<&aggre2_noc MASTER_QUP_1 0 &clk_virt SLAVE_EBI_CH0 0>;
-> > +				interconnect-names =3D "qup-core", "qup-config", "qup-memory";
-> >   				status =3D "disabled";
-> >   			};
-> >  =20
-> > @@ -604,6 +622,10 @@ i2c8: i2c@988000 {
-> >   				interrupts =3D <GIC_SPI 355 IRQ_TYPE_LEVEL_HIGH>;
-> >   				#address-cells =3D <1>;
-> >   				#size-cells =3D <0>;
-> > +				interconnects =3D <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_Q=
-UP_CORE_1 0>,
-> > +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-> > +						<&aggre2_noc MASTER_QUP_1 0 &clk_virt SLAVE_EBI_CH0 0>;
-> > +				interconnect-names =3D "qup-core", "qup-config", "qup-memory";
-> >   				status =3D "disabled";
-> >   			};
-> >  =20
-> > @@ -615,6 +637,9 @@ uart9: serial@98c000 {
-> >   				pinctrl-names =3D "default";
-> >   				pinctrl-0 =3D <&qup_uart9_default>;
-> >   				interrupts =3D <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
-> > +				interconnects =3D <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_Q=
-UP_CORE_1 0>,
-> > +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>;
-> > +				interconnect-names =3D "qup-core", "qup-config";
-> >   				status =3D "disabled";
-> >   			};
-> >  =20
-> > @@ -628,11 +653,62 @@ i2c10: i2c@990000 {
-> >   				interrupts =3D <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>;
-> >   				#address-cells =3D <1>;
-> >   				#size-cells =3D <0>;
-> > +				interconnects =3D <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_Q=
-UP_CORE_1 0>,
-> > +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
-> > +						<&aggre2_noc MASTER_QUP_1 0 &clk_virt SLAVE_EBI_CH0 0>;
-> > +				interconnect-names =3D "qup-core", "qup-config", "qup-memory";
-> >   				status =3D "disabled";
-> >   			};
-> >  =20
-> >   		};
-> >  =20
-> > +		config_noc: interconnect@1500000 {
-> > +			compatible =3D "qcom,sm6350-config-noc";
-> > +			reg =3D <0 0x01500000 0 0x28000>;
-> > +			#interconnect-cells =3D <2>;
-> > +			qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +		};
-> > +
-> > +		system_noc: interconnect@1620000 {
-> > +			compatible =3D "qcom,sm6350-system-noc";
-> > +			reg =3D <0 0x01620000 0 0x17080>;
-> > +			#interconnect-cells =3D <2>;
-> > +			qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +
-> > +			clk_virt: interconnect-clk-virt {
-> > +				compatible =3D "qcom,sm6350-clk-virt";
-> > +				#interconnect-cells =3D <2>;
-> > +				qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +			};
-> > +		};
-> > +
-> > +		aggre1_noc: interconnect@16e0000 {
-> > +			compatible =3D "qcom,sm6350-aggre1-noc";
-> > +			reg =3D <0 0x016e0000 0 0x15080>;
-> > +			#interconnect-cells =3D <2>;
-> > +			qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +		};
-> > +
-> > +		aggre2_noc: interconnect@1700000 {
-> > +			compatible =3D "qcom,sm6350-aggre2-noc";
-> > +			reg =3D <0 0x01700000 0 0x1f880>;
-> > +			#interconnect-cells =3D <2>;
-> > +			qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +
-> > +			compute_noc: interconnect-compute-noc {
-> > +				compatible =3D "qcom,sm6350-compute-noc";
-> > +				#interconnect-cells =3D <2>;
-> > +				qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +			};
-> > +		};
-> > +
-> > +		mmss_noc: interconnect@1740000 {
-> > +			compatible =3D "qcom,sm6350-mmss-noc";
-> > +			reg =3D <0 0x01740000 0 0x1c100>;
-> > +			#interconnect-cells =3D <2>;
-> > +			qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +		};
-> > +
-> >   		ufs_mem_hc: ufs@1d84000 {
-> >   			compatible =3D "qcom,sm6350-ufshc", "qcom,ufshc",
-> >   				     "jedec,ufs-2.0";
-> > @@ -933,6 +1009,10 @@ sdhc_2: sdhci@8804000 {
-> >   				 <&gcc GCC_SDCC2_APPS_CLK>,
-> >   				 <&rpmhcc RPMH_CXO_CLK>;
-> >   			clock-names =3D "iface", "core", "xo";
-> > +			interconnects =3D <&aggre2_noc MASTER_SDCC_2 0 &clk_virt SLAVE_EBI_=
-CH0 0>,
-> > +					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_SDCC_2 0>;
-> > +			interconnect-names =3D "sdhc-ddr", "cpu-sdhc";
-> > +
-> >   			qcom,dll-config =3D <0x0007642c>;
-> >   			qcom,ddr-config =3D <0x80040868>;
-> >   			power-domains =3D <&rpmhpd 0>;
-> > @@ -947,11 +1027,15 @@ sdhc2_opp_table: sdhc2-opp-table {
-> >   				opp-100000000 {
-> >   					opp-hz =3D /bits/ 64 <100000000>;
-> >   					required-opps =3D <&rpmhpd_opp_svs_l1>;
-> > +					opp-peak-kBps =3D <790000 131000>;
-> > +					opp-avg-kBps =3D <50000 50000>;
-> >   				};
-> >  =20
-> >   				opp-202000000 {
-> >   					opp-hz =3D /bits/ 64 <202000000>;
-> >   					required-opps =3D <&rpmhpd_opp_nom>;
-> > +					opp-peak-kBps =3D <3190000 294000>;
-> > +					opp-avg-kBps =3D <261438 300000>;
->
-> Just wondering where do these values come from? Are they from the downstr=
-eam DT?
-> The rest looks good to me.
 
-Exactly, the values are part of downstream dtsi[0]. The docs for this
-property are:
-- qcom,msm-bus,vectors-KBps:
-    Arrays of unsigned integers representing:
-    * master-id
-    * slave-id
-    * arbitrated bandwidth in KBps
-    * instantaneous bandwidth in KBps
+On 18/07/2022 10:42, Suzuki K Poulose wrote:
+> Hi James
+> 
+> On 18/07/2022 10:30, James Clark wrote:
+>>
+>>
+>> On 14/07/2022 07:13, Anshuman Khandual wrote:
+>>> The arm_spe_pmu driver will enable SYS_PMSCR_EL1.CX in order to add CONTEXT
+>>> packets into the traces, if the owner of the perf event runs with required
+>>> capabilities i.e CAP_PERFMON or CAP_SYS_ADMIN via perfmon_capable() helper.
+>>>
+>>> The value of this bit is computed in the arm_spe_event_to_pmscr() function
+>>> but the check for capabilities happens in the pmu event init callback i.e
+>>> arm_spe_pmu_event_init(). This suggests that the value of the CX bit should
+>>> remain consistent for the duration of the perf session.
+>>>
+>>> However, the function arm_spe_event_to_pmscr() may be called later during
+>>> the event start callback i.e arm_spe_pmu_start() when the "current" process
+>>> is not the owner of the perf session, hence the CX bit setting is currently
+>>> not consistent.
+>>>
+>>> One way to fix this, is by caching the required value of the CX bit during
+>>> the initialization of the PMU event, so that it remains consistent for the
+>>> duration of the session. It uses currently unused 'event->hw.flags' element
+>>> to cache perfmon_capable() value, which can be referred during event start
+>>> callback to compute SYS_PMSCR_EL1.CX. This ensures consistent availability
+>>> of context packets in the trace as per event owner capabilities.
+>>>
+>>> Drop BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init(), because
+>>> now CX bit cannot be set in arm_spe_event_to_pmscr() with perfmon_capable()
+>>> disabled.
+>>>
+>>> Cc: Will Deacon <will@kernel.org>
+>>> Cc: Mark Rutland <mark.rutland@arm.com>
+>>> Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
+>>> Cc: linux-arm-kernel@lists.infradead.org
+>>> Cc: linux-kernel@vger.kernel.org
+>>> Fixes: cea7d0d4a59b ("drivers/perf: Open access for CAP_PERFMON privileged process")
+>>> Reported-by: German Gomez <german.gomez@arm.com>
+>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>> ---
+>>> Changes in V3:
+>>>
+>>> - Moved set_spe_event_has_cx() before arm_spe_event_to_pmscr()
+>>> - Reinstated perfmon_capable() back in arm_spe_pmu_event_init()
+>>> - Dropped BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init()
+>>> - Updated the commit message
+>>>   Changes in V2:
+>>>
+>>> https://lore.kernel.org/all/20220713085925.2627533-1-anshuman.khandual@arm.com/
+>>>
+>>> - Moved CONFIG_PID_IN_CONTEXTIDR config check inside the helper per Suzuki
+>>> - Changed the comment per Suzuki
+>>> - Renamed the helpers Per Suzuki
+>>> - Added "Fixes: " tag per German
+>>>
+>>> Changes in V1:
+>>>
+>>> https://lore.kernel.org/all/20220712051404.2546851-1-anshuman.khandual@arm.com/
+>>>
+>>>
+>>>   drivers/perf/arm_spe_pmu.c | 22 ++++++++++++++++++++--
+>>>   1 file changed, 20 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+>>> index db670b265897..b65a7d9640e1 100644
+>>> --- a/drivers/perf/arm_spe_pmu.c
+>>> +++ b/drivers/perf/arm_spe_pmu.c
+>>> @@ -39,6 +39,24 @@
+>>>   #include <asm/mmu.h>
+>>>   #include <asm/sysreg.h>
+>>>   +/*
+>>> + * Cache if the event is allowed to trace Context information.
+>>> + * This allows us to perform the check, i.e, perfmon_capable(),
+>>> + * in the context of the event owner, once, during the event_init().
+>>> + */
+>>> +#define SPE_PMU_HW_FLAGS_CX            BIT(0)
+>>> +
+>>> +static void set_spe_event_has_cx(struct perf_event *event)
+>>> +{
+>>> +    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+>>> +        event->hw.flags |= SPE_PMU_HW_FLAGS_CX;
+>>> +}
+>>> +
+>>> +static bool get_spe_event_has_cx(struct perf_event *event)
+>>> +{
+>>> +    return !!(event->hw.flags & SPE_PMU_HW_FLAGS_CX);
+>>> +}
+>>> +
+>>>   #define ARM_SPE_BUF_PAD_BYTE            0
+>>>     struct arm_spe_pmu_buf {
+>>> @@ -272,7 +290,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+>>>       if (!attr->exclude_kernel)
+>>>           reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
+>>>   -    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+>>> +    if (get_spe_event_has_cx(event))
+>>>           reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+>>>         return reg;
+>>> @@ -709,10 +727,10 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+>>>           !(spe_pmu->features & SPE_PMU_FEAT_FILT_LAT))
+>>>           return -EOPNOTSUPP;
+>>>   +    set_spe_event_has_cx(event);
+>>>       reg = arm_spe_event_to_pmscr(event);
+>>>       if (!perfmon_capable() &&
+>>>           (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
+>>> -            BIT(SYS_PMSCR_EL1_CX_SHIFT) |
+>>
+>> The first part of the change looks ok, but I'm not sure about this removal here.
+>>
+>> Doesn't this mean that if you ask for context data when opening the event
+>> without permission you don't get an error returned any more? It just silently
+>> ignores it.
+> 
+> How do you ask for context data with SPE ? If there was a way, we don't
+> need this caching. The CX bit is set unconditionally on perfmon_capable() and is not controlled by an attribute. Ideally it is
+> better to switch to an attribute. But given that it was never there,
+> I wonder if this would be a problem for the existing perf users ?
 
-The first two paths downstream are consolidated into one here, the third
-downstream is the second one here.
+Oh yes sorry I thought one of those lines was checking the bit from the user
+request, but you are right it's unconditional. So this point should be dropped.
 
-[0] https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/tag=
-s/android-12.1.0_r0.15/qcom/lagoon.dtsi#3165
+I don't think it's actually a problem currently.
+> 
+> 
+>>
+>> That changes the semantics of the perf event open call and I don't see why that's
+>> needed to fix the issue about only checking the permissions of the owning process.
+>> At least it seems like a separate unrelated change.
+>>
+>> It's also worth noting that the value doesn't need to be cached, and another
+>> one line solution is just to check the permissions of the owning process. This
+>> avoids duplicating something that is already saved, will survive any future
+>> refactors of the permissions system, and doesn't use up space in hw_flags:
+>>
+>>     if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) &&
+>>         (has_capability(event->owner, CAP_PERFMON) || has_capability(event->owner, CAP_SYS_ADMIN)))
+>>     {
+>>     reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+>>     }
+> 
+> We don't use any bits in the hw_events for SPE. So using a bit for storing something doesn't seem to be a wasted effort. Any future
+> refactors to the permission system would need to take care of the
+> current users. So that argument is not valid in either case.
 
-Hope that clears it up!
-Regards
-Luca
+I'm just thinking that if you can get something from existing data without
+saving something new, and do it in fewer lines, then it's more readable.
 
->
-> Thanks,
-> Georgi
->
-> >   				};
-> >   			};
-> >   		};
-> > @@ -1017,12 +1101,33 @@ dp_phy: dp-phy@88ea200 {
-> >   			};
-> >   		};
-> >  =20
-> > +		dc_noc: interconnect@9160000 {
-> > +			compatible =3D "qcom,sm6350-dc-noc";
-> > +			reg =3D <0 0x09160000 0 0x3200>;
-> > +			#interconnect-cells =3D <2>;
-> > +			qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +		};
-> > +
-> >   		system-cache-controller@9200000 {
-> >   			compatible =3D "qcom,sm6350-llcc";
-> >   			reg =3D <0 0x09200000 0 0x50000>, <0 0x09600000 0 0x50000>;
-> >   			reg-names =3D "llcc_base", "llcc_broadcast_base";
-> >   		};
-> >  =20
-> > +		gem_noc: interconnect@9680000 {
-> > +			compatible =3D "qcom,sm6350-gem-noc";
-> > +			reg =3D <0 0x09680000 0 0x3e200>;
-> > +			#interconnect-cells =3D <2>;
-> > +			qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +		};
-> > +
-> > +		npu_noc: interconnect@9990000 {
-> > +			compatible =3D "qcom,sm6350-npu-noc";
-> > +			reg =3D <0 0x09990000 0 0x1600>;
-> > +			#interconnect-cells =3D <2>;
-> > +			qcom,bcm-voters =3D <&apps_bcm_voter>;
-> > +		};
-> > +
-> >   		usb_1: usb@a6f8800 {
-> >   			compatible =3D "qcom,sm6350-dwc3", "qcom,dwc3";
-> >   			reg =3D <0 0x0a6f8800 0 0x400>;
-> > @@ -1051,6 +1156,10 @@ usb_1: usb@a6f8800 {
-> >  =20
-> >   			resets =3D <&gcc GCC_USB30_PRIM_BCR>;
-> >  =20
-> > +			interconnects =3D <&aggre2_noc MASTER_USB3 0 &clk_virt SLAVE_EBI_CH=
-0 0>,
-> > +					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_USB3 0>;
-> > +			interconnect-names =3D "usb-ddr", "apps-usb";
-> > +
-> >   			usb_1_dwc3: usb@a600000 {
-> >   				compatible =3D "snps,dwc3";
-> >   				reg =3D <0 0x0a600000 0 0xcd00>;
+Maybe the refactor argument is less strong. Either way, with my previous
+point dropped the patch is functionally the same to my suggestion so I
+don't have any strong feelings about this one.
 
+> 
+> Cheers
+> Suzuki

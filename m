@@ -2,98 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869B6578A66
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6F6578A69
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235371AbiGRTN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S235080AbiGRTOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235385AbiGRTNZ (ORCPT
+        with ESMTP id S230298AbiGRTOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:13:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988192FFF8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:13:23 -0700 (PDT)
+        Mon, 18 Jul 2022 15:14:37 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B738A2CCB5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:14:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658171603; x=1689707603;
+  t=1658171676; x=1689707676;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jfpGMUuM81j/VW9iWBnOI0YIldx7GwCl3+DCAYabqc4=;
-  b=nelcHDQ4CJvKl+dqVbY9AiWfDF7uDtLxwcjSWvtMTch0ho0dGdrk3K5x
-   0OJr9usv67eYmgA8bw4mX6sjslOOI6xCZhXRJCsYcwCScPUl15uUl+AxJ
-   UM2yfbwX101AsJe8b4uyU7OReKZ58oN1cUkZf4iyr24R90ntLN/vJ1a6T
-   WV+iNPbYDFCMmgvqfz2VPiWsrq1GLUpWQL27RppZtnP7FN9uL2O+qAwph
-   IrCtBNXTE4V5/VTiqLk0qfhalHbdEku3Q7HHj30+3rmv16xxchfr4qaPG
-   DuX1U40ReIefT+YlUSrkpd6rvWMRChawGNAE0MOZazOikzoqUCpZ3qHAd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="311986828"
+  bh=Xp0ZNpYz19QNvdTmcofg5uiTtsnhZ7FV23L2OrUqiGk=;
+  b=oK5xstkmQCZbYkMlbh0O8l1J82qi1tLAUnJ3v4ZsOI8C57QHY+PvJz1c
+   mr9uEI4PW2b5LPhhhNetonBQQqB6h8L0MdE8Fu2do6ufVABzl0JZEIykY
+   hkZxAKG2XJpUczkhshPOj+pKabdJM3VQNpFUzhxrHy/5izruRpnYj4/R2
+   /MLMxyIPYIwdcvnQZRYwRbtXxIhKKBKF+RAMBZTB/rZX83Fha3SlUi5k2
+   h2X7x/CmT1LQ5LWSJoIsDUhz72SXlyos/EpO85wrzOdtr8shBc2v4h8MX
+   e1YqRy97uEnCQfJLTTBfVMDa/dqS4jfIOIA+OQuG5ueEVZoNaWoKx2DlC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="266082098"
 X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="311986828"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:13:23 -0700
+   d="scan'208";a="266082098"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:14:27 -0700
 X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="630037408"
+   d="scan'208";a="700145102"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:13:20 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:14:25 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oDWBB-001OPS-1s;
-        Mon, 18 Jul 2022 22:13:17 +0300
-Date:   Mon, 18 Jul 2022 22:13:17 +0300
+        id 1oDWCE-001OPa-29;
+        Mon, 18 Jul 2022 22:14:22 +0300
+Date:   Mon, 18 Jul 2022 22:14:22 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Antonio Borneo <antonio.borneo@foss.st.com>,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Subject: Re: [PATCH v1 1/1] irqchip/stm32-exti: Use INVALID_HWIRQ definition
-Message-ID: <YtWwzW/Cou3/aia1@smile.fi.intel.com>
-References: <20220715205203.82591-1-andriy.shevchenko@linux.intel.com>
- <87sfn14cns.wl-maz@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH v1 1/1] ALSA: isa: Use INVALID_HWIRQ definition
+Message-ID: <YtWxDmEtDMORLUSX@smile.fi.intel.com>
+References: <20220715205737.83076-1-andriy.shevchenko@linux.intel.com>
+ <87zgh9tuna.wl-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87sfn14cns.wl-maz@kernel.org>
+In-Reply-To: <87zgh9tuna.wl-tiwai@suse.de>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 10:41:59AM +0100, Marc Zyngier wrote:
-> On Fri, 15 Jul 2022 21:52:03 +0100,
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > 
-> > Use specific definition for invalid IRQ. It makes the
-> > code uniform in respect to the constant used for that.
-> > No functional change intended.
+On Sat, Jul 16, 2022 at 08:54:17AM +0200, Takashi Iwai wrote:
+> On Fri, 15 Jul 2022 22:57:37 +0200,
+> Andy Shevchenko wrote:
 
 ...
 
-> > -#define EXTI_INVALID_IRQ       U8_MAX
-> > +#define EXTI_INVALID_IRQ       ((u8)INVALID_HWIRQ)
+> > -#define INVALID_IRQ  ((unsigned)-1)
+> > -
+> > +#define INVALID_IRQ  ((unsigned)INVALID_HWIRQ)
 > 
-> This looks like a terrible idea. It gives the impression that you can
-> now rely on comparing the internal data structure field to
-> INVALID_HWIRQ. Which is of course bound to fail.
+> This seems failing to build on my local tree as is.
+> We need to include <linux/irq.h> explicitly.
 
-I don't know how one can go to that conclusion, but okay, I understood you.
-
-> To be honest, I'd rather *kill* INVALID_HWIRQ, because apart from
-> cherryview, nobody even *checks* for this value by that name. So much
-> for the "code uniformity"...
-
-It's used by two or three, I don't remember by heart.
+As Marc told me this is probably the way to the wrong direction, so, please,
+discard this patch anyway.
 
 -- 
 With Best Regards,

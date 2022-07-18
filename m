@@ -2,228 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFFF5781F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F9D5781F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234998AbiGRMPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
+        id S235083AbiGRMP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235043AbiGRMPB (ORCPT
+        with ESMTP id S235080AbiGRMPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:15:01 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7018252B5;
-        Mon, 18 Jul 2022 05:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658146493; x=1689682493;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2a9djxvYHwMzKSUq5xazfVjyavQ+n220/gOWPtn17QY=;
-  b=kxPywq749wz2MdfSXFQPMR+BWVnWLZXg/T9CYWFuyf/w5SS6hp/FmiaZ
-   seOENarwhXbiEhmhmazlnCMsUfoLbnddKk7M78oWb9pwLUTFX+t+N23yU
-   fWM1cou/nMjYTzlGDyzwj2bvgHhRgbI3ZekTKJNi2hBwZFfnKPrVH6ktG
-   8PFD4u8opoGsH6MrZnMBzhfW4oNOR/IIujKQBYRRAneVuKH/y6+FqBNU9
-   9o8TNR/GIvWvanuY9w1DeZfWj7Mrv9l8VV+13AiFk8QwhMs0aL+Uc/Qw3
-   gELPhqJNsiHPQopI9dyVqj0Xq8F/cpEzByG8uab9pZ/igSHeAGqmj/l5w
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286222221"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="286222221"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 05:14:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="547464900"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 18 Jul 2022 05:14:52 -0700
-Received: from [10.252.209.6] (kliang2-mobl1.ccr.corp.intel.com [10.252.209.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 75C665807C9;
-        Mon, 18 Jul 2022 05:14:50 -0700 (PDT)
-Message-ID: <2abcf8c7-610d-a58f-47cb-cd5c2c1c15de@linux.intel.com>
-Date:   Mon, 18 Jul 2022 08:14:49 -0400
+        Mon, 18 Jul 2022 08:15:39 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B4726114
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:15:30 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id ay11-20020a05600c1e0b00b003a3013da120so7691796wmb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:15:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bh9NZr4gq3p7XYiwnsBZLhMSoV7xIvFjFW59LLlWpBM=;
+        b=xiuse1IKKx0XozsiaQHJ4SQtwAU2L7g25uNWBVbiSRGNk/7RNobYrCgwgYtzyyTML7
+         GDGCMfE82etDe6Qfd6fw2RqkO519c/uDDwCCR0Iqnh8P1ILw78wknKSnzVJxSojItxPX
+         AoFVy3NKFkuJsx6RUpsfgtC7OOg83pHEiF7FdWyeBIqOtE5bxZ6el2TMP/LdTSnkOdCk
+         AUNRxkNerbaoSywKcwjpLt1/edruIpyuwTi0xVo0Kdf5A785P0fcXqmQKrOmTGtF3q2R
+         Yr1r22iFSdBhXvjuGpvv4iDe5Y7I3DE32EvfqeiouOimN5JWlRC5+Kre4hTKc9iOlp34
+         id7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bh9NZr4gq3p7XYiwnsBZLhMSoV7xIvFjFW59LLlWpBM=;
+        b=r2NvSdo4jDEATqqRvAqFt0tfqIIOeWJwY57U6hQLaBQsGY22ED8to2BPjXNXkg0hV+
+         5hD5Ncz6g1Tw3U/2ro0nkWJjXcgyjDoekny2d7mYQkAEIRUKu5E0jWyW4U5IfIo98Soa
+         W6lCBN5eaO6hme3gy/mNp8RDSbghvkeXLKipkGsSbK71SwS6wzQDXOazBqgVKsFN0wUZ
+         ucdCCK33Gy8uxPFt40gAnBlubdGrGIFTDCHSH9lmTqSitTFfFzRfq97GmYc0SS5gRJZZ
+         cIX/TKK4nUwitXv0fxIPdCuMbO4lYTyDw5nUc3nfmkgY1b/+txTY2A1aSh4aWDK4HR4y
+         J7Ig==
+X-Gm-Message-State: AJIora8iyX3PhNcpXceRre4Xm5/tK0EjrbEaklxNiisbeeXoACoIU6a/
+        7z+3NRdBbDLnrMj3Fc3gDIENTg==
+X-Google-Smtp-Source: AGRyM1t73eqThp+YiwuMVeGp3LQdvy3Tti0MdP9P6YfwveVXZEm/D8ATXffrujB0f1dgfh974v8QJg==
+X-Received: by 2002:a05:600c:3844:b0:3a3:d71:c4ce with SMTP id s4-20020a05600c384400b003a30d71c4cemr14645076wmr.23.1658146528206;
+        Mon, 18 Jul 2022 05:15:28 -0700 (PDT)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id r6-20020a5d6946000000b0021b91d1ddbfsm10795784wrw.21.2022.07.18.05.15.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 05:15:27 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+Subject: [PATCH v2] remoteproc: qcom: q6v5: Use _clk_get_optional for aggre2_clk
+Date:   Mon, 18 Jul 2022 15:15:14 +0300
+Message-Id: <20220718121514.2451590-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH v3 1/2] perf metrics: Add literal for system TSC frequency
-To:     Ian Rogers <irogers@google.com>, perry.taylor@intel.com,
-        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20220715223521.3389971-1-irogers@google.com>
- <20220715223521.3389971-2-irogers@google.com>
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220715223521.3389971-2-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Only msm8996 and msm8998 SLPIs need the RPM_SMD_AGGR2_NOC_CLK
+(as aggre2 clock). None of the other platforms do. Back when the support
+for the mentioned platforms was added to the q6v5 pass driver, the
+devm_clk_get_optional was not available, so the has_aggre2_clk was
+necessary in order to differentiate between plaforms that need this
+clock and those which do not. Now that devm_clk_get_optional is available,
+we can drop the has_aggre2_clk. This makes the adsp_data more cleaner
+and removes the check within adsp_init_clocks.
 
-Thanks Ian for working on the issue and coordinate the patches.
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
 
-On 2022-07-15 6:35 p.m., Ian Rogers wrote:
-> Such a literal is useful to calculate things like the average frequency
-> [1]. The TSC frequency isn't exposed by sysfs although some experimental
-> drivers look to add it [2]. This change computes the value using the
-> frequency in /proc/cpuinfo which is accruate 
+Changes since v1:
+ * reworded the commit message to explain why this change would make
+   sense, as suggested by Bjorn.
 
-%s/accruate/accurate/
+ drivers/remoteproc/qcom_q6v5_pas.c | 41 +++++-------------------------
+ 1 file changed, 7 insertions(+), 34 deletions(-)
 
-> at least on Intel processors.
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 6ae39c5653b1..beef7a09c380 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -34,7 +34,6 @@ struct adsp_data {
+ 	const char *firmware_name;
+ 	int pas_id;
+ 	unsigned int minidump_id;
+-	bool has_aggre2_clk;
+ 	bool auto_boot;
 
-I googled the cpuinfo of other Archs, e.g., arm and s390. It looks like
-only Intel display the TSC frequency in the "model name".
+ 	char **proxy_pd_names;
+@@ -64,7 +63,6 @@ struct qcom_adsp {
+ 	int pas_id;
+ 	unsigned int minidump_id;
+ 	int crash_reason_smem;
+-	bool has_aggre2_clk;
+ 	const char *info_name;
 
-So it may be better to move it to X86 specific code, arch/x86/util/tsc.c
+ 	struct completion start_done;
+@@ -310,15 +308,13 @@ static int adsp_init_clock(struct qcom_adsp *adsp)
+ 		return ret;
+ 	}
 
-> 
-> [1] https://github.com/intel/perfmon-metrics/blob/5ad9ef7056f31075e8178b9f1fb732af183b2c8d/SKX/metrics/perf/skx_metric_perf.json#L11
-> [2] https://github.com/trailofbits/tsc_freq_khz
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/expr.c | 15 +++++++++++++
->  tools/perf/util/expr.c  | 49 +++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 64 insertions(+)
-> 
-> diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-> index 5c0032fe93ae..45afe4f24859 100644
-> --- a/tools/perf/tests/expr.c
-> +++ b/tools/perf/tests/expr.c
-> @@ -1,8 +1,10 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include "util/debug.h"
->  #include "util/expr.h"
-> +#include "util/header.h"
->  #include "util/smt.h"
->  #include "tests.h"
-> +#include <math.h>
->  #include <stdlib.h>
->  #include <string.h>
->  #include <linux/zalloc.h>
-> @@ -69,6 +71,11 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
->  	double val, num_cpus, num_cores, num_dies, num_packages;
->  	int ret;
->  	struct expr_parse_ctx *ctx;
-> +	bool is_intel = false;
-> +	char buf[128];
-> +
-> +	if (!get_cpuid(buf, sizeof(buf)))
-> +		is_intel = strstr(buf, "Intel") != NULL;
->  
->  	TEST_ASSERT_EQUAL("ids_union", test_ids_union(), 0);
->  
-> @@ -175,6 +182,14 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
->  	if (num_dies) // Some platforms do not have CPU die support, for example s390
->  		TEST_ASSERT_VAL("#num_dies >= #num_packages", num_dies >= num_packages);
->  
-> +	if (is_intel) {
-> +		double system_tsc_freq;
-> +
-> +		TEST_ASSERT_VAL("#system_tsc_freq", expr__parse(&system_tsc_freq, ctx,
-> +								"#system_tsc_freq") == 0);
+-	if (adsp->has_aggre2_clk) {
+-		adsp->aggre2_clk = devm_clk_get(adsp->dev, "aggre2");
+-		if (IS_ERR(adsp->aggre2_clk)) {
+-			ret = PTR_ERR(adsp->aggre2_clk);
+-			if (ret != -EPROBE_DEFER)
+-				dev_err(adsp->dev,
+-					"failed to get aggre2 clock");
+-			return ret;
+-		}
++	adsp->aggre2_clk = devm_clk_get_optional(adsp->dev, "aggre2");
++	if (IS_ERR(adsp->aggre2_clk)) {
++		ret = PTR_ERR(adsp->aggre2_clk);
++		if (ret != -EPROBE_DEFER)
++			dev_err(adsp->dev,
++				"failed to get aggre2 clock");
++		return ret;
+ 	}
 
+ 	return 0;
+@@ -457,7 +453,6 @@ static int adsp_probe(struct platform_device *pdev)
+ 	adsp->rproc = rproc;
+ 	adsp->minidump_id = desc->minidump_id;
+ 	adsp->pas_id = desc->pas_id;
+-	adsp->has_aggre2_clk = desc->has_aggre2_clk;
+ 	adsp->info_name = desc->sysmon_name;
+ 	platform_set_drvdata(pdev, adsp);
 
-I think we should use arch_get_tsc_freq() to replace here.
-This belong to a separate patch.
+@@ -531,7 +526,6 @@ static const struct adsp_data adsp_resource_init = {
+ 		.crash_reason_smem = 423,
+ 		.firmware_name = "adsp.mdt",
+ 		.pas_id = 1,
+-		.has_aggre2_clk = false,
+ 		.auto_boot = true,
+ 		.ssr_name = "lpass",
+ 		.sysmon_name = "adsp",
+@@ -542,7 +536,6 @@ static const struct adsp_data sdm845_adsp_resource_init = {
+ 		.crash_reason_smem = 423,
+ 		.firmware_name = "adsp.mdt",
+ 		.pas_id = 1,
+-		.has_aggre2_clk = false,
+ 		.auto_boot = true,
+ 		.load_state = "adsp",
+ 		.ssr_name = "lpass",
+@@ -554,7 +547,6 @@ static const struct adsp_data sm6350_adsp_resource = {
+ 	.crash_reason_smem = 423,
+ 	.firmware_name = "adsp.mdt",
+ 	.pas_id = 1,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"lcx",
+@@ -571,7 +563,6 @@ static const struct adsp_data sm8150_adsp_resource = {
+ 		.crash_reason_smem = 423,
+ 		.firmware_name = "adsp.mdt",
+ 		.pas_id = 1,
+-		.has_aggre2_clk = false,
+ 		.auto_boot = true,
+ 		.proxy_pd_names = (char*[]){
+ 			"cx",
+@@ -587,7 +578,6 @@ static const struct adsp_data sm8250_adsp_resource = {
+ 	.crash_reason_smem = 423,
+ 	.firmware_name = "adsp.mdt",
+ 	.pas_id = 1,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"lcx",
+@@ -604,7 +594,6 @@ static const struct adsp_data sm8350_adsp_resource = {
+ 	.crash_reason_smem = 423,
+ 	.firmware_name = "adsp.mdt",
+ 	.pas_id = 1,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"lcx",
+@@ -621,7 +610,6 @@ static const struct adsp_data msm8996_adsp_resource = {
+ 		.crash_reason_smem = 423,
+ 		.firmware_name = "adsp.mdt",
+ 		.pas_id = 1,
+-		.has_aggre2_clk = false,
+ 		.auto_boot = true,
+ 		.proxy_pd_names = (char*[]){
+ 			"cx",
+@@ -636,7 +624,6 @@ static const struct adsp_data cdsp_resource_init = {
+ 	.crash_reason_smem = 601,
+ 	.firmware_name = "cdsp.mdt",
+ 	.pas_id = 18,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.ssr_name = "cdsp",
+ 	.sysmon_name = "cdsp",
+@@ -647,7 +634,6 @@ static const struct adsp_data sdm845_cdsp_resource_init = {
+ 	.crash_reason_smem = 601,
+ 	.firmware_name = "cdsp.mdt",
+ 	.pas_id = 18,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.load_state = "cdsp",
+ 	.ssr_name = "cdsp",
+@@ -659,7 +645,6 @@ static const struct adsp_data sm6350_cdsp_resource = {
+ 	.crash_reason_smem = 601,
+ 	.firmware_name = "cdsp.mdt",
+ 	.pas_id = 18,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"cx",
+@@ -676,7 +661,6 @@ static const struct adsp_data sm8150_cdsp_resource = {
+ 	.crash_reason_smem = 601,
+ 	.firmware_name = "cdsp.mdt",
+ 	.pas_id = 18,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"cx",
+@@ -692,7 +676,6 @@ static const struct adsp_data sm8250_cdsp_resource = {
+ 	.crash_reason_smem = 601,
+ 	.firmware_name = "cdsp.mdt",
+ 	.pas_id = 18,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"cx",
+@@ -708,7 +691,6 @@ static const struct adsp_data sc8280xp_nsp0_resource = {
+ 	.crash_reason_smem = 601,
+ 	.firmware_name = "cdsp.mdt",
+ 	.pas_id = 18,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"nsp",
+@@ -723,7 +705,6 @@ static const struct adsp_data sc8280xp_nsp1_resource = {
+ 	.crash_reason_smem = 633,
+ 	.firmware_name = "cdsp.mdt",
+ 	.pas_id = 30,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"nsp",
+@@ -738,7 +719,6 @@ static const struct adsp_data sm8350_cdsp_resource = {
+ 	.crash_reason_smem = 601,
+ 	.firmware_name = "cdsp.mdt",
+ 	.pas_id = 18,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"cx",
+@@ -756,7 +736,6 @@ static const struct adsp_data mpss_resource_init = {
+ 	.firmware_name = "modem.mdt",
+ 	.pas_id = 4,
+ 	.minidump_id = 3,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = false,
+ 	.proxy_pd_names = (char*[]){
+ 		"cx",
+@@ -773,7 +752,6 @@ static const struct adsp_data sc8180x_mpss_resource = {
+ 	.crash_reason_smem = 421,
+ 	.firmware_name = "modem.mdt",
+ 	.pas_id = 4,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = false,
+ 	.proxy_pd_names = (char*[]){
+ 		"cx",
+@@ -789,7 +767,6 @@ static const struct adsp_data slpi_resource_init = {
+ 		.crash_reason_smem = 424,
+ 		.firmware_name = "slpi.mdt",
+ 		.pas_id = 12,
+-		.has_aggre2_clk = true,
+ 		.auto_boot = true,
+ 		.proxy_pd_names = (char*[]){
+ 			"ssc_cx",
+@@ -804,7 +781,6 @@ static const struct adsp_data sm8150_slpi_resource = {
+ 		.crash_reason_smem = 424,
+ 		.firmware_name = "slpi.mdt",
+ 		.pas_id = 12,
+-		.has_aggre2_clk = false,
+ 		.auto_boot = true,
+ 		.proxy_pd_names = (char*[]){
+ 			"lcx",
+@@ -821,7 +797,6 @@ static const struct adsp_data sm8250_slpi_resource = {
+ 	.crash_reason_smem = 424,
+ 	.firmware_name = "slpi.mdt",
+ 	.pas_id = 12,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"lcx",
+@@ -838,7 +813,6 @@ static const struct adsp_data sm8350_slpi_resource = {
+ 	.crash_reason_smem = 424,
+ 	.firmware_name = "slpi.mdt",
+ 	.pas_id = 12,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"lcx",
+@@ -865,7 +839,6 @@ static const struct adsp_data sdx55_mpss_resource = {
+ 	.crash_reason_smem = 421,
+ 	.firmware_name = "modem.mdt",
+ 	.pas_id = 4,
+-	.has_aggre2_clk = false,
+ 	.auto_boot = true,
+ 	.proxy_pd_names = (char*[]){
+ 		"cx",
+--
+2.34.3
 
-
-Thanks,
-Kan
-> +		TEST_ASSERT_VAL("!isnan(#system_tsc_freq)", !isnan(system_tsc_freq));
-> +	}
-> +
->  	/*
->  	 * Source count returns the number of events aggregating in a leader
->  	 * event including the leader. Check parsing yields an id.
-> diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-> index 675f318ce7c1..4c81533e4b43 100644
-> --- a/tools/perf/util/expr.c
-> +++ b/tools/perf/util/expr.c
-> @@ -402,6 +402,50 @@ double expr_id_data__source_count(const struct expr_id_data *data)
->  	return data->val.source_count;
->  }
->  
-> +/*
-> + * Derive the TSC frequency in Hz from the /proc/cpuinfo, for example:
-> + * ...
-> + * model name      : Intel(R) Xeon(R) Gold 6154 CPU @ 3.00GHz
-> + * ...
-> + * will return 3000000000.
-> + */
-> +static double system_tsc_freq(void)
-> +{
-> +	static double result;
-> +	static bool computed;
-> +	FILE *cpuinfo;
-> +	char *line = NULL;
-> +	size_t len = 0;
-> +
-> +	if (computed)
-> +		return result;
-> +
-> +	computed = true;
-> +	result = NAN;
-> +	cpuinfo = fopen("/proc/cpuinfo", "r");
-> +	if (!cpuinfo) {
-> +		pr_err("Failed to read /proc/cpuinfo for TSC frequency");
-> +		return NAN;
-> +	}
-> +	while (getline(&line, &len, cpuinfo) > 0) {
-> +		if (!strncmp(line, "model name", 10)) {
-> +			char *pos = strstr(line + 11, " @ ");
-> +
-> +			if (pos && sscanf(pos, " @ %lfGHz", &result) == 1) {
-> +				result *= 1000000000;
-> +				goto out;
-> +			}
-> +		}
-> +	}
-> +out:
-> +	if (isnan(result))
-> +		pr_err("Failed to find TSC frequency in /proc/cpuinfo");
-> +
-> +	free(line);
-> +	fclose(cpuinfo);
-> +	return result;
-> +}
-> +
->  double expr__get_literal(const char *literal)
->  {
->  	static struct cpu_topology *topology;
-> @@ -417,6 +461,11 @@ double expr__get_literal(const char *literal)
->  		goto out;
->  	}
->  
-> +	if (!strcasecmp("#system_tsc_freq", literal)) {
-> +		result = system_tsc_freq();
-> +		goto out;
-> +	}
-> +
->  	/*
->  	 * Assume that topology strings are consistent, such as CPUs "0-1"
->  	 * wouldn't be listed as "0,1", and so after deduplication the number of

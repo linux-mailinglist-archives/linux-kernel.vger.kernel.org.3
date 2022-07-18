@@ -2,87 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28AC57849E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B535784AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235676AbiGRN7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S235682AbiGROC1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 18 Jul 2022 10:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235669AbiGRN7h (ORCPT
+        with ESMTP id S233142AbiGROCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:59:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C431FCEB;
-        Mon, 18 Jul 2022 06:59:37 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 04C2466015B2;
-        Mon, 18 Jul 2022 14:59:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658152775;
-        bh=k4xbc/KxSu0t1ZuCXLylgktrPrf4etvCU4uHHfVpdvo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MSQPo+QJyrJGPQjPwq4PVuS8usKOjr0hRhGugecZWIPQD4L6WP6UFPX1u7R6MyM0s
-         5a/lfRMZJBPiHj4UX2fDddUh/ZHOQuXBntdyOCBk+022s/FvtuzabMr0Aq7TYefGGj
-         +HuXnJyaotczIGt4rYxWtkEm8AXuktNB+5ro0QFHTyYLqkM3MbpluhVsz5QnMr/xU/
-         4oZtGAZjd7DLELZhXCjXy+PI/8i/r9faWKTV01ZZ9gWkfGwT20+IC0lkyXug5czaLI
-         0m7vZZmTSLQe26iSolOJMnjqMntteCkxFk26LPF/poT/Rv8opk3mMV0cUkVHiMq2Z5
-         7+5grMXlQU+ow==
-Message-ID: <b2439e75-88a3-5f04-5fe6-b53e8d5232a7@collabora.com>
-Date:   Mon, 18 Jul 2022 15:59:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: display: mediatek: dpi: add power-domains
- property
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        hsinyi@chromium.org, fparent@baylibre.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220718052217.29729-1-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220718052217.29729-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 10:02:25 -0400
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6121A13E8F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:02:23 -0700 (PDT)
+X-QQ-mid: bizesmtp89t1658152926t3mn2cfa
+Received: from smtpclient.apple ( [111.193.9.146])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 18 Jul 2022 22:02:05 +0800 (CST)
+X-QQ-SSF: 01400000002000B0V000B00A0000000
+X-QQ-FEAT: D6RqbDSxuq5xgiVzKotCrCzg2lhpBA/M9CkNTCFeKshpCf0niC8i016/BezUu
+        wVyw/wd8SnwuKY8vO1kksH/HrNXksmEI9repRvvu+UAxozVwKYD5Pl3v6qw4iTKtMr5oInX
+        q1FeaC7pOfkOe+R0zapigpx8q7eViSPdWsc+et7kLeBa3bOww2tR32BNQTpX++86YZOjDSd
+        HmNS8hdu/fLfeKAxb2SCkDHP21Puh1ZwxYhK0udH5hjhIC6UL3K/Qz/rQxBULAl5mFeFdTE
+        wpSIu2D++bsCouEHrYeTpOIe1Z3bVb4EwSs6ngxMr5Xer0eKJlrVzl301sVasrRtxxrMjyF
+        B0vFT3KpaNfGODtUAvxzNwwDOpJtaG0ma0lBNWrC89MtW0LPnnbG2OELL5dKT5C2kRiHA6R
+        1IEZj7iDj9g=
+X-QQ-GoodBg: 2
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
+From:   Yan Xinyu <sdlyyxy@bupt.edu.cn>
+In-Reply-To: <YtQuMJz+0MCxMAPk@arcor.de>
+Date:   Mon, 18 Jul 2022 22:02:04 +0800
+Cc:     johan@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <DA894279-AFBC-45A0-851B-3B6EDACB8581@bupt.edu.cn>
+References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
+ <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
+ <YtKrbucYNulPEKUp@arcor.de>
+ <333E5B85-7534-4CE5-8AB6-464571CBF61E@bupt.edu.cn>
+ <YtQuMJz+0MCxMAPk@arcor.de>
+To:     Reinhard Speyerer <rspmn@arcor.de>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign4
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/07/22 07:22, Allen-KH Cheng ha scritto:
-> DPI is part of the display / multimedia block in MediaTek SoCs
-> and is managed using power controller in some platforms. We add
-> the power-domains property to the binding documentation.
+> On Jul 17, 2022, at 23:48, Reinhard Speyerer <rspmn@arcor.de> wrote:
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Hi Yan,
+> 
+> On Sat, Jul 16, 2022 at 09:36:27PM +0800, sdlyyxy wrote:
+>> Hi Reinhard,
+>> 
+>>> On Jul 16, 2022, at 20:13, Reinhard Speyerer <rspmn@arcor.de> wrote:
+>>> 
+>>> On Fri, Jul 15, 2022 at 10:59:13PM +0800, sdlyyxy wrote:
+>>>> 
+>>>>> On Jul 15, 2022, at 22:24, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>>>>> 
+>>>>> The Oppo R11 diagnostic USB connection needs to be bound to the
+>>>>> usb-serial-simple driver as it just wants to use a dumb pipe to
+>>>>> communicate to the host.
+>>>>> 
+>>>>> usb-devices output:
+>>>>> T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
+>>>>> D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
+>>>>> P: Vendor=22d9 ProdID=276c Rev=04.04
+>>>>> S: Manufacturer=OPPO
+>>>>> S: Product=SDM660-MTP _SN:09C6BCA7
+>>>>> S: SerialNumber=beb2c403
+>>>>> C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
+>>>>> I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
+>>>>> 
+>>>>> Reported-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+>>>>> Cc: Johan Hovold <johan@kernel.org>
+>>>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>>> ---
+>>>>> drivers/usb/serial/usb-serial-simple.c | 4 +++-
+>>>>> 1 file changed, 3 insertions(+), 1 deletion(-)
+>>>>> 
+>>>>> diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+>>>>> index 4c6747889a19..eb832b94aa3a 100644
+>>>>> --- a/drivers/usb/serial/usb-serial-simple.c
+>>>>> +++ b/drivers/usb/serial/usb-serial-simple.c
+>>>>> @@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
+>>>>> 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
+>>>>> 					USB_CLASS_VENDOR_SPEC,	\
+>>>>> 					0x50,			\
+>>>>> -					0x01) }
+>>>>> +					0x01) },		\
+>>>>> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
+>>>>> +					0xff, 0xff, 0x30) }
+>>>>> DEVICE(google, GOOGLE_IDS);
+>>>>> 
+>>>>> /* Libtransistor USB console */
+>>>>> -- 
+>>>>> 2.37.1
+>>>> Tested-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+>>> 
+>>> While this may work sufficiently well for real low-volume diag traffic I'd
+>>> expect a significant percentage of diag messages to be lost in practice
+>>> with the usb-serial-simple driver.
+>>> 
+>>> According to the usb-devices output this looks like the Qualcomm USB gadget
+>>> in the DIAG + ADB composition to me.
+>>> 
+>>> Since the option driver uses the usb-wwan framework my suggestion would be
+>>> for the original patch to be applied instead similar to what has been done
+>>> e.g. for the Quectel RM500Q diag port.
+>>> 
+>>> Regards,
+>>> Reinhard
+>>> 
+>> I tested the diag port using two userspace programs: QCSuper[1] 
+>> and scat[2]. Both option and usb-serial-simple drivers generate
+>> similar output, so I cannot comfirm diag message loss. Do you
+>> have any test method suggestions to generate high-volume diag 
+>> traffic and detect message loss?
+>> 
+> 
+> in my experience activating all message logs on the device with a
+> mask value like 0xf or 0x1f is a good way to generate more diag traffic.
+> Please refer to https://source.codeaurora.org/quic/imm/imm/sources/diag
+> (DIAG_CMD_OP_SET_ALL_MSG_MASK) for details.
+> 
+> Regards,
+> Reinhard
+> 
 
-For the contents of this commit:
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-
-...but I'm not sure whether this one requires a Fixes tag (because, effectively,
-the DPI hardware *requires* that power domain to get up) - and if it does,
-which commit to reference: the first commit for this file is a TXT->schema
-conversion, but the TXT didn't have power-domains as well.
-
-
+Thank you very much for your advice! I'll try to understand the diag
+protocol and experiment with different USB drivers to figure out their
+difference :)
 
 Regards,
-Angelo
+sdlyyxy
+
+
+

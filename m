@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A5F5786F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBC15786F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235367AbiGRQGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S235610AbiGRQHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234822AbiGRQGd (ORCPT
+        with ESMTP id S235603AbiGRQHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:06:33 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E7019C2B;
-        Mon, 18 Jul 2022 09:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=W/h2DA8cfEG16WKUgNpJElu4U35pORu6Lpisgp/aztg=; b=QLN6WX2qBSYbabOQyYw4ip+w6g
-        7r+HEHPGop9B4DUJzTW8luJJgMAeQpgv4CYSDE8/MUr03o3lppKVSnGpqO5y7NTAEYI/cm25r4NVg
-        3nH3lnbQ+Ptnz/KkOoQw+y6U47QXpESbK34xTHJwOigwLN6/2WK2UATYKkd8b2w38UmmWzhu03NY0
-        QLq9TscLbgSVFuEh71JUputnS/98gE1EXF4Uw+eBjIvBXHVv0UvKJZfAffXfOUnQOB0ZVErrkxJC7
-        3ZTO32hTTUEPvKWgfhjNA7GwY2Syn6ROYIFeboIDs9p6AXvCBtb/EpbLESPC7Uo6y0dwHC54d9Q5l
-        kH0jMfBw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33416)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oDTGN-0001nK-7M; Mon, 18 Jul 2022 17:06:27 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oDTGL-000253-Bw; Mon, 18 Jul 2022 17:06:25 +0100
-Date:   Mon, 18 Jul 2022 17:06:25 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [PATCH net-next v3 08/47] net: phylink: Support differing link
- speeds and interface speeds
-Message-ID: <YtWFAfu1nSE6vCfx@shell.armlinux.org.uk>
-References: <20220715215954.1449214-1-sean.anderson@seco.com>
- <20220715215954.1449214-9-sean.anderson@seco.com>
- <YtMaKWZyC/lgAQ0i@lunn.ch>
+        Mon, 18 Jul 2022 12:07:02 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687E92A710;
+        Mon, 18 Jul 2022 09:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658160421; x=1689696421;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BGMaJTElQp6haGmkH8rT8RsSQevkIPle8322hFlFuJg=;
+  b=aKOP8/gklL+5oQX4jxLl9VSJCrY2ECVl9OT4mukzlfyt76kOv7TtGMqt
+   81Jt2hlaCS4O5KE8jF93/OY3T1edR8PxWJhLVy1OiLviglfQhXjreO9E1
+   k1cZNcM8bo0SufhVWZV+48FXc+B5gFbwvUDS48T2mh8Yy2CxJA/rSW0qD
+   aubJcbZeueG0LEnVXyqsQ0GtCNxO8zIIq6hWVwImybzM9La06EMMuWdy1
+   5xMvxpu+ACpB/qN5UA9AZEMgu+4M9lwJyLij8rZh4J2gg4mb0WLfKULk6
+   jXVactYuoBSBvyqS4oAKBliShTuGV8CIVQN6IvHZouT7Cyfa8szr0Ja4L
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="347947883"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="347947883"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 09:06:36 -0700
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="655347466"
+Received: from maurocar-mobl2.ger.corp.intel.com (HELO maurocar-mobl2) ([10.249.35.85])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 09:06:33 -0700
+Date:   Mon, 18 Jul 2022 18:06:30 +0200
+From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas =?UTF-8?B?SGVsbHN0?= =?UTF-8?B?csO2bQ==?= 
+        <thomas.hellstrom@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Dave Airlie <airlied@redhat.com>, stable@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org
+Subject: Re: [Intel-gfx] [PATCH v2 05/21] drm/i915/gt: Skip TLB
+ invalidations once wedged
+Message-ID: <20220718180630.7bef2fd9@maurocar-mobl2>
+In-Reply-To: <d51882e0-6864-7a49-ae16-f7213dc716c4@linux.intel.com>
+References: <cover.1657800199.git.mchehab@kernel.org>
+        <f20bd21c94610dae59824b8040e5a9400de6f963.1657800199.git.mchehab@kernel.org>
+        <d51882e0-6864-7a49-ae16-f7213dc716c4@linux.intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtMaKWZyC/lgAQ0i@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 10:06:01PM +0200, Andrew Lunn wrote:
-> This seem error prone when new PHY_INTERFACE_MODES are added. I would
-> prefer a WARN_ON_ONCE() in the default: so we get to know about such
-> problems.
+On Mon, 18 Jul 2022 14:45:22 +0100
+Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
+
+> On 14/07/2022 13:06, Mauro Carvalho Chehab wrote:
+> > From: Chris Wilson <chris.p.wilson@intel.com>
+> > 
+> > Skip all further TLB invalidations once the device is wedged and
+> > had been reset, as, on such cases, it can no longer process instructions
+> > on the GPU and the user no longer has access to the TLB's in each engine.
+> > 
+> > That helps to reduce the performance regression introduced by TLB
+> > invalidate logic.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")  
 > 
-> I'm also wondering if we need a sanity check here. I've seen quite a
-> few boards a Fast Ethernet MAC, but a 1G PHY because they are
-> cheap. In such cases, the MAC is supposed to call phy_set_max_speed()
-> to indicate it can only do 100Mbs. PHY_INTERFACE_MODE_MII but a
-> link_speed of 1G is clearly wrong. Are there other cases where we
-> could have a link speed faster than what the interface mode allows?
+> Is the claim of a performance regression this solved based on a wedged 
+> GPU which does not work any more to the extend where mmio tlb 
+> invalidation requests keep timing out? If so please clarify in the 
+> commit text and then it looks good to me. Even if it is IMO a very 
+> borderline situation to declare something a fix.
 
-Currently, phylink will deal with that situation - the MAC will report
-that it only supports 10/100, and when the PHY is brought up, the
-supported/advertisement masks will be restricted to those speeds.
+Indeed this helps on a borderline situation: if GT is wedged, TLB 
+invalidation will timeout, so it makes sense to keep the patch with a
+comment like:
 
-> Bike shedding a bit, but would it be better to use host_side_speed and
-> line_side_speed? When you say link_speed, which link are your
-> referring to? Since we are talking about the different sides of the
-> PHY doing different speeds, the naming does need to be clear.
+    drm/i915/gt: Skip TLB invalidations once wedged
+    
+    Skip all further TLB invalidations once the device is wedged and
+    had been reset, as, on such cases, it can no longer process instructions
+    on the GPU and the user no longer has access to the TLB's in each engine.
+    
+    So, an attempt to do a TLB cache invalidation will produce a timeout.
+    
+    That helps to reduce the performance regression introduced by TLB
+    invalidate logic.
 
-Yes, we definitely need that clarification.
-
-I am rather worried that we have drivers using ->speed today in their
-mac_config and we're redefining what that means in this patch. Also,
-the value that we pass to the *_link_up() calls appears to be the
-phy <-> (pcs|mac) speed not the media speed. It's also ->speed and
-->duplex that we report to the user in the "Link is Up" message,
-which will be confusing if it always says 10G despite the media link
-being e.g. 100M.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Regards,
+Mauro

@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205C557803F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D7C57804A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbiGRKv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
+        id S233943AbiGRKzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbiGRKv5 (ORCPT
+        with ESMTP id S232964AbiGRKzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:51:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D33C205DD;
-        Mon, 18 Jul 2022 03:51:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2EA0B81120;
-        Mon, 18 Jul 2022 10:51:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B46FEC341C0;
-        Mon, 18 Jul 2022 10:51:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658141513;
-        bh=cM3t1S+fqufj5ZWZu24Lh26z1hT79BU+gKX4fdAZaoQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I+RuqFA/KVkZTcitvJfH2RzsNdutbTwgH63ePE1wr86fjldlvlzJIhHFMaYt5R2L7
-         92jtvKrsr7miLQLzypjaDFu6VK/dWY5/aE3xTb/h0WOUOiYMTADGiXC2mN/yLJh4QM
-         ohCX877+kEr2BfCcgfJMv00sJHvTXJY3hggHWD3XxTBKOqHqKt5pwbo3OfLThNk4Dm
-         rOlUu+6xxWJZNY+l2tEs6yi4DKuHrR6UI0PgIL7iuVSy5Nav4cUgQnUumgAiH3AH8j
-         ykwlUbuvL6kf26gblyGt6EiRncOXjCgPzzFYgUB7WhWhoBQYUnQQ4kZMk+giRAh5m2
-         JFwHzU7DVmTdQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oDOLq-0005F6-Gz; Mon, 18 Jul 2022 12:51:47 +0200
-Date:   Mon, 18 Jul 2022 12:51:46 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Stanimir Varbanov <svarbanov@mm-sol.com>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] PCI: qcom: Add support for SC8280XP and SA8540P
-Message-ID: <YtU7QpjK60cG1yCp@hovoldconsulting.com>
-References: <20220714071348.6792-1-johan+linaro@kernel.org>
- <aa11b2ec-7196-7423-151c-1797966d0cd2@mm-sol.com>
- <YtUzY9eYM0uhT3jj@hovoldconsulting.com>
+        Mon, 18 Jul 2022 06:55:07 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5F8DF60
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:55:05 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id w17so13120316ljh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=65axDZrjnZBXcWUayw3QWyz90285gEottBlBhu/SSjw=;
+        b=KOV72CPlJAzzABIbu0WidxJcA9FDNi+RPjMmY1JwIFq4HWTsbk1pXpuOMx8vfFC+2m
+         ETOgPopA64TUimrM7ZNTmR5Zc+A6vS0qMSiH92/pZqRqflnU/WfrbQkXeDlZgQBeFtZW
+         nRBbOmODI3dwNDqiCcbmH4nQFTsrEJ+mzCzdRM2a2dbEraNpUnm8aVzx39RdHoOnHA0z
+         iSkafeqeEamKXA1cH65YNaoC3g0DWok1l5JymZNgHGDH3ftqDjUB7c19BGtMqTXy0MsH
+         3N31glBP054j3nBIVo1tqDAnVf2e09+xu6xMHzXJg4WaauY8Lfm7ZbW32ku2bLqK7IBh
+         2iBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=65axDZrjnZBXcWUayw3QWyz90285gEottBlBhu/SSjw=;
+        b=3X1GFJPRVoSgUu9z9Mgial0dhtBP2U62h/3DN3iaL5piDd0W+UBPbtenk6dP47AH81
+         XVmUkj6c6F6debDkWlFNPUDizGLHAPV5m3J/FRRh1AuCDbJUoZrxIq9HnCpCOCocOzcI
+         VYkP/YekONDRPSVxHjHBdHO/snpw+pTuHHqAAYFO2lYW3Zi9+ApkYQhAg5FuXAcNBNDI
+         2GWFwVrOjjfthy8Mig9EjEG12E4HZqS3gC26bkFwwYQLXnk3ybKPhOhlxkIAtANr+5EI
+         FKsFFkZ8bkTPjcpL13hZTBGJgfd7UFxUvLmLeZh/J7m5xY1DbQQZXUReqc9sj87iPZbh
+         CABw==
+X-Gm-Message-State: AJIora89+liqyNS8TPszdc2OGZv5BftjTXNKqdv1nuQcRro/SdWRup19
+        AgPgzu5OlSNwRfc0ULeC1T7WvJhxVcE5PGbturmbJw==
+X-Google-Smtp-Source: AGRyM1tvOUNdvPqHOEw1A9rLm7e4DBk5vbwRTdNKP1qGAo/AUT5hGNImOjZ4ODG65HsAHFNOTdXmh64ni2qNbjiPU3E=
+X-Received: by 2002:a2e:9b0e:0:b0:25d:9ded:7b4f with SMTP id
+ u14-20020a2e9b0e000000b0025d9ded7b4fmr8786108lji.4.1658141703976; Mon, 18 Jul
+ 2022 03:55:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtUzY9eYM0uhT3jj@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
+In-Reply-To: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 18 Jul 2022 12:54:27 +0200
+Message-ID: <CAPDyKFr0Lnp_3rUWcdZMcgtcFW050hOiGVZV_bVu=pqCLE8dEw@mail.gmail.com>
+Subject: Re: [PATCH v2] power: domain: handle power supplies that need interrupts
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
+        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,34 +70,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:18:11PM +0200, Johan Hovold wrote:
-> On Mon, Jul 18, 2022 at 10:49:40AM +0300, Stanimir Varbanov wrote:
-> > Hi Johan,
-> > 
-> > Thank you for your work, especially for for the last three patches ;-)
-> > 
-> > On 7/14/22 10:13, Johan Hovold wrote:
-> > > This series adds support for the PCIe controllers found on SC8280XP and
-> > > SA8540P.
-> > > 
-> > > Included are also three patches that clean up the way the driver handles
-> > > different IP revisions (e.g. by modelling optional clocks as being truly
-> > > optional).
-> 
-> > For the whole set:
-> > 
-> > Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
-> 
-> Thanks for the ack.
-> 
-> Could you take a look at Dmitry's MSI series that this series depends on
-> as well?
-> 
-> I saw you acking the binding, but not the rest of the series it seems:
-> 
-> 	https://lore.kernel.org/all/3f9e1c18-bc61-8690-5427-ba8dc5fad7ad@mm-sol.com/
+On Tue, 12 Jul 2022 at 14:19, Martin Kepplinger
+<martin.kepplinger@puri.sm> wrote:
+>
+> If the power-domains' power-supply node (regulator) needs
+> interrupts to work, the current setup with noirq callbacks cannot
+> work; for example a pmic regulator on i2c, when suspending, usually already
+> times out during suspend_noirq:
+>
+> [   41.024193] buck4: failed to disable: -ETIMEDOUT
+>
+> So fix system suspend and resume for these power-domains by using the
+> "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5
+> board, but by looking at the dts, this will fix imx8mq-evk and possibly
+> other boards too.
+>
+> Possibly one can find more changes than suspend/resume for this case. They
+> can be added later when testing them.
+>
+> Initially system suspend problems had been discussed at
+> https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
+> which led to discussing the pmic that contains the regulators which
+> serve as power-domain power-supplies:
+> https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+>
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>
+> revision history
+> ----------------
+> v2: (thank you Krzysztof)
+> * rewrite: find possible regulators' interrupts property in parents
+>   instead of inventing a new property.
+>
+> v1: (initial idea)
+> https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
+>
+>
+>  drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 3e86772d5fac..ca3e3500939d 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2298,6 +2298,28 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
+>         return ret;
+>  }
+>
+> +/**
+> + * of_genpd_get_power_supply_irq() - Adjust if power-supply needs interrupts
+> + * @genpd: Pointer to PM domain associated with the PM domain provider.
+> + */
+> +static void of_genpd_get_power_supply_irq(struct generic_pm_domain *pd)
+> +{
+> +       struct device_node *dn;
+> +
+> +       dn = of_parse_phandle(pd->dev.of_node, "power-supply", 0);
+> +       if (!dn)
+> +               return;
+> +
+> +       while ((dn = of_get_next_parent(dn))) {
+> +               if (of_get_property(dn, "interrupts", NULL)) {
+> +                       pd->domain.ops.suspend = genpd_suspend_noirq;
+> +                       pd->domain.ops.resume = genpd_resume_noirq;
+> +                       pd->domain.ops.suspend_noirq = NULL;
+> +                       pd->domain.ops.resume_noirq = NULL;
+> +               }
+> +       }
+> +}
+> +
+>  /**
+>   * of_genpd_add_provider_simple() - Register a simple PM domain provider
+>   * @np: Device node pointer associated with the PM domain provider.
+> @@ -2343,6 +2365,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
+>         genpd->provider = &np->fwnode;
+>         genpd->has_provider = true;
+>
+> +       of_genpd_get_power_supply_irq(genpd);
+> +
+>         return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
+> @@ -2394,6 +2418,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+>
+>                 genpd->provider = &np->fwnode;
+>                 genpd->has_provider = true;
+> +
+> +               of_genpd_get_power_supply_irq(genpd);
+>         }
+>
+>         ret = genpd_add_provider(np, data->xlate, data);
 
-Of course you only acked the single patched that touched the Qualcomm
-driver. Sorry about the noise.
+Overall I understand the need for this, but let me suggest a slightly
+different approach to solve this. See below.
 
-Johan
+I think the OF parsing looks quite platform specific. Rather than
+adding this in the generic layer of genpd, I suggest that we move the
+OF parsing into the genpd provider code.
+
+Moreover, to inform genpd that it should use the other set of
+callbacks for system suspend/resume, let's add a new genpd
+configuration bit. The genpd provider should then set the genpd->flag,
+prior to calling pm_genpd_init(), to let it know that it should pick
+the other callbacks.
+
+Does it make sense?
+
+Kind regards
+Uffe

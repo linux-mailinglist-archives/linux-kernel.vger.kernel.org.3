@@ -2,128 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754B7578CAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9D5578CBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234667AbiGRV0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
+        id S234946AbiGRVbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233216AbiGRV0T (ORCPT
+        with ESMTP id S232002AbiGRVbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:26:19 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47442F011;
-        Mon, 18 Jul 2022 14:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1658179578; x=1689715578;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4RlVufiXTHzC4WPLNtwom5sZQqrDoICj4LD/vo1jP8Y=;
-  b=UVQ62QVowMISA1vuuJe3dy8L+yymAzL65HSpvrSoX6LpPcOCo6Lcn3gw
-   2Lg4KlV/7gJKIhPP8BCHjguTzsFOcNKyfAE3NB1QxpSJq/qUPAm6Kpish
-   NNR+E1W81FSRX6jhYrpacsF/AsdU3d5qNetQcayenNa3a4eAyLxZGdS7M
-   zJ00khBmHAgC+pQUsCfAVRvv1+TAfBFpb5rRUE0Dzdlp9oQDp0h2mo1EP
-   k3blxkRyUn2V9gEMX7nPuoIP6umTLRMDIuiH+1laHLxplScY/0rYm1+kJ
-   s8Io1ZGnWRAXkP5MnAp1OHleYldsCRBdbE1hv/l2RGILqlKXUYaXaYftc
-   w==;
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="105020709"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Jul 2022 14:26:17 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 18 Jul 2022 14:26:13 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 18 Jul 2022 14:26:11 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <maxime.chevallier@bootlin.com>,
-        "Horatiu Vultur" <horatiu.vultur@microchip.com>
-Subject: [PATCH 3/3] ARM: dts: lan966x: Enable network driver on pcb8291
-Date:   Mon, 18 Jul 2022 23:29:21 +0200
-Message-ID: <20220718212921.1506984-4-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220718212921.1506984-1-horatiu.vultur@microchip.com>
-References: <20220718212921.1506984-1-horatiu.vultur@microchip.com>
+        Mon, 18 Jul 2022 17:31:15 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D4E29CA5;
+        Mon, 18 Jul 2022 14:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Vc3qso9ymLtA66nsgaSk3Fy1snAD6uHt7i9HTlSHNiE=; b=EkBE3hq6xruIeTN5pEWtycoPia
+        nTHhukDaToLTtOiyz5ifrYaL/pk2PEsOqtxeu/aJZ2V2cSPXMTmolnSS8WPs5A2KV5yTVPnrrZ1EN
+        vOw0TUxhvDeRjpE1mx/2K3fMGW84q5XAjOK5+M7rdK7bROK809nD43PZ3epjvCcNnwPTVXcvbsDu8
+        u1S71EsomcWjaM9RrRzbyUezQioixsfbADKuWHNK1IwJGl3YizTAxUeifKpU6slDevnkbBMuu5SHS
+        RQ6jCJo4M1vU85mqk4SFqv/uBiBRg8NE95nkeb0lHBIjEFKa1XB5sqocejkiCQ5PzK8hi8vOtZxSi
+        PBFnLfzQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDYJz-004uBp-SO; Mon, 18 Jul 2022 21:30:32 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 783B49802A7; Mon, 18 Jul 2022 23:30:31 +0200 (CEST)
+Date:   Mon, 18 Jul 2022 23:30:31 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Mel Gorman <mgorman@suse.de>, Miroslav Benes <mbenes@suse.cz>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Song Liu <songliubraving@fb.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
+        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 09/16] irq: don't copy cpu affinity mask if source is
+ equal to destination
+Message-ID: <YtXQ96UAA4GINTNU@worktop.programming.kicks-ass.net>
+References: <20220718192844.1805158-1-yury.norov@gmail.com>
+ <20220718192844.1805158-10-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718192844.1805158-10-yury.norov@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pcb8291 has 2 ports that are connected to the internal ports of the
-switch. Enable them in DT.
+On Mon, Jul 18, 2022 at 12:28:37PM -0700, Yury Norov wrote:
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- arch/arm/boot/dts/lan966x-pcb8291.dts | 35 +++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+>  kernel/irq/manage.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+> index 8c396319d5ac..f9c1b21584ec 100644
+> --- a/kernel/irq/manage.c
+> +++ b/kernel/irq/manage.c
+> @@ -284,7 +284,8 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask,
+>  	switch (ret) {
+>  	case IRQ_SET_MASK_OK:
+>  	case IRQ_SET_MASK_OK_DONE:
+> -		cpumask_copy(desc->irq_common_data.affinity, mask);
+> +		if (desc->irq_common_data.affinity != mask)
+> +			cpumask_copy(desc->irq_common_data.affinity, mask);
 
-diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
-index 2cb532aa33f0..d890e6fcdbae 100644
---- a/arch/arm/boot/dts/lan966x-pcb8291.dts
-+++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
-@@ -4,6 +4,7 @@
-  */
- /dts-v1/;
- #include "lan966x.dtsi"
-+#include "dt-bindings/phy/phy-lan966x-serdes.h"
- 
- / {
- 	model = "Microchip EVB - LAN9662";
-@@ -32,6 +33,40 @@ fc3_b_pins: fc3-b-pins {
- 	};
- };
- 
-+&mdio1 {
-+	status = "okay";
-+};
-+
-+&phy0 {
-+	status = "okay";
-+};
-+
-+&phy1 {
-+	status = "okay";
-+};
-+
-+&switch {
-+	status = "okay";
-+};
-+
-+&serdes {
-+	status = "okay";
-+};
-+
-+&port0 {
-+	status = "okay";
-+	phy-handle = <&phy0>;
-+	phy-mode = "gmii";
-+	phys = <&serdes 0 CU(0)>;
-+};
-+
-+&port1 {
-+	status = "okay";
-+	phy-handle = <&phy1>;
-+	phy-mode = "gmii";
-+	phys = <&serdes 1 CU(1)>;
-+};
-+
- &flx3 {
- 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
- 	status = "okay";
--- 
-2.33.0
+Seems like mostly pointless logic at this point. This is not a
+performance senstive operation afaik.
 
+>  		fallthrough;
+>  	case IRQ_SET_MASK_OK_NOCOPY:
+>  		irq_validate_effective_affinity(data);
+> -- 
+> 2.34.1
+> 

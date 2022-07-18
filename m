@@ -2,84 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69806577E69
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39987577E6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbiGRJNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
+        id S233983AbiGRJOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiGRJNj (ORCPT
+        with ESMTP id S231128AbiGRJOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:13:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23B605F59
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658135617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4YHQhKuUA0qrCJAM8mGzKA3vSJV63FUpFph/DNHn0yI=;
-        b=OlNWX8jDvNZcDMyEdyByJ+X/kWiSSORvqyyTn3iSZSUgI2GPZ21155EcF81/IXhhssMlD5
-        k1v1zC0StlYosqQQQI3U2t3tAMbiEE3T/uIcvCxDK1+E1XF2E7/Y+oUVEE3BZ46tyfEGzZ
-        L5wpzIYR/uHl+6ZbW2sTLEaTdrE93+M=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-151-lkiALlK2Ph6HWy4GpZUZ3w-1; Mon, 18 Jul 2022 05:13:35 -0400
-X-MC-Unique: lkiALlK2Ph6HWy4GpZUZ3w-1
-Received: by mail-wm1-f72.google.com with SMTP id m10-20020a7bcb8a000000b003a2d979099cso4011341wmi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:13:35 -0700 (PDT)
+        Mon, 18 Jul 2022 05:14:16 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36491F586
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:14:15 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id os14so20072501ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WUeHNrPcbgcPWPwewb02SjJEm6kE+JIMReuJUoqG3iw=;
+        b=OAFJy8YpvX9OS2BoMivpYxPDEwgfR7xFkOLlZ7QS04TtulbnmOCbl6ehuOOmtKAfGH
+         k8j5+jIpmOWVytXhdX/JTpwBaMFKxL7QCJwC0xGFibHt2lH3EwwoWSD5Yw+jG0NvnTTF
+         xSX3pUWMWH9T76V9D1sgEVMtZC5oGDwIDcIrg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4YHQhKuUA0qrCJAM8mGzKA3vSJV63FUpFph/DNHn0yI=;
-        b=57Rclnwg+9LnSlOPzWsGoarV+o1c75hWsr4qyd93QG1AScw28DaRtc7TsQDTstqbM4
-         BUuLISpVn76T+856KOvTfurLhWMtdyd8OVqeDfsCFPA89IIwnTeDJiFX1EcIMaNEhROw
-         FEP1VZS1qQutP6RdrtuwNUuZjrw1UcZ3cysQwok+fBikw9h7gOHF7ttqQkkIHkRrqkP1
-         6j8JGSbA1lq8YSZCCb7IUFQUjV+llcSYEDIFLTs8OBkfg/PtktX7XFOMACuUcrkSbZU8
-         7pNw/Pktol17CxqUjFGoMJB7Enx8eE9hOZD/1bX5E0GsZQ7XVHhFP35AJslsjHisTErc
-         9uug==
-X-Gm-Message-State: AJIora9gb4PNN+66WdAfnxTunJcTQB+zfSElysnmlPUcEIUyjeMLfzOU
-        4TWaAlouH7Z8t+cKhzyG7si7gMz5bm9faes9xLOrTSyeVaQ6Gy9nS+LzxNAZrfxhyGZYmO9VBVY
-        8P8Zo4+NJbrG8tJRAoXEsQYHm
-X-Received: by 2002:a5d:4608:0:b0:21d:a5b4:20a2 with SMTP id t8-20020a5d4608000000b0021da5b420a2mr22836798wrq.276.1658135614606;
-        Mon, 18 Jul 2022 02:13:34 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sY83c0sHrS2e/KcEsqINyTA830XmFnkM/jxp3KNTu3FfpHmVEOdL2BvxlQ9J3l/YdhyW/QNQ==
-X-Received: by 2002:a5d:4608:0:b0:21d:a5b4:20a2 with SMTP id t8-20020a5d4608000000b0021da5b420a2mr22836776wrq.276.1658135614382;
-        Mon, 18 Jul 2022 02:13:34 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p9-20020a05600c358900b003a319bd3278sm4261037wmq.40.2022.07.18.02.13.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 02:13:33 -0700 (PDT)
-Message-ID: <51214426-a893-cac3-b984-97688838c896@redhat.com>
-Date:   Mon, 18 Jul 2022 11:13:32 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WUeHNrPcbgcPWPwewb02SjJEm6kE+JIMReuJUoqG3iw=;
+        b=0WVZEiTP3ZfHag7Xbqz9SbqdSb+T8x/2GFLVVrtoLM2mBxhgVg0VeyZvxXad2aS6Et
+         N6m7/VhEqZl1FZXqFNtV8+g5DO6cFuw2OYL8UFjMpFaZsFHkT/wVYX+sVOOwK2nHo4Ro
+         K+zNS6p7b2FrogOjq77PjrXMMM87lQgp5OaMpd4K3SQ1vymI02ieCO+DV62YjrhJjUMm
+         iGxOQ3m90qPoO3gb8DBPLESw+pWQ8EwKHaFPn0rk3Y7mfmO71/B3wyeNmXvK4Cv+5pHT
+         nJSW0YVHgXPGbLi1wDVhPBYu+pyr4VrndeRD3u4OGAtLrUTYLb6Y7VuJSxZk0Yj0NIbC
+         qeHg==
+X-Gm-Message-State: AJIora/5p8fLfs3HcUGx4nh7uD7UAeXKfS5q2NOQi/rF3YOV/gOCO/QA
+        EwVYTe0hVhEw00AgHj8gVTCaQXzmN9iiExbgurKlrRogQo2z8A==
+X-Google-Smtp-Source: AGRyM1tei5MOBwBW/httC+ufQ7v+Wagvm+SjEH8CT3A2BsT0RpKzd+k3XZ9vyt0tQIRANwiS9CXfcihWKeACkCBzfiE=
+X-Received: by 2002:a17:907:2855:b0:72b:700e:21eb with SMTP id
+ el21-20020a170907285500b0072b700e21ebmr24974561ejc.270.1658135653827; Mon, 18
+ Jul 2022 02:14:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/ssd130x: Use new regmap bulk write support to drop
- custom bus
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Marek Vasut <marex@denx.de>, David Airlie <airlied@linux.ie>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-References: <20220618174338.2253021-1-javierm@redhat.com>
- <YrYSd5x1JKJJeklJ@ravnborg.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YrYSd5x1JKJJeklJ@ravnborg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
+In-Reply-To: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Mon, 18 Jul 2022 11:14:02 +0200
+Message-ID: <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
+Subject: Re: [PATCH] ovl: Handle ENOSYS when fileattr support is missing in
+ lower/upper fs
+To:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000a2f11305e410ca32"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,36 +64,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sam,
+--000000000000a2f11305e410ca32
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/24/22 21:37, Sam Ravnborg wrote:
-> Hi Javier,
-> 
-> On Sat, Jun 18, 2022 at 07:43:38PM +0200, Javier Martinez Canillas wrote:
->> Data writes for the ssd130x 4-wire SPI protocol need special handling, due
->> the Data/Command control (D/C) pin having to be toggled prior to the write.
->>
->> The regmap API only allowed drivers to provide .reg_{read,write} callbacks
->> to do per register read/write, but didn't provide a way for drivers to do
->> the same for bulk read/writes.
->>
->> For this reason, a custom regmap bus was used by the driver just to define
->> a bulk write callback that implements the D/C pin toggling. But the regmap
->> API has been extended to support defining bulk read/write handlers, so the
->> custom regmap bus is not needed anymore and could just be dropped.
->>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Patch looks good, but obviously needs the dependencies sorted out.
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+On Mon, 4 Jul 2022 at 20:36, Christian Kohlsch=C3=BCtter
+<christian@kohlschutter.com> wrote:
 >
+> overlayfs may fail to complete updates when a filesystem lacks
+> fileattr/xattr syscall support and responds with an ENOSYS error code,
+> resulting in an unexpected "Function not implemented" error.
 
-Thanks. The regmap fixes that were the dependencies landed in v5.19-rc4
-and drm-misc-next is already at v5.19-rc6, so I'll push this patch now.
+Issue seems to be with fuse: nothing should be returning ENOSYS to
+userspace except the syscall lookup code itself.  ENOSYS means that
+the syscall does not exist.
 
--- 
-Best regards,
+Fuse uses ENOSYS in the protocol to indicate that the filesystem does
+not support that operation, but that's not the value that the
+filesystem should be returning to userspace.
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+The getxattr/setxattr implementations already translate ENOSYS to
+EOPNOTSUPP, but ioctl doesn't.
 
+The attached patch (untested) should do this.   Can you please give it a tr=
+y?
+
+Thanks,
+Miklos
+
+--000000000000a2f11305e410ca32
+Content-Type: text/x-patch; charset="US-ASCII"; name="fuse-ioctl-translate-enosys.patch"
+Content-Disposition: attachment; 
+	filename="fuse-ioctl-translate-enosys.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l5qj3i030>
+X-Attachment-Id: f_l5qj3i030
+
+LS0tCiBmcy9mdXNlL2lvY3RsLmMgfCAgIDE1ICsrKysrKysrKysrKystLQogMSBmaWxlIGNoYW5n
+ZWQsIDEzIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgotLS0gYS9mcy9mdXNlL2lvY3Rs
+LmMKKysrIGIvZnMvZnVzZS9pb2N0bC5jCkBAIC05LDYgKzksMTcgQEAKICNpbmNsdWRlIDxsaW51
+eC9jb21wYXQuaD4KICNpbmNsdWRlIDxsaW51eC9maWxlYXR0ci5oPgogCitzdGF0aWMgc3NpemVf
+dCBmdXNlX3NlbmRfaW9jdGwoc3RydWN0IGZ1c2VfbW91bnQgKmZtLCBzdHJ1Y3QgZnVzZV9hcmdz
+ICphcmdzKQoreworCXNzaXplX3QgcmV0ID0gZnVzZV9zaW1wbGVfcmVxdWVzdChmbSwgYXJncyk7
+CisKKwkvKiBUcmFuc2xhdGUgRU5PU1lTLCB3aGljaCBzaG91bGRuJ3QgYmUgcmV0dXJuZWQgZnJv
+bSBmcyAqLworCWlmIChyZXQgPT0gLUVOT1NZUykKKwkJcmV0ID0gLUVOT1RUWTsKKworCXJldHVy
+biByZXQ7Cit9CisKIC8qCiAgKiBDVVNFIHNlcnZlcnMgY29tcGlsZWQgb24gMzJiaXQgYnJva2Ug
+b24gNjRiaXQga2VybmVscyBiZWNhdXNlIHRoZQogICogQUJJIHdhcyBkZWZpbmVkIHRvIGJlICdz
+dHJ1Y3QgaW92ZWMnIHdoaWNoIGlzIGRpZmZlcmVudCBvbiAzMmJpdApAQCAtMjU5LDcgKzI3MCw3
+IEBAIGxvbmcgZnVzZV9kb19pb2N0bChzdHJ1Y3QgZmlsZSAqZmlsZSwgdW4KIAlhcC5hcmdzLm91
+dF9wYWdlcyA9IHRydWU7CiAJYXAuYXJncy5vdXRfYXJndmFyID0gdHJ1ZTsKIAotCXRyYW5zZmVy
+cmVkID0gZnVzZV9zaW1wbGVfcmVxdWVzdChmbSwgJmFwLmFyZ3MpOworCXRyYW5zZmVycmVkID0g
+ZnVzZV9zZW5kX2lvY3RsKGZtLCAmYXAuYXJncyk7CiAJZXJyID0gdHJhbnNmZXJyZWQ7CiAJaWYg
+KHRyYW5zZmVycmVkIDwgMCkKIAkJZ290byBvdXQ7CkBAIC0zOTMsNyArNDA0LDcgQEAgc3RhdGlj
+IGludCBmdXNlX3ByaXZfaW9jdGwoc3RydWN0IGlub2RlCiAJYXJncy5vdXRfYXJnc1sxXS5zaXpl
+ID0gaW5hcmcub3V0X3NpemU7CiAJYXJncy5vdXRfYXJnc1sxXS52YWx1ZSA9IHB0cjsKIAotCWVy
+ciA9IGZ1c2Vfc2ltcGxlX3JlcXVlc3QoZm0sICZhcmdzKTsKKwllcnIgPSBmdXNlX3NlbmRfaW9j
+dGwoZm0sICZhcmdzKTsKIAlpZiAoIWVycikgewogCQlpZiAob3V0YXJnLnJlc3VsdCA8IDApCiAJ
+CQllcnIgPSBvdXRhcmcucmVzdWx0Owo=
+--000000000000a2f11305e410ca32--

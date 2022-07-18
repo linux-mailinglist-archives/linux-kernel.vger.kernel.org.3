@@ -2,51 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E458578617
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47881578618
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235231AbiGRPRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 11:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
+        id S235257AbiGRPRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbiGRPRP (ORCPT
+        with ESMTP id S233406AbiGRPRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:17:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FFD25C43
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:17:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41573B81646
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:17:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B3DDC36AE5;
-        Mon, 18 Jul 2022 15:17:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658157431;
-        bh=7vYdhXeQdOu5QO7fBUho2H+EQnIcqXUqzgdSIhY4WMM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LfCvzksFJwZBgBuzW2Rf+hh7lzSOze0hr87nXoiLN2ybN3Tud+f9IAZyWinu/+q+4
-         54/G/vPbhIslkJvs5NBprcI2JK4ZuZhngkOyoGb60lz1xVSvFxppoQafFejAlyVrkC
-         7V2+GF+MTQqPpFSSpxEo0FSS31QhqZU0P4FaH+v1oe0/+axYqjKdVuWbusikDHTY21
-         OKpKDYcybJc5pOQu6y+7gL3zWWC7q1lLZsC+5mM6o4Ws9NmCaHZB0FwS/bUV5S4EC2
-         au6e+pEswAgMOIvr0ZvKqaBPBH/97Mx0kNtQUyAhqFk3uDqIyvGblLLieQC0diGvk3
-         d+7eJhh2A5HGg==
-Date:   Mon, 18 Jul 2022 16:17:06 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     iommu@lists.linux.dev, Robin Murphy <robin.murphy@arm.com>,
-        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH] MAINTAINERS: Add Robin Murphy as IOMMU SUBSYTEM reviewer
-Message-ID: <20220718151704.GB12935@willie-the-truck>
-References: <20220715110334.6969-1-joro@8bytes.org>
+        Mon, 18 Jul 2022 11:17:19 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B61527B17
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:17:18 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id a18-20020a05600c349200b003a30de68697so3519110wmq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=fIeWgJkq4ADJTJssdbY8YcP7rWqEzAaP7D1xlEKvTj4=;
+        b=awRdYtNS2Zyiv24INdiZICqbDqtDmWcLaeLnOKQd3penNpY/vYGRfLDfEK5Q8Vi5HL
+         J+zCcVqHSBZvyzPzodMAy8m4TVb54t5GmzivIeDekMJhNYQrVfDJ1omwMyq7r0pcWmPh
+         Al/UVWaXYJgr5MLirqXRAewR6upob6IhkVip/FhJqpntbk8KoLwj19NKhA5yGTGzMPMO
+         syTWnQRe3HFWFmyd2qYMp1FHlkCSlYUEEw7I2dMEc8X02yz23e5ciVCz0/JqSh8NlKUf
+         JdAAClVRxvhpVgw0QXH+GuWbL+GuFzA5wu6Yq0bCgRvWmkhkjYvMiohM8+3L0Mf5iuxz
+         QQCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=fIeWgJkq4ADJTJssdbY8YcP7rWqEzAaP7D1xlEKvTj4=;
+        b=OzyPEWO95f1UGBHJdUCcWIWnDvD6Ek1yNFP9QaH21kfrTFRhMgFAVXcA76avMIiz6A
+         SbdAEQqeqNiCQyJUjksFWb9k7KfTii/lgxLU3HTNV7hoMiOh+3UgkLF3t9QYECtswJFg
+         EUKStaZaCR7dOBrp8W/1bBfyX42Dcljhd2cxMxOlLoI5shsSc7dCPcV8/ApV62OGNcGZ
+         A4VwlSxVKuoRRdJ5Q4DxOo9noXnsYaHvmUzvTWJK5cX2kBZyOpIldK/vnlC7qwYHIh7C
+         3NsfGNelTXRT4iFttObqFNCJujJKncrnvmhcV7Y21OSHM+H1r+8i49isRQGJoaiXj9ru
+         N36w==
+X-Gm-Message-State: AJIora8A/TsHyMRIcrXuOhO6dzrlIyMEhBXB4NcUle3XVg3xTkFzjhvV
+        dgQBfhGrxX6+2m35nYnPikKGT7D2uX4MbA==
+X-Google-Smtp-Source: AGRyM1vDNjWwA9Q0bIP0N1CjK7w7jTUsJ/pcKL3y7r/RaZ0lkzMqNlp6GVH1rCljYn1HEHatFfGobQ==
+X-Received: by 2002:a05:600c:3ac4:b0:3a3:19c5:7cb2 with SMTP id d4-20020a05600c3ac400b003a319c57cb2mr6104107wms.63.1658157436961;
+        Mon, 18 Jul 2022 08:17:16 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id ay10-20020a05600c1e0a00b003a32167b8d4sm128487wmb.13.2022.07.18.08.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 08:17:16 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 16:17:14 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 1/9] mfd: intel_soc_pmic_crc: Merge Intel PMIC core to
+ crc
+Message-ID: <YtV5eoSKj8Y0BYsa@google.com>
+References: <YrxjTD0sJXh8cgVP@google.com>
+ <CAHp75VdHpqAxS3jmFi-1Sw6wB1CP3wQVM_+5OP0C_yFFG336LA@mail.gmail.com>
+ <Yr1YXHb3GqwZncFK@google.com>
+ <CAHp75Vf1UK9Z2P1D9v_j9rsdKoDXWSvb=wJgmkvACYgwofWrxA@mail.gmail.com>
+ <35c907e6-6018-d22b-1992-ffc66eb82b0e@redhat.com>
+ <Yr1iweMUl+EUY+Q6@google.com>
+ <YtHF2giNT1gG1wge@smile.fi.intel.com>
+ <YtUV5sE8A3ayQ/Q3@google.com>
+ <YtUWB1ncCr1i3V5x@google.com>
+ <YtVP1ua2mS9pxK/w@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220715110334.6969-1-joro@8bytes.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YtVP1ua2mS9pxK/w@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,44 +82,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 01:03:34PM +0200, Joerg Roedel wrote:
-> From: Joerg Roedel <jroedel@suse.de>
-> 
-> Robin has been acting as a reviewer of the IOMMU Subsystem for a long
-> time. He is also defacto maintaining the IOMMU DMA-API Layer, so make
-> both roles official by adding Robin to the MAINTAINERS file.
-> 
-> Signed-off-by: Joerg Roedel <jroedel@suse.de>
-> ---
->  MAINTAINERS | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8f9ed151ad4c..029f49f29982 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10448,9 +10448,20 @@ T:	git git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git
->  F:	fs/iomap/
->  F:	include/linux/iomap.h
->  
-> -IOMMU DRIVERS
-> +IOMMU DMA-API LAYER
-> +M:	Robin Murphy <robin.murphy@arm.com>
-> +L:	iommu@lists.linux.dev
-> +S:	Maintained
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
-> +F:	drivers/iommu/dma-iommu.c
-> +F:	drivers/iommu/iova.c
-> +F:	include/linux/dma-iommu.h
-> +F:	include/linux/iova.h
-> +
-> +IOMMU SUBSYSTEM
->  M:	Joerg Roedel <joro@8bytes.org>
->  M:	Will Deacon <will@kernel.org>
-> +R:	Robin Murphy <robin.murphy@arm.com>
+On Mon, 18 Jul 2022, Andy Shevchenko wrote:
 
-It's about time!
+> On Mon, Jul 18, 2022 at 09:12:55AM +0100, Lee Jones wrote:
+> > On Mon, 18 Jul 2022, Lee Jones wrote:
+> > > On Fri, 15 Jul 2022, Andy Shevchenko wrote:
+> > > > On Thu, Jun 30, 2022 at 09:45:53AM +0100, Lee Jones wrote:
+> 
+> ...
+> 
+> > > > Is it okay to be applied?
+> > > 
+> > > Yes, I think so.
+> > > 
+> > > Can you collect all of the Acked-by/Tested-by tags you received
+> > > and submit a [RESEND] please?  Hans' TB which should be applied to all
+> > > patches springs to mind.
+> > 
+> > To save yourself some pain, leave off my Acks.
+> 
+> Actually it's less pain to leave your tags as they are now in the commit
+> messages.
+> 
+> I will resend it soon with your tags still in.
 
-Acked-by: Will Deacon <will@kernel.org>
+Sure, whatever works.
 
-Will
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

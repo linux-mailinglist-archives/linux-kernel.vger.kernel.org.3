@@ -2,115 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A76578D04
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EEA578D00
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236222AbiGRVlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
+        id S236055AbiGRVlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236177AbiGRVls (ORCPT
+        with ESMTP id S233959AbiGRVli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:41:48 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493C71092
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:41:47 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-10c0052da61so27431114fac.12
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:41:47 -0700 (PDT)
+        Mon, 18 Jul 2022 17:41:38 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21A8DFA
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:41:37 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id k85so20606067ybk.7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:41:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jwFMLZ5nGNucrFSwM6yJgESfML4UAN0HVzEssesyWsg=;
-        b=cbk8jMcghN6CO7K9epBOigQ2O2dFNSD5n/MO0d3HjFcFz+Uhei6sY4A2y/UXtxYBHQ
-         NKeNKMuS1fJrA5keekKePOposlQYpCs2DU00FTgGI8tGrzMRx13aQEr6hzdh9Wq6u+4x
-         +xjiuc3NaUjifVRYirZa2+epbzfDOloSPQgvFeDwGnbfKION3IGct5KHpYudNY2XhhXz
-         Hd1BYozesCJdYHgPJnjRsLGTtatWpn3SuWZnHytFi3er4NmrzO1LfKK6q3FEGiLRM0Z0
-         TE3jLfPNpU4x807rNWXxcxp76T5zZ98Ktjb1yzTCR4RwGHiPxwnQUKtjQBcRunSqHeAQ
-         qEPQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=11hzfogXOAnA+QZrTEs9fkbIDkZiqX5r5itghbSCq60=;
+        b=dboWeBtiOrt1/oQ7dsI7qPXJcM/JRXGM+36KEKdlAE5wlXWnINACAXhPgeqV24OiE3
+         aUFEz9Wo6ef4Hoc81/RZc3nm/krWKCiJR0HnbnJ8/Hz59WoaflRJ7oXYB6d4/E8dC1i4
+         3xi0+fnuLm5Pqh5035PoCBm7IEAW08cSbp2Uo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jwFMLZ5nGNucrFSwM6yJgESfML4UAN0HVzEssesyWsg=;
-        b=3ysF9+FREBl6KBpTPjqylKX1qnE9fianw6uFe+v7nuT6tT2hiffWzbr8YBioZulz20
-         LUPVOlF/krv5Q41JROe7wRdc0CNRXrwtxidvKlXdxgAVmJho+j0VS5oWYmfUFy/9J0nU
-         3PjdI6b10tMNRFIH6qHCUo9cEaaP8KZPR0oR3gCZisxCYFKF1ENFPedO7h08aknDyl9u
-         Zqu0xajqD9uoOkgaq/8k0B3j+L7hdvOeTsnc27z1ddTgcA29GjHI+49LNMUrd5BY4o60
-         LI2iyqnb1miHhcWcEnpF1tFO0qIQpxSDU0O6t86z7TnkY05Gh4LdCrHLy9fybzNa0Z6g
-         aE3g==
-X-Gm-Message-State: AJIora8KYLe8oi9jXfbUWFcOByBH6QMyYzhIPNNw7Phgc+sItIiBS8jE
-        jV9G3ZxQJKs0nT2eGFih631rDA==
-X-Google-Smtp-Source: AGRyM1upmic9iUN2ukbLHy5btrfdPZM97XTo8i6MG2ITNp4nedcswuclUHCJgeodCyWSUsjxGuQsSA==
-X-Received: by 2002:aca:b744:0:b0:32f:4c19:cec1 with SMTP id h65-20020acab744000000b0032f4c19cec1mr14730236oif.43.1658180506276;
-        Mon, 18 Jul 2022 14:41:46 -0700 (PDT)
-Received: from zeta-build.. ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id a39-20020a056870a1a700b0010490c6b552sm6781283oaf.35.2022.07.18.14.41.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 14:41:45 -0700 (PDT)
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Chris Healy <cphealy@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Subject: [PATCH] hantro: Remove dedicated control documentation
-Date:   Mon, 18 Jul 2022 18:41:22 -0300
-Message-Id: <20220718214123.73275-2-ezequiel@vanguardiasur.com.ar>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220718214123.73275-1-ezequiel@vanguardiasur.com.ar>
-References: <20220718214123.73275-1-ezequiel@vanguardiasur.com.ar>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=11hzfogXOAnA+QZrTEs9fkbIDkZiqX5r5itghbSCq60=;
+        b=k3oKTIy0OdTca/u15iCn6ij6pxiz+W1GSB2U67QaaD6w9OL0WgocWoXdS7pAf/fb8I
+         KCcr0n0EP4NxMCMsEjKF2h/LjJXrOs7xmPk2zwdc33qbwpYM2VDw9+UNAoKPsiTnT0Mr
+         k6M091J4mRRXWO9ZmPDY/0tJesY0iBUeOOflo97qZ6gVxd7ryZZXMiERVY8ue1cUzxMz
+         JXPq7qrAYjNUNdcDvumKKfiJjxrOi8vlgDjXWXxScGaIRPQFULGOf08YFueGnYrzqWG6
+         EiILSKe2a/VAeyEh3sX9R9UItZpnq/cIZy9S+LoRZZFNiz/P27hN6QHO7GWanqK87hR8
+         O7dg==
+X-Gm-Message-State: AJIora876msNjl3vLniG05qRgioDmFeiQVDKDqUyxpAW7r7z7O9uMqPu
+        D30J5ReIF6NNMyfLElbn6SeYCAIuCkEMstN3Dxy7rw==
+X-Google-Smtp-Source: AGRyM1uxecbBwMgr6XtFdCndO7oF4254MFrOti40qpwETkSUihyQLM8KgCq5Ea21/K4aUBmZbGWxNn8h53USGV5Beig=
+X-Received: by 2002:a25:dc52:0:b0:66e:ef32:6316 with SMTP id
+ y79-20020a25dc52000000b0066eef326316mr30768547ybe.197.1658180496854; Mon, 18
+ Jul 2022 14:41:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220718163158.42176b4e@canb.auug.org.au> <YtXF8TUZHNRUUyJh@kroah.com>
+In-Reply-To: <YtXF8TUZHNRUUyJh@kroah.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Mon, 18 Jul 2022 14:41:23 -0700
+Message-ID: <CACeCKafbgLmhLoYQiTTDkeeJ26HqFYBHXtcpwQkzOyO9LESEFw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the usb tree
+To:     Greg KH <greg@kroah.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Benson Leung <bleung@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dedicated control required by the HEVC support
-was removed, and the driver now calculates the value
-internally. Remove the ad-hoc documentation as well.
+Hi Stephen & Greg,
 
-Fixes: 3360755ef89ab ("media: hantro: Stop using Hantro dedicated control")
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
- .../userspace-api/media/drivers/hantro.rst    | 19 -------------------
- 1 file changed, 19 deletions(-)
- delete mode 100644 Documentation/userspace-api/media/drivers/hantro.rst
+On Mon, Jul 18, 2022 at 1:43 PM Greg KH <greg@kroah.com> wrote:
+>
+> On Mon, Jul 18, 2022 at 04:31:58PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > After merging the usb tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> >
+> > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_cmd_mux_set':
+> > drivers/platform/chrome/cros_typec_switch.c:52:16: error: implicit declaration of function 'cros_ec_command'; did you mean 'cros_ec_cmd'? [-Werror=implicit-function-declaration]
+> >    52 |         return cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
+> >       |                ^~~~~~~~~~~~~~~
+> >       |                cros_ec_cmd
+> > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_register_switches':
+> > drivers/platform/chrome/cros_typec_switch.c:244:23: error: implicit declaration of function 'acpi_evaluate_integer'; did you mean 'acpi_evaluate_object'? [-Werror=implicit-function-declaration]
+> >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+> >       |                       ^~~~~~~~~~~~~~~~~~~~~
+> >       |                       acpi_evaluate_object
+> > drivers/platform/chrome/cros_typec_switch.c:244:49: error: invalid use of undefined type 'struct acpi_device'
+> >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+> >       |                                                 ^~
+> >
+> > Caused by commit
+> >
+> >   e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
+> >
+> > and commits
+> >
+> >   34f375f0fdf6 ("platform/chrome: cros_typec_switch: Set EC retimer")
+> >   bb53ad958012 ("platform/chrome: cros_typec_switch: Add event check")
+> >
+> > interacting with commit
+> >
+> >   b1d288d9c3c5 ("platform/chrome: cros_ec_proto: Rename cros_ec_command function")
+> >
+> > from the chrome-platform tree.
 
-diff --git a/Documentation/userspace-api/media/drivers/hantro.rst b/Documentation/userspace-api/media/drivers/hantro.rst
-deleted file mode 100644
-index cd9754b4e005..000000000000
---- a/Documentation/userspace-api/media/drivers/hantro.rst
-+++ /dev/null
-@@ -1,19 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--Hantro video decoder driver
--===========================
--
--The Hantro video decoder driver implements the following driver-specific controls:
--
--``V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP (integer)``
--    Specifies to Hantro HEVC video decoder driver the number of data (in bits) to
--    skip in the slice segment header.
--    If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
--    to before syntax element "slice_temporal_mvp_enabled_flag".
--    If IDR, the skipped bits are just "pic_output_flag"
--    (separate_colour_plane_flag is not supported).
--
--.. note::
--
--        This control is not yet part of the public kernel API and
--        it is expected to change.
--- 
-2.34.3
+I am very sorry about the conflicts.
 
+I can think of a few ways to address this:
+1. A fixup patch on top of linux-next updating the function signature
+to cros_ec_cmd() ; I will send this out if you'd like.
+2. Pull in Commit b1d288d9c3c5 ("platform/chrome: cros_ec_proto:
+Rename cros_ec_command function") to usb-next.
+We will also have to pull in dependent commit 015cd0043503
+("regulator: cros-ec: Use common cros_ec_command()")
+3. Revert the entire cros-typec-switch (patches 3-9) series from
+usb-next and wait till after the merge window to apply it to
+chrome-platform directly.
+
+> >
+> > I have used the usb tree from next-20220715 for today.
+> >
+> > I will fix up the cros_ec_command() rename with a merge fix patch after
+> > the apci usage problem is solved.
+>
+> The ACPI issue should now be solved in my tree.
+
+Sorry about the missing Kconfig dependency, and thank you for applying
+the patch quickly.
+
+Best regards,
+
+-Prashant

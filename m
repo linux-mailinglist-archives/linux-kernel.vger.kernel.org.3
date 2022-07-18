@@ -2,138 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29586577D63
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C108577D6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbiGRIWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S233765AbiGRIZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiGRIW1 (ORCPT
+        with ESMTP id S231710AbiGRIY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:22:27 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1623F1900B;
-        Mon, 18 Jul 2022 01:22:27 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id r12so8265037qvm.3;
-        Mon, 18 Jul 2022 01:22:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EQibuB+HRd3lrCPdCHjd5Kptvz7t3wE5RCUTUbzpTH8=;
-        b=NlrPf2Ceni4K+B8ZD1iIzmYW1ljlu/GQcpa6Y3gFvAEaIHCjBYn7M1oR+PFH5bcPDa
-         xSib4vCYKrPj8UNxVwnSTIZLLYk8loGs2ZBxMfYJtNSXFdIe4X/Sxh3hn1PzosQfelLr
-         4wqLNYa48Teo2Ki0Ds2Arv7Uod1adopX4O2hf7Q0Ci4L3i89RJFrb6eos3ll9FZFx3xO
-         t810/hkl9gCfwNzHJ/wIZei+4U7dWLRdx4MtO9mwAT0v9v9rZUI44l+3T3Dl2826C4Fz
-         xuUDf0xaTlhz577ronNrkv0PjQI5nrIANMbO06qX95a6vdMVFA9OEcafXDJXUBd/iLHo
-         KpQw==
-X-Gm-Message-State: AJIora8fB2I1YbexVYBV1YUtiOStH48WSbMTLrE4T9Pb4rNRowUrHP9Y
-        OaMI8kEuTELK8B7yeXr32Ss3i+NbJv68vA==
-X-Google-Smtp-Source: AGRyM1v0AfWpISYzwGkWUx12otwWQtC3/XMcNcCr45toH8/q0KPo9Daexw3wlSCj/xaFjYR96YafYQ==
-X-Received: by 2002:a05:6214:2aa1:b0:473:2cc2:63e with SMTP id js1-20020a0562142aa100b004732cc2063emr20457565qvb.26.1658132546301;
-        Mon, 18 Jul 2022 01:22:26 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id bk34-20020a05620a1a2200b006af1f0af045sm10390047qkb.107.2022.07.18.01.22.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 01:22:26 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31bf3656517so98859317b3.12;
-        Mon, 18 Jul 2022 01:22:25 -0700 (PDT)
-X-Received: by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP id
- i4-20020a815404000000b0031cc24d94b0mr28386378ywb.502.1658132545091; Mon, 18
- Jul 2022 01:22:25 -0700 (PDT)
+        Mon, 18 Jul 2022 04:24:58 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB3D11808
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658132697; x=1689668697;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cBvNiGavME3n0nBDEdyYgx8fYccwcx+6a+lqiJ9fZVg=;
+  b=KxYwa49XFgL6WFmpYxvmwttcZwCzQukI4kqR2AHOYvsAqvPF3JehSOF1
+   mWSMe8YYJCQto+aOlFuNPgZzLHfgqj3SoN+ICLrgzshEh0Jj7n2Rp3Qk9
+   2xVTKGHACC9KZ4Q/i6Aus/pXSNP+A0uDO7cBNvSbRFIvs6l3wzSFsFWjt
+   L9n2A7FXFn2hKuIsAAIDcN5Fd+zKIE6xqrrLikWchJ254Tz6108ziQtCD
+   OCGx0H7K7rKe821ffntl4Qm+GvXBnM38Uaard2eZMdVIzhMsijy9sMijg
+   phdiaJsVedCn2olZXuBgLh7ROQEsJZ8j+m+WwhBlr/M+rcEKQcIQjHWDW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="272997114"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="272997114"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 01:24:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="924253278"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Jul 2022 01:24:55 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDM3i-0004Aw-KM;
+        Mon, 18 Jul 2022 08:24:54 +0000
+Date:   Mon, 18 Jul 2022 16:24:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [linux-stable-rc:linux-5.15.y 3230/8464]
+ drivers/gpu/drm/i915/gt/intel_gt.c:966:2: error: format string is not a
+ string literal (potentially insecure)
+Message-ID: <202207181627.mc5qRroQ-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220718004114.3925745-1-shorne@gmail.com> <20220718004114.3925745-2-shorne@gmail.com>
-In-Reply-To: <20220718004114.3925745-2-shorne@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 18 Jul 2022 10:22:13 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVP=1ovo62oXaOXT4ipA9Qb61XQ1e4XVVi1gEi+s+wtTQ@mail.gmail.com>
-Message-ID: <CAMuHMdVP=1ovo62oXaOXT4ipA9Qb61XQ1e4XVVi1gEi+s+wtTQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] asm-generic: Remove pci.h copying remaining code
- to x86
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nick Child <nick.child@ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 2:41 AM Stafford Horne <shorne@gmail.com> wrote:
-> The generic pci.h header now only provides a definition of
-> pci_get_legacy_ide_irq which is used by architectures that support PNP.
-> Of the architectures that use asm-generic/pci.h this is only x86.
->
-> This patch removes the old pci.h in order to make room for a new
-> pci.h to be used by arm64, riscv, openrisc, etc.
->
-> The existing code in pci.h is moved out to x86.  On other architectures
-> we clean up any outstanding references.
->
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
-> Signed-off-by: Stafford Horne <shorne@gmail.com>
-> ---
-> Since v2:
->  - Remove pci_get_legacy_ide_irq in m68k
-> Since v1:
->  - Remove pci_get_legacy_ide_irq for most architectures as its not needed.
+Hi Tvrtko,
 
->  arch/m68k/include/asm/pci.h    |  2 --
+FYI, the error/warning still remains.
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   baefa2315cb1371486f6661a628e96fa3336f573
+commit: 8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7 [3230/8464] drm/i915: Flush TLBs before releasing backing store
+config: i386-randconfig-a002-20220718 (https://download.01.org/0day-ci/archive/20220718/202207181627.mc5qRroQ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout 8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Gr{oetje,eeting}s,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-                        Geert
+All errors (new ones prefixed by >>):
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>> drivers/gpu/drm/i915/gt/intel_gt.c:966:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+           GEM_TRACE("\n");
+           ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:366:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:380:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/intel_gt.c:966:2: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:366:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:380:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
+   1 error generated.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+vim +966 drivers/gpu/drm/i915/gt/intel_gt.c
+
+   927	
+   928	void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+   929	{
+   930		static const i915_reg_t gen8_regs[] = {
+   931			[RENDER_CLASS]			= GEN8_RTCR,
+   932			[VIDEO_DECODE_CLASS]		= GEN8_M1TCR, /* , GEN8_M2TCR */
+   933			[VIDEO_ENHANCEMENT_CLASS]	= GEN8_VTCR,
+   934			[COPY_ENGINE_CLASS]		= GEN8_BTCR,
+   935		};
+   936		static const i915_reg_t gen12_regs[] = {
+   937			[RENDER_CLASS]			= GEN12_GFX_TLB_INV_CR,
+   938			[VIDEO_DECODE_CLASS]		= GEN12_VD_TLB_INV_CR,
+   939			[VIDEO_ENHANCEMENT_CLASS]	= GEN12_VE_TLB_INV_CR,
+   940			[COPY_ENGINE_CLASS]		= GEN12_BLT_TLB_INV_CR,
+   941		};
+   942		struct drm_i915_private *i915 = gt->i915;
+   943		struct intel_uncore *uncore = gt->uncore;
+   944		struct intel_engine_cs *engine;
+   945		enum intel_engine_id id;
+   946		const i915_reg_t *regs;
+   947		unsigned int num = 0;
+   948	
+   949		if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
+   950			return;
+   951	
+   952		if (GRAPHICS_VER(i915) == 12) {
+   953			regs = gen12_regs;
+   954			num = ARRAY_SIZE(gen12_regs);
+   955		} else if (GRAPHICS_VER(i915) >= 8 && GRAPHICS_VER(i915) <= 11) {
+   956			regs = gen8_regs;
+   957			num = ARRAY_SIZE(gen8_regs);
+   958		} else if (GRAPHICS_VER(i915) < 8) {
+   959			return;
+   960		}
+   961	
+   962		if (drm_WARN_ONCE(&i915->drm, !num,
+   963				  "Platform does not implement TLB invalidation!"))
+   964			return;
+   965	
+ > 966		GEM_TRACE("\n");
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,121 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACD5577F10
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F5B577F14
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234325AbiGRJxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
+        id S234326AbiGRJyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234316AbiGRJxv (ORCPT
+        with ESMTP id S233467AbiGRJyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:53:51 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C41BD94;
-        Mon, 18 Jul 2022 02:53:48 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 18 Jul 2022 05:54:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF15D25E7;
+        Mon, 18 Jul 2022 02:54:30 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lmcjg6JpWz4xQt;
-        Mon, 18 Jul 2022 19:53:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658138024;
-        bh=sEBU+YVJDngFZCMwdXHtPnov93faAmqDyFwiYTVRLRE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rRlN0K14GUP5fkIZadeeiTrQiaXwinzLkOeyDL75UC/FbJTFvDFI7ohuyMqJP5j5g
-         5uVp5qFpGIuQmG+0NtxAXgrE+o+I7+br8bFm8V84amaSXaCtajA9yBYJQv25FzyMye
-         9OypfMa0hBNSx38BZJw+zc24iXc3Tyq+5TlDSyq2jtYLl7ePHV2kmiWd3TrcDke7vo
-         hrXiiprw50GRi/Mo66/DdwFBAtjdjVtdZEOlbeqlgOiTMm/WUztp3xD0xUIY+DUwwT
-         1DrON4MRp7ZAhxgFTrSf3ebL7HbLRd7e+qsvvDBHCWqrTnJA/yq9X1tSsa34czWYgF
-         CLe3lEAFc/RMQ==
-Date:   Mon, 18 Jul 2022 19:53:42 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Eric Biggers <ebiggers@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: linux-next: manual merge of the mm tree with the crypto tree
-Message-ID: <20220718195342.6817be63@canb.auug.org.au>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7151B66019EC;
+        Mon, 18 Jul 2022 10:54:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658138069;
+        bh=730F5cDo9gbvK3JLLYRq51ZQ/6vn6ZWi3Fd5hPgUBi0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XQ38RAsgcAq0F9lmw96rWFo4or6eZKty5Ykii2WvIa+ZyouuO+YEK1Fn5dnQQ2frF
+         c71p30E7qONWGb1Fc0M8ZI286D/Y1XcD5vz/A3I48KIrVhEmR6uW6+ZxziLRIeBABO
+         0k+X/9kgDkYTYlnUKtRgZC8LOql6oI0Zwlk/VsnPwL9ommCMKfNB1lzhZCzcjJREIs
+         TGhidwf9ORPT8M878DWh9W/PIFP3LMQNZiEhUcB+rZEZlTZv4XnQ0Vh7YWJH7UN+4g
+         JONyjTpOCog22tYNWlxWyIvvAvhEi+zx659mGkLfi8JqbFHR/mgX8AU6estiWoQCX5
+         ZW5peooyulStw==
+Message-ID: <9075358a-cdba-fc91-1940-d78a9b58bae3@collabora.com>
+Date:   Mon, 18 Jul 2022 11:54:25 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3dIelKPkHS5xUiwgZD92y.y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5/5] media: mediatek: vcodec: Fix encoder multi-instance
+ deadlock
+Content-Language: en-US
+To:     Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>
+Cc:     Yong Wu <yong.wu@mediatek.com>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220716093808.29894-1-irui.wang@mediatek.com>
+ <20220716093808.29894-6-irui.wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220716093808.29894-6-irui.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/3dIelKPkHS5xUiwgZD92y.y
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Il 16/07/22 11:38, Irui Wang ha scritto:
+> The vb2_queue lock can be set by encoder context, the deadlock
+> may occur when running multi-instance encoding if use device
+> mutex lock.
+> 
+> Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 
-Hi all,
+This needs a Fixes tag.
 
-Today's linux-next merge of the mm tree got a conflict in:
-
-  lib/Makefile
-
-between commit:
-
-  463f74089ff9 ("crypto: lib - move lib/sha1.c into lib/crypto/")
-
-from the crypto tree and commit:
-
-  058c2f0f755f ("Maple Tree: add new data structure")
-
-from the mm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc lib/Makefile
-index 17e48da223e2,dd5cf8f36eaa..000000000000
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@@ -29,7 -29,8 +29,7 @@@ endi
- =20
-  lib-y :=3D ctype.o string.o vsprintf.o cmdline.o \
-  	 rbtree.o radix-tree.o timerqueue.o xarray.o \
-- 	 idr.o extable.o irq_regs.o argv_split.o \
- -	 maple_tree.o idr.o extable.o \
- -	 sha1.o irq_regs.o argv_split.o \
-++	 maple_tree.o idr.o extable.o irq_regs.o argv_split.o \
-  	 flex_proportions.o ratelimit.o show_mem.o \
-  	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
-  	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
-
---Sig_/3dIelKPkHS5xUiwgZD92y.y
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLVLaYACgkQAVBC80lX
-0Gy0wggAl3wAxCAwQaRF54Vp+HXtz1qFXyo6zGw2hSZJGFcYwZTpmIwD3HDKtgk9
-/EO5/Z36eDC2fvgmeGdtiymrrSESuLNlSvnCV3jDiPr+Z3FjuIMMiUBvE4DSgSp9
-gDcWY0j0YiJnLMW8r4eBF3AVA4XdMf9tTJBeO8mSJPioZjtdJhx08RWwxaUKuNhT
-YDXseJl/QqLD+Don3+iCbfj0W7FbjfdaWt+M1jVWWdgyvgLcvy+9IByBsyx87llH
-AGi5YF84C38Ay4kw/icv67YghOfP/XSU1c9Pkc6DdONVdLYZdNVB+4uh8bNfDdRe
-wlbBY8PVzaYMcdopSCfmGYAzjTremw==
-=zees
------END PGP SIGNATURE-----
-
---Sig_/3dIelKPkHS5xUiwgZD92y.y--

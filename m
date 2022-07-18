@@ -2,106 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC10577CC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F28577CC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233086AbiGRHoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
+        id S233502AbiGRHob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiGRHoE (ORCPT
+        with ESMTP id S230171AbiGRHo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:44:04 -0400
-Received: from extserv.mm-sol.com (ns.mm-sol.com [37.157.136.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9796F63D6;
-        Mon, 18 Jul 2022 00:44:02 -0700 (PDT)
-Received: from [192.168.1.7] (unknown [195.24.90.54])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: svarbanov@mm-sol.com)
-        by extserv.mm-sol.com (Postfix) with ESMTPSA id AB337D2E3;
-        Mon, 18 Jul 2022 10:43:58 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mm-sol.com; s=201706;
-        t=1658130239; bh=J2XEYZ7B+4jlGgZLIA7nxTffPaKXrEtUOke3dtH0o4A=;
-        h=Date:Subject:To:Cc:From:From;
-        b=UEHMbqGc0/Xd6wlIuArKJOYm3ei7nKsevKujc2jIU/mFOBjf9hF1ynuSvp4CjcONC
-         qAMxNBLzYcos6Xaihx16T6tWqdgpUZykNLZDtNQ+3Eqzy2o3l4nLWnSVQc8dbVVL4d
-         N7HKi3tt6TRePbksPwWmqH+VxUXSE5F9YCExEHRY2+1CkKQwryeK/SH4TKBLCs81Nb
-         1bbwkky/euPn3dV320ieaaqH1+OLi4/BoSW2CaBIOCac85vqngTy4gFJS0FcVrHpc/
-         YaOwJg0ri+E0/rHEfXbXW1Xskq697oqDGxDw5d1qsX5NiGZnA9dYopF/+fjiTQwtZy
-         BmJSZRJ3tm/kQ==
-Message-ID: <d6db1784-0b21-9bdb-8528-3f814da188b0@mm-sol.com>
-Date:   Mon, 18 Jul 2022 10:43:56 +0300
+        Mon, 18 Jul 2022 03:44:29 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FC56430;
+        Mon, 18 Jul 2022 00:44:28 -0700 (PDT)
+X-UUID: 77c5818b06ff4a8c869c0201b6b7ce26-20220718
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:aea19736-9353-42cf-ac42-b4365d23b90c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:54
+X-CID-INFO: VERSION:1.1.8,REQID:aea19736-9353-42cf-ac42-b4365d23b90c,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_HamU,ACTI
+        ON:release,TS:54
+X-CID-META: VersionHash:0f94e32,CLOUDID:e81dc5d7-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:0882f59e6fa7,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 77c5818b06ff4a8c869c0201b6b7ce26-20220718
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <jing-ting.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 79088243; Mon, 18 Jul 2022 15:44:23 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 18 Jul 2022 15:44:21 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 18 Jul 2022 15:44:21 +0800
+Message-ID: <d8f0bc5e2fb6ed259f9334c83279b4c011283c41.camel@mediatek.com>
+Subject: Re: [Bug] race condition at rebind_subsystems()
+From:   Jing-Ting Wu <jing-ting.wu@mediatek.com>
+To:     Tejun Heo <tj@kernel.org>,
+        Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+CC:     Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        <wsd_upstream@mediatek.com>, <lixiong.liu@mediatek.com>,
+        <wenju.xu@mediatek.com>, <jonathan.jmchen@mediatek.com>
+Date:   Mon, 18 Jul 2022 15:44:21 +0800
+In-Reply-To: <YtGaP+e35DZYSQf0@slm.duckdns.org>
+References: <1978e209e71905d89651e61abd07285912d412a1.camel@mediatek.com>
+         <20220715115938.GA8646@blackbody.suse.cz>
+         <YtGaP+e35DZYSQf0@slm.duckdns.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] PCI: qcom: Add support for modular builds
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220715165601.GA1139849@bhelgaas>
-From:   Stanimir Varbanov <svarbanov@mm-sol.com>
-In-Reply-To: <20220715165601.GA1139849@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-07-15 at 06:47 -1000, Tejun Heo wrote:
+> (resending, I messed up the message header, sorry)
+> 
+> Hello,
+> 
+> On Fri, Jul 15, 2022 at 01:59:38PM +0200, Michal Koutný wrote:
+> > The css->rstat_css_node should not be modified if there are
+> > possible RCU
+> > readers elsewhere.
+> > One way to fix this would be to insert synchronize_rcu() after
+> > list_del_rcu() and before list_add_rcu().
+> > (A further alternative (I've heard about) would be to utilize
+> > 'nulls'
+> > RCU lists [1] to make the move between lists detectable.)
+> > 
+> > But as I'm looking at it from distance, it may be simpler and
+> > sufficient
+> > to just take cgroup_rstat_lock around the list migration (the
+> > nesting
+> > under cgroup_mutex that's held with rebind_subsystems() is fine).
+> 
+> synchronize_rcu() prolly is the better fit here given how that
+> list_node's
+> usage, but yeah, great find.
+> 
+> Thanks.
+> 
+
+Hi Michal and Tejun,
 
 
-On 7/15/22 19:56, Bjorn Helgaas wrote:
-> On Thu, Jul 14, 2022 at 04:05:41PM +0300, Dmitry Baryshkov wrote:
->> On 14/07/2022 15:19, Stanimir Varbanov wrote:
->>> Please take a look why we made it built-in first [1].
->>>
->>> If arguments there are still valid I don't see why to make it a module
->>> again.
->>>
->>> [1] https://lkml.org/lkml/2016/8/24/694
->>
->> It looks like there is a move to make all non-essential drivers buildable as
->> modules. For example, the Kirin, dra7xx, Meson PCI controllers are now
->> buildable as modules. So I think we can follow that and allow building the
->> pcie-qcom as a module.
-> 
-> IIUC the arguments in [1] are that:
-> 
->   - Kconfig is bool, so it can't be built as a module
->   - there's no sensible use case for unbind
-> 
-> Those described the situation at the time, and there's no point in
-> having .remove() and using module_platform_driver() if Kconfig is
-> bool.
-> 
-> But they don't seem like arguments for why the driver couldn't be
-> *made* modular.
+Thanks for your suggestion.
+Accroding your description, is the following patch corrent?
 
-I guess the core of the problem was lack of dw_pcie_host_deinit() at
-that time.
-> 
-> I think drivers *should* be modular unless there's a technical reason
-> they can't be.
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -1813,6 +1813,7 @@
+ 
+ 		if (ss->css_rstat_flush) {
+ 			list_del_rcu(&css->rstat_css_node);
++			synchronize_rcu();
+ 			list_add_rcu(&css->rstat_css_node,
+ 				     &dcgrp->rstat_css_list);
+ 		}
 
-I agree.
 
-> 
-> Bjorn
+If the patch is correct, we will add this patch to our stability test.
+And we will continue to observe whether the problem is solved.
+Thank you.
 
--- 
-regards,
-Stan
+
+
+
+Best regards,
+Jing-Ting Wu
+

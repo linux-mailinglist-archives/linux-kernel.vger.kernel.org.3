@@ -2,127 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4789578717
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF1C578746
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235664AbiGRQOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
+        id S233609AbiGRQYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbiGRQOr (ORCPT
+        with ESMTP id S234295AbiGRQYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:14:47 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326C36313;
-        Mon, 18 Jul 2022 09:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nX3RsnGi2cfh0LOSF81ZLNZldnSaN6v4PcSbVisOW24=; b=Yq+Zwwr/nrqv7G2bTjTM/Ek3fB
-        +oDapSLdDJJQ6wYDpxLHzEu/nddwCTK/Z3ISy+e1Q/r1enEhtAWTeTFTGeWBRqLw6L2tYMg29cWjT
-        FW6Ibt6fmJ+QIzvBJxfgJhspRor80SaJIAcyPx5HDYdPsVH6CCmrF60qXFv7HMEBbzypVi156Esez
-        FrKqLB8o5M/fopJxIuzZWe5+Blylr5x7UBaKjMmMVegNqX90BColsrshxF+MHpbQtwOfVJZg3ZN9A
-        lHoP8ytZ7hiHZgeREp+mia+xOGEbZePkpYahqHK8gzAY6dwDUVgTgiJxyNNfUeM3GkmwrruaQDfwL
-        ZCTPIgfQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33420)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oDTOM-0001oa-Sn; Mon, 18 Jul 2022 17:14:42 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oDTOM-000267-6x; Mon, 18 Jul 2022 17:14:42 +0100
-Date:   Mon, 18 Jul 2022 17:14:42 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [PATCH net-next v3 10/47] net: phylink: Adjust link settings
- based on rate adaptation
-Message-ID: <YtWG8p/EFRk+punM@shell.armlinux.org.uk>
-References: <20220715215954.1449214-1-sean.anderson@seco.com>
- <20220715215954.1449214-11-sean.anderson@seco.com>
- <YtMc2qYWKRn2PxRY@lunn.ch>
- <4172fd87-8e51-e67d-bf86-fdc6829fa9b3@seco.com>
+        Mon, 18 Jul 2022 12:24:01 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2836F9FE6;
+        Mon, 18 Jul 2022 09:24:00 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id v16so2000502wrr.6;
+        Mon, 18 Jul 2022 09:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A0+VW9WAfHDFP3xbpibU5Fke69H8iS3ox7I176HQdps=;
+        b=YwKRewUGYwHCCfSNoxojmDu8A2dhrMyHqgdu0FzkWCJWiNc6p1YBLSTkrtXer6Q++6
+         H2TDJHH4Q/Hfg/BaiP1qMYBQADRWDFQwdTrm0DcJUHwKO0DP1dzwqmQacnOryfO/cwB/
+         cExTlZEUgmP6ksnLHZ9q5ImQBF9gqdxgdBGSJf9fc5oMD8NKmoSR6AofI2EGO0HScEfl
+         JHVzlk8DxVi+uZEJj9FQkiXkCUebxcXGFGfkJqbD9RJ9W2SY70noF0YqFNEjPI50i9NB
+         YXUK+Mcuul2ApkDK0u1DGHSftsp1r9DZp7F5gu6YrPiSZNXIYgmoRUQga2wjVQX0OgA8
+         aTbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A0+VW9WAfHDFP3xbpibU5Fke69H8iS3ox7I176HQdps=;
+        b=4nB5kuP/eUHPzCYWzfbJ7Vr3BtVJwoSdA56ihsrlXdPt92lBZ+lUDU59mVHU+MGc/k
+         EQM2FKCCDkJqhbNzKBnJSlvPCxS5nIGdZDTSUJo6knhNKmucuTC0WXplC7kmutGElTsE
+         6QywNHchUZnjDvuY4i0pu2RSPcSUOouzECzdMUMWelF45tY4vXZpZvE61EHrzA4CALk8
+         0eZ4Wjqc1J7XQxXL2exf+abj1u/usMBYWzWz7gpOcKhDNG/Z58bhUJgJEJXpLhUY2GXn
+         L8DZ7dhK96aGhoLZSWQUzW7huCMfi74Zz/+eztjQpYQ+XtUzyq+CrWKrVA8Ceclxp4oP
+         W0AQ==
+X-Gm-Message-State: AJIora++KJWGf1SHm/MmvPZ9FVMD7luvCAPPC4DYuI3i80qtZo27VLHK
+        JNyMbHdHqhVEh0YSzMwzta0=
+X-Google-Smtp-Source: AGRyM1tNHdNl9YLuNZ1bTDfv88YDJm43VHX7L/WrvbjTolNdrtnMk0Q2t2dBT8s0a/z42vKdoKvlzg==
+X-Received: by 2002:a05:6000:601:b0:21d:7f3e:e231 with SMTP id bn1-20020a056000060100b0021d7f3ee231mr23565371wrb.219.1658161438342;
+        Mon, 18 Jul 2022 09:23:58 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id q6-20020a1cf306000000b003a2e92edeccsm19150824wmq.46.2022.07.18.09.23.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 09:23:57 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH 1/3] ARM: dts: qcom: ipq8064: add v2 dtsi variant
+Date:   Mon, 18 Jul 2022 18:18:24 +0200
+Message-Id: <20220718161826.4943-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4172fd87-8e51-e67d-bf86-fdc6829fa9b3@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 06:37:22PM -0400, Sean Anderson wrote:
-> On 7/16/22 4:17 PM, Andrew Lunn wrote:
-> > On Fri, Jul 15, 2022 at 05:59:17PM -0400, Sean Anderson wrote:
-> > > If the phy is configured to use pause-based rate adaptation, ensure that
-> > > the link is full duplex with pause frame reception enabled. Note that these
-> > > settings may be overridden by ethtool.
-> > > 
-> > > Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> > > ---
-> > > 
-> > > Changes in v3:
-> > > - New
-> > > 
-> > >   drivers/net/phy/phylink.c | 4 ++++
-> > >   1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> > > index 7fa21941878e..7f65413aa778 100644
-> > > --- a/drivers/net/phy/phylink.c
-> > > +++ b/drivers/net/phy/phylink.c
-> > > @@ -1445,6 +1445,10 @@ static void phylink_phy_change(struct phy_device *phydev, bool up)
-> > >   	pl->phy_state.speed = phy_interface_speed(phydev->interface,
-> > >   						  phydev->speed);
-> > >   	pl->phy_state.duplex = phydev->duplex;
-> > > +	if (phydev->rate_adaptation == RATE_ADAPT_PAUSE) {
-> > > +		pl->phy_state.duplex = DUPLEX_FULL;
-> > > +		rx_pause = true;
-> > > +	}
-> > 
-> > I would not do this. If the requirements for rate adaptation are not
-> > fulfilled, you should turn off rate adaptation.
-> > 
-> > A MAC which knows rate adaptation is going on can help out, by not
-> > advertising 10Half, 100Half etc. Autoneg will then fail for modes
-> > where rate adaptation does not work.
-> 
-> OK, so maybe it is better to phylink_warn here. Something along the
-> lines of "phy using pause-based rate adaptation, but duplex is %s".
-> 
-> > The MAC should also be declaring what sort of pause it supports, so
-> > disable rate adaptation if it does not have async pause.
-> 
-> That's what we do in the previous patch.
-> 
-> The problem is that rx_pause and tx_pause are resolved based on our
-> advertisement and the link partner's advertisement. However, the link
-> partner may not support pause frames at all. In that case, we will get
-> rx_pause and tx_pause as false. However, we still want to enable rx_pause,
-> because we know that the phy will be emitting pause frames. And of course
-> the user can always force disable pause frames anyway through ethtool.
+Add ipq8064-v2.0 dtsi variant that differ from original ipq8064 SoC for
+some additional pcie, sata and usb configuration values, additional
+reserved memory and serial output.
 
-If you want the MAC to enable rx_pause, that ought to be handled
-separately in the mac_link_up() method, IMHO.
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ .../boot/dts/qcom-ipq8064-v2.0-smb208.dtsi    | 37 ++++++++++
+ arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi      | 69 +++++++++++++++++++
+ 2 files changed, 106 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi
+ create mode 100644 arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
 
+diff --git a/arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi
+new file mode 100644
+index 000000000000..0442580b22de
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-ipq8064-v2.0-smb208.dtsi
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "qcom-ipq8064-v2.0.dtsi"
++
++&rpm {
++	smb208_regulators: regulators {
++		compatible = "qcom,rpm-smb208-regulators";
++
++		smb208_s1a: s1a {
++			regulator-min-microvolt = <1050000>;
++			regulator-max-microvolt = <1150000>;
++
++			qcom,switch-mode-frequency = <1200000>;
++		};
++
++		smb208_s1b: s1b {
++			regulator-min-microvolt = <1050000>;
++			regulator-max-microvolt = <1150000>;
++
++			qcom,switch-mode-frequency = <1200000>;
++		};
++
++		smb208_s2a: s2a {
++			regulator-min-microvolt = < 800000>;
++			regulator-max-microvolt = <1250000>;
++
++			qcom,switch-mode-frequency = <1200000>;
++		};
++
++		smb208_s2b: s2b {
++			regulator-min-microvolt = < 800000>;
++			regulator-max-microvolt = <1250000>;
++
++			qcom,switch-mode-frequency = <1200000>;
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
+new file mode 100644
+index 000000000000..2f117d576daf
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "qcom-ipq8064.dtsi"
++
++/ {
++	model = "Qualcomm Technologies, Inc. IPQ8064-v2.0";
++
++	aliases {
++		serial0 = &gsbi4_serial;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		rsvd@41200000 {
++			reg = <0x41200000 0x300000>;
++			no-map;
++		};
++	};
++};
++
++&gsbi4 {
++	qcom,mode = <GSBI_PROT_I2C_UART>;
++	status = "okay";
++
++	serial@16340000 {
++		status = "okay";
++	};
++	/*
++	 * The i2c device on gsbi4 should not be enabled.
++	 * On ipq806x designs gsbi4 i2c is meant for exclusive
++	 * RPM usage. Turning this on in kernel manifests as
++	 * i2c failure for the RPM.
++	 */
++};
++
++&pcie0 {
++	compatible = "qcom,pcie-ipq8064-v2";
++};
++
++&pcie1 {
++	compatible = "qcom,pcie-ipq8064-v2";
++};
++
++&pcie2 {
++	compatible = "qcom,pcie-ipq8064-v2";
++};
++
++&sata {
++	ports-implemented = <0x1>;
++};
++
++&ss_phy_0 {
++	qcom,rx-eq = <2>;
++	qcom,tx-deamp_3_5db = <32>;
++	qcom,mpll = <5>;
++};
++
++&ss_phy_1 {
++	qcom,rx-eq = <2>;
++	qcom,tx-deamp_3_5db = <32>;
++	qcom,mpll = <5>;
++};
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.36.1
+

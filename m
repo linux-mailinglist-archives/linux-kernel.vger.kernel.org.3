@@ -2,71 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82242578E72
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCB0578E77
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234580AbiGRXqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 19:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S235163AbiGRXuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 19:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiGRXqv (ORCPT
+        with ESMTP id S229615AbiGRXuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 19:46:51 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20F933417
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:46:49 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so19774743pjn.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:46:49 -0700 (PDT)
+        Mon, 18 Jul 2022 19:50:13 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E0731355
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:50:11 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id x11so4306410qts.13
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:50:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V+k5WNh4t1m32DC2xdn9fqss9Z9YPd/9WCm7Vf/65ew=;
-        b=IKcajPEAOoIJLsaEnsE29X545rHMn3JotFea30qeq9PiH2LmRPV0e2ppAntkVs3SbX
-         qNmZXVmRwcP+wgg79UgXOD28mrlAFYR4DY9Mhy2g8+P2Xld7JXlu7svBXo2lz2EgEVNl
-         efo6pQEuJOxxswIoQohjFg2GOpoeduYEm342e7MOPqLd+i+sbneveien6K40mVZBcUzN
-         Pj3QAC/hT4WpWaUYbdY5isGpRQUYYSuWP+E0ef0pCKjBbEf98jANV0nrgifcXwD5DiT7
-         osgc7gmGlWp3JNod5zpKbBzHK6DX1aWKdw/6HxZAxmcE2ke8+yE34zvOVgup4RY8O8K9
-         +ydQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=kGG9hK6/fhPYP5ESwwboqRMB7+NvjeWq6Eay6lmiXCI=;
+        b=VlLfcO29O92uk5Fj654ZAYB7C4/sETGre2JqOjHe66hQut5b9toLVEFq8KqrnDyUk+
+         lTyXLtkMF4os2hZropep5TrTK5KfFbYVhS8vU/iGRC1aZKV6QfGiZ2YUAtcZnGhz3n+8
+         TnfclZ2FfDCg9e2/jrfiD9WhMrzpl8dWmzC/kt4LZmUebSaHvhmiYEpZ/jxuxFMsy/QA
+         jlf07oF/b8Da9yqqhah9prZzFFF30sPHJUC4/g9utSFUEmkfzVn43JNNN9BLsGKkClYl
+         stwB1CBZ4EFltfW5/TFsHr8rbhENFLMZAbjMi2c5MSaIAVjG2fVxWBCjBwD+f3BKnyIJ
+         3kkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V+k5WNh4t1m32DC2xdn9fqss9Z9YPd/9WCm7Vf/65ew=;
-        b=5vM8uK0iz7XdJm80nTAIeWhmGu79IX8z2+fF88Yb1/jATiv5LVDfgOtO8b4b7e/xcV
-         4gmCAS3YnttojcpgHWhmDBC/VEwgU7o0wrAow7qFzfZjJD2GBPJlZchvGd/j+BY11pFW
-         XILUkxZosLIJbEZh++qo5ESQkL7DfP2SW26kAT55L315ZOhanDQsL7uR3I5+uCxQJE3d
-         +jqvearq2p4B7yzj/ZdCGbcWxhc6WqifmbAMDUYPMjWXNyluSMTvenjHxNIxDeRh899s
-         t+bviQfVtDaPBE6zNG71UxEtRhqo8XVNeEClFSdd1mCTVfaGpDUWBkqHzHlJFX91v6K0
-         zcxQ==
-X-Gm-Message-State: AJIora8jN74eUonryxdP0g/35DXBrKkWQf5VcS2QBpg6wNIzEcHnWWrs
-        ajz0GC0cmmr4zvRsmISUDcnJQQ==
-X-Google-Smtp-Source: AGRyM1tHTutF3/J1jx5hyumfSIH5Nny7tbSTVRFNGviIDr3edV8HTIveuVe3LoJ6y2mAcVox2RucNA==
-X-Received: by 2002:a17:90a:4e05:b0:1ec:8de4:1dd5 with SMTP id n5-20020a17090a4e0500b001ec8de41dd5mr34719549pjh.242.1658188009008;
-        Mon, 18 Jul 2022 16:46:49 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id c13-20020aa7952d000000b0052ac5e304d0sm10157638pfp.179.2022.07.18.16.46.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 16:46:48 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 23:46:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, oliver.upton@linux.dev,
-        shuah@kernel.org, maz@kernel.org, pbonzini@redhat.com,
-        shan.gavin@gmail.com
-Subject: Re: [PATCH v3] KVM: selftests: Fix target thread to be migrated in
- rseq_test
-Message-ID: <YtXw5DKI7z9s1TA6@google.com>
-References: <20220719013540.3477946-1-gshan@redhat.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=kGG9hK6/fhPYP5ESwwboqRMB7+NvjeWq6Eay6lmiXCI=;
+        b=lnkdq4Y1R/r01kko5Q1oJlO+9GllpGjLMFwALu7mvM++KgFRReZnNJiTU4uvCXxvhW
+         RCt4ag2MQoAcnT+kZ7oYyiSyXnoaeQ9ecdZ1r5iexGWr8modnrrx0gWLx5zq/8lURAIY
+         SedAafjlc2wbdABlCG2fPoVuMK5/UR42yJPtA9gmeIkOaYB66Qcy9/xngVChS28zopZW
+         cCb84IdPiihTKdvxJ8hTtO/fU9pPmpmmL8O2hUTYgW57fDDZJkqf1SSap6PE6saSbBHA
+         3SQU39VohNs/FW+q+CTKTRQUyvlGkuJ01Hhnn4MI5O8QhHdxlu0zHEBQLqlr4ZFt/Tf4
+         JpRw==
+X-Gm-Message-State: AJIora8bcYiC5cZoiiA5cuEYCfCDZyxJUaUO2lAYtFNJt7YtfaHXpupl
+        rBGQungFGiFOmuhyV2ojlteRmjQJReYJdjwt9v4=
+X-Google-Smtp-Source: AGRyM1vMh64VQZjysUkcwkuFQsafV2uQy9g9bSldWAXIM8dm2+6Fak+IMbz2mEZ9QMVqycyjrr6XbkFl4eGN0ibWRp8=
+X-Received: by 2002:a05:622a:19aa:b0:31e:f81d:7371 with SMTP id
+ u42-20020a05622a19aa00b0031ef81d7371mr2513259qtc.345.1658188210793; Mon, 18
+ Jul 2022 16:50:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719013540.3477946-1-gshan@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Tue, 19 Jul 2022 04:50:00 +0500
+Message-ID: <CABXGCsPRrUoNtO4J8H8aLWRCGGZkwHqtOZV9Edamd2pXVB0ooA@mail.gmail.com>
+Subject: Command "clinfo" causes BUG: kernel NULL pointer dereference,
+ address: 0000000000000008 on driver amdgpu
+To:     amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,83 +63,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022, Gavin Shan wrote:
-> ---
-> v3: Improved changelog (Oliver Upon)
+Hi guys I continue testing 5.19 rc7 and found the bug.
+Command "clinfo" causes BUG: kernel NULL pointer dereference, address:
+0000000000000008 on driver amdgpu.
 
-Sorry I didn't catch v3, I saw that you waited but just didn't get to this earlier :-/
+Here is trace:
+[ 1320.203332] BUG: kernel NULL pointer dereference, address: 0000000000000008
+[ 1320.203338] #PF: supervisor read access in kernel mode
+[ 1320.203340] #PF: error_code(0x0000) - not-present page
+[ 1320.203341] PGD 0 P4D 0
+[ 1320.203344] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[ 1320.203346] CPU: 5 PID: 1226 Comm: kworker/5:2 Tainted: G W L
+-------- --- 5.19.0-0.rc7.53.fc37.x86_64+debug #1
+[ 1320.203348] Hardware name: System manufacturer System Product
+Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
+[ 1320.203350] Workqueue: events delayed_fput
+[ 1320.203354] RIP: 0010:dma_resv_add_fence+0x5a/0x2d0
+[ 1320.203358] Code: 85 c0 0f 84 43 02 00 00 8d 50 01 09 c2 0f 88 47
+02 00 00 8b 15 73 10 99 01 49 8d 45 70 48 89 44 24 10 85 d2 0f 85 05
+02 00 00 <49> 8b 44 24 08 48 3d 80 93 53 97 0f 84 06 01 00 00 48 3d 20
+93 53
+[ 1320.203360] RSP: 0018:ffffaf4cc1adfc68 EFLAGS: 00010246
+[ 1320.203362] RAX: ffff976660408208 RBX: ffff975f545f2000 RCX: 0000000000000000
+[ 1320.203363] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff976660408198
+[ 1320.203364] RBP: ffff976806f6e800 R08: 0000000000000000 R09: 0000000000000000
+[ 1320.203366] R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+[ 1320.203367] R13: ffff976660408198 R14: ffff975f545f2000 R15: ffff976660408198
+[ 1320.203368] FS: 0000000000000000(0000) GS:ffff976de1200000(0000)
+knlGS:0000000000000000
+[ 1320.203370] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1320.203371] CR2: 0000000000000008 CR3: 00000007fb31c000 CR4: 0000000000350ee0
+[ 1320.203372] Call Trace:
+[ 1320.203374] <TASK>
+[ 1320.203378] amdgpu_amdkfd_gpuvm_destroy_cb+0x5d/0x1e0 [amdgpu]
+[ 1320.203516] amdgpu_vm_fini+0x2f/0x4e0 [amdgpu]
+[ 1320.203625] ? mutex_destroy+0x21/0x50
+[ 1320.203629] amdgpu_driver_postclose_kms+0x1da/0x2b0 [amdgpu]
+[ 1320.203734] drm_file_free.part.0+0x20d/0x260
+[ 1320.203738] drm_release+0x6a/0x120
+[ 1320.203741] __fput+0xab/0x270
+[ 1320.203743] delayed_fput+0x1f/0x30
+[ 1320.203745] process_one_work+0x2a0/0x600
+[ 1320.203749] worker_thread+0x4f/0x3a0
+[ 1320.203751] ? process_one_work+0x600/0x600
+[ 1320.203753] kthread+0xf5/0x120
+[ 1320.203755] ? kthread_complete_and_exit+0x20/0x20
+[ 1320.203758] ret_from_fork+0x22/0x30
+[ 1320.203764] </TASK>
 
-> ---
->  tools/testing/selftests/kvm/rseq_test.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index 4158da0da2bb..c83ac7b467f8 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -38,6 +38,7 @@ static __thread volatile struct rseq __rseq = {
->   */
->  #define NR_TASK_MIGRATIONS 100000
->  
-> +static pid_t rseq_tid;
->  static pthread_t migration_thread;
->  static cpu_set_t possible_mask;
->  static int min_cpu, max_cpu;
-> @@ -106,7 +107,8 @@ static void *migration_worker(void *ign)
+Full kernel log is here:
+https://pastebin.com/EeKh2LEr
 
-Pass the target TID to the worker, then there's no need to use a global and no
-chance of consuming rseq_tid "uninitialized".  The casting to convert gettid() to
-a "void *" is annoying, but not the end of the world.
+And one hour later after a lot of messages "BUG: workqueue lockup" GPU
+completely hung.
 
->  		 * stable, i.e. while changing affinity is in-progress.
->  		 */
->  		smp_wmb();
-> -		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> +		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask),
-> +				      &allowed_mask);
+I will be glad to test patches that fix this bug.
 
-Eh, let this poke out, don't think it's worth wrapping here.
-
-E.g.
-
----
- tools/testing/selftests/kvm/rseq_test.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-index aba7be178dab..a54d4d05a058 100644
---- a/tools/testing/selftests/kvm/rseq_test.c
-+++ b/tools/testing/selftests/kvm/rseq_test.c
-@@ -80,8 +80,9 @@ static int next_cpu(int cpu)
- 	return cpu;
- }
-
--static void *migration_worker(void *ign)
-+static void *migration_worker(void *__rseq_tid)
- {
-+	pid_t rseq_tid = (pid_t)(unsigned long)__rseq_tid;
- 	cpu_set_t allowed_mask;
- 	int r, i, cpu;
-
-@@ -104,7 +105,7 @@ static void *migration_worker(void *ign)
- 		 * stable, i.e. while changing affinity is in-progress.
- 		 */
- 		smp_wmb();
--		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-+		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask), &allowed_mask);
- 		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
- 			    errno, strerror(errno));
- 		smp_wmb();
-@@ -227,7 +228,8 @@ int main(int argc, char *argv[])
- 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
- 	ucall_init(vm, NULL);
-
--	pthread_create(&migration_thread, NULL, migration_worker, 0);
-+	pthread_create(&migration_thread, NULL, migration_worker,
-+		       (void *)(unsigned long)gettid());
-
- 	for (i = 0; !done; i++) {
- 		vcpu_run(vcpu);
-
-base-commit: ad6cb756bb497997032df2bda7cbdff076e4a66a
---
+-- 
+Best Regards,
+Mike Gavrilov.

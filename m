@@ -2,128 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0590757882B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68E4578837
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235625AbiGRRNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 13:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S234444AbiGRRTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 13:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234592AbiGRRNk (ORCPT
+        with ESMTP id S234024AbiGRRTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:13:40 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009322C10E
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:13:39 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id s129-20020a632c87000000b00411564fe1feso5866935pgs.7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:13:39 -0700 (PDT)
+        Mon, 18 Jul 2022 13:19:16 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4562320188
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:19:15 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id p9so12357533pjd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:19:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=T789rHVyM0EXnBz1s4xRom+47Pt99vhuH1gFXMufNBM=;
-        b=lUCY63XCcnTUmmbN+2RPcnFjRSJ8Sfm/6HX/0m66JTA1bkq5V2Cy7qXkNOVlD+O9p6
-         t3eUdZWsFDMfRYvIBTI01Mh4VZcl+Uzy2MNRljKAt88WIBPSD0cLeewVVk+sZepqWKq8
-         XRh5A9vzt69+AbrzXpvUfSsOhNuxMSxC1XAKR/qk9/MXTtlPfjCVklm08est7K/SRs8S
-         TjbXiNSzYEfZYm2ko/HxHdPMrbprvT7xIb60h7WnbhqKXYs/GJzmTfnAXEJb7jQFgd32
-         65TX2LBN6bcvOF3ciPmITGYrZpw/AVuTCKni18RUN5NwY1azbmFDMsdZXmiAfAiU+z+B
-         Vx5Q==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6AlSG11Xz0KEmY1J4qxRxusy/iUb0jY7LfF1OTYlmoE=;
+        b=vEheWttEDztzn0wX59F2KAGkreCbHs3di+tKqkl4IAPJ8k+nkONjCaOPX0ur9T4LFn
+         HrVp5kPLFewdY8BqiqJF/XavfQqqwVJQWl6AOBEy+YbzNGvJwMKXg6qBhrucJC1j/d2f
+         /eixL9KXtAUfWaEZ6j5QcDUsb1pTei0QpfJACiz2a6oePiDheULjMRKUm+wzPiSz6E4w
+         0ZexggTDJG0McCTRtrAfYvWd0L88p05aYt0yWRNZGz/f1isLq+nSOc9bpNoaOfCzhY7g
+         YNbtNy9apzKYpB55t8+rdEKFWbEX3NqHfi3QUzYz5acc7L66jsN9JI8C3C/T5ZcpnnRY
+         PSMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=T789rHVyM0EXnBz1s4xRom+47Pt99vhuH1gFXMufNBM=;
-        b=s3yTQXyWmP9lHn/K77xMoC0rhuzHufQkLkiEAZ3zTx4oW8FL5RJzgQeh2MVGcEp3GB
-         mQKESNEZdkLLPJa3VFHXAwZuqncK6zzo78UyjRu5dIdP/5eeo8wZ+nrqF0xLIjDUOwqy
-         5zZztpdtbmoDc5r96KERT82XjkaaGKJtgkQMUxr1hfqI1Tv414Uv6ikeOQeK57gHp95M
-         UkVZDVIqA+9eNFpg6tPEkYp4Hsfrlx0M5FhmCF6tpeO8zi1jYAYmrTEXIrj5n9OBcdGn
-         TGw1aMq0kuqKd3ZdUNRfdeGO5lQsus1EV7fSqJBzLMKWSOFh5iGnz7KUwX6ijP8xPp0o
-         HB3w==
-X-Gm-Message-State: AJIora+EymLbrvniuaD7bp4YMN+gumQSSJPGTKg+N8Fb7q7iyblcuZxr
-        JfRezVuNhZo0FFgrKEYbAjcDO1LGQs90
-X-Google-Smtp-Source: AGRyM1va7P2ztYevG3XekdBbVXxvteBJ+UuQ0nFr6oDlNIJ5SGcdXE8wK4eAZhIprsSbJdWw5p1sec3y4FFW
-X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a05:6a00:188e:b0:52a:b545:559f with SMTP
- id x14-20020a056a00188e00b0052ab545559fmr29158357pfh.18.1658164419189; Mon,
- 18 Jul 2022 10:13:39 -0700 (PDT)
-Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Mon, 18 Jul 2022 17:13:32 +0000
-In-Reply-To: <20220718171333.1321831-1-mizhang@google.com>
-Message-Id: <20220718171333.1321831-3-mizhang@google.com>
-Mime-Version: 1.0
-References: <20220718171333.1321831-1-mizhang@google.com>
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v2 2/2] kvm: nVMX: add tracepoint for kvm:kvm_nested_vmrun
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
-        David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6AlSG11Xz0KEmY1J4qxRxusy/iUb0jY7LfF1OTYlmoE=;
+        b=iAPfsjt4TNHsmttK6rhQdBFtZUEJHkFlAI/USlA2UT2LvILDmYOmOfvN4eb/Ikj6n8
+         dYZUeMTRoxbr4kExzUwow3/0bVyGEzYUCWYoFfofkJyztXGpuqoNfUbD2f0PqkCVOcEg
+         lsqgPNoN/sN5F/Kq3dUr2EMigLW7Ol3zPQqGVh8cNITCYaNSbTRyavxwqi/I2G3OP80T
+         LagtW8yG2nbO0yPkgGwDL+tp9Llzkb8G0QhrfSk1NtxZ30aruBZjDRkZj9PkdHgRTcRS
+         lox9j8FWKC2pUTYVz6x1EOUaDLFv1THz1Pdhd79K9P9IIV30po9v83EdJXnkU+EfJ9Gj
+         O5Qg==
+X-Gm-Message-State: AJIora/QjeUvMNb5PIfq7SfSAp5qzJMqycYfTn6LOQPQUocX3kiexCDa
+        RL//21YrUb+tEyhkcuyko91qHg==
+X-Google-Smtp-Source: AGRyM1t9xo/AS/NKpz2t46SlZm8sa/vdqDfuyTscDK82ci703AzuOy6ziJl8eg57k0SFP6nQ2Qy72A==
+X-Received: by 2002:a17:90b:3d85:b0:1f0:7355:734 with SMTP id pq5-20020a17090b3d8500b001f073550734mr34853999pjb.24.1658164754519;
+        Mon, 18 Jul 2022 10:19:14 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id a20-20020aa794b4000000b0052abfc4b4a4sm9830384pfl.12.2022.07.18.10.19.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 10:19:13 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 11:19:11 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v1 0/2] Add support for MT8188 SCP
+Message-ID: <20220718171911.GA3331732@p14s>
+References: <20220715051821.30707-1-tinghan.shen@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715051821.30707-1-tinghan.shen@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Matlack <dmatlack@google.com>
+On Fri, Jul 15, 2022 at 01:18:19PM +0800, Tinghan Shen wrote:
+> 
+> Tinghan Shen (2):
+>   dt-bindings: remoteproc: mediatek: Add binding for mt8188 scp
+>   remoteproc: Support MT8188 SCP
+> 
+>  .../devicetree/bindings/remoteproc/mtk,scp.yaml     |  2 ++
+>  drivers/remoteproc/mtk_scp.c                        | 13 +++++++++++++
+>  2 files changed, 15 insertions(+)
 
-This tracepoint is called by nested SVM during emulated VMRUN. Call
-also during emulated VMLAUNCH and VMRESUME in nested VMX.
+I have applied this set.
 
-Attempt to use analagous VMCS fields to the VMCB fields that are
-reported in the SVM case:
+Thanks,
+Mathieu
 
-"int_ctl": 32-bit field of the VMCB that the CPU uses to deliver virtual
-interrupts. The analagous VMCS field is the 16-bit "guest interrupt
-status".
-
-"event_inj": 32-bit field of VMCB that is used to inject events
-(exceptions and interrupts) into the guest. The analagous VMCS field
-is the "VM-entry interruption-information field".
-
-"npt_enabled": 1 when the VCPU has enabled nested paging. The analagous
-VMCS field is the enable-EPT execution control.
-
-"npt_addr": 64-bit field when the VCPU has enabled nested paging. The
-analagous VMCS field is the ept_pointer.
-
-Signed-off-by: David Matlack <dmatlack@google.com>
-[Add several parameters and move the code into the
-nested_vmx_enter_non_root_mode().]
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
----
- arch/x86/kvm/vmx/nested.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index f5cb18e00e78..825f7102daee 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -3367,6 +3367,15 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
- 	};
- 	u32 failed_index;
- 
-+	trace_kvm_nested_vmrun(kvm_rip_read(vcpu),
-+			       vmx->nested.current_vmptr,
-+			       vmcs12->guest_rip,
-+			       vmcs12->guest_intr_status,
-+			       vmcs12->vm_entry_intr_info_field,
-+			       vmcs12->secondary_vm_exec_control & SECONDARY_EXEC_ENABLE_EPT,
-+			       vmcs12->ept_pointer,
-+			       KVM_ISA_VMX);
-+
- 	kvm_service_local_tlb_flush_requests(vcpu);
- 
- 	evaluate_pending_interrupts = exec_controls_get(vmx) &
--- 
-2.37.0.170.g444d1eabd0-goog
-
+> 
+> -- 
+> 2.18.0
+> 

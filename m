@@ -2,135 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDB75787A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368B45787D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235559AbiGRQnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S233242AbiGRQyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGRQnB (ORCPT
+        with ESMTP id S229890AbiGRQx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:43:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78413FD07;
-        Mon, 18 Jul 2022 09:43:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BD25614D5;
-        Mon, 18 Jul 2022 16:43:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D518C341C0;
-        Mon, 18 Jul 2022 16:42:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658162579;
-        bh=mt3Hyx8w6+AK+UEpBf+TEowqs5ZfWsQtF+zhUIoosBg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BGxX9vsMm1Ecrtq84DecdKj2ORySdm25ksz6E2U2vy91SN+3jC3GDANNGLUVg5lnP
-         e4nJPEkDUuQTG8z2+sVPseOya+28/8YR/gbw8DbnXG2hmDvdWy91geYgVEkBhtI/yA
-         c0Pfbzj3uh17pMp1a67PBC0cDA01HCa68YgL6bfE0GjGq/O4DqoLQ8g6vxUeK/K3FM
-         kuwyFcpLF59a1bpliKM7nfSvxckVg1f87cKrs0Gfw93tiXiMwUlVaQTOZCUNeMNjjF
-         B8OTLAipPWoMzX3IPty7g+nuMX1AI8cd8lYthlhjNbvqoSPWfs0UuFMzssUCc3SesF
-         ex2a8XW5rhW9g==
-Date:   Mon, 18 Jul 2022 17:52:53 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lars@metafoo.de, cy_huang@richtek.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 0/3] Add Richtek RTQ6056 support
-Message-ID: <20220718175253.1333a61a@jic23-huawei>
-In-Reply-To: <1658123163-10039-1-git-send-email-u0084500@gmail.com>
-References: <1658123163-10039-1-git-send-email-u0084500@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Mon, 18 Jul 2022 12:53:58 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FD962E5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:53:57 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id p4so7517874wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PFgEFsfl8rKJs7ra2dHHZoS/sWYcHlxBizMiDuSMBHs=;
+        b=mKTwFX9DcjFSbsWZCVza9QbOzZMgaViFHpyhezP8skfw9OhFHOtxe7Coa9eHKiupWf
+         GVN5yHFqjF5RvR4cUnCT5TeYNNGH16qQTQo1324kdB32i+xK1jhd92eVU0UxcAZ1VJl+
+         YCFlHbbXFyJy8vOlddVjkGKOTQ/m/QSiyBzHwmTC5yTtRUwcf7Uvc6jPR9g4q/bJhb7J
+         0l7QCOPJacqQKytb6294d+jLYTpGkqKCr9Rhiqu6KsMCbZfa8rkADp06Jt0BTjfPbpq6
+         bKh2lRVqkB/XiLnFVspPNZtdu2+PyjKIBF3giMevCtYzSqa8goeqyMShrFPusWEqeYPO
+         hhSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PFgEFsfl8rKJs7ra2dHHZoS/sWYcHlxBizMiDuSMBHs=;
+        b=r5DO5rY3M42o4VJChkspK/9MNBcDr3HuJqne1ekhKHWWQIrdymtc2nH4Z+dJS+HbKg
+         cMhrUNS1Vz8CGgvkM3C+BXbc0FIzt3WJurryZdvYMUhGChzh29gUX0lNg2Q3ejOQDPD6
+         z6r3JOnndcTKkXkEXoSepHYKhTzgdbT3SDooAjFDfVLmU047PfHSkRAOUkKes/L4+fQ6
+         S13aKjGv4fr3KXU5kGZ/40Q/3NU6IxtaNk8EtXkuCZHgk3/e67LVbXnURHeUHwo7R+wD
+         tOAZ7j7TEKNNGStYKLMy+DbJrCFVzUh/GA8pcQheYEPS+knBqZzZs1uw2+wcT7iYwc+S
+         Qhuw==
+X-Gm-Message-State: AJIora/OJRyG96b1hj00zwBZrOlxnmvyFeJoiF3g/NWY/xlxewX6WZpP
+        NNZTX+FHFQ1KdBaaiY2ArS9a21zdvF4/Ta/g+EMmlg==
+X-Google-Smtp-Source: AGRyM1vVZb4Aon6v5ILgG/Iyd1Sfx4G+07cbbi2sRUeRYV96oOPEBR88UX4fRnJ/EZaOzI28tw0KmqafYPKa3sfBzio=
+X-Received: by 2002:a05:600c:a146:b0:3a3:1e79:4446 with SMTP id
+ ib6-20020a05600ca14600b003a31e794446mr3231430wmb.158.1658163235828; Mon, 18
+ Jul 2022 09:53:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+ <20220715061027.1612149-7-kaleshsingh@google.com> <87k08c3vtw.wl-maz@kernel.org>
+In-Reply-To: <87k08c3vtw.wl-maz@kernel.org>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Mon, 18 Jul 2022 09:53:44 -0700
+Message-ID: <CAC_TJvcxPCWXq_dViN09c5eyd0N_TdfOmOgExaiO+ugfeTuN6g@mail.gmail.com>
+Subject: Re: [PATCH v4 06/18] arm64: stacktrace: Add description of stacktrace/common.h
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>, android-mm@google.com,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 13:46:00 +0800
-cy_huang <u0084500@gmail.com> wrote:
+On Sun, Jul 17, 2022 at 2:58 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Fri, 15 Jul 2022 07:10:15 +0100,
+> Kalesh Singh <kaleshsingh@google.com> wrote:
+> >
+> > Add brief description on how to use stacktrace/common.h to implement
+> > a stack unwinder.
+> >
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > ---
+> >  arch/arm64/include/asm/stacktrace/common.h | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/arch/arm64/include/asm/stacktrace/common.h b/arch/arm64/include/asm/stacktrace/common.h
+> > index f86efe71479d..b362086f4c70 100644
+> > --- a/arch/arm64/include/asm/stacktrace/common.h
+> > +++ b/arch/arm64/include/asm/stacktrace/common.h
+> > @@ -2,6 +2,14 @@
+> >  /*
+> >   * Common arm64 stack unwinder code.
+> >   *
+> > + * To implement a new arm64 stack unwinder:
+> > + *     1) Include this header
+> > + *
+> > + *     2) Provide implementations for the following functions:
+> > + *            - on_overflow_stack()
+> > + *            - on_accessible_stack()
+> > + *            - unwind_next()
+>
+> A short description of what these helpers are supposed to do would
+> also be helpful.
 
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> This patch series is to enable Richtek RTQ6056 support.
-> 
-> The RTQ6056 is a high accuracy current-sense monitor with I2C interface, and
-> the device provides full information for system by reading out the load current
-> and power.
+Thanks Fuad, Marc. I'll add descriptions in the next version.
 
-If sending a new version without there being any public replies to the previous version
-please reply to that thread yourself to say you are resending and why.
-Greatly reduces the chances of me picking up the wrong version!
-> 
-> Since v7
-> - Use 'DEFINE_RUNTIME_DEV_PM_OPS' to replace the explicit declaration of pm_ops.
-> 
-> Since v6
-> - Remove specific rtq6056 ABI document.
-> - Update integration time description in general ABI document.
-> - Remove the redundant blank line.
-> - To prevent the race condition for attribute wrtie and shunt resistor write,
->   use 'iio_device_claim_direct_mode' API.
-> - Refine the order for 'action_reset' and 'pm_runtime'.
-> - Fix text typo in comment like as ohm to Ohm and timea to time.
-> 
-> Since v5
-> - Fix kernel version text for ABI.
-> 
-> Since v4
-> - Add '__aligned(8)' for timestamp member.
-> - Declare timestamp from 'int64_t' to more unified 's64'.
-> 
-> Since v3
-> - change the node name to be generic 'adc' in binding example.
-> - Refine pm_runtime API calling order in 'read_channel' API.
-> - Fix vshunt wrong scale for divider.
-> - Refine the comment text.
-> - Use 'devm_add_action_or_reset' to decrease the code usage in probe
->   function.
-> - Use RUNTIME_PM_OPS to replace SET_RUNTIME_PM_OPS.
-> - minor fix for the comma.
-> - Use pm_ptr to replace the direct assigned pm_ops.
-> 
-> Since v2
-> - Change the resistor property name to be generic 'shunt-resistor-micro-ohms'.
-> - Rename file from 'rtq6056-adc' to 'rtq6056'.
-> - Refine the ABI, if generic already defined it, remove it and check the channel
->   report unit.
-> - Add copyright text.
-> - include the correct header.
-> - change the property parsing name.
-> - To use iio_chan_spec address field.
-> - Refine each channel separate and shared_by_all.
-> - Use pm_runtime and pm_runtime_autosuspend.
-> - Remove the shutdown callback. From the HW suggestion, it's not recommended to
->   use battery as the power supply.
-> - Check all scale unit (voltage->mV, current->mA, power->milliWatt).
-> - Use the read_avail to provide the interface for attribute value list.
-> - Add comma for the last element in the const integer array.
-> - Refine each ADC label text.
-> - In read_label callback, replace snprintf to sysfs_emit.
-> 
-> ChiYuan Huang (3):
->   dt-bindings: iio: adc: Add rtq6056 adc support
->   iio: adc: Add rtq6056 support
->   Documentation: ABI: testing: rtq6056: Update ABI docs
-> 
->  Documentation/ABI/testing/sysfs-bus-iio            |  10 +
->  .../bindings/iio/adc/richtek,rtq6056.yaml          |  56 ++
->  drivers/iio/adc/Kconfig                            |  15 +
->  drivers/iio/adc/Makefile                           |   1 +
->  drivers/iio/adc/rtq6056.c                          | 663 +++++++++++++++++++++
->  5 files changed, 745 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/richtek,rtq6056.yaml
->  create mode 100644 drivers/iio/adc/rtq6056.c
-> 
-
+>
+> Thanks,
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

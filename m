@@ -2,82 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58822578B13
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E8C578B15
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236234AbiGRTi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S236227AbiGRTig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236216AbiGRTiJ (ORCPT
+        with ESMTP id S236271AbiGRTiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:38:09 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AD6E30569;
-        Mon, 18 Jul 2022 12:38:03 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.92,281,1650898800"; 
-   d="scan'208";a="126531998"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 19 Jul 2022 04:38:02 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 1719440E2264;
-        Tue, 19 Jul 2022 04:37:58 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] dt-bindings: interrupt-controller: renesas,rzg2l-irqc: Document RZ/V2L SoC
-Date:   Mon, 18 Jul 2022 20:37:45 +0100
-Message-Id: <20220718193745.7472-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 15:38:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011AF31393;
+        Mon, 18 Jul 2022 12:38:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC478B81705;
+        Mon, 18 Jul 2022 19:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4242C341C0;
+        Mon, 18 Jul 2022 19:38:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658173095;
+        bh=vpqAL0CO/3a8visbxpQjy5FG9dzSYgZJjhqVkMHPZ9M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uJwT0BIEYiy2IydNB5664j5+dSwoB1bzgZCPvsxIEy+6GAl6EsyKLpNq3e7u0lEu2
+         qD+Gl+Le97pLChGOVBt7IP8fdfIj8bXoB0R0fGImT/O51gn3IJ10B4TmSKI5nNFwhT
+         Ca5OXWip3qIhshOufJ2u5z/hDTjvW48Frl9viIwaNS9X6XUAmd4o+WH5Ere/eJXC7r
+         d+f9U8axJLckNX6l4SIuz7Debc0m64ckc84iDn3ZoM6WMNH6+HohWC7417ubUXQCxj
+         zD7CLVkyX7mNjRPZ4hxrMd37yGljypLrSyYEicoAucTKOVCWn7ZYtGDPnwmPnUrWn2
+         kFGEwZAyyIquw==
+Date:   Mon, 18 Jul 2022 12:38:10 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     edumazet@google.com, aelior@marvell.com, skalluru@marvell.com,
+        manishc@marvell.com, davem@davemloft.net, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bnx2x: Fix comment typo
+Message-ID: <20220718123810.220fae3f@kernel.org>
+In-Reply-To: <20220715045630.22682-1-wangborong@cdjrlc.com>
+References: <20220715045630.22682-1-wangborong@cdjrlc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document RZ/V2L (R9A07G054) IRQC bindings. The RZ/V2L IRQC block is
-identical to one found on the RZ/G2L SoC. No driver changes are
-required as generic compatible string "renesas,rzg2l-irqc" will be
-used as a fallback.
+On Fri, 15 Jul 2022 12:56:30 +0800 Jason Wang wrote:
+> Subject: [PATCH] bnx2x: Fix comment typo
+> Date: Fri, 15 Jul 2022 12:56:30 +0800
 
-While at it, update the comment "# RZ/G2L" to "# RZ/G2{L,LC}" for
-"renesas,r9a07g044-irqc" compatible string as both RZ/G2L and
-RZ/G2LC SoC's use the common SoC DTSI and have the same IRQC block.
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-Note: This patch depends on [0] which is in next.
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
-commit/?h=next-20220718&id=96fed779d3d4cb3c221bb70e94de59b8dec0abfc
----
- .../bindings/interrupt-controller/renesas,rzg2l-irqc.yaml      | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
-index ffbb4ab4d9a7..33b90e975e33 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
-@@ -26,7 +26,8 @@ properties:
-   compatible:
-     items:
-       - enum:
--          - renesas,r9a07g044-irqc    # RZ/G2L
-+          - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
-+          - renesas,r9a07g054-irqc    # RZ/V2L
-       - const: renesas,rzg2l-irqc
- 
-   '#interrupt-cells':
--- 
-2.25.1
-
+The date on your submissions is broken, please fix and repost.
+I got those patches on Monday my time and they are supposedly 
+sent on Thursday my time :(

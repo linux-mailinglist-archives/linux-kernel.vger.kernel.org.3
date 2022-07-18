@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A8B57880C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F75578817
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235766AbiGRRFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 13:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        id S234759AbiGRRFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 13:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235677AbiGRRFq (ORCPT
+        with ESMTP id S235625AbiGRRFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:05:46 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B752BB2C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:05:45 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id o18so11133101pgu.9
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:05:45 -0700 (PDT)
+        Mon, 18 Jul 2022 13:05:47 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF192BB1A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:05:46 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id b10so1434286pjq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:05:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8D/oi8qgxVglaE+KkXtnFYaHMrc21lTodlCKwN8q0IQ=;
-        b=6NTHNWDkGfN7I+U3W+qmMcN0LlUVIhzQVfmatvueYDhm8xc3F4XrNe3HMFoK47IaeP
-         wezuL4aRYBbBQbfcTX6JLbwTLYCb6mq25SW67gKOZRSMVOOn9ugx9Du/yLIya1jEXiGa
-         VaLqwovf483nx9vII+fm0YIOZKj3Je/TzzINbqEZBo+KvLTzAQ79d3DtpvrydepRM+i5
-         YsD2Eidv3FO5D50/wsetAe86PBnZdrehL4o2bdHfVEgSmy+pVZKLQ4n4yt4wPXyejx2Q
-         yZkNzkd/0jDcSycMCWUv6lNEvloqo4BB9asMOgTq7RRA5XOLGZGz8j+W2LKSmBcQCAU9
-         k4aQ==
+        bh=H7ChdRBKS+9A003EiQbM2SMDrKCCYQePnInXhSsyMB0=;
+        b=2V7H54kc+3zNv1TcuveEZhkWNgIt1ocwR1qZtOLzfciyvULmAUYAVdSYvDM/LMqPW7
+         B2K1L+wSiEDZFuMDMucw3/YkGg89OijRh8dtnIplDxavoLr+HLhF1RSyQXxCnRG/72Tf
+         KHeNwRoBhGw0rXQdnYIWadk5aSrZwLj7I/0cV0ZkgQrHx0ezw5iLQkZg1Uak7Z5I0sqE
+         qFLiHdxohtP+MR29CMLuGTlZRid3ndTvwyv2IFhPeeJPuBbWKdNqbpz4KKb8bRDh9SWd
+         v8nTz6wqG+l9bP6qNs15D6dX6qH+nOrr4SmzAUcKI22h5JluwKsyWFI5ud4IQSpY+eeR
+         W4Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8D/oi8qgxVglaE+KkXtnFYaHMrc21lTodlCKwN8q0IQ=;
-        b=3lnK6TQUeWjYk7gg3bumt/ZdpkXd8OkO4OL7eOo5HSpJTk0mPMPVSRDbOMeA/DWLCu
-         NmqSUndZ+PAkvm7HpXeA48/6ql/yPd4R925XObTRl6mC84pGxdKp0xF5kHAploihm5HP
-         ppAmGnpmmUPVTzf1KPXX2/+e3WJgohMq++xcJHpM1FVXJU2EcAbtCIhjJzGuSh8C/2/f
-         Ap36RnEUs2iHNrLrbt5Qcx+PPxO8r+1mc5rfgNDZV4mTGTGC1NU2e7OVrXOqB9u51L1J
-         C/NzxckQVqBrwRCHcJwfzhDCP+b0hPS04GdZelT89o/LQ25q/Rik4ph+xEOpbdw439Bp
-         g+aQ==
-X-Gm-Message-State: AJIora+BzpD/W0rfcwqoH75YBmu2khfuvt3u/1NwheupINRF87U6CLng
-        lLe70CTQzKIwxYVMVMgYEweP/H6LeE7FzQ==
-X-Google-Smtp-Source: AGRyM1vFaRliljxiyhBObWT8RV5lv8cN9afUQtCB8wCNEDbktpQqD63FFaGhCAEBugkoEzCPluKhgw==
-X-Received: by 2002:a63:ec15:0:b0:412:6fb4:88fb with SMTP id j21-20020a63ec15000000b004126fb488fbmr24847293pgh.49.1658163944724;
-        Mon, 18 Jul 2022 10:05:44 -0700 (PDT)
+        bh=H7ChdRBKS+9A003EiQbM2SMDrKCCYQePnInXhSsyMB0=;
+        b=GKI0/4YhsEzxmyf0Q4K+6QBAOn5EKlLnj50/8Zw9s6RXatvjYOSSRBMxpA7X+9hci3
+         H1z8mmNki8qn6BTjBaOJsHtuK7S1CF8831HKnT5qcnrDDdzpxZxST680SE7lU0FsLG1L
+         C2WF11/pFj3gyzmHNoqG7oTg6oSncToKY+L36i67yaPfUOo0e88Kl/3ksimCmbcyIM9Z
+         n8cBG/kviOUW/aqeKQccPE0uee0nELvydBsi112xKzQq3BAaoOuBpSjOj0ZaMr1KSw3m
+         GdSbDG/TXJ4K2Fjdxp2wVO1g99+/JkcYC3gLRAAzay3YYb+nGYETdCDdM8olbuojh7oA
+         txBQ==
+X-Gm-Message-State: AJIora/ci7AhZqlZD4t1DInUtQWmrHozhiHSxT5HCFVrhd/5kim/R3rQ
+        4ZQKyqYJPO6ZmQg+oM3/pMDbmer0iGpiQQ==
+X-Google-Smtp-Source: AGRyM1uvFkWFiSwIv2bxiYnsB/Me0O2umAIdMXnBAJupJyduccoZ2CTvIm6kzqVVu3DQdq7Cn7s+hQ==
+X-Received: by 2002:a17:902:a413:b0:156:15b:524a with SMTP id p19-20020a170902a41300b00156015b524amr30012463plq.106.1658163945893;
+        Mon, 18 Jul 2022 10:05:45 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id r10-20020a170902be0a00b0016bc947c5b7sm9733402pls.38.2022.07.18.10.05.43
+        by smtp.gmail.com with ESMTPSA id r10-20020a170902be0a00b0016bc947c5b7sm9733402pls.38.2022.07.18.10.05.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 10:05:44 -0700 (PDT)
+        Mon, 18 Jul 2022 10:05:45 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>,
@@ -60,9 +60,9 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Will Deacon <will@kernel.org>
-Subject: [RFC  1/9] RISC-V: Define a helper function to probe number of hardware counters
-Date:   Mon, 18 Jul 2022 10:01:57 -0700
-Message-Id: <20220718170205.2972215-2-atishp@rivosinc.com>
+Subject: [RFC  2/9] RISC-V: Define a helper function to return counter width
+Date:   Mon, 18 Jul 2022 10:01:58 -0700
+Message-Id: <20220718170205.2972215-3-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220718170205.2972215-1-atishp@rivosinc.com>
 References: <20220718170205.2972215-1-atishp@rivosinc.com>
@@ -77,134 +77,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM module needs to know how many hardware counters the platform supports.
-Otherwise, it will not be able to show optimal value of virtual
-counters to the guest.
+The virtual hardware counters need to have the same width as the
+logical hardware counters for simplicity.  However, there shouldn't
+be mapping between virtual hardware counters and logical hardware
+counters. As we don't support hetergeneous harts or counters with
+different width as of now, the implementation relies on the counter
+width of the first available programmable counter.
 
 Signed-off-by: Atish Patra <atishp@rivosinc.com>
 ---
- drivers/perf/riscv_pmu_sbi.c   | 23 +++++++++++++++++------
- include/linux/perf/riscv_pmu.h |  4 ++++
- 2 files changed, 21 insertions(+), 6 deletions(-)
+ drivers/perf/riscv_pmu_sbi.c   | 25 +++++++++++++++++++++++++
+ include/linux/perf/riscv_pmu.h |  1 +
+ 2 files changed, 26 insertions(+)
 
 diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-index 24124546844c..1723af68ffa1 100644
+index 1723af68ffa1..5d0eef3ef136 100644
 --- a/drivers/perf/riscv_pmu_sbi.c
 +++ b/drivers/perf/riscv_pmu_sbi.c
-@@ -27,6 +27,7 @@
-  */
- static union sbi_pmu_ctr_info *pmu_ctr_list;
- static unsigned int riscv_pmu_irq;
-+static struct riscv_pmu *rvpmu;
- 
- struct sbi_pmu_event_data {
- 	union {
-@@ -227,6 +228,12 @@ static const struct sbi_pmu_event_data pmu_cache_event_map[PERF_COUNT_HW_CACHE_M
- 	},
- };
- 
-+int riscv_pmu_sbi_get_num_hw_ctrs(void)
-+{
-+	return rvpmu ? rvpmu->num_hw_counters : 0;
-+}
-+EXPORT_SYMBOL(riscv_pmu_sbi_get_num_hw_ctrs);
-+
- static int pmu_sbi_ctr_get_width(int idx)
- {
- 	return pmu_ctr_list[idx].width;
-@@ -443,7 +450,7 @@ static int pmu_sbi_find_num_ctrs(void)
- 		return sbi_err_map_linux_errno(ret.error);
+@@ -250,6 +250,31 @@ static bool pmu_sbi_ctr_is_fw(int cidx)
+ 	return (info->type == SBI_PMU_CTR_TYPE_FW) ? true : false;
  }
  
--static int pmu_sbi_get_ctrinfo(int nctr)
-+static int pmu_sbi_get_ctrinfo(int nctr, int *num_hw_ctrs)
- {
- 	struct sbiret ret;
- 	int i, num_hw_ctr = 0, num_fw_ctr = 0;
-@@ -453,7 +460,7 @@ static int pmu_sbi_get_ctrinfo(int nctr)
- 	if (!pmu_ctr_list)
- 		return -ENOMEM;
- 
--	for (i = 0; i <= nctr; i++) {
-+	for (i = 0; i < nctr; i++) {
- 		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_GET_INFO, i, 0, 0, 0, 0, 0);
- 		if (ret.error)
- 			/* The logical counter ids are not expected to be contiguous */
-@@ -466,6 +473,7 @@ static int pmu_sbi_get_ctrinfo(int nctr)
- 		pmu_ctr_list[i].value = cinfo.value;
- 	}
- 
-+	*num_hw_ctrs = num_hw_ctr;
- 	pr_info("%d firmware and %d hardware counters\n", num_fw_ctr, num_hw_ctr);
- 
- 	return 0;
-@@ -698,7 +706,7 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
- static int pmu_sbi_device_probe(struct platform_device *pdev)
- {
- 	struct riscv_pmu *pmu = NULL;
--	int num_counters;
-+	int num_counters, num_hw_ctrs = 0;
- 	int ret = -ENODEV;
- 
- 	pr_info("SBI PMU extension is available\n");
-@@ -713,7 +721,7 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
- 	}
- 
- 	/* cache all the information about counters now */
--	if (pmu_sbi_get_ctrinfo(num_counters))
-+	if (pmu_sbi_get_ctrinfo(num_counters, &num_hw_ctrs))
- 		goto out_free;
- 
- 	ret = pmu_sbi_setup_irqs(pmu, pdev);
-@@ -723,6 +731,7 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
- 		pmu->pmu.capabilities |= PERF_PMU_CAP_NO_EXCLUDE;
- 	}
- 	pmu->num_counters = num_counters;
-+	pmu->num_hw_counters = num_hw_ctrs;
- 	pmu->ctr_start = pmu_sbi_ctr_start;
- 	pmu->ctr_stop = pmu_sbi_ctr_stop;
- 	pmu->event_map = pmu_sbi_event_map;
-@@ -733,14 +742,16 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
- 
- 	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
- 	if (ret)
--		return ret;
-+		goto out_free;
- 
- 	ret = perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
- 	if (ret) {
- 		cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_STARTING, &pmu->node);
--		return ret;
-+		goto out_free;
- 	}
- 
-+	rvpmu = pmu;
++/*
++ * Returns the counter width of a programmable counter
++ * As we don't support heterneous CPUs yet, it is okay to just
++ * return the counter width of the first programmable counter.
++ */
++int riscv_pmu_sbi_hpmc_width(void)
++{
++	int i;
++	union sbi_pmu_ctr_info *info;
 +
- 	return 0;
- 
- out_free:
++	if (!rvpmu)
++		return -EINVAL;
++
++	for (i = 0; i < rvpmu->num_counters; i++) {
++		info = &pmu_ctr_list[i];
++		if (!info)
++			continue;
++		if (info->type == SBI_PMU_CTR_TYPE_HW)
++			return info->width;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL(riscv_pmu_sbi_hpmc_width);
++
+ static int pmu_sbi_ctr_get_idx(struct perf_event *event)
+ {
+ 	struct hw_perf_event *hwc = &event->hw;
 diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
-index 46f9b6fe306e..fc47167e000c 100644
+index fc47167e000c..6fee211c27b5 100644
 --- a/include/linux/perf/riscv_pmu.h
 +++ b/include/linux/perf/riscv_pmu.h
-@@ -46,6 +46,7 @@ struct riscv_pmu {
- 	irqreturn_t	(*handle_irq)(int irq_num, void *dev);
- 
- 	int		num_counters;
-+	int		num_hw_counters;
- 	u64		(*ctr_read)(struct perf_event *event);
- 	int		(*ctr_get_idx)(struct perf_event *event);
- 	int		(*ctr_get_width)(int idx);
-@@ -69,6 +70,9 @@ void riscv_pmu_legacy_skip_init(void);
- static inline void riscv_pmu_legacy_skip_init(void) {};
- #endif
+@@ -72,6 +72,7 @@ static inline void riscv_pmu_legacy_skip_init(void) {};
  struct riscv_pmu *riscv_pmu_alloc(void);
-+#ifdef CONFIG_RISCV_PMU_SBI
-+int riscv_pmu_sbi_get_num_hw_ctrs(void);
-+#endif
+ #ifdef CONFIG_RISCV_PMU_SBI
+ int riscv_pmu_sbi_get_num_hw_ctrs(void);
++int riscv_pmu_sbi_hpmc_width(void);
+ #endif
  
  #endif /* CONFIG_RISCV_PMU */
- 
 -- 
 2.25.1
 

@@ -2,113 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B43578304
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4E857830D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235027AbiGRNDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
+        id S235193AbiGRNEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiGRNDQ (ORCPT
+        with ESMTP id S235173AbiGRND6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:03:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94AF1A471
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658149391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TcEMTaB7xAKJTL0h0LjPI2dPleMaM3KdN7Sj0rKKqlU=;
-        b=hziSAIabwfurBdlMSoRNXjNZmHsfBiqF/uZ0jN1qh0vjsY1EYQBzClGXYr7Lit0JlRUgCb
-        dmQGADvokGBhwtRIhgBbI33+ajSx/XSu/Qq9UOGI2fr26iHMSuKRsZvrIkxTOFgrQRJtNv
-        FeOTZ+j+LfvdCl0q45iNmyI/QfQ4/XM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-JIDVGr4kP-aUeBFG_ycyrg-1; Mon, 18 Jul 2022 09:03:07 -0400
-X-MC-Unique: JIDVGr4kP-aUeBFG_ycyrg-1
-Received: by mail-wr1-f69.google.com with SMTP id c7-20020adfc6c7000000b0021db3d6961bso2004102wrh.23
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:03:07 -0700 (PDT)
+        Mon, 18 Jul 2022 09:03:58 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01C360F8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:03:56 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id e15so15190296edj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=zM3JzhRssik7POz7o5zHEQmq3nlUbfeSo9DWVPrJQK0=;
+        b=uyNTCGd5YUjRh25MM8MbjG2pfHd13DW9QxeLHwxPdMr/HplpVZnizhjdh/UcRb6tBB
+         fCUS2xYCqMnKffsyN9BJAVAtVbr0FHNTDXh3MN1iUUIxO+4PWQzLGO+xuzHr+n8ucgVw
+         l/xOxeJ9yuI8bUIPGD+weacTDu7ZBXxmPyyLqXglJEiaAw30JHtpgT2rs48ex4eqBXZz
+         6f3lFWK50iQfYcPT7KeLfknMMuMWeVFqDd3UIIBkhTS/uK30mDX28V7wjxGctX7CL7fY
+         tjew/FkcwCaTXMZwnau7VLfG8lkLAZaM3/znyOtX363b/HY2ggAG/e1o2SIqbrh7G2tM
+         m6nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=TcEMTaB7xAKJTL0h0LjPI2dPleMaM3KdN7Sj0rKKqlU=;
-        b=uVsk7vAVOOc3fo5Q93Kw4jul+J6YFHwFYpxjevQzaMZirRWGtNDeQUyWyi7Uw9cah6
-         fAnEn7o10RsasjfhMgu6eZXpD+gjy5ndcUVps630tqiUQn4XohjJ7iMFDlWrxMaM02MK
-         eGgPLRrQnBwkq2Cbfepg78F+GcY/RzEzKneVLCofd/luapcQFYiiwYYMhpYt3oagPJwE
-         1ZiIWbnFpkuzsc6mrRSJyhAQAsT5OvZM/vn/l9wkdscy0+dnH0KPpUfE2lbAtcWywvpD
-         L99SIn16XMYsQBrV/kLoS4+6pnqBfO21eZ3AWPj5eJWltUtSJHSeBg7cwEeK2iYDjZ3/
-         C7sg==
-X-Gm-Message-State: AJIora9vl4u50aD1Ehl5Qo9WVCJxG5bbWnqdVUferQ2hGxWlr0NwamhA
-        VUKGFu90fLUyYhUZp0mYjkr2cvSNNcZB1dz0wlHLX5PLoxXVXm3NZykR0HOtE3zA8onj2jBbCXr
-        Cg2EOvQ4/R6k/dBHSLcp6N0hq
-X-Received: by 2002:a05:600c:1f16:b0:3a3:214c:a85e with SMTP id bd22-20020a05600c1f1600b003a3214ca85emr39476wmb.95.1658149386368;
-        Mon, 18 Jul 2022 06:03:06 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1upa5txyGo3VOx+mVbSu4SrZBRbL944pvx+WCPaDiEcZcCpcHclrXUGGcrP3tyGHYvxGIrbwQ==
-X-Received: by 2002:a05:600c:1f16:b0:3a3:214c:a85e with SMTP id bd22-20020a05600c1f1600b003a3214ca85emr39452wmb.95.1658149386109;
-        Mon, 18 Jul 2022 06:03:06 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:7400:6b3a:a74a:bd53:a018? (p200300cbc70574006b3aa74abd53a018.dip0.t-ipconnect.de. [2003:cb:c705:7400:6b3a:a74a:bd53:a018])
-        by smtp.gmail.com with ESMTPSA id p42-20020a05600c1daa00b003a30f84a9aasm10906417wms.26.2022.07.18.06.03.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:03:05 -0700 (PDT)
-Message-ID: <0c67010a-7d5f-567c-a300-0c75f1c47cb9@redhat.com>
-Date:   Mon, 18 Jul 2022 15:03:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm: remove unneeded PageAnon check in
- restore_exclusive_pte()
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220716081816.10752-1-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220716081816.10752-1-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=zM3JzhRssik7POz7o5zHEQmq3nlUbfeSo9DWVPrJQK0=;
+        b=ucvVeXu1It3O85IS2YZfsAJ7xXcVt4JMoFBuo1yTHhxVzS6wLIKnbOobsAuqukQgzP
+         DC0vGPBDiFoskNRB0G9uWnp2plHMTUG5Er8KoGkrpMx7/oLgxBLv3K+GtR2MuMIf0131
+         gebubABsabRlHCrS6jFhfVp9N2xJnV2FCD79JcS1vbgeHyCZ9dZelKJ5KahZmQHpLYWE
+         qX+G7+cBaEzsJUOlAJRIh64N6azH4ZsMRJiNnkDJIea2II4wnOjQ04fwa2REl8NTpJQC
+         VHeyRr5eoLmTKm9k9JR3FgVoz6hPGib19yFzMzBbeEUJJAsW2D3YrmpETCis3JshQFB9
+         bCfg==
+X-Gm-Message-State: AJIora9UgQXyp1V78Z5q0hMfPw4CZKtGl9EaQkIJ87lPdm5L6DHJqZyU
+        9PEKMBWBjjqdL9aJ9ZOVmqUaE/aFXRu9k+Vm
+X-Google-Smtp-Source: AGRyM1sGi7hDRHgbtbQ1r4bhDDCZKOUJkCZ0vIKaczfxZ3PORpdqu17Jsa5awBE4iVj+SejJfaQlNw==
+X-Received: by 2002:a05:6402:12d8:b0:43a:6a70:9039 with SMTP id k24-20020a05640212d800b0043a6a709039mr37051772edx.379.1658149435052;
+        Mon, 18 Jul 2022 06:03:55 -0700 (PDT)
+Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id g21-20020a1709061e1500b00722f8d02928sm5555089ejj.174.2022.07.18.06.03.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 18 Jul 2022 06:03:54 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
+ missing in lower/upper fs
+From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+In-Reply-To: <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
+Date:   Mon, 18 Jul 2022 15:03:52 +0200
+Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com>
+References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
+ <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
+ <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com>
+ <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
+ <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com>
+ <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>, torvalds@linux-foundation.org
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.07.22 10:18, Miaohe Lin wrote:
-> When code reaches here, the page must be !PageAnon. There's no need to
-> check PageAnon again. Remove it.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/memory.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index f671b2dce1fe..d98f89cee3e9 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -753,7 +753,7 @@ static void restore_exclusive_pte(struct vm_area_struct *vma,
->  		 * Currently device exclusive access only supports anonymous
->  		 * memory so the entry shouldn't point to a filebacked page.
->  		 */
-> -		WARN_ON_ONCE(!PageAnon(page));
-> +		WARN_ON_ONCE(1);
->  
->  	set_pte_at(vma->vm_mm, address, ptep, pte);
->  
+Am 18.07.2022 um 14:21 schrieb Miklos Szeredi <miklos@szeredi.hu>:
+>=20
+> On Mon, 18 Jul 2022 at 12:56, Christian Kohlsch=C3=BCtter
+> <christian@kohlschutter.com> wrote:
+>=20
+>> However, users of fuse that have no business with overlayfs suddenly =
+see their ioctl return ENOTTY instead of ENOSYS.
+>=20
+> And returning ENOTTY is the correct behavior.  See this comment in
+> <asm-generic/errrno.h>:
+>=20
+> /*
+> * This error code is special: arch syscall entry code will return
+> * -ENOSYS if users try to call a syscall that doesn't exist.  To keep
+> * failures of syscalls that really do exist distinguishable from
+> * failures due to attempts to use a nonexistent syscall, syscall
+> * implementations should refrain from returning -ENOSYS.
+> */
+> #define ENOSYS 38 /* Invalid system call number */
+>=20
+> Thanks,
+> Miklos
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+That ship is sailed since ENOSYS was returned to user-space for the =
+first time.
 
--- 
-Thanks,
+It reminds me a bit of Linus' "we do not break userspace" email from =
+2012 [1, 2], where Linus wrote:
+> Applications *do* care about error return values. There's no way in
+> hell you can willy-nilly just change them. And if you do change them,
+> and applications break, there is no way in hell you can then blame the
+> application.
 
-David / dhildenb
+(Adding Linus for clarification whether his statement is still true in =
+2022, and marking subject with regression tag for visibility.)
 
+As far as I, a fuse user, understand, fuse uses ENOSYS as a specific =
+marker to indicate permanent failure:
+
+=46rom libfuse =
+https://libfuse.github.io/doxygen/structfuse__lowlevel__ops.html:
+> If this request is answered with an error code of ENOSYS, this is =
+treated as a permanent failure with error code EOPNOTSUPP, i.e. all =
+future getxattr() requests will fail with EOPNOTSUPP without being send =
+to the filesystem process.
+
+(also see  https://man.openbsd.org/fuse_new.3)
+
+
+Again, in summary:
+1. I believe the fix should be in ovl, because ovl caused the =
+regression.
+2. Fixing in fuse would not be sufficient because other lower =
+filesystems that also return ENOSYS remain affected (a cursory search =
+indicates ecryptfs also returns ENOSYS).
+3. Fixing in fuse would break user-space. We do not break userspace.
+
+Cheers,
+Christian
+
+
+
+[1] https://lkml.org/lkml/2012/12/23/75
+[2] https://lkml.org/lkml/2012/12/23/99=

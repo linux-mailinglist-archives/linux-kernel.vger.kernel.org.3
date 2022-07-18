@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75B0577DB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A3B577DB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233946AbiGRIkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        id S233959AbiGRIkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233872AbiGRIj4 (ORCPT
+        with ESMTP id S233900AbiGRIj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:39:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E256BC3E;
-        Mon, 18 Jul 2022 01:39:55 -0700 (PDT)
+        Mon, 18 Jul 2022 04:39:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7928CBC92;
+        Mon, 18 Jul 2022 01:39:56 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4754:89ee:32c6:e620])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F1D786601A1B;
-        Mon, 18 Jul 2022 09:39:53 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE0266601A2E;
+        Mon, 18 Jul 2022 09:39:54 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658133594;
-        bh=p1IL0WApAId0OF2roNkCC1LN0QMRN6h/Fzya6tDqTJk=;
+        s=mail; t=1658133595;
+        bh=aAX2fIh0E/jx2jwVuosd8v5FOJr/5j+dV3YioIr80rc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bNTMEP3NGof4m/05T5ErKNB6zBdxk7o8uu7EzV6O+TXcJGGOesbsBZ5IBBI3S/H4C
-         rY/8idtsmPNdCQVneBfN5sHPBtnMjGW0ysZ7kb0nS9bC845it6XZCjhFveSGrBEDNp
-         S7MFX2hpW7ehPKoOekzqM9ZXqswy6GmJ04mHBuaEsjCLYebLrfRM9+7UtJneXQxdFx
-         R9+EymURvZCcOeYMz7zekaI+LIoawhphJnG6Z1HNdrnQFlJ3ysdoMlZi44ufLC2CDC
-         azATiv/epXe/Ts/MlexbOKpkAbZa5sCW1pj0m482/zO65RhBZLY1SCfaiYj5E7qrHg
-         NthFthxzUvSeQ==
+        b=WrJiN1Cm4Wa0LYa4FCz+FGHrVrWvTDOfElmkh8S6OI/JEcd0LyhxmhXwUwu4hBATx
+         iK4R8mxeRgYc64pUvA8SQYe7VB7th9p4mN6nKfFAHo4J/Lm45E7nqyUDh6vSy21vMo
+         KJKc5VklJCNKmgjp+E0lUsDR+rabYpt78F/+udczXMdmnp51E20zpAFTKZqBYcsWV7
+         Ngn5DW/M+ZOsxpcS8jjakmJKsw+fAypmi/3BBEKZOw6plORkUacG5h9YvDpHoOeb37
+         S2Slbo/FlXImqGUFNfZOPkAgF8j0g6KV/FxPNBijsE42eiwx21BjeMsQOKoqJHItmx
+         SWvYtZOz+YRtQ==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v2 1/7] media: hantro: Store HEVC bit depth in context
-Date:   Mon, 18 Jul 2022 10:39:39 +0200
-Message-Id: <20220718083945.200845-2-benjamin.gaignard@collabora.com>
+Subject: [PATCH v2 2/7] media: hantro: HEVC: Fix auxilary buffer size calculation
+Date:   Mon, 18 Jul 2022 10:39:40 +0200
+Message-Id: <20220718083945.200845-3-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220718083945.200845-1-benjamin.gaignard@collabora.com>
 References: <20220718083945.200845-1-benjamin.gaignard@collabora.com>
@@ -61,27 +61,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Store HEVC bit depth in context.
-Bit depth is equal to hevc sps bit_depth_luma_minus8 + 8.
+SAO and FILTER buffers size depend of the bit depth.
+Make sure we have enough space for 10bit bitstreams.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/staging/media/hantro/hantro_hevc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/media/hantro/hantro_hevc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
-index 5984c5fa6f83..dcb5c8703b6e 100644
+index dcb5c8703b6e..e06837108a09 100644
 --- a/drivers/staging/media/hantro/hantro_hevc.c
 +++ b/drivers/staging/media/hantro/hantro_hevc.c
-@@ -163,6 +163,8 @@ int hantro_hevc_validate_sps(struct hantro_ctx *ctx, const struct v4l2_ctrl_hevc
- 		/* Only 8-bit is supported */
- 		return -EINVAL;
+@@ -104,7 +104,7 @@ static int tile_buffer_reallocate(struct hantro_ctx *ctx)
+ 		hevc_dec->tile_bsd.cpu = NULL;
+ 	}
  
-+	ctx->bit_depth = sps->bit_depth_luma_minus8 + 8;
-+
- 	/*
- 	 * for tile pixel format check if the width and height match
- 	 * hardware constraints
+-	size = VERT_FILTER_RAM_SIZE * height64 * (num_tile_cols - 1);
++	size = (VERT_FILTER_RAM_SIZE * height64 * (num_tile_cols - 1) * ctx->bit_depth) / 8;
+ 	hevc_dec->tile_filter.cpu = dma_alloc_coherent(vpu->dev, size,
+ 						       &hevc_dec->tile_filter.dma,
+ 						       GFP_KERNEL);
+@@ -112,7 +112,7 @@ static int tile_buffer_reallocate(struct hantro_ctx *ctx)
+ 		goto err_free_tile_buffers;
+ 	hevc_dec->tile_filter.size = size;
+ 
+-	size = VERT_SAO_RAM_SIZE * height64 * (num_tile_cols - 1);
++	size = (VERT_SAO_RAM_SIZE * height64 * (num_tile_cols - 1) * ctx->bit_depth) / 8;
+ 	hevc_dec->tile_sao.cpu = dma_alloc_coherent(vpu->dev, size,
+ 						    &hevc_dec->tile_sao.dma,
+ 						    GFP_KERNEL);
 -- 
 2.32.0
 

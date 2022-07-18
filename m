@@ -2,163 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE74E5787D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDB75787A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbiGRQv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
+        id S235559AbiGRQnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiGRQvx (ORCPT
+        with ESMTP id S232158AbiGRQnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:51:53 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A31F2B19C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:51:52 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id b26so17958123wrc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PAbDl1PRM5nJcEKcI6Ytvs7hiGOzTQVF+JIk15dOA88=;
-        b=n5udodEAa/PhqseWRA+ZivosTL+aHxlWiMaVXsWsHZeKg72WFl+q1bjcvEIKJGsXbs
-         RPtworRU8Nh1Cwv3GXk0n/mYI4XiC1YfEuJnfhNedphfctJ327KC83r8YiDGb/sBkL+E
-         XmUeJXLrY9YW/3OUjWA9vNqnCvnqNxrPg15pTeOicsw3EyemCxVJP4y1v7l++F+xEAOJ
-         2su/h+SGAbOfp1TCEcaP+E8bUk2BQFUxLbYPsl3W8zNRYhyNQdQkm6aF1qWD1BxKDxb4
-         KvaUN4IuTL+e3uuThg2ACcxOutr+PidsEjVo0kigDgA+GaX5R1S87jJUM6Wdlx4D2tfT
-         DnFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PAbDl1PRM5nJcEKcI6Ytvs7hiGOzTQVF+JIk15dOA88=;
-        b=bLU5B3IkKj/S/Kg3plMQFWLYIYB0ktNU++AHIZ9cDt9+SJXH8or183xzcrPfYvOZqC
-         AIodbdQNUfcr8ouf5yfRWCFoUW19t+8HZZuBefmoQABkxj+UOB3QmeO3qpBaMylYgV5H
-         /aGl56EFx21HSwxHvKtNDf0XcTRMAKTLSsUlEFKWZPPQOfnSHYiVReeRt90rds+pd2sJ
-         abiApEkJEOfJpjLBoo7R4myz6umSfLGMmpU1CmUgd9u6WSbX+Vw8UGYemvbVAg4j8CgF
-         mZGuYAEg1osLxKrlndebmBZme16UPE9xi5l3nu1h2x8GXCS30tZaePFDay3bdirQeegj
-         jk5Q==
-X-Gm-Message-State: AJIora94SG3yXinFRKSZHRSXewFTcGGqFL21yxj3b7D0OOhjKk5wx52U
-        QjrYiQY1d+9ssCZdslySeFNGPrFmfXjkTiONm3In8Q==
-X-Google-Smtp-Source: AGRyM1uiGKWRYqdXWTkzEYeZ3M32/orW5NzHDsHKznhO1+2vVhPaYRL6sJmL5DodgqnLocvJeqHO6XvZNDEU4APTl4g=
-X-Received: by 2002:a5d:6c65:0:b0:21d:b7c0:9930 with SMTP id
- r5-20020a5d6c65000000b0021db7c09930mr23007398wrz.500.1658163110612; Mon, 18
- Jul 2022 09:51:50 -0700 (PDT)
+        Mon, 18 Jul 2022 12:43:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78413FD07;
+        Mon, 18 Jul 2022 09:43:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BD25614D5;
+        Mon, 18 Jul 2022 16:43:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D518C341C0;
+        Mon, 18 Jul 2022 16:42:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658162579;
+        bh=mt3Hyx8w6+AK+UEpBf+TEowqs5ZfWsQtF+zhUIoosBg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BGxX9vsMm1Ecrtq84DecdKj2ORySdm25ksz6E2U2vy91SN+3jC3GDANNGLUVg5lnP
+         e4nJPEkDUuQTG8z2+sVPseOya+28/8YR/gbw8DbnXG2hmDvdWy91geYgVEkBhtI/yA
+         c0Pfbzj3uh17pMp1a67PBC0cDA01HCa68YgL6bfE0GjGq/O4DqoLQ8g6vxUeK/K3FM
+         kuwyFcpLF59a1bpliKM7nfSvxckVg1f87cKrs0Gfw93tiXiMwUlVaQTOZCUNeMNjjF
+         B8OTLAipPWoMzX3IPty7g+nuMX1AI8cd8lYthlhjNbvqoSPWfs0UuFMzssUCc3SesF
+         ex2a8XW5rhW9g==
+Date:   Mon, 18 Jul 2022 17:52:53 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lars@metafoo.de, cy_huang@richtek.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 0/3] Add Richtek RTQ6056 support
+Message-ID: <20220718175253.1333a61a@jic23-huawei>
+In-Reply-To: <1658123163-10039-1-git-send-email-u0084500@gmail.com>
+References: <1658123163-10039-1-git-send-email-u0084500@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220715061027.1612149-1-kaleshsingh@google.com>
- <20220715061027.1612149-12-kaleshsingh@google.com> <877d4a513o.wl-maz@kernel.org>
-In-Reply-To: <877d4a513o.wl-maz@kernel.org>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Mon, 18 Jul 2022 09:51:39 -0700
-Message-ID: <CAC_TJvewAfGACxwZ57W+fDsXOYBNnjxaKUt3Es9Ou0vDO3H_0w@mail.gmail.com>
-Subject: Re: [PATCH v4 11/18] KVM: arm64: Stub implementation of non-protected
- nVHE HYP stack unwinder
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Fuad Tabba <tabba@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        andreyknvl@gmail.com, russell.king@oracle.com,
-        vincenzo.frascino@arm.com, Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Oliver Upton <oupton@google.com>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:31 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Fri, 15 Jul 2022 07:10:20 +0100,
-> Kalesh Singh <kaleshsingh@google.com> wrote:
-> >
-> > Add stub implementations of non-protected nVHE stack unwinder, for
-> > building. These are implemented later in this series.
-> >
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > ---
-> >  arch/arm64/include/asm/stacktrace/nvhe.h | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >
-> > diff --git a/arch/arm64/include/asm/stacktrace/nvhe.h b/arch/arm64/include/asm/stacktrace/nvhe.h
-> > index 1eac4e57f2ae..36cf7858ddd8 100644
-> > --- a/arch/arm64/include/asm/stacktrace/nvhe.h
-> > +++ b/arch/arm64/include/asm/stacktrace/nvhe.h
-> > @@ -8,6 +8,12 @@
-> >   *      the HYP memory. The stack is unwinded in EL2 and dumped to a shared
-> >   *      buffer where the host can read and print the stacktrace.
-> >   *
-> > + *   2) Non-protected nVHE mode - the host can directly access the
-> > + *      HYP stack pages and unwind the HYP stack in EL1. This saves having
-> > + *      to allocate shared buffers for the host to read the unwinded
-> > + *      stacktrace.
-> > + *
-> > + *
-> >   * Copyright (C) 2022 Google LLC
-> >   */
-> >  #ifndef __ASM_STACKTRACE_NVHE_H
-> > @@ -53,5 +59,21 @@ static int notrace unwind_next(struct unwind_state *state)
-> >  NOKPROBE_SYMBOL(unwind_next);
-> >  #endif       /* CONFIG_PROTECTED_NVHE_STACKTRACE */
-> >
-> > +/*
-> > + * Non-protected nVHE HYP stack unwinder
-> > + */
-> > +#else        /* !__KVM_NVHE_HYPERVISOR__ */
->
-> I don't get this path. This either represents the VHE hypervisor or
-> the kernel proper. Which one is it?
+On Mon, 18 Jul 2022 13:46:00 +0800
+cy_huang <u0084500@gmail.com> wrote:
 
-Hi Marc. This is run from kernel proper context. And it's the
-unwinding for conventional nVHE (non-protected). The unwinding is done
-from the host kernel in EL1.
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> This patch series is to enable Richtek RTQ6056 support.
+> 
+> The RTQ6056 is a high accuracy current-sense monitor with I2C interface, and
+> the device provides full information for system by reading out the load current
+> and power.
 
->
-> > +static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
-> > +                                  struct stack_info *info)
-> > +{
-> > +     return false;
-> > +}
-> > +
-> > +static int notrace unwind_next(struct unwind_state *state)
-> > +{
-> > +     return 0;
-> > +}
-> > +NOKPROBE_SYMBOL(unwind_next);
-> > +
-> >  #endif       /* __KVM_NVHE_HYPERVISOR__ */
-> >  #endif       /* __ASM_STACKTRACE_NVHE_H */
->
-> Thanks,
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+If sending a new version without there being any public replies to the previous version
+please reply to that thread yourself to say you are resending and why.
+Greatly reduces the chances of me picking up the wrong version!
+> 
+> Since v7
+> - Use 'DEFINE_RUNTIME_DEV_PM_OPS' to replace the explicit declaration of pm_ops.
+> 
+> Since v6
+> - Remove specific rtq6056 ABI document.
+> - Update integration time description in general ABI document.
+> - Remove the redundant blank line.
+> - To prevent the race condition for attribute wrtie and shunt resistor write,
+>   use 'iio_device_claim_direct_mode' API.
+> - Refine the order for 'action_reset' and 'pm_runtime'.
+> - Fix text typo in comment like as ohm to Ohm and timea to time.
+> 
+> Since v5
+> - Fix kernel version text for ABI.
+> 
+> Since v4
+> - Add '__aligned(8)' for timestamp member.
+> - Declare timestamp from 'int64_t' to more unified 's64'.
+> 
+> Since v3
+> - change the node name to be generic 'adc' in binding example.
+> - Refine pm_runtime API calling order in 'read_channel' API.
+> - Fix vshunt wrong scale for divider.
+> - Refine the comment text.
+> - Use 'devm_add_action_or_reset' to decrease the code usage in probe
+>   function.
+> - Use RUNTIME_PM_OPS to replace SET_RUNTIME_PM_OPS.
+> - minor fix for the comma.
+> - Use pm_ptr to replace the direct assigned pm_ops.
+> 
+> Since v2
+> - Change the resistor property name to be generic 'shunt-resistor-micro-ohms'.
+> - Rename file from 'rtq6056-adc' to 'rtq6056'.
+> - Refine the ABI, if generic already defined it, remove it and check the channel
+>   report unit.
+> - Add copyright text.
+> - include the correct header.
+> - change the property parsing name.
+> - To use iio_chan_spec address field.
+> - Refine each channel separate and shared_by_all.
+> - Use pm_runtime and pm_runtime_autosuspend.
+> - Remove the shutdown callback. From the HW suggestion, it's not recommended to
+>   use battery as the power supply.
+> - Check all scale unit (voltage->mV, current->mA, power->milliWatt).
+> - Use the read_avail to provide the interface for attribute value list.
+> - Add comma for the last element in the const integer array.
+> - Refine each ADC label text.
+> - In read_label callback, replace snprintf to sysfs_emit.
+> 
+> ChiYuan Huang (3):
+>   dt-bindings: iio: adc: Add rtq6056 adc support
+>   iio: adc: Add rtq6056 support
+>   Documentation: ABI: testing: rtq6056: Update ABI docs
+> 
+>  Documentation/ABI/testing/sysfs-bus-iio            |  10 +
+>  .../bindings/iio/adc/richtek,rtq6056.yaml          |  56 ++
+>  drivers/iio/adc/Kconfig                            |  15 +
+>  drivers/iio/adc/Makefile                           |   1 +
+>  drivers/iio/adc/rtq6056.c                          | 663 +++++++++++++++++++++
+>  5 files changed, 745 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/richtek,rtq6056.yaml
+>  create mode 100644 drivers/iio/adc/rtq6056.c
+> 
+

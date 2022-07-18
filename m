@@ -2,89 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C60457821E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AD457821A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235038AbiGRMVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        id S234848AbiGRMV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235036AbiGRMVb (ORCPT
+        with ESMTP id S235020AbiGRMVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:21:31 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFF725282
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:21:29 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id oy13so20848088ejb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ie8y8xom7gdgORK3/wgC6v2nBY/N6LA9J5NWgTDl2HM=;
-        b=dZ9jScMt4MO13dtuzooZqTSxO2bjJkLycwSI6B0TBmg9pnUReCQ76CmaV4WQ6A5J1F
-         BXd0HR3D0YzUSUo21ICIN4NsTAl3SmzYXTrgawKRuq35PsRaR1GgaemH76YDIv0NQeDv
-         D1EK/PliBPHo5GdlCRd296v+4mVWyx5UzS/OI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ie8y8xom7gdgORK3/wgC6v2nBY/N6LA9J5NWgTDl2HM=;
-        b=6ArFf2iTYJ4khQBBIo+80nV2+od1KaJ/r08PKPalQdpZkNaTS1vn5cW2reVI49Gw4k
-         KYUhYoEcMCtbZQuVKgguhVKf5tdqkNGyYOK441sVN8wC7VTOALRX2/NOCeGIpUfqQmZj
-         CtWagZI13tEczMhX7hvTHE2DGPRpjKaneVs+Gx545VKU8Nb/Dz5yLg6ssPxuSwtY1zok
-         vUKLPmbQZgrbuqMmmI5Rwt+EvHD74pVWHxCgeNO7fm5zPnkKEV2sjEeuQaSERuFiggnF
-         09zJPE1PmGkiBs7DXopcCFHRYTIkb0Puy4ayyE4QLNZCwZA1GB2wQQxhwSK5CUE+CDoF
-         XPuA==
-X-Gm-Message-State: AJIora8h3su0l1DU1DDKUKcR5R517iij/Hoe+Bf15Rzosr05LP483333
-        kc8O5VjMR7jam0luDZ6AGt0W/1TiIG1Ka0X35k+STQ==
-X-Google-Smtp-Source: AGRyM1vI/im93ImHCgZ05iECidEYFcWtEzzcaF2dJOWQB1/Yq5IMa3L6gYgLFbipMZiZCi+5b2lvg6oArb2FqBJ9MTI=
-X-Received: by 2002:a17:906:93ef:b0:72b:44e2:bdd8 with SMTP id
- yl15-20020a17090693ef00b0072b44e2bdd8mr25545654ejb.192.1658146887863; Mon, 18
- Jul 2022 05:21:27 -0700 (PDT)
+        Mon, 18 Jul 2022 08:21:25 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DEC24F3F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:21:23 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Lmgww0S7vz1M7xB;
+        Mon, 18 Jul 2022 20:18:40 +0800 (CST)
+Received: from dggphis33418.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Jul 2022 20:21:21 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <cuigaosheng1@huawei.com>, <srinivas.kandagatla@linaro.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <gongruiqi1@huawei.com>,
+        <wangweiyang2@huawei.com>
+Subject: [PATCH -next,v4] nvmem: core: Fix memleak in nvmem_register()
+Date:   Mon, 18 Jul 2022 20:21:20 +0800
+Message-ID: <20220718122120.3103545-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
- <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
- <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
- <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com>
-In-Reply-To: <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 18 Jul 2022 14:21:16 +0200
-Message-ID: <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
-Subject: Re: [PATCH] ovl: Handle ENOSYS when fileattr support is missing in
- lower/upper fs
-To:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 at 12:56, Christian Kohlsch=C3=BCtter
-<christian@kohlschutter.com> wrote:
+dev_set_name will alloc memory for nvmem->dev.kobj.name in
+nvmem_register, when nvmem_validate_keepouts failed, nvmem's
+memory will be freed and return, but nobody will free memory
+for nvmem->dev.kobj.name, there will be memleak, so moving
+nvmem_validate_keepouts() after device_register() and let
+the device core deal with cleaning name in error cases.
 
-> However, users of fuse that have no business with overlayfs suddenly see =
-their ioctl return ENOTTY instead of ENOSYS.
+Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+ drivers/nvmem/core.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-And returning ENOTTY is the correct behavior.  See this comment in
-<asm-generic/errrno.h>:
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 1e3c754efd0d..6067d3bbff5d 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -829,21 +829,19 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	nvmem->dev.groups = nvmem_dev_groups;
+ #endif
+ 
+-	if (nvmem->nkeepout) {
+-		rval = nvmem_validate_keepouts(nvmem);
+-		if (rval) {
+-			ida_free(&nvmem_ida, nvmem->id);
+-			kfree(nvmem);
+-			return ERR_PTR(rval);
+-		}
+-	}
+-
+ 	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
+ 
+ 	rval = device_register(&nvmem->dev);
+ 	if (rval)
+ 		goto err_put_device;
+ 
++	if (nvmem->nkeepout) {
++		rval = nvmem_validate_keepouts(nvmem);
++		if (rval) {
++			goto err_device_del;
++		}
++	}
++
+ 	if (config->compat) {
+ 		rval = nvmem_sysfs_setup_compat(nvmem, config);
+ 		if (rval)
+-- 
+2.25.1
 
-/*
- * This error code is special: arch syscall entry code will return
- * -ENOSYS if users try to call a syscall that doesn't exist.  To keep
- * failures of syscalls that really do exist distinguishable from
- * failures due to attempts to use a nonexistent syscall, syscall
- * implementations should refrain from returning -ENOSYS.
- */
-#define ENOSYS 38 /* Invalid system call number */
-
-Thanks,
-Miklos

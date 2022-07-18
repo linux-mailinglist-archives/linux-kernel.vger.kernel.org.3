@@ -2,183 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C7B577CF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F38577CF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiGRH6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
+        id S233358AbiGRH63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbiGRH6W (ORCPT
+        with ESMTP id S232898AbiGRH60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:58:22 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317AC183BD;
-        Mon, 18 Jul 2022 00:58:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658131101; x=1689667101;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+BDZxa4+mDfmbiUpV7OYkV9hvGump0+Dz2UalQqK8Z8=;
-  b=VAqzBZV1LPuTERT3YRxUC1+VXNuwoboZXhJ7nVUj/aZBF/dxmBo4ltPh
-   CUZXE/wq99fr8bOJeDUE4lANRP2BjW3I8KoWtleyc5+3NyUSwqQGTEObe
-   I/bWvXbYeaCJIvAVZHQgTSY4IGdI7uiUMNITxnwavVMco+RF8eEvm/ej0
-   Xe7kgkJhaiTOuNtzX5iK7nS98MfK0EBLxlLzu1j2yZ5p0nfuWwxN6TgWg
-   fVAefRc3gPpECsupmLY8nqS71Hi3pN+z1803M666zqeCzP8A7cWDRmRA2
-   4M2jmBPXWYCzgtGoiyHooelM1zkKRhTUD/8VzeX7dN5K6i0uu5PDEpc+3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286179888"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="286179888"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 00:58:20 -0700
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="655169692"
-Received: from yangxuan-mobl.ccr.corp.intel.com (HELO localhost) ([10.249.171.3])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 00:58:17 -0700
-Date:   Mon, 18 Jul 2022 15:58:15 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
-        joro@8bytes.org, wanpengli@tencent.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: X86: Fix the comments in prepare_vmcs02_rare()
-Message-ID: <20220718075815.enldntoehbiphhpv@linux.intel.com>
-References: <20220715114211.53175-1-yu.c.zhang@linux.intel.com>
- <20220715114211.53175-3-yu.c.zhang@linux.intel.com>
- <YtGOL4jIMQwoW5vb@google.com>
+        Mon, 18 Jul 2022 03:58:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F19186C8;
+        Mon, 18 Jul 2022 00:58:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 023FBB80860;
+        Mon, 18 Jul 2022 07:58:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF40C341C8;
+        Mon, 18 Jul 2022 07:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658131102;
+        bh=9VkCz/bfnf/qGq2/1Oq0qquI0jn6/NXBPsVwJD7f5nI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qoFOIwraAytdTjsX1H90InvZK44DZvKpq4U2Nq1XWousJUEXvVlG/5C9bJQUZjdiy
+         r5ebGrArIVD7qCjVS7hnUKj4H427U7b7HVkZPJeKoFm22l1V1IgaSXU7J88BqxjM2O
+         uOLG2z1UfZZb5tQoFO+cuzFtk4LvLQeMW6OBmHzehlRidUu3AnTUoSb9Coxgwfamzv
+         XKWMXngIbmjOFUPjTMWeQ6oJ61hwE7j/z/RIjg8RuP1zNHGfN1NCr9KKZ+1VK8LwDT
+         DPwEEjFLUs5AA2DDG4cXENnMOEvtXTKvl20pSqtvuKapiYxe16L7jgvT5vLzS4Xpbe
+         tpnJimxUPfilw==
+Message-ID: <22495dc6-0d55-70d0-d9f3-bcfafcae62d1@kernel.org>
+Date:   Mon, 18 Jul 2022 10:58:16 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtGOL4jIMQwoW5vb@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sm6350: Add interconnect support
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220525144404.200390-1-luca.weiss@fairphone.com>
+ <20220525144404.200390-6-luca.weiss@fairphone.com>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220525144404.200390-6-luca.weiss@fairphone.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 03:56:31PM +0000, Sean Christopherson wrote:
-> On Fri, Jul 15, 2022, Yu Zhang wrote:
-> > Although EB.PF in vmcs02 is still set by simply "or"ing the EB of
-> > vmcs01 and vmcs12, the explanation is obsolete. "enable_ept" being
-> > set is not the only reason for L0 to clear its EB.PF.
-> > 
-> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > ---
-> >  arch/x86/kvm/vmx/nested.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> > index 778f82015f03..634a7d218048 100644
-> > --- a/arch/x86/kvm/vmx/nested.c
-> > +++ b/arch/x86/kvm/vmx/nested.c
-> > @@ -2451,10 +2451,10 @@ static void prepare_vmcs02_rare(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
-> >  	 * is not easy (if at all possible?) to merge L0 and L1's desires, we
-> >  	 * simply ask to exit on each and every L2 page fault. This is done by
-> >  	 * setting MASK=MATCH=0 and (see below) EB.PF=1.
-> > -	 * Note that below we don't need special code to set EB.PF beyond the
-> > -	 * "or"ing of the EB of vmcs01 and vmcs12, because when enable_ept,
-> > -	 * vmcs01's EB.PF is 0 so the "or" will take vmcs12's value, and when
-> > -	 * !enable_ept, EB.PF is 1, so the "or" will always be 1.
-> > +	 * Note that EB.PF is set by "or"ing of the EB of vmcs01 and vmcs12,
-> > +	 * because when L0 has no desire to intercept #PF, vmcs01's EB.PF is 0
-> > +	 * so the "or" will take vmcs12's value, otherwise EB.PF is 1, so the
-> > +	 * "or" will always be 1.
+On 25.05.22 17:44, Luca Weiss wrote:
+> Add all the different NoC providers that are found in SM6350 and
+> populate different nodes that use the interconnect properties.
 > 
-> Oof!  I was going to respond with a variety of nits (about the existing comment),
-> and even suggest that we address the TODO just out of sight, but looking at all
-> of this made me realize there's a bug here!  vmx_update_exception_bitmap() doesn't
-> update MASK and MATCH!
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+> Changes since v2:
+> * none
 > 
-> Hitting the bug is extremely unlikely, as it would require changing the guest's
-> MAXPHYADDR via KVM_SET_CPUID2 _after_ KVM_SET_NESTED_STATE, but before KVM_RUN
-> (because KVM now disallows changin CPUID after KVM_RUN).
+>   arch/arm64/boot/dts/qcom/sm6350.dtsi | 109 +++++++++++++++++++++++++++
+>   1 file changed, 109 insertions(+)
 > 
-> During KVM_SET_CPUID2, KVM will invoke vmx_update_exception_bitmap() to refresh
-> the exception bitmap to handle the ept=1 && allow_smaller_maxphyaddr=1 scenario.
-> But when L2 is active, vmx_update_exception_bitmap() assumes vmcs02 already has
-> the correct MASK+MATCH because of the "clear both if KVM and L1 both want #PF"
-> behavior.  But if KVM's desire to intercept #PF changes from 0=>1, then KVM will
-> run L2 with the MASK+MATCH from vmcs12 because vmx_need_pf_intercept() would have
-> returned false at the time of prepare_vmcs02_rare().
+> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> index fb1a0f662575..119073f19285 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> @@ -1,11 +1,13 @@
+>   // SPDX-License-Identifier: BSD-3-Clause
+>   /*
+>    * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
+> + * Copyright (c) 2022, Luca Weiss <luca.weiss@fairphone.com>
+>    */
+>   
+>   #include <dt-bindings/clock/qcom,gcc-sm6350.h>
+>   #include <dt-bindings/clock/qcom,rpmh.h>
+>   #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/interconnect/qcom,sm6350.h>
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   #include <dt-bindings/mailbox/qcom-ipcc.h>
+>   #include <dt-bindings/power/qcom-rpmpd.h>
+> @@ -539,6 +541,10 @@ i2c0: i2c@880000 {
+>   				interrupts = <GIC_SPI 601 IRQ_TYPE_LEVEL_HIGH>;
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
+> +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_0 0>,
+> +						<&aggre1_noc MASTER_QUP_0 0 &clk_virt SLAVE_EBI_CH0 0>;
+> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+>   				status = "disabled";
+>   			};
+>   
+> @@ -552,6 +558,10 @@ i2c2: i2c@888000 {
+>   				interrupts = <GIC_SPI 603 IRQ_TYPE_LEVEL_HIGH>;
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
+> +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_0 0>,
+> +						<&aggre1_noc MASTER_QUP_0 0 &clk_virt SLAVE_EBI_CH0 0>;
+> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+>   				status = "disabled";
+>   			};
+>   		};
+> @@ -578,6 +588,10 @@ i2c6: i2c@980000 {
+>   				interrupts = <GIC_SPI 353 IRQ_TYPE_LEVEL_HIGH>;
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
+> +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
+> +						<&aggre2_noc MASTER_QUP_1 0 &clk_virt SLAVE_EBI_CH0 0>;
+> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+>   				status = "disabled";
+>   			};
+>   
+> @@ -591,6 +605,10 @@ i2c7: i2c@984000 {
+>   				interrupts = <GIC_SPI 354 IRQ_TYPE_LEVEL_HIGH>;
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
+> +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
+> +						<&aggre2_noc MASTER_QUP_1 0 &clk_virt SLAVE_EBI_CH0 0>;
+> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+>   				status = "disabled";
+>   			};
+>   
+> @@ -604,6 +622,10 @@ i2c8: i2c@988000 {
+>   				interrupts = <GIC_SPI 355 IRQ_TYPE_LEVEL_HIGH>;
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
+> +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
+> +						<&aggre2_noc MASTER_QUP_1 0 &clk_virt SLAVE_EBI_CH0 0>;
+> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+>   				status = "disabled";
+>   			};
+>   
+> @@ -615,6 +637,9 @@ uart9: serial@98c000 {
+>   				pinctrl-names = "default";
+>   				pinctrl-0 = <&qup_uart9_default>;
+>   				interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
+> +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>;
+> +				interconnect-names = "qup-core", "qup-config";
+>   				status = "disabled";
+>   			};
+>   
+> @@ -628,11 +653,62 @@ i2c10: i2c@990000 {
+>   				interrupts = <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>;
+>   				#address-cells = <1>;
+>   				#size-cells = <0>;
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
+> +						<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_QUP_1 0>,
+> +						<&aggre2_noc MASTER_QUP_1 0 &clk_virt SLAVE_EBI_CH0 0>;
+> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+>   				status = "disabled";
+>   			};
+>   
+>   		};
+>   
+> +		config_noc: interconnect@1500000 {
+> +			compatible = "qcom,sm6350-config-noc";
+> +			reg = <0 0x01500000 0 0x28000>;
+> +			#interconnect-cells = <2>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +		};
+> +
+> +		system_noc: interconnect@1620000 {
+> +			compatible = "qcom,sm6350-system-noc";
+> +			reg = <0 0x01620000 0 0x17080>;
+> +			#interconnect-cells = <2>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +
+> +			clk_virt: interconnect-clk-virt {
+> +				compatible = "qcom,sm6350-clk-virt";
+> +				#interconnect-cells = <2>;
+> +				qcom,bcm-voters = <&apps_bcm_voter>;
+> +			};
+> +		};
+> +
+> +		aggre1_noc: interconnect@16e0000 {
+> +			compatible = "qcom,sm6350-aggre1-noc";
+> +			reg = <0 0x016e0000 0 0x15080>;
+> +			#interconnect-cells = <2>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +		};
+> +
+> +		aggre2_noc: interconnect@1700000 {
+> +			compatible = "qcom,sm6350-aggre2-noc";
+> +			reg = <0 0x01700000 0 0x1f880>;
+> +			#interconnect-cells = <2>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +
+> +			compute_noc: interconnect-compute-noc {
+> +				compatible = "qcom,sm6350-compute-noc";
+> +				#interconnect-cells = <2>;
+> +				qcom,bcm-voters = <&apps_bcm_voter>;
+> +			};
+> +		};
+> +
+> +		mmss_noc: interconnect@1740000 {
+> +			compatible = "qcom,sm6350-mmss-noc";
+> +			reg = <0 0x01740000 0 0x1c100>;
+> +			#interconnect-cells = <2>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +		};
+> +
+>   		ufs_mem_hc: ufs@1d84000 {
+>   			compatible = "qcom,sm6350-ufshc", "qcom,ufshc",
+>   				     "jedec,ufs-2.0";
+> @@ -933,6 +1009,10 @@ sdhc_2: sdhci@8804000 {
+>   				 <&gcc GCC_SDCC2_APPS_CLK>,
+>   				 <&rpmhcc RPMH_CXO_CLK>;
+>   			clock-names = "iface", "core", "xo";
+> +			interconnects = <&aggre2_noc MASTER_SDCC_2 0 &clk_virt SLAVE_EBI_CH0 0>,
+> +					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_SDCC_2 0>;
+> +			interconnect-names = "sdhc-ddr", "cpu-sdhc";
+> +
+>   			qcom,dll-config = <0x0007642c>;
+>   			qcom,ddr-config = <0x80040868>;
+>   			power-domains = <&rpmhpd 0>;
+> @@ -947,11 +1027,15 @@ sdhc2_opp_table: sdhc2-opp-table {
+>   				opp-100000000 {
+>   					opp-hz = /bits/ 64 <100000000>;
+>   					required-opps = <&rpmhpd_opp_svs_l1>;
+> +					opp-peak-kBps = <790000 131000>;
+> +					opp-avg-kBps = <50000 50000>;
+>   				};
+>   
+>   				opp-202000000 {
+>   					opp-hz = /bits/ 64 <202000000>;
+>   					required-opps = <&rpmhpd_opp_nom>;
+> +					opp-peak-kBps = <3190000 294000>;
+> +					opp-avg-kBps = <261438 300000>;
 
-And then the #PF could be missed in L0 because previously both L1 and L0 has no
-desire to intercept it, meanwhile KVM fails to update this after migration(I guess
-the only scenario for this to happen is migration?). Is this understanding correct? 
+Just wondering where do these values come from? Are they from the downstream DT?
+The rest looks good to me.
 
-> 
-> Fixing the bug is fairly straightforward, and presents a good opportunity to
-> clean up the code (and this comment) and address the TODO.
-> 
-> Unless someone objects to my suggestion for patch 01, can you send a new version
-> of patch 01?  I'll send a separate series to fix this theoretical bug, avoid
-> writing MASK+MATCH when vmcs0x.EXCEPTION_BITMAP.PF+0, and to address the TODO.
+Thanks,
+Georgi
 
-Sure, I will send another version of patch 01.
+>   				};
+>   			};
+>   		};
+> @@ -1017,12 +1101,33 @@ dp_phy: dp-phy@88ea200 {
+>   			};
+>   		};
+>   
+> +		dc_noc: interconnect@9160000 {
+> +			compatible = "qcom,sm6350-dc-noc";
+> +			reg = <0 0x09160000 0 0x3200>;
+> +			#interconnect-cells = <2>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +		};
+> +
+>   		system-cache-controller@9200000 {
+>   			compatible = "qcom,sm6350-llcc";
+>   			reg = <0 0x09200000 0 0x50000>, <0 0x09600000 0 0x50000>;
+>   			reg-names = "llcc_base", "llcc_broadcast_base";
+>   		};
+>   
+> +		gem_noc: interconnect@9680000 {
+> +			compatible = "qcom,sm6350-gem-noc";
+> +			reg = <0 0x09680000 0 0x3e200>;
+> +			#interconnect-cells = <2>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +		};
+> +
+> +		npu_noc: interconnect@9990000 {
+> +			compatible = "qcom,sm6350-npu-noc";
+> +			reg = <0 0x09990000 0 0x1600>;
+> +			#interconnect-cells = <2>;
+> +			qcom,bcm-voters = <&apps_bcm_voter>;
+> +		};
+> +
+>   		usb_1: usb@a6f8800 {
+>   			compatible = "qcom,sm6350-dwc3", "qcom,dwc3";
+>   			reg = <0 0x0a6f8800 0 0x400>;
+> @@ -1051,6 +1156,10 @@ usb_1: usb@a6f8800 {
+>   
+>   			resets = <&gcc GCC_USB30_PRIM_BCR>;
+>   
+> +			interconnects = <&aggre2_noc MASTER_USB3 0 &clk_virt SLAVE_EBI_CH0 0>,
+> +					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_USB3 0>;
+> +			interconnect-names = "usb-ddr", "apps-usb";
+> +
+>   			usb_1_dwc3: usb@a600000 {
+>   				compatible = "snps,dwc3";
+>   				reg = <0 0x0a600000 0 0xcd00>;
 
-> 
-> E.g. I believe this is what we want to end up with:
-> 
-> 	if (vmcs12)
-> 		eb |= vmcs12->exception_bitmap;
-> 
-> 	/*
-> 	 * #PF is conditionally intercepted based on the #PF error code (PFEC)
-> 	 * combined with the exception bitmap.  #PF is intercept if:
-> 	 *
-> 	 *    EXCEPTION_BITMAP.PF=1 && ((PFEC & MASK) == MATCH).
-> 	 *
-> 	 * If any #PF is being intercepted, update MASK+MATCH, otherwise leave
-> 	 * them alone they do not affect interception (EXCEPTION_BITMAP.PF=0).
-> 	 */
-> 	if (eb & (1u << PF_VECTOR)) {
-> 		/*
-> 		 * If EPT is enabled, #PF is only intercepted if MAXPHYADDR is
-> 		 * smaller on the guest than on the host.  In that case, KVM
-> 		 * only needs to intercept present, non-reserved #PF.  If EPT
-> 		 * is disabled, i.e. KVM is using shadow paging, KVM needs to
-> 		 * intercept all #PF.  Note, whether or not KVM wants to
-> 		 * intercept _any_ #PF is handled below.
-> 		 */
-> 		if (enable_ept) {
-> 			pfec_mask = PFERR_PRESENT_MASK | PFERR_RSVD_MASK;
-> 			pfec_match = PFERR_PRESENT_MASK;
-> 		} else {
-> 			pfec_mask = 0;
-> 			pfec_match = 0;
-> 		}
-> 
-> 		if (!(vmcs12->exception_bitmap & (1u << PF_VECTOR))) {
-> 			/* L1 doesn't want to intercept #PF, use KVM's MASK+MATCH. */
-> 		} else if (!kvm_needs_pf_intercept) {
-> 			/* KVM doesn't want to intercept #PF, use L1's MASK+MATCH. */
-> 			pfec_mask = vmcs12->page_fault_error_code_mask;
-> 			pfec_match = vmcs12->page_fault_error_code_match;
-> 		} else if (pfec_mask != vmcs12->page_fault_error_code_mask ||
-> 			   pfec_match != vmcs12->page_fault_error_code_mask) {
-> 			/*
-> 			 * KVM and L1 want to intercept #PF with different MASK
-> 			 * and/or MATCH.  For simplicity, intercept all #PF by
-> 			 * clearing MASK+MATCH.  Merging KVM's and L1's desires
-> 			 * is quite complex, while the odds of meaningfully
-> 			 * reducing what #PFs are intercept are low.
-> 			 */
-> 			pfec_mask = 0;
-> 			pfec_match = 0;
-> 		} else {
-> 			/* KVM and L1 have identical MASK+MATCH. */
-> 		}
-> 		vmcs_write32(PAGE_FAULT_ERROR_CODE_MASK, pfec_mask);
-> 		vmcs_write32(PAGE_FAULT_ERROR_CODE_MATCH, pfec_match);
-> 	}
-
-And we do not need to update the PFEC_MASK & PFEC_MATCH in prepare_vmcs02_rare()
-anymore, right? Thanks!
-
-B.R.
-Yu

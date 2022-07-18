@@ -2,71 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1EA5786EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1085786EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235308AbiGRQGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S235382AbiGRQGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiGRQF7 (ORCPT
+        with ESMTP id S234507AbiGRQGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:05:59 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00382DE85
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:05:57 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id e15so15976175edj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:05:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=85usSUEiitwz/5MS47HoqHg9REwGFwSe77Yysgl88ek=;
-        b=d1bsMy+FqniTZ30hTRNDVs0t2qpCbwM7tvXj9W6kE5qC8yCfyD/hLx+73s/Fmoc9cw
-         h8RH25ZJpBxLxly61B/1UHS5tq6Fq4sauhTxo6uQVALS2Ei75LEFlFVbr/Ipw0QwCU1I
-         qCUUd+AzoqsNg543VtEoWoVp5jPS605S87RMItWcfDe14hXh0UeEa3eJGOKgVq/Q8Xwy
-         gL+BbQm4pod2an9lKp4qq++qva4TUidADhMUMWdQ0rKJHpyvMDnA/W6V+gk7ref+ajrF
-         f1QJIpp6Y1LRX8u71V7qfNCUfI3BbsLSgCK5FCmkqKdnZ1+1QKUvEW64gIh8MpM7W2rH
-         LZfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=85usSUEiitwz/5MS47HoqHg9REwGFwSe77Yysgl88ek=;
-        b=A/F49kWUSgssk9PT//jqvJy7J4kGaNVQE0pEUcXgd93MRFSjNClIPGuRrb6wuXcr+0
-         9A8Nx3Px3t4griQCG1/yNfwSMZdcnxeNyiMBwQJ7YrhxBlZPWxqs+fgcesCyqvASyZcB
-         rID6UJkdi4v73KTD6a+ueC+qgk/5hPy4gjN3E19xqtMmn0QwHWIo1VoSQDECzr/xifBC
-         SPfHgDgNyaJ9zKbxDABO6A/L+UwPcDDyEj7KlJWdJXmTmQkdbs876YFSfZcdYAmYyabX
-         U+AQ98v3aF/Q/4bz3VBbyYUow5ixR/ZpwhRi6L83ULLkdvk09jsSktyeaFieMQrTJCJz
-         yzQg==
-X-Gm-Message-State: AJIora8VBtJnAvluWb/BlsWnA/xyt0nE7ztDE69Yz+Y3RctVpHGCEMiV
-        86EEJ1rT+rzrjb+/Qj0nC/8OnfPTYT0vbzURKkk=
-X-Google-Smtp-Source: AGRyM1tySmPJpQxBk6xBDGcgtfIlfvfFRwsgGjCETuctJB4RiKc2fshLQIoUp43FhtoTNjwscgbuSg6GpptkPOG2a/c=
-X-Received: by 2002:a05:6402:3290:b0:43a:86c4:af70 with SMTP id
- f16-20020a056402329000b0043a86c4af70mr37496823eda.313.1658160356587; Mon, 18
- Jul 2022 09:05:56 -0700 (PDT)
+        Mon, 18 Jul 2022 12:06:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DC22A428
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:06:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9E602CE180B
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:06:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE40BC341C0;
+        Mon, 18 Jul 2022 16:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658160361;
+        bh=y1cgUDuB7GWAStxEEln99NZauxORnrhqSoZj21jRwlE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=DbSXe40l1DQmfV2sxRyhVWixJFIsdEGB9folzeon8YaMgk0tXGY/+zLBRdAVVpj0N
+         gWcbVVMmRMo2ciBIKsXqARh0zPDs4ierORhQXzq0pjHlR7vSH/7q4CLob0u+zZ9NGn
+         6+3lbp6wivTiRXxC5IhS0+3wRvbMnLw1xCwkqrUJaDDzaJW2c1QTgLoizlvXAIxCLP
+         FXkBRSPnbqix03SbYzLKQsvZaXKw+e0UBWUXL5xMQl8zSrnZHfYACbFzfNMLIE5nVh
+         qvxvES+lw7K2l3tgOzzDlp/H77lSXqnk3zVG8+9sBjX2ux3VK/OtZrBQ19Bbf3uEK0
+         zcEOdbML6dsOw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7724C5C0833; Mon, 18 Jul 2022 09:06:01 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 09:06:01 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Marco Elver <elver@google.com>, kasan-dev@googlegroups.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] printk: Make console tracepoint safe in NMI() context
+Message-ID: <20220718160601.GF1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220718151143.32112-1-pmladek@suse.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6f02:23:b0:20:553:9eaa with HTTP; Mon, 18 Jul 2022
- 09:05:56 -0700 (PDT)
-Reply-To: sgtkaylam28@gmail.com
-From:   Kayla Manthey <elikounde@gmail.com>
-Date:   Mon, 18 Jul 2022 10:05:56 -0600
-Message-ID: <CAGwZt9QkDC-+xYt3NAJuz+CjCHP0wSeJrT4gNoHoLy3nX4o6LA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718151143.32112-1-pmladek@suse.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-H=C3=A4lsningar,
-V=C3=A4nligen fick du mitt tidigare meddelande? Skriv tillbaka
+On Mon, Jul 18, 2022 at 05:11:43PM +0200, Petr Mladek wrote:
+> The commit 701850dc0c31bfadf75a0 ("printk, tracing: fix console
+> tracepoint") moved the tracepoint from console_unlock() to
+> vprintk_store(). As a result, it might be called in any
+> context and triggered the following warning:
+> 
+>   WARNING: CPU: 1 PID: 16462 at include/trace/events/printk.h:10 printk_sprint+0x81/0xda
+>   Modules linked in: ppdev parport_pc parport
+>   CPU: 1 PID: 16462 Comm: event_benchmark Not tainted 5.19.0-rc5-test+ #5
+>   Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
+>   EIP: printk_sprint+0x81/0xda
+>   Code: 89 d8 e8 88 fc 33 00 e9 02 00 00 00 eb 6b 64 a1 a4 b8 91 c1 e8 fd d6 ff ff 84 c0 74 5c 64 a1 14 08 92 c1 a9 00 00 f0 00 74 02 <0f> 0b 64 ff 05 14 08 92 c1 b8 e0 c4 6b c1 e8 a5 dc 00 00 89 c7 e8
+>   EAX: 80110001 EBX: c20a52f8 ECX: 0000000c EDX: 6d203036
+>   ESI: 3df6004c EDI: 00000000 EBP: c61fbd7c ESP: c61fbd70
+>   DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010006
+>   CR0: 80050033 CR2: b7efc000 CR3: 05b80000 CR4: 001506f0
+>   Call Trace:
+>    vprintk_store+0x24b/0x2ff
+>    vprintk+0x37/0x4d
+>    _printk+0x14/0x16
+>    nmi_handle+0x1ef/0x24e
+>    ? find_next_bit.part.0+0x13/0x13
+>    ? find_next_bit.part.0+0x13/0x13
+>    ? function_trace_call+0xd8/0xd9
+>    default_do_nmi+0x57/0x1af
+>    ? trace_hardirqs_off_finish+0x2a/0xd9
+>    ? to_kthread+0xf/0xf
+>    exc_nmi+0x9b/0xf4
+>    asm_exc_nmi+0xae/0x29c
+> 
+> It comes from:
+> 
+>   #define __DO_TRACE(name, args, cond, rcuidle) \
+>   [...]
+> 		/* srcu can't be used from NMI */	\
+> 		WARN_ON_ONCE(rcuidle && in_nmi());	\
+> 
+> It might be possible to make srcu working in NMI. But it
+> would be slower on some architectures. It is not worth
+> doing it just because of this tracepoint.
+> 
+> It would be possible to disable this tracepoint in NMI
+> or in rcuidle context. Where the rcuidle context looks
+> more rare and thus more acceptable to be ignored.
+> 
+> Alternative solution would be to move the tracepoint
+> back to console code. But the location is less reliable
+> by definition. Also the synchronization against other
+> tracing messages is much worse.
+> 
+> Let's ignore the tracepoint in rcuidle context as the least
+> evil solution.
+> 
+> Link: https://lore.kernel.org/r/20220712151655.GU1790663@paulmck-ThinkPad-P17-Gen-1
+> 
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Petr Mladek <pmladek@suse.com>
+
+From an RCU viewpoint:
+
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+
+> ---
+> Changes against v1:
+> 
+>   + use rcu_is_watching() instead of rcu_is_idle_cpu()
+> 
+> 
+>  include/trace/events/printk.h | 9 ++++++++-
+>  kernel/printk/printk.c        | 2 +-
+>  2 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/trace/events/printk.h b/include/trace/events/printk.h
+> index 13d405b2fd8b..5485513d8838 100644
+> --- a/include/trace/events/printk.h
+> +++ b/include/trace/events/printk.h
+> @@ -7,11 +7,18 @@
+>  
+>  #include <linux/tracepoint.h>
+>  
+> -TRACE_EVENT(console,
+> +TRACE_EVENT_CONDITION(console,
+>  	TP_PROTO(const char *text, size_t len),
+>  
+>  	TP_ARGS(text, len),
+>  
+> +	/*
+> +	 * trace_console_rcuidle() is not working in NMI. printk()
+> +	 * is used more often in NMI than in rcuidle context.
+> +	 * Choose the less evil solution here.
+> +	 */
+> +	TP_CONDITION(rcu_is_watching()),
+> +
+>  	TP_STRUCT__entry(
+>  		__dynamic_array(char, msg, len + 1)
+>  	),
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index b49c6ff6dca0..bd76a45ecc7f 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2108,7 +2108,7 @@ static u16 printk_sprint(char *text, u16 size, int facility,
+>  		}
+>  	}
+>  
+> -	trace_console_rcuidle(text, text_len);
+> +	trace_console(text, text_len);
+>  
+>  	return text_len;
+>  }
+> -- 
+> 2.35.3
+> 

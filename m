@@ -2,156 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394385784F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4C65784FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbiGROMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 10:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S235783AbiGROMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 10:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235760AbiGROMP (ORCPT
+        with ESMTP id S235781AbiGROMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:12:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D6AE27FDC
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658153529;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nBIZ5inYKW+z3A/0WRI0HsZbXbpbCq0J/0LeFUWRE6c=;
-        b=a2w0hbP23vFeuts4HytvKzWNCrCCNWNqpWSbl9+ZiXRPFhNun+yWvwr3xItnUBdQDiFrte
-        5tXQ2vNlxeL6qujcFCK7IDEfkCyx5l+6Hsk1vlf0vXKwr8p04UUW/9F2zTDGNQyrrniou9
-        9WTg7R0MINd1rb0Fjba4KWCWnPPgPhE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-512-pGEqucTQNjKNyVCGKumkbA-1; Mon, 18 Jul 2022 10:11:57 -0400
-X-MC-Unique: pGEqucTQNjKNyVCGKumkbA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C6001019C8D;
-        Mon, 18 Jul 2022 14:11:56 +0000 (UTC)
-Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 07E2C2026D64;
-        Mon, 18 Jul 2022 14:11:50 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Jane Malalane <jane.malalane@citrix.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-perf-users@vger.kernel.org,
-        linux-crypto@vger.kernel.org (open list:CRYPTO API)
-Subject: [PATCH v2 5/5] x86/cpuid: check for dependencies violations in CPUID and attempt to fix them
-Date:   Mon, 18 Jul 2022 17:11:23 +0300
-Message-Id: <20220718141123.136106-6-mlevitsk@redhat.com>
-In-Reply-To: <20220718141123.136106-1-mlevitsk@redhat.com>
-References: <20220718141123.136106-1-mlevitsk@redhat.com>
+        Mon, 18 Jul 2022 10:12:16 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729C227FC7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:12:13 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bp17so19558419lfb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:12:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=3A1pwYA+9FmIi8p2b6mGGlRlD8boBkr9tedQRRE3OGw=;
+        b=LtRuShdjnX5B6eYwnoEW+6QtEzDFPpA2ejTnRmXXrdZykusYnUqHAX4SotY4JxubfL
+         MbN7ksokGRoZgHHzjdJYTjwnzqPIc9gngsDhjjs2xoQ8qv9IWB9xDHmaHrku3IxHsxCG
+         T+fKxsnt4SpUciNjMQ3KSODdGp4QxDUSbOxz6ZIqx4xMVUXaW2Z7XeNSla1WML63xoYG
+         n2aA6vPFHlYAhST1/N5F/GN7uEW+VfFwsW3ueK7hUfrmUe+xA221FADW/fga/tdZ/4PW
+         W8SVtoN14bZXp375LdzaOlutOGFvdHtzc0q0HARmPHpIKd9+8gvOJVrawqDU4fmnYQQa
+         0X0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3A1pwYA+9FmIi8p2b6mGGlRlD8boBkr9tedQRRE3OGw=;
+        b=3fjmlLw6LtCeYSghgTjNvBUh14UZ9GRMP3nx5dA6dVDwbhVS4u1ZNW+vIdxC8IuDc0
+         WkcdbIZHVPFx3a0MJ5H+JSt422GvzlIH8E9oQoLtqrGULuqr+1io1Mg3VNBBEsFGxVp8
+         PtNSUZpv1YexBqgjBBvATW5b/O0SQylxvUjZAcJKoFP6jZQ+WpHi1mKIfbSPLKvEqSpv
+         EFGnIbJi6eU+Ph3U2BGAjhCqchitOwiZpVIL3ogtiLLcDgJGhsLZ204ByeRiMvhZGnCq
+         V5+A5aop5v7ZTaedTd7K3LnfT8ADsxaT9Ps1Lt0LpJAmVRYBOYKlDxBAtfUg5GzJrs36
+         ZAsQ==
+X-Gm-Message-State: AJIora8MnBzU0dPcPJyEmPmgrCRlACKA5deMJqomvDXFynlvZmIGwvFZ
+        8/0ofKFCbZiWrPmDGUpfRryDBQ==
+X-Google-Smtp-Source: AGRyM1uPqgWas+MQLu7jqyCHTRDKBBuAtsxPfwX2Ln/MOsU/F89ubYmh0biVDDxjB+NwN2IIol0VTA==
+X-Received: by 2002:ac2:5dc6:0:b0:488:e498:1d71 with SMTP id x6-20020ac25dc6000000b00488e4981d71mr14580614lfq.140.1658153531868;
+        Mon, 18 Jul 2022 07:12:11 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id v14-20020a056512348e00b0047f6b8c2127sm2611415lfr.186.2022.07.18.07.12.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 07:12:11 -0700 (PDT)
+Message-ID: <13e66ec9-f9be-c384-a581-b0b05ca549ed@linaro.org>
+Date:   Mon, 18 Jul 2022 16:12:10 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 2/2] dt-bindings: phy: Add bindings doc for Sunplus
+ USB2
+Content-Language: en-US
+To:     Vincent Shih <vincent.sunplus@gmail.com>, kishon@ti.com,
+        vkoul@kernel.org, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com
+References: <1658141480-9291-1-git-send-email-vincent.sunplus@gmail.com>
+ <1658141480-9291-3-git-send-email-vincent.sunplus@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1658141480-9291-3-git-send-email-vincent.sunplus@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to configuration bugs, sometimes a CPU feature is disabled in CPUID,
-but not features that depend on it.
+On 18/07/2022 12:51, Vincent Shih wrote:
+> Add bindings doc for Sunplus USB2 PHY driver
+> 
+> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+> ---
+> Changes in v4:
+>  - No change
 
-For example, when one attempts to disable AVX2 but not AVX in the
-guest's CPUID, the guest kernel crashes in aes-ni driver, when it
-is used.
+You should keep Rob's review tag:
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-While the aes-ni driver can also be fixed to be more eager to detect this kind
-of situation, it is simpler to fix this in a generic way since the kernel
-has all the required info in the form of a dependency table.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kernel/cpu/cpuid-deps.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index e1b5f5c02c0106..376296c1f55ab2 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -94,6 +94,11 @@ static inline void clear_feature(struct cpuinfo_x86 *c, unsigned int feature)
- 		set_bit(feature, (unsigned long *)cpu_caps_cleared);
- }
- 
-+static inline bool test_feature(struct cpuinfo_x86 *c, unsigned int feature)
-+{
-+	return test_bit(feature, (unsigned long *)c->x86_capability);
-+}
-+
- /* Take the capabilities and the BUG bits into account */
- #define MAX_FEATURE_BITS ((NCAPINTS + NBUGINTS) * sizeof(u32) * 8)
- 
-@@ -136,6 +141,10 @@ void setup_clear_cpu_cap(unsigned int feature)
-  * Some CPU features depend on higher CPUID levels, which may not always
-  * be available due to CPUID level capping or broken virtualization
-  * software.  Add those features to this table to auto-disable them.
-+ *
-+ * Also due to configuration bugs, some CPUID features might be present
-+ * while CPUID features that they depend on are not present,
-+ * e.g a AVX2 present but AVX is not present.
-  */
- struct cpuid_dependent_feature {
- 	u32 feature;
-@@ -153,6 +162,7 @@ cpuid_dependent_features[] = {
- void filter_cpuid_features(struct cpuinfo_x86 *c)
- {
- 	const struct cpuid_dependent_feature *df;
-+	const struct cpuid_dep *d;
- 
- 	for (df = cpuid_dependent_features; df->feature; df++) {
- 
-@@ -175,4 +185,16 @@ void filter_cpuid_features(struct cpuinfo_x86 *c)
- 		pr_warn("CPU: CPU feature " X86_CAP_FMT " disabled, no CPUID level 0x%x\n",
- 			x86_cap_flag(df->feature), df->level);
- 	}
-+
-+	for (d = cpuid_deps; d->feature; d++) {
-+
-+		if (!test_feature(c, d->feature) || test_feature(c, d->depends))
-+			continue;
-+
-+		clear_cpu_cap(c, d->feature);
-+
-+		pr_warn("CPU: CPU feature " X86_CAP_FMT " disabled, because it depends on "
-+			X86_CAP_FMT " which is not supported in CPUID\n",
-+			x86_cap_flag(d->feature), x86_cap_flag(d->depends));
-+	}
- }
--- 
-2.34.3
-
+Best regards,
+Krzysztof

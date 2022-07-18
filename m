@@ -2,89 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22404578236
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95E3578248
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234084AbiGRMXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
+        id S234232AbiGRM00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbiGRMXg (ORCPT
+        with ESMTP id S233407AbiGRM0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:23:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0051225595
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658147014; x=1689683014;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Jz5cpYq86nZh92glinpz2Zo/OMEGYZaVz7jRMfspFQo=;
-  b=etaqL/ABXmur0gsJFuthaSDlPwPhDdPHhwROtu9s55zjDtBiqxu6QCbw
-   6C7x2xNJaSf2ZF3m/wYPTWW5d6eDyOCWDhdFrdXNTJk+cGZHiwRU2ETtd
-   Wi/MEDO9sEeuL9hgvmH82AaQA+PlBF1I4CQYbKBU0ahjN792KBWNBJvBS
-   P7jQSJKIz7xQL7yUiDm+etEzAM7+wCj92jqb/OaWrYx4fK0/7U3VRL9jv
-   bbeyhp/qDBnfsLwseuyVJ5WCcmYC6pBkkbyH97tmcDTHPTvs3eY8NVzLn
-   UYQJXZ1ac48WF0BAIiTKfWdrwmtkFp3+uoUxLS8d/kp4nzKP+62GtUC1f
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="311887737"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="311887737"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 05:23:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="686717795"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Jul 2022 05:23:32 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 87EE7195; Mon, 18 Jul 2022 15:23:39 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andy@kernel.org>
-Subject: [RESEND][PATCH v1 9/9] Revert "mfd: intel_soc_pmic_bxtwc: Support IRQ chip hierarchy"
-Date:   Mon, 18 Jul 2022 15:23:28 +0300
-Message-Id: <20220718122328.8287-9-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220718122328.8287-1-andriy.shevchenko@linux.intel.com>
-References: <20220718122328.8287-1-andriy.shevchenko@linux.intel.com>
+        Mon, 18 Jul 2022 08:26:25 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FEF222
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:26:23 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 26ICORKL076857
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Mon, 18 Jul 2022 20:24:27 +0800 (CST)
+        (envelope-from Di.Shen@unisoc.com)
+Received: from bj10906pcu1.spreadtrum.com (10.0.74.51) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Mon, 18 Jul 2022 20:24:28 +0800
+From:   Di Shen <di.shen@unisoc.com>
+To:     <lukasz.luba@arm.com>, <amitk@kernel.org>, <rui.zhang@intel.com>
+CC:     <amit.kachhap@gmail.com>, <daniel.lezcano@linaro.org>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xuewen.yan@unisoc.com>, <xuewen.yan94@gmail.com>
+Subject: [PATCH] thermal: cpufreq_cooling: Avoid all cluster using global cooling_ops
+Date:   Mon, 18 Jul 2022 20:24:19 +0800
+Message-ID: <20220718122419.9409-1-di.shen@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.51]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 26ICORKL076857
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 4a34dfdfcc185efea44da958b2e4a6005a70e7d4.
----
- drivers/mfd/intel_soc_pmic_bxtwc.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Now, all the cooling device use the globle cpufreq_cooling_ops. When the
+CONFIG_THERMAL_GOV_POWER_ALLOCATOR is enabled, once one cluster init the
+cpufreq_cooling_ops, it would make all cooling device use the power allocator's
+ops. If one's em is error because of the "em_is_sane", it would cause the
+em NULL, but the cooling device's ops is exist, as a result, it would cause
+panic because of the em.
 
-diff --git a/drivers/mfd/intel_soc_pmic_bxtwc.c b/drivers/mfd/intel_soc_pmic_bxtwc.c
-index f9842ff44b3f..8dac0d41f64f 100644
---- a/drivers/mfd/intel_soc_pmic_bxtwc.c
-+++ b/drivers/mfd/intel_soc_pmic_bxtwc.c
-@@ -422,10 +422,8 @@ static int bxtwc_add_chained_irq_chip(struct intel_soc_pmic *pmic,
- 		return dev_err_probe(pmic->dev, irq, "Failed to get parent vIRQ(%d) for chip %s\n",
- 				     pirq, chip->name);
+Add cpufreq_power_cooling_ops to avoid this case.
+
+Signed-off-by: Di Shen <di.shen@unisoc.com>
+Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+---
+ drivers/thermal/cpufreq_cooling.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index b8151d95a806..af5cfb458370 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -493,6 +493,17 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
+ 	.set_cur_state		= cpufreq_set_cur_state,
+ };
  
--	return __devm_regmap_add_irq_chip(pmic->dev, pmic->regmap, irq,
--					  irq_flags, 0,
--					  regmap_irq_get_domain(pdata),
--					  chip, data);
-+	return devm_regmap_add_irq_chip(pmic->dev, pmic->regmap, irq, irq_flags,
-+					0, chip, data);
- }
- 
- static int bxtwc_probe(struct platform_device *pdev)
++#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
++static struct thermal_cooling_device_ops cpufreq_power_cooling_ops = {
++	.get_max_state		= cpufreq_get_max_state,
++	.get_cur_state		= cpufreq_get_cur_state,
++	.set_cur_state		= cpufreq_set_cur_state,
++	.get_requested_power	= cpufreq_get_requested_power,
++	.state2power		= cpufreq_state2power,
++	.power2state		= cpufreq_power2state,
++};
++#endif
++
+ /**
+  * __cpufreq_cooling_register - helper function to create cpufreq cooling device
+  * @np: a valid struct device_node to the cooling device device tree node
+@@ -559,9 +570,7 @@ __cpufreq_cooling_register(struct device_node *np,
+ #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+ 	if (em_is_sane(cpufreq_cdev, em)) {
+ 		cpufreq_cdev->em = em;
+-		cooling_ops->get_requested_power = cpufreq_get_requested_power;
+-		cooling_ops->state2power = cpufreq_state2power;
+-		cooling_ops->power2state = cpufreq_power2state;
++		cooling_ops = &cpufreq_power_cooling_ops;
+ 	} else
+ #endif
+ 	if (policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED) {
 -- 
-2.35.1
+2.17.1
 

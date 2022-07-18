@@ -2,115 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDA2577CE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A482D577CEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233162AbiGRHyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S233218AbiGRH4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiGRHyb (ORCPT
+        with ESMTP id S230009AbiGRH43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:54:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50F1636A
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:54:30 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDLaE-0001WB-2p; Mon, 18 Jul 2022 09:54:26 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDLaD-001fcN-2M; Mon, 18 Jul 2022 09:54:25 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oDLaC-005uvA-Af; Mon, 18 Jul 2022 09:54:24 +0200
-Date:   Mon, 18 Jul 2022 09:54:22 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>
-Subject: Re: [PATCH 1/7] pwm: change &pci->dev to dev in probe
-Message-ID: <20220718075422.tpxjkua67w4y2lee@pengutronix.de>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
- <20220712100113.569042-2-ben.dooks@sifive.com>
- <20220713081633.5lsunbl5mfnngdrs@pengutronix.de>
- <2cd139dd-559e-7975-41a7-c813bc5851ea@sifive.com>
- <20220718074954.4z4qiz2pbuyrzaje@pengutronix.de>
+        Mon, 18 Jul 2022 03:56:29 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834BD183B2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:56:23 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1658130956t7fduxie
+Received: from localhost.localdomain ( [182.148.15.157])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 18 Jul 2022 15:55:54 +0800 (CST)
+X-QQ-SSF: 01000000002000E0U000B00A0000020
+X-QQ-FEAT: I6umPUGCYXFVJ41OBmTHZCAuvOk0nuyFrkzHbZ8yYJoOROKptEgxbDoCpvPR9
+        H/m0c+9zbgRNGfDO/X7hMqpdcb4va5GYfy/hmVMHVhWSbkjkUvv8Qt5+CiM1TNmZI2OFFvN
+        wfWHF/wSJCGxar3kCDs4Xk+nhc32kr4otZcjYhZrY79pJCYk835bcpIqAax0RMBUVJWGUQ6
+        Ecm9kyMl9m2247XTSBRUhN7jRs++ijF/UKv9K/l3QdT0WtpM/KkotQy4m399oHHI2Ld58Mu
+        quPaPe16EpC6iEjFk+3L+9QQHocK/Iqdawv4IgD3lngTVdLswAWgkLB+dwBXjeERLxHZxYt
+        1AgnKLhEziE3VyMTF7jC1cP7HgBbAAAkfpCn7iIsfzD/Fn/JxrgF7AhPK6btNnFSoUpLQeq
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     paulus@samba.org
+Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org, haren@linux.ibm.com,
+        npiggin@gmail.com, nick.child@ibm.com, Julia.Lawall@inria.fr,
+        clg@kaod.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] powerpc/pseries/vas: Fix comment typo
+Date:   Mon, 18 Jul 2022 15:55:53 +0800
+Message-Id: <20220718075553.70897-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ngh2iorqj3djqfbj"
-Content-Disposition: inline
-In-Reply-To: <20220718074954.4z4qiz2pbuyrzaje@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The double `the' in line 807 is duplicated, remove one.
 
---ngh2iorqj3djqfbj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+---
+ arch/powerpc/platforms/pseries/vas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hello,
+diff --git a/arch/powerpc/platforms/pseries/vas.c b/arch/powerpc/platforms/pseries/vas.c
+index 91e7eda0606c..7e6e6dd2e33e 100644
+--- a/arch/powerpc/platforms/pseries/vas.c
++++ b/arch/powerpc/platforms/pseries/vas.c
+@@ -804,7 +804,7 @@ int vas_reconfig_capabilties(u8 type, int new_nr_creds)
+ 	 * The total number of available credits may be decreased or
+ 	 * increased with DLPAR operation. Means some windows have to be
+ 	 * closed / reopened. Hold the vas_pseries_mutex so that the
+-	 * the user space can not open new windows.
++	 * user space can not open new windows.
+ 	 */
+ 	if (old_nr_creds <  new_nr_creds) {
+ 		/*
+-- 
+2.35.1
 
-On Mon, Jul 18, 2022 at 09:49:54AM +0200, Uwe Kleine-K=F6nig wrote:
-> On Mon, Jul 18, 2022 at 08:19:16AM +0100, Ben Dooks wrote:
-> > On 13/07/2022 09:16, Uwe Kleine-K=F6nig wrote:
-> > > On Tue, Jul 12, 2022 at 11:01:07AM +0100, Ben Dooks wrote:
-> > > > The dwc_pwm_probe() assignes dev to be &pci->dev but then uses
-> > > > &pci->dev throughout the function. Change these all to the be
-> > > > 'dev' variable to make lines shorter.
-> > >=20
-> > > Looks reasonable.
-> > >=20
-> > > Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > ack for 1/7 or the series?
->=20
-> The former. For the other patches I assume they will change in v2.
-
-Oh well, and 2/7 is so obviously a preparation patch that I'll wait to
-see v2 for that one, too.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ngh2iorqj3djqfbj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLVEawACgkQwfwUeK3K
-7AmTggf6A0ecpKFfBLiPjo/NNYwaME/rIWapOnrvy/ycFw1mJRqbs7Yys4jnN3Wp
-PEhd18VJo1i0pzD0tTlNayIso/8vm3oBwVyfCWazfm99Z0Fg5za+prV+51Jf4Vgz
-mnzDGFuMiXFYItmDPPlGOV0FVJsH2h07dalUkFCTtReX7CW/OoLHgt1eZ2OQgKsM
-ECw8Q/k+46q7qiXc2shR9Pk+G3svCkXZtVI5lhlqZnNdGnPKEU0Ixk/uo///C9pM
-2qJ2yRCNAzCPK2YWRVf43OuT4mHhMHxv32JlkqEWuUczQsqvQNPDj4xEj5BGy8/D
-TSSiVYp1pjGib45T5rRSKLIQgKZQKw==
-=Bzbt
------END PGP SIGNATURE-----
-
---ngh2iorqj3djqfbj--

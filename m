@@ -2,223 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA3D577A15
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 06:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74462577A16
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 06:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiGRE2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 00:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
+        id S232852AbiGRE2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 00:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGRE17 (ORCPT
+        with ESMTP id S229535AbiGRE2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 00:27:59 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF4FE028;
-        Sun, 17 Jul 2022 21:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658118477; x=1689654477;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=90P6pQAJwdW/mwcL71CfVSZo0O4cicHXL75H4XFCGx4=;
-  b=jXBwGgZaTFKNKINK96tPfHxKMeOBWl38hwQdmeaXyPON3a66x0rVXjV+
-   Jq8ApKLmPQvw/ddYglhh+CKlveCvJhCTmUIWfwOtY3QdnUJqE9Fq9hqSK
-   qXqESBcFSKMqCjMM+oD0ROoaCCYAJ/Dz0QRig0cHa1cygpEuciiTLgTn0
-   BoXwq3341brGVZNTYlEwpaNz1EeHbUwy2DLQ4KyfRfmNHMArEYh/wIdHJ
-   a0EYbu4ENWUTB0AsDeYXgXvqqZ+8YhqGFxiPdLXjxqQ2aOn/q8JDt1xlM
-   o968AYJjA8tCFvXnoXH9afz4Yp7mcVKkdZdj5TX0rckEjjx9B2kWucbpg
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="311808185"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="311808185"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 21:27:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="924187006"
-Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Jul 2022 21:27:57 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sun, 17 Jul 2022 21:27:56 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Sun, 17 Jul 2022 21:27:56 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Sun, 17 Jul 2022 21:27:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S6YBmnR7M4gO3aiPeJT+x/pXm+J2i3UUIUQoPrnOUqEs6Pp4AzP1HKAe+qdwoPHIPCeIiTSo2BYXmo8vixBoYaz0UPLcHz46nWwAfALzwy5wilzXMLe38yztrgWqHBpkUI+XnIde/kT3FzETGLW2bD2DHZWmdnr0naM9Jshxq9n/Rh7RSNWjK4lfUAiuWrxqTBQQBGi/o5gvFxVgLJ/KNNcNfQwjThihMuZyr3xtGgptxolReBJ8E7ggphkWbPO/7q8KMRqI+C20cc5RUlDTuG0GooTxZX0Yip/PiLiL6WLjIlnedNGCQ//B9SfMJGi9IKt6OAz87rTIczOivv5SQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lLrkSaFIioczV/SJr1IS0LFSKrwaDBj0+JUa31aapK0=;
- b=g4jaEpNaQ5MoKvaOf4Tc8VUvQIvaxBDQ9TzTP6WRzzMVuLjNkdasMBOzM3UciCiql6FbbiRdjlR4V+WY1BLeQxthn5rLfe8OCntKksRUmzD9SvStYeaDk0iQzVZhyU46zKNZoxzGuvhFH7DhBjiKAVRHichLmKEjc961UQ6DvW38IulG8XR5gQJZMtTtuR8UQl+3hCfsJwBNp26kPZLtOzngZDRseAS0lSow2YWmWO4Whot03EFuixHvNTkSmNFEmcrnV4DEy6zhaO7//eUMfWUuKzIM+g/ij4Ox8o1h9xOpsDpsrXZEnuDvhw4kxDisttskGAxkozpCDTs+iHqzFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
- by DM4PR11MB5567.namprd11.prod.outlook.com (2603:10b6:5:39a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Mon, 18 Jul
- 2022 04:27:54 +0000
-Received: from DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::cba:2a0b:8dbe:ca9c]) by DM6PR11MB3819.namprd11.prod.outlook.com
- ([fe80::cba:2a0b:8dbe:ca9c%7]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
- 04:27:54 +0000
-From:   "Wu, Hao" <hao.wu@intel.com>
-To:     "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "Weight, Russell H" <russell.h.weight@intel.com>,
-        "Muddebihal, Basheer Ahmed" <basheer.ahmed.muddebihal@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Zhang, Tianfei" <tianfei.zhang@intel.com>
-Subject: RE: [PATCH v3 2/2] fpga: dfl-pci: Add IDs for Intel N6000, N6001 and
- C6100 cards
-Thread-Topic: [PATCH v3 2/2] fpga: dfl-pci: Add IDs for Intel N6000, N6001 and
- C6100 cards
-Thread-Index: AQHYkhMVsoLbDKGMDkCQj83FX47Tpq2Dl6/g
-Date:   Mon, 18 Jul 2022 04:27:54 +0000
-Message-ID: <DM6PR11MB381961FEAAEC946E46562C83858C9@DM6PR11MB3819.namprd11.prod.outlook.com>
-References: <20220707150549.265621-1-matthew.gerlach@linux.intel.com>
- <20220707150549.265621-3-matthew.gerlach@linux.intel.com>
-In-Reply-To: <20220707150549.265621-3-matthew.gerlach@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5b5f38b8-f98a-4df9-5ec4-08da6875e28f
-x-ms-traffictypediagnostic: DM4PR11MB5567:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 30p7Kf4R6C3rR8LnJXEyPe7+CjG7u3uaWoIPsyUyOwEtDWTHvUVMGGEd5xx41xJijF1z9yd3baQN6z3H0lFbnRnazOLj2NnXq91607uR1E+8HYsk3oRs+0vElBj/+8uP661YELoyAILtUJoppiFM11hgR3GMdDoB4H7nZ6b09+v03n/sfMYFxXQjyBMAR3/B1CE/eadSQ1+8ehOPblXTubSEYgubm+Mm1MJgUgmatQvwIl2aMNpvVKfs6MojZeiWDd6BTsMz/CKnQ9aBIb0ELRIVVVzmCM4E5aE3ZI2UD+mM5ErvtRxUjC943yFDfCiwGQFMFTgPjxi8WHv091LfEH8I/pOSw3AA2rZjRZ+QeyrzcgWLQHrJPBqXIFocsyzZxlf0EUbSiEexQYPv0EE2XzVpAI5nv/NjUp8k2uQm6hNWOyT2iI2lAO4BeT8qXNtd9AQgvnt93uX74qzo9e5FCn7zfRM0BInRWQAqzUTXs0zbJexJRo0PH9jiH2oc1yIGqkmiV72iofkvEObdJ6eiyUN6f4c4LLu+1y51QYS8fR6YH3Ozg/KUdlt6E+yCJnUZI2OY8SWC2SuGDq4KBYtuHDH9XH+shZvfoz3qTae+ocxUbABbNIJjup/lfK2I+sdK54bQHsYPGxrIl9g7RGowIfefGLfznB6eec/fVlYu15jAknJrCIRLxy7AL4YEAibv9rm/EN9ULlwpOXqmTg8BRvRnohSYDOjZGgjc9pgQanOzsiJeiE5N6C/YOLv+sJrwTqCRtbr7vifWOscO2rtxWwpS360OnD2AKXZcgiDNqqRUMUqOBwI2q03FZBW96e/1W03ovrZ/KLi/btyDDwaz6g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(376002)(396003)(346002)(366004)(83380400001)(9686003)(26005)(186003)(41300700001)(2906002)(33656002)(86362001)(7696005)(53546011)(6506007)(478600001)(5660300002)(8936002)(52536014)(38070700005)(38100700002)(122000001)(316002)(82960400001)(921005)(6636002)(110136005)(8676002)(55016003)(64756008)(66446008)(66476007)(71200400001)(66946007)(66556008)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HlMpPQrnJ5/fjxom91cFRLVqb+yJVdRjcLHOO9wgEwVi2Lwi1OgNhsqv+ljw?=
- =?us-ascii?Q?Z4c2KaBaDOZd3D1RMW9KJcDqGUiKXA5GM76n839QPuzn6dCinuTdjJi0oZKD?=
- =?us-ascii?Q?WhJDfVdW0pwyyKM0bFqpAHy0kEziTmxp3HZ+mFeSZou/6YqXs2A7stqeaOEa?=
- =?us-ascii?Q?KWGH000vxpW0BqlS1hAeTVTBdROiJxPyEEhTf9uH+PZQXBe5BgtROX0y7wDd?=
- =?us-ascii?Q?fTGyyFHi+f9cJYJN8/HonEoa3dE1ec04iFKtmzlf3E7yEEBU+x8gNAzneWKi?=
- =?us-ascii?Q?meIQaahjW+I8Angv6EJG8I9hco9+InKVUSn9TX9RoL/pmdZzYRuhXhvKNgHl?=
- =?us-ascii?Q?WGrkdLsR5+XfX1NJDmFB+MH1IVbgpVoIr0xi6cXGo8+/vQzkTv93VsZocmJL?=
- =?us-ascii?Q?MVLHDoaI7a88UK44/HEzDGUZ/zcSACiuH0FERPTleI0eck5NWR9o0qjMkLmj?=
- =?us-ascii?Q?I63EHDNbZCCOPPh774jmwBREBIt7D1geHrt2vzbhy/wMNWOyIpuu9YasZU03?=
- =?us-ascii?Q?Ari1bA393Fgtx/unEggQT8f9MZgCk5KeFIWTN9O/dEYM2U0SSF2NEVZ4CDC8?=
- =?us-ascii?Q?syoXNZrw7ir4O9OzY0Ktp+/EQI0RZMuFCKOmUrNXE6CoRA2H1M1Io5Kcgard?=
- =?us-ascii?Q?y5ie/Ik2Gc7XCZUnnP4iSf6NnYbAym/FJZQ6K9GZQ1/GkQRQIL2q5+KgRwlz?=
- =?us-ascii?Q?wIW19ASZFcdLUZ0K2mQU7HlSXfL7SEFY9BTqIoEYnTqmg/iK82rtGWeg97Jp?=
- =?us-ascii?Q?hUarl/g7lQBqDHe4GPYq4yKCMFsDCrS+5yy9j2vTo5MCvE5wG37kUsblBU2e?=
- =?us-ascii?Q?sRTJY2Sh0bcNCBX7zK/e6A5C1eGA34HIuB8eq/mscvIBO6mJMIf8DCeFjynu?=
- =?us-ascii?Q?GxYHTVbUmS5cpsBA6OclaWUbOlC9fMAv++vMFFq3YSoVvx550jEq2WoTS/VN?=
- =?us-ascii?Q?+WWLTKcYs7XqTHPMfdf/89GmLkB8iYMdNG4mUjwnGKWVgAUqdTO7Z7ZPCLQq?=
- =?us-ascii?Q?TH369Od+8kxmDL00j7Utr3rbhdzOPYWIo7ZqAKp4WfpK46HEHzLiVNFb41Iu?=
- =?us-ascii?Q?Ps1u5dKHM78H0QZHxLEqcB0bIj5cUv6L0CSOtLIsFZRcsahpd7ZAveE9fgy6?=
- =?us-ascii?Q?OCDTWwpzyUDEH7gYf4ORGkv/ShR9lR6C5XJgrdlnYSjAa/kUHf41OK2fX/ZD?=
- =?us-ascii?Q?xehWjraYSpZtR0wQqNjFuNTrAc32OQ4OOtpxiMIZ4pJxnS7giTsadnaFwMp1?=
- =?us-ascii?Q?FRGorPudyS67F7hhnulC15UNIrCkd2YfEZyHjRQeqsZ5r5w92xWETov0j7ps?=
- =?us-ascii?Q?WfsS7udGma0dqIS4BjL2CCErPlTWTEyAmg2KAOgLO7/A6LXRHgRjikxKoESX?=
- =?us-ascii?Q?EoN9tcSneIl05emv+C8aSqqPm5kgW+9DceaHkhvdpg34MAw93KYIZvoHcSM9?=
- =?us-ascii?Q?ELMoVZJ6FqI0sxwa88KL+hlCMUw/LDj7qQCfOZpRXPiSBPn6HfgQ7t2CxK5F?=
- =?us-ascii?Q?+WAQZ0+ZkXB2GkxHBgP/AsSv4hWcQ4DYFPPK3KWtXZ4fxvlyfe9kNLoUY0i+?=
- =?us-ascii?Q?oEg8yeUkCck4Z/ThxGU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 18 Jul 2022 00:28:53 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31AB114A
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 21:28:51 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id v5so8000722qvq.8
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 21:28:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=11YqMJGe0PaT2Lk2xlEdlr79a7uVr8jdnzNlj+sQuRg=;
+        b=iUkhY23+VUsjFO/xiObhSmS0HMYmuVdRPHuydCGKGvs+w2V/bbfpfx4OKo+XPIf8XA
+         OAy5CNB5qnzmS5gPHCNdQ8acw0qPL+Pg5byroJF2qJAHspobUKW9tseDx0aCiTQsueoO
+         U/8FG3hpBIfdusDvCg+2mrWemK7U3jadCGVqn8KvnSrPiDDdOREKA5YSwrR7xeL/cQPH
+         XRKRfvVO7r/ouAkGQMq31J3EQQ5paF1zkEle6KK1aoSWzh9Ty2RrPx1vgnKgluyQlPUl
+         nIoIfcf1qlPuMuC1d2zkRVHraGV3SfW0ZUTWRbRgFZ0EE6DAjJgWaU0k6JcE83ZrLQoH
+         NNYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=11YqMJGe0PaT2Lk2xlEdlr79a7uVr8jdnzNlj+sQuRg=;
+        b=GhxwKN9jiRU6wkOUBSWjVe1v7oQozONOasjqU56GmDvAQWnz6RD1NwEvY96yOBaiBu
+         WNoeO4D4F2Dm2l5rTp/PbwTPUHaiucZhAVutsLUvqlC7htRbzEsgyyG3o2w2pm17sGh0
+         sGury4kmoAIFuFrxFNME2rS7QpQwHA1BLbTw2M6PLRJv9uZFW5dT9HihhEQ3khv+nWJt
+         0QnDPR597fJpFLCHpleZf6rYL3YQ04lER3Ldn2unBry2Nlom+hrP0BNB9Fzxv9hnAxR2
+         LQ4ZcOEPzQDrLbi1Qko1tw2/x2qot5WQRKogKlPbdD+HozTNw3+2Ro4hb/7dsvKsFTq1
+         GKmg==
+X-Gm-Message-State: AJIora9LdwQPu1T2YT89b6+myOqtz1YTaIf+HHf79sweNgwajcnrT/PI
+        4hiya9U/Cd2MKQZU9Qo7V4tM4OfQavP+qA==
+X-Google-Smtp-Source: AGRyM1sooFImIFXs2Q3NCAJ8Yq5HMVUbr5oDjG05er6N0OKEEPeh3Oh1l3cBv3X3+0Y/LF+3peUMPQ==
+X-Received: by 2002:a05:6214:f6c:b0:473:8e39:47f0 with SMTP id iy12-20020a0562140f6c00b004738e3947f0mr19872742qvb.106.1658118530524;
+        Sun, 17 Jul 2022 21:28:50 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id i5-20020a05620a248500b006b5d9a1d326sm6523397qkn.83.2022.07.17.21.28.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 21:28:50 -0700 (PDT)
+Date:   Sun, 17 Jul 2022 21:28:37 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Liam Howlett <liam.howlett@oracle.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] maple_tree: Fix sparse reported issues
+In-Reply-To: <20220718022718.wtlw7grwp6dv5fcp@revolver>
+Message-ID: <1098dd4d-8f12-4493-5aff-1ee489d8e7@google.com>
+References: <20220712142441.4184969-1-Liam.Howlett@oracle.com> <653cc1da-e45a-9a93-7158-cee3e710ba35@redhat.com> <20220713132926.3sl7gs67dyjj7kit@revolver> <44a478e8-2ccc-e82-bd5a-172778c01529@google.com> <20220713175013.aoemaelds45aavc4@revolver>
+ <20220715195301.r7ozt6ph2scti7vz@revolver> <fc9c2193-f5d7-d494-8e4e-c9f340ae8625@google.com> <20220718022718.wtlw7grwp6dv5fcp@revolver>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b5f38b8-f98a-4df9-5ec4-08da6875e28f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2022 04:27:54.7386
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LL+/LgRU8BxhTzcvDEFuQAmdbe1qQsxe5vaWy9MERLU80OnJTkRhRDeVYUw+bxjPDQ+Y5rF9CkB98AeKyUTR5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5567
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: matthew.gerlach@linux.intel.com <matthew.gerlach@linux.intel.com>
-> Sent: Thursday, July 7, 2022 11:06 PM
-> To: Wu, Hao <hao.wu@intel.com>; Xu, Yilun <yilun.xu@intel.com>; Weight,
-> Russell H <russell.h.weight@intel.com>; Muddebihal, Basheer Ahmed
-> <basheer.ahmed.muddebihal@intel.com>; trix@redhat.com;
-> mdf@kernel.org; corbet@lwn.net; linux-fpga@vger.kernel.org; linux-
-> doc@vger.kernel.org; linux-kernel@vger.kernel.org; Zhang, Tianfei
-> <tianfei.zhang@intel.com>
-> Cc: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Subject: [PATCH v3 2/2] fpga: dfl-pci: Add IDs for Intel N6000, N6001 and
-> C6100 cards
->=20
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->=20
-> Add pci_dev_table entries supporting the Intel N6000, N6001
-> and C6100 cards to the dfl-pci driver.
->=20
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> ---
-> v3: added necessary subdevice ids
->     removed 'drivers: ' from title
->=20
-> v2: changed names from INTEL_OFS to INTEL_DFL
-> ---
->  drivers/fpga/dfl-pci.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->=20
-> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-> index fd1fa55c9113..94eabdf1d2f7 100644
-> --- a/drivers/fpga/dfl-pci.c
-> +++ b/drivers/fpga/dfl-pci.c
-> @@ -77,12 +77,19 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
->  #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
->  #define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
->  #define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
-> +#define PCIE_DEVICE_ID_INTEL_DFL		0xbcce
->=20
->  /* VF Device */
->  #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
->  #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
->  #define PCIE_DEVICE_ID_VF_DSC_1_X		0x09C5
->  #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF	0x0B2C
-> +#define PCIE_DEVICE_ID_INTEL_DFL_VF		0xbccf
-> +
-> +/* PCI Subdevice ID */
-> +#define PCIE_SUBDEVICE_ID_INTEL_N6000		0x1770
-> +#define PCIE_SUBDEVICE_ID_INTEL_N6001		0x1771
-> +#define PCIE_SUBDEVICE_ID_INTEL_C6100		0x17d4
+On Mon, 18 Jul 2022, Liam Howlett wrote:
+> * Hugh Dickins <hughd@google.com> [220717 16:58]:
+> > On Fri, 15 Jul 2022, Liam Howlett wrote:
+> > > 
+> > > Please find attached the last outstanding fix for this series.  It
+> > > covers a rare failure scenario that one of the build bots reported.
+> > > Ironically, it changes __vma_adjust() more than the rest of the series,
+> > > but leaves the locking in the existing order.
+> > 
+> > Thanks, I folded that in to my testing on next-20220715, along with
+> > other you posted on Friday (mas_dead_leaves() walk fix);
+> 
+>   Please drop that patch, it needs more testing.
 
-Please move SUBDEVICE_ID above together with DEVICE_ID.=20
-If we add new SUBDEVICE to some other device like this, it will
-be hard to distinguish them.
+Drop the mas_dead_leaves() walk fix, or the __vma_adjust() changes
+which you attached in that mail to me? please let me know a.s.a.p,
+since I cannot proceed without knowing which.
 
-With above change.
-Acked-by: Wu Hao <hao.wu@intel.com>
+> 
+> > but have not
+> > even glanced at the v11 you posted Saturday, though I see from responses
+> > that v11 has some other changes, including __vma_adjust() again, but I
+> > just have not looked.  (I've had my own experiments in __vma_adjust()).
+> > 
+> > You'll be wanting my report, I'll give it here rather than in the v11
+> > thread.  In short, some progress, but still frustratingly none on the
+> > main crashes.
+> > 
+> > 1. swapops.h BUG on !PageLocked migration entry.  This is *not* the
+> > most urgent to fix, I'm just listing it first to get it out of the way
+> > here.  This is the BUG that terminates every tmpfs swapping load test
+> > on the laptop: only progress was that, just one time, the workstation
+> > hit it before hitting its usual problems: nice to see it there too.
+> > I'll worry about this bug when the rest is running stably.  I've only
+> > ever noticed it when it's brk being unmapped, I expect that's a clue.
+> 
+> Thanks for pointing me towards a usable reproducer.  I should be able to
+> narrow it down from there, especially with the brk hint.
 
-Thanks
-Hao
+I'm afraid I cannot point you to a good reproducer; but anyway, the BUG
+necessarily appears some time after whatever code is at fault has been
+exercised, so it needs thought rather than any reproducer.  It was not
+obvious to me, but I'll think it through again, once the other issues
+are resolved.
 
+> 
+> > 
+> > 2. Silly in do_mas_mumap():
+> > --- a/mm/mmap.c
+> > +++ b/mm/mmap.c
+> > @@ -2513,7 +2513,7 @@ int do_mas_munmap(struct ma_state *mas, struct mm_struct *mm,
+> >  	arch_unmap(mm, start, end);
+> >  
+> >  	/* Find the first overlapping VMA */
+> > -	vma = mas_find(mas, end - 1);
+> > +	vma = mas_find(mas, start);
+> >  	if (!vma)
+> >  		return 0;
+> >  
+> > Fixing that does fix some bad behaviors seen - I'd been having crashes in
+> > unmap_vmas() and unlink_anon_vmas(), and put "if (WARN_ON(!vma)) return;"
+> > in unmap_region(); but that no longer seems necessary now do_mas_munmap()
+> > is fixed thus.  I had high hopes that it would fix all the rest, but no.
+> 
+> This is actually correct.  mas_find() is not the same as vma_find().
+> mas_find() uses the maple state index and searches until a limit (end
+> -1 in this case).  I haven't seen these crashes, but I think you are
+> hitting the same issue you are discussing in #6 below.  I also hadn't
+> realised the potential confusion of those APIs.
+
+You're right, I'm wrong, sorry about that.  But then I'm left with the
+conundrum of how a class of crashes went away when I changed that.  Did
+I break it all so badly that it couldn't reach the anon_vma bugs I was
+hitting before?  Or did making that change coincide with my moving from 
+DEBUG_MAPLE off to on, so different crashes came sooner?  Or did I fold
+in another fix from you around that time?  I don't know (and I don't
+expect you to answer this!), but I've got some backtracking to do.
+
+> 
+> > 
+> > 3. vma_adjust_trans_huge().  Skip this paragraph, I think there
+> > is actually no problem here, but for safety I have rearranged the
+> > vma_adjust_trans_huge()s inside the rmap locks, because when things
+> > aren't working right, best to rule out some possibilities.  Why am
+> > I even mentioning it here?  In case I send any code snippets and
+> > you're puzzled by vma_adjust_trans_huge() having moved.
+> 
+> Thanks, I will keep this in mind.
+> 
+> > 
+> > 4. unlink_anon_vmas() in __vma_adjust().  Not urgent to fix (can only
+> > be an issue when GFP_KERNEL preallocation fails, which I think means
+> > when current is being OOM-killed), but whereas vma_expand() has careful
+> > anon_cloned flag, __vma_adjust() does not, and I think could be
+> > unlinking a pre-existing anon_vma.  Aside from that, I am nervous about
+> > using unlink_anon_vmas() there like that (and in vma_expand()): IIUC it's
+> > an unnecessary "optimization" for a very unlikely case, that's in danger
+> > of doing more harm than good; and should be removed from them both (then
+> > they can both simply return -ENOMEM when mas_preallocate() fails).
+> 
+> I will add a flag to __vma_adjust, but I don't see how it could happen.
+> I guess if importer has an anon_vma already?  I added these as an unwind
+> since I don't want to leak - even on the rare preallocation failure.  If
+> you don't want to unroll, what would you suggest in these cases?  Would
+> a flag be acceptable?
+
+I cannot see what purpose adding a flag to __vma_adjust() would serve.
+If importer had anon_vma already, yes, without checking the code again,
+that was I think what I had in mind.  But (correct me if you've observed
+that I'm wrong) there's no question of a leak there: a vma which wasn't
+given an anon_vma before gets linked in to one, and it will all get torn
+down correctly when the process exits (indeed, when OOM kill completes).
+
+It's "nice" to delay setting anon_vma until it's needed, but not worth
+any effort to rewind it (especially on such an unlikely path): and
+normally, once anon_vma has been set, it stays set - I'm not sure of
+the consequence of unsetting it again (racing with rmap lookups: may
+be okay because of how anon_vma is not trusted when page is not mapped;
+but it's easier just to omit the rewind than think all that through).
+
+> 
+> > 
+> > 5. I was horrified/thrilled to notice last night that mas_store_prealloc()
+> > does a mas_destroy() at the end.  So only the first vma_mas_store() in
+> > __vma_adjust() gets to use the carefully preallocated nodes.  I thought
+> > that might be responsible for lots of nastiness, but again sadly no.
+> > Maybe it just falls back to GFP_ATOMIC when the preallocateds are gone
+> > (I didn't look) and that often works okay.  Whether the carefully
+> > chosen prealloc count allows for __vma_adjust() use would be another
+> > question.  (Earlier on I did try doubling its calculation, in case it
+> > was preallocating too few, but that made no difference either.)
+> 
+> mas_store_prealloc will allocate for the worst case scenario.  Since I
+> cannot guarantee the second store isn't the worst case, and could fail,
+> I cannot allow for more than one allocation per preallocate.  I thought
+> I was fine in __vma_adjust since I preallocate after the goto label for
+> a second removal but it turns out I wasn't since the second preallocate
+> could fail, so I've removed the requirement for a second store for 'case
+> 6' by updating the tree once and removing both VMAs in a single pass.
+> There could, potentially be an issue if the caller to __vma_merge()
+> wanted to reduce one limit of the VMA (I guess just the start..) and
+> also remove one or more VMAs, and also be in a situation where
+> allocations could cause issues (fs_reclaim).. and since __vma_adjust()
+> is so complicated, I looked at the callers.  Most use vma_merge(), and
+> those seem fine.  fs/exec only adjusts one at a time.  when splitting,
+> only a single insert happens.  Did I miss some situation(s)?
+
+I don't think the fs/exec stack moving will be any worry for this.
+Did you miss any case?  Yes, the "insert" cases from __split_vma().
+I have no appreciation of when maple tree actually needs to make an
+allocation, so I don't know whether the adjust_next case ever needs
+to make an allocation, but I'd have thought the insert case might
+need to sometimes.
+
+But I'll admit to skimming your paragraph there, I'm more concerned
+to go on to the following issue than fully grasp your argument above.
+
+> 
+> > 
+> > 6. The main problem, crashes on the workstation (never seen on the
+> > laptop).  I keep hacking around with the debug info (and, please,
+> > %px not %p, %lx not %lu in the debug info: I've changed them all,
+> 
+> Okay, so I tried to remove all %px in the debug code so I'll revert
+> those.  I use %lu for historic reasons from mt_dump(), I can change
+> those too,  The tree uses ranges to store pointers so I print the
+> pointers in %lx and the ranges in %lu.
+> 
+> 
+> > and a couple of %lds, in my copy of lib/maple_tree.c).  I forget
+> > how the typical crashes appeared with the MAPLE_DEBUGs turned off
+> > (the BUG_ON(count != mm->map_count) in exit_mmap() perhaps); I've
+> > turned them on, but usually comment out the mt_validate() and
+> > mt_dump(), which generate far too much noise for non-specialists,
+> > and delay the onset of crash tenfold (but re-enabled to give you
+> > the attached messages.xz).
+> > 
+> > Every time, it's the cc1 (9.3.1) doing some munmapping (cc1 is
+> > mostly what's running in this load test, so that's not surprising;
+> > but surprising that even when I switched the laptop to using same
+> > gcc-9, couldn't reproduce the problem there). Typically, that
+> > munmapping has involved splitting a small, say three page, vma
+> > into two pages below and one page above (the "insert", and I've
+> > hacked the debug to dump that too, see "mmap: insert" - ah,
+> > looking at the messages now, the insert is bigger this time).
+> > 
+> > And what has happened each time I've studied it (I don't know
+> > if this is evident from the mt dumps in the messages, I hope so)
+> > is that the vma and the insert have been correctly placed in the
+> > tree, except that the vma has *also* been placed several pages
+> > earlier, and a linear search of the tree finds that misplaced
+> > instance first, vm_start not matching mt index.
+> > 
+> > The map_count in these cases has always been around 59, 60, 61:
+> > maybe just typical for cc1, or maybe significant for maple tree?
+> > 
+> > I won't give up quite yet, but I'm hoping you'll have an idea for
+> > the misplaced tree entry.  Something going wrong in rebalancing?
+> > 
+> > For a long time I assumed the problem would be at the mm/mmap.c end,
+> > and I've repeatedly tried different things with the vma_mas stuff
+> > in __vma_adjust() (for example, using vma_mas_remove() to remove
+> > vmas before re-adding them, and/or doing mas_reset() in more places);
+> > but none of those attempts actually fixed the issue.  So now I'm
+> > thinking the problem is really at the lib/maple_tree.c end.
+> > 
+> 
+> Do you have the patch
+> "maple_tree-Fix-stale-data-copy-in-mas_wr_node_store.patch"? It sounds
+> like your issue fits this fix exactly. I was seeing the same issue with
+> gcc 9.3.1 20200408 and this bug doesn't happen for me now.  The logs
+> you sent also fit the situation. I went through the same exercise
+> (exorcism?) of debugging the various additions and removals of the VMA
+> only to find the issue in the tree itself.  The fix also modified the
+> test code to detect the issue - which was actually hit but not detected
+> in the existing test cases from a live capture of VMA activities.  It is
+> difficult to spot in the tree dump as well.  I am sure I sent this to
+> Andrew as it is included in v11 and did not show up in his diff, but I
+> cannot find it on lore, perhaps I forgot to CC you?  I've attached it
+> here for you in case you missed it.
+
+Thanks!  No, I never received that patch, nor can I see it on lore
+or marc.info; but I (still) haven't looked at v11, and don't know
+about Andrew's diff.  Anyway, sounds exciting, I'm eager to stop
+writing this mail and get to testing with that in - but please
+let me know whether it's the mas_dead_leaves() or the __vma_adjust()
+mods you attached previously, which you want me to leave out.
+
+> 
+> You are actually hitting the issue several iterations beyond when it
+> first occurred.  It was introduced earlier in the tree and exposed with
+> your other operations by means of a node split or merge.
+> 
+> > 7. If you get to do cleanups later, please shrink those double blank
+> > lines to single blank lines.  And find a better name for the strange
+> > vma_mas_szero() - vma_mas_erase(), or is erase something different?
+> > I'm not even sure that it's needed: that's a special case for exec's
+> > shift_arg_pages() VM_STACK_INCOMPLETE_SETUP, which uses __vma_adjust()
+> > in a non-standard way.  And trace_vma_mas_szero() in vma_mas_remove()
+> > looks wrong.
+> 
+> Okay, I'll be sure to only have one blank line.  Where do you see this?
+> I would have thought that checkpatch would complain?  I did try to,
+
+No, I'm not going to search for those double blank lines now:
+please do your own diff and look through for them.  And I don't know
+whether checkpatch objects to them or not, but they're bad for patch
+application, since they increase the likelihood that a patch applies
+in the wrong place.
+
+As to whether this is or is not a good time for such cleanups,
+I just don't know: I see Andrew on the one hand intending to drop
+maple tree for the moment, but Linus on the other hand promising
+an extra week for 5.19.  I'll just let others decide what they want.
+
+Hugh
+
+> regretfully, address more checkpatch issues on v11.  It added more noise
+> to the differences of v10 + patches to v11 than anything else.
+> 
+> 
+> Thanks again,
+> Liam

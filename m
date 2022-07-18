@@ -2,98 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F026578411
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735E057841B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235004AbiGRNow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
+        id S234007AbiGRNpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbiGRNou (ORCPT
+        with ESMTP id S235046AbiGRNp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:44:50 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF02C19C1C;
-        Mon, 18 Jul 2022 06:44:48 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmjrH1XNRz4xZB;
-        Mon, 18 Jul 2022 23:44:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1658151887;
-        bh=ct7Bb9TEvoCcCMzYFWgojsTrBCyiQvnckSQyh1hVRXk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pp5pG25f9wQVNn9FX01c5sgo/IisHcF/8CvZa4R8kaqhPha+c9zSoODzcOqIrsJEL
-         3H5Gx6FkwDM1wcu3KzoWndoIH1dj5PwXXPbDgJ3X3KSqLraoFK6+t2H/AEsZ4Rmi6l
-         MGSLSQ3MYkjDvElAC1u/ElxqimB5GsZ7ZMvxTfHcrbIuVw+xg/zVLeiWTK1RBq59uH
-         dih19E9zzkt2HIi1lwCFgc6Tm2O66He0G6LkHbtHt2QH4/sp9XID2qsmRNPrJJcVZS
-         /xA4/Q0UTQfkUHm246ns0jMU4EhzEML6WwTs+5XWttr1GiapF6tjxNVSG6xaJJH09m
-         TwOIO1Tc77JFw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     <linuxppc-dev@lists.ozlabs.org>
-Cc:     sudipm.mukherjee@gmail.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        torvalds@linux-foundation.org
-Subject: [PATCH] powerpc/64s: Disable stack variable initialisation for prom_init
-Date:   Mon, 18 Jul 2022 23:44:18 +1000
-Message-Id: <20220718134418.354114-1-mpe@ellerman.id.au>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <87cze3docs.fsf@mpe.ellerman.id.au>
-References: <87cze3docs.fsf@mpe.ellerman.id.au>
+        Mon, 18 Jul 2022 09:45:28 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B2A192A7;
+        Mon, 18 Jul 2022 06:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658151927; x=1689687927;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lWXZGlmG3SNmi4VM7l9EBpLyUGbO7uiW4f5tn6p4HqY=;
+  b=BIWRsmBRLLvZCVZ5emoiLcvhwIQlseviNBv4II8DwCjrhWR8TZYtCYwB
+   MonB1TDMGHM5AT50klrRbbIi5aCXJgapG1VDKSK/XmGe7ZMDuJpe/sCzU
+   cl2T9NjbBvemxHu+0zkGYvJAdtTZfYDzASvjZ6MgtZTX+GeHJwRVy2cyD
+   aWfNJN6BI8ED7qlavIOpng6PCq85auqKfAH2+bvmZhkCiskeQiLj24oce
+   KeDv43btNdWxpJ5AoTCrYNR7UxHA/Tg8Wsw1i9MGbR/a2GkQjlijU0JMH
+   WzI1pP5v69oXCNcziZ3zsp4elSQu3h00RPQSUgyQwvvEwpeb4dx0sEqgm
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="350183604"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="350183604"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:45:27 -0700
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="686739692"
+Received: from smyint-mobl1.amr.corp.intel.com (HELO [10.212.107.15]) ([10.212.107.15])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:45:24 -0700
+Message-ID: <d51882e0-6864-7a49-ae16-f7213dc716c4@linux.intel.com>
+Date:   Mon, 18 Jul 2022 14:45:22 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 05/21] drm/i915/gt: Skip TLB invalidations once wedged
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Chris Wilson <chris.p.wilson@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Fei Yang <fei.yang@intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>
+References: <cover.1657800199.git.mchehab@kernel.org>
+ <f20bd21c94610dae59824b8040e5a9400de6f963.1657800199.git.mchehab@kernel.org>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <f20bd21c94610dae59824b8040e5a9400de6f963.1657800199.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With GCC 12 allmodconfig prom_init fails to build:
 
-  Error: External symbol 'memset' referenced from prom_init.c
-  make[2]: *** [arch/powerpc/kernel/Makefile:204: arch/powerpc/kernel/prom_init_check] Error 1
+On 14/07/2022 13:06, Mauro Carvalho Chehab wrote:
+> From: Chris Wilson <chris.p.wilson@intel.com>
+> 
+> Skip all further TLB invalidations once the device is wedged and
+> had been reset, as, on such cases, it can no longer process instructions
+> on the GPU and the user no longer has access to the TLB's in each engine.
+> 
+> That helps to reduce the performance regression introduced by TLB
+> invalidate logic.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
 
-The allmodconfig build enables KASAN, so all calls to memset in
-prom_init should be converted to __memset by the #ifdefs in
-asm/string.h, because prom_init must use the non-KASAN instrumented
-versions.
+Is the claim of a performance regression this solved based on a wedged 
+GPU which does not work any more to the extend where mmio tlb 
+invalidation requests keep timing out? If so please clarify in the 
+commit text and then it looks good to me. Even if it is IMO a very 
+borderline situation to declare something a fix.
 
-The build failure happens because there's a call to memset that hasn't
-been caught by the pre-processor and converted to __memset. Typically
-that's because it's a memset generated by the compiler itself, and that
-is the case here.
+Regards,
 
-With GCC 12, allmodconfig enables CONFIG_INIT_STACK_ALL_PATTERN, which
-causes the compiler to emit memset calls to initialise on-stack
-variables with a pattern.
+Tvrtko
 
-Because prom_init is non-user-facing boot-time only code, as a
-workaround just disable stack variable initialisation to unbreak the
-build.
-
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
----
- arch/powerpc/kernel/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-index f91f0f29a566..c8cf924bf9c0 100644
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -20,6 +20,7 @@ CFLAGS_prom.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- CFLAGS_prom_init.o += -fno-stack-protector
- CFLAGS_prom_init.o += -DDISABLE_BRANCH_PROFILING
- CFLAGS_prom_init.o += -ffreestanding
-+CFLAGS_prom_init.o += $(call cc-option, -ftrivial-auto-var-init=uninitialized)
- 
- ifdef CONFIG_FUNCTION_TRACER
- # Do not trace early boot code
--- 
-2.35.3
-
+> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
+> Cc: Fei Yang <fei.yang@intel.com>
+> Cc: Andi Shyti <andi.shyti@linux.intel.com>
+> Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v2 00/21] at: https://lore.kernel.org/all/cover.1657800199.git.mchehab@kernel.org/
+> 
+>   drivers/gpu/drm/i915/gt/intel_gt.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
+> index 1d84418e8676..5c55a90672f4 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
+> @@ -934,6 +934,9 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+>   	if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
+>   		return;
+>   
+> +	if (intel_gt_is_wedged(gt))
+> +		return;
+> +
+>   	if (GRAPHICS_VER(i915) == 12) {
+>   		regs = gen12_regs;
+>   		num = ARRAY_SIZE(gen12_regs);

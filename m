@@ -2,419 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D549578C3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E615578B6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236181AbiGRU5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 16:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S233540AbiGRUCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 16:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235905AbiGRU5D (ORCPT
+        with ESMTP id S229801AbiGRUCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 16:57:03 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BFB32B89
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:57:00 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id g19-20020a9d1293000000b0061c7bfda5dfso9879974otg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MaL6nUZp1qnzFg5lPX4aXiHwyJgQQ7FQ0456bzIqrd4=;
-        b=FjumPJRgFY5eeB5lGRtrx/X4WGR/RNXvsyxCmxHJGjWmWxjxX43Oy0h9WpbVs/G9Or
-         ++LnnUzMDM8N8WiAPGWENuyv5Ge8ng3s0C9MIWQJBIwePOUDvymCk63MTBmkp4IAkg/j
-         hF+eXYwEDIKVMRvbLEPtf3Cn1mQJhUImeG0A/Cacpl5VwDjJKp0cDJw+hX+5yIcoFNw9
-         DfGEGZ3qecfcqrN2NDwhv1m0FYtpyNlvIMRajW0azcLEgmC/dqMQFkyOByA2Z0UsnNi2
-         X7NY6L9CjaaV2eaWXNI7uXUX57pTXfHIfJ1+F560d5GcQzkUlB5F1+uYxnkzbcG9kMIV
-         u4Ng==
+        Mon, 18 Jul 2022 16:02:13 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2672B1277A;
+        Mon, 18 Jul 2022 13:02:13 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id h145so10188742iof.9;
+        Mon, 18 Jul 2022 13:02:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MaL6nUZp1qnzFg5lPX4aXiHwyJgQQ7FQ0456bzIqrd4=;
-        b=w5Dt4V75vILZ3I41JuKk+k2oVt6k72cCAXduBXIis4R5jSxNmDw6eRXl/7+h5bxGxb
-         lmDlDb0Kcj1+GOtXC2lTPY/nXRtiCRvA0AW3igsBhp6jLYCMDhJH2QxuxRD75zlCIEXG
-         Iunsqxro4m5EwHnoDQBXyceP2gifnvWZd2RG96IG/tIxRgNqywpQnVzRBq8/VrA9BnaZ
-         rXshuBp32AZ32VvYiuTJvdsSxHNzBPdyTY4osWaoVWKo/MY/XChu4yjucfZbVCAdvn2f
-         q1OJx6UvuvmGd75bzewkIoXuYd6phq5MRL439lqxNFQl/Njts4+DhnG9YAk0eEpJoVE7
-         QDdw==
-X-Gm-Message-State: AJIora9saDfAR78TUN9VcAGbSmiGwdoCon06aqVN0zEtyxr1bQyfnYIw
-        rBPZ4H66dQnVX3jfWuQ9F2+swA==
-X-Google-Smtp-Source: AGRyM1v3ju4pWLaLyB7J9v+/Op4/p9RZ3pLizVgSCnsZE/a78N8riyvlWvFOIZs2qlRWVbAqriefDg==
-X-Received: by 2002:a9d:5a05:0:b0:61c:32a3:f402 with SMTP id v5-20020a9d5a05000000b0061c32a3f402mr11582713oth.107.1658177820213;
-        Mon, 18 Jul 2022 13:57:00 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id l8-20020a4ab2c8000000b0035eb4e5a6cbsm5252065ooo.33.2022.07.18.13.56.59
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Hsva2XeLTXYA3pmbulVo9SFnlL5NoziYrhGMsppBEB4=;
+        b=SLI1vPma8/gqLdzYuSTcnBGD+uNU3nkN4N57tS9KbRe2o7emGkbMzjsvvsjLUhSGNr
+         R0S6iszGCkniK2aYxuUOqWvMgNp50xXWDg9A2IFw/55XRz94g1VDEu4hM6/ZRxZix5qd
+         vMJvkuoaoTWkAupADiIe7bPjFQ/RjtzbLgrVS/KEbK69MUek/CLZchjRA3Eu2Zd8ti08
+         CWndhDpZ/CkJJ0/axWXOKZaoeABHvsHjf/zILz1nhT5mlZJBEL/dfsMOGJtj3R34pVNl
+         +vKR95x8fBmNT8ZfodyaEbXFRSVDXhgzmr+Yn5c5wKqIyuFtFvx+0+O8G4/OmeitpRSs
+         eR+g==
+X-Gm-Message-State: AJIora85EPA0r4WDfSGGGZEttyxBa8Yfz7m4fc25DHhvqhLJLnC9XicQ
+        Rw2h91n/Mpf795hC0BPT3w==
+X-Google-Smtp-Source: AGRyM1v0S+9leHvsXKTlm7rkpwJ0N6xwue0xbSBj2n+6jLJwGXlQ5dDvSMBrvu1VKXfzRlI9M5F3mQ==
+X-Received: by 2002:a02:3f5c:0:b0:33e:ff53:a40e with SMTP id c28-20020a023f5c000000b0033eff53a40emr14913871jaf.230.1658174532365;
+        Mon, 18 Jul 2022 13:02:12 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id l40-20020a026668000000b0032e3b0933c6sm5764580jaf.162.2022.07.18.13.02.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 13:57:00 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Fred Eckert <Frede@cmslaser.com>
-Subject: [PATCH v3 6/6] gpio: gpio-mm: Implement and utilize register structures
-Date:   Fri, 15 Jul 2022 14:52:28 -0400
-Message-Id: <124fb6518c06db7ac5c6032c8d4fe429611ac3ed.1657907849.git.william.gray@linaro.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1657907849.git.william.gray@linaro.org>
-References: <cover.1657907849.git.william.gray@linaro.org>
+        Mon, 18 Jul 2022 13:02:12 -0700 (PDT)
+Received: (nullmailer pid 3451017 invoked by uid 1000);
+        Mon, 18 Jul 2022 20:02:10 -0000
+Date:   Mon, 18 Jul 2022 14:02:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        kursad.oney@broadcom.com, anand.gore@broadcom.com,
+        dan.beygelman@broadcom.com, f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        joel.peshkin@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] dt-bindings: arm64: bcmbca: Merge BCM4908 into
+ BCMBCA
+Message-ID: <20220718200210.GA3436421-robh@kernel.org>
+References: <20220712021144.7068-1-william.zhang@broadcom.com>
+ <20220712021144.7068-2-william.zhang@broadcom.com>
+ <ca8c3003-1bcb-6658-592c-566609fd7bd2@linaro.org>
+ <94b0ab39-279d-d3c2-98a4-054c10ad041c@broadcom.com>
+ <c40f20c7-59ee-99f4-9a11-e928b41eda9f@linaro.org>
+ <6efb1cfe-6129-276a-eeb3-44147304d211@broadcom.com>
+ <e4356c5e89492eb690e3dc863ba281bd@milecki.pl>
+ <85219d59e2906534409fc24ad2e5e4c9@milecki.pl>
+ <147bc812-3971-9832-fb39-5545e280f562@broadcom.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <147bc812-3971-9832-fb39-5545e280f562@broadcom.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reduce magic numbers and improve code readability by implementing and
-utilizing named register data structures. The GPIO-MM device features an
-Intel 8255 compatible GPIO interface, so the i8255 GPIO module is
-selected and utilized as well.
+On Wed, Jul 13, 2022 at 11:37:18AM -0700, William Zhang wrote:
+> Hi Rafal,
+> 
+> On 7/13/22 03:58, Rafał Miłecki wrote:
+> > On 2022-07-13 12:50, Rafał Miłecki wrote:
+> > > On 2022-07-13 02:57, William Zhang wrote:
+> > > > On 7/12/22 11:18, Krzysztof Kozlowski wrote:
+> > > > > On 12/07/2022 19:37, William Zhang wrote:
+> > > > > > > > +      - description: BCM4908 Family based boards
+> > > > > > > > +        items:
+> > > > > > > > +          - enum:
+> > > > > > > > +              # BCM4908 SoC based boards
+> > > > > > > > +              - brcm,bcm94908
+> > > > > > > > +              - asus,gt-ac5300
+> > > > > > > > +              - netgear,raxe500
+> > > > > > > > +              # BCM4906 SoC based boards
+> > > > > > > > +              - brcm,bcm94906
+> > > > > > > > +              - netgear,r8000p
+> > > > > > > > +              - tplink,archer-c2300-v1
+> > > > > > > > +          - enum:
+> > > > > > > > +              - brcm,bcm4908
+> > > > > > > > +              - brcm,bcm4906
+> > > > > > > > +              - brcm,bcm49408
+> > > > > > > 
+> > > > > > > This is wrong.  brcm,bcm94908 followed by brcm,bcm4906 does not look
+> > > > > > > like valid list of compatibles.
+> > > > > > > 
+> > > > > > For 4908 board variant, it will need to be followed by
+> > > > > > 4908 chip. Sorry
+> > > > > > for the basic question but is there any requirement to
+> > > > > > enforce this kind
+> > > > > > of rule?  I would assume dts writer know what he/she is
+> > > > > > doing and select
+> > > > > > the right combination.
+> > > > > 
+> > > > > The entire point of DT schema is to validate DTS.
+> > > > > Combination like above
+> > > > > prevents that goal.
+> > > > > 
+> > > > > Best regards,
+> > > > > Krzysztof
+> > > > Understand the DT schema purpose. But items property allows multiple
+> > > > enums in the list which gives a lot of flexibility but make it hard to
+> > > > validate. I am not familiar with DT schema, is there any directive to
+> > > > specify one enum value depending on another so dts validation tool can
+> > > > report error if combination is wrong?
+> > > > 
+> > > > This is our preferred format of all bcmbca compatible string
+> > > > especially when we could have more than 10 chip variants for the same
+> > > > chip family and we really want to work on the chip family id.  We will
+> > > > make sure they are in the right combination in our own patch and patch
+> > > > from other contributors. Would this work? If not, I will probably have
+> > > > to revert the change of 4908(maybe append brcm,bcmbca as this chip
+> > > > belongs to the same bca group) and use "enum board variant", "const
+> > > > main chip id", "brcm,bca" for all other chips as our secondary choice.
+> > > 
+> > > I'm not sure why I didn't even receive 1/3 and half of discussion
+> > > e-mails.
+> > > 
+> > > You can't just put all strings into a single bag and allow mixing them
+> > > in any combos. Please check how it's properly handled in the current
+> > > existing binding:
+> > > Documentation/devicetree/bindings/arm/bcm/brcm,bcm4908.yaml
+> > > 
+> > > Above binding enforces that non-matching compatible strings are not used
+> > > together.
+> > 
+> > I just noticed you're actually removing brcm,bcm4908.yaml in the 2/3 so
+> > you must be aware of that file.
+> > 
+> > So you see a cleanly working binding in the brcm,bcm4908.yaml but
+> > instead copying it you decided to wrote your own one from scratch.
+> > Incorrectly.
+> > 
+> > This smells of NIH (not invented here). Please just use that binding I
+> > wrote and move if it needed.
+> 
+> Not mean to discredit any of your work and I did copy over your binding and
+> combine them into one SoC entry to the new bcmbca.yaml and add you as one of
+> the maintainer to this file. As this change would certainly concern you,
+> that's why I sent RFC first.  As I explained in the cover letter, the
+> purpose of the change is to reduce the number of compatible strings and keep
+> one entry for one chip family due to possible large number of chip variants.
+> But since there is no way to validate the combination, I will copy the
+> existing 4908 bindings as they are now but I would propose to append "brcm,
+> bcmbca" as it is part of bcmbca chip. And for the other chips, we would just
+> use enum "board variant", const "main chip id", const "brcm,bca".  Does that
+> sound good to you?
 
-Tested-by: Fred Eckert <Frede@cmslaser.com>
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
-Changes in v3:
- - Include "gpio-i8255.h" instead of <linux/gpio/i8255.h>
- - Import I8255 symbol namespace
- - Define GPIOMM_NUM_PPI as the number of PPI (2)
- - Utilize i8255_state struct; replaces 'control_state' and 'lock' with
-   'ppi_state'
- - Call i8255_state_init() to initialize 'ppi_state'
+If you want fewer combinations of compatibles, adding a genericish 
+"brcm,bcmbca" is not going to help. Is there much value to adding it? 
+What can you do with that information (and nothing else) is the 
+question to ask. 
 
- drivers/gpio/Kconfig        |   1 +
- drivers/gpio/gpio-gpio-mm.c | 202 +++++++-----------------------------
- 2 files changed, 41 insertions(+), 162 deletions(-)
-
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 253a03ee3fa4..5202e3b6f2c6 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -889,6 +889,7 @@ config GPIO_GPIO_MM
- 	tristate "Diamond Systems GPIO-MM GPIO support"
- 	depends on PC104
- 	select ISA_BUS_API
-+	select GPIO_I8255
- 	help
- 	  Enables GPIO support for the Diamond Systems GPIO-MM and GPIO-MM-12.
- 
-diff --git a/drivers/gpio/gpio-gpio-mm.c b/drivers/gpio/gpio-gpio-mm.c
-index 097a06463d01..75b3ceeddbaf 100644
---- a/drivers/gpio/gpio-gpio-mm.c
-+++ b/drivers/gpio/gpio-gpio-mm.c
-@@ -6,7 +6,7 @@
-  * This driver supports the following Diamond Systems devices: GPIO-MM and
-  * GPIO-MM-12.
-  */
--#include <linux/bitmap.h>
-+#include <linux/bits.h>
- #include <linux/bitops.h>
- #include <linux/device.h>
- #include <linux/errno.h>
-@@ -17,7 +17,10 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
--#include <linux/spinlock.h>
-+
-+#include "gpio-i8255.h"
-+
-+MODULE_IMPORT_NS(I8255);
- 
- #define GPIOMM_EXTENT 8
- #define MAX_NUM_GPIOMM max_num_isa_dev(GPIOMM_EXTENT)
-@@ -27,32 +30,26 @@ static unsigned int num_gpiomm;
- module_param_hw_array(base, uint, ioport, &num_gpiomm, 0);
- MODULE_PARM_DESC(base, "Diamond Systems GPIO-MM base addresses");
- 
-+#define GPIOMM_NUM_PPI 2
-+
- /**
-  * struct gpiomm_gpio - GPIO device private data structure
-- * @chip:	instance of the gpio_chip
-- * @io_state:	bit I/O state (whether bit is set to input or output)
-- * @out_state:	output bits state
-- * @control:	Control registers state
-- * @lock:	synchronization lock to prevent I/O race conditions
-- * @base:	base port address of the GPIO device
-+ * @chip:		instance of the gpio_chip
-+ * @ppi_state:		Programmable Peripheral Interface group states
-+ * @ppi:		Programmable Peripheral Interface groups
-  */
- struct gpiomm_gpio {
- 	struct gpio_chip chip;
--	unsigned char io_state[6];
--	unsigned char out_state[6];
--	unsigned char control[2];
--	spinlock_t lock;
--	void __iomem *base;
-+	struct i8255_state ppi_state[GPIOMM_NUM_PPI];
-+	struct i8255 __iomem *ppi;
- };
- 
- static int gpiomm_gpio_get_direction(struct gpio_chip *chip,
- 	unsigned int offset)
- {
- 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
--	const unsigned int port = offset / 8;
--	const unsigned int mask = BIT(offset % 8);
- 
--	if (gpiommgpio->io_state[port] & mask)
-+	if (i8255_get_direction(gpiommgpio->ppi_state, offset))
- 		return GPIO_LINE_DIRECTION_IN;
- 
- 	return GPIO_LINE_DIRECTION_OUT;
-@@ -62,35 +59,8 @@ static int gpiomm_gpio_direction_input(struct gpio_chip *chip,
- 	unsigned int offset)
- {
- 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
--	const unsigned int io_port = offset / 8;
--	const unsigned int control_port = io_port / 3;
--	unsigned long flags;
--	unsigned int control;
--
--	spin_lock_irqsave(&gpiommgpio->lock, flags);
--
--	/* Check if configuring Port C */
--	if (io_port == 2 || io_port == 5) {
--		/* Port C can be configured by nibble */
--		if (offset % 8 > 3) {
--			gpiommgpio->io_state[io_port] |= 0xF0;
--			gpiommgpio->control[control_port] |= BIT(3);
--		} else {
--			gpiommgpio->io_state[io_port] |= 0x0F;
--			gpiommgpio->control[control_port] |= BIT(0);
--		}
--	} else {
--		gpiommgpio->io_state[io_port] |= 0xFF;
--		if (io_port == 0 || io_port == 3)
--			gpiommgpio->control[control_port] |= BIT(4);
--		else
--			gpiommgpio->control[control_port] |= BIT(1);
--	}
- 
--	control = BIT(7) | gpiommgpio->control[control_port];
--	iowrite8(control, gpiommgpio->base + 3 + control_port*4);
--
--	spin_unlock_irqrestore(&gpiommgpio->lock, flags);
-+	i8255_direction_input(gpiommgpio->ppi, gpiommgpio->ppi_state, offset);
- 
- 	return 0;
- }
-@@ -99,44 +69,9 @@ static int gpiomm_gpio_direction_output(struct gpio_chip *chip,
- 	unsigned int offset, int value)
- {
- 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
--	const unsigned int io_port = offset / 8;
--	const unsigned int control_port = io_port / 3;
--	const unsigned int mask = BIT(offset % 8);
--	const unsigned int out_port = (io_port > 2) ? io_port + 1 : io_port;
--	unsigned long flags;
--	unsigned int control;
--
--	spin_lock_irqsave(&gpiommgpio->lock, flags);
--
--	/* Check if configuring Port C */
--	if (io_port == 2 || io_port == 5) {
--		/* Port C can be configured by nibble */
--		if (offset % 8 > 3) {
--			gpiommgpio->io_state[io_port] &= 0x0F;
--			gpiommgpio->control[control_port] &= ~BIT(3);
--		} else {
--			gpiommgpio->io_state[io_port] &= 0xF0;
--			gpiommgpio->control[control_port] &= ~BIT(0);
--		}
--	} else {
--		gpiommgpio->io_state[io_port] &= 0x00;
--		if (io_port == 0 || io_port == 3)
--			gpiommgpio->control[control_port] &= ~BIT(4);
--		else
--			gpiommgpio->control[control_port] &= ~BIT(1);
--	}
--
--	if (value)
--		gpiommgpio->out_state[io_port] |= mask;
--	else
--		gpiommgpio->out_state[io_port] &= ~mask;
--
--	control = BIT(7) | gpiommgpio->control[control_port];
--	iowrite8(control, gpiommgpio->base + 3 + control_port*4);
- 
--	iowrite8(gpiommgpio->out_state[io_port], gpiommgpio->base + out_port);
--
--	spin_unlock_irqrestore(&gpiommgpio->lock, flags);
-+	i8255_direction_output(gpiommgpio->ppi, gpiommgpio->ppi_state, offset,
-+			       value);
- 
- 	return 0;
- }
-@@ -144,47 +79,16 @@ static int gpiomm_gpio_direction_output(struct gpio_chip *chip,
- static int gpiomm_gpio_get(struct gpio_chip *chip, unsigned int offset)
- {
- 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
--	const unsigned int port = offset / 8;
--	const unsigned int mask = BIT(offset % 8);
--	const unsigned int in_port = (port > 2) ? port + 1 : port;
--	unsigned long flags;
--	unsigned int port_state;
--
--	spin_lock_irqsave(&gpiommgpio->lock, flags);
--
--	/* ensure that GPIO is set for input */
--	if (!(gpiommgpio->io_state[port] & mask)) {
--		spin_unlock_irqrestore(&gpiommgpio->lock, flags);
--		return -EINVAL;
--	}
--
--	port_state = ioread8(gpiommgpio->base + in_port);
--
--	spin_unlock_irqrestore(&gpiommgpio->lock, flags);
- 
--	return !!(port_state & mask);
-+	return i8255_get(gpiommgpio->ppi, offset);
- }
- 
--static const size_t ports[] = { 0, 1, 2, 4, 5, 6 };
--
- static int gpiomm_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
- 	unsigned long *bits)
- {
- 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
--	unsigned long offset;
--	unsigned long gpio_mask;
--	void __iomem *port_addr;
--	unsigned long port_state;
--
--	/* clear bits array to a clean slate */
--	bitmap_zero(bits, chip->ngpio);
- 
--	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
--		port_addr = gpiommgpio->base + ports[offset / 8];
--		port_state = ioread8(port_addr) & gpio_mask;
--
--		bitmap_set_value8(bits, port_state, offset);
--	}
-+	i8255_get_multiple(gpiommgpio->ppi, mask, bits, chip->ngpio);
- 
- 	return 0;
- }
-@@ -193,49 +97,17 @@ static void gpiomm_gpio_set(struct gpio_chip *chip, unsigned int offset,
- 	int value)
- {
- 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
--	const unsigned int port = offset / 8;
--	const unsigned int mask = BIT(offset % 8);
--	const unsigned int out_port = (port > 2) ? port + 1 : port;
--	unsigned long flags;
--
--	spin_lock_irqsave(&gpiommgpio->lock, flags);
--
--	if (value)
--		gpiommgpio->out_state[port] |= mask;
--	else
--		gpiommgpio->out_state[port] &= ~mask;
--
--	iowrite8(gpiommgpio->out_state[port], gpiommgpio->base + out_port);
- 
--	spin_unlock_irqrestore(&gpiommgpio->lock, flags);
-+	i8255_set(gpiommgpio->ppi, gpiommgpio->ppi_state, offset, value);
- }
- 
- static void gpiomm_gpio_set_multiple(struct gpio_chip *chip,
- 	unsigned long *mask, unsigned long *bits)
- {
- 	struct gpiomm_gpio *const gpiommgpio = gpiochip_get_data(chip);
--	unsigned long offset;
--	unsigned long gpio_mask;
--	size_t index;
--	void __iomem *port_addr;
--	unsigned long bitmask;
--	unsigned long flags;
--
--	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
--		index = offset / 8;
--		port_addr = gpiommgpio->base + ports[index];
--
--		bitmask = bitmap_get_value8(bits, offset) & gpio_mask;
--
--		spin_lock_irqsave(&gpiommgpio->lock, flags);
- 
--		/* update output state data and set device gpio register */
--		gpiommgpio->out_state[index] &= ~gpio_mask;
--		gpiommgpio->out_state[index] |= bitmask;
--		iowrite8(gpiommgpio->out_state[index], port_addr);
--
--		spin_unlock_irqrestore(&gpiommgpio->lock, flags);
--	}
-+	i8255_set_multiple(gpiommgpio->ppi, gpiommgpio->ppi_state, mask, bits,
-+			   chip->ngpio);
- }
- 
- #define GPIOMM_NGPIO 48
-@@ -250,6 +122,21 @@ static const char *gpiomm_names[GPIOMM_NGPIO] = {
- 	"Port 2C2", "Port 2C3", "Port 2C4", "Port 2C5", "Port 2C6", "Port 2C7",
- };
- 
-+static void gpiomm_init_dio(struct i8255 __iomem *const ppi,
-+			    struct i8255_state *const ppi_state)
-+{
-+	const unsigned long ngpio = 24;
-+	const unsigned long mask = GENMASK(ngpio - 1, 0);
-+	const unsigned long bits = 0;
-+	unsigned long i;
-+
-+	/* Initialize all GPIO to output 0 */
-+	for (i = 0; i < GPIOMM_NUM_PPI; i++) {
-+		i8255_mode0_output(&ppi[i]);
-+		i8255_set_multiple(&ppi[i], &ppi_state[i], &mask, &bits, ngpio);
-+	}
-+}
-+
- static int gpiomm_probe(struct device *dev, unsigned int id)
- {
- 	struct gpiomm_gpio *gpiommgpio;
-@@ -266,8 +153,8 @@ static int gpiomm_probe(struct device *dev, unsigned int id)
- 		return -EBUSY;
- 	}
- 
--	gpiommgpio->base = devm_ioport_map(dev, base[id], GPIOMM_EXTENT);
--	if (!gpiommgpio->base)
-+	gpiommgpio->ppi = devm_ioport_map(dev, base[id], GPIOMM_EXTENT);
-+	if (!gpiommgpio->ppi)
- 		return -ENOMEM;
- 
- 	gpiommgpio->chip.label = name;
-@@ -284,7 +171,8 @@ static int gpiomm_probe(struct device *dev, unsigned int id)
- 	gpiommgpio->chip.set = gpiomm_gpio_set;
- 	gpiommgpio->chip.set_multiple = gpiomm_gpio_set_multiple;
- 
--	spin_lock_init(&gpiommgpio->lock);
-+	i8255_state_init(gpiommgpio->ppi_state, GPIOMM_NUM_PPI);
-+	gpiomm_init_dio(gpiommgpio->ppi, gpiommgpio->ppi_state);
- 
- 	err = devm_gpiochip_add_data(dev, &gpiommgpio->chip, gpiommgpio);
- 	if (err) {
-@@ -292,16 +180,6 @@ static int gpiomm_probe(struct device *dev, unsigned int id)
- 		return err;
- 	}
- 
--	/* initialize all GPIO as output */
--	iowrite8(0x80, gpiommgpio->base + 3);
--	iowrite8(0x00, gpiommgpio->base);
--	iowrite8(0x00, gpiommgpio->base + 1);
--	iowrite8(0x00, gpiommgpio->base + 2);
--	iowrite8(0x80, gpiommgpio->base + 7);
--	iowrite8(0x00, gpiommgpio->base + 4);
--	iowrite8(0x00, gpiommgpio->base + 5);
--	iowrite8(0x00, gpiommgpio->base + 6);
--
- 	return 0;
- }
- 
--- 
-2.36.1
-
+Rob

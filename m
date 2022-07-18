@@ -2,115 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB095783AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964935783AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234003AbiGRN0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S234636AbiGRN0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiGRN0h (ORCPT
+        with ESMTP id S235428AbiGRN0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:26:37 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A697A12A9E
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:26:35 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31c86fe1dddso107032577b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vq1nfsdA5coq6n5SWADtW9niUwKkaHcu8n81CtS/PhQ=;
-        b=dTUf55RM5WdP0LTR2NDp2XkkNrsELz1sG8vCGKO87mJJQ9FFaySJP6oqtMelslTt5Q
-         zPFPI6yFZ49+BtPSbdN1wiergAigi+MOud/TEM4wbeTMyEV87ZLSKgaT5iLuXYWL8wTL
-         yYLGmjGXWUEHeow734wqjY86NeBlviK8c0m/yOEq0XZsZyiSvYjheiSXyvhWYGTR2Pb3
-         JawabQL3CJ1gREnbrlXqZQqz99eYZ9qaUzSqDwcBIrGXyycOK0WMN28u7DLycUho1SqH
-         d1ywL1Fp/5wrj8bT12OjUAS29wCC+jLL5YND+XCG22JBqRUefkvUka2WfbfXxwVWyOwY
-         JeoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vq1nfsdA5coq6n5SWADtW9niUwKkaHcu8n81CtS/PhQ=;
-        b=bfHRr1Bw0DmuWSVLpVcEZVAOIid1YYRRZelDDDtHq0881ETTAgSktQdU493xAB7b0U
-         f+CK7KOakvSp3/S0shNWUek04wuXPZ5oP7ssizTOX9k/BKmsVhN0Pm05nOUy8a1C8Mmw
-         Y6uL82T9J3LcpDYYu0Ab/DJ4SZD6CUWBXl7kZTytO8WnOCCzteC1TG2ytlUBtmQYQTHM
-         93bEdhggVg1c0jV32rRBc+2BjmqiKuzPDM6fxKitG7GT+QaZmX2wWHcOwgaezHSKlP+v
-         IoR2jPks6SL42yT0do0aOV9BQNF8omoo8yB2nPTEsvw0wuBE/cqX/Or5raYLCbUM0ADL
-         MJNg==
-X-Gm-Message-State: AJIora9oPD4KLQMwOIFlPyDLPHmVAikGutYjnwMy9dpTvnjWsP3pqdKE
-        vaefTkl8SK+TBTxmjMoSJ7AHO93LFKJAIK4XBwHpZA==
-X-Google-Smtp-Source: AGRyM1vNXtk6hbtKSVS4tozHK4fF3mWDNBu6r9gapXG+u0NKNyochywe+71HfJC7PRKWGUqwSTcw6FD+Abyo42NezGA=
-X-Received: by 2002:a81:5b43:0:b0:31b:aed2:f563 with SMTP id
- p64-20020a815b43000000b0031baed2f563mr30038159ywb.115.1658150794803; Mon, 18
- Jul 2022 06:26:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220715044948.434149-1-cosmin.tanislav@analog.com> <20220715044948.434149-3-cosmin.tanislav@analog.com>
-In-Reply-To: <20220715044948.434149-3-cosmin.tanislav@analog.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 18 Jul 2022 15:26:22 +0200
-Message-ID: <CACRpkdZ+KQqUKeevuXgcKLiK85STDeZFh=D47LMvyZb-o-Wbcw@mail.gmail.com>
-Subject: Re: [PATCH v8 2/2] iio: adc: ad4130: add AD4130 driver
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 18 Jul 2022 09:26:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B437298
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:26:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA5C9B815E8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:26:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A9CC341C0;
+        Mon, 18 Jul 2022 13:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658150794;
+        bh=4tiO4PApBXbBzVqE/dLoJLfQkxM8y4vZA0drfXcfE7g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HV2Fn4G5sZhal83TZdtyoJTVZ7a2oFLDCJAw6ZMpE0DbCQGPu1tza5qi2CX0FxfpH
+         hpGYjlwArua1Zxlfg6SB5k1Pbmu1GShhkXXmfn8ryHDa6wTUpsYFB2bULowFSxMlgN
+         L3ySt3eeE3AirkyCxj/sJOBKO/rvP5cOgOidiicKZ1iKOIp3zvA009Szw5Cbj/2DwV
+         XqJ5kE5CQt6090/FpHmSSoSuMxWtBbKKzCHbQN0of0IImEY3HEHcdT/I+2Ia8gv6FP
+         tqDqzCoMgXX0swYh14zmRTuNotwCgDDcDC3dn7fH30dX4n2bwBtcBTFWbQ6BNueJin
+         3bDVXKz/E3Hcg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDQlc-008DVV-BW;
+        Mon, 18 Jul 2022 14:26:32 +0100
+Date:   Mon, 18 Jul 2022 14:26:31 +0100
+Message-ID: <87sfmyzh4o.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Robert Moore <robert.moore@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V15 01/15] ACPICA: MADT: Add LoongArch APICs support
+In-Reply-To: <7ed06824-4ccb-a9c4-fa01-583006ab90c1@loongson.cn>
+References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+        <1657868751-30444-2-git-send-email-lvjianmin@loongson.cn>
+        <87mtd93p3n.wl-maz@kernel.org>
+        <7ed06824-4ccb-a9c4-fa01-583006ab90c1@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, robert.moore@intel.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cosmin,
+On Mon, 18 Jul 2022 13:28:11 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>=20
+>=20
+>=20
+> On 2022/7/17 =E4=B8=8A=E5=8D=882:10, Marc Zyngier wrote:
+> > [+ Robert Moore]
+> >=20
+> > On Fri, 15 Jul 2022 08:05:37 +0100,
+> > Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> >>=20
+> >> From: Huacai Chen <chenhuacai@loongson.cn>
+> >>=20
+> >> LoongArch-specific interrupt controllers (similar to APIC) are added
+> >> in the next revision of ACPI Specification (current revision is 6.4),
+> >> which including CORE_PIC (CPUINTC), LIO_PIC (LIOINTC), EIO_PIC (EIOINT=
+C),
+> >> HT_PIC (HTVECINTC), BIO_PIC (PCHINTC), LPC_PIC (PCHLPC) and MSI_PIC
+> >> (PCHMSI). This patch add their definition.
+> >>=20
+> >> ACPI changes of LoongArch-specific interrupt controllers have already
+> >> been approved in the ECRs, and will be public in the next revision of
+> >> ACPI Specification.
+> >>=20
+> >> Reference: https://mantis.uefi.org/mantis/view.php?id=3D2203
+> >> Reference: https://mantis.uefi.org/mantis/view.php?id=3D2313
+> >>=20
+> >> Above links needs login(available for ASWG), so the following link(
+> >> the ECR file for adding LoongArch APICs into ACPI spec) is provided
+> >> for public:
+> >>=20
+> >> https://github.com/lvjianmin-loongson/acpica/blob/master/Add%20APIC%20=
+Structures%20for%20Loongarch%20in%20MADT-rev3.pdf
+> >>=20
+> >> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> >> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> >=20
+> > Since the ACPI maintainers are unwilling to take this patch (for
+> > undisclosed reasons), we need something to unblock this sorry
+> > situation, as I don't think it is fair on the LoongArch folks to be
+> > blocked for another cycle on this ground only.
+> >=20
+> > I'm proposing to replace this patch with the following, which will
+> > allow the patches to be merged without breaking anything. Once the
+> > ACPI support is updated, we'll be able to simply revert this patch.
+> >=20
+> > Thanks,
+> >=20
+> > 	M.
+> >=20
+> >  From 43ec25d2dbde3c422cce430c9d5ec32fbe7b255c Mon Sep 17 00:00:00 2001
+> > From: Marc Zyngier <maz@kernel.org>
+> > Date: Sat, 16 Jul 2022 18:56:10 +0100
+> > Subject: [PATCH] LoongArch: Provisionally add ACPICA data structures
+> >=20
+> > The LoongArch architecture is using ACPI, but the spec containing
+> > the required updates still is in an unreleased state.
+> >=20
+> > Instead of preventing the inclusion of the IRQ support into the
+> > kernel, add the missing bits to the arch-specific parts of
+> > the ACPICA support.
+> >=20
+> > Once the ACPICA bits are updated to the version that supports
+> > LoongArch, these bits can eventually be removed.
+> >=20
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > ---
+> >   arch/loongarch/include/asm/acpi.h | 138 ++++++++++++++++++++++++++++++
+> >   1 file changed, 138 insertions(+)
+> >=20
+> > diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include=
+/asm/acpi.h
+> > index 62044cd5b7bc..6155e46098af 100644
+> > --- a/arch/loongarch/include/asm/acpi.h
+> > +++ b/arch/loongarch/include/asm/acpi.h
+> > @@ -31,6 +31,144 @@ static inline bool acpi_has_cpu_in_madt(void)
+> >     extern struct list_head acpi_wakeup_device_list;
+> >   +/*
+> > + * Temporary definitions until the core ACPICA code gets updated (see
+> > + * 1656837932-18257-1-git-send-email-lvjianmin@loongson.cn and its
+> > + * follow-ups for the "rationale").
+> > + *
+> > + * Once the "legal reasons" are cleared and that the code is merged,
+> > + * this can be dropped entierely.
+> > + */
+> > +#if (ACPI_CA_VERSION =3D=3D 0x20220331 && !defined(LOONGARCH_ACPICA_EX=
+T))
+> > +
+> > +#define LOONGARCH_ACPICA_EXT	1
+> > +
+> > +#define	ACPI_MADT_TYPE_CORE_PIC		17
+> > +#define	ACPI_MADT_TYPE_LIO_PIC		18
+> > +#define	ACPI_MADT_TYPE_HT_PIC		19
+> > +#define	ACPI_MADT_TYPE_EIO_PIC		20
+> > +#define	ACPI_MADT_TYPE_MSI_PIC		21
+> > +#define	ACPI_MADT_TYPE_BIO_PIC		22
+> > +#define	ACPI_MADT_TYPE_LPC_PIC		23
+> > +
+> > +/* Values for Version field above */
+> > +
+> > +enum acpi_madt_core_pic_version {
+> > +	ACPI_MADT_CORE_PIC_VERSION_NONE =3D 0,
+> > +	ACPI_MADT_CORE_PIC_VERSION_V1 =3D 1,
+> > +	ACPI_MADT_CORE_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserv=
+ed */
+> > +};
+> > +
+> > +enum acpi_madt_lio_pic_version {
+> > +	ACPI_MADT_LIO_PIC_VERSION_NONE =3D 0,
+> > +	ACPI_MADT_LIO_PIC_VERSION_V1 =3D 1,
+> > +	ACPI_MADT_LIO_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserve=
+d */
+> > +};
+> > +
+> > +enum acpi_madt_eio_pic_version {
+> > +	ACPI_MADT_EIO_PIC_VERSION_NONE =3D 0,
+> > +	ACPI_MADT_EIO_PIC_VERSION_V1 =3D 1,
+> > +	ACPI_MADT_EIO_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserve=
+d */
+> > +};
+> > +
+> > +enum acpi_madt_ht_pic_version {
+> > +	ACPI_MADT_HT_PIC_VERSION_NONE =3D 0,
+> > +	ACPI_MADT_HT_PIC_VERSION_V1 =3D 1,
+> > +	ACPI_MADT_HT_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserved=
+ */
+> > +};
+> > +
+> > +enum acpi_madt_bio_pic_version {
+> > +	ACPI_MADT_BIO_PIC_VERSION_NONE =3D 0,
+> > +	ACPI_MADT_BIO_PIC_VERSION_V1 =3D 1,
+> > +	ACPI_MADT_BIO_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserve=
+d */
+> > +};
+> > +
+> > +enum acpi_madt_msi_pic_version {
+> > +	ACPI_MADT_MSI_PIC_VERSION_NONE =3D 0,
+> > +	ACPI_MADT_MSI_PIC_VERSION_V1 =3D 1,
+> > +	ACPI_MADT_MSI_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserve=
+d */
+> > +};
+> > +
+> > +enum acpi_madt_lpc_pic_version {
+> > +	ACPI_MADT_LPC_PIC_VERSION_NONE =3D 0,
+> > +	ACPI_MADT_LPC_PIC_VERSION_V1 =3D 1,
+> > +	ACPI_MADT_LPC_PIC_VERSION_RESERVED =3D 2	/* 2 and greater are reserve=
+d */
+> > +};
+> > +
+>=20
+> Hi, Marc, I add #pragma here to make following structures align to 1
+> byte as include/acpi/actbl2.h, or else, the MADT will not be parsed
+> correctly.
 
-thanks for your patch!
+If that's required, please add it.
 
-On Fri, Jul 15, 2022 at 6:50 AM Cosmin Tanislav <demonsingur@gmail.com> wrote:
+Thanks,
 
-> AD4130-8 is an ultra-low power, high precision, measurement solution for
-> low bandwidth battery operated applications.
->
-> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
-> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
-> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
-> selectable filter options, smart sequencer, sensor biasing and excitation
-> options, diagnostics, and a FIFO buffer.
->
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-(...)
-> +static int ad4310_parse_fw(struct iio_dev *indio_dev)
-> +{
-(...)
-> +       int_clk_out = device_property_read_bool(dev, "adi,int-clk-out");
-> +       if (st->mclk && int_clk_out)
-> +               return dev_err_probe(dev, -EINVAL,
-> +                                    "Cannot expose internal clock\n");
-> +
-> +       device_property_read_u32(dev, "adi,ext-clk-freq-hz", &ext_clk_freq);
-> +       if (ext_clk_freq != AD4130_MCLK_FREQ_153_6KHZ &&
-> +           ext_clk_freq != AD4130_MCLK_FREQ_76_8KHZ)
-> +               return dev_err_probe(dev, -EINVAL,
-> +                                    "Invalid external clock frequency %u\n",
-> +                                    ext_clk_freq);
+	M.
 
-As mentioned in the bindings I think this is cheating. Just implement a real
-clock abstraction and take the desired clock divider (1 or 2?) from the phandle.
-
-See e.g.
-commit 639d5661cc808057854681685ecb596406dbacce
-"clk: ux500: Implement the missing CLKOUT clocks"
-for an example, it is more complex so it should be a copy/paste/strip
-exercise mostly.
-
-Yours,
-Linus Walleij
+--=20
+Without deviation from the norm, progress is not possible.

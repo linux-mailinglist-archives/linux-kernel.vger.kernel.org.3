@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76BB5789F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428275789F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbiGRS7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S234105AbiGRTAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbiGRS7T (ORCPT
+        with ESMTP id S233758AbiGRTAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:59:19 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735252B267
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:59:18 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bp15so23029158ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:59:18 -0700 (PDT)
+        Mon, 18 Jul 2022 15:00:48 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D722B274
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:00:47 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id os14so23045943ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:00:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=slpfovSxwH69MidbtOJcRY7uDQ6H4tBu5oDj8UdArpM=;
-        b=ZBid+pAuHLootIpQ3LlrGlDWrvmgPtUN7AWBITQq4lkFGus1FxoKm70PWD/0QEEFmr
-         Y1n8YB8A1dzrVRX4yR015vt3T87P20UqfcJeF4BIa0rSw5b/kYQT7GMapYpYRnqfXDWX
-         frjLvOf8JgDbK1xGLbIDMVQq/gsEhmkcX9yED3NDZSHwgi5DguKXMo9suK9Dmi19G4xS
-         j7OiA5YAdwQftYn5l1vv2wFBax+g8vmZzMZT0RUA2TkEX3KwDw5eSS2pazJZmCcZrDck
-         MWozrVFaSRPqcsLY1IfkYS8Cqfd4aODloSdhMxWFjj79H6rTbws8y7+NxbdjeQiiuPUU
-         B1AA==
+        bh=VQyoH7Iz8mEpqAOd0ZONZyEq4M37QPm603w2BBFwKM8=;
+        b=Z79+e/QKWsVqEovUmcQ2HznGd9tPqIiEP5LgIpEpC7EHyvSgvZ6t5FZRTRMhZHZLGN
+         M9+guF5Kv6dOe9rhbQGBtAPC63QjnJON4DrsYkf13p8b2jizjEhg9uNHyiz5gCpGKUJU
+         amsxg0l8FbxjkVnVVT11Bq0lf//qNSZnSSWN8xuyppw3PXiO+g58dAUHMz2tgOpHpsAE
+         lKbypVyE16N+UPos58AN9XJk/jLsIjMbkPaW4ry1F/rciHBVI9ssjViIobffSlbWiB9s
+         XX1KUi6qymYRQLLM/93caMa381BoDz/bJVbGqz988oAVh8T+meqjiOu53xMkXQY6j/Pz
+         N1wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=slpfovSxwH69MidbtOJcRY7uDQ6H4tBu5oDj8UdArpM=;
-        b=qNEXJ9Qfof4O6y9OyYc8fIAM3+2Dz7+uDRCq1F5ia+qQRHR6ee3HiZhSD6ewzliHVr
-         f0zFjW/lZHNL7Lgh7CoTsVGCPIRlQ2g42CXA2/m8iJbmuEtJCcxRPIbefa6jZo12AEZw
-         UNcaM++mUOyUPw7c2KhLfwqKZau5PZLnv1qd/UsflFlrWbNj0t+f8F9L/CvD0fTFwKhd
-         Wi6hG6LSWI7Wx8Mf0GmS7+14pRsKr/g2+28/UoV+sJefLvTZGEr1OZz3qZX6WCQnW7Jv
-         CTNQe0rTw7vYc4IYQLYgOL9sxGRd3/C+sRWJvEhp+hfbzwYMD8rcx9b84EZtRGMNA5Na
-         Svpw==
-X-Gm-Message-State: AJIora/Ep2dFKEXNdNwxWKOCXFSodmsTPDZW3L36aKtMrNt/Iq2zDjhz
-        rk6F+2V1qbeBZ42nHxOKoFY8+YkpgDhK/u5QYri9jYgm
-X-Google-Smtp-Source: AGRyM1uQZwoFvVHeSTMnTXBRgwIxT/NZ/PA/c59d2WUkP+agcYAww0Uht4SdtramGRzjUzzaTK8yd/mqI/nJOun+DTE=
-X-Received: by 2002:a17:907:1623:b0:72b:64e3:878a with SMTP id
- hb35-20020a170907162300b0072b64e3878amr27789024ejc.185.1658170757048; Mon, 18
- Jul 2022 11:59:17 -0700 (PDT)
+        bh=VQyoH7Iz8mEpqAOd0ZONZyEq4M37QPm603w2BBFwKM8=;
+        b=q2YR/x1QykiFgodMTe/i/f8+zRoAadYn75qZ+NAV46foTIIIAcaDpvaR//1VRB8k+c
+         r3OViJDrqHeGO1Z5NWSDajCoMh5kjBcI+LmZ0y25zIDvUcDl3bg+s0RsKdZi/mDQoiVO
+         UFlskVrKDMiigK5P0pSWp+AMlo8MpMIaHwkOth/hyhRRpwKBKhfUI+MWCEplftDfizR8
+         ZFbRi9Poc3r9QGpVKQq2eN/+5lGWvn9ijkFsHGFXgSYhJvqm/CDi1EiK+ZeX2vSHxtK6
+         q8FDHI9maM0Nnu7h8AyQ9eqgwDl+HxQ+oo5Vj4XmkzTmAEC+HCcJ4eL3/GU7QknPC1Az
+         uVxg==
+X-Gm-Message-State: AJIora9gTvmZPUKTwPJ6QkevIaUH4aAZnp/gNwwHG1f88+C4+7eoF3WV
+        qDGCcGmoUeIkCaaiPHFfalXDwr6WrP+fAkBt48U=
+X-Google-Smtp-Source: AGRyM1sAm0ceprBeNasxCBhGobuk2pQl9XbeaWeQmikg9R40pJTUHYeb+giTHB2g6CW/mQzFSVkhhZ9LsDrrgRr3LwU=
+X-Received: by 2002:a17:907:2702:b0:72b:307b:98e6 with SMTP id
+ w2-20020a170907270200b0072b307b98e6mr27482559ejk.658.1658170845590; Mon, 18
+ Jul 2022 12:00:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220714164507.561751-1-mairacanal@riseup.net> <20220714164507.561751-8-mairacanal@riseup.net>
-In-Reply-To: <20220714164507.561751-8-mairacanal@riseup.net>
+References: <20220714164507.561751-1-mairacanal@riseup.net> <20220714164507.561751-9-mairacanal@riseup.net>
+In-Reply-To: <20220714164507.561751-9-mairacanal@riseup.net>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 18 Jul 2022 14:59:05 -0400
-Message-ID: <CADnq5_NwQWjGvMVxqPG1LcJkCV1MMJt9d25sXFkFQ8zUDw0sng@mail.gmail.com>
-Subject: Re: [PATCH 08/12] drm/amd/display: Remove unused variables from dcn10_stream_encoder
+Date:   Mon, 18 Jul 2022 15:00:34 -0400
+Message-ID: <CADnq5_MYHR256zeDaGpbs9=ax9LqmThWeZ0Ld4_YUfNeDMwuqw@mail.gmail.com>
+Subject: Re: [PATCH 09/12] drm/amd/display: Remove unused MaxUsedBW variable
 To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
 Cc:     Harry Wentland <harry.wentland@amd.com>,
         Leo Li <sunpeng.li@amd.com>,
@@ -89,108 +89,84 @@ Alex
 On Thu, Jul 14, 2022 at 12:46 PM Ma=C3=ADra Canal <mairacanal@riseup.net> w=
 rote:
 >
-> The variable regval from the function enc1_update_generic_info_packet
-> and the variables dynamic_range_rgb and dynamic_range_ycbcr from the
-> function enc1_stream_encoder_dp_set_stream_attribute are not currently
-> used.
+> Remove the variable MaxUsedBW from the function
+> DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCal=
+culation.
+> As a side-effect, the variables MaxPerPlaneVActiveWRBandwidth and
+> WRBandwidth are also removed.
 >
-> This was pointed by clang with the following warnings:
+> This was pointed by clang with the following warning:
 >
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_stream_encoder.c:62:=
-11:
-> warning: variable 'regval' set but not used [-Wunused-but-set-variable]
->         uint32_t regval;
->                  ^
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_stream_encoder.c:262=
-:10:
-> warning: variable 'dynamic_range_rgb' set but not used [-Wunused-but-set-=
-variable]
->         uint8_t dynamic_range_rgb =3D 0; /*full range*/
->                 ^
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_stream_encoder.c:263=
-:10:
-> warning: variable 'dynamic_range_ycbcr' set but not used [-Wunused-but-se=
-t-variable]
->         uint8_t dynamic_range_ycbcr =3D 1; /*bt709*/
->                 ^
-> 3 warnings generated.
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:=
+3043:10:
+> warning: variable 'MaxUsedBW' set but not used [-Wunused-but-set-variable=
+]
+>                 double MaxUsedBW =3D 0;
+>                        ^
+> 1 warning generated.
 >
 > Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
 > ---
->  .../drm/amd/display/dc/dcn10/dcn10_stream_encoder.c    | 10 ----------
->  1 file changed, 10 deletions(-)
+>  .../dc/dml/dcn30/display_mode_vba_30.c        | 28 -------------------
+>  1 file changed, 28 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_stream_encoder.c =
-b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_stream_encoder.c
-> index c99c6fababa9..484e7cdf00b8 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_stream_encoder.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_stream_encoder.c
-> @@ -59,7 +59,6 @@ void enc1_update_generic_info_packet(
->         uint32_t packet_index,
->         const struct dc_info_packet *info_packet)
->  {
-> -       uint32_t regval;
->         /* TODOFPGA Figure out a proper number for max_retries polling fo=
-r lock
->          * use 50 for now.
->          */
-> @@ -88,7 +87,6 @@ void enc1_update_generic_info_packet(
->         REG_UPDATE(AFMT_VBI_PACKET_CONTROL, AFMT_GENERIC_CONFLICT_CLR, 1)=
-;
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30=
+.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> index 842eb94ebe04..876b321b30ca 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> @@ -3037,40 +3037,12 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchP=
+arametersWatermarksAndPerforman
 >
->         /* choose which generic packet to use */
-> -       regval =3D REG_READ(AFMT_VBI_PACKET_CONTROL);
->         REG_UPDATE(AFMT_VBI_PACKET_CONTROL,
->                         AFMT_GENERIC_INDEX, packet_index);
+>         {
+>                 //Maximum Bandwidth Used
+> -               double TotalWRBandwidth =3D 0;
+> -               double MaxPerPlaneVActiveWRBandwidth =3D 0;
+> -               double WRBandwidth =3D 0;
+> -               double MaxUsedBW =3D 0;
+> -               for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+> -                       if (v->WritebackEnable[k] =3D=3D true
+> -                                       && v->WritebackPixelFormat[k] =3D=
+=3D dm_444_32) {
+> -                               WRBandwidth =3D v->WritebackDestinationWi=
+dth[k] * v->WritebackDestinationHeight[k]
+> -                                               / (v->HTotal[k] * v->Writ=
+ebackSourceHeight[k] / v->PixelClock[k]) * 4;
+> -                       } else if (v->WritebackEnable[k] =3D=3D true) {
+> -                               WRBandwidth =3D v->WritebackDestinationWi=
+dth[k] * v->WritebackDestinationHeight[k]
+> -                                               / (v->HTotal[k] * v->Writ=
+ebackSourceHeight[k] / v->PixelClock[k]) * 8;
+> -                       }
+> -                       TotalWRBandwidth =3D TotalWRBandwidth + WRBandwid=
+th;
+> -                       MaxPerPlaneVActiveWRBandwidth =3D dml_max(MaxPerP=
+laneVActiveWRBandwidth, WRBandwidth);
+> -               }
+> -
+>                 v->TotalDataReadBandwidth =3D 0;
+>                 for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+>                         v->TotalDataReadBandwidth =3D v->TotalDataReadBan=
+dwidth
+>                                         + v->ReadBandwidthPlaneLuma[k]
+>                                         + v->ReadBandwidthPlaneChroma[k];
+>                 }
+> -
+> -               {
+> -                       double MaxPerPlaneVActiveRDBandwidth =3D 0;
+> -                       for (k =3D 0; k < v->NumberOfActivePlanes; ++k) {
+> -                               MaxPerPlaneVActiveRDBandwidth =3D dml_max=
+(MaxPerPlaneVActiveRDBandwidth,
+> -                                               v->ReadBandwidthPlaneLuma=
+[k] + v->ReadBandwidthPlaneChroma[k]);
+> -
+> -                       }
+> -               }
+> -
+> -               MaxUsedBW =3D MaxTotalRDBandwidth + TotalWRBandwidth;
+>         }
 >
-> @@ -259,8 +257,6 @@ void enc1_stream_encoder_dp_set_stream_attribute(
->         uint32_t h_back_porch;
->         uint8_t synchronous_clock =3D 0; /* asynchronous mode */
->         uint8_t colorimetry_bpc;
-> -       uint8_t dynamic_range_rgb =3D 0; /*full range*/
-> -       uint8_t dynamic_range_ycbcr =3D 1; /*bt709*/
->         uint8_t dp_pixel_encoding =3D 0;
->         uint8_t dp_component_depth =3D 0;
->
-> @@ -372,18 +368,15 @@ void enc1_stream_encoder_dp_set_stream_attribute(
->         switch (output_color_space) {
->         case COLOR_SPACE_SRGB:
->                 misc1 =3D misc1 & ~0x80; /* bit7 =3D 0*/
-> -               dynamic_range_rgb =3D 0; /*full range*/
->                 break;
->         case COLOR_SPACE_SRGB_LIMITED:
->                 misc0 =3D misc0 | 0x8; /* bit3=3D1 */
->                 misc1 =3D misc1 & ~0x80; /* bit7 =3D 0*/
-> -               dynamic_range_rgb =3D 1; /*limited range*/
->                 break;
->         case COLOR_SPACE_YCBCR601:
->         case COLOR_SPACE_YCBCR601_LIMITED:
->                 misc0 =3D misc0 | 0x8; /* bit3=3D1, bit4=3D0 */
->                 misc1 =3D misc1 & ~0x80; /* bit7 =3D 0*/
-> -               dynamic_range_ycbcr =3D 0; /*bt601*/
->                 if (hw_crtc_timing.pixel_encoding =3D=3D PIXEL_ENCODING_Y=
-CBCR422)
->                         misc0 =3D misc0 | 0x2; /* bit2=3D0, bit1=3D1 */
->                 else if (hw_crtc_timing.pixel_encoding =3D=3D PIXEL_ENCOD=
-ING_YCBCR444)
-> @@ -393,15 +386,12 @@ void enc1_stream_encoder_dp_set_stream_attribute(
->         case COLOR_SPACE_YCBCR709_LIMITED:
->                 misc0 =3D misc0 | 0x18; /* bit3=3D1, bit4=3D1 */
->                 misc1 =3D misc1 & ~0x80; /* bit7 =3D 0*/
-> -               dynamic_range_ycbcr =3D 1; /*bt709*/
->                 if (hw_crtc_timing.pixel_encoding =3D=3D PIXEL_ENCODING_Y=
-CBCR422)
->                         misc0 =3D misc0 | 0x2; /* bit2=3D0, bit1=3D1 */
->                 else if (hw_crtc_timing.pixel_encoding =3D=3D PIXEL_ENCOD=
-ING_YCBCR444)
->                         misc0 =3D misc0 | 0x4; /* bit2=3D1, bit1=3D0 */
->                 break;
->         case COLOR_SPACE_2020_RGB_LIMITEDRANGE:
-> -               dynamic_range_rgb =3D 1; /*limited range*/
-> -               break;
->         case COLOR_SPACE_2020_RGB_FULLRANGE:
->         case COLOR_SPACE_2020_YCBCR:
->         case COLOR_SPACE_XR_RGB:
+>         // VStartup Margin
 > --
 > 2.36.1
 >

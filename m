@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634345779A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 04:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4085779A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 04:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiGRCcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 22:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S232020AbiGRCgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 22:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGRCcr (ORCPT
+        with ESMTP id S229535AbiGRCgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 22:32:47 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14D311A26
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 19:32:46 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 89-20020a17090a09e200b001ef7638e536so16845010pjo.3
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 19:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=xlbbCZRIaGdn36DTZr6+SN9Rl75VJXXUnbsT0ZBkay4=;
-        b=fmrhVZ4ugSw0IzxbGSrMuisNQ7QD80llHIi8B5JGaMk1HBtYblY9xyAU7XKalo1OOM
-         W6NHgIiZgbIC2L5ueTDv2t64RaGf3ol+sI39ZbaWB83EV6Iu/lE983+PgF3MAdE0wicZ
-         jz98yots/tw4XmzYoDxzoHCDFpxVDv5gS40k8K1VzKpAytKBjwOnXlylXqF0vfmeG24/
-         K/zhAHn27r6be9ZmpIfEGq/vg79kFc98jvb7axx3Q1ejF2c1hff1Yi6FZ3QGBbiVz2N5
-         vWAB6ch4Zw0CFWLZVQNW2qni7IJ0G77T2z6gJCsv/tnkvSCBrbGeAMjmREtIl8IcmZYg
-         kRqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xlbbCZRIaGdn36DTZr6+SN9Rl75VJXXUnbsT0ZBkay4=;
-        b=RajnIWc+KZrc3vblLHivNDxYNCY5fuj9yOtJjlMC5ThNcxxgmEodvrFj85azbtuq3G
-         nCL2QU5gFAmDnZq2Et7h5T80ZLhF9YkVM6xL2OkhZuioIJb7RMbdzMh1RwQlf/UW/y1f
-         T2d5GGi5RT0GVSYnM2+F5yLGmD4IHDPg2it8oHjA61VMsLcYR+0lYzXI0sbBrRH6mYd8
-         Fs21xbyYl5QREv1M8h5GcobTbBkq2YSXbHnHnWcZU/tNc63qefK73A8gCIZ2egZO5a5+
-         qEUHe2jWxMRy0KEnDxmiBDEFnxizyO7BL9N1R1ekmfCgVdz9tcCdpNbVvJvYaBg/Zxy/
-         p76Q==
-X-Gm-Message-State: AJIora+D91lDY7Kd2HvyXPiLcDZn5c7NabrE1uyDQjsotp3nIQmnmtbK
-        SxrwkUCD1M1nXcNuFTIHDocNSw==
-X-Google-Smtp-Source: AGRyM1sJrzOzlNaasgbKuuzhS/qLqw53YMCRPXPpodCKte494pyBT53HBAUhr6OXNm57+r4b8Biv0Q==
-X-Received: by 2002:a17:90b:3890:b0:1f0:2abb:e7d1 with SMTP id mu16-20020a17090b389000b001f02abbe7d1mr36493070pjb.158.1658111566683;
-        Sun, 17 Jul 2022 19:32:46 -0700 (PDT)
-Received: from [10.85.115.102] ([139.177.225.228])
-        by smtp.gmail.com with ESMTPSA id h29-20020aa796dd000000b0052a198c2046sm8029561pfq.203.2022.07.17.19.32.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 19:32:46 -0700 (PDT)
-Message-ID: <5f6dc0a9-02ef-5bd2-d864-ab4b2c4c4820@bytedance.com>
-Date:   Mon, 18 Jul 2022 10:32:40 +0800
+        Sun, 17 Jul 2022 22:36:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B3412AD7;
+        Sun, 17 Jul 2022 19:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658111773; x=1689647773;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/M65rZf+LykCHFKChzYC+mMCtapWFiOrqIQyyPkk7vo=;
+  b=QND2PAGrtmeioGLK63JTZDQjWe1d3K6kCi/kGsHoojvjkisfMLHEkG6+
+   8Nj7I4kaDsdbRhovKr2Q20/WR8UOKu2yH209UtzMKerw9bzuj2UFlteBf
+   G10B3njXR76WHxweQzIyCk0VcbEO7il2C5WT6e3xdHEDgwycddL8ywXCt
+   AnH1mppWaRZ4KgZDpGwLPKJ0YKHlZjcCdrWYIoTXNHvej85IPpcBVb2zM
+   sZ/yAkKdsBET5JUwAoHeUzGPFfuxMhnMrYn5OkReSQqM67bW2WN108G+k
+   btYNAWhAL3EBwZ1PkJita5SebcWnYCdu/bWrdZ8Na8wTDxYvJN9E8s7Ri
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="311794674"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="311794674"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 19:36:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="629755398"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 17 Jul 2022 19:36:10 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDGcD-0003vg-Ox;
+        Mon, 18 Jul 2022 02:36:09 +0000
+Date:   Mon, 18 Jul 2022 10:35:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, daniel@iogearbox.net, kernel-team@fb.com,
+        jolsa@kernel.org, rostedt@goodmis.org, Song Liu <song@kernel.org>
+Subject: Re: [PATCH v3 bpf-next 2/4] ftrace: allow IPMODIFY and DIRECT ops on
+ the same function
+Message-ID: <202207181033.RY6WO0I5-lkp@intel.com>
+References: <20220718001405.2236811-3-song@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v2] sched/fair: Remove unused parameter idle of
- _nohz_idle_balance()
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20220710101910.8413-1-jiahao.os@bytedance.com>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <20220710101910.8413-1-jiahao.os@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718001405.2236811-3-song@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,57 +66,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Song,
 
-gentle ping.
+I love your patch! Yet something to improve:
 
-On 2022/7/10 Hao Jia wrote:
-> Commit 7a82e5f52a35 ("sched/fair: Merge for each idle cpu loop of ILB")
-> has been merged. The parameter idle of _nohz_idle_balance()
-> is not used anymore so we can remove it.
-> 
-> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+[auto build test ERROR on bpf-next/master]
 
-Hi Peter,
-The patch got Reviewed-by from Vincent.
-If you have time, please review the patch.
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220718-081533
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: x86_64-randconfig-a006 (https://download.01.org/0day-ci/archive/20220718/202207181033.RY6WO0I5-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/1535f287d288f9b7540ec50f56da1fe437ac6512
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220718-081533
+        git checkout 1535f287d288f9b7540ec50f56da1fe437ac6512
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Regards,
-Hao
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->   kernel/sched/fair.c | 7 +++----
->   1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 77b2048a9326..8d4be2a95e37 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -10682,8 +10682,7 @@ static bool update_nohz_stats(struct rq *rq)
->    * can be a simple update of blocked load or a complete load balance with
->    * tasks movement depending of flags.
->    */
-> -static void _nohz_idle_balance(struct rq *this_rq, unsigned int flags,
-> -			       enum cpu_idle_type idle)
-> +static void _nohz_idle_balance(struct rq *this_rq, unsigned int flags)
->   {
->   	/* Earliest time when we have to do rebalance again */
->   	unsigned long now = jiffies;
-> @@ -10798,7 +10797,7 @@ static bool nohz_idle_balance(struct rq *this_rq, enum cpu_idle_type idle)
->   	if (idle != CPU_IDLE)
->   		return false;
->   
-> -	_nohz_idle_balance(this_rq, flags, idle);
-> +	_nohz_idle_balance(this_rq, flags);
->   
->   	return true;
->   }
-> @@ -10818,7 +10817,7 @@ void nohz_run_idle_balance(int cpu)
->   	 * (ie NOHZ_STATS_KICK set) and will do the same.
->   	 */
->   	if ((flags == NOHZ_NEWILB_KICK) && !need_resched())
-> -		_nohz_idle_balance(cpu_rq(cpu), NOHZ_STATS_KICK, CPU_IDLE);
-> +		_nohz_idle_balance(cpu_rq(cpu), NOHZ_STATS_KICK);
->   }
->   
->   static void nohz_newidle_balance(struct rq *this_rq)
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/rhashtable-types.h:14,
+                    from include/linux/ipc.h:7,
+                    from include/uapi/linux/sem.h:5,
+                    from include/linux/sem.h:5,
+                    from include/linux/sched.h:15,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/node.h:18,
+                    from include/linux/cpu.h:17,
+                    from include/linux/stop_machine.h:5,
+                    from kernel/trace/ftrace.c:17:
+   kernel/trace/ftrace.c: In function 'prepare_direct_functions_for_ipmodify':
+>> kernel/trace/ftrace.c:8082:21: error: 'direct_mutex' undeclared (first use in this function); did you mean 'event_mutex'?
+    8082 |         mutex_lock(&direct_mutex);
+         |                     ^~~~~~~~~~~~
+   include/linux/mutex.h:187:44: note: in definition of macro 'mutex_lock'
+     187 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+         |                                            ^~~~
+   kernel/trace/ftrace.c:8082:21: note: each undeclared identifier is reported only once for each function it appears in
+    8082 |         mutex_lock(&direct_mutex);
+         |                     ^~~~~~~~~~~~
+   include/linux/mutex.h:187:44: note: in definition of macro 'mutex_lock'
+     187 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+         |                                            ^~~~
+>> kernel/trace/ftrace.c:8084:19: error: 'struct ftrace_ops' has no member named 'func_hash'
+    8084 |         hash = ops->func_hash->filter_hash;
+         |                   ^~
+>> kernel/trace/ftrace.c:8095:37: error: implicit declaration of function 'ops_references_ip' [-Werror=implicit-function-declaration]
+    8095 |                                 if (ops_references_ip(op, ip)) {
+         |                                     ^~~~~~~~~~~~~~~~~
+>> kernel/trace/ftrace.c:8103:40: error: 'struct ftrace_ops' has no member named 'ops_func'
+    8103 |                                 if (!op->ops_func) {
+         |                                        ^~
+   kernel/trace/ftrace.c:8107:41: error: 'struct ftrace_ops' has no member named 'ops_func'
+    8107 |                                 ret = op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_PEER);
+         |                                         ^~
+   kernel/trace/ftrace.c: In function 'register_ftrace_function':
+   kernel/trace/ftrace.c:8158:31: error: 'direct_mutex' undeclared (first use in this function); did you mean 'event_mutex'?
+    8158 |                 mutex_unlock(&direct_mutex);
+         |                               ^~~~~~~~~~~~
+         |                               event_mutex
+   In file included from include/linux/rhashtable-types.h:14,
+                    from include/linux/ipc.h:7,
+                    from include/uapi/linux/sem.h:5,
+                    from include/linux/sem.h:5,
+                    from include/linux/sched.h:15,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/node.h:18,
+                    from include/linux/cpu.h:17,
+                    from include/linux/stop_machine.h:5,
+                    from kernel/trace/ftrace.c:17:
+   kernel/trace/ftrace.c: In function 'cleanup_direct_functions_after_ipmodify':
+   kernel/trace/ftrace.c:8178:21: error: 'direct_mutex' undeclared (first use in this function); did you mean 'event_mutex'?
+    8178 |         mutex_lock(&direct_mutex);
+         |                     ^~~~~~~~~~~~
+   include/linux/mutex.h:187:44: note: in definition of macro 'mutex_lock'
+     187 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+         |                                            ^~~~
+   kernel/trace/ftrace.c:8180:19: error: 'struct ftrace_ops' has no member named 'func_hash'
+    8180 |         hash = ops->func_hash->filter_hash;
+         |                   ^~
+   kernel/trace/ftrace.c:8199:43: error: 'struct ftrace_ops' has no member named 'ops_func'
+    8199 |                         if (found_op && op->ops_func)
+         |                                           ^~
+   kernel/trace/ftrace.c:8200:35: error: 'struct ftrace_ops' has no member named 'ops_func'
+    8200 |                                 op->ops_func(op, FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY_PEER);
+         |                                   ^~
+   cc1: some warnings being treated as errors
+
+
+vim +8082 kernel/trace/ftrace.c
+
+  8051	
+  8052	/*
+  8053	 * When registering ftrace_ops with IPMODIFY, it is necessary to make sure
+  8054	 * it doesn't conflict with any direct ftrace_ops. If there is existing
+  8055	 * direct ftrace_ops on a kernel function being patched, call
+  8056	 * FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_PEER on it to enable sharing.
+  8057	 *
+  8058	 * @ops:     ftrace_ops being registered.
+  8059	 *
+  8060	 * Returns:
+  8061	 *         0 - @ops does not have IPMODIFY or @ops itself is DIRECT, no
+  8062	 *             change needed;
+  8063	 *         1 - @ops has IPMODIFY, hold direct_mutex;
+  8064	 *         -EBUSY - currently registered DIRECT ftrace_ops cannot share the
+  8065	 *                  same function with IPMODIFY, abort the register.
+  8066	 *         -EAGAIN - cannot make changes to currently registered DIRECT
+  8067	 *                   ftrace_ops due to rare race conditions. Should retry
+  8068	 *                   later. This is needed to avoid potential deadlocks
+  8069	 *                   on the DIRECT ftrace_ops side.
+  8070	 */
+  8071	static int prepare_direct_functions_for_ipmodify(struct ftrace_ops *ops)
+  8072		__acquires(&direct_mutex)
+  8073	{
+  8074		struct ftrace_func_entry *entry;
+  8075		struct ftrace_hash *hash;
+  8076		struct ftrace_ops *op;
+  8077		int size, i, ret;
+  8078	
+  8079		if (!(ops->flags & FTRACE_OPS_FL_IPMODIFY))
+  8080			return 0;
+  8081	
+> 8082		mutex_lock(&direct_mutex);
+  8083	
+> 8084		hash = ops->func_hash->filter_hash;
+  8085		size = 1 << hash->size_bits;
+  8086		for (i = 0; i < size; i++) {
+  8087			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+  8088				unsigned long ip = entry->ip;
+  8089				bool found_op = false;
+  8090	
+  8091				mutex_lock(&ftrace_lock);
+  8092				do_for_each_ftrace_op(op, ftrace_ops_list) {
+  8093					if (!(op->flags & FTRACE_OPS_FL_DIRECT))
+  8094						continue;
+> 8095					if (ops_references_ip(op, ip)) {
+  8096						found_op = true;
+  8097						break;
+  8098					}
+  8099				} while_for_each_ftrace_op(op);
+  8100				mutex_unlock(&ftrace_lock);
+  8101	
+  8102				if (found_op) {
+> 8103					if (!op->ops_func) {
+  8104						ret = -EBUSY;
+  8105						goto err_out;
+  8106					}
+  8107					ret = op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_PEER);
+  8108					if (ret)
+  8109						goto err_out;
+  8110				}
+  8111			}
+  8112		}
+  8113	
+  8114		/*
+  8115		 * Didn't find any overlap with direct ftrace_ops, or the direct
+  8116		 * function can share with ipmodify. Hold direct_mutex to make sure
+  8117		 * this doesn't change until we are done.
+  8118		 */
+  8119		return 1;
+  8120	
+  8121	err_out:
+  8122		mutex_unlock(&direct_mutex);
+  8123		return ret;
+  8124	}
+  8125	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB6F578753
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F75578759
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235460AbiGRQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S235527AbiGRQ1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235850AbiGRQ0G (ORCPT
+        with ESMTP id S235712AbiGRQ1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:26:06 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1002A97D
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:26:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658161565; x=1689697565;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3QC6YAMoeXNWQrv+0mBy2+kLe1dZJxM4XIQQ7oCw49c=;
-  b=P5C52Y3rszK+MTljG1TEPCgCSm0J+e89kqEA/wu7syFZBYK75QfuotvJ
-   VZqZY2QMz6w5bccXIXxoxNAhxVhdRIXFaghXJ3ylk9yrcK3+SgDj752Kr
-   A9+fZenNuxyI3d1ANiuoKUxxF57r1dzaDg7U+w1J5LFTG2UZqz2pXdL8I
-   MarvphitePLtQZZeyC40TFBmuN9PQCTlkdASIDnVM+Ybm3j0ik4j0sBvT
-   WO3tBGg3rmr8xlgaf8odLfroIYkcZffF0cKMHZFBBZcqgR6umzbHIKHdR
-   v/T1G+tnMk+y+LJ1YPmwSycEFv9ccezvmISMOONTZlZIIVRBC33un7zO+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287005805"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="287005805"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 09:25:38 -0700
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="773794174"
-Received: from astephax-mobl.amr.corp.intel.com (HELO [10.209.134.250]) ([10.209.134.250])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 09:25:37 -0700
-Message-ID: <6a06bb5c-c385-a247-1e03-2759dbedbfbb@linux.intel.com>
-Date:   Mon, 18 Jul 2022 11:25:36 -0500
+        Mon, 18 Jul 2022 12:27:09 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535892AC55
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:27:06 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso13202905pjo.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=H5cFyysoeTQyXDxMaPkX9P458DIkopQ0kteqyRLVvVk=;
+        b=srwJ5unZpe8cCGvbxFkxoG5xA8CCLaXd6hjT6r4UJqAC2Dk9lZ8cZn7M345y7IpwC7
+         eaVrgXjwmBbdGfryzKzSWAUwlRSzK9XX35rLtK1XImEo8uLmhptnasNHtST0h7t7W59P
+         CfucU3MJ8Kyry92SVGq2s93lW/DnA5oCb+Udj1nd8bWb/OliT7ajZdhytXxoIRjRcBCu
+         wIIvdjXEQ2SKG6WM/MmawMJIXrWOI1lwytMLB2tDuWh8SOjI/AahEDwElobD98F5qpDN
+         VlMKI3zwfaUQy1GFX+/E/Es1LQGPrJBC+KDdXkV/FOZ//ALPch62iMa2lnuKJF2uDR+b
+         vs3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=H5cFyysoeTQyXDxMaPkX9P458DIkopQ0kteqyRLVvVk=;
+        b=7wSeS3P83eEoUYu+KST0MR5CY5usSatLo2IQ6JiiO5TGu30tHkTN5OFlssuM2CDxxc
+         j/sB/CLMC/qzUI70gcPArUVbDY+wtZNC6mac7Nn6XN3Z0rHxlJfTyr4a1Fp9quCRn+QR
+         NBVnDBs/AU1FvmWRNKQ9/u3tKj1utWEtXGR4CTD7yuHXuJFI0l+PhO0eHwATyS/PLyvS
+         K3/zZu/MSnQGSIO9GAwb9tneARGaVn+PJXnMTJSRNXll30ejuIL024ntIlAoeyyc+tfT
+         BC0EWO+e/QfQ/pns7za+kwBu5aKqwY5cDbVKRWhuByXHp6JT4soGL8ZNwD6gVxk77F45
+         ubuQ==
+X-Gm-Message-State: AJIora80ANCLIIlQJWuNypjXIjDPbqHUJOz96jFLjX0OZvDMN97LlYb7
+        O1XGiX2agr27J4yio3U4yQ7MjA==
+X-Google-Smtp-Source: AGRyM1sxVrWyI5XycSgmQCI2aYpXen9m2F2n99d+l9K7vIS2GIdNeVpz3cWYni+d1fP6RBTgZozOgQ==
+X-Received: by 2002:a17:90b:3a88:b0:1f0:56d5:460e with SMTP id om8-20020a17090b3a8800b001f056d5460emr38485602pjb.208.1658161626338;
+        Mon, 18 Jul 2022 09:27:06 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id p10-20020a170902780a00b0016b68cf6ae5sm9701133pll.226.2022.07.18.09.27.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 09:27:05 -0700 (PDT)
+Message-ID: <7146c853-0ff8-3c92-c872-ce6615baab40@kernel.dk>
+Date:   Mon, 18 Jul 2022 10:27:04 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: sof-client-ipc-flood-test.c:undefined reference to
- `sof_client_get_fw_state'
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [LKP] Re: [io_uring] 584b0180f0:
+ phoronix-test-suite.fio.SequentialWrite.IO_uring.Yes.Yes.1MB.DefaultTestDirectory.mb_s
+ -10.2% regression
 Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Fred Oh <fred.oh@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-References: <202207170529.CoaJYL8a-lkp@intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <202207170529.CoaJYL8a-lkp@intel.com>
+To:     Yin Fengwei <fengwei.yin@intel.com>,
+        kernel test robot <oliver.sang@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com
+References: <20220527092432.GE11731@xsang-OptiPlex-9020>
+ <2085bfef-a91c-8adb-402b-242e8c5d5c55@kernel.dk>
+ <0d60aa42-a519-12ad-3c69-72ed12398865@intel.com>
+ <26d913ea-7aa0-467d-4caf-a93f8ca5b3ff@kernel.dk>
+ <9df150bb-f4fd-7857-aea8-b2c7a06a8791@intel.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <9df150bb-f4fd-7857-aea8-b2c7a06a8791@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,47 +80,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/17/22 9:30 PM, Yin Fengwei wrote:
+> Hi Jens,
+> 
+> On 7/15/2022 11:58 PM, Jens Axboe wrote:
+>> In terms of making this more obvious, does the below also fix it for
+>> you?
+> 
+> The regression is still there after applied the change you posted.
 
+Still don't see the regression here, using ext4. I get about 1020-1045
+IOPS with or without the patch you sent.
 
-On 7/16/22 16:48, kernel test robot wrote:
-> Hi Ranjani,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   c5fe7a97f20c7f3070ac870144515c0fabc6b999
-> commit: 6e9548cdb30e5d6724236dd7b89a79a270751485 ASoC: SOF: Convert the generic IPC flood test into SOF client
-> date:   5 months ago
-> config: arm64-buildonly-randconfig-r006-20220715 (https://download.01.org/0day-ci/archive/20220717/202207170529.CoaJYL8a-lkp@intel.com/config)
-> compiler: aarch64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e9548cdb30e5d6724236dd7b89a79a270751485
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 6e9548cdb30e5d6724236dd7b89a79a270751485
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+This is running it in a vm, and the storage device is nvme. What is
+hosting your ext4 fs?
 
-I reproduced the problem, it's similar to another randconfig issue
-reported by Randy Dunlap. I'll track it here:
+-- 
+Jens Axboe
 
-https://github.com/thesofproject/linux/issues/3768
-
-> 
-> All errors (new ones prefixed by >>):
-> 
->    aarch64-linux-ld: Unexpected GOT/PLT entries detected!
->    aarch64-linux-ld: Unexpected run-time procedure linkages detected!
->    aarch64-linux-ld: sound/soc/sof/sof-client-ipc-flood-test.o: in function `sof_ipc_flood_dfs_open':
->>> sof-client-ipc-flood-test.c:(.text+0xfc): undefined reference to `sof_client_get_fw_state'
->    aarch64-linux-ld: sound/soc/sof/sof-client-ipc-flood-test.o: in function `sof_debug_ipc_flood_test':
->>> sof-client-ipc-flood-test.c:(.text+0x254): undefined reference to `sof_client_ipc_tx_message'
->    aarch64-linux-ld: sound/soc/sof/sof-client-ipc-flood-test.o: in function `sof_ipc_flood_probe':
->>> sof-client-ipc-flood-test.c:(.text+0xa54): undefined reference to `sof_client_get_debugfs_root'
-> 

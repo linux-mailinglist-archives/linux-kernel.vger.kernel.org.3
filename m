@@ -2,127 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E505780AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF065780AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbiGRLY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 07:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S233979AbiGRLZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 07:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiGRLY4 (ORCPT
+        with ESMTP id S232286AbiGRLZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 07:24:56 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9ED219B;
-        Mon, 18 Jul 2022 04:24:53 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 9F14F5FD2C;
-        Mon, 18 Jul 2022 14:24:50 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1658143490;
-        bh=wGEeIQWWGtUa/UelB/KX1+Ok9OTnuuq+f1pYAYE6qF8=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=htKR2Puy5cXqexK4g/yiTKmkgj/VY4lXUoTfY47f6egQQTBzXefQVDmQ44zcdCq0A
-         VFHUBQhbWb79fNN9ILbwaM6IY/oRGo0HZdSnsXacS/GkzpHv4hND6hNC7VmFsAD+x0
-         XdgPGsM+CnC0j27P6WN83LYg9Y5cHApd3BbIDRjeDG0c+P6ZVqUNzJJgJbw14sVehA
-         V5W2iX+oD1rusI23T28nXa4YzN1YzTcssDMCUuP112vB5zQZTe5VyBHm2Y13YJMCwR
-         7IRIJtcnlCmAwTja6zGKas1CuScUy38JXjJaQmTTdwgXknJrnxPnss/G72ikc8uyI5
-         rov8Z1qby6D8A==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 18 Jul 2022 14:24:50 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
- allocate() stage
-Thread-Topic: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
- allocate() stage
-Thread-Index: AQHYdd/Pt2zXEFx7c0Or/RCut5+rEK0/GLKAgCpM/oCAEyDEAIAErDEAgALhSAA=
-Date:   Mon, 18 Jul 2022 11:23:59 +0000
-Message-ID: <20220718112446.lucl7omialqri7yv@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220601174837.20292-1-ddrokosov@sberdevices.ru>
- <20220604145955.2a1108ca@jic23-huawei>
- <20220701115823.vywhifktaxcr72cc@CAB-WSD-L081021.sigma.sbrf.ru>
- <20220713170436.32330fa6@jic23-huawei> <20220716162556.2e919bf7@jic23-huawei>
-In-Reply-To: <20220716162556.2e919bf7@jic23-huawei>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <AF8CF10F72894E429D9BAA345C244FE0@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Mon, 18 Jul 2022 07:25:04 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC61BCB1;
+        Mon, 18 Jul 2022 04:25:01 -0700 (PDT)
+Received: from mail-yw1-f170.google.com ([209.85.128.170]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MsHwC-1nPQgA0KZ0-00tjPu; Mon, 18 Jul 2022 13:25:00 +0200
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31e1ecea074so26608577b3.8;
+        Mon, 18 Jul 2022 04:24:59 -0700 (PDT)
+X-Gm-Message-State: AJIora+XZxXwlbeo8tYRIcu6UrcArdCFUnfN41ji1cKx2TLUisIzJ1Pr
+        PRqoYLaACkjWRTk1llHbQmYvaVUEXxktkfAttNw=
+X-Google-Smtp-Source: AGRyM1tzL7hthvP1sOdr1X/BfOKLedAJn4Urbe8k3BQ7Z19q4rX8bfPxpzkeM1Uk0JKELZ+zlaoPYOQFI7A/abx5b1Y=
+X-Received: by 2002:a81:9b02:0:b0:31c:9ae4:99ec with SMTP id
+ s2-20020a819b02000000b0031c9ae499ecmr29471022ywg.495.1658143498552; Mon, 18
+ Jul 2022 04:24:58 -0700 (PDT)
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/18 07:04:00 #19921665
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1656396767.git.qinjian@cqplus1.com> <CAK8P3a1HoB74TA9EKJFuPLuw_zJfy_p7fwkm0M45+jaGkK6ivA@mail.gmail.com>
+In-Reply-To: <CAK8P3a1HoB74TA9EKJFuPLuw_zJfy_p7fwkm0M45+jaGkK6ivA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 18 Jul 2022 13:24:42 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3eSNR4xdGkjiBadNd+YsvEP6WtdAcJjinX+5AAiZWQog@mail.gmail.com>
+Message-ID: <CAK8P3a3eSNR4xdGkjiBadNd+YsvEP6WtdAcJjinX+5AAiZWQog@mail.gmail.com>
+Subject: Re: [PATCH v20 00/11] Add Sunplus SP7021 SoC Support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Qin Jian <qinjian@cqplus1.com>, Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ez5RRW2DnTCgtLBs77BuhklVwUiXDDX6Rjn05D2CM3wYwbvtcV+
+ UIjey1f9G0pqstGJgytrgMLQ25ReWBgVjD3A0DiFX1OVpvK8Eb43bRIGDJPW3R1Cyg1skgz
+ 4M6TiYFY1eRxrWC5ZXqsoroEYy4/mmpc0Plpt6L5ql53Ge97ELgZ2cqdspfCpehAN/dlUPa
+ RZQve9n2SqmYT/SiKe83g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vmE3xwsqK9A=:MD3/WQhQvR5PchRTMYws0Z
+ MMhpZNbXkPxQM22yc9lk6QdR5VFAK8D/rcXc8F6B07ukICnehNh9Z2heeel5TIdoAPhG4/H8U
+ lvaXpa8D2oJGueodqXTa4f/tXbaMAq7uzM0qsoTT/s6wmn+RH3jwnEpecf9VKlaqKsutfTjpd
+ jEAobfhxUYsS4brByThBmiFCHhvh3PyS59K/zKbwnTOiVHbNRK+VKBON/mbkV2DY3m/WHbWwc
+ AjHcwjf9VMkDAiN4pTBaDFPYlof3l9YVk5yvBoAWUWC8dPQgYvKmAlcUM5XH3TJ+VEp7vfvFG
+ zBcUPuIxIo8LRc81JMiQVo6BGFN6prfyEbLxHxMC0XVaahBPC5q5cLqTfQjVRs0UqOMAhc8Bp
+ PTtiK9qvV5ovuZ4CYNcTJZTJZ7rYzu0PVx7dR9xkBvsLWTcPtdug9QzvttB1oFI6fdGAEFtZA
+ ELv2R8U5sAfleLpbMZsrW7cQQRdAY0VJPVBpP4NS19Fpjlmt/W//R5aL6Y2LJrz77sfz/PBeJ
+ u6AN3gz/8+fr0CsuPU5yp4H2x9xrUoMC6RH3VNH6kPo+IPEBtL+oEIuujNzUbUhQyPs9n6ZNo
+ tS3PBel49g25WYKjRDd5dEMopEb7pM0miu5c/mvLvpIRHdpi6vVpY3eB8ehsZK6XXh+yISVVh
+ rqcQkyTxRJwecHO8fvW2hsFSHR4ykP8MUaXWuChh5F7ZrdNg0bnl8HRQoXErDmrz04tVJ6Ckw
+ 4mgzB+XmOpuEroNvCQEdqr3JAM7S2upeP45cAg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jonathan,
+On Wed, Jul 6, 2022 at 5:01 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Jun 28, 2022 at 8:26 AM Qin Jian <qinjian@cqplus1.com> wrote:
+> >
+> > This patch series add Sunplus SP7021 SoC support.
+> >
+> > Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+> > peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+> > single chip. It is designed for industrial control.
+> >
+> > SP7021 consists of two chips (dies) in a package. One is called C-chip
+> > (computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+> > process (22 nm) for high performance computing. The other is called P-
+> > chip (peripheral chip). It has many peripherals and an ARM A926 added
+> > especially for real-time control. P-chip is made for customers. It adopts
+> > low-level process (ex: 0.11 um) to reduce cost.
+> >
+>
+> As far as I can tell, all review comments have been fully addressed,
+> but I'm missing an Ack from Stephen Boyd so I can apply it through
+> the SoC tree.
 
-On Sat, Jul 16, 2022 at 04:25:56PM +0100, Jonathan Cameron wrote:
-> On Wed, 13 Jul 2022 17:04:36 +0100
-> Jonathan Cameron <jic23@kernel.org> wrote:
->=20
-> > On Fri, 1 Jul 2022 11:59:59 +0000
-> > Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
-> >=20
-> > > Hello Jonathan,
-> > >=20
-> > > This patch has been on the mailing list for one month already, but no
-> > > comments from other IIO reviewers. What do you think we should do wit=
-h it?
-> > > Is it a helpful change or not? =20
-> >=20
-> > Given I'm way behind and timing in cycle, I'm probably going to kick th=
-is
-> > back to start of the next cycle. Sorry for delay,
-> Applied to the togreg branch of iio.git.
->=20
-> I'm unlikely to do another pull request this cycle unless there is a dela=
-y in
-> the release for some reason (and probably not even if there is), so this
-> is queued up for next cycle.  As such it'll sit exposed only in the testi=
-ng
-> branch until I rebase on rc1.
->=20
-> Thanks,
->=20
-> Jonathan
->=20
+I ended up applying the series without the clk driver now, please see
 
-Thank you for the patch applied.
-I have one question about the previous already applied patchset
+https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?h=arm/newsoc&id=7cb7b8fe63393d77
 
-https://lore.kernel.org/all/20220607183907.20017-1-ddrokosov@sberdevices.ru=
-/
+No need to resend the series any more, please just work with
+the clk maintainers to get that driver included through their tree.
 
-I see this patchset already merged to linux-next more than a month ago.
-But it's still not available in the linux stable branch. Could you please
-explain what's the problem with this one? Was some bug found during
-linux-next testing stage? Should I fix something?
+If there are any issues with the patches that I merged, it's best
+to send bugfix patches that can be applied on top of the branch
+listed above, or a pull request based on that commit.
 
-Appreciate any help to understand what's I missing.
+For new features to be merged in a later release, e.g. patches to
+add device tree nodes for other on-chip components, or additional
+dts files, please base them on the coming -rc1 release when that
+is out.
 
---=20
-Thank you,
-Dmitry=
+       Arnd

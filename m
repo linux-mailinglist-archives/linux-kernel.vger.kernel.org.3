@@ -2,161 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9129578AA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DC1578AAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235854AbiGRT06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
+        id S235878AbiGRT1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233716AbiGRT04 (ORCPT
+        with ESMTP id S233716AbiGRT1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:26:56 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A362F652
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:26:56 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ss3so23103567ejc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=T6pIhZoCfcBPiPwmB8bNAnYeRRxbKbLMH2IiA6YSiS4=;
-        b=faNSnFWta+P8uRY/mAT3+Za/vDXl1BUX2axDNHN+u6Fk25/DihtmqZ1ez9cCMledSv
-         o9/1J17v9pQBQ22wZBZk65u+HaKDsSyplTzLJbloNiWSa4yK5aWNB/+W8djYr2BZXbMZ
-         nKmVyznhptfFFftvmKRyAAkKgxPgg9l0mNz9LgrVHwb391NNfRtHq0xyMzcQZokkGGPL
-         4DGyWU6qA5cME9WgwEB7+dKnSmwvgkqDLyeWjtQgBo1SRTiXygp4trF8CEYjuCnYrYe4
-         H32fixbFwKgd/J0xdyHHfgXAiROs0ZPcMZsb0YVnWBoyx4TKU4Utes2OE4K+STSipjAg
-         QEMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=T6pIhZoCfcBPiPwmB8bNAnYeRRxbKbLMH2IiA6YSiS4=;
-        b=plKANYAMynSpJ3SHDMp8iEi+z8d8cIU9uA/ovbGoH17IECIsosrjlQxu1caPsFW1Hl
-         j7A7ARp8LWgZAsEa1GViruFt6rwEmNXOknRwmGWRZwe1ZXs4lIGgRc6jGAnZ00QZJZAP
-         84ztMzJb3QPw9weL0HB/DHLWq7GWUP1/rS4FoQYsXtGRgElJ6+5GUxXJt986CzWEfrcx
-         Vb88XUF8x8y0QlK0kNpp5++aq8RqVKgma/ts15o0SAuN+XpoNt0fRp5BOP6GNubBeViu
-         vmUrEyCZjfT4I4I+s1Wx9SnK2rSGH2jZQ29Oyhj9rQWK3PlfTOL8bdG/Rn+HxYaQafw0
-         ShdA==
-X-Gm-Message-State: AJIora+XDD2Bn282FCzYaLKZtU3Hat71GUKIO1z/6YA3B9zkehONB0lo
-        oBL2Z64OER9h4lHltzxZdQCh5DhBSdTfp7tSy0A=
-X-Google-Smtp-Source: AGRyM1v2XHLFYVt425ORaNirifkP+WzgLnf514m1xkW3VOh/4LAd0ujGzW1aOGq8nXCA1ZrlIeP6uaIsYntigmdolkY=
-X-Received: by 2002:a17:906:4fc5:b0:72b:9943:6f10 with SMTP id
- i5-20020a1709064fc500b0072b99436f10mr27435815ejw.722.1658172414591; Mon, 18
- Jul 2022 12:26:54 -0700 (PDT)
+        Mon, 18 Jul 2022 15:27:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A28E2F67D;
+        Mon, 18 Jul 2022 12:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658172461; x=1689708461;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Cpspz5hk0l8D4QudLfxSecBxuf+XXfR+ujpkU/UG7pU=;
+  b=BjKAphPDWkVMrLAmzrgV9arRNNTFU+KI3ZMQqR9Wjhb7S9QTPVNmlv0i
+   aYTNpEsnLONIZ1fpvYVOVvGJl6j4+x/4Pb8IoTn8gKE8SUEh6S1LgtK/b
+   gjay37CS+lraeSOao6W0gxa7ituVIOiDlpPsqXRjjLwPt9uzug2kgmJYU
+   lvnNnkXnCYcILdRl4ixoiCzRgdoEo4gOQv0I7Tzf08WOW57DeGTgfVuO3
+   wEyY3v1twzjr/16tqruBRhwQxdygYSCImk/+aA/7oGo4Lni/m4QAVBBKS
+   18ycWkz4RLmT6xUZheiPEzabc1AcVpOJhtV6hWAlDlCwaZp/lRP0B4M9L
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="283870310"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="283870310"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:27:40 -0700
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="624861676"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:27:40 -0700
+Date:   Mon, 18 Jul 2022 12:27:33 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     "Wu, Hao" <hao.wu@intel.com>
+cc:     "Xu, Yilun" <yilun.xu@intel.com>,
+        "Weight, Russell H" <russell.h.weight@intel.com>,
+        "Muddebihal, Basheer Ahmed" <basheer.ahmed.muddebihal@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Zhang, Tianfei" <tianfei.zhang@intel.com>
+Subject: RE: [PATCH v3 2/2] fpga: dfl-pci: Add IDs for Intel N6000, N6001
+ and C6100 cards
+In-Reply-To: <DM6PR11MB381961FEAAEC946E46562C83858C9@DM6PR11MB3819.namprd11.prod.outlook.com>
+Message-ID: <alpine.DEB.2.22.394.2207181226400.3963026@rhweight-WRK1>
+References: <20220707150549.265621-1-matthew.gerlach@linux.intel.com> <20220707150549.265621-3-matthew.gerlach@linux.intel.com> <DM6PR11MB381961FEAAEC946E46562C83858C9@DM6PR11MB3819.namprd11.prod.outlook.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20220714191745.45512-1-andrealmeid@igalia.com> <20220714191745.45512-2-andrealmeid@igalia.com>
-In-Reply-To: <20220714191745.45512-2-andrealmeid@igalia.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 18 Jul 2022 15:26:42 -0400
-Message-ID: <CADnq5_MBa3ip2De7ztVpBAaupnynjAnO0sBcd2_io7Y2Pnkywg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Documentation/gpu: Add GFXOFF section
-To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tom St Denis <tom.stdenis@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        kernel-dev@igalia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied the series with some minor tweaks to the documentation.
 
-Thanks!
 
-Alex
+On Mon, 18 Jul 2022, Wu, Hao wrote:
 
-On Thu, Jul 14, 2022 at 3:18 PM Andr=C3=A9 Almeida <andrealmeid@igalia.com>=
- wrote:
+>> -----Original Message-----
+>> From: matthew.gerlach@linux.intel.com <matthew.gerlach@linux.intel.com>
+>> Sent: Thursday, July 7, 2022 11:06 PM
+>> To: Wu, Hao <hao.wu@intel.com>; Xu, Yilun <yilun.xu@intel.com>; Weight,
+>> Russell H <russell.h.weight@intel.com>; Muddebihal, Basheer Ahmed
+>> <basheer.ahmed.muddebihal@intel.com>; trix@redhat.com;
+>> mdf@kernel.org; corbet@lwn.net; linux-fpga@vger.kernel.org; linux-
+>> doc@vger.kernel.org; linux-kernel@vger.kernel.org; Zhang, Tianfei
+>> <tianfei.zhang@intel.com>
+>> Cc: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Subject: [PATCH v3 2/2] fpga: dfl-pci: Add IDs for Intel N6000, N6001 and
+>> C6100 cards
+>>
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>>
+>> Add pci_dev_table entries supporting the Intel N6000, N6001
+>> and C6100 cards to the dfl-pci driver.
+>>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+>> ---
+>> v3: added necessary subdevice ids
+>>     removed 'drivers: ' from title
+>>
+>> v2: changed names from INTEL_OFS to INTEL_DFL
+>> ---
+>>  drivers/fpga/dfl-pci.c | 19 +++++++++++++++++++
+>>  1 file changed, 19 insertions(+)
+>>
+>> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+>> index fd1fa55c9113..94eabdf1d2f7 100644
+>> --- a/drivers/fpga/dfl-pci.c
+>> +++ b/drivers/fpga/dfl-pci.c
+>> @@ -77,12 +77,19 @@ static void cci_pci_free_irq(struct pci_dev *pcidev)
+>>  #define PCIE_DEVICE_ID_INTEL_PAC_D5005		0x0B2B
+>>  #define PCIE_DEVICE_ID_SILICOM_PAC_N5010	0x1000
+>>  #define PCIE_DEVICE_ID_SILICOM_PAC_N5011	0x1001
+>> +#define PCIE_DEVICE_ID_INTEL_DFL		0xbcce
+>>
+>>  /* VF Device */
+>>  #define PCIE_DEVICE_ID_VF_INT_5_X		0xBCBF
+>>  #define PCIE_DEVICE_ID_VF_INT_6_X		0xBCC1
+>>  #define PCIE_DEVICE_ID_VF_DSC_1_X		0x09C5
+>>  #define PCIE_DEVICE_ID_INTEL_PAC_D5005_VF	0x0B2C
+>> +#define PCIE_DEVICE_ID_INTEL_DFL_VF		0xbccf
+>> +
+>> +/* PCI Subdevice ID */
+>> +#define PCIE_SUBDEVICE_ID_INTEL_N6000		0x1770
+>> +#define PCIE_SUBDEVICE_ID_INTEL_N6001		0x1771
+>> +#define PCIE_SUBDEVICE_ID_INTEL_C6100		0x17d4
 >
-> Add a GFXOFF section at "GPU Power Controls" file, explaining what it is
-> and how userspace can interact with it.
+> Please move SUBDEVICE_ID above together with DEVICE_ID.
+> If we add new SUBDEVICE to some other device like this, it will
+> be hard to distinguish them.
+
+This is a very good suggestion.  I will resubmit with your suggestion.
+
+Thanks for the review.
+Matthew
 >
-> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
-> ---
-> Changes from v1: file created
+> With above change.
+> Acked-by: Wu Hao <hao.wu@intel.com>
 >
->  Documentation/gpu/amdgpu/thermal.rst | 41 ++++++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
+> Thanks
+> Hao
 >
-> diff --git a/Documentation/gpu/amdgpu/thermal.rst b/Documentation/gpu/amd=
-gpu/thermal.rst
-> index 8aeb0186c9ef..14c0fb874cf6 100644
-> --- a/Documentation/gpu/amdgpu/thermal.rst
-> +++ b/Documentation/gpu/amdgpu/thermal.rst
-> @@ -63,3 +63,44 @@ gpu_metrics
->
->  .. kernel-doc:: drivers/gpu/drm/amd/pm/amdgpu_pm.c
->     :doc: gpu_metrics
-> +
-> +GFXOFF
-> +=3D=3D=3D=3D=3D=3D
-> +
-> +GFXOFF is a feature found in some mobile GPUs that saves power consumpti=
-on. The
-> +card's firmware uses RLC (RunList Controller) to power off the gfx engin=
-e
-> +dynamically when there is no workload on gfx pipe and puts gfx into "idl=
-e"
-> +state. GFXOFF is on by default on supported GPUs.
-> +
-> +Userspace can interact with GFXOFF through a debugfs interface:
-> +
-> +``amdgpu_gfxoff``
-> +-----------------
-> +
-> +Use it to enable/disable GFXOFF, and to check if it's current enabled/di=
-sabled::
-> +
-> +  $ xxd -l1 -p /sys/kernel/debug/dri/0/amdgpu_gfxoff
-> +  01
-> +
-> +- Write 0 to disable it, and 1 to enable it.
-> +- Read 0 means it's disabled, 1 it's enabled.
-> +
-> +If it's enabled, that means that the GPU is free to enter into GFXOFF mo=
-de as
-> +needed. Disabled means that it will never enter GFXOFF mode.
-> +
-> +``amdgpu_gfxoff_status``
-> +------------------------
-> +
-> +Read it to check current GFXOFF's status of a GPU::
-> +
-> +  $ xxd -l1 -p /sys/kernel/debug/dri/0/amdgpu_gfxoff_status
-> +  02
-> +
-> +- 0: GPU is in GFXOFF state, the gfx engine is powered down.
-> +- 1: Transition out of GFXOFF state
-> +- 2: Not in GFXOFF state
-> +- 3: Transition into GFXOFF state
-> +
-> +If GFXOFF is enabled, the value will be transitioning around [0, 3], alw=
-ays
-> +getting into 0 when possible. When it's disabled, it's always at 2. Retu=
-rns
-> +``-EINVAL`` if it's not supported.
-> --
-> 2.37.0
 >

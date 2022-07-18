@@ -2,116 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C997578DBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A12578DBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235656AbiGRWwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
+        id S235913AbiGRWyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiGRWwE (ORCPT
+        with ESMTP id S231194AbiGRWyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:52:04 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A41A32ECC
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658184723; x=1689720723;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=Ppc0WMgEoRli+1vb5q9D23cP9I5d5tmVloP4wivrBe4=;
-  b=DmO/zfMF0iThneRyonbqlGLny5S0PI6wU+BPYDGyDYmhgRj75nkERPZz
-   iuhVSiV9/Tn3E5X2jiEjUN2Cx5BjBR+Wa49VBKZz8c5Ebzreg401VbIfS
-   mKPRUHOpghW6BF/qQaOckyu+Gc0Y0WTyqBE1RSOa0AZXb0FXfuet88L6g
-   aHHVEf4J7XnjaRHKFwSPF2Kxdkw6ZlfaLUeohisEuTNkCnnyLadeRZuMJ
-   1GpvCVd+2Ga3jmDdO3AwlYgUciDS6ysYqknQFV1EGK9g2GbLFofy+8DSH
-   fOunzdb21P7wY64s596IfzBbMKEBWPbph+5WQRK3k8zJkNJFc2PAl46nh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="348027355"
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="348027355"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 15:52:02 -0700
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="624924161"
-Received: from venigall-mobl2.amr.corp.intel.com (HELO [10.209.89.134]) ([10.209.89.134])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 15:52:02 -0700
-Message-ID: <39dad538-3aed-3b46-3590-d496df5e2884@linux.intel.com>
-Date:   Mon, 18 Jul 2022 15:52:01 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH v8 1/5] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Kai Huang <kai.huang@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <0f6bedbb-14cc-bf93-5d9f-bfd2c49dc7b2@intel.com>
- <48b9d807-2d9e-016f-bada-906911d6ecb0@linux.intel.com>
- <f26f88ee-1226-3e32-77cc-fc86bc65e0b7@intel.com>
- <ca73d2bd-5d40-d385-aeb0-8c04811690ff@linux.intel.com>
- <331abea18e728061979301772a9d0d61543f59fb.camel@intel.com>
- <0b5884b8-9240-63b2-ca4c-20c86fd2e8c1@linux.intel.com>
- <8b6f3f9f-71c8-2b6f-20a3-5e9c259a1b9a@intel.com>
- <74383158-460e-0cd1-94bc-faca5b8175ea@linux.intel.com>
- <932869b757b384426ada376cd9791697353c2247.camel@intel.com>
- <e92c570e-29c0-e6d1-88e8-cb6344c01859@linux.intel.com>
-In-Reply-To: <e92c570e-29c0-e6d1-88e8-cb6344c01859@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+        Mon, 18 Jul 2022 18:54:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057707673;
+        Mon, 18 Jul 2022 15:54:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D5316155C;
+        Mon, 18 Jul 2022 22:54:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 961D0C341C0;
+        Mon, 18 Jul 2022 22:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1658184853;
+        bh=Gys8VwNKIenWK94lJnGxUsyVbkTx49TEjms99sZJBGo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kjUkzVIGebDzjAUSsNXLbnbcBsfe78jP7ucZq9KYsGCAWn9DjkyLV3l7l52Ldw7yg
+         cjQ2XkTgP0zmjVYGk+VN3Rx5pWfG8OkFY+hTCCmcJXXCyNWzUtbUyis63QTgYeSB4e
+         KzJqFF766l5jOvlytC16nlcANeVhXeQN1v1b82T4=
+Date:   Mon, 18 Jul 2022 15:54:12 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the mm tree
+Message-Id: <20220718155412.fe6a624ec067ef603bbf0cd8@linux-foundation.org>
+In-Reply-To: <20220718202815.11807e92@canb.auug.org.au>
+References: <20220718202815.11807e92@canb.auug.org.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+On Mon, 18 Jul 2022 20:28:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-On 7/6/22 3:27 PM, Sathyanarayanan Kuppuswamy wrote:
+> After merging the mm tree, today's linux-next build (powerpc
+> ppc44x_defconfig) produced this warning:
 > 
+> mm/shmem.c:2848:12: warning: 'shmem_fileattr_set' defined but not used [-Wunused-function]
+>  2848 | static int shmem_fileattr_set(struct user_namespace *mnt_userns,
+>       |            ^~~~~~~~~~~~~~~~~~
+> mm/shmem.c:2839:12: warning: 'shmem_fileattr_get' defined but not used [-Wunused-function]
+>  2839 | static int shmem_fileattr_get(struct dentry *dentry, struct fileattr *fa)
+>       |            ^~~~~~~~~~~~~~~~~~
 > 
-> On 7/5/22 3:31 PM, Kai Huang wrote:
->> On Tue, 2022-07-05 at 14:21 -0700, Sathyanarayanan Kuppuswamy wrote:
->>> SGX is a related feature. It also uses IOCTL approach for enclave provisioning.
->>>
->>> arch/x86/kernel/cpu/sgx/ioctl.c
->>
->> SGX isn't a good example here.  The IOCTLs are used to create enclaves, but not
->> for attestation.  SGX attestation relies on enclave itself to get/verify the
->> report, etc, so has no interaction with the kernel.
+> Introduced by commit
 > 
-> If you are looking for an attestation specific example, you can only check the AMD
-> code.
-> 
-> https://patchwork.kernel.org/project/linux-mm/patch/20220307213356.2797205-44-brijesh.singh@amd.com/
-> 
-> Also, sev_get_attestation_report() in arch/x86/kvm/svm/sev.c also implements attestation
-> IOCTL specific to KVM.
-> 
+>   8673852551f0 ("mm/shmem: support FS_IOC_[SG]ETFLAGS in tmpfs")
 
-As mentioned above, AMD also uses IOCTL model for attestation use case. So you agree
-with us using similar approach here? Please let me know your comments.
+Thanks, I moved the definitions inside the appropriate ifdef.
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+--- a/mm/shmem.c~mm-shmem-support-fs_ioc_etflags-in-tmpfs-fix
++++ a/mm/shmem.c
+@@ -2837,39 +2837,6 @@ out:
+ 	return error;
+ }
+ 
+-static int shmem_fileattr_get(struct dentry *dentry, struct fileattr *fa)
+-{
+-	struct shmem_inode_info *info = SHMEM_I(d_inode(dentry));
+-
+-	fileattr_fill_flags(fa, info->fsflags & SHMEM_FL_USER_VISIBLE);
+-
+-	return 0;
+-}
+-
+-static int shmem_fileattr_set(struct user_namespace *mnt_userns,
+-			      struct dentry *dentry, struct fileattr *fa)
+-{
+-	struct inode *inode = d_inode(dentry);
+-	struct shmem_inode_info *info = SHMEM_I(inode);
+-
+-	if (fileattr_has_fsx(fa))
+-		return -EOPNOTSUPP;
+-
+-	info->fsflags = (info->fsflags & ~SHMEM_FL_USER_MODIFIABLE) |
+-		(fa->flags & SHMEM_FL_USER_MODIFIABLE);
+-
+-	inode->i_flags &= ~(S_APPEND | S_IMMUTABLE | S_NOATIME);
+-	if (info->fsflags & FS_APPEND_FL)
+-		inode->i_flags |= S_APPEND;
+-	if (info->fsflags & FS_IMMUTABLE_FL)
+-		inode->i_flags |= S_IMMUTABLE;
+-	if (info->fsflags & FS_NOATIME_FL)
+-		inode->i_flags |= S_NOATIME;
+-
+-	inode->i_ctime = current_time(inode);
+-	return 0;
+-}
+-
+ static int shmem_statfs(struct dentry *dentry, struct kstatfs *buf)
+ {
+ 	struct shmem_sb_info *sbinfo = SHMEM_SB(dentry->d_sb);
+@@ -3195,6 +3162,40 @@ static const char *shmem_get_link(struct
+ }
+ 
+ #ifdef CONFIG_TMPFS_XATTR
++
++static int shmem_fileattr_get(struct dentry *dentry, struct fileattr *fa)
++{
++	struct shmem_inode_info *info = SHMEM_I(d_inode(dentry));
++
++	fileattr_fill_flags(fa, info->fsflags & SHMEM_FL_USER_VISIBLE);
++
++	return 0;
++}
++
++static int shmem_fileattr_set(struct user_namespace *mnt_userns,
++			      struct dentry *dentry, struct fileattr *fa)
++{
++	struct inode *inode = d_inode(dentry);
++	struct shmem_inode_info *info = SHMEM_I(inode);
++
++	if (fileattr_has_fsx(fa))
++		return -EOPNOTSUPP;
++
++	info->fsflags = (info->fsflags & ~SHMEM_FL_USER_MODIFIABLE) |
++		(fa->flags & SHMEM_FL_USER_MODIFIABLE);
++
++	inode->i_flags &= ~(S_APPEND | S_IMMUTABLE | S_NOATIME);
++	if (info->fsflags & FS_APPEND_FL)
++		inode->i_flags |= S_APPEND;
++	if (info->fsflags & FS_IMMUTABLE_FL)
++		inode->i_flags |= S_IMMUTABLE;
++	if (info->fsflags & FS_NOATIME_FL)
++		inode->i_flags |= S_NOATIME;
++
++	inode->i_ctime = current_time(inode);
++	return 0;
++}
++
+ /*
+  * Superblocks without xattr inode operations may get some security.* xattr
+  * support from the LSM "for free". As soon as we have any other xattrs
+_
+

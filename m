@@ -2,121 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA44578CBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10474578CAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbiGRVaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
+        id S234610AbiGRV0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiGRV3p (ORCPT
+        with ESMTP id S234967AbiGRV0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:29:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660A929C85;
-        Mon, 18 Jul 2022 14:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MAAgRXyGRUBm6HRgIN7nuvuw3aye3x5SdOQNP5jLmJs=; b=PAablPLLkltxvc9MCZh8AxhzJo
-        96EgOIXX0Qr+GdNNwNtvi3qZ8/kAJaYXV27egcjzp4r6GUBxJ1SDanbq/Y/LuWaGkIRLxJ6uA7eNs
-        eipDG7QRQS+zlV/x3Kp+ROrBIouY/vp/QCuwsthr69l1EFd9Jogq0tfS2VepaKg3qz7+tNsKNEWqR
-        aIFouCVfb9fx84FGmKbo9yr23x4byXfrBHp9qH2wO4Ld3q4Zh6nI0IJ4T/IKIanZNVI97z2KKtfCB
-        3bVL2y4Dl7lI0ZIVmG1EqVm5a+zBbGkuKTFIYk3tdchaVDNhUFVbFmNPeDVacoK/kWXJtxZcYX4Fe
-        fvJoMeeA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDYId-00D2zy-6h; Mon, 18 Jul 2022 21:29:07 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C42009802A7; Mon, 18 Jul 2022 23:29:06 +0200 (CEST)
-Date:   Mon, 18 Jul 2022 23:29:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Mel Gorman <mgorman@suse.de>, Miroslav Benes <mbenes@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Song Liu <songliubraving@fb.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
-        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 08/16] smp: optimize smp_call_function_many_cond() for
- more
-Message-ID: <YtXQom+a5C+iXSvm@worktop.programming.kicks-ass.net>
-References: <20220718192844.1805158-1-yury.norov@gmail.com>
- <20220718192844.1805158-9-yury.norov@gmail.com>
+        Mon, 18 Jul 2022 17:26:11 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F972AE1D;
+        Mon, 18 Jul 2022 14:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658179568; x=1689715568;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=980PssNBkKl6pJGSdycVps/zbWeYrW5Q24GPyZNMFtw=;
+  b=gEwEy7jaNHkiB52QS2QnRFSuRzrm4FVA177I0R6Hf0NFuKJS/flAasNo
+   9+Me766uL1k/gfJhwWebHZdm4jRU5GfVwCC4GOoe3E3EoZeS+QzuOKuB7
+   1tsQsxr1mFErqKTthjIVLgtkLyfU+BQt7l7ba/y3ijt3q2LMFg+JBzk91
+   jNSKN1TfXkOORUSVaqXM3r6MKiphA/eVWOxmVw89/fh9eujnTpAcABVVt
+   T2MdEumEfKW5FMaUJ8OAP192Y9B7XyGYafPK15baERgW1JGpNzVOfV2SJ
+   nY2xRUbiUmm+fYdlOKGnrI3GT878JyO8CgMIQZucyZqbWha9GwNwP1HE5
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
+   d="scan'208";a="182715239"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Jul 2022 14:26:07 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 18 Jul 2022 14:26:07 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 18 Jul 2022 14:26:05 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <maxime.chevallier@bootlin.com>,
+        "Horatiu Vultur" <horatiu.vultur@microchip.com>
+Subject: [PATCH 0/3] ARM: dts: lan966x: Extend pcb8291.
+Date:   Mon, 18 Jul 2022 23:29:18 +0200
+Message-ID: <20220718212921.1506984-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718192844.1805158-9-yury.norov@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:28:36PM -0700, Yury Norov wrote:
+Extend pcb8291 with different features like, add support to reset the board
+using GPIO and add network support.
 
-> ---
->  kernel/smp.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/smp.c b/kernel/smp.c
-> index 7ed2b9b12f74..f96fdf944b4a 100644
-> --- a/kernel/smp.c
-> +++ b/kernel/smp.c
-> @@ -942,7 +942,11 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
->  
->  	if (run_remote) {
->  		cfd = this_cpu_ptr(&cfd_data);
-> -		cpumask_and(cfd->cpumask, mask, cpu_online_mask);
-> +		if (mask == cpu_online_mask)
-> +			cpumask_copy(cfd->cpumask, cpu_online_mask);
-> +		else
-> +			cpumask_and(cfd->cpumask, mask, cpu_online_mask);
-> +
+Horatiu Vultur (3):
+  ARM: dts: lan966x: Add gpio-restart
+  ARM: dts: lan966x: Disable can0 on pcb8291
+  ARM: dts: lan966x: Enable network driver on pcb8291
 
-Or... you could optimize cpumask_and() to detect the src1p == src2p case?
+ arch/arm/boot/dts/lan966x-pcb8291.dts | 45 ++++++++++++++++++++++-----
+ 1 file changed, 37 insertions(+), 8 deletions(-)
 
->  		__cpumask_clear_cpu(this_cpu, cfd->cpumask);
->  
->  		cpumask_clear(cfd->cpumask_ipi);
-> -- 
-> 2.34.1
-> 
+-- 
+2.33.0
+

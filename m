@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E7F578612
+	by mail.lfdr.de (Postfix) with ESMTP id 83819578613
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbiGRPMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 11:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S235234AbiGRPMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiGRPMr (ORCPT
+        with ESMTP id S235202AbiGRPMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:12:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B421CFEE
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:12:45 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1769E20113;
-        Mon, 18 Jul 2022 15:12:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658157164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=n6LVjaU4a6ZqK4u6O9u+Kak/7hh30ZC7LW8h15/5TNQ=;
-        b=YW1yP+oScnnss1fEGR8gDuv7b/Y0UQhHpO9M1aypLFmJteAsU02Yaev3O3bkvutzPSIDOa
-        6TWKbXERfig1vk7n+zUikahEuBHMa/ah/EL9hCGXdl0JsVqsZCoQPWNUSi/L68psqd0Ngt
-        PoDzF0jotSdp8omAlTUSebeiNqbLPvE=
-Received: from alley.suse.cz (unknown [10.100.201.202])
-        by relay2.suse.de (Postfix) with ESMTP id B962E2C141;
-        Mon, 18 Jul 2022 15:12:42 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Marco Elver <elver@google.com>, kasan-dev@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2] printk: Make console tracepoint safe in NMI() context
-Date:   Mon, 18 Jul 2022 17:11:43 +0200
-Message-Id: <20220718151143.32112-1-pmladek@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Mon, 18 Jul 2022 11:12:50 -0400
+X-Greylist: delayed 115 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Jul 2022 08:12:48 PDT
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2221CFEE
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:12:48 -0700 (PDT)
+Received: from [167.98.27.226] (helo=[10.35.4.171])
+        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1oDSQ9-002C9w-8q; Mon, 18 Jul 2022 16:12:29 +0100
+Message-ID: <7c68e645-efd7-c48c-77aa-9aa607c77033@codethink.co.uk>
+Date:   Mon, 18 Jul 2022 16:12:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 03/13] dt-bindings: dma: dw-axi-dmac: extend the number
+ of interrupts
+Content-Language: en-GB
+To:     Conor Dooley <mail@conchuod.ie>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh@kernel.org>
+References: <20220705215213.1802496-1-mail@conchuod.ie>
+ <20220705215213.1802496-4-mail@conchuod.ie>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20220705215213.1802496-4-mail@conchuod.ie>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 701850dc0c31bfadf75a0 ("printk, tracing: fix console
-tracepoint") moved the tracepoint from console_unlock() to
-vprintk_store(). As a result, it might be called in any
-context and triggered the following warning:
+On 05/07/2022 22:52, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> The Canaan k210 apparently has a Sysnopsys Designware AXI DMA
+> controller, but according to the documentation & devicetree it has 6
+> interrupts rather than the standard one. Support the 6 interrupt
+> configuration by unconditionally extending the binding to a maximum of
+> 8 per-channel interrupts thereby matching the number of possible
+> channels.
 
-  WARNING: CPU: 1 PID: 16462 at include/trace/events/printk.h:10 printk_sprint+0x81/0xda
-  Modules linked in: ppdev parport_pc parport
-  CPU: 1 PID: 16462 Comm: event_benchmark Not tainted 5.19.0-rc5-test+ #5
-  Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
-  EIP: printk_sprint+0x81/0xda
-  Code: 89 d8 e8 88 fc 33 00 e9 02 00 00 00 eb 6b 64 a1 a4 b8 91 c1 e8 fd d6 ff ff 84 c0 74 5c 64 a1 14 08 92 c1 a9 00 00 f0 00 74 02 <0f> 0b 64 ff 05 14 08 92 c1 b8 e0 c4 6b c1 e8 a5 dc 00 00 89 c7 e8
-  EAX: 80110001 EBX: c20a52f8 ECX: 0000000c EDX: 6d203036
-  ESI: 3df6004c EDI: 00000000 EBP: c61fbd7c ESP: c61fbd70
-  DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010006
-  CR0: 80050033 CR2: b7efc000 CR3: 05b80000 CR4: 001506f0
-  Call Trace:
-   vprintk_store+0x24b/0x2ff
-   vprintk+0x37/0x4d
-   _printk+0x14/0x16
-   nmi_handle+0x1ef/0x24e
-   ? find_next_bit.part.0+0x13/0x13
-   ? find_next_bit.part.0+0x13/0x13
-   ? function_trace_call+0xd8/0xd9
-   default_do_nmi+0x57/0x1af
-   ? trace_hardirqs_off_finish+0x2a/0xd9
-   ? to_kthread+0xf/0xf
-   exc_nmi+0x9b/0xf4
-   asm_exc_nmi+0xae/0x29c
+I think you can still configure it to produce a single interrupt
+even if there are per-channel interrupts available. This is from
+my reading of the driver a little while ago so may not be totally
+correct now.
 
-It comes from:
-
-  #define __DO_TRACE(name, args, cond, rcuidle) \
-  [...]
-		/* srcu can't be used from NMI */	\
-		WARN_ON_ONCE(rcuidle && in_nmi());	\
-
-It might be possible to make srcu working in NMI. But it
-would be slower on some architectures. It is not worth
-doing it just because of this tracepoint.
-
-It would be possible to disable this tracepoint in NMI
-or in rcuidle context. Where the rcuidle context looks
-more rare and thus more acceptable to be ignored.
-
-Alternative solution would be to move the tracepoint
-back to console code. But the location is less reliable
-by definition. Also the synchronization against other
-tracing messages is much worse.
-
-Let's ignore the tracepoint in rcuidle context as the least
-evil solution.
-
-Link: https://lore.kernel.org/r/20220712151655.GU1790663@paulmck-ThinkPad-P17-Gen-1
-
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Petr Mladek <pmladek@suse.com>
----
-Changes against v1:
-
-  + use rcu_is_watching() instead of rcu_is_idle_cpu()
+Having per-channel irqs might be useful in the future, but as above
+I think it'll require the driver to be updated to do it (and possibly
+some sort of detection)
 
 
- include/trace/events/printk.h | 9 ++++++++-
- kernel/printk/printk.c        | 2 +-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+> Link: https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf #Page 51
+> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>   .../devicetree/bindings/dma/snps,dw-axi-dmac.yaml          | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+> index 4324a94b26b2..67aa7bb6d36a 100644
+> --- a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+> +++ b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+> @@ -34,7 +34,12 @@ properties:
+>         - const: axidma_apb_regs
+>   
+>     interrupts:
+> -    maxItems: 1
+> +    description:
+> +      If the IP-core synthesis parameter DMAX_INTR_IO_TYPE is set to 1, this
+> +      will be per-channel interrupts. Otherwise, this is a single combined IRQ
+> +      for all channels.
+> +    minItems: 1
+> +    maxItems: 8
+>   
+>     clocks:
+>       items:
 
-diff --git a/include/trace/events/printk.h b/include/trace/events/printk.h
-index 13d405b2fd8b..5485513d8838 100644
---- a/include/trace/events/printk.h
-+++ b/include/trace/events/printk.h
-@@ -7,11 +7,18 @@
- 
- #include <linux/tracepoint.h>
- 
--TRACE_EVENT(console,
-+TRACE_EVENT_CONDITION(console,
- 	TP_PROTO(const char *text, size_t len),
- 
- 	TP_ARGS(text, len),
- 
-+	/*
-+	 * trace_console_rcuidle() is not working in NMI. printk()
-+	 * is used more often in NMI than in rcuidle context.
-+	 * Choose the less evil solution here.
-+	 */
-+	TP_CONDITION(rcu_is_watching()),
-+
- 	TP_STRUCT__entry(
- 		__dynamic_array(char, msg, len + 1)
- 	),
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index b49c6ff6dca0..bd76a45ecc7f 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2108,7 +2108,7 @@ static u16 printk_sprint(char *text, u16 size, int facility,
- 		}
- 	}
- 
--	trace_console_rcuidle(text, text_len);
-+	trace_console(text, text_len);
- 
- 	return text_len;
- }
+
 -- 
-2.35.3
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
 
+https://www.codethink.co.uk/privacy.html

@@ -2,176 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C275577D7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70F6577D85
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233175AbiGRI1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S233522AbiGRI37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiGRI1b (ORCPT
+        with ESMTP id S232898AbiGRI3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:27:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD70211A0C;
-        Mon, 18 Jul 2022 01:27:30 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 78F986601A08;
-        Mon, 18 Jul 2022 09:27:27 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658132848;
-        bh=3wSuhWp2P2ZyIQrwtaWVzGC8uMFmX+0xQ1Qp+Gq760s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MEYN6sSMnl1b1jGZam3vGPUhszK6Kka5I6EgC7NQr3Q36fJmBTBNdXMzktsez5qIj
-         y+s+XdM0YgKFkp9EXPOn+L1Cz+Oxd1XhKLcE2IBo0ISLE3PVkCNEzlzehYjysaiuWG
-         Zo51GGkWRKk8PczsWqR8TmMapo+ER+hjgV4sjVLPFHsPVY4Qf/tMhapXsuArRIxERi
-         5Mf2Iqmq2tvvOG65/uZIKGF7a1cWG0Qn+VqDzTx0mD+1qYHnorumujxfSLaFnON56Z
-         IAxKex2js5tEg95LQVFjSdehcwbr2FzRLtQrHYbNSh7clnBnGfAggQdU5fxiHr3DM+
-         lRudS6QdbjYdQ==
-Message-ID: <ee88aec0-f6f8-c554-6752-447cb0f34e16@collabora.com>
-Date:   Mon, 18 Jul 2022 10:27:23 +0200
+        Mon, 18 Jul 2022 04:29:49 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50837DF97
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:29:48 -0700 (PDT)
+Received: from [10.20.42.19] (unknown [10.20.42.19])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz9PqGdVipG8mAA--.33224S3;
+        Mon, 18 Jul 2022 16:29:30 +0800 (CST)
+Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
+ <87less52bx.wl-maz@kernel.org>
+ <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
+ <87ilnw3vlg.wl-maz@kernel.org>
+ <20994a99-b5b1-442d-d23d-2a11ecef24a0@loongson.cn>
+ <87wncbzteg.wl-maz@kernel.org>
+ <058aed14-3644-5fc4-8eda-ec645df91836@loongson.cn>
+ <87fsiy53h3.wl-maz@kernel.org>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <6d534d7d-766c-d5d1-59ed-1ecdd96837be@loongson.cn>
+Date:   Mon, 18 Jul 2022 16:29:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 13/13] video: backlight: mt6370: Add MediaTek MT6370
- support
+In-Reply-To: <87fsiy53h3.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-References: <20220715112607.591-1-peterwu.pub@gmail.com>
- <20220715112607.591-14-peterwu.pub@gmail.com>
- <ec3bdfb8-0e42-a772-28b1-165811872afa@collabora.com>
- <20220715162913.5ewxwhv6jtdgt3c2@maple.lan>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220715162913.5ewxwhv6jtdgt3c2@maple.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxz9PqGdVipG8mAA--.33224S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cr13trW3GrykGrykGry8Xwb_yoW8tr45pF
+        WagFyYyF4qyFyrAwnrtan0qa1FyrWfJ3ykXrnI93y8Aas8twnrXr1aya1j9Fy7uF1Ikw4j
+        vrWIg34fuF1DJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
+        87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+        1lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK6svP
+        MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_XrWUJr1UMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/07/22 18:29, Daniel Thompson ha scritto:
-> On Fri, Jul 15, 2022 at 02:38:45PM +0200, AngeloGioacchino Del Regno wrote:
->> Il 15/07/22 13:26, ChiaEn Wu ha scritto:
->>> From: ChiaEn Wu <chiaen_wu@richtek.com>
+
+
+On 2022/7/18 下午2:39, Marc Zyngier wrote:
+> On Mon, 18 Jul 2022 02:07:21 +0100,
+> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>>
+>>
+>>
+>> On 2022/7/17 下午10:49, Marc Zyngier wrote:
+>>> On Sun, 17 Jul 2022 12:29:05 +0100,
+>>> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 2022/7/17 下午6:02, Marc Zyngier wrote:
+>>>>> But the other issue is that you seem to call this function from two
+>>>>> different locations. This cannot be right, as there should be only one
+>>>>> probe order, and not multiple.
+>>>>>
+>>>>
+>>>> As we described two IRQ models(Legacy and Extended) in this cover
+>>>> letter, the parent domain of MSI domain can be htvec domain(Legacy) or
+>>>> eiointc domain(Extended). In MADT, only one APIC(HTPIC for htvec or
+>>>> EIOPIC for eiointc) is allowed to pass into kernel, and then in the
+>>>> irqchip driver, only one kind APIC of them can be parsed from MADT, so
+>>>> we have to support two probe order for them.
 >>>
->>> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
->>> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
->>> driver, display bias voltage supply, one general purpose LDO, and the
->>> USB Type-C & PD controller complies with the latest USB Type-C and PD
->>> standards.
+>>> Do you really have the two variants in the wild? Or is this just
+>>> because this is a possibility?
 >>>
->>> This adds support for MediaTek MT6370 Backlight driver. It's commonly used
->>> to drive the display WLED. There are 4 channels inside, and each channel
->>> supports up to 30mA of current capability with 2048 current steps in
->>> exponential or linear mapping curves.
->>>
->>> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 >>
->> Hello ChiaEn,
->>
->> I propose to move this one to drivers/leds (or drivers/pwm) and, instead of
->> registering a backlight device, register a PWM device.
->>
->> This way you will be able to reuse the generic backlight-pwm driver, as you'd
->> be feeding the PWM device exposed by this driver to the generic one: this will
->> most importantly make it easy to chain it with MTK_DISP_PWM (mtk-pwm-disp)
->> with a devicetree that looks like...
+>> Currently, there are not CPUs(used for PC and server) based on
+>> LoongArch shipped with only HTPIC, but with both HTPIC and EIOPIC, we
+>> just want to provide two choices for designers(but obviously, EIOPIC
+>> may be enough currently). Do you think we don't have to do like this,
+>> yes? If so, maybe we don't have to support ACPI-way entry for htvec
+>> currently, and do the work in future if required.
 > 
-> Out of interest, does MT6370 have the same structure for backlights as the prior
-> systems using mtk-pwm-disp or was mtk-pwm-disp simply a normal(-ish) PWM
-> that relied on something on the board for all the constant current
-> driver hardware?
+> If the existing HW is only following the 'Extended' model, then I'd
+> suggest you only support this for now. It has two effects:
 > 
+> - it simplifies the current code, making it more maintainable and
+>    easier to reason about
 > 
-
-As per my understanding, mtk-pwm-disp is chained to other multimedia features of
-the display block of MediaTek SoCs, such as the AAL (adaptive ambient light),
-CABC (content adaptive backlight control) etc, other than being a normal(ish)
-PWM... that's the reason of my request.
-
-Moreover, in the end, this PMIC's backlight controller is just a "fancy" PWM
-controller, with OCP/OVP.
-
->>
->> 	pwmleds-disp {
->> 		compatible = "pwm-leds";
->>
->> 		disp_led: disp-pwm {
->> 			label = "backlight-pwm";
->> 			pwms = <&pwm0 0 500000>;
->> 			max-brightness = <1024>;
->> 		};
->> 	};
->>
->> 	backlight_lcd0: backlight {
->> 		compatible = "led-backlight";
->> 		leds = <&disp_led>, <&pmic_bl_led>;
->> 		default-brightness-level = <300>;
->> 	};
+> - it sends the message to integrators that 'Extended' is the correct
+>    model, and that it is what they should support
 > 
-> I think this proposal has to start with the devicetree bindings rather
-> than the driver. Instead I think the question is: does this proposal
-> result in DT bindings that better describe the underlying hardware?
+> Now, we don't have much time left to get this series into -next (I
+> will be closing the tree to new features this week, and only queue
+> fixes).
+> 
+> So whatever you need to do, please do it quickly so that we can have
+> at least some of this in 5.20.
+> 
+> Thanks,
+> 
+> 	M.
 > 
 
- From how I understand it - yes: we have a fancy PWM (&pwm0) that we use
-to control display backlight (backlight-pwm)...
+Ok, Marc, thanks for your suggestion, got it, I'll remove 'Legacy' mode 
+support and send next version as soon as possible.
 
-Obviously, here we're not talking about OLEDs, but LCDs, where the backlight
-is made of multiple strings of WhiteLED (effectively, a "pwm-leds" controlled
-"led-backlight").
-
-Using PWM will also allow for a little more fine-grained board specific
-configuration, as I think that this PMIC (and/or variants of it) will be
-used in completely different form factors: I think that's going to be both
-smartphones and tablets/laptops... and I want to avoid vendor properties
-to configure the PWM part in a somehow different way.
-
-> This device has lots of backlight centric features (OCP, OVP, single
-> control with multiple outputs, exponential curves, etc) and its not
-> clear where they would fit into the "PWM" bindings.
-> 
-
-For OCP and OVP, the only bindings that fit would be regulators, but that's
-not a regulator... and that's about it - I don't really have arguments for
-that.
-
-What I really want to see here is usage of "generic" drivers like led_bl
-and/or pwm_bl as to get some "standardization" around with all the benefits
-that this carries.
-
-> Come to think of it I'm also a little worried also about the whole linear
-> versus exponential curve thing since I thought LED drivers were required
-> to use exponential curves.
-> 
-
-That probably depends on how the controller interprets the data, I guess,
-but I agree with you on this thought.
-
-Regards,
-Angelo

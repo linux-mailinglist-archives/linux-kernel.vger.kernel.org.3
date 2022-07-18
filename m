@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB07578DAA
+	by mail.lfdr.de (Postfix) with ESMTP id 12514578DA9
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbiGRWle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S235682AbiGRWln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234596AbiGRWlc (ORCPT
+        with ESMTP id S235657AbiGRWlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:41:32 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B492DA9C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:41:31 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id n2so8566890qkk.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:41:31 -0700 (PDT)
+        Mon, 18 Jul 2022 18:41:40 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2403931228
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:41:40 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id o26so9954409qkl.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ISQEQ+fIU3xAcRWcqutk61dQJfgUByc+o/p0/o9VaqQ=;
-        b=IH/FZ8SrUXP2dDYcRxYo5hHvEHRDVPafx35U/9ZnUzKdYONMPijudkIJgyNp/P1eqS
-         Vz+6KL7fWpehsS1cZaRejfGyFWa9vLodhJW54WnzQEK190wK7fzCpe4PgSrQWHAWy7LD
-         7P0Jn3c54BPUPIYPFib731YYvXf1TFuRIGIS/T7kyWo5aD/jaGyK+zZC7wKvmgenhRkO
-         V1YUIwQj5br4kxCvuQZPcJDR4aEDHWvE+ePOZLsmgkHnzwZjCXOvCQ/99BF64hkTG7qd
-         eJEAXPCtQMqIXm1OH4M7jazorAiFE6SEzkdjAGKvnw7iGZ69My6Qo5IOfomFGWEVisqU
-         vo6A==
+        bh=dhwistRYtSEw+FOLxYsmvUgg2SfWUhko3Y0iHqBJPu4=;
+        b=aZjpVE4EcfZyMPDvoC7PBa41wvK2SMv/ubMIQQmy/TcdmvAB5sTm44ZV/uFzXt0wKb
+         dY1VwMVxuQMp9OYczxgQEk9hE51YGmr3jeXIZY234G94ZXXg8PMXFU/zJqaUpcjH7ejA
+         LYVWL2CCeav7caDWP+9DFE7whPhYbTJSoCcTnByMx5lxj9MtM03ixpQAZLwBsUxIBkjg
+         QUN0frpfAARrFIv2TnEePpjDVy58E7mdMzD8yaY1OTNOoFTfzUxrtQBhVR0D9BaBb9kB
+         IrWLlZBGkxIPpfI98VafP5REK0GHAtwXrp03Ht7SCMiv8t682jChRH2ZOETYgUaTzYUc
+         Ov3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ISQEQ+fIU3xAcRWcqutk61dQJfgUByc+o/p0/o9VaqQ=;
-        b=1L9c6rmXXKt8U+1hSCaOqFjpz6VhgY8lw7yEWUbEHWSfK++sDtGdHbhpwX9lFDdvti
-         9agKRrs+S0eb6+6a51842OiNVZBgdkVWFFA8jkV3yMTBiGtpHvLuquZ7AmT3XAXBbaLW
-         0wZ8XPUIrnz5s1VQOB01rtXS7t+09KXbbB0r5JJEvXCgvEPET7oB9HXDTKhBv5AApkIe
-         TBOrDewdHJiPQ6WCyp+Mfrp5SXmb++aoMBOANzZMH1FT9q25HJuZcV9bdykjPreo8ank
-         /lkeG+5DBdfJsfq0kcE/RLflf6U3iUy0Fc/P5EnVlHCkPM9gHxmyGHqnXzhCZXPwDb4b
-         In1g==
-X-Gm-Message-State: AJIora+2Fe0rtnCOB+7mScSXWblTys4dIRWDE+3bLsve+rDF++InwYIY
-        8vh9DWoI8uG1/0D1FN6wXUvaZ0iKpHbV+snPuBY=
-X-Google-Smtp-Source: AGRyM1tSoqflDUr5Mg2xHUPRTTAzjNKYxv+S53Qbj3gS0KL0JvYKrrffyaAXoiFit8+UmyC/nTzU38aOfUyQ4tXScMQ=
-X-Received: by 2002:a05:620a:2807:b0:6a6:6ef1:fb9d with SMTP id
- f7-20020a05620a280700b006a66ef1fb9dmr19234367qkp.146.1658184090436; Mon, 18
- Jul 2022 15:41:30 -0700 (PDT)
+        bh=dhwistRYtSEw+FOLxYsmvUgg2SfWUhko3Y0iHqBJPu4=;
+        b=bzWaP4R8bYqGPzTY11jZ2iGl8pfM/Nn5+FvSUEAptHpt0gE4FwvINLjgPzjHEqEcx3
+         b3fZxvGLA9yQ5f28kIbg/OJBWeKhUthk+y722TpQcdEzW5pzBpPZiNbxTkv9EzOaOk/Z
+         DzsLg8j8/asNBheKur0HlseJ/zwABF0j8VfnuOlvyhYgxSypJ3mjDAhY592vQh/L0dRy
+         fRs4LDN5Qh7HbsTj1YYCHx+Hn53lWq7AlBDZQHBMqTFA/PG7ZirJPfZQg1BKXi9wMb+W
+         uq6Y3k20lzSStT5/BlS2HzG8j+hwq8a5AjTHQqhgB1SiN0MqRINgGVt2Of0okTmp6xp4
+         1n/w==
+X-Gm-Message-State: AJIora+ZS/ePUejPPJboAN9A5uOj0OIOpIw56NftDFdL7zW0Ue+4beF8
+        y87gS32mxvXTIuOtiO/319FX/WWxWPHkO5GyNok=
+X-Google-Smtp-Source: AGRyM1uScp5BBbw1h7lKeNpe/eePFGZhqBK9tTMDKuzsgR/3BD2ukP36SV2w1XPGK7UaVV0BfA7m9PBA3Pmv5jHpmqw=
+X-Received: by 2002:a05:620a:2556:b0:6a7:9f07:602 with SMTP id
+ s22-20020a05620a255600b006a79f070602mr18213055qko.207.1658184099146; Mon, 18
+ Jul 2022 15:41:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1655150842.git.andreyknvl@google.com> <11a7bfb5ed5de141b50db8c08e9c6ad37ef3febc.1655150842.git.andreyknvl@google.com>
- <CANpmjNMTb4cxizfb5Xzy979jCA2_BMio6W4k1wZivKnu77RKVw@mail.gmail.com>
-In-Reply-To: <CANpmjNMTb4cxizfb5Xzy979jCA2_BMio6W4k1wZivKnu77RKVw@mail.gmail.com>
+References: <cover.1655150842.git.andreyknvl@google.com> <9363b16202fb04a3223de714e70b7a6b72c4367e.1655150842.git.andreyknvl@google.com>
+ <YrBDzKTZMnWztGIQ@elver.google.com>
+In-Reply-To: <YrBDzKTZMnWztGIQ@elver.google.com>
 From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 19 Jul 2022 00:41:19 +0200
-Message-ID: <CA+fCnZeq8bWKcQ5fCYuXCvReDJjv+SKcaFu-DPO==W3XPRUm3w@mail.gmail.com>
-Subject: Re: [PATCH 06/32] kasan: introduce kasan_print_aux_stacks
+Date:   Tue, 19 Jul 2022 00:41:28 +0200
+Message-ID: <CA+fCnZe7b0iNPePpYXswDsjZykphK8vgaYDeeOJCuKbePPDVVw@mail.gmail.com>
+Subject: Re: [PATCH 19/32] kasan: pass tagged pointers to kasan_save_alloc/free_info
 To:     Marco Elver <elver@google.com>
 Cc:     andrey.konovalov@linux.dev,
         Alexander Potapenko <glider@google.com>,
@@ -77,28 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 1:35 PM Marco Elver <elver@google.com> wrote:
+On Mon, Jun 20, 2022 at 11:54 AM Marco Elver <elver@google.com> wrote:
 >
-> > diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> > index aa6b43936f8d..bcea5ed15631 100644
-> > --- a/mm/kasan/kasan.h
-> > +++ b/mm/kasan/kasan.h
-> > @@ -265,6 +265,12 @@ void kasan_print_address_stack_frame(const void *addr);
-> >  static inline void kasan_print_address_stack_frame(const void *addr) { }
-> >  #endif
+> On Mon, Jun 13, 2022 at 10:14PM +0200, andrey.konovalov@linux.dev wrote:
+> > From: Andrey Konovalov <andreyknvl@google.com>
 > >
-> > +#ifdef CONFIG_KASAN_GENERIC
-> > +void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object);
-> > +#else
-> > +static inline void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object) { }
-> > +#endif
+> > Pass tagged pointers to kasan_save_alloc/free_info().
+> >
+> > This is a preparatory patch to simplify other changes in the series.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > ---
+> >  mm/kasan/common.c  | 4 ++--
+> >  mm/kasan/generic.c | 3 +--
+> >  mm/kasan/kasan.h   | 2 +-
+> >  mm/kasan/tags.c    | 3 +--
+> >  4 files changed, 5 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> > index f937b6c9e86a..519fd0b3040b 100644
+> > --- a/mm/kasan/common.c
+> > +++ b/mm/kasan/common.c
+> > @@ -227,7 +227,7 @@ static inline bool ____kasan_slab_free(struct kmem_cache *cache, void *object,
+> >               return false;
+> >
+> >       if (kasan_stack_collection_enabled())
+> > -             kasan_save_free_info(cache, object, tag);
+> > +             kasan_save_free_info(cache, tagged_object);
+> >
 >
-> Why not put this into one of the existing "#ifdef
-> CONFIG_KASAN_GENERIC" blocks? There are several; probably the one 10
-> lines down might be ok?
+> Variable 'tag' becomes unused in this function after this patch.
 
-The idea was to group functions based on their purpose, not on which
-mode uses them. Here, kasan_print_aux_stacks() is related to printing
-reports, so it goes next to other such functions. We could rework the
-order of functions in this file, but I'd rather keep it as is in this
-change. Thanks!
+Will fix in v2, thanks!

@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F75578759
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44BF578762
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbiGRQ1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
+        id S235327AbiGRQ26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235712AbiGRQ1J (ORCPT
+        with ESMTP id S231132AbiGRQ2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:27:09 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535892AC55
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:27:06 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso13202905pjo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=H5cFyysoeTQyXDxMaPkX9P458DIkopQ0kteqyRLVvVk=;
-        b=srwJ5unZpe8cCGvbxFkxoG5xA8CCLaXd6hjT6r4UJqAC2Dk9lZ8cZn7M345y7IpwC7
-         eaVrgXjwmBbdGfryzKzSWAUwlRSzK9XX35rLtK1XImEo8uLmhptnasNHtST0h7t7W59P
-         CfucU3MJ8Kyry92SVGq2s93lW/DnA5oCb+Udj1nd8bWb/OliT7ajZdhytXxoIRjRcBCu
-         wIIvdjXEQ2SKG6WM/MmawMJIXrWOI1lwytMLB2tDuWh8SOjI/AahEDwElobD98F5qpDN
-         VlMKI3zwfaUQy1GFX+/E/Es1LQGPrJBC+KDdXkV/FOZ//ALPch62iMa2lnuKJF2uDR+b
-         vs3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=H5cFyysoeTQyXDxMaPkX9P458DIkopQ0kteqyRLVvVk=;
-        b=7wSeS3P83eEoUYu+KST0MR5CY5usSatLo2IQ6JiiO5TGu30tHkTN5OFlssuM2CDxxc
-         j/sB/CLMC/qzUI70gcPArUVbDY+wtZNC6mac7Nn6XN3Z0rHxlJfTyr4a1Fp9quCRn+QR
-         NBVnDBs/AU1FvmWRNKQ9/u3tKj1utWEtXGR4CTD7yuHXuJFI0l+PhO0eHwATyS/PLyvS
-         K3/zZu/MSnQGSIO9GAwb9tneARGaVn+PJXnMTJSRNXll30ejuIL024ntIlAoeyyc+tfT
-         BC0EWO+e/QfQ/pns7za+kwBu5aKqwY5cDbVKRWhuByXHp6JT4soGL8ZNwD6gVxk77F45
-         ubuQ==
-X-Gm-Message-State: AJIora80ANCLIIlQJWuNypjXIjDPbqHUJOz96jFLjX0OZvDMN97LlYb7
-        O1XGiX2agr27J4yio3U4yQ7MjA==
-X-Google-Smtp-Source: AGRyM1sxVrWyI5XycSgmQCI2aYpXen9m2F2n99d+l9K7vIS2GIdNeVpz3cWYni+d1fP6RBTgZozOgQ==
-X-Received: by 2002:a17:90b:3a88:b0:1f0:56d5:460e with SMTP id om8-20020a17090b3a8800b001f056d5460emr38485602pjb.208.1658161626338;
-        Mon, 18 Jul 2022 09:27:06 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170902780a00b0016b68cf6ae5sm9701133pll.226.2022.07.18.09.27.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 09:27:05 -0700 (PDT)
-Message-ID: <7146c853-0ff8-3c92-c872-ce6615baab40@kernel.dk>
-Date:   Mon, 18 Jul 2022 10:27:04 -0600
+        Mon, 18 Jul 2022 12:28:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4702AC55;
+        Mon, 18 Jul 2022 09:28:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CE006202EE;
+        Mon, 18 Jul 2022 16:28:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658161712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9b4Wqp8N5OITLHBHNLTdaMUCfhXN9N9nneM6F+8cgIM=;
+        b=oyczfGqqfhAeG+kWYNBxlKge0MxJjFa0h+av/G+GeqrT1PDjxPB1tydLNMOyBfF4MxomJA
+        CkgbQwqxTRLY/Ex1L1rLasRRvau+YLhXC4f4TYUjOcXYBSHdvklKiqvl/CIkFsfRZggwbF
+        m+HsOctQFz1AWH9vPD3r3af0vIXvIPQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658161712;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9b4Wqp8N5OITLHBHNLTdaMUCfhXN9N9nneM6F+8cgIM=;
+        b=DnbCGbA6B+uRIRtyaPFImifiyxs9XZcSx+uOPKpUeW1GTSiA88i5PFt0sZMPJIAY0wM61S
+        GSq/qmGzjtcrIFCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF7E613A37;
+        Mon, 18 Jul 2022 16:28:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9xCzLjCK1WLcdgAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 18 Jul 2022 16:28:32 +0000
+Date:   Mon, 18 Jul 2022 18:28:27 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        x86@kernel.org, ardb@kernel.org, tglx@linutronix.de,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, stable@vger.kernel.org,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+Subject: Re: [PATCH] efi/x86: use naked RET on mixed mode call wrapper
+Message-ID: <YtWKK2ZLib1R7itI@zn.tnic>
+References: <20220715194550.793957-1-cascardo@canonical.com>
+ <YtVG8VBmFikS6GMn@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [LKP] Re: [io_uring] 584b0180f0:
- phoronix-test-suite.fio.SequentialWrite.IO_uring.Yes.Yes.1MB.DefaultTestDirectory.mb_s
- -10.2% regression
-Content-Language: en-US
-To:     Yin Fengwei <fengwei.yin@intel.com>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com
-References: <20220527092432.GE11731@xsang-OptiPlex-9020>
- <2085bfef-a91c-8adb-402b-242e8c5d5c55@kernel.dk>
- <0d60aa42-a519-12ad-3c69-72ed12398865@intel.com>
- <26d913ea-7aa0-467d-4caf-a93f8ca5b3ff@kernel.dk>
- <9df150bb-f4fd-7857-aea8-b2c7a06a8791@intel.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <9df150bb-f4fd-7857-aea8-b2c7a06a8791@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YtVG8VBmFikS6GMn@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,21 +77,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/17/22 9:30 PM, Yin Fengwei wrote:
-> Hi Jens,
-> 
-> On 7/15/2022 11:58 PM, Jens Axboe wrote:
->> In terms of making this more obvious, does the below also fix it for
->> you?
-> 
-> The regression is still there after applied the change you posted.
+On Mon, Jul 18, 2022 at 01:41:37PM +0200, Peter Zijlstra wrote:
+> diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+> index 10a3bfc1eb23..f934dcdb7c0d 100644
+> --- a/arch/x86/include/asm/nospec-branch.h
+> +++ b/arch/x86/include/asm/nospec-branch.h
+> @@ -297,6 +297,8 @@ do {									\
+>  	alternative_msr_write(MSR_IA32_SPEC_CTRL,			\
+>  			      spec_ctrl_current() | SPEC_CTRL_IBRS,	\
+>  			      X86_FEATURE_USE_IBRS_FW);			\
+> +	altnerative_msr_write(MSR_IA32_PRED_CMD, PRED_CMD_IBPB,		\
+> +			      X86_FEATURE_USE_IBPB_FW);			\
+>  } while (0)
 
-Still don't see the regression here, using ext4. I get about 1020-1045
-IOPS with or without the patch you sent.
+So I'm being told we need to untrain on return from EFI to protect the
+kernel from it. Ontop of yours.
 
-This is running it in a vm, and the storage device is nvme. What is
-hosting your ext4 fs?
+Asm looks correct but lemme run it through the test builds first...
+
+---
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 38a3e86e665e..e58f18555022 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -62,6 +62,12 @@
+ 	dec	reg;				\
+ 	jnz	771b;
+ 
++#ifdef CONFIG_CPU_UNRET_ENTRY
++#define CALL_ZEN_UNTRAIN_RET	"call zen_untrain_ret"
++#else
++#define CALL_ZEN_UNTRAIN_RET	""
++#endif
++
+ #ifdef __ASSEMBLY__
+ 
+ /*
+@@ -128,12 +134,6 @@
+ .Lskip_rsb_\@:
+ .endm
+ 
+-#ifdef CONFIG_CPU_UNRET_ENTRY
+-#define CALL_ZEN_UNTRAIN_RET	"call zen_untrain_ret"
+-#else
+-#define CALL_ZEN_UNTRAIN_RET	""
+-#endif
+-
+ /*
+  * Mitigate RETBleed for AMD/Hygon Zen uarch. Requires KERNEL CR3 because the
+  * return thunk isn't mapped into the userspace tables (then again, AMD
+@@ -169,6 +169,16 @@ extern void __x86_return_thunk(void);
+ extern void zen_untrain_ret(void);
+ extern void entry_ibpb(void);
+ 
++#if defined(CONFIG_CPU_UNRET_ENTRY) || defined(CONFIG_CPU_IBPB_ENTRY)
++# define UNTRAIN_RET						\
++	asm volatile(ALTERNATIVE_2(ANNOTATE_RETPOLINE_SAFE "nop", \
++		     CALL_ZEN_UNTRAIN_RET, X86_FEATURE_UNRET,	\
++		     "call entry_ibpb", X86_FEATURE_ENTRY_IBPB)	\
++		     ::)
++#else
++# define UNTRAIN_RET
++#endif
++
+ #ifdef CONFIG_RETPOLINE
+ 
+ #define GEN(reg) \
+@@ -306,6 +316,7 @@ do {									\
+ 	alternative_msr_write(MSR_IA32_SPEC_CTRL,			\
+ 			      spec_ctrl_current(),			\
+ 			      X86_FEATURE_USE_IBRS_FW);			\
++	UNTRAIN_RET;							\
+ 	preempt_enable();						\
+ } while (0)
+ 
 
 -- 
-Jens Axboe
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

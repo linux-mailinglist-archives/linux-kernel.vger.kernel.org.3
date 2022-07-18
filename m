@@ -2,59 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A6C578D64
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0B3578D67
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbiGRWNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
+        id S234457AbiGRWNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiGRWNi (ORCPT
+        with ESMTP id S234186AbiGRWNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:13:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEB7313AD;
-        Mon, 18 Jul 2022 15:13:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A44E86152C;
-        Mon, 18 Jul 2022 22:13:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF3AC341C0;
-        Mon, 18 Jul 2022 22:13:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658182415;
-        bh=6sNH6sal5TicDehq4BhVSgQxonrBdrjzj1qkQO3IpZc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jep36cTrn9SQVYkmm3O3YLkoKbgaTEQTGa57ZmONF0Bn98aLslFIPI+aeMMDnTFWD
-         QViGm3mbzPGm09ShDjupZINzYt9Vsurt1GHosk/tD5N9X8kwevHYf9+gPf4C6aVMze
-         iOwQYXF2yrxcMUdbj1PUUIEUjoih8j7FXXaEKhQGSRZWJeLS8bUHTOtYoXCw2480U8
-         VsefHX40HcAtybwFIwScOKBqvzI4ZQ+29sNii2cFxjQ+yivnOmDotFWs+SPPo862kG
-         t5CeD5mjEJD6SzRwp4rFxxpWrbXyFv+mLhaAHpi7FwhaNX5D8zC0FcfiAeA8WZ0+ez
-         oKDpiVX3ROzNA==
-Date:   Mon, 18 Jul 2022 15:13:35 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     "ruansy.fnst@fujitsu.com" <ruansy.fnst@fujitsu.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>
-Subject: Re: [RFC PATCH v6] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
-Message-ID: <YtXbD4e8mLHqWSwL@magnolia>
-References: <20220410171623.3788004-1-ruansy.fnst@fujitsu.com>
- <20220714103421.1988696-1-ruansy.fnst@fujitsu.com>
- <62d05eb8e663c_1643dc294fa@dwillia2-xfh.jf.intel.com.notmuch>
+        Mon, 18 Jul 2022 18:13:44 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7F332BAD
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:13:41 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id a10so15321936ljj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=a33Qw4o2GwiupPnD3JLXL5y0DKLG1ElEVAAgwe0B5Bo=;
+        b=ao0wowMsVpLPxy3ybBR+HAH3Q6OYlCisAE8fvCweQhGE70BNOfO/n4E8fl3TdXrvBF
+         3VJutmdZUvV/Q4ZJXhbKCDifMZBv7vP2EpaGs0DU3L/NzuRrMv8d7Hgp3S+aDgtqRcZr
+         yJlOuJ0E9gpYwNFfHvLRYGNXhEE+UAI8VDBNIJLdf4JcmiR9iAfBI1/wjElO1DXRkEE2
+         6Ysz00ioL00RfVGtsXZQuWlUhYk+zJIx0OgRVqnJ5JJej1YsKnFWGaPFh4e3Oz0bUyiF
+         j5B/JexALOH7jczOSSBFM7GXuKRZ6GbBzYBcldg0C/5MPnGHSy6RmIgNquqt14sdFkgW
+         Oeeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=a33Qw4o2GwiupPnD3JLXL5y0DKLG1ElEVAAgwe0B5Bo=;
+        b=vXqlidw4y8zqCXkksIUt/poICw+jobgBnzyKWcxzWACU41rfqLZ7ebGc7wgQityhsG
+         xjSuZHwl1jN7tfo3VnZgxxDbr1NDQ2tPPkH3Xauzy4KHeVtuSda4Na0+d7Dw56BPw8Db
+         AbJh+ywCJO9S8gIYN0rQ5P5yYOitmpQQfKtF6XFV1hJj34Pi9Ra0qfAij8rSsNZc8BZl
+         AdAjlSeEHGKZYY6PM7RLkaCpU4RAwA21dCbSrPLoUHaHxVTWjHiykX0milm/3Glw4Us4
+         /4V0/TmCipCC0LKSm29y6zazzUzAYHFf/Qa0P+Lq2W8MHED6ar5I5JrY3sJMR90fMrYh
+         L3tQ==
+X-Gm-Message-State: AJIora+qnp4XypWEFrxbpmDMXjBGW1ucsUwscDYwtGqBMOG30z0t5QvH
+        diMm5vbBFKX6bmRYVjMKWCrMeg==
+X-Google-Smtp-Source: AGRyM1sAc32xiETAC4EkGghttf/KuN3+IrhF59X4Km0ADF/Ex7Y45lggmThZeLwkUM11zMyP296KUw==
+X-Received: by 2002:a05:651c:204a:b0:25d:4ef0:80a9 with SMTP id t10-20020a05651c204a00b0025d4ef080a9mr13875280ljo.319.1658182419767;
+        Mon, 18 Jul 2022 15:13:39 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id w16-20020a05651234d000b00485caa0f5dfsm2847754lfr.44.2022.07.18.15.13.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 15:13:39 -0700 (PDT)
+Message-ID: <d8f24aca-2cdf-413f-2b30-ad41b81be1a5@linaro.org>
+Date:   Tue, 19 Jul 2022 01:13:38 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62d05eb8e663c_1643dc294fa@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/4] arm64: dts: qcom: add sdm845-google-blueline (Pixel
+ 3)
+Content-Language: en-GB
+To:     Caleb Connolly <caleb@connolly.tech>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Kalle Valo <kvalo@kernel.org>
+Cc:     Amit Pundir <amit.pundir@linaro.org>, Vinod Koul <vkoul@kernel.org>
+References: <20220718213051.1475108-1-caleb@connolly.tech>
+ <20220718213051.1475108-3-caleb@connolly.tech>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220718213051.1475108-3-caleb@connolly.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,128 +88,776 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 11:21:44AM -0700, Dan Williams wrote:
-> ruansy.fnst@fujitsu.com wrote:
-> > This patch is inspired by Dan's "mm, dax, pmem: Introduce
-> > dev_pagemap_failure()"[1].  With the help of dax_holder and
-> > ->notify_failure() mechanism, the pmem driver is able to ask filesystem
-> > (or mapped device) on it to unmap all files in use and notify processes
-> > who are using those files.
-> > 
-> > Call trace:
-> > trigger unbind
-> >  -> unbind_store()
-> >   -> ... (skip)
-> >    -> devres_release_all()   # was pmem driver ->remove() in v1
-> >     -> kill_dax()
-> >      -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_PRE_REMOVE)
-> >       -> xfs_dax_notify_failure()
-> > 
-> > Introduce MF_MEM_PRE_REMOVE to let filesystem know this is a remove
-> > event.  So do not shutdown filesystem directly if something not
-> > supported, or if failure range includes metadata area.  Make sure all
-> > files and processes are handled correctly.
-> > 
-> > ==
-> > Changes since v5:
-> >   1. Renamed MF_MEM_REMOVE to MF_MEM_PRE_REMOVE
-> >   2. hold s_umount before sync_filesystem()
-> >   3. move sync_filesystem() after SB_BORN check
-> >   4. Rebased on next-20220714
-> > 
-> > Changes since v4:
-> >   1. sync_filesystem() at the beginning when MF_MEM_REMOVE
-> >   2. Rebased on next-20220706
-> > 
-> > [1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
-> > 
-> > Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> > ---
-> >  drivers/dax/super.c         |  3 ++-
-> >  fs/xfs/xfs_notify_failure.c | 15 +++++++++++++++
-> >  include/linux/mm.h          |  1 +
-> >  3 files changed, 18 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-> > index 9b5e2a5eb0ae..cf9a64563fbe 100644
-> > --- a/drivers/dax/super.c
-> > +++ b/drivers/dax/super.c
-> > @@ -323,7 +323,8 @@ void kill_dax(struct dax_device *dax_dev)
-> >  		return;
-> >  
-> >  	if (dax_dev->holder_data != NULL)
-> > -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
-> > +		dax_holder_notify_failure(dax_dev, 0, U64_MAX,
-> > +				MF_MEM_PRE_REMOVE);
-> >  
-> >  	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
-> >  	synchronize_srcu(&dax_srcu);
-> > diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
-> > index 69d9c83ea4b2..6da6747435eb 100644
-> > --- a/fs/xfs/xfs_notify_failure.c
-> > +++ b/fs/xfs/xfs_notify_failure.c
-> > @@ -76,6 +76,9 @@ xfs_dax_failure_fn(
-> >  
-> >  	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
-> >  	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
-> > +		/* Do not shutdown so early when device is to be removed */
-> > +		if (notify->mf_flags & MF_MEM_PRE_REMOVE)
-> > +			return 0;
-> >  		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
-> >  		return -EFSCORRUPTED;
-> >  	}
-> > @@ -174,12 +177,22 @@ xfs_dax_notify_failure(
-> >  	struct xfs_mount	*mp = dax_holder(dax_dev);
-> >  	u64			ddev_start;
-> >  	u64			ddev_end;
-> > +	int			error;
-> >  
-> >  	if (!(mp->m_sb.sb_flags & SB_BORN)) {
-> >  		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
-> >  		return -EIO;
-> >  	}
-> >  
-> > +	if (mf_flags & MF_MEM_PRE_REMOVE) {
-> > +		xfs_info(mp, "device is about to be removed!");
-> > +		down_write(&mp->m_super->s_umount);
-> > +		error = sync_filesystem(mp->m_super);
-> > +		up_write(&mp->m_super->s_umount);
+On 19/07/2022 00:30, Caleb Connolly wrote:
+> From: Amit Pundir <amit.pundir@linaro.org>
 > 
-> Are all mappings invalidated after this point?
+> This adds an initial dts for the Blueline (Pixel 3). Supported
+> functionality includes display, Debug UART, UFS, USB-C (peripheral), WiFi,
+> Bluetooth and modem.
+> 
+> Bootloader compatible board and msm IDs are needed for the kernel to boot
+> with Pixel3 bootloader, so those are added.
+> 
+> GPIOs 0 through 3 and 81 through 84 are configured to not be accessible
+> from the application CPUs, so we mark them as reserved to allow the Pixel 3
+> to boot.
+> 
+> The reserved-memory locations where obtained from downstream using
+> kernel logs:
+> https://gist.github.com/calebccff/090d10bfac3cb9e9bd98dda30b054c96
+> 
+> The rmtfs region is allocated with UIO, making it technically "dynamic".
+> It's address and size can be read from sysfs:
+> 
+> blueline:/ # cat /sys/class/uio/uio0/name
+> rmtfs
+> at /sys/class/uio/uio0/maps/map0/addr
+> 0x00000000f2701000
+> blueline:/ # cat /sys/class/uio/uio0/maps/map0/size
+> 0x0000000000200000
+> 
+> Like the OnePlus 6, it needs 1kB reserved on either side of the rmtfs
+> memory to workaround some XPU bug which would otherwise cause erroneous
+> XPU violations when accessing the rmtfs_mem region.
+> 
+> For wifi, the pixel 3 reports a board-id of 0xFF, and downstream
+> only includes a single bdwlan file. The qcom,ath10k-calibration-variant
+> property is set to ensure that the correct calibration data is used.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> [AmitP: Cherry-picked and refactored from Bjorn's db845c dts
+>          ("arm64: dts: qcom: Add Dragonboard 845c") https://lkml.org/lkml/2019/6/6/7]
+> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+> [sumits: merged commits to add board and msm ids, gpio range reservation,
+>    ufs device-reset gpio and adaptation to v5.5+ changes]
+> Signed-off-by: Sumit Semwal <sumit.semwal@linaro.org>
+> [vinod: Add display nodes]
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> [caleb: remove db845c bits, cleanup, add reserved-memory for modem/wifi]
+> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
 
-No; all this step does is pushes dirty filesystem [meta]data to pmem
-before we lose DAXDEV_ALIVE...
+Thanks for your patch, few minor items to improve.
 
-> The goal of the removal notification is to invalidate all DAX mappings
-> that are no pointing to pfns that do not exist anymore, so just syncing
-> does not seem like enough, and the shutdown is skipped above. What am I
-> missing?
+> ---
+>   arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>   .../boot/dts/qcom/sdm845-google-blueline.dts  | 652 ++++++++++++++++++
+>   2 files changed, 653 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/qcom/sdm845-google-blueline.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 2f8aec2cc6db..c151e17e6eb7 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -100,6 +100,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r1.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r2.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r3.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-db845c.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-google-blueline.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-mtp.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-oneplus-enchilada.dtb
+>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-oneplus-fajita.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-google-blueline.dts b/arch/arm64/boot/dts/qcom/sdm845-google-blueline.dts
+> new file mode 100644
+> index 000000000000..dec979ad9209
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-google-blueline.dts
+> @@ -0,0 +1,652 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/dma/qcom-gpi.h>
+> +#include <dt-bindings/input/linux-event-codes.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> +
+> +#include "sdm845.dtsi"
+> +#include "pm8998.dtsi"
+> +#include "pmi8998.dtsi"
+> +
+> +/delete-node/ &mpss_region;
+> +/delete-node/ &venus_mem;
+> +/delete-node/ &cdsp_mem;
+> +/delete-node/ &mba_region;
+> +/delete-node/ &slpi_mem;
+> +/delete-node/ &spss_mem;
+> +/delete-node/ &rmtfs_mem;
+> +
+> +/ {
+> +	model = "Google Pixel 3";
+> +	compatible = "google,blueline", "qcom,sdm845";
+> +	qcom,board-id = <0x00021505 0>;
+> +	qcom,msm-id = <321 0x20001>;
+> +
+> +	aliases {
+> +		serial0 = &uart9;
+> +		serial1 = &uart6;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	volume-keys {
+> +		compatible = "gpio-keys";
+> +		label = "Volume keys";
+> +		autorepeat;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&volume_up_gpio>;
+> +
+> +		vol-up {
+> +			label = "Volume Up";
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
+> +			debounce-interval = <15>;
+> +		};
+> +	};
+> +
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
 
-...however, the shutdown above only applies to filesystem metadata.  In
-effect, we avoid the fs shutdown in MF_MEM_PRE_REMOVE mode, which
-enables the mf_dax_kill_procs calls to proceed against mapped file data.
-I have a nagging suspicion that in non-PREREMOVE mode, we can end up
-shutting down the filesytem on an xattr block and the 'return
--EFSCORRUPTED' actually prevents us from reaching all the remaining file
-data mappings.
+These properties are already part of the sdm845.dtsi, so no need to have 
+them here.
 
-IOWs, I think that clause above really ought to have returned zero so
-that we keep the filesystem up while we're tearing down mappings, and
-only call xfs_force_shutdown() after we've had a chance to let
-xfs_dax_notify_ddev_failure() tear down all the mappings.
+> +
+> +		mpss_region: memory@8e000000 {
+> +			reg = <0 0x8e000000 0 0x9800000>;
+> +			no-map;
+> +		};
+> +
+> +		venus_mem: venus@97800000 {
+> +			reg = <0 0x97800000 0 0x500000>;
+> +			no-map;
+> +		};
+> +
+> +		cdsp_mem: cdsp-mem@97D00000 {
+> +			reg = <0 0x97D00000 0 0x800000>;
+> +			no-map;
+> +		};
+> +
+> +		mba_region: mba@98500000 {
+> +			reg = <0 0x98500000 0 0x200000>;
+> +			no-map;
+> +		};
+> +
+> +		slpi_mem: slpi@98700000 {
+> +			reg = <0 0x98700000 0 0x1400000>;
+> +			no-map;
+> +		};
+> +
+> +		spss_mem: spss@99B00000 {
+> +			reg = <0 0x99B00000 0 0x100000>;
+> +			no-map;
+> +		};
+> +
+> +		/* rmtfs lower guard */
+> +		memory@f2700000 {
+> +			reg = <0 0xf2700000 0 0x1000>;
+> +			no-map;
+> +		};
+> +
+> +		rmtfs_mem: memory@f2701000 {
+> +			compatible = "qcom,rmtfs-mem";
+> +			reg = <0 0xf2701000 0 0x200000>;
+> +			no-map;
+> +
+> +			qcom,client-id = <1>;
+> +			qcom,vmid = <15>;
+> +		};
+> +
+> +		/* rmtfs upper guard */
+> +		memory@f2901000 {
+> +			reg = <0 0xf2901000 0 0x1000>;
+> +			no-map;
+> +		};
+> +	};
+> +
+> +	vph_pwr: vph-pwr-regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vph_pwr";
+> +		regulator-min-microvolt = <3700000>;
+> +		regulator-max-microvolt = <3700000>;
+> +	};
+> +
+> +	vreg_s4a_1p8: vreg-s4a-1p8 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vreg_s4a_1p8";
+> +
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +
+> +		vin-supply = <&vph_pwr>;
+> +	};
+> +};
+> +
+> +&adsp_pas {
+> +	status = "okay";
+> +
+> +	firmware-name = "qcom/sdm845/pixel3/adsp.mbn";
 
-I missed that subtlety in the initial ~30 rounds of review, but I figure
-at this point let's just land it in 5.20 and clean up that quirk for
--rc1.
+What about using "qcom/sdm845/blueline/adsp.mbn" instead?
 
-> Notice that kill_dev_dax() does unmap_mapping_range() after invalidating
-> the dax device and that ensures that all existing mappings are gone and
-> cannot be re-established. As far as I can see a process with an existing
-> dax mapping will still be able to use it after this runs, no?
+Bjorn, Amit?
 
-I'm not sure where in akpm's tree I find kill_dev_dax()?  I'm cribbing
-off of:
+> +};
+> +
+> +&apps_rsc {
+> +	pm8998-rpmh-regulators {
+> +		compatible = "qcom,pm8998-rpmh-regulators";
+> +		qcom,pmic-id = "a";
+> +		vdd-s1-supply = <&vph_pwr>;
+> +		vdd-s2-supply = <&vph_pwr>;
+> +		vdd-s3-supply = <&vph_pwr>;
+> +		vdd-s4-supply = <&vph_pwr>;
+> +		vdd-s5-supply = <&vph_pwr>;
+> +		vdd-s6-supply = <&vph_pwr>;
+> +		vdd-s7-supply = <&vph_pwr>;
+> +		vdd-s8-supply = <&vph_pwr>;
+> +		vdd-s9-supply = <&vph_pwr>;
+> +		vdd-s10-supply = <&vph_pwr>;
+> +		vdd-s11-supply = <&vph_pwr>;
+> +		vdd-s12-supply = <&vph_pwr>;
+> +		vdd-s13-supply = <&vph_pwr>;
+> +		vdd-l1-l27-supply = <&vreg_s7a_1p025>;
+> +		vdd-l2-l8-l17-supply = <&vreg_s3a_1p35>;
+> +		vdd-l3-l11-supply = <&vreg_s7a_1p025>;
+> +		vdd-l4-l5-supply = <&vreg_s7a_1p025>;
+> +		vdd-l6-supply = <&vph_pwr>;
+> +		vdd-l7-l12-l14-l15-supply = <&vreg_s5a_2p04>;
+> +		vdd-l9-supply = <&vreg_bob>;
+> +		vdd-l10-l23-l25-supply = <&vreg_bob>;
+> +		vdd-l13-l19-l21-supply = <&vreg_bob>;
+> +		vdd-l16-l28-supply = <&vreg_bob>;
+> +		vdd-l18-l22-supply = <&vreg_bob>;
+> +		vdd-l20-l24-supply = <&vreg_bob>;
+> +		vdd-l26-supply = <&vreg_s3a_1p35>;
+> +		vin-lvs-1-2-supply = <&vreg_s4a_1p8>;
+> +
+> +		vreg_s3a_1p35: smps3 {
+> +			regulator-min-microvolt = <1352000>;
+> +			regulator-max-microvolt = <1352000>;
+> +		};
+> +
+> +		vreg_s5a_2p04: smps5 {
+> +			regulator-min-microvolt = <1904000>;
+> +			regulator-max-microvolt = <2040000>;
+> +		};
+> +
+> +		vreg_s7a_1p025: smps7 {
+> +			regulator-min-microvolt = <900000>;
+> +			regulator-max-microvolt = <1028000>;
+> +		};
+> +
+> +		vdda_mipi_dsi0_pll:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/tree/fs/xfs/xfs_notify_failure.c?h=mm-stable
+Do we need this alias?
 
---D
+> +		vreg_l1a_0p875: ldo1 {
+> +			regulator-min-microvolt = <880000>;
+> +			regulator-max-microvolt = <880000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-boot-on;
+> +		};
+> +
+> +		vreg_l5a_0p8: ldo5 {
+> +			regulator-min-microvolt = <800000>;
+> +			regulator-max-microvolt = <800000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l12a_1p8: ldo12 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1800000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l7a_1p8: ldo7 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1800000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l13a_2p95: ldo13 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <2960000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l14a_1p88: ldo14 {
+> +			regulator-min-microvolt = <1800000>;
+> +			regulator-max-microvolt = <1800000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-boot-on;
+> +			/*
+> +			 * We can't properly bring the panel back if it gets turned off
+> +			 * so keep it's regulators always on for now.
+> +			 */
+
+Any idea, what is the issue here? Do you have the datasheet for the panel?
+
+> +			regulator-always-on;
+> +		};
+> +
+> +		vreg_l17a_1p3: ldo17 {
+> +			regulator-min-microvolt = <1304000>;
+> +			regulator-max-microvolt = <1304000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l19a_3p3: ldo19 {
+> +			regulator-min-microvolt = <3300000>;
+> +			regulator-max-microvolt = <3312000>;
+> +			qcom,init-voltage = <3300000>;
+> +			qcom,initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			/*
+> +			 * The touchscreen needs this to be 3.3v, which is apparently
+> +			 * quite close to the hardware limit for this LDO (3.312v)
+> +			 * It must be kept in high power mode to prevent TS brownouts
+> +			 */
+> +			regulator-allowed-modes = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l20a_2p95: ldo20 {
+> +			regulator-min-microvolt = <2960000>;
+> +			regulator-max-microvolt = <2968000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l21a_2p95: ldo21 {
+> +			regulator-min-microvolt = <2960000>;
+> +			regulator-max-microvolt = <2968000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l24a_3p075: ldo24 {
+> +			regulator-min-microvolt = <3088000>;
+> +			regulator-max-microvolt = <3088000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vreg_l25a_3p3: ldo25 {
+> +			regulator-min-microvolt = <3300000>;
+> +			regulator-max-microvolt = <3312000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +		};
+> +
+> +		vdda_mipi_dsi0_1p2:
+
+Do we need this alias?
+
+> +		vreg_l26a_1p2: ldo26 {
+> +			regulator-min-microvolt = <1200000>;
+> +			regulator-max-microvolt = <1200000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-boot-on;
+> +		};
+> +
+> +		vreg_l28a_3p0: ldo28 {
+> +			regulator-min-microvolt = <2856000>;
+> +			regulator-max-microvolt = <3008000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-boot-on;
+> +			/*
+> +			 * We can't properly bring the panel back if it gets turned off
+> +			 * so keep it's regulators always on for now.
+> +			 */
+> +			regulator-always-on;
+> +		};
+> +	};
+> +
+> +	pmi8998-rpmh-regulators {
+> +		compatible = "qcom,pmi8998-rpmh-regulators";
+> +		qcom,pmic-id = "b";
+> +
+> +		vdd-bob-supply = <&vph_pwr>;
+> +
+> +		vreg_bob: bob {
+> +			regulator-min-microvolt = <3312000>;
+> +			regulator-max-microvolt = <3600000>;
+> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+> +			regulator-allow-bypass;
+> +		};
+> +	};
+> +
+> +	pm8005-rpmh-regulators {
+> +		compatible = "qcom,pm8005-rpmh-regulators";
+> +		qcom,pmic-id = "c";
+> +
+> +		vdd-s1-supply = <&vph_pwr>;
+> +		vdd-s2-supply = <&vph_pwr>;
+> +		vdd-s3-supply = <&vph_pwr>;
+> +		vdd-s4-supply = <&vph_pwr>;
+> +
+> +		vreg_s3c_0p6: smps3 {
+> +			regulator-min-microvolt = <600000>;
+> +			regulator-max-microvolt = <600000>;
+> +		};
+> +	};
+> +};
+> +
+> +&cdsp_pas {
+> +	status = "okay";
+> +	firmware-name = "qcom/sdm845/pixel3/cdsp.mbn";
+> +};
+> +
+> +&dsi0 {
+> +	status = "okay";
+> +	vdda-supply = <&vdda_mipi_dsi0_1p2>;
+> +
+> +	ports {
+> +		port@1 {
+> +			endpoint {
+> +				remote-endpoint = <&lg_sw43408_in_0>;
+> +				data-lanes = <0 1 2 3>;
+> +			};
+> +		};
+> +	};
+> +
+> +	panel@0 {
+> +		compatible = "lg,sw43408";
+> +		reg = <0>;
+> +
+> +		vddi-supply = <&vreg_l14a_1p88>;
+> +		vpnl-supply = <&vreg_l28a_3p0>;
+> +
+> +		reset-gpios = <&tlmm 6 GPIO_ACTIVE_LOW>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&panel_reset_pins &panel_te_pin &panel_pmgpio_pins>;
+> +
+> +		ports {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			port@0 {
+> +				reg = <0>;
+> +				lg_sw43408_in_0: endpoint {
+> +					remote-endpoint = <&dsi0_out>;
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&dsi0_out {
+> +	remote-endpoint = <&lg_sw43408_in_0>;
+> +	data-lanes = <0 1 2 3>;
+> +};
+> +
+> +&dsi0_phy {
+> +	status = "okay";
+> +	vdds-supply = <&vdda_mipi_dsi0_pll>;
+> +};
+> +
+> +&gcc {
+> +	protected-clocks = <GCC_QSPI_CORE_CLK>,
+> +			   <GCC_QSPI_CORE_CLK_SRC>,
+> +			   <GCC_QSPI_CNOC_PERIPH_AHB_CLK>;
+> +};
+> +
+> +&gmu {
+> +	status = "okay";
+> +};
+> +
+> +&gpi_dma0 {
+> +	status = "okay";
+> +};
+> +
+> +&gpu {
+> +	status = "okay";
+> +
+> +	zap-shader {
+> +		memory-region = <&gpu_mem>;
+> +		firmware-name = "qcom/sdm845/pixel3/a630_zap.mbn";
+> +	};
+> +};
+> +
+> +&ipa {
+> +	status = "okay";
+> +
+> +	firmware-name = "qcom/sdm845/pixel3/ipa_fws.mbn";
+> +};
+> +
+> +&mss_pil {
+> +	status = "okay";
+> +	firmware-name = "qcom/sdm845/pixel3/mba.mbn", "qcom/sdm845/pixel3/modem.mbn";
+> +};
+> +
+> +&mdss {
+> +	status = "okay";
+> +};
+> +
+> +&mdss_mdp {
+> +	status = "okay";
+> +};
+
+Not necessary, it is a default state since the commit 4a5622c1d975 
+("arm64: dts: qcom: sdm845: Don't disable MDP explicitly")
+
+> +
+> +&pm8998_gpio {
+> +	volume_up_gpio: vol-up-active {
+> +		pins = "gpio6";
+> +		function = "normal";
+> +		input-enable;
+> +		bias-pull-up;
+> +		qcom,drive-strength = <0>;
+> +	};
+> +
+> +	panel_pmgpio_pins: panel-pmgpio-active {
+> +		pins = "gpio2", "gpio5";
+> +		function = "normal";
+> +		input-enable;
+> +		bias-disable;
+> +		power-source = <0>;
+> +	};
+> +};
+> +
+> +&pm8998_pon {
+> +	resin {
+> +		compatible = "qcom,pm8941-resin";
+> +		interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+> +		debounce = <15625>;
+> +		bias-pull-up;
+> +		linux,code = <KEY_VOLUMEDOWN>;
+> +	};
+
+Please move the (disabled, labelled) resin device to pm8998.dtsi and 
+just add status = "okay" here.
+
+> +};
+> +
+> +&qupv3_id_0 {
+> +	status = "okay";
+> +};
+> +
+> +&qupv3_id_1 {
+> +	status = "okay";
+> +};
+> +
+> +&qup_uart6_default {
+> +	pinmux {
+> +		pins = "gpio45", "gpio46", "gpio47", "gpio48";
+> +		function = "qup6";
+> +	};
+> +
+> +	cts {
+> +		pins = "gpio45";
+> +		bias-disable;
+> +	};
+> +
+> +	rts-tx {
+> +		pins = "gpio46", "gpio47";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	rx {
+> +		pins = "gpio48";
+> +		bias-pull-up;
+> +	};
+> +};
+> +
+> +&qup_uart9_default {
+> +	pinconf-tx {
+> +		pins = "gpio4";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	pinconf-rx {
+> +		pins = "gpio5";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +};
+> +
+> +&tlmm {
+> +	gpio-reserved-ranges = <0 4>, <81 4>;
+> +
+> +	panel_te_pin: panel-te {
+> +		mux {
+> +			pins = "gpio12";
+> +			function = "mdp_vsync";
+> +			drive-strength = <2>;
+> +			bias-disable;
+> +			input-enable;
+> +		};
+> +	};
+> +
+> +	panel_reset_pins: panel-active {
+> +		mux {
+> +			pins = "gpio6", "gpio52";
+> +			function = "gpio";
+> +			drive-strength = <8>;
+> +			bias-disable = <0>;
+> +		};
+> +	};
+> +
+> +	panel_suspend: panel-suspend {
+> +		mux {
+> +			pins = "gpio6", "gpio52";
+> +			function = "gpio";
+> +			drive-strength = <2>;
+> +			bias-pull-down;
+> +		};
+> +	};
+> +
+> +	touchscreen_reset: ts-reset {
+> +		mux {
+> +			pins = "gpio99";
+> +			function = "gpio";
+> +			drive-strength = <8>;
+> +			bias-pull-up;
+> +			//output-high;
+
+debug, can be removed?
+
+> +		};
+> +	};
+> +
+> +	touchscreen_pins: ts-pins {
+> +		mux {
+> +			pins = "gpio125";
+> +			function = "gpio";
+> +			drive-strength = <2>;
+> +			bias-disable;
+> +		};
+> +	};
+> +
+> +	touchscreen_i2c_pins: qup-i2c2-gpio {
+> +		pins = "gpio27", "gpio28";
+> +		function = "gpio";
+> +
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +};
+> +
+> +&uart6 {
+> +	status = "okay";
+> +
+> +	bluetooth {
+> +		compatible = "qcom,wcn3990-bt";
+> +
+> +		vddio-supply = <&vreg_s4a_1p8>;
+> +		vddxo-supply = <&vreg_l7a_1p8>;
+> +		vddrf-supply = <&vreg_l17a_1p3>;
+> +		vddch0-supply = <&vreg_l25a_3p3>;
+> +		max-speed = <3200000>;
+> +	};
+> +};
+> +
+> +&uart9 {
+> +	status = "okay";
+> +};
+> +
+> +&usb_1 {
+> +	status = "okay";
+> +};
+> +
+> +&usb_1_dwc3 {
+> +	dr_mode = "peripheral";
+> +};
+> +
+> +&usb_1_hsphy {
+> +	status = "okay";
+> +
+> +	vdd-supply = <&vreg_l1a_0p875>;
+> +	vdda-pll-supply = <&vreg_l12a_1p8>;
+> +	vdda-phy-dpdm-supply = <&vreg_l24a_3p075>;
+> +
+> +	qcom,imp-res-offset-value = <8>;
+> +	qcom,hstx-trim-value = <QUSB2_V2_HSTX_TRIM_21_6_MA>;
+> +	qcom,preemphasis-level = <QUSB2_V2_PREEMPHASIS_5_PERCENT>;
+> +	qcom,preemphasis-width = <QUSB2_V2_PREEMPHASIS_WIDTH_HALF_BIT>;
+> +};
+> +
+> +&usb_1_qmpphy {
+> +	status = "okay";
+> +
+> +	vdda-phy-supply = <&vreg_l26a_1p2>;
+> +	vdda-pll-supply = <&vreg_l1a_0p875>;
+> +};
+> +
+> +&usb_2 {
+> +	status = "okay";
+> +};
+> +
+> +&usb_2_dwc3 {
+> +	dr_mode = "host";
+> +};
+> +
+> +&usb_2_hsphy {
+> +	status = "okay";
+> +
+> +	vdd-supply = <&vreg_l1a_0p875>;
+> +	vdda-pll-supply = <&vreg_l12a_1p8>;
+> +	vdda-phy-dpdm-supply = <&vreg_l24a_3p075>;
+> +
+> +	qcom,imp-res-offset-value = <8>;
+> +	qcom,hstx-trim-value = <QUSB2_V2_HSTX_TRIM_22_8_MA>;
+> +};
+> +
+> +&usb_2_qmpphy {
+> +	status = "okay";
+> +
+> +	vdda-phy-supply = <&vreg_l26a_1p2>;
+> +	vdda-pll-supply = <&vreg_l1a_0p875>;
+> +};
+> +
+> +&ufs_mem_hc {
+> +	status = "okay";
+> +
+> +	reset-gpios = <&tlmm 150 GPIO_ACTIVE_LOW>;
+> +
+> +	vcc-supply = <&vreg_l20a_2p95>;
+> +	vcc-max-microamp = <800000>;
+> +};
+> +
+> +&ufs_mem_phy {
+> +	status = "okay";
+> +
+> +	vdda-phy-supply = <&vreg_l1a_0p875>;
+> +	vdda-pll-supply = <&vreg_l26a_1p2>;
+> +};
+> +
+> +&venus {
+> +	status = "okay";
+> +	firmware-name = "qcom/sdm845/oneplus6/venus.mbn";
+
+Why are you using the oneplus6 here?
+
+> +};
+> +
+> +&wifi {
+> +	status = "okay";
+> +
+> +	vdd-0.8-cx-mx-supply = <&vreg_l5a_0p8>;
+> +	vdd-1.8-xo-supply = <&vreg_l7a_1p8>;
+> +	vdd-1.3-rfa-supply = <&vreg_l17a_1p3>;
+> +	vdd-3.3-ch0-supply = <&vreg_l25a_3p3>;
+> +
+> +	qcom,snoc-host-cap-8bit-quirk;
+> +	qcom,ath10k-calibration-variant = "google_blueline";
+
+Ideally Kalle Valo should bless this string, added him to the Cc list. 
+Could you please submit the board file to the ath10k (see [1] for the 
+description and [2] for an example).
+
+
+[1] https://wireless.wiki.kernel.org/en/users/drivers/ath10k/boardfiles
+[2] 
+https://lore.kernel.org/ath10k/CAA8EJpphUrxr5gtW0=-tZh-DrKXmHkfFxWMvYRpTUGuCesGCbw@mail.gmail.com/T/#u
+
+> +};
+
+
+-- 
+With best wishes
+Dmitry

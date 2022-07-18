@@ -2,107 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4C157860F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E7F578612
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbiGRPLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 11:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
+        id S235211AbiGRPMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233838AbiGRPL2 (ORCPT
+        with ESMTP id S234141AbiGRPMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:11:28 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1B31CFEE
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:11:27 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id b11so21771469eju.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:11:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=7F8+UCVWKbAQTKBNFCoH9X0sSLk2kYOf1pqvUZLzBOw=;
-        b=AttdUXSlQQ23O7n53YGj3RpOZCZkERAaZ8RUL7dsYzNGZv4CgJGt3nd1yz4J0utSKD
-         rlcKYbc2pRl2IWX6YZBfhH4dUzCq1euVjE9wyNpai5f8APvicipOhGGZ+KkM1HF1/cos
-         zRukMw/OOLUl6wV4BNgQznA7zyXY3cPwWXgsLR847K/uhA5U/vdW2/Eh+O7PNIP0lg08
-         U+9N5F0Akv2uELN+3TYELC7hOOrWsvoFNxV/ory/4xD5RgvaySeU8qMXFRvmjganrwkf
-         5lXZgumWxFHR8XDyCRiFiwiCmjktNoysOK1Oy/7x70ebYLJkdF9AuW12ussAaiyFtZ9e
-         UEsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=7F8+UCVWKbAQTKBNFCoH9X0sSLk2kYOf1pqvUZLzBOw=;
-        b=uhNWzZ29cbjVwPRMekvywYRns/0FaRNbDl0ecwrCME/NtmmgGZpV8aYAh96a+aML6g
-         SyaF4lKtXKGslW/IYKtFzhVwPbq+XL+b0hdgZ/0EKycmEeo92lCQcReTVsIj6Tim1NxO
-         Js89T0lfTZzY7Uw9VzMxuIeyXoKtIqxfinhdDCz6XMRzUm/TARHofil9unITSBxVrv59
-         uIkMlc1uX+Difif4KdI8NyZyQMEXbhr2593WrGpYf7+tac0Pipx0BhkI3awv7rEMyVFb
-         CaaQVwa62hiJ+sTCShLxYEiQr0vECjUeVQNhXcD5qGwnhynE4DH6mH61/1jMQ9NDy9Dg
-         DQMg==
-X-Gm-Message-State: AJIora+mzBXdOHJEPHp3F/qyGfY98uWiU0wzdofVHrmpGxlb5zs76Kkn
-        omvePNqzCO2rKBOaHXBBnoGo/LSsmT+TwfVk1GIvufAxxBRUDw==
-X-Google-Smtp-Source: AGRyM1tSjRiJE8EBBkz12zOUZpQCQpNZz6k17kw++hvdoKtgtsgwua1Rxp/VjTOnPfWsavNFrxusXPBVYN+ElPg2jIM=
-X-Received: by 2002:a17:907:7604:b0:72b:4ad5:b21c with SMTP id
- jx4-20020a170907760400b0072b4ad5b21cmr25523698ejc.412.1658157085104; Mon, 18
- Jul 2022 08:11:25 -0700 (PDT)
+        Mon, 18 Jul 2022 11:12:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B421CFEE
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:12:45 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1769E20113;
+        Mon, 18 Jul 2022 15:12:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658157164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=n6LVjaU4a6ZqK4u6O9u+Kak/7hh30ZC7LW8h15/5TNQ=;
+        b=YW1yP+oScnnss1fEGR8gDuv7b/Y0UQhHpO9M1aypLFmJteAsU02Yaev3O3bkvutzPSIDOa
+        6TWKbXERfig1vk7n+zUikahEuBHMa/ah/EL9hCGXdl0JsVqsZCoQPWNUSi/L68psqd0Ngt
+        PoDzF0jotSdp8omAlTUSebeiNqbLPvE=
+Received: from alley.suse.cz (unknown [10.100.201.202])
+        by relay2.suse.de (Postfix) with ESMTP id B962E2C141;
+        Mon, 18 Jul 2022 15:12:42 +0000 (UTC)
+From:   Petr Mladek <pmladek@suse.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Marco Elver <elver@google.com>, kasan-dev@googlegroups.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
+Subject: [PATCH v2] printk: Make console tracepoint safe in NMI() context
+Date:   Mon, 18 Jul 2022 17:11:43 +0200
+Message-Id: <20220718151143.32112-1-pmladek@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 18 Jul 2022 20:41:13 +0530
-Message-ID: <CA+G9fYuBK8yvEQb-DL9EjFSOcW1sfdj5gmg_kZEYHnPN+6mQkw@mail.gmail.com>
-Subject: perf: util/annotate.c:1765:9: error: too few arguments to function 'init_disassemble_info'
-To:     open list <linux-kernel@vger.kernel.org>,
-        perf-users <perf-users@linaro.org>, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andres Freund <andres@anarazel.de>,
-        andrew.burgess@embecosm.com,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Roman Gushchin <guro@fb.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-with reference to other email thread on perf build failure on Linus mainline [1]
+The commit 701850dc0c31bfadf75a0 ("printk, tracing: fix console
+tracepoint") moved the tracepoint from console_unlock() to
+vprintk_store(). As a result, it might be called in any
+context and triggered the following warning:
 
-I see perf build failure today on Linus mainline tree with this error [2]
-with gcc-11.
+  WARNING: CPU: 1 PID: 16462 at include/trace/events/printk.h:10 printk_sprint+0x81/0xda
+  Modules linked in: ppdev parport_pc parport
+  CPU: 1 PID: 16462 Comm: event_benchmark Not tainted 5.19.0-rc5-test+ #5
+  Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
+  EIP: printk_sprint+0x81/0xda
+  Code: 89 d8 e8 88 fc 33 00 e9 02 00 00 00 eb 6b 64 a1 a4 b8 91 c1 e8 fd d6 ff ff 84 c0 74 5c 64 a1 14 08 92 c1 a9 00 00 f0 00 74 02 <0f> 0b 64 ff 05 14 08 92 c1 b8 e0 c4 6b c1 e8 a5 dc 00 00 89 c7 e8
+  EAX: 80110001 EBX: c20a52f8 ECX: 0000000c EDX: 6d203036
+  ESI: 3df6004c EDI: 00000000 EBP: c61fbd7c ESP: c61fbd70
+  DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010006
+  CR0: 80050033 CR2: b7efc000 CR3: 05b80000 CR4: 001506f0
+  Call Trace:
+   vprintk_store+0x24b/0x2ff
+   vprintk+0x37/0x4d
+   _printk+0x14/0x16
+   nmi_handle+0x1ef/0x24e
+   ? find_next_bit.part.0+0x13/0x13
+   ? find_next_bit.part.0+0x13/0x13
+   ? function_trace_call+0xd8/0xd9
+   default_do_nmi+0x57/0x1af
+   ? trace_hardirqs_off_finish+0x2a/0xd9
+   ? to_kthread+0xf/0xf
+   exc_nmi+0x9b/0xf4
+   asm_exc_nmi+0xae/0x29c
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+It comes from:
 
-  CC      util/annotate.o
-  CC      util/block-info.o
-  CC      bench/mem-functions.o
-  MKDIR   tests/
-  CC      tests/parse-events.o
-util/annotate.c: In function 'symbol__disassemble_bpf':
-util/annotate.c:1765:9: error: too few arguments to function
-'init_disassemble_info'
- 1765 |         init_disassemble_info(&info, s,
-      |         ^~~~~~~~~~~~~~~~~~~~~
-In file included from util/annotate.c:1718:
-/usr/include/dis-asm.h:472:13: note: declared here
-  472 | extern void init_disassemble_info (struct disassemble_info
-*dinfo, void *stream,
-      |             ^~~~~~~~~~~~~~~~~~~~~
-make[4]: *** [tools/build/Makefile.build:97: util/annotate.o] Error 1
+  #define __DO_TRACE(name, args, cond, rcuidle) \
+  [...]
+		/* srcu can't be used from NMI */	\
+		WARN_ON_ONCE(rcuidle && in_nmi());	\
 
-Please refer link [3] for more details,
+It might be possible to make srcu working in NMI. But it
+would be slower on some architectures. It is not worth
+doing it just because of this tracepoint.
 
-[1] https://lore.kernel.org/bpf/20220715191641.go6xbmhic3kafcsc@awork3.anarazel.de/T/
-[2] https://builds.tuxbuild.com/2C7WeIEmOBAGYdKtUjtXB0Yn7Ts/
-[3] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.19-rc6-448-gff6992735ade/testrun/10863106/suite/build/test/gcc-11-lkftconfig-perf/history/
+It would be possible to disable this tracepoint in NMI
+or in rcuidle context. Where the rcuidle context looks
+more rare and thus more acceptable to be ignored.
 
-Best regards
-Naresh Kamboju
+Alternative solution would be to move the tracepoint
+back to console code. But the location is less reliable
+by definition. Also the synchronization against other
+tracing messages is much worse.
+
+Let's ignore the tracepoint in rcuidle context as the least
+evil solution.
+
+Link: https://lore.kernel.org/r/20220712151655.GU1790663@paulmck-ThinkPad-P17-Gen-1
+
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+---
+Changes against v1:
+
+  + use rcu_is_watching() instead of rcu_is_idle_cpu()
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+ include/trace/events/printk.h | 9 ++++++++-
+ kernel/printk/printk.c        | 2 +-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/include/trace/events/printk.h b/include/trace/events/printk.h
+index 13d405b2fd8b..5485513d8838 100644
+--- a/include/trace/events/printk.h
++++ b/include/trace/events/printk.h
+@@ -7,11 +7,18 @@
+ 
+ #include <linux/tracepoint.h>
+ 
+-TRACE_EVENT(console,
++TRACE_EVENT_CONDITION(console,
+ 	TP_PROTO(const char *text, size_t len),
+ 
+ 	TP_ARGS(text, len),
+ 
++	/*
++	 * trace_console_rcuidle() is not working in NMI. printk()
++	 * is used more often in NMI than in rcuidle context.
++	 * Choose the less evil solution here.
++	 */
++	TP_CONDITION(rcu_is_watching()),
++
+ 	TP_STRUCT__entry(
+ 		__dynamic_array(char, msg, len + 1)
+ 	),
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index b49c6ff6dca0..bd76a45ecc7f 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -2108,7 +2108,7 @@ static u16 printk_sprint(char *text, u16 size, int facility,
+ 		}
+ 	}
+ 
+-	trace_console_rcuidle(text, text_len);
++	trace_console(text, text_len);
+ 
+ 	return text_len;
+ }
+-- 
+2.35.3
+

@@ -2,478 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD3C57796C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A96457796B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232951AbiGRBvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 21:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S231629AbiGRBur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 21:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiGRBvN (ORCPT
+        with ESMTP id S229536AbiGRBuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 21:51:13 -0400
-X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 17 Jul 2022 18:51:10 PDT
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855F713D23
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:51:10 -0700 (PDT)
-X-UUID: 84e79db355a543c3bc97903c6cca7ee8-20220718
-X-UUID: 84e79db355a543c3bc97903c6cca7ee8-20220718
-X-User: oushixiong@kylinos.cn
-Received: from localhost.localdomain [(111.48.58.12)] by mailgw
-        (envelope-from <oushixiong@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 214112793; Mon, 18 Jul 2022 09:46:43 +0800
-From:   oushixiong <oushixiong@kylinos.cn>
-To:     Dave Airlie <airlied@redhat.com>
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, oushixiong <oushixiong@kylinos.cn>
-Subject: [PATCH] drm/ast: add dmabuf/prime buffer sharing support
-Date:   Mon, 18 Jul 2022 09:45:59 +0800
-Message-Id: <20220718014559.64069-1-oushixiong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 17 Jul 2022 21:50:44 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B3612617;
+        Sun, 17 Jul 2022 18:50:43 -0700 (PDT)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 26I1oNpJ003576;
+        Mon, 18 Jul 2022 10:50:24 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 26I1oNpJ003576
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1658109024;
+        bh=lhmLp+GypwgvX/iEleEwdXY5F8LazzpdirKNejyUh70=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kUejGBPiekNwkwWeDpQkzwgpJgQjokGGstOEhiTj+epUmmHWC0Eu1v7fUsbXuzQP9
+         Aicu5fJXjtpJG8q0HBKsyFVLsNYApqHwggTswSdkgUl54kEfA9fOWp/1r71XVeorMq
+         U2jXIOdHFJcA1wO32xGbJIp/HP2DEE/e1gOZwykaeob6Lvoo34z4BDtviLTCkb/ol8
+         YgQuSgMxtLoTwNUoJgLjolePzc/DZO9NzV8Eku+pkYiQH3WH0lNCiYYsvzEeOrzhns
+         ytS8vZMUtyz7bTBW5Vqqaz2Ic4E7YfWxpHRAdUgRc1Y7B6WiBCeOjkQzh/lK0bAO7s
+         mTfpKk0aEx+Qw==
+X-Nifty-SrcIP: [209.85.128.43]
+Received: by mail-wm1-f43.google.com with SMTP id ay11-20020a05600c1e0b00b003a3013da120so6918769wmb.5;
+        Sun, 17 Jul 2022 18:50:24 -0700 (PDT)
+X-Gm-Message-State: AJIora8lOpHSSvhCBKP8P2sI8yRREX0tNNaXk/+877Hm/UzPsXlhCPVv
+        TWXv3OQse/RhTrsDyZ8PNzZ7BGjlJ8qSJswJ3JY=
+X-Google-Smtp-Source: AGRyM1uhKv6UpDeF+V4+PlWw4qGSsEoWbI4ApsTU5kcseJNaD5ObwV6+1zvCPjnBdRBA7PfVkeJBTYjUkGKaDy2GFrE=
+X-Received: by 2002:a05:600c:a42:b0:39c:9086:8a34 with SMTP id
+ c2-20020a05600c0a4200b0039c90868a34mr30609166wmq.169.1658109022757; Sun, 17
+ Jul 2022 18:50:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20220716093249.19326-1-bagasdotme@gmail.com>
+In-Reply-To: <20220716093249.19326-1-bagasdotme@gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 18 Jul 2022 10:49:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASvOjn+abQ1196+tpvVYnj9zkPPnuc4on02aQG_YhU_dw@mail.gmail.com>
+Message-ID: <CAK7LNASvOjn+abQ1196+tpvVYnj9zkPPnuc4on02aQG_YhU_dw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] kbuild: lto: documentation fixes
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Martin Liska <mliska@suse.cz>, Andi Kleen <ak@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds ast specific codes for DRM Prime feature.
-User application can get file descriptor from gem handle and also
-gem handle from file descriptor.this is to allow for offloading
-of rendering in one direction and outputs in the other.
+On Sat, Jul 16, 2022 at 6:33 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> Here is documentation fixes for kbuild LTO feature tree [1]. Two patches
+> fixes warnings reported by kernel test robot, the others are formatting
+> improvements.
 
-Signed-off-by: oushixiong <oushixiong@kylinos.cn>
----
- drivers/gpu/drm/ast/ast_drv.c  |  16 +++-
- drivers/gpu/drm/ast/ast_drv.h  |  19 ++++-
- drivers/gpu/drm/ast/ast_main.c | 115 ++++++++++++++++++++++++++++-
- drivers/gpu/drm/ast/ast_ttm.c  | 130 ++++++++++++++++++++++++++++++++-
- 4 files changed, 273 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-index bf589c53b908..084d0c8b0f6b 100644
---- a/drivers/gpu/drm/ast/ast_drv.c
-+++ b/drivers/gpu/drm/ast/ast_drv.c
-@@ -214,7 +214,7 @@ static const struct file_operations ast_fops = {
- };
- 
- static struct drm_driver driver = {
--	.driver_features = DRIVER_MODESET | DRIVER_GEM,
-+	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_PRIME,
- 
- 	.load = ast_driver_load,
- 	.unload = ast_driver_unload,
-@@ -231,6 +231,20 @@ static struct drm_driver driver = {
- 	.dumb_create = ast_dumb_create,
- 	.dumb_map_offset = ast_dumb_mmap_offset,
- 
-+	.prime_handle_to_fd     = drm_gem_prime_handle_to_fd,
-+	.prime_fd_to_handle     = drm_gem_prime_fd_to_handle,
-+	.gem_prime_import       = drm_gem_prime_import,
-+	.gem_prime_export       = drm_gem_prime_export,
-+
-+	.gem_prime_get_sg_table = ast_gem_prime_get_sg_table,
-+	.gem_prime_import_sg_table = ast_gem_prime_import_sg_table,
-+	.gem_prime_vmap         = ast_gem_prime_vmap,
-+	.gem_prime_vunmap       = ast_gem_prime_vunmap,
-+	.gem_prime_pin          = ast_gem_prime_pin,
-+	.gem_prime_unpin        = ast_gem_prime_unpin,
-+
-+	.gem_prime_res_obj = ast_gem_prime_res_obj,
-+
- };
- 
- static int __init ast_init(void)
-diff --git a/drivers/gpu/drm/ast/ast_drv.h b/drivers/gpu/drm/ast/ast_drv.h
-index e6c4cd3dc50e..b19b9aa5a517 100644
---- a/drivers/gpu/drm/ast/ast_drv.h
-+++ b/drivers/gpu/drm/ast/ast_drv.h
-@@ -258,6 +258,7 @@ struct ast_encoder {
- struct ast_framebuffer {
- 	struct drm_framebuffer base;
- 	struct drm_gem_object *obj;
-+	void *vmapping;
- };
- 
- struct ast_fbdev {
-@@ -330,6 +331,7 @@ struct ast_bo {
- 	struct drm_gem_object gem;
- 	struct ttm_place placements[3];
- 	int pin_count;
-+	struct ttm_bo_kmap_obj dma_buf_vmap;
- };
- #define gem_to_ast_bo(gobj) container_of((gobj), struct ast_bo, gem)
- 
-@@ -361,7 +363,9 @@ int ast_mm_init(struct ast_private *ast);
- void ast_mm_fini(struct ast_private *ast);
- 
- int ast_bo_create(struct drm_device *dev, int size, int align,
--		  uint32_t flags, struct ast_bo **pastbo);
-+		uint32_t flags, struct sg_table *sg,
-+		struct reservation_object *resv,
-+		struct ast_bo **pastbo);
- 
- int ast_gem_create(struct drm_device *dev,
- 		   u32 size, bool iskernel,
-@@ -369,6 +373,19 @@ int ast_gem_create(struct drm_device *dev,
- 
- int ast_bo_pin(struct ast_bo *bo, u32 pl_flag, u64 *gpu_addr);
- int ast_bo_unpin(struct ast_bo *bo);
-+struct sg_table *ast_gem_prime_get_sg_table(struct drm_gem_object *obj);
-+void *ast_gem_prime_vmap(struct drm_gem_object *obj);
-+void ast_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr);
-+
-+struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-+			struct dma_buf_attachment *attach,
-+			struct sg_table *sg);
-+
-+int ast_gem_prime_pin(struct drm_gem_object *obj);
-+void ast_gem_prime_unpin(struct drm_gem_object *obj);
-+
-+struct reservation_object *ast_gem_prime_res_obj(struct drm_gem_object *obj);
-+
- 
- static inline int ast_bo_reserve(struct ast_bo *bo, bool no_wait)
- {
-diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
-index 224fa1ef87ff..6f8fc49b062c 100644
---- a/drivers/gpu/drm/ast/ast_main.c
-+++ b/drivers/gpu/drm/ast/ast_main.c
-@@ -28,7 +28,7 @@
- #include <drm/drmP.h>
- #include "ast_drv.h"
- 
--
-+#include <linux/dma-buf.h>
- #include <drm/drm_fb_helper.h>
- #include <drm/drm_crtc_helper.h>
- 
-@@ -383,17 +383,125 @@ static int ast_get_dram_info(struct drm_device *dev)
- 	return 0;
- }
- 
-+int ast_handle_damage(struct ast_framebuffer *fb, int x, int y,
-+			int width, int height)
-+{
-+	struct ast_bo *dst_bo = NULL;
-+	void *dst = NULL;
-+	int ret = 0, i;
-+	unsigned long offset = 0;
-+	bool unmap = false;
-+	unsigned int bytesPerPixel;
-+
-+	bytesPerPixel = fb->base.format->cpp[0];
-+
-+	if (!fb->obj->import_attach)
-+		return -EINVAL;
-+
-+	if (!fb->vmapping) {
-+		fb->vmapping = dma_buf_vmap(fb->obj->import_attach->dmabuf);
-+		if (!fb->vmapping)
-+			return 0;
-+	}
-+	dst_bo = gem_to_ast_bo(fb->obj);
-+	ret = ast_bo_reserve(dst_bo, true);
-+	if (ret) {
-+		DRM_ERROR("ast_bo_reserve failed\n");
-+		ast_bo_unreserve(dst_bo);
-+		goto error;
-+	}
-+	if (!dst_bo->dma_buf_vmap.virtual) {
-+		ret = ttm_bo_kmap(&dst_bo->bo, 0,
-+			dst_bo->bo.num_pages, &dst_bo->dma_buf_vmap);
-+		if (ret) {
-+			DRM_ERROR("failed to kmap fbcon\n");
-+			goto error;
-+		}
-+		unmap = true;
-+	}
-+	dst = dst_bo->dma_buf_vmap.virtual;
-+
-+	for (i = y; i < y + height; i++) {
-+		offset = i * fb->base.pitches[0] + (x * bytesPerPixel);
-+		memcpy_toio(dst + offset, fb->vmapping + offset,
-+			width * bytesPerPixel);
-+	}
-+
-+	if (unmap)
-+		ttm_bo_kunmap(&dst_bo->dma_buf_vmap);
-+	ast_bo_unreserve(dst_bo);
-+
-+error:
-+	return 0;
-+}
-+
- static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
- {
- 	struct ast_framebuffer *ast_fb = to_ast_framebuffer(fb);
- 
-+	if (ast_fb->obj->import_attach) {
-+		if (ast_fb->vmapping)
-+			dma_buf_vunmap(ast_fb->obj->import_attach->dmabuf,
-+				ast_fb->vmapping);
-+	}
-+
- 	drm_gem_object_put_unlocked(ast_fb->obj);
- 	drm_framebuffer_cleanup(fb);
- 	kfree(ast_fb);
- }
- 
-+static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-+				struct drm_file *file,
-+				unsigned int flags,
-+				unsigned int color,
-+				struct drm_clip_rect *clips,
-+				unsigned int num_clips)
-+{
-+	struct ast_framebuffer *ast_fb = to_ast_framebuffer(fb);
-+	int i, ret = 0;
-+
-+	drm_modeset_lock_all(fb->dev);
-+
-+	if (ast_fb->obj->import_attach) {
-+		ret = dma_buf_begin_cpu_access(
-+				ast_fb->obj->import_attach->dmabuf,
-+				DMA_FROM_DEVICE);
-+		if (ret)
-+			goto unlock;
-+		}
-+
-+	for (i = 0; i < num_clips; i++) {
-+		ret = ast_handle_damage(ast_fb, clips[i].x1, clips[i].y1,
-+			clips[i].x2 - clips[i].x1,
-+			clips[i].y2 - clips[i].y1);
-+		if (ret)
-+			break;
-+	}
-+
-+	if (ast_fb->obj->import_attach) {
-+		dma_buf_end_cpu_access(ast_fb->obj->import_attach->dmabuf,
-+			DMA_FROM_DEVICE);
-+	}
-+
-+unlock:
-+	drm_modeset_unlock_all(fb->dev);
-+
-+	return ret;
-+}
-+
-+static int ast_user_framebuffer_create_handle(struct drm_framebuffer *fb,
-+			struct drm_file *file_priv,
-+			unsigned int *handle)
-+{
-+	struct ast_framebuffer *ast_fb = to_ast_framebuffer(fb);
-+
-+	return drm_gem_handle_create(file_priv, ast_fb->obj, handle);
-+}
-+
- static const struct drm_framebuffer_funcs ast_fb_funcs = {
-+	.create_handle = ast_user_framebuffer_create_handle,
- 	.destroy = ast_user_framebuffer_destroy,
-+	.dirty = ast_user_framebuffer_dirty,
- };
- 
- 
-@@ -605,7 +713,7 @@ int ast_gem_create(struct drm_device *dev,
- 	if (size == 0)
- 		return -EINVAL;
- 
--	ret = ast_bo_create(dev, size, 0, 0, &astbo);
-+	ret = ast_bo_create(dev, size, 0, 0, NULL, NULL, &astbo);
- 	if (ret) {
- 		if (ret != -ERESTARTSYS)
- 			DRM_ERROR("failed to allocate GEM object\n");
-@@ -656,6 +764,9 @@ void ast_gem_free_object(struct drm_gem_object *obj)
- {
- 	struct ast_bo *ast_bo = gem_to_ast_bo(obj);
- 
-+	if (ast_bo->gem.import_attach)
-+		drm_prime_gem_destroy(&ast_bo->gem, ast_bo->bo.sg);
-+
- 	ast_bo_unref(&ast_bo);
- }
- 
-diff --git a/drivers/gpu/drm/ast/ast_ttm.c b/drivers/gpu/drm/ast/ast_ttm.c
-index fe354ebf374d..fea0429407e0 100644
---- a/drivers/gpu/drm/ast/ast_ttm.c
-+++ b/drivers/gpu/drm/ast/ast_ttm.c
-@@ -27,6 +27,7 @@
-  */
- #include <drm/drmP.h>
- #include <drm/ttm/ttm_page_alloc.h>
-+#include <linux/dma-buf.h>
- 
- #include "ast_drv.h"
- 
-@@ -215,8 +216,38 @@ static struct ttm_tt *ast_ttm_tt_create(struct ttm_buffer_object *bo,
- 	return tt;
- }
- 
-+static int ast_ttm_tt_populate(struct ttm_tt *ttm,
-+			struct ttm_operation_ctx *ctx)
-+{
-+	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
-+
-+	if (ttm->state != tt_unpopulated)
-+		return 0;
-+
-+	if (slave && ttm->sg) {
-+		drm_prime_sg_to_page_addr_arrays(ttm->sg, ttm->pages,
-+				NULL, ttm->num_pages);
-+		ttm->state = tt_unbound;
-+		return 0;
-+	}
-+
-+	return ttm_pool_populate(ttm, ctx);
-+}
-+
-+static void ast_ttm_tt_unpopulate(struct ttm_tt *ttm)
-+{
-+	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
-+
-+	if (slave)
-+		return;
-+
-+	ttm_pool_unpopulate(ttm);
-+}
-+
- struct ttm_bo_driver ast_bo_driver = {
- 	.ttm_tt_create = ast_ttm_tt_create,
-+	.ttm_tt_populate = ast_ttm_tt_populate,
-+	.ttm_tt_unpopulate = ast_ttm_tt_unpopulate,
- 	.init_mem_type = ast_bo_init_mem_type,
- 	.eviction_valuable = ttm_bo_eviction_valuable,
- 	.evict_flags = ast_bo_evict_flags,
-@@ -297,13 +328,21 @@ void ast_ttm_placement(struct ast_bo *bo, int domain)
- }
- 
- int ast_bo_create(struct drm_device *dev, int size, int align,
--		  uint32_t flags, struct ast_bo **pastbo)
-+		  uint32_t flags, struct sg_table *sg,
-+		  struct reservation_object *resv,
-+		  struct ast_bo **pastbo)
- {
- 	struct ast_private *ast = dev->dev_private;
- 	struct ast_bo *astbo;
- 	size_t acc_size;
-+	enum ttm_bo_type type;
- 	int ret;
- 
-+	if (sg)
-+		type = ttm_bo_type_sg;
-+	else
-+		type = ttm_bo_type_device;
-+
- 	astbo = kzalloc(sizeof(struct ast_bo), GFP_KERNEL);
- 	if (!astbo)
- 		return -ENOMEM;
-@@ -320,9 +359,9 @@ int ast_bo_create(struct drm_device *dev, int size, int align,
- 				       sizeof(struct ast_bo));
- 
- 	ret = ttm_bo_init(&ast->ttm.bdev, &astbo->bo, size,
--			  ttm_bo_type_device, &astbo->placement,
-+			  type, &astbo->placement,
- 			  align >> PAGE_SHIFT, false, acc_size,
--			  NULL, NULL, ast_bo_ttm_destroy);
-+			  sg, resv, ast_bo_ttm_destroy);
- 	if (ret)
- 		goto error;
- 
-@@ -418,3 +457,88 @@ int ast_mmap(struct file *filp, struct vm_area_struct *vma)
- 	ast = file_priv->minor->dev->dev_private;
- 	return ttm_bo_mmap(filp, vma, &ast->ttm.bdev);
- }
-+
-+struct sg_table *ast_gem_prime_get_sg_table(struct drm_gem_object *obj)
-+{
-+	struct ast_bo *bo = gem_to_ast_bo(obj);
-+	int npages = bo->bo.num_pages;
-+
-+	return drm_prime_pages_to_sg(bo->bo.ttm->pages, npages);
-+}
-+
-+void *ast_gem_prime_vmap(struct drm_gem_object *obj)
-+{
-+	struct ast_bo *bo = gem_to_ast_bo(obj);
-+	int ret;
-+
-+	ret = ttm_bo_kmap(&bo->bo, 0, bo->bo.num_pages,
-+			&bo->dma_buf_vmap);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return bo->dma_buf_vmap.virtual;
-+}
-+
-+void ast_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr)
-+{
-+	struct ast_bo *bo = gem_to_ast_bo(obj);
-+
-+	ttm_bo_kunmap(&bo->dma_buf_vmap);
-+}
-+
-+struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-+				struct dma_buf_attachment *attach,
-+				struct sg_table *sg)
-+{
-+	struct ast_bo *bo;
-+	int ret;
-+
-+	struct reservation_object *resv = attach->dmabuf->resv;
-+
-+	ww_mutex_lock(&resv->lock, NULL);
-+	ret = ast_bo_create(dev, attach->dmabuf->size,
-+			PAGE_SIZE, 0, sg, resv, &bo);
-+	ww_mutex_unlock(&resv->lock);
-+
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return &bo->gem;
-+}
-+
-+int ast_gem_prime_pin(struct drm_gem_object *obj)
-+{
-+	struct ast_bo *bo  = gem_to_ast_bo(obj);
-+	int ret = 0;
-+
-+	ret = ast_bo_reserve(bo, false);
-+	if (unlikely(ret != 0))
-+		return ret;
-+
-+	/* pin buffer into GTT */
-+	ret = ast_bo_pin(bo, TTM_PL_FLAG_SYSTEM, NULL);
-+	ast_bo_unreserve(bo);
-+
-+	return ret;
-+}
-+
-+void ast_gem_prime_unpin(struct drm_gem_object *obj)
-+{
-+	struct ast_bo *bo = gem_to_ast_bo(obj);
-+	int ret = 0;
-+
-+	ret = ast_bo_reserve(bo, false);
-+	if (unlikely(ret != 0))
-+		return;
-+
-+	ast_bo_unpin(bo);
-+	ast_bo_unreserve(bo);
-+}
-+
-+struct reservation_object *ast_gem_prime_res_obj(struct drm_gem_object *obj)
-+{
-+	struct ast_bo *bo = gem_to_ast_bo(obj);
-+
-+	return bo->bo.resv;
-+}
-+
+Please do not submit patches unrelated to the mainline.
+
+This series applies to the individual repository of Jiri Slaby.
+
+
+
+
+
+
+
+
+
+>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+>
+> Bagas Sanjaya (4):
+>   Documentation: lto: add blank line padding before single requirement
+>     list
+>   Documentation: lto: use bullet list for FAQ
+>   Documentation: lto: use bullet lists for external link references list
+>   Documentation: lto: add LTO documentation to toc index
+>
+>  Documentation/kbuild/index.rst     |  2 ++
+>  Documentation/kbuild/lto-build.rst | 36 +++++++++++++++++-------------
+>  2 files changed, 23 insertions(+), 15 deletions(-)
+>
+>
+> base-commit: 79a278f10955da2801240f52efb828d158b2b36c
+> --
+> An old man doll... just what I always wanted! - Clara
+>
+
+
 -- 
-2.17.1
-
+Best Regards
+Masahiro Yamada

@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DDC578B87
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0496578B89
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234436AbiGRUK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 16:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
+        id S234618AbiGRUKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 16:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234227AbiGRUKX (ORCPT
+        with ESMTP id S234227AbiGRUKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 16:10:23 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F9AA462;
-        Mon, 18 Jul 2022 13:10:22 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id o2so5192437ill.6;
-        Mon, 18 Jul 2022 13:10:22 -0700 (PDT)
+        Mon, 18 Jul 2022 16:10:45 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B7C2983A;
+        Mon, 18 Jul 2022 13:10:45 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id p81so10245904iod.2;
+        Mon, 18 Jul 2022 13:10:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=QqLfFJGdvrKUW1fmZt9ValV02p3rXb0EIAq0v1cNES8=;
-        b=NnevbM7/7BUWDjPmVGEmz90r4bSVnH9OwSTL0h3dLHphxNrlH2uZoskTfY4peqiEqc
-         cfPB7V1QR2f6jHUD9e9RFCiDJTR1Eh/XnfvwG15w99GPvRWh28Az2pbOOrVG3alC6B45
-         nH19uH2brEOxmHj9HpaDjDflzs85ctsx9LkovZedii3ImuUtRZjalIftNijaKWTYpck9
-         jt89HbQ6C3+Yu6Ey6caVRr5nwnRdj5lPYnUlg4ves3ZUvHHESGJj10den6ewsq0K6R+3
-         TgmpJbI4fpkEvyVLQA8HIPANjAIIeH3h5gnvOnPXduxNhsdR7optT/y4NQx9gEqbb1wi
-         wi9A==
-X-Gm-Message-State: AJIora/FxP8yy8fiNIa54zf49p3EkWMumY0rgzbquwWxk/dsR83yp7G0
-        bDCptmwxGfu/DCsLnUpZtw==
-X-Google-Smtp-Source: AGRyM1vIK3KywiBRGl3M+VsgE1D2GxpaHCm/sub2KfIH9kA0N1m3Epw0wvneMsVhfP/2VtUlWvQIIg==
-X-Received: by 2002:a92:6c05:0:b0:2da:b9e8:24df with SMTP id h5-20020a926c05000000b002dab9e824dfmr14653836ilc.99.1658175021933;
-        Mon, 18 Jul 2022 13:10:21 -0700 (PDT)
+        bh=5rjfTGrt4xmymVGtpNrhi9ebxqtPFU1Wg32kJfF6yZM=;
+        b=D8kEk++cwfE8fJBtBguczQr2Bin8tzXktbfZ8AlHp5jd/O7I36WCOe9yI3h5C2XVsh
+         DhKhENK/NA6RG3DpxB+N3c4pXpXpCuVg116W6ng5GTYnQKkEe1Js/p/uX38+wZFhQmuA
+         Mnm89g8vrFPhc3WxUtH2Gqqb1NtmmdNqHo5fnquYFYOiekLoKLbIziiFkr1F7t2I3/iU
+         M1kJg7/MwzFdedK9lmYU5CPNx7fnO6+INh9ZKc6FgH0HqJ96jZnafaKGSm3zc3qCP5mJ
+         +t61deg0KjNk+RcfThF5Qgn6d9mD7LeNaDlsxCjP2bAoi5PLxrOmqnOwOfa9/lRfsjFx
+         d+5w==
+X-Gm-Message-State: AJIora+pan+SRUp/YQfCFVgnV8kq0K9RJPxfkKLSVUzm24JnySHBglpF
+        kHma/4XYntubcGdM3DBmXncxif66AA==
+X-Google-Smtp-Source: AGRyM1ua0GjyZ64NbEhZxZhxjYVvv+/wFm0Bro8rMy75FpwbrAzy6qGL73JtXq8/EIoL73W0XywYIQ==
+X-Received: by 2002:a05:6602:2b10:b0:67b:bef0:65b4 with SMTP id p16-20020a0566022b1000b0067bbef065b4mr12925297iov.182.1658175044407;
+        Mon, 18 Jul 2022 13:10:44 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id u75-20020a02234e000000b0033f4a1114a6sm5741039jau.178.2022.07.18.13.10.20
+        by smtp.gmail.com with ESMTPSA id q24-20020a027b18000000b003415de88347sm3165447jac.123.2022.07.18.13.10.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 13:10:21 -0700 (PDT)
-Received: (nullmailer pid 3464461 invoked by uid 1000);
-        Mon, 18 Jul 2022 20:10:19 -0000
-Date:   Mon, 18 Jul 2022 14:10:19 -0600
+        Mon, 18 Jul 2022 13:10:44 -0700 (PDT)
+Received: (nullmailer pid 3465081 invoked by uid 1000);
+        Mon, 18 Jul 2022 20:10:42 -0000
+Date:   Mon, 18 Jul 2022 14:10:42 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, bin.zhang@mediatek.com,
+Cc:     matthias.bgg@gmail.com, devicetree@vger.kernel.org,
         benliang.zhao@mediatek.com, linux-mediatek@lists.infradead.org,
+        bin.zhang@mediatek.com,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+        <angelogioacchino.delregno@collabora.com>,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH V4] dt-bindings: mediatek: Add axi clock in mt8173 dts
  example
-Message-ID: <20220718201019.GA3461716-robh@kernel.org>
+Message-ID: <20220718201042.GA3465001-robh@kernel.org>
 References: <20220712111106.31089-1-xiangsheng.hou@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -66,12 +67,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 07:11:07PM +0800, Xiangsheng Hou wrote:
+On Tue, 12 Jul 2022 19:11:07 +0800, Xiangsheng Hou wrote:
 > For mt8173, it is needed to add the axi clock for dma mode.
-
-Needs to be sent to Mark Brown and linux-spi list. Use 
-get_maintainers.pl.
-
 > 
 > Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
 > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
@@ -89,23 +86,5 @@ get_maintainers.pl.
 >  .../devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml        | 5 +++--
 >  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
-> index 41e60fe4b09f..d3d7ed4b497b 100644
-> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
-> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-nor.yaml
-> @@ -82,8 +82,9 @@ examples:
->          compatible = "mediatek,mt8173-nor";
->          reg = <0 0x1100d000 0 0xe0>;
->          interrupts = <1>;
-> -        clocks = <&pericfg CLK_PERI_SPI>, <&topckgen CLK_TOP_SPINFI_IFR_SEL>;
-> -        clock-names = "spi", "sf";
-> +        clocks = <&pericfg CLK_PERI_SPI>, <&topckgen CLK_TOP_SPINFI_IFR_SEL>,
-> +                 <&pericfg CLK_PERI_NFI>;
-> +        clock-names = "spi", "sf", "axi";
->          #address-cells = <1>;
->          #size-cells = <0>;
->  
-> -- 
-> 2.25.1
-> 
-> 
+
+Acked-by: Rob Herring <robh@kernel.org>

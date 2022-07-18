@@ -2,124 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385D0577A2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 06:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E69577A2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 06:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233068AbiGREsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 00:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S233098AbiGREvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 00:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiGREsf (ORCPT
+        with ESMTP id S233080AbiGREvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 00:48:35 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A031710574
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 21:48:34 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LmTtR3xvKzjX0R;
-        Mon, 18 Jul 2022 12:45:51 +0800 (CST)
-Received: from [10.174.179.110] (10.174.179.110) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Jul 2022 12:48:32 +0800
-Message-ID: <250ec3d9-6fec-a051-6d9a-24b265fa0a57@huawei.com>
-Date:   Mon, 18 Jul 2022 12:48:12 +0800
+        Mon, 18 Jul 2022 00:51:07 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A4311170
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 21:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oQ2Oy2vE4Y+KSIGzjxEVBp2pts3FTmVlEXlZ7nc293g=; b=nBvaO59oeX5a7SMVYM/SbOx5JJ
+        ZBvajKem9pipbsgpzqt1itELF/BEif2uqcVZ9hUkdzwyunb+0aVLM1NcptrIobXpDztlh6ZDNRLUE
+        tfbwfdr+KrlBJWZYJdfpyws7LDbetDeWg5ifEFTQ0+QKU/sSS0E5dDCtrExWR6Wllfj9F6aCfSJHY
+        OorfZYx+97coaWllh4iJjRkx/Wg4AYSRBDC2YhqmxCCD7CJ0mwNr+k3e4W0/Cxgbb1BWrvpKuAWzY
+        3zK0bWBaHLirhNKaKPlAxaepoG4MCzKfLoXLBLSh3xWhc9xN9k7wUqrdk3pI9k9g6uT+seJSvBbdI
+        rIHY3v9A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDIim-00Avlp-1G; Mon, 18 Jul 2022 04:51:04 +0000
+Date:   Sun, 17 Jul 2022 21:51:04 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH 0/3] Small fixes for swiotlb
+Message-ID: <YtTmuOXkB7NJ8JYl@infradead.org>
+References: <20220715104535.1053907-1-chao.gao@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH] mm/damon/reclaim: fix 'enabled' is incorrectly set
- because 'system_wq' is not initialized
-Content-Language: en-US
-To:     SeongJae Park <sj@kernel.org>
-CC:     <akpm@linux-foundation.org>, <damon@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220715170736.126498-1-sj@kernel.org>
-From:   songyuanzheng <songyuanzheng@huawei.com>
-In-Reply-To: <20220715170736.126498-1-sj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.110]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715104535.1053907-1-chao.gao@intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello SJ,
-
-Thank you very much for your reply, through your reply let me understand 
-this principle, so please ignore this patch.
-
-Thanks,
-
-Yuanzheng
-
-On 2022/7/16 1:07, SeongJae Park wrote:
-> Hello Yuanzheng,
->
->
-> On Fri, 15 Jul 2022 06:16:09 +0000 Yuanzheng Song <songyuanzheng@huawei.com> wrote:
->
->> The 'enabled' will be incorrectly set because the 'system_wq'
->> might not initialized yet. This results in 'enabled=true',
->> but the 'damon_reclaim_timer' is inactive. So fix it by moving
->> the judgment logic of the 'damon_reclaim_initialized' to the
->> start position of the enable_store().
-> Thank you for this patch!
->
-> In the case, however, 'damon_reclaim_init()' will activate
-> 'damon_reclaim_timer', which will check the 'enabled' and start DAMON later.
-> So 'enabled' will inconsistently set while DAMON_RECLAIM is not really enabled
-> for a moment, but those will eventually be consistent.  This patch could reduce
-> the duration of the inconsistent state.
->
-> However, this would break boot-time DAMON_RECLAIM enabling, which adds
-> 'damon_reclaim.enabled=true' to the kernel parameter, as this change will set
-> 'enabled' as 'false' in the early 'damon_reclaim_enabled_store()', so that the
-> later 'damon_reclaim_initialized()' activated 'damon_reclaim_timer' shows
-> 'enabled' as 'false' and therefore doesn't start DAMON.
->
-> If there is anything I'm missing, please let me know.
->
->
-> Thanks,
-> SJ
->
->> Fixes: 294928293813 ("mm/damon/reclaim: schedule 'damon_reclaim_timer' only after 'system_wq' is initialized")
->> Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
->> ---
->>   mm/damon/reclaim.c | 9 +++++----
->>   1 file changed, 5 insertions(+), 4 deletions(-)
->>
->> diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
->> index e69b807fefe4..b13d5a02bf2e 100644
->> --- a/mm/damon/reclaim.c
->> +++ b/mm/damon/reclaim.c
->> @@ -374,13 +374,14 @@ static bool damon_reclaim_initialized;
->>   static int damon_reclaim_enabled_store(const char *val,
->>   		const struct kernel_param *kp)
->>   {
->> -	int rc = param_set_bool(val, kp);
->> -
->> -	if (rc < 0)
->> -		return rc;
->> +	int rc;
->>   
->>   	/* system_wq might not initialized yet */
->>   	if (!damon_reclaim_initialized)
->> +		return -EINVAL;
->> +
->> +	rc = param_set_bool(val, kp);
->> +	if (rc < 0)
->>   		return rc;
->>   
->>   	schedule_delayed_work(&damon_reclaim_timer, 0);
->> -- 
->> 2.25.1
-> .
+Thanks, applied.

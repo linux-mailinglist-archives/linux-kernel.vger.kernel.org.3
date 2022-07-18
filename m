@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7F0578CC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16D4578CC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234989AbiGRVbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S235273AbiGRVcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbiGRVbX (ORCPT
+        with ESMTP id S235352AbiGRVcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:31:23 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B433431DF8;
-        Mon, 18 Jul 2022 14:31:21 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id bp15so23719303ejb.6;
-        Mon, 18 Jul 2022 14:31:21 -0700 (PDT)
+        Mon, 18 Jul 2022 17:32:25 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A74431DE3;
+        Mon, 18 Jul 2022 14:32:22 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id m8so3661718edd.9;
+        Mon, 18 Jul 2022 14:32:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bSM5ivYjQeEP8TfF7U5MwOVE0teXxd2IvF5WPp8/KBc=;
-        b=gBKdHn8otcrOaqcMOQNE0eKSTu5eRkOi4I8ZMtloFBpcwoqx+4W0YgLGu+jZF/EgVM
-         lVrTmFqm3C2Fuclno1XZZQ9R43fnk5oR7Rig+FeJQB5Yw8lc/J5SY5YZnv3KGaY4qvDT
-         ow4JjFvaPzk4MmoofaX7/8n8+SQnT4/7mc6ABLCgh6Y8xsj3yBeKe/woF/sVrXAx2hJ6
-         GTto1VFja7nl+CdGM967AUn9zTwM7hCtOFADL7h4wyqLIeoYkskt+SKVNJQ21UPIHLOY
-         jS5QxXIH4+vDuRX17T8StJjsZhd7vir7tgKI/lItwI/wASh9SgZZJqTdhdwE5+z/1XDB
-         eUzQ==
+        bh=cZkDfDNbFMdK5ahboEdA9lOTIKE9tZIP2dVStYZIlZk=;
+        b=IReFK6sSfSt/KnqfJOvKAq9nwFRsAtyRlfh7HSB4zsSFUtv4+lGKnGhm3ahufxTGr1
+         bHw73MThrzP59sXlr/MeZqT5wnE/OkeKb9CuJXKMo/U04xutLWSArz1CAIG5w+/SQocJ
+         PCjs1+5T0J6seKUIkD3gxgMTmrZDIRSQG4Fg7+TFApptGpAlZTjWsBRO+1cZ/f3B7C3/
+         7zpNcWNGr8ly5+8ahx9Wy6AnZVIAK0CaEBqt6TIAJ7Ttc5A3UogdziimGgjLUpP78kQs
+         sbrN1DJrHiPStug+p3UCmPkoyoBwcad9vTvs5feKTMJhEgYpVMEHAeU2yInpEzm//VIQ
+         VT4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bSM5ivYjQeEP8TfF7U5MwOVE0teXxd2IvF5WPp8/KBc=;
-        b=sdwG02oXrwhMBK3AHKKlLqpjnyplEso+IVWWzCg59KkDZRAFB7fCXrlfw3SruN0VZX
-         FPCpFZHyDNEmzT2xnxmHIlkvlTKiR0FKWau3v3skv6PORpkx6phNWPUsQfOH+zhelg9f
-         4bpXSgoPxOkqqhs/jfzhyWplcTMFKA58evgZYgfyoBpD6DaMgm+tikO9ucUcuV3Ddx31
-         +5qTLVQdqQiw2m568Oz0jNZL4bpntMlfckT7YDNAodZAalNtIHeuANp/xlCc9KCppkm9
-         E0olEYCLQwyhhidHuFePyrifHWz79DPSIe3J43LfZJlnJl2lzoaftmOeXulnMjmLegg6
-         XxBQ==
-X-Gm-Message-State: AJIora+/mGp57Tbwd3LGn7KiUzf2R7MdvmlNeBvbeDccx9ixm+e9irWX
-        ufdu/c4jFFMhVo4w0fE1Lbj2venCvOVnhhPGNBs=
-X-Google-Smtp-Source: AGRyM1v95rKJTJeASt2uwuv/96bNjRzHCdLQO61Ht3D1x7i6W4zfHdp728CQ7ePIw5Cde8mm1A90Q/MHpM4dKb0sQKM=
-X-Received: by 2002:a17:907:608f:b0:72b:7db9:4dc6 with SMTP id
- ht15-20020a170907608f00b0072b7db94dc6mr26848162ejc.463.1658179880155; Mon, 18
- Jul 2022 14:31:20 -0700 (PDT)
+        bh=cZkDfDNbFMdK5ahboEdA9lOTIKE9tZIP2dVStYZIlZk=;
+        b=yQ6IFTMp5mOBv7MrDCmtykuXnQ+ggocvArXzqaEdvPVx1BUpVq525DvX04RG+FFPHG
+         rzlhNMDp+Zw+9VCUdVmL4YSJce5B5knRKfGt3SN7nRQse8L6qXOK45nVqya+G2xFsYF4
+         2Ho59JwEbtzq7ZJC0MICIMQxu3AXAMxprBB0KEKsCF1jNAC3ssD6ksDI2qfswUpIGPKI
+         t5+T6o+wNEGnz0CvcJX/nB2PqaveXZb6wnWODWCTj0Nm/Pb6MY7lb4zfAU4gZXzDYNrX
+         9rtOQnpZa53FTqfqq9x3Gnh9VDCZl0rnQUQHtsP9HGXnMrVc2e1ciLbdptStQSoDDnpU
+         DgOA==
+X-Gm-Message-State: AJIora9DHX/RPXEYB5i5EsEpCjh+uvKeYoDNasSrgQ7coST0cqO+nRIV
+        vK2zKpUXvcSmrt3YJfeJXccfqxkiQ97TEolmtA6ZU9EdCD/hYA==
+X-Google-Smtp-Source: AGRyM1vZb2rDb+9iuNv2MQVOYd355haW+MpGrVtge67yoRFR8/7nimITKfX+LvrOp+C/e92ONLA+XMKARktsEO6wv1w=
+X-Received: by 2002:a05:6402:1658:b0:43a:91cd:2ffb with SMTP id
+ s24-20020a056402165800b0043a91cd2ffbmr38458308edx.277.1658179940991; Mon, 18
+ Jul 2022 14:32:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220712235310.1935121-2-joannelkoong@gmail.com> <YtLJMxChUupbAa+U@xsang-OptiPlex-9020>
-In-Reply-To: <YtLJMxChUupbAa+U@xsang-OptiPlex-9020>
-From:   Joanne Koong <joannelkoong@gmail.com>
-Date:   Mon, 18 Jul 2022 14:31:09 -0700
-Message-ID: <CAJnrk1Z0f1z-Mk10othmauAyaF_LD+MxcwVrtD_2=Z_bOHgecQ@mail.gmail.com>
-Subject: Re: [net] 2e20fc25bc: BUG:kernel_NULL_pointer_dereference,address
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, dccp@vger.kernel.org,
-        lkp@lists.01.org, Eric Dumazet <edumazet@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>
+References: <cover.1657907849.git.william.gray@linaro.org> <e0f9ff79a4229cf0ccce4844745453dae633a1aa.1657907849.git.william.gray@linaro.org>
+In-Reply-To: <e0f9ff79a4229cf0ccce4844745453dae633a1aa.1657907849.git.william.gray@linaro.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 18 Jul 2022 23:31:44 +0200
+Message-ID: <CAHp75VeQkpr9Ww-C+1w13BiLSuCY=FMMtjjAdVCq0a5z1bkSVA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/6] gpio: i8255: Introduce the Intel 8255 interface
+ library module
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Fred Eckert <Frede@cmslaser.com>,
+        John Hentges <jhentges@accesio.com>,
+        Jay Dolan <jay.dolan@accesio.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,212 +72,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 7:20 AM kernel test robot <oliver.sang@intel.com> wrote:
+On Mon, Jul 18, 2022 at 10:56 PM William Breathitt Gray
+<william.gray@linaro.org> wrote:
 >
+> Exposes consumer library functions providing support for interfaces
+> compatible with the venerable Intel 8255 Programmable Peripheral
+> Interface (PPI).
 >
+> The Intel 8255 PPI first appeared in the early 1970s, initially for the
+> Intel 8080 and later appearing in the original IBM-PC. The popularity of
+> the original Intel 8255 chip led to many subsequent variants and clones
+> of the interface in various chips and integrated circuits. Although
+> still popular, interfaces compatible with the Intel 8255 PPI are
+> nowdays typically found embedded in larger VLSI processing chips and
+> FPGA components rather than as discrete ICs.
 >
-> Greeting,
->
-> FYI, we noticed the following commit (built with gcc-11):
->
-> commit: 2e20fc25bca52fbc786bbae312df56514c10798d ("[PATCH net-next v2 1/3] net: Add a bhash2 table hashed by port + address")
-> url: https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/Add-a-second-bind-table-hashed-by-port-address/20220713-075808
-> base: https://git.kernel.org/cgit/linux/kernel/git/davem/net-next.git 5022e221c98a609e0e5b0a73852c7e3d32f1c545
-> patch link: https://lore.kernel.org/netdev/20220712235310.1935121-2-joannelkoong@gmail.com
->
-> in testcase: boot
->
-> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
->
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->
->
-> +-------------------------------------------------------+------------+------------+
-> |                                                       | 5022e221c9 | 2e20fc25bc |
-> +-------------------------------------------------------+------------+------------+
-> | boot_successes                                        | 8          | 0          |
-> | boot_failures                                         | 0          | 12         |
-> | BUG:kernel_NULL_pointer_dereference,address           | 0          | 12         |
-> | Oops:#[##]                                            | 0          | 12         |
-> | RIP:inet_bhash2_update_saddr                          | 0          | 12         |
-> | Kernel_panic-not_syncing:Fatal_exception_in_interrupt | 0          | 12         |
-> +-------------------------------------------------------+------------+------------+
->
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->
-I will fix this issue in the next iteration of the patch (if the
-previous address was never added to the bhash2 table, then we don't
-need to compute the hash for it and remove it from the table). Thanks
-for reporting.
->
-> [  247.022450][  T328] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> [  247.024448][  T328] #PF: supervisor write access in kernel mode
-> [  247.026159][  T328] #PF: error_code(0x0002) - not-present page
-> [  247.027743][  T328] PGD 800000014b28a067 P4D 800000014b28a067 PUD 14b289067 PMD 0
-> [  247.029705][  T328] Oops: 0002 [#1] SMP PTI
-> [  247.030900][  T328] CPU: 1 PID: 328 Comm: wget Not tainted 5.19.0-rc5-01130-g2e20fc25bca5 #1
-> [  247.033223][  T328] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-> [ 247.035984][ T328] RIP: 0010:inet_bhash2_update_saddr (include/linux/list.h:884 include/net/sock.h:824 net/ipv4/inet_hashtables.c:872)
-> [ 247.037623][ T328] Code: 48 8d 83 00 03 00 00 4c 8b a3 f8 02 00 00 48 89 c7 48 89 44 24 28 e8 10 79 01 ff 4c 8b ab 00 03 00 00 4c 89 ef e8 f1 87 01 ff <4d> 89 65 00 4d 85 e4 74 14 e8 93 2b ed fe 49 8d 7c 24 08 e8 d9 87
-> All code
-> ========
->    0:   48 8d 83 00 03 00 00    lea    0x300(%rbx),%rax
->    7:   4c 8b a3 f8 02 00 00    mov    0x2f8(%rbx),%r12
->    e:   48 89 c7                mov    %rax,%rdi
->   11:   48 89 44 24 28          mov    %rax,0x28(%rsp)
->   16:   e8 10 79 01 ff          callq  0xffffffffff01792b
->   1b:   4c 8b ab 00 03 00 00    mov    0x300(%rbx),%r13
->   22:   4c 89 ef                mov    %r13,%rdi
->   25:   e8 f1 87 01 ff          callq  0xffffffffff01881b
->   2a:*  4d 89 65 00             mov    %r12,0x0(%r13)           <-- trapping instruction
->   2e:   4d 85 e4                test   %r12,%r12
->   31:   74 14                   je     0x47
->   33:   e8 93 2b ed fe          callq  0xfffffffffeed2bcb
->   38:   49 8d 7c 24 08          lea    0x8(%r12),%rdi
->   3d:   e8                      .byte 0xe8
->   3e:   d9                      .byte 0xd9
->   3f:   87                      .byte 0x87
->
-> Code starting with the faulting instruction
-> ===========================================
->    0:   4d 89 65 00             mov    %r12,0x0(%r13)
->    4:   4d 85 e4                test   %r12,%r12
->    7:   74 14                   je     0x1d
->    9:   e8 93 2b ed fe          callq  0xfffffffffeed2ba1
->    e:   49 8d 7c 24 08          lea    0x8(%r12),%rdi
->   13:   e8                      .byte 0xe8
->   14:   d9                      .byte 0xd9
->   15:   87                      .byte 0x87
-> [  247.062693][  T328] RSP: 0018:ffffc90000ae7bd8 EFLAGS: 00010246
-> [  247.064435][  T328] RAX: ffff88811673c3e0 RBX: ffff8881168e4600 RCX: ffffffff823fb28f
-> [  247.066525][  T328] RDX: 0000000000000a28 RSI: 0001ffffffffffff RDI: 0000000000000000
-> [  247.068479][  T328] RBP: ffffc90000ae7c60 R08: ffffffff8477ff18 R09: 0000000000000000
-> [  247.070484][  T328] R10: 0000000000000005 R11: 0000000000000000 R12: 0000000000000000
-> [  247.072457][  T328] R13: 0000000000000000 R14: ffffffff84cefd40 R15: ffffffff84cf29c0
-> [  247.074463][  T328] FS:  00007f38cc1a6700(0000) GS:ffff88842fd00000(0000) knlGS:0000000000000000
-> [  247.076798][  T328] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  247.080161][  T328] CR2: 0000000000000000 CR3: 0000000116a32000 CR4: 00000000000006e0
-> [  247.082224][  T328] Call Trace:
-> [  247.083152][  T328]  <TASK>
-> [ 247.083906][ T328] ? write_comp_data (kernel/kcov.c:229)
-> [ 247.085183][ T328] tcp_v4_connect (net/ipv4/tcp_ipv4.c:261)
-> [ 247.086542][ T328] __inet_stream_connect (net/ipv4/af_inet.c:661)
-> [ 247.088103][ T328] ? write_comp_data (kernel/kcov.c:229)
-> [ 247.089429][ T328] inet_stream_connect (net/ipv4/af_inet.c:725)
-> [ 247.090707][ T328] ? __inet_stream_connect (net/ipv4/af_inet.c:720)
-> [ 247.092104][ T328] __sys_connect_file (net/socket.c:1976)
-> [ 247.093453][ T328] __sys_connect (net/socket.c:1993)
-> [ 247.094902][ T328] ? write_comp_data (kernel/kcov.c:229)
-> [ 247.096382][ T328] ? __x64_sys_alarm (kernel/time/itimer.c:306)
-> [ 247.097825][ T328] __x64_sys_connect (net/socket.c:2000)
-> [ 247.115487][ T328] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-> [ 247.116792][ T328] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:115)
-> [  247.118477][  T328] RIP: 0033:0x7f38cb2662e0
-> [ 247.119521][ T328] Code: 00 31 d2 48 29 c2 64 89 11 48 83 c8 ff eb ea 90 90 90 90 90 90 90 90 90 90 90 83 3d fd 8e 2c 00 00 75 10 b8 2a 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 fe ce 00 00 48 89 04 24
-> All code
-> ========
->    0:   00 31                   add    %dh,(%rcx)
->    2:   d2 48 29                rorb   %cl,0x29(%rax)
->    5:   c2 64 89                retq   $0x8964
->    8:   11 48 83                adc    %ecx,-0x7d(%rax)
->    b:   c8 ff eb ea             enterq $0xebff,$0xea
->    f:   90                      nop
->   10:   90                      nop
->   11:   90                      nop
->   12:   90                      nop
->   13:   90                      nop
->   14:   90                      nop
->   15:   90                      nop
->   16:   90                      nop
->   17:   90                      nop
->   18:   90                      nop
->   19:   90                      nop
->   1a:   83 3d fd 8e 2c 00 00    cmpl   $0x0,0x2c8efd(%rip)        # 0x2c8f1e
->   21:   75 10                   jne    0x33
->   23:   b8 2a 00 00 00          mov    $0x2a,%eax
->   28:   0f 05                   syscall
->   2a:*  48 3d 01 f0 ff ff       cmp    $0xfffffffffffff001,%rax         <-- trapping instruction
->   30:   73 31                   jae    0x63
->   32:   c3                      retq
->   33:   48 83 ec 08             sub    $0x8,%rsp
->   37:   e8 fe ce 00 00          callq  0xcf3a
->   3c:   48 89 04 24             mov    %rax,(%rsp)
->
-> Code starting with the faulting instruction
-> ===========================================
->    0:   48 3d 01 f0 ff ff       cmp    $0xfffffffffffff001,%rax
->    6:   73 31                   jae    0x39
->    8:   c3                      retq
->    9:   48 83 ec 08             sub    $0x8,%rsp
->    d:   e8 fe ce 00 00          callq  0xcf10
->   12:   48 89 04 24             mov    %rax,(%rsp)
-> [  247.124379][  T328] RSP: 002b:00007fffffe84038 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
-> [  247.126935][  T328] RAX: ffffffffffffffda RBX: 00007fffffe840d0 RCX: 00007f38cb2662e0
-> [  247.128978][  T328] RDX: 0000000000000010 RSI: 00007fffffe840f0 RDI: 0000000000000004
-> [  247.131142][  T328] RBP: 0000000000000004 R08: 00007fffffe83fa0 R09: 0000000000000001
-> [  247.133075][  T328] R10: 00007fffffe83dd0 R11: 0000000000000246 R12: 0000000000000050
-> [  247.135155][  T328] R13: 000000000065ade0 R14: 0000000001549a70 R15: 000000000000002a
-> [  247.137196][  T328]  </TASK>
-> [  247.142192][  T328] Modules linked in: bochs drm_vram_helper drm_ttm_helper ttm drm_kms_helper syscopyarea sysfillrect sysimgblt ppdev fb_sys_fops sr_mod drm joydev i2c_piix4 cdrom parport_pc parport
-> [  247.147469][  T328] CR2: 0000000000000000
-> [  247.148548][  T328] ---[ end trace 0000000000000000 ]---
-> [ 247.186378][ T328] RIP: 0010:inet_bhash2_update_saddr (include/linux/list.h:884 include/net/sock.h:824 net/ipv4/inet_hashtables.c:872)
-> [ 247.218516][ T328] Code: 48 8d 83 00 03 00 00 4c 8b a3 f8 02 00 00 48 89 c7 48 89 44 24 28 e8 10 79 01 ff 4c 8b ab 00 03 00 00 4c 89 ef e8 f1 87 01 ff <4d> 89 65 00 4d 85 e4 74 14 e8 93 2b ed fe 49 8d 7c 24 08 e8 d9 87
-> All code
-> ========
->    0:   48 8d 83 00 03 00 00    lea    0x300(%rbx),%rax
->    7:   4c 8b a3 f8 02 00 00    mov    0x2f8(%rbx),%r12
->    e:   48 89 c7                mov    %rax,%rdi
->   11:   48 89 44 24 28          mov    %rax,0x28(%rsp)
->   16:   e8 10 79 01 ff          callq  0xffffffffff01792b
->   1b:   4c 8b ab 00 03 00 00    mov    0x300(%rbx),%r13
->   22:   4c 89 ef                mov    %r13,%rdi
->   25:   e8 f1 87 01 ff          callq  0xffffffffff01881b
->   2a:*  4d 89 65 00             mov    %r12,0x0(%r13)           <-- trapping instruction
->   2e:   4d 85 e4                test   %r12,%r12
->   31:   74 14                   je     0x47
->   33:   e8 93 2b ed fe          callq  0xfffffffffeed2bcb
->   38:   49 8d 7c 24 08          lea    0x8(%r12),%rdi
->   3d:   e8                      .byte 0xe8
->   3e:   d9                      .byte 0xd9
->   3f:   87                      .byte 0x87
->
-> Code starting with the faulting instruction
-> ===========================================
->    0:   4d 89 65 00             mov    %r12,0x0(%r13)
->    4:   4d 85 e4                test   %r12,%r12
->    7:   74 14                   je     0x1d
->    9:   e8 93 2b ed fe          callq  0xfffffffffeed2ba1
->    e:   49 8d 7c 24 08          lea    0x8(%r12),%rdi
->   13:   e8                      .byte 0xe8
->   14:   d9                      .byte 0xd9
->   15:   87                      .byte 0x87
->
->
-> To reproduce:
->
->         # build kernel
->         cd linux
->         cp config-5.19.0-rc5-01130-g2e20fc25bca5 .config
->         make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
->         make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
->         cd <mod-install-dir>
->         find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
->
->
->         git clone https://github.com/intel/lkp-tests.git
->         cd lkp-tests
->         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
->
->         # if come across any failure that blocks the test,
->         # please remove ~/.lkp and /lkp dir to run from a clean state.
->
->
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
->
->
+> A CONFIG_GPIO_I8255 Kconfig option is introduced by this patch. Modules
+> wanting access to these i8255 library functions should select this
+> Kconfig option, and import the I8255 symbol namespace.
+
+Thanks for an update, my comments below.
+
+...
+
+> +config GPIO_I8255
+> +       tristate
+> +       help
+> +         Enables support for the i8255 interface library functions. The i8255
+> +         interface library provides functions to facilitate communication with
+> +         interfaces compatible with the venerable Intel 8255 Programmable
+> +         Peripheral Interface (PPI). The Intel 8255 PPI chip was first released
+> +         in the early 1970s but compatible interfaces are nowadays typically
+> +         found embedded in larger VLSI processing chips and FPGA components.
+
++ "If built as a module its name will be ..." or similar sentence
+would be good to add.
+
+...
+
+> +       case I8255_PORTC:
+> +               /* Port C can be configured by nibble */
+> +               if (port_offset > 3)
+
+More naturally looks >= 4 to show the beginning offset number for the UPPER.
+
+> +                       return I8255_CONTROL_PORTC_UPPER_DIRECTION;
+> +               return I8255_CONTROL_PORTC_LOWER_DIRECTION;
+
+...
+
+> +       out_state = ioread8(&ppi[group].port[ppi_port]);
+> +       out_state &= ~io_mask;
+> +       out_state |= bit_mask;
+
+Usual pattern is
+
+  out_state = (out_state & ~mask) | (bits & mask);
+
+(and we call them mask and value or bits)
+
+> +
+
+No need for this blank line.
+
+> +       iowrite8(out_state, &ppi[group].port[ppi_port]);
+
+...
+
+> +               bit_mask = bitmap_get_value8(bits, offset) & gpio_mask;
+> +               io_port = offset / 8;
+
+Exactly why I recommended reconsidering the above pattern, you won't
+need to do ' & mask' in the caller(s).
+
+> +               i8255_set_port(ppi, state, io_port, gpio_mask, bit_mask);
+
+...
+
+> + * Initializes the @state of each Intel 8255 Programmable Peripheral Interface
+> + * group for use in i8255 library functions.
+
+I'm not sure about terminology. What's 'group'? We have a very well
+established term 'bank' isn't it what you meant here by 'group'?
+
+...
+
+> +int i8255_get(const struct i8255 __iomem *ppi, unsigned long offset);
+
+I'm not sure what const with __iomem gives us? The purpose of that is?.
+And if it's about the content of the register, then const is a lie.
+
+Ditto for the rest of the similar cases.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

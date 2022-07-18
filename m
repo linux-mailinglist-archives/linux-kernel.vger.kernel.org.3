@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4E6577CC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC10577CC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbiGRHq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S233086AbiGRHoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbiGRHq0 (ORCPT
+        with ESMTP id S230171AbiGRHoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:46:26 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D37BF5C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:46:24 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by andre.telenet-ops.be with bizsmtp
-        id wXmM2700S4C55Sk01XmMe8; Mon, 18 Jul 2022 09:46:21 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oDLSP-003yxi-GB
-        for linux-kernel@vger.kernel.org; Mon, 18 Jul 2022 09:46:21 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oDLPI-00Fx1q-5K
-        for linux-kernel@vger.kernel.org; Mon, 18 Jul 2022 09:43:08 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v5.19-rc7
-Date:   Mon, 18 Jul 2022 09:43:08 +0200
-Message-Id: <20220718074308.3801763-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAHk-=wj63HHDU0MTRVKese5a4j82g3s3u4Ztno7=7Cj=cRRFFQ@mail.gmail.com>
-References: <CAHk-=wj63HHDU0MTRVKese5a4j82g3s3u4Ztno7=7Cj=cRRFFQ@mail.gmail.com>
+        Mon, 18 Jul 2022 03:44:04 -0400
+Received: from extserv.mm-sol.com (ns.mm-sol.com [37.157.136.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9796F63D6;
+        Mon, 18 Jul 2022 00:44:02 -0700 (PDT)
+Received: from [192.168.1.7] (unknown [195.24.90.54])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: svarbanov@mm-sol.com)
+        by extserv.mm-sol.com (Postfix) with ESMTPSA id AB337D2E3;
+        Mon, 18 Jul 2022 10:43:58 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mm-sol.com; s=201706;
+        t=1658130239; bh=J2XEYZ7B+4jlGgZLIA7nxTffPaKXrEtUOke3dtH0o4A=;
+        h=Date:Subject:To:Cc:From:From;
+        b=UEHMbqGc0/Xd6wlIuArKJOYm3ei7nKsevKujc2jIU/mFOBjf9hF1ynuSvp4CjcONC
+         qAMxNBLzYcos6Xaihx16T6tWqdgpUZykNLZDtNQ+3Eqzy2o3l4nLWnSVQc8dbVVL4d
+         N7HKi3tt6TRePbksPwWmqH+VxUXSE5F9YCExEHRY2+1CkKQwryeK/SH4TKBLCs81Nb
+         1bbwkky/euPn3dV320ieaaqH1+OLi4/BoSW2CaBIOCac85vqngTy4gFJS0FcVrHpc/
+         YaOwJg0ri+E0/rHEfXbXW1Xskq697oqDGxDw5d1qsX5NiGZnA9dYopF/+fjiTQwtZy
+         BmJSZRJ3tm/kQ==
+Message-ID: <d6db1784-0b21-9bdb-8528-3f814da188b0@mm-sol.com>
+Date:   Mon, 18 Jul 2022 10:43:56 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] PCI: qcom: Add support for modular builds
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220715165601.GA1139849@bhelgaas>
+From:   Stanimir Varbanov <svarbanov@mm-sol.com>
+In-Reply-To: <20220715165601.GA1139849@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v5.19-rc7[1] compared to v5.18[2].
-
-Summarized:
-  - build errors: +7/-4
-  - build warnings: +11/-11
-
-JFYI, when comparing v5.19-rc7[1] to v5.19-rc6[3], the summaries are:
-  - build errors: +11/-6
-  - build warnings: +0/-1
-
-Note that there may be false regressions, as some logs are incomplete.
-Still, they're build errors/warnings.
-
-Happy fixing! ;-)
-
-Thanks to the linux-next team for providing the build service.
-
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/ff6992735ade75aae3e35d16b17da1008d753d28/ (all 135 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4b0986a3613c92f4ec1bdc7f60ec66fea135991f/ (131 out of 135 configs)
-[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/32346491ddf24599decca06190ebca03ff9de7f8/ (all 135 configs)
 
 
-*** ERRORS ***
+On 7/15/22 19:56, Bjorn Helgaas wrote:
+> On Thu, Jul 14, 2022 at 04:05:41PM +0300, Dmitry Baryshkov wrote:
+>> On 14/07/2022 15:19, Stanimir Varbanov wrote:
+>>> Please take a look why we made it built-in first [1].
+>>>
+>>> If arguments there are still valid I don't see why to make it a module
+>>> again.
+>>>
+>>> [1] https://lkml.org/lkml/2016/8/24/694
+>>
+>> It looks like there is a move to make all non-essential drivers buildable as
+>> modules. For example, the Kirin, dra7xx, Meson PCI controllers are now
+>> buildable as modules. So I think we can follow that and allow building the
+>> pcie-qcom as a module.
+> 
+> IIUC the arguments in [1] are that:
+> 
+>   - Kconfig is bool, so it can't be built as a module
+>   - there's no sensible use case for unbind
+> 
+> Those described the situation at the time, and there's no point in
+> having .remove() and using module_platform_driver() if Kconfig is
+> bool.
+> 
+> But they don't seem like arguments for why the driver couldn't be
+> *made* modular.
 
-7 error regressions:
-  + error: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5100), (.head.text+0x5040)
-  + error: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
-  + {standard input}: Error: displacement to undefined symbol .L271 overflows 12-bit field:  => 1625
-  + {standard input}: Error: displacement to undefined symbol .L271 overflows 8-bit field :  => 1634
-  + {standard input}: Error: displacement to undefined symbol .L318 overflows 8-bit field :  => 1711, 1693, 1681, 1665
-  + {standard input}: Error: pcrel too far:  => 1644, 1685, 1700, 1672, 1649, 1656, 1667, 1695, 1655, 1702, 1660, 1609, 1684, 1657, 1632, 1618, 1698, 1629, 1635, 1676, 1673, 1670, 1686, 1705
-  + {standard input}: Error: unknown opcode:  => 1713
+I guess the core of the problem was lack of dw_pcie_host_deinit() at
+that time.
+> 
+> I think drivers *should* be modular unless there's a technical reason
+> they can't be.
 
-4 error improvements:
-  - /kisskb/src/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c: error: case label does not reduce to an integer constant: 4917:4 => 
-  - /kisskb/src/drivers/scsi/aacraid/commsup.c: error: case label does not reduce to an integer constant: 1983:2 => 
-  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text': (.head.text+0x5100), (.head.text+0x5040) => 
-  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o: (.init.text+0xa4) => 
+I agree.
 
+> 
+> Bjorn
 
-*** WARNINGS ***
-
-11 warning regressions:
-  + .config: warning: override: ARCH_RV32I changes choice state:  => 3864
-  + arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for ZPOOL:  => 61
-  + arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for ZPOOL:  => 37
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47b0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47e0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4810): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4828): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4840): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
-  + modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x52bc): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names:  => N/A
-
-11 warning improvements:
-  - .config: warning: override: reassigning to symbol GCC_PLUGIN_RANDSTRUCT: 12253, 12475 => 
-  - /kisskb/src/drivers/scsi/mpt3sas/mpt3sas_base.c: warning: array subscript 'Mpi2SasIOUnitPage1_t {aka struct _MPI2_CONFIG_PAGE_SASIOUNIT_1}[0]' is partly outside array bounds of 'unsigned char[20]' [-Warray-bounds]: 5400:40, 5396:40, 5403:43 => 
-  - /kisskb/src/drivers/tty/serial/sh-sci.c: warning: unused variable 'sport' [-Wunused-variable]: 2651:26 => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4790): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47a8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47d8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4808): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4820): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x45d4): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names: N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+-- 
+regards,
+Stan

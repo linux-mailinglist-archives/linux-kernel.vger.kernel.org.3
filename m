@@ -2,147 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4A4577DA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAF7577DA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbiGRIjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
+        id S233925AbiGRIjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbiGRIjg (ORCPT
+        with ESMTP id S233791AbiGRIjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:39:36 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537E6BC3E
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:39:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C0440CE0ADA
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:39:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DCCC341CA
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:39:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658133572;
-        bh=6868ghL+z9k6lE8Zhf9thtidSkGyAy7loJEZcnhZTxI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=p97gLbODcmBvh5cx7H8owMnLX98xsIx2FgXC4yXlnl19Hz7HI4E8JOY/1jydlLR6D
-         MEMjmxDE3NdqXJdm0rb2PRkr+WRMgBcE2/rJlBhmd+4hxJHQHjo44Eu+AUF4FRV41P
-         Dalu8ydIZruE/3I5aflT94cLsmYQZ/NjpQF3+tDQaNmrAs5IWWYnSd3Gmpog8otznn
-         SJ0wlpK35/j2GNjApbNpx1E+F17fJJZu9UkIdzl0YR/xuf5KDe3EAoJDw58Lfdiy+m
-         q7bUtbsLvcgOqyJjMWx7SPURcbFSoAS0Xqe1Ue9xaAUlzmzXt8Rr0IVNQ+/YBGXCXu
-         N+ITPhKgp6gIA==
-Received: by mail-vs1-f50.google.com with SMTP id t127so9752233vsb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:39:32 -0700 (PDT)
-X-Gm-Message-State: AJIora/VqBXK/r+iBjsGl7teDGSCA8jVlrumRXo4aPa6lozvKlQhSC2Z
-        JkDJGlCz5VoXk+/A5B/B/hPYcK6ipGZ0u/LcgsA=
-X-Google-Smtp-Source: AGRyM1vYLPKEzTkdiSMW1GoG0z6Et3OxAmvTioua6BelylBjw6xGvfHRIegg4/8Hd4BjWHhuVTSj/PKWlz4YBTaVEiY=
-X-Received: by 2002:a05:6102:3f06:b0:356:f57f:4f59 with SMTP id
- k6-20020a0561023f0600b00356f57f4f59mr8650321vsv.70.1658133571179; Mon, 18 Jul
- 2022 01:39:31 -0700 (PDT)
+        Mon, 18 Jul 2022 04:39:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714F4643D;
+        Mon, 18 Jul 2022 01:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658133578; x=1689669578;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kWWiZuOQESLiD7NGQ4Gd3K05y6A+bgzV19UwDrmVFI0=;
+  b=MqSBUxHMNkujJWSfSADLSJGtsNP5PqJG75FzydF8nznyr3YE9/ssX9dU
+   nx3TUTQImiULmp2xD61vABS47gtO1O6N5S0PZyWmVdBqNuxFtNUJzI3Yg
+   4gKiEIiD3HkOfYYI9673PaVk2/aoFI/wi5Vb2Nj0GMN/dfm5inN0NynU3
+   drZBHq2HG9XsxJIrlNXNgHZQpOayE/bL4OJ96yT7BCL21gvZpuFrK+iqD
+   K3jm1HIzzzXzCHhiwNaxgi0cQkwTjmgu0GeqAmHXrlXPRs/PGnXTTSDpc
+   M7LaTpC3vT2AujFNeoslKMiu7KHZSIt7sTCi5wWcsIqtd09R/AFKc3NjB
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="350130338"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="350130338"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 01:39:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="739385944"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 18 Jul 2022 01:39:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Jul 2022 11:39:33 +0300
+Date:   Mon, 18 Jul 2022 11:39:33 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb/typec/tcpm: fix repeated words in comments
+Message-ID: <YtUcRZmQJgOeYSY0@kuha.fi.intel.com>
+References: <20220716135642.52460-1-yuanjilin@cdjrlc.com>
 MIME-Version: 1.0
-References: <1657868751-30444-1-git-send-email-lvjianmin@loongson.cn>
- <87less52bx.wl-maz@kernel.org> <6e9def1e-31fe-787d-1b2b-a328424352f0@loongson.cn>
- <87ilnw3vlg.wl-maz@kernel.org> <20994a99-b5b1-442d-d23d-2a11ecef24a0@loongson.cn>
- <87wncbzteg.wl-maz@kernel.org> <058aed14-3644-5fc4-8eda-ec645df91836@loongson.cn>
- <87fsiy53h3.wl-maz@kernel.org> <6d534d7d-766c-d5d1-59ed-1ecdd96837be@loongson.cn>
-In-Reply-To: <6d534d7d-766c-d5d1-59ed-1ecdd96837be@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 18 Jul 2022 16:39:19 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4yZYkZBvn0dwCWbdhVjP9wBZ+2yPUcRo8p3m6J_89otQ@mail.gmail.com>
-Message-ID: <CAAhV-H4yZYkZBvn0dwCWbdhVjP9wBZ+2yPUcRo8p3m6J_89otQ@mail.gmail.com>
-Subject: Re: [PATCH V15 00/15] irqchip: Add LoongArch-related irqchip drivers
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220716135642.52460-1-yuanjilin@cdjrlc.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jianmin and Marc,
+On Sat, Jul 16, 2022 at 09:56:42PM +0800, Jilin Yuan wrote:
+>  Delete the redundant word 'to'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 
-On Mon, Jul 18, 2022 at 4:29 PM Jianmin Lv <lvjianmin@loongson.cn> wrote:
->
->
->
-> On 2022/7/18 =E4=B8=8B=E5=8D=882:39, Marc Zyngier wrote:
-> > On Mon, 18 Jul 2022 02:07:21 +0100,
-> > Jianmin Lv <lvjianmin@loongson.cn> wrote:
-> >>
-> >>
-> >>
-> >> On 2022/7/17 =E4=B8=8B=E5=8D=8810:49, Marc Zyngier wrote:
-> >>> On Sun, 17 Jul 2022 12:29:05 +0100,
-> >>> Jianmin Lv <lvjianmin@loongson.cn> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>> On 2022/7/17 =E4=B8=8B=E5=8D=886:02, Marc Zyngier wrote:
-> >>>>> But the other issue is that you seem to call this function from two
-> >>>>> different locations. This cannot be right, as there should be only =
-one
-> >>>>> probe order, and not multiple.
-> >>>>>
-> >>>>
-> >>>> As we described two IRQ models(Legacy and Extended) in this cover
-> >>>> letter, the parent domain of MSI domain can be htvec domain(Legacy) =
-or
-> >>>> eiointc domain(Extended). In MADT, only one APIC(HTPIC for htvec or
-> >>>> EIOPIC for eiointc) is allowed to pass into kernel, and then in the
-> >>>> irqchip driver, only one kind APIC of them can be parsed from MADT, =
-so
-> >>>> we have to support two probe order for them.
-> >>>
-> >>> Do you really have the two variants in the wild? Or is this just
-> >>> because this is a possibility?
-> >>>
-> >>
-> >> Currently, there are not CPUs(used for PC and server) based on
-> >> LoongArch shipped with only HTPIC, but with both HTPIC and EIOPIC, we
-> >> just want to provide two choices for designers(but obviously, EIOPIC
-> >> may be enough currently). Do you think we don't have to do like this,
-> >> yes? If so, maybe we don't have to support ACPI-way entry for htvec
-> >> currently, and do the work in future if required.
-> >
-> > If the existing HW is only following the 'Extended' model, then I'd
-> > suggest you only support this for now. It has two effects:
-> >
-> > - it simplifies the current code, making it more maintainable and
-> >    easier to reason about
-> >
-> > - it sends the message to integrators that 'Extended' is the correct
-> >    model, and that it is what they should support
-> >
-> > Now, we don't have much time left to get this series into -next (I
-> > will be closing the tree to new features this week, and only queue
-> > fixes).
-> >
-> > So whatever you need to do, please do it quickly so that we can have
-> > at least some of this in 5.20.
-> >
-> > Thanks,
-> >
-> >       M.
-> >
->
-> Ok, Marc, thanks for your suggestion, got it, I'll remove 'Legacy' mode
-> support and send next version as soon as possible.
-I think keeping the "Legacy" mode is faster than removing it for now
-to keep up with the merge window, since it is already here and doesn't
-need to modify.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Huacai
->
->
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 3bc2f4ebd1fe..2d80b5b17ea4 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4453,7 +4453,7 @@ static void run_state_machine(struct tcpm_port *port)
+>  		 * The specification suggests that dual mode ports in sink
+>  		 * mode should transition to state PE_SRC_Transition_to_default.
+>  		 * See USB power delivery specification chapter 8.3.3.6.1.3.
+> -		 * This would mean to to
+> +		 * This would mean to
+>  		 * - turn off VCONN, reset power supply
+>  		 * - request hardware reset
+>  		 * - turn on VCONN
+> -- 
+> 2.36.1
+
+-- 
+heikki

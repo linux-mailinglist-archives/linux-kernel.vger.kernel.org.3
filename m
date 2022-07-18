@@ -2,130 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A59578C83
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCAB578C8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbiGRVMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
+        id S233392AbiGRVPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbiGRVL7 (ORCPT
+        with ESMTP id S229916AbiGRVPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:11:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C88A31DD8;
-        Mon, 18 Jul 2022 14:11:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658178718; x=1689714718;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B8FiBLFp5csoUvFgk1WR/dfs+8dLITXSfuetGEHiUoY=;
-  b=CEB2EwYfH7GxYV40MJKQETf1mxGKLaW4O4FSayfCf4MjpDgqKE8PEbBQ
-   JbqOhvVEE+XlI1LlkL5EJdN+QDk+m2IefH3FLjPTsaR17pFFXy/8x3phX
-   gK2YV3Dx1o07PGEujgvmEc5a1b4csz9BzdI75ynV4E2KLhenpocdIswFK
-   bAg0VB3Ox4/ITmnU0l0kqzVkgbRTi9ZE5rUW5OreH2HBza3Q5EoujWNRc
-   XZrAHrsKO8KoajaQarJqBv+6LOdlFnLVahsC4ZKahA1UzmrdWoI4xIoiw
-   fT0q5+dWHJvIWDctfpxulclt/U+DKWKJStk/UzvkanyoYO5tm3J3wEFxH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="350284486"
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="350284486"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 14:11:58 -0700
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="739614852"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 14:11:48 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oDY1n-001OYv-2P;
-        Tue, 19 Jul 2022 00:11:43 +0300
-Date:   Tue, 19 Jul 2022 00:11:43 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Mel Gorman <mgorman@suse.de>, Miroslav Benes <mbenes@suse.cz>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Song Liu <songliubraving@fb.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
-        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 06/16] lib/test_bitmap: delete meaningless test for
- bitmap_cut
-Message-ID: <YtXMjwXnRIT+YHg7@smile.fi.intel.com>
-References: <20220718192844.1805158-1-yury.norov@gmail.com>
- <20220718192844.1805158-7-yury.norov@gmail.com>
+        Mon, 18 Jul 2022 17:15:06 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CDE22BEB;
+        Mon, 18 Jul 2022 14:15:03 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id e69so2834250iof.5;
+        Mon, 18 Jul 2022 14:15:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=waGojzQJKestAFlcfSdCqvEWi/o6eYFkAoN0J4xqLlM=;
+        b=LuRKu7Lp0MaU2BDhqBw6AuKFUaN8tLRCtO2tIQjGlJE8gbA7QLPLDJSy1TV4D+WODS
+         Fe1JBp1yUp7EBnFVIHVWlZ8FssgpbWjuPwsw875XIQlchGvuT1bCxa+TsRU+X9HQ6P4b
+         BGwiuDV9iJm9+gywjQOvIvEFKowvcRCFUAGkcyKeCsXfPmJ2prARdY3+PJHphqlLkWIq
+         69qz8Le2hNZ52D70RpH/BsjmgKLh3V/rPhmStwRBTrlbd3u33Ngy6TyXPeItjmyg52ao
+         k56xwwyVTBilVr1AGKdDuc/2BbEV/3oRwTeW6Xw9BFKqZ3e1jJq1GGwevnXPY9LgdrfP
+         752A==
+X-Gm-Message-State: AJIora98qqBdmTPE19zK0UexXArm2Ns5JKJeV5lFxDnhCtY8+hfCAsY+
+        bQF/go9o1VJUFSpTngnOuMxDpDOvDA==
+X-Google-Smtp-Source: AGRyM1vzkO++HsbSir7ZbCZNk8RsHLKO5mm6TyRRsK3Bu8hhHALzdY+MkTYM98ZV7iYjLMb5ueJJrQ==
+X-Received: by 2002:a05:6602:131a:b0:67b:dbd5:49dd with SMTP id h26-20020a056602131a00b0067bdbd549ddmr8950312iov.1.1658178902508;
+        Mon, 18 Jul 2022 14:15:02 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id x13-20020a92de0d000000b002dc06989d86sm5196511ilm.52.2022.07.18.14.15.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 14:15:02 -0700 (PDT)
+Received: (nullmailer pid 3569024 invoked by uid 1000);
+        Mon, 18 Jul 2022 21:15:00 -0000
+Date:   Mon, 18 Jul 2022 15:15:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>, iommu@lists.linux.dev,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v2 03/19] dt-bindings: power: mediatek: Add bindings for
+ MediaTek SCPSYS
+Message-ID: <20220718211500.GA3562861-robh@kernel.org>
+References: <20220714122837.20094-1-tinghan.shen@mediatek.com>
+ <20220714122837.20094-4-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220718192844.1805158-7-yury.norov@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220714122837.20094-4-tinghan.shen@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:28:34PM -0700, Yury Norov wrote:
-> One of bitmap_cut() tests passed it with:
-> 	nbits = BITS_PER_LONG;
-> 	first = BITS_PER_LONG;
-> 	cut = BITS_PER_LONG;
+On Thu, Jul 14, 2022 at 08:28:21PM +0800, Tinghan Shen wrote:
+> The System Control Processor System (SCPSYS) has several power
+> management related tasks in the system. Add the bindings for it.
+
+Please coordinate your work:
+
+https://lore.kernel.org/linux-arm-kernel/20220718180654.GA3260460-robh@kernel.org/
+
 > 
-> This test is useless because the range to cut is not inside the
-> bitmap. This should normally raise an error, but bitmap_cut() is
-> void and returns nothing.
-> 
-> To check if the test is passed, it just tests that the memory is
-> not touched by bitmap_cut(), which is probably not correct, because
-> if a function is passed with wrong parameters, it's too optimistic 
-> to expect a correct, or even sane behavior.
-> 
-> Now that we have bitmap_check_params(), there's a tool to detect such
-> things in real code, and we can drop the test.
-
-There are no "useless" tests. Same comments as per a couple of previous
-patches.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  .../bindings/mfd/mediatek,scpsys.yaml         | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,scpsys.yaml

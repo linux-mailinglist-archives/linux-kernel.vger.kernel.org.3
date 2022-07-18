@@ -2,196 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B7A5786BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B64A5786BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbiGRPtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 11:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S234880AbiGRPtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235192AbiGRPti (ORCPT
+        with ESMTP id S234938AbiGRPta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:49:38 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00078.outbound.protection.outlook.com [40.107.0.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A51011473;
-        Mon, 18 Jul 2022 08:49:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K4zLA0l8VDjkfjpwUFyo+IaHJxoB2rRRx5PaBIdQzJwVg1iewUqPUljDaoyF3nlZJMpY11Z3xvQ6mFnP+Rs81Gmk9SZr5uOtWtmnRnSnrhTxSSSvygdzo7N2k9ERm+Q+6M+IebvSQdq+xHFhaYpA44bdZJkT5twXkyBIvsywgO6HP0PFQcu/pH1uUcHgxm6u35eIqHCflGb+Q3RkeqxzRGEltsfOFqJX7KTJi/ldZ60tRrI6dS9N8eWE6br4CECTgveJ+uMNpuxQaYRBkI25Mbu4qiPFjisQw5gX1Dc6ewFA+PrPBRwkDZH4LO9+/56jwTaO8/9H2toXcQ8nfJpYsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7vPdVf7NkMjEn1Dw68n07dVL7Uqc6PqkL+5R6Tp4K1c=;
- b=fm9Vqv6yq9etdiSIiCWe+UKz2k8/MoRa+KWvA0C7KwyyYzZJIUK8czRiqZZUvhYQl6QciifABXB/VBiKLIJ3f8EVPn4clPz3+vbAtyjr+m0Z+NmV5EMP/myVkkqi9SdUcAa9INq9ijIKpOO9WaI+u8IxzOzflfeFe4obcgWP2lrv4k3l7rQ+pFBxJtx6L63af0/g9uJ5dSIUDF9/yqdyHNzSKeFzG1rI/RhxrVgctoZPizR9U+1vJpq6PkcIieRslzR7DLZ8hm9yjP+0bXFmrHPSPCuXatLYTB8TDFc7OZWJ1gYdm8dXY7aFIEdCR8JFoqvMRB7WP8OBxfh5LOaqPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7vPdVf7NkMjEn1Dw68n07dVL7Uqc6PqkL+5R6Tp4K1c=;
- b=Vmy75OiOrEEmO++y8wGvLuJvvQGshNSVbWhXIVbJEyTAE/P9a4RwYAc4wfjqu9C+WeMoln4Zv/9QtAAbFaRiGJTUrnUCwlaDP6Y+knqgbnCNXzinS6K9AByG1qco7iy4+7oDsa/HHd5MhQlMoxvW++QMAELFney6ce+kyPQh311kuqpkoEs2Mx0F2yk9E1XYB/4Z7F1u0mmuxKCi4bumG4hYtQdCpI4/ihIvD2plNJRNliS/vKsKu5BN2PBUEYFmkeL6rYOw3FHeoGCQ9NjnBE8pEtOjzHZKlHJzOoiPcCGrc1pES7RouBmAgF/vxpchqaRAi+MGrQCEC2xEwbf2Uw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by AM5PR03MB2898.eurprd03.prod.outlook.com (2603:10a6:206:19::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Mon, 18 Jul
- 2022 15:49:31 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1%6]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
- 15:49:31 +0000
-Subject: Re: [PATCH net-next v3 08/47] net: phylink: Support differing link
- speeds and interface speeds
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-References: <20220715215954.1449214-1-sean.anderson@seco.com>
- <20220715215954.1449214-9-sean.anderson@seco.com> <YtMaKWZyC/lgAQ0i@lunn.ch>
- <984fec49-4c08-9d5a-d62f-c59f106f8fe5@seco.com> <YtNlXA4lBeG+gRXH@lunn.ch>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <918b1c8d-1794-3ae9-a68f-0e0c24421169@seco.com>
-Date:   Mon, 18 Jul 2022 11:49:25 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <YtNlXA4lBeG+gRXH@lunn.ch>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR11CA0027.namprd11.prod.outlook.com
- (2603:10b6:610:54::37) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Mon, 18 Jul 2022 11:49:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C98C6594;
+        Mon, 18 Jul 2022 08:49:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF0F26145B;
+        Mon, 18 Jul 2022 15:49:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 874EEC341CA;
+        Mon, 18 Jul 2022 15:49:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658159367;
+        bh=IfAevGzlpYCavmnr3ns+VPAyXBT6NE4h2pno3np3Oyc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nGCPao167W/S4i0fNSIkzBvgCNkf8Y8RqKtTF8saQLEUstEOL4tdYCAm1ieeZfVWU
+         2rIVnC+hnGwZ8cTIb2zOBJT3c7kzhHgw/FLW3Lcu8YCvBf/kfUpI6/KX7MycQwOB+9
+         /hkZckzOJONozJ23Br0wG+PItJ57+Azmc4jBn/JMLURHTFwbE3pSx01VoRkx4sjofg
+         bjjN0lDcJcgEq3zAqYJHg3cVqO5jTnL/445JVJ53ZMUgl4/i7+a7vX01MHY5Qn5Ywi
+         zYU7Vj64PuMqIQv0sheHmBahZz6tz1Z+bvPwSyNTLCfOg9OG/zS3kTNctQR/cDnOQe
+         wI46ITQXy6cqA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7F21240374; Mon, 18 Jul 2022 12:49:25 -0300 (-03)
+Date:   Mon, 18 Jul 2022 12:49:25 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
+        Like Xu <likexu@tencent.com>,
+        James Clark <james.clark@arm.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Claire Jensen <clairej735@gmail.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v6 2/2] perf test: Json format checking
+Message-ID: <YtWBBSHK2hAtykro@kernel.org>
+References: <20220707201213.331663-1-irogers@google.com>
+ <20220707201213.331663-3-irogers@google.com>
+ <YtV/+yRsA9SJuntp@kernel.org>
+ <YtWAQqXFp98+N9ej@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bcadace4-aea0-4745-0252-08da68d51ad2
-X-MS-TrafficTypeDiagnostic: AM5PR03MB2898:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YCgmqrabnu+q6fhOZQJ98BIUzNv50+da3DJ3QwoUhuCU79ZPg6dfYfh1ZDUi/y3V1IWUw1/nQWGZJJlgv482+hj7/iycz8dVEKOzUrcZl4BDlr+uWqWDS2dZLZmepMo9+7E0oFGteM6omQp4BtoqWE02gHP4FDpJ38qnctUdTmqAkyIdWLnKuteMSQZlBXE+Hd2hK62/D2aJv4fDuNEbhtQxUXlhhXvzo2Z02lgxBPuvxWi+W6l1+VsVc9Hs2c1REWI6tj9hYVS4caaYRVu9BrW5cn9UI+9itLKTQSrKP7c0KndZZMMhDkiov+y3LF+fyLmXnOgqPZ8viNPLR4NEVyOVX7mYaSvcTHzAys0tVtJzrBBcUHUIo/VU3MShlj/SaFgsesB75tW3IqF/3jiffyFRKk5k9RcmQXQeEhT/qYjIbtasb4WXyX3bO9vINuo2CcDNoG/WrODGk8Saqk5smcaqKBLD/gxzgSto6HjbOr6xSJ4d8/V2qcruYscG3h6TuWMWVEGCUHGgyObRP81tTLQ+4wHgf3oSHCy22ztVVz28JX2BiZ3iZFpJY/y+Ve7hTxmkDp2QnQwdiySeArNJxdjzKT2m+iOgKWFppjShWXu/ubXuZnGj22dnLz2qjgZDLEWNs72Ch+QaXve1Xa3tBw0bgr+vzUMC6p8t7w8Q/pFm5NffqrF6Ti/Ohl8gFV7rvE73rJa6NRUEzkPs14/oqqTJ0TeU3uBVERAhi+pKz2oi1gzilmGXT8dlPCyQN+denTZRuLzqruJBKQWL+0BMafK2MWJNmxzvOczyzhZNTedyJBnkbRLZofIVjnEYxzbry2VqGGS/CQzJEhffjttCyeIVmy88Y5HiRYJsgsmaU4jnvePDblokFHk7DKAe0KoX
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(39850400004)(376002)(136003)(366004)(2616005)(83380400001)(38350700002)(6486002)(52116002)(478600001)(186003)(53546011)(6506007)(6512007)(38100700002)(41300700001)(26005)(66946007)(6666004)(7416002)(44832011)(2906002)(31686004)(5660300002)(36756003)(8936002)(8676002)(316002)(4326008)(31696002)(54906003)(6916009)(86362001)(66556008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ukw5S0hUSjUvbERIVHBmNlNLYlVESithbDMvcFMyTUFsWHNrSUpVRnpmMHV1?=
- =?utf-8?B?NkhlWkhRaXlXVGJYR0hoNU9aenJCUVo1cjY5dUNidGVTY1RQMG05Y2NZYjd1?=
- =?utf-8?B?N3F6ajNkOHZtdDVoZDg1dG50VTlQd3loUlg3OWhsY1dsZ25CVWlwYlRqYkhj?=
- =?utf-8?B?U1Z3MUZZT3Q5KzA5dDYrUGtQSHNGdlZDelRMQ01DRFZxdGd1cnBiUjZHNFBW?=
- =?utf-8?B?aENHN2U4RzFCSEowc2xpYWpvdjFrUExuOWt2ZCtEZXQ1dUFobTJudHZhN3pY?=
- =?utf-8?B?cUxFWUo4Q1NPeVZUWitSZ3QrZkV4MFB2clJDY2trWVN0Q2ZCak4wUHBaeFh4?=
- =?utf-8?B?N0NnTHNHOHRXa3I2Vi9mWXJrdDR2MHkra0FOMU8rWTE3NmhCbG1RMmNkSlVV?=
- =?utf-8?B?SHlhOUsveURuRjBaR0dFOEx1ajZEY1JkMC9lNjZWZ0dTS3JHejFFbnNnWXlN?=
- =?utf-8?B?M1lKK0JXa1NNWTE5M2tNZm1aZTdPTDQwamRYMEp5cWo1dTZpRzlyUnllYlcx?=
- =?utf-8?B?NkRxMzBvMmtHcWNyRXZBYnNDWGErdVQ3bEIwVktvOHZ6cmRHdmJ1OHR3UXcr?=
- =?utf-8?B?eHNUdEVxdU93cnV6KzRnZUp2UFhsNEZJNUpxa09vNWhnM1FqVmxRbDRZaUdS?=
- =?utf-8?B?WlBqRXFtVzZYUk1UZFJhRzhiKyszbklpN1ZSekRRZzVnQlAxOEhwelRWUm8x?=
- =?utf-8?B?dFdKUnh5OGN5V3lta0pESDQ2UDBPdlc0bmJxNW9WOVdmWlJaMU1UOGRlMVA4?=
- =?utf-8?B?VU9tU3BvQmZ3aUZWTXJGVDBPQXN3NldOR2FKbVd1V0tRdjR1QVp4c1ZOYkMx?=
- =?utf-8?B?aC9zdTJIditSQXBoTXFTeWU0T1l0QlJ6dHdHVnBkYnU5MEdrbTdzK2taK0xz?=
- =?utf-8?B?NFY4OVlIYisyRVlrQVBzaVlmRFNPVEl5ZFIzRWFvYjBMZ0xGUmdvN3dJUUZI?=
- =?utf-8?B?QUhBMzYwU3FzQ0Z1OHRQZlpSSE00R1NINUV3R3N0aTRQdnZKWjNxSXQ1VUdN?=
- =?utf-8?B?azhiOXhsRG0wVHVUQ0hyL3BpMFpCUklNUGRkWmFiaFBJOW4zSXVabzdydlBz?=
- =?utf-8?B?TWlYNkYxQmV4RVpUU3BJOGQ2NFg3WlBCRFE3SHl5em5qbzdIUTlUYlR2NTNm?=
- =?utf-8?B?emlxelk3bTduZFhlQ09tdVh2R2ZySHBTSDd2N1MxbDNtMks0dmxEUnduNmxN?=
- =?utf-8?B?N1FENkVrWjI2ekxCSzdHS0xCN3ZuK0g1Wjl5a2FTM2pSdkVNZFFqWGY1Z3NT?=
- =?utf-8?B?TlJJWnBaZllLTkNaT0p6OHZRWXFQRVZsYzM0SW43NGtPSGVQSk5qMDk4eG0r?=
- =?utf-8?B?TWpnZHlzRnRHK3dKbmZ1VC9randFUjN0Mzh3R2kzVmNNYXUvMFcvWWRUclFY?=
- =?utf-8?B?QzRRcUFEbUNtcDk4K2lyeWRCWDYxMDc0cFVFUzNSK2pxYVByNTJXUHE4NFho?=
- =?utf-8?B?eDFnWWtPMnBqVnFVQ1BtWkR5RkN6SThEN1hlSXFnT1JDUlFMQkkrcEVVSHd4?=
- =?utf-8?B?djNmMXVRak1DZy9zWmtpcnprTTV1S3hmekI4bm44cmZwUTFGcHNhUnk2WGtW?=
- =?utf-8?B?Y21NZ3libElvak85SXlzM1VITDErOUhJR0pqVXBqU1NFWUNUMTI4eFFtVVZo?=
- =?utf-8?B?RTgrNHRpMHhSS0lUUWFkZmkyenRUOWdEdTRRUEZzU3c4ZVhtMFMxc1ljajRT?=
- =?utf-8?B?ZWJ1WjBwdS9ZQ2x5ZjBHOElFZFZTdnRjb2xQcVRFVUozeklvdENjdVhPcldN?=
- =?utf-8?B?cnIrb0IwdDNtdWFtbThUZTVhdmxCZTI2QTFTalFvUUJjL2NQS2JlZTE1ZXNz?=
- =?utf-8?B?QkFkVXF4QXFlbGU5WlBRMzFURjVzQlR3VGxuL2duL0hJSU1UMXlLWGxqQnB5?=
- =?utf-8?B?c3o5b3hGTUpwcThnZXhVR2Erd2VadXNaRGViMWZvbEtkS3kwSlVWRDZLSlV2?=
- =?utf-8?B?c3phMU1aVkliM2FtRkFFd0Q5YWlYVGN0d2JlamZMc1pubmhqaStGNnRUK01W?=
- =?utf-8?B?clpZc3ZmMFNKYzN5YWNnUnVLeTRCeGFRenJwR2FuaVYwUVhmWW9RRkQxNkpp?=
- =?utf-8?B?eU55dHlrSEpkTVNVUFk3dmdqL25hRW1IUG01YXM5RmNSSHRJMnlNeWV6MHFF?=
- =?utf-8?B?NHhEaGFrRXAzbzdPaSs0VU5DWWNxWEU4RHhlYlBwcTFaRjlGdDN5cnVPYTNM?=
- =?utf-8?B?M0E9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcadace4-aea0-4745-0252-08da68d51ad2
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2022 15:49:31.5671
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /Km0cNlcwIT+tVl0Jki/S78Qesn0lRnrbHR6l8tr3/bLahEp5BdfM8cZf+snfZZOl0OyyCx4VAzNtoTKjG9roQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR03MB2898
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YtWAQqXFp98+N9ej@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/16/22 9:26 PM, Andrew Lunn wrote:
->> > This seem error prone when new PHY_INTERFACE_MODES are added. I would
->> > prefer a WARN_ON_ONCE() in the default: so we get to know about such
->> > problems.
->> 
->> Actually, this is the reason I did not add a default: clause to the
->> switch (and instead listed everything out). If a new interface mode is
->> added, there will be a warning (as I discovered when preparing this
->> patch).
+Em Mon, Jul 18, 2022 at 12:46:10PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Jul 18, 2022 at 12:44:59PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Thu, Jul 07, 2022 at 01:12:13PM -0700, Ian Rogers escreveu:
+> > > From: Claire Jensen <cjense@google.com>
+> > > 
+> > > Add field checking tests for perf stat JSON output.
+> > > Sanity checks the expected number of fields are present, that the
+> > > expected keys are present and they have the correct values.
+> > 
+> > it isn't installing the lib:
+> > 
+> > [root@five ~]# perf test -v json
+> >  91: perf stat JSON output linter                                    :
+> > --- start ---
+> > test child forked, pid 4086678
+> > Checking json output: no args python3: can't open file '/var/home/acme/libexec/perf-core/tests/shell/lib/perf_json_output_lint.py': [Errno 2] No such file or directory
+> > test child finished with -2
+> > ---- end ----
+> > perf stat JSON output linter: Skip
+> > [root@five ~]#
+> > 
+> > I'm trying to fix, but please test it after installing...
 > 
-> Ah, the compiler produces a warning. O.K. that is good. Better than an
-> WARN_ON_ONCE at runtime.
 > 
->> > Bike shedding a bit, but would it be better to use host_side_speed and
->> > line_side_speed? When you say link_speed, which link are your
->> > referring to? Since we are talking about the different sides of the
->> > PHY doing different speeds, the naming does need to be clear.
->> When I say "link" I mean the thing that the PMD speaks. That is, one of
->> the ethtool link mode bits. I am thinking of a topology like
->> 
->> 
->> MAC (+PCS) <-- phy interface mode (MII) --> phy <-- link mode --> far-end phy
->> 
->> The way it has been done up to now, the phy interface mode and the link
->> mode have the same speed. For some MIIs, (such as MII or GMII) this is
->> actually the case, since the data clock changes depending on the data
->> speed. For others (SGMII/USXGMII) the data is repeated, but the clock
->> rate stays the same. In particular, the MAC doesn't care what the actual
->> link speed is, just what configuration it has to use (so it selects the
->> right clock etc).
->> 
->> The exception to the above is when you have no phy (such as for
->> 1000BASE-X):
->> 
->> MAC (+PCS) <-- MDI --> PMD <-- link mode --> far-end PMD
->> 
->> All of the phy interface modes which can be used this way are
->> "non-adaptive." That is, in the above case they have a fixed speed.
->> 
->> That said, I would like to keep the "phy interface mode speed" named
->> "speed" so I don't have to write up a semantic patch to rename it in all
->> the drivers.
+> It should:
 > 
-> So you want phydev->speed to be the host side speed. That leaves the
-> line side speed as a new variable, so it can be called line_side_speed?
+> install-tests: all install-gtk
+>         $(call QUIET_INSTALL, tests) \
+>                 $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests'; \
+>                 $(INSTALL) tests/attr.py '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests'; \
+>                 $(INSTALL) tests/pe-file.exe* '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests'; \
+>                 $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/attr'; \
+>                 $(INSTALL) tests/attr/* '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/attr'; \
+>                 $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
+>                 $(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
+>                 $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+>                 $(INSTALL) tests/shell/lib/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
 > 
-> I just find link_speed ambiguous, and line_side_speed less so.
+> /me checking...
 
-I would rather use something with "link" to match up with
-ETHTOOL_LINK_MODE_*. Ideally "speed" would be something like
-"interface_speed" to match up with PHY_INTERFACE_MODE_*.
+The patch below is needed, but then should we mix .py and .sh in that
+directory?
 
-> The documentation for phydev->speed needs updating to make it clear it
-> is the host side speed.
+⬢[acme@toolbox perf]$ git diff
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 8f0b1fb39984fb7b..65e5ba767fd6210e 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -1006,6 +1006,7 @@ install-tests: all install-gtk
+                $(INSTALL) tests/shell/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell'; \
+                $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'; \
+                $(INSTALL) tests/shell/lib/*.sh '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
++               $(INSTALL) tests/shell/lib/*.py '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/tests/shell/lib'
 
-OK
+ install-bin: install-tools install-tests install-traceevent-plugins
 
---Sean
+⬢[acme@toolbox perf]$
+
+And then, after that I'm getting:
+
+[root@five ~]# perf test json
+ 91: perf stat JSON output linter                                    : FAILED!
+[root@five ~]# perf test -v json |& tail -20
+{"core" : "S0-D0-C15", "aggregate-number" : 2, "counter-value" : "2675.000000", "unit" : "", "event" : "stalled-cycles-backend", "event-runtime" : 2864158, "pcnt-running" : 100.00, "metric-value" : 0.341252, "metric-unit" : "backend cycles idle"}
+
+{"core" : "S0-D0-C15", "aggregate-number" : 2, "counter-value" : "233533.000000", "unit" : "", "event" : "instructions", "event-runtime" : 2865528, "pcnt-running" : 100.00, "metric-value" : 0.297920, "metric-unit" : "insn per cycle"}
+
+{"core" : "S0-D0-C15", "aggregate-number" : 2, "metric-value" : 0.192975, "metric-unit" : "stalled cycles per insn"}
+
+{"core" : "S0-D0-C15", "aggregate-number" : 2, "counter-value" : "50214.000000", "unit" : "", "event" : "branches", "event-runtime" : 2865638, "pcnt-running" : 100.00, "metric-value" : 17.295742, "metric-unit" : "M/sec"}
+
+{"core" : "S0-D0-C15", "aggregate-number" : 2, "counter-value" : "1513.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 1564989, "pcnt-running" : 54.00, "metric-value" : 3.013104, "metric-unit" : "of all branches"}
+
+Traceback (most recent call last):
+  File "/var/home/acme/libexec/perf-core/tests/shell/lib/perf_json_output_lint.py", line 92, in <module>
+    check_json_output(expected_items)
+  File "/var/home/acme/libexec/perf-core/tests/shell/lib/perf_json_output_lint.py", line 53, in check_json_output
+    raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
+RuntimeError: wrong number of fields. counted 3 expected 8 in '{"core" : "S0-D0-C0", "aggregate-number" : 2, "metric-value" : 0.094345, "metric-unit" : "stalled cycles per insn"}
+'
+test child finished with -1
+---- end ----
+perf stat JSON output linter: FAILED!
+[root@five ~]#
+
+Can you please check and send a v7?
+
+- Arnaldo

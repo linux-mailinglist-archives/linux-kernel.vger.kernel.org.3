@@ -2,140 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62058578117
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B343957811A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbiGRLk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 07:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S234455AbiGRLmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 07:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiGRLk6 (ORCPT
+        with ESMTP id S230249AbiGRLmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 07:40:58 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297C0B4E
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 04:40:57 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id h17so16670274wrx.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 04:40:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OtDWofZTy1qmKuvBDY8yr9mvFOFtQYbwQaCoI3ka5GY=;
-        b=TJd8MU6tXuWiaQeLz1k7kxgk75viXfVDjqKS2cuGI25ZYB964+bhrQqtboTyyWlNls
-         DVxqcuAWXgzsaxgVrTOW+kgbZNh5CA0cylRsceGZsUvLLIdxB9F6wx987KC6TAvryxaN
-         h1zzphjZJoLdF6rZHei1WS0VjxxE62ciiHF3oezxbxoPOndAGtOsBq2JOrMBDMvN5UGl
-         y/fC6Yr8E5Rdw2CAka8m5ImYupNOyL8F7dwi8M2e0fyCNZ0nUE2tCoEwtMz9xImzQMcN
-         FssLqh9q329hWQa/aqD+eLCzabsmmsSsM8esLgyC4VXfaPtZ4k9sz5esOUQ4Q/F6LaQd
-         ak7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OtDWofZTy1qmKuvBDY8yr9mvFOFtQYbwQaCoI3ka5GY=;
-        b=HE1xAbz6NhEQUVsRdaeARucBLtVZQ2T4jyxg0KGBJlDf6+BRTiLxJ3fl5fd02NoPXB
-         bKg/DbPA6EFDNqjKDEbw83+amcWU2XHKhtgpNkrLi7k5pZ0ZoNI011qmzl9cPq9MOi+x
-         AhpIU6vuhCeY6zz9M3TZyM9qU1iBVB+4NHPuA4TucVCVWMzN51LmgAbQOup2j4Ut731U
-         TF/235CsBDFd72jGATWLvVExp+/Hl0Eu01YcJYNIdH8hxeT/Hg2MX9UxFd6uYqEl/4lW
-         8nitqImBTF2q/NqBTHDGugM5LQTOn41lbyU32cfyaAPeTmtGbfHMppYPgry50qZW7wTK
-         iHqg==
-X-Gm-Message-State: AJIora/lUsR9wpehNp7eMqwFduWJQDHXZcvY3TmQHvWnEoZwIG3L7TNG
-        7AxPyc5FEhP9/jeRdd9PHa7aXg==
-X-Google-Smtp-Source: AGRyM1u7DbY7c6IJjYVD2ncrk34adCppra4JnZ17sKsvadoDIiTb1u9m7aYXB1xAGgT1BCLKrfGETA==
-X-Received: by 2002:a5d:47a8:0:b0:21d:b690:9273 with SMTP id 8-20020a5d47a8000000b0021db6909273mr21300789wrb.242.1658144455677;
-        Mon, 18 Jul 2022 04:40:55 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id l14-20020adff48e000000b0021d7ad6b9fdsm10615226wro.57.2022.07.18.04.40.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 04:40:55 -0700 (PDT)
-Message-ID: <595e0169-fe87-0477-fbe4-ff89387605df@linaro.org>
-Date:   Mon, 18 Jul 2022 12:40:53 +0100
+        Mon, 18 Jul 2022 07:42:02 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5ADFB4E;
+        Mon, 18 Jul 2022 04:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EEc9IHZIWJwHYmyzdLOeoXjAFOJf8a2lOt0xm5QgV3w=; b=T+cIZZ3bhcx8LfA9eyofGJrDhv
+        zy6tBDbb4qBFCHdlXaxIdQxJJNjascLa6qWnSS4kO6uvbc48k+UniEGd/L/dvhbrSXryRPqbd+/Pl
+        sQa1/OY6pFczLuEF054UxJh4D214/RgxImxXHsY6xzpvD8Ft01So1580ctcmigeWn9Usmto6n9W/l
+        npRD39zyWsSUTqmQ0hoMRu1/4X07fIpeiaagnyUMPe9cMUsirrzg8UwFENG/F0xdZSZc+Xell3mtE
+        VtZ8SNFb450+ILrXP7Mg8m1BJorpkZigjTPSHPVbCMos1tAAOrwIEW+4XT409PjaE//v3kcnRIqRM
+        bSvgwg5Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDP87-004oSC-0E; Mon, 18 Jul 2022 11:41:39 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D2E17980239; Mon, 18 Jul 2022 13:41:37 +0200 (CEST)
+Date:   Mon, 18 Jul 2022 13:41:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        x86@kernel.org, ardb@kernel.org, tglx@linutronix.de,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, stable@vger.kernel.org,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+Subject: Re: [PATCH] efi/x86: use naked RET on mixed mode call wrapper
+Message-ID: <YtVG8VBmFikS6GMn@worktop.programming.kicks-ass.net>
+References: <20220715194550.793957-1-cascardo@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next] nvmem: core: Fix memleak in nvmem_register()
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, gongruiqi1@huawei.com,
-        wangweiyang2@huawei.com
-References: <20220716075352.2622809-1-cuigaosheng1@huawei.com>
- <YtJ1mthCP+4laqOn@kroah.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <YtJ1mthCP+4laqOn@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715194550.793957-1-cascardo@canonical.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 16/07/2022 09:23, Greg KH wrote:
-> On Sat, Jul 16, 2022 at 03:53:52PM +0800, Gaosheng Cui wrote:
->> dev_set_name will alloc memory for nvmem->dev.kobj.name in
->> nvmem_register, when nvmem_validate_keepouts failed, nvmem's
->> memory will be freed and return, but nobody will free memory
->> for nvmem->dev.kobj.name, there will be memleak, so using
->> kfree_const(nvmem->dev.kobj.name) to fix it.
->>
->> Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
->> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
->> ---
->>   drivers/nvmem/core.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
->> index 1e3c754efd0d..6c75c9afa5f3 100644
->> --- a/drivers/nvmem/core.c
->> +++ b/drivers/nvmem/core.c
->> @@ -833,6 +833,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->>   		rval = nvmem_validate_keepouts(nvmem);
->>   		if (rval) {
->>   			ida_free(&nvmem_ida, nvmem->id);
->> +			kfree_const(nvmem->dev.kobj.name);
->>   			kfree(nvmem);
+On Fri, Jul 15, 2022 at 04:45:50PM -0300, Thadeu Lima de Souza Cascardo wrote:
+> When running with return thunks enabled under 32-bit EFI, the system
+> crashes with:
 > 
-> Something is really wrong, you should never be touching the name pointer
-> of a kobject directly like this.  Also the device structure itself
-> should be cleaning up the memory, not a kfree.  So this feels wrong...
-
-The problem is that at this point we have not device_intialize() the dev 
-yet, so there is no refcount setup for kobject yet.
-
-I see two drivers (drivers/nvme/core.c and drivers/base/node.c)  doing 
-something similar.
-
-Most common (99.99%) usage pattern is
-
-dev_set_name(...)
-ret = device_register(..);
-if (ret < 0)
-	put_device(..)
-
-but in this particular case we have:
-
-dev_set_name(...)
-..
-ret = do_some_error_checks()
-if (ret < 0)
-	return ret;
-...
-ret = device_register(..);
-if (ret < 0)
-	put_device(..)
-
-One solution is to follow the most used pattern and move the checks 
-after device register and let device core take care of freeing this 
-kobj.name as part of its cleanup routine.
-
---srini
-
+> [    0.137688] kernel tried to execute NX-protected page - exploit attempt? (uid: 0)
+> [    0.138136] BUG: unable to handle page fault for address: 000000005bc02900
+> [    0.138136] #PF: supervisor instruction fetch in kernel mode
+> [    0.138136] #PF: error_code(0x0011) - permissions violation
+> [    0.138136] PGD 18f7063 P4D 18f7063 PUD 18ff063 PMD 190e063 PTE 800000005bc02063
+> [    0.138136] Oops: 0011 [#1] PREEMPT SMP PTI
+> [    0.138136] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc6+ #166
+> [    0.138136] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+> [    0.138136] RIP: 0010:0x5bc02900
+> [    0.138136] Code: Unable to access opcode bytes at RIP 0x5bc028d6.
+> [    0.138136] RSP: 0018:ffffffffb3203e10 EFLAGS: 00010046
+> [    0.138136] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000048
+> [    0.138136] RDX: 000000000190dfac RSI: 0000000000001710 RDI: 000000007eae823b
+> [    0.138136] RBP: ffffffffb3203e70 R08: 0000000001970000 R09: ffffffffb3203e28
+> [    0.138136] R10: 747563657865206c R11: 6c6977203a696665 R12: 0000000000001710
+> [    0.138136] R13: 0000000000000030 R14: 0000000001970000 R15: 0000000000000001
+> [    0.138136] FS:  0000000000000000(0000) GS:ffff8e013ca00000(0000) knlGS:0000000000000000
+> [    0.138136] CS:  0010 DS: 0018 ES: 0018 CR0: 0000000080050033
+> [    0.138136] CR2: 000000005bc02900 CR3: 0000000001930000 CR4: 00000000000006f0
+> [    0.138136] Call Trace:
+> [    0.138136]  <TASK>
+> [    0.138136]  ? efi_set_virtual_address_map+0x9c/0x175
+> [    0.138136]  efi_enter_virtual_mode+0x4a6/0x53e
+> [    0.138136]  start_kernel+0x67c/0x71e
+> [    0.138136]  x86_64_start_reservations+0x24/0x2a
+> [    0.138136]  x86_64_start_kernel+0xe9/0xf4
+> [    0.138136]  secondary_startup_64_no_verify+0xe5/0xeb
+> [    0.138136]  </TASK>
 > 
-> greg k-h
+> That's because it cannot jump to the return thunk from the 32-bit code.
+> Using a naked RET and marking it as safe allows the system to proceed
+> booting.
+> 
+> Fixes: aa3d480315ba ("x86: Use return-thunk in asm code")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> Cc: <stable@vger.kernel.org>
+> ---
+> 
+> Does this leave one potential attack vector open? Perhaps, since this is
+> running under a different mapping (AFAIU), the risk is reduced? Or rather, the
+> attacker could attack using the firmware RETs anyway?
+> 
+> Alternatively, we could use IBPB when available when using the wrapper.
+> 
+> Thoughts?
+
+What actual uarch are you running this on? Is this AMD hardware?
+
+For Intel we'll enable IBRS for firmware if it is not otherwise enabled
+(upstream will always enable IBRS for the SKL family chips, but Thomas
+just posted the retbleed=stuff approach yesterday that will not)
+
+On AMD I think you're stuck with IBPB, but that has to be issued
+*before* calling the firmware muck.
+
+In either case, I think the patch as proposed is fine. But perhaps we
+want something like the below on top.
+
+---
+Subject: x86/amd: Use IBPB for firmware calls
+
+On AMD IBRS does not prevent Retbleed; as such use IBPB before a
+firmware call to flush the branch history state.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/include/asm/cpufeatures.h   |  1 +
+ arch/x86/include/asm/nospec-branch.h |  2 ++
+ arch/x86/kernel/cpu/bugs.c           | 11 ++++++++++-
+ 3 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 00f5227c8459..a77b915d36a8 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -302,6 +302,7 @@
+ #define X86_FEATURE_RETPOLINE_LFENCE	(11*32+13) /* "" Use LFENCE for Spectre variant 2 */
+ #define X86_FEATURE_RETHUNK		(11*32+14) /* "" Use REturn THUNK */
+ #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
++#define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 10a3bfc1eb23..f934dcdb7c0d 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -297,6 +297,8 @@ do {									\
+ 	alternative_msr_write(MSR_IA32_SPEC_CTRL,			\
+ 			      spec_ctrl_current() | SPEC_CTRL_IBRS,	\
+ 			      X86_FEATURE_USE_IBRS_FW);			\
++	altnerative_msr_write(MSR_IA32_PRED_CMD, PRED_CMD_IBPB,		\
++			      X86_FEATURE_USE_IBPB_FW);			\
+ } while (0)
+ 
+ #define firmware_restrict_branch_speculation_end()			\
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index aa34f908c39f..78c9082242a9 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1516,7 +1516,16 @@ static void __init spectre_v2_select_mitigation(void)
+ 	 * the CPU supports Enhanced IBRS, kernel might un-intentionally not
+ 	 * enable IBRS around firmware calls.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) {
++	if (boot_cpu_has_bug(X86_BUG_RETBLEED) &&
++	    (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
++	     boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)) {
++
++		if (retbleed_cmd != RETBLEED_CMD_IBPB) {
++			setup_force_cpu_cap(X86_FEATURE_USE_IBPB_FW);
++			pr_info("Enabling Speculation Barrier for firmware calls\n");
++		}
++
++	} else if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) {
+ 		setup_force_cpu_cap(X86_FEATURE_USE_IBRS_FW);
+ 		pr_info("Enabling Restricted Speculation for firmware calls\n");
+ 	}

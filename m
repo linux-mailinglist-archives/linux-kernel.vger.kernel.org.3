@@ -2,97 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77B3578A7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AF0578A89
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235229AbiGRTQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S231283AbiGRTSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiGRTQb (ORCPT
+        with ESMTP id S230317AbiGRTR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:16:31 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98792ED5D;
-        Mon, 18 Jul 2022 12:16:29 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id r4so2362765ilb.10;
-        Mon, 18 Jul 2022 12:16:29 -0700 (PDT)
+        Mon, 18 Jul 2022 15:17:58 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAA82F660
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:17:57 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ez10so23056325ejc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TdpNh/OtxrXAgRkyZLTx7sdU3f7L5qyIViCiqKyQJ5I=;
+        b=OFD0dfOkX/Ub3w/l4upU/yo1HLwEnU8/D4qFP8bCzSuiF0FPoYp9aqVZAXPaNWYmg5
+         j6RR4FW3j0s/IQEJ24FN9jyOjGCh5Wrep+tS1pwAh/psbXQ75dFjKYKDtw5SUqUfKpAk
+         pF8xp6rX5tMH86kWWgvw2+CO5ipjAHrRrG0vY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8RF8yPg0V6Ei1ECcsENYa6ZgHRNw38bA40D3WRP4FyM=;
-        b=HtIUSlWeR67/+pac3QdOLs/nTkmfUEP3IOQGcSHNfw8CupHXTLHuMaPwMBcdCxOIt/
-         BhPgPwaC3u9lnnCi11gSBCzJVQj7yN5XOZDSekAdTLbbEv/wKCz3v5EekWn271vmFyX2
-         K+qsBpI1Al0EsGIxmNpu7joFOZ8hJIlSU/BUQitlZLuUXbWltgssjgOqed91QRTdfCUY
-         tUdMsIR6yWfknVDQpvBpE2IK1S8pitqKZjpX1KdEwTZlOGDCGnVcJ3xWlN3BpHPAM6ht
-         S8W+IvKX9hX33KOTj/EpK+Tnbli8NvbRr707kY6xmnEibAZQovY+PhBgf/cYJQD981hb
-         8u/Q==
-X-Gm-Message-State: AJIora/7P6kX1T4V4WCDr8g5mO2a4sCQ2f8w3oaC5Impc/Mx1DsqNDwQ
-        Lx3lJ/oTAvf3+xm+3dANP2dUqYEfZQ==
-X-Google-Smtp-Source: AGRyM1skZXRGXATxAj9yKT/sA/YyYFM/FtsMqbrtgIQYQ35QL7+WaUwDmKepF9LYedHCorY7wdg3Cg==
-X-Received: by 2002:a05:6e02:188c:b0:2dc:a00:3222 with SMTP id o12-20020a056e02188c00b002dc0a003222mr13783935ilu.43.1658171789064;
-        Mon, 18 Jul 2022 12:16:29 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id w64-20020a025d43000000b0033ef9dc43d4sm5785863jaa.159.2022.07.18.12.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:16:28 -0700 (PDT)
-Received: (nullmailer pid 3377517 invoked by uid 1000);
-        Mon, 18 Jul 2022 19:16:27 -0000
-Date:   Mon, 18 Jul 2022 13:16:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     dmaengine@vger.kernel.org, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, p.zabel@pengutronix.de,
-        thierry.reding@gmail.com, vkoul@kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: dmaengine: Add compatible for
- Tegra234
-Message-ID: <20220718191627.GA3375779-robh@kernel.org>
-References: <20220711154536.41736-1-akhilrajeev@nvidia.com>
- <20220711154536.41736-2-akhilrajeev@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TdpNh/OtxrXAgRkyZLTx7sdU3f7L5qyIViCiqKyQJ5I=;
+        b=4sv7/5/hyXw9nuttMz44Vg5CadqfdhCDpET1O15fgZjcnqIq59FzJehDOhn6p+HkW4
+         lvKH42f7cSlcCph2Tem08dfOlhFpvTELTMsmLGFJN0/5D+h9nBq+IqZL/xxmyHwElYYe
+         3z0cK1WP5IV9MBDUcabSNQjBGQ9Fc8FYPfpClxNb23EEJs1iUMZ/UJvo2rllO30+p4K/
+         sfEw5C8Rq4Al8bi+5IU+EmfFPCQCwjhwD9PnHhoHp6LX1Pt1sUOP2KUeGrh9OJ0zNGBH
+         G/OXj+Ik3gVYllkhdLrtvGwbX+v7Zkx5qFBYvn9T+pGmrFz6CIopi5uTWK8BmuJEaocq
+         KZcg==
+X-Gm-Message-State: AJIora/ef9wRxhASilbxDQfgoEvOWvtfnfI7qLOHoc58rtN+ueDmzYmM
+        HVaxEVaPSjkA8eeSahBjm9bGSGaDVnqR/tT1xNE=
+X-Google-Smtp-Source: AGRyM1vGWNfJZ362b+OLQ+4CCoEJ9Af54Px2LWU/lW25Pu25LgDTQD+jey/qD1bxFiTQdRnDkhaFqA==
+X-Received: by 2002:a17:907:970b:b0:72b:5919:506c with SMTP id jg11-20020a170907970b00b0072b5919506cmr26383766ejc.241.1658171875507;
+        Mon, 18 Jul 2022 12:17:55 -0700 (PDT)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id j26-20020aa7de9a000000b0043a7293a03dsm9052653edv.7.2022.07.18.12.17.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 12:17:54 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id n12so5624564wrc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:17:54 -0700 (PDT)
+X-Received: by 2002:a05:6000:1f8c:b0:21d:7e98:51ba with SMTP id
+ bw12-20020a0560001f8c00b0021d7e9851bamr22879411wrb.442.1658171873851; Mon, 18
+ Jul 2022 12:17:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711154536.41736-2-akhilrajeev@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
+ <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
+ <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
+ <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
+ <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
+ <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com> <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com>
+In-Reply-To: <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 18 Jul 2022 12:17:37 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
+Message-ID: <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
+Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
+ missing in lower/upper fs
+To:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 09:15:34PM +0530, Akhil R wrote:
-> Document the compatible string used by GPCDMA controller for Tegra234.
-> 
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> ---
->  .../devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml      | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
-> index 9dd1476d1849..399edcd5cecf 100644
-> --- a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
-> +++ b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml
-> @@ -26,6 +26,10 @@ properties:
->            - const: nvidia,tegra194-gpcdma
->            - const: nvidia,tegra186-gpcdma
->  
-> +      - items:
-> +          - const: nvidia,tegra234-gpcdma
+On Mon, Jul 18, 2022 at 12:04 PM Christian Kohlsch=C3=BCtter
+<christian@kohlschutter.com> wrote:
+>
+> The regression in question caused overlayfs to erroneously return ENOSYS =
+when one lower filesystem (e.g., davfs2) returned this upon checking extend=
+ed attributes (there were two relevant submissions triggering this somewher=
+e around 5.15, 5.16)
 
-This can be added to the above entry changing it from a const to enum.
+Well, if that's the case, isn't the proper fix to just fix davfs2?
 
-> +          - const: nvidia,tegra186-gpcdma
-> +
->    "#dma-cells":
->      const: 1
->  
-> -- 
-> 2.17.1
-> 
-> 
+If ENOSYS isn't a valid error, and has broken apps that want to just
+ignore "no fattr support", then it's a davfs2 bug, and fixing it there
+will presumably magically just fix the ovl case too?
+
+Yes, yes, you point to that commit to util-linux to also accept
+ENOSYS, but that's from 2021.
+
+So it's presumably triggered by the same issue - a rare (or new) and
+broken filesystem returned the wrong error code.
+
+Let's just fix that.
+
+I do not object to *also* doing the ovlfs "accept ENOSYS too", since
+it seems harmless and understandable, but at the same time this all
+does make me go "the actual *fundamental* cause of this was davfs2
+being confused, it should be fixed there too.
+
+And yes, yes, I realize that davfs2 is out-of-tree fuse filesystem,
+and is not in the kernel. But have people made the bug-report to the
+maintainers there?
+
+I don't think we should *only* have a kernel-side fix for a broken
+FUSE filesystem. Particularly not one to some random bystander like
+ovlfs.
+
+In fact if we do a kernel patch for this dodgy filesystem, it would
+seem to me to make more sense to have FUSE notice that "ok, ENOSYS is
+broken for this situation, let's translate it to the right ENOTTY",
+and that would have fixed both the ovlfs case and the util-linux one.
+
+Hmm?
+
+              Linus

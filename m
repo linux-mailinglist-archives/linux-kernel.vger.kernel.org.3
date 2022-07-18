@@ -2,249 +2,555 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48F55785CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BA45785D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiGROvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 10:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
+        id S233360AbiGROvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 10:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbiGROvM (ORCPT
+        with ESMTP id S234130AbiGROvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:51:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9BB15A03;
-        Mon, 18 Jul 2022 07:51:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F399B81616;
-        Mon, 18 Jul 2022 14:51:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E44C341C0;
-        Mon, 18 Jul 2022 14:51:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658155864;
-        bh=C1xj80V0jqqtJ7Kst5Rh/INDGS8YzFtQrsffbUAm3vA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X2kkJnKsPpygAIgZeRTB3KoU/bGcQaQAmkMOkt1BlrPJ7Tkq6Zt7K8xOtz8DXiegC
-         wpM8K1ATQjFSQeWlvTwzzl4Nut9dCrpaRGiuR5kgkEmCK8DZDAKs2Qii9Qp1VyKZiP
-         SZOb+jwmfuVl4+pWS4wQIFbi+L1GbXP7ftrt+esPRmSd9VtfnWc5il9+fF2T4gV1o8
-         QrafqBElgWJeBDInvtPxwzkzH4EXuL6oya2x2BV6zD7/NFWY++zv1nVOK6UL9c0EK4
-         wK9EnlYKbHhkcFWnLCByXfjFXDIpfS8R3/b22GieU1j3UycdZYlWOW69AxbAI5AJ5Z
-         LlJUlgaRrfowg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5EAFB40374; Mon, 18 Jul 2022 11:51:01 -0300 (-03)
-Date:   Mon, 18 Jul 2022 11:51:01 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Blake Jones <blakejones@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] Add a "-m" option to "perf buildid-list".
-Message-ID: <YtVzVZoo5PTj0qXH@kernel.org>
-References: <20220629213632.3899212-1-blakejones@google.com>
- <Yr6u/jdLvg2TcT8s@krava>
+        Mon, 18 Jul 2022 10:51:49 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767C2167C8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:51:46 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 16F124236CE;
+        Mon, 18 Jul 2022 10:51:45 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id HDNqdZxSNBJq; Mon, 18 Jul 2022 10:51:43 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id C9BA54235D3;
+        Mon, 18 Jul 2022 10:51:43 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C9BA54235D3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1658155903;
+        bh=6wc4jDdr/nRGR4CnyuxVut1gitBpW68DftKLdpT/Vyg=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=bT+SRkFWlOsWyht0kjECRWMIurxz72ePYkXl6Hi+0RdL1Yjx7RkuPOZImZj3yeUj+
+         qQTClZBsRe6luHO5agHZRarKRDyJE3ilO2/yXIxzuCQZv5sU08oLjae0oEj9pT2mco
+         eBJOj7bn+vPbiv+qz00eE+WfTrhyLq2gulTi3q2KNNEfxTX8A9RsxMx/K9H7qspJG/
+         k5Rqe3T0hmp43JMw32yU2QMcyrflj0G8QNSY+nexkEJ+CfYwoxE7z4HK7JEnjRkT93
+         fs6RHS2U0nekRl1uK/qX+pZALOHFCb7BWxinurtUb5smf2IrelXffTMsKEdzIUMRQl
+         KQo6gpY0vNMYQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id G2k2I5Vs2UUZ; Mon, 18 Jul 2022 10:51:43 -0400 (EDT)
+Received: from thinkos.internal.efficios.com (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by mail.efficios.com (Postfix) with ESMTPSA id 67A6C42315B;
+        Mon, 18 Jul 2022 10:51:43 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     James Morse <james.morse@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        Michael Jeanson <mjeanson@efficios.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [RFC PATCH] arm: i.MX6 Cortex-A9: Fix memory ordering inconsistency by disabling prefetch instructions
+Date:   Mon, 18 Jul 2022 10:51:50 -0400
+Message-Id: <20220718145150.3344778-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yr6u/jdLvg2TcT8s@krava>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Jul 01, 2022 at 10:23:26AM +0200, Jiri Olsa escreveu:
-> On Wed, Jun 29, 2022 at 02:36:32PM -0700, Blake Jones wrote:
-> > This new option displays all of the information needed to do external
-> > BuildID-based symbolization of kernel stack traces, such as those collected
-> > by bpf_get_stackid(). For each kernel module plus the main kernel, it
-> > displays the BuildID, the start and end virtual addresses of that module's
-> > text range (rounded out to page boundaries), and the pathname of the
-> > module.
-> > 
-> > When run as a non-privileged user, the actual addresses of the modules'
-> > text ranges are not available, so the tools displays "0, <text length>" for
-> > kernel modules and "0, 0xffffffffffffffff" for the kernel itself.
-> > 
-> > Sample output:
-> > 
-> > root# perf buildid-list -m
-> > cf6df852fd4da122d616153353cc8f560fd12fe0 ffffffffa5400000 ffffffffa6001e27 [kernel.kallsyms]
-> > 1aa7209aa2acb067d66ed6cf7676d65066384d61 ffffffffc0087000 ffffffffc008b000 /lib/modules/5.15.15-1rodete2-amd64/kernel/crypto/sha512_generic.ko
-> > 3857815b5bf0183697b68f8fe0ea06121644041e ffffffffc008c000 ffffffffc0098000 /lib/modules/5.15.15-1rodete2-amd64/kernel/arch/x86/crypto/sha512-ssse3.ko
-> > 4081fde0bca2bc097cb3e9d1efcb836047d485f1 ffffffffc0099000 ffffffffc009f000 /lib/modules/5.15.15-1rodete2-amd64/kernel/drivers/acpi/button.ko
-> > 1ef81ba4890552ea6b0314f9635fc43fc8cef568 ffffffffc00a4000 ffffffffc00aa000 /lib/modules/5.15.15-1rodete2-amd64/kernel/crypto/cryptd.ko
-> > cc5c985506cb240d7d082b55ed260cbb851f983e ffffffffc00af000 ffffffffc00b6000 /lib/modules/5.15.15-1rodete2-amd64/kernel/drivers/i2c/busses/i2c-piix4.ko
-> > [...]
-> > 
-> > Signed-off-by: Blake Jones <blakejones@google.com>
-> 
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
+Observed issue
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-To clarify, b4 found v3 and that was the one applied.
+On a Wandboard i.MX6 Quad Board revD1 (Cortex-A9 r2p10), spurious hangs
+have been experienced in sys_futex in a few scenarios with liburcu
+rwlock stress-tests [1]. The test run in a loop is:
 
-Thanks,
+for a in $(seq 1 100000); do echo $a; tests/benchmark/.libs/test_rwlock 2=
+ 2 1 || exit 1; done
 
-- Arnaldo
- 
-> thanks,
-> jirka
-> 
-> > ---
-> >  .../perf/Documentation/perf-buildid-list.txt  |  4 ++
-> >  tools/perf/builtin-buildid-list.c             | 38 ++++++++++++++++++-
-> >  tools/perf/util/machine.c                     | 15 ++++++++
-> >  tools/perf/util/machine.h                     |  5 +++
-> >  4 files changed, 61 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/perf/Documentation/perf-buildid-list.txt b/tools/perf/Documentation/perf-buildid-list.txt
-> > index 25c52efcc7f0..e1e8fdbe06b9 100644
-> > --- a/tools/perf/Documentation/perf-buildid-list.txt
-> > +++ b/tools/perf/Documentation/perf-buildid-list.txt
-> > @@ -33,6 +33,10 @@ OPTIONS
-> >  -k::
-> >  --kernel::
-> >  	Show running kernel build id.
-> > +-m::
-> > +--kernel-maps::
-> > +	Show buildid, start/end text address, and path of running kernel and
-> > +	its modules.
-> >  -v::
-> >  --verbose::
-> >  	Be more verbose.
-> > diff --git a/tools/perf/builtin-buildid-list.c b/tools/perf/builtin-buildid-list.c
-> > index cebadd632234..cffca6a536e9 100644
-> > --- a/tools/perf/builtin-buildid-list.c
-> > +++ b/tools/perf/builtin-buildid-list.c
-> > @@ -12,6 +12,7 @@
-> >  #include "util/build-id.h"
-> >  #include "util/debug.h"
-> >  #include "util/dso.h"
-> > +#include "util/map.h"
-> >  #include <subcmd/pager.h>
-> >  #include <subcmd/parse-options.h>
-> >  #include "util/session.h"
-> > @@ -20,6 +21,34 @@
-> >  #include <errno.h>
-> >  #include <linux/err.h>
-> >  
-> > +static int buildid__map_cb(struct map *map, void *arg __maybe_unused)
-> > +{
-> > +	const struct dso *dso = map->dso;
-> > +	char bid_buf[SBUILD_ID_SIZE];
-> > +
-> > +	memset(bid_buf, 0, sizeof(bid_buf));
-> > +	if (dso->has_build_id)
-> > +		build_id__sprintf(&dso->bid, bid_buf);
-> > +	printf("%s %16lx %16lx", bid_buf, map->start, map->end);
-> > +	if (dso->long_name != NULL) {
-> > +		printf(" %s", dso->long_name);
-> > +	} else if (dso->short_name != NULL) {
-> > +		printf(" %s", dso->short_name);
-> > +	}
-> > +	printf("\n");
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void buildid__show_kernel_maps(void)
-> > +{
-> > +	struct machine *machine;
-> > +
-> > +	machine = machine__new_host();
-> > +	machine__for_each_kernel_map(machine, buildid__map_cb, NULL);
-> > +	machine__delete(machine);
-> > +}
-> > +
-> >  static int sysfs__fprintf_build_id(FILE *fp)
-> >  {
-> >  	char sbuild_id[SBUILD_ID_SIZE];
-> > @@ -99,6 +128,7 @@ static int perf_session__list_build_ids(bool force, bool with_hits)
-> >  int cmd_buildid_list(int argc, const char **argv)
-> >  {
-> >  	bool show_kernel = false;
-> > +	bool show_kernel_maps = false;
-> >  	bool with_hits = false;
-> >  	bool force = false;
-> >  	const struct option options[] = {
-> > @@ -106,6 +136,8 @@ int cmd_buildid_list(int argc, const char **argv)
-> >  	OPT_STRING('i', "input", &input_name, "file", "input file name"),
-> >  	OPT_BOOLEAN('f', "force", &force, "don't complain, do it"),
-> >  	OPT_BOOLEAN('k', "kernel", &show_kernel, "Show current kernel build id"),
-> > +	OPT_BOOLEAN('m', "kernel-maps", &show_kernel_maps,
-> > +	    "Show build id of current kernel + modules"),
-> >  	OPT_INCR('v', "verbose", &verbose, "be more verbose"),
-> >  	OPT_END()
-> >  	};
-> > @@ -117,8 +149,12 @@ int cmd_buildid_list(int argc, const char **argv)
-> >  	argc = parse_options(argc, argv, options, buildid_list_usage, 0);
-> >  	setup_pager();
-> >  
-> > -	if (show_kernel)
-> > +	if (show_kernel) {
-> >  		return !(sysfs__fprintf_build_id(stdout) > 0);
-> > +	} else if (show_kernel_maps) {
-> > +		buildid__show_kernel_maps();
-> > +		return 0;
-> > +	}
-> >  
-> >  	return perf_session__list_build_ids(force, with_hits);
-> >  }
-> > diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> > index 009061852808..16d225149b93 100644
-> > --- a/tools/perf/util/machine.c
-> > +++ b/tools/perf/util/machine.c
-> > @@ -3327,3 +3327,18 @@ int machine__for_each_dso(struct machine *machine, machine__dso_t fn, void *priv
-> >  	}
-> >  	return err;
-> >  }
-> > +
-> > +int machine__for_each_kernel_map(struct machine *machine, machine__map_t fn, void *priv)
-> > +{
-> > +	struct maps *maps = machine__kernel_maps(machine);
-> > +	struct map *map;
-> > +	int err = 0;
-> > +
-> > +	for (map = maps__first(maps); map != NULL; map = map__next(map)) {
-> > +		err = fn(map, priv);
-> > +		if (err != 0) {
-> > +			break;
-> > +		}
-> > +	}
-> > +	return err;
-> > +}
-> > diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
-> > index 5d7daf7cb7bc..e1476343cbb2 100644
-> > --- a/tools/perf/util/machine.h
-> > +++ b/tools/perf/util/machine.h
-> > @@ -262,6 +262,11 @@ typedef int (*machine__dso_t)(struct dso *dso, struct machine *machine, void *pr
-> >  
-> >  int machine__for_each_dso(struct machine *machine, machine__dso_t fn,
-> >  			  void *priv);
-> > +
-> > +typedef int (*machine__map_t)(struct map *map, void *priv);
-> > +int machine__for_each_kernel_map(struct machine *machine, machine__map_t fn,
-> > +				 void *priv);
-> > +
-> >  int machine__for_each_thread(struct machine *machine,
-> >  			     int (*fn)(struct thread *thread, void *p),
-> >  			     void *priv);
-> > 
-> > base-commit: 1bcca2b1bd67f3c0e5c3a88ed16c6389f01a5b31
-> > -- 
-> > 2.37.0.rc0.161.g10f37bed90-goog
-> > 
+This runs a 1 second test with 2 reader and 2 writer threads.
 
--- 
+The hangs show up in the following scenarios:
 
-- Arnaldo
+- glibc nptl rwlock,
+- glibc nptl pthread_join.
+
+Another simpler test-case that reproduces the pthread join hang is as fol=
+lows:
+
+/*
+ * Build with:
+ *   gcc -O2 -pthread -o test-pthread-join test-pthread-join.c
+ * Run in a loop:
+ *   for a in $(seq 500000); do echo $a; ./test-pthread-join || exit 1; d=
+one
+ */
+
+void *testmemthread(void *arg)
+{
+        printf("thread id : %lu, pid %lu\n", pthread_self(), getpid());
+        return ((void*)0);
+}
+
+int main()
+{
+        int err, i;
+        pthread_t testmemid[NR_THREADS];
+        void *tret;
+
+        for (i =3D 0; i < NR_THREADS; i++) {
+                err =3D pthread_create(&testmemid[i], NULL, testmemthread=
+,
+                        (void *)(long)i);
+                if (err !=3D 0)
+                        exit(1);
+        }
+        for (i =3D 0; i < NR_THREADS; i++) {
+                err =3D pthread_join(testmemid[i], &tret);
+                if (err !=3D 0)
+                        exit(1);
+        }
+        return 0;
+}
+
+In all cases a FUTEX_WAIT is stuck waiting for a state change that can
+be validated to be present in user memory by inspecting the hung process
+with a debugger.
+
+This can be reproduced with a Debian bullseye config-5.18.0-0.bpo.1-armmp
+configuration. The config-5.18.0-0.bpo.1-armmp configuration applied to
+a vanilla 5.18.2 kernel tree reproduces this issue when compiled with
+gcc version 10.2.1 20210110 (Debian 10.2.1-6). The U-Boot version is
+2021.01+dfsg-4.
+
+Note that this either does not appear to reproduce or takes longer to
+reproduce as soon as the configuration varies significantly enough to
+change the kernel code generated for futex wait.
+
+- It takes longer to hit the hang when running on a 5.18.2 kernel
+  compiled with gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04).
+
+- The issue is not reproduced with a kernel built from a
+  imx_v6_v7_defconfig configuration with gcc 10.2.1.
+  One important effect of this configuration change is that it targets
+  __LINUX_ARM_ARCH__ =3D 6 rather than __LINUX_ARM_ARCH__ =3D 7.
+
+Root Cause Analysis
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Instrumentation of the futex system call FUTEX_WAKE and FUTEX_WAIT code
+with tracepoints, and tracing with LTTng [2] in "snapshot" flight
+recorder mode allows a better understanding of what is going on when the
+hang reproduces.
+
+First, a bit of context about sys_futex: it relies on a Dekker [3]
+two-variables memory barrier scenario:
+
+ * CPU 0                                 CPU 1
+ * val =3D *futex;
+ * sys_futex(WAIT, futex, val);
+ *   futex_wait(futex, val);
+ *
+ *   waiters++; (a)
+ *   smp_mb(); (A) <-- paired with -.
+ *                                  |
+ *   lock(hash_bucket(futex));      |
+ *                                  |
+ *   uval =3D *futex;                 |
+ *                                  |        *futex =3D newval;
+ *                                  |        sys_futex(WAKE, futex);
+ *                                  |          futex_wake(futex);
+ *                                  |
+ *                                  `--------> smp_mb(); (B)
+ *   if (uval =3D=3D val)
+ *     queue();
+ *     unlock(hash_bucket(futex));
+ *     schedule();                         if (waiters)
+ *                                           lock(hash_bucket(futex));
+ *   else                                    wake_waiters(futex);
+ *     waiters--; (b)                        unlock(hash_bucket(futex));
+ *
+ * Where (A) orders the waiters increment and the futex value read throug=
+h
+ * atomic operations (see futex_hb_waiters_inc) and where (B) orders the =
+write
+ * to futex and the waiters read (see futex_hb_waiters_pending()).
+ *
+ * This yields the following case (where X:=3Dwaiters, Y:=3Dfutex):
+ *
+ *      X =3D Y =3D 0
+ *
+ *      w[X]=3D1          w[Y]=3D1
+ *      MB              MB
+ *      r[Y]=3Dy          r[X]=3Dx
+ *
+ * Which guarantees that x=3D=3D0 && y=3D=3D0 is impossible; which transl=
+ates back into
+ * the guarantee that we cannot both miss the futex variable change and t=
+he
+ * enqueue.
+
+When reproducing the hang, we observe the following in the userspace
+stacks and in the execution trace:
+
+  (gdb) thread apply all bt
+
+  Thread 5 (Thread 0xb5693450 (LWP 2404) "test_rwlock"):
+  #0  __libc_do_syscall () at ../sysdeps/unix/sysv/linux/arm/libc-do-sysc=
+all.S:46
+  #1  0xb6fa105c in futex_abstimed_wait (private=3D0, abstime=3D0x0, cloc=
+kid=3D0, expected=3D3, futex_word=3D<optimized out>) at ../sysdeps/nptl/f=
+utex-internal.h:287
+  #2  __pthread_rwlock_wrlock_full (abstime=3D0x0, clockid=3D0, rwlock=3D=
+0x4420d8 <lock>) at pthread_rwlock_common.c:731
+  #3  __GI___pthread_rwlock_wrlock (rwlock=3Drwlock@entry=3D0x4420d8 <loc=
+k>) at pthread_rwlock_wrlock.c:27
+  #4  0x00430fe0 in thr_writer (_count=3D0x96e1d0) at test_rwlock.c:205
+  #5  0xb6f9c98e in start_thread (arg=3D0x4d5aa9ac) at pthread_create.c:4=
+77
+  #6  0xb6f37bec in ?? () at ../sysdeps/unix/sysv/linux/arm/clone.S:73 fr=
+om /lib/arm-linux-gnueabihf/libc.so.6
+  Backtrace stopped: previous frame identical to this frame (corrupt stac=
+k?)
+
+  Thread 4 (Thread 0xb5e94450 (LWP 2403) "test_rwlock"):
+  #0  __libc_do_syscall () at ../sysdeps/unix/sysv/linux/arm/libc-do-sysc=
+all.S:46
+  #1  0xb6fa0ea4 in futex_abstimed_wait (private=3D0, abstime=3D0x0, cloc=
+kid=3D0, expected=3D2, futex_word=3D<optimized out>) at ../sysdeps/nptl/f=
+utex-internal.h:287
+  #2  __pthread_rwlock_wrlock_full (abstime=3D0x0, clockid=3D0, rwlock=3D=
+0x4420d8 <lock>) at pthread_rwlock_common.c:830
+  #3  __GI___pthread_rwlock_wrlock (rwlock=3Drwlock@entry=3D0x4420d8 <loc=
+k>) at pthread_rwlock_wrlock.c:27
+  #4  0x00430fe0 in thr_writer (_count=3D0x96e1c8) at test_rwlock.c:205
+  #5  0xb6f9c98e in start_thread (arg=3D0x4d5aa9ac) at pthread_create.c:4=
+77
+  #6  0xb6f37bec in ?? () at ../sysdeps/unix/sysv/linux/arm/clone.S:73 fr=
+om /lib/arm-linux-gnueabihf/libc.so.6
+  Backtrace stopped: previous frame identical to this frame (corrupt stac=
+k?)
+
+  Thread 3 (Thread 0xb6695450 (LWP 2402) "test_rwlock"):
+  #0  __libc_do_syscall () at ../sysdeps/unix/sysv/linux/arm/libc-do-sysc=
+all.S:46
+  #1  0xb6fa07be in futex_abstimed_wait (private=3D<optimized out>, absti=
+me=3D0x0, clockid=3D0, expected=3D3, futex_word=3D<optimized out>) at ../=
+sysdeps/nptl/futex-internal.h:287
+  #2  __pthread_rwlock_rdlock_full (abstime=3D0x0, clockid=3D0, rwlock=3D=
+0x4420d8 <lock>) at pthread_rwlock_common.c:460
+  #3  __GI___pthread_rwlock_rdlock (rwlock=3Drwlock@entry=3D0x4420d8 <loc=
+k>) at pthread_rwlock_rdlock.c:27
+  #4  0x004311ba in thr_reader (_count=3D0x96e1b8) at test_rwlock.c:157
+  #5  0xb6f9c98e in start_thread (arg=3D0x4d5aa9ac) at pthread_create.c:4=
+77
+  #6  0xb6f37bec in ?? () at ../sysdeps/unix/sysv/linux/arm/clone.S:73 fr=
+om /lib/arm-linux-gnueabihf/libc.so.6
+  Backtrace stopped: previous frame identical to this frame (corrupt stac=
+k?)
+
+  Thread 2 (Thread 0xb6e96450 (LWP 2401) "test_rwlock"):
+  #0  __libc_do_syscall () at ../sysdeps/unix/sysv/linux/arm/libc-do-sysc=
+all.S:46
+  #1  0xb6fa07be in futex_abstimed_wait (private=3D<optimized out>, absti=
+me=3D0x0, clockid=3D0, expected=3D3, futex_word=3D<optimized out>) at ../=
+sysdeps/nptl/futex-internal.h:287
+  #2  __pthread_rwlock_rdlock_full (abstime=3D0x0, clockid=3D0, rwlock=3D=
+0x4420d8 <lock>) at pthread_rwlock_common.c:460
+  #3  __GI___pthread_rwlock_rdlock (rwlock=3Drwlock@entry=3D0x4420d8 <loc=
+k>) at pthread_rwlock_rdlock.c:27
+  #4  0x004311ba in thr_reader (_count=3D0x96e1b0) at test_rwlock.c:157
+  #5  0xb6f9c98e in start_thread (arg=3D0x4d5aa9ac) at pthread_create.c:4=
+77
+  #6  0xb6f37bec in ?? () at ../sysdeps/unix/sysv/linux/arm/clone.S:73 fr=
+om /lib/arm-linux-gnueabihf/libc.so.6
+  Backtrace stopped: previous frame identical to this frame (corrupt stac=
+k?)
+
+  Thread 1 (Thread 0xb6fe3d60 (LWP 2400) "test_rwlock"):
+  #0  __libc_do_syscall () at ../sysdeps/unix/sysv/linux/arm/libc-do-sysc=
+all.S:46
+  #1  0xb6f9dafc in __pthread_clockjoin_ex (threadid=3D3068748880, thread=
+_return=3Dthread_return@entry=3D0xbeb80a8c, clockid=3Dclockid@entry=3D0, =
+abstime=3Dabstime@entry=3D0x0, block=3Dblock@entry=3Dtrue) at pthread_joi=
+n_common.c:145
+  #2  0xb6f9d8ec in __pthread_join (threadid=3D<optimized out>, thread_re=
+turn=3Dthread_return@entry=3D0xbeb80a8c) at pthread_join.c:24
+  #3  0x00430b20 in main (argc=3D<optimized out>, argv=3D0xbeb80c14) at t=
+est_rwlock.c:367
+
+  (gdb) print *rwlock
+  $1 =3D {__data =3D {__readers =3D 19, __writers =3D 0, __wrphase_futex =
+=3D 3, __writers_futex =3D 3, __pad3 =3D 0, __pad4 =3D 0, __flags =3D 0 '=
+\000',
+      __shared =3D 0 '\000', __pad1 =3D 0 '\000', __pad2 =3D 0 '\000', __=
+cur_writer =3D 0},
+    __size =3D "\023\000\000\000\000\000\000\000\003\000\000\000\003", '\=
+000' <repeats 18 times>, __align =3D 19}
+
+Thread 4 (tid=3D2403) should either have been awakened when the
+__wrphase_futex state changed from 2 to 3, or should have observed a
+__wrphase_futex=3D=3D3 and thus never have blocked.
+
+Here is the relevant instrumentation. Note that the instrumentation
+added aims at minimizing the impact on the fast-path timings to make
+sure the issue can be reproduced under tracing. Indeed, adding too much
+instrumentation either hides the problem or makes it take much longer to
+reproduce.
+
+futex_wait_end:              At each location where the function futex_wa=
+it_setup() returns.
+futex_wait_get_value_locked: Conditional if uval !=3D val so the timing o=
+f the fast-path is not changed too much.
+futex_wait_get_user:         After futex_wait_setup issues get_user() (sl=
+ow path for page faults).
+futex_wake_end:              At each location where the function futex_wa=
+ke() returns.
+
+Let's look at the relevant portion of the trace just before the hang:
+
+[...]
+        [16:27:34.437683527] (+0.000004666) futex_wait_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 2, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437700528] (+0.000017001) futex_wait_end: { cpu_id =3D =
+0 }, { tid =3D 2402, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437703195] (+0.000002667) futex_wake_end: { cpu_id =3D =
+1 }, { tid =3D 2401, pid =3D 2400 }, { uaddr =3D 0x4420E0, ret =3D 1, msg=
+ =3D "" }
+        [16:27:34.437704862] (+0.000001667) futex_wait_end: { cpu_id =3D =
+3 }, { tid =3D 2404, pid =3D 2400 }, { uaddr =3D 0x4420E4, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437708195] (+0.000003333) futex_wait_end: { cpu_id =3D =
+1 }, { tid =3D 2401, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437735863] (+0.000027668) futex_wake_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E0, ret =3D 2, msg=
+ =3D "" }
+        [16:27:34.437741863] (+0.000006000) futex_wake_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E4, ret =3D 1, msg=
+ =3D "" }
+        [16:27:34.437745863] (+0.000004000) futex_wait_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 2, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437762531] (+0.000016668) futex_wait_end: { cpu_id =3D =
+1 }, { tid =3D 2401, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437765531] (+0.000003000) futex_wake_end: { cpu_id =3D =
+0 }, { tid =3D 2402, pid =3D 2400 }, { uaddr =3D 0x4420E0, ret =3D 1, msg=
+ =3D "" }
+        [16:27:34.437767864] (+0.000002333) futex_wait_end: { cpu_id =3D =
+3 }, { tid =3D 2404, pid =3D 2400 }, { uaddr =3D 0x4420E4, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437770198] (+0.000002334) futex_wait_end: { cpu_id =3D =
+0 }, { tid =3D 2402, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437797865] (+0.000027667) futex_wake_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E0, ret =3D 2, msg=
+ =3D "" }
+        [16:27:34.437803866] (+0.000006001) futex_wake_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E4, ret =3D 1, msg=
+ =3D "" }
+        [16:27:34.437807866] (+0.000004000) futex_wait_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 2, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437824866] (+0.000017000) futex_wait_end: { cpu_id =3D =
+0 }, { tid =3D 2402, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437826866] (+0.000002000) futex_wake_end: { cpu_id =3D =
+1 }, { tid =3D 2401, pid =3D 2400 }, { uaddr =3D 0x4420E0, ret =3D 1, msg=
+ =3D "" }
+        [16:27:34.437830200] (+0.000003334) futex_wait_end: { cpu_id =3D =
+3 }, { tid =3D 2404, pid =3D 2400 }, { uaddr =3D 0x4420E4, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437831533] (+0.000001333) futex_wait_end: { cpu_id =3D =
+1 }, { tid =3D 2401, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437852868] (+0.000021335) futex_wake_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E0, ret =3D 2, msg=
+ =3D "" }
+        [16:27:34.437858534] (+0.000005666) futex_wake_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E4, ret =3D 1, msg=
+ =3D "" }
+(b)     [16:27:34.437862868] (+0.000004334) futex_wait_end: { cpu_id =3D =
+2 }, { tid =3D 2403, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 2, ret=
+ =3D 0, msg =3D "" }
+(a)     [16:27:34.437879202] (+0.000016334) futex_wake_end: { cpu_id =3D =
+0 }, { tid =3D 2402, pid =3D 2400 }, { uaddr =3D 0x4420E0, ret =3D 0, msg=
+ =3D "!futex_hb_waiters_pending" }
+        [16:27:34.437879535] (+0.000000333) futex_wait_end: { cpu_id =3D =
+1 }, { tid =3D 2401, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437884535] (+0.000005000) futex_wait_end: { cpu_id =3D =
+0 }, { tid =3D 2402, pid =3D 2400 }, { uaddr =3D 0x4420E0, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:34.437884535] (+0.000000000) futex_wait_end: { cpu_id =3D =
+3 }, { tid =3D 2404, pid =3D 2400 }, { uaddr =3D 0x4420E4, val =3D 3, ret=
+ =3D 0, msg =3D "" }
+        [16:27:35.241824878] (+0.803940343) futex_wait_end: { cpu_id =3D =
+2 }, { tid =3D 2400, pid =3D 2400 }, { uaddr =3D 0xB6E964B8, val =3D 2401=
+, ret =3D 0, msg =3D "" }
+
+At (a), tid=3D2402 observes waiters_pending=3D=3D0, and therefore skips
+awakening any other threads on futex uaddr=3D0x4420E0.
+
+However, at (b), tid=3D2403 returns from futex_wait_setup() on futex
+uaddr=3D0x4420E0 with ret=3D0, which will cause it to block. It was calle=
+d
+with a val=3D2 as input argument. Considering that no
+futex_wait_get_value_locked is traced, this means the observed uval
+loaded by futex_get_value_locked() matches the expected val (=3D=3D2).
+
+Considering that tid=3D2402 observes waiters_pending=3D=3D0, we have the
+following ordering:
+
+Waker                  Waiter
+tid=3D2402               tid=3D2403
+-------------------------------
+*futex=3D3
+dmb
+                       load *futex
+                       sys_futex
+load waiters_pending
+  (observe 0)
+                         atomic_inc waiters_pending
+                         dmb
+                         load *futex
+                           (observe 2, impossible!)
+
+The fact that the waiter thread observes the futex=3D2 when the waker
+observed waiters_pending=3D0 is a contradiction of the Dekker 2-variables
+memory barrier scenario.
+
+Looking more specifically at the operations involved in the loads and
+stores of the futex and waiters_pending variables, we notice two things:
+
+1) atomic_inc has a prefetchw() (PLDW) instruction, which is compiled
+   out for __LINUX_ARM_ARCH__ =3D 6, which could explain why imx_v6_v7_de=
+fconfig
+   does not reproduce the hang.
+
+2) the waiter thread has a pattern of load *futex; dmb; load *futex,
+   which are two loads of the same variable. I have attempted to modify
+   the get_user used for the second load to replace LDR by LDREX in
+   case some variation of errata 761319 would be at play here, but
+   the hang persists.
+
+Solution
+=3D=3D=3D=3D=3D=3D=3D=3D
+
+The hang does not reproduce with the code that implements the arm
+prefetchw() static inline function commented out.
+
+Note that it is not the same as commenting out the entire arch-specific
+prefetchw implementation (leaving ARCH_HAS_PREFETCHW undefined), which
+then relies on the __builtin_prefetch() builtin.
+
+Known Drawbacks
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Removing prefetch instructions can affect the performance of some
+microbenchmarks, especially for streaming use-cases.
+
+Unfortunately, the Cortex-A9 does not appear to have a documented
+Coprocessor Access Control Register bit for disabling the PLD and PLDW
+instructions, which prevents fixing it at boot-time from U-Boot.
+Removing the prefetch instruction from the kernel code does not fix
+similar issues that may arise in user-space.
+
+Request for Feedback
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+This fix targets all i.MX configurations, but it is likely too broad (or
+too narrow). It would be great if people with access to different
+Freescale i.MX test boards, and test boards from other vendors, could try
+to reproduce the issue to figure out what would be the right scope for
+this fix.
+
+It would also be great if people with knowledge of the ARM CPU internals
+could help understanding whether this fix really fixes an issue between
+prefetch and memory barriers, or just happens to hide the issue. It
+would be good to understand whether this issue only affects PLDW or if
+it also affects the PLD instruction.
+
+Link: https://liburcu.org [1]
+Link: https://lttng.org [2]
+Link: https://lwn.net/Articles/573436/ [3]
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: James Morse <james.morse@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: "Mark Rutland" <mark.rutland@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: "Shawn Guo" <shawnguo@kernel.org>
+Cc: "Sascha Hauer" <s.hauer@pengutronix.de>
+Cc: Michael Jeanson <mjeanson@efficios.com>
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm/Kconfig                 | 3 +++
+ arch/arm/include/asm/processor.h | 2 ++
+ arch/arm/mach-imx/Kconfig        | 1 +
+ 3 files changed, 6 insertions(+)
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 2e8091e2d8a8..ffcc0363e171 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -239,6 +239,9 @@ config GENERIC_ISA_DMA
+ config FIQ
+ 	bool
+=20
++config ARM_DISABLE_PREFETCHW
++	bool
++
+ config ARCH_MTD_XIP
+ 	bool
+=20
+diff --git a/arch/arm/include/asm/processor.h b/arch/arm/include/asm/proc=
+essor.h
+index bdc35c0e8dfb..8a3e0c566d1f 100644
+--- a/arch/arm/include/asm/processor.h
++++ b/arch/arm/include/asm/processor.h
+@@ -121,6 +121,7 @@ static inline void prefetch(const void *ptr)
+ #define ARCH_HAS_PREFETCHW
+ static inline void prefetchw(const void *ptr)
+ {
++#if !defined(CONFIG_ARM_DISABLE_PREFETCHW)
+ 	__asm__ __volatile__(
+ 		".arch_extension	mp\n"
+ 		__ALT_SMP_ASM(
+@@ -128,6 +129,7 @@ static inline void prefetchw(const void *ptr)
+ 			"pld\t%a0"
+ 		)
+ 		:: "p" (ptr));
++#endif
+ }
+ #endif
+ #endif
+diff --git a/arch/arm/mach-imx/Kconfig b/arch/arm/mach-imx/Kconfig
+index c5a59158722b..1bbc6d63b6ec 100644
+--- a/arch/arm/mach-imx/Kconfig
++++ b/arch/arm/mach-imx/Kconfig
+@@ -10,6 +10,7 @@ menuconfig ARCH_MXC
+ 	select PM_OPP if PM
+ 	select SOC_BUS
+ 	select SRAM
++	select ARM_DISABLE_PREFETCHW
+ 	help
+ 	  Support for Freescale MXC/iMX-based family of processors
+=20
+--=20
+2.30.2
+

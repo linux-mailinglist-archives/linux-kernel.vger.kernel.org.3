@@ -2,228 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D281577F8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DFC577F91
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234035AbiGRKWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S233909AbiGRKXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiGRKWZ (ORCPT
+        with ESMTP id S229815AbiGRKXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:22:25 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2841CFD5;
-        Mon, 18 Jul 2022 03:22:23 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 973C66601A05;
-        Mon, 18 Jul 2022 11:22:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658139741;
-        bh=MBfaA4l7s9JZSP3+F+mJre4x0mO0iWTWc7gCQfQH6R4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bgKQqeZ3BSO/JrSFq+us7gOSiaS9QQL/nZTgdDc4xU8jGJ0dJmRNikSXK4TmbX+Uz
-         TnfbQetMKhMfBw1xftjD7PcseM2CVl3zSs4wLmJW62qtZEvQtjckQ6NEZFyad5ch20
-         /QPjynMzbLT7nIgxIzsSPkJXUL5wr2uxjEu+poJFShYOVXeHKhUyslIBQW1stXP9Vq
-         SGorPakSM4X2nlNM6/DUUwpm/DaZoWoIxxqUa7ftVkHhhPpsumAfMMaSd9nP3j3vw/
-         8LJVKVM0VhX12KGP5DLBiBsHPHei28IUtxug2Dawy+KjCpS1Kzy2lBClQdNFR8I/ea
-         lepl1nve+GCiA==
-Message-ID: <00dc6bff-d87a-0d80-fe20-ae70e5ad0c4f@collabora.com>
-Date:   Mon, 18 Jul 2022 12:22:17 +0200
+        Mon, 18 Jul 2022 06:23:36 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F5F1C901;
+        Mon, 18 Jul 2022 03:23:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658139792;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=VA8GwCW4QpEMKYWhRM1u4BGCLhp6kJzO4cxOgeUtw4g=;
+    b=TL9bjhXIDSnjP6E0R1Z7fTFzgKDwPFOsnsZG8I/wDEzNUI/J88N4A21SABCXOgFXk4
+    PGIKC1yOgXwG7kuQNzoTEBpIA2gmhlNdv3yYIhoRsdLFNyACkhvDn+ioJRZ4/pOqfdtT
+    5onX4kuhM8vRPXp7f2NqgfYiCFKxudtOzpiVNr7uO4G0Kf+7EncgjSbxV06FVlJrkc1t
+    JTxb+uAoYIh4b2E9Oq15F1D1vTwNVnGRMdUdweBK561cZ0r/MGFfPXW3O7V2Ncte1iwR
+    noGN1bwOrn6SyMiyw9Ye+xraItzOhRc2YtnJHGC/cNygcGzahck8jvRPn9BSwyDNh2i1
+    C90Q==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSqijYPVurqCog2kT72ilCcUDL4c4Q=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100:b185:70d0:e6b4:7289]
+    by smtp.strato.de (RZmta 47.47.0 AUTH)
+    with ESMTPSA id t870d5y6IANBDAA
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 18 Jul 2022 12:23:11 +0200 (CEST)
+Message-ID: <1dbd95e8-e6d7-a611-32d0-ea974787ff5a@hartkopp.net>
+Date:   Mon, 18 Jul 2022 12:23:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [V5,3/8] media: mtk-jpegdec: manage jpegdec multi-hardware
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
 Content-Language: en-US
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        nicolas.dufresne@collabora.com, wenst@chromium.org,
-        kyrie wu <kyrie.wu@mediatek.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, srv_heupstream@mediatek.com
-References: <20220716093408.29734-1-irui.wang@mediatek.com>
- <20220716093408.29734-4-irui.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220716093408.29734-4-irui.wang@mediatek.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Max Staudt <max@enpas.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
+ <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com>
+ <20220717233842.1451e349.max@enpas.org>
+ <6faf29c7-3e9d-bc21-9eac-710f901085d8@hartkopp.net>
+ <20220718101507.eioy2bdcmjkgtacz@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220718101507.eioy2bdcmjkgtacz@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/07/22 11:34, Irui Wang ha scritto:
-> From: kyrie wu <kyrie.wu@mediatek.com>
+
+
+On 7/18/22 12:15, Marc Kleine-Budde wrote:
+> On 18.07.2022 08:57:21, Oliver Hartkopp wrote:
+>>> What do the maintainers think of dropping the old "slcan" name, and
+>>> just allowing this to be a normal canX device? These patches do bring
+>>> it closer to that, after all. In this case, this name string magic
+>>> could be dropped altogether.
+>>>
+>>
+>> I'm fine with it in general. But we have to take into account that there
+>> might be existing setups that still might use the slcan_attach or slcand
+>> mechanic which will likely break after the kernel update.
+>>
+>> But in the end the slcan0 shows up everywhere - even in log files, etc.
+>>
+>> So we really should name it canX. When people really get in trouble with it,
+>> they can rename the network interface name with the 'ip' tool ...
 > 
-> manage each hardware information, including irq/clk/power.
-> the hardware includes HW0/HW1/HW2.
-> 
-> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-> Signed-off-by: irui wang <irui.wang@mediatek.com>
-> 
-> ---
->   drivers/media/platform/mediatek/jpeg/Makefile |   5 +-
->   .../platform/mediatek/jpeg/mtk_jpeg_core.c    |  23 +++
->   .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  37 ++++
->   .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 172 ++++++++++++++++++
->   4 files changed, 235 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/jpeg/Makefile b/drivers/media/platform/mediatek/jpeg/Makefile
-> index 69703db4b0a5..26e84852523e 100644
-> --- a/drivers/media/platform/mediatek/jpeg/Makefile
-> +++ b/drivers/media/platform/mediatek/jpeg/Makefile
-> @@ -1,9 +1,10 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   obj-$(CONFIG_VIDEO_MEDIATEK_JPEG) += mtk_jpeg.o \
-> -	mtk-jpeg-enc-hw.o
-> +	mtk-jpeg-enc-hw.o \
-> +	mtk-jpeg-dec-hw.o
->   
->   mtk_jpeg-y := mtk_jpeg_core.o \
-> -		 mtk_jpeg_dec_hw.o \
->   		 mtk_jpeg_dec_parse.o
->   
->   mtk-jpeg-enc-hw-y := mtk_jpeg_enc_hw.o
-> +mtk-jpeg-dec-hw-y := mtk_jpeg_dec_hw.o
-> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-> index 386d48cc4f59..a9e8be976bb0 100644
-> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-> @@ -1100,6 +1100,10 @@ static void mtk_jpeg_multicore_enc_device_run(void *priv)
->   	queue_work(jpeg->workqueue, &ctx->jpeg_work);
->   }
->   
-> +static void mtk_jpeg_multicore_dec_device_run(void *priv)
-> +{
+> Don't break user space! If you don't like slcanX use udev to give it a
+> proper name.
 
-.... why is this function empty?!
+Ok. Fine with me too.
 
-> +}
-> +
->   static void mtk_jpeg_dec_device_run(void *priv)
->   {
->   	struct mtk_jpeg_ctx *ctx = priv;
-> @@ -1166,6 +1170,10 @@ static const struct v4l2_m2m_ops mtk_jpeg_multicore_enc_m2m_ops = {
->   	.device_run = mtk_jpeg_multicore_enc_device_run,
->   };
->   
-> +static const struct v4l2_m2m_ops mtk_jpeg_multicore_dec_m2m_ops = {
-> +	.device_run = mtk_jpeg_multicore_dec_device_run,
-> +};
-> +
->   static const struct v4l2_m2m_ops mtk_jpeg_dec_m2m_ops = {
->   	.device_run = mtk_jpeg_dec_device_run,
->   	.job_ready  = mtk_jpeg_dec_job_ready,
-> @@ -1680,6 +1688,17 @@ static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
->   	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
->   };
->   
-> +static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
-> +	.formats = mtk_jpeg_dec_formats,
-> +	.num_formats = MTK_JPEG_DEC_NUM_FORMATS,
-> +	.qops = &mtk_jpeg_dec_qops,
-> +	.m2m_ops = &mtk_jpeg_multicore_dec_m2m_ops,
-> +	.dev_name = "mtk-jpeg-dec",
-> +	.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
-> +	.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
-> +	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
-> +};
-> +
->   #if defined(CONFIG_OF)
->   static const struct of_device_id mtk_jpeg_match[] = {
->   	{
-> @@ -1698,6 +1717,10 @@ static const struct of_device_id mtk_jpeg_match[] = {
->   		.compatible = "mediatek,mt8195-jpgenc",
->   		.data = &mtk8195_jpegenc_drvdata,
->   	},
-> +	{
-> +		.compatible = "mediatek,mt8195-jpgdec",
-> +		.data = &mtk8195_jpegdec_drvdata,
-> +	},
->   	{},
->   };
->   
+IMO it does not break user space when slcan gets the common naming 
+schema for CAN interface names.
 
-..snip..
+We had the same thing with 'eth0' which is now named enblablabla or 
+'wlan0' now named wlp2s0.
 
-> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-> index d2f25f43e852..232e81165dd3 100644
-> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+But I have no strong opinion on that naming ...
 
-..snip..
-
-> +
-> +static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
-> +{
-> +	struct mtk_jpegdec_clk *jpegdec_clk;
-> +	struct mtk_jpeg_dev *master_dev;
-> +	struct mtk_jpegdec_comp_dev *dev;
-> +	int ret, i;
-> +
-> +	struct device *decs = &pdev->dev;
-> +
-> +	if (!decs->parent)
-> +		return -EPROBE_DEFER;
-> +
-> +	master_dev = dev_get_drvdata(decs->parent);
-> +	if (!master_dev)
-> +		return -EPROBE_DEFER;
-> +
-> +	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
-> +	if (!dev)
-> +		return -ENOMEM;
-> +
-> +	dev->plat_dev = pdev;
-> +	dev->dev = &pdev->dev;
-> +
-> +	if (!master_dev->is_jpgdec_multihw) {
-> +		master_dev->is_jpgdec_multihw = true;
-> +		for (i = 0; i < MTK_JPEGDEC_HW_MAX; i++)
-> +			master_dev->dec_hw_dev[i] = NULL;
-> +	}
-> +
-> +	jpegdec_clk = &dev->jdec_clk;
-> +
-> +	jpegdec_clk->clk_num = devm_clk_bulk_get_all(&pdev->dev,
-> +						     &jpegdec_clk->clks);
-> +	if (jpegdec_clk->clk_num < 0)
-> +		return dev_err_probe(&pdev->dev,
-> +				      jpegdec_clk->clk_num,
-> +				      "Failed to get jpegdec clock count.\n");
-> +
-> +	dev->reg_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(dev->reg_base))
-> +		return PTR_ERR(dev->reg_base);
-> +
-> +	ret = mtk_jpegdec_hw_init_irq(dev);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev,
-> +				     ret,
-> +				     "Failed to register JPEGDEC irq handler.\n");
-
-Fix:
-		return dev_err_probe(&pdev->dev, ret,
-
-				     "Failed to register JPEGDEC irq handler.\n");
+Best regards,
+Oliver
 
 
-Regards,
-Angelo

@@ -2,89 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE15577F87
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57BE577F88
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234028AbiGRKUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S233953AbiGRKV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233940AbiGRKUR (ORCPT
+        with ESMTP id S233195AbiGRKVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:20:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B3E1CB0E;
-        Mon, 18 Jul 2022 03:20:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A767B8109E;
-        Mon, 18 Jul 2022 10:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1CD87C341CE;
-        Mon, 18 Jul 2022 10:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658139613;
-        bh=E6qUE/0FVI0925eqyIBrCUBMqK+zwWphena0m6VhbnE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OXZHYC+qEMDbyEcHGefefVFx5QQEh19SO3NL1NUvgctLhdghYRDVb9FY035wu/N+O
-         6u6vYyd+HGT+B4XfoPk0KftlyAiu7yvGfNYsGoaFFVUJoi0UujqsNPMXSgy8cv1l63
-         8uxlKTvqrjlgx5v5I4amneLgPlkvK2rrxgqG/cUulwCxCDZVjfYTx5FevIm7bprTs4
-         w4LjLt3jiGqRXAjK1pwEfSQcC/gjsiqFNtHl2bIAIK3avwbb7PnS0TMyX6f2oIKXEX
-         dpT2g+hYqJAD6zl+WgvR/xX42fSQGIstkL2sNApHO04H1X9iO36z2WzNTqiQHk7rYL
-         +yvHBh5D2/5Bw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 01866E451AD;
-        Mon, 18 Jul 2022 10:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 18 Jul 2022 06:21:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7710E1C901
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:21:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCDEF1042;
+        Mon, 18 Jul 2022 03:21:52 -0700 (PDT)
+Received: from [10.57.44.129] (unknown [10.57.44.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03AAD3F70D;
+        Mon, 18 Jul 2022 03:21:50 -0700 (PDT)
+Message-ID: <8ac163c3-bd5f-eb10-e8c0-83857be58184@arm.com>
+Date:   Mon, 18 Jul 2022 11:21:49 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v3] drivers/perf: arm_spe: Fix consistency of
+ SYS_PMSCR_EL1.CX
+To:     James Clark <james.clark@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     german.gomez@arm.com, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220714061302.2715102-1-anshuman.khandual@arm.com>
+ <9b2982f1-023a-3499-7e87-f00b5a689ae9@arm.com>
+ <e3aef6fd-973b-d7ef-6d6a-10f9e8ac3b04@arm.com>
+ <9a5359f1-84e3-c436-b8d9-1f3c356f8804@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <9a5359f1-84e3-c436-b8d9-1f3c356f8804@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/1] net: stmmac: switch to use interrupt for hw
- crosstimestamping
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165813961300.9736.8038169452034701746.git-patchwork-notify@kernel.org>
-Date:   Mon, 18 Jul 2022 10:20:13 +0000
-References: <20220714075428.1060984-1-vee.khee.wong@linux.intel.com>
-In-Reply-To: <20220714075428.1060984-1-vee.khee.wong@linux.intel.com>
-To:     Wong Vee Khee <vee.khee.wong@linux.intel.com>
-Cc:     davem@davemloft.net, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        kuba@kernel.org, mcoquelin.stm32@gmail.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        richardcochran@gmail.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 14 Jul 2022 15:54:27 +0800 you wrote:
-> Using current implementation of polling mode, there is high chances we
-> will hit into timeout error when running phc2sys. Hence, update the
-> implementation of hardware crosstimestamping to use the MAC interrupt
-> service routine instead of polling for TSIS bit in the MAC Timestamp
-> Interrupt Status register to be set.
+On 18/07/2022 10:47, James Clark wrote:
 > 
-> Cc: Richard Cochran <richardcochran@gmail.com>
-> Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
 > 
-> [...]
+> On 18/07/2022 10:42, Suzuki K Poulose wrote:
+>> Hi James
+>>
+>> On 18/07/2022 10:30, James Clark wrote:
+>>>
+>>>
+>>> On 14/07/2022 07:13, Anshuman Khandual wrote:
+>>>> The arm_spe_pmu driver will enable SYS_PMSCR_EL1.CX in order to add CONTEXT
+>>>> packets into the traces, if the owner of the perf event runs with required
+>>>> capabilities i.e CAP_PERFMON or CAP_SYS_ADMIN via perfmon_capable() helper.
+>>>>
+>>>> The value of this bit is computed in the arm_spe_event_to_pmscr() function
+>>>> but the check for capabilities happens in the pmu event init callback i.e
+>>>> arm_spe_pmu_event_init(). This suggests that the value of the CX bit should
+>>>> remain consistent for the duration of the perf session.
+>>>>
+>>>> However, the function arm_spe_event_to_pmscr() may be called later during
+>>>> the event start callback i.e arm_spe_pmu_start() when the "current" process
+>>>> is not the owner of the perf session, hence the CX bit setting is currently
+>>>> not consistent.
+>>>>
+>>>> One way to fix this, is by caching the required value of the CX bit during
+>>>> the initialization of the PMU event, so that it remains consistent for the
+>>>> duration of the session. It uses currently unused 'event->hw.flags' element
+>>>> to cache perfmon_capable() value, which can be referred during event start
+>>>> callback to compute SYS_PMSCR_EL1.CX. This ensures consistent availability
+>>>> of context packets in the trace as per event owner capabilities.
+>>>>
+>>>> Drop BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init(), because
+>>>> now CX bit cannot be set in arm_spe_event_to_pmscr() with perfmon_capable()
+>>>> disabled.
+>>>>
+>>>> Cc: Will Deacon <will@kernel.org>
+>>>> Cc: Mark Rutland <mark.rutland@arm.com>
+>>>> Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
+>>>> Cc: linux-arm-kernel@lists.infradead.org
+>>>> Cc: linux-kernel@vger.kernel.org
+>>>> Fixes: cea7d0d4a59b ("drivers/perf: Open access for CAP_PERFMON privileged process")
+>>>> Reported-by: German Gomez <german.gomez@arm.com>
+>>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>>> ---
+>>>> Changes in V3:
+>>>>
+>>>> - Moved set_spe_event_has_cx() before arm_spe_event_to_pmscr()
+>>>> - Reinstated perfmon_capable() back in arm_spe_pmu_event_init()
+>>>> - Dropped BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init()
+>>>> - Updated the commit message
+>>>>    Changes in V2:
+>>>>
+>>>> https://lore.kernel.org/all/20220713085925.2627533-1-anshuman.khandual@arm.com/
+>>>>
+>>>> - Moved CONFIG_PID_IN_CONTEXTIDR config check inside the helper per Suzuki
+>>>> - Changed the comment per Suzuki
+>>>> - Renamed the helpers Per Suzuki
+>>>> - Added "Fixes: " tag per German
+>>>>
+>>>> Changes in V1:
+>>>>
+>>>> https://lore.kernel.org/all/20220712051404.2546851-1-anshuman.khandual@arm.com/
+>>>>
+>>>>
+>>>>    drivers/perf/arm_spe_pmu.c | 22 ++++++++++++++++++++--
+>>>>    1 file changed, 20 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+>>>> index db670b265897..b65a7d9640e1 100644
+>>>> --- a/drivers/perf/arm_spe_pmu.c
+>>>> +++ b/drivers/perf/arm_spe_pmu.c
+>>>> @@ -39,6 +39,24 @@
+>>>>    #include <asm/mmu.h>
+>>>>    #include <asm/sysreg.h>
+>>>>    +/*
+>>>> + * Cache if the event is allowed to trace Context information.
+>>>> + * This allows us to perform the check, i.e, perfmon_capable(),
+>>>> + * in the context of the event owner, once, during the event_init().
+>>>> + */
+>>>> +#define SPE_PMU_HW_FLAGS_CX            BIT(0)
+>>>> +
+>>>> +static void set_spe_event_has_cx(struct perf_event *event)
+>>>> +{
+>>>> +    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+>>>> +        event->hw.flags |= SPE_PMU_HW_FLAGS_CX;
+>>>> +}
+>>>> +
+>>>> +static bool get_spe_event_has_cx(struct perf_event *event)
+>>>> +{
+>>>> +    return !!(event->hw.flags & SPE_PMU_HW_FLAGS_CX);
+>>>> +}
+>>>> +
+>>>>    #define ARM_SPE_BUF_PAD_BYTE            0
+>>>>      struct arm_spe_pmu_buf {
+>>>> @@ -272,7 +290,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+>>>>        if (!attr->exclude_kernel)
+>>>>            reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
+>>>>    -    if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+>>>> +    if (get_spe_event_has_cx(event))
+>>>>            reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+>>>>          return reg;
+>>>> @@ -709,10 +727,10 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+>>>>            !(spe_pmu->features & SPE_PMU_FEAT_FILT_LAT))
+>>>>            return -EOPNOTSUPP;
+>>>>    +    set_spe_event_has_cx(event);
+>>>>        reg = arm_spe_event_to_pmscr(event);
+>>>>        if (!perfmon_capable() &&
+>>>>            (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
+>>>> -            BIT(SYS_PMSCR_EL1_CX_SHIFT) |
+>>>
+>>> The first part of the change looks ok, but I'm not sure about this removal here.
+>>>
+>>> Doesn't this mean that if you ask for context data when opening the event
+>>> without permission you don't get an error returned any more? It just silently
+>>> ignores it.
+>>
+>> How do you ask for context data with SPE ? If there was a way, we don't
+>> need this caching. The CX bit is set unconditionally on perfmon_capable() and is not controlled by an attribute. Ideally it is
+>> better to switch to an attribute. But given that it was never there,
+>> I wonder if this would be a problem for the existing perf users ?
+> 
+> Oh yes sorry I thought one of those lines was checking the bit from the user
+> request, but you are right it's unconditional. So this point should be dropped.
+> 
+> I don't think it's actually a problem currently.
+>>
+>>
+>>>
+>>> That changes the semantics of the perf event open call and I don't see why that's
+>>> needed to fix the issue about only checking the permissions of the owning process.
+>>> At least it seems like a separate unrelated change.
+>>>
+>>> It's also worth noting that the value doesn't need to be cached, and another
+>>> one line solution is just to check the permissions of the owning process. This
+>>> avoids duplicating something that is already saved, will survive any future
+>>> refactors of the permissions system, and doesn't use up space in hw_flags:
+>>>
+>>>      if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) &&
+>>>          (has_capability(event->owner, CAP_PERFMON) || has_capability(event->owner, CAP_SYS_ADMIN)))
+>>>      {
+>>>      reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+>>>      }
+>>
+>> We don't use any bits in the hw_events for SPE. So using a bit for storing something doesn't seem to be a wasted effort. Any future
+>> refactors to the permission system would need to take care of the
+>> current users. So that argument is not valid in either case.
+> 
+> I'm just thinking that if you can get something from existing data without
+> saving something new, and do it in fewer lines, then it's more readable.
 
-Here is the summary with links:
-  - [1/1] net: stmmac: switch to use interrupt for hw crosstimestamping
-    https://git.kernel.org/netdev/net/c/76c16d3e1944
+True. On the otherside, you don't have to repeat this operation,
+every single time the event is scheduled. I would also goto the
+next level and cache the "PMSCR" configuration for a given event
+in to the hw_event, which is what the hw_event is for. i.e, storing
+hw specific configuration of the event for the PMU. But this is for a
+later series.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Cheers
+Suzuki
 
+
+> 
+> Maybe the refactor argument is less strong. Either way, with my previous
+> point dropped the patch is functionally the same to my suggestion so I
+> don't have any strong feelings about this one.
+> 
+>>
+>> Cheers
+>> Suzuki
 

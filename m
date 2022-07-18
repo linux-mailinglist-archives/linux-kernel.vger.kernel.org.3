@@ -2,90 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7699A577C36
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3B3577C37
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiGRHMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S233764AbiGRHNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbiGRHMg (ORCPT
+        with ESMTP id S231689AbiGRHNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:12:36 -0400
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399D717A86;
-        Mon, 18 Jul 2022 00:12:32 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id r14so15711586wrg.1;
-        Mon, 18 Jul 2022 00:12:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jq+ERgHLXjd99Gt//WGSWsvGDeg+4Vpzw3ae5fqcZd0=;
-        b=qQUc2w6grL4384+um1BW4h2jSKqJyXWxQesrpsUEFp64War6tc015XB2P7v8nkRRhp
-         l7VxpaZYVlXYtz+iKMqAJGrKTckWYqTgt002hk4NIc/DP3OwZCwcIxkGoEhUGWG48CB1
-         kqquwnDuKaoLafRQ6J/56NJTlJbAgb0OBf+rYkBv2AWNdNwkY31LarCl/37q4Gz6ZGbA
-         zcEQGioSVvHWrTbPCFGew55vgjLNxsSQsSI+vNEHBLguu3l7c8nBils2g2qak4pBfF1r
-         jDbFDZmYva1XxKVAz8akFG/tS8adpDdDoYoCZClxQ4PQqfxdd8LU1vLeSEjLrw9MZPO1
-         oxrA==
-X-Gm-Message-State: AJIora+dApVM/CC06vuOL3qC4RIF9LCGZQHVf6ja0rpXSL8S8a5boAFg
-        ewfTGV0pZCpATYRZ2inL4TQkmSxg8+A=
-X-Google-Smtp-Source: AGRyM1vuCuHClwlRREYmL4N9K/orvP2tFDDUyl37081RiZs1RADzqbgP5a7pWfTHCG9hGrL+f5OTjw==
-X-Received: by 2002:a05:6000:185:b0:21d:7ffc:4916 with SMTP id p5-20020a056000018500b0021d7ffc4916mr21851821wrx.692.1658128350735;
-        Mon, 18 Jul 2022 00:12:30 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id id15-20020a05600ca18f00b003a31f1edfa7sm627887wmb.41.2022.07.18.00.12.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 00:12:30 -0700 (PDT)
-Message-ID: <d0e692ed-e28b-2fff-b870-3640ef5009bb@kernel.org>
-Date:   Mon, 18 Jul 2022 09:12:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] serial: remove VR41XX serial driver
-Content-Language: en-US
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20220715140322.135825-1-tsbogend@alpha.franken.de>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220715140322.135825-1-tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 03:13:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D2517A86
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:13:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 845A461319
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:13:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAF3C341C0;
+        Mon, 18 Jul 2022 07:13:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658128392;
+        bh=51swZxaHJh3GKTY5TD3dhPc0ycstZoPXVjupMS9JkwQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XXjAueojpHAo+0wnGZa7OPm63c4moRcpozBTtgkbHmnr3e/NLNI3XjD2dma7lRViM
+         ERotw0AL0sBjZokWNZT6AETiiVnRXuxHendgkysRZz5QugwCQtaKbyhVeNXBX618Eg
+         iQmyAgu45qZk5MVMpNDowMS5DconlmISNh0bIIMAL6FMmLJL2J504QunH0ftuSAsTo
+         iz6iR+XuzONiCKAnScyjy815y7n/27b3bU2NokneKx5SciSrUXj0z5IVEIuJs3Judg
+         hIwN8+Eb12/m/N5oTvgqHYXK38v1nxmFMzs7FofdfCmbQZKxsQ98CVFS5BuE+/a/VI
+         j+9VtH1ZDofJA==
+Received: from 82-132-227-210.dab.02.net ([82.132.227.210] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDKwI-0088Nz-IW;
+        Mon, 18 Jul 2022 08:13:10 +0100
+Date:   Mon, 18 Jul 2022 08:13:00 +0100
+Message-ID: <87bktm51xf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org,
+        madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
+        tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org,
+        wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com,
+        yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 09/18] KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
+In-Reply-To: <20220715061027.1612149-10-kaleshsingh@google.com>
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+        <20220715061027.1612149-10-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.227.210
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, broonie@kernel.org, madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com, tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, andreyknvl@gmail.com, russell.king@oracle.com, vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15. 07. 22, 16:03, Thomas Bogendoerfer wrote:
-> Commit d3164e2f3b0a ("MIPS: Remove VR41xx support") removed support
-> for MIPS VR41xx platform, so remove exclusive drivers for this
-> platform, too.
+On Fri, 15 Jul 2022 07:10:18 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> In protected nVHE mode the host cannot directly access
+> hypervisor memory, so we will dump the hypervisor stacktrace
+> to a shared buffer with the host.
+> 
+> The minimum size do the buffer required, assuming the min frame
 
-Acked-by: Jiri Slaby <jirislaby@kernel.org>
+s/do/for/ ?
 
-...
-> --- a/include/uapi/linux/serial_core.h
-> +++ b/include/uapi/linux/serial_core.h
-> @@ -124,10 +124,6 @@
->   /* TXX9 type number */
->   #define PORT_TXX9	64
->   
-> -/* NEC VR4100 series SIU/DSIU */
-> -#define PORT_VR41XX_SIU		65
-> -#define PORT_VR41XX_DSIU	66
+> size of [x29, x30] (2 * sizeof(long)), is half the combined size of
+> the hypervisor and overflow stacks plus an additional entry to
+> delimit the end of the stacktrace.
 
-I didn't find any userspace users, so hopefully nothing breaks.
+Let me see if I understand this: the maximum stack size is the
+combination of the HYP and overflow stacks, and the smallest possible
+stack frame is 128bit (only FP+LR). The buffer thus needs to provide
+one 64bit entry per stack frame that fits in the combined stack, plus
+one entry as an end marker.
 
-thanks,
+So the resulting size is half of the combined stack size, plus a
+single 64bit word. Is this correct?
+
+> 
+> The stacktrace buffers are used later in the seried to dump the
+> nVHE hypervisor stacktrace when using protected-mode.
+>
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>  arch/arm64/include/asm/memory.h      | 7 +++++++
+>  arch/arm64/kvm/hyp/nvhe/stacktrace.c | 4 ++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> index 0af70d9abede..28a4893d4b84 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -113,6 +113,13 @@
+>  
+>  #define OVERFLOW_STACK_SIZE	SZ_4K
+>  
+> +/*
+> + * With the minimum frame size of [x29, x30], exactly half the combined
+> + * sizes of the hyp and overflow stacks is needed to save the unwinded
+> + * stacktrace; plus an additional entry to delimit the end.
+> + */
+> +#define NVHE_STACKTRACE_SIZE	((OVERFLOW_STACK_SIZE + PAGE_SIZE) / 2 + sizeof(long))
+> +
+>  /*
+>   * Alignment of kernel segments (e.g. .text, .data).
+>   *
+> diff --git a/arch/arm64/kvm/hyp/nvhe/stacktrace.c b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> index a3d5b34e1249..69e65b457f1c 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> @@ -9,3 +9,7 @@
+>  
+>  DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
+>  	__aligned(16);
+> +
+> +#ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
+> +DEFINE_PER_CPU(unsigned long [NVHE_STACKTRACE_SIZE/sizeof(long)], pkvm_stacktrace);
+> +#endif /* CONFIG_PROTECTED_NVHE_STACKTRACE */
+
+OK, so the allocation exists even if KVM is not running in protected
+mode. I guess this is OK for now, but definitely reinforces my request
+that this is only there when compiled for debug mode.
+
+Thanks,
+
+	M.
+
 -- 
-js
-suse labs
+Without deviation from the norm, progress is not possible.

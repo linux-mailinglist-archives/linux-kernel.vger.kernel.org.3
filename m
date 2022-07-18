@@ -2,202 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1ACD577DCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E56E577DCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234012AbiGRIml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S234019AbiGRIn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233994AbiGRImf (ORCPT
+        with ESMTP id S233926AbiGRInZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:42:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 615CE19C06
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658133753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jGouTsNv1lisIVuwecS9yzguYrksQ4eFIjfFj4TU4q0=;
-        b=UDBzWZwJrKF3bx7Ca9UMbW9jKh33qGiMAnhn42Grguss2Db8jznAeE02JbJxTK1/3R3kQT
-        +rRUTUr4IXCJ39Zx4y4pwRt9r2BNWFbYHpkwG3fanU7/b7zE0UwonRVBaMI25aXaKsIWqE
-        d0QH6opxEnHoFHB0w9TIB83o8XsS4s8=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-452-wV0c1Xy3PD2rnrNr30j_oQ-1; Mon, 18 Jul 2022 04:42:26 -0400
-X-MC-Unique: wV0c1Xy3PD2rnrNr30j_oQ-1
-Received: by mail-pj1-f69.google.com with SMTP id v19-20020a17090abb9300b001ef7bbd5a28so9259036pjr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:42:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jGouTsNv1lisIVuwecS9yzguYrksQ4eFIjfFj4TU4q0=;
-        b=bg2b8Mkz5F8/L3EICWpJcn0IYVncBJabp1cyQ9swTZ++ZkDFEawOt3KjreKqS6gfsH
-         LDUu2t8jfINKQhGDfZwNOyxVpc+3ZD5Rr/SFKqOh+kEWmMVJVMhNQwbX0w2fGo+3Ws5X
-         fpi3zjz00vAwnsS+BLJgs5iBcRIr6Sy56qUzgoX0OIkGpEUhukR5bzUhedEUgPbjpZqD
-         o86iB1JQeat0yNAF+1hx5hXXcUT7z1lX/etjOCfgV/zZ5nFHDbC7A/40Gr8aEgoeUlZz
-         fP8yiP6zU3RHaYbL9NvsT3ZXKQb77Jptq5IZ8LQSRFNjaOKhJY3sVNsW9Qo3q7OYqVKB
-         OgVg==
-X-Gm-Message-State: AJIora9dFOuKRFv17+pdC2ZkaXwiNoxrjqOB4xjCEZ8BCuemxgjR/kBj
-        yrbK/QZVtGoZtjLUL8/liqMjragLeVAbeFB21F2Y1lN2he/ZbdI2I/vuXA127xL/jU/7C7RmESz
-        T7NbC3Fd6s9LE1t43FHsOflPbb4RUu9qjABBx3TsK
-X-Received: by 2002:a17:90b:3c0c:b0:1ef:e647:ff48 with SMTP id pb12-20020a17090b3c0c00b001efe647ff48mr37022216pjb.173.1658133744857;
-        Mon, 18 Jul 2022 01:42:24 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uQCNjvoDfxIqziZqYdDHzUlMEZYuKMP4alAW7pp2XL/lSwJYhrCgB6FbdmGe7ipEOiFq4GD15BG6v9tre5yow=
-X-Received: by 2002:a17:90b:3c0c:b0:1ef:e647:ff48 with SMTP id
- pb12-20020a17090b3c0c00b001efe647ff48mr37022193pjb.173.1658133744537; Mon, 18
- Jul 2022 01:42:24 -0700 (PDT)
+        Mon, 18 Jul 2022 04:43:25 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D08192A7;
+        Mon, 18 Jul 2022 01:43:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lmb8R6wRlz4xQt;
+        Mon, 18 Jul 2022 18:43:19 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658133801;
+        bh=aXwcZQse9JvHSKXL22foLYLTQbulhGvhqdMm2a2O3Bg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MqMyyMPiCO+4WBCLL3ucYNF7VXE+y2mhXmc372hIEC6CY6EzInpXg4ApFYEr3fuB3
+         8X6XcCHvecqCuX1vM8geFZ05FX/oWe7rMKtJPXZIRnWPb+UPRp+cQ0m3zvZEz0vXpC
+         Xd6fZklFN09iU0lfylyXWdC7PdhMmitGD2wIk0yOJXXY6N+ky99ent9GeL1+YFaHaR
+         OStlXZePqpIqCzQj1iO2hrnmafJw7zyumugYLnX1dM4NNDKHpZoL1kRKA3fwzOJ35K
+         HogMJdBAsej2HFE3D0NS4VSTZ1PhjgDNKiiR9h67515oPw1Bv9nqvfyDufzprnTCt1
+         CLEe1NW2aGmKA==
+Date:   Mon, 18 Jul 2022 18:43:18 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the random tree with the arm64 tree
+Message-ID: <20220718184318.25d75848@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
- <20220712145850.599666-7-benjamin.tissoires@redhat.com> <bf56b01d-4c05-0d0b-e85b-219e55606803@fb.com>
-In-Reply-To: <bf56b01d-4c05-0d0b-e85b-219e55606803@fb.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Mon, 18 Jul 2022 10:42:13 +0200
-Message-ID: <CAO-hwJJirS9S8TU9NMXhjmaTeL9PNxeQBg0oT3zLdd63uDp74g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 06/23] selftests/bpf: Add tests for kfunc
- returning a memory pointer
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Exd8vzD_W6MX5oj.bTwiiWK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 6:34 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 7/12/22 7:58 AM, Benjamin Tissoires wrote:
-> > We add 2 new kfuncs that are following the RET_PTR_TO_MEM
-> > capability from the previous commit.
-> > Then we test them in selftests:
-> > the first tests are testing valid case, and are not failing,
-> > and the later ones are actually preventing the program to be loaded
-> > because they are wrong.
-> >
-> > To work around that, we mark the failing ones as not autoloaded
-> > (with SEC("?tc")), and we manually enable them one by one, ensuring
-> > the verifier rejects them.
-> >
-> > To be able to use bpf_program__set_autoload() from libbpf, we need
-> > to use a plain skeleton, not a light-skeleton, and this is why we
-> > also change the Makefile to generate both for kfunc_call_test.c
-> >
-> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >
-> > ---
-> >
-> > new in v6
-> > ---
-> >   include/linux/btf.h                           |  4 +-
-> >   net/bpf/test_run.c                            | 22 +++++
-> >   tools/testing/selftests/bpf/Makefile          |  5 +-
-> >   .../selftests/bpf/prog_tests/kfunc_call.c     | 48 ++++++++++
-> >   .../selftests/bpf/progs/kfunc_call_test.c     | 89 +++++++++++++++++++
-> >   5 files changed, 165 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > index 31da4273c2ec..6f46ff2128ae 100644
-> > --- a/include/linux/btf.h
-> > +++ b/include/linux/btf.h
-> > @@ -422,7 +422,9 @@ static inline int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dt
-> >
-> >   static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type *t)
-> >   {
-> > -     /* t comes in already as a pointer */
-> > +     if (!btf_type_is_ptr(t))
-> > +             return false;
->
-> Why we have a change here?
+--Sig_/Exd8vzD_W6MX5oj.bTwiiWK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Definitely a mistake while fixing/rebasing the series.
+Hi all,
 
-Will bring this hunk in the previous patch in the next revision.
+Today's linux-next merge of the random tree got a conflict in:
 
-Thanks for the review!
+  arch/arm64/kernel/kaslr.c
 
+between commit:
+
+  fc5a89f75d2a ("arm64: kaslr: defer initialization to initcall where permi=
+tted")
+
+from the arm64 tree and commit:
+
+  29abd7758699 ("random: handle archrandom in plural words")
+
+from the random tree.
+
+I fixed it up (the former has removed tha call to
+arch_get_random_seed_words_early() that is updated in the latter) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
 Cheers,
-Benjamin
+Stephen Rothwell
 
->
-> > +
-> >       t = btf_type_by_id(btf, t->type);
-> >
-> >       /* allow const */
-> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> > index 9da2a42811e8..0b4026ea4652 100644
-> > --- a/net/bpf/test_run.c
-> > +++ b/net/bpf/test_run.c
-> > @@ -606,6 +606,24 @@ noinline void bpf_kfunc_call_memb1_release(struct prog_test_member1 *p)
-> >       WARN_ON_ONCE(1);
-> >   }
-> >
-> > +static int *__bpf_kfunc_call_test_get_mem(struct prog_test_ref_kfunc *p, const int size)
-> > +{
-> > +     if (size > 2 * sizeof(int))
-> > +             return NULL;
-> > +
-> > +     return (int *)p;
-> > +}
-> > +
-> > +noinline int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size)
-> > +{
-> > +     return __bpf_kfunc_call_test_get_mem(p, rdwr_buf_size);
-> > +}
-> > +
-> > +noinline int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size)
-> > +{
-> > +     return __bpf_kfunc_call_test_get_mem(p, rdonly_buf_size);
-> > +}
-> > +
-> >   noinline struct prog_test_ref_kfunc *
-> >   bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **pp, int a, int b)
-> >   {
-> > @@ -704,6 +722,8 @@ BTF_ID(func, bpf_kfunc_call_memb_acquire)
-> >   BTF_ID(func, bpf_kfunc_call_test_release)
-> >   BTF_ID(func, bpf_kfunc_call_memb_release)
-> >   BTF_ID(func, bpf_kfunc_call_memb1_release)
-> > +BTF_ID(func, bpf_kfunc_call_test_get_rdwr_mem)
-> > +BTF_ID(func, bpf_kfunc_call_test_get_rdonly_mem)
-> >   BTF_ID(func, bpf_kfunc_call_test_kptr_get)
-> >   BTF_ID(func, bpf_kfunc_call_test_pass_ctx)
-> >   BTF_ID(func, bpf_kfunc_call_test_pass1)
-> > @@ -731,6 +751,8 @@ BTF_SET_END(test_sk_release_kfunc_ids)
-> >   BTF_SET_START(test_sk_ret_null_kfunc_ids)
-> >   BTF_ID(func, bpf_kfunc_call_test_acquire)
-> >   BTF_ID(func, bpf_kfunc_call_memb_acquire)
-> > +BTF_ID(func, bpf_kfunc_call_test_get_rdwr_mem)
-> > +BTF_ID(func, bpf_kfunc_call_test_get_rdonly_mem)
-> >   BTF_ID(func, bpf_kfunc_call_test_kptr_get)
-> >   BTF_SET_END(test_sk_ret_null_kfunc_ids)
-> >
-> [...]
->
+--Sig_/Exd8vzD_W6MX5oj.bTwiiWK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLVHSYACgkQAVBC80lX
+0Gyx+Af/c+NsnChpMNGKzfd2hlBsaJ/+6UIos2H9L4za1TGLwI2dAQkYqBe5GMNP
+pW4HibdyneuIAYVD2X7xD9+bvgpZGdslLSXQQHnhepREAa8wenlRaZbgMjCbEdYm
+gj0NE3gkJ6gaXVd8c73vrQ5kL8xGRXNfcIGeiuH/W1qa5IVtIWo1tY4RR+oUUd94
++oExrvP64j59MX1CzlUXzi+vqwOgu13/JMVKW/cWOwlyRElxmrIYcrnQ5xHkvF3w
+Ye+KzyVMagjTAgTvl/saIcAWvUjQ1hsFvUMbDLwFcWQTpfKMsVYhxlDc50twdr7p
+i4hsUpnMikEgL0dTO5N7u0rpXdzagw==
+=ngz3
+-----END PGP SIGNATURE-----
+
+--Sig_/Exd8vzD_W6MX5oj.bTwiiWK--

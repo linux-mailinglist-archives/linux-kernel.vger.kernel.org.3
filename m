@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06625789D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578955789D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbiGRSxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
+        id S233909AbiGRSyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbiGRSxn (ORCPT
+        with ESMTP id S231264AbiGRSyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:53:43 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD302613F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:53:42 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id w12so16553539edd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:53:42 -0700 (PDT)
+        Mon, 18 Jul 2022 14:54:38 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CB32E9C9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:54:37 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id z23so22986396eju.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:54:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=QQCeFWAFeeYdE8AjB15uv+68TOpyaBwb6vwqnHcmGmg=;
-        b=OrKeVKLURvey9dO5WC2LaIReRqt7JeYxJsb/rxtAYnzaWF/YswmZK+RmgID5pk5hJ+
-         kwlW7xQy+/+uWXFRS9wo4msdp85Hp6C34wrtXKeRwWMqUr2My1sj8+3e3bEjU7jVOQI1
-         xktxra0gDL4AEWJ1Mdug6zemBkkhvI9b4OxuaHgQ36ncjSDTjolCYNKJJrsqyYmbuVQG
-         fZFtl8bNT1l/QlkNJ4uo65jqgfe+NYJP34lF0uZ2bse8xDLKSOEkBBwhiWWd5f3qIVz7
-         l8Ch2Ij6oDNz9+AFTY0Dqd851oN1jQu836XjaboYL3eT0qqK54oz20rGTXwlPP8zMCA7
-         /IVQ==
+        bh=oGwjE6MIwO4ucRosF+8m5EnWnpdyb5yp48oQst1QNMs=;
+        b=Hw/cn955r/+L1mdh7/c5e/DT+5UqIfu0y3ea6tKR6CyaJ9S5iNsdwx+JFPhDHvAMAi
+         pBAtYPvKlwTL6EJKbCJontOplOeipTpHFNlHopuvVaRAwz9lSjChwOl/kcmP13Yf/wAF
+         4Xf+Io0yb+Pn6H09XEqRRqTQXauDq88ix8d0WmnbxD30Lxh2Cn1dVUjLewfzlKy/ajKO
+         /5xNRs+yZo33NRk400jh1IRcY1ijRv1opDzReGVUQxM3+aOWGEjTdYESbKBFrrHk5hMa
+         0YqwT4Gg4qmh6iYJSXxFfbJZLpZOBUiWXCw9SipgMxMF6fRi0uoR679GUzZfYRA+/B64
+         4IwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QQCeFWAFeeYdE8AjB15uv+68TOpyaBwb6vwqnHcmGmg=;
-        b=Q4XaTO8pCHYKrQ2H6Kstc8edPBmqBxy21iU0BACtonSZUOqmpO60eYrkgqte6Fs2mI
-         SsmWu7t1DU+0q6vFhk5tcQZsMH1bP2a0116tHiv/muDd/j3RwPqlAa9QOFrUmt6u0CXI
-         Jh8ZodHpVnsQx5xv+zGZ2LiE+apts5Gtr0HhKVSL0cCjsO3aT8WXhvnmGg7zVTDPE/AI
-         FIyjQZ9SHpYlf98D438HZl2D2+bwIvWLH5hmuIGarJxzosWJAURrnIMqr6CQVN+2skaE
-         DNEMN9t307UefXoQvbiLSTv3bzaxRW+yLWadnk+fD3NGO3EWlh37RF/w9hUZ6dNALI9N
-         eDHw==
-X-Gm-Message-State: AJIora8xhAXigIYbBN1CsRHQtz5SFtYvh9capoQ32KJJxGMyvwCMz5+s
-        LWB6u8kSMR79YJZSpkL4YcvuRevAxuooPu2jZjo=
-X-Google-Smtp-Source: AGRyM1vFm/q16yDnNmxPJrCn+CGhjdvi5dklwjRveBxeTxdUBq2J0ybUbYU2ZNuqC3neB0Opwn5rrTn1N/7NR2hhiTg=
-X-Received: by 2002:a05:6402:2895:b0:43b:1e47:c132 with SMTP id
- eg21-20020a056402289500b0043b1e47c132mr32853099edb.425.1658170421073; Mon, 18
- Jul 2022 11:53:41 -0700 (PDT)
+        bh=oGwjE6MIwO4ucRosF+8m5EnWnpdyb5yp48oQst1QNMs=;
+        b=XpEl7Db6e82puhcQEmZBNFrfREsiYrls9A9J945JAg7TkXXHAVYkIW7EkQBMFCmC3u
+         OH0dS87Zm11Mt0MugqVvCu4lhS8OrdBNR3GMgPZ9HuxLXFIW1XADZrrsW+dqDXwEvdTL
+         MSsqsUU0lGhllVH6q+WKYtK5s9PAXRVOtVILVLuqdhPLInX/5/hYofBSpJ7cpDMmCTxY
+         3SOUK0lh6AZszrEDtEPWrV0Ca7ylKMOJuJF01bsQ6gznkepkexT/s9aLIPNmE5Gz82K8
+         KTiizzfUWGgS2onDLSMjDiacFXS9xEuiped+Qm++KPIKOBHqstO+NuEJPFtXTLLhy6+7
+         ph6A==
+X-Gm-Message-State: AJIora/qZ5i7fiu57vMT9hcDsK1UV/7ilnT79cMkG/DYqLW75atfGlrV
+        3vUdllfpzkj7PmgY7hvMuHpKjFaAWVgO9kd59K4=
+X-Google-Smtp-Source: AGRyM1tIqrsFMSjGxNxpvTlCjK1sMKGBOFkixBpGEmhMeK/QEH2R/OkK4amX3VBUABiVM3Ewf6/2CQZUDdUFIu/lTms=
+X-Received: by 2002:a17:906:58d5:b0:72f:2b21:eb20 with SMTP id
+ e21-20020a17090658d500b0072f2b21eb20mr6790627ejs.508.1658170476337; Mon, 18
+ Jul 2022 11:54:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220714164507.561751-1-mairacanal@riseup.net> <20220714164507.561751-3-mairacanal@riseup.net>
-In-Reply-To: <20220714164507.561751-3-mairacanal@riseup.net>
+References: <20220714164507.561751-1-mairacanal@riseup.net> <20220714164507.561751-4-mairacanal@riseup.net>
+In-Reply-To: <20220714164507.561751-4-mairacanal@riseup.net>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 18 Jul 2022 14:53:29 -0400
-Message-ID: <CADnq5_NzUdMWL2Am6hPkZsthMu=ONPvb1Lu85v0f2PoqA5uWNw@mail.gmail.com>
-Subject: Re: [PATCH 03/12] drm/amd/display: Remove unused clk_src variable
+Date:   Mon, 18 Jul 2022 14:54:24 -0400
+Message-ID: <CADnq5_M5UjWbN2N=zr-BGRcha-2Q+jSC5MXScU+nt6LD=_fs8w@mail.gmail.com>
+Subject: Re: [PATCH 04/12] drm/amd/display: Remove unused dml32_CalculatedoublePipeDPPCLKAndSCLThroughput
+ function
 To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
 Cc:     Harry Wentland <harry.wentland@amd.com>,
         Leo Li <sunpeng.li@amd.com>,
@@ -89,38 +90,113 @@ Alex
 On Thu, Jul 14, 2022 at 12:45 PM Ma=C3=ADra Canal <mairacanal@riseup.net> w=
 rote:
 >
-> Remove the variable clk_src from the function dcn3_get_pix_clk_dividers.
+> Remove dml32_CalculatedoublePipeDPPCLKAndSCLThroughput function, which is=
+ not used in
+> the codebase.
 >
 > This was pointed by clang with the following warning:
 >
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_clock_source.c:1279:25: =
-warning:
-> variable 'clk_src' set but not used [-Wunused-but-set-variable]
->         struct dce110_clk_src *clk_src;
->                                ^
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_util_=
+32.c:393:6:
+> warning: no previous prototype for function
+> 'dml32_CalculatedoublePipeDPPCLKAndSCLThroughput' [-Wmissing-prototypes]
+> void dml32_CalculatedoublePipeDPPCLKAndSCLThroughput(
+>      ^
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_util_=
+32.c:393:1:
+> note: declare 'static' if the function is not intended to be used outside=
+ of
+> this translation unit
+> void dml32_CalculatedoublePipeDPPCLKAndSCLThroughput(
+> ^
+> static
 > 1 warning generated.
 >
 > Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
 > ---
->  drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c | 2 --
->  1 file changed, 2 deletions(-)
+>  .../dc/dml/dcn32/display_mode_vba_util_32.c   | 54 -------------------
+>  1 file changed, 54 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c b/driv=
-ers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
-> index 5cc7cc0b2f2d..d55da1ab1ac2 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
-> @@ -1276,9 +1276,7 @@ static uint32_t dcn3_get_pix_clk_dividers(
->                 struct pll_settings *pll_settings)
->  {
->         unsigned long long actual_pix_clk_100Hz =3D pix_clk_params ? pix_=
-clk_params->requested_pix_clk_100hz : 0;
-> -       struct dce110_clk_src *clk_src;
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_ut=
+il_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32=
+.c
+> index 5a701d9df0f7..4d62ab0c1a78 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_util_32.c
+> @@ -390,60 +390,6 @@ void dml32_CalculateBytePerPixelAndBlockSizes(
+>  #endif
+>  } // CalculateBytePerPixelAndBlockSizes
 >
-> -       clk_src =3D TO_DCE110_CLK_SRC(cs);
->         DC_LOGGER_INIT();
->
->         if (pix_clk_params =3D=3D NULL || pll_settings =3D=3D NULL
+> -void dml32_CalculatedoublePipeDPPCLKAndSCLThroughput(
+> -               double HRatio,
+> -               double HRatioChroma,
+> -               double VRatio,
+> -               double VRatioChroma,
+> -               double MaxDCHUBToPSCLThroughput,
+> -               double MaxPSCLToLBThroughput,
+> -               double PixelClock,
+> -               enum source_format_class SourcePixelFormat,
+> -               unsigned int HTaps,
+> -               unsigned int HTapsChroma,
+> -               unsigned int VTaps,
+> -               unsigned int VTapsChroma,
+> -
+> -               /* output */
+> -               double *PSCL_THROUGHPUT,
+> -               double *PSCL_THROUGHPUT_CHROMA,
+> -               double *DPPCLKUsingdoubleDPP)
+> -{
+> -       double DPPCLKUsingdoubleDPPLuma;
+> -       double DPPCLKUsingdoubleDPPChroma;
+> -
+> -       if (HRatio > 1) {
+> -               *PSCL_THROUGHPUT =3D dml_min(MaxDCHUBToPSCLThroughput, Ma=
+xPSCLToLBThroughput * HRatio /
+> -                               dml_ceil((double) HTaps / 6.0, 1.0));
+> -       } else {
+> -               *PSCL_THROUGHPUT =3D dml_min(MaxDCHUBToPSCLThroughput, Ma=
+xPSCLToLBThroughput);
+> -       }
+> -
+> -       DPPCLKUsingdoubleDPPLuma =3D PixelClock * dml_max3(VTaps / 6 * dm=
+l_min(1, HRatio), HRatio * VRatio /
+> -                       *PSCL_THROUGHPUT, 1);
+> -
+> -       if ((HTaps > 6 || VTaps > 6) && DPPCLKUsingdoubleDPPLuma < 2 * Pi=
+xelClock)
+> -               DPPCLKUsingdoubleDPPLuma =3D 2 * PixelClock;
+> -
+> -       if ((SourcePixelFormat !=3D dm_420_8 && SourcePixelFormat !=3D dm=
+_420_10 && SourcePixelFormat !=3D dm_420_12 &&
+> -                       SourcePixelFormat !=3D dm_rgbe_alpha)) {
+> -               *PSCL_THROUGHPUT_CHROMA =3D 0;
+> -               *DPPCLKUsingdoubleDPP =3D DPPCLKUsingdoubleDPPLuma;
+> -       } else {
+> -               if (HRatioChroma > 1) {
+> -                       *PSCL_THROUGHPUT_CHROMA =3D dml_min(MaxDCHUBToPSC=
+LThroughput, MaxPSCLToLBThroughput *
+> -                                       HRatioChroma / dml_ceil((double) =
+HTapsChroma / 6.0, 1.0));
+> -               } else {
+> -                       *PSCL_THROUGHPUT_CHROMA =3D dml_min(MaxDCHUBToPSC=
+LThroughput, MaxPSCLToLBThroughput);
+> -               }
+> -               DPPCLKUsingdoubleDPPChroma =3D PixelClock * dml_max3(VTap=
+sChroma / 6 * dml_min(1, HRatioChroma),
+> -                               HRatioChroma * VRatioChroma / *PSCL_THROU=
+GHPUT_CHROMA, 1);
+> -               if ((HTapsChroma > 6 || VTapsChroma > 6) && DPPCLKUsingdo=
+ubleDPPChroma < 2 * PixelClock)
+> -                       DPPCLKUsingdoubleDPPChroma =3D 2 * PixelClock;
+> -               *DPPCLKUsingdoubleDPP =3D dml_max(DPPCLKUsingdoubleDPPLum=
+a, DPPCLKUsingdoubleDPPChroma);
+> -       }
+> -}
+> -
+>  void dml32_CalculateSwathAndDETConfiguration(
+>                 unsigned int DETSizeOverride[],
+>                 enum dm_use_mall_for_pstate_change_mode UseMALLForPStateC=
+hange[],
 > --
 > 2.36.1
 >

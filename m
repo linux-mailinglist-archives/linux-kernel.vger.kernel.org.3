@@ -2,83 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0497578B40
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F25CD578B43
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236321AbiGRTt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
+        id S236195AbiGRTvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiGRTt1 (ORCPT
+        with ESMTP id S236345AbiGRTvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:49:27 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F70725DF;
-        Mon, 18 Jul 2022 12:49:26 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sz17so23234159ejc.9;
-        Mon, 18 Jul 2022 12:49:26 -0700 (PDT)
+        Mon, 18 Jul 2022 15:51:40 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DA031DFA
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:51:38 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id mf4so23283519ejc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:51:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HYS8d97OSWqWFt6qraEk8QQYqaDKoCu9P8dNF7MQV/I=;
-        b=RQqo5euyUNZsNSDq76e+Y6Cv3Yfw/KrbWFz3lAinvv27/90P/dhfgqzg2IbRDBN7O7
-         +VQ2m7hOk4ZGFrXCnHACMXuauL3TuF2vpfwKjpFKWjwdnfn/309SqQdCy4yBZ0kwbe48
-         ySQZzZVKf2rCRkw0109fbQrUt6mNVPt1Q694GFB6kgOTnazJYwfOj3zhUNXwVdXA9Y5R
-         s0d9rxiiWM9UHF4OArALxG7Bh9/uCQwNTXJ8vzSL681fvxc69wvWDo3+Upp7GKe7ANXz
-         pdTYA3bh6wgnCEFny2rthbqMJa3uJLnDwhUhifdCKoCbcaDCChcwEyd2KvDp9uUY/sBY
-         s8+w==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f6A956WYUO29o8aXvwOKjdN1VhCZMhvt6dhIwD6j8CI=;
+        b=ZE0mxgV5M/vTD2TZG9dzY+IbFs/6eOD12TS2xwBjR8UELYWPsck5+pF0NHrkTuTIzX
+         1wkYnO6fQmjf59ZEN6F9YKBr0FKQR8U5s2g6mmzXbe0Zt/jRf5KBCO8ACndAB7g6/mYN
+         n7NfXgDjPBdcsmEnOnkQj1GN49Eo+Vrd8OYnQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HYS8d97OSWqWFt6qraEk8QQYqaDKoCu9P8dNF7MQV/I=;
-        b=Vs515rMqaa57tra7WEOTWyyqrQJgak0m1JEgqjlM9LB01IUAvE8fcg+YRdR1dYnDW9
-         +SVUYQyqFPvDy4D36yfn+2GhgfdSgJmXB2oKK5rDorullaufZkqSm8fm4S/mJZ/nwyLr
-         RPrdAUrDX4w/SIamQh1CjkuIMIUAbkMdFHg6aDsY3EVAizjgD/3V1w7wDNWaamBbXLBW
-         O58+aq4sRgXU4tk+kKEEaTnjpunQZHQdO+hT4SkUs0+i5wY8Ljhph1+/ffErm5LedOMN
-         orqR+LzZoOCaMFGVO+JPIQPv48NSDlTkFISN1t/Gq/a84lJTpPqJv9/O1prrIlhJTBYl
-         iAFQ==
-X-Gm-Message-State: AJIora94BylGHrsOl5OhfQgfWBHEunzWHgwyoWeHbTkvIOlNQom1YLSx
-        MRvqloAeZehPBs4ffDpiaHs=
-X-Google-Smtp-Source: AGRyM1teajZoX5+KI3lN1KKf4u/ANfoSP5l4g1qk1vVWzKjnntOq9y9g7rs0LxxBLBs9tyWYsF2JHw==
-X-Received: by 2002:a17:907:a40f:b0:72b:64ee:5b2f with SMTP id sg15-20020a170907a40f00b0072b64ee5b2fmr28425844ejc.268.1658173764701;
-        Mon, 18 Jul 2022 12:49:24 -0700 (PDT)
-Received: from [192.168.0.104] ([77.126.166.31])
-        by smtp.gmail.com with ESMTPSA id g1-20020a17090604c100b0072afb6d4d6fsm5952705eja.171.2022.07.18.12.49.22
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f6A956WYUO29o8aXvwOKjdN1VhCZMhvt6dhIwD6j8CI=;
+        b=AJD09rL+JkpDHSPQcbWL1jpjmbSZ+ggT85BovRUHgGyBnebGCbxdgYIxOiPl0yfCAS
+         C7iN1g13fs26+0OwxWbiqFMqmejZzrwTgN+7NxvevV6pYUqBzTUkwYLlOtjGBM7FLQ0f
+         Mx51xxOaz8gzqUYOXmA1dRwvTDoXkEdsgoZU9J8emxb18/vlt4LicmJg9XIbF9+balsz
+         jzWZezYzi14IzPVizerAuM3KKk0/cDgwKHjbHP7iZP6Rl/6JqBFgdB8HwpYdwPLDakjS
+         koqiJVBl8XJmRHE5Wh5l8/dfywxtnCi7R8NKaGGN7cTz/FG6Uj7ZHbWdD6v3KG9/BDuF
+         vCZA==
+X-Gm-Message-State: AJIora/WPoFKXqOlfZYnIqTdWqOZiP5Y7Gwg4oTMkSxqnPkqPuwCYgrX
+        eYu3Om8x12B/XX19GmeB1hRmGw0AAY4aX4S7lPI=
+X-Google-Smtp-Source: AGRyM1u/NAfjetOkEJcdox9v+/vGriZvV9n5yu+6J2SYiX5S3VlR1ZgZ/1ASsE250v8IhEGH/1H5gA==
+X-Received: by 2002:a17:907:7205:b0:72f:38ec:f70e with SMTP id dr5-20020a170907720500b0072f38ecf70emr4916216ejc.130.1658173897204;
+        Mon, 18 Jul 2022 12:51:37 -0700 (PDT)
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
+        by smtp.gmail.com with ESMTPSA id lv8-20020a170906bc8800b0072b91a3d7e9sm5814921ejb.28.2022.07.18.12.51.35
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 12:49:24 -0700 (PDT)
-Message-ID: <2fc99d26-f804-ad34-1fd7-90cfb123b426@gmail.com>
-Date:   Mon, 18 Jul 2022 22:49:21 +0300
+        Mon, 18 Jul 2022 12:51:36 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id l22-20020a05600c4f1600b003a2e10c8cdeso40376wmq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:51:35 -0700 (PDT)
+X-Received: by 2002:a05:600c:2d07:b0:3a3:585:5d96 with SMTP id
+ x7-20020a05600c2d0700b003a305855d96mr19795045wmf.38.1658173895466; Mon, 18
+ Jul 2022 12:51:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next V2 2/2] net/mlx5e: Improve remote NUMA
- preferences used for the IRQ affinity hints
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Tariq Toukan <tariqt@nvidia.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20220718124315.16648-1-tariqt@nvidia.com>
- <20220718124315.16648-3-tariqt@nvidia.com>
- <YtVlDiLTPxm312u+@worktop.programming.kicks-ass.net>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <YtVlDiLTPxm312u+@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220716230344.239749011@linutronix.de> <87wncauslw.ffs@tglx> <87tu7euska.ffs@tglx>
+In-Reply-To: <87tu7euska.ffs@tglx>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 18 Jul 2022 12:51:19 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjpzVRU0Yr_0DJSB_bKHW3_74UucNpJBjxfHPo_R=PYNg@mail.gmail.com>
+Message-ID: <CAHk-=wjpzVRU0Yr_0DJSB_bKHW3_74UucNpJBjxfHPo_R=PYNg@mail.gmail.com>
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juergen Gross <jgross@suse.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,156 +88,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 18, 2022 at 12:30 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Let the compiler add a 16 byte padding in front of each function entry
+> point and put the call depth accounting there. That avoids calling out
+> into the module area and reduces ITLB pressure.
 
+Ooh.
 
-On 7/18/2022 4:50 PM, Peter Zijlstra wrote:
-> On Mon, Jul 18, 2022 at 03:43:15PM +0300, Tariq Toukan wrote:
-> 
->> Reviewed-by: Gal Pressman <gal@nvidia.com>
->> Acked-by: Saeed Mahameed <saeedm@nvidia.com>
->> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
->> ---
->>   drivers/net/ethernet/mellanox/mlx5/core/eq.c | 62 +++++++++++++++++++-
->>   1 file changed, 59 insertions(+), 3 deletions(-)
->>
->> v2:
->> Separated the set_cpu operation into two functions, per Saeed's suggestion.
->> Added Saeed's Acked-by signature.
->>
->> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eq.c b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
->> index 229728c80233..e72bdaaad84f 100644
->> --- a/drivers/net/ethernet/mellanox/mlx5/core/eq.c
->> +++ b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
->> @@ -11,6 +11,9 @@
->>   #ifdef CONFIG_RFS_ACCEL
->>   #include <linux/cpu_rmap.h>
->>   #endif
->> +#ifdef CONFIG_NUMA
->> +#include <linux/sched/topology.h>
->> +#endif
->>   #include "mlx5_core.h"
->>   #include "lib/eq.h"
->>   #include "fpga/core.h"
->> @@ -806,13 +809,67 @@ static void comp_irqs_release(struct mlx5_core_dev *dev)
->>   	kfree(table->comp_irqs);
->>   }
->>   
->> +static void set_cpus_by_local_spread(struct mlx5_core_dev *dev, u16 *cpus,
->> +				     int ncomp_eqs)
->> +{
->> +	int i;
->> +
->> +	for (i = 0; i < ncomp_eqs; i++)
->> +		cpus[i] = cpumask_local_spread(i, dev->priv.numa_node);
->> +}
->> +
->> +static bool set_cpus_by_numa_distance(struct mlx5_core_dev *dev, u16 *cpus,
->> +				      int ncomp_eqs)
->> +{
->> +#ifdef CONFIG_NUMA
->> +	cpumask_var_t cpumask;
->> +	int first;
->> +	int i;
->> +
->> +	if (!zalloc_cpumask_var(&cpumask, GFP_KERNEL)) {
->> +		mlx5_core_err(dev, "zalloc_cpumask_var failed\n");
->> +		return false;
->> +	}
->> +	cpumask_copy(cpumask, cpu_online_mask);
->> +
->> +	first = cpumask_local_spread(0, dev->priv.numa_node);
-> 
-> Arguably you want something like:
-> 
-> 	first = cpumask_any(cpumask_of_node(dev->priv.numa_node));
+I actually like this a lot better.
 
-Any doesn't sound like what I'm looking for, I'm looking for first.
-I do care about the order within the node, so it's more like 
-cpumask_first(cpumask_of_node(dev->priv.numa_node));
+Could we just say "use this instead if you have SKL and care about the issue?"
 
-Do you think this has any advantage over cpumask_local_spread, if used 
-only during the setup phase of the driver?
+I don't hate your module thunk trick, but this does seem *so* much
+simpler, and if it performs better anyway, it really does seem like
+the better approach.
 
-> 
->> +
->> +	for (i = 0; i < ncomp_eqs; i++) {
->> +		int cpu;
->> +
->> +		cpu = sched_numa_find_closest(cpumask, first);
->> +		if (cpu >= nr_cpu_ids) {
->> +			mlx5_core_err(dev, "sched_numa_find_closest failed, cpu(%d) >= nr_cpu_ids(%d)\n",
->> +				      cpu, nr_cpu_ids);
->> +
->> +			free_cpumask_var(cpumask);
->> +			return false;
-> 
-> So this will fail when ncomp_eqs > cpumask_weight(online_cpus); is that
-> desired?
-> 
+And people and distros who care would have an easy time adding that
+simple compiler patch instead.
 
-Yes. ncomp_eqs does not exceed the num of online cores.
+I do think that for generality, the "-mforce-function-padding" option
+should perhaps take as an argument how much padding (and how much
+alignment) to force:
 
+    -mforce-function-padding=5:16
 
->> +		}
->> +		cpus[i] = cpu;
->> +		cpumask_clear_cpu(cpu, cpumask);
-> 
-> Since there is no concurrency on this cpumask, you don't need atomic
-> ops:
-> 
-> 		__cpumask_clear_cpu(..);
-> 
+would force 5 bytes of minimum padding, and align functions to 16
+bytes. It should be easy to generate (no more complexity than your
+current one) by just making the output do
 
-Right. I'll fix.
+        .skip 5,0xcc
+        .palign 4,0xcc
 
->> +	}
->> +
->> +	free_cpumask_var(cpumask);
->> +	return true;
->> +#else
->> +	return false;
->> +#endif
->> +}
->> +
->> +static void mlx5_set_eqs_cpus(struct mlx5_core_dev *dev, u16 *cpus, int ncomp_eqs)
->> +{
->> +	bool success = set_cpus_by_numa_distance(dev, cpus, ncomp_eqs);
->> +
->> +	if (!success)
->> +		set_cpus_by_local_spread(dev, cpus, ncomp_eqs);
->> +}
->> +
->>   static int comp_irqs_request(struct mlx5_core_dev *dev)
->>   {
->>   	struct mlx5_eq_table *table = dev->priv.eq_table;
->>   	int ncomp_eqs = table->num_comp_eqs;
->>   	u16 *cpus;
->>   	int ret;
->> -	int i;
->>   
->>   	ncomp_eqs = table->num_comp_eqs;
->>   	table->comp_irqs = kcalloc(ncomp_eqs, sizeof(*table->comp_irqs), GFP_KERNEL);
->> @@ -830,8 +887,7 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
->>   		ret = -ENOMEM;
->>   		goto free_irqs;
->>   	}
->> -	for (i = 0; i < ncomp_eqs; i++)
->> -		cpus[i] = cpumask_local_spread(i, dev->priv.numa_node);
->> +	mlx5_set_eqs_cpus(dev, cpus, ncomp_eqs);
-> 
-> So you change this for mlx5, what about the other users of
-> cpumask_local_spread() ?
+and now you can specify that you only need X bytes of padding, for example.
 
-I took a look at the different netdev users.
-While some users have similar use case to ours (affinity hints), many 
-others use cpumask_local_spread in other flows (XPS setting, ring 
-allocations, etc..).
-
-Moving them to use the newly exposed API needs some deeper dive into 
-their code, especially due to the possible undesired side-effects.
-
-I prefer not to include these changes in my series for now, but probably 
-contribute it in a followup work.
-
-Regards,
-Tariq
+                        Linus

@@ -2,127 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE0C5786F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554C35786FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234616AbiGRQHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        id S233966AbiGRQHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235451AbiGRQHM (ORCPT
+        with ESMTP id S233151AbiGRQHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:07:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE5219C2B
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:07:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3XVB/nlrkvDOmjrjaiTf3FsIIT/RNdtwVa0SsHwoaZ8=; b=WyPbVehXqWMqowQ5bKPyc4QfGM
-        IDfPKec/SOw6IEsOAsQJ3a94He/hMADv4zEIktxFk+Qk9W4Y99DZQtHjbaQ1Hv+oRKKksSQ689Ez3
-        qPkNnK9CJkhgeDmN/H4tU3WNSEROIAjvgVxyclSsrGWe4dFzvDhbcnf89Im2zo381KhiowupCK+1b
-        wuRQL88Nyn/Uw+XiI6JoJ6iFrWAG+vOIY4yGU+d8ZWOZSXdd4gEqM9vmsocP0h2mpFv7nHtEpKDe8
-        V8VChy+aC0ai8bVAky66dAPlZtTYVwQW/fyygG+zcxZYcDJtzT9MOIJcsEsP5G2hthZkBsPa8QK5I
-        GDvzSGuQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDTGn-00CoMn-3m; Mon, 18 Jul 2022 16:06:53 +0000
-Date:   Mon, 18 Jul 2022 17:06:53 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org, steven.price@arm.com, will@kernel.org,
-        aarcange@redhat.com, guojian@oppo.com, hanchuanhua@oppo.com,
-        hannes@cmpxchg.org, hughd@google.com, linux-kernel@vger.kernel.org,
-        minchan@kernel.org, shy828301@gmail.com, v-songbaohua@oppo.com,
-        ying.huang@intel.com, zhangshiming@oppo.com
-Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
-Message-ID: <YtWFHfs0mYonWBwH@casper.infradead.org>
-References: <20220718090050.2261-1-21cnbao@gmail.com>
+        Mon, 18 Jul 2022 12:07:38 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67652A702
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:07:37 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so13106511pjf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:07:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=9TtjPFua9h2nXvdI295iIvL1KzKHe3EXSfFcAruP83w=;
+        b=B1Vkgcwjmw7wF5OIqM2gALnGlnAyAG2yQwQgXfjRGkFUma/YPHJARaaTbp8wa8XRog
+         pi3U2WHIL4JMGTI+Zv6aZiB6++EXbxB3vvgnUGeAwsiBqntL6dRUfOLSo7+sLb0c81/g
+         U5QYnMbZfJrA377IZT504TiE60Ki5Vv39eUJG/NHOStwhRr+9aGua9xCVJsqxV/uWs2L
+         9zlcIITsUvYq3cMWOCrBIUGIbj4xdKDFvaAsNyVPAzJVJlhNlHAJxTBp8rP7W9n4fdlx
+         Iy7cNHfe12sNoT0KG0JgFeVDPH5TNda7JAhcfxiNHGQINO8TSKIB6K9EKAqNhtHXKAHM
+         xu7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9TtjPFua9h2nXvdI295iIvL1KzKHe3EXSfFcAruP83w=;
+        b=UszJBUleAIhvIMJrXgeEbqA05sz1uFYW9bJihwZ5bDu85VvsdCzdDFPZEPyV3PAep4
+         PQfW9vBDVxV+tnoZCgIXodgiTSmAAfMTJbeeb3uCb01Z3GcEIey19cRxZ9QU/qBmFflI
+         geMQ4OWj1R4zUq1Hh4JCr/n9gREPHu/zOYdwcz/yR78sK7IHPTU0SkQUdhwt84TZXhva
+         9MJVb5xdJi/nGzR61MX8aWMviThIKoUfJ1ZEYr6eXfmXvVxUxP6VKa7b/q1rSbHplbL9
+         KiPthuMe+SEcmqcGb7BOCO+or5QIw8xRNPhoLOt0FCF/GRng9p4s/+kWVqA8640hFGsD
+         oSxw==
+X-Gm-Message-State: AJIora9so6pNqWin1ecy6XVuE8nOdeUSmz2eKZKnlanziztA2CfDNWV6
+        YiVjnddiOH26ZqqB4YKfliGs9A==
+X-Google-Smtp-Source: AGRyM1sIk3+b4iopeDoB9IY63nrGzfKZs7lewxCPMQpTqmN00GDEE8+iAFs4O2M8lemnUJ7n5XYrrQ==
+X-Received: by 2002:a17:90b:3a84:b0:1f0:56d5:4604 with SMTP id om4-20020a17090b3a8400b001f056d54604mr32203421pjb.41.1658160457262;
+        Mon, 18 Jul 2022 09:07:37 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id r10-20020a170902be0a00b0016bc947c5b7sm9669163pls.38.2022.07.18.09.07.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 09:07:36 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 16:07:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] KVM: x86/mmu: Add shadow mask for effective host
+ MTRR memtype
+Message-ID: <YtWFRTg4Is7XFld9@google.com>
+References: <20220715230016.3762909-1-seanjc@google.com>
+ <20220715230016.3762909-4-seanjc@google.com>
+ <580a46b4623309474bb3207ea994eb9b5a3603a7.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220718090050.2261-1-21cnbao@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <580a46b4623309474bb3207ea994eb9b5a3603a7.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 09:00:50PM +1200, Barry Song wrote:
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 1652a9800ebe..e1c540e80eec 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -101,6 +101,7 @@ config ARM64
->  	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->  	select ARCH_WANT_LD_ORPHAN_WARN
->  	select ARCH_WANTS_NO_INSTR
-> +	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
-
-Can't you avoid all the other changes by simply doing:
-
-	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES && !ARM64_MTE
-
->  	select ARCH_HAS_UBSAN_SANITIZE_ALL
->  	select ARM_AMBA
->  	select ARM_ARCH_TIMER
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 0b6632f18364..78d6f6014bfb 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -45,6 +45,12 @@
->  	__flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
->  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->  
-> +static inline bool arch_thp_swp_supported(void)
-> +{
-> +	return !system_supports_mte();
-> +}
-> +#define arch_thp_swp_supported arch_thp_swp_supported
-> +
->  /*
->   * Outside of a few very special situations (e.g. hibernation), we always
->   * use broadcast TLB invalidation instructions, therefore a spurious page
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index de29821231c9..4ddaf6ad73ef 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
->  	return split_huge_page_to_list(&folio->page, list);
->  }
->  
-> +/*
-> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
-> + * limitations in the implementation like arm64 MTE can override this to
-> + * false
-> + */
-> +#ifndef arch_thp_swp_supported
-> +static inline bool arch_thp_swp_supported(void)
-> +{
-> +	return true;
-> +}
-> +#endif
-> +
->  #endif /* _LINUX_HUGE_MM_H */
-> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
-> index 2a65a89b5b4d..10b94d64cc25 100644
-> --- a/mm/swap_slots.c
-> +++ b/mm/swap_slots.c
-> @@ -307,7 +307,7 @@ swp_entry_t folio_alloc_swap(struct folio *folio)
->  	entry.val = 0;
->  
->  	if (folio_test_large(folio)) {
-> -		if (IS_ENABLED(CONFIG_THP_SWAP))
-> +		if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
->  			get_swap_pages(1, &entry, folio_nr_pages(folio));
->  		goto out;
->  	}
-> -- 
-> 2.25.1
+On Mon, Jul 18, 2022, Maxim Levitsky wrote:
+> On Fri, 2022-07-15 at 23:00 +0000, Sean Christopherson wrote:
+> > diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> > index ba3dccb202bc..cabe3fbb4f39 100644
+> > --- a/arch/x86/kvm/mmu/spte.h
+> > +++ b/arch/x86/kvm/mmu/spte.h
+> > @@ -147,6 +147,7 @@ extern u64 __read_mostly shadow_mmio_value;
+> >  extern u64 __read_mostly shadow_mmio_mask;
+> >  extern u64 __read_mostly shadow_mmio_access_mask;
+> >  extern u64 __read_mostly shadow_present_mask;
+> > +extern u64 __read_mostly shadow_memtype_mask;
+> >  extern u64 __read_mostly shadow_me_value;
+> >  extern u64 __read_mostly shadow_me_mask;
+> >  
 > 
 > 
+> So if I understand correctly:
+> 
+> 
+> VMX:
+> 
+> - host MTRRs are ignored.
+> 
+> - all *host* mmio ranges (can only be VFIO's pci BARs), are mapped UC in EPT,
+>  but guest can override this with its PAT to WC)
+> 
+> 
+> - all regular memory is mapped WB + guest PAT ignored unless there is noncoherent dma,
+>  (an older Intel's IOMMU? I think current Intel's IOMMLU are coherent?)
+
+Effectively, yes.
+
+My understanding is that on x86, everything is cache-coherent by default, but devices
+can set a no-snoop flag, which breaks cache coherency.  But then the IOMMU, except for
+old Intel IOMMUs, can block such packets, and VFIO forces the block setting in the IOMMU
+when it's supported by hardware.
+
+Note, at first glance, commit e8ae0e140c05 ("vfio: Require that devices support DMA
+cache coherence") makes it seem like exposing non-coherent DMA to KVM is impossible,
+but IIUC that's just enforcing that the _default_ device behavior provides coherency.
+I.e. VFIO will still allow an old Intel IOMMU plus a device that sets no-snoop.

@@ -2,239 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F933578B60
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5944578B66
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236369AbiGRT5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
+        id S235213AbiGRUBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 16:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234580AbiGRT5N (ORCPT
+        with ESMTP id S233533AbiGRUBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:57:13 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657FD2E9F0;
-        Mon, 18 Jul 2022 12:57:12 -0700 (PDT)
+        Mon, 18 Jul 2022 16:01:03 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BD61277A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:01:02 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so7972922wmb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658174232; x=1689710232;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JnA8EvXdeEwN8pRQP0MpQ7Bwix3rW1cV6V4o1jd2WMY=;
-  b=BfHZJ0PLsOssmCOiB6NoK44Hn/Ww8NGdc3ifMyWjgI7nr6VvSFWXr+bO
-   2W5DOWHvi/4nq6KcZUEWnD9d8S7J5bofPqdQWOkyrurNiQVtOafLjgai+
-   FSaL9JmSjfoWLqTWe5D7XghTLgkJb16JykCZrLAFhQARsk7iej4odl0c8
-   k=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 Jul 2022 12:57:12 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:57:11 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 18 Jul 2022 12:57:10 -0700
-Received: from [10.110.0.218] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 18 Jul
- 2022 12:57:10 -0700
-Message-ID: <ffb31b6f-8ed3-e890-976d-64a48478d404@quicinc.com>
-Date:   Mon, 18 Jul 2022 12:57:09 -0700
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=juywSF6kivPVUCDC/3oKIs3f7hUcTtSz7n8yKgroz60=;
+        b=ZvIYtRO+ujX46pjEvyB7XnyOdQeKac4TxCgDWEn/vnwhJndWwMvo/lHoJiWYKHCaVe
+         QIAqdcg/9E+mc3lXM2mfr+S1kIT9OxDuTe68b5ibo2AWP8EdCjByWcVPTheIUoO1Ds95
+         l2GphB6de49/b0l18CM1srazpj+m6DpVKlGm4Y+6MBRjJg3ntjnZ7nsxobi4wlTiRZpo
+         xgNEYwQF0vofUDHhSSkCZii8FNwJPJxcrp2WpduwD94EGdsyBU1JlJRQal56vDAjzL5L
+         REwthKiBkyphAnJi2jo+6F0qLPS+dQT+7AFXoLbBc045anv+ng2tM1DBq9MHDEWkL7Kt
+         1aMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=juywSF6kivPVUCDC/3oKIs3f7hUcTtSz7n8yKgroz60=;
+        b=8MVPO2dQ+i01zr113zx26c/D1WX76XIPYnlqrZsEoV3cz/0Divczd6SmsMjE14lwxu
+         vew7j9uA6yFHX7CapkKw93XOEXOon7xCys+hbuWlit9r59+5Ir7mHAQTxKp+C0RCrP6T
+         27RCbL0hYZmayiPyR90iHVriE7AozALEQYCusquQ+9NP6BSjSBVdk5jLNXWBxfYLCtSa
+         C+u+1oflVHoykZQVAIdMo98BGGfXYTXXzX7xZzVgokehRfEujzMfU0eZuDqFiIGdDSxm
+         t4nJW1yp0bMW6jSKN4ESV9xm4D4BKQviT7Kno8oUAWjHBBNwIXcbSSgBR4g6gXz8bbet
+         W7LA==
+X-Gm-Message-State: AJIora/dQglFn77S3NazA/DTQykEf7gsYkLm6nKGbmehVChkFNP9OViE
+        M2D+fZ1dXh17vV/ws6IHi84=
+X-Google-Smtp-Source: AGRyM1tUpgqlD9Quxxx+3N1IOfEiChOCwJTSHv8j3ZpMTvj1v3U1oxi0x66tQclQ08tbw3gJLwY7zQ==
+X-Received: by 2002:a05:600c:2d09:b0:3a3:1062:ce61 with SMTP id x9-20020a05600c2d0900b003a31062ce61mr14389529wmf.138.1658174461318;
+        Mon, 18 Jul 2022 13:01:01 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f2e:6999:b072:faf1:1e0f:8765? (p200300c78f2e6999b072faf11e0f8765.dip0.t-ipconnect.de. [2003:c7:8f2e:6999:b072:faf1:1e0f:8765])
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c294900b003a320b6d5eesm1676674wmd.15.2022.07.18.13.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 13:01:00 -0700 (PDT)
+Message-ID: <71368760-0399-52f2-ca6e-ad8f4daf8003@gmail.com>
+Date:   Mon, 18 Jul 2022 22:00:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: power: reset: qcom-pon: update "reg"
- property details
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5/7] staging: vt6655: Replace MACvReceive1 with function
+ vt6655_mac_dma_ctl
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <corbet@lwn.net>, <sre@kernel.org>, <robh+dt@kernel.org>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>
-References: <20220713193350.29796-1-quic_amelende@quicinc.com>
- <20220713193350.29796-2-quic_amelende@quicinc.com>
- <c129c748-4306-da64-fc18-2d224b2fc97c@linaro.org>
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-In-Reply-To: <c129c748-4306-da64-fc18-2d224b2fc97c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1658094708.git.philipp.g.hortmann@gmail.com>
+ <c433e54f0fae051fc8ba9050aa094d6f7141e8d4.1658094708.git.philipp.g.hortmann@gmail.com>
+ <20220718124136.GE2338@kadam>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220718124136.GE2338@kadam>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/14/2022 4:48 AM, Krzysztof Kozlowski wrote:
-> On 13/07/2022 21:33, Anjelique Melendez wrote:
->> From: David Collins <quic_collinsd@quicinc.com>
+On 7/18/22 14:41, Dan Carpenter wrote:
+> On Mon, Jul 18, 2022 at 12:20:25AM +0200, Philipp Hortmann wrote:
+>> checkpatch.pl does not accept multiline macros.
 >>
->> Update the description of "reg" property to add the PON_PBS base
->> address along with PON_HLOS base address.  Also add "reg-names"
->> property description.
->>
->> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
->> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->> ---
->>  Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 73 ++++++++++++++++++++++++++++--
->>  1 file changed, 69 insertions(+), 4 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->> index 353f155d..562fe308 100644
->> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->> @@ -15,18 +15,26 @@ description: |
->>  
->>    This DT node has pwrkey and resin as sub nodes.
->>  
->> -allOf:
->> -  - $ref: reboot-mode.yaml#
+> 
+> What?  Really?
+You are right. It does not really complain about multiline macros but 
+you cannot have a clean checkpatch check when using more than one macro 
+containing the same variable. Find more info below.
+> 
+> I tested this to see if was true and it just complained about potential
+> side effects on iobase.
+> 
+> regads,
+> dan carpenter
+> 
+>> diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
+>> index 5747de436911..129a6602f6f0 100644
+>> --- a/drivers/staging/vt6655/mac.h
+>> +++ b/drivers/staging/vt6655/mac.h
+>> @@ -537,16 +537,6 @@
+>>   
+>>   /*---------------------  Export Macros ------------------------------*/
+>>   
+>> -#define MACvReceive1(iobase)						\
+>> -do {									\
+>> -	unsigned long reg_value;					\
+>> -	reg_value = ioread32(iobase + MAC_REG_RXDMACTL1);		\
+>> -	if (reg_value & DMACTL_RUN)					\
+>> -		iowrite32(DMACTL_WAKE, iobase + MAC_REG_RXDMACTL1);	\
+>> -	else								\
+>> -		iowrite32(DMACTL_RUN, iobase + MAC_REG_RXDMACTL1);	\
+>> -} while (0)
 >> -
->>  properties:
->>    compatible:
->>      enum:
->>        - qcom,pm8916-pon
->>        - qcom,pms405-pon
->>        - qcom,pm8998-pon
->> +      - qcom,pmk8350-pon
->>  
->>    reg:
->> -    maxItems: 1
->> +    description: |
->> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
->> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
->> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
->> +      peripherals.  In that case, the PON_PBS address needs to be specified to
->> +      facilitate software debouncing on some PMIC.
+>>   #define MACvTransmit0(iobase)						\
+>>   do {									\
+>>   	unsigned long reg_value;					\
 > 
-> You miss here min and maxItems
-ACK
-> 
->> +
->> +  reg-names:
->> +    description: |
->> +      For PON GEN1 and GEN2, it should be "pon". For PON GEN3 it should include
->> +      "hlos" and optionally "pbs".
-> 
-> Skip description. You miss here min and maxItems.
-> 
-> See
-> https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
-> for examples.
-ACK
-> 
-> 
->>  
->>    pwrkey:
->>      type: object
->> @@ -42,6 +50,63 @@ required:
->>  
->>  unevaluatedProperties: false
->>  
->> +allOf:
->> +  - $ref: reboot-mode.yaml#
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,pm8916-pon
->> +    then:
->> +      properties:
->> +        reg:
->> +          maxItems: 1
->> +        reg-names:
->> +          items:
->> +            - const: pon
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,pms405-pon
->> +    then:
->> +      properties:
->> +        reg:
->> +          maxItems: 1
->> +        reg-names:
->> +          items:
->> +            - const: pon
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,pm8998-pon
->> +    then:
->> +      properties:
->> +        reg:
->> +          maxItems: 1
->> +        reg-names:
->> +          items:
->> +            - const: pon
-> 
-> No clue why you made three if statements. This is one if for all three
-> variants.
-> 
-Sorry about that was not sure how to combine the if statements originally.
-Found that you could do:
 
-- if:
-      properties:
-        compatible:
-          contains:
-            enum:
-              - qcom,pm8916-pon
-              - qcom,pms405-pon
-              - qcom,pm8998-pon
-    then:
-     ...
+I was asking in kernelnewbies what to do with multi line macros as 
+checkpatch.pl warnings cannot be totally avoided.
 
-I was wondering if for the "qcom,pmk8350-pon" compatible would you rather
-have the if statement the way it is or have it follow the same pattern as
-above i.e.
+Greg replied to make functions out of them.
 
-contains:
-  const: qcom,pmk8350-pon
+Please find the full email under:
 
-vs
+https://www.mail-archive.com/kernelnewbies@kernelnewbies.org/msg22042.html
 
-contains:
-  enum:
-    - qcom,pmk8350-pon
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,pmk8350-pon
->> +    then:
->> +      properties:
->> +        reg:
->> +          minItems: 1
->> +          maxItems: 2
->> +        reg-names:
->> +          minItems: 1
->> +          items:
->> +            - const: hlos
->> +            - const: pbs
->> +
->>  examples:
->>    - |
->>     #include <dt-bindings/interrupt-controller/irq.h>
-> 
-> 
-> Best regards,
-> Krzysztof
+In this case I really like the static function solution much more than 
+the macros.
 
-Thanks,
-Anjelique
+Thanks for your support.

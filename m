@@ -2,86 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DAA5787C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7C85787C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbiGRQtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
+        id S233829AbiGRQu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiGRQtd (ORCPT
+        with ESMTP id S229639AbiGRQuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:49:33 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B8C336;
-        Mon, 18 Jul 2022 09:49:31 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LmnvT21FCz6HJbV;
-        Tue, 19 Jul 2022 00:47:49 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Mon, 18 Jul 2022 18:49:29 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Mon, 18 Jul 2022 18:49:29 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Jim Baxter <jim_baxter@mentor.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Thread-Index: AQHYe+tsPH1HC/8x8Uq7oovD5MPpKK1G5r2QgAG+ywCAACILEIAHUz4AgDRUxQCAACKFgA==
-Date:   Mon, 18 Jul 2022 16:49:28 +0000
-Message-ID: <f82d4961986547b28b6de066219ad08b@huawei.com>
-References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
- <1561909199.3985.33.camel@linux.ibm.com>
- <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
- <1561991485.4067.14.camel@linux.ibm.com>
- <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
- <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
- <20220609102627.GA3922@lxhi-065>
- <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
- <20220610153336.GA8881@lxhi-065>
- <4bc349a59e4042f7831b1190914851fe@huawei.com>
- <20220615092712.GA4068@lxhi-065>
- <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
-In-Reply-To: <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 18 Jul 2022 12:50:22 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934A4DFDF
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:50:21 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id b10so1394127pjq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xbz9zNJ4kudtBf4HleF/yHu6MPshPQFfqoJeR3sCNGk=;
+        b=pIJd3Rwn4OsqgMkQsd/bkmHGfMyZspMyiAOd14uUTppNPZ2se0sG5bX1psOR5cPqnk
+         bxbdl+zj9dDCNCReWjeZ5dReNQ08Gzy4tZwcqezsQOB1ABYcgOo2Xig5BHxO10/xpT/g
+         ovXE+65resESh+wZlHPMAumZ5sCDQia67KIHmp7zX25uRJkk3huy1Wd9Z21YWmG+i2j9
+         lfKAafpGO4z76Djs1J2bsLbFSTihsR11QLFcwdhM1HK8x3ZgcqnZsY1yoT7mpLn6NscT
+         RZyI5K4yjdcnRMzQ3UXh0xSd9t4CT7uvWRGVaf70IoaWdW/zFXhPdWUoUww5unOGVF2a
+         e+ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xbz9zNJ4kudtBf4HleF/yHu6MPshPQFfqoJeR3sCNGk=;
+        b=tfX2nzzCMck3dvaeMYxQXrF2ByuIL95zsG8VyxmU6TXgUfu7wNjTVnT8B14vAc9Sas
+         tPQAHadDi9LF2nf1h5sAzSm4Q5YVY2j75eWM6PBy3ceYqDkOziGysb3OtkBgraLgZsxg
+         0ipeWrLHEO7HBVkPzAStq7xKsXdF2J21a02onzCdWGRwTHofagcAz4mWBA0LtgmcXkL1
+         2lJnpphBjCFFLvkOuSkrOpjlLx0GULFdqAR5fRF+kVrQ6c+r6+BO5QSdSkmvhA0c1bsG
+         eH7yYCJXrEFX0UEwkLS19i9zHai89wisLwI/ij5ZWiezfB8yL/kJg0EBdRlGMXb46FJz
+         1BzQ==
+X-Gm-Message-State: AJIora9kTWPHLcKrSd+wVqDkGazpyy3nsVOuIdUK3/PjLfBEEIqGqD0z
+        GyTlgg3yyj6SWZLx7V781IFspg==
+X-Google-Smtp-Source: AGRyM1vl7YFDCbAwvvfalJOgfG+z5WlR/ZoOFjk4UTf7LkgcuSQbI2ibhatxCL/NtG24+yabrzs8Kg==
+X-Received: by 2002:a17:902:e746:b0:16c:3ffd:61fb with SMTP id p6-20020a170902e74600b0016c3ffd61fbmr29139404plf.123.1658163020887;
+        Mon, 18 Jul 2022 09:50:20 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id k6-20020aa79986000000b00528c22038f5sm9895204pfh.14.2022.07.18.09.50.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 09:50:20 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 16:50:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: x86/mmu: Document the "rules" for using
+ host_pfn_mapping_level()
+Message-ID: <YtWPSILmAp/0m5eC@google.com>
+References: <20220715232107.3775620-1-seanjc@google.com>
+ <20220715232107.3775620-3-seanjc@google.com>
+ <YtMIvgfsgIPWMgGM@google.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtMIvgfsgIPWMgGM@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,55 +74,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBKaW0gQmF4dGVyIFttYWlsdG86amltX2JheHRlckBtZW50b3IuY29tXQ0KPiBTZW50
-OiBNb25kYXksIEp1bHkgMTgsIDIwMjIgNjozNiBQTQ0KPiBPbiAxNS8wNi8yMDIyIDEwOjI3LCBF
-dWdlbml1IFJvc2NhIHdyb3RlOg0KPiA+IEhlbGxvIFJvYmVydG8sDQo+ID4NCj4gPiBPbiBGciwg
-SnVuIDEwLCAyMDIyIGF0IDAzOjM4OjI0ICswMDAwLCBSb2JlcnRvIFNhc3N1IHdyb3RlOg0KPiA+
-PiBJIHdvdWxkIGJlIGhhcHB5IHRvIGFkZHJlc3MgdGhlIHJlbWFpbmluZyBjb25jZXJucywgb3Ig
-dGFrZSBtb3JlDQo+ID4+IHN1Z2dlc3Rpb25zLCBhbmQgdGhlbiBkZXZlbG9wIGEgbmV3IHZlcnNp
-b24gb2YgdGhlIHBhdGNoIHNldC4NCj4gPiBJIGZhY2UgYSBudW1iZXIgb2YgY29uZmxpY3RzIHdo
-ZW4gSSB0cnkgdG8gcmViYXNlIHRoZSBsYXRlc3Qgb3BlbkV1bGVyDQo+ID4gY29tbWl0cyBhZ2Fp
-bnN0IHZhbmlsbGEgbWFzdGVyICh2NS4xOS1yYzIpLiBEbyB5b3UgdGhpbmsgaXQgaXMgcG9zc2li
-bGUNCj4gPiB0byBzdWJtaXQgdGhlIHJlYmFzZWQgdmVyc2lvbiB0byBNTD8NCj4gPg0KPiA+IElu
-IGFkZGl0aW9uLCBJIGNhbiBhbHNvIHNlZSBzb21lIG9wZW4vdW5yZXNvbHZlZCBwb2ludHMgZnJv
-bSBNaW1pIFsqXS4NCj4gPiBEaWQgeW91IGJ5IGNoYW5jZSBmaW5kIHNvbWUgbXV0dWFsIGFncmVl
-bWVudCBvZmZsaW5lIG9yIGRvIHlvdSB0aGluaw0KPiA+IHRoZXkgd291bGQgc3RpbGwgcG90ZW50
-aWFsbHkgbmVlZCBzb21lIGF0dGVudGlvbj8NCj4gPg0KPiA+IE1heWJlIHdlIGNhbiByZXN1bWUg
-dGhlIGRpc2N1c3Npb24gb25jZSB5b3Ugc3VibWl0IHRoZSByZWJhc2VkIHNlcmllcz8NCj4gPg0K
-PiA+IE1hbnkgdGhhbmtzIGFuZCBsb29raW5nIGZvcndhcmQgdG8gaXQuDQo+ID4NCj4gPiBbKl0g
-UG90ZW50aWFsbHkgY29tbWVudHMgd2hpY2ggZGVzZXJ2ZSBhIHJlcGx5L2NsYXJpZmljYXRpb24v
-cmVzb2x1dGlvbg0KPiA+DQo+ID4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8xNTYxOTg1
-NjUyLjQwNDkuMjQuY2FtZWxAbGludXguaWJtLmNvbS8jdA0KPiA+IGh0dHBzOi8vbG9yZS5rZXJu
-ZWwub3JnL2xrbWwvMTU2MTkwODQ1Ni4zOTg1LjIzLmNhbWVsQGxpbnV4LmlibS5jb20vDQo+ID4N
-Cj4gPiBCUiwgRXVnZW5pdS4NCj4gPg0KPiANCj4gDQo+IEhlbGxvLA0KPiANCj4gSSBoYXZlIGJl
-ZW4gdGVzdGluZyB0aGVzZSBwYXRjaGVzIGFuZCBkbyBub3Qgc2VlIHRoZSB4YXR0ciBpbmZvcm1h
-dGlvbiB3aGVuDQo+IHRyeWluZyB0byByZXRyaWV2ZSBpdCB3aXRoaW4gdGhlIGluaXRyYW1mcywg
-ZG8geW91IGhhdmUgYW4gZXhhbXBsZSBvZiBob3cNCj4geW91IHRlc3RlZCB0aGlzIG9yaWdpbmFs
-bHk/DQoNCkhpIEppbSwgYWxsDQoNCmFwb2xvZ2llcywgSSBkaWRuJ3QgZmluZCB5ZXQgdGhlIHRp
-bWUgdG8gbG9vayBhdCB0aGlzLg0KDQpVaG0sIEkgZ3Vlc3MgdGhpcyBjb3VsZCBiZSBzb2x2ZWQg
-d2l0aDoNCg0KaHR0cHM6Ly9naXRodWIuY29tL29wZW5ldWxlci1taXJyb3Iva2VybmVsL2NvbW1p
-dC8xOGE1MDJmN2UzYjFkZTdiOWJhMGM3MDg5NmNlMDhlZTEzZDA1MmRhDQoNCmFuZCBhZGRpbmcg
-aW5pdHJhbXRtcGZzIHRvIHRoZSBrZXJuZWwgY29tbWFuZCBsaW5lLiBZb3UgYXJlDQpwcm9iYWJs
-eSB1c2luZyByYW1mcywgd2hpY2ggZG9lcyBub3QgaGF2ZSB4YXR0ciBzdXBwb3J0Lg0KDQo+IFNv
-IGZhciBJIGhhdmUgc2V0IHRoZSB4YXR0ciBpbiB0aGUgcm9vdGZzIGJlZm9yZSBjcmVhdGluZyB0
-aGUgY3BpbyBmaWxlIGxpa2UgdGhpczoNCj4gJCBzZXRmYXR0ciAtbiB1c2VyLmNvbW1lbnQgLXYg
-InRoaXMgaXMgYSBjb21tZW50IiB0ZXN0LnR4dA0KPiBJZiBJIGFjY2VzcyB0aGUgZGF0YSBoZXJl
-IGl0IHdvcmtzOg0KPiAkIGdldGZhdHRyIHRlc3QudHh0DQo+ICMgZmlsZTogdGVzdC50eHQNCj4g
-dXNlci5jb21tZW50DQo+IA0KPiANCj4gVGhlbiBJIHBhY2thZ2UgaXQgYW5kIHRyeSB0byB2ZXJp
-ZnkgaXQgd2l0aCB0aGlzIGNvbW1hbmQ6DQo+ICRnZXRmYXR0ciAvdGVzdC50eHQNCg0KSSBhc3N1
-bWUgeW91IHRyeSB0byBwYWNrL3VucGFjaywgcmlnaHQ/IElmIEkgcmVtZW1iZXIgY29ycmVjdGx5
-DQpJIG9ubHkgaW1wbGVtZW50ZWQgdGhlIHBhY2sgcGFydC4gVW5wYWNraW5nIGlzIGRvbmUgYnkg
-dGhlIGtlcm5lbA0KKGJ1dCB5b3UgYXJlIHJpZ2h0LCBpdCBzaG91bGQgYmUgZG9uZSBieSB1c2Vy
-IHNwYWNlIHRvbykuDQoNCj4gV2hpY2ggcmV0dXJucyB0byB0aGUgY29tbWFuZCBsaW5lIHdpdGhv
-dXQgdGhlIGRhdGEuDQo+IA0KPiANCj4gDQo+IEkgYmVsaWV2ZSB0aGUgY3BpbyBpcyB3b3JraW5n
-IGJlY2F1c2UgSSBzZWUgdGhlIGZpbGUgL01FVEFEQVRBXCFcIVwhIGluDQo+IHRoZSB0YXJnZXQg
-cm9vdCBmaWxlc3lzdGVtLCB3aGljaCBzaG93cyB0aGUgZm9sbG93aW5nIHdoZW4gdmlld2VkIHdp
-dGggY2F0IC1lOg0KPiAwMDAwMDAyOF5BXkF1c2VyLmNvbW1lbnReQHRoaXMgaXMgYSBjb21tZW50
-DQo+IA0KPiBUaGlzIG1hdGNoZXMgdGhlIGRhdGEgSSBmZWQgaW4gYXQgdGhlIHN0YXJ0LCBzbyBJ
-IGJlbGlldmUgdGhlIGRhdGEgaXMgYmVpbmcNCj4gdHJhbnNmZXJyZWQgY29ycmVjdGx5IGJ1dCBJ
-IGFtIGFjY2Vzc2lvbmluZyBpdCB3aXRoIHRoZSB3cm9uZyB0b29scy4NCg0KWWVzLCB4YXR0cnMg
-YXJlIG1hcnNoYWxsZWQgaW4gdGhlIE1FVEFEQVRBISEhIGZpbGUsIG9uZSBwZXIgcmVndWxhciBm
-aWxlDQp4YXR0cnMgYXJlIGFwcGxpZWQgdG8uIFhhdHRycyBhcmUgYXBwbGllZCB0byB0aGUgcHJl
-dmlvdXMgcmVndWxhciBmaWxlLg0KVGhhdCBmaWxlIG5hbWUgd2FzIHByZWZlcnJlZCB0byBhZGRp
-bmcgYSBzdWZmaXggdG8gdGhlIGZpbGUsIHRvIGF2b2lkDQpyZWFjaGluZyB0aGUgZmlsZW5hbWUg
-c2l6ZSBsaW1pdC4NCg0KUm9iZXJ0bw0K
+On Sat, Jul 16, 2022, Mingwei Zhang wrote:
+> On Fri, Jul 15, 2022, Sean Christopherson wrote:
+> > Add a comment to document how host_pfn_mapping_level() can be used safely,
+> > as the line between safe and dangerous is quite thin.  E.g. if KVM were
+> > to ever support in-place promotion to create huge pages, consuming the
+> > level is safe if the caller holds mmu_lock and checks that there's an
+> > existing _leaf_ SPTE, but unsafe if the caller only checks that there's a
+> > non-leaf SPTE.
+> > 
+> > Opportunistically tweak the existing comments to explicitly document why
+> > KVM needs to use READ_ONCE().
+> > 
+> > No functional change intended.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 42 +++++++++++++++++++++++++++++++++++-------
+> >  1 file changed, 35 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index bebff1d5acd4..d5b644f3e003 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -2919,6 +2919,31 @@ static void direct_pte_prefetch(struct kvm_vcpu *vcpu, u64 *sptep)
+> >  	__direct_pte_prefetch(vcpu, sp, sptep);
+> >  }
+> >  
+> > +/*
+> > + * Lookup the mapping level for @gfn in the current mm.
+> > + *
+> > + * WARNING!  Use of host_pfn_mapping_level() requires the caller and the end
+> > + * consumer to be tied into KVM's handlers for MMU notifier events!
+> Since calling this function won't cause kernel crash now, I guess we can
+> remove the warning sign here, but keep the remaining statement since it
+> is necessary.
+
+Calling this function won't _directly_ crash the kernel, but improper usage can
+most definitely crash the host kernel, or even worse, silently corrupt host and
+or guest data.  E.g. if KVM were to race with an mmu_notifier event and incorrectly
+map a stale huge page into the guest.
+
+So yes, the function itself is robust, but usage is still very subtle and delicate.
+
+> > + *
+> > + * There are several ways to safely use this helper:
+> > + *
+> > + * - Check mmu_notifier_retry_hva() after grabbing the mapping level, before
+> > + *   consuming it.  In this case, mmu_lock doesn't need to be held during the
+> > + *   lookup, but it does need to be held while checking the MMU notifier.
+> 
+> but it does need to be held while checking the MMU notifier and
+> consuming the result.
+
+I didn't want to include "consuming the result" because arguably the result is
+being consumed while running the guest, and obviously KVM doesn't hold mmu_lock
+while running the guest (though I fully acknowledge the above effectively uses
+"consume" in the sense of shoving the result into SPTEs).  
+
+> > + *
+> > + * - Hold mmu_lock AND ensure there is no in-progress MMU notifier invalidation
+> > + *   event for the hva.  This can be done by explicit checking the MMU notifier
+
+s/explicit/explicitly
+
+> > + *   or by ensuring that KVM already has a valid mapping that covers the hva.
+> 
+> Yes, more specifically, "mmu notifier sequence counter".
+
+Heh, depends on what the reader interprets as "sequence counter".  If the reader
+interprets that as the literal sequence counter, mmu_notifier_seq, then this phrasing
+is incorrect as mmu_notifier_seq isn't bumped until the invalidation completes,
+i.e. it guards against _past_ invalidations, not in-progress validations.
+
+My preference is to intentionally not be precise in describing how to check for an
+in-progress invalidation, e.g. so that this comment doesn't need to be updated if
+the details change, and to also to try and force developers to do more than copy
+and paste if they want to use this helper.

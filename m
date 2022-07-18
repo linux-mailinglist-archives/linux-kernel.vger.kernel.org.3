@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33076578C95
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E3C578C99
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233708AbiGRVR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
+        id S234181AbiGRVSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiGRVRz (ORCPT
+        with ESMTP id S229799AbiGRVSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:17:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476DF28705;
-        Mon, 18 Jul 2022 14:17:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2DACB81616;
-        Mon, 18 Jul 2022 21:17:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83A47C341C0;
-        Mon, 18 Jul 2022 21:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658179072;
-        bh=K/9SDjqw4vYpv+vkfU1NchDdEJsTlnMjcryymCgfXs0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=sqCVA01TnIsANagwDR4tSav1T4rDy2FVOcsOKuNZTtzdmtnF2zVKJeBVLO+JlxHc0
-         a1yYXfZRi59MvsPQjSLCpwQbZrIsWqmgCZJL8X9d7tP1N7wdLSvhqrlJUkUN/tXiLu
-         7hQdxIIKAtkJVqJbNf+GvCUL7pCRmD57EYoeFi6AvRJE2v/efKkGdUx0cYHGXgqwnH
-         p+qVuIMzuoLzrBlBAcA/V33hMfN+T56tP5gRE0M/8vNGb1Mgy9Y8dRB9NF7yD76/Ns
-         b9wN6tspAHwpcPftH98/rVnzSCxkjc5i8IFq6N0DEhry1iEBczlo6mUp1/HNXZbkc1
-         ap2Ik7Trdl1lA==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 18 Jul 2022 17:18:16 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C2428705;
+        Mon, 18 Jul 2022 14:18:15 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id n7so10355998ioo.7;
+        Mon, 18 Jul 2022 14:18:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=CA6cnIkj6RDBPi8wVndYenOw7BfsLn6HBSCFjK/hRkk=;
+        b=vY4E7Q0/yf8wqlPZgngrNwlmKxoXFYP+p/0wY40QylcYgo05vvW1jblY+8Y/rrD60W
+         mvB+oq3IHROxgCx9/LMzKL0ZC6HgxHTR5dQBsK4iOpDRp4oTswfEopV1nSPGHILyDLsB
+         o1msV9CvWwBPmxxITtLFY7K8KxdC3V5OPrNsFtKOYoiaJr1D54cmvBPCRml/2kfoGzn4
+         UcwLqzvx0kvUM/FyRhmuFkHgGQUW4HqSXRoEIAw+WsaITdzLMsZLcvebdzvKlEhQtXcq
+         4DpwP3spj4IlX1bvoFKwmeIVFXaLYvQNRezKfjWEh3X73CP+to6RSfCh5JbcEfsC+lkP
+         s4Ng==
+X-Gm-Message-State: AJIora8iFb7qL0NrVzKn57cr5wVF0oLrajW3ENOSrcTp2KQXihLFYLFJ
+        BJxLQ7Pval5Vfs0VR0IVLA==
+X-Google-Smtp-Source: AGRyM1tMwB1OR6cOOec4zTljTVtyHRR6P+TR082tR8av+kzniYWrINr3/JwNrtZTkmpwLMaUd9NU5w==
+X-Received: by 2002:a02:a890:0:b0:33f:22b8:cb0b with SMTP id l16-20020a02a890000000b0033f22b8cb0bmr16115281jam.136.1658179093108;
+        Mon, 18 Jul 2022 14:18:13 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id j195-20020a0263cc000000b003417ba4f66asm840832jac.41.2022.07.18.14.18.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 14:18:12 -0700 (PDT)
+Received: (nullmailer pid 3574265 invoked by uid 1000);
+        Mon, 18 Jul 2022 21:18:10 -0000
+Date:   Mon, 18 Jul 2022 15:18:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        devicetree@vger.kernel.org,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] doc: gpio-mvebu: Add information about Armada 38x
+ and Armada 39x
+Message-ID: <20220718211810.GA3574206-robh@kernel.org>
+References: <20220714115515.5748-1-pali@kernel.org>
+ <20220714183328.4137-1-pali@kernel.org>
+ <20220714183328.4137-2-pali@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220711115542.1015136-1-abel.vesa@linaro.org>
-References: <20220711115542.1015136-1-abel.vesa@linaro.org>
-Subject: Re: [GIT PULL] clk: imx: Updates for v5.20
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>
-Date:   Mon, 18 Jul 2022 14:17:50 -0700
-User-Agent: alot/0.10
-Message-Id: <20220718211752.83A47C341C0@smtp.kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220714183328.4137-2-pali@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Abel Vesa (2022-07-11 04:55:42)
-> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a=
-56:
->=20
->   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/ tags/=
-clk-imx-5.20
->=20
-> for you to fetch changes up to c196175acdd3ab06114bde2955971bc7282f2b85:
->=20
->   clk: imx: clk-fracn-gppll: Add more freq config for video pll (2022-06-=
-16 17:28:59 +0300)
->=20
-> ----------------------------------------------------------------
+On Thu, 14 Jul 2022 20:33:26 +0200, Pali Rohár wrote:
+> Armada 38x and Armada 39x should use compatible string "marvel,armadaxp-gpio".
+> 
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/gpio/gpio-mvebu.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Thanks. Pulled into clk-next
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3771257833A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0336C57833B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbiGRNJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
+        id S235420AbiGRNKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235384AbiGRNJw (ORCPT
+        with ESMTP id S235309AbiGRNKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:09:52 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0227D12ACF
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:09:51 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u19so10390385lfs.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PhK1b8reBUV699VXSqYLQPHF1tp+dIwcIa0DcdvJTNw=;
-        b=HZ9YTB0b7sxmG8a9XikFipR9NlM9c5Wrl/9w9h6Nh4NdJlf0Z/IESC2JrFD2b5JRXV
-         065Xmoxpx+zxUYcN9enVUBt3bOZ35t7LaOB/1WDQ6nEaaziJPbZzpj1mcnlSClZ10nuc
-         mgbOZ1tRGJVmNmeMy0c/dqaBfM36zBYLFbe7G3SHBXl9kKHyyvKN/3ezEMVqh7QfkCIZ
-         JoR6pkqmQdTqw/qFVhqccq0QFyX+fSVU90iGcyTxmcz/VgFzStKIwS3Tdtmtm0Uz1PD+
-         EL71wszSMscE+Tkkqt4NQDczdTS5w8ROv7LZCj87/XwvZX4i7I9txCH6idDraPMD1oja
-         zbVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PhK1b8reBUV699VXSqYLQPHF1tp+dIwcIa0DcdvJTNw=;
-        b=rrAvDpi4ac1Ig75HCDYgBPHfoHIHhT33OX+OkOQxwYsVcyIe3ELcW9iV050loPsRjc
-         ZMCDxlvVYYtd/wyMJe0Hjv285adKWnSGe+uj0FrowsyFKpIbxlHpag8NwjqJpviC+Huo
-         nCEb5pHQEKCPQB5SZ3egz7+e2GPoKcr1//N/QoQwNwnSdreQrd+ylJ5U5JQR/eMpS3bW
-         EQPBKgnbHKPWE1aJ4l7XPJ46HZwvgn/vOqyJgJqF72iQsLf0tU6K4vMj2HOkPcHtKZwV
-         6YgN7LISf2SBxFO0FsyjmxwbEW0Rnou6bhClRAfAF5+Pdeg0gL49sFQLctLEf+9GrdpT
-         9z4g==
-X-Gm-Message-State: AJIora8Ea8suAkDO5/ttVSSEHZLsojSYeTNA2bMWsRh9aB+z7+RNAnUd
-        RYyk8FtkLm/LYMItJdxzskS5Sg==
-X-Google-Smtp-Source: AGRyM1ub7C1wNFUUzclp8W82PDBUt5OBAdhZ5vBkZnyH93vEyNyrtqqNhg9fpJ+lfNDYfchWjlRWUg==
-X-Received: by 2002:a05:6512:22c8:b0:488:e69b:9311 with SMTP id g8-20020a05651222c800b00488e69b9311mr14113807lfu.564.1658149789113;
-        Mon, 18 Jul 2022 06:09:49 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id c28-20020ac25f7c000000b0047f750ecd8csm2596389lfc.67.2022.07.18.06.09.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:09:48 -0700 (PDT)
-Message-ID: <78160db4-eef2-ce8b-caf7-4df5bc0a8e94@linaro.org>
-Date:   Mon, 18 Jul 2022 15:09:47 +0200
+        Mon, 18 Jul 2022 09:10:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A6812AB1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:10:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFEFBB81607
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FA2C341C0;
+        Mon, 18 Jul 2022 13:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658149814;
+        bh=hdsWoAacUlbtUsKYM7Fe7L2NSapcAMw6cTP36dELNto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GwA3mNLUulPloNbONSLsDZACF7hUfHV0fY4DrHU2VveDdLJvhRLg9RbKosmmiafZD
+         9Hqc2ojdFd9zgs4/Ff60q8fScSFzEE01jLqAY5PK3S4+hkNlZ8Ynvq4XzG2Ls5guLs
+         gUQSS68IB9XNiYxkciO64glvbjEp0oEm9JgC/DRbnHIPb/1m7tNoo8W8xJfXke3voe
+         P4LlRmVDgwWXqWjKqECUV/0jeYRvd8nL8hOSb1juhn8wx5PCPwdf1WGik3UkzyWtkn
+         UeA+VqLF70nrSe+WsDuMlkv+swx9Wd1x24x/8/8ZP6X59996uWI9FMq+HH+v28Y2f8
+         Q8ScC2k+QkHFw==
+Date:   Mon, 18 Jul 2022 14:10:06 +0100
+From:   Will Deacon <will@kernel.org>
+To:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
+        james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rppt@kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        yaohongbo@linux.alibaba.com, alikernel-developer@linux.alibaba.com
+Subject: Re: [PATCH v5] arm64: mm: fix linear mem mapping access performance
+ degradation
+Message-ID: <20220718131005.GA12406@willie-the-truck>
+References: <f0dd1176-39f1-0a08-d0e2-627dd437aa5f@linux.alibaba.com>
+ <1657460657-25698-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <a6caa7b5-6a15-987d-c0a3-dcf9c1cdd3b0@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH 1/4] dt-bindings: qcom: Document bindings for new
- msm8916-samsung-e2015 devices
-Content-Language: en-US
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        devicetree@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20220715102055.3844-1-linmengbo0689@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220715102055.3844-1-linmengbo0689@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a6caa7b5-6a15-987d-c0a3-dcf9c1cdd3b0@linux.alibaba.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/07/2022 12:21, Lin, Meng-Bo wrote:
-> Document the new samsung,e5/e7/grandmax device tree bindings used in their
-> device trees.
+On Sun, Jul 10, 2022 at 11:33:02PM +0800, guanghui.fgh wrote:
+> In short, this path work:
 > 
-> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 3 +++
+> 1.Before doing work for rebuiling crashkernel mem, the pgd is swapper_pg_dir
+> in [[[ttbr1]]]
+> 
+> 2.Change the [[[ttbr0]]]to use idmap_pg_dir pgd
+> 
+> 3.The [[[idmap_cpu_replace_ttbr1_with_flush_tlb]]] are mapped [[[only]]]
+> with idmap_pg_dir mapping in [[[ttbr0]]]
+> 
+> 4.The [[[idmap_cpu_replace_ttbr1_with_flush_tlb]]] will flush tlb all,
+> switch [[[ttbr1]]] to use init_pg_dir pgd(and flush tlb all again).
+> There is no tlb conflict to swapper_pg_dir.
+> There is no tlb cache for swapper_pg_dir.
+> 
+> 5.Woring with init_pg_dir pgd to access swapper_pg_dir pagetable with fix
+> mapping. And modify crashkernel mapping in the swapper_pg_dir without any
+> tlb conflict and flush.
+> 
+> 6.When finishing the work, switch ttbr1 pgd to the origin swapper_pg_dir
+> with cpu_replace_ttbr1 function(similar to the above).
 
-If this is resend of v1, why I cannot find this patch in v1?
+I do not think that this complexity is justified. As I have stated on
+numerous occasions already, I would prefer that we leave the crashkernel
+mapped when rodata is not "full". That fixes your performance issue and
+matches what we do for module code, so I do not see a security argument
+against it.
 
+I do not plan to merge this patch as-is.
 
-Best regards,
-Krzysztof
+Thanks,
+
+Will

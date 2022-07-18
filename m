@@ -2,161 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C404457878C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545C0578794
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbiGRQiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
+        id S235328AbiGRQjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235076AbiGRQho (ORCPT
+        with ESMTP id S235768AbiGRQi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:37:44 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49852AC7F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:37:43 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id r186so11078791pgr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jy5bSdPEBHXtGkQFa13jOzIoiz6rP1xz8tt7o64b2cQ=;
-        b=NQ8j8x3+91cla9P71GlmIQUO+YiZKXDcdHt+gmAIJSyrqZNEBDY7FGlpbRiJEXD7z5
-         5gxU7bKwBE5tqn+nDr7r5g1/e3FGcQBK88Na+AQMAVF1OCFExs6cbMGQ+s1B1+cEohQ1
-         NXmfWaxoq5DLxu+ykiAgCzknCkII2GtmkS8hwFmLTSrNhJ6xpdCcFYTLUlndlc4xbUd6
-         /jSAY8VxUGhxgMnxWk/J+fAkuiiWrd/yLVKLcUFhsdhg2Inh4cyF9vBNC7+cKjRLYCk2
-         tKplmn6UcTnyhBIbul2q9qfUpQE6gCkdm3y6emya2m8sOenvJygT8xsc8zSuNtja/Rw+
-         Pomw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=jy5bSdPEBHXtGkQFa13jOzIoiz6rP1xz8tt7o64b2cQ=;
-        b=KfhMoaQ8RY4NQYk0Y4X4DUdrgzDN319Uyj/XKGdh1dgw4sLUrvuYeTunRhdKjXurDr
-         f2jAi5flr1mZrmlpYvWyyfTn3t/U049uEItnvIDqAiFqk3A5BaKTkWccz9SWns7+XZsd
-         mu0POagojWXIbnFK8/f+KDl9U2Mb9YzXrjZVPwrRW1tIBo1SfaNblWCjYOCrbIA/wtZB
-         IdyTCdii5a1guZWlddjHC8wVY30Nx5/eJf6lluynlht7eZlUc3qPmrxoHuO3W6luRMLV
-         2q324fXczCfFo2fT+nR0wudlHplPixguguBZHUXAVY1CWOogoIpWBaGSp1bwxGnnb/vL
-         57GQ==
-X-Gm-Message-State: AJIora/AroelwgX/Dv/kQ9q/JlQSi+AFLwjyIZn4kM9ffPKfjrEZ7pVQ
-        dQ1Ia/ci6O5yqFYKWJLOYmdafqqYf7I9bw==
-X-Google-Smtp-Source: AGRyM1tPcVAhq6pbK/P4T7cMXNm+4Qu9OOTYXv56xIwOeYZf0YvWayAr/HgaK8nqSxXHiudex4yu6Q==
-X-Received: by 2002:a05:6a00:22d5:b0:52b:af2:9056 with SMTP id f21-20020a056a0022d500b0052b0af29056mr28550724pfj.80.1658162263152;
-        Mon, 18 Jul 2022 09:37:43 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id ha15-20020a17090af3cf00b001efa332d365sm9489636pjb.33.2022.07.18.09.37.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 09:37:42 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 16:37:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Peter Shier <pshier@google.com>
-Subject: Re: [PATCH v2 02/24] KVM: VMX: Drop bits 31:16 when shoving
- exception error code into VMCS
-Message-ID: <YtWMUsjfkv+JcOXe@google.com>
-References: <20220715204226.3655170-1-seanjc@google.com>
- <20220715204226.3655170-3-seanjc@google.com>
- <547250051f1578b7ddf60311be46b3eb7990ccc6.camel@redhat.com>
+        Mon, 18 Jul 2022 12:38:57 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BE4656F;
+        Mon, 18 Jul 2022 09:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=q498TUyBgFKahP8/Mq2OBXRnjBoiDJLsVpL5QujD8eg=; b=qicc0heer4g3rBVZzes21636YX
+        z5abYKnvAGcm6lO029U6O0Kk4hFYne39T6B1xyn3/U92xzDWz9Ex5MPFRTUmxHEnhOqOD4FxatXt9
+        C2DXdlsc12Luig8IxG2U5QN1W3er6+ldLP+AQk2J0EV5tG4nCjZ70XdHJXC3AAbNrzCAPS0HxA+44
+        YcQk/ji8kH1A+uvhrcNFvPvU2AeJPMCWvJAfcZ4bwwTUPPHkXC4m/V9qWFwR1b4DvC1P5nYWxZqeg
+        kwKBRMpbEzkNwYyzAGkE6dYnK/MaELLQcV1Bh/UxL8TsVVWw2MNBoj3UmalN2/Cbr2f6WfUHyYOs7
+        DnJfNLSQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDTlT-00Cq9G-Lk; Mon, 18 Jul 2022 16:38:35 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 32FBB9802A7; Mon, 18 Jul 2022 18:38:35 +0200 (CEST)
+Date:   Mon, 18 Jul 2022 18:38:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        x86@kernel.org, ardb@kernel.org, tglx@linutronix.de,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, stable@vger.kernel.org,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+Subject: Re: [PATCH] efi/x86: use naked RET on mixed mode call wrapper
+Message-ID: <YtWMiyem8+N4vbKE@worktop.programming.kicks-ass.net>
+References: <20220715194550.793957-1-cascardo@canonical.com>
+ <YtVG8VBmFikS6GMn@worktop.programming.kicks-ass.net>
+ <YtWKK2ZLib1R7itI@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <547250051f1578b7ddf60311be46b3eb7990ccc6.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YtWKK2ZLib1R7itI@zn.tnic>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022, Maxim Levitsky wrote:
-> On Fri, 2022-07-15 at 20:42 +0000, Sean Christopherson wrote:
-> > Deliberately truncate the exception error code when shoving it into the
-> > VMCS (VM-Entry field for vmcs01 and vmcs02, VM-Exit field for vmcs12).
-> > Intel CPUs are incapable of handling 32-bit error codes and will never
-> > generate an error code with bits 31:16, but userspace can provide an
-> > arbitrary error code via KVM_SET_VCPU_EVENTS.  Failure to drop the bits
-> > on exception injection results in failed VM-Entry, as VMX disallows
-> > setting bits 31:16.  Setting the bits on VM-Exit would at best confuse
-> > L1, and at worse induce a nested VM-Entry failure, e.g. if L1 decided to
-> > reinject the exception back into L2.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > Reviewed-by: Jim Mattson <jmattson@google.com>
-> > ---
-> >  arch/x86/kvm/vmx/nested.c |  9 ++++++++-
-> >  arch/x86/kvm/vmx/vmx.c    | 11 ++++++++++-
-> >  2 files changed, 18 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> > index 8c2c81406248..05c34a72c266 100644
-> > --- a/arch/x86/kvm/vmx/nested.c
-> > +++ b/arch/x86/kvm/vmx/nested.c
-> > @@ -3822,7 +3822,14 @@ static void nested_vmx_inject_exception_vmexit(struct kvm_vcpu *vcpu,
-> >         u32 intr_info = nr | INTR_INFO_VALID_MASK;
-> >  
-> >         if (vcpu->arch.exception.has_error_code) {
-> > -               vmcs12->vm_exit_intr_error_code = vcpu->arch.exception.error_code;
-> > +               /*
-> > +                * Intel CPUs will never generate an error code with bits 31:16
-> > +                * set, and more importantly VMX disallows setting bits 31:16
-> > +                * in the injected error code for VM-Entry.  Drop the bits to
-> > +                * mimic hardware and avoid inducing failure on nested VM-Entry
-> > +                * if L1 chooses to inject the exception back to L2.
+On Mon, Jul 18, 2022 at 06:28:27PM +0200, Borislav Petkov wrote:
+> On Mon, Jul 18, 2022 at 01:41:37PM +0200, Peter Zijlstra wrote:
+> > diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+> > index 10a3bfc1eb23..f934dcdb7c0d 100644
+> > --- a/arch/x86/include/asm/nospec-branch.h
+> > +++ b/arch/x86/include/asm/nospec-branch.h
+> > @@ -297,6 +297,8 @@ do {									\
+> >  	alternative_msr_write(MSR_IA32_SPEC_CTRL,			\
+> >  			      spec_ctrl_current() | SPEC_CTRL_IBRS,	\
+> >  			      X86_FEATURE_USE_IBRS_FW);			\
+> > +	altnerative_msr_write(MSR_IA32_PRED_CMD, PRED_CMD_IBPB,		\
+> > +			      X86_FEATURE_USE_IBPB_FW);			\
+> >  } while (0)
 > 
-> Very small nitpick:
-> I think I would still prefer to have a mention that AMD CPUs can have error code > 16 bit,
-> The above comment kind of implies this, but it would be a bit more clear, but I don't
-> have a strong preference on this.
+> So I'm being told we need to untrain on return from EFI to protect the
+> kernel from it. Ontop of yours.
 
-Agreed, I'll reword this to make it abundantly clear that setting bits 31:16 is
-architecturally allowed and done by AMD, and that this is purely an Intel oddity.
+I don't think there's any credible way we can protect against EFI taking
+over the system if it wants to. It runs at CPL0 and has access to the
+direct map. If EFI wants it can take over the system without trying.
 
-> > +                */
-> > +               vmcs12->vm_exit_intr_error_code = (u16)vcpu->arch.exception.error_code;
-> >                 intr_info |= INTR_INFO_DELIVER_CODE_MASK;
-> >         }
-> >  
-> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > index b0cc911a8f6f..d2b3d30d6afb 100644
-> > --- a/arch/x86/kvm/vmx/vmx.c
-> > +++ b/arch/x86/kvm/vmx/vmx.c
-> > @@ -1621,7 +1621,16 @@ static void vmx_queue_exception(struct kvm_vcpu *vcpu)
-> >         kvm_deliver_exception_payload(vcpu);
-> >  
-> >         if (has_error_code) {
-> > -               vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, error_code);
-> > +               /*
-> > +                * Despite the error code being architecturally defined as 32
-> > +                * bits, and the VMCS field being 32 bits, Intel CPUs and thus
-> > +                * VMX don't actually supporting setting bits 31:16.  Hardware
-> > +                * will (should) never provide a bogus error code, but KVM's
-> > +                * ABI lets userspace shove in arbitrary 32-bit values.  Drop
-
-I'll update this to mention AMD CPUs as well.
-
-> > +                * the upper bits to avoid VM-Fail, losing information that
-> > +                * does't really exist is preferable to killing the VM.
-> > +                */
-> > +               vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, (u16)error_code);
-> >                 intr_info |= INTR_INFO_DELIVER_CODE_MASK;
-> >         }
-> >  
-> 
-> 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> 
-> Best regards,
->  Maxim Levitsky
-> 
-> 

@@ -2,179 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1085786EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A5F5786F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbiGRQGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S235367AbiGRQGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234507AbiGRQGG (ORCPT
+        with ESMTP id S234822AbiGRQGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:06:06 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DC22A428
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:06:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9E602CE180B
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:06:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE40BC341C0;
-        Mon, 18 Jul 2022 16:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658160361;
-        bh=y1cgUDuB7GWAStxEEln99NZauxORnrhqSoZj21jRwlE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=DbSXe40l1DQmfV2sxRyhVWixJFIsdEGB9folzeon8YaMgk0tXGY/+zLBRdAVVpj0N
-         gWcbVVMmRMo2ciBIKsXqARh0zPDs4ierORhQXzq0pjHlR7vSH/7q4CLob0u+zZ9NGn
-         6+3lbp6wivTiRXxC5IhS0+3wRvbMnLw1xCwkqrUJaDDzaJW2c1QTgLoizlvXAIxCLP
-         FXkBRSPnbqix03SbYzLKQsvZaXKw+e0UBWUXL5xMQl8zSrnZHfYACbFzfNMLIE5nVh
-         qvxvES+lw7K2l3tgOzzDlp/H77lSXqnk3zVG8+9sBjX2ux3VK/OtZrBQ19Bbf3uEK0
-         zcEOdbML6dsOw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7724C5C0833; Mon, 18 Jul 2022 09:06:01 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 09:06:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Marco Elver <elver@google.com>, kasan-dev@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] printk: Make console tracepoint safe in NMI() context
-Message-ID: <20220718160601.GF1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220718151143.32112-1-pmladek@suse.com>
+        Mon, 18 Jul 2022 12:06:33 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E7019C2B;
+        Mon, 18 Jul 2022 09:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=W/h2DA8cfEG16WKUgNpJElu4U35pORu6Lpisgp/aztg=; b=QLN6WX2qBSYbabOQyYw4ip+w6g
+        7r+HEHPGop9B4DUJzTW8luJJgMAeQpgv4CYSDE8/MUr03o3lppKVSnGpqO5y7NTAEYI/cm25r4NVg
+        3nH3lnbQ+Ptnz/KkOoQw+y6U47QXpESbK34xTHJwOigwLN6/2WK2UATYKkd8b2w38UmmWzhu03NY0
+        QLq9TscLbgSVFuEh71JUputnS/98gE1EXF4Uw+eBjIvBXHVv0UvKJZfAffXfOUnQOB0ZVErrkxJC7
+        3ZTO32hTTUEPvKWgfhjNA7GwY2Syn6ROYIFeboIDs9p6AXvCBtb/EpbLESPC7Uo6y0dwHC54d9Q5l
+        kH0jMfBw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33416)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oDTGN-0001nK-7M; Mon, 18 Jul 2022 17:06:27 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oDTGL-000253-Bw; Mon, 18 Jul 2022 17:06:25 +0100
+Date:   Mon, 18 Jul 2022 17:06:25 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandru Marginean <alexandru.marginean@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH net-next v3 08/47] net: phylink: Support differing link
+ speeds and interface speeds
+Message-ID: <YtWFAfu1nSE6vCfx@shell.armlinux.org.uk>
+References: <20220715215954.1449214-1-sean.anderson@seco.com>
+ <20220715215954.1449214-9-sean.anderson@seco.com>
+ <YtMaKWZyC/lgAQ0i@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220718151143.32112-1-pmladek@suse.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YtMaKWZyC/lgAQ0i@lunn.ch>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 05:11:43PM +0200, Petr Mladek wrote:
-> The commit 701850dc0c31bfadf75a0 ("printk, tracing: fix console
-> tracepoint") moved the tracepoint from console_unlock() to
-> vprintk_store(). As a result, it might be called in any
-> context and triggered the following warning:
+On Sat, Jul 16, 2022 at 10:06:01PM +0200, Andrew Lunn wrote:
+> This seem error prone when new PHY_INTERFACE_MODES are added. I would
+> prefer a WARN_ON_ONCE() in the default: so we get to know about such
+> problems.
 > 
->   WARNING: CPU: 1 PID: 16462 at include/trace/events/printk.h:10 printk_sprint+0x81/0xda
->   Modules linked in: ppdev parport_pc parport
->   CPU: 1 PID: 16462 Comm: event_benchmark Not tainted 5.19.0-rc5-test+ #5
->   Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
->   EIP: printk_sprint+0x81/0xda
->   Code: 89 d8 e8 88 fc 33 00 e9 02 00 00 00 eb 6b 64 a1 a4 b8 91 c1 e8 fd d6 ff ff 84 c0 74 5c 64 a1 14 08 92 c1 a9 00 00 f0 00 74 02 <0f> 0b 64 ff 05 14 08 92 c1 b8 e0 c4 6b c1 e8 a5 dc 00 00 89 c7 e8
->   EAX: 80110001 EBX: c20a52f8 ECX: 0000000c EDX: 6d203036
->   ESI: 3df6004c EDI: 00000000 EBP: c61fbd7c ESP: c61fbd70
->   DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010006
->   CR0: 80050033 CR2: b7efc000 CR3: 05b80000 CR4: 001506f0
->   Call Trace:
->    vprintk_store+0x24b/0x2ff
->    vprintk+0x37/0x4d
->    _printk+0x14/0x16
->    nmi_handle+0x1ef/0x24e
->    ? find_next_bit.part.0+0x13/0x13
->    ? find_next_bit.part.0+0x13/0x13
->    ? function_trace_call+0xd8/0xd9
->    default_do_nmi+0x57/0x1af
->    ? trace_hardirqs_off_finish+0x2a/0xd9
->    ? to_kthread+0xf/0xf
->    exc_nmi+0x9b/0xf4
->    asm_exc_nmi+0xae/0x29c
-> 
-> It comes from:
-> 
->   #define __DO_TRACE(name, args, cond, rcuidle) \
->   [...]
-> 		/* srcu can't be used from NMI */	\
-> 		WARN_ON_ONCE(rcuidle && in_nmi());	\
-> 
-> It might be possible to make srcu working in NMI. But it
-> would be slower on some architectures. It is not worth
-> doing it just because of this tracepoint.
-> 
-> It would be possible to disable this tracepoint in NMI
-> or in rcuidle context. Where the rcuidle context looks
-> more rare and thus more acceptable to be ignored.
-> 
-> Alternative solution would be to move the tracepoint
-> back to console code. But the location is less reliable
-> by definition. Also the synchronization against other
-> tracing messages is much worse.
-> 
-> Let's ignore the tracepoint in rcuidle context as the least
-> evil solution.
-> 
-> Link: https://lore.kernel.org/r/20220712151655.GU1790663@paulmck-ThinkPad-P17-Gen-1
-> 
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
+> I'm also wondering if we need a sanity check here. I've seen quite a
+> few boards a Fast Ethernet MAC, but a 1G PHY because they are
+> cheap. In such cases, the MAC is supposed to call phy_set_max_speed()
+> to indicate it can only do 100Mbs. PHY_INTERFACE_MODE_MII but a
+> link_speed of 1G is clearly wrong. Are there other cases where we
+> could have a link speed faster than what the interface mode allows?
 
-From an RCU viewpoint:
+Currently, phylink will deal with that situation - the MAC will report
+that it only supports 10/100, and when the PHY is brought up, the
+supported/advertisement masks will be restricted to those speeds.
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+> Bike shedding a bit, but would it be better to use host_side_speed and
+> line_side_speed? When you say link_speed, which link are your
+> referring to? Since we are talking about the different sides of the
+> PHY doing different speeds, the naming does need to be clear.
 
-> ---
-> Changes against v1:
-> 
->   + use rcu_is_watching() instead of rcu_is_idle_cpu()
-> 
-> 
->  include/trace/events/printk.h | 9 ++++++++-
->  kernel/printk/printk.c        | 2 +-
->  2 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/trace/events/printk.h b/include/trace/events/printk.h
-> index 13d405b2fd8b..5485513d8838 100644
-> --- a/include/trace/events/printk.h
-> +++ b/include/trace/events/printk.h
-> @@ -7,11 +7,18 @@
->  
->  #include <linux/tracepoint.h>
->  
-> -TRACE_EVENT(console,
-> +TRACE_EVENT_CONDITION(console,
->  	TP_PROTO(const char *text, size_t len),
->  
->  	TP_ARGS(text, len),
->  
-> +	/*
-> +	 * trace_console_rcuidle() is not working in NMI. printk()
-> +	 * is used more often in NMI than in rcuidle context.
-> +	 * Choose the less evil solution here.
-> +	 */
-> +	TP_CONDITION(rcu_is_watching()),
-> +
->  	TP_STRUCT__entry(
->  		__dynamic_array(char, msg, len + 1)
->  	),
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index b49c6ff6dca0..bd76a45ecc7f 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2108,7 +2108,7 @@ static u16 printk_sprint(char *text, u16 size, int facility,
->  		}
->  	}
->  
-> -	trace_console_rcuidle(text, text_len);
-> +	trace_console(text, text_len);
->  
->  	return text_len;
->  }
-> -- 
-> 2.35.3
-> 
+Yes, we definitely need that clarification.
+
+I am rather worried that we have drivers using ->speed today in their
+mac_config and we're redefining what that means in this patch. Also,
+the value that we pass to the *_link_up() calls appears to be the
+phy <-> (pcs|mac) speed not the media speed. It's also ->speed and
+->duplex that we report to the user in the "Link is Up" message,
+which will be confusing if it always says 10G despite the media link
+being e.g. 100M.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

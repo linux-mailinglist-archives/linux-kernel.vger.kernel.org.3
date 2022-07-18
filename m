@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302025788C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0155788D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235935AbiGRRtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 13:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S233382AbiGRRvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 13:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235895AbiGRRtP (ORCPT
+        with ESMTP id S229824AbiGRRvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:49:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F8C2B608;
-        Mon, 18 Jul 2022 10:49:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=SAGZqlv/8Ekeq7cG9+dcrh2VR2Q3Mh2/2a+2GmOEZ38=; b=led+XNtZy4DOs8zGSGMdVKgQCV
-        o+5rhsSbXAm1WD2ABinuR6B/vzR+DxKu1xY2yskOvMGlItwad7UQlrx8JsMSDoEIk0HxBoQ50tOP1
-        qKfDzBoyZw5BC6ybQrsPm1RR0XHex0ddNvhvIBgG22T0t0DPNqbA2iXyXe/2+/4mkFQMoSC2NRiQH
-        qzD527277g92Y+GLhDfAo/KrQb/iLwAeA4WcyHmLwvlOGN2RNpAGcd4dwWlre2/SiBpdv+VtsdndC
-        3wp1IUoMOezYiZ4u/0YrTtQBu1YMP8fIumHHg1fxZqpN7Te6S8beExSl/LfCjnNKR8a3QGdxy1Dfn
-        GaCkBJaQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDUrl-00HKCn-4Q; Mon, 18 Jul 2022 17:49:09 +0000
-Message-ID: <e90e0d6e-b4e5-b708-a431-cec27379bf51@infradead.org>
-Date:   Mon, 18 Jul 2022 10:49:07 -0700
+        Mon, 18 Jul 2022 13:51:53 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4AE2D1D0;
+        Mon, 18 Jul 2022 10:51:52 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id y8so16383630eda.3;
+        Mon, 18 Jul 2022 10:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OzNDaj+DZhSHMIrNJY7lm71T3WkSPnzySsNM702N+zE=;
+        b=IWbRPmZUG1AiFeiQO3HR1B31sET+hYeHvzIh0Q39+w7eyfEjso7f94PSh6QwpZNeM4
+         coyKBTR+x5wfb0/iZ8dq92B/6W3rsZmYx5sa9ZDiCeZhxTaX2PoJXesmGAh2QNOJYQWE
+         /leEZWfou6/hefbt+hWXFHU7Jg5nt7Wy3BcZH6/h2Mx0BSkneg61rhS8D10kFxyFepXu
+         q81d/2HPF+N5GSRPD3tBgW7V3DorwUsD53ARgcy7FBdEc8yKxjeoBgCcd8Vb4OQhz9g0
+         D32bz/CTnROYPh5WV4onoKGn4s/8DQZ/w3UfGKAh3mKuP+IbVYrbIXqws4VroFFVtkrm
+         pZyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OzNDaj+DZhSHMIrNJY7lm71T3WkSPnzySsNM702N+zE=;
+        b=sFKHw/YSHfAt68k/lVDNcpEGbcPPaozAeQe5ypydWWo5I+G2Do3MnIUw6DVQsd1DHT
+         fJ0kBXAVfqnW9NCAJo404gxHquxBTa1MjOgy/Hh0ZdM/bkveMNxMopTZqvCGnZ5cFHPa
+         olfwK7R7cre1m0jXAO/AHTGpnVkO21oDOtjeLos1eTdOLG6n2QYiyORFAka8QgKw0dS/
+         KhSyy5jT721jviRy2DjBdbyY9ga1TpUm7QB18JA8YHT81e75zfeu9YpBZ08EHF0GRLvr
+         yX3v8xy033mufn+FfvxzEvkTE/NlnvcRsYXqTmCFWQv5gg3hQJ8TjYE24f+vNCx789pd
+         SUuA==
+X-Gm-Message-State: AJIora+Mtr+AQZVhCPlDstXwersjI/PL72bomFD2lu0BSkFSzG3sW3KI
+        O89hOoZb7SYtvEcV5/oGHOo=
+X-Google-Smtp-Source: AGRyM1t2SRY22FUnIBxr79BTWXtaLzb3OzYXyF2ywpYjSlpK3tyLidmTDuUPD/cRYOA9B9u9dzOEJA==
+X-Received: by 2002:aa7:d60a:0:b0:43a:5795:b729 with SMTP id c10-20020aa7d60a000000b0043a5795b729mr38562794edr.230.1658166710821;
+        Mon, 18 Jul 2022 10:51:50 -0700 (PDT)
+Received: from localhost (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id t21-20020aa7d4d5000000b0043a5bcf80a2sm9013260edr.60.2022.07.18.10.51.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 10:51:49 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dipen Patel <dipenp@nvidia.com>, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hte: Fixes for v5.19
+Date:   Mon, 18 Jul 2022 19:51:45 +0200
+Message-Id: <20220718175145.1945060-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/2] crypto: make the sha1 library optional
-Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Jason@zx2c4.com
-References: <YtEqWH2JzolCfLRA@gondor.apana.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YtEqWH2JzolCfLRA@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+The following changes since commit 5dad4eccd2b4316a84209603a28d34c6346392bb:
 
-On 7/15/22 01:50, Herbert Xu wrote:
-> Eric Biggers <ebiggers@kernel.org> wrote:
->> This series makes it possible to build the kernel without SHA-1 support,
->> although for now this is only possible in minimal configurations, due to
->> the uses of SHA-1 in the networking subsystem.
->>
->> Eric Biggers (2):
->>  crypto: move lib/sha1.c into lib/crypto/
->>  crypto: make the sha1 library optional
->>
->> crypto/Kconfig          | 1 +
->> init/Kconfig            | 1 +
->> lib/Makefile            | 2 +-
->> lib/crypto/Kconfig      | 3 +++
->> lib/crypto/Makefile     | 3 +++
->> lib/{ => crypto}/sha1.c | 0
->> net/ipv6/Kconfig        | 1 +
->> 7 files changed, 10 insertions(+), 1 deletion(-)
->> rename lib/{ => crypto}/sha1.c (100%)
->>
->>
->> base-commit: 79e6e2f3f3ff345947075341781e900e4f70db81
-> 
-> All applied.  Thanks.
+  dt-bindings: timestamp: Correct id path (2022-06-02 15:56:59 +0200)
 
-Eric,
-linux-next-20220718 has a build error:
+are available in the Git repository at:
 
-ERROR: modpost: missing MODULE_LICENSE() in lib/crypto/libsha1.o
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/hte/for-5.19
 
--- 
-~Randy
+for you to fetch changes up to 85ff37e302efdf173cff6d1a310c2f7f38f1d069:
+
+  gpiolib: cdev: Fix kernel doc for struct line (2022-06-17 12:58:57 +0200)
+
+Thanks,
+Thierry
+
+----------------------------------------------------------------
+hte: Fixes for v5.19
+
+This contains a single fix for an out-of-sync kerneldoc comment.
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      gpiolib: cdev: Fix kernel doc for struct line
+
+ drivers/gpio/gpiolib-cdev.c | 4 ++++
+ 1 file changed, 4 insertions(+)

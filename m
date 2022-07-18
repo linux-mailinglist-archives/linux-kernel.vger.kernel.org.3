@@ -2,183 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F83E577C0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAFF577C18
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbiGRG6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 02:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
+        id S230317AbiGRHCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233606AbiGRG5v (ORCPT
+        with ESMTP id S233184AbiGRHCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 02:57:51 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D059E165B4
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:57:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658127470; x=1689663470;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=kP3TMLhOBN0SOfYIAaFFq2xdvS0WfG2ZEeJ6EaXyvT0=;
-  b=c1+P4MufSBGQoO+sPBy9Q5Ezyj4JXJbFV1EAbBv8zmqRm7+v2PDgikL6
-   VwBG3VuaazET0UybOfJG2r5ECxaSnEkXBN4Qr7NJHc2jLTwClRcemrNC3
-   /jZV9vCFHQ++ZaZqOXZdAYFa/2vZ0mvWL9YhzN9v4SSWD23MPnu/97DC5
-   A0zeCsqvxiJ2j2cqJbVYCh/bNKuwvKG5LI0u5xccNy0E21W0JDqK96Pgq
-   okpJdnrk2Ab3/FgOY9lEB9AxlBJbk3AdQmewSu2yXSCOOILEJk3qHDSsW
-   aK/wdBLeG7OmOGvM1T90BeSWhPCfHys/pdl+WUk3f6qMwVppJ58xsnJ2o
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286169616"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="286169616"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 23:57:50 -0700
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="572284966"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 23:57:46 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Jagdish Gediya <jvgediya@linux.ibm.com>
-Subject: Re: [PATCH v9 1/8] mm/demotion: Add support for explicit memory tiers
-References: <20220714045351.434957-1-aneesh.kumar@linux.ibm.com>
-        <20220714045351.434957-2-aneesh.kumar@linux.ibm.com>
-        <87bktq4xs7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <3659f1bb-a82e-1aad-f297-808a2c17687d@linux.ibm.com>
-Date:   Mon, 18 Jul 2022 14:57:42 +0800
-In-Reply-To: <3659f1bb-a82e-1aad-f297-808a2c17687d@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Fri, 15 Jul 2022 14:38:43 +0530")
-Message-ID: <87tu7e3o2h.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 18 Jul 2022 03:02:13 -0400
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138A41706D;
+        Mon, 18 Jul 2022 00:02:13 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id b26so15663505wrc.2;
+        Mon, 18 Jul 2022 00:02:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mBaCn+yOtwwme9flF0xPrDTgDsQW7uNWw9wOEtCnhK4=;
+        b=TxPYWCpnbe999RTMQbJmHOshS9DrDRFDdYeJwCnZX0xutYYGnR3102WyksgRMV/Dz6
+         bd53Ng6jWR5tpNH3TA0FFEcQnLfu22APattrzKiFTn10yOTB7A2C8WzrMTXpJe4HwKaN
+         uYqpj0sdf80RGGbytvF70vKEeiW58AwisZU8Fj7d1ggdm1Xf2ES+Ko+guMgJjNYeUZ2h
+         hcyPmZi9VrNSKuZOfYAV5j28RPRa4BcWAsLmxlQ5Z0rwet7GMZr6t1lHf3n8HWjuR70e
+         u/LX48XrHxs2QR4h11+h+UBTnK+aMxTrZXBwjy4mnlKGt5wSbq/AJNHb8Ey2y53w7Zz+
+         iABg==
+X-Gm-Message-State: AJIora962fYRr8KRW8oPuAfI/ZkpxfITjinGS63OVkMM7ZS+EBWG9Raf
+        qtcFWuObhqQ/ftTQmHTKhelvzhYhJk8=
+X-Google-Smtp-Source: AGRyM1vY2mD3JpdNb/SNzvjPGkQe4nn8SXRSvzuNUEmKzaUnA+s4GFDYX2/U024C758KBtyCxc93MA==
+X-Received: by 2002:adf:f245:0:b0:21d:a39a:bed5 with SMTP id b5-20020adff245000000b0021da39abed5mr20980909wrp.508.1658127731543;
+        Mon, 18 Jul 2022 00:02:11 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id r10-20020a056000014a00b0021d68a504cbsm10078557wrx.94.2022.07.18.00.02.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 00:02:10 -0700 (PDT)
+Message-ID: <d75d1339-4539-330a-680b-2d940e603a72@kernel.org>
+Date:   Mon, 18 Jul 2022 09:02:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then a 0 to
+ trigger a break character
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Sherry Sun <sherry.sun@nxp.com>
+Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>
+References: <20220715025944.11076-1-sherry.sun@nxp.com>
+ <20220715025944.11076-3-sherry.sun@nxp.com>
+ <509669b26b5899088e9b77ed94d103ee@walle.cc>
+ <AS8PR04MB840448675E64E4FCDEEF91A1928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+ <e2560f01fd1731ea2422d82c97efcc6f@walle.cc>
+ <AS8PR04MB8404B8E3EB0FFCEE8ADDA283928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+ <61c525fc87d6586c024cd6e42fcf876d@walle.cc>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <61c525fc87d6586c024cd6e42fcf876d@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+On 15. 07. 22, 13:52, Michael Walle wrote:
+>> Seems we have the different understanding of the break_ctl(port,ctl)
+>> callback. The original break_ctl(tty,-1) in lpuart will not send the
+>> break signal until we call break_ctl(tty,0).
+> 
+> That is not correct. The TX linue goes low as soon as the SBK bit
+> is set. See below.
 
-> On 7/15/22 1:23 PM, Huang, Ying wrote:
+In that case…
 
-[snip]
+>> Per my understanding of
+>> "If ctl is nonzero, the break signal should be transmitted", call
+>> break_ctl(tty,-1) is enough the send one break signal, now my patch
+>> makes the behavior align with my understanding.
+> 
+> As I said, Greg should clarify here.
+> 
+> In any case, I've checked the hardware (LS1028A) and as soon as you
+> set the SBK bit, the TX line goes low (TTL levels) as expected. It
+> will go to high again as soon as you clear the bit again.
+> 
+> So to me it seems there is nothing wrong here. Also have a look
+> at man ioctl_tty:
+> 
+>         TIOCSBRK
+>                Turn break on, that is, start sending zero bits.
+> 
+>         TIOCCBRK
+>                Turn break off, that is, stop sending zero bits.
+> 
+> So to send one break "character", you need to do ioctl(TIOCSBRK)
+> followed by an ioctl(TIOCCBRK).
 
->> 
->> You dropped the original sysfs interface patches from the series, but
->> the kernel internal implementation is still for the original sysfs
->> interface.  For example, memory tier ID is for the original sysfs
->> interface, not for the new proposed sysfs interface.  So I suggest you
->> to implement with the new interface in mind.  What do you think about
->> the following design?
->> 
->
-> Sorry I am not able to follow you here. This patchset completely drops
-> exposing memory tiers to userspace via sysfs. Instead it allow
-> creation of memory tiers with specific tierID from within the kernel/device driver.
-> Default tierID is 200 and dax kmem creates memory tier with tierID 100. 
->
->
->> - Each NUMA node belongs to a memory type, and each memory type
->>   corresponds to a "abstract distance", so each NUMA node corresonds to
->>   a "distance".  For simplicity, we can start with static distances, for
->>   example, DRAM (default): 150, PMEM: 250.  The distance of each NUMA
->>   node can be recorded in a global array,
->> 
->>     int node_distances[MAX_NUMNODES];
->> 
->>   or, just
->> 
->>     pgdat->distance
->> 
->
-> I don't follow this. I guess you are trying to have a different design.
-> Would it be much easier if you can write this in the form of a patch? 
+… you're right.
 
-Written some pseudo code as follow to show my basic idea.
-
-#define MEMORY_TIER_ADISTANCE_DRAM	150
-#define MEMORY_TIER_ADISTANCE_PMEM	250
-
-struct memory_tier {
-	/* abstract distance range covered by the memory tier */
-	int adistance_start;
-	int adistance_len;
-	struct list_head list;
-	nodemask_t nodemask;
-};
-
-/* RCU list of memory tiers */
-static LIST_HEAD(memory_tiers);
-
-/* abstract distance of each NUMA node */
-int node_adistances[MAX_NUMNODES];
-
-struct memory_tier *find_create_memory_tier(int adistance)
-{
-	struct memory_tier *tier;
-
-	list_for_each_entry(tier, &memory_tiers, list) {
-		if (adistance >= tier->adistance_start &&
-		    adistance < tier->adistance_start + tier->adistance_len)
-			return tier;
-	}
-	/* allocate a new memory tier and return */
-}
-
-void memory_tier_add_node(int nid)
-{
-	int adistance;
-	struct memory_tier *tier;
-
-	adistance = node_adistances[nid] || MEMORY_TIER_ADISTANCE_DRAM;
-	tier = find_create_memory_tier(adistance);
-	node_set(nid, &tier->nodemask);
-	/* setup demotion data structure, etc */
-}
-
-static int __meminit migrate_on_reclaim_callback(struct notifier_block *self,
-						 unsigned long action, void *_arg)
-{
-	struct memory_notify *arg = _arg;
-	int nid;
-
-	nid = arg->status_change_nid;
-	if (nid < 0)
-		return notifier_from_errno(0);
-
-	switch (action) {
-	case MEM_ONLINE:
-		memory_tier_add_node(nid);
-		break;
-	}
-
-	return notifier_from_errno(0);
-}
-
-/* kmem.c */
-static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
-{
-	node_adistances[dev_dax->target_node] = MEMORY_TIER_ADISTANCE_PMEM;
-	/* add_memory_driver_managed() */
-}
-
-[snip]
-
-Best Regards,
-Huang, Ying
+regards,
+-- 
+js

@@ -2,130 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610C2577B04
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B1A577B20
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbiGRGcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 02:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        id S232243AbiGRGfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 02:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiGRGcG (ORCPT
+        with ESMTP id S233548AbiGRGe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 02:32:06 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A850D15FFE;
-        Sun, 17 Jul 2022 23:32:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmXDw4Nktz4xXF;
-        Mon, 18 Jul 2022 16:32:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658125921;
-        bh=u4m9TJdNGX1rL5MkxVo3l4zbaNKUTaSl0NLh/x38pZ0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=J6inUyhj8DzDty0nBomKyDNb/oIMQD0x598HOXpeIIriEeKpeSn1MoHBL8JZ2rfkY
-         6WHUEntbqFrbtb2YhRZA/ULxpEW2yRO+seJmgIQrxTO9aA7rQkWSH3pWdxSSufdhSI
-         C4KIwYWILxEzhQsYaqEEXlGTArOUIzR6qkCTuQ9oPDullhrWIVg90Xa7eHj3GyoAgk
-         Yd4KtjHiDWPIpgqx87x9w7tcF9w1fHFhui96aiOridkPnx7Cuaci/ZkWrEyi1tj0vO
-         Z/zM4PyXsXUXGTSOOmvbNoKOvSGdOHxN8d+973AShF7CPKC6M/q6hQ4AcDtHYnrWFr
-         IIjCZh5D48uFg==
-Date:   Mon, 18 Jul 2022 16:31:58 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the usb tree
-Message-ID: <20220718163158.42176b4e@canb.auug.org.au>
+        Mon, 18 Jul 2022 02:34:58 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF7F17056
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:34:56 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id e16so9777988pfm.11
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:from:to:subject:references
+         :in-reply-to:content-transfer-encoding;
+        bh=S53fMGJ7d0alkGH+ulDHUMvLnCp992Os4EhV2Z3Vc40=;
+        b=M1l54ay5r+9gA9iDuaHbt1PXGuBvWNoVXchA6ROAr9TQBryZ/CnJ26PZqZRccKEw4F
+         qpe7QC3e78ETuC7W0zUIq8rTKN5Bm06w3EcK6mCKGQS6xXbqBtsGrQu0QQ74PuZtvSsc
+         qRszhWok/lhvP62IiaQe5fnEcON/JE2Y+eYAa66B1gTDq9FWgJ7Mq68vPGLtXdxlPA2B
+         Hc5p1nJTqiEnSkLEFrgZKejU4Z3AwCBcvjAf4CrmoGJ9y8hv3985HLS8OQfuS0OH987w
+         adk450PypM9EmJCQMDmD4QonB6k4lTIh+8BOVd2RiWR8xg9SR4MkuR0dy17m8ewbiFrh
+         ruzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from:to
+         :subject:references:in-reply-to:content-transfer-encoding;
+        bh=S53fMGJ7d0alkGH+ulDHUMvLnCp992Os4EhV2Z3Vc40=;
+        b=D42BHVRoiOO61RIDUKQT0MCVvdzMPW75bUb4k8cuj4Kj0Q5xL8nQl5n9UTAE+6Pd2w
+         ushuaXBn8ZSnzg5LbwmLFSwOLBZHjpu8Oe8pMBs7nlOcOeN5x+UiGd4Or6T2qn4SQeXT
+         +NAqFzQ5CtGdU9E6W0jUrQty7Oygl6uyR76xREAq95KN3y3k2PWhqckx+6h1yA6yZqZq
+         of5oRIAcyu5jCJeURNIpf2/LF+aSTGb2GCvDh8QHcDLlAoMi+jjjd/Q44IQJggAWAXLr
+         TsXe8D4z/SuZhcz5QjBZ6j1uK2zSuideHdfUXw5kqrs+Ph5xi9lhSzeLCl82KhRX2YAH
+         SJGg==
+X-Gm-Message-State: AJIora+SLI/jOMiSl7GqPQGaspd/auA5OaPLucPgbP8Pb44twXPBxjZB
+        UfaREsVOJk5aebK6hlrNvVHafQ==
+X-Google-Smtp-Source: AGRyM1vCzFhCX7Lu9ii1ZswpntAQGPAzMIjvRI4RiX/q+ZNlfw66sJWMpfTMSfuV62G0Npoa9ua7MQ==
+X-Received: by 2002:a65:5b8e:0:b0:41a:3c3:b693 with SMTP id i14-20020a655b8e000000b0041a03c3b693mr7425087pgr.84.1658126095722;
+        Sun, 17 Jul 2022 23:34:55 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1f3b:709e:6fec:df37:6562:5a80? ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
+        by smtp.gmail.com with ESMTPSA id t13-20020a62d14d000000b00528a4238eadsm8547021pfl.13.2022.07.17.23.34.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Jul 2022 23:34:55 -0700 (PDT)
+Message-ID: <e69cb444-2bee-870e-08ca-bbe3237d8166@linaro.org>
+Date:   Mon, 18 Jul 2022 12:04:50 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oBci1lv=tF9l4LwqQdfysoa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   bhupesh.sharma@linaro.org
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 3/3] thermal: qcom: tsens: Implement re-initialization
+ workaround quirk
+References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
+ <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
+ <09ff7e3a-7dd5-db35-3795-89151afb5363@somainline.org>
+In-Reply-To: <09ff7e3a-7dd5-db35-3795-89151afb5363@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/oBci1lv=tF9l4LwqQdfysoa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Konrad,
 
-Hi all,
+On 7/15/22 8:26 PM, Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
+> 
+> 
+> On 1.07.2022 16:58, Bhupesh Sharma wrote:
+> > Since for some QCoM tsens controllers, its suggested to
+> > monitor the controller health periodically and in case an
+> > issue is detected, to re-initialize the tsens controller
+> > via trustzone, add the support for the same in the
+> > qcom tsens driver.
+> >
+> > Note that Once the tsens controller is reset using scm call,
+> > all SROT and TM region registers will enter the reset mode.
+> >
+> > While all the SROT registers will be re-programmed and
+> > re-enabled in trustzone prior to the scm call exit, the TM
+> > region registers will not re-initialized in trustzone and thus
+> > need to be handled by the tsens driver.
+> >
+> > Cc: Amit Kucheria <amitk@kernel.org>
+> > Cc: Thara Gopinath <thara.gopinath@gmail.com>
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: linux-arm-msm@vger.kernel.org
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > ---
+> Hi, I think this should be also checked and applied on init. This
+> seems required for at least SM6375, as the controller starts (or
+> well, doesn't start...) in an unknown state and the driver does
+> not like it, as the TSENS_EN indicates it is disabled.
+> Downstream runs this right at probe..
 
-After merging the usb tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Hmm.. very interesting. I was not aware of the SM6375 case, as for SM8150
+the controller starts in a valid state but may require reinit during operation.
 
-drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_cmd_mu=
-x_set':
-drivers/platform/chrome/cros_typec_switch.c:52:16: error: implicit declarat=
-ion of function 'cros_ec_command'; did you mean 'cros_ec_cmd'? [-Werror=3Di=
-mplicit-function-declaration]
-   52 |         return cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, =
-&req,
-      |                ^~~~~~~~~~~~~~~
-      |                cros_ec_cmd
-drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_regist=
-er_switches':
-drivers/platform/chrome/cros_typec_switch.c:244:23: error: implicit declara=
-tion of function 'acpi_evaluate_integer'; did you mean 'acpi_evaluate_objec=
-t'? [-Werror=3Dimplicit-function-declaration]
-  244 |                 ret =3D acpi_evaluate_integer(adev->handle, "_ADR",=
- NULL, &index);
-      |                       ^~~~~~~~~~~~~~~~~~~~~
-      |                       acpi_evaluate_object
-drivers/platform/chrome/cros_typec_switch.c:244:49: error: invalid use of u=
-ndefined type 'struct acpi_device'
-  244 |                 ret =3D acpi_evaluate_integer(adev->handle, "_ADR",=
- NULL, &index);
-      |                                                 ^~
+So, I did not use the downstream approach to do it right at _probe() and then
+later while get_temp() is called.
 
-Caused by commit
+Let me add that in v2. BTW do you want me to set the need_reinit_wa as true
+for SM6375 as well, or would you like to add that with a followup-patch ?
 
-  e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
-
-and commits
-
-  34f375f0fdf6 ("platform/chrome: cros_typec_switch: Set EC retimer")
-  bb53ad958012 ("platform/chrome: cros_typec_switch: Add event check")
-
-interacting with commit
-
-  b1d288d9c3c5 ("platform/chrome: cros_ec_proto: Rename cros_ec_command fun=
-ction")
-
-from the chrome-platform tree.
-
-I have used the usb tree from next-20220715 for today.
-
-I will fix up the cros_ec_command() rename with a merge fix patch after
-the apci usage problem is solved.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/oBci1lv=tF9l4LwqQdfysoa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLU/l4ACgkQAVBC80lX
-0Gy3vAgAir7AzgK6yRr7V0wPpHR/OguTKRvhjU5NoBbnJOs/BMuBDfrng9pa5TzO
-TZmL3sKBLLUMaKWY/ymKtr/h7MA3KXNw/x0W97aEx+z+yt5pHUlYRp7dPJwSjKFv
-g/tgSiOrgtruqHhboAEI+jQG9QiDN7OEoy+Z3WTHjC0XwSuQ27iXkSx/8o2SBSTI
-iAtvvTCSwUrs2gRt9Qvnft0iiksLy/2cKGOev1yB1gVl7rZ+CUrxxsvNIaPTaabZ
-bpcWap1XCHWL1GT3GU3jFBQZ1JCjrXmImwmrB2+fjvf3mHa/pZ01Yl2Tl9cXwvcD
-BLZt84tO7tesN0F36fzL1smYNlQTBQ==
-=KyZ5
------END PGP SIGNATURE-----
-
---Sig_/oBci1lv=tF9l4LwqQdfysoa--
+Regards,
+Bhupesh

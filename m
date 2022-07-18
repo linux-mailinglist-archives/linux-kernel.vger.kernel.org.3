@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FE957825E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BFF57826A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiGRMaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S234378AbiGRMgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233110AbiGRMat (ORCPT
+        with ESMTP id S230324AbiGRMgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:30:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3F2205F7;
-        Mon, 18 Jul 2022 05:30:48 -0700 (PDT)
+        Mon, 18 Jul 2022 08:36:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D3965C1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:36:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BBB5614E8;
-        Mon, 18 Jul 2022 12:30:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E75C341C0;
-        Mon, 18 Jul 2022 12:30:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99733614E0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:36:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08244C341C0;
+        Mon, 18 Jul 2022 12:36:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658147447;
-        bh=ECdxE1bsN444YLZGJxne40CdRsdsjAKrmqAIXOOtD2g=;
+        s=k20201202; t=1658147791;
+        bh=MLTmj3Ke3Z/3vM8iYacOreNpyGWrCnTR3+ZyKEIgWnk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RF/u2VR6cz7S5mkBDmpzsbDbNjmr7BKs7LNKjeB05r0TTto8rLYuFdRbXFRe+u9QI
-         cLOYtLkrOV+9t6opsTPUHf6BVlan3j5F60InYEYyW9BTKM/XoQ3Lh9nFwJ857Lfr5n
-         PA05IS5/5ruRYtuWSiDFI9tjDmif6SXp0cQJCY8YJpQe768bsi+fumpQIML3lK9Cl2
-         LEPP3hi0jQJr73iGcjhhn2lZqZHIXr73WXdAyp424PvXOiPYgrlYiVtFcQFLCIsz+u
-         JOLKiVo771my9jUZ+be2INOxgyltZxeF1UIdXxgUp2C29t2mXTRV9tKPq67kdEJElv
-         ZB9RSsFs3x+IQ==
-Date:   Mon, 18 Jul 2022 15:30:43 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Cc:     Jianglei Nie <niejianglei2021@163.com>, jgg@ziepe.ca,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/hfi1: fix potential memory leak in setup_base_ctxt()
-Message-ID: <YtVSc7aazgxVFHRa@unreal>
-References: <20220711070718.2318320-1-niejianglei2021@163.com>
- <1038e814-5f0d-17a3-1331-8ed24a64d597@cornelisnetworks.com>
- <YtU4eXQCVEPGnh9b@unreal>
- <be437471-0080-8e9c-978a-6029c7826335@cornelisnetworks.com>
+        b=C4z4OICx4HS9nvx7xARZvlMqDztERfCcgXm+6ZcEAdguGb+L3j5d8IaTfcuzw6BM/
+         hmCboJS2BwX1m16yUPjwqO4tyCcb88f9FYM4q6w19keTj7db+KD5d/BWut07W5xCAm
+         YWnC7sQGhu7iEkx3m4VOmx8U7uaB2ArjbbD/c1f2LkTD3itJOeyuyEB4rPRKJqhdmj
+         zVkIqW02EpmRhqrjdsVqRn7WX8xrTnoTEQKA9LwwPMS4L1mOVrmq246u34OEffQ5Zl
+         8IaSDXTBEZPD2n7lpphGPnW/vVGr0w8mfBpNINFJCQ8QzbD+bMVR4n4ezF8TBr+J0p
+         YIZ51iFgVUboA==
+Date:   Mon, 18 Jul 2022 13:36:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Christian Kohlschuetter <christian@kohlschuetter.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] regulator: core: Fix off-on-delay-us for
+ always-on/boot-on regulators
+Message-ID: <YtVTyzLREdkzYiKS@sirena.org.uk>
+References: <E25D6465-6475-42B4-90EB-3D2C3CAF3B20@kohlschuetter.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Rd0hcaxFx6zIWIQc"
 Content-Disposition: inline
-In-Reply-To: <be437471-0080-8e9c-978a-6029c7826335@cornelisnetworks.com>
+In-Reply-To: <E25D6465-6475-42B4-90EB-3D2C3CAF3B20@kohlschuetter.com>
+X-Cookie: System checkpoint complete.
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,78 +56,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 08:11:59AM -0400, Dennis Dalessandro wrote:
-> On 7/18/22 6:39 AM, Leon Romanovsky wrote:
-> > On Mon, Jul 11, 2022 at 07:52:25AM -0400, Dennis Dalessandro wrote:
-> >> On 7/11/22 3:07 AM, Jianglei Nie wrote:
-> >>> setup_base_ctxt() allocates a memory chunk for uctxt->groups with
-> >>> hfi1_alloc_ctxt_rcv_groups(). When init_user_ctxt() fails, uctxt->groups
-> >>> is not released, which will lead to a memory leak.
-> >>>
-> >>> We should release the uctxt->groups with hfi1_free_ctxt_rcv_groups()
-> >>> when init_user_ctxt() fails.
-> >>>
-> >>> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> >>> ---
-> >>>  drivers/infiniband/hw/hfi1/file_ops.c | 4 +++-
-> >>>  1 file changed, 3 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/infiniband/hw/hfi1/file_ops.c b/drivers/infiniband/hw/hfi1/file_ops.c
-> >>> index 2e4cf2b11653..629beff053ad 100644
-> >>> --- a/drivers/infiniband/hw/hfi1/file_ops.c
-> >>> +++ b/drivers/infiniband/hw/hfi1/file_ops.c
-> >>> @@ -1179,8 +1179,10 @@ static int setup_base_ctxt(struct hfi1_filedata *fd,
-> >>>  		goto done;
-> >>>  
-> >>>  	ret = init_user_ctxt(fd, uctxt);
-> >>> -	if (ret)
-> >>> +	if (ret) {
-> >>> +		hfi1_free_ctxt_rcv_groups(uctxt);
-> >>>  		goto done;
-> >>> +	}
-> >>>  
-> >>>  	user_init(uctxt);
-> >>>  
-> >>
-> >> Doesn't seem like this patch is correct. The free is done when the file is
-> >> closed, along with other clean up stuff. See hfi1_file_close().
-> > 
-> > Can setup_base_ctxt() be called twice for same uctxt?
-> > You are allocating rcd->groups and not releasing.
-> 
-> The first thing assign_ctxt() does is a check of the fd->uctxt and it bails with
-> -EINVAL. So effectively only once.
 
-I'm slightly confused. How will you release rcd->groups?
+--Rd0hcaxFx6zIWIQc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-assign_ctxt()
- -> setup_base_ctxt()
-   -> hfi1_alloc_ctxt_rcv_groups()
-      ,,,
-      rcd->groups = kzalloc...
-      ...
-   -> init_user_ctxt() <-- fails and leaves fd->uctx == NULL
+On Sun, Jul 17, 2022 at 01:30:36PM +0200, Christian Kohlschuetter wrote:
+> Regulators marked with "regulator-always-on" or "regulator-boot-on"
+> as well as an "off-on-delay-us", may run into cycling issues that are
+> hard to detect.
 
+This doesn't apply against current code, please check and resend.
 
-...
-hfi1_file_close()
-  struct hfi1_ctxtdata *uctxt = fdata->uctxt;
-  ...
-  if (!uctxt)             <-- This is our case
-     goto done; 
-  ...
+--Rd0hcaxFx6zIWIQc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-done:
-  if (refcount_dec_and_test(&dd->user_refcount))
-     complete(&dd->user_comp);
+-----BEGIN PGP SIGNATURE-----
 
-  cleanup_srcu_struct(&fdata->pq_srcu);
-  kfree(fdata);
-  return 0;
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLVU8oACgkQJNaLcl1U
+h9Clrgf/XyGHMgkck1t++00V1/G5LvJt18wBTkGiINR/lCta78T4+gJ+NlfO5v8t
+1lqIuXne1k/twVU8jmTl4RfqdnbEscnEr7ZAIDIHHZ3eFYvxLRmKMQTwQWMXOvAZ
+zK/fzP4E4U36L3tTK+X1HcoodFmyjL7LYFOlO3UKEpmoe3Hs5CeqYOP1PLpBkTIo
+H34VqCG5RQ5gYkqwHc/UAjfVZcRPlXHhKbWX9hfEsej6V0vy+/8PgTxc4euAzUK1
+12k3HV5uIPgzUzRNv/uu5usvICqvhmOhxMSZfkEClQAnBHbcJ7+3jaZsv+Z5+BH7
+G6ZpQavs0h8XKY7P7pW0fEMYJHxjhw==
+=/Smk
+-----END PGP SIGNATURE-----
 
-
-
-> 
-> -Denny
-> 
-> 
+--Rd0hcaxFx6zIWIQc--

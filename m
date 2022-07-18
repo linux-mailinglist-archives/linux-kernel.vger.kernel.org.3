@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A036578E06
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDEC578E0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236438AbiGRXEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 19:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        id S230125AbiGRXGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 19:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236414AbiGRXEG (ORCPT
+        with ESMTP id S229478AbiGRXGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 19:04:06 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56442EE2F;
-        Mon, 18 Jul 2022 16:04:05 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z22so8283613lfu.7;
-        Mon, 18 Jul 2022 16:04:05 -0700 (PDT)
+        Mon, 18 Jul 2022 19:06:36 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC20F275EC
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:06:35 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id r142-20020a632b94000000b0041a18177a5dso1630192pgr.10
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TZUTBE8JOO+dBwswBQU/UW48YDxWzcOqBKIIatUeRxg=;
-        b=eu+8mAmsNBdDm3xB9tJ7qWbNXhdC6joRhpKHQAJ4NU3Mky13rD9L25sbhWt9DuIotI
-         gUojvdBW5A0Yn/MC4O+GhB63tm4n97gegK8HpEZRkzwH2RBhJ3qbgnumGnjVrlCvsJR7
-         2tNXRis6jsm9duhk3z7u+9TVJuxAzDeFkQhctki+wu7c0eWrDms/Ckpf9yes50sGz5ZS
-         iqzCE8Mh9LilppMXKYD8OidSUpoV8K4oY90b0RKIZ/yMBMgmavyjBG0D5sM+o8aKrngS
-         gmmNcREgRh2MPSjA60ICVGr0N2G66g230+VXfqZ4m8y7QeVjVf+NB5gcvz50Ti9awr+y
-         lg8Q==
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc:content-transfer-encoding;
+        bh=kr+g0QLyfEsKisyWseSQidWHG7rTs+Z9BjnCTx3ihTc=;
+        b=UALDjrOGFK63RNNlZA9jDLc+QBDSAH1EdrvRdsbNPiAxlbTp5/vXOzhCE0JdyzjItg
+         6Guq1N/aGwWPV+Lqa8Faop3fIKcrvQylt/GMLCPQ/7GSHA3Tai77w4t5p8omE3dh63a5
+         ZvP0h4vC2B2xEwEhysFiZd9ED6dCdIoGNVpxRoS1WZABUjlOKu8WUPczczpe+tVS9M9d
+         9zBPC7I6ns7Gu48exyHoPaD1dh3sfob4A9ZMTpZE68k0cJwNgu19cJXyd/sqjPn89v5W
+         jR7kBLNsJg8SR0yswTuj0tmeMqIjb3s9rkr8/+e/IITIMXsDBURqpQP2W0buSK4lgJgt
+         MgCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TZUTBE8JOO+dBwswBQU/UW48YDxWzcOqBKIIatUeRxg=;
-        b=rtpI9Unm45IrX6GHJ32A73KgZUTHBXuByJTKBO3+A2GvT6xLpx/vDxNkkHn2VZ+RSo
-         T6009zsOqom79UFdfVY9lC/9GSyFCCEB7Jvc7/9QQf/aLKf8iEekOjI+2cn/w3Md6MwV
-         L2FyNHJAd/OUu8sQkG6rUM4RafOFbH/prvOHFVdWFAV+TZYO2qNQFAfj9GSacUub35Jm
-         kR+CK+76LsW0BMcQ++Mf2VyktVpkMTrT4zE2z79zrQGSnVwD/0XAdOqoeUY+MNKOpiql
-         lc+Riy8yc1sTQ0hQamw/yDviN+8E1qH6Ho5jYY+hyzWKPgzHhrAyRQqiinVkJI9ymV6U
-         duNA==
-X-Gm-Message-State: AJIora95pibKA1l3Z+2MrEWIAlDa3oCFEekfIoOFQO6PDUHxf8DnjbLF
-        1yBkN4cEfKDJTrRS97aVR5uxmcrtPWapTgb8fLAeYpS81FPgjg==
-X-Google-Smtp-Source: AGRyM1u0wBbNmMakHQBA/ZO0hGJZKUbnq/dnkUov8nPUnJv4Mrzha3OP1ESzVnpMYzPJIoYstMUH0d87QXPunDiWZNY=
-X-Received: by 2002:a05:6512:3409:b0:489:c549:4693 with SMTP id
- i9-20020a056512340900b00489c5494693mr15228484lfr.26.1658185443502; Mon, 18
- Jul 2022 16:04:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220717133759.8479-1-khalid.masum.92@gmail.com>
- <3ea0ea90-48bf-ce19-e014-9443d732e831@gmail.com> <CAABMjtHiet1_SRvLBhoNxeEh865rwtZCkb510JmFPkHFMd5chQ@mail.gmail.com>
-In-Reply-To: <CAABMjtHiet1_SRvLBhoNxeEh865rwtZCkb510JmFPkHFMd5chQ@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 18 Jul 2022 16:03:52 -0700
-Message-ID: <CABBYNZJVv=pJv60P6fYZh65JU+BV5agGfXEh4VenxELEXqtDsA@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: hci_core: Use ERR_PTR instead of NULL
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc:content-transfer-encoding;
+        bh=kr+g0QLyfEsKisyWseSQidWHG7rTs+Z9BjnCTx3ihTc=;
+        b=S6hiNQ822xG5apmLnR/1kxI0cE0DIKZqUrn3nlM6PSTR5WYqMWLrqzvOTeW6dAdMgd
+         MQ/nCn59Ni9w+RgdjF6DvO+zQrh4UnukKt1v2X3T30l/fkW9whzk5nYbB17tqF1ITnzr
+         Wb81kR/CVvRF0p/DxrJklQZB3U8rRC0PX6jCOgqbEh+yvdP0CHS/tISJonNn+wzB0TYR
+         BGfvRNY1VMFS+3l1uf731RD4XBYXYlnbo3hD/DdqzCpnPD1//gQNvT3sbno/hxLcKrZq
+         0UNmVesw+HUgMRQCOvscnAXWFY0H/PHJCpyZo0frtlciHsfavAcEoel4D7z9M2Xlfsn4
+         Q3aA==
+X-Gm-Message-State: AJIora8VMxI5uh361C4m//wODNUiPBKT25HH4eM9IjNGvsLTFvxCDLw8
+        rRGiy0EYlOzIfeQGqAvXD5MsV+iLx3sC/PW6Lg==
+X-Google-Smtp-Source: AGRyM1vtVDLoN7bIQSM386zKqi30WcOFVcP2gi6jg06lTY3MCLjhqHNIUvyaeunHATC+f0/1R+GPQ6p77PqvVtOUDA==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f922:7e91:d8e8:24c4])
+ (user=justinstitt job=sendgmr) by 2002:a17:903:3093:b0:16b:deea:4d36 with
+ SMTP id u19-20020a170903309300b0016bdeea4d36mr30327719plc.126.1658185595359;
+ Mon, 18 Jul 2022 16:06:35 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 16:06:26 -0700
+In-Reply-To: <CAKwvOdnN67xFL22oWfqrKjvES4vjSB3KNhm401LtoC7igO+4Vg@mail.gmail.com>
+Message-Id: <20220718230626.1029318-1-justinstitt@google.com>
+Mime-Version: 1.0
+References: <CAKwvOdnN67xFL22oWfqrKjvES4vjSB3KNhm401LtoC7igO+4Vg@mail.gmail.com>
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH v4] lib/test_printf.c: fix clang -Wformat warnings
+From:   Justin Stitt <justinstitt@google.com>
+To:     ndesaulniers@google.com
+Cc:     andriy.shevchenko@linux.intel.com, justinstitt@google.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
+        senozhatsky@chromium.org, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,68 +71,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Khalid,
+see warnings:
+| lib/test_printf.c:157:52: error: format specifies type 'unsigned char'
+| but the argument has type 'int' [-Werror,-Wformat]
+test("0|1|1|128|255",
+| "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+-
+| lib/test_printf.c:158:55: error: format specifies type 'char' but the
+| argument has type 'int' [-Werror,-Wformat] test("0|1|1|-128|-1",
+| "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+-
+| lib/test_printf.c:159:41: error: format specifies type 'unsigned
+short'
+| but the argument has type 'int' [-Werror,-Wformat]
+| test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
 
-On Sun, Jul 17, 2022 at 11:34 AM Khalid Masum <khalid.masum.92@gmail.com> wrote:
->
-> On Sun, Jul 17, 2022 at 10:17 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
-> >
-> > Hi Khalid,
-> >
-> > Khalid Masum <khalid.masum.92@gmail.com> says:
-> > > Failure of kzalloc to allocate memory is not reported. Return Error
-> > > pointer to ENOMEM if memory allocation fails. This will increase
-> > > readability and will make the function easier to use in future.
-> > >
-> > > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> > > ---
-> >
-> > [snip]
-> >
-> > > index a0f99baafd35..ea50767e02bf 100644
-> > > --- a/net/bluetooth/hci_core.c
-> > > +++ b/net/bluetooth/hci_core.c
-> > > @@ -2419,7 +2419,7 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
-> > >
-> > >       hdev = kzalloc(alloc_size, GFP_KERNEL);
-> > >       if (!hdev)
-> > > -             return NULL;
-> > > +             return ERR_PTR(-ENOMEM);
-> > >
-> >
-> > This will break all callers of hci_alloc_dev(). All callers expect NULL
-> > in case of an error, so you will leave them with wrong pointer.
->
-> You are right. All callers of hci_alloc_dev() need to be able to handle
-> the error pointer. I shall send a V2 with all the callers of hci_alloc_dev
-> handling the ERR_PTR.
->
-> > Also, allocation functionS return an error only in case of ENOMEM, so
-> > initial code is fine, IMO
-> >
+There's an ongoing movement to eventually enable the -Wformat flag for
+clang. Previous patches have targeted incorrect usage of
+format specifiers. In this case, however, the "incorrect" format
+specifiers are intrinsically part of the test cases. Hence, fixing them
+would be misaligned with their intended purpose. My proposed fix is to
+simply disable the warnings so that one day a clean build of the kernel
+with clang (and -Wformat enabled) would be possible. It would also keep
+us in the green for alot of the CI bots.
 
-If there just a single error like ENOMEM then Id say this is fine,
-just as it is fine for kzalloc.
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+changes from v1 -> v2:
+* moved NOWARN macro definition to a more appropriate location
+* using __diag_ignore_all (thanks Nathan)
+* using local scoping for code blocks instead of __VA_ARGS__ (thanks
+* Nick)
+* indented affected test cases (thanks Andy)
 
-> I think it makes the memory allocation error handling look to be a bit
-> different from what we usually do while allocating memory which is,
-> returning an error or an error pointer. Here we are returning a NULL
-> without any context, making it a bit unreadable. So I think returning
-> an error pointer is better. If I am not mistaken, this also complies with
-> the return convention:
-> https://www.kernel.org/doc/htmldocs/kernel-hacking/convention-returns.html
+changes from v2 -> v3:
+* reinserted commit message
+* remove Andy's Suggested-by tag
+* add issue tracker link
 
-Not sure if that would apply to code that is basically a wrapper of kzalloc.
+changes from v3 -> v4:
+* better macro indentation and usage string (thanks Nick)
 
-> >
-> > Thanks,
-> > --Pavel Skripkin
->
->
-> Thanks,
->   -- Khalid Masum
+ lib/test_printf.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 07309c45f327..f78044c1efaa 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -30,6 +30,12 @@
+ #define PAD_SIZE 16
+ #define FILL_CHAR '$'
+=20
++#define NOWARN(option, comment, block) \
++	__diag_push(); \
++	__diag_ignore_all(#option, comment); \
++	block \
++	__diag_pop();
++
+ KSTM_MODULE_GLOBALS();
+=20
+ static char *test_buffer __initdata;
+@@ -154,9 +160,11 @@ test_number(void)
+ 	test("0x1234abcd  ", "%#-12x", 0x1234abcd);
+ 	test("  0x1234abcd", "%#12x", 0x1234abcd);
+ 	test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|% d", 0,=
+ 1, 12, 123, 1234, -123, -1234);
+-	test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+-	test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+-	test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
++	NOWARN(-Wformat, "Intentionally test narrowing conversion specifiers.", {
++		test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
++		test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
++		test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
++	})
+ 	/*
+ 	 * POSIX/C99: =C2=BBThe result of converting zero with an explicit
+ 	 * precision of zero shall be no characters.=C2=AB Hence the output
+--=20
+2.37.0.170.g444d1eabd0-goog
 
-
--- 
-Luiz Augusto von Dentz

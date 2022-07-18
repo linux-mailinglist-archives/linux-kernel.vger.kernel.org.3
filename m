@@ -2,203 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CBE578725
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC3D578723
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235693AbiGRQWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
+        id S235670AbiGRQWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234440AbiGRQWT (ORCPT
+        with ESMTP id S234440AbiGRQWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:22:19 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4102A414;
-        Mon, 18 Jul 2022 09:22:13 -0700 (PDT)
-X-UUID: 550ed3b5952f48e0963c4b506648ac13-20220719
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:ffd712da-ee05-4a53-8920-bbc7d965f842,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:0f94e32,CLOUDID:449f4b33-b9e4-42b8-b28a-6364427c76bb,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 550ed3b5952f48e0963c4b506648ac13-20220719
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 855950989; Tue, 19 Jul 2022 00:22:08 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 19 Jul 2022 00:22:06 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 19 Jul 2022 00:22:05 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <aaronyu@google.com>, <matthias.bgg@gmail.com>,
-        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
-        <julianbraha@gmail.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [PATCH v10 0/8] ASoC: mediatek: Add support for MT8186 SoC
-Date:   Tue, 19 Jul 2022 00:21:56 +0800
-Message-ID: <20220718162204.26238-1-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 18 Jul 2022 12:22:06 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758992A419
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:22:03 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id w17so14238760ljh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gnhzl8AV0IevaeOqkOrbzpbXv8n6BNxG2ZRn/9lxH9g=;
+        b=U+kOT7919lLIV5hgAHfLCeFLNWoe6ERaJnxxRw1TKiDC7MfJjIXmpa0xU5m/Uh0rz3
+         EWwrnMUJeT/pTCHGcrSpbzEcZdiZBIeCwILTQ5xumjFEqfwH9nF5GIwUiRR8h5Ov0Qsw
+         OF4YeYQ3CZ9Dls0/dLacIQAuwBWQ+akD0/daipf6WEvqGus8uOy2NF2CK1csD6+1EnNT
+         rbxaBoCiR2MOufFQRuD5JB/P6JsL6vq2awMZRC1kQlsSXbxPjLPFLf8v22CNHig0TUy4
+         9+JRoVprxfJVXducukBoGcjiRFwPmKS8p0mqakiAf+1mfepTzUYHMF30hUvr64IXCuxJ
+         xUQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gnhzl8AV0IevaeOqkOrbzpbXv8n6BNxG2ZRn/9lxH9g=;
+        b=8LFo9bxcqWscAN0x/W01gvLPLqFtgBcMSQFS2lT2CJD6efsJ7PdJhbyoZyyVjncHrt
+         DZps1aTayTNG8GrmcPkzt4O/7UGfrE+YAC2rM+R4BPr1ZXezFiSqOCoRkKmtnvsD/gQa
+         JGq+LIK5zfdEHoFd+XeSB79xlb5w3V9e9jzyD8r7rHViTU1+Ie9mUJoH9mRpiTl5SRmq
+         rEusy+pyKmzVdfhjgcLCBCOhl/bjgpYLLOEeZawLVN4tH83M6FXUIv2E2O5lbWv/LGyc
+         STN7hwT03ZZSIAEpCG4T9Lu5d5iBYQPp8MwQOg/vXZ6UtDfo3Kn0fhxp1dQjxKIgic6i
+         MXvQ==
+X-Gm-Message-State: AJIora+zKGPIxGO2ywzd27NznYvjei5VvZkwAJFxPuy8VDMDPHBQkUNM
+        jlTr5bLQV97x2nFdwMQ/7OOzCQ==
+X-Google-Smtp-Source: AGRyM1u/ldBvC8/9GQl6gU/uzMlWEFWVdqqS2949zozHWxiwR574uX1lG9v35lqzBpUtqOK3A43/kQ==
+X-Received: by 2002:a2e:be8a:0:b0:25d:c49e:fa29 with SMTP id a10-20020a2ebe8a000000b0025dc49efa29mr213513ljr.194.1658161321494;
+        Mon, 18 Jul 2022 09:22:01 -0700 (PDT)
+Received: from [10.43.1.253] ([83.142.187.84])
+        by smtp.gmail.com with ESMTPSA id u1-20020ac258c1000000b0047f943112e3sm2674134lfo.285.2022.07.18.09.21.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 09:21:59 -0700 (PDT)
+Message-ID: <820dff42-67e4-32d2-a72f-9e9bdb70609e@semihalf.com>
+Date:   Mon, 18 Jul 2022 18:21:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] PCI/ASPM: Disable ASPM when save/restore PCI state
+Content-Language: en-US
+To:     Victor Ding <victording@google.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
+        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Zide Chen <zide.chen@intel.com>
+References: <20210311173433.GA2071075@bjorn-Precision-5520>
+ <20210726220307.GA647936@bjorn-Precision-5520>
+ <CANqTbdb_h_W+8kmh6s56deA8VKn6tO1KDJaS5Yasq5RFLtGUbQ@mail.gmail.com>
+From:   Dmytro Maluka <dmy@semihalf.com>
+In-Reply-To: <CANqTbdb_h_W+8kmh6s56deA8VKn6tO1KDJaS5Yasq5RFLtGUbQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series of patches adds support for Mediatek AFE of MT8186 Soc.
-Patches are based on broonie tree "for-next" branch.
+Hi Victor and Bjorn,
 
-Changes since v9:
-  - Drop the definitions that unused in mt8186-afe-common.h.
-  - Use device_get_match_data() instead of of_device_get_match_data().
+On 2/9/22 09:03, Victor Ding wrote:
+> I sincerely apologize that I missed your two emails last year. Please find my
+> comments embedded below.
+> 
+> On Tue, Jul 27, 2021 at 8:03 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>
+>> On Thu, Mar 11, 2021 at 11:34:33AM -0600, Bjorn Helgaas wrote:
+>>> On Thu, Jan 28, 2021 at 03:52:42PM +0000, Victor Ding wrote:
+>>>> Certain PCIe devices (e.g. GL9750) have high penalties (e.g. high Port
+>>>> T_POWER_ON) when exiting L1 but enter L1 aggressively. As a result,
+>>>> such devices enter and exit L1 frequently during pci_save_state and
+>>>> pci_restore_state; eventually causing poor suspend/resume performance.
+>>>>
+>>>> Based on the observation that PCI accesses dominance pci_save_state/
+>>>> pci_restore_state plus these accesses are fairly close to each other, the
+>>>> actual time the device could stay in low power states is negligible.
+>>>> Therefore, the little power-saving benefit from ASPM during suspend/resume
+>>>> does not overweight the performance degradation caused by high L1 exit
+>>>> penalties.
+>>>>
+>>>> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=211187
+>>>
+>>> Thanks for this!
+>>>
+>>> This device can tolerate unlimited delay for L1 exit (DevCtl Endpoint
+>>> L1 Acceptable Latency is unlimited) and it makes no guarantees about
+>>> how fast it can exit L1 (LnkCap L1 Exit Latency is also unlimited), so
+>>> I think there's basically no restriction on when it can enter ASPM
+>>> L1.0.
+>>>
+>>> I have a hard time interpreting the L1.2 entry conditions in PCIe
+>>> r5.0, sec 5.5.1, but I can believe it enters L1.2 aggressively since
+>>> the device says it can tolerate any latencies.
+>>>
+>>> If L1.2 exit takes 3100us, it could do ~60 L1 exits in 200ms.  I guess
+>>> config accesses and code execution can account for some of that, but
+>>> still seems like a lot of L1 entries/exits during suspend.  I wouldn't
+>>> think we would touch the device that much and that intermittently.
+>>>
+>>>> Signed-off-by: Victor Ding <victording@google.com>
+>>>>
+>>>> ---
+>>>>
+>>>> Changes in v2:
+>>>> - Updated commit message to remove unnecessary information
+>>>> - Fixed a bug reading wrong register in pcie_save_aspm_control
+>>>> - Updated to reuse existing pcie_config_aspm_dev where possible
+>>>> - Fixed goto label style
+>>>>
+>>>>  drivers/pci/pci.c       | 18 +++++++++++++++---
+>>>>  drivers/pci/pci.h       |  6 ++++++
+>>>>  drivers/pci/pcie/aspm.c | 27 +++++++++++++++++++++++++++
+>>>>  include/linux/pci.h     |  1 +
+>>>>  4 files changed, 49 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+>>>> index 32011b7b4c04..9ea88953f90b 100644
+>>>> --- a/drivers/pci/pci.c
+>>>> +++ b/drivers/pci/pci.c
+>>>> @@ -1542,6 +1542,10 @@ static void pci_restore_ltr_state(struct pci_dev *dev)
+>>>>  int pci_save_state(struct pci_dev *dev)
+>>>>  {
+>>>>     int i;
+>>>> +
+>>>> +   pcie_save_aspm_control(dev);
+>>>> +   pcie_disable_aspm(dev);
+>>>
+>>> If I understand this patch correctly, it basically does this:
+>>>
+>>>     pci_save_state
+>>>   +   pcie_save_aspm_control
+>>>   +   pcie_disable_aspm
+>>>       <save state>
+>>>   +   pcie_restore_aspm_control
+>>>
+>>> The <save state> part is just a bunch of config reads with very little
+>>> other code execution.  I'm really surprised that there's enough time
+>>> between config reads for the link to go to L1.  I guess you've
+>>> verified that this does speed up suspend significantly, but this just
+>>> doesn't make sense to me.
+>>>
+>>> In the bugzilla you say the GL9750 can go to L1.2 after ~4us of
+>>> inactivity.  That's enough time for a lot of code execution.  We must
+>>> be missing something.  There's so much PCI traffic during save/restore
+>>> that it should be easy to match up the analyzer trace with the code.
+>>> Can you get any insight into what's going on that way?
+> 
+> Unfortunately I did not and still do not have access to the required analyzers.
+> However, I received an analyzer trace screenshot confirming GL9750 indeed
+> went idle for ~4.2us. (I've attached it to the bugzilla).
+> 
+> I agree that 4us is more than sufficient for a lot of code execution, especially
+> these PCI config space accesses for the same device appear to be fairly
+> close to each other. However, as device resumes occur in parallel and a
+> global mutex is required for each access, these PCI config space accesses
+> from multiple devices are serialized arbitrarily causing accesses from the
+> same device far apart from each other.
+> 
+> The hypothesis came from my observation that PCI config space accesses
+> from different devices in the slow runs were always interleaved, while they
+> were mostly grouped together in the fast runs. To further prove the hypothesis,
+> I added a global lock when save/restore PCI state, forcing the related PCI
+> config space accesses from the same device grouped together, I always got
+> fast runs.
 
-Changes since v8:
-  - Remove unnecessary comments and blank line.
-  - Use devm_add_action_or_reset to ease error handling when dev probe.
-  - Remove .remove callback in plaform driver.
+I also happen to be working with a platform with GL9750 and I can
+confirm Victor's observations and conclusion: PCI config accesses in
+pci_save_state()/pci_restore_state() are so far apart in time because
+they are arbitrarily serialized with PCI config accesses for other
+devices during parallel suspend/resume, since they use the global
+pci_config_lock in pci_conf1_read()/pci_conf1_write().
 
-Changes since v7:
-  - Optimize the code logic, such as the return value and position of a
-    function.
-  - Use devm_pm_runtime_enable() instead of pm_runtime_enable().
-  - Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync().
+By the way, there is an easier way to confirm this conclusion: instead
+of adding a global lock around PCI state save/restore as Victor did,
+we can just disable parallel suspend/resume via
+"echo 0 >/sys/power/pm_async".
 
-Changes since v6:
-  - The Makefile and Kconfig updates are moved into the driver patches so that can
-    keep independence of each patch.
+So it seems we understand what's going on. Can we move forward with
+merging Victor's patch?
 
-Changes since v5:
-  - fix build error about function snd_soc_card_jack_new that modified by:
-    Link: https://lore.kernel.org/r/20220408041114.6024-1-akihiko.odaki@gmail.com
-  - some have been accepted, details are in the link below:
-    Link: https://lore.kernel.org/all/165459931885.399031.2621579592368573898.b4-ty@kernel.org/
+While we're at it, I'm also wondering why for the basic PCI config (the
+first 256 bytes) Linux on x86 always uses the legacy 0xCF8/0xCFC method
+instead of MMCFG, even if MMCFG is available. The legacy method is
+inherently non-atomic and does require the global lock, while the MMCFG
+method generally doesn't, so using MMCFG would significantly speed up
+PCI config accesses in high-contention scenarios like the parallel
+suspend/resume.
 
-Changes since v4:
-  - [v5 07/20]
-    - remove unsusd controls
-  - [v5 09/20]
-    - correct indent error
-  - [v5 10/20]
-  - [v5 13/20]
-  - [v5 14/20]
-    - fix the return value if the value is different from the previous
-      value in mixer controls
-  - [v5 17/20]
-  - [v5 19/20]
-    - correct the compatible name with '_' instead of '-'
-  - [v5 18/20]
-  - [v5 20/20]
-    - correct the yaml after 'pip3 install dtschema --upgrade'
+I've tried the below change which forces using MMCFG for the first 256
+bytes, and indeed, it makes suspend/resume of individual PCI devices
+with pm_async=1 almost as fast as with pm_async=0. In particular, it
+fixes the problem with slow GL9750 suspend/resume even without Victor's
+patch.
 
-Changes since v3:
-  - [v4 09/18]
-    - remove DEBUG_COEFF debugging code
-  - [v4 10/18]
-    - simplify the logic of the code
-  - [v4 13/18]
-    - split out the MT6366 bits into mt8186-mt6366-commom.c
-    - fix build error of "error: 'struct dev_pm_info' has no member named 'runtime_error'"
-    - fix bug of adda dai driver
-    - add route for pcm interface channel 2.
-  - [v4 15/18]
-  - [v4 17/18]
-    - commonize the configuration of the codec
-    - move MT6366 common bits into mt8186-mt6366-common.c
+--- a/arch/x86/pci/common.c
++++ b/arch/x86/pci/common.c
+@@ -40,20 +40,20 @@ const struct pci_raw_ops *__read_mostly raw_pci_ext_ops;
+ int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
+                                                int reg, int len, u32 *val)
+ {
+-       if (domain == 0 && reg < 256 && raw_pci_ops)
+-               return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
+        if (raw_pci_ext_ops)
+                return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
++       if (domain == 0 && reg < 256 && raw_pci_ops)
++               return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
+        return -EINVAL;
+ }
+ 
+ int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
+                                                int reg, int len, u32 val)
+ {
+-       if (domain == 0 && reg < 256 && raw_pci_ops)
+-               return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
+        if (raw_pci_ext_ops)
+                return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
++       if (domain == 0 && reg < 256 && raw_pci_ops)
++               return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
+        return -EINVAL;
+ }
+ 
 
-Changes since v2:
-  - add a new compatible string "mediatek,mt6366-sound"
-  - modify the log level for simplicity
-  - use dev_err_probe(...) instead of dev_err(...) in dev probe()
-  - optimized the logic of some code
-  - use BIT() and GENMASK() macros to descript the registers
+Sounds good if I submit a patch like this? (I'm not suggesting it
+instead of Victor's patch, rather as a separate improvement.)
 
-  Thanks for AngeloGioacchino's careful reviews.
+Thanks,
+Dmytro
 
-Changes since v1:
-  [v2 01/17]
-    - add a new ID to the existing mt6358 codec driver
-  [v2 03/17]
-    - modify log level in DAPM events
-    - use standard numeric control with name ending in Switch
-    - return 1 when the value changed in mixer control's .get callback
-  [v2 05/17]
-    - ending in Switch to the standard on/off controls
-    - change to "HW Gain 1 Volume" and "HW Gain 2 Volume"
-  [v2 09/17]
-    - return an error in the default case rather than just picking one of
-      the behaviours when do .set_fmt
-    - use the new defines that are _PROVIDER_MASK, _DAIFMT_CBP_CFP and
-      _DAIFMT_CBC_CFC
-  [v2 10/17]
-  [v2 11/17]
-    - the clock and gpio are aplit out into separate  patches
-
-  The source file's GPL comment use c++ style, and the header fils's GPL
-  comment use c style. We have added "Switch" after the names of all the
-  controls that just are simple on/off.
-
-Jiaxin Yu (8):
-  dt-bindings: mediatek: mt6358: add new compatible for using mt6366
-  ASoC: mediatek: mt8186: add platform driver
-  ASoC: mediatek: mt8186: add mt8186-mt6366 common driver
-  dt-bindings: mediatek: mt8186: add audio afe document
-  ASoC: mediatek: mt8186: add machine driver with mt6366, da7219 and
-    max98357
-  dt-bindings: mediatek: mt8186: add mt8186-mt6366-da7219-max98357
-    document
-  ASoC: mediatek: mt8186: add machine driver with mt6366, rt1019 and
-    rt5682s
-  dt-bindings: mediatek: mt8186: add mt8186-mt6366-rt1019-rt5682s
-    document
-
- .../devicetree/bindings/sound/mt6358.txt      |    4 +-
- .../bindings/sound/mt8186-afe-pcm.yaml        |  175 +
- .../sound/mt8186-mt6366-da7219-max98357.yaml  |   75 +
- .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |   75 +
- sound/soc/mediatek/Kconfig                    |   44 +
- sound/soc/mediatek/Makefile                   |    1 +
- sound/soc/mediatek/mt8186/Makefile            |   22 +
- sound/soc/mediatek/mt8186/mt8186-afe-clk.c    |    3 +-
- sound/soc/mediatek/mt8186/mt8186-afe-clk.h    |    2 +-
- sound/soc/mediatek/mt8186/mt8186-afe-common.h |  195 ++
- .../soc/mediatek/mt8186/mt8186-afe-control.c  |  255 ++
- sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    | 3000 +++++++++++++++++
- .../mediatek/mt8186/mt8186-mt6366-common.c    |   57 +
- .../mediatek/mt8186/mt8186-mt6366-common.h    |   17 +
- .../mt8186/mt8186-mt6366-da7219-max98357.c    | 1002 ++++++
- .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     |  978 ++++++
- 16 files changed, 5902 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
- create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-max98357.yaml
- create mode 100644 Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
- create mode 100644 sound/soc/mediatek/mt8186/Makefile
- create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-common.h
- create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-control.c
- create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-pcm.c
- create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.c
- create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-common.h
- create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
- create mode 100644 sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-
--- 
-2.18.0
-
+> 
+>>
+>> I'm dropping this for now, pending a better understanding of what's
+>> going on.
+>>
+>>>>     /* XXX: 100% dword access ok here? */
+>>>>     for (i = 0; i < 16; i++) {
+>>>>             pci_read_config_dword(dev, i * 4, &dev->saved_config_space[i]);
+>>>> @@ -1552,18 +1556,22 @@ int pci_save_state(struct pci_dev *dev)
+>>>>
+>>>>     i = pci_save_pcie_state(dev);
+>>>>     if (i != 0)
+>>>> -           return i;
+>>>> +           goto exit;
+>>>>
+>>>>     i = pci_save_pcix_state(dev);
+>>>>     if (i != 0)
+>>>> -           return i;
+>>>> +           goto exit;
+>>>>
+>>>>     pci_save_ltr_state(dev);
+>>>>     pci_save_aspm_l1ss_state(dev);
+>>>>     pci_save_dpc_state(dev);
+>>>>     pci_save_aer_state(dev);
+>>>>     pci_save_ptm_state(dev);
+>>>> -   return pci_save_vc_state(dev);
+>>>> +   i = pci_save_vc_state(dev);
+>>>> +
+>>>> +exit:
+>>>> +   pcie_restore_aspm_control(dev);
+>>>> +   return i;
+>>>>  }
+>>>>  EXPORT_SYMBOL(pci_save_state);
+>>>>
+>>>> @@ -1661,6 +1669,8 @@ void pci_restore_state(struct pci_dev *dev)
+>>>>     if (!dev->state_saved)
+>>>>             return;
+>>>>
+>>>> +   pcie_disable_aspm(dev);
+>>>> +
+>>>>     /*
+>>>>      * Restore max latencies (in the LTR capability) before enabling
+>>>>      * LTR itself (in the PCIe capability).
+>>>> @@ -1689,6 +1699,8 @@ void pci_restore_state(struct pci_dev *dev)
+>>>>     pci_enable_acs(dev);
+>>>>     pci_restore_iov_state(dev);
+>>>>
+>>>> +   pcie_restore_aspm_control(dev);
+>>>> +
+>>>>     dev->state_saved = false;
+>>>>  }
+>>>>  EXPORT_SYMBOL(pci_restore_state);
+>>>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+>>>> index a81459159f6d..e074a0cbe73c 100644
+>>>> --- a/drivers/pci/pci.h
+>>>> +++ b/drivers/pci/pci.h
+>>>> @@ -584,6 +584,9 @@ void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+>>>>  void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
+>>>>  void pci_save_aspm_l1ss_state(struct pci_dev *dev);
+>>>>  void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
+>>>> +void pcie_save_aspm_control(struct pci_dev *dev);
+>>>> +void pcie_restore_aspm_control(struct pci_dev *dev);
+>>>> +void pcie_disable_aspm(struct pci_dev *pdev);
+>>>>  #else
+>>>>  static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+>>>>  static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+>>>> @@ -591,6 +594,9 @@ static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) { }
+>>>>  static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
+>>>>  static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev) { }
+>>>>  static inline void pci_restore_aspm_l1ss_state(struct pci_dev *dev) { }
+>>>> +static inline void pcie_save_aspm_control(struct pci_dev *dev) { }
+>>>> +static inline void pcie_restore_aspm_control(struct pci_dev *dev) { }
+>>>> +static inline void pcie_disable_aspm(struct pci_dev *pdev) { }
+>>>>  #endif
+>>>>
+>>>>  #ifdef CONFIG_PCIE_ECRC
+>>>> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+>>>> index a08e7d6dc248..e1e97db32e8b 100644
+>>>> --- a/drivers/pci/pcie/aspm.c
+>>>> +++ b/drivers/pci/pcie/aspm.c
+>>>> @@ -784,6 +784,33 @@ static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
+>>>>                                        PCI_EXP_LNKCTL_ASPMC, val);
+>>>>  }
+>>>>
+>>>> +void pcie_disable_aspm(struct pci_dev *pdev)
+>>>> +{
+>>>> +   if (!pci_is_pcie(pdev))
+>>>> +           return;
+>>>> +
+>>>> +   pcie_config_aspm_dev(pdev, 0);
+>>>> +}
+>>>> +
+>>>> +void pcie_save_aspm_control(struct pci_dev *pdev)
+>>>> +{
+>>>> +   u16 lnkctl;
+>>>> +
+>>>> +   if (!pci_is_pcie(pdev))
+>>>> +           return;
+>>>> +
+>>>> +   pcie_capability_read_word(pdev, PCI_EXP_LNKCTL, &lnkctl);
+>>>> +   pdev->saved_aspm_ctl = lnkctl & PCI_EXP_LNKCTL_ASPMC;
+>>>> +}
+>>>> +
+>>>> +void pcie_restore_aspm_control(struct pci_dev *pdev)
+>>>> +{
+>>>> +   if (!pci_is_pcie(pdev))
+>>>> +           return;
+>>>> +
+>>>> +   pcie_config_aspm_dev(pdev, pdev->saved_aspm_ctl);
+>>>> +}
+>>>> +
+>>>>  static void pcie_config_aspm_link(struct pcie_link_state *link, u32 state)
+>>>>  {
+>>>>     u32 upstream = 0, dwstream = 0;
+>>>> diff --git a/include/linux/pci.h b/include/linux/pci.h
+>>>> index b32126d26997..a21bfd6e3f89 100644
+>>>> --- a/include/linux/pci.h
+>>>> +++ b/include/linux/pci.h
+>>>> @@ -387,6 +387,7 @@ struct pci_dev {
+>>>>     unsigned int    ltr_path:1;     /* Latency Tolerance Reporting
+>>>>                                        supported from root to here */
+>>>>     u16             l1ss;           /* L1SS Capability pointer */
+>>>> +   u16             saved_aspm_ctl; /* ASPM Control saved at suspend time */
+>>>>  #endif
+>>>>     unsigned int    eetlp_prefix_path:1;    /* End-to-End TLP Prefix */
+>>>>
+>>>>

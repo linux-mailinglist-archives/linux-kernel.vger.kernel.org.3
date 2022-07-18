@@ -2,103 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88AD577F65
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7265577F69
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233951AbiGRKNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        id S233997AbiGRKP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233833AbiGRKM6 (ORCPT
+        with ESMTP id S230240AbiGRKP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:12:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A491CB0B;
-        Mon, 18 Jul 2022 03:12:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CEC5B80E25;
-        Mon, 18 Jul 2022 10:12:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD49FC341C0;
-        Mon, 18 Jul 2022 10:12:49 +0000 (UTC)
-Message-ID: <f3162b4e-a2ab-326b-f905-360dc63bc143@xs4all.nl>
-Date:   Mon, 18 Jul 2022 12:12:47 +0200
+        Mon, 18 Jul 2022 06:15:26 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FD6DFB0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:15:25 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oDNmS-00052z-6f; Mon, 18 Jul 2022 12:15:12 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 770CFB2F94;
+        Mon, 18 Jul 2022 10:15:08 +0000 (UTC)
+Date:   Mon, 18 Jul 2022 12:15:07 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Max Staudt <max@enpas.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
+Message-ID: <20220718101507.eioy2bdcmjkgtacz@pengutronix.de>
+References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
+ <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com>
+ <20220717233842.1451e349.max@enpas.org>
+ <6faf29c7-3e9d-bc21-9eac-710f901085d8@hartkopp.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 0/7] Enable 10bits bitstream for Hantro/G2 HEVC codec
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-References: <20220718083945.200845-1-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220718083945.200845-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gbbsrwdp7reehx4n"
+Content-Disposition: inline
+In-Reply-To: <6faf29c7-3e9d-bc21-9eac-710f901085d8@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/18/22 10:39, Benjamin Gaignard wrote:
-> Since v1 Jernej patches to support 10 bits decoding have been merged.
-> This v2 rebase the previously send patches and add Ezequiel reviewed-by
-> tag.
-> This series add 10bits support for newer hardware blocks (i.e without
-> legacy regs) and for HEVC codec.
-> 
-> It based tested on IMX8MQ with HEVC conformance tests.
-> The results are that all 10bits bitstreams are OK.
-> 
-> The problematic point raise by this series is the question of where 
-> to put HEVC validation function. Does it have to be only hantro_try_ctrl()
-> or shall it be done also in .run().
-> This series doesn't change that behavoir so I will argue in farvor to
-> merge it and to work on this validation time problem when unstaging 
-> the driver.
-> Hans, Ezequiel may that sound acceptable for you ? 
 
-Hmm, the hantro driver will be unstaged either this week or (hopefully)
-very early on in the next cycle. So I think you should no longer consider
-hantro as a staging driver but as a regular mainline driver.
+--gbbsrwdp7reehx4n
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This series definitely won't make the 5.20 cut, so I think it makes more
-sense to get this right before merging it.
+On 18.07.2022 08:57:21, Oliver Hartkopp wrote:
+> > What do the maintainers think of dropping the old "slcan" name, and
+> > just allowing this to be a normal canX device? These patches do bring
+> > it closer to that, after all. In this case, this name string magic
+> > could be dropped altogether.
+> >=20
+>=20
+> I'm fine with it in general. But we have to take into account that there
+> might be existing setups that still might use the slcan_attach or slcand
+> mechanic which will likely break after the kernel update.
+>=20
+> But in the end the slcan0 shows up everywhere - even in log files, etc.
+>=20
+> So we really should name it canX. When people really get in trouble with =
+it,
+> they can rename the network interface name with the 'ip' tool ...
 
-Regards,
+Don't break user space! If you don't like slcanX use udev to give it a
+proper name.
 
-	Hans
+regards,
+Marc
 
-> 
-> Regards,
-> Benjamin
-> 
-> Benjamin Gaignard (7):
->   media: hantro: Store HEVC bit depth in context
->   media: hantro: HEVC: Fix auxilary buffer size calculation
->   media: hantro: HEVC: Fix chroma offset computation
->   media: hantro: postproc: Configure output regs to support 10bit
->   media: Hantro: HEVC: Allows 10-bit bitstream
->   media: hantro: imx8m: Enable 10bit decoding
->   media: hantro: Allows luma and chroma depth to be different
-> 
->  .../staging/media/hantro/hantro_g2_hevc_dec.c |  4 +--
->  drivers/staging/media/hantro/hantro_hevc.c    | 13 +++++----
->  .../staging/media/hantro/hantro_postproc.c    |  7 ++++-
->  drivers/staging/media/hantro/imx8m_vpu_hw.c   | 27 +++++++++++++++++++
->  4 files changed, 40 insertions(+), 11 deletions(-)
-> 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
+--gbbsrwdp7reehx4n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLVMqkACgkQrX5LkNig
+011fVggAhIqvpyjYuqNRGmzUXsKCFCmmzPv58yhfyNhblDiwov4AeO0dmDEgDA9R
+DbWo9aqPKF/KydxOEe+qYVutKrCBkXmZiZepKrVwTFMswcqMxngMytzh/n9eO126
+dNx5xSuPVTP6bEC4U9Y9XXxVguv5UBVTf6UHsIQGErkltdqiITq1QKhYK3hogzkk
+vMfNmWeMrXtFzCCLA6ShHL/7HmCsSvKsD5RD9Tm6I5IVcc5a1iaJPZ6xaYY5FsBc
+tJDGfBZdxEIEi2d4qQix88fLYWtFoBI4pscyWqIvudmuio0ZUJbcE1tNVarP4hya
+XSjg8Lxv6XeKQjymjbBUOjYDPmQgAg==
+=y6Hg
+-----END PGP SIGNATURE-----
+
+--gbbsrwdp7reehx4n--

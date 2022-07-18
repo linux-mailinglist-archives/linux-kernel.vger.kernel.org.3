@@ -2,474 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539E657881D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99C3578801
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235975AbiGRRGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 13:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
+        id S235459AbiGRRC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 13:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235818AbiGRRF6 (ORCPT
+        with ESMTP id S235283AbiGRRCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:05:58 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B602C643
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:05:55 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 23so11133868pgc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:05:55 -0700 (PDT)
+        Mon, 18 Jul 2022 13:02:25 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D322A409
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:02:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658163744; x=1689699744;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=THBLx/sNvC3WNSdwgIBX42PA3igsavB96VhXXe8FnVw=;
+  b=JtxiVWs4ve7FbkqbPDhNTQAhmbQQUHWZhcqq3qTtONXmKhUL6FaRYQZv
+   ia/cB7AVqqgvHHbxZ2/HW6cq2BJNQ0Gp9oFNbufutRSLhPII5mKEYLc8Z
+   BpFIb+BcLQ9L6Xnw5FoFt8Antjj4nFTET44l28tSw3W6ae03LKXR8CoGG
+   VFMon8rydrGXC8IWhXfkcJasDEYsDbQktYZD+FBLTx4+IAH52FkD5BGck
+   svx+j1llkqEIEXEG46JP/ZVgKw+riOVyyB70PZR+ZQUC4yK1YpACR3rc8
+   cuDxKGTsuOQdhSjO+3aIkleY0iVVmMu6ZtDWyb7ZHZQmk4gQexRTq8If+
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="104979021"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Jul 2022 10:02:23 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 18 Jul 2022 10:02:23 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Mon, 18 Jul 2022 10:02:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ri7LqszW0gY4htrbjvaJt38TDJfDocECnnwhW0S2YlGpmUiLWJhdZeZsw/CBi3wvG8teC3yRCA0jkjzW+JyXC0D0lgKAr3grrFcGPRcBOa/GB92KiH4oFcO3s8/HwXUlw+b4mdHDy6eIrLkTN3JKbSYcNwioksev/C5i8sZf8zVYwffbSyIXJOPJPd0rQAjeZqPfc8aPzQt2AlcSHgCSvOtGMWjA23/kz1no5wADE2xFjMHzHDNtZovXOx6nFjbLY/lzOe075/DdO7spAeufa7I/VCi+CsLb8jzvRxNyNCT1R0/QdExpeJbq40EdWE8JSdQ9vJJNBOQZNRTkDxLbzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=THBLx/sNvC3WNSdwgIBX42PA3igsavB96VhXXe8FnVw=;
+ b=mD6kXMf9v26K7UWFIS6wQalOWhkeGsC/B9t4Rz3BDdhhbrRWfZ83EaluEjjmofT9NNfzyfxCp2nT6zpHv1w5AAu/JqRYLrd1DxGVOIBr4hpg7Em8Mihcr3Q0IH/PzEM0DrSlU7q6OHroBJQBEr/xnN6w8Mf8KRcT9zKf8VM3sSdkUVfwMak/eHFUSw8lnuHaM4EnNG1gbDwVht5J5fl6g7ngBNeUoUOtRqbETtmrPytetO65UgOyk/4lgIrVN6wN7hugcPlJYQg96odn4C4e7o7vuGuGVyWxGd+3YTmTBHSwUHlYwlLMVrg9yfXEV6vAWK7oPEo7k8PTBTvfV8iqLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oOsWXe1XlE7Dvyt6YnaIl4l/lBbF3+FHoY2EVuHBogc=;
-        b=yDEh3i7cvGOG1Tg6a3LH5g6p9IZ71ROXWiKkAcCBDzpRGIkynsCnDocSHaB+p5lMtJ
-         un3KvvMO1rR4R6lnmasBC5U/GtKZCLfazzQczKJ460Swi58kGxQQGVKHHLwGSZmXg52d
-         jAtF35upbVQffkVvkequyyH558IkEUcoc8q2Ta0kG9/goGLIh6PxPSMEhL/edqqRa/RU
-         3SY6aBwkzzhR/2uFSpIH2LMHaADdwA9v2eYNcHXpv5YnJIYXvNJVnj53+Dslhe2tZold
-         mCQD+57SYP0fEBMAGQSZHaskYwdskEPm0nGJwtL0AYAaeMlsu4wrXigjxkFByncTorSX
-         Lt7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oOsWXe1XlE7Dvyt6YnaIl4l/lBbF3+FHoY2EVuHBogc=;
-        b=H8Xqtudcw19xvJffhApz2xy4dD0uSCZEf0vKWAdSMzNeVar9qxFfdY1t1KSwK2RvEr
-         r3L4vLxDVF23Z6kvhKPNvi2QfJs5CZIgXoWJgDzBGcSpVC7SBBxBHswoeH0RtaBawQQZ
-         ToqQdKEB/yEXHBVsUrIydlY0AoREVWbVmty5P6IlQ/q8S/lF8J1h/UGS/nLoVURVMuy+
-         nFSObYEpJ6kK+UXy1eueOO8EZ43cbIXbm+GolfgyvCWY3bWM4z16tde9qmBiXQXx0ZOs
-         NQGcoNZJHOnxyJ3XQUQRJRaIe2CfFE6ByZdJcVYnknNNMF0EG9OO7kLf74jWedNKizOc
-         c2jw==
-X-Gm-Message-State: AJIora+wXJZakG80tJP87FbWCp9RHq8T+gDqiM5BqDDRdH9kFbuGgTps
-        JIk7Js1v9yZbcEpkfh1Y0sPEMj+ujHfedA==
-X-Google-Smtp-Source: AGRyM1u3Q+C0LQCywanESfw4GyKuwBIrIwjITjzR6A1JvgUVZ5Tnlck04W/lkZFWguLgJ06YyWcaMA==
-X-Received: by 2002:a63:3101:0:b0:419:a4c7:649a with SMTP id x1-20020a633101000000b00419a4c7649amr23650792pgx.199.1658163954901;
-        Mon, 18 Jul 2022 10:05:54 -0700 (PDT)
-Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id r10-20020a170902be0a00b0016bc947c5b7sm9733402pls.38.2022.07.18.10.05.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 10:05:54 -0700 (PDT)
-From:   Atish Patra <atishp@rivosinc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: [RFC  9/9] RISC-V: KVM: Implement firmware events
-Date:   Mon, 18 Jul 2022 10:02:05 -0700
-Message-Id: <20220718170205.2972215-10-atishp@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220718170205.2972215-1-atishp@rivosinc.com>
-References: <20220718170205.2972215-1-atishp@rivosinc.com>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=THBLx/sNvC3WNSdwgIBX42PA3igsavB96VhXXe8FnVw=;
+ b=loBddJsdlvDqhnJsG8XhKWW1IeT1a4x9xKHa8ur5CXsuu9RzUR2JYZK3dpjv4gs+OvwloL1stPyNqHwNP64x6V1VQgFJoMwlt2BRN7GxNZ4pj20DIoKaBwSz4XXjuVRXjBDcdQDAvI4tyAVfeHLzljIF4MKfZjVd8PedL2hGoLM=
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) by
+ SJ0PR11MB5053.namprd11.prod.outlook.com (2603:10b6:a03:2af::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.13; Mon, 18 Jul
+ 2022 17:02:18 +0000
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::1954:e4ab:eafd:9cb4]) by DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::1954:e4ab:eafd:9cb4%5]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
+ 17:02:17 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <sudip.mukherjee@sifive.com>, <p.yadav@ti.com>, <michael@walle.cc>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>
+CC:     <greentime.hu@sifive.com>, <jude.onyenegecha@sifive.com>,
+        <william.salmon@sifive.com>, <adnan.chowdhury@sifive.com>,
+        <ben.dooks@sifive.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] mtd: spi-nor: add support for Quad Page Program to
+ no_sfdp_flags
+Thread-Topic: [PATCH 2/3] mtd: spi-nor: add support for Quad Page Program to
+ no_sfdp_flags
+Thread-Index: AQHYmsgjen1JGDoDVkiRJKdzpaguzQ==
+Date:   Mon, 18 Jul 2022 17:02:17 +0000
+Message-ID: <3a9877d0-3cc5-6452-764b-d07b38c72b00@microchip.com>
+References: <20220712163823.428126-1-sudip.mukherjee@sifive.com>
+ <20220712163823.428126-3-sudip.mukherjee@sifive.com>
+In-Reply-To: <20220712163823.428126-3-sudip.mukherjee@sifive.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: eb8e12a4-fdae-4ff9-e84e-08da68df4581
+x-ms-traffictypediagnostic: SJ0PR11MB5053:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yPoDQdel0Ba6s1L6/ZoXjhTJPjC0klm5DdHxcBHNG3sJNYzKCQmxRfj7RG69NykgvwyU7ZiRHZw2tDMBznGTVNUJxaoTamY9JwCxoLbwFqzFrfrkoX87yqKjEQgSq2Jrvp3duSQhgEtXIKMHNVpMmWYlEZ+cJ06QXMY2cyShi0EHUN6tJfgu45y9tVHtpXJdgoYllw8ZvscnAPUPWLiQ9mwoCsUahIhAiFJrePY2J/zYabWZ+FMZI955Dd1akTe7z7G8T8wA67aFvC+7mSQBSWVV0II/9W9NrD3SfEG8/RREPe+GOrgIFqUvRo06Flzow2S3yJBzB9/rvKRNoOQyIgkmiGinZa6w0F6KXs0VC93Jc3s0wDjtuOYgMNOJyq7NpbPF+qA43Hk8/L5fzuF2GtOlpf8kIhaMvQTvNFzxncNVLzNwpBEsghKHwgjEB/8Tu+DX++t7XFsSJKE24Kaf8mLHLB1Zyl2RuW6r+jrUUdZwM5IqVct6gkR4A6WMRjbsP9WSY8cW5HcZDKo8McoH0b+3/pzpZBbMRxk5YihM7NA0saWIyBQvIohQt6KJfEZz7jSSg/RUSMqZMH2IxG23Jsj+lwH2vgEj83JL4aQEfXhiHx4+bctsBwFW0SS690zwLTk9MVppAyTWCIUzWraYRBdl7zmpHjo9VOyfXgemcfgMiGoz7SkiwaRE/XiIvAY8LabPZ+RpjEyCnjEevoa6UqOIMMRk9PNITyNmqUYY9+Nr2iI7RiZe9TYOv8T1oTNCwoKuhU9IgHcpkLhDfLsLrZbfHFgQdcUafW2E5DHHiWTj/w7cA4mzKWP9y4iis4+A7Kj3+zleHbfZUBsxVB1vbydqeM8T+ObeyQQwCAEWzHMdhLRpukK4FQBcxZaQZ7UN
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6479.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(346002)(396003)(136003)(366004)(376002)(8936002)(66556008)(76116006)(7416002)(4326008)(66946007)(5660300002)(8676002)(64756008)(66446008)(66476007)(54906003)(2906002)(26005)(86362001)(31696002)(122000001)(38070700005)(71200400001)(83380400001)(966005)(478600001)(6486002)(186003)(91956017)(316002)(31686004)(53546011)(41300700001)(2616005)(6506007)(38100700002)(110136005)(6512007)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RUM0N1dCMWQvdDE3Q3h5KzZHcVp0N3Ixd0NWT3p3Zk1kQXVCTDJRbjczbURq?=
+ =?utf-8?B?NnJDbXNCOHR4V3Q2cWV3U2hKdXRMcUd1Q3I0VEV4OFozdWc2S0FjL09FcEJo?=
+ =?utf-8?B?WG9ucDBaWEtOSGlQU3IvSGFsaHhlcU9POHFhU3h5THpSUVNsMWRTb1NNQUp4?=
+ =?utf-8?B?U2hJaENnRVAwK2RXSWZ1VWhzZjJFZGZpZmlocXFMa3VsaDNtMjArVHg1TVVv?=
+ =?utf-8?B?VDZCSWMxWDBHRFY2eTBCN0dSbDhhNmttU2grQjNuRFZKaURjRGxZSmdRZFZy?=
+ =?utf-8?B?VWV2U2F3NHpoZ3RNaWEwZmpNOWNNRklYMnV2bVVwa3V2MUJvTjJ5RUlKa0pQ?=
+ =?utf-8?B?TlpQd2ZaK0xrVGdEUTRrcDNnSmtFa29QVG5LZ3QyeS9xR1NoU21aQm5xT1Zj?=
+ =?utf-8?B?QmV0cWh0NXBUaUJJdHVJbmxQd3hCL2JQYSt2TkhlOGNQdEJWNjg2RG1oclZk?=
+ =?utf-8?B?bEo2V2hRd0ZvUjdWbUJFcEZDTHJRaUVsNU14MlNLUmdVK2U1WUx1R1JCRHg0?=
+ =?utf-8?B?ZG56dHltQXVoRHlIN3Y0UlY0SlZvSEppVzY2UnlhSjJxZ2RrYzRienRLV2sv?=
+ =?utf-8?B?NzZwLzJBM0JxOXVuUUtKaVh0N1lMcmFrS2s2R0oxamI0NUFIa0I3TlZDVjRp?=
+ =?utf-8?B?MnJodEErbnRvb1dDYlJ0TmFBSHB2dEdoRUhFem5SdkY5dEJGc0J4SmFzOUpK?=
+ =?utf-8?B?b1lDaXVDVjNTQVRhQUdWc1drd296VmpoNVNjTGpsejhYeWpMRGhsZktGank4?=
+ =?utf-8?B?a2JNUlZ0bFhoTU96YWhUelNwMldDbk9ucUlmNENGcHF4dTRxWmU2eGxqdFpY?=
+ =?utf-8?B?bmlzZG9zTW81ZGUrYWZkN3hkNGd5QzcraGtqakc0RkVrd0NDKzBNVGJlQzVx?=
+ =?utf-8?B?TWRDS1FWWWs0dVhOLzhSb1kzRW1yVkd0VERUaUNnWFJIaGs1RlhiTWVRazBC?=
+ =?utf-8?B?d2E2RkRva1ozTjNVTVMzOUhEc0VFLzNuU1lJbkEwQTdaMktsTXlxYjROdWcx?=
+ =?utf-8?B?ZjRHTkF3K1plUitaU1JybHByNXZlVkZnQU96VnBYTWFrcDZkdUwyOE41VmJK?=
+ =?utf-8?B?blg3WVVKVFg1Z0hKb2pFWDVKcEE3R29pQm5XNHZZSkhIWHdjcG1jR2c3cFoy?=
+ =?utf-8?B?ZjhBOVIrdnFCdDAwMXJ0Z2ZmWjZ2bVlBUEFxN2FaR1JGdGhwdGVGNHV3Y0Ra?=
+ =?utf-8?B?V29oMVZhc2FQSm4rbkZ6N0h0OUZXaTFYa0gwZlRWQ1o5b000dUJQNzdJUVNJ?=
+ =?utf-8?B?T280K0ZsZGtYVWtycXZINHpnaElhckpmbGdEc2pvUnMzRDhFQUlYQjVkNlQv?=
+ =?utf-8?B?NmVjSVhIb0NmbG4rSGJtUHFkQXhhQ3NyZjFZZXovK0dRRE9qWG1IT2xTUzZa?=
+ =?utf-8?B?ZzlnUjdkSmgrbDRjTll6bWgvTjFoMjBscjdCa2lnMHEvek9wdHRmam9HUWhW?=
+ =?utf-8?B?SkJUL255d0hvekdpUDFmVlFaWElSeHExYlZubUtzWUFYcGRtYnVkN1pnMVI1?=
+ =?utf-8?B?MUUyUUxySklVK1d3MHl6VXlFcmtjUnNDOXRqZEJIS2RLdUFHLzZqMGdnTVhh?=
+ =?utf-8?B?U1VKVjNmRklJb3lhT3JDUUFnb3ZtbGdpbTlrOC9BQ3F2ZllUK0pQQ2xLbU9N?=
+ =?utf-8?B?ZlRHTlJwc2djL3VVblVxZzVYT1lnMjFWWkZmMUl6dVJsTkYvMnpjY2VMcURM?=
+ =?utf-8?B?Y09OL2w0K1JLQW94U3dMUmVxYVBwOUxHWDdvcHVoaWtLcU1Rejd4NFhpSzF5?=
+ =?utf-8?B?RUVKOGdJclJYakVEeGcvOTA3R2NGbXMzZkJOTks2UTZZdlZFaHIybCtUdXYv?=
+ =?utf-8?B?Vk1wZjhKelJMejJPdlRsU0RpcjlPL0lyT2lOL3d2M2JEcCs2aWVsVkUvcHVE?=
+ =?utf-8?B?U3lodk5JMjlRZFRJZ2lrSE90czdkQkxNMG1lUFROTWovVUdiL3BtNmtjamZ5?=
+ =?utf-8?B?UnhpU2wwVUZ0Y0RPQlpuVzVnaXRyQVZzNXlUK0ZRVVJsMEU2YnpTUFR6R2tV?=
+ =?utf-8?B?em1ySGFLYVpUZGRNR0QyZ2lKdm5qV1MzWGdBdlRCL0xiVlhGamMyQmhqT1l1?=
+ =?utf-8?B?aHJuQlprVmFzVlBMb2VVRkNQck5FQzVqQ1pUS2I4UmZadkxmc2g5WkpjY0tB?=
+ =?utf-8?B?YUNvVTVkWE8rd2ppL0VMeDVKenpEZ2lRbFVNTWdYWXZzM3BjVm1renhWZVpK?=
+ =?utf-8?B?bkE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AAD883B69ABC2E41B30CCD33B2551F80@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6479.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb8e12a4-fdae-4ff9-e84e-08da68df4581
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2022 17:02:17.9171
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ggzvT9QtgOdfyKrtTRs19LesuLuWLwigvKn+c9vF5UsBWRuCaywAnLw6No5ehPsLbogGuCtZMfKoHBfGQhjbfb6iMUGx/VLkBwAn/FIgMN8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5053
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SBI PMU extension defines a set of firmware events which can provide
-useful information to guests about number of SBI calls. As hypervisor
-implements the SBI PMU extension, these firmware events corresponds
-to ecall invocations between VS->HS mode. All other firmware events
-will always report zero if monitored as KVM doesn't implement them.
-
-Signed-off-by: Atish Patra <atishp@rivosinc.com>
----
- arch/riscv/include/asm/kvm_vcpu_pmu.h | 16 +++++
- arch/riscv/include/asm/sbi.h          |  2 +-
- arch/riscv/kvm/tlb.c                  |  6 +-
- arch/riscv/kvm/vcpu_pmu.c             | 90 +++++++++++++++++++++++----
- arch/riscv/kvm/vcpu_sbi_replace.c     |  7 +++
- 5 files changed, 106 insertions(+), 15 deletions(-)
-
-diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-index 5410236b62a8..d68b17ea796b 100644
---- a/arch/riscv/include/asm/kvm_vcpu_pmu.h
-+++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-@@ -15,6 +15,14 @@
- #ifdef CONFIG_RISCV_PMU_SBI
- #define RISCV_KVM_MAX_FW_CTRS 32
- 
-+struct kvm_fw_event {
-+	/* Current value of the event */
-+	unsigned long value;
-+
-+	/* Event monitoring status */
-+	bool started;
-+};
-+
- /* Per virtual pmu counter data */
- struct kvm_pmc {
- 	u8 idx;
-@@ -22,11 +30,14 @@ struct kvm_pmc {
- 	struct perf_event *perf_event;
- 	uint64_t counter_val;
- 	union sbi_pmu_ctr_info cinfo;
-+	/* Monitoring event ID */
-+	unsigned long event_idx;
- };
- 
- /* PMU data structure per vcpu */
- struct kvm_pmu {
- 	struct kvm_pmc pmc[RISCV_MAX_COUNTERS];
-+	struct kvm_fw_event fw_event[RISCV_KVM_MAX_FW_CTRS];
- 	/* Number of the virtual firmware counters available */
- 	int num_fw_ctrs;
- 	/* Number of the virtual hardware counters available */
-@@ -48,6 +59,7 @@ struct kvm_pmu {
- { .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
- #endif
- 
-+int kvm_riscv_vcpu_pmu_incr_fw(struct kvm_vcpu *vcpu, unsigned long fid);
- int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
- 				unsigned long *val, unsigned long new_val,
- 				unsigned long wr_mask);
-@@ -75,6 +87,10 @@ struct kvm_pmu {
- #define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
- { .base = 0,      .count = 0, .func = NULL },
- 
-+static inline int kvm_riscv_vcpu_pmu_incr_fw(struct kvm_vcpu *vcpu, unsigned long fid)
-+{
-+	return 0;
-+}
- 
- static inline int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
- {
-diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index 2a0ef738695e..a192a95a34eb 100644
---- a/arch/riscv/include/asm/sbi.h
-+++ b/arch/riscv/include/asm/sbi.h
-@@ -171,7 +171,7 @@ enum sbi_pmu_fw_generic_events_t {
- 	SBI_PMU_FW_IPI_SENT		= 6,
- 	SBI_PMU_FW_IPI_RECVD		= 7,
- 	SBI_PMU_FW_FENCE_I_SENT		= 8,
--	SBI_PMU_FW_FENCE_I_RECVD	= 9,
-+	SBI_PMU_FW_FENCE_I_RCVD		= 9,
- 	SBI_PMU_FW_SFENCE_VMA_SENT	= 10,
- 	SBI_PMU_FW_SFENCE_VMA_RCVD	= 11,
- 	SBI_PMU_FW_SFENCE_VMA_ASID_SENT	= 12,
-diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
-index 1a76d0b1907d..0793d39e8ff7 100644
---- a/arch/riscv/kvm/tlb.c
-+++ b/arch/riscv/kvm/tlb.c
-@@ -240,6 +240,7 @@ void kvm_riscv_local_tlb_sanitize(struct kvm_vcpu *vcpu)
- 
- void kvm_riscv_fence_i_process(struct kvm_vcpu *vcpu)
- {
-+	kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_FENCE_I_RCVD);
- 	local_flush_icache_all();
- }
- 
-@@ -323,15 +324,18 @@ void kvm_riscv_hfence_process(struct kvm_vcpu *vcpu)
- 						d.addr, d.size, d.order);
- 			break;
- 		case KVM_RISCV_HFENCE_VVMA_ASID_GVA:
-+			kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_ASID_RCVD);
- 			kvm_riscv_local_hfence_vvma_asid_gva(
- 						READ_ONCE(v->vmid), d.asid,
- 						d.addr, d.size, d.order);
- 			break;
- 		case KVM_RISCV_HFENCE_VVMA_ASID_ALL:
-+			kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_ASID_RCVD);
- 			kvm_riscv_local_hfence_vvma_asid_all(
- 						READ_ONCE(v->vmid), d.asid);
- 			break;
- 		case KVM_RISCV_HFENCE_VVMA_GVA:
-+			kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_RCVD);
- 			kvm_riscv_local_hfence_vvma_gva(
- 						READ_ONCE(v->vmid),
- 						d.addr, d.size, d.order);
-@@ -382,7 +386,7 @@ void kvm_riscv_fence_i(struct kvm *kvm,
- 		       unsigned long hbase, unsigned long hmask)
- {
- 	make_xfence_request(kvm, hbase, hmask, KVM_REQ_FENCE_I,
--			    KVM_REQ_FENCE_I, NULL);
-+		    KVM_REQ_FENCE_I, NULL);
- }
- 
- void kvm_riscv_hfence_gvma_vmid_gpa(struct kvm *kvm,
-diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-index 278c261efad3..f451d7ac2608 100644
---- a/arch/riscv/kvm/vcpu_pmu.c
-+++ b/arch/riscv/kvm/vcpu_pmu.c
-@@ -168,21 +168,39 @@ static int pmu_get_pmc_index(struct kvm_pmu *pmu, unsigned long eidx,
- 	return pmu_get_programmable_pmc_index(pmu, eidx, cbase, cmask);
- }
- 
-+int kvm_riscv_vcpu_pmu_incr_fw(struct kvm_vcpu *vcpu, unsigned long fid)
-+{
-+	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-+	struct kvm_fw_event *fevent;
-+
-+	if (!kvpmu || fid >= SBI_PMU_FW_MAX)
-+		return -EINVAL;
-+
-+	fevent = &kvpmu->fw_event[fid];
-+	if (fevent->started)
-+		fevent->value++;
-+
-+	return 0;
-+}
-+
- int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
- 				unsigned long *out_val)
- {
- 	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
- 	struct kvm_pmc *pmc;
- 	u64 enabled, running;
-+	int fevent_code;
- 
- 	if (!kvpmu)
- 		return -EINVAL;
- 
- 	pmc = &kvpmu->pmc[cidx];
--	if (!pmc->perf_event)
--		return -EINVAL;
- 
--	pmc->counter_val += perf_event_read_value(pmc->perf_event, &enabled, &running);
-+	if (pmc->cinfo.type == SBI_PMU_CTR_TYPE_FW) {
-+		fevent_code = get_event_code(pmc->event_idx);
-+		pmc->counter_val = kvpmu->fw_event[fevent_code].value;
-+	} else if (pmc->perf_event)
-+		pmc->counter_val += perf_event_read_value(pmc->perf_event, &enabled, &running);
- 	*out_val = pmc->counter_val;
- 
- 	return 0;
-@@ -237,6 +255,7 @@ int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
- 	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
- 	int i, num_ctrs, pmc_index;
- 	struct kvm_pmc *pmc;
-+	int fevent_code;
- 
- 	num_ctrs = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
- 	if (ctr_base + __fls(ctr_mask) >= num_ctrs)
-@@ -250,7 +269,14 @@ int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
- 		pmc = &kvpmu->pmc[pmc_index];
- 		if (flag & SBI_PMU_START_FLAG_SET_INIT_VALUE)
- 			pmc->counter_val = ival;
--		if (pmc->perf_event) {
-+		if (pmc->cinfo.type == SBI_PMU_CTR_TYPE_FW) {
-+			fevent_code = get_event_code(pmc->event_idx);
-+			if (fevent_code >= SBI_PMU_FW_MAX)
-+				return -EINVAL;
-+
-+			kvpmu->fw_event[fevent_code].started = true;
-+			kvpmu->fw_event[fevent_code].value = pmc->counter_val;
-+		} else if (pmc->perf_event) {
- 			perf_event_period(pmc->perf_event, pmu_get_sample_period(pmc));
- 			perf_event_enable(pmc->perf_event);
- 		}
-@@ -266,6 +292,7 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
- 	int i, num_ctrs, pmc_index;
- 	u64 enabled, running;
- 	struct kvm_pmc *pmc;
-+	int fevent_code;
- 
- 	num_ctrs = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
- 	if ((ctr_base + __fls(ctr_mask)) >= num_ctrs)
-@@ -277,7 +304,12 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
- 		if (!test_bit(pmc_index, kvpmu->used_pmc))
- 			continue;
- 		pmc = &kvpmu->pmc[pmc_index];
--		if (pmc->perf_event) {
-+		if (pmc->cinfo.type == SBI_PMU_CTR_TYPE_FW) {
-+			fevent_code = get_event_code(pmc->event_idx);
-+			if (fevent_code >= SBI_PMU_FW_MAX)
-+				return -EINVAL;
-+			kvpmu->fw_event[fevent_code].started = false;
-+		} else if (pmc->perf_event) {
- 			/* Stop counting the counter */
- 			perf_event_disable(pmc->perf_event);
- 			if (flag & SBI_PMU_STOP_FLAG_RESET) {
-@@ -285,9 +317,12 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
- 				pmc->counter_val += perf_event_read_value(pmc->perf_event,
- 									  &enabled, &running);
- 				pmu_release_perf_event(pmc);
--				clear_bit(pmc_index, kvpmu->used_pmc);
- 			}
- 		}
-+		if (flag & SBI_PMU_STOP_FLAG_RESET) {
-+			pmc->event_idx = SBI_PMU_EVENT_IDX_INVALID;
-+			clear_bit(pmc_index, kvpmu->used_pmc);
-+		}
- 	}
- 
- 	return 0;
-@@ -303,14 +338,19 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
- 	int num_ctrs, ctr_idx;
- 	u32 etype = pmu_get_perf_event_type(eidx);
- 	u64 config;
--	struct kvm_pmc *pmc;
-+	struct kvm_pmc *pmc = NULL;
-+	bool is_fevent;
-+	unsigned long event_code;
- 
- 	num_ctrs = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
- 	if ((etype == PERF_TYPE_MAX) || ((ctr_base + __fls(ctr_mask)) >= num_ctrs))
- 		return -EINVAL;
- 
--	if (pmu_is_fw_event(eidx))
-+	event_code = get_event_code(eidx);
-+	is_fevent = pmu_is_fw_event(eidx);
-+	if (is_fevent && event_code >= SBI_PMU_FW_MAX)
- 		return -EOPNOTSUPP;
-+
- 	/*
- 	 * SKIP_MATCH flag indicates the caller is aware of the assigned counter
- 	 * for this event. Just do a sanity check if it already marked used.
-@@ -319,13 +359,23 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
- 		if (!test_bit(ctr_base, kvpmu->used_pmc))
- 			return -EINVAL;
- 		ctr_idx = ctr_base;
--		goto match_done;
-+		if (is_fevent)
-+			goto perf_event_done;
-+		else
-+			goto match_done;
- 	}
- 
- 	ctr_idx = pmu_get_pmc_index(kvpmu, eidx, ctr_base, ctr_mask);
- 	if (ctr_idx < 0)
- 		return -EOPNOTSUPP;
- 
-+	/*
-+	 * No need to create perf events for firmware events as the firmware counter
-+	 * is supposed to return the measurement of VS->HS mode invocations.
-+	 */
-+	if (is_fevent)
-+		goto perf_event_done;
-+
- match_done:
- 	pmc = &kvpmu->pmc[ctr_idx];
- 	pmu_release_perf_event(pmc);
-@@ -363,17 +413,26 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
- 		return -EOPNOTSUPP;
- 	}
- 
--	set_bit(ctr_idx, kvpmu->used_pmc);
- 	pmc->perf_event = event;
--	if (flag & SBI_PMU_CFG_FLAG_AUTO_START)
--		perf_event_enable(pmc->perf_event);
-+perf_event_done:
-+	if (flag & SBI_PMU_CFG_FLAG_AUTO_START) {
-+		if (is_fevent)
-+			kvpmu->fw_event[event_code].started = true;
-+		else
-+			perf_event_enable(pmc->perf_event);
-+	}
-+	/* This should be only true for firmware events */
-+	if (!pmc)
-+		pmc = &kvpmu->pmc[ctr_idx];
-+	pmc->event_idx = eidx;
-+	set_bit(ctr_idx, kvpmu->used_pmc);
- 
- 	return ctr_idx;
- }
- 
- int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
- {
--	int i = 0, num_hw_ctrs, num_fw_ctrs, hpm_width;
-+	int i, num_hw_ctrs, num_fw_ctrs, hpm_width;
- 	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
- 	struct kvm_pmc *pmc;
- 
-@@ -395,6 +454,7 @@ int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
- 	bitmap_zero(kvpmu->used_pmc, RISCV_MAX_COUNTERS);
- 	kvpmu->num_hw_ctrs = num_hw_ctrs;
- 	kvpmu->num_fw_ctrs = num_fw_ctrs;
-+	memset(&kvpmu->fw_event, 0, SBI_PMU_FW_MAX * sizeof(struct kvm_fw_event));
- 	/*
- 	 * There is no corelation betwen the logical hardware counter and virtual counters.
- 	 * However, we need to encode a hpmcounter CSR in the counter info field so that
-@@ -409,6 +469,7 @@ int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
- 		pmc->idx = i;
- 		pmc->counter_val = 0;
- 		pmc->vcpu = vcpu;
-+		pmc->event_idx = SBI_PMU_EVENT_IDX_INVALID;
- 		if (i < kvpmu->num_hw_ctrs) {
- 			kvpmu->pmc[i].cinfo.type = SBI_PMU_CTR_TYPE_HW;
- 			if (i < 3)
-@@ -444,7 +505,10 @@ void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu)
- 	for_each_set_bit(i, kvpmu->used_pmc, RISCV_MAX_COUNTERS) {
- 		pmc = &kvpmu->pmc[i];
- 		pmu_release_perf_event(pmc);
-+		pmc->counter_val = 0;
-+		pmc->event_idx = SBI_PMU_EVENT_IDX_INVALID;
- 	}
-+	memset(&kvpmu->fw_event, 0, SBI_PMU_FW_MAX * sizeof(struct kvm_fw_event));
- }
- 
- void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu)
-diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
-index 4c034d8a606a..614ae127e102 100644
---- a/arch/riscv/kvm/vcpu_sbi_replace.c
-+++ b/arch/riscv/kvm/vcpu_sbi_replace.c
-@@ -12,6 +12,7 @@
- #include <asm/csr.h>
- #include <asm/sbi.h>
- #include <asm/kvm_vcpu_timer.h>
-+#include <asm/kvm_vcpu_pmu.h>
- #include <asm/kvm_vcpu_sbi.h>
- 
- static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-@@ -25,6 +26,7 @@ static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 	if (cp->a6 != SBI_EXT_TIME_SET_TIMER)
- 		return -EINVAL;
- 
-+	kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_SET_TIMER);
- #if __riscv_xlen == 32
- 	next_cycle = ((u64)cp->a1 << 32) | (u64)cp->a0;
- #else
-@@ -55,6 +57,7 @@ static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 	if (cp->a6 != SBI_EXT_IPI_SEND_IPI)
- 		return -EINVAL;
- 
-+	kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_IPI_SENT);
- 	kvm_for_each_vcpu(i, tmp, vcpu->kvm) {
- 		if (hbase != -1UL) {
- 			if (tmp->vcpu_id < hbase)
-@@ -65,6 +68,7 @@ static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
- 		ret = kvm_riscv_vcpu_set_interrupt(tmp, IRQ_VS_SOFT);
- 		if (ret < 0)
- 			break;
-+		kvm_riscv_vcpu_pmu_incr_fw(tmp, SBI_PMU_FW_IPI_RECVD);
- 	}
- 
- 	return ret;
-@@ -89,6 +93,7 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
- 	switch (funcid) {
- 	case SBI_EXT_RFENCE_REMOTE_FENCE_I:
- 		kvm_riscv_fence_i(vcpu->kvm, hbase, hmask);
-+		kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_FENCE_I_SENT);
- 		break;
- 	case SBI_EXT_RFENCE_REMOTE_SFENCE_VMA:
- 		if (cp->a2 == 0 && cp->a3 == 0)
-@@ -96,6 +101,7 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
- 		else
- 			kvm_riscv_hfence_vvma_gva(vcpu->kvm, hbase, hmask,
- 						  cp->a2, cp->a3, PAGE_SHIFT);
-+		kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_SENT);
- 		break;
- 	case SBI_EXT_RFENCE_REMOTE_SFENCE_VMA_ASID:
- 		if (cp->a2 == 0 && cp->a3 == 0)
-@@ -106,6 +112,7 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
- 						       hbase, hmask,
- 						       cp->a2, cp->a3,
- 						       PAGE_SHIFT, cp->a4);
-+		kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_ASID_SENT);
- 		break;
- 	case SBI_EXT_RFENCE_REMOTE_HFENCE_GVMA:
- 	case SBI_EXT_RFENCE_REMOTE_HFENCE_GVMA_VMID:
--- 
-2.25.1
-
+T24gNy8xMi8yMiAxOTozOCwgU3VkaXAgTXVraGVyamVlIHdyb3RlOg0KPiBbWW91IGRvbid0IG9m
+dGVuIGdldCBlbWFpbCBmcm9tIHN1ZGlwLm11a2hlcmplZUBzaWZpdmUuY29tLiBMZWFybiB3aHkg
+dGhpcyBpcyBpbXBvcnRhbnQgYXQgaHR0cHM6Ly9ha2EubXMvTGVhcm5BYm91dFNlbmRlcklkZW50
+aWZpY2F0aW9uIF0NCj4gDQo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Ig
+b3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiAN
+Cj4gU29tZSBmbGFzaCBjaGlwcyB3aGljaCBkb2VzIG5vdCBoYXZlIGEgU0ZEUCB0YWJsZSBjYW4g
+c3VwcG9ydCBRdWFkDQo+IElucHV0IFBhZ2UgUHJvZ3JhbS4gRW5hYmxlIGl0IGluIGh3Y2FwcyBp
+ZiBkZWZpbmVkLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogU3VkaXAgTXVraGVyamVlIDxzdWRpcC5t
+dWtoZXJqZWVAc2lmaXZlLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL210ZC9zcGktbm9yL2NvcmUu
+YyB8IDUgKysrKysNCj4gIGRyaXZlcnMvbXRkL3NwaS1ub3IvY29yZS5oIHwgMiArKw0KPiAgMiBm
+aWxlcyBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L210ZC9zcGktbm9yL2NvcmUuYyBiL2RyaXZlcnMvbXRkL3NwaS1ub3IvY29yZS5jDQo+IGluZGV4
+IGU1Zjc2OTFjNWJkNDAuLmUyOTlmYzhmZGQzZDQgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbXRk
+L3NwaS1ub3IvY29yZS5jDQo+ICsrKyBiL2RyaXZlcnMvbXRkL3NwaS1ub3IvY29yZS5jDQo+IEBA
+IC0yMzc1LDYgKzIzNzUsMTEgQEAgc3RhdGljIHZvaWQgc3BpX25vcl9ub19zZmRwX2luaXRfcGFy
+YW1zKHN0cnVjdCBzcGlfbm9yICpub3IpDQo+ICAgICAgICAgICAgICAgICBzcGlfbm9yX3NldF9w
+cF9zZXR0aW5ncygmcGFyYW1zLT5wYWdlX3Byb2dyYW1zW1NOT1JfQ01EX1BQXzhfOF84X0RUUl0s
+DQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTUElOT1JfT1BfUFAs
+IFNOT1JfUFJPVE9fOF84XzhfRFRSKTsNCj4gICAgICAgICB9DQo+ICsgICAgICAgaWYgKG5vX3Nm
+ZHBfZmxhZ3MgJiBTUElfTk9SX1FVQURfUFApIHsNCj4gKyAgICAgICAgICAgICAgIHBhcmFtcy0+
+aHdjYXBzLm1hc2sgfD0gU05PUl9IV0NBUFNfUFBfMV8xXzQ7DQo+ICsgICAgICAgICAgICAgICBz
+cGlfbm9yX3NldF9wcF9zZXR0aW5ncygmcGFyYW1zLT5wYWdlX3Byb2dyYW1zW1NOT1JfQ01EX1BQ
+XzFfMV80XSwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNQSU5P
+Ul9PUF9QUF8xXzFfNCwgU05PUl9QUk9UT18xXzFfNCk7DQo+ICsgICAgICAgfQ0KPiANCj4gICAg
+ICAgICAvKg0KPiAgICAgICAgICAqIFNlY3RvciBFcmFzZSBzZXR0aW5ncy4gU29ydCBFcmFzZSBU
+eXBlcyBpbiBhc2NlbmRpbmcgb3JkZXIsIHdpdGggdGhlDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L210ZC9zcGktbm9yL2NvcmUuaCBiL2RyaXZlcnMvbXRkL3NwaS1ub3IvY29yZS5oDQo+IGluZGV4
+IDU4ZmJlZGM5NDA4MGYuLmRkZTYzNmJkYjFhN2MgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbXRk
+L3NwaS1ub3IvY29yZS5oDQo+ICsrKyBiL2RyaXZlcnMvbXRkL3NwaS1ub3IvY29yZS5oDQo+IEBA
+IC00NjIsNiArNDYyLDcgQEAgc3RydWN0IHNwaV9ub3JfZml4dXBzIHsNCj4gICAqICAgU1BJX05P
+Ul9PQ1RBTF9SRUFEOiAgICAgIGZsYXNoIHN1cHBvcnRzIE9jdGFsIFJlYWQuDQo+ICAgKiAgIFNQ
+SV9OT1JfT0NUQUxfRFRSX1JFQUQ6ICBmbGFzaCBzdXBwb3J0cyBvY3RhbCBEVFIgUmVhZC4NCj4g
+ICAqICAgU1BJX05PUl9PQ1RBTF9EVFJfUFA6ICAgIGZsYXNoIHN1cHBvcnRzIE9jdGFsIERUUiBQ
+YWdlIFByb2dyYW0uDQo+ICsgKiAgIFNQSV9OT1JfUVVBRF9QUDogICAgICAgICBmbGFzaCBzdXBw
+b3J0cyBRdWFkIElucHV0IFBhZ2UgUHJvZ3JhbS4NCg0KWW91IGRvbid0IG5lZWQgdGhpcyBmbGFn
+IGlmIHlvdXIgZmxhc2ggc3VwcG9ydHMgdGhlIDQtYnl0ZSBBZGRyZXNzDQpJbnN0cnVjdGlvbiBU
+YWJsZS4gRG9lcyB5b3UgZmxhc2ggc3VwcG9ydCBpdD8gQ2FuIHlvdSBkdW1wIGFsbCB0aGUNClNG
+RFAgdGFibGVzLCBwbGVhc2U/DQoNClRoYW5rcywNCnRhDQo+ICAgKg0KPiAgICogQGZpeHVwX2Zs
+YWdzOiAgICBmbGFncyB0aGF0IGluZGljYXRlIHN1cHBvcnQgdGhhdCBjYW4gYmUgZGlzY292ZXJl
+ZCB2aWEgU0ZEUA0KPiAgICogICAgICAgICAgICAgICAgICBpZGVhbGx5LCBidXQgY2FuIG5vdCBi
+ZSBkaXNjb3ZlcmVkIGZvciB0aGlzIHBhcnRpY3VsYXIgZmxhc2gNCj4gQEAgLTUwOSw2ICs1MTAs
+NyBAQCBzdHJ1Y3QgZmxhc2hfaW5mbyB7DQo+ICAjZGVmaW5lIFNQSV9OT1JfT0NUQUxfUkVBRCAg
+ICAgICAgICAgICBCSVQoNSkNCj4gICNkZWZpbmUgU1BJX05PUl9PQ1RBTF9EVFJfUkVBRCAgICAg
+ICAgIEJJVCg2KQ0KPiAgI2RlZmluZSBTUElfTk9SX09DVEFMX0RUUl9QUCAgICAgICAgICAgQklU
+KDcpDQo+ICsjZGVmaW5lIFNQSV9OT1JfUVVBRF9QUCAgICAgICAgICAgICAgICAgICAgICAgIEJJ
+VCg4KQ0KPiANCj4gICAgICAgICB1OCBmaXh1cF9mbGFnczsNCj4gICNkZWZpbmUgU1BJX05PUl80
+Ql9PUENPREVTICAgICAgICAgICAgIEJJVCgwKQ0KPiAtLQ0KPiAyLjMwLjINCj4gDQoNCg==

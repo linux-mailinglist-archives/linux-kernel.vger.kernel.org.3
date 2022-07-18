@@ -2,218 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6A9577CED
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C7B577CF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiGRH5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S233294AbiGRH6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbiGRH5q (ORCPT
+        with ESMTP id S232898AbiGRH6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:57:46 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7ADD183BC
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:57:44 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bu1so15806400wrb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=vEslTCITyimnIbsqLplwjM+NWGFZaT0Hs7X96p81Hkw=;
-        b=7RsWumKS/cfYmyRJ4MP3H3gJCDxUZGilhTzh5mFgx2JHv7QQSCOVAoF11HW/UZceyh
-         m6TYGjxr/YHwiRCtHvbmEDUO4eqF9SSsjkaP8fiJl0YmP8UU6+l3xLbT0X9UARxcoyRX
-         8nqsGx6f0bBGyTgCMbHxPmz+k0A3V7hDKsyjvskTk2KWIMyYbRtniOxmFhvUAVZGWCPa
-         3XkWspTkyyfp3FImy7eJ4Ch/xO9+sU0fLLuspGM9oyw+iLig/BpNIBDfNVpnYNnMiq2g
-         uoA6LS206TFe5Hun/lOQb9cgEJoj9qoAn5A/qkUkNvnlsOdn0DZflOze/JkimIyev7U4
-         3ppw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=vEslTCITyimnIbsqLplwjM+NWGFZaT0Hs7X96p81Hkw=;
-        b=rae9iOsMnfuReF/dJTYfVJ1w5aUdv3zHVEK73n5hSNYMaBBVlpoWW/o9xioccZhYba
-         VjEi0/y15I65o8t4KQRJvtrybAx/7bd9tGP2j73/nM8bO7Iqmfgr+/QN80icSoeHXXO0
-         3GnAQO46aU30IeHuTkJqSWwXBPkuNXC1xDQWUjNagB5KnCaPTI9k6kZNIrBg62KyPsLx
-         2KKMXPCIbxolpJ8CHi7RSAltwGqEd7fHub7h6/OGAzO8LrDg0UK7yaiTyfXsCANDNCyj
-         YDed3h8WivcuocrTgOq0ZcMaER0dyDYV7TqrvgLw9lv/76AcYYUaOAjH2CROXGh9zOtu
-         gf6g==
-X-Gm-Message-State: AJIora8QV9V1+3uyDn6hfedYX8pBsiVH8OJZRugV9qYvMLXMmvafxX6u
-        e6icoeehKsST4qbLeBZ5RD3I6Q==
-X-Google-Smtp-Source: AGRyM1t29nFzQjLeYWvn0zyBdJryjDXStwGg7Go31PP+MzU2+XxCaU1TQoV6XTBGcA6KsPOOyHfHDw==
-X-Received: by 2002:a5d:5985:0:b0:21d:b6b6:4434 with SMTP id n5-20020a5d5985000000b0021db6b64434mr21345760wri.111.1658131063310;
-        Mon, 18 Jul 2022 00:57:43 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:a2b7:375c:fabd:3626? ([2001:861:44c0:66c0:a2b7:375c:fabd:3626])
-        by smtp.gmail.com with ESMTPSA id a7-20020adfeec7000000b0021d7050ace4sm5040248wrp.77.2022.07.18.00.57.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 00:57:42 -0700 (PDT)
-Message-ID: <2280fc46-cd0a-6267-ad0f-9916bd0ea146@baylibre.com>
-Date:   Mon, 18 Jul 2022 09:57:41 +0200
+        Mon, 18 Jul 2022 03:58:22 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317AC183BD;
+        Mon, 18 Jul 2022 00:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658131101; x=1689667101;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+BDZxa4+mDfmbiUpV7OYkV9hvGump0+Dz2UalQqK8Z8=;
+  b=VAqzBZV1LPuTERT3YRxUC1+VXNuwoboZXhJ7nVUj/aZBF/dxmBo4ltPh
+   CUZXE/wq99fr8bOJeDUE4lANRP2BjW3I8KoWtleyc5+3NyUSwqQGTEObe
+   I/bWvXbYeaCJIvAVZHQgTSY4IGdI7uiUMNITxnwavVMco+RF8eEvm/ej0
+   Xe7kgkJhaiTOuNtzX5iK7nS98MfK0EBLxlLzu1j2yZ5p0nfuWwxN6TgWg
+   fVAefRc3gPpECsupmLY8nqS71Hi3pN+z1803M666zqeCzP8A7cWDRmRA2
+   4M2jmBPXWYCzgtGoiyHooelM1zkKRhTUD/8VzeX7dN5K6i0uu5PDEpc+3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286179888"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="286179888"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 00:58:20 -0700
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="655169692"
+Received: from yangxuan-mobl.ccr.corp.intel.com (HELO localhost) ([10.249.171.3])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 00:58:17 -0700
+Date:   Mon, 18 Jul 2022 15:58:15 +0800
+From:   Yu Zhang <yu.c.zhang@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
+        joro@8bytes.org, wanpengli@tencent.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: X86: Fix the comments in prepare_vmcs02_rare()
+Message-ID: <20220718075815.enldntoehbiphhpv@linux.intel.com>
+References: <20220715114211.53175-1-yu.c.zhang@linux.intel.com>
+ <20220715114211.53175-3-yu.c.zhang@linux.intel.com>
+ <YtGOL4jIMQwoW5vb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] arm64: dts: meson: add support for Beelink GT1
- Ultimate
-Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Furkan Kardame <furkan@fkardame.com>
-References: <20220707093954.21716-1-christianshewitt@gmail.com>
- <20220707093954.21716-2-christianshewitt@gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220707093954.21716-2-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtGOL4jIMQwoW5vb@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/07/2022 11:39, Christian Hewitt wrote:
-> The Beelink GT1 Ultimate is based on the Amlogic S912 (Q200)
-> reference design with the following specifications:
+On Fri, Jul 15, 2022 at 03:56:31PM +0000, Sean Christopherson wrote:
+> On Fri, Jul 15, 2022, Yu Zhang wrote:
+> > Although EB.PF in vmcs02 is still set by simply "or"ing the EB of
+> > vmcs01 and vmcs12, the explanation is obsolete. "enable_ept" being
+> > set is not the only reason for L0 to clear its EB.PF.
+> > 
+> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > ---
+> >  arch/x86/kvm/vmx/nested.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> > index 778f82015f03..634a7d218048 100644
+> > --- a/arch/x86/kvm/vmx/nested.c
+> > +++ b/arch/x86/kvm/vmx/nested.c
+> > @@ -2451,10 +2451,10 @@ static void prepare_vmcs02_rare(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
+> >  	 * is not easy (if at all possible?) to merge L0 and L1's desires, we
+> >  	 * simply ask to exit on each and every L2 page fault. This is done by
+> >  	 * setting MASK=MATCH=0 and (see below) EB.PF=1.
+> > -	 * Note that below we don't need special code to set EB.PF beyond the
+> > -	 * "or"ing of the EB of vmcs01 and vmcs12, because when enable_ept,
+> > -	 * vmcs01's EB.PF is 0 so the "or" will take vmcs12's value, and when
+> > -	 * !enable_ept, EB.PF is 1, so the "or" will always be 1.
+> > +	 * Note that EB.PF is set by "or"ing of the EB of vmcs01 and vmcs12,
+> > +	 * because when L0 has no desire to intercept #PF, vmcs01's EB.PF is 0
+> > +	 * so the "or" will take vmcs12's value, otherwise EB.PF is 1, so the
+> > +	 * "or" will always be 1.
 > 
-> - 3GB DDR3 RAM
-> - 32GB eMMC
-> - HDMI 2.1 video
-> - S/PDIF optical output
-> - 10/100/1000 Ethernet
-> - AP6356S Wireless (802.11 a/b/g/n, BT 4.2)
-> - 3x USB 2.0 ports
-> - IR receiver
-> - 1x micro SD card slot
-> - 1x Power LED (white)
-> - 1x Reset button (internal)
+> Oof!  I was going to respond with a variety of nits (about the existing comment),
+> and even suggest that we address the TODO just out of sight, but looking at all
+> of this made me realize there's a bug here!  vmx_update_exception_bitmap() doesn't
+> update MASK and MATCH!
 > 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
->   arch/arm64/boot/dts/amlogic/Makefile          |  1 +
->   .../dts/amlogic/meson-gxm-gt1-ultimate.dts    | 91 +++++++++++++++++++
->   2 files changed, 92 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dts
+> Hitting the bug is extremely unlikely, as it would require changing the guest's
+> MAXPHYADDR via KVM_SET_CPUID2 _after_ KVM_SET_NESTED_STATE, but before KVM_RUN
+> (because KVM now disallows changin CPUID after KVM_RUN).
 > 
-> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-> index 8773211df50e..641399fcbdd9 100644
-> --- a/arch/arm64/boot/dts/amlogic/Makefile
-> +++ b/arch/arm64/boot/dts/amlogic/Makefile
-> @@ -43,6 +43,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-libretech-cc-v2.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-libretech-cc.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-nexbox-a95x.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-p212.dtb
-> +dtb-$(CONFIG_ARCH_MESON) += meson-gxm-gt1-ultimate.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-gxm-khadas-vim2.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-gxm-mecool-kiii-pro.dtb
->   dtb-$(CONFIG_ARCH_MESON) += meson-gxm-minix-neo-u9h.dtb
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dts b/arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dts
-> new file mode 100644
-> index 000000000000..2c267884cc16
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gxm-gt1-ultimate.dts
-> @@ -0,0 +1,91 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) Christian Hewitt <christianshewitt@gmail.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "meson-gxm.dtsi"
-> +#include "meson-gx-p23x-q20x.dtsi"
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	compatible = "azw,gt1-ultimate", "amlogic,s912", "amlogic,meson-gxm";
-> +	model = "Beelink GT1 Ultimate";
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led-white {
-> +			color = <LED_COLOR_ID_WHITE>;
-> +			function = LED_FUNCTION_POWER;
-> +			gpios = <&gpio_ao GPIOAO_9 GPIO_ACTIVE_HIGH>;
-> +			default-state = "on";
-> +			panic-indicator;
-> +		};
-> +	};
-> +
-> +	adc-keys {
-> +		compatible = "adc-keys";
-> +		io-channels = <&saradc 0>;
-> +		io-channel-names = "buttons";
-> +		keyup-threshold-microvolt = <1710000>;
-> +
-> +		button-function {
-> +			label = "update";
-> +			linux,code = <KEY_VENDOR>;
-> +			press-threshold-microvolt = <10000>;
-> +		};
-> +	};
-> +};
-> +
-> +&ethmac {
-> +	pinctrl-0 = <&eth_pins>;
-> +	pinctrl-names = "default";
-> +	phy-handle = <&external_phy>;
-> +	amlogic,tx-delay-ns = <2>;
-> +	phy-mode = "rgmii";
-> +};
-> +
-> +&external_mdio {
-> +	external_phy: ethernet-phy@0 {
-> +		/* Realtek RTL8211F (0x001cc916) */
-> +		reg = <0>;
-> +		max-speed = <1000>;
-> +
-> +		reset-assert-us = <10000>;
-> +		reset-deassert-us = <80000>;
-> +		reset-gpios = <&gpio GPIOZ_14 GPIO_ACTIVE_LOW>;
-> +
-> +		interrupt-parent = <&gpio_intc>;
-> +		/* MAC_INTR on GPIOZ_15 */
-> +		interrupts = <25 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +};
-> +
-> +&ir {
-> +	linux,rc-map-name = "rc-beelink-gs1";
-> +};
-> +
-> +&sd_emmc_a {
-> +	brcmf: wifi@1 {
-> +		reg = <1>;
-> +		compatible = "brcm,bcm4329-fmac";
-> +	};
-> +};
-> +
-> +&uart_A {
-> +	status = "okay";
-> +	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
-> +	pinctrl-names = "default";
-> +	uart-has-rtscts;
-> +
-> +	bluetooth {
-> +		compatible = "brcm,bcm43438-bt";
-> +		shutdown-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-> +		max-speed = <2000000>;
-> +		clocks = <&wifi32k>;
-> +		clock-names = "lpo";
-> +	};
-> +};
+> During KVM_SET_CPUID2, KVM will invoke vmx_update_exception_bitmap() to refresh
+> the exception bitmap to handle the ept=1 && allow_smaller_maxphyaddr=1 scenario.
+> But when L2 is active, vmx_update_exception_bitmap() assumes vmcs02 already has
+> the correct MASK+MATCH because of the "clear both if KVM and L1 both want #PF"
+> behavior.  But if KVM's desire to intercept #PF changes from 0=>1, then KVM will
+> run L2 with the MASK+MATCH from vmcs12 because vmx_need_pf_intercept() would have
+> returned false at the time of prepare_vmcs02_rare().
 
+And then the #PF could be missed in L0 because previously both L1 and L0 has no
+desire to intercept it, meanwhile KVM fails to update this after migration(I guess
+the only scenario for this to happen is migration?). Is this understanding correct? 
 
-Looks fine for me:
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+> 
+> Fixing the bug is fairly straightforward, and presents a good opportunity to
+> clean up the code (and this comment) and address the TODO.
+> 
+> Unless someone objects to my suggestion for patch 01, can you send a new version
+> of patch 01?  I'll send a separate series to fix this theoretical bug, avoid
+> writing MASK+MATCH when vmcs0x.EXCEPTION_BITMAP.PF+0, and to address the TODO.
+
+Sure, I will send another version of patch 01.
+
+> 
+> E.g. I believe this is what we want to end up with:
+> 
+> 	if (vmcs12)
+> 		eb |= vmcs12->exception_bitmap;
+> 
+> 	/*
+> 	 * #PF is conditionally intercepted based on the #PF error code (PFEC)
+> 	 * combined with the exception bitmap.  #PF is intercept if:
+> 	 *
+> 	 *    EXCEPTION_BITMAP.PF=1 && ((PFEC & MASK) == MATCH).
+> 	 *
+> 	 * If any #PF is being intercepted, update MASK+MATCH, otherwise leave
+> 	 * them alone they do not affect interception (EXCEPTION_BITMAP.PF=0).
+> 	 */
+> 	if (eb & (1u << PF_VECTOR)) {
+> 		/*
+> 		 * If EPT is enabled, #PF is only intercepted if MAXPHYADDR is
+> 		 * smaller on the guest than on the host.  In that case, KVM
+> 		 * only needs to intercept present, non-reserved #PF.  If EPT
+> 		 * is disabled, i.e. KVM is using shadow paging, KVM needs to
+> 		 * intercept all #PF.  Note, whether or not KVM wants to
+> 		 * intercept _any_ #PF is handled below.
+> 		 */
+> 		if (enable_ept) {
+> 			pfec_mask = PFERR_PRESENT_MASK | PFERR_RSVD_MASK;
+> 			pfec_match = PFERR_PRESENT_MASK;
+> 		} else {
+> 			pfec_mask = 0;
+> 			pfec_match = 0;
+> 		}
+> 
+> 		if (!(vmcs12->exception_bitmap & (1u << PF_VECTOR))) {
+> 			/* L1 doesn't want to intercept #PF, use KVM's MASK+MATCH. */
+> 		} else if (!kvm_needs_pf_intercept) {
+> 			/* KVM doesn't want to intercept #PF, use L1's MASK+MATCH. */
+> 			pfec_mask = vmcs12->page_fault_error_code_mask;
+> 			pfec_match = vmcs12->page_fault_error_code_match;
+> 		} else if (pfec_mask != vmcs12->page_fault_error_code_mask ||
+> 			   pfec_match != vmcs12->page_fault_error_code_mask) {
+> 			/*
+> 			 * KVM and L1 want to intercept #PF with different MASK
+> 			 * and/or MATCH.  For simplicity, intercept all #PF by
+> 			 * clearing MASK+MATCH.  Merging KVM's and L1's desires
+> 			 * is quite complex, while the odds of meaningfully
+> 			 * reducing what #PFs are intercept are low.
+> 			 */
+> 			pfec_mask = 0;
+> 			pfec_match = 0;
+> 		} else {
+> 			/* KVM and L1 have identical MASK+MATCH. */
+> 		}
+> 		vmcs_write32(PAGE_FAULT_ERROR_CODE_MASK, pfec_mask);
+> 		vmcs_write32(PAGE_FAULT_ERROR_CODE_MATCH, pfec_match);
+> 	}
+
+And we do not need to update the PFEC_MASK & PFEC_MATCH in prepare_vmcs02_rare()
+anymore, right? Thanks!
+
+B.R.
+Yu

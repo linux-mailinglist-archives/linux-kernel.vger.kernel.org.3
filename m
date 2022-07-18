@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A20578039
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FEE578040
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234364AbiGRKvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
+        id S234411AbiGRKvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233789AbiGRKvn (ORCPT
+        with ESMTP id S233897AbiGRKvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:51:43 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B8D20188;
-        Mon, 18 Jul 2022 03:51:42 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id b9so10241030pfp.10;
-        Mon, 18 Jul 2022 03:51:42 -0700 (PDT)
+        Mon, 18 Jul 2022 06:51:46 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBCB20182;
+        Mon, 18 Jul 2022 03:51:44 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id f11so10201612pgj.7;
+        Mon, 18 Jul 2022 03:51:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=D6FerIaQa1Bm0TWJMe1xJeQcvTkggfU5y98W1rJcblM=;
-        b=jmX5BVYeoKczgNexINheOqQBoXxlI3I56cgm3bWlQRCKsCc9WZPzT9GvlhOFP99pAV
-         KXmcQYjUhTFT6fEWVrZWoDoWYHoQLAhPoJqwM0luXsqXrwfn8Fsk8jm0ALrlUgn1pg+X
-         wa1ACzw6zuWojIjMQ5okk+Q/7Fog3UJMzMsidO6fC3jq0eKiLUqIsG9Xqja8zjxxdAzv
-         lgntaXf70EYQwe1rLLnjqUNoEJ2Cm1RLQszFprPAQdWY9jX1r6Wj8WfyNqJGo++4mRex
-         iilA4oduaygmpLGAljmZBFvnC6D7MtcISUJ7/37ge5NewQUaEjGMkQjFYAGWNU8lphsL
-         4dzw==
+        bh=Pzx0LTAEG3plavLsKEb5O1+0H3QSoplqHlDrOAmJwM0=;
+        b=pjHLQ1tU+9Z/jw03Et5aIahbF/Qm2nLM2GoP+sewQYwZoxFZuKCXaynTjv4K1YzH/e
+         POLpKKxGFLNydnDB1V8Fw3dBYLodL8EZ/FCkN3Qf9d2wJyXf9lFMV7AXjX1UZMZSq7IP
+         2XuVfIYuyRTi/b/XM4QxkAwd/Vvf3AxCb5pVxgzEuffw2QYAFhGGyeqZgJSwJcyuwRHs
+         0nJ8s7u3fkmgquf2Jk8tE3RokRx43voshbnitAAuQbOI+ITg2F93o6wAx5+PvYY1a2j3
+         AlvFGbLNO0Yis6+7MtmghrqFArpZTW2v/dQ5/704EXYekCYNXWnb2GX+LYfq9dSRPzkW
+         iLUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=D6FerIaQa1Bm0TWJMe1xJeQcvTkggfU5y98W1rJcblM=;
-        b=yqn+YYU4RDCtrAh1D4EmEviu5aCJlfB6Xzf9T+DezMbzwuR20qLTPDGBoRrTIr2bq5
-         4MGZrl3eP8uYgLCyxzmhN27dIXTcY5mAkWGLw67aWi/28RgLg1HEdcoN6cBSVzAr9iAe
-         HoAJAsINS37HsnP/r5Qgy8W3fwulTwaGtJ20r7DA6n/tREtsmYrwt1k/nCwW2+5hmA2o
-         GjgTUSlN869q9vIlLvTxsUgxA3t4f3nP4jt7myQV20k4we5HDgtjaQ3LDHkhXyj3ycOD
-         bhvJPgFgpgua5qtJTtxhrHQ3Z1WOgCwhCrzi9i90evHLGYnsDJy2tfSidAxaX3Ic3hnF
-         PYxg==
-X-Gm-Message-State: AJIora9PTbmrKTqbLLOcI1GS2kY4TTlHumok84ca6E7x9kxihEMmvGvp
-        RX/ta3cUWvh1hiNGu9iOUKg=
-X-Google-Smtp-Source: AGRyM1tNyhyR7PVKzZsn8ioiT/rPLYpUCRXeHvYy3ltSzzwEUb/AK8c14FZyra8g9Qhkd1JKVoiBYg==
-X-Received: by 2002:a05:6a00:27a1:b0:52b:a5f:6ae6 with SMTP id bd33-20020a056a0027a100b0052b0a5f6ae6mr28083006pfb.50.1658141502106;
-        Mon, 18 Jul 2022 03:51:42 -0700 (PDT)
+        bh=Pzx0LTAEG3plavLsKEb5O1+0H3QSoplqHlDrOAmJwM0=;
+        b=7Y22rIZfeay0FshSF16JgMKX1428HPuFwTl5avQhTYf02ynE9hThbcI9/++EyCg9OW
+         e8H56GQGrXzjakXgTd5Ww/UkMhlVRF1soebEkKDuJuakuFkw8u0m8Mduyq4x2W89Zmiv
+         zKtwp0DotH5pXWjvZWg4pmlyskcpn7G7nhT0IAsM7aHKvze+dqzFIZzjld/JJiN6s9s3
+         qCQLUvaUO059bcpERcZXLW7gEa8dX8pZW98GRHYEDT//coXHisY4iB5HwYRm0TGe5dWl
+         20edmPsM8G0JUiyDrFwlNC1TcvqEd130Se7llFMjVJF17Ljr2J0lA/pp557EENyaH8If
+         +Qpw==
+X-Gm-Message-State: AJIora8ve1Nks/kGYc+069bWblUkKyrN2CVkV58eZZm4406s6E9ziGfo
+        NbpOQDFyQRH1RviqQKamq9o=
+X-Google-Smtp-Source: AGRyM1sM2aRIyOja2E9k7LGH0ZcvsU9FUgU7Z7TYOhcgHRZQYqonOKjMd4pT27VlfZsvZ1ABsValtg==
+X-Received: by 2002:a05:6a00:124c:b0:52b:26b6:2ab4 with SMTP id u12-20020a056a00124c00b0052b26b62ab4mr20907079pfi.85.1658141504318;
+        Mon, 18 Jul 2022 03:51:44 -0700 (PDT)
 Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id s2-20020aa78bc2000000b0052ac1af926fsm8914641pfd.20.2022.07.18.03.51.40
+        by smtp.googlemail.com with ESMTPSA id s2-20020aa78bc2000000b0052ac1af926fsm8914641pfd.20.2022.07.18.03.51.42
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Jul 2022 03:51:41 -0700 (PDT)
+        Mon, 18 Jul 2022 03:51:44 -0700 (PDT)
 From:   Vincent Shih <vincent.sunplus@gmail.com>
 To:     kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
         linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
@@ -54,9 +54,9 @@ To:     kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
         krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
         wells.lu@sunplus.com
 Cc:     Vincent Shih <vincent.sunplus@gmail.com>
-Subject: [PATCH v4 1/2] phy: usb: Add USB2.0 phy driver for Sunplus SP7021
-Date:   Mon, 18 Jul 2022 18:51:19 +0800
-Message-Id: <1658141480-9291-2-git-send-email-vincent.sunplus@gmail.com>
+Subject: [PATCH v4 2/2] dt-bindings: phy: Add bindings doc for Sunplus USB2
+Date:   Mon, 18 Jul 2022 18:51:20 +0800
+Message-Id: <1658141480-9291-3-git-send-email-vincent.sunplus@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1658141480-9291-1-git-send-email-vincent.sunplus@gmail.com>
 References: <1658141480-9291-1-git-send-email-vincent.sunplus@gmail.com>
@@ -70,396 +70,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add USB2.0 phy driver for Sunplus SP7021
+Add bindings doc for Sunplus USB2 PHY driver
 
 Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
 ---
 Changes in v4:
- -  Addressed the issue from kernel test robot.
+ - No change
 
- MAINTAINERS                            |   8 +
- drivers/phy/Kconfig                    |   1 +
- drivers/phy/Makefile                   |   1 +
- drivers/phy/sunplus/Kconfig            |  12 ++
- drivers/phy/sunplus/Makefile           |   2 +
- drivers/phy/sunplus/phy-sunplus-usb2.c | 297 +++++++++++++++++++++++++++++++++
- 6 files changed, 321 insertions(+)
- create mode 100644 drivers/phy/sunplus/Kconfig
- create mode 100644 drivers/phy/sunplus/Makefile
- create mode 100644 drivers/phy/sunplus/phy-sunplus-usb2.c
+ .../bindings/phy/sunplus,sp7021-usb2-phy.yaml      | 73 ++++++++++++++++++++++
+ MAINTAINERS                                        |  1 +
+ 2 files changed, 74 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
 
+diff --git a/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
+new file mode 100644
+index 0000000..069d422
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
+@@ -0,0 +1,73 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) Sunplus Co., Ltd. 2021
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/phy/sunplus,sp7021-usb2-phy.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Sunplus SP7021 USB 2.0 PHY Controller
++
++maintainers:
++  - Vincent Shih <vincent.sunplus@gmail.com>
++
++properties:
++  compatible:
++    const: sunplus,sp7021-usb2-phy
++
++  reg:
++    items:
++      - description: UPHY register region
++      - description: MOON4 register region
++
++  reg-names:
++    items:
++      - const: phy
++      - const: moon4
++
++  clocks:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  "#phy-cells":
++    const: 0
++
++  nvmem-cell-names:
++    description: names corresponding to the nvmem cells of disconnect voltage
++    const: disc_vol
++
++  nvmem-cells:
++    description: nvmem cell address of disconnect voltage
++    maxItems: 1
++
++  sunplus,disc-vol-addr-off:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: the otp address offset of disconnect voltage
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - resets
++  - "#phy-cells"
++  - nvmem-cell-names
++  - nvmem-cells
++  - sunplus,disc-vol-addr-off
++
++additionalProperties: false
++
++examples:
++  - |
++    sp_uphy0: usb-phy@9c004a80 {
++      compatible = "sunplus,sp7021-usb2-phy";
++      reg = <0x9c004a80 0x80>, <0x9c000248 0x10>;
++      reg-names = "phy", "moon4";
++      clocks = <&clkc 0x3d>;
++      resets = <&rstc 0x2d>;
++      #phy-cells = <0>;
++      nvmem-cell-names = "disc_vol";
++      nvmem-cells = <&disc_vol>;
++      sunplus,disc-vol-addr-off = <0>;
++    };
 diff --git a/MAINTAINERS b/MAINTAINERS
-index f679152..31d2ba0 100644
+index 31d2ba0..989e5ba 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -19223,6 +19223,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
- F:	drivers/nvmem/sunplus-ocotp.c
- 
-+SUNPLUS USB2 PHY DRIVER
-+M:	Vincent Shih <vincent.sunplus@gmail.com>
-+L:	linux-usb@vger.kernel.org
-+S:	Maintained
-+F:	drivers/phy/sunplus/Kconfig
-+F:	drivers/phy/sunplus/Makefile
-+F:	drivers/phy/sunplus/phy-sunplus-usb2.c
-+
- SUNPLUS PWM DRIVER
- M:	Hammer Hsieh <hammerh0314@gmail.com>
+@@ -19227,6 +19227,7 @@ SUNPLUS USB2 PHY DRIVER
+ M:	Vincent Shih <vincent.sunplus@gmail.com>
+ L:	linux-usb@vger.kernel.org
  S:	Maintained
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 300b0f2..7bd00a1 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -91,6 +91,7 @@ source "drivers/phy/rockchip/Kconfig"
- source "drivers/phy/samsung/Kconfig"
- source "drivers/phy/socionext/Kconfig"
- source "drivers/phy/st/Kconfig"
-+source "drivers/phy/sunplus/Kconfig"
- source "drivers/phy/tegra/Kconfig"
- source "drivers/phy/ti/Kconfig"
- source "drivers/phy/intel/Kconfig"
-diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-index 01e9eff..54f312c 100644
---- a/drivers/phy/Makefile
-+++ b/drivers/phy/Makefile
-@@ -31,6 +31,7 @@ obj-y					+= allwinner/	\
- 					   samsung/	\
- 					   socionext/	\
- 					   st/		\
-+					   sunplus/	\
- 					   tegra/	\
- 					   ti/		\
- 					   xilinx/
-diff --git a/drivers/phy/sunplus/Kconfig b/drivers/phy/sunplus/Kconfig
-new file mode 100644
-index 0000000..3bd3cfb
---- /dev/null
-+++ b/drivers/phy/sunplus/Kconfig
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config PHY_SUNPLUS_USB
-+	tristate "Sunplus SP7021 USB 2.0 PHY driver"
-+	depends on OF && (SOC_SP7021 || COMPILE_TEST)
-+	select GENERIC_PHY
-+	help
-+	  Enable this to support the USB 2.0 PHY on Sunplus SP7021
-+	  SoC. The USB 2.0 PHY controller supports battery charger
-+	  and synchronous signals, various power down modes including
-+	  operating, partial and suspend modes, and high-speed,
-+	  full-speed and low-speed data transfer.
-diff --git a/drivers/phy/sunplus/Makefile b/drivers/phy/sunplus/Makefile
-new file mode 100644
-index 0000000..71754d5
---- /dev/null
-+++ b/drivers/phy/sunplus/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_PHY_SUNPLUS_USB)	+= phy-sunplus-usb2.o
-diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
-new file mode 100644
-index 0000000..09875c4
---- /dev/null
-+++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
-@@ -0,0 +1,297 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Sunplus SP7021 USB 2.0 phy driver
-+ *
-+ * Copyright (C) 2022 Sunplus Technology Inc., All rights reserved.
-+ *
-+ * Note 1 : non-posted write command for the registers accesses of
-+ * Sunplus SP7021.
-+ *
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-consumer.h>
-+#include <linux/of_platform.h>
-+#include <linux/phy/phy.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset.h>
-+
-+#define HIGH_MASK_BITS				GENMASK(31, 16)
-+#define LOW_MASK_BITS				GENMASK(15, 0)
-+#define OTP_DISC_LEVEL_DEFAULT			0xd
-+
-+/* GROUP UPHY */
-+#define CONFIG1					0x4
-+#define J_HS_TX_PWRSAV				BIT(5)
-+#define CONFIG3					0xc
-+#define J_FORCE_DISC_ON				BIT(5)
-+#define J_DEBUG_CTRL_ADDR_MACRO			BIT(0)
-+#define CONFIG7					0x1c
-+#define J_DISC					0X1f
-+#define CONFIG9					0x24
-+#define J_ECO_PATH				BIT(6)
-+#define CONFIG16				0x40
-+#define J_TBCWAIT_MASK				GENMASK(6, 5)
-+#define J_TBCWAIT_1P1_MS			FIELD_PREP(J_TBCWAIT_MASK, 0)
-+#define J_TVDM_SRC_DIS_MASK			GENMASK(4, 3)
-+#define J_TVDM_SRC_DIS_8P2_MS			FIELD_PREP(J_TVDM_SRC_DIS_MASK, 3)
-+#define J_TVDM_SRC_EN_MASK			GENMASK(2, 1)
-+#define J_TVDM_SRC_EN_1P6_MS			FIELD_PREP(J_TVDM_SRC_EN_MASK, 0)
-+#define J_BC_EN					BIT(0)
-+#define CONFIG17				0x44
-+#define IBG_TRIM0_MASK				GENMASK(7, 5)
-+#define IBG_TRIM0_SSLVHT			FIELD_PREP(IBG_TRIM0_MASK, 4)
-+#define J_VDATREE_TRIM_MASK			GENMASK(4, 1)
-+#define J_VDATREE_TRIM_DEFAULT			FIELD_PREP(J_VDATREE_TRIM_MASK, 9)
-+#define CONFIG23				0x5c
-+#define PROB_MASK				GENMASK(5, 3)
-+#define PROB					FIELD_PREP(PROB_MASK, 7)
-+
-+/* GROUP MOON4 */
-+#define UPHY_CONTROL0				0x0
-+#define UPHY_CONTROL1				0x4
-+#define UPHY_CONTROL2				0x8
-+#define MO1_UPHY_RX_CLK_SEL			BIT(6)
-+#define MASK_MO1_UPHY_RX_CLK_SEL		BIT(6 + 16)
-+#define UPHY_CONTROL3				0xc
-+#define MO1_UPHY_PLL_POWER_OFF_SEL		BIT(7)
-+#define MASK_MO1_UPHY_PLL_POWER_OFF_SEL		BIT(7 + 16)
-+#define MO1_UPHY_PLL_POWER_OFF			BIT(3)
-+#define MASK_UPHY_PLL_POWER_OFF			BIT(3 + 16)
-+
-+struct sp_usbphy {
-+	struct device *dev;
-+	struct resource *phy_res_mem;
-+	struct resource *moon4_res_mem;
-+	struct reset_control *rstc;
-+	struct clk *phy_clk;
-+	void __iomem *phy_regs;
-+	void __iomem *moon4_regs;
-+	u32 disc_vol_addr_off;
-+};
-+
-+static int update_disc_vol(struct sp_usbphy *usbphy)
-+{
-+	struct nvmem_cell *cell;
-+	char *disc_name = "disc_vol";
-+	ssize_t otp_l = 0;
-+	char *otp_v;
-+	u32 val, set;
-+
-+	cell = nvmem_cell_get(usbphy->dev, disc_name);
-+	if (IS_ERR_OR_NULL(cell)) {
-+		if (PTR_ERR(cell) == -EPROBE_DEFER)
-+			return -EPROBE_DEFER;
-+	}
-+
-+	otp_v = nvmem_cell_read(cell, &otp_l);
-+	nvmem_cell_put(cell);
-+
-+	if (otp_v) {
-+		set = *(otp_v + 1);
-+		set = (set << (sizeof(char) * 8)) | *otp_v;
-+		set = (set >> usbphy->disc_vol_addr_off) & J_DISC;
-+	}
-+
-+	if (!otp_v || set == 0)
-+		set = OTP_DISC_LEVEL_DEFAULT;
-+
-+	val = readl(usbphy->phy_regs + CONFIG7);
-+	val = (val & ~J_DISC) | set;
-+	writel(val, usbphy->phy_regs + CONFIG7);
-+
-+	return 0;
-+}
-+
-+static int sp_uphy_init(struct phy *phy)
-+{
-+	struct sp_usbphy *usbphy = phy_get_drvdata(phy);
-+	u32 val;
-+	int ret;
-+
-+	ret = clk_prepare_enable(usbphy->phy_clk);
-+	if (ret)
-+		goto err_clk;
-+
-+	ret = reset_control_deassert(usbphy->rstc);
-+	if (ret)
-+		goto err_reset;
-+
-+	/* Default value modification */
-+	writel(HIGH_MASK_BITS | 0x4002, usbphy->moon4_regs + UPHY_CONTROL0);
-+	writel(HIGH_MASK_BITS | 0x8747, usbphy->moon4_regs + UPHY_CONTROL1);
-+
-+	/* disconnect voltage */
-+	ret = update_disc_vol(usbphy);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* board uphy 0 internal register modification for tid certification */
-+	val = readl(usbphy->phy_regs + CONFIG9);
-+	val &= ~(J_ECO_PATH);
-+	writel(val, usbphy->phy_regs + CONFIG9);
-+
-+	val = readl(usbphy->phy_regs + CONFIG1);
-+	val &= ~(J_HS_TX_PWRSAV);
-+	writel(val, usbphy->phy_regs + CONFIG1);
-+
-+	val = readl(usbphy->phy_regs + CONFIG23);
-+	val = (val & ~PROB) | PROB;
-+	writel(val, usbphy->phy_regs + CONFIG23);
-+
-+	/* port 0 uphy clk fix */
-+	writel(MASK_MO1_UPHY_RX_CLK_SEL | MO1_UPHY_RX_CLK_SEL,
-+	       usbphy->moon4_regs + UPHY_CONTROL2);
-+
-+	/* battery charger */
-+	writel(J_TBCWAIT_1P1_MS | J_TVDM_SRC_DIS_8P2_MS | J_TVDM_SRC_EN_1P6_MS | J_BC_EN,
-+	       usbphy->phy_regs + CONFIG16);
-+	writel(IBG_TRIM0_SSLVHT | J_VDATREE_TRIM_DEFAULT, usbphy->phy_regs + CONFIG17);
-+
-+	/* chirp mode */
-+	writel(J_FORCE_DISC_ON | J_DEBUG_CTRL_ADDR_MACRO, usbphy->phy_regs + CONFIG3);
-+
-+	return 0;
-+
-+err_reset:
-+	reset_control_assert(usbphy->rstc);
-+err_clk:
-+	clk_disable_unprepare(usbphy->phy_clk);
-+
-+	return ret;
-+}
-+
-+static int sp_uphy_power_on(struct phy *phy)
-+{
-+	struct sp_usbphy *usbphy = phy_get_drvdata(phy);
-+	u32 pll_pwr_on, pll_pwr_off;
-+
-+	/* PLL power off/on twice */
-+	pll_pwr_off = (readl(usbphy->moon4_regs + UPHY_CONTROL3) & ~LOW_MASK_BITS)
-+			| MO1_UPHY_PLL_POWER_OFF_SEL | MO1_UPHY_PLL_POWER_OFF;
-+	pll_pwr_on = (readl(usbphy->moon4_regs + UPHY_CONTROL3) & ~LOW_MASK_BITS)
-+			| MO1_UPHY_PLL_POWER_OFF_SEL;
-+
-+	writel(MASK_MO1_UPHY_PLL_POWER_OFF_SEL | MASK_UPHY_PLL_POWER_OFF | pll_pwr_off,
-+	       usbphy->moon4_regs + UPHY_CONTROL3);
-+	mdelay(1);
-+	writel(MASK_MO1_UPHY_PLL_POWER_OFF_SEL | MASK_UPHY_PLL_POWER_OFF | pll_pwr_on,
-+	       usbphy->moon4_regs + UPHY_CONTROL3);
-+	mdelay(1);
-+	writel(MASK_MO1_UPHY_PLL_POWER_OFF_SEL | MASK_UPHY_PLL_POWER_OFF | pll_pwr_off,
-+	       usbphy->moon4_regs + UPHY_CONTROL3);
-+	mdelay(1);
-+	writel(MASK_MO1_UPHY_PLL_POWER_OFF_SEL | MASK_UPHY_PLL_POWER_OFF | pll_pwr_on,
-+	       usbphy->moon4_regs + UPHY_CONTROL3);
-+	mdelay(1);
-+	writel(MASK_MO1_UPHY_PLL_POWER_OFF_SEL | MASK_UPHY_PLL_POWER_OFF | 0x0,
-+	       usbphy->moon4_regs + UPHY_CONTROL3);
-+
-+	return 0;
-+}
-+
-+static int sp_uphy_power_off(struct phy *phy)
-+{
-+	struct sp_usbphy *usbphy = phy_get_drvdata(phy);
-+	u32 pll_pwr_off;
-+
-+	pll_pwr_off = (readl(usbphy->moon4_regs + UPHY_CONTROL3) & ~LOW_MASK_BITS)
-+			| MO1_UPHY_PLL_POWER_OFF_SEL | MO1_UPHY_PLL_POWER_OFF;
-+
-+	writel(MASK_MO1_UPHY_PLL_POWER_OFF_SEL | MASK_UPHY_PLL_POWER_OFF | pll_pwr_off,
-+	       usbphy->moon4_regs + UPHY_CONTROL3);
-+	mdelay(1);
-+	writel(MASK_MO1_UPHY_PLL_POWER_OFF_SEL | MASK_UPHY_PLL_POWER_OFF | 0x0,
-+	       usbphy->moon4_regs + UPHY_CONTROL3);
-+
-+	return 0;
-+}
-+
-+static int sp_uphy_exit(struct phy *phy)
-+{
-+	struct sp_usbphy *usbphy = phy_get_drvdata(phy);
-+
-+	reset_control_assert(usbphy->rstc);
-+	clk_disable_unprepare(usbphy->phy_clk);
-+
-+	return 0;
-+}
-+
-+static const struct phy_ops sp_uphy_ops = {
-+	.init		= sp_uphy_init,
-+	.power_on	= sp_uphy_power_on,
-+	.power_off	= sp_uphy_power_off,
-+	.exit		= sp_uphy_exit,
-+};
-+
-+static const struct of_device_id sp_uphy_dt_ids[] = {
-+	{.compatible = "sunplus,sp7021-usb2-phy", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, sp_uphy_dt_ids);
-+
-+static int sp_usb_phy_probe(struct platform_device *pdev)
-+{
-+	struct sp_usbphy *usbphy;
-+	struct phy_provider *phy_provider;
-+	struct phy *phy;
-+	int ret;
-+
-+	usbphy = devm_kzalloc(&pdev->dev, sizeof(*usbphy), GFP_KERNEL);
-+	if (!usbphy)
-+		return -ENOMEM;
-+
-+	usbphy->dev = &pdev->dev;
-+
-+	usbphy->phy_res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "phy");
-+	usbphy->phy_regs = devm_ioremap_resource(&pdev->dev, usbphy->phy_res_mem);
-+	if (IS_ERR(usbphy->phy_regs))
-+		return PTR_ERR(usbphy->phy_regs);
-+
-+	usbphy->moon4_res_mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "moon4");
-+	usbphy->moon4_regs = devm_ioremap(&pdev->dev, usbphy->moon4_res_mem->start,
-+					  resource_size(usbphy->moon4_res_mem));
-+	if (IS_ERR(usbphy->moon4_regs))
-+		return PTR_ERR(usbphy->moon4_regs);
-+
-+	usbphy->phy_clk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(usbphy->phy_clk))
-+		return PTR_ERR(usbphy->phy_clk);
-+
-+	usbphy->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-+	if (IS_ERR(usbphy->rstc))
-+		return PTR_ERR(usbphy->rstc);
-+
-+	of_property_read_u32(pdev->dev.of_node, "sunplus,disc-vol-addr-off",
-+			     &usbphy->disc_vol_addr_off);
-+
-+	phy = devm_phy_create(&pdev->dev, NULL, &sp_uphy_ops);
-+	if (IS_ERR(phy)) {
-+		ret = -PTR_ERR(phy);
-+		return ret;
-+	}
-+
-+	phy_set_drvdata(phy, usbphy);
-+	phy_provider = devm_of_phy_provider_register(&pdev->dev, of_phy_simple_xlate);
-+
-+	return PTR_ERR_OR_ZERO(phy_provider);
-+}
-+
-+static struct platform_driver sunplus_usb_phy_driver = {
-+	.probe		= sp_usb_phy_probe,
-+	.driver		= {
-+		.name	= "sunplus-usb2-phy",
-+		.of_match_table = sp_uphy_dt_ids,
-+	},
-+};
-+module_platform_driver(sunplus_usb_phy_driver);
-+
-+MODULE_AUTHOR("Vincent Shih <vincent.shih@sunplus.com>");
-+MODULE_DESCRIPTION("Sunplus USB 2.0 phy driver");
-+MODULE_LICENSE("GPL");
-+
++F:	Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
+ F:	drivers/phy/sunplus/Kconfig
+ F:	drivers/phy/sunplus/Makefile
+ F:	drivers/phy/sunplus/phy-sunplus-usb2.c
 -- 
 2.7.4
 

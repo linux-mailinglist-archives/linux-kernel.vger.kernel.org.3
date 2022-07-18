@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B436577C3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE65577C3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiGRHPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S233761AbiGRHQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiGRHPv (ORCPT
+        with ESMTP id S229826AbiGRHQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:15:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8C111804;
-        Mon, 18 Jul 2022 00:15:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C9A66134B;
-        Mon, 18 Jul 2022 07:15:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E24B4C341C0;
-        Mon, 18 Jul 2022 07:15:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658128549;
-        bh=Z2cmY8+eKqIV7mFoiE72EWO95/pjIwP9a1crVM1liS8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NaY8xlRcwPnM+zohaXrpoBcxanhOI1nvQuSyg/VK+e4A0wZ2Nuias53yuUxB4xNrH
-         fj5dbm3zxoTXbY4W2y0yHDRABf2GvRwOdtFCy4P9swUIFMlsqCNBPKfrQLcbla6wNX
-         PgOJ8V3L9ruzZEQV6HBrVre7SJBPUFj39+IboOS/Z7Cikn67hJ0RtNb/ZP3BWpfHBb
-         9gDrX23ky5OSKysC3qrmbS0mG2LrKslm1MrvvdCUUjfOCFKFfA89bV9i0ae/0jwBVP
-         VGVWxSVsOxBzJl7p34+Yt4R1F3mXPIE6Pa1Sv8+ReOrPVXxGqwm03kVL5kzuXv83px
-         5NHGKmKA0qsdA==
-Message-ID: <91613bc8-8a9e-00ed-71c9-ebf4eabed396@kernel.org>
-Date:   Mon, 18 Jul 2022 10:15:44 +0300
+        Mon, 18 Jul 2022 03:16:28 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861CE11804
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:16:26 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id h62so19239146ybb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WTgbojCl60puN/cEewYOxAr1hHsDequScTa2K7T5ZyM=;
+        b=XkzeYNcRzpABXyXiaDj/XSL3DkKnblJpLdnnUHPNJ4QUgGyapkpkIa3KJvOioCX+S/
+         IoD05JGqTb2VGCyN+Q2HPqTXINOElTCoeiOVztQcoMxvuIIIzku6VQVtvVcSs5Sbrny7
+         OWpO77Ooa+Zaj3FqXyzMcWM940Yemtd2k/7fHDWBXH+39KqZ+vw7GSlGvr9tmu4GBbW+
+         eBF3Ah2Gl0qg3Sx5HBCJ9v+cLMFZZ+86bBwSn2wJ6IgNwImUeLo2eAP2NWrAIAJqffMX
+         IpMFR6yYrL/oQInlfhoDnpZ57Qpvjj+QbSYeC/aTt5JZjjd/5rJRvR18vTSSNT6SqkSa
+         hO2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WTgbojCl60puN/cEewYOxAr1hHsDequScTa2K7T5ZyM=;
+        b=LcTkgHwS12KHt/lrxFiiccm9b/LIXzbdsHnRR+mxA1UCPK5Ol2BgNDU8KKliJRMFzH
+         YF9qmb/9/hqPwSkC1L2Nz47TwfMMoIT+w7zNpS8DeG2RIEVT6ZccQrMWD9IeSDasdiQy
+         /0Y0f9TnmEx0xK9hOH6jwxBDCWrwzmhElvA0KRbJYalxRoDN7Q/2jY9ce6mhzas7HSGJ
+         wmAns41xf4inxcauZmbK3XSTyBR0hLEoML5cOsrn4FCCNhJtQ+rcWhw6ar0fxPQXG0yN
+         06/yxpVzWb60TvxrgMjcu5Btjvd1bNnh9p7alHmLBWuh6ngT2p+XLCLt18xjrDp4MtWO
+         ml0Q==
+X-Gm-Message-State: AJIora91sObJMK3/Vzvvxg2MHd3l0gavsNFOoG/sXT9YpDlD4D7Y+rec
+        qQYB9DVJNxD3QIpTS2CvcJJLOSV6t3aJuXABpCviyg==
+X-Google-Smtp-Source: AGRyM1vXDd9kub6MhF+ZlHXK1zUfZ9BpkhYPjv6xg3uCsDxdIr1DAtTkqNx3K+YB1lmfHV40hZJ9kbAxMo2QntWHy2o=
+X-Received: by 2002:a25:2b03:0:b0:664:271f:924 with SMTP id
+ r3-20020a252b03000000b00664271f0924mr26389896ybr.211.1658128585638; Mon, 18
+ Jul 2022 00:16:25 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 0/5] Add interconnect support for SM6350
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Odelu Kukatla <okukatla@codeaurora.org>
-References: <20220525144404.200390-1-luca.weiss@fairphone.com>
- <CLG9OKW0OMLX.2XWU1ZHFRR9RQ@otso>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <CLG9OKW0OMLX.2XWU1ZHFRR9RQ@otso>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220713040430.25778-1-zhouchengming@bytedance.com> <20220713040430.25778-4-zhouchengming@bytedance.com>
+In-Reply-To: <20220713040430.25778-4-zhouchengming@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 18 Jul 2022 09:16:13 +0200
+Message-ID: <CAKfTPtAM1u5dA9+tfEipFUXFVB5xU+5cK4SBwN9rvQzSuRHn+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 03/10] sched/fair: maintain task se depth in set_task_rq()
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,22 +66,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 13 Jul 2022 at 06:04, Chengming Zhou
+<zhouchengming@bytedance.com> wrote:
+>
+> Previously we only maintain task se depth in task_move_group_fair(),
+> if a !fair task change task group, its se depth will not be updated,
+> so commit eb7a59b2c888 ("sched/fair: Reset se-depth when task switched to FAIR")
+> fix the problem by updating se depth in switched_to_fair() too.
+>
+> This patch move task se depth maintainence to set_task_rq(), which will be
+> called when CPU/cgroup change, so its depth will always be correct.
+>
+> This patch is preparation for the next patch.
+>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-On 15.07.22 16:34, Luca Weiss wrote:
-> Hi all,
-> 
-> On Wed May 25, 2022 at 4:43 PM CEST, Luca Weiss wrote:
->> This series adds interconnect support for the various NoCs found on
->> sm6350.
->>
->> A more special modification is allowing child NoC devices, like done for
->> rpm-based qcm2290 which was already merged, but now for rpmh-based
->> interconnect.
-> 
-> any feedback on the two interconnect patches and the dts patch?
-> Georgi? Bjorn?
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-I merged the interconnect patches.
-
-Thanks,
-Georgi
+> ---
+>  kernel/sched/fair.c  | 8 --------
+>  kernel/sched/sched.h | 1 +
+>  2 files changed, 1 insertion(+), 8 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 2a3e12ead144..bf595b622656 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -11539,14 +11539,6 @@ static void attach_entity_cfs_rq(struct sched_entity *se)
+>  {
+>         struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>
+> -#ifdef CONFIG_FAIR_GROUP_SCHED
+> -       /*
+> -        * Since the real-depth could have been changed (only FAIR
+> -        * class maintain depth value), reset depth properly.
+> -        */
+> -       se->depth = se->parent ? se->parent->depth + 1 : 0;
+> -#endif
+> -
+>         /* Synchronize entity with its cfs_rq */
+>         update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);
+>         attach_entity_load_avg(cfs_rq, se);
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index aad7f5ee9666..8cc3eb7b86cd 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1940,6 +1940,7 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
+>         set_task_rq_fair(&p->se, p->se.cfs_rq, tg->cfs_rq[cpu]);
+>         p->se.cfs_rq = tg->cfs_rq[cpu];
+>         p->se.parent = tg->se[cpu];
+> +       p->se.depth = tg->se[cpu] ? tg->se[cpu]->depth + 1 : 0;
+>  #endif
+>
+>  #ifdef CONFIG_RT_GROUP_SCHED
+> --
+> 2.36.1
+>

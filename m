@@ -2,228 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29DE577D9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7F6577D9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233708AbiGRIhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
+        id S233788AbiGRIhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbiGRIhF (ORCPT
+        with ESMTP id S231132AbiGRIhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:37:05 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7C319299
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:37:03 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so17459953pjr.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:37:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hrEyQGzrB3TAIf/TmXechjLg15TCHCdypY6rTcTiJ1Q=;
-        b=aYzzebC8Nn5bqXlt1anYrWRRc1cd679atDrbMKEoimTgs6qL74K36w/o7x7Pmi/dm0
-         9n3CklWEN8XA3oztwnzH1on4r1sQCcH14KQNK8+ivGYom3PtaHgLTS8LCg8kTqalcHE2
-         0PKMiZecAeeTDeJKj4z8F/EL2zSKnFcSTX0slJm4O5/gFeezRQiV5NL/RNc/MoacC9ib
-         bKo4svAeaNwGB6c1ArZoyD/OMA5EjGLLLMGqla2poqNgJNJfmZsaS1e2zHFMIzHsTHz1
-         ToqEhZUV3mwCUx/me2EiUW7zruqe1ezj2xbb/mYQCKHrzo0EgjtZ5UyzzaagxJ4HiKdY
-         rwkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hrEyQGzrB3TAIf/TmXechjLg15TCHCdypY6rTcTiJ1Q=;
-        b=fpeAlAldy+JwgffeCuAZL2ieDPvb61UEImclnGLf+1XL/sL6G/o53HGxb17RNu7Q4e
-         0rgQtQflnbLXM8QbsdL++kSlyQ8gJue1CKjZYFtShxudM5pHWRtykcMzzyAxIQXXD9ri
-         RHJwy8TY0iUjOMZ+BRvP3xbqguXtLx3qkXdQK0Otb4bTelYDUaqMgvzrVEBdDr0vAkcG
-         oOEyb+wpagBi6+ryWZ7RScANCK3AiAjAgCNEZNnlWmUjjlQHIVAy8vwhHPdC9S3x7HUr
-         A2W8y4aFA6iSrQRAw3riUeyDb3EqJwxFWAz6x6Q3bPXbw+cWM8DxuFFV5PAzdSwdDdnq
-         0FTA==
-X-Gm-Message-State: AJIora+BFqYp34Wg5eyCmJbb7b461eYRUsWLMHmf8wDkz9EUSgcKakuy
-        jElGEpP8+NhOrmW3OQdZcvjTUA==
-X-Google-Smtp-Source: AGRyM1shMPa38M0T1/NNgVd+C25k5wuq8hvvwXh0UbSz0nvv2e7mPwkacDPoPodFXencByhxF9Gg7w==
-X-Received: by 2002:a17:90b:17c4:b0:1f0:5541:f2a with SMTP id me4-20020a17090b17c400b001f055410f2amr31585924pjb.224.1658133423176;
-        Mon, 18 Jul 2022 01:37:03 -0700 (PDT)
-Received: from C02GD5ZHMD6R.bytedance.net ([61.120.150.77])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170902d88500b00163ffbc4f74sm8794752plz.49.2022.07.18.01.37.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 01:37:02 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     axboe@kernel.dk, tj@kernel.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, hanjinke <hanjinke.666@bytedance.com>
-Subject: [PATCH] block: don't allow the same type rq_qos add more than once
-Date:   Mon, 18 Jul 2022 16:36:46 +0800
-Message-Id: <20220718083646.67601-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Mon, 18 Jul 2022 04:37:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE6219290
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:37:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658133463; x=1689669463;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=svJzOs7lLK8VfxKlVR9L8K4CdAyx/d3LOgCV8X0yj/I=;
+  b=jUZ0yddl+qDU9XG0LJsyVmbSXVFr7vb4uhke7t09/5NlVBHB1S+zAHKY
+   paPZul8Aq+g9jcimWGRgbp4g9bb7g2UopmVQ9ojP68Lu7JhZ9hUCJUyvd
+   +pvE31E2sO7NIp16gKkCSIsOI25gTMBpt+MBTxAg/3BI6SWwxZx9RE7ZU
+   AyI6EaMtNxf5IWl9FWfzUkxx5DSSn+qFySIwhbEZDk1PPkhs2lMjQdEoK
+   1GYnvO6gHSN1imb/ssVNvQPZhOnF1jx+eL3qwC/DNsKigvZrLpG/Vz0tW
+   DC2Uoj0nUjOiwKMyiR0MlrR7C/UvsF2u077xdwAp0wKK5Gcp40dlhXJa0
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="269191076"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="269191076"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 01:37:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="739385494"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 18 Jul 2022 01:37:31 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Jul 2022 11:37:31 +0300
+Date:   Mon, 18 Jul 2022 11:37:31 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org, Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH 1/2] platform/chrome: cros_ec_typec: Rename port altmode
+ array
+Message-ID: <YtUbyy4j/23XgsIc@kuha.fi.intel.com>
+References: <20220712210318.2671292-1-pmalani@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712210318.2671292-1-pmalani@chromium.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: hanjinke <hanjinke.666@bytedance.com>
+On Tue, Jul 12, 2022 at 09:03:17PM +0000, Prashant Malani wrote:
+> Rename "p_altmode" to "port_altmode" which is a less ambiguous name for
+> the port_altmode struct array.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-In our test of iocost, we encounttered some list add/del corrutions of
-inner_walk list in ioc_timer_fn.
-The resean can be descripted as follow:
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-cpu 0						cpu 1
-ioc_qos_write					ioc_qos_write
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index d6088ba447af..b9848e80f372 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -60,8 +60,7 @@ struct cros_typec_port {
+>  	uint8_t mux_flags;
+>  	uint8_t role;
+>  
+> -	/* Port alt modes. */
+> -	struct typec_altmode p_altmode[CROS_EC_ALTMODE_MAX];
+> +	struct typec_altmode port_altmode[CROS_EC_ALTMODE_MAX];
+>  
+>  	/* Flag indicating that PD partner discovery data parsing is completed. */
+>  	bool sop_disc_done;
+> @@ -282,16 +281,16 @@ static void cros_typec_register_port_altmodes(struct cros_typec_data *typec,
+>  	struct cros_typec_port *port = typec->ports[port_num];
+>  
+>  	/* All PD capable CrOS devices are assumed to support DP altmode. */
+> -	port->p_altmode[CROS_EC_ALTMODE_DP].svid = USB_TYPEC_DP_SID;
+> -	port->p_altmode[CROS_EC_ALTMODE_DP].mode = USB_TYPEC_DP_MODE;
+> +	port->port_altmode[CROS_EC_ALTMODE_DP].svid = USB_TYPEC_DP_SID;
+> +	port->port_altmode[CROS_EC_ALTMODE_DP].mode = USB_TYPEC_DP_MODE;
+>  
+>  	/*
+>  	 * Register TBT compatibility alt mode. The EC will not enter the mode
+>  	 * if it doesn't support it, so it's safe to register it unconditionally
+>  	 * here for now.
+>  	 */
+> -	port->p_altmode[CROS_EC_ALTMODE_TBT].svid = USB_TYPEC_TBT_SID;
+> -	port->p_altmode[CROS_EC_ALTMODE_TBT].mode = TYPEC_ANY_MODE;
+> +	port->port_altmode[CROS_EC_ALTMODE_TBT].svid = USB_TYPEC_TBT_SID;
+> +	port->port_altmode[CROS_EC_ALTMODE_TBT].mode = TYPEC_ANY_MODE;
+>  
+>  	port->state.alt = NULL;
+>  	port->state.mode = TYPEC_STATE_USB;
+> @@ -431,7 +430,7 @@ static int cros_typec_enable_tbt(struct cros_typec_data *typec,
+>  		data.enter_vdo |= TBT_ENTER_MODE_ACTIVE_CABLE;
+>  
+>  	if (!port->state.alt) {
+> -		port->state.alt = &port->p_altmode[CROS_EC_ALTMODE_TBT];
+> +		port->state.alt = &port->port_altmode[CROS_EC_ALTMODE_TBT];
+>  		ret = cros_typec_usb_safe_state(port);
+>  		if (ret)
+>  			return ret;
+> @@ -473,7 +472,7 @@ static int cros_typec_enable_dp(struct cros_typec_data *typec,
+>  	/* Configuration VDO. */
+>  	dp_data.conf = DP_CONF_SET_PIN_ASSIGN(pd_ctrl->dp_mode);
+>  	if (!port->state.alt) {
+> -		port->state.alt = &port->p_altmode[CROS_EC_ALTMODE_DP];
+> +		port->state.alt = &port->port_altmode[CROS_EC_ALTMODE_DP];
+>  		ret = cros_typec_usb_safe_state(port);
+>  		if (ret)
+>  			return ret;
+> -- 
+> 2.37.0.144.g8ac04bfd2-goog
 
-ioc = q_to_ioc(bdev_get_queue(bdev));
-if (!ioc) {
-	ioc = kzalloc();			ioc = q_to_ioc(bdev_get_queue(bdev));
-							if (!ioc) {
-								ioc = kzalloc();
-								...
-								rq_qos_add(q, rqos);
-							 }
-	...
-	rq_qos_add(q, rqos);
-	...
-}
-
-When the io.cost.qos file is written by two cpu concurrently, rq_qos may
-be added to one disk twice. In that case, there will be two iocs enabled
-and running on one disk. They own different iocgs on their active list.
-In the ioc_timer_fn function, because of the iocgs from two ioc have the
-same root iocg, the root iocg's walk_list may be overwritten by each
-other and this lead to list add/del corrutions in building or destorying
-the inner_walk list.
-
-And so far, the blk-rq-qos framework works in case that one instance for
-one type rq_qos per queue by default. This patch make this explicit and
-also fix the crash above.
-
-Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
----
- block/blk-iocost.c    |  7 ++++++-
- block/blk-iolatency.c |  6 +++++-
- block/blk-ioprio.c    |  5 +++++
- block/blk-rq-qos.h    | 11 ++++++++++-
- block/blk-wbt.c       |  8 +++++++-
- 5 files changed, 33 insertions(+), 4 deletions(-)
-
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 33a11ba971ea..2c41edc3fd70 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -2886,7 +2886,12 @@ static int blk_iocost_init(struct request_queue *q)
- 	 * called before policy activation completion, can't assume that the
- 	 * target bio has an iocg associated and need to test for NULL iocg.
- 	 */
--	rq_qos_add(q, rqos);
-+	ret = rq_qos_add(q, rqos);
-+	if (ret) {
-+		free_percpu(ioc->pcpu_stat);
-+		kfree(ioc);
-+		return ret;
-+	}
- 	ret = blkcg_activate_policy(q, &blkcg_policy_iocost);
- 	if (ret) {
- 		rq_qos_del(q, rqos);
-diff --git a/block/blk-iolatency.c b/block/blk-iolatency.c
-index 9568bf8dfe82..9a572439f326 100644
---- a/block/blk-iolatency.c
-+++ b/block/blk-iolatency.c
-@@ -773,7 +773,11 @@ int blk_iolatency_init(struct request_queue *q)
- 	rqos->ops = &blkcg_iolatency_ops;
- 	rqos->q = q;
- 
--	rq_qos_add(q, rqos);
-+	ret = rq_qos_add(q, rqos);
-+	if (ret) {
-+		kfree(blkiolat);
-+		return ret;
-+	}
- 
- 	ret = blkcg_activate_policy(q, &blkcg_policy_iolatency);
- 	if (ret) {
-diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
-index 79e797f5d194..931bffdf0cab 100644
---- a/block/blk-ioprio.c
-+++ b/block/blk-ioprio.c
-@@ -251,6 +251,11 @@ int blk_ioprio_init(struct request_queue *q)
- 	 * rq-qos callbacks.
- 	 */
- 	rq_qos_add(q, rqos);
-+	if (ret) {
-+		blkcg_deactivate_policy(q, &ioprio_policy);
-+		kfree(blkioprio_blkg);
-+		return ret;
-+	}
- 
- 	return 0;
- }
-diff --git a/block/blk-rq-qos.h b/block/blk-rq-qos.h
-index 0e46052b018a..bbc70cf21c9c 100644
---- a/block/blk-rq-qos.h
-+++ b/block/blk-rq-qos.h
-@@ -86,7 +86,7 @@ static inline void rq_wait_init(struct rq_wait *rq_wait)
- 	init_waitqueue_head(&rq_wait->wait);
- }
- 
--static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
-+static inline int rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
- {
- 	/*
- 	 * No IO can be in-flight when adding rqos, so freeze queue, which
-@@ -98,6 +98,8 @@ static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
- 	blk_mq_freeze_queue(q);
- 
- 	spin_lock_irq(&q->queue_lock);
-+	if (rq_qos_id(q, rqos->id))
-+		goto out;
- 	rqos->next = q->rq_qos;
- 	q->rq_qos = rqos;
- 	spin_unlock_irq(&q->queue_lock);
-@@ -109,6 +111,13 @@ static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
- 		blk_mq_debugfs_register_rqos(rqos);
- 		mutex_unlock(&q->debugfs_mutex);
- 	}
-+
-+	return 0;
-+out:
-+	spin_unlock_irq(&q->queue_lock);
-+	blk_mq_unfreeze_queue(q);
-+	return -EBUSY;
-+
- }
- 
- static inline void rq_qos_del(struct request_queue *q, struct rq_qos *rqos)
-diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-index 0c119be0e813..cc8f45929b31 100644
---- a/block/blk-wbt.c
-+++ b/block/blk-wbt.c
-@@ -820,6 +820,7 @@ int wbt_init(struct request_queue *q)
- {
- 	struct rq_wb *rwb;
- 	int i;
-+	int ret;
- 
- 	rwb = kzalloc(sizeof(*rwb), GFP_KERNEL);
- 	if (!rwb)
-@@ -846,7 +847,12 @@ int wbt_init(struct request_queue *q)
- 	/*
- 	 * Assign rwb and add the stats callback.
- 	 */
--	rq_qos_add(q, &rwb->rqos);
-+	ret = rq_qos_add(q, &rwb->rqos);
-+	if (ret) {
-+		blk_stat_free_callback(rwb->cb);
-+		kfree(rwb);
-+		return ret;
-+	}
- 	blk_stat_add_callback(q, rwb->cb);
- 
- 	rwb->min_lat_nsec = wbt_default_latency_nsec(q);
 -- 
-2.20.1
-
+heikki

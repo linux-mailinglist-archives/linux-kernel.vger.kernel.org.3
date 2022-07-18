@@ -2,727 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D2A578CEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7F0578CC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234676AbiGRVhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        id S234989AbiGRVbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235303AbiGRVhL (ORCPT
+        with ESMTP id S235082AbiGRVbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:37:11 -0400
-X-Greylist: delayed 359 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Jul 2022 14:37:08 PDT
-Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E262F326CE;
-        Mon, 18 Jul 2022 14:37:07 -0700 (PDT)
-Received: from localhost.localdomain (unknown [81.178.197.238])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 47E341401E9;
-        Mon, 18 Jul 2022 21:31:11 +0000 (UTC)
-From:   Caleb Connolly <caleb@connolly.tech>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Caleb Connolly <caleb@connolly.tech>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Cc:     Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 4/4] drm: panel: Add lg sw43408 panel driver
-Date:   Mon, 18 Jul 2022 22:30:51 +0100
-Message-Id: <20220718213051.1475108-5-caleb@connolly.tech>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220718213051.1475108-1-caleb@connolly.tech>
-References: <20220718213051.1475108-1-caleb@connolly.tech>
+        Mon, 18 Jul 2022 17:31:23 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B433431DF8;
+        Mon, 18 Jul 2022 14:31:21 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id bp15so23719303ejb.6;
+        Mon, 18 Jul 2022 14:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bSM5ivYjQeEP8TfF7U5MwOVE0teXxd2IvF5WPp8/KBc=;
+        b=gBKdHn8otcrOaqcMOQNE0eKSTu5eRkOi4I8ZMtloFBpcwoqx+4W0YgLGu+jZF/EgVM
+         lVrTmFqm3C2Fuclno1XZZQ9R43fnk5oR7Rig+FeJQB5Yw8lc/J5SY5YZnv3KGaY4qvDT
+         ow4JjFvaPzk4MmoofaX7/8n8+SQnT4/7mc6ABLCgh6Y8xsj3yBeKe/woF/sVrXAx2hJ6
+         GTto1VFja7nl+CdGM967AUn9zTwM7hCtOFADL7h4wyqLIeoYkskt+SKVNJQ21UPIHLOY
+         jS5QxXIH4+vDuRX17T8StJjsZhd7vir7tgKI/lItwI/wASh9SgZZJqTdhdwE5+z/1XDB
+         eUzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bSM5ivYjQeEP8TfF7U5MwOVE0teXxd2IvF5WPp8/KBc=;
+        b=sdwG02oXrwhMBK3AHKKlLqpjnyplEso+IVWWzCg59KkDZRAFB7fCXrlfw3SruN0VZX
+         FPCpFZHyDNEmzT2xnxmHIlkvlTKiR0FKWau3v3skv6PORpkx6phNWPUsQfOH+zhelg9f
+         4bpXSgoPxOkqqhs/jfzhyWplcTMFKA58evgZYgfyoBpD6DaMgm+tikO9ucUcuV3Ddx31
+         +5qTLVQdqQiw2m568Oz0jNZL4bpntMlfckT7YDNAodZAalNtIHeuANp/xlCc9KCppkm9
+         E0olEYCLQwyhhidHuFePyrifHWz79DPSIe3J43LfZJlnJl2lzoaftmOeXulnMjmLegg6
+         XxBQ==
+X-Gm-Message-State: AJIora+/mGp57Tbwd3LGn7KiUzf2R7MdvmlNeBvbeDccx9ixm+e9irWX
+        ufdu/c4jFFMhVo4w0fE1Lbj2venCvOVnhhPGNBs=
+X-Google-Smtp-Source: AGRyM1v95rKJTJeASt2uwuv/96bNjRzHCdLQO61Ht3D1x7i6W4zfHdp728CQ7ePIw5Cde8mm1A90Q/MHpM4dKb0sQKM=
+X-Received: by 2002:a17:907:608f:b0:72b:7db9:4dc6 with SMTP id
+ ht15-20020a170907608f00b0072b7db94dc6mr26848162ejc.463.1658179880155; Mon, 18
+ Jul 2022 14:31:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
+References: <20220712235310.1935121-2-joannelkoong@gmail.com> <YtLJMxChUupbAa+U@xsang-OptiPlex-9020>
+In-Reply-To: <YtLJMxChUupbAa+U@xsang-OptiPlex-9020>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Mon, 18 Jul 2022 14:31:09 -0700
+Message-ID: <CAJnrk1Z0f1z-Mk10othmauAyaF_LD+MxcwVrtD_2=Z_bOHgecQ@mail.gmail.com>
+Subject: Re: [net] 2e20fc25bc: BUG:kernel_NULL_pointer_dereference,address
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, dccp@vger.kernel.org,
+        lkp@lists.01.org, Eric Dumazet <edumazet@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sumit Semwal <sumit.semwal@linaro.org>
-
-LG SW43408 is 1080x2160, 4-lane MIPI-DSI panel, used in some Pixel3
-phones.
-
-Whatever init sequence we have for this panel isn't capable of
-initialising it completely, toggling the reset gpio ever causes the
-panel to die. Until this is resolved we avoid resetting the panel. The
-disable/unprepare functions only put the panel to sleep mode and
-disable the backlight.
-
-Signed-off-by: Sumit Semwal <sumit.semwal@linaro.org>
-[vinod: Add DSC support]
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-[caleb: cleanup and support turning off the panel]
-Signed-off-by: Caleb Connolly <caleb@connolly.tech>
----
- MAINTAINERS                              |   8 +
- drivers/gpu/drm/panel/Kconfig            |  11 +
- drivers/gpu/drm/panel/Makefile           |   1 +
- drivers/gpu/drm/panel/panel-lg-sw43408.c | 586 +++++++++++++++++++++++
- 4 files changed, 606 insertions(+)
- create mode 100644 drivers/gpu/drm/panel/panel-lg-sw43408.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f679152bdbad..8a2b954ad140 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6376,6 +6376,14 @@ S:	Orphan / Obsolete
- F:	drivers/gpu/drm/i810/
- F:	include/uapi/drm/i810_drm.h
- 
-+DRM DRIVER FOR LG SW43408 PANELS
-+M:	Sumit Semwal <sumit.semwal@linaro.org>
-+M:	Caleb Connolly <caleb@connolly.tech>
-+S:	Maintained
-+T:	git git://anongit.freedesktop.org/drm/drm-misc
-+F:	Documentation/devicetree/bindings/display/panel/lg,sw43408-panel.txt
-+F:	drivers/gpu/drm/panel/panel-lg-sw43408.c
-+
- DRM DRIVER FOR LVDS PANELS
- M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
- L:	dri-devel@lists.freedesktop.org
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 38799effd00a..706b112794b9 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -256,6 +256,17 @@ config DRM_PANEL_LEADTEK_LTK500HD1829
- 	  24 bit RGB per pixel. It provides a MIPI DSI interface to
- 	  the host and has a built-in LED backlight.
- 
-+config DRM_PANEL_LG_SW43408
-+	tristate "LG SW43408 panel"
-+	depends on OF
-+	depends on DRM_MIPI_DSI
-+	depends on BACKLIGHT_CLASS_DEVICE
-+	help
-+	  Say Y here if you want to enable support for LG sw43408 panel.
-+	  The panel has a 1080x2160 resolution and uses
-+	  24 bit RGB per pixel. It provides a MIPI DSI interface to
-+	  the host and has a built-in LED backlight.
-+
- config DRM_PANEL_SAMSUNG_LD9040
- 	tristate "Samsung LD9040 RGB/SPI panel"
- 	depends on OF && SPI
-diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-index 42a7ab54234b..ba26a69b74e7 100644
---- a/drivers/gpu/drm/panel/Makefile
-+++ b/drivers/gpu/drm/panel/Makefile
-@@ -25,6 +25,7 @@ obj-$(CONFIG_DRM_PANEL_LEADTEK_LTK050H3146W) += panel-leadtek-ltk050h3146w.o
- obj-$(CONFIG_DRM_PANEL_LEADTEK_LTK500HD1829) += panel-leadtek-ltk500hd1829.o
- obj-$(CONFIG_DRM_PANEL_LG_LB035Q02) += panel-lg-lb035q02.o
- obj-$(CONFIG_DRM_PANEL_LG_LG4573) += panel-lg-lg4573.o
-+obj-$(CONFIG_DRM_PANEL_LG_SW43408) += panel-lg-sw43408.o
- obj-$(CONFIG_DRM_PANEL_NEC_NL8048HL11) += panel-nec-nl8048hl11.o
- obj-$(CONFIG_DRM_PANEL_NEWVISION_NV3052C) += panel-newvision-nv3052c.o
- obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35510) += panel-novatek-nt35510.o
-diff --git a/drivers/gpu/drm/panel/panel-lg-sw43408.c b/drivers/gpu/drm/panel/panel-lg-sw43408.c
-new file mode 100644
-index 000000000000..c7b8ec7b970d
---- /dev/null
-+++ b/drivers/gpu/drm/panel/panel-lg-sw43408.c
-@@ -0,0 +1,586 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2019 Linaro Ltd
-+ * Author: Sumit Semwal <sumit.semwal@linaro.org>
-+ */
-+
-+#include <linux/backlight.h>
-+#include <linux/delay.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+
-+#include <linux/gpio/consumer.h>
-+#include <linux/regulator/consumer.h>
-+
-+#include <drm/drm_device.h>
-+#include <drm/drm_mipi_dsi.h>
-+#include <drm/drm_modes.h>
-+#include <drm/drm_panel.h>
-+#include <drm/drm_print.h>
-+#include <drm/display/drm_dsc.h>
-+#include <drm/display/drm_dsc_helper.h>
-+
-+#include <video/mipi_display.h>
-+
-+struct panel_cmd {
-+	size_t len;
-+	const char *data;
-+};
-+
-+#define _INIT_CMD(...)                                                   \
-+	{                                                                \
-+		.len = sizeof((char[]){ __VA_ARGS__ }), .data = (char[]) \
-+		{                                                        \
-+			__VA_ARGS__                                      \
-+		}                                                        \
-+	}
-+
-+static const char *const regulator_names[] = {
-+	"vddi",
-+	"vpnl",
-+};
-+
-+static const unsigned long regulator_enable_loads[] = {
-+	62000,
-+	857000,
-+};
-+
-+static const unsigned long regulator_disable_loads[] = {
-+	80,
-+	0,
-+};
-+
-+struct sw43408_panel {
-+	struct drm_panel base;
-+	struct mipi_dsi_device *link;
-+
-+	const struct drm_display_mode *mode;
-+	struct backlight_device *backlight;
-+
-+	struct regulator_bulk_data supplies[ARRAY_SIZE(regulator_names)];
-+
-+	struct gpio_desc *reset_gpio;
-+
-+	bool prepared;
-+	bool enabled;
-+};
-+
-+static const struct panel_cmd lg_sw43408_on_cmds_1[] = {
-+	_INIT_CMD(0x00, 0x53, 0x0C, 0x30),
-+	_INIT_CMD(0x00, 0x55, 0x00, 0x70, 0xDF, 0x00, 0x70, 0xDF),
-+	_INIT_CMD(0x00, 0xF7, 0x01, 0x49, 0x0C),
-+
-+	{},
-+};
-+
-+static const struct panel_cmd lg_sw43408_on_cmds_2[] = {
-+	_INIT_CMD(0x00, 0xB0, 0xAC),
-+	_INIT_CMD(0x00, 0xCD, 0x00, 0x00, 0x00, 0x19, 0x19, 0x19, 0x19, 0x19,
-+		  0x19, 0x19, 0x19, 0x19, 0x19, 0x19, 0x19, 0x19, 0x16, 0x16),
-+	_INIT_CMD(0x00, 0xCB, 0x80, 0x5C, 0x07, 0x03, 0x28),
-+	_INIT_CMD(0x00, 0xC0, 0x02, 0x02, 0x0F),
-+	_INIT_CMD(0x00, 0xE5, 0x00, 0x3A, 0x00, 0x3A, 0x00, 0x0E, 0x10),
-+	_INIT_CMD(0x00, 0xB5, 0x75, 0x60, 0x2D, 0x5D, 0x80, 0x00, 0x0A, 0x0B,
-+		  0x00, 0x05, 0x0B, 0x00, 0x80, 0x0D, 0x0E, 0x40, 0x00, 0x0C,
-+		  0x00, 0x16, 0x00, 0xB8, 0x00, 0x80, 0x0D, 0x0E, 0x40, 0x00,
-+		  0x0C, 0x00, 0x16, 0x00, 0xB8, 0x00, 0x81, 0x00, 0x03, 0x03,
-+		  0x03, 0x01, 0x01),
-+	_INIT_CMD(0x00, 0x55, 0x04, 0x61, 0xDB, 0x04, 0x70, 0xDB),
-+	_INIT_CMD(0x00, 0xB0, 0xCA),
-+
-+	{},
-+};
-+
-+static inline struct sw43408_panel *to_panel_info(struct drm_panel *panel)
-+{
-+	return container_of(panel, struct sw43408_panel, base);
-+}
-+
-+/*
-+ * Currently unable to bring up the panel after resetting, must be missing
-+ * some init commands somewhere.
-+ */
-+static __always_unused int panel_reset(struct sw43408_panel *ctx)
-+{
-+	int ret = 0, i;
-+
-+	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
-+		ret = regulator_set_load(ctx->supplies[i].consumer,
-+					 regulator_enable_loads[i]);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+	if (ret < 0)
-+		return ret;
-+
-+	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
-+		ret = regulator_set_load(ctx->supplies[i].consumer,
-+					 regulator_disable_loads[i]);
-+		if (ret) {
-+			DRM_DEV_ERROR(ctx->base.dev,
-+				      "regulator_set_load failed %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	ret = regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+	if (ret < 0)
-+		return ret;
-+
-+	gpiod_set_value(ctx->reset_gpio, 0);
-+	usleep_range(9000, 10000);
-+	gpiod_set_value(ctx->reset_gpio, 1);
-+	usleep_range(1000, 2000);
-+	gpiod_set_value(ctx->reset_gpio, 0);
-+	usleep_range(9000, 10000);
-+
-+	return 0;
-+}
-+
-+static int send_mipi_cmds(struct drm_panel *panel, const struct panel_cmd *cmds)
-+{
-+	struct sw43408_panel *ctx = to_panel_info(panel);
-+	unsigned int i = 0;
-+	int err;
-+
-+	if (!cmds)
-+		return -EFAULT;
-+
-+	for (i = 0; cmds[i].len != 0; i++) {
-+		const struct panel_cmd *cmd = &cmds[i];
-+
-+		if (cmd->len == 2)
-+			err = mipi_dsi_dcs_write(ctx->link, cmd->data[1], NULL,
-+						 0);
-+		else
-+			err = mipi_dsi_dcs_write(ctx->link, cmd->data[1],
-+						 cmd->data + 2, cmd->len - 2);
-+
-+		if (err < 0)
-+			return err;
-+
-+		usleep_range((cmd->data[0]) * 1000, (1 + cmd->data[0]) * 1000);
-+	}
-+
-+	return 0;
-+}
-+
-+static int lg_panel_disable(struct drm_panel *panel)
-+{
-+	struct sw43408_panel *ctx = to_panel_info(panel);
-+
-+	backlight_disable(ctx->backlight);
-+	ctx->enabled = false;
-+
-+	return 0;
-+}
-+
-+/*
-+ * We can't currently re-initialise the panel properly after powering off.
-+ * This function will be used when this is resolved.
-+ */
-+static __always_unused int lg_panel_power_off(struct drm_panel *panel)
-+{
-+	struct sw43408_panel *ctx = to_panel_info(panel);
-+	int i, ret = 0;
-+
-+	gpiod_set_value(ctx->reset_gpio, 1);
-+
-+	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
-+		ret = regulator_set_load(ctx->supplies[i].consumer,
-+					 regulator_disable_loads[i]);
-+		if (ret) {
-+			DRM_DEV_ERROR(panel->dev,
-+				      "regulator_set_load failed %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	ret = regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+	if (ret) {
-+		DRM_DEV_ERROR(panel->dev, "regulator_bulk_disable failed %d\n",
-+			      ret);
-+	}
-+	return ret;
-+}
-+
-+static int lg_panel_unprepare(struct drm_panel *panel)
-+{
-+	struct sw43408_panel *ctx = to_panel_info(panel);
-+	int ret, i;
-+
-+	if (!ctx->prepared)
-+		return 0;
-+
-+	ret = mipi_dsi_dcs_set_display_off(ctx->link);
-+	if (ret < 0) {
-+		DRM_DEV_ERROR(panel->dev,
-+			      "set_display_off cmd failed ret = %d\n", ret);
-+	}
-+
-+	msleep(120);
-+
-+	ret = mipi_dsi_dcs_enter_sleep_mode(ctx->link);
-+	if (ret < 0) {
-+		DRM_DEV_ERROR(panel->dev, "enter_sleep cmd failed ret = %d\n",
-+			      ret);
-+	}
-+
-+	/* Would call panel_power_off() */
-+
-+	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
-+		ret = regulator_set_load(ctx->supplies[i].consumer,
-+					 regulator_disable_loads[i]);
-+		if (ret) {
-+			DRM_DEV_ERROR(panel->dev,
-+				      "regulator_set_load failed %d\n", ret);
-+			return ret;
-+		}
-+	}
-+
-+	ctx->prepared = false;
-+
-+	return ret;
-+}
-+
-+static int lg_panel_prepare(struct drm_panel *panel)
-+{
-+	struct sw43408_panel *ctx = to_panel_info(panel);
-+	int err, i;
-+
-+	if (ctx->prepared)
-+		return 0;
-+
-+	/* Would call panel_reset() */
-+
-+	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
-+		err = regulator_set_load(ctx->supplies[i].consumer,
-+					 regulator_enable_loads[i]);
-+		if (err)
-+			return err;
-+	}
-+
-+	err = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+	if (err < 0)
-+		return err;
-+
-+	usleep_range(9000, 10000);
-+
-+	err = mipi_dsi_dcs_write(ctx->link, MIPI_DCS_SET_GAMMA_CURVE,
-+				 (u8[]){ 0x02 }, 1);
-+	if (err < 0) {
-+		DRM_DEV_ERROR(panel->dev, "failed to set gamma curve: %d\n",
-+			      err);
-+		goto poweroff;
-+	}
-+
-+	err = mipi_dsi_dcs_set_tear_on(ctx->link,
-+				       MIPI_DSI_DCS_TEAR_MODE_VBLANK);
-+	if (err < 0) {
-+		DRM_DEV_ERROR(panel->dev, "failed to set tear on: %d\n", err);
-+		goto poweroff;
-+	}
-+
-+	err = send_mipi_cmds(panel, &lg_sw43408_on_cmds_1[0]);
-+
-+	if (err < 0) {
-+		DRM_DEV_ERROR(panel->dev,
-+			      "failed to send DCS Init 1st Code: %d\n", err);
-+		goto poweroff;
-+	}
-+
-+	err = mipi_dsi_dcs_exit_sleep_mode(ctx->link);
-+	if (err < 0) {
-+		DRM_DEV_ERROR(panel->dev, "failed to exit sleep mode: %d\n",
-+			      err);
-+		goto poweroff;
-+	}
-+
-+	msleep(135);
-+
-+	err = mipi_dsi_dcs_write(ctx->link, MIPI_DSI_COMPRESSION_MODE,
-+				 (u8[]){ 0x11 }, 0);
-+	if (err < 0) {
-+		DRM_DEV_ERROR(panel->dev,
-+			      "failed to set compression mode: %d\n", err);
-+		goto poweroff;
-+	}
-+
-+	err = send_mipi_cmds(panel, &lg_sw43408_on_cmds_2[0]);
-+
-+	if (err < 0) {
-+		DRM_DEV_ERROR(panel->dev,
-+			      "failed to send DCS Init 2nd Code: %d\n", err);
-+		goto poweroff;
-+	}
-+
-+	err = mipi_dsi_dcs_set_display_on(ctx->link);
-+	if (err < 0) {
-+		DRM_DEV_ERROR(panel->dev, "failed to Set Display ON: %d\n",
-+			      err);
-+		goto poweroff;
-+	}
-+
-+	msleep(120);
-+
-+	ctx->prepared = true;
-+
-+	return 0;
-+
-+poweroff:
-+	gpiod_set_value(ctx->reset_gpio, 1);
-+	regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-+	return err;
-+}
-+
-+static int lg_panel_enable(struct drm_panel *panel)
-+{
-+	struct sw43408_panel *ctx = to_panel_info(panel);
-+	struct drm_dsc_picture_parameter_set pps;
-+	int ret;
-+
-+	if (ctx->enabled)
-+		return 0;
-+
-+	ret = backlight_enable(ctx->backlight);
-+	if (ret) {
-+		DRM_DEV_ERROR(panel->dev, "Failed to enable backlight %d\n",
-+			      ret);
-+		return ret;
-+	}
-+
-+	if (!panel->dsc) {
-+		DRM_DEV_ERROR(panel->dev, "Can't find DSC\n");
-+		return -ENODEV;
-+	}
-+
-+	drm_dsc_pps_payload_pack(&pps, panel->dsc);
-+
-+	ctx->enabled = true;
-+
-+	return 0;
-+}
-+
-+static int lg_panel_get_modes(struct drm_panel *panel,
-+			      struct drm_connector *connector)
-+{
-+	struct sw43408_panel *ctx = to_panel_info(panel);
-+	const struct drm_display_mode *m = ctx->mode;
-+	struct drm_display_mode *mode;
-+
-+	mode = drm_mode_duplicate(connector->dev, m);
-+	if (!mode) {
-+		DRM_DEV_ERROR(panel->dev, "failed to add mode %ux%u\n",
-+			      m->hdisplay, m->vdisplay);
-+		return -ENOMEM;
-+	}
-+
-+	connector->display_info.width_mm = m->width_mm;
-+	connector->display_info.height_mm = m->height_mm;
-+
-+	drm_mode_set_name(mode);
-+	drm_mode_probed_add(connector, mode);
-+
-+	return 1;
-+}
-+
-+static int lg_panel_backlight_update_status(struct backlight_device *bl)
-+{
-+	struct mipi_dsi_device *dsi = bl_get_data(bl);
-+	int ret = 0;
-+	uint16_t brightness;
-+
-+	brightness = (uint16_t)backlight_get_brightness(bl);
-+	/* Brightness is sent in big-endian */
-+	brightness = cpu_to_be16(brightness);
-+
-+	ret = mipi_dsi_dcs_set_display_brightness(dsi, brightness);
-+	return ret;
-+}
-+
-+static int lg_panel_backlight_get_brightness(struct backlight_device *bl)
-+{
-+	struct mipi_dsi_device *dsi = bl_get_data(bl);
-+	int ret = 0;
-+	u16 brightness = 0;
-+
-+	ret = mipi_dsi_dcs_get_display_brightness(dsi, &brightness);
-+	if (ret < 0)
-+		return ret;
-+
-+	return brightness & 0xff;
-+}
-+
-+const struct backlight_ops lg_panel_backlight_ops = {
-+	.update_status = lg_panel_backlight_update_status,
-+	.get_brightness = lg_panel_backlight_get_brightness,
-+};
-+
-+static int lg_panel_backlight_init(struct sw43408_panel *ctx)
-+{
-+	struct device *dev = &ctx->link->dev;
-+	const struct backlight_properties props = {
-+		.type = BACKLIGHT_PLATFORM,
-+		.brightness = 255,
-+		.max_brightness = 255,
-+	};
-+
-+	ctx->backlight = devm_backlight_device_register(dev, dev_name(dev), dev,
-+							ctx->link,
-+							&lg_panel_backlight_ops,
-+							&props);
-+
-+	if (IS_ERR(ctx->backlight))
-+		return dev_err_probe(dev, PTR_ERR(ctx->backlight),
-+				     "Failed to create backlight\n");
-+
-+	return 0;
-+}
-+
-+static const struct drm_panel_funcs panel_funcs = {
-+	.disable = lg_panel_disable,
-+	.unprepare = lg_panel_unprepare,
-+	.prepare = lg_panel_prepare,
-+	.enable = lg_panel_enable,
-+	.get_modes = lg_panel_get_modes,
-+};
-+
-+static const struct drm_display_mode sw43408_default_mode = {
-+	.clock = 152340,
-+
-+	.hdisplay = 1080,
-+	.hsync_start = 1080 + 20,
-+	.hsync_end = 1080 + 20 + 32,
-+	.htotal = 1080 + 20 + 32 + 20,
-+
-+	.vdisplay = 2160,
-+	.vsync_start = 2160 + 20,
-+	.vsync_end = 2160 + 20 + 4,
-+	.vtotal = 2160 + 20 + 4 + 20,
-+
-+	.width_mm = 62,
-+	.height_mm = 124,
-+
-+	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
-+};
-+
-+static const struct of_device_id panel_of_match[] = {
-+	{ .compatible = "lg,sw43408", .data = &sw43408_default_mode },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, panel_of_match);
-+
-+static int panel_add(struct sw43408_panel *ctx)
-+{
-+	struct device *dev = &ctx->link->dev;
-+	int i, ret;
-+
-+	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++)
-+		ctx->supplies[i].supply = regulator_names[i];
-+
-+	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
-+				      ctx->supplies);
-+	if (ret < 0)
-+		return ret;
-+
-+	ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-+	if (IS_ERR(ctx->reset_gpio)) {
-+		DRM_DEV_ERROR(dev, "cannot get reset gpio %ld\n",
-+			      PTR_ERR(ctx->reset_gpio));
-+		return PTR_ERR(ctx->reset_gpio);
-+	}
-+
-+	ret = lg_panel_backlight_init(ctx);
-+	if (ret < 0)
-+		return ret;
-+
-+	drm_panel_init(&ctx->base, dev, &panel_funcs, DRM_MODE_CONNECTOR_DSI);
-+
-+	drm_panel_add(&ctx->base);
-+	return ret;
-+}
-+
-+static int panel_probe(struct mipi_dsi_device *dsi)
-+{
-+	struct sw43408_panel *ctx;
-+	struct drm_dsc_config *dsc;
-+	int err;
-+
-+	ctx = devm_kzalloc(&dsi->dev, sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	ctx->mode = of_device_get_match_data(&dsi->dev);
-+	dsi->mode_flags = MIPI_DSI_MODE_LPM;
-+	dsi->format = MIPI_DSI_FMT_RGB888;
-+	dsi->lanes = 4;
-+
-+	ctx->link = dsi;
-+	mipi_dsi_set_drvdata(dsi, ctx);
-+
-+	err = panel_add(ctx);
-+	if (err < 0)
-+		return err;
-+
-+	/* The panel is DSC panel only, set the dsc params */
-+	dsc = devm_kzalloc(&dsi->dev, sizeof(*dsc), GFP_KERNEL);
-+	if (!dsc)
-+		return -ENOMEM;
-+
-+	dsc->dsc_version_major = 0x1;
-+	dsc->dsc_version_minor = 0x1;
-+
-+	dsc->slice_height = 16;
-+	dsc->slice_width = 540;
-+	dsc->slice_count = 1;
-+	dsc->bits_per_component = 8;
-+	dsc->bits_per_pixel = 8;
-+	dsc->block_pred_enable = true;
-+
-+	ctx->base.dsc = dsc;
-+
-+	return mipi_dsi_attach(dsi);
-+}
-+
-+static int panel_remove(struct mipi_dsi_device *dsi)
-+{
-+	struct sw43408_panel *ctx = mipi_dsi_get_drvdata(dsi);
-+	int err;
-+
-+	err = lg_panel_unprepare(&ctx->base);
-+	if (err < 0)
-+		DRM_DEV_ERROR(&dsi->dev, "failed to unprepare panel: %d\n",
-+			      err);
-+
-+	err = lg_panel_disable(&ctx->base);
-+	if (err < 0)
-+		DRM_DEV_ERROR(&dsi->dev, "failed to disable panel: %d\n", err);
-+
-+	err = mipi_dsi_detach(dsi);
-+	if (err < 0)
-+		DRM_DEV_ERROR(&dsi->dev, "failed to detach from DSI host: %d\n",
-+			      err);
-+
-+	if (ctx->base.dev)
-+		drm_panel_remove(&ctx->base);
-+
-+	return 0;
-+}
-+
-+static struct mipi_dsi_driver panel_driver = {
-+	.driver = {
-+		.name = "panel-lg-sw43408",
-+		.of_match_table = panel_of_match,
-+	},
-+	.probe = panel_probe,
-+	.remove = panel_remove,
-+};
-+module_mipi_dsi_driver(panel_driver);
-+
-+MODULE_AUTHOR("Sumit Semwal <sumit.semwal@linaro.org>");
-+MODULE_DESCRIPTION("LG SW436408 MIPI-DSI LED panel");
-+MODULE_LICENSE("GPL");
--- 
-2.36.1
-
+On Sat, Jul 16, 2022 at 7:20 AM kernel test robot <oliver.sang@intel.com> wrote:
+>
+>
+>
+> Greeting,
+>
+> FYI, we noticed the following commit (built with gcc-11):
+>
+> commit: 2e20fc25bca52fbc786bbae312df56514c10798d ("[PATCH net-next v2 1/3] net: Add a bhash2 table hashed by port + address")
+> url: https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/Add-a-second-bind-table-hashed-by-port-address/20220713-075808
+> base: https://git.kernel.org/cgit/linux/kernel/git/davem/net-next.git 5022e221c98a609e0e5b0a73852c7e3d32f1c545
+> patch link: https://lore.kernel.org/netdev/20220712235310.1935121-2-joannelkoong@gmail.com
+>
+> in testcase: boot
+>
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+>
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+>
+>
+> +-------------------------------------------------------+------------+------------+
+> |                                                       | 5022e221c9 | 2e20fc25bc |
+> +-------------------------------------------------------+------------+------------+
+> | boot_successes                                        | 8          | 0          |
+> | boot_failures                                         | 0          | 12         |
+> | BUG:kernel_NULL_pointer_dereference,address           | 0          | 12         |
+> | Oops:#[##]                                            | 0          | 12         |
+> | RIP:inet_bhash2_update_saddr                          | 0          | 12         |
+> | Kernel_panic-not_syncing:Fatal_exception_in_interrupt | 0          | 12         |
+> +-------------------------------------------------------+------------+------------+
+>
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+>
+I will fix this issue in the next iteration of the patch (if the
+previous address was never added to the bhash2 table, then we don't
+need to compute the hash for it and remove it from the table). Thanks
+for reporting.
+>
+> [  247.022450][  T328] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> [  247.024448][  T328] #PF: supervisor write access in kernel mode
+> [  247.026159][  T328] #PF: error_code(0x0002) - not-present page
+> [  247.027743][  T328] PGD 800000014b28a067 P4D 800000014b28a067 PUD 14b289067 PMD 0
+> [  247.029705][  T328] Oops: 0002 [#1] SMP PTI
+> [  247.030900][  T328] CPU: 1 PID: 328 Comm: wget Not tainted 5.19.0-rc5-01130-g2e20fc25bca5 #1
+> [  247.033223][  T328] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+> [ 247.035984][ T328] RIP: 0010:inet_bhash2_update_saddr (include/linux/list.h:884 include/net/sock.h:824 net/ipv4/inet_hashtables.c:872)
+> [ 247.037623][ T328] Code: 48 8d 83 00 03 00 00 4c 8b a3 f8 02 00 00 48 89 c7 48 89 44 24 28 e8 10 79 01 ff 4c 8b ab 00 03 00 00 4c 89 ef e8 f1 87 01 ff <4d> 89 65 00 4d 85 e4 74 14 e8 93 2b ed fe 49 8d 7c 24 08 e8 d9 87
+> All code
+> ========
+>    0:   48 8d 83 00 03 00 00    lea    0x300(%rbx),%rax
+>    7:   4c 8b a3 f8 02 00 00    mov    0x2f8(%rbx),%r12
+>    e:   48 89 c7                mov    %rax,%rdi
+>   11:   48 89 44 24 28          mov    %rax,0x28(%rsp)
+>   16:   e8 10 79 01 ff          callq  0xffffffffff01792b
+>   1b:   4c 8b ab 00 03 00 00    mov    0x300(%rbx),%r13
+>   22:   4c 89 ef                mov    %r13,%rdi
+>   25:   e8 f1 87 01 ff          callq  0xffffffffff01881b
+>   2a:*  4d 89 65 00             mov    %r12,0x0(%r13)           <-- trapping instruction
+>   2e:   4d 85 e4                test   %r12,%r12
+>   31:   74 14                   je     0x47
+>   33:   e8 93 2b ed fe          callq  0xfffffffffeed2bcb
+>   38:   49 8d 7c 24 08          lea    0x8(%r12),%rdi
+>   3d:   e8                      .byte 0xe8
+>   3e:   d9                      .byte 0xd9
+>   3f:   87                      .byte 0x87
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   4d 89 65 00             mov    %r12,0x0(%r13)
+>    4:   4d 85 e4                test   %r12,%r12
+>    7:   74 14                   je     0x1d
+>    9:   e8 93 2b ed fe          callq  0xfffffffffeed2ba1
+>    e:   49 8d 7c 24 08          lea    0x8(%r12),%rdi
+>   13:   e8                      .byte 0xe8
+>   14:   d9                      .byte 0xd9
+>   15:   87                      .byte 0x87
+> [  247.062693][  T328] RSP: 0018:ffffc90000ae7bd8 EFLAGS: 00010246
+> [  247.064435][  T328] RAX: ffff88811673c3e0 RBX: ffff8881168e4600 RCX: ffffffff823fb28f
+> [  247.066525][  T328] RDX: 0000000000000a28 RSI: 0001ffffffffffff RDI: 0000000000000000
+> [  247.068479][  T328] RBP: ffffc90000ae7c60 R08: ffffffff8477ff18 R09: 0000000000000000
+> [  247.070484][  T328] R10: 0000000000000005 R11: 0000000000000000 R12: 0000000000000000
+> [  247.072457][  T328] R13: 0000000000000000 R14: ffffffff84cefd40 R15: ffffffff84cf29c0
+> [  247.074463][  T328] FS:  00007f38cc1a6700(0000) GS:ffff88842fd00000(0000) knlGS:0000000000000000
+> [  247.076798][  T328] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  247.080161][  T328] CR2: 0000000000000000 CR3: 0000000116a32000 CR4: 00000000000006e0
+> [  247.082224][  T328] Call Trace:
+> [  247.083152][  T328]  <TASK>
+> [ 247.083906][ T328] ? write_comp_data (kernel/kcov.c:229)
+> [ 247.085183][ T328] tcp_v4_connect (net/ipv4/tcp_ipv4.c:261)
+> [ 247.086542][ T328] __inet_stream_connect (net/ipv4/af_inet.c:661)
+> [ 247.088103][ T328] ? write_comp_data (kernel/kcov.c:229)
+> [ 247.089429][ T328] inet_stream_connect (net/ipv4/af_inet.c:725)
+> [ 247.090707][ T328] ? __inet_stream_connect (net/ipv4/af_inet.c:720)
+> [ 247.092104][ T328] __sys_connect_file (net/socket.c:1976)
+> [ 247.093453][ T328] __sys_connect (net/socket.c:1993)
+> [ 247.094902][ T328] ? write_comp_data (kernel/kcov.c:229)
+> [ 247.096382][ T328] ? __x64_sys_alarm (kernel/time/itimer.c:306)
+> [ 247.097825][ T328] __x64_sys_connect (net/socket.c:2000)
+> [ 247.115487][ T328] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+> [ 247.116792][ T328] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:115)
+> [  247.118477][  T328] RIP: 0033:0x7f38cb2662e0
+> [ 247.119521][ T328] Code: 00 31 d2 48 29 c2 64 89 11 48 83 c8 ff eb ea 90 90 90 90 90 90 90 90 90 90 90 83 3d fd 8e 2c 00 00 75 10 b8 2a 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 fe ce 00 00 48 89 04 24
+> All code
+> ========
+>    0:   00 31                   add    %dh,(%rcx)
+>    2:   d2 48 29                rorb   %cl,0x29(%rax)
+>    5:   c2 64 89                retq   $0x8964
+>    8:   11 48 83                adc    %ecx,-0x7d(%rax)
+>    b:   c8 ff eb ea             enterq $0xebff,$0xea
+>    f:   90                      nop
+>   10:   90                      nop
+>   11:   90                      nop
+>   12:   90                      nop
+>   13:   90                      nop
+>   14:   90                      nop
+>   15:   90                      nop
+>   16:   90                      nop
+>   17:   90                      nop
+>   18:   90                      nop
+>   19:   90                      nop
+>   1a:   83 3d fd 8e 2c 00 00    cmpl   $0x0,0x2c8efd(%rip)        # 0x2c8f1e
+>   21:   75 10                   jne    0x33
+>   23:   b8 2a 00 00 00          mov    $0x2a,%eax
+>   28:   0f 05                   syscall
+>   2a:*  48 3d 01 f0 ff ff       cmp    $0xfffffffffffff001,%rax         <-- trapping instruction
+>   30:   73 31                   jae    0x63
+>   32:   c3                      retq
+>   33:   48 83 ec 08             sub    $0x8,%rsp
+>   37:   e8 fe ce 00 00          callq  0xcf3a
+>   3c:   48 89 04 24             mov    %rax,(%rsp)
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   48 3d 01 f0 ff ff       cmp    $0xfffffffffffff001,%rax
+>    6:   73 31                   jae    0x39
+>    8:   c3                      retq
+>    9:   48 83 ec 08             sub    $0x8,%rsp
+>    d:   e8 fe ce 00 00          callq  0xcf10
+>   12:   48 89 04 24             mov    %rax,(%rsp)
+> [  247.124379][  T328] RSP: 002b:00007fffffe84038 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+> [  247.126935][  T328] RAX: ffffffffffffffda RBX: 00007fffffe840d0 RCX: 00007f38cb2662e0
+> [  247.128978][  T328] RDX: 0000000000000010 RSI: 00007fffffe840f0 RDI: 0000000000000004
+> [  247.131142][  T328] RBP: 0000000000000004 R08: 00007fffffe83fa0 R09: 0000000000000001
+> [  247.133075][  T328] R10: 00007fffffe83dd0 R11: 0000000000000246 R12: 0000000000000050
+> [  247.135155][  T328] R13: 000000000065ade0 R14: 0000000001549a70 R15: 000000000000002a
+> [  247.137196][  T328]  </TASK>
+> [  247.142192][  T328] Modules linked in: bochs drm_vram_helper drm_ttm_helper ttm drm_kms_helper syscopyarea sysfillrect sysimgblt ppdev fb_sys_fops sr_mod drm joydev i2c_piix4 cdrom parport_pc parport
+> [  247.147469][  T328] CR2: 0000000000000000
+> [  247.148548][  T328] ---[ end trace 0000000000000000 ]---
+> [ 247.186378][ T328] RIP: 0010:inet_bhash2_update_saddr (include/linux/list.h:884 include/net/sock.h:824 net/ipv4/inet_hashtables.c:872)
+> [ 247.218516][ T328] Code: 48 8d 83 00 03 00 00 4c 8b a3 f8 02 00 00 48 89 c7 48 89 44 24 28 e8 10 79 01 ff 4c 8b ab 00 03 00 00 4c 89 ef e8 f1 87 01 ff <4d> 89 65 00 4d 85 e4 74 14 e8 93 2b ed fe 49 8d 7c 24 08 e8 d9 87
+> All code
+> ========
+>    0:   48 8d 83 00 03 00 00    lea    0x300(%rbx),%rax
+>    7:   4c 8b a3 f8 02 00 00    mov    0x2f8(%rbx),%r12
+>    e:   48 89 c7                mov    %rax,%rdi
+>   11:   48 89 44 24 28          mov    %rax,0x28(%rsp)
+>   16:   e8 10 79 01 ff          callq  0xffffffffff01792b
+>   1b:   4c 8b ab 00 03 00 00    mov    0x300(%rbx),%r13
+>   22:   4c 89 ef                mov    %r13,%rdi
+>   25:   e8 f1 87 01 ff          callq  0xffffffffff01881b
+>   2a:*  4d 89 65 00             mov    %r12,0x0(%r13)           <-- trapping instruction
+>   2e:   4d 85 e4                test   %r12,%r12
+>   31:   74 14                   je     0x47
+>   33:   e8 93 2b ed fe          callq  0xfffffffffeed2bcb
+>   38:   49 8d 7c 24 08          lea    0x8(%r12),%rdi
+>   3d:   e8                      .byte 0xe8
+>   3e:   d9                      .byte 0xd9
+>   3f:   87                      .byte 0x87
+>
+> Code starting with the faulting instruction
+> ===========================================
+>    0:   4d 89 65 00             mov    %r12,0x0(%r13)
+>    4:   4d 85 e4                test   %r12,%r12
+>    7:   74 14                   je     0x1d
+>    9:   e8 93 2b ed fe          callq  0xfffffffffeed2ba1
+>    e:   49 8d 7c 24 08          lea    0x8(%r12),%rdi
+>   13:   e8                      .byte 0xe8
+>   14:   d9                      .byte 0xd9
+>   15:   87                      .byte 0x87
+>
+>
+> To reproduce:
+>
+>         # build kernel
+>         cd linux
+>         cp config-5.19.0-rc5-01130-g2e20fc25bca5 .config
+>         make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+>         make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+>         cd <mod-install-dir>
+>         find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+>
+>
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+>
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+>
+>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+>
+>

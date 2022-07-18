@@ -2,194 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216255785F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E825785F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234867AbiGRO67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 10:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S234912AbiGRPBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234761AbiGRO65 (ORCPT
+        with ESMTP id S229697AbiGRPBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:58:57 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57713AE6F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:58:56 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26IErHCA010450;
-        Mon, 18 Jul 2022 14:58:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=corp-2022-7-12;
- bh=LxR1YqrimuIjlurdtqa0BRqQdV5wvcYSK/DWaTMfYnY=;
- b=MInCD81aXGdxZJCBhNB8jNui0EYGGjiVbGf6Axbomo+itQ/WZY0oShOjVbtHFrRtAZ6U
- LP3DSUO4D0paXoenrNdqblslgbcty5j3T8HA6TS1H69goa32C4XOR8d+fWBMUFGyBK8/
- zr0dno6RNVuFlH4nSnMmLD/ElOXihEbshXS2k2wbtaMdB1LvA/M2kiST07pynzdys5gm
- TLnYaWSfjnM6itMiLYniyBycfuAcaCLu41eMT634Pr2ppDwSv1K60ZXIVuQCBPQ8phdk
- xu1jFaEjCQZD7ogU3B4GOePWPT/39HHuy+B0PasG0PlRMP6ws05GLlxjMJMujifx3I+m hA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbkx0um66-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jul 2022 14:58:52 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26ICUmEu006386;
-        Mon, 18 Jul 2022 14:58:51 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1gfmw4t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jul 2022 14:58:51 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OiHnxWgdUwa0wQcI2eznRYnxPlEKYD2rgBZcEnAzNG2ob8yDFtlb+dFufJYLWCKt8hq0zYIOnXPeXRYCB6YXV0+bGzqlBFvbqv0eNjXq9EPJWOzzEHoHcpW17thD/dpb39DAE8pfLl17WiZqrMb2rbVpGs6rEroIiqKXGfNdJqkP6vNu7ppCrm1p0a/GEEqhl50+wc7soJClKXjcsDz85xkNQJh0v/dimD5KB+MBOxQjV9vu3eJewppQN+Q4sg+Y6PUT9z+gY9lGG555Ps98MISMHXl/6kIUY3BHDQVvdvO8KYNE+bJJyZ9u3jjyGNmRliwZ2YAfTRFEt0ohPpggww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LxR1YqrimuIjlurdtqa0BRqQdV5wvcYSK/DWaTMfYnY=;
- b=A3dayoNSaB7QxWQDAyAcn1SUH9ZR/9FELeujqYmGy8RT9tjeDiqph0qD2FyaoG9maiTYs7zzkFXFyZhEZlOpxtOk8vS8iSxxAFw4GYZC2ZlviGZ9XhGt5DejfwV5MP/6Aounkv4CoAsv4voNWYEMueNfKpMj9QUTktUIDbqcCXf5AEn/T+Ewlkg1FQeDXnZk9fYXr+MwhbvYWknQrEqUS+azSJsblW9BtL8K9Tbu1wbM0fdYUZR9cvLX3tw390CB+vCJhgfEUbgAlYUbqn9vZBsreds6RhsLAiD6U6fPHEi5F7Qa5+uaGBl6x5p+ukiq0CAwMmxHDlEYoJz954z4/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LxR1YqrimuIjlurdtqa0BRqQdV5wvcYSK/DWaTMfYnY=;
- b=gFzbXUkGuJt6ELcaPFWdzYbDFfzXkyFNrymdci1Q5Lw/jN+WUM/vUCEwSOQa//UEA9cY9Ut9UFOSWnuSeQrU3la4v3HprTCCi9tXX1YQkAh7xO6b+I8let4fgQQW28CF+Kfp2vv6rAITFlaSq89FSMSqAaNQ//9PGo50rD7m8MA=
-Received: from SN4PR10MB5622.namprd10.prod.outlook.com (2603:10b6:806:209::18)
- by PH7PR10MB6282.namprd10.prod.outlook.com (2603:10b6:510:1a8::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.21; Mon, 18 Jul
- 2022 14:58:49 +0000
-Received: from SN4PR10MB5622.namprd10.prod.outlook.com
- ([fe80::3579:b754:7f20:b262]) by SN4PR10MB5622.namprd10.prod.outlook.com
- ([fe80::3579:b754:7f20:b262%6]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
- 14:58:49 +0000
-Date:   Mon, 18 Jul 2022 16:58:49 +0200
-From:   Alexandre Chartre <alexandre.chartre@oracle.com>
-To:     Ken Moffat <zarniwhoop@ntlworld.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Retbleed, Zen2 and STIBP
-Message-ID: <YtV1KT5l8KpoJWGT@localhost.localdomain>
-References: <YtUXda9ymAI0ED7n@llamedos.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YtUXda9ymAI0ED7n@llamedos.localdomain>
-X-ClientProxiedBy: PR0P264CA0229.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:100:1e::25) To SN4PR10MB5622.namprd10.prod.outlook.com
- (2603:10b6:806:209::18)
+        Mon, 18 Jul 2022 11:01:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41B9323BEF
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658156480;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BHSes/WjwsThp6weFkYaeDkMyMfx1ODvuk7pSgKJJmg=;
+        b=DPYtg3hUqJHAfbFJAoHKRywNtmD7BNOY6jRIKYOOGd+ah7S9hs0m350m3/7K9HRVgI50Jx
+        BwYIdo3kCL5jwyBzCehXnZbG4ksGoV2Ro+Bv8AjXfUSzgUTPhXgcedylncVRU897plZ//e
+        JqA/MXjlm5uzpRwvprH/AlWwoIUFovI=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-260-WnOo9idiNiGZWxPFipxWyQ-1; Mon, 18 Jul 2022 11:01:19 -0400
+X-MC-Unique: WnOo9idiNiGZWxPFipxWyQ-1
+Received: by mail-qv1-f70.google.com with SMTP id fc20-20020ad44f34000000b00472ff2a85beso5604833qvb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:01:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=BHSes/WjwsThp6weFkYaeDkMyMfx1ODvuk7pSgKJJmg=;
+        b=BezrfzvsK0mEFDpJQhQU3sHecMODT85IWvjwvbogGSk3szG7fwMZh8bcPIEAiKCszS
+         wCpByZ+3yPgeGZdvwdquqJT7jg/EMTF0Ap/DS5BrtWvq3IA9QighMyQPmhD2OG5WMwiZ
+         VCU6+PnUbir4d6UtwI8DPJACraQryXzgwgD8ma4rM7Df1tdAih4droue88atBXgvxMYa
+         RHxjLE5IO2pQfBoX/g72c7qZrrGSmXS5bs6KkHpTtJxcR8ewy4+o8iu7OUypBOJnym91
+         wD7CJ2hdCmQv+eC15y2ZXK0NDUUb2HjD4p2kuDjSwE0cfzg67Jkuq7NTokVPSrO0uRhZ
+         AJQw==
+X-Gm-Message-State: AJIora9sLDoQndDY7+pD6WTE/yDrvrsdB0RvGZvebp5MJFZ2fHSp/iqK
+        KyhRqqjgmqIUElt0ObhUZhXdYZd/69H/CdjRfwxjJiKSyIl8Il4z11/z19EzRGPwvyq5kBo3A55
+        8VtPgXKhOMa033m1Kl3mrUzsR
+X-Received: by 2002:ae9:ddc2:0:b0:6b5:b33f:a2df with SMTP id r185-20020ae9ddc2000000b006b5b33fa2dfmr17296181qkf.746.1658156475900;
+        Mon, 18 Jul 2022 08:01:15 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1umRLZVDb3ZR7Qr+fEk3G0gl72mYlrC9SQxx4k22xI0jiZYmZ85s99d6wy0jP2FwrCpbTH/Mg==
+X-Received: by 2002:ae9:ddc2:0:b0:6b5:b33f:a2df with SMTP id r185-20020ae9ddc2000000b006b5b33fa2dfmr17296020qkf.746.1658156474064;
+        Mon, 18 Jul 2022 08:01:14 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-97-238.dyn.eolo.it. [146.241.97.238])
+        by smtp.gmail.com with ESMTPSA id bk34-20020a05620a1a2200b006af1f0af045sm11135611qkb.107.2022.07.18.08.01.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 08:01:13 -0700 (PDT)
+Message-ID: <26265e62a3ed1d5fd8f588a043c2da5a09378021.camel@redhat.com>
+Subject: Re: [mptcp]  d24141fe7b:
+ WARNING:at_mm/page_counter.c:#page_counter_cancel
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        netdev@vger.kernel.org, mptcp@lists.linux.dev, lkp@lists.01.org,
+        lkp@intel.com
+Date:   Mon, 18 Jul 2022 17:01:09 +0200
+In-Reply-To: <YtVhyGSsv1CWvPz4@xsang-OptiPlex-9020>
+References: <YtVhyGSsv1CWvPz4@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4fc0e658-fd87-4ca2-a296-08da68ce04e5
-X-MS-TrafficTypeDiagnostic: PH7PR10MB6282:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OaW6wBZBfmMnCKipCJ4dew+n34ptOFno7qX5kfXeDzMtTercmk6n1gXmS9CQmPsoGfBP0uvGrAMx9MlPSsrHjz4pCqldmcuDeuKlsklOh5EPNRat7jpk3jJ+Gthl4KXbwPukCL2m3bZu85w8c/Ei0FQAoTLsnW4kp0L+wP8tLZ5ELTxxualAJEQK4BLzRi0h5GjZsjMQ3+XLwIEsN2iNPDyPffxs6iSqorvrvTnI6ryb8OU/9R6wwC5T9ohkyO01vbU4z3/oxqPO3JYos67Uv7m2ZqUFvN5CgoBt0mdclmmyuCgnbfhUBPf5KthTQZ9PGCnMGIfCHCm5k60rkgNk94eq2YyHgVWdd7nKTxlqCWFTsryrg85sEnKjvPT5R8/uad5Uw4PaMdAdZ6lSjSID25jglPUyfoMSa7biacYwA+dFnylSzQQvc3tDz5l76XRB+q32INbJrYn9miiVOS1QwZEuXEi1NIdyTuVpVNOAJaf1Q1Wuf64pCugbrBz/qkQQOpTp7ayIQR/5XyGs5VMXLOty/JjQGHAhNbH8SJS+6IwAnHS3b4n7AubaGBGMFQ9qzdB8G5ngbehlAPoGlAz3cLFN1xD6+fehpUGOqbuBxKhwErY1ZfOVRtz3lfrGenZk0ej9KVjg8GG3YfeY2rSn+JOXDyg24gPoZhC+Ng3LIItwIGbfSyDGBwNM371HzLLy/7BUnTm2GPN2YKs9Whj14Bj7mLZPafljyD/C0Vogdl5Net+S1IZQ+bqMfNts7H0/Cqw3xDCuWUBj3vnrEmxSvC0k4MDFd6s0PGlM3YnDCNY42/I40THbD5aCccjBXHKjpzEiWu0lme6f7b6GngN+wg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR10MB5622.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(136003)(39860400002)(396003)(366004)(346002)(66476007)(66946007)(66556008)(6506007)(38100700002)(6916009)(8676002)(4326008)(316002)(478600001)(6512007)(9686003)(26005)(8936002)(6486002)(966005)(5660300002)(44832011)(2906002)(41300700001)(86362001)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WDhHczMxMnJ5K29MT1JVdzNhZmpFbjFiSUtha1JwYXBacWVmYjUycDYzNmVs?=
- =?utf-8?B?Mll1NllPOXlUSC9lNUZOUDNxb0hETXNZU1VPUDFrb1lER0hQczJPNEhwQ3RJ?=
- =?utf-8?B?QUMyUjdJeHQ1cE13MDhnQVZreTRnREoyd3RneDA5YWtXNStVNEJEeTlkWmdt?=
- =?utf-8?B?ZzRCdlVDTnAybnBVMlgzWnFSRTRmUCtJVExHTEIwcTdvV1pzVjNWQkxlNG1a?=
- =?utf-8?B?d0dEVDdnU3I1YmRobVE2aXg3MjhjV0xtQis0c0IvbnkxdlE2bU45V0xjYzFS?=
- =?utf-8?B?VlhRSUZYOVU0YTBlRHdUQXFtSVRNN0lCbXpHMDNKNHdqNUt2WEpPOXBMQ1VG?=
- =?utf-8?B?eEJaRzVFZ01HWCtQSFdkZHdrcnRYM01UeUNPUHRBc0dCVzc0c2VOdjlnb1JE?=
- =?utf-8?B?NnR5b0lrSlBHU0lZR0hWam12a2NIa3o1QVYwQUNIdTNyeE56OFluN3h5cE50?=
- =?utf-8?B?TFJjYkkxVjVZVTNQMHU3OURSUFc3Z0lCZDM0THJBQjYwMTVzWTJlUHRVeEEv?=
- =?utf-8?B?dmtGRjVPUFExWkQvdDVCeWozeUtjVHcwVUMzWnFKS3l2NTlKMnhwa0FaN2k0?=
- =?utf-8?B?VGUyTmwyUm12QnRiV1ZJLzdPL0hhT1VsMmZPNTlsWTVMbHZUajllZldrR3N2?=
- =?utf-8?B?NU1QUDN4U3VoYURQTFRITFRQNDRSQUFRaFk5ZEw2bWVLb0wydHdhczNWUHRS?=
- =?utf-8?B?ejZ1ZE9ncUs5Rm9LWDBhYWQwdHpZeVUxVW5QdklKUXlBd1JWa2laRkRLeXJP?=
- =?utf-8?B?ZlhKWUFJcnJyb2xDTWFoZ2tSWE5QZVhyUkptTUdCTUpxN0VCMWxyVWNOelNK?=
- =?utf-8?B?dEFPeTRFSThsYUNnRzdhU0t6RHlvbVUzY1cwR25zU0pJTUJpYUZwSUFjVFp0?=
- =?utf-8?B?SW5BV05ZRDB4Z0RPL0FyYStOSENTd21PVUl0eTlEMXlMS1dlR0E3cXhvUVhM?=
- =?utf-8?B?RzRyNE55TWtBdHZSeGZxbHJwSzdyTWRvTXFYQzdGMExCYS9WbFg5K2pWeFJQ?=
- =?utf-8?B?dDBFOVorVHUrQUp0Y05lTUNJcWRUa0VGbVk0TXZ6TDkzQ3VEbWZpOW1DdmdG?=
- =?utf-8?B?U0IxcE54MjhtcXNQNG1GTW9lVFNUOWx6RkIzdi9ZTHRzM21oODJ0VUtqTkJR?=
- =?utf-8?B?M0I5YUdLaXY2VWEwWnpOL3VFb2IxTitIYXdwT0o5QWZqdTNUZDJqNmxxT0h6?=
- =?utf-8?B?VlBUb3JQT0lRZEJwNFgwY3pla3VkdC9OUXA1dzNlb1BHWCt4ZFZXd0JESDRD?=
- =?utf-8?B?SVI4UGFTQ0taY3FiODN5eXlncmFnTTBUSFZmY2V5cXAxWDNKVzJoNkdhTndQ?=
- =?utf-8?B?NEtvRmhtWlRGcDg4ZFBKODJpbFNORXZJUlFUNGUzYmVuQWdQa0dxOHZUNmxo?=
- =?utf-8?B?Y2xLeHVWRUxpdzdsRkN4SGJjaW10WnFOak0razJNa1lNMjBKUy9rdXY1WWVv?=
- =?utf-8?B?NG02Q0pBUWlKVDJ3T3oyVXJtTTQxQ09BbU13aGhYcTlTRjdhVk5CMUdCZUZM?=
- =?utf-8?B?aVJPclR0NTh6QkxvMzRXOGJqSUU5aW1KVm9sUHI1eG1EaU81K2RDVWx3YlFj?=
- =?utf-8?B?bmozSTQ1RzU1Y1VUeHhQYkxQdUtpdTNudXVqVGJHQlllcVcrczNlSi9tVnJ0?=
- =?utf-8?B?WUlGTW1WVFMydk42SXJxU2pxM2RVYWp2eG9KYWdSbzBGN2M1R3BrN0lsbmRa?=
- =?utf-8?B?UWpvNXZISnVRS2NFc1NJZXdWL1NicTVKNWtSaHRYaWtUTjhIMDRDdDZ3dzRh?=
- =?utf-8?B?YnRGSytJNzI0dmpjSTRBSmpQdFlHZlpBZ0tJYXFDc1gvbDB6RHl1U1FUcWly?=
- =?utf-8?B?UjcxS3ZmSGNFRm1GRkxPWE1Eb040R0kzbS82ZGY0TiswVWQ2U3lGcXZTanpa?=
- =?utf-8?B?N1BicjBNM2haMTdkY1p5SWp5RjcwMkY2UkRLZEtmbngwaWdsSzJOVWpzTmtP?=
- =?utf-8?B?TDhGekNQSVJoQkp4QmlRNmRoYlhzaC9DS1FVcTFXcWgyMUdTTUJudXdTaGdu?=
- =?utf-8?B?Q2dnWFJRSFlENVdqSWErSGxpQis4d25vb1RCK0NHMHRyS3hyRXV1Rkx6bGpS?=
- =?utf-8?B?VFlUM0o5VFZybWszaVp4bkhFZkY0WGpOTWZXTDFSTjcwWnlqZk9WdlNmUldQ?=
- =?utf-8?B?UzZTL0tLK0pleHdpbFRFK0pLVksxV2VVVjFlWnpJYS9vdzRCc09sa1V1bXZz?=
- =?utf-8?B?d2c9PQ==?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4fc0e658-fd87-4ca2-a296-08da68ce04e5
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR10MB5622.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2022 14:58:48.8414
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Vae++Pic+Q+ThIkQB6mH6S/q86HGYGEQdjXax6PXj9+s2zvH27yGcjISZdh9I2T4GeLl9dUg+qMub2gGyVfcvrPkh1+nK/GdU3xuRnoIHIE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6282
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_14,2022-07-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 bulkscore=0
- malwarescore=0 adultscore=0 mlxscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207180065
-X-Proofpoint-GUID: oZr-8l-l4CAkbn72_kk8bWO9frPTb2Ol
-X-Proofpoint-ORIG-GUID: oZr-8l-l4CAkbn72_kk8bWO9frPTb2Ol
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 09:19:01AM +0100, Ken Moffat wrote:
-> Probably like most people, I find the detail of the available
-> retbleed mitigations obscure.  In particular, for zen2 the options
-> *might* include ibpb or unret.
+On Mon, 2022-07-18 at 21:36 +0800, kernel test robot wrote:
+> FYI, we noticed the following commit (built with gcc-11):
 > 
-> But I have failed to find what 'unret' actually means.  Any
-> pointers, please ?
+> commit: d24141fe7b48d3572afb673ae350cf0e88caba6c ("mptcp: drop SK_RECLAIM_* macros")
+> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
 > 
-> While ibpb might be available (and slow), on my Renoir with
-> microcode level (0860106h) there were no newer microcode versions
-> available when I last looked (a few weeks ago) but note 7 at the
-> bottom of
-> https://www.amd.com/system/files/documents/technical-guidance-for-mitigating-branch-type-confusion_v
-> 7_20220712.pdf
-> implies that the relevant bit is only set on Renoir in 0860109h and
-> later.
+> in testcase: kernel-selftests
+> version: kernel-selftests-x86_64-77b3a84e-1_20220711
+> with following parameters:
 > 
-> Some of the text in that pdf implies that at least one of the
-> options could be set if not already set from the microcode, but the
-> amount of detail leaves me totally lost.
+> 	group: mptcp
+> 	ucode: 0xec
 > 
-> Assuming, for the moment, that I might want to try this full
-> mitigation, is there any way to set this in the absence of newer
-> microcode ?
+> test-description: The kernel contains a set of "self tests" under the tools/testing/selftests/ directory. These are intended to be small unit tests to exercise individual code paths in the kernel.
+> test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
 > 
-> Or should I just accept that the best I can get is 'unret', whatever
-> that means ?
 > 
-> ĸen
+> on test machine: 8 threads Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz with 16G memory
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> 
+> 
+> [  240.473094][T14986] ------------[ cut here ]------------
+> [  240.478507][T14986] page_counter underflow: -4294828518 nr_pages=4294967290
+> [  240.485500][T14986] WARNING: CPU: 2 PID: 14986 at mm/page_counter.c:56 page_counter_cancel+0x96/0xc0
+> [  240.494671][T14986] Modules linked in: mptcp_diag inet_diag nft_tproxy nf_tproxy_ipv6 nf_tproxy_ipv4 nft_socket nf_socket_ipv4 nf_socket_ipv6 nf_tabl
+> es nfnetlink openvswitch nf_conncount nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 btrfs blake2b_generic xor raid6_pq zstd_compress libcrc32c sd_mo
+> d t10_pi crc64_rocksoft_generic crc64_rocksoft crc64 i915 sg hp_wmi ipmi_devintf intel_rapl_msr intel_rapl_common ipmi_msghandler x86_pkg_temp_thermal i
+> ntel_powerclamp coretemp crct10dif_pclmul crc32_pclmul intel_gtt sparse_keymap crc32c_intel platform_profile drm_buddy ghash_clmulni_intel mei_wdt rfkil
+> l wmi_bmof drm_display_helper rapl ttm ahci drm_kms_helper libahci intel_cstate syscopyarea intel_uncore mei_me sysfillrect serio_raw libata i2c_i801 me
+> i sysimgblt i2c_smbus fb_sys_fops intel_pch_thermal wmi video intel_pmc_core tpm_infineon acpi_pad fuse ip_tables
+> [  240.570849][T14986] CPU: 2 PID: 14986 Comm: mptcp_connect Tainted: G S                5.19.0-rc4-00739-gd24141fe7b48 #1
+> [  240.581637][T14986] Hardware name: HP HP Z240 SFF Workstation/802E, BIOS N51 Ver. 01.63 10/05/2017
+> [  240.590600][T14986] RIP: 0010:page_counter_cancel+0x96/0xc0
+> [  240.596179][T14986] Code: 00 00 00 45 31 c0 48 89 ef 5d 4c 89 c6 41 5c e9 40 fd ff ff 4c 89 e2 48 c7 c7 20 73 39 84 c6 05 d5 b1 52 04 01 e8 e7 95 f3
+> 01 <0f> 0b eb a9 48 89 ef e8 1e 25 fc ff eb c3 66 66 2e 0f 1f 84 00 00
+> [  240.615639][T14986] RSP: 0018:ffffc9000496f7c8 EFLAGS: 00010082
+> [  240.621569][T14986] RAX: 0000000000000000 RBX: ffff88819c9c0120 RCX: 0000000000000000
+> [  240.629404][T14986] RDX: 0000000000000027 RSI: 0000000000000004 RDI: fffff5200092deeb
+> [  240.637239][T14986] RBP: ffff88819c9c0120 R08: 0000000000000001 R09: ffff888366527a2b
+> [  240.645069][T14986] R10: ffffed106cca4f45 R11: 0000000000000001 R12: 00000000fffffffa
+> [  240.652903][T14986] R13: ffff888366536118 R14: 00000000fffffffa R15: ffff88819c9c0000
+> [  240.660738][T14986] FS:  00007f3786e72540(0000) GS:ffff888366500000(0000) knlGS:0000000000000000
+> [  240.669529][T14986] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  240.675974][T14986] CR2: 00007f966b346000 CR3: 0000000168cea002 CR4: 00000000003706e0
+> [  240.683807][T14986] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  240.691641][T14986] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  240.699468][T14986] Call Trace:
+> [  240.702613][T14986]  <TASK>
+> [  240.705413][T14986]  page_counter_uncharge+0x29/0x80
+> [  240.710389][T14986]  drain_stock+0xd0/0x180
+> [  240.714585][T14986]  refill_stock+0x278/0x580
+> [  240.718951][T14986]  __sk_mem_reduce_allocated+0x222/0x5c0
+> [  240.724443][T14986]  ? rwlock_bug+0xc0/0xc0
+> [  240.729248][T14986]  __mptcp_update_rmem+0x235/0x2c0
+> [  240.734228][T14986]  __mptcp_move_skbs+0x194/0x6c0
+> [  240.739030][T14986]  ? mptcp_check_data_fin+0x380/0x380
+> [  240.744869][T14986]  ? skb_release_data+0x482/0x640
+> [  240.749764][T14986]  mptcp_recvmsg+0xdfa/0x1340
+> [  240.754315][T14986]  ? __mptcp_move_skbs+0x6c0/0x6c0
+> [  240.759296][T14986]  ? memset+0x20/0x40
+> [  240.763153][T14986]  inet_recvmsg+0x37f/0x500
+> [  240.767521][T14986]  ? generic_perform_write+0x310/0x4c0
+> [  240.772846][T14986]  ? inet_sendpage+0x140/0x140
+> [  240.777473][T14986]  ? find_held_lock+0x2c/0x140
+> [  240.782109][T14986]  sock_read_iter+0x24a/0x380
+> [  240.786655][T14986]  ? sock_recvmsg+0x140/0x140
+> [  240.791198][T14986]  ? 0xffffffff81000000
+> [  240.795228][T14986]  ? poll_select_set_timeout+0x82/0x100
+> [  240.800633][T14986]  ? __lock_release+0x102/0x540
+> [  240.805353][T14986]  new_sync_read+0x420/0x540
+> [  240.809806][T14986]  ? lock_is_held_type+0x98/0x140
+> [  240.814691][T14986]  ? __ia32_sys_llseek+0x340/0x340
+> [  240.819668][T14986]  ? 0xffffffff81000000
+> [  240.823693][T14986]  ? recalibrate_cpu_khz+0x40/0x40
+> [  240.828667][T14986]  ? ktime_get_ts64+0xbc/0x240
+> [  240.833306][T14986]  ? fsnotify_perm+0x13b/0x4c0
+> [  240.838552][T14986]  vfs_read+0x37f/0x4c0
+> [  240.842582][T14986]  ksys_read+0x170/0x200
+> [  240.846688][T14986]  ? __ia32_sys_pwrite64+0x200/0x200
+> [  240.851836][T14986]  ? lockdep_hardirqs_on_prepare+0x19a/0x380
+> [  240.858284][T14986]  ? syscall_enter_from_user_mode+0x21/0x80
+> [  240.864039][T14986]  do_syscall_64+0x5c/0x80
+> [  240.868314][T14986]  ? do_syscall_64+0x69/0x80
+> [  240.872770][T14986]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> [  240.878526][T14986] RIP: 0033:0x7f3786d9ae8e
+> [  240.882805][T14986] Code: c0 e9 b6 fe ff ff 50 48 8d 3d 6e 18 0a 00 e8 89 e8 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+> [  240.902259][T14986] RSP: 002b:00007fff7be81e08 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> [  240.910533][T14986] RAX: ffffffffffffffda RBX: 0000000000002000 RCX: 00007f3786d9ae8e
+> [  240.918368][T14986] RDX: 0000000000002000 RSI: 00007fff7be87ec0 RDI: 0000000000000005
+> [  240.926206][T14986] RBP: 0000000000000005 R08: 00007f3786e6a230 R09: 00007f3786e6a240
+> [  240.934046][T14986] R10: fffffffffffff288 R11: 0000000000000246 R12: 0000000000002000
+> [  240.941884][T14986] R13: 00007fff7be87ec0 R14: 00007fff7be87ec0 R15: 0000000000002000
+> [  240.949741][T14986]  </TASK>
+> [  240.952632][T14986] irq event stamp: 27367
+> [  240.956735][T14986] hardirqs last  enabled at (27366): [<ffffffff81ba50ea>] mem_cgroup_uncharge_skmem+0x6a/0x80
+> [  240.966848][T14986] hardirqs last disabled at (27367): [<ffffffff81b8fd42>] refill_stock+0x282/0x580
+> [  240.976017][T14986] softirqs last  enabled at (27360): [<ffffffff83a4d8ef>] mptcp_recvmsg+0xaf/0x1340
+> [  240.985273][T14986] softirqs last disabled at (27364): [<ffffffff83a4d30c>] __mptcp_move_skbs+0x18c/0x6c0
+> [  240.994872][T14986] ---[ end trace 0000000000000000 ]---
 
-'unret' = AMD JMP2RET i.e. replace all 'ret' instructions with
-'jmp __x86_return_thunk', and safe training the thunk code upon
-kernel/hypervisor entry. This is a purely software mitigation,
-it doesn't require any microcode.
+I think that the root cause is that subflows and main socket end-up in
+different cgroups (likely, the subflows in no cgroup at all). It should
+be quite unrelated from the mentioned commit (older issue).
 
-AMD JMP2RET is described in this document:
-https://www.amd.com/system/files/documents/technical-guidance-for-mitigating-branch-type-confusion_v7_20220712.pdf
+I'll try to have a better look.
 
-alex.
+Thanks!
+
+Paolo
 

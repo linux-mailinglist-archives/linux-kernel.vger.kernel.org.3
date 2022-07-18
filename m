@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE4C577D58
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679E3577D59
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbiGRISh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
+        id S233815AbiGRITL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbiGRISe (ORCPT
+        with ESMTP id S233771AbiGRITE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:18:34 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E854E1900D
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:18:30 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x91so14220004ede.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z+u8dlZ8Muf2HXMeU0KFrMSR2DdrEfYE39jHtYBLJvk=;
-        b=e/pfi4LiQiBx98KeNwsNG85Q9l7RndPje7VUL/FYpkZcIQkcvtf7tM4VafS+M7L8wa
-         +r9PGqWoTeSaG9Ow4MsGxFsdeZu1szALQtbuu+oyGz0fGits8Gami5fdaVLPTukXEo7V
-         eLr6Zn4BxFxFNd6hCuekvtVsP+0z3UqKCJVYg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z+u8dlZ8Muf2HXMeU0KFrMSR2DdrEfYE39jHtYBLJvk=;
-        b=Ws1tab4PpUlAVO/gnzoY4Q8T57KG6pVLWv5oarFeLR98goRtzAzHVRIDvVRrpXLp02
-         Nnjar1hMcehc2Rs7TEw2MeYHGbRL/RQpE8RAwFIul9n0TWN1CMvrg8vUVtBFRLC1E84d
-         JAtg/RdxRADC7anFdBlzRo1hHTDq0nQptOAu6rsPjIW49htz5AxlpEnZQtR3eRpMy8mC
-         NoY51UDR4vrWN2d5HaHYhK8nwcODQOV6QNNklk6mtV/8rbu2loTQsMqw4KEg6IPnPXLl
-         xUH7k+KHocXdeJ1foeL54T4g9aWDKA5zhGqOmlKPkaPz7157jPGR8uP/jc8u9+kUE0/6
-         KLaQ==
-X-Gm-Message-State: AJIora9GusYraHxM1I8eKcEQLEkWhwR9SxGRWHEuxZs1O5Hrv6L2Dgae
-        UTGtL6YPlSn3NQGeRZ66bAEUfHYOEN+HOhM/M0g+oA==
-X-Google-Smtp-Source: AGRyM1t2KjNAK8+Cdsj/U870U8abc3W65tr4+56ozSx6bSjF1xdkpTirePoJ75KgMCJxjWca6RFNJYpWxwZZUBXUHq4=
-X-Received: by 2002:a05:6402:3202:b0:43a:86f5:a930 with SMTP id
- g2-20020a056402320200b0043a86f5a930mr34796033eda.389.1658132309531; Mon, 18
- Jul 2022 01:18:29 -0700 (PDT)
+        Mon, 18 Jul 2022 04:19:04 -0400
+Received: from smtpq2.tb.ukmail.iss.as9143.net (smtpq2.tb.ukmail.iss.as9143.net [212.54.57.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD56B849
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:19:03 -0700 (PDT)
+Received: from [212.54.57.108] (helo=csmtp4.tb.ukmail.iss.as9143.net)
+        by smtpq2.tb.ukmail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <zarniwhoop@ntlworld.com>)
+        id 1oDLy2-0005F5-06
+        for linux-kernel@vger.kernel.org; Mon, 18 Jul 2022 10:19:02 +0200
+Received: from llamedos.mydomain ([81.97.236.130])
+        by cmsmtp with ESMTPA
+        id DLy1opNWRuYlrDLy1oRSOL; Mon, 18 Jul 2022 10:19:01 +0200
+X-SourceIP: 81.97.236.130
+X-Authenticated-Sender: zarniwhoop@ntlworld.com
+X-Spam: 0
+X-Authority: v=2.4 cv=RoXWkQqK c=1 sm=1 tr=0 ts=62d51775 cx=a_exe
+ a=OGiDJHazYrvzwCbh7ZIPzQ==:117 a=OGiDJHazYrvzwCbh7ZIPzQ==:17
+ a=IkcTkHD0fZMA:10 a=RgO8CyIxsXoA:10 a=zd2uoN0lAAAA:8 a=GQgagVcjBMtnFRtF3loA:9
+ a=QEXdDO2ut3YA:10
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ntlworld.com;
+        s=meg.feb2017; t=1658132341;
+        bh=V/C/Yeyoys4o7TehoWP926lx5yRUap6C1609FFWebys=;
+        h=Date:From:To:Subject;
+        b=ayAh9nwgdvHBrFI2O1lMC0SOwn6F7sssbd3po5CaREv8eKmPuwfPDxGr8+mIVtbsU
+         3i6wPRiFY0fXNPuizpu2rMah9nkOgl6FzwLFEhTVoQpffX/Va7ip4/N1x6NLHDvbY4
+         HJk9KgzTiRoiHUFZNHeFsY7ybVEcfPMRwez3kddG59/RlN8zZWhyuiAEfSZ1Ub3szU
+         lMqqiFmuzmrtLZ202oOe0YP2DHwQOoN/0ZCiItcQgqlBPCzpkb0kHho4GKfZKsXyzG
+         Z4Ff6DMljuyPFNX62qEo3iay57fgYXKUtRT66Qjo/g2sb3Iq7paEz96wKua6Stkm5F
+         YeAXjbz8zYrDQ==
+Received: by llamedos.mydomain (Postfix, from userid 1000)
+        id 9E99A8DB5C; Mon, 18 Jul 2022 09:19:01 +0100 (BST)
+Date:   Mon, 18 Jul 2022 09:19:01 +0100
+From:   Ken Moffat <zarniwhoop@ntlworld.com>
+To:     linux-kernel@vger.kernel.org
+Subject: Retbleed, Zen2 and STIBP
+Message-ID: <YtUXda9ymAI0ED7n@llamedos.localdomain>
 MIME-Version: 1.0
-References: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com>
- <CAJfpegtSsG_qUT8LsO=ro76RTwBBfa=1JVwwX+mVxd-svir+3g@mail.gmail.com> <CAFQAk7jTJi_OcX=4nevbOquphcibtD=jG-jwwbC0KMJOfx9DeQ@mail.gmail.com>
-In-Reply-To: <CAFQAk7jTJi_OcX=4nevbOquphcibtD=jG-jwwbC0KMJOfx9DeQ@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 18 Jul 2022 10:18:18 +0200
-Message-ID: <CAJfpegu1uSMGrh==DS9+fbX+Gm8XaOyY3KTQ3xtZsbPEJo1M8A@mail.gmail.com>
-Subject: Re: [PATCH] fuse: writeback_cache consistency enhancement (writeback_cache_v2)
-To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xie Yongji <xieyongji@bytedance.com>, fam.zheng@bytedance.com,
-        Miklos Szeredi <mszeredi@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Clacks-Overhead: GNU Terry Pratchett
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/2.2.6 (2022-06-05)
+X-CMAE-Envelope: MS4xfFOLku9WgYEKmdRdm/nvrbE3/D3Bjzf4qmp/FnBsB+7V4z4de2bxFPo3SKLY3eahoww5E/zhi7TZVvbqGdVXb5m+wia/5hf51D0hiYA/myNgh17OOnP2
+ gC9yyAqB/K51ojf2jhBa9cljxoFmBw9K4ACvDlOSNbg4NSExn94wFvSWlV1cMIawr3vI/HZR0ZOfc9Kfr7SNhy2nFm8FFcvTMP8=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 at 08:01, Jiachen Zhang
-<zhangjiachen.jaycee@bytedance.com> wrote:
->
-> On Fri, Jul 15, 2022 at 6:07 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
-> >
-> > On Fri, 24 Jun 2022 at 07:58, Jiachen Zhang
-> > <zhangjiachen.jaycee@bytedance.com> wrote:
+Probably like most people, I find the detail of the available
+retbleed mitigations obscure.  In particular, for zen2 the options
+*might* include ibpb or unret.
 
-> > > +       if (fc->writeback_cache_v2 && S_ISREG(inode->i_mode)) {
-> > > +               inode_lock(inode);
-> >
-> > I don't think this can work.   fuse_change_attributes() might be
-> > called from within inlode locked context.  E.g.
-> >
-> > lookup_slow -> __lookup_slow -> d_revalidate -> fuse_dentry_revalidate
-> > -> fuse_change_attributes
-> >
->
-> Yes, this is a problem that should be fixed. As we can not check the
-> inode lock state from the inode->i_rwsem structure, I think we can
-> pass the inode lock state along the FUSE function call-path to
-> fuse_change_attributes(), and only when we can certainly know whether
-> the inode is locked or unlocked then we continue the
-> writeback_cache_v2 logics. What do you think?
+But I have failed to find what 'unret' actually means.  Any
+pointers, please ?
 
-Not liking it very much.
+While ibpb might be available (and slow), on my Renoir with
+microcode level (0860106h) there were no newer microcode versions
+available when I last looked (a few weeks ago) but note 7 at the
+bottom of
+https://www.amd.com/system/files/documents/technical-guidance-for-mitigating-branch-type-confusion_v
+7_20220712.pdf
+implies that the relevant bit is only set on Renoir in 0860109h and
+later.
 
-Better create a new lock for this purpose that we do always know the state of.
+Some of the text in that pdf implies that at least one of the
+options could be set if not already set from the microcode, but the
+amount of detail leaves me totally lost.
 
-Thanks,
-Miklos
+Assuming, for the moment, that I might want to try this full
+mitigation, is there any way to set this in the absence of newer
+microcode ?
+
+Or should I just accept that the best I can get is 'unret', whatever
+that means ?
+
+ĸen
+-- 
+ It is very easy to get ridiculously confused about the tenses of
+ time travel, but most things can be resolved by a sufficiently
+ large ego.        -- The Last Continent

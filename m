@@ -2,188 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73D2578CC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFEF578CCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbiGRVcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        id S235437AbiGRVe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235508AbiGRVcI (ORCPT
+        with ESMTP id S236035AbiGRVeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:32:08 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2062.outbound.protection.outlook.com [40.107.212.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99A131919;
-        Mon, 18 Jul 2022 14:32:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jHGt68cXFdoja/R287XuYHmrxTTpCL+APk6e2sU2xAXUXORo274IoynJUAb0YIFhWYn2HWMotr4inWg3dZ7Vhed91PgUkByWvPO4XJtOuZtpG8CA6/SNSRI5Yu0PTquui8m/jxUTVc97visw6R6Dfh14l/52PYicBDOxNqVY3yNkFhmPcSUOFjnFYN3Bi/w+eEgSnPmtvG0289OSKeETmg4KFjMJp6THJ5EiV09fHK5B7KkZK0ZNbc8VHBRabzKT7MI4bzrzzS8bxCoYPZl96Wa81wrKXtmO1rUAYToxQsKeD2jUdZaG4/ivhCVx5x4nzPOVv03VUwrwkfDLAQGnhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y9Bd+JE3v0qb9gopO3AqeQuMBvXmF/Vrczu5FnY3G2g=;
- b=IYIXglijl3GukbHLh0mJbEeFvsJtv6Lw4kNTCSCLhAryx9EATxD5w1ouXqXgHpTEo3pqblA8BMXfgoYIAkhq/R8l8QKgJBJTp28WzdNelxM+1Oj/0l504R+Q2XQw9njj2Y+YairWm/U6fcUJl20yW96P++qmKVTLvCeiJOy2O2yAGhxE2xnyCbmNBHt/GfrW+5UxwKn0B9AIfb83cT8xtPt5s8sg+RLgNKoU1zcO0xTYkJ6mzkauxww5gXGT7qO95mmcPwoSBhN2qL85MTSBSkhy9/J+bJrEqWAJZd/3cTnf0Y4Gi9jTVOvB1SJwDbGSgBWr8dtth0zcrfXM2fg7rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y9Bd+JE3v0qb9gopO3AqeQuMBvXmF/Vrczu5FnY3G2g=;
- b=Xuh1kQqhfwdw8wQ2IB1yhFMI9JzUq7YapqLwyq4yRY2yUlOqOXNhUuuteMucjyCkSgFGi9PxqKlFhskWE1opdpAZG+kHzoqGdyEzjRGKPrvmUJvKiZWd+mlAKg31wiVgCn3HetSjEGnDuWSi3CaHmXQUfS65r/y8P2BQLR3APLR6bY/eSq/jEZuJ+CxL4HKXx5imwEkMzRXE1K00MLDN4FPhGwveg4agEWZD7Ef4bPmv2S1ivIihqtiQixN4Dx2SWZNLpDEcuTNBFwmmsq3Q3ND0RQh/xJuoZ9wGANvggIutkwKP3onF4xCl7e+6wIEU3AsfVZCbLebfMwyTq8xlbA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13)
- by IA1PR12MB6066.namprd12.prod.outlook.com (2603:10b6:208:3ee::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Mon, 18 Jul
- 2022 21:32:05 +0000
-Received: from BY5PR12MB4116.namprd12.prod.outlook.com
- ([fe80::dda2:7b0a:3280:5365]) by BY5PR12MB4116.namprd12.prod.outlook.com
- ([fe80::dda2:7b0a:3280:5365%7]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
- 21:32:05 +0000
-Message-ID: <57f1b92b-3422-7d3c-96ae-10ad5d3d22c4@nvidia.com>
-Date:   Mon, 18 Jul 2022 14:32:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 0/6] gpiolib: cdev: code cleanup following hte
- integration
-Content-Language: en-US
-To:     Kent Gibson <warthog618@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, brgl@bgdev.pl,
-        linus.walleij@linaro.org, andy.shevchenko@gmail.com
-References: <20220714020319.72952-1-warthog618@gmail.com>
-X-Nvconfidentiality: public
-From:   Dipen Patel <dipenp@nvidia.com>
-In-Reply-To: <20220714020319.72952-1-warthog618@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR05CA0035.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::10) To BY5PR12MB4116.namprd12.prod.outlook.com
- (2603:10b6:a03:210::13)
+        Mon, 18 Jul 2022 17:34:22 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3B428724
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:34:20 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id l14so7412438qtv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=suUG4NbxQ9Jc3ynJZYSSIg0ST38XjFLBT9pq2CkXbaQ=;
+        b=b0pxV4EfxBXsSBC2H3gma7vsR1kQNKR2IEM+ZlJTjB6+KE9bMMdkfPugTlRcm2Gy7o
+         F50+Slq8nFJGAmp1b4+kcJ/PmUSNBSl5P5T8cZZRupf5GdWDpZlvxo4kUaJ7zIuVnZ/k
+         o1ncUXcuiKonkqAuQyuo11YJCxDbb+JK7S+NTTJ8wi8gCdd0+dCkdUE9EEQ6yjVmRsRM
+         8S2jTk9A3MaoTdXAxDbqpN2H2jcs4y/wGQJ4zJQDkt0vu4OXSNv14Hn1sP7spyXBPO8n
+         VUbV6mFd4MJQSsvqp2Mr1WARi5qZDfM9soD3kVT0qVkhTkdvBBuE3tgdhNZuWz4nQjOR
+         9c2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=suUG4NbxQ9Jc3ynJZYSSIg0ST38XjFLBT9pq2CkXbaQ=;
+        b=HXjqANZFHGDnKvAuoTWbKlFjRPIo4mrtb4d9ZS7LK9wmnHsYJtu5/VjrhyIZESvR29
+         62cxu/lqL4V0ZwL5JCr18SiawQtC0/A+K+rI0DlByJHa3j4bh70jt52qXQT5wiT3hFoQ
+         Qsar77KH8/v/6ZzloFlq+wE9FbUTJdRw6sdKDb5ILw9xHSuvA6LVHW4ZHdNGvw66Ko4j
+         PTPUn20Ca4mBxg3+xN6YNEAQsyd4fxEyn28EhswHr+V6bi717W/GrD45Lx0R+E54gmS1
+         obnm75UUyI99OD+eFo/E8YcDS6vZRHl5I/IIm49Das/j8IvX/92acCIihnXXlw/40mX9
+         YhUw==
+X-Gm-Message-State: AJIora+uz+NEO6yRzhyvmhxCSaMTdBAaLPGrRk0Jb1GMyO6WERAb2Ges
+        EZNoqsY2gqBr6F1DfHrUBTtJGg==
+X-Google-Smtp-Source: AGRyM1uQvjddRJ8GTU4jNcb8q7gfa6t0XJN3XwYL2TU+081VWIyu/CfILm0ovHBg/Rjy20DpC/4D9w==
+X-Received: by 2002:ac8:5f09:0:b0:31e:9704:dfab with SMTP id x9-20020ac85f09000000b0031e9704dfabmr22960730qta.375.1658180059610;
+        Mon, 18 Jul 2022 14:34:19 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id ez12-20020a05622a4c8c00b0031eb0bb5c3csm10047906qtb.28.2022.07.18.14.34.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 14:34:18 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 14:34:01 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Liam Howlett <liam.howlett@oracle.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] maple_tree: Fix sparse reported issues
+In-Reply-To: <20220718174733.dya2xjigqeud6clx@revolver>
+Message-ID: <a6736ccf-fb45-5777-ca28-575297f1879f@google.com>
+References: <20220713132926.3sl7gs67dyjj7kit@revolver> <44a478e8-2ccc-e82-bd5a-172778c01529@google.com> <20220713175013.aoemaelds45aavc4@revolver> <20220715195301.r7ozt6ph2scti7vz@revolver> <fc9c2193-f5d7-d494-8e4e-c9f340ae8625@google.com>
+ <20220718022718.wtlw7grwp6dv5fcp@revolver> <1098dd4d-8f12-4493-5aff-1ee489d8e7@google.com> <20220718125649.cpatlh7ublgf7bvg@revolver> <20220718134541.ucbpuqdfcnfxravx@revolver> <7db5a8c5-9084-a7fe-6e83-713e52ed8539@google.com>
+ <20220718174733.dya2xjigqeud6clx@revolver>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8712accb-a310-4051-3af5-08da6904f5ff
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6066:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: THIWAYLkvmWSZr0Y02XIkRX5sbtTQFxFpGILnSnxJm2JtlNiDroJvYCybyxHAP2QAZOKYForz/WUk92RVWaUek97bHzn3tRz/ejtkuX00V95BdlqSd2fy1fQnSvsSlcVTcp6/wOjmjPjL1VGjYTYkpn+peWlJhlTgswjE9L3xcLzSEYGpFZr+o+RC23fFnBfwoDsCVxzeJZJRvjAG6M/rXfBi+bwAp+oVrLoPDdQh14NKASOpDMR7PBlZNaFd7OETKTxxM5Cox9Vgl1A9rTXuuPxm4dwUgTQmFbEnaOXWtP60KYktGnq+6ppL9e13qEk3WD8GRKWS2Mvc+NhnHJecPmTv3nUT09ZfL4SdvClqswb/2M+Xlp7/lrzGgsl0avcofY0Ed9Ik3v0xnnTHlXUpcAmkkJSQXybvjyHPN3idvQUKsbkhMBrWPOBcbNNJjwSb0maf9NaEvjRG3YNuT6/Fe1xHNBJ+IFtcml1Wukgq9lbzKS44Sobw0ephtY5+e5OWSp06cuAuwFC3NlTyqel57Gz0Ud4PY0Weh3bUFaxeI+g8OfkCP/2okaTEaUKKAQWWZsKTelkjypfCujbsS3xG+cIberIjJapYrBHQ8wliM8W2FwoN7DMv5if5pxcakkcKnJR+Wz95SxQ1yq9BMLsdwDwREm1i/oKyTIq7PeoBSJORg7Bm5MLz8IsHUIeswGPQSAZ+/0UBNv3CMyrDnFrqYvIJptkM7cIKvWf0OY/dKy3ga0pSDYRYxjHwzJLpwCaIgkk1dbMU66th+Pusj/xeUnO3TCC1MBbNRyJIr53pid6UsUl7KVmzMiKcBlYAfFi7J29Eu0XQkopkwPa59TDKQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(39860400002)(376002)(396003)(136003)(26005)(66476007)(83380400001)(66946007)(86362001)(2616005)(66556008)(31696002)(6506007)(38100700002)(6512007)(316002)(53546011)(41300700001)(5660300002)(2906002)(6486002)(478600001)(8936002)(31686004)(186003)(8676002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MHkraGhHM0VwRHU2TWNKa2lTUG42SnpNVHltMEt2Q2lINDg2WXcwbUFoNStz?=
- =?utf-8?B?VTlNbHpMYzZ2TktQS040VXlRa1dDZ015dm5kY2hUcTlaZkR1SmFVcll6anNn?=
- =?utf-8?B?NDJXK1ROWDJJYU4wM05xVWRFTUIrZDJTeUZWbVpLcENvdWNPek8xeG9UQkcz?=
- =?utf-8?B?dEw1QzJHZkNFNS9PS2VQa1NiVEF2ckxZc1kvY0RVVEpzaks5WkVJWVkwTlBO?=
- =?utf-8?B?YlZhM1dQb3VlUlFWOHZxcVFBcGpOR0lNZ2ZOR3lhcEZVaERjNS9CRHljMTlj?=
- =?utf-8?B?S2ErUjZpSnJqdlhQWFFOa01LNTZrZVBnRTVlREd2bDhBNHd3MDA5YXlNNU1n?=
- =?utf-8?B?WUh2cDNBc2RGS2pkVkZoek1SV2FJMjVOUGtPY0Q3WWdEc3NZRWlEWjVMQW9x?=
- =?utf-8?B?MnEwbFo5NmlhTG52L0JUeDlYRm5pOHFkRlNBWGtmUlVvSkNNTkZzR2xmdS90?=
- =?utf-8?B?Sys1M1ZjZk1hRjBwdkNVWDV2N2pjKytsMmcyckM2NklpZkFVN3MxM2czbmpi?=
- =?utf-8?B?T3RNZjNqaVlmemNBZTFWa3BJNHNiaVpTa1RGbm15Yk8zRnpqNTA4Qm5IRCsr?=
- =?utf-8?B?Q2dWOVhJSFBtanpxNFlhVHRWRk5TV2tUa2dvVmtPNlYzWit0ZklzMlplazlv?=
- =?utf-8?B?bytjZHNOaFN3VEdqTE93OUlXL0xIUFU1SE40b3RFYlpVSXhXaU9xTHNWOGMw?=
- =?utf-8?B?bXBBU3FYaXJ3b0xnU3FUQ3FrRkxyclVPZWlocVNRcWdTUjU5a0JOSE56RXY5?=
- =?utf-8?B?ajYzS2ZTckc4WWJYVmVabjZBdDdYZUZuNDlFNk5tQnNySkYwVGV5allEaFdi?=
- =?utf-8?B?a2x6blh3dHZ5VUNReStRVnJ1ZmE4a0ZXN1VISVVGVk4yWHBvUVZtNklxZ0JM?=
- =?utf-8?B?YVgraUVHaG16KzNHdjhsRDhRNE5JbmdWaWEzMnM4TXpZcmc4TW9FUjVZeER2?=
- =?utf-8?B?SE9RdlJSTHFmTlNYbWJBRkYrUmFadEI2Mnhyazc3QjQ1N3FqZHhtQ3JXTGRL?=
- =?utf-8?B?WVduTnJqMmU0TjJ0NXZUNUhUMEMrREJJZUpGdndnNy9IamZFVlUxUWp2Um5I?=
- =?utf-8?B?cDBOQlJtaVJZVFV4R2JXYlZtTXhPNGoyY08velZucUhuOVV0T3VOMXptMFo0?=
- =?utf-8?B?MWl0NW56ckdaVm1wbVdJL3BXQjNySnlvNzE0WU1iRXVwS1dwN2FVbXlHSkli?=
- =?utf-8?B?RFpjdWJMREVrOFd5VFpNWUpTWHdqRllUWDRlWmM4ZWpwbHF4OWJodXl0YVJy?=
- =?utf-8?B?WUxYZU5VRkQ2QUl2TWY1Z0NRZWE2eGdPRVBwRG52K0V4dG9sYlYzS0VQclg2?=
- =?utf-8?B?THpuYnNBb3JObW5yUDgwalpFck1FSi9jWDJUdXMrRGdJRVZ0QVU2ZnducnFU?=
- =?utf-8?B?UFhHa1diK25TR3ZDenV3YU9mdnNMOFNXRlV5ZE4xU0tuVlc2MXdpRHN5dWgx?=
- =?utf-8?B?TW9XN1luanZLTXhkUzhvNXN3amJEL09nVkhyakZzYUhRanlKYmZvWS9vc3Bw?=
- =?utf-8?B?MWFtN2Q4K2xqZDZhcnJrNkVpVFNkT1dQc0JIRURCYml1M0hjV3ZrcTZub1hS?=
- =?utf-8?B?emtqVkxhb2JxUUgxYTRLZlpuRnFWditwN2puSFAxOWV4RHcwU2JudXBrOXpD?=
- =?utf-8?B?YmxUNUhoSmgzUCt2UStUeDgycDBIUDJWSHF2TjNWU0xwc0VZb20weDlZbGhm?=
- =?utf-8?B?NTJKQ09YMzhqTFcxbXJ2NjZWd2NZcUpwblFPU1NGVDQzY2tRSWMrQ001Z2dP?=
- =?utf-8?B?a3BXU3plZVNlYjg2UXI3ejVORHQ1U0FIWjRUYnBkbVU4cEx0bG1CYXBlSFJ0?=
- =?utf-8?B?Q0NudzZpM0psUC9DQkpHNXk2alhDT1IzWlBEcXhiUlhOd2dhR3IrMnhqeHA4?=
- =?utf-8?B?NVNONlJBTVg5WGpiWXFFNGVKeHBGU1REOUpPSHNsdW52OUVPd3l6ZEoyRERM?=
- =?utf-8?B?NHBNTTR6SytkUjY5eGxPRkdMY0h0VnoxQmlWN3BkeHlZTHFvL29MMWxJYkJ1?=
- =?utf-8?B?RzJBOUd6eUpZNlNWOXZyTUZ1RHJkQk9BcjU0bGRBWUVFWmRrTHRUTnNrRUxR?=
- =?utf-8?B?aWJNQ21OdVlKaFc1WjBDN0VJb3R4NzlYNEh5UTg4TDhIK05kWEtGcnl2Qnk3?=
- =?utf-8?Q?yqJ7LNWdVEp8YSZ8+MvAIjgpf?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8712accb-a310-4051-3af5-08da6904f5ff
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4116.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2022 21:32:05.5527
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UcNszoO3UyMfvLwsm8HkP4FNm4iAnT/agIBHRTwG4ZYc/GAf7/5ZYqDQRU3kpIUJ2XxNMb8YcW7kyK+FqNYrYw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6066
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/13/22 7:03 PM, Kent Gibson wrote:
-> This patch series is a collection of improvements to simplify the
-> code, improve readability, and compile out unused code.
-> There are no functional changes.
->
-> The first patch is a cleanup for my recent linereq_free() fix. I
-> noted then that the edge_detector_stop() could probably be safely
-> moved inside the line desc check block, but wanted to keep that
-> change minimal just in case.  It can be safely moved, and so here
-> it is.
->
-> Patch 2 makes use of an existing macro to simplify a call.
->
-> Patch 3 replaces some more if-else chains with switches, which is
-> more readable (YMMV).
->
-> Patch 4 reorganizes the line identification code to share code
-> common to alternate paths.
->
-> Patch 5 consolidates a number of separate flags into one.  This
-> reduces code complexity, simplifies any future edge source additions,
-> and makes patch 6 significantly simpler.
->
-> Patch 6 totally compiles out the hte specific code when CONFIG_HTE
-> is not selected.
->
-> I've based this series on gpio/for-current, as it requires the fix
-> patch -
-> commit c8e27a4a5136 ("gpiolib: cdev: fix null pointer dereference in linereq_free()")
-> Happy to rebase if that doesn't suit.
->
-> Dipen, I don't have any HTE compatible hardware to test with, so
-> could you check that this still works for you?
+On Mon, 18 Jul 2022, Liam Howlett wrote:
+> > 
+> > I said before that I expected the test run to hit the swapops.h
+> > migration entry !PageLocked BUG, but it did not.  It ran for
+> > nearly 7 hours, and then one of its builds terminated with
+> > 
+> > {standard input}: Assembler messages:
+> > {standard input}: Error: open CFI at the end of file;
+> >  missing .cfi_endproc directive
+> > gcc: fatal error: Killed signal terminated program cc1
+> > compilation terminated.
+> > 
+> > which I've never seen before.  Usually I'd put something like that down
+> > to a error in swap, or a TLB flushing error (but I include Nadav's fix
+> > in my kernel, and wouldn't get very far without it): neither related to
+> > the maple tree patchset.
+> > 
+> > But on this occasion, my guess is that it's actually an example of what
+> > the swapops.h migration entry !PageLocked BUG is trying to alert us to.
+> > 
+> > Imagine when such a "stale" migration entry is found, but the page it
+> > points to (now reused for something else) just happens to be PageLocked
+> > at that instant.  Then the BUG won't fire, and we proceed to use the
+> > page as if it's ours, but it's not.  I think that's what happened.
+> > 
+> > I must get on with the day: more testing, and thinking.
+> 
+> 
+> I think this is the same issue seen here:
+> https://lore.kernel.org/linux-mm/YsQt3IHbJnAhsSWl@casper.infradead.org/
 
-Only hte logic
+Yes, that's a swapops.h migration entry !PageLocked BUG on brk.
 
-Tested-by: Dipen Patel <dipenp@nvidia.com>
+> 
+> Note that on 20220616, the maple tree was in the next.
+> 
+> I suspect I am doing something wrong in do_brk_munmap().  I am using a
+> false VMA to munmap a partial vma by setting it up like the part of the
+> VMA that would have been split, inserted into the tree, then removed and
+> freed.  I must be missing something necessary for this to function
+> correctly.
 
->
-> Changes v1 -> v2:
->  Address Andy's review comments, specifically
->   - Patch 4 move ternary initializer into a helper function.
->   - Patch 5 variable declaration ordering.
->   - Patch 6 remove obsoleted comment and tidy some if expressions.
->
-> Kent Gibson (6):
->   gpiolib: cdev: simplify linereq_free
->   gpiolib: cdev: simplify parameter in call to hte_edge_setup
->   gpiolib: cdev: replace if-else chains with switches
->   gpiolib: cdev: simplify line event identification
->   gpiolib: cdev: consolidate edge detector configuration flags
->   gpiolib: cdev: compile out HTE unless CONFIG_HTE selected
->
->  drivers/gpio/gpiolib-cdev.c | 291 +++++++++++++++++++-----------------
->  1 file changed, 151 insertions(+), 140 deletions(-)
->
->
-> base-commit: 7329b071729645e243b6207e76bca2f4951c991b
+Thanks for pointing to that, yes, the vma_init(&unmap, mm) etc in
+do_brk_munmap(): I hadn't noticed struct vma_area_struct unmap before.
 
+And almost coincident with your mail, my next test run crashed on
+kernel BUG at mm/huge_memory.c:2013, VM_BUG_ON_VMA(vma->vm_start > haddr),
+in __split_huge_pmd_locked(), while servicing do_brk_munmap():
+no doubt for a (different but) related reason.
 
+Presumably you noticed an opportunity to optimize out some maple tree
+operations by giving do_brk_munmap() its own processing.  But I think
+you're going to have to undo all that, and make do_brk_munmap() do
+things in the standard, less direct, munmap() way - using
+do_mas_align_munmap() I presume.
+
+(Oh dear, I see that doing mas_preallocate() at the beginning,
+but then __split_vma()s inside, and __split_vma() will do a
+vma_adjust(), which will do a mas_preallocate().  Ah, but they
+are on distinct "mas"es at different levels, so it's probably okay.)
+
+If rmap is to be sure to find migration entries that it inserted
+earlier, you must hold anon_vma_lock_write() (in the brk case) across
+the tricky vma manipulations.  No doubt you could write an optimized
+do_brk_munmap() which does everything under anon_vma_lock_write(), but
+you'd then be duplicating far too much of the care in __vma_adjust()
+for my taste (I'm already not so happy to find it duplicated in
+vma_expand()).
+
+I'll continue with some testing, but expect it to keep hitting these
+issues until do_brk_munmap() is rewritten - perhaps it reduces to
+little more than a wrapper like do_munmap() or do_mas_munmap().
+
+Hugh

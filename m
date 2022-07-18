@@ -2,138 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55485782C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636525782C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235048AbiGRMv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
+        id S235168AbiGRMwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234520AbiGRMv4 (ORCPT
+        with ESMTP id S235132AbiGRMwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:51:56 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A18222B6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:51:51 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id w17so13468421ljh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:51:51 -0700 (PDT)
+        Mon, 18 Jul 2022 08:52:00 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0E1222BA;
+        Mon, 18 Jul 2022 05:51:59 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id r12so8642932qvm.3;
+        Mon, 18 Jul 2022 05:51:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OJXhbwSqMRATHVRajJolwvgYLJ2CSrmgUASy2N9nxn8=;
-        b=mqmAkpdliFx1VG4eVEkqivQ0O5+4lFFFY6ty+unhLqXCJd+T2+xPCH/MP/2yp37gCn
-         DUvLrM+auHbrDLN7eNYRRDRma9wrZkzYakm/1lB2UqljPpO4uncp72NdAFdXXZSoZk4D
-         LCz4M6BHiFr5j/Q5TOsiGo5GDC0dHwnBv88pfuGZQK/+iUb64N0W8B9O8sgpht772JUm
-         482uB14eVYQYCoNrShwliyCX0ReprSHm9dVVkoPIeLI47lPM3rudeUT9fhfnb1gdCd+I
-         90R/qQI4U0rzdQ6NztPYUFnMeSUlTqSo1lZ5MXs4w+U869QB3lgG+DHHqWwQceAh6Ruz
-         UajQ==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q4uXCnri7wkZqApftIfl++Q32cRWGI8+outdITbrGHc=;
+        b=mfwU1MrXxoUE9k8PRf1ghXzDyHkUuq7wH5bE/Iie7YAGNDnffmXTNlGee4El/zADOu
+         HMaXGJvyJ4tN8bAs62/cQCCuQh+PS4OunuuB2EHqlPamTfb5UgqWOdd6xsR4pI0GM9sh
+         L+AbQgyT7FLKBR91CL9Oirc5o/jsRWGmkFMbh1xZfekjrM1sVJUtoaxLLSaxs6UqxKVq
+         F4jfK19USZ8Pwnu/ZtdI/2Snfw3HByfa8T4ncy7mM2pjSCIQYlVTAZsHWcdEbEYvmmUR
+         MD5N/iatkvSBkw+x80i1wtg60ZEQmegYiLYMoT9ft7RE9dKKjc7kHjzN7Ci5IQ3YzeMI
+         /vvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OJXhbwSqMRATHVRajJolwvgYLJ2CSrmgUASy2N9nxn8=;
-        b=5cf/2d0OvbMILliOqnnLBwnZ5ndhrSthLftyljd/nHBFLy/OZYvKp3P6KJz7pWdPD8
-         m2Vwyc0QMpwSGC2vxKXAw1JfN5i8ms4n07DSZjnDkUKZYTiiXf8y7I1BCiMnh8NUJDkY
-         yUhzVIabtLfegN/QrHERlxPBxq1VN5HsYktu6XkoQZBWC8ECvQcF3gAnIBNYZeSl8Cbc
-         tB+c0XH7UfsHHC63J1WT3Pf7nivTTyb+XfpnOeCfay4np1VD4kY9sQeWv5MCEZM7tDm4
-         ON6E0/wPZ0LFuE3LNtSLpoFkVArBH3kJjWfjN66Lj+IamUL1Fr5znrBxvDaTv7x56JIR
-         /D8g==
-X-Gm-Message-State: AJIora/0+YFfW8bPuvTasLhHFBWsHXU278GzUZaRZf7qrogl7qkXxOep
-        jeqhELdd1PGxPixDIo5JDP3/qcK7Ix0POENlh1Z+rQ==
-X-Google-Smtp-Source: AGRyM1vCGpXByC4iMeBNORjehfb1nd7xOZbX1LOKXrEjLaS4H1ppLA2vxAfTsdoR7d0IDMEgaopM9fKiNux+UCagSPE=
-X-Received: by 2002:a2e:968c:0:b0:25d:b5b1:9c8c with SMTP id
- q12-20020a2e968c000000b0025db5b19c8cmr2865910lji.300.1658148710042; Mon, 18
- Jul 2022 05:51:50 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to;
+        bh=Q4uXCnri7wkZqApftIfl++Q32cRWGI8+outdITbrGHc=;
+        b=lRQvaPbVchSzdJpZvtTheXhVe1I95ADhI2Yu+61gYTbR3zzhWCzWK0R8U4WSQnszDS
+         6elDRBggluJzlQPrchXGk1rXaSal0/vTpYohCMY9PL8bnfUc0DQcTPdpGnZe6MxoPO+u
+         elAiHib7LBgYZtojqIvLn2Q4C8ghamKURHTYybQcpTF/cKxB4XskCDQ1FimdB6fLQCp4
+         OmRdHfOswSobC9z9j0URcUUPhVnhU1xYZAvuQOy+nXk1dw0FAuuzhENGaH3ttbA6piAF
+         hPYCBRrS0ZfeUcEWh0qkYgNzHvwRA+JpMq62JwKzmjmSOThjz8osnf++0Iqak2OTjIPb
+         /mJg==
+X-Gm-Message-State: AJIora9nAwr5Haef7ML5g000YI5n+LqkERiYE6yRCkGxeOU+t5YFzWgK
+        4mr0lSbDZDnT/QTyIw/Z7g==
+X-Google-Smtp-Source: AGRyM1vse5BUOdsqfBrG9qrwaKVpJOQ5Sqbh1uVY6hhCSsFT/ffcNioVZq5UoaiRMiyDIrZlg2oWwA==
+X-Received: by 2002:a05:6214:410a:b0:473:38b7:e09c with SMTP id kc10-20020a056214410a00b0047338b7e09cmr21024496qvb.26.1658148717955;
+        Mon, 18 Jul 2022 05:51:57 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id y17-20020a05620a25d100b006b46a78bc0fsm10984027qko.118.2022.07.18.05.51.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 05:51:57 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:5961:4f8c:df98:38fc])
+        by serve.minyard.net (Postfix) with ESMTPSA id 2C0A61800BB;
+        Mon, 18 Jul 2022 12:51:56 +0000 (UTC)
+Date:   Mon, 18 Jul 2022 07:51:55 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        jic23@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, openbmc@lists.ozlabs.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v1 0/2] char: ipmi: kcs: add Arbel NPCM8XX support
+Message-ID: <20220718125155.GA40038@minyard.net>
+Reply-To: minyard@acm.org
+References: <20220717121124.154734-1-tmaimon77@gmail.com>
 MIME-Version: 1.0
-References: <20220514215424.1007718-1-bhupesh.sharma@linaro.org>
- <20220514215424.1007718-7-bhupesh.sharma@linaro.org> <Yr4psYiCCbi15RMe@builder.lan>
- <772dc5d2-c3b2-685b-3a38-b86e8877424a@linaro.org>
-In-Reply-To: <772dc5d2-c3b2-685b-3a38-b86e8877424a@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 18 Jul 2022 14:51:13 +0200
-Message-ID: <CAPDyKFpUpvHWMZmU0RxLAoFQG7RzOnqvTQPQBOm0s5MkkMHChw@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] arm64: dts: qcom: ipq8074: Fix 'max-frequency'
- value for sdhci node
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220717121124.154734-1-tmaimon77@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 at 10:47, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
->
-> On 7/1/22 4:24 AM, Bjorn Andersson wrote:
-> > On Sat 14 May 16:54 CDT 2022, Bhupesh Sharma wrote:
-> >
-> >> Since the Qualcomm sdhci-msm device-tree binding has been converted
-> >> to yaml format, 'make dtbs_check' reports issues with
-> >> 'max-frequency' value for ipq8074 sdhci node:
-> >>
-> >>   arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb: mmc@7824900:
-> >>    max-frequency:0:0: 384000000 is greater than the maximum of 200000000
-> >>
-> >> Fix the same.
-> >>
-> >> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> >> Cc: Rob Herring <robh@kernel.org>
-> >> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> >> ---
-> >>   arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> >> index ab2a1e7955b5..b2d71af9b419 100644
-> >> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> >> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-> >> @@ -388,7 +388,7 @@ sdhc_1: mmc@7824900 {
-> >>                               <&gcc GCC_SDCC1_APPS_CLK>,
-> >>                               <&xo>;
-> >>                      clock-names = "iface", "core", "xo";
-> >> -                    max-frequency = <384000000>;
-> >> +                    max-frequency = <200000000>;
-> > This might match the binding, but someone put 384000000 there for a
-> > reason. Perhaps the binding needs to be updated instead?
->
-> I was waiting for getting access to ipq8074 reference manual / documentation.
-> I double-checked and it seems SDCC1 on this SoC does support a max frequency
-> of 384 MHz which is strange as the SDCC2 supports 200 MHz as max frequency
-> instead.
+On Sun, Jul 17, 2022 at 03:11:22PM +0300, Tomer Maimon wrote:
+> This patch set adds Arbel NPCM8XX Keyboard Controller Style (KCS) support to 
+> KCS NPCM driver.
+> 
+> The NPCM KCS driver tested on NPCM845 evaluation board.
 
-I guess it depends on what the property is being used for from the mmc
-host driver perspective. So, to answer the question, we probably need
-to look at the code in the host driver to best understand what to do
-here.
+This seems reasonable, I've pulled it into my tree.  If anyone has any
+issues with this, please respond.
 
->
-> Also the eMMC and MMC controllers on other SoCs (i.MX etx( usually support only
-> a max frequency of 200 MHz, so may be we need an exceptional addition to the
-> binding documentation here.
->
-> @Ulf - what's your view on updating the binding documentation here? I can
-> send a v3 accordingly.
+-corey
 
-The point with the property is to let host controllers specify whether
-there is an upper limit of the frequency that it can support. No
-matter what, the mmc core will not use a frequency greater than stated
-by the eMMC/SD/SDIO specs.
-
-For eMMC, 200MHz is the maximum frequency.
-
-For SD/SDIO cards, the SDR104 mode has 208MHz. So it seems like we
-need an update to the binding, no matter what. :-)
-
-I have no strong opinions around this, but perhaps just raising the
-limit of the binding to cover the qcom case makes best sense.
-
-Kind regards
-Uffe
+> 
+> Tomer Maimon (2):
+>   dt-bindings: ipmi: Add npcm845 compatible
+>   char: ipmi: modify NPCM KCS configuration
+> 
+>  Documentation/devicetree/bindings/ipmi/npcm7xx-kcs-bmc.txt | 5 +++--
+>  drivers/char/ipmi/Kconfig                                  | 6 +++---
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> -- 
+> 2.33.0
+> 

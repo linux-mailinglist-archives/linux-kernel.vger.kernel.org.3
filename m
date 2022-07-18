@@ -2,379 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB45577A5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 07:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47872577A60
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 07:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbiGRF2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 01:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
+        id S233241AbiGRF3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 01:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiGRF2j (ORCPT
+        with ESMTP id S229585AbiGRF3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 01:28:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7FA11813
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 22:28:37 -0700 (PDT)
+        Mon, 18 Jul 2022 01:29:00 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CEC2AF9;
+        Sun, 17 Jul 2022 22:28:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658122117; x=1689658117;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=0b7S+GNCemhe7GvHK5p4aozzCcBDgi6yoKuuO33tyVk=;
-  b=A98VAgieiv3dsUuEubVPiRlTXB42Inr5sjU3TvPC+J28P8BbiICypmqQ
-   +r0IZaRa8EG2dj1DrClyLJKLaC/CbXp3yDTiTg2NXoS7oENT/AF8LbmwQ
-   nhAY7DklXyMZnTpnGHpF/Rpm0J7gL+I4KvAvgkfVsgdlwImqqeu3b5dMq
-   NzNDfE+lyy12qSssatGovNXJ50NDmVDbBkZd+0DOJeWuByo9X64VBN29u
-   IoTzF1Kn3X1VpsMc5UdHPDyDx9tr9VMe1ekG+N2EzuMpmJs5zPJr8EXAR
-   zirq9wbIxwzz/bTC5H5MVX3cxKCh/ZIMIQF+aCfqQkB1jmGomi66SKesf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="269159516"
+  t=1658122139; x=1689658139;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=mScdO1FDAH4pFrbb0tv4FpgH0db/Mzo7rZE/V1o5DIo=;
+  b=RqMcci9fLcOiPWa6b8E81b4ummYNvV863XMnMSTfDynR4nAE8hn2CK1p
+   lBHHrAO3417i1UJWsdtHIk4VIti6S+75/WtuU3QrgbH0Pa4ku/gGpaggm
+   pQG7NqZKKybJX7zzRi0ClWPRFsDd9MzFoZe+If+//gkqNW25D77DNE/UC
+   Y9iZnNCh9YkTRur07Hv2+O7w3QapVJW9glkf1Vo/3iA/hLCt5gPskEHaB
+   nvWRtshe+L71jh5MiZU1g2OK0bihLLfiKtx6F0RUH5fT3LqZlfTCkbimD
+   /rqRsUy9OD71SxMMImnlPuKguG0AtP2kQPviL8E9h2+pHyuA268FLrRVn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="372444708"
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="269159516"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 22:28:37 -0700
+   d="scan'208";a="372444708"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 22:28:59 -0700
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="572259705"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 22:28:33 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Wei Xu <weixugc@google.com>
-Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Jagdish Gediya <jvgediya@linux.ibm.com>
-Subject: Re: [PATCH v9 1/8] mm/demotion: Add support for explicit memory tiers
-References: <20220714045351.434957-1-aneesh.kumar@linux.ibm.com>
-        <20220714045351.434957-2-aneesh.kumar@linux.ibm.com>
-        <87bktq4xs7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAAPL-u_F=RBnCy3_WfbDyM0x7_CWPAK+fvwwLZvyRGUgVoS_VQ@mail.gmail.com>
-Date:   Mon, 18 Jul 2022 13:28:17 +0800
-In-Reply-To: <CAAPL-u_F=RBnCy3_WfbDyM0x7_CWPAK+fvwwLZvyRGUgVoS_VQ@mail.gmail.com>
-        (Wei Xu's message of "Fri, 15 Jul 2022 09:59:25 -0700")
-Message-ID: <8735ez3s7i.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="924201445"
+Received: from lananhtr-mobl3.ccr.corp.intel.com ([10.215.250.14])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 22:28:56 -0700
+Message-ID: <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
+Subject: Re: [PATCH v3 3/4] thermal/core: Build ascending ordered indexes
+ for the trip points
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     quic_manafm@quicinc.com, amitk@kernel.org, lukasz.luba@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 18 Jul 2022 13:28:55 +0800
+In-Reply-To: <20220715210911.714479-3-daniel.lezcano@linaro.org>
+References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+         <20220715210911.714479-3-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei Xu <weixugc@google.com> writes:
+T24gRnJpLCAyMDIyLTA3LTE1IGF0IDIzOjA5ICswMjAwLCBEYW5pZWwgTGV6Y2FubyB3cm90ZToK
+PiBCeSBjb252ZW50aW9uIHRoZSB0cmlwcyBwb2ludHMgYXJlIGRlY2xhcmVkIGluIHRoZSBhc2Nl
+bmRpbmcKPiB0ZW1wZXJhdHVyZSBvcmRlci4gSG93ZXZlciwgbm8gc3BlY2lmaWNhdGlvbiBmb3Ig
+dGhlIGRldmljZSB0cmVlLAo+IEFDUEkKPiBvciBkb2N1bWVudGF0aW9uIHRlbGxzIHRoZSB0cmlw
+IHBvaW50cyBtdXN0IGJlIG9yZGVyZWQgdGhpcyB3YXkuCj4gCj4gSW4gdGhlIG90aGVyIGhhbmQs
+IHdlIG5lZWQgdGhvc2UgdG8gYmUgb3JkZXJlZCB0byBicm93c2UgdGhlbSBhdCB0aGUKPiB0aGVy
+bWFsIGV2ZW50cy4gQnV0IGlmIHdlIGFzc3VtZSB0aGV5IGFyZSBvcmRlcmVkIGFuZCBjaGFuZ2Ug
+dGhlIGNvZGUKPiBiYXNlZCBvbiB0aGlzIGFzc3VtcHRpb24sIGFueSBwbGF0Zm9ybSB3aXRoIHNo
+dWZmbGVkIHRyaXAgcG9pbnRzCj4gZGVzY3JpcHRpb24gd2lsbCBiZSBicm9rZW4gKGlmIHRoZXkg
+ZXhpc3QpLgo+IAo+IEluc3RlYWQgb2YgdGFraW5nIHRoZSByaXNrIG9mIGJyZWFraW5nIHRoZSBl
+eGlzdGluZyBwbGF0Zm9ybXMsIHVzZSBhbgo+IGFycmF5IG9mIHRlbXBlcmF0dXJlIG9yZGVyZWQg
+dHJpcCBpZGVudGlmaWVycyBhbmQgbWFrZSBpdCBhdmFpbGFibGUKPiBmb3IgdGhlIGNvZGUgbmVl
+ZGluZyB0byBicm93c2UgdGhlIHRyaXAgcG9pbnRzIGluIGFuIG9yZGVyZWQgd2F5Lgo+IAo+IFNp
+Z25lZC1vZmYtYnk6IERhbmllbCBMZXpjYW5vIDxkYW5pZWwubGV6Y2Fub0BsaW5hcm8ub3JnPgo+
+IC0tLQo+IMKgZHJpdmVycy90aGVybWFsL3RoZXJtYWxfY29yZS5jIHwgNjIgKysrKysrKysrKysr
+KysrKysrKysrKysrKysrLS0tLS0KPiAtLQo+IMKgaW5jbHVkZS9saW51eC90aGVybWFsLmjCoMKg
+wqDCoMKgwqDCoCB8wqAgMiArKwo+IMKgMiBmaWxlcyBjaGFuZ2VkLCA1MiBpbnNlcnRpb25zKCsp
+LCAxMiBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90aGVybWFsL3RoZXJt
+YWxfY29yZS5jCj4gYi9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3JlLmMKPiBpbmRleCBmNjYw
+MzZiM2RhYWUuLmYwMmYzOGI2NjQ0NSAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL3RoZXJtYWwvdGhl
+cm1hbF9jb3JlLmMKPiArKysgYi9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3JlLmMKPiBAQCAt
+MzU1LDcgKzM1NSw4IEBAIHN0YXRpYyB2b2lkIGhhbmRsZV9jcml0aWNhbF90cmlwcyhzdHJ1Y3QK
+PiB0aGVybWFsX3pvbmVfZGV2aWNlICp0eiwKPiDCoH0KPiDCoAo+IMKgc3RhdGljIHZvaWQgaGFu
+ZGxlX3RoZXJtYWxfdHJpcF9jcm9zc2VkKHN0cnVjdCB0aGVybWFsX3pvbmVfZGV2aWNlCj4gKnR6
+LCBpbnQgdHJpcCwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaW50IHRyaXBfdGVtcCwgaW50IHRy
+aXBfaHlzdCwKPiBlbnVtIHRoZXJtYWxfdHJpcF90eXBlIHRyaXBfdHlwZSkKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgaW50IHRyaXBfdGVtcCwgaW50IHRyaXBfaHlzdCwKPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgZW51bSB0aGVybWFsX3RyaXBfdHlwZQo+IHRyaXBfdHlwZSkKPiDCoHsKPiDCoMKg
+wqDCoMKgwqDCoMKgaWYgKHR6LT5sYXN0X3RlbXBlcmF0dXJlID09IFRIRVJNQUxfVEVNUF9JTlZB
+TElEKQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuOwo+IEBAIC0xMTY1
+LDYgKzExNjYsNDYgQEAgc3RhdGljIHZvaWQgYmluZF90eihzdHJ1Y3QgdGhlcm1hbF96b25lX2Rl
+dmljZQo+ICp0eikKPiDCoMKgwqDCoMKgwqDCoMKgbXV0ZXhfdW5sb2NrKCZ0aGVybWFsX2xpc3Rf
+bG9jayk7Cj4gwqB9Cj4gwqAKPiArc3RhdGljIHZvaWQgc29ydF90cmlwc19pbmRleGVzKHN0cnVj
+dCB0aGVybWFsX3pvbmVfZGV2aWNlICp0eikKPiArewo+ICvCoMKgwqDCoMKgwqDCoGludCBpLCBq
+Owo+ICsKPiArwqDCoMKgwqDCoMKgwqBmb3IgKGkgPSAwOyBpIDwgdHotPnRyaXBzOyBpKyspCj4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHR6LT50cmlwc19pbmRleGVzW2ldID0gaTsK
+PiArIAo+ICvCoMKgwqDCoMKgwqDCoGZvciAoaSA9IDA7IGkgPCB0ei0+dHJpcHM7IGkrKykgewo+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBmb3IgKGogPSBpICsgMTsgaiA8IHR6LT50
+cmlwczsgaisrKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBpbnQgdDEsIHQyOwo+ICsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoHR6LT5vcHMtPmdldF90cmlwX3RlbXAodHosIHR6LQo+ID50cmlwc19pbmRl
+eGVzW2ldLCAmdDEpOwoKVGhpcyBsaW5lIGNhbiBiZSBtb3ZlZCB0byB0aGUgdXBwZXIgbG9vcC4K
+Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0ei0+b3Bz
+LT5nZXRfdHJpcF90ZW1wKHR6LCB0ei0KPiA+dHJpcHNfaW5kZXhlc1tqXSwgJnQyKTsKPiArCgp3
+aGF0IGFib3V0IHRoZSBkaXNhYmxlZCB0cmlwIHBvaW50cz8KCndlIHNob3VsZCBpZ25vcmUgdGhv
+c2UgdHJpcCBwb2ludHMgYW5kIGNoZWNrIHRoZSByZXR1cm4gdmFsdWUgdG8gbWFrZQpzdXJlIHdl
+J3JlIGNvbXBhcmluZyB0aGUgdmFsaWQgdHJpcF90ZW1wIHZhbHVlcy4KCnRoYW5rcywKcnVpCgo+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHQxID4g
+dDIpCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgc3dhcCh0ei0+dHJpcHNfaW5kZXhlc1tpXSwgdHotCj4gPnRyaXBzX2luZGV4
+ZXNbal0pOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gK8KgwqDCoMKgwqDC
+oMKgfQo+ICt9Cj4gKwo+ICtzdGF0aWMgaW50IHRoZXJtYWxfem9uZV9kZXZpY2VfdHJpcF9pbml0
+KHN0cnVjdCB0aGVybWFsX3pvbmVfZGV2aWNlCj4gKnR6KQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKg
+ZW51bSB0aGVybWFsX3RyaXBfdHlwZSB0cmlwX3R5cGU7Cj4gK8KgwqDCoMKgwqDCoMKgaW50IHRy
+aXBfdGVtcCwgaTsKPiArwqDCoMKgwqDCoMKgwqAKPiArwqDCoMKgwqDCoMKgwqB0ei0+dHJpcHNf
+aW5kZXhlcyA9IGt6YWxsb2ModHotPnRyaXBzICogc2l6ZW9mKGludCksCj4gR0ZQX0tFUk5FTCk7
+Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKCF0ei0+dHJpcHNfaW5kZXhlcykKPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FTk9NRU07Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoGZv
+ciAoaSA9IDA7IGkgPCB0ei0+dHJpcHM7IGkrKykgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqBpZiAodHotPm9wcy0+Z2V0X3RyaXBfdHlwZSh0eiwgaSwgJnRyaXBfdHlwZSkgfHwK
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHR6LT5vcHMtPmdldF90cmlw
+X3RlbXAodHosIGksICZ0cmlwX3RlbXApIHx8Cj4gIXRyaXBfdGVtcCkKPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNldF9iaXQoaSwgJnR6LT50cmlwc19k
+aXNhYmxlZCk7Cj4gK8KgwqDCoMKgwqDCoMKgfQo+ICsKPiArwqDCoMKgwqDCoMKgwqBzb3J0X3Ry
+aXBzX2luZGV4ZXModHopOwo+ICsKPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiArfQo+ICsK
+PiDCoC8qKgo+IMKgICogdGhlcm1hbF96b25lX2RldmljZV9yZWdpc3RlcigpIC0gcmVnaXN0ZXIg
+YSBuZXcgdGhlcm1hbCB6b25lCj4gZGV2aWNlCj4gwqAgKiBAdHlwZTrCoMKgwqDCoMKgwqB0aGUg
+dGhlcm1hbCB6b25lIGRldmljZSB0eXBlCj4gQEAgLTExOTYsMTEgKzEyMzcsOCBAQCB0aGVybWFs
+X3pvbmVfZGV2aWNlX3JlZ2lzdGVyKGNvbnN0IGNoYXIgKnR5cGUsCj4gaW50IHRyaXBzLCBpbnQg
+bWFzaywKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBpbnQgcG9sbGluZ19kZWxheSkKPiDCoHsKPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0
+IHRoZXJtYWxfem9uZV9kZXZpY2UgKnR6Owo+IC3CoMKgwqDCoMKgwqDCoGVudW0gdGhlcm1hbF90
+cmlwX3R5cGUgdHJpcF90eXBlOwo+IC3CoMKgwqDCoMKgwqDCoGludCB0cmlwX3RlbXA7Cj4gwqDC
+oMKgwqDCoMKgwqDCoGludCBpZDsKPiDCoMKgwqDCoMKgwqDCoMKgaW50IHJlc3VsdDsKPiAtwqDC
+oMKgwqDCoMKgwqBpbnQgY291bnQ7Cj4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCB0aGVybWFsX2dv
+dmVybm9yICpnb3Zlcm5vcjsKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBpZiAoIXR5cGUgfHwgc3Ry
+bGVuKHR5cGUpID09IDApIHsKPiBAQCAtMTI3MiwxMiArMTMxMCw5IEBAIHRoZXJtYWxfem9uZV9k
+ZXZpY2VfcmVnaXN0ZXIoY29uc3QgY2hhciAqdHlwZSwKPiBpbnQgdHJpcHMsIGludCBtYXNrLAo+
+IMKgwqDCoMKgwqDCoMKgwqBpZiAocmVzdWx0KQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgZ290byByZWxlYXNlX2RldmljZTsKPiDCoAo+IC3CoMKgwqDCoMKgwqDCoGZvciAoY291
+bnQgPSAwOyBjb3VudCA8IHRyaXBzOyBjb3VudCsrKSB7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGlmICh0ei0+b3BzLT5nZXRfdHJpcF90eXBlKHR6LCBjb3VudCwgJnRyaXBfdHlw
+ZSkgfHwKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHR6LT5vcHMtPmdl
+dF90cmlwX3RlbXAodHosIGNvdW50LCAmdHJpcF90ZW1wKSB8fAo+IC3CoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgIXRyaXBfdGVtcCkKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNldF9iaXQoY291bnQsICZ0ei0+dHJpcHNfZGlzYWJs
+ZWQpOwo+IC3CoMKgwqDCoMKgwqDCoH0KPiArwqDCoMKgwqDCoMKgwqByZXN1bHQgPSB0aGVybWFs
+X3pvbmVfZGV2aWNlX3RyaXBfaW5pdCh0eik7Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKHJlc3VsdCkK
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byB1bnJlZ2lzdGVyOwo+IMKgCj4g
+wqDCoMKgwqDCoMKgwqDCoC8qIFVwZGF0ZSAndGhpcycgem9uZSdzIGdvdmVybm9yIGluZm9ybWF0
+aW9uICovCj4gwqDCoMKgwqDCoMKgwqDCoG11dGV4X2xvY2soJnRoZXJtYWxfZ292ZXJub3JfbG9j
+ayk7Cj4gQEAgLTEyOTAsNyArMTMyNSw3IEBAIHRoZXJtYWxfem9uZV9kZXZpY2VfcmVnaXN0ZXIo
+Y29uc3QgY2hhciAqdHlwZSwKPiBpbnQgdHJpcHMsIGludCBtYXNrLAo+IMKgwqDCoMKgwqDCoMKg
+wqByZXN1bHQgPSB0aGVybWFsX3NldF9nb3Zlcm5vcih0eiwgZ292ZXJub3IpOwo+IMKgwqDCoMKg
+wqDCoMKgwqBpZiAocmVzdWx0KSB7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBt
+dXRleF91bmxvY2soJnRoZXJtYWxfZ292ZXJub3JfbG9jayk7Cj4gLcKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoGdvdG8gdW5yZWdpc3RlcjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgZ290byBrZnJlZV9pbmRleGVzOwo+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAKPiDCoMKg
+wqDCoMKgwqDCoMKgbXV0ZXhfdW5sb2NrKCZ0aGVybWFsX2dvdmVybm9yX2xvY2spOwo+IEBAIC0x
+Mjk4LDcgKzEzMzMsNyBAQCB0aGVybWFsX3pvbmVfZGV2aWNlX3JlZ2lzdGVyKGNvbnN0IGNoYXIg
+KnR5cGUsCj4gaW50IHRyaXBzLCBpbnQgbWFzaywKPiDCoMKgwqDCoMKgwqDCoMKgaWYgKCF0ei0+
+dHpwIHx8ICF0ei0+dHpwLT5ub19od21vbikgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgcmVzdWx0ID0gdGhlcm1hbF9hZGRfaHdtb25fc3lzZnModHopOwo+IMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJlc3VsdCkKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gdW5yZWdpc3RlcjsKPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8ga2ZyZWVfaW5kZXhlczsKPiDC
+oMKgwqDCoMKgwqDCoMKgfQo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoG11dGV4X2xvY2soJnRoZXJt
+YWxfbGlzdF9sb2NrKTsKPiBAQCAtMTMxOSw2ICsxMzU0LDggQEAgdGhlcm1hbF96b25lX2Rldmlj
+ZV9yZWdpc3Rlcihjb25zdCBjaGFyICp0eXBlLAo+IGludCB0cmlwcywgaW50IG1hc2ssCj4gwqAK
+PiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHR6Owo+IMKgCj4gK2tmcmVlX2luZGV4ZXM6Cj4gK8Kg
+wqDCoMKgwqDCoMKga2ZyZWUodHotPnRyaXBzX2luZGV4ZXMpOwo+IMKgdW5yZWdpc3RlcjoKPiDC
+oMKgwqDCoMKgwqDCoMKgZGV2aWNlX2RlbCgmdHotPmRldmljZSk7Cj4gwqByZWxlYXNlX2Rldmlj
+ZToKPiBAQCAtMTM4Nyw2ICsxNDI0LDcgQEAgdm9pZCB0aGVybWFsX3pvbmVfZGV2aWNlX3VucmVn
+aXN0ZXIoc3RydWN0Cj4gdGhlcm1hbF96b25lX2RldmljZSAqdHopCj4gwqDCoMKgwqDCoMKgwqDC
+oHRoZXJtYWxfcmVtb3ZlX2h3bW9uX3N5c2ZzKHR6KTsKPiDCoMKgwqDCoMKgwqDCoMKgaWRhX3Np
+bXBsZV9yZW1vdmUoJnRoZXJtYWxfdHpfaWRhLCB0ei0+aWQpOwo+IMKgwqDCoMKgwqDCoMKgwqBp
+ZGFfZGVzdHJveSgmdHotPmlkYSk7Cj4gK8KgwqDCoMKgwqDCoMKga2ZyZWUodHotPnRyaXBzX2lu
+ZGV4ZXMpOwo+IMKgwqDCoMKgwqDCoMKgwqBtdXRleF9kZXN0cm95KCZ0ei0+bG9jayk7Cj4gwqDC
+oMKgwqDCoMKgwqDCoGRldmljZV91bnJlZ2lzdGVyKCZ0ei0+ZGV2aWNlKTsKPiDCoAo+IGRpZmYg
+LS1naXQgYS9pbmNsdWRlL2xpbnV4L3RoZXJtYWwuaCBiL2luY2x1ZGUvbGludXgvdGhlcm1hbC5o
+Cj4gaW5kZXggMjMxYmFjMjc2OGZiLi40YzNiNzI1MzY3NzIgMTAwNjQ0Cj4gLS0tIGEvaW5jbHVk
+ZS9saW51eC90aGVybWFsLmgKPiArKysgYi9pbmNsdWRlL2xpbnV4L3RoZXJtYWwuaAo+IEBAIC0x
+MTIsNiArMTEyLDcgQEAgc3RydWN0IHRoZXJtYWxfY29vbGluZ19kZXZpY2Ugewo+IMKgICogQG1v
+ZGU6wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGN1cnJlbnQgbW9kZSBvZiB0aGlzIHRoZXJt
+YWwgem9uZQo+IMKgICogQGRldmRhdGE6wqDCoMKgcHJpdmF0ZSBwb2ludGVyIGZvciBkZXZpY2Ug
+cHJpdmF0ZSBkYXRhCj4gwqAgKiBAdHJpcHM6wqDCoMKgwqDCoG51bWJlciBvZiB0cmlwIHBvaW50
+cyB0aGUgdGhlcm1hbCB6b25lIHN1cHBvcnRzCj4gKyAqIEB0cmlwc19pbmRleGVzOsKgwqDCoMKg
+wqBhbiBhcnJheSBvZiBzb3J0ZWQgdHJpcCBwb2ludHMgaW5kZXhlcwo+IMKgICogQHRyaXBzX2Rp
+c2FibGVkO8KgwqDCoMKgYml0bWFwIGZvciBkaXNhYmxlZCB0cmlwcwo+IMKgICogQHBhc3NpdmVf
+ZGVsYXlfamlmZmllczogbnVtYmVyIG9mIGppZmZpZXMgdG8gd2FpdCBiZXR3ZWVuIHBvbGxzCj4g
+d2hlbgo+IMKgICrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwZXJm
+b3JtaW5nIHBhc3NpdmUgY29vbGluZy4KPiBAQCAtMTUyLDYgKzE1Myw3IEBAIHN0cnVjdCB0aGVy
+bWFsX3pvbmVfZGV2aWNlIHsKPiDCoMKgwqDCoMKgwqDCoMKgZW51bSB0aGVybWFsX2RldmljZV9t
+b2RlIG1vZGU7Cj4gwqDCoMKgwqDCoMKgwqDCoHZvaWQgKmRldmRhdGE7Cj4gwqDCoMKgwqDCoMKg
+wqDCoGludCB0cmlwczsKPiArwqDCoMKgwqDCoMKgwqBpbnQgKnRyaXBzX2luZGV4ZXM7Cj4gwqDC
+oMKgwqDCoMKgwqDCoHVuc2lnbmVkIGxvbmcgdHJpcHNfZGlzYWJsZWQ7wqDCoMKgLyogYml0bWFw
+IGZvciBkaXNhYmxlZCB0cmlwcwo+ICovCj4gwqDCoMKgwqDCoMKgwqDCoHVuc2lnbmVkIGxvbmcg
+cGFzc2l2ZV9kZWxheV9qaWZmaWVzOwo+IMKgwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBsb25nIHBv
+bGxpbmdfZGVsYXlfamlmZmllczsKCg==
 
-> On Fri, Jul 15, 2022 at 12:53 AM Huang, Ying <ying.huang@intel.com> wrote:
->>
->> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->>
->> > In the current kernel, memory tiers are defined implicitly via a
->> > demotion path relationship between NUMA nodes, which is created
->> > during the kernel initialization and updated when a NUMA node is
->> > hot-added or hot-removed.  The current implementation puts all
->> > nodes with CPU into the top tier, and builds the tier hierarchy
->> > tier-by-tier by establishing the per-node demotion targets based
->> > on the distances between nodes.
->> >
->> > This current memory tier kernel interface needs to be improved for
->> > several important use cases,
->> >
->> > The current tier initialization code always initializes
->> > each memory-only NUMA node into a lower tier.  But a memory-only
->> > NUMA node may have a high performance memory device (e.g. a DRAM
->> > device attached via CXL.mem or a DRAM-backed memory-only node on
->> > a virtual machine) and should be put into a higher tier.
->> >
->> > The current tier hierarchy always puts CPU nodes into the top
->> > tier. But on a system with HBM or GPU devices, the
->> > memory-only NUMA nodes mapping these devices should be in the
->> > top tier, and DRAM nodes with CPUs are better to be placed into the
->> > next lower tier.
->> >
->> > With current kernel higher tier node can only be demoted to selected nodes on the
->> > next lower tier as defined by the demotion path, not any other
->> > node from any lower tier.  This strict, hard-coded demotion order
->> > does not work in all use cases (e.g. some use cases may want to
->> > allow cross-socket demotion to another node in the same demotion
->> > tier as a fallback when the preferred demotion node is out of
->> > space), This demotion order is also inconsistent with the page
->> > allocation fallback order when all the nodes in a higher tier are
->> > out of space: The page allocation can fall back to any node from
->> > any lower tier, whereas the demotion order doesn't allow that.
->> >
->> > The current kernel also don't provide any interfaces for the
->> > userspace to learn about the memory tier hierarchy in order to
->> > optimize its memory allocations.
->> >
->> > This patch series address the above by defining memory tiers explicitly.
->> >
->> > This patch introduce explicity memory tiers. The tier ID value
->> > of a memory tier is used to derive the demotion order between
->> > NUMA nodes.
->> >
->> > For example, if we have 3 memtiers: memtier100, memtier200, memiter300
->> > then the memory tier order is: memtier300 -> memtier200 -> memtier100
->> > where memtier300 is the highest tier and memtier100 is the lowest tier.
->> >
->> > While reclaim we migrate pages from fast(higher) tiers to slow(lower)
->> > tiers when the fast(higher) tier is under memory pressure.
->> >
->> > This patchset introduce 3 memory tiers (memtier100, memtier200 and memtier300)
->> > which are created by different kernel subsystems. The default memory
->> > tier created by the kernel is memtier200. A kernel parameter is provided
->> > to override the default memory tier.
->> >
->> > Link: https://lore.kernel.org/linux-mm/CAAPL-u9Wv+nH1VOZTj=9p9S70Y3Qz3+63EkqncRDdHfubsrjfw@mail.gmail.com
->> > Link: https://lore.kernel.org/linux-mm/7b72ccf4-f4ae-cb4e-f411-74d055482026@linux.ibm.com
->> >
->> > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
->> > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->> > ---
->> >  include/linux/memory-tiers.h | 15 +++++++
->> >  mm/Makefile                  |  1 +
->> >  mm/memory-tiers.c            | 78 ++++++++++++++++++++++++++++++++++++
->> >  3 files changed, 94 insertions(+)
->> >  create mode 100644 include/linux/memory-tiers.h
->> >  create mode 100644 mm/memory-tiers.c
->> >
->> > diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
->> > new file mode 100644
->> > index 000000000000..a81dbc20e0d1
->> > --- /dev/null
->> > +++ b/include/linux/memory-tiers.h
->> > @@ -0,0 +1,15 @@
->> > +/* SPDX-License-Identifier: GPL-2.0 */
->> > +#ifndef _LINUX_MEMORY_TIERS_H
->> > +#define _LINUX_MEMORY_TIERS_H
->> > +
->> > +#ifdef CONFIG_NUMA
->> > +
->> > +#define MEMORY_TIER_HBM_GPU  300
->> > +#define MEMORY_TIER_DRAM     200
->> > +#define MEMORY_TIER_PMEM     100
->> > +
->> > +#define DEFAULT_MEMORY_TIER  MEMORY_TIER_DRAM
->> > +#define MAX_MEMORY_TIER_ID   400
->> > +
->> > +#endif       /* CONFIG_NUMA */
->> > +#endif  /* _LINUX_MEMORY_TIERS_H */
->> > diff --git a/mm/Makefile b/mm/Makefile
->> > index 6f9ffa968a1a..d30acebc2164 100644
->> > --- a/mm/Makefile
->> > +++ b/mm/Makefile
->> > @@ -92,6 +92,7 @@ obj-$(CONFIG_KFENCE) += kfence/
->> >  obj-$(CONFIG_FAILSLAB) += failslab.o
->> >  obj-$(CONFIG_MEMTEST)                += memtest.o
->> >  obj-$(CONFIG_MIGRATION) += migrate.o
->> > +obj-$(CONFIG_NUMA) += memory-tiers.o
->> >  obj-$(CONFIG_DEVICE_MIGRATION) += migrate_device.o
->> >  obj-$(CONFIG_TRANSPARENT_HUGEPAGE) += huge_memory.o khugepaged.o
->> >  obj-$(CONFIG_PAGE_COUNTER) += page_counter.o
->> > diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
->> > new file mode 100644
->> > index 000000000000..011877b6dbb9
->> > --- /dev/null
->> > +++ b/mm/memory-tiers.c
->> > @@ -0,0 +1,78 @@
->> > +// SPDX-License-Identifier: GPL-2.0
->> > +#include <linux/types.h>
->> > +#include <linux/nodemask.h>
->> > +#include <linux/slab.h>
->> > +#include <linux/lockdep.h>
->> > +#include <linux/moduleparam.h>
->> > +#include <linux/memory-tiers.h>
->> > +
->> > +struct memory_tier {
->> > +     struct list_head list;
->> > +     int id;
->> > +     nodemask_t nodelist;
->> > +};
->> > +
->> > +static DEFINE_MUTEX(memory_tier_lock);
->> > +static LIST_HEAD(memory_tiers);
->> > +
->> > +static void insert_memory_tier(struct memory_tier *memtier)
->> > +{
->> > +     struct list_head *ent;
->> > +     struct memory_tier *tmp_memtier;
->> > +
->> > +     lockdep_assert_held_once(&memory_tier_lock);
->> > +
->> > +     list_for_each(ent, &memory_tiers) {
->> > +             tmp_memtier = list_entry(ent, struct memory_tier, list);
->> > +             if (tmp_memtier->id < memtier->id) {
->> > +                     list_add_tail(&memtier->list, ent);
->> > +                     return;
->> > +             }
->> > +     }
->> > +     list_add_tail(&memtier->list, &memory_tiers);
->> > +}
->> > +
->> > +static struct memory_tier *register_memory_tier(unsigned int tier)
->> > +{
->> > +     struct memory_tier *memtier;
->> > +
->> > +     if (tier > MAX_MEMORY_TIER_ID)
->> > +             return ERR_PTR(-EINVAL);
->> > +
->> > +     memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
->> > +     if (!memtier)
->> > +             return ERR_PTR(-ENOMEM);
->> > +
->> > +     memtier->id   = tier;
->> > +
->> > +     insert_memory_tier(memtier);
->> > +
->> > +     return memtier;
->> > +}
->> > +
->> > +static unsigned int default_memtier = DEFAULT_MEMORY_TIER;
->> > +core_param(default_memory_tier, default_memtier, uint, 0644);
->> > +
->> > +static int __init memory_tier_init(void)
->> > +{
->> > +     struct memory_tier *memtier;
->> > +
->> > +     /*
->> > +      * Register only default memory tier to hide all empty
->> > +      * memory tier from sysfs. Since this is early during
->> > +      * boot, we could avoid holding memtory_tier_lock. But
->> > +      * keep it simple by holding locks. So we can add lock
->> > +      * held debug checks in other functions.
->> > +      */
->> > +     mutex_lock(&memory_tier_lock);
->> > +     memtier = register_memory_tier(default_memtier);
->> > +     if (IS_ERR(memtier))
->> > +             panic("%s() failed to register memory tier: %ld\n",
->> > +                   __func__, PTR_ERR(memtier));
->> > +
->> > +     /* CPU only nodes are not part of memory tiers. */
->> > +     memtier->nodelist = node_states[N_MEMORY];
->> > +     mutex_unlock(&memory_tier_lock);
->> > +     return 0;
->> > +}
->> > +subsys_initcall(memory_tier_init);
->>
->> You dropped the original sysfs interface patches from the series, but
->> the kernel internal implementation is still for the original sysfs
->> interface.  For example, memory tier ID is for the original sysfs
->> interface, not for the new proposed sysfs interface.  So I suggest you
->> to implement with the new interface in mind.  What do you think about
->> the following design?
->>
->> - Each NUMA node belongs to a memory type, and each memory type
->>   corresponds to a "abstract distance", so each NUMA node corresonds to
->>   a "distance".  For simplicity, we can start with static distances, for
->>   example, DRAM (default): 150, PMEM: 250.
->
-> I agree with this design, though I'd prefer the new attribute to not
-> be named as "distance".  This is to both avoid the confusion with the
-> SLIT distance and to avoid the misconception that only the latency
-> matters, but the bandwidth doesn't.
->
-> How about we call it "performance level" (perf_level) or something
-> similar instead?
-
-I have no strong opinion on this.  Both "distance" or "perf_level" looks
-OK to me.
-
->> The distance of each NUMA
->>   node can be recorded in a global array,
->>
->>     int node_distances[MAX_NUMNODES];
->>
->>   or, just
->>
->>     pgdat->distance
->
-> I think node_devices[] is a better place to record this new attribute.
-> The HMAT performance data is also listed there.
-
-Firstly, we all agree that we need a place to record this information,
-per node or per memory type.  Personally, I prefer to separate the data
-and its interface (such as sysfs).
-
->> - Each memory tier corresponds to a range of distance, for example,
->>   0-100, 100-200, 200-300, >300, we can start with static ranges too.
->>
->> - The core API of memory tier could be
->>
->>     struct memory_tier *find_create_memory_tier(int distance);
->>
->>   it will find the memory tier which covers "distance" in the memory
->>   tier list, or create a new memory tier if not found.
->>
->> - kmem_dax driver will setup distance for PMEM NUMA nodes before online
->>   them.
->
-> This attribute should be a property of the NUMA node based on the
-> device hardware.
-
-Yes.  Or a property of a memory type.
-
-> For PMEM, it is better to handle at the ACPI level.
-> For example, we can consider initializing this attribute for a PMEM
-> node in acpi_numa_memory_affinity_init() when the node is
-> non-volatile.
-
-The abstract_distance/perf_level may be determined from multiple
-information sources, e.g., ACPI SLIT/SRAT/HMAT, etc.  It should be the
-responsibility of device drivers (e.g., kmem_dax) to determine the final
-value of abstract_distance/perf_level based on the information
-availability/priority and some specific knowledge of the hardware.  Yes,
-ACPI SRAT is valuable to determine the abstract_distance/perf_level.
-And, it's better for kmem_dax to use it to determine the final value of
-abstract_distance/perf_level.
-
-To make the first version as simple as possible, I think we can just use
-some static abstract_distance/perf_level in kmem_dax driver for the NUMA
-nodes onlined by it.  Because we use the driver for PMEM only now.  We
-can enhance the implementation later.
-
->> - When a NUMA node is onlined, we will use find_create_memory_tier() to
->>   find or create its memory tier and add the NUMA node into the memory
->>   tier.
->
-> I think we should create all the memory tiers up-front, just like NUMA
-> nodes, to keep their devices and IDs stable.  Similar to offline NUMA
-> nodes, when a memory tier has no online nodes, we can mark it as
-> offline and exclude it from online-related operations (e.g. demotion).
-> A memory tier can be made online when it gets assigned with an online
-> node.
-
-Each memory tier corresponds to a range of abstract_distance/perf_level.
-For example, if 1 <= abstract_distance/perf_level <= 500, 5 memory tiers
-can be defined with abstract_distance/perf_level ranges 1-100, 101-200,
-201-300, 301-400, 401-500.  We can create these 5 memory tiers up-front
-of course.  In the new design, we may change the ranges at run time
-according to policy chosen by the users.  For example, we may change 5
-memory tiers above to 500 memory tiers, with
-abstract_distance/perf_level ranges 1-1, 2-2, ..., 500-500.  This may
-make memory tier devices and their IDs unstable at some degree.  But if
-we are cautious to customize the ranges, it's possible to make the
-memory tier devices and their IDs stable in most cases.
-
-Because we may define 500 memory tiers, it's hard to create all memory
-tiers up-front really.  But we can create them all in concept and
-allocate memory/resources for one when we add the first NUMA node to it.
-
-To make the fist version as simple as possible, I suggest to define 500
-memory tiers as above statically.
-
->> - Or we can add memory type data structure now.
-
-Best Regards,
-Huang, Ying

@@ -2,95 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4295B578D3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F60B578D4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236432AbiGRWCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
+        id S236199AbiGRWEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234877AbiGRWCt (ORCPT
+        with ESMTP id S235709AbiGRWE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:02:49 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CAE30F41;
-        Mon, 18 Jul 2022 15:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658181768; x=1689717768;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4f4sqt41mbrBJQ5YZ8lAHwW92PK8OUBMApM+zNy2HDY=;
-  b=hM9Z/qy6RaT5oicalFdsPZGqVQhvImEtYBBFzdc8KyjoqQnU97+H9NPW
-   aKEDHahNrNc4es5hylJQnt/YKFECmQjgkq9KO6O3bDEsJan/QHsU+yHPO
-   W+NguDic4qsk3d8c4V80gXaJ9U85TpxlzZ42sIQYVOTEQHzP5Wsw1U2eQ
-   xQjaG4G3VKw2QywvIrSi8INW9l2HvnyG+sBwUFrDs8ShNfovndZzK9Pgw
-   u6bQQfmxTBE5KRUnObJihXaztia9GlixP02IUZiV1nrRX+1AFb9p85EMF
-   wBIAEtzivdnTKC4OSKHDBniXWIHJ+Q6t/BqVwzaxwDhfpKLAenmQOu8Gu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="273161745"
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="273161745"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 15:02:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="601361127"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Jul 2022 15:02:46 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 28FC0195; Tue, 19 Jul 2022 01:02:55 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v1 3/3] gpio: 74xx-mmio: use bits.h macros for all masks
-Date:   Tue, 19 Jul 2022 01:02:52 +0300
-Message-Id: <20220718220252.16923-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220718220252.16923-1-andriy.shevchenko@linux.intel.com>
-References: <20220718220252.16923-1-andriy.shevchenko@linux.intel.com>
+        Mon, 18 Jul 2022 18:04:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9AE1F2D6;
+        Mon, 18 Jul 2022 15:04:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 778DBB817B5;
+        Mon, 18 Jul 2022 22:04:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E7DC341C0;
+        Mon, 18 Jul 2022 22:04:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658181860;
+        bh=3JxZkLM8MBszfDbDjwosYrF471wfmGyjogJnExYKUPY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BSlcJtetWKT66UYJ5KpIsH1zskh3T2ZqU/URAT5Y8TZeNrDkyU4XdYFBS1UCq8HGs
+         OeAcEtyYH5QPq1S0Yf81A5dfERgEQxdiY1nFXXqysSevgo4VJ10WCEzxjCSTsywggx
+         5o3XEpBmhlD+Mj4w7jqRwz28mrK0Ev4Pvv7VC/qnVVpXS6vgAgZnf3vmjMzM//0TM+
+         m2PNihIHQjQ8iDbkBmz1rc3GpaRWbkpAqP8iOcdqqB4t+W5qDj3Ykk/sudVMnTAfSN
+         MIStUtpzJ2s7xfcOgw526ZqsCKTTUvFKUQGKMYkCj01RTmOKRLDqptGyKlWg1k0DIr
+         kQpGkmvYq8x6g==
+Date:   Mon, 18 Jul 2022 15:04:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Dave Airlie <airlied@gmail.com>, torvalds@linux-foundation.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        gregkh@linuxfoundation.org, Daniel Vetter <daniel@ffwll.ch>,
+        mcgrof@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.sf.net, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-block@vger.kernel.org,
+        Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH] docs: driver-api: firmware: add driver firmware
+ guidelines.
+Message-ID: <20220718150414.1767bbd8@kernel.org>
+In-Reply-To: <97e5afd3-77a3-2227-0fbf-da2f9a41520f@leemhuis.info>
+References: <20220718072144.2699487-1-airlied@gmail.com>
+        <97e5afd3-77a3-2227-0fbf-da2f9a41520f@leemhuis.info>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the GENMASK() (far less error-prone, far more concise).
+On Mon, 18 Jul 2022 11:33:11 +0200 Thorsten Leemhuis wrote:
+> > If the hardware isn't
+> > +  enabled by default or under development,  
+> 
+> Wondering if it might be better to drop the "or under development", as
+> the "enabled by default" is the main part afaics. Maybe something like
+> "If support for the hardware is normally inactive (e.g. has to be
+> enabled manually by a kernel parameter)" would be better anyway.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpio/gpio-74xx-mmio.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpio/gpio-74xx-mmio.c b/drivers/gpio/gpio-74xx-mmio.c
-index b2cc8a55c257..cd399898ed12 100644
---- a/drivers/gpio/gpio-74xx-mmio.c
-+++ b/drivers/gpio/gpio-74xx-mmio.c
-@@ -5,6 +5,7 @@
-  *  Copyright (C) 2014 Alexander Shiyan <shc_work@mail.ru>
-  */
- 
-+#include <linux/bits.h>
- #include <linux/err.h>
- #include <linux/gpio/driver.h>
- #include <linux/mod_devicetable.h>
-@@ -14,7 +15,7 @@
- 
- #define MMIO_74XX_DIR_IN	(0 << 8)
- #define MMIO_74XX_DIR_OUT	(1 << 8)
--#define MMIO_74XX_BIT_CNT(x)	((x) & 0xff)
-+#define MMIO_74XX_BIT_CNT(x)	((x) & GENMASK(7, 0))
- 
- struct mmio_74xx_gpio_priv {
- 	struct gpio_chip	gc;
--- 
-2.35.1
-
+It's a tricky one, I'd say something like you can break the FW ABI
+"until HW becomes available for public consumption" or such.
+I'm guessing what we're after is letting people break the compatibility
+in early stages of the product development cycles. Pre-silicon and
+bring up, but not after there are products on the market?

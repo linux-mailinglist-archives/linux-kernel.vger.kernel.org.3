@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C21577F08
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D57577F0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiGRJwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
+        id S234310AbiGRJx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234231AbiGRJwE (ORCPT
+        with ESMTP id S231294AbiGRJxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:52:04 -0400
+        Mon, 18 Jul 2022 05:53:25 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8AB1ADB6;
-        Mon, 18 Jul 2022 02:52:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21E817E1C;
+        Mon, 18 Jul 2022 02:53:24 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3B72466019EC;
-        Mon, 18 Jul 2022 10:52:01 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C8A1566019EC;
+        Mon, 18 Jul 2022 10:53:22 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658137922;
-        bh=DwirXspN3Y3vFBnvNC+gMPwdHPw3dxPtlLcTkFzaP3M=;
+        s=mail; t=1658138003;
+        bh=VIxBxxLSa4ktKCkPs1Dc1qanYxk7HSJmo+nuBsN7108=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=j1/vkC4OKV5+d+kGyTUqlm1aRo5n/yStDLapB2Nu23DqLAxq/V8B2NyNEUYMBumTN
-         FVGqkZ7+3xd4if9vEm1UNEx1Epb9w86rmefaRY5n7zOiCtW0rH5PTP2zb+ONP8V6V7
-         v/3NncWTF6AiJ7T/TFTMLHhlWmxQGmTk4BZVUOMYc+40FSPbC8cl9/Dg6i120dRxE2
-         NqirQABTSh387G92VSoFpQhdlDImR2dFhXL3LN5RXxIViQ3Ax522G2FzlIkG4lnfUV
-         qoh62m3IxP1hI4VisTdKX91AKSt1SrA0FAF7CZ4fPPm1Idb5XM6wcgwpHYg58Q4sQQ
-         PeVaLiVQcd6cw==
-Message-ID: <9e1b51df-6d4e-5767-3111-dd1232ad22ad@collabora.com>
-Date:   Mon, 18 Jul 2022 11:51:59 +0200
+        b=OBajxEXF7nCoTgF3jxiCtm5jkVJ0bfYA7QQQ+phsgTLNBe3qALrKrFevNxzq1pi5j
+         ou4TpCn3QHWujcYDsVhQ/WseMdBg4juX++2gVr+gej3wLI8p5yHuwGa4Ix/suF9dnC
+         vf2a+lL8dgCe//fPycaXNZMZEi+EsAtVQ4xozsUNNCcxlsCZ1Q0YEtkE8rnISpIQJC
+         dzGssWz9ZP6JdHbbpr/FFupdseeOfYzPAo2X/O+br1JJD3PxmBOzL7UTHE6HV7abhO
+         cyyzlZl0/Hj9PBT6LBzEOtAcBeFCs471mK0VR+cHvm6jdVjZq53zy8HFwPdXcIfIkh
+         vkGpmPo5c2XPg==
+Message-ID: <98b0edfa-9669-3adb-894d-5d6fce9e2f8f@collabora.com>
+Date:   Mon, 18 Jul 2022 11:53:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 2/5] dt-bindings: media: mediatek: vcodec: Add encoder
- dt-bindings for mt8188
+Subject: Re: [PATCH 3/5] media: mediatek: vcodec: Add mt8188 encoder driver
 Content-Language: en-US
 To:     Irui Wang <irui.wang@mediatek.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -57,10 +56,10 @@ Cc:     Yong Wu <yong.wu@mediatek.com>,
         srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220716093808.29894-1-irui.wang@mediatek.com>
- <20220716093808.29894-3-irui.wang@mediatek.com>
+ <20220716093808.29894-4-irui.wang@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220716093808.29894-3-irui.wang@mediatek.com>
+In-Reply-To: <20220716093808.29894-4-irui.wang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,26 +72,72 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 16/07/22 11:38, Irui Wang ha scritto:
-> Add encoder dt-bindings for mt8188.
+> Add mt8188's compatible "mediatek,mt8188-vcodec-enc".
+> Add mt8188's device private data "mt8188_pdata".
+> Remove platform_get_resource API to get IRQ resoure.
 > 
 > Signed-off-by: Irui Wang <irui.wang@mediatek.com>
 > ---
->   .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml       | 1 +
->   1 file changed, 1 insertion(+)
+>   .../mediatek/vcodec/mtk_vcodec_enc_drv.c      | 21 ++++++++++++-------
+>   1 file changed, 13 insertions(+), 8 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> index d36fcca04cbc..66901118d346 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
-> @@ -22,6 +22,7 @@ properties:
->         - mediatek,mt8183-vcodec-enc
-
-Please keep alphabetical order.
-Add it here instead.
-
->         - mediatek,mt8192-vcodec-enc
->         - mediatek,mt8195-vcodec-enc
-> +      - mediatek,mt8188-vcodec-enc
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+> index 95e8c29ccc65..6b0688b4872d 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
+> @@ -228,7 +228,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>   {
+>   	struct mtk_vcodec_dev *dev;
+>   	struct video_device *vfd_enc;
+> -	struct resource *res;
+>   	phandle rproc_phandle;
+>   	enum mtk_vcodec_fw_type fw_type;
+>   	int ret;
+> @@ -272,13 +271,6 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
+>   		goto err_res;
+>   	}
 >   
->     reg:
->       maxItems: 1
+> -	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+
+This needs to be a separated commit with a Fixes tag!
+
+> -	if (res == NULL) {
+> -		dev_err(&pdev->dev, "failed to get irq resource");
+> -		ret = -ENOENT;
+> -		goto err_res;
+> -	}
+> -
+>   	dev->enc_irq = platform_get_irq(pdev, 0);
+>   	irq_set_status_flags(dev->enc_irq, IRQ_NOAUTOEN);
+>   	ret = devm_request_irq(&pdev->dev, dev->enc_irq,
+> @@ -428,6 +420,18 @@ static const struct mtk_vcodec_enc_pdata mt8195_pdata = {
+>   	.core_id = VENC_SYS,
+>   };
+>   
+> +static const struct mtk_vcodec_enc_pdata mt8188_pdata = {
+> +	.uses_ext = true,
+> +	.capture_formats = mtk_video_formats_capture_h264,
+> +	.num_capture_formats = ARRAY_SIZE(mtk_video_formats_capture_h264),
+> +	.output_formats = mtk_video_formats_output,
+> +	.num_output_formats = ARRAY_SIZE(mtk_video_formats_output),
+> +	.min_bitrate = 64,
+> +	.max_bitrate = 50000000,
+> +	.core_id = VENC_SYS,
+> +	.is_34bit = true,
+> +};
+> +
+>   static const struct of_device_id mtk_vcodec_enc_match[] = {
+>   	{.compatible = "mediatek,mt8173-vcodec-enc",
+>   			.data = &mt8173_avc_pdata},
+> @@ -436,6 +440,7 @@ static const struct of_device_id mtk_vcodec_enc_match[] = {
+>   	{.compatible = "mediatek,mt8183-vcodec-enc", .data = &mt8183_pdata},
+>   	{.compatible = "mediatek,mt8192-vcodec-enc", .data = &mt8192_pdata},
+>   	{.compatible = "mediatek,mt8195-vcodec-enc", .data = &mt8195_pdata},
+> +	{.compatible = "mediatek,mt8188-vcodec-enc", .data = &mt8188_pdata},
+
+Please keep this list alphabetically sorted.
+
+>   	{},
+>   };
+>   MODULE_DEVICE_TABLE(of, mtk_vcodec_enc_match);
+

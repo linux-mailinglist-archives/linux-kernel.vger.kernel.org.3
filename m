@@ -2,152 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C4357860E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4C157860F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbiGRPKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 11:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        id S235183AbiGRPLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiGRPKo (ORCPT
+        with ESMTP id S233838AbiGRPL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:10:44 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3739A17066
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:10:43 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y9so10867688pff.12
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:10:43 -0700 (PDT)
+        Mon, 18 Jul 2022 11:11:28 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1B31CFEE
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:11:27 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id b11so21771469eju.10
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:11:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=y3DD+UASViCc3fGdQ/4ByzAJsHsn6yyQz8QF1rik9EE=;
-        b=h9Hv3MgK7LZRMkwACMwTdtHyUH/P1a01EyGvrqF3l38fy5uYYAe3UFO9XZ/vIwZxFH
-         qZJWQL6MJzwiPlwd8qDQTfBj6wpufP9E/X+d5zmM8Q44lFTsFOWxOAw+J33uhi0Ubza4
-         Y4hfFHlUImM8cDDAE+y2OjZMtXP9NwIF5Bvop5+bgc2NJK135H+CNAtmrS2j0ahPofMH
-         xUIGn6OoRs/jz+rslOPPI0hjQsUtWhaoN5JiDcqhAt6/gCKeRUJW4Ir+eF8avxETlVKo
-         Y0QezJpf/Qlv6clWXlpgyM+0cPE+EQoIWm9yJb4dRcIXQfOCkFHcMFJcnamlyuG/kjJB
-         VtxA==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=7F8+UCVWKbAQTKBNFCoH9X0sSLk2kYOf1pqvUZLzBOw=;
+        b=AttdUXSlQQ23O7n53YGj3RpOZCZkERAaZ8RUL7dsYzNGZv4CgJGt3nd1yz4J0utSKD
+         rlcKYbc2pRl2IWX6YZBfhH4dUzCq1euVjE9wyNpai5f8APvicipOhGGZ+KkM1HF1/cos
+         zRukMw/OOLUl6wV4BNgQznA7zyXY3cPwWXgsLR847K/uhA5U/vdW2/Eh+O7PNIP0lg08
+         U+9N5F0Akv2uELN+3TYELC7hOOrWsvoFNxV/ory/4xD5RgvaySeU8qMXFRvmjganrwkf
+         5lXZgumWxFHR8XDyCRiFiwiCmjktNoysOK1Oy/7x70ebYLJkdF9AuW12ussAaiyFtZ9e
+         UEsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=y3DD+UASViCc3fGdQ/4ByzAJsHsn6yyQz8QF1rik9EE=;
-        b=3uvqc2YmVKi9PNOC5bj1RHLwcgkPS9SsWiTHuyu8Q+pGG4e3sx+4tT2oKzF5hJfDgr
-         Op5uRKRaqkJ2QDumYXMhI0vMeK518NDhxWX/ML98KlH6sWemmroWkAwKqbp45XNwgus6
-         P+p9uEVoC6Fo/nKUr8grIYfuGoKhFLSvsmGfCk2zXl6mkdnfjvXBfndOOvcek6DgDEOY
-         MlDRUgv7ZYtINaxtkWMaOH0JS4zRNQ+vmdZPzDRL9CT2+PQbBJP5QabMj5OdhctFqVyF
-         zgocTSKFNt9qYS1kqNxTDIH9HyM2hCP6VrLY1aq6nW9+RJTbd3jo9V/+WqiwRsbNerC2
-         YMLQ==
-X-Gm-Message-State: AJIora+nLQGeklMAn/3lmSe4dG4Gv0wk5NJoMrvITbgUzBfmApH0B4xW
-        pjYLNTITlziLzQXjmsnP/u/jMQ==
-X-Google-Smtp-Source: AGRyM1u+3wS+b7zUB2a5r4bYSCQZtSYfdQnZbz9rgZATqgwj5v932UogCgeV7eQflosiypDbBNuV7g==
-X-Received: by 2002:a05:6a00:1781:b0:528:c839:9886 with SMTP id s1-20020a056a00178100b00528c8399886mr28676389pfg.71.1658157042532;
-        Mon, 18 Jul 2022 08:10:42 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id f19-20020a17090aa79300b001efff0a4ca4sm9415305pjq.51.2022.07.18.08.10.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 08:10:42 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 15:10:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: x86: Drop unnecessary goto+label in
- kvm_arch_init()
-Message-ID: <YtV37rQaExsfITH3@google.com>
-References: <20220715230016.3762909-1-seanjc@google.com>
- <20220715230016.3762909-3-seanjc@google.com>
- <2c8fd8e1179fc63084ec451496df5b68caae2756.camel@redhat.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=7F8+UCVWKbAQTKBNFCoH9X0sSLk2kYOf1pqvUZLzBOw=;
+        b=uhNWzZ29cbjVwPRMekvywYRns/0FaRNbDl0ecwrCME/NtmmgGZpV8aYAh96a+aML6g
+         SyaF4lKtXKGslW/IYKtFzhVwPbq+XL+b0hdgZ/0EKycmEeo92lCQcReTVsIj6Tim1NxO
+         Js89T0lfTZzY7Uw9VzMxuIeyXoKtIqxfinhdDCz6XMRzUm/TARHofil9unITSBxVrv59
+         uIkMlc1uX+Difif4KdI8NyZyQMEXbhr2593WrGpYf7+tac0Pipx0BhkI3awv7rEMyVFb
+         CaaQVwa62hiJ+sTCShLxYEiQr0vECjUeVQNhXcD5qGwnhynE4DH6mH61/1jMQ9NDy9Dg
+         DQMg==
+X-Gm-Message-State: AJIora+mzBXdOHJEPHp3F/qyGfY98uWiU0wzdofVHrmpGxlb5zs76Kkn
+        omvePNqzCO2rKBOaHXBBnoGo/LSsmT+TwfVk1GIvufAxxBRUDw==
+X-Google-Smtp-Source: AGRyM1tSjRiJE8EBBkz12zOUZpQCQpNZz6k17kw++hvdoKtgtsgwua1Rxp/VjTOnPfWsavNFrxusXPBVYN+ElPg2jIM=
+X-Received: by 2002:a17:907:7604:b0:72b:4ad5:b21c with SMTP id
+ jx4-20020a170907760400b0072b4ad5b21cmr25523698ejc.412.1658157085104; Mon, 18
+ Jul 2022 08:11:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2c8fd8e1179fc63084ec451496df5b68caae2756.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 18 Jul 2022 20:41:13 +0530
+Message-ID: <CA+G9fYuBK8yvEQb-DL9EjFSOcW1sfdj5gmg_kZEYHnPN+6mQkw@mail.gmail.com>
+Subject: perf: util/annotate.c:1765:9: error: too few arguments to function 'init_disassemble_info'
+To:     open list <linux-kernel@vger.kernel.org>,
+        perf-users <perf-users@linaro.org>, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andres Freund <andres@anarazel.de>,
+        andrew.burgess@embecosm.com,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Roman Gushchin <guro@fb.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022, Maxim Levitsky wrote:
-> I honestly don't see much value in this change, but I don't mind it either.
+with reference to other email thread on perf build failure on Linus mainline [1]
 
-Yeah, this particular instance isn't a significant improvement, but I really dislike
-the pattern (if the target is a raw return) and want to discourage its use in KVM.
+I see perf build failure today on Linus mainline tree with this error [2]
+with gcc-11.
 
-For longer functions, having to scroll down to see that the target is nothing more
-than a raw return is quite annoying.  And for more complex usage, the pattern sometimes
-leads to setting the return value well ahead of the "goto", which combined with the
-scrolling is very unfriendly to readers.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-E.g. prior to commit 71a4c30bf0d3 ("KVM: Refactor error handling for setting memory
-region"), the memslot code input validation was written as so.  The "r = 0" in the
-"Nothing to change" path was especially gross.
+  CC      util/annotate.o
+  CC      util/block-info.o
+  CC      bench/mem-functions.o
+  MKDIR   tests/
+  CC      tests/parse-events.o
+util/annotate.c: In function 'symbol__disassemble_bpf':
+util/annotate.c:1765:9: error: too few arguments to function
+'init_disassemble_info'
+ 1765 |         init_disassemble_info(&info, s,
+      |         ^~~~~~~~~~~~~~~~~~~~~
+In file included from util/annotate.c:1718:
+/usr/include/dis-asm.h:472:13: note: declared here
+  472 | extern void init_disassemble_info (struct disassemble_info
+*dinfo, void *stream,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+make[4]: *** [tools/build/Makefile.build:97: util/annotate.o] Error 1
 
-        r = -EINVAL;
-        as_id = mem->slot >> 16;
-        id = (u16)mem->slot;
+Please refer link [3] for more details,
 
-        /* General sanity checks */
-        if (mem->memory_size & (PAGE_SIZE - 1))
-                goto out;
-        if (mem->guest_phys_addr & (PAGE_SIZE - 1))
-                goto out;
-        /* We can read the guest memory with __xxx_user() later on. */
-        if ((id < KVM_USER_MEM_SLOTS) &&
-            ((mem->userspace_addr & (PAGE_SIZE - 1)) ||
-             !access_ok((void __user *)(unsigned long)mem->userspace_addr,
-                        mem->memory_size)))
-                goto out;
-        if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
-                goto out;
-        if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
-                goto out;
+[1] https://lore.kernel.org/bpf/20220715191641.go6xbmhic3kafcsc@awork3.anarazel.de/T/
+[2] https://builds.tuxbuild.com/2C7WeIEmOBAGYdKtUjtXB0Yn7Ts/
+[3] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.19-rc6-448-gff6992735ade/testrun/10863106/suite/build/test/gcc-11-lkftconfig-perf/history/
 
-        slot = id_to_memslot(__kvm_memslots(kvm, as_id), id);
-        base_gfn = mem->guest_phys_addr >> PAGE_SHIFT;
-        npages = mem->memory_size >> PAGE_SHIFT;
+Best regards
+Naresh Kamboju
 
-        if (npages > KVM_MEM_MAX_NR_PAGES)
-                goto out;
 
-        new = old = *slot;
-
-        new.id = id;
-        new.base_gfn = base_gfn;
-        new.npages = npages;
-        new.flags = mem->flags;
-        new.userspace_addr = mem->userspace_addr;
-
-        if (npages) {
-                if (!old.npages)
-                        change = KVM_MR_CREATE;
-                else { /* Modify an existing slot. */
-                        if ((new.userspace_addr != old.userspace_addr) ||
-                            (npages != old.npages) ||
-                            ((new.flags ^ old.flags) & KVM_MEM_READONLY))
-                                goto out;
-
-                        if (base_gfn != old.base_gfn)
-                                change = KVM_MR_MOVE;
-                        else if (new.flags != old.flags)
-                                change = KVM_MR_FLAGS_ONLY;
-                        else { /* Nothing to change. */
-                                r = 0;
-                                goto out;
-                        }
-                }
-        } else {
-                if (!old.npages)
-                        goto out;
-
-                change = KVM_MR_DELETE;
-                new.base_gfn = 0;
-                new.flags = 0;
-        }
-
+--
+Linaro LKFT
+https://lkft.linaro.org

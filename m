@@ -2,88 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7D35783C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB6E5783BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbiGRNdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S233716AbiGRNdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbiGRNds (ORCPT
+        with ESMTP id S233699AbiGRNdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:33:48 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258D515715
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4cA63wMDAV5ZgwXYl8SjRPRo5qL0t+IFn/hc3lDLOz8=; b=fHKLlB4/Sdlv23rU6wJznHJPgR
-        7aFH278XLJe5I8CAJBULOnh+LVIlGnCNj/Rohzq9d4ef27FCGEPFmCvJ/FHu/BfCpCX02KGato0+6
-        x2nPWfjKEl61d7z7PBWAvmg6SrgSpFMZZ+nrgPCNvV/9tPVIBA6JRuSukpswfksY8GRHcigtC2owq
-        OWnpH6aqEwm6mhIZSoE0Rtwu0IrZypOYtblL9cDEA9tNqykx8yBeS+NK5QMo2HX7bmxL0lAyMzNSw
-        KL2qFBViIFsKdLHAYQ5YohNkBMZfpVanU0QYW8J2CSfQpfKYrkDSWtRM2ZSs9jWCkAfnz0lSc5C/M
-        TSi1ky4w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDQsP-004pda-3m; Mon, 18 Jul 2022 13:33:33 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E9176980299; Mon, 18 Jul 2022 15:33:30 +0200 (CEST)
-Date:   Mon, 18 Jul 2022 15:33:30 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Wen Pu <puwen@hygon.cn>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: retbleed on hygon
-Message-ID: <YtVhKtJkb23CcTtb@worktop.programming.kicks-ass.net>
-References: <YtVHr1jDOtUXYF0Z@worktop.programming.kicks-ass.net>
- <584296cf-80d7-5c78-8bd0-6eb53a5bc914@hygon.cn>
+        Mon, 18 Jul 2022 09:33:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8E311C03;
+        Mon, 18 Jul 2022 06:33:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57FF6615E9;
+        Mon, 18 Jul 2022 13:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AAD1C341C0;
+        Mon, 18 Jul 2022 13:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658151216;
+        bh=nHiNKNkka8ODegJm3GpruB//oq/yRLOrqdvgbyC08U4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GLIp7Z0G2x2/x//4ZpBoX2pxBM0GzJQdkM/A7jsIc+SLUz9R6lmCee5kNdgaBbDFQ
+         7arWEtN0KI04IflJZpy5NuOvvpqGLUbvKt/ttT7a/ihBkhIFVDYEkqPTFnh0BKRqOk
+         6d9SUku6O/gH0ElC5sglMRLoRtJCz3C4KYwcFaoNJmJkObYLs0/tuTPm9M6UFuLz0E
+         FnjddTPsqCT+J0U++Up5W9340L3H+yz4tTucEXaOb0DcA1RaV21yq56wA9Qmzz5nC/
+         6CsrtebjIROdXOZPOaGo/t6SIYu1TjkF4lcL3m5c8RfGBqEdgnWvbSfeSQEQra4P+n
+         vzQigrSpa/7HQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 33FFF40374; Mon, 18 Jul 2022 10:33:33 -0300 (-03)
+Date:   Mon, 18 Jul 2022 10:33:33 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Ian Rogers <rogers.email@gmail.com>,
+        Ian Rogers <irogers@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH] perf python: Avoid deprecation warning on distutils
+Message-ID: <YtVhLasCbE/52kYI@kernel.org>
+References: <20220615014206.26651-1-irogers@google.com>
+ <c0b64785-55f2-111c-cec7-a7a90f68f8ac@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <584296cf-80d7-5c78-8bd0-6eb53a5bc914@hygon.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c0b64785-55f2-111c-cec7-a7a90f68f8ac@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 01:03:41PM +0000, Wen Pu wrote:
-> On 2022/7/18 19:44, Peter Zijlstra wrote:
-> > Hi Pu Wen,
+Em Mon, Jul 18, 2022 at 01:50:22PM +0100, James Clark escreveu:
+> On 15/06/2022 02:42, Ian Rogers wrote:
+> > Fix the following DeprecationWarning:
 > > 
-> > Now that retbleed is public could you please review the patches in
-> > question and clarify the situation vs Hygon please? For development I've
-> > assumed Hygon is basically Zen1 wrt this issue.
+> > tools/perf/util/setup.py:31: DeprecationWarning: The distutils
+> > package is deprecated and slated for removal in Python 3.12. Use
+> > setuptools or check PEP 632 for potential alternatives
+> > 
+> > Note: the setuptools module may need installing, for example:
+> > sudo apt install python-setuptools
+
+Thanks, applied, added this to the cset log:
+
+    Reviewer comments:
+
+    James said:
+
+    Tested it with python 2.7 and 3.8 by running "make install-python_ext PYTHON=..."
+
+    Committer notes:
+
+    Tested with:
+
+     $ make -k BUILD_BPF_SKEL=1 PYTHON=python2 O=/tmp/build/perf-urgent -C tools/perf install-bin ; perf test python
+
+     $ make -k BUILD_BPF_SKEL=1 PYTHON=python3 O=/tmp/build/perf-urgent -C tools/perf install-bin ; perf test python
+
+     $ make -k BUILD_BPF_SKEL=1 O=/tmp/build/perf-urgent -C tools/perf install-bin ; perf test python
+
+
+- Arnaldo
+
+ > 
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/setup.py | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+> > index c255a2c90cd6..5a3c74bce836 100644
+> > --- a/tools/perf/util/setup.py
+> > +++ b/tools/perf/util/setup.py
+> > @@ -11,7 +11,7 @@ def clang_has_option(option):
+> >      return [o for o in cc_output if ((b"unknown argument" in o) or (b"is not supported" in o))] == [ ]
+> >  
+> >  if cc_is_clang:
+> > -    from distutils.sysconfig import get_config_vars
+> > +    from sysconfig import get_config_vars
+> >      vars = get_config_vars()
+> >      for var in ('CFLAGS', 'OPT'):
+> >          vars[var] = sub("-specs=[^ ]+", "", vars[var])
+> > @@ -28,10 +28,10 @@ if cc_is_clang:
+> >          if not clang_has_option("-ffat-lto-objects"):
+> >              vars[var] = sub("-ffat-lto-objects", "", vars[var])
+> >  
+> > -from distutils.core import setup, Extension
+> > +from setuptools import setup, Extension
+> >  
+> > -from distutils.command.build_ext   import build_ext   as _build_ext
+> > -from distutils.command.install_lib import install_lib as _install_lib
+> > +from setuptools.command.build_ext   import build_ext   as _build_ext
+> > +from setuptools.command.install_lib import install_lib as _install_lib
+> >  
+> >  class build_ext(_build_ext):
+> >      def finalize_options(self):
 > 
-> Hi Peter,
+> Tested it with python 2.7 and 3.8 by running "make install-python_ext PYTHON=..."
 > 
-> I'm sorry that there is something wrong with my email these days, so I
-> haven't received the patches. Do you mean those with "[peterz: add
-> hygon]" added by you? Thanks a lot for taking Hygon into account. I'll
-> clarify it as soon as possible.
+> Reviewed-by: James Clark <james.clark@arm.com>
 
-It's not your email, it was a hardware embargo issue so these patches
-have never been mailed out before hitting Linus' tree :-/
+-- 
 
-Please double check the entire series, see the merge commit:
-
-  ce114c866860 ("Merge tag 'x86_bugs_retbleed' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip")
-
-But in specific pay attention to commits:
-
-  a149180fbcf336e97ce4eb2cdc13672727feb94d
-  6b80b59b3555706508008f1f127b5412c89c7fd8
-  3ebc170068885b6fc7bedda6c667bb2c4d533159
-  d7caac991feeef1b871ee6988fd2c9725df09039
-  26aae8ccbc1972233afd08fb3f368947c0314265
-
-Basically everything that has HYGON in it. For that first commit, double
-check with your hardware folks the mitigation actually works for Hygon
-too. For the other commits validate it DTRT wrt HYGON. Please also send
-a patch enabling or removing the spectral chicken for hygon.
-
+- Arnaldo

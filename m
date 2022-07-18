@@ -2,173 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECD1577FF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11BF578001
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233804AbiGRKmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
+        id S233885AbiGRKnn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 18 Jul 2022 06:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGRKmv (ORCPT
+        with ESMTP id S230182AbiGRKnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:42:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 758611EAF6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:42:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658140969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oLrScKBdhpCdLMjjpdXV8SaTREGDjAlN+Xk7aTHMv2A=;
-        b=GSvF4Bj9d2zoHiEDT20R9254GvzaPahjr6BCsO53m19deWInMEBy2suJwj0ejVhpbe0O/q
-        YK+eD6ONsin4DmEyI3HJ1EwvhgDfAKit1O82XazpGx+1v3Ox0Om1YMTw7goR6LFF2s8kk4
-        F6/sDc5wcISX3/ExyAAxsYLd3JBzmX4=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-227-DlBkbfBCNDu9IcFgyZNHvg-1; Mon, 18 Jul 2022 06:42:46 -0400
-X-MC-Unique: DlBkbfBCNDu9IcFgyZNHvg-1
-Received: by mail-wr1-f72.google.com with SMTP id l11-20020adfbd8b000000b0021d754b84c5so1916097wrh.17
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:42:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=oLrScKBdhpCdLMjjpdXV8SaTREGDjAlN+Xk7aTHMv2A=;
-        b=UtyN9E+9J3hAwge7JmMJQShb7PVlXiIoa5I5bOMM7GFr6/HZcOi0dqq5Eg1fVu395l
-         7252uRlI39elgxNesRV+8VOyGqze7ARiqHK5QiqoBWR6++7/JkltecsG8DzyF0QkeBZ1
-         5y/rqJ39NlbjjoUJp4LPdyxERwFc1OyjErcd7QDhd98GjT8PasH3vMNw6sj8/Pd4Am/2
-         7By++Bz63h8jVEbOQzIfq6nRqWZznaTONTLS7hDoOcEbktnTLC2F45rfIolo/cxFWihf
-         3EK6hE3zsuOyukDwIwq3KfqLq6qeZ5rO1VnKkkV76cvqEMAs1NcSfcBfNdcEsTeFzzW1
-         x/Sg==
-X-Gm-Message-State: AJIora8XOXHgSxo8/Wn1xRTHlPSiy//fW+ggh2kren90EHbeL8JvUZ/i
-        YdVpAlsaTDI6hCatnTK9u38zW232ruZS8b7b/g8bo0O36kbFEz7aDos/SmN2WJwaWlLZD6yOBNs
-        Z1BYLnTPOkmomZGbljYXa7hkZ
-X-Received: by 2002:a05:6000:1cf:b0:21d:656c:dd9f with SMTP id t15-20020a05600001cf00b0021d656cdd9fmr22448989wrx.15.1658140964969;
-        Mon, 18 Jul 2022 03:42:44 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tvyVTXl6JyA3KOeMpwZznouh8ZkjX9bsFoPFeugUtbQI8wxCD+26JoafOfE/Ds+FNKbNgmrA==
-X-Received: by 2002:a05:6000:1cf:b0:21d:656c:dd9f with SMTP id t15-20020a05600001cf00b0021d656cdd9fmr22448973wrx.15.1658140964726;
-        Mon, 18 Jul 2022 03:42:44 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:7400:6b3a:a74a:bd53:a018? (p200300cbc70574006b3aa74abd53a018.dip0.t-ipconnect.de. [2003:cb:c705:7400:6b3a:a74a:bd53:a018])
-        by smtp.gmail.com with ESMTPSA id id15-20020a05600ca18f00b003a31f1edfa7sm1226229wmb.41.2022.07.18.03.42.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 03:42:44 -0700 (PDT)
-Message-ID: <096eec91-89a5-6068-acd3-c457d3ebd4d1@redhat.com>
-Date:   Mon, 18 Jul 2022 12:42:43 +0200
+        Mon, 18 Jul 2022 06:43:41 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.109.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91AB31EC5E
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:43:34 -0700 (PDT)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2044.outbound.protection.outlook.com [104.47.22.44]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-17-lQ7POjJ9OjKiaGcSFSrp1Q-2; Mon, 18 Jul 2022 12:43:31 +0200
+X-MC-Unique: lQ7POjJ9OjKiaGcSFSrp1Q-2
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ ZRAP278MB0253.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:28::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5438.12; Mon, 18 Jul 2022 10:43:29 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::3d:ca30:8c24:1a95]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::3d:ca30:8c24:1a95%8]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
+ 10:43:29 +0000
+Date:   Mon, 18 Jul 2022 12:43:28 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] dt-bindings: gpio: stmpe: Remove node name
+ requirement
+Message-ID: <20220718104328.GA18450@francesco-nb.int.toradex.com>
+References: <20220712163345.445811-1-francesco.dolcini@toradex.com>
+ <20220712163345.445811-4-francesco.dolcini@toradex.com>
+In-Reply-To: <20220712163345.445811-4-francesco.dolcini@toradex.com>
+X-ClientProxiedBy: MR2P264CA0115.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:33::31) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Vaibhav Jain <vaibhav@linux.ibm.com>, linux-kernel@vger.kernel.org
-Cc:     "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220601163243.3806231-1-vaibhav@linux.ibm.com>
- <05623846-03c7-89f1-e1dd-0ee23723c7e9@redhat.com>
- <87r13p2jju.fsf@vajain21.in.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] resource: re-factor page_is_ram()
-In-Reply-To: <87r13p2jju.fsf@vajain21.in.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ec061669-4ac4-4df9-450b-08da68aa5a63
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0253:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: wN41uCMDgXs+6xMxOBAH/LkJ2AV+fpk5oCrCFqRk2p0rWMJpAf+4SDh+17QI77ydhqiYocMg0L8sxRoTV6qHl/1qh330qavbUZWfI1aLhSr6k2WR9wQ+kO2AGoNa2TaHMpOaaCBtBM2Opfy2k3y+cBGKz8iOs4lSj9V50TD8ujvEb9pMdsZLlwiIYfcAuzkQApiLcBC9ELuU4vbTQz6P45HKUH/V8AwbZEk/Vd0QogB2NglwsAYeQNdFHqyEMZfZ4jwt6max8sQhqWlZC+/rUOT9V+9WwtZ9znfS81jQD0rQGyYFRF+2yLqN4WIvNxolKVAt1Av9U3KnyoG+gANxmISMbmpkaHWDGIsYppIHwRIDZaYcS7ujUBS8qJzMRFyQk84xF+EEXB/V97+DNzWkgyFxwYfecpUuliKfu3MJ9t5kZkMncKshrGyqDQzZiHRS3YCvc0ZBTs9Q+OZEks/JZpexbYm281DCQkPcwpoetKFxafcRp5CfW8piEPy+DrTU9HuzjSQVjF8antOHt/6BlDx0kVyKX5gIvT/GFSIxeCPZFynvtKrvRh3uPkgkcW1UzB83y1m+Ll9rASYoqiki7fIqs5/gYvob5KAoSCpRCSifhKGtZKUXR8oRTj5o8NcaukOROT3yuwWXgHTh35gV8OH/s5j3PwMbrFxlthcWDaExwTJ/AJ5yPJtGd1KIb0yN7WTEEeaUjL8hunpcR1zxCBeK1R38h7kyvXIQIYbZQOB8oVcNecnYjx18WDOp0wkflWvGBbpQ6LBxiaDFDDfchJTnfF0PmRUi8q9GaHWqIt8SGVTPPfUfI8t2JCgHwrQwgq+PO4qzmoCOgTU9p5aWYg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(136003)(396003)(39840400004)(376002)(966005)(186003)(83380400001)(66476007)(4326008)(110136005)(66556008)(66946007)(316002)(8676002)(54906003)(8936002)(6506007)(2906002)(52116002)(86362001)(6512007)(5660300002)(6486002)(1076003)(41300700001)(4744005)(44832011)(33656002)(26005)(7416002)(38350700002)(38100700002)(478600001);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DI42IpsX/NUGs6rDnzLC1Oxw/h3AUC6xslAaVK3P7qGivCDLiiK58MEYXUP5?=
+ =?us-ascii?Q?qHngdHZ4Oobb1bWQaBk+cqxXcplM3/0Db4TkOc8zoUsVHKGoIk0ekjVd4Vv6?=
+ =?us-ascii?Q?vHM3/CKEtH9JR6fuG/zOt7hdJNt2p4WQCP8yNmxwEhFjigq8Erkv57xgK40V?=
+ =?us-ascii?Q?Hr3GiyV9QZPe/H54ibcAmvjYxtNr8PgCOFj70YertqKLtj0ZhSNOnbwtZLbr?=
+ =?us-ascii?Q?HxyMkO0TS7DUEX6gJSaBLNWPN3FzEaLl4cuBi1qaqOEKxA91K0t82Ob5Bksh?=
+ =?us-ascii?Q?j0d7mrXoNw+xx4phPm+ORkWvsLYUjjZGjTKrGKe1Pez4mIZBe3TbNipsuS/P?=
+ =?us-ascii?Q?k+z5EAJvMVtw7yG2cEjPsXVYW9tqLV+8aQG28QDBTMVYLmYutegat+Jr/Sa+?=
+ =?us-ascii?Q?QCIcInwqqO3n4G6EwuCXwCWVR8+gPd3th6tYOuHe60JfobTjCHzWBLiMhYdr?=
+ =?us-ascii?Q?amEdZitmRCg7Kynsl2N7AWlMTFwUA7w92sGAjiwLSmIjpbYJF2GaXN3LgovS?=
+ =?us-ascii?Q?Wz14d7s+ntYqfRSwClnWju6JjIFiJrmfUv+Lma3sVSPacizBpqSCZdzNXjHS?=
+ =?us-ascii?Q?J+zqvsGRflUHc4WrFC7eKyYM1rvxB9jY6kagr/ym6BDZjaFZd50bfDQRJQPQ?=
+ =?us-ascii?Q?xAOh+eaRC/J+BbtMCy6jVBqlL/cfYy1EAYBvDmxWFg8ie6cx6CmmEAeYQggH?=
+ =?us-ascii?Q?ZKYUokhgNICVVX2VMM76ItJV/uWA88FN0mf8UEyzusJ26Oqwv0W7DHg6k4VF?=
+ =?us-ascii?Q?0A4FMTfPGt8dSpZoowj3SNs/hbpAaP+Hltvbe/P+RWiMmGY/o2r3OHou2G1B?=
+ =?us-ascii?Q?y1B8fdawJjBgTiNnuIcTu0U2wvGIWr0eW1rNoJM9hhyOd/HF2sjVQaaBSFS2?=
+ =?us-ascii?Q?Z+VChbU7HMocMenambEaO+5Rryz4Okgf0JTzLpwSRiu2nPyEIa9tECyS/S8j?=
+ =?us-ascii?Q?lHTwEx3YrRVtcVqQ7y4UgWBHLd1MPyfX3xNrKkHRx9SCiHW+A1zcEo+4nLkV?=
+ =?us-ascii?Q?Px/xh/OyxV9nN6wzTkZPQ7Q2VcmSWIF+QiGCywSX05l4cmneTfStBHVTA0U4?=
+ =?us-ascii?Q?NVmAPU/mZ0hW1osPfMeb6BjHp/N5rzw1Kdg2Ybbhqp06xbmDbt0GpGvcB926?=
+ =?us-ascii?Q?vFupUwrK/kxxBNd84yeUWHSPu3vXxeCsHFwI5ujHarGXj3SZtFCYJw/oSga6?=
+ =?us-ascii?Q?YsW2OPyRCikMuxkWXmaaxMioC/yPeOIlVgsxoHf2ptGU2NMRYJjGi+VZw2l+?=
+ =?us-ascii?Q?avoYotuhZ5vDOuwM3mbJ3Y6B8nlUrB/IqsrkjV1hfxfYoxDdeuijAMVAJNb0?=
+ =?us-ascii?Q?bEHRiZcvN1mHupx9WigIhqX7oFxTAZe8DbL9Sb8759Uu8T1ohbzrR7U/LHSz?=
+ =?us-ascii?Q?MGLts5gb/PWIqwNMSYekSlzP8KrBc1Onhw2kBkPjtJzGBoWxUcCUEXbozj1X?=
+ =?us-ascii?Q?K9i820THqHd40JpfXKGBDU5jvVtf8yy4nnKxjj/Lupc9rmqW8T4roKYgzGCB?=
+ =?us-ascii?Q?GinPzK08YaNOLtcJKh1gN0qMkuhhFWOkHmtckB4+Tj+YFCovLBLFL9f8zVax?=
+ =?us-ascii?Q?ZVtcGd1Ifn/4STcUKqimd6zK3fCk/7hO3aBe+0V/Kug63c4sGXeU5+qe6DO8?=
+ =?us-ascii?Q?BQ=3D=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec061669-4ac4-4df9-450b-08da68aa5a63
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2022 10:43:29.7155
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0oBhnJb1jNO/FdaJk+sEAIW2JpJ5sExObE15Nkxz24quzfy2/UqGzN425aPkZRG/2q3JMNEToSgvSB1Gvtfsn0T3X/QQIcXaSDct0FVAzms=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0253
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[sorry for the late reply]
-
+On Tue, Jul 12, 2022 at 06:33:43PM +0200, Francesco Dolcini wrote:
+> STMPE driver does not require a specific node name anymore, only the
+> compatible is checked, update binding according to this.
 > 
-> The improvement to the gcc (v12.1.1) generated code (x86_64) for
-> page_is_ram is quite evident.
-> 
-> With the patch:
->    0x0000000000000920 <+0>:	call   0x925 <page_is_ram+5>
->    0x0000000000000925 <+5>:	shl    $0xc,%rdi
->    0x0000000000000929 <+9>:	xor    %r8d,%r8d
->    0x000000000000092c <+12>:	xor    %ecx,%ecx
->    0x000000000000092e <+14>:	mov    $0x81000200,%edx
->    0x0000000000000933 <+19>:	lea    0x1(%rdi),%rsi
->    0x0000000000000937 <+23>:	call   0x7e0 <find_next_iomem_res>
->    0x000000000000093c <+28>:	test   %eax,%eax
->    0x000000000000093e <+30>:	sete   %al
->    0x0000000000000941 <+33>:	movzbl %al,%eax
->    0x0000000000000944 <+36>:	ret
->    0x0000000000000945 <+37>:	int3
-> 
-> Without the patch:
->    0x0000000000001000 <+0>:	call   0x1005 <page_is_ram+5>
->    0x0000000000001005 <+5>:	shl    $0xc,%rdi
->    0x0000000000001009 <+9>:	lea    0xfff(%rdi),%rsi
->    0x0000000000001010 <+16>:	cmp    %rsi,%rdi
->    0x0000000000001013 <+19>:	jae    0x1064 <page_is_ram+100>
->    0x0000000000001015 <+21>:	sub    $0x40,%rsp
->    0x0000000000001019 <+25>:	xor    %ecx,%ecx
->    0x000000000000101b <+27>:	mov    $0x81000200,%edx
->    0x0000000000001020 <+32>:	mov    %rsp,%r8
->    0x0000000000001023 <+35>:	call   0x7e0 <find_next_iomem_res>
->    0x0000000000001028 <+40>:	test   %eax,%eax
->    0x000000000000102a <+42>:	jne    0x105a <page_is_ram+90>
->    0x000000000000102c <+44>:	mov    (%rsp),%rax
->    0x0000000000001030 <+48>:	mov    $0x1,%ecx
->    0x0000000000001035 <+53>:	lea    0xfff(%rax),%rdx
->    0x000000000000103c <+60>:	mov    0x8(%rsp),%rax
->    0x0000000000001041 <+65>:	shr    $0xc,%rdx
->    0x0000000000001045 <+69>:	add    $0x1,%rax
->    0x0000000000001049 <+73>:	shr    $0xc,%rax
->    0x000000000000104d <+77>:	cmp    %rax,%rdx
->    0x0000000000001050 <+80>:	jae    0x105a <page_is_ram+90>
->    0x0000000000001052 <+82>:	mov    %ecx,%eax
->    0x0000000000001054 <+84>:	add    $0x40,%rsp
->    0x0000000000001058 <+88>:	ret
->    0x0000000000001059 <+89>:	int3
->    0x000000000000105a <+90>:	xor    %ecx,%ecx
->    0x000000000000105c <+92>:	add    $0x40,%rsp
->    0x0000000000001060 <+96>:	mov    %ecx,%eax
->    0x0000000000001062 <+98>:	ret
->    0x0000000000001063 <+99>:	int3
->    0x0000000000001064 <+100>:	xor    %eax,%eax
->    0x0000000000001066 <+102>:	ret
->    0x0000000000001067 <+103>:	int3
-> 
-> Looking at the disassembly above, gcc has inlined both walk_system_ram_range()
-> and __is_ram() in page_is_ram(). This ends up in page_is_ram() calling
-> find_next_iomem_res() directly anyways with bunch of book-keeping
-> afterwards which can be avoided.
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-We usually don't care about such micro-optimizations unless you can
-showcase actual performance numbers. Otherwise we'd have constant,
-unnecessary code-churn all over the place.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Most probably, all that list walking dominates the runtime either way.
-
-Feel free to proof me wrong ;)
-
-> >>
->> If it doesn't make the code easier to read (at least for me), why do we
->> care?
-> IMHO, calling find_next_iomem_res() from page_is_ram() instead of
-> calling walk_system_ram_range() makes it easy to trace the path of
-> page_is_ram(). Also the dummy callback makes the code flow seems strange
-> initially.
-> 
-
-I'm not convinced, but I don't care enough to object. I'll add more
-review feedback to the patch.
-
--- 
-Thanks,
-
-David / dhildenb
+from v1 https://lore.kernel.org/all/CACRpkdZDRjadHc4TBHouWPSYhLoCAynXzKejKi+H98C5ioCW6A@mail.gmail.com/
 

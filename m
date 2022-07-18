@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3B857840E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F026578411
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234995AbiGRNoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        id S235004AbiGRNow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234950AbiGRNoE (ORCPT
+        with ESMTP id S233482AbiGRNou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:44:04 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE7E6374
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:44:03 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id w2so13635836ljj.7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QGPckwIqmYC0GGeLNsoZO9ZfM0x0N4ESwTfdOVnfbdo=;
-        b=f3ntLRVwskz3ZYyc2FJn8KOqs8b6ND5mDfh/7JZFWOq5l7KWLXKWX9A9rKeTa5Ij4k
-         7JGNN4tCQOemtel+6gbrSKA5gp4HIM2qxMMw+tS0YV/5naByFOtIryM0FC9tuNFVTvbr
-         Jrdds9O/F2AzeJevAMT6zuZXRuHiK+SpaTUkfIndiTuqomSVPxeatvzTOEZ6jO/E85kH
-         TBDEEb5ZqoeeM8vt0G2FyfX2kYWk6aetO28bczKUfx/RZ61pMkGe8W0OA4X7xbilIUhA
-         xNuI8calWwk6BChdv3oBhEsOCtCz5qqbICQC/cNoPm+zTJT1HvDsiK8N1OEWdA+5O5YT
-         mUlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QGPckwIqmYC0GGeLNsoZO9ZfM0x0N4ESwTfdOVnfbdo=;
-        b=UZyzY4e1CNzLvlkcMcLxR5FVyKY+5t1Nv8hIBkbjHulO8NdrWzOdeiHt1D7M7HBAfx
-         DUdQbi0OS4ReVLek5F3wV/txH0Mc7nKRGPiS7soOIN1YMd3EGtnQsITr6DO7EXWRCSaX
-         wVg/D1NDbK3BciiWVJo5R0c8xC2jmg+QLBuJUnpL8sLaDxuUSb0A1wDbRdk/yEdFiD2R
-         /642lR5LZU7Nay5Z574cTRySGXreZ+hx1ZbQXVTpr3LTOR2ATWdGouZEiu1+HDWFJJ0y
-         JGYQ8qW3zIwUcwy+E7GMKGAC4juY98rzeNArilPg7sOgng8VrZB+jT7QV86eaGXEMCS7
-         FftQ==
-X-Gm-Message-State: AJIora/p2QLqqiY+gV4Bi1tiGLtaE9vWLTNn/+VFkihZ+AFfyfGz8nLP
-        b683Eyv+JroxPrYfd3y3VRsNYQ==
-X-Google-Smtp-Source: AGRyM1tzhjki38V3oaMBPTSxXFp3nFxykyZ41PEs8Iaz+PAeQSFVS2lALcibNLEz/hiYCRucx9zy4w==
-X-Received: by 2002:a05:651c:1986:b0:25d:a125:eee2 with SMTP id bx6-20020a05651c198600b0025da125eee2mr8375312ljb.488.1658151841639;
-        Mon, 18 Jul 2022 06:44:01 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id e13-20020ac25cad000000b00489cc0dd59esm2606599lfq.90.2022.07.18.06.44.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:44:01 -0700 (PDT)
-Message-ID: <27939c76-161d-1bd4-0a2e-ec21681e0548@linaro.org>
-Date:   Mon, 18 Jul 2022 15:43:59 +0200
+        Mon, 18 Jul 2022 09:44:50 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF02C19C1C;
+        Mon, 18 Jul 2022 06:44:48 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmjrH1XNRz4xZB;
+        Mon, 18 Jul 2022 23:44:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1658151887;
+        bh=ct7Bb9TEvoCcCMzYFWgojsTrBCyiQvnckSQyh1hVRXk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pp5pG25f9wQVNn9FX01c5sgo/IisHcF/8CvZa4R8kaqhPha+c9zSoODzcOqIrsJEL
+         3H5Gx6FkwDM1wcu3KzoWndoIH1dj5PwXXPbDgJ3X3KSqLraoFK6+t2H/AEsZ4Rmi6l
+         MGSLSQ3MYkjDvElAC1u/ElxqimB5GsZ7ZMvxTfHcrbIuVw+xg/zVLeiWTK1RBq59uH
+         dih19E9zzkt2HIi1lwCFgc6Tm2O66He0G6LkHbtHt2QH4/sp9XID2qsmRNPrJJcVZS
+         /xA4/Q0UTQfkUHm246ns0jMU4EhzEML6WwTs+5XWttr1GiapF6tjxNVSG6xaJJH09m
+         TwOIO1Tc77JFw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     <linuxppc-dev@lists.ozlabs.org>
+Cc:     sudipm.mukherjee@gmail.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        torvalds@linux-foundation.org
+Subject: [PATCH] powerpc/64s: Disable stack variable initialisation for prom_init
+Date:   Mon, 18 Jul 2022 23:44:18 +1000
+Message-Id: <20220718134418.354114-1-mpe@ellerman.id.au>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <87cze3docs.fsf@mpe.ellerman.id.au>
+References: <87cze3docs.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: ipmi: Add npcm845 compatible
-Content-Language: en-US
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, jic23@kernel.org,
-        minyard@acm.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     openbmc@lists.ozlabs.org, openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220717121124.154734-1-tmaimon77@gmail.com>
- <20220717121124.154734-2-tmaimon77@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220717121124.154734-2-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/07/2022 14:11, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM845 KCS and modify NPCM KCS
-> description to support all NPCM BMC SoC.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+With GCC 12 allmodconfig prom_init fails to build:
 
+  Error: External symbol 'memset' referenced from prom_init.c
+  make[2]: *** [arch/powerpc/kernel/Makefile:204: arch/powerpc/kernel/prom_init_check] Error 1
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The allmodconfig build enables KASAN, so all calls to memset in
+prom_init should be converted to __memset by the #ifdefs in
+asm/string.h, because prom_init must use the non-KASAN instrumented
+versions.
 
+The build failure happens because there's a call to memset that hasn't
+been caught by the pre-processor and converted to __memset. Typically
+that's because it's a memset generated by the compiler itself, and that
+is the case here.
 
-Best regards,
-Krzysztof
+With GCC 12, allmodconfig enables CONFIG_INIT_STACK_ALL_PATTERN, which
+causes the compiler to emit memset calls to initialise on-stack
+variables with a pattern.
+
+Because prom_init is non-user-facing boot-time only code, as a
+workaround just disable stack variable initialisation to unbreak the
+build.
+
+Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+---
+ arch/powerpc/kernel/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
+index f91f0f29a566..c8cf924bf9c0 100644
+--- a/arch/powerpc/kernel/Makefile
++++ b/arch/powerpc/kernel/Makefile
+@@ -20,6 +20,7 @@ CFLAGS_prom.o += $(DISABLE_LATENT_ENTROPY_PLUGIN)
+ CFLAGS_prom_init.o += -fno-stack-protector
+ CFLAGS_prom_init.o += -DDISABLE_BRANCH_PROFILING
+ CFLAGS_prom_init.o += -ffreestanding
++CFLAGS_prom_init.o += $(call cc-option, -ftrivial-auto-var-init=uninitialized)
+ 
+ ifdef CONFIG_FUNCTION_TRACER
+ # Do not trace early boot code
+-- 
+2.35.3
+

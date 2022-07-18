@@ -2,76 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFEF578CCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79816578CC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbiGRVe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
+        id S235353AbiGRVeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236035AbiGRVeW (ORCPT
+        with ESMTP id S235996AbiGRVeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:34:22 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3B428724
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:34:20 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id l14so7412438qtv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=suUG4NbxQ9Jc3ynJZYSSIg0ST38XjFLBT9pq2CkXbaQ=;
-        b=b0pxV4EfxBXsSBC2H3gma7vsR1kQNKR2IEM+ZlJTjB6+KE9bMMdkfPugTlRcm2Gy7o
-         F50+Slq8nFJGAmp1b4+kcJ/PmUSNBSl5P5T8cZZRupf5GdWDpZlvxo4kUaJ7zIuVnZ/k
-         o1ncUXcuiKonkqAuQyuo11YJCxDbb+JK7S+NTTJ8wi8gCdd0+dCkdUE9EEQ6yjVmRsRM
-         8S2jTk9A3MaoTdXAxDbqpN2H2jcs4y/wGQJ4zJQDkt0vu4OXSNv14Hn1sP7spyXBPO8n
-         VUbV6mFd4MJQSsvqp2Mr1WARi5qZDfM9soD3kVT0qVkhTkdvBBuE3tgdhNZuWz4nQjOR
-         9c2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=suUG4NbxQ9Jc3ynJZYSSIg0ST38XjFLBT9pq2CkXbaQ=;
-        b=HXjqANZFHGDnKvAuoTWbKlFjRPIo4mrtb4d9ZS7LK9wmnHsYJtu5/VjrhyIZESvR29
-         62cxu/lqL4V0ZwL5JCr18SiawQtC0/A+K+rI0DlByJHa3j4bh70jt52qXQT5wiT3hFoQ
-         Qsar77KH8/v/6ZzloFlq+wE9FbUTJdRw6sdKDb5ILw9xHSuvA6LVHW4ZHdNGvw66Ko4j
-         PTPUn20Ca4mBxg3+xN6YNEAQsyd4fxEyn28EhswHr+V6bi717W/GrD45Lx0R+E54gmS1
-         obnm75UUyI99OD+eFo/E8YcDS6vZRHl5I/IIm49Das/j8IvX/92acCIihnXXlw/40mX9
-         YhUw==
-X-Gm-Message-State: AJIora+uz+NEO6yRzhyvmhxCSaMTdBAaLPGrRk0Jb1GMyO6WERAb2Ges
-        EZNoqsY2gqBr6F1DfHrUBTtJGg==
-X-Google-Smtp-Source: AGRyM1uQvjddRJ8GTU4jNcb8q7gfa6t0XJN3XwYL2TU+081VWIyu/CfILm0ovHBg/Rjy20DpC/4D9w==
-X-Received: by 2002:ac8:5f09:0:b0:31e:9704:dfab with SMTP id x9-20020ac85f09000000b0031e9704dfabmr22960730qta.375.1658180059610;
-        Mon, 18 Jul 2022 14:34:19 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id ez12-20020a05622a4c8c00b0031eb0bb5c3csm10047906qtb.28.2022.07.18.14.34.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 14:34:18 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 14:34:01 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Liam Howlett <liam.howlett@oracle.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] maple_tree: Fix sparse reported issues
-In-Reply-To: <20220718174733.dya2xjigqeud6clx@revolver>
-Message-ID: <a6736ccf-fb45-5777-ca28-575297f1879f@google.com>
-References: <20220713132926.3sl7gs67dyjj7kit@revolver> <44a478e8-2ccc-e82-bd5a-172778c01529@google.com> <20220713175013.aoemaelds45aavc4@revolver> <20220715195301.r7ozt6ph2scti7vz@revolver> <fc9c2193-f5d7-d494-8e4e-c9f340ae8625@google.com>
- <20220718022718.wtlw7grwp6dv5fcp@revolver> <1098dd4d-8f12-4493-5aff-1ee489d8e7@google.com> <20220718125649.cpatlh7ublgf7bvg@revolver> <20220718134541.ucbpuqdfcnfxravx@revolver> <7db5a8c5-9084-a7fe-6e83-713e52ed8539@google.com>
- <20220718174733.dya2xjigqeud6clx@revolver>
+        Mon, 18 Jul 2022 17:34:12 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D97FF58E
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:34:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HujOkwxQQsVVE+/AX3WLEFoFMPmP65oRdauqn2ox+31uV1nDZhX4fx8To4iBMiC+8zZj2GR8lbOvbTYSTB6Np5yQ/CamzuHzpEHG9gilGg1qcGzH0llcoaOEuYckdkvnbGjeteZzyjxyiLPzTTMMFvfkPXZbyyJ9yRRniZAm+fsZRjY3LUT9xj0x1iNtMEMYv0qAtOavH3W+zeopJJDxsQX2eytwq7c4XBvKM/2ZFOd9lWzoikB3Qh0I7BfFrUUfIf2x/2FJCNI8oyB4UqGnU5SEfZPa3tD8r5pdzHmqEPiHZng+eNHRkXlSx3WSJwZyqT+M9Z6vMASecNF4LnO5ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Lall0w3xu5vPH7W7jZkMKWOfPhPjku0BbcWBcBWFoFU=;
+ b=GhUVvHTknabfy4qR6JhtgMWRdozh9W4kP4ISmThBs6NZPqnt7ku73CR9rvt7ri/81fNp0hjfdHCLYS7rWzfw8vpiMsEVDE1BYDdJNPah/7ur3rIaFNFsrVy7YNamf3ds1XjX1e5OcQZT9W9Fn8tp93lgy10ywelDgWjjwdA/vNX/E3+GjubSieLcHDtRoB0YiY3wxm536pe6NtjH8Vrj14xDvQUNycWJGh+k76daXtuSsCkbfBC2eRj3TjaG99D+x3S4jC+Ds9Vbox6nTEZ24qJQoIDjbJZxo4/rW6sUNuirj3Al5znOVvKFlh0ODKeF+ys2500mDivDmHWAcnbgBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Lall0w3xu5vPH7W7jZkMKWOfPhPjku0BbcWBcBWFoFU=;
+ b=KS+GRQ0ZkXSnz2AXXIlia/yWhddl4wFVhsbjBbF+9lyGUaCqnhOLHMboR9ARZ8FZP3r2rM9x/Xay9j5oy1CXnHAl4q8K23cnl9iBR9X5BmDGxlekQLcTA4L16HptaKl+G/HWpNJvm1N2rkof62VGPdEZN4xAFVg6An/FDZGOYlY=
+Received: from DS7PR03CA0045.namprd03.prod.outlook.com (2603:10b6:5:3b5::20)
+ by BN6PR12MB1396.namprd12.prod.outlook.com (2603:10b6:404:1b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Mon, 18 Jul
+ 2022 21:34:07 +0000
+Received: from DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b5:cafe::97) by DS7PR03CA0045.outlook.office365.com
+ (2603:10b6:5:3b5::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26 via Frontend
+ Transport; Mon, 18 Jul 2022 21:34:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT047.mail.protection.outlook.com (10.13.172.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5438.12 via Frontend Transport; Mon, 18 Jul 2022 21:34:07 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 18 Jul
+ 2022 16:34:06 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ASoC: amd: yc: Decrease level of error message
+Date:   Mon, 18 Jul 2022 16:34:02 -0500
+Message-ID: <20220718213402.19497-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 71a85bef-f784-4df7-1289-08da69053ebb
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1396:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AwVL82gvTL0IJc3hPKgtD4r9el1D1f9UCtBTfHoxRBLsx+rkH66FzOVlBKyf+eJ89nJ3N5wQ7LGZN6jFI2lymLLTJIiA2q28QywZvErQpGjWCJcLT4EERURUH9MRggIrtl+Eg1D93h0caPzQsxiRYw5bhjrSh1wPM165op5zNac5Ca3f7Dr/hEIXll4mW8dg7ZMA5JuE7zyFxXjXV8wfYZ4RpNVrj0alNBngpdZfOd1Q4pfAgW0xOOu81tkWz+2Mu1cCvbY/8dEHo3fPnbgTeRq+Aa3H6YB1umupoPIjE0ReQeDT3FO/EnvSNE3K47uG8y+fxihL4yy7dvUZf6jOFCChVnflnzNQXRuNImXriaX48MRFI7W51JwInSPV0X29Z2gjyA0NetjzycBOU+XIMyXEkiGw3y0ghqc/pIlIbe+rWxLQXaUqlK95SPhKmy+X6VRzMrbFG56QaZhsBf3Jua0IKls7TKlfFXdB8Xg9eUU9fyjwJoBe6nx1peuZ8wqJA8v7JPdWKZ+IS69gWmwECtd4MIZLgSikuu7RzisdmC3b8eAJr8zK8MmLYA2p7rocPDOTvBo1dt1NiPGklc/GUm/YMC4PzXw8xEnD28zB/7KW7SqUDe1rcJxgtCbdB61YttUzlGCsVSJrTBpqX29q8GkZuFBx/IQi2uoS1anfi+Otws6KyPh+ZkXaCVrSWkZsgG/jIzqQNmRN+zyrsZ8I+IiCmRrmyqQzUbreIJhNcLeSStCzN12cgXRhUfwUWVn/e0DDJBbF0IcitQaL8BfNuw9BTtr77OCyJzO5Tlrlm3NWO9ndo4TMpmFcJUq8WmJ5kJAN8n58Nwpxutc26vQbhg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(136003)(346002)(396003)(36840700001)(40470700004)(46966006)(83380400001)(186003)(26005)(44832011)(2906002)(15650500001)(41300700001)(6666004)(86362001)(7696005)(478600001)(8936002)(426003)(40460700003)(5660300002)(2616005)(16526019)(110136005)(54906003)(316002)(82310400005)(70586007)(82740400003)(81166007)(336012)(47076005)(40480700001)(36756003)(1076003)(36860700001)(8676002)(4326008)(356005)(70206006)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2022 21:34:07.3609
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71a85bef-f784-4df7-1289-08da69053ebb
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1396
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,77 +101,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022, Liam Howlett wrote:
-> > 
-> > I said before that I expected the test run to hit the swapops.h
-> > migration entry !PageLocked BUG, but it did not.  It ran for
-> > nearly 7 hours, and then one of its builds terminated with
-> > 
-> > {standard input}: Assembler messages:
-> > {standard input}: Error: open CFI at the end of file;
-> >  missing .cfi_endproc directive
-> > gcc: fatal error: Killed signal terminated program cc1
-> > compilation terminated.
-> > 
-> > which I've never seen before.  Usually I'd put something like that down
-> > to a error in swap, or a TLB flushing error (but I include Nadav's fix
-> > in my kernel, and wouldn't get very far without it): neither related to
-> > the maple tree patchset.
-> > 
-> > But on this occasion, my guess is that it's actually an example of what
-> > the swapops.h migration entry !PageLocked BUG is trying to alert us to.
-> > 
-> > Imagine when such a "stale" migration entry is found, but the page it
-> > points to (now reused for something else) just happens to be PageLocked
-> > at that instant.  Then the BUG won't fire, and we proceed to use the
-> > page as if it's ours, but it's not.  I think that's what happened.
-> > 
-> > I must get on with the day: more testing, and thinking.
-> 
-> 
-> I think this is the same issue seen here:
-> https://lore.kernel.org/linux-mm/YsQt3IHbJnAhsSWl@casper.infradead.org/
+On a number of platforms that contain acp3x controller a new ERR level
+message is showing up:
 
-Yes, that's a swapops.h migration entry !PageLocked BUG on brk.
+`acp6x pci device not found`
 
-> 
-> Note that on 20220616, the maple tree was in the next.
-> 
-> I suspect I am doing something wrong in do_brk_munmap().  I am using a
-> false VMA to munmap a partial vma by setting it up like the part of the
-> VMA that would have been split, inserted into the tree, then removed and
-> freed.  I must be missing something necessary for this to function
-> correctly.
+This is because ACP3x and ACP6x share same PCI ID but can be identified
+by PCI revision.  As this is expected behavior for a system with ACP3x
+decrease message to debug.
 
-Thanks for pointing to that, yes, the vma_init(&unmap, mm) etc in
-do_brk_munmap(): I hadn't noticed struct vma_area_struct unmap before.
+Fixes: b1630fcbfde6c ("ASoC: amd: yc: add new YC platform varaint support")
+Cc: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ sound/soc/amd/yc/pci-acp6x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And almost coincident with your mail, my next test run crashed on
-kernel BUG at mm/huge_memory.c:2013, VM_BUG_ON_VMA(vma->vm_start > haddr),
-in __split_huge_pmd_locked(), while servicing do_brk_munmap():
-no doubt for a (different but) related reason.
+diff --git a/sound/soc/amd/yc/pci-acp6x.c b/sound/soc/amd/yc/pci-acp6x.c
+index 20f7a99783f20..77c5fa1f7af14 100644
+--- a/sound/soc/amd/yc/pci-acp6x.c
++++ b/sound/soc/amd/yc/pci-acp6x.c
+@@ -159,7 +159,7 @@ static int snd_acp6x_probe(struct pci_dev *pci,
+ 	case 0x6f:
+ 		break;
+ 	default:
+-		dev_err(&pci->dev, "acp6x pci device not found\n");
++		dev_dbg(&pci->dev, "acp6x pci device not found\n");
+ 		return -ENODEV;
+ 	}
+ 	if (pci_enable_device(pci)) {
+-- 
+2.25.1
 
-Presumably you noticed an opportunity to optimize out some maple tree
-operations by giving do_brk_munmap() its own processing.  But I think
-you're going to have to undo all that, and make do_brk_munmap() do
-things in the standard, less direct, munmap() way - using
-do_mas_align_munmap() I presume.
-
-(Oh dear, I see that doing mas_preallocate() at the beginning,
-but then __split_vma()s inside, and __split_vma() will do a
-vma_adjust(), which will do a mas_preallocate().  Ah, but they
-are on distinct "mas"es at different levels, so it's probably okay.)
-
-If rmap is to be sure to find migration entries that it inserted
-earlier, you must hold anon_vma_lock_write() (in the brk case) across
-the tricky vma manipulations.  No doubt you could write an optimized
-do_brk_munmap() which does everything under anon_vma_lock_write(), but
-you'd then be duplicating far too much of the care in __vma_adjust()
-for my taste (I'm already not so happy to find it duplicated in
-vma_expand()).
-
-I'll continue with some testing, but expect it to keep hitting these
-issues until do_brk_munmap() is rewritten - perhaps it reduces to
-little more than a wrapper like do_munmap() or do_mas_munmap().
-
-Hugh

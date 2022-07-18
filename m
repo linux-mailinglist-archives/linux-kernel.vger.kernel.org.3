@@ -2,87 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D42578D09
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0822F578D0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbiGRVqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        id S236269AbiGRVqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbiGRVqn (ORCPT
+        with ESMTP id S233858AbiGRVqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:46:43 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF6B2125D;
-        Mon, 18 Jul 2022 14:46:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gB0Dyj6KD1xR0J9edWlW2XlEQizibh7QqbUWvK+mgdc=; b=eObLTaTy/3Us0YDbQ5gnsRcwcZ
-        DuDFu+DbE2G2jh6j/NlBzj89vGk9Ot9DsAGhGZXwZxAfFuM3xbPLMzHXqe0n3NiJXDAh+zpSyesu0
-        /yIaXYGLlRJLO48Nr+n3Vnlmc79kCqNiUDMJ6/kq4RR2yDSpknB2nX1fT9NxNE9ekd2lgagl20bVH
-        vkOsh1WPu1uZkxgRXHmhJvTsImpDTfQ4JOzW9BxDlhdY3CASpc+BG1b0r1rdMS7KNI8Towfzug/bx
-        d2SFavJYeWYJIZcPdOxkUhWJ/ovM6TuBKEo2rV1Yu1uzV7fjxk6NsX9Nh0koq5YwNtI5MIjCH5lvL
-        nkIsd8tg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDYZN-00D3tf-Aq; Mon, 18 Jul 2022 21:46:25 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AC3489802A7; Mon, 18 Jul 2022 23:46:24 +0200 (CEST)
-Date:   Mon, 18 Jul 2022 23:46:24 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        x86@kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v3 00/20] KCFI support
-Message-ID: <YtXUsIjT9IDGKUCv@worktop.programming.kicks-ass.net>
-References: <20220610233513.1798771-1-samitolvanen@google.com>
- <202206131001.6BA9933C@keescook>
+        Mon, 18 Jul 2022 17:46:46 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073182125D;
+        Mon, 18 Jul 2022 14:46:46 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id g4-20020a17090a290400b001f1f2b7379dso633957pjd.0;
+        Mon, 18 Jul 2022 14:46:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GM8+8p1/J6+pvSGth1ereNERHh7ix8LfwtKYNnc1Yxg=;
+        b=jgcYn+YC6i33CFfygb7e9U5GlpP/bJ0AV/VZXeqqL3Jc02Ng+sA+DrgA0/1OK4EpMo
+         WEccNc2FoNGfHrFYx1dwY03rglWXab6oKFJ1hJGn5s56bBTyy+Pqu2qHdcgohPhvJVFh
+         D5lP5fk5rlAKMoPSrIRPnq/XuCNppfdKD9nrGha2CsejmYvHFx70qtxR9FeqR7+f5dVt
+         LZvG3iyj2ltfq3LxlRpi9//zrWKnGSAaBOhpmr74ITjke3uo/D5jQqq8lAAyI2xPoomY
+         tAF9VaQK1KuB9EsxiVk9lQG4+UzynlHTgw6NYgpQ8SxS2pAsqAS/9/F2wlQH0X4Mo3C2
+         X0OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GM8+8p1/J6+pvSGth1ereNERHh7ix8LfwtKYNnc1Yxg=;
+        b=sUF/IwOZC5zRRNvvNJpJCuUvfCOnuKv0ecbt3cqjbJMakkhdzJN9K1DqHZcAmrBbDi
+         XCbJy7QrOVFODQ8oj+idl9/+EziZpoYTcvMPSy7SM2CbymfanLDd/cVeYDi6a4ne0O0T
+         guHsM3S9GHLTwqts5Dt7l0sYPLMTwrSpdESkuEP2fgOu1CKYx5mWNjD/by6D38ricIkY
+         b5li40j6N2lQ/w/0Y/ftksBZGJggEFf7BchD9dvSn5U/ukHnm7upxDvSSE7fd80f/XNa
+         H07Qe6g67DsmgGTZyv2fTNcEcrKBfcPE5GdRtN5LFII1yDSIapcI/TZt8WpgLCycOgWG
+         2dhQ==
+X-Gm-Message-State: AJIora+UDWWYPzt7LKNBKsNIBli6WdlBmfjnjdvnCS8ZnmwTi0yjAsRF
+        7NzmUJyQZUl7XNQ9lYHL1A==
+X-Google-Smtp-Source: AGRyM1vvUiEJKErL+DrhF5cRKF825CvG3u21GVvK6FHmCOMLT6owA1qQPK018cZae5WSCmi6/I73Ag==
+X-Received: by 2002:a17:90a:f0c8:b0:1f0:671b:f594 with SMTP id fa8-20020a17090af0c800b001f0671bf594mr39853106pjb.238.1658180805505;
+        Mon, 18 Jul 2022 14:46:45 -0700 (PDT)
+Received: from jevburton3.c.googlers.com.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id u18-20020a17090341d200b0016cb98ab5b4sm9289657ple.153.2022.07.18.14.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 14:46:43 -0700 (PDT)
+From:   Joe Burton <jevburton.kernel@gmail.com>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Joe Burton <jevburton@google.com>
+Subject: [PATCH] [PATCH bpf-next] libbpf: Add bpf_obj_get_opts()
+Date:   Mon, 18 Jul 2022 21:46:33 +0000
+Message-Id: <20220718214633.3951533-1-jevburton.kernel@gmail.com>
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202206131001.6BA9933C@keescook>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 10:04:12AM -0700, Kees Cook wrote:
-> On Fri, Jun 10, 2022 at 04:34:53PM -0700, Sami Tolvanen wrote:
-> > KCFI is a proposed forward-edge control-flow integrity scheme for
-> > Clang, which is more suitable for kernel use than the existing CFI
-> > scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
-> > alter function references to point to a jump table, and won't break
-> > function address equality. The latest LLVM patch is here:
-> > 
-> >   https://reviews.llvm.org/D119296
-> > 
-> > This RFC series replaces the current arm64 CFI implementation with
-> > KCFI and adds support for x86_64.
-> 
-> I think the "RFC" prefix for this series can be dropped. :)
-> 
-> It looks to me like all of Peter's concerns have been addressed. I'd say
-> let's get the Clang side landed, and once that's done, land this via x86
-> -tip?
-> 
-> Peter and Will does this sound right to you? It touches arm64, so if
-> -tip isn't okay, I could take it in one of my trees?
+From: Joe Burton <jevburton@google.com>
 
-Sorry, I was a bit pre-occupied with this retbleed crud, I'll try and
-have a look at things shortly.
+Add an extensible variant of bpf_obj_get() capable of setting the
+`file_flags` parameter.
+
+This parameter is needed to enable unprivileged access to BPF maps.
+Without a method like this, users must manually make the syscall.
+
+Signed-off-by: Joe Burton <jevburton@google.com>
+---
+ tools/lib/bpf/bpf.c | 10 ++++++++++
+ tools/lib/bpf/bpf.h |  9 +++++++++
+ 2 files changed, 19 insertions(+)
+
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 5eb0df90eb2b..5acb0e8bd13c 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char *pathname)
+ }
+ 
+ int bpf_obj_get(const char *pathname)
++{
++	LIBBPF_OPTS(bpf_obj_get_opts, opts);
++	return bpf_obj_get_opts(pathname, &opts);
++}
++
++int bpf_obj_get_opts(const char *pathname, const struct bpf_obj_get_opts *opts)
+ {
+ 	union bpf_attr attr;
+ 	int fd;
+ 
++	if (!OPTS_VALID(opts, bpf_obj_get_opts))
++		return libbpf_err(-EINVAL);
++
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.pathname = ptr_to_u64((void *)pathname);
++	attr.file_flags = OPTS_GET(opts, file_flags, 0);
+ 
+ 	fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
+ 	return libbpf_err_errno(fd);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 88a7cc4bd76f..f31b493b5f9a 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -270,8 +270,17 @@ LIBBPF_API int bpf_map_update_batch(int fd, const void *keys, const void *values
+ 				    __u32 *count,
+ 				    const struct bpf_map_batch_opts *opts);
+ 
++struct bpf_obj_get_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++
++	__u32 file_flags;
++};
++#define bpf_obj_get_opts__last_field file_flags
++
+ LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
+ LIBBPF_API int bpf_obj_get(const char *pathname);
++LIBBPF_API int bpf_obj_get_opts(const char *pathname,
++				const struct bpf_obj_get_opts *opts);
+ 
+ struct bpf_prog_attach_opts {
+ 	size_t sz; /* size of this struct for forward/backward compatibility */
+-- 
+2.37.0.170.g444d1eabd0-goog
+

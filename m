@@ -2,83 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3669E578DB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0723F578DB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235893AbiGRWrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S235986AbiGRWrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbiGRWrB (ORCPT
+        with ESMTP id S235692AbiGRWrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:47:01 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933D924BE9
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:46:59 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 7so5973625ybw.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:46:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xQJVTZ5v7RU+QWK7eqra9kSzzqeCgRFsqsbR5Z4AZ7o=;
-        b=Df+S+nm/ultWgajStkadNGGsbckIEro6h+yfnCP5TKbUAGV71rp0DzSh00h0DIQVoZ
-         hAmEubPFgIKGGZ0negc8z/BwkzMgQeRZ+GmuTya9uN/+7JL/bWhG9imVMlbEwrYH8APH
-         Y1l3ZNjiciOm3+yN/I2I5dk+7EoBrnGG9yNjEog4SIDc4cwOiowpPcTZh+FtdAjRp8y9
-         7e5hForPc4VGiDEaSxcm9p6PkD2ifk0y9rYE8EfRP4gdlMYwL2h0M9aY2ewQrogVSdKP
-         p46zFl2GWH7tCnaZm2PmXChvs2or8zlwr2WHxlDLrn5to1crZ9CjgAplGe1qA10+PMjE
-         m+Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xQJVTZ5v7RU+QWK7eqra9kSzzqeCgRFsqsbR5Z4AZ7o=;
-        b=ARE4pEEj8BP65PGoS/g1dxP4F6NgGpTp4JxXdhcXUmXLPFBelmpmd/OEJEoAzFcod4
-         Yt4MmULbdBgHFCu/Zdwkt3UvT3AS9Al1PHRTqiJpM08BbbdP7LpNWaS0tAetR1yrApll
-         i5MyLWAb1p806AAKjGF9TnDbiqNFTfQWV1E98t4lgwYrrwYFcJlIi88Oc6XVwXz1qR+q
-         Gz2O64CyCwFfwjea95ubaKcrQQq61ekUZBkLinkOIMGJdokWIbD6/CoKKc2KlgZNoE54
-         epUsXoknQM198P4A6IbPlXL06CFp/ICtlZ+b3fBsITWFyIAjbrEskRKYcz6eLcUWfdGD
-         jqcw==
-X-Gm-Message-State: AJIora+mvPKpy22k1MJWp3QMN+riaxGsoJJRZoHl9jE3vay01vZ9ojIB
-        WayBGhSKwhM256N9BUtz32Hz/Du2Vl8dW57GDvgrdQ==
-X-Google-Smtp-Source: AGRyM1upKT8DoHK9/hAXB2LaXysZKiUfoN4DANKDn581tq3jO8SbDNPhWd7P+SCZAnhOuFhNh+wn6oxO+TSGY2m7XVA=
-X-Received: by 2002:a5b:9c5:0:b0:66e:cbbf:2904 with SMTP id
- y5-20020a5b09c5000000b0066ecbbf2904mr27768238ybq.220.1658184418848; Mon, 18
- Jul 2022 15:46:58 -0700 (PDT)
+        Mon, 18 Jul 2022 18:47:40 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E6D24BE9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:47:39 -0700 (PDT)
+Received: (Authenticated sender: joao@overdrivepizza.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 923C71C0002;
+        Mon, 18 Jul 2022 22:47:29 +0000 (UTC)
 MIME-Version: 1.0
-References: <20220718220252.16923-1-andriy.shevchenko@linux.intel.com> <20220718220252.16923-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220718220252.16923-2-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 19 Jul 2022 00:46:47 +0200
-Message-ID: <CACRpkda8GwRMoUY60sTLRfbJrN70hxDjzxaG=4Hqh48kUrE9kw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] gpio: 74xx-mmio: Check MMIO_74XX_DIR_IN flag in mmio_74xx_dir_in()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Date:   Mon, 18 Jul 2022 15:47:29 -0700
+From:   Joao Moreira <joao@overdrivepizza.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, samitolvanen@google.com
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+In-Reply-To: <87lesqukm5.ffs@tglx>
+References: <20220716230344.239749011@linutronix.de> <87wncauslw.ffs@tglx>
+ <87tu7euska.ffs@tglx>
+ <CAHk-=wjpzVRU0Yr_0DJSB_bKHW3_74UucNpJBjxfHPo_R=PYNg@mail.gmail.com>
+ <87o7xmup5t.ffs@tglx> <YtXOMPpmx8TcFtOX@worktop.programming.kicks-ass.net>
+ <87lesqukm5.ffs@tglx>
+Message-ID: <2f7f899cb75b79b08b0662ff4d2cb877@overdrivepizza.com>
+X-Sender: joao@overdrivepizza.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 12:02 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On 2022-07-18 15:22, Thomas Gleixner wrote:
+> On Mon, Jul 18 2022 at 23:18, Peter Zijlstra wrote:
+>> On Mon, Jul 18, 2022 at 10:44:14PM +0200, Thomas Gleixner wrote:
+>>> And we need input from the Clang folks because their CFI work also 
+>>> puts
+>>> stuff in front of the function entry, which nicely collides.
+>> 
+>> Right, I need to go look at the latest kCFI patches, that sorta got
+>> side-tracked for working on all the retbleed muck :/
+>> 
+>> Basically kCFI wants to preface every (indirect callable) function 
+>> with:
+>> 
+>> __cfi_\func:
+>> 	int3
+>>         movl $0x12345678, %rax
+>>         int3
+>>         int3
+>> \func:
+>>         endbr
+>> \func_direct:
+>> 
+>> Ofc, we can still put the whole:
+>> 
+>> 	sarq	$5, PER_CPU_VAR(__x86_call_depth);
+>> 	jmp	\func_direct
+>> 
+>> thing in front of that. But it does somewhat destroy the version I had
+>> that only needs the 10 bytes padding for the sarq.
+> 
+> Right, because it needs the jump. I was just chatting with Jaoa about
+> that over IRC.
+> 
+> The jump slow things down. Jaoa has ideas and will reply soonish.
 
-> It's logically better to check the IN in ->direction_input() and
-> _OUT in ->direction_output().
->
-> While at it, replace ternary with plain if-conditional for the sake
-> of consistency with mmio_74xx_dir_out().
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+So, IIRC, kCFI will do something like this to validate call targets 
+based on the hash as described on Peter's e-mail:
 
-Yep this is better.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+func_whatever:
+	...
+	cmpl $0x\hash, -6(%rax)
+	je 1f
+	ud2
+1:
+	call *%rax
+	...
 
-Yours,
-Linus Walleij
+Thus the hash will be 6 bytes before the function entry point. Then we 
+can get the compiler to emit a padding area before the __cfi_\func 
+snippet and, during boot, if the CPU needs the call depth tracking 
+mitigation, we:
+- move the __cfi_func into the padding area
+- patch the call depth tracking snippet ahead of it (overwriting the old 
+__cfi_\func:)
+- fix the cmpl offset in the caller
+
+func_whatever:
+	...
+	cmpl $0x\hash, -FIXED_OFFSET(%rax)
+	je 1f
+	ud2
+1:
+	call *%rax
+	...
+
+This approach is very similar to what we discussed in the past for 
+replacing kCFI with FineIBT if CET is available. Also, it would prevent 
+the need for any jump and would keep the additional padding area in 10 
+bytes.
+
+Tks,
+Joao
+
+

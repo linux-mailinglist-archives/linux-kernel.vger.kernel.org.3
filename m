@@ -2,85 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB40578944
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83E4578940
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235897AbiGRSJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S235797AbiGRSIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235834AbiGRSJI (ORCPT
+        with ESMTP id S234870AbiGRSIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:09:08 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3FD101E8;
-        Mon, 18 Jul 2022 11:09:07 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id A70405C00C5;
-        Mon, 18 Jul 2022 14:09:06 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 18 Jul 2022 14:09:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1658167746; x=1658254146; bh=9EVYFQs3TfjexPazUkgkLFWSM4eN+61vSya
-        zDvU3JXY=; b=D3Otbn+w9zgEgOzUpLm3pClk07nfXG50Dt/6CcsQlNjM9PfPEz/
-        VbuvRVBlrYrrgZbD+HDhBHLUoywquEgh+6OfGTao9Ko1zYukMfuUyIzm1W4dcPE0
-        zI6dGadXxfzLNzyQLGjNjAsm2S2v4Iih7ZQ0w1p6HAYPmcne0ppKhfgnY5w3+CtZ
-        zmZnknZx6t/1DTrpzWypMruZKd16AJGfKgK1dqcc/EUwuXkJpJANAkv/xjTNZhGb
-        bXUrBtexNOxCB1T+y706BXIoKRvJeiBVPPQmg9eYzSqKnRhQNFORzcSYIB2zxgDA
-        0Yo8pmLdFhyZugbg+JrveMK5kpXQ7YmLmYQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1658167746; x=1658254146; bh=9EVYFQs3Tfjex
-        PazUkgkLFWSM4eN+61vSyazDvU3JXY=; b=KWVz+WBPo4wOHR+z4RZpBCV9hQosu
-        o3HEjIvXLc49G0rE6pJ14HFj+Idp8hNanjbdKg0w0uXReFUVX/wDKviIOcSWH2i9
-        q2jlTrJE/Y5bqUD2ObM+QJjd86FCL/fKGlHHzZSrJL+FsbJDXst00vYIieKZpt6G
-        2hXepp5R9NZul/A2G6bRv/hgb+gEhTJX3+wyoa3y7gbmh8olfLA8ZXyFwLkEnq3z
-        UrsbW1jYLF2faP2vQpwzUjWLsKm3pFgXWC4aXq7zFHGtjdtXMMWoVKbOGdDd20qc
-        luNBVYlkia5VgIBy1e+MojiSms9YuvlUU0PmtYZuF04vNfIDh2zKOKYYA==
-X-ME-Sender: <xms:wqHVYoMm7syGZ67I_8Df6HgCjmudF0d4Vpuvc7M0skGhX3ldZoPXPQ>
-    <xme:wqHVYu8zupr4vNJ-92-v-YU9TS6_1a-rzHo8Usb4lAYYl4gZtyEFT7yTxVuELEwka
-    -vSGoPLawUv3rU>
-X-ME-Received: <xmr:wqHVYvQupUW4L8RmfamPv7ulqGIpeZcW200OD0_-XoxXcnS7XtNNZrq30efFFe6Kn3eUPNRuWPor>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekkedguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffvghm
-    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
-    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeejffejgffgueegudevvdejkefg
-    hefghffhffejteekleeufeffteffhfdtudehteenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
-    shhlrggsrdgtohhm
-X-ME-Proxy: <xmx:wqHVYguiVzURQRGpGwJy2nc_FjqfwbWAdEHthCXIw1RTTKtiOyKgAQ>
-    <xmx:wqHVYgelTZqpGS5sXiu5H3pAf0BUL6avuviLO4c72ClT-iQtUfA_dQ>
-    <xmx:wqHVYk0qrioFrxLSjULkueOFpKLztTASZ18VwOf0L1NhFvN8A1t7CA>
-    <xmx:wqHVYlFlbj2XKNxQGSXoneenWCG6HfKGen5a61XS7Y9RheSK5vkg-Q>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 18 Jul 2022 14:09:05 -0400 (EDT)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH 1/5] Ignore failure to unmap -1
-Date:   Mon, 18 Jul 2022 14:08:18 -0400
-Message-Id: <20220718180820.2555-2-demi@invisiblethingslab.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220718180820.2555-1-demi@invisiblethingslab.com>
-References: <20220718180820.2555-1-demi@invisiblethingslab.com>
+        Mon, 18 Jul 2022 14:08:46 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06FA2F009;
+        Mon, 18 Jul 2022 11:08:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658167725; x=1689703725;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nW6+aTOUp8V8dOJLuYT41htSmHJVh62MKwZHT7NcAAM=;
+  b=mEEt+df+m/sWVL1z1gTl2DwgdWwgCggnet6xTnM4cwiUJv9rhgrclcKG
+   B42A3EYmodKBh9sZ1LkggjiL8PswK69UpEj2Vq5zDsZmsAKseXWxnhcpx
+   WyfH5vZcGsBlSfpm010cMvDoWTBSHi8VWVSpGjjPhdaYLJRxcUjfDM5DB
+   jezT4GU4nJmT4tv+T1HHjwbU45dzO0eAo50ePYLg+yP/BKojYWq4hUc/L
+   X8R02ruqn4SPhry4OrHd+z/0ajcnF2ftykekgu+maVd6JGKrrKqEQ1YH5
+   fW1NDN9Kp5QL9YcP9MZf6f9qJ42qfpYH+Y9KoVIGqxhKXyEMZJczGXxek
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="283853763"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="283853763"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 11:08:45 -0700
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="773832349"
+Received: from mvemla-mobl1.amr.corp.intel.com (HELO [10.209.87.21]) ([10.209.87.21])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 11:08:44 -0700
+Message-ID: <2616c28881ccba4e44cf24105ada117f954c0d30.camel@linux.intel.com>
+Subject: Re: [tip: x86/urgent] x86/sgx: Set active memcg prior to shmem
+ allocation
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-tip-commits@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 18 Jul 2022 11:08:26 -0700
+In-Reply-To: <YtUs3MKLzFg+rqEV@zn.tnic>
+References: <20220520174248.4918-1-kristen@linux.intel.com>
+         <165419442842.4207.2566961916839377924.tip-bot2@tip-bot2>
+         <YtUs3MKLzFg+rqEV@zn.tnic>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.module_f35+14217+587aad52) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,42 +65,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Upstream commit 166d3863231667c4f64dee72b77d1102cdfad11f ]
+On Mon, 2022-07-18 at 11:50 +0200, Borislav Petkov wrote:
+> Just what I think looks like a discrepancy I noticed while merging
+> tip/master:
+> 
+> On Thu, Jun 02, 2022 at 06:27:08PM -0000, tip-bot2 for Kristen
+> Carlson Accardi wrote:
+> > diff --git a/arch/x86/kernel/cpu/sgx/encl.h
+> > b/arch/x86/kernel/cpu/sgx/encl.h
+> > index d44e737..332ef35 100644
+> > --- a/arch/x86/kernel/cpu/sgx/encl.h
+> > +++ b/arch/x86/kernel/cpu/sgx/encl.h
+> > @@ -103,10 +103,13 @@ static inline int sgx_encl_find(struct
+> > mm_struct *mm, unsigned long addr,
+> >  int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
+> >                      unsigned long end, unsigned long vm_flags);
+> >  
+> > +bool current_is_ksgxd(void);
+> >  void sgx_encl_release(struct kref *ref);
+> >  int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
+> > -int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long
+> > page_index,
+> > -                        struct sgx_backing *backing);
+> > +int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long
+> > page_index,
+> > +                           struct sgx_backing *backing);
+> > +int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long
+> > page_index,
+> > +                          struct sgx_backing *backing);
+> >  void sgx_encl_put_backing(struct sgx_backing *backing);
+> 
+> So this is making the sgx_encl_get_backing() thing static but its
+> counterpart sgx_encl_put_backing() is not and is still called by
+> other
+> places.
+> 
+> Perhaps something wrong with the layering or is this on purpose?
+> 
+> Thx.
+> 
 
-The error paths of gntdev_mmap() can call unmap_grant_pages() even
-though not all of the pages have been successfully mapped.  This will
-trigger the WARN_ON()s in __unmap_grant_pages_done().  The number of
-warnings can be very large; I have observed thousands of lines of
-warnings in the systemd journal.
+Hi Boris,
 
-Avoid this problem by only warning on unmapping failure if the handle
-being unmapped is not -1.  The handle field of any page that was not
-successfully mapped will be -1, so this catches all cases where
-unmapping can legitimately fail.
+This is intentional - sgx_encl_put_backing() was not changed and will
+continue to be used as it previously was.
 
-Suggested-by: Juergen Gross <jgross@suse.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-Fixes: 36cd49b071fc ("xen/gntdev: Avoid blocking in unmap_grant_pages()")
----
- drivers/xen/gntdev.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks,
+Kristen
 
-diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
-index 2c3248e71e9c1a3e032b847d177b02855cdda1a1..a6585854a85fc6fffc16c3498ba73fbee84ad6ca 100644
---- a/drivers/xen/gntdev.c
-+++ b/drivers/xen/gntdev.c
-@@ -390,7 +390,8 @@ static void __unmap_grant_pages_done(int result,
- 	unsigned int offset = data->unmap_ops - map->unmap_ops;
- 
- 	for (i = 0; i < data->count; i++) {
--		WARN_ON(map->unmap_ops[offset+i].status);
-+		WARN_ON(map->unmap_ops[offset+i].status &&
-+			map->unmap_ops[offset+i].handle != -1);
- 		pr_debug("unmap handle=%d st=%d\n",
- 			map->unmap_ops[offset+i].handle,
- 			map->unmap_ops[offset+i].status);
--- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab

@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49DE577D72
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C275577D7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233420AbiGRI0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        id S233175AbiGRI1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbiGRI0S (ORCPT
+        with ESMTP id S229890AbiGRI1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:26:18 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319ED11808;
-        Mon, 18 Jul 2022 01:26:17 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26I7bu0X011573;
-        Mon, 18 Jul 2022 10:26:12 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=BfPiABITD7uYe270apArKx4X3woahNqN8ZZ+BShAQm0=;
- b=8Z/gVg9fWZa5/htpwfER1UhAB9a/lDD2dGUnf7j+Cs8VZ7p1sxk7szEz49wsGAPM3FnG
- AJRUBYRoyHYMAkn93oikOFXDd4gjRbHMUwVeqaPwd9Fh77b4nA7vw1fTWvC8ha/SiVY8
- PT7Cs+IHyCJthvQMewXzG86DM8KB7hCtx5ZvgSYRfJv586Nj//E559tBCKFbpmv/g9B6
- EKHe5Tas4yC5nIASfUJLTAJkQHNFYpDTO9/Isn3O6P9zfTbpH+NjRUGDpF7RjEUgb9RU
- mpfklEmLz54iuiHDxVwnjYqWRmbVbMzSzHA7kGS88eZyiQX5zM8LZkLlzI3kDhAXiaO4 7g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hbnq27y77-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Jul 2022 10:26:12 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 320B510002A;
-        Mon, 18 Jul 2022 10:26:11 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 22DC82138C4;
-        Mon, 18 Jul 2022 10:26:11 +0200 (CEST)
-Received: from [10.252.21.88] (10.75.127.45) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 18 Jul
- 2022 10:26:08 +0200
-Message-ID: <0eaabd6c-07bd-eb83-da9d-6195b350bc9a@foss.st.com>
-Date:   Mon, 18 Jul 2022 10:26:07 +0200
+        Mon, 18 Jul 2022 04:27:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD70211A0C;
+        Mon, 18 Jul 2022 01:27:30 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 78F986601A08;
+        Mon, 18 Jul 2022 09:27:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658132848;
+        bh=3wSuhWp2P2ZyIQrwtaWVzGC8uMFmX+0xQ1Qp+Gq760s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MEYN6sSMnl1b1jGZam3vGPUhszK6Kka5I6EgC7NQr3Q36fJmBTBNdXMzktsez5qIj
+         y+s+XdM0YgKFkp9EXPOn+L1Cz+Oxd1XhKLcE2IBo0ISLE3PVkCNEzlzehYjysaiuWG
+         Zo51GGkWRKk8PczsWqR8TmMapo+ER+hjgV4sjVLPFHsPVY4Qf/tMhapXsuArRIxERi
+         5Mf2Iqmq2tvvOG65/uZIKGF7a1cWG0Qn+VqDzTx0mD+1qYHnorumujxfSLaFnON56Z
+         IAxKex2js5tEg95LQVFjSdehcwbr2FzRLtQrHYbNSh7clnBnGfAggQdU5fxiHr3DM+
+         lRudS6QdbjYdQ==
+Message-ID: <ee88aec0-f6f8-c554-6752-447cb0f34e16@collabora.com>
+Date:   Mon, 18 Jul 2022 10:27:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 0/4] Introduction of rpmsg_rx_done
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 13/13] video: backlight: mt6370: Add MediaTek MT6370
+ support
 Content-Language: en-US
-To:     Chris Lew <quic_clew@quicinc.com>, <bjorn.andersson@linaro.org>,
-        <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1654651005-15475-1-git-send-email-quic_clew@quicinc.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <1654651005-15475-1-git-send-email-quic_clew@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+References: <20220715112607.591-1-peterwu.pub@gmail.com>
+ <20220715112607.591-14-peterwu.pub@gmail.com>
+ <ec3bdfb8-0e42-a772-28b1-165811872afa@collabora.com>
+ <20220715162913.5ewxwhv6jtdgt3c2@maple.lan>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220715162913.5ewxwhv6jtdgt3c2@maple.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_04,2022-07-15_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,56 +74,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Chris,
-
-On 6/8/22 03:16, Chris Lew wrote:
-> This series proposes an implementation for the rpmsg framework to do
-> deferred cleanup of buffers provided in the rx callback. The current
-> implementation assumes that the client is done with the buffer after
-> returning from the rx callback.
+Il 15/07/22 18:29, Daniel Thompson ha scritto:
+> On Fri, Jul 15, 2022 at 02:38:45PM +0200, AngeloGioacchino Del Regno wrote:
+>> Il 15/07/22 13:26, ChiaEn Wu ha scritto:
+>>> From: ChiaEn Wu <chiaen_wu@richtek.com>
+>>>
+>>> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+>>> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+>>> driver, display bias voltage supply, one general purpose LDO, and the
+>>> USB Type-C & PD controller complies with the latest USB Type-C and PD
+>>> standards.
+>>>
+>>> This adds support for MediaTek MT6370 Backlight driver. It's commonly used
+>>> to drive the display WLED. There are 4 channels inside, and each channel
+>>> supports up to 30mA of current capability with 2048 current steps in
+>>> exponential or linear mapping curves.
+>>>
+>>> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+>>
+>> Hello ChiaEn,
+>>
+>> I propose to move this one to drivers/leds (or drivers/pwm) and, instead of
+>> registering a backlight device, register a PWM device.
+>>
+>> This way you will be able to reuse the generic backlight-pwm driver, as you'd
+>> be feeding the PWM device exposed by this driver to the generic one: this will
+>> most importantly make it easy to chain it with MTK_DISP_PWM (mtk-pwm-disp)
+>> with a devicetree that looks like...
 > 
-> In some cases where the data size is large, the client may want to
-> avoid copying the data in the rx callback for later processing. This
-> series proposes two new facilities for signaling that they want to
-> hold on to a buffer after the rx callback.
-> They are:
->  - New API rpmsg_rx_done() to tell the rpmsg framework the client is
->    done with the buffer
->  - New return codes for the rx callback to signal that the client will
->    hold onto a buffer and later call rpmsg_rx_done()
+> Out of interest, does MT6370 have the same structure for backlights as the prior
+> systems using mtk-pwm-disp or was mtk-pwm-disp simply a normal(-ish) PWM
+> that relied on something on the board for all the constant current
+> driver hardware?
 > 
-> This series implements the qcom_glink_native backend for these new
-> facilities.
-
-The API you proposed seems to me quite smart and adaptable to the rpmsg
-virtio backend.
-
-My main concern is about the release of the buffer when the endpoint
-is destroyed.
-
-Does the buffer release should be handled by each services or by the
-core?
-
-I wonder if the buffer list could be managed by the core part by adding
-the list in the rpmsg_endpoint structure. On destroy the core could call
-the rx_done for each remaining buffers in list...
-
-I let Bjorn and Mathieu advise on this...
-
-Thanks,
-Arnaud
-
->  
-> Chris Lew (4):
->   rpmsg: core: Add rx done hooks
->   rpmsg: char: Add support to use rpmsg_rx_done
->   rpmsg: glink: Try to send rx done in irq
->   rpmsg: glink: Add support for rpmsg_rx_done
 > 
->  drivers/rpmsg/qcom_glink_native.c | 112 ++++++++++++++++++++++++++++++--------
->  drivers/rpmsg/rpmsg_char.c        |  50 ++++++++++++++++-
->  drivers/rpmsg/rpmsg_core.c        |  20 +++++++
->  drivers/rpmsg/rpmsg_internal.h    |   1 +
->  include/linux/rpmsg.h             |  24 ++++++++
->  5 files changed, 183 insertions(+), 24 deletions(-)
+
+As per my understanding, mtk-pwm-disp is chained to other multimedia features of
+the display block of MediaTek SoCs, such as the AAL (adaptive ambient light),
+CABC (content adaptive backlight control) etc, other than being a normal(ish)
+PWM... that's the reason of my request.
+
+Moreover, in the end, this PMIC's backlight controller is just a "fancy" PWM
+controller, with OCP/OVP.
+
+>>
+>> 	pwmleds-disp {
+>> 		compatible = "pwm-leds";
+>>
+>> 		disp_led: disp-pwm {
+>> 			label = "backlight-pwm";
+>> 			pwms = <&pwm0 0 500000>;
+>> 			max-brightness = <1024>;
+>> 		};
+>> 	};
+>>
+>> 	backlight_lcd0: backlight {
+>> 		compatible = "led-backlight";
+>> 		leds = <&disp_led>, <&pmic_bl_led>;
+>> 		default-brightness-level = <300>;
+>> 	};
 > 
+> I think this proposal has to start with the devicetree bindings rather
+> than the driver. Instead I think the question is: does this proposal
+> result in DT bindings that better describe the underlying hardware?
+> 
+
+ From how I understand it - yes: we have a fancy PWM (&pwm0) that we use
+to control display backlight (backlight-pwm)...
+
+Obviously, here we're not talking about OLEDs, but LCDs, where the backlight
+is made of multiple strings of WhiteLED (effectively, a "pwm-leds" controlled
+"led-backlight").
+
+Using PWM will also allow for a little more fine-grained board specific
+configuration, as I think that this PMIC (and/or variants of it) will be
+used in completely different form factors: I think that's going to be both
+smartphones and tablets/laptops... and I want to avoid vendor properties
+to configure the PWM part in a somehow different way.
+
+> This device has lots of backlight centric features (OCP, OVP, single
+> control with multiple outputs, exponential curves, etc) and its not
+> clear where they would fit into the "PWM" bindings.
+> 
+
+For OCP and OVP, the only bindings that fit would be regulators, but that's
+not a regulator... and that's about it - I don't really have arguments for
+that.
+
+What I really want to see here is usage of "generic" drivers like led_bl
+and/or pwm_bl as to get some "standardization" around with all the benefits
+that this carries.
+
+> Come to think of it I'm also a little worried also about the whole linear
+> versus exponential curve thing since I thought LED drivers were required
+> to use exponential curves.
+> 
+
+That probably depends on how the controller interprets the data, I guess,
+but I agree with you on this thought.
+
+Regards,
+Angelo

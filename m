@@ -2,104 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEFA57838B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D207578387
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbiGRNTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        id S235256AbiGRNTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235348AbiGRNTk (ORCPT
+        with ESMTP id S234706AbiGRNTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:19:40 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4FCC2E;
-        Mon, 18 Jul 2022 06:19:39 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id q5-20020a17090a304500b001efcc885cc4so12561594pjl.4;
-        Mon, 18 Jul 2022 06:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K6cOdwUYhhUlLCQ8OAKwhRXbgdqK2kdqyGhsdqgptvQ=;
-        b=IxYllnS8mdNEqHx4KGUk9e7Uzj85Y9OLP0pOC2UsLb6btN8FRh9yoRZ5s4a81mm2GL
-         sZhOMckV2sXy95vzHO0zrCQiAc8t1jIKzvH1/jDufyQnD2KcerT+zimf3yKRL0Yk2ZYJ
-         OZVleS53+x1M3Snaa9mT85QMK37D/OMhCQgZluU+4mUjW4ukjJae8NSapw8B/t4U1Fah
-         scNpyvRuz+qASZyGvNTcqu4jyfnx9RbfZUw+ny1+Vv86GnQ/wxo8VanKy5o72iDGuqB1
-         lJ32iBHoucs7cDtH/oHhCQL/WPaZ7H0jwpmGKDACVWqMyk2IfQwhFWJ2fdltbsT+40Ny
-         s82w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=K6cOdwUYhhUlLCQ8OAKwhRXbgdqK2kdqyGhsdqgptvQ=;
-        b=brtfrr7xsIGBDquUWN//qsmvMOdLw1T+qUwfXfFL6+iHeiZ4LhoDXZ+kXUc1gu3GE+
-         A/HHugd9Asdq4EhFYA/d8i2GUSa+5lj8KZfkDta1rNubOYrvKLktDfP/0e49LxaYHbfr
-         wMoamLn2PTdi+vKIzwK79lvhJuN65m/V3zn/AGagIxg28zS2mY0Ssd7ZZ79iibihB9VL
-         egiKtlpdlZJi67f0UfuVE/whb6k+2e29cNwOJ6snsirBofMJijUdFpwyYp7v8XT86wCW
-         Sk2d0DS+XXfMglhuTEz2lg6fDaz7w0tiI7DGDzlDwb8NUqDBtqXnhl4PsfmwGgLvR7vY
-         HdHg==
-X-Gm-Message-State: AJIora+LnYfjPKcU6E2DB+gN2ECu3gNauu7PEhgQMGXhXCvpN/C9spiS
-        val+i7deyQxpLnFgiNUIvrI=
-X-Google-Smtp-Source: AGRyM1tEg45BncQglD1UOqVTnZaN6yxmDNrJBIfk2QKl4b1+kHAqbAQ4j1B2N/cFvA514dH67u/CvA==
-X-Received: by 2002:a17:90a:e7cd:b0:1f0:c82:c88f with SMTP id kb13-20020a17090ae7cd00b001f00c82c88fmr38290987pjb.100.1658150379172;
-        Mon, 18 Jul 2022 06:19:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jc14-20020a17090325ce00b0016be02d2a44sm9390076plb.133.2022.07.18.06.19.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 06:19:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 18 Jul 2022 06:19:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
-        broonie@kernel.org, lorenzo.pieralisi@arm.com, festevam@gmail.com,
-        francesco.dolcini@toradex.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: Re: [PATCH v15 17/17] PCI: imx6: Reformat suspend callback to keep
- symmetric with resume
-Message-ID: <20220718131900.GA4002775@roeck-us.net>
-References: <1657783869-19194-1-git-send-email-hongxing.zhu@nxp.com>
- <1657783869-19194-18-git-send-email-hongxing.zhu@nxp.com>
+        Mon, 18 Jul 2022 09:19:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711336272;
+        Mon, 18 Jul 2022 06:19:31 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1FD4933CC5;
+        Mon, 18 Jul 2022 13:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658150370; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uHzot1g1ilmbChTYESLhhB1Zrae8HwVQwzEp3wCsJXk=;
+        b=lnWOEk4se/IsyvUweRMvgKaR/pQWqalfvf85pRJ0DNQDGIAU46+O+9xhKwWiTXMpld3fS8
+        7LFPdd5K/x/7b8873r4rqObj2+dt2NhcwWTlMSQoDtvjaX7uWEBFhyuG7EtK+n+2wb9kRn
+        M6GqPr5vVg2U6boAvslw0dxBWlXoLvY=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 265362C142;
+        Mon, 18 Jul 2022 13:19:29 +0000 (UTC)
+Date:   Mon, 18 Jul 2022 15:19:28 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        kbuild-all@lists.01.org, daniel@iogearbox.net, kernel-team@fb.com,
+        jolsa@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v4 bpf-next 2/4] ftrace: allow IPMODIFY and DIRECT ops on
+ the same function
+Message-ID: <YtVd4FKOcEmGfubm@alley>
+References: <20220718055449.3960512-3-song@kernel.org>
+ <202207181552.VuKfz9zg-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1657783869-19194-18-git-send-email-hongxing.zhu@nxp.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202207181552.VuKfz9zg-lkp@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 03:31:09PM +0800, Richard Zhu wrote:
-> Create imx6_pcie_stop_link() and imx6_pcie_host_exit() functions.
-> Encapsulate clocks, regulators disables and PHY uninitialization into
-> imx6_pcie_host_exit().
+On Mon 2022-07-18 15:42:25, kernel test robot wrote:
+> Hi Song,
 > 
-> To keep suspend/resume symmetric as much as possible, invoke these two
-> new created functions in suspend callback.
+> I love your patch! Perhaps something to improve:
 > 
-> To be symmetric with imx6_pcie_host_exit(), move imx6_pcie_clk_enable()
-> to imx6_pcie_host_init() from imx6_pcie_deassert_core_reset().
+> [auto build test WARNING on bpf-next/master]
 > 
-> Link: https://lore.kernel.org/r/1656645935-1370-18-git-send-email-hongxing.zhu@nxp.com
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220718-135652
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20220718/202207181552.VuKfz9zg-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/intel-lab-lkp/linux/commit/9ef1ec8cb818d8ca70887c8c123f2d579384a6c6
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220718-135652
+>         git checkout 9ef1ec8cb818d8ca70887c8c123f2d579384a6c6
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    kernel/trace/ftrace.c: In function 'register_ftrace_function':
+> >> kernel/trace/ftrace.c:8197:14: warning: variable 'direct_mutex_locked' set but not used [-Wunused-but-set-variable]
+>     8197 |         bool direct_mutex_locked = false;
+>          |              ^~~~~~~~~~~~~~~~~~~
+> 
+> 
+> vim +/direct_mutex_locked +8197 kernel/trace/ftrace.c
+> 
+>   8182	
+>   8183	/**
+>   8184	 * register_ftrace_function - register a function for profiling
+>   8185	 * @ops:	ops structure that holds the function for profiling.
+>   8186	 *
+>   8187	 * Register a function to be called by all functions in the
+>   8188	 * kernel.
+>   8189	 *
+>   8190	 * Note: @ops->func and all the functions it calls must be labeled
+>   8191	 *       with "notrace", otherwise it will go into a
+>   8192	 *       recursive loop.
+>   8193	 */
+>   8194	int register_ftrace_function(struct ftrace_ops *ops)
+>   8195		__releases(&direct_mutex)
+>   8196	{
+> > 8197		bool direct_mutex_locked = false;
+>   8198		int ret;
+>   8199	
+>   8200		ftrace_ops_init(ops);
+>   8201	
+>   8202		ret = prepare_direct_functions_for_ipmodify(ops);
+>   8203		if (ret < 0)
+>   8204			return ret;
+>   8205		else if (ret == 1)
+>   8206			direct_mutex_locked = true;
 
-If CONFIG_PM_SLEEP=n:
+Honestly, this is another horrible trick. Would it be possible to
+call prepare_direct_functions_for_ipmodify() with direct_mutex
+already taken?
 
-Error log:
-drivers/pci/controller/dwc/pci-imx6.c:973:13: error: 'imx6_pcie_host_exit' defined but not used [-Werror=unused-function]
-  973 | static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
-      |             ^~~~~~~~~~~~~~~~~~~
-drivers/pci/controller/dwc/pci-imx6.c:904:13: error: 'imx6_pcie_stop_link' defined but not used [-Werror=unused-function]
-  904 | static void imx6_pcie_stop_link(struct dw_pcie *pci)
+I mean something like:
 
-Guenter
+	mutex_lock(&direct_mutex);
+
+	ret = prepare_direct_functions_for_ipmodify(ops);
+	if (ret)
+		goto out:
+
+	mutex_lock(&ftrace_lock);
+	ret = ftrace_startup(ops, 0);
+	mutex_unlock(&ftrace_lock);
+
+out:
+	mutex_unlock(&direct_mutex);
+	return ret;
+
+
+>   8208		mutex_lock(&ftrace_lock);
+>   8209	
+>   8210		ret = ftrace_startup(ops, 0);
+>   8211	
+>   8212		mutex_unlock(&ftrace_lock);
+>   8213	
+
+Would be possible to handle tr->mutex the same way to avoid
+the trylock? I mean to take it in advance before direct_mutex?
+
+Best Regards,
+Petr

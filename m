@@ -2,119 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E771A577FDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4482577FE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233991AbiGRKj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
+        id S234339AbiGRKjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiGRKj0 (ORCPT
+        with ESMTP id S233750AbiGRKji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:39:26 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284D06308;
-        Mon, 18 Jul 2022 03:39:25 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-10cf9f5b500so21415014fac.2;
-        Mon, 18 Jul 2022 03:39:25 -0700 (PDT)
+        Mon, 18 Jul 2022 06:39:38 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADEA95BC
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:39:35 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id w17so13079054ljh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Vz8thXfyqmr8/ZGBgzP+4ncQZsqZIti3MIOVrQPZcf4=;
-        b=UYrX4jNghz7l+TMu1SjHr0EY0oK4QtNJwXWXzW1OWV9IGqHjzN4L4uScGFTH3lh6+n
-         FWjA33OtTjRxqNoUy2tUFKejBrjafdEVCPzpfaU+vB/W0oGN6axOFfZ5cRkmzwJyyReh
-         CHOwmzAOrqtapvbnFwKc+UyoGb71wjnZvEkV5NafYWR/KAdHBnuZBTqRnfTe3uClrecb
-         eI6UZLY4AEJkRkXay+9qF63zCyEIa4H9zcfwh6SaxYDgMq2zfApdDMxbnwQAFGoB2YT7
-         3BvVn4M/CG+xRFJsWZl4sswbIBFawxZiM8J1BnAl5BADwKSTErJG0SZvSCIStZ6Fm+7r
-         tDGA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yPxqKB77kyU9V8lnhOsK1GQJLunCLPWKLPbPXEb7VqM=;
+        b=YPdYfpqYPenGGrKjxRKOqtqEciMGsRjSAnOPoaWHAJ+bAtHCJWZlXk+oOXQSLDezmL
+         hfYl+CHNsyIAeFJCeIRsk0El/9vEWqzUcdvSxrNQhHrZC/EYDydH8D6lXhp/iSzdD4TK
+         d5uYCUMyXWyWN2haGevP2ienPhQR45g5T2K554CxHx6b7EsclFGVTbS9U68bjX9zrHpD
+         MBqc4yDKfqtLrFdttrrnq/Q+h+ZZzD6G/JRyv/WRi0KH652Lm7SGjl2LmBkjhTwaLjXq
+         zx8erGF9B6h7GkOfYd7tX0K89PmaGTVWCYT1IFViGeKLjhD5o5Hz4OrHUimdg7kM2blc
+         b0WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Vz8thXfyqmr8/ZGBgzP+4ncQZsqZIti3MIOVrQPZcf4=;
-        b=ZSSl3P1dO97GlXmxotZA7O2dacBX8lK2WmdSN2lKMFYU30NYeLSsUeTbdHJidmrwe6
-         HGZc5y0J+f28yrLMUr3HvAuA7eYVPIVuZ80SWbNtmo8S8pkLg2Moq0L3W3H8c0l41YFM
-         axIMApWcr5cdee5bnycZVNXSrBlfi1FZgn5HNSIh73KIpIP+62g7iyeV1EBzvwFaRRvt
-         KgCnb9vJeUrBGTi1vHCezXbP10psFBvGxVNNR5A6pFrjyy5BwJFa0ztYD9ChE4DjB1jo
-         CMjFw5fxU55B38lEtpWD8p8LjBUi1Hm53h+RrO90Ns9A9CyNhX5+F1aJjH/rif+4I7kV
-         7Lhw==
-X-Gm-Message-State: AJIora90I1/D6JPr9h6iYb2UHbGoqyqiaUdRsZaalludwNR/nPx4OOng
-        dfOyRatpuxtbx9zxLXrd1tGpUAS76BppR5YhqGk=
-X-Google-Smtp-Source: AGRyM1uQOqVeM+UIDqTpNmTACLVwDpYhkfFVH7exxRRhDtnftOV9C6MxkZWzz27cPD3MJSJooxjEFQklnfn5c+TLsBA=
-X-Received: by 2002:a05:6870:c889:b0:10c:7f1:c6b8 with SMTP id
- er9-20020a056870c88900b0010c07f1c6b8mr13629698oab.280.1658140764394; Mon, 18
- Jul 2022 03:39:24 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yPxqKB77kyU9V8lnhOsK1GQJLunCLPWKLPbPXEb7VqM=;
+        b=IAX0P8TXWUNhb46spT92oDljdP7A9YvFLalhhRX7W+wLhnJfpuiYcK/bFuil7jBB8q
+         lcS9YzPu5GQlL2PR5GfwJEJ/eq195y12NVGQ6JQsn5GeWpL1QkSe/8mJb4VeeisqOvVW
+         e226FOWEYBa9sipHeOQ0SxcoW+qxcpITNnQWKnzeh2kr2X6ovrLgEAXS4lDcPXffXlAc
+         0UQxoYndkftcMTslh2V47mBuRjbs2QvvroyCmXsGA67/P3ySgQ9ux6AS5951mfLTWaYj
+         NhHwsCuUHa67aGE7LS47x8xjep51ymtN+ghfJ2nNbqyaLYzdY48cIjznmdXysW4cgYmS
+         nzrg==
+X-Gm-Message-State: AJIora/LFcZIIQqjQFX+lcIr3ixt5Yx3B34mxGRfoh8B32CJIcadnopF
+        p1Z1A691XDrAHbYH65veD7O8Mw==
+X-Google-Smtp-Source: AGRyM1scKmN6ALHiC5oMMyrUNbx2hAFThxeUdXKc4IHkHRgeKvoKCp7Mo8e40GEOC+sL4O6jpOt3zw==
+X-Received: by 2002:a2e:9113:0:b0:25d:68a9:c39b with SMTP id m19-20020a2e9113000000b0025d68a9c39bmr11899226ljg.175.1658140773955;
+        Mon, 18 Jul 2022 03:39:33 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id b2-20020a196442000000b00478f2f2f043sm2542692lfj.147.2022.07.18.03.39.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 03:39:33 -0700 (PDT)
+Message-ID: <91edff9a-53f2-647b-04a8-76d15f22a8f2@linaro.org>
+Date:   Mon, 18 Jul 2022 13:39:32 +0300
 MIME-Version: 1.0
-References: <20220712013632.7042-1-bingjingc@synology.com> <20220712145201.GA1074561@falcondesktop>
-In-Reply-To: <20220712145201.GA1074561@falcondesktop>
-From:   bingjing chang <bxxxjxxg@gmail.com>
-Date:   Mon, 18 Jul 2022 18:39:12 +0800
-Message-ID: <CAMmgxWGu9AJELK3hM10CoS8q38JfVB0yvbFr6=LpFqApXFqXVg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] btrfs: send: fix sending link commands for
- existing file paths
-To:     Filipe Manana <fdmanana@kernel.org>
-Cc:     bingjingc <bingjingc@synology.com>, Chris Mason <clm@fb.com>,
-        David Sterba <dsterba@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Robbie Ko <robbieko@synology.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 7/8] PCI: qcom: Clean up IP configurations
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+References: <20220714071348.6792-1-johan+linaro@kernel.org>
+ <20220714071348.6792-8-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220714071348.6792-8-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Filipe Manana <fdmanana@kernel.org>=E6=96=BC 2022=E5=B9=B47=E6=9C=8812=E6=
-=97=A5 =E9=80=B1=E4=BA=8C=EF=BC=8C=E4=B8=8B=E5=8D=8810:52=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On Tue, Jul 12, 2022 at 09:36:30AM +0800, bingjingc wrote:
-> > From: BingJing Chang <bingjingc@synology.com>
-> >
-> > There is a bug sending link commands for existing file paths. When we'r=
-e
-> > processing an inode, we go over all references. All the new file paths =
-are
-> > added to the "new_refs" list. And all the deleted file paths are added =
-to
-> > the "deleted_refs" list. In the end, when we finish processing the inod=
-e,
-> > we iterate over all the items in the "new_refs" list and send link comm=
-ands
-> > for those file paths. After that, we go over all the items in the
-> > "deleted_refs" list and send unlink commands for them. If there are
-> > duplicated file paths in both lists, we will try to create them before =
-we
-> > remove them. Then the receiver gets an -EEXIST error when trying the li=
-nk
-> > operations.
-> >
-> > BingJing Chang (2):
-> >   btrfs: send: introduce recorded_ref_alloc and recorded_ref_free
-> >   btrfs: send: fix sending link commands for existing file paths
-> >
-> >  fs/btrfs/send.c | 195 ++++++++++++++++++++++++++++++++++++++++++++----
-> >  1 file changed, 181 insertions(+), 14 deletions(-)
->
-> Looks good now, thanks.
->
-> Reviewed-by: Filipe Manana <fdmanana@suse.com>
->
-> Also, are you planning on submitting a test case for fstests too?
+On 14/07/2022 10:13, Johan Hovold wrote:
+> The various IP versions have different configurations that are encoded
+> in separate sets of operation callbacks. Currently, there is no need for
+> also maintaining corresponding sets of data parameters, but it is
+> conceivable that these may again be found useful (e.g. to implement
+> minor variations of the operation callbacks).
+> 
+> Rename the default configuration structures after the IP version they
+> apply to so that they can more easily be reused by different SoCs.
+> 
+> Note that SoC specific configurations can be added later if need arises
+> (e.g. cfg_sc8280xp).
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Sorry for my late reply. I will try to add a test case to fstests,
-thanks for reminding me.
 
->
-> >
-> > --
-> > 2.37.0
-> >
+If we have nothing left in the qcom_pcie_cfg other than the .ops, what 
+about dropping the qcom_pcie_cfg completely and using the qcom_pcie_ops 
+as match data?
+
+This patch is nevertheless:
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+
+> ---
+>   drivers/pci/controller/dwc/pcie-qcom.c | 89 +++++++++-----------------
+>   1 file changed, 29 insertions(+), 60 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 1339f05bee65..8dddb72f8647 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1606,66 +1606,35 @@ static const struct qcom_pcie_ops ops_2_9_0 = {
+>   	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
+>   };
+>   
+> -static const struct qcom_pcie_cfg apq8084_cfg = {
+> +static const struct qcom_pcie_cfg cfg_1_0_0 = {
+>   	.ops = &ops_1_0_0,
+>   };
+>   
+> -static const struct qcom_pcie_cfg ipq8064_cfg = {
+> +static const struct qcom_pcie_cfg cfg_1_9_0 = {
+> +	.ops = &ops_1_9_0,
+> +};
+> +
+> +static const struct qcom_pcie_cfg cfg_2_1_0 = {
+>   	.ops = &ops_2_1_0,
+>   };
+>   
+> -static const struct qcom_pcie_cfg msm8996_cfg = {
+> +static const struct qcom_pcie_cfg cfg_2_3_2 = {
+>   	.ops = &ops_2_3_2,
+>   };
+>   
+> -static const struct qcom_pcie_cfg ipq8074_cfg = {
+> +static const struct qcom_pcie_cfg cfg_2_3_3 = {
+>   	.ops = &ops_2_3_3,
+>   };
+>   
+> -static const struct qcom_pcie_cfg ipq4019_cfg = {
+> +static const struct qcom_pcie_cfg cfg_2_4_0 = {
+>   	.ops = &ops_2_4_0,
+>   };
+>   
+> -static const struct qcom_pcie_cfg sa8540p_cfg = {
+> -	.ops = &ops_1_9_0,
+> -};
+> -
+> -static const struct qcom_pcie_cfg sc8280xp_cfg = {
+> -	.ops = &ops_1_9_0,
+> -};
+> -
+> -static const struct qcom_pcie_cfg sdm845_cfg = {
+> +static const struct qcom_pcie_cfg cfg_2_7_0 = {
+>   	.ops = &ops_2_7_0,
+>   };
+>   
+> -static const struct qcom_pcie_cfg sm8150_cfg = {
+> -	/* sm8150 has qcom IP rev 1.5.0. However 1.5.0 ops are same as
+> -	 * 1.9.0, so reuse the same.
+> -	 */
+> -	.ops = &ops_1_9_0,
+> -};
+> -
+> -static const struct qcom_pcie_cfg sm8250_cfg = {
+> -	.ops = &ops_1_9_0,
+> -};
+> -
+> -static const struct qcom_pcie_cfg sm8450_pcie0_cfg = {
+> -	.ops = &ops_1_9_0,
+> -};
+> -
+> -static const struct qcom_pcie_cfg sm8450_pcie1_cfg = {
+> -	.ops = &ops_1_9_0,
+> -};
+> -
+> -static const struct qcom_pcie_cfg sc7280_cfg = {
+> -	.ops = &ops_1_9_0,
+> -};
+> -
+> -static const struct qcom_pcie_cfg sc8180x_cfg = {
+> -	.ops = &ops_1_9_0,
+> -};
+> -
+> -static const struct qcom_pcie_cfg ipq6018_cfg = {
+> +static const struct qcom_pcie_cfg cfg_2_9_0 = {
+>   	.ops = &ops_2_9_0,
+>   };
+>   
+> @@ -1780,24 +1749,24 @@ static int qcom_pcie_remove(struct platform_device *pdev)
+>   }
+>   
+>   static const struct of_device_id qcom_pcie_match[] = {
+> -	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
+> -	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
+> -	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &ipq8064_cfg },
+> -	{ .compatible = "qcom,pcie-apq8064", .data = &ipq8064_cfg },
+> -	{ .compatible = "qcom,pcie-msm8996", .data = &msm8996_cfg },
+> -	{ .compatible = "qcom,pcie-ipq8074", .data = &ipq8074_cfg },
+> -	{ .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
+> -	{ .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
+> -	{ .compatible = "qcom,pcie-sa8540p", .data = &sa8540p_cfg },
+> -	{ .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
+> -	{ .compatible = "qcom,pcie-sm8150", .data = &sm8150_cfg },
+> -	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
+> -	{ .compatible = "qcom,pcie-sc8180x", .data = &sc8180x_cfg },
+> -	{ .compatible = "qcom,pcie-sc8280xp", .data = &sc8280xp_cfg },
+> -	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &sm8450_pcie0_cfg },
+> -	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &sm8450_pcie1_cfg },
+> -	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
+> -	{ .compatible = "qcom,pcie-ipq6018", .data = &ipq6018_cfg },
+> +	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
+> +	{ .compatible = "qcom,pcie-ipq8064", .data = &cfg_2_1_0 },
+> +	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
+> +	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
+> +	{ .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
+> +	{ .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
+> +	{ .compatible = "qcom,pcie-ipq4019", .data = &cfg_2_4_0 },
+> +	{ .compatible = "qcom,pcie-qcs404", .data = &cfg_2_4_0 },
+> +	{ .compatible = "qcom,pcie-sa8540p", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-sdm845", .data = &cfg_2_7_0 },
+> +	{ .compatible = "qcom,pcie-sm8150", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-sm8250", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-sc8180x", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-sc8280xp", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-sc7280", .data = &cfg_1_9_0 },
+> +	{ .compatible = "qcom,pcie-ipq6018", .data = &cfg_2_9_0 },
+>   	{ }
+>   };
+>   MODULE_DEVICE_TABLE(of, qcom_pcie_match);
+
+
+-- 
+With best wishes
+Dmitry

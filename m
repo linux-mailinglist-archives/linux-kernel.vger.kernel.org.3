@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0243F578C08
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8971D578C0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiGRUsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 16:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S233375AbiGRUtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 16:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiGRUsA (ORCPT
+        with ESMTP id S233431AbiGRUtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 16:48:00 -0400
-Received: from mr5.vodafonemail.de (mr5.vodafonemail.de [145.253.228.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC497669;
-        Mon, 18 Jul 2022 13:47:58 -0700 (PDT)
-Received: from smtp.vodafone.de (unknown [10.0.0.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mr5.vodafonemail.de (Postfix) with ESMTPS id 4LmvDX47m0z1yGF;
-        Mon, 18 Jul 2022 20:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
-        s=vfde-mb-mr2-21dec; t=1658177276;
-        bh=SNrPLMGCpjQRbb6blJwXA2sn6QML20WYwo9AlatwEoM=;
-        h=Date:From:To:Subject:Message-ID:References:Content-Type:
-         In-Reply-To:From;
-        b=UK60cWTiNUJ82bDP0Xzs0CxFOlU+yVfPGEZqC/RTGqrqJTYc/MJniyEJ41LhQ4CD4
-         cJ8t9wYHC8vH8LrGHEpejX8BNKUpBrJpsGu3iGPWBIQOqhVsENDdAfbcGGofF+fyIi
-         fNdV6pYc2sQl6UTwCmHWwQNq28t4EGPDYLd9rnpI=
-Received: from arcor.de (p3ee2cf42.dip0.t-ipconnect.de [62.226.207.66])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp.vodafone.de (Postfix) with ESMTPSA id 4LmvDG6MBmz9sNt;
-        Mon, 18 Jul 2022 20:47:39 +0000 (UTC)
-Date:   Mon, 18 Jul 2022 22:47:24 +0200
-From:   Reinhard Speyerer <rspmn@arcor.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     sdlyyxy <sdlyyxy@bupt.edu.cn>, johan@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: usb-serial-simple: add new device id for OPPO R11
-Message-ID: <YtXG3EVrRKAG7WVx@arcor.de>
-References: <20220715142444.4173681-1-gregkh@linuxfoundation.org>
- <119D7B0F-7809-464A-AFF1-DF72FFF9E63F@bupt.edu.cn>
- <YtKrbucYNulPEKUp@arcor.de>
- <YtRtswctFMLxeglu@kroah.com>
+        Mon, 18 Jul 2022 16:49:04 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4EE63E2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:49:04 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso19377358pjc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Zbzt4chIOAHidm79RNeoJvZKga6Ri3IH/kwQEEuMyhQ=;
+        b=ox+L7vvavOYp4ysTAQIE6ZNLqMWWkVbtwMP1VNfH3juV5EfYZ3YpuVCyI4axobd5eI
+         2RaL+uBtsUPlSjJnh1cpw8gz2z0Qm+NiegNkzBZwuXLUEv+DIhtdmugtgYlEQ3WpnQ71
+         TePdoppcwfTsJPsnkp88/eMaisHj3PYupQ2j7vZN9kA6vsfpH3BeD6pqNfmuljnYfo/Q
+         Jxh6eh04QPrnDP35DacSAXi0oYSvX9J8TOtU+NtGoLa2Mpk6Ygzc4XUwrZucU4Q0j0SQ
+         +WxpiJmMeitNO4mt7MBoPNwEkgAHx9knjOFgMuFce1mZluXqVj5MqbZ1kY/cYij15r8S
+         x3ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Zbzt4chIOAHidm79RNeoJvZKga6Ri3IH/kwQEEuMyhQ=;
+        b=BBbXlFE2MZ9EOPuod2PBq8WM7NsvaES51nj+dsXAbd+TURy/Rc5jf3RHGHosclX/Sn
+         qa9YJOHgQHaIK0ns+0CwhlwNf7rfRjKOSqG6puilIhNLh7+apo3048pH29tOPwo/s83C
+         PtC8hOsShwhqVoJMWF29WpOTTYK+KKtYEZ/q0cQOTI76rnOlUTJp2RJdhEpGKTJeim1i
+         TlWXqALzUrUeL/PE9ftKhiReV2Tx1Jp4MjU34W5nlIXkH+hC3GTS00mtGPkNNqgP4XD/
+         WobNcLhJHXxbwYYQbADrB1Chk5QM1nGcm/pC/ZndYwk/vS/6PAKHgjIV72r7lveKOEd5
+         4bBA==
+X-Gm-Message-State: AJIora9KlVPJTMjZgqQowTUVT5MCZ2EtJ3uw1MpZND/M+lss4H4G97RR
+        PfZWnuNC94Ki+kvZSxU9v9Mtjw==
+X-Google-Smtp-Source: AGRyM1vgptEceVtByGuNYUrudxA+4UJt+Gr4/h5m/Geot5gc24p2f9PZe/3aC+qtDZ5bkni9hTvQtg==
+X-Received: by 2002:a17:90b:1c0b:b0:1f0:23df:5406 with SMTP id oc11-20020a17090b1c0b00b001f023df5406mr34986891pjb.157.1658177343346;
+        Mon, 18 Jul 2022 13:49:03 -0700 (PDT)
+Received: from google.com (59.39.145.34.bc.googleusercontent.com. [34.145.39.59])
+        by smtp.gmail.com with ESMTPSA id v21-20020a17090ac91500b001f113765d48sm7878522pjt.2.2022.07.18.13.49.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 13:49:01 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 20:48:55 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: x86/mmu: Document the "rules" for using
+ host_pfn_mapping_level()
+Message-ID: <YtXHN9rrj6+SRa1Z@google.com>
+References: <20220715232107.3775620-1-seanjc@google.com>
+ <20220715232107.3775620-3-seanjc@google.com>
+ <YtMIvgfsgIPWMgGM@google.com>
+ <YtWPSILmAp/0m5eC@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtRtswctFMLxeglu@kroah.com>
-X-purgate-type: clean
-X-purgate: clean
-X-purgate-size: 4575
-X-purgate-ID: 155817::1658177275-BA9E322F-1671A4FF/0/0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <YtWPSILmAp/0m5eC@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,109 +75,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Sun, Jul 17, 2022 at 10:14:43PM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Jul 16, 2022 at 02:13:34PM +0200, Reinhard Speyerer wrote:
-> > On Fri, Jul 15, 2022 at 10:59:13PM +0800, sdlyyxy wrote:
+On Mon, Jul 18, 2022, Sean Christopherson wrote:
+> On Sat, Jul 16, 2022, Mingwei Zhang wrote:
+> > On Fri, Jul 15, 2022, Sean Christopherson wrote:
+> > > Add a comment to document how host_pfn_mapping_level() can be used safely,
+> > > as the line between safe and dangerous is quite thin.  E.g. if KVM were
+> > > to ever support in-place promotion to create huge pages, consuming the
+> > > level is safe if the caller holds mmu_lock and checks that there's an
+> > > existing _leaf_ SPTE, but unsafe if the caller only checks that there's a
+> > > non-leaf SPTE.
 > > > 
-> > > > On Jul 15, 2022, at 22:24, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > > 
-> > > > The Oppo R11 diagnostic USB connection needs to be bound to the
-> > > > usb-serial-simple driver as it just wants to use a dumb pipe to
-> > > > communicate to the host.
-> > > > 
-> > > > usb-devices output:
-> > > > T: Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 10 Spd=480 MxCh= 0
-> > > > D: Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
-> > > > P: Vendor=22d9 ProdID=276c Rev=04.04
-> > > > S: Manufacturer=OPPO
-> > > > S: Product=SDM660-MTP _SN:09C6BCA7
-> > > > S: SerialNumber=beb2c403
-> > > > C: #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=500mA
-> > > > I: If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30
-> > > > 
-> > > > Reported-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-> > > > Cc: Johan Hovold <johan@kernel.org>
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > ---
-> > > > drivers/usb/serial/usb-serial-simple.c | 4 +++-
-> > > > 1 file changed, 3 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
-> > > > index 4c6747889a19..eb832b94aa3a 100644
-> > > > --- a/drivers/usb/serial/usb-serial-simple.c
-> > > > +++ b/drivers/usb/serial/usb-serial-simple.c
-> > > > @@ -60,7 +60,9 @@ DEVICE(flashloader, FLASHLOADER_IDS);
-> > > > 	{ USB_VENDOR_AND_INTERFACE_INFO(0x18d1,			\
-> > > > 					USB_CLASS_VENDOR_SPEC,	\
-> > > > 					0x50,			\
-> > > > -					0x01) }
-> > > > +					0x01) },		\
-> > > > +	{ USB_DEVICE_AND_INTERFACE_INFO(0x22d9, 0x276c,		\
-> > > > +					0xff, 0xff, 0x30) }
-> > > > DEVICE(google, GOOGLE_IDS);
-> > > > 
-> > > > /* Libtransistor USB console */
-> > > > -- 
-> > > > 2.37.1
-> > > Tested-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-> > 
-> > While this may work sufficiently well for real low-volume diag traffic I'd
-> > expect a significant percentage of diag messages to be lost in practice
-> > with the usb-serial-simple driver.
-> > 
-> > According to the usb-devices output this looks like the Qualcomm USB gadget
-> > in the DIAG + ADB composition to me.
-> > 
-> > Since the option driver uses the usb-wwan framework my suggestion would be
-> > for the original patch to be applied instead similar to what has been done
-> > e.g. for the Quectel RM500Q diag port.
+> > > Opportunistically tweak the existing comments to explicitly document why
+> > > KVM needs to use READ_ONCE().
+> > > 
+> > > No functional change intended.
+> > > 
+> > > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > > ---
+> > >  arch/x86/kvm/mmu/mmu.c | 42 +++++++++++++++++++++++++++++++++++-------
+> > >  1 file changed, 35 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index bebff1d5acd4..d5b644f3e003 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -2919,6 +2919,31 @@ static void direct_pte_prefetch(struct kvm_vcpu *vcpu, u64 *sptep)
+> > >  	__direct_pte_prefetch(vcpu, sp, sptep);
+> > >  }
+> > >  
+> > > +/*
+> > > + * Lookup the mapping level for @gfn in the current mm.
+> > > + *
+> > > + * WARNING!  Use of host_pfn_mapping_level() requires the caller and the end
+> > > + * consumer to be tied into KVM's handlers for MMU notifier events!
+> > Since calling this function won't cause kernel crash now, I guess we can
+> > remove the warning sign here, but keep the remaining statement since it
+> > is necessary.
 > 
-> But this is not using the option chip, nor using the option flow control
-> protocol at all, so it should not be showing up as a device controlled
-> by the option driver.  It just will not work properly, the simple driver
-> should be doing the exact same thing here.
+> Calling this function won't _directly_ crash the kernel, but improper usage can
+> most definitely crash the host kernel, or even worse, silently corrupt host and
+> or guest data.  E.g. if KVM were to race with an mmu_notifier event and incorrectly
+> map a stale huge page into the guest.
 > 
+> So yes, the function itself is robust, but usage is still very subtle and delicate.
 
-you seem to have the misconception that devices handled by the option driver
-would use a USB to serial converter chip from Option similar to e.g. the
-ftdi_sio driver which is not the case.
+Understood. So we basically create another "gup_fast_only()" within KVM
+and we worry that may confuse other developers so we add the warning
+sign.
+> 
+> > > + *
+> > > + * There are several ways to safely use this helper:
+> > > + *
+> > > + * - Check mmu_notifier_retry_hva() after grabbing the mapping level, before
+> > > + *   consuming it.  In this case, mmu_lock doesn't need to be held during the
+> > > + *   lookup, but it does need to be held while checking the MMU notifier.
+> > 
+> > but it does need to be held while checking the MMU notifier and
+> > consuming the result.
+> 
+> I didn't want to include "consuming the result" because arguably the result is
+> being consumed while running the guest, and obviously KVM doesn't hold mmu_lock
+> while running the guest (though I fully acknowledge the above effectively uses
+> "consume" in the sense of shoving the result into SPTEs).  
+> 
+> > > + *
+> > > + * - Hold mmu_lock AND ensure there is no in-progress MMU notifier invalidation
+> > > + *   event for the hva.  This can be done by explicit checking the MMU notifier
+> 
+> s/explicit/explicitly
+> 
+> > > + *   or by ensuring that KVM already has a valid mapping that covers the hva.
+> > 
+> > Yes, more specifically, "mmu notifier sequence counter".
+> 
+> Heh, depends on what the reader interprets as "sequence counter".  If the reader
+> interprets that as the literal sequence counter, mmu_notifier_seq, then this phrasing
+> is incorrect as mmu_notifier_seq isn't bumped until the invalidation completes,
+> i.e. it guards against _past_ invalidations, not in-progress validations.
+> 
+> My preference is to intentionally not be precise in describing how to check for an
+> in-progress invalidation, e.g. so that this comment doesn't need to be updated if
+> the details change, and to also to try and force developers to do more than copy
+> and paste if they want to use this helper.
 
-Quoting from option.c:
-  ===
-  This driver exists because the "normal" serial driver doesn't work too well
-  with GSM modems. Issues:
-  - data loss -- one single Receive URB is not nearly enough
-  - nonstandard flow (Option devices) control
-  - controlling the baud rate doesn't make sense
+Hmm, I was going to say that I strongly disagree about the intentional
+unclearness. But then I find that MMU notifier implementation does
+require more than just the counter but also the range, so yeah, talking
+too much may fall into the weeds. But in general, I think mmu notifier
+deserves better documentation in both concept and implementation in KVM.
 
-  This driver is named "option" because the most common device it's
-  used for is a PC-Card (with an internal OHCI-USB interface, behind
-  which the GSM interface sits), made by Option Inc.
-  ===
-
-The GSM/UMTS interface in the Option card actually contains a Qualcomm chip
-which exports its serial ports via USB. The data loss mentioned by Matthias
-above also applies to the diag port.
-
-As can be seen from the sendsetup code in the qcserial driver the
-"nonstandard flow (Option devices) control" mentioned above is actually
-a Qualcomm "feature" required for some of their USB serial implementations
-on tne device to work properly.
-
-In case you suspect potential problems with the sendsetup code and the OPPO
-R11 diag port Yan's option.c patch could be extended like this:
-	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30),
-	  .driver_info = NCTRL(0) },
-
-With a few more lines of code you could also add a new layout to the qcserial
-driver if you prefer for the OPPO R11 to be handled by it for some reason.
-
-Either one would be fine with me.
-
-Please don't give the OPPO R11 diag port on Linux a bad name by letting
-the usb-serial-simple driver handle it.
-
-Thanks,
-Reinhard

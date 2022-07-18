@@ -2,159 +2,478 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B205577967
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD3C57796C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbiGRBpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 21:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S232951AbiGRBvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 21:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiGRBpK (ORCPT
+        with ESMTP id S229949AbiGRBvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 21:45:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102DB13F22
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658108710; x=1689644710;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K3ZBTCN554S4wyXZeUS8sJhqy6fYcV1h0evtpe655gg=;
-  b=f8zDx8LyaStX/BIkNaiH33tD88y8Dt4KVxLRfpIr1+iTVctjb98S/YCa
-   /OlE2Nzw9s+VMkBqOYLUKj5VqsSwSYai3k5pYnctairqsj2XE4G17HEIZ
-   x4DUBdm4WwO+SS5zgXFQq5T+vGt3pdid1gth3B2H9EEyXNsCHWdGDI+ss
-   QuixuJqb0u6slPQID0upaFsskVC73oAXVs6mPY2fFKHBhynAxgjrc1K7/
-   QEqKUD4Un82PcfUYfnuJbiLtYunetyilq7hUaZ65C6eJ3sHE0zKjQcLXw
-   G+mGI3PYCF7xgp+R2cRbbYarchoB9Bq6XHHpFIgykJf8D+YfbnUGvOFJC
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="284864883"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="284864883"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:45:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="629746039"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jul 2022 18:45:08 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDFop-0003sQ-JK;
-        Mon, 18 Jul 2022 01:45:07 +0000
-Date:   Mon, 18 Jul 2022 09:44:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [bvanassche:f2fs 2/3] include/linux/f2fs_fs.h:364:1: error:
- static_assert failed due to requirement 'sizeof(struct f2fs_nat_block) ==
- 4095':
-Message-ID: <202207180909.eQsJ5h8G-lkp@intel.com>
+        Sun, 17 Jul 2022 21:51:13 -0400
+X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 17 Jul 2022 18:51:10 PDT
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855F713D23
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:51:10 -0700 (PDT)
+X-UUID: 84e79db355a543c3bc97903c6cca7ee8-20220718
+X-UUID: 84e79db355a543c3bc97903c6cca7ee8-20220718
+X-User: oushixiong@kylinos.cn
+Received: from localhost.localdomain [(111.48.58.12)] by mailgw
+        (envelope-from <oushixiong@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 214112793; Mon, 18 Jul 2022 09:46:43 +0800
+From:   oushixiong <oushixiong@kylinos.cn>
+To:     Dave Airlie <airlied@redhat.com>
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, oushixiong <oushixiong@kylinos.cn>
+Subject: [PATCH] drm/ast: add dmabuf/prime buffer sharing support
+Date:   Mon, 18 Jul 2022 09:45:59 +0800
+Message-Id: <20220718014559.64069-1-oushixiong@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/bvanassche/linux f2fs
-head:   93e015b268055bcd2dc2f03bcb2c1311dff33c5e
-commit: c8670ac5d2e3a0351cefc7ca9722cf532c3fa823 [2/3] Verify structure sizes at compile time
-config: hexagon-randconfig-r041-20220717 (https://download.01.org/0day-ci/archive/20220718/202207180909.eQsJ5h8G-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/c8670ac5d2e3a0351cefc7ca9722cf532c3fa823
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche f2fs
-        git checkout c8670ac5d2e3a0351cefc7ca9722cf532c3fa823
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
+This patch adds ast specific codes for DRM Prime feature.
+User application can get file descriptor from gem handle and also
+gem handle from file descriptor.this is to allow for offloading
+of rendering in one direction and outputs in the other.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: oushixiong <oushixiong@kylinos.cn>
+---
+ drivers/gpu/drm/ast/ast_drv.c  |  16 +++-
+ drivers/gpu/drm/ast/ast_drv.h  |  19 ++++-
+ drivers/gpu/drm/ast/ast_main.c | 115 ++++++++++++++++++++++++++++-
+ drivers/gpu/drm/ast/ast_ttm.c  | 130 ++++++++++++++++++++++++++++++++-
+ 4 files changed, 273 insertions(+), 7 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   In file included from fs/f2fs/dir.c:10:
->> include/linux/f2fs_fs.h:364:1: error: static_assert failed due to requirement 'sizeof(struct f2fs_nat_block) == 4095': 
-   static_assert(sizeof(struct f2fs_nat_block) == 4095, "");
-   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
-   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-                                    ^               ~~~~
-   include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
-   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-                                           ^              ~~~~
-   In file included from fs/f2fs/dir.c:10:
->> include/linux/f2fs_fs.h:407:1: error: static_assert failed due to requirement 'sizeof(struct f2fs_sit_block) == 4070': 
-   static_assert(sizeof(struct f2fs_sit_block) == 4070, "");
-   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:77:34: note: expanded from macro 'static_assert'
-   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-                                    ^               ~~~~
-   include/linux/build_bug.h:78:41: note: expanded from macro '__static_assert'
-   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-                                           ^              ~~~~
-   2 errors generated.
-
-
-vim +364 include/linux/f2fs_fs.h
-
-   363	
- > 364	static_assert(sizeof(struct f2fs_nat_block) == 4095, "");
-   365	
-   366	/*
-   367	 * For SIT entries
-   368	 *
-   369	 * Each segment is 2MB in size by default so that a bitmap for validity of
-   370	 * there-in blocks should occupy 64 bytes, 512 bits.
-   371	 * Not allow to change this.
-   372	 */
-   373	#define SIT_VBLOCK_MAP_SIZE 64
-   374	#define SIT_ENTRY_PER_BLOCK (PAGE_SIZE / sizeof(struct f2fs_sit_entry))
-   375	
-   376	/*
-   377	 * F2FS uses 4 bytes to represent block address. As a result, supported size of
-   378	 * disk is 16 TB and it equals to 16 * 1024 * 1024 / 2 segments.
-   379	 */
-   380	#define F2FS_MAX_SEGMENT       ((16 * 1024 * 1024) / 2)
-   381	
-   382	/*
-   383	 * Note that f2fs_sit_entry->vblocks has the following bit-field information.
-   384	 * [15:10] : allocation type such as CURSEG_XXXX_TYPE
-   385	 * [9:0] : valid block count
-   386	 */
-   387	#define SIT_VBLOCKS_SHIFT	10
-   388	#define SIT_VBLOCKS_MASK	((1 << SIT_VBLOCKS_SHIFT) - 1)
-   389	#define GET_SIT_VBLOCKS(raw_sit)				\
-   390		(le16_to_cpu((raw_sit)->vblocks) & SIT_VBLOCKS_MASK)
-   391	#define GET_SIT_TYPE(raw_sit)					\
-   392		((le16_to_cpu((raw_sit)->vblocks) & ~SIT_VBLOCKS_MASK)	\
-   393		 >> SIT_VBLOCKS_SHIFT)
-   394	
-   395	struct f2fs_sit_entry {
-   396		__le16 vblocks;				/* reference above */
-   397		__u8 valid_map[SIT_VBLOCK_MAP_SIZE];	/* bitmap for valid blocks */
-   398		__le64 mtime;				/* segment age for cleaning */
-   399	} __packed;
-   400	
-   401	static_assert(sizeof(struct f2fs_sit_entry) == 74, "");
-   402	
-   403	struct f2fs_sit_block {
-   404		struct f2fs_sit_entry entries[SIT_ENTRY_PER_BLOCK];
-   405	} __packed;
-   406	
- > 407	static_assert(sizeof(struct f2fs_sit_block) == 4070, "");
-   408	
-
+diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
+index bf589c53b908..084d0c8b0f6b 100644
+--- a/drivers/gpu/drm/ast/ast_drv.c
++++ b/drivers/gpu/drm/ast/ast_drv.c
+@@ -214,7 +214,7 @@ static const struct file_operations ast_fops = {
+ };
+ 
+ static struct drm_driver driver = {
+-	.driver_features = DRIVER_MODESET | DRIVER_GEM,
++	.driver_features = DRIVER_MODESET | DRIVER_GEM | DRIVER_PRIME,
+ 
+ 	.load = ast_driver_load,
+ 	.unload = ast_driver_unload,
+@@ -231,6 +231,20 @@ static struct drm_driver driver = {
+ 	.dumb_create = ast_dumb_create,
+ 	.dumb_map_offset = ast_dumb_mmap_offset,
+ 
++	.prime_handle_to_fd     = drm_gem_prime_handle_to_fd,
++	.prime_fd_to_handle     = drm_gem_prime_fd_to_handle,
++	.gem_prime_import       = drm_gem_prime_import,
++	.gem_prime_export       = drm_gem_prime_export,
++
++	.gem_prime_get_sg_table = ast_gem_prime_get_sg_table,
++	.gem_prime_import_sg_table = ast_gem_prime_import_sg_table,
++	.gem_prime_vmap         = ast_gem_prime_vmap,
++	.gem_prime_vunmap       = ast_gem_prime_vunmap,
++	.gem_prime_pin          = ast_gem_prime_pin,
++	.gem_prime_unpin        = ast_gem_prime_unpin,
++
++	.gem_prime_res_obj = ast_gem_prime_res_obj,
++
+ };
+ 
+ static int __init ast_init(void)
+diff --git a/drivers/gpu/drm/ast/ast_drv.h b/drivers/gpu/drm/ast/ast_drv.h
+index e6c4cd3dc50e..b19b9aa5a517 100644
+--- a/drivers/gpu/drm/ast/ast_drv.h
++++ b/drivers/gpu/drm/ast/ast_drv.h
+@@ -258,6 +258,7 @@ struct ast_encoder {
+ struct ast_framebuffer {
+ 	struct drm_framebuffer base;
+ 	struct drm_gem_object *obj;
++	void *vmapping;
+ };
+ 
+ struct ast_fbdev {
+@@ -330,6 +331,7 @@ struct ast_bo {
+ 	struct drm_gem_object gem;
+ 	struct ttm_place placements[3];
+ 	int pin_count;
++	struct ttm_bo_kmap_obj dma_buf_vmap;
+ };
+ #define gem_to_ast_bo(gobj) container_of((gobj), struct ast_bo, gem)
+ 
+@@ -361,7 +363,9 @@ int ast_mm_init(struct ast_private *ast);
+ void ast_mm_fini(struct ast_private *ast);
+ 
+ int ast_bo_create(struct drm_device *dev, int size, int align,
+-		  uint32_t flags, struct ast_bo **pastbo);
++		uint32_t flags, struct sg_table *sg,
++		struct reservation_object *resv,
++		struct ast_bo **pastbo);
+ 
+ int ast_gem_create(struct drm_device *dev,
+ 		   u32 size, bool iskernel,
+@@ -369,6 +373,19 @@ int ast_gem_create(struct drm_device *dev,
+ 
+ int ast_bo_pin(struct ast_bo *bo, u32 pl_flag, u64 *gpu_addr);
+ int ast_bo_unpin(struct ast_bo *bo);
++struct sg_table *ast_gem_prime_get_sg_table(struct drm_gem_object *obj);
++void *ast_gem_prime_vmap(struct drm_gem_object *obj);
++void ast_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr);
++
++struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
++			struct dma_buf_attachment *attach,
++			struct sg_table *sg);
++
++int ast_gem_prime_pin(struct drm_gem_object *obj);
++void ast_gem_prime_unpin(struct drm_gem_object *obj);
++
++struct reservation_object *ast_gem_prime_res_obj(struct drm_gem_object *obj);
++
+ 
+ static inline int ast_bo_reserve(struct ast_bo *bo, bool no_wait)
+ {
+diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
+index 224fa1ef87ff..6f8fc49b062c 100644
+--- a/drivers/gpu/drm/ast/ast_main.c
++++ b/drivers/gpu/drm/ast/ast_main.c
+@@ -28,7 +28,7 @@
+ #include <drm/drmP.h>
+ #include "ast_drv.h"
+ 
+-
++#include <linux/dma-buf.h>
+ #include <drm/drm_fb_helper.h>
+ #include <drm/drm_crtc_helper.h>
+ 
+@@ -383,17 +383,125 @@ static int ast_get_dram_info(struct drm_device *dev)
+ 	return 0;
+ }
+ 
++int ast_handle_damage(struct ast_framebuffer *fb, int x, int y,
++			int width, int height)
++{
++	struct ast_bo *dst_bo = NULL;
++	void *dst = NULL;
++	int ret = 0, i;
++	unsigned long offset = 0;
++	bool unmap = false;
++	unsigned int bytesPerPixel;
++
++	bytesPerPixel = fb->base.format->cpp[0];
++
++	if (!fb->obj->import_attach)
++		return -EINVAL;
++
++	if (!fb->vmapping) {
++		fb->vmapping = dma_buf_vmap(fb->obj->import_attach->dmabuf);
++		if (!fb->vmapping)
++			return 0;
++	}
++	dst_bo = gem_to_ast_bo(fb->obj);
++	ret = ast_bo_reserve(dst_bo, true);
++	if (ret) {
++		DRM_ERROR("ast_bo_reserve failed\n");
++		ast_bo_unreserve(dst_bo);
++		goto error;
++	}
++	if (!dst_bo->dma_buf_vmap.virtual) {
++		ret = ttm_bo_kmap(&dst_bo->bo, 0,
++			dst_bo->bo.num_pages, &dst_bo->dma_buf_vmap);
++		if (ret) {
++			DRM_ERROR("failed to kmap fbcon\n");
++			goto error;
++		}
++		unmap = true;
++	}
++	dst = dst_bo->dma_buf_vmap.virtual;
++
++	for (i = y; i < y + height; i++) {
++		offset = i * fb->base.pitches[0] + (x * bytesPerPixel);
++		memcpy_toio(dst + offset, fb->vmapping + offset,
++			width * bytesPerPixel);
++	}
++
++	if (unmap)
++		ttm_bo_kunmap(&dst_bo->dma_buf_vmap);
++	ast_bo_unreserve(dst_bo);
++
++error:
++	return 0;
++}
++
+ static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
+ {
+ 	struct ast_framebuffer *ast_fb = to_ast_framebuffer(fb);
+ 
++	if (ast_fb->obj->import_attach) {
++		if (ast_fb->vmapping)
++			dma_buf_vunmap(ast_fb->obj->import_attach->dmabuf,
++				ast_fb->vmapping);
++	}
++
+ 	drm_gem_object_put_unlocked(ast_fb->obj);
+ 	drm_framebuffer_cleanup(fb);
+ 	kfree(ast_fb);
+ }
+ 
++static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
++				struct drm_file *file,
++				unsigned int flags,
++				unsigned int color,
++				struct drm_clip_rect *clips,
++				unsigned int num_clips)
++{
++	struct ast_framebuffer *ast_fb = to_ast_framebuffer(fb);
++	int i, ret = 0;
++
++	drm_modeset_lock_all(fb->dev);
++
++	if (ast_fb->obj->import_attach) {
++		ret = dma_buf_begin_cpu_access(
++				ast_fb->obj->import_attach->dmabuf,
++				DMA_FROM_DEVICE);
++		if (ret)
++			goto unlock;
++		}
++
++	for (i = 0; i < num_clips; i++) {
++		ret = ast_handle_damage(ast_fb, clips[i].x1, clips[i].y1,
++			clips[i].x2 - clips[i].x1,
++			clips[i].y2 - clips[i].y1);
++		if (ret)
++			break;
++	}
++
++	if (ast_fb->obj->import_attach) {
++		dma_buf_end_cpu_access(ast_fb->obj->import_attach->dmabuf,
++			DMA_FROM_DEVICE);
++	}
++
++unlock:
++	drm_modeset_unlock_all(fb->dev);
++
++	return ret;
++}
++
++static int ast_user_framebuffer_create_handle(struct drm_framebuffer *fb,
++			struct drm_file *file_priv,
++			unsigned int *handle)
++{
++	struct ast_framebuffer *ast_fb = to_ast_framebuffer(fb);
++
++	return drm_gem_handle_create(file_priv, ast_fb->obj, handle);
++}
++
+ static const struct drm_framebuffer_funcs ast_fb_funcs = {
++	.create_handle = ast_user_framebuffer_create_handle,
+ 	.destroy = ast_user_framebuffer_destroy,
++	.dirty = ast_user_framebuffer_dirty,
+ };
+ 
+ 
+@@ -605,7 +713,7 @@ int ast_gem_create(struct drm_device *dev,
+ 	if (size == 0)
+ 		return -EINVAL;
+ 
+-	ret = ast_bo_create(dev, size, 0, 0, &astbo);
++	ret = ast_bo_create(dev, size, 0, 0, NULL, NULL, &astbo);
+ 	if (ret) {
+ 		if (ret != -ERESTARTSYS)
+ 			DRM_ERROR("failed to allocate GEM object\n");
+@@ -656,6 +764,9 @@ void ast_gem_free_object(struct drm_gem_object *obj)
+ {
+ 	struct ast_bo *ast_bo = gem_to_ast_bo(obj);
+ 
++	if (ast_bo->gem.import_attach)
++		drm_prime_gem_destroy(&ast_bo->gem, ast_bo->bo.sg);
++
+ 	ast_bo_unref(&ast_bo);
+ }
+ 
+diff --git a/drivers/gpu/drm/ast/ast_ttm.c b/drivers/gpu/drm/ast/ast_ttm.c
+index fe354ebf374d..fea0429407e0 100644
+--- a/drivers/gpu/drm/ast/ast_ttm.c
++++ b/drivers/gpu/drm/ast/ast_ttm.c
+@@ -27,6 +27,7 @@
+  */
+ #include <drm/drmP.h>
+ #include <drm/ttm/ttm_page_alloc.h>
++#include <linux/dma-buf.h>
+ 
+ #include "ast_drv.h"
+ 
+@@ -215,8 +216,38 @@ static struct ttm_tt *ast_ttm_tt_create(struct ttm_buffer_object *bo,
+ 	return tt;
+ }
+ 
++static int ast_ttm_tt_populate(struct ttm_tt *ttm,
++			struct ttm_operation_ctx *ctx)
++{
++	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
++
++	if (ttm->state != tt_unpopulated)
++		return 0;
++
++	if (slave && ttm->sg) {
++		drm_prime_sg_to_page_addr_arrays(ttm->sg, ttm->pages,
++				NULL, ttm->num_pages);
++		ttm->state = tt_unbound;
++		return 0;
++	}
++
++	return ttm_pool_populate(ttm, ctx);
++}
++
++static void ast_ttm_tt_unpopulate(struct ttm_tt *ttm)
++{
++	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
++
++	if (slave)
++		return;
++
++	ttm_pool_unpopulate(ttm);
++}
++
+ struct ttm_bo_driver ast_bo_driver = {
+ 	.ttm_tt_create = ast_ttm_tt_create,
++	.ttm_tt_populate = ast_ttm_tt_populate,
++	.ttm_tt_unpopulate = ast_ttm_tt_unpopulate,
+ 	.init_mem_type = ast_bo_init_mem_type,
+ 	.eviction_valuable = ttm_bo_eviction_valuable,
+ 	.evict_flags = ast_bo_evict_flags,
+@@ -297,13 +328,21 @@ void ast_ttm_placement(struct ast_bo *bo, int domain)
+ }
+ 
+ int ast_bo_create(struct drm_device *dev, int size, int align,
+-		  uint32_t flags, struct ast_bo **pastbo)
++		  uint32_t flags, struct sg_table *sg,
++		  struct reservation_object *resv,
++		  struct ast_bo **pastbo)
+ {
+ 	struct ast_private *ast = dev->dev_private;
+ 	struct ast_bo *astbo;
+ 	size_t acc_size;
++	enum ttm_bo_type type;
+ 	int ret;
+ 
++	if (sg)
++		type = ttm_bo_type_sg;
++	else
++		type = ttm_bo_type_device;
++
+ 	astbo = kzalloc(sizeof(struct ast_bo), GFP_KERNEL);
+ 	if (!astbo)
+ 		return -ENOMEM;
+@@ -320,9 +359,9 @@ int ast_bo_create(struct drm_device *dev, int size, int align,
+ 				       sizeof(struct ast_bo));
+ 
+ 	ret = ttm_bo_init(&ast->ttm.bdev, &astbo->bo, size,
+-			  ttm_bo_type_device, &astbo->placement,
++			  type, &astbo->placement,
+ 			  align >> PAGE_SHIFT, false, acc_size,
+-			  NULL, NULL, ast_bo_ttm_destroy);
++			  sg, resv, ast_bo_ttm_destroy);
+ 	if (ret)
+ 		goto error;
+ 
+@@ -418,3 +457,88 @@ int ast_mmap(struct file *filp, struct vm_area_struct *vma)
+ 	ast = file_priv->minor->dev->dev_private;
+ 	return ttm_bo_mmap(filp, vma, &ast->ttm.bdev);
+ }
++
++struct sg_table *ast_gem_prime_get_sg_table(struct drm_gem_object *obj)
++{
++	struct ast_bo *bo = gem_to_ast_bo(obj);
++	int npages = bo->bo.num_pages;
++
++	return drm_prime_pages_to_sg(bo->bo.ttm->pages, npages);
++}
++
++void *ast_gem_prime_vmap(struct drm_gem_object *obj)
++{
++	struct ast_bo *bo = gem_to_ast_bo(obj);
++	int ret;
++
++	ret = ttm_bo_kmap(&bo->bo, 0, bo->bo.num_pages,
++			&bo->dma_buf_vmap);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return bo->dma_buf_vmap.virtual;
++}
++
++void ast_gem_prime_vunmap(struct drm_gem_object *obj, void *vaddr)
++{
++	struct ast_bo *bo = gem_to_ast_bo(obj);
++
++	ttm_bo_kunmap(&bo->dma_buf_vmap);
++}
++
++struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
++				struct dma_buf_attachment *attach,
++				struct sg_table *sg)
++{
++	struct ast_bo *bo;
++	int ret;
++
++	struct reservation_object *resv = attach->dmabuf->resv;
++
++	ww_mutex_lock(&resv->lock, NULL);
++	ret = ast_bo_create(dev, attach->dmabuf->size,
++			PAGE_SIZE, 0, sg, resv, &bo);
++	ww_mutex_unlock(&resv->lock);
++
++	if (ret)
++		return ERR_PTR(ret);
++
++	return &bo->gem;
++}
++
++int ast_gem_prime_pin(struct drm_gem_object *obj)
++{
++	struct ast_bo *bo  = gem_to_ast_bo(obj);
++	int ret = 0;
++
++	ret = ast_bo_reserve(bo, false);
++	if (unlikely(ret != 0))
++		return ret;
++
++	/* pin buffer into GTT */
++	ret = ast_bo_pin(bo, TTM_PL_FLAG_SYSTEM, NULL);
++	ast_bo_unreserve(bo);
++
++	return ret;
++}
++
++void ast_gem_prime_unpin(struct drm_gem_object *obj)
++{
++	struct ast_bo *bo = gem_to_ast_bo(obj);
++	int ret = 0;
++
++	ret = ast_bo_reserve(bo, false);
++	if (unlikely(ret != 0))
++		return;
++
++	ast_bo_unpin(bo);
++	ast_bo_unreserve(bo);
++}
++
++struct reservation_object *ast_gem_prime_res_obj(struct drm_gem_object *obj)
++{
++	struct ast_bo *bo = gem_to_ast_bo(obj);
++
++	return bo->bo.resv;
++}
++
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04009578997
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2310857899C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235999AbiGRSaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
+        id S234783AbiGRSeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235992AbiGRSaE (ORCPT
+        with ESMTP id S235957AbiGRSeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:30:04 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6B51EC50
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:30:03 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id os14so22897372ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:30:03 -0700 (PDT)
+        Mon, 18 Jul 2022 14:34:23 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F5962DF
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:34:22 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id tk8so11533786ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Cmv5hgCvNzLGGr3LktdlyBF/B6b4xDynWT6Leb6vwMU=;
-        b=KBwiHB+SXKRnkpvfkXzleS7byHrzZEABKfttt7pWmaEsExqk03fAWoqPR7nKPf3yLn
-         Fyy7ZwVpbxtKJXXXE5vUlGB1XmrO7dWEjESKiVizPyTEuMwzHXNx/5JkAO4H6cQPZBsZ
-         raIzGwzOE6ZLTmMNCIsGijKHIUXqYKCek8XUw=
+        bh=uKNO/2jKtYxtHpiKjjZWFyfX1vgvMagozZ10mRTcyRY=;
+        b=IBilH2yk53/8G11w0puh2eRVbRH56qZC4Tjg3Pq7xlpPa17Nee9c7J7l1O2yx6UVN0
+         z3xxHnOh5QjU9uN/l6evyV0y+yYqZOk6RJ/fGPflrU720VaN8nL55cKT5RMTIrXLfAFu
+         hmXxGCVcHQ+wDwrb4zsbvFrKF9iDVqdEu3NLQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Cmv5hgCvNzLGGr3LktdlyBF/B6b4xDynWT6Leb6vwMU=;
-        b=3lVydobOiTEoazTgdN75b8bX4tDeheZB3F1uXc8kRxpEvxixqStMmdHp7BvSwxbZP4
-         WK/bcYA15FJtbJDUtKccZcfgSsuv+GCebEixmyik9Sx4Ecrf33SLBFq0c0xv8d+6KHVN
-         9S2RhS3is9EZOu3q5I2v7Ca0+3a1wAIpw9c37CXuJ3ERRxyVjzhGl1/WirbYxwIy0yMa
-         YK//g4eR2qyeNAkQvcXBNcqhpJr3BQ6wPX+qV+ZapuRBD4+amRp/cODhQWVx4g7Avn+s
-         rNnWUymp36KFV7hxlXH9k6T3G8Y3qvUcP3/X/fhSnY7z7oRDxiPDdOLrPKpOrvnWKtux
-         4oow==
-X-Gm-Message-State: AJIora/E3X+6hO8mmf2QgXmCSpQvndmj+PhhuOgTupCQT3FGmuRyvuW3
-        LzosRxEbHeMLn9h1epIec1pJxqW8iepzlyAH
-X-Google-Smtp-Source: AGRyM1uBKjosSOtsaPU8+YW7FoRtwYeyzEW1rSpTz63jdzA59ebfoR8EXdnfxsT7JMs696URUoxEkg==
-X-Received: by 2002:a17:907:97cd:b0:72f:2df:274f with SMTP id js13-20020a17090797cd00b0072f02df274fmr15000195ejc.766.1658169001430;
-        Mon, 18 Jul 2022 11:30:01 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id d15-20020a170906304f00b0072f42ca2932sm810410ejd.137.2022.07.18.11.30.00
+        bh=uKNO/2jKtYxtHpiKjjZWFyfX1vgvMagozZ10mRTcyRY=;
+        b=ZvcpQRGVKpvAkxQT7Gf5dh+55vbQtbJH52dmvOGSiV2KXX6MNrIA0qE0ongTD591PB
+         bfDoZTY0kEUdXlpWkELONuKe0o0TQA+QGqmLXUNplSaoUgm2oZnz38sId9Ry3lU8NYfA
+         yP6ZgbQylkn6GaPqoUTESAP8kz5lu/izctbKY8Vz29o6TozlMbDmqMTB3twO/8tDzDDA
+         XtMO5kra9zo1zm12Yjq7vVqiR9pzJlEV+6WclFaJ/ffgEa98qgeEZxl0AYLbPINtlyPP
+         QCw/2HURecLRPtqptt8+4y7khmMKbEaI6BYW5sLmvTgYfygcGmWT7HxxtXrZCPsbrzGI
+         gm/A==
+X-Gm-Message-State: AJIora8N7eH6m0bZmkTQ3nxLGeylZbzxenQN61W87WdKCxRhScwzB/0H
+        9bjeqZ5O8S1V1GcgqlbtewRylH3W6IsDCMIN
+X-Google-Smtp-Source: AGRyM1t0sjJM8yhNmBSTv+n+O1m0qeVBNSVX6l8m3UrZb7Ta+eJZMpptgaRK/uHWQhs4vaj19ozl2g==
+X-Received: by 2002:a17:907:3e9a:b0:72b:44d4:4482 with SMTP id hs26-20020a1709073e9a00b0072b44d44482mr27527055ejc.34.1658169260938;
+        Mon, 18 Jul 2022 11:34:20 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id v10-20020a1709061dca00b0072b32de7794sm5770634ejh.70.2022.07.18.11.34.19
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 11:30:00 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id r2so17294182wrs.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:30:00 -0700 (PDT)
-X-Received: by 2002:a5d:69c2:0:b0:21d:807c:a892 with SMTP id
- s2-20020a5d69c2000000b0021d807ca892mr23808743wrw.274.1658168999877; Mon, 18
- Jul 2022 11:29:59 -0700 (PDT)
+        Mon, 18 Jul 2022 11:34:20 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id bu1so18308022wrb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:34:19 -0700 (PDT)
+X-Received: by 2002:a5d:544b:0:b0:21d:70cb:b4a2 with SMTP id
+ w11-20020a5d544b000000b0021d70cbb4a2mr23607916wrv.281.1658169258764; Mon, 18
+ Jul 2022 11:34:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
- <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
- <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
- <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
- <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
-In-Reply-To: <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
+References: <20220715194550.793957-1-cascardo@canonical.com>
+ <YtVG8VBmFikS6GMn@worktop.programming.kicks-ass.net> <YtWKK2ZLib1R7itI@zn.tnic>
+In-Reply-To: <YtWKK2ZLib1R7itI@zn.tnic>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 18 Jul 2022 11:29:43 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
-Message-ID: <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
-Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
- missing in lower/upper fs
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Date:   Mon, 18 Jul 2022 11:34:02 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiWQOsxqE+tvZi_MjzGaqfG6Xo5AhbYXtiLWcKVVvbycQ@mail.gmail.com>
+Message-ID: <CAHk-=wiWQOsxqE+tvZi_MjzGaqfG6Xo5AhbYXtiLWcKVVvbycQ@mail.gmail.com>
+Subject: Re: [PATCH] efi/x86: use naked RET on mixed mode call wrapper
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -81,60 +84,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 6:13 AM Miklos Szeredi <miklos@szeredi.hu> wrote:
+On Mon, Jul 18, 2022 at 9:28 AM Borislav Petkov <bp@suse.de> wrote:
 >
-> Correct.  The question is whether any application would break in this
-> case.  I think not, but you are free to prove otherwise.
+> So I'm being told we need to untrain on return from EFI to protect the
+> kernel from it.
 
-Most often, an error is "just an error", and most applications usually
-won't care.
+Why would we have to protect the kernel from EFI?
 
-There are exceptions: some errors are very much "do something special"
-(eg EAGAIN or EINTR _are_ often separately tested for and often mean
-"just retry"). And permission error handling is often different from
-EINVAL etc.
+If we can't trust EFI, then the machine is already compromised. We
+just *called* an EFI routine, if EFI is untrusted, it did something
+random.
 
-And ENOSYS can easily be such an error - people probing whether they
-are running on a new kernel that supports a new system call or not.
+I mean, it could have already done something bad at boot time when it
+loaded the kernel.
 
-And yeah, some of our ioctl's are odd, and we have a lot of drivers
-(and driver infrastructure) that basically does "this device does not
-support this ioctl, so return ENOSYS".
-
-I don't think that's the right thing to do, but I think it's
-understandable. The traditional error for "this device does not
-support this ioctl" is ENOTTY, which sounds so crazy to non-tty people
-that I understand why people have used ENOSYS instead.
-
-It's sad that it's called "ENOTTY" and some (at least historical)
-strerror() implementations will indeed return "Not a tty". Never mind
-that modern ones will say "inappropriate ioctl for device" - even when
-the string has been updated, the error number isn't called
-EINAPPROPRAITEDEVICE.
-
-But it is what it is, and so I think ENOTTY is understandably not used
-in many situations just because it's such a senseless historical name.
-
-And so if people don't use ENOSYS, they use EINVAL.
-
-I *suspect* no application cares: partly because ioctl error numbers
-are so random anyway, but also very much if this is a "without
-overlayfs it does X, with overlayfs it does Y".
-
-The sanest thing to do is likely to make ovl match what a non-ovl
-setup would do in the same situation (_either_ of the overlaid
-filesystems - there might be multiple cases).
-
-But I'm missing the original report. It sounds like there was a
-regression and we already have a case of "changing the error number
-broke something". If so, that regression should be fixed.
-
-In general, I'm perfectly happy with people fixing error numbers and
-changing them.
-
-The only thing I require is that if those cleanups and fixes are
-reported to break something, people quickly revert (and preferably add
-a big comment about "Use *this* error number, because while this
-*other* error number would make sense, application XyZ expects AbC"..)
+So no, let's not "protect ourselves from EFI".
 
              Linus

@@ -2,107 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306E65783BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7D35783C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbiGRNd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
+        id S233858AbiGRNdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiGRNdY (ORCPT
+        with ESMTP id S233802AbiGRNds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:33:24 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D29C3A2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:33:24 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id os14so21276497ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:33:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/kXAx7ah4HpRG+01WFj99UWodkpRTD76480uGpstIdo=;
-        b=fN/w6gbahfXVJVzwo0RCILbViBL9L0qywzdz9Ka3x0LdPCHqwgLEOiMnL0jrrW3qiE
-         w134epUUAHiOzvsX6oObhsLZp3UtTn9cJ5tKkWkBpLNHQIyrimcHvTUrsqV4/MbClRgi
-         3dQKWtRqnlL8KqoXPfkjur7Z7riJBc1mWGhlxGz+Vl+sVSh/c/uwolsMqC0hlC4yasbv
-         oVfjLddvR7wO5NSuUoP2XLaBEA5OvwAlmMPcIkaiyAoQCsWkNTZZQvtZ8cOqy2py54OX
-         h6NiAWfqH58kGNxVgiV6mqTaVRXBjYozhPagMuXeWtoNDoydl3MiruRpW7hze2b+df/H
-         5ymA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/kXAx7ah4HpRG+01WFj99UWodkpRTD76480uGpstIdo=;
-        b=INOAEu4x7mo8sfzDBYUMdCg15k+igFRBs1Gebs0oOl/FU800JMXv9zqpFY5QTBF9Mc
-         2JG2JaElHYCmVY6cW07Du4qtm2oKSJPq3Ge3UzzQRytmui2x5Rs7M815CgrrVdYtMjcZ
-         Gcpo1rZVrK3oidwen+zxAYcZN+jRHR6fqScEtk8/P+a4kP4N1EZVuJmrppZQqY6KKxNN
-         +7ppYEh6pBVpQ4228S7lIHKkpnmK8u//T7m4RZrzB3Znp4brlOq6AFZfvJK4dTvAKscn
-         NWZ8bmIjxTrwifgH4etFFowWRT2sXZQYo17kvspQVWte0CuWVh9uV03s1pBuIxqWJ1wg
-         N/Hg==
-X-Gm-Message-State: AJIora8BJ+BG2/dkCnm3u/1LWZnujpGoPtaGa1SuG2ge3ULanIH98iEf
-        4aLHulrlz6Xutbullx6/Ucxs0+ByI04o6uaHM5ghnw==
-X-Google-Smtp-Source: AGRyM1u5fJVQo2Ki3UQ3YTx283cKYLZ8z7I+odIE1wk5V95Cu4ufa/Q/r9xT+1OzNOe956EgZNjg3le4dePsT/lnlqA=
-X-Received: by 2002:a17:907:160c:b0:72f:1031:2184 with SMTP id
- hb12-20020a170907160c00b0072f10312184mr11133344ejc.355.1658151202457; Mon, 18
- Jul 2022 06:33:22 -0700 (PDT)
+        Mon, 18 Jul 2022 09:33:48 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258D515715
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4cA63wMDAV5ZgwXYl8SjRPRo5qL0t+IFn/hc3lDLOz8=; b=fHKLlB4/Sdlv23rU6wJznHJPgR
+        7aFH278XLJe5I8CAJBULOnh+LVIlGnCNj/Rohzq9d4ef27FCGEPFmCvJ/FHu/BfCpCX02KGato0+6
+        x2nPWfjKEl61d7z7PBWAvmg6SrgSpFMZZ+nrgPCNvV/9tPVIBA6JRuSukpswfksY8GRHcigtC2owq
+        OWnpH6aqEwm6mhIZSoE0Rtwu0IrZypOYtblL9cDEA9tNqykx8yBeS+NK5QMo2HX7bmxL0lAyMzNSw
+        KL2qFBViIFsKdLHAYQ5YohNkBMZfpVanU0QYW8J2CSfQpfKYrkDSWtRM2ZSs9jWCkAfnz0lSc5C/M
+        TSi1ky4w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDQsP-004pda-3m; Mon, 18 Jul 2022 13:33:33 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E9176980299; Mon, 18 Jul 2022 15:33:30 +0200 (CEST)
+Date:   Mon, 18 Jul 2022 15:33:30 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Wen Pu <puwen@hygon.cn>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: retbleed on hygon
+Message-ID: <YtVhKtJkb23CcTtb@worktop.programming.kicks-ass.net>
+References: <YtVHr1jDOtUXYF0Z@worktop.programming.kicks-ass.net>
+ <584296cf-80d7-5c78-8bd0-6eb53a5bc914@hygon.cn>
 MIME-Version: 1.0
-References: <20220718050914.2267370-1-tzungbi@kernel.org> <20220718050914.2267370-9-tzungbi@kernel.org>
-In-Reply-To: <20220718050914.2267370-9-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 18 Jul 2022 06:33:11 -0700
-Message-ID: <CABXOdTeNi3k8ieL+A6+A7eZyYAzT6UL_M=2j6c0d5iW2_HuLNg@mail.gmail.com>
-Subject: Re: [PATCH v2 08/10] platform/chrome: cros_ec_proto: return -EAGAIN
- when retries timed out
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <584296cf-80d7-5c78-8bd0-6eb53a5bc914@hygon.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 10:10 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> While EC_COMMS_STATUS_PROCESSING flag is still on after it tries
-> EC_COMMAND_RETRIES times for sending EC_CMD_GET_COMMS_STATUS,
-> cros_ec_wait_until_complete() doesn't return an error code.
->
-> Return -EAGAIN in the case instead.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+On Mon, Jul 18, 2022 at 01:03:41PM +0000, Wen Pu wrote:
+> On 2022/7/18 19:44, Peter Zijlstra wrote:
+> > Hi Pu Wen,
+> > 
+> > Now that retbleed is public could you please review the patches in
+> > question and clarify the situation vs Hygon please? For development I've
+> > assumed Hygon is basically Zen1 wrt this issue.
+> 
+> Hi Peter,
+> 
+> I'm sorry that there is something wrong with my email these days, so I
+> haven't received the patches. Do you mean those with "[peterz: add
+> hygon]" added by you? Thanks a lot for taking Hygon into account. I'll
+> clarify it as soon as possible.
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+It's not your email, it was a hardware embargo issue so these patches
+have never been mailed out before hitting Linus' tree :-/
 
-> ---
-> No changes from v1.
->
->  drivers/platform/chrome/cros_ec_proto.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index a6ad7f7956e6..9dec475edc84 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -167,6 +167,9 @@ static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *
->                         return ret;
->         }
->
-> +       if (i >= EC_COMMAND_RETRIES)
-> +               ret = -EAGAIN;
-> +
->         return ret;
->  }
->
-> --
-> 2.37.0.170.g444d1eabd0-goog
->
+Please double check the entire series, see the merge commit:
+
+  ce114c866860 ("Merge tag 'x86_bugs_retbleed' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip")
+
+But in specific pay attention to commits:
+
+  a149180fbcf336e97ce4eb2cdc13672727feb94d
+  6b80b59b3555706508008f1f127b5412c89c7fd8
+  3ebc170068885b6fc7bedda6c667bb2c4d533159
+  d7caac991feeef1b871ee6988fd2c9725df09039
+  26aae8ccbc1972233afd08fb3f368947c0314265
+
+Basically everything that has HYGON in it. For that first commit, double
+check with your hardware folks the mitigation actually works for Hygon
+too. For the other commits validate it DTRT wrt HYGON. Please also send
+a patch enabling or removing the spectral chicken for hygon.
+

@@ -2,87 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103F7578882
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4558578889
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbiGRRdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 13:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
+        id S234925AbiGRRfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 13:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiGRRdG (ORCPT
+        with ESMTP id S231274AbiGRRfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:33:06 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250962CE0D
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:33:05 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id id17so474311wmb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:33:05 -0700 (PDT)
+        Mon, 18 Jul 2022 13:35:09 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19822C64F;
+        Mon, 18 Jul 2022 10:35:08 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id e15so16325971edj.2;
+        Mon, 18 Jul 2022 10:35:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+GhSiJA8jNsER0UOznMgRktrQLMwzPG3Lkdw+33iL48=;
-        b=DVpMJwQkF5I84C5a0bD/n0SGDKhI8JmAiylD9fmz59B8jFXrW5DzKsxyYiuwdhGLvm
-         K4gULiPfi6uauHtwJd2OIRawraFt+4S6N4KPFQEXI0286+Iz5uri3jFYjtWo7UNzRDbq
-         WO/sHs2EbpJKexJf2/tIF2biRfjE38wrxW6d0gZkNTo64HJbndH7E73QqrQQbQSXP8IW
-         +2es2frz9Bo5NJ4Ed4m92YziZGBbbEVM0o9C24Sru2nHI1xnBwSVrqYMNffmWR61pa9D
-         12jZHHKA2uzOcv8qjjqzDwaga2LDQK5UYlTyUy8DbMjzhxEGoWrK4gduH418liVMZ7We
-         plfA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+eU1cSyQLxmrfn01q1p7MKhYduUyHmgmYolTfJz8lZE=;
+        b=mdfiZmpD7Re99R4yDcPh1sNkfA8y43hAbSf4uix/ViFHNO2f9LqX2bFC6KLD6r64cJ
+         MPN7qPuBhOgfLDJvcW8dShdBRNWLlM4D0VDUGqz7RYa7Nfa5TW1zSuf0EouO+ZFLdZQq
+         6lnu6gr00+G5+kxREfFge1eB0F6znJF8kBc/WJFaExFZO6IVojH70CI64w0qA9kHZb6k
+         1sll1qhUlGI7wUvj0d1TyQwogqr2tepn4Ibwy+I9rHzdtZeZWjXRLuFBjkqBPUNeZN5u
+         umOlhFW0Xg1UVlVTfgyzdpRojYb56OQb9wgEVeUXlm/MUIquM3Z/kx9rDtpcafKX0NQb
+         bR1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+GhSiJA8jNsER0UOznMgRktrQLMwzPG3Lkdw+33iL48=;
-        b=6fEcRtFd25AaCkmEsu1e+cO0IwELKt0SuO4JIE+7aCORrgtoO1axjcoNWZZDqdFKtc
-         ivMUfDpIajWIz2xH95anaAHiUMcDOH8+a5YWqRUxHsNGqJSUqAXto3pkx8pV8dmKtfd4
-         IVnDgknizT3ReZLXLu/x1F9BZ9hgMd9BkJYPmFgvWEB4miVR5ylu6fCRDzAg+hNG4m14
-         P6DUniZoqd0R1s8kB76VF7oBBHltMoID68U61oJGo/pWio3gqWURCtWoK1zwL/UmxrXb
-         qyveA4tE7u6MkWtKomo6SLm7oFLUBTQJnmx+gVxWAPt4gz0PN2nbVhxbn8AIP46nPC7y
-         aTOw==
-X-Gm-Message-State: AJIora9Tb0rCbotJAaVF6lA1IvLck0nVI2RGiRXRyPAgNH9iLe+ql5EN
-        e2q7kp387N/WwHymwUVYSF89SiVOemeizIlqtu1hyA==
-X-Google-Smtp-Source: AGRyM1tdOOSVY9WqE1GNkbUPuJZIHQeZx/yxe+w4lvoTvSD+QSC1W6nuhwTjhl40mPLwy38Rmfsy+mkoP0zaF4gbspQ=
-X-Received: by 2002:a1c:7213:0:b0:3a3:155a:dd5d with SMTP id
- n19-20020a1c7213000000b003a3155add5dmr9625060wmc.178.1658165583538; Mon, 18
- Jul 2022 10:33:03 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+eU1cSyQLxmrfn01q1p7MKhYduUyHmgmYolTfJz8lZE=;
+        b=Gn69v8oRRg5mZrRfFptTiV1ZdtUsXKTXM0KziStdOfHY0WeTaMiVazHhYDLVFkP8lg
+         gfVh8/VB38OIjlIe0gnWzmjqCcNTEhjTijEu2BFbTWArybKubFxD4Cit+kcehUPsIul0
+         elHyd9hchUyhplPVJjNh9+Eu9L7V33K//JSJ8oI+cscPwEeQ96wRxdFr9mwIkaWevrzS
+         bvEjlNIDTLR3utr0zbsXCWrc4FCoclx/R8NCkxQTiZGuAdNllofmeGcxPpQp00lfsRxm
+         i2Qa7v1wcnaKLduVYRDWA+fEXwdvPLQOLbJP4SZgtg+SxRoJeLjX63QCsvHNF/L4Jrpi
+         6faA==
+X-Gm-Message-State: AJIora8AbORYMlAXR0PxHQ3G8GY8zToOj9UIJ2Lp0Zi/XvSm2HMFadwu
+        q9xXO4GV4zytOBEyp7piJZs=
+X-Google-Smtp-Source: AGRyM1un5p89dW4cqDybFAv+d05y+pSl9kUfu2VsS7Rcm3njoTgZDrOaK2gxvL1RoxnBnP9B4fHY4A==
+X-Received: by 2002:a05:6402:23a5:b0:43a:a374:344f with SMTP id j37-20020a05640223a500b0043aa374344fmr37950012eda.403.1658165707402;
+        Mon, 18 Jul 2022 10:35:07 -0700 (PDT)
+Received: from skbuf ([188.25.231.190])
+        by smtp.gmail.com with ESMTPSA id r17-20020a056402035100b0043a6a7048absm8972088edw.95.2022.07.18.10.35.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 10:35:06 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 20:35:04 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/4] net: dsa: qca8k: code split for qca8k
+Message-ID: <20220718173504.jliiboqbw6bjr2l4@skbuf>
+References: <20220716174958.22542-1-ansuelsmth@gmail.com>
+ <62d57362.1c69fb81.33c2d.59a9@mx.google.com>
 MIME-Version: 1.0
-References: <20220715061027.1612149-1-kaleshsingh@google.com>
- <20220715061027.1612149-13-kaleshsingh@google.com> <87tu7ezrso.wl-maz@kernel.org>
-In-Reply-To: <87tu7ezrso.wl-maz@kernel.org>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Mon, 18 Jul 2022 10:32:52 -0700
-Message-ID: <CAC_TJvcc0VZhp+u+2YpXuQ-UcGC+YTKy1PEoPCmbm+_WXo6cVw@mail.gmail.com>
-Subject: Re: [PATCH v4 12/18] KVM: arm64: Save protected-nVHE (pKVM) hyp stacktrace
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Fuad Tabba <tabba@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        andreyknvl@gmail.com, russell.king@oracle.com,
-        vincenzo.frascino@arm.com, Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Oliver Upton <oupton@google.com>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>, android-mm@google.com,
-        "Cc: Android Kernel" <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62d57362.1c69fb81.33c2d.59a9@mx.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,63 +80,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 2:36 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Fri, 15 Jul 2022 07:10:21 +0100,
-> Kalesh Singh <kaleshsingh@google.com> wrote:
+On Mon, Jul 18, 2022 at 04:46:20PM +0200, Christian Marangi wrote:
+> On Sat, Jul 16, 2022 at 07:49:54PM +0200, Christian Marangi wrote:
+> > This is posted as an RFC as it does contain changes that depends on a
+> > regmap patch. The patch is here [1] hoping it will get approved.
+> > 
+> > If it will be NACKed, I will have to rework this and revert one of the
+> > patch that makes use of the new regmap bulk implementation.
 > >
-> > In protected nVHE mode, the host cannot access private owned hypervisor
-> > memory. Also the hypervisor aims to remains simple to reduce the attack
-> > surface and does not provide any printk support.
-> >
-> > For the above reasons, the approach taken to provide hypervisor stacktraces
-> > in protected mode is:
-> >    1) Unwind and save the hyp stack addresses in EL2 to a shared buffer
-> >       with the host (done in this patch).
-> >    2) Delegate the dumping and symbolization of the addresses to the
-> >       host in EL1 (later patch in the series).
-> >
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > ---
-> >  arch/arm64/include/asm/stacktrace/nvhe.h | 18 ++++++
-> >  arch/arm64/kvm/hyp/nvhe/stacktrace.c     | 70 ++++++++++++++++++++++++
-> >  2 files changed, 88 insertions(+)
-> >
-> > diff --git a/arch/arm64/include/asm/stacktrace/nvhe.h b/arch/arm64/include/asm/stacktrace/nvhe.h
-> > index 36cf7858ddd8..456a6ae08433 100644
-> > --- a/arch/arm64/include/asm/stacktrace/nvhe.h
-> > +++ b/arch/arm64/include/asm/stacktrace/nvhe.h
-> > @@ -21,6 +21,22 @@
-> >
-> >  #include <asm/stacktrace/common.h>
-> >
-> > +/**
-> > + * kvm_nvhe_unwind_init - Start an unwind from the given nVHE HYP fp and pc
-> > + *
-> > + * @fp : frame pointer at which to start the unwinding.
-> > + * @pc : program counter at which to start the unwinding.
-> > + */
-> > +static __always_inline void kvm_nvhe_unwind_init(struct unwind_state *state,
-> > +                                              unsigned long fp,
-> > +                                              unsigned long pc)
-> > +{
-> > +     unwind_init_common(state, NULL);
->
-> Huh. Be careful here. This function is only 'inline', which means it
-> may not be really inlined. We've had tons of similar issues like this
-> in the past, and although this will not break at runtime anymore, it
-> will definitely stop the kernel from linking.
+> 
+> The regmap patch that this series depends on has been accepted but needs
+> some time to be put in linux-next. Considering the comments from the
+> code move, is it urgent to have the changes done or we can wait for the
+> regmap patch to get applied?
+> 
+> (this was asked from the regmap maintainer so here is the question)
 
-Ahh, there are a few other always inline *unwind_init* functions that
-use this. I'll update in the next version.
+If I understand correctly, what you're saying is that the regmap_bulk_read()
+change from patch 2/4 (net: dsa: qca8k: convert to regmap read/write API)
+won't work correctly without the regmap dependency, and would introduce
+a regression in the driver, right?
 
-Thanks,
-Kalesh
+If so, I would prefer getting the patches merged linearly and not in
+parallel, in other words either Mark provides a branch to pull into
+net-next or you wait until the merge window opens and then closes, which
+means a couple of weeks.
 
->
-> Thanks,
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+The fact that in linux-next things would work isn't enough, since on
+net-next they would still be broken.
+
+> > Anyway, this is needed ad ipq4019 SoC have an internal switch that is
+> > based on qca8k with very minor changes. The general function is equal.
+> > 
+> > Because of this we split the driver to common and specific code.
+> > 
+> > As the common function needs to be moved to a different file to be
+> > reused, we had to convert every remaining user of qca8k_read/write/rmw
+> > to regmap variant.
+> > We had also to generilized the special handling for the ethtool_stats
+> > function that makes use of the autocast mib. (ipq4019 will have a
+> > different tagger and use mmio so it could be quicker to use mmio instead
+> > of automib feature)
+> > And we had to convert the regmap read/write to bulk implementation to
+> > drop the special function that makes use of it. This will be compatible
+> > with ipq4019 and at the same time permits normal switch to use the eth
+> > mgmt way to send the entire ATU table read/write in one go.
+> > 
+> > (the bulk implementation could not be done when it was introduced as
+> > regmap didn't support at times bulk read/write without a bus)
+> > 
+> > [1] https://lore.kernel.org/lkml/20220715201032.19507-1-ansuelsmth@gmail.com/

@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684EC57801E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76A657801A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234407AbiGRKsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S234306AbiGRKsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234240AbiGRKsd (ORCPT
+        with ESMTP id S234270AbiGRKsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:48:33 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D869B1F2E2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:48:24 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id b11so20405675eju.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4oRak+C2KluI48BtBgPjPXk/AjJSdRg3YOHC7j1IJKc=;
-        b=xCzpO+0vKd22GOhNS1gpEGBGfBEZxh6GUzkKqmPMQhJ67hvOqoR2/zJc88DP/6ChMG
-         h2DJL9SJMDPhUNWDfpFIl9pl3RvditxQW06A8rSrycYLo0YuvzMnR9xSh0xrG7vjfuun
-         3rZXgUni7hrSCJe8aTi2GnHOO6XrnwL4UGzXL53yMXrP+dEXJJlQyjnnvJ5D9tK6pwll
-         9dPJJyMUPEFGC8rkIp6SYXmpqnaop/gDPaMNgf9I5prw1zQwY1JgKviM1xC5SkAx/gU3
-         qzWgQ8fDM6CqpJopBJsI/g6wlk21hyiELyGfp79nJGDq8h5NxRsfZA24wEY7LZ74PYtO
-         l3fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4oRak+C2KluI48BtBgPjPXk/AjJSdRg3YOHC7j1IJKc=;
-        b=loTHy01S+XtOX9xENq+aROpxsGiq0AHsrmXiR0tJlCbth3YpHstCOlkm7O/F1SsY8E
-         aaS963K6qu6dAJsqKT8usQAWzCpiavjrt1UZ4h1q69FwKrubMFolPHt8JYGyy7MSy1R8
-         NNZDVBTAEQSGnOdAvE4R+zc0sMCraRDuzbv0r+MtfEQTl33Icf5omgGwLw1Ew1aQSk1S
-         umsJgCVekiH5mLgaiMJgbn3npk0m2kUYLNjUIY7OlGOOYpG4HLLXn5Sk7fvwM8wI3+B3
-         JQqkfN7tkTvOfdj5X7Ju+LK/69O7/0B8nXNRtQu1ej0S7B0ytnIfqyNXChmQMFkCILVR
-         u/xw==
-X-Gm-Message-State: AJIora/Plag9r/30I6vvd29qIPP7fqn/mMZrCGheX1XeF/DVTgJEI7U4
-        ay6L4i29M25SBA+UAZm7UvSIf7GZVnQOc90TA1gb5w==
-X-Google-Smtp-Source: AGRyM1v58741g9YF1j3O3YhZhbaaALkEvMwjbuiSWX6eGAUC4RwB+foXNRxi9DundUhsUPDjhOqkyanAVMGdqiE8fM4=
-X-Received: by 2002:a17:907:a053:b0:72b:3051:b79b with SMTP id
- gz19-20020a170907a05300b0072b3051b79bmr23902331ejc.690.1658141303429; Mon, 18
- Jul 2022 03:48:23 -0700 (PDT)
+        Mon, 18 Jul 2022 06:48:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B40A1CB24
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:48:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26D3FB8107E
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:48:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD243C341C0;
+        Mon, 18 Jul 2022 10:48:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658141294;
+        bh=JAyGeINuZXCg47n62w2E/ixYwa1Du2XE/Y1lWIoSMdE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rW0/T4C6bZMKvYq43tVe+QU8x4NRLisHaxlfXXShlGDeEIGVVBk2C9gkENolyJE3x
+         ny1EttvNgNb4PgvIymkjkAWl6IcIgndnfFLJnaX9eJFNI5zl47QBo2c7ByJPoobTiX
+         lhA61sVJBVTaxHMuT11ZJCdCwr91ysfSQzJU7wQ40SrZaWPtKCU5l6GznQnZ0s8VJd
+         JWhHLqq5XslVJd6Yww7/lrBF+Actmd3Rf5QuLjT0RuNbWHbdYFF9GWpRysSXqNyGEQ
+         T+ZjULCo7+XoWM3ze1rElnBtDFWrVRRmxakjthoT/8q7oSDY1OoY3s8GjVUKVAv8tP
+         /7e1Ahui+YoFA==
+Date:   Mon, 18 Jul 2022 10:48:11 +0000
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Guenter Roeck <groeck@google.com>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
+        <chrome-platform@lists.linux.dev>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] platform/chrome: cros_kbd_led_backlight: fix build
+ warning
+Message-ID: <YtU6a+bIpgpyScsL@google.com>
+References: <20220718061608.2303425-1-tzungbi@kernel.org>
+ <CABXOdTeH-q=17QBnCn5NGT5V0QA5SOaTnrWaK+g5F3j4mVp8cA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220713175950.964-1-mario.limonciello@amd.com>
-In-Reply-To: <20220713175950.964-1-mario.limonciello@amd.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 18 Jul 2022 12:48:11 +0200
-Message-ID: <CACRpkdbcP32Bi51pHOJQM6d-0NgaHxSmxwvEsxmk4PoO1R0Fqg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: Don't allow PINCTRL_AMD to be a module
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Basavaraj.Natikar@amd.com, madcatx@atlas.cz,
-        jwrdegoede@fedoraproject.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABXOdTeH-q=17QBnCn5NGT5V0QA5SOaTnrWaK+g5F3j4mVp8cA@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 8:00 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Sun, Jul 17, 2022 at 11:54:31PM -0700, Guenter Roeck wrote:
+> On Sun, Jul 17, 2022 at 11:16 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+> >
+> > drivers/platform/chrome/cros_kbd_led_backlight.c got a new build warning
+> > when using the randconfig in [1]:
+> > >>> warning: unused variable 'keyboard_led_drvdata_ec_pwm'
+> >
+> > The warning happens when CONFIG_CROS_EC is set but CONFIG_OF is not set.
+> > Reproduce:
+> > - mkdir build_dir
+> > - wget [1] -O build_dir/.config
+> > - COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 \
+> >   O=build_dir ARCH=s390 SHELL=/bin/bash drivers/platform/chrome/
+> >
+> 
+> Have you tried the following ?
+>     CONFIG_ACPI=y
+>     CONFIG_CROS_EC=n
+>     CONFIG_OF=y
+> 
+> That should be possible, but with your patch it should now result in a
+> build error because keyboard_led_drvdata_ec_pwm is no longer defined.
 
-> It was observed that by allowing pinctrl_amd to be loaded
-> later in the boot process that interrupts sent to the GPIO
-> controller early in the boot are not serviced.  The kernel treats
-> these as a spurious IRQ and disables the IRQ.
->
-> This problem was exacerbated because it happened on a system with
-> an encrypted partition so the kernel object was not accesssible for
-> an extended period of time while waiting for a passphrase.
->
-> To avoid this situation from occurring, stop allowing pinctrl-amd
-> from being built as a module and instead require it to be built-in
-> or disabled.
->
-> Reported-by: madcatx@atlas.cz
-> Suggested-by: jwrdegoede@fedoraproject.org
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216230
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Hmm, just got another lkp robot's warning about the undeclared symbol.  Will
+fix it by using __maybe_unused in next version.
 
-Patch applied for fixes!
-Excellent root causing.
+> Also, with your patch, CONFIG_CROS_EC=y, CONFIG_ACPI=y, and
+> CONFIG_OF=n (ie Intel/AMD systems) would result in the code not being
+> compiled, which would be wrong.
 
-Yours,
-Linus Walleij
+Intel and AMD systems rely on `keyboard_led_drvdata_acpi` but not
+`keyboard_led_drvdata_ec_pwm` for now.  They shouldn't be affected by the
+patch.
+
+In any cases, let's use __maybe_unused in next version.

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58E0577945
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F38577946
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiGRB2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 21:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
+        id S231547AbiGRB2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 21:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiGRB2i (ORCPT
+        with ESMTP id S229680AbiGRB2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 21:28:38 -0400
+        Sun, 17 Jul 2022 21:28:43 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ADA13F18
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:28:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA96D13EB0
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658107717; x=1689643717;
+  t=1658107721; x=1689643721;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=k3ePWk+fUoLUpq8oyDvlEOoSVKymvsGYV9Svvo+EtbE=;
-  b=SwLReOzkAVbd9bB+79+oDK0uMAE9xnqwWx5jCoEHSEyiJEhytQC13Xyh
-   TD/yyjU5ELaEAiW6E7zzXqX1R1/vEDOKEpOyHLCnqHrMFb6azg7ePmMh+
-   EvoOmj5Miv7Lztpiz3i/7VfR55f6Zaz2uiENIel2evSwWjw8PCD0agSX9
-   TtvEymPHS9XIgeQJudgBEmKWdHsHiWp7Hf5xxql5kjI09gauqlH+n5U33
-   2zQTRppJVBbjbdzWJomiNiELkpUCREXFIYxkMTwpJORrAUuTHn2qiyExW
-   iIZwAIbqBaieeChikodEvsXINzvMUfBtJ2rzq/CwVkLIVYpnGsX6Otwy5
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="283673951"
+  bh=6UdrsFkMglmSseu9pu04NsQfmdO+tQ2peISIQFw0LIM=;
+  b=CU7On30BnTmZyJx8XIOCwlNd+ZrcN+Krvt1cC7g7WgO/hgi9jzbQITOV
+   zXN61Tc/8kPs165y7C0n9nvTD+PRb55onqM2kMjczuwwP8MMVjTSXDer9
+   ibmSPERvDKqtIP4cAD+vcxTQfYG3ZMbtNxeedIqNp3N6kkSDzwWEvwaCi
+   dbiSagrrA1eoEySJaT6QKrswxu4VkLHY+Staoz/ieVnwgc7XoAgKhLhX/
+   CZICtRpHe+CChc4unyP8e0diEqWy4/TpJNqjSS8LBCvhISa2rUK7buRTK
+   8NyESm2BabQVG8ZjVvmXU9gciq4dLHGVEgnJuBcIqdLeG/iOIH84M4dv3
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="283673959"
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="283673951"
+   d="scan'208";a="283673959"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:28:37 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:28:41 -0700
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="547294028"
+   d="scan'208";a="547294038"
 Received: from spr.sh.intel.com ([10.239.53.122])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:28:33 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:28:37 -0700
 From:   Chao Gao <chao.gao@intel.com>
 To:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
 Cc:     dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
@@ -45,9 +45,9 @@ Cc:     dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
         sathyanarayanan.kuppuswamy@linux.intel.com,
         ilpo.jarvinen@linux.intel.com, ak@linux.intel.com,
         alexander.shishkin@linux.intel.com, Chao Gao <chao.gao@intel.com>
-Subject: [RFC v2 1/2] swiotlb: use bitmap to track free slots
-Date:   Mon, 18 Jul 2022 09:28:17 +0800
-Message-Id: <20220718012818.107051-2-chao.gao@intel.com>
+Subject: [RFC v2 2/2] swiotlb: Allocate memory in a cache-friendly way
+Date:   Mon, 18 Jul 2022 09:28:18 +0800
+Message-Id: <20220718012818.107051-3-chao.gao@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220718012818.107051-1-chao.gao@intel.com>
 References: <20220718012818.107051-1-chao.gao@intel.com>
@@ -62,211 +62,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, each slot tracks the number of contiguous free slots starting
-from itself. It helps to quickly check if there are enough contiguous
-entries when dealing with an allocation request. But maintaining this
-information can leads to some overhead. Specifically, if a slot is
-allocated/freed, preceding slots may need to be updated as the number
-of contiguous free slots can change. This process may access memory
-scattering over multiple cachelines.
+Currently, swiotlb uses an index to indicate the starting point of next
+search. The index increases from 0 to the number of slots - 1 and then
+wraps around. It is straightforward but not cache-friendly because the
+"oldest" slot in a swiotlb area is used first.
 
-To reduce the overhead of maintaining the number of contiguous free
-entries, use a global bitmap to track free slots; each bit represents
-if a slot is available. The number of contiguous free slots can be
-calculated by counting the number of consecutive 1s in the bitmap.
+Freed slots are probably accessed right before being freed, especially
+in VM's case (device backends access them in DMA_TO_DEVICE mode; guest
+accesses them in other DMA modes). Thus those just freed slots may
+reside in cache. Then reusing those just freed slots can reduce cache
+misses.
 
-Tests show that the average cost of freeing slots drops by 120 cycles
-while the average cost of allocation increases by 20 cycles. Overall,
-100 cycles are saved from a pair of allocation and freeing.
+To that end, maintain a free list for free slots and insert freed slots
+from the head and searching for free slots always starts from the head.
 
+With this optimization, network throughput of sending data from host to
+guest, measured by iperf3, increases by 7%.
+
+A bad side effect of this patch is we cannot use a large stride to skip
+unaligned slots when there is an alignment requirement. Currently, a
+large stride is used when a) device has an alignment requirement, stride
+is calculated according to the requirement; b) the requested size is
+larger than PAGE_SIZE. For x86 with 4KB page size, stride is set to 2.
+
+For case a), few devices have an alignment requirement; the impact is
+limited. For case b) this patch probably leads to one (or more if page size
+is larger than 4K) additional lookup; but as the "io_tlb_slot" struct of
+free slots are also accessed when freeing slots, they probably resides in
+CPU cache as well and then the overhead is almost negligible.
+
+Suggested-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Chao Gao <chao.gao@intel.com>
 ---
-Ilpo, I didn't add your Reviewed-by as many changes were made due to
-conflicts during rebasing.
----
- include/linux/swiotlb.h |  6 ++---
- kernel/dma/swiotlb.c    | 60 +++++++++++++++++++----------------------
- 2 files changed, 30 insertions(+), 36 deletions(-)
+ include/linux/swiotlb.h |  2 ++
+ kernel/dma/swiotlb.c    | 71 +++++++++++++++++------------------------
+ 2 files changed, 32 insertions(+), 41 deletions(-)
 
 diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
-index d3ae03edbbd2..2c8e6f5df610 100644
+index 2c8e6f5df610..335a550aeda5 100644
 --- a/include/linux/swiotlb.h
 +++ b/include/linux/swiotlb.h
-@@ -77,8 +77,6 @@ dma_addr_t swiotlb_map(struct device *dev, phys_addr_t phys,
-  *		@end. For default swiotlb, this is command line adjustable via
-  *		setup_io_tlb_npages.
+@@ -79,6 +79,7 @@ dma_addr_t swiotlb_map(struct device *dev, phys_addr_t phys,
   * @used:	The number of used IO TLB block.
-- * @list:	The free list describing the number of free entries available
-- *		from each index.
   * @orig_addr:	The original address corresponding to a mapped entry.
   * @alloc_size:	Size of the allocated buffer.
++ * @node:	Representation of an io_tlb_slot in the per-area free list.
   * @debugfs:	The dentry to debugfs.
-@@ -87,6 +85,8 @@ dma_addr_t swiotlb_map(struct device *dev, phys_addr_t phys,
-  * @for_alloc:  %true if the pool is used for memory allocation
-  * @nareas:  The area number in the pool.
-  * @area_nslabs: The slot number in the area.
-+ * @bitmap:	The bitmap used to track free entries. 1 in bit X means the slot
-+ *		indexed by X is free.
-  */
- struct io_tlb_mem {
- 	phys_addr_t start;
-@@ -104,8 +104,8 @@ struct io_tlb_mem {
+  * @late_alloc:	%true if allocated using the page allocator
+  * @force_bounce: %true if swiotlb bouncing is forced
+@@ -104,6 +105,7 @@ struct io_tlb_mem {
  	struct io_tlb_slot {
  		phys_addr_t orig_addr;
  		size_t alloc_size;
--		unsigned int list;
++		struct list_head node;
  	} *slots;
-+	unsigned long *bitmap;
+ 	unsigned long *bitmap;
  };
- extern struct io_tlb_mem io_tlb_default_mem;
- 
 diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index 70fd73fc357a..e9803a04459e 100644
+index e9803a04459e..cb04a5c06552 100644
 --- a/kernel/dma/swiotlb.c
 +++ b/kernel/dma/swiotlb.c
-@@ -276,7 +276,7 @@ static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, phys_addr_t start,
+@@ -78,13 +78,13 @@ static unsigned long default_nareas;
+  * This is a single area with a single lock.
+  *
+  * @used:	The number of used IO TLB block.
+- * @index:	The slot index to start searching in this area for next round.
++ * @free_slots: List of free slots.
+  * @lock:	The lock to protect the above data structures in the map and
+  *		unmap calls.
+  */
+ struct io_tlb_area {
+ 	unsigned long used;
+-	unsigned int index;
++	struct list_head free_slots;
+ 	spinlock_t lock;
+ };
+ 
+@@ -258,6 +258,7 @@ static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, phys_addr_t start,
+ 		unsigned long nslabs, unsigned int flags,
+ 		bool late_alloc, unsigned int nareas)
+ {
++	int aindex;
+ 	void *vaddr = phys_to_virt(start);
+ 	unsigned long bytes = nslabs << IO_TLB_SHIFT, i;
+ 
+@@ -272,13 +273,16 @@ static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, phys_addr_t start,
+ 
+ 	for (i = 0; i < mem->nareas; i++) {
+ 		spin_lock_init(&mem->areas[i].lock);
+-		mem->areas[i].index = 0;
++		INIT_LIST_HEAD(&mem->areas[i].free_slots);
  	}
  
  	for (i = 0; i < mem->nslabs; i++) {
--		mem->slots[i].list = IO_TLB_SEGSIZE - io_tlb_offset(i);
-+		__set_bit(i, mem->bitmap);
+ 		__set_bit(i, mem->bitmap);
  		mem->slots[i].orig_addr = INVALID_PHYS_ADDR;
  		mem->slots[i].alloc_size = 0;
++		aindex = i / mem->area_nslabs;
++		list_add_tail(&mem->slots[i].node,
++			      &mem->areas[aindex].free_slots);
  	}
-@@ -360,6 +360,11 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
- 	if (!mem->areas)
- 		panic("%s: Failed to allocate mem->areas.\n", __func__);
  
-+	mem->bitmap = memblock_alloc(BITS_TO_BYTES(nslabs), SMP_CACHE_BYTES);
-+	if (!mem->bitmap)
-+		panic("%s: Failed to allocate %lu bytes align=0x%x\n",
-+		      __func__, BITS_TO_BYTES(nslabs), SMP_CACHE_BYTES);
-+
- 	swiotlb_init_io_tlb_mem(mem, __pa(tlb), nslabs, flags, false,
- 				default_nareas);
+ 	/*
+@@ -595,13 +599,6 @@ static inline unsigned long get_max_slots(unsigned long boundary_mask)
+ 	return nr_slots(boundary_mask + 1);
+ }
  
-@@ -434,6 +439,10 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask,
- 	if (!mem->areas)
- 		goto error_area;
- 
-+	mem->bitmap = bitmap_zalloc(nslabs, GFP_KERNEL);
-+	if (!mem->bitmap)
-+		goto error_bitmap;
-+
- 	mem->slots = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO,
- 		get_order(array_size(sizeof(*mem->slots), nslabs)));
- 	if (!mem->slots)
-@@ -448,6 +457,8 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask,
- 	return 0;
- 
- error_slots:
-+	bitmap_free(mem->bitmap);
-+error_bitmap:
- 	free_pages((unsigned long)mem->areas, area_order);
- error_area:
- 	free_pages((unsigned long)vstart, order);
-@@ -607,7 +618,7 @@ static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
+-static unsigned int wrap_area_index(struct io_tlb_mem *mem, unsigned int index)
+-{
+-	if (index >= mem->area_nslabs)
+-		return 0;
+-	return index;
+-}
+-
+ /*
+  * Find a suitable number of IO TLB entries size that will fit this request and
+  * allocate a buffer from that IO TLB pool.
+@@ -614,29 +611,19 @@ static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
+ 	unsigned long boundary_mask = dma_get_seg_boundary(dev);
+ 	dma_addr_t tbl_dma_addr =
+ 		phys_to_dma_unencrypted(dev, mem->start) & boundary_mask;
++	dma_addr_t slot_dma_addr;
+ 	unsigned long max_slots = get_max_slots(boundary_mask);
  	unsigned int iotlb_align_mask =
  		dma_get_min_align_mask(dev) & ~(IO_TLB_SIZE - 1);
- 	unsigned int nslots = nr_slots(alloc_size), stride;
--	unsigned int index, wrap, count = 0, i;
-+	unsigned int index, wrap, i;
+-	unsigned int nslots = nr_slots(alloc_size), stride;
+-	unsigned int index, wrap, i;
++	unsigned int nslots = nr_slots(alloc_size);
++	unsigned int slot_index, i;
  	unsigned int offset = swiotlb_align_offset(dev, orig_addr);
  	unsigned long flags;
- 	unsigned int slot_base;
-@@ -626,6 +637,9 @@ static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
- 		stride = max(stride, stride << (PAGE_SHIFT - IO_TLB_SHIFT));
- 	stride = max(stride, (alloc_align_mask >> IO_TLB_SHIFT) + 1);
+-	unsigned int slot_base;
+-	unsigned int slot_index;
++	struct io_tlb_slot *slot, *tmp;
  
-+	/* slots shouldn't cross one segment */
-+	max_slots = min_t(unsigned long, max_slots, IO_TLB_SEGSIZE);
-+
- 	spin_lock_irqsave(&area->lock, flags);
+ 	BUG_ON(!nslots);
+ 	BUG_ON(area_index >= mem->nareas);
+ 
+-	/*
+-	 * For mappings with an alignment requirement don't bother looping to
+-	 * unaligned slots once we found an aligned one.  For allocations of
+-	 * PAGE_SIZE or larger only look for page aligned allocations.
+-	 */
+-	stride = (iotlb_align_mask >> IO_TLB_SHIFT) + 1;
+-	if (alloc_size >= PAGE_SIZE)
+-		stride = max(stride, stride << (PAGE_SHIFT - IO_TLB_SHIFT));
+-	stride = max(stride, (alloc_align_mask >> IO_TLB_SHIFT) + 1);
+-
+ 	/* slots shouldn't cross one segment */
+ 	max_slots = min_t(unsigned long, max_slots, IO_TLB_SEGSIZE);
+ 
+@@ -644,19 +631,27 @@ static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
  	if (unlikely(nslots > mem->area_nslabs - area->used))
  		goto not_found;
-@@ -651,7 +665,8 @@ static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
- 		if (!iommu_is_span_boundary(slot_index, nslots,
- 					    nr_slots(tbl_dma_addr),
- 					    max_slots)) {
--			if (mem->slots[slot_index].list >= nslots)
-+			if (find_next_zero_bit(mem->bitmap, slot_index + nslots,
-+					       slot_index) == slot_index + nslots)
+ 
+-	slot_base = area_index * mem->area_nslabs;
+-	index = wrap = wrap_area_index(mem, ALIGN(area->index, stride));
+-
+-	do {
+-		slot_index = slot_base + index;
++	list_for_each_entry_safe(slot, tmp, &area->free_slots, node) {
++		slot_index = slot - mem->slots;
++		slot_dma_addr = slot_addr(tbl_dma_addr, slot_index);
+ 
+ 		if (orig_addr &&
+-		    (slot_addr(tbl_dma_addr, slot_index) &
+-		     iotlb_align_mask) != (orig_addr & iotlb_align_mask)) {
+-			index = wrap_area_index(mem, index + 1);
++		    (slot_dma_addr & iotlb_align_mask) !=
++			    (orig_addr & iotlb_align_mask)) {
+ 			continue;
+ 		}
+ 
++		/* Ensure requested alignment is met */
++		if (alloc_align_mask && (slot_dma_addr & (alloc_align_mask - 1)))
++			continue;
++
++		/*
++		 * If requested size is larger than a page, ensure allocated
++		 * memory to be page aligned.
++		 */
++		if (alloc_size >= PAGE_SIZE && (slot_dma_addr & ~PAGE_MASK))
++			continue;
++
+ 		/*
+ 		 * If we find a slot that indicates we have 'nslots' number of
+ 		 * contiguous buffers, we allocate the buffers from that slot
+@@ -669,8 +664,7 @@ static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
+ 					       slot_index) == slot_index + nslots)
  				goto found;
  		}
- 		index = wrap_area_index(mem, index + stride);
-@@ -663,14 +678,10 @@ static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
+-		index = wrap_area_index(mem, index + stride);
+-	} while (index != wrap);
++	}
  
- found:
- 	for (i = slot_index; i < slot_index + nslots; i++) {
--		mem->slots[i].list = 0;
-+		__clear_bit(i, mem->bitmap);
+ not_found:
+ 	spin_unlock_irqrestore(&area->lock, flags);
+@@ -681,15 +675,9 @@ static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
+ 		__clear_bit(i, mem->bitmap);
  		mem->slots[i].alloc_size = alloc_size - (offset +
  				((i - slot_index) << IO_TLB_SHIFT));
++		list_del(&mem->slots[i].node);
  	}
--	for (i = slot_index - 1;
--	     io_tlb_offset(i) != IO_TLB_SEGSIZE - 1 &&
--	     mem->slots[i].list; i--)
--		mem->slots[i].list = ++count;
  
- 	/*
- 	 * Update the indices to avoid searching in the next round.
-@@ -775,40 +786,20 @@ static void swiotlb_release_slots(struct device *dev, phys_addr_t tlb_addr)
- 	int nslots = nr_slots(mem->slots[index].alloc_size + offset);
- 	int aindex = index / mem->area_nslabs;
- 	struct io_tlb_area *area = &mem->areas[aindex];
--	int count, i;
-+	int i;
- 
- 	/*
--	 * Return the buffer to the free list by setting the corresponding
--	 * entries to indicate the number of contiguous entries available.
--	 * While returning the entries to the free list, we merge the entries
--	 * with slots below and above the pool being returned.
-+	 * Return the slots to swiotlb, updating bitmap to indicate
-+	 * corresponding entries are free.
- 	 */
- 	BUG_ON(aindex >= mem->nareas);
--
- 	spin_lock_irqsave(&area->lock, flags);
--	if (index + nslots < ALIGN(index + 1, IO_TLB_SEGSIZE))
--		count = mem->slots[index + nslots].list;
--	else
--		count = 0;
--
 -	/*
--	 * Step 1: return the slots to the free list, merging the slots with
--	 * superceeding slots
+-	 * Update the indices to avoid searching in the next round.
 -	 */
- 	for (i = index + nslots - 1; i >= index; i--) {
--		mem->slots[i].list = ++count;
-+		__set_bit(i, mem->bitmap);
+-	if (index + nslots < mem->area_nslabs)
+-		area->index = index + nslots;
+-	else
+-		area->index = 0;
+ 	area->used += nslots;
+ 	spin_unlock_irqrestore(&area->lock, flags);
+ 	return slot_index;
+@@ -798,6 +786,7 @@ static void swiotlb_release_slots(struct device *dev, phys_addr_t tlb_addr)
+ 		__set_bit(i, mem->bitmap);
  		mem->slots[i].orig_addr = INVALID_PHYS_ADDR;
  		mem->slots[i].alloc_size = 0;
++		list_add(&mem->slots[i].node, &mem->areas[aindex].free_slots);
  	}
  
--	/*
--	 * Step 2: merge the returned slots with the preceding slots, if
--	 * available (non zero)
--	 */
--	for (i = index - 1;
--	     io_tlb_offset(i) != IO_TLB_SEGSIZE - 1 && mem->slots[i].list;
--	     i--)
--		mem->slots[i].list = ++count;
  	area->used -= nslots;
- 	spin_unlock_irqrestore(&area->lock, flags);
- }
-@@ -980,7 +971,10 @@ static int rmem_swiotlb_device_init(struct reserved_mem *rmem,
- 			return -ENOMEM;
- 
- 		mem->slots = kcalloc(nslabs, sizeof(*mem->slots), GFP_KERNEL);
--		if (!mem->slots) {
-+		mem->bitmap = bitmap_zalloc(nslabs, GFP_KERNEL);
-+		if (!mem->slots || !mem->bitmap) {
-+			kfree(mem->slots);
-+			bitmap_free(mem->bitmap);
- 			kfree(mem);
- 			return -ENOMEM;
- 		}
 -- 
 2.25.1
 

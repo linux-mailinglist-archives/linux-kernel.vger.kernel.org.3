@@ -2,322 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F9D5781F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8145781FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235083AbiGRMP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
+        id S234718AbiGRMQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235080AbiGRMPj (ORCPT
+        with ESMTP id S234697AbiGRMQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:15:39 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B4726114
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:15:30 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id ay11-20020a05600c1e0b00b003a3013da120so7691796wmb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bh9NZr4gq3p7XYiwnsBZLhMSoV7xIvFjFW59LLlWpBM=;
-        b=xiuse1IKKx0XozsiaQHJ4SQtwAU2L7g25uNWBVbiSRGNk/7RNobYrCgwgYtzyyTML7
-         GDGCMfE82etDe6Qfd6fw2RqkO519c/uDDwCCR0Iqnh8P1ILw78wknKSnzVJxSojItxPX
-         AoFVy3NKFkuJsx6RUpsfgtC7OOg83pHEiF7FdWyeBIqOtE5bxZ6el2TMP/LdTSnkOdCk
-         AUNRxkNerbaoSywKcwjpLt1/edruIpyuwTi0xVo0Kdf5A785P0fcXqmQKrOmTGtF3q2R
-         Yr1r22iFSdBhXvjuGpvv4iDe5Y7I3DE32EvfqeiouOimN5JWlRC5+Kre4hTKc9iOlp34
-         id7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bh9NZr4gq3p7XYiwnsBZLhMSoV7xIvFjFW59LLlWpBM=;
-        b=r2NvSdo4jDEATqqRvAqFt0tfqIIOeWJwY57U6hQLaBQsGY22ED8to2BPjXNXkg0hV+
-         5hD5Ncz6g1Tw3U/2ro0nkWJjXcgyjDoekny2d7mYQkAEIRUKu5E0jWyW4U5IfIo98Soa
-         W6lCBN5eaO6hme3gy/mNp8RDSbghvkeXLKipkGsSbK71SwS6wzQDXOazBqgVKsFN0wUZ
-         ucdCCK33Gy8uxPFt40gAnBlubdGrGIFTDCHSH9lmTqSitTFfFzRfq97GmYc0SS5gRJZZ
-         cIX/TKK4nUwitXv0fxIPdCuMbO4lYTyDw5nUc3nfmkgY1b/+txTY2A1aSh4aWDK4HR4y
-         J7Ig==
-X-Gm-Message-State: AJIora8iyX3PhNcpXceRre4Xm5/tK0EjrbEaklxNiisbeeXoACoIU6a/
-        7z+3NRdBbDLnrMj3Fc3gDIENTg==
-X-Google-Smtp-Source: AGRyM1t73eqThp+YiwuMVeGp3LQdvy3Tti0MdP9P6YfwveVXZEm/D8ATXffrujB0f1dgfh974v8QJg==
-X-Received: by 2002:a05:600c:3844:b0:3a3:d71:c4ce with SMTP id s4-20020a05600c384400b003a30d71c4cemr14645076wmr.23.1658146528206;
-        Mon, 18 Jul 2022 05:15:28 -0700 (PDT)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id r6-20020a5d6946000000b0021b91d1ddbfsm10795784wrw.21.2022.07.18.05.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 05:15:27 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-Subject: [PATCH v2] remoteproc: qcom: q6v5: Use _clk_get_optional for aggre2_clk
-Date:   Mon, 18 Jul 2022 15:15:14 +0300
-Message-Id: <20220718121514.2451590-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.3
+        Mon, 18 Jul 2022 08:16:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47B219C2C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:16:24 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oDPfj-0006Vm-1w; Mon, 18 Jul 2022 14:16:23 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oDPfi-001i4a-BF; Mon, 18 Jul 2022 14:16:22 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oDPfh-005xWL-MB; Mon, 18 Jul 2022 14:16:21 +0200
+Date:   Mon, 18 Jul 2022 14:16:18 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 7/8] interconnect: Make icc_provider_del() return void
+Message-ID: <20220718121618.rpagy3vinzgdokxa@pengutronix.de>
+References: <20220715203652.89912-1-u.kleine-koenig@pengutronix.de>
+ <20220715203652.89912-8-u.kleine-koenig@pengutronix.de>
+ <7bd4f2fb-70ce-3724-130f-f5c75ee7bde2@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qrigaio6mwohcagq"
+Content-Disposition: inline
+In-Reply-To: <7bd4f2fb-70ce-3724-130f-f5c75ee7bde2@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only msm8996 and msm8998 SLPIs need the RPM_SMD_AGGR2_NOC_CLK
-(as aggre2 clock). None of the other platforms do. Back when the support
-for the mentioned platforms was added to the q6v5 pass driver, the
-devm_clk_get_optional was not available, so the has_aggre2_clk was
-necessary in order to differentiate between plaforms that need this
-clock and those which do not. Now that devm_clk_get_optional is available,
-we can drop the has_aggre2_clk. This makes the adsp_data more cleaner
-and removes the check within adsp_init_clocks.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
+--qrigaio6mwohcagq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Changes since v1:
- * reworded the commit message to explain why this change would make
-   sense, as suggested by Bjorn.
+On Mon, Jul 18, 2022 at 12:10:34PM +0300, Georgi Djakov wrote:
+>=20
+> Hi Uwe,
+>=20
+> Thanks for the patchset!
+>=20
+> On 15.07.22 23:36, Uwe Kleine-K=F6nig wrote:
+> > All users ignore the return value of icc_provider_del(). Consequently
+> > make it not return an error code.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+> >   drivers/interconnect/core.c           | 10 +++-------
+> >   include/linux/interconnect-provider.h |  2 +-
+> >   2 files changed, 4 insertions(+), 8 deletions(-)
+> >=20
+> > diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> > index 808f6e7a8048..25debded65a8 100644
+> > --- a/drivers/interconnect/core.c
+> > +++ b/drivers/interconnect/core.c
+> > @@ -1057,29 +1057,25 @@ EXPORT_SYMBOL_GPL(icc_provider_add);
+> >   /**
+> >    * icc_provider_del() - delete previously added interconnect provider
+> >    * @provider: the interconnect provider that will be removed from top=
+ology
+> > - *
+> > - * Return: 0 on success, or an error code otherwise
+> >    */
+> > -int icc_provider_del(struct icc_provider *provider)
+> > +void icc_provider_del(struct icc_provider *provider)
+> >   {
+> >   	mutex_lock(&icc_lock);
+> >   	if (provider->users) {
+> >   		pr_warn("interconnect provider still has %d users\n",
+> >   			provider->users);
+> >   		mutex_unlock(&icc_lock);
+> > -		return -EBUSY;
+> > +		return;
+> >   	}
+>=20
+> Looks like provider->users is now useless, so we should remove it. But th=
+at
+> could be a separate clean-up.
 
- drivers/remoteproc/qcom_q6v5_pas.c | 41 +++++-------------------------
- 1 file changed, 7 insertions(+), 34 deletions(-)
+Well, it's still used to emit the warning. If this can trigger there is
+indeed a problem though. If there are still users, they should hold a
+reference to the device preventing its release.
 
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index 6ae39c5653b1..beef7a09c380 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -34,7 +34,6 @@ struct adsp_data {
- 	const char *firmware_name;
- 	int pas_id;
- 	unsigned int minidump_id;
--	bool has_aggre2_clk;
- 	bool auto_boot;
+> >   	if (!list_empty(&provider->nodes)) {
+> >   		pr_warn("interconnect provider still has nodes\n");
+> >   		mutex_unlock(&icc_lock);
+> > -		return -EBUSY;
+> > +		return;
+> >   	}
+> >   	list_del(&provider->provider_list);
+> >   	mutex_unlock(&icc_lock);
+> > -
+> > -	return 0;
+> >   }
+> >   EXPORT_SYMBOL_GPL(icc_provider_del);
+> > diff --git a/include/linux/interconnect-provider.h b/include/linux/inte=
+rconnect-provider.h
+> > index 6bd01f7159c6..191f083d1f3b 100644
+> > --- a/include/linux/interconnect-provider.h
+> > +++ b/include/linux/interconnect-provider.h
+> > @@ -123,7 +123,7 @@ void icc_node_add(struct icc_node *node, struct icc=
+_provider *provider);
+> >   void icc_node_del(struct icc_node *node);
+> >   int icc_nodes_remove(struct icc_provider *provider);
+> >   int icc_provider_add(struct icc_provider *provider);
+> > -int icc_provider_del(struct icc_provider *provider);
+> > +void icc_provider_del(struct icc_provider *provider);
+> >   struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args=
+ *spec);
+> >   void icc_sync_state(struct device *dev);
+>=20
+> We should also squash the following:
+>=20
+> --- a/include/linux/interconnect-provider.h
+> +++ b/include/linux/interconnect-provider.h
+> @@ -172,7 +172,7 @@ static inline int icc_provider_add(struct icc_provide=
+r *provider)
+>  	return -ENOTSUPP;
+>  }
+>=20
+> -static inline int icc_provider_del(struct icc_provider *provider)
+> +static inline void icc_provider_del(struct icc_provider *provider)
+>  {
+>  	return -ENOTSUPP;
+>  }
 
- 	char **proxy_pd_names;
-@@ -64,7 +63,6 @@ struct qcom_adsp {
- 	int pas_id;
- 	unsigned int minidump_id;
- 	int crash_reason_smem;
--	bool has_aggre2_clk;
- 	const char *info_name;
+Sent a v2 with this change (and also removed the return statement).
 
- 	struct completion start_done;
-@@ -310,15 +308,13 @@ static int adsp_init_clock(struct qcom_adsp *adsp)
- 		return ret;
- 	}
+Thanks
+Uwe
 
--	if (adsp->has_aggre2_clk) {
--		adsp->aggre2_clk = devm_clk_get(adsp->dev, "aggre2");
--		if (IS_ERR(adsp->aggre2_clk)) {
--			ret = PTR_ERR(adsp->aggre2_clk);
--			if (ret != -EPROBE_DEFER)
--				dev_err(adsp->dev,
--					"failed to get aggre2 clock");
--			return ret;
--		}
-+	adsp->aggre2_clk = devm_clk_get_optional(adsp->dev, "aggre2");
-+	if (IS_ERR(adsp->aggre2_clk)) {
-+		ret = PTR_ERR(adsp->aggre2_clk);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(adsp->dev,
-+				"failed to get aggre2 clock");
-+		return ret;
- 	}
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
- 	return 0;
-@@ -457,7 +453,6 @@ static int adsp_probe(struct platform_device *pdev)
- 	adsp->rproc = rproc;
- 	adsp->minidump_id = desc->minidump_id;
- 	adsp->pas_id = desc->pas_id;
--	adsp->has_aggre2_clk = desc->has_aggre2_clk;
- 	adsp->info_name = desc->sysmon_name;
- 	platform_set_drvdata(pdev, adsp);
+--qrigaio6mwohcagq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-@@ -531,7 +526,6 @@ static const struct adsp_data adsp_resource_init = {
- 		.crash_reason_smem = 423,
- 		.firmware_name = "adsp.mdt",
- 		.pas_id = 1,
--		.has_aggre2_clk = false,
- 		.auto_boot = true,
- 		.ssr_name = "lpass",
- 		.sysmon_name = "adsp",
-@@ -542,7 +536,6 @@ static const struct adsp_data sdm845_adsp_resource_init = {
- 		.crash_reason_smem = 423,
- 		.firmware_name = "adsp.mdt",
- 		.pas_id = 1,
--		.has_aggre2_clk = false,
- 		.auto_boot = true,
- 		.load_state = "adsp",
- 		.ssr_name = "lpass",
-@@ -554,7 +547,6 @@ static const struct adsp_data sm6350_adsp_resource = {
- 	.crash_reason_smem = 423,
- 	.firmware_name = "adsp.mdt",
- 	.pas_id = 1,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"lcx",
-@@ -571,7 +563,6 @@ static const struct adsp_data sm8150_adsp_resource = {
- 		.crash_reason_smem = 423,
- 		.firmware_name = "adsp.mdt",
- 		.pas_id = 1,
--		.has_aggre2_clk = false,
- 		.auto_boot = true,
- 		.proxy_pd_names = (char*[]){
- 			"cx",
-@@ -587,7 +578,6 @@ static const struct adsp_data sm8250_adsp_resource = {
- 	.crash_reason_smem = 423,
- 	.firmware_name = "adsp.mdt",
- 	.pas_id = 1,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"lcx",
-@@ -604,7 +594,6 @@ static const struct adsp_data sm8350_adsp_resource = {
- 	.crash_reason_smem = 423,
- 	.firmware_name = "adsp.mdt",
- 	.pas_id = 1,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"lcx",
-@@ -621,7 +610,6 @@ static const struct adsp_data msm8996_adsp_resource = {
- 		.crash_reason_smem = 423,
- 		.firmware_name = "adsp.mdt",
- 		.pas_id = 1,
--		.has_aggre2_clk = false,
- 		.auto_boot = true,
- 		.proxy_pd_names = (char*[]){
- 			"cx",
-@@ -636,7 +624,6 @@ static const struct adsp_data cdsp_resource_init = {
- 	.crash_reason_smem = 601,
- 	.firmware_name = "cdsp.mdt",
- 	.pas_id = 18,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.ssr_name = "cdsp",
- 	.sysmon_name = "cdsp",
-@@ -647,7 +634,6 @@ static const struct adsp_data sdm845_cdsp_resource_init = {
- 	.crash_reason_smem = 601,
- 	.firmware_name = "cdsp.mdt",
- 	.pas_id = 18,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.load_state = "cdsp",
- 	.ssr_name = "cdsp",
-@@ -659,7 +645,6 @@ static const struct adsp_data sm6350_cdsp_resource = {
- 	.crash_reason_smem = 601,
- 	.firmware_name = "cdsp.mdt",
- 	.pas_id = 18,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"cx",
-@@ -676,7 +661,6 @@ static const struct adsp_data sm8150_cdsp_resource = {
- 	.crash_reason_smem = 601,
- 	.firmware_name = "cdsp.mdt",
- 	.pas_id = 18,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"cx",
-@@ -692,7 +676,6 @@ static const struct adsp_data sm8250_cdsp_resource = {
- 	.crash_reason_smem = 601,
- 	.firmware_name = "cdsp.mdt",
- 	.pas_id = 18,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"cx",
-@@ -708,7 +691,6 @@ static const struct adsp_data sc8280xp_nsp0_resource = {
- 	.crash_reason_smem = 601,
- 	.firmware_name = "cdsp.mdt",
- 	.pas_id = 18,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"nsp",
-@@ -723,7 +705,6 @@ static const struct adsp_data sc8280xp_nsp1_resource = {
- 	.crash_reason_smem = 633,
- 	.firmware_name = "cdsp.mdt",
- 	.pas_id = 30,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"nsp",
-@@ -738,7 +719,6 @@ static const struct adsp_data sm8350_cdsp_resource = {
- 	.crash_reason_smem = 601,
- 	.firmware_name = "cdsp.mdt",
- 	.pas_id = 18,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"cx",
-@@ -756,7 +736,6 @@ static const struct adsp_data mpss_resource_init = {
- 	.firmware_name = "modem.mdt",
- 	.pas_id = 4,
- 	.minidump_id = 3,
--	.has_aggre2_clk = false,
- 	.auto_boot = false,
- 	.proxy_pd_names = (char*[]){
- 		"cx",
-@@ -773,7 +752,6 @@ static const struct adsp_data sc8180x_mpss_resource = {
- 	.crash_reason_smem = 421,
- 	.firmware_name = "modem.mdt",
- 	.pas_id = 4,
--	.has_aggre2_clk = false,
- 	.auto_boot = false,
- 	.proxy_pd_names = (char*[]){
- 		"cx",
-@@ -789,7 +767,6 @@ static const struct adsp_data slpi_resource_init = {
- 		.crash_reason_smem = 424,
- 		.firmware_name = "slpi.mdt",
- 		.pas_id = 12,
--		.has_aggre2_clk = true,
- 		.auto_boot = true,
- 		.proxy_pd_names = (char*[]){
- 			"ssc_cx",
-@@ -804,7 +781,6 @@ static const struct adsp_data sm8150_slpi_resource = {
- 		.crash_reason_smem = 424,
- 		.firmware_name = "slpi.mdt",
- 		.pas_id = 12,
--		.has_aggre2_clk = false,
- 		.auto_boot = true,
- 		.proxy_pd_names = (char*[]){
- 			"lcx",
-@@ -821,7 +797,6 @@ static const struct adsp_data sm8250_slpi_resource = {
- 	.crash_reason_smem = 424,
- 	.firmware_name = "slpi.mdt",
- 	.pas_id = 12,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"lcx",
-@@ -838,7 +813,6 @@ static const struct adsp_data sm8350_slpi_resource = {
- 	.crash_reason_smem = 424,
- 	.firmware_name = "slpi.mdt",
- 	.pas_id = 12,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"lcx",
-@@ -865,7 +839,6 @@ static const struct adsp_data sdx55_mpss_resource = {
- 	.crash_reason_smem = 421,
- 	.firmware_name = "modem.mdt",
- 	.pas_id = 4,
--	.has_aggre2_clk = false,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
- 		"cx",
---
-2.34.3
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLVTw8ACgkQwfwUeK3K
+7AlgaQf/YQ7Rlm1PuTAUzeYj/3/wPqSWlFti8aneEGYZgWJJ+iUMHr/pGtlbfXcD
+QpFrCgYd36+g12jHddOV8zz5inPSyArQSjg34Vgs3lyWsdPYi9O3Kex49ht7SnOW
+YKLl+zD/jIB1RayidwBoRE2cPzXZAdERrXy9vI9LR6lSQKluCDvJEPqfDWIzSXgB
+k/mnHwhGwcg5BScnOh9rWkasFkqxMSwCVIx43CFaYmG1S/ykLAErzxBXDRUyUlSq
+b3+pmqInTaJQDYR8xkhoBLn4wkS52e01e8EV7t501CPJbkpnn5/oyNmUOjKIbRoM
+/XqT/KuSugVftsGc96nrCWZnj6brpw==
+=72Cu
+-----END PGP SIGNATURE-----
+
+--qrigaio6mwohcagq--

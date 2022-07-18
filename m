@@ -2,79 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D904578133
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F94578131
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbiGRLrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 07:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233990AbiGRLru (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234519AbiGRLru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 18 Jul 2022 07:47:50 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2D522B08
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 04:47:49 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id b11so20665700eju.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 04:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FbiX+RFIAMeCqfDvuYNCSYIszG13Fk6KIejZi/pE9NM=;
-        b=b9NB1aRGK1xMpEy0wYmuiYYeDHdN+OrzTAk3RkL13uzqg2ffPsIzplJiO43jzX3mxy
-         aijDR9ab4xqx0jDQYYY3bG1/+S8m/zij3eFWfeLmTaj8aD3Aj7FzaksIHBJYKAXgFfxU
-         L24GIh6F4PuHyy8R5ZXFqARNKhTSoTShS9+iwq4YX9E1QILuvGrPjDEUyVbsdIYw6JVj
-         v2ROt5wP2qNmqQHUpcBOBqWr+q1guyee19liECetTmesReyn6Xf3ySsuGaIhGYR7M+o6
-         KZ+8EkcngIHqXGnDtAEa1q/fn7tAbUZ8dFs2SqmbQK4ROKabsc7znlD0u95KcAlBbCQy
-         k2nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FbiX+RFIAMeCqfDvuYNCSYIszG13Fk6KIejZi/pE9NM=;
-        b=pr0KQ35ZV5ahcNk2VmlKsrnrv7+JVV6VwETgERxUJYYWkPJMsCywDNf0q/PA6yQXf4
-         64asSM/GRjOzftPTV6vp0g0ourrl2N48sYNIzE2IlE+RE7A0iIS7i4Ja5Y/JyNeBF+2k
-         mIHLHlJdoP9qQjGjf6pOmXQW7F3SSOZIZYU4YaZFOzlSxBenU1YroZwqAvTePHPja5Bf
-         qPB3sQIS01pHGHEIP9/EQU5QUJK2BBcpe3a02Vu34Qvy2Spv1TEFkIuSqqGvBcgN4TwW
-         brNDQgs5Efwa/Zy/ru7RDG2wWTDO4cKzkYIlh2OMp2UI1LvcIWAJWFcO1LGqv3B37OxT
-         P1+A==
-X-Gm-Message-State: AJIora9LqBwGH9BCB+1n5uoCynf8ixnaJN555Z2AX3bI1VAeNm+kNFS0
-        9WXju68B3Css4+BDBI2nT4lPifUk36FRH4cF+kZjqA==
-X-Google-Smtp-Source: AGRyM1sP3A16042BETbhyG23Pn8nBJ5zxFTLn76/uqVR71z4ePBJthKuWPXTwJngHsH5tiyWhlfMpwNlyHMcWNn5A8k=
-X-Received: by 2002:a17:907:7f9e:b0:72e:d375:431 with SMTP id
- qk30-20020a1709077f9e00b0072ed3750431mr21578887ejc.580.1658144867776; Mon, 18
- Jul 2022 04:47:47 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234513AbiGRLrr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 18 Jul 2022 07:47:47 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA3A2126D;
+        Mon, 18 Jul 2022 04:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658144865; x=1689680865;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=k95d+pG1IVPgq98QC9nwO2SCOSkBsTf8lK1Vpw4nOGQ=;
+  b=iEbLIeA+FS6vaiBZkW57vHtdagdclumdYegK6ed8qZJVPO0Vi4w04yAs
+   eq5VF7L0+KJXyX0jXE5DzhpOBRUbx98v5e6zoL9/cil1HmWujL3RsCmw7
+   ma42manXf6DvyLrHeH2WGqSnUXkmimWC1tREJN4jgpOh3pHrOIFH2TTAZ
+   qKF4pSO+Y6aV5ejF779nvHiINl/oNE6fWYsIzpXwPgq11TXV8BRbXff7A
+   4RmQtaqthnLJfh/ad5nQisjCr3lDLzn3hgl2nBfSCeXmAh+thZK1KgBn4
+   OyZ+Jk2iJxPSza7t6tU84mPi6knlmQJ03SU1OWZcyVz5x8d/3NqVn1jze
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="265982491"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="265982491"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 04:47:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="629890758"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 18 Jul 2022 04:47:42 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5DEB813E2; Mon, 18 Jul 2022 14:47:51 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>, Kate Hsuan <hpa@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Gross <markgross@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v1 1/1] platform/x86: p2sb: Move out of X86_PLATFORM_DEVICES dependency
+Date:   Mon, 18 Jul 2022 14:47:48 +0300
+Message-Id: <20220718114748.6365-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220715024910.12578-1-allen.chen@ite.com.tw> <20220715024910.12578-2-allen.chen@ite.com.tw>
-In-Reply-To: <20220715024910.12578-2-allen.chen@ite.com.tw>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 18 Jul 2022 13:47:36 +0200
-Message-ID: <CAG3jFyv6_2OcLp2JyKkiEB0MddOS5Tk5Jm5=r7S5EqVyxGK3gg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] drm/bridge: it6505: Modified power sequence
-To:     allen <allen.chen@ite.com.tw>
-Cc:     Pin-yen Lin <treapking@google.com>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied series to drm-misc-next.
+The P2SB library is used for various drivers, including server
+platforms. That's why the dependency on X86_PLATFORM_DEVICES
+seems superfluous.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/platform/x86/Kconfig            | 12 ++++++++++++
+ drivers/platform/x86/Makefile           |  4 ++++
+ drivers/platform/x86/intel/Kconfig      | 12 ------------
+ drivers/platform/x86/intel/Makefile     |  2 --
+ drivers/platform/x86/{intel => }/p2sb.c |  0
+ 5 files changed, 16 insertions(+), 14 deletions(-)
+ rename drivers/platform/x86/{intel => }/p2sb.c (100%)
+
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index bc4013e950ed..cab9ceb85436 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -1164,6 +1164,18 @@ config WINMATE_FM07_KEYS
+ 
+ endif # X86_PLATFORM_DEVICES
+ 
++config P2SB
++	bool "Primary to Sideband (P2SB) bridge access support"
++	depends on PCI
++	help
++	  The Primary to Sideband (P2SB) bridge is an interface to some
++	  PCI devices connected through it. In particular, SPI NOR controller
++	  in Intel Apollo Lake SoC is one of such devices.
++
++	  The main purpose of this library is to unhide P2SB device in case
++	  firmware kept it hidden on some platforms in order to access devices
++	  behind it.
++
+ config PMC_ATOM
+        def_bool y
+        depends on PCI
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index 4a59f47a46e2..f04001431c91 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -120,6 +120,10 @@ obj-$(CONFIG_X86_ANDROID_TABLETS)	+= x86-android-tablets.o
+ # Intel uncore drivers
+ obj-$(CONFIG_INTEL_IPS)				+= intel_ips.o
+ 
++# Intel miscellaneous drivers
++intel_p2sb-y				:= p2sb.o
++obj-$(CONFIG_P2SB)			+= intel_p2sb.o
++
+ # Intel PMIC / PMC / P-Unit devices
+ obj-$(CONFIG_INTEL_SCU_IPC)		+= intel_scu_ipc.o
+ obj-$(CONFIG_INTEL_SCU_PCI)		+= intel_scu_pcidrv.o
+diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
+index c9cfbaae436b..794968bda115 100644
+--- a/drivers/platform/x86/intel/Kconfig
++++ b/drivers/platform/x86/intel/Kconfig
+@@ -70,18 +70,6 @@ config INTEL_OAKTRAIL
+ 	  enable/disable the Camera, WiFi, BT etc. devices. If in doubt, say Y
+ 	  here; it will only load on supported platforms.
+ 
+-config P2SB
+-	bool "Primary to Sideband (P2SB) bridge access support"
+-	depends on PCI
+-	help
+-	  The Primary to Sideband (P2SB) bridge is an interface to some
+-	  PCI devices connected through it. In particular, SPI NOR controller
+-	  in Intel Apollo Lake SoC is one of such devices.
+-
+-	  The main purpose of this library is to unhide P2SB device in case
+-	  firmware kept it hidden on some platforms in order to access devices
+-	  behind it.
+-
+ config INTEL_BXTWC_PMIC_TMU
+ 	tristate "Intel Broxton Whiskey Cove TMU Driver"
+ 	depends on INTEL_SOC_PMIC_BXTWC
+diff --git a/drivers/platform/x86/intel/Makefile b/drivers/platform/x86/intel/Makefile
+index 741a9404db98..717933dd0cfd 100644
+--- a/drivers/platform/x86/intel/Makefile
++++ b/drivers/platform/x86/intel/Makefile
+@@ -28,8 +28,6 @@ intel_int0002_vgpio-y			:= int0002_vgpio.o
+ obj-$(CONFIG_INTEL_INT0002_VGPIO)	+= intel_int0002_vgpio.o
+ intel_oaktrail-y			:= oaktrail.o
+ obj-$(CONFIG_INTEL_OAKTRAIL)		+= intel_oaktrail.o
+-intel_p2sb-y				:= p2sb.o
+-obj-$(CONFIG_P2SB)			+= intel_p2sb.o
+ intel_sdsi-y				:= sdsi.o
+ obj-$(CONFIG_INTEL_SDSI)		+= intel_sdsi.o
+ intel_vsec-y				:= vsec.o
+diff --git a/drivers/platform/x86/intel/p2sb.c b/drivers/platform/x86/p2sb.c
+similarity index 100%
+rename from drivers/platform/x86/intel/p2sb.c
+rename to drivers/platform/x86/p2sb.c
+-- 
+2.35.1
+

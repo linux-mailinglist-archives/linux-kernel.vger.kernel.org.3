@@ -2,119 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2083957811E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335EE578120
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234012AbiGRLm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 07:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
+        id S234467AbiGRLnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 07:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiGRLmy (ORCPT
+        with ESMTP id S234192AbiGRLnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 07:42:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35666656B
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 04:42:54 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658144571;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PS21eztK5aF+C+ShkdTlSeCwoba12LKY/CMfYEzSG4Q=;
-        b=2sMpgRCpmeEPBylJN+vve/u0B7DeXyMXxYRP39T/28XjJfxNBECJZRhvc02e7mQ1pNXfIp
-        Yajn7Hdji9FyizG20w9tC5AytTkqXFudqAjY0On4aM2NSLdKylBbmx9kcwjjBXF3/v+v6j
-        WfmPPYVq+qBcS+B/gZBzrzWMv71oyZNQB9jhjHhi+vu//VB8Ruy6aX4b1FdXlngntxbwfj
-        FZBQyJGNV/2qFjxBTuo2T0SuN4//rbnIe55X5FsBvL70VDNxxPvjAmhTMTdWza2mRXGZw0
-        cqKZIySyqXab5R4BOzGRTnWCke8yXZAYuwfOuA55YGOc5HGGb9LRlwjO1UB5tw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658144571;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PS21eztK5aF+C+ShkdTlSeCwoba12LKY/CMfYEzSG4Q=;
-        b=uFWN6EPtznjuNWhM60TorPLI7k5ZJZ4chje5dpqNSue94iq9RWHMWxUyk3KUh1gVgoarmz
-        2IeU1fD7agDsGvCw==
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [patch 02/38] x86/cpu: Use native_wrmsrl() in
- load_percpu_segment()
-In-Reply-To: <87fsiyww0l.ffs@tglx>
-References: <20220716230344.239749011@linutronix.de>
- <20220716230952.787452088@linutronix.de>
- <0bec8fe2-d1e3-f01c-6e52-06ab542efdd8@citrix.com> <87zgh7wo91.ffs@tglx>
- <87tu7fwlhr.ffs@tglx> <87r12jwl9l.ffs@tglx> <87o7xnwgl3.ffs@tglx>
- <70b03d06-6ab9-1693-f811-f784a7dced76@suse.com> <87lesqx64u.ffs@tglx>
- <87ilnux0ji.ffs@tglx> <YtUodTM53de5vVxO@worktop.programming.kicks-ass.net>
- <87fsiyww0l.ffs@tglx>
-Date:   Mon, 18 Jul 2022 13:42:50 +0200
-Message-ID: <87cze2wssl.ffs@tglx>
+        Mon, 18 Jul 2022 07:43:00 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42956B86A;
+        Mon, 18 Jul 2022 04:42:59 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id mf4so20700469ejc.3;
+        Mon, 18 Jul 2022 04:42:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=16jnFsvBrAgbEt4xpQGg6hQiZZIMKLW+cCiQ1OqTMC8=;
+        b=LLTUoRzUUFKiAu3tR2Vs0NiaFln/YwydRZaSlRdCAhAUv0G1ngreNmz0brJaLV7CzY
+         TQU0okdCRNjR9mdfxVKsCu9B/UTsYMkaDQbB9q1Fo0Fy4Kg3/Z82ZQr5Aubb053fhWyd
+         iG+0Zw2jqWk8fd5R3JToFHhg1MLmAViu4cbwHNn4gpeljl2VBa6nGpQ0ygjOuPZ5FRav
+         X9rSQ++PaIIAP1p4GrNUyhA0I9KKnh1fH7fZRG5nzHpp9Xl0mz0zVXS/tACg4rGK2czG
+         eqjUMURqZbYEG3oJCT0/RzNEXd5srhddhELFEmJHJ6rRIE4NMf+s65zrnHi2TH2xCkG4
+         rAZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=16jnFsvBrAgbEt4xpQGg6hQiZZIMKLW+cCiQ1OqTMC8=;
+        b=gZsa7y/qV4wbasF3xnENUL/ETVkx9kjeLMupZ3ERRIXQ3MnaBcDYdk/8K8yj92RLjF
+         9LVr6Y7xR0zP5WN/RQga5CewlkHygLk91Db3kSJa9Xdyef3jsPKL0jWt9BkuaDiohZLm
+         f8ULFI7+nVNvATrGo0xU6dE+2WJ5Kib6ztuz/FjpMbx8X2SNciH4VrDLlv67GKzbnBtA
+         9xXs/N5FZzL2gE0Ie6IIRrVfOFCg39jVUg2FcGzkw/KsAKQcRkML3/veEz7meNJgoqoo
+         ZEGUomrWaKo83/2OC7W0q/defX0FF6BF09kzZbgWMSmUa1G8J6quNgAGNw7O8wZqmERN
+         iH/Q==
+X-Gm-Message-State: AJIora/155z+vXMoXL6/CuknV9vRPGaR/WDrLlSjViU2Iu9QrNl0o+7q
+        TOXF98JFTmDTS8Nk9r5gMQ4=
+X-Google-Smtp-Source: AGRyM1sEW677SbP17IE3+fkQqGLUtcTguoPwApk3lL8xM5+6N/Zvm4MaZA+Ag8xYApRYkyVNbDh2qQ==
+X-Received: by 2002:a17:906:5305:b0:712:388c:2bf5 with SMTP id h5-20020a170906530500b00712388c2bf5mr24946074ejo.559.1658144577795;
+        Mon, 18 Jul 2022 04:42:57 -0700 (PDT)
+Received: from [192.168.0.104] ([77.126.166.31])
+        by smtp.gmail.com with ESMTPSA id ek9-20020a056402370900b0042de3d661d2sm8361944edb.1.2022.07.18.04.42.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 04:42:55 -0700 (PDT)
+Message-ID: <72170546-fad0-0b96-e075-b755c3a48bec@gmail.com>
+Date:   Mon, 18 Jul 2022 14:42:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net-next 1/2] sched/topology: Expose
+ sched_numa_find_closest
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Tariq Toukan <tariqt@nvidia.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220717052301.19067-1-tariqt@nvidia.com>
+ <20220717052301.19067-2-tariqt@nvidia.com>
+ <YtUzu4d9F+V621tw@worktop.programming.kicks-ass.net>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <YtUzu4d9F+V621tw@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18 2022 at 12:33, Thomas Gleixner wrote:
-> On Mon, Jul 18 2022 at 11:31, Peter Zijlstra wrote:
->> On Mon, Jul 18, 2022 at 10:55:29AM +0200, Thomas Gleixner wrote:
->>> On Mon, Jul 18 2022 at 08:54, Thomas Gleixner wrote:
->>> > On Mon, Jul 18 2022 at 07:11, Juergen Gross wrote:
->>> >>> -	switch_to_new_gdt(cpu);
->>> >>> +	switch_to_real_gdt(cpu);
->>> >>
->>> >> ... can't you use the paravirt variant of load_gdt in switch_to_real=
-_gdt() ?
->>> >
->>> > That does not solve the problem of having a disagreement between GDT =
-and
->>> > GS_BASE. Let me dig into this some more.
->>>=20
->>> Bah. The real problem is __loadsegment_simple(gs, 0). After that GS_BASE
->>> is 0. So any per CPU access before setting MSR_GS_BASE back to working
->>> state is going into lala land.
->>>=20
->>> So it's not the GDT. It's the mov 0, %gs which makes stuff go south, but
->>> as %gs is already 0, we can keep the paravirt load_gdt() and use
->>> native_write_msr() and everything should be happy.
+
+
+On 7/18/2022 1:19 PM, Peter Zijlstra wrote:
+> On Sun, Jul 17, 2022 at 08:23:00AM +0300, Tariq Toukan wrote:
+>> This logic can help device drivers prefer some remote cpus
+>> over others, according to the NUMA distance metrics.
 >>
->> How is the ret from xen_load_gdt() not going to explode?
->
-> This is only for the early boot _before_ all the patching happens. So
-> that goes through the default retthunk.
->
-> Secondary CPUs do not need that as they set up GDT and GS_BASE in the
-> low level asm code before coming out to C.
->
-> I'm still trying to figure out how this works on XENPV and on 32bit.
+>> Reviewed-by: Gal Pressman <gal@nvidia.com>
+>> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+>> ---
+>>   include/linux/sched/topology.h | 2 ++
+>>   kernel/sched/topology.c        | 1 +
+>>   2 files changed, 3 insertions(+)
+>>
+>> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+>> index 56cffe42abbc..d467c30bdbb9 100644
+>> --- a/include/linux/sched/topology.h
+>> +++ b/include/linux/sched/topology.h
+>> @@ -61,6 +61,8 @@ static inline int cpu_numa_flags(void)
+>>   {
+>>   	return SD_NUMA;
+>>   }
+>> +
+>> +int sched_numa_find_closest(const struct cpumask *cpus, int cpu);
+>>   #endif
+>>   
+>>   extern int arch_asym_cpu_priority(int cpu);
+>> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+>> index 05b6c2ad90b9..688334ac4980 100644
+>> --- a/kernel/sched/topology.c
+>> +++ b/kernel/sched/topology.c
+>> @@ -2066,6 +2066,7 @@ int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
+>>   
+>>   	return found;
+>>   }
+>> +EXPORT_SYMBOL(sched_numa_find_closest);
+> 
+> EXPORT_SYMBOL_GPL() if anything.
 
-On 32bit the CPU comes out with GDT and FS correctly set too.
+I'll fix.
 
-For XEN_PV it looks like cpu_initialize_context() hands down GDT and
-GSBASE info to the hypercall which kicks the CPU so we should be
-good there as well. Emphasis on should. J=C3=BCrgen?
+> 
+> Also, this thing will be subject to sched_domains, that means that if
+> someone uses cpusets or other means to partition the machine, that
+> effects the result.
+> 
+> Is that what you want?
+
+Yes, it's good enough, at least as a first phase and basic functionality.
+Later we might introduce whatever enhancements we find necessary.
+
 
 Thanks,
-
-        tglx
+Tariq

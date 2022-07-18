@@ -2,148 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830C357813F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2366757813D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbiGRLuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 07:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
+        id S233782AbiGRLuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 07:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234589AbiGRLur (ORCPT
+        with ESMTP id S234575AbiGRLuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 07:50:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA4122BCC;
-        Mon, 18 Jul 2022 04:50:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658145043; x=1689681043;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5FOrLIjTNrMgP5wev/cI/BFIYR4iejo/Cv0ax9sgFdE=;
-  b=Y+KBikxyTciaPX+ntgQZt4a6fHPhyGjO6ICkAEt2tIUW0S3uwHAHIcKg
-   pyr6vQgO+OdvbyxFBKZv5yKN0zj+lyH93Ym99+kK8RRzOqwoHWAK4oBMR
-   7Bp2To2A7kbxOf4izPx/g7DejWLhuJIWxiYI6HQmr1XV73FoZ3iauSVZO
-   YVZ9WXZ3LzNteHHZkxgZixlkQA3enk3ZSKLMX+04+WNMukPQ86HZs2/o+
-   1z7GCbuMRKnFLIk3GMrYWlgO7lqc5dN4wy8EAuH/K2UsVl2wAnEVs1wNx
-   BKGI2mBuE/oFtl/wTqcqlKb07Ejx7CC2lzr0aKEu+7+Zpqr6Ja8p0A1EH
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="287347962"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="287347962"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 04:50:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="843246864"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 18 Jul 2022 04:50:38 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDPGn-0004JW-W6;
-        Mon, 18 Jul 2022 11:50:37 +0000
-Date:   Mon, 18 Jul 2022 19:50:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V5 16/16] rv/reactor: Add the panic reactor
-Message-ID: <202207181929.M7O6FDon-lkp@intel.com>
-References: <5b3233ed8c7bd06895cc177da8a4299d764d6f9a.1657745645.git.bristot@kernel.org>
+        Mon, 18 Jul 2022 07:50:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BCE1D0E3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 04:50:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9ACDB1FAE3;
+        Mon, 18 Jul 2022 11:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658145030; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eKzpLVM2ghrjyx6usBgvoxGV0PT3wE1TbPP4tTz+nTY=;
+        b=iq1q3Rl6+6ppxktg6X7qVZQ/OmPN24PXOfdWaYB58OLJtFKnYrUtm9agyJLsAdwI+ny8oQ
+        2KLNXTi/0Uay0DyGjueWsKmagOJR5JrUH96ZETQvHlGxb8amYfUPNrEOsSmz+/IqmR1C+x
+        sfNVmzOPGtob257IKFSLHCOvb9kAB24=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 561662C141;
+        Mon, 18 Jul 2022 11:50:30 +0000 (UTC)
+Date:   Mon, 18 Jul 2022 13:50:29 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     akpm@linux-foundation.org, pasha.tatashin@soleen.com,
+        sjpark@amazon.de, sieberf@amazon.com, shakeelb@google.com,
+        dhowells@redhat.com, willy@infradead.org, vbabka@suse.cz,
+        david@redhat.com, minchan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] mm: fix use-after free of page_ext after race with
+ memory-offline
+Message-ID: <YtVJBQ/ZOt22o8+B@dhcp22.suse.cz>
+References: <1657810063-28938-1-git-send-email-quic_charante@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5b3233ed8c7bd06895cc177da8a4299d764d6f9a.1657745645.git.bristot@kernel.org>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1657810063-28938-1-git-send-email-quic_charante@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Thu 14-07-22 20:17:43, Charan Teja Kalla wrote:
+> The below is one path where race between page_ext and  offline of the
+> respective memory blocks will cause use-after-free on the access of
+> page_ext structure.
+> 
+> process1		              process2
+> ---------                             ---------
+> a)doing /proc/page_owner           doing memory offline
+> 			           through offline_pages.
+> 
+> b)PageBuddy check is failed
+> thus proceed to get the
+> page_owner information
+> through page_ext access.
+> page_ext = lookup_page_ext(page);
+> 
+> 				    migrate_pages();
+> 				    .................
+> 				Since all pages are successfully
+> 				migrated as part of the offline
+> 				operation,send MEM_OFFLINE notification
+> 				where for page_ext it calls:
+> 				offline_page_ext()-->
+> 				__free_page_ext()-->
+> 				   free_page_ext()-->
+> 				     vfree(ms->page_ext)
+> 			           mem_section->page_ext = NULL
+> 
+> c) Check for the PAGE_EXT flags
+> in the page_ext->flags access
+> results into the use-after-free(leading
+> to the translation faults).
+> 
+> As mentioned above, there is really no synchronization between page_ext
+> access and its freeing in the memory_offline.
+> 
+> The memory offline steps(roughly) on a memory block is as below:
+> 1) Isolate all the pages
+> 2) while(1)
+>   try free the pages to buddy.(->free_list[MIGRATE_ISOLATE])
+> 3) delete the pages from this buddy list.
+> 4) Then free page_ext.(Note: The struct page is still alive as it is
+> freed only during hot remove of the memory which frees the memmap, which
+> steps the user might not perform).
+> 
+> This design leads to the state where struct page is alive but the struct
+> page_ext is freed, where the later is ideally part of the former which
+> just representing the page_flags. This seems to be a wrong design where
+> 'struct page' as a whole is not accessible(Thanks to Minchan for
+> pointing this out).
 
-I love your patch! Perhaps something to improve:
+Nice description of the problem! Thanks!
 
-[auto build test WARNING on rostedt-trace/for-next]
-[also build test WARNING on tip/sched/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> The above mentioned race is just one example __but the problem persists
+> in the other paths too involving page_ext->flags access(eg:
+> page_is_idle())__. Since offline waits till the last reference on the
+> page goes down i.e. any path that took the refcount on the page can make
+> the memory offline operation to wait. Eg: In the migrate_pages()
+> operation, we do take the extra refcount on the pages that are under
+> migration and then we do copy page_owner by accessing page_ext. For
+> 
+> Fix those paths where offline races with page_ext access by maintaining
+> synchronization with rcu lock.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220714-052220
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220718/202207181929.M7O6FDon-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 07022e6cf9b5b3baa642be53d0b3c3f1c403dbfd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f83faf07d0dad6cfd8fb22ff38b752dd7619bfc0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220714-052220
-        git checkout f83faf07d0dad6cfd8fb22ff38b752dd7619bfc0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/pcs/ kernel/trace/rv/
+Please be much more specific about the synchronization. How does RCU
+actually synchronize the offlining and access? Higher level description
+of all the actors would be very helpful not only for the review but also
+for future readers.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Also, more specifically
+[...]
+> diff --git a/mm/page_ext.c b/mm/page_ext.c
+> index 3dc715d..5ccd3ee 100644
+> --- a/mm/page_ext.c
+> +++ b/mm/page_ext.c
+> @@ -299,8 +299,9 @@ static void __free_page_ext(unsigned long pfn)
+>  	if (!ms || !ms->page_ext)
+>  		return;
+>  	base = get_entry(ms->page_ext, pfn);
+> -	free_page_ext(base);
+>  	ms->page_ext = NULL;
+> +	synchronize_rcu();
+> +	free_page_ext(base);
+>  }
 
-All warnings (new ones prefixed by >>):
+So you are imposing the RCU grace period for each page_ext! This can get
+really expensive. Have you tried to measure the effect?
 
->> kernel/trace/rv/reactor_panic.c:27:5: warning: no previous prototype for function 'register_react_panic' [-Wmissing-prototypes]
-   int register_react_panic(void)
-       ^
-   kernel/trace/rv/reactor_panic.c:27:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int register_react_panic(void)
-   ^
-   static 
->> kernel/trace/rv/reactor_panic.c:33:6: warning: no previous prototype for function 'unregister_react_panic' [-Wmissing-prototypes]
-   void unregister_react_panic(void)
-        ^
-   kernel/trace/rv/reactor_panic.c:33:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void unregister_react_panic(void)
-   ^
-   static 
-   2 warnings generated.
+Is there any reason why page_ext is freed during offlining rather when
+it is hotremoved?
 
-
-vim +/register_react_panic +27 kernel/trace/rv/reactor_panic.c
-
-    26	
-  > 27	int register_react_panic(void)
-    28	{
-    29		rv_register_reactor(&rv_panic);
-    30		return 0;
-    31	}
-    32	
-  > 33	void unregister_react_panic(void)
-    34	{
-    35		rv_unregister_reactor(&rv_panic);
-    36	}
-    37	
-
+Thanks!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Michal Hocko
+SUSE Labs

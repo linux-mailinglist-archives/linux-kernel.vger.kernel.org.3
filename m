@@ -2,87 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3462B577ED4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75291577ED9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234167AbiGRJlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
+        id S234189AbiGRJmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbiGRJli (ORCPT
+        with ESMTP id S234210AbiGRJmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:41:38 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D2618B14
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:41:37 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id i14so19842854yba.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0fOvbxuv2i/5Fzmz+3Q/qIWhDdrS7QG5wOKPzGz/uIY=;
-        b=G3ldbuY+mWVn7ay3tMVHD/zVJ4BIpuzDiqmOUrL9SZtu6moGWd4rAPTZqsejlKf3q+
-         yia8d++1RE9vr7d8BKUzuJih3iYsDhRndNPYzJtGPsDBs8IWzb5iPSPiun4IRIO/LEN/
-         17tvA/OeTpsA0qbadS2ZCrODA/MY30gkZ2BUkc20mH2yNCeMy+U8hwukifQs42YTzFbL
-         4iQxnLCjX4HYCKnVaupqTes4Kt9vVg7H26chsPzMoZIuuQitXLWbjdTCsLmBc9rld0pY
-         Bg85u1C0QgW1d71VlR62SQT9BaTljmaRxhg+FZmtpxlRKXaWxQ5C7MQoHCZuH109IlEW
-         c41g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0fOvbxuv2i/5Fzmz+3Q/qIWhDdrS7QG5wOKPzGz/uIY=;
-        b=JXHOq0qrZOsMSC56iOouBHii7qyZoRLtgzVgrZ79SjLwiu2I7SeOX8gQYKKGg7iR/r
-         iF5jfA2uFj8c7JSSLgy+X0UKCvi7nRtXZumGS8u4x+XUufHiHartaMdLh+r62boisHuc
-         KYAhaZfQMCx7/iiXiN/7bfMGTuKdT1+0CHNJ5bxsvzI3d4grc176xqwUou3SXYo5IOKA
-         0nDSG//quyfpQKdjuv6wCOzFN1S+nvwwMM7NbZcCTLyB0CYpWDRkozqAn6HW0J6ib5S5
-         QLkPXJNBYA2ZF2nnHi4h7W8Kg9VOSqYfsjvl41RIQRGVCo5nmxhD8amfJs+ggHodYhRY
-         a4rg==
-X-Gm-Message-State: AJIora9MOuhmKzLDUBuFMcGPcNlsweIhGphqC23NPBlfS7NzpubkfGW0
-        NVfhBn+uleZqu8Y1Hr6sCImWqAV1CUjR225N064QMw==
-X-Google-Smtp-Source: AGRyM1vAtV/OOZgvx1kKG3FvseqMLz6Z/yAiXnzUMl+LY6h0es27TmM8UASc1JpZ0HuCq+s3wHStVZi2IjNSqN7I20I=
-X-Received: by 2002:a25:8c91:0:b0:670:5c00:7c6a with SMTP id
- m17-20020a258c91000000b006705c007c6amr1238342ybl.66.1658137296329; Mon, 18
- Jul 2022 02:41:36 -0700 (PDT)
+        Mon, 18 Jul 2022 05:42:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF4E112AC7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:42:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DB101042;
+        Mon, 18 Jul 2022 02:42:07 -0700 (PDT)
+Received: from [10.57.44.129] (unknown [10.57.44.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2EC013F70D;
+        Mon, 18 Jul 2022 02:42:05 -0700 (PDT)
+Message-ID: <e3aef6fd-973b-d7ef-6d6a-10f9e8ac3b04@arm.com>
+Date:   Mon, 18 Jul 2022 10:42:03 +0100
 MIME-Version: 1.0
-References: <YtH53r9UcYwquxcx@debian> <043cec12-b719-e9e6-d234-fe6ca75ca894@gmail.com>
- <a15dc5d9-ed10-d75b-3e76-e5e03ebfe25f@sholland.org>
-In-Reply-To: <a15dc5d9-ed10-d75b-3e76-e5e03ebfe25f@sholland.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 18 Jul 2022 11:41:25 +0200
-Message-ID: <CACRpkdZ6yPUd0KPLqviB_ufiEe9dz3XyP+JPkP5ujKc7xYYKVw@mail.gmail.com>
-Subject: Re: build failure of next-20220715 due to "No rule to make target"
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v3] drivers/perf: arm_spe: Fix consistency of
+ SYS_PMSCR_EL1.CX
+To:     James Clark <james.clark@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     german.gomez@arm.com, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220714061302.2715102-1-anshuman.khandual@arm.com>
+ <9b2982f1-023a-3499-7e87-f00b5a689ae9@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <9b2982f1-023a-3499-7e87-f00b5a689ae9@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 4:15 AM Samuel Holland <samuel@sholland.org> wrote:
+Hi James
 
-> The patch in question[0] contains the new file, so something must have gone
-> wrong when applying it[1].
+On 18/07/2022 10:30, James Clark wrote:
+> 
+> 
+> On 14/07/2022 07:13, Anshuman Khandual wrote:
+>> The arm_spe_pmu driver will enable SYS_PMSCR_EL1.CX in order to add CONTEXT
+>> packets into the traces, if the owner of the perf event runs with required
+>> capabilities i.e CAP_PERFMON or CAP_SYS_ADMIN via perfmon_capable() helper.
+>>
+>> The value of this bit is computed in the arm_spe_event_to_pmscr() function
+>> but the check for capabilities happens in the pmu event init callback i.e
+>> arm_spe_pmu_event_init(). This suggests that the value of the CX bit should
+>> remain consistent for the duration of the perf session.
+>>
+>> However, the function arm_spe_event_to_pmscr() may be called later during
+>> the event start callback i.e arm_spe_pmu_start() when the "current" process
+>> is not the owner of the perf session, hence the CX bit setting is currently
+>> not consistent.
+>>
+>> One way to fix this, is by caching the required value of the CX bit during
+>> the initialization of the PMU event, so that it remains consistent for the
+>> duration of the session. It uses currently unused 'event->hw.flags' element
+>> to cache perfmon_capable() value, which can be referred during event start
+>> callback to compute SYS_PMSCR_EL1.CX. This ensures consistent availability
+>> of context packets in the trace as per event owner capabilities.
+>>
+>> Drop BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init(), because
+>> now CX bit cannot be set in arm_spe_event_to_pmscr() with perfmon_capable()
+>> disabled.
+>>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Fixes: cea7d0d4a59b ("drivers/perf: Open access for CAP_PERFMON privileged process")
+>> Reported-by: German Gomez <german.gomez@arm.com>
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>> Changes in V3:
+>>
+>> - Moved set_spe_event_has_cx() before arm_spe_event_to_pmscr()
+>> - Reinstated perfmon_capable() back in arm_spe_pmu_event_init()
+>> - Dropped BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init()
+>> - Updated the commit message
+>>   
+>> Changes in V2:
+>>
+>> https://lore.kernel.org/all/20220713085925.2627533-1-anshuman.khandual@arm.com/
+>>
+>> - Moved CONFIG_PID_IN_CONTEXTIDR config check inside the helper per Suzuki
+>> - Changed the comment per Suzuki
+>> - Renamed the helpers Per Suzuki
+>> - Added "Fixes: " tag per German
+>>
+>> Changes in V1:
+>>
+>> https://lore.kernel.org/all/20220712051404.2546851-1-anshuman.khandual@arm.com/
+>>
+>>
+>>   drivers/perf/arm_spe_pmu.c | 22 ++++++++++++++++++++--
+>>   1 file changed, 20 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+>> index db670b265897..b65a7d9640e1 100644
+>> --- a/drivers/perf/arm_spe_pmu.c
+>> +++ b/drivers/perf/arm_spe_pmu.c
+>> @@ -39,6 +39,24 @@
+>>   #include <asm/mmu.h>
+>>   #include <asm/sysreg.h>
+>>   
+>> +/*
+>> + * Cache if the event is allowed to trace Context information.
+>> + * This allows us to perform the check, i.e, perfmon_capable(),
+>> + * in the context of the event owner, once, during the event_init().
+>> + */
+>> +#define SPE_PMU_HW_FLAGS_CX			BIT(0)
+>> +
+>> +static void set_spe_event_has_cx(struct perf_event *event)
+>> +{
+>> +	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+>> +		event->hw.flags |= SPE_PMU_HW_FLAGS_CX;
+>> +}
+>> +
+>> +static bool get_spe_event_has_cx(struct perf_event *event)
+>> +{
+>> +	return !!(event->hw.flags & SPE_PMU_HW_FLAGS_CX);
+>> +}
+>> +
+>>   #define ARM_SPE_BUF_PAD_BYTE			0
+>>   
+>>   struct arm_spe_pmu_buf {
+>> @@ -272,7 +290,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+>>   	if (!attr->exclude_kernel)
+>>   		reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
+>>   
+>> -	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+>> +	if (get_spe_event_has_cx(event))
+>>   		reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+>>   
+>>   	return reg;
+>> @@ -709,10 +727,10 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+>>   	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_LAT))
+>>   		return -EOPNOTSUPP;
+>>   
+>> +	set_spe_event_has_cx(event);
+>>   	reg = arm_spe_event_to_pmscr(event);
+>>   	if (!perfmon_capable() &&
+>>   	    (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
+>> -		    BIT(SYS_PMSCR_EL1_CX_SHIFT) |
+> 
+> The first part of the change looks ok, but I'm not sure about this removal here.
+> 
+> Doesn't this mean that if you ask for context data when opening the event
+> without permission you don't get an error returned any more? It just silently
+> ignores it.
 
-Patch 6/6 didn't apply cleanly so was applied with
-patch -p1 < patch.patch and then I missed to git add the .c file.
+How do you ask for context data with SPE ? If there was a way, we don't
+need this caching. The CX bit is set unconditionally on 
+perfmon_capable() and is not controlled by an attribute. Ideally it is
+better to switch to an attribute. But given that it was never there,
+I wonder if this would be a problem for the existing perf users ?
 
-> I wasn't sure what to do, so I resent the whole
-> series[2], in case the index hashes in the v1 patches were causing the problem.
 
-Fixed up by applying v2 now!
+> 
+> That changes the semantics of the perf event open call and I don't see why that's
+> needed to fix the issue about only checking the permissions of the owning process.
+> At least it seems like a separate unrelated change.
+> 
+> It's also worth noting that the value doesn't need to be cached, and another
+> one line solution is just to check the permissions of the owning process. This
+> avoids duplicating something that is already saved, will survive any future
+> refactors of the permissions system, and doesn't use up space in hw_flags:
+> 
+>     if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) &&
+>         (has_capability(event->owner, CAP_PERFMON) || has_capability(event->owner, CAP_SYS_ADMIN)))
+>     {
+> 	reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+>     }
 
-Linus Walleij
+We don't use any bits in the hw_events for SPE. So using a bit for 
+storing something doesn't seem to be a wasted effort. Any future
+refactors to the permission system would need to take care of the
+current users. So that argument is not valid in either case.
+
+Cheers
+Suzuki

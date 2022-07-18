@@ -2,120 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFA5578841
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103F7578882
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235365AbiGRRW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 13:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
+        id S235826AbiGRRdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 13:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233400AbiGRRW5 (ORCPT
+        with ESMTP id S231274AbiGRRdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:22:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22DD20BD0;
-        Mon, 18 Jul 2022 10:22:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 989A9B816D4;
-        Mon, 18 Jul 2022 17:22:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C619C341C0;
-        Mon, 18 Jul 2022 17:22:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658164974;
-        bh=4Qf4uY0oktTd//WyjvLyb1YapNMCufZPX8bfRpna8Fw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FKkNKxw/kSvyFnzvgQpX72YSb9C0wtGX2dw4fIAXmH4PuiW1KfVWmvQw7ufO4jw17
-         CCIMYspn+W/gj5vVZ0ecOXyXLPHm/lar6IuLDqXPvJvRH17hJhLgXFHKaDD6BhzJ3/
-         /BRelt5LBe370HQ7+77hLmEG2GhmkgEdiO9HnS1cQAIcgfiFt3Ydq+beQi//q7gudO
-         9vYaMxgMI+okXLTBOHrQhNeulM2Rl4hm5IECw0ieXhVKlWSVkHlfC0Br02d2x75XEO
-         0ia8aElEl8j3jewmrubVsUwLCwLxEh5Lf3MfYn5JbAau5ayTV1FFXWluA+hq7fAHli
-         qrwQu9hGvA6SA==
-Date:   Mon, 18 Jul 2022 18:32:49 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
- allocate() stage
-Message-ID: <20220718183249.6f411e5c@jic23-huawei>
-In-Reply-To: <20220718112446.lucl7omialqri7yv@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220601174837.20292-1-ddrokosov@sberdevices.ru>
-        <20220604145955.2a1108ca@jic23-huawei>
-        <20220701115823.vywhifktaxcr72cc@CAB-WSD-L081021.sigma.sbrf.ru>
-        <20220713170436.32330fa6@jic23-huawei>
-        <20220716162556.2e919bf7@jic23-huawei>
-        <20220718112446.lucl7omialqri7yv@CAB-WSD-L081021.sigma.sbrf.ru>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Mon, 18 Jul 2022 13:33:06 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250962CE0D
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:33:05 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id id17so474311wmb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+GhSiJA8jNsER0UOznMgRktrQLMwzPG3Lkdw+33iL48=;
+        b=DVpMJwQkF5I84C5a0bD/n0SGDKhI8JmAiylD9fmz59B8jFXrW5DzKsxyYiuwdhGLvm
+         K4gULiPfi6uauHtwJd2OIRawraFt+4S6N4KPFQEXI0286+Iz5uri3jFYjtWo7UNzRDbq
+         WO/sHs2EbpJKexJf2/tIF2biRfjE38wrxW6d0gZkNTo64HJbndH7E73QqrQQbQSXP8IW
+         +2es2frz9Bo5NJ4Ed4m92YziZGBbbEVM0o9C24Sru2nHI1xnBwSVrqYMNffmWR61pa9D
+         12jZHHKA2uzOcv8qjjqzDwaga2LDQK5UYlTyUy8DbMjzhxEGoWrK4gduH418liVMZ7We
+         plfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+GhSiJA8jNsER0UOznMgRktrQLMwzPG3Lkdw+33iL48=;
+        b=6fEcRtFd25AaCkmEsu1e+cO0IwELKt0SuO4JIE+7aCORrgtoO1axjcoNWZZDqdFKtc
+         ivMUfDpIajWIz2xH95anaAHiUMcDOH8+a5YWqRUxHsNGqJSUqAXto3pkx8pV8dmKtfd4
+         IVnDgknizT3ReZLXLu/x1F9BZ9hgMd9BkJYPmFgvWEB4miVR5ylu6fCRDzAg+hNG4m14
+         P6DUniZoqd0R1s8kB76VF7oBBHltMoID68U61oJGo/pWio3gqWURCtWoK1zwL/UmxrXb
+         qyveA4tE7u6MkWtKomo6SLm7oFLUBTQJnmx+gVxWAPt4gz0PN2nbVhxbn8AIP46nPC7y
+         aTOw==
+X-Gm-Message-State: AJIora9Tb0rCbotJAaVF6lA1IvLck0nVI2RGiRXRyPAgNH9iLe+ql5EN
+        e2q7kp387N/WwHymwUVYSF89SiVOemeizIlqtu1hyA==
+X-Google-Smtp-Source: AGRyM1tdOOSVY9WqE1GNkbUPuJZIHQeZx/yxe+w4lvoTvSD+QSC1W6nuhwTjhl40mPLwy38Rmfsy+mkoP0zaF4gbspQ=
+X-Received: by 2002:a1c:7213:0:b0:3a3:155a:dd5d with SMTP id
+ n19-20020a1c7213000000b003a3155add5dmr9625060wmc.178.1658165583538; Mon, 18
+ Jul 2022 10:33:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+ <20220715061027.1612149-13-kaleshsingh@google.com> <87tu7ezrso.wl-maz@kernel.org>
+In-Reply-To: <87tu7ezrso.wl-maz@kernel.org>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Mon, 18 Jul 2022 10:32:52 -0700
+Message-ID: <CAC_TJvcc0VZhp+u+2YpXuQ-UcGC+YTKy1PEoPCmbm+_WXo6cVw@mail.gmail.com>
+Subject: Re: [PATCH v4 12/18] KVM: arm64: Save protected-nVHE (pKVM) hyp stacktrace
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>, android-mm@google.com,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 11:23:59 +0000
-Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+On Mon, Jul 18, 2022 at 2:36 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Fri, 15 Jul 2022 07:10:21 +0100,
+> Kalesh Singh <kaleshsingh@google.com> wrote:
+> >
+> > In protected nVHE mode, the host cannot access private owned hypervisor
+> > memory. Also the hypervisor aims to remains simple to reduce the attack
+> > surface and does not provide any printk support.
+> >
+> > For the above reasons, the approach taken to provide hypervisor stacktraces
+> > in protected mode is:
+> >    1) Unwind and save the hyp stack addresses in EL2 to a shared buffer
+> >       with the host (done in this patch).
+> >    2) Delegate the dumping and symbolization of the addresses to the
+> >       host in EL1 (later patch in the series).
+> >
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > ---
+> >  arch/arm64/include/asm/stacktrace/nvhe.h | 18 ++++++
+> >  arch/arm64/kvm/hyp/nvhe/stacktrace.c     | 70 ++++++++++++++++++++++++
+> >  2 files changed, 88 insertions(+)
+> >
+> > diff --git a/arch/arm64/include/asm/stacktrace/nvhe.h b/arch/arm64/include/asm/stacktrace/nvhe.h
+> > index 36cf7858ddd8..456a6ae08433 100644
+> > --- a/arch/arm64/include/asm/stacktrace/nvhe.h
+> > +++ b/arch/arm64/include/asm/stacktrace/nvhe.h
+> > @@ -21,6 +21,22 @@
+> >
+> >  #include <asm/stacktrace/common.h>
+> >
+> > +/**
+> > + * kvm_nvhe_unwind_init - Start an unwind from the given nVHE HYP fp and pc
+> > + *
+> > + * @fp : frame pointer at which to start the unwinding.
+> > + * @pc : program counter at which to start the unwinding.
+> > + */
+> > +static __always_inline void kvm_nvhe_unwind_init(struct unwind_state *state,
+> > +                                              unsigned long fp,
+> > +                                              unsigned long pc)
+> > +{
+> > +     unwind_init_common(state, NULL);
+>
+> Huh. Be careful here. This function is only 'inline', which means it
+> may not be really inlined. We've had tons of similar issues like this
+> in the past, and although this will not break at runtime anymore, it
+> will definitely stop the kernel from linking.
 
-> Hello Jonathan,
-> 
-> On Sat, Jul 16, 2022 at 04:25:56PM +0100, Jonathan Cameron wrote:
-> > On Wed, 13 Jul 2022 17:04:36 +0100
-> > Jonathan Cameron <jic23@kernel.org> wrote:
-> >   
-> > > On Fri, 1 Jul 2022 11:59:59 +0000
-> > > Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
-> > >   
-> > > > Hello Jonathan,
-> > > > 
-> > > > This patch has been on the mailing list for one month already, but no
-> > > > comments from other IIO reviewers. What do you think we should do with it?
-> > > > Is it a helpful change or not?    
-> > > 
-> > > Given I'm way behind and timing in cycle, I'm probably going to kick this
-> > > back to start of the next cycle. Sorry for delay,  
-> > Applied to the togreg branch of iio.git.
-> > 
-> > I'm unlikely to do another pull request this cycle unless there is a delay in
-> > the release for some reason (and probably not even if there is), so this
-> > is queued up for next cycle.  As such it'll sit exposed only in the testing
-> > branch until I rebase on rc1.
-> > 
-> > Thanks,
-> > 
-> > Jonathan
-> >   
-> 
-> Thank you for the patch applied.
-> I have one question about the previous already applied patchset
-> 
-> https://lore.kernel.org/all/20220607183907.20017-1-ddrokosov@sberdevices.ru/
-> 
-> I see this patchset already merged to linux-next more than a month ago.
-> But it's still not available in the linux stable branch. Could you please
-> explain what's the problem with this one? Was some bug found during
-> linux-next testing stage? Should I fix something?
-> 
-> Appreciate any help to understand what's I missing.
+Ahh, there are a few other always inline *unwind_init* functions that
+use this. I'll update in the next version.
 
-It's not a fix so it will go in during the merge window in about 2 weeks time.
-Won't get backported to Stable though unless we ask for that to happen as it's
-not really a fix so I didn't add a marking for it to be picked up for stable
-(which would only happen after 5.20-rc1 anyway).
+Thanks,
+Kalesh
 
-J
-
-
-> 
-
+>
+> Thanks,
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

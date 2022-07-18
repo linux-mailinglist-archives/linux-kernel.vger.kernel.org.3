@@ -2,104 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2C95789E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD365789E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbiGRS4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S233747AbiGRS4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiGRS4Q (ORCPT
+        with ESMTP id S233368AbiGRS4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:56:16 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A1C2F038
+        Mon, 18 Jul 2022 14:56:17 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DAD2F386
         for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:56:16 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id s18-20020a17090aa11200b001f1e9e2438cso700737pjp.2
+Received: by mail-ej1-x62f.google.com with SMTP id z23so22994426eju.8
         for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ImWpl/KKv4UFu4MEO4wU0UdHvw3c0qhUubcZMjHwl1c=;
-        b=ZoiVOL41A6vCsGH0b1L/NLRLJ58R67hAbMBl6a3ujrVpjQ4uRQDZ+b6sOUeVZChAv1
-         Db+5EalLfTpv9YtPjcUskcoveKHKgPRjT7MSTzmSENZn0PUr4iiWciunSBvNuGMSCB8i
-         mS/7dQdFnfsxyyVcx128s5nawZVpZOpiVwKlk=
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OlTtr5Gd284OqEXfbDoqgh6rP1VAtWxhRShnoixkRbw=;
+        b=d6GcSCh+7n/GZEZUJUNlmqvQFKgvgxpaE9K32+dORzvBulfX/UjyU2DOdjn25pdojM
+         7A/9kJsuMYbuoQEmbPXengBpsifDZ3oXqMqQJ4KMdfc6BxIMKG3O8vgbRnQcW9GlMAgS
+         hLY0zHaAcbH7aXwIcfvl4n3qOFid9OPO5B+2w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ImWpl/KKv4UFu4MEO4wU0UdHvw3c0qhUubcZMjHwl1c=;
-        b=bRCf7ig7Jr1OqweQpcsfvLel4Xg0Ls2LmOYsddUCwFHsuzhmguPYZyunEWohN8OhDF
-         IbezTyFIK375IupFDTbvSI9kK/bH9naXURrsHLPvZkWhIX/+lZHh3yZrlN2DEYo+8WHs
-         Kb2tA+VbmfyzGFCvIceE9meJf8QdqJ7eH1PRURdrACgp5kiRMQj1jrtoVOwDv72ZV+Ni
-         odcNCOehX9VMJ84xZsuZ1/NReOxGJe4MMx212RwfByPnrojuSMDBU5EBdE/ozDXQ01FB
-         11HafiYVm4PM2qSzZUIak7gUONg2gJ/6LIj/ArhbEELnA7ybSZbZyNXj7VfaDBPn4vXh
-         DuUA==
-X-Gm-Message-State: AJIora/2VQLXgHMujx+zqFYwqF1kwJQdhWnpBdomggKCGzYmU2hEYff2
-        7kdtVfx7D7XSY+kP7G89rHQ5RdwLXOSXOA==
-X-Google-Smtp-Source: AGRyM1t8c/cRBGwxbDh8wtrP3JCV2aD79MUsWaVgg+FuCPJnIe4Rl3qht860tDVjt0ZtJy8teE9r9g==
-X-Received: by 2002:a17:902:f092:b0:16c:abb9:f984 with SMTP id p18-20020a170902f09200b0016cabb9f984mr25023585pla.41.1658170575345;
-        Mon, 18 Jul 2022 11:56:15 -0700 (PDT)
-Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d66-20020a621d45000000b00528669a770esm9791323pfd.90.2022.07.18.11.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 11:56:14 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Cc:     bleung@chromium.org, gregkh@linuxfoundation.org,
-        Prashant Malani <pmalani@chromium.org>,
-        "Reported-by : kernel test robot" <lkp@intel.com>
-Subject: [PATCH] platform/chrome: cros_typec_switch: Add ACPI Kconfig dep
-Date:   Mon, 18 Jul 2022 18:55:51 +0000
-Message-Id: <20220718185551.1025288-1-pmalani@chromium.org>
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OlTtr5Gd284OqEXfbDoqgh6rP1VAtWxhRShnoixkRbw=;
+        b=iQHV+V5nt78dkMJtk5aviauTzoYdWmjlkzcXETprNSuwHRhoRA5LdS4dDlHftPWtVS
+         TOEgJ7uTNWkSK2BAvqbQ0evF6paxKv2UYQp7y7CSCpwn/C8vZ9AJWmNnRhXxUaByJ2X5
+         e1IANitleCyN8c6HXYs9OJZSGzq/Q46LAR2pg3TPDrSxVoqEfQZwspf4ue9KgqxP4IL/
+         FlElDQRa/yNvZoVdYilWW7m3FaCGgPGBwAP7vhwJUd2ePdg/rf2/kWB5xPYBB9lllAib
+         dAILdh7GJQvRV+uXrwYNw7pMZRnbUKTWujpDKae43gwIzl5XEGzPNy4/l5UgbhJZYnsU
+         zVNA==
+X-Gm-Message-State: AJIora9axdekCUIRBUdZnCjq/DlFVJgu8HTAge01qysl5olAqJd+XvAf
+        giNrWjB6jX6tKYkA90d30JCx8+9RrjwUoo2BTlegBw==
+X-Google-Smtp-Source: AGRyM1uo031Zdy22MbXpwGfGpcKqCn6IvBlAnm7yWcskFnaXLXp81/Bd6TlVQEXSCslz3eJkrirRKWfcSpzZwaICnwg=
+X-Received: by 2002:a17:907:9809:b0:72f:817:d433 with SMTP id
+ ji9-20020a170907980900b0072f0817d433mr14173469ejc.483.1658170575172; Mon, 18
+ Jul 2022 11:56:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220716222454.29914-3-jim2101024@gmail.com> <20220718181425.GA1431580@bhelgaas>
+In-Reply-To: <20220718181425.GA1431580@bhelgaas>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Mon, 18 Jul 2022 14:56:03 -0400
+Message-ID: <CA+-6iNwjPr2gu_oyn4NheLPJZHh-3eib-3onz63sfNOJpdJ6Tw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000001ff22505e418ecbd"
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the ACPI Kconfig dependency that was missed during the initial
-driver submission. Fixes the following compiler errors:
+--0000000000001ff22505e418ecbd
+Content-Type: text/plain; charset="UTF-8"
 
-drivers/platform/chrome/cros_typec_switch.c:93:9: error: call to
-undeclared function 'acpi_evaluate_integer'; ISO C99 and later do not
-support implicit function declarations
- [-Wimplicit-function-declaration]
-   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+On Mon, Jul 18, 2022 at 2:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Sat, Jul 16, 2022 at 06:24:49PM -0400, Jim Quinlan wrote:
+> > Currently, the function does the setup for establishing PCIe link-up
+> > with the downstream device, and it does the actual link-up as well.
+> > The calling sequence is (roughly) the following in the probe:
+> >
+> > -> brcm_pcie_probe()
+> >     -> brcm_pcie_setup();                       /* Set-up and link-up */
+> >     -> pci_host_probe(bridge);
+> >
+> > This commit splits the setup function in two: brcm_pcie_setup(), which only
+> > does the set-up, and brcm_pcie_start_link(), which only does the link-up.
+> > The reason why we are doing this is to lay a foundation for subsequent
+> > commits so that we can turn on any power regulators, as described in the
+> > root port's DT node, prior to doing link-up.
+>
+> All drivers that care about power regulators turn them on before
+> link-up, but typically those regulators are described directly under
+> the host bridge itself.
+Hi Bjorn,
 
-drivers/platform/chrome/cros_typec_switch.c:93:35: error: incomplete
-definition of type 'struct acpi_device'
-   ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+Actually, what you describe is what I proposed with my v1 back in Nov 2020.
+The binding commit message said,
 
-Fixes: e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
-Reported-by: Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
- drivers/platform/chrome/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+    "Quite similar to the regulator bindings found in "rockchip-pcie-host.txt",
+     this allows optional regulators to be attached and controlled by the
+     PCIe RC driver."
 
-diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
-index c62a514a087f..9d4fc505fa25 100644
---- a/drivers/platform/chrome/Kconfig
-+++ b/drivers/platform/chrome/Kconfig
-@@ -267,7 +267,7 @@ config CHROMEOS_PRIVACY_SCREEN
- 
- config CROS_TYPEC_SWITCH
- 	tristate "ChromeOS EC Type-C Switch Control"
--	depends on MFD_CROS_EC_DEV && TYPEC
-+	depends on MFD_CROS_EC_DEV && TYPEC && ACPI
- 	default MFD_CROS_EC_DEV
- 	help
- 	  If you say Y here, you get support for configuring the Chrome OS EC Type C
--- 
-2.37.0.170.g444d1eabd0-goog
+>
+> IIUC the difference here is that you have regulators described under
+> Root Ports (not the host bridge/Root Complex itself), so you don't
+> know about them until you've enumerated the Root Ports.
+> brcm_pcie_probe() can't turn them on directly because it doesn't know
+> what Root Ports are present and doesn't know about regulators below
+> them.
 
+The reviewer's requested me to move the regulator node(s)  elsewhere,
+and at some point later it was requested to be placed under the Root Port
+driver.  I would love to return them under the host bridge, just say the word!
+
+>
+> So I think brcm_pcie_setup() does initialization that doesn't depend
+> on the link or any downstream devices, and brcm_pcie_start_link() does
+> things that depend on the link being up.  Right?
+Yes.
+
+>
+> If so, "start_link" might be a slight misnomer since AFAICT
+> brcm_pcie_start_link() doesn't do anything to initiate link-up except
+> maybe deasserting fundamental reset.  Some drivers start the LTSSM or
+> explicitly enable link training, but brcm_pcie_start_link() doesn't
+> seem to do anything like that.
+>
+> brcm_pcie_start_link() still does brcm_pcie_set_outbound_win().  Does
+> that really depend on the link being up?  If that only affects the
+> Root Port, maybe it could be done before link-up?
+Some of the registers cannot be accessed until after linkup but these do
+not have that issue.  I will change this.
+
+Jim Quinlan
+Broadcom STB
+
+>
+> > We do this by defining an
+> > add_bus() callback which is invoked during enumeraion.  At the end of this
+> > patchset the probe function trace will look something like this:
+> >
+> > -> brcm_pcie_probe()
+> >     -> brcm_pcie_setup();                       /* Set-up only */
+> >     -> pci_host_probe(bridge);
+> >         -> [enumeration]
+> >             -> pci_alloc_child_bus()
+> >                 -> bus->ops->add_bus(bus);      /* We've set this op */
+> >                 -> brcm_pcie_add_bus()          /* Our callback      */
+> >                      -> [turn on regulators]    /* Main objective!   */
+> >                      -> brcm_pcie_start_link()  /* Link-up           */
+
+--0000000000001ff22505e418ecbd
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
+DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
+BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
+VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
+DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
+qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
+YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
+S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
+8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
+AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
+AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
+MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC89bumtyjc43/YB73JCm2tfvLY0Hgk
+eq192u3hYzM/UDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
+MTgxODU2MTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
+hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
+AgEwDQYJKoZIhvcNAQEBBQAEggEAgCWjvQYbszcn1/qNTjV5NmuD4JnsCD35U1xrbQdc3PHnC9Eu
+fhuGiO8DgLDQtqMArscQolDY1s6wbEuxi7Y+4igYugHrDbbx5GRJQe3NTsVlKOt7B6hUC1nO2Q8n
+7T9nWOJjvgb2ybnKXouuBWrSeJy9R1xUnix18pjA9Zdcq06FsIA7Hbrxw6S8gflBMN6DROn0D5lN
+822Sc3Kl+rNnwvurcHSbd95aSVbgl3OIMW00A9kT11ZCSS1e3hXZGKR1pNWo3JbHXbcnrfJbgaTr
+JTOZ2LzlTNWPVJLvZS2bz8jwChgXKFEq+bTio3vWgwLwXyNpwKaduyq5TfHsF6GyLQ==
+--0000000000001ff22505e418ecbd--

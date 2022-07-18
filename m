@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54465784EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681A25784F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235749AbiGROL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 10:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S235764AbiGROMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 10:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235728AbiGROLx (ORCPT
+        with ESMTP id S235740AbiGROLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:11:53 -0400
+        Mon, 18 Jul 2022 10:11:54 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBB56275C1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:11:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E78962715A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:11:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658153511;
+        s=mimecast20190719; t=1658153513;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w5ar1xL/lWu4+LzORYC79cebbS3mhMxSowTJXzIDy14=;
-        b=Nt2+Mp3N49b+kKIjPo5AUgAMylrtOuL2H5xux0E/GFlyMKcHtu+82FxVHPuZ1zYPtNGgxB
-        Ad+2Z09jXxpj0tm1MKIHWxKSCfyJ2sWcIHf5+2W6S5ZWj0npNl3f1Q0OjcxwCKl1kWTE7E
-        KBHArzI1Zk+ZXaGfmU3ddQhHqbjOkkw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=WQ28KCG8qrZVHeMH3WgWsVAsqXW66sq9MXnU4h146Bs=;
+        b=DYpjzXzgXmLjd9O99Q+Dv4+Jrgaa7XYOelA4nuoPFX+5ozWeB0WDV49CIcVt2YvuW2wF6v
+        O3A4FYOMjHFY4EoWe7FGHzQ5wYTJ3D8FOkRWxLtOHGeu+eiqXRnN48DugWWa84f4nsJuAD
+        rxPIQq0XyFHJucY4QuF5gjxoOeXa/zI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-F11jd_UNMn6FzKPX6SELGw-1; Mon, 18 Jul 2022 10:11:42 -0400
-X-MC-Unique: F11jd_UNMn6FzKPX6SELGw-1
+ us-mta-638-Mw1UrJkLOfKZHkMeNfQTmg-1; Mon, 18 Jul 2022 10:11:46 -0400
+X-MC-Unique: Mw1UrJkLOfKZHkMeNfQTmg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3250096AC62;
-        Mon, 18 Jul 2022 14:11:40 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4EC0529ABA0B;
+        Mon, 18 Jul 2022 14:11:45 +0000 (UTC)
 Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7E7D92026D64;
-        Mon, 18 Jul 2022 14:11:35 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DE182026D64;
+        Mon, 18 Jul 2022 14:11:40 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
@@ -66,9 +66,9 @@ Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
         Mark Rutland <mark.rutland@arm.com>,
         linux-perf-users@vger.kernel.org,
         linux-crypto@vger.kernel.org (open list:CRYPTO API)
-Subject: [PATCH v2 2/5] x86/cpuid: refactor setup_clear_cpu_cap()/clear_cpu_cap()
-Date:   Mon, 18 Jul 2022 17:11:20 +0300
-Message-Id: <20220718141123.136106-3-mlevitsk@redhat.com>
+Subject: [PATCH v2 3/5] x86/cpuid: move filter_cpuid_features to cpuid-deps.c
+Date:   Mon, 18 Jul 2022 17:11:21 +0300
+Message-Id: <20220718141123.136106-4-mlevitsk@redhat.com>
 In-Reply-To: <20220718141123.136106-1-mlevitsk@redhat.com>
 References: <20220718141123.136106-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -76,74 +76,158 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently setup_clear_cpu_cap passes NULL 'struct cpuinfo_x86*'
-to clear_cpu_cap to indicate that capability should be cleared from boot_cpu_data.
+filter_cpuid_features performs a sanity check on CPU/hypervisor
+provided CPUID in regard to having all required leaves which
+some CPUID feature bits require.
 
-Later that is used in clear_feature to do recursive call to
-clear_cpu_cap together with clearing the feature bit from 'cpu_caps_cleared'
+Soon this sanity check will be extended to also disable CPUID
+features which were erronsly enabled in CPUID and depend on
+features that are marked as disabled in the CPUID.
 
-Remove that code and just call the do_clear_cpu_cap on boot_cpu_data directly
-from the setup_clear_cpu_cap.
+It thus makes sense to have both checks in one file.
 
-The only functional change this introduces is that now calling clear_cpu_cap
-explicitly on boot_cpu_data also sets the bits in cpu_caps_cleared,
-which is the only thing that makes sense anyway.
-
-All callers of both functions were checked for this and fixed.
+No functional change intended.
 
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/kernel/cpu/cpuid-deps.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
+ arch/x86/include/asm/cpufeature.h |  1 +
+ arch/x86/kernel/cpu/common.c      | 47 -------------------------------
+ arch/x86/kernel/cpu/cpuid-deps.c  | 47 +++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+), 47 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index c881bcafba7d70..d6777d07ba3302 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -88,18 +88,16 @@ static inline void clear_feature(struct cpuinfo_x86 *c, unsigned int feature)
- 	 * rest of the cpufeature code uses atomics as well, so keep it for
- 	 * consistency. Cleanup all of it separately.
- 	 */
--	if (!c) {
--		clear_cpu_cap(&boot_cpu_data, feature);
-+	clear_bit(feature, (unsigned long *)c->x86_capability);
-+
-+	if (c == &boot_cpu_data)
- 		set_bit(feature, (unsigned long *)cpu_caps_cleared);
--	} else {
--		clear_bit(feature, (unsigned long *)c->x86_capability);
--	}
+diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
+index ea34cc31b0474f..3eb5fe0d654e63 100644
+--- a/arch/x86/include/asm/cpufeature.h
++++ b/arch/x86/include/asm/cpufeature.h
+@@ -147,6 +147,7 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
+ 
+ extern void setup_clear_cpu_cap(unsigned int bit);
+ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
++extern void filter_cpuid_features(struct cpuinfo_x86 *c, bool warn);
+ 
+ #define setup_force_cpu_cap(bit) do { \
+ 	set_cpu_cap(&boot_cpu_data, bit);	\
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 736262a76a12b7..beaea42c1b47e1 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -620,53 +620,6 @@ __noendbr void cet_disable(void)
+ 		wrmsrl(MSR_IA32_S_CET, 0);
  }
  
- /* Take the capabilities and the BUG bits into account */
- #define MAX_FEATURE_BITS ((NCAPINTS + NBUGINTS) * sizeof(u32) * 8)
- 
--static void do_clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int feature)
-+void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int feature)
- {
- 	DECLARE_BITMAP(disable, MAX_FEATURE_BITS);
- 	const struct cpuid_dep *d;
-@@ -129,12 +127,7 @@ static void do_clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int feature)
- 	} while (changed);
- }
- 
--void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int feature)
+-/*
+- * Some CPU features depend on higher CPUID levels, which may not always
+- * be available due to CPUID level capping or broken virtualization
+- * software.  Add those features to this table to auto-disable them.
+- */
+-struct cpuid_dependent_feature {
+-	u32 feature;
+-	u32 level;
+-};
+-
+-static const struct cpuid_dependent_feature
+-cpuid_dependent_features[] = {
+-	{ X86_FEATURE_MWAIT,		0x00000005 },
+-	{ X86_FEATURE_DCA,		0x00000009 },
+-	{ X86_FEATURE_XSAVE,		0x0000000d },
+-	{ 0, 0 }
+-};
+-
+-static void filter_cpuid_features(struct cpuinfo_x86 *c, bool warn)
 -{
--	do_clear_cpu_cap(c, feature);
+-	const struct cpuid_dependent_feature *df;
+-
+-	for (df = cpuid_dependent_features; df->feature; df++) {
+-
+-		if (!cpu_has(c, df->feature))
+-			continue;
+-		/*
+-		 * Note: cpuid_level is set to -1 if unavailable, but
+-		 * extended_extended_level is set to 0 if unavailable
+-		 * and the legitimate extended levels are all negative
+-		 * when signed; hence the weird messing around with
+-		 * signs here...
+-		 */
+-		if (!((s32)df->level < 0 ?
+-		     (u32)df->level > (u32)c->extended_cpuid_level :
+-		     (s32)df->level > (s32)c->cpuid_level))
+-			continue;
+-
+-		clear_cpu_cap(c, df->feature);
+-		if (!warn)
+-			continue;
+-
+-		pr_warn("CPU: CPU feature " X86_CAP_FMT " disabled, no CPUID level 0x%x\n",
+-			x86_cap_flag(df->feature), df->level);
+-	}
 -}
 -
- void setup_clear_cpu_cap(unsigned int feature)
+ /*
+  * Naming convention should be: <Name> [(<Codename>)]
+  * This table only is used unless init_<vendor>() below doesn't set it;
+diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+index d6777d07ba3302..306f285844aedc 100644
+--- a/arch/x86/kernel/cpu/cpuid-deps.c
++++ b/arch/x86/kernel/cpu/cpuid-deps.c
+@@ -131,3 +131,50 @@ void setup_clear_cpu_cap(unsigned int feature)
  {
--	do_clear_cpu_cap(NULL, feature);
-+	clear_cpu_cap(&boot_cpu_data, feature);
+ 	clear_cpu_cap(&boot_cpu_data, feature);
  }
++
++/*
++ * Some CPU features depend on higher CPUID levels, which may not always
++ * be available due to CPUID level capping or broken virtualization
++ * software.  Add those features to this table to auto-disable them.
++ */
++struct cpuid_dependent_feature {
++	u32 feature;
++	u32 level;
++};
++
++static const struct cpuid_dependent_feature
++cpuid_dependent_features[] = {
++	{ X86_FEATURE_MWAIT,		0x00000005 },
++	{ X86_FEATURE_DCA,		0x00000009 },
++	{ X86_FEATURE_XSAVE,		0x0000000d },
++	{ 0, 0 }
++};
++
++void filter_cpuid_features(struct cpuinfo_x86 *c, bool warn)
++{
++	const struct cpuid_dependent_feature *df;
++
++	for (df = cpuid_dependent_features; df->feature; df++) {
++
++		if (!cpu_has(c, df->feature))
++			continue;
++		/*
++		 * Note: cpuid_level is set to -1 if unavailable, but
++		 * extended_extended_level is set to 0 if unavailable
++		 * and the legitimate extended levels are all negative
++		 * when signed; hence the weird messing around with
++		 * signs here...
++		 */
++		if (!((s32)df->level < 0 ?
++		     (u32)df->level > (u32)c->extended_cpuid_level :
++		     (s32)df->level > (s32)c->cpuid_level))
++			continue;
++
++		clear_cpu_cap(c, df->feature);
++		if (!warn)
++			continue;
++
++		pr_warn("CPU: CPU feature " X86_CAP_FMT " disabled, no CPUID level 0x%x\n",
++			x86_cap_flag(df->feature), df->level);
++	}
++}
 -- 
 2.34.3
 

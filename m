@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6630578B06
+	by mail.lfdr.de (Postfix) with ESMTP id F251F578B07
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236192AbiGRTh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S236240AbiGRThc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbiGRThQ (ORCPT
+        with ESMTP id S236188AbiGRThR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:37:16 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074C92CDED
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:14 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id g126so11565451pfb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:14 -0700 (PDT)
+        Mon, 18 Jul 2022 15:37:17 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D68130541
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:15 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s27so11490852pga.13
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ii9tnumcH6f4uVFiJaNvbNbCHj/eOFwFpwV99AWDIWY=;
-        b=gF1O4Ap8c6u3Wl7EJAnk5cpari+SSbCrCwIHnkKi2iGutzFYOra9oMYtovijltSliX
-         f9n+3+zOazFlTlGbgoP7cASWhUOA3yRUCNf36n4asDLBRZ2n5F6V77g8Ih0ng07spWdH
-         HCMUUeGMN6x1yYhcSmRTYhGUaieuitiLXWFPOh9CH2CMEqYcyByqPimLVW+wP36dQPZe
-         1RJE9T2eaZawBkz5E8JuXZAG/5xKtgo8+wNL/iuOrcsSXLKNEDQJjqpz/5Yuv3v3GVFQ
-         DvCcYoxTnP9tWp+lBd1uyqN2PAo5ihDVfdOn4Uj1GiSnYTj0YlvWIZ5h14BKB8GCHPjA
-         0gFA==
+        bh=pKws8yGRo63vLoo5PvEhs398wa0pzhCZmm6r0b5wNuc=;
+        b=qMpMBqoEJowM7hHEVUp4urmfW4BmRk2K5WRu6rjNNtcGI/q+u2qcbzoTj0dymzU/YN
+         GICq1D6c+IwKTAtMkM/ialUwiAbHd2qyav/oi4Lb2/tQir2MH5L1/9FN/OSYwOL11ogc
+         J95A/oNh44qpCzubW1bL4lW6pv2SZPldzPpGkHfXoFe/mJfk3/K11+ZWWai+ZuaWUxuj
+         ZktYEG+NaXZRrAZnM4dfOCYWFErlRI/RQXv4NrUjDJOmLWof5hAYkt6ED39XDfIu11Ol
+         QDBHOQm0nz2tV3l6dVnFXwCweU/mVRE1/C2vxelapt4M8n9mqIfwuSDyhKsokwR/n6pa
+         5lRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ii9tnumcH6f4uVFiJaNvbNbCHj/eOFwFpwV99AWDIWY=;
-        b=zNosqQGRRV4CaRWURanoiewy4STvLM3KxyKHHT8F6Hsf8HCScyF+cQ3A2t8VEiOceI
-         QZY5H10tGPVIEX5UdpZX+XKlTNm0SWt7bxaxipLM8I0hHhLNNRSc7CIa/hpYw2MGJU2e
-         6SVIIyNp4KmNg0Ufmsk7oeyXD4mazPfbNcYEitOVeB50srGE2EiUU4Dp9LT3x2hJWnav
-         ds960yZ/NKDnjROufVOZQyn43lPtj1xn+XpVJ3fL0bDB+88WPkAe3/a+y1PXckyBPHoT
-         wnCKML5fdoWdWhCnS2yhK9Za3NHtjidRuGRNspCldqha8ypXQP5LWBlN4+bqau1YVeLg
-         SHyw==
-X-Gm-Message-State: AJIora966Nwt47D7+YDU9q5ZbBx+WjFQz39REMn4yP0wquFAmJTBQ4g0
-        bxkHX9pc2LSshNWIDL+YlOg=
-X-Google-Smtp-Source: AGRyM1tECueM0uV0ckJl2HFWgTNipKEQZcrDzMSchFkRcqY0hBmCA7xorYY92YcZXwgaVycH49hQXg==
-X-Received: by 2002:a05:6a00:3388:b0:52a:c018:6cdf with SMTP id cm8-20020a056a00338800b0052ac0186cdfmr29910792pfb.55.1658173033302;
-        Mon, 18 Jul 2022 12:37:13 -0700 (PDT)
+        bh=pKws8yGRo63vLoo5PvEhs398wa0pzhCZmm6r0b5wNuc=;
+        b=p19nGqIbcAFUMXODGLbp5jyjrhLm3T5bzu5wCgv5behm4KjNDftIlVhBcghfbm/w5V
+         nDHfxuVqq01uLqLnsswCfLjADBO1LUD0Y795bEDV5QMiNzkahi+qNKl76EJLgNN74BUB
+         RhcMjuBqjwBrwf+UnSwTa/uzvvKh3LGK0ecJKQc0TdGj4vKbYpl986X2lKMMzTU5gM5l
+         TxjJ4J9O5rjSy3koi/I84TPOX9ZBTLNZwmhbvkUN+oH2FOCJxEWrpDoeQYqIaK5M0+M4
+         Ok113NBIUa0JHTnM5qVNQeS00ULQ9sNyZFatmzbkDWtdyQR5IR8k6IEw+eDvsXOny8SX
+         XW3g==
+X-Gm-Message-State: AJIora+M516yro9aU1Oktzw2lt+fkXmZPV3Xiw2fQBdP+1HU3fcHDuRT
+        t+l1/7SiJAioiHTUNvu9cz0=
+X-Google-Smtp-Source: AGRyM1v2EDFEp/irIA5oLmEjHJRkKj6neMr06kHIqrOuqyOom6q/rRWy9YaOFocxFmxkQmdYOSbCBw==
+X-Received: by 2002:aa7:9256:0:b0:52a:cbf7:43ea with SMTP id 22-20020aa79256000000b0052acbf743eamr29902665pfp.7.1658173034758;
+        Mon, 18 Jul 2022 12:37:14 -0700 (PDT)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.11
+        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:37:12 -0700 (PDT)
+        Mon, 18 Jul 2022 12:37:14 -0700 (PDT)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     linux-mm@kvack.org
@@ -66,9 +66,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
         Nick Piggin <npiggin@gmail.com>
-Subject: [RFC PATCH 07/14] mm: do fix spurious page-faults for instruction faults
-Date:   Mon, 18 Jul 2022 05:02:05 -0700
-Message-Id: <20220718120212.3180-8-namit@vmware.com>
+Subject: [RFC PATCH 08/14] x86/mm: introduce flush_tlb_fix_spurious_fault
+Date:   Mon, 18 Jul 2022 05:02:06 -0700
+Message-Id: <20220718120212.3180-9-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220718120212.3180-1-namit@vmware.com>
 References: <20220718120212.3180-1-namit@vmware.com>
@@ -85,11 +85,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-The next patches might cause spurious instruction faults on x86. To
-prevent them from occurring too much, call
-flush_tlb_fix_spurious_fault() for page-faults on code fetching as well.
-The callee is expected to do a full flush, or whatever is necessary to
-avoid further TLB flushes.
+The next patches introduce relaxed TLB flushes for x86, which would
+require a full TLB flush upon spurious page-fault. If a spurious
+page-fault occurs on x86, check if the local TLB generation is out of
+sync and perform a TLB flush if needed.
 
 Cc: Andrea Arcangeli <aarcange@redhat.com>
 Cc: Andrew Cooper <andrew.cooper3@citrix.com>
@@ -105,22 +104,53 @@ Cc: Yu Zhao <yuzhao@google.com>
 Cc: Nick Piggin <npiggin@gmail.com>
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- mm/memory.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/pgtable.h |  4 +++-
+ arch/x86/mm/tlb.c              | 17 +++++++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 31ec3f0071a2..152a47876c36 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4924,7 +4924,7 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
- 		 * This still avoids useless tlb flushes for .text page faults
- 		 * with threads.
- 		 */
--		if (vmf->flags & FAULT_FLAG_WRITE)
-+		if (vmf->flags & (FAULT_FLAG_WRITE|FAULT_FLAG_INSTRUCTION))
- 			flush_tlb_fix_spurious_fault(vmf->vma, vmf->address);
- 	}
- unlock:
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 44e2d6f1dbaa..1fbdaff1bb7a 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1079,7 +1079,9 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm,
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
+ }
+ 
+-#define flush_tlb_fix_spurious_fault(vma, address) do { } while (0)
++extern void flush_tlb_fix_spurious_fault(struct vm_area_struct *vma,
++					 unsigned long address);
++#define flush_tlb_fix_spurious_fault flush_tlb_fix_spurious_fault
+ 
+ #define mk_pmd(page, pgprot)   pfn_pmd(page_to_pfn(page), (pgprot))
+ 
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index d400b6d9d246..ff3bcc55435e 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -955,6 +955,23 @@ static void put_flush_tlb_info(void)
+ #endif
+ }
+ 
++void flush_tlb_fix_spurious_fault(struct vm_area_struct *vma,
++				  unsigned long address)
++{
++	u32 loaded_mm_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
++	u64 mm_tlb_gen = atomic64_read(&vma->vm_mm->context.tlb_gen);
++	u64 local_tlb_gen = this_cpu_read(cpu_tlbstate.ctxs[loaded_mm_asid].tlb_gen);
++	struct flush_tlb_info *info;
++
++	if (local_tlb_gen == mm_tlb_gen)
++		return;
++
++	preempt_disable();
++	info = get_flush_tlb_info(NULL, 0, TLB_FLUSH_ALL, 0, false, 0);
++	flush_tlb_func(info);
++	preempt_enable();
++}
++
+ void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
+ 				unsigned long end, unsigned int stride_shift,
+ 				bool freed_tables)
 -- 
 2.25.1
 

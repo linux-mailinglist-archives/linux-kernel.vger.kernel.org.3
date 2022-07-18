@@ -2,133 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C2E578256
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218EE578292
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbiGRM3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
+        id S234845AbiGRMml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234537AbiGRM3V (ORCPT
+        with ESMTP id S235014AbiGRMmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:29:21 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E95B66
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:29:20 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Lmh645hLpz1M7xh;
-        Mon, 18 Jul 2022 20:26:36 +0800 (CST)
-Received: from [10.67.110.176] (10.67.110.176) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Jul 2022 20:29:17 +0800
-Subject: Re: [PATCH -next,v2] nvmem: core: Fix memleak in nvmem_register()
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <gongruiqi1@huawei.com>,
-        <wangweiyang2@huawei.com>
-References: <20220716095257.2752110-1-cuigaosheng1@huawei.com>
- <9029caa7-beea-34f6-7f9b-b2b230c3baeb@linaro.org>
-From:   cuigaosheng <cuigaosheng1@huawei.com>
-Message-ID: <81b18902-fb45-74b2-ec58-84b468ee9bf1@huawei.com>
-Date:   Mon, 18 Jul 2022 20:29:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Mon, 18 Jul 2022 08:42:39 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 055781BE9A;
+        Mon, 18 Jul 2022 05:42:38 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id A35521C80F4A;
+        Mon, 18 Jul 2022 20:29:37 +0800 (CST)
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 18 Jul
+ 2022 20:29:37 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Mon, 18 Jul 2022 20:29:37 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id 90A0D63A20; Mon, 18 Jul 2022 15:29:35 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <gregkh@linuxfoundation.org>,
+        <stern@rowland.harvard.edu>, <tony@atomide.com>,
+        <felipe.balbi@linux.intel.com>, <jgross@suse.com>,
+        <lukas.bulwahn@gmail.com>, <arnd@arndb.de>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <openbmc@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1 0/3] usb: host: npcm7xx-ehci: add Arbel NPCM8XX support and remove reset sequence 
+Date:   Mon, 18 Jul 2022 15:29:19 +0300
+Message-ID: <20220718122922.9396-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <9029caa7-beea-34f6-7f9b-b2b230c3baeb@linaro.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.176]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your ideas,
+This patch set
+- Adds Arbel NPCM8XX USB EHCI host controller support to USB EHCI driver.
+- Remove the USB reset sequence because it is done in the NPCM reset driver.
 
-I have made another patch, moving nvmem_validate_keepouts() after
-device_register() and let the device core deal with cleaning name in
-error cases, it's a better option for the issue.
+The NPCM USB host driver tested on the NPCM845 evaluation board.
 
-Thanks,
+Tomer Maimon (3):
+  usb: host: npcm7xx: remove USB EHCI host reset sequence
+  dt-bindings: usb: npcm7xx: Add npcm845 compatible
+  USB: host: npcm: Add NPCM8XX support
 
-在 2022/7/18 19:44, Srinivas Kandagatla 写道:
->
->
-> On 16/07/2022 10:52, Gaosheng Cui wrote:
->> dev_set_name will alloc memory for nvmem->dev.kobj.name in
->> nvmem_register, when nvmem_validate_keepouts failed, nvmem's
->> memory will be freed and return, but nobody will free memory
->> for nvmem->dev.kobj.name, there will be memleak, so moving
->> dev_set_name after nvmem_validate_keepouts to fix it.
->>
->> Fixes: de0534df9347 ("nvmem: core: fix error handling while 
->> validating keepout regions")
->> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
->> ---
->>   drivers/nvmem/core.c | 28 ++++++++++++++--------------
->>   1 file changed, 14 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
->> index 1e3c754efd0d..a5d75edf509d 100644
->> --- a/drivers/nvmem/core.c
->> +++ b/drivers/nvmem/core.c
->> @@ -808,20 +808,6 @@ struct nvmem_device *nvmem_register(const struct 
->> nvmem_config *config)
->>       else if (!config->no_of_node)
->>           nvmem->dev.of_node = config->dev->of_node;
->>   -    switch (config->id) {
->> -    case NVMEM_DEVID_NONE:
->> -        dev_set_name(&nvmem->dev, "%s", config->name);
->> -        break;
->> -    case NVMEM_DEVID_AUTO:
->> -        dev_set_name(&nvmem->dev, "%s%d", config->name, nvmem->id);
->> -        break;
->> -    default:
->> -        dev_set_name(&nvmem->dev, "%s%d",
->> -                 config->name ? : "nvmem",
->> -                 config->name ? config->id : nvmem->id);
->> -        break;
->> -    }
->> -
->>       nvmem->read_only = device_property_present(config->dev, 
->> "read-only") ||
->>                  config->read_only || !nvmem->reg_write;
->>   @@ -838,6 +824,20 @@ struct nvmem_device *nvmem_register(const 
->> struct nvmem_config *config)
->>           }
->>       }
->>   +    switch (config->id) {
->> +    case NVMEM_DEVID_NONE:
->> +        dev_set_name(&nvmem->dev, "%s", config->name);
->> +        break;
->> +    case NVMEM_DEVID_AUTO:
->> +        dev_set_name(&nvmem->dev, "%s%d", config->name, nvmem->id);
->> +        break;
->> +    default:
->> +        dev_set_name(&nvmem->dev, "%s%d",
->> +                 config->name ? : "nvmem",
->> +                 config->name ? config->id : nvmem->id);
->> +        break;
->> +    }
->> +
-> The issue with this approach is that dev_err messages in 
-> nvmem_validate_keepouts() will show up without device name setup.
->
-> I think better option is to move nvmem_validate_keepouts() after 
-> device_register() and let the device core deal with cleaning name in 
-> error cases.
->
-> --srini
->
->>       dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", 
->> config->name);
->>         rval = device_register(&nvmem->dev);
-> .
+ .../devicetree/bindings/usb/npcm7xx-usb.txt   |  4 +-
+ drivers/usb/host/Kconfig                      |  8 ++--
+ drivers/usb/host/ehci-npcm7xx.c               | 47 -------------------
+ 3 files changed, 7 insertions(+), 52 deletions(-)
+
+-- 
+2.33.0
+

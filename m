@@ -2,89 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF20578523
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F67F578527
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbiGROQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 10:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S233446AbiGRORk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 10:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiGROQM (ORCPT
+        with ESMTP id S233142AbiGRORj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:16:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161105FA2;
-        Mon, 18 Jul 2022 07:16:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 18 Jul 2022 10:17:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC310D13C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:17:37 -0700 (PDT)
+Received: from [IPV6:2804:14c:137:a261:c39e:574c:1421:5266] (unknown [IPv6:2804:14c:137:a261:c39e:574c:1421:5266])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A157A60A6D;
-        Mon, 18 Jul 2022 14:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8970EC341CF;
-        Mon, 18 Jul 2022 14:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658153770;
-        bh=anQAhzj0hNoAoDauWAq911k+RDOaRL0GEvj3qKhtGY4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=b/Pa9E/Jr2Gd3SQoqBG6Msxj+sN6828QlFO2lDwMzyRfpchng/INs/htM6GMgPNlh
-         ioa2jELQfHiLejSc6ItPg4PBxCmjwQkFZ0jZ5NpMBYuri7Ycq5+W2Wnu24j3i9ur3g
-         VTQ8uX8d10lEj4z3UgYzameKLbiJ7sL1kXAMbFiEHE0jyOBNhn3EmByg3YU7cMaUkW
-         Gc7bbAu6EkWuhx5zc8yZuVKUxt/ZiBDRyNuSzbcKb+Vpi0CPFu2w+GxJTTwbZpG8hz
-         odgbVtlB5vKG0lSvvFvcR4Eo8oYXc2M728bi3te0Ga6RbEx/BDEhIGXuh58le5ywFY
-         RMocPiTrjUK2Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     claudiu.beznea@microchip.com, tudor.ambarus@microchip.com,
-        alexandre.belloni@bootlin.com, nicolas.ferre@microchip.com
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20220718071052.1707858-1-claudiu.beznea@microchip.com>
-References: <20220718071052.1707858-1-claudiu.beznea@microchip.com>
-Subject: Re: [PATCH] spi: atmel: remove #ifdef CONFIG_{PM, SLEEP}
-Message-Id: <165815376828.235243.1985340166357749822.b4-ty@kernel.org>
-Date:   Mon, 18 Jul 2022 15:16:08 +0100
+        (Authenticated sender: padovan)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 066CA66019FD;
+        Mon, 18 Jul 2022 15:17:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658153856;
+        bh=X11xN3vFeOABvtsJsmWIq8i6v0cajRPr7dedlaIvdFg=;
+        h=Date:Subject:From:To:Cc:Reply-To:References:In-Reply-To:From;
+        b=CByK9J/lZ+P6iDBQAxV1B78VKGCAMsbWeABFLGrCqNQzRKO21Im/UOWLohSzQwNI2
+         2K1/bnSPTmJ6ZIdcVvAnkFps4LH83T2davXI2qnztcEICf/2YFLLesm5OKD5vgJqJ/
+         Bn+ZqNoftfdB4kI6JalY1RVCtXsvG5/Fp29qEr6SNO6bF0MYbrzFgGbmM+fAEV+DUZ
+         VXUL+T79xKRZikRQWMEC6XMyREy4sYHbJkaQOTnN/NlHpiCm3XKrrkffi1qB9KBAi3
+         x+Utt5HJUwH+Rc9NA2w7l3D6fsDPq2PlsUVMtZ53+tykhcBoenwZ5osXU36dQqr0Xw
+         9dYHoy3M7ihXg==
+Message-ID: <3bbebb1b-c205-e789-d37e-6d016260685c@collabora.com>
+Date:   Mon, 18 Jul 2022 11:17:29 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [kernelci-members] KernelCI working group: Web Dashboard
+Content-Language: en-US
+From:   Gustavo Padovan <gustavo.padovan@collabora.com>
+To:     kernelci-members@groups.io,
+        "kernelci@groups.io" <kernelci@groups.io>
+Cc:     automated-testing@lists.yoctoproject.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernelci-tsc@groups.io" <kernelci-tsc@groups.io>,
+        Simon Xiao <sixiao@microsoft.com>,
+        Carlos Cardenas <Carlos.Cardenas@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Sharath George John <sgeorgejohn@microsoft.com>,
+        "Alain Gefflaut (HE/HIM)" <agefflaut@microsoft.com>,
+        Johnson George <Johnson.George@microsoft.com>
+Reply-To: kernelci-members@groups.io
+References: <f3874e7d-ccfe-4a2d-d054-9b7bf9e8b44d@collabora.com>
+ <16F4479F76A8C807.11895@groups.io> <16F65ECD601264EC.15470@groups.io>
+In-Reply-To: <16F65ECD601264EC.15470@groups.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 10:10:52 +0300, Claudiu Beznea wrote:
-> Remove #ifdef CONFIG_PM, #ifdef CONFIG_PM_SLEEP and use
-> SYSTEM_SLEEP_PM_OPS() and RUNTIME_PM_OPS() macros instead which allows
-> getting also rid of __maybe_unused in the code.
-> 
-> 
+Hi everyone,
 
-Applied to
+In our last Web Dashboard meeting[1] where we reviewed the User Stories 
+document[2]. Then, after that we worked offline to incorporate the 
+feedback on doc, so it is time for our next meeting to further discuss. 
+Please answer the poll with your time availability on the link below. I 
+added dates from 21th to 28th of July.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+https://doodle.com/meeting/participate/id/eX6vyY5b
 
-Thanks!
+Thank you,
 
-[1/1] spi: atmel: remove #ifdef CONFIG_{PM, SLEEP}
-      commit: a3fd35be0eda760610a63e179ad860189b890f0b
+Gus
+—
+[1]https://docs.google.com/document/d/1yp-2L54tnrwkZ--59t2GeXuq1gt5dDnsFy08odizl1Y/edit#bookmark=id.6ok0ufne9shj
+[2]https://docs.google.com/document/d/1_rfMpas4n_gw2GvUTRU63vIXk95VotJuittalX7trP8/edit#heading=h.wjoxi4s5pxzl 
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+On 6/7/22 10:46, Gustavo Padovan wrote:
+>
+> Hello,
+>
+> Our next meeting has been scheduled for this Thursday at 3pm UTC. 
+> Invite was sent to the kernelci-members list, but here goes the 
+> instructions to join as well:
+>
+> This event has a video call.
+> Join: https://meet.google.com/yyz-jzjy-yfu
+> (US) +1 254-227-6870 PIN: 188509910#
+> View more phone numbers: 
+> https://tel.meet/yyz-jzjy-yfu?pin=5882595078642&hs=7
+>
+> Regards,
+>
+> Gustavo
+>
+> Le 31/05/2022 à 15:34, Gustavo Padovan a écrit :
+>>
+>> Hello everyone,
+>>
+>> **
+>>
+>> *From our first meeting back in October[1], we took the action of 
+>> organizing our user stories that you were spread as a comments in the 
+>> the github issue{2} and, converting them into User Stories document[3].*
+>>
+>> *
+>>
+>> In the next meeting, we want to study the current User Stories and 
+>> start discussions to progress on development. The proposed slots are 
+>> for next week. Please answer the doodle by the end of this week:
+>>
+>> https://doodle.com/meeting/participate/id/egJ12A9d
+>>
+>> Best regards,
+>>
+>> Gustavo
+>>
+>> [1] 
+>> https://docs.google.com/document/d/1yp-2L54tnrwkZ--59t2GeXuq1gt5dDnsFy08odizl1Y/edit# 
+>> <https://docs.google.com/document/d/1yp-2L54tnrwkZ--59t2GeXuq1gt5dDnsFy08odizl1Y/edit#>
+>>
+>> [2] https://github.com/kernelci/kernelci-project/discussions/28 
+>> <https://github.com/kernelci/kernelci-project/discussions/28>
+>>
+>> {3} 
+>> https://docs.google.com/document/d/1_rfMpas4n_gw2GvUTRU63vIXk95VotJuittalX7trP8/edit 
+>> <https://docs.google.com/document/d/1_rfMpas4n_gw2GvUTRU63vIXk95VotJuittalX7trP8/edit>* 
+>>
+>> Le 27/07/2021 à 11:54, Guillaume Tucker a écrit :
+>>> Last year's KernelCI Community Survey[1] showed the importance of
+>>> having a good web dashboard.  About 70% of respondents would use
+>>> one if it provided the information they needed efficiently.
+>>> While other things are arguably even more important, such as
+>>> testing patches from mailing lists, replying to stable reviews
+>>> and sending email reports directly to contributors in a "natural"
+>>> workflow, the web dashboard has been a sticking point for a
+>>> while.
+>>>
+>>> There have been several attempts at solving this problem, using
+>>> Elastic Stack and Grafana among other things, but there isn't a
+>>> single framework able to directly provide an off-the-shelf
+>>> solution to the community's needs.  In fact, the first issue is
+>>> the lack of understanding of these needs: who wants to use the
+>>> web dashboard, and how?  Then, how does one translate those needs
+>>> into a user interface?  Doing this requires skills that engineers
+>>> who regularly contribute to KernelCI typically don't have.  As
+>>> such, a dedicated working group is being created in order to fill
+>>> this gap.
+>>>
+>>> The aim is to coordinate efforts and try to follow best practices
+>>> to make steady progress and avoid repeating the same mistakes.
+>>> Most likely, we will need some help from proper web developers
+>>> who aren't part of the usual KernelCI community.  This may be
+>>> facilitated by the KernelCI LF project budget if approved by the
+>>> governing board.
+>>>
+>>> In order to get started, we would need to have maybe 3 to 5
+>>> people available to focus on this.  It doesn't necessarily mean a
+>>> lot of hours spent but actions to be carried out on a daily or
+>>> weekly basis.  So far we have Gustavo Padovan as our new KernelCI
+>>> Project Manager and a few people have expressed interest but we
+>>> still need formal confirmation.
+>>>
+>>>
+>>> Here's a GitHub project dedicated to the new web dashboard:
+>>>
+>>>    https://github.com/orgs/kernelci/projects/4
+>>>
+>>> I've created a couple of issues to get started about user
+>>> stories, and some initial milestones as a basic skeleton:
+>>>
+>>>    https://github.com/kernelci/kernelci-project/milestones
+>>>
+>>>
+>>> This is ultimately a community-driven effort to address the needs
+>>> of the kernel community.  Please share any thoughts you may have
+>>> on this, whether you want to add some user stories, share some
+>>> expertise, be officially in the working group or take part in
+>>> this effort in any other way.
+>>>
+>>> Best wishes,
+>>> Guillaume
+>>>
+>>> [1]https://foundation.kernelci.org/blog/2020/07/09/kernelci-community-survey-report/
+>>>
+>>>
+>>>
+>>>
+>>>
+> _._,_._,_
+> ------------------------------------------------------------------------
+> Groups.io Links:
+>
+> You receive all messages sent to this group.
+>
+> View/Reply Online (#404) 
+> <https://groups.io/g/kernelci-members/message/404> | Reply To Group 
+> <mailto:kernelci-members@groups.io?subject=Re:%20Re%3A%20%5Bkernelci-members%5D%20KernelCI%20working%20group%3A%20Web%20Dashboard> 
+> | Reply To Sender 
+> <mailto:gustavo.padovan@collabora.com?subject=Private:%20Re:%20Re%3A%20%5Bkernelci-members%5D%20KernelCI%20working%20group%3A%20Web%20Dashboard> 
+> | Mute This Topic <https://groups.io/mt/84484922/6162449> | New Topic 
+> <https://groups.io/g/kernelci-members/post>
+> Your Subscription 
+> <https://groups.io/g/kernelci-members/editsub/6162449> | Contact Group 
+> Owner <mailto:kernelci-members+owner@groups.io> | Unsubscribe 
+> <https://groups.io/g/kernelci-members/leave/10351275/6162449/983346018/xyzzy> 
+> [gustavo.padovan@collabora.com]
+>
+> _._,_._,_
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-- 
+Gustavo Padovan
+Kernel team Lead
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Collabora Ltd.
+Platinum Building, St John's Innovation Park
+Cambridge CB4 0DS, UK
+Registered in England & Wales, no. 5513718
 
-Thanks,
-Mark

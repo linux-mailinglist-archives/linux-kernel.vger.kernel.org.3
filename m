@@ -2,155 +2,832 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDEC578E0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B433578E0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiGRXGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 19:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
+        id S236450AbiGRXHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 19:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGRXGg (ORCPT
+        with ESMTP id S229478AbiGRXHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 19:06:36 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC20F275EC
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:06:35 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id r142-20020a632b94000000b0041a18177a5dso1630192pgr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:06:35 -0700 (PDT)
+        Mon, 18 Jul 2022 19:07:02 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F53A32EED
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:06:59 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id o12so15445778ljc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:06:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=kr+g0QLyfEsKisyWseSQidWHG7rTs+Z9BjnCTx3ihTc=;
-        b=UALDjrOGFK63RNNlZA9jDLc+QBDSAH1EdrvRdsbNPiAxlbTp5/vXOzhCE0JdyzjItg
-         6Guq1N/aGwWPV+Lqa8Faop3fIKcrvQylt/GMLCPQ/7GSHA3Tai77w4t5p8omE3dh63a5
-         ZvP0h4vC2B2xEwEhysFiZd9ED6dCdIoGNVpxRoS1WZABUjlOKu8WUPczczpe+tVS9M9d
-         9zBPC7I6ns7Gu48exyHoPaD1dh3sfob4A9ZMTpZE68k0cJwNgu19cJXyd/sqjPn89v5W
-         jR7kBLNsJg8SR0yswTuj0tmeMqIjb3s9rkr8/+e/IITIMXsDBURqpQP2W0buSK4lgJgt
-         MgCQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=p04r9zdpJUdCMikRQDyLZ8lS/PzgxzWdKARW7mjHsJI=;
+        b=utkAsEb8cGxSt7ML/b5U54fsNOubacz7ISuwB5OAS4/OIyUIJBYKMY1VvstOyKCYmf
+         kLlluki977nVSHxLP01pcO+O8gvWuRQMqjGVRgqbv7y/WLJtWtjWujMPZAEuo9tzvWMb
+         r7SGil35jmmvW+pbgCYSzgI5CVvOol0iTLjipib29rYC3Xe4HCfhfyTcjZAubEW9JddV
+         n6kLc++8aICkD04QcQV7r3PflaO0PWzUExdXzzRenprsM9YUoUUcLTdXmJos2OGVU1hz
+         gfZbr1lLXOhQO4ycBUuUlTI8Tp5fd+85CcT5PcTZvVT1VqL8EEn0VAzLuymNoxO8NdJP
+         s6Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=kr+g0QLyfEsKisyWseSQidWHG7rTs+Z9BjnCTx3ihTc=;
-        b=S6hiNQ822xG5apmLnR/1kxI0cE0DIKZqUrn3nlM6PSTR5WYqMWLrqzvOTeW6dAdMgd
-         MQ/nCn59Ni9w+RgdjF6DvO+zQrh4UnukKt1v2X3T30l/fkW9whzk5nYbB17tqF1ITnzr
-         Wb81kR/CVvRF0p/DxrJklQZB3U8rRC0PX6jCOgqbEh+yvdP0CHS/tISJonNn+wzB0TYR
-         BGfvRNY1VMFS+3l1uf731RD4XBYXYlnbo3hD/DdqzCpnPD1//gQNvT3sbno/hxLcKrZq
-         0UNmVesw+HUgMRQCOvscnAXWFY0H/PHJCpyZo0frtlciHsfavAcEoel4D7z9M2Xlfsn4
-         Q3aA==
-X-Gm-Message-State: AJIora8VMxI5uh361C4m//wODNUiPBKT25HH4eM9IjNGvsLTFvxCDLw8
-        rRGiy0EYlOzIfeQGqAvXD5MsV+iLx3sC/PW6Lg==
-X-Google-Smtp-Source: AGRyM1vtVDLoN7bIQSM386zKqi30WcOFVcP2gi6jg06lTY3MCLjhqHNIUvyaeunHATC+f0/1R+GPQ6p77PqvVtOUDA==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:f922:7e91:d8e8:24c4])
- (user=justinstitt job=sendgmr) by 2002:a17:903:3093:b0:16b:deea:4d36 with
- SMTP id u19-20020a170903309300b0016bdeea4d36mr30327719plc.126.1658185595359;
- Mon, 18 Jul 2022 16:06:35 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 16:06:26 -0700
-In-Reply-To: <CAKwvOdnN67xFL22oWfqrKjvES4vjSB3KNhm401LtoC7igO+4Vg@mail.gmail.com>
-Message-Id: <20220718230626.1029318-1-justinstitt@google.com>
-Mime-Version: 1.0
-References: <CAKwvOdnN67xFL22oWfqrKjvES4vjSB3KNhm401LtoC7igO+4Vg@mail.gmail.com>
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v4] lib/test_printf.c: fix clang -Wformat warnings
-From:   Justin Stitt <justinstitt@google.com>
-To:     ndesaulniers@google.com
-Cc:     andriy.shevchenko@linux.intel.com, justinstitt@google.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
-        senozhatsky@chromium.org, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=p04r9zdpJUdCMikRQDyLZ8lS/PzgxzWdKARW7mjHsJI=;
+        b=4ahY9O99tOwNwmUoH5XBa2vvLZ4Y1OaunT9UZ8lj/ikd9ARztUa70ymdn+Wowo+02N
+         5iK+KrM+fJDADwQhqL0xFOAF6m7jZjjRlBYek1a/Mo5dQYvmeQnE7xWPdlkPSgZgZa+1
+         d6RF+3p2cDEq+WVJh1QUKUGV6hYvMipCMReJ/Ec/PAKeqeAGjx8clC8qyAL3PQb/KmcD
+         1ORuoDMBIhbj0s2ayOQmJBkaNlPNgoc9HUFwmadZ+ZeSGXf6mnp3PYrzDG70EEAkfyIF
+         ZwFCZ3fkU/xtRphgYaviiKyhMVw+16LVJpaL8jS+nF5zE0ungFA5A8S7/UCOCJXO2S+A
+         APgQ==
+X-Gm-Message-State: AJIora/oCYyJkosiK301UEBvncz1G9n1sK9T4t0Wc1n+Wk6hcxeVYYYK
+        pxMjMSm2La/vv22x6remI6e7RA==
+X-Google-Smtp-Source: AGRyM1umReM5gGy/MpCfbafTtfKspQZzmobYAv3aGSi+nLsVeuMdDr03M7Op1QfWmIn5NAaXZ9BWKQ==
+X-Received: by 2002:a2e:a172:0:b0:25d:6242:ee10 with SMTP id u18-20020a2ea172000000b0025d6242ee10mr13545592ljl.399.1658185617224;
+        Mon, 18 Jul 2022 16:06:57 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id f10-20020ac2532a000000b0047255d21171sm2837283lfh.160.2022.07.18.16.06.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 16:06:56 -0700 (PDT)
+Message-ID: <163a4993-6d39-b2e8-f2a6-a7c0da577083@linaro.org>
+Date:   Tue, 19 Jul 2022 02:06:56 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 4/4] drm: panel: Add lg sw43408 panel driver
+Content-Language: en-GB
+To:     Caleb Connolly <caleb@connolly.tech>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Cc:     Vinod Koul <vkoul@kernel.org>
+References: <20220718213051.1475108-1-caleb@connolly.tech>
+ <20220718213051.1475108-5-caleb@connolly.tech>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220718213051.1475108-5-caleb@connolly.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-see warnings:
-| lib/test_printf.c:157:52: error: format specifies type 'unsigned char'
-| but the argument has type 'int' [-Werror,-Wformat]
-test("0|1|1|128|255",
-| "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
--
-| lib/test_printf.c:158:55: error: format specifies type 'char' but the
-| argument has type 'int' [-Werror,-Wformat] test("0|1|1|-128|-1",
-| "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
--
-| lib/test_printf.c:159:41: error: format specifies type 'unsigned
-short'
-| but the argument has type 'int' [-Werror,-Wformat]
-| test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+On 19/07/2022 00:30, Caleb Connolly wrote:
+> From: Sumit Semwal <sumit.semwal@linaro.org>
+> 
+> LG SW43408 is 1080x2160, 4-lane MIPI-DSI panel, used in some Pixel3
+> phones.
+> 
+> Whatever init sequence we have for this panel isn't capable of
+> initialising it completely, toggling the reset gpio ever causes the
+> panel to die. Until this is resolved we avoid resetting the panel. The
+> disable/unprepare functions only put the panel to sleep mode and
+> disable the backlight.
+> 
+> Signed-off-by: Sumit Semwal <sumit.semwal@linaro.org>
+> [vinod: Add DSC support]
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> [caleb: cleanup and support turning off the panel]
+> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+> ---
+>   MAINTAINERS                              |   8 +
+>   drivers/gpu/drm/panel/Kconfig            |  11 +
+>   drivers/gpu/drm/panel/Makefile           |   1 +
+>   drivers/gpu/drm/panel/panel-lg-sw43408.c | 586 +++++++++++++++++++++++
+>   4 files changed, 606 insertions(+)
+>   create mode 100644 drivers/gpu/drm/panel/panel-lg-sw43408.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f679152bdbad..8a2b954ad140 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6376,6 +6376,14 @@ S:	Orphan / Obsolete
+>   F:	drivers/gpu/drm/i810/
+>   F:	include/uapi/drm/i810_drm.h
+>   
+> +DRM DRIVER FOR LG SW43408 PANELS
+> +M:	Sumit Semwal <sumit.semwal@linaro.org>
+> +M:	Caleb Connolly <caleb@connolly.tech>
+> +S:	Maintained
+> +T:	git git://anongit.freedesktop.org/drm/drm-misc
+> +F:	Documentation/devicetree/bindings/display/panel/lg,sw43408-panel.txt
+> +F:	drivers/gpu/drm/panel/panel-lg-sw43408.c
+> +
+>   DRM DRIVER FOR LVDS PANELS
+>   M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>   L:	dri-devel@lists.freedesktop.org
+> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+> index 38799effd00a..706b112794b9 100644
+> --- a/drivers/gpu/drm/panel/Kconfig
+> +++ b/drivers/gpu/drm/panel/Kconfig
+> @@ -256,6 +256,17 @@ config DRM_PANEL_LEADTEK_LTK500HD1829
+>   	  24 bit RGB per pixel. It provides a MIPI DSI interface to
+>   	  the host and has a built-in LED backlight.
+>   
+> +config DRM_PANEL_LG_SW43408
+> +	tristate "LG SW43408 panel"
+> +	depends on OF
+> +	depends on DRM_MIPI_DSI
+> +	depends on BACKLIGHT_CLASS_DEVICE
+> +	help
+> +	  Say Y here if you want to enable support for LG sw43408 panel.
+> +	  The panel has a 1080x2160 resolution and uses
+> +	  24 bit RGB per pixel. It provides a MIPI DSI interface to
+> +	  the host and has a built-in LED backlight.
+> +
+>   config DRM_PANEL_SAMSUNG_LD9040
+>   	tristate "Samsung LD9040 RGB/SPI panel"
+>   	depends on OF && SPI
+> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+> index 42a7ab54234b..ba26a69b74e7 100644
+> --- a/drivers/gpu/drm/panel/Makefile
+> +++ b/drivers/gpu/drm/panel/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_DRM_PANEL_LEADTEK_LTK050H3146W) += panel-leadtek-ltk050h3146w.o
+>   obj-$(CONFIG_DRM_PANEL_LEADTEK_LTK500HD1829) += panel-leadtek-ltk500hd1829.o
+>   obj-$(CONFIG_DRM_PANEL_LG_LB035Q02) += panel-lg-lb035q02.o
+>   obj-$(CONFIG_DRM_PANEL_LG_LG4573) += panel-lg-lg4573.o
+> +obj-$(CONFIG_DRM_PANEL_LG_SW43408) += panel-lg-sw43408.o
+>   obj-$(CONFIG_DRM_PANEL_NEC_NL8048HL11) += panel-nec-nl8048hl11.o
+>   obj-$(CONFIG_DRM_PANEL_NEWVISION_NV3052C) += panel-newvision-nv3052c.o
+>   obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35510) += panel-novatek-nt35510.o
+> diff --git a/drivers/gpu/drm/panel/panel-lg-sw43408.c b/drivers/gpu/drm/panel/panel-lg-sw43408.c
+> new file mode 100644
+> index 000000000000..c7b8ec7b970d
+> --- /dev/null
+> +++ b/drivers/gpu/drm/panel/panel-lg-sw43408.c
+> @@ -0,0 +1,586 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright (C) 2019 Linaro Ltd
+> + * Author: Sumit Semwal <sumit.semwal@linaro.org>
+> + */
+> +
+> +#include <linux/backlight.h>
+> +#include <linux/delay.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/regulator/consumer.h>
+> +
+> +#include <drm/drm_device.h>
+> +#include <drm/drm_mipi_dsi.h>
+> +#include <drm/drm_modes.h>
+> +#include <drm/drm_panel.h>
+> +#include <drm/drm_print.h>
+> +#include <drm/display/drm_dsc.h>
+> +#include <drm/display/drm_dsc_helper.h>
+> +
+> +#include <video/mipi_display.h>
+> +
+> +struct panel_cmd {
+> +	size_t len;
+> +	const char *data;
+> +};
+> +
+> +#define _INIT_CMD(...)                                                   \
+> +	{                                                                \
+> +		.len = sizeof((char[]){ __VA_ARGS__ }), .data = (char[]) \
+> +		{                                                        \
+> +			__VA_ARGS__                                      \
+> +		}                                                        \
+> +	}
+> +
+> +static const char *const regulator_names[] = {
+> +	"vddi",
+> +	"vpnl",
+> +};
+> +
+> +static const unsigned long regulator_enable_loads[] = {
+> +	62000,
+> +	857000,
+> +};
+> +
+> +static const unsigned long regulator_disable_loads[] = {
+> +	80,
+> +	0,
+> +};
+> +
+> +struct sw43408_panel {
+> +	struct drm_panel base;
+> +	struct mipi_dsi_device *link;
+> +
+> +	const struct drm_display_mode *mode;
+> +	struct backlight_device *backlight;
+> +
+> +	struct regulator_bulk_data supplies[ARRAY_SIZE(regulator_names)];
+> +
+> +	struct gpio_desc *reset_gpio;
+> +
+> +	bool prepared;
+> +	bool enabled;
+> +};
+> +
+> +static const struct panel_cmd lg_sw43408_on_cmds_1[] = {
+> +	_INIT_CMD(0x00, 0x53, 0x0C, 0x30),
 
-There's an ongoing movement to eventually enable the -Wformat flag for
-clang. Previous patches have targeted incorrect usage of
-format specifiers. In this case, however, the "incorrect" format
-specifiers are intrinsically part of the test cases. Hence, fixing them
-would be misaligned with their intended purpose. My proposed fix is to
-simply disable the warnings so that one day a clean build of the kernel
-with clang (and -Wformat enabled) would be possible. It would also keep
-us in the green for alot of the CI bots.
+Please use the lower case for hex numbers.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-changes from v1 -> v2:
-* moved NOWARN macro definition to a more appropriate location
-* using __diag_ignore_all (thanks Nathan)
-* using local scoping for code blocks instead of __VA_ARGS__ (thanks
-* Nick)
-* indented affected test cases (thanks Andy)
+> +	_INIT_CMD(0x00, 0x55, 0x00, 0x70, 0xDF, 0x00, 0x70, 0xDF),
+> +	_INIT_CMD(0x00, 0xF7, 0x01, 0x49, 0x0C),
+> +
+> +	{},
+> +};
+> +
+> +static const struct panel_cmd lg_sw43408_on_cmds_2[] = {
+> +	_INIT_CMD(0x00, 0xB0, 0xAC),
+> +	_INIT_CMD(0x00, 0xCD, 0x00, 0x00, 0x00, 0x19, 0x19, 0x19, 0x19, 0x19,
+> +		  0x19, 0x19, 0x19, 0x19, 0x19, 0x19, 0x19, 0x19, 0x16, 0x16),
+> +	_INIT_CMD(0x00, 0xCB, 0x80, 0x5C, 0x07, 0x03, 0x28),
+> +	_INIT_CMD(0x00, 0xC0, 0x02, 0x02, 0x0F),
+> +	_INIT_CMD(0x00, 0xE5, 0x00, 0x3A, 0x00, 0x3A, 0x00, 0x0E, 0x10),
+> +	_INIT_CMD(0x00, 0xB5, 0x75, 0x60, 0x2D, 0x5D, 0x80, 0x00, 0x0A, 0x0B,
+> +		  0x00, 0x05, 0x0B, 0x00, 0x80, 0x0D, 0x0E, 0x40, 0x00, 0x0C,
+> +		  0x00, 0x16, 0x00, 0xB8, 0x00, 0x80, 0x0D, 0x0E, 0x40, 0x00,
+> +		  0x0C, 0x00, 0x16, 0x00, 0xB8, 0x00, 0x81, 0x00, 0x03, 0x03,
+> +		  0x03, 0x01, 0x01),
+> +	_INIT_CMD(0x00, 0x55, 0x04, 0x61, 0xDB, 0x04, 0x70, 0xDB),
+> +	_INIT_CMD(0x00, 0xB0, 0xCA),
 
-changes from v2 -> v3:
-* reinserted commit message
-* remove Andy's Suggested-by tag
-* add issue tracker link
+The dtbo from the latest firware uses a bit different sequence here:
 
-changes from v3 -> v4:
-* better macro indentation and usage string (thanks Nick)
+0xb0, 0xac
+0xe5, 0x00....
+0xb5, 0x75.....
+msleep(85);
+0xcd, 0x00.....
+0xcb, 0x80...
+0x55, 0x04...
+0xb0, 0xca
 
- lib/test_printf.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+I'm not sure, but granted that you have issues with panel reinit, maybe 
+that would make any difference.
 
-diff --git a/lib/test_printf.c b/lib/test_printf.c
-index 07309c45f327..f78044c1efaa 100644
---- a/lib/test_printf.c
-+++ b/lib/test_printf.c
-@@ -30,6 +30,12 @@
- #define PAD_SIZE 16
- #define FILL_CHAR '$'
-=20
-+#define NOWARN(option, comment, block) \
-+	__diag_push(); \
-+	__diag_ignore_all(#option, comment); \
-+	block \
-+	__diag_pop();
-+
- KSTM_MODULE_GLOBALS();
-=20
- static char *test_buffer __initdata;
-@@ -154,9 +160,11 @@ test_number(void)
- 	test("0x1234abcd  ", "%#-12x", 0x1234abcd);
- 	test("  0x1234abcd", "%#12x", 0x1234abcd);
- 	test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|% d", 0,=
- 1, 12, 123, 1234, -123, -1234);
--	test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
--	test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
--	test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-+	NOWARN(-Wformat, "Intentionally test narrowing conversion specifiers.", {
-+		test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-+		test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-+		test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-+	})
- 	/*
- 	 * POSIX/C99: =C2=BBThe result of converting zero with an explicit
- 	 * precision of zero shall be no characters.=C2=AB Hence the output
---=20
-2.37.0.170.g444d1eabd0-goog
+> +
+> +	{},
+> +};
+> +
+> +static inline struct sw43408_panel *to_panel_info(struct drm_panel *panel)
+> +{
+> +	return container_of(panel, struct sw43408_panel, base);
+> +}
+> +
+> +/*
+> + * Currently unable to bring up the panel after resetting, must be missing
+> + * some init commands somewhere.
+> + */
+> +static __always_unused int panel_reset(struct sw43408_panel *ctx)
+> +{
+> +	int ret = 0, i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
+> +		ret = regulator_set_load(ctx->supplies[i].consumer,
+> +					 regulator_enable_loads[i]);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
+> +		ret = regulator_set_load(ctx->supplies[i].consumer,
+> +					 regulator_disable_loads[i]);
+> +		if (ret) {
+> +			DRM_DEV_ERROR(ctx->base.dev,
+> +				      "regulator_set_load failed %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
 
+If I remember correctly, there is no need to set loads before disabling 
+the regulator.
+
+> +
+> +	ret = regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
+> +	if (ret < 0)
+> +		return ret;
+
+So, you bump & disable regulators before playing with the reset GPIO. 
+Does the panel honour reset GPIO while being powered down?
+
+> +
+> +	gpiod_set_value(ctx->reset_gpio, 0);
+> +	usleep_range(9000, 10000);
+> +	gpiod_set_value(ctx->reset_gpio, 1);
+> +	usleep_range(1000, 2000);
+> +	gpiod_set_value(ctx->reset_gpio, 0);
+> +	usleep_range(9000, 10000);
+> +
+> +	return 0;
+> +}
+> +
+> +static int send_mipi_cmds(struct drm_panel *panel, const struct panel_cmd *cmds)
+> +{
+> +	struct sw43408_panel *ctx = to_panel_info(panel);
+> +	unsigned int i = 0;
+> +	int err;
+> +
+> +	if (!cmds)
+> +		return -EFAULT;
+> +
+> +	for (i = 0; cmds[i].len != 0; i++) {
+> +		const struct panel_cmd *cmd = &cmds[i];
+> +
+> +		if (cmd->len == 2)
+> +			err = mipi_dsi_dcs_write(ctx->link, cmd->data[1], NULL,
+> +						 0);
+> +		else
+> +			err = mipi_dsi_dcs_write(ctx->link, cmd->data[1],
+> +						 cmd->data + 2, cmd->len - 2);
+> +
+> +		if (err < 0)
+> +			return err;
+> +
+> +		usleep_range((cmd->data[0]) * 1000, (1 + cmd->data[0]) * 1000);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int lg_panel_disable(struct drm_panel *panel)
+> +{
+> +	struct sw43408_panel *ctx = to_panel_info(panel);
+> +
+> +	backlight_disable(ctx->backlight);
+> +	ctx->enabled = false;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * We can't currently re-initialise the panel properly after powering off.
+> + * This function will be used when this is resolved.
+> + */
+> +static __always_unused int lg_panel_power_off(struct drm_panel *panel)
+> +{
+> +	struct sw43408_panel *ctx = to_panel_info(panel);
+> +	int i, ret = 0;
+> +
+> +	gpiod_set_value(ctx->reset_gpio, 1);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
+> +		ret = regulator_set_load(ctx->supplies[i].consumer,
+> +					 regulator_disable_loads[i]);
+> +		if (ret) {
+> +			DRM_DEV_ERROR(panel->dev,
+> +				      "regulator_set_load failed %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	ret = regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(panel->dev, "regulator_bulk_disable failed %d\n",
+> +			      ret);
+> +	}
+> +	return ret;
+> +}
+> +
+> +static int lg_panel_unprepare(struct drm_panel *panel)
+> +{
+> +	struct sw43408_panel *ctx = to_panel_info(panel);
+> +	int ret, i;
+> +
+> +	if (!ctx->prepared)
+> +		return 0;
+> +
+> +	ret = mipi_dsi_dcs_set_display_off(ctx->link);
+> +	if (ret < 0) {
+> +		DRM_DEV_ERROR(panel->dev,
+> +			      "set_display_off cmd failed ret = %d\n", ret);
+> +	}
+> +
+> +	msleep(120);
+> +
+> +	ret = mipi_dsi_dcs_enter_sleep_mode(ctx->link);
+> +	if (ret < 0) {
+> +		DRM_DEV_ERROR(panel->dev, "enter_sleep cmd failed ret = %d\n",
+> +			      ret);
+> +	}
+> +
+> +	/* Would call panel_power_off() */
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
+> +		ret = regulator_set_load(ctx->supplies[i].consumer,
+> +					 regulator_disable_loads[i]);
+> +		if (ret) {
+> +			DRM_DEV_ERROR(panel->dev,
+> +				      "regulator_set_load failed %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+
+Do you need to disable regulators instead?
+Also would you need to pull the reset gpio?
+
+> +
+> +	ctx->prepared = false;
+> +
+> +	return ret;
+> +}
+> +
+> +static int lg_panel_prepare(struct drm_panel *panel)
+> +{
+> +	struct sw43408_panel *ctx = to_panel_info(panel);
+> +	int err, i;
+> +
+> +	if (ctx->prepared)
+> +		return 0;
+> +
+> +	/* Would call panel_reset() */
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++) {
+> +		err = regulator_set_load(ctx->supplies[i].consumer,
+> +					 regulator_enable_loads[i]);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	err = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	usleep_range(9000, 10000);
+
+Reset the panel here?
+
+> +
+> +	err = mipi_dsi_dcs_write(ctx->link, MIPI_DCS_SET_GAMMA_CURVE,
+> +				 (u8[]){ 0x02 }, 1);
+> +	if (err < 0) {
+> +		DRM_DEV_ERROR(panel->dev, "failed to set gamma curve: %d\n",
+> +			      err);
+> +		goto poweroff;
+> +	}
+> +
+> +	err = mipi_dsi_dcs_set_tear_on(ctx->link,
+> +				       MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+> +	if (err < 0) {
+> +		DRM_DEV_ERROR(panel->dev, "failed to set tear on: %d\n", err);
+> +		goto poweroff;
+> +	}
+> +
+> +	err = send_mipi_cmds(panel, &lg_sw43408_on_cmds_1[0]);
+> +
+> +	if (err < 0) {
+> +		DRM_DEV_ERROR(panel->dev,
+> +			      "failed to send DCS Init 1st Code: %d\n", err);
+> +		goto poweroff;
+> +	}
+> +
+> +	err = mipi_dsi_dcs_exit_sleep_mode(ctx->link);
+> +	if (err < 0) {
+> +		DRM_DEV_ERROR(panel->dev, "failed to exit sleep mode: %d\n",
+> +			      err);
+> +		goto poweroff;
+> +	}
+> +
+> +	msleep(135);
+> +
+> +	err = mipi_dsi_dcs_write(ctx->link, MIPI_DSI_COMPRESSION_MODE,
+> +				 (u8[]){ 0x11 }, 0);
+
+Please adjust mipi_dsi_compression_mode() instead. Do you really need 
+0x11 here? Does 0x1 work? You might want to adjust the mentioned function.
+
+> +	if (err < 0) {
+> +		DRM_DEV_ERROR(panel->dev,
+> +			      "failed to set compression mode: %d\n", err);
+> +		goto poweroff;
+> +	}
+> +
+> +	err = send_mipi_cmds(panel, &lg_sw43408_on_cmds_2[0]);
+> +
+> +	if (err < 0) {
+> +		DRM_DEV_ERROR(panel->dev,
+> +			      "failed to send DCS Init 2nd Code: %d\n", err);
+> +		goto poweroff;
+> +	}
+> +
+> +	err = mipi_dsi_dcs_set_display_on(ctx->link);
+> +	if (err < 0) {
+> +		DRM_DEV_ERROR(panel->dev, "failed to Set Display ON: %d\n",
+> +			      err);
+> +		goto poweroff;
+> +	}
+> +
+> +	msleep(120);
+> +
+> +	ctx->prepared = true;
+> +
+> +	return 0;
+> +
+> +poweroff:
+> +	gpiod_set_value(ctx->reset_gpio, 1);
+> +	regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
+> +	return err;
+> +}
+> +
+> +static int lg_panel_enable(struct drm_panel *panel)
+> +{
+> +	struct sw43408_panel *ctx = to_panel_info(panel);
+> +	struct drm_dsc_picture_parameter_set pps;
+> +	int ret;
+> +
+> +	if (ctx->enabled)
+> +		return 0;
+> +
+> +	ret = backlight_enable(ctx->backlight);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(panel->dev, "Failed to enable backlight %d\n",
+> +			      ret);
+> +		return ret;
+> +	}
+
+Do you need to enable the backlight beforehand (well, before sending the 
+pps?) drm_panel_enable() would enable the backlight for you.
+
+> +
+> +	if (!panel->dsc) {
+> +		DRM_DEV_ERROR(panel->dev, "Can't find DSC\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	drm_dsc_pps_payload_pack(&pps, panel->dsc);
+
+Do you need to call mipi_dsi_picture_parameter_set() here? Otherwise 
+genrated pps is not used at all.
+
+> +
+> +	ctx->enabled = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static int lg_panel_get_modes(struct drm_panel *panel,
+> +			      struct drm_connector *connector)
+> +{
+> +	struct sw43408_panel *ctx = to_panel_info(panel);
+> +	const struct drm_display_mode *m = ctx->mode;
+> +	struct drm_display_mode *mode;
+> +
+> +	mode = drm_mode_duplicate(connector->dev, m);
+> +	if (!mode) {
+> +		DRM_DEV_ERROR(panel->dev, "failed to add mode %ux%u\n",
+> +			      m->hdisplay, m->vdisplay);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	connector->display_info.width_mm = m->width_mm;
+> +	connector->display_info.height_mm = m->height_mm;
+> +
+> +	drm_mode_set_name(mode);
+> +	drm_mode_probed_add(connector, mode);
+> +
+> +	return 1;
+> +}
+> +
+> +static int lg_panel_backlight_update_status(struct backlight_device *bl)
+> +{
+> +	struct mipi_dsi_device *dsi = bl_get_data(bl);
+> +	int ret = 0;
+> +	uint16_t brightness;
+
+u16
+
+> +
+> +	brightness = (uint16_t)backlight_get_brightness(bl);
+
+Probably no need to cast here.
+
+> +	/* Brightness is sent in big-endian */
+> +	brightness = cpu_to_be16(brightness);
+> +
+> +	ret = mipi_dsi_dcs_set_display_brightness(dsi, brightness);
+
+lmdpdg.py suggest that this (and get_display_brightnees()) should be 
+wrapped into disabling and reenabling MIPI_DSI_MODE_LPM in dsi->mode_flags.
+
+> +	return ret;
+> +}
+> +
+> +static int lg_panel_backlight_get_brightness(struct backlight_device *bl)
+> +{
+> +	struct mipi_dsi_device *dsi = bl_get_data(bl);
+> +	int ret = 0;
+> +	u16 brightness = 0;
+> +
+> +	ret = mipi_dsi_dcs_get_display_brightness(dsi, &brightness);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return brightness & 0xff;
+
+So the brighness is sent as be16, but doesn't require handling on 
+get_brightness?
+
+> +}
+> +
+> +const struct backlight_ops lg_panel_backlight_ops = {
+> +	.update_status = lg_panel_backlight_update_status,
+> +	.get_brightness = lg_panel_backlight_get_brightness,
+> +};
+> +
+> +static int lg_panel_backlight_init(struct sw43408_panel *ctx)
+> +{
+> +	struct device *dev = &ctx->link->dev;
+> +	const struct backlight_properties props = {
+> +		.type = BACKLIGHT_PLATFORM,
+> +		.brightness = 255,
+> +		.max_brightness = 255,
+
+900, according to the dtsi
+
+> +	};
+> +
+> +	ctx->backlight = devm_backlight_device_register(dev, dev_name(dev), dev,
+> +							ctx->link,
+> +							&lg_panel_backlight_ops,
+> +							&props);
+> +
+> +	if (IS_ERR(ctx->backlight))
+> +		return dev_err_probe(dev, PTR_ERR(ctx->backlight),
+> +				     "Failed to create backlight\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct drm_panel_funcs panel_funcs = {
+> +	.disable = lg_panel_disable,
+> +	.unprepare = lg_panel_unprepare,
+> +	.prepare = lg_panel_prepare,
+> +	.enable = lg_panel_enable,
+> +	.get_modes = lg_panel_get_modes,
+> +};
+> +
+> +static const struct drm_display_mode sw43408_default_mode = {
+> +	.clock = 152340,
+> +
+> +	.hdisplay = 1080,
+> +	.hsync_start = 1080 + 20,
+> +	.hsync_end = 1080 + 20 + 32,
+> +	.htotal = 1080 + 20 + 32 + 20,
+> +
+> +	.vdisplay = 2160,
+> +	.vsync_start = 2160 + 20,
+> +	.vsync_end = 2160 + 20 + 4,
+> +	.vtotal = 2160 + 20 + 4 + 20,
+> +
+> +	.width_mm = 62,
+> +	.height_mm = 124,
+> +
+> +	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
+> +};
+> +
+> +static const struct of_device_id panel_of_match[] = {
+> +	{ .compatible = "lg,sw43408", .data = &sw43408_default_mode },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, panel_of_match);
+> +
+> +static int panel_add(struct sw43408_panel *ctx)
+> +{
+> +	struct device *dev = &ctx->link->dev;
+> +	int i, ret;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ctx->supplies); i++)
+> +		ctx->supplies[i].supply = regulator_names[i];
+> +
+> +	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
+> +				      ctx->supplies);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+> +	if (IS_ERR(ctx->reset_gpio)) {
+> +		DRM_DEV_ERROR(dev, "cannot get reset gpio %ld\n",
+> +			      PTR_ERR(ctx->reset_gpio));
+> +		return PTR_ERR(ctx->reset_gpio);
+> +	}
+> +
+> +	ret = lg_panel_backlight_init(ctx);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	drm_panel_init(&ctx->base, dev, &panel_funcs, DRM_MODE_CONNECTOR_DSI);
+> +
+> +	drm_panel_add(&ctx->base);
+> +	return ret;
+> +}
+> +
+> +static int panel_probe(struct mipi_dsi_device *dsi)
+> +{
+> +	struct sw43408_panel *ctx;
+> +	struct drm_dsc_config *dsc;
+> +	int err;
+> +
+> +	ctx = devm_kzalloc(&dsi->dev, sizeof(*ctx), GFP_KERNEL);
+> +	if (!ctx)
+> +		return -ENOMEM;
+> +
+> +	ctx->mode = of_device_get_match_data(&dsi->dev);
+> +	dsi->mode_flags = MIPI_DSI_MODE_LPM;
+> +	dsi->format = MIPI_DSI_FMT_RGB888;
+> +	dsi->lanes = 4;
+> +
+> +	ctx->link = dsi;
+> +	mipi_dsi_set_drvdata(dsi, ctx);
+> +
+> +	err = panel_add(ctx);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	/* The panel is DSC panel only, set the dsc params */
+> +	dsc = devm_kzalloc(&dsi->dev, sizeof(*dsc), GFP_KERNEL);
+> +	if (!dsc)
+> +		return -ENOMEM;
+> +
+> +	dsc->dsc_version_major = 0x1;
+> +	dsc->dsc_version_minor = 0x1;
+> +
+> +	dsc->slice_height = 16;
+> +	dsc->slice_width = 540;
+> +	dsc->slice_count = 1;
+> +	dsc->bits_per_component = 8;
+> +	dsc->bits_per_pixel = 8;
+> +	dsc->block_pred_enable = true;
+> +
+> +	ctx->base.dsc = dsc;
+
+I was really hoping to move DSC PPS data to struct mipi_dsi_device, 
+before DSC panel drivers start to pop up.
+
+See 
+https://lore.kernel.org/linux-arm-msm/20220711094320.368062-2-dmitry.baryshkov@linaro.org/
+
+> +
+> +	return mipi_dsi_attach(dsi);
+> +}
+> +
+> +static int panel_remove(struct mipi_dsi_device *dsi)
+> +{
+> +	struct sw43408_panel *ctx = mipi_dsi_get_drvdata(dsi);
+> +	int err;
+> +
+> +	err = lg_panel_unprepare(&ctx->base);
+> +	if (err < 0)
+> +		DRM_DEV_ERROR(&dsi->dev, "failed to unprepare panel: %d\n",
+> +			      err);
+> +
+> +	err = lg_panel_disable(&ctx->base);
+> +	if (err < 0)
+> +		DRM_DEV_ERROR(&dsi->dev, "failed to disable panel: %d\n", err);
+> +
+> +	err = mipi_dsi_detach(dsi);
+> +	if (err < 0)
+> +		DRM_DEV_ERROR(&dsi->dev, "failed to detach from DSI host: %d\n",
+> +			      err);
+> +
+> +	if (ctx->base.dev)
+> +		drm_panel_remove(&ctx->base);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct mipi_dsi_driver panel_driver = {
+> +	.driver = {
+> +		.name = "panel-lg-sw43408",
+> +		.of_match_table = panel_of_match,
+> +	},
+> +	.probe = panel_probe,
+> +	.remove = panel_remove,
+> +};
+> +module_mipi_dsi_driver(panel_driver);
+> +
+> +MODULE_AUTHOR("Sumit Semwal <sumit.semwal@linaro.org>");
+> +MODULE_DESCRIPTION("LG SW436408 MIPI-DSI LED panel");
+> +MODULE_LICENSE("GPL");
+
+
+-- 
+With best wishes
+Dmitry

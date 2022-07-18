@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF54578212
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAC6578218
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235002AbiGRMTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
+        id S235034AbiGRMUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234918AbiGRMTk (ORCPT
+        with ESMTP id S234365AbiGRMUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:19:40 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1514248F1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:19:39 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="372512249"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="372512249"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 05:19:39 -0700
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="624703988"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 05:19:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1oDPip-001OAG-1H;
-        Mon, 18 Jul 2022 15:19:35 +0300
-Date:   Mon, 18 Jul 2022 15:19:34 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 1/9] mfd: intel_soc_pmic_crc: Merge Intel PMIC core to
- crc
-Message-ID: <YtVP1ua2mS9pxK/w@smile.fi.intel.com>
-References: <YrrO0CQVv6hj1AB0@smile.fi.intel.com>
- <YrxjTD0sJXh8cgVP@google.com>
- <CAHp75VdHpqAxS3jmFi-1Sw6wB1CP3wQVM_+5OP0C_yFFG336LA@mail.gmail.com>
- <Yr1YXHb3GqwZncFK@google.com>
- <CAHp75Vf1UK9Z2P1D9v_j9rsdKoDXWSvb=wJgmkvACYgwofWrxA@mail.gmail.com>
- <35c907e6-6018-d22b-1992-ffc66eb82b0e@redhat.com>
- <Yr1iweMUl+EUY+Q6@google.com>
- <YtHF2giNT1gG1wge@smile.fi.intel.com>
- <YtUV5sE8A3ayQ/Q3@google.com>
- <YtUWB1ncCr1i3V5x@google.com>
+        Mon, 18 Jul 2022 08:20:43 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B4511A3A;
+        Mon, 18 Jul 2022 05:20:41 -0700 (PDT)
+Received: from zn.tnic (p200300ea972976d7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:76d7:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EC8681EC04F0;
+        Mon, 18 Jul 2022 14:20:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658146836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YUsHaSIKv5mhVert20B83ArzxD5bMsOqQGQm2WfFNQY=;
+        b=Ga6lTw52ypWNCa7ANAt/KfjkmVyY188H+6CK9mutryTo0MlTHD49tBVIAgvT3rAxlb5hBH
+        x//kdGxXjpUKs4jyHamB06xu9+kdpmUNNZGYHG5m8FEI0HMZ9vzqjGmulqnxN1BfUIp9QQ
+        dKivWsgLjUwBv94Pm38Ha6t5kSXbj9s=
+Date:   Mon, 18 Jul 2022 14:20:32 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, brchuckz@netscape.net,
+        jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] x86: move some code out of arch/x86/kernel/cpu/mtrr
+Message-ID: <YtVQEIuHa6qGXFxs@zn.tnic>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <20220715142549.25223-2-jgross@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YtUWB1ncCr1i3V5x@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220715142549.25223-2-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 09:12:55AM +0100, Lee Jones wrote:
-> On Mon, 18 Jul 2022, Lee Jones wrote:
-> > On Fri, 15 Jul 2022, Andy Shevchenko wrote:
-> > > On Thu, Jun 30, 2022 at 09:45:53AM +0100, Lee Jones wrote:
+On Fri, Jul 15, 2022 at 04:25:47PM +0200, Juergen Gross wrote:
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 736262a76a12..e43322f8a4ef 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
 
-...
+I guess the move's ok but not into cpu/common.c pls. That thing is
+huuuge and is a dumping ground for everything.
 
-> > > Is it okay to be applied?
-> > 
-> > Yes, I think so.
-> > 
-> > Can you collect all of the Acked-by/Tested-by tags you received
-> > and submit a [RESEND] please?  Hans' TB which should be applied to all
-> > patches springs to mind.
-> 
-> To save yourself some pain, leave off my Acks.
+arch/x86/kernel/cpu/cacheinfo.c looks like a more viable candidate for
+all things cache.
 
-Actually it's less pain to leave your tags as they are now in the commit
-messages.
+Rest looks trivial.
 
-I will resend it soon with your tags still in.
-
-Thanks!
+Thx.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette

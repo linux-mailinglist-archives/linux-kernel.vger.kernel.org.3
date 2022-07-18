@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531FA577EC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24728577EC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbiGRJgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
+        id S233716AbiGRJh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233863AbiGRJgt (ORCPT
+        with ESMTP id S233680AbiGRJhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:36:49 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D0D1ADA7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658137008; x=1689673008;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VIkFoRI5FsnReAuZJewimSARyWrBL4vaqa7hKMRx854=;
-  b=Sp/tZN1lKC0nv09kw7gJjfL9fQw0O530E5PQU2KCjOIHwALNf4xfr6sA
-   Gu0D4dZSvAuEhM/YKNukVz0nCmabGt8TV9UmwmTINZk4LfxmeH0vH4Df3
-   JvDBoxhaK3BPf9VfHXnFOewcGT6v9TnV/2ZL/bhWxvb/l9z+FTOvULY0T
-   Q=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 Jul 2022 02:36:48 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 02:36:48 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 18 Jul 2022 02:36:47 -0700
-Received: from [10.233.21.232] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 18 Jul
- 2022 02:36:45 -0700
-Message-ID: <1c530e9b-3184-0113-d8ef-47548d7ab173@quicinc.com>
-Date:   Mon, 18 Jul 2022 17:36:43 +0800
+        Mon, 18 Jul 2022 05:37:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 031321ADAC
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:37:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658137034;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h3W9LFUtphIHBmLct6LbkfBYwwCjHm4BOKd/7U7nvQ4=;
+        b=Bcq9bTTK64yqTfUPBWXAcSiOBjgq8BxkifmAXKH12TkwomOJyA8QD36bhU+p9TlUEZ5em0
+        gv2aBsFOlHYbNH7uL+1uP+jtlXHnjAD4BZXbqPCBJ1KrDWqvtSSXz3KqpGdl9rPMSG4Rub
+        CSUv3AXS5Q1RZ5Yfpe8/8vBl36W73q4=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-586-L9cTy2dPPC2d-pJ1r_OBLQ-1; Mon, 18 Jul 2022 05:37:13 -0400
+X-MC-Unique: L9cTy2dPPC2d-pJ1r_OBLQ-1
+Received: by mail-qk1-f199.google.com with SMTP id ay35-20020a05620a17a300b006b5d9646d31so5082011qkb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:37:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=h3W9LFUtphIHBmLct6LbkfBYwwCjHm4BOKd/7U7nvQ4=;
+        b=zo+91+RkfQAoVmaY/zgicsB4SxU8Kc8bjENSp2Tapc+cw16FIQ9swxP00l29P8Ueaj
+         Ygaj8bL6OPf2nwHNfVLxndtFrqzoMmBmkcEuASrKp06iQvlWkSshzSXkOPuJNeMeZkKZ
+         dmU/xAoosABoatzMOeq1BnySl2n0zQbur0mfkfZvxa3qlOhYtNa45wqV4+AVkjuevPsV
+         ToMQtqQM97wKJvv42Cc/NwOI14QsOa4t1xZaRhHF8NvT+APM1Z2TPn7FYKnN4IAqPAj/
+         Bo5lar2Op0ZrJmsfgLmEl5gPDR2ZHBDCXdw1QZrGavg7RU5WmWzjurEuCKws/AkvDq/X
+         mJ6A==
+X-Gm-Message-State: AJIora+pK7FOr8z3EX4Vsn8A/PnmQjfZy/siIzx1oY+NMJN+uHkuBSox
+        Grzujf7bXJnkCnauzw4Ox3WI171ztWelt2qUcZDL/2IlhVDKKWTTS1IUxcwkB310LjewLn0kb7j
+        giIH1ENdNUr0k+Pcd0PuAzqFc
+X-Received: by 2002:ac8:5910:0:b0:315:534d:b74e with SMTP id 16-20020ac85910000000b00315534db74emr21190221qty.475.1658137032524;
+        Mon, 18 Jul 2022 02:37:12 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tHkKddwAUBvrNP6S422BvgT3NFa1fann+Q0IVtCXe5r52OCXqo/1IS+R+MBZmtQKONfdZ5Cg==
+X-Received: by 2002:ac8:5910:0:b0:315:534d:b74e with SMTP id 16-20020ac85910000000b00315534db74emr21190213qty.475.1658137032275;
+        Mon, 18 Jul 2022 02:37:12 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id v3-20020a05620a440300b006a6a4b43c01sm4666677qkp.38.2022.07.18.02.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 02:37:11 -0700 (PDT)
+Message-ID: <028a575079cee20cbbf41bca8a734e16535d179e.camel@redhat.com>
+Subject: Re: [PATCH] KVM: x86: Do not block APIC write for non ICR registers
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, jon.grimm@amd.com,
+        Zeng Guang <guang.zeng@intel.com>
+Date:   Mon, 18 Jul 2022 12:37:07 +0300
+In-Reply-To: <20220718083913.222140-1-suravee.suthikulpanit@amd.com>
+References: <20220718083913.222140-1-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] selftests/kprobe: Update test for no event name syntax
- error
-Content-Language: en-US
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220718144007.78c5b50f9b123fb80a920054@kernel.org>
- <165812790993.1377963.9762767354560397298.stgit@devnote2>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <165812790993.1377963.9762767354560397298.stgit@devnote2>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Masami,
-
-On 7/18/2022 3:05 PM, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->
-> The commit 208003254c32 ("selftests/kprobe: Do not test for GRP/
-> without event failures") removed a syntax which is no more cause
-> a syntax error (NO_EVENT_NAME error with GRP/).
-> However, there are another case (NO_EVENT_NAME error without GRP/)
-> which causes a same error. This adds a test for that case.
->
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, 2022-07-18 at 03:39 -0500, Suravee Suthikulpanit wrote:
+> The commit 5413bcba7ed5 ("KVM: x86: Add support for vICR APIC-write
+> VM-Exits in x2APIC mode") introduces logic to prevent APIC write
+> for offset other than ICR. This breaks x2AVIC support, which requires
+> KVM to trap and emulate x2APIC MSR writes.
+> 
+> Therefore, removes the warning and modify to logic to allow MSR write.
+> 
+> Fixes: 5413bcba7ed5 ("KVM: x86: Add support for vICR APIC-write VM-Exits in x2APIC mode")
+> Cc: Zeng Guang <guang.zeng@intel.com>
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 > ---
->   .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-> index 7c02509c71d0..9e85d3019ff0 100644
-> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-> @@ -21,6 +21,7 @@ check_error 'p:^/bar vfs_read'		# NO_GROUP_NAME
->   check_error 'p:^12345678901234567890123456789012345678901234567890123456789012345/bar vfs_read'	# GROUP_TOO_LONG
->   
->   check_error 'p:^foo.1/bar vfs_read'	# BAD_GROUP_NAME
-> +check_error 'p:^ vfs_read'		# NO_EVENT_NAME
+>  arch/x86/kvm/lapic.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 9d4f73c4dc02..f688090d98b0 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -69,6 +69,7 @@ static bool lapic_timer_advance_dynamic __read_mostly;
+>  /* step-by-step approximation to mitigate fluctuation */
+>  #define LAPIC_TIMER_ADVANCE_ADJUST_STEP 8
+>  static int kvm_lapic_msr_read(struct kvm_lapic *apic, u32 reg, u64 *data);
+> +static int kvm_lapic_msr_write(struct kvm_lapic *apic, u32 reg, u64 data);
+>  
+>  static inline void __kvm_lapic_set_reg(char *regs, int reg_off, u32 val)
+>  {
+> @@ -2284,17 +2285,23 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
+>         u64 val;
+>  
+>         if (apic_x2apic_mode(apic)) {
+> +               kvm_lapic_msr_read(apic, offset, &val);
+> +
+>                 /*
+>                  * When guest APIC is in x2APIC mode and IPI virtualization
+>                  * is enabled, accessing APIC_ICR may cause trap-like VM-exit
+>                  * on Intel hardware. Other offsets are not possible.
+> +                *
+> +                * For AMD AVIC, write to some APIC registers can cause
+> +                * trap-like VM-exit (see arch/x86/kvm/svm/avic.c:
+> +                * avic_unaccel_trap_write()).
+>                  */
+> -               if (WARN_ON_ONCE(offset != APIC_ICR))
+> +               if (offset == APIC_ICR) {
+> +                       kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
+> +                       trace_kvm_apic_write(APIC_ICR, val);
+>                         return;
+> -
+> -               kvm_lapic_msr_read(apic, offset, &val);
+> -               kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
+> -               trace_kvm_apic_write(APIC_ICR, val);
+> +               }
+> +               kvm_lapic_msr_write(apic, offset, val);
+>         } else {
+>                 val = kvm_lapic_get_reg(apic, offset);
+>  
 
-i think you fix the issue which exist from start, right ?
 
-is there better comment than NO_EVENT_NAME  ?
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
->   check_error 'p:foo/^12345678901234567890123456789012345678901234567890123456789012345 vfs_read'	# EVENT_TOO_LONG
->   check_error 'p:foo/^bar.1 vfs_read'	# BAD_EVENT_NAME
->   
->
+Best regards,
+	Maxim Levitsky
+

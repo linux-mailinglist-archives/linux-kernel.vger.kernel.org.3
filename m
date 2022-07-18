@@ -2,113 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70632577E56
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08236577E5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiGRJH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S234100AbiGRJIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbiGRJH5 (ORCPT
+        with ESMTP id S234098AbiGRJIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:07:57 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710AC11810
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:07:56 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 64so19637126ybt.12
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:07:56 -0700 (PDT)
+        Mon, 18 Jul 2022 05:08:48 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC2B1928C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:08:45 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id z12-20020a056830128c00b0061c8168d3faso6955564otp.7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:08:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9eJN+m0pEHtjJ1cyznLRwut5IHeAG8qD1A+Zq2Ji8RE=;
-        b=a28ILWIbndvvHjicaKV1NVvzz3vVS0NEL6I/oMvaX5/7dAEFb7NRO6NFh1gJmzRhjg
-         S7cDPxX9yShHvrtd8+TZ51ZmL8uwlX5cRDVVaECNYg4D8Zbc62fQHXLhFrBJJENJ4v6u
-         kzR43CopMtm1pqMP0OSbhlTtIlZMrv1/q0pq4PTIa0HKg+vNGOlV8pe7y+lydcP1vf8M
-         U1ddaGUxm1eDRD+vr3PN2rZWBXhr6ch2fQsZvGk8zSjLTVFOt1HiSInkS4Z6GhHFQADs
-         HNEiR0CGvpjp+HRQ2UCXxkm8OdgxA0xdMJSBynsOWBIx2M+10rZJe+KjZkKJTc6NjBYv
-         71jg==
+        bh=gyN4R4wxoBxOYspFa5dE/mkU9oa9JodtT8mt47nKD20=;
+        b=ASu0WTSHFZTnJxmWsucJT2xg3U3pJ9JDjAT++73osXtDgaNaPEkLXxKn9fjFQcesZj
+         yuq/KorlL6gF9V0/pWqQYG22JPWrtGnBN2d5mSNRUcFLAbQGia5AUKLBQZcUQTUEe+8f
+         /rgjgMTabag6/QWzBowTZNAEZZ25J1dA5junzkGMbt9uzzpKZYyAVrQpF4VwEeJWXRqv
+         qRUzxeOE1sPEh49iMO/ukNr+EJegIACLVSWu5WgBqAV0C4gP+hn21xpL5D4S0Wq1n+bc
+         PkjrHpQGP1LL7SAVgne+3TtKgXudqRHaX00bbazPD6Iy/45iHIVZfSAbvz6Ij3gi00MZ
+         MViQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9eJN+m0pEHtjJ1cyznLRwut5IHeAG8qD1A+Zq2Ji8RE=;
-        b=57utpJeSeafh24iMbTFeIkDp24lNwHRAVdKe3CDSqL39hK7NIh0Jpqv+RdTV7nke2t
-         IQa5/KhX8Ra1KRwFEy52my+cgppLOOli/QQJhbOQ2VriU1CikwWYJnsXiQniLshxnSAU
-         cNxlJ8Dxe1a+q177axwm5NYW4vMjatSaeI7c54ePEpBaN2PnjfCUUsUhqYbKCBww8zZX
-         h6czqhrLjmSy69cIs8HEcLe1vJIrM4c3gU/B7Cmt2rAQFfZjZf3dZn2pCKnq00C6PX9J
-         gk8IAKUZ08wz3HpB8NsSCl0Y2K8HV1E48N007Add0wu82NMt+bX+a2Mo8mYbgO/+JwGU
-         bhcA==
-X-Gm-Message-State: AJIora+rUiPp+42yh0Y2/G0o2/Ezrg0vQhxNzAzdwCfTKp2UV6e2rdeL
-        thPXP2yoG89WRBa6l2KcYQjT4OmGCNc5/ww/mBpLPw==
-X-Google-Smtp-Source: AGRyM1slwFfk5U3IpZzcEo3JyKbDkizozgOVrCNpodmEfJGeCB577KdrlSLcv1KnQ57zoe+PIhqjOgjjp3fZl3K/7dQ=
-X-Received: by 2002:a25:f508:0:b0:66f:3c5f:c39f with SMTP id
- a8-20020a25f508000000b0066f3c5fc39fmr24891200ybe.374.1658135275708; Mon, 18
- Jul 2022 02:07:55 -0700 (PDT)
+        bh=gyN4R4wxoBxOYspFa5dE/mkU9oa9JodtT8mt47nKD20=;
+        b=QYVH8ywyJwYgIATiws28kGMImA3NC7OMtTYmZypWkuSongTYtrMP9IcX6klPTzfeuk
+         rsUJFbmrwj86t/kfPd05gCrRH68Fxzfpi+8WmFIQ0FqFSJZeO1HY2qs74S7F9gbvLwp6
+         2Y5Io1b+I01kOcylkOcqNXG0FIh23c/V/ecWUqmGRQRsY9IRZT4kQbUl/W5kg7hRsYrO
+         JywE6eFXYhHDtUQ6GP36bCpc1UeHxhpDF4tsg32N9GcJatTB5RgiI0p9PfjNADymsAqL
+         hW5aIOIwsAb27tXIZaHxbAOBY0oTuWnHyG3adsf2IXYDM1wNZtESPt0i28r4XsMdI205
+         cccw==
+X-Gm-Message-State: AJIora8S8mBVHB4EL7VzVA9unzwJ8oD+m4XlKFFzPoI10ClKfr1dzqR9
+        QP8vbFLixF43WTjhHfHTYVO2dphCAL2tJvV6331iiRqg02Wu3w==
+X-Google-Smtp-Source: AGRyM1trl6Ac86+5L4VHnfQf/LcT7deUAzD+vON1lIJfOtePo+yI0pY7we08AjsL5W7qoPc56zZ6NTGNdM9naMbHcpg=
+X-Received: by 2002:a05:6830:108a:b0:61c:9fb5:6784 with SMTP id
+ y10-20020a056830108a00b0061c9fb56784mr1754550oto.299.1658135325046; Mon, 18
+ Jul 2022 02:08:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220712021527.109921-1-lihuafei1@huawei.com> <20220712021527.109921-4-lihuafei1@huawei.com>
-In-Reply-To: <20220712021527.109921-4-lihuafei1@huawei.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 18 Jul 2022 11:07:43 +0200
-Message-ID: <CACRpkdYvOjfmf=Z3pGfD-UPxfTc9PXtOyw2x+ptYiSy=gmGnpQ@mail.gmail.com>
-Subject: Re: [PATCH 3/5] ARM: stacktrace: Allow stack trace saving for
- non-current tasks
-To:     Li Huafei <lihuafei1@huawei.com>
-Cc:     linux@armlinux.org.uk, rmk+kernel@armlinux.org.uk, ardb@kernel.org,
-        will@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, arnd@arndb.de, rostedt@goodmis.org,
-        nick.hawkins@hpe.com, john@phrozen.org, mhiramat@kernel.org,
-        ast@kernel.org, linyujun809@huawei.com, ndesaulniers@google.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
+References: <20220715235824.2549012-1-kaleshsingh@google.com>
+In-Reply-To: <20220715235824.2549012-1-kaleshsingh@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Mon, 18 Jul 2022 10:08:08 +0100
+Message-ID: <CA+EHjTxXX_d8M9VGCBokoKCCuvOoR_1u4JrSNKPTdN3qp9bQog@mail.gmail.com>
+Subject: Re: [PATCH] KVM: arm64: Fix hypervisor address symbolization
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     maz@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
+        madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
+        android-mm@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 4:18 AM Li Huafei <lihuafei1@huawei.com> wrote:
+Hi Kalesh,
 
-> The current ARM implementation of save_stack_trace_tsk() does not allow
-> saving stack trace for non-current tasks, which may limit the scenarios
-> in which stack_trace_save_tsk() can be used. Like other architectures,
-> or like ARM's unwind_backtrace(), we can leave it up to the caller to
-> ensure that the task that needs to be unwound is not running.
+On Sat, Jul 16, 2022 at 12:58 AM Kalesh Singh <kaleshsingh@google.com> wrote:
 >
-> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> With CONFIG_RANDOMIZE_BASE=y vmlinux addresses will resolve correctly
+> from kallsyms. Fix this by adding the KASLR offset before printing the
+> symbols.
+>
+> Based on arm64 for-next/stacktrace.
+>
+> Fixes: 6ccf9cb557bd ("KVM: arm64: Symbolize the nVHE HYP addresses")
+> Reported-by: Fuad Tabba <tabba@google.com>
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
 
-That sounds good, but:
+Even with this patch applied I still don't get symbolization unless I
+disable randomization, either by setting CONFIG_RANDOMIZE_BASE=n or
+pass nokaslr as a kernel parameter. I tried both and in either case it
+works.
 
->         if (tsk != current) {
-> -#ifdef CONFIG_SMP
-> -               /*
-> -                * What guarantees do we have here that 'tsk' is not
-> -                * running on another CPU?  For now, ignore it as we
-> -                * can't guarantee we won't explode.
-> -                */
-> -               return;
-> -#else
-> +               /* task blocked in __switch_to */
+Thanks,
+/fuad
 
-The commit text is not consistent with the comment you are removing.
 
-The commit is talking about "non-current" tasks which is one thing,
-but the code is avoiding any tasks under SMP because they may be
-running on another CPU. So you need to update the commit
-message to say something like "non-current or running on another CPU".
-
-If this condition will be checked at call sites in following patches,
-then mention
-that in the commit as well, so we know the end result is that we do
-not break it,
-
-I think Russell want to check this commit as well,
-
-Yours,
-Linus Walleij
+>  arch/arm64/kvm/handle_exit.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
+> index f66c0142b335..e43926ef2bc2 100644
+> --- a/arch/arm64/kvm/handle_exit.c
+> +++ b/arch/arm64/kvm/handle_exit.c
+> @@ -347,10 +347,10 @@ void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr,
+>                         kvm_err("nVHE hyp BUG at: %s:%u!\n", file, line);
+>                 else
+>                         kvm_err("nVHE hyp BUG at: [<%016llx>] %pB!\n", panic_addr,
+> -                                       (void *)panic_addr);
+> +                                       (void *)(panic_addr + kaslr_offset()));
+>         } else {
+>                 kvm_err("nVHE hyp panic at: [<%016llx>] %pB!\n", panic_addr,
+> -                               (void *)panic_addr);
+> +                               (void *)(panic_addr + kaslr_offset()));
+>         }
+>
+>         /*
+>
+> base-commit: 82a592c13b0aeff94d84d54183dae0b26384c95f
+> --
+> 2.37.0.170.g444d1eabd0-goog
+>

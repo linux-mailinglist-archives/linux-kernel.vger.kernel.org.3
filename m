@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3578B578B09
+	by mail.lfdr.de (Postfix) with ESMTP id B1061578B0A
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbiGRThj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
+        id S236212AbiGRThm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236190AbiGRThT (ORCPT
+        with ESMTP id S236197AbiGRThU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:37:19 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7400E2D1E3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:18 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id g4-20020a17090a290400b001f1f2b7379dso357374pjd.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:18 -0700 (PDT)
+        Mon, 18 Jul 2022 15:37:20 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D116F2E690
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:19 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id h132so11502442pgc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Oo4Pz1r5XHW7nwxpGgJZANPDnH94I0NGToeI6/zKa1I=;
-        b=Yta4aSxqKdJJamMX5Ka9KLD4dubuyf5nvRkNeJsovDB9Ytj1BQ5qWdRgLzIHHHERB6
-         5sXf3niGo/72wXP0jlBMi/vVkFJX8hLRvbMlrw7tatNFrNNgmNMB9HbzNICkzbNcXs3w
-         6cu7pwr4AsBJZ3fn8/KYDPZk8nX+6Rg3Ljpt2/TGFqbUZ7cKL97bfzfYsiBq4vhT+Kw9
-         MVxwsvKLWzOIIRIJm9ZWmpzyPYTX/gBlEmxcuQU3TzAh1tBYia4QkzmOzqCE6j5LO15n
-         QaXqO0JTJLp//5mmCRV7FullleEzXsADDRB6uSgI3/pl3o0omrcymnmvGc3DAicOGAQh
-         YnEg==
+        bh=sYv+0w7UbdJfCd/9qiOzPSdo3DPlp98QBnk6mmrNOzw=;
+        b=LfD4eNC9SIqr9cYWB25Xbr4WiNNia1nr+3GwzKavBUssVyFOxkqXDhxuEsCKotgHGX
+         IWop0WCMjmuoVKLDBbwwaKBQDtdmqkvwVj7sFVhuA7x/GT8cqq96HiJcsEWIREVlkZkC
+         XkrXrhlO0AHfhi7Ka0pK/Bk6TGPHIcLO4v6aQWeY6gTl5lS1/EBV6g/dpM3ldLkVpRs4
+         P/DRFwB289y/gdLxuvwxWRrdWSS/ANky/BYuh5pHXytyibxUmY1neqRo3cZIvwKFVK6F
+         YK0uUoEexTXqrgimYNcJK1bFS70JivrQyx9FnwmH/rpHZPac+0k2ux4Obajgr/ZrEpGI
+         ztog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Oo4Pz1r5XHW7nwxpGgJZANPDnH94I0NGToeI6/zKa1I=;
-        b=VowYbvd3LpdyHdziQkX4zPe46BeX0WuZW92HDaAs4Q5kDNWYwcYBnTIZeQBsoIYM1Y
-         s844MAUbeAwWIKMfVYGTQU1B5gMdfWlGNVPdkuzsFAwle7twvVXHCckzA7aYhr3JuOLp
-         ss39W0t6+vldjdGcsgDlzl+/ygGgyWIXPagXIEL/WEFgebOhIRE57XFdlxIqW8yU7Hnq
-         dNa5F+2tWk33KveVxxcmwL+9fiNVjKuyGuU4FvjDWndnImyvQ6J+BjiEeJJgWDwhenB2
-         IRxQUZmcTaBVi6eFMuApSBvH7t/e9LSgMM+ciL8mhpCzAxZkAE8O6HJpaDPxGoMQe8wu
-         aNXg==
-X-Gm-Message-State: AJIora9CRh4aUOSPQaZHozUglbIZCf3AH1M9X0kBIOebUrV5LQ3AVaDT
-        DBwsbVInaYwpzR/8D2mJEOQ=
-X-Google-Smtp-Source: AGRyM1v14qCZwBb3XJU5MS/ZzWDs+xXqoaSfao3rsct5ND+6jaOGoGucVBBiblDjUX+cd9G34nsdiw==
-X-Received: by 2002:a17:902:7106:b0:16c:6c95:6153 with SMTP id a6-20020a170902710600b0016c6c956153mr29356100pll.166.1658173037752;
-        Mon, 18 Jul 2022 12:37:17 -0700 (PDT)
+        bh=sYv+0w7UbdJfCd/9qiOzPSdo3DPlp98QBnk6mmrNOzw=;
+        b=XiukuTmSJtZFfLopEAeh6ZNaUYrI0Q3rRjHZQUZMLGAkjBierDSCkXSZIAS+ODYbfh
+         9zoXrvEpEGwib18HlLawyc7Q6emYnX188Gl6wIojMD/fbgavm+VLzyD7vgIckvnU4a6x
+         WRHis8RdZDhqW/oiCHPdKoWCo+2yd1h1LKIb9mGDUwhkUb6YMDMfzmOo/9qbjLAkCWnb
+         c1IEXbuDibVVK1FEJRI9ucOuC2G5pYqJtiq6KIJb87ez+JnZ0fXxujLnJwacPgkdTiBm
+         5mGm8J8X1qMA24ntYfREm0hEk4j8e8mfRu3B4EcI7NvW/xV+pEE/mdOys9JCn5a5E1r0
+         4msA==
+X-Gm-Message-State: AJIora+O9X00L4KDV8utyrTxTLfHY0s0zCdVXkNBi+xgKzUGTz5eiv3Y
+        EnvhpyXKPB/gj5nvDUxGI+g=
+X-Google-Smtp-Source: AGRyM1vupv7tu2tOFZ1Su8p2ph2+On2wlRIi/LDIoBmyKSXGXyJd3hN8YQju5I/uoHMU9RGeKryGig==
+X-Received: by 2002:a63:2684:0:b0:415:18d8:78dd with SMTP id m126-20020a632684000000b0041518d878ddmr26454387pgm.33.1658173039290;
+        Mon, 18 Jul 2022 12:37:19 -0700 (PDT)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.16
+        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:37:17 -0700 (PDT)
+        Mon, 18 Jul 2022 12:37:18 -0700 (PDT)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     linux-mm@kvack.org
@@ -66,9 +66,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
         Nick Piggin <npiggin@gmail.com>
-Subject: [RFC PATCH 10/14] x86/mm: introduce relaxed TLB flushes
-Date:   Mon, 18 Jul 2022 05:02:08 -0700
-Message-Id: <20220718120212.3180-11-namit@vmware.com>
+Subject: [RFC PATCH 11/14] x86/mm: use relaxed TLB flushes when protection is removed
+Date:   Mon, 18 Jul 2022 05:02:09 -0700
+Message-Id: <20220718120212.3180-12-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220718120212.3180-1-namit@vmware.com>
 References: <20220718120212.3180-1-namit@vmware.com>
@@ -85,15 +85,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-Introduce relaxed TLB flushes in x86. When protection is removed from
-PTEs (i.e., PTEs become writeable or executable), relaxed TLB flushes
-would be used. Relaxed TLB flushes do flush the local TLB, but do not
-flush remote TLBs.
-
-If later a spurious page-fault is encountered, and the local TLB
-generation is found to be out of sync with the mm's TLB generation, a
-full TLB flush takes place to prevent further spurious page-faults from
-occurring.
+When checking x86 PTE flags to determine whether a TLB flush is needed,
+determine whether a relaxed TLB flush is sufficient. If protection is
+added (NX removed or W added), indicate that a relaxed TLB flush would
+suffice.
 
 Cc: Andrea Arcangeli <aarcange@redhat.com>
 Cc: Andrew Cooper <andrew.cooper3@citrix.com>
@@ -109,109 +104,58 @@ Cc: Yu Zhao <yuzhao@google.com>
 Cc: Nick Piggin <npiggin@gmail.com>
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- arch/x86/include/asm/tlb.h      | 3 ++-
- arch/x86/include/asm/tlbflush.h | 9 +++++----
- arch/x86/kernel/alternative.c   | 2 +-
- arch/x86/kernel/ldt.c           | 3 ++-
- arch/x86/mm/tlb.c               | 4 ++--
- 5 files changed, 12 insertions(+), 9 deletions(-)
+ arch/x86/include/asm/tlbflush.h | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/tlb.h b/arch/x86/include/asm/tlb.h
-index 1bfe979bb9bc..51c85136f9a8 100644
---- a/arch/x86/include/asm/tlb.h
-+++ b/arch/x86/include/asm/tlb.h
-@@ -20,7 +20,8 @@ static inline void tlb_flush(struct mmu_gather *tlb)
- 		end = tlb->end;
- 	}
- 
--	flush_tlb_mm_range(tlb->mm, start, end, stride_shift, tlb->freed_tables);
-+	flush_tlb_mm_range(tlb->mm, start, end, stride_shift, tlb->freed_tables,
-+			   tlb->strict);
- }
- 
- /*
 diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 77d4810e5a5d..230cd1d24fe6 100644
+index 230cd1d24fe6..4f98735ab07a 100644
 --- a/arch/x86/include/asm/tlbflush.h
 +++ b/arch/x86/include/asm/tlbflush.h
-@@ -220,23 +220,24 @@ void flush_tlb_multi(const struct cpumask *cpumask,
- #endif
- 
- #define flush_tlb_mm(mm)						\
--		flush_tlb_mm_range(mm, 0UL, TLB_FLUSH_ALL, 0UL, true)
-+		flush_tlb_mm_range(mm, 0UL, TLB_FLUSH_ALL, 0UL, true, true)
- 
- #define flush_tlb_range(vma, start, end)				\
- 	flush_tlb_mm_range((vma)->vm_mm, start, end,			\
- 			   ((vma)->vm_flags & VM_HUGETLB)		\
- 				? huge_page_shift(hstate_vma(vma))	\
--				: PAGE_SHIFT, false)
-+				: PAGE_SHIFT, false, true)
- 
- extern void flush_tlb_all(void);
- extern void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
- 				unsigned long end, unsigned int stride_shift,
--				bool freed_tables);
-+				bool freed_tables, bool strict);
- extern void flush_tlb_kernel_range(unsigned long start, unsigned long end);
- 
- static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
- {
--	flush_tlb_mm_range(vma->vm_mm, a, a + PAGE_SIZE, PAGE_SHIFT, false);
-+	flush_tlb_mm_range(vma->vm_mm, a, a + PAGE_SIZE, PAGE_SHIFT, false,
-+			   true);
- }
- 
- static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index e257f6c80372..48945a47fd76 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1099,7 +1099,7 @@ static void *__text_poke(text_poke_f func, void *addr, const void *src, size_t l
+@@ -271,18 +271,23 @@ static inline enum pte_flush_type pte_flags_flush_type(unsigned long oldflags,
+ 	 * dirty/access bit if needed without a fault.
  	 */
- 	flush_tlb_mm_range(poking_mm, poking_addr, poking_addr +
- 			   (cross_page_boundary ? 2 : 1) * PAGE_SIZE,
--			   PAGE_SHIFT, false);
-+			   PAGE_SHIFT, false, true);
+ 	const pteval_t flush_on_clear = _PAGE_DIRTY | _PAGE_PRESENT |
+-					_PAGE_ACCESSED;
++					_PAGE_ACCESSED | _PAGE_RW;
++	const pteval_t flush_on_set = _PAGE_NX;
++	const pteval_t flush_on_set_relaxed = _PAGE_RW;
++	const pteval_t flush_on_clear_relaxed = _PAGE_NX;
+ 	const pteval_t software_flags = _PAGE_SOFTW1 | _PAGE_SOFTW2 |
+ 					_PAGE_SOFTW3 | _PAGE_SOFTW4;
+-	const pteval_t flush_on_change = _PAGE_RW | _PAGE_USER | _PAGE_PWT |
++	const pteval_t flush_on_change = _PAGE_USER | _PAGE_PWT |
+ 			  _PAGE_PCD | _PAGE_PSE | _PAGE_GLOBAL | _PAGE_PAT |
+ 			  _PAGE_PAT_LARGE | _PAGE_PKEY_BIT0 | _PAGE_PKEY_BIT1 |
+-			  _PAGE_PKEY_BIT2 | _PAGE_PKEY_BIT3 | _PAGE_NX;
++			  _PAGE_PKEY_BIT2 | _PAGE_PKEY_BIT3;
+ 	unsigned long diff = oldflags ^ newflags;
  
- 	if (func == text_poke_memcpy) {
- 		/*
-diff --git a/arch/x86/kernel/ldt.c b/arch/x86/kernel/ldt.c
-index 525876e7b9f4..7c7bc97324bc 100644
---- a/arch/x86/kernel/ldt.c
-+++ b/arch/x86/kernel/ldt.c
-@@ -372,7 +372,8 @@ static void unmap_ldt_struct(struct mm_struct *mm, struct ldt_struct *ldt)
+ 	BUILD_BUG_ON(flush_on_clear & software_flags);
+ 	BUILD_BUG_ON(flush_on_clear & flush_on_change);
+ 	BUILD_BUG_ON(flush_on_change & software_flags);
++	BUILD_BUG_ON(flush_on_change & flush_on_clear_relaxed);
++	BUILD_BUG_ON(flush_on_change & flush_on_set_relaxed);
+ 
+ 	/* Ignore software flags */
+ 	diff &= ~software_flags;
+@@ -301,9 +306,16 @@ static inline enum pte_flush_type pte_flags_flush_type(unsigned long oldflags,
+ 	if (diff & flush_on_change)
+ 		return PTE_FLUSH_STRICT;
+ 
++	if (diff & oldflags & flush_on_clear_relaxed)
++		return PTE_FLUSH_RELAXED;
++
++	if (diff & newflags & flush_on_set_relaxed)
++		return PTE_FLUSH_RELAXED;
++
+ 	/* Ensure there are no flags that were left behind */
+ 	if (IS_ENABLED(CONFIG_DEBUG_VM) &&
+-	    (diff & ~(flush_on_clear | software_flags | flush_on_change))) {
++	    (diff & ~(flush_on_clear | flush_on_set |
++		      software_flags | flush_on_change))) {
+ 		VM_WARN_ON_ONCE(1);
+ 		return PTE_FLUSH_STRICT;
  	}
- 
- 	va = (unsigned long)ldt_slot_va(ldt->slot);
--	flush_tlb_mm_range(mm, va, va + nr_pages * PAGE_SIZE, PAGE_SHIFT, false);
-+	flush_tlb_mm_range(mm, va, va + nr_pages * PAGE_SIZE, PAGE_SHIFT, false,
-+			   true);
- }
- 
- #else /* !CONFIG_PAGE_TABLE_ISOLATION */
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index ff3bcc55435e..ec5033d28a97 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -974,7 +974,7 @@ void flush_tlb_fix_spurious_fault(struct vm_area_struct *vma,
- 
- void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
- 				unsigned long end, unsigned int stride_shift,
--				bool freed_tables)
-+				bool freed_tables, bool strict)
- {
- 	struct flush_tlb_info *info;
- 	u64 new_tlb_gen;
-@@ -1000,7 +1000,7 @@ void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
- 	 * a local TLB flush is needed. Optimize this use-case by calling
- 	 * flush_tlb_func_local() directly in this case.
- 	 */
--	if (cpumask_any_but(mm_cpumask(mm), cpu) < nr_cpu_ids) {
-+	if (strict && cpumask_any_but(mm_cpumask(mm), cpu) < nr_cpu_ids) {
- 		flush_tlb_multi(mm_cpumask(mm), info);
- 	} else if (mm == this_cpu_read(cpu_tlbstate.loaded_mm)) {
- 		lockdep_assert_irqs_enabled();
 -- 
 2.25.1
 

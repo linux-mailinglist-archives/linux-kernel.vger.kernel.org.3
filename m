@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0167D57831D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935FA578320
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235268AbiGRNFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S235274AbiGRNFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235263AbiGRNFe (ORCPT
+        with ESMTP id S235272AbiGRNFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:05:34 -0400
+        Mon, 18 Jul 2022 09:05:48 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7028626AC8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:05:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9D8E275F8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658149520;
+        s=mimecast20190719; t=1658149533;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TNn/219w/nxXvIhafPjEI4PpysZRiwXMWVRFnBiLVQo=;
-        b=e5VhSHQiJ1RtCWkdMfmXLO7M44KXVoD0YFycLlSm+UP8rNpdcxIFlwkPDGEFqKEbiKmHYN
-        83SA5Rqt4VL9yyzBYmXnVDeED5gKvshhUdR7Flp/R3SyvXk6Qa4kkeL7jPUNWYewLvyQRI
-        T6a3SHWP4eYdVvOHU08Pa50okEfne8g=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TT6pUBRi6JqyBvxc8wKLIkreog5y7xrjcrt1g51AiQA=;
+        b=FlouCJ6KGSVAuJIIW14jWmvtY81TWPb4BgkoFTiK/6rjvwAffripxg3/T50ZoPhZdfxmIs
+        Xf5RhAVyVUn1Z8QbBX9HOSdhRsb9PRMOzUIBXLqu9tqYPVXAdpSLajlZ0wzTHgvOuP8KeL
+        iesVFIFHMBCXqHSSRXdEARx1/43ShsI=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-f8Y2mIxYNK6ep0M9cg4zVQ-1; Mon, 18 Jul 2022 09:05:19 -0400
-X-MC-Unique: f8Y2mIxYNK6ep0M9cg4zVQ-1
-Received: by mail-qv1-f70.google.com with SMTP id ln2-20020a0562145a8200b0047301e9bc53so5411196qvb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:05:19 -0700 (PDT)
+ us-mta-463-r4zQVAgfOK6beUbJOIc_Dw-1; Mon, 18 Jul 2022 09:05:32 -0400
+X-MC-Unique: r4zQVAgfOK6beUbJOIc_Dw-1
+Received: by mail-qk1-f199.google.com with SMTP id m8-20020a05620a24c800b006b5d8eb23efso5499782qkn.10
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:05:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=TNn/219w/nxXvIhafPjEI4PpysZRiwXMWVRFnBiLVQo=;
-        b=EYwMk29m5noJAfTRGNGQB37Ng63McR/QHPv2tcqSFzNP+x3fSH4guH7E21sTjVZA7L
-         NZ6kiDceWmemMN53KtVHaXEUnHfrO0lQi2k/2RJW+RhMOVwKTymBQAHhjcYqotkN5t0c
-         joBfWxF5pMPeLW0JsghFEtM1Sq+D8omhAdjFkgmy79VdYZ6jNgRZoI9Hd5WdN59uey9l
-         NG6AttnJn7k8iY+BuXMb/RZ8ucLz3t1oJjfwlNnoI2fDJVa2Z7jJ0s6zZUBqSehfhKp5
-         G7ywIxmXT215K5dFxxFYA8qEOyu3PvMDzrRzBq1XODeNqWsS7aV2AjfNiNHo0Dy1Mi6Y
-         rIVA==
-X-Gm-Message-State: AJIora/UjxiXVpiNnvby7FgQ0nn3zGJ/u0gGnei+XVQPw64eBqPhp661
-        rbl/NfLcLNXwHmfYv21wmKVxU8GpKxbeNJJIyP5rbnIDSSyN598+Ct6FVy/Vczfo3NoVSsMym5M
-        IZGSOwL56qKs6ypzvR5vyT/sF
-X-Received: by 2002:a05:620a:d83:b0:6a7:a68c:6118 with SMTP id q3-20020a05620a0d8300b006a7a68c6118mr17493321qkl.337.1658149518785;
-        Mon, 18 Jul 2022 06:05:18 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t4AqfUdMQ2En1oft289/J+A0HQz/7crr95hCS3cG1hRbkgp1V5jTc9qwXelJWXoqR8RG90dg==
-X-Received: by 2002:a05:620a:d83:b0:6a7:a68c:6118 with SMTP id q3-20020a05620a0d8300b006a7a68c6118mr17493292qkl.337.1658149518475;
-        Mon, 18 Jul 2022 06:05:18 -0700 (PDT)
+        bh=TT6pUBRi6JqyBvxc8wKLIkreog5y7xrjcrt1g51AiQA=;
+        b=UuubXBuB5aErVZLgDeCdzDdzi7KUC799PFSFiPevq2zEIAScZTsOEXBR2olg+FpOwf
+         CuaE5AUN7sQig1/xS5Gft22zLUaD4mUIsVgMx/MnCuv2nEMIMKpGaPKGzhxb+FHTbnEP
+         8hz/OOT27zxphCw5GRyWJ6bpoyeZC36GBi+NonrvK9djb5PVQ0kJo6beennGKZmuqzsz
+         dhpdGFmqraoY5zy8BwGJAGOSfvZ4RJ2HLz8gf3WaUQMoxwmZ+5xJ4S8bRjfZzW0LnRdl
+         ruJLLeKy7+9BpOPP2ZdAZdZn7OkSeK3DN/Z1/M5hqK1ugz2kXn5rnUaou57Nu7rz9YI0
+         gM7g==
+X-Gm-Message-State: AJIora+sxY6PTCz3Pe/ffj/OejaCAhV5Gpts1dnRtn13BYbaXb/H9+f9
+        a5Jo9IugDEJMpGZcPcdoNOMK7ws2H8p9b+UGO0+gxDcAx4Edf7+UHEUY3dDBpR0qUoVq3LXDpim
+        ADEt4BGyyw3Q1Hd183IzKNVbc
+X-Received: by 2002:a0c:df0c:0:b0:472:fbf6:7ab4 with SMTP id g12-20020a0cdf0c000000b00472fbf67ab4mr20418086qvl.30.1658149531417;
+        Mon, 18 Jul 2022 06:05:31 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vG2Trc9NCaNNRnQ7OpQQmQNw/vRZ0z52+FvP6VWZpg+aQtqTyQlo14tvlKJJtzNIn0a7VyMQ==
+X-Received: by 2002:a0c:df0c:0:b0:472:fbf6:7ab4 with SMTP id g12-20020a0cdf0c000000b00472fbf67ab4mr20418052qvl.30.1658149531078;
+        Mon, 18 Jul 2022 06:05:31 -0700 (PDT)
 Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id r2-20020ac87ee2000000b0031ed590433bsm8051643qtc.78.2022.07.18.06.05.15
+        by smtp.gmail.com with ESMTPSA id v2-20020a05620a440200b006b5da3c8d81sm6715817qkp.73.2022.07.18.06.05.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 06:05:17 -0700 (PDT)
-Message-ID: <103afbe8e0d3c560d02fc3454bba3d0d88e9251a.camel@redhat.com>
-Subject: Re: [PATCH v2 21/24] KVM: VMX: Update MTF and ICEBP comments to
- document KVM's subtle behavior
+        Mon, 18 Jul 2022 06:05:30 -0700 (PDT)
+Message-ID: <332546d06ea1f93f57cc9052f848517a20a5cbf6.camel@redhat.com>
+Subject: Re: [PATCH v2 22/24] KVM: x86: Rename inject_pending_events() to
+ kvm_check_and_inject_events()
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -65,10 +65,10 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jim Mattson <jmattson@google.com>,
         Oliver Upton <oupton@google.com>,
         Peter Shier <pshier@google.com>
-Date:   Mon, 18 Jul 2022 16:05:14 +0300
-In-Reply-To: <20220715204226.3655170-22-seanjc@google.com>
+Date:   Mon, 18 Jul 2022 16:05:27 +0300
+In-Reply-To: <20220715204226.3655170-23-seanjc@google.com>
 References: <20220715204226.3655170-1-seanjc@google.com>
-         <20220715204226.3655170-22-seanjc@google.com>
+         <20220715204226.3655170-23-seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
@@ -83,52 +83,125 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, 2022-07-15 at 20:42 +0000, Sean Christopherson wrote:
-> Document the oddities of ICEBP interception (trap-like #DB is intercepted
-> as a fault-like exception), and how using VMX's inner "skip" helper
-> deliberately bypasses the pending MTF and single-step #DB logic.
+> Rename inject_pending_events() to kvm_check_and_inject_events() in order
+> to capture the fact that it handles more than just pending events, and to
+> (mostly) align with kvm_check_nested_events(), which omits the "inject"
+> for brevity.
 > 
-> No functional change intended.
+> Add a comment above kvm_check_and_inject_events() to provide a high-level
+> synopsis, and to document a virtualization hole (KVM erratum if you will)
+> that exists due to KVM not strictly tracking instruction boundaries with
+> respect to coincident instruction restarts and asynchronous events.
+> 
+> No functional change inteded.
 > 
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  arch/x86/kvm/vmx/vmx.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
+>  arch/x86/kvm/svm/nested.c |  2 +-
+>  arch/x86/kvm/svm/svm.c    |  2 +-
+>  arch/x86/kvm/x86.c        | 46 ++++++++++++++++++++++++++++++++++++---
+>  3 files changed, 45 insertions(+), 5 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 5302b046110f..de6fcfa0ef02 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -1578,9 +1578,13 @@ static void vmx_update_emulated_instruction(struct kvm_vcpu *vcpu)
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 0a8ee5f28319..028e180a74b6 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -1310,7 +1310,7 @@ static void nested_svm_inject_exception_vmexit(struct kvm_vcpu *vcpu)
+>                 else
+>                         vmcb->control.exit_info_2 = vcpu->arch.cr2;
+>         } else if (ex->vector == DB_VECTOR) {
+> -               /* See inject_pending_event.  */
+> +               /* See kvm_check_and_inject_events().  */
+>                 kvm_deliver_exception_payload(vcpu, ex);
 >  
->         /*
->          * Per the SDM, MTF takes priority over debug-trap exceptions besides
-> -        * T-bit traps. As instruction emulation is completed (i.e. at the
-> -        * instruction boundary), any #DB exception pending delivery must be a
-> -        * debug-trap. Record the pending MTF state to be delivered in
-> +        * TSS T-bit traps and ICEBP (INT1).  KVM doesn't emulate T-bit traps
-> +        * or ICEBP (in the emulator proper), and skipping of ICEBP after an
-> +        * intercepted #DB deliberately avoids single-step #DB and MTF updates
-> +        * as ICEBP is higher priority than both.  As instruction emulation is
-> +        * completed at this point (i.e. KVM is at the instruction boundary),
-> +        * any #DB exception pending delivery must be a debug-trap of lower
-> +        * priority than MTF.  Record the pending MTF state to be delivered in
->          * vmx_check_nested_events().
+>                 if (vcpu->arch.dr7 & DR7_GD) {
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index a336517b563e..95bdf127d531 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3518,7 +3518,7 @@ void svm_complete_interrupt_delivery(struct kvm_vcpu *vcpu, int delivery_mode,
+>  
+>         /* Note, this is called iff the local APIC is in-kernel. */
+>         if (!READ_ONCE(vcpu->arch.apic->apicv_active)) {
+> -               /* Process the interrupt via inject_pending_event */
+> +               /* Process the interrupt via kvm_check_and_inject_events(). */
+>                 kvm_make_request(KVM_REQ_EVENT, vcpu);
+>                 kvm_vcpu_kick(vcpu);
+>                 return;
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index b924afb76b72..69b9725beff3 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9691,7 +9691,47 @@ static void kvm_inject_exception(struct kvm_vcpu *vcpu)
+>         static_call(kvm_x86_inject_exception)(vcpu);
+>  }
+>  
+> -static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
+> +/*
+> + * Check for any event (interrupt or exception) that is ready to be injected,
+> + * and if there is at least one event, inject the event with the highest
+> + * priority.  This handles both "pending" events, i.e. events that have never
+> + * been injected into the guest, and "injected" events, i.e. events that were
+> + * injected as part of a previous VM-Enter, but weren't successfully delivered
+> + * and need to be re-injected.
+> + *
+> + * Note, this is not guaranteed to be invoked on a guest instruction boundary,
+> + * i.e. doesn't guarantee that there's an event window in the guest.  KVM must
+> + * be able to inject exceptions in the "middle" of an instruction, and so must
+> + * also be able to re-inject NMIs and IRQs in the middle of an instruction.
+> + * I.e. for exceptions and re-injected events, NOT invoking this on instruction
+> + * boundaries is necessary and correct.
+> + *
+> + * For simplicity, KVM uses a single path to inject all events (except events
+> + * that are injected directly from L1 to L2) and doesn't explicitly track
+> + * instruction boundaries for asynchronous events.  However, because VM-Exits
+> + * that can occur during instruction execution typically result in KVM skipping
+> + * the instruction or injecting an exception, e.g. instruction and exception
+> + * intercepts, and because pending exceptions have higher priority than pending
+> + * interrupts, KVM still honors instruction boundaries in most scenarios.
+> + *
+> + * But, if a VM-Exit occurs during instruction execution, and KVM does NOT skip
+> + * the instruction or inject an exception, then KVM can incorrecty inject a new
+> + * asynchrounous event if the event became pending after the CPU fetched the
+> + * instruction (in the guest).  E.g. if a page fault (#PF, #NPF, EPT violation)
+> + * occurs and is resolved by KVM, a coincident NMI, SMI, IRQ, etc... can be
+> + * injected on the restarted instruction instead of being deferred until the
+> + * instruction completes.
+> + *
+> + * In practice, this virtualization hole is unlikely to be observed by the
+> + * guest, and even less likely to cause functional problems.  To detect the
+> + * hole, the guest would have to trigger an event on a side effect of an early
+> + * phase of instruction execution, e.g. on the instruction fetch from memory.
+> + * And for it to be a functional problem, the guest would need to depend on the
+> + * ordering between that side effect, the instruction completing, _and_ the
+> + * delivery of the asynchronous event.
+> + */
+> +static int kvm_check_and_inject_events(struct kvm_vcpu *vcpu,
+> +                                      bool *req_immediate_exit)
+>  {
+>         bool can_inject;
+>         int r;
+> @@ -10170,7 +10210,7 @@ void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
+>          * When APICv gets disabled, we may still have injected interrupts
+>          * pending. At the same time, KVM_REQ_EVENT may not be set as APICv was
+>          * still active when the interrupt got accepted. Make sure
+> -        * inject_pending_event() is called to check for that.
+> +        * kvm_check_and_inject_events() is called to check for that.
 >          */
->         if (nested_cpu_has_mtf(vmcs12) &&
-> @@ -5084,8 +5088,10 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
->                          * instruction.  ICEBP generates a trap-like #DB, but
->                          * despite its interception control being tied to #DB,
->                          * is an instruction intercept, i.e. the VM-Exit occurs
-> -                        * on the ICEBP itself.  Note, skipping ICEBP also
-> -                        * clears STI and MOVSS blocking.
-> +                        * on the ICEBP itself.  Use the inner "skip" helper to
-> +                        * avoid single-step #DB and MTF updates, as ICEBP is
-> +                        * higher priority.  Note, skipping ICEBP still clears
-> +                        * STI and MOVSS blocking.
->                          *
->                          * For all other #DBs, set vmcs.PENDING_DBG_EXCEPTIONS.BS
->                          * if single-step is enabled in RFLAGS and STI or MOVSS
+>         if (!apic->apicv_active)
+>                 kvm_make_request(KVM_REQ_EVENT, vcpu);
+> @@ -10467,7 +10507,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>                         goto out;
+>                 }
+>  
+> -               r = inject_pending_event(vcpu, &req_immediate_exit);
+> +               r = kvm_check_and_inject_events(vcpu, &req_immediate_exit);
+>                 if (r < 0) {
+>                         r = 0;
+>                         goto out;
 
+
+Makes sense.
 
 Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 

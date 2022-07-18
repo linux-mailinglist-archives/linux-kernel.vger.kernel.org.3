@@ -2,199 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253485782BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55485782C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbiGRMun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S235048AbiGRMv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbiGRMum (ORCPT
+        with ESMTP id S234520AbiGRMv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:50:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719DD6397;
-        Mon, 18 Jul 2022 05:50:40 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1F56033BE8;
-        Mon, 18 Jul 2022 12:50:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658148639; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9QeNU7i1Z8jOANG2Muly2d9TTzEZo5jKEBQhnd4Wbho=;
-        b=aXCE0L5kmo7kN4TNty5IXSebf6+/gMTsHbMU8UHhLiD5s6Q/GymEAj8WT2fCYooe+u+H3E
-        8nzTlsJbn7jQhxaPDdbi1pWLoddkmSVa0BJt6HMf381Wq3CsFTB4fA5yx7Pe5rFABuYmRx
-        s4bd2JA1tX19hRCZ+8nHXLxtMpYt9yQ=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BD6AD2C141;
-        Mon, 18 Jul 2022 12:50:38 +0000 (UTC)
-Date:   Mon, 18 Jul 2022 14:50:36 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Song Liu <song@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, jolsa@kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH v3 bpf-next 1/4] ftrace: add
- modify_ftrace_direct_multi_nolock
-Message-ID: <YtVXHDfV8HDwAm6G@alley>
-References: <20220718001405.2236811-1-song@kernel.org>
- <20220718001405.2236811-2-song@kernel.org>
+        Mon, 18 Jul 2022 08:51:56 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A18222B6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:51:51 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id w17so13468421ljh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OJXhbwSqMRATHVRajJolwvgYLJ2CSrmgUASy2N9nxn8=;
+        b=mqmAkpdliFx1VG4eVEkqivQ0O5+4lFFFY6ty+unhLqXCJd+T2+xPCH/MP/2yp37gCn
+         DUvLrM+auHbrDLN7eNYRRDRma9wrZkzYakm/1lB2UqljPpO4uncp72NdAFdXXZSoZk4D
+         LCz4M6BHiFr5j/Q5TOsiGo5GDC0dHwnBv88pfuGZQK/+iUb64N0W8B9O8sgpht772JUm
+         482uB14eVYQYCoNrShwliyCX0ReprSHm9dVVkoPIeLI47lPM3rudeUT9fhfnb1gdCd+I
+         90R/qQI4U0rzdQ6NztPYUFnMeSUlTqSo1lZ5MXs4w+U869QB3lgG+DHHqWwQceAh6Ruz
+         UajQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OJXhbwSqMRATHVRajJolwvgYLJ2CSrmgUASy2N9nxn8=;
+        b=5cf/2d0OvbMILliOqnnLBwnZ5ndhrSthLftyljd/nHBFLy/OZYvKp3P6KJz7pWdPD8
+         m2Vwyc0QMpwSGC2vxKXAw1JfN5i8ms4n07DSZjnDkUKZYTiiXf8y7I1BCiMnh8NUJDkY
+         yUhzVIabtLfegN/QrHERlxPBxq1VN5HsYktu6XkoQZBWC8ECvQcF3gAnIBNYZeSl8Cbc
+         tB+c0XH7UfsHHC63J1WT3Pf7nivTTyb+XfpnOeCfay4np1VD4kY9sQeWv5MCEZM7tDm4
+         ON6E0/wPZ0LFuE3LNtSLpoFkVArBH3kJjWfjN66Lj+IamUL1Fr5znrBxvDaTv7x56JIR
+         /D8g==
+X-Gm-Message-State: AJIora/0+YFfW8bPuvTasLhHFBWsHXU278GzUZaRZf7qrogl7qkXxOep
+        jeqhELdd1PGxPixDIo5JDP3/qcK7Ix0POENlh1Z+rQ==
+X-Google-Smtp-Source: AGRyM1vCGpXByC4iMeBNORjehfb1nd7xOZbX1LOKXrEjLaS4H1ppLA2vxAfTsdoR7d0IDMEgaopM9fKiNux+UCagSPE=
+X-Received: by 2002:a2e:968c:0:b0:25d:b5b1:9c8c with SMTP id
+ q12-20020a2e968c000000b0025db5b19c8cmr2865910lji.300.1658148710042; Mon, 18
+ Jul 2022 05:51:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718001405.2236811-2-song@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220514215424.1007718-1-bhupesh.sharma@linaro.org>
+ <20220514215424.1007718-7-bhupesh.sharma@linaro.org> <Yr4psYiCCbi15RMe@builder.lan>
+ <772dc5d2-c3b2-685b-3a38-b86e8877424a@linaro.org>
+In-Reply-To: <772dc5d2-c3b2-685b-3a38-b86e8877424a@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 18 Jul 2022 14:51:13 +0200
+Message-ID: <CAPDyKFpUpvHWMZmU0RxLAoFQG7RzOnqvTQPQBOm0s5MkkMHChw@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] arm64: dts: qcom: ipq8074: Fix 'max-frequency'
+ value for sdhci node
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 2022-07-17 17:14:02, Song Liu wrote:
-> This is similar to modify_ftrace_direct_multi, but does not acquire
-> direct_mutex. This is useful when direct_mutex is already locked by the
-> user.
-> 
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -5691,22 +5691,8 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> @@ -5717,12 +5703,8 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->  	int i, size;
->  	int err;
->  
-> -	if (check_direct_multi(ops))
-> +	if (WARN_ON_ONCE(!mutex_is_locked(&direct_mutex)))
->  		return -EINVAL;
+On Mon, 18 Jul 2022 at 10:47, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+>
+> On 7/1/22 4:24 AM, Bjorn Andersson wrote:
+> > On Sat 14 May 16:54 CDT 2022, Bhupesh Sharma wrote:
+> >
+> >> Since the Qualcomm sdhci-msm device-tree binding has been converted
+> >> to yaml format, 'make dtbs_check' reports issues with
+> >> 'max-frequency' value for ipq8074 sdhci node:
+> >>
+> >>   arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb: mmc@7824900:
+> >>    max-frequency:0:0: 384000000 is greater than the maximum of 200000000
+> >>
+> >> Fix the same.
+> >>
+> >> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> >> Cc: Rob Herring <robh@kernel.org>
+> >> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> >> ---
+> >>   arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> >> index ab2a1e7955b5..b2d71af9b419 100644
+> >> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> >> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> >> @@ -388,7 +388,7 @@ sdhc_1: mmc@7824900 {
+> >>                               <&gcc GCC_SDCC1_APPS_CLK>,
+> >>                               <&xo>;
+> >>                      clock-names = "iface", "core", "xo";
+> >> -                    max-frequency = <384000000>;
+> >> +                    max-frequency = <200000000>;
+> > This might match the binding, but someone put 384000000 there for a
+> > reason. Perhaps the binding needs to be updated instead?
+>
+> I was waiting for getting access to ipq8074 reference manual / documentation.
+> I double-checked and it seems SDCC1 on this SoC does support a max frequency
+> of 384 MHz which is strange as the SDCC2 supports 200 MHz as max frequency
+> instead.
 
-IMHO, it is better to use:
+I guess it depends on what the property is being used for from the mmc
+host driver perspective. So, to answer the question, we probably need
+to look at the code in the host driver to best understand what to do
+here.
 
-	lockdep_assert_held_once(&direct_mutex);
+>
+> Also the eMMC and MMC controllers on other SoCs (i.MX etx( usually support only
+> a max frequency of 200 MHz, so may be we need an exceptional addition to the
+> binding documentation here.
+>
+> @Ulf - what's your view on updating the binding documentation here? I can
+> send a v3 accordingly.
 
-It will always catch the problem when called without the lock and
-lockdep is enabled.
+The point with the property is to let host controllers specify whether
+there is an upper limit of the frequency that it can support. No
+matter what, the mmc core will not use a frequency greater than stated
+by the eMMC/SD/SDIO specs.
 
-> -	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-> -		return -EINVAL;
-> -
-> -	mutex_lock(&direct_mutex);
->  
->  	/* Enable the tmp_ops to have the same functions as the direct ops */
->  	ftrace_ops_init(&tmp_ops);
-> @@ -5730,7 +5712,7 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->  
->  	err = register_ftrace_function(&tmp_ops);
->  	if (err)
-> -		goto out_direct;
-> +		return err;
->  
->  	/*
->  	 * Now the ftrace_ops_list_func() is called to do the direct callers.
-> @@ -5754,7 +5736,64 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->  	/* Removing the tmp_ops will add the updated direct callers to the functions */
->  	unregister_ftrace_function(&tmp_ops);
->  
-> - out_direct:
-> +	return err;
-> +}
-> +
-> +/**
-> + * modify_ftrace_direct_multi_nolock - Modify an existing direct 'multi' call
-> + * to call something else
-> + * @ops: The address of the struct ftrace_ops object
-> + * @addr: The address of the new trampoline to call at @ops functions
-> + *
-> + * This is used to unregister currently registered direct caller and
-> + * register new one @addr on functions registered in @ops object.
-> + *
-> + * Note there's window between ftrace_shutdown and ftrace_startup calls
-> + * where there will be no callbacks called.
-> + *
-> + * Caller should already have direct_mutex locked, so we don't lock
-> + * direct_mutex here.
-> + *
-> + * Returns: zero on success. Non zero on error, which includes:
-> + *  -EINVAL - The @ops object was not properly registered.
-> + */
-> +int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
-> +{
-> +	if (check_direct_multi(ops))
-> +		return -EINVAL;
-> +	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-> +		return -EINVAL;
-> +
-> +	return __modify_ftrace_direct_multi(ops, addr);
-> +}
-> +EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi_nolock);
-> +
-> +/**
-> + * modify_ftrace_direct_multi - Modify an existing direct 'multi' call
-> + * to call something else
-> + * @ops: The address of the struct ftrace_ops object
-> + * @addr: The address of the new trampoline to call at @ops functions
-> + *
-> + * This is used to unregister currently registered direct caller and
-> + * register new one @addr on functions registered in @ops object.
-> + *
-> + * Note there's window between ftrace_shutdown and ftrace_startup calls
-> + * where there will be no callbacks called.
-> + *
-> + * Returns: zero on success. Non zero on error, which includes:
-> + *  -EINVAL - The @ops object was not properly registered.
-> + */
-> +int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> +{
-> +	int err;
-> +
-> +	if (check_direct_multi(ops))
-> +		return -EINVAL;
-> +	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&direct_mutex);
-> +	err = __modify_ftrace_direct_multi(ops, addr);
->  	mutex_unlock(&direct_mutex);
->  	return err;
->  }
+For eMMC, 200MHz is the maximum frequency.
 
-I would personally do:
+For SD/SDIO cards, the SDR104 mode has 208MHz. So it seems like we
+need an update to the binding, no matter what. :-)
 
-int __modify_ftrace_direct_multi(struct ftrace_ops *ops,
-			unsigned long addr, bool lock)
-{
-	int err;
+I have no strong opinions around this, but perhaps just raising the
+limit of the binding to cover the qcom case makes best sense.
 
-	if (check_direct_multi(ops))
-		return -EINVAL;
-	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-		return -EINVAL;
-
-	if (lock)
-		mutex_lock(&direct_mutex);
-
-	err = __modify_ftrace_direct_multi(ops, addr);
-
-	if (lock)
-		mutex_unlock(&direct_mutex);
-
-	return err;
-}
-
-int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-{
-	__modify_ftrace_direct_multi(ops, addr, true);
-}
-
-int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
-{
-	__modify_ftrace_direct_multi(ops, addr, false);
-}
-
-To avoid duplication of the checks. But it is a matter of taste.
-
-Best Regards,
-Petr
+Kind regards
+Uffe

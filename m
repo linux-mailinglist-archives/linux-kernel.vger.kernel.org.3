@@ -2,142 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC04577BED
+	by mail.lfdr.de (Postfix) with ESMTP id 4C315577BEC
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbiGRGys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 02:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
+        id S233463AbiGRGyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 02:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbiGRGyp (ORCPT
+        with ESMTP id S232753AbiGRGyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Jul 2022 02:54:45 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5245DE0D8
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523A965AE
         for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:54:44 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id oy13so19486888ejb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:54:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9Wf3nz0D32YPk/y25pAQGhDQ1uTDwJ1vjvWzFxFZHho=;
-        b=Ih+9aNjIeLTpADvaHAVyzE/9Uv2qM+Aey4UGoF+VMVge3MFhBt9ewvTNE+mU3yn44w
-         A5+1FZasc2gPR68mlTe/uEt7GAJxFdaQFHktdNPRH6/CFPDR2gXztTpIRPYObF4gitXd
-         TZ1lgSK2X37oA0Z4uZBTiAvU0ArMCukhL9fdmZU6pmPXqi6/diRgxvG2E2VhEHRlxD8f
-         JVzjCoUN12HTHGj9wlPhxSIjxTjitGtAbC2b8GmfcNbE8oFgR3wNCTPQXIDYk110+xt6
-         qUpWOfYlEjgqeGQ4xrS6HZs2IKccJLEUaeG/XOLgKcXo+dM0nWCDyb7olQv49hqFFp2m
-         Md+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9Wf3nz0D32YPk/y25pAQGhDQ1uTDwJ1vjvWzFxFZHho=;
-        b=n40b2w/DUMeSQTbZx6Qhc2syiqkZqcKxtS6HVLW/9JvJXKwe0f8xytV6OpJceAei2t
-         VG3YF8n2/qxIT86zmtbGXVbakIhKZnViy+9XKwIj2P/smWJHhB6lvoVxGHePF3ugaZ5A
-         vVMSG0RNDxqcOuCiQfyyUPQYSlFgRO4gzS/w3HDqAZb94PE+lO/SqzyLOMEKHRX/53UE
-         0sOcQji3ss2o0GOQo2VJH+9RFm9mYfrQRKJg3XnWiN0WGzgoRCap4LqV0hxZ2WCMQwfQ
-         ggNL+oPSLXcjaknoDHik/neX2iYXFsiwUwXa5ouLQSM/a/4i8Eu0o2R7q2LcOIoaQ52s
-         W5HA==
-X-Gm-Message-State: AJIora977sipe+4wnBkeuvbtHi3idAobG+pqZN/aA5SR10AYxgBZo9R7
-        gPbeZbYGY3YQqOUKwJ9PsHMnqVJ2YFA+12wpELGllQ==
-X-Google-Smtp-Source: AGRyM1vEW2fHt3QyClItms5lOeJKBbgwfyE4WQDULLAvCf0Qqtqg8io+RzvCaT1lotn0yOTNZGTQJE9IFkzFljFVot0=
-X-Received: by 2002:a17:907:160c:b0:72f:1031:2184 with SMTP id
- hb12-20020a170907160c00b0072f10312184mr9807494ejc.355.1658127282713; Sun, 17
- Jul 2022 23:54:42 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658127281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F3oMg+xgvxHikv+tJ6oZey82TaGFT5DoD5cvGkQB4iU=;
+        b=ryHT9HdE6knXP+ik6pAtNLdqHISeKr0/wua7GfbXQ6XFzUOQ5XufTU1THvP1T5m6kpAx7/
+        fIjSXgZCp62b1vaj8d+IK5PN9UKb54EMzZmmbenI1UvdlXg+3OkUsfALtg7OkgEFXIrtei
+        TVqYXGwgWPB5h1nlqm68ZnCgAh8tRMge3bXxjvWaNK1UBD2AAuB0sRs/A5jSt4QoeOxDZ+
+        pmSJ9RBmHop5RpE5hvR9rrskc6xfUTQojF2ZerVtU2v1kee+JBXVevcViOfdYXnvgMknFw
+        U240yuCKlqI9yPVgkT2wfDHvpl3nen5oekXJ56/1+jtBU3excoe7hK7eKd79ow==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658127281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F3oMg+xgvxHikv+tJ6oZey82TaGFT5DoD5cvGkQB4iU=;
+        b=kDoDPFYp7z/wNjK3iD62+BH0V1nUNF/QdqIfNDmk8rvM5etzesX/WQC5n0vz7Pk5fll368
+        nKwXIeQS5i0E0HBA==
+To:     Juergen Gross <jgross@suse.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [patch 02/38] x86/cpu: Use native_wrmsrl() in
+ load_percpu_segment()
+In-Reply-To: <70b03d06-6ab9-1693-f811-f784a7dced76@suse.com>
+References: <20220716230344.239749011@linutronix.de>
+ <20220716230952.787452088@linutronix.de>
+ <0bec8fe2-d1e3-f01c-6e52-06ab542efdd8@citrix.com> <87zgh7wo91.ffs@tglx>
+ <87tu7fwlhr.ffs@tglx> <87r12jwl9l.ffs@tglx> <87o7xnwgl3.ffs@tglx>
+ <70b03d06-6ab9-1693-f811-f784a7dced76@suse.com>
+Date:   Mon, 18 Jul 2022 08:54:41 +0200
+Message-ID: <87lesqx64u.ffs@tglx>
 MIME-Version: 1.0
-References: <20220718061608.2303425-1-tzungbi@kernel.org>
-In-Reply-To: <20220718061608.2303425-1-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Sun, 17 Jul 2022 23:54:31 -0700
-Message-ID: <CABXOdTeH-q=17QBnCn5NGT5V0QA5SOaTnrWaK+g5F3j4mVp8cA@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_kbd_led_backlight: fix build warning
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 11:16 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+On Mon, Jul 18 2022 at 07:11, Juergen Gross wrote:
+> On 17.07.22 23:54, Thomas Gleixner wrote:
+>>   void __init native_smp_prepare_boot_cpu(void)
+>>   {
+>>   	int me = smp_processor_id();
+>> -	switch_to_new_gdt(me);
+>> +
+>> +	/* SMP invokes this from setup_per_cpu_areas() */
+>> +	if (!IS_ENABLED(CONFIG_SMP))
+>> +		switch_to_real_gdt(me);
+>> +
+>>   	/* already set me in cpu_online_mask in boot_cpu_init() */
+>>   	cpumask_set_cpu(me, cpu_callout_mask);
+>>   	cpu_set_state_online(me);
+>> --- a/arch/x86/xen/enlighten_pv.c
+>> +++ b/arch/x86/xen/enlighten_pv.c
+>> @@ -1164,7 +1164,7 @@ static void __init xen_setup_gdt(int cpu
+>>   	pv_ops.cpu.write_gdt_entry = xen_write_gdt_entry_boot;
+>>   	pv_ops.cpu.load_gdt = xen_load_gdt_boot;
+>>   
+>> -	switch_to_new_gdt(cpu);
+>> +	switch_to_real_gdt(cpu);
 >
-> drivers/platform/chrome/cros_kbd_led_backlight.c got a new build warning
-> when using the randconfig in [1]:
-> >>> warning: unused variable 'keyboard_led_drvdata_ec_pwm'
->
-> The warning happens when CONFIG_CROS_EC is set but CONFIG_OF is not set.
-> Reproduce:
-> - mkdir build_dir
-> - wget [1] -O build_dir/.config
-> - COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 \
->   O=build_dir ARCH=s390 SHELL=/bin/bash drivers/platform/chrome/
->
+> ... can't you use the paravirt variant of load_gdt in switch_to_real_gdt() ?
 
-Have you tried the following ?
-    CONFIG_ACPI=y
-    CONFIG_CROS_EC=n
-    CONFIG_OF=y
-
-That should be possible, but with your patch it should now result in a
-build error because keyboard_led_drvdata_ec_pwm is no longer defined.
-
-Also, with your patch, CONFIG_CROS_EC=y, CONFIG_ACPI=y, and
-CONFIG_OF=n (ie Intel/AMD systems) would result in the code not being
-compiled, which would be wrong.
+That does not solve the problem of having a disagreement between GDT and
+GS_BASE. Let me dig into this some more.
 
 Thanks,
-Guenter
 
-> Fix the warning by hardening the guard condition.  Also use IS_ENABLED()
-> because CROS_EC is a tristate.
->
-> [1]: https://download.01.org/0day-ci/archive/20220717/202207170538.MR39dw8m-lkp@intel.com/config
->
-> Fixes: 40f58143745e ("platform/chrome: cros_kbd_led_backlight: support EC PWM backend")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
->  drivers/platform/chrome/cros_kbd_led_backlight.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_kbd_led_backlight.c b/drivers/platform/chrome/cros_kbd_led_backlight.c
-> index 5ad41c10412d..4a0b2bd004d5 100644
-> --- a/drivers/platform/chrome/cros_kbd_led_backlight.c
-> +++ b/drivers/platform/chrome/cros_kbd_led_backlight.c
-> @@ -119,7 +119,7 @@ static const struct keyboard_led_drvdata keyboard_led_drvdata_acpi = {
->
->  #endif /* CONFIG_ACPI */
->
-> -#ifdef CONFIG_CROS_EC
-> +#if IS_ENABLED(CONFIG_CROS_EC) && defined(CONFIG_OF)
->
->  static int
->  keyboard_led_set_brightness_ec_pwm(struct led_classdev *cdev,
-> @@ -187,11 +187,7 @@ static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {
->         .max_brightness = KEYBOARD_BACKLIGHT_MAX,
->  };
->
-> -#else /* CONFIG_CROS_EC */
-> -
-> -static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {};
-> -
-> -#endif /* CONFIG_CROS_EC */
-> +#endif /* IS_ENABLED(CONFIG_CROS_EC) && defined(CONFIG_OF) */
->
->  static int keyboard_led_probe(struct platform_device *pdev)
->  {
-> --
-> 2.37.0.170.g444d1eabd0-goog
->
+        tglx

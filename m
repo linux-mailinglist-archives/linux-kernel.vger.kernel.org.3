@@ -2,100 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1635F578920
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86996578924
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235160AbiGRSBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S235214AbiGRSCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234225AbiGRSBh (ORCPT
+        with ESMTP id S235193AbiGRSCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:01:37 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4912E6A1;
-        Mon, 18 Jul 2022 11:01:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fvDvYNh033IOlQjqYKmG7DkfegtAnkMbbjHUTcpexCw=; b=Mkf+EnOO5lL4TN07vG/v1CkFSK
-        O9h2x7xk2EK3aIgRnG4AwBANgxMawFV8s5A/9WP9DRo8lxNkhDCVrYA8ELqmaZyJ9O/BfhdRQ8l6Z
-        yzkVB5uAXV5KRLG28A3gtiEPabNpKDH28R8EPRrlO2YFRtqcZO5N+HVYxUYzl3FSi9Dw/olJPlqwn
-        1Uc5OlexNfAlnU+PPOKLHFEMxTV+gZwXCPmw2oDdrRPJdxVH1xo7cYn/P3YEreDdQ/UUGAfPOjLbe
-        7HlNRrEailyn6mm3h1EYu94Ii94VpJE9o4I+1ly4EGFJE00+eo1I7vwrZWPfmm5icIJGiT2O3qSB4
-        jDzo7BsQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33428)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oDV3j-0001xD-MR; Mon, 18 Jul 2022 19:01:31 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oDV3i-0002A1-Oo; Mon, 18 Jul 2022 19:01:30 +0100
-Date:   Mon, 18 Jul 2022 19:01:30 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [PATCH net-next v3 08/47] net: phylink: Support differing link
- speeds and interface speeds
-Message-ID: <YtWf+u7GP2bQzNwv@shell.armlinux.org.uk>
-References: <20220715215954.1449214-1-sean.anderson@seco.com>
- <20220715215954.1449214-9-sean.anderson@seco.com>
- <YtMaKWZyC/lgAQ0i@lunn.ch>
- <YtWFAfu1nSE6vCfx@shell.armlinux.org.uk>
- <b1c3fc9f-71af-6610-6f58-64a0297347dd@seco.com>
- <YtWYWhAm/n5mnw4I@lunn.ch>
+        Mon, 18 Jul 2022 14:02:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE952E9F6;
+        Mon, 18 Jul 2022 11:02:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 502AAB816ED;
+        Mon, 18 Jul 2022 18:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 914E7C341C0;
+        Mon, 18 Jul 2022 18:02:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658167323;
+        bh=JmgzQ4GBBNdx5oxKuBYu/AkqxPX3wUd1Yb7MhLqzvMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YxvKwN2xYu23esvDDqWRMNKYrajgfy+LP3noFTgVD3zCILBb6RrCDw6eJo1S/uLD0
+         0mvF8Ax7SSuMOdKdO/fMlkYJeq5RbA20ZmU3GwstPBy+LKpJzW9B0YMnbNSvq5PcsP
+         wujN/63fJbsTzQeVqMG5Haw8vbUfuhRgGpfjLvsCOd/SE9c9R8H3zr6qqoa0JjeSrg
+         0EMyVCWCZQ0loDpH+bsDc7M9HbSIQs8132Pq1RmjfAqfowzvf7h6c/EMbq0a4qyJyQ
+         UvQ+UdrW7t3UTslly0LBooN4BuOZM7VoMcRqgR/DjkpDkQjyT27zn7xpPkV/8bfHvx
+         BnwgRZSks61Og==
+Received: by pali.im (Postfix)
+        id 8012311AA; Mon, 18 Jul 2022 20:01:59 +0200 (CEST)
+Date:   Mon, 18 Jul 2022 20:01:59 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jim Quinlan <james.quinlan@broadcom.com>,
+        Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two
+ funcs
+Message-ID: <20220718180159.feglhlmu7a75axgv@pali>
+References: <CA+-6iNwKDYzJ2F5ns-EKV0pMvYwUzPhzzmb7mA0pNp2k1UWMzw@mail.gmail.com>
+ <20220718170528.GA1426959@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YtWYWhAm/n5mnw4I@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220718170528.GA1426959@bhelgaas>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 07:28:58PM +0200, Andrew Lunn wrote:
-> > > I am rather worried that we have drivers using ->speed today in their
-> > > mac_config and we're redefining what that means in this patch.
+On Monday 18 July 2022 12:05:28 Bjorn Helgaas wrote:
+> On Mon, Jul 18, 2022 at 09:37:08AM -0400, Jim Quinlan wrote:
+> > On Mon, Jul 18, 2022 at 9:11 AM Pali Rohár <pali@kernel.org> wrote:
+> > >
+> > > Hello!
+> > >
+> > > On Saturday 16 July 2022 18:24:49 Jim Quinlan wrote:
+> > > > @@ -948,6 +941,40 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+> > > >       if (pcie->gen)
+> > > >               brcm_pcie_set_gen(pcie, pcie->gen);
+> > > >
+> > > > +     /* Don't advertise L0s capability if 'aspm-no-l0s' */
+> > > > +     aspm_support = PCIE_LINK_STATE_L1;
+> > > > +     if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
+> > > > +             aspm_support |= PCIE_LINK_STATE_L0S;
+> > > > +     tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+> > > > +     u32p_replace_bits(&tmp, aspm_support,
+> > > > +             PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
+> > > > +     writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+> > > > +
+> > > > +     /*
+> > > > +      * For config space accesses on the RC, show the right class for
+> > > > +      * a PCIe-PCIe bridge (the default setting is to be EP mode).
+> > > > +      */
+> > > > +     tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+> > > > +     u32p_replace_bits(&tmp, 0x060400,
+> > >
+> > > There is already macro PCI_CLASS_BRIDGE_PCI_NORMAL, so please use it
+> > > instead of magic constant.
 > > 
-> > Well, kind of. Previously, interface speed was defined to be link speed,
-> > and both were just "speed". The MAC driver doesn't really care what the
-> > link speed is if there is a phy, just how fast the phy interface mode
-> > speed is.
+> > Will do, thanks.
 > 
-> I'm not sure that is true. At least for SGMII, the MAC is passed the
-> line side speed, which can be 10, 100, or 1G. The PHY interface mode
-> speed is fixed at 1G, since it is SGMII, but the MAC needs to know if
-> it needs to repeat symbols because the line side speed is lower than
-> the host side speed.
+> I can fix that up locally.
 
-... and passing the SGMII link speed (1G) will break a lot of stuff
-where the MAC/PCS may need to know the media speed to do the right
-number of symbol replication.
+Great!
 
-So I don't think we can get away with just saying ->speed is the link
-speed which will prevent drivers breaking. I don't think it's that
-simple. Like everything with phylink, all the drivers need to be looked
-at and tweaked with every damn change, which makes phylink development
-painfully slow.
+I did git grep on recent master branch and found another candidates with
+magic numbers which refers to PCI_CLASS_BRIDGE_PCI_NORMAL:
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+arch/mips/pci/pci-mt7620.c:     pcie_w32(0x06040001, RALINK_PCI0_CLASS);
+arch/mips/pci/pci-rt3883.c:     rt3883_pci_w32(rpc, 0x06040001, RT3883_PCI_REG_CLASS(1));
+arch/powerpc/platforms/4xx/pci.c:               out_le32(mbase + 0x208, 0x06040001);
+drivers/pci/controller/pcie-brcmstb.c:  u32p_replace_bits(&tmp, 0x060400,
+
+(class code is stored in upper 24 bits of 32-bit register, so it makes
+sense that on lowest 8 bits is something more - 0x01)
+
+What do you think? Does it make sense to send patch which replace above
+hex numbers by macros?
+
+> > > I introduced it recently in commit:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=904b10fb189cc15376e9bfce1ef0282e68b0b004
+> > >
+> > > > +                       PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
+> > > > +     writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+> > > > +
+> > > > +     return 0;
+> > > > +}
+> 
+> 
+> 
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 

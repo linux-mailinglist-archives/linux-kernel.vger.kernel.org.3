@@ -2,132 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B998578A9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94508578AA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbiGRTW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
+        id S235812AbiGRTXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235704AbiGRTWw (ORCPT
+        with ESMTP id S235701AbiGRTXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:22:52 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31AF2F67D;
-        Mon, 18 Jul 2022 12:22:51 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so19138500pjr.4;
-        Mon, 18 Jul 2022 12:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L49cEqnvIqcH6kuvpQrqn6Zje6ktkAbRLUeIUPxx/7E=;
-        b=AOJiH+SXnVmQJ+bGNsZclRXLODxNSpRAvPfO/VxS7r8q2g5X+8Xlta47Sl1pGHzkV+
-         FwVS6nFN35kueD5zFoeT2Vv3mlbHyBS2eLHAXHY+HA81SCyD7KP1t86n3llHw0BDRhTg
-         7ch/aSQGS5uqNET+mWyGr9MIsDr6aTo1b+6izOguOwAcCZPuG46lc3d9yq3pl2ncn2vD
-         Viw2Q0xjJXJVjT2AMQBZ1fIMD63Tief5fi+JCPArIrudaYNEp/+tca6nW5kzvPHK8EvX
-         OrRROGhSWJzS0qyYOUQQX6nlYAPRZP8RFAaRlfraANgBC65PrFNL+zLE+OpIUFOPlbpB
-         kS5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=L49cEqnvIqcH6kuvpQrqn6Zje6ktkAbRLUeIUPxx/7E=;
-        b=hiZlLRGpZBgPitM7gSsX/2JZbHyPCZ/DtY93s4gPByhpAloBBUdCjAg/Go1iK3cF9r
-         qeCaPDyRWEHIktgfxyNSlBKrkLU6f1mb7GNz35XbE3HrBppGAhkh3KJGimx4iEl+cW7E
-         EkdUVyanO/4HhmNdkoGiLT6+ojicMPhVlagt0EomAmAq1+dQ5lqizTTVGhxr7VOx4zHx
-         P+T9z+cEOUT2xx1N2XflOsNNgK2uMcJapg1rviOQiRtaafjJggg84aQthIevtUyOGRBc
-         m2PKCQ92CRPPafLeORnRn50pIq86a9Uz2x/QrCeLwurG3txGYhUvNMuYsDc0tRgZp3a+
-         VPlw==
-X-Gm-Message-State: AJIora8CL1WilHca2HYj51N36fT09dMkairTf7krh9OY+F2fe1NvwvPP
-        K8L94F9uc5kHYeuEgI0yISopTII1864=
-X-Google-Smtp-Source: AGRyM1tq50m0ES0OTSxOpN5pOU2LngotNJr4NPiFELTsNZIQFAUcI3uyp1uiOJvpro1TX2XYoK7uXQ==
-X-Received: by 2002:a17:902:f708:b0:153:839f:bf2c with SMTP id h8-20020a170902f70800b00153839fbf2cmr28645338plo.113.1658172170867;
-        Mon, 18 Jul 2022 12:22:50 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id e15-20020a056a0000cf00b005255489187fsm9620296pfj.135.2022.07.18.12.22.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:22:49 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 18 Jul 2022 09:22:47 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jinke Han <hanjinke.666@bytedance.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [PATCH] block: don't allow the same type rq_qos add more than
- once
-Message-ID: <YtWzB6T7GBb7fiNe@slm.duckdns.org>
-References: <20220718083646.67601-1-hanjinke.666@bytedance.com>
+        Mon, 18 Jul 2022 15:23:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4792F67C;
+        Mon, 18 Jul 2022 12:23:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95ACF616CD;
+        Mon, 18 Jul 2022 19:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C8A4C341C0;
+        Mon, 18 Jul 2022 19:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658172223;
+        bh=zn268JVToH1CrQ7zJIK0eZF4kMGLavgHTgGjFqMHSE0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=B69LvkOepfV5ubz8OtDW5ZNqbnWmPX+1y97k9GTrGOFc/ZDKVdyaWA83uSdsQRvmm
+         aIpGgTkNxRM8JM2wqHM7Kg9c1uXUuORV575Xh+ZPAbWG7dgjtJMmg8vqD9Vh2ykTBD
+         ML5RpFcZ3rr9EPwzOrLUJLs8U9foLpw9vgXrxupvcaiyTfTrQkiX6ssGvB3hZanFgC
+         xyvNBmQ649eGhktPXPznZYkC/K+EabhsMnvH3zCLNxLdPxU9RX9BCvifv4pcuY62Lz
+         oSbr9N6ikbrolDxYOWx75MyiQ1K/fsZ4QC/KxkR9YsU6za8P2e0Zmv4cYzx5sTEEYO
+         HkmwenW4DThNw==
+Date:   Mon, 18 Jul 2022 14:23:41 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jim Quinlan <james.quinlan@broadcom.com>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two
+ funcs
+Message-ID: <20220718192341.GA1437687@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220718083646.67601-1-hanjinke.666@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CA+-6iNwjPr2gu_oyn4NheLPJZHh-3eib-3onz63sfNOJpdJ6Tw@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Mon, Jul 18, 2022 at 04:36:46PM +0800, Jinke Han wrote:
-> When the io.cost.qos file is written by two cpu concurrently, rq_qos may
-> be added to one disk twice. In that case, there will be two iocs enabled
-> and running on one disk. They own different iocgs on their active list.
-> In the ioc_timer_fn function, because of the iocgs from two ioc have the
-> same root iocg, the root iocg's walk_list may be overwritten by each
-> other and this lead to list add/del corrutions in building or destorying
-> the inner_walk list.
+On Mon, Jul 18, 2022 at 02:56:03PM -0400, Jim Quinlan wrote:
+> On Mon, Jul 18, 2022 at 2:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > On Sat, Jul 16, 2022 at 06:24:49PM -0400, Jim Quinlan wrote:
+> > > Currently, the function does the setup for establishing PCIe link-up
+> > > with the downstream device, and it does the actual link-up as well.
+> > > The calling sequence is (roughly) the following in the probe:
+> > >
+> > > -> brcm_pcie_probe()
+> > >     -> brcm_pcie_setup();                       /* Set-up and link-up */
+> > >     -> pci_host_probe(bridge);
+> > >
+> > > This commit splits the setup function in two: brcm_pcie_setup(), which only
+> > > does the set-up, and brcm_pcie_start_link(), which only does the link-up.
+> > > The reason why we are doing this is to lay a foundation for subsequent
+> > > commits so that we can turn on any power regulators, as described in the
+> > > root port's DT node, prior to doing link-up.
+> >
+> > All drivers that care about power regulators turn them on before
+> > link-up, but typically those regulators are described directly under
+> > the host bridge itself.
 > 
-> And so far, the blk-rq-qos framework works in case that one instance for
-> one type rq_qos per queue by default. This patch make this explicit and
-> also fix the crash above.
+> Actually, what you describe is what I proposed with my v1 back in Nov 2020.
+> The binding commit message said,
+> 
+>     "Quite similar to the regulator bindings found in
+>     "rockchip-pcie-host.txt", this allows optional regulators to be
+>     attached and controlled by the PCIe RC driver."
+> 
+> > IIUC the difference here is that you have regulators described under
+> > Root Ports (not the host bridge/Root Complex itself), so you don't
+> > know about them until you've enumerated the Root Ports.
+> > brcm_pcie_probe() can't turn them on directly because it doesn't know
+> > what Root Ports are present and doesn't know about regulators below
+> > them.
+> 
+> The reviewer's requested me to move the regulator node(s)
+> elsewhere, and at some point later it was requested to be placed
+> under the Root Port driver.  I would love to return them under the
+> host bridge, just say the word!
 
-Ah, good catch. Looks great. Just a few nits below.
+I'm not suggesting a change in that design; I'm only trying to
+understand and clarify the commit log.
 
-> Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
+I looked briefly for the suggestion to put the regulators under the
+Root Port instead of the host bridge, but didn't find it.  I don't
+know enough to have an opinion yet.
 
-Can you please use your full name in FIRST LAST form on the SOB line?
+> > So I think brcm_pcie_setup() does initialization that doesn't depend
+> > on the link or any downstream devices, and brcm_pcie_start_link() does
+> > things that depend on the link being up.  Right?
+>
+> Yes.
+> 
+> > If so, "start_link" might be a slight misnomer since AFAICT
+> > brcm_pcie_start_link() doesn't do anything to initiate link-up except
+> > maybe deasserting fundamental reset.  Some drivers start the LTSSM or
+> > explicitly enable link training, but brcm_pcie_start_link() doesn't
+> > seem to do anything like that.
+> >
+> > brcm_pcie_start_link() still does brcm_pcie_set_outbound_win().  Does
+> > that really depend on the link being up?  If that only affects the
+> > Root Port, maybe it could be done before link-up?
+>
+> Some of the registers cannot be accessed until after linkup but these do
+> not have that issue.  I will change this.
 
-> --- a/block/blk-iocost.c
-> +++ b/block/blk-iocost.c
-> @@ -2886,7 +2886,12 @@ static int blk_iocost_init(struct request_queue *q)
->  	 * called before policy activation completion, can't assume that the
->  	 * target bio has an iocg associated and need to test for NULL iocg.
->  	 */
-> -	rq_qos_add(q, rqos);
-> +	ret = rq_qos_add(q, rqos);
-> +	if (ret) {
-> +		free_percpu(ioc->pcpu_stat);
-> +		kfree(ioc);
-> +		return ret;
+Here's my attempt (assuming we don't change the DT regulator design):
 
-Given that these get repeated for policy activation failure, it'd prolly be
-better to factor them out at the end and use gotos and make all of the users
-use the same pattern.
-
-> +static inline int rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
->  {
->  	/*
->  	 * No IO can be in-flight when adding rqos, so freeze queue, which
-> @@ -98,6 +98,8 @@ static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
->  	blk_mq_freeze_queue(q);
->  
->  	spin_lock_irq(&q->queue_lock);
-> +	if (rq_qos_id(q, rqos->id))
-> +		goto out;
-
-Maybe rename the goto label to ebusy so that it's `goto ebusy`?
-
-Other than the nits, please feel free to add
-
-Acked-by: Tejun Heo <tj@kernel.org>
-
-Thanks.
-
--- 
-tejun
+diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+index bd88a0a46c63..70cad1cbcbb4 100644
+--- a/drivers/pci/controller/pcie-brcmstb.c
++++ b/drivers/pci/controller/pcie-brcmstb.c
+@@ -852,14 +852,11 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+ 	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
+ 	u64 rc_bar2_offset, rc_bar2_size;
+ 	void __iomem *base = pcie->base;
+-	struct device *dev = pcie->dev;
++	int ret, memc;
++	u32 tmp, burst, aspm_support;
+ 	struct resource_entry *entry;
+-	bool ssc_good = false;
+ 	struct resource *res;
+ 	int num_out_wins = 0;
+-	u16 nlw, cls, lnksta;
+-	int i, ret, memc;
+-	u32 tmp, burst, aspm_support;
+ 
+ 	/* Reset the bridge */
+ 	pcie->bridge_sw_init_set(pcie, 1);
+@@ -948,25 +945,23 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+ 	if (pcie->gen)
+ 		brcm_pcie_set_gen(pcie, pcie->gen);
+ 
+-	/* Unassert the fundamental reset */
+-	pcie->perst_set(pcie, 0);
++	/* Don't advertise L0s capability if 'aspm-no-l0s' */
++	aspm_support = PCIE_LINK_STATE_L1;
++	if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
++		aspm_support |= PCIE_LINK_STATE_L0S;
++	tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
++	u32p_replace_bits(&tmp, aspm_support,
++		PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
++	writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+ 
+ 	/*
+-	 * Give the RC/EP time to wake up, before trying to configure RC.
+-	 * Intermittently check status for link-up, up to a total of 100ms.
++	 * For config space accesses on the RC, show the right class for
++	 * a PCIe-PCIe bridge (the default setting is to be EP mode).
+ 	 */
+-	for (i = 0; i < 100 && !brcm_pcie_link_up(pcie); i += 5)
+-		msleep(5);
+-
+-	if (!brcm_pcie_link_up(pcie)) {
+-		dev_err(dev, "link down\n");
+-		return -ENODEV;
+-	}
+-
+-	if (!brcm_pcie_rc_mode(pcie)) {
+-		dev_err(dev, "PCIe misconfigured; is in EP mode\n");
+-		return -EINVAL;
+-	}
++	tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
++	u32p_replace_bits(&tmp, PCI_CLASS_BRIDGE_PCI_NORMAL,
++			  PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
++	writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+ 
+ 	resource_list_for_each_entry(entry, &bridge->windows) {
+ 		res = entry->res;
+@@ -998,23 +993,37 @@ static int brcm_pcie_setup(struct brcm_pcie *pcie)
+ 		num_out_wins++;
+ 	}
+ 
+-	/* Don't advertise L0s capability if 'aspm-no-l0s' */
+-	aspm_support = PCIE_LINK_STATE_L1;
+-	if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
+-		aspm_support |= PCIE_LINK_STATE_L0S;
+-	tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+-	u32p_replace_bits(&tmp, aspm_support,
+-		PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
+-	writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
++	return 0;
++}
++
++static int brcm_pcie_start_link(struct brcm_pcie *pcie)
++{
++	struct device *dev = pcie->dev;
++	void __iomem *base = pcie->base;
++	u16 nlw, cls, lnksta;
++	bool ssc_good = false;
++	u32 tmp;
++	int ret, i;
++
++	/* Unassert the fundamental reset */
++	pcie->perst_set(pcie, 0);
+ 
+ 	/*
+-	 * For config space accesses on the RC, show the right class for
+-	 * a PCIe-PCIe bridge (the default setting is to be EP mode).
++	 * Give the RC/EP time to wake up, before trying to configure RC.
++	 * Intermittently check status for link-up, up to a total of 100ms.
+ 	 */
+-	tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+-	u32p_replace_bits(&tmp, 0x060400,
+-			  PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
+-	writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
++	for (i = 0; i < 100 && !brcm_pcie_link_up(pcie); i += 5)
++		msleep(5);
++
++	if (!brcm_pcie_link_up(pcie)) {
++		dev_err(dev, "link down\n");
++		return -ENODEV;
++	}
++
++	if (!brcm_pcie_rc_mode(pcie)) {
++		dev_err(dev, "PCIe misconfigured; is in EP mode\n");
++		return -EINVAL;
++	}
+ 
+ 	if (pcie->ssc) {
+ 		ret = brcm_pcie_set_ssc(pcie);
+@@ -1204,6 +1213,10 @@ static int brcm_pcie_resume(struct device *dev)
+ 	if (ret)
+ 		goto err_reset;
+ 
++	ret = brcm_pcie_start_link(pcie);
++	if (ret)
++		goto err_reset;
++
+ 	if (pcie->msi)
+ 		brcm_msi_set_regs(pcie->msi);
+ 
+@@ -1393,6 +1406,10 @@ static int brcm_pcie_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto fail;
+ 
++	ret = brcm_pcie_start_link(pcie);
++	if (ret)
++		goto fail;
++
+ 	pcie->hw_rev = readl(pcie->base + PCIE_MISC_REVISION);
+ 	if (pcie->type == BCM4908 && pcie->hw_rev >= BRCM_PCIE_HW_REV_3_20) {
+ 		dev_err(pcie->dev, "hardware revision with unsupported PERST# setup\n");

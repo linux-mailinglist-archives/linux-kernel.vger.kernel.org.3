@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5DD577C2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDF4577C30
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbiGRHGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S233749AbiGRHK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233721AbiGRHGe (ORCPT
+        with ESMTP id S233159AbiGRHK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:06:34 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6A517068
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:06:33 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id n185so6546213wmn.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZI+psl62KRHu+/xwUEa944NIpr8bwJMp0OVmnA0Tjtw=;
-        b=iVQrWs3MRYym3WpQlxcZbyUTbB9NgDt540mGZaeASrif4xJJL0ZP16Gs+toxe7etRI
-         elH6zhBeYGG0nIgbpXOGPXQpHNTxrE5ylPKniMAJduz9p3niY2iqxrc+r2rHmA1QUoJx
-         AsQ5F8jh9xxgn+fJFqhKThhEh/XpE78Z4mWKFskKXGhogvOxOM67Sf8qFCgjgJgLPey9
-         Adlz81DQt6k/g1/kfkp5VkC5KczOL8/CTFOlFVihAO8ijGM88Wo9zDoqu2t8IAVUAP9u
-         YJiGmHmOqAnlo+R+8m4PL/UvAxoOykmx29qCuJsjKlK9bIZ9Z5AQKuvnJPAjFbAR5NKa
-         cxkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZI+psl62KRHu+/xwUEa944NIpr8bwJMp0OVmnA0Tjtw=;
-        b=TU51uQGEcsFr8aRdhtdENKSOy2Ke1tF8k7g/WlxwYjj7mWMLdDNkC2fCQg0aJeQYZb
-         DetAwjn3S9DJ+WYF2puCLcZdNNU3iOEQ2Cx4dJ/n1eg7vdzLst6+NTil5a4h+DgR6Y09
-         IRAus7uVZF0tD9FFqU37N2SDIbJl7KD6usi9qYv8sRyF2JUfhXyHIJVw5TjBA1uxJSEX
-         H8E+drWUlp+lX5NGeYkSQqaOEHzinCaDwve82G5vLOb3iu8d2RWXPMy/eqXFGDZWCDSA
-         5Ngi8sGO6HGoaLe1wuoDXwFK59TDHc86yN7YksrxrR1v+gZRdvgJDPMD65n6cAp3cfio
-         tt7g==
-X-Gm-Message-State: AJIora9+un/hfJQ+eR++beFezJKLQrbJwi25btzhEImoW9CmxOHKu6Gp
-        vIhh1b/IdNKDAN5g7vpCke3eow==
-X-Google-Smtp-Source: AGRyM1saJthbQ+1R+t0bpM3h/3M+zTnIoBp23gV23NDFQGiwJecHu1D+2hA54oDOtG4e1bYSU71yoQ==
-X-Received: by 2002:a05:600c:1c88:b0:3a3:10b6:e844 with SMTP id k8-20020a05600c1c8800b003a310b6e844mr10970188wms.155.1658127992443;
-        Mon, 18 Jul 2022 00:06:32 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id z5-20020a5d6405000000b0021b966abc19sm9914954wru.19.2022.07.18.00.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 00:06:31 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 10:06:30 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] remoteproc: qcom: q6v5: Use _clk_get_optional for
- aggre2_clk
-Message-ID: <YtUGdmyUoMc3Hro1@linaro.org>
-References: <20220714104309.4111334-1-abel.vesa@linaro.org>
- <YtOHOptMSAzHfm7a@builder.lan>
+        Mon, 18 Jul 2022 03:10:26 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC5117079;
+        Mon, 18 Jul 2022 00:10:24 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LmY0r3K9qzVfrT;
+        Mon, 18 Jul 2022 15:06:36 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Jul 2022 15:10:22 +0800
+CC:     <gregkh@linuxfoundation.org>, <alexander.shishkin@linux.intel.com>,
+        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
+        <robin.murphy@arm.com>, <acme@kernel.org>, <peterz@infradead.org>,
+        <corbet@lwn.net>, <mathieu.poirier@linaro.org>,
+        <mark.rutland@arm.com>, <jonathan.cameron@huawei.com>,
+        <john.garry@huawei.com>, <helgaas@kernel.org>,
+        <lorenzo.pieralisi@arm.com>, <suzuki.poulose@arm.com>,
+        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
+        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <iommu@lists.linux.dev>,
+        <linux-doc@vger.kernel.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>, Yicong Yang <yangyicong@hisilicon.com>
+Subject: Re: [PATCH v10 7/8] docs: trace: Add HiSilicon PTT device driver
+ documentation
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+References: <20220714092710.53486-1-yangyicong@hisilicon.com>
+ <20220714092710.53486-8-yangyicong@hisilicon.com>
+ <YtEgoZveaZJ3a7+4@debian.me>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <f0dc5cb8-ec3b-eb8f-98e3-4a6301e8be06@huawei.com>
+Date:   Mon, 18 Jul 2022 15:10:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtOHOptMSAzHfm7a@builder.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YtEgoZveaZJ3a7+4@debian.me>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-07-16 22:51:22, Bjorn Andersson wrote:
-> On Thu 14 Jul 05:43 CDT 2022, Abel Vesa wrote:
->
-> > There is devm_clk_get_optional now, so lets drop the has_aggre2_clk
-> > from adsp_data.
->
-> I like this patch, but for the history, could you please provide a
-> reason why you would like to do this?
+On 2022/7/15 16:09, Bagas Sanjaya wrote:
+> On Thu, Jul 14, 2022 at 05:27:09PM +0800, Yicong Yang wrote:
+>> +1. Tx path QoS control
+>> +------------------------
+>> +
+> <snip>
+>> +2. Tx path buffer control
+>> +-------------------------
+>> +
+> 
+> Shouldn't Tx in the headings above be lowercase (tx)?
 
-Sure, I'll reword it and resend.
+Tx is used to keep consistence with other places.
 
-Thanks,
-Abel
+> 
+>> +1. filter
+>> +---------
+> <snip>
+>> +2. type
+>> +-------
+> <snip>
+>> +3. direction
+>> +------------
+> <snip>
+>> +4. format
+>> +--------------
+> <snip>
+>> +5. memory management
+>> +--------------------
+> <snip>
+>> +6. decoding
+>> +-----------
+> 
+> I think these headings above should use title case instead.
 
->
-> Regards,
-> Bjorn
->
-> >
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >  drivers/remoteproc/qcom_q6v5_pas.c | 41 +++++-------------------------
-> >  1 file changed, 7 insertions(+), 34 deletions(-)
-> >
+ok.
 
-...
+> 
+> Anyway, the documentation (htmldocs) builds successfully without new
+> warnings.
+> 
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+
+Thanks.
+

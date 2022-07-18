@@ -2,117 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 905D4577F1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F393577F27
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbiGRJ4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S233272AbiGRJ7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiGRJ4b (ORCPT
+        with ESMTP id S231547AbiGRJ7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:56:31 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D0A1A068
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:56:29 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id g1so14477686edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:56:29 -0700 (PDT)
+        Mon, 18 Jul 2022 05:59:20 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5242E1A3B2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:59:19 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ef5380669cso101125427b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:59:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EUG2Bl6auG4euKWbKCVfTQIsL72qesYuYx+oA0TLXYA=;
-        b=cg5+u12elLlpSxw3zBnGpBIdLV4ULJ+lK4j7a2Vev65lyzIlATOSd8n5BjaNPJVE+Z
-         Ro3kg6lD3KBtLbjuyrfp3MwPHJ6Nf2i2nIZ1XYoVYC8qgHVN7KCKPRYjaIRiWVcpiS/L
-         1ZAbIDtBWP5aW9TvBDocEY2oz9hrdSOxVrrIE=
+        bh=rICEhbm6vaKvSX6eVBX7E219JQ8Wrmc4UWO7V6sg6vI=;
+        b=DIRG7obP5JHRupkVmzijJoml6pRbMFU/jmlLdHu/MJyhVSCfC6raU7p3AM0B6FTmpP
+         9ylf9NP8Pg7QxeZF9v5p6QYvw93S9ynm8lXhmI/NQ4EPAx/7zkOj6q4WV1EJw8QKpVS2
+         Sg+BTq1Fhkg2m2GtkhqKVOGU44Guto40b2XjNfVY97yk97Pj49zckB78LNycVZu/QASK
+         K+dEBhl/vQLEKy/IbBB5asfexSbBFfXFQf2hc4e/SQaY+7XNmukMUUT2AnxiLKNqE+uC
+         br+JJ/u+kDAeNpKB3aljUmvDIAHpkQPlhs83Ies1b4btf4RVxcU2oQ0RvTDywQNJvHPc
+         ThBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EUG2Bl6auG4euKWbKCVfTQIsL72qesYuYx+oA0TLXYA=;
-        b=J5737F4WYQXdWV5CTHOI5Os+KduUqEDXif/fqmp768TN4uN4zj3HCWjy9Vw+ah2Ykt
-         6nlDEE+A2FqP+gKl7HSUz8K3g86PxiearCEyLkF1ybvhRuQNOi0M0YQX8waWicucJaz5
-         KEMvK1ZMuW6O7ISz3NpF23fx+jBDd5ZxZ7AGyZudmrFgtCNqGdSHfYhy1WF7dgaJnpz0
-         1AoUCF11fNe6W8+E9AUKupms1XHcgrmVxCTIJwFnnb4nWKIlhK1bsCKyeM9oDJIR4EBw
-         jZW9YUlLsmiksn2RudibDMleRClMQSfbxoyWEhIISyQCDi/YOZAhGt+SqsUNVOwRLyTP
-         aOGQ==
-X-Gm-Message-State: AJIora9aEL2S9NxzHLdoKIA4jILH02YVKISeuPOcpwiYxucdYN82ZDYM
-        TwplWpgFBDMoG9zKBhSVy0rp/PkmDC4zXoO20BhJpg==
-X-Google-Smtp-Source: AGRyM1siVaVBPENz8Hu3bRiVVYnwdDIPhJO1Dl29/Uf8jdEBsgt3QTxxZTllwS0pUhnOqW9n8zkC3tCxOzTTfQgM/O8=
-X-Received: by 2002:a05:6402:e96:b0:43a:f21f:42a0 with SMTP id
- h22-20020a0564020e9600b0043af21f42a0mr36554601eda.382.1658138188528; Mon, 18
- Jul 2022 02:56:28 -0700 (PDT)
+        bh=rICEhbm6vaKvSX6eVBX7E219JQ8Wrmc4UWO7V6sg6vI=;
+        b=rOR42Wz6Wqmr6BKbYq4zsswB0wtvBVC4ujaljMb5rhn7snKEt9YmlT+kp2R6P5jzsO
+         yiWoQC0m1R5lCD16aEbvPnOkZdeEK+V7u541r1D9vOW5ADUgguJjeprhoroiP40YwN8+
+         NmQLlWCDNp9CaO+EITAY4Pv/OzoaS//H4MKEdiGRMBX3YO48ZIPBpVCl33QAxC2BP92r
+         2G4EIqmzvCAuTRQTvXt0HVDLtpdkeSDX8OSgf0Ed3mbyuSqAca1cASchnseoZyAhAJWk
+         EZq19a8hoctDJ1CkKr1qLeUY8JVwKKLRtvmZkqSMletTkJm50Dmvxdvv8eA80iao/iQM
+         dgAg==
+X-Gm-Message-State: AJIora/gOsRMkJ1raNa+4Uf4btqXoWvHtwtgGnlWGUCaMxklQcsGEimP
+        GrI4stMzsMtuHtDJUdi8KPd91ACxc4/n+LD9rKu+nA==
+X-Google-Smtp-Source: AGRyM1vYJySz7fm76vr2JcnXE5hJJ4IXObW2ZbBj7gRGMIElHgSugBzxg7vnvzpYvA08W/MBvCS57OhywHZEsW89RL0=
+X-Received: by 2002:a81:4809:0:b0:31d:848:4b3b with SMTP id
+ v9-20020a814809000000b0031d08484b3bmr29677783ywa.69.1658138358575; Mon, 18
+ Jul 2022 02:59:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220601011103.12681-1-dlunev@google.com> <20220601111059.v4.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
-In-Reply-To: <20220601111059.v4.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 18 Jul 2022 11:56:17 +0200
-Message-ID: <CAJfpegsitwAnrU3H3ig3a7AWKknTZNo0cFc5kPm09KzZGgO-bQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] FUSE: Retire superblock on force unmount
-To:     Daniil Lunev <dlunev@chromium.org>
-Cc:     linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        Daniil Lunev <dlunev@google.com>
+References: <20220624195112.894916-1-robimarko@gmail.com> <CACRpkdZdccrfA4yHoVjzpsJesYshuP6PjtT=KTeEQgOdXR6_5w@mail.gmail.com>
+In-Reply-To: <CACRpkdZdccrfA4yHoVjzpsJesYshuP6PjtT=KTeEQgOdXR6_5w@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 18 Jul 2022 11:59:07 +0200
+Message-ID: <CACRpkdZ5P-U19wTnzsOr9o_XWn1rKqVSxc+YrYnKNJLTmJyYTg@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: qcom: spmi-gpio: make the irqchip immutable
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Jun 2022 at 03:11, Daniil Lunev <dlunev@chromium.org> wrote:
+On Sun, Jul 10, 2022 at 1:05 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Fri, Jun 24, 2022 at 9:51 PM Robert Marko <robimarko@gmail.com> wrote:
 >
-> From: Daniil Lunev <dlunev@chromium.org>
+> > Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
+> > immutable") added a warning to indicate if the gpiolib is altering the
+> > internals of irqchips.
+> >
+> > Following this change the following warning is now observed for the SPMI
+> > PMIC pinctrl driver:
+> > gpio gpiochip1: (200f000.spmi:pmic@0:gpio@c000): not an immutable chip, please consider fixing it!
+> >
+> > Fix this by making the irqchip in the SPMI PMIC pinctrl driver immutable.
+> >
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
 >
-> Force unmount of FUSE severes the connection with the user space, even
-> if there are still open files. Subsequent remount tries to re-use the
-> superblock held by the open files, which is meaningless in the FUSE case
-> after disconnect - reused super block doesn't have userspace counterpart
-> attached to it and is incapable of doing any IO.
->
-> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
->
-> Signed-off-by: Daniil Lunev <dlunev@google.com>
+> Patch applied!
 
-Why the double sign-off?
+Jumping the gun too quick.
 
-> ---
->
-> (no changes since v3)
->
-> Changes in v3:
-> - No changes
->
-> Changes in v2:
-> - Use an exported function instead of directly modifying superblock
->
->  fs/fuse/inode.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-> index 8c0665c5dff88..8875361544b2a 100644
-> --- a/fs/fuse/inode.c
-> +++ b/fs/fuse/inode.c
-> @@ -476,8 +476,11 @@ static void fuse_umount_begin(struct super_block *sb)
->  {
->         struct fuse_conn *fc = get_fuse_conn_super(sb);
->
-> -       if (!fc->no_force_umount)
-> -               fuse_abort_conn(fc);
-> +       if (fc->no_force_umount)
-> +               return;
-> +
-> +       fuse_abort_conn(fc);
-> +       retire_super(sb);
+Reverted the patch following Marc's feedback.
 
-And this is called for both block and non-block supers.  Which means
-that the bdi will be unregistered, yet the sb could still be reused
-(see fuse_test_super()).
-
-Thanks,
-Miklos
+Yours,
+Linus Walleij

@@ -2,320 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D405785BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084D65785C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbiGROrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 10:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S234312AbiGROuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 10:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiGROri (ORCPT
+        with ESMTP id S229647AbiGROu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:47:38 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF40E2BCE
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:47:36 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so5297243wmo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9N+dD3imMxQIPPnsppdjJv/Cl1xiB5fWoniABYyOdJY=;
-        b=dhZjLB9XJ2+0vPQ+fBTPGejM8X6qyRtv64StC0AnlrxljcE1aAjfJcSHBi/ZvR9VJn
-         KvsUUzhQXVq/FNAPCWdgBiE4AGqRCLd61+hINPm0kUBmTo2wgP3PNeQtSnVcv/oGPa0a
-         TJ/lFiiJVxIYIVUpJbKlql89At9jr433jIMs0d8oI/2Gx7iemY6RCWbYisbCw6U7YdtT
-         ih3xEoCghPvE5MtUSLXzXix7UgsRw/9oY0fBrrH57mFsRiDfF1pp8+v0vfXoL/NOv88A
-         2pyLjMWj3DWI7tvssH8P4Wb2IU+mkRIT1Up/VwuesuC77wJZKtt8aeEEtNat4RjJeSGA
-         swuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9N+dD3imMxQIPPnsppdjJv/Cl1xiB5fWoniABYyOdJY=;
-        b=2X9GIGRwQZaAGGmVNWg9cqbp/1TdMMoOyub16u3QzRoOoNgsx4ZDf5Ovmm7Idq4WcU
-         z4SgmEdlOy3UWQLR+F8K2d5eeyr9bw43KQ6CrEXVdwOpwcuKwThKZzVr/J14hvvVDAJN
-         N3sbF+dpXgFcSo4qlbylJImKfmJCPRNah+q603fmXPlDDRBB+Igc92PX0Lxrewp96AMl
-         gR6NBEwBLq5paFLgCv1yklav8kyuB/R6e0MrHdxW34/P+RSUeP1FLdTe6jmm1A4cHwTj
-         wuEtvMFQY60Hyw83mhIUPdhTNCfAaV8B/rCsox0scHjmdUaJs0+gEux3uKHurqfbiyZc
-         krnQ==
-X-Gm-Message-State: AJIora+Pfey80nffchljH6Nnt1J/tR8Z1ruXoecmpSa1TNzwxizFU83z
-        ypj5Lv/z8SB/fzcVcVtk9hejNY0fVQChJ07W4/K3FA==
-X-Google-Smtp-Source: AGRyM1uR4Krgva/jlLP0qN95xwHuIOLb+WaPu5gAUICeIzKNtxncN6UfohC3PgDpFrO8zKSmXnserUnRnFr9eyWABu8=
-X-Received: by 2002:a7b:ce13:0:b0:3a3:102c:23d3 with SMTP id
- m19-20020a7bce13000000b003a3102c23d3mr13381143wmc.67.1658155654834; Mon, 18
- Jul 2022 07:47:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220715223521.3389971-1-irogers@google.com> <20220715223521.3389971-3-irogers@google.com>
- <5f86dd4d-e078-4bc6-2d51-df404179ecf6@linux.intel.com>
-In-Reply-To: <5f86dd4d-e078-4bc6-2d51-df404179ecf6@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 18 Jul 2022 07:47:21 -0700
-Message-ID: <CAP-5=fUUG_A8723xAd=Z_6f-p7=+TrjQYEB1JVgB8weKyeRJAQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] perf tsc: Add arch TSC frequency information
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     perry.taylor@intel.com, caleb.biggers@intel.com,
-        kshipra.bopardikar@intel.com,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Mon, 18 Jul 2022 10:50:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F1A1401A;
+        Mon, 18 Jul 2022 07:50:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E409B81616;
+        Mon, 18 Jul 2022 14:50:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF43FC341C0;
+        Mon, 18 Jul 2022 14:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658155826;
+        bh=BhYFCVA7dpyOPmNpW0wkDUPxPDs6vHeHXBug41P4VaM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iVqF+HbsqYpoEpwyllLcfNKQOh6gW/yXWxhAg6ErVDQ1Me1yvR81Cdvh6UVjW8yQJ
+         YVxERx7H02qbPtQVxvFEI/Mxfgn1F8l6+ALlbiF/yKT/GoS0cfYOR/m4EYZ0kHT0bN
+         U6emKMoQSfPCDr2+yQ0UebW4qCKWMHNbUuhezMI5VSz25Hj440XZLWKRKVqVw+Xno+
+         qIbN3hg8VjZFgcts6UJQigiB7dibbAQ1t5nsHOWuM47AcqImtk0IDEegSWobikMoXZ
+         5jChYN7jDOiBfeWRAg0xstV5NhY9efuHQZ+ZTBs7ELjWqo4/+wLnDggnOurCyNx9wh
+         DI+l8MDB+ulCw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id AF97840374; Mon, 18 Jul 2022 11:50:22 -0300 (-03)
+Date:   Mon, 18 Jul 2022 11:50:22 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Blake Jones <blakejones@google.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Add a "-m" option to "perf buildid-list".
+Message-ID: <YtVzLodaUYIou7JQ@kernel.org>
+References: <20220615001334.611882-1-blakejones@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615001334.611882-1-blakejones@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 5:49 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->
-> On 2022-07-15 6:35 p.m., Ian Rogers wrote:
-> > From: Kan Liang <kan.liang@linux.intel.com>
-> >
-> > The TSC frequency information is required for the event metrics with
-> > the literal, system_tsc_freq. For the newer Intel platform, the TSC
-> > frequency information can be retrieved from the CPUID leaf 0x15.
-> > If the TSC frequency information isn't present the /proc/cpuinfo
-> > approach is used.
-> >
-> > Refactor cpuid for this use. Note, the previous stack pushing/popping
-> > approach was broken on x86-64 that has stack red zones that would be
-> > clobbered.
-> >
-> > Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/arch/x86/util/cpuid.h  | 34 +++++++++++++++++++++++++++++++
-> >  tools/perf/arch/x86/util/header.c | 27 ++++++++++--------------
-> >  tools/perf/arch/x86/util/tsc.c    | 33 ++++++++++++++++++++++++++++++
-> >  tools/perf/util/expr.c            | 15 +++++++++++++-
-> >  tools/perf/util/tsc.h             |  1 +
-> >  5 files changed, 93 insertions(+), 17 deletions(-)
-> >  create mode 100644 tools/perf/arch/x86/util/cpuid.h
-> >
-> > diff --git a/tools/perf/arch/x86/util/cpuid.h b/tools/perf/arch/x86/util/cpuid.h
-> > new file mode 100644
-> > index 000000000000..0a3ae0ace7e9
-> > --- /dev/null
-> > +++ b/tools/perf/arch/x86/util/cpuid.h
-> > @@ -0,0 +1,34 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef PERF_CPUID_H
-> > +#define PERF_CPUID_H 1
-> > +
-> > +
-> > +static inline void
-> > +cpuid(unsigned int op, unsigned int op2, unsigned int *a, unsigned int *b,
-> > +     unsigned int *c, unsigned int *d)
-> > +{
-> > +     /*
-> > +      * Preserve %ebx/%rbx register by either placing it in %rdi or saving it
-> > +      * on the stack - x86-64 needs to avoid the stack red zone. In PIC
-> > +      * compilations %ebx contains the address of the global offset
-> > +      * table. %rbx is occasionally used to address stack variables in
-> > +      * presence of dynamic allocas.
-> > +      */
-> > +     asm(
-> > +#if defined(__x86_64__)
-> > +             "mov %%rbx, %%rdi\n"
-> > +             "cpuid\n"
-> > +             "xchg %%rdi, %%rbx\n"
-> > +#else
-> > +             "pushl %%ebx\n"
-> > +             "cpuid\n"
-> > +             "movl %%ebx, %%edi\n"
-> > +             "popl %%ebx\n"
-> > +#endif
-> > +             : "=a"(*a), "=D"(*b), "=c"(*c), "=d"(*d)
-> > +             : "a"(op), "2"(op2));
-> > +}
-> > +
-> > +void get_cpuid_0(char *vendor, unsigned int *lvl);
-> > +
-> > +#endif
-> > diff --git a/tools/perf/arch/x86/util/header.c b/tools/perf/arch/x86/util/header.c
-> > index 578c8c568ffd..a51444a77a5f 100644
-> > --- a/tools/perf/arch/x86/util/header.c
-> > +++ b/tools/perf/arch/x86/util/header.c
-> > @@ -9,18 +9,17 @@
-> >
-> >  #include "../../../util/debug.h"
-> >  #include "../../../util/header.h"
-> > +#include "cpuid.h"
-> >
-> > -static inline void
-> > -cpuid(unsigned int op, unsigned int *a, unsigned int *b, unsigned int *c,
-> > -      unsigned int *d)
-> > +void get_cpuid_0(char *vendor, unsigned int *lvl)
-> >  {
-> > -     __asm__ __volatile__ (".byte 0x53\n\tcpuid\n\t"
-> > -                           "movl %%ebx, %%esi\n\t.byte 0x5b"
-> > -                     : "=a" (*a),
-> > -                     "=S" (*b),
-> > -                     "=c" (*c),
-> > -                     "=d" (*d)
-> > -                     : "a" (op));
-> > +     unsigned int b, c, d;
-> > +
-> > +     cpuid(0, 0, lvl, &b, &c, &d);
-> > +     strncpy(&vendor[0], (char *)(&b), 4);
-> > +     strncpy(&vendor[4], (char *)(&d), 4);
-> > +     strncpy(&vendor[8], (char *)(&c), 4);
-> > +     vendor[12] = '\0';
-> >  }
-> >
-> >  static int
-> > @@ -31,14 +30,10 @@ __get_cpuid(char *buffer, size_t sz, const char *fmt)
-> >       int nb;
-> >       char vendor[16];
-> >
-> > -     cpuid(0, &lvl, &b, &c, &d);
-> > -     strncpy(&vendor[0], (char *)(&b), 4);
-> > -     strncpy(&vendor[4], (char *)(&d), 4);
-> > -     strncpy(&vendor[8], (char *)(&c), 4);
-> > -     vendor[12] = '\0';
-> > +     get_cpuid_0(vendor, &lvl);
-> >
-> >       if (lvl >= 1) {
-> > -             cpuid(1, &a, &b, &c, &d);
-> > +             cpuid(1, 0, &a, &b, &c, &d);
-> >
-> >               family = (a >> 8) & 0xf;  /* bits 11 - 8 */
-> >               model  = (a >> 4) & 0xf;  /* Bits  7 - 4 */
-> > diff --git a/tools/perf/arch/x86/util/tsc.c b/tools/perf/arch/x86/util/tsc.c
-> > index 559365f8fe52..b69144f22489 100644
-> > --- a/tools/perf/arch/x86/util/tsc.c
-> > +++ b/tools/perf/arch/x86/util/tsc.c
-> > @@ -1,7 +1,9 @@
-> >  // SPDX-License-Identifier: GPL-2.0
-> >  #include <linux/types.h>
-> > +#include <string.h>
-> >
-> >  #include "../../../util/tsc.h"
-> > +#include "cpuid.h"
-> >
-> >  u64 rdtsc(void)
-> >  {
-> > @@ -11,3 +13,34 @@ u64 rdtsc(void)
-> >
-> >       return low | ((u64)high) << 32;
-> >  }
-> > +
-> > +double arch_get_tsc_freq(void)
-> > +{
-> > +     unsigned int a, b, c, d, lvl;
-> > +     static bool cached;
-> > +     static double tsc;
-> > +     char vendor[16];
-> > +
-> > +     if (cached)
-> > +             return tsc;
-> > +
-> > +     cached = true;
-> > +     get_cpuid_0(vendor, &lvl);
-> > +     if (!strstr(vendor, "Intel"))
-> > +             return 0;
-> > +
-> > +     /*
-> > +      * Don't support Time Stamp Counter and
-> > +      * Nominal Core Crystal Clock Information Leaf.
-> > +      */
-> > +     if (lvl < 0x15)
-> > +             return 0;
-> > +
-> > +     cpuid(0x15, 0, &a, &b, &c, &d);
-> > +     /* TSC frequency is not enumerated */
-> > +     if (!a || !b || !c)
-> > +             return 0;
-> > +
-> > +     tsc = (double)c * (double)b / (double)a;
-> > +     return tsc;
-> > +}
-> > diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-> > index 4c81533e4b43..16f10e6d5ca5 100644
-> > --- a/tools/perf/util/expr.c
-> > +++ b/tools/perf/util/expr.c
-> > @@ -12,6 +12,7 @@
-> >  #include "expr-bison.h"
-> >  #include "expr-flex.h"
-> >  #include "smt.h"
-> > +#include "tsc.h"
-> >  #include <linux/err.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/zalloc.h>
-> > @@ -443,9 +444,19 @@ static double system_tsc_freq(void)
-> >
-> >       free(line);
-> >       fclose(cpuinfo);
-> > +     if (isnan(result))
-> > +             pr_err("Error reading system_tsc_freq");
-> > +
-> >       return result;
-> >  }
-> >
-> > +#if !defined(__i386__) && !defined(__x86_64__)
-> > +double arch_get_tsc_freq(void)
->
-> Other arch_* functions are __weak functions. I think it's better to keep
-> it consistent. It also avoid to add a new #if defined when adding a new
-> arch. Is there a problem to use __weak here?
+Em Tue, Jun 14, 2022 at 05:13:34PM -0700, Blake Jones escreveu:
+> This new option displays all of the information needed to do external
+> BuildID-based symbolization of kernel stack traces, such as those collected
+> by bpf_get_stackid(). For each kernel module plus the main kernel, it
+> displays the BuildID, the start and end virtual addresses of that module's
+> text range (rounded out to page boundaries), and the pathname of the
+> module.
+> 
+> When run as a non-privileged user, the actual addresses of the modules'
+> text ranges are not available, so the tools displays "0, <text length>" for
+> kernel modules and "0, 0xffffffffffffffff" for the kernel itself.
+> 
+> Sample output:
+> 
+> root# perf buildid-list -m
+> cf6df852fd4da122d616153353cc8f560fd12fe0 ffffffffa5400000 ffffffffa6001e27 [kernel.kallsyms]
+> 1aa7209aa2acb067d66ed6cf7676d65066384d61 ffffffffc0087000 ffffffffc008b000 /lib/modules/5.15.15-1rodete2-amd64/kernel/crypto/sha512_generic.ko
+> 3857815b5bf0183697b68f8fe0ea06121644041e ffffffffc008c000 ffffffffc0098000 /lib/modules/5.15.15-1rodete2-amd64/kernel/arch/x86/crypto/sha512-ssse3.ko
+> 4081fde0bca2bc097cb3e9d1efcb836047d485f1 ffffffffc0099000 ffffffffc009f000 /lib/modules/5.15.15-1rodete2-amd64/kernel/drivers/acpi/button.ko
+> 1ef81ba4890552ea6b0314f9635fc43fc8cef568 ffffffffc00a4000 ffffffffc00aa000 /lib/modules/5.15.15-1rodete2-amd64/kernel/crypto/cryptd.ko
+> cc5c985506cb240d7d082b55ed260cbb851f983e ffffffffc00af000 ffffffffc00b6000 /lib/modules/5.15.15-1rodete2-amd64/kernel/drivers/i2c/busses/i2c-piix4.ko
+> [...]
 
-There are problems with weak in general and link time optimizations -
-weak is implemented as a C compiler extension. There have been
-patches/threads in the past about avoiding it. In this case it'd be
-easy to get two arch_get_tsc_freq defined or none. Without weak these
-are both linker errors. With weak your mileage varies.
+Thanks, applied.
 
-Thanks,
-Ian
+- Arnaldo
 
-> Thanks,
-> Kan
->
-> > +{
-> > +     return 0.0;
-> > +}
-> > +#endif
-> > +
-> >  double expr__get_literal(const char *literal)
-> >  {
-> >       static struct cpu_topology *topology;
-> > @@ -462,7 +473,9 @@ double expr__get_literal(const char *literal)
-> >       }
-> >
-> >       if (!strcasecmp("#system_tsc_freq", literal)) {
-> > -             result = system_tsc_freq();
-> > +             result = arch_get_tsc_freq();
-> > +             if (fpclassify(result) == FP_ZERO)
-> > +                     result = system_tsc_freq();
-> >               goto out;
-> >       }
-> >
-> > diff --git a/tools/perf/util/tsc.h b/tools/perf/util/tsc.h
-> > index 7d83a31732a7..88fd1c4c1cb8 100644
-> > --- a/tools/perf/util/tsc.h
-> > +++ b/tools/perf/util/tsc.h
-> > @@ -25,6 +25,7 @@ int perf_read_tsc_conversion(const struct perf_event_mmap_page *pc,
-> >  u64 perf_time_to_tsc(u64 ns, struct perf_tsc_conversion *tc);
-> >  u64 tsc_to_perf_time(u64 cyc, struct perf_tsc_conversion *tc);
-> >  u64 rdtsc(void);
-> > +double arch_get_tsc_freq(void);
-> >
-> >  size_t perf_event__fprintf_time_conv(union perf_event *event, FILE *fp);
-> >
+ 
+> Signed-off-by: Blake Jones <blakejones@google.com>
+> ---
+>  .../perf/Documentation/perf-buildid-list.txt  |  4 +++
+>  tools/perf/builtin-buildid-list.c             | 35 ++++++++++++++++++-
+>  tools/perf/util/machine.c                     | 13 +++++++
+>  tools/perf/util/machine.h                     |  5 +++
+>  4 files changed, 56 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/Documentation/perf-buildid-list.txt b/tools/perf/Documentation/perf-buildid-list.txt
+> index 25c52efcc7f0..e1e8fdbe06b9 100644
+> --- a/tools/perf/Documentation/perf-buildid-list.txt
+> +++ b/tools/perf/Documentation/perf-buildid-list.txt
+> @@ -33,6 +33,10 @@ OPTIONS
+>  -k::
+>  --kernel::
+>  	Show running kernel build id.
+> +-m::
+> +--kernel-maps::
+> +	Show buildid, start/end text address, and path of running kernel and
+> +	its modules.
+>  -v::
+>  --verbose::
+>  	Be more verbose.
+> diff --git a/tools/perf/builtin-buildid-list.c b/tools/perf/builtin-buildid-list.c
+> index cebadd632234..e73520190974 100644
+> --- a/tools/perf/builtin-buildid-list.c
+> +++ b/tools/perf/builtin-buildid-list.c
+> @@ -12,6 +12,7 @@
+>  #include "util/build-id.h"
+>  #include "util/debug.h"
+>  #include "util/dso.h"
+> +#include "util/map.h"
+>  #include <subcmd/pager.h>
+>  #include <subcmd/parse-options.h>
+>  #include "util/session.h"
+> @@ -20,6 +21,31 @@
+>  #include <errno.h>
+>  #include <linux/err.h>
+>  
+> +static int buildid__map_cb(struct map *map, void *arg __maybe_unused)
+> +{
+> +	const struct dso *dso = map->dso;
+> +	char bid_buf[SBUILD_ID_SIZE];
+> +
+> +	memset(bid_buf, 0, sizeof(bid_buf));
+> +	if (dso->has_build_id)
+> +		build_id__sprintf(&dso->bid, bid_buf);
+> +	printf("%s %16lx %16lx", bid_buf, map->start, map->end);
+> +	if (dso->long_name != NULL)
+> +		printf(" %s", dso->long_name);
+> +	printf("\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static void buildid__show_kernel_maps(void)
+> +{
+> +	struct machine *machine;
+> +
+> +	machine = machine__new_host();
+> +	machine__for_each_kernel_map(machine, buildid__map_cb, NULL);
+> +	machine__delete(machine);
+> +}
+> +
+>  static int sysfs__fprintf_build_id(FILE *fp)
+>  {
+>  	char sbuild_id[SBUILD_ID_SIZE];
+> @@ -99,6 +125,7 @@ static int perf_session__list_build_ids(bool force, bool with_hits)
+>  int cmd_buildid_list(int argc, const char **argv)
+>  {
+>  	bool show_kernel = false;
+> +	bool show_kernel_maps = false;
+>  	bool with_hits = false;
+>  	bool force = false;
+>  	const struct option options[] = {
+> @@ -106,6 +133,8 @@ int cmd_buildid_list(int argc, const char **argv)
+>  	OPT_STRING('i', "input", &input_name, "file", "input file name"),
+>  	OPT_BOOLEAN('f', "force", &force, "don't complain, do it"),
+>  	OPT_BOOLEAN('k', "kernel", &show_kernel, "Show current kernel build id"),
+> +	OPT_BOOLEAN('m', "kernel-maps", &show_kernel_maps,
+> +	    "Show build id of current kernel + modules"),
+>  	OPT_INCR('v', "verbose", &verbose, "be more verbose"),
+>  	OPT_END()
+>  	};
+> @@ -117,8 +146,12 @@ int cmd_buildid_list(int argc, const char **argv)
+>  	argc = parse_options(argc, argv, options, buildid_list_usage, 0);
+>  	setup_pager();
+>  
+> -	if (show_kernel)
+> +	if (show_kernel) {
+>  		return !(sysfs__fprintf_build_id(stdout) > 0);
+> +	} else if (show_kernel_maps) {
+> +		buildid__show_kernel_maps();
+> +		return 0;
+> +	}
+>  
+>  	return perf_session__list_build_ids(force, with_hits);
+>  }
+> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> index 009061852808..28fff9a02ab0 100644
+> --- a/tools/perf/util/machine.c
+> +++ b/tools/perf/util/machine.c
+> @@ -3327,3 +3327,16 @@ int machine__for_each_dso(struct machine *machine, machine__dso_t fn, void *priv
+>  	}
+>  	return err;
+>  }
+> +
+> +int machine__for_each_kernel_map(struct machine *machine, machine__map_t fn, void *priv)
+> +{
+> +	struct maps *maps = machine__kernel_maps(machine);
+> +	struct map *map;
+> +	int err = 0;
+> +
+> +	for (map = maps__first(maps); map != NULL; map = map__next(map)) {
+> +		if (fn(map, priv))
+> +			err = -1;
+> +	}
+> +	return err;
+> +}
+> diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
+> index 5d7daf7cb7bc..e1476343cbb2 100644
+> --- a/tools/perf/util/machine.h
+> +++ b/tools/perf/util/machine.h
+> @@ -262,6 +262,11 @@ typedef int (*machine__dso_t)(struct dso *dso, struct machine *machine, void *pr
+>  
+>  int machine__for_each_dso(struct machine *machine, machine__dso_t fn,
+>  			  void *priv);
+> +
+> +typedef int (*machine__map_t)(struct map *map, void *priv);
+> +int machine__for_each_kernel_map(struct machine *machine, machine__map_t fn,
+> +				 void *priv);
+> +
+>  int machine__for_each_thread(struct machine *machine,
+>  			     int (*fn)(struct thread *thread, void *p),
+>  			     void *priv);
+> 
+> base-commit: 1bcca2b1bd67f3c0e5c3a88ed16c6389f01a5b31
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
+
+-- 
+
+- Arnaldo

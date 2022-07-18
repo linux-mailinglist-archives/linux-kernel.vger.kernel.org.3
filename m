@@ -2,121 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FBB577980
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 04:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BBF577982
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 04:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiGRCFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 22:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S233051AbiGRCFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 22:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiGRCFP (ORCPT
+        with ESMTP id S233035AbiGRCFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 22:05:15 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19736A1B8;
-        Sun, 17 Jul 2022 19:05:15 -0700 (PDT)
+        Sun, 17 Jul 2022 22:05:23 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F5513D3A;
+        Sun, 17 Jul 2022 19:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658109915; x=1689645915;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UheU48fkS1ujzAAU4XJMMxMi8YLgZdLzVEy7P4R4JfM=;
-  b=EOPhxQ+wG4lmuuRYjaZxseNc9qlHNuLKFcvq3xu7saX6V1kBmSSLAFRW
-   yutcFQZx9pSzkfBF9QpqW1dwo9mBbj2tS44RD+7JcGa0si1/57ZMdwwgV
-   Ms9UIpRiRGBQ7G9qfGi0EE7SeIgSdXfU42uBKPJhLn4ACQlA6ZlAZugnR
-   gfOLhK5hBZLDCEHpnOaNhovTQoSmWv7Ek7LLRW5Kk/dfz+IihE1lA+Pvk
-   Fck6eYJ0uWJUafMNN4WflngWxZds91bXG1X+i7Ss5FsjUcktItOIhSyIc
-   NAhJ0QPow/uBPVb+23fSp2J+zVkgzWLBJYhU1yvCLen5pf4MzekhLJHmU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286132200"
+  t=1658109922; x=1689645922;
+  h=subject:references:in-reply-to:to:cc:from:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=XvbJNiAUBYCFA1BgcjNoBuChcRw2xE7D5d4i2rcVp4A=;
+  b=BOT2ym6//iQJZpYmZBq+amNCrZg31pt+Uuph/eC01fP9AV1z13Nu6pYQ
+   ez7mj0AnsaRzSen2cswaTc49Y9Lwk3kSfzhg2KOckKGtlWlwYkC85zH0X
+   0EbRGwlOa6iT/ZCuChfv0kDSRhRGdEvqUDHNIv2mBKtAM8L7AnFO1usbv
+   Y27TedUiDt40a1DpcwxEYVelgXXyjkWp3kWbMAXoM9xc6IsjXirQowS+7
+   ZooUjGNJANBuLzlLziV4vSOpN0++DcB8ebuGR8bcESfPK7bx/mJYdq5AK
+   FQoUDh4JNguc2vldnQU8ZuqSxmWuHbXdRwcy+5eUlLi1qjT6t1SwzzAPn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="350074140"
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="286132200"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 19:05:14 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="350074140"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 19:05:22 -0700
 X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="547300223"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 17 Jul 2022 19:05:09 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDG8C-0003tG-A0;
-        Mon, 18 Jul 2022 02:05:08 +0000
-Date:   Mon, 18 Jul 2022 10:05:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     kbuild-all@lists.01.org,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V5 16/16] rv/reactor: Add the panic reactor
-Message-ID: <202207180927.O9kBl2xY-lkp@intel.com>
-References: <5b3233ed8c7bd06895cc177da8a4299d764d6f9a.1657745645.git.bristot@kernel.org>
+   d="scan'208";a="655076055"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.172.248]) ([10.249.172.248])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 19:05:20 -0700
+Subject: Re: [PATCH] posix_acl: Use try_cmpxchg in get_acl
+References: <202207162205.iBwToBEr-lkp@intel.com>
+In-Reply-To: <202207162205.iBwToBEr-lkp@intel.com>
+To:     Uros Bizjak <ubizjak@gmail.com>, linux-fsdevel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     kbuild-all@lists.01.org, Alexander Viro <viro@zeniv.linux.org.uk>
+From:   kernel test robot <rong.a.chen@intel.com>
+X-Forwarded-Message-Id: <202207162205.iBwToBEr-lkp@intel.com>
+Message-ID: <fae1386b-a95e-b44f-362d-06b268e790de@intel.com>
+Date:   Mon, 18 Jul 2022 10:05:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b3233ed8c7bd06895cc177da8a4299d764d6f9a.1657745645.git.bristot@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Hi Uros,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on rostedt-trace/for-next]
-[also build test WARNING on tip/sched/core]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc6 next-20220715]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220714-052220
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220718/202207180927.O9kBl2xY-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/f83faf07d0dad6cfd8fb22ff38b752dd7619bfc0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Bristot-de-Oliveira/The-Runtime-Verification-RV-interface/20220714-052220
-        git checkout f83faf07d0dad6cfd8fb22ff38b752dd7619bfc0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/lkdtm/ kernel/trace/rv/
+url: 
+https://github.com/intel-lab-lkp/linux/commits/Uros-Bizjak/posix_acl-Use-try_cmpxchg-in-get_acl/20220715-014002
+base: 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
+4a57a8400075bc5287c5c877702c68aeae2a033d
+config: powerpc-sam440ep_defconfig 
+(https://download.01.org/0day-ci/archive/20220716/202207162205.iBwToBEr-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+         wget 
+https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+-O ~/bin/make.cross
+         chmod +x ~/bin/make.cross
+         # 
+https://github.com/intel-lab-lkp/linux/commit/8291d21630df3a57adf6d0ed8a1cded2a2700f66
+         git remote add linux-review https://github.com/intel-lab-lkp/linux
+         git fetch --no-tags linux-review 
+Uros-Bizjak/posix_acl-Use-try_cmpxchg-in-get_acl/20220715-014002
+         git checkout 8291d21630df3a57adf6d0ed8a1cded2a2700f66
+         # save the config file
+         mkdir build_dir && cp config build_dir/.config
+         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross 
+W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/trace/rv/reactor_panic.c:21:19: sparse: sparse: symbol 'rv_panic' was not declared. Should it be static?
->> kernel/trace/rv/reactor_panic.c:27:5: sparse: sparse: symbol 'register_react_panic' was not declared. Should it be static?
->> kernel/trace/rv/reactor_panic.c:33:6: sparse: sparse: symbol 'unregister_react_panic' was not declared. Should it be static?
+    In file included from include/linux/kernel.h:20,
+                     from fs/posix_acl.c:14:
+    fs/posix_acl.c: In function 'get_acl':
+>> include/linux/atomic/atomic-arch-fallback.h:90:34: error: initialization of 'struct posix_acl **' from incompatible pointer type 'void **' [-Werror=incompatible-pointer-types]
+       90 |         typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+          |                                  ^
+    include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+       78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+          |                                             ^
+    include/linux/atomic/atomic-instrumented.h:1978:9: note: in 
+expansion of macro 'arch_try_cmpxchg'
+     1978 |         arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+          |         ^~~~~~~~~~~~~~~~
+    fs/posix_acl.c:167:23: note: in expansion of macro 'try_cmpxchg'
+      167 |         if (unlikely(!try_cmpxchg(p, &sentinel, acl)))
+          |                       ^~~~~~~~~~~
+    cc1: some warnings being treated as errors
 
+
+vim +90 include/linux/atomic/atomic-arch-fallback.h
+
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  86  29f006fdefe6f8 include/linux/atomic-arch-fallback.h 
+Peter Zijlstra 2020-08-29  87  #ifndef arch_try_cmpxchg
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  88  #define arch_try_cmpxchg(_ptr, _oldp, _new) \
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  89  ({ \
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29 @90  	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  91  	___r = arch_cmpxchg((_ptr), ___o, (_new)); \
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  92  	if (unlikely(___r != ___o)) \
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  93  		*___op = ___r; \
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  94  	likely(___r == ___o); \
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  95  })
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  96  #endif /* arch_try_cmpxchg */
+29f006fdefe6f8 include/linux/atomic-arch-fallback.h Peter Zijlstra 
+2020-08-29  97
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp

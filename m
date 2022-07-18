@@ -2,172 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43C5578D99
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83552578D82
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235139AbiGRWga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S234972AbiGRW2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiGRWg2 (ORCPT
+        with ESMTP id S229647AbiGRW2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:36:28 -0400
-X-Greylist: delayed 474 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Jul 2022 15:36:26 PDT
-Received: from mail.aperture-lab.de (mail.aperture-lab.de [116.203.183.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D0E22BED;
-        Mon, 18 Jul 2022 15:36:26 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2ADCC3EEC0;
-        Tue, 19 Jul 2022 00:28:19 +0200 (CEST)
-From:   =?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>
-To:     Johannes Berg <johannes.berg@intel.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
-        Simon Wunderlich <sw@simonwunderlich.de>,
-        Sven Eckelmann <sven@narfation.org>,
-        =?UTF-8?q?Linus=20L=C3=BCssing?= <linus.luessing@c0d3.blue>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Linus=20L=C3=BCssing?= <ll@simonwunderlich.de>
-Subject: [PATCH] mac80211: Fix wrong channel bandwidths reported for aggregates
-Date:   Tue, 19 Jul 2022 00:28:04 +0200
-Message-Id: <20220718222804.21708-1-linus.luessing@c0d3.blue>
+        Mon, 18 Jul 2022 18:28:45 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3F5286D3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:28:41 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10c8e8d973eso27728301fac.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CM+L+F29IjkyytSgiUJ9L1anz4s5cjBnkaXschPxT+s=;
+        b=Yq+Uz2UfmII9HsrH9h2DcdOQOcBpvQWk4eGZIG76Nm98EAHedcqcyuNAfAsNGU5wnS
+         LBfYbf7o2RvpXaly6M22s2nyQ0ugJJqli+6xTfusfX5eDw/5Biz17R25ooPX8/RGqFe6
+         OhV5B4sZZFKnCfWKZHTTvnAslOt4t+I6ricgU1JoXJwNm6omRCV9Fq2vQpnJRFf7cBUU
+         5xgKP/GqmnHWela1juasxpglmhsEAHiS5Jzx4um2HEd+pUW9hAEK2VoeQEAz6GA9zF7c
+         OA9Y0yqapLTCWBLRlmqrWwOGdnTrfeKDVBup2BqP9eIerIjg9AOe0PdhrQnZh498afur
+         ps4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CM+L+F29IjkyytSgiUJ9L1anz4s5cjBnkaXschPxT+s=;
+        b=ZgrDjxW/DbXDbM4lKAmvP2PMclLUHEx2Lr48Y4kh3wRgF9xnmJSXdEhIAkFSN2869D
+         ekwpyM/kjmO39cCumdQhHbiUo53yZayR0lNh9vhLUQ2nZzDqpxoV11+1trtoy7gvRr8R
+         0H9JFj1ASQ/Mxkr1bWwLmMfxRPhPg914zdqwAjjmHuumfqnl4jw1lu7W5ZKA2nUpnKAX
+         vtRXBlE5kUGNJ4UdX+vvsxo5O4ziYqQEYN6sVft1L9AS9etK9W8GuhCEcGF35MzIIZJD
+         A57t6qmOPR2yDxw3DfE969790Fe5RSC3zoI2p+Tojq6m7jIW4greMHWmL/d/milmVGeR
+         qvog==
+X-Gm-Message-State: AJIora+X1LUNPE2qBVifoNxmn/FXQhQpdfNCEZXTz9F2/4aopOGIJzo9
+        y2Odi+trCAoFI8Wq+I1cJi6a7w==
+X-Google-Smtp-Source: AGRyM1vPyGVktBCtcTaxH8G86pSgyCdxCEPnpid+y/LK/LtOaq0k5UVTTe7VlXBijDZQo/uwJ6aRSQ==
+X-Received: by 2002:a05:6870:c5a0:b0:10c:5a7f:1e1c with SMTP id ba32-20020a056870c5a000b0010c5a7f1e1cmr16718133oab.250.1658183320998;
+        Mon, 18 Jul 2022 15:28:40 -0700 (PDT)
+Received: from baldur ([2600:380:7819:4216:5926:b852:ebc3:8111])
+        by smtp.gmail.com with ESMTPSA id e11-20020a4ada0b000000b0042568efdaccsm5388483oou.15.2022.07.18.15.28.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 15:28:40 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 17:28:24 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] i2c: qcom-geni: Use the correct return value
+Message-ID: <YtXeiKWhFtldI2eE@baldur>
+References: <20220717035027.2135106-1-bjorn.andersson@linaro.org>
+ <20220717035027.2135106-2-bjorn.andersson@linaro.org>
+ <YtTxR/X5+UZW9pZZ@matsya>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtTxR/X5+UZW9pZZ@matsya>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Lüssing <ll@simonwunderlich.de>
+On Mon 18 Jul 00:36 CDT 2022, Vinod Koul wrote:
 
-AR9003 based wifi chips have a hardware bug, they always report a
-channel bandwidth of HT40 for any sub-frame of an aggregate which is
-not the last one. Only the last sub-frame has correct channel bandwidth
-information.
+> On 16-07-22, 20:50, Bjorn Andersson wrote:
+> > The introduction of GPI support moved things around and instead of
+> > returning the result from geni_i2c_xfer() the number of messages in the
+> > request was returned, ignoring the actual result. Fix this.
+> 
+> Thanks for the fix, looking at master_xfer() it does expect error
+> return, so look good with one nit:
+> 
+> > 
+> > Fixes: d8703554f4de ("i2c: qcom-geni: Add support for GPI DMA")
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> >  drivers/i2c/busses/i2c-qcom-geni.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> > index 6ac402ea58fb..3bec7c782824 100644
+> > --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> > +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> > @@ -688,7 +688,7 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
+> >  	pm_runtime_put_autosuspend(gi2c->se.dev);
+> >  	gi2c->cur = NULL;
+> >  	gi2c->err = 0;
+> 
+> Unrelated, should gi2c->err be set to ret here..?
+> 
 
-This can be easily reproduced by setting an ath9k based wifi to HT20 and
-running an iperf test. Then "iw dev wlan0 station dump" will occasionally,
-wrongly show something like:
+When we reach this point we have concluded the current transfer
+(successfully or not...), so I believe that the purpose of this line is
+to clear the "error state" that might have occurred during that transfer.
 
-  rx bitrate:     121.5 MBit/s MCS 6 40MHz
+I believe this line could be removed, as the first step in a transfer is
+to clear the error state again. But as you suggest this is separate to
+the proposed change.
 
-Debug output in ath9k_hw_process_rxdesc_edma() confirmed that it is
-always frames with (rxs->rs_isaggr && !rxs->rs_moreaggr) and no others
-which report RATE_INFO_BW_40.
 
-Unfortunately we cannot easily fix this within ath9k as in ath9k we
-cannot peek at the rate/bandwidth info of the last aggregate
-sub-frame and there is no queueing within ath9k after receiving the
-frame from the wifi chip, it is directly handed over to mac80211.
+May I have a R-b?
 
-Therefore fixing this within mac80211: For an aggergated AMPDU only
-update the RX "last_rate" variable from the last sub-frame of an
-aggregate. In theory, without hardware bugs, rate/bandwidth info
-should be the same for all sub-frames of an aggregate anyway.
+Regards,
+Bjorn
 
-This change only affects ath9k, ath9k-htc and ath10k as these are
-currently the only drivers implementing the RX_FLAG_AMPDU_LAST_KNOWN
-flag.
-
-Tested-on: 8devices Lima board, QCA9531 WiFi
-
-Cc: Sven Eckelmann <sven@narfation.org>
-Cc: Simon Wunderlich <sw@simonwunderlich.de>
-Cc: Linus Lüssing <linus.luessing@c0d3.blue>
-Signed-off-by: Linus Lüssing <ll@simonwunderlich.de>
----
- net/mac80211/rx.c       |  8 ++++----
- net/mac80211/sta_info.h | 16 +++++++++++++---
- 2 files changed, 17 insertions(+), 7 deletions(-)
-
-diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
-index 304b9909f025..988dbf058489 100644
---- a/net/mac80211/rx.c
-+++ b/net/mac80211/rx.c
-@@ -1723,6 +1723,7 @@ ieee80211_rx_h_sta_process(struct ieee80211_rx_data *rx)
- 	struct sk_buff *skb = rx->skb;
- 	struct ieee80211_rx_status *status = IEEE80211_SKB_RXCB(skb);
- 	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)skb->data;
-+	u32 *last_rate = &sta->deflink.rx_stats.last_rate;
- 	int i;
- 
- 	if (!sta)
-@@ -1744,8 +1745,7 @@ ieee80211_rx_h_sta_process(struct ieee80211_rx_data *rx)
- 			sta->deflink.rx_stats.last_rx = jiffies;
- 			if (ieee80211_is_data(hdr->frame_control) &&
- 			    !is_multicast_ether_addr(hdr->addr1))
--				sta->deflink.rx_stats.last_rate =
--					sta_stats_encode_rate(status);
-+				sta_stats_encode_rate(status, last_rate);
- 		}
- 	} else if (rx->sdata->vif.type == NL80211_IFTYPE_OCB) {
- 		sta->deflink.rx_stats.last_rx = jiffies;
-@@ -1757,7 +1757,7 @@ ieee80211_rx_h_sta_process(struct ieee80211_rx_data *rx)
- 		 */
- 		sta->deflink.rx_stats.last_rx = jiffies;
- 		if (ieee80211_is_data(hdr->frame_control))
--			sta->deflink.rx_stats.last_rate = sta_stats_encode_rate(status);
-+			sta_stats_encode_rate(status, last_rate);
- 	}
- 
- 	sta->deflink.rx_stats.fragments++;
-@@ -4502,7 +4502,7 @@ static void ieee80211_rx_8023(struct ieee80211_rx_data *rx,
- 	/* end of statistics */
- 
- 	stats->last_rx = jiffies;
--	stats->last_rate = sta_stats_encode_rate(status);
-+	sta_stats_encode_rate(status, &stats->last_rate);
- 
- 	stats->fragments++;
- 	stats->packets++;
-diff --git a/net/mac80211/sta_info.h b/net/mac80211/sta_info.h
-index 70ee55ec5518..67f9c1647567 100644
---- a/net/mac80211/sta_info.h
-+++ b/net/mac80211/sta_info.h
-@@ -941,10 +941,19 @@ enum sta_stats_type {
- 
- #define STA_STATS_RATE_INVALID		0
- 
--static inline u32 sta_stats_encode_rate(struct ieee80211_rx_status *s)
-+static inline void
-+sta_stats_encode_rate(struct ieee80211_rx_status *s, u32 *rate)
- {
- 	u32 r;
- 
-+	/* some drivers (notably ath9k) only report a valid bandwidth
-+	 * in the last subframe of an aggregate, skip the others
-+	 * in that case
-+	 */
-+	if (s->flag & RX_FLAG_AMPDU_LAST_KNOWN &&
-+	    !(s->flag & RX_FLAG_AMPDU_IS_LAST))
-+		return;
-+
- 	r = STA_STATS_FIELD(BW, s->bw);
- 
- 	if (s->enc_flags & RX_ENC_FLAG_SHORT_GI)
-@@ -975,10 +984,11 @@ static inline u32 sta_stats_encode_rate(struct ieee80211_rx_status *s)
- 		break;
- 	default:
- 		WARN_ON(1);
--		return STA_STATS_RATE_INVALID;
-+		*rate = STA_STATS_RATE_INVALID;
-+		return;
- 	}
- 
--	return r;
-+	*rate = r;
- }
- 
- #endif /* STA_INFO_H */
--- 
-2.36.1
-
+> > -	return num;
+> > +	return ret;
+> >  }
+> >  
+> >  static u32 geni_i2c_func(struct i2c_adapter *adap)
+> > -- 
+> > 2.35.1
+> 
+> -- 
+> ~Vinod

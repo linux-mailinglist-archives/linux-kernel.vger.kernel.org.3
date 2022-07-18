@@ -2,119 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0614C577D33
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AD2577D3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiGRILC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
+        id S233548AbiGRIMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiGRILB (ORCPT
+        with ESMTP id S229815AbiGRIMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:11:01 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CD212601
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:10:59 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id g126so9969626pfb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=koJtdu2xGKY/BDY+kAcaq9hS2IfMj226ck1h8XVx8nc=;
-        b=YPfCzd+LWX6tGDrhIg8VyeRtxSwuQnIytXKBmgqlJU+EP1t3GV3USjvadSwh21GTWn
-         bIxC9/uswSeopFMkbYMOtzFJVtEA3ZGrZBZC69To+Tp+or9+gD9lUJJ3MIahxw+6p7Gx
-         r0ogkc0Ppp4Pv8PTWZmNkCDUCuyjHUVHeVFiqx5Y9FHWpGQrfLEyaZXSkfaAASPZ/lgH
-         vYj3As3RcWhFUBLOB/naxgsoKzkpo54qn/TWlDqmuOe7+TgtZqKkPU9F2fFjnOlOLkcM
-         LsK/QN+01r/wML+H8xKfxZyYepasaICMvcZr4oF7lS7S3Hj1r8jyPeeadjNbz1FrzRxL
-         5IhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=koJtdu2xGKY/BDY+kAcaq9hS2IfMj226ck1h8XVx8nc=;
-        b=i01WRjlUK/vnL8FbTvwTQoTC4dqOqQKZJiq9IWneNBiklcmU5ZijoZi14WqA5pRafb
-         WGhX386JPp4UHwvuUucy4IuK/DIXJzLV4j2X6bMgCzfbArDueYgnkokpZ5oEDniT1OVz
-         7JuIvYssKKZj66s12/QttgCXGWAbwGbLt1d9QiR0niA6PWhMZZr9wONP8XnT5I/HU/l3
-         CiCRnQ9KkfSYmJdl9xNHA7LnsxG9knLsmm/QHHpMKQrY1XqZEA0k4DwMt+F8/7YrjQ3s
-         VCaGXJS0ZX4TqfhOip/KH8Ffl/wyEm/3gxa0pnfb0zRdPA10mUoyNWCurcCpC+8tBVfS
-         3c9Q==
-X-Gm-Message-State: AJIora+6gBggQQn+JD4Cns1jY45E0f67wlai9phpNuysSLn9cXIjD9FP
-        w24G/jw1MIpHtBkJ3868FJ9tQQl6JjsFAiWT
-X-Google-Smtp-Source: AGRyM1s1EKjylolsXMIuvJO65KwmrcIJ8rMJh/CjiItqMsskcy1K0pyvsDM0UwUrI7oSMmx+Ha9VmQ==
-X-Received: by 2002:a63:6a82:0:b0:419:de8c:8ca with SMTP id f124-20020a636a82000000b00419de8c08camr14123782pgc.467.1658131859151;
-        Mon, 18 Jul 2022 01:10:59 -0700 (PDT)
-Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.232])
-        by smtp.gmail.com with ESMTPSA id ng8-20020a17090b1a8800b001ef9479373fsm11047865pjb.4.2022.07.18.01.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 01:10:58 -0700 (PDT)
-From:   Guowei Du <duguoweisz@gmail.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, duguowei <duguowei@xiaomi.com>
-Subject: [PATCH] f2fs: modify task name prefix
-Date:   Mon, 18 Jul 2022 16:10:38 +0800
-Message-Id: <20220718081038.2279-1-duguoweisz@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 18 Jul 2022 04:12:39 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E324912767;
+        Mon, 18 Jul 2022 01:12:37 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id C6F831C811BE;
+        Mon, 18 Jul 2022 16:12:36 +0800 (CST)
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 18 Jul
+ 2022 16:12:36 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Mon, 18 Jul 2022 16:12:36 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id 814C563A20; Mon, 18 Jul 2022 11:12:35 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <openbmc@lists.ozlabs.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1 0/3] spi: npcm-fiu: add Arbel NPCM8XX support
+Date:   Mon, 18 Jul 2022 11:11:43 +0300
+Message-ID: <20220718081146.256070-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: duguowei <duguowei@xiaomi.com>
+This patch set adds Arbel NPCM8XX Flash Interface Unit (FIU) support to FIU NPCM
+driver and modify direct read dummy configuration.
 
-If there are more than one f2fs sbi, there will be more
-discard threads. But the comm is too long to show dev
-minor. So, change the default prefix of thread from
-"f2fs_discard" to "f2fs_dcd".
+NPCM8XX FIU supports four controllers.
 
-Before:
-$ ps -e | grep f2fs
-1628 ?        00:00:00 f2fs_ckpt-7:10
-1629 ?        00:00:00 f2fs_flush-7:10
-1630 ?        00:00:00 f2fs_discard-7:
-1631 ?        00:00:00 f2fs_gc-7:10
-2030 ?        00:00:00 f2fs_ckpt-7:27
-2031 ?        00:00:00 f2fs_flush-7:27
-2032 ?        00:00:00 f2fs_discard-7:
-2033 ?        00:00:00 f2fs_gc-7:27
+The NPCM FIU driver tested on NPCM845 evaluation board.
 
-After:
-$ ps -e | grep f2fs
-1628 ?        00:00:00 f2fs_ckpt-7:10
-1629 ?        00:00:00 f2fs_flush-7:10
-1630 ?        00:00:00 f2fs_dcd-7:10
-1631 ?        00:00:00 f2fs_gc-7:10
-2030 ?        00:00:00 f2fs_ckpt-7:27
-2031 ?        00:00:00 f2fs_flush-7:27
-2032 ?        00:00:00 f2fs_dcd-7:27
-2033 ?        00:00:00 f2fs_gc-7:27
+Tomer Maimon (3):
+  spi: npcm-fiu: Modify direct read dummy configuration
+  dt-binding: spi: Add npcm845 compatible to npcm-fiu document
+  spi: npcm-fiu: Add NPCM8XX support
 
-Signed-off-by: duguowei <duguowei@xiaomi.com>
----
- fs/f2fs/segment.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../bindings/spi/nuvoton,npcm-fiu.txt         | 13 ++++++++-
+ drivers/spi/spi-npcm-fiu.c                    | 28 +++++++++++++++++--
+ 2 files changed, 38 insertions(+), 3 deletions(-)
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 874c1b9c41a2..2eeefcbe62db 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -2018,7 +2018,7 @@ int f2fs_start_discard_thread(struct f2fs_sb_info *sbi)
- 		return 0;
- 
- 	dcc->f2fs_issue_discard = kthread_run(issue_discard_thread, sbi,
--				"f2fs_discard-%u:%u", MAJOR(dev), MINOR(dev));
-+				"f2fs_dcd-%u:%u", MAJOR(dev), MINOR(dev));
- 	if (IS_ERR(dcc->f2fs_issue_discard))
- 		err = PTR_ERR(dcc->f2fs_issue_discard);
- 
 -- 
-2.36.1
+2.33.0
 

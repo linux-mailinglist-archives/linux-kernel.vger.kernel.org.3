@@ -2,132 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817195783E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4002E5783EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234304AbiGRNj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
+        id S234365AbiGRNkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGRNjX (ORCPT
+        with ESMTP id S233697AbiGRNkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:39:23 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24E817E07;
-        Mon, 18 Jul 2022 06:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658151562; x=1689687562;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=S7SbUtL4cXYV52pGPG02yhwUZTGsc8NrJiIgLWn4W7c=;
-  b=BJWyFDRip95JHzoYbGH+0DJ5V+5dZPT5+ghBR6VSZhIV2Sqr93d4UiF8
-   vyOup5u3xyJl1hq094RnKf1auqXDBZbp9bsr+Jswxg/ViL59RW0re12G5
-   tIu2Kbh50MTIydoAUHI5BUsLFZMBjCPHTuQuWomNIHqUcwaiM9K5ET51k
-   8O6rRKsTzUHEUvQHis3mhsen8c3evSq3G1zntgO5ygCg2jWaq8ZgpHVaK
-   GVDVmARwIuA5VxpOif4yGpmfcqlLP1FzzDj+YD2vAIRsyGoKd0PyWLw+K
-   Uml8CVijb5kJ2+pCaOq4GWWM8iuL+jl2jynAxA7Yg+SV1M08qTz86zX8E
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="350181894"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="350181894"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:39:22 -0700
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="686737192"
-Received: from smyint-mobl1.amr.corp.intel.com (HELO [10.212.107.15]) ([10.212.107.15])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:39:19 -0700
-Message-ID: <72a40626-ee71-fffe-3816-933fbec92c4d@linux.intel.com>
-Date:   Mon, 18 Jul 2022 14:39:17 +0100
+        Mon, 18 Jul 2022 09:40:09 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACD71A076
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:40:07 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id u13so19386080lfn.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:40:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qP9Fo5KBG1bSRd2Jktw44saL7dv2bZtKwCgW6wpScEo=;
+        b=LydNAbpiOiDlshy5VPw8GM+ohK5mAteiOjn9DViBMZcAdgGLZgOluNcnR2js6hMa2d
+         7hJ1zcRoNeGwk/OLqK/9NnXjVQillG9u7p5R1Wsyw2Rn6BE13YJO9Udn3uLjF1Fo41jf
+         bCcFwqcXI/WAJbdHXX5XBSPeCutlv07HBSTzrjpUCjAWfhO0cNUk05Vv1by2t8j9N/QS
+         Ne2YRcvdW8w42bnprFuMwwlZXMPD+viCFITy89/Toygy+8fWax3argEtwmAxhLksNAoP
+         ur5TUpos4VK+1Z3FJ+o+sfUEVSktZ7JbPQEtvAAi0HcATRTI0nQGEjg2hILU9NMYlHmB
+         EM6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qP9Fo5KBG1bSRd2Jktw44saL7dv2bZtKwCgW6wpScEo=;
+        b=64cMXBWccRNAnsZoyQZSnZG0L0fDLbO7RqunIF52hFhm6wSxigUf1jM9+99olPoVZT
+         9yHFpXZXKI+Za0lJIWDScKJNHD6WKwFVR1S0sMpyfG2ILrdfEvVq/unxwDfjLU7DnEiu
+         PFNnm3Z4+L+CWrNPPttXyQDiovwTy27HNjuB/JKl9SCAfuDroylrn9P+n+qxIS0C4Al3
+         CEl27wDzlwSHBEcdkKN43JaS6fQqflqCwf+Rlr3+9aLf45tftT1pnH+UUNbDg2ngp/cW
+         cv8cIfP3nyGnh+hjpqoxcRrHtnAZFDZQ1b0xUq+zshZ4Mp8wlMvIDtn71pIiJurZzuVq
+         I7kQ==
+X-Gm-Message-State: AJIora8a+SBAX4RR+Aw1Iupw/uLndDY+HO71O+Wh6+BJOt3j4+zYZ4cI
+        5llMTcZkkX9Ara+n0fskaqt63w==
+X-Google-Smtp-Source: AGRyM1s1qWe+cRpioSO8Ixn5A2yF3sZewgmBHH5fFTqKY8HJ5V1AGYKl/UMTkIk31fZ8gW3ypTjz3g==
+X-Received: by 2002:a05:6512:3b23:b0:48a:4a8c:2a27 with SMTP id f35-20020a0565123b2300b0048a4a8c2a27mr956367lfv.372.1658151605709;
+        Mon, 18 Jul 2022 06:40:05 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id s11-20020a05651c048b00b0025d681fbebdsm2050116ljc.100.2022.07.18.06.40.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 06:40:05 -0700 (PDT)
+Message-ID: <0d758fae-efde-eb0c-5fc9-2407826ac163@linaro.org>
+Date:   Mon, 18 Jul 2022 15:40:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 04/21] drm/i915/gt: Only invalidate TLBs exposed to
- user manipulation
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 1/3] dt-bindings: net: fsl,fec: Add i.MX8ULP FEC items
 Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Chris Wilson <chris.p.wilson@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Fei Yang <fei.yang@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>
-References: <cover.1657800199.git.mchehab@kernel.org>
- <c0ab69f803cfe439f9218d0c0a930eae563dee83.1657800199.git.mchehab@kernel.org>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <c0ab69f803cfe439f9218d0c0a930eae563dee83.1657800199.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     wei.fang@nxp.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, peng.fan@nxp.com,
+        ping.bai@nxp.com, sudeep.holla@arm.com,
+        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
+References: <20220718142257.556248-1-wei.fang@nxp.com>
+ <20220718142257.556248-2-wei.fang@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220718142257.556248-2-wei.fang@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 14/07/2022 13:06, Mauro Carvalho Chehab wrote:
-> From: Chris Wilson <chris.p.wilson@intel.com>
+On 18/07/2022 16:22, wei.fang@nxp.com wrote:
+> From: Wei Fang <wei.fang@nxp.com>
 > 
-> Don't flush TLBs when the buffer is only used in the GGTT under full
-> control of the kernel, as there's no risk of concurrent access
-> and stale access from prefetch.
+> Add fsl,imx8ulp-fec for i.MX8ULP platform.
 > 
-> We only need to invalidate the TLB if they are accessible by the user.
-> That helps to reduce the performance regression introduced by TLB
-> invalidate logic.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+> Signed-off-by: Wei Fang <wei.fang@nxp.com>
 
-Do we really need or want stable and fixes on this one?
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-What do we think the performance improvement is, given there's very 
-little in GGTT, which is not mapped via PPGTT as well?
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
-I think it is safe, but part of me would ideally not even want to think 
-about whether it is safe, if the performance improvement is 
-non-existent. Which I can't imagine how there would be?
+If a tag was not added on purpose, please state why and what changed.
 
-Regards,
 
-Tvrtko
 
-> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-> Cc: Fei Yang <fei.yang@intel.com>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/21] at: https://lore.kernel.org/all/cover.1657800199.git.mchehab@kernel.org/
-> 
->   drivers/gpu/drm/i915/i915_vma.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
-> index ef3b04c7e153..646f419b2035 100644
-> --- a/drivers/gpu/drm/i915/i915_vma.c
-> +++ b/drivers/gpu/drm/i915/i915_vma.c
-> @@ -538,7 +538,8 @@ int i915_vma_bind(struct i915_vma *vma,
->   				   bind_flags);
->   	}
->   
-> -	set_bit(I915_BO_WAS_BOUND_BIT, &vma->obj->flags);
-> +	if (bind_flags & I915_VMA_LOCAL_BIND)
-> +		set_bit(I915_BO_WAS_BOUND_BIT, &vma->obj->flags);
->   
->   	atomic_or(bind_flags, &vma->flags);
->   	return 0;
+Best regards,
+Krzysztof

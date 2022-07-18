@@ -2,117 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC05578680
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC2E578681
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235597AbiGRPhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 11:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
+        id S235614AbiGRPiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234134AbiGRPhM (ORCPT
+        with ESMTP id S235624AbiGRPiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:37:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBADBC81;
-        Mon, 18 Jul 2022 08:37:10 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LmmHt66YzzlW4M;
-        Mon, 18 Jul 2022 23:35:22 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Jul 2022 23:37:02 +0800
-Message-ID: <b0e740c4-9630-c539-e811-a4ad93fcca5c@huawei.com>
-Date:   Mon, 18 Jul 2022 23:37:01 +0800
+        Mon, 18 Jul 2022 11:38:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7448BF6C;
+        Mon, 18 Jul 2022 08:38:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DCAE61254;
+        Mon, 18 Jul 2022 15:38:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60174C341CA;
+        Mon, 18 Jul 2022 15:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658158686;
+        bh=3yZ1jSHssAY3HgAy72zNKH6+/8SrEIHJAMJj70k/W0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ue34b7d++T+f0rwIIWjDYfLQe5ww3aYWLC3c7MEDR7hPf5EJk0J1qkIKx6DCXiB5x
+         Z31JINkl9KXmq9Q71jaZqVnb1tktpR8UvPnO2sVhXgRT0uzlf88WoXjnuJCse3Pa2p
+         xh+ICwspP2QHPbU0hMxXNkQ1qW5HiSUiqxtE5XVqQGQp+aFB7c024ZhE09AeHeRiSE
+         +bfqwMn9S3jbcncSm6xWGM6mX5rPa8vitSAdGFYPzjpm0lOZ6NUqqWox5qhhX4dGPx
+         T3zF5vx1X6jq9JUqYANBj3VavTKnJl569sNXaxqPOggkrjJutCaHzg+YfbEt8CRruZ
+         ZEzL0wZJUsGOA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id F30AD40374; Mon, 18 Jul 2022 12:38:03 -0300 (-03)
+Date:   Mon, 18 Jul 2022 12:38:03 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     xaizek <xaizek@posteo.net>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v2] perf gtk: Only support --gtk if compiled in
+Message-ID: <YtV+Wxf8l7NgVLTy@kernel.org>
+References: <20220707203836.345918-1-irogers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v9 3/4] bpf, arm64: Implement
- bpf_arch_text_poke() for arm64
-Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Will Deacon <will@kernel.org>, KP Singh <kpsingh@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>
-References: <20220711150823.2128542-1-xukuohai@huawei.com>
- <20220711150823.2128542-4-xukuohai@huawei.com>
- <8de014c1-aa63-5783-e5fd-53b7fdece805@nvidia.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <8de014c1-aa63-5783-e5fd-53b7fdece805@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707203836.345918-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/18/2022 9:52 PM, Jon Hunter wrote:
-
-[..]
+Em Thu, Jul 07, 2022 at 01:38:36PM -0700, Ian Rogers escreveu:
+> If HAVE_GTK2_SUPPORT isn't defined then --gtk can't succeed, don't
+> support it as a command line option in this case.
 > 
-> This change appears to be causing the build to fail ...
+> v2. Is a rebase. Patch appears to have been missed in:
+> https://lore.kernel.org/lkml/Ygu40djM1MqAfkcF@kernel.org/
+
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-annotate.c | 8 ++++++++
+>  tools/perf/builtin-report.c   | 6 ++++++
+>  2 files changed, 14 insertions(+)
 > 
-> /tmp/cc52xO0c.s: Assembler messages:
-> /tmp/cc52xO0c.s:8: Error: operand 1 should be an integer register --
-> `mov lr,x9'
-> /tmp/cc52xO0c.s:7: Error: undefined symbol lr used as an immediate value
-> make[2]: *** [scripts/Makefile.build:250: arch/arm64/net/bpf_jit_comp.o]
-> Error 1
-> make[1]: *** [scripts/Makefile.build:525: arch/arm64/net] Error 2
-> 
-> Let me know if you have any thoughts.
-> 
+> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+> index 2ffe071dbcff..f839e69492e8 100644
+> --- a/tools/perf/builtin-annotate.c
+> +++ b/tools/perf/builtin-annotate.c
+> @@ -50,7 +50,9 @@ struct perf_annotate {
+>  	bool	   use_tui;
+>  #endif
+>  	bool	   use_stdio, use_stdio2;
+> +#ifdef HAVE_GTK2_SUPPORT
+>  	bool	   use_gtk;
+> +#endif
+>  	bool	   skip_missing;
+>  	bool	   has_br_stack;
+>  	bool	   group_set;
+> @@ -526,7 +528,9 @@ int cmd_annotate(int argc, const char **argv)
+>  	OPT_BOOLEAN('q', "quiet", &quiet, "do now show any message"),
+>  	OPT_BOOLEAN('D', "dump-raw-trace", &dump_trace,
+>  		    "dump raw trace in ASCII"),
+> +#ifdef HAVE_GTK2_SUPPORT
+>  	OPT_BOOLEAN(0, "gtk", &annotate.use_gtk, "Use the GTK interface"),
+> +#endif
+>  #ifdef HAVE_SLANG_SUPPORT
+>  	OPT_BOOLEAN(0, "tui", &annotate.use_tui, "Use the TUI interface"),
+>  #endif
+> @@ -614,10 +618,12 @@ int cmd_annotate(int argc, const char **argv)
+>  	if (annotate_check_args(&annotate.opts) < 0)
+>  		return -EINVAL;
+>  
+> +#ifdef HAVE_GTK2_SUPPORT
+>  	if (symbol_conf.show_nr_samples && annotate.use_gtk) {
+>  		pr_err("--show-nr-samples is not available in --gtk mode at this time\n");
+>  		return ret;
+>  	}
+> +#endif
+>  
+>  	ret = symbol__validate_sym_arguments();
+>  	if (ret)
+> @@ -656,8 +662,10 @@ int cmd_annotate(int argc, const char **argv)
+>  	else if (annotate.use_tui)
+>  		use_browser = 1;
+>  #endif
+> +#ifdef HAVE_GTK2_SUPPORT
+>  	else if (annotate.use_gtk)
+>  		use_browser = 2;
+> +#endif
+>  
+>  	setup_browser(true);
+>  
+> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+> index afe4a5539ecc..91ed41cc7d88 100644
+> --- a/tools/perf/builtin-report.c
+> +++ b/tools/perf/builtin-report.c
+> @@ -74,7 +74,9 @@ struct report {
+>  #ifdef HAVE_SLANG_SUPPORT
+>  	bool			use_tui;
+>  #endif
+> +#ifdef HAVE_GTK2_SUPPORT
+>  	bool			use_gtk;
+> +#endif
+>  	bool			use_stdio;
+>  	bool			show_full_info;
+>  	bool			show_threads;
+> @@ -1227,7 +1229,9 @@ int cmd_report(int argc, const char **argv)
+>  #ifdef HAVE_SLANG_SUPPORT
+>  	OPT_BOOLEAN(0, "tui", &report.use_tui, "Use the TUI interface"),
+>  #endif
+> +#ifdef HAVE_GTK2_SUPPORT
+>  	OPT_BOOLEAN(0, "gtk", &report.use_gtk, "Use the GTK2 interface"),
+> +#endif
+>  	OPT_BOOLEAN(0, "stdio", &report.use_stdio,
+>  		    "Use the stdio interface"),
+>  	OPT_BOOLEAN(0, "header", &report.header, "Show data header."),
+> @@ -1516,8 +1520,10 @@ int cmd_report(int argc, const char **argv)
+>  	else if (report.use_tui)
+>  		use_browser = 1;
+>  #endif
+> +#ifdef HAVE_GTK2_SUPPORT
+>  	else if (report.use_gtk)
+>  		use_browser = 2;
+> +#endif
+>  
+>  	/* Force tty output for header output and per-thread stat. */
+>  	if (report.header || report.header_only || report.show_threads)
+> -- 
+> 2.37.0.rc0.161.g10f37bed90-goog
 
-Sorry for this failure, but I can't reproduce it.
+-- 
 
-I guess maybe your assembler doesn't recognize "lr". Could you give a
-try to replace "lr" with "x30"?
-
- #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
- "      bti j\n" /* dummy_tramp is called via "br x10" */
- #endif
--"      mov x10, lr\n"
--"      mov lr, x9\n"
-+"      mov x10, x30\n"
-+"      mov x30, x9\n"
- "      ret x10\n"
- "      .size dummy_tramp, .-dummy_tramp\n"
- "      .popsection\n
-
-Thanks.
-
-> Cheers
-> Jon
-> 
-
+- Arnaldo

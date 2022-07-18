@@ -2,108 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B1757842D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3654578432
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbiGRNrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        id S235191AbiGRNrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235443AbiGRNqv (ORCPT
+        with ESMTP id S235441AbiGRNrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:46:51 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815BB27FEC
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:46:31 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id e28so19383584lfj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1Ca4WmtOXZ89SSKgkCTyyeuFvpbtZ/WHhtifhXbvcEo=;
-        b=rb1wVT0dKmKGL97pEjcvYwz/fhSAmZNDc0P4/hdcXz+Fufj0XsGMDTNfdqNosxjrb/
-         57AUxgA+P0U6Qi3HPr/LuS+AR4VkKsWCyA3nOiO25zhwMGvWP6UHSZgZ3Kkgy48b1+/a
-         iLXztohSBaWRIPlwjdgq9YjDCDE6RuSc76qJYd2/OZxeK80wgSdqVtbWZvtpnPfku/XF
-         7X6oOZAigrmYDSv/I5NK2Dj56r7N2aytqo2F4ObTzgLgtL1eADFzIkKVIhNiv040iT0A
-         /tB/gsbgZM3btLohUMcR3B+lDMnBgC/VKIacpgbR1w/m3CI3LZr+AYCfbZntDqIXGPqf
-         /NDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1Ca4WmtOXZ89SSKgkCTyyeuFvpbtZ/WHhtifhXbvcEo=;
-        b=RBAmoAPcdf66l/jDi9AD1Pph6uU6N7pP8gQbDKp7gPuDJHsUn/8nQJKbudq+5of1+E
-         5K6fZAykf969EdZG/1XH+gVLKPkbBkUVzYisavfs7iVqquci/RAToZcF9teVMJFTa2KA
-         FuHh05Wc/a48yePT75LKOseIvBKLvhlTWWHNAq+UalGfIPfs4NYoJbGYu+/XeF0nTF5p
-         PaAIjiCJ9uTL1ATvdoyhyAAjFQaxhxiDG+fFeH/3qE1BYBXhQ7AQU8TaiEXPjaz/IDv4
-         yYt7x2DhsjkDi1f2nle6nlM7XGn15F8W2rPOKOYTz+Fv2v3NSXAwkbkcgKR3wXZ0zIE+
-         kAHw==
-X-Gm-Message-State: AJIora/i7xKYfxFvw+QI35wxn3piwCVGTkqCZwWY3KPYXZ0DIL6KYmeV
-        xSF0ZAqfso5VIml/4nXSp2AOIw==
-X-Google-Smtp-Source: AGRyM1uONSabiSDCR4AmrDqvp810Jrfu+iudY40VuKCfH8AAfC6slMQ6f4KBsjQXUXAjBHW7qOTadg==
-X-Received: by 2002:a05:6512:12c9:b0:489:fa6e:d371 with SMTP id p9-20020a05651212c900b00489fa6ed371mr15583105lfg.37.1658151988393;
-        Mon, 18 Jul 2022 06:46:28 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id q9-20020a2e84c9000000b0025d4f025ab9sm2112445ljh.70.2022.07.18.06.46.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:46:27 -0700 (PDT)
-Message-ID: <6b9ff2dd-fa49-0e3e-f832-5af903749aa3@linaro.org>
-Date:   Mon, 18 Jul 2022 15:46:26 +0200
+        Mon, 18 Jul 2022 09:47:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDB1B7BC;
+        Mon, 18 Jul 2022 06:46:55 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BD5E366015A2;
+        Mon, 18 Jul 2022 14:46:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658152014;
+        bh=6W6w/V/cgC7i8dcLnR8Z1tgmXFyjXKpDCXUfV/w0+2c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YdS48N30Hps+3LGmWFkFB4fikJKuoYdrzAvLVEHRxUquGqm4k68AP27mMCJczodZn
+         95tmpuqcvKk2A1IsrYE6RWCLUFY1TinpdHHaVZw+wAIHJVtdXZuyxI9YCLGpn3DRFa
+         88o1fY2ybN9Cdm580ibkNjVmZ/S6f/2kYcoAxQlDqTkdnB1qvZ57O9Mmq9Wcj6r0rq
+         glEgQdfah3YCTHCL5ZSvezg0GGQPI0sLy/J/I7gIyqB/VB5A+//JyKekUZ2z4xyQ8e
+         MLV03qDJ9AYwJhExZBjBmNiTs/6g8nvGZuWTmUaXCOzsZNUP+iyJVw8xVmaRyxkLrA
+         EQq/7RcQsY/Og==
+Message-ID: <acfac038-3ac8-1748-1ffa-cb85771f2f6c@collabora.com>
+Date:   Mon, 18 Jul 2022 15:46:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] dt-bindings: arm: qcom: Document samsung,matissewifi
- device
+Subject: Re: [PATCH] dt-bindings: pinctrl: mt8195: Use drive-strength-microamp
+ in examples
 Content-Language: en-US
-To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220717213432.134486-1-matti.lehtimaki@gmail.com>
- <20220717213432.134486-3-matti.lehtimaki@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220717213432.134486-3-matti.lehtimaki@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sean.wang@mediatek.com,
+        nfraprado@collabora.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220715103029.204500-1-angelogioacchino.delregno@collabora.com>
+ <CACRpkdYagmVAim68q=AOzrQfPw=fk5Q1z+B7X3nRDa-X4XukOw@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CACRpkdYagmVAim68q=AOzrQfPw=fk5Q1z+B7X3nRDa-X4XukOw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/07/2022 23:34, Matti Lehtimäki wrote:
-> Add binding documentation for Samsung Galaxy Tab 4 10.1 (2014) tablet
-> which is based on Snapdragon 400 (apq8026) SoC.
+Il 18/07/22 15:35, Linus Walleij ha scritto:
+> On Fri, Jul 15, 2022 at 12:30 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
 > 
-> Signed-off-by: Matti LehtimÃ¤ki <matti.lehtimaki@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>> The property mediatek,drive-strength-adv was deprecated: change the
+>> example for i2c0-pins to use drive-strength-microamp.
+>>
+>> Fixes: b6d9af2c6b69 ("dt-bindings: pinctrl: mt8195: Add and use drive-strength-microamp")
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 5c06d1bfc046..5a24dfd66823 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -104,6 +104,7 @@ properties:
->            - enum:
->                - asus,sparrow
->                - lg,lenok
-> +              - samsung,matissewifi
+> After finding this in my Inbox, drop my own uglyfix and apply this instead.
+> 
+> Yours,
+> Linus Walleij
 
-samsung,matisse-wifi
-
-
-Best regards,
-Krzysztof
+Thank you!

@@ -2,91 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27446577D8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE4F577D8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbiGRIaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S233381AbiGRIcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiGRIai (ORCPT
+        with ESMTP id S233050AbiGRIcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:30:38 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8889318B3A
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:30:37 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id t21so4957396uaq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:30:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=1s+lxhOMqq4O56VoMuk2kFee42cpuqF01E2Fde/OMmU=;
-        b=LeHRciFnIn1BVUUFvOLDuMBYvXLraHZmnabK8QTCJP8Qr6xSRw8Vyad4Ok0v/3F8zh
-         Co2D0noZ2rAMohJDMZzd3KSWCPmBjpRkdUfT0CRzPQ6ggfO6rNdU9Yv0K5CdfRIkmGGj
-         V+6po2q8v+GDBgqTdPoUr83Pd0cM5TF2WQQmHVfdRJ3e4dh2xMPr/Ah/qC+HzQFvBzsD
-         kuFVVSBF6e8ypKth9C9IO5kot+l783w3ixIc3a4kMxeAvWYXJpdSlwBQmG7ywQz2Ui8D
-         xzGWaeJyBARq/3X5xddDoiAEHFihj8F2GAYzd/vvlR9x/5ML+wmYmfpNEBElA3ehC+br
-         d0wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=1s+lxhOMqq4O56VoMuk2kFee42cpuqF01E2Fde/OMmU=;
-        b=QawJgHgCozV83b8SLnDbLi90s1L7kw5mdhOzbmKg8tYzTn99sn4/vf+Gq5MjmhPrCK
-         X89gM1LOrPzLKPB/8GMttCWjDdo/7gFWA7X8KgeAms831r0Om2U05du5T+RPCW6pZUZw
-         xs20ed9f5ipDscQyPZWEG4gZdGzZjoPNre9lUS3agJNTxNqBvyaul0BWeInSDARSbMNC
-         f3hgT0uzTXZcpKXLQSfykEbOAfGoucO6+rXNbEdpP+MS7XsPOcm3xCzRP+hjuXCRxi2B
-         UheGDR09w6bdM8hZt0OdG/wTaufBancgXZYqIqtXswZfXqVBCzgTpr1LJ2billxq27I5
-         40nQ==
-X-Gm-Message-State: AJIora805SdccWFwRNPlr0upApEqfxLw+sqSqfwbft/zEp1GclLU7y2L
-        W4/d4uluqscb2mx65Yuoq842CSWsptsgCLW9n7I=
-X-Google-Smtp-Source: AGRyM1uniMWeVea2RC7S0lhQkuAmfXLtdJYD/sktVvSvoiorBSjS4+17LjOQTBIES16QbwzNzMimG8RIUo2Q9Xfx6IA=
-X-Received: by 2002:ab0:6d9a:0:b0:383:7010:8a5f with SMTP id
- m26-20020ab06d9a000000b0038370108a5fmr9307698uah.20.1658133036499; Mon, 18
- Jul 2022 01:30:36 -0700 (PDT)
+        Mon, 18 Jul 2022 04:32:07 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028DB19019;
+        Mon, 18 Jul 2022 01:32:05 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26I7VBb2032736;
+        Mon, 18 Jul 2022 10:31:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=+abmPYEQnU9+JlxUCqaWwS+GUJzoT8ValDRBagPFZmg=;
+ b=R/D/pwpF/AZnDo1sRn+dRsDXD+enCHMXRONKwvYORIQ1oqxqox64lC6WNvX7y+J98hTQ
+ l5ls3wb+4NEeeKUgH84faLGRe57U20drXuJdzXVx6ypujUaxepOKquWVIiUKLUqAqLGE
+ rVjL/noW6D8Q8g14EP0wbpF6zkhLnQpKyGIN8XuVtshyn+QmGkcICrDcf11ruBJ9gOfA
+ wwzcyGXGlvntu1GiQSH7mpbLfYY2y8L5OBLagxn4F0bdr7dn/SfDHxWlciuewl6sfbHu
+ CO4xb3o1j5TLV0Dw6W6TIBM/lN++3KxfW4mPVUOmo+Pt+GyPbzMq2zuMUXmqy8Crvrxt vg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hbnp5qw9d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Jul 2022 10:31:59 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E5F8B10002A;
+        Mon, 18 Jul 2022 10:31:57 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E11E52138D7;
+        Mon, 18 Jul 2022 10:31:57 +0200 (CEST)
+Received: from [10.252.21.88] (10.75.127.47) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 18 Jul
+ 2022 10:31:56 +0200
+Message-ID: <9a81c387-2b27-1227-ceb7-0da2d865f42d@foss.st.com>
+Date:   Mon, 18 Jul 2022 10:31:55 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:612c:1682:b0:2d1:82a4:fc30 with HTTP; Mon, 18 Jul 2022
- 01:30:36 -0700 (PDT)
-Reply-To: lmarwane.sacemm@gmail.com
-From:   ENGEL CZ sro <rpkoliv@gmail.com>
-Date:   Mon, 18 Jul 2022 10:30:36 +0200
-Message-ID: <CAOqzm5z0800TgRV=vbwBmncm9nCq0bwsv6=Dgk9RDK3MVnpdTQ@mail.gmail.com>
-Subject: Inquiry
-To:     undisclosed-recipients:;
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/4] rpmsg: core: Add rx done hooks
+Content-Language: en-US
+To:     Chris Lew <quic_clew@quicinc.com>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1654651005-15475-1-git-send-email-quic_clew@quicinc.com>
+ <1654651005-15475-2-git-send-email-quic_clew@quicinc.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <1654651005-15475-2-git-send-email-quic_clew@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-18_04,2022-07-15_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear Seller,
 
-Greetings to you and your esteemed Company.
 
-My name is Mr Marwane Lofti Marketing Director of  ENGEL  CZ  sro. I
-would like to inquire about your products.
-After going through your website, we have to state that we are
-interested to make a purchase from your esteemed company.
+On 6/8/22 03:16, Chris Lew wrote:
+> In order to reduce the amount of copies in the rpmsg framework, it is
+> necessary for clients to take brief ownership of the receive buffer.
+> 
+> Add the capability for clients to notify the rpmsg framework and the
+> underlying transports when it is going to hold onto a buffer and also
+> notify when the client is done with the buffer.
+> 
+> In the .rx_cb of the rpmsg drivers, if they wish to use the received
+> buffer at a later point, they should return RPMSG_DEFER. Otherwise
+> returning RPMSG_HANDLED (0) will signal the framework that the client
+> is done with the resources and can continue with cleanup.
+> 
+> The clients should check if their rpmsg endpoint supports the rx_done
+> operation with the new state variable in the rpmsg_endpoint since not
+> all endpoints will have the ability to support this operation.
+> 
+> Signed-off-by: Chris Lew <quic_clew@quicinc.com>
+> ---
+>  drivers/rpmsg/rpmsg_core.c     | 20 ++++++++++++++++++++
+>  drivers/rpmsg/rpmsg_internal.h |  1 +
+>  include/linux/rpmsg.h          | 24 ++++++++++++++++++++++++
+>  3 files changed, 45 insertions(+)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index 290c1f02da10..359be643060f 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -351,6 +351,26 @@ ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
+>  }
+>  EXPORT_SYMBOL(rpmsg_get_mtu);
+>  
+> +/**
+> + * rpmsg_rx_done() - release resources related to @data from a @rx_cb
+> + * @ept:	the rpmsg endpoint
+> + * @data:	payload from a message
+> + *
+> + * Returns 0 on success and an appropriate error value on failure.
+> + */
+> +int rpmsg_rx_done(struct rpmsg_endpoint *ept, void *data)
+> +{
+> +	if (WARN_ON(!ept))
+> +		return -EINVAL;
+> +	if (!ept->ops->rx_done)
+> +		return -ENXIO;
+> +	if (!ept->rx_done)
+> +		return -EINVAL;
+> +
+> +	return ept->ops->rx_done(ept, data);
+> +}
+> +EXPORT_SYMBOL(rpmsg_rx_done);
+> +
+>  /*
+>   * match a rpmsg channel with a channel info struct.
+>   * this is used to make sure we're not creating rpmsg devices for channels
+> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+> index a22cd4abe7d1..99cb86ce638e 100644
+> --- a/drivers/rpmsg/rpmsg_internal.h
+> +++ b/drivers/rpmsg/rpmsg_internal.h
+> @@ -76,6 +76,7 @@ struct rpmsg_endpoint_ops {
+>  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
+>  			     poll_table *wait);
+>  	ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
+> +	int (*rx_done)(struct rpmsg_endpoint *ept, void *data);
+>  };
+>  
+>  struct device *rpmsg_find_device(struct device *parent,
+> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
+> index 523c98b96cb4..8e34222e8bca 100644
+> --- a/include/linux/rpmsg.h
+> +++ b/include/linux/rpmsg.h
+> @@ -63,6 +63,18 @@ struct rpmsg_device {
+>  	const struct rpmsg_device_ops *ops;
+>  };
+>  
+> +/**
+> + * rpmsg rx callback return definitions
+> + * @RPMSG_HANDLED: rpmsg user is done processing data, framework can free the
+> + *                 resources related to the buffer
+> + * @RPMSG_DEFER:   rpmsg user is not done processing data, framework will hold
+> + *                 onto resources related to the buffer until rpmsg_rx_done is
+> + *                 called. User should check their endpoint to see if rx_done
+> + *                 is a supported operation.
+> + */
+> +#define RPMSG_HANDLED	0
+> +#define RPMSG_DEFER	1
 
-* Is your Company manufacturer and supplier?
-* Have you exported to the Czech Market ?. If this is correct, could
-you please inform us how many days it takes to deliver the goods to us
-in Czech Republic?
-* Do you have Company Profile and Product Catalog? Please send us for
-our review to enable us proceed
+DEFER or HOLD?
+In both case, would be nice to update the up-streamed RPMSG service
+devices to reflect this update, even if the compatibility is preserved.
 
-I await to receive answers from you by return mail soon
+> +
+>  typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
+>  
+>  /**
+> @@ -71,6 +83,7 @@ typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
+>   * @refcount: when this drops to zero, the ept is deallocated
+>   * @cb: rx callback handler
+>   * @cb_lock: must be taken before accessing/changing @cb
+> + * @rx_done: if set, rpmsg endpoint supports rpmsg_rx_done
 
-Thank You,
-Mr Marwane Lofti
-ENGEL  CZ  sro
-Baarova 305/18
-150 00 Prague 4
-Czech Republic
+Same: done or hold?
+
+Perhaps a bitmap here would be better for future.
+I guess that similar feature could be requested for TX...
+
+Regards,
+Arnaud
+
+
+>   * @addr: local rpmsg address
+>   * @priv: private data for the driver's use
+>   *
+> @@ -93,6 +106,7 @@ struct rpmsg_endpoint {
+>  	struct kref refcount;
+>  	rpmsg_rx_cb_t cb;
+>  	struct mutex cb_lock;
+> +	bool rx_done;
+>  	u32 addr;
+>  	void *priv;
+>  
+> @@ -192,6 +206,8 @@ __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
+>  
+>  ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
+>  
+> +int rpmsg_rx_done(struct rpmsg_endpoint *ept, void *data);
+> +
+>  #else
+>  
+>  static inline int rpmsg_register_device_override(struct rpmsg_device *rpdev,
+> @@ -316,6 +332,14 @@ static inline ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
+>  	return -ENXIO;
+>  }
+>  
+> +static inline int rpmsg_rx_done(struct rpmsg_endpoint *ept, void *data)
+> +{
+> +	/* This shouldn't be possible */
+> +	WARN_ON(1);
+> +
+> +	return -ENXIO;
+> +}
+> +
+>  #endif /* IS_ENABLED(CONFIG_RPMSG) */
+>  
+>  /* use a macro to avoid include chaining to get THIS_MODULE */

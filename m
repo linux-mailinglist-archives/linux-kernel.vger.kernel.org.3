@@ -2,145 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74823578D6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A6C578D64
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234186AbiGRWRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
+        id S233963AbiGRWNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbiGRWRB (ORCPT
+        with ESMTP id S233294AbiGRWNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:17:01 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7D531659A;
-        Mon, 18 Jul 2022 15:17:00 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 26IM8fqS005455;
-        Mon, 18 Jul 2022 17:08:41 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 26IM8dBn005451;
-        Mon, 18 Jul 2022 17:08:39 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 18 Jul 2022 17:08:39 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-hardening@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: Re: mainline build failure of powerpc allmodconfig for prom_init_check
-Message-ID: <20220718220839.GF25951@gate.crashing.org>
-References: <Ys/aDKZNhhsENH9S@debian> <CADVatmO9XzFnX+N0TuOtr0FYyxKr1oe5RAhCEJjmnvjteT5QNw@mail.gmail.com> <87cze3docs.fsf@mpe.ellerman.id.au> <CAHk-=wgJCTaY5FeNpcw6U-c1Z6c-A2WWQfCVa=1WW3Hdf9_eww@mail.gmail.com>
-Mime-Version: 1.0
+        Mon, 18 Jul 2022 18:13:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEB7313AD;
+        Mon, 18 Jul 2022 15:13:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A44E86152C;
+        Mon, 18 Jul 2022 22:13:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF3AC341C0;
+        Mon, 18 Jul 2022 22:13:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658182415;
+        bh=6sNH6sal5TicDehq4BhVSgQxonrBdrjzj1qkQO3IpZc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jep36cTrn9SQVYkmm3O3YLkoKbgaTEQTGa57ZmONF0Bn98aLslFIPI+aeMMDnTFWD
+         QViGm3mbzPGm09ShDjupZINzYt9Vsurt1GHosk/tD5N9X8kwevHYf9+gPf4C6aVMze
+         iOwQYXF2yrxcMUdbj1PUUIEUjoih8j7FXXaEKhQGSRZWJeLS8bUHTOtYoXCw2480U8
+         VsefHX40HcAtybwFIwScOKBqvzI4ZQ+29sNii2cFxjQ+yivnOmDotFWs+SPPo862kG
+         t5CeD5mjEJD6SzRwp4rFxxpWrbXyFv+mLhaAHpi7FwhaNX5D8zC0FcfiAeA8WZ0+ez
+         oKDpiVX3ROzNA==
+Date:   Mon, 18 Jul 2022 15:13:35 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     "ruansy.fnst@fujitsu.com" <ruansy.fnst@fujitsu.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>
+Subject: Re: [RFC PATCH v6] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Message-ID: <YtXbD4e8mLHqWSwL@magnolia>
+References: <20220410171623.3788004-1-ruansy.fnst@fujitsu.com>
+ <20220714103421.1988696-1-ruansy.fnst@fujitsu.com>
+ <62d05eb8e663c_1643dc294fa@dwillia2-xfh.jf.intel.com.notmuch>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgJCTaY5FeNpcw6U-c1Z6c-A2WWQfCVa=1WW3Hdf9_eww@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <62d05eb8e663c_1643dc294fa@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:06:52PM -0700, Linus Torvalds wrote:
-> On Sun, Jul 17, 2022 at 9:41 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
-> > >         li 4,254                 #,
-> >
-> > Here we load 254 into r4, which is the 2nd parameter to memset (c).
+On Thu, Jul 14, 2022 at 11:21:44AM -0700, Dan Williams wrote:
+> ruansy.fnst@fujitsu.com wrote:
+> > This patch is inspired by Dan's "mm, dax, pmem: Introduce
+> > dev_pagemap_failure()"[1].  With the help of dax_holder and
+> > ->notify_failure() mechanism, the pmem driver is able to ask filesystem
+> > (or mapped device) on it to unmap all files in use and notify processes
+> > who are using those files.
+> > 
+> > Call trace:
+> > trigger unbind
+> >  -> unbind_store()
+> >   -> ... (skip)
+> >    -> devres_release_all()   # was pmem driver ->remove() in v1
+> >     -> kill_dax()
+> >      -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_PRE_REMOVE)
+> >       -> xfs_dax_notify_failure()
+> > 
+> > Introduce MF_MEM_PRE_REMOVE to let filesystem know this is a remove
+> > event.  So do not shutdown filesystem directly if something not
+> > supported, or if failure range includes metadata area.  Make sure all
+> > files and processes are handled correctly.
+> > 
+> > ==
+> > Changes since v5:
+> >   1. Renamed MF_MEM_REMOVE to MF_MEM_PRE_REMOVE
+> >   2. hold s_umount before sync_filesystem()
+> >   3. move sync_filesystem() after SB_BORN check
+> >   4. Rebased on next-20220714
+> > 
+> > Changes since v4:
+> >   1. sync_filesystem() at the beginning when MF_MEM_REMOVE
+> >   2. Rebased on next-20220706
+> > 
+> > [1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
+> > 
+> > Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> > ---
+> >  drivers/dax/super.c         |  3 ++-
+> >  fs/xfs/xfs_notify_failure.c | 15 +++++++++++++++
+> >  include/linux/mm.h          |  1 +
+> >  3 files changed, 18 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> > index 9b5e2a5eb0ae..cf9a64563fbe 100644
+> > --- a/drivers/dax/super.c
+> > +++ b/drivers/dax/super.c
+> > @@ -323,7 +323,8 @@ void kill_dax(struct dax_device *dax_dev)
+> >  		return;
+> >  
+> >  	if (dax_dev->holder_data != NULL)
+> > -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
+> > +		dax_holder_notify_failure(dax_dev, 0, U64_MAX,
+> > +				MF_MEM_PRE_REMOVE);
+> >  
+> >  	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+> >  	synchronize_srcu(&dax_srcu);
+> > diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+> > index 69d9c83ea4b2..6da6747435eb 100644
+> > --- a/fs/xfs/xfs_notify_failure.c
+> > +++ b/fs/xfs/xfs_notify_failure.c
+> > @@ -76,6 +76,9 @@ xfs_dax_failure_fn(
+> >  
+> >  	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+> >  	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
+> > +		/* Do not shutdown so early when device is to be removed */
+> > +		if (notify->mf_flags & MF_MEM_PRE_REMOVE)
+> > +			return 0;
+> >  		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+> >  		return -EFSCORRUPTED;
+> >  	}
+> > @@ -174,12 +177,22 @@ xfs_dax_notify_failure(
+> >  	struct xfs_mount	*mp = dax_holder(dax_dev);
+> >  	u64			ddev_start;
+> >  	u64			ddev_end;
+> > +	int			error;
+> >  
+> >  	if (!(mp->m_sb.sb_flags & SB_BORN)) {
+> >  		xfs_warn(mp, "filesystem is not ready for notify_failure()!");
+> >  		return -EIO;
+> >  	}
+> >  
+> > +	if (mf_flags & MF_MEM_PRE_REMOVE) {
+> > +		xfs_info(mp, "device is about to be removed!");
+> > +		down_write(&mp->m_super->s_umount);
+> > +		error = sync_filesystem(mp->m_super);
+> > +		up_write(&mp->m_super->s_umount);
 > 
-> I love how even powerpc people know that "4" is bogus, and have to
-> make it clear that it means "r4".
+> Are all mappings invalidated after this point?
 
-This is compiler output.  Compiler output is mainly meant for the
-assembler to produce object code from.  It isn't meant to be readable
-(and e.g. -fverbose-asm didn't help much here, that's the "#," ;-) ).
+No; all this step does is pushes dirty filesystem [meta]data to pmem
+before we lose DAXDEV_ALIVE...
 
-The mnemonic determines what the operands mean.  It is much easier to
-read and write "li 4,254" than "li r4,254" or "li %r4,254", all of which
-are valid.  You can also write "li 3+1,2*127", but not with the other
-forms (this is useful if you use assembler macros, which are way more
-powerful and appropriate than abusing the C preprocessor, when writing
-assembler code).
+> The goal of the removal notification is to invalidate all DAX mappings
+> that are no pointing to pfns that do not exist anymore, so just syncing
+> does not seem like enough, and the shutdown is skipped above. What am I
+> missing?
 
-It matters more if you have three or four or five or six operands to an
-assembler instruction, all the extra line noise makes things illegible.
+...however, the shutdown above only applies to filesystem metadata.  In
+effect, we avoid the fs shutdown in MF_MEM_PRE_REMOVE mode, which
+enables the mf_dax_kill_procs calls to proceed against mapped file data.
+I have a nagging suspicion that in non-PREREMOVE mode, we can end up
+shutting down the filesytem on an xattr block and the 'return
+-EFSCORRUPTED' actually prevents us from reaching all the remaining file
+data mappings.
 
-The "%r4" variant hails from winnt.  It is a bit problematic in inline
-assembler, because you need to escape the % in extended inline asm, but
-not in basic inline asm.  It also is pure line noise to read.
+IOWs, I think that clause above really ought to have returned zero so
+that we keep the filesystem up while we're tearing down mappings, and
+only call xfs_force_shutdown() after we've had a chance to let
+xfs_dax_notify_ddev_failure() tear down all the mappings.
 
-The "r4" variant is problematic if you have symbols named the same.
-When you use the -mregnames assembler option it is taken to mean the
-register; you can write "(r6)" to mean the symbol.  (There also are "sp"
-and "rtos" and "xer" and whatnot, not just "r4").
+I missed that subtlety in the initial ~30 rounds of review, but I figure
+at this point let's just land it in 5.20 and clean up that quirk for
+-rc1.
 
-> I don't understand why the powerpc assembler is so messed up, and uses
-> random integer constants for register "names".
+> Notice that kill_dev_dax() does unmap_mapping_range() after invalidating
+> the dax device and that ensures that all existing mappings are gone and
+> cannot be re-established. As far as I can see a process with an existing
+> dax mapping will still be able to use it after this runs, no?
 
-360 was the same.  370 was the same.  390 is the same.  801 was the
-same.  RIOS (aka POWER) was the same.  So yes, PowerPC inherited it, I
-don't know how much thought was put into this, don't change a winning
-team etc.
+I'm not sure where in akpm's tree I find kill_dev_dax()?  I'm cribbing
+off of:
 
-> And it gets even worse, when you start mixing FP, vector and integer "names".
+https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/tree/fs/xfs/xfs_notify_failure.c?h=mm-stable
 
-It is clear from the mnemonic what the operands are: some register, an
-immediate, a constant, etc.  An expression (which can include object
-symbols) can be any of those.
-
-Assembler language is unforgiving.  It isn't easy to write, and most
-mistakes will not be diagnosed.  If the assmbler language makes it
-easier to read the code, that makes it more likely correct code will be
-written, and that correct code will be written in less time.
-
-> I've seen many bad assemblers (in fact, I have *written* a couple of
-> bad assemblers myself), but I have never seen anything quite that
-> broken on any other architecture.
-> 
-> Oddities, yes ("$" as a prefix for register? Alpha asm is also very
-> odd), but nothing *quite* as broken as "simple constants have entirely
-> different meanings depending on the exact instruction and argument
-> position".
-
-What is broken about that?  It makes everything very consistent, and
-very readable.  Sigils are just nasty, and having the register names the
-same as valid symbol names is also problematic.
-
-> It's not even an IBM thing. S390 uses perfectly sane register syntax,
-> and calls things '%r4" etc.
-
-s390 has the same syntax, and even inherited the GAS code for this from
-the ppc port.
-
-> The human-written asm files have those #define's in headers just to
-> make things slightly more legible, because apparently the assembler
-> doesn't even *accept* the sane names.
-
-That was true a long time ago.  And the "#define r0 0" thing caused
-quite a few bugs itself btw.
-
-> So it's not even a "the compiler
-> generates this abbreviated illegible mess". It's literally that the
-> assembler is so horrid.
-
-The disassembler has shown "r4" etc. by default since ages.  The
-assembler needs -mregnames to accept it; enabling this by default would
-be a compatibility break, not acceptable.
-
-> Why do people put up with that?
-
-Why are people misinformed?
-
-Is there anything in particular in the documentation we could improve?
-
-
-Hope this helps,
-
-
-Segher
+--D

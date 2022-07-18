@@ -2,56 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53659577AAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 07:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D752577AB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiGRFzT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 18 Jul 2022 01:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
+        id S233311AbiGRGB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 02:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233425AbiGRFzO (ORCPT
+        with ESMTP id S231769AbiGRGBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 01:55:14 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA7C13F3A
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 22:55:12 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26HEMWZp013484
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 22:55:12 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hbu1keqcu-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 22:55:12 -0700
-Received: from twshared30313.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Sun, 17 Jul 2022 22:55:08 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 9F793A4C0216; Sun, 17 Jul 2022 22:54:59 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <live-patching@vger.kernel.org>
-CC:     <daniel@iogearbox.net>, <kernel-team@fb.com>, <jolsa@kernel.org>,
-        <rostedt@goodmis.org>, Song Liu <song@kernel.org>
-Subject: [PATCH v4 bpf-next 4/4] bpf: support bpf_trampoline on functions with IPMODIFY (e.g. livepatch)
-Date:   Sun, 17 Jul 2022 22:54:49 -0700
-Message-ID: <20220718055449.3960512-5-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220718055449.3960512-1-song@kernel.org>
-References: <20220718055449.3960512-1-song@kernel.org>
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: FUwyyzAYusNzavyo-hQk2EuqfAHot7qd
-X-Proofpoint-GUID: FUwyyzAYusNzavyo-hQk2EuqfAHot7qd
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 18 Jul 2022 02:01:54 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267E3E1C
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:01:53 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id c17so4541812ilq.5
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Uy4t9VHJprxNdkz4bMrqpaBkv/xus7n+mLoCJxi+/b4=;
+        b=6TVZ4oq7IweFGwxmtLpttlytXC88nkfdZR2EL1LAJzokXydfR2R9aiSK44C0+kgjg+
+         HZMrsRrvZuUrYOGts0vaxvwmAgUZz2W5BisxbzL+xL8FKPDec0jazXuKvqhTdxzGet5T
+         9KSvuTrCaYVW4EQBherIEFziNLTB/7ZqX+Y6ChBIEatYpsJia4xHwUmsS0VoBGT++AR2
+         pj9O6NWtnj41y/p+5uJFwtPJWwuKpaCuzvpchkyUxlbVncINkK4u7Ln4wAVuGkPmYhJh
+         iJ1zvqdzqjozicUbyjzcJBNTkFgeJBLGFxdvRuGrcadQ+mdgtH6Xk4wt2ngnUaVZVfoA
+         nEiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Uy4t9VHJprxNdkz4bMrqpaBkv/xus7n+mLoCJxi+/b4=;
+        b=d9QoyESZr8DFVlZs6nV3JbS4UyPTa1rVYWwRuPuJ8t3Y/k2K4NZSpIYAT8NswLTKxg
+         nNC2s2lIHcbHWpjBPLAgwiGnL5BdQc8f5plH8Goe29ZfeVaNVWgDpUQXMy3scMp39qgo
+         XAp4l0zXlhdAKs0QZ1fwlA6WUzJoWqmubxtOxBpNwFQSl+8Bt/S3v85d4xx45+SjPU/1
+         uj3BtvNe9wLt8uXHQv3OmOA+GDmCyPyb+Y+khtoea2EeqQ3026qmEoK/GyV4lgkQoMs2
+         kBsa7Hl/kh/hb9MR0juIM+Dss0KvxZVKv0aszX8hZ4L1IQDPrU6/RntrY6VLB0t7U3FW
+         FyoQ==
+X-Gm-Message-State: AJIora9lfTUJ61BjLuHsI+diX3F77nOZR6N6aK+N6gvtBFuAVUKM1Am/
+        YdUZMZagLLGFpnpzEUU5XpSoH/Hp18Cu+tQ/NI3biA==
+X-Google-Smtp-Source: AGRyM1uz6vbCJ/zKCdpYqHejeNHJrLzvH54fk69pjtEiuzzClUVZihWo5q332MhtjgQITTI9e0Rwi2su5C9CnT2wwhg=
+X-Received: by 2002:a92:ca4c:0:b0:2dc:864f:8a53 with SMTP id
+ q12-20020a92ca4c000000b002dc864f8a53mr12911352ilo.299.1658124112478; Sun, 17
+ Jul 2022 23:01:52 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_04,2022-07-15_01,2022-06-22_01
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
+References: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com> <CAJfpegtSsG_qUT8LsO=ro76RTwBBfa=1JVwwX+mVxd-svir+3g@mail.gmail.com>
+In-Reply-To: <CAJfpegtSsG_qUT8LsO=ro76RTwBBfa=1JVwwX+mVxd-svir+3g@mail.gmail.com>
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Date:   Mon, 18 Jul 2022 14:01:41 +0800
+Message-ID: <CAFQAk7jTJi_OcX=4nevbOquphcibtD=jG-jwwbC0KMJOfx9DeQ@mail.gmail.com>
+Subject: [PATCH] fuse: writeback_cache consistency enhancement (writeback_cache_v2)
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xie Yongji <xieyongji@bytedance.com>, fam.zheng@bytedance.com,
+        Miklos Szeredi <mszeredi@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,331 +66,267 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When tracing a function with IPMODIFY ftrace_ops (livepatch), the bpf
-trampoline must follow the instruction pointer saved on stack. This needs
-extra handling for bpf trampolines with BPF_TRAMP_F_CALL_ORIG flag.
+On Fri, Jul 15, 2022 at 6:07 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+>
+> On Fri, 24 Jun 2022 at 07:58, Jiachen Zhang
+> <zhangjiachen.jaycee@bytedance.com> wrote:
+> >
+> > Some users may want both the high performance of the writeback_cahe mode and
+> > a little bit more consistency among FUSE mounts. In the current writeback
+> > mode implementation, users of one FUSE mount can never see the file
+> > expansion done by other FUSE mounts.
+> >
+> > Based on the suggested writeback V2 patch in the upstream mailing-list [1],
+> > this commit allows the cmtime and size to be updated from server in
+> > writeback mode. Compared with the writeback V2 patch in [1], this commit has
+> > several differences:
+> >
+> >     1. Ensure c/mtime are not updated from kernel to server. IOW, the cmtime
+> >     generated by kernel are just temporary values that are never flushed to
+> >     server, and they can also be updated by the official server cmtime when
+> >     the writeback cache is clean.
+>
+> Interesting.  The issue there is that ctime/mtime would change
+> spontaneously when data is flushed to server.  Maybe that's a lesser
+> of the evils, I don't know...
+>
 
-Implement bpf_tramp_ftrace_ops_func and use it for the ftrace_ops used
-by BPF trampoline. This enables tracing functions with livepatch.
+Hi Miklos,
 
-This also requires moving bpf trampoline to *_ftrace_direct_mult APIs.
+Yes, just like what Vivek said in this mail thread before. But the
+server may reply on the cmtime to do cache revalidation, so I think
+we'd better use a single time source.
 
-Link: https://lore.kernel.org/all/20220602193706.2607681-2-song@kernel.org/
-Signed-off-by: Song Liu <song@kernel.org>
----
- include/linux/bpf.h     |   8 ++
- kernel/bpf/trampoline.c | 158 +++++++++++++++++++++++++++++++++++-----
- 2 files changed, 149 insertions(+), 17 deletions(-)
+> >
+> >     2. Skip mtime-based revalidation when fc->auto_inval_data is set with
+> >     fc->writeback_cache_v2. Because the kernel-generated temporary cmtime
+> >     are likely not equal to the offical server cmtime.
+>
+> Right, I think auto_inval_data has always been broken with writeback_cache.
+> >
+> >     3. If any page is ever flushed to the server during FUSE_GETATTR
+> >     handling on fuse server, even if the cache is clean when
+> >     fuse_change_attributes() checks, we should not update the i_size. This
+> >     is because the FUSE_GETATTR may get a staled size before the FUSE_WRITE
+> >     request changes server inode size. This commit ensures this by
+> >     increasing attr_version after writeback for writeback_cache_v2. In that
+> >     case, we should also ensure the ordering of the attr_version updating
+> >     and the fi->writepages RB-tree updating. So that if a fuse page
+> >     writeback ever happens during fuse_change_attributes(), either the
+> >     fi->writepages is not empty, or the attr_version is increased. So we
+> >     never mistakenly update a stale file size from server to kernel.
+> >
+> > With this patch, writeback mode can consider the server c/mtime as the
+> > official one. When inode attr is timeout or invalidated, kernel has chance
+> > to see size and c/mtime modified by others.
+> >
+> > Together with another patch [2], a FUSE daemon is able to implement
+> > close-to-open (CTO) consistency like what is done in NFS clients.
+> >
+> > [1] https://lore.kernel.org/linux-fsdevel/Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com
+> > [2] https://lore.kernel.org/linux-fsdevel/20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com/
+> >
+> > Suggested-by: Miklos Szeredi <mszeredi@redhat.com>
+> > Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+> > ---
+> >  fs/fuse/file.c            | 17 +++++++++++++++
+> >  fs/fuse/fuse_i.h          |  3 +++
+> >  fs/fuse/inode.c           | 44 +++++++++++++++++++++++++++++++++++++--
+> >  include/uapi/linux/fuse.h |  5 +++++
+> >  4 files changed, 67 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> > index 9b64e2ff1c96..35bdc7af8468 100644
+> > --- a/fs/fuse/file.c
+> > +++ b/fs/fuse/file.c
+> > @@ -1829,6 +1829,15 @@ static void fuse_writepage_end(struct fuse_mount *fm, struct fuse_args *args,
+> >                  */
+> >                 fuse_send_writepage(fm, next, inarg->offset + inarg->size);
+> >         }
+> > +
+> > +       if (fc->writeback_cache_v2)
+> > +               fi->attr_version = atomic64_inc_return(&fc->attr_version);
+> > +       /*
+> > +        * Ensure attr_version increases before the page is move out of the
+> > +        * writepages rb-tree.
+> > +        */
+> > +       smp_mb();
+> > +
+> >         fi->writectr--;
+> >         fuse_writepage_finish(fm, wpa);
+> >         spin_unlock(&fi->lock);
+> > @@ -1858,10 +1867,18 @@ static struct fuse_file *fuse_write_file_get(struct fuse_inode *fi)
+> >
+> >  int fuse_write_inode(struct inode *inode, struct writeback_control *wbc)
+> >  {
+> > +       struct fuse_conn *fc = get_fuse_conn(inode);
+> >         struct fuse_inode *fi = get_fuse_inode(inode);
+> >         struct fuse_file *ff;
+> >         int err;
+> >
+> > +       /*
+> > +        * Kernel c/mtime should not be updated to the server in the
+> > +        * writeback_cache_v2 mode as server c/mtime are official.
+> > +        */
+> > +       if (fc->writeback_cache_v2)
+> > +               return 0;
+> > +
+> >         /*
+> >          * Inode is always written before the last reference is dropped and
+> >          * hence this should not be reached from reclaim.
+> > diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> > index 488b460e046f..47de36146fb8 100644
+> > --- a/fs/fuse/fuse_i.h
+> > +++ b/fs/fuse/fuse_i.h
+> > @@ -654,6 +654,9 @@ struct fuse_conn {
+> >         /* show legacy mount options */
+> >         unsigned int legacy_opts_show:1;
+> >
+> > +       /* Improved writeback cache policy */
+> > +       unsigned writeback_cache_v2:1;
+> > +
+> >         /*
+> >          * fs kills suid/sgid/cap on write/chown/trunc. suid is killed on
+> >          * write/trunc only if caller did not have CAP_FSETID.  sgid is killed
+> > diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+> > index 8c0665c5dff8..2d5fa82b08b6 100644
+> > --- a/fs/fuse/inode.c
+> > +++ b/fs/fuse/inode.c
+> > @@ -237,14 +237,41 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
+> >         u32 cache_mask;
+> >         loff_t oldsize;
+> >         struct timespec64 old_mtime;
+> > +       bool try_wb_update = false;
+> > +
+> > +       if (fc->writeback_cache_v2 && S_ISREG(inode->i_mode)) {
+> > +               inode_lock(inode);
+>
+> I don't think this can work.   fuse_change_attributes() might be
+> called from within inlode locked context.  E.g.
+>
+> lookup_slow -> __lookup_slow -> d_revalidate -> fuse_dentry_revalidate
+> -> fuse_change_attributes
+>
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7496842a4671..f35c59e0b742 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -47,6 +47,7 @@ struct kobject;
- struct mem_cgroup;
- struct module;
- struct bpf_func_state;
-+struct ftrace_ops;
- 
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
-@@ -756,6 +757,11 @@ struct btf_func_model {
-  */
- #define BPF_TRAMP_F_ORIG_STACK		BIT(5)
- 
-+/* This trampoline is on a function with another ftrace_ops with IPMODIFY,
-+ * e.g., a live patch. This flag is set and cleared by ftrace call backs,
-+ */
-+#define BPF_TRAMP_F_SHARE_IPMODIFY	BIT(6)
-+
- /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-  * bytes on x86.
-  */
-@@ -838,9 +844,11 @@ struct bpf_tramp_image {
- struct bpf_trampoline {
- 	/* hlist for trampoline_table */
- 	struct hlist_node hlist;
-+	struct ftrace_ops *fops;
- 	/* serializes access to fields of this trampoline */
- 	struct mutex mutex;
- 	refcount_t refcnt;
-+	u32 flags;
- 	u64 key;
- 	struct {
- 		struct btf_func_model model;
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index fd69812412ca..fa901aef7930 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -13,6 +13,7 @@
- #include <linux/static_call.h>
- #include <linux/bpf_verifier.h>
- #include <linux/bpf_lsm.h>
-+#include <linux/delay.h>
- 
- /* dummy _ops. The verifier will operate on target program's ops. */
- const struct bpf_verifier_ops bpf_extension_verifier_ops = {
-@@ -29,6 +30,81 @@ static struct hlist_head trampoline_table[TRAMPOLINE_TABLE_SIZE];
- /* serializes access to trampoline_table */
- static DEFINE_MUTEX(trampoline_mutex);
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex);
-+
-+static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
-+{
-+	struct bpf_trampoline *tr = ops->private;
-+	int ret = 0;
-+
-+	if (cmd == FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_SELF) {
-+		/* This is called inside register_ftrace_direct_multi(), so
-+		 * tr->mutex is already locked.
-+		 */
-+		WARN_ON_ONCE(!mutex_is_locked(&tr->mutex));
-+
-+		/* Instead of updating the trampoline here, we propagate
-+		 * -EAGAIN to register_ftrace_direct_multi(). Then we can
-+		 * retry register_ftrace_direct_multi() after updating the
-+		 * trampoline.
-+		 */
-+		if ((tr->flags & BPF_TRAMP_F_CALL_ORIG) &&
-+		    !(tr->flags & BPF_TRAMP_F_ORIG_STACK)) {
-+			if (WARN_ON_ONCE(tr->flags & BPF_TRAMP_F_SHARE_IPMODIFY))
-+				return -EBUSY;
-+
-+			tr->flags |= BPF_TRAMP_F_SHARE_IPMODIFY;
-+			return -EAGAIN;
-+		}
-+
-+		return 0;
-+	}
-+
-+	/* The normal locking order is
-+	 *    tr->mutex => direct_mutex (ftrace.c) => ftrace_lock (ftrace.c)
-+	 *
-+	 * The following two commands are called from
-+	 *
-+	 *   prepare_direct_functions_for_ipmodify
-+	 *   cleanup_direct_functions_after_ipmodify
-+	 *
-+	 * In both cases, direct_mutex is already locked. Use
-+	 * mutex_trylock(&tr->mutex) to avoid deadlock in race condition
-+	 * (something else is making changes to this same trampoline).
-+	 */
-+	if (!mutex_trylock(&tr->mutex)) {
-+		/* sleep 1 ms to make sure whatever holding tr->mutex makes
-+		 * some progress.
-+		 */
-+		msleep(1);
-+		return -EAGAIN;
-+	}
-+
-+	switch (cmd) {
-+	case FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_PEER:
-+		tr->flags |= BPF_TRAMP_F_SHARE_IPMODIFY;
-+
-+		if ((tr->flags & BPF_TRAMP_F_CALL_ORIG) &&
-+		    !(tr->flags & BPF_TRAMP_F_ORIG_STACK))
-+			ret = bpf_trampoline_update(tr, false /* lock_direct_mutex */);
-+		break;
-+	case FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY_PEER:
-+		tr->flags &= ~BPF_TRAMP_F_SHARE_IPMODIFY;
-+
-+		if (tr->flags & BPF_TRAMP_F_ORIG_STACK)
-+			ret = bpf_trampoline_update(tr, false /* lock_direct_mutex */);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	};
-+
-+	mutex_unlock(&tr->mutex);
-+	return ret;
-+}
-+#endif
-+
- bool bpf_prog_has_trampoline(const struct bpf_prog *prog)
- {
- 	enum bpf_attach_type eatype = prog->expected_attach_type;
-@@ -89,6 +165,16 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
- 	tr = kzalloc(sizeof(*tr), GFP_KERNEL);
- 	if (!tr)
- 		goto out;
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+	tr->fops = kzalloc(sizeof(struct ftrace_ops), GFP_KERNEL);
-+	if (!tr->fops) {
-+		kfree(tr);
-+		tr = NULL;
-+		goto out;
-+	}
-+	tr->fops->private = tr;
-+	tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
-+#endif
- 
- 	tr->key = key;
- 	INIT_HLIST_NODE(&tr->hlist);
-@@ -128,7 +214,7 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
- 	int ret;
- 
- 	if (tr->func.ftrace_managed)
--		ret = unregister_ftrace_direct((long)ip, (long)old_addr);
-+		ret = unregister_ftrace_direct_multi(tr->fops, (long)old_addr);
- 	else
- 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, NULL);
- 
-@@ -137,15 +223,20 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
- 	return ret;
- }
- 
--static int modify_fentry(struct bpf_trampoline *tr, void *old_addr, void *new_addr)
-+static int modify_fentry(struct bpf_trampoline *tr, void *old_addr, void *new_addr,
-+			 bool lock_direct_mutex)
- {
- 	void *ip = tr->func.addr;
- 	int ret;
- 
--	if (tr->func.ftrace_managed)
--		ret = modify_ftrace_direct((long)ip, (long)old_addr, (long)new_addr);
--	else
-+	if (tr->func.ftrace_managed) {
-+		if (lock_direct_mutex)
-+			ret = modify_ftrace_direct_multi(tr->fops, (long)new_addr);
-+		else
-+			ret = modify_ftrace_direct_multi_nolock(tr->fops, (long)new_addr);
-+	} else {
- 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, new_addr);
-+	}
- 	return ret;
- }
- 
-@@ -163,10 +254,12 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
- 	if (bpf_trampoline_module_get(tr))
- 		return -ENOENT;
- 
--	if (tr->func.ftrace_managed)
--		ret = register_ftrace_direct((long)ip, (long)new_addr);
--	else
-+	if (tr->func.ftrace_managed) {
-+		ftrace_set_filter_ip(tr->fops, (unsigned long)ip, 0, 0);
-+		ret = register_ftrace_direct_multi(tr->fops, (long)new_addr);
-+	} else {
- 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr);
-+	}
- 
- 	if (ret)
- 		bpf_trampoline_module_put(tr);
-@@ -332,11 +425,11 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, u32 idx)
- 	return ERR_PTR(err);
- }
- 
--static int bpf_trampoline_update(struct bpf_trampoline *tr)
-+static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex)
- {
- 	struct bpf_tramp_image *im;
- 	struct bpf_tramp_links *tlinks;
--	u32 flags = BPF_TRAMP_F_RESTORE_REGS;
-+	u32 orig_flags = tr->flags;
- 	bool ip_arg = false;
- 	int err, total;
- 
-@@ -358,18 +451,31 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
- 		goto out;
- 	}
- 
-+	/* clear all bits except SHARE_IPMODIFY */
-+	tr->flags &= BPF_TRAMP_F_SHARE_IPMODIFY;
-+
- 	if (tlinks[BPF_TRAMP_FEXIT].nr_links ||
--	    tlinks[BPF_TRAMP_MODIFY_RETURN].nr_links)
-+	    tlinks[BPF_TRAMP_MODIFY_RETURN].nr_links) {
- 		/* NOTE: BPF_TRAMP_F_RESTORE_REGS and BPF_TRAMP_F_SKIP_FRAME
- 		 * should not be set together.
- 		 */
--		flags = BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_SKIP_FRAME;
-+		tr->flags |= BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_SKIP_FRAME;
-+	} else {
-+		tr->flags |= BPF_TRAMP_F_RESTORE_REGS;
-+	}
- 
- 	if (ip_arg)
--		flags |= BPF_TRAMP_F_IP_ARG;
-+		tr->flags |= BPF_TRAMP_F_IP_ARG;
-+
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+again:
-+	if ((tr->flags & BPF_TRAMP_F_SHARE_IPMODIFY) &&
-+	    (tr->flags & BPF_TRAMP_F_CALL_ORIG))
-+		tr->flags |= BPF_TRAMP_F_ORIG_STACK;
-+#endif
- 
- 	err = arch_prepare_bpf_trampoline(im, im->image, im->image + PAGE_SIZE,
--					  &tr->func.model, flags, tlinks,
-+					  &tr->func.model, tr->flags, tlinks,
- 					  tr->func.addr);
- 	if (err < 0)
- 		goto out;
-@@ -378,17 +484,34 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
- 	WARN_ON(!tr->cur_image && tr->selector);
- 	if (tr->cur_image)
- 		/* progs already running at this address */
--		err = modify_fentry(tr, tr->cur_image->image, im->image);
-+		err = modify_fentry(tr, tr->cur_image->image, im->image, lock_direct_mutex);
- 	else
- 		/* first time registering */
- 		err = register_fentry(tr, im->image);
-+
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+	if (err == -EAGAIN) {
-+		/* -EAGAIN from bpf_tramp_ftrace_ops_func. Now
-+		 * BPF_TRAMP_F_SHARE_IPMODIFY is set, we can generate the
-+		 * trampoline again, and retry register.
-+		 */
-+		/* reset fops->func and fops->trampoline for re-register */
-+		tr->fops->func = NULL;
-+		tr->fops->trampoline = 0;
-+		goto again;
-+	}
-+#endif
- 	if (err)
- 		goto out;
-+
- 	if (tr->cur_image)
- 		bpf_tramp_image_put(tr->cur_image);
- 	tr->cur_image = im;
- 	tr->selector++;
- out:
-+	/* If any error happens, restore previous flags */
-+	if (err)
-+		tr->flags = orig_flags;
- 	kfree(tlinks);
- 	return err;
- }
-@@ -454,7 +577,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_tr
- 
- 	hlist_add_head(&link->tramp_hlist, &tr->progs_hlist[kind]);
- 	tr->progs_cnt[kind]++;
--	err = bpf_trampoline_update(tr);
-+	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */);
- 	if (err) {
- 		hlist_del_init(&link->tramp_hlist);
- 		tr->progs_cnt[kind]--;
-@@ -487,7 +610,7 @@ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_
- 	}
- 	hlist_del_init(&link->tramp_hlist);
- 	tr->progs_cnt[kind]--;
--	return bpf_trampoline_update(tr);
-+	return bpf_trampoline_update(tr, true /* lock_direct_mutex */);
- }
- 
- /* bpf_trampoline_unlink_prog() should never fail. */
-@@ -715,6 +838,7 @@ void bpf_trampoline_put(struct bpf_trampoline *tr)
- 	 * multiple rcu callbacks.
- 	 */
- 	hlist_del(&tr->hlist);
-+	kfree(tr->fops);
- 	kfree(tr);
- out:
- 	mutex_unlock(&trampoline_mutex);
--- 
-2.30.2
+Yes, this is a problem that should be fixed. As we can not check the
+inode lock state from the inode->i_rwsem structure, I think we can
+pass the inode lock state along the FUSE function call-path to
+fuse_change_attributes(), and only when we can certainly know whether
+the inode is locked or unlocked then we continue the
+writeback_cache_v2 logics. What do you think?
 
+Thanks,
+Jiachen
+
+> > +               try_wb_update = true;
+> > +       }
+> >
+> >         spin_lock(&fi->lock);
+> >         /*
+> >          * In case of writeback_cache enabled, writes update mtime, ctime and
+> >          * may update i_size.  In these cases trust the cached value in the
+> >          * inode.
+> > +        *
+> > +        * In writeback_cache_v2 mode, if all the following conditions are met,
+> > +        * then we allow the attributes to be refreshed:
+> > +        *
+> > +        * - inode is not in the process of being written (I_SYNC)
+> > +        * - inode has no dirty pages (I_DIRTY_PAGES)
+> > +        * - inode data-related attributes are clean (I_DIRTY_DATASYNC)
+> > +        * - inode does not have any page writeback in progress
+> > +        *
+> > +        * Note: checking PAGECACHE_TAG_WRITEBACK is not sufficient in fuse,
+> > +        * since inode can appear to have no PageWriteback pages, yet still have
+> > +        * outstanding write request.
+> >          */
+> >         cache_mask = fuse_get_cache_mask(inode);
+> > +       if (try_wb_update && !(inode->i_state & (I_DIRTY_PAGES | I_SYNC |
+> > +           I_DIRTY_DATASYNC)) && RB_EMPTY_ROOT(&fi->writepages))
+> > +               cache_mask &= ~(STATX_MTIME | STATX_CTIME | STATX_SIZE);
+> > +       /*
+> > +        * Ensure the ordering of cleanness checking and following attr_version
+> > +        * comparison.
+> > +        */
+> > +       smp_mb();
+> > +
+> >         if (cache_mask & STATX_SIZE)
+> >                 attr->size = i_size_read(inode);
+> >
+> > @@ -283,7 +310,13 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
+> >                         truncate_pagecache(inode, attr->size);
+> >                         if (!fc->explicit_inval_data)
+> >                                 inval = true;
+> > -               } else if (fc->auto_inval_data) {
+> > +               } else if (!fc->writeback_cache_v2 && fc->auto_inval_data) {
+> > +                       /*
+> > +                        * When fc->writeback_cache_v2 is set, the old_mtime
+> > +                        * can be generated by kernel and must not equal to
+> > +                        * new_mtime generated by server. So skip in such
+> > +                        * case.
+> > +                        */
+> >                         struct timespec64 new_mtime = {
+> >                                 .tv_sec = attr->mtime,
+> >                                 .tv_nsec = attr->mtimensec,
+> > @@ -303,6 +336,9 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
+> >
+> >         if (IS_ENABLED(CONFIG_FUSE_DAX))
+> >                 fuse_dax_dontcache(inode, attr->flags);
+> > +
+> > +       if (try_wb_update)
+> > +               inode_unlock(inode);
+> >  }
+> >
+> >  static void fuse_init_inode(struct inode *inode, struct fuse_attr *attr)
+> > @@ -1153,6 +1189,10 @@ static void process_init_reply(struct fuse_mount *fm, struct fuse_args *args,
+> >                                 fc->async_dio = 1;
+> >                         if (flags & FUSE_WRITEBACK_CACHE)
+> >                                 fc->writeback_cache = 1;
+> > +                       if (flags & FUSE_WRITEBACK_CACHE_V2) {
+> > +                               fc->writeback_cache = 1;
+> > +                               fc->writeback_cache_v2 = 1;
+> > +                       }
+> >                         if (flags & FUSE_PARALLEL_DIROPS)
+> >                                 fc->parallel_dirops = 1;
+> >                         if (flags & FUSE_HANDLE_KILLPRIV)
+> > @@ -1234,7 +1274,7 @@ void fuse_send_init(struct fuse_mount *fm)
+> >                 FUSE_ABORT_ERROR | FUSE_MAX_PAGES | FUSE_CACHE_SYMLINKS |
+> >                 FUSE_NO_OPENDIR_SUPPORT | FUSE_EXPLICIT_INVAL_DATA |
+> >                 FUSE_HANDLE_KILLPRIV_V2 | FUSE_SETXATTR_EXT | FUSE_INIT_EXT |
+> > -               FUSE_SECURITY_CTX;
+> > +               FUSE_SECURITY_CTX | FUSE_WRITEBACK_CACHE_V2;
+> >  #ifdef CONFIG_FUSE_DAX
+> >         if (fm->fc->dax)
+> >                 flags |= FUSE_MAP_ALIGNMENT;
+> > diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> > index d6ccee961891..b474763bcf59 100644
+> > --- a/include/uapi/linux/fuse.h
+> > +++ b/include/uapi/linux/fuse.h
+> > @@ -194,6 +194,7 @@
+> >   *  - add FUSE_SECURITY_CTX init flag
+> >   *  - add security context to create, mkdir, symlink, and mknod requests
+> >   *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
+> > + *  - add FUSE_WRITEBACK_CACHE_V2 init flag
+> >   */
+> >
+> >  #ifndef _LINUX_FUSE_H
+> > @@ -353,6 +354,9 @@ struct fuse_file_lock {
+> >   * FUSE_SECURITY_CTX:  add security context to create, mkdir, symlink, and
+> >   *                     mknod
+> >   * FUSE_HAS_INODE_DAX:  use per inode DAX
+> > + * FUSE_WRITEBACK_CACHE_V2:
+> > + *                     allow time/size to be refreshed if no pending write
+> > + *                     c/mtime not updated from kernel to server
+> >   */
+> >  #define FUSE_ASYNC_READ                (1 << 0)
+> >  #define FUSE_POSIX_LOCKS       (1 << 1)
+> > @@ -389,6 +393,7 @@ struct fuse_file_lock {
+> >  /* bits 32..63 get shifted down 32 bits into the flags2 field */
+> >  #define FUSE_SECURITY_CTX      (1ULL << 32)
+> >  #define FUSE_HAS_INODE_DAX     (1ULL << 33)
+> > +#define FUSE_WRITEBACK_CACHE_V2        (1ULL << 34)
+> >
+> >  /**
+> >   * CUSE INIT request/reply flags
+> > --
+> > 2.20.1
+> >

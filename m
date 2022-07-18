@@ -2,243 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5940557836F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D263578377
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiGRNQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S234862AbiGRNRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231846AbiGRNQU (ORCPT
+        with ESMTP id S231846AbiGRNRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:16:20 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E524C50;
-        Mon, 18 Jul 2022 06:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658150179; x=1689686179;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VxmTG1G1BT3MUMMObd8x+1C//h3uDMoam9tOXoLeA0g=;
-  b=QkPqKf4o9bNKXY8R7WQsNxs0Hk3Lx/nuLyHkYKvfiuPB2RncaLYstNQY
-   dkarOPOCIaFfPW745EWlZaLDs53fCmcMVsER/ozHFF1P+p58lxSJKt/Qw
-   KpCjlNTAJ2H+h6qgsebErgrOQp82qdrGO7iGqTGXudvxfilA7rwZzah2W
-   Cw3nbrn16HrBDmSRg62Ae9G45nVt8qdu7Gk0+aT2LT4HZ+BDmqkgqOlD1
-   xcEg1AKu3772EqxncJ4B9B1lk1ZUwMKhcUumvllQ3cf/M1J01b3+MF0gs
-   CmJHjZ1cXS4pLRbZIK2/afu5SUWfb9UN4DWHURfBgve1acI+QQW4V8YyF
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="311898188"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="311898188"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:16:19 -0700
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="686731010"
-Received: from smyint-mobl1.amr.corp.intel.com (HELO [10.212.107.15]) ([10.212.107.15])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:16:15 -0700
-Message-ID: <76318fe1-37dc-8a1e-317e-76333995b8ca@linux.intel.com>
-Date:   Mon, 18 Jul 2022 14:16:10 +0100
+        Mon, 18 Jul 2022 09:17:32 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCD627B0E;
+        Mon, 18 Jul 2022 06:17:31 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26IB4SFZ018834;
+        Mon, 18 Jul 2022 13:17:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2022-7-12;
+ bh=QbduH7IvcIhtWH+EsZ3o1SeNINjm2WdWbVycNnnI+Pg=;
+ b=itJmrIOSgMqPPA17iKcokEVBpocstF9ByxnxVMGX6PhZBimxiVOLVZYU/lCrdbpVw9lK
+ MiD9RO46QjCsrQCAm7t+ojUEiRpFsyBgC2fjCqIDQLXVHqyIygxUUxIq9atJxhTqnKLr
+ QKOLAFGZnOwSbdwKpvmDJUSGPT5GRS23qkCnpMfvZ8l1vP5IPvaZf8M22V/YB1/A/GzC
+ EFXUbEa8+jTLznLxP8I32qLORDQUPL+4XDeHGVqP/vNIpd+kZKJ8M+QdPv7NueiLC64L
+ tb2qKiHZi/x8ksA9icytK2hGnRsmDrN7Fda8difsT5Fepr23Nk+a0fnnMP1UUaDOvcCI bg== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbn7a379y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Jul 2022 13:17:30 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26ICInP5006501;
+        Mon, 18 Jul 2022 13:17:30 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1gfjjex-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Jul 2022 13:17:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BwAhnVPnASYCEzYYza7rY2df0xfN8WFKTQdZOEinQaRVNMHYe8ne3cVUSkkvEVP3vVMlMGtfLCwz+fwHPWj846ZFiWOsvQ0ABJSvy7tStvbKWcj8xy4gDJjUcubfP/aY0Vhb+ipg+AyXZjVVEbyiB/0pyFFZIjA/L0p+8Z2I+IAVjPaUxGc5I7wY/oyyWU/6y1kyXUS7jpNUqrzLNuF3vUW+MjZAcYHlQKz5GPYKyyu6ATs4wzZSNAttKQCXSqI7DjHpDzOG5iqqjoxVKavbe1Hqp51yK2e4lmXA5kUlE8WRuBmFbhBQP4CqmrQelVsn9DHfqqzFnEcZ1TtHnew4Zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QbduH7IvcIhtWH+EsZ3o1SeNINjm2WdWbVycNnnI+Pg=;
+ b=OODuv8oyjqEQ0HEszNwKYmwwnSjgp89QidGhOsX9J55qHoKvhN2V83HLxpuQnfOhs3QYSAhOA1ulNuzXX1rbdeHGBqpa/7wvR+mtyeNVaTJVbZpPrpJXT2jP48FlY+dTUCJN39udwR8Dg7zr9p5iLeQV+hU7fXWlyjc9fzelyiqw16NRM8J8a/4F2DA9vJ7Ug3yWP+NT2i8jR2jQYLgsDJMdbYwWVGjIxLmiCZLi1J0CYwqsacSi1UB2M7xc+2+ZsGO2mdUm/QUxmmnESZHgctvjIFHr26qpQIRLvN+OXlu1cbGvvT2hbbMk6mOlk2JLOdy1GeRSpwhMcPp7GkX8mQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QbduH7IvcIhtWH+EsZ3o1SeNINjm2WdWbVycNnnI+Pg=;
+ b=teSWf3FHFelJcBcsWN75azflF+uffFAtmFt2omubZEmDLpL+h4DHmBOdKKnIOHuX82zHWVctaXivy4Pq5yPv0scPup1dBZ+sEwsWXkd+TQ8XRL3iWq6i6D5e7c6BFUX4ceyk7q90J2Mh0IBgOaR0YikS2dCdEg9Z+5S8mbuWAEY=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DM5PR1001MB2201.namprd10.prod.outlook.com
+ (2603:10b6:4:31::38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Mon, 18 Jul
+ 2022 13:17:28 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
+ 13:17:28 +0000
+Date:   Mon, 18 Jul 2022 16:17:17 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] tools/power/x86/intel-speed-select: Fix off by one check
+Message-ID: <YtVdXen0K8KH0kwu@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-ClientProxiedBy: ZR0P278CA0111.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:20::8) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 01/21] drm/i915/gt: Ignore TLB invalidations on idle
- engines
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Chris Wilson <chris.p.wilson@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Fei Yang <fei.yang@intel.com>
-References: <cover.1657800199.git.mchehab@kernel.org>
- <c014a1d743fa46a6b57f02bffb7badf438136442.1657800199.git.mchehab@kernel.org>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <c014a1d743fa46a6b57f02bffb7badf438136442.1657800199.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6958f62e-843a-47b7-e18b-08da68bfdccd
+X-MS-TrafficTypeDiagnostic: DM5PR1001MB2201:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Tnv9PjhfCuFnJlA4RKUw2EQ0JTLn6Xo2r3seBuzZ1OEGkJLNSDhdUzam6QqLOOhtzrbQWZ9O6v4G4kxDh7pFAbshnfNOdbXfYLYCinsqT5vzmAa81Ft+B9/FH1PYwrtoW13bZ80wGKjSMs92ibeL4kkVIyoRWoJjdBhbZvZqLqtNK07D3YNVA6Nu73jQzwWETECTKcCBT83/uE4QllJN+YgnNNiG0lTqiI55J79k3SyjFFl0b1wCVbdprqhH3e3gR2PBBGM+EHqlfwjv5/fJExkaDsiYFf52IXqWS3xVIYI6y0T6WiLV6cxfU3kMNbQspG9ozLiy485nhruu584UkbA2nlOqPjjZ04yOVHi04VNBIT5cVcxBpLjjZnLUnV1x7mg9yqItwZR6zNlRKLsmf05bpPVRq70EzUQWbtVZk8WNEW28g2VSRWE9wlWYqO5yyikxAIrdNsNKjdMD5Sc4SFD+umI4CpAVLIqmZ3LV8N8qjXm3ZbYOxZO+KGMee5QXr79UOwUbv6UaEMRP9uOZYheVTG7BFhKk86VlGipC+/ysU53jpnlSLxXOxtkQpsYWUqY2xtC4hqrukNjW7dTy9EtyMuJfwS+oxQeRuAS3nee6E8vRFG8sPMXVh6FPfDFfTPu8ilh2+2Ny0A4IyKgsHlun9fPrUj7mGaDU9sprSl+myrT91AHa76Xh7TMic40ZcDN9YFEhBswktknJY+uksQ/ynNA/3pVm4x1xFENjspDqDxuDD3sooxsNeed/MQ01T5m+d66BEswr9o26/mT45nG2aN9GeMpihXT8jKmCTdrv2XZl1bx9mwuQpjseJLyG
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39860400002)(136003)(346002)(366004)(376002)(396003)(83380400001)(9686003)(26005)(6512007)(6506007)(38100700002)(38350700002)(5660300002)(44832011)(186003)(4744005)(8936002)(33716001)(2906002)(52116002)(41300700001)(6486002)(6666004)(66476007)(478600001)(8676002)(316002)(66946007)(4326008)(86362001)(66556008)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bc2SM6kWSzSiv1i+YsR0Gak0w2hWhsF9OwuvA0dpOVTBmk9hxXrwBg2sYR12?=
+ =?us-ascii?Q?GQkGodjRAkqKPNWjXHMjUrtmRhrUS34Ish3AdyrInV35CsVmbFDF5wmSoJIA?=
+ =?us-ascii?Q?aFWlloP5m5ONtHmyF85CANTinJbDWcSJFCriscBRbB0mPRHF5BotXJEfH8l+?=
+ =?us-ascii?Q?s7juwqIgJRjJCEnJm+7SRcIDJZGECBCRae8gs/DOBivn4X+5kh34hxRObaZ5?=
+ =?us-ascii?Q?H6qoNS5n6thIGAgHx/fhMM90toXJ7OGiDfZflRdK02ZSHr+YoCBqJUFldNxd?=
+ =?us-ascii?Q?hcVtkQJSX+sPwIb5hxbOCTORjH+Kj9ijpFYcGncd1+Wjsy+wEs03HE2cra/L?=
+ =?us-ascii?Q?yjBmuUkY+66X52ESYSx8dUHzYimzFYz0MDFdKomLnLTcgHxYomDLj/xwdT9S?=
+ =?us-ascii?Q?YY8Yx8HxWmsKCyLFJ6GJOLg7yHdY9xIzL0pjgTWKhs7qQup+F9CJ7Il7Pe2A?=
+ =?us-ascii?Q?/maTJ68/ZzCU5E28Imc4WlX7Dl6jCHYjnAqlkPD7JcHLSsE3BiIDxQ4tDl9g?=
+ =?us-ascii?Q?Tr0BhA+aTk1qGIi+QwlifuzxMQQSrIJvkNU77eion5fnrZFqTdefQfUWmM5L?=
+ =?us-ascii?Q?zCPOuO7Zm1KScj3aZZpGEHpLIDJP+uWQnSfyDp2XQwlkCTGL377KGNblB1My?=
+ =?us-ascii?Q?zHRovO40e5jqYIKOWIvlcqlyhxl8R7RZT3kUB+cI4HzEMoHkkV7QLR0oblos?=
+ =?us-ascii?Q?rBJbyR3rBIPg2V2ZpFnGMcT5QnQTWTAJ/THKcy0cTPSsaIvCIAOwty2LcKTd?=
+ =?us-ascii?Q?Ko65DRVgBXa8r9rTggqSLcATGNjRCuIO1y9U05ezcZvWs8E/pTlOKV6zOnKm?=
+ =?us-ascii?Q?QXGv7pfAYyLX2ay1YuHUViJh8NPxiDQRNzI0/kS0QuBtJnzsWt6qrOOtOaFh?=
+ =?us-ascii?Q?yqndtTYBv8IXXjqMedlGFaABGRyzu+YJC06pAsnyyPIQfBYgm1xf7PDIyM8V?=
+ =?us-ascii?Q?8Ac/cHYZiHo9cA9MvThXHHyF6++RA3PsV/9/kerzyQ8gmmBCYIMbpeAw6Gnn?=
+ =?us-ascii?Q?dE46HPP2cBIUAdh1ftObVsILp4yZsbo5xigdSmA2mh8bE/Z53O6VYFKdIF5n?=
+ =?us-ascii?Q?D/RMMk5UxTeBC+Yw/fueYPK1qzgonnDPUjgN+8x3v7cUiWDjoAizTMUH2v3K?=
+ =?us-ascii?Q?TavLlSDI8DuzJk0a3qhSIibgYEZa2bi01bEge/RXt8ASUHBYhfX69bIo+wcS?=
+ =?us-ascii?Q?4S/fElixo5lZ+rubg6Gd/N1pWzMk7zLlIqpDYFtU7CSG39IMErL2g/kNqWiZ?=
+ =?us-ascii?Q?6tB7olyfR5lGb1DVgwiXAQz+mfK1xhg4uA8yN/37Ip+dhn/tyk+Zr71xDi2S?=
+ =?us-ascii?Q?/0xSRuVH13uAGrd1H8mizApJrdkIhQSA6VKUWGNhWA5fjSn5te/AyP2poj0w?=
+ =?us-ascii?Q?XgzSSyItKYiydDhn5StwyTw3YeXecnCLqxnoBJWPu1aWH2cP9Af3Sp3sCnKq?=
+ =?us-ascii?Q?NjkAumaCj2k82BJtnaZQX7D7LWU0vZWk86OZ4QJahoIvsPIz8J62On+rfqga?=
+ =?us-ascii?Q?q9xtP+rLRevaviAUWDfh/mUaWZXg6nqZhf5gdswLtd5I2rm6cUJRpFxo1sHs?=
+ =?us-ascii?Q?apbV3ejTBAZMJWYYAjkaeeIF6z5i/WoyOzNQzr+IzpkSQE1Ion5IjYfMHLNf?=
+ =?us-ascii?Q?6Q=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6958f62e-843a-47b7-e18b-08da68bfdccd
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2022 13:17:27.9806
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UjuSHKW/w96VF54aEapCl3Fh6Ol4Nxto3QufjD/zcajTVlf9jepaLz6y30BB6OBZ2ij3cLik0vF9+ZFWR//z1Bg3UfpQ9DfkjrcrnMC7Iww=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1001MB2201
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-18_12,2022-07-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207180058
+X-Proofpoint-ORIG-GUID: CV7kMtPwJGwxKti8k6EqFIISqy5uGYq4
+X-Proofpoint-GUID: CV7kMtPwJGwxKti8k6EqFIISqy5uGYq4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Change > MAX_DIE_PER_PACKAGE to >= MAX_DIE_PER_PACKAGE to prevent
+accessing one element beyond the end of the array.
 
-On 14/07/2022 13:06, Mauro Carvalho Chehab wrote:
-> From: Chris Wilson <chris.p.wilson@intel.com>
-> 
-> Check if the device is powered down prior to any engine activity,
-> as, on such cases, all the TLBs were already invalidated, so an
-> explicit TLB invalidation is not needed, thus reducing the
-> performance regression impact due to it.
-> 
-> This becomes more significant with GuC, as it can only do so when
-> the connection to the GuC is awake.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+Fixes: 7fd786dfbd2c ("tools/power/x86/intel-speed-select: OOB daemon mode")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ tools/power/x86/intel-speed-select/isst-daemon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Patch itself looks fine but I don't think we closed on the issue of 
-stable/fixes on this patch?
+diff --git a/tools/power/x86/intel-speed-select/isst-daemon.c b/tools/power/x86/intel-speed-select/isst-daemon.c
+index dd372924bc82..d0400c6684ba 100644
+--- a/tools/power/x86/intel-speed-select/isst-daemon.c
++++ b/tools/power/x86/intel-speed-select/isst-daemon.c
+@@ -41,7 +41,7 @@ void process_level_change(int cpu)
+ 	time_t tm;
+ 	int ret;
+ 
+-	if (pkg_id >= MAX_PACKAGE_COUNT || die_id > MAX_DIE_PER_PACKAGE) {
++	if (pkg_id >= MAX_PACKAGE_COUNT || die_id >= MAX_DIE_PER_PACKAGE) {
+ 		debug_printf("Invalid package/die info for cpu:%d\n", cpu);
+ 		return;
+ 	}
+-- 
+2.35.1
 
-My position here is that, if the functional issue is only with GuC 
-invalidations, then the tags shouldn't be there (and the huge CC list).
-
-Regards,
-
-Tvrtko
-
-> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-> Cc: Fei Yang <fei.yang@intel.com>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/21] at: https://lore.kernel.org/all/cover.1657800199.git.mchehab@kernel.org/
-> 
->   drivers/gpu/drm/i915/gem/i915_gem_pages.c | 10 ++++++----
->   drivers/gpu/drm/i915/gt/intel_gt.c        | 17 ++++++++++-------
->   drivers/gpu/drm/i915/gt/intel_gt_pm.h     |  3 +++
->   3 files changed, 19 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> index 97c820eee115..6835279943df 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
-> @@ -6,14 +6,15 @@
->   
->   #include <drm/drm_cache.h>
->   
-> +#include "gt/intel_gt.h"
-> +#include "gt/intel_gt_pm.h"
-> +
->   #include "i915_drv.h"
->   #include "i915_gem_object.h"
->   #include "i915_scatterlist.h"
->   #include "i915_gem_lmem.h"
->   #include "i915_gem_mman.h"
->   
-> -#include "gt/intel_gt.h"
-> -
->   void __i915_gem_object_set_pages(struct drm_i915_gem_object *obj,
->   				 struct sg_table *pages,
->   				 unsigned int sg_page_sizes)
-> @@ -217,10 +218,11 @@ __i915_gem_object_unset_pages(struct drm_i915_gem_object *obj)
->   
->   	if (test_and_clear_bit(I915_BO_WAS_BOUND_BIT, &obj->flags)) {
->   		struct drm_i915_private *i915 = to_i915(obj->base.dev);
-> +		struct intel_gt *gt = to_gt(i915);
->   		intel_wakeref_t wakeref;
->   
-> -		with_intel_runtime_pm_if_active(&i915->runtime_pm, wakeref)
-> -			intel_gt_invalidate_tlbs(to_gt(i915));
-> +		with_intel_gt_pm_if_awake(gt, wakeref)
-> +			intel_gt_invalidate_tlbs(gt);
->   	}
->   
->   	return pages;
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-> index 68c2b0d8f187..c4d43da84d8e 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> @@ -12,6 +12,7 @@
->   
->   #include "i915_drv.h"
->   #include "intel_context.h"
-> +#include "intel_engine_pm.h"
->   #include "intel_engine_regs.h"
->   #include "intel_ggtt_gmch.h"
->   #include "intel_gt.h"
-> @@ -924,6 +925,7 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->   	struct drm_i915_private *i915 = gt->i915;
->   	struct intel_uncore *uncore = gt->uncore;
->   	struct intel_engine_cs *engine;
-> +	intel_engine_mask_t awake, tmp;
->   	enum intel_engine_id id;
->   	const i915_reg_t *regs;
->   	unsigned int num = 0;
-> @@ -947,26 +949,31 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->   
->   	GEM_TRACE("\n");
->   
-> -	assert_rpm_wakelock_held(&i915->runtime_pm);
-> -
->   	mutex_lock(&gt->tlb_invalidate_lock);
->   	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
->   
->   	spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
->   
-> +	awake = 0;
->   	for_each_engine(engine, gt, id) {
->   		struct reg_and_bit rb;
->   
-> +		if (!intel_engine_pm_is_awake(engine))
-> +			continue;
-> +
->   		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
->   		if (!i915_mmio_reg_offset(rb.reg))
->   			continue;
->   
->   		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-> +		awake |= engine->mask;
->   	}
->   
->   	spin_unlock_irq(&uncore->lock);
->   
-> -	for_each_engine(engine, gt, id) {
-> +	for_each_engine_masked(engine, gt, awake, tmp) {
-> +		struct reg_and_bit rb;
-> +
->   		/*
->   		 * HW architecture suggest typical invalidation time at 40us,
->   		 * with pessimistic cases up to 100us and a recommendation to
-> @@ -974,12 +981,8 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->   		 */
->   		const unsigned int timeout_us = 100;
->   		const unsigned int timeout_ms = 4;
-> -		struct reg_and_bit rb;
->   
->   		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
-> -		if (!i915_mmio_reg_offset(rb.reg))
-> -			continue;
-> -
->   		if (__intel_wait_for_register_fw(uncore,
->   						 rb.reg, rb.bit, 0,
->   						 timeout_us, timeout_ms,
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_pm.h b/drivers/gpu/drm/i915/gt/intel_gt_pm.h
-> index bc898df7a48c..a334787a4939 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt_pm.h
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt_pm.h
-> @@ -55,6 +55,9 @@ static inline void intel_gt_pm_might_put(struct intel_gt *gt)
->   	for (tmp = 1, intel_gt_pm_get(gt); tmp; \
->   	     intel_gt_pm_put(gt), tmp = 0)
->   
-> +#define with_intel_gt_pm_if_awake(gt, wf) \
-> +	for (wf = intel_gt_pm_get_if_awake(gt); wf; intel_gt_pm_put_async(gt), wf = 0)
-> +
->   static inline int intel_gt_pm_wait_for_idle(struct intel_gt *gt)
->   {
->   	return intel_wakeref_wait_for_idle(&gt->wakeref);

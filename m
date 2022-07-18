@@ -2,83 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B065789B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A805789C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236028AbiGRSoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
+        id S235384AbiGRSqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236046AbiGRSoS (ORCPT
+        with ESMTP id S230171AbiGRSqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:44:18 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E8EDE9A;
-        Mon, 18 Jul 2022 11:44:14 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id n138so8763725iod.4;
-        Mon, 18 Jul 2022 11:44:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xT29dFQG9gO6zUOkC6HwFgLGzT9S34ngMonC+QSf2Mg=;
-        b=uCMqmlWqj0BietQUYb+YYdjAHxw5dNj1l8Xj706tDUjWZT4P36irDjqNEZQMFOpd++
-         g6fi3esd8cENAuAq37OufWYxWpoGdCFMHh9WCfZ34U58F4WuYdDn3hX0r65B5edcUW8A
-         s4G6L5uSIZYJdvc7j5ZsuHb/0PTb3ZDug/jV0U6ZfkaeC0jQWmQVwntO/j4rKjVxanjK
-         rH6Pxo9oFjc7GqR/YrMSnPw5SvfExEmw7THeiE+T59v+GTR6NojFi+VhOMhn6aN90WP7
-         89sKTjX+V1amoiFTKhdnkTbmg/qPsRCZX3ivyYt6K0greOFteaPUaX/GkTy5c59xSZ3a
-         9tmA==
-X-Gm-Message-State: AJIora9vV5LV3NSm+mOBkz4gtoSx+TQsgMys248A00YmERKGtKsj6dpK
-        sz8hs9A4UkLfq+9KCtLAVCS+cwPrmA==
-X-Google-Smtp-Source: AGRyM1s6VYhtM8AfinB2gMgIvElLBBuNUg5GEn+jv3VioD1/E3fdRmV5D0aWKyrIxBqsnn62hvzymw==
-X-Received: by 2002:a05:6638:272c:b0:33f:6fe4:b76f with SMTP id m44-20020a056638272c00b0033f6fe4b76fmr14884160jav.284.1658169853769;
-        Mon, 18 Jul 2022 11:44:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id g26-20020a05663810fa00b00339d244c4a6sm5876544jae.23.2022.07.18.11.44.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 11:44:13 -0700 (PDT)
-Received: (nullmailer pid 3326217 invoked by uid 1000);
-        Mon, 18 Jul 2022 18:44:11 -0000
-Date:   Mon, 18 Jul 2022 12:44:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Xiandong Wang <xiandong.wang@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-mediatek@lists.infradead.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: soc: mediatek: add mdp3 mutex
- support for mt8186
-Message-ID: <20220718184411.GA3326033-robh@kernel.org>
-References: <20220711123247.15807-1-allen-kh.cheng@mediatek.com>
- <20220711123247.15807-2-allen-kh.cheng@mediatek.com>
+        Mon, 18 Jul 2022 14:46:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E702E9C9;
+        Mon, 18 Jul 2022 11:46:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B8A6A2077E;
+        Mon, 18 Jul 2022 18:46:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658169994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IEi9Vz+G38C+o5hOJ1yrZT3rdapUJkl0ZlusWRAZA3Y=;
+        b=PBmt63953sU4ntvHe/O4lDUWhLNlStCouc89TG1qj4oyRYUikRKLT9nDc7a1FR9noEb7kd
+        3KTGn3YIqmNBinlxvIhO86rkmN0SuFmWjOauSSA77poxIzTdIx2s0piwJXjyhF47kGzrf5
+        oovfUqBNs8O5RF6X+Gc5L/rog70oYww=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658169994;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IEi9Vz+G38C+o5hOJ1yrZT3rdapUJkl0ZlusWRAZA3Y=;
+        b=BAT9hQXmWJEFK31Hvu6iX3BQ2einZEoUKLMmV5WZyxpH8E+RKirOwRW2k81ScjCkAkEycG
+        xm425/Qt6Q7Q39Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E9C813A37;
+        Mon, 18 Jul 2022 18:46:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id h92nJoqq1WIOMAAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 18 Jul 2022 18:46:34 +0000
+Date:   Mon, 18 Jul 2022 20:46:34 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+Subject: Re: [PATCH] efi/x86: use naked RET on mixed mode call wrapper
+Message-ID: <YtWqit2B3UYIWht1@zn.tnic>
+References: <20220715194550.793957-1-cascardo@canonical.com>
+ <YtVG8VBmFikS6GMn@worktop.programming.kicks-ass.net>
+ <YtWKK2ZLib1R7itI@zn.tnic>
+ <CAHk-=wiWQOsxqE+tvZi_MjzGaqfG6Xo5AhbYXtiLWcKVVvbycQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220711123247.15807-2-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wiWQOsxqE+tvZi_MjzGaqfG6Xo5AhbYXtiLWcKVVvbycQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Jul 2022 20:32:46 +0800, Allen-KH Cheng wrote:
-> Add mdp3 mutex compatible for mt8186 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Signed-off-by: Xiandong Wang <xiandong.wang@mediatek.com>
-> ---
->  .../devicetree/bindings/soc/mediatek/mediatek,mutex.yaml         | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Mon, Jul 18, 2022 at 11:34:02AM -0700, Linus Torvalds wrote:
+> Why would we have to protect the kernel from EFI?
 
-Acked-by: Rob Herring <robh@kernel.org>
+Yes, we cleared this up on IRC in the meantime.
+
+This was raised as a concern in case we don't trust EFI. But we cannot
+not (double negation on purpose) trust EFI because it can do whatever it
+likes anyway, "underneath" the OS.
+
+I'm keeping the UNTRAIN_RET-in-C diff in my patches/ folder, though - I
+get the feeling we might need it soon for something else.
+
+:-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)

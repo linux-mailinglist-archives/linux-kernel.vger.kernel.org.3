@@ -2,152 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF60578329
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCAA57832C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiGRNGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
+        id S235297AbiGRNHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbiGRNG1 (ORCPT
+        with ESMTP id S234739AbiGRNHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:06:27 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BF227B04
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:06:22 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 19so13534415ljz.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=a+O9vudZmIw0y8HcEu8EeY4zyTPk+O1DAP+t2vVBksA=;
-        b=DiSjKH1Qipp92JGNti6EzoCEbaLHb26NceygyY4BOdkstNYl6brT0xu9MlN20tvhTN
-         p1SZy0jvCk+w6lZHsdv52GS+OTqS1sj9kxbvT10EdxSvDbHqhzCuRCQQ9P2hnpC1b6LC
-         At5s9W/afxoD6Bs83X89slxumpRLIGNaPPay1nO8e3SmDQlWSTZDN2glQcQNa0vSoxRA
-         +DJd3FanU4ToJGcr9jGOOqNjYz7uuLjAinYUeSpIJbPNSGMDiVVwYAho+3NGAwQO0dxz
-         WNWxagJOEhw+KUMIa7luCCnXcjm5t24lpWyvm3Y/exFntB7aM4syJ52k2gNYJSssB2lP
-         yx/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=a+O9vudZmIw0y8HcEu8EeY4zyTPk+O1DAP+t2vVBksA=;
-        b=NUSOSVbXd2F674TeIlZ8sjwv6bmAokjxSWBtWALe/JXo+FEp8piJ98ZX8qKZtkMWYA
-         Wnep3zEqhDzVa7fAP3CDLdCvCoNs49fsP8JL+OAupY4WVlaD7hMtrLMSVl3inbitwPvN
-         6Wtz14ryzi/IhT09kDBzGJPSOW4kukxQhy6I90KMYjL+cGlGPwwWyhFObnOJSjVA/8HN
-         wWGUweUwgRwptDpXIjKOKwODR8w05kDbLPr83FyDfC7rr06RDvcqX8ZR5/aMKpNmTTKh
-         uxoU2QhHglB4eZWhNXF0tPEskznekeh+TH+5XxjkAxozEP99BHMFxJN5A0VRtdtfTm33
-         8K2Q==
-X-Gm-Message-State: AJIora/ICtYv15X/TzWEeLGtHKYtpIQbyHHWnQSPV41kfFjOt2ttjZUA
-        IuNVMnNvqOh4UTYFvaD1c+8Uww==
-X-Google-Smtp-Source: AGRyM1vtwkiYg5ErQ9NCTyTYbs/3Slz+OVi7+HIoAuGUzoeHVOGBofEwhslH/MRQOOUsFT2PfU2nlQ==
-X-Received: by 2002:a05:651c:23b:b0:25d:6920:2b06 with SMTP id z27-20020a05651c023b00b0025d69202b06mr12121153ljn.226.1658149580235;
-        Mon, 18 Jul 2022 06:06:20 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id t8-20020a05651c204800b0025d835fe81esm2082741ljo.115.2022.07.18.06.06.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:06:19 -0700 (PDT)
-Message-ID: <2a96f734-010d-b42d-8418-715d7c420272@linaro.org>
-Date:   Mon, 18 Jul 2022 15:06:18 +0200
+        Mon, 18 Jul 2022 09:07:19 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7B6BD9;
+        Mon, 18 Jul 2022 06:07:18 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3DD3E33C3C;
+        Mon, 18 Jul 2022 13:07:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658149637; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H5Wq7UiyiOTRMUDpc6xc7IitAP2lzVm2pLNGp2lGASQ=;
+        b=XtJe6a8nF7pqBa8nRk/UCO84w5sS9fRUTRjOvlycoFn3dsOc0mRZLm8PtJoI7KPHXV4OYW
+        mqLLSB7DQg0vcVUn+lBUl5h19Uhz7Atgivc1U2HOM8CxHuJjX9ttutIwrwnyayDSkkAcdQ
+        LJFNpWbBrtpRpYRzvwjFhdnyp05AA60=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 06BF92C141;
+        Mon, 18 Jul 2022 13:07:17 +0000 (UTC)
+Date:   Mon, 18 Jul 2022 15:07:16 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, jolsa@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v3 bpf-next 4/4] bpf: support bpf_trampoline on functions
+ with IPMODIFY (e.g. livepatch)
+Message-ID: <YtVbBFYbJGiRAv99@alley>
+References: <20220718001405.2236811-1-song@kernel.org>
+ <20220718001405.2236811-5-song@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] dt-bindings: fpga: add binding doc for ecp5-spi fpga
- mgr
-Content-Language: en-US
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru
-References: <20220714122657.17972-1-i.bornyakov@metrotek.ru>
- <20220714122657.17972-3-i.bornyakov@metrotek.ru>
- <044a9736-a4ec-c250-7755-c80a5bcbe38b@linaro.org>
- <20220715100356.fwjomifweifn6zsr@h-e2.ddg>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220715100356.fwjomifweifn6zsr@h-e2.ddg>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718001405.2236811-5-song@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/07/2022 12:03, Ivan Bornyakov wrote:
-> On Fri, Jul 15, 2022 at 11:33:54AM +0200, Krzysztof Kozlowski wrote:
->> On 14/07/2022 14:26, Ivan Bornyakov wrote:
->>> Add Device Tree Binding doc for Lattice ECP5 FPGA manager using slave
->>> SPI to load .bit formatted uncompressed bitstream image.
->>>
->>> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
->>> ---
->>>  .../fpga/lattice,ecp5-spi-fpga-mgr.yaml       | 71 +++++++++++++++++++
->>>  1 file changed, 71 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/fpga/lattice,ecp5-spi-fpga-mgr.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/fpga/lattice,ecp5-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/lattice,ecp5-spi-fpga-mgr.yaml
->>> new file mode 100644
->>> index 000000000000..79868f9c84e2
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/fpga/lattice,ecp5-spi-fpga-mgr.yaml
->>> @@ -0,0 +1,71 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/fpga/lattice,ecp5-spi-fpga-mgr.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Lattice ECP5 FPGA manager.
->>> +
->>> +maintainers:
->>> +  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
->>> +
->>> +description:
->>> +  Device Tree Bindings for Lattice ECP5 FPGA Manager using slave SPI to
->>> +  load the uncompressed bitstream in .bit format.
->>
->> s/Device Tree Bindings for//
->>
->> Instead describe the hardware you are adding bindings for. What is a
->> "Manager"? It is so broad and unspecific... It is some dedicated
->> hardware to communicate with FPGA or you just called this regular FPGA
->> interface exposed to the CPU/SoC?
->>
+On Sun 2022-07-17 17:14:05, Song Liu wrote:
+> When tracing a function with IPMODIFY ftrace_ops (livepatch), the bpf
+> trampoline must follow the instruction pointer saved on stack. This needs
+> extra handling for bpf trampolines with BPF_TRAMP_F_CALL_ORIG flag.
 > 
-> "FPGA Manager" is a kernel subsystem that exports a set of functions for
-> programming an FPGA with a bitstream image.
-> See Documentation/driver-api/fpga/fpga-mgr.rst
-
-This is what you want to include in the bindings document? How is it
-related to bindings? We do not talk about driver API but we talk about
-hardware. Bindings are for the hardware.
-
+> Implement bpf_tramp_ftrace_ops_func and use it for the ftrace_ops used
+> by BPF trampoline. This enables tracing functions with livepatch.
 > 
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - lattice,ecp5-spi-fpga-mgr
->>
->> Do not encode interface name in compatible so no "spi".
->>
+> This also requires moving bpf trampoline to *_ftrace_direct_mult APIs.
 > 
-> Recently when I submitted FPGA manager for Microchip PolarFire, I was
-> asked the opposite, to add "spi" in compatible. The reason was that FPGA
-> can be programmed through other interfaces as well.
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/static_call.h>
+>  #include <linux/bpf_verifier.h>
+>  #include <linux/bpf_lsm.h>
+> +#include <linux/delay.h>
+>  
+>  /* dummy _ops. The verifier will operate on target program's ops. */
+>  const struct bpf_verifier_ops bpf_extension_verifier_ops = {
+> @@ -29,6 +30,81 @@ static struct hlist_head trampoline_table[TRAMPOLINE_TABLE_SIZE];
+>  /* serializes access to trampoline_table */
+>  static DEFINE_MUTEX(trampoline_mutex);
+>  
+> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> +static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex);
+> +
+> +static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
+> +{
+> +	struct bpf_trampoline *tr = ops->private;
+> +	int ret = 0;
+> +
+> +	if (cmd == FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_SELF) {
+> +		/* This is called inside register_ftrace_direct_multi(), so
+> +		 * tr->mutex is already locked.
+> +		 */
+> +		WARN_ON_ONCE(!mutex_is_locked(&tr->mutex));
 
-I don't see such comment from Rob (DT maintainer):
-https://lore.kernel.org/all/?q=%22dt-bindings%3A+fpga%3A+add+binding+doc+for+microchip-spi+fpga+mgr%22
+Again, better is:
 
-Can you point me to it?
+		lockdep_assert_held_once(&tr->mutex);
 
-Best regards,
-Krzysztof
+> +
+> +		/* Instead of updating the trampoline here, we propagate
+> +		 * -EAGAIN to register_ftrace_direct_multi(). Then we can
+> +		 * retry register_ftrace_direct_multi() after updating the
+> +		 * trampoline.
+> +		 */
+> +		if ((tr->flags & BPF_TRAMP_F_CALL_ORIG) &&
+> +		    !(tr->flags & BPF_TRAMP_F_ORIG_STACK)) {
+> +			if (WARN_ON_ONCE(tr->flags & BPF_TRAMP_F_SHARE_IPMODIFY))
+> +				return -EBUSY;
+> +
+> +			tr->flags |= BPF_TRAMP_F_SHARE_IPMODIFY;
+> +			return -EAGAIN;
+> +		}
+> +
+> +		return 0;
+> +	}
+> +
+> +	/* The normal locking order is
+> +	 *    tr->mutex => direct_mutex (ftrace.c) => ftrace_lock (ftrace.c)
+> +	 *
+> +	 * The following two commands are called from
+> +	 *
+> +	 *   prepare_direct_functions_for_ipmodify
+> +	 *   cleanup_direct_functions_after_ipmodify
+> +	 *
+> +	 * In both cases, direct_mutex is already locked. Use
+> +	 * mutex_trylock(&tr->mutex) to avoid deadlock in race condition
+> +	 * (something else is making changes to this same trampoline).
+> +	 */
+> +	if (!mutex_trylock(&tr->mutex)) {
+> +		/* sleep 1 ms to make sure whatever holding tr->mutex makes
+> +		 * some progress.
+> +		 */
+> +		msleep(1);
+> +		return -EAGAIN;
+> +	}
+
+Huh, this looks horrible. And I do not get it. The above block prints
+a warning when the mutex is not taken. Why it is already taken
+when cmd == FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_SELF
+and why it has to be explicitly taken otherwise?
+
+Would it be possible to call prepare_direct_functions_for_ipmodify(),
+cleanup_direct_functions_after_ipmodify() with rt->mutex already taken
+so that the ordering is correct even in this case.
+
+That said, this is the first version when I am in Cc. I am not sure
+if it has already been discussed.
+
+
+> +	switch (cmd) {
+> +	case FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_PEER:
+> +		tr->flags |= BPF_TRAMP_F_SHARE_IPMODIFY;
+> +
+> +		if ((tr->flags & BPF_TRAMP_F_CALL_ORIG) &&
+> +		    !(tr->flags & BPF_TRAMP_F_ORIG_STACK))
+> +			ret = bpf_trampoline_update(tr, false /* lock_direct_mutex */);
+> +		break;
+> +	case FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY_PEER:
+> +		tr->flags &= ~BPF_TRAMP_F_SHARE_IPMODIFY;
+> +
+> +		if (tr->flags & BPF_TRAMP_F_ORIG_STACK)
+> +			ret = bpf_trampoline_update(tr, false /* lock_direct_mutex */);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	};
+> +
+> +	mutex_unlock(&tr->mutex);
+> +	return ret;
+> +}
+> +#endif
+> +
+>  bool bpf_prog_has_trampoline(const struct bpf_prog *prog)
+>  {
+>  	enum bpf_attach_type eatype = prog->expected_attach_type;
+
+Note that I did not do proper review. I not much familiar with the
+ftrace code. I just wanted to check how much this patchset affects
+livepatching and noticed the commented things.
+
+Best Regards,
+Petr

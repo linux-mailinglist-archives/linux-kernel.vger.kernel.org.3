@@ -2,144 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4E857830D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2835578310
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbiGRNEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S235163AbiGRNEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbiGRND6 (ORCPT
+        with ESMTP id S235184AbiGRNEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:03:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01C360F8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:03:56 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id e15so15190296edj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=zM3JzhRssik7POz7o5zHEQmq3nlUbfeSo9DWVPrJQK0=;
-        b=uyNTCGd5YUjRh25MM8MbjG2pfHd13DW9QxeLHwxPdMr/HplpVZnizhjdh/UcRb6tBB
-         fCUS2xYCqMnKffsyN9BJAVAtVbr0FHNTDXh3MN1iUUIxO+4PWQzLGO+xuzHr+n8ucgVw
-         l/xOxeJ9yuI8bUIPGD+weacTDu7ZBXxmPyyLqXglJEiaAw30JHtpgT2rs48ex4eqBXZz
-         6f3lFWK50iQfYcPT7KeLfknMMuMWeVFqDd3UIIBkhTS/uK30mDX28V7wjxGctX7CL7fY
-         tjew/FkcwCaTXMZwnau7VLfG8lkLAZaM3/znyOtX363b/HY2ggAG/e1o2SIqbrh7G2tM
-         m6nQ==
+        Mon, 18 Jul 2022 09:04:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB382BE2B
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658149450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rCaukIQ4Y9kP6/SvywHkOLwsqGQwYiQZVmc0+Rt1khE=;
+        b=DHDBKF8TON2MdjZ7dwDM0h1uxB5yNdrGWC8YEMr4wNmr4XjByIZ5oUL2Y/4dtAVkw8m8hr
+        PuZOoeyCcHjBHfdWv68j5mnEki+djt0SztqaWPoxCEll6g40eFbuvlL6Wnyc9Cq4NvHyWK
+        s8glPLAHO7tGWtqOAtkyTInUo+I/xtY=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-ARyoUUzRPkW1yk6SduUwdA-1; Mon, 18 Jul 2022 09:04:09 -0400
+X-MC-Unique: ARyoUUzRPkW1yk6SduUwdA-1
+Received: by mail-qv1-f72.google.com with SMTP id m11-20020a0cfbab000000b004738181b474so5408442qvp.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:04:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=zM3JzhRssik7POz7o5zHEQmq3nlUbfeSo9DWVPrJQK0=;
-        b=ucvVeXu1It3O85IS2YZfsAJ7xXcVt4JMoFBuo1yTHhxVzS6wLIKnbOobsAuqukQgzP
-         DC0vGPBDiFoskNRB0G9uWnp2plHMTUG5Er8KoGkrpMx7/oLgxBLv3K+GtR2MuMIf0131
-         gebubABsabRlHCrS6jFhfVp9N2xJnV2FCD79JcS1vbgeHyCZ9dZelKJ5KahZmQHpLYWE
-         qX+G7+cBaEzsJUOlAJRIh64N6azH4ZsMRJiNnkDJIea2II4wnOjQ04fwa2REl8NTpJQC
-         VHeyRr5eoLmTKm9k9JR3FgVoz6hPGib19yFzMzBbeEUJJAsW2D3YrmpETCis3JshQFB9
-         bCfg==
-X-Gm-Message-State: AJIora9UgQXyp1V78Z5q0hMfPw4CZKtGl9EaQkIJ87lPdm5L6DHJqZyU
-        9PEKMBWBjjqdL9aJ9ZOVmqUaE/aFXRu9k+Vm
-X-Google-Smtp-Source: AGRyM1sGi7hDRHgbtbQ1r4bhDDCZKOUJkCZ0vIKaczfxZ3PORpdqu17Jsa5awBE4iVj+SejJfaQlNw==
-X-Received: by 2002:a05:6402:12d8:b0:43a:6a70:9039 with SMTP id k24-20020a05640212d800b0043a6a709039mr37051772edx.379.1658149435052;
-        Mon, 18 Jul 2022 06:03:55 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id g21-20020a1709061e1500b00722f8d02928sm5555089ejj.174.2022.07.18.06.03.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:03:54 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
- missing in lower/upper fs
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-In-Reply-To: <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
-Date:   Mon, 18 Jul 2022 15:03:52 +0200
-Cc:     overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com>
-References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
- <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
- <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com>
- <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
- <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com>
- <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>, torvalds@linux-foundation.org
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=rCaukIQ4Y9kP6/SvywHkOLwsqGQwYiQZVmc0+Rt1khE=;
+        b=1f7CE23xpaC82N771ODU269XmT8lB5rPmA8GzO2/CG68mhR+Wds285zaksZ1kg1ZRq
+         FAITYcScIOsFXzorl+gxXHp0yRjCyh3P1KpAjvNLrnKqdw4Jbh1qK/m5ErHWQRGI7yUH
+         SdnkmN/burib7ERaxdT1UqWWAxJWGm+lfdrOzcPjkEW75YUnCCtObovbS/WXsSaISjjF
+         f7JJWx0aAcx4J/I5KMSoSnmqgkep1diHkMjPLdmARGqtD7sdwm3WhfY30fdCstxwkPcZ
+         1Tv1olh6CoakkaFPxsW2OPQG/ZcXk1qHc20tn4xTy2njXoZ6SK5x+ssBvc1azUDGWjQz
+         9BGQ==
+X-Gm-Message-State: AJIora+e67xFSX1dcu4QRm5Gs6Opn2Hs5l/Dj5kts278JgioFcX8ciDA
+        5u6uXA0cLw2NoPeXQk/xaI3wgXoSUPH9SiNGkCpTnYVxd6OGXH5V7kLVQUjvPjKaKRcYbDFYQeN
+        OuCKsIqF7ACrkIPmshgdRWLnQ
+X-Received: by 2002:a37:b8c4:0:b0:6b5:79e4:36f0 with SMTP id i187-20020a37b8c4000000b006b579e436f0mr16796649qkf.126.1658149448863;
+        Mon, 18 Jul 2022 06:04:08 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sxp4WFs1CRKioCUfqdwEazjduXx4uCsRMlfV7UWtZG6xxfxu6hNzU/uGwBIl7vg64cKH8PbQ==
+X-Received: by 2002:a37:b8c4:0:b0:6b5:79e4:36f0 with SMTP id i187-20020a37b8c4000000b006b579e436f0mr16796595qkf.126.1658149448288;
+        Mon, 18 Jul 2022 06:04:08 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id h10-20020ac8548a000000b0031eddc83560sm6208450qtq.90.2022.07.18.06.04.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 06:04:07 -0700 (PDT)
+Message-ID: <547250051f1578b7ddf60311be46b3eb7990ccc6.camel@redhat.com>
+Subject: Re: [PATCH v2 02/24] KVM: VMX: Drop bits 31:16 when shoving
+ exception error code into VMCS
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Date:   Mon, 18 Jul 2022 16:04:04 +0300
+In-Reply-To: <20220715204226.3655170-3-seanjc@google.com>
+References: <20220715204226.3655170-1-seanjc@google.com>
+         <20220715204226.3655170-3-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 18.07.2022 um 14:21 schrieb Miklos Szeredi <miklos@szeredi.hu>:
->=20
-> On Mon, 18 Jul 2022 at 12:56, Christian Kohlsch=C3=BCtter
-> <christian@kohlschutter.com> wrote:
->=20
->> However, users of fuse that have no business with overlayfs suddenly =
-see their ioctl return ENOTTY instead of ENOSYS.
->=20
-> And returning ENOTTY is the correct behavior.  See this comment in
-> <asm-generic/errrno.h>:
->=20
-> /*
-> * This error code is special: arch syscall entry code will return
-> * -ENOSYS if users try to call a syscall that doesn't exist.  To keep
-> * failures of syscalls that really do exist distinguishable from
-> * failures due to attempts to use a nonexistent syscall, syscall
-> * implementations should refrain from returning -ENOSYS.
-> */
-> #define ENOSYS 38 /* Invalid system call number */
->=20
-> Thanks,
-> Miklos
+On Fri, 2022-07-15 at 20:42 +0000, Sean Christopherson wrote:
+> Deliberately truncate the exception error code when shoving it into the
+> VMCS (VM-Entry field for vmcs01 and vmcs02, VM-Exit field for vmcs12).
+> Intel CPUs are incapable of handling 32-bit error codes and will never
+> generate an error code with bits 31:16, but userspace can provide an
+> arbitrary error code via KVM_SET_VCPU_EVENTS.  Failure to drop the bits
+> on exception injection results in failed VM-Entry, as VMX disallows
+> setting bits 31:16.  Setting the bits on VM-Exit would at best confuse
+> L1, and at worse induce a nested VM-Entry failure, e.g. if L1 decided to
+> reinject the exception back into L2.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Jim Mattson <jmattson@google.com>
+> ---
+>  arch/x86/kvm/vmx/nested.c |  9 ++++++++-
+>  arch/x86/kvm/vmx/vmx.c    | 11 ++++++++++-
+>  2 files changed, 18 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 8c2c81406248..05c34a72c266 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -3822,7 +3822,14 @@ static void nested_vmx_inject_exception_vmexit(struct kvm_vcpu *vcpu,
+>         u32 intr_info = nr | INTR_INFO_VALID_MASK;
+>  
+>         if (vcpu->arch.exception.has_error_code) {
+> -               vmcs12->vm_exit_intr_error_code = vcpu->arch.exception.error_code;
+> +               /*
+> +                * Intel CPUs will never generate an error code with bits 31:16
+> +                * set, and more importantly VMX disallows setting bits 31:16
+> +                * in the injected error code for VM-Entry.  Drop the bits to
+> +                * mimic hardware and avoid inducing failure on nested VM-Entry
+> +                * if L1 chooses to inject the exception back to L2.
 
-That ship is sailed since ENOSYS was returned to user-space for the =
-first time.
-
-It reminds me a bit of Linus' "we do not break userspace" email from =
-2012 [1, 2], where Linus wrote:
-> Applications *do* care about error return values. There's no way in
-> hell you can willy-nilly just change them. And if you do change them,
-> and applications break, there is no way in hell you can then blame the
-> application.
-
-(Adding Linus for clarification whether his statement is still true in =
-2022, and marking subject with regression tag for visibility.)
-
-As far as I, a fuse user, understand, fuse uses ENOSYS as a specific =
-marker to indicate permanent failure:
-
-=46rom libfuse =
-https://libfuse.github.io/doxygen/structfuse__lowlevel__ops.html:
-> If this request is answered with an error code of ENOSYS, this is =
-treated as a permanent failure with error code EOPNOTSUPP, i.e. all =
-future getxattr() requests will fail with EOPNOTSUPP without being send =
-to the filesystem process.
-
-(also see  https://man.openbsd.org/fuse_new.3)
+Very small nitpick:
+I think I would still prefer to have a mention that AMD CPUs can have error code > 16 bit,
+The above comment kind of implies this, but it would be a bit more clear, but I don't
+have a strong preference on this.
 
 
-Again, in summary:
-1. I believe the fix should be in ovl, because ovl caused the =
-regression.
-2. Fixing in fuse would not be sufficient because other lower =
-filesystems that also return ENOSYS remain affected (a cursory search =
-indicates ecryptfs also returns ENOSYS).
-3. Fixing in fuse would break user-space. We do not break userspace.
+> +                */
+> +               vmcs12->vm_exit_intr_error_code = (u16)vcpu->arch.exception.error_code;
+>                 intr_info |= INTR_INFO_DELIVER_CODE_MASK;
+>         }
+>  
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index b0cc911a8f6f..d2b3d30d6afb 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -1621,7 +1621,16 @@ static void vmx_queue_exception(struct kvm_vcpu *vcpu)
+>         kvm_deliver_exception_payload(vcpu);
+>  
+>         if (has_error_code) {
+> -               vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, error_code);
+> +               /*
+> +                * Despite the error code being architecturally defined as 32
+> +                * bits, and the VMCS field being 32 bits, Intel CPUs and thus
+> +                * VMX don't actually supporting setting bits 31:16.  Hardware
+> +                * will (should) never provide a bogus error code, but KVM's
+> +                * ABI lets userspace shove in arbitrary 32-bit values.  Drop
+> +                * the upper bits to avoid VM-Fail, losing information that
+> +                * does't really exist is preferable to killing the VM.
+> +                */
+> +               vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, (u16)error_code);
+>                 intr_info |= INTR_INFO_DELIVER_CODE_MASK;
+>         }
+>  
 
-Cheers,
-Christian
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+ Maxim Levitsky
 
 
-
-[1] https://lkml.org/lkml/2012/12/23/75
-[2] https://lkml.org/lkml/2012/12/23/99=

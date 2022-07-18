@@ -2,106 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07F35787EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC07C5787F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234634AbiGRQ5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
+        id S234838AbiGRQ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbiGRQ5D (ORCPT
+        with ESMTP id S234759AbiGRQ5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:57:03 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88252B1A4;
-        Mon, 18 Jul 2022 09:56:59 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id m13so5998253edc.5;
-        Mon, 18 Jul 2022 09:56:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y3DicpiZDzzyLvsd6Ksc1jxotvvS3SoBDIYH96KWNtg=;
-        b=KUKKHyYWEJQbW9ke9Rw1YIZJaiFxXnCj4yr4QmqifDHu6S1SMb6SIZE5A21R2HhbZ0
-         2gPuEGxA3VkBSG5aEF5bDSx00RMurXvxMRSIv8MEiFxhF0iKD9YHGVkYTvOinpxKmIQ+
-         Nv6jaPHBJ2gJx22z5fzAzcVI6X2PESSspw5ui+uRmlCMGo16JQBEwjVaN0EXtibBKJDG
-         qQ6JwWEKnDD8o/tnyaEEfWawuHJt09qBUeH2a4+mzdGmT51ClBuZsDhppFJv3ORp4DCp
-         EFq8lWr0u2wLMuFZCx59OaP/eI9XSdqO/djQobEM//RngBYiGpHJQU8zUIildGJ9GWR4
-         7iwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y3DicpiZDzzyLvsd6Ksc1jxotvvS3SoBDIYH96KWNtg=;
-        b=A3genINUGjDC5fm+lqNnKmgmhaxsDJr/p6KMEPiU6Lv7DV4rrWEI5t4sbbg16Ffu06
-         IjMuyimc4jT4Hma5vGZ4C8HZriQ8RXGBxaqSkG0YdxWIVykhBu5W58Xi+rk0bvbesSYd
-         aBOJSFGRlbX29WoxNKzhN/aIxJNQn2lq6Rx4faayi/BxHIU6/7nA86NrZczGer0CXHzM
-         11PLyu55MSTOwyX5h+QVzNLtd4uWR5teqqsk5JXlTBUSNa77fviZgfifGqV7KUep4zzf
-         qBzzBNjToH0qywR5G+2we63KiMWEoMUE68g6xymWiljvYsVCr5f8YgFP68A4zsJ/BpKR
-         hxUg==
-X-Gm-Message-State: AJIora9QiwI3tXKqw23mPV1FGvE/wJSaf6l2PpnOhkZzJ1stP0q9ZB6Q
-        D+HKDc2op2v+44QdgQlPqEM=
-X-Google-Smtp-Source: AGRyM1syIdVOZlV95OE9SRKoINorbj9ZvFSagj4n4pG8X5leSXmfWy+OX9VV0dqUJVDUD4hGdnhwtw==
-X-Received: by 2002:a05:6402:46:b0:43a:f611:5992 with SMTP id f6-20020a056402004600b0043af6115992mr38917400edu.18.1658163418196;
-        Mon, 18 Jul 2022 09:56:58 -0700 (PDT)
-Received: from kista.localdomain (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id gr19-20020a170906e2d300b0070abf371274sm5661292ejb.136.2022.07.18.09.56.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 09:56:57 -0700 (PDT)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
-        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, nicolas.dufresne@collabora.com,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH] media: cedrus: hevc: Add check for invalid timestamp
-Date:   Mon, 18 Jul 2022 18:56:49 +0200
-Message-Id: <20220718165649.16407-1-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Mon, 18 Jul 2022 12:57:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D502BB22
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:57:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81F4DB8167A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113E5C341C0;
+        Mon, 18 Jul 2022 16:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658163448;
+        bh=AnJdj+qPEyjwaxmU5ymhWx17b9DtWL91rx0lNbaEJnI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JPyT0RynILtx2EUQmdMhPkGtYND7f66t4sOqBJzNqUnh932Y3l7aKdSRg8BSsRirV
+         nLRrxRu4tZDl0flU0dmGh6/UhxNZUDmjVokIfXd+i77V1d6PEIaTEXtPfFmUInIYdO
+         dC8wS4PXMqXygxngpliHXhhxIYEtQpLRkk3afxVmt70C4+Cx1+KW6NaYIe1gOr7FOV
+         ifDY8Ge37q2QM/Y6/hToXlMykwUdZqimI5LDnQTpXgRfhH8VHEtfYFFYF5jl9b+XAp
+         0OibGdOE+30id4Th0KL0jbwwoQCvYfxFoUxZk0h+HAy5MwwtW9jhmT5AND3VdWszsO
+         a9O2fTIZS1LKQ==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDU3h-008GnX-MJ;
+        Mon, 18 Jul 2022 17:57:25 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Mon, 18 Jul 2022 17:57:25 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Subject: Re: [PATCH v4 11/18] KVM: arm64: Stub implementation of non-protected
+ nVHE HYP stack unwinder
+In-Reply-To: <CAC_TJvewAfGACxwZ57W+fDsXOYBNnjxaKUt3Es9Ou0vDO3H_0w@mail.gmail.com>
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+ <20220715061027.1612149-12-kaleshsingh@google.com>
+ <877d4a513o.wl-maz@kernel.org>
+ <CAC_TJvewAfGACxwZ57W+fDsXOYBNnjxaKUt3Es9Ou0vDO3H_0w@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <54b1c642097af7d290174072bd6e856c@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, broonie@kernel.org, madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com, tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, andreyknvl@gmail.com, russell.king@oracle.com, vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not all DPB entries will be used most of the time. Unused entries will
-thus have invalid timestamps. They will produce negative buffer index
-which is not specifically handled. This works just by chance in current
-code. It will even produce bogus pointer, but since it's not used, it
-won't do any harm.
+On 2022-07-18 17:51, Kalesh Singh wrote:
+> On Mon, Jul 18, 2022 at 12:31 AM Marc Zyngier <maz@kernel.org> wrote:
+>> 
+>> On Fri, 15 Jul 2022 07:10:20 +0100,
+>> Kalesh Singh <kaleshsingh@google.com> wrote:
+>> >
+>> > Add stub implementations of non-protected nVHE stack unwinder, for
+>> > building. These are implemented later in this series.
+>> >
+>> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+>> > ---
+>> >  arch/arm64/include/asm/stacktrace/nvhe.h | 22 ++++++++++++++++++++++
+>> >  1 file changed, 22 insertions(+)
+>> >
+>> > diff --git a/arch/arm64/include/asm/stacktrace/nvhe.h b/arch/arm64/include/asm/stacktrace/nvhe.h
+>> > index 1eac4e57f2ae..36cf7858ddd8 100644
+>> > --- a/arch/arm64/include/asm/stacktrace/nvhe.h
+>> > +++ b/arch/arm64/include/asm/stacktrace/nvhe.h
+>> > @@ -8,6 +8,12 @@
+>> >   *      the HYP memory. The stack is unwinded in EL2 and dumped to a shared
+>> >   *      buffer where the host can read and print the stacktrace.
+>> >   *
+>> > + *   2) Non-protected nVHE mode - the host can directly access the
+>> > + *      HYP stack pages and unwind the HYP stack in EL1. This saves having
+>> > + *      to allocate shared buffers for the host to read the unwinded
+>> > + *      stacktrace.
+>> > + *
+>> > + *
+>> >   * Copyright (C) 2022 Google LLC
+>> >   */
+>> >  #ifndef __ASM_STACKTRACE_NVHE_H
+>> > @@ -53,5 +59,21 @@ static int notrace unwind_next(struct unwind_state *state)
+>> >  NOKPROBE_SYMBOL(unwind_next);
+>> >  #endif       /* CONFIG_PROTECTED_NVHE_STACKTRACE */
+>> >
+>> > +/*
+>> > + * Non-protected nVHE HYP stack unwinder
+>> > + */
+>> > +#else        /* !__KVM_NVHE_HYPERVISOR__ */
+>> 
+>> I don't get this path. This either represents the VHE hypervisor or
+>> the kernel proper. Which one is it?
+> 
+> Hi Marc. This is run from kernel proper context. And it's the
+> unwinding for conventional nVHE (non-protected). The unwinding is done
+> from the host kernel in EL1.
 
-Let's fix that brittle design by skipping writing DPB entry altogether
-if timestamp is invalid.
+This really deserves a comment here, as the one you currently
+have is a bit misleading (and you probably want to move it
+below the #else).
 
-Fixes: 86caab29da78 ("media: cedrus: Add HEVC/H.265 decoding support")
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
- drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 3 +++
- 1 file changed, 3 insertions(+)
+Thanks,
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-index 1afc6797d806..687f87598f78 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-@@ -147,6 +147,9 @@ static void cedrus_h265_frame_info_write_dpb(struct cedrus_ctx *ctx,
- 			dpb[i].pic_order_cnt_val
- 		};
- 
-+		if (buffer_index < 0)
-+			continue;
-+
- 		cedrus_h265_frame_info_write_single(ctx, i, dpb[i].field_pic,
- 						    pic_order_cnt,
- 						    buffer_index);
+         M.
 -- 
-2.37.1
-
+Jazz is not dead. It just smells funny...

@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C69578D38
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669BF578D58
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235492AbiGRWCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S235116AbiGRWL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbiGRWCY (ORCPT
+        with ESMTP id S230263AbiGRWLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:02:24 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342003057D
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:02:23 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-10c0119dd16so27583177fac.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:02:23 -0700 (PDT)
+        Mon, 18 Jul 2022 18:11:54 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC0931376;
+        Mon, 18 Jul 2022 15:11:53 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id z12so19026209wrq.7;
+        Mon, 18 Jul 2022 15:11:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UdBFHF56DJCJ7TVTujTvKpBH89sBJrOSHbI3IjUu/5k=;
-        b=wTFG8JWjShO5RNne+JFekypG5Jun3Z5JIEH+vyfzhLBlGdU3IBQsxWmjzY9A//MPbd
-         rbrty3FJrIcYAIe4+QpZ+Jw8usCg0M1t/NQ6SaJZfehWJ8pL9kQL3jea1SnWkYzIlwJn
-         k6gemebyT1TUIP+p7XkvwQKCKbomhP+6ECd4p5gkhBYU5TuLASId3JFpmQYgYQrJeiIZ
-         OFgUDSxDA/A0v0eFvkvAhGhE6oHgUsjR2MjGx53TGIvCR7jOOF7jk9AhVTpQlflXTYmK
-         tAm6l0alQnFFnPmqHezfvMTknOoT9vWuAImEcXQf0hz5DKT1vmwD/HN70lEffAi6OWKb
-         oiXQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KhoNbI1/wIdu6SVDPbjXasWJrkQ2kVGR6Zwa7oq3DcM=;
+        b=jmxNWExbZtsN3rwoEB7zPuWlh7iDucNSlKl1aDegRkFhtqZRi3UCSKDWRDMsdHcdgx
+         +fxwC7bjJdtQ+//2NYCCQUnQ0upbUuGYPFKaQYsrK/2tQXWMLucTxynuK0BS3vJzEEJW
+         EKr/cRsuwoLrKuQobulznLwAQnNRjf2dGRBZm1S9p2wW09DvoGS0jS7UwKLMoP2qzY8Z
+         yw3G21uqjAshW8iYw1GQfBgbS65gRwzNLwjtFCRUaGZp04FTqG1y+Dn6UA4Sws4iY3bg
+         t0LMWyBh63M1oDTdWiNPtVo5Dog+yAo9O+iRc4ImKbnLWrV4bhIFr7TAwQbONPtBqFQj
+         LpIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UdBFHF56DJCJ7TVTujTvKpBH89sBJrOSHbI3IjUu/5k=;
-        b=R3ZN+lrpFJGQiYXnQp14w2t28zKkGYYXMQ6Ftges29e7TtW4Ne0VWEKBUaZKw1JcIj
-         kmTk3RpEUKoQt0SmDeodK2sXjkxxT9FVxEqYRVik8o2Wu7tSaKTK6dxL1oSYgBC1ZR6+
-         OBZY/LizNgqNXoA9bZh+53UpRG+VpkepmkdZ3n0Dg0s4efJku2UE4cQwMDrw5x4wyS4b
-         OcZpJLx0L507/pkXp1+2lT+cofpp6NYbo5Fse6qNLIYZtShqCBIl/P9ykbuYyEJlFx20
-         tEhvj6YIl0ZrZ7OzfJCUswvjJlf/i/sLmw7nyj8NEL+8bsCOfAX3JcX7gs8/qsSQL/s2
-         l+pA==
-X-Gm-Message-State: AJIora8BZnJ7ADF/qHBo16omhq5TmusotldWkWgU74GVxwoj1bR5uiv4
-        aj7OU0/yV3HaxcIiRpQMbSBqi+1w2G3OPq6f
-X-Google-Smtp-Source: AGRyM1vB/B9eryf5swntZ6a7FaXZ/PDoV23ychjM/n23I/soPsdtUbR9hUTrm9sjNJ8atxYP1gPpYw==
-X-Received: by 2002:a05:6870:2186:b0:10b:f3fa:a07b with SMTP id l6-20020a056870218600b0010bf3faa07bmr18360882oae.266.1658181742537;
-        Mon, 18 Jul 2022 15:02:22 -0700 (PDT)
-Received: from zeta-build.. ([190.190.187.68])
-        by smtp.gmail.com with ESMTPSA id x27-20020a9d459b000000b0061c68a35fdfsm3793183ote.9.2022.07.18.15.02.20
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KhoNbI1/wIdu6SVDPbjXasWJrkQ2kVGR6Zwa7oq3DcM=;
+        b=00KV8pXXqFWKUJhJ1MiSlCwWSpQfzBLbMOL0JaO4c/Qx8tqac7mCvrE/flwS+l7t76
+         PM4VT4H57ml9RxVTEVj+GL8esK3sJHU9DFjaNrmkobLXAAblyO6TrKvqIwGExsQWw8IT
+         ERFLSqdruAnTEFRjJpE0Cjdxd/cDw8wJeGkmFbs3J2sNzXlHEPkurl16seFEpH8qSQ4w
+         +lfZq+lK6xMwwGnEIuZNjCxjkcx6IxSFZUcuwEQMOtdXM9JVr6z/ddrR7Xv0UpdxXVZi
+         3whLqv7BeFRkIiUZCqOkHI+CsGipohGTWIBek6PHKl3jO8l1aNFJ9j6nEOiU6cDWeU54
+         Q8UA==
+X-Gm-Message-State: AJIora/vrLr+WIZvG0v4fPV/N2Ym0L/mu2/Y1A+aEdiMc4KFZHHPNjYL
+        nGaV+mYr0SP5ME3vqwipN5k=
+X-Google-Smtp-Source: AGRyM1vVMQXtN6e6Ok1nHQQ/eKlHncOU5kuHKla6+h5eGht2sb6fJOL9sWPJV3atsxWoRYFaVQ1R3g==
+X-Received: by 2002:a05:6000:15c9:b0:21d:ad06:f4c with SMTP id y9-20020a05600015c900b0021dad060f4cmr23648446wry.427.1658182311785;
+        Mon, 18 Jul 2022 15:11:51 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id ba5-20020a0560001c0500b0021d6c7a9f50sm11576127wrb.41.2022.07.18.15.11.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 15:02:22 -0700 (PDT)
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Subject: [PATCH v3 2/2] videobuf2: Remove vb2_find_timestamp()
-Date:   Mon, 18 Jul 2022 19:02:11 -0300
-Message-Id: <20220718220211.97995-2-ezequiel@vanguardiasur.com.ar>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220718220211.97995-1-ezequiel@vanguardiasur.com.ar>
-References: <20220718220211.97995-1-ezequiel@vanguardiasur.com.ar>
+        Mon, 18 Jul 2022 15:11:51 -0700 (PDT)
+Message-ID: <62d5daa7.1c69fb81.111b1.97f2@mx.google.com>
+X-Google-Original-Message-ID: <YtXWpJGxOT0W0a2c@Ansuel-xps.>
+Date:   Mon, 18 Jul 2022 23:54:44 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 1/4] net: dsa: qca8k: drop
+ qca8k_read/write/rmw for regmap variant
+References: <20220716174958.22542-1-ansuelsmth@gmail.com>
+ <20220716174958.22542-2-ansuelsmth@gmail.com>
+ <20220718180452.ysqaxzguqc3urgov@skbuf>
+ <62d5a291.1c69fb81.e8ebe.287f@mx.google.com>
+ <20220718184017.o2ogalgjt6zwwhq3@skbuf>
+ <62d5ad12.1c69fb81.2dfa5.a834@mx.google.com>
+ <20220718193521.ap3fc7mzkpstw727@skbuf>
+ <62d5b8f5.1c69fb81.ae62f.1177@mx.google.com>
+ <20220718203042.j3ahonkf3jhw7rg3@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718203042.j3ahonkf3jhw7rg3@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,67 +89,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we've transitioned all users to vb2_find_buffer API,
-remove the unused vb2_find_timestamp().
+On Mon, Jul 18, 2022 at 11:30:42PM +0300, Vladimir Oltean wrote:
+> On Mon, Jul 18, 2022 at 09:30:58PM +0200, Christian Marangi wrote:
+> > Tell me if I got this wrong.
+> > 
+> > The suggestion was to move the struct dsa_switch_ops to qca8k.h and add
+> > in the specific code probe the needed ops to add to the generic
+> > struct...
+> 
+> The declaration yes; the definition to qca8k-common.c. See for example
+> where felix_switch_ops is, relative to felix_vsc9959.c, seville_vsc9953.c
+> (users), felix.h (declaration), and felix.c (definition). Or how
+> mv88e6xxx_switch_ops does things and still supports a gazillion of switches.
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Acked-by: Tomasz Figa <tfiga@chromium.org>
----
- drivers/media/common/videobuf2/videobuf2-v4l2.c | 13 -------------
- include/media/videobuf2-v4l2.h                  | 16 ----------------
- 2 files changed, 29 deletions(-)
+Mhh I checked the example and they doesn't seems to be useful from my
+problem. But I think it's better to discuss this to the patch directly
+so you can better understand whay I intended with having dsa_switch_ops
+set to const.
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index f26cb8586bd4..4e84a0e1aca2 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -625,19 +625,6 @@ static const struct vb2_buf_ops v4l2_buf_ops = {
- 	.copy_timestamp		= __copy_timestamp,
- };
- 
--int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
--		       unsigned int start_idx)
--{
--	unsigned int i;
--
--	for (i = start_idx; i < q->num_buffers; i++)
--		if (q->bufs[i]->copied_timestamp &&
--		    q->bufs[i]->timestamp == timestamp)
--			return i;
--	return -1;
--}
--EXPORT_SYMBOL_GPL(vb2_find_timestamp);
--
- struct vb2_buffer *vb2_find_buffer(struct vb2_queue *q, u64 timestamp)
- {
- 	unsigned int i;
-diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
-index 76e405c0b003..5a845887850b 100644
---- a/include/media/videobuf2-v4l2.h
-+++ b/include/media/videobuf2-v4l2.h
-@@ -62,22 +62,6 @@ struct vb2_v4l2_buffer {
- #define to_vb2_v4l2_buffer(vb) \
- 	container_of(vb, struct vb2_v4l2_buffer, vb2_buf)
- 
--/**
-- * vb2_find_timestamp() - Find buffer with given timestamp in the queue
-- *
-- * @q:		pointer to &struct vb2_queue with videobuf2 queue.
-- * @timestamp:	the timestamp to find.
-- * @start_idx:	the start index (usually 0) in the buffer array to start
-- *		searching from. Note that there may be multiple buffers
-- *		with the same timestamp value, so you can restart the search
-- *		by setting @start_idx to the previously found index + 1.
-- *
-- * Returns the buffer index of the buffer with the given @timestamp, or
-- * -1 if no buffer with @timestamp was found.
-- */
--int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
--		       unsigned int start_idx);
--
- /**
-  * vb2_find_buffer() - Find a buffer with given timestamp
-  *
 -- 
-2.34.3
-
+	Ansuel

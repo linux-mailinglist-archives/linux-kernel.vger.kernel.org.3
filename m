@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86F2578DA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB07578DAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235491AbiGRWlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 18:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
+        id S235566AbiGRWle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234596AbiGRWlU (ORCPT
+        with ESMTP id S234596AbiGRWlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 18:41:20 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6FA2D1D3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:41:19 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id l14so7518207qtv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:41:19 -0700 (PDT)
+        Mon, 18 Jul 2022 18:41:32 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B492DA9C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:41:31 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id n2so8566890qkk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 15:41:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hV04gJeXIMaTZ1Jk1N+nIbNrqJFTcRn2y0JfEOihkw8=;
-        b=IROMFuz2/wOa2pL4mKbRGtySWdHOHRt4GrNKKn7Bza52koex4HrozURD5wdH+F41eV
-         sR1WHq/Pul3QucGfIc5ruREk7iz0G5aYq9Ud/i5KDg0WpZLVvKV76ej/SmlXqsmG14cW
-         WU9VyBC5wMDUiqu/U7QOigzKsG0LDYMQHYsjJosW96Br9K81jsoXhubNWcclf5LGzLNi
-         /usskXzsOp03JBmav0nT+tn9iYe3tgZ0LsDeWyBjb+RWuxtGFfrwD0uVmtzenKsRws3N
-         USWWtZNslYoqp2iYySx8oLR3I+tzS9lZL1a0m5nNXKwUM/P7Hz6tcJ9nz/gS9LXfKXgj
-         kVug==
+        bh=ISQEQ+fIU3xAcRWcqutk61dQJfgUByc+o/p0/o9VaqQ=;
+        b=IH/FZ8SrUXP2dDYcRxYo5hHvEHRDVPafx35U/9ZnUzKdYONMPijudkIJgyNp/P1eqS
+         Vz+6KL7fWpehsS1cZaRejfGyFWa9vLodhJW54WnzQEK190wK7fzCpe4PgSrQWHAWy7LD
+         7P0Jn3c54BPUPIYPFib731YYvXf1TFuRIGIS/T7kyWo5aD/jaGyK+zZC7wKvmgenhRkO
+         V1YUIwQj5br4kxCvuQZPcJDR4aEDHWvE+ePOZLsmgkHnzwZjCXOvCQ/99BF64hkTG7qd
+         eJEAXPCtQMqIXm1OH4M7jazorAiFE6SEzkdjAGKvnw7iGZ69My6Qo5IOfomFGWEVisqU
+         vo6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hV04gJeXIMaTZ1Jk1N+nIbNrqJFTcRn2y0JfEOihkw8=;
-        b=mZpsYWTr0OPHX6ciif145Eliu/nRqYAxLKCO2K1E3c/E6gHCgsOEy02L7zBQWxdjzN
-         wXkb1UBm5cenHycxnnvnwL/U4uyt0FXtLEL3R3T4bvISayvErlby2PDSpLRvHfbi2B4l
-         z27nnpSvNDT6sEaNkCqyBgA4D2jyQWdmNTKyQAXtvfi4AAUuXHCJ5yDcuMeorc5bGYvZ
-         reYEk12zwzxd2CTiXjdPe3Uc+WHBJcWDABmuD1wut672qKdUan+NsgQAv4v+AWKqXDCn
-         oxI0hFJS3xob8sZ7JA40E6lUwggHex+DFd3UejKuQL1xM9kNfcekjeT7zUv6FnT3NwDA
-         LvFg==
-X-Gm-Message-State: AJIora8IK5r9XWugE1xaamqMz0V6Z3nzxHflTQ9EkTDAHbaR9FuQNYme
-        mbuEfQJA8fxiX/6ID4BqKgQd3u/chTgRUTX5wtc=
-X-Google-Smtp-Source: AGRyM1vWIRiBCEPaEu8ccu39ek+Op1bAr/9W70rRJyLmqPHafkxRKLHee0UwfKZbMu3aGVJ9euW8FrT3myOm2u/eQgw=
-X-Received: by 2002:ac8:7fc1:0:b0:31e:c575:a56c with SMTP id
- b1-20020ac87fc1000000b0031ec575a56cmr22857594qtk.11.1658184078807; Mon, 18
- Jul 2022 15:41:18 -0700 (PDT)
+        bh=ISQEQ+fIU3xAcRWcqutk61dQJfgUByc+o/p0/o9VaqQ=;
+        b=1L9c6rmXXKt8U+1hSCaOqFjpz6VhgY8lw7yEWUbEHWSfK++sDtGdHbhpwX9lFDdvti
+         9agKRrs+S0eb6+6a51842OiNVZBgdkVWFFA8jkV3yMTBiGtpHvLuquZ7AmT3XAXBbaLW
+         0wZ8XPUIrnz5s1VQOB01rtXS7t+09KXbbB0r5JJEvXCgvEPET7oB9HXDTKhBv5AApkIe
+         TBOrDewdHJiPQ6WCyp+Mfrp5SXmb++aoMBOANzZMH1FT9q25HJuZcV9bdykjPreo8ank
+         /lkeG+5DBdfJsfq0kcE/RLflf6U3iUy0Fc/P5EnVlHCkPM9gHxmyGHqnXzhCZXPwDb4b
+         In1g==
+X-Gm-Message-State: AJIora+2Fe0rtnCOB+7mScSXWblTys4dIRWDE+3bLsve+rDF++InwYIY
+        8vh9DWoI8uG1/0D1FN6wXUvaZ0iKpHbV+snPuBY=
+X-Google-Smtp-Source: AGRyM1tSoqflDUr5Mg2xHUPRTTAzjNKYxv+S53Qbj3gS0KL0JvYKrrffyaAXoiFit8+UmyC/nTzU38aOfUyQ4tXScMQ=
+X-Received: by 2002:a05:620a:2807:b0:6a6:6ef1:fb9d with SMTP id
+ f7-20020a05620a280700b006a66ef1fb9dmr19234367qkp.146.1658184090436; Mon, 18
+ Jul 2022 15:41:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1655150842.git.andreyknvl@google.com> <YqxKQpjJMwUCpbTt@elver.google.com>
-In-Reply-To: <YqxKQpjJMwUCpbTt@elver.google.com>
+References: <cover.1655150842.git.andreyknvl@google.com> <11a7bfb5ed5de141b50db8c08e9c6ad37ef3febc.1655150842.git.andreyknvl@google.com>
+ <CANpmjNMTb4cxizfb5Xzy979jCA2_BMio6W4k1wZivKnu77RKVw@mail.gmail.com>
+In-Reply-To: <CANpmjNMTb4cxizfb5Xzy979jCA2_BMio6W4k1wZivKnu77RKVw@mail.gmail.com>
 From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 19 Jul 2022 00:41:08 +0200
-Message-ID: <CA+fCnZdsn1yRR9Ekzg9vpWjUw7F2E16RSo4B0cXbAb7PYo0SiA@mail.gmail.com>
-Subject: Re: [PATCH 00/32] kasan: switch tag-based modes to stack ring from
- per-object metadata
+Date:   Tue, 19 Jul 2022 00:41:19 +0200
+Message-ID: <CA+fCnZeq8bWKcQ5fCYuXCvReDJjv+SKcaFu-DPO==W3XPRUm3w@mail.gmail.com>
+Subject: Re: [PATCH 06/32] kasan: introduce kasan_print_aux_stacks
 To:     Marco Elver <elver@google.com>
 Cc:     andrey.konovalov@linux.dev,
         Alexander Potapenko <glider@google.com>,
@@ -77,51 +77,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 11:32 AM Marco Elver <elver@google.com> wrote:
+On Fri, Jun 17, 2022 at 1:35 PM Marco Elver <elver@google.com> wrote:
 >
-> > The disadvantage:
+> > diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> > index aa6b43936f8d..bcea5ed15631 100644
+> > --- a/mm/kasan/kasan.h
+> > +++ b/mm/kasan/kasan.h
+> > @@ -265,6 +265,12 @@ void kasan_print_address_stack_frame(const void *addr);
+> >  static inline void kasan_print_address_stack_frame(const void *addr) { }
+> >  #endif
 > >
-> > - If the affected object was allocated/freed long before the bug happened
-> >   and the stack trace events were purged from the stack ring, the report
-> >   will have no stack traces.
+> > +#ifdef CONFIG_KASAN_GENERIC
+> > +void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object);
+> > +#else
+> > +static inline void kasan_print_aux_stacks(struct kmem_cache *cache, const void *object) { }
+> > +#endif
 >
-> Do you have statistics on how how likely this is? Maybe through
-> identifying what the average lifetime of an entry in the stack ring is?
->
-> How bad is this for very long lived objects (e.g. pagecache)?
+> Why not put this into one of the existing "#ifdef
+> CONFIG_KASAN_GENERIC" blocks? There are several; probably the one 10
+> lines down might be ok?
 
-I ran a test on Pixel 6: the stack ring of size (32 << 10) gets fully
-rewritten every ~2.7 seconds during boot. Any buggy object that is
-allocated/freed and then accessed with a bigger time span will not
-have stack traces.
-
-This can be dealt with by increasing the stack ring size, but this
-comes down to how much memory one is willing to allocate for the stack
-ring. If we decide to use sampling (saving stack traces only for every
-Nth object), that will affect this too.
-
-But any object that is allocated once during boot will be purged out
-of the stack ring sooner or later. One could argue that such objects
-are usually allocated at a single know place, so have a stack trace
-won't considerably improve the report.
-
-I would say that we need to deploy some solution, study the reports,
-and adjust the implementation based on that.
-
-> > Discussion
-> > ==========
-> >
-> > The current implementation of the stack ring uses a single ring buffer for
-> > the whole kernel. This might lead to contention due to atomic accesses to
-> > the ring buffer index on multicore systems.
-> >
-> > It is unclear to me whether the performance impact from this contention
-> > is significant compared to the slowdown introduced by collecting stack
-> > traces.
->
-> I agree, but once stack trace collection becomes faster (per your future
-> plans below), this might need to be revisited.
-
-Ack.
-
-Thanks!
+The idea was to group functions based on their purpose, not on which
+mode uses them. Here, kasan_print_aux_stacks() is related to printing
+reports, so it goes next to other such functions. We could rework the
+order of functions in this file, but I'd rather keep it as is in this
+change. Thanks!

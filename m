@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB791577CCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D59577CD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbiGRHtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        id S232841AbiGRHuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiGRHtq (ORCPT
+        with ESMTP id S232604AbiGRHuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:49:46 -0400
-Received: from extserv.mm-sol.com (ns.mm-sol.com [37.157.136.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD2C1209B;
-        Mon, 18 Jul 2022 00:49:45 -0700 (PDT)
-Received: from [192.168.1.7] (unknown [195.24.90.54])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: svarbanov@mm-sol.com)
-        by extserv.mm-sol.com (Postfix) with ESMTPSA id D7E08D2E3;
-        Mon, 18 Jul 2022 10:49:42 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mm-sol.com; s=201706;
-        t=1658130583; bh=xf8vuKL8G7ik7cebVncZ887DV9yRiKhEp9uMoJOL7mo=;
-        h=Date:Subject:To:Cc:From:From;
-        b=qVNX5bIxsn/TWs9nKnIXMetNespY3j9sEPFdb8ev/CfTHM6Fr0N06oHLECN8woVLA
-         PLnt1wUcdVAfyHKgPJt8XwMMIUS0ucWT7efK2CDa1AaNvpQrIH4mwfGk2FiH7UMu2d
-         DtBYD+ni9LJl16dvcWetjMMVt8RrBbmRRd428NEV7pLCT4IPNwFwU47XQyCitpYekP
-         DrGXhCtnFW4jhm7NzyJeHW2e3oW/8z4RMzDQ1fVA0Rp29ZIqDIPkK5M9vN+N1Cv3Wr
-         jxKtJvjUF8SQwcnrAXWMdMD0DcjagGloo6fAhxMrwQMNGhSais0ulbtRjFtEdLS6hh
-         jA5fpMtfnOK4w==
-Message-ID: <aa11b2ec-7196-7423-151c-1797966d0cd2@mm-sol.com>
-Date:   Mon, 18 Jul 2022 10:49:40 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 0/8] PCI: qcom: Add support for SC8280XP and SA8540P
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mon, 18 Jul 2022 03:50:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF46E17E37
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:50:01 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oDLVu-0000p6-11; Mon, 18 Jul 2022 09:49:58 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oDLVt-001fbn-3e; Mon, 18 Jul 2022 09:49:57 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oDLVs-005uu1-7D; Mon, 18 Jul 2022 09:49:56 +0200
+Date:   Mon, 18 Jul 2022 09:49:54 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220714071348.6792-1-johan+linaro@kernel.org>
-From:   Stanimir Varbanov <svarbanov@mm-sol.com>
-In-Reply-To: <20220714071348.6792-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Adnan Chowdhury <adnan.chowdhury@sifive.com>
+Subject: Re: [PATCH 1/7] pwm: change &pci->dev to dev in probe
+Message-ID: <20220718074954.4z4qiz2pbuyrzaje@pengutronix.de>
+References: <20220712100113.569042-1-ben.dooks@sifive.com>
+ <20220712100113.569042-2-ben.dooks@sifive.com>
+ <20220713081633.5lsunbl5mfnngdrs@pengutronix.de>
+ <2cd139dd-559e-7975-41a7-c813bc5851ea@sifive.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gugjtpolg2xq7sbq"
+Content-Disposition: inline
+In-Reply-To: <2cd139dd-559e-7975-41a7-c813bc5851ea@sifive.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
 
-Thank you for your work, especially for for the last three patches ;-)
+--gugjtpolg2xq7sbq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 7/14/22 10:13, Johan Hovold wrote:
-> This series adds support for the PCIe controllers found on SC8280XP and
-> SA8540P.
-> 
-> Included are also three patches that clean up the way the driver handles
-> different IP revisions (e.g. by modelling optional clocks as being truly
-> optional).
-> 
-> These patches depend on the recently merged (but currently held off?)
-> PIPE clock series:
-> 
-> 	https://lore.kernel.org/all/20220608105238.2973600-1-dmitry.baryshkov@linaro.org/
-> 
-> as well as the about-to-be-merged MSI series (v17):
-> 
-> 	https://lore.kernel.org/all/20220707134733.2436629-6-dmitry.baryshkov@linaro.org/
-> 
-> Note that the final patch in the PIPE clock series is currently missing
-> from the pci/ctrl/qcom-pending branch:
-> 
-> 	https://lore.kernel.org/all/20220608105238.2973600-6-dmitry.baryshkov@linaro.org/
-> 
-> Johan
-> 
-> 
-> Changes in v2
->  - drop the two DT schema fixes which have been applied by Bjorn H and
->    squashed into the MSI v17 series by Dmitry, respectively
->  - rebase on pci/ctrl/qcom-pending (2022-07-14)
->  - fix compatible sort order (Krzysztof)
->  - amend commit message for first patch to clarify motivation
->    (Krzysztof)
->  - add acks and reviewed-by tags from Dmitry, Krzysztof, Mani and Rob
-> 
-> 
-> Johan Hovold (8):
->   dt-bindings: PCI: qcom: Enumerate platforms with single msi interrupt
->   dt-bindings: PCI: qcom: Add SC8280XP to binding
->   dt-bindings: PCI: qcom: Add SA8540P to binding
->   PCI: qcom: Add support for SC8280XP
->   PCI: qcom: Add support for SA8540P
->   PCI: qcom: Make all optional clocks optional
->   PCI: qcom: Clean up IP configurations
->   PCI: qcom: Sort device-id table
-> 
->  .../devicetree/bindings/pci/qcom,pcie.yaml    |  70 +++++++++-
->  drivers/pci/controller/dwc/pcie-qcom.c        | 121 +++++++-----------
->  2 files changed, 114 insertions(+), 77 deletions(-)
-> 
+On Mon, Jul 18, 2022 at 08:19:16AM +0100, Ben Dooks wrote:
+> On 13/07/2022 09:16, Uwe Kleine-K=F6nig wrote:
+> > On Tue, Jul 12, 2022 at 11:01:07AM +0100, Ben Dooks wrote:
+> > > The dwc_pwm_probe() assignes dev to be &pci->dev but then uses
+> > > &pci->dev throughout the function. Change these all to the be
+> > > 'dev' variable to make lines shorter.
+> >=20
+> > Looks reasonable.
+> >=20
+> > Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> ack for 1/7 or the series?
 
-For the whole set:
+The former. For the other patches I assume they will change in v2.
 
-Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
+Best regards
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
--- 
-regards,
-Stan
+--gugjtpolg2xq7sbq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLVEJ8ACgkQwfwUeK3K
+7Ank1gf/aVK8DObV4OI8VKrTvEmxLg4uzaKulXPLONF9YVCLqp+OcklVONURMzSy
+06f2yQrGKiVQHysJyp8schvUryXZr2iUNA7R63Gn0X47aElFjxcpZ4kiGX6qMDDg
+N270bJgnqQ07OXwqcuqCqki8886WBZGVyIyqrDwD8O31UIw/9mwKuSL9Svn5hwEX
+GD3d8s6VEuNif/YUTcb0jGv5xYVEZfKuXmQcWD3VDAn8iZ0PiwYQUpX+Y9FCgN6O
+QHVC7AjL8JkSDlZAbd37aFqdtj5f/hFd2LP2vHM0uxQasMrwjWONxlaGT1sifBb5
+6QL2AKWvXFgcr1DbHjncNUzuXbRytA==
+=YjeE
+-----END PGP SIGNATURE-----
+
+--gugjtpolg2xq7sbq--

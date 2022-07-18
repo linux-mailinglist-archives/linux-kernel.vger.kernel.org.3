@@ -2,26 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B161578CE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DC3578CE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235950AbiGRVhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S235906AbiGRVhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 17:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbiGRVhL (ORCPT
+        with ESMTP id S232009AbiGRVhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Jul 2022 17:37:11 -0400
-X-Greylist: delayed 359 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Jul 2022 14:37:07 PDT
 Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [IPv6:2a01:4f8:a0:821d::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24140326E2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0E9C32476;
         Mon, 18 Jul 2022 14:37:07 -0700 (PDT)
 Received: from localhost.localdomain (unknown [81.178.197.238])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 85B24140197;
-        Mon, 18 Jul 2022 21:31:06 +0000 (UTC)
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 585601401E0;
+        Mon, 18 Jul 2022 21:31:07 +0000 (UTC)
 From:   Caleb Connolly <caleb@connolly.tech>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -36,12 +35,13 @@ To:     Andy Gross <agross@kernel.org>,
         Caleb Connolly <caleb@connolly.tech>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Amit Pundir <amit.pundir@linaro.org>
-Subject: [PATCH 0/4] Initial support for the Pixel 3
-Date:   Mon, 18 Jul 2022 22:30:47 +0100
-Message-Id: <20220718213051.1475108-1-caleb@connolly.tech>
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH 1/4] Documentation: dt-bindings: arm: qcom: add google,blueline
+Date:   Mon, 18 Jul 2022 22:30:48 +0100
+Message-Id: <20220718213051.1475108-2-caleb@connolly.tech>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220718213051.1475108-1-caleb@connolly.tech>
+References: <20220718213051.1475108-1-caleb@connolly.tech>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -52,43 +52,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds an initial DTS and display panel driver
-for the Pixel 3. The Pixel 3 display uses DSC (Display
-Stream Compression) which has been supported in mainline
-for some time now.
+Document the bindings for the Pixel 3
 
-Functionality includes:
- - Display, GPU, venus video transcoder
- - Modem/WiFi/Bluetooth - ModemManager seems to fail
+Based on https://lore.kernel.org/all/20220521164550.91115-7-krzysztof.kozlowski@linaro.org/
 
-The touchscreen uses some HEFTY downstream driver, hopefully
-we'll come up with an upstreamable solution for it soon and
-make this a bit more usable.
+Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+---
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Amit Pundir (1):
-  arm64: dts: qcom: add sdm845-google-blueline (Pixel 3)
-
-Caleb Connolly (1):
-  Documentation: dt-bindings: arm: qcom: add google,blueline
-
-Sumit Semwal (2):
-  dt-bindings: panel: Add LG SW43408 MIPI-DSI panel
-  drm: panel: Add lg sw43408 panel driver
-
- .../devicetree/bindings/arm/qcom.yaml         |   1 +
- .../bindings/display/panel/lg,43408.yaml      |  41 ++
- .../display/panel/panel-simple-dsi.yaml       |   2 +
- MAINTAINERS                                   |   8 +
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/sdm845-google-blueline.dts  | 652 ++++++++++++++++++
- drivers/gpu/drm/panel/Kconfig                 |  11 +
- drivers/gpu/drm/panel/Makefile                |   1 +
- drivers/gpu/drm/panel/panel-lg-sw43408.c      | 586 ++++++++++++++++
- 9 files changed, 1303 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/panel/lg,43408.yaml
- create mode 100644 arch/arm64/boot/dts/qcom/sdm845-google-blueline.dts
- create mode 100644 drivers/gpu/drm/panel/panel-lg-sw43408.c
-
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index b727467e86c6..b3e1004673c7 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -320,6 +320,7 @@ properties:
+ 
+       - items:
+           - enum:
++              - google,blueline
+               - lenovo,yoga-c630
+               - oneplus,enchilada
+               - oneplus,fajita
 -- 
 2.36.1
 

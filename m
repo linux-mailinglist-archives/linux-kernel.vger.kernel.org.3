@@ -2,126 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAAF657884C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9989578852
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234482AbiGRR06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 13:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
+        id S235532AbiGRR1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 13:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233660AbiGRR01 (ORCPT
+        with ESMTP id S235413AbiGRR1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:26:27 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172252A96B;
-        Mon, 18 Jul 2022 10:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658165187; x=1689701187;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DtUN5B7jxpyekGCrTuXMCcL4ou9ZK5JJGNt3LwquMZk=;
-  b=YMOtUQzln3LeymZ/B4mT4C6Mz4oFu/R8oIzhiAUVCbUNW5YueeX0/dk4
-   tsHyIpWqejC5LI1rFik1SS23LGkTb1J8hYjoTkKu7I0wdFEGIMVBLsfea
-   u31NrDOjtdffH1U7Ur+BZCexppRhpmU0JbE3+0BAkW4S7a0GZYxrEfj8y
-   kPkDfXy1omcKCcKdxQAJ5XrJh3OUH1LsTjtzPFeUyyie3THfUdLW20S+n
-   cjUCuSlvOJtU2twKwHuOwuE3uBs+o91vCSxumTwNl9Pp+L64yqV+Ffxn5
-   ryF8lC/IA/Q2SXExpQTSpgpuhzduwf0yAx14T8PH8F9XyYB75ISOzBcWN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="311962004"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="311962004"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 10:26:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="655376612"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Jul 2022 10:26:25 -0700
-Received: from [10.252.209.6] (kliang2-mobl1.ccr.corp.intel.com [10.252.209.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 7FEE75808A1;
-        Mon, 18 Jul 2022 10:26:23 -0700 (PDT)
-Message-ID: <6dfdeeee-1c28-666d-1385-c4bcc493cc6a@linux.intel.com>
-Date:   Mon, 18 Jul 2022 13:26:22 -0400
+        Mon, 18 Jul 2022 13:27:22 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C452B1AC
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:27:20 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id z12so18093801wrq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NarkEMjRQJGNapnFE354uoBB/FLZcCCiwC99PqFL5qY=;
+        b=S68ky+N9MIZZqrGTw9WcCJuhoDR9m6g+zzdzjK+mpiGOlOMkgUPViUE0yazvxbTVav
+         Yrq5OCexwM9wOYoRIMSmHKvc1e1P1m2lzlsgZsk2EINVKLs8FbE86MSoh6jbX/64wkKa
+         TmI3gVVD5vqZl8NwUinYueWQFaCGVMMcBymaWzUannVPb7zYVB2aes/zUjEB7Gqvz8oP
+         ckNfx0wCYQeIKHff5noIKIPvpUTw9XiQOQs7/yQitKejqOP2jE8lybHPfHJRsnt3DgcJ
+         F4v8L+of8kaCZh2iyCodYJ8P9j81QmB/E5GcG0DzpcCt6yBrW7SIvBDgrvYpLW7gCO2l
+         PB1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NarkEMjRQJGNapnFE354uoBB/FLZcCCiwC99PqFL5qY=;
+        b=g8AClmlI5N1CoYv49EPmSxT6tYQqoBZ80O1DcV+FNmywN3ZOoILn+Zcrlb0tHBwywh
+         SrqS4LY5BIi8lk47Ys9dFBuf9hfaI0mOrNrTMrcwEBhqP1lX60aonVy6jOxtxdgV+RhL
+         9yqI0mk0fMzF3STclexQaLfr6KV8p7avfhFuxCAh+qCVRI00Wg26mpESPGBihvUfCCZa
+         FQRnZ9PPZuW6TpMSapmYggtIKJRGi/z/GCPImWxuCURztaHndw9jjNLJDEqVOUYXzkm/
+         n1wc4Y0lfKBq1eJbfyKYGUPqlavBfjmGLQJNfvGeLU3nni3jmPoXK3fdK6JYwoDXDmHf
+         6VzQ==
+X-Gm-Message-State: AJIora+5lQcPRGot+cllDiLYkzkKNr5r6cV62/HpFlaHHZUtBPTLuqCG
+        S3Q3W9XAPfck/Y5MvNqeRD7v0ie1hJjpVPypSIVbBg==
+X-Google-Smtp-Source: AGRyM1uwq/757n/imP51CRNLieGFzZptqlZ7Lr0+jvfWuU7btodZ8udc9faDQUfo4/sXOUPE8dWEAhnfKnXpHMNeznk=
+X-Received: by 2002:a05:6000:1e04:b0:21d:7ec3:fe5a with SMTP id
+ bj4-20020a0560001e0400b0021d7ec3fe5amr23991658wrb.116.1658165238673; Mon, 18
+ Jul 2022 10:27:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH v4 0/3] Add arch TSC frequency information
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>, perry.taylor@intel.com,
-        caleb.biggers@intel.com, kshipra.bopardikar@intel.com,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20220718164312.3994191-1-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20220718164312.3994191-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+ <20220715061027.1612149-10-kaleshsingh@google.com> <87bktm51xf.wl-maz@kernel.org>
+In-Reply-To: <87bktm51xf.wl-maz@kernel.org>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Mon, 18 Jul 2022 10:27:07 -0700
+Message-ID: <CAC_TJvdP4joAFP0bgfKGbqsXDANGAzUiwijmhvqJsGGEqkwRdA@mail.gmail.com>
+Subject: Re: [PATCH v4 09/18] KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 18, 2022 at 12:13 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Fri, 15 Jul 2022 07:10:18 +0100,
+> Kalesh Singh <kaleshsingh@google.com> wrote:
+> >
+> > In protected nVHE mode the host cannot directly access
+> > hypervisor memory, so we will dump the hypervisor stacktrace
+> > to a shared buffer with the host.
+> >
+> > The minimum size do the buffer required, assuming the min frame
+>
+> s/do/for/ ?
+Ack
 
+>
+> > size of [x29, x30] (2 * sizeof(long)), is half the combined size of
+> > the hypervisor and overflow stacks plus an additional entry to
+> > delimit the end of the stacktrace.
+>
+> Let me see if I understand this: the maximum stack size is the
+> combination of the HYP and overflow stacks, and the smallest possible
+> stack frame is 128bit (only FP+LR). The buffer thus needs to provide
+> one 64bit entry per stack frame that fits in the combined stack, plus
+> one entry as an end marker.
+>
+> So the resulting size is half of the combined stack size, plus a
+> single 64bit word. Is this correct?
 
-On 2022-07-18 12:43 p.m., Ian Rogers wrote:
-> The first patch adds the #system_tsc_freq literal to expr.c and
-> computes it via cpuid. The second patches adds support for "older"
-> processors by computing the value via /proc/cpuinfo. The third patch
-> adds a test then the computation looks somewhat sensible.
-> 
-> Such a literal is useful to calculate things like the average
-> frequency [1]. The TSC frequency isn't exposed by sysfs although some
-> experimental drivers look to add it [2].
-> 
-> [1] https://github.com/intel/perfmon-metrics/blob/5ad9ef7056f31075e8178b9f1fb732af183b2c8d/SKX/metrics/perf/skx_metric_perf.json#L11
-> [2] https://github.com/trailofbits/tsc_freq_khz
-> 
-> v4. Modified the patch order and separated out the test.
-> v3. Added the cpuid approach from Kan Liang.
-> v2. Adds warnings to make clear if things have changed/broken on future
->     Intel platforms. It also adds caching and an Intel specific that a
->     value is computed.
-> 
-> Ian Rogers (2):
->   perf tsc: Add cpuinfo fall back for arch_get_tsc_freq
->   perf test: Add test for #system_tsc_freq in metrics
+That understanding is correct. So for the 64 KB pages is slightly more
+than half a page (overflow stack is 4KB).
 
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+>
+> >
+> > The stacktrace buffers are used later in the seried to dump the
+> > nVHE hypervisor stacktrace when using protected-mode.
+> >
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > ---
+> >  arch/arm64/include/asm/memory.h      | 7 +++++++
+> >  arch/arm64/kvm/hyp/nvhe/stacktrace.c | 4 ++++
+> >  2 files changed, 11 insertions(+)
+> >
+> > diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> > index 0af70d9abede..28a4893d4b84 100644
+> > --- a/arch/arm64/include/asm/memory.h
+> > +++ b/arch/arm64/include/asm/memory.h
+> > @@ -113,6 +113,13 @@
+> >
+> >  #define OVERFLOW_STACK_SIZE  SZ_4K
+> >
+> > +/*
+> > + * With the minimum frame size of [x29, x30], exactly half the combined
+> > + * sizes of the hyp and overflow stacks is needed to save the unwinded
+> > + * stacktrace; plus an additional entry to delimit the end.
+> > + */
+> > +#define NVHE_STACKTRACE_SIZE ((OVERFLOW_STACK_SIZE + PAGE_SIZE) / 2 + sizeof(long))
+> > +
+> >  /*
+> >   * Alignment of kernel segments (e.g. .text, .data).
+> >   *
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/stacktrace.c b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> > index a3d5b34e1249..69e65b457f1c 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> > +++ b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> > @@ -9,3 +9,7 @@
+> >
+> >  DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
+> >       __aligned(16);
+> > +
+> > +#ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
+> > +DEFINE_PER_CPU(unsigned long [NVHE_STACKTRACE_SIZE/sizeof(long)], pkvm_stacktrace);
+> > +#endif /* CONFIG_PROTECTED_NVHE_STACKTRACE */
+>
+> OK, so the allocation exists even if KVM is not running in protected
+> mode. I guess this is OK for now, but definitely reinforces my request
+> that this is only there when compiled for debug mode.
+>
+
+Yes, but in the case you aren't running protected mode you can avoid
+it by setting PROTECTED_NVHE_STACKTRACE=n.
 
 Thanks,
-Kan
+Kalesh
 
-> 
-> Kan Liang (1):
->   perf tsc: Add arch TSC frequency information
-> 
->  tools/perf/arch/x86/util/cpuid.h  | 34 ++++++++++++++
->  tools/perf/arch/x86/util/header.c | 27 +++++------
->  tools/perf/arch/x86/util/tsc.c    | 77 +++++++++++++++++++++++++++++++
->  tools/perf/tests/expr.c           | 13 ++++++
->  tools/perf/util/expr.c            | 13 ++++++
->  tools/perf/util/tsc.h             |  1 +
->  6 files changed, 149 insertions(+), 16 deletions(-)
->  create mode 100644 tools/perf/arch/x86/util/cpuid.h
-> 
+> Thanks,
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

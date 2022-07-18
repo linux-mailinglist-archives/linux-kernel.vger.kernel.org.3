@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E937578960
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98E9578962
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbiGRSOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
+        id S235837AbiGRSQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiGRSOb (ORCPT
+        with ESMTP id S229639AbiGRSQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:14:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F1B2CCB9;
-        Mon, 18 Jul 2022 11:14:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2418B816CF;
-        Mon, 18 Jul 2022 18:14:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3937BC341C0;
-        Mon, 18 Jul 2022 18:14:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658168067;
-        bh=7mJAJ79anHwJ/WB2hxfx2DwpigreSJuf5+TDz+HsVrM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=N5PAtTh5h0s19MfOscwKfm7aa21gxE3sa57C64jOyouZ7OUJsYE39vA18FpeMNv7k
-         zE3yKETrh12Y4gF3Efxu1HH+gAp6eG0A/GYlaa/J54vlSs//o/9sz4GRRvXwBy1bSV
-         QrYDPfQdSfBgrcJggs40rKoYy72Npcsmsdt5THMcfAsYSV3F5SHRhqKzCZb3XDGyXl
-         gVakm5QwwQFohcWLM8Rpz47lnWCcvteDO8CO/ZFSXUGYIVpV+Yw5rxCV2w5418Cdpl
-         Kxvq3HaCSs5767/Jab8bT7Ztu91UUHkEDnAxTkOMb1KB0Gz3d0dgCCgtgLzNnp1scZ
-         sYGzjyNkz/gDg==
-Date:   Mon, 18 Jul 2022 13:14:25 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Mon, 18 Jul 2022 14:16:05 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F672CDD1;
+        Mon, 18 Jul 2022 11:16:04 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id l23so22814010ejr.5;
+        Mon, 18 Jul 2022 11:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7UDF6r+GMUXDZ8LsxT+YDZqzkLbdjQrKJwZqxdgZ6QA=;
+        b=bwE7ePkNhjlgzgFJcf8R80Cpe4O4RxVzT+v4Go9vlS1Ru0ut08zdll78zjfqd4ZQVg
+         0E9iNszQGa5+3o/D45yi0O3je7YNipQcbXwX4ZfgsBSfYUOktMF76yZ4wnH6ORjM+dSG
+         wNYTqSn3uTfOU6ybPHXg7IGLV95MK9YFk4AH5hluKGoaV92QeZ1baMRyhtQIzMz+R3mP
+         GyFjNbC/0HBVPlJ8y+YYd3STk0rgwkRK6P19aVzpD7q6mAevXGjbOWLlnAXrLZNykyO/
+         Mp/OLSRvLIszCiCfxCnRezDRqYC4O3DxhANzaaAjqQCDMKkAiJrruz7Cck1yMZ2hcz/F
+         5hlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7UDF6r+GMUXDZ8LsxT+YDZqzkLbdjQrKJwZqxdgZ6QA=;
+        b=e5LMgfvb7CS/RrlTLtf9UeaNAU8bGiZWGYdNQ2irEJWWjRB0i0b958tTNC0m3430fz
+         p+2UUJXJ93NnVqaNYY6bZn0bO/MVyWNoq7DOx9JJ3KSE1zouo3yVvb4uGCNRabwUPYm9
+         noGvrnkVPn0W019f9il73WXQhgMTVO8kgCrZTd5QGuHLr/sOMglT1qKkg8JdK7qcBZB1
+         xX1gft7enVGceYTF8o7c4he0vju/mlCnC1qb0UcV85aDfM7aZwiW7KzvvyaqiA9l2QML
+         9BBm7TBamdbb4VSHYWuGAeLzNcvnws04lNZFvpq/mjfwaPHRGtRBIzRIA+TsOJ7Q4Xe0
+         BxbA==
+X-Gm-Message-State: AJIora9B7mn1A8RCRpu2lZQEeR4E7WbhMMy2sm82g289Ge+Qc++uKDLS
+        aQrw8mE+w3QIjR11dgr5/Qw=
+X-Google-Smtp-Source: AGRyM1uDElJDptc1QLTVFcqYz1rmwXnCcaQQnLR5QHnwWrTkGr0Sbec+dTtC7wfL2O1OO4IGPFwbMA==
+X-Received: by 2002:a17:907:3d90:b0:72f:2994:74a1 with SMTP id he16-20020a1709073d9000b0072f299474a1mr7027324ejc.261.1658168163062;
+        Mon, 18 Jul 2022 11:16:03 -0700 (PDT)
+Received: from skbuf ([188.25.231.190])
+        by smtp.gmail.com with ESMTPSA id lc13-20020a170906dfed00b00703671ebe65sm5661284ejc.198.2022.07.18.11.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 11:16:02 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 21:15:59 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two
- funcs
-Message-ID: <20220718181425.GA1431580@bhelgaas>
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next RFC PATCH 0/4] net: dsa: qca8k: code split for qca8k
+Message-ID: <20220718181559.lzzrrutmr2b7mpsn@skbuf>
+References: <20220716174958.22542-1-ansuelsmth@gmail.com>
+ <62d57362.1c69fb81.33c2d.59a9@mx.google.com>
+ <20220718173504.jliiboqbw6bjr2l4@skbuf>
+ <62d59b1a.1c69fb81.a5458.8e4e@mx.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220716222454.29914-3-jim2101024@gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <62d59b1a.1c69fb81.a5458.8e4e@mx.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 06:24:49PM -0400, Jim Quinlan wrote:
-> Currently, the function does the setup for establishing PCIe link-up
-> with the downstream device, and it does the actual link-up as well.
-> The calling sequence is (roughly) the following in the probe:
-> 
-> -> brcm_pcie_probe()
->     -> brcm_pcie_setup();                       /* Set-up and link-up */
->     -> pci_host_probe(bridge);
-> 
-> This commit splits the setup function in two: brcm_pcie_setup(), which only
-> does the set-up, and brcm_pcie_start_link(), which only does the link-up.
-> The reason why we are doing this is to lay a foundation for subsequent
-> commits so that we can turn on any power regulators, as described in the
-> root port's DT node, prior to doing link-up.
+On Mon, Jul 18, 2022 at 07:23:35PM +0200, Christian Marangi wrote:
+> Ok, so I have to keep the qca8k special function. Is it a problem if I
+> keep the function and than later make the conversion when we have the
+> regmap dependency merged?
 
-All drivers that care about power regulators turn them on before
-link-up, but typically those regulators are described directly under
-the host bridge itself.
+You mean to ask whether there's any problem if the common qca8k_fdb_read()
+calls the specific qca8k_bulk_read as opposed to regmap_bulk_read()?
 
-IIUC the difference here is that you have regulators described under
-Root Ports (not the host bridge/Root Complex itself), so you don't
-know about them until you've enumerated the Root Ports.
-brcm_pcie_probe() can't turn them on directly because it doesn't know
-what Root Ports are present and doesn't know about regulators below
-them.
-
-So I think brcm_pcie_setup() does initialization that doesn't depend
-on the link or any downstream devices, and brcm_pcie_start_link() does
-things that depend on the link being up.  Right?
-
-If so, "start_link" might be a slight misnomer since AFAICT
-brcm_pcie_start_link() doesn't do anything to initiate link-up except
-maybe deasserting fundamental reset.  Some drivers start the LTSSM or
-explicitly enable link training, but brcm_pcie_start_link() doesn't
-seem to do anything like that.
-
-brcm_pcie_start_link() still does brcm_pcie_set_outbound_win().  Does
-that really depend on the link being up?  If that only affects the
-Root Port, maybe it could be done before link-up?
-
-> We do this by defining an
-> add_bus() callback which is invoked during enumeraion.  At the end of this
-> patchset the probe function trace will look something like this:
-> 
-> -> brcm_pcie_probe()
->     -> brcm_pcie_setup();                       /* Set-up only */
->     -> pci_host_probe(bridge);
->         -> [enumeration]
->             -> pci_alloc_child_bus()
->                 -> bus->ops->add_bus(bus);      /* We've set this op */
->                 -> brcm_pcie_add_bus()          /* Our callback      */
->                      -> [turn on regulators]    /* Main objective!   */
->                      -> brcm_pcie_start_link()  /* Link-up           */
+Well, no, considering that you don't yet support the switch with the
+MMIO regmap, the common code is still "common" for the single switch
+that the driver supports. You should be able to continue making progress
+with qca8k_bulk_read() being called from common code (as long as you
+leave a TODO comment or something, that it doesn't really belong there).

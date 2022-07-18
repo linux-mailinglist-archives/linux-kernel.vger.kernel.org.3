@@ -2,148 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77F3578C4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E81578C50
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235872AbiGRVBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S236144AbiGRVBc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 18 Jul 2022 17:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbiGRVBQ (ORCPT
+        with ESMTP id S236123AbiGRVBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:01:16 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BDA31DCB;
-        Mon, 18 Jul 2022 14:01:15 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id j22so23598658ejs.2;
-        Mon, 18 Jul 2022 14:01:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=9JKC69ZgKxvEAiR9jfUcMboRX5UUbUaTHt8/AYNH2iU=;
-        b=Q5ZX+0Ir7yfQayyrfLWCW5z3mC5EADyfcN6MvQHrLtz6K8IOfWCa0yhWTskhALWXZP
-         F7bM+gPPi/t1FIcIrJZe3jDuXfvDBKSdJUrOSx3SZCh6yVaLlpepVhkH63dJha/npcGv
-         hxprjSIMJqOuhJBANig6mSBhrnFfZl/xjJ9EVnllwpN/rNHAYoBeNmtwTFrkNJq4oed8
-         gzsvsVKunCep6nbY6PYJPHSRfpb/sdhxqDEpOJyKko1BXkTlnw5GcpGZfnl4HWwiykPh
-         JT9Fa3ToYzIDRuOb3NQmJZQAT1CfR43SPvzWXuIvVUmc/778xE10FjW9gF5acOE8KF7o
-         shIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=9JKC69ZgKxvEAiR9jfUcMboRX5UUbUaTHt8/AYNH2iU=;
-        b=hMzQyTJUCz/s9iUSOnY/4a1bgA5SrW9FhaB34aW+j3OQiCxIKyemcRbKzBrUHlt1bE
-         SMNfL5v/+tdIh1LmK82MynZUeJd6TlzUKuQdSioDcMY1nfBKGyFf0MJBlF41oHDQ5x9/
-         9lwnEKhp2HdqsFbPS9hVulyttK9u1Vob6W4Sc4k+dJ+MPENiqKcdIv23Ls9G6iBt8NBZ
-         OQHsPEbRatiLXFMnKCRueA3RO64sEDxocCo+UhnY8OqmOIjYpQoCT02kvDowlVAE3ER0
-         +fRilkqiWQgIKe+dhU8cvrpsgRG62LdSvDU/yjuIDbvoHlLx1P9MM6Am0mGhx779IRiX
-         s67A==
-X-Gm-Message-State: AJIora+3sNAIWJrHDQ1scj7bAGhp1/UCWMMrpCbLC+9CRzLfvyXuPFrj
-        3Yqy2LaAATqxhSjNl/JVvTh6VOSZ7COKdYJ1tsE=
-X-Google-Smtp-Source: AGRyM1s9jd0rj28RTzjMiTDsu+XS7RpA+HYRxtnjZa49iDkWruhQJP4cy0PkxwOAeF6i6B+rqrlCWO5wcq3a3zHUmkQ=
-X-Received: by 2002:a17:907:3f07:b0:72b:54b2:f57f with SMTP id
- hq7-20020a1709073f0700b0072b54b2f57fmr26915014ejc.502.1658178073581; Mon, 18
- Jul 2022 14:01:13 -0700 (PDT)
+        Mon, 18 Jul 2022 17:01:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A0E32075
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 14:01:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C88DA61380
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 21:01:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63E4DC341C0;
+        Mon, 18 Jul 2022 21:01:25 +0000 (UTC)
+Date:   Mon, 18 Jul 2022 17:01:23 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: Re: [patch 36/38] x86/ftrace: Make it call depth tracking aware
+Message-ID: <20220718170123.4d4bae4a@gandalf.local.home>
+In-Reply-To: <20220716230954.835254576@linutronix.de>
+References: <20220716230344.239749011@linutronix.de>
+        <20220716230954.835254576@linutronix.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220711083220.2175036-1-asavkov@redhat.com> <20220711083220.2175036-4-asavkov@redhat.com>
- <CAPhsuW7xTRpLf1kyj5ejH0fV_aHCMQjUwn-uhWeNytXedh4+TQ@mail.gmail.com>
- <CAADnVQ+ju04JAqyEbA_7oVj9uBAuL-fUP1FBr_OTygGf915RfQ@mail.gmail.com>
- <Ys7JL9Ih3546Eynf@wtfbox.lan> <CAADnVQ+6aN5nMwaTjoa9ddnT6rakgwb9oPhtdWSsgyaHP8kZ6Q@mail.gmail.com>
- <YtFjCSR8YiK8E13J@samus.usersys.redhat.com>
-In-Reply-To: <YtFjCSR8YiK8E13J@samus.usersys.redhat.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 18 Jul 2022 14:01:02 -0700
-Message-ID: <CAADnVQLjJK+9Jf+14WNp4O9q+s88eB-FF8pA_5TRziYVKoJxUQ@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 3/4] bpf: add bpf_panic() helper
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Song Liu <song@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>, dvacek@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 5:52 AM Artem Savkov <asavkov@redhat.com> wrote:
->
-> On Wed, Jul 13, 2022 at 03:20:22PM -0700, Alexei Starovoitov wrote:
-> > On Wed, Jul 13, 2022 at 6:31 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > >
-> > > On Tue, Jul 12, 2022 at 11:08:54AM -0700, Alexei Starovoitov wrote:
-> > > > On Tue, Jul 12, 2022 at 10:53 AM Song Liu <song@kernel.org> wrote:
-> > > > >
-> > > > > >
-> > > > > > +BPF_CALL_1(bpf_panic, const char *, msg)
-> > > > > > +{
-> > > > > > +       panic(msg);
-> > > > >
-> > > > > I think we should also check
-> > > > >
-> > > > >    capable(CAP_SYS_BOOT) && destructive_ebpf_enabled()
-> > > > >
-> > > > > here. Or at least, destructive_ebpf_enabled(). Otherwise, we
-> > > > > may trigger panic after the sysctl is disabled.
-> > > > >
-> > > > > In general, I don't think sysctl is a good API, as it is global, and
-> > > > > the user can easily forget to turn it back off. If possible, I would
-> > > > > rather avoid adding new BPF related sysctls.
-> > > >
-> > > > +1. New syscal isn't warranted here.
-> > > > Just CAP_SYS_BOOT would be enough here.
-> > >
-> > > Point taken, I'll remove sysctl knob in any further versions.
-> > >
-> > > > Also full blown panic() seems unnecessary.
-> > > > If the motivation is to get a memory dump then crash_kexec() helper
-> > > > would be more suitable.
-> > > > If the goal is to reboot the system then the wrapper of sys_reboot()
-> > > > is better.
-> > > > Unfortunately the cover letter lacks these details.
-> > >
-> > > The main goal is to get the memory dump, so crash_kexec() should be enough.
-> > > However panic() is a bit more versatile and it's consequences are configurable
-> > > to some extent. Are there any downsides to using it?
-> >
-> > versatile? In what sense? That it does a lot more than kexec?
-> > That's a disadvantage.
-> > We should provide bpf with minimal building blocks and let
-> > bpf program decide what to do.
-> > If dmesg (that is part of panic) is useful it should be its
-> > own kfunc.
-> > If halt is necessary -> separate kfunc as well.
-> > reboot -> another kfunc.
-> >
-> > Also panic() is not guaranteed to do kexec and just
-> > panic is not what you stated is the goal of the helper.
->
-> Alright, if the aim is to provide the smallest building blocks then
-> crash_kexec() is a better choice.
->
-> > >
-> > > > Why this destructive action cannot be delegated to user space?
-> > >
-> > > Going through userspace adds delays and makes it impossible to hit "exactly
-> > > the right moment" thus making it unusable in most cases.
-> >
-> > What would be an example of that?
-> > kexec is not instant either.
->
-> With kexec at least the thread it got called in is in a proper state. I
-> guess it is possible to achieve this by signalling userspace to do
-> kexec/panic and then block the thread somehow but that won't work in a
-> single-cpu case. Or am I missing something?
+On Sun, 17 Jul 2022 01:18:08 +0200 (CEST)
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-Something like this.
-We can extend bpf_send_signal to send a signal to pid 1
-or another user agent.
-It's still not clear to me why you want that memory dump.
+> @@ -280,7 +291,19 @@ SYM_INNER_LABEL(ftrace_regs_caller_end,
+>  	/* Restore flags */
+>  	popfq
+>  	UNWIND_HINT_FUNC
+> -	jmp	ftrace_epilogue
+> +
+> +	/*
+> +	 * Since we're effectively emulating a tail-call with PUSH;RET
+> +	 * make sure we don't unbalance the RSB and mess up accounting.
+> +	 */
+> +	ANNOTATE_INTRA_FUNCTION_CALL
+> +	call	2f
+> +	int3
+> +2:
+> +	add	$8, %rsp
+> +	ALTERNATIVE __stringify(RET), \
+> +		    __stringify(ANNOTATE_UNRET_SAFE; ret; int3), \
+> +		    X86_FEATURE_CALL_DEPTH
+>  
+>  SYM_FUNC_END(ftrace_regs_caller)
+
+Would this code be simpler if we nuked the ftrace_epilogue altogether?
+
+After commit 0c0593b45c9b ("x86/ftrace: Make function graph use ftrace
+directly"), the ftrace_epilogue is no longer needed. That was there to make
+sure all the trampolines would call the function graph tracer. But now that
+function graph tracing is just another ftrace caller, it's not needed
+anymore.
+
+Something like the below. It booted and passed the ftrace kselftests.
+
+Feel free to include this in your series.
+
+-- Steve
+
+From 533f10bd48ffbc4ee5d2a07f0a7fe99aeb1c823a Mon Sep 17 00:00:00 2001
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Date: Mon, 18 Jul 2022 16:01:07 -0400
+Subject: [PATCH] ftrace/x86: Remove jumps to ftrace_epilogue
+
+The jumps to ftrace_epilogue were done as a way to make sure all the
+function tracing trampolines ended at the function graph trampoline, as
+the ftrace_epilogue was the location that it would handle that.
+
+With the advent of function graph tracer now being just one of the
+callbacks of the function tracer there is no more requirement that all
+trampolines go to a single location.
+
+Remove the jumps to the ftrace_epilogue and replace them with return
+statements.
+
+Note, the ftrace_epilogue can probably be renamed to ftrace_stub and the
+weak logic for that could probably be removed. But lets leave that as a
+separate change.
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ arch/x86/kernel/ftrace_64.S | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index dfeb227de561..8f225fafa5fb 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -173,7 +173,9 @@ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
+ SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
+ 	ANNOTATE_NOENDBR
+ 
+-	jmp ftrace_epilogue
++	UNWIND_HINT_FUNC
++	ENDBR
++	RET
+ SYM_FUNC_END(ftrace_caller);
+ STACK_FRAME_NON_STANDARD_FP(ftrace_caller)
+ 
+@@ -261,15 +263,9 @@ SYM_INNER_LABEL(ftrace_regs_caller_jmp, SYM_L_GLOBAL)
+ 	/* Restore flags */
+ 	popfq
+ 
+-	/*
+-	 * As this jmp to ftrace_epilogue can be a short jump
+-	 * it must not be copied into the trampoline.
+-	 * The trampoline will add the code to jump
+-	 * to the return.
+-	 */
+ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ 	ANNOTATE_NOENDBR
+-	jmp ftrace_epilogue
++	jmp 2f
+ 
+ 	/* Swap the flags with orig_rax */
+ 1:	movq MCOUNT_REG_SIZE(%rsp), %rdi
+@@ -279,8 +275,10 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ 	restore_mcount_regs 8
+ 	/* Restore flags */
+ 	popfq
++2:
+ 	UNWIND_HINT_FUNC
+-	jmp	ftrace_epilogue
++	ENDBR
++	RET
+ 
+ SYM_FUNC_END(ftrace_regs_caller)
+ STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
+-- 
+2.35.1
+

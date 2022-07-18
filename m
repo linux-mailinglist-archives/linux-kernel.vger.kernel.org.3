@@ -2,165 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8971D578C0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BEB578C12
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 22:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233375AbiGRUtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 16:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
+        id S231567AbiGRUtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 16:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbiGRUtE (ORCPT
+        with ESMTP id S233484AbiGRUtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 16:49:04 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4EE63E2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:49:04 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso19377358pjc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 13:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Zbzt4chIOAHidm79RNeoJvZKga6Ri3IH/kwQEEuMyhQ=;
-        b=ox+L7vvavOYp4ysTAQIE6ZNLqMWWkVbtwMP1VNfH3juV5EfYZ3YpuVCyI4axobd5eI
-         2RaL+uBtsUPlSjJnh1cpw8gz2z0Qm+NiegNkzBZwuXLUEv+DIhtdmugtgYlEQ3WpnQ71
-         TePdoppcwfTsJPsnkp88/eMaisHj3PYupQ2j7vZN9kA6vsfpH3BeD6pqNfmuljnYfo/Q
-         Jxh6eh04QPrnDP35DacSAXi0oYSvX9J8TOtU+NtGoLa2Mpk6Ygzc4XUwrZucU4Q0j0SQ
-         +WxpiJmMeitNO4mt7MBoPNwEkgAHx9knjOFgMuFce1mZluXqVj5MqbZ1kY/cYij15r8S
-         x3ag==
+        Mon, 18 Jul 2022 16:49:19 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CADBC10;
+        Mon, 18 Jul 2022 13:49:18 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id u20so10305106iob.8;
+        Mon, 18 Jul 2022 13:49:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Zbzt4chIOAHidm79RNeoJvZKga6Ri3IH/kwQEEuMyhQ=;
-        b=BBbXlFE2MZ9EOPuod2PBq8WM7NsvaES51nj+dsXAbd+TURy/Rc5jf3RHGHosclX/Sn
-         qa9YJOHgQHaIK0ns+0CwhlwNf7rfRjKOSqG6puilIhNLh7+apo3048pH29tOPwo/s83C
-         PtC8hOsShwhqVoJMWF29WpOTTYK+KKtYEZ/q0cQOTI76rnOlUTJp2RJdhEpGKTJeim1i
-         TlWXqALzUrUeL/PE9ftKhiReV2Tx1Jp4MjU34W5nlIXkH+hC3GTS00mtGPkNNqgP4XD/
-         WobNcLhJHXxbwYYQbADrB1Chk5QM1nGcm/pC/ZndYwk/vS/6PAKHgjIV72r7lveKOEd5
-         4bBA==
-X-Gm-Message-State: AJIora9KlVPJTMjZgqQowTUVT5MCZ2EtJ3uw1MpZND/M+lss4H4G97RR
-        PfZWnuNC94Ki+kvZSxU9v9Mtjw==
-X-Google-Smtp-Source: AGRyM1vgptEceVtByGuNYUrudxA+4UJt+Gr4/h5m/Geot5gc24p2f9PZe/3aC+qtDZ5bkni9hTvQtg==
-X-Received: by 2002:a17:90b:1c0b:b0:1f0:23df:5406 with SMTP id oc11-20020a17090b1c0b00b001f023df5406mr34986891pjb.157.1658177343346;
-        Mon, 18 Jul 2022 13:49:03 -0700 (PDT)
-Received: from google.com (59.39.145.34.bc.googleusercontent.com. [34.145.39.59])
-        by smtp.gmail.com with ESMTPSA id v21-20020a17090ac91500b001f113765d48sm7878522pjt.2.2022.07.18.13.49.00
+        bh=nv+IAt2KrXC1YsMwgz/3SPPCPTXqf1A56qVYg6JYqJU=;
+        b=e8c7/BB3uoA3O7VtsCIsWeGaBDg0usniEdaScII/f9ql3g9NLnb5wzmUTcb6460sVm
+         V+HNkwpTptAd1AL2ulF9FyTDnSfYEkCE7UKu1ceD39da/SlSZYIRupOWSHDXDvkLyVG5
+         EwO+J3D8RrkvMHl0h41xXW8ewYQIALz+9giGfz4UrOA2AuFTg4rfX4lfwhJXVD6qIDfh
+         +/It75uDsb/XNB6M8V525dD5DBEkQbD/akfwE+WDhGmyebFzDDx53S5dYNlQekiGoTol
+         O+V3Ya5JT7seBk4xqvpVof5rBIQsbaElSguCE0N61t54ihuuApTPvdrkKS8cb/PhlZo5
+         SZEg==
+X-Gm-Message-State: AJIora9Sig9Y1B8lxSidFcmE8HVlLcqXWBnHCDvbrCvdmb24GAUDzrME
+        XQUyvSiSXVTodREfhqDjTn25ESCv9w==
+X-Google-Smtp-Source: AGRyM1uqScuOl3f7VRVbpisNewCpXjaPDKPuJYAtTg54N6uM+Qki4EHBJdsF8CbWLvKlJxOiaFYpMw==
+X-Received: by 2002:a02:970a:0:b0:33f:42a8:a63f with SMTP id x10-20020a02970a000000b0033f42a8a63fmr15708479jai.115.1658177357368;
+        Mon, 18 Jul 2022 13:49:17 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id f19-20020a022413000000b00339ceeec5edsm5914760jaa.12.2022.07.18.13.49.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 13:49:01 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 20:48:55 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: x86/mmu: Document the "rules" for using
- host_pfn_mapping_level()
-Message-ID: <YtXHN9rrj6+SRa1Z@google.com>
-References: <20220715232107.3775620-1-seanjc@google.com>
- <20220715232107.3775620-3-seanjc@google.com>
- <YtMIvgfsgIPWMgGM@google.com>
- <YtWPSILmAp/0m5eC@google.com>
+        Mon, 18 Jul 2022 13:49:17 -0700 (PDT)
+Received: (nullmailer pid 3526738 invoked by uid 1000);
+        Mon, 18 Jul 2022 20:49:14 -0000
+Date:   Mon, 18 Jul 2022 14:49:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     kthota@nvidia.com, lpieralisi@kernel.org, bhelgaas@google.com,
+        jingoohan1@gmail.com, gustavo.pimentel@synopsys.com, kw@linux.com,
+        linux-pci@vger.kernel.org, robh+dt@kernel.org, sagar.tv@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kishon@ti.com, mmaddireddy@nvidia.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com
+Subject: Re: [PATCH V5 2/9] dt-bindings: PCI: tegra234: Add schema for
+ tegra234 rootport mode
+Message-ID: <20220718204914.GA3526680-robh@kernel.org>
+References: <20220713090029.30395-1-vidyas@nvidia.com>
+ <20220713090029.30395-3-vidyas@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtWPSILmAp/0m5eC@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220713090029.30395-3-vidyas@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022, Sean Christopherson wrote:
-> On Sat, Jul 16, 2022, Mingwei Zhang wrote:
-> > On Fri, Jul 15, 2022, Sean Christopherson wrote:
-> > > Add a comment to document how host_pfn_mapping_level() can be used safely,
-> > > as the line between safe and dangerous is quite thin.  E.g. if KVM were
-> > > to ever support in-place promotion to create huge pages, consuming the
-> > > level is safe if the caller holds mmu_lock and checks that there's an
-> > > existing _leaf_ SPTE, but unsafe if the caller only checks that there's a
-> > > non-leaf SPTE.
-> > > 
-> > > Opportunistically tweak the existing comments to explicitly document why
-> > > KVM needs to use READ_ONCE().
-> > > 
-> > > No functional change intended.
-> > > 
-> > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > > ---
-> > >  arch/x86/kvm/mmu/mmu.c | 42 +++++++++++++++++++++++++++++++++++-------
-> > >  1 file changed, 35 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index bebff1d5acd4..d5b644f3e003 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -2919,6 +2919,31 @@ static void direct_pte_prefetch(struct kvm_vcpu *vcpu, u64 *sptep)
-> > >  	__direct_pte_prefetch(vcpu, sp, sptep);
-> > >  }
-> > >  
-> > > +/*
-> > > + * Lookup the mapping level for @gfn in the current mm.
-> > > + *
-> > > + * WARNING!  Use of host_pfn_mapping_level() requires the caller and the end
-> > > + * consumer to be tied into KVM's handlers for MMU notifier events!
-> > Since calling this function won't cause kernel crash now, I guess we can
-> > remove the warning sign here, but keep the remaining statement since it
-> > is necessary.
+On Wed, 13 Jul 2022 14:30:22 +0530, Vidya Sagar wrote:
+> Add support for PCIe controllers that operate in the rootport mode
+> in tegra234 chipset.
 > 
-> Calling this function won't _directly_ crash the kernel, but improper usage can
-> most definitely crash the host kernel, or even worse, silently corrupt host and
-> or guest data.  E.g. if KVM were to race with an mmu_notifier event and incorrectly
-> map a stale huge page into the guest.
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> ---
+> V5:
+> * Addressed review comments from Rob
 > 
-> So yes, the function itself is robust, but usage is still very subtle and delicate.
+> V4:
+> * Rebased on top of previous patch
+> 
+> V3:
+> * New patch in this series
+> 
+>  .../bindings/pci/nvidia,tegra194-pcie.yaml    | 102 +++++++++++++++++-
+>  1 file changed, 100 insertions(+), 2 deletions(-)
+> 
 
-Understood. So we basically create another "gup_fast_only()" within KVM
-and we worry that may confuse other developers so we add the warning
-sign.
-> 
-> > > + *
-> > > + * There are several ways to safely use this helper:
-> > > + *
-> > > + * - Check mmu_notifier_retry_hva() after grabbing the mapping level, before
-> > > + *   consuming it.  In this case, mmu_lock doesn't need to be held during the
-> > > + *   lookup, but it does need to be held while checking the MMU notifier.
-> > 
-> > but it does need to be held while checking the MMU notifier and
-> > consuming the result.
-> 
-> I didn't want to include "consuming the result" because arguably the result is
-> being consumed while running the guest, and obviously KVM doesn't hold mmu_lock
-> while running the guest (though I fully acknowledge the above effectively uses
-> "consume" in the sense of shoving the result into SPTEs).  
-> 
-> > > + *
-> > > + * - Hold mmu_lock AND ensure there is no in-progress MMU notifier invalidation
-> > > + *   event for the hva.  This can be done by explicit checking the MMU notifier
-> 
-> s/explicit/explicitly
-> 
-> > > + *   or by ensuring that KVM already has a valid mapping that covers the hva.
-> > 
-> > Yes, more specifically, "mmu notifier sequence counter".
-> 
-> Heh, depends on what the reader interprets as "sequence counter".  If the reader
-> interprets that as the literal sequence counter, mmu_notifier_seq, then this phrasing
-> is incorrect as mmu_notifier_seq isn't bumped until the invalidation completes,
-> i.e. it guards against _past_ invalidations, not in-progress validations.
-> 
-> My preference is to intentionally not be precise in describing how to check for an
-> in-progress invalidation, e.g. so that this comment doesn't need to be updated if
-> the details change, and to also to try and force developers to do more than copy
-> and paste if they want to use this helper.
-
-Hmm, I was going to say that I strongly disagree about the intentional
-unclearness. But then I find that MMU notifier implementation does
-require more than just the counter but also the range, so yeah, talking
-too much may fall into the weeds. But in general, I think mmu notifier
-deserves better documentation in both concept and implementation in KVM.
-
+Reviewed-by: Rob Herring <robh@kernel.org>

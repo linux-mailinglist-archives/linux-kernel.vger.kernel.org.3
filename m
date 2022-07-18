@@ -2,53 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427BD5781CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E22C5781D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234916AbiGRMM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
+        id S234912AbiGRMMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234886AbiGRMMW (ORCPT
+        with ESMTP id S234915AbiGRMM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:12:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6769F24955;
-        Mon, 18 Jul 2022 05:12:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3AA261477;
-        Mon, 18 Jul 2022 12:12:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63089C341D5;
-        Mon, 18 Jul 2022 12:12:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658146336;
-        bh=KU5XG89/tyFz/Oo7SvzDbI2yUM/Xgd+xaHy715tmcZ0=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=DWUG4Y6uQvGk746GZMk+lGC9BgD6G/iN0LkDOLjoAagJWBlq/hFgsgLacl2AGtHLH
-         hw3DTcFeXwjUWFGV8wCixktHj2+JUSVBuGwi9acsR+FzXky0H+X9MJraLxNjesq06E
-         z54WAXrmGIzint8OtZUOrN6aYuf8NxnimA2ilZYDAZb/GIiSwvD+rKu/rpl73lm9Mz
-         loeVNDWuVP17bUCu4+WtkX1LTqvEirPE7XEyOPFbxRY8ogIkBC2RNAMJWKtn4/wPtX
-         7Ix4MJH7G7yTwkj1TS0/pAiAhjeJdPii+Pl8iEhLzxOpd7kgll35IxZRcMXJ9dMjHE
-         UMH3QogDWvRHA==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 18 Jul 2022 08:12:26 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA2124F00
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:12:23 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lmglj6WrPzlW4X;
+        Mon, 18 Jul 2022 20:10:41 +0800 (CST)
+Received: from dggphis33418.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Jul 2022 20:12:21 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <cuigaosheng1@huawei.com>, <srinivas.kandagatla@linaro.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <gongruiqi1@huawei.com>,
+        <wangweiyang2@huawei.com>
+Subject: [PATCH -next,v3] nvmem: core: Fix memleak in nvmem_register()
+Date:   Mon, 18 Jul 2022 20:12:21 +0800
+Message-ID: <20220718121221.3099515-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wifi: wl1251: fix repeated words in comments
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220710043405.38304-1-yuanjilin@cdjrlc.com>
-References: <20220710043405.38304-1-yuanjilin@cdjrlc.com>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165814633252.32602.10124173678960288207.kvalo@kernel.org>
-Date:   Mon, 18 Jul 2022 12:12:14 +0000 (UTC)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,18 +46,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jilin Yuan <yuanjilin@cdjrlc.com> wrote:
+dev_set_name will alloc memory for nvmem->dev.kobj.name in
+nvmem_register, when nvmem_validate_keepouts failed, nvmem's
+memory will be freed and return, but nobody will free memory
+for nvmem->dev.kobj.name, there will be memleak, so moving
+dev_set_name after nvmem_validate_keepouts to fix it.
 
-> Delete the redundant word 'the'.
-> 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+ drivers/nvmem/core.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-Patch applied to wireless-next.git, thanks.
-
-f1cee996f185 wifi: wl1251: fix repeated words in comments
-
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 1e3c754efd0d..6067d3bbff5d 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -829,21 +829,19 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	nvmem->dev.groups = nvmem_dev_groups;
+ #endif
+ 
+-	if (nvmem->nkeepout) {
+-		rval = nvmem_validate_keepouts(nvmem);
+-		if (rval) {
+-			ida_free(&nvmem_ida, nvmem->id);
+-			kfree(nvmem);
+-			return ERR_PTR(rval);
+-		}
+-	}
+-
+ 	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
+ 
+ 	rval = device_register(&nvmem->dev);
+ 	if (rval)
+ 		goto err_put_device;
+ 
++	if (nvmem->nkeepout) {
++		rval = nvmem_validate_keepouts(nvmem);
++		if (rval) {
++			goto err_device_del;
++		}
++	}
++
+ 	if (config->compat) {
+ 		rval = nvmem_sysfs_setup_compat(nvmem, config);
+ 		if (rval)
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220710043405.38304-1-yuanjilin@cdjrlc.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.25.1
 

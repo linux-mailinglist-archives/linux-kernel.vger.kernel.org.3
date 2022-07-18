@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E56E577DCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9EA7577DD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbiGRIn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S234021AbiGRIqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbiGRInZ (ORCPT
+        with ESMTP id S233932AbiGRIqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:43:25 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D08192A7;
-        Mon, 18 Jul 2022 01:43:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lmb8R6wRlz4xQt;
-        Mon, 18 Jul 2022 18:43:19 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658133801;
-        bh=aXwcZQse9JvHSKXL22foLYLTQbulhGvhqdMm2a2O3Bg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MqMyyMPiCO+4WBCLL3ucYNF7VXE+y2mhXmc372hIEC6CY6EzInpXg4ApFYEr3fuB3
-         8X6XcCHvecqCuX1vM8geFZ05FX/oWe7rMKtJPXZIRnWPb+UPRp+cQ0m3zvZEz0vXpC
-         Xd6fZklFN09iU0lfylyXWdC7PdhMmitGD2wIk0yOJXXY6N+ky99ent9GeL1+YFaHaR
-         OStlXZePqpIqCzQj1iO2hrnmafJw7zyumugYLnX1dM4NNDKHpZoL1kRKA3fwzOJ35K
-         HogMJdBAsej2HFE3D0NS4VSTZ1PhjgDNKiiR9h67515oPw1Bv9nqvfyDufzprnTCt1
-         CLEe1NW2aGmKA==
-Date:   Mon, 18 Jul 2022 18:43:18 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the random tree with the arm64 tree
-Message-ID: <20220718184318.25d75848@canb.auug.org.au>
+        Mon, 18 Jul 2022 04:46:32 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFD7B6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:46:32 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so17531089pjm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y957zCpGlniV/Si1gB7hyzzV3GqFvEOSGpTrCkRJ3N4=;
+        b=TS8oWTsNuIKrdwz7CdqkNr+Kyt2Fkt1mCq4Ny+Vw68yXzZfoO6nk5PfGIF2Vslrs9Q
+         EYzquS26tAqK23AjcRIws+7QPlLihZjNPF472zGRnEorq852UPp1qrL1WzeXhy5VU7/j
+         7JZxDDdj/8qS2cZBVMmkrUpIJUTd6SXj5fEWvo1MXFfovv6aivByO5jqhq7Jr0RHw5w9
+         qL13T/B01oDW0cpgjGtu+2p/4Y3Y+P7R5LCBTlnU8RuSEOppyblLrsuvMD3XtiNarh0B
+         rRhKoA+ktuLOw4zwOCrhtwCxXMis2U5gYd0IaJBSll6lFTdH/O1pPkNhiyvDOI3aewKl
+         EVcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y957zCpGlniV/Si1gB7hyzzV3GqFvEOSGpTrCkRJ3N4=;
+        b=B+tO9uVjjAWhVjUTF4HKAx3moNlM32bFkYAOwx/ChoP3eMMj2PzkBgQMhT6xOGhCfG
+         ph7DoDuIlpugHyuPlkvkN2oqMqAK7l40KiS0A5znh2an48gSSrg2L+r5sklNYk3Dg2O5
+         C5sIFKepuXZv/5PKvlKFmtqTOgDHNWtkAxllKKO32goPTtb8WLV49fXZBK6gxZ+ATKOt
+         fB+Y32nbMu8FnXxizqkvldz5U/TvNXeYFXvQonQ9FWeRRf3C26nIY7XhtscmoJqrbbrV
+         Ba4vXMWRzfvAP3HvB6ot65g9ZTtMKw3HRy/UR8mhXU/oW62PCmreqP3lZyZ/thHutaTv
+         QQaA==
+X-Gm-Message-State: AJIora/WEyFgYktlcox+25XuHCyM5iZ9bK3khAAHHs+Xnf985Ux5DN4v
+        48vsGGIJW8YMDVwpjxXtzkz9Jg==
+X-Google-Smtp-Source: AGRyM1v0lb2Qi2Gd06NKDrEvEWrU5c3+56Zc1hPsUTR+a7AE9/OC+/MnWmQuOOiqrIueE72+pTFq7Q==
+X-Received: by 2002:a17:90b:4b50:b0:1f0:5643:fa5c with SMTP id mi16-20020a17090b4b5000b001f05643fa5cmr38855624pjb.131.1658133991458;
+        Mon, 18 Jul 2022 01:46:31 -0700 (PDT)
+Received: from anup-ubuntu64-vm.. ([122.171.37.148])
+        by smtp.gmail.com with ESMTPSA id t6-20020a635f06000000b0040dffa7e3d7sm7556487pgb.16.2022.07.18.01.46.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 01:46:30 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH] cpuidle: riscv-sbi: Fix CPU_PM_CPU_IDLE_ENTER_xyz() macro usage
+Date:   Mon, 18 Jul 2022 14:15:53 +0530
+Message-Id: <20220718084553.2056169-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Exd8vzD_W6MX5oj.bTwiiWK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Exd8vzD_W6MX5oj.bTwiiWK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Currently, we are using CPU_PM_CPU_IDLE_ENTER_PARAM() for all SBI HSM
+suspend types so retentive suspend types are also treated non-retentive
+and kernel will do redundant additional work for these states.
 
-Hi all,
+The BIT[31] of SBI HSM suspend types allows us to differentiate between
+retentive and non-retentive suspend types so we should use this BIT
+to call appropriate CPU_PM_CPU_IDLE_ENTER_xyz() macro.
 
-Today's linux-next merge of the random tree got a conflict in:
+Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+---
+ drivers/cpuidle/cpuidle-riscv-sbi.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-  arch/arm64/kernel/kaslr.c
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+index 1151e5e2ba82..33c92fec4365 100644
+--- a/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -97,8 +97,13 @@ static int sbi_cpuidle_enter_state(struct cpuidle_device *dev,
+ 				   struct cpuidle_driver *drv, int idx)
+ {
+ 	u32 *states = __this_cpu_read(sbi_cpuidle_data.states);
++	u32 state = states[idx];
+ 
+-	return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend, idx, states[idx]);
++	if (state & SBI_HSM_SUSP_NON_RET_BIT)
++		return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend, idx, state);
++	else
++		return CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM(sbi_suspend,
++							     idx, state);
+ }
+ 
+ static int __sbi_enter_domain_idle_state(struct cpuidle_device *dev,
+-- 
+2.34.1
 
-between commit:
-
-  fc5a89f75d2a ("arm64: kaslr: defer initialization to initcall where permi=
-tted")
-
-from the arm64 tree and commit:
-
-  29abd7758699 ("random: handle archrandom in plural words")
-
-from the random tree.
-
-I fixed it up (the former has removed tha call to
-arch_get_random_seed_words_early() that is updated in the latter) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Exd8vzD_W6MX5oj.bTwiiWK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLVHSYACgkQAVBC80lX
-0Gyx+Af/c+NsnChpMNGKzfd2hlBsaJ/+6UIos2H9L4za1TGLwI2dAQkYqBe5GMNP
-pW4HibdyneuIAYVD2X7xD9+bvgpZGdslLSXQQHnhepREAa8wenlRaZbgMjCbEdYm
-gj0NE3gkJ6gaXVd8c73vrQ5kL8xGRXNfcIGeiuH/W1qa5IVtIWo1tY4RR+oUUd94
-+oExrvP64j59MX1CzlUXzi+vqwOgu13/JMVKW/cWOwlyRElxmrIYcrnQ5xHkvF3w
-Ye+KzyVMagjTAgTvl/saIcAWvUjQ1hsFvUMbDLwFcWQTpfKMsVYhxlDc50twdr7p
-i4hsUpnMikEgL0dTO5N7u0rpXdzagw==
-=ngz3
------END PGP SIGNATURE-----
-
---Sig_/Exd8vzD_W6MX5oj.bTwiiWK--

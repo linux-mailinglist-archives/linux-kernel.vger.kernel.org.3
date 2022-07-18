@@ -2,119 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83819578613
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F927578614
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 17:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235234AbiGRPMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 11:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S235240AbiGRPNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 11:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235202AbiGRPMu (ORCPT
+        with ESMTP id S235202AbiGRPNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:12:50 -0400
-X-Greylist: delayed 115 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Jul 2022 08:12:48 PDT
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2221CFEE
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:12:48 -0700 (PDT)
-Received: from [167.98.27.226] (helo=[10.35.4.171])
-        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1oDSQ9-002C9w-8q; Mon, 18 Jul 2022 16:12:29 +0100
-Message-ID: <7c68e645-efd7-c48c-77aa-9aa607c77033@codethink.co.uk>
-Date:   Mon, 18 Jul 2022 16:12:28 +0100
+        Mon, 18 Jul 2022 11:13:13 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35809275C0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 08:13:12 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 26IFCmkp090786;
+        Mon, 18 Jul 2022 10:12:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1658157168;
+        bh=VG8f/acBJAyK9kbXYs6a9nr3t+nEI09J3pQcpkEC7yc=;
+        h=From:To:CC:Subject:Date;
+        b=bOEATYHbZja4HUZV04J9+qfYvy39/wkmgeJeCAsMzjWWl0cx2RjYtuJTfSiEwWg8G
+         vLKOolIjxjLFYak1h1pWucI1pGTL4qSM/l7+Asm/ZJDvTvLyzp1zq0fz/QNUh42pga
+         DVyyAibzsC2tGxunNd9xF0RG9bjfj+//fEgG1jlg=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 26IFCmRI023058
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 18 Jul 2022 10:12:48 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 18
+ Jul 2022 10:12:47 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 18 Jul 2022 10:12:47 -0500
+Received: from pratyush-4F-325.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 26IFChlw027105;
+        Mon, 18 Jul 2022 10:12:44 -0500
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+CC:     Pratyush Yadav <p.yadav@ti.com>, Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "open list:SPI NOR SUBSYSTEM" <linux-mtd@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] MAINTAINERS: Use my kernel.org email
+Date:   Mon, 18 Jul 2022 20:42:43 +0530
+Message-ID: <20220718151243.1149442-1-p.yadav@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 03/13] dt-bindings: dma: dw-axi-dmac: extend the number
- of interrupts
-Content-Language: en-GB
-To:     Conor Dooley <mail@conchuod.ie>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh@kernel.org>
-References: <20220705215213.1802496-1-mail@conchuod.ie>
- <20220705215213.1802496-4-mail@conchuod.ie>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <20220705215213.1802496-4-mail@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/07/2022 22:52, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The Canaan k210 apparently has a Sysnopsys Designware AXI DMA
-> controller, but according to the documentation & devicetree it has 6
-> interrupts rather than the standard one. Support the 6 interrupt
-> configuration by unconditionally extending the binding to a maximum of
-> 8 per-channel interrupts thereby matching the number of possible
-> channels.
+Use the kernel.org email I have for reviewing patches.
 
-I think you can still configure it to produce a single interrupt
-even if there are per-channel interrupts available. This is from
-my reading of the driver a little while ago so may not be totally
-correct now.
+Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Having per-channel irqs might be useful in the future, but as above
-I think it'll require the driver to be updated to do it (and possibly
-some sort of detection)
-
-
-> Link: https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf #Page 51
-> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->   .../devicetree/bindings/dma/snps,dw-axi-dmac.yaml          | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-> index 4324a94b26b2..67aa7bb6d36a 100644
-> --- a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-> +++ b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
-> @@ -34,7 +34,12 @@ properties:
->         - const: axidma_apb_regs
->   
->     interrupts:
-> -    maxItems: 1
-> +    description:
-> +      If the IP-core synthesis parameter DMAX_INTR_IO_TYPE is set to 1, this
-> +      will be per-channel interrupts. Otherwise, this is a single combined IRQ
-> +      for all channels.
-> +    minItems: 1
-> +    maxItems: 8
->   
->     clocks:
->       items:
-
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fe5daf141501..282b34eae750 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18827,7 +18827,7 @@ F:	drivers/pinctrl/spear/
+ 
+ SPI NOR SUBSYSTEM
+ M:	Tudor Ambarus <tudor.ambarus@microchip.com>
+-M:	Pratyush Yadav <p.yadav@ti.com>
++M:	Pratyush Yadav <pratyush@kernel.org>
+ R:	Michael Walle <michael@walle.cc>
+ L:	linux-mtd@lists.infradead.org
+ S:	Maintained
 -- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
+2.36.1
 
-https://www.codethink.co.uk/privacy.html

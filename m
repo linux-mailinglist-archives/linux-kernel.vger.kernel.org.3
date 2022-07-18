@@ -2,94 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7DC577EB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A579577EB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234140AbiGRJcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
+        id S234137AbiGRJb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbiGRJcV (ORCPT
+        with ESMTP id S233195AbiGRJb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:32:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCB11A837
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pxfVjTQqn7wXOhd19YJZCe2q/E6thx+T7hFS++QNFGY=; b=J/Wdxo7flkH5R3dt6FdOfdLkyw
-        z88k6QfT96wjtD+EOU52Ud/RBvkUiQ6vNLaH8HpsslKUp88SBmAgAeJcMpxGaAFSx0OUZ94TmcsYF
-        9hg0uFdbyaScdpVo8U45KoZR4qHNDjDxdhZ/9PzZ/czHnOWQb1x5u3f9dJkp+0Db0+c9sjTL2ijft
-        Tnts2loDpTJdVleFGrNdDs3ZUXX8c+My6ZYc+AJb3YUo+Dvi9WDZeF9TYU5OeVeFewUa8Eb6i5XiM
-        cle2wuyymwy8gSHMvSbD/K9O2l8KxYqDaeiUCgd7/ZZAZ+7QJ1zOvv3xRIGEqP8ptyGQSuLH9Ynbh
-        ebuUqScA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDN6F-004nQL-7Z; Mon, 18 Jul 2022 09:31:35 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AE46D980222; Mon, 18 Jul 2022 11:31:33 +0200 (CEST)
-Date:   Mon, 18 Jul 2022 11:31:33 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [patch 02/38] x86/cpu: Use native_wrmsrl() in
- load_percpu_segment()
-Message-ID: <YtUodTM53de5vVxO@worktop.programming.kicks-ass.net>
-References: <20220716230344.239749011@linutronix.de>
- <20220716230952.787452088@linutronix.de>
- <0bec8fe2-d1e3-f01c-6e52-06ab542efdd8@citrix.com>
- <87zgh7wo91.ffs@tglx>
- <87tu7fwlhr.ffs@tglx>
- <87r12jwl9l.ffs@tglx>
- <87o7xnwgl3.ffs@tglx>
- <70b03d06-6ab9-1693-f811-f784a7dced76@suse.com>
- <87lesqx64u.ffs@tglx>
- <87ilnux0ji.ffs@tglx>
+        Mon, 18 Jul 2022 05:31:58 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82ED41A06F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:31:56 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 6so19758373ybc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BRnIJhnc7zj4KKZ0HO33twM8x3MOEz6vSsZhsRfqSSk=;
+        b=dp7jk0t5JzhYGiuclMZTx5/iTT1EbE5sziHRoVQjGU1uce7s6WlN7ys3lN2ZUmvVoU
+         00T9ByMLojt5bfXV+gvEhBkc/4LEb35NKzpxm6nfPH5dK/r19/UnWX1epUtl15M39nzn
+         yAwkY92hbK+8w5SQ2ASAqZK8mO/xu2j3phlWv5TZLwh0ghyEFU7sWidbcovjulGsKP4X
+         S4oqgUUFXpi2ovI0IP+vENJ0rrY/DqD2lSwW7draZB89BOUU65s84v9+kuu/UQihfinX
+         gr70ExG7mxnY90kqjt/g/dfOmD/oy+wfUvwdya5c5lqyB0POqmNxO74/gWnd471f8GBW
+         LOPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BRnIJhnc7zj4KKZ0HO33twM8x3MOEz6vSsZhsRfqSSk=;
+        b=i8MFIfLJVcD0paMze/UyTmjqlmb1b9DmULz28g7ag/ZCMTdLVEzksw0vR3N5z6QAD4
+         7tOP3Voc3IwjP7dr5fTblEeNfDXbCaAnZTC9BwAgtIrdYJPLhvUOplmm9gIMoUrfdvTu
+         tx4bxx8QR3+wJI8vHabZbnYg5QsVA2VvKTlNpMfG+aoVozauASzKfNDq/uk5iK4/8S1O
+         8iEC8LwCogAbWtmBLlV7bdYthprZ5jBSIX9MJvNPTjNU+ykfgYOhwHkvJVsift8s1VLQ
+         jfVZIEnc5e04BbZbqqHvrFRqKntv13djXo4x9/iLXdNFYEUtS2DDz/8mEe6QbLjnD5fb
+         X0wA==
+X-Gm-Message-State: AJIora8tFIOLCO3ItvPVRRReXUPb8THFofVwbh2qoK8xaUmqN2057zX6
+        cdNKrxE/dphvao53JCGceQRjqb2NMbhRVS5qkaWrjw==
+X-Google-Smtp-Source: AGRyM1uXldGPZJoJ/+9/ccHAHQvnwo2ZRA1orwV4zWgWiSU2c7r1rIOtncJqVdW/J4ktbugvQYAzUoc2M5iAUPO7Ds0=
+X-Received: by 2002:a05:6902:703:b0:66e:a7aa:2706 with SMTP id
+ k3-20020a056902070300b0066ea7aa2706mr27412795ybt.410.1658136715817; Mon, 18
+ Jul 2022 02:31:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ilnux0ji.ffs@tglx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714020319.72952-1-warthog618@gmail.com> <20220714020319.72952-5-warthog618@gmail.com>
+In-Reply-To: <20220714020319.72952-5-warthog618@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 18 Jul 2022 11:31:44 +0200
+Message-ID: <CACRpkdZA+KCrRgdRQbK1mG76EtA9uw8f4rXBfjGfNZW1bCaV9g@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] gpiolib: cdev: simplify line event identification
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        brgl@bgdev.pl, dipenp@nvidia.com, andy.shevchenko@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:55:29AM +0200, Thomas Gleixner wrote:
-> On Mon, Jul 18 2022 at 08:54, Thomas Gleixner wrote:
-> > On Mon, Jul 18 2022 at 07:11, Juergen Gross wrote:
-> >>> -	switch_to_new_gdt(cpu);
-> >>> +	switch_to_real_gdt(cpu);
-> >>
-> >> ... can't you use the paravirt variant of load_gdt in switch_to_real_gdt() ?
-> >
-> > That does not solve the problem of having a disagreement between GDT and
-> > GS_BASE. Let me dig into this some more.
-> 
-> Bah. The real problem is __loadsegment_simple(gs, 0). After that GS_BASE
-> is 0. So any per CPU access before setting MSR_GS_BASE back to working
-> state is going into lala land.
-> 
-> So it's not the GDT. It's the mov 0, %gs which makes stuff go south, but
-> as %gs is already 0, we can keep the paravirt load_gdt() and use
-> native_write_msr() and everything should be happy.
+On Thu, Jul 14, 2022 at 4:04 AM Kent Gibson <warthog618@gmail.com> wrote:
 
-How is the ret from xen_load_gdt() not going to explode?
+> Reorganise line event identification code to reduce code duplication,
+> and replace if-else initializers with a helper function to improve
+> readability.
+>
+> Signed-off-by: Kent Gibson <warthog618@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+Yep more readable.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij

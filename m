@@ -2,177 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FEE578040
+	by mail.lfdr.de (Postfix) with ESMTP id 205C557803F
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234411AbiGRKvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S234401AbiGRKv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233897AbiGRKvq (ORCPT
+        with ESMTP id S233940AbiGRKv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:51:46 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBCB20182;
-        Mon, 18 Jul 2022 03:51:44 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id f11so10201612pgj.7;
-        Mon, 18 Jul 2022 03:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Pzx0LTAEG3plavLsKEb5O1+0H3QSoplqHlDrOAmJwM0=;
-        b=pjHLQ1tU+9Z/jw03Et5aIahbF/Qm2nLM2GoP+sewQYwZoxFZuKCXaynTjv4K1YzH/e
-         POLpKKxGFLNydnDB1V8Fw3dBYLodL8EZ/FCkN3Qf9d2wJyXf9lFMV7AXjX1UZMZSq7IP
-         2XuVfIYuyRTi/b/XM4QxkAwd/Vvf3AxCb5pVxgzEuffw2QYAFhGGyeqZgJSwJcyuwRHs
-         0nJ8s7u3fkmgquf2Jk8tE3RokRx43voshbnitAAuQbOI+ITg2F93o6wAx5+PvYY1a2j3
-         AlvFGbLNO0Yis6+7MtmghrqFArpZTW2v/dQ5/704EXYekCYNXWnb2GX+LYfq9dSRPzkW
-         iLUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Pzx0LTAEG3plavLsKEb5O1+0H3QSoplqHlDrOAmJwM0=;
-        b=7Y22rIZfeay0FshSF16JgMKX1428HPuFwTl5avQhTYf02ynE9hThbcI9/++EyCg9OW
-         e8H56GQGrXzjakXgTd5Ww/UkMhlVRF1soebEkKDuJuakuFkw8u0m8Mduyq4x2W89Zmiv
-         zKtwp0DotH5pXWjvZWg4pmlyskcpn7G7nhT0IAsM7aHKvze+dqzFIZzjld/JJiN6s9s3
-         qCQLUvaUO059bcpERcZXLW7gEa8dX8pZW98GRHYEDT//coXHisY4iB5HwYRm0TGe5dWl
-         20edmPsM8G0JUiyDrFwlNC1TcvqEd130Se7llFMjVJF17Ljr2J0lA/pp557EENyaH8If
-         +Qpw==
-X-Gm-Message-State: AJIora8ve1Nks/kGYc+069bWblUkKyrN2CVkV58eZZm4406s6E9ziGfo
-        NbpOQDFyQRH1RviqQKamq9o=
-X-Google-Smtp-Source: AGRyM1sM2aRIyOja2E9k7LGH0ZcvsU9FUgU7Z7TYOhcgHRZQYqonOKjMd4pT27VlfZsvZ1ABsValtg==
-X-Received: by 2002:a05:6a00:124c:b0:52b:26b6:2ab4 with SMTP id u12-20020a056a00124c00b0052b26b62ab4mr20907079pfi.85.1658141504318;
-        Mon, 18 Jul 2022 03:51:44 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id s2-20020aa78bc2000000b0052ac1af926fsm8914641pfd.20.2022.07.18.03.51.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 18 Jul 2022 03:51:44 -0700 (PDT)
-From:   Vincent Shih <vincent.sunplus@gmail.com>
-To:     kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com
-Cc:     Vincent Shih <vincent.sunplus@gmail.com>
-Subject: [PATCH v4 2/2] dt-bindings: phy: Add bindings doc for Sunplus USB2
-Date:   Mon, 18 Jul 2022 18:51:20 +0800
-Message-Id: <1658141480-9291-3-git-send-email-vincent.sunplus@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1658141480-9291-1-git-send-email-vincent.sunplus@gmail.com>
-References: <1658141480-9291-1-git-send-email-vincent.sunplus@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 06:51:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D33C205DD;
+        Mon, 18 Jul 2022 03:51:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2EA0B81120;
+        Mon, 18 Jul 2022 10:51:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B46FEC341C0;
+        Mon, 18 Jul 2022 10:51:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658141513;
+        bh=cM3t1S+fqufj5ZWZu24Lh26z1hT79BU+gKX4fdAZaoQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I+RuqFA/KVkZTcitvJfH2RzsNdutbTwgH63ePE1wr86fjldlvlzJIhHFMaYt5R2L7
+         92jtvKrsr7miLQLzypjaDFu6VK/dWY5/aE3xTb/h0WOUOiYMTADGiXC2mN/yLJh4QM
+         ohCX877+kEr2BfCcgfJMv00sJHvTXJY3hggHWD3XxTBKOqHqKt5pwbo3OfLThNk4Dm
+         rOlUu+6xxWJZNY+l2tEs6yi4DKuHrR6UI0PgIL7iuVSy5Nav4cUgQnUumgAiH3AH8j
+         ykwlUbuvL6kf26gblyGt6EiRncOXjCgPzzFYgUB7WhWhoBQYUnQQ4kZMk+giRAh5m2
+         JFwHzU7DVmTdQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oDOLq-0005F6-Gz; Mon, 18 Jul 2022 12:51:47 +0200
+Date:   Mon, 18 Jul 2022 12:51:46 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Stanimir Varbanov <svarbanov@mm-sol.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/8] PCI: qcom: Add support for SC8280XP and SA8540P
+Message-ID: <YtU7QpjK60cG1yCp@hovoldconsulting.com>
+References: <20220714071348.6792-1-johan+linaro@kernel.org>
+ <aa11b2ec-7196-7423-151c-1797966d0cd2@mm-sol.com>
+ <YtUzY9eYM0uhT3jj@hovoldconsulting.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtUzY9eYM0uhT3jj@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings doc for Sunplus USB2 PHY driver
+On Mon, Jul 18, 2022 at 12:18:11PM +0200, Johan Hovold wrote:
+> On Mon, Jul 18, 2022 at 10:49:40AM +0300, Stanimir Varbanov wrote:
+> > Hi Johan,
+> > 
+> > Thank you for your work, especially for for the last three patches ;-)
+> > 
+> > On 7/14/22 10:13, Johan Hovold wrote:
+> > > This series adds support for the PCIe controllers found on SC8280XP and
+> > > SA8540P.
+> > > 
+> > > Included are also three patches that clean up the way the driver handles
+> > > different IP revisions (e.g. by modelling optional clocks as being truly
+> > > optional).
+> 
+> > For the whole set:
+> > 
+> > Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
+> 
+> Thanks for the ack.
+> 
+> Could you take a look at Dmitry's MSI series that this series depends on
+> as well?
+> 
+> I saw you acking the binding, but not the rest of the series it seems:
+> 
+> 	https://lore.kernel.org/all/3f9e1c18-bc61-8690-5427-ba8dc5fad7ad@mm-sol.com/
 
-Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
----
-Changes in v4:
- - No change
+Of course you only acked the single patched that touched the Qualcomm
+driver. Sorry about the noise.
 
- .../bindings/phy/sunplus,sp7021-usb2-phy.yaml      | 73 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 74 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
-
-diff --git a/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
-new file mode 100644
-index 0000000..069d422
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/phy/sunplus,sp7021-usb2-phy.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Sunplus SP7021 USB 2.0 PHY Controller
-+
-+maintainers:
-+  - Vincent Shih <vincent.sunplus@gmail.com>
-+
-+properties:
-+  compatible:
-+    const: sunplus,sp7021-usb2-phy
-+
-+  reg:
-+    items:
-+      - description: UPHY register region
-+      - description: MOON4 register region
-+
-+  reg-names:
-+    items:
-+      - const: phy
-+      - const: moon4
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  nvmem-cell-names:
-+    description: names corresponding to the nvmem cells of disconnect voltage
-+    const: disc_vol
-+
-+  nvmem-cells:
-+    description: nvmem cell address of disconnect voltage
-+    maxItems: 1
-+
-+  sunplus,disc-vol-addr-off:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: the otp address offset of disconnect voltage
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - resets
-+  - "#phy-cells"
-+  - nvmem-cell-names
-+  - nvmem-cells
-+  - sunplus,disc-vol-addr-off
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    sp_uphy0: usb-phy@9c004a80 {
-+      compatible = "sunplus,sp7021-usb2-phy";
-+      reg = <0x9c004a80 0x80>, <0x9c000248 0x10>;
-+      reg-names = "phy", "moon4";
-+      clocks = <&clkc 0x3d>;
-+      resets = <&rstc 0x2d>;
-+      #phy-cells = <0>;
-+      nvmem-cell-names = "disc_vol";
-+      nvmem-cells = <&disc_vol>;
-+      sunplus,disc-vol-addr-off = <0>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 31d2ba0..989e5ba 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19227,6 +19227,7 @@ SUNPLUS USB2 PHY DRIVER
- M:	Vincent Shih <vincent.sunplus@gmail.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
- F:	drivers/phy/sunplus/Kconfig
- F:	drivers/phy/sunplus/Makefile
- F:	drivers/phy/sunplus/phy-sunplus-usb2.c
--- 
-2.7.4
-
+Johan

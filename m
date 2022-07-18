@@ -2,775 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9326157852D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576DB57852E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 16:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbiGROSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 10:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S234685AbiGROSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 10:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbiGROSh (ORCPT
+        with ESMTP id S234430AbiGROSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 10:18:37 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4114DDFAF
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:18:33 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id bu1so17253292wrb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:18:33 -0700 (PDT)
+        Mon, 18 Jul 2022 10:18:51 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FBA1FA
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:18:46 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26IDZHNq029595;
+        Mon, 18 Jul 2022 14:18:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=corp-2022-7-12;
+ bh=Hn8scAS4SW8pHEJOkFqQLu6M0o7J/m3JbAE4tacqOl4=;
+ b=m7V64PGupmsZ9pUDssDTf7T14jo4lBB6PkTr6kbhEhMztckLFi1cIeExbH7LWdeS3e8A
+ NjHcG12LVNhWRifICuu1IScSVYVTkpaDyuEtB3MFKlI2a27xrxjoD8BvayNc5h8H9eTC
+ qy0JJjeSq2djxyoNwDaViqQ5dgCi4m1+WcKGhvfMxIigWR/MegRt5Q030KaoweXeqFX2
+ 2UOy9tEwAtDGUKskfPCRWy2okqbDDdpq4YifWmoYYdoyMmrXpbaiW05VSQNz37o7NdI6
+ K+N3nlXZ0IoL1BDid/TFA0BDv4VB3TJRcogs3HvSdZCcy1kdZTDJjaUVHeuSfZrafAqt fQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbnvtbdgr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Jul 2022 14:18:36 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26ICLdP3004177;
+        Mon, 18 Jul 2022 14:18:35 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1k3v490-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Jul 2022 14:18:35 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BUVed9qZ5nSyFQ7aDbewYy+BEW8yItKTNAT2/Sy4v2Y+Za/mVwBwwqbtIO68X0Gomh3KNarsUaEbZhFRrPN37HYz+fXGOWYlCQw/B2jy/IoZ+r+qpw2i4DOoq2sBb3/4ucfh0MbnHaO04nv/Zde1RGHTzni2WEaDJ29F4V97g0gJI5mkkuEzIYeyeR8j/0v4wQVfJ1bx+pAELlkIBxTVPuEM6Cg8LAN3/cS+hdrrKv+86seePvsRetEGV0BZ4NwR/a5PJzx5l/Lxj5GahOtqCw07CMhxu9j0lqZqXbUBhq/eA9hJqVVypTZ8rbX9zbRVNxDBRkP4f+RnEYy9QUVoYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Hn8scAS4SW8pHEJOkFqQLu6M0o7J/m3JbAE4tacqOl4=;
+ b=SiNxW5hR+HvQLpHWcSpud7Oz/WjPSFVML//ga7dpeRuACkO342I13ZaALyMbXiSFxl6CRLc9B0LR4n1kUSjaty917RoqezGp7yk0i77zRvE7+XYYsjcnMxPffpxOUFwk7pJ/1BHcuQ80w19eDJsT1lkRv5LhxZ7Qg4BkLmPG8ftzOOL4eSj3qskQbBZybrEtzgj2EihzwLlVwe0q12Bvh85ZL6e6WRlTC4t/BNduU1vgF4pxRacv/zYJ/eWJlLPuc3roxn69WAkMkFbqh/8AG5KrMm1Zk4epIPK1RHWPU1lv5QUA39s/HJAYOwTfC2Yg8WxRe2zWCZdCgCNizffb0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=gLq0d/jV4o9aB9pU8p7hMA+66qSzv4eqlhhhHzAYRmw=;
-        b=vEyDTieprd8sNYmuqnTOrargXydmC0ROgW8hxZ+TmQo8DTdxtWB2rU9xtKbwV8Io7Y
-         NeSu3Z0Fcrwed5eQrOt7TevAPh4s6pboEcyIDANa0saXRTCSTib0SHWpA8W/+A9yP+6k
-         d8WQULhyBS8JPUeIxdXsplv/iMA6q4QcNZSKR1aX5hD02/JFl9efIgZwo04d6A/V+T4H
-         C3gR3a3z8Tz6+BFPHDiVvfGysxJCF+Fngd888vVyTgD1sGrqn+E6w2ivqve99Tz0+lDa
-         vOkfc6CuS6TIoIfb+YsotGZtPNO/Cj/yF/vzTcCbWaPODbXXsPaIFLhp9d1UgkJhsYiJ
-         Qc/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=gLq0d/jV4o9aB9pU8p7hMA+66qSzv4eqlhhhHzAYRmw=;
-        b=YUT8M8kmAMsNT1ywTly85vwb5dw+HMEGZ2SJXOdXipnBWmxexHA79BaQT2oN8qvPV1
-         /Iovpx1JloBYhHsjkzSAq5ZJcqRwq1gLJ+KMycKeoUNygDyVCeGLJ+1Gcq6zk4BTvbY4
-         z/gzVXPL1XbC0pMarJHlkeMe1XzkDOcqZPs7w0tDIW9anFODp0onumB/tZQf8H490vtX
-         aXyankXZIXX22V7zu1GF62PTsARl/WhCiE81CBrml+65ohB6xfWnvfNDmQl/YvY7W8mO
-         y+58VUMIYWvMp0CHmfid6ojeyvJCqcTj6veBvJ2/DyUBb3TzI7Xgqyn8YQLBhxdfms1k
-         rDzQ==
-X-Gm-Message-State: AJIora/++0QFAKBL8Pb8ho/crJ3W3EAzbzhxUHNDPIumNnrhrPzK5Sfn
-        B7AHJlb4RNHhqIq0CCb2F9PQpQ==
-X-Google-Smtp-Source: AGRyM1sAwosNw1DqpvsNcl7J11odJWZRQhS7HKRREBfavJFYLY9GKFX6JmjDGvjCkVb1BdRf62c3WQ==
-X-Received: by 2002:a5d:64a4:0:b0:21d:be80:de06 with SMTP id m4-20020a5d64a4000000b0021dbe80de06mr20460241wrp.107.1658153911461;
-        Mon, 18 Jul 2022 07:18:31 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id c6-20020a7bc006000000b003a02f957245sm18759407wmb.26.2022.07.18.07.18.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 07:18:31 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 15:18:28 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        katie.morris@in-advantage.com
-Subject: Re: [PATCH v13 net-next 9/9] mfd: ocelot: add support for the
- vsc7512 chip via spi
-Message-ID: <YtVrtOHy3lAeKCRH@google.com>
-References: <20220705204743.3224692-1-colin.foster@in-advantage.com>
- <20220705204743.3224692-10-colin.foster@in-advantage.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Hn8scAS4SW8pHEJOkFqQLu6M0o7J/m3JbAE4tacqOl4=;
+ b=LQ8u56PJxKxykdyXl6cW7vqn87PJo+bC9siMY2mVVkENwoXPCB62vU31oIdIFNlHvcYHaMd7atX0If18gjALozGBEeiGXArlSULYtj0GUd5V2hTB2vpEFRL+JpCZBgj3YokvL/qlJtjQ/VS46tQmwMkQOQ70Oewt0XDI4cRiym0=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by BY5PR10MB3811.namprd10.prod.outlook.com (2603:10b6:a03:1fc::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Mon, 18 Jul
+ 2022 14:18:32 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::c4d1:edc3:7d21:7c68]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::c4d1:edc3:7d21:7c68%6]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
+ 14:18:32 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>, Hugh Dickins <hughd@google.com>
+Subject: [RESEND PATCH for v10] maple_tree: Fix stale data copy in
+ mas_wr_node_store()
+Thread-Topic: [RESEND PATCH for v10] maple_tree: Fix stale data copy in
+ mas_wr_node_store()
+Thread-Index: AQHYmrFCz2uoTyd9lkuIUcTlC7rTIw==
+Date:   Mon, 18 Jul 2022 14:18:31 +0000
+Message-ID: <20220718141818.2569416-1-Liam.Howlett@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9cd4d917-6bdb-49f0-71fe-08da68c864c7
+x-ms-traffictypediagnostic: BY5PR10MB3811:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qdgAds4XcAVLcqdFpQrrDQW19i46bJEMJEJTZhhq4jUNnF/1yTc5eRSdGDTBgI7++DfA/6dSTuCI2JxpSe4qlRAP4cPu6/aWLIFs9zPfL04QnF7KYN3BXRycKQuPVu3LD2FfeFM1dqghFwjfKrDK9WZKyk6ttfUdICeTYF7ti6KV7VBWx2Vq+iHfqYvOgRg8v765Dw+YEZCJcEHvvHSxtV/DpOPpGy7kYvsdkKGBsh/N6F4ctZX53aN/Ug5Gq6k+QgAKs2g54itlRlOKOVFB/5qTqDKs+boZkW0PWciaCx4K0ojWSaeYqV+OKHR/j8DhCds1dk3GldbpBezTZBd1i3uAsYlwz6cC+RXKFtLdDksA5SAMyYjIs/zU1ydTdVIBoI0N5xOco9d5UGsyCl5Dcps+9hhArENHFrCbG1htJnnBsUFU77UutuBj+wD7ef5g2WrETDAvV4tiZhYj9R0/r1wJjgOCt5lBBmtTG2FmepV5vwjNiOnkp3Dy7XKZ30CSMl6gAqNx7b9H4URkGKmTWXNEtGCT7w4FW25Vk6DQ4FZ0nNcAtPLhpHcqP2RNY+9/i0seFAKqnFBLwamYvNCQQZwukfwcX2GxrqO4Ui5CoLrElioCY63M1GbkkY5O+C0BnnnDk3sZQGHfV/X8/jsEJbEOc2cPlsl8BRecpHvrCKloKyyqLoIOuaszkzhE1WyuiHDMeGFnUBr4JSByOGn3JaV8fdkj26ADmq63Ugz6Kb0sQilK5KtX3hWIRSZTKKEnsgwjXHzYVePKh91gdFNrOdMAmXPmTLOfFYHJXhd2ED8P99ex/OfUhC65PndZRHqF
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(366004)(376002)(346002)(39860400002)(71200400001)(6486002)(478600001)(41300700001)(26005)(186003)(38100700002)(1076003)(6512007)(122000001)(6506007)(83380400001)(38070700005)(2616005)(2906002)(110136005)(44832011)(8936002)(86362001)(5660300002)(64756008)(8676002)(316002)(66476007)(66446008)(66556008)(36756003)(66946007)(76116006)(91956017);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?TH9WBTzZVFYZHGgomSUQGhswc5uVK2wuH+FBAKxJM5IZhoTrDO9ZjfWDhk?=
+ =?iso-8859-1?Q?QXVd6fajgDhWbK7It3djbipnwICseRmyKQyE5RYCvZMJZcf5WZulRLnybU?=
+ =?iso-8859-1?Q?f90l7SmEtwXVpwmNAueiM1B0hRbHaB1iotrSR5mMPjG2NPahpfEgNENWxA?=
+ =?iso-8859-1?Q?PEApGiWOCb/yGs6tH3lnnNpSTfItCfxbwU6ks50Dkhv7BFL3bxCCbvQoei?=
+ =?iso-8859-1?Q?9OyISeGL9KzWqo9qn/4zFmhj4/cBf06AY6xUjo4xU55PfHSpBRZaR0S11f?=
+ =?iso-8859-1?Q?F32xf3/SXxvI0Lv/UPzvdehjZTRjBsZOjHeC60jDwd9IrDsuyokQca0nwE?=
+ =?iso-8859-1?Q?oSo8xvpxjdHvaaAp0Y2BuFWfr/cRo9WFnYBMAMmLjnvCKoXYGjn4RSfaJz?=
+ =?iso-8859-1?Q?Wpka10b2GuMqY7c5yV3egBnmDp6uDDFfm/9NKnS3bJUJLyCiDnco+tJ1DH?=
+ =?iso-8859-1?Q?ZP9sXsBBFl2PFFc2Y7LUr7a4ssrR7K/asAlSn1+O1YJVlD0ZKAZCIh6CA7?=
+ =?iso-8859-1?Q?5lAt6mevUL3QtQYfHNeAINlgDgWWTppxZbUU8pc2uvnc6wgmLrQLvWh3ij?=
+ =?iso-8859-1?Q?lTgXzbz6iNqeXI07Ua9+umJYC1VQ2ntovMkC80x8n4YPVFV4tXNWWAGSTA?=
+ =?iso-8859-1?Q?0l+LyvyVgCYbAuBmi69lQEnIhFeOtvbSdv0cDGDbe4x3fC2iZsPGDJt9AK?=
+ =?iso-8859-1?Q?c6KBp5BVOHznZ7EJWNKjwiMoCSugak1FTzPat2/KiIcQLp5eHNctFEne0Q?=
+ =?iso-8859-1?Q?3QUyzpckZE4YJpcnLro6Yhofr65XhRKgaifpEJ+Sevyi92DAva3kh2Q8/J?=
+ =?iso-8859-1?Q?mqQmmYaZz0eN+UaSghYTkMFZ6d66shmb6JA/FY6G7wesT+PCC5SNR/bNt7?=
+ =?iso-8859-1?Q?rpw9EvaXy0iNDcry9GAauXtKHa1xjhGqlsWs3dB928K1pcEILelg6do5Vc?=
+ =?iso-8859-1?Q?ePDV8zBJ3lDl4ezglXiF0jSYzRyxaqlxUdSUjDeFebjWgpcltsvdkkODXo?=
+ =?iso-8859-1?Q?yZlhnySjNLXaFGzO/8fwYo/vJ71U+KXT1jRqhO4fRBMJl3+v/A9lAmq8mz?=
+ =?iso-8859-1?Q?KJhTz8ezkniucZsgdVQh8CktlR22FlHDWS7Obl70SvUW3b1jlYBJOj+Xy0?=
+ =?iso-8859-1?Q?2o0gG+szffHlLJEkUjtgIDyHO6ZDi03JPziOmEINvW7q8qltr54xFmR+eY?=
+ =?iso-8859-1?Q?l3dvohdX8S4FE4NCZQFS4GXbaF3Wid/dBaETQNK3c1A+WsyyzpY9Wg2iTc?=
+ =?iso-8859-1?Q?G0nqolJgh7c7aHp3iWTqc/mIGpekwbKdI2ctGY/VHiv1Z0RKFmZy6WNMCI?=
+ =?iso-8859-1?Q?8aYr2UGiXxBdSaVugimuhPI8k7Lp71K1WfFJcNQ0YFyGgJtkJCr3X8RvSh?=
+ =?iso-8859-1?Q?S0lFWvR6LC0IBEFqnALwaJ5Nryt3qaqgNrH4ta8Gc13zRgw3CEzJSDaaQv?=
+ =?iso-8859-1?Q?TrJwe1rQKKpZmHSaXik+U4LC0O4hAaE07HfxNh+MxUGEgeQ1h5ZzkCHkHB?=
+ =?iso-8859-1?Q?RoKOEnJo1oYZ61eTEhoj+pUFhtKGmszL5xV9zj9rq3aZjQnwcu8ioccog/?=
+ =?iso-8859-1?Q?U6p/DUxZpowdAnwcHEewGPmb5UL0FrY0n03P+mXKvJ99H+C90CnGkP4Suc?=
+ =?iso-8859-1?Q?AzcdiO86pI0Op/zhjKs9e6+CMymXCF/QbqCsghUgfmAT3h+8BckVE2oQ?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220705204743.3224692-10-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cd4d917-6bdb-49f0-71fe-08da68c864c7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2022 14:18:31.9418
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nbkAfuKpxc7wLa1XmPIB4PTlXORshz2oE1Ex4VdxffBOVmN2Nwot2GgKuL1x8x1cj3M5LDGhIOUOIN1Kkb0M9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB3811
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-18_13,2022-07-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 mlxscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207180062
+X-Proofpoint-GUID: eQ_gw-AhrVqu0t3cfVcb9AqVNCUUQ6iF
+X-Proofpoint-ORIG-GUID: eQ_gw-AhrVqu0t3cfVcb9AqVNCUUQ6iF
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Jul 2022, Colin Foster wrote:
+This is already in v11, but I must have messed up the emailing of this
+patch so I am resending for completeness.
 
-> The VSC7512 is a networking chip that contains several peripherals. Many of
-> these peripherals are currently supported by the VSC7513 and VSC7514 chips,
-> but those run on an internal CPU. The VSC7512 lacks this CPU, and must be
-> controlled externally.
-> 
-> Utilize the existing drivers by referencing the chip as an MFD. Add support
-> for the two MDIO buses, the internal phys, pinctrl, and serial GPIO.
-> 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
->  MAINTAINERS               |   1 +
->  drivers/mfd/Kconfig       |  21 +++
->  drivers/mfd/Makefile      |   3 +
->  drivers/mfd/ocelot-core.c | 169 ++++++++++++++++++++
->  drivers/mfd/ocelot-spi.c  | 317 ++++++++++++++++++++++++++++++++++++++
->  drivers/mfd/ocelot.h      |  34 ++++
->  6 files changed, 545 insertions(+)
->  create mode 100644 drivers/mfd/ocelot-core.c
->  create mode 100644 drivers/mfd/ocelot-spi.c
->  create mode 100644 drivers/mfd/ocelot.h
+When replacing or reusing a node, it is possible that stale data would
+be copied into the new node when a store operation wrote to the node
+maximum value but into lower slots.  Fix this by skipping the copy step
+if the range being written is the node maximum, and skip setting the
+end pivot in this case as well.
 
-Generally this is looking much better.
+Reported-by: syzbot+b707736a1ad47fda6500@syzkaller.appspotmail.com
+Fixes: 2ee236fe53a8 ("mm: start tracking VMAs with maple tree")
+Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+---
+ lib/maple_tree.c | 56 +++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 43 insertions(+), 13 deletions(-)
 
-Almost ready for inclusion with just a few nits.
-
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5e798c42fa08..e3299677cd4a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14471,6 +14471,7 @@ OCELOT EXTERNAL SWITCH CONTROL
->  M:	Colin Foster <colin.foster@in-advantage.com>
->  S:	Supported
->  F:	Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml
-> +F:	drivers/mfd/ocelot*
->  F:	include/linux/mfd/ocelot.h
->  
->  OCXL (Open Coherent Accelerator Processor Interface OpenCAPI) DRIVER
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 3b59456f5545..0ef433d170dc 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -962,6 +962,27 @@ config MFD_MENF21BMC
->  	  This driver can also be built as a module. If so the module
->  	  will be called menf21bmc.
->  
-> +config MFD_OCELOT
-> +	tristate "Microsemi Ocelot External Control Support"
-> +	depends on SPI_MASTER
-> +	select MFD_CORE
-> +	select REGMAP_SPI
-> +	help
-> +	  Ocelot is a family of networking chips that support multiple ethernet
-> +	  and fibre interfaces. In addition to networking, they contain several
-> +	  other functions, including pinctrl, MDIO, and communication with
-> +	  external chips. While some chips have an internal processor capable of
-> +	  running an OS, others don't. All chips can be controlled externally
-> +	  through different interfaces, including SPI, I2C, and PCIe.
-> +
-> +	  Say yes here to add support for Ocelot chips (VSC7511, VSC7512,
-> +	  VSC7513, VSC7514) controlled externally.
-> +
-> +	  To compile this driver as a module, choose M here: the module will be
-> +	  called ocelot-soc.
-> +
-> +	  If unsure, say N.
-> +
->  config EZX_PCAP
->  	bool "Motorola EZXPCAP Support"
->  	depends on SPI_MASTER
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 858cacf659d6..0004b7e86220 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -120,6 +120,9 @@ obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
->  
->  obj-$(CONFIG_MFD_CORE)		+= mfd-core.o
->  
-> +ocelot-soc-objs			:= ocelot-core.o ocelot-spi.o
-> +obj-$(CONFIG_MFD_OCELOT)	+= ocelot-soc.o
-> +
->  obj-$(CONFIG_EZX_PCAP)		+= ezx-pcap.o
->  obj-$(CONFIG_MFD_CPCAP)		+= motorola-cpcap.o
->  
-> diff --git a/drivers/mfd/ocelot-core.c b/drivers/mfd/ocelot-core.c
-> new file mode 100644
-> index 000000000000..e07cd901e1b3
-> --- /dev/null
-> +++ b/drivers/mfd/ocelot-core.c
-> @@ -0,0 +1,169 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/*
-> + * Core driver for the Ocelot chip family.
-> + *
-> + * The VSC7511, 7512, 7513, and 7514 can be controlled internally via an
-> + * on-chip MIPS processor, or externally via SPI, I2C, PCIe. This core driver is
-> + * intended to be the bus-agnostic glue between, for example, the SPI bus and
-> + * the child devices.
-> + *
-> + * Copyright 2021, 2022 Innovative Advantage Inc.
-
-Range?
-
-> + * Author: Colin Foster <colin.foster@in-advantage.com>
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/ocelot.h>
-> +#include <linux/module.h>
-> +#include <linux/regmap.h>
-> +#include <linux/types.h>
-> +
-> +#include <soc/mscc/ocelot.h>
-> +
-> +#include "ocelot.h"
-> +
-> +#define REG_GCB_SOFT_RST		0x0008
-> +
-> +#define BIT_SOFT_CHIP_RST		BIT(0)
-> +
-> +#define VSC7512_MIIM0_RES_START		0x7107009c
-> +#define VSC7512_MIIM0_RES_SIZE		0x24
-> +
-> +#define VSC7512_MIIM1_RES_START		0x710700c0
-> +#define VSC7512_MIIM1_RES_SIZE		0x24
-
-Maybe:
-
-#define VSC7512_MIIM0_RES_START		0x7107009c
-#define VSC7512_MIIM1_RES_START		0x710700c0
-#define VSC7512_MIIM_RES_SIZE		0x24
-
-No strong feelings about this though, just saves a line or two.
-
-> +#define VSC7512_PHY_RES_START		0x710700f0
-> +#define VSC7512_PHY_RES_SIZE		0x4
-> +
-> +#define VSC7512_GPIO_RES_START		0x71070034
-> +#define VSC7512_GPIO_RES_SIZE		0x6c
-> +
-> +#define VSC7512_SIO_CTRL_RES_START	0x710700f8
-> +#define VSC7512_SIO_CTRL_RES_SIZE	0x100
-> +
-> +#define VSC7512_GCB_RST_SLEEP_US	100
-> +#define VSC7512_GCB_RST_TIMEOUT_US	100000
-> +
-> +static int ocelot_gcb_chip_rst_status(struct ocelot_ddata *ddata)
-> +{
-> +	int val, err;
-> +
-> +	err = regmap_read(ddata->gcb_regmap, REG_GCB_SOFT_RST, &val);
-> +	if (err)
-> +		val = err;
-
-I think just returning err is clearer.
-
-> +	return val;
-> +}
-> +
-> +int ocelot_chip_reset(struct device *dev)
-> +{
-> +	struct ocelot_ddata *ddata = dev_get_drvdata(dev);
-> +	int ret, val;
-> +
-> +	/*
-> +	 * Reset the entire chip here to put it into a completely known state.
-> +	 * Other drivers may want to reset their own subsystems. The register
-> +	 * self-clears, so one write is all that is needed and wait for it to
-> +	 * clear.
-> +	 */
-> +	ret = regmap_write(ddata->gcb_regmap, REG_GCB_SOFT_RST,
-> +			   BIT_SOFT_CHIP_RST);
-
-Lots of these line-breaks can be removed which will tidy-up the file
-quite a bit.  The new max is 100 chars.  So long as checkpatch.pl
-doesn't complain, I'm happy.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = readx_poll_timeout(ocelot_gcb_chip_rst_status, ddata, val, !val,
-> +				 VSC7512_GCB_RST_SLEEP_US,
-> +				 VSC7512_GCB_RST_TIMEOUT_US);
-> +	if (ret)
-> +		return dev_err_probe(ddata->dev, ret, "timeout: chip reset\n");
-
-*This* function is not probe.
-
-Also the last failure will produce 2 prints due to the dev_err_probe()
-in actual .probe() below.  Please fix that.
-
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_NS(ocelot_chip_reset, MFD_OCELOT);
-> +
-> +static const struct resource vsc7512_miim0_resources[] = {
-> +	DEFINE_RES_REG_NAMED(VSC7512_MIIM0_RES_START, VSC7512_MIIM0_RES_SIZE,
-> +			     "gcb_miim0"),
-
-Lots of early breaks coming up - I won't comment on them all.
-
-> +	DEFINE_RES_REG_NAMED(VSC7512_PHY_RES_START, VSC7512_PHY_RES_SIZE,
-> +			     "gcb_phy"),
-> +};
-> +
-> +static const struct resource vsc7512_miim1_resources[] = {
-> +	DEFINE_RES_REG_NAMED(VSC7512_MIIM1_RES_START, VSC7512_MIIM1_RES_SIZE,
-> +			     "gcb_miim1"),
-> +};
-> +
-> +static const struct resource vsc7512_pinctrl_resources[] = {
-> +	DEFINE_RES_REG_NAMED(VSC7512_GPIO_RES_START, VSC7512_GPIO_RES_SIZE,
-> +			     "gcb_gpio"),
-> +};
-> +
-> +static const struct resource vsc7512_sgpio_resources[] = {
-> +	DEFINE_RES_REG_NAMED(VSC7512_SIO_CTRL_RES_START,
-> +			     VSC7512_SIO_CTRL_RES_SIZE,
-> +			     "gcb_sio"),
-> +};
-> +
-> +static const struct mfd_cell vsc7512_devs[] = {
-> +	{
-> +		.name = "ocelot-pinctrl",
-> +		.of_compatible = "mscc,ocelot-pinctrl",
-> +		.num_resources = ARRAY_SIZE(vsc7512_pinctrl_resources),
-> +		.resources = vsc7512_pinctrl_resources,
-> +	}, {
-> +		.name = "ocelot-sgpio",
-> +		.of_compatible = "mscc,ocelot-sgpio",
-> +		.num_resources = ARRAY_SIZE(vsc7512_sgpio_resources),
-> +		.resources = vsc7512_sgpio_resources,
-> +	}, {
-> +		.name = "ocelot-miim0",
-> +		.of_compatible = "mscc,ocelot-miim",
-> +		.of_reg = VSC7512_MIIM0_RES_START,
-> +		.use_of_reg = true,
-> +		.num_resources = ARRAY_SIZE(vsc7512_miim0_resources),
-> +		.resources = vsc7512_miim0_resources,
-> +	}, {
-> +		.name = "ocelot-miim1",
-> +		.of_compatible = "mscc,ocelot-miim",
-> +		.of_reg = VSC7512_MIIM1_RES_START,
-> +		.use_of_reg = true,
-> +		.num_resources = ARRAY_SIZE(vsc7512_miim1_resources),
-> +		.resources = vsc7512_miim1_resources,
-> +	},
-> +};
-> +
-> +static void ocelot_core_try_add_regmap(struct device *dev,
-> +				       const struct resource *res)
-> +{
-> +	if (!dev_get_regmap(dev, res->name))
-> +		ocelot_spi_init_regmap(dev, res);
-
-This is probably clearer at first-glance for readers:
-
-	if (dev_get_regmap(dev, res->name))
-	        return;
-	
-	ocelot_spi_init_regmap(dev, res);
-
-> +}
-> +
-> +static void ocelot_core_try_add_regmaps(struct device *dev,
-> +					const struct mfd_cell *cell)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < cell->num_resources; i++)
-> +		ocelot_core_try_add_regmap(dev, &cell->resources[i]);
-> +}
-> +
-> +int ocelot_core_init(struct device *dev)
-> +{
-> +	int i, ndevs;
-> +
-> +	ndevs = ARRAY_SIZE(vsc7512_devs);
-> +
-> +	for (i = 0; i < ndevs; i++)
-> +		ocelot_core_try_add_regmaps(dev, &vsc7512_devs[i]);
-> +
-> +	return devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, vsc7512_devs,
-> +				    ndevs, NULL, 0, NULL);
-> +}
-> +EXPORT_SYMBOL_NS(ocelot_core_init, MFD_OCELOT);
-> +
-> +MODULE_DESCRIPTION("Externally Controlled Ocelot Chip Driver");
-> +MODULE_AUTHOR("Colin Foster <colin.foster@in-advantage.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(MFD_OCELOT_SPI);
-> diff --git a/drivers/mfd/ocelot-spi.c b/drivers/mfd/ocelot-spi.c
-> new file mode 100644
-> index 000000000000..0c1c5215c706
-> --- /dev/null
-> +++ b/drivers/mfd/ocelot-spi.c
-> @@ -0,0 +1,317 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/*
-> + * SPI core driver for the Ocelot chip family.
-> + *
-> + * This driver will handle everything necessary to allow for communication over
-> + * SPI to the VSC7511, VSC7512, VSC7513 and VSC7514 chips. The main functions
-> + * are to prepare the chip's SPI interface for a specific bus speed, and a host
-> + * processor's endianness. This will create and distribute regmaps for any
-> + * children.
-> + *
-> + * Copyright 2021, 2022 Innovative Advantage Inc.
-> + *
-> + * Author: Colin Foster <colin.foster@in-advantage.com>
-> + */
-> +
-> +#include <linux/ioport.h>
-> +#include <linux/kconfig.h>
-> +#include <linux/module.h>
-> +#include <linux/regmap.h>
-> +#include <linux/spi/spi.h>
-> +
-> +#include <asm/byteorder.h>
-> +
-> +#include "ocelot.h"
-> +
-> +#define REG_DEV_CPUORG_IF_CTRL		0x0000
-> +#define REG_DEV_CPUORG_IF_CFGSTAT	0x0004
-> +
-> +#define CFGSTAT_IF_NUM_VCORE		(0 << 24)
-> +#define CFGSTAT_IF_NUM_VRAP		(1 << 24)
-> +#define CFGSTAT_IF_NUM_SI		(2 << 24)
-> +#define CFGSTAT_IF_NUM_MIIM		(3 << 24)
-> +
-> +#define VSC7512_DEVCPU_ORG_RES_START	0x71000000
-> +#define VSC7512_DEVCPU_ORG_RES_SIZE	0x38
-> +
-> +#define VSC7512_CHIP_REGS_RES_START	0x71070000
-> +#define VSC7512_CHIP_REGS_RES_SIZE	0x14
-> +
-> +struct spi_device;
-
-Why not just #include?
-
-> +static const struct resource vsc7512_dev_cpuorg_resource =
-> +	DEFINE_RES_REG_NAMED(VSC7512_DEVCPU_ORG_RES_START,
-> +			     VSC7512_DEVCPU_ORG_RES_SIZE,
-> +			     "devcpu_org");
-> +
-> +static const struct resource vsc7512_gcb_resource =
-> +	DEFINE_RES_REG_NAMED(VSC7512_CHIP_REGS_RES_START,
-> +			     VSC7512_CHIP_REGS_RES_SIZE,
-> +			     "devcpu_gcb_chip_regs");
-> +
-> +static int ocelot_spi_initialize(struct device *dev)
-> +{
-> +	struct ocelot_ddata *ddata = dev_get_drvdata(dev);
-> +	u32 val, check;
-> +	int err;
-> +
-> +	val = OCELOT_SPI_BYTE_ORDER;
-> +
-> +	/*
-> +	 * The SPI address must be big-endian, but we want the payload to match
-> +	 * our CPU. These are two bits (0 and 1) but they're repeated such that
-> +	 * the write from any configuration will be valid. The four
-> +	 * configurations are:
-> +	 *
-> +	 * 0b00: little-endian, MSB first
-> +	 * |            111111   | 22221111 | 33222222 |
-> +	 * | 76543210 | 54321098 | 32109876 | 10987654 |
-> +	 *
-> +	 * 0b01: big-endian, MSB first
-> +	 * | 33222222 | 22221111 | 111111   |          |
-> +	 * | 10987654 | 32109876 | 54321098 | 76543210 |
-> +	 *
-> +	 * 0b10: little-endian, LSB first
-> +	 * |              111111 | 11112222 | 22222233 |
-> +	 * | 01234567 | 89012345 | 67890123 | 45678901 |
-> +	 *
-> +	 * 0b11: big-endian, LSB first
-> +	 * | 22222233 | 11112222 |   111111 |          |
-> +	 * | 45678901 | 67890123 | 89012345 | 01234567 |
-> +	 */
-> +	err = regmap_write(ddata->cpuorg_regmap, REG_DEV_CPUORG_IF_CTRL, val);
-> +	if (err)
-> +		return err;
-> +
-> +	/*
-> +	 * Apply the number of padding bytes between a read request and the data
-> +	 * payload. Some registers have access times of up to 1us, so if the
-> +	 * first payload bit is shifted out too quickly, the read will fail.
-> +	 */
-> +	val = ddata->spi_padding_bytes;
-> +	err = regmap_write(ddata->cpuorg_regmap, REG_DEV_CPUORG_IF_CFGSTAT,
-> +			   val);
-> +	if (err)
-> +		return err;
-> +
-> +	/*
-> +	 * After we write the interface configuration, read it back here. This
-> +	 * will verify several different things. The first is that the number of
-> +	 * padding bytes actually got written correctly. These are found in bits
-> +	 * 0:3.
-> +	 *
-> +	 * The second is that bit 16 is cleared. Bit 16 is IF_CFGSTAT:IF_STAT,
-> +	 * and will be set if the register access is too fast. This would be in
-> +	 * the condition that the number of padding bytes is insufficient for
-> +	 * the SPI bus frequency.
-> +	 *
-> +	 * The last check is for bits 31:24, which define the interface by which
-> +	 * the registers are being accessed. Since we're accessing them via the
-> +	 * serial interface, it must return IF_NUM_SI.
-> +	 */
-> +	check = val | CFGSTAT_IF_NUM_SI;
-> +
-> +	err = regmap_read(ddata->cpuorg_regmap, REG_DEV_CPUORG_IF_CFGSTAT,
-> +			  &val);
-> +	if (err)
-> +		return err;
-> +
-> +	if (check != val)
-> +		return -ENODEV;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct regmap_config ocelot_spi_regmap_config = {
-> +	.reg_bits = 24,
-> +	.reg_stride = 4,
-> +	.reg_downshift = 2,
-> +	.val_bits = 32,
-> +
-> +	.write_flag_mask = 0x80,
-> +
-> +	.use_single_write = true,
-> +	.can_multi_write = false,
-> +
-> +	.reg_format_endian = REGMAP_ENDIAN_BIG,
-> +	.val_format_endian = REGMAP_ENDIAN_NATIVE,
-> +};
-> +
-> +static int ocelot_spi_regmap_bus_read(void *context,
-> +				      const void *reg, size_t reg_size,
-> +				      void *val, size_t val_size)
-> +{
-> +	struct ocelot_ddata *ddata = context;
-> +	struct spi_transfer tx, padding, rx;
-> +	struct spi_device *spi = ddata->spi;
-> +	struct spi_message msg;
-> +
-> +	spi = ddata->spi;
-
-Drop this line.
-
-> +	spi_message_init(&msg);
-> +
-> +	memset(&tx, 0, sizeof(tx));
-> +
-> +	tx.tx_buf = reg;
-> +	tx.len = reg_size;
-> +
-> +	spi_message_add_tail(&tx, &msg);
-> +
-> +	if (ddata->spi_padding_bytes) {
-> +		memset(&padding, 0, sizeof(padding));
-> +
-> +		padding.len = ddata->spi_padding_bytes;
-> +		padding.tx_buf = ddata->dummy_buf;
-> +		padding.dummy_data = 1;
-> +
-> +		spi_message_add_tail(&padding, &msg);
-> +	}
-> +
-> +	memset(&rx, 0, sizeof(rx));
-> +	rx.rx_buf = val;
-> +	rx.len = val_size;
-> +
-> +	spi_message_add_tail(&rx, &msg);
-> +
-> +	return spi_sync(spi, &msg);
-> +}
-> +
-> +static int ocelot_spi_regmap_bus_write(void *context, const void *data,
-> +				       size_t count)
-> +{
-> +	struct ocelot_ddata *ddata = context;
-> +	struct spi_device *spi = ddata->spi;
-> +
-> +	return spi_write(spi, data, count);
-> +}
-> +
-> +static const struct regmap_bus ocelot_spi_regmap_bus = {
-> +	.write = ocelot_spi_regmap_bus_write,
-> +	.read = ocelot_spi_regmap_bus_read,
-> +};
-> +
-> +struct regmap *
-> +ocelot_spi_init_regmap(struct device *dev, const struct resource *res)
-
-One line, along with all the others.
-
-> +{
-> +	struct ocelot_ddata *ddata = dev_get_drvdata(dev);
-> +	struct regmap_config regmap_config;
-> +
-> +	memcpy(&regmap_config, &ocelot_spi_regmap_config,
-> +	       sizeof(regmap_config));
-> +
-> +	regmap_config.name = res->name;
-> +	regmap_config.max_register = res->end - res->start;
-> +	regmap_config.reg_base = res->start;
-> +
-> +	return devm_regmap_init(dev, &ocelot_spi_regmap_bus, ddata,
-> +				&regmap_config);
-> +}
-> +EXPORT_SYMBOL_NS(ocelot_spi_init_regmap, MFD_OCELOT_SPI);
-> +
-> +static int ocelot_spi_probe(struct spi_device *spi)
-> +{
-> +	struct device *dev = &spi->dev;
-> +	struct ocelot_ddata *ddata;
-> +	struct regmap *r;
-> +	int err;
-> +
-> +	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
-> +	if (!ddata)
-> +		return -ENOMEM;
-> +
-> +	ddata->dev = dev;
-
-How are you fetching ddata if you don't already have 'dev'?
-
-> +	dev_set_drvdata(dev, ddata);
-
-This should use the spi_* variant.
-
-> +	if (spi->max_speed_hz <= 500000) {
-> +		ddata->spi_padding_bytes = 0;
-> +	} else {
-> +		/*
-> +		 * Calculation taken from the manual for IF_CFGSTAT:IF_CFG.
-> +		 * Register access time is 1us, so we need to configure and send
-> +		 * out enough padding bytes between the read request and data
-> +		 * transmission that lasts at least 1 microsecond.
-> +		 */
-> +		ddata->spi_padding_bytes = 1 +
-> +			(spi->max_speed_hz / 1000000 + 2) / 8;
-> +
-> +		ddata->dummy_buf = devm_kzalloc(dev, ddata->spi_padding_bytes,
-> +						GFP_KERNEL);
-> +		if (!ddata->dummy_buf)
-> +			return -ENOMEM;
-> +	}
-> +
-> +	ddata->spi = spi;
-
-If you have 'spi' you definitely do not need 'dev'.
-
-You can derive one from the other.
-
-> +	spi->bits_per_word = 8;
-> +
-> +	err = spi_setup(spi);
-> +	if (err < 0)
-> +		return dev_err_probe(&spi->dev, err,
-> +				     "Error performing SPI setup\n");
-> +
-> +	r = ocelot_spi_init_regmap(dev, &vsc7512_dev_cpuorg_resource);
-> +	if (IS_ERR(r))
-> +		return PTR_ERR(r);
-> +
-> +	ddata->cpuorg_regmap = r;
-> +
-> +	r = ocelot_spi_init_regmap(dev, &vsc7512_gcb_resource);
-> +	if (IS_ERR(r))
-> +		return PTR_ERR(r);
-> +
-> +	ddata->gcb_regmap = r;
-> +
-> +	/*
-> +	 * The chip must be set up for SPI before it gets initialized and reset.
-> +	 * This must be done before calling init, and after a chip reset is
-> +	 * performed.
-> +	 */
-> +	err = ocelot_spi_initialize(dev);
-> +	if (err)
-> +		return dev_err_probe(dev, err, "Error initializing SPI bus\n");
-> +
-> +	err = ocelot_chip_reset(dev);
-> +	if (err)
-> +		return dev_err_probe(dev, err, "Error resetting device\n");
-> +
-> +	/*
-> +	 * A chip reset will clear the SPI configuration, so it needs to be done
-> +	 * again before we can access any registers
-> +	 */
-> +	err = ocelot_spi_initialize(dev);
-> +	if (err)
-> +		return dev_err_probe(dev, err,
-> +				     "Error initializing SPI bus after reset\n");
-> +
-> +	err = ocelot_core_init(dev);
-> +	if (err < 0)
-> +		return dev_err_probe(dev, err,
-> +				     "Error initializing Ocelot core\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct spi_device_id ocelot_spi_ids[] = {
-> +	{ "vsc7512", 0 },
-> +	{ }
-> +};
-> +
-> +static const struct of_device_id ocelot_spi_of_match[] = {
-> +	{ .compatible = "mscc,vsc7512" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ocelot_spi_of_match);
-> +
-> +static struct spi_driver ocelot_spi_driver = {
-> +	.driver = {
-> +		.name = "ocelot-soc",
-> +		.of_match_table = ocelot_spi_of_match,
-> +	},
-> +	.id_table = ocelot_spi_ids,
-> +	.probe = ocelot_spi_probe,
-> +};
-> +module_spi_driver(ocelot_spi_driver);
-> +
-> +MODULE_DESCRIPTION("SPI Controlled Ocelot Chip Driver");
-> +MODULE_AUTHOR("Colin Foster <colin.foster@in-advantage.com>");
-> +MODULE_LICENSE("Dual MIT/GPL");
-> +MODULE_IMPORT_NS(MFD_OCELOT);
-> diff --git a/drivers/mfd/ocelot.h b/drivers/mfd/ocelot.h
-> new file mode 100644
-> index 000000000000..c86bd6990a3c
-> --- /dev/null
-> +++ b/drivers/mfd/ocelot.h
-> @@ -0,0 +1,34 @@
-> +/* SPDX-License-Identifier: GPL-2.0 OR MIT */
-> +/* Copyright 2021, 2022 Innovative Advantage Inc. */
-> +
-> +#include <asm/byteorder.h>
-> +
-> +struct device;
-> +struct spi_device;
-> +struct regmap;
-> +struct resource;
-> +
-> +struct ocelot_ddata {
-> +	struct device *dev;
-> +	struct regmap *gcb_regmap;
-> +	struct regmap *cpuorg_regmap;
-> +	int spi_padding_bytes;
-> +	struct spi_device *spi;
-> +	void *dummy_buf;
-> +};
-
-This looks like it deserves a doc header.
-
-> +int ocelot_chip_reset(struct device *dev);
-> +int ocelot_core_init(struct device *dev);
-> +
-> +/* SPI-specific routines that won't be necessary for other interfaces */
-> +struct regmap *ocelot_spi_init_regmap(struct device *dev,
-> +				      const struct resource *res);
-> +
-> +#define OCELOT_SPI_BYTE_ORDER_LE 0x00000000
-> +#define OCELOT_SPI_BYTE_ORDER_BE 0x81818181
-> +
-> +#ifdef __LITTLE_ENDIAN
-> +#define OCELOT_SPI_BYTE_ORDER OCELOT_SPI_BYTE_ORDER_LE
-> +#else
-> +#define OCELOT_SPI_BYTE_ORDER OCELOT_SPI_BYTE_ORDER_BE
-> +#endif
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index 768707770926..6583c2c1145f 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -4120,12 +4120,18 @@ static inline bool mas_wr_node_store(struct ma_wr_s=
+tate *wr_mas)
+ 	if (dst_offset < max_piv)
+ 		dst_pivots[dst_offset] =3D mas->last;
+ 	mas->offset =3D dst_offset;
+-	rcu_assign_pointer(dst_slots[dst_offset++], wr_mas->entry);
++	rcu_assign_pointer(dst_slots[dst_offset], wr_mas->entry);
+=20
+-	/* this range wrote to the end of the node. */
+-	if (wr_mas->offset_end > wr_mas->node_end)
++	/*
++	 * this range wrote to the end of the node or it overwrote the rest of
++	 * the data
++	 */
++	if (wr_mas->offset_end > wr_mas->node_end || mas->last >=3D mas->max) {
++		new_end =3D dst_offset;
+ 		goto done;
++	}
+=20
++	dst_offset++;
+ 	/* Copy to the end of node if necessary. */
+ 	copy_size =3D wr_mas->node_end - wr_mas->offset_end + 1;
+ 	memcpy(dst_slots + dst_offset, wr_mas->slots + wr_mas->offset_end,
+@@ -4133,14 +4139,16 @@ static inline bool mas_wr_node_store(struct ma_wr_s=
+tate *wr_mas)
+ 	if (dst_offset < max_piv) {
+ 		if (copy_size > max_piv - dst_offset)
+ 			copy_size =3D max_piv - dst_offset;
+-		memcpy(dst_pivots + dst_offset, wr_mas->pivots + wr_mas->offset_end,
++
++		memcpy(dst_pivots + dst_offset,
++		       wr_mas->pivots + wr_mas->offset_end,
+ 		       sizeof(unsigned long) * copy_size);
+ 	}
+=20
+-done:
+ 	if ((wr_mas->node_end =3D=3D node_slots - 1) && (new_end < node_slots - 1=
+))
+ 		dst_pivots[new_end] =3D mas->max;
+=20
++done:
+ 	mas_leaf_set_meta(mas, newnode, dst_pivots, maple_leaf_64, new_end);
+ 	if (in_rcu) {
+ 		mas->node =3D mt_mk_node(newnode, wr_mas->type);
+@@ -6946,19 +6954,20 @@ static void mas_validate_limits(struct ma_state *ma=
+s)
+ {
+ 	int i;
+ 	unsigned long prev_piv =3D 0;
+-	void __rcu **slots =3D ma_slots(mte_to_node(mas->node),
+-				mte_node_type(mas->node));
++	enum maple_type type =3D mte_node_type(mas->node);
++	void __rcu **slots =3D ma_slots(mte_to_node(mas->node), type);
++	unsigned long *pivots =3D ma_pivots(mas_mn(mas), type);
+=20
+ 	/* all limits are fine here. */
+ 	if (mte_is_root(mas->node))
+ 		return;
+=20
+-	for (i =3D 0; i < mt_slot_count(mas->node); i++) {
+-		enum maple_type type =3D mte_node_type(mas->node);
+-		unsigned long *pivots =3D ma_pivots(mas_mn(mas), type);
+-		unsigned long piv =3D mas_safe_pivot(mas, pivots, type, i);
++	for (i =3D 0; i < mt_slots[type]; i++) {
++		unsigned long piv;
++
++		piv =3D mas_safe_pivot(mas, pivots, i, type);
+=20
+-		if (!piv)
++		if (!piv & (i !=3D 0))
+ 			break;
+=20
+ 		if (!mte_is_leaf(mas->node)) {
+@@ -6991,6 +7000,26 @@ static void mas_validate_limits(struct ma_state *mas=
+)
+ 		if (piv =3D=3D mas->max)
+ 			break;
+ 	}
++	for (i +=3D 1; i < mt_slots[type]; i++) {
++		void *entry =3D mas_slot(mas, slots, i);
++
++		if (entry && (i !=3D mt_slots[type] - 1)) {
++			pr_err("%p[%u] should not have entry %p\n", mas_mn(mas),
++			       i, entry);
++			MT_BUG_ON(mas->tree, entry !=3D NULL);
++		}
++
++		if (i < mt_pivots[type]) {
++			unsigned long piv =3D pivots[i];
++
++			if (!piv)
++				continue;
++
++			pr_err("%p[%u] should not have piv %lu\n",
++			       mas_mn(mas), i, piv);
++			MT_BUG_ON(mas->tree, i < mt_pivots[type] - 1);
++		}
++	}
+ }
+=20
+ static void mt_validate_nulls(struct maple_tree *mt)
+@@ -7023,8 +7052,9 @@ static void mt_validate_nulls(struct maple_tree *mt)
+ 			offset =3D 0;
+ 			slots =3D ma_slots(mte_to_node(mas.node),
+ 					 mte_node_type(mas.node));
+-		} else
++		} else {
+ 			offset++;
++		}
+=20
+ 	} while (!mas_is_none(&mas));
+ }
+--=20
+2.35.1

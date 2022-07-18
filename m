@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B14C577D56
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE4C577D58
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbiGRIS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S233717AbiGRISh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232796AbiGRISX (ORCPT
+        with ESMTP id S233682AbiGRISe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:18:23 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C51518E0D;
-        Mon, 18 Jul 2022 01:18:22 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id E4C595FD02;
-        Mon, 18 Jul 2022 11:18:20 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1658132300;
-        bh=qE3oICe7EFjo8tBFXaB+54QUv+zuKwoUREtOQS9uPkI=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=UWMKMHr/QTzKS6bP877LWnR1qzAfuH4KhypdiAI33Emzzn//E84vDckRKMy4tprK1
-         9qhrDYFqmageiypiPv6G716fe1I1e2Wfpt3pp9hn5W4LyPmXzrKymp9DxhGrJrLj6V
-         iFCMfZj2Lv7Q+gllGsjn96pix0wybVQdBBdgYbLPRSeLSh/aZlYp49PW/x946Nqz7X
-         g9PAkctNKp+IHqvVFXfJ5UNuf+pfrmAbWIkhp/K7NFRn6jYvZEK2ePvb99Wz5Lk0Do
-         /tLBuHkx7tz4r93gNcJb0Fu6+pt2XNmwYXkh2C4cjsVRx+xwB+cWzKDApB/DdGCr/X
-         2gD3Xyaes4yIQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 18 Jul 2022 11:18:20 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: [RFC PATCH v1 2/3] virtio/vsock: use 'target' in notify_poll_in,
- callback.
-Thread-Topic: [RFC PATCH v1 2/3] virtio/vsock: use 'target' in notify_poll_in,
- callback.
-Thread-Index: AQHYmn7T+PqKYxwQ8USiiecixCHJYQ==
-Date:   Mon, 18 Jul 2022 08:17:31 +0000
-Message-ID: <358f8d52-fd88-ad2e-87e2-c64bfa516a58@sberdevices.ru>
-In-Reply-To: <c8de13b1-cbd8-e3e0-5728-f3c3648c69f7@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6A2B7E3D9075EA4E817DC70C89877970@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Mon, 18 Jul 2022 04:18:34 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E854E1900D
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:18:30 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x91so14220004ede.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 01:18:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z+u8dlZ8Muf2HXMeU0KFrMSR2DdrEfYE39jHtYBLJvk=;
+        b=e/pfi4LiQiBx98KeNwsNG85Q9l7RndPje7VUL/FYpkZcIQkcvtf7tM4VafS+M7L8wa
+         +r9PGqWoTeSaG9Ow4MsGxFsdeZu1szALQtbuu+oyGz0fGits8Gami5fdaVLPTukXEo7V
+         eLr6Zn4BxFxFNd6hCuekvtVsP+0z3UqKCJVYg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z+u8dlZ8Muf2HXMeU0KFrMSR2DdrEfYE39jHtYBLJvk=;
+        b=Ws1tab4PpUlAVO/gnzoY4Q8T57KG6pVLWv5oarFeLR98goRtzAzHVRIDvVRrpXLp02
+         Nnjar1hMcehc2Rs7TEw2MeYHGbRL/RQpE8RAwFIul9n0TWN1CMvrg8vUVtBFRLC1E84d
+         JAtg/RdxRADC7anFdBlzRo1hHTDq0nQptOAu6rsPjIW49htz5AxlpEnZQtR3eRpMy8mC
+         NoY51UDR4vrWN2d5HaHYhK8nwcODQOV6QNNklk6mtV/8rbu2loTQsMqw4KEg6IPnPXLl
+         xUH7k+KHocXdeJ1foeL54T4g9aWDKA5zhGqOmlKPkaPz7157jPGR8uP/jc8u9+kUE0/6
+         KLaQ==
+X-Gm-Message-State: AJIora9GusYraHxM1I8eKcEQLEkWhwR9SxGRWHEuxZs1O5Hrv6L2Dgae
+        UTGtL6YPlSn3NQGeRZ66bAEUfHYOEN+HOhM/M0g+oA==
+X-Google-Smtp-Source: AGRyM1t2KjNAK8+Cdsj/U870U8abc3W65tr4+56ozSx6bSjF1xdkpTirePoJ75KgMCJxjWca6RFNJYpWxwZZUBXUHq4=
+X-Received: by 2002:a05:6402:3202:b0:43a:86f5:a930 with SMTP id
+ g2-20020a056402320200b0043a86f5a930mr34796033eda.389.1658132309531; Mon, 18
+ Jul 2022 01:18:29 -0700 (PDT)
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/18 02:31:00 #19923013
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com>
+ <CAJfpegtSsG_qUT8LsO=ro76RTwBBfa=1JVwwX+mVxd-svir+3g@mail.gmail.com> <CAFQAk7jTJi_OcX=4nevbOquphcibtD=jG-jwwbC0KMJOfx9DeQ@mail.gmail.com>
+In-Reply-To: <CAFQAk7jTJi_OcX=4nevbOquphcibtD=jG-jwwbC0KMJOfx9DeQ@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Mon, 18 Jul 2022 10:18:18 +0200
+Message-ID: <CAJfpegu1uSMGrh==DS9+fbX+Gm8XaOyY3KTQ3xtZsbPEJo1M8A@mail.gmail.com>
+Subject: Re: [PATCH] fuse: writeback_cache consistency enhancement (writeback_cache_v2)
+To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xie Yongji <xieyongji@bytedance.com>, fam.zheng@bytedance.com,
+        Miklos Szeredi <mszeredi@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBjYWxsYmFjayBjb250cm9scyBzZXR0aW5nIG9mIFBPTExJTixQT0xMUkROT1JNIG91dHB1
-dCBiaXRzDQpvZiBwb2xsKCkgc3lzY2FsbCxidXQgaW4gc29tZSBjYXNlcyxpdCBpcyBpbmNvcnJl
-Y3RseSB0byBzZXQgaXQsDQp3aGVuIHNvY2tldCBoYXMgYXQgbGVhc3QgMSBieXRlcyBvZiBhdmFp
-bGFibGUgZGF0YS4gVXNlICd0YXJnZXQnDQp3aGljaCBpcyBhbHJlYWR5IGV4aXN0cyBhbmQgZXF1
-YWwgdG8gc2tfcmN2bG93YXQgaW4gdGhpcyBjYXNlLg0KDQpTaWduZWQtb2ZmLWJ5OiBBcnNlbml5
-IEtyYXNub3YgPEFWS3Jhc25vdkBzYmVyZGV2aWNlcy5ydT4NCi0tLQ0KIG5ldC92bXdfdnNvY2sv
-dmlydGlvX3RyYW5zcG9ydF9jb21tb24uYyB8IDIgKy0NCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
-cnRpb24oKyksIDEgZGVsZXRpb24oLSkNCg0KZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2svdmly
-dGlvX3RyYW5zcG9ydF9jb21tb24uYyBiL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9j
-b21tb24uYw0KaW5kZXggZWMyYzJhZmJmMGQwLi41OTE5MDg3NDA5OTIgMTAwNjQ0DQotLS0gYS9u
-ZXQvdm13X3Zzb2NrL3ZpcnRpb190cmFuc3BvcnRfY29tbW9uLmMNCisrKyBiL25ldC92bXdfdnNv
-Y2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYw0KQEAgLTYzNCw3ICs2MzQsNyBAQCB2aXJ0aW9f
-dHJhbnNwb3J0X25vdGlmeV9wb2xsX2luKHN0cnVjdCB2c29ja19zb2NrICp2c2ssDQogCQkJCXNp
-emVfdCB0YXJnZXQsDQogCQkJCWJvb2wgKmRhdGFfcmVhZHlfbm93KQ0KIHsNCi0JaWYgKHZzb2Nr
-X3N0cmVhbV9oYXNfZGF0YSh2c2spKQ0KKwlpZiAodnNvY2tfc3RyZWFtX2hhc19kYXRhKHZzaykg
-Pj0gdGFyZ2V0KQ0KIAkJKmRhdGFfcmVhZHlfbm93ID0gdHJ1ZTsNCiAJZWxzZQ0KIAkJKmRhdGFf
-cmVhZHlfbm93ID0gZmFsc2U7DQotLSANCjIuMjUuMQ0K
+On Mon, 18 Jul 2022 at 08:01, Jiachen Zhang
+<zhangjiachen.jaycee@bytedance.com> wrote:
+>
+> On Fri, Jul 15, 2022 at 6:07 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+> >
+> > On Fri, 24 Jun 2022 at 07:58, Jiachen Zhang
+> > <zhangjiachen.jaycee@bytedance.com> wrote:
+
+> > > +       if (fc->writeback_cache_v2 && S_ISREG(inode->i_mode)) {
+> > > +               inode_lock(inode);
+> >
+> > I don't think this can work.   fuse_change_attributes() might be
+> > called from within inlode locked context.  E.g.
+> >
+> > lookup_slow -> __lookup_slow -> d_revalidate -> fuse_dentry_revalidate
+> > -> fuse_change_attributes
+> >
+>
+> Yes, this is a problem that should be fixed. As we can not check the
+> inode lock state from the inode->i_rwsem structure, I think we can
+> pass the inode lock state along the FUSE function call-path to
+> fuse_change_attributes(), and only when we can certainly know whether
+> the inode is locked or unlocked then we continue the
+> writeback_cache_v2 logics. What do you think?
+
+Not liking it very much.
+
+Better create a new lock for this purpose that we do always know the state of.
+
+Thanks,
+Miklos

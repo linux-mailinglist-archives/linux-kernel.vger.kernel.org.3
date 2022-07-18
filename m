@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C2E577C61
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8D0577C63
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbiGRHTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        id S233782AbiGRHUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233801AbiGRHTV (ORCPT
+        with ESMTP id S233288AbiGRHUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:19:21 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A4D13CF7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:19:19 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v16so15668734wrd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:19:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SQ3SllmUgI/0gTSk6zeAGxNHKWL97JN2nZZc5fKOm5c=;
-        b=N4DASKSLJdxXiMrG1KCns0eaYNhtD01q7nBkHfbQ5fuvMjJPcJxAOjHzaeHz1xxvVI
-         FhNmPm/D/w62u1v6LqH9gZ/TQ39JMZJt/qP05zBXeUmF88upVMniVieTi/chSTmYfHS+
-         ElRG0OQTXkSjAdKAxCzxlSjM1CzKcK8EVSggpUk3cE4uhQpHfz0wdMRmE2dfU6aJMO/a
-         fRdOck9cBpI+jrMbOy66rXv+ZeCv8k33gB/OnbCfJm/EkLbpEW5D0azB6teG12D+N7cp
-         e/8MXlSvj/ymaqgSCzAMBmIymPL6US4hhLtCn9u7alc/lL0zC6PZ4c1VyRiGUFgOgawM
-         cDRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SQ3SllmUgI/0gTSk6zeAGxNHKWL97JN2nZZc5fKOm5c=;
-        b=mp7lN7OgogWvw3us6mX74dDZ59cRAF0qTAstAk2x3uQGOfrHpdYvlgXK+O6XBFpMZZ
-         spFA7Byc2l6+cA7wfqA4tWFk4ieGnw5w6XAfsQoTBk64+10NwfvZfEGPgZ21M8kXNaGs
-         3/g2k/0eRD2GsphlJY5qEf1t1D4/0UkDVuRn1Eeef16ecNoSRgIVuW6z5RG1HcbzSKnA
-         WzZfvtoX8eMMCAmsQRQCj7zRSmkyG0M8cAhbFrx0Sr9l11Ur4oBSOsDJniIewBoD9aIY
-         rHHPamygfJKzWc2fYMjQ0coHeLjKgTtSgmpU0dskPJUHq50dF4RGPhD14SYQ+XKbfGFO
-         YdrA==
-X-Gm-Message-State: AJIora/eI7qEG2nfYxAcf7IGwETdg7Sy7k3RVqe4GTfB8XiB6jXdNgx/
-        zKpaEwXkAZPpQx9Q5yOnQBjO+w==
-X-Google-Smtp-Source: AGRyM1u1ldPCMxt1zHXsh5Een4rWGOOpz/5xX/Em7Zo3s1lNKEmrnSdsnHECNarbUOs9uaChc5P9oA==
-X-Received: by 2002:a5d:5985:0:b0:21d:b6b6:4434 with SMTP id n5-20020a5d5985000000b0021db6b64434mr21236181wri.111.1658128757889;
-        Mon, 18 Jul 2022 00:19:17 -0700 (PDT)
-Received: from [10.35.4.171] ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id t4-20020a1c7704000000b003a308e9a192sm12037687wmi.30.2022.07.18.00.19.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 00:19:17 -0700 (PDT)
-Message-ID: <2cd139dd-559e-7975-41a7-c813bc5851ea@sifive.com>
-Date:   Mon, 18 Jul 2022 08:19:16 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/7] pwm: change &pci->dev to dev in probe
-Content-Language: en-GB
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>
-References: <20220712100113.569042-1-ben.dooks@sifive.com>
- <20220712100113.569042-2-ben.dooks@sifive.com>
- <20220713081633.5lsunbl5mfnngdrs@pengutronix.de>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <20220713081633.5lsunbl5mfnngdrs@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Mon, 18 Jul 2022 03:20:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEF4633A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:20:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AA4061349
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF3DCC341C0;
+        Mon, 18 Jul 2022 07:20:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658128830;
+        bh=HwCVC7i31nzH7rBtvRQvL24rveJVApXsIarHWo0LXKw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=C0f6yg4a7U739G9TpadFTCWNpT/AFi47x5NE1OZ1Xh5qyS2rvsRi5qnSO1gqi+4Nq
+         hODk+7bnZRZ60Z2JFzrCNRhXbD1wZfTOXHLd/GXZ3LUfMKfnF/zTgpLKzucL7A3hEI
+         DudYCvR94GNcGK47MfHYNXvKWsFHVxlV/ZmENACqdvehxUXGWrYYLTajhvVe+cQwAu
+         DykEWIsW9uftrctS82Ixh9KkmB7j2ekDSSXSRUhRmjRiy1HiKi1hglY3uu3YhhV8vg
+         MgMKW48UFAFH52rfsRAVYrKm42DaxPsG2tPyXSy28Y99odfvzBkVMng41nwMyJz6Hc
+         ohoHK/q1TksSQ==
+Received: from 82-132-227-210.dab.02.net ([82.132.227.210] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDL3M-0088Uj-Oz;
+        Mon, 18 Jul 2022 08:20:28 +0100
+Date:   Mon, 18 Jul 2022 08:20:18 +0100
+Message-ID: <87a69651l9.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org,
+        madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
+        tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org,
+        drjones@redhat.com, wangkefeng.wang@huawei.com, elver@google.com,
+        keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org,
+        oupton@google.com, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        android-mm@google.com, kernel-team@android.com
+Subject: Re: [PATCH v4 10/18] KVM: arm64: Stub implementation of pKVM HYP stack unwinder
+In-Reply-To: <20220715061027.1612149-11-kaleshsingh@google.com>
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+        <20220715061027.1612149-11-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.227.210
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, broonie@kernel.org, madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com, tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, andreyknvl@gmail.com, russell.king@oracle.com, vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org, drjones@redhat.com, wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, android-mm@google.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,18 +75,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/07/2022 09:16, Uwe Kleine-König wrote:
-> On Tue, Jul 12, 2022 at 11:01:07AM +0100, Ben Dooks wrote:
->> The dwc_pwm_probe() assignes dev to be &pci->dev but then uses
->> &pci->dev throughout the function. Change these all to the be
->> 'dev' variable to make lines shorter.
+On Fri, 15 Jul 2022 07:10:19 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> Looks reasonable.
+> Add some stub implementations of protected nVHE stack unwinder, for
+> building. These are implemented later in this series.
 > 
-> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-
-ack for 1/7 or the series?
-I'll repost v2 this week once we've dealt with polarity.
-
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>  arch/arm64/include/asm/stacktrace/nvhe.h | 57 ++++++++++++++++++++++++
+>  arch/arm64/kvm/hyp/nvhe/stacktrace.c     |  3 +-
+>  2 files changed, 58 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/stacktrace/nvhe.h
 > 
+> diff --git a/arch/arm64/include/asm/stacktrace/nvhe.h b/arch/arm64/include/asm/stacktrace/nvhe.h
+> new file mode 100644
+> index 000000000000..1eac4e57f2ae
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/stacktrace/nvhe.h
+> @@ -0,0 +1,57 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * KVM nVHE hypervisor stack tracing support.
+> + *
+> + * The unwinder implementation depends on the nVHE mode:
+> + *
+> + *   1) pKVM (protected nVHE) mode - the host cannot directly access
+> + *      the HYP memory. The stack is unwinded in EL2 and dumped to a shared
+> + *      buffer where the host can read and print the stacktrace.
+> + *
+> + * Copyright (C) 2022 Google LLC
+> + */
+> +#ifndef __ASM_STACKTRACE_NVHE_H
+> +#define __ASM_STACKTRACE_NVHE_H
+> +
+> +#include <asm/stacktrace/common.h>
+> +
+> +static inline bool on_accessible_stack(const struct task_struct *tsk,
+> +				       unsigned long sp, unsigned long size,
+> +				       struct stack_info *info)
+> +{
+> +	return false;
+> +}
+> +
+> +/*
+> + * Protected nVHE HYP stack unwinder
+> + */
+> +#ifdef __KVM_NVHE_HYPERVISOR__
+> +
+> +#ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
+> +static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
+> +				     struct stack_info *info)
+> +{
+> +	return false;
+> +}
+> +
+> +static int notrace unwind_next(struct unwind_state *state)
+> +{
+> +	return 0;
+> +}
+> +NOKPROBE_SYMBOL(unwind_next);
 
+I find this rather dodgy. It means that every compilation unit that
+(indirectly) drags this include file may end-up with an 'unwind_next'
+function. At best this will be eliminated at compilation time, but it
+may also generate a warning.
+
+Why can't this me made an 'inline' function? At the very least, it
+should have a __maybe_unused attribute.
+
+> +#else	/* !CONFIG_PROTECTED_NVHE_STACKTRACE */
+> +static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
+> +				     struct stack_info *info)
+> +{
+> +	return false;
+> +}
+> +
+> +static int notrace unwind_next(struct unwind_state *state)
+> +{
+> +	return 0;
+> +}
+> +NOKPROBE_SYMBOL(unwind_next);
+
+Same thing here.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

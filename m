@@ -2,82 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD6C5787A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7624D5787A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235495AbiGRQmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
+        id S235622AbiGRQnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGRQmb (ORCPT
+        with ESMTP id S235574AbiGRQnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:42:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255BADFDC
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:42:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF93E6151D
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:42:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE252C341C0;
-        Mon, 18 Jul 2022 16:42:28 +0000 (UTC)
-Date:   Mon, 18 Jul 2022 12:42:27 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: schedstat false counting of domain load_balance() tried to move
- one or more tasks failed
-Message-ID: <20220718124227.17b3c611@gandalf.local.home>
-In-Reply-To: <YtUtHqig/SNka/XO@worktop.programming.kicks-ass.net>
-References: <20220712215259.6cb28bed@gandalf.local.home>
-        <YtUtHqig/SNka/XO@worktop.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 12:43:19 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F552983B
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:43:18 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id r64-20020a254443000000b006707b7c2baeso438163yba.16
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=fYofINTij03DPcWKIxfbrAT4JPb3siK7exyNeIlcD5U=;
+        b=N9uFsdwVL4V6pYvk4JsZwo6gVJAaVtZJfYKCVfqCJfXQFkY8VZVetp4CafnFw5m+wI
+         USuc1jejc8950fmeG47w8DiTaJSwr67wd4asubiCo5lKObX4peLeAQXThc4q9fHZJNvy
+         hSoRQF/ZkSlSJXiOaVb6PJKs0YkOX7I2KBcTTqzWZosQnTtu8rb94cO+T9SbAFDnclcZ
+         qxip1nZk09WCKtqTNuPQkKQ6tWyiljVJHqEHYUfP2JWJSA20KUsx93M3+XqrX8L28ZAo
+         R/nJJUN1hq3VoffKVxs0NXsHCW7bJTRugFvQ484nb9lJf6Z0Lhtu5kkznEIN/jlBGCuo
+         QwDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=fYofINTij03DPcWKIxfbrAT4JPb3siK7exyNeIlcD5U=;
+        b=w3u8XpY+zMc32dmgL3F+nM5xY7U9rsIhGlijCGkVWrYmdit42IIuBntloS6/B+BLKV
+         oI3GiTChi9noOnVVXv2CMLk1/YgGhZtNrB+M4OfA7PScz05bshIsahLmP4Rf63PWDke+
+         xvmSPYISohqski6VDtq29P0cl72T10IBFqWQH0JoKSpL2nhORthO4uMikENfFSZH3p1F
+         pYNlLexc4PR0LWuTP4tHPEQvCF0arI/n71tfr6WETRtikrTTjXKyQOJbA4tDmA1wv6E1
+         Nc7u5KIYMFQZ/txVnBqWAh/yzclFk6XQPGo6Ti4J06XgnT0gEUCRVb9r5Ds2JHlAPtEG
+         2dvw==
+X-Gm-Message-State: AJIora+LwRX+eg/pCRTu17hZY2nQp6n6ynAr8cnXykN4Xhm/atiJ6eB7
+        a/AAipzcT1e8+RgUZ9A10G5cqXcAoLUM
+X-Google-Smtp-Source: AGRyM1sui6frsIcA/wQFW2UecSes/L71+RdmIY8GslmayyTv5uj7L8ODJtUI90YevaRH7Sf96QjfVgdmN8fV
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:922:90e9:167f:1ccd])
+ (user=irogers job=sendgmr) by 2002:a25:f06:0:b0:670:1685:d31d with SMTP id
+ 6-20020a250f06000000b006701685d31dmr10216544ybp.380.1658162597250; Mon, 18
+ Jul 2022 09:43:17 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 09:43:09 -0700
+Message-Id: <20220718164312.3994191-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH v4 0/3] Add arch TSC frequency information
+From:   Ian Rogers <irogers@google.com>
+To:     perry.taylor@intel.com, caleb.biggers@intel.com,
+        kshipra.bopardikar@intel.com,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 11:51:26 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+The first patch adds the #system_tsc_freq literal to expr.c and
+computes it via cpuid. The second patches adds support for "older"
+processors by computing the value via /proc/cpuinfo. The third patch
+adds a test then the computation looks somewhat sensible.
 
-> > Do we care? Should it be fixed? Should it be documented?  
-> 
-> *shrug*, I suppose we can fix. People using this stuff are the sort that
-> are likely to read documentation instead of code.
+Such a literal is useful to calculate things like the average
+frequency [1]. The TSC frequency isn't exposed by sysfs although some
+experimental drivers look to add it [2].
 
-Yep.
+[1] https://github.com/intel/perfmon-metrics/blob/5ad9ef7056f31075e8178b9f1fb732af183b2c8d/SKX/metrics/perf/skx_metric_perf.json#L11
+[2] https://github.com/trailofbits/tsc_freq_khz
 
-> 
-> At the same time; I suspect it's been 'broken' like forever, so who
-> knows what people are actually expecting today.
+v4. Modified the patch order and separated out the test.
+v3. Added the cpuid approach from Kan Liang.
+v2. Adds warnings to make clear if things have changed/broken on future
+    Intel platforms. It also adds caching and an Intel specific that a
+    value is computed.
 
-As you stated, it's used by people that read documentation more than the
-code. My expectation is that they are making wrong decisions because what
-they expect those numbers to mean are not what is actually happening.
+Ian Rogers (2):
+  perf tsc: Add cpuinfo fall back for arch_get_tsc_freq
+  perf test: Add test for #system_tsc_freq in metrics
 
-I think it's better to make the functionality match the documentation, and
-if people complain, we can ask them what exactly they expected and why. And
-perhaps they might be complaining that a benchmark isn't behaving as
-expected because they were interpreting the results incorrectly.
+Kan Liang (1):
+  perf tsc: Add arch TSC frequency information
 
-I'll go write up a fix.
+ tools/perf/arch/x86/util/cpuid.h  | 34 ++++++++++++++
+ tools/perf/arch/x86/util/header.c | 27 +++++------
+ tools/perf/arch/x86/util/tsc.c    | 77 +++++++++++++++++++++++++++++++
+ tools/perf/tests/expr.c           | 13 ++++++
+ tools/perf/util/expr.c            | 13 ++++++
+ tools/perf/util/tsc.h             |  1 +
+ 6 files changed, 149 insertions(+), 16 deletions(-)
+ create mode 100644 tools/perf/arch/x86/util/cpuid.h
 
-Thanks!
+-- 
+2.37.0.170.g444d1eabd0-goog
 
--- Steve

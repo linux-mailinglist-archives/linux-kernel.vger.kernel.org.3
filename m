@@ -2,84 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA63E578E01
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A036578E06
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbiGRXDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 19:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S236438AbiGRXEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 19:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236351AbiGRXDG (ORCPT
+        with ESMTP id S236414AbiGRXEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 19:03:06 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D553335E
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:03:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id m16so17328529edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:03:05 -0700 (PDT)
+        Mon, 18 Jul 2022 19:04:06 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56442EE2F;
+        Mon, 18 Jul 2022 16:04:05 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z22so8283613lfu.7;
+        Mon, 18 Jul 2022 16:04:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bCuV65AO3xjvo3XNNmdojm9svHgvfqPfeodDABzyyBE=;
-        b=kR7aR1HQxR0fwFVRuD2V30Hz1vbP5xF+IUONHdVl381RaIypdmjANYgjwMwNYiztQo
-         4Bk5NCbRdBF+b3CUsebO4F+F+dM5Ogbns93F7S84OlQqwbS2x56MN7yaXA13uVQ+ipPS
-         WjW/LwKzIoxMhiiC6NdfjaZKn2joO9PQou/I8hH2WaYNEiTiBkkIpnncpJ8mNzmiPTp+
-         qd5lybeDHjE+yHpVyko1068N4YIn4XR+OVCwVb34gI0sqNfxNhk8p3O9LvrVQXFiqOEq
-         eL80KFu4EDWDdaoeGo8SOb8cuTtT4R7iKVwsGO2C3jcDEYWcBzmnr4yILZVV0HDwryby
-         a+Jg==
+        bh=TZUTBE8JOO+dBwswBQU/UW48YDxWzcOqBKIIatUeRxg=;
+        b=eu+8mAmsNBdDm3xB9tJ7qWbNXhdC6joRhpKHQAJ4NU3Mky13rD9L25sbhWt9DuIotI
+         gUojvdBW5A0Yn/MC4O+GhB63tm4n97gegK8HpEZRkzwH2RBhJ3qbgnumGnjVrlCvsJR7
+         2tNXRis6jsm9duhk3z7u+9TVJuxAzDeFkQhctki+wu7c0eWrDms/Ckpf9yes50sGz5ZS
+         iqzCE8Mh9LilppMXKYD8OidSUpoV8K4oY90b0RKIZ/yMBMgmavyjBG0D5sM+o8aKrngS
+         gmmNcREgRh2MPSjA60ICVGr0N2G66g230+VXfqZ4m8y7QeVjVf+NB5gcvz50Ti9awr+y
+         lg8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bCuV65AO3xjvo3XNNmdojm9svHgvfqPfeodDABzyyBE=;
-        b=ORc9wrDDgRLk5Nnp+Y1Nnf5PetF1q8wypoOjGNYcOSscp936yRDb7AxaOwlZBGQdba
-         I8XMMEJgHfN2eSeYdCK5rPfowHX0/Ld4z4oK1e7wKvN0+u8mL6p6IObK8mD8iQwB4VN8
-         5xECqDYx0tRMnH+xlgC+BBNwwItTzMTiNT0KeNJasXeFsqZ8bEO9o1GStn70AQitpxxq
-         kArpsjrq7c3sVCFYwRtPJo5s4bAv9tXjPI3vVs3f56pAgdOkywuCvcwJswnUyNIqi/Mo
-         sQ4DsEFPoZzNIEKFHi7At2BsmBdRqutkN5ChX6KVibmX4std+V1m711OI8NLX6kZ/XAF
-         IdQg==
-X-Gm-Message-State: AJIora8niCUHnOgrii4opoirM1xOCfzp+g9mjIXstH5qvpYz2p5MOzZx
-        qpTNDjTI+fPgXiy99KR1P2KCsKfYiq9TZLZEY41SZA==
-X-Google-Smtp-Source: AGRyM1tcOjq2PV7D5Cf2k01aq9MpqaWCMGHYdZB9ytd/ZcVGEwSJYBapdwKkXVxQYPYI6yKi5fdOOCg/EWWc2tdPpqI=
-X-Received: by 2002:a05:6402:371a:b0:43a:ece9:ab8e with SMTP id
- ek26-20020a056402371a00b0043aece9ab8emr39311986edb.126.1658185383730; Mon, 18
- Jul 2022 16:03:03 -0700 (PDT)
+        bh=TZUTBE8JOO+dBwswBQU/UW48YDxWzcOqBKIIatUeRxg=;
+        b=rtpI9Unm45IrX6GHJ32A73KgZUTHBXuByJTKBO3+A2GvT6xLpx/vDxNkkHn2VZ+RSo
+         T6009zsOqom79UFdfVY9lC/9GSyFCCEB7Jvc7/9QQf/aLKf8iEekOjI+2cn/w3Md6MwV
+         L2FyNHJAd/OUu8sQkG6rUM4RafOFbH/prvOHFVdWFAV+TZYO2qNQFAfj9GSacUub35Jm
+         kR+CK+76LsW0BMcQ++Mf2VyktVpkMTrT4zE2z79zrQGSnVwD/0XAdOqoeUY+MNKOpiql
+         lc+Riy8yc1sTQ0hQamw/yDviN+8E1qH6Ho5jYY+hyzWKPgzHhrAyRQqiinVkJI9ymV6U
+         duNA==
+X-Gm-Message-State: AJIora95pibKA1l3Z+2MrEWIAlDa3oCFEekfIoOFQO6PDUHxf8DnjbLF
+        1yBkN4cEfKDJTrRS97aVR5uxmcrtPWapTgb8fLAeYpS81FPgjg==
+X-Google-Smtp-Source: AGRyM1u0wBbNmMakHQBA/ZO0hGJZKUbnq/dnkUov8nPUnJv4Mrzha3OP1ESzVnpMYzPJIoYstMUH0d87QXPunDiWZNY=
+X-Received: by 2002:a05:6512:3409:b0:489:c549:4693 with SMTP id
+ i9-20020a056512340900b00489c5494693mr15228484lfr.26.1658185443502; Mon, 18
+ Jul 2022 16:04:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1657907849.git.william.gray@linaro.org>
-In-Reply-To: <cover.1657907849.git.william.gray@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 19 Jul 2022 01:02:52 +0200
-Message-ID: <CACRpkdbYriKi8QN-KrMN=teeqH=g2JwzB3qnCT1AaLcqTD=ssQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] gpio: Implement and utilize register structures
- for ISA drivers
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, John Hentges <jhentges@accesio.com>,
-        Jay Dolan <jay.dolan@accesio.com>,
-        Fred Eckert <Frede@cmslaser.com>,
-        Paul Demetrotion <pdemetrotion@winsystems.com>,
-        techsupport@winsystems.com,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20220717133759.8479-1-khalid.masum.92@gmail.com>
+ <3ea0ea90-48bf-ce19-e014-9443d732e831@gmail.com> <CAABMjtHiet1_SRvLBhoNxeEh865rwtZCkb510JmFPkHFMd5chQ@mail.gmail.com>
+In-Reply-To: <CAABMjtHiet1_SRvLBhoNxeEh865rwtZCkb510JmFPkHFMd5chQ@mail.gmail.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Mon, 18 Jul 2022 16:03:52 -0700
+Message-ID: <CABBYNZJVv=pJv60P6fYZh65JU+BV5agGfXEh4VenxELEXqtDsA@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: hci_core: Use ERR_PTR instead of NULL
+To:     Khalid Masum <khalid.masum.92@gmail.com>
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:56 PM William Breathitt Gray
-<william.gray@linaro.org> wrote:
+Hi Khalid,
 
-> Changes in v3:
+On Sun, Jul 17, 2022 at 11:34 AM Khalid Masum <khalid.masum.92@gmail.com> wrote:
+>
+> On Sun, Jul 17, 2022 at 10:17 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+> >
+> > Hi Khalid,
+> >
+> > Khalid Masum <khalid.masum.92@gmail.com> says:
+> > > Failure of kzalloc to allocate memory is not reported. Return Error
+> > > pointer to ENOMEM if memory allocation fails. This will increase
+> > > readability and will make the function easier to use in future.
+> > >
+> > > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> > > ---
+> >
+> > [snip]
+> >
+> > > index a0f99baafd35..ea50767e02bf 100644
+> > > --- a/net/bluetooth/hci_core.c
+> > > +++ b/net/bluetooth/hci_core.c
+> > > @@ -2419,7 +2419,7 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
+> > >
+> > >       hdev = kzalloc(alloc_size, GFP_KERNEL);
+> > >       if (!hdev)
+> > > -             return NULL;
+> > > +             return ERR_PTR(-ENOMEM);
+> > >
+> >
+> > This will break all callers of hci_alloc_dev(). All callers expect NULL
+> > in case of an error, so you will leave them with wrong pointer.
+>
+> You are right. All callers of hci_alloc_dev() need to be able to handle
+> the error pointer. I shall send a V2 with all the callers of hci_alloc_dev
+> handling the ERR_PTR.
+>
+> > Also, allocation functionS return an error only in case of ENOMEM, so
+> > initial code is fine, IMO
+> >
 
-I'm happy with v3 from my POV, especially if also Andy's comments
-are also addressed in the next iteration.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+If there just a single error like ENOMEM then Id say this is fine,
+just as it is fine for kzalloc.
 
-Yours,
-Linus Walleij
+> I think it makes the memory allocation error handling look to be a bit
+> different from what we usually do while allocating memory which is,
+> returning an error or an error pointer. Here we are returning a NULL
+> without any context, making it a bit unreadable. So I think returning
+> an error pointer is better. If I am not mistaken, this also complies with
+> the return convention:
+> https://www.kernel.org/doc/htmldocs/kernel-hacking/convention-returns.html
+
+Not sure if that would apply to code that is basically a wrapper of kzalloc.
+
+> >
+> > Thanks,
+> > --Pavel Skripkin
+>
+>
+> Thanks,
+>   -- Khalid Masum
+
+
+
+-- 
+Luiz Augusto von Dentz

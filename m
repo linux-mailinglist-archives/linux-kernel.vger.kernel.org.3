@@ -2,115 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92D05782E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D494A5783B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbiGRM7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
+        id S233534AbiGRNad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbiGRM7Y (ORCPT
+        with ESMTP id S233852AbiGRNaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:59:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270236437;
-        Mon, 18 Jul 2022 05:59:22 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lmhml2rgXzjX4G;
-        Mon, 18 Jul 2022 20:56:39 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Jul 2022 20:59:21 +0800
-Received: from k04.huawei.com (10.67.174.115) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Jul 2022 20:59:20 +0800
-From:   Pu Lehui <pulehui@huawei.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
-        Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Change the casting about jited_ksyms and jited_linfo
-Date:   Mon, 18 Jul 2022 21:29:38 +0800
-Message-ID: <20220718132938.1031864-6-pulehui@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220718132938.1031864-1-pulehui@huawei.com>
-References: <20220718132938.1031864-1-pulehui@huawei.com>
+        Mon, 18 Jul 2022 09:30:16 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EC41A388;
+        Mon, 18 Jul 2022 06:29:59 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.155]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MtO06-1nOMvi0yvG-00usz7; Mon, 18 Jul 2022 15:29:48 +0200
+Message-ID: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
+Date:   Mon, 18 Jul 2022 15:29:47 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.115]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [Regression] ext4: changes to mb_optimize_scan cause issues on
+ Raspberry Pi
+To:     linux-ext4@vger.kernel.org, Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:9fY30Z9jd9z0wsQphdvwiUzBCnLULQyuNQ0uIByAwsbooQNcfqb
+ nKlAGwHxs0c5ASlv6XRDoLl+hDi/3Gp9Sb9X9yAOgc5WfuqRQZiF9sp1OA8kutUAGtP8oC/
+ ox0cnH2YpmLwrfrAG+h0eSWfP8aKbduEAmEL14GxyPgWFrONRY7Ea3Djvp83TUerI0XyUre
+ irkvwxm217+MRIau00B9Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CwKwexPPutM=:ml7nh5Q5lT5cE3anMzqwB+
+ 5MbPejskWOkTI6L2y9E9elOAAbC48I2y5a4O4G7pTvByLSQRwBCVgTFzVUs3I0FzdFmG40r+u
+ LNbaE9BVmWGq/B3s1HX2gF5BBvHuFryJQ8H3jAJmUItanRoeOCx4ODcpPknR2/6o28vWDNOUJ
+ QEf/eCz5j9a6PqUU7FSjmyL8s8KSmEN3noMneD7dcvpCnm7OUIDtfZSnf7qPfR3av6AOO0rPE
+ wYDoTDaUNtCTyiUbp66641aS7UP8HPq3uczjYA4w6gwGgLnusabxwOXgSLLRnhOjJ7vs47zr5
+ e2iDP+9U92CguJsrZ0QAn+ZnuYHkT0I4ENOvE+UU+foMU/l8OJZuHzO5+h640qL4NcSn1RMSQ
+ DpfS1aaMJKg2lM6xmR9rix5HVq6mUsIgu4EwKs+CLlC5L5IURWzLkU5gg3eI80sdeF+biFAK9
+ XlNNTKA0eaQRn1WXQgCQ/l8z2VRsfPqBh8RW4ZAu6gfOkH9QJemAUMGb20ERhWFBON7qojMFc
+ MhoPZsg7JskUI9AI3TGuyf2AGOVWywRmG7KyxJgY3byduJnuTT6ysUNKtIvHt2XyUdvoK0Bnq
+ 396QDB1pqWAM5X4X047fKbjJoruAMD+H2z90+/uBffSTKK7EBNvrcE9KrzDVBrmvRx6ExSwmB
+ J2yUTOcsH9iQ/+rQJD5dLSLq4U4BtAkaA8Ku2p/0SWF6EVbNBGGTtwgwjIHUdGeiUbCtT4QbD
+ wyoB7gAnkur27LuTAON7kru1z9sVJK68MkkQRAdRvARclqmavoUX3kEjSR0=
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,HEXHASH_WORD,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have unified data extension operation of jited_ksyms and jited_linfo
-into zero extension [0], so there's no need to cast __u64 memory address
-to long data type. And __u64 in some arch is unsigned long, so to avoid
-compiler warnings we just cast them to unsigned long long.
+Hi,
 
-[0] https://lore.kernel.org/bpf/20220530092815.1112406-2-pulehui@huawei.com/
+i noticed that since Linux 5.18 (Linux 5.19-rc6 is still affected) i'm 
+unable to run "rpi-update" without massive performance regression on my 
+Raspberry Pi 4 (multi_v7_defconfig + CONFIG_ARM_LPAE). Using Linux 5.17 
+this tool successfully downloads the latest firmware (> 100 MB) on my 
+development micro SD card (Kingston 16 GB Industrial) with a ext4 
+filesystem within ~ 1 min. The same scenario on Linux 5.18 shows the 
+following symptoms:
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- tools/testing/selftests/bpf/prog_tests/btf.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+- download takes endlessly much time and leads to an abort by userspace 
+in most cases because of the poor performance
+- massive system load during download even after download has been 
+aborted (heartbeat LED goes wild)
+- whole system becomes nearly unresponsive
+- system load goes back to normal after > 10 min
+- dmesg doesn't show anything suspicious
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index e852a9df779d..db10fa1745d1 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -6613,8 +6613,9 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
- 	}
- 
- 	if (CHECK(jited_linfo[0] != jited_ksyms[0],
--		  "jited_linfo[0]:%lx != jited_ksyms[0]:%lx",
--		  (long)(jited_linfo[0]), (long)(jited_ksyms[0]))) {
-+		  "jited_linfo[0]:%llx != jited_ksyms[0]:%llx",
-+		  (unsigned long long)(jited_linfo[0]),
-+		  (unsigned long long)(jited_ksyms[0]))) {
- 		err = -1;
- 		goto done;
- 	}
-@@ -6632,16 +6633,17 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
- 		}
- 
- 		if (CHECK(jited_linfo[i] <= jited_linfo[i - 1],
--			  "jited_linfo[%u]:%lx <= jited_linfo[%u]:%lx",
--			  i, (long)jited_linfo[i],
--			  i - 1, (long)(jited_linfo[i - 1]))) {
-+			  "jited_linfo[%u]:%llx <= jited_linfo[%u]:%llx",
-+			  i, (unsigned long long)jited_linfo[i],
-+			  i - 1, (unsigned long long)(jited_linfo[i - 1]))) {
- 			err = -1;
- 			goto done;
- 		}
- 
- 		if (CHECK(jited_linfo[i] - cur_func_ksyms > cur_func_len,
--			  "jited_linfo[%u]:%lx - %lx > %u",
--			  i, (long)jited_linfo[i], (long)cur_func_ksyms,
-+			  "jited_linfo[%u]:%llx - %llx > %u",
-+			  i, (unsigned long long)jited_linfo[i],
-+			  (unsigned long long)cur_func_ksyms,
- 			  cur_func_len)) {
- 			err = -1;
- 			goto done;
--- 
-2.25.1
+I was able to bisect this issue:
+
+ff042f4a9b050895a42cae893cc01fa2ca81b95c good
+4b0986a3613c92f4ec1bdc7f60ec66fea135991f bad
+25fd2d41b505d0640bdfe67aa77c549de2d3c18a bad
+b4bc93bd76d4da32600795cd323c971f00a2e788 bad
+3fe2f7446f1e029b220f7f650df6d138f91651f2 bad
+b080cee72ef355669cbc52ff55dc513d37433600 good
+ad9c6ee642a61adae93dfa35582b5af16dc5173a good
+9b03992f0c88baef524842e411fbdc147780dd5d bad
+aab4ed5816acc0af8cce2680880419cd64982b1d good
+14705fda8f6273501930dfe1d679ad4bec209f52 good
+5c93e8ecd5bd3bfdee013b6da0850357eb6ca4d8 good
+8cb5a30372ef5cf2b1d258fce1711d80f834740a bad
+077d0c2c78df6f7260cdd015a991327efa44d8ad bad
+cc5095747edfb054ca2068d01af20be3fcc3634f good
+27b38686a3bb601db48901dbc4e2fc5d77ffa2c1 good
+
+commit 077d0c2c78df6f7260cdd015a991327efa44d8ad
+Author: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Date:   Tue Mar 8 15:22:01 2022 +0530
+
+ext4: make mb_optimize_scan performance mount option work with extents
+
+If i revert this commit with Linux 5.19-rc6 the performance regression 
+disappears.
+
+Please ask if you need more information.
+
+Regards
 

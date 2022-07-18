@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5107C57799C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 04:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CED57799D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 04:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233172AbiGRCZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 22:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S233184AbiGRC0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 22:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiGRCZa (ORCPT
+        with ESMTP id S229886AbiGRC0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 22:25:30 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E874210FED
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 19:25:27 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LmQjJ50xvzjWww;
-        Mon, 18 Jul 2022 10:22:44 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Jul 2022 10:25:25 +0800
-Subject: Re: [PATCH] mm/hugetlb: avoid corrupting page->mapping in
- hugetlb_mcopy_atomic_pte
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>
-CC:     <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220712130542.18836-1-linmiaohe@huawei.com>
- <20220713102357.8328614813db01b569650ffd@linux-foundation.org>
- <a47922cf-eb30-1ad9-fc96-1896254564ef@huawei.com>
- <20220716160629.d065828c84ad2423c10f7733@linux-foundation.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <0dcf8902-b14a-860a-cb66-46e57b6d14a9@huawei.com>
-Date:   Mon, 18 Jul 2022 10:25:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sun, 17 Jul 2022 22:26:12 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AF210FED
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 19:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658111171; x=1689647171;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E/f/xd2rmOqtAKvPXucthGOuo5Ii7MemqTTqoJuDICE=;
+  b=GhtdSFUw3zGJMsu38IVInj2EqiC57z0bG3n30oCPWc2dWtbCyQRR7K6y
+   KyuDm4tIkPuTVQU7Ty1wn9t+4kyrSHBMGzvyl9EZf6D0xWEVO9X0vML+K
+   NgY2PjPiA1DKbpxHpGLuBzP0d0h5UGfHvvELwOLwL0YrlxgSKAVCIjMqt
+   cFJ1+h2Vqe8RF4MQX2FtGNo1uc+gLuLfIdJFgaFzALcv2JpzmqBdxSl4W
+   Q4zQbwtZ6m8+C1q6b6WHGuUYc4imAPsOEPlRyfcTNjo0PptATrgv5Bjyb
+   UbZj7jbqeeVVTmTc+m8fPT8P7V2tNaZLe6EVx7BaDrZCMi1j62gST9SFo
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347803784"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="347803784"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 19:26:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="597087705"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 17 Jul 2022 19:26:10 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDGSX-0003us-F4;
+        Mon, 18 Jul 2022 02:26:09 +0000
+Date:   Mon, 18 Jul 2022 10:25:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [axboe-block:for-5.20/io_uring 54/171] io_uring/rw.c:912:2-7:
+ WARNING: NULL check before some freeing functions is not needed.
+Message-ID: <202207181028.PrDZ92aj-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220716160629.d065828c84ad2423c10f7733@linux-foundation.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/17 7:06, Andrew Morton wrote:
-> On Thu, 14 Jul 2022 17:59:53 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
-> 
->> On 2022/7/14 1:23, Andrew Morton wrote:
->>> On Tue, 12 Jul 2022 21:05:42 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
->>>
->>>> In MCOPY_ATOMIC_CONTINUE case with a non-shared VMA, pages in the page
->>>> cache are installed in the ptes. But hugepage_add_new_anon_rmap is called
->>>> for them mistakenly because they're not vm_shared. This will corrupt the
->>>> page->mapping used by page cache code.
->>>
->>> Well that sounds bad.  And theories on why this has gone unnoticed for
->>> over a year?  I assume this doesn't have coverage in our selftests?
->>
->> As discussed in another thread, when minor fault handling is proposed, only
->> VM_SHARED vma is expected to be supported
-> 
-> So...  do we feel that this fix should be backported?  And if so, is
-> there a suitable commit for the Fixes:?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-5.20/io_uring
+head:   004523ebfe6de8dd664ddf6fc26c47801b3bdaf5
+commit: 9d6c15adf84bd6618f37ad7427537f97d7c68045 [54/171] io_uring: move read/write related opcodes to its own file
+config: s390-randconfig-c043-20220717 (https://download.01.org/0day-ci/archive/20220718/202207181028.PrDZ92aj-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
 
-I tend to backport this fix. And I think the Fixes tag in this patch should be suitable,
-i.e. Fixes: f619147104c8 ("userfaultfd: add UFFDIO_CONTINUE ioctl").
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks.
 
-> .
-> 
+cocci warnings: (new ones prefixed by >>)
+>> io_uring/rw.c:912:2-7: WARNING: NULL check before some freeing functions is not needed.
+   io_uring/rw.c:1017:2-7: WARNING: NULL check before some freeing functions is not needed.
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

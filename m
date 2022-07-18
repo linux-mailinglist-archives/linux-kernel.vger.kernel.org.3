@@ -2,101 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D19F5782B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253485782BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbiGRMu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        id S234669AbiGRMun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233249AbiGRMu0 (ORCPT
+        with ESMTP id S233493AbiGRMum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:50:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACFE5F67;
-        Mon, 18 Jul 2022 05:50:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF2891042;
-        Mon, 18 Jul 2022 05:50:25 -0700 (PDT)
-Received: from [10.32.33.51] (e121896.warwick.arm.com [10.32.33.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D58C43F70D;
-        Mon, 18 Jul 2022 05:50:23 -0700 (PDT)
-Message-ID: <c0b64785-55f2-111c-cec7-a7a90f68f8ac@arm.com>
-Date:   Mon, 18 Jul 2022 13:50:22 +0100
+        Mon, 18 Jul 2022 08:50:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719DD6397;
+        Mon, 18 Jul 2022 05:50:40 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1F56033BE8;
+        Mon, 18 Jul 2022 12:50:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658148639; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9QeNU7i1Z8jOANG2Muly2d9TTzEZo5jKEBQhnd4Wbho=;
+        b=aXCE0L5kmo7kN4TNty5IXSebf6+/gMTsHbMU8UHhLiD5s6Q/GymEAj8WT2fCYooe+u+H3E
+        8nzTlsJbn7jQhxaPDdbi1pWLoddkmSVa0BJt6HMf381Wq3CsFTB4fA5yx7Pe5rFABuYmRx
+        s4bd2JA1tX19hRCZ+8nHXLxtMpYt9yQ=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id BD6AD2C141;
+        Mon, 18 Jul 2022 12:50:38 +0000 (UTC)
+Date:   Mon, 18 Jul 2022 14:50:36 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, jolsa@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v3 bpf-next 1/4] ftrace: add
+ modify_ftrace_direct_multi_nolock
+Message-ID: <YtVXHDfV8HDwAm6G@alley>
+References: <20220718001405.2236811-1-song@kernel.org>
+ <20220718001405.2236811-2-song@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] perf python: Avoid deprecation warning on distutils
-Content-Language: en-US
-To:     Ian Rogers <rogers.email@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-References: <20220615014206.26651-1-irogers@google.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220615014206.26651-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718001405.2236811-2-song@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 15/06/2022 02:42, Ian Rogers wrote:
-> Fix the following DeprecationWarning:
+On Sun 2022-07-17 17:14:02, Song Liu wrote:
+> This is similar to modify_ftrace_direct_multi, but does not acquire
+> direct_mutex. This is useful when direct_mutex is already locked by the
+> user.
 > 
-> tools/perf/util/setup.py:31: DeprecationWarning: The distutils
-> package is deprecated and slated for removal in Python 3.12. Use
-> setuptools or check PEP 632 for potential alternatives
-> 
-> Note: the setuptools module may need installing, for example:
-> sudo apt install python-setuptools
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/setup.py | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
-> index c255a2c90cd6..5a3c74bce836 100644
-> --- a/tools/perf/util/setup.py
-> +++ b/tools/perf/util/setup.py
-> @@ -11,7 +11,7 @@ def clang_has_option(option):
->      return [o for o in cc_output if ((b"unknown argument" in o) or (b"is not supported" in o))] == [ ]
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -5691,22 +5691,8 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+> @@ -5717,12 +5703,8 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+>  	int i, size;
+>  	int err;
 >  
->  if cc_is_clang:
-> -    from distutils.sysconfig import get_config_vars
-> +    from sysconfig import get_config_vars
->      vars = get_config_vars()
->      for var in ('CFLAGS', 'OPT'):
->          vars[var] = sub("-specs=[^ ]+", "", vars[var])
-> @@ -28,10 +28,10 @@ if cc_is_clang:
->          if not clang_has_option("-ffat-lto-objects"):
->              vars[var] = sub("-ffat-lto-objects", "", vars[var])
->  
-> -from distutils.core import setup, Extension
-> +from setuptools import setup, Extension
->  
-> -from distutils.command.build_ext   import build_ext   as _build_ext
-> -from distutils.command.install_lib import install_lib as _install_lib
-> +from setuptools.command.build_ext   import build_ext   as _build_ext
-> +from setuptools.command.install_lib import install_lib as _install_lib
->  
->  class build_ext(_build_ext):
->      def finalize_options(self):
+> -	if (check_direct_multi(ops))
+> +	if (WARN_ON_ONCE(!mutex_is_locked(&direct_mutex)))
+>  		return -EINVAL;
 
-Tested it with python 2.7 and 3.8 by running "make install-python_ext PYTHON=..."
+IMHO, it is better to use:
 
-Reviewed-by: James Clark <james.clark@arm.com>
+	lockdep_assert_held_once(&direct_mutex);
+
+It will always catch the problem when called without the lock and
+lockdep is enabled.
+
+> -	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+> -		return -EINVAL;
+> -
+> -	mutex_lock(&direct_mutex);
+>  
+>  	/* Enable the tmp_ops to have the same functions as the direct ops */
+>  	ftrace_ops_init(&tmp_ops);
+> @@ -5730,7 +5712,7 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+>  
+>  	err = register_ftrace_function(&tmp_ops);
+>  	if (err)
+> -		goto out_direct;
+> +		return err;
+>  
+>  	/*
+>  	 * Now the ftrace_ops_list_func() is called to do the direct callers.
+> @@ -5754,7 +5736,64 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+>  	/* Removing the tmp_ops will add the updated direct callers to the functions */
+>  	unregister_ftrace_function(&tmp_ops);
+>  
+> - out_direct:
+> +	return err;
+> +}
+> +
+> +/**
+> + * modify_ftrace_direct_multi_nolock - Modify an existing direct 'multi' call
+> + * to call something else
+> + * @ops: The address of the struct ftrace_ops object
+> + * @addr: The address of the new trampoline to call at @ops functions
+> + *
+> + * This is used to unregister currently registered direct caller and
+> + * register new one @addr on functions registered in @ops object.
+> + *
+> + * Note there's window between ftrace_shutdown and ftrace_startup calls
+> + * where there will be no callbacks called.
+> + *
+> + * Caller should already have direct_mutex locked, so we don't lock
+> + * direct_mutex here.
+> + *
+> + * Returns: zero on success. Non zero on error, which includes:
+> + *  -EINVAL - The @ops object was not properly registered.
+> + */
+> +int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
+> +{
+> +	if (check_direct_multi(ops))
+> +		return -EINVAL;
+> +	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+> +		return -EINVAL;
+> +
+> +	return __modify_ftrace_direct_multi(ops, addr);
+> +}
+> +EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi_nolock);
+> +
+> +/**
+> + * modify_ftrace_direct_multi - Modify an existing direct 'multi' call
+> + * to call something else
+> + * @ops: The address of the struct ftrace_ops object
+> + * @addr: The address of the new trampoline to call at @ops functions
+> + *
+> + * This is used to unregister currently registered direct caller and
+> + * register new one @addr on functions registered in @ops object.
+> + *
+> + * Note there's window between ftrace_shutdown and ftrace_startup calls
+> + * where there will be no callbacks called.
+> + *
+> + * Returns: zero on success. Non zero on error, which includes:
+> + *  -EINVAL - The @ops object was not properly registered.
+> + */
+> +int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+> +{
+> +	int err;
+> +
+> +	if (check_direct_multi(ops))
+> +		return -EINVAL;
+> +	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&direct_mutex);
+> +	err = __modify_ftrace_direct_multi(ops, addr);
+>  	mutex_unlock(&direct_mutex);
+>  	return err;
+>  }
+
+I would personally do:
+
+int __modify_ftrace_direct_multi(struct ftrace_ops *ops,
+			unsigned long addr, bool lock)
+{
+	int err;
+
+	if (check_direct_multi(ops))
+		return -EINVAL;
+	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+		return -EINVAL;
+
+	if (lock)
+		mutex_lock(&direct_mutex);
+
+	err = __modify_ftrace_direct_multi(ops, addr);
+
+	if (lock)
+		mutex_unlock(&direct_mutex);
+
+	return err;
+}
+
+int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+{
+	__modify_ftrace_direct_multi(ops, addr, true);
+}
+
+int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
+{
+	__modify_ftrace_direct_multi(ops, addr, false);
+}
+
+To avoid duplication of the checks. But it is a matter of taste.
+
+Best Regards,
+Petr

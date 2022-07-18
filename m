@@ -2,154 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51DFF578073
+	by mail.lfdr.de (Postfix) with ESMTP id E8F55578075
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 13:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233965AbiGRLN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 07:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S234443AbiGRLPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 07:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiGRLN0 (ORCPT
+        with ESMTP id S234380AbiGRLPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 07:13:26 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD58820189;
-        Mon, 18 Jul 2022 04:13:24 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26IB4X3r029439;
-        Mon, 18 Jul 2022 11:13:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=U9bSBoQlIl24xzjYpYvuVoNGkFnnTeE9X46ydSrf8JU=;
- b=uyqWYtjsVK+96jzS/xrqwBgcMJ8004KoT6lzzSypuFV7g3t+IgbxG1exejmYVNeBe8UK
- 40kPimtOoIhpF6GmFFXsnYTmQdwdzkNxKuSOwPXztM56LmyslM9V0ZqONarO1qt1ml9p
- I+jQQ8y6sEOuUpjOxXL1c/QQHa2wrl2417zdD+j5zmDlPPnxMrOEtVgGSjv/7HnDaHSx
- 6adrH8ZVP6G2FjTRrXdc5S5g2x7O2hbH0nh7YmZ5w6NRtVBVOr6byj3rlOjyek2wW7hl
- LP8VbOY5jUsThQVE3hTGtrkhF0bgftjKMhaML3Vnh0PuDW8yp22Q2MjNebnDtgsVmzyg Zg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbkx0u0wf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jul 2022 11:13:20 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26I8PWGb004030;
-        Mon, 18 Jul 2022 11:13:20 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1k3qjk7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Jul 2022 11:13:20 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ozs2fHIxl/EOqIunliWW/UD+N1Be2U2TPhBZcrOPPCloS5XHtY3ncrN5jU4nTXvsV5MttlOKa0/j8s4ScKjzo0vGan9xjcFuJ4r9IfyLdo0eEK7XSaMPTjsGemikRzP2mc6g15aGwj01NooxUD67EDwMk9MlLyrrYJ4NZRk0Pkkm2PZVw7Yk4vJjeJ9+FrDbm1gMAyzWnR7HpzmL8gNbaa2a4X5M/RLPE4iLTue/bt0Zoi0zmbqNRmaNMed/rFWa0sTTkc5N2SbLTg0iy5uDQRE+z5VODLZrpNSO4ifih9bvDJZtAAj4PG2y5vYjHSaKmmJkSJNlKmh/wp0K8zF82w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U9bSBoQlIl24xzjYpYvuVoNGkFnnTeE9X46ydSrf8JU=;
- b=A1r0DjJ53NxmJT5okgoBblQd9bUDeJ7eV9q3ctqfZetS+mWWDfuqQoXjVD7PhibZsOOw0u2MSHqLY6S5kRqkSF7UKJgzbe+xsHRCHusJenN753KcQo0zrq85zbqGs3DwL8RyTBiBWKzU233Rpaz25kJT78xon9amXGrLWj/hSRXHK87sOjy0FI66SBk8l4TeXhW/SnzykDARu4oRcSWLMDhpeAb3lmtDiT81GWyBOcMlSPXdlWHoHU+l2gbgbbCYgNHt9FyzsfvfsVbNM0MZxbssAVbQ+EnvtoQ5Afpfoqn070l7MrBjNrvj2Vyu0diysyxjngBwUFRRTSdJW16oaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U9bSBoQlIl24xzjYpYvuVoNGkFnnTeE9X46ydSrf8JU=;
- b=CyFE5bLO7MtwEt8xgIdtXNn8VGtV96/UvesfI0JCcwf2jblM3szpq9o0dSNk/qFo7k6kMtYZ0GhXpIt7/lgp0bUMwadsTGgtZzJ2wtohhth7M7RKo3LFLvnFa9FMnF+6ohT8Eebz5AUN0a6VBU49vIhySymtVxWuWCknljPMwoo=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by PH0PR10MB4757.namprd10.prod.outlook.com
- (2603:10b6:510:3f::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Mon, 18 Jul
- 2022 11:13:18 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
- 11:13:18 +0000
-Date:   Mon, 18 Jul 2022 14:13:09 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH] nvme-auth: Uninitialized variable in
- nvme_auth_transform_key()
-Message-ID: <20220718111308.GW2316@kadam>
-References: <YtU/bFMYRCrx6tgp@kili>
- <YtU/tS/E2W9m+aau@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtU/tS/E2W9m+aau@kili>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR2P264CA0079.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:32::19) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        Mon, 18 Jul 2022 07:15:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A265520189;
+        Mon, 18 Jul 2022 04:15:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24C6561254;
+        Mon, 18 Jul 2022 11:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C6C4C341C0;
+        Mon, 18 Jul 2022 11:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658142930;
+        bh=j6BIBslIcdbSSvcTjI9y5KeEti/16HJAFmDAP1Pa50w=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Ains+1nJmVItxqBF2ZqmkWO/+aabe47PlSbW36Nb30+fW94XlziWNe9yK4sZCeKtS
+         OAJN4OIdaREePVMttK3RUbNxmUtlOsivQ5yNCp3/p4DBjq9HDvk8McZTYKxDHjwavD
+         w2EOx7aTV/2olxpQ2udu7GMup9V/4K6TQCsNJk7vijsnhRPwE6r3Glx/hq+jfXrkcw
+         y1ySlvFxOzRZ7UAy1FkyxkHrg9eEB4Sa6kAbRq2yg+Uh+wldhF7nAlE2zUwofGb4m8
+         OApnWnz0mWpoRdK4R7kCG8/IbD9O5Rk7ezAc+QMdwncEYTwh2BdpdgdiJ5PDgip40P
+         j8xMI8RVW0fWg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Qiang Yu <quic_qianyu@quicinc.com>, quic_hemantk@quicinc.com,
+        loic.poulain@linaro.org, quic_jhugo@quicinc.com,
+        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_cang@quicinc.com,
+        ath11k@lists.infradead.org
+Subject: Re: [PATCH v4 1/1] bus: mhi: host: Move IRQ allocation to controller registration phase
+References: <1655952183-66792-1-git-send-email-quic_qianyu@quicinc.com>
+        <20220624072740.GA12171@thinkpad>
+Date:   Mon, 18 Jul 2022 14:15:23 +0300
+In-Reply-To: <20220624072740.GA12171@thinkpad> (Manivannan Sadhasivam's
+        message of "Fri, 24 Jun 2022 12:57:40 +0530")
+Message-ID: <87k08an038.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e33b238a-defa-496e-cede-08da68ae846b
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4757:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2vvr7kgUz93vHvoHhXLH8itLvwzHU2Wcu9u3oFtqEOm9CtyCEXa682/IIzJpJnEZ8cPWHQPB7eXuA7sWIad7wV/djRQgXStwjK0G9Z+xum/0BverzHxZmIloNismt6aRecCgqIGSgPeMPKJrlLq3vEs6RcwOmOsVaLz9g7Yo2kXF60ycDlkeSvPZcNSp6hkRfT93aVdHg/ibX56Ae2hBKSIQgUCce+w8gUkjoOqF4z6Axr4gapCw6b1Ozu/6nfOsitkk86o0jn7XIE03VDS476uXMYeB2+CHCxv+Uz+/UOmVc3sWO50EjrNFzBoLcQrA5QAiGRTpsHD2wyDQbxPfzTMrf3McssUhqIiSZrrsLend5dvSHcC2aevz8qo0wIdiDFfLiU3mjg/pFSdupF5q6EcZvyGHfRu/j+ogHXhjh5fW4XqzxqaEgSf6VG3m6bPg3XYPTt67p5/d8G9wtibIKNe38Axa6uuYSOINzYCi6dJv3IlDlzig02OITUI9PKd0ThggsZPEGkgnwNP3dprnTP+5yGKXdIIkxC+aCG32/JVwxce0LdtQjX8QhKh9sLx7bAo38OOIMPuH9PScZvjlsru6Vo4DRQSBxS5so3HNFEl8VcJGdlrzKA74UZJS8117Uq+/FgBM2sUh+KVBlQFKAP7pA5MQZb1RG5gx+J/abn6bbc1Bmri5n+GJ6KKChoE/ltxv57QJcsQN/KHZ8Mb5xecQSQAKHW8M1coaluup3JBRN3Qg9OwAgQAW6wpQeHh/CWMwE9nL5dg2xbUfZpmgQ8QDZFCd8qF4RtyXw2a7/Mry3x0gHn3ckY6KSFzjDDIq
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(136003)(39860400002)(376002)(396003)(346002)(186003)(6512007)(9686003)(33716001)(52116002)(41300700001)(26005)(1076003)(38100700002)(6666004)(2906002)(6506007)(86362001)(6916009)(5660300002)(8936002)(478600001)(8676002)(38350700002)(66556008)(66946007)(66476007)(4326008)(44832011)(316002)(558084003)(33656002)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a5eKNqPgTcZ6PJfeTHJQvpAhxRBQSQKsvsslapEHIFRas4djqGMVk3HCLFTu?=
- =?us-ascii?Q?G3vxjfBHbnoRKXiOObeOjuGDMuQpIjmoUDzf6trfnEo3Gef3HCwPi4xiQQ0W?=
- =?us-ascii?Q?1w2hKiYMkHwba8TMc/U3s5UWWfc056rCxRJPrp3Ov4AWsdo0T8bMQNv4sWbv?=
- =?us-ascii?Q?NPJUPEMh5G9yRBiS4Rv3bGQttZnD2oGA3lVqMDqDUs8yYRuoi34W6eQA1dww?=
- =?us-ascii?Q?BD9tgXGk/p7DoYSF+VPSE8b1+oV+LxWv2lM5RlFKh2AodtFOjZK/GpEFBtcS?=
- =?us-ascii?Q?YweDBM0U2J2PWd4ERVxAZkxx5UFGgI968Ozo+ccwsfvKdIVK+aYVNUY3kkbX?=
- =?us-ascii?Q?4U3EV8KhiXDuMOxKXbDes2hh9CF1zFEem2tcasrcxOw9Ja3p/pNLHjYGmb/j?=
- =?us-ascii?Q?VzBV4xu/WnKAo0m/u2OqFaav+MU4isZee03a98KXitvMbvpvr0YcewRehRpu?=
- =?us-ascii?Q?XAKjmkMu88Xgzb7hZOZV34PSgDKtGgM9NevV+y/i6VsYJfl1DKU64k5897km?=
- =?us-ascii?Q?UzAuimKRLiJW2GNP+UlK/37CNOnx0iPuimLSbWY83ncnWg6d2Ppndt7Ntdw2?=
- =?us-ascii?Q?W67WxDVuYnk8+S21ors+ztG/KZE3S0S/o2XR2JhVdbNGr6y0X7NAPFUo5+N5?=
- =?us-ascii?Q?WOR6MrwZitFl+U2mrwoM02G+Rc7eQUY5sF+zSLTS0ITIwITrWGl6pE8o/8/W?=
- =?us-ascii?Q?SDhX685z4jXLZrxsIbs8JjR6Vj6vrpJ7LlTEMxhJAYRBvf1M7iuy8gRDkEd2?=
- =?us-ascii?Q?TUaG6qDgsjwFVfEjETceHsG8Ofd+iWOr+JYvclBTL7YOJ5vvOu0wKIxZU+JU?=
- =?us-ascii?Q?z/SAcyTFkf+18OwIad4bFHzDeBNGRcbY0b/5WCxAzzdtbQeE2LdM5H2mdh0f?=
- =?us-ascii?Q?n/rwG5b8ppvmPymorfqMeBJS2TLVosO5Tx2xKR6mvp5tE+e6UgvTkPUbCLtu?=
- =?us-ascii?Q?VE2UegszQ5o+cXn8TIBEhMlU/jeTDUbdOozOggYafjelH5ihzY+XXqOHDaF6?=
- =?us-ascii?Q?iJ/rs8uGc1iO4u+2KnWrEBITFmV3KEABtjH1Pm+ISymHZe5CDjzoANRM0eBI?=
- =?us-ascii?Q?17zGsw6GZmqPq6Y6yDXYMJgE4VC5EBjxWcWcwu0tS3bg8sRSV11P6DC5uJL4?=
- =?us-ascii?Q?oiIQkwwh248e4k8lKJ47AvL/eo5Sf0gRkpBoLVLhUx3BulOypT84c6IE9bME?=
- =?us-ascii?Q?s0CKJigj1p0YfX/ksTz/MOFKsMaNw0cZ1P5gmBe+Mz95s6uE92YGoJqCm8Tw?=
- =?us-ascii?Q?rmijU+F7I0OfGAx1i+OHSkW4OIb0hNJMNkblhyXSr9N9Zmy4SK97W30k+ayE?=
- =?us-ascii?Q?17yzymG+T5MnBZvGGm+AnHAJf2Mx6PCwMeWPvoY1GEPyQMJMeqVyYgQU5HIK?=
- =?us-ascii?Q?NobcnSWXEiUCCBsDZwHsM84HVF1kBxVUiDfS0j1TFlmyM+isbjsc8ey+l9l0?=
- =?us-ascii?Q?1Lmipx8HJR4o4a9Lc0UVZ8m1m1aby0vVicx84ao4dj4MatuMrwedVuCueJ6g?=
- =?us-ascii?Q?7zRy514CiorGqEB9l6PI5vTQAbfkx4Y/vpTbh+wQ2ti6E1+ZsGuO4ryFovKH?=
- =?us-ascii?Q?qVlQTAakHtHSJatRr7iBkKK7BoewXhUgFLn/TQFwULATE0h6DOrbE7Q6SxxB?=
- =?us-ascii?Q?ag=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e33b238a-defa-496e-cede-08da68ae846b
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2022 11:13:18.3164
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2vBLYJsw+KU534sVWzhnABBIvfDurA0Sn5834RftHo3VsaQKri+d2GL9rPycVTlJpb2VdyknbiXiLQyM1JwPxqD+FgiGgOxcbjpMer9HMY0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4757
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_10,2022-07-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
- mlxlogscore=862 malwarescore=0 adultscore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207180048
-X-Proofpoint-GUID: j-D4G3F-KyAToC9gtjUANTZlT7LlxewO
-X-Proofpoint-ORIG-GUID: j-D4G3F-KyAToC9gtjUANTZlT7LlxewO
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, the subject was supposed to be [PATCH 2/2].  Do I need to resend
-for patchwork to accept it?
++ ath11k list
 
-regards,
-dan carpenter
+Manivannan Sadhasivam <mani@kernel.org> writes:
 
+> On Thu, Jun 23, 2022 at 10:43:03AM +0800, Qiang Yu wrote:
+>> During runtime, the MHI endpoint may be powered up/down several times.
+>> So instead of allocating and destroying the IRQs all the time, let's just
+>> enable/disable IRQs during power up/down.
+>> 
+>> The IRQs will be allocated during mhi_register_controller() and freed
+>> during mhi_unregister_controller(). This works well for things like PCI
+>> hotplug also as once the PCI device gets removed, the controller will
+>> get unregistered. And once it comes back, it will get registered back
+>> and even if the IRQ configuration changes (MSI), that will get accounted.
+>> 
+>> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
+>
+> Applied to mhi-next!
+
+I did a bisect and this patch breaks ath11k during rmmod. I'm on
+vacation right now so I can't investigate in detail but more info below.
+
+[   66.939878] rmmod ath11k_pci
+[   67.606269] general protection fault, probably for non-canonical
+address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC KASAN
+PTI
+[   67.606328] KASAN: null-ptr-deref in range
+[0x0000000000000000-0x0000000000000007]
+[   67.606387] CPU: 3 PID: 1463 Comm: rmmod Not tainted 5.19.0-rc1+ #669
+[   67.606456] Hardware name: Intel(R) Client Systems
+NUC8i7HVK/NUC8i7HVB, BIOS HNKBLi70.86A.0067.2021.0528.1339 05/28/2021
+[   67.606492] RIP: 0010:mhi_irq_handler+0x61/0x370 [mhi]
+[   67.606565] Code: 00 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 9b 02 00
+00 49 8b ad 20 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 ea 48 c1 ea
+03 <80> 3c 02 00 0f 85 bd 02 00 00 48 8d 7b 10 48 8b 6d 00 48 b8 00 00
+[   67.606639] RSP: 0018:ffffc900042ffba8 EFLAGS: 00010046
+[   67.606706] RAX: dffffc0000000000 RBX: ffff88812e1e2800 RCX:
+0000000000000001
+[   67.606742] RDX: 0000000000000000 RSI: ffff88812e1e2800 RDI:
+ffff888110e8d120
+[   67.606776] RBP: 0000000000000000 R08: 0000000000000001 R09:
+ffffffff86ac17af
+[   67.606810] R10: fffffbfff0d582f5 R11: 0000000000000001 R12:
+ffff88812c3afb80
+[   67.606845] R13: ffff888110e8d000 R14: ffff88811ddba800 R15:
+ffff88812e1e2800
+[   67.606880] FS:  00007fef00794740(0000) GS:ffff888234200000(0000)
+knlGS:0000000000000000
+[   67.606915] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   67.606950] CR2: 000055df2323b788 CR3: 0000000109844001 CR4:
+00000000003706e0
+[   67.606987] Call Trace:
+[   67.607021]  <TASK>
+[   67.607056]  __free_irq+0x590/0x9d0
+[   67.607099]  ? slab_free_freelist_hook+0xf0/0x1a0
+[   67.607136]  free_irq+0x7b/0x110
+[   67.607171]  mhi_deinit_free_irq+0x14e/0x260 [mhi]
+[   67.607210]  mhi_unregister_controller+0x69/0x290 [mhi]
+[   67.607249]  ath11k_mhi_unregister+0x2b/0x70 [ath11k_pci]
+[   67.607284]  ath11k_pci_remove+0x107/0x2a0 [ath11k_pci]
+[   67.607321]  pci_device_remove+0x89/0x1b0
+[   67.607359]  device_release_driver_internal+0x3bc/0x600
+[   67.607400]  driver_detach+0xbc/0x180
+[   67.607439]  bus_remove_driver+0xe2/0x2d0
+[   67.607476]  pci_unregister_driver+0x21/0x250
+[   67.607512]  __do_sys_delete_module+0x307/0x4b0
+[   67.607548]  ? free_module+0x4e0/0x4e0
+[   67.607584]  ? lockdep_hardirqs_on_prepare.part.0+0x18c/0x370
+[   67.607618]  ? syscall_enter_from_user_mode+0x1d/0x50
+[   67.607653]  ? lockdep_hardirqs_on+0x79/0x100
+[   67.607688]  do_syscall_64+0x35/0x80
+[   67.607723]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+[   67.607758] RIP: 0033:0x7fef008e1a6b
+[   67.607794] Code: 73 01 c3 48 8b 0d 25 c4 0c 00 f7 d8 64 89 01 48 83
+c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00 00 0f
+05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d f5 c3 0c 00 f7 d8 64 89 01 48
+[   67.607836] RSP: 002b:00007ffdd5803a38 EFLAGS: 00000206 ORIG_RAX:
+00000000000000b0
+[   67.607873] RAX: ffffffffffffffda RBX: 000055c0d3f107a0 RCX:
+00007fef008e1a6b
+[   67.607961] RDX: 000000000000000a RSI: 0000000000000800 RDI:
+000055c0d3f10808
+[   67.607995] RBP: 00007ffdd5803a98 R08: 0000000000000000 R09:
+0000000000000000
+[   67.608029] R10: 00007fef0095dac0 R11: 0000000000000206 R12:
+00007ffdd5803c70
+[   67.608063] R13: 00007ffdd5804eb7 R14: 000055c0d3f0f2a0 R15:
+000055c0d3f107a0
+[   67.608100]  </TASK>
+[   67.608134] Modules linked in: ath11k_pci(-) ath11k mac80211 libarc4
+cfg80211 qmi_helpers qrtr_mhi mhi qrtr nvme nvme_core
+[   67.608185] ---[ end trace 0000000000000000 ]---
+[   67.608186] RIP: 0010:mhi_irq_handler+0x61/0x370 [mhi]
+[   67.608192] Code: 00 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 9b 02 00
+00 49 8b ad 20 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 ea 48 c1 ea
+03 <80> 3c 02 00 0f 85 bd 02 00 00 48 8d 7b 10 48 8b 6d 00 48 b8 00 00
+[   67.608194] RSP: 0018:ffffc900042ffba8 EFLAGS: 00010046
+[   67.608196] RAX: dffffc0000000000 RBX: ffff88812e1e2800 RCX:
+0000000000000001
+[   67.608197] RDX: 0000000000000000 RSI: ffff88812e1e2800 RDI:
+ffff888110e8d120
+[   67.608198] RBP: 0000000000000000 R08: 0000000000000001 R09:
+ffffffff86ac17af
+[   67.608199] R10: fffffbfff0d582f5 R11: 0000000000000001 R12:
+ffff88812c3afb80
+[   67.608200] R13: ffff888110e8d000 R14: ffff88811ddba800 R15:
+ffff88812e1e2800
+[   67.608201] FS:  00007fef00794740(0000) GS:ffff888234200000(0000)
+knlGS:0000000000000000
+[   67.608203] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   67.608204] CR2: 000055df2323b788 CR3: 0000000109844001 CR4:
+00000000003706e0
+[   67.608206] Kernel panic - not syncing: Fatal exception
+[   67.608665] Kernel Offset: 0xa00000 from 0xffffffff81000000
+(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[   67.608704] Rebooting in 10 seconds..
+
+git bisect start
+# bad: [9df125af0822d3e2bde7508e9536d67ab541a166] bus: mhi: ep: Check dev_set_name() return value
+git bisect bad 9df125af0822d3e2bde7508e9536d67ab541a166
+# good: [178329d4d635fb1848cc7ca1803dee5a634cde0d] bus: mhi: host: pci_generic: Add support for Quectel EM120 FCCL modem
+git bisect good 178329d4d635fb1848cc7ca1803dee5a634cde0d
+# bad: [1227d2a20cd7319fb45c62fab4b252600e0308bf] bus: mhi: host: Move IRQ allocation to controller registration phase
+git bisect bad 1227d2a20cd7319fb45c62fab4b252600e0308bf
+# good: [b7ce716254315dffcfce60e149ddd022c8a60345] bus: mhi: host: pci_generic: Add Cinterion MV31-W with new baseline
+git bisect good b7ce716254315dffcfce60e149ddd022c8a60345
+# first bad commit: [1227d2a20cd7319fb45c62fab4b252600e0308bf] bus: mhi: host: Move IRQ allocation to controller registration phase
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

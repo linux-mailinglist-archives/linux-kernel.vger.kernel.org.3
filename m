@@ -2,242 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD365789E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8036C578A49
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbiGRS4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S234802AbiGRTFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbiGRS4R (ORCPT
+        with ESMTP id S229700AbiGRTFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:56:17 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DAD2F386
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:56:16 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id z23so22994426eju.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:56:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OlTtr5Gd284OqEXfbDoqgh6rP1VAtWxhRShnoixkRbw=;
-        b=d6GcSCh+7n/GZEZUJUNlmqvQFKgvgxpaE9K32+dORzvBulfX/UjyU2DOdjn25pdojM
-         7A/9kJsuMYbuoQEmbPXengBpsifDZ3oXqMqQJ4KMdfc6BxIMKG3O8vgbRnQcW9GlMAgS
-         hLY0zHaAcbH7aXwIcfvl4n3qOFid9OPO5B+2w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OlTtr5Gd284OqEXfbDoqgh6rP1VAtWxhRShnoixkRbw=;
-        b=iQHV+V5nt78dkMJtk5aviauTzoYdWmjlkzcXETprNSuwHRhoRA5LdS4dDlHftPWtVS
-         TOEgJ7uTNWkSK2BAvqbQ0evF6paxKv2UYQp7y7CSCpwn/C8vZ9AJWmNnRhXxUaByJ2X5
-         e1IANitleCyN8c6HXYs9OJZSGzq/Q46LAR2pg3TPDrSxVoqEfQZwspf4ue9KgqxP4IL/
-         FlElDQRa/yNvZoVdYilWW7m3FaCGgPGBwAP7vhwJUd2ePdg/rf2/kWB5xPYBB9lllAib
-         dAILdh7GJQvRV+uXrwYNw7pMZRnbUKTWujpDKae43gwIzl5XEGzPNy4/l5UgbhJZYnsU
-         zVNA==
-X-Gm-Message-State: AJIora9axdekCUIRBUdZnCjq/DlFVJgu8HTAge01qysl5olAqJd+XvAf
-        giNrWjB6jX6tKYkA90d30JCx8+9RrjwUoo2BTlegBw==
-X-Google-Smtp-Source: AGRyM1uo031Zdy22MbXpwGfGpcKqCn6IvBlAnm7yWcskFnaXLXp81/Bd6TlVQEXSCslz3eJkrirRKWfcSpzZwaICnwg=
-X-Received: by 2002:a17:907:9809:b0:72f:817:d433 with SMTP id
- ji9-20020a170907980900b0072f0817d433mr14173469ejc.483.1658170575172; Mon, 18
- Jul 2022 11:56:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220716222454.29914-3-jim2101024@gmail.com> <20220718181425.GA1431580@bhelgaas>
-In-Reply-To: <20220718181425.GA1431580@bhelgaas>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Mon, 18 Jul 2022 14:56:03 -0400
-Message-ID: <CA+-6iNwjPr2gu_oyn4NheLPJZHh-3eib-3onz63sfNOJpdJ6Tw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two funcs
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001ff22505e418ecbd"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 15:05:34 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E658ABE08;
+        Mon, 18 Jul 2022 12:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658171133; x=1689707133;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=PtIp17+q0zPGP6z3WM/0GlY1gm+bjxSXApJ2oTjZoOo=;
+  b=aytgh4ClQQxfbeMZsnVmgbbuKx4OgRTgCclCaJvmcJcH7W5hmR0ipcuw
+   v/FeFeUvr3jJjlHr8Rg1VpzpbRXswChHh4y1w6LDGUN0yeCBoCdrdUkW8
+   S0KCMIW04khj6aeIF85yvT0U3uvf/cipM1UDowRfgKsHoSoUnH0IEsJl4
+   G5x0Ad9TYCaQ6zaIBmahSweRqx7LbWpeKStxMOOsx52T3avz/I1kvEd5L
+   IytnsgB+Yw0eidJpqG97bzYXUE+a5cNoew2WcsB7kVU/iqDnrkjoO33eB
+   IoSKRf30cMw7YFEpFHoNXDUHXrBv9wI8bE3IJC96JTTBnQTUApf4lIbiq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287041351"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="287041351"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:05:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="594567946"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by orsmga007.jf.intel.com with ESMTP; 18 Jul 2022 12:05:33 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     bp@alien8.de
+Cc:     linux-tip-commits@vger.kernel.org, peterz@infradead.org,
+        dave.hansen@linux.intel.com, rafael.j.wysocki@intel.com,
+        rui.zhang@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org,
+        chang.seok.bae@intel.com
+Subject: [PATCH][Rebased] intel_idle: Add a new flag to initialize the AMX state
+Date:   Mon, 18 Jul 2022 11:56:11 -0700
+Message-Id: <20220718185611.20030-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <YtUimvkv+rDJJ9zu@zn.tnic>
+References: <YtUimvkv+rDJJ9zu@zn.tnic>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001ff22505e418ecbd
-Content-Type: text/plain; charset="UTF-8"
+The non-initialized AMX state can be the cause of C-state demotion from C6
+to C1E. This low-power idle state may improve power savings and thus result
+in a higher available turbo frequency budget.
 
-On Mon, Jul 18, 2022 at 2:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Sat, Jul 16, 2022 at 06:24:49PM -0400, Jim Quinlan wrote:
-> > Currently, the function does the setup for establishing PCIe link-up
-> > with the downstream device, and it does the actual link-up as well.
-> > The calling sequence is (roughly) the following in the probe:
-> >
-> > -> brcm_pcie_probe()
-> >     -> brcm_pcie_setup();                       /* Set-up and link-up */
-> >     -> pci_host_probe(bridge);
-> >
-> > This commit splits the setup function in two: brcm_pcie_setup(), which only
-> > does the set-up, and brcm_pcie_start_link(), which only does the link-up.
-> > The reason why we are doing this is to lay a foundation for subsequent
-> > commits so that we can turn on any power regulators, as described in the
-> > root port's DT node, prior to doing link-up.
->
-> All drivers that care about power regulators turn them on before
-> link-up, but typically those regulators are described directly under
-> the host bridge itself.
-Hi Bjorn,
+This behavior is implementation-specific. Initialize the state for the C6
+entrance of Sapphire Rapids as needed.
 
-Actually, what you describe is what I proposed with my v1 back in Nov 2020.
-The binding commit message said,
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Link: https://lkml.kernel.org/r/20220608164748.11864-3-chang.seok.bae@intel.com
+Link: https://lkml.kernel.org/r/20220614164116.5196-1-chang.seok.bae@intel.com
+[ changb: Rebased to the upstream again. ]
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+---
+The patch merged in the tip's x86/fpu has conflict with the retbleed patch
+-- commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle") as of
+v5.19-rc7.
+---
+ drivers/idle/intel_idle.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-    "Quite similar to the regulator bindings found in "rockchip-pcie-host.txt",
-     this allows optional regulators to be attached and controlled by the
-     PCIe RC driver."
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index f5c6802aa6c3..1ec221079367 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -56,6 +56,7 @@
+ #include <asm/nospec-branch.h>
+ #include <asm/mwait.h>
+ #include <asm/msr.h>
++#include <asm/fpu/api.h>
+ 
+ #define INTEL_IDLE_VERSION "0.5.1"
+ 
+@@ -113,6 +114,11 @@ static unsigned int mwait_substates __initdata;
+  */
+ #define CPUIDLE_FLAG_IBRS		BIT(16)
+ 
++/*
++ * Initialize large xstate for the C6-state entrance.
++ */
++#define CPUIDLE_FLAG_INIT_XSTATE	BIT(17)
++
+ /*
+  * MWAIT takes an 8-bit "hint" in EAX "suggesting"
+  * the C-state (top nibble) and sub-state (bottom nibble)
+@@ -185,6 +191,13 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+ 	return ret;
+ }
+ 
++static __cpuidle int intel_idle_xstate(struct cpuidle_device *dev,
++				       struct cpuidle_driver *drv, int index)
++{
++	fpu_idle_fpregs();
++	return __intel_idle(dev, drv, index);
++}
++
+ /**
+  * intel_idle_s2idle - Ask the processor to enter the given idle state.
+  * @dev: cpuidle device of the target CPU.
+@@ -200,8 +213,12 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+ 				       struct cpuidle_driver *drv, int index)
+ {
+-	unsigned long eax = flg2MWAIT(drv->states[index].flags);
+ 	unsigned long ecx = 1; /* break on interrupt flag */
++	struct cpuidle_state *state = &drv->states[index];
++	unsigned long eax = flg2MWAIT(state->flags);
++
++	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
++		fpu_idle_fpregs();
+ 
+ 	mwait_idle_with_hints(eax, ecx);
+ 
+@@ -936,7 +953,8 @@ static struct cpuidle_state spr_cstates[] __initdata = {
+ 	{
+ 		.name = "C6",
+ 		.desc = "MWAIT 0x20",
+-		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
++		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED |
++					   CPUIDLE_FLAG_INIT_XSTATE,
+ 		.exit_latency = 290,
+ 		.target_residency = 800,
+ 		.enter = &intel_idle,
+@@ -1851,6 +1869,9 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 			drv->states[drv->state_count].enter = intel_idle_ibrs;
+ 		}
+ 
++		if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_INIT_XSTATE)
++			drv->states[drv->state_count].enter = intel_idle_xstate;
++
+ 		if ((disabled_states_mask & BIT(drv->state_count)) ||
+ 		    ((icpu->use_acpi || force_use_acpi) &&
+ 		     intel_idle_off_by_default(mwait_hint) &&
+-- 
+2.17.1
 
->
-> IIUC the difference here is that you have regulators described under
-> Root Ports (not the host bridge/Root Complex itself), so you don't
-> know about them until you've enumerated the Root Ports.
-> brcm_pcie_probe() can't turn them on directly because it doesn't know
-> what Root Ports are present and doesn't know about regulators below
-> them.
-
-The reviewer's requested me to move the regulator node(s)  elsewhere,
-and at some point later it was requested to be placed under the Root Port
-driver.  I would love to return them under the host bridge, just say the word!
-
->
-> So I think brcm_pcie_setup() does initialization that doesn't depend
-> on the link or any downstream devices, and brcm_pcie_start_link() does
-> things that depend on the link being up.  Right?
-Yes.
-
->
-> If so, "start_link" might be a slight misnomer since AFAICT
-> brcm_pcie_start_link() doesn't do anything to initiate link-up except
-> maybe deasserting fundamental reset.  Some drivers start the LTSSM or
-> explicitly enable link training, but brcm_pcie_start_link() doesn't
-> seem to do anything like that.
->
-> brcm_pcie_start_link() still does brcm_pcie_set_outbound_win().  Does
-> that really depend on the link being up?  If that only affects the
-> Root Port, maybe it could be done before link-up?
-Some of the registers cannot be accessed until after linkup but these do
-not have that issue.  I will change this.
-
-Jim Quinlan
-Broadcom STB
-
->
-> > We do this by defining an
-> > add_bus() callback which is invoked during enumeraion.  At the end of this
-> > patchset the probe function trace will look something like this:
-> >
-> > -> brcm_pcie_probe()
-> >     -> brcm_pcie_setup();                       /* Set-up only */
-> >     -> pci_host_probe(bridge);
-> >         -> [enumeration]
-> >             -> pci_alloc_child_bus()
-> >                 -> bus->ops->add_bus(bus);      /* We've set this op */
-> >                 -> brcm_pcie_add_bus()          /* Our callback      */
-> >                      -> [turn on regulators]    /* Main objective!   */
-> >                      -> brcm_pcie_start_link()  /* Link-up           */
-
---0000000000001ff22505e418ecbd
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
-DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
-BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
-VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
-DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
-qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
-YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
-S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
-8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
-AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
-AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
-MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC89bumtyjc43/YB73JCm2tfvLY0Hgk
-eq192u3hYzM/UDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
-MTgxODU2MTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
-hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
-AgEwDQYJKoZIhvcNAQEBBQAEggEAgCWjvQYbszcn1/qNTjV5NmuD4JnsCD35U1xrbQdc3PHnC9Eu
-fhuGiO8DgLDQtqMArscQolDY1s6wbEuxi7Y+4igYugHrDbbx5GRJQe3NTsVlKOt7B6hUC1nO2Q8n
-7T9nWOJjvgb2ybnKXouuBWrSeJy9R1xUnix18pjA9Zdcq06FsIA7Hbrxw6S8gflBMN6DROn0D5lN
-822Sc3Kl+rNnwvurcHSbd95aSVbgl3OIMW00A9kT11ZCSS1e3hXZGKR1pNWo3JbHXbcnrfJbgaTr
-JTOZ2LzlTNWPVJLvZS2bz8jwChgXKFEq+bTio3vWgwLwXyNpwKaduyq5TfHsF6GyLQ==
---0000000000001ff22505e418ecbd--

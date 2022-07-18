@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037AD577F54
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFDC577F4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 12:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbiGRKGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 06:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        id S233670AbiGRKF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 06:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiGRKGK (ORCPT
+        with ESMTP id S233313AbiGRKFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 06:06:10 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B901BE85
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:06:05 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1658138720t60o43yy
-Received: from localhost.localdomain ( [182.148.15.157])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 18 Jul 2022 18:05:19 +0800 (CST)
-X-QQ-SSF: 01000000002000E0U000B00A0000000
-X-QQ-FEAT: J5JfekO1WsjnFRCaIrI9KYX73TsBVSpDrxrZytBTXGuBm4FsKT62YRtbKmS2l
-        ybcFzHccw/BfsvUGYuYAjnVklOzxREmvfcNDfxMnPzZT3LSEcAC+gxSlvsfjXzFS413OitG
-        iQJ14cE+YGQBGiLG8V8XxxcruMDZeY6GVOdT3T4mRGEJxnQI9eNZnlrPri8HZxfDTYO4Itf
-        cDtbLjQ032MaZ9QKK0eqYU+xy98zgF4TmVrzpqPJ9cbooyd6Arn8rjcFhxEYdw5LxhnZdaY
-        3f9la0Hb2HAYeWOoaaPDEa/ZJUqNAAECW8MtTRXcP48lxYjgc4fJ/cj31Ip+/Y7ztUji8A4
-        QYGD1dUK0UaoTqmNkEkI7/ztp4Wv4xW63DLsXFJlnZ9j2iIMyg0vCsorDC02dlie+0/8PJ1
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     paulus@samba.org
-Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org,
-        farosas@linux.ibm.com, npiggin@gmail.com, Julia.Lawall@inria.fr,
-        aik@ozlabs.ru, maciej.szmigiero@oracle.com, liubo03@inspur.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] KVM: PPC: Book3S HV: Fix comment typo
-Date:   Mon, 18 Jul 2022 18:05:04 +0800
-Message-Id: <20220718100504.194167-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 18 Jul 2022 06:05:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084E61C117;
+        Mon, 18 Jul 2022 03:05:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99D41600BE;
+        Mon, 18 Jul 2022 10:05:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2637FC341C0;
+        Mon, 18 Jul 2022 10:05:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658138723;
+        bh=jQBmYBdX2gGNxydkwrFOfbWG0oW2jGpJsWf8e1m53QQ=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=kmnSfqtP4kmOo1ohDD6CpP4vKnW+LaS5PyJTRFL59WlKpoNXapgjz9jum3Mege8Cj
+         fGQOnETl4YYTMdjl51F5ubJXq0XuNWfrxIjC9inZMMrk1bSStY9H8iNGfvdpb6PP/C
+         aOzop/MhPkmDZYJVXTH6SIiEqRAAbXYoLhMjVucKEFrLwFg3/ilcxzU0BnuvtKnorE
+         z6CerU3SvnXINYVYxHaC29OjC/ybbbnElpLcCiwJdr/OUmaxYZF2W2bRMhA0sCzRcI
+         FxcjhjWfJujWl+JOEO/riYFEDy+syHXMQPQob/PG6jXDzXaPCdhfd61EHrXKW60ZGA
+         JU3uSQHVoSYcw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: wil6210: fix repeated words in comments
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220709132137.12442-1-yuanjilin@cdjrlc.com>
+References: <20220709132137.12442-1-yuanjilin@cdjrlc.com>
+To:     Jilin Yuan <yuanjilin@cdjrlc.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165813871929.12812.893316246899205397.kvalo@kernel.org>
+Date:   Mon, 18 Jul 2022 10:05:20 +0000 (UTC)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `that' is duplicated in line 1604, remove one.
+Jilin Yuan <yuanjilin@cdjrlc.com> wrote:
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- arch/powerpc/kvm/book3s_64_mmu_hv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Delete the redundant word 'for'.
+> 
+> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-index 514fd45c1994..73c6db20cd8a 100644
---- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
-+++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-@@ -1601,7 +1601,7 @@ long kvm_vm_ioctl_resize_hpt_commit(struct kvm *kvm,
-  * is valid, it is written to the HPT as if an H_ENTER with the
-  * exact flag set was done.  When the invalid count is non-zero
-  * in the header written to the stream, the kernel will make
-- * sure that that many HPTEs are invalid, and invalidate them
-+ * sure that many HPTEs are invalid, and invalidate them
-  * if not.
-  */
- 
+Patch applied to ath-next branch of ath.git, thanks.
+
+aa6f2be484d7 wifi: wil6210: fix repeated words in comments
+
 -- 
-2.35.1
+https://patchwork.kernel.org/project/linux-wireless/patch/20220709132137.12442-1-yuanjilin@cdjrlc.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

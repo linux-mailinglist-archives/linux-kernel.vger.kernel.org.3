@@ -2,65 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29D6577C85
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B32C577C8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbiGRHZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S233857AbiGRHbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233807AbiGRHZs (ORCPT
+        with ESMTP id S233791AbiGRHbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:25:48 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15914DF39
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:25:48 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        Mon, 18 Jul 2022 03:31:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E08112635
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:31:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 022592222E;
-        Mon, 18 Jul 2022 09:25:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1658129146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=113CvxFlsdPK4nY41NWM/Ojlt38/75HJl40UvHiLM+s=;
-        b=Bab/YYVzYZwDy0vUix9/dGR0zso4fACBtbBIzS0r6CHlUEAZWneNNWQk1/ljr+DSJ+aUA/
-        HA5+Cyh+Bv1uqMjfXTyG6qqOLMfYyaDw7Jqd4xN2WQZ433RtFtcTaKZE82A5EG5ddk76e4
-        goGFEa4UaM/XGxHe2kHib3nav6yGoyY=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 18 Jul 2022 09:25:45 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor.Ambarus@microchip.com
-Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, quic_c_sbhanu@quicinc.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mtd: spi-nor: winbond: use SNOR_ID3() for w25q512nwm
-In-Reply-To: <735a88af-c4f1-a6b3-3f85-ea532b3f39c7@microchip.com>
-References: <20220510140232.3519184-1-michael@walle.cc>
- <20220510140232.3519184-3-michael@walle.cc>
- <735a88af-c4f1-a6b3-3f85-ea532b3f39c7@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <305d3c9cf8a2362ad23a87f6ea92c6b4@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7BBB6136F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 07:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C115C341C0;
+        Mon, 18 Jul 2022 07:31:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658129465;
+        bh=DyGORClHzu6C8JR5WaLhDs42Jqg9N7GmhXlXTrbaLhE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=O1PfYO0HlJ1CpXoE8mak09OaqWh7UJ8uDiPmTck+0ZbZW07RDdC4/lpL/rBgNBwwm
+         dfsVfNm57IxV/NdtRLQioQFtM2DQqpsTrY4nYuxcj1WcKVXdBOW5Iz3UfX5TkCm8I4
+         RD7BWAi/Y48LFHuoZLjd3NkFPdee1KuO0XYHUiKMpGbGg50eGBdZT/ETl0keuKiRAl
+         Xuf5gINglPvszBBLRaxIiIWVlkB6KeNYSwz9YfELWUcz3rOwwbUIFSIAlmjZBU1yg7
+         SSa+3g2Ya8eI7MYJ4yo8z1Ipd8OqogqdnOLGMJZubbDW+jW3T2ufPgYx7Vzjgrt6MJ
+         Jyg7jzY/UA0pw==
+Received: from 82-132-227-210.dab.02.net ([82.132.227.210] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDLDa-0088Zv-EP;
+        Mon, 18 Jul 2022 08:31:03 +0100
+Date:   Mon, 18 Jul 2022 08:30:51 +0100
+Message-ID: <877d4a513o.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org,
+        madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
+        tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org,
+        wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com,
+        yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 11/18] KVM: arm64: Stub implementation of non-protected nVHE HYP stack unwinder
+In-Reply-To: <20220715061027.1612149-12-kaleshsingh@google.com>
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+        <20220715061027.1612149-12-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.227.210
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, broonie@kernel.org, madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com, tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, andreyknvl@gmail.com, russell.king@oracle.com, vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-07-12 10:40, schrieb Tudor.Ambarus@microchip.com:
-> Shaik, can we have your Tested-by tag on this?
+On Fri, 15 Jul 2022 07:10:20 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
+> 
+> Add stub implementations of non-protected nVHE stack unwinder, for
+> building. These are implemented later in this series.
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>  arch/arm64/include/asm/stacktrace/nvhe.h | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/stacktrace/nvhe.h b/arch/arm64/include/asm/stacktrace/nvhe.h
+> index 1eac4e57f2ae..36cf7858ddd8 100644
+> --- a/arch/arm64/include/asm/stacktrace/nvhe.h
+> +++ b/arch/arm64/include/asm/stacktrace/nvhe.h
+> @@ -8,6 +8,12 @@
+>   *      the HYP memory. The stack is unwinded in EL2 and dumped to a shared
+>   *      buffer where the host can read and print the stacktrace.
+>   *
+> + *   2) Non-protected nVHE mode - the host can directly access the
+> + *      HYP stack pages and unwind the HYP stack in EL1. This saves having
+> + *      to allocate shared buffers for the host to read the unwinded
+> + *      stacktrace.
+> + *
+> + *
+>   * Copyright (C) 2022 Google LLC
+>   */
+>  #ifndef __ASM_STACKTRACE_NVHE_H
+> @@ -53,5 +59,21 @@ static int notrace unwind_next(struct unwind_state *state)
+>  NOKPROBE_SYMBOL(unwind_next);
+>  #endif	/* CONFIG_PROTECTED_NVHE_STACKTRACE */
+>  
+> +/*
+> + * Non-protected nVHE HYP stack unwinder
+> + */
+> +#else	/* !__KVM_NVHE_HYPERVISOR__ */
 
-Sigh. His email address bounces with "The email address you
-entered couldn't be found." So don't expect a Tested-by: here.
+I don't get this path. This either represents the VHE hypervisor or
+the kernel proper. Which one is it?
 
--michael
+> +static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
+> +				     struct stack_info *info)
+> +{
+> +	return false;
+> +}
+> +
+> +static int notrace unwind_next(struct unwind_state *state)
+> +{
+> +	return 0;
+> +}
+> +NOKPROBE_SYMBOL(unwind_next);
+> +
+>  #endif	/* __KVM_NVHE_HYPERVISOR__ */
+>  #endif	/* __ASM_STACKTRACE_NVHE_H */
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

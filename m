@@ -2,93 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BE25779CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 05:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1E35779D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 05:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiGRDua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 23:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S231939AbiGRDws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 23:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiGRDuY (ORCPT
+        with ESMTP id S229482AbiGRDwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 23:50:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4E8DFD9
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 20:50:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 17 Jul 2022 23:52:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049D613CE1;
+        Sun, 17 Jul 2022 20:52:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9844361196
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 03:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12827C341C0;
-        Mon, 18 Jul 2022 03:50:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658116223;
-        bh=W1l3MKFfc668mGrdCGEIa+NpnVFSilikyS52LQqnzqs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eZwzSCq08R4rpdqTK3LFcHQ2o/1tgJhyW6XJUnoxyRnGY3ylxtyuz5jRq/TukLcBw
-         qv8CB0V/I8szCaSW7Brc/mNeupOS+zsbcdiFzjLThC5qMZV9MgXxQXX0vMQKOkNYx2
-         KbVDIxoiVHV63T7t9S4hJ9FjU7rASKgy50nS04bQYbIZCuSg/vPkJtIWvhJK0FhRCd
-         pcn4XROh8HvcpA3XD876//T7kw/JwTFzyO3tRCE8S38qP8hA9ZRYTQfN+Ngk3tpeN/
-         hpgbN+3udW6eZ8qIjI+1VS/OCz+aMqGAJyk7SPseicpVWyXMeRpUYfHMXW+XyjRNW4
-         0i6XXnxGpMvKQ==
-Date:   Mon, 18 Jul 2022 03:50:19 +0000
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Guenter Roeck <groeck@google.com>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH 05/11] platform/chrome: cros_ec_proto: separate
- cros_ec_wait_until_complete()
-Message-ID: <YtTYexaeIWZgSwfH@google.com>
-References: <20220628024913.1755292-1-tzungbi@kernel.org>
- <20220628024913.1755292-6-tzungbi@kernel.org>
- <CABXOdTeC+q-UiPiThqL5MGg-+cGACGW4qLaLKZbmX4M26TvbDg@mail.gmail.com>
- <Ys+OlrVCy4MkyRnr@google.com>
- <CABXOdTfJ6x5ePkmj+w21jTX7EOTXZrCd8PwikAJQTfeQmUBxaQ@mail.gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LmSj62Gn2z4xdJ;
+        Mon, 18 Jul 2022 13:52:42 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1658116362;
+        bh=PAhbVquV8KMmPT0KbTUCb3rhFdvrE7pS8SUJl2k86NQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=abNf9MX4GToZ6jiZBngBosnaGO7J6cYxeNUtHJjScudZr25fDWl24rBpyIX65VBb8
+         UsLGOhmSjfXpcn6B8TuwACWUDoTD+0uOnbXkAK7zW5vL8jMsCQQIrHpH/DKoofWkAJ
+         Wa5uTJqVo6voEQzV+NIjrLGnWPWntFlxcdKDzmte+G7ez220tFzclj2p7XzHQU518/
+         L9h0KiQLxI94FEBrFBpFVy84BHz1Vj69336+PshS8riZ1OA5d4TwpO+ntrmWF8ftlH
+         cUYoLH9Y0AL0ldtOSxCReqfi8u0gC0ITOvkL31Y17LJ/2IBL5EJsQGVCSw2mrBdMC0
+         naA3RyWOj+3dQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-hardening@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: mainline build failure of powerpc allmodconfig for prom_init_check
+In-Reply-To: <20220717195448.GB25951@gate.crashing.org>
+References: <Ys/aDKZNhhsENH9S@debian>
+ <CADVatmO9XzFnX+N0TuOtr0FYyxKr1oe5RAhCEJjmnvjteT5QNw@mail.gmail.com>
+ <CAHk-=whc3Uvhrmrr27xp5=oOhSDjXc5s1ZxC3B7xMYV6oj4WRQ@mail.gmail.com>
+ <20220717195448.GB25951@gate.crashing.org>
+Date:   Mon, 18 Jul 2022 13:52:38 +1000
+Message-ID: <87k08bdqm1.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABXOdTfJ6x5ePkmj+w21jTX7EOTXZrCd8PwikAJQTfeQmUBxaQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 07:29:45AM -0700, Guenter Roeck wrote:
-> On Wed, Jul 13, 2022 at 8:33 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> > On Wed, Jul 13, 2022 at 11:15:47AM -0700, Guenter Roeck wrote:
-> > > On Mon, Jun 27, 2022 at 7:49 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
-> > > > +               ret = cros_ec_xfer_command(ec_dev, msg);
-> > > > +               if (ret == -EAGAIN)
-> > > > +                       continue;
-> > > > +               if (ret < 0)
-> > > > +                       break;
-> > >
-> > > With the command allocated on the stack, this can return immediately.
-> >
-> > Nack, the function has no goto labels.  `return ret` follows the loop
-> > immediately.  The `break` here doesn't make it to become too complicated.
-> > I would prefer to keep it.
-> 
-> Sorry, you lost me here. The code after the loop does
-> 
->            kfree(msg);
->            return ret;
-> 
-> If kfree() is no longer necessary, only the return statement is left. So break;
-> is identical to return ret;. Am I missing something ?
+Segher Boessenkool <segher@kernel.crashing.org> writes:
+> On Sun, Jul 17, 2022 at 07:44:22AM -0700, Linus Torvalds wrote:
+>> On Sun, Jul 17, 2022 at 2:13 AM Sudip Mukherjee
+>> <sudipm.mukherjee@gmail.com> wrote:
+>> > I was trying to check it. With gcc-11 the assembly code generated is
+>> > not using memset, but using __memset.
+>> > But with gcc-12, I can see the assembly code is using memset. One
+>> > example from the assembly:
+>> 
+>> You could try making the 'args' array in 'struct prom_args' be marked
+>> 'volatile'.
+>> 
+>> Ie something like this:
+>> 
+>>   --- a/arch/powerpc/kernel/prom_init.c
+>>   +++ b/arch/powerpc/kernel/prom_init.c
+>>   @@ -115,6 +115,6 @@ struct prom_args {
+>>            __be32 service;
+>>            __be32 nargs;
+>>            __be32 nret;
+>>   -          __be32 args[10];
+>>   +        volatile __be32 args[10];
+>>    };
+>> 
+>> because I think it's just the compilers turning the small loop over
+>> those fields into a "memset()".
+>
+> Yes.  See <https://gcc.gnu.org/onlinedocs/gcc/Standards.html#C-Language>
+> near the end:
+>   Most of the compiler support routines used by GCC are present in
+>   libgcc, but there are a few exceptions. GCC requires the freestanding
+>   environment provide memcpy, memmove, memset and memcmp. Finally, if
+>   __builtin_trap is used, and the target does not implement the trap
+>   pattern, then GCC emits a call to abort.
+>
+> Can't we simply have a small simple implementation of these functions in
+> arch/powerpc/boot/?  This stuff is not performance-critical, and this is
+> not the first time we hit these problems.
 
-You are correct.
+prom_init.c isn't in arch/powerpc/boot :)
 
-I meant personally I would prefer to use `break`:
-  * The loop is short so that it won't become too complicated.
-  * Keep the function has a single exit point.
+It's linked into the kernel proper, but we want it to behave like a
+pre-boot environment (because not all boot paths run it) which is why we
+restrict what symbols it can call.
 
-But, anyway, let's use `return ret` to make it explicit.
+We could have a prom_memset() etc. but we'd need to do some tricks to
+rewrite references to memset() to prom_memset() before linking.
+
+cheers

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48731578B02
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D68B578B05
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236193AbiGRThT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
+        id S236204AbiGRThV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236157AbiGRThK (ORCPT
+        with ESMTP id S236171AbiGRThQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:37:10 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658082CCB9
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:09 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a15so12753123pjs.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:09 -0700 (PDT)
+        Mon, 18 Jul 2022 15:37:16 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF682D1E2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:11 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 72so11548760pge.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:37:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZFfNYrVG625GOSA+id1AogN2HiBF2G/dud76HkUGe+4=;
-        b=DuOhKFmRzGfZbq1nE2NE6Kc5a1/zJpTjh2RvqjQrCWls/7Qhm59F3Q5qnZAqPiZzON
-         HTPLLExPZor3+WUD0GCeFJpaZ9HYJzT2HyRhOUdXKPSxPoB6NcCCp6BaC0PUnMozc1Yt
-         7yR/B8zLzmfdp4wBCIwoubwwq+IB152Z6aXNEBRtKOMqAeRb0Yg89EaxtZKRLj96Zhk2
-         zoX+JoTOX8z/qePogfLcdbultYnUpTJzA0NIOrLiUF3n+b/B8dbqeFNxtjocuKqlEg9I
-         gVwTOuaGbUDx39ekLwLxOUStg09K/QpEk4bRVNpBu1NY3eLXRtkHF8N04DDoJYpcUW4c
-         qdtw==
+        bh=ztsUe2wZg/YICD33iqkzWz48lO96HPpWHQuuJ7tssIY=;
+        b=L6+6rmWmlW74N35sQK1UeLXbLRgio2fsQS6mHJKVKzCTV61e8UW1ZZTN3koJ/ZKhAc
+         Fuvodma7l4HTg6DZYvRj45/tMb7kCvzZw5K3JToemZFvQ1c5i9J+9IHlZylJfJHA8nmc
+         uoiAVOLKXgLbMrTehDka9krReSTVnxLoS+Pghk2tFsInE1OztwnvEOqn4jNqft/Etn2w
+         jjh/vGyNDH6Vj+uXcHOgy8ww40jB0eIPjLweUE55/vH6SgXA/XVlD1I8fHOnP35ZIRdB
+         XkPCLZoHaJrwMPAIT4pU6iMAvGGNwFLN6atUCLJsOAvQHbVbxWALAXD8mmcQKOHMfINI
+         qscw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZFfNYrVG625GOSA+id1AogN2HiBF2G/dud76HkUGe+4=;
-        b=Nti7WPuVxm8TeHVNyBgzYwmxLHmfDCvVoDS3GKG8ndpeF/h5J9GGDhTlsBwhvWcl85
-         HlYg11vGOjswxZA07Gqe9fYdaSJYx7R/4qtEJ9VMd8sojEyIqVXhHm+XUyzNoSgoeqP5
-         xED4uYiRkcuCK6Pb6aXDy1GQPhMTAntVQNVv08+moqU9BYv9fsmjxOjnN4kX4EWHHUuV
-         epoNUUmty2zy0NrUJXSPDy1dhSohlXRMnUx8Eqb3g2Siol8BD/N3O2nM317ZUu/7N4pe
-         HTVMTpi29SwIJzn7dd8b6+sfJcbJUY8t9Ceq+IyWjv4QDuUpWgKQa52TSOMSlQP9kXTl
-         klpA==
-X-Gm-Message-State: AJIora/a0d0q8OR+O44L/M8CFk59oTDSHFn2w9dgtwyJod46sQX01FNk
-        8yilkL9xY3r6u91jd01gi0s=
-X-Google-Smtp-Source: AGRyM1vEHCEomLrXWGc5eN5sitXXmIDRxEROcYfVCHE3CQXw0PbDpM+yh+ClwMd2ENoAaXz/XYUQHw==
-X-Received: by 2002:a17:90a:9f8d:b0:1f0:253e:3ecf with SMTP id o13-20020a17090a9f8d00b001f0253e3ecfmr41557002pjp.33.1658173028683;
-        Mon, 18 Jul 2022 12:37:08 -0700 (PDT)
+        bh=ztsUe2wZg/YICD33iqkzWz48lO96HPpWHQuuJ7tssIY=;
+        b=EkAAfLru/MUM3TA+6tS7NUftUc7WP27afLom4G2Fy9UurxeblN9dLq+a2NebV8C0/N
+         WkMgnbmrj9vD422w+bVoXs8ua3dR4fAX/RTNEy2XmQ3goL07ok55Eir4l+9B2MLcAYuI
+         ghju2KigT1LNAh3cms0zkPwVaxHFIFqkzyWLIkI495Lj+MMo7ND4kZ6zn0ieIKWud0bp
+         xxIbnsUn2VCFL3LkLmk3PXiXwYszrbNEg1Oj/K7ypObyf0WLMXzMFTOvVK/G3on146yB
+         RN/ulOen5vG5i5trcb//5LPZ3Z6iVAd3xkde1WHczAWpRLSNvHPNQ3+FpAnkOr4Q3etk
+         PBrQ==
+X-Gm-Message-State: AJIora/cV60WNmnQNUza9qiv5+zUIs6jqvob+dFBiZB7MKo4twCZQfxo
+        qCNMcY7bjbK5GTqQteIMvgs=
+X-Google-Smtp-Source: AGRyM1ta8bb059Mp7zmutlWdMZ80ywE9XEnxT7RsTULurbViUhAfTouO49B+QsXkfMAuN7Zpzky0+Q==
+X-Received: by 2002:a05:6a00:889:b0:510:91e6:6463 with SMTP id q9-20020a056a00088900b0051091e66463mr29798403pfj.58.1658173030299;
+        Mon, 18 Jul 2022 12:37:10 -0700 (PDT)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.07
+        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b0016bc4a6ce28sm9907887plb.98.2022.07.18.12.37.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 12:37:08 -0700 (PDT)
+        Mon, 18 Jul 2022 12:37:09 -0700 (PDT)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     linux-mm@kvack.org
@@ -65,10 +65,10 @@ Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Nick Piggin <npiggin@gmail.com>
-Subject: [RFC PATCH 04/14] mm/mprotect: preserve write with MM_CP_TRY_CHANGE_WRITABLE
-Date:   Mon, 18 Jul 2022 05:02:02 -0700
-Message-Id: <20220718120212.3180-5-namit@vmware.com>
+        Nick Piggin <npiggin@gmail.com>, x86@kernel.org
+Subject: [RFC PATCH 05/14] x86/mm: check exec permissions on fault
+Date:   Mon, 18 Jul 2022 05:02:03 -0700
+Message-Id: <20220718120212.3180-6-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220718120212.3180-1-namit@vmware.com>
 References: <20220718120212.3180-1-namit@vmware.com>
@@ -85,17 +85,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-When MM_CP_TRY_CHANGE_WRITABLE is used, change_pte_range() tries to set
-PTEs as writable.
+access_error() currently does not check for execution permission
+violation. As a result, spurious page-faults due to execution permission
+violation cause SIGSEGV.
 
-Yet, writable PTEs might still become read-only, due to various
-limitations of the logic that determines whether a PTE can become
-writable (see can_change_pte_writable()). Anyhow, it is much easier to
-keep the writable bit set when MM_CP_TRY_CHANGE_WRITABLE is used than to
-first clear it and then figure out whether it can be set again.
+It appears not to be an issue so far, but the next patches avoid TLB
+flushes on permission promotion, which can lead to this scenario. nodejs
+for instance crashes when TLB flush is avoided on permission promotion.
 
-Preserve the write-bit when MM_CP_TRY_CHANGE_WRITABLE is used, similarly
-to the way it is done with NUMA.
+Add a check to prevent access_error() from returning mistakenly that
+spurious page-faults due to instruction fetch are a reason for an access
+error.
+
+It is assumed that error code bits of "instruction fetch" and "write" in
+the hardware error code are mutual exclusive, and the change assumes so.
+However, to be on the safe side, especially if hypervisors misbehave,
+assert this is the case and warn otherwise.
 
 Cc: Andrea Arcangeli <aarcange@redhat.com>
 Cc: Andrew Cooper <andrew.cooper3@citrix.com>
@@ -109,43 +114,47 @@ Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Will Deacon <will@kernel.org>
 Cc: Yu Zhao <yuzhao@google.com>
 Cc: Nick Piggin <npiggin@gmail.com>
+Cc: x86@kernel.org
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- mm/mprotect.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ arch/x86/mm/fault.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index da5b9bf8204f..92bfb17dcb8a 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -84,6 +84,7 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
- 	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
- 	bool will_need = cp_flags & MM_CP_WILL_NEED;
-+	bool try_change_writable = cp_flags & MM_CP_TRY_CHANGE_WRITABLE;
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index fe10c6d76bac..00013c1fac3f 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1107,10 +1107,28 @@ access_error(unsigned long error_code, struct vm_area_struct *vma)
+ 				       (error_code & X86_PF_INSTR), foreign))
+ 		return 1;
  
- 	tlb_change_page_size(tlb, PAGE_SIZE);
+-	if (error_code & X86_PF_WRITE) {
++	if (error_code & (X86_PF_WRITE | X86_PF_INSTR)) {
++		/*
++		 * CPUs are not expected to set the two error code bits
++		 * together, but to ensure that hypervisors do not misbehave,
++		 * run an additional sanity check.
++		 */
++		if ((error_code & (X86_PF_WRITE|X86_PF_INSTR)) ==
++					(X86_PF_WRITE|X86_PF_INSTR)) {
++			WARN_ON_ONCE(1);
++			return 1;
++		}
++
+ 		/* write, present and write, not present: */
+-		if (unlikely(!(vma->vm_flags & VM_WRITE)))
++		if ((error_code & X86_PF_WRITE) &&
++		    unlikely(!(vma->vm_flags & VM_WRITE)))
++			return 1;
++
++		/* exec, present and exec, not present: */
++		if ((error_code & X86_PF_INSTR) &&
++		    unlikely(!(vma->vm_flags & VM_EXEC)))
+ 			return 1;
++
+ 		return 0;
+ 	}
  
-@@ -114,7 +115,8 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 		oldpte = *pte;
- 		if (pte_present(oldpte)) {
- 			pte_t ptent;
--			bool preserve_write = prot_numa && pte_write(oldpte);
-+			bool preserve_write = (prot_numa || try_change_writable) &&
-+					       pte_write(oldpte);
- 
- 			/*
- 			 * Avoid trapping faults against the zero or KSM
-@@ -190,8 +192,7 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 			 * example, if a PTE is already dirty and no other
- 			 * COW or special handling is required.
- 			 */
--			if ((cp_flags & MM_CP_TRY_CHANGE_WRITABLE) &&
--			    !pte_write(ptent) &&
-+			if (try_change_writable && !pte_write(ptent) &&
- 			    can_change_pte_writable(vma, addr, ptent)) {
- 				ptent = pte_mkwrite(ptent);
- 				if (will_need)
 -- 
 2.25.1
 

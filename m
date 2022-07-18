@@ -2,107 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E154578937
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED17957893D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 20:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235678AbiGRSIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 14:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S235745AbiGRSIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 14:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbiGRSH7 (ORCPT
+        with ESMTP id S235694AbiGRSIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 14:07:59 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A202ED71
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:07:58 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id r70so8780982iod.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 11:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KTCpJmC4pecTn3Rx1irJxkC3X2lBUkxseTUJWSLvFWo=;
-        b=FXckv+DCJB3SLoCnbb5nkk2+lua/3016I0o2hoZdhYIwogZteGz2j1/S0kClXLkGaA
-         XEaMc4YFH8vBGsIHViFRKEPRvezi9A+36iEHQn/gKJrNJDYBoJb1V8NQgL0pbzvGeVy5
-         2j9Tj3TeWNkXp+8Ou8QcHvU0VPcUDxfzNQAbDOj4PBmFgFWAZGOs2aQfVuRzQF0JtYzf
-         wMepw9N4kGJK2rI5D9nHwfQHqrIT4bVaCEsfSJSAItl+KyP28Rpt9p3tJ2sJ+vxrE9vH
-         pGkCiQBXaWINuwWCw41VJOj2TrmzXAl2xvyDAknWlF1DV0iSkOEdSomuueMKNV5iOOyc
-         KOVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KTCpJmC4pecTn3Rx1irJxkC3X2lBUkxseTUJWSLvFWo=;
-        b=SkdWGaJOQPoNf5dNDeLa0a4wV1oTG6hQVnO2UBSFvfdyF0JNejXeJ0PCfRmVbAgIFk
-         M7/zjRJ8nIe0a81UtGOU7U/txE93UAy1offcSuEdhlRFoKPnmOFeDatQ+0yV4AwUc+aa
-         TycDV7vv7z+CSgA+SIFJMAy5llWnANxYfdoKbz3bFyY1pc143YOlhfPx825F5JZZ39su
-         XdJMwIHf7ZiZ2E0aTiEqbAnY+t7qVYTyHsvMYOot3g4B/l6G/6mJETOFo/w2hizxI3ws
-         GHQ3wdp1e75CQ8QVXuAhaKIQtRzr17dtWVubfq88SukKS6Jekg81I23bz86p6FhyuGQn
-         s22g==
-X-Gm-Message-State: AJIora8fGQB/2EDTlY/0qKle3PF4PPecCWGAZvmmDcR689avDCFZ2hBB
-        ncow2XOYQcgUbSqig/8SClTgplQgFXeLFUT9dROfmMAVJyg=
-X-Google-Smtp-Source: AGRyM1sTup4B+a2XbBmpCjJcMLtlqKrEXWZNvm193+nbm66d2mxBG5Tp8/CncXpoJPLMeUbCZoRZ5z2YN8ywGEs7WBM=
-X-Received: by 2002:a05:6638:50:b0:33f:17b9:be63 with SMTP id
- a16-20020a056638005000b0033f17b9be63mr15969485jap.92.1658167677547; Mon, 18
- Jul 2022 11:07:57 -0700 (PDT)
+        Mon, 18 Jul 2022 14:08:16 -0400
+Received: from esa2.mentor.iphmx.com (esa2.mentor.iphmx.com [68.232.141.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FB22F004;
+        Mon, 18 Jul 2022 11:08:15 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.92,281,1650960000"; 
+   d="scan'208";a="79917465"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa2.mentor.iphmx.com with ESMTP; 18 Jul 2022 10:08:14 -0800
+IronPort-SDR: zDH7NpIdnCMcwT/D3prrqMMhlGnooyg0d/vhKwsQ0lbC8PuU04Gv9ZCy4BNlxdbHMTipPu7yzI
+ dRMIu+m44ScLzHSFuk1bs8Ke08oCUF1fdtWSLySCjNnRNbNbRqvzPvN10aGLaiF4xz+hncd+0H
+ w6grKi3yhHgBbe41Ac8tf1gLu427xsb4JbCK67KTEudG/ltVQCQNF9/N9qfGccyar1t//X34gq
+ HsStVJsdYbWaWOsQLdbtbvtx5Nc4d6iFxX75zmgTGALxm3lBG+OSR+9nWMcypiPEFqSevnUg3O
+ bnk=
+Message-ID: <737ddf72-05f4-a47e-c901-fec5b1dfa7a6@mentor.com>
+Date:   Mon, 18 Jul 2022 19:08:04 +0100
 MIME-Version: 1.0
-References: <20220712130542.18836-1-linmiaohe@huawei.com> <20220713102357.8328614813db01b569650ffd@linux-foundation.org>
- <a47922cf-eb30-1ad9-fc96-1896254564ef@huawei.com> <20220716160629.d065828c84ad2423c10f7733@linux-foundation.org>
- <0dcf8902-b14a-860a-cb66-46e57b6d14a9@huawei.com>
-In-Reply-To: <0dcf8902-b14a-860a-cb66-46e57b6d14a9@huawei.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Mon, 18 Jul 2022 11:07:21 -0700
-Message-ID: <CAJHvVcjpgJL1chHQwBUu5Dqj8Lr5fvw_S3O1=XCZF1CyvcSTEQ@mail.gmail.com>
-Subject: Re: [PATCH] mm/hugetlb: avoid corrupting page->mapping in hugetlb_mcopy_atomic_pte
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Content-Language: en-GB
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>
+CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+        "takondra@cisco.com" <takondra@cisco.com>,
+        "kamensky@cisco.com" <kamensky@cisco.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
+ <1561909199.3985.33.camel@linux.ibm.com>
+ <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
+ <1561991485.4067.14.camel@linux.ibm.com>
+ <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
+ <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
+ <20220609102627.GA3922@lxhi-065>
+ <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+ <20220610153336.GA8881@lxhi-065>
+ <4bc349a59e4042f7831b1190914851fe@huawei.com>
+ <20220615092712.GA4068@lxhi-065>
+ <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
+ <f82d4961986547b28b6de066219ad08b@huawei.com>
+From:   Jim Baxter <jim_baxter@mentor.com>
+Organization: Siemens Digital Industries Software
+In-Reply-To: <f82d4961986547b28b6de066219ad08b@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: svr-ies-mbx-12.mgc.mentorg.com (139.181.222.12) To
+ svr-ies-mbx-12.mgc.mentorg.com (139.181.222.12)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 7:25 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> On 2022/7/17 7:06, Andrew Morton wrote:
-> > On Thu, 14 Jul 2022 17:59:53 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
-> >
-> >> On 2022/7/14 1:23, Andrew Morton wrote:
-> >>> On Tue, 12 Jul 2022 21:05:42 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
-> >>>
-> >>>> In MCOPY_ATOMIC_CONTINUE case with a non-shared VMA, pages in the page
-> >>>> cache are installed in the ptes. But hugepage_add_new_anon_rmap is called
-> >>>> for them mistakenly because they're not vm_shared. This will corrupt the
-> >>>> page->mapping used by page cache code.
-> >>>
-> >>> Well that sounds bad.  And theories on why this has gone unnoticed for
-> >>> over a year?  I assume this doesn't have coverage in our selftests?
-> >>
-> >> As discussed in another thread, when minor fault handling is proposed, only
-> >> VM_SHARED vma is expected to be supported
-> >
-> > So...  do we feel that this fix should be backported?  And if so, is
-> > there a suitable commit for the Fixes:?
->
-> I tend to backport this fix. And I think the Fixes tag in this patch should be suitable,
-> i.e. Fixes: f619147104c8 ("userfaultfd: add UFFDIO_CONTINUE ioctl").
 
-Agreed, it is worth backporting.
 
->
-> Thanks.
->
-> > .
-> >
->
+Best regards,
+
+*Jim Baxter*
+
+Siemens Digital Industries Software
+Automotive Business Unit
+DI SW STS ABU
+UK
+Tel.: +44 (161) 926-1656
+mailto:jim.baxter@siemens.com <mailto:jim.baxter@siemens.com>
+sw.siemens.com <https://sw.siemens.com/>
+
+On 18/07/2022 17:49, Roberto Sassu wrote:
+>> From: Jim Baxter [mailto:jim_baxter@mentor.com]
+>> Sent: Monday, July 18, 2022 6:36 PM
+>>
+>>
+>> Hello,
+>>
+>> I have been testing these patches and do not see the xattr information when
+>> trying to retrieve it within the initramfs, do you have an example of how
+>> you tested this originally?
+> 
+> Hi Jim, all
+> 
+> apologies, I didn't find yet the time to look at this.
+
+Hello Roberto,
+
+Thank you for your response, I can wait until you have looked at the patches,
+I asked the question to make sure it was not something wrong in my
+configuration.
+
+> 
+> Uhm, I guess this could be solved with:
+> 
+> https://github.com/openeuler-mirror/kernel/commit/18a502f7e3b1de7b9ba0c70896ce08ee13d052da
+> 
+> and adding initramtmpfs to the kernel command line. You are
+> probably using ramfs, which does not have xattr support.
+> 
+
+
+Thank you, I have tested that patch but the problem remained. Here is my
+command line, I wonder if there is something wrong.
+
+Kernel command line: rw rootfstype=initramtmpfs root=/dev/ram0 initrd=0x500000000 rootwait 
+
+
+I also found that root is always mounted as rootfs in my initramfs system
+which I understood to be tmpfs, is that incorrect?
+
+sh-3.2# mount
+none on / type rootfs (rw)
+
+
+>> So far I have set the xattr in the rootfs before creating the cpio file like this:
+>> $ setfattr -n user.comment -v "this is a comment" test.txt
+>> If I access the data here it works:
+>> $ getfattr test.txt
+>> # file: test.txt
+>> user.comment
+>>
+>>
+>> Then I package it and try to verify it with this command:
+>> $getfattr /test.txt
+> 
+> I assume you try to pack/unpack, right? If I remember correctly
+> I only implemented the pack part. Unpacking is done by the kernel
+> (but you are right, it should be done by user space too).
+> 
+
+
+I modified the file before packing. To pack I use the following commands:
+
+$ ./usr/gen_initramfs.sh -l initramfs.list -e xattr ../rootfs > initramfs.cpio
+$ gzip initramfs.cpio
+$ mkimage -A arm64 -O linux -T ramdisk -d initramfs.cpio.gz uRamdisk
+
+The kernel is loaded using:
+booti ${kernaddr} ${initramaddr} ${dtbaddr}
+
+
+
+
+>> Which returns to the command line without the data.
+>>
+>>
+>>
+>> I believe the cpio is working because I see the file /METADATA\!\!\! in
+>> the target root filesystem, which shows the following when viewed with cat -e:
+>> 00000028^A^Auser.comment^@this is a comment
+>>
+>> This matches the data I fed in at the start, so I believe the data is being
+>> transferred correctly but I am accessioning it with the wrong tools.
+> 
+> Yes, xattrs are marshalled in the METADATA!!! file, one per regular file
+> xattrs are applied to. Xattrs are applied to the previous regular file.
+> That file name was preferred to adding a suffix to the file, to avoid
+> reaching the filename size limit.
+> 
+> Roberto
+
+Best regards,
+Jim

@@ -2,138 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684CC5783A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB095783AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235416AbiGRNYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S234003AbiGRN0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235493AbiGRNYJ (ORCPT
+        with ESMTP id S235123AbiGRN0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:24:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECD0D118;
-        Mon, 18 Jul 2022 06:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658150648; x=1689686648;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qqcHWk/lAUf+5mgRAPx2mVBoNbfUdleZV6DkpswyZto=;
-  b=RgE/wuNZzLDxY899CkpLfBlh3PFTGbqT7hPuSi/tc/NSGF7xiHfDqtjB
-   g6Xg52Fd3e1gBY6cMFw2zU1QOczMHuAe8G+p8hw5oYCDBOMY2qzZMWJK1
-   3Hn02mR1pPzSdT+LZ7t8lp7uA5uAQMCbc+MgNnB1l9Nvjei4oEQnSmGSh
-   1Onx9n0WZqce9fOhadIbpDR0b+Syvq1jyBvZFzW0K9aRqHW6WTwxAJagf
-   njqHlAWXYg3PwWI17qW8OIpqyi7holw7ymQwsspg6SHRUJYNaIfqqRD6o
-   5i8Au2Zzh36ZuCWfQfW5+TfcV76Esf/PKCoq4g4efySIABDxGgej13oMQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="350179116"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="350179116"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:24:08 -0700
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="686733003"
-Received: from smyint-mobl1.amr.corp.intel.com (HELO [10.212.107.15]) ([10.212.107.15])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:24:04 -0700
-Message-ID: <f4e26591-a680-6557-c91c-63f6061bfd2d@linux.intel.com>
-Date:   Mon, 18 Jul 2022 14:24:02 +0100
+        Mon, 18 Jul 2022 09:26:37 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A697A12A9E
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:26:35 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31c86fe1dddso107032577b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vq1nfsdA5coq6n5SWADtW9niUwKkaHcu8n81CtS/PhQ=;
+        b=dTUf55RM5WdP0LTR2NDp2XkkNrsELz1sG8vCGKO87mJJQ9FFaySJP6oqtMelslTt5Q
+         zPFPI6yFZ49+BtPSbdN1wiergAigi+MOud/TEM4wbeTMyEV87ZLSKgaT5iLuXYWL8wTL
+         yYLGmjGXWUEHeow734wqjY86NeBlviK8c0m/yOEq0XZsZyiSvYjheiSXyvhWYGTR2Pb3
+         JawabQL3CJ1gREnbrlXqZQqz99eYZ9qaUzSqDwcBIrGXyycOK0WMN28u7DLycUho1SqH
+         d1ywL1Fp/5wrj8bT12OjUAS29wCC+jLL5YND+XCG22JBqRUefkvUka2WfbfXxwVWyOwY
+         JeoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vq1nfsdA5coq6n5SWADtW9niUwKkaHcu8n81CtS/PhQ=;
+        b=bfHRr1Bw0DmuWSVLpVcEZVAOIid1YYRRZelDDDtHq0881ETTAgSktQdU493xAB7b0U
+         f+CK7KOakvSp3/S0shNWUek04wuXPZ5oP7ssizTOX9k/BKmsVhN0Pm05nOUy8a1C8Mmw
+         Y6uL82T9J3LcpDYYu0Ab/DJ4SZD6CUWBXl7kZTytO8WnOCCzteC1TG2ytlUBtmQYQTHM
+         93bEdhggVg1c0jV32rRBc+2BjmqiKuzPDM6fxKitG7GT+QaZmX2wWHcOwgaezHSKlP+v
+         IoR2jPks6SL42yT0do0aOV9BQNF8omoo8yB2nPTEsvw0wuBE/cqX/Or5raYLCbUM0ADL
+         MJNg==
+X-Gm-Message-State: AJIora9oPD4KLQMwOIFlPyDLPHmVAikGutYjnwMy9dpTvnjWsP3pqdKE
+        vaefTkl8SK+TBTxmjMoSJ7AHO93LFKJAIK4XBwHpZA==
+X-Google-Smtp-Source: AGRyM1vNXtk6hbtKSVS4tozHK4fF3mWDNBu6r9gapXG+u0NKNyochywe+71HfJC7PRKWGUqwSTcw6FD+Abyo42NezGA=
+X-Received: by 2002:a81:5b43:0:b0:31b:aed2:f563 with SMTP id
+ p64-20020a815b43000000b0031baed2f563mr30038159ywb.115.1658150794803; Mon, 18
+ Jul 2022 06:26:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 03/21] drm/i915/gt: Invalidate TLB of the OA unit at
- TLB invalidations
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Chris Wilson <chris.p.wilson@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Fei Yang <fei.yang@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>
-References: <cover.1657800199.git.mchehab@kernel.org>
- <44ec6a01ef2e82184abbb075b9c8a09297fa120c.1657800199.git.mchehab@kernel.org>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <44ec6a01ef2e82184abbb075b9c8a09297fa120c.1657800199.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220715044948.434149-1-cosmin.tanislav@analog.com> <20220715044948.434149-3-cosmin.tanislav@analog.com>
+In-Reply-To: <20220715044948.434149-3-cosmin.tanislav@analog.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 18 Jul 2022 15:26:22 +0200
+Message-ID: <CACRpkdZ+KQqUKeevuXgcKLiK85STDeZFh=D47LMvyZb-o-Wbcw@mail.gmail.com>
+Subject: Re: [PATCH v8 2/2] iio: adc: ad4130: add AD4130 driver
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Cosmin,
 
-On 14/07/2022 13:06, Mauro Carvalho Chehab wrote:
-> From: Chris Wilson <chris.p.wilson@intel.com>
-> 
-> Ensure that the TLB of the OA unit is also invalidated
-> on gen12 HW, as just invalidating the TLB of an engine is not
-> enough.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
-> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-> Cc: Fei Yang <fei.yang@intel.com>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+thanks for your patch!
 
-Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+On Fri, Jul 15, 2022 at 6:50 AM Cosmin Tanislav <demonsingur@gmail.com> wrote:
 
-Regards,
-
-Tvrtko
-
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/21] at: https://lore.kernel.org/all/cover.1657800199.git.mchehab@kernel.org/
-> 
->   drivers/gpu/drm/i915/gt/intel_gt.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-> index c4d43da84d8e..1d84418e8676 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-> @@ -11,6 +11,7 @@
->   #include "pxp/intel_pxp.h"
->   
->   #include "i915_drv.h"
-> +#include "i915_perf_oa_regs.h"
->   #include "intel_context.h"
->   #include "intel_engine_pm.h"
->   #include "intel_engine_regs.h"
-> @@ -969,6 +970,15 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
->   		awake |= engine->mask;
->   	}
->   
-> +	/* Wa_2207587034:tgl,dg1,rkl,adl-s,adl-p */
-> +	if (awake &&
-> +	    (IS_TIGERLAKE(i915) ||
-> +	     IS_DG1(i915) ||
-> +	     IS_ROCKETLAKE(i915) ||
-> +	     IS_ALDERLAKE_S(i915) ||
-> +	     IS_ALDERLAKE_P(i915)))
-> +		intel_uncore_write_fw(uncore, GEN12_OA_TLB_INV_CR, 1);
+> AD4130-8 is an ultra-low power, high precision, measurement solution for
+> low bandwidth battery operated applications.
+>
+> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
+> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
+> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
+> selectable filter options, smart sequencer, sensor biasing and excitation
+> options, diagnostics, and a FIFO buffer.
+>
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+(...)
+> +static int ad4310_parse_fw(struct iio_dev *indio_dev)
+> +{
+(...)
+> +       int_clk_out = device_property_read_bool(dev, "adi,int-clk-out");
+> +       if (st->mclk && int_clk_out)
+> +               return dev_err_probe(dev, -EINVAL,
+> +                                    "Cannot expose internal clock\n");
 > +
->   	spin_unlock_irq(&uncore->lock);
->   
->   	for_each_engine_masked(engine, gt, awake, tmp) {
+> +       device_property_read_u32(dev, "adi,ext-clk-freq-hz", &ext_clk_freq);
+> +       if (ext_clk_freq != AD4130_MCLK_FREQ_153_6KHZ &&
+> +           ext_clk_freq != AD4130_MCLK_FREQ_76_8KHZ)
+> +               return dev_err_probe(dev, -EINVAL,
+> +                                    "Invalid external clock frequency %u\n",
+> +                                    ext_clk_freq);
+
+As mentioned in the bindings I think this is cheating. Just implement a real
+clock abstraction and take the desired clock divider (1 or 2?) from the phandle.
+
+See e.g.
+commit 639d5661cc808057854681685ecb596406dbacce
+"clk: ux500: Implement the missing CLKOUT clocks"
+for an example, it is more complex so it should be a copy/paste/strip
+exercise mostly.
+
+Yours,
+Linus Walleij

@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D42757885A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFF4578828
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235598AbiGRR2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 13:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
+        id S234303AbiGRRNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 13:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235471AbiGRR2C (ORCPT
+        with ESMTP id S233707AbiGRRNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:28:02 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F402C678;
-        Mon, 18 Jul 2022 10:28:01 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id bk26so18055843wrb.11;
-        Mon, 18 Jul 2022 10:28:01 -0700 (PDT)
+        Mon, 18 Jul 2022 13:13:37 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C3E2B261
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:13:36 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id i9-20020a17090a65c900b001f03395643dso9767284pjs.9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:13:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SE+OXLYD8zcDEgzlTLoNNCKIcujRnk24kJfM6BVh3/s=;
-        b=a88P17pRfzEiS2Py8vikhNd21u3AO7wg6hSBs7DtRAE7+b0M7RbKAkiaucRLGbfaVk
-         3L4G47rF7eRc+unyBqFa1Da8ibuxPaiQQ8nIV1o9K2vUVSRRSrqPZTeZcj+kO6kkDx0M
-         DAweP6PzUo5lNXNIsrUW0wspmfkmACqQ+ubx4Rp084ofSWo98HvhXr8qD1ePWFeFmczY
-         hRUHllOqKwbg3hKkwQ/X6frdqylTlSHG23J+RPPYRKBbTHvejXFcY9SHG8OGGJ1My6rE
-         w3/t0sw2lAQtMBz6ncOzF4DqRxHi298k8unmmcWwQoHrnnuo5Wt/Ot06n2NB9EMeDtq9
-         sUnQ==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=hBW555vzZ9VwsiwxyvqF8/j7N4IdLZ1Pm2etmGkj9Ok=;
+        b=EqOXIAFmmesXHqqQFo3pONu5uf32f5JqWCF2lKIjhQd4BOWd19v/3vwgO9In29blAz
+         oMa8JbfevDRcwU1N4l97vw6esfc1WgiX18pg8XjHK8EY1i6N0JW65KpmARgyhOaWgftV
+         ZSdz+oUM37q4T1JPfJcXLMD3Np0m5MWop0YBUCkyTBeo7bhFgExeoOlJbJNjLMP2SF4W
+         YfWuJzBLfBCmm8BGPZcfULXGD7sjQb3TTclxTUn6HBf8EQjT/FP+n94FIqe5+RvBSQfb
+         F4OS1GENnPqUPZOB8jHsOiRUnbuV7dRAn1XscKeYfNghwrnRueLHUHgOzecgiu8MQGQK
+         +DFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SE+OXLYD8zcDEgzlTLoNNCKIcujRnk24kJfM6BVh3/s=;
-        b=uP8I6ANfhUcBftHxbQJx/Xfgbov0kAhm8KTajUwTtZ4GBKFBLTOWdA/OjMuZvPwdDK
-         ZqG3sakq/7T45NhNaB4DlqSLGWKOf+utiC1B4s4+Jw0bzdGSw26QZL/cGTFdsSM+AF9L
-         OxQEgu/SfeYoxIrlv8USyPbN63z46DBw+1eAreQ2qahcgM4Ku9xApQdtVzQirFzORozu
-         j6ZwGbmjjePnSio3abDNgM5FVv+vNeTN6BMATv6hRwr4cU4C2O/I/adW93tF5eLGr6Li
-         HHI3O2GxAZNXjmxNbk5eKQlm2rRct1KXmejkMmPAnHLpv1jGgcPNvDQEIHqq2S9RonQ7
-         7HGA==
-X-Gm-Message-State: AJIora/l6UHN83FkApyveDgwT+2Mib2ZheE8hoeEmkNS0Uy2tLTC1OfY
-        oLjjmriuebrhCSasf3XXM14=
-X-Google-Smtp-Source: AGRyM1v32hf1Spqq4nXa2qUYus7QJvk1pNXsLpopnExuZB1JtD7ZLZpkvd+9tNebCR0iTWdhtMOMXQ==
-X-Received: by 2002:a5d:4911:0:b0:21d:6c60:978e with SMTP id x17-20020a5d4911000000b0021d6c60978emr24493085wrq.615.1658165279941;
-        Mon, 18 Jul 2022 10:27:59 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id o17-20020a05600c4fd100b003a305c0ab06sm15163711wmq.31.2022.07.18.10.27.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 10:27:59 -0700 (PDT)
-Message-ID: <62d5981f.1c69fb81.35e7.2434@mx.google.com>
-X-Google-Original-Message-ID: <YtWUHJncJ8z5QieW@Ansuel-xps.>
-Date:   Mon, 18 Jul 2022 19:10:52 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 4/4] net: dsa: qca8k: split qca8k in common
- and 8xxx specific code
-References: <20220716174958.22542-1-ansuelsmth@gmail.com>
- <20220716174958.22542-5-ansuelsmth@gmail.com>
- <20220718172135.2fpojugpmoyekcn7@skbuf>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718172135.2fpojugpmoyekcn7@skbuf>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=hBW555vzZ9VwsiwxyvqF8/j7N4IdLZ1Pm2etmGkj9Ok=;
+        b=TiHF3XI9R3WDSFnuO0gjLN+OAs1m43bTCLAXyBY6qGblT48rg6sZNFkF3YwPGA6G0H
+         0qCzjAYqR0exrTCm59lV1V27MKzfQrEuhtaPDrYkviF06qojNZZILVYSV9GKyRF3rue9
+         EC3GmzOTjzbdAH1mioOqcs4XM9FQf6K5p/fz5tr/3eln5LkNql643jJ+pNB1bzopB/3v
+         NE9jGE8Veh+m3STd9HoDB6SyhGV7zGp49CNjKAWpcFj7h7bhT4qrTsndfPlj4NBMMv1b
+         jPncguz7ZKswtFrmi9eIvtfWiPkD8PPtGpk8B/0XfPCjm3wlKMki0V9d3irlLElDY5JN
+         Pavg==
+X-Gm-Message-State: AJIora+TMsfQgZ14/piTWUykbgvshqfRDDyb4lh9I5hHmSJbQTFCpSjJ
+        AOUfJOLSvvel1f+wi/ydr/P8BLEt/udz
+X-Google-Smtp-Source: AGRyM1tNyE9t7NLqrrVSjIDGyHcYXyS3Ib48NX9s+UucFR8qcFtBGC2Zl8iwLf0L2nIH/7d+e4u+QANdsxDC
+X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
+ (user=mizhang job=sendgmr) by 2002:a17:902:f68c:b0:16c:4eb6:913c with SMTP id
+ l12-20020a170902f68c00b0016c4eb6913cmr28593782plg.2.1658164416047; Mon, 18
+ Jul 2022 10:13:36 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Mon, 18 Jul 2022 17:13:30 +0000
+Message-Id: <20220718171333.1321831-1-mizhang@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH v2 0/2] Extend KVM trace_kvm_nested_vmrun() to support VMX
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
+        David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,31 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 08:21:35PM +0300, Vladimir Oltean wrote:
-> On Sat, Jul 16, 2022 at 07:49:58PM +0200, Christian Marangi wrote:
-> > The qca8k family reg structure is also used in the internal ipq40xx
-> > switch. Split qca8k common code from specific code for future
-> > implementation of ipq40xx internal switch based on qca8k.
-> > 
-> > While at it also fix minor wrong format for comments and reallign
-> > function as we had to drop static declaration.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  drivers/net/dsa/qca/Makefile                  |    1 +
-> >  drivers/net/dsa/qca/{qca8k.c => qca8k-8xxx.c} | 1210 +----------------
-> >  drivers/net/dsa/qca/qca8k-common.c            | 1174 ++++++++++++++++
-> >  drivers/net/dsa/qca/qca8k.h                   |   58 +
-> >  4 files changed, 1245 insertions(+), 1198 deletions(-)
-> >  rename drivers/net/dsa/qca/{qca8k.c => qca8k-8xxx.c} (64%)
-> >  create mode 100644 drivers/net/dsa/qca/qca8k-common.c
-> 
-> Sorry, this patch is very difficult to review for correctness.
-> Could you try to split it to multiple individual function movements?
+This patch set update trace_kvm_nested_vmrun() to support VMX:
+ - Change the print of EPT/NPT enabled boolean to print of nested
+   EPT/NPT address in the trace;
+ - Add a caller from vmx/nested.c.
+ - Fix some minor format fixes from the callsites and Update the trace
+   output naming according to the x86 vendor.
 
-You are right.
-Can I split them in category function (bridge function, vlan function,
-ATU...) Or you want them even more split? 
+v1 -> v2:
+ - fix some format issue in trace_kvm_nested_vmrun() in vmx/nested.
+
+v1 link:
+ - https://lore.kernel.org/lkml/20220708232304.1001099-2-mizhang@google.com/T/
+
+David Matlack (1):
+  kvm: nVMX: add tracepoint for kvm:kvm_nested_vmrun
+
+Mingwei Zhang (1):
+  KVM: nested/x86: update trace_kvm_nested_vmrun() to suppot VMX
+
+ arch/x86/kvm/svm/nested.c |  4 +++-
+ arch/x86/kvm/trace.h      | 19 +++++++++++++------
+ arch/x86/kvm/vmx/nested.c |  9 +++++++++
+ 3 files changed, 25 insertions(+), 7 deletions(-)
 
 -- 
-	Ansuel
+2.37.0.144.g8ac04bfd2-goog
+

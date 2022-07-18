@@ -2,109 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAFF577C18
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4A0577C1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbiGRHCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S233702AbiGRHFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbiGRHCN (ORCPT
+        with ESMTP id S233696AbiGRHFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:02:13 -0400
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138A41706D;
-        Mon, 18 Jul 2022 00:02:13 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id b26so15663505wrc.2;
-        Mon, 18 Jul 2022 00:02:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mBaCn+yOtwwme9flF0xPrDTgDsQW7uNWw9wOEtCnhK4=;
-        b=TxPYWCpnbe999RTMQbJmHOshS9DrDRFDdYeJwCnZX0xutYYGnR3102WyksgRMV/Dz6
-         bd53Ng6jWR5tpNH3TA0FFEcQnLfu22APattrzKiFTn10yOTB7A2C8WzrMTXpJe4HwKaN
-         uYqpj0sdf80RGGbytvF70vKEeiW58AwisZU8Fj7d1ggdm1Xf2ES+Ko+guMgJjNYeUZ2h
-         hcyPmZi9VrNSKuZOfYAV5j28RPRa4BcWAsLmxlQ5Z0rwet7GMZr6t1lHf3n8HWjuR70e
-         u/LX48XrHxs2QR4h11+h+UBTnK+aMxTrZXBwjy4mnlKGt5wSbq/AJNHb8Ey2y53w7Zz+
-         iABg==
-X-Gm-Message-State: AJIora962fYRr8KRW8oPuAfI/ZkpxfITjinGS63OVkMM7ZS+EBWG9Raf
-        qtcFWuObhqQ/ftTQmHTKhelvzhYhJk8=
-X-Google-Smtp-Source: AGRyM1vY2mD3JpdNb/SNzvjPGkQe4nn8SXRSvzuNUEmKzaUnA+s4GFDYX2/U024C758KBtyCxc93MA==
-X-Received: by 2002:adf:f245:0:b0:21d:a39a:bed5 with SMTP id b5-20020adff245000000b0021da39abed5mr20980909wrp.508.1658127731543;
-        Mon, 18 Jul 2022 00:02:11 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id r10-20020a056000014a00b0021d68a504cbsm10078557wrx.94.2022.07.18.00.02.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 00:02:10 -0700 (PDT)
-Message-ID: <d75d1339-4539-330a-680b-2d940e603a72@kernel.org>
-Date:   Mon, 18 Jul 2022 09:02:09 +0200
+        Mon, 18 Jul 2022 03:05:14 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7253EDFD5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:05:13 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1oDKoD-0003yH-CX; Mon, 18 Jul 2022 09:04:49 +0200
+Message-ID: <b5f5f87e-c690-2525-4b5f-4d178157a4d3@pengutronix.de>
+Date:   Mon, 18 Jul 2022 09:04:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: writing a 1 and then a 0 to
- trigger a break character
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V3 3/3] arm64: dts: imx8ulp-evk: Add the fec support
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Sherry Sun <sherry.sun@nxp.com>
-Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>
-References: <20220715025944.11076-1-sherry.sun@nxp.com>
- <20220715025944.11076-3-sherry.sun@nxp.com>
- <509669b26b5899088e9b77ed94d103ee@walle.cc>
- <AS8PR04MB840448675E64E4FCDEEF91A1928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
- <e2560f01fd1731ea2422d82c97efcc6f@walle.cc>
- <AS8PR04MB8404B8E3EB0FFCEE8ADDA283928B9@AS8PR04MB8404.eurprd04.prod.outlook.com>
- <61c525fc87d6586c024cd6e42fcf876d@walle.cc>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <61c525fc87d6586c024cd6e42fcf876d@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     wei.fang@nxp.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     aisheng.dong@nxp.com, devicetree@vger.kernel.org, peng.fan@nxp.com,
+        ping.bai@nxp.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, sudeep.holla@arm.com, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20220718142257.556248-1-wei.fang@nxp.com>
+ <20220718142257.556248-4-wei.fang@nxp.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220718142257.556248-4-wei.fang@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15. 07. 22, 13:52, Michael Walle wrote:
->> Seems we have the different understanding of the break_ctl(port,ctl)
->> callback. The original break_ctl(tty,-1) in lpuart will not send the
->> break signal until we call break_ctl(tty,0).
+On 18.07.22 16:22, wei.fang@nxp.com wrote:
+> From: Wei Fang <wei.fang@nxp.com>
 > 
-> That is not correct. The TX linue goes low as soon as the SBK bit
-> is set. See below.
+> Enable the fec on i.MX8ULP EVK board.
+> 
+> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+> ---
+> V2 change:
+> Add clock_ext_rmii and clock_ext_ts. They are both related to EVK board.
+> V3 change:
+> No change.
+> ---
+>  arch/arm64/boot/dts/freescale/imx8ulp-evk.dts | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8ulp-evk.dts b/arch/arm64/boot/dts/freescale/imx8ulp-evk.dts
+> index 33e84c4e9ed8..ebce716b10e6 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8ulp-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8ulp-evk.dts
+> @@ -19,6 +19,21 @@ memory@80000000 {
+>  		device_type = "memory";
+>  		reg = <0x0 0x80000000 0 0x80000000>;
+>  	};
+> +
+> +	clock_ext_rmii: clock-ext-rmii {
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <50000000>;
+> +		clock-output-names = "ext_rmii_clk";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	clock_ext_ts: clock-ext-ts {
+> +		compatible = "fixed-clock";
+> +		/* External ts clock is 50MHZ from PHY on EVK board. */
+> +		clock-frequency = <50000000>;
+> +		clock-output-names = "ext_ts_clk";
+> +		#clock-cells = <0>;
+> +	};
+>  };
+>  
+>  &lpuart5 {
+> @@ -38,7 +53,49 @@ &usdhc0 {
+>  	status = "okay";
+>  };
+>  
+> +&fec {
+> +	pinctrl-names = "default", "sleep";
+> +	pinctrl-0 = <&pinctrl_enet>;
+> +	pinctrl-1 = <&pinctrl_enet>;
+> +	clocks = <&cgc1 IMX8ULP_CLK_XBAR_DIVBUS>,
+> +		 <&pcc4 IMX8ULP_CLK_ENET>,
+> +		 <&cgc1 IMX8ULP_CLK_ENET_TS_SEL>,
+> +		 <&clock_ext_rmii>;
+> +	clock-names = "ipg", "ahb", "ptp", "enet_clk_ref";
+> +	assigned-clocks = <&cgc1 IMX8ULP_CLK_ENET_TS_SEL>;
+> +	assigned-clock-parents = <&clock_ext_ts>;
+> +	phy-mode = "rmii";
+> +	phy-handle = <&ethphy>;
+> +	status = "okay";
+> +
+> +	mdio {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		ethphy: ethernet-phy {
 
-In that case…
+@1
 
->> Per my understanding of
->> "If ctl is nonzero, the break signal should be transmitted", call
->> break_ctl(tty,-1) is enough the send one break signal, now my patch
->> makes the behavior align with my understanding.
-> 
-> As I said, Greg should clarify here.
-> 
-> In any case, I've checked the hardware (LS1028A) and as soon as you
-> set the SBK bit, the TX line goes low (TTL levels) as expected. It
-> will go to high again as soon as you clear the bit again.
-> 
-> So to me it seems there is nothing wrong here. Also have a look
-> at man ioctl_tty:
-> 
->         TIOCSBRK
->                Turn break on, that is, start sending zero bits.
-> 
->         TIOCCBRK
->                Turn break off, that is, stop sending zero bits.
-> 
-> So to send one break "character", you need to do ioctl(TIOCSBRK)
-> followed by an ioctl(TIOCCBRK).
+> +			reg = <1>;
+> +			micrel,led-mode = <1>;
+> +		};
+> +	};
+> +};
+> +
+>  &iomuxc1 {
+> +	pinctrl_enet: enetgrp {
+> +		fsl,pins = <
+> +			MX8ULP_PAD_PTE15__ENET0_MDC     0x43
+> +			MX8ULP_PAD_PTE14__ENET0_MDIO    0x43
+> +			MX8ULP_PAD_PTE17__ENET0_RXER    0x43
+> +			MX8ULP_PAD_PTE18__ENET0_CRS_DV  0x43
+> +			MX8ULP_PAD_PTF1__ENET0_RXD0     0x43
+> +			MX8ULP_PAD_PTE20__ENET0_RXD1    0x43
+> +			MX8ULP_PAD_PTE16__ENET0_TXEN    0x43
+> +			MX8ULP_PAD_PTE23__ENET0_TXD0    0x43
+> +			MX8ULP_PAD_PTE22__ENET0_TXD1    0x43
+> +			MX8ULP_PAD_PTE19__ENET0_REFCLK  0x43
+> +			MX8ULP_PAD_PTF10__ENET0_1588_CLKIN 0x43
+> +		>;
+> +	};
+> +
+>  	pinctrl_lpuart5: lpuart5grp {
+>  		fsl,pins = <
+>  			MX8ULP_PAD_PTF14__LPUART5_TX	0x3
 
-… you're right.
 
-regards,
 -- 
-js
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,221 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA3557885C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A51A57886B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 19:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235718AbiGRR2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 13:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S235677AbiGRR31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 13:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235629AbiGRR2V (ORCPT
+        with ESMTP id S233477AbiGRR30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:28:21 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE702CCA8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:28:19 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a15so12457968pjs.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 10:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=miE0kqF6TFWNBIdBqT6VO1lpZCmACyisnAMzziZNjoU=;
-        b=NbIy7yTi7YM4Stffc79sessrp1CqyBGn3R/J21HXe0ejAsE5Mrh5QqWTJgP7wR03LK
-         bb7L46eQ6BiRSMbtFL8hMydP+qMc7KQCv0ftuB4Pql370F7ZT1h9eVCol8O0M78fTybA
-         trO3VyZD4AvTgLllsSgul+CpMn0n6h2k5Y2cSgI4n6N9zM/B4JOhehr7yM7lVKWWPW32
-         XKV4QMGHLtGUxJiVMeYOkAp0gVhw7NX3AMsquci9bZ/g34mAEiSoMGHA1ZGk/Vb2WKV3
-         oUWNGIJvCugJpsdUdfkq91teAEYeTHoj3CA503/XoMR3fNUIOkvk2+p/QfRlgGxOSF/A
-         5usw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=miE0kqF6TFWNBIdBqT6VO1lpZCmACyisnAMzziZNjoU=;
-        b=8CWTdoiWiTQ/Efn1aMmTLeEdBVeg0lIow/4YjekPOqdA7OY0rFxYSNN+5rL7SKtYjW
-         Qq+IoT8Iel3MBS7dpWLulMVDQK38ZdZXJYMA++3iocw2F9xAquAxI0OuvcSjf0b//rXp
-         xfr9RpGSSyp2uYvCVhDnLFs7J3CJXTAQlWBl2kCasfLKRi154PjpYrbozSAheJ4eTYDB
-         NU6G/nmD61l20jt9oY0Q1g+me1sQ59KNCYh4hYa0x4bFiAu4J4L4Gpj6ozxlUgvLIETb
-         gafUlYnkKM5rSvDkAO3EEfthJID0qF5+b+3PjbzXLTrUWwLSRbfefzQHAmxGf13po1pj
-         q2nQ==
-X-Gm-Message-State: AJIora8a2doDlhDQGcirK8VlDZKvuuyJcqD/c9VyWLr5A35sYC7GP2Xy
-        vSO+ZiYY4NIHiMmt9se/Ab7jNQ==
-X-Google-Smtp-Source: AGRyM1tm0SI4zofXoCefa+XbSd+8xZO1TpJMQvohWCBDcmGclrUCOuPnvrC8Ad5uWhIAubhkywZjaA==
-X-Received: by 2002:a17:903:228b:b0:16b:ee10:b91 with SMTP id b11-20020a170903228b00b0016bee100b91mr29296087plh.27.1658165299137;
-        Mon, 18 Jul 2022 10:28:19 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id e12-20020a17090301cc00b0016bd67bc868sm9852993plh.210.2022.07.18.10.28.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 10:28:18 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 17:28:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        pbonzini@redhat.com, mlevitsk@redhat.com, jon.grimm@amd.com,
-        Zeng Guang <guang.zeng@intel.com>
-Subject: Re: [PATCH] KVM: x86: Do not block APIC write for non ICR registers
-Message-ID: <YtWYL6mvN72kaDOi@google.com>
-References: <20220718083913.222140-1-suravee.suthikulpanit@amd.com>
+        Mon, 18 Jul 2022 13:29:26 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8106555;
+        Mon, 18 Jul 2022 10:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=xKnevU/94YSw3Ocux7u+8CQU8vdT2o5/n6VI6gzr4dI=; b=AIxDr+4psF5lfR3bm5dgm153bc
+        c2SMjcvQ5ce1MzJy3TsI9xEe+GQ9O1hI75pjUmSUgcfTqIjguCuA7br09XH70MOsPO3hxlIXZxB7s
+        yl6yr9mojJQfEfLdJotr9gz/ht0zIMqdBopCaAwGinS8v62iyNCegNw4cqKiUoRfbTTE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oDUYE-00AjbS-5Y; Mon, 18 Jul 2022 19:28:58 +0200
+Date:   Mon, 18 Jul 2022 19:28:58 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandru Marginean <alexandru.marginean@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH net-next v3 08/47] net: phylink: Support differing link
+ speeds and interface speeds
+Message-ID: <YtWYWhAm/n5mnw4I@lunn.ch>
+References: <20220715215954.1449214-1-sean.anderson@seco.com>
+ <20220715215954.1449214-9-sean.anderson@seco.com>
+ <YtMaKWZyC/lgAQ0i@lunn.ch>
+ <YtWFAfu1nSE6vCfx@shell.armlinux.org.uk>
+ <b1c3fc9f-71af-6610-6f58-64a0297347dd@seco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220718083913.222140-1-suravee.suthikulpanit@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b1c3fc9f-71af-6610-6f58-64a0297347dd@seco.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022, Suravee Suthikulpanit wrote:
-> The commit 5413bcba7ed5 ("KVM: x86: Add support for vICR APIC-write
-> VM-Exits in x2APIC mode") introduces logic to prevent APIC write
-> for offset other than ICR. This breaks x2AVIC support, which requires
-> KVM to trap and emulate x2APIC MSR writes.
+> > I am rather worried that we have drivers using ->speed today in their
+> > mac_config and we're redefining what that means in this patch.
 > 
-> Therefore, removes the warning and modify to logic to allow MSR write.
-> 
-> Fixes: 5413bcba7ed5 ("KVM: x86: Add support for vICR APIC-write VM-Exits in x2APIC mode")
+> Well, kind of. Previously, interface speed was defined to be link speed,
+> and both were just "speed". The MAC driver doesn't really care what the
+> link speed is if there is a phy, just how fast the phy interface mode
+> speed is.
 
-This tag is wrong, I believe it should be:
+I'm not sure that is true. At least for SGMII, the MAC is passed the
+line side speed, which can be 10, 100, or 1G. The PHY interface mode
+speed is fixed at 1G, since it is SGMII, but the MAC needs to know if
+it needs to repeat symbols because the line side speed is lower than
+the host side speed.
 
-  Fixes: 4d1d7942e36a ("KVM: SVM: Introduce logic to (de)activate x2AVIC mode")
-
-And that absolutely matters because this should not be backported to older
-kernels that don't support x2avic.
-
-> Cc: Zeng Guang <guang.zeng@intel.com>
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/lapic.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 9d4f73c4dc02..f688090d98b0 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -69,6 +69,7 @@ static bool lapic_timer_advance_dynamic __read_mostly;
->  /* step-by-step approximation to mitigate fluctuation */
->  #define LAPIC_TIMER_ADVANCE_ADJUST_STEP 8
->  static int kvm_lapic_msr_read(struct kvm_lapic *apic, u32 reg, u64 *data);
-> +static int kvm_lapic_msr_write(struct kvm_lapic *apic, u32 reg, u64 data);
->  
->  static inline void __kvm_lapic_set_reg(char *regs, int reg_off, u32 val)
->  {
-> @@ -2284,17 +2285,23 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
->  	u64 val;
->  
->  	if (apic_x2apic_mode(apic)) {
-> +		kvm_lapic_msr_read(apic, offset, &val);
-> +
->  		/*
->  		 * When guest APIC is in x2APIC mode and IPI virtualization
->  		 * is enabled, accessing APIC_ICR may cause trap-like VM-exit
->  		 * on Intel hardware. Other offsets are not possible.
-> +		 *
-> +		 * For AMD AVIC, write to some APIC registers can cause
-
-x2AVIC if we're going to keep a comment.  But at this point, the WARN has done its
-job and the comment is obsolete.  My preference is to just document that ICR is
-special in x2APIC mode and not bother with vendor/feature specific behavior.
-
-> +		 * trap-like VM-exit (see arch/x86/kvm/svm/avic.c:
-
-Specifying the file name and full path is completely unnecessary.
-
-> +		 * avic_unaccel_trap_write()).
-
-If something like this comes up again in the future, please just explicitly document
-the architecturally (or micro-architectural behavior).  Redirecting to KVM code is
-annoying for the reader and comments that reference function names all too often
-become stale.  There _are_ times when explicitly referencing a function is appropriate,
-but IMO this isn't one of them.
-
-But if we just drop the Intel vs. AMD stuff, this all goes away.
-
->  		 */
-> -		if (WARN_ON_ONCE(offset != APIC_ICR))
-> +		if (offset == APIC_ICR) {
-> +			kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
-> +			trace_kvm_apic_write(APIC_ICR, val);
->  			return;
-> -
-> -		kvm_lapic_msr_read(apic, offset, &val);
-> -		kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
-> -		trace_kvm_apic_write(APIC_ICR, val);
-> +		}
-> +		kvm_lapic_msr_write(apic, offset, val);
-
-Because this lacks the TODO below, what about tweaking this so that there's a
-single call to kvm_lapic_msr_write()?  gcc-11 even generates more efficient code
-for this.  Alternatively, the ICR path can be an early return inside a single
-x2APIC check, but gcc generate identical code and I like making x2APIC+ICR stand
-out as being truly special.
-
-Compile tested only.
-
----
-From: Sean Christopherson <seanjc@google.com>
-Date: Mon, 18 Jul 2022 10:16:02 -0700
-Subject: [PATCH] KVM: x86: Handle trap-like x2APIC accesses for any APIC
- register
-
-Handle trap-like VM-Exits for all APIC registers when the guest is in
-x2APIC mode and drop the now-stale WARN that KVM encounters trap-like
-exits only for ICR.  On Intel, only writes to ICR can be trap-like when
-APICv and x2APIC are enabled, but AMD's x2AVIC can trap more registers,
-e.g. LDR and DFR.
-
-Fixes: 4d1d7942e36a ("KVM: SVM: Introduce logic to (de)activate x2AVIC mode")
-Reported-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Cc: Zeng Guang <guang.zeng@intel.com>
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/lapic.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 9d4f73c4dc02..95bb1ef37a12 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2283,21 +2283,20 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
- 	struct kvm_lapic *apic = vcpu->arch.apic;
- 	u64 val;
-
--	if (apic_x2apic_mode(apic)) {
--		/*
--		 * When guest APIC is in x2APIC mode and IPI virtualization
--		 * is enabled, accessing APIC_ICR may cause trap-like VM-exit
--		 * on Intel hardware. Other offsets are not possible.
--		 */
--		if (WARN_ON_ONCE(offset != APIC_ICR))
--			return;
--
-+	if (apic_x2apic_mode(apic))
- 		kvm_lapic_msr_read(apic, offset, &val);
-+	else
-+		val = kvm_lapic_get_reg(apic, offset);
-+
-+	/*
-+	 * ICR is a single 64-bit register when x2APIC is enabled.  For legacy
-+	 * xAPIC, ICR writes need to go down the common (slightly slower) path
-+	 * to get the upper half from ICR2.
-+	 */
-+	if (apic_x2apic_mode(apic) && offset == APIC_ICR) {
- 		kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
- 		trace_kvm_apic_write(APIC_ICR, val);
- 	} else {
--		val = kvm_lapic_get_reg(apic, offset);
--
- 		/* TODO: optimize to just emulate side effect w/o one more write */
- 		kvm_lapic_reg_write(apic, offset, (u32)val);
- 	}
-
-base-commit: 8031d87aa9953ddeb047a5356ebd0b240c30f233
---
-
+     Andrew

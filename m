@@ -2,90 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAF7577DA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02614577DAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 10:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbiGRIjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 04:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
+        id S233912AbiGRIj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 04:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbiGRIjj (ORCPT
+        with ESMTP id S232158AbiGRIj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 04:39:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714F4643D;
-        Mon, 18 Jul 2022 01:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658133578; x=1689669578;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kWWiZuOQESLiD7NGQ4Gd3K05y6A+bgzV19UwDrmVFI0=;
-  b=MqSBUxHMNkujJWSfSADLSJGtsNP5PqJG75FzydF8nznyr3YE9/ssX9dU
-   nx3TUTQImiULmp2xD61vABS47gtO1O6N5S0PZyWmVdBqNuxFtNUJzI3Yg
-   4gKiEIiD3HkOfYYI9673PaVk2/aoFI/wi5Vb2Nj0GMN/dfm5inN0NynU3
-   drZBHq2HG9XsxJIrlNXNgHZQpOayE/bL4OJ96yT7BCL21gvZpuFrK+iqD
-   K3jm1HIzzzXzCHhiwNaxgi0cQkwTjmgu0GeqAmHXrlXPRs/PGnXTTSDpc
-   M7LaTpC3vT2AujFNeoslKMiu7KHZSIt7sTCi5wWcsIqtd09R/AFKc3NjB
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="350130338"
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="350130338"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 01:39:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
-   d="scan'208";a="739385944"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 18 Jul 2022 01:39:34 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Jul 2022 11:39:33 +0300
-Date:   Mon, 18 Jul 2022 11:39:33 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb/typec/tcpm: fix repeated words in comments
-Message-ID: <YtUcRZmQJgOeYSY0@kuha.fi.intel.com>
-References: <20220716135642.52460-1-yuanjilin@cdjrlc.com>
+        Mon, 18 Jul 2022 04:39:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30872BC92;
+        Mon, 18 Jul 2022 01:39:55 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4754:89ee:32c6:e620])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 441056601A12;
+        Mon, 18 Jul 2022 09:39:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658133593;
+        bh=VGO6bJB0It56njxoW1ZluHISXuIAwk0hlWOpYr3qvh0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=izorKfV6D59nkihSVVKwQzSDN6Be6j30U2dXb1Obk6eo/wo2kD4uc10x9gpPwKBez
+         LCuYFa3wmKb1txsaIlMzbu9X3P9OY7ldwE9iQVKcchwLub1flI/Al8DY6J2Wrg+Us6
+         +dQUhW1zx0fLkn6aDgZ5mr382mVn1Xgi5nfywkJbjYPa0rAnxsbZ+aaZRkrlAPeAeD
+         oZn3P0PbCbYtXQAjp78j3SZx/b+XceGR9DHogelEN05zCeKLFPjJmhALUHUVRcCgP7
+         kX+uzdMm4NyQcA1xnayA5AM/u8WgZHUBN2XCWDrYUm/QhPdNYe+s8KMv8hPa38TPyQ
+         4OLYDHIsr+zyg==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v2 0/7]  Enable 10bits bitstream for Hantro/G2 HEVC codec
+Date:   Mon, 18 Jul 2022 10:39:38 +0200
+Message-Id: <20220718083945.200845-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220716135642.52460-1-yuanjilin@cdjrlc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 09:56:42PM +0800, Jilin Yuan wrote:
->  Delete the redundant word 'to'.
-> 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+Since v1 Jernej patches to support 10 bits decoding have been merged.
+This v2 rebase the previously send patches and add Ezequiel reviewed-by
+tag.
+This series add 10bits support for newer hardware blocks (i.e without
+legacy regs) and for HEVC codec.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+It based tested on IMX8MQ with HEVC conformance tests.
+The results are that all 10bits bitstreams are OK.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3bc2f4ebd1fe..2d80b5b17ea4 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4453,7 +4453,7 @@ static void run_state_machine(struct tcpm_port *port)
->  		 * The specification suggests that dual mode ports in sink
->  		 * mode should transition to state PE_SRC_Transition_to_default.
->  		 * See USB power delivery specification chapter 8.3.3.6.1.3.
-> -		 * This would mean to to
-> +		 * This would mean to
->  		 * - turn off VCONN, reset power supply
->  		 * - request hardware reset
->  		 * - turn on VCONN
-> -- 
-> 2.36.1
+The problematic point raise by this series is the question of where 
+to put HEVC validation function. Does it have to be only hantro_try_ctrl()
+or shall it be done also in .run().
+This series doesn't change that behavoir so I will argue in farvor to
+merge it and to work on this validation time problem when unstaging 
+the driver.
+Hans, Ezequiel may that sound acceptable for you ? 
+
+Regards,
+Benjamin
+
+Benjamin Gaignard (7):
+  media: hantro: Store HEVC bit depth in context
+  media: hantro: HEVC: Fix auxilary buffer size calculation
+  media: hantro: HEVC: Fix chroma offset computation
+  media: hantro: postproc: Configure output regs to support 10bit
+  media: Hantro: HEVC: Allows 10-bit bitstream
+  media: hantro: imx8m: Enable 10bit decoding
+  media: hantro: Allows luma and chroma depth to be different
+
+ .../staging/media/hantro/hantro_g2_hevc_dec.c |  4 +--
+ drivers/staging/media/hantro/hantro_hevc.c    | 13 +++++----
+ .../staging/media/hantro/hantro_postproc.c    |  7 ++++-
+ drivers/staging/media/hantro/imx8m_vpu_hw.c   | 27 +++++++++++++++++++
+ 4 files changed, 40 insertions(+), 11 deletions(-)
 
 -- 
-heikki
+2.32.0
+

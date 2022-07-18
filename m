@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91106577929
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE72577930
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 03:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbiGRBOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 21:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S232502AbiGRBQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 21:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbiGRBOu (ORCPT
+        with ESMTP id S230015AbiGRBQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 21:14:50 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1C211801
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:14:49 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id c3so8459134pfb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eQAZ3O9SzuCt/F9lSSXScWHLuD4SVMp78IGm0SPE7gQ=;
-        b=oplNe3eVsGFmxpjamcsvfXuQqB7bMOQRGp/li++QcwqHYxmFMSLV0Gz2ek12DfzTCH
-         dyVKQYtS8ih5zzNKciGS9xdwrHQsKqmHV2d8BjA1zyhWkNvLedUeetol1/nqFiSXjEzQ
-         yqm17R1y80pDN++tZqvONJEH0mQjcAPVRcQJEjGetn97Ob9mBW1wZVhQvx+/gLDzvJyn
-         2dQYhWwimrteU97C+76r0DzVpc8341eBvZ/duATnloMMu1VhfS53iHdHQio1n5WaHsIY
-         UPPPUvM2BPPHbMwVsA8MhurbI4a6dItxgaFtleFGNKTiIRB++3jG6bOeX0fs43Kmz2L9
-         wRLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eQAZ3O9SzuCt/F9lSSXScWHLuD4SVMp78IGm0SPE7gQ=;
-        b=Fw6UznnOY3iNYfcMzXoIJCsEpLjE0Ni9jGOZVU5ctjvxrPd68a3e+/tbh6sTgKOdKm
-         SsdYC9/mZ/KuiqZmLwHWKvnaVL4j2N2r7lrl7X3x9e82ivwzbEVMZFKuEMD6dTaDBAyk
-         mK0oAFG9C6BEPdmzaF3CNtN/PdgK57KehRJexoo4qckn9fi02bVvcv7tI+U2UCzoYI2n
-         VD6NaSMdCuWHS6PSBeOZaOhSsnv9FRj7mdcB51Jy8rdJni4LHD7+AG6ZQArtqwnUK90A
-         DEoiyZhI6oJdh4Dx36Fmu8gw/QYW8X7ml3E4zk/0TMzh061zbEoeJR8fiijolSO26KIt
-         HTcw==
-X-Gm-Message-State: AJIora+AB/455pXCaNDSKRT7PILh69eVZ4g2gQ/Ykel0DBmKZ1dJej2P
-        9PIP7QGuKr6dCDsf1HqDL1E1Vybv7wX+zQ==
-X-Google-Smtp-Source: AGRyM1shEIaF4JG2n1WJHxPYM2A5LlhrO1uNTpcJbBZRIunLUiGHuqOG+hHn3pUqz4eltbC0PK4HrQ==
-X-Received: by 2002:a05:6a00:b4d:b0:52b:1eb1:218e with SMTP id p13-20020a056a000b4d00b0052b1eb1218emr20375015pfo.33.1658106889133;
-        Sun, 17 Jul 2022 18:14:49 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id t13-20020a62d14d000000b00528a4238eadsm8076255pfl.13.2022.07.17.18.14.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 18:14:48 -0700 (PDT)
-Message-ID: <2769e603-613e-0d61-0942-511bfb97760d@kernel.dk>
-Date:   Sun, 17 Jul 2022 19:14:47 -0600
+        Sun, 17 Jul 2022 21:16:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF99011823
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 18:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658106984; x=1689642984;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1WUb26eGG0rtceH20RMmEXVjO0dlju8oh9FxVP/TLrQ=;
+  b=H+F0ULgCUI2ZWo9y0KoVbumjH5rkVEN6k1IB/V6IzB4Wfp+580z7+I6P
+   Gs+0WuZfXmeZhUTwUjpxhS5WyWoYszv+UIMhi36fKEnlpDCmv9UCqV0UQ
+   YsKeDgsrOD4m3DJfYSm6mXAiWbZqHvjHJDFQXb2klXdf9a0JJnWumMLir
+   X51DhIlNwi5a53Bz01u56sTZV8AfmG3siSCvf5XL/qmIluwAkuUAR/1cD
+   tJx8kcTZghRVRqwlNOz9siAd3TDc9Fu3CB1HY7EVDpJrZbo8RZ/JoFnRF
+   xui0F32hMmEburC5XtJqw5IIBWxNUUC+eug9lDZfsGs+kJBBsGc3NOuLs
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286127470"
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="286127470"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:16:24 -0700
+X-IronPort-AV: E=Sophos;i="5.92,280,1650956400"; 
+   d="scan'208";a="624520457"
+Received: from spr.sh.intel.com ([10.239.53.122])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2022 18:16:22 -0700
+From:   Chao Gao <chao.gao@intel.com>
+To:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Chao Gao <chao.gao@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: [RESEND PATCH 0/3] Small fixes for swiotlb
+Date:   Mon, 18 Jul 2022 09:16:04 +0800
+Message-Id: <20220718011608.106289-1-chao.gao@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [LKP] Re: [io_uring] 584b0180f0:
- phoronix-test-suite.fio.SequentialWrite.IO_uring.Yes.Yes.1MB.DefaultTestDirectory.mb_s
- -10.2% regression
-Content-Language: en-US
-To:     Yin Fengwei <fengwei.yin@intel.com>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com
-References: <20220527092432.GE11731@xsang-OptiPlex-9020>
- <2085bfef-a91c-8adb-402b-242e8c5d5c55@kernel.dk>
- <0d60aa42-a519-12ad-3c69-72ed12398865@intel.com>
- <26d913ea-7aa0-467d-4caf-a93f8ca5b3ff@kernel.dk>
- <6d70460d-0a85-4104-9abc-dd100af99e6f@intel.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <6d70460d-0a85-4104-9abc-dd100af99e6f@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/17/22 6:58 PM, Yin Fengwei wrote:
-> 
-> 
-> On 7/15/2022 11:58 PM, Jens Axboe wrote:
->> I can't really explain that either, at least not immediately. I tried
->> running with and without that patch, and don't see any difference here.
->> In terms of making this more obvious, does the below also fix it for
->> you?
-> I will try the fix and let you know the result.
-> 
->>
->> And what filesystem is this being run on?
-> I am using ext4 and LKP are also using ext4. Thanks.
+Resend reason: use correct IOMMU mailing list.
+---
 
-Thanks, I'll try ext4 as well (was on XFS).
+They are found when I try to rebase my swiotlb optimizations onto the
+latest dma-mapping tree.
+
+Patch 1 is to remove unused fields.
+Patch 2-3 are to fix a corner case that area size can be smaller than the
+number of slots in a segment (128). Such small areas conflict with an
+implication of the mechanism used to track free slots.
+
+Chao Gao (3):
+  swiotlb: remove unused fields in io_tlb_mem
+  swiotlb: consolidate rounding up default_nslabs
+  swiotlb: ensure a segment doesn't cross the area boundary
+
+ include/linux/swiotlb.h |  5 -----
+ kernel/dma/swiotlb.c    | 45 ++++++++++++++++++++++++-----------------
+ 2 files changed, 27 insertions(+), 23 deletions(-)
 
 -- 
-Jens Axboe
+2.25.1
 

@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F28577CC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D18577CC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 09:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233502AbiGRHob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 03:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S233356AbiGRHpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 03:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiGRHo3 (ORCPT
+        with ESMTP id S230171AbiGRHp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 03:44:29 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FC56430;
-        Mon, 18 Jul 2022 00:44:28 -0700 (PDT)
-X-UUID: 77c5818b06ff4a8c869c0201b6b7ce26-20220718
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:aea19736-9353-42cf-ac42-b4365d23b90c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:54
-X-CID-INFO: VERSION:1.1.8,REQID:aea19736-9353-42cf-ac42-b4365d23b90c,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_HamU,ACTI
-        ON:release,TS:54
-X-CID-META: VersionHash:0f94e32,CLOUDID:e81dc5d7-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:0882f59e6fa7,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 77c5818b06ff4a8c869c0201b6b7ce26-20220718
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <jing-ting.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 79088243; Mon, 18 Jul 2022 15:44:23 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 18 Jul 2022 15:44:21 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 18 Jul 2022 15:44:21 +0800
-Message-ID: <d8f0bc5e2fb6ed259f9334c83279b4c011283c41.camel@mediatek.com>
-Subject: Re: [Bug] race condition at rebind_subsystems()
-From:   Jing-Ting Wu <jing-ting.wu@mediatek.com>
-To:     Tejun Heo <tj@kernel.org>,
-        Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-CC:     Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        <wsd_upstream@mediatek.com>, <lixiong.liu@mediatek.com>,
-        <wenju.xu@mediatek.com>, <jonathan.jmchen@mediatek.com>
-Date:   Mon, 18 Jul 2022 15:44:21 +0800
-In-Reply-To: <YtGaP+e35DZYSQf0@slm.duckdns.org>
-References: <1978e209e71905d89651e61abd07285912d412a1.camel@mediatek.com>
-         <20220715115938.GA8646@blackbody.suse.cz>
-         <YtGaP+e35DZYSQf0@slm.duckdns.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 18 Jul 2022 03:45:29 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199286447
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:45:29 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id h132so9843852pgc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 00:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=qPG5f5XlsbAdv/pqkYarWJ8wMcfg6//ahYHY17VbN5U=;
+        b=fKA2hRQVdeW/NA6c8c2q1ZV6wYKR6+JN3/s8yMF9je69q8wSovPOM9vfcvkcriciqM
+         aTUf2PApOm1RBJ6rpX87hfeZE9iBcUeXWk6dM8/KHkiYwWQPGdced5Zni+mQCblN7/78
+         Ybf18N9vo4PPjhQJm2fFlPi9NSuerX1EyZs5LTvB1fnsVDOxrZVw3aZ4BydWl5/cIolc
+         SSvR3bRzCF/UpCSMFe9yphSUVuETw4ejoqCeyIvda/oxlxg8Yn+36clichzSMkrPkmoj
+         rXjAL8Yl6oeEO3xv19An1HGWmpVG94qYZWH9XC4eh/q7VL9OuhfvRrdMILACwVVdDb0L
+         Mybw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qPG5f5XlsbAdv/pqkYarWJ8wMcfg6//ahYHY17VbN5U=;
+        b=B5uGL/vrUcNetVgJMhEpjvcXltcl9qirVP9LKXd9XTNz95FWVx3b2x5W8nmRH9ULPc
+         4dncG0UaLi1VkkLY2M1jflli0EB7t55TcQbhYzB3Jg/1EZJq3cLsnNEcxy/FY2cEIoOi
+         3Ttz2kjwpR6IP9R5txvfiFWBDD6xhaJ+SBuu3e0JxigiOXb6Npek+pbnmi+kHM9qoyHn
+         1bdxKwzUiDcLlnPCbDwno2glktpJI30GQwCjAutG6wRXIK82Bs9OFzfIGSCJ6nHT3rTT
+         FS2Do8U6DbUfSEauTH+rBoxCusrRDdX4tvJtXn7D+Iqem1rZ1OOUXS1WTP0/LRCGSsfu
+         t9XQ==
+X-Gm-Message-State: AJIora+bShQK0ye7Vwq78XbOFhlzOEoDPShQ0rysoQUg5pdyzKuwaGrV
+        cehO9UijiacB8x0CBeJ3K/KnntPyUH96QQPh
+X-Google-Smtp-Source: AGRyM1sQprqWVlzlJ1WxL5CGdZG2fd3EVR6uSrUck2XLqKdokl+RzFwU24VXCtx9eUjRpgtPPT0Afg==
+X-Received: by 2002:a05:6a00:1410:b0:528:5a5a:d846 with SMTP id l16-20020a056a00141000b005285a5ad846mr27369239pfu.9.1658130328453;
+        Mon, 18 Jul 2022 00:45:28 -0700 (PDT)
+Received: from sebin-inspiron ([103.165.167.46])
+        by smtp.gmail.com with ESMTPSA id w8-20020a170902a70800b001677fa34a07sm8564103plq.43.2022.07.18.00.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 00:45:27 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 13:15:18 +0530
+From:   Sebin Sebastian <mailmesebin00@gmail.com>
+To:     "Somalapuram, Amaranath" <asomalap@amd.com>
+Cc:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nirmoy Das <nirmoy.das@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Tom St Denis <tom.stdenis@amd.com>,
+        Evan Quan <evan.quan@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] drm/amdgpu: double free error and freeing
+ uninitialized null pointer
+Message-ID: <YtUPjqJyB/X+TnTi@sebin-inspiron>
+References: <20220710132911.399325-1-mailmesebin00@gmail.com>
+ <21df71a6-44d4-48a6-17d2-d463174a10c7@igalia.com>
+ <YtAw4dra+g1rcAXd@sebin-inspiron>
+ <1106b107-6373-9f89-5310-ea29db9fdf75@igalia.com>
+ <5ad24101-8db7-06eb-f28d-5e0c455592ce@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+In-Reply-To: <5ad24101-8db7-06eb-f28d-5e0c455592ce@amd.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,59 +88,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-15 at 06:47 -1000, Tejun Heo wrote:
-> (resending, I messed up the message header, sorry)
+On Fri, Jul 15, 2022 at 01:48:56PM +0530, Somalapuram, Amaranath wrote:
 > 
-> Hello,
+> On 7/14/2022 9:13 PM, André Almeida wrote:
+> > Às 12:06 de 14/07/22, Sebin Sebastian escreveu:
+> > > On Tue, Jul 12, 2022 at 12:14:27PM -0300, André Almeida wrote:
+> > > > Hi Sebin,
+> > > > 
+> > > > Às 10:29 de 10/07/22, Sebin Sebastian escreveu:
+> > > > > Fix two coverity warning's double free and and an uninitialized pointer
+> > > > > read. Both tmp and new are pointing at same address and both are freed
+> > > > > which leads to double free. Freeing tmp in the condition after new is
+> > > > > assigned with new address fixes the double free issue. new is not
+> > > > > initialized to null which also leads to a free on an uninitialized
+> > > > > pointer.
+> > > > > Coverity issue: 1518665 (uninitialized pointer read)
+> > > > > 		1518679 (double free)
+> > > > What are those numbers?
+> > > > 
+> > > These numbers are the issue ID's for the errors that are being reported
+> > > by the coverity static analyzer tool.
+> > > 
+> > I see, but I don't know which tool was used, so those seem like random
+> > number to me. I would just remove this part of your commit message, but
+> > if you want to keep it, you need to at least mention what's the tool.
 > 
-> On Fri, Jul 15, 2022 at 01:59:38PM +0200, Michal KoutnÃ½ wrote:
-> > The css->rstat_css_node should not be modified if there are
-> > possible RCU
-> > readers elsewhere.
-> > One way to fix this would be to insert synchronize_rcu() after
-> > list_del_rcu() and before list_add_rcu().
-> > (A further alternative (I've heard about) would be to utilize
-> > 'nulls'
-> > RCU lists [1] to make the move between lists detectable.)
+> new variable is not needed to initialize.
+>
+But if new is not initialized to null, won't it trigger a free on an
+uninitialized pointer in the first if block inside the do while loop?
+
+> The only condition double free happens is:
+> 
+> tmp = new;
+>                 if (sscanf(reg_offset, "%X %n", &tmp[i], &ret) != 1) {
+>                         ret = -EINVAL;
+>                         goto error_free; *//    if it hits this*
+>                 }/
+> /
+> 
+> and can be avoided like:
+> 
+>  error_free:
+> -       kfree(tmp);
+> +       if (tmp != new)
+> +               kfree(tmp);
+>         kfree(new);
+>         return ret;
+>  }
+> 
+> 
+> Regards,
+> 
+> S.Amarnath
+>
+This seem's like the best way to avoid the double free. Thanks for the
+suggestions.
+
+> > > > > Signed-off-by: Sebin Sebastian<mailmesebin00@gmail.com>
+> > > > > ---
+> > > > >   drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 8 +++++---
+> > > > >   1 file changed, 5 insertions(+), 3 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> > > > > index f3b3c688e4e7..d82fe0e1b06b 100644
+> > > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> > > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> > > > > @@ -1660,7 +1660,7 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
+> > > > >   {
+> > > > >   	struct amdgpu_device *adev = (struct amdgpu_device *)file_inode(f)->i_private;
+> > > > >   	char reg_offset[11];
+> > > > > -	uint32_t *new, *tmp = NULL;
+> > > > > +	uint32_t *new = NULL, *tmp = NULL;
+> > > > >   	int ret, i = 0, len = 0;
+> > > > >   	do {
+> > > > > @@ -1692,17 +1692,19 @@ static ssize_t amdgpu_reset_dump_register_list_write(struct file *f,
+> > > > >   		goto error_free;
+> > > > >   	}
+> > > > If the `if (!new) {` above this line is true, will be tmp freed?
+> > > > 
+> > > Yes, It doesn't seem to free tmp here. Should I free tmp immediately
+> > > after the do while loop and remove `kfree(tmp)` from the `if (ret)`
+> > > block? Thanks for pointing out the errors.
+> > If you free immediately after the while loop, then you would risk a use
+> > after free here:
 > > 
-> > But as I'm looking at it from distance, it may be simpler and
-> > sufficient
-> > to just take cgroup_rstat_lock around the list migration (the
-> > nesting
-> > under cgroup_mutex that's held with rebind_subsystems() is fine).
-> 
-> synchronize_rcu() prolly is the better fit here given how that
-> list_node's
-> usage, but yeah, great find.
-> 
-> Thanks.
-> 
-
-Hi Michal and Tejun,
-
-
-Thanks for your suggestion.
-Accroding your description, is the following patch corrent?
-
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -1813,6 +1813,7 @@
- 
- 		if (ss->css_rstat_flush) {
- 			list_del_rcu(&css->rstat_css_node);
-+			synchronize_rcu();
- 			list_add_rcu(&css->rstat_css_node,
- 				     &dcgrp->rstat_css_list);
- 		}
-
-
-If the patch is correct, we will add this patch to our stability test.
-And we will continue to observe whether the problem is solved.
-Thank you.
-
-
-
-
-Best regards,
-Jing-Ting Wu
-
+> > 	swap(adev->reset_dump_reg_list, tmp);
+> > 
+> > So this isn't the solution either.
+> > 
+> > > > >   	ret = down_write_killable(&adev->reset_domain->sem);
+> > > > > -	if (ret)
+> > > > > +	if (ret) {
+> > > > > +		kfree(tmp);
+> > > > >   		goto error_free;
+> > > > > +	}
+> > > > >   	swap(adev->reset_dump_reg_list, tmp);
+> > > > >   	swap(adev->reset_dump_reg_value, new);
+> > > > >   	adev->num_regs = i;
+> > > > >   	up_write(&adev->reset_domain->sem);
+> > > > > +	kfree(tmp);
+> > > > >   	ret = size;
+> > > > >   error_free:
+> > > > > -	kfree(tmp);
+> > > > >   	kfree(new);
+> > > > >   	return ret;
+> > > > >   }

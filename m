@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E0857843A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A87857843E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235462AbiGRNrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S235492AbiGRNsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235446AbiGRNrk (ORCPT
+        with ESMTP id S235446AbiGRNsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:47:40 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D8A25C58
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658152056; x=1689688056;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=E9AP2s70xFyX/Kx7r8Cy/LmGrjmh6rN1yf6uQ7FJICQ=;
-  b=IHwavW9DzyvYHg1fMCY9kVS2TIBANUiNrEjI54OvlA7qrxJ50tHX4nyz
-   qArHHJ+Vppy4Ay4g8u0wELMcLpNY4dVl+/c+p9ImpMa0bs03lAmV0uk9F
-   zV5UQ9Go4JupMY9DLoCykXAno388vqsqKam2O32oFyWfAgfPYD4ZvSe1x
-   BEge5x6cwu8S7ESX0aVftK3zLpUl0+F7hdKcNrQ1H0hKs+3hvW/iQMIiU
-   Svqu+bY9w9UUirDfdst6aEZF8tqNXy/kwhdgCNW/KStOQgPmRyS/cwOkD
-   8xmnK1zRj818tVhPz28MnksFh8Q/8+LMU9Q4GIWLg9/VkWBmekMZLzmIY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="266005477"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="266005477"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:47:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="624735226"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga008.jf.intel.com with ESMTP; 18 Jul 2022 06:47:36 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Mon, 18 Jul 2022 06:47:35 -0700
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15]) by
- ORSMSX602.amr.corp.intel.com ([10.22.229.15]) with mapi id 15.01.2375.028;
- Mon, 18 Jul 2022 06:47:35 -0700
-From:   "Winkler, Tomas" <tomas.winkler@intel.com>
-To:     "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "Usyskin, Alexander" <alexander.usyskin@intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        "Lubart, Vitaly" <vitaly.lubart@intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Ceraolo Spurio, Daniele" <daniele.ceraolospurio@intel.com>
-Subject: RE: [PATCH v5 02/14] drm/i915/gsc: add slow_fw flag to the mei
- auxiliary device
-Thread-Topic: [PATCH v5 02/14] drm/i915/gsc: add slow_fw flag to the mei
- auxiliary device
-Thread-Index: AQHYkS2y4nDoBS6zcUm7lJX3uj+Lia1zfVmAgA+SR+A=
-Date:   Mon, 18 Jul 2022 13:47:35 +0000
-Message-ID: <c5cae0f43af84182b9539085012088d8@intel.com>
-References: <20220706114345.1128018-1-alexander.usyskin@intel.com>
- <20220706114345.1128018-3-alexander.usyskin@intel.com>
- <Ysb5464dRPxPrp0d@intel.com>
-In-Reply-To: <Ysb5464dRPxPrp0d@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-x-originating-ip: [10.22.254.132]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 18 Jul 2022 09:48:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C3E255BE;
+        Mon, 18 Jul 2022 06:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=he4BsFEqlETpQMe0yQVdnX/HTL6ufCO0M/YAN+bslNU=; b=d1bPonhbieaRwnjlWIosd26sbt
+        4eaqaKU7ZGwauPRt0tQTKkz3dQk22w2G67cJSDwS2ILMIv52NZkkdgKPJQ3tfu0ri9Ux+fSpxLK6E
+        Tb3UNKjFZmOw8Y19GLoITRPuOf54w3UVeaeOgYym2PHAkHmlZVxdwL0kRsDblEype+2f2pdtzs4C2
+        XSWzyZWPhIPcVfXaPP9fNM/5zmu5Qad8JePz6noKGSiOuASDo/b8+ct/ZjMSK8N7NKkI9caikM4fR
+        yeip29miYKwy6bhGhb4Ra/P2+EPrmqMdNBOajMgNLbD5FNzIuF2qbSooIDtb31jTQ1hlw+1oHkknN
+        lLqend1g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDR6j-00Cj5t-My; Mon, 18 Jul 2022 13:48:21 +0000
+Date:   Mon, 18 Jul 2022 14:48:21 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] s390/crash: use static swap buffer for
+ copy_to_user_real()
+Message-ID: <YtVkpRJ7jvLFuKs4@casper.infradead.org>
+References: <cover.1658148067.git.agordeev@linux.ibm.com>
+ <77d50b4a2359d1791835b6111edaa155eb11c5ea.1658148067.git.agordeev@linux.ibm.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <77d50b4a2359d1791835b6111edaa155eb11c5ea.1658148067.git.agordeev@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jul 18, 2022 at 03:32:40PM +0200, Alexander Gordeev wrote:
+> +++ b/arch/s390/kernel/crash_dump.c
+> @@ -53,6 +53,7 @@ struct save_area {
+>  };
+>  
+>  static LIST_HEAD(dump_save_areas);
 
->=20
-> On Wed, Jul 06, 2022 at 02:43:33PM +0300, Alexander Usyskin wrote:
-> > Add slow_fw flag to the mei auxiliary device info to inform the mei
-> > driver about slow underlying firmware.
-> > Such firmware will require to use larger operation timeouts.
-> >
-> > Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-> > Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-> > Reviewed-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-> > ---
-> >  include/linux/mei_aux.h | 1 +
->=20
-> This patch has a wrong subject since it doesn't touch i915.
+I'd suggest you need a mutex here so that simultaneous calls to
+copy_to_user_real() don't corrupt each others data.
 
-This is in a shared file between drm and mei, but I can resend.
-
->=20
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/include/linux/mei_aux.h b/include/linux/mei_aux.h index
-> > 587f25128848..a29f4064b9c0 100644
-> > --- a/include/linux/mei_aux.h
-> > +++ b/include/linux/mei_aux.h
-> > @@ -11,6 +11,7 @@ struct mei_aux_device {
-> >  	struct auxiliary_device aux_dev;
-> >  	int irq;
-> >  	struct resource bar;
-> > +	bool slow_fw;
-> >  };
-> >
-> >  #define auxiliary_dev_to_mei_aux_dev(auxiliary_dev) \
-> > --
-> > 2.34.1
-> >
+> +static char memcpy_real_buf[PAGE_SIZE];
+>  
+>  /*
+>   * Allocate a save area
+> @@ -179,23 +180,18 @@ int copy_oldmem_kernel(void *dst, unsigned long src, size_t count)
+>  static int copy_to_user_real(void __user *dest, unsigned long src, unsigned long count)
+>  {
+>  	int offs = 0, size, rc;
+> -	char *buf;
+>  
+> -	buf = (char *)__get_free_page(GFP_KERNEL);
+> -	if (!buf)
+> -		return -ENOMEM;
+>  	rc = -EFAULT;
+>  	while (offs < count) {
+>  		size = min(PAGE_SIZE, count - offs);
+> -		if (memcpy_real(buf, src + offs, size))
+> +		if (memcpy_real(memcpy_real_buf, src + offs, size))
+>  			goto out;
+> -		if (copy_to_user(dest + offs, buf, size))
+> +		if (copy_to_user(dest + offs, memcpy_real_buf, size))
+>  			goto out;
+>  		offs += size;
+>  	}
+>  	rc = 0;
+>  out:
+> -	free_page((unsigned long)buf);
+>  	return rc;
+>  }
+>  
+> -- 
+> 2.34.1
+> 

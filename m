@@ -2,94 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2C9578D20
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 23:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E580578D2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 00:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbiGRV50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 17:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
+        id S236392AbiGRWAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 18:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234131AbiGRV5Y (ORCPT
+        with ESMTP id S233981AbiGRWAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 17:57:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF222E9FE;
-        Mon, 18 Jul 2022 14:57:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EBC260C38;
-        Mon, 18 Jul 2022 21:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF732C341C0;
-        Mon, 18 Jul 2022 21:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658181442;
-        bh=YwbotHMfbuxrSbS+K1OjmqsDpBUf1RB689gnIn+U8ck=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LVuchH6+Yae3CHyWf7MKhWHG8rjKFTfYb/7M6dAzH+3gWxyMuOcmtvikTSZbLoocS
-         eS1R60VC84RcEgSQQSw68cdLP+cLq0kVtlmelmPXPZqjc44P3UX5yPi50m+sTUoovI
-         QYMvv30U+q+xYkZLLctJIokbWaRRpQA+CHBjyvNGg4KmX4OpcdoJ+26sGFNEkiI2U8
-         FyM1QrXbNYJqF63JdIh5UhhVJTN7UC4ebekfIuWtvNyHBlhqMm6fT2nv2x6NLkGhR0
-         6ecyxF/LqkqMXOm01V2ZUl7NPzaYtOwpmKBxQBfrX7NL8SrD/gTvRKfBykWbud318c
-         yoXCfwcT6lGZA==
-Date:   Mon, 18 Jul 2022 14:57:17 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Tariq Toukan <ttoukan.linux@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next V2 2/2] net/mlx5e: Improve remote NUMA
- preferences used for the IRQ affinity hints
-Message-ID: <20220718145717.27c2db1b@kernel.org>
-In-Reply-To: <2fc99d26-f804-ad34-1fd7-90cfb123b426@gmail.com>
-References: <20220718124315.16648-1-tariqt@nvidia.com>
-        <20220718124315.16648-3-tariqt@nvidia.com>
-        <YtVlDiLTPxm312u+@worktop.programming.kicks-ass.net>
-        <2fc99d26-f804-ad34-1fd7-90cfb123b426@gmail.com>
+        Mon, 18 Jul 2022 18:00:16 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A3F30567;
+        Mon, 18 Jul 2022 15:00:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Smy+K5SsBoKu7R2Ez6Wknyaqr3gfX9BPVA5fVt2P8T0=; b=leyACy2j4DACa1kT6Gpoba8VOm
+        VOcEfZL3PkIZgiPs8NmLAJaBh8ucD+6kAoUEzxAXkRiJhdoKUCC9eS2BxTrWrSU3Gqy8FGHCl0+Yf
+        cnoOA2e2G7FTo7OqIQ+Jms+460wxBba1ZdXNg9IsZJuJ86ignpBqHcbMW+ipI2+RdNLMHKQbtEnSK
+        yUQZmHoK4wSnrk6TsdqloQ/tkKm0+6MDqgVLg+haVl7nQ2yUnqoiirjvDUaegs24clTHejTLG5Nhf
+        GrMHfUZ3Mq47NEGdmLxe/Y3iaYND/IDLOH/w41NkO0UbGqm0/y7Hu229QF2xyeGt/BSMoNktdIPyL
+        BQ+qyY7Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDYmh-001q88-OL; Mon, 18 Jul 2022 22:00:11 +0000
+Date:   Mon, 18 Jul 2022 15:00:11 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     torvalds@linux-foundation.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, gregkh@linuxfoundation.org,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.sf.net, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-media@vger.kernel.org, linux-block@vger.kernel.org,
+        Dave Airlie <airlied@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: Re: [PATCH] docs: driver-api: firmware: add driver firmware
+ guidelines.
+Message-ID: <YtXX604B2X8vdH9b@bombadil.infradead.org>
+References: <20220718072144.2699487-1-airlied@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718072144.2699487-1-airlied@gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 22:49:21 +0300 Tariq Toukan wrote:
-> >> @@ -830,8 +887,7 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
-> >>   		ret = -ENOMEM;
-> >>   		goto free_irqs;
-> >>   	}
-> >> -	for (i = 0; i < ncomp_eqs; i++)
-> >> -		cpus[i] = cpumask_local_spread(i, dev->priv.numa_node);
-> >> +	mlx5_set_eqs_cpus(dev, cpus, ncomp_eqs);  
-> > 
-> > So you change this for mlx5, what about the other users of
-> > cpumask_local_spread() ?  
+On Mon, Jul 18, 2022 at 05:21:44PM +1000, Dave Airlie wrote:
+> From: Dave Airlie <airlied@redhat.com>
 > 
-> I took a look at the different netdev users.
-> While some users have similar use case to ours (affinity hints), many 
-> others use cpumask_local_spread in other flows (XPS setting, ring 
-> allocations, etc..).
+> A recent snafu where Intel ignored upstream feedback on a firmware
+> change, led to a late rc6 fix being required. In order to avoid this
+> in the future we should document some expectations around
+> linux-firmware.
 > 
-> Moving them to use the newly exposed API needs some deeper dive into 
-> their code, especially due to the possible undesired side-effects.
+> I was originally going to write this for drm, but it seems quite generic
+> advice.
 > 
-> I prefer not to include these changes in my series for now, but probably 
-> contribute it in a followup work.
+> I'm cc'ing this quite widely to reach subsystems which use fw a lot.
+> 
+> Signed-off-by: Dave Airlie <airlied@redhat.com>
 
-I'd be great if you could pick any other driver and start creating 
-the right APIs for it and mlx5. "Probably contribute followup work"
-does not inspire confidence. And yes, I am being picky, I'm holding 
-a grudge against mlx5 for not using netif_get_num_default_rss_queues().
+Document well deserved to be written, thanks for making this happen.
+Modulo all the silly spelling / bike-shedding issues folks might find,
+in case you care to re-spin for a v2:
+
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+
+Now let's think about the impact of two corner cases which *do*
+happen and so this poses security implications on enablement:
+
+1) Devices which end up with a security issue which a vendor considers
+   obsolete, and the only way to fix something is firmware. We're
+   security-out-of-luck. For this I've previously sucessfully have put
+   effort into organizations to open source the firmware. We were
+   successful more than once:
+
+     * https://github.com/qca/open-ath9k-htc-firmware
+     * https://github.com/qca/ath6kl-firmware
+
+   When these efforts fall short we have a slew of reverse engineering
+   efforts which fortunately also have been sucessfull.
+
+2) Vendor goes belly up
+
+Both implicate the need to help persuade early on a strategy for open
+source firmware, and I don't want to hear anyone tell me it is not
+possible.
+
+When that fails we can either reverse engineer and worst case, I am not
+sure if we have a process for annotations or should. Perhaps a kconfig
+symbol which drivers with buggy firmware can depend on, and only if you
+enable that kconfig symbol would these drivers be available to be
+enabled?
+
+Are we aware of such device drivers? They must exist...
+
+  Luis

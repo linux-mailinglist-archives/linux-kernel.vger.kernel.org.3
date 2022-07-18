@@ -2,86 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6F6578A69
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8AE578A6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 21:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbiGRTOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 15:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S235442AbiGRTO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 15:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiGRTOh (ORCPT
+        with ESMTP id S230298AbiGRTO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 15:14:37 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B738A2CCB5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 12:14:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658171676; x=1689707676;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xp0ZNpYz19QNvdTmcofg5uiTtsnhZ7FV23L2OrUqiGk=;
-  b=oK5xstkmQCZbYkMlbh0O8l1J82qi1tLAUnJ3v4ZsOI8C57QHY+PvJz1c
-   mr9uEI4PW2b5LPhhhNetonBQQqB6h8L0MdE8Fu2do6ufVABzl0JZEIykY
-   hkZxAKG2XJpUczkhshPOj+pKabdJM3VQNpFUzhxrHy/5izruRpnYj4/R2
-   /MLMxyIPYIwdcvnQZRYwRbtXxIhKKBKF+RAMBZTB/rZX83Fha3SlUi5k2
-   h2X7x/CmT1LQ5LWSJoIsDUhz72SXlyos/EpO85wrzOdtr8shBc2v4h8MX
-   e1YqRy97uEnCQfJLTTBfVMDa/dqS4jfIOIA+OQuG5ueEVZoNaWoKx2DlC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="266082098"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="266082098"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:14:27 -0700
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="700145102"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 12:14:25 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oDWCE-001OPa-29;
-        Mon, 18 Jul 2022 22:14:22 +0300
-Date:   Mon, 18 Jul 2022 22:14:22 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 1/1] ALSA: isa: Use INVALID_HWIRQ definition
-Message-ID: <YtWxDmEtDMORLUSX@smile.fi.intel.com>
-References: <20220715205737.83076-1-andriy.shevchenko@linux.intel.com>
- <87zgh9tuna.wl-tiwai@suse.de>
+        Mon, 18 Jul 2022 15:14:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD92C2CCB4;
+        Mon, 18 Jul 2022 12:14:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D524616BD;
+        Mon, 18 Jul 2022 19:14:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B5D3C341C0;
+        Mon, 18 Jul 2022 19:14:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658171694;
+        bh=dqjX1mmlML3aigT0dIo8r1Wy/YrsKN/Sc5/hAu3AZzE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=g5m5lFVBpvfVj/WQ+kexwatTrjuly4N3LBV3QOw/e0BZ3pUCvUeUn9ogK8GqAA/He
+         3GjokFeeQjW9zgoMmALq66vrpNXxp9pqDOw0T9C6y2RE2QnH9T5UYntnaYytTYW6iC
+         BZSChVAJv9ydeKNVw3xFg8QSQRSCcntrrS1T5NxqwfHwTy3hY0Yr4ST6W5c+LFT/Gr
+         Ts+dsAqW5UX3PhieBu/xbTnqjQLDQNvlyFB+P1qn5hSUCqL4eC3xARjzRPQgNecrKm
+         lbyEwb1cL4pBOblVbBagqIitt/yx0TtUhlh8eySseKctsxu259KSAAZD0ZWuPDHkXZ
+         j21F1HzcZR6fg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87zgh9tuna.wl-tiwai@suse.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com>
+References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com> <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com>
+Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jonathan =?utf-8?q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Olof Johansson <olof@lixom.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Thomas G leixner <tglx@linutronix.de>,
+        Patrick Venture <venture@google.com>,
+        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Nancy Yuen <yuenn@google.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>, open list:
+        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>, ;
+Illegal-Object: Syntax error in Cc: address found on vger.kernel.org:
+        Cc:     ;
+                        ^-missing semicolon to end mail group, extraneous tokens in mailbox, missing end of mailbox
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Date:   Mon, 18 Jul 2022 12:14:52 -0700
+User-Agent: alot/0.10
+Message-Id: <20220718191454.5B5D3C341C0@smtp.kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 08:54:17AM +0200, Takashi Iwai wrote:
-> On Fri, 15 Jul 2022 22:57:37 +0200,
-> Andy Shevchenko wrote:
+Quoting Tomer Maimon (2022-07-12 00:28:30)
+> On Mon, 11 Jul 2022 at 22:55, Stephen Boyd <sboyd@kernel.org> wrote:
+> >
+> > Quoting Tomer Maimon (2022-07-11 05:35:07)
+> > > +        */
+> > > +       int onecell_idx;
+> > > +};
+> > > +
+> > > +struct npcm8xx_clk_pll_data {
+> > > +       u32 reg;
+> > > +       const char *name;
+> > > +       const char *parent_name;
+> >
+> > Any reason why we're not using clk_parent_data or direct clk_hw
+> > pointers?
+> For more historical reasons, I did the same method as done in the
+> NPCM7XX driver.
+> The clk_init_data struct can use * const *parent_names,
+> https://elixir.bootlin.com/linux/v5.19-rc6/source/include/linux/clk-provi=
+der.h#L289
+> Is it problematic?
 
-...
+It will need to be changed to not use global string matching. Ideally
+new drivers use clk_parent_data or clk_hw pointers directly. It's faster
+and preferred.
 
-> > -#define INVALID_IRQ  ((unsigned)-1)
-> > -
-> > +#define INVALID_IRQ  ((unsigned)INVALID_HWIRQ)
-> 
-> This seems failing to build on my local tree as is.
-> We need to include <linux/irq.h> explicitly.
+> >
+> > > +       NPCM8XX_CLK_S_AHB, CLK_DIVIDER_READ_ONLY, 0, NPCM8XX_CLK_SPI0=
+},
+> > > +       /* bit 10-6 SPI0CKDV*/
+> > > +       {NPCM8XX_CLKDIV3, 1, 5, NPCM8XX_CLK_S_SPIX,
+> > > +       NPCM8XX_CLK_S_AHB, CLK_DIVIDER_READ_ONLY, 0, NPCM8XX_CLK_SPIX=
+},
+> > > +       /* bit 5-1 SPIXCKDV*/
+> > > +
+> > > +       {NPCM8XX_CLKDIV4, 28, 4, NPCM8XX_CLK_S_RG, NPCM8XX_CLK_S_RG_M=
+UX,
+> > > +       CLK_DIVIDER_READ_ONLY, 0, NPCM8XX_CLK_RG},
+> > > +       /* bit 31-28 RGREFDIV*/
+> > > +       {NPCM8XX_CLKDIV4, 12, 4, NPCM8XX_CLK_S_RCP, NPCM8XX_CLK_S_RCP=
+_MUX,
+> > > +       CLK_DIVIDER_READ_ONLY, 0, NPCM8XX_CLK_RCP},
+> > > +       /* bit 15-12 RCPREFDIV*/
+> > > +       {NPCM8XX_THRTL_CNT, 0, 2, NPCM8XX_CLK_S_TH, NPCM8XX_CLK_S_CPU=
+_MUX,
+> > > +       CLK_DIVIDER_READ_ONLY | CLK_DIVIDER_POWER_OF_TWO, 0, NPCM8XX_=
+CLK_TH},
+> > > +       /* bit 1-0 TH_DIV*/
+> > > +};
+> > > +
+> > > +static DEFINE_SPINLOCK(npcm8xx_clk_lock);
+> > > +
+> > > +static int npcm8xx_clk_probe(struct platform_device *pdev)
+> > > +{
+> > > +       struct clk_hw_onecell_data *npcm8xx_clk_data;
+> > > +       struct device *dev =3D &pdev->dev;
+> > > +       struct device_node *np =3D dev->of_node;
+> > > +       void __iomem *clk_base;
+> > > +       struct resource res;
+> > > +       struct clk_hw *hw;
+> > > +       int i, err;
+> > > +
+> > > +       npcm8xx_clk_data =3D devm_kzalloc(dev, struct_size(npcm8xx_cl=
+k_data, hws,
+> > > +                                                        NPCM8XX_NUM_=
+CLOCKS),
+> > > +                                       GFP_KERNEL);
+> > > +       if (!npcm8xx_clk_data)
+> > > +               return -ENOMEM;
+> > > +
+> > > +       err =3D of_address_to_resource(np, 0, &res);
+> >
+> > Why can't we use platform_get_resource()?
+> >
+> > > +       if (err) {
+> > > +               dev_err(dev, "Failed to get resource, ret %d\n", err);
+> > > +               return err;
+> > > +       }
+> > > +
+> > > +       clk_base =3D ioremap(res.start, resource_size(&res));
+> >
+> > And use devm_platform_ioremap_resource()?
+> Clock and reset driver use the same memory register map 0xF0801000 - 0xF0=
+801FFF.
+> For historical reasons the registers of both modules are mixed in the
+> memory range 0xF0801000 - 0xF0801FFF this is why we can't have a
+> separate region for each module.
+> In case I will use devm_platform_ioremap_resource function the reset
+> ioremap will fail so the driver using the method above.
 
-As Marc told me this is probably the way to the wrong direction, so, please,
-discard this patch anyway.
+So the clk and reset driver should be the same driver, or one driver
+should register the other and use the auxiliary bus to express the
+relationship. That way we know that the drivers are tightly coupled and
+aren't going to stomp over each other.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> >
+> > > +       if (!clk_base) {
+> > > +               dev_err(&pdev->dev, "Failed to remap I/O memory\n");
+> > > +               return -ENOMEM;
+> > > +       }
+> > > +
+> > > +       npcm8xx_clk_data->num =3D NPCM8XX_NUM_CLOCKS;
+> > > +
+> > > +       for (i =3D 0; i < NPCM8XX_NUM_CLOCKS; i++)
+> > > +               npcm8xx_clk_data->hws[i] =3D ERR_PTR(-EPROBE_DEFER);
+> > > +
+> > > +       /* Reference 25MHz clock */
+> >
+> > Does this exist on the board? If so, I'd make a fixed rate clk in the
+> > dts and have 'refclk' be an input in the binding for this clk controlle=
+r.
+> No, it is an internal clock in the SoC, this is why it is in the driver.
 
-
+Ok. I suppose that could be inside the 'soc' node for this device as a
+fixed rate clk but registering it here is also fine.

@@ -2,56 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40801577989
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 04:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865C557798E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 04:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbiGRCJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Jul 2022 22:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S233120AbiGRCMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Jul 2022 22:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiGRCJB (ORCPT
+        with ESMTP id S230218AbiGRCMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Jul 2022 22:09:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B90210559
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 19:09:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8A4AB80EFF
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:08:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18758C3411E;
-        Mon, 18 Jul 2022 02:08:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658110137;
-        bh=b9NvY9iu91PN+nbkdFil7z6UnA+30tNfJQaKaf1Zn10=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=beEwHQISvatVEaFlarkpSupiipxJaHpyjCVF9621I+QVIcUP5h55jqstJR+0qWl87
-         6UFkb/CYJ1mWl8iRmfQzXq5zwwsu12YzUGKePog1NbBMkc/oE+TmnDP97W3UGJV4GG
-         woWfCTI0rK9ciHRgbeOkx+YG4EuFmfIgM9lSM49d0XWm/3NBQvoyhehYSly8u2Qs1X
-         vZxCW0bsUtwStKWtouHpulwyAq8lgkMQNVm8ZykqYhPORTDvZrQd2Ee/8AhYOd4bOv
-         BcHmx7rhkusdr2BG1vOLVaXG2hgfzQJhVr5c03cbHTVCZG62//jbSHiBPZh9ipRrIx
-         NeWcAD5swec3Q==
-Date:   Mon, 18 Jul 2022 11:08:53 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: Re: [PATCH] selftests/kprobe: Do not test for GRP/ without event
- failures
-Message-Id: <20220718110853.299c7631f15fd1dfb002ef6c@kernel.org>
-In-Reply-To: <20220712161707.6dc08a14@gandalf.local.home>
-References: <20220712161707.6dc08a14@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Sun, 17 Jul 2022 22:12:45 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EF410559;
+        Sun, 17 Jul 2022 19:12:44 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so11280927pjf.2;
+        Sun, 17 Jul 2022 19:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i78I4TE1JiOYqnZaNPr9Rowmxm+xUoOYt534dSBaRR0=;
+        b=P2vUoEy9XBI+qEttU1UOVGA4SpJWQTnTp+zza1zDkZ53KQdcadas6XXAInXdMdeXah
+         Mu/C1wRiNNN0Yg2XTuZK3KOFkzGGQgHOci15P/FwkmSuZxuTxQjIaGhyDGzJ9k3JoSl9
+         JD9bfHLJ4lU+PguYsL8vVP6d0JBzYfTABNPDBpvqPXH4olmJz22IzqEGirlnQFH7w7f4
+         QlGKOGfMnNMW55OMdySiwYZJf857N1q/vTQVr+UdIxK+5KtKrfr94oBPWEUSrtS5g72w
+         60fZaeV0ro8+qStmeOfhHaJJ7wEvxDw0cP8qPormOpbvZynRq07aWhF1Kmi7ehD3Y+GP
+         GMpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i78I4TE1JiOYqnZaNPr9Rowmxm+xUoOYt534dSBaRR0=;
+        b=QHaU3kAsKqsW3XQmbXdT5K/2s1L+ITzdyw/en28fzP0NR/wVOyspLGfTFRDxP4gwAU
+         oj/WrS+mbxNkgLLcFzVxQqBcqye9/A3/n/ryxiFUGflj5e6mVdAON3XKvEyTl7zdhk7h
+         m0QraABcTXUM3V9v7leOJTc3nPChgFf7y0ekdK7VmeBlZUXPyedPbejjoZTMNPHm1FZO
+         ym88JKpYcjg1hdI4V3o9tiInTYyoDJyyywHPPjuHQGMz2EDEEtML0ZWk+0fbwwvmKEAv
+         vLQcLRLvEcqaYX8aXuipnNj2oVJdDbmQEnGeMU6AKxucishUMknLAXgdWbf+cmuukghZ
+         BlsA==
+X-Gm-Message-State: AJIora/R8R9MsA9gEok3aPcR3JO6qy9RGzgwe8AvFAlKTy9RUydQ6UKw
+        fyLRMD2QVdkf7vwajY8fbNYaFcA0QdFHWg==
+X-Google-Smtp-Source: AGRyM1th9MU4wtYAqqWGdKRksVwhGB90SLKNfy7x8fq1400OGXLKjnKdikVOMIR/16OC6ZvcCp0Fkg==
+X-Received: by 2002:a17:902:e213:b0:16c:4292:9f57 with SMTP id u19-20020a170902e21300b0016c42929f57mr26018611plb.143.1658110363547;
+        Sun, 17 Jul 2022 19:12:43 -0700 (PDT)
+Received: from cloud-MacBookPro ([2601:646:8201:c2e0:1d20:c9aa:c964:2f9b])
+        by smtp.gmail.com with ESMTPSA id o11-20020a170903210b00b001638a171558sm7883365ple.202.2022.07.17.19.12.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 19:12:42 -0700 (PDT)
+Date:   Sun, 17 Jul 2022 19:12:41 -0700
+From:   binyi <dantengknight@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Joe Perches <joe@perches.com>, Manish Chopra <manishc@marvell.com>,
+        GR-Linux-NIC-Dev@marvell.com, Coiby Xu <coiby.xu@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] staging: qlge: Fix indentation issue under long for
+ loop
+Message-ID: <20220718021241.GA8270@cloud-MacBookPro>
+References: <20220710210418.GA148412@cloud-MacBookPro>
+ <20220712134610.GO2338@kadam>
+ <1d6fd2b271dfa0514ccb914c032e362bc4f669fa.camel@perches.com>
+ <20220715060457.GA2928@cloud-MacBookPro>
+ <20220715092847.GU2316@kadam>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220715092847.GU2316@kadam>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,61 +78,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 16:17:07 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Jul 15, 2022 at 12:28:47PM +0300, Dan Carpenter wrote:
+> On Thu, Jul 14, 2022 at 11:04:57PM -0700, binyi wrote:
+> > On Tue, Jul 12, 2022 at 07:14:55AM -0700, Joe Perches wrote:
+> > > On Tue, 2022-07-12 at 16:46 +0300, Dan Carpenter wrote:
+> > > > > @@ -3007,10 +3007,12 @@ static int qlge_start_rx_ring(struct qlge_adapter *qdev, struct rx_ring *rx_ring
+> > > > >  		tmp = (u64)rx_ring->lbq.base_dma;
+> > > > >  		base_indirect_ptr = rx_ring->lbq.base_indirect;
+> > > > >  
+> > > > > -		for (page_entries = 0; page_entries <
+> > > > > -			MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN); page_entries++)
+> > > > > -				base_indirect_ptr[page_entries] =
+> > > > > -					cpu_to_le64(tmp + (page_entries * DB_PAGE_SIZE));
+> > > > > +		for (page_entries = 0;
+> > > > > +		     page_entries < MAX_DB_PAGES_PER_BQ(QLGE_BQ_LEN);
+> > > > > +		     page_entries++) {
+> > > > > +			base_indirect_ptr[page_entries] = cpu_to_le64(tmp);
+> > > > > +			tmp += DB_PAGE_SIZE;
+> > > > 
+> > > > I've previously said that using "int i;" is clearer here.  You would
+> > > > kind of expect "page_entries" to be the number of entries, so it's kind
+> > > > of misleading.  In other words, it's not just harmless wordiness and
+> > > > needless exposition, it's actively bad.
+> > > 
+> > > Likely true.
+> > > 
+> > 
+> > I agree it could be misleading. But if "page_entries" is in the for loop I
+> > would assume it's some kind of index variable, and still it provides some
+> > information (page entry) for the index, probably page_entry_idx could be
+> > better name but still makes the for loop a very long one. I guess I would
+> > leave it be.
+> 
+> It does not "provide some information".  That's what I was trying to
+> explain.  It's the opposite of information.  Information is good. No
+> information is neutral.  But anti-information is bad.
 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> A new feature is added where kprobes (and other probes) do not need to
-> explicitly state the event name when creating a probe. The event name will
-> come from what is being attached.
-> 
-> That is:
-> 
->   # echo 'p:foo/ vfs_read' > kprobe_events
-> 
-> Will no longer error, but instead create an event:
-> 
->   # cat kprobe_events
->  p:foo/p_vfs_read_0 vfs_read
-> 
-> This should not be tested as an error case anymore. Remove it from the
-> selftest as now this feature "breaks" the selftest as it no longer fails
-> as expected.
+I see. Indeed, being neutral is better than being bad. 
 
-Good catch!
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-BTW, in this case, NO_EVENT_NAME error should not happen anymore.
-Let me cleanup the code.
-
-Thank you,
-
+> Like there are so many times in life where you listen to someone and you
+> think you are learning something but you end up stupider than before.
+> They have done studies on TV news where it can make you less informed
+> than people who don't watch it.  And other studies say if you stop
+> watching TV news for even a month then your brain starts to heal.
 > 
-> Link: https://lore.kernel.org/all/1656296348-16111-1-git-send-email-quic_linyyuan@quicinc.com/
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  .../selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc       | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-> index fa928b431555..7c02509c71d0 100644
-> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-> @@ -21,7 +21,6 @@ check_error 'p:^/bar vfs_read'		# NO_GROUP_NAME
->  check_error 'p:^12345678901234567890123456789012345678901234567890123456789012345/bar vfs_read'	# GROUP_TOO_LONG
->  
->  check_error 'p:^foo.1/bar vfs_read'	# BAD_GROUP_NAME
-> -check_error 'p:foo/^ vfs_read'		# NO_EVENT_NAME
->  check_error 'p:foo/^12345678901234567890123456789012345678901234567890123456789012345 vfs_read'	# EVENT_TOO_LONG
->  check_error 'p:foo/^bar.1 vfs_read'	# BAD_EVENT_NAME
->  
-> -- 
-> 2.35.1
-> 
+> I don't really care about one line of code, but what I'm trying to say
+> is learn to recognize anti-information and delete it.  Comments for
+> example are often useless.
 
+It makes more sense to me now. Thanks for explaining!
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Best,
+Binyi

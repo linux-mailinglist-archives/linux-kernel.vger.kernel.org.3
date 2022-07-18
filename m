@@ -2,292 +2,525 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B352B578451
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031C5578457
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 15:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235535AbiGRNwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 09:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
+        id S235544AbiGRNwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 09:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235527AbiGRNwA (ORCPT
+        with ESMTP id S234989AbiGRNwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:52:00 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C37027CFC
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:51:57 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id n18so19455871lfq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NXepRwCmHXNEdV0q8fO4cx6qihndjDIfVD2iW8c3B2I=;
-        b=lQz2MxiTEf9TZD7FzZAXQLlRkoy35pVVvzoGsVi9W719l1ocMKcztIuY4ZvhVEG5NK
-         +EspkvHKwE8im2Xr3MFYhET6v9f1ujeGYQaHzr4dMycjUOxRwXhVZL8VRmYXNDzLTuAy
-         g1DopHi+HyKmslpcLeMJs9y/9He6+w7c2Ei8vOouPo7hQYI0x0GJExRNVIvkN64Bu8D/
-         JhjUGkQYV/INlrDDKuSeG0gPI8bfrrsdC7UOza62gwAUApgBXJDjfg+nZan0c1oUNWEq
-         OqSpihd7rCAXgDKMkYKJs/ZZUVD65D4etll/DexCJL3KW1IlKD2vDwB4fIhQTfYjf0SS
-         slew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NXepRwCmHXNEdV0q8fO4cx6qihndjDIfVD2iW8c3B2I=;
-        b=ePo0SwCJzuOLtC/qNoXCA2wwbotQNOyO8A4gefTT4UP18w6q0Vox/LSa8N2h8N1n0F
-         +XWr9ZE5NSuIFrL8TzSTqCbk46mgQG9O/P+YhCE+3f26wVbdKiiOf1sFHlbWYRQPhxB4
-         I4fwywUC9zAaHs4/Y2LSrLppkbGel1rn/260JeAtr5RONX6IvHLWRN8OZC4UUySc+H06
-         llrcMBjYYrpxvDgoNaSZs/e0eJpKIYrWtT7YDBNt+bxKQepo526V2jR+1TuSzYlTBeR8
-         726VPA2ZbJP8C0Q42Jb96pgRKGHXzDh9aOUZJQWi+zHIIBEqzwnsN65kX+wQWcZ6gkDN
-         pGzQ==
-X-Gm-Message-State: AJIora+EwSzF1oPOAhxSIrBnkTx8wHUh2NgHO1XY+F/ZR5XIrIl7WM1D
-        1L6GOph9ZhzX6x2mIHIztj6Z5w==
-X-Google-Smtp-Source: AGRyM1u8biS5A5stNNex26D8tk1YTjCm5oCNp2FTG+A4GdkeFJhuRmurktf4iXWZeIzn8veGEh/Dbg==
-X-Received: by 2002:a05:6512:4029:b0:489:c7a7:42c8 with SMTP id br41-20020a056512402900b00489c7a742c8mr14325013lfb.461.1658152315795;
-        Mon, 18 Jul 2022 06:51:55 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id k6-20020a0565123d8600b0047255d211c7sm2609276lfv.246.2022.07.18.06.51.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:51:55 -0700 (PDT)
-Message-ID: <dc19c084-633d-9777-6dfd-b9633ac9c4ae@linaro.org>
-Date:   Mon, 18 Jul 2022 15:51:54 +0200
+        Mon, 18 Jul 2022 09:52:17 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2709B27CEE;
+        Mon, 18 Jul 2022 06:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658152334; x=1689688334;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wOmUkzV8PVWQBKXvAD26b6dd2PZxhIsSHlEEBWuu4xg=;
+  b=l+4zPjptqdsgr9uB1rv9Ema7jfs6BbMoOO0VRY8GJIqVPvzXVCb1Bao+
+   Pv+vhaprJ9bDZUHPqJY/oziVgvA8cuKeNEzS9VPk8gdqGc1RK831g9Cyo
+   DZfduyR1/ttDa30ho+fUc8NQStu8GIpQZ6+6al+IOFIL5U4qUaegp8Pyl
+   1S/XDAC0FfVeqzEtOHc/AAuCEcRInCWBe3RP+1ZELQYX08GPIvLq80wCT
+   Ihn74+18sFPlFGpkfDCLVgjhvI4wDo/2qj2bqDgv27bKhzkra/CR+dTBt
+   BZZjcacXwtZ2Zgg4NVUq9ZSg9ZtjGgYOs/uIjFnafcZVDiS3ZF4LY6nMV
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="266006876"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="266006876"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:52:13 -0700
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="686742305"
+Received: from smyint-mobl1.amr.corp.intel.com (HELO [10.212.107.15]) ([10.212.107.15])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:52:07 -0700
+Message-ID: <605ab738-42df-c8fe-efb3-654d5792d3cc@linux.intel.com>
+Date:   Mon, 18 Jul 2022 14:52:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab 4
- 10.1 (SM-T530)
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 06/21] drm/i915/gt: Batch TLB invalidations
 Content-Language: en-US
-To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220717213432.134486-1-matti.lehtimaki@gmail.com>
- <20220717213432.134486-4-matti.lehtimaki@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220717213432.134486-4-matti.lehtimaki@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Chris Wilson <chris.p.wilson@intel.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Ashutosh Dixit <ashutosh.dixit@intel.com>,
+        Ayaz A Siddiqui <ayaz.siddiqui@intel.com>,
+        Casey Bowman <casey.g.bowman@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Prathap Kumar Valsan <prathap.kumar.valsan@intel.com>,
+        Ramalingam C <ramalingam.c@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, stable@vger.kernel.org,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Fei Yang <fei.yang@intel.com>
+References: <cover.1657800199.git.mchehab@kernel.org>
+ <9f535a97f32320a213a619a30c961ba44b595453.1657800199.git.mchehab@kernel.org>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <9f535a97f32320a213a619a30c961ba44b595453.1657800199.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/07/2022 23:34, Matti Lehtimäki wrote:
-> Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
-> based on the apq8026 platform.
-> 
-> Currently supported are accelerometer sensor, hall sensor, internal storage, physical
-> buttons (power & volume), screen (based on simple-framebuffer set up by
-> the bootloader) sdcard, touchscreen and USB.
-> 
-> Signed-off-by: Matti LehtimÃ¤ki <matti.lehtimaki@gmail.com>
 
-Thank you for your patch. There is something to discuss/improve.
+On 14/07/2022 13:06, Mauro Carvalho Chehab wrote:
+> From: Chris Wilson <chris.p.wilson@intel.com>
+> 
+> Invalidate TLB in patch, in order to reduce performance regressions.
 
+"in batches"?
+
+> Currently, every caller performs a full barrier around a TLB
+> invalidation, ignoring all other invalidations that may have already
+> removed their PTEs from the cache. As this is a synchronous operation
+> and can be quite slow, we cause multiple threads to contend on the TLB
+> invalidate mutex blocking userspace.
+> 
+> We only need to invalidate the TLB once after replacing our PTE to
+> ensure that there is no possible continued access to the physical
+> address before releasing our pages. By tracking a seqno for each full
+> TLB invalidate we can quickly determine if one has been performed since
+> rewriting the PTE, and only if necessary trigger one for ourselves.
+> 
+> That helps to reduce the performance regression introduced by TLB
+> invalidate logic.
+> 
+> [mchehab: rebased to not require moving the code to a separate file]
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+> Suggested-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
+> Cc: Fei Yang <fei.yang@intel.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 > ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../dts/qcom-apq8026-samsung-matissewifi.dts  | 475 ++++++++++++++++++
->  2 files changed, 476 insertions(+)
->  create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts
 > 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 5112f493f494..4d02a1740079 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1010,6 +1010,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
->  	qcom-apq8016-sbc.dtb \
->  	qcom-apq8026-asus-sparrow.dtb \
->  	qcom-apq8026-lg-lenok.dtb \
-> +	qcom-apq8026-samsung-matissewifi.dtb \
->  	qcom-apq8060-dragonboard.dtb \
->  	qcom-apq8064-cm-qs600.dtb \
->  	qcom-apq8064-ifc6410.dtb \
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts
-> new file mode 100644
-> index 000000000000..f4c5eb9db11c
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matissewifi.dts
-> @@ -0,0 +1,475 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2022, Matti LehtimÃ¤ki <matti.lehtimaki@gmail.com>
-> + */
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v2 00/21] at: https://lore.kernel.org/all/cover.1657800199.git.mchehab@kernel.org/
+> 
+>   .../gpu/drm/i915/gem/i915_gem_object_types.h  |  3 +-
+>   drivers/gpu/drm/i915/gem/i915_gem_pages.c     | 21 +++++---
+>   drivers/gpu/drm/i915/gt/intel_gt.c            | 53 ++++++++++++++-----
+>   drivers/gpu/drm/i915/gt/intel_gt.h            | 12 ++++-
+>   drivers/gpu/drm/i915/gt/intel_gt_types.h      | 18 ++++++-
+>   drivers/gpu/drm/i915/gt/intel_ppgtt.c         |  8 ++-
+>   drivers/gpu/drm/i915/i915_vma.c               | 34 +++++++++---
+>   drivers/gpu/drm/i915/i915_vma.h               |  1 +
+>   drivers/gpu/drm/i915/i915_vma_resource.c      |  5 +-
+>   drivers/gpu/drm/i915/i915_vma_resource.h      |  6 ++-
+>   10 files changed, 125 insertions(+), 36 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+> index 5cf36a130061..9f6b14ec189a 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_object_types.h
+> @@ -335,7 +335,6 @@ struct drm_i915_gem_object {
+>   #define I915_BO_READONLY          BIT(7)
+>   #define I915_TILING_QUIRK_BIT     8 /* unknown swizzling; do not release! */
+>   #define I915_BO_PROTECTED         BIT(9)
+> -#define I915_BO_WAS_BOUND_BIT     10
+>   	/**
+>   	 * @mem_flags - Mutable placement-related flags
+>   	 *
+> @@ -616,6 +615,8 @@ struct drm_i915_gem_object {
+>   		 * pages were last acquired.
+>   		 */
+>   		bool dirty:1;
 > +
-> +/dts-v1/;
+> +		u32 tlb;
+>   	} mm;
+>   
+>   	struct {
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+> index 6835279943df..8357dbdcab5c 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+> @@ -191,6 +191,18 @@ static void unmap_object(struct drm_i915_gem_object *obj, void *ptr)
+>   		vunmap(ptr);
+>   }
+>   
+> +static void flush_tlb_invalidate(struct drm_i915_gem_object *obj)
+> +{
+> +	struct drm_i915_private *i915 = to_i915(obj->base.dev);
+> +	struct intel_gt *gt = to_gt(i915);
 > +
-> +#include "qcom-msm8226.dtsi"
-> +#include "qcom-pm8226.dtsi"
-> +#include <dt-bindings/input/input.h>
+> +	if (!obj->mm.tlb)
+> +		return;
 > +
-> +/delete-node/ &smem_region;
+> +	intel_gt_invalidate_tlb(gt, obj->mm.tlb);
+> +	obj->mm.tlb = 0;
+> +}
 > +
-> +/ {
-> +	model = "Samsung Galaxy Tab 4 10.1";
-> +	compatible = "samsung,matissewifi", "qcom,apq8026";
-> +	chassis-type = "tablet";
+>   struct sg_table *
+>   __i915_gem_object_unset_pages(struct drm_i915_gem_object *obj)
+>   {
+> @@ -216,14 +228,7 @@ __i915_gem_object_unset_pages(struct drm_i915_gem_object *obj)
+>   	__i915_gem_object_reset_page_iter(obj);
+>   	obj->mm.page_sizes.phys = obj->mm.page_sizes.sg = 0;
+>   
+> -	if (test_and_clear_bit(I915_BO_WAS_BOUND_BIT, &obj->flags)) {
+> -		struct drm_i915_private *i915 = to_i915(obj->base.dev);
+> -		struct intel_gt *gt = to_gt(i915);
+> -		intel_wakeref_t wakeref;
+> -
+> -		with_intel_gt_pm_if_awake(gt, wakeref)
+> -			intel_gt_invalidate_tlbs(gt);
+> -	}
+> +	flush_tlb_invalidate(obj);
+>   
+>   	return pages;
+>   }
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
+> index 5c55a90672f4..f435e06125aa 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
+> @@ -38,8 +38,6 @@ static void __intel_gt_init_early(struct intel_gt *gt)
+>   {
+>   	spin_lock_init(&gt->irq_lock);
+>   
+> -	mutex_init(&gt->tlb_invalidate_lock);
+> -
+>   	INIT_LIST_HEAD(&gt->closed_vma);
+>   	spin_lock_init(&gt->closed_lock);
+>   
+> @@ -50,6 +48,8 @@ static void __intel_gt_init_early(struct intel_gt *gt)
+>   	intel_gt_init_reset(gt);
+>   	intel_gt_init_requests(gt);
+>   	intel_gt_init_timelines(gt);
+> +	mutex_init(&gt->tlb.invalidate_lock);
+> +	seqcount_mutex_init(&gt->tlb.seqno, &gt->tlb.invalidate_lock);
+>   	intel_gt_pm_init_early(gt);
+>   
+>   	intel_uc_init_early(&gt->uc);
+> @@ -770,6 +770,7 @@ void intel_gt_driver_late_release_all(struct drm_i915_private *i915)
+>   		intel_gt_fini_requests(gt);
+>   		intel_gt_fini_reset(gt);
+>   		intel_gt_fini_timelines(gt);
+> +		mutex_destroy(&gt->tlb.invalidate_lock);
+>   		intel_engines_free(gt);
+>   	}
+>   }
+> @@ -908,7 +909,7 @@ get_reg_and_bit(const struct intel_engine_cs *engine, const bool gen8,
+>   	return rb;
+>   }
+>   
+> -void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+> +static void mmio_invalidate_full(struct intel_gt *gt)
+>   {
+>   	static const i915_reg_t gen8_regs[] = {
+>   		[RENDER_CLASS]			= GEN8_RTCR,
+> @@ -931,12 +932,6 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+>   	const i915_reg_t *regs;
+>   	unsigned int num = 0;
+>   
+> -	if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
+> -		return;
+> -
+> -	if (intel_gt_is_wedged(gt))
+> -		return;
+> -
+>   	if (GRAPHICS_VER(i915) == 12) {
+>   		regs = gen12_regs;
+>   		num = ARRAY_SIZE(gen12_regs);
+> @@ -951,9 +946,6 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+>   			  "Platform does not implement TLB invalidation!"))
+>   		return;
+>   
+> -	GEM_TRACE("\n");
+> -
+> -	mutex_lock(&gt->tlb_invalidate_lock);
+>   	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
+>   
+>   	spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
+> @@ -973,6 +965,8 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+>   		awake |= engine->mask;
+>   	}
+>   
+> +	GT_TRACE(gt, "invalidated engines %08x\n", awake);
 > +
-> +	qcom,msm-id = <0xC708FF01 0 0x20000>,
-> +		      <0xC708FF01 1 0x20000>,
-> +		      <0xC708FF01 2 0x20000>,
-> +		      <0xC708FF01 3 0x20000>;
+>   	/* Wa_2207587034:tgl,dg1,rkl,adl-s,adl-p */
+>   	if (awake &&
+>   	    (IS_TIGERLAKE(i915) ||
+> @@ -1012,5 +1006,38 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+>   	 * transitions.
+>   	 */
+>   	intel_uncore_forcewake_put_delayed(uncore, FORCEWAKE_ALL);
+> -	mutex_unlock(&gt->tlb_invalidate_lock);
+> +}
+> +
+> +static bool tlb_seqno_passed(const struct intel_gt *gt, u32 seqno)
+> +{
+> +	u32 cur = intel_gt_tlb_seqno(gt);
+> +
+> +	/* Only skip if a *full* TLB invalidate barrier has passed */
+> +	return (s32)(cur - ALIGN(seqno, 2)) > 0;
+> +}
+> +
+> +void intel_gt_invalidate_tlb(struct intel_gt *gt, u32 seqno)
+> +{
+> +	intel_wakeref_t wakeref;
+> +
+> +	if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
+> +		return;
+> +
+> +	if (intel_gt_is_wedged(gt))
+> +		return;
+> +
+> +	if (tlb_seqno_passed(gt, seqno))
+> +		return;
+> +
+> +	with_intel_gt_pm_if_awake(gt, wakeref) {
+> +		mutex_lock(&gt->tlb.invalidate_lock);
+> +		if (tlb_seqno_passed(gt, seqno))
+> +			goto unlock;
+> +
+> +		mmio_invalidate_full(gt);
+> +
+> +		write_seqcount_invalidate(&gt->tlb.seqno);
+> +unlock:
+> +		mutex_unlock(&gt->tlb.invalidate_lock);
+> +	}
+>   }
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.h b/drivers/gpu/drm/i915/gt/intel_gt.h
+> index 82d6f248d876..40b06adf509a 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gt.h
+> +++ b/drivers/gpu/drm/i915/gt/intel_gt.h
+> @@ -101,6 +101,16 @@ void intel_gt_info_print(const struct intel_gt_info *info,
+>   
+>   void intel_gt_watchdog_work(struct work_struct *work);
+>   
+> -void intel_gt_invalidate_tlbs(struct intel_gt *gt);
+> +static inline u32 intel_gt_tlb_seqno(const struct intel_gt *gt)
+> +{
+> +	return seqprop_sequence(&gt->tlb.seqno);
+> +}
+> +
+> +static inline u32 intel_gt_next_invalidate_tlb_full(const struct intel_gt *gt)
+> +{
+> +	return intel_gt_tlb_seqno(gt) | 1;
+> +}
+> +
+> +void intel_gt_invalidate_tlb(struct intel_gt *gt, u32 seqno);
+>   
+>   #endif /* __INTEL_GT_H__ */
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_types.h b/drivers/gpu/drm/i915/gt/intel_gt_types.h
+> index df708802889d..3804a583382b 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gt_types.h
+> +++ b/drivers/gpu/drm/i915/gt/intel_gt_types.h
+> @@ -11,6 +11,7 @@
+>   #include <linux/llist.h>
+>   #include <linux/mutex.h>
+>   #include <linux/notifier.h>
+> +#include <linux/seqlock.h>
+>   #include <linux/spinlock.h>
+>   #include <linux/types.h>
+>   #include <linux/workqueue.h>
+> @@ -83,7 +84,22 @@ struct intel_gt {
+>   	struct intel_uc uc;
+>   	struct intel_gsc gsc;
+>   
+> -	struct mutex tlb_invalidate_lock;
+> +	struct {
+> +		/* Serialize global tlb invalidations */
+> +		struct mutex invalidate_lock;
+> +
+> +		/*
+> +		 * Batch TLB invalidations
+> +		 *
+> +		 * After unbinding the PTE, we need to ensure the TLB
+> +		 * are invalidated prior to releasing the physical pages.
+> +		 * But we only need one such invalidation for all unbinds,
+> +		 * so we track how many TLB invalidations have been
+> +		 * performed since unbind the PTE and only emit an extra
+> +		 * invalidate if no full barrier has been passed.
+> +		 */
+> +		seqcount_mutex_t seqno;
+> +	} tlb;
+>   
+>   	struct i915_wa_list wa_list;
+>   
+> diff --git a/drivers/gpu/drm/i915/gt/intel_ppgtt.c b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
+> index d8b94d638559..2da6c82a8bd2 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_ppgtt.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_ppgtt.c
+> @@ -206,8 +206,12 @@ void ppgtt_bind_vma(struct i915_address_space *vm,
+>   void ppgtt_unbind_vma(struct i915_address_space *vm,
+>   		      struct i915_vma_resource *vma_res)
+>   {
+> -	if (vma_res->allocated)
+> -		vm->clear_range(vm, vma_res->start, vma_res->vma_size);
+> +	if (!vma_res->allocated)
+> +		return;
+> +
+> +	vm->clear_range(vm, vma_res->start, vma_res->vma_size);
+> +	if (vma_res->tlb)
+> +		vma_invalidate_tlb(vm, *vma_res->tlb);
 
-Lower case hex and does not match bindings.
-https://lore.kernel.org/all/20220705130300.100882-2-krzysztof.kozlowski@linaro.org/
+The patch is about more than batching? If there is a security hole in 
+this area (unbind) with the current code?
 
-This would need detailed explanation because it really does not look
-correct.
+Regards,
 
-> +
-> +	aliases {
-> +		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
-> +		mmc1 = &sdhc_2; /* SDC2 SD card slot */
-> +		display0 = &framebuffer0;
-> +	};
-> +
-> +	chosen {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		stdout-path = "display0";
-> +
-> +		framebuffer0: framebuffer@3200000 {
-> +			compatible = "simple-framebuffer";
-> +			reg = <0x3200000 0x800000>;
-> +			width = <1280>;
-> +			height = <800>;
-> +			stride = <(1280 * 3)>;
-> +			format = "r8g8b8";
-> +			status = "okay";
-> +		};
-> +	};
-> +
-> +	gpio-hall-sensor {
-> +		compatible = "gpio-keys";
-> +
-> +		event-hall-sensor {
-> +			label = "Hall Effect Sensor";
-> +			gpios = <&tlmm 110 GPIO_ACTIVE_HIGH>;
-> +			interrupts = <&tlmm 110 IRQ_TYPE_EDGE_FALLING>;
-> +			linux,input-type = <EV_SW>;
-> +			linux,code = <SW_LID>;
-> +			debounce-interval = <15>;
-> +			wakeup-source;
-> +		};
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		autorepeat;
-> +
-> +		key-home {
-> +			label = "Home";
-> +			gpios = <&tlmm 108 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_HOMEPAGE>;
-> +			debounce-interval = <15>;
-> +		};
-> +
-> +		key-volume-down {
-> +			label = "Volume Down";
-> +			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_VOLUMEDOWN>;
-> +			debounce-interval = <15>;
-> +		};
-> +
-> +		key-volume-up {
-> +			label = "Volume Up";
-> +			gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			debounce-interval = <15>;
-> +		};
-> +	};
-> +
-> +	i2c-muic {
-> +		compatible = "i2c-gpio";
-> +		sda-gpios = <&tlmm 14 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-> +		scl-gpios = <&tlmm 15 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&muic_i2c_default_state>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		muic: extcon@25 {
+Tvrtko
 
-extcon is Linux specific, need some generic name instead.
-
-> +			compatible = "siliconmitus,sm5502-muic";
-> +			reg = <0x25>;
+>   }
+>   
+>   static unsigned long pd_count(u64 size, int shift)
+> diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
+> index 646f419b2035..84a9ccbc5fc5 100644
+> --- a/drivers/gpu/drm/i915/i915_vma.c
+> +++ b/drivers/gpu/drm/i915/i915_vma.c
+> @@ -538,9 +538,6 @@ int i915_vma_bind(struct i915_vma *vma,
+>   				   bind_flags);
+>   	}
+>   
+> -	if (bind_flags & I915_VMA_LOCAL_BIND)
+> -		set_bit(I915_BO_WAS_BOUND_BIT, &vma->obj->flags);
+> -
+>   	atomic_or(bind_flags, &vma->flags);
+>   	return 0;
+>   }
+> @@ -1311,6 +1308,19 @@ I915_SELFTEST_EXPORT int i915_vma_get_pages(struct i915_vma *vma)
+>   	return err;
+>   }
+>   
+> +void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb)
+> +{
+> +	/*
+> +	 * Before we release the pages that were bound by this vma, we
+> +	 * must invalidate all the TLBs that may still have a reference
+> +	 * back to our physical address. It only needs to be done once,
+> +	 * so after updating the PTE to point away from the pages, record
+> +	 * the most recent TLB invalidation seqno, and if we have not yet
+> +	 * flushed the TLBs upon release, perform a full invalidation.
+> +	 */
+> +	WRITE_ONCE(tlb, intel_gt_next_invalidate_tlb_full(vm->gt));
+> +}
 > +
-> +			interrupt-parent = <&tlmm>;
-> +			interrupts = <67 IRQ_TYPE_EDGE_FALLING>;
+>   static void __vma_put_pages(struct i915_vma *vma, unsigned int count)
+>   {
+>   	/* We allocate under vma_get_pages, so beware the shrinker */
+> @@ -1942,7 +1952,12 @@ struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async)
+>   		vma->vm->skip_pte_rewrite;
+>   	trace_i915_vma_unbind(vma);
+>   
+> -	unbind_fence = i915_vma_resource_unbind(vma_res);
+> +	if (async)
+> +		unbind_fence = i915_vma_resource_unbind(vma_res,
+> +							&vma->obj->mm.tlb);
+> +	else
+> +		unbind_fence = i915_vma_resource_unbind(vma_res, NULL);
 > +
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&muic_int_default_state>;
-> +		};
-> +	};
+>   	vma->resource = NULL;
+>   
+>   	atomic_and(~(I915_VMA_BIND_MASK | I915_VMA_ERROR | I915_VMA_GGTT_WRITE),
+> @@ -1950,10 +1965,13 @@ struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async)
+>   
+>   	i915_vma_detach(vma);
+>   
+> -	if (!async && unbind_fence) {
+> -		dma_fence_wait(unbind_fence, false);
+> -		dma_fence_put(unbind_fence);
+> -		unbind_fence = NULL;
+> +	if (!async) {
+> +		if (unbind_fence) {
+> +			dma_fence_wait(unbind_fence, false);
+> +			dma_fence_put(unbind_fence);
+> +			unbind_fence = NULL;
+> +		}
+> +		vma_invalidate_tlb(vma->vm, vma->obj->mm.tlb);
+>   	}
+>   
+>   	/*
+> diff --git a/drivers/gpu/drm/i915/i915_vma.h b/drivers/gpu/drm/i915/i915_vma.h
+> index 88ca0bd9c900..5048eed536da 100644
+> --- a/drivers/gpu/drm/i915/i915_vma.h
+> +++ b/drivers/gpu/drm/i915/i915_vma.h
+> @@ -213,6 +213,7 @@ bool i915_vma_misplaced(const struct i915_vma *vma,
+>   			u64 size, u64 alignment, u64 flags);
+>   void __i915_vma_set_map_and_fenceable(struct i915_vma *vma);
+>   void i915_vma_revoke_mmap(struct i915_vma *vma);
+> +void vma_invalidate_tlb(struct i915_address_space *vm, u32 tlb);
+>   struct dma_fence *__i915_vma_evict(struct i915_vma *vma, bool async);
+>   int __i915_vma_unbind(struct i915_vma *vma);
+>   int __must_check i915_vma_unbind(struct i915_vma *vma);
+> diff --git a/drivers/gpu/drm/i915/i915_vma_resource.c b/drivers/gpu/drm/i915/i915_vma_resource.c
+> index 27c55027387a..5a67995ea5fe 100644
+> --- a/drivers/gpu/drm/i915/i915_vma_resource.c
+> +++ b/drivers/gpu/drm/i915/i915_vma_resource.c
+> @@ -223,10 +223,13 @@ i915_vma_resource_fence_notify(struct i915_sw_fence *fence,
+>    * Return: A refcounted pointer to a dma-fence that signals when unbinding is
+>    * complete.
+>    */
+> -struct dma_fence *i915_vma_resource_unbind(struct i915_vma_resource *vma_res)
+> +struct dma_fence *i915_vma_resource_unbind(struct i915_vma_resource *vma_res,
+> +					   u32 *tlb)
+>   {
+>   	struct i915_address_space *vm = vma_res->vm;
+>   
+> +	vma_res->tlb = tlb;
 > +
-> +	reg_tsp_1p8v: regulator-tsp-1p8v {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "tsp_1p8v";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
+>   	/* Reference for the sw fence */
+>   	i915_vma_resource_get(vma_res);
+>   
+> diff --git a/drivers/gpu/drm/i915/i915_vma_resource.h b/drivers/gpu/drm/i915/i915_vma_resource.h
+> index 5d8427caa2ba..06923d1816e7 100644
+> --- a/drivers/gpu/drm/i915/i915_vma_resource.h
+> +++ b/drivers/gpu/drm/i915/i915_vma_resource.h
+> @@ -67,6 +67,7 @@ struct i915_page_sizes {
+>    * taken when the unbind is scheduled.
+>    * @skip_pte_rewrite: During ggtt suspend and vm takedown pte rewriting
+>    * needs to be skipped for unbind.
+> + * @tlb: pointer for obj->mm.tlb, if async unbind. Otherwise, NULL
+>    *
+>    * The lifetime of a struct i915_vma_resource is from a binding request to
+>    * the actual possible asynchronous unbind has completed.
+> @@ -119,6 +120,8 @@ struct i915_vma_resource {
+>   	bool immediate_unbind:1;
+>   	bool needs_wakeref:1;
+>   	bool skip_pte_rewrite:1;
 > +
-> +		gpio = <&tlmm 31 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&tsp_en_default_state>;
-> +	};
-> +
-> +	reg_tsp_3p3v: regulator-tsp-3p3v {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "tsp_3p3v";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +
-> +		gpio = <&tlmm 73 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&tsp_en1_default_state>;
-> +	};
-> +
-> +	reserved-memory {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		framebuffer@3200000 {
-
-Generic node names, so memory@
-
-> +			reg = <0x3200000 0x800000>;
-> +			no-map;
-> +		};
-> +
-> +		mpss_region: mpss@8400000 {
-
-The same and so on...
-
-> +			reg = <0x08400000 0x1f00000>;
-> +			no-map;
-> +		};
-> +
-> +		mba_region: mba@a300000 {
-
-Best regards,
-Krzysztof
+> +	u32 *tlb;
+>   };
+>   
+>   bool i915_vma_resource_hold(struct i915_vma_resource *vma_res,
+> @@ -131,7 +134,8 @@ struct i915_vma_resource *i915_vma_resource_alloc(void);
+>   
+>   void i915_vma_resource_free(struct i915_vma_resource *vma_res);
+>   
+> -struct dma_fence *i915_vma_resource_unbind(struct i915_vma_resource *vma_res);
+> +struct dma_fence *i915_vma_resource_unbind(struct i915_vma_resource *vma_res,
+> +					   u32 *tlb);
+>   
+>   void __i915_vma_resource_init(struct i915_vma_resource *vma_res);
+>   

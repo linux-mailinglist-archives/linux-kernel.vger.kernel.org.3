@@ -2,78 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8548A577EAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 956D0577EAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 11:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234123AbiGRJ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 05:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S234127AbiGRJa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 05:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233900AbiGRJ3x (ORCPT
+        with ESMTP id S229799AbiGRJa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 05:29:53 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECA91A05A
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:29:52 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id i206so19773183ybc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:29:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pC3YC3d9bXDprR56rXx3gA8+RrhPYL1457fQ3w6d17g=;
-        b=o6bXP62Kaj26+UgnjvTe0fgRRikgdJJvDAUgx77U8YMM5C6NVJY7SpzSQ9yEZDFFS2
-         Uy0mQgmMkehBX5txvBV22HACjM/2lxegZZASdZ0Chg0cEotSpqYjDanRSKtiFzTJygUo
-         UxJTgL67an7phN+ONvpjqynlmqG3EoGm1O1FIxlydqB5LI9PiMooHeCUDcKOB6DMvqeO
-         M1IG/2AJOin6e0vgIBcgYg4N5iGDcg2ves6E6Bs/0XqzbodwXWh4S7cAXtJM0lfOayum
-         rK332wmyWwBSeaVVLUouJMDSqZC8YgL7sLWFWI5e/RCy9y+WHaRQRS9z7jglMAVxh3x3
-         c/1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pC3YC3d9bXDprR56rXx3gA8+RrhPYL1457fQ3w6d17g=;
-        b=lTEYmOy2X9lHRrkSOv32hqyUpdM/SnzgXjRaABCMg0fn1h5Nc6RxwWZfdXltUEFAkG
-         TaF2e7E9eYqSxKcHuZOHEAjG086vVVXasi60E+vzDQ3fwXQYmXmYQJ3X8TYCni+Hf4Jc
-         LhCd+C3RZA1wPWKEHAtwcctxJN4BUYMjY21GZcKMsnMYf4niESY1/Moejj9cjbAbNIJg
-         SQasEQf/oFTRoayMvvvkrbuIUujtccT6u6Rui3gcY+BhIKXlt+4EA7cInlhCxy6gQPC4
-         hnTJoy7L4FK+N1pON+YaZ7Hx1IE6UsZcQANAgwBXh4b41yi4qajOL4PPPpKFZmmvAZg2
-         fFLA==
-X-Gm-Message-State: AJIora+V5A5/F4PmYxCGwX1MkvYmEtpFewmVz5COD96pe3i8mNUMUDUg
-        RdYnviCCDQgAOiGO7kxeAiTGJ38VClIlGhU6RZqHzQ==
-X-Google-Smtp-Source: AGRyM1vk4BvOZcZB37sdvcpmGFUE3a7MsmuV6qdRpMfWmQDwonT4ic54kK/m++/blILmh+qKIi4G3qDpIT53bHKQ3dI=
-X-Received: by 2002:a05:6902:124e:b0:668:222c:e8da with SMTP id
- t14-20020a056902124e00b00668222ce8damr25109558ybu.383.1658136591808; Mon, 18
- Jul 2022 02:29:51 -0700 (PDT)
+        Mon, 18 Jul 2022 05:30:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5B251A061
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 02:30:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE0D61042;
+        Mon, 18 Jul 2022 02:30:26 -0700 (PDT)
+Received: from [10.32.33.51] (e121896.warwick.arm.com [10.32.33.51])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 39C443F70D;
+        Mon, 18 Jul 2022 02:30:25 -0700 (PDT)
+Message-ID: <9b2982f1-023a-3499-7e87-f00b5a689ae9@arm.com>
+Date:   Mon, 18 Jul 2022 10:30:23 +0100
 MIME-Version: 1.0
-References: <20220714020319.72952-1-warthog618@gmail.com> <20220714020319.72952-3-warthog618@gmail.com>
-In-Reply-To: <20220714020319.72952-3-warthog618@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 18 Jul 2022 11:29:40 +0200
-Message-ID: <CACRpkdb=AO-mrkAMsY6owzZoF=aEJRCw5pHM_aono7vaRVBgXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] gpiolib: cdev: simplify parameter in call to hte_edge_setup
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        brgl@bgdev.pl, dipenp@nvidia.com, andy.shevchenko@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3] drivers/perf: arm_spe: Fix consistency of
+ SYS_PMSCR_EL1.CX
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     german.gomez@arm.com, suzuki.poulose@arm.com,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexey Budankov <alexey.budankov@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220714061302.2715102-1-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220714061302.2715102-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 4:04 AM Kent Gibson <warthog618@gmail.com> wrote:
 
-> Improve readability by using the GPIO_V2_LINE_FLAG_EDGE_BOTH instead
-> of combining the rising and falling edge flags.
->
-> Signed-off-by: Kent Gibson <warthog618@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On 14/07/2022 07:13, Anshuman Khandual wrote:
+> The arm_spe_pmu driver will enable SYS_PMSCR_EL1.CX in order to add CONTEXT
+> packets into the traces, if the owner of the perf event runs with required
+> capabilities i.e CAP_PERFMON or CAP_SYS_ADMIN via perfmon_capable() helper.
+> 
+> The value of this bit is computed in the arm_spe_event_to_pmscr() function
+> but the check for capabilities happens in the pmu event init callback i.e
+> arm_spe_pmu_event_init(). This suggests that the value of the CX bit should
+> remain consistent for the duration of the perf session.
+> 
+> However, the function arm_spe_event_to_pmscr() may be called later during
+> the event start callback i.e arm_spe_pmu_start() when the "current" process
+> is not the owner of the perf session, hence the CX bit setting is currently
+> not consistent.
+> 
+> One way to fix this, is by caching the required value of the CX bit during
+> the initialization of the PMU event, so that it remains consistent for the
+> duration of the session. It uses currently unused 'event->hw.flags' element
+> to cache perfmon_capable() value, which can be referred during event start
+> callback to compute SYS_PMSCR_EL1.CX. This ensures consistent availability
+> of context packets in the trace as per event owner capabilities.
+> 
+> Drop BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init(), because
+> now CX bit cannot be set in arm_spe_event_to_pmscr() with perfmon_capable()
+> disabled.
+> 
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Alexey Budankov <alexey.budankov@linux.intel.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Fixes: cea7d0d4a59b ("drivers/perf: Open access for CAP_PERFMON privileged process")
+> Reported-by: German Gomez <german.gomez@arm.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+> Changes in V3:
+> 
+> - Moved set_spe_event_has_cx() before arm_spe_event_to_pmscr()
+> - Reinstated perfmon_capable() back in arm_spe_pmu_event_init()
+> - Dropped BIT(SYS_PMSCR_EL1_CX_SHIFT) check in arm_spe_pmu_event_init()
+> - Updated the commit message
+>  
+> Changes in V2:
+> 
+> https://lore.kernel.org/all/20220713085925.2627533-1-anshuman.khandual@arm.com/
+> 
+> - Moved CONFIG_PID_IN_CONTEXTIDR config check inside the helper per Suzuki
+> - Changed the comment per Suzuki
+> - Renamed the helpers Per Suzuki
+> - Added "Fixes: " tag per German
+> 
+> Changes in V1:
+> 
+> https://lore.kernel.org/all/20220712051404.2546851-1-anshuman.khandual@arm.com/
+> 
+> 
+>  drivers/perf/arm_spe_pmu.c | 22 ++++++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
+> index db670b265897..b65a7d9640e1 100644
+> --- a/drivers/perf/arm_spe_pmu.c
+> +++ b/drivers/perf/arm_spe_pmu.c
+> @@ -39,6 +39,24 @@
+>  #include <asm/mmu.h>
+>  #include <asm/sysreg.h>
+>  
+> +/*
+> + * Cache if the event is allowed to trace Context information.
+> + * This allows us to perform the check, i.e, perfmon_capable(),
+> + * in the context of the event owner, once, during the event_init().
+> + */
+> +#define SPE_PMU_HW_FLAGS_CX			BIT(0)
+> +
+> +static void set_spe_event_has_cx(struct perf_event *event)
+> +{
+> +	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+> +		event->hw.flags |= SPE_PMU_HW_FLAGS_CX;
+> +}
+> +
+> +static bool get_spe_event_has_cx(struct perf_event *event)
+> +{
+> +	return !!(event->hw.flags & SPE_PMU_HW_FLAGS_CX);
+> +}
+> +
+>  #define ARM_SPE_BUF_PAD_BYTE			0
+>  
+>  struct arm_spe_pmu_buf {
+> @@ -272,7 +290,7 @@ static u64 arm_spe_event_to_pmscr(struct perf_event *event)
+>  	if (!attr->exclude_kernel)
+>  		reg |= BIT(SYS_PMSCR_EL1_E1SPE_SHIFT);
+>  
+> -	if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) && perfmon_capable())
+> +	if (get_spe_event_has_cx(event))
+>  		reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+>  
+>  	return reg;
+> @@ -709,10 +727,10 @@ static int arm_spe_pmu_event_init(struct perf_event *event)
+>  	    !(spe_pmu->features & SPE_PMU_FEAT_FILT_LAT))
+>  		return -EOPNOTSUPP;
+>  
+> +	set_spe_event_has_cx(event);
+>  	reg = arm_spe_event_to_pmscr(event);
+>  	if (!perfmon_capable() &&
+>  	    (reg & (BIT(SYS_PMSCR_EL1_PA_SHIFT) |
+> -		    BIT(SYS_PMSCR_EL1_CX_SHIFT) |
 
-Yours,
-Linus Walleij
+The first part of the change looks ok, but I'm not sure about this removal here.
+
+Doesn't this mean that if you ask for context data when opening the event
+without permission you don't get an error returned any more? It just silently
+ignores it.
+
+That changes the semantics of the perf event open call and I don't see why that's
+needed to fix the issue about only checking the permissions of the owning process.
+At least it seems like a separate unrelated change.
+
+It's also worth noting that the value doesn't need to be cached, and another
+one line solution is just to check the permissions of the owning process. This
+avoids duplicating something that is already saved, will survive any future
+refactors of the permissions system, and doesn't use up space in hw_flags:
+
+   if (IS_ENABLED(CONFIG_PID_IN_CONTEXTIDR) &&
+       (has_capability(event->owner, CAP_PERFMON) || has_capability(event->owner, CAP_SYS_ADMIN)))
+   {
+	reg |= BIT(SYS_PMSCR_EL1_CX_SHIFT);
+   }
+
+
+>  		    BIT(SYS_PMSCR_EL1_PCT_SHIFT))))
+>  		return -EACCES;
+>  

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3567577A44
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 07:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27856577A48
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 07:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiGRFKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 01:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S233343AbiGRFKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 01:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbiGRFKW (ORCPT
+        with ESMTP id S233249AbiGRFKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 01:10:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D0413CC2
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 22:10:19 -0700 (PDT)
+        Mon, 18 Jul 2022 01:10:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA30513DDE
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 22:10:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27125B80EF1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED59C341C8;
-        Mon, 18 Jul 2022 05:10:15 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C0DA4CE0EF3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F18C341D1;
+        Mon, 18 Jul 2022 05:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658121016;
-        bh=qZEfQmPuzobblfAILf3AUWXcuMaT0V6hEOUvHUNl8Wg=;
+        s=k20201202; t=1658121018;
+        bh=nL2IFLAzOr5cOIj07ugBl3ewpUMw1jlbJK1RtoAjFDw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T9D2Uwy5Q9lasElEuSApy6N0MnUxH+mHQhsf1FmV3W1fqzsRDG9gIjgJFtRm3X7uy
-         Kqrsth9rh+JoQ/g7RQicEjrvHB0xzTExvIKrJ91qRYi7aHZQ2z9+sEX71aGhub4VI7
-         jt89FUWYEsSQu2K01OWtXkSNi5I5+h+cPC0tA644n4H4zpnakVVPL6Js4/RbeXB9pA
-         5rElaI0ZfxT3GpNc4Rep6j6NBFlW45TliPKWfza/6CnGVAwvFu/8Yl1xKzKtSwuepL
-         E2+BLj2I++0b1rMIEyKmO5qnl3DZlVsSFUiEy3bWNAb5rS4vlgbYw4BGHePnMtOW/A
-         AB3ZX+PrTggAw==
+        b=lktgRo7eQNyC4UwmJk5XSoMvnxr7xre/aGqRb7+a/s5yY9DXhwARmCr7k2ws8B3Xx
+         D2y2ZNm5o+gu8VUJ43FNZCP3Ant0KW07e9hbJjzQWQc2sx7Zg7MyUQN+5pijJbCsHt
+         t/C1v6hbMH8KNJwhiCiaBUkmf4y7CCk2e/WFEnEwkceniDgZC6V2PZjBY0+z9OWNZG
+         8pWaPBk+WQtoKVyPhyWq5ValdZf50v+23AjQeYMzemyVzFtNoDhgQF8md6CgdlalC3
+         P8nGf/G3exGA12CrOPGoeY1lRSg1FjAEy/30wO7xfPJnsmsPoWmDsicsx0XPE/JOZk
+         X0PdazoAcBY1Q==
 From:   Tzung-Bi Shih <tzungbi@kernel.org>
 To:     bleung@chromium.org, groeck@chromium.org
 Cc:     chrome-platform@lists.linux.dev, tzungbi@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 08/10] platform/chrome: cros_ec_proto: return -EAGAIN when retries timed out
-Date:   Mon, 18 Jul 2022 05:09:12 +0000
-Message-Id: <20220718050914.2267370-9-tzungbi@kernel.org>
+Subject: [PATCH v2 09/10] platform/chrome: cros_ec_proto: add Kunit test for empty payload
+Date:   Mon, 18 Jul 2022 05:09:13 +0000
+Message-Id: <20220718050914.2267370-10-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
 In-Reply-To: <20220718050914.2267370-1-tzungbi@kernel.org>
 References: <20220718050914.2267370-1-tzungbi@kernel.org>
@@ -53,32 +53,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While EC_COMMS_STATUS_PROCESSING flag is still on after it tries
-EC_COMMAND_RETRIES times for sending EC_CMD_GET_COMMS_STATUS,
-cros_ec_wait_until_complete() doesn't return an error code.
+cros_ec_wait_until_complete() sends EC_CMD_GET_COMMS_STATUS which expects
+to receive sizeof(struct ec_response_get_comms_status) from
+cros_ec_xfer_command().
 
-Return -EAGAIN in the case instead.
+Add Kunit test and expect to receive an error code when
+cros_ec_xfer_command() returns 0.
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
 No changes from v1.
 
- drivers/platform/chrome/cros_ec_proto.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/platform/chrome/cros_ec_proto_test.c | 31 ++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-index a6ad7f7956e6..9dec475edc84 100644
---- a/drivers/platform/chrome/cros_ec_proto.c
-+++ b/drivers/platform/chrome/cros_ec_proto.c
-@@ -167,6 +167,9 @@ static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *
- 			return ret;
- 	}
- 
-+	if (i >= EC_COMMAND_RETRIES)
-+		ret = -EAGAIN;
-+
- 	return ret;
+diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+index fbb872040711..d76e09b8a36a 100644
+--- a/drivers/platform/chrome/cros_ec_proto_test.c
++++ b/drivers/platform/chrome/cros_ec_proto_test.c
+@@ -1934,6 +1934,36 @@ static void cros_ec_proto_test_cmd_xfer_in_progress_return_error(struct kunit *t
+ 	KUNIT_EXPECT_EQ(test, cros_kunit_ec_pkt_xfer_mock_called, 2);
  }
+ 
++static void cros_ec_proto_test_cmd_xfer_in_progress_return0(struct kunit *test)
++{
++	struct cros_ec_proto_test_priv *priv = test->priv;
++	struct cros_ec_device *ec_dev = &priv->ec_dev;
++	struct ec_xfer_mock *mock;
++	int ret;
++	struct cros_ec_command msg;
++
++	memset(&msg, 0, sizeof(msg));
++
++	ec_dev->pkt_xfer = cros_kunit_ec_pkt_xfer_mock;
++
++	/* For the first host command to return EC_RES_IN_PROGRESS. */
++	{
++		mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_IN_PROGRESS, 0);
++		KUNIT_ASSERT_PTR_NE(test, mock, NULL);
++	}
++
++	/* For EC_CMD_GET_COMMS_STATUS. */
++	{
++		mock = cros_kunit_ec_xfer_mock_add(test, 0);
++		KUNIT_ASSERT_PTR_NE(test, mock, NULL);
++	}
++
++	ret = cros_ec_cmd_xfer(ec_dev, &msg);
++	KUNIT_EXPECT_EQ(test, ret, -EPROTO);
++
++	KUNIT_EXPECT_EQ(test, cros_kunit_ec_pkt_xfer_mock_called, 2);
++}
++
+ static void cros_ec_proto_test_release(struct device *dev)
+ {
+ }
+@@ -2013,6 +2043,7 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
+ 	KUNIT_CASE(cros_ec_proto_test_cmd_xfer_in_progress_retries_status_processing),
+ 	KUNIT_CASE(cros_ec_proto_test_cmd_xfer_in_progress_xfer_error),
+ 	KUNIT_CASE(cros_ec_proto_test_cmd_xfer_in_progress_return_error),
++	KUNIT_CASE(cros_ec_proto_test_cmd_xfer_in_progress_return0),
+ 	{}
+ };
  
 -- 
 2.37.0.170.g444d1eabd0-goog

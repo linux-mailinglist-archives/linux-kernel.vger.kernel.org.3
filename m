@@ -2,301 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCA9578782
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C404457878C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 18:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbiGRQhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 12:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S234996AbiGRQiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 12:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGRQgu (ORCPT
+        with ESMTP id S235076AbiGRQho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 12:36:50 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4372AC6F;
-        Mon, 18 Jul 2022 09:36:50 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26I1S1mT022610;
-        Mon, 18 Jul 2022 09:36:50 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=TeQY+xpRQFbN43ExUqBhLxXY3y5PjdgXOQiq8EsN8aE=;
- b=DSuOPOmrr1H5qNTUlZbXpTCfv4VAhEQSD4hz0xWBo3/o0XFd5l83yqqzR8riC4dFkebO
- BFjCUqouftu7n4bBQ7dOLe/xdptrhVNSN/PW+Z7t1AzuHWBouTK5/8seN+JQ0CQh/GBq
- Gpvp+LeaP8dks9KNKdM8plDwIugYILLlUs4= 
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hcpn65kf0-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Jul 2022 09:36:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZJH7AyNIaJsRp5OuTy5pF00VlIKZAdY1wxCu/+ElK6H+aQFkYNajWqY7IG1d0nNOZAuAz+a3MqGQBVioinnGVYE3vzOzoGE7F0/VqtHIqWczrn9idU4L90/30o2ocfnXiIA7zh2QPaSHoGe2iAN1kKSixWrcA/jJHFvTqtuzw/qUYJEIu6FPMcOBHpUlc3aTrauya+ItelEbdtykigRTCtTQJ8QWdrf3NiWaLVN4ai/03qEH63577S+R9orBE3GuCUuT4sw+wdKyHHRuoNZ45uSFxI6re72OeyV4IErYJBvfWxYHebzhq6NR/SXoa72fDBsKqRVLtUkc06mk3/Fdpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TeQY+xpRQFbN43ExUqBhLxXY3y5PjdgXOQiq8EsN8aE=;
- b=llEE9yGey1WOdzGSorXMgyN9Iz7OQZXu38IzvCZ1Rn+LHvmOqXgttyNpkuZ5iY0PsngediMClqJxl/X86SXMxQ52ADNfzwC/AQ1YSPmruDndOZwNc0++6mCXgSkNgRNkV3rCzTOlYIbLK0UNGLLLlgMUwvsd7bIjadBplT8wpmX+8yNoc5CblkdJI7y/D3QofURJJtrDC3hBso7K46GZ/Rti0aFdKTtxg1AL/fOgeRgStzxXcgCRzKFquad1SZyadmGw4VloFOxY3gviW52gAEkQ4uEcSik38xoX/6EpxXepKgsDEuheurEEymO42lvS68oN6aS67sczFxML+tcEsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by MW5PR15MB5169.namprd15.prod.outlook.com (2603:10b6:303:192::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Mon, 18 Jul
- 2022 16:36:46 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::5de3:3999:66df:42d1]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::5de3:3999:66df:42d1%4]) with mapi id 15.20.5438.023; Mon, 18 Jul 2022
- 16:36:46 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Petr Mladek <pmladek@suse.com>
-CC:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>
-Subject: Re: [PATCH v3 bpf-next 1/4] ftrace: add
- modify_ftrace_direct_multi_nolock
-Thread-Topic: [PATCH v3 bpf-next 1/4] ftrace: add
- modify_ftrace_direct_multi_nolock
-Thread-Index: AQHYmjtZKdCAk8gdFEio+bCmUefGN62EFXwAgAA/L4A=
-Date:   Mon, 18 Jul 2022 16:36:46 +0000
-Message-ID: <0E284A30-F185-4557-B7D1-0F6ABDB24BE5@fb.com>
-References: <20220718001405.2236811-1-song@kernel.org>
- <20220718001405.2236811-2-song@kernel.org> <YtVXHDfV8HDwAm6G@alley>
-In-Reply-To: <YtVXHDfV8HDwAm6G@alley>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.100.31)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2478e238-75cd-40fb-acf6-08da68dbb49a
-x-ms-traffictypediagnostic: MW5PR15MB5169:EE_
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: np1H1bsMpeF606X+qauiEXIH7gwThxvr3cLbWXsPUIXGz8U4xs+//RF287/eYu0ifD+kfUQJSV/ANDc6ScC1VGZ/UrRGTj+IzXK8ecBbFQKC60rz6q/LcxapGEIHP/VQ0cgn7BqPSQkKNa9SmSexKZHpiBO9VEHUryewpAGQdLJpNA+d3/b/uJBfnZqtU5sB8Jqt+4wrShmHdvRR27FFKoiSxVtGLzKVTxXH+X3erawxEv8JgSxOxvU+ViCV6iXTHV1YO0Q0FL6n5+MF15HNaynuYNlGuVr/NQ4zR+RF/G9qKMnqXl5OajZc/qlj/eucdNWWymj9mY4P0uP9dYWKojdhEKMTc1EzM6E8fEPC2CKur2G7t1T/8MsuZy8kn1197XFx2yw1IKzA7qJlb9Rg9j7hJw5WjE6TxxJr6i5ahaIcJeEUC2nXyndHBFcoEeV+7ch/nNoSVYcvO6jmDz0K6T3mcagHQ/xiBak1rOIudbQ/dlQ4onFxzR9pWxc/fRchPL3Jg4wlMM0YEhewkqDvmDjjByzkxmDbcbIgxlPDAzcfwMYxuKFkTTxpTKZz4PZsbw3P0izHl/6RgW61FTUXGUUfef0VVC08cnPOzu+zwfplGZtvkg/jrpgX14nhxw3bZU/tjhoUQisQcBaZgA16797bAN8lMuG8DQEjQwfohSaI00IABPUGpn2/mjpowTEOcxF4Mj2PmKjNdCHkl6c4WaDDVlMlMf/j8uvAA8eqTSRLUt+EDC8oB4NpUON0GG5BpkpT5+9QgPXcbX5Yi9uKGTiYpj9YMAmf3w7NLkbp9hzvadUod7fqkVva/vilTNSD0TH7BBC2SltAezL8/1HUETz/8zS15Hlml5yRR5R968Q=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(136003)(366004)(396003)(346002)(6486002)(41300700001)(71200400001)(478600001)(2616005)(186003)(6512007)(38100700002)(122000001)(6506007)(53546011)(66476007)(66946007)(38070700005)(83380400001)(76116006)(33656002)(2906002)(5660300002)(8936002)(316002)(91956017)(6916009)(8676002)(4326008)(86362001)(64756008)(66446008)(66556008)(36756003)(54906003)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PuW+Zd+7I9wmFM76hXD8Q+R5lNdJaN0LAnC/rLp8qoAlvPDW09lY+pPDXyCe?=
- =?us-ascii?Q?lXHePeBsVDT+e46IoQ90naQee+KqRILFqyPvRGLtfW+GT88snTV6qRz5dNVu?=
- =?us-ascii?Q?TdZzToyv18JncXf5kWPhHhJx6UfDAXSToevpKLl5Tfa707OWXd5W5w3byQKc?=
- =?us-ascii?Q?DyTzx6/lSePyv0KBBs2SN2Ut9lJhcySl4fPxqT7Ff97viUbYEHTRh0IpGlzG?=
- =?us-ascii?Q?4bnF4vfKaPI+/uQKzhWt48EvcarBr1ekiO5teoZuHFp2ZRJXcSQ+7U11eE4Y?=
- =?us-ascii?Q?1L4DbN0szhfm5NBkeiosX5vId4TijVBOVbmJSPulNjRl8Iez1QeoTENmWvA5?=
- =?us-ascii?Q?iZqeBL787adQhOowTds1wgvZYHlxSw4yFTeWJbgoZnh5H46pOAawu+mNyisP?=
- =?us-ascii?Q?pBLh/4UYVhiqIzQRz+29AEaAzPa63LdzOTzoE0TaeR2lsnmq//n+3Asuz/Z4?=
- =?us-ascii?Q?pDufJ7R932d1pWAfkvL3wi/LSE+i9+EgQ3Uss0S8mqIDUDi0kdnTm3r4N9rs?=
- =?us-ascii?Q?kKH+mJ0JhnyFnSK5dK/lXCSy/MNp/XB6EfhSxp4Y9Shok87NsWwPtIGL1Yyk?=
- =?us-ascii?Q?lUH/TsD5PpUU7ucVok+6ua2VKW3w7z+6G1/098fEauo9unwzgIK9wFqzRNYq?=
- =?us-ascii?Q?DKaUBaTSZG+D/6efi3fFGqGnKVSinPG3eNZq9vxT9p+uf8sRVO9CLMzUm+wu?=
- =?us-ascii?Q?tSVvY7B1IQvuyRyjQ907sbSyZ9wgRBYS2MuYUw8z5yvgDWfgH+wRGd1VLevB?=
- =?us-ascii?Q?xDabNSVIm0gFRZUY113kF6823YwIiVrodoM60QJo0pGOf/WK1kpFf3f4HfXB?=
- =?us-ascii?Q?BB6Dgo+TFh2HmmwFULHFCVwbDhYvsM/UrJW979Wkq9IhtmD+0ihHDt01jJoY?=
- =?us-ascii?Q?ZK8lXI+Wp/0yDE6lyuGKrbHY353Y8DRqujxzhvrEmlDFU8RYaOv+svW4P0o4?=
- =?us-ascii?Q?kZ6CUf05GS7Mp/H9ZzIknSxsItqnf0b/0WY0Tcu0hJVk2+vuiFTSd1YibeDz?=
- =?us-ascii?Q?nuTPNmW6ZYHKJVfAGp5EoSu5Xu2zYJLl6Cyo01kpO9G0vonPM4jCHUc3Jhh/?=
- =?us-ascii?Q?wewfsvTMMYyLSFWl0zKlXha59h0IxLr774+pbwnpkbv6YL6/BLOUOAUtuH6A?=
- =?us-ascii?Q?haVRzVat0CH9S5xmFN1tQ0UmI1S1wvAograh/JqDL9ipvJfrqXKURBeUZ+Ap?=
- =?us-ascii?Q?XPTEIthscC5wJIYK/yvBuh6PDO2o134nWF1IaW9fbVEuS6a2pOMuKl+Asj4I?=
- =?us-ascii?Q?dkAdZrtrF5fdB5kpFbZnS7BsTsMiYSLDGg5vIDGccHno7pUUrFjo13vVjUZ2?=
- =?us-ascii?Q?Iu4URiulW+4cXTV5m2Xo3Yiw6NT9Gh4r9na8+WdyeJ8iUs4nx2l517b6cbGn?=
- =?us-ascii?Q?F6yLhLGk7TkeBpxHZjd7KW7Aw/hDwhqtp6HlMc1D0P9aPxFdaOV2eYEvoTfE?=
- =?us-ascii?Q?n/Uz5dEikE+pvwYoJqLZZU5A+NVYcFHFDgH1iMRyOAXnxBpdl5bmvONzHsDm?=
- =?us-ascii?Q?re+5aLI/fOtYbmo7jsc1aoYynFxLpLe3Z8CAJbSqtY6MvyK6jGVVMekIBfpn?=
- =?us-ascii?Q?4QmNaRPBIcqFuE5cjuIlQHLSZa/MPmbzAbUE6WQkK8IgVNRkoeJKDRmhYkV7?=
- =?us-ascii?Q?JAWGSTWCjuITvpqMBXFT060=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5B7226FDD129F449B8C01991F80D0206@namprd15.prod.outlook.com>
+        Mon, 18 Jul 2022 12:37:44 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49852AC7F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:37:43 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id r186so11078791pgr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 09:37:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jy5bSdPEBHXtGkQFa13jOzIoiz6rP1xz8tt7o64b2cQ=;
+        b=NQ8j8x3+91cla9P71GlmIQUO+YiZKXDcdHt+gmAIJSyrqZNEBDY7FGlpbRiJEXD7z5
+         5gxU7bKwBE5tqn+nDr7r5g1/e3FGcQBK88Na+AQMAVF1OCFExs6cbMGQ+s1B1+cEohQ1
+         NXmfWaxoq5DLxu+ykiAgCzknCkII2GtmkS8hwFmLTSrNhJ6xpdCcFYTLUlndlc4xbUd6
+         /jSAY8VxUGhxgMnxWk/J+fAkuiiWrd/yLVKLcUFhsdhg2Inh4cyF9vBNC7+cKjRLYCk2
+         tKplmn6UcTnyhBIbul2q9qfUpQE6gCkdm3y6emya2m8sOenvJygT8xsc8zSuNtja/Rw+
+         Pomw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jy5bSdPEBHXtGkQFa13jOzIoiz6rP1xz8tt7o64b2cQ=;
+        b=KfhMoaQ8RY4NQYk0Y4X4DUdrgzDN319Uyj/XKGdh1dgw4sLUrvuYeTunRhdKjXurDr
+         f2jAi5flr1mZrmlpYvWyyfTn3t/U049uEItnvIDqAiFqk3A5BaKTkWccz9SWns7+XZsd
+         mu0POagojWXIbnFK8/f+KDl9U2Mb9YzXrjZVPwrRW1tIBo1SfaNblWCjYOCrbIA/wtZB
+         IdyTCdii5a1guZWlddjHC8wVY30Nx5/eJf6lluynlht7eZlUc3qPmrxoHuO3W6luRMLV
+         2q324fXczCfFo2fT+nR0wudlHplPixguguBZHUXAVY1CWOogoIpWBaGSp1bwxGnnb/vL
+         57GQ==
+X-Gm-Message-State: AJIora/AroelwgX/Dv/kQ9q/JlQSi+AFLwjyIZn4kM9ffPKfjrEZ7pVQ
+        dQ1Ia/ci6O5yqFYKWJLOYmdafqqYf7I9bw==
+X-Google-Smtp-Source: AGRyM1tPcVAhq6pbK/P4T7cMXNm+4Qu9OOTYXv56xIwOeYZf0YvWayAr/HgaK8nqSxXHiudex4yu6Q==
+X-Received: by 2002:a05:6a00:22d5:b0:52b:af2:9056 with SMTP id f21-20020a056a0022d500b0052b0af29056mr28550724pfj.80.1658162263152;
+        Mon, 18 Jul 2022 09:37:43 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id ha15-20020a17090af3cf00b001efa332d365sm9489636pjb.33.2022.07.18.09.37.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 09:37:42 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 16:37:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Subject: Re: [PATCH v2 02/24] KVM: VMX: Drop bits 31:16 when shoving
+ exception error code into VMCS
+Message-ID: <YtWMUsjfkv+JcOXe@google.com>
+References: <20220715204226.3655170-1-seanjc@google.com>
+ <20220715204226.3655170-3-seanjc@google.com>
+ <547250051f1578b7ddf60311be46b3eb7990ccc6.camel@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2478e238-75cd-40fb-acf6-08da68dbb49a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2022 16:36:46.3352
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5afn8yScyVW2qJ+HQkMI2GVvznbbVQEfCZia+SsqLH9KPkn8uQNLeBN7ZrkVWHdc+6eOL9/Y8uFDG1MKBkXR0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR15MB5169
-X-Proofpoint-GUID: dSe8w_QFXXEJI_UsGHgPpPEhSHIjXwBg
-X-Proofpoint-ORIG-GUID: dSe8w_QFXXEJI_UsGHgPpPEhSHIjXwBg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_16,2022-07-18_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <547250051f1578b7ddf60311be46b3eb7990ccc6.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Petr, 
+On Mon, Jul 18, 2022, Maxim Levitsky wrote:
+> On Fri, 2022-07-15 at 20:42 +0000, Sean Christopherson wrote:
+> > Deliberately truncate the exception error code when shoving it into the
+> > VMCS (VM-Entry field for vmcs01 and vmcs02, VM-Exit field for vmcs12).
+> > Intel CPUs are incapable of handling 32-bit error codes and will never
+> > generate an error code with bits 31:16, but userspace can provide an
+> > arbitrary error code via KVM_SET_VCPU_EVENTS.  Failure to drop the bits
+> > on exception injection results in failed VM-Entry, as VMX disallows
+> > setting bits 31:16.  Setting the bits on VM-Exit would at best confuse
+> > L1, and at worse induce a nested VM-Entry failure, e.g. if L1 decided to
+> > reinject the exception back into L2.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > Reviewed-by: Jim Mattson <jmattson@google.com>
+> > ---
+> >  arch/x86/kvm/vmx/nested.c |  9 ++++++++-
+> >  arch/x86/kvm/vmx/vmx.c    | 11 ++++++++++-
+> >  2 files changed, 18 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> > index 8c2c81406248..05c34a72c266 100644
+> > --- a/arch/x86/kvm/vmx/nested.c
+> > +++ b/arch/x86/kvm/vmx/nested.c
+> > @@ -3822,7 +3822,14 @@ static void nested_vmx_inject_exception_vmexit(struct kvm_vcpu *vcpu,
+> >         u32 intr_info = nr | INTR_INFO_VALID_MASK;
+> >  
+> >         if (vcpu->arch.exception.has_error_code) {
+> > -               vmcs12->vm_exit_intr_error_code = vcpu->arch.exception.error_code;
+> > +               /*
+> > +                * Intel CPUs will never generate an error code with bits 31:16
+> > +                * set, and more importantly VMX disallows setting bits 31:16
+> > +                * in the injected error code for VM-Entry.  Drop the bits to
+> > +                * mimic hardware and avoid inducing failure on nested VM-Entry
+> > +                * if L1 chooses to inject the exception back to L2.
+> 
+> Very small nitpick:
+> I think I would still prefer to have a mention that AMD CPUs can have error code > 16 bit,
+> The above comment kind of implies this, but it would be a bit more clear, but I don't
+> have a strong preference on this.
 
-Thanks for your quick review!
+Agreed, I'll reword this to make it abundantly clear that setting bits 31:16 is
+architecturally allowed and done by AMD, and that this is purely an Intel oddity.
 
-> On Jul 18, 2022, at 5:50 AM, Petr Mladek <pmladek@suse.com> wrote:
-> 
-> On Sun 2022-07-17 17:14:02, Song Liu wrote:
->> This is similar to modify_ftrace_direct_multi, but does not acquire
->> direct_mutex. This is useful when direct_mutex is already locked by the
->> user.
->> 
->> --- a/kernel/trace/ftrace.c
->> +++ b/kernel/trace/ftrace.c
->> @@ -5691,22 +5691,8 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->> @@ -5717,12 +5703,8 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->> 	int i, size;
->> 	int err;
->> 
->> -	if (check_direct_multi(ops))
->> +	if (WARN_ON_ONCE(!mutex_is_locked(&direct_mutex)))
->> 		return -EINVAL;
-> 
-> IMHO, it is better to use:
-> 
-> 	lockdep_assert_held_once(&direct_mutex);
-> 
-> It will always catch the problem when called without the lock and
-> lockdep is enabled.
+> > +                */
+> > +               vmcs12->vm_exit_intr_error_code = (u16)vcpu->arch.exception.error_code;
+> >                 intr_info |= INTR_INFO_DELIVER_CODE_MASK;
+> >         }
+> >  
+> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> > index b0cc911a8f6f..d2b3d30d6afb 100644
+> > --- a/arch/x86/kvm/vmx/vmx.c
+> > +++ b/arch/x86/kvm/vmx/vmx.c
+> > @@ -1621,7 +1621,16 @@ static void vmx_queue_exception(struct kvm_vcpu *vcpu)
+> >         kvm_deliver_exception_payload(vcpu);
+> >  
+> >         if (has_error_code) {
+> > -               vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, error_code);
+> > +               /*
+> > +                * Despite the error code being architecturally defined as 32
+> > +                * bits, and the VMCS field being 32 bits, Intel CPUs and thus
+> > +                * VMX don't actually supporting setting bits 31:16.  Hardware
+> > +                * will (should) never provide a bogus error code, but KVM's
+> > +                * ABI lets userspace shove in arbitrary 32-bit values.  Drop
 
-Will fix. 
+I'll update this to mention AMD CPUs as well.
 
+> > +                * the upper bits to avoid VM-Fail, losing information that
+> > +                * does't really exist is preferable to killing the VM.
+> > +                */
+> > +               vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, (u16)error_code);
+> >                 intr_info |= INTR_INFO_DELIVER_CODE_MASK;
+> >         }
+> >  
 > 
->> -	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
->> -		return -EINVAL;
->> -
->> -	mutex_lock(&direct_mutex);
->> 
->> 	/* Enable the tmp_ops to have the same functions as the direct ops */
->> 	ftrace_ops_init(&tmp_ops);
->> @@ -5730,7 +5712,7 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->> 
->> 	err = register_ftrace_function(&tmp_ops);
->> 	if (err)
->> -		goto out_direct;
->> +		return err;
->> 
->> 	/*
->> 	 * Now the ftrace_ops_list_func() is called to do the direct callers.
->> @@ -5754,7 +5736,64 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->> 	/* Removing the tmp_ops will add the updated direct callers to the functions */
->> 	unregister_ftrace_function(&tmp_ops);
->> 
->> - out_direct:
->> +	return err;
->> +}
->> +
->> +/**
->> + * modify_ftrace_direct_multi_nolock - Modify an existing direct 'multi' call
->> + * to call something else
->> + * @ops: The address of the struct ftrace_ops object
->> + * @addr: The address of the new trampoline to call at @ops functions
->> + *
->> + * This is used to unregister currently registered direct caller and
->> + * register new one @addr on functions registered in @ops object.
->> + *
->> + * Note there's window between ftrace_shutdown and ftrace_startup calls
->> + * where there will be no callbacks called.
->> + *
->> + * Caller should already have direct_mutex locked, so we don't lock
->> + * direct_mutex here.
->> + *
->> + * Returns: zero on success. Non zero on error, which includes:
->> + *  -EINVAL - The @ops object was not properly registered.
->> + */
->> +int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
->> +{
->> +	if (check_direct_multi(ops))
->> +		return -EINVAL;
->> +	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
->> +		return -EINVAL;
->> +
->> +	return __modify_ftrace_direct_multi(ops, addr);
->> +}
->> +EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi_nolock);
->> +
->> +/**
->> + * modify_ftrace_direct_multi - Modify an existing direct 'multi' call
->> + * to call something else
->> + * @ops: The address of the struct ftrace_ops object
->> + * @addr: The address of the new trampoline to call at @ops functions
->> + *
->> + * This is used to unregister currently registered direct caller and
->> + * register new one @addr on functions registered in @ops object.
->> + *
->> + * Note there's window between ftrace_shutdown and ftrace_startup calls
->> + * where there will be no callbacks called.
->> + *
->> + * Returns: zero on success. Non zero on error, which includes:
->> + *  -EINVAL - The @ops object was not properly registered.
->> + */
->> +int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
->> +{
->> +	int err;
->> +
->> +	if (check_direct_multi(ops))
->> +		return -EINVAL;
->> +	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
->> +		return -EINVAL;
->> +
->> +	mutex_lock(&direct_mutex);
->> +	err = __modify_ftrace_direct_multi(ops, addr);
->> 	mutex_unlock(&direct_mutex);
->> 	return err;
->> }
 > 
-> I would personally do:
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 > 
-> int __modify_ftrace_direct_multi(struct ftrace_ops *ops,
-> 			unsigned long addr, bool lock)
-> {
-> 	int err;
+> Best regards,
+>  Maxim Levitsky
 > 
-> 	if (check_direct_multi(ops))
-> 		return -EINVAL;
-> 	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-> 		return -EINVAL;
 > 
-> 	if (lock)
-> 		mutex_lock(&direct_mutex);
-> 
-> 	err = __modify_ftrace_direct_multi(ops, addr);
-> 
-> 	if (lock)
-> 		mutex_unlock(&direct_mutex);
-
-The "if (lock) lock" pattern bothers me a little. But I agrees this is 
-a matter of taste. If other folks prefers this way, I will make the 
-change. 
-
-Thanks,
-Song
-
-> 
-> 	return err;
-> }
-> 
-> int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-> {
-> 	__modify_ftrace_direct_multi(ops, addr, true);
-> }
-> 
-> int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
-> {
-> 	__modify_ftrace_direct_multi(ops, addr, false);
-> }
-> 
-> To avoid duplication of the checks. But it is a matter of taste.
-> 
-> Best Regards,
-> Petr
-

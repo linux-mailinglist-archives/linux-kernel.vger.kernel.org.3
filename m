@@ -2,75 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE1D577BE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA1E577BE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbiGRGr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 02:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
+        id S232908AbiGRGtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 02:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiGRGr0 (ORCPT
+        with ESMTP id S229680AbiGRGtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 02:47:26 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EB515A3A
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:47:22 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id r2so8162041qta.0
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=CxwxaDVgue0TLlkqxh1Fx5Wl0sMETEThFBBYudThPAM=;
-        b=H+UuJsNyKDvw1n9H1k+7Bzi4IfrGrJlJ+FBtYdOotBBc1Fy++8aN1z+zX38Ks+nMLU
-         yqbepoXNUqbukUDYaENTap76agS+vPDg2qrlQS0fcX8Q3AiTboQLQafEhG0GR5d2xbbQ
-         KEFkNkX8qchC9rSio2+EfgOSYJrUCEk3qL7X16+RIcufBF+S13t6mBomNPlVtSKxP+ek
-         dMAPtzmL7m4Lx+H2Qm+P+Pe3/8nuXBMmxHmv989XwGiNKYglVfrt2IxKTibXdMT2JN4y
-         lT2uiJ3ZiluA1rr52lXyCK0euw/oPeZU0q89x8UHuxuOVJdfjUv9G4FvBdXiq83U5NAU
-         Be+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=CxwxaDVgue0TLlkqxh1Fx5Wl0sMETEThFBBYudThPAM=;
-        b=PlQtXnEnT+2Q10qSo1IU9idNlJlTJpjW6DxP3y0tlDaNPFwaNEwmQfEhF2ZY5xFasN
-         DBNyr/XHrW9KbRvWHKRU4nXxS35uUI6di0js1blfiDSG5ZYxOF3bJK6UuQTY4CVyfjLO
-         3DbH8bknUfZN8gEmd3+qyibCNCssLi8L5aLfXSQk9YNGIfHeHLW3K4TokenwIbN7tckx
-         EvwSLufUeYfO6v+EoZO/FJ4FzASbQ3dCGk/SMFLxgdEoicsMglRbLqnKXz0emRKMGEyG
-         UcYvtuqhouD0sb7XEoeI0wqNzvvhHRV4OUT4BCE5IDqbBM/5R9R9dHy2LOyqXsy2xDeR
-         q+sg==
-X-Gm-Message-State: AJIora976JTHm9daSKd4rf2/z8OiDg5MtbHnw0WaMOGRGsfIDwAo3tpf
-        IWq9R60L7finv+EggnMZcYOXQw==
-X-Google-Smtp-Source: AGRyM1vZ6NSZ6iejW3cP+ma+fW6L3dwMU4IzactuBQcBEgTBGN7rsTMzQU1xDErluCeEX8ueEaVsgQ==
-X-Received: by 2002:a05:622a:48d:b0:31e:f1a8:61dc with SMTP id p13-20020a05622a048d00b0031ef1a861dcmr1905138qtx.129.1658126841281;
-        Sun, 17 Jul 2022 23:47:21 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id fy19-20020a05622a5a1300b002f936bae288sm2315360qtb.87.2022.07.17.23.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 23:47:20 -0700 (PDT)
-Date:   Sun, 17 Jul 2022 23:47:08 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Liam Howlett <liam.howlett@oracle.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] maple_tree: Fix sparse reported issues
-In-Reply-To: <1098dd4d-8f12-4493-5aff-1ee489d8e7@google.com>
-Message-ID: <b8f67958-11cf-2fb2-aba9-6cc88c75874@google.com>
-References: <20220712142441.4184969-1-Liam.Howlett@oracle.com> <653cc1da-e45a-9a93-7158-cee3e710ba35@redhat.com> <20220713132926.3sl7gs67dyjj7kit@revolver> <44a478e8-2ccc-e82-bd5a-172778c01529@google.com> <20220713175013.aoemaelds45aavc4@revolver>
- <20220715195301.r7ozt6ph2scti7vz@revolver> <fc9c2193-f5d7-d494-8e4e-c9f340ae8625@google.com> <20220718022718.wtlw7grwp6dv5fcp@revolver> <1098dd4d-8f12-4493-5aff-1ee489d8e7@google.com>
+        Mon, 18 Jul 2022 02:49:39 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9BD3886
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:49:37 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LmXZ52934zjX3l;
+        Mon, 18 Jul 2022 14:46:53 +0800 (CST)
+Received: from [10.174.178.157] (10.174.178.157) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Jul 2022 14:49:34 +0800
+Message-ID: <9a4e42af-a354-2947-5088-436df2b4cc9f@huawei.com>
+Date:   Mon, 18 Jul 2022 14:49:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] mm/huge_memory: Return from zap_huge_pmd after WARN_ONCE.
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <zi.yan@cs.rutgers.edu>
+References: <20220715092238.22663-1-zhouguanghui1@huawei.com>
+ <YtGo7GS5l4WxZA/R@casper.infradead.org>
+From:   Zhou Guanghui <zhouguanghui1@huawei.com>
+In-Reply-To: <YtGo7GS5l4WxZA/R@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.157]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,35 +51,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 17 Jul 2022, Hugh Dickins wrote:
-> On Mon, 18 Jul 2022, Liam Howlett wrote:
-> > Do you have the patch
-> > "maple_tree-Fix-stale-data-copy-in-mas_wr_node_store.patch"? It sounds
-> > like your issue fits this fix exactly. I was seeing the same issue with
-> > gcc 9.3.1 20200408 and this bug doesn't happen for me now.  The logs
-> > you sent also fit the situation. I went through the same exercise
-> > (exorcism?) of debugging the various additions and removals of the VMA
-> > only to find the issue in the tree itself.  The fix also modified the
-> > test code to detect the issue - which was actually hit but not detected
-> > in the existing test cases from a live capture of VMA activities.  It is
-> > difficult to spot in the tree dump as well.  I am sure I sent this to
-> > Andrew as it is included in v11 and did not show up in his diff, but I
-> > cannot find it on lore, perhaps I forgot to CC you?  I've attached it
-> > here for you in case you missed it.
+
+
+On 2022/7/16 1:50, Matthew Wilcox wrote:
+> On Fri, Jul 15, 2022 at 09:22:38AM +0000, Zhou Guanghui wrote:
+>> After WARN_ONCE is processed, the subsequent page judgment results
+>> in NULL pointer access. It is more reasonable to return from the
+>> function here.
 > 
-> Thanks!  No, I never received that patch, nor can I see it on lore
-> or marc.info; but I (still) haven't looked at v11, and don't know
-> about Andrew's diff.  Anyway, sounds exciting, I'm eager to stop
-> writing this mail and get to testing with that in - but please
-> let me know whether it's the mas_dead_leaves() or the __vma_adjust()
-> mods you attached previously, which you want me to leave out.
+> I'm not sure this is a good idea.  Probably better to crash than
+> continue.
 
-I just went ahead with both of those still in, my do_mas_munmap()
-non-fix reverted, and your "Fix stale data copy" added: looks very
-promising so far, been running two hours without a problem.  I
-do expect it to hit the migration entry !PageLocked BUG soon (as
-it quickly did on the laptop), but that's okay: I'll switch over
-to thinking about that BUG, so long as tonight's run does not
-crash in some other way.
+Except present pmd and pmd migration entry, there should be no other possible scenarios. Whether crash or warn is unnecessary. However, the current process that crashes after a warning is reported is not reasonable.
 
-Hugh
+Like this:
+if (pmd_present(orig_pmd)) {
+	xxx
+} else {
+	swp_entry_t entry;
+
+	VM_BUG_ON(!is_pmd_migration_entry(orig_pmd));
+	entry = pmd_to_swp_entry(orig_pmd);
+	page = pfn_to_page(swp_offset(entry));
+	flush_needed = 0;
+}
+
+Thanks.
+
+> 
+>> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
+>> ---
+>>  mm/huge_memory.c | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index 834f288b3769..7f5ccca6792a 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -1601,8 +1601,11 @@ int zap_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>>  			entry = pmd_to_swp_entry(orig_pmd);
+>>  			page = pfn_swap_entry_to_page(entry);
+>>  			flush_needed = 0;
+>> -		} else
+>> +		} else {
+>> +			spin_unlock(ptl);
+>>  			WARN_ONCE(1, "Non present huge pmd without pmd migration enabled!");
+>> +			return 1;
+>> +		}
+>>  
+>>  		if (PageAnon(page)) {
+>>  			zap_deposited_table(tlb->mm, pmd);
+>> -- 
+>> 2.17.1
+>>
+>>
+> 
+> .

@@ -2,42 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186E2577BF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4B3577BF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 08:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbiGRGzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 02:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        id S233613AbiGRG4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 02:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbiGRGzk (ORCPT
+        with ESMTP id S233607AbiGRGz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 02:55:40 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4989313E09;
-        Sun, 17 Jul 2022 23:55:39 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oDKfH-0005xs-S1; Mon, 18 Jul 2022 08:55:35 +0200
-Message-ID: <0f226def-baf9-d6b2-2ee3-f6fae7d675f1@leemhuis.info>
-Date:   Mon, 18 Jul 2022 08:55:35 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] certs: make system keyring depend on x509 parser
-Content-Language: en-US
-To:     Adam Borowski <kilobyte@angband.pl>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220717231105.33005-1-kilobyte@angband.pl>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Steven Rostedt <rostedt@goodmis.org>
-In-Reply-To: <20220717231105.33005-1-kilobyte@angband.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1658127339;eec334ab;
-X-HE-SMSGID: 1oDKfH-0005xs-S1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Mon, 18 Jul 2022 02:55:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328AF13D78
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Jul 2022 23:55:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE4B2612ED
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 06:55:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD6CC341C0;
+        Mon, 18 Jul 2022 06:55:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658127356;
+        bh=40HSFVKrievXEEZlinu6PVUqYOcnH5q0Oq33vn9Lwjo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jCIW4Qgexksy/SJrcSNfrRR68t3p3TVKpL99DlukG154BeFzBHhGrMlWRvC8bqj/G
+         kEYF6yh7/OFtFP+bPNQaGBivbBlnyih60DH1v6KIHgk+vhwrUam5ZtUY5eoK4AsB11
+         3CFKef7mF0hvinUab37XGKI7unbYDbeThU9q/KjyPQfW3RcHXyeyxCbaFU3W5MRmuc
+         I2u6EEUH9KgiL/8hPx8+5KvSEf7Gsr/4pjOJP+AoyRtbwKp/tY2RDKzf36i2V+kIk1
+         LxHJnsvHOQYMQGOqschrCmaMB2ZDdaCJKXNGr5ehISY91UsuUM14dLLDmp722VJpxG
+         7Xqc7Lj/wZldA==
+Received: from 82-132-227-210.dab.02.net ([82.132.227.210] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDKfZ-0088CH-Th;
+        Mon, 18 Jul 2022 07:55:54 +0100
+Date:   Mon, 18 Jul 2022 07:55:44 +0100
+Message-ID: <87cze252q7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org,
+        madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
+        tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org,
+        wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com,
+        yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 08/18] KVM: arm64: Add PROTECTED_NVHE_STACKTRACE Kconfig
+In-Reply-To: <20220715061027.1612149-9-kaleshsingh@google.com>
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+        <20220715061027.1612149-9-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.227.210
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, broonie@kernel.org, madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com, tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, andreyknvl@gmail.com, russell.king@oracle.com, vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,42 +74,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+[- Drew and android-mm, as both addresses bounce]
 
-Thx for looking into this.
-
-On 18.07.22 01:11, Adam Borowski wrote:
-> This code requires x509_load_certificate_list() to be built-in.
+On Fri, 15 Jul 2022 07:10:17 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> Fixes: 60050ffe3d770dd1df5b641aa48f49d07a54bd84
+> This can be used to disable stacktrace for the protected KVM
+> nVHE hypervisor, in order to save on the associated memory usage.
+> 
+> This option is disabled by default, since protected KVM is not widely
+> used on platforms other than Android currently.
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>  arch/arm64/kvm/Kconfig | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+> index 8a5fbbf084df..1edab6f8a3b8 100644
+> --- a/arch/arm64/kvm/Kconfig
+> +++ b/arch/arm64/kvm/Kconfig
+> @@ -46,6 +46,21 @@ menuconfig KVM
+>  
+>  	  If unsure, say N.
+>  
+> +config PROTECTED_NVHE_STACKTRACE
+> +	bool "Protected KVM hypervisor stacktraces"
+> +	depends on KVM
+> +	default n
+> +	help
+> +	  Say Y here to enable pKVM hypervisor stacktraces on hyp_panic()
+> +
+> +	  If you are not using protected nVHE (pKVM), say N.
+> +
+> +	  If using protected nVHE mode, but cannot afford the associated
+> +	  memory cost (less than 0.75 page per CPU) of pKVM stacktraces,
+> +	  say N.
+> +
+> +	  If unsure, say N.
+> +
 
-Just BTW: per docs.kernel.org/process/submitting-patches.html this
-should be
+Can we make this depend on NVHE_EL2_DEBUG instead? I'd like to keep
+the disclosing of EL2 information in protected mode a strict debug
+feature.
 
-Fixes: 60050ffe3d77 ("certs: Move load_certificate_list() to be with the
-asymmetric keys code")
+>  config NVHE_EL2_DEBUG
+>  	bool "Debug mode for non-VHE EL2 object"
+>  	depends on KVM
 
-But I write for a different reason: Could you also please add "Link:"
-and "Reported-by:" tags for earlier reports about this issue please:
+Thanks,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/all/202206221515.DqpUuvbQ-lkp@intel.com/
-Reported-by: Steven Rostedt <rostedt@goodmis.org>
-Link:
-https://lore.kernel.org/all/20220712104554.408dbf42@gandalf.local.home/
+	M.
 
-tia
-
-> […]
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
-
-P.P.S.: Let me tell regzbot to monitor this thread:
-
-#regzbot ^backmonitor:
-https://lore.kernel.org/all/20220712104554.408dbf42@gandalf.local.home/
+-- 
+Without deviation from the norm, progress is not possible.

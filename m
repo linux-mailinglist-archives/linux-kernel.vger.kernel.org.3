@@ -2,211 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9065A57824F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDAA57824A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Jul 2022 14:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234461AbiGRM1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 08:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        id S234331AbiGRM1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 08:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234471AbiGRM1R (ORCPT
+        with ESMTP id S233407AbiGRM1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 08:27:17 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267E025EB2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:27:14 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id u13so19024018lfn.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 05:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SvNSiy3Bwyzzmb9hWm5P2ubOF+K0KPQR5bua58V/jh0=;
-        b=fvzJULg7DRCWCIpeJrHd8MszLKI1FCkIqUIlpfMgk4Y9DoLijatc6bknHRhlef65cQ
-         WSkxz+dMpXpDQuTDLRcjqChHLNrmSK1htOi3Q1Ap1XjPzlitOiadSO1j5WrlV2PdnB8E
-         bqtRarasBZWlUSAezWCCVo4ExQZu8B52noAfuFmdP/NsR5T0xIJ0in5tQtPG9DFaHdi4
-         QqCuJ6LqHK5C0/OdDwFCLUCvvBdyfHNx5u4y8d6miqg6/gZsHqeGlcNHyGb1dc6KnZPy
-         +41xCZsvOhgvrTLuk8Ii1L0cwh6uist3zpQZdMgbIFTbjXXsz50iwd/HBs+TbaV7xxiy
-         tFug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SvNSiy3Bwyzzmb9hWm5P2ubOF+K0KPQR5bua58V/jh0=;
-        b=vRPh/8AeGNC/krw8BbknmvG3U9awQSN2N/YWkimR0IOL2lFcAMMSWJTVliBWm5HenV
-         ZftlxkTuvwIpUlj7UHbx0LMXPaZyutU4ZLzRuMxhD4+3cDBVmm9voTHPQ1tZ60hOdkeH
-         uHR5sINZXe0yQsWZEhzp/Y5Wg2HZyyaZ3u/3lXAWsZlagknWxJSFaHLX1iTsWsi7WShZ
-         oUn1B+jyhcN9pHW6YXOjbMg4mcwfEITFjbQiIpHyWVOOqvLnGGYwsPUcrZm1Hsa9AwtK
-         7r3mu2RImhrmJC568ndocuW1axg1xfY7+u1+yyuH5/QzNUZnNDV/G996DpWJ3uBJSDP7
-         RPww==
-X-Gm-Message-State: AJIora+IHIBFZ9mSSjtnhkl3D3WTxhyKsJHBig5QrhbGkMCRD5VFVKc5
-        8e1uDuSUVoDDLXGQ0h2cLsoYVjIOeeRNdS2+DSUWcA==
-X-Google-Smtp-Source: AGRyM1uKiFktgrEzxlm7H0kdDSoycjmIDjrn5dKMTQroWG6UyBZUIQ/Ro4Bg+FkT/p4F94gX2lwF5GGf0OM1CfmattE=
-X-Received: by 2002:a05:6512:aca:b0:48a:1a70:d0d8 with SMTP id
- n10-20020a0565120aca00b0048a1a70d0d8mr11279481lfu.167.1658147232435; Mon, 18
- Jul 2022 05:27:12 -0700 (PDT)
+        Mon, 18 Jul 2022 08:27:05 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91D5BAF;
+        Mon, 18 Jul 2022 05:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658147224; x=1689683224;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=9pmvwK6gZKZsdPvJKC7erTRSJ1Azp96NhdXTB4qIeoo=;
+  b=PsqWSWvhZs1FsjKfD8TmD/8cXT9hvRv8sUqsPVR11JKYhBhzEtOMVeyB
+   wZrCJyvXmTE43gWDrFv/ABEIu4VvfjVZD2QLJuFY3ht88Rr7cCai5OPEh
+   2joA9fYPZ7g7hkq0pUdcCRMGTQREGLFbCS/pM97VMYHdvpi+YyXdmRSMP
+   KSYrHRyThfszqUK2VyOmuNPACBjNcuAzhAcJraquPWx7sKl6mwCJe3YvL
+   McHT/+GJhdwdzCcSiJ7DIVgmZ6mVT5v2p/iPyywdzX7tXq2VFd8wnkkCN
+   eEhoO6aur1fHDkrOBV56Hp/46BwHsjOwUsqmH5ppTsVhnerERFK0k82Wu
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="286948011"
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="286948011"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 05:27:03 -0700
+X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
+   d="scan'208";a="601206977"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 05:26:58 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oDPpu-001OAV-2O;
+        Mon, 18 Jul 2022 15:26:54 +0300
+Date:   Mon, 18 Jul 2022 15:26:54 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+        upstream@semihalf.com
+Subject: Re: [net-next: PATCH v2 5/8] device property: introduce
+ fwnode_dev_node_match
+Message-ID: <YtVRjvzgmeDjLz1k@smile.fi.intel.com>
+References: <20220715085012.2630214-1-mw@semihalf.com>
+ <20220715085012.2630214-6-mw@semihalf.com>
+ <YtHBvb/kh/Sl0cmz@smile.fi.intel.com>
+ <YtHDHtWU5Wbgknej@smile.fi.intel.com>
+ <CAPv3WKcf7U_KLuxg5zgyQZru52QEAgrHq2dO7dD4JGMMCLq05w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220712121832.3659769-1-martin.kepplinger@puri.sm>
- <CAPDyKFr0Lnp_3rUWcdZMcgtcFW050hOiGVZV_bVu=pqCLE8dEw@mail.gmail.com> <06ee17dfd5f5fb0cb3db4ddfee863c7b8351096e.camel@puri.sm>
-In-Reply-To: <06ee17dfd5f5fb0cb3db4ddfee863c7b8351096e.camel@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 18 Jul 2022 14:26:35 +0200
-Message-ID: <CAPDyKFpm1nMEeUjygapfwtBcr25AQerX4j14MPKd5NW2-BW33g@mail.gmail.com>
-Subject: Re: [PATCH v2] power: domain: handle power supplies that need interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPv3WKcf7U_KLuxg5zgyQZru52QEAgrHq2dO7dD4JGMMCLq05w@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 at 14:08, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> Am Montag, dem 18.07.2022 um 12:54 +0200 schrieb Ulf Hansson:
-> > On Tue, 12 Jul 2022 at 14:19, Martin Kepplinger
-> > <martin.kepplinger@puri.sm> wrote:
-> > >
-> > > If the power-domains' power-supply node (regulator) needs
-> > > interrupts to work, the current setup with noirq callbacks cannot
-> > > work; for example a pmic regulator on i2c, when suspending, usually
-> > > already
-> > > times out during suspend_noirq:
-> > >
-> > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > >
-> > > So fix system suspend and resume for these power-domains by using
-> > > the
-> > > "outer" suspend/resume callbacks instead. Tested on the imx8mq-
-> > > librem5
-> > > board, but by looking at the dts, this will fix imx8mq-evk and
-> > > possibly
-> > > other boards too.
-> > >
-> > > Possibly one can find more changes than suspend/resume for this
-> > > case. They
-> > > can be added later when testing them.
-> > >
-> > > Initially system suspend problems had been discussed at
-> > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > > which led to discussing the pmic that contains the regulators which
-> > > serve as power-domain power-supplies:
-> > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > >
-> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > ---
-> > >
-> > > revision history
-> > > ----------------
-> > > v2: (thank you Krzysztof)
-> > > * rewrite: find possible regulators' interrupts property in parents
-> > >   instead of inventing a new property.
-> > >
-> > > v1: (initial idea)
-> > > https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
-> > >
-> > >
-> > >  drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
-> > >  1 file changed, 26 insertions(+)
-> > >
-> > > diff --git a/drivers/base/power/domain.c
-> > > b/drivers/base/power/domain.c
-> > > index 3e86772d5fac..ca3e3500939d 100644
-> > > --- a/drivers/base/power/domain.c
-> > > +++ b/drivers/base/power/domain.c
-> > > @@ -2298,6 +2298,28 @@ static bool genpd_present(const struct
-> > > generic_pm_domain *genpd)
-> > >         return ret;
-> > >  }
-> > >
-> > > +/**
-> > > + * of_genpd_get_power_supply_irq() - Adjust if power-supply needs
-> > > interrupts
-> > > + * @genpd: Pointer to PM domain associated with the PM domain
-> > > provider.
-> > > + */
-> > > +static void of_genpd_get_power_supply_irq(struct generic_pm_domain
-> > > *pd)
-> > > +{
-> > > +       struct device_node *dn;
-> > > +
-> > > +       dn = of_parse_phandle(pd->dev.of_node, "power-supply", 0);
-> > > +       if (!dn)
-> > > +               return;
-> > > +
-> > > +       while ((dn = of_get_next_parent(dn))) {
-> > > +               if (of_get_property(dn, "interrupts", NULL)) {
-> > > +                       pd->domain.ops.suspend =
-> > > genpd_suspend_noirq;
-> > > +                       pd->domain.ops.resume = genpd_resume_noirq;
-> > > +                       pd->domain.ops.suspend_noirq = NULL;
-> > > +                       pd->domain.ops.resume_noirq = NULL;
-> > > +               }
-> > > +       }
-> > > +}
-> > > +
-> > >  /**
-> > >   * of_genpd_add_provider_simple() - Register a simple PM domain
-> > > provider
-> > >   * @np: Device node pointer associated with the PM domain
-> > > provider.
-> > > @@ -2343,6 +2365,8 @@ int of_genpd_add_provider_simple(struct
-> > > device_node *np,
-> > >         genpd->provider = &np->fwnode;
-> > >         genpd->has_provider = true;
-> > >
-> > > +       of_genpd_get_power_supply_irq(genpd);
-> > > +
-> > >         return 0;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
-> > > @@ -2394,6 +2418,8 @@ int of_genpd_add_provider_onecell(struct
-> > > device_node *np,
-> > >
-> > >                 genpd->provider = &np->fwnode;
-> > >                 genpd->has_provider = true;
-> > > +
-> > > +               of_genpd_get_power_supply_irq(genpd);
-> > >         }
-> > >
-> > >         ret = genpd_add_provider(np, data->xlate, data);
+On Sat, Jul 16, 2022 at 01:15:55AM +0200, Marcin Wojtas wrote:
+> pt., 15 lip 2022 o 21:42 Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> napisał(a):
 > >
-> > Overall I understand the need for this, but let me suggest a slightly
-> > different approach to solve this. See below.
+> > On Fri, Jul 15, 2022 at 10:36:29PM +0300, Andy Shevchenko wrote:
+> > > On Fri, Jul 15, 2022 at 10:50:09AM +0200, Marcin Wojtas wrote:
+> > > > This patch adds a new generic routine fwnode_dev_node_match
+> > > > that can be used e.g. as a callback for class_find_device().
+> > > > It searches for the struct device corresponding to a
+> > > > struct fwnode_handle by iterating over device and
+> > > > its parents.
+> > >
+> > > Implementation
+> > > 1) misses the word 'parent';
+> 
+> I'm not sure. We don't necessarily look for parent device(s). We start
+> with a struct device and if it matches the fwnode, success is returned
+> immediately. Only otherwise we iterate over parent devices to find a
+> match.
+
+Yes, you iterate over parents. 0 iterations doesn't change semantics of
+all cases, right?
+
+> > > 2) located outside of the group of fwnode APIs operating on parents.
+> 
+> I can shift it right below fwnode_get_nth_parent if you prefer.
+
+Yes, please do.
+
+> > > I would suggest to rename to fwnode_get_next_parent_node() and place
+> > > near to fwnode_get_next_parent_dev() (either before or after, where
+> > > it makes more sense).
 > >
-> > I think the OF parsing looks quite platform specific. Rather than
-> > adding this in the generic layer of genpd, I suggest that we move the
-> > OF parsing into the genpd provider code.
+> > And matching function will be after that:
 > >
-> > Moreover, to inform genpd that it should use the other set of
-> > callbacks for system suspend/resume, let's add a new genpd
-> > configuration bit. The genpd provider should then set the genpd-
-> > >flag,
-> > prior to calling pm_genpd_init(), to let it know that it should pick
-> > the other callbacks.
+> >         return fwnode_get_next_parent_node(...) != NULL;
 > >
-> > Does it make sense?
->
-> the provider here would be gpcv2, right?
+> > Think about it. Maybe current solution is good enough, just needs better
+> > naming (fwnode_match_parent_node()? Dunno).
+> >
+> > P.S. Actually _get maybe misleading as we won't bump reference counting,
+> >      rather _find?
+> 
+> How about the following name:
+> fwnode_find_dev_match()
+> ?
 
-Correct.
+fwnode_find_parent_dev_match() LGTM, thanks!
 
-> Conceptually I know what you
-> mean and will try to make it work later. thanks a lot!
+You iterate over parents.
 
-Great! Feel free to ping me if you need some help to put it together.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Kind regards
-Uffe
+

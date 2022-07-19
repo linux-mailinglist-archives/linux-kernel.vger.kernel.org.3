@@ -2,187 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624E55790DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE33F5790E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236934AbiGSC32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 22:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
+        id S234391AbiGSCbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 22:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiGSC30 (ORCPT
+        with ESMTP id S231476AbiGSCbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 22:29:26 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBC83AE74
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 19:29:25 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id f11so10704394plr.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 19:29:25 -0700 (PDT)
+        Mon, 18 Jul 2022 22:31:32 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00AB13F80;
+        Mon, 18 Jul 2022 19:31:31 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26IKb7B9013956;
+        Tue, 19 Jul 2022 02:30:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=XIFFZujGLqp/3FQ7GgaFMRV7FIvBpG6nyaRArvj1JVc=;
+ b=Zqg0oKXSG+xzYagtmK3mSeB3rcUzHo+nJ4adwdVIUQCbk3JrSk3NMcpxJNn8ZG5KZmSP
+ bBAcazm0/x3FqhfeKFBiivr6ZW+9omEsvSKCLLMY9P5ujJCOiTGHG+XYnyHUUcHMMq7O
+ /1bv4v+Ee4SNfZDNxKAkXeluYa0By8xGjmlYWu+drd97yGkNzIJOghB27AggnFTOzX8Q
+ FfG7d9yysthp23ggFJL3JfPlpfKASijIWFDD0cCyJ/wh1bNGXXzO4cL1kFpVkS2kW2T2
+ gCFsNFjV8vcxe9KnKTzv2p1mkIVxRrBS6AhMVfPG7Xyx0xgY1OXg+ODx8X9aGcm8yaK9 Vg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbmxs4w86-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Jul 2022 02:30:46 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26J0AEDj007931;
+        Tue, 19 Jul 2022 02:30:45 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2102.outbound.protection.outlook.com [104.47.70.102])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1em42c4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Jul 2022 02:30:45 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QYc5H+X2v3YhLdNtH8JdKFN4prOCMENQXGWzrSWeypKuhXcWHN5lPkktySGzT0LeFIkK9L5a4ky65LdQp25PEIZZwyrVQxEMPs5ysbBWoMLVKq+WgCDQFVYx9PAgYta0eWDSoALG3QYudzJBw52WaqjYDROyXWvLNwIsEzGiQpwbxPIrCy+aA3//IB6OZCH656dGqzWOoQE/qpgvMJn+WCEHLEjZ0hIxm1UtlJdvbpbK2FMW1H+ogIMBdSmkM1eXqH4CYyOmjRLDbWWsdDM5DElYJa+NqPN1J7jzojyR2uM97gK6d+ZOi8zNpnOO8oDaGtUoG+BMvj1K5xSMDM3OAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XIFFZujGLqp/3FQ7GgaFMRV7FIvBpG6nyaRArvj1JVc=;
+ b=MVbEugVfAMA6hCtHv27WM+RSKpoSm82vuJO28WBa5o4ANS0Bu5zUwb8GMEO/+Rc4ewN0NHwLIN3+dyA4MSme6+JAKDTCoXiILP3kYQyoO5egPAKJEeXCOnfWt/8uE/lFiOrKA9xHP0sZbx71X/UCjUdUgUFAeHlrpAba6bDVJM+xBYnYqsOWC41n+qzwNty+1443LRyFSOoKKejyMSWupNPityZX2+EUPkfAIG5zOafbuEc+MxDaoZJSro5z8dRkCFZKEqcunRfzTdxfCIoXLD9yhva9XQLJ8Z/e0b4M+Vum5qaSO6SF97icWUZVzfkV9thugj0wZaWVrpS7qJ2Q0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cyKjSUAbf6aP85qdLzMpG+9cGQ3XPhloIG7GN5HqbOk=;
-        b=PtvjjDevADa6eY5pKioXcYnfJJSND/ijd1BdeH1tmUdp/23IMf/kiY4KS+ZhOStwud
-         iybB4kMCiwSVMkA8YuXqfa3amnH2O4pcZIBoeVD0/FAcvtreTNAh78plnjqzNJG7B3PP
-         EZDUOglKwDCYfYPnJoEAKUbd8QDFV2q4diM5h0oiE76qUXj5kNOqfk/G/43HcCbG9rL/
-         yhUwI+6blwiAeFb0iWtG155fY92T2rsU/HptjH4uUTnwecaoaokLy7Kjmm0mJGQs5PKM
-         kdZScs/OmYfVex1lyjeV9QptalsbxXetYuO0fdqJRhNuLusSRtYPefx1+mEcC8tmNLbz
-         eJbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cyKjSUAbf6aP85qdLzMpG+9cGQ3XPhloIG7GN5HqbOk=;
-        b=RM7iDS3VTG9CPyZiuNUV6uUkJUUtG+Sht1HeBOcuIsypBTlL5OIvLg/7WBnd4UQ/M8
-         WT6CVE4zI+BlY8FR1KDpty/1sDLzzc81aHmZQOo3JoqCjxsgtmxLYRpY058uK9A7Ryui
-         qMx4C7Lc2D3aHzD3+mcm6hHW5LDUd1BKk/BSKc9XdTkJ7Se3L+y2jxWCGUbXCEdSJh53
-         0nyBO60aNQtXLDnjztFAQcWn7wiP4lkKYgC7sEaaF6maoysgKK7cGSKtrzT9w1rs9+ul
-         /3/5xf5JpfQJC/w/bqrqa0qA/AE0108DL/fxArpw+25I86kV5rntzNc3XLG84uu1Ve/8
-         6Dig==
-X-Gm-Message-State: AJIora/TvOb86dakcOTQjatj1Z0TEB2EwrsmfczNb3xpqAqQtMFNc58d
-        AY+oxisG6AFuS1p1LseLYuP3Vw==
-X-Google-Smtp-Source: AGRyM1uE7kGFOhcKAIUbIMwDuprs5wFhNaDkkeHbkK3wFdgYy5LG6jRHw7UlP4t59RnLwjBy7vbGcA==
-X-Received: by 2002:a17:90b:1bc7:b0:1f0:34e2:5c86 with SMTP id oa7-20020a17090b1bc700b001f034e25c86mr34944374pjb.136.1658197764422;
-        Mon, 18 Jul 2022 19:29:24 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id m22-20020a170902bb9600b0016c5b2a16ffsm10189043pls.142.2022.07.18.19.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 19:29:23 -0700 (PDT)
-Message-ID: <74d1f308-de03-fd5e-b7f0-0e17980f988e@kernel.dk>
-Date:   Mon, 18 Jul 2022 20:29:22 -0600
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XIFFZujGLqp/3FQ7GgaFMRV7FIvBpG6nyaRArvj1JVc=;
+ b=d3iRJ2IpsJixRNoHivUaEQbHaS/OJKnjgpe2eCYbHJDTcXFSka+BHutmyj9YkGalVBL2KG9OjN04fMz1SQYZpd9JwO9maY2qOFdQW21SNcFeRF3r3nSpwZyhP6R17su0HR5YqzE/XInH39T+qlhpCxqR2MIG1wdajMAGE3PuJDY=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by CY4PR10MB1768.namprd10.prod.outlook.com (2603:10b6:910:c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.20; Tue, 19 Jul
+ 2022 02:30:43 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::6516:e908:d2bd:ca45]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::6516:e908:d2bd:ca45%6]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
+ 02:30:43 +0000
+To:     John Garry <john.garry@huawei.com>
+Cc:     <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hch@lst.de>,
+        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <iommu@lists.linux.dev>,
+        <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>
+Subject: Re: [PATCH v6 4/6] scsi: sd: Allow max_sectors be capped at DMA
+ optimal size limit
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq18roprg0r.fsf@ca-mkp.ca.oracle.com>
+References: <1657797329-98541-1-git-send-email-john.garry@huawei.com>
+        <1657797329-98541-5-git-send-email-john.garry@huawei.com>
+Date:   Mon, 18 Jul 2022 22:30:39 -0400
+In-Reply-To: <1657797329-98541-5-git-send-email-john.garry@huawei.com> (John
+        Garry's message of "Thu, 14 Jul 2022 19:15:27 +0800")
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0292.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::27) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [LKP] Re: [io_uring] 584b0180f0:
- phoronix-test-suite.fio.SequentialWrite.IO_uring.Yes.Yes.1MB.DefaultTestDirectory.mb_s
- -10.2% regression
-Content-Language: en-US
-To:     Yin Fengwei <fengwei.yin@intel.com>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com
-References: <20220527092432.GE11731@xsang-OptiPlex-9020>
- <2085bfef-a91c-8adb-402b-242e8c5d5c55@kernel.dk>
- <0d60aa42-a519-12ad-3c69-72ed12398865@intel.com>
- <26d913ea-7aa0-467d-4caf-a93f8ca5b3ff@kernel.dk>
- <9df150bb-f4fd-7857-aea8-b2c7a06a8791@intel.com>
- <7146c853-0ff8-3c92-c872-ce6615baab40@kernel.dk>
- <81af5cdf-1a13-db2c-7b7b-cfd86f1271e6@intel.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <81af5cdf-1a13-db2c-7b7b-cfd86f1271e6@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 88d42061-2f85-4bbc-5b14-08da692eadaf
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1768:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VwaqvDmC2p73c+GvpLCVXQ507ysTrayP+VOn+KBG7wK0E4ZRI5YTYBueHaL9AQtw7SYFBwmryiBznnvQgryVHLEUq7vut0+p+9bRBdoqwPxmT8dpX6VAxQMZE/wH34AveQYyIAsmPy8JZiiAH2XQ58ZYupUt3BjF8Cw3/w4YHg2mVr0TB1djCsZ1/xBU8nNzclLkpcfHzOQJhZLGiAAMwn4/BERgsgiGkM2hy9VqEHWkEmSWXS2XySRvg2X+b3ZLxx5ccK6xFRbuAjn0G+KzOUcgQ/tB2fA0OlNTHew5OMIADqQOeZmEOZMFPAqnyR/0VTeSBKohO1IlelkfDDKljFsYf+5ZY8TWnPU3RafAhmly5AB8mbMkN/55nwdUgClyxJvytUq6KUM8w+8kvL/IRebbB5ubA0Uk7k459/5REyyRwzBzCK+zABC7Qe4CkxYCOnf/7eXjHD0anlbqyrLQLK9ZaVY2nSttfszLgWXHIhUbrBhkYkn//mXlwNL5quIM7nBlw2TuFC6cPErOOXIobFIO4IOLcNZCXcJWqL0df4JBbHFk3RsjTg6qlndu5Tzbo7mJy02ODRZbf51NPblHUysGWM7JXTF2lA/+zl/mLW6w6HGA4YfvYMlQbfMYAXNqKAHQ3LaJGtyP3eZZ0zX8aEmxkZvo2JIJ0GS74h1/Y1zmhJMJpA8rAKY9WPGX7w4tKqFx93qi1NxhWbLTUE93cvd4BHE9FQxH3eLGwa4yyFFZXEvyuUixLy6WQSEg8dJCM8/cB8U0AMs+DzjaTFYf6uFpZJYjTphzEowEZDTWSao+w5xMB7O2JTxm3vHcVU1m
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(366004)(376002)(396003)(346002)(136003)(316002)(66946007)(5660300002)(4744005)(38350700002)(86362001)(66556008)(8936002)(8676002)(36916002)(6506007)(52116002)(7416002)(4326008)(6666004)(83380400001)(186003)(38100700002)(6512007)(26005)(6916009)(478600001)(41300700001)(2906002)(6486002)(66476007)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?twKm6NM8+kb4A0WU60tRkdFFTjzinQB+iHtQbJBoiw22T7sl4rtdM8DJ9F5T?=
+ =?us-ascii?Q?FGqP93rjwC52np0RF4N/UutSwhRXwU0W8kNd6B0C8zIeLtYvBnIPK72bc2AM?=
+ =?us-ascii?Q?Ld+USK7KOIDko337SejoZ3qRGnIftRoysHH6hPsmzswQNiG+jTatjA6Zo82L?=
+ =?us-ascii?Q?AagZFjym+5atNsbrTgx/yG3NZtx+2ljtLr17bmz0KWJbwkFkNlVirN0WIUo4?=
+ =?us-ascii?Q?BW6i7k8CMB7JAl5MiWkBkF8U5vJ34NUjpI+CJU8keAb2TovgQwEo6NoYwxRN?=
+ =?us-ascii?Q?bKFhEXBRo/+GjNvP2VxJM7k7RqIBATjLgp4LFkcZV1fOzqpDOwM74RhFBYdf?=
+ =?us-ascii?Q?6P2neMJ+Sn35ppIpJ1XG80iJreLPJck0UpBooHds1pcnftS/G9XX09ovestd?=
+ =?us-ascii?Q?fR1NrIVy9o3yMcvrvpkQD+KKf3ebsiKBcVGkmALMclb8U9j3z/hDVWJMrYdQ?=
+ =?us-ascii?Q?FX1f3aWvx0CYy6tyKNSSdq7TUNLzRZK9IYW/lkt54uJmUUXksuNuKXvje07+?=
+ =?us-ascii?Q?sgAE0LIzU1wDH4xkWhNNIEV4Xprd7kS/LRICyYd6lQZw6NsWQS+FbazqFxMS?=
+ =?us-ascii?Q?xgkazKplF4QDFLdCL9u1kBxCF1xFYDSb5hTjOMzFR5VkJQAQQ0J+/LTXwwtU?=
+ =?us-ascii?Q?LzEr3cNs7DNmzJ80+BNlPU6wpsfb6ijS0KS0pZWGfvAp1VWAfNzk6UJ4J+JV?=
+ =?us-ascii?Q?CVN5L2JP+5aPfnzsa7kOKzTXGqYJdM6roSjtALToZmoqvcDkbosV26hQEkCK?=
+ =?us-ascii?Q?Kx8DUa/oZEzd/PyyQwamaCH6cn7Xk80SlAv+mMLm98/oqu6AB3IPOs38QdW0?=
+ =?us-ascii?Q?pcmup/aLzsHbi2Q86nMyjzxCTTKtnfgirJ8Sz9O2TaUwOOsa2jshuNtmfRZ4?=
+ =?us-ascii?Q?MdVvbb2nmTmTGfu61PnWlrj48zqK7kk2Q6EYDoeMPwq/vhrqQwmEQ5V5g/Yh?=
+ =?us-ascii?Q?T6mr0io6xs2DuT0rxOP8Sq/AJzxQLIUephIOxQjxGxJ6buVS7a0D20kg606K?=
+ =?us-ascii?Q?9AM9Fp1SXbeCDj1r9OMSoEFwv2ZmimI46yLsDUZ99KBCksl/1utDIsZNdtxR?=
+ =?us-ascii?Q?KWI9hdffghU5VpZz19//Rm+XDgeNoIbNjoN+Wcl3zkkMJVCSxycQCWZE0M5f?=
+ =?us-ascii?Q?v2kVWhIUh/NXK7+mFEuu7aO7TuFhXNYVbXxX4S1wrExOZH918HbktFzpIuCS?=
+ =?us-ascii?Q?+u/F4RTlSGOJ3wkoXpr69rmPzplRnkOqvbHIVpv/BWv4sb57UpxXtcQuTSJS?=
+ =?us-ascii?Q?UU4dk4XqW8zPt8gu0sC4ruwrN7eOH3mrHXhfVllJiYshYHSl5vBnrf1QLsX9?=
+ =?us-ascii?Q?7CQLzDjZZpFNDjhFnOPIA9AE4BSsRAVFq5nCsQc7Rqg3dGFtlApjcu6TVWts?=
+ =?us-ascii?Q?UlyBe8lEzMlV6sZ7zo3ZnqSiEkaxl3fgJ3HU/JqPp5StfzupAC7KqaoSgLr2?=
+ =?us-ascii?Q?Gl2t2/QAeJ18geoRMqaoeN/YZ3M/ChbJW9nBfEbBWGuFO1SYpvbMBYDhX/qz?=
+ =?us-ascii?Q?myBYsyHb46zwtfTcNWgKj5yUvMAwg1e3QS6EEqix0ESZrM0CyYXmuKOlvghJ?=
+ =?us-ascii?Q?DzTSubcXg48Vl/BHe8nG/kd+f8FAwyykkF/QM+Wcp2e9NurCywKcjdQG0Os9?=
+ =?us-ascii?Q?nw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88d42061-2f85-4bbc-5b14-08da692eadaf
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 02:30:43.2833
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mtclvbNTsUr5KN35X8bv2M8+ykiyGT3qfvTMZiz6oGO6kTZDQVBF5qscuJMCdqyNvPPAnylYng5jR2falSOdQNqL4VetdAJPasUPZl+3mOU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1768
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-18_22,2022-07-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 mlxlogscore=999
+ suspectscore=0 phishscore=0 adultscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207190007
+X-Proofpoint-GUID: sKE8lQUSl3Fv2-Ao7dwW0guX0D9Zfl_6
+X-Proofpoint-ORIG-GUID: sKE8lQUSl3Fv2-Ao7dwW0guX0D9Zfl_6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/18/22 8:16 PM, Yin Fengwei wrote:
-> Hi Jens,
-> 
-> On 7/19/2022 12:27 AM, Jens Axboe wrote:
->> On 7/17/22 9:30 PM, Yin Fengwei wrote:
->>> Hi Jens,
->>>
->>> On 7/15/2022 11:58 PM, Jens Axboe wrote:
->>>> In terms of making this more obvious, does the below also fix it for
->>>> you?
->>>
->>> The regression is still there after applied the change you posted.
->>
->> Still don't see the regression here, using ext4. I get about 1020-1045
->> IOPS with or without the patch you sent.
->>
->> This is running it in a vm, and the storage device is nvme. What is
->> hosting your ext4 fs?
-> Just did more test with vm. The regression can't be reproduced with latest
-> code (I tried the tag v5.19-rc7) whatever the underneath storage is SATA
-> or NVME.
-> 
-> But the regression and the debugging patch from me could be reproduced
-> on both SATA and NVME if use commit 584b0180f0f4d6 as base commit
-> (584b0180f0f4d6 vs 584b0180f0f4d6 with my debugging patch).
-> 
-> 
-> Here is the test result I got:
-> NVME as host storage:
->   5.19.0-rc7:
->     write: IOPS=933, BW=937MiB/s (982MB/s)(18.3GiB/20020msec); 0 zone resets
->     write: IOPS=993, BW=996MiB/s (1045MB/s)(19.5GiB/20020msec); 0 zone resets
->     write: IOPS=1005, BW=1009MiB/s (1058MB/s)(19.7GiB/20020msec); 0 zone resets
->     write: IOPS=985, BW=989MiB/s (1037MB/s)(19.3GiB/20020msec); 0 zone resets
->     write: IOPS=1020, BW=1024MiB/s (1073MB/s)(20.0GiB/20020msec); 0 zone resets
-> 
->   5.19.0-rc7 with my debugging patch:
->     write: IOPS=988, BW=992MiB/s (1040MB/s)(19.7GiB/20384msec); 0 zone resets
->     write: IOPS=995, BW=998MiB/s (1047MB/s)(20.1GiB/20574msec); 0 zone resets
->     write: IOPS=996, BW=1000MiB/s (1048MB/s)(19.5GiB/20020msec); 0 zone resets
->     write: IOPS=995, BW=998MiB/s (1047MB/s)(19.5GiB/20020msec); 0 zone resets
->     write: IOPS=1006, BW=1009MiB/s (1058MB/s)(19.7GiB/20019msec); 0 zone resets
 
-These two basically look identical, which may be why I get the same with
-and without your patch. I don't think it makes a difference for this.
-Curious how it came about?
+John,
 
->   584b0180f0:
->     write: IOPS=1004, BW=1008MiB/s (1057MB/s)(19.7GiB/20020msec); 0 zone resets
->     write: IOPS=968, BW=971MiB/s (1018MB/s)(19.4GiB/20468msec); 0 zone resets
->     write: IOPS=982, BW=986MiB/s (1033MB/s)(19.3GiB/20020msec); 0 zone resets
->     write: IOPS=1000, BW=1004MiB/s (1053MB/s)(20.1GiB/20461msec); 0 zone resets
->     write: IOPS=903, BW=906MiB/s (950MB/s)(18.1GiB/20419msec); 0 zone resets
-> 
->   584b0180f0 with my debugging the patch:
->     write: IOPS=1073, BW=1076MiB/s (1129MB/s)(21.1GiB/20036msec); 0 zone resets
->     write: IOPS=1131, BW=1135MiB/s (1190MB/s)(22.2GiB/20022msec); 0 zone resets
->     write: IOPS=1122, BW=1126MiB/s (1180MB/s)(22.1GiB/20071msec); 0 zone resets
->     write: IOPS=1071, BW=1075MiB/s (1127MB/s)(21.1GiB/20071msec); 0 zone resets
->     write: IOPS=1049, BW=1053MiB/s (1104MB/s)(21.1GiB/20482msec); 0 zone resets
+> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+> index a1a2ac09066f..3eaee1f7aaca 100644
+> --- a/drivers/scsi/sd.c
+> +++ b/drivers/scsi/sd.c
+> @@ -3296,6 +3296,8 @@ static int sd_revalidate_disk(struct gendisk *disk)
+>  				      (sector_t)BLK_DEF_MAX_SECTORS);
+>  	}
+>  
+> +	rw_max = min_not_zero(rw_max, sdp->host->opt_sectors);
+> +
+>  	/* Do not exceed controller limit */
+>  	rw_max = min(rw_max, queue_max_hw_sectors(q));
 
-Last one looks like it may be faster indeed. I do wonder if this is
-something else, though. There's no reason why -rc7 with that same patch
-applied should be any different than 584b0180f0 with it.
+I'm OK with this approach.
 
-
-these resu
-> 
-> 
-> SATA disk as host storage:
->   5.19.0-rc7:
->     write: IOPS=624, BW=627MiB/s (658MB/s)(12.3GiB/20023msec); 0 zone resets
->     write: IOPS=655, BW=658MiB/s (690MB/s)(12.9GiB/20021msec); 0 zone resets
->     write: IOPS=596, BW=600MiB/s (629MB/s)(12.1GiB/20586msec); 0 zone resets
->     write: IOPS=647, BW=650MiB/s (682MB/s)(12.7GiB/20020msec); 0 zone resets
->     write: IOPS=591, BW=594MiB/s (623MB/s)(12.1GiB/20787msec); 0 zone resets
-> 
->   5.19.0-rc7 with my debugging patch:
->     write: IOPS=633, BW=637MiB/s (668MB/s)(12.6GiB/20201msec); 0 zone resets
->     write: IOPS=614, BW=617MiB/s (647MB/s)(13.1GiB/21667msec); 0 zone resets
->     write: IOPS=653, BW=657MiB/s (689MB/s)(12.8GiB/20020msec); 0 zone resets
->     write: IOPS=618, BW=622MiB/s (652MB/s)(12.2GiB/20033msec); 0 zone resets
->     write: IOPS=604, BW=608MiB/s (638MB/s)(12.1GiB/20314msec); 0 zone resets
-
-These again are probably the same, within variance.
-
->   584b0180f0:
->     write: IOPS=635, BW=638MiB/s (669MB/s)(12.5GiB/20020msec); 0 zone resets
->     write: IOPS=649, BW=652MiB/s (684MB/s)(12.8GiB/20066msec); 0 zone resets
->     write: IOPS=639, BW=642MiB/s (674MB/s)(13.1GiB/20818msec); 0 zone resets
-> 
->   584b0180f0 with my debugging patch:
->     write: IOPS=850, BW=853MiB/s (895MB/s)(17.1GiB/20474msec); 0 zone resets
->     write: IOPS=738, BW=742MiB/s (778MB/s)(15.1GiB/20787msec); 0 zone resets
->     write: IOPS=751, BW=755MiB/s (792MB/s)(15.1GiB/20432msec); 0 zone resets
-
-But this one looks like a clear difference.
-
-I'll poke at this tomorrow.
+Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
 
 -- 
-Jens Axboe
-
+Martin K. Petersen	Oracle Linux Engineering

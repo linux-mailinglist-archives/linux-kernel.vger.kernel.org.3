@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F60F579A4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F915799C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238899AbiGSMNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S238353AbiGSMGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238887AbiGSMMZ (ORCPT
+        with ESMTP id S238486AbiGSMEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:12:25 -0400
+        Tue, 19 Jul 2022 08:04:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B3D52DDE;
-        Tue, 19 Jul 2022 05:03:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CEE4D4CD;
+        Tue, 19 Jul 2022 05:00:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87C1E616FD;
-        Tue, 19 Jul 2022 12:03:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68971C341C6;
-        Tue, 19 Jul 2022 12:03:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12A5A61655;
+        Tue, 19 Jul 2022 12:00:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E59ABC341CF;
+        Tue, 19 Jul 2022 12:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232224;
-        bh=XqlTd4nTiZWMDUpAlCHbBSebnj0dDtBFRM1zS2k8yng=;
+        s=korg; t=1658232038;
+        bh=l1u1mqPWr6KkvTGe6RxTRSXt6DLJuiZb38yg1TUF2gA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RmpsL+b0GxkbzHi2grOpn8saiODxcV2OABU1T45ciIf4i+9g/05MRq+yUTFcuEusg
-         KRbaRhfAAnfGtYKrAHq4PKCyzhBEJkonK7lTF/iBgIti9SeYA0EVE9IXGejR1zEW+K
-         bwUkjuvPvXb5KhPslkkYP7miavsn4C1eY/A7KfdY=
+        b=0hysTn1B4clQ3hZ1glUGjcFSDBj0FbiMkCfHs382x2sO+lfWxlAUcYfh6Z4/hCjgK
+         YpllUlYn4yeWY/62NS87KklkJ3SLEYoW6v3BK2mmM0oa1H1pC/fko4ArVZJAXPB2P4
+         +/AjXFZlOd3FFEPhNUWn64T54D9EorDcHdnZyTpw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 54/71] ASoC: ops: Fix off by one in range control validation
+Subject: [PATCH 4.19 40/48] signal handling: dont use BUG_ON() for debugging
 Date:   Tue, 19 Jul 2022 13:54:17 +0200
-Message-Id: <20220719114557.567108171@linuxfoundation.org>
+Message-Id: <20220719114523.368849978@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,43 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 5871321fb4558c55bf9567052b618ff0be6b975e ]
+[ Upstream commit a382f8fee42ca10c9bfce0d2352d4153f931f5dc ]
 
-We currently report that range controls accept a range of 0..(max-min) but
-accept writes in the range 0..(max-min+1). Remove that extra +1.
+These are indeed "should not happen" situations, but it turns out recent
+changes made the 'task_is_stopped_or_trace()' case trigger (fix for that
+exists, is pending more testing), and the BUG_ON() makes it
+unnecessarily hard to actually debug for no good reason.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220604105246.4055214-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+It's been that way for a long time, but let's make it clear: BUG_ON() is
+not good for debugging, and should never be used in situations where you
+could just say "this shouldn't happen, but we can continue".
+
+Use WARN_ON_ONCE() instead to make sure it gets logged, and then just
+continue running.  Instead of making the system basically unusuable
+because you crashed the machine while potentially holding some very core
+locks (eg this function is commonly called while holding 'tasklist_lock'
+for writing).
+
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-ops.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/signal.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
-index 7a37312c8e0c..453b61b42dd9 100644
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -530,7 +530,7 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
- 		return -EINVAL;
- 	if (mc->platform_max && tmp > mc->platform_max)
- 		return -EINVAL;
--	if (tmp > mc->max - mc->min + 1)
-+	if (tmp > mc->max - mc->min)
- 		return -EINVAL;
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 4cc3f3ba13a9..c79b87ac1041 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1825,12 +1825,12 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
+ 	bool autoreap = false;
+ 	u64 utime, stime;
  
- 	if (invert)
-@@ -551,7 +551,7 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
- 			return -EINVAL;
- 		if (mc->platform_max && tmp > mc->platform_max)
- 			return -EINVAL;
--		if (tmp > mc->max - mc->min + 1)
-+		if (tmp > mc->max - mc->min)
- 			return -EINVAL;
+-	BUG_ON(sig == -1);
++	WARN_ON_ONCE(sig == -1);
  
- 		if (invert)
+- 	/* do_notify_parent_cldstop should have been called instead.  */
+- 	BUG_ON(task_is_stopped_or_traced(tsk));
++	/* do_notify_parent_cldstop should have been called instead.  */
++	WARN_ON_ONCE(task_is_stopped_or_traced(tsk));
+ 
+-	BUG_ON(!tsk->ptrace &&
++	WARN_ON_ONCE(!tsk->ptrace &&
+ 	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
+ 
+ 	if (sig != SIGCHLD) {
 -- 
 2.35.1
 

@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF13A57A9F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EAB57AA02
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240205AbiGSWnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
+        id S240388AbiGSWqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236742AbiGSWnB (ORCPT
+        with ESMTP id S232110AbiGSWqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:43:01 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4B8509F7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:43:00 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id q5so13300619plr.11
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:43:00 -0700 (PDT)
+        Tue, 19 Jul 2022 18:46:15 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5038F4E87D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:46:14 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id n7so13031749ioo.7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:46:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3mBMNTNhashQoUW+48e8V6j0bFm9Antzk3St87vtHyQ=;
-        b=sbILa/KKpaY/yaJBO8yP6X5Tf3PfNDgbJK2WWJHf09SLNUW9sePi5k4LtP7CecLnZF
-         z8fHFi8S7PTaNe1ny88KxX7bgthd9DzxzNmusdUgsJgPP/AJMFV9y2lG7kp4kZsbr47c
-         C1j/haDut2mgx72jxqeWBejL/dW7ib+P+TQ8RxkzsgqM/QDGaRtAOa1rSXd2azdEeXfY
-         Yx5RwTeDcj3fk0AQNkcXqwv7sQbaDnWD1HwtoW6p0CRh95uq5d3mrTX4G+1xmXdSA9wa
-         r+fj/ruXM3x1yjXDQ+/Gp6K+jMJ4MhxMx7v1rCIFwt8AW1HrE2IRLHkMhITdo/QMOV2/
-         YiLA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lnuskSEx1rWRFyExO7VDAIyPqC7rs15nNdWPt5ojSJo=;
+        b=MjL9o3vEOb0cC/AOC29+FJHaYEDdp3YF4uPnUKdH2MSDVyDrF7ODr3Ke0Wcy4ilYzf
+         BzCFwxsZ/XHiEHTOzXcQJv3vCytelIwqMbSVQy/FRLtlMuURP6ov3NWCIw8RZPLahcDd
+         C48SeV+unpKZ2XPeGrdmEDCsa6LF6ZASoymNm+TqHMtWQYybbebrFT/9bV5YYeMDLZ4x
+         oaPJRoZ/aZAKBfaZ9E6cpvtaiAhFYSDi9LC7qcvIPN12naTuSVOg+/o2fA2e6EiO7Fa0
+         xHvsR1NLSDdqKv1q7gdh+mZLQNyp7KE54xFUiOdTzB8i+cvo8dMLbT1d0lXkvAObz4G2
+         IAjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3mBMNTNhashQoUW+48e8V6j0bFm9Antzk3St87vtHyQ=;
-        b=LD3m8ZEQomYH0urs++iR6aYJq58sohiEsa/3U/Y8kAYVjz1tyIzk9PYS6u8Bxrch5S
-         Cs7pxcvF+Es38F9hWV22jKCEaTOLjZpUCSOpql0BHKKyxQBI86r1kCdv8dpJZ3GLNVji
-         Dm0JNknWXK+5EIcMOZTbt4p4SCwjyGzZFXfB9z9UeMPUq1klgeGxBr2OpYa3Oj9SX2sP
-         fl7K0oalbbzZI2MKiv0jBOVQKucDq9mQ5kNKMRIvOzWd5bNTUPF5A+XcLkJMkg+gjRk2
-         j3FOX3Q0ZIZuE7zOE05801oEG3fd/lPcygqX6RzXKyuh/47QSSBb1LCJsQt2Q64+M+Vb
-         gNuQ==
-X-Gm-Message-State: AJIora+hmTNH+qiu7iCp+UTW2P/bUrh619vgkwaJ8KOZno0koOg6auTe
-        aKfwUiFUoh4gMR7QHxcyBi3z4eW1pIPlwA==
-X-Google-Smtp-Source: AGRyM1vPLoWkMbH196Cy88DSN5XsqMQVREA4QruekZ7i34VY83xVjisjTYv51mdZYk9VzlutlXr9Jg==
-X-Received: by 2002:a17:90b:1b42:b0:1f0:447f:995c with SMTP id nv2-20020a17090b1b4200b001f0447f995cmr1791428pjb.200.1658270580349;
-        Tue, 19 Jul 2022 15:43:00 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id y36-20020a634b24000000b0040cfb5151fcsm10496778pga.74.2022.07.19.15.42.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 15:43:00 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 22:42:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Subject: Re: [PATCH V3 07/12] KVM: X86/MMU: Remove the check of the return
- value of to_shadow_page()
-Message-ID: <YtczcE8bxNJfWwZ5@google.com>
-References: <20220521131700.3661-1-jiangshanlai@gmail.com>
- <20220521131700.3661-8-jiangshanlai@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lnuskSEx1rWRFyExO7VDAIyPqC7rs15nNdWPt5ojSJo=;
+        b=40rUBBxmN7g2JBYANA/Jn3Ok9gRwToBMNbJxnWK5WI+U+IeZaGtGMir2qg3SjIYhkw
+         RXffWuXt0eXWAHMniwpEflByYmLslCgc/1rAcgm1DpOejvlMv8JPJS56OWr4CGb5SW7m
+         Wfx55+ueYg/kXMjM5z+oXs8oUmiLO3gfZcjY+c9FPnTIgIDnj4DQcS4+J0pgWKUTK4Qx
+         f/1ROJ7LCNR0gBjQ0w+vAxKd2dg484YFqQz6Onz9RonlnN/Jm8GP9nEANu1ls5GmOWLd
+         dVKstiReRkRDT1HTNP0AgQthghHyNjgpiTSLGKJm8T6qWreDYVTOpMhg6e653EPfCB2h
+         QgiA==
+X-Gm-Message-State: AJIora/tElblCs1X4tK/4t8x+JhjLIvuOtmmkaMVnXBRq0uX7Dns7o3J
+        7b4pfAzs+Bba7QKZIkxF7GCPcQfTar1tUV02lZE6dQ==
+X-Google-Smtp-Source: AGRyM1scKsvkgjvOBcySMD8ANT00O0TRABCY2NJ0UUBywdxmH7xhFhuqq83FJ/2EITJFvKlSUEurf8W9R+8SpfjeE5I=
+X-Received: by 2002:a05:6602:1644:b0:678:8ba4:8df6 with SMTP id
+ y4-20020a056602164400b006788ba48df6mr16243773iow.138.1658270773545; Tue, 19
+ Jul 2022 15:46:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220521131700.3661-8-jiangshanlai@gmail.com>
+References: <20220719195628.3415852-1-axelrasmussen@google.com>
+ <20220719195628.3415852-3-axelrasmussen@google.com> <D43534E1-7982-45EE-8B16-2C4687F49E77@vmware.com>
+In-Reply-To: <D43534E1-7982-45EE-8B16-2C4687F49E77@vmware.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Tue, 19 Jul 2022 15:45:37 -0700
+Message-ID: <CAJHvVcigVqAibm0JODkiR=Pcd3E14xp0NB6acw2q2enwnrnLSA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,32 +87,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> 
-> Remove the check of the return value of to_shadow_page() in
-> mmu_free_root_page(), kvm_mmu_free_guest_mode_roots(), is_unsync_root()
-> and is_tdp_mmu() because it can not return NULL.
+On Tue, Jul 19, 2022 at 3:32 PM Nadav Amit <namit@vmware.com> wrote:
+>
+> On Jul 19, 2022, at 12:56 PM, Axel Rasmussen <axelrasmussen@google.com> w=
+rote:
+>
+> > Historically, it has been shown that intercepting kernel faults with
+> > userfaultfd (thereby forcing the kernel to wait for an arbitrary amount
+> > of time) can be exploited, or at least can make some kinds of exploits
+> > easier. So, in 37cd0575b8 "userfaultfd: add UFFD_USER_MODE_ONLY" we
+> > changed things so, in order for kernel faults to be handled by
+> > userfaultfd, either the process needs CAP_SYS_PTRACE, or this sysctl
+> > must be configured so that any unprivileged user can do it.
+> >
+> > In a typical implementation of a hypervisor with live migration (take
+> > QEMU/KVM as one such example), we do indeed need to be able to handle
+> > kernel faults. But, both options above are less than ideal:
+> >
+> > - Toggling the sysctl increases attack surface by allowing any
+> >  unprivileged user to do it.
+> >
+> > - Granting the live migration process CAP_SYS_PTRACE gives it this
+> >  ability, but *also* the ability to "observe and control the
+> >  execution of another process [...], and examine and change [its]
+> >  memory and registers" (from ptrace(2)). This isn't something we need
+> >  or want to be able to do, so granting this permission violates the
+> >  "principle of least privilege".
+> >
+> > This is all a long winded way to say: we want a more fine-grained way t=
+o
+> > grant access to userfaultfd, without granting other additional
+> > permissions at the same time.
+> >
+> > To achieve this, add a /dev/userfaultfd misc device. This device
+> > provides an alternative to the userfaultfd(2) syscall for the creation
+> > of new userfaultfds. The idea is, any userfaultfds created this way wil=
+l
+> > be able to handle kernel faults, without the caller having any special
+> > capabilities. Access to this mechanism is instead restricted using e.g.
+> > standard filesystem permissions.
+>
+> Are there any other =E2=80=9Cdevices" that when opened by different proce=
+sses
+> provide such isolated interfaces in each process? I.e., devices that if y=
+ou
+> read from them in different processes you get completely unrelated data?
+> (putting aside namespaces).
+>
+> It all sounds so wrong to me, that I am going to try again to pushback
+> (sorry).
 
-s/can not/can no longer, to make it very clear the to_shadow_page() _could_ return
-NULL in the past, but something changed.
+No need to be sorry. :)
 
-And please explain _why_ it can no longer return NULL, even if that's just a
-reference to kvm_mmu_alloc_local_shadow_page() or whatever it ends up being named.
-That can also tie into the obsolete sp handling.
+>
+> From a semantic point of view - userfaultfd is process specific. It is
+> therefore similar to /proc/[pid]/mem (or /proc/[pid]/pagemap and so on).
+>
+> So why can=E2=80=99t we put it there? I saw that you argued against it in=
+ your
+> cover-letter, and I think that your argument is you would need
+> CAP_SYS_PTRACE if you want to access userfaultfd of other processes. But
+> this is EXACTLY the way opening /proc/[pid]/mem is performed - see
+> proc_mem_open().
+>
+> So instead of having some strange device that behaves differently in the
+> context of each process, you can just have /proc/[pid]/userfaultfd and th=
+en
+> use mm_access() to check if you have permissions to access userfaultfd (j=
+ust
+> like proc_mem_open() does). This would be more intuitive for users as it =
+is
+> similar to other /proc/[pid]/X, and would cover both local and remote
+> use-cases.
 
-> Remove the check of the return value of to_shadow_page() in
-> is_page_fault_stale() and is_obsolete_root() because it can not return
-> NULL and the obsoleting for local shadow page is already handled by
-> a different way.
-> 
-> When the obsoleting process is done, all the obsoleted non-local shadow
-> pages are already unlinked from the local shadow pages by the help of
-> the parent rmap from the children and the local shadow pages become
-> theoretically valid again.  The local shadow page can be freed if
-> is_obsolete_sp() return true, or be reused if is_obsolete_sp() becomes
-> false.
-> 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> ---
+Ah, so actually I find this argument much more compelling.
+
+I don't find it persuasive that we should put it in /proc for the
+purpose of supporting cross-process memory manipulation, because I
+think the syscall works better for that, and in that case we don't
+mind depending on CAP_SYS_PTRACE.
+
+But, what you've argued here I do find persuasive. :) You are right, I
+can't think of any other example of a device node in /dev that works
+like this, where it is completely independent on a per-process basis.
+The closest I could come up with was /dev/zero or /dev/null or
+similar. You won't affect any other process by touching these, but I
+don't think these are good examples.
+
+I'll send a v5 which does this. I do worry that cross-process support
+is probably complex to get right, so I might leave that out and only
+allow a process to open its own device for now.
+
+>

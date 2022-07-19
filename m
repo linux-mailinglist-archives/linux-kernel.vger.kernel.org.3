@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8778D579AD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CB05799F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbiGSMUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
+        id S238558AbiGSMJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239335AbiGSMRt (ORCPT
+        with ESMTP id S238470AbiGSMIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:17:49 -0400
+        Tue, 19 Jul 2022 08:08:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6521A558EB;
-        Tue, 19 Jul 2022 05:06:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32EA4F6B5;
+        Tue, 19 Jul 2022 05:01:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EC2461768;
-        Tue, 19 Jul 2022 12:06:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E275C341C6;
-        Tue, 19 Jul 2022 12:06:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF1B460F10;
+        Tue, 19 Jul 2022 12:01:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90077C341C6;
+        Tue, 19 Jul 2022 12:01:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232400;
-        bh=/aLEQFCmFGIlnMdi7S7nNRU3mfK34kJHakA0v4YusS4=;
+        s=korg; t=1658232103;
+        bh=zTMGL2Dz4oaFfdIx4+ZUzqOgMdKuokBrEPksJo03C0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tdwJoNhu1pC6pCFmTaNcagiQDZJSykWPafKBvAMLIUOc2omHYQCP2I2mQtA+FIXYh
-         ICuYqkcx7EcGB6yRzRF1Qp6q3t/PthIWzXLRTiFgG5j4qwnouT/4LSkDc6EtTIaBwU
-         oD9y2+WPNCl+WfPH48/YmjOy1/8n8AbzRs0QS59o=
+        b=QZZaUdOaDpa0eIgEjUfm9dKevR0fIMZ0taSAwwNh04jG3ZmLkRzwW0IX240qmhyzt
+         hUNlCsqJDrHbx4uvxqfyh4K4vLyjBxriKqXztksqOWm4N6BK+U3iOQsi5hu5eCeM8j
+         uwTlpG265HEwCadtklb1rwRLOOUgDnyoiqcE5CMI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 044/112] sysctl: Fix data races in proc_dointvec_minmax().
+        stable@vger.kernel.org,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: [PATCH 5.4 14/71] drm/panfrost: Fix shrinker list corruption by madvise IOCTL
 Date:   Tue, 19 Jul 2022 13:53:37 +0200
-Message-Id: <20220719114630.697790436@linuxfoundation.org>
+Message-Id: <20220719114553.602589941@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-[ Upstream commit f613d86d014b6375a4085901de39406598121e35 ]
+commit 9fc33eaaa979d112d10fea729edcd2a2e21aa912 upstream.
 
-A sysctl variable is accessed concurrently, and there is always a chance
-of data-race.  So, all readers and writers need some basic protection to
-avoid load/store-tearing.
+Calling madvise IOCTL twice on BO causes memory shrinker list corruption
+and crashes kernel because BO is already on the list and it's added to
+the list again, while BO should be removed from the list before it's
+re-added. Fix it.
 
-This patch changes proc_dointvec_minmax() to use READ_ONCE() and
-WRITE_ONCE() internally to fix data-races on the sysctl side.  For now,
-proc_dointvec_minmax() itself is tolerant to a data-race, but we still
-need to add annotations on the other subsystem's side.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 013b65101315 ("drm/panfrost: Add madvise and shrinker support")
+Acked-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+Reviewed-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Steven Price <steven.price@arm.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220630200601.1884120-3-dmitry.osipenko@collabora.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/sysctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/panfrost/panfrost_drv.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 30681afbdb70..1800907da60c 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -959,7 +959,7 @@ static int do_proc_dointvec_minmax_conv(bool *negp, unsigned long *lvalp,
- 		if ((param->min && *param->min > tmp) ||
- 		    (param->max && *param->max < tmp))
- 			return -EINVAL;
--		*valp = tmp;
-+		WRITE_ONCE(*valp, tmp);
- 	}
+--- a/drivers/gpu/drm/panfrost/panfrost_drv.c
++++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+@@ -428,8 +428,8 @@ static int panfrost_ioctl_madvise(struct
  
- 	return 0;
--- 
-2.35.1
-
+ 	if (args->retained) {
+ 		if (args->madv == PANFROST_MADV_DONTNEED)
+-			list_add_tail(&bo->base.madv_list,
+-				      &pfdev->shrinker_list);
++			list_move_tail(&bo->base.madv_list,
++				       &pfdev->shrinker_list);
+ 		else if (args->madv == PANFROST_MADV_WILLNEED)
+ 			list_del_init(&bo->base.madv_list);
+ 	}
 
 

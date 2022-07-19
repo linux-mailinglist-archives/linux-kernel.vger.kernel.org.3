@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCEE57997C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31084579A00
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237950AbiGSMD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
+        id S238429AbiGSMKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237684AbiGSMCx (ORCPT
+        with ESMTP id S238493AbiGSMIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:02:53 -0400
+        Tue, 19 Jul 2022 08:08:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFE9419B9;
-        Tue, 19 Jul 2022 04:59:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A263C50045;
+        Tue, 19 Jul 2022 05:01:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A82F61642;
-        Tue, 19 Jul 2022 11:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D12BC341C6;
-        Tue, 19 Jul 2022 11:59:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2200A616FB;
+        Tue, 19 Jul 2022 12:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C2AC341CA;
+        Tue, 19 Jul 2022 12:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231952;
-        bh=7hG0PSxrVxuVd3VAegAi1N4Yy2ClZZbFC8rM5gscrqo=;
+        s=korg; t=1658232112;
+        bh=ma7NhXFgC+7hwyuEmkcP1+W4Jkc830HpQ+gJrpBWGww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L29ZJ/vYuwacIXFg+nqS0ZSTkrS1Diso7eSzcga5OVu8ER3Sn7neYpPMaW2h7mOcl
-         3mphKnd2a/n95BOiHS5dE0R320CNIa5zcsx1ZbqaJmaPdgaxtXlV0HbBLvINIy9MPG
-         Qw734/Foy96xN6xDhbiLtlhlPD3B/01wcZruYvMg=
+        b=qDbFMGwbKqMmi+SVtySq6LrGW67wRT/k5qj/iumVfTkNV5tFRU+bIyXDKFgulOJqo
+         Nlqpym5i3JRTFh4iH9qRY7VOcnDD4wTTFbqJTGzrW4FEwGpPE/TqeDvidaCTOFKLmt
+         DnXJbN+KGx4zQaKMRulcyQi92rrb/UbsBhg8xYck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 02/48] ALSA: hda/conexant: Apply quirk for another HP ProDesk 600 G3 model
-Date:   Tue, 19 Jul 2022 13:53:39 +0200
-Message-Id: <20220719114520.201175748@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Wei Wang <wvw@google.com>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: [PATCH 5.4 17/71] sched/rt: Disable RT_RUNTIME_SHARE by default
+Date:   Tue, 19 Jul 2022 13:53:40 +0200
+Message-Id: <20220719114553.906618615@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
-References: <20220719114518.915546280@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meng Tang <tangmeng@uniontech.com>
+From: Daniel Bristot de Oliveira <bristot@redhat.com>
 
-commit d16d69bf5a25d91c6d8f3e29711be12551bf56cd upstream.
+commit 2586af1ac187f6b3a50930a4e33497074e81762d upstream.
 
-There is another HP ProDesk 600 G3 model with the PCI SSID 103c:82b4
-that requires the quirk HP_MIC_NO_PRESENCE. Add the corresponding
-entry to the quirk table.
+The RT_RUNTIME_SHARE sched feature enables the sharing of rt_runtime
+between CPUs, allowing a CPU to run a real-time task up to 100% of the
+time while leaving more space for non-real-time tasks to run on the CPU
+that lend rt_runtime.
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220711101744.25189-1-tangmeng@uniontech.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+The problem is that a CPU can easily borrow enough rt_runtime to allow
+a spinning rt-task to run forever, starving per-cpu tasks like kworkers,
+which are non-real-time by design.
+
+This patch disables RT_RUNTIME_SHARE by default, avoiding this problem.
+The feature will still be present for users that want to enable it,
+though.
+
+Signed-off-by: Daniel Bristot de Oliveira <bristot@redhat.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Wei Wang <wvw@google.com>
+Link: https://lkml.kernel.org/r/b776ab46817e3db5d8ef79175fa0d71073c051c7.1600697903.git.bristot@redhat.com
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_conexant.c |    1 +
- 1 file changed, 1 insertion(+)
+ kernel/sched/features.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/pci/hda/patch_conexant.c
-+++ b/sound/pci/hda/patch_conexant.c
-@@ -918,6 +918,7 @@ static const struct snd_pci_quirk cxt506
- 	SND_PCI_QUIRK(0x103c, 0x828c, "HP EliteBook 840 G4", CXT_FIXUP_HP_DOCK),
- 	SND_PCI_QUIRK(0x103c, 0x8299, "HP 800 G3 SFF", CXT_FIXUP_HP_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x829a, "HP 800 G3 DM", CXT_FIXUP_HP_MIC_NO_PRESENCE),
-+	SND_PCI_QUIRK(0x103c, 0x82b4, "HP ProDesk 600 G3", CXT_FIXUP_HP_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x836e, "HP ProBook 455 G5", CXT_FIXUP_MUTE_LED_GPIO),
- 	SND_PCI_QUIRK(0x103c, 0x837f, "HP ProBook 470 G5", CXT_FIXUP_MUTE_LED_GPIO),
- 	SND_PCI_QUIRK(0x103c, 0x83b2, "HP EliteBook 840 G5", CXT_FIXUP_HP_DOCK),
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -77,7 +77,7 @@ SCHED_FEAT(WARN_DOUBLE_CLOCK, false)
+ SCHED_FEAT(RT_PUSH_IPI, true)
+ #endif
+ 
+-SCHED_FEAT(RT_RUNTIME_SHARE, true)
++SCHED_FEAT(RT_RUNTIME_SHARE, false)
+ SCHED_FEAT(LB_MIN, false)
+ SCHED_FEAT(ATTACH_AGE_LOAD, true)
+ 
 
 

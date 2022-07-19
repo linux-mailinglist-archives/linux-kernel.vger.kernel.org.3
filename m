@@ -2,92 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB315579F7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F2B579F86
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243466AbiGSNUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        id S237422AbiGSNV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243587AbiGSNTR (ORCPT
+        with ESMTP id S234089AbiGSNVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:19:17 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594A89C78D;
-        Tue, 19 Jul 2022 05:36:20 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id ss3so26852962ejc.11;
-        Tue, 19 Jul 2022 05:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mxcLD7aZ6jsY7oFsPYUSToT/Y/wpWE8VHgtc4q9/SHs=;
-        b=UMCedSn0uqijFaItw1iI5KA3Xqb/2Y9y/GJ3g0UMPpc9/OIzgjdrO9zpEv5C1Wyni2
-         hfuN7dkQOlnuQ6TkNUySZ7hNe1naFhbh6QjbLhxeBSTs35AhPIJ3ullF81Wpzthr4flB
-         PJH9ptYNnvx/5pkadKqfUK0uKg6dF11aHdDouPN0Y3VpEcfxZ3VBsNw0L4qyJj/Lb8xF
-         XUJ709vFQCUb3DTBKJPYN8DkTxooVq/xQrRxFZvRhFlPJVjkRfwEsj5cMHc1FKlFUMFJ
-         1Pb7ZlmpY0qK7tmT7hisrI5mJjrdDiDJeQc5/HGLKKvj4CgGUYslIMoBusVjo94y/ELD
-         Czlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mxcLD7aZ6jsY7oFsPYUSToT/Y/wpWE8VHgtc4q9/SHs=;
-        b=vnR0btXLq6eui3F4V1MIT9UMKN9XtBqIasUhCSCmLMptFrWWkP4iM0W18M+/nK9SpU
-         qrAUGOoronr0ZiUHFVy8zRAgU0BeBANSA4S3unwo9Y1GtVGG3C+wn1DFVCb0jgg7mDSD
-         k2nTG6cqEobG8q4DZrLeZIHen1NPVPesFKn1pdwny3bN32LYASRUYQVzvPmDHZqcl6ED
-         euVaV3oywPWl8jrdDEdJBBSgXuW9UdpL8MaVzyo/JKbxyUis1YJFMMvjk/isMZ9NTw9H
-         /+YqGrTjKv8CXmWugiBqdPyESCf3YoFiKBn1yAESu2vQSORVI6KIw6sNwFrYZbNybwSN
-         GNjg==
-X-Gm-Message-State: AJIora+vV+zxaZjUvoCbCO32P2nDOjz7gdOM2wVFGahxRyStKJemRNrT
-        Fx82OosgYTlIp6By7JbJmfI=
-X-Google-Smtp-Source: AGRyM1vnqAm8mBYSI0RJubE81r4PBFBeZqZ0fyTuSJUxeoZ58Tg8crAGQYRszmO3VvxW0HJ/rfoYHQ==
-X-Received: by 2002:a17:907:3e05:b0:71c:2ba5:1ab with SMTP id hp5-20020a1709073e0500b0071c2ba501abmr29551417ejc.93.1658234178540;
-        Tue, 19 Jul 2022 05:36:18 -0700 (PDT)
-Received: from skbuf ([188.27.185.104])
-        by smtp.gmail.com with ESMTPSA id mb17-20020a170906eb1100b006fe9ec4ba9esm6629945ejb.52.2022.07.19.05.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 05:36:17 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 15:36:15 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v2 02/15] net: dsa: qca8k: move mib struct to
- common code
-Message-ID: <20220719123615.yazpogreu5cw7oxg@skbuf>
-References: <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-3-ansuelsmth@gmail.com>
- <20220719005726.8739-3-ansuelsmth@gmail.com>
+        Tue, 19 Jul 2022 09:21:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A05E5A160;
+        Tue, 19 Jul 2022 05:37:22 -0700 (PDT)
+Received: from [192.168.1.72] (136.203.115.78.rev.sfr.net [78.115.203.136])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 82A216601A38;
+        Tue, 19 Jul 2022 13:37:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658234240;
+        bh=wWppogLD5zvn424zVkczPstVmt7AHw1XWt3/QUo8fcs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YfR11FBpG+V4i8kKp3fXf+IFG0HHjy2q54moSk2syuggQPp6vlROFGrbrDyrm9pS5
+         bj6+44CcyVsvWl26P6y+h/05hIXG/+Hw5DOv14dH9lcBUlnO85tEnDQuZ8GYPA1OxO
+         BnIviNip25/4X3aIZoq8wSvPebv/quZQ1uKjxAx+KqHfA1z6mVIxA05NVHjHkCcl0a
+         AiFZqbodH5pIU0Hwymd4F5KiGsJMWE6NcLTd3IiYO7DwQAFRIOl/cg1inNmHgvZTno
+         96fPbiNXfMo6agx1KoJAKCxdPtHJce8QanLcVu1lINgdwF//KaJPrrwRs9dHY9ZTol
+         QBz+CK0zkD93Q==
+Message-ID: <8fc9d169-78ff-0fe4-67c0-784097861f12@collabora.com>
+Date:   Tue, 19 Jul 2022 14:37:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719005726.8739-3-ansuelsmth@gmail.com>
- <20220719005726.8739-3-ansuelsmth@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] Makefile: replace headers_install with headers for
+ kselftest
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <a7af58feaa6ae6d3b0c8c55972a470cec62341e5.1657693952.git.guillaume.tucker@collabora.com>
+ <f35a71d6-bd96-7aa9-c143-39ae88bc85d5@linuxfoundation.org>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <f35a71d6-bd96-7aa9-c143-39ae88bc85d5@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 02:57:12AM +0200, Christian Marangi wrote:
-> The same MIB struct is used by drivers based on qca8k family switch. Move
-> it to common code to make it accessible also by other drivers.
+On 14/07/2022 22:45, Shuah Khan wrote:
+> On 7/13/22 12:33 AM, Guillaume Tucker wrote:
+>> Replace headers_install with headers as kselftest uses the header
+>> files from within the kernel tree rather than from a system-wide
+>> installation.
+>>
+>> We can still run this directly:
+>>
+>>    $ make O=build kselftest-all
+>>
+>> and when building from the selftests directory:
+>>
+>>    $ make O=build headers
+>>    $ make O=build -C tools/testing/selftests all
+>>
+>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+>> Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+>> ---
+>>   Makefile | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index fb2f3bb53a6b..5c934d16664c 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -1347,10 +1347,10 @@ tools/%: FORCE
+>>   # Kernel selftest
+>>     PHONY += kselftest
+>> -kselftest: headers_install
+>> +kselftest: headers
+>>       $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+>>   -kselftest-%: headers_install FORCE
+>> +kselftest-%: headers FORCE
+>>       $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
+>>     PHONY += kselftest-merge
+>>
 > 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
+> Thank you for taking care of this. This will go through kbuild?
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+You're welcome.
+
+Masahiro-san,
+
+A you OK with applying this in the kbuild tree ahead of the
+upcoming merge window?
+
+Best wishes,
+Guillaume
+ 
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> thanks,
+> -- Shuah
+> 

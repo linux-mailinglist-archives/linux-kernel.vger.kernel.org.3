@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8091579D9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D245579B90
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241931AbiGSMxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S240137AbiGSMaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242012AbiGSMwS (ORCPT
+        with ESMTP id S240345AbiGSM3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:52:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B956390F;
-        Tue, 19 Jul 2022 05:20:33 -0700 (PDT)
+        Tue, 19 Jul 2022 08:29:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394DB67CB3;
+        Tue, 19 Jul 2022 05:11:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30D7161772;
-        Tue, 19 Jul 2022 12:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7801C341C6;
-        Tue, 19 Jul 2022 12:20:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1E9FB81B31;
+        Tue, 19 Jul 2022 12:11:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB06C341C6;
+        Tue, 19 Jul 2022 12:11:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233231;
-        bh=ASsZ87Qcp96nGVuUoINaJyFZXCA14MyEoFJuMLRfDAg=;
+        s=korg; t=1658232665;
+        bh=myOxGa24Q0NLoBS0Hx/dDNK5aQV8wrjyQ1yqeZ7tf9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HbzulWQKUt+fGsyx5e7LXDw8aAwS45oEHBkABZ8+oy5JpQpxJo0w/0YTK1a1zXs2E
-         C8MzquWtpAc8GAzldQydFPBsLRX6hUhxeCYWRKMTTDS3XJToFQrhA2o15A7yUNvmv0
-         VQbQTMT8Hp1VFNJGoqd2His+Gw9VPccQyHNzB6sE=
+        b=WZ2RNRGBzp35lq3Yo+oPMtqaMMgLlsvyIrR1LF11YoLeWPDqyEqKdD1fyuWZQf7u0
+         XvPJLFEAHs4gBnv0xNdOpY4640FbLnPgUBKkG9H/Rn21Fj8ScCJoqd6v1oLxqpK37B
+         WkiCr1R9ZJEiw1g0u7rOjaAdWS+Sozp2Y/azwqr4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Harrison <John.C.Harrison@Intel.com>,
-        Tejas Upadhyay <tejas.upadhyay@intel.com>,
-        Anusha Srivatsa <anusha.srivatsa@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 051/231] drm/i915/guc: ADL-N should use the same GuC FW as ADL-S
-Date:   Tue, 19 Jul 2022 13:52:16 +0200
-Message-Id: <20220719114718.544993954@linuxfoundation.org>
+        stable@vger.kernel.org, Jeremy Szu <jeremy.szu@canonical.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 005/167] ALSA: hda/realtek: fix mute/micmute LEDs for HP machines
+Date:   Tue, 19 Jul 2022 13:52:17 +0200
+Message-Id: <20220719114657.242905348@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,53 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+From: Jeremy Szu <jeremy.szu@canonical.com>
 
-[ Upstream commit 25c95bf494067f7bd1dfa8064ef964abe88cafc2 ]
+commit 61d307855eb1a2ae849da445edd5389db8a58a5c upstream.
 
-The only difference between the ADL S and P GuC FWs is the HWConfig
-support. ADL-N does not support HWConfig, so we should use the same
-binary as ADL-S, otherwise the GuC might attempt to fetch a config
-table that does not exist. ADL-N is internally identified as an ADL-P,
-so we need to special-case it in the FW selection code.
+The HP ProBook 440/450 G9 and EliteBook 640/650 G9 have multiple
+motherboard design and they are using different subsystem ID of audio
+codec. Add the same quirk for other MBs.
 
-Fixes: 7e28d0b26759 ("drm/i915/adl-n: Enable ADL-N platform")
-Cc: John Harrison <John.C.Harrison@Intel.com>
-Cc: Tejas Upadhyay <tejas.upadhyay@intel.com>
-Cc: Anusha Srivatsa <anusha.srivatsa@intel.com>
-Cc: Jani Nikula <jani.nikula@intel.com>
-Signed-off-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Reviewed-by: Matt Roper <matthew.d.roper@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220621233005.3952293-1-daniele.ceraolospurio@intel.com
-(cherry picked from commit 971e4a9781742aaad1587e25fd5582b2dd595ef8)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Jeremy Szu <jeremy.szu@canonical.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220713022706.22892-1-jeremy.szu@canonical.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ sound/pci/hda/patch_realtek.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
-index 9b6fbad47646..097b0c8b8531 100644
---- a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
-+++ b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
-@@ -160,6 +160,15 @@ __uc_fw_auto_select(struct drm_i915_private *i915, struct intel_uc_fw *uc_fw)
- 	u8 rev = INTEL_REVID(i915);
- 	int i;
- 
-+	/*
-+	 * The only difference between the ADL GuC FWs is the HWConfig support.
-+	 * ADL-N does not support HWConfig, so we should use the same binary as
-+	 * ADL-S, otherwise the GuC might attempt to fetch a config table that
-+	 * does not exist.
-+	 */
-+	if (IS_ADLP_N(i915))
-+		p = INTEL_ALDERLAKE_S;
-+
- 	GEM_BUG_ON(uc_fw->type >= ARRAY_SIZE(blobs_all));
- 	fw_blobs = blobs_all[uc_fw->type].blobs;
- 	fw_count = blobs_all[uc_fw->type].count;
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8887,6 +8887,10 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x103c, 0x89c3, "HP", ALC285_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x89ca, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8a78, "HP Dev One", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
++	SND_PCI_QUIRK(0x103c, 0x8aa0, "HP ProBook 440 G9 (MB 8A9E)", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8aa3, "HP ProBook 450 G9 (MB 8AA1)", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8aa8, "HP EliteBook 640 G9 (MB 8AA6)", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8aab, "HP EliteBook 650 G9 (MB 8AA9)", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x103f, "ASUS TX300", ALC282_FIXUP_ASUS_TX300),
+ 	SND_PCI_QUIRK(0x1043, 0x106d, "Asus K53BE", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
 
 

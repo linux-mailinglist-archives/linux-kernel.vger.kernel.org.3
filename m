@@ -2,67 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985DF57A5CA
+	by mail.lfdr.de (Postfix) with ESMTP id 4198B57A5C9
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238323AbiGSRvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238550AbiGSRvl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S238372AbiGSRvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 19 Jul 2022 13:51:41 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B29564D4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:51:40 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id r2so21712202wrs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SieDmqK9J1h609x4vSmfoTVzQMopY1SXeRb3Ll+BMWc=;
-        b=Rx/6js5ipM757vGZL6pg2GyudRa09IykQ8MRFpbIRUFuy1mBqjCKrhsXxznN0xprPN
-         x29xEl/Qaqr/vKjZ7I7K2ofEYGt6o+WJuqtvvWX9RIqlKl8dEHzFyGrb6rbWkMSGQbqq
-         5ueLNicDXZYEjXXetR+PMiKBVAqyePG4LRgB6Vfldl7+nXCpf4zGetYbHTNKQHp2xB5y
-         R6+s4BlazmhyFlV5ZV/R5OPEvrkimqTSfGHHIbQ3wcanqbkrQ/V9YLresql07lpQVC0D
-         1Qbjps2NYf0mTTtXSIrAuvvE4jhEBFh+AlUISbrRjnkl/HobcsSXHQtZq91lQDjWjmlT
-         MkNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SieDmqK9J1h609x4vSmfoTVzQMopY1SXeRb3Ll+BMWc=;
-        b=CdBhS+nu36FJX9IznWHFEs1c7JPRRdHncSQI4cm5xleVswFnKxhFFw3nS8Bk/AeLGZ
-         /vCRubeTnG2hABFe5e5kOW5QrNwTo2C+CaBFZl6ECYJQsVtxV2aFEgyEUAgjgC8fB8VW
-         fFKvOjeneFtvbkezXIyZ5s4je12/wuEtl3JLkDgdjJm66g96JBkTu/idF//xmjLbH2hD
-         do+aCnUFU8ZHl2uLkRkKZGbvoacUOrdpVTCWmvHDXaybK4LAygfai3MwBQ2kUUd1mPfY
-         yLHcfLcCrtQ8VI3nJRSSsKRlh9lFR6MrGjc6rUG08t5RlVVD3UGL3OHGJXuu9JCYCRER
-         sr8w==
-X-Gm-Message-State: AJIora+uHUFVv+Vc2AOIFcMjvX40eNt7idgSYfcVu0Vs2fRu3sqhTtUO
-        qEOWmRGW1OYNgWK0H66FlHa3Z/H38nzFpQDGvqtKag==
-X-Google-Smtp-Source: AGRyM1vgAlJo4741zJxidIxS1f+q/y3qjO10bkWI8pwZWh4HfDxzQZHuMOAcMwVRZ7HxSUF5ynNRS83ySShFqJo1/sE=
-X-Received: by 2002:a5d:6a4c:0:b0:21e:46d4:6eec with SMTP id
- t12-20020a5d6a4c000000b0021e46d46eecmr782189wrw.375.1658253099207; Tue, 19
- Jul 2022 10:51:39 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236009AbiGSRvj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 19 Jul 2022 13:51:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EA27564D4;
+        Tue, 19 Jul 2022 10:51:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 931091570;
+        Tue, 19 Jul 2022 10:51:37 -0700 (PDT)
+Received: from [10.57.42.173] (unknown [10.57.42.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 609693F766;
+        Tue, 19 Jul 2022 10:51:35 -0700 (PDT)
+Message-ID: <5875dacd-1431-210f-485d-0d47a3d3066f@arm.com>
+Date:   Tue, 19 Jul 2022 18:51:34 +0100
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-12-adrian.hunter@intel.com>
-In-Reply-To: <20220711093218.10967-12-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 10:51:27 -0700
-Message-ID: <CAP-5=fVmRXQr9WmygngsCZ1=4f9e4YK_6GqTv9o1S3-8O=C1TA@mail.gmail.com>
-Subject: Re: [PATCH 11/35] perf session: Create guest machines from id_index
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 03/13] coresight: stm: Update STM driver to use Trace
+ ID API
+To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, linux-perf-users@vger.kernel.org,
+        leo.yan@linaro.org, quic_jinlmao@quicinc.com
+References: <20220704081149.16797-1-mike.leach@linaro.org>
+ <20220704081149.16797-4-mike.leach@linaro.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220704081149.16797-4-mike.leach@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,88 +48,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Now that id_index has machine_pid, use it to create guest machines.
-> Create the guest machines with an idle thread because guest events
-> for "swapper" will be possible.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+On 04/07/2022 09:11, Mike Leach wrote:
+> Updates the STM driver to use the trace ID allocation API.
+> This uses the _system_id calls to allocate an ID on device poll,
+> and release on device remove.
+> 
+> The sysfs access to the STMTRACEIDR register has been changed from RW
+> to RO. Having this value as writable is not appropriate for the new
+> Trace ID scheme - and had potential to cause errors in the previous
+> scheme if values clashed with other sources.
+> 
+> Signed-off-by: Mike Leach <mike.leach@linaro.org>
 
-Nothing obviously off to my unqualified eyes :-)
 
-Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks,
-Ian
 
 > ---
->  tools/perf/util/session.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->
-> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-> index 5141fe164e97..1af981d5ad3c 100644
-> --- a/tools/perf/util/session.c
-> +++ b/tools/perf/util/session.c
-> @@ -2751,6 +2751,24 @@ void perf_session__fprintf_info(struct perf_session *session, FILE *fp,
->         fprintf(fp, "# ========\n#\n");
->  }
->
-> +static int perf_session__register_guest(struct perf_session *session, pid_t machine_pid)
-> +{
-> +       struct machine *machine = machines__findnew(&session->machines, machine_pid);
-> +       struct thread *thread;
+>   drivers/hwtracing/coresight/coresight-stm.c | 41 +++++++--------------
+>   1 file changed, 14 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-stm.c b/drivers/hwtracing/coresight/coresight-stm.c
+> index bb14a3a8a921..9ef3e923a930 100644
+> --- a/drivers/hwtracing/coresight/coresight-stm.c
+> +++ b/drivers/hwtracing/coresight/coresight-stm.c
+> @@ -31,6 +31,7 @@
+>   #include <linux/stm.h>
+>   
+>   #include "coresight-priv.h"
+> +#include "coresight-trace-id.h"
+>   
+>   #define STMDMASTARTR			0xc04
+>   #define STMDMASTOPR			0xc08
+> @@ -615,24 +616,7 @@ static ssize_t traceid_show(struct device *dev,
+>   	val = drvdata->traceid;
+>   	return sprintf(buf, "%#lx\n", val);
+>   }
+> -
+> -static ssize_t traceid_store(struct device *dev,
+> -			     struct device_attribute *attr,
+> -			     const char *buf, size_t size)
+> -{
+> -	int ret;
+> -	unsigned long val;
+> -	struct stm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> -
+> -	ret = kstrtoul(buf, 16, &val);
+> -	if (ret)
+> -		return ret;
+> -
+> -	/* traceid field is 7bit wide on STM32 */
+> -	drvdata->traceid = val & 0x7f;
+> -	return size;
+> -}
+> -static DEVICE_ATTR_RW(traceid);
+> +static DEVICE_ATTR_RO(traceid);
+>   
+>   #define coresight_stm_reg(name, offset)	\
+>   	coresight_simple_reg32(struct stm_drvdata, name, offset)
+> @@ -819,14 +803,6 @@ static void stm_init_default_data(struct stm_drvdata *drvdata)
+>   	 */
+>   	drvdata->stmsper = ~0x0;
+>   
+> -	/*
+> -	 * The trace ID value for *ETM* tracers start at CPU_ID * 2 + 0x10 and
+> -	 * anything equal to or higher than 0x70 is reserved.  Since 0x00 is
+> -	 * also reserved the STM trace ID needs to be higher than 0x00 and
+> -	 * lowner than 0x10.
+> -	 */
+> -	drvdata->traceid = 0x1;
+> -
+>   	/* Set invariant transaction timing on all channels */
+>   	bitmap_clear(drvdata->chs.guaranteed, 0, drvdata->numsp);
+>   }
+> @@ -854,7 +830,7 @@ static void stm_init_generic_data(struct stm_drvdata *drvdata,
+>   
+>   static int stm_probe(struct amba_device *adev, const struct amba_id *id)
+>   {
+> -	int ret;
+> +	int ret, trace_id;
+>   	void __iomem *base;
+>   	struct device *dev = &adev->dev;
+>   	struct coresight_platform_data *pdata = NULL;
+> @@ -938,12 +914,22 @@ static int stm_probe(struct amba_device *adev, const struct amba_id *id)
+>   		goto stm_unregister;
+>   	}
+>   
+> +	trace_id = coresight_trace_id_get_system_id();
+> +	if (trace_id < 0) {
+> +		ret = trace_id;
+> +		goto cs_unregister;
+> +	}
+> +	drvdata->traceid = (u8)trace_id;
 > +
-> +       if (!machine)
-> +               return -ENOMEM;
+>   	pm_runtime_put(&adev->dev);
+>   
+>   	dev_info(&drvdata->csdev->dev, "%s initialized\n",
+>   		 (char *)coresight_get_uci_data(id));
+>   	return 0;
+>   
+> +cs_unregister:
+> +	coresight_unregister(drvdata->csdev);
 > +
-> +       machine->single_address_space = session->machines.host.single_address_space;
-> +
-> +       thread = machine__idle_thread(machine);
-> +       if (!thread)
-> +               return -ENOMEM;
-> +       thread__put(thread);
-> +
-> +       return 0;
-> +}
-> +
->  int perf_event__process_id_index(struct perf_session *session,
->                                  union perf_event *event)
->  {
-> @@ -2762,6 +2780,7 @@ int perf_event__process_id_index(struct perf_session *session,
->         size_t e2_sz = sizeof(struct id_index_entry_2);
->         size_t etot_sz = e1_sz + e2_sz;
->         struct id_index_entry_2 *e2;
-> +       pid_t last_pid = 0;
->
->         max_nr = sz / e1_sz;
->         nr = ie->nr;
-> @@ -2787,6 +2806,7 @@ int perf_event__process_id_index(struct perf_session *session,
->         for (i = 0; i < nr; i++, (e2 ? e2++ : 0)) {
->                 struct id_index_entry *e = &ie->entries[i];
->                 struct perf_sample_id *sid;
-> +               int ret;
->
->                 if (dump_trace) {
->                         fprintf(stdout, " ... id: %"PRI_lu64, e->id);
-> @@ -2814,6 +2834,17 @@ int perf_event__process_id_index(struct perf_session *session,
->
->                 sid->machine_pid = e2->machine_pid;
->                 sid->vcpu.cpu = e2->vcpu;
-> +
-> +               if (!sid->machine_pid)
-> +                       continue;
-> +
-> +               if (sid->machine_pid != last_pid) {
-> +                       ret = perf_session__register_guest(session, sid->machine_pid);
-> +                       if (ret)
-> +                               return ret;
-> +                       last_pid = sid->machine_pid;
-> +                       perf_guest = true;
-> +               }
->         }
->         return 0;
->  }
-> --
-> 2.25.1
->
+>   stm_unregister:
+>   	stm_unregister_device(&drvdata->stm);
+>   	return ret;
+> @@ -953,6 +939,7 @@ static void stm_remove(struct amba_device *adev)
+>   {
+>   	struct stm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
+>   
+> +	coresight_trace_id_put_system_id(drvdata->traceid);
+
+This makes think that, we should add a WARN_ON() in
+
+	coresight_trace_id_put_system_id(id)
+	{
+
+		WARN_ON(!coresight_trace_id_is_used(id));
+
+	}
+
+Anyways, for this patch:
+
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+

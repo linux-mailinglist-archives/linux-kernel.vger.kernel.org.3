@@ -2,87 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1662357AA3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA37457AA3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240549AbiGSXHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 19:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
+        id S240559AbiGSXI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 19:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240538AbiGSXHK (ORCPT
+        with ESMTP id S240563AbiGSXI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 19:07:10 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E5861D91;
-        Tue, 19 Jul 2022 16:07:09 -0700 (PDT)
-Received: by mail-pj1-f46.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so435205pjf.2;
-        Tue, 19 Jul 2022 16:07:09 -0700 (PDT)
+        Tue, 19 Jul 2022 19:08:28 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C79161D91
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:08:27 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id n4-20020a17090a73c400b001f1e87432c2so434368pjk.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ET65oz3snuYW9UKmGCi68CucaUuwFBdpbcu5YHhob8w=;
+        b=ZDwPc2YaURL2ac7KBS/xNJru3MgkntAdwQ0Q43KLd3OK7/f5sLniwqTBRcAVCfzz6c
+         r6gZ+UJFFUxNdswWA7VgEolASTeA/dgFHbNACXgans17Ncv68aXHlr6vowlOsgwjpNqr
+         5MCvt0x9BBhlN2AR0g2evITBgzAdNEVGLY2DdzuqsssKqV6yLI7N9LtYenxYb+EwzBSQ
+         FSPjoO1OwPl4jXkahKNFQNyqR3ml73f234EORFB920A/GzeY+LQMbzWw0i6AcVqA7zOY
+         95owPxP3yO8dr74A2adqCrAu5fx245AiUDjxTXJZveXZ/xquCvkY8mFyanggl6w4SEqN
+         TJ5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6Tw23vDNo/n+pN2EHeNiGsK/YDkkAImg4vz2iP2eaGM=;
-        b=7VE5lneYyBfeMoHUigqV4hdK3mJUjPsBpaOZ2O09H2v8l0kba0r49OY67nmHPrZKqv
-         1eMUh09SCIyK6nfXtOJxqjif8Yx1WTkfTaxThYkiGaNLc+a/kkXvUcIgWSVwgiu+4kqh
-         g0AwXl5PA4qvmNzmDF6d4nSzc77L0YWD+YVz9hcwpLyzz3lqSn4FLea7tbQL3ooJdygZ
-         kfUR6ed8mPa6H5wKCg+JwJj4ZropAQvcAL+UvdUuCMX7fUEuFqOj7ALLbOSA1463+GG5
-         ssRQoZQXjZT3rtPAurc3nVnlXIuxcbgzbWI4bqN4YOwy4RBvThuswMVrOpDgArHd8SD7
-         guVg==
-X-Gm-Message-State: AJIora9tg3MI4J/CKJL80fHM+5QJjcAxNJXm1uEE1SrNUg5EWhpt1V5U
-        Uw/LDDKtjtRFBtXYJSKBN20=
-X-Google-Smtp-Source: AGRyM1vG7yGVeWpxGJlPtp3YHkTJUdzIERYOZYK1v+sjBcXtiq+FJvIg2cJR7cf61v44YD8bPxJUAA==
-X-Received: by 2002:a17:902:e848:b0:16c:41d1:19cf with SMTP id t8-20020a170902e84800b0016c41d119cfmr35595037plg.40.1658272028471;
-        Tue, 19 Jul 2022 16:07:08 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:a7e0:78fc:9269:215b? ([2620:15c:211:201:a7e0:78fc:9269:215b])
-        by smtp.gmail.com with ESMTPSA id t126-20020a628184000000b0050dc7628148sm12100127pfd.34.2022.07.19.16.07.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 16:07:07 -0700 (PDT)
-Message-ID: <574ad23b-45c9-1bc3-0a86-c7cb73ea07bf@acm.org>
-Date:   Tue, 19 Jul 2022 16:07:05 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ET65oz3snuYW9UKmGCi68CucaUuwFBdpbcu5YHhob8w=;
+        b=Wj6lnKWUFRFCh3dWhCJJvUukGHI14E4x/BcNXka49Of1PE20s+a7gnEjyoKrZ+zUX0
+         h8vDfczWl7uc2K0LK5bLyq51qOcE8PPRaUEVfKDbIytM5dHgDmTn5OVkMKBi4dcnftHD
+         LgZgiim5CQ1LY5vhrMbZoaBeUhP+T9coW39xSBF3D031gokJ8i/5j1U8//FriI5lPtDY
+         QyBiPML7/+iuGx/61WNHL5x9x/VSy8YuLBnheW4lG7jISrjlyrVL7v/0GjcGJJeRPJ7l
+         qzKlS9A4abEzNb4jJHIUQqW0u4b5TaBNYQWx9g5vP3xJ14XG5OfvNCpCeEQVHmUezn3+
+         cOYQ==
+X-Gm-Message-State: AJIora98UW10o1h5E3Ln2asc7nCJ/r8d54O4fEhu1cqQjeu4yo5Za1Tx
+        jygKK3SwNerUayfCSxzBtP3xQQ==
+X-Google-Smtp-Source: AGRyM1tjxWRS3tOmxtESoizG6YYLn4fNUbLCxDc5oFfKk4184j1oiwQdV22Lb7ncrvKw4a18UgdiTQ==
+X-Received: by 2002:a17:90b:1a81:b0:1ef:9e9d:a08a with SMTP id ng1-20020a17090b1a8100b001ef9e9da08amr1939618pjb.58.1658272106623;
+        Tue, 19 Jul 2022 16:08:26 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id n2-20020a170902d2c200b0016c2cdea409sm12289236plc.280.2022.07.19.16.08.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 16:08:26 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 23:08:22 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH V3 08/12] KVM: X86/MMU: Allocate mmu->pae_root for PAE
+ paging on-demand
+Message-ID: <Ytc5Zmer7sjkGAqV@google.com>
+References: <20220521131700.3661-1-jiangshanlai@gmail.com>
+ <20220521131700.3661-9-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
-Content-Language: en-US
-To:     Can Guo <quic_cang@quicinc.com>, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, beanhuo@micron.com, quic_asutoshd@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        linux-scsi@vger.kernel.org, kernel-team@android.com
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1658214120-22772-1-git-send-email-quic_cang@quicinc.com>
- <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521131700.3661-9-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 00:01, Can Guo wrote:
-> Adds MCQ support to UFS driver.
+On Sat, May 21, 2022, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> mmu->pae_root for non-PAE paging is allocated on-demand, but
+> mmu->pae_root for PAE paging is allocated early when struct kvm_mmu is
+> being created.
+> 
+> Simplify the code to allocate mmu->pae_root for PAE paging and make
+> it on-demand.
 
-The description of this patch is too short. It should be explained how 
-the UFSHCI queues are made visible to the block layer. It should also be 
-explained which roles are assigned to queues and how (HCTX_TYPE_*). How 
-the MAXQ configuration register is handled should also be explained.
+Hmm, I'm not convinced this simplifies things enough to justify the risk.  There's
+a non-zero chance that the __GFP_DMA32 allocation was intentionally done during VM
+creation in order to avoid OOM on low memory.
 
-The host lock is obtained in multiple UFSHCI 3.0 code paths. Information 
-about the role of the host lock in MCQ code should be provided.
+Maybe move this patch to the tail end of the series so that it has a higher chance
+of reverting cleanly if on-demand allocation breaks someone's setup?
 
-Thanks,
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |   2 +-
+>  arch/x86/kvm/mmu/mmu.c          | 101 +++++++++++++-------------------
+>  arch/x86/kvm/x86.c              |   4 +-
+>  3 files changed, 44 insertions(+), 63 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 9cdc5bbd721f..fb9751dfc1a7 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1615,7 +1615,7 @@ int kvm_mmu_vendor_module_init(void);
+>  void kvm_mmu_vendor_module_exit(void);
+>  
+>  void kvm_mmu_destroy(struct kvm_vcpu *vcpu);
+> -int kvm_mmu_create(struct kvm_vcpu *vcpu);
+> +void kvm_mmu_create(struct kvm_vcpu *vcpu);
+>  int kvm_mmu_init_vm(struct kvm *kvm);
+>  void kvm_mmu_uninit_vm(struct kvm *kvm);
+>  
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 90b715eefe6a..63c2b2c6122c 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -668,6 +668,41 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
+>  	}
+>  }
+>  
+> +static int mmu_alloc_pae_root(struct kvm_vcpu *vcpu)
 
-Bart.
+Now that pae_root isn't the "full" root, just the page table, I think we should
+rename pae_root to something else, and then name this accordingly.
+
+pae_root_backing_page and mmu_alloc_pae_root_backing_page()?  Definitely don't
+love the name if someone has a better idea.
+
+> +{
+> +	struct page *page;
+> +
+> +	if (vcpu->arch.mmu->root_role.level != PT32E_ROOT_LEVEL)
+> +		return 0;
+
+I think I'd prefer to move this check to the caller, it's confusing to see an
+unconditional call to a PAE-specific helper.
+
+> +	if (vcpu->arch.mmu->pae_root)
+> +		return 0;
+> +
+> +	/*
+> +	 * Allocate a page to hold the four PDPTEs for PAE paging when emulating
+> +	 * 32-bit mode.  CR3 is only 32 bits even on x86_64 in this case.
+> +	 * Therefore we need to allocate the PDP table in the first 4GB of
+> +	 * memory, which happens to fit the DMA32 zone.
+> +	 */
+> +	page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_DMA32);
+
+Leave off __GFP_ZERO, it's unnecesary in both cases, and actively misleading in
+when TDP is disabled.  KVM _must_ write the page after making it decrypted.  And
+since I can't find any code that actually does initialize "pae_root", I suspect
+this series is buggy.
+
+But if there is a bug, it was introduced earlier in this series, either by
+
+  KVM: X86/MMU: Add local shadow pages
+
+or by
+
+  KVM: X86/MMU: Activate local shadow pages and remove old logic
+
+depending on whether you want to blame the function that is buggy, or the patch
+that uses the buggy function..
+
+The right place to initialize the root is kvm_mmu_alloc_local_shadow_page().
+KVM sets __GFP_ZERO for mmu_shadow_page_cache, i.e. relies on new sp->spt pages
+to be zeroed prior to "allocating" from the cache.
+
+The PAE root backing page on the other hand is allocated once and then reused
+over and over.
+
+	if (role.level == PT32E_ROOT_LEVEL &&
+	    !WARN_ON_ONCE(!vcpu->arch.mmu->pae_root)) {
+		sp->spt = vcpu->arch.mmu->pae_root;
+		kvm_mmu_initialize_pae_root(sp->spt): <==== something like this
+	} else {
+		sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
+	}
+
+
+> -	for (i = 0; i < 4; ++i)
+> -		mmu->pae_root[i] = INVALID_PAE_ROOT;
+
+Please remove this code in a separate patch.  I don't care if it is removed before
+or after (I'm pretty sure the existing behavior is paranoia), but I don't want
+multiple potentially-functional changes in this patch.

@@ -2,78 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C702E57AA14
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A2257AA17
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238081AbiGSW5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
+        id S240146AbiGSW6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiGSW5a (ORCPT
+        with ESMTP id S238321AbiGSW56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:57:30 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC31624A2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:57:29 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id f14so12517866qkm.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1JWtealjQ+8bZ96gLiC3bhPM3ofU7N0+GLxtwH0QfzM=;
-        b=mrHH4FT3fpuDn2IUZqPUNlCKJZxCzlUNv9VGG/xcArDAMH3DT+54zcmTtGB8JGb3SS
-         9wQkvuGn8x2vmwmZQPjalIBs+JnuG0ewd4TfpX985AXcmehGVKwIm/EZX+iBI41ikqfN
-         bMXkRo6/zAJMe8fvrki+DpYbsUc4ZwpKYLxiw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1JWtealjQ+8bZ96gLiC3bhPM3ofU7N0+GLxtwH0QfzM=;
-        b=524o94vD4OEAc6wW66pPcJ1bTCCNXtRt633rVZiNCT4dFAmX9AvMHQnncPOVidCmNV
-         VCv2Ez/pF6HuaAVjJlXGG767N0yD2Vkw3xJRyFyBOD/wioIt1FBJ3MZXhGHZDWXzqZv8
-         GfL5921gLV4Xdx3IESfQlq0/T2/M3FswJN6HaJFXJylgKvLR9lvDUCtnYMCHxhIcG6wM
-         sf1/3K8fcFi7K8hU9oow3LC76J7Dxp9fDSpe59jUgTsdRitVwHQQ27c8ufPsBZq5irFi
-         fcum2VWVkSssHmz+v//PBLzQcEr+tgDmLic95tllR2+YLUmZc8Fv1/73isNOjT5TcW6x
-         6Uzg==
-X-Gm-Message-State: AJIora9EJF+88+OvXhLBzNNGNWS2tCNT4J6SiypZ/vpC0cuwZLJ4DBaz
-        Y/DmBtvrhxsXcmVPeZ6tUwPdpQ==
-X-Google-Smtp-Source: AGRyM1vRzZKOEKQnMCVfDlKb6uOECyGV4DsnpBp1ygkm4yxBnjqBs8GcaKkBtsriS8SN2SeOD5eTUQ==
-X-Received: by 2002:a37:63cb:0:b0:6b5:d13a:67cc with SMTP id x194-20020a3763cb000000b006b5d13a67ccmr14166941qkb.165.1658271448790;
-        Tue, 19 Jul 2022 15:57:28 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id f13-20020a05620a408d00b006b5df4d2c81sm10305187qko.94.2022.07.19.15.57.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 15:57:28 -0700 (PDT)
-Message-ID: <22892254-becb-d6ec-b8c2-a4ceb7fbb6fd@joelfernandes.org>
-Date:   Tue, 19 Jul 2022 18:57:26 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH rcu 4/7] rcu/nocb: Add an option to offload all CPUs on
- boot
+        Tue, 19 Jul 2022 18:57:58 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FB162A5C;
+        Tue, 19 Jul 2022 15:57:55 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JI5AHD020611;
+        Tue, 19 Jul 2022 15:57:55 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=6i1/Yjzvea9sZyTmrcHQINsckMRJy6koL10j8VZ/PFg=;
+ b=HB9Cap4ZwaOK7SZW7e+jyQJ00fspxw/VkCsmgq1ksg0HNl5qrhBdt32mWOtrwLkbMhsb
+ ehU8Y0Tz4BYCarnIl2SJOWl+3kmbKYd7CgqwUSLFfE6qMDMYhY9FwEUF4k7rQbIOl1uG
+ 0JY/cxKhU7OY6ICTsBd9RDcwThqqu9xUINg= 
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2044.outbound.protection.outlook.com [104.47.73.44])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hd974asbu-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Jul 2022 15:57:55 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BAkFSgI0YRGwr0Nss/aQV5gIBK7sGc72/IMBhA9TVPrGnJeBORp6emnxolioKCc6PwRhYnY7oAOrMHadSCxjdIjMyYQ6FyW0teXD7Xr8Bi56h5BJCgkxBaKseN8Y9Cx4zOiJjR0sVnJchloaq4FpUf74iYgJ/uDdVZ8t+kRfxNhbI9DxAX7pbln8kQq8QPSFapXjlJFcWUJJSRlhvOiJaTySRvU++xEdYhKm9RSZmTOj8y68oSHDhVoIZB6CXqqwt84fsTH/yqw/yt92/G2AdboNPk8dVtEn+Ng/Kee14vXf8nrEkvibmbq/AusnGehyan7kGJZi8y1MPkG/5dDPqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6i1/Yjzvea9sZyTmrcHQINsckMRJy6koL10j8VZ/PFg=;
+ b=KgMOrcte6xKlwqrMSxG5hnJOZnSkEzU2rObqt2B9r2JaRuPM848Q7uxjBd2/wuM29H0Uynq+Z8s6j3zC5qF28VAoXwD5V4XoQFsYgZjkWfuIyEoJ6ZBPgdjMCvcfBRFkJ5jHhpjX5eAw1HnU4XqNJjlb4HDzrDto6/rhvgSNk95+SwaOl+4Jl1DNXBYFc/dmQjxMPLcYAD/gcbUJRoYRMxGZIpN1cAhwuNJq+ex1IE0OKNxYRGTX3fnwySosdb7HytWTt5V37rLcdPkG6hQhbU1Mm02hgRmqrFChT7OneTqR7uQ3ULCTyf1OCIHtOH8uYJP2lQFOT67wdLR2cntzRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by SJ0PR15MB4632.namprd15.prod.outlook.com (2603:10b6:a03:37d::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Tue, 19 Jul
+ 2022 22:57:52 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::5de3:3999:66df:42d1]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::5de3:3999:66df:42d1%4]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
+ 22:57:52 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     Song Liu <song@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>
+Subject: Re: [PATCH v4 bpf-next 2/4] ftrace: allow IPMODIFY and DIRECT ops on
+ the same function
+Thread-Topic: [PATCH v4 bpf-next 2/4] ftrace: allow IPMODIFY and DIRECT ops on
+ the same function
+Thread-Index: AQHYmmrwWVTrDYAzL0G5ckglE1ecDq2GBfkAgABLI4A=
+Date:   Tue, 19 Jul 2022 22:57:52 +0000
+Message-ID: <C6229252-B41F-43B9-BABC-538947466710@fb.com>
+References: <20220718055449.3960512-1-song@kernel.org>
+ <20220718055449.3960512-3-song@kernel.org>
+ <20220719142856.7d87ea6d@gandalf.local.home>
+In-Reply-To: <20220719142856.7d87ea6d@gandalf.local.home>
+Accept-Language: en-US
 Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Kalesh Singh <kaleshsingh@google.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        kernel test robot <lkp@intel.com>
-References: <20220620224455.GA3840881@paulmck-ThinkPad-P17-Gen-1>
- <20220620224503.3841196-4-paulmck@kernel.org>
- <7a09896b-88dd-040b-86c0-863f8279a04e@quicinc.com>
- <20220719181257.GR1790663@paulmck-ThinkPad-P17-Gen-1>
- <530b3bf4-f790-2973-5bc5-6ccd4797ae2a@joelfernandes.org>
- <20220719225306.GY1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220719225306.GY1790663@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.100.31)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e54d0753-00bc-4b99-ad30-08da69da1c50
+x-ms-traffictypediagnostic: SJ0PR15MB4632:EE_
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DsMN616oCQBmG57kiA3gE4BgGnZT64gAzqBUzVzO1KkHtFoZdpCJikSJt+ZyXJFS6B7pEKeL3nzUbQ0eEpf/ucD+7Fky6Nl9/3ywus+Nooxhpnm6TqEJWjFjq2ek5RotnvSPRY3ospRimUXcNCOZ+wWGNgiDrDD9NzDiER8LuQqFULhzvSEaVn9OHYNT+DgjLgV+n0J0kSSzmi0d7m5i5ED7GAfRuBA8fzk4A7miLDbyGK0TTHacE9ssmdaeGJLsSmjjT1cS7novtymhjPzPNomVFiwWOmRb1opHrVTt6EKniLcDPxoTSlFs0RJbEKJCs09w/DNpZfoaIWVsXhpceUfmPwjaxRSGda85575NzPjzdDgrba3ZL2uEtQ8LZSzKPmJ8o+11IB+Dk+1tGkonwlqSf1nazSHbMYRZO9JUpAll0YbeAM+8NbPoc/jzclOpD2fLWPP5/o6pIcq5GN+SUA26oy8WtYqsAcCjm2gj2CEdfUy+fYwRAlJSuLe2S5Yq4kCQzOovq54JtQejq2Ilt4MFU1tQ0nRaHIeVQqqPr+Hxu912fol/BrrW2xaV+Loj8f6ZQJ/1kooPRRwVLODZAhRCqLCKSWkI6YhuCT+210zk3qwLsRZMTW9GO5ZNXO8WKmNBaVJjR8XtIQ1uQmBPNlRzzHbA8MgV/y30NTpMHHo+UBKMd8cDGoubrN8uTG3hD6wuiLeltWodCqmVuEMS9mQyecCNioRCtxluzRBGxSiVf2PVMMyAGqZHO6E41PgmTnaKioWZ4BIL/ZG231SBMjBaaQP0eavmqUj6QLfYVXDWJtGAux+VVhXuNcm0wbZPL0VxshMVveZAvdcOnSknpw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(366004)(39860400002)(396003)(346002)(83380400001)(71200400001)(41300700001)(186003)(478600001)(2906002)(6512007)(33656002)(6506007)(53546011)(2616005)(8936002)(6486002)(54906003)(86362001)(122000001)(6916009)(316002)(5660300002)(38070700005)(66946007)(38100700002)(8676002)(36756003)(64756008)(66476007)(66446008)(66556008)(4326008)(76116006)(91956017)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?l4i7trkRJy1VUTyo6yLltAsFezJ5/SLMoDe/NMkwNag70jwg5j+jcDASrq4v?=
+ =?us-ascii?Q?g73GyuYPrg/8KzP4yRU4zsynd/I7WqBFfZE+vx3DrcgV1rTRimAjXPMg0w09?=
+ =?us-ascii?Q?3/R/3kv7jYN37JCYTBbkj3ywCHL7y0sWuBWHakZ6DE8Sxk4OqPK4PFan0Tp5?=
+ =?us-ascii?Q?dL5pc3GdXAHyaodCRs6X3WX/zs6wUoEDH6pR6dwtnv0eSBY5byGbzS64wCZt?=
+ =?us-ascii?Q?G8SKbkTjabxRdkWZqiz3lmjkunhAi2ZxWOnCcQ/LDmwm8Q830kZ07GfCVOVb?=
+ =?us-ascii?Q?kYYOru/7uBlz9Akh587R64pUy0PToz4NzpMjkUxGGLyg+6UvviGlTYvLhaJP?=
+ =?us-ascii?Q?6uLpAU7OgrEiMLMhDeyiBsrDdCBa//NOhe5UdDipE6kDrvebUdWVmKQjZY1a?=
+ =?us-ascii?Q?92AAZ9ebdI+GQBXgGcIVl+3JhOg9C49X8oQ+U7HrEJ80Ipxj87Rk0dAruQkr?=
+ =?us-ascii?Q?tCsMT/EGXi3EesGrh3J4jkjd4PSupX3dB9s7O4oCSd3ox5m7xBMbVBHCxGUZ?=
+ =?us-ascii?Q?vSS+GjBPUrDGxZ7YLxqak78YXNW2yBBo6cKlFj/qjGGMfbtEGrlBhKDUMMZh?=
+ =?us-ascii?Q?Prk9fqw8ExkrB6FwrT2iiCIyWJh+z67LT3KlmVFXOOBiQ6TaO2m8rwg6CPL1?=
+ =?us-ascii?Q?bxCaeSLCAovC9MGaSz1qMKSMHj4l6Nq+luoe8lNlbaq/MTdA6S/9zgQJAtJc?=
+ =?us-ascii?Q?WwrUqLLqhWIPPeXjPoTUL2yCZt73cOCR2WqClOgW0hQ52Ioc1z5O3vlaybC6?=
+ =?us-ascii?Q?oVBHZ3c973vMOr0HZlny1/1Wq1YmD/XwetkgNtyh5XuhFlb7Gat+6mLBFKVk?=
+ =?us-ascii?Q?C5wVmKNpxETI2O9sSC8NTgwu19Mu7W5ksQSxCqp/9Nb2o1hGNUd8X4EPDuk9?=
+ =?us-ascii?Q?ueJggb1Jb1NPQlnGDvyzQh6PWWKOgwrrdwpw1TpNdvqRqSz+C6JZ3ny/nGSM?=
+ =?us-ascii?Q?0xTCuyWgYsXIJrPERy2a40f90H3rN9g8zgk80m/4Z6ZiOShXWpmy7005WX40?=
+ =?us-ascii?Q?Rh+/bCCCQbOH+lXh4RLdfrEcqVXehU/92+zA6a4yitD5vZ/DekqzLS74Sqks?=
+ =?us-ascii?Q?7ckIOyuI+v3xTDvQQ2zBR2bi1lWByjsBMZqE1rwbuejA1VCdBckwRQd4AyUk?=
+ =?us-ascii?Q?VOPkQ+4nuawr7ISoZVZn7nFRoRty6ks0vapB96wuZJRV2T+ydZO4942WJ/Mc?=
+ =?us-ascii?Q?3FOCzhGzl0PbHuuHQebbPXuTIxBdZkGRZd6Dm6UuBImMABYGp7xN9yYRYT3y?=
+ =?us-ascii?Q?shmIJlDZ1t2d19VcyF6iz6VfL3XKWjIXs1wcRqoDEouA9oV+tLn8kPmZO4kW?=
+ =?us-ascii?Q?xj7Wy9MJ3RB2tEiDCSv43dcLom38/n6Xee/2KSKgLYsDcmUinjdNvyik9E65?=
+ =?us-ascii?Q?V8jR2TbIY5aYsVV8rZh2WRs6Sg45skWjux2hviPMN8CcCZbSErBBvTc48gQd?=
+ =?us-ascii?Q?EUzKWXdJcN70iq5/NLJcihCk6pmYHz6mAYDU630nEUliw06HgIhc5jc/K8Ua?=
+ =?us-ascii?Q?3QRdo/0WzS47FLu7tJehTYqLAb7gLyGUfpoi95lBUFPqTmqcFYGPKL/CfoZ8?=
+ =?us-ascii?Q?r+hXhBxdOG8DB+byhlf3Ni1xvanAIiTwnZpUHX3QAd3fhD0j+4cUgze8j5Sg?=
+ =?us-ascii?Q?mdO+qpOsw3Kqk/BrlTWBI9Q=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C0FB8228F3C90C468745A56B944765D9@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e54d0753-00bc-4b99-ad30-08da69da1c50
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2022 22:57:52.4869
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rt+3zlCw8vCisOebjV1kDK9cx11kCNFUtHQkbCRYH5F9uAHsn1l+G+5lj1cq/z2bRWPgCOWY1d/nJKkujNLz2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4632
+X-Proofpoint-ORIG-GUID: mEbU5ll4ChLZRZvr-a23lNhm29q9qCTY
+X-Proofpoint-GUID: mEbU5ll4ChLZRZvr-a23lNhm29q9qCTY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-19_10,2022-07-19_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,178 +142,179 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 7/19/2022 6:53 PM, Paul E. McKenney wrote:
-> On Tue, Jul 19, 2022 at 06:42:00PM -0400, Joel Fernandes wrote:
->>
->>
->> On 7/19/2022 2:12 PM, Paul E. McKenney wrote:
->>> On Tue, Jul 19, 2022 at 03:04:07PM +0530, Neeraj Upadhyay wrote:
->>>>
->>>>
->>>> On 6/21/2022 4:15 AM, Paul E. McKenney wrote:
->>>>> From: Joel Fernandes <joel@joelfernandes.org>
->>>>>
->>>>> Systems built with CONFIG_RCU_NOCB_CPU=y but booted without either
->>>>> the rcu_nocbs= or rcu_nohz_full= kernel-boot parameters will not have
->>>>> callback offloading on any of the CPUs, nor can any of the CPUs be
->>>>> switched to enable callback offloading at runtime.  Although this is
->>>>> intentional, it would be nice to have a way to offload all the CPUs
->>>>> without having to make random bootloaders specify either the rcu_nocbs=
->>>>> or the rcu_nohz_full= kernel-boot parameters.
->>>>>
->>>>> This commit therefore provides a new CONFIG_RCU_NOCB_CPU_DEFAULT_ALL
->>>>> Kconfig option that switches the default so as to offload callback
->>>>> processing on all of the CPUs.  This default can still be overridden
->>>>> using the rcu_nocbs= and rcu_nohz_full= kernel-boot parameters.
->>>>>
->>>>> Reviewed-by: Kalesh Singh <kaleshsingh@google.com>
->>>>> Reviewed-by: Uladzislau Rezki <urezki@gmail.com>
->>>>> (In v4.1, fixed issues with CONFIG maze reported by kernel test robot).
->>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>> Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
->>>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->>>>> ---
->>>>
->>>>
->>>> Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
->>>>
->>>> One query on cpumask_setall() below
->>>>
->>>>>   Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
->>>>>   kernel/rcu/Kconfig                              | 13 +++++++++++++
->>>>>   kernel/rcu/tree_nocb.h                          | 15 ++++++++++++++-
->>>>>   3 files changed, 33 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
->>>>> index 2522b11e593f2..34605c275294c 100644
->>>>> --- a/Documentation/admin-guide/kernel-parameters.txt
->>>>> +++ b/Documentation/admin-guide/kernel-parameters.txt
->>>>> @@ -3659,6 +3659,9 @@
->>>>>   			just as if they had also been called out in the
->>>>>   			rcu_nocbs= boot parameter.
->>>>> +			Note that this argument takes precedence over
->>>>> +			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
->>>>> +
->>>>>   	noiotrap	[SH] Disables trapped I/O port accesses.
->>>>>   	noirqdebug	[X86-32] Disables the code which attempts to detect and
->>>>> @@ -4557,6 +4560,9 @@
->>>>>   			no-callback mode from boot but the mode may be
->>>>>   			toggled at runtime via cpusets.
->>>>> +			Note that this argument takes precedence over
->>>>> +			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
->>>>> +
->>>>>   	rcu_nocb_poll	[KNL]
->>>>>   			Rather than requiring that offloaded CPUs
->>>>>   			(specified by rcu_nocbs= above) explicitly
->>>>> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
->>>>> index 1c630e573548d..27aab870ae4cf 100644
->>>>> --- a/kernel/rcu/Kconfig
->>>>> +++ b/kernel/rcu/Kconfig
->>>>> @@ -262,6 +262,19 @@ config RCU_NOCB_CPU
->>>>>   	  Say Y here if you need reduced OS jitter, despite added overhead.
->>>>>   	  Say N here if you are unsure.
->>>>> +config RCU_NOCB_CPU_DEFAULT_ALL
->>>>> +	bool "Offload RCU callback processing from all CPUs by default"
->>>>> +	depends on RCU_NOCB_CPU
->>>>> +	default n
->>>>> +	help
->>>>> +	  Use this option to offload callback processing from all CPUs
->>>>> +	  by default, in the absence of the rcu_nocbs or nohz_full boot
->>>>> +	  parameter. This also avoids the need to use any boot parameters
->>>>> +	  to achieve the effect of offloading all CPUs on boot.
->>>>> +
->>>>> +	  Say Y here if you want offload all CPUs by default on boot.
->>>>> +	  Say N here if you are unsure.
->>>>> +
->>>>>   config TASKS_TRACE_RCU_READ_MB
->>>>>   	bool "Tasks Trace RCU readers use memory barriers in user and idle"
->>>>>   	depends on RCU_EXPERT && TASKS_TRACE_RCU
->>>>> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
->>>>> index 4cf9a29bba79d..60cc92cc66552 100644
->>>>> --- a/kernel/rcu/tree_nocb.h
->>>>> +++ b/kernel/rcu/tree_nocb.h
->>>>> @@ -1197,11 +1197,21 @@ void __init rcu_init_nohz(void)
->>>>>   {
->>>>>   	int cpu;
->>>>>   	bool need_rcu_nocb_mask = false;
->>>>> +	bool offload_all = false;
->>>>>   	struct rcu_data *rdp;
->>>>> +#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
->>>>> +	if (!rcu_state.nocb_is_setup) {
->>>>> +		need_rcu_nocb_mask = true;
->>>>> +		offload_all = true;
->>>>> +	}
->>>>> +#endif /* #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) */
->>>>> +
->>>>>   #if defined(CONFIG_NO_HZ_FULL)
->>>>> -	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
->>>>> +	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
->>>>>   		need_rcu_nocb_mask = true;
->>>>> +		offload_all = false; /* NO_HZ_FULL has its own mask. */
->>>>> +	}
->>>>>   #endif /* #if defined(CONFIG_NO_HZ_FULL) */
->>>>>   	if (need_rcu_nocb_mask) {
->>>>> @@ -1222,6 +1232,9 @@ void __init rcu_init_nohz(void)
->>>>>   		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
->>>>>   #endif /* #if defined(CONFIG_NO_HZ_FULL) */
->>>>> +	if (offload_all)
->>>>> +		cpumask_setall(rcu_nocb_mask);
->>>>
->>>> Do we need to do a cpumask_and(rcu_nocb_mask, cpu_possible_mask,
->>>> rcu_nocb_mask) after setting all cpus in rcu_nocb_mask (cpumask_subset()
->>>> check below takes care of it though)?
->>>
->>> Without that cpumask_and(), systems with sparse CPU numbering schemes
->>> (for example, 0, 4, 8, 12, ...) will get a pr_info(), and as you noted,
->>> the needed cpumask_and().
->>>
->>> I am inclined to see a complaint before we change this.  And perhaps if
->>> this is to change, the change should be in cpumask_setall() rather than
->>> in rcu_init_nohz().  But that is an argument for later, if at all.  ;-)
->>>
->>>>> +
->>>>>   	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
->>
->> We could also suppress the pr_info() by making it conditional.
->>
->> like:
->>
->> if (!CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) {
->> 	pr_info(...);
->> }
->>
->> In other words, we could make the cpumask_and() as expected/normal on
->> systems with sparse CPU numbering schemes. Would that work?
+> On Jul 19, 2022, at 11:28 AM, Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> That would be a good within-RCU workaround if we get an urgent complaint,
-> but if this requires a change, shouldn't cpumask_setall() refrain from
-> setting bits for non-existent CPUs?  It does refrain from setting any
-> bits beyond the largest-numbered CPU.
+> On Sun, 17 Jul 2022 22:54:47 -0700
+> Song Liu <song@kernel.org> wrote:
 > 
-> But perhaps there is an early boot reason why cpumask_setall() cannot
-> do this?
+> Again, make the subject:
+> 
+>  ftrace: Allow IPMODIFY and DIRECT ops on the same function
+> 
+Will fix. 
 
-Agreed, it would be great if it did not set those bits. I checked other
-places in the kernel like kernel/sched/core.c and cannot find that it is
-masking the bits after the setall(), so maybe its Ok?
+> [...]
 
-> Either way, we are just doing a pr_info(), not a WARN_ON() or similar,
-> so the current state is probably fine.
+>> +
+>> +/*
+>> + * For most ftrace_ops_cmd,
+>> + * Returns:
+>> + *        0 - Success.
+>> + *        -EBUSY - The operation cannot process
+>> + *        -EAGAIN - The operation cannot process tempoorarily.
+> 
+> Just state:
+> 
+> 	Returns:
+> 		0 - Success
+> 		Negative on failure. The return value is dependent
+> 		on the callback.
+> 
+> Let's not bind policy of the callback with ftrace.
 
-Agreed, thanks.
-
- - Joel
+Will fix. 
 
 > 
-> 							Thanx, Paul
+>> + */
+>> +typedef int (*ftrace_ops_func_t)(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
+>> +
+>> #ifdef CONFIG_DYNAMIC_FTRACE
+>> /* The hash used to know what functions callbacks trace */
+>> 
+
+[...]
+
+>> 
+>> -	if (!(ops->flags & FTRACE_OPS_FL_IPMODIFY))
+>> +	is_ipmodify = ops->flags & FTRACE_OPS_FL_IPMODIFY;
+>> +	is_direct = ops->flags & FTRACE_OPS_FL_DIRECT;
+>> +
+>> +	/* either IPMODIFY nor DIRECT, skip */
+>> +	if (!is_ipmodify && !is_direct)
+>> 		return 0;
 > 
->> Thanks,
->>
->>  - Joel
->>
->>
->>>>>   		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
->>
->>
->>
->>>>>   		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+> I wonder if we should also add:
+> 
+> 	if (WARN_ON_ONCE(is_ipmodify && is_direct))
+> 		return 0;
+> 
+> As a direct should never have an ipmodify.
+
+Right, I will also remove IPMODIFY from direct_ops:
+
+@ -2487,8 +2490,7 @@ static void call_direct_funcs(unsigned long ip, unsigned long pip,
+
+ struct ftrace_ops direct_ops = {
+        .func           = call_direct_funcs,
+-       .flags          = FTRACE_OPS_FL_IPMODIFY
+-                         | FTRACE_OPS_FL_SAVE_REGS
++       .flags          = FTRACE_OPS_FL_SAVE_REGS
+                          | FTRACE_OPS_FL_PERMANENT,
+        /*
+         * By declaring the main trampoline as this trampoline
+
+
+> 
+>> 
+>> 	/*
+>> -	 * Since the IPMODIFY is a very address sensitive action, we do not
+>> -	 * allow ftrace_ops to set all functions to new hash.
+>> +	 * Since the IPMODIFY and DIRECT are very address sensitive
+>> +	 * actions, we do not allow ftrace_ops to set all functions to new
+>> +	 * hash.
+
+[...]
+
+> 
+> Again, these are ops_func() specific and has nothing to do with the logic
+> in this file. Just state:
+> 
+> * Returns:
+> *         0 - @ops does not have IPMODIFY or @ops itself is DIRECT, no
+> *             change needed;
+> *         1 - @ops has IPMODIFY, hold direct_mutex;
+> *         Negative on error.
+> 
+> And if we move the logic that this does not keep hold of the direct_mutex,
+> we could just let the callback return any non-zero on error.
+> 
+>> + */
+>> +static int prepare_direct_functions_for_ipmodify(struct ftrace_ops *ops)
+>> +	__acquires(&direct_mutex)
+>> +{
+>> +	struct ftrace_func_entry *entry;
+>> +	struct ftrace_hash *hash;
+>> +	struct ftrace_ops *op;
+>> +	int size, i, ret;
+>> +
+>> +	if (!(ops->flags & FTRACE_OPS_FL_IPMODIFY))
+>> +		return 0;
+>> +
+>> +	mutex_lock(&direct_mutex);
+>> +
+>> +	hash = ops->func_hash->filter_hash;
+>> +	size = 1 << hash->size_bits;
+>> +	for (i = 0; i < size; i++) {
+>> +		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+>> +			unsigned long ip = entry->ip;
+>> +			bool found_op = false;
+>> +
+>> +			mutex_lock(&ftrace_lock);
+>> +			do_for_each_ftrace_op(op, ftrace_ops_list) {
+>> +				if (!(op->flags & FTRACE_OPS_FL_DIRECT))
+>> +					continue;
+>> +				if (ops_references_ip(op, ip)) {
+>> +					found_op = true;
+>> +					break;
+> 
+> I think you want a goto here. The macros "do_for_each_ftrace_op() { .. }
+> while_for_each_ftrace_op()" is a double loop. The break just moves to the
+> next set of pages and does not break out of the outer loop.
+
+Hmmm... really? I didn't see it ...
+
+
+#define do_for_each_ftrace_op(op, list)                 \
+        op = rcu_dereference_raw_check(list);                   \
+        do
+
+#define while_for_each_ftrace_op(op)                            \
+        while (likely(op = rcu_dereference_raw_check((op)->next)) &&    \
+               unlikely((op) != &ftrace_list_end))
+
+Did I miss something...?
+
+> 
+> 					goto out_loop;
+> 
+>> +				}
+>> +			} while_for_each_ftrace_op(op);
+
+[...]
+
+> 
+>> 	mutex_lock(&ftrace_lock);
+>> 
+>> 	ret = ftrace_startup(ops, 0);
+>> 
+>> 	mutex_unlock(&ftrace_lock);
+>> 
+>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>> +	if (direct_mutex_locked)
+>> +		mutex_unlock(&direct_mutex);
+>> +#endif
+> 
+> Change this to:
+> 
+> out_unlock:
+> 	mutex_unlock(&direct_mutex);
+> 
+
+We still need #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS, as 
+direct_mutex is not defined without that config. 
+
+Thanks,
+Song
+
+[...]
+

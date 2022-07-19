@@ -2,112 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF3B5793A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9775793AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiGSG6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 02:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S233784AbiGSHAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 03:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiGSG6d (ORCPT
+        with ESMTP id S231602AbiGSHAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 02:58:33 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5AA275D8;
-        Mon, 18 Jul 2022 23:58:30 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 19 Jul
- 2022 14:58:27 +0800
-Message-ID: <50078eed-3c24-a4b5-1e21-3187daa9867a@amlogic.com>
-Date:   Tue, 19 Jul 2022 14:58:27 +0800
+        Tue, 19 Jul 2022 03:00:39 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A27B1E3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:00:33 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VJqbCMx_1658214018;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VJqbCMx_1658214018)
+          by smtp.aliyun-inc.com;
+          Tue, 19 Jul 2022 15:00:30 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     hch@lst.de
+Cc:     sagi@grimberg.me, kch@nvidia.com, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] nvmet-auth: Fix unsigned comparison with less than zero
+Date:   Tue, 19 Jul 2022 15:00:05 +0800
+Message-Id: <20220719070005.39531-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] clk: meson: s4: add s4 SoC clock controller driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220708062757.3662-1-yu.tu@amlogic.com>
- <20220708062757.3662-4-yu.tu@amlogic.com>
- <7fe9aab5-73a2-6209-ae65-d955c426f745@linaro.org>
- <f5bf2abd-4d60-523a-3f84-879da2f1c78a@amlogic.com>
- <152cee25-9a36-a948-98e7-847d9ee36c1f@linaro.org>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <152cee25-9a36-a948-98e7-847d9ee36c1f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-	Thank you very much for your prompt reply.
+The return from the call to nvmet_auth_challenge() and nvmet_setup_auth()
+is int, it can be a negative error code, however this is being assigned
+to an u16 variable 'status', so making 'status' an int, and change the
+position to keep the code format.
 
-On 2022/7/19 14:29, Krzysztof Kozlowski wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On 19/07/2022 08:02, Yu Tu wrote:
->> Hi Krzysztof,
->> 	Thank you for your advice.
->>
->> On 2022/7/12 17:44, Krzysztof Kozlowski wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> On 08/07/2022 08:27, Yu Tu wrote:
->>>> Add the peripheral clock controller found in the s4 SoC family.
->>>>
->>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>> ---
->>>>    MAINTAINERS                |    2 +-
->>>>    drivers/clk/meson/Kconfig  |   17 +
->>>>    drivers/clk/meson/Makefile |    1 +
->>>>    drivers/clk/meson/s4.c     | 4678 ++++++++++++++++++++++++++++++++++++
->>>>    drivers/clk/meson/s4.h     |  156 ++
->>>>    5 files changed, 4853 insertions(+), 1 deletion(-)
->>>>    create mode 100644 drivers/clk/meson/s4.c
->>>>    create mode 100644 drivers/clk/meson/s4.h
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index e4ca46c5c8a1..f116ec0642f2 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -1772,7 +1772,7 @@ M:	Jerome Brunet <jbrunet@baylibre.com>
->>>>    L:	linux-amlogic@lists.infradead.org
->>>>    S:	Maintained
->>>>    F:	Documentation/devicetree/bindings/clock/amlogic*
->>>> -F:	drivers/clk/meson/
->>>> +F:	drivers/clk/meson/*
->>>
->>> Why?
->> Warning is displayed when using checkpatch. I will correct it.
-> 
-> What warning?
-  ./scripts/checkpatch.pl --strict 
-0001-clk-meson-s4-add-s4-SoC-clock-controller-driver.patch
-WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-If I add that strange change, I won't have this WARNING.
-Should I ignore this warning?
-> 
-> Best regards,
-> Krzysztof
-> 
-> .
+This was found by coccicheck:
+
+./drivers/nvme/target/fabrics-cmd-auth.c:488:6-12: WARNING: Unsigned expression compared with zero: status < 0.
+./drivers/nvme/target/fabrics-cmd-auth.c:251:8-14: WARNING: Unsigned expression compared with zero: status < 0.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/nvme/target/fabrics-cmd-auth.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/nvme/target/fabrics-cmd-auth.c b/drivers/nvme/target/fabrics-cmd-auth.c
+index cc56e8c821ce..02d1931a8219 100644
+--- a/drivers/nvme/target/fabrics-cmd-auth.c
++++ b/drivers/nvme/target/fabrics-cmd-auth.c
+@@ -190,7 +190,7 @@ void nvmet_execute_auth_send(struct nvmet_req *req)
+ 	struct nvmf_auth_dhchap_success2_data *data;
+ 	void *d;
+ 	u32 tl;
+-	u16 status = 0;
++	int status = 0;
+ 
+ 	if (req->cmd->auth_send.secp != NVME_AUTH_DHCHAP_PROTOCOL_IDENTIFIER) {
+ 		status = NVME_SC_INVALID_FIELD | NVME_SC_DNR;
+@@ -443,7 +443,7 @@ void nvmet_execute_auth_receive(struct nvmet_req *req)
+ 	struct nvmet_ctrl *ctrl = req->sq->ctrl;
+ 	void *d;
+ 	u32 al;
+-	u16 status = 0;
++	int status = 0;
+ 
+ 	if (req->cmd->auth_receive.secp != NVME_AUTH_DHCHAP_PROTOCOL_IDENTIFIER) {
+ 		status = NVME_SC_INVALID_FIELD | NVME_SC_DNR;
+-- 
+2.20.1.7.g153144c
+

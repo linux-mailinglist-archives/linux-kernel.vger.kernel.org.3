@@ -2,167 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A299579870
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EE9579879
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235393AbiGSL1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        id S235507AbiGSL2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233150AbiGSL1t (ORCPT
+        with ESMTP id S236885AbiGSL2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:27:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C833539B9D;
-        Tue, 19 Jul 2022 04:27:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AC0E6153B;
-        Tue, 19 Jul 2022 11:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27226C341C6;
-        Tue, 19 Jul 2022 11:27:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658230067;
-        bh=ICfoiOvIJ0g5QzM4+e7yeMzRRcNF2dUhKeW6eYTC1KM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M2AgthR/UZxv+IYgZRyhRm2vc2G+gKFDqJuqdLzqQwRd2PrYXos4Hfcq0k0zpKBSX
-         fErVLAVTSDpUEnMVUcVEciW2eeB0FkWknkJx2bqGJ5VNqXJ/72k1nGWA5b5EE5l+5G
-         cO1ZzrZWFG5ScK7wVUccL8N1HM30mWgURoYNzWaU=
-Date:   Tue, 19 Jul 2022 13:27:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zheng Yejian <zhengyejian1@huawei.com>
-Cc:     jiangshanlai@gmail.com, josh@joshtriplett.org,
-        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        paulmck@linux.vnet.ibm.com, peterz@infradead.org,
-        rostedt@goodmis.org, stable@vger.kernel.org, xukuohai@huawei.com
-Subject: Re: [PATCH 4.19] rcu/tree: Mark functions as notrace
-Message-ID: <YtaVME8upwGDi5iz@kroah.com>
-References: <YtF8EKyR2/ztAYd9@kroah.com>
- <20220716153424.49327-1-zhengyejian1@huawei.com>
+        Tue, 19 Jul 2022 07:28:17 -0400
+Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2181.outbound.protection.outlook.com [40.92.63.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033FF40BC6;
+        Tue, 19 Jul 2022 04:28:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lYPMQY+sxR3sWU7d1mYpTd29bov4JZIKTsmWHYJtLgvNp0dPrZmCMB+sYBD48UawJsB6PiSV9O5u4uY40NsuhjicbJQRCeqjU2EACtgpCodBuKkJu6HQBAccFwePJfUzhYuUfMS64mZOOMnQZW5Xlm2nx4q5vmjS1RwK5ZbobKPtw9xKQcPnslbERFxQTjxHeaE5b2rPbpdfDoWu/yf7MfrP+ujSrVoyQftmGzXf/qv3iQ83Lr0eLMQa6ojWM4TrKmBTiRnHyXTnYP5N7t1WPrImRH8UI0x2OtUZvt4xPsDFm9aTt0sudoYYMp2wcFUeOVyBRXQx/L/JI1akyeSLOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L/1StnuZoTod2g2y2vLeW5+xqzCb+EfjZ+W+PgbhEAE=;
+ b=dtBYmYOaYW3ET1R1QL54dCqnKEUWiER42+jvMVdIdRuxK5RiUBOC2m5h0Ysp5biALmtqmluHGLlIJbtcejC085riYxyR+kKRSCZPzkozBGeGjcsP7cQAAQ4uahmY8eWXrJmh81JBGyzo+2ZhKftZJ/zKjd3zBhPG7XI8zTqPo0GwfY/P3R/GhlzMmwoTCG2QIlGcBgz10m5uOs+vQc/ANYZwHqjKj9FHAmh7qOt8BaGJapF00sU712u2MC4tnoZagQ2vPlN9StBT9Asjnenwc54Fsfp3iJw0dtCli7kOROfjcc7RpIOPES8CDydGf/b0aq4+tYos9oivLUGtjPbwKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L/1StnuZoTod2g2y2vLeW5+xqzCb+EfjZ+W+PgbhEAE=;
+ b=DQVXVkmcfRZLB2mKCbUuFJ62kL6zYFIm0cB8nh2RCZh4qnMJd3oc2K84qSyqw1DRBSg9KI3vqDkF3TdDXNTFZh/bcMfdMHg0aeXCrKVu80X0tZ1sr26eOCLuv98Cskp6uW2N4ftMYeNO0LcVToqKpKxBCNNkvuRYkTnYh1/RZgH2AXo/WjKufSTtDowNJwmxRrLM1m1xRXl5oYN9FNSXLFUZfeotiO+yEZIXQ97wK9K2jYtcbQarXuDmAnc3KBlgdf47ieDrWfIqLUSznoFJ5Cxhvp5fkn8zrCeLMz0gezGH35EhAsl/Ni6uD0bj7aBI9g23U9zQXD9qCX9bGe2vkw==
+Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:113::14)
+ by MEYP282MB2053.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:bd::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.20; Tue, 19 Jul
+ 2022 11:28:12 +0000
+Received: from MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::c4ba:5450:ad8:7a3c]) by MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::c4ba:5450:ad8:7a3c%7]) with mapi id 15.20.5438.024; Tue, 19 Jul 2022
+ 11:28:12 +0000
+From:   Yonglin Tan <yonglin.tan@outlook.com>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yonglin Tan <yonglin.tan@outlook.com>
+Subject: [PATCH] USB: serial: option: add Quectel EM060K modem
+Date:   Tue, 19 Jul 2022 19:28:00 +0800
+Message-ID: <MEYP282MB23740DC78FB0DE954C59D3DEFD8F9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-TMN:  [svlOW3bL6bZEvZ4LTVa/5UJs0hKTgzqk]
+X-ClientProxiedBy: TYCP286CA0046.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:2b5::6) To MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:220:113::14)
+X-Microsoft-Original-Message-ID: <1658230080-12659-1-git-send-email-yonglin.tan@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220716153424.49327-1-zhengyejian1@huawei.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 31161cf2-5f9d-4119-3f74-08da6979c375
+X-MS-Exchange-SLBlob-MailProps: +LiGfBxqLEsSlG+xIylouf0m7tfFNUetzVxLo9UhXttDyETPbSLAF/QAkjSz1TfegC2I6YRVuMj5ARlMYZAXsmG6kXYkPMfyMZs4K6Y46U6zZlvM+x4vpR5egl1T+p59YOY43Ap3g3Bd6uT18EmI6MTSqA2ztjfMYjg8MxROZhBn148FS4N9NrCAkHTi/a9K6KUfBaSX8xxYnX0PPEivc294FX3UBcUHY7tpJhF01fz9KHo7k36SV0uz505i5wbE4e3Dnr2I20p8+GGs5B7ilMV4pt8kqzbZp7pX93qf/aZfkx5E85bDKrJ7GbCE7bOfn+IZTTuXBBa9oYbMzfE0Ls49jY7JXO3soY2eyWQj/CdIS5/WMdLCbJ+/h0K4i/YxADgQ9NaGNBgeymS7nS9ng0ZzltUWf71wnRKiyco6iiTe0yLmN/N5NkwvHT+Z3orphk6DpuMqxLKCprPTYlo/Q3XcvaTWxavMJ6sjYEdi/KO7T8LmHNQ1MD9dUPL3i6aZjJK1vDodK2f2hCYid/Mj3FV4UKVdVKiu1SdQKPZSr6fQdd9eNEslZDdXMu6+VN5RgF+ayUqbiBzvw9fRVIMLvbogLVH5ZXc9ER1TY156zBDSI6uXkI00BtJvV1ZoV7wc2IKiBR1b/sCyOX/B8prmN4ez7FGwsSKHwJwzsVAmzYbh5HieOSgfTHJSshNk4NbXQ+Ldmv6IW4zAXAJVOoBy9b1Zr7EKRf+CyVNadz1k/KtbitSzc1nnYBzB2MyGjO/Ewt6StyI0jsYj2Kx1KjmgGJTEhxxrGmyF
+X-MS-TrafficTypeDiagnostic: MEYP282MB2053:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UQGuf0buv3KZAExC6fE6BVb+cyw20av5cEdkBYbMDiqVSO0CUZiaPPlcWLHmFQi4mbM6eKaUQCQIEukQLV+JPlpdvnlXIMOHlkT1FBpZb2TptjeAekkq5/34l36uEZXe/Fovlzq8XeTAS/awURqdOiMlhjZSKdUFjqhnJwsKoov/YbVi/DlgQSR6TabSB3KF8DDBXTiinkhm20I/AyBIbTwskPckYqjAoEAnUtrt1wG3H8DPHj0k77fJnKUPcvsc3bfthOS6AhVFPsUpQqiMYzEJCkVkgyVyVP6b/cnzBTOqm8RxVZWu+wSE2pTyER5pEg3kQhi3A+3Ul6j02Gr8M33bGoVD08UAak+OpFtYgSdlk3UdEPJ/EdbeSGa2mcDjqD2tu/H9SLVdf6CgOV4nYMls42AGN4zQQYw2RrcKnrO+5ftgzIX7KjkUdcG95pTi1RC5hZSd2L/4XTFWlYF2zb4haPYouUEZ8c5q4xIdwZtXKk1gl47yw8E7UujxRCvGyGFRtCRAgaF1RDTU+q8mB5qGFKHuXwZ6+qwDP52kQQaOwNaU+fxFdOEg8WQ//MLXSGQmMZkFBmw5Wr2osCNdY9Keypy+TSH8RNli554B+Digmn66B57sU0pvjXA1MEmT0JF0sNT15U07DONogqoOcA==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BvwFEc5SCbH0/sbH+kFt50YKUOXrrMCfeNEqa5zp8BuQyPFnlFpbrWXjLInN?=
+ =?us-ascii?Q?EnCkkeNdRUxTnECG2pe70o0Cby6zY6UQMrFUgq4YA9BNlxUAjW3uKwdtZ8Kv?=
+ =?us-ascii?Q?kDruHLLrHQThX36Ay3V58bLiIvwA8XIZLDBGHgYXqAEp2MSWIgh4W6+BfCEO?=
+ =?us-ascii?Q?mIanLOmGIPR3G3fy+/KXoR2nlRBKMaBsDgIIOhcpXERZda5xkky9W/nsRvhk?=
+ =?us-ascii?Q?YlavZ6wIvkrYHQxCxpOXFH3EdQAN4Qj/M/twEBoVXbJdAaoCISL1T4iWKRuZ?=
+ =?us-ascii?Q?H4yfEXjh5jK+ZCYLU8QEGHpZxwl13IBIvA++yd+2RejnCsWphFq3ZxQWGP9J?=
+ =?us-ascii?Q?DYGO/ferKvlix8i8VjLS389U8nUXactmw/TWKlfkcedr2IrEYOs19Ynim2hF?=
+ =?us-ascii?Q?A4mDQPJa+INIW8oSFw0gZmUrqh2hjXk8sP952KgafLNxz3zAhIT5PX19xVYt?=
+ =?us-ascii?Q?xL9iPqTyMI9aOalTBcqz4WNPRM0pvnOU5ofziKY9/nuVUUGsnXpcC17dousn?=
+ =?us-ascii?Q?Li5UbcUoUi6ua9LEk+Io5y6czAH8/WnIq49bBnTXMYXIgl1HsptBGXtZhwHN?=
+ =?us-ascii?Q?KH187HHcCRrG5V9AYYKO85AgnFI7qEPAdrcwVUs9hdvsxcElrOLxtdcqDlPB?=
+ =?us-ascii?Q?9zBNGCGnXtt/DtoExpTCUda/yEl1YvjxG1LC8o00vVaGV0O5SICqsM8jNZgF?=
+ =?us-ascii?Q?sefxn/nTmq/dG1Sb52uF3MDo+8sG50oy4p2IbMW8CN8U9453+U+gdT5UfJi6?=
+ =?us-ascii?Q?rSdWTZwutRqrPtVJzXg2mqe/soO7gHNCEb1A/fmOyShFCXQxV6EdLlGaE/J7?=
+ =?us-ascii?Q?ulkFIYGUgpQ6O481g6w8F3pUPPo5k5xmNOCHwf5XzPvZMA+KgRptUjp95TrK?=
+ =?us-ascii?Q?S9LwOZ2+OTuGRdYVdmX5M+FCrErShRnhNmsJXuGaJS6lUUf3emYvWW2UOKlg?=
+ =?us-ascii?Q?gGhn+yaG3IkyuqEOJZBpe4447lyTviyhIAyc5ArzEOL/MhVrdqwQA1+0lTTl?=
+ =?us-ascii?Q?37sLf2MP+q7LHHQeIDTFVdiLKU/W8POWaqx0O6KRGHLQEnPuKTBjG3yZ/s+u?=
+ =?us-ascii?Q?WO15mJ1xn0ZoujaULFaU4z1JO8hymDNLAZvuZ1MzwHk5fPkG2l9bs73Gb9PH?=
+ =?us-ascii?Q?7/Lk/ovI/c0MnaLSede7qcWJzmCHmezs9Md6XXPoAySOKsJCkgKqxd1NVONk?=
+ =?us-ascii?Q?mZdvzbktLFAozRsceUoFzD3deBIrwH1KOvRcybmgIPxQIhw5F3Hf71hgw3Pv?=
+ =?us-ascii?Q?rsfpq5FMoKPIJg/DFi/hZFEaiSqOkcnOT0T4qppoFA=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31161cf2-5f9d-4119-3f74-08da6979c375
+X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 11:28:11.9890
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MEYP282MB2053
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 11:34:24PM +0800, Zheng Yejian wrote:
-> On Fri, 15 Jul 2022 16:39:12 +0200
-> Greg KH <gregkh@linuxfoundation.org> wrote:
-> > On Wed, Jul 13, 2022 at 06:20:09PM +0800, Zheng Yejian wrote:
-> > > This patch and problem analysis is based on v4.19 LTS, but v5.4 LTS
-> > > and below seem to be involved.
-> > >
-> > > Hulk Robot reports a softlockup problem, see following logs:
-> > >   [   41.463870] watchdog: BUG: soft lockup - CPU#0 stuck for 22s!  [ksoftirqd/0:9]
-> > >   [   41.509763] Modules linked in:
-> > >   [   41.512295] CPU: 0 PID: 9 Comm: ksoftirqd/0 Not tainted 4.19.90 #13
-> > >   [   41.516134] Hardware name: linux,dummy-virt (DT)
-> > >   [   41.519182] pstate: 80c00005 (Nzcv daif +PAN +UAO)
-> > >   [   41.522415] pc : perf_trace_buf_alloc+0x138/0x238
-> > >   [   41.525583] lr : perf_trace_buf_alloc+0x138/0x238
-> > >   [   41.528656] sp : ffff8000c137e880
-> > >   [   41.531050] x29: ffff8000c137e880 x28: ffff20000850ced0
-> > >   [   41.534759] x27: 0000000000000000 x26: ffff8000c137e9c0
-> > >   [   41.538456] x25: ffff8000ce5c2ae0 x24: ffff200008358b08
-> > >   [   41.542151] x23: 0000000000000000 x22: ffff2000084a50ac
-> > >   [   41.545834] x21: ffff8000c137e880 x20: 000000000000001c
-> > >   [   41.549516] x19: ffff7dffbfdf88e8 x18: 0000000000000000
-> > >   [   41.553202] x17: 0000000000000000 x16: 0000000000000000
-> > >   [   41.556892] x15: 1ffff00036e07805 x14: 0000000000000000
-> > >   [   41.560592] x13: 0000000000000004 x12: 0000000000000000
-> > >   [   41.564315] x11: 1fffefbff7fbf120 x10: ffff0fbff7fbf120
-> > >   [   41.568003] x9 : dfff200000000000 x8 : ffff7dffbfdf8904
-> > >   [   41.571699] x7 : 0000000000000000 x6 : ffff0fbff7fbf121
-> > >   [   41.575398] x5 : ffff0fbff7fbf121 x4 : ffff0fbff7fbf121
-> > >   [   41.579086] x3 : ffff20000850cdc8 x2 : 0000000000000008
-> > >   [   41.582773] x1 : ffff8000c1376000 x0 : 0000000000000100
-> > >   [   41.586495] Call trace:
-> > >   [   41.588922]  perf_trace_buf_alloc+0x138/0x238
-> > >   [   41.591912]  perf_ftrace_function_call+0x1ac/0x248
-> > >   [   41.595123]  ftrace_ops_no_ops+0x3a4/0x488
-> > >   [   41.597998]  ftrace_graph_call+0x0/0xc
-> > >   [   41.600715]  rcu_dynticks_curr_cpu_in_eqs+0x14/0x70
-> > >   [   41.603962]  rcu_is_watching+0xc/0x20
-> > >   [   41.606635]  ftrace_ops_no_ops+0x240/0x488
-> > >   [   41.609530]  ftrace_graph_call+0x0/0xc
-> > >   [   41.612249]  __read_once_size_nocheck.constprop.0+0x1c/0x38
-> > >   [   41.615905]  unwind_frame+0x140/0x358
-> > >   [   41.618597]  walk_stackframe+0x34/0x60
-> > >   [   41.621359]  __save_stack_trace+0x204/0x3b8
-> > >   [   41.624328]  save_stack_trace+0x2c/0x38
-> > >   [   41.627112]  __kasan_slab_free+0x120/0x228
-> > >   [   41.630018]  kasan_slab_free+0x10/0x18
-> > >   [   41.632752]  kfree+0x84/0x250
-> > >   [   41.635107]  skb_free_head+0x70/0xb0
-> > >   [   41.637772]  skb_release_data+0x3f8/0x730
-> > >   [   41.640626]  skb_release_all+0x50/0x68
-> > >   [   41.643350]  kfree_skb+0x84/0x278
-> > >   [   41.645890]  kfree_skb_list+0x4c/0x78
-> > >   [   41.648595]  __dev_queue_xmit+0x1a4c/0x23a0
-> > >   [   41.651541]  dev_queue_xmit+0x28/0x38
-> > >   [   41.654254]  ip6_finish_output2+0xeb0/0x1630
-> > >   [   41.657261]  ip6_finish_output+0x2d8/0x7f8
-> > >   [   41.660174]  ip6_output+0x19c/0x348
-> > >   [   41.663850]  mld_sendpack+0x560/0x9e0
-> > >   [   41.666564]  mld_ifc_timer_expire+0x484/0x8a8
-> > >   [   41.669624]  call_timer_fn+0x68/0x4b0
-> > >   [   41.672355]  expire_timers+0x168/0x498
-> > >   [   41.675126]  run_timer_softirq+0x230/0x7a8
-> > >   [   41.678052]  __do_softirq+0x2d0/0xba0
-> > >   [   41.680763]  run_ksoftirqd+0x110/0x1a0
-> > >   [   41.683512]  smpboot_thread_fn+0x31c/0x620
-> > >   [   41.686429]  kthread+0x2c8/0x348
-> > >   [   41.688927]  ret_from_fork+0x10/0x18
-> > >
-> > > Look into above call stack, there is a recursive call in
-> > > 'ftrace_graph_call', and the direct cause of above recursion is that
-> > > 'rcu_dynticks_curr_cpu_in_eqs' is traced, see following snippet:
-> > >     __read_once_size_nocheck.constprop.0
-> > >       ftrace_graph_call    <-- 1. first call
-> > >         ......
-> > >           rcu_dynticks_curr_cpu_in_eqs
-> > >             ftrace_graph_call    <-- 2. recursive call here!!!
-> > >
-> > > Comparing with mainline kernel, commit ff5c4f5cad33 ("rcu/tree:
-> > > Mark the idle relevant functions noinstr") mark related functions as
-> > > 'noinstr' which implies notrace, noinline and sticks things in the
-> > > .noinstr.text section.
-> > > Link: https://lore.kernel.org/all/20200416114706.625340212@infradead.org/
-> > >
-> > > But we cannot directly backport that commit, because there seems to be
-> > > many prepatches. Instead, marking the functions as 'notrace' where it is
-> > > 'noinstr' in that commit and mark 'rcu_dynticks_curr_cpu_in_eqs' as
-> > > inline look like it resolves the problem.
-> > >
-> > > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > > Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-> > > ---
-> > >  kernel/rcu/tree.c        | 22 +++++++++++-----------
-> > >  kernel/rcu/tree_plugin.h |  4 ++--
-> > >  2 files changed, 13 insertions(+), 13 deletions(-)
-> >
-> > Given that no one has noticed this on 4.19 yet, this change is very odd.
-> >
-> > What changed to cause this to suddenly happen?  How did you test this
-> > change, and as you did change the function to be __alaways_inline, what
-> > did that cause to have happen?
-> 
-> Hi greg, Steve had similar questions, so answer them together in:
-> https://lore.kernel.org/lkml/20220716152313.46350-1-zhengyejian1@huawei.com/
-> 
-> There are something need to be discussed.
+Add usb product id entry for the Quectel EM060K module.
 
-Great, I'll drop this from my patch queue, please work to find the real
-issue and solution here.
+"MBIM mode": DIAG + NMEA + AT + MODEM + MBIM
 
-thanks,
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  8 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=030b Rev= 5.04
+S:  Manufacturer=Quectel
+S:  Product=EM060K-GL
+S:  SerialNumber=89fb57db
+C:* #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 8 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 8 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 9 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 9 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#=12 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-greg k-h
+Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
+---
+ drivers/usb/serial/option.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index de59fa9..9c2039e 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -253,6 +253,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_BG96			0x0296
+ #define QUECTEL_PRODUCT_EP06			0x0306
+ #define QUECTEL_PRODUCT_EM05G			0x030a
++#define QUECTEL_PRODUCT_EM060K			0x030b
+ #define QUECTEL_PRODUCT_EM12			0x0512
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
+ #define QUECTEL_PRODUCT_EC200S_CN		0x6002
+@@ -1138,6 +1139,9 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0, 0) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G, 0xff),
+ 	  .driver_info = RSVD(6) | ZLP },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0xff, 0xff),
+ 	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) | RSVD(4) | NUMEP2 },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0, 0) },
+-- 
+2.7.4
+

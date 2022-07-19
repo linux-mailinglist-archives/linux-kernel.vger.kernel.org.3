@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B4F57A63A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E47D57A640
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239964AbiGSSMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
+        id S239954AbiGSSNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 14:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239948AbiGSSMD (ORCPT
+        with ESMTP id S232034AbiGSSM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:12:03 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B67B5C9C5;
-        Tue, 19 Jul 2022 11:11:51 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id j1-20020a17090aeb0100b001ef777a7befso2040857pjz.0;
-        Tue, 19 Jul 2022 11:11:51 -0700 (PDT)
+        Tue, 19 Jul 2022 14:12:59 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E0D545C7;
+        Tue, 19 Jul 2022 11:12:59 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id e16so14295588pfm.11;
+        Tue, 19 Jul 2022 11:12:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZL20oedxmnviAUBaSn09RaT61qD24EJ96IDebQUMg7o=;
-        b=koR2hgNK02+h8dwMhuV320QqlSM+AEHej7R8HdCtvK2ntQJvIgscNaNNYBxjF5pLWQ
-         ex8NnMort4zNWxCIgAe6Qmam7JiBhTSa5T6tsgA/P8Ow1sd7ozlT3j0Lot7vrfRksgmW
-         Ls2pk5IrLgQuyufpu2AzaCP3pkA23KWysu1BfFZIesbsfLcVu0LRwjj2y1JwLBQv6d7G
-         8QbPTYO67g6kxpUS0BF8YcftazXm9jmAuBYQStNcoPdvwX5c0yBwHNXSxQ3ohxzX1n92
-         R62jCBtyHhVFF2nJyDPfW4qaatd0vRI9UyO8Y8Au5098XxO9iWv/r5nvucY1h7zy6+3Q
-         05Ww==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lx48cK2mO82aDssLzSprNsDu8ZPznwsFdIksxVa34nI=;
+        b=p9TgEkgHFMpUpt8wgKRPpuHLgFeJrKGezWQlCxEX4DQ61ebKgRddD+aVPtRsontDul
+         ca6oZocVqAoNx70rWVOPSck2idBpruWwjRF9/JkYWKsGBmaMfTEM3C8tRdIK4wqUFqIk
+         xwx/4slk+6G8ioesR/3sUY6aMNII0OK8U20ktYgy4P2zwOQJXhwUPn4bvnxege9pKhCa
+         axHzwWGGfXo6/nTXsj7Scbu9BzLt4/rG8nwQ6z6PFTx7HmmVS+mWLpvD0KQ0jBJFenTD
+         x7+1Kddu5yczhWCu0Oj84gAxY91LaMtowvXKmeSe1bkWmciLyy0NdzEl63mv7nLMf3e9
+         jG1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZL20oedxmnviAUBaSn09RaT61qD24EJ96IDebQUMg7o=;
-        b=54nEBJs4jezkKrqlt+tkquHhmeSxEcfWjlAguhqLNNDpFAYBoSNifzX0yFDLy45rVg
-         w1wruv2ExgMIBvsO2gTorRUY5aUo4oJz0Bu4LE0L3BVmagPZtkHBDLYQNUERXcorZKTi
-         JrZN3E27/wJcB1t1A5jk5YRVn68ocY/Zxv4AcVaYjSW6U/JfwqwLD0W2xFylwZmmNws7
-         o1fUIVIcxTA4Mw0ckjxu2SPjHCSGDQVd4c3iWl5zav51RBVkygk5pIvfN4vlQaN6Sd53
-         YreXl18Zj6q8YFVCManYgq43yqzDAnLfrZz2h62BvWyEV+B5hh4Eq4O0fCss2gAtlXAS
-         0U5Q==
-X-Gm-Message-State: AJIora8AgscakNPQ/bmOLvs0yEMfVgh9MosZVoxQCQOZo1o7HDfgE3CB
-        PIUuohCDav7tnA/6Mw8VSdc=
-X-Google-Smtp-Source: AGRyM1uqvqhcR6WESD+U85o78Rvej+05X9CxZkttsyBFYkchWQgiTrKSLe9DXGeXGDP2+Ktl6JQNTw==
-X-Received: by 2002:a17:902:cf4c:b0:16d:1175:9ed0 with SMTP id e12-20020a170902cf4c00b0016d11759ed0mr3260447plg.66.1658254310598;
-        Tue, 19 Jul 2022 11:11:50 -0700 (PDT)
-Received: from [192.168.1.106] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id g5-20020aa79f05000000b005283f9e9b19sm6964517pfr.180.2022.07.19.11.11.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 11:11:50 -0700 (PDT)
-Message-ID: <ae1ef021-abfa-dbfb-91c1-2624ceb04d31@gmail.com>
-Date:   Tue, 19 Jul 2022 11:11:48 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lx48cK2mO82aDssLzSprNsDu8ZPznwsFdIksxVa34nI=;
+        b=TN+/Q8PGXkIpquw5O6fXtwJ7feybXBR71T7+KVyav8fh6gcAn54q/as9fF2eCe1ffA
+         kfQNJbHREAdEbqRba5rRv5K2hlbnpQeHPq5bKUxL+8jXdr6caFqtVvSlD2eJn+C/6RVx
+         7d3oO3Coq3yc+I6xfEWYHHP23DjEphYoBxiYgVV4+neOc7Mv1JQ24hAQgPJW5rhzJHkw
+         v69Bn/z5I6jPW4FioVO/5uNTK9TDgJoY17prom9VWhLLj6jSKspReeKUKSDa25LLXBE3
+         +n+mjvzGnoALBs7vdCC1Ug92Ia7epXjFHfmOrK0JqB2aYsscvzdcfXDTT4zEsCCDcqtz
+         BnvQ==
+X-Gm-Message-State: AJIora9BMDDesmPPxVEkxiFwePioNnYPXb9pdqSObsypcACjydeeFCFm
+        RHIGxekMuD9KUhaKbwpVlfY=
+X-Google-Smtp-Source: AGRyM1uZKjd3vypiOzvYHAG42NpxKsJpXUN/a41VFp/AwjkZchOlzYyPloGwvMHwk0QLhdR9kxYVyg==
+X-Received: by 2002:a63:5810:0:b0:40d:77fb:1c25 with SMTP id m16-20020a635810000000b0040d77fb1c25mr30287980pgb.570.1658254378556;
+        Tue, 19 Jul 2022 11:12:58 -0700 (PDT)
+Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902f60c00b0016d0beb6ce0sm1897179plg.246.2022.07.19.11.12.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 11:12:58 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 11:12:56 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Yuan Yao <yuan.yao@linux.intel.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v7 053/102] KVM: TDX: don't request
+ KVM_REQ_APIC_PAGE_RELOAD
+Message-ID: <20220719181256.GB1379820@ls.amr.corp.intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+ <bcdcc4175321ff570a198aa55f8ac035de2add1f.1656366338.git.isaku.yamahata@intel.com>
+ <20220712034743.glrfvpx54ja6jrzg@yy-desk-7060>
+ <20220712061439.GA28707@gao-cwp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH 5.4 00/71] 5.4.207-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220719114552.477018590@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220712061439.GA28707@gao-cwp>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,30 +75,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 12, 2022 at 02:14:45PM +0800,
+Chao Gao <chao.gao@intel.com> wrote:
+
+> On Tue, Jul 12, 2022 at 11:47:43AM +0800, Yuan Yao wrote:
+> >On Mon, Jun 27, 2022 at 02:53:45PM -0700, isaku.yamahata@intel.com wrote:
+> >> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> >>
+> >> TDX doesn't need APIC page depending on vapic and its callback is
+> >> WARN_ON_ONCE(is_tdx).  To avoid unnecessary overhead and WARN_ON_ONCE(),
+> >> skip requesting KVM_REQ_APIC_PAGE_RELOAD when TD.
+> 
+> !kvm_gfn_shared_mask() doesn't ensure the VM is a TD. Right?
 
 
-On 7/19/2022 4:53 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.207 release.
-> There are 71 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.207-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+That's right. I changed the check as follows.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and built tested 
-with BMIPS_GENERIC (bmips_stb_defconfig):
+commit 6753fc53f3b3fcbbd07ac688578ff5fb7f7f7d96 (HEAD)
+Author: Isaku Yamahata <isaku.yamahata@intel.com>
+Date:   Wed Mar 30 22:32:03 2022 -0700
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+    KVM: TDX: don't request KVM_REQ_APIC_PAGE_RELOAD
+    
+    TDX doesn't need APIC page depending on vapic and its callback is
+    WARN_ON_ONCE(is_tdx).  To avoid unnecessary overhead and WARN_ON_ONCE(),
+    skip requesting KVM_REQ_APIC_PAGE_RELOAD when TD.
+    
+      WARNING: arch/x86/kvm/vmx/main.c:696 vt_set_apic_access_page_addr+0x3c/0x50 [kvm_intel]
+      RIP: 0010:vt_set_apic_access_page_addr+0x3c/0x50 [kvm_intel]
+      Call Trace:
+       vcpu_enter_guest+0x145d/0x24d0 [kvm]
+       kvm_arch_vcpu_ioctl_run+0x25d/0xcc0 [kvm]
+       kvm_vcpu_ioctl+0x414/0xa30 [kvm]
+       __x64_sys_ioctl+0xc0/0x100
+       do_syscall_64+0x39/0xc0
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+    
+    Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 51ba2d163ec4..bfd7ed6ba385 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10045,7 +10045,9 @@ void kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+         * Update it when it becomes invalid.
+         */
+        apic_address = gfn_to_hva(kvm, APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT);
+-       if (start <= apic_address && apic_address < end)
++       /* TDX doesn't need APIC page. */
++       if (kvm->arch.vm_type != KVM_X86_TDX_VM &&
++           start <= apic_address && apic_address < end)
+                kvm_make_all_cpus_request(kvm, KVM_REQ_APIC_PAGE_RELOAD);
+ }
+ 
+
 -- 
-Florian
+Isaku Yamahata <isaku.yamahata@gmail.com>

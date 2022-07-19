@@ -2,47 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6C057A11D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9B357A141
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238988AbiGSOSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
+        id S238434AbiGSOV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238571AbiGSOSg (ORCPT
+        with ESMTP id S237569AbiGSOVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:18:36 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5358E1FCC0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:54:00 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LnKyP3nrlzlVt1;
-        Tue, 19 Jul 2022 21:52:13 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Jul 2022 21:53:54 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 19 Jul
- 2022 21:53:54 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <dinguyen@kernel.org>
-Subject: [PATCH -next 3/3] firmware: stratix10-svc: add missing platform_device_unregister()
-Date:   Tue, 19 Jul 2022 22:02:57 +0800
-Message-ID: <20220719140257.3499657-3-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220719140257.3499657-1-yangyingliang@huawei.com>
-References: <20220719140257.3499657-1-yangyingliang@huawei.com>
+        Tue, 19 Jul 2022 10:21:45 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD2866B84
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:04:46 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id f24-20020a1cc918000000b003a30178c022so9993001wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=L94oHBSftAEa3rDT4AJ1V+PwG4JicNPHLRIniySo+rM=;
+        b=StLIAtFJw2aByBPEd5DWw/mCW7IX8gyCWM24C5VoqghqL3x7mLezHcKBXBVSrWP84Y
+         xwJElpDOvDRLZdnqDBCB9YrtqBbi8nAuLZ7PkqfcIRG8P2uZCRlaQkLM/e0+BkVvjmzf
+         EoBA2nTXSoq6MqT7QsrHRWmlaghdUAZFzDjzMxYZw0AaCjJao/XrX/wnTYMTML475E5j
+         GANHdeYrjqP2moSb/cJNcp5EQWfLnCtQtrtdNtWENXrpj2oBY6tzngcPwdFsMkZ0Uyqh
+         mwM+Zonn09DR2yP4vuGqU45N6YFgxne2OxhbnzW1eCaZhoRvB4Ton3Y7R0TYnMCqorjq
+         0BFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=L94oHBSftAEa3rDT4AJ1V+PwG4JicNPHLRIniySo+rM=;
+        b=y8tyYNLpVNv5xOSDOmVXLkJUmfiFtEhJfkRBmYCKpOI6T+U/K8prrVIBxDKr5/BeXi
+         zQ13Gz/PkYZgSKg1Onm1BFy5KYe/qHuXqj6qTdeZKfuc6fFabomvKyV4Y3LrIOzeEuKy
+         TJ0Bxn2y44r0RLyL+sBYmRUi7PFCYKXCmWkSrZGTowQeBMpA2M98AtdUpT7J+BMF39mO
+         dChk4tN55U8QA/W78hYLRPTGm3eUxBlYpXgUAWhUgZgpDU2pmtOXifyptGTR9u1Ktarl
+         YUb1oPiFN6aZCNvAiB4BRfkB51mb8v9ySiHZc9haADvU15PDMwNCdREbZ0liOXGbc+sK
+         l+gA==
+X-Gm-Message-State: AJIora9DnuIan/zK+gD9h9H5Ab+ZlflzJRbdNeCcXCi4lfTlOyduxLGz
+        yTaFkuIttgpfeL2Bfb89vdZdt2O8FpIjAA==
+X-Google-Smtp-Source: AGRyM1tjuVhJR84hP2gMCuawKRlwNGX9ih4Tn6UUGN84EYqew++4Z1I0GdyS8KZxc7vD+L14OYUgug==
+X-Received: by 2002:a1c:7915:0:b0:3a3:11a3:7452 with SMTP id l21-20020a1c7915000000b003a311a37452mr15511350wme.27.1658239485155;
+        Tue, 19 Jul 2022 07:04:45 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id i16-20020a5d5230000000b0021d9d13bf6csm13252481wra.97.2022.07.19.07.04.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 07:04:44 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 15:04:41 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Haimin Zhang <tcs.kernel@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        David Howells <dhowells@redhat.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Haimin Zhang <tcs_kernel@tencent.com>,
+        TCS Robot <tcs_robot@tencent.com>
+Subject: Re: [PATCH v2] fs/pipe: Deinitialize the watch_queue when pipe is
+ freed
+Message-ID: <Yta5+UOcK2rgBT6q@google.com>
+References: <20220509131726.59664-1-tcs.kernel@gmail.com>
+ <Ynl+kUGRYaovLc8q@sol.localdomain>
+ <YsVYQAQ8ylvMQtR2@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YsVYQAQ8ylvMQtR2@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,44 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing platform_device_unregister() in error path in
-stratix10_svc_drv_probe().
+On Wed, 06 Jul 2022, Lee Jones wrote:
 
-Fixes: e6281c26674e ("firmware: stratix10-svc: Add support for FCS")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/firmware/stratix10-svc.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> On Mon, 09 May 2022, Eric Biggers wrote:
+> 
+> > On Mon, May 09, 2022 at 09:17:26PM +0800, Haimin Zhang wrote:
+> > > From: Haimin Zhang <tcs_kernel@tencent.com>
+> > > 
+> > > Add a new function call to deinitialize the watch_queue of a freed pipe.
+> > > When a pipe node is freed, it doesn't make pipe->watch_queue->pipe null.
+> > > Later when function post_one_notification is called, it will use this
+> > > field, but it has been freed and watch_queue->pipe is a dangling pointer.
+> > > It makes a uaf issue.
+> > > Check wqueu->defunct before pipe check since pipe becomes invalid once all
+> > > watch queues were cleared.
+> > > 
+> > > Reported-by: TCS Robot <tcs_robot@tencent.com>
+> > > Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
+> > 
+> > Is this fixing something?  If so it should have a "Fixes" tag.
+> 
+> It sure is.
+> 
+> Haimin, are you planning a v3?
 
-diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
-index cb824f63faa8..bde1f543f529 100644
---- a/drivers/firmware/stratix10-svc.c
-+++ b/drivers/firmware/stratix10-svc.c
-@@ -1209,13 +1209,13 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 	if (!svc->intel_svc_fcs) {
- 		dev_err(dev, "failed to allocate %s device\n", INTEL_FCS);
- 		ret = -ENOMEM;
--		goto err_free_kfifo;
-+		goto err_unregister_dev;
- 	}
- 
- 	ret = platform_device_add(svc->intel_svc_fcs);
- 	if (ret) {
- 		platform_device_put(svc->intel_svc_fcs);
--		goto err_free_kfifo;
-+		goto err_unregister_dev;
- 	}
- 
- 	dev_set_drvdata(dev, svc);
-@@ -1224,6 +1224,8 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+err_unregister_dev:
-+	platform_device_unregister(svc->stratix10_svc_rsu);
- err_free_kfifo:
- 	kfifo_free(&controller->svc_fifo);
- err_destroy_pool:
+This patch is set to fix a pretty public / important bug.
+
+Has there been any more activity that I may have missed?
+
+Perhaps it's been superseded?
+
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

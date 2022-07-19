@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6726C579AA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5984D579C0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239267AbiGSMPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
+        id S240602AbiGSMfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239172AbiGSMOT (ORCPT
+        with ESMTP id S240727AbiGSMeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:14:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB15B1010;
-        Tue, 19 Jul 2022 05:05:22 -0700 (PDT)
+        Tue, 19 Jul 2022 08:34:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70F077485;
+        Tue, 19 Jul 2022 05:13:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AED31B81B38;
-        Tue, 19 Jul 2022 12:05:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D446C341C6;
-        Tue, 19 Jul 2022 12:05:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C281361632;
+        Tue, 19 Jul 2022 12:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D752C341C6;
+        Tue, 19 Jul 2022 12:12:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232302;
-        bh=kPJAsjLpGBb2Q5ipTE7OnPID7nGe121aKEl9He9CuPQ=;
+        s=korg; t=1658232750;
+        bh=+9weaKiei4UsraWdur+ff2fnOPti+6SBDkR3LPIm2S0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MacgMPSjZ/XMYwnwS2u8yMlRc60TBzyI75CUbgbKGlA9o/qaKC0uM6VqsAi4BoPL4
-         WqxtPhpPL+6/iQhoVdZoDloUZz1+d3tg+XPFyl4CSMM0DE6mnGv5k985Zzx56belx5
-         /p8XgJjCyJlbhNRg3k6oJNhUY0lA86CmBEGiypIo=
+        b=fPv6z+jwJqQWOo6Az6sIo49djJKl5F5+FrFCXVK9MG0ua7zWK2mHBnTlmrZwHrATA
+         tntTPQyeVBCm/Ik7V83hBcNEKlzBxXqUj/ASqYfc1ycQUHrGta95+PIpBmg3lKm74F
+         37Q20S88sVL/+IPZTI4Xo9kChvPXCy5IM+5+B82U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 011/112] net: sock: tracing: Fix sock_exceed_buf_limit not to dereference stale pointer
-Date:   Tue, 19 Jul 2022 13:53:04 +0200
-Message-Id: <20220719114627.095104940@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 053/167] sysctl: Fix data races in proc_dointvec_minmax().
+Date:   Tue, 19 Jul 2022 13:53:05 +0200
+Message-Id: <20220719114701.722734928@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit 820b8963adaea34a87abbecb906d1f54c0aabfb7 upstream.
+[ Upstream commit f613d86d014b6375a4085901de39406598121e35 ]
 
-The trace event sock_exceed_buf_limit saves the prot->sysctl_mem pointer
-and then dereferences it in the TP_printk() portion. This is unsafe as the
-TP_printk() portion is executed at the time the buffer is read. That is,
-it can be seconds, minutes, days, months, even years later. If the proto
-is freed, then this dereference will can also lead to a kernel crash.
+A sysctl variable is accessed concurrently, and there is always a chance
+of data-race.  So, all readers and writers need some basic protection to
+avoid load/store-tearing.
 
-Instead, save the sysctl_mem array into the ring buffer and have the
-TP_printk() reference that instead. This is the proper and safe way to
-read pointers in trace events.
+This patch changes proc_dointvec_minmax() to use READ_ONCE() and
+WRITE_ONCE() internally to fix data-races on the sysctl side.  For now,
+proc_dointvec_minmax() itself is tolerant to a data-race, but we still
+need to add annotations on the other subsystem's side.
 
-Link: https://lore.kernel.org/all/20220706052130.16368-12-kuniyu@amazon.com/
-
-Cc: stable@vger.kernel.org
-Fixes: 3847ce32aea9f ("core: add tracepoints for queueing skb to rcvbuf")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/trace/events/sock.h |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/sysctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/trace/events/sock.h
-+++ b/include/trace/events/sock.h
-@@ -98,7 +98,7 @@ TRACE_EVENT(sock_exceed_buf_limit,
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index b152e0a30a2b..f5134435fb9c 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -988,7 +988,7 @@ static int do_proc_dointvec_minmax_conv(bool *negp, unsigned long *lvalp,
+ 		if ((param->min && *param->min > tmp) ||
+ 		    (param->max && *param->max < tmp))
+ 			return -EINVAL;
+-		*valp = tmp;
++		WRITE_ONCE(*valp, tmp);
+ 	}
  
- 	TP_STRUCT__entry(
- 		__array(char, name, 32)
--		__field(long *, sysctl_mem)
-+		__array(long, sysctl_mem, 3)
- 		__field(long, allocated)
- 		__field(int, sysctl_rmem)
- 		__field(int, rmem_alloc)
-@@ -110,7 +110,9 @@ TRACE_EVENT(sock_exceed_buf_limit,
- 
- 	TP_fast_assign(
- 		strncpy(__entry->name, prot->name, 32);
--		__entry->sysctl_mem = prot->sysctl_mem;
-+		__entry->sysctl_mem[0] = READ_ONCE(prot->sysctl_mem[0]);
-+		__entry->sysctl_mem[1] = READ_ONCE(prot->sysctl_mem[1]);
-+		__entry->sysctl_mem[2] = READ_ONCE(prot->sysctl_mem[2]);
- 		__entry->allocated = allocated;
- 		__entry->sysctl_rmem = sk_get_rmem0(sk, prot);
- 		__entry->rmem_alloc = atomic_read(&sk->sk_rmem_alloc);
+ 	return 0;
+-- 
+2.35.1
+
 
 

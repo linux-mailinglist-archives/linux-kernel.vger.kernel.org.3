@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A011579F1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41842579B75
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243350AbiGSNKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        id S237869AbiGSM1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243304AbiGSNJP (ORCPT
+        with ESMTP id S239735AbiGSM0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:09:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D64151A19;
-        Tue, 19 Jul 2022 05:28:25 -0700 (PDT)
+        Tue, 19 Jul 2022 08:26:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE367A6;
+        Tue, 19 Jul 2022 05:10:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99021B81B32;
-        Tue, 19 Jul 2022 12:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63E1C341DB;
-        Tue, 19 Jul 2022 12:28:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 64643CE1BE2;
+        Tue, 19 Jul 2022 12:10:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA1EC341C6;
+        Tue, 19 Jul 2022 12:10:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233703;
-        bh=+pwhI5DseAVUweaksDK2NMrC+e9Ib1UwCS+TtiDZy7g=;
+        s=korg; t=1658232601;
+        bh=iEp1GRXpnlwQEzZb52vi8VX+UqoaJVU/P2fR+9/aONo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lHAyN0hd0ojMNsJ6yYvwuCYHe73SjDmFPUcpYCVE2umVX2wrECZYogA2N7kil3kvo
-         hkEX8Pwpvkzy3TvAUvZeKoa7oLTtdcX9jOAJ/HgMXsqw/mFo4Yh0xZfZUPyhOn3CHW
-         yilGiNuC/KZS+Ekns+PECHYHlbL+Wujobfbb32mQ=
+        b=JCsvbZeXWtezCgNVKRS2GU5+GVC4GSW4yc6hhHkHdXgxqcYp8itJg0e9MG7fuI+w/
+         cZy19WnIo65OkZeeyiwu1xikJYCqskc7+UyJJlxDpu6MpFRE/2ISHmAvlpGJAyKZLd
+         4zM887UfrpX0PUtN9kIQxvc40LgKINnwa9WkvGxg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 183/231] ASoC: ops: Fix off by one in range control validation
+Subject: [PATCH 5.10 095/112] ASoC: madera: Fix event generation for rate controls
 Date:   Tue, 19 Jul 2022 13:54:28 +0200
-Message-Id: <20220719114729.617862702@linuxfoundation.org>
+Message-Id: <20220719114635.986355549@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,43 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit 5871321fb4558c55bf9567052b618ff0be6b975e ]
+[ Upstream commit 980555e95f7cabdc9c80a07107622b097ba23703 ]
 
-We currently report that range controls accept a range of 0..(max-min) but
-accept writes in the range 0..(max-min+1). Remove that extra +1.
+madera_adsp_rate_put always returns zero regardless of if the control
+value was updated. This results in missing notifications to user-space
+of the control change. Update the handling to return 1 when the
+value is changed.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220604105246.4055214-1-broonie@kernel.org
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220623105120.1981154-5-ckeepax@opensource.cirrus.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-ops.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/codecs/madera.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
-index e693070f51fe..d867f449d82d 100644
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -526,7 +526,7 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
- 		return -EINVAL;
- 	if (mc->platform_max && tmp > mc->platform_max)
- 		return -EINVAL;
--	if (tmp > mc->max - mc->min + 1)
-+	if (tmp > mc->max - mc->min)
- 		return -EINVAL;
+diff --git a/sound/soc/codecs/madera.c b/sound/soc/codecs/madera.c
+index a74c9b28368b..bbab4bc1f6b5 100644
+--- a/sound/soc/codecs/madera.c
++++ b/sound/soc/codecs/madera.c
+@@ -899,7 +899,7 @@ static int madera_adsp_rate_put(struct snd_kcontrol *kcontrol,
+ 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
+ 	const int adsp_num = e->shift_l;
+ 	const unsigned int item = ucontrol->value.enumerated.item[0];
+-	int ret;
++	int ret = 0;
  
- 	if (invert)
-@@ -547,7 +547,7 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
- 			return -EINVAL;
- 		if (mc->platform_max && tmp > mc->platform_max)
- 			return -EINVAL;
--		if (tmp > mc->max - mc->min + 1)
-+		if (tmp > mc->max - mc->min)
- 			return -EINVAL;
+ 	if (item >= e->items)
+ 		return -EINVAL;
+@@ -916,10 +916,10 @@ static int madera_adsp_rate_put(struct snd_kcontrol *kcontrol,
+ 			 "Cannot change '%s' while in use by active audio paths\n",
+ 			 kcontrol->id.name);
+ 		ret = -EBUSY;
+-	} else {
++	} else if (priv->adsp_rate_cache[adsp_num] != e->values[item]) {
+ 		/* Volatile register so defer until the codec is powered up */
+ 		priv->adsp_rate_cache[adsp_num] = e->values[item];
+-		ret = 0;
++		ret = 1;
+ 	}
  
- 		if (invert)
+ 	mutex_unlock(&priv->rate_lock);
 -- 
 2.35.1
 

@@ -2,212 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8F55795D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0EB75795D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbiGSJLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 05:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S235884AbiGSJLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 05:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiGSJLB (ORCPT
+        with ESMTP id S235585AbiGSJLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:11:01 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB8523BC6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:10:59 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id y11so23690168lfs.6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7Mtd3J+03yO0iS9XA8aLlV/pFtrHZmqJ3Z5d/M8D54g=;
-        b=6r+6877vSw2e0oYl9YY2c9JqBLTeh8tvGJGT4G5S7u9KlAlSMuXJBp23Wa+pL4r2dx
-         R0a8DqA8j1b9HYRXUZ9t5HEv3GOVCpm289/Ja4VSH/OhKISr1M6hUk1L3MAoSXjuR6MP
-         fOKJhAXrKSHQCY42apgBmR/vPclqr7x45EgLiGh0rq8HifeS9N3n95BrT3mdKiL5BOY5
-         N5Dlo//MMiXlGKl4bnAFueqOVkv6fJ75IyWFc0w5UF+Wwd03k2pufDm9xt7/va+D3Xpg
-         Kx2j3nB+SCeE3ldTaTnJ3FhSVQyXeXMhcyftCP4FsgNzt3UWYp5cuYX100FXJ356I6fj
-         /LlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7Mtd3J+03yO0iS9XA8aLlV/pFtrHZmqJ3Z5d/M8D54g=;
-        b=s/X83BZtBZyUauRta7Wb/kquj5LQ9WiRMzsZQXZcxYbV8DXOvNGUo+XoqHxBlbBMhm
-         sEJeoFpVi8oHwYjQfvQ9H9jOdqLAuSJ3HqfgyXWZ6YB0CQsUMMi8TfrNo8dulNoQgoy+
-         Ap7MOIb7LQ/xWYllezldsDbODCrXYTsT1ASqVoRMbOQfVHdxEF1qPXADp+pN84CVGVfa
-         7GD4wY9dRaqgOHuiQrTHLe2/HEnDQT2r+ZaHV+BLsDh4Q+K1oR/keknaewTIjReIfd8O
-         XXA8hK08gPuoAC8uR8jF/siVcseYQ8vtkOs+b33JVLu3kN7JHAgC7xDQ1J2ZMzCqnpWY
-         uMVA==
-X-Gm-Message-State: AJIora/fzv40NqJEovqwZ75WhrILBJ+qp3XVVutBepd88t5U0Ai4KMo+
-        Jfo/Ddo0MZdRtrn4uJ+Zoz9erQ==
-X-Google-Smtp-Source: AGRyM1uans68sAZ4YjjIACUwqygWHqFjMkoEiQApgqu5BOyWtuTmGobWzZZ9+zPY+tmvKUTiyagkGg==
-X-Received: by 2002:a05:6512:3e28:b0:48a:a4b:c474 with SMTP id i40-20020a0565123e2800b0048a0a4bc474mr15554335lfv.254.1658221858236;
-        Tue, 19 Jul 2022 02:10:58 -0700 (PDT)
-Received: from localhost (h-46-59-88-103.A463.priv.bahnhof.se. [46.59.88.103])
-        by smtp.gmail.com with ESMTPSA id m9-20020a05651202e900b0047f8cb9401fsm3107245lfq.89.2022.07.19.02.10.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 02:10:57 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 11:10:56 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        khilman@baylibre.com, abailon@baylibre.com, amitk@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v1 17/33] thermal/drivers/rcar: Switch to new of API
-Message-ID: <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
- <20220710212423.681301-18-daniel.lezcano@linexp.org>
+        Tue, 19 Jul 2022 05:11:45 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332D21E3F4;
+        Tue, 19 Jul 2022 02:11:42 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id E75935FD2D;
+        Tue, 19 Jul 2022 12:11:38 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1658221898;
+        bh=ndyH5ftv3Kzz+sOzzgfEGnysfiLveuxF2LvHN7EM5H8=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=IN76I/eecdcEi83vEAMd4zXGN/QksoyxUwUmdC2cyW446jIVdx5GJCSHYGeG2ys7P
+         CTcQVFRXddKV8n7oWnPTTpxYeUmc1sd4j3CthNp/VheRqmObPI12V947v22REO1nkm
+         muuc3eE9rMBtSZl2EMwlTuNVyASKbzQ4P6H1Myisovhd0AEsYmkgKyhk0hgPZa0oa9
+         m6MRyXv2EoArr6DGcWTkiqayobSaISnyFoBCHA3TB6PG2UVOwS0byIZkdkj17aNn3X
+         a9KHcpT44hW+B5SMxMyZ+8HoM1BoN2chhcIDAuT4vYTbxTeFdhQKegVVfum/K4ekkK
+         FDnM+Q9DIK+PQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 19 Jul 2022 12:11:38 +0300 (MSK)
+From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
+To:     Jonathan Cameron <jic23@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
+ allocate() stage
+Thread-Topic: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
+ allocate() stage
+Thread-Index: AQHYdd/Pt2zXEFx7c0Or/RCut5+rEK0/GLKAgCpM/oCAEyDEAIAErDEAgALhSACAAGbVgIABBkYA
+Date:   Tue, 19 Jul 2022 09:11:33 +0000
+Message-ID: <20220719091132.qfax7t2ogacur65u@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220601174837.20292-1-ddrokosov@sberdevices.ru>
+ <20220604145955.2a1108ca@jic23-huawei>
+ <20220701115823.vywhifktaxcr72cc@CAB-WSD-L081021.sigma.sbrf.ru>
+ <20220713170436.32330fa6@jic23-huawei> <20220716162556.2e919bf7@jic23-huawei>
+ <20220718112446.lucl7omialqri7yv@CAB-WSD-L081021.sigma.sbrf.ru>
+ <20220718183249.6f411e5c@jic23-huawei>
+In-Reply-To: <20220718183249.6f411e5c@jic23-huawei>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <CCB0717121BCD44BB0BFB8FC96D706E3@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220710212423.681301-18-daniel.lezcano@linexp.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/19 05:10:00 #19924636
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Mon, Jul 18, 2022 at 06:32:49PM +0100, Jonathan Cameron wrote:
+> On Mon, 18 Jul 2022 11:23:59 +0000
+> Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+>=20
+> > Hello Jonathan,
+> >=20
+> > On Sat, Jul 16, 2022 at 04:25:56PM +0100, Jonathan Cameron wrote:
+> > > On Wed, 13 Jul 2022 17:04:36 +0100
+> > > Jonathan Cameron <jic23@kernel.org> wrote:
+> > >  =20
+> > > > On Fri, 1 Jul 2022 11:59:59 +0000
+> > > > Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+> > > >  =20
+> > > > > Hello Jonathan,
+> > > > >=20
+> > > > > This patch has been on the mailing list for one month already, bu=
+t no
+> > > > > comments from other IIO reviewers. What do you think we should do=
+ with it?
+> > > > > Is it a helpful change or not?   =20
+> > > >=20
+> > > > Given I'm way behind and timing in cycle, I'm probably going to kic=
+k this
+> > > > back to start of the next cycle. Sorry for delay, =20
+> > > Applied to the togreg branch of iio.git.
+> > >=20
+> > > I'm unlikely to do another pull request this cycle unless there is a =
+delay in
+> > > the release for some reason (and probably not even if there is), so t=
+his
+> > > is queued up for next cycle.  As such it'll sit exposed only in the t=
+esting
+> > > branch until I rebase on rc1.
+> > >=20
+> > > Thanks,
+> > >=20
+> > > Jonathan
+> > >  =20
+> >=20
+> > Thank you for the patch applied.
+> > I have one question about the previous already applied patchset
+> >=20
+> > https://lore.kernel.org/all/20220607183907.20017-1-ddrokosov@sberdevice=
+s.ru/
+> >=20
+> > I see this patchset already merged to linux-next more than a month ago.
+> > But it's still not available in the linux stable branch. Could you plea=
+se
+> > explain what's the problem with this one? Was some bug found during
+> > linux-next testing stage? Should I fix something?
+> >=20
+> > Appreciate any help to understand what's I missing.
+>=20
+> It's not a fix so it will go in during the merge window in about 2 weeks =
+time.
+> Won't get backported to Stable though unless we ask for that to happen as=
+ it's
+> not really a fix so I didn't add a marking for it to be picked up for sta=
+ble
+> (which would only happen after 5.20-rc1 anyway).
+>=20
+> J
 
-Thanks for your work.
+Thanks a lot for explanation!
 
-On 2022-07-10 23:24:07 +0200, Daniel Lezcano wrote:
-> The thermal OF code has a new API allowing to migrate the OF
-> initialization to a simpler approach.
-> 
-> Use this new API.
-
-I tested this together with the series it depends on and while 
-temperature monitoring seems to work fine it breaks the emul_temp 
-interface (/sys/class/thermal/thermal_zone2/emul_temp).
-
-Before this change I can write a temperature to this file and have it 
-trigger actions, in my test-case changing the cooling state, which I 
-observe in /sys/class/thermal/cooling_device0/cur_state.
-
-Likewise before this change I could trip the critical trip-point that 
-would power off the board using the emul_temp interface, this too no 
-longer works,
-
-    echo 120000 > /sys/class/thermal/thermal_zone2/emul_temp
-
-Is this an intention change of the new API?
-
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> ---
->  drivers/thermal/rcar_gen3_thermal.c | 16 ++++++++--------
->  drivers/thermal/rcar_thermal.c      | 13 +++----------
->  2 files changed, 11 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index 43eb25b167bc..29946114a8f9 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -164,9 +164,9 @@ static int rcar_gen3_thermal_round(int temp)
->  	return result * RCAR3_THERMAL_GRAN;
->  }
->  
-> -static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
-> +static int rcar_gen3_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
->  {
-> -	struct rcar_gen3_thermal_tsc *tsc = devdata;
-> +	struct rcar_gen3_thermal_tsc *tsc = tz->devdata;
->  	int mcelsius, val;
->  	int reg;
->  
-> @@ -203,9 +203,9 @@ static int rcar_gen3_thermal_mcelsius_to_temp(struct rcar_gen3_thermal_tsc *tsc,
->  	return INT_FIXPT(val);
->  }
->  
-> -static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
-> +static int rcar_gen3_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
->  {
-> -	struct rcar_gen3_thermal_tsc *tsc = devdata;
-> +	struct rcar_gen3_thermal_tsc *tsc = tz->devdata;
->  	u32 irqmsk = 0;
->  
->  	if (low != -INT_MAX) {
-> @@ -225,7 +225,7 @@ static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
->  	return 0;
->  }
->  
-> -static struct thermal_zone_of_device_ops rcar_gen3_tz_of_ops = {
-> +static struct thermal_zone_device_ops rcar_gen3_tz_of_ops = {
->  	.get_temp	= rcar_gen3_thermal_get_temp,
->  	.set_trips	= rcar_gen3_thermal_set_trips,
->  };
-> @@ -504,8 +504,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->  	for (i = 0; i < priv->num_tscs; i++) {
->  		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
->  
-> -		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
-> -							    &rcar_gen3_tz_of_ops);
-> +		zone = devm_thermal_of_zone_register(dev, i, tsc,
-> +						     &rcar_gen3_tz_of_ops);
->  		if (IS_ERR(zone)) {
->  			dev_err(dev, "Can't register thermal zone\n");
->  			ret = PTR_ERR(zone);
-> @@ -556,7 +556,7 @@ static int __maybe_unused rcar_gen3_thermal_resume(struct device *dev)
->  
->  		priv->thermal_init(tsc);
->  		if (zone->ops->set_trips)
-> -			rcar_gen3_thermal_set_trips(tsc, zone->prev_low_trip,
-> +			rcar_gen3_thermal_set_trips(zone, zone->prev_low_trip,
->  						    zone->prev_high_trip);
->  	}
->  
-> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> index 1d729ed4d685..4df42d70d867 100644
-> --- a/drivers/thermal/rcar_thermal.c
-> +++ b/drivers/thermal/rcar_thermal.c
-> @@ -271,13 +271,6 @@ static int rcar_thermal_get_current_temp(struct rcar_thermal_priv *priv,
->  	return 0;
->  }
->  
-> -static int rcar_thermal_of_get_temp(void *data, int *temp)
-> -{
-> -	struct rcar_thermal_priv *priv = data;
-> -
-> -	return rcar_thermal_get_current_temp(priv, temp);
-> -}
-> -
->  static int rcar_thermal_get_temp(struct thermal_zone_device *zone, int *temp)
->  {
->  	struct rcar_thermal_priv *priv = rcar_zone_to_priv(zone);
-> @@ -323,8 +316,8 @@ static int rcar_thermal_get_trip_temp(struct thermal_zone_device *zone,
->  	return 0;
->  }
->  
-> -static const struct thermal_zone_of_device_ops rcar_thermal_zone_of_ops = {
-> -	.get_temp	= rcar_thermal_of_get_temp,
-> +static struct thermal_zone_device_ops rcar_thermal_zone_of_ops = {
-> +	.get_temp	= rcar_thermal_get_temp,
->  };
->  
->  static struct thermal_zone_device_ops rcar_thermal_zone_ops = {
-> @@ -534,7 +527,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  			goto error_unregister;
->  
->  		if (chip->use_of_thermal) {
-> -			priv->zone = devm_thermal_zone_of_sensor_register(
-> +			priv->zone = devm_thermal_of_zone_register(
->  						dev, i, priv,
->  						&rcar_thermal_zone_of_ops);
->  		} else {
-> -- 
-> 2.25.1
-> 
-
--- 
-Kind Regards,
-Niklas Söderlund
+--=20
+Thank you,
+Dmitry=

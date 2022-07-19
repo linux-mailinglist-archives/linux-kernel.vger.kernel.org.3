@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A54579A6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A71579B3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239070AbiGSMQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
+        id S236919AbiGSMZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239341AbiGSMOe (ORCPT
+        with ESMTP id S240006AbiGSMY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:14:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447414BD2D;
-        Tue, 19 Jul 2022 05:05:31 -0700 (PDT)
+        Tue, 19 Jul 2022 08:24:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9774261D42;
+        Tue, 19 Jul 2022 05:09:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A7EA61740;
-        Tue, 19 Jul 2022 12:04:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFC9C341C6;
-        Tue, 19 Jul 2022 12:04:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D800B81B2B;
+        Tue, 19 Jul 2022 12:08:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A6AEC341C6;
+        Tue, 19 Jul 2022 12:08:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232247;
-        bh=fh11CQGg78fCZlvxIkEKdZTt+V7QMJNel34lx3CZraQ=;
+        s=korg; t=1658232527;
+        bh=tDavWp/OijAssTT8TolwZcclYl6hiOCLRtRXjqj/hW8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ul6rSRJfgn4NcjvLU675n0er+A2YQg0Ag/UmttEvfagJ9nI8crlaLkwrrg4+Vsgu4
-         ZOipoTLHeeRcPZ3E3mp+m1VWXJGHgnwEvGvgjqaNnXD3Q7GlIRocT8MokZGUnjLzmG
-         PCaG6iCsm83epviR74cdHAaYtMHDmNqFcOnvFYzw=
+        b=bST29rlPFAXraNgq/5SzZHcLh1oUIo0rSVeXYWnU6xKZX0Hj7yuh/5DjPZ2h1itUr
+         0k6R6NBhG2W8cF/j4VAnrOkYPrhiD4SiFZNd9tmITTx0YXrHU8+DgOH9DsODddBBZq
+         WrpjZ+guOie6AZyYS0qFjetvV8pmBT5I8GqcZXmU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 56/71] ASoC: cs47l15: Fix event generation for low power mux control
-Date:   Tue, 19 Jul 2022 13:54:19 +0200
-Message-Id: <20220719114557.779196016@linuxfoundation.org>
+Subject: [PATCH 5.10 087/112] net: sfp: fix memory leak in sfp_probe()
+Date:   Tue, 19 Jul 2022 13:54:20 +0200
+Message-Id: <20220719114635.091923514@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-[ Upstream commit 7f103af4a10f375b9b346b4d0b730f6a66b8c451 ]
+[ Upstream commit 0a18d802d65cf662644fd1d369c86d84a5630652 ]
 
-cs47l15_in1_adc_put always returns zero regardless of if the control
-value was updated. This results in missing notifications to user-space
-of the control change. Update the handling to return 1 when the value is
-changed.
+sfp_probe() allocates a memory chunk from sfp with sfp_alloc(). When
+devm_add_action() fails, sfp is not freed, which leads to a memory leak.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220623105120.1981154-3-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+We should use devm_add_action_or_reset() instead of devm_add_action().
+
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Link: https://lore.kernel.org/r/20220629075550.2152003-1-niejianglei2021@163.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/cs47l15.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/phy/sfp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/cs47l15.c b/sound/soc/codecs/cs47l15.c
-index ece1276f38eb..1f7148794a5a 100644
---- a/sound/soc/codecs/cs47l15.c
-+++ b/sound/soc/codecs/cs47l15.c
-@@ -122,6 +122,9 @@ static int cs47l15_in1_adc_put(struct snd_kcontrol *kcontrol,
- 		snd_soc_kcontrol_component(kcontrol);
- 	struct cs47l15 *cs47l15 = snd_soc_component_get_drvdata(component);
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 96068e0d841a..dcbe278086dc 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -2427,7 +2427,7 @@ static int sfp_probe(struct platform_device *pdev)
  
-+	if (!!ucontrol->value.integer.value[0] == cs47l15->in1_lp_mode)
-+		return 0;
-+
- 	switch (ucontrol->value.integer.value[0]) {
- 	case 0:
- 		/* Set IN1 to normal mode */
-@@ -150,7 +153,7 @@ static int cs47l15_in1_adc_put(struct snd_kcontrol *kcontrol,
- 		break;
- 	}
+ 	platform_set_drvdata(pdev, sfp);
  
--	return 0;
-+	return 1;
- }
+-	err = devm_add_action(sfp->dev, sfp_cleanup, sfp);
++	err = devm_add_action_or_reset(sfp->dev, sfp_cleanup, sfp);
+ 	if (err < 0)
+ 		return err;
  
- static const struct snd_kcontrol_new cs47l15_snd_controls[] = {
 -- 
 2.35.1
 

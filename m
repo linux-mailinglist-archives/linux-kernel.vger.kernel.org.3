@@ -2,124 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9104D57A8CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB56C57A8D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbiGSVQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
+        id S234662AbiGSVRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiGSVQB (ORCPT
+        with ESMTP id S229451AbiGSVRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:16:01 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F3D101E8;
-        Tue, 19 Jul 2022 14:15:59 -0700 (PDT)
-Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
+        Tue, 19 Jul 2022 17:17:01 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A390F11468;
+        Tue, 19 Jul 2022 14:17:00 -0700 (PDT)
+Received: from mail-yb1-f179.google.com ([209.85.219.179]) by
  mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MlwJv-1nmrE61ajr-00j5gi; Tue, 19 Jul 2022 23:15:57 +0200
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31e623a4ff4so22032987b3.4;
-        Tue, 19 Jul 2022 14:15:56 -0700 (PDT)
-X-Gm-Message-State: AJIora+T4xG4QDLOVkgBIYkCf3+PRmhpzQhW7lJWHafMDPRnzNv4RnvO
-        2rHl7gwbzFXU0Dg6z0n26s0/4e/781WjWExAUtU=
-X-Google-Smtp-Source: AGRyM1vouONdtWRC6uSgwsM19DKN9yNnXedmOnx5mzXB1WkttrHPn7qGRPbPc392P2G3LxDYHDbGxroARtvQ8zSdF5U=
-X-Received: by 2002:a81:6dce:0:b0:31e:5a3b:d3a2 with SMTP id
- i197-20020a816dce000000b0031e5a3bd3a2mr5966976ywc.495.1658265355982; Tue, 19
- Jul 2022 14:15:55 -0700 (PDT)
+ 1MmUYD-1nnPTP3b4j-00iXAB; Tue, 19 Jul 2022 23:16:59 +0200
+Received: by mail-yb1-f179.google.com with SMTP id r3so28865125ybr.6;
+        Tue, 19 Jul 2022 14:16:58 -0700 (PDT)
+X-Gm-Message-State: AJIora9N2WV6+1xae8EWvZjKx4IJ6w4qV7Xm9GoTG1qPhDduRxxO2FAm
+        XURRs95fLfMP+Fbwa5ILzGWSD6Fb8PQQqq7A8cc=
+X-Google-Smtp-Source: AGRyM1sI/ANvRuQzgIGjHCGC9d2EMffjmy1dco5InUp+sZM3+VYXylWgzFcwHl4oDMY2+qh3/s1XYfz1qu0gaJVqYb0=
+X-Received: by 2002:a25:808c:0:b0:670:7d94:f2a with SMTP id
+ n12-20020a25808c000000b006707d940f2amr6630554ybk.452.1658265417471; Tue, 19
+ Jul 2022 14:16:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220715185551.3951955-1-f.fainelli@gmail.com>
- <CAK8P3a3cuTknZaLZCFGwZtMfbd1qAFWEtXMcvVHsXoJn8EUCOg@mail.gmail.com> <2656551b-2c6f-9f0d-93a6-ef6177ec265e@gmail.com>
-In-Reply-To: <2656551b-2c6f-9f0d-93a6-ef6177ec265e@gmail.com>
+References: <YtVKzW4vh1nRSqbx@debian> <20220719210427.GA1568454@bhelgaas>
+In-Reply-To: <20220719210427.GA1568454@bhelgaas>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 19 Jul 2022 23:15:38 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1LnCz32DixQ2VuBh+c64+CNqNJ8v2Nk0X6P8kYA4=-gQ@mail.gmail.com>
-Message-ID: <CAK8P3a1LnCz32DixQ2VuBh+c64+CNqNJ8v2Nk0X6P8kYA4=-gQ@mail.gmail.com>
-Subject: Re: [PATCH] tools: Fixed MIPS builds due to struct flock re-definition
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+Date:   Tue, 19 Jul 2022 23:16:40 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0qcd6pZ=9fGapGexBMifp68jVezQou0QuK9As9vCyfyg@mail.gmail.com>
+Message-ID: <CAK8P3a0qcd6pZ=9fGapGexBMifp68jVezQou0QuK9As9vCyfyg@mail.gmail.com>
+Subject: Re: build failure of next-20220718 due to 'imx6_pcie_host_exit'
+ defined but not used
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Guo Ren <guoren@kernel.org>
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:QV+yaOmp53gp6OjojdvV3ieXcFDNVjTN5PqmbJEzK8BPxF31qLU
- HiGlhZgDWQRUAU3u/LpXKuwrwjSL9UuRkxZg4KRiPp64Otzcoms+Y5SmFFtcO0u2MMOkWrG
- 3SZnUAwHA46H4uEDnN+W4WDYXu/9dCdBzp4N+63Ufn4ZjuIVcyUQWwibT02MOsu7KUzDxsc
- Wy6AwRqtc+ps1KWWTBKHw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:10cdnJmKZtQ=:/QccC7jf5ms26fI4w4DM/A
- 68WwR0xMqDB74n+nd1xapXgbQmr7DX0KwTTRVyeAOzD+FUP6BWfsHxg73hnz1JUpszIWKbGua
- b4VMenmeevupq5QSX0whZEDbGkyk2fzJISCWMp8JFw3vAejk4YN55sIZVcv52TTz9BwUoOxMU
- e3Wy/UXprMZzy5GK9+3QnYv0ggJAX9IB7iKXwxFWFORjAj/sDow4a2GjI8vxZDcZPGQFm+nIu
- fIWWeIBCMntn3Uy3MDUaF6pyv3hj3KwS1D/elaTtU+iHrvWw4X8u6YRFCybYJEZyWybps8ToB
- eBXwPVH71puSETIp2QOAj/BYMLCvvI1Kx2dg3bLPmaJ50BMKUciYT08ytcF21k+A5MIWo7mgl
- /SDL91ClZg3n0YRXzKyLDJwJ3wbRGgN+aKmyNnNIBqLrX11YOQeoH056WwVii+fZ3QWMPCdsC
- hmkw6yL1ztwCxMn9VxwK7eVP6FAHJYMeBVlOwWOAVsCiJOhBSHEwc6us0IAk8ZvBVDEguPdyk
- g39MUAXELrJjGuFs52ysmBKcxpGG4SuwCfqJ4ZbxOp1w+FEGcRL3jARQFTDWzOOq4qPvFf9K7
- 123EWoEkdwQMICu8ZJEiqT0XOmZzYNZJB/p13TcUVc3a3NEqcMB2+PYDxW/bOVT8l5kGTwhB1
- qLk90KUshb9V6WNoA4XbzMGJwg2loSkgxYDC/4L/FKSFVdDTm7cWH9mbIRpEZGDJktyoYAv/B
- I/tdCX9jsVQVJX40LP2R9lDYO3RFVCnCQXlBMA==
+X-Provags-ID: V03:K1:VbLSWcUOv35+nG5np387bzI0zv7EGp/wyL+h4pP/h+ic+U1dP6D
+ FHVT+e8wtvk0O30fOLIEycVhOrffESmYHnp9SOS2jnECUaFLvBnVVSWl2A3LLms/6b7irwI
+ 522y918VQlifgZysGo2OmzG3Fb6/3lAVZ26tOoFxp89pAVPB5zA1pjQF1QnW/cJf8GTv35n
+ ItHTpYN9CAD/LCODp9hAA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IlKh02Tckes=:WTBhEUydwFqbl6LMK/J1TI
+ TSpWuERdNXT9KAKQIzwRAP0U4HxFtfV1+ihJ5Gd+DNuj0pQ2N64gO+lLTwCxDB6mGNPEUEN4B
+ KGeBpKCz5me1gF1i2bT1iAYGGs2d6HlpVLlJCS42oNezMPdGf4xUIvNWXJOJPuvLOgTSX7Abe
+ H5rkzMELh/a5OWjBxVkOwHZhz10eOrEpgeyGitcmxepXKZfr4/dZXjHezCwkqRdy+ux+3SuKQ
+ 2roni7qfJ2Qe8TbFR+VzaOXQIhlGjMxleScj6Tttha8X1wTQssCrCoB3au6cuqfxQ61L+RVso
+ wObbgNtF/tMu0bA6NcEp8JvNXRpA3vlg+W220F+AFAxKZ43VsX55SMuzTjjF1ezw9FIgJAr+h
+ CYZpkwfe3u18DvAwcyPIiMKyvYHOSjLilYfeoMMhH2I0vgBj/VSajAeUwl9k66AYyIwa5GiMp
+ Y5cb1LlojErkuhAENEf74HhyvNsgbtDtJGWFBjjjI9ZgAu0Nv1eU9MsinvORmalui2uXNqWim
+ mR4Dd4ZAi0RYFUHc3hYS5+TOhRRBuliQlubYSihPCmyVVgMVcWEI7JATck9yBLcLGjVHwOqje
+ abpeLgtGheSjgs7y3A9m1TXhoP1zgS6yNhcNmxVEfw3TP3jN2SSUhCl5MzVybziwFsOGG/x+V
+ 8bfUHIlwcGIRwBKzGYv1e8ZjqfGid+3qLrGfuxdFoqVlDT+wQt+JbfITfOHw7XdGW0fH5mPoo
+ +GpsJZdme8sIx6uFef0GlSc9kciqZRLIqGC8Q6t43OB3c2TcWMNPx1994bzFjbc/B0AZnqeCs
+ WfEwnBsR6KJs38yYQ7zjqsTcuE1YMSI3UHa9pZ8s5cIjKuF5pKQPHO4zDH/dF1URQqD23A+/+
+ e2fHCyLWcRnuwhRozPYTjEo9bdyrxHpWNU8s+8oug=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 9:05 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> On 7/19/2022 12:42 AM, Arnd Bergmann wrote:
-
-> > I applied this to the asm-generic tree, but now I'm having second thoughts, as
-> > this only changes the tools/include/ version but not the version we ship to user
-> > space. Normally these are meant to be kept in sync.
+On Tue, Jul 19, 2022 at 11:04 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> Thanks! Just to be clear, applying just your patch is not enough as the
-> original build issue is still present, so we would need my change plus
-> yours, I think that is what you intended but just wanted to double
-> confirm.
-
-Yes, this was just the diff on top of your patch, I've folded it into a single
-commit now.
-
-> On a side note your tree at:
+> commit 0e4daeaa52ca ("PCI: imx6: Convert to NOIRQ_SYSTEM_SLEEP_PM_OPS()")
+> Author: Bjorn Helgaas <bhelgaas@google.com>
+> Date:   Tue Jul 19 15:50:18 2022 -0500
 >
-> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/refs/heads
+>     PCI: imx6: Convert to NOIRQ_SYSTEM_SLEEP_PM_OPS()
 >
-> does not appear to have it included/pushed out yet, should I be looking
-> at another git tree?
-
-Pushed it out now. There is the main asm-generic branch that is in
-linux-next, and the asm-generic-fixes branch that I should send after
-the build bots report success.
-
-I've merged the fixes branch into the main branch for testing for the
-moment, but will undo the merge when I forward the contents.
-
-> > It appears that commit 306f7cc1e906 ("uapi: always define
-> > F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h") already caused
-> > them to diverge, presumably the uapi version here is correct and we
-> > forgot to adapt the tools version at some point. There are also some
-> > non-functional differences from older patches.
-> >
-> > I think the correct fix to address the problem in both versions and
-> > get them back into sync would be something like the patch below.
-> > I have done zero testing on it though.
-> >
-> > Christoph and Florian, any other suggestions?
+>     Replace SET_NOIRQ_SYSTEM_SLEEP_PM_OPS() with NOIRQ_SYSTEM_SLEEP_PM_OPS(),
+>     which has the advantage that the compiler always sees the PM callbacks as
+>     referenced, so they don't need to be wrapped with "#ifdef CONFIG_PM_SLEEP"
+>     or tagged with "__maybe_unused" to avoid "defined but not used" warnings.
 >
-> This works for me with my patch plus your patch in the following
-> configurations:
+>     See 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate old ones").
 >
-> - MIPS toolchain with kernel-headers 4.1.x
-> - MIPS toolchain with kernel headers using my patch plus your patch
->
-> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+>     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Thanks!
-
-       Arnd
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

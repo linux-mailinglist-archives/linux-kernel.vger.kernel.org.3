@@ -2,92 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD0857A750
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A95C57A74E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236677AbiGSTiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 15:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
+        id S236423AbiGSTid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 15:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGSTiR (ORCPT
+        with ESMTP id S235565AbiGSTib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 15:38:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D535343315
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:38:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CFCDB81CE7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:38:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21779C341C6;
-        Tue, 19 Jul 2022 19:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658259494;
-        bh=rGgOW++6Z/HQIhZG8Yc1nSzysdlCSnRW1K4rZlLDsZw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SkzAkSgdiAR4Ux/5dnucPUlz9LItGNMJXgLu2bZVPoipA6yaay0LO7oM7NYWW3Abz
-         7X07UWjBSbkZNj6IkyRXai03CirvPcAV+AK/n90bcLskaBv8qezsNk0BfExt/Etqcf
-         ozD74O/ifomc1olwSIsO2NVWAJg6zpPQmiPu3aeCOkxAw/JL7yje38oXpnGtv9jH+2
-         z35gJg0exhrjh2lkepaDXFWrQCGoA+HhfOGlL6e9+ErOMANAGgHi9EP1uYfQIpzNeY
-         uYYCfxFkvcV9M3v5GG7+4JIEfqa5+kgVGK5ucdVTU7ELhs5pS99y8osyOMYliDuRcd
-         gsqJRZPGMKaBA==
-Date:   Tue, 19 Jul 2022 20:38:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Christian =?utf-8?Q?Kohlschu=CC=88tter?= 
-        <christian@kohlschutter.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH REBASE] regulator: core: Fix off-on-delay-us for
- always-on/boot-on regulators
-Message-ID: <YtcIIaFeVIzor/jD@sirena.org.uk>
-References: <Yta/zrJxQOfYmN4C@sirena.org.uk>
- <20220719184943.1566-1-christian@kohlschutter.com>
+        Tue, 19 Jul 2022 15:38:31 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D134B0C7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658259510; x=1689795510;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=j1NSqX65Z1POM4/Ayq9+N9CgUstQx3vxobykYw22oGY=;
+  b=OO/TJXM2Cq2VgNEwgwsj/wR3n11dtUabORrgktA8UoAfn1FHpGxtZBF/
+   Z31toHHB5FSjeKYaSwGsPJYocCtdSnqIPXSZa4jBfR+sN9Qhbv7C5UgNM
+   gDzO3WFX4M6fdJzZ/yyVj36CkubB8ChyFSIzEtKANJWhHCVv8uBwu/sJ1
+   elN+1JGiTZbR24fYZkZyz/z7mmrsAFTuXWX8AEQjRWytgRn+1CTWVvWHy
+   QVZHu86yn0utCl5KSfH2p8wIFzyF01YMO4x9N23DrVx54elMGT2aEfF8y
+   /S8VPVEoPHVIZwFxQpwqOrTKcEGcNEZvpM/vyM7VbCFK9Y41eywjUlEsn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="269608709"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="269608709"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 12:38:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="548036058"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 19 Jul 2022 12:38:29 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDt36-0005xi-FG;
+        Tue, 19 Jul 2022 19:38:28 +0000
+Date:   Wed, 20 Jul 2022 03:38:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     kbuild-all@lists.01.org, Atish Patra <Atish.Patra@wdc.com>,
+        linux-kernel@vger.kernel.org
+Subject: [atishp04:kvm_perf_rfc 15/24]
+ arch/openrisc/include/asm/cmpxchg.h:131:24: error: call to
+ '__cmpxchg_called_with_bad_pointer' declared with attribute error: Bad
+ argument size for cmpxchg
+Message-ID: <202207200317.VLiEV0Zq-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XryecoVwR/YSURWc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220719184943.1566-1-christian@kohlschutter.com>
-X-Cookie: We have ears, earther...FOUR OF THEM!
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/atishp04/linux kvm_perf_rfc
+head:   f7c410879b9a723ff8fbc32e4acb668b7fee423a
+commit: 20c5f15d297fb5a842bb1488be2781826b65a1dd [15/24] COVER
+config: openrisc-randconfig-c024-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200317.VLiEV0Zq-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/atishp04/linux/commit/20c5f15d297fb5a842bb1488be2781826b65a1dd
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 kvm_perf_rfc
+        git checkout 20c5f15d297fb5a842bb1488be2781826b65a1dd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash
 
---XryecoVwR/YSURWc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Tue, Jul 19, 2022 at 06:49:44PM +0000, Christian Kohlschu=CC=88tter wrot=
-e:
-> Regulators marked with "regulator-always-on" or "regulator-boot-on"
-> as well as an "off-on-delay-us", may run into cycling issues that are
-> hard to detect.
+All errors (new ones prefixed by >>):
 
-I think this already got applied, I had another go at persuading things
-to cope which seemed to work - not 100% sure what was going on, git
-seemed less forgiving than raw patch here.  It didn't look like a
-rebasing issue, it looked like the umlaut was upsetting git.  Should be
-commit 218320fec29430438016f88dd4fbebfa1b95ad8d in my tree.
+   In file included from arch/openrisc/include/asm/atomic.h:131,
+                    from include/linux/atomic.h:7,
+                    from include/asm-generic/bitops/lock.h:5,
+                    from arch/openrisc/include/asm/bitops.h:41,
+                    from include/linux/bitops.h:33,
+                    from include/linux/kernel.h:22,
+                    from lib/atomic64_test.c:12:
+   arch/openrisc/include/asm/cmpxchg.h: In function '__cmpxchg':
+>> arch/openrisc/include/asm/cmpxchg.h:131:24: error: call to '__cmpxchg_called_with_bad_pointer' declared with attribute error: Bad argument size for cmpxchg
+     131 |                 return __cmpxchg_called_with_bad_pointer();
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
---XryecoVwR/YSURWc
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +/__cmpxchg_called_with_bad_pointer +131 arch/openrisc/include/asm/cmpxchg.h
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLXCCEACgkQJNaLcl1U
-h9C3Ygf9GPu7d8iKXOil/obbkcxcxqzdEuc+miDHvZXSA6Bt6Qoz+yX114xx9uJK
-aAVcYpC+XJmcX8MtwguzR5tfGDQKeqsXahzInmGZ6ZEuIlie3nT487mUcZAPj64q
-3GtMlc8An5CCS8nDV48opfP9BBpi/cDIY/DkVcAGPUIsi1Vm+W1juyaIS9Kz86wA
-OGlX3S0b9alY3q//sSzurRXUwCdrPyAZ++0ig/roCdJiZHyfyugxbrEmiKbY+1jG
-S78HzVTL7gPQx4ZiaJ/Cd+qJYeGMQAr8LpLiup8HJmWA94M3QyfzBMpupjGTOAnT
-xMxNTkpWtOxCQ9uDT+AoZPax9prtOA==
-=/iaL
------END PGP SIGNATURE-----
+489e0f802db708 Stafford Horne 2017-03-23  113  
+489e0f802db708 Stafford Horne 2017-03-23  114  /*
+489e0f802db708 Stafford Horne 2017-03-23  115   * This function doesn't exist, so you'll get a linker error
+489e0f802db708 Stafford Horne 2017-03-23  116   * if something tries to do an invalid cmpxchg().
+489e0f802db708 Stafford Horne 2017-03-23  117   */
+489e0f802db708 Stafford Horne 2017-03-23  118  extern unsigned long __cmpxchg_called_with_bad_pointer(void)
+489e0f802db708 Stafford Horne 2017-03-23  119  	__compiletime_error("Bad argument size for cmpxchg");
+489e0f802db708 Stafford Horne 2017-03-23  120  
+489e0f802db708 Stafford Horne 2017-03-23  121  static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
+489e0f802db708 Stafford Horne 2017-03-23  122  		unsigned long new, int size)
+489e0f802db708 Stafford Horne 2017-03-23  123  {
+489e0f802db708 Stafford Horne 2017-03-23  124  	switch (size) {
+489e0f802db708 Stafford Horne 2017-03-23  125  	case 1:
+489e0f802db708 Stafford Horne 2017-03-23  126  	case 2:
+489e0f802db708 Stafford Horne 2017-03-23  127  		return cmpxchg_small(ptr, old, new, size);
+489e0f802db708 Stafford Horne 2017-03-23  128  	case 4:
+489e0f802db708 Stafford Horne 2017-03-23  129  		return cmpxchg_u32(ptr, old, new);
+489e0f802db708 Stafford Horne 2017-03-23  130  	default:
+489e0f802db708 Stafford Horne 2017-03-23 @131  		return __cmpxchg_called_with_bad_pointer();
+489e0f802db708 Stafford Horne 2017-03-23  132  	}
+489e0f802db708 Stafford Horne 2017-03-23  133  }
+489e0f802db708 Stafford Horne 2017-03-23  134  
 
---XryecoVwR/YSURWc--
+:::::: The code at line 131 was first introduced by commit
+:::::: 489e0f802db708c69004f64d92a3e1b70731614a openrisc: add 1 and 2 byte cmpxchg support
+
+:::::: TO: Stafford Horne <shorne@gmail.com>
+:::::: CC: Stafford Horne <shorne@gmail.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

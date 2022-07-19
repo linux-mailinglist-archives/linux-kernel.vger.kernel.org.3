@@ -2,115 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1E1578F5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA3D578F5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236024AbiGSAld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 20:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S232126AbiGSAoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 20:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232768AbiGSAlc (ORCPT
+        with ESMTP id S229660AbiGSAoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 20:41:32 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4241A24947;
-        Mon, 18 Jul 2022 17:41:31 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id tk8so12988856ejc.7;
-        Mon, 18 Jul 2022 17:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N0UFO2LEB4N3gT8fM5N0L2BjWrPKcIQI1x0+D9+PXyM=;
-        b=CrsObfdoQkRTNBGQviz57J895etCe1uCs6faYu8P9SApkKbWomIm/hs3s7+oYHIULl
-         FVYWW0/w/csJyjTU6BpJBb9aHdYFWI05ZR9s9+ubvInSO1K8j7u+NM2eARqCag4FrPUc
-         Ax0xXDi35ZeMgzJ9HnCM43PQawEcART3F5Yyul+sWxMI2Auk/h27zBlc/kB+UUJBBVMQ
-         IUOd4OrTYiUAo4VBnWUECIXMm/pILggQhzNGN3pRWZLy+vkipLooLggqlmcNLSOrQy2M
-         JflfZ1PICW+KLpe6DrtyEDZa+kP3XxvUybLwldorMfSbd2fX4HGJdXmMiP9ItRqSQjQc
-         7a6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N0UFO2LEB4N3gT8fM5N0L2BjWrPKcIQI1x0+D9+PXyM=;
-        b=nph7fztI5LX5YGGv6ml+HB8+IYp90OM5vj+xoy9LslNgoGF9/8xryuN5jajE63qN0Q
-         5IQie48uPeJkXsV74EBi9Di6gxfT+ZAEI4GlMyqJSzC9A0fSjO+Q75S5FBo9zzHyPtHD
-         speLqXREgHVfCLawJh7xq2VFLG1IrQ8GVmn9RVNEABNqMGa94m0HCDW/K9W9V359QAEh
-         Dn+PcOAK27WaqCrHIt7nidR3ch/PTQLVyCl9XsBXmpQzve2zn7su0JWk5m3BfAW6gu8T
-         /zVIvamy6WCnFe/5uWi4JCGMgUf4GZmxTcwRyNlcKcbYD+lnX3BycDKXyQPiEDXTT1Pg
-         Ao6w==
-X-Gm-Message-State: AJIora/SkGNWS5tjN5pGIiEwqtJ+CwYTvLkO+EH35QBinvgrKeCt+w91
-        EYxr3SrRdoF5dn9T46oJy+Q=
-X-Google-Smtp-Source: AGRyM1svc/KRbFwjDP944pTBOdvhHaa4ZAuA4xFFY+a7/Zcbuaqb4XYRStVOgEjyFucz8SKjqDGgkA==
-X-Received: by 2002:a17:907:9706:b0:72b:4b0d:86a2 with SMTP id jg6-20020a170907970600b0072b4b0d86a2mr26993817ejc.242.1658191289781;
-        Mon, 18 Jul 2022 17:41:29 -0700 (PDT)
-Received: from skbuf ([188.25.231.190])
-        by smtp.gmail.com with ESMTPSA id d25-20020a170906305900b0072f42ca292bsm1095210ejd.129.2022.07.18.17.41.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 17:41:29 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 03:41:26 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next RFC PATCH 1/4] net: dsa: qca8k: drop
- qca8k_read/write/rmw for regmap variant
-Message-ID: <20220719004126.2ysae4vhbmfnqsta@skbuf>
-References: <20220718184017.o2ogalgjt6zwwhq3@skbuf>
- <62d5ad12.1c69fb81.2dfa5.a834@mx.google.com>
- <20220718193521.ap3fc7mzkpstw727@skbuf>
- <62d5b8f5.1c69fb81.ae62f.1177@mx.google.com>
- <20220718203042.j3ahonkf3jhw7rg3@skbuf>
- <62d5daa7.1c69fb81.111b1.97f2@mx.google.com>
- <20220718234358.27zv5ogeuvgmaud4@skbuf>
- <62d5f18e.1c69fb81.35e7.46fe@mx.google.com>
- <20220719001811.ty6brvavbrts6rk4@skbuf>
- <62d5fc18.1c69fb81.28c9a.a5c2@mx.google.com>
+        Mon, 18 Jul 2022 20:44:04 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DEF2BB1F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658191443; x=1689727443;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=q5+VJDL3oTtOXslCW7UyHAdL/HccBlTnRViXZUYSzxc=;
+  b=GGfxA0MsBg8I5iRxtmyEtHjr7LU2FohHko3dRrBBfv5A1ZWmJXsxqJl9
+   E8c/Vkbhx65dGo4zawubb8k1uNdZduDmAEaf6SpkSA3AE3FK+RTDlEFqi
+   LW2a/zGGR4m7WZZM3Xiir06I+d8o1O6DaYK1KlwsQnoCzfti65738Hev7
+   BRJwSFoGiA5/vPT5w+Vl7LP8jdp8Jzvo+o15tpuqELJ6cbC9YKgsXqFdJ
+   6Sapb0StIRFR8ya2nPQNhYuP7PxLFFAF594+0JHlhmkExNu1ysP3dj0I/
+   bKNThmIwHEP53S0RKdC5ENkjWKKuZvLzheHekWU0LsUSf80sRtinC4yGm
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="372658868"
+X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
+   d="scan'208";a="372658868"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 17:44:02 -0700
+X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
+   d="scan'208";a="572628190"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 17:43:58 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org, steven.price@arm.com, will@kernel.org,
+        aarcange@redhat.com, guojian@oppo.com, hanchuanhua@oppo.com,
+        hannes@cmpxchg.org, hughd@google.com, linux-kernel@vger.kernel.org,
+        minchan@kernel.org, shy828301@gmail.com, v-songbaohua@oppo.com,
+        zhangshiming@oppo.com
+Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
+References: <20220718090050.2261-1-21cnbao@gmail.com>
+Date:   Tue, 19 Jul 2022 08:43:47 +0800
+In-Reply-To: <20220718090050.2261-1-21cnbao@gmail.com> (Barry Song's message
+        of "Mon, 18 Jul 2022 21:00:50 +1200")
+Message-ID: <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62d5fc18.1c69fb81.28c9a.a5c2@mx.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 02:17:20AM +0200, Christian Marangi wrote:
-> Wonder if a good idea would be leave things as is for now and work of a
-> single dsa_switch_ops on another series.
-> 
-> With "leave things as is" I mean that function will get migrated to
-> qca8k-common.c and exposed with the header file.
-> 
-> And the dsa_switch_ops is defined in qca8k specific code.
-> 
-> The warn about the 23 patch was scary so considering this series is
-> already a bit big and I can squash only a few patch, putting extra logic
-> to correctly handle each would make this even bigger.
-> 
-> Think the right thing to do is handling the changes for single
-> dsa_switch_ops to a separate series and at the same time also get some
-> info on ipq4019 and what can be generalized.
-> 
-> What do you think?
+Barry Song <21cnbao@gmail.com> writes:
 
-I don't have a clear mental image right now of how things would look like,
-but I suppose you can try and I can review the result. I imagine the
-only code added now that you'll need to delete when you later migrate from
-switch-specific dsa_switch_ops to common dsa_switch_ops are the function
-prototypes from qca8k.h, since the implementations of the dsa_switch_ops
-will become static functions at some point in the future.
+> From: Barry Song <v-songbaohua@oppo.com>
+>
+> THP_SWAP has been proven to improve the swap throughput significantly
+> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
+> splitting THP after swapped out").
+> As long as arm64 uses 4K page size, it is quite similar with x86_64
+> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
+> enabling it on arm64 will benefit arm64 as well.
+> A corner case is that MTE has an assumption that only base pages
+> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
+> MTE support until MTE is reworked to coexist with THP_SWAP.
+>
+> A micro-benchmark is written to measure thp swapout throughput as
+> below,
+>
+>  unsigned long long tv_to_ms(struct timeval tv)
+>  {
+>  	return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+>  }
+>
+>  main()
+>  {
+>  	struct timeval tv_b, tv_e;;
+>  #define SIZE 400*1024*1024
+>  	volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+>  				MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>  	if (!p) {
+>  		perror("fail to get memory");
+>  		exit(-1);
+>  	}
+>
+>  	madvise(p, SIZE, MADV_HUGEPAGE);
+>  	memset(p, 0x11, SIZE); /* write to get mem */
+>
+>  	gettimeofday(&tv_b, NULL);
+>  	madvise(p, SIZE, MADV_PAGEOUT);
+>  	gettimeofday(&tv_e, NULL);
+>
+>  	printf("swp out bandwidth: %ld bytes/ms\n",
+>  			SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
+>  }
+>
+> Testing is done on rk3568 64bit quad core processor Quad Core
+> Cortex-A55 platform - ROCK 3A.
+> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
+> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
+>
+> Cc: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Steven Price <steven.price@arm.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+> ---
+>  -v3: 
+>  * refine the commit log;
+>  * add a benchmark result;
+>  * refine the macro of arch_thp_swp_supported
+>  Thanks to the comments of Anshuman, Andrew, Steven
+>
+>  arch/arm64/Kconfig               |  1 +
+>  arch/arm64/include/asm/pgtable.h |  6 ++++++
+>  include/linux/huge_mm.h          | 12 ++++++++++++
+>  mm/swap_slots.c                  |  2 +-
+>  4 files changed, 20 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 1652a9800ebe..e1c540e80eec 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -101,6 +101,7 @@ config ARM64
+>  	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>  	select ARCH_WANT_LD_ORPHAN_WARN
+>  	select ARCH_WANTS_NO_INSTR
+> +	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+>  	select ARCH_HAS_UBSAN_SANITIZE_ALL
+>  	select ARM_AMBA
+>  	select ARM_ARCH_TIMER
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 0b6632f18364..78d6f6014bfb 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -45,6 +45,12 @@
+>  	__flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
+>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>  
+> +static inline bool arch_thp_swp_supported(void)
+> +{
+> +	return !system_supports_mte();
+> +}
+> +#define arch_thp_swp_supported arch_thp_swp_supported
+> +
+>  /*
+>   * Outside of a few very special situations (e.g. hibernation), we always
+>   * use broadcast TLB invalidation instructions, therefore a spurious page
+> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> index de29821231c9..4ddaf6ad73ef 100644
+> --- a/include/linux/huge_mm.h
+> +++ b/include/linux/huge_mm.h
+> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
+>  	return split_huge_page_to_list(&folio->page, list);
+>  }
+>  
+> +/*
+> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
+> + * limitations in the implementation like arm64 MTE can override this to
+> + * false
+> + */
+> +#ifndef arch_thp_swp_supported
+> +static inline bool arch_thp_swp_supported(void)
+> +{
+> +	return true;
+> +}
+
+How about the following?
+
+static inline bool arch_wants_thp_swap(void)
+{
+     return IS_ENABLED(ARCH_WANTS_THP_SWAP);
+}
+
+Best Regards,
+Huang, Ying
+
+> +#endif
+> +
+>  #endif /* _LINUX_HUGE_MM_H */
+> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
+> index 2a65a89b5b4d..10b94d64cc25 100644
+> --- a/mm/swap_slots.c
+> +++ b/mm/swap_slots.c
+> @@ -307,7 +307,7 @@ swp_entry_t folio_alloc_swap(struct folio *folio)
+>  	entry.val = 0;
+>  
+>  	if (folio_test_large(folio)) {
+> -		if (IS_ENABLED(CONFIG_THP_SWAP))
+> +		if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
+>  			get_swap_pages(1, &entry, folio_nr_pages(folio));
+>  		goto out;
+>  	}

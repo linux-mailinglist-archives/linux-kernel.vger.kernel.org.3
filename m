@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA9B579968
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95B3579E86
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237930AbiGSMCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S242755AbiGSNB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237920AbiGSMBe (ORCPT
+        with ESMTP id S242706AbiGSM72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:01:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494064331A;
-        Tue, 19 Jul 2022 04:58:40 -0700 (PDT)
+        Tue, 19 Jul 2022 08:59:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61E74F685;
+        Tue, 19 Jul 2022 05:24:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEDAA61640;
-        Tue, 19 Jul 2022 11:58:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DC96C341CA;
-        Tue, 19 Jul 2022 11:58:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53EFF61921;
+        Tue, 19 Jul 2022 12:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E5AC36AE3;
+        Tue, 19 Jul 2022 12:24:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231918;
-        bh=yO7cXLAxMONxPcse2MF3SOWUyJi9k0jjmONBy+J6g8w=;
+        s=korg; t=1658233481;
+        bh=T0O0KgkJt/ofJDvterLLW1GOiWLpCRtQ9l7LyqAHt2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f9sH05ZnIcALOeZpweIeq3wBfQH677LvddXuvqx+ZhubMVQVfnEYcGTgvqj2aJycJ
-         rxAnS7mjtNvEmlAB3gE4r5vWQCGDlz0RzsFshrjyCUvoRvk/OzwFAQAna9ueC6qXWt
-         RuWS3XYvpuD30lUxkXaKSLvmkW3B6lH4oKX47/wc=
+        b=JJCRuPrnXS0CdgmwHLaKQBHvQaR+xxQXENnxEE5JkZqN/e+rUKb8g3rHbo4VHuDAq
+         cWbhFkeLcGspJVTIqYCEdn1QuhQ4JIiLVbbRlSv/or3iyVdYDnB55NFnJpZNyJZrnX
+         /nFtsTcYsIyIY4NjACbiu0vfDWGo2bF+5r9diskQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 4.14 10/43] xhci: bail out early if driver cant accress host in resume
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 136/231] seg6: fix skb checksum evaluation in SRH encapsulation/insertion
 Date:   Tue, 19 Jul 2022 13:53:41 +0200
-Message-Id: <20220719114522.949172508@linuxfoundation.org>
+Message-Id: <20220719114725.865735173@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
-References: <20220719114521.868169025@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +54,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
 
-commit 72ae194704da212e2ec312ab182a96799d070755 upstream.
+[ Upstream commit df8386d13ea280d55beee1b95f61a59234a3798b ]
 
-Bail out early if the xHC host needs to be reset at resume
-but driver can't access xHC PCI registers.
+Support for SRH encapsulation and insertion was introduced with
+commit 6c8702c60b88 ("ipv6: sr: add support for SRH encapsulation and
+injection with lwtunnels"), through the seg6_do_srh_encap() and
+seg6_do_srh_inline() functions, respectively.
+The former encapsulates the packet in an outer IPv6 header along with
+the SRH, while the latter inserts the SRH between the IPv6 header and
+the payload. Then, the headers are initialized/updated according to the
+operating mode (i.e., encap/inline).
+Finally, the skb checksum is calculated to reflect the changes applied
+to the headers.
 
-If xhci driver already fails to reset the controller then there
-is no point in attempting to free, re-initialize, re-allocate and
-re-start the host. If failure to access the host is detected later,
-failing the resume, xhci interrupts will be double freed
-when remove is called.
+The IPv6 payload length ('payload_len') is not initialized
+within seg6_do_srh_{inline,encap}() but is deferred in seg6_do_srh(), i.e.
+the caller of seg6_do_srh_{inline,encap}().
+However, this operation invalidates the skb checksum, since the
+'payload_len' is updated only after the checksum is evaluated.
 
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20200312144517.1593-2-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-[sudip: adjust context]
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To solve this issue, the initialization of the IPv6 payload length is
+moved from seg6_do_srh() directly into the seg6_do_srh_{inline,encap}()
+functions and before the skb checksum update takes place.
+
+Fixes: 6c8702c60b88 ("ipv6: sr: add support for SRH encapsulation and injection with lwtunnels")
+Reported-by: Paolo Abeni <pabeni@redhat.com>
+Link: https://lore.kernel.org/all/20220705190727.69d532417be7438b15404ee1@uniroma2.it
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/ipv6/seg6_iptunnel.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1111,8 +1111,10 @@ int xhci_resume(struct xhci_hcd *xhci, b
+diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
+index d64855010948..e756ba705fd9 100644
+--- a/net/ipv6/seg6_iptunnel.c
++++ b/net/ipv6/seg6_iptunnel.c
+@@ -189,6 +189,8 @@ int seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh, int proto)
+ 	}
+ #endif
  
- 		xhci_dbg(xhci, "Stop HCD\n");
- 		xhci_halt(xhci);
--		xhci_reset(xhci);
-+		retval = xhci_reset(xhci);
- 		spin_unlock_irq(&xhci->lock);
-+		if (retval)
-+			return retval;
- 		xhci_cleanup_msix(xhci);
++	hdr->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
++
+ 	skb_postpush_rcsum(skb, hdr, tot_len);
  
- 		xhci_dbg(xhci, "// Disabling event ring interrupts\n");
+ 	return 0;
+@@ -241,6 +243,8 @@ int seg6_do_srh_inline(struct sk_buff *skb, struct ipv6_sr_hdr *osrh)
+ 	}
+ #endif
+ 
++	hdr->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
++
+ 	skb_postpush_rcsum(skb, hdr, sizeof(struct ipv6hdr) + hdrlen);
+ 
+ 	return 0;
+@@ -302,7 +306,6 @@ static int seg6_do_srh(struct sk_buff *skb)
+ 		break;
+ 	}
+ 
+-	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
+ 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
+ 	nf_reset_ct(skb);
+ 
+-- 
+2.35.1
+
 
 

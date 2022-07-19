@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9CF579C4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A13D579E35
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240934AbiGSMi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        id S242580AbiGSM64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240779AbiGSMh5 (ORCPT
+        with ESMTP id S242330AbiGSM6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:37:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A58422DD;
-        Tue, 19 Jul 2022 05:14:34 -0700 (PDT)
+        Tue, 19 Jul 2022 08:58:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F665F106;
+        Tue, 19 Jul 2022 05:23:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55D3AB81B21;
-        Tue, 19 Jul 2022 12:14:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC5F3C341C6;
-        Tue, 19 Jul 2022 12:14:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D0E6618F1;
+        Tue, 19 Jul 2022 12:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4BFC341C6;
+        Tue, 19 Jul 2022 12:23:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232871;
-        bh=gTAyIIWfVvcGQ/wzA1TZPu6SnMzXCc/djoWkchmhfY8=;
+        s=korg; t=1658233411;
+        bh=JFj+LVCeBm8RwxCHRYQqnzhufZo45CcRt8VNjkTJA6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yUv9p1FIxRDxWif2nVysvSCr3ytsW1rHYrHAk6QV4IKuzFGxzgOvomyLIUoaws1RI
-         wPkSB+f5ev2HquSlsjNKIke4QvVDYI04jsDDjkKb+I1XAAxDjaHkJhdMdQW8baz6Co
-         235E4htzo51AoRaWj4eeza0ajICiWtTrXLLDN6DE=
+        b=JA3YbHojfMvEDxXhiuTRllr+bq7xoOrBzP6XHBBmhrdhzD+FSu/ozwl5qUCqhY9DA
+         H1OEjaTknaywBAzWn/CIvhQiM8LSj/wmMhG8tqBAqxi1foSJfdrtjj1pJTRO8yUCS9
+         WKm6bXWG2zZT2p/wF03nmF+TVA/rVL2wXQn6Ja6A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, William Zhang <william.zhang@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 065/167] arm64: dts: broadcom: bcm4908: Fix timer node for BCM4906 SoC
-Date:   Tue, 19 Jul 2022 13:53:17 +0200
-Message-Id: <20220719114702.822782094@linuxfoundation.org>
+Subject: [PATCH 5.18 113/231] icmp: Fix data-races around sysctl_icmp_echo_enable_probe.
+Date:   Tue, 19 Jul 2022 13:53:18 +0200
+Message-Id: <20220719114724.048794263@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Zhang <william.zhang@broadcom.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit b4a544e415e9be33b37d9bfa9d9f9f4d13f553d6 ]
+[ Upstream commit 4a2f7083cc6cb72dade9a63699ca352fad26d1cd ]
 
-The cpu mask value in interrupt property inherits from bcm4908.dtsi
-which sets to four cpus. Correct the value to two cpus for dual core
-BCM4906 SoC.
+While reading sysctl_icmp_echo_enable_probe, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its readers.
 
-Fixes: c8b404fb05dc ("arm64: dts: broadcom: bcm4908: add BCM4906 Netgear R8000P DTS files")
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: d329ea5bd884 ("icmp: add response to RFC 8335 PROBE messages")
+Fixes: 1fd07f33c3ea ("ipv6: ICMPV6: add response to ICMPV6 RFC 8335 PROBE messages")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ net/ipv4/icmp.c | 2 +-
+ net/ipv6/icmp.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-index 66023d553524..d084c33d5ca8 100644
---- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-+++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-@@ -9,6 +9,14 @@ cpus {
- 		/delete-node/ cpu@3;
- 	};
+diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
+index 92eaa96a9ff1..7edc8a3b1646 100644
+--- a/net/ipv4/icmp.c
++++ b/net/ipv4/icmp.c
+@@ -1025,7 +1025,7 @@ bool icmp_build_probe(struct sk_buff *skb, struct icmphdr *icmphdr)
+ 	u16 ident_len;
+ 	u8 status;
  
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
-+	};
-+
- 	pmu {
- 		compatible = "arm,cortex-a53-pmu";
- 		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+-	if (!net->ipv4.sysctl_icmp_echo_enable_probe)
++	if (!READ_ONCE(net->ipv4.sysctl_icmp_echo_enable_probe))
+ 		return false;
+ 
+ 	/* We currently only support probing interfaces on the proxy node
+diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
+index e6b978ea0e87..26554aa6fc1b 100644
+--- a/net/ipv6/icmp.c
++++ b/net/ipv6/icmp.c
+@@ -919,7 +919,7 @@ static int icmpv6_rcv(struct sk_buff *skb)
+ 		break;
+ 	case ICMPV6_EXT_ECHO_REQUEST:
+ 		if (!net->ipv6.sysctl.icmpv6_echo_ignore_all &&
+-		    net->ipv4.sysctl_icmp_echo_enable_probe)
++		    READ_ONCE(net->ipv4.sysctl_icmp_echo_enable_probe))
+ 			icmpv6_echo_reply(skb);
+ 		break;
+ 
 -- 
 2.35.1
 

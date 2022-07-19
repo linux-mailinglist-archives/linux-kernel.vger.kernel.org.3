@@ -2,77 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A81A5794A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E925794AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237037AbiGSH4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 03:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
+        id S234196AbiGSH5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 03:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236889AbiGSH4n (ORCPT
+        with ESMTP id S234713AbiGSH5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 03:56:43 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4CA18E18
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:56:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1658217402; x=1689753402;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kPn+jVbdHDbOQa9qOPTliLwITlhniYkXD6SqjIgKME0=;
-  b=YQ4sbmud/zNRJwBsdeWsFv+gF+cnKA/w1oMC9TU7h2kDVRCbRMmtrMXR
-   k36GcMAtby98iR8DuAC57MN9+/fjQD4yjDVB/imCCyup+iYz0EbpSC2NW
-   P/LiMf0sQi8JgZ2q3rpD+1gVFjJVlYB+ir9mxaAMfDFnxNUNawmpkMPcu
-   vuAfpD5reXeqNjn4UzBtQ91Xl5I4sRr2ElMEpwLZhbEuwYMKiu2a4WhrJ
-   auWw+XXauTs+RSg4kpSqwd0S4lETe9FEdu6nUol+IsGSBbUQObKgI7lpm
-   j/kFejauJDiPwcmszdru61qMKsImsoxuYP0wr7vMvk60hlX+nj8BEbyrU
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="165362018"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jul 2022 00:56:42 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 19 Jul 2022 00:56:42 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 19 Jul 2022 00:56:39 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <p.yadav@ti.com>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <richard@nod.at>,
-        <michael@walle.cc>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH] MAINTAINERS: Use my kernel.org email
-Date:   Tue, 19 Jul 2022 10:56:37 +0300
-Message-ID: <165821627887.113797.8074554472699520278.b4-ty@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220718151243.1149442-1-p.yadav@ti.com>
-References: <20220718151243.1149442-1-p.yadav@ti.com>
+        Tue, 19 Jul 2022 03:57:17 -0400
+Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com (mailrelay1-1.pub.mailoutpod1-cph3.one.com [46.30.210.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E526F2AE39
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=2cIAQ8Q87Su0xZjwFvxWnDl7yaVEuz+orMsRxOWQtYs=;
+        b=A9TzvSRl9qa2gKDkZ7WTu/eJU9KIqJ4YckBWNGrnnbkd0WWETmYLn9/hpUxq2tLMoNWw0zf4yZDRw
+         gnZIpUFk57ynNZw2Qj5ydTQfpDrwEgKj2xndN9bWGfd76nHAL9C1olbZblsWM3qVXBIcJaFhXrwCZP
+         TP+BgeLM3xL09ajysK1R1okSt96o6C/jbdd4Zmxn//yk7c7AB9M17lsfRXLtrmTY+JzHgHlkwxSahH
+         KVKyfbdAnNz4j3ueJuzPHXwxdh1l8sTdOKWSc9kf8stZN0T7TPaQKw/G2vd35xXaa5MLDDfL6FYkB5
+         8MkwwssYPsQquP+qoV7ETWXW418du/Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=2cIAQ8Q87Su0xZjwFvxWnDl7yaVEuz+orMsRxOWQtYs=;
+        b=Ckq/4EfNAN8crPZdNPERFvfDyFnaOOKE8TbiBV33dgGS410bjTk0YIy/DNH+aJ+P2sHF0MpiOAfNw
+         v3EpcsTCA==
+X-HalOne-Cookie: 45e94343b7d45f836c1765849a42fe61463e522e
+X-HalOne-ID: 65e9548c-0738-11ed-a6c8-d0431ea8a283
+Received: from mailproxy1.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 65e9548c-0738-11ed-a6c8-d0431ea8a283;
+        Tue, 19 Jul 2022 07:57:13 +0000 (UTC)
+Date:   Tue, 19 Jul 2022 09:57:11 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Caleb Connolly <caleb@connolly.tech>
+Cc:     devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        phone-devel@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 3/4] dt-bindings: panel: Add LG SW43408 MIPI-DSI panel
+Message-ID: <YtZj1yV3blLOJH62@ravnborg.org>
+References: <20220718213051.1475108-1-caleb@connolly.tech>
+ <20220718213051.1475108-4-caleb@connolly.tech>
+ <YtZKylMu4jEa/oDp@ravnborg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtZKylMu4jEa/oDp@ravnborg.org>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 20:42:43 +0530, Pratyush Yadav wrote:
-> Use the kernel.org email I have for reviewing patches.
+Hi Caleb,
+
+On Tue, Jul 19, 2022 at 08:10:18AM +0200, Sam Ravnborg wrote:
+> Hi Caleb,
 > 
+> On Mon, Jul 18, 2022 at 10:30:50PM +0100, Caleb Connolly wrote:
+> > From: Sumit Semwal <sumit.semwal@linaro.org>
+> > 
+> > LG SW43408 is 1080x2160, 4-lane MIPI-DSI panel.
+> A few things to improve to this binding.
 > 
+> 	Sam
+> > 
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > Signed-off-by: Sumit Semwal <sumit.semwal@linaro.org>
+> > [caleb: convert to yaml]
+> > Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+> > ---
+> >  .../bindings/display/panel/lg,43408.yaml      | 41 +++++++++++++++++++
+> >  .../display/panel/panel-simple-dsi.yaml       |  2 +
+> >  2 files changed, 43 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/display/panel/lg,43408.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/display/panel/lg,43408.yaml b/Documentation/devicetree/bindings/display/panel/lg,43408.yaml
+> > new file mode 100644
+> > index 000000000000..0529a3aa2692
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/display/panel/lg,43408.yaml
+> > @@ -0,0 +1,41 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/display/panel/panel-lvds.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: LG SW43408 1080x2160 DSI panel
+> > +
+> > +maintainers:
+> > +  - Caleb Connolly <caleb@connolly.tech>
+> > +
+> > +description: |
+> > +  This panel is used on the Pixel 3, it is a 60hz OLED panel which
+> > +  required DSC (Display Stream Compression) and has rounded corners.
+> > +
+> > +allOf:
+> > +  - $ref: panel-common.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - const: lg,sw43408
+> > +
+> > +  vddi-supply: true
+> > +  vpnl-supply: true
+> > +  reset-gpios: true
+> > +
+> > +  backlight: false
+> > +  power-supply: false
+> No need to say anything is false, this is covered by the statement below.
+> Also, the driver uses backlight, so it should be true?
+The driver do not use backlight from the DT so disregard the last
+comment.
 
-Applied to spi-nor/next, thanks!
-
-[1/1] MAINTAINERS: Use my kernel.org email
-      https://git.kernel.org/mtd/c/92714596cdbe
-
-Best regards,
--- 
-Tudor Ambarus <tudor.ambarus@microchip.com>
+	Sam

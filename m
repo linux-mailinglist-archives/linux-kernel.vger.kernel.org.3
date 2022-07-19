@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B0357984D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EAE579856
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234416AbiGSLVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S235316AbiGSLYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiGSLVR (ORCPT
+        with ESMTP id S234546AbiGSLYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:21:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88AF1EC66
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:21:16 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 11:21:13 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658229675;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pk1fyLIsHfoRQmsXJ2jTqaeievyMkNJS1qcck37CGn0=;
-        b=34bIPmpUaFStzlySqwCz7cQidmwiUVlvnc2ot5rkrohq1EuUdmnggkLoozCeBLVkqMU0Ce
-        08Uum1OTN65kMVpgwUlqUCcyl8EQqusSCCR9BX4LzfNkkG7iy1TFMEpOfyhQH2EsYMOOXO
-        wl7EACsk/tHYstZ37URKygqsS2GgrGTYjTZSmU0o3Le31932FQkrvor/SvWpV7xecH9hOp
-        Fgo8XmIeGMLZ+UJ57yAbcz5sqhsYAWZK9EhTlf9Mca7DNaiXfbbKKyEMEZ1OVsGAWP2Gsv
-        sHB6m9FrSwmxOWl8XcGHLw/DknUSh8CelCVWCoRwKJn8x/iL5nr+1YnAoULNEg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658229675;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pk1fyLIsHfoRQmsXJ2jTqaeievyMkNJS1qcck37CGn0=;
-        b=um/+e1JChdmO+Soavows5bDlszEty+Q7u/hpwFJp6uS3SJXn6/CJRlESZzd8ZDVPbCgVy5
-        YoCll0602uDMQACQ==
-From:   "irqchip-bot for Jason Wang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/gic-v3: Fix comment typo
-Cc:     Jason Wang <wangborong@cdjrlc.com>, Marc Zyngier <maz@kernel.org>,
-        tglx@linutronix.de
-In-Reply-To: <20220715051258.28889-1-wangborong@cdjrlc.com>
-References: <20220715051258.28889-1-wangborong@cdjrlc.com>
+        Tue, 19 Jul 2022 07:24:23 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E4D1EC66;
+        Tue, 19 Jul 2022 04:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=MVGcC/DTzfP8ZGucES1+UZ9Ncni0QnWl0/Uq2QzEjHM=;
+        b=HPWPWY8ZohaXc8X4cikOm9D9XVeNpckywpAY/ZxCe98IPWrnEnMjiGVMOqRotGPJqvrli5S4lo7yi
+         qVrAU5OWGSXtc8tZVHHK2Lh4+b3UsehSuHcv507t0EszLxDTZw8RNoACw3rONPWH7rlFDyEVaWlKSA
+         ucHiyf13YAxiHTV+dCzRy5V3ap7sI/x47GjdGzvXZ5NrB7x/yGmR3bVr+wlp2/ZsJX9uBeijFjMj/O
+         dq39Eg85EYLDPv/LyLuoAyGajM8zXWYytete9ZQrmWYWz0uUn/CX/fIog1ZPJWiunx1NoFUOkFspn3
+         kxvoDt1gjoZE+MHMLNX/ixX+IzBAnBg==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000008,0.008705)], BW: [Enabled, t: (0.000022,0.000002)], RTDA: [Enabled, t: (0.075079), Hit: No, Details: v2.40.0; Id: 15.52kd5h.1g8b36t0c.79k; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Tue, 19 Jul 2022 14:24:04 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: [PATCH v5 0/2] Lattice ECP5 FPGA manager
+Date:   Tue, 19 Jul 2022 14:23:33 +0300
+Message-Id: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Message-ID: <165822967317.15455.7810652368125768179.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+slave SPI interface with .bit formatted uncompressed bitstream image.
 
-Commit-ID:     295171705c9ac98f4626609033f6bab0c2e37ed0
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/295171705c9ac98f4626609033f6bab0c2e37ed0
-Author:        Jason Wang <wangborong@cdjrlc.com>
-AuthorDate:    Fri, 15 Jul 2022 13:12:58 +08:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Tue, 19 Jul 2022 12:13:31 +01:00
+ChangeLog:
+  v1 -> v2:
+    * remove "spi" from compatible string
+    * reword description in dt-bindings doc
+    * add reference to spi-peripheral-props.yaml in dt-binding doc
+    * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+      undersores in node names.
+  v2 -> v3:
+    * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+  v3 -> v4:
+    * dt-bindings: reword description
+    * dt-bindings: revert props order
+  v4 -> v5:
+    * dt-bindings: remove trailing dot from title
+    * dt-bindings: reword description to avoid driver reference
+    * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
 
-irqchip/gic-v3: Fix comment typo
+Ivan Bornyakov (2):
+  fpga: ecp5-spi: add Lattice ECP5 FPGA manager
+  dt-bindings: fpga: add binding doc for ecp5-spi fpga mgr
 
-The double `the' is duplicated in line 1786, remove one.
+ .../bindings/fpga/lattice,ecp5-fpga-mgr.yaml  |  74 +++++
+ drivers/fpga/Kconfig                          |   7 +
+ drivers/fpga/Makefile                         |   1 +
+ drivers/fpga/ecp5-spi.c                       | 275 ++++++++++++++++++
+ 4 files changed, 357 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,ecp5-fpga-mgr.yaml
+ create mode 100644 drivers/fpga/ecp5-spi.c
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220715051258.28889-1-wangborong@cdjrlc.com
----
- drivers/irqchip/irq-gic-v3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-- 
+2.37.1
 
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 5c1cf90..d28b45f 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -1783,7 +1783,7 @@ static void gic_enable_nmi_support(void)
- 	 * the security state of the GIC (controlled by the GICD_CTRL.DS bit)
- 	 * and if Group 0 interrupts can be delivered to Linux in the non-secure
- 	 * world as FIQs (controlled by the SCR_EL3.FIQ bit). These affect the
--	 * the ICC_PMR_EL1 register and the priority that software assigns to
-+	 * ICC_PMR_EL1 register and the priority that software assigns to
- 	 * interrupts:
- 	 *
- 	 * GICD_CTRL.DS | SCR_EL3.FIQ | ICC_PMR_EL1 | Group 1 priority
+

@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FCA57A86E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8143F57A872
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237475AbiGSUpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 16:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S234457AbiGSUp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 16:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238143AbiGSUpB (ORCPT
+        with ESMTP id S240196AbiGSUpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 16:45:01 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D99599D4;
-        Tue, 19 Jul 2022 13:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mm6gaIG3ulRS6bYmNbpjfA3sE2i3p2OSI7BJX/PQ87M=; b=NHRZ5ZOoSJvZ1rx0k+qAorgHi+
-        ysh3vwi0PmqkJ+sGT7WvvQq42Iam55ZtfsYvuSe8jlWS3T5GO6WFTAJPoBvG8B0awkYvog91umeP9
-        Uy9+z9l79ZNg4uOpd7S9OPocCVgkb02y0J3HsguQ5KVTAI49LNiEt9sPKWHn2I9cb6QoKgN6FB9Kg
-        nC7EdVklSTsvadIYvBBICjf9v+16T5FuWpJnr1e48reVt+ocCZ9LYMX8lFiuwZHLqGO0dgF535kiv
-        pv2Ma+2wbPCi1qg2RE2gqrjaTAHsDQjqblHKykFE7WpSED9UQK0QBFo9aHF9TjvED8BhtMx764WgT
-        m/JB4MpQ==;
-Received: from 200-100-212-117.dial-up.telesp.net.br ([200.100.212.117] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oDu59-006j7M-DT; Tue, 19 Jul 2022 22:44:39 +0200
-Message-ID: <8e201d99-78a8-d68c-6d33-676a1ba5a6ee@igalia.com>
-Date:   Tue, 19 Jul 2022 17:44:03 -0300
+        Tue, 19 Jul 2022 16:45:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FE5252A6;
+        Tue, 19 Jul 2022 13:45:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A944B81D4F;
+        Tue, 19 Jul 2022 20:45:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23A39C341D9;
+        Tue, 19 Jul 2022 20:45:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658263519;
+        bh=is8+ILmv9PejEMf4YjQ/EARYt+ria3kqCNvGVtOmbyg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TF5U96gC1H5J4OrMSrDKgmZyB5uc/XphUOWbKMbJnxayFYXmqy9U0annagiK1Lrww
+         kMnoog99PZLyFGuCmst1LjRa3A+igB4SQQtOhT27n9rNi3z3g4K1WE64ntqxZjv2vh
+         k/kz6eKQ8VgzwurgemKgs9PnDlqVkNrgYIi7MbAC3Wbf7o3BHERBZu0yGYViXn4EHq
+         MjlEZg/EAxSqoTOQIqp/hdqMTyPcjcH4EVZz5vnUxRzfeK8UHMPgPgEeYZqYKNtPWl
+         NtU/Awbn7557SdeWBWIEbxOJL/rsBecuXSPyt1b+srrACu7ksrSaPiG6F+0N3fSa1h
+         HNlHaIUCq5SSQ==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-10bd4812c29so33555576fac.11;
+        Tue, 19 Jul 2022 13:45:19 -0700 (PDT)
+X-Gm-Message-State: AJIora8rejmL37IxbD3I3KEzr1eJa7jU/x1aV5FkkJwl7xHsAx5PbZ8z
+        v8Eafrog5yw3rylye4j0+uLI8gpOavUwCosboXk=
+X-Google-Smtp-Source: AGRyM1sICwjAXSPoZhvHV3Kl2TfNBu9m6a+FLzUR2NSmzL9dkb7rG0rM0A03qKW8n7Vjdtf9rfc5bQfPyzgPrD82OAc=
+X-Received: by 2002:a05:6870:5b91:b0:108:374a:96b0 with SMTP id
+ em17-20020a0568705b9100b00108374a96b0mr766142oab.126.1658263517968; Tue, 19
+ Jul 2022 13:45:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 09/13] notifier: Show function names on notifier
- routines if DEBUG_NOTIFIERS is set
-Content-Language: en-US
-To:     Arjan van de Ven <arjan@linux.intel.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Xiaoming Ni <nixiaoming@huawei.com>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-10-gpiccoli@igalia.com>
- <e292e128-d732-e770-67d7-b6ed947cec7b@linux.intel.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <e292e128-d732-e770-67d7-b6ed947cec7b@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAMj1kXHD5XBAS1aBjzg1RCeK6qgtanUSED_xyTZ0v1j+UShMKw@mail.gmail.com>
+ <20220627122230.7eetepoufd5w3lxd@black.fi.intel.com> <CAMkAt6oJJaRM_dy=y2BP99VziPriVuA4jAmMc=G7njwJYKFgyg@mail.gmail.com>
+ <CAMj1kXHpS2B9Q7AaQ1euGidZUEyR6gfi=e+t1J_Cr8bmK_9mTw@mail.gmail.com>
+ <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com> <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
+ <20220718172159.4vwjzrfthelovcty@black.fi.intel.com> <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
+ <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
+ <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com> <YtcCWfCQuEsVhH6W@zn.tnic>
+In-Reply-To: <YtcCWfCQuEsVhH6W@zn.tnic>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 19 Jul 2022 22:45:06 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
+Message-ID: <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Gonda <pgonda@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Yao, Jiewen" <jiewen.yao@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/07/2022 17:33, Arjan van de Ven wrote:
-> On 7/19/2022 12:53 PM, Guilherme G. Piccoli wrote:
->> Currently we have a debug infrastructure in the notifiers file, but
->> it's very simple/limited. Extend it by:
->>
->> (a) Showing all registered/unregistered notifiers' callback names;
-> 
-> 
-> I'm not yet convinced that this is the right direction.
-> The original intent for this "debug" feature was to be lightweight enough that it could run in production, since at the time, rootkits
-> liked to clobber/hijack notifiers and there were also some other signs of corruption at the time.
-> 
-> By making something print (even at pr_info) for what are probably frequent non-error operations, you turn something that is light
-> into something that's a lot more heavy and generally that's not a great idea... it'll be a performance surprise.
-> 
-> 
+On Tue, 19 Jul 2022 at 21:14, Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Tue, Jul 19, 2022 at 11:29:32AM -0700, Dionna Amalie Glaze wrote:
+> > How about instead of the limited resource of UTS_VERSION, we add a
+> > SETUP_BOOT_FEATURES enum for setup_data in the boot header? That would
+> > be easier to parse out and more extensible in the future.
+> > https://www.kernel.org/doc/html/latest/x86/boot.html?highlight=boot
+> >
+> > This can contain a bitmap of a number of features that we currently
+> > need manual tagging for, such as SEV guest support, SEV-SNP guest
+> > support, TDX guest support, and (CONFIG_UNACCEPTED_MEMORY, TDX) or
+> > (CONFIG_UNACCEPTED_MEMORY, SEV-SNP).
+> > The VMM, UEFI, or boot loader can read these from the images/kernels
+> > and have the appropriate behavior.
+>
+> I think for stuff like that you want loadflags or xloadflags in the
+> setup header.
+>
 
-Is registering/un-registering notifiers a hot path, or performance
-sensitive usually? For me, this patch proved to be very useful, and once
-enabled, shows relatively few entries in dmesg, these operations aren't
-so common thing it seems.
+Please, no. Let's not invent Linux/x86 specific hacks to infer whether
+or not the kernel is capable of accepting memory when it is perfectly
+capable of telling us directly. We will surely need something
+analogous on other architectures in the future as well, so the setup
+header is definitely not the right place for this.
 
-Also, if this Kconfig option was meant to run in production, maybe the
-first thing would be have some sysfs tuning or anything able to turn it
-on - I've worked with a variety of customers and the most terrifying
-thing in servers is to install a new kernel and reboot heh
+The 'bootloader that calls EBS()' case does not apply to Linux, and
+given that we are talking specifically about confidential computing
+VMs here, we can afford to be normative and define something generic
+that works well for us.
 
-My understanding is that this debug infrastructure would be useful for
-notifiers writers and people playing with the core notifiers
-code...tracing would be much more useful in the context of checking if
-some specific notifier got registered/executed in production environment
-I guess.
-
-Cheers,
-
-
-Guilherme
+So let's define a way for the EFI stub to signal to the firmware
+(before EBS()) that it will take control of accepting memory. The
+'bootloader that calls EBS()' case can invent something along the
+lines of what has been proposed in this thread to infer the
+capabilities of the kernel (and decide what to signal to the
+firmware). But we have no need for this additional complexity on
+Linux.

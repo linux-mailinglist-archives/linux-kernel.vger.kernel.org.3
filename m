@@ -2,53 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD575797CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3F65797D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235895AbiGSKkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 06:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S233329AbiGSKno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 06:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbiGSKkP (ORCPT
+        with ESMTP id S229500AbiGSKnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 06:40:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC7764DC;
-        Tue, 19 Jul 2022 03:40:14 -0700 (PDT)
+        Tue, 19 Jul 2022 06:43:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE98B33F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 03:43:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83A5A6145D;
-        Tue, 19 Jul 2022 10:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A82F1C341CA;
-        Tue, 19 Jul 2022 10:40:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 646B4B81AB2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:43:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD602C341C6;
+        Tue, 19 Jul 2022 10:43:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658227213;
-        bh=qvhkpMRddHvQfPRFR7U/uabTs0X5ItLi4j1JcUHmutI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=sYchI28UbpiDE9EOH/ie7swZlbgVOOfsddPEHu2On87HRIsPrl3w7y+TFwG6fYVIx
-         VrDyX8R56yxqqDuur6p4tiG2Ixc18/AH4cT20Mu2H5G1m9X4J0oLjgI0UGXJjB8dfC
-         cWQFqMW7tJEMGP8AQCmQ+RGEw2if7wwvqfdRJxHvvCLV73AKD98qVL2kKZUK6a5kGH
-         13C3mHGIfYI0tiyqiM4NOjGDuGWioOF5AOHdFsjSO4QhdIj7XguQV+sUR9waH5qVBJ
-         hFnurIVISTZ8i5c6YLSAbzoIX4EySdUvMWozPpsYxtKFQTtxeeA6hM+Y6uEFHUy7xi
-         AO36y+Gr9knrg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8D902E451BA;
-        Tue, 19 Jul 2022 10:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 1/2] net: dsa: sja1105: silent spi_device_id warnings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165822721357.28275.6504175351310430939.git-patchwork-notify@kernel.org>
-Date:   Tue, 19 Jul 2022 10:40:13 +0000
-References: <20220717135831.2492844-1-o.rempel@pengutronix.de>
-In-Reply-To: <20220717135831.2492844-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     olteanv@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com,
-        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+        s=k20201202; t=1658227417;
+        bh=iJd6H+8fNSRJuv3eLl/eVHLOrWTWORA02tiW58EpTso=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fje14KJooK8UuF4Le+blz2qqb7gLZxwhUWCPYiMz0VjkO7XukgdkV97LDlC+S2TKK
+         cJAppN6LXLIffITBVHWgaUk/Jj3pBGPGb4ZJaWxRX0slNJGYYCruvRO5sFuG0HD4wj
+         rXSuISjUP4TGZ5ExzNmYyW/NXq4iFVm7Hl2/r0yyw4UpNpDVdt/R3mkcYLNAI1a11Y
+         BI2KBINAUudc6dbQZ2tbNB1nngRs6kAnZkfVQU98x7yCGfp4XzTI6TwpEj57PS8G7V
+         Q449jcdy3TA4h5OTSaQmdHolJDKoX8SuIjJPcuz08ALGWngurwliqo91u/3mNKsPCy
+         1STaWrOCUZqsg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDkhT-008SNC-T0;
+        Tue, 19 Jul 2022 11:43:35 +0100
+Date:   Tue, 19 Jul 2022 11:43:35 +0100
+Message-ID: <87h73dz8ko.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org,
+        madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
+        tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com,
+        andreyknvl@gmail.com, russell.king@oracle.com,
+        vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org,
+        drjones@redhat.com, wangkefeng.wang@huawei.com, elver@google.com,
+        keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org,
+        oupton@google.com, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        android-mm@google.com, kernel-team@android.com
+Subject: Re: [PATCH v4 00/18] KVM nVHE Hypervisor stack unwinder
+In-Reply-To: <20220715061027.1612149-1-kaleshsingh@google.com>
+References: <20220715061027.1612149-1-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, mark.rutland@arm.com, broonie@kernel.org, madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com, tabba@google.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, andreyknvl@gmail.com, russell.king@oracle.com, vincenzo.frascino@arm.com, mhiramat@kernel.org, ast@kernel.org, drjones@redhat.com, wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com, yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, android-mm@google.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,35 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sun, 17 Jul 2022 15:58:30 +0200 you wrote:
-> Add spi_device_id entries to silent following warnings:
->  SPI driver sja1105 has no spi_device_id for nxp,sja1105e
->  SPI driver sja1105 has no spi_device_id for nxp,sja1105t
->  SPI driver sja1105 has no spi_device_id for nxp,sja1105p
->  SPI driver sja1105 has no spi_device_id for nxp,sja1105q
->  SPI driver sja1105 has no spi_device_id for nxp,sja1105r
->  SPI driver sja1105 has no spi_device_id for nxp,sja1105s
->  SPI driver sja1105 has no spi_device_id for nxp,sja1110a
->  SPI driver sja1105 has no spi_device_id for nxp,sja1110b
->  SPI driver sja1105 has no spi_device_id for nxp,sja1110c
->  SPI driver sja1105 has no spi_device_id for nxp,sja1110d
+On Fri, 15 Jul 2022 07:10:09 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> [...]
+> Hi all,
+> 
+> This is v4 of the series adding support for nVHE hypervisor stacktraces;
+> and is based on arm64 for-next/stacktrace.
+> 
+> Thanks all for your feedback on previous revisions. Mark Brown, I
+> appreciate your Reviewed-by on the v3, I have dropped the tags in this
+> new verision since I think the series has changed quite a bit.
+> 
+> The previous versions were posted at:
+> v3: https://lore.kernel.org/r/20220607165105.639716-1-kaleshsingh@google.com/
+> v2: https://lore.kernel.org/r/20220502191222.4192768-1-kaleshsingh@google.com/
+> v1: https://lore.kernel.org/r/20220427184716.1949239-1-kaleshsingh@google.com/
+> 
+> The main updates in this version are to address concerens from Marc on the
+> memory usage and reusing the common code by refactoring into a shared header.
 
-Here is the summary with links:
-  - [net,v2,1/2] net: dsa: sja1105: silent spi_device_id warnings
-    https://git.kernel.org/netdev/net/c/855fe49984a8
-  - [net,v2,2/2] net: dsa: vitesse-vsc73xx: silent spi_device_id warnings
-    https://git.kernel.org/netdev/net/c/1774559f0799
+Overall, the series looks better. I've pointed out a few things that
+need changing, but my overall gripe is around the abuse the
+stacktrace/nvhe.h as a dumping ground. A lot of the code there could
+be pushed to handle_exit.c (or some other compilation unit).
 
-You are awesome, thank you!
+I've pushed an example of a 10 minutes refactor in my tree
+(kvm-arm64/nvhe-stacktrace), and I'm sure these are the lowest hanging
+fruits.
+
+Thanks,
+
+	M.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Without deviation from the norm, progress is not possible.

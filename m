@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B4F579B7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5F2579D22
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240065AbiGSM2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        id S241561AbiGSMrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239838AbiGSM0x (ORCPT
+        with ESMTP id S239414AbiGSMpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:26:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2184148C93;
-        Tue, 19 Jul 2022 05:10:17 -0700 (PDT)
+        Tue, 19 Jul 2022 08:45:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC3F558FF;
+        Tue, 19 Jul 2022 05:18:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A7E061632;
-        Tue, 19 Jul 2022 12:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 721AEC341D1;
-        Tue, 19 Jul 2022 12:10:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEF78B81B1C;
+        Tue, 19 Jul 2022 12:17:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1547C341C6;
+        Tue, 19 Jul 2022 12:17:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232616;
-        bh=NGZvUX2/8YYY7PFd7hqg4wLi0Lty1gk9Q+AsMykP6rs=;
+        s=korg; t=1658233059;
+        bh=JG031+SIFPqD7zsmkiMMSaalhVUkd4njI1+DibBd8D0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c9qvoEYOnYhjRAj2wN2gw7NJgR2Zb4ntOAugoTh47fcroHApnY+G1StKUyI5z142d
-         pLW4CTsZS+6JlPVR0rV6VMI/LKJQmgq1Hd+DFjS/9l28Uppt0KKY13jHyyoha3veZS
-         ZdFzrIcQOM0iVBmT16FlZS6CkGQtjuhHfdycEh38=
+        b=TaJ2u9yEUbNg1SQTRAg2vjtu/kfKecrpVZt4Sn5eKbZMJ/5OKQg77y2tQ8h1VcRd5
+         QX3QTtQPdsUflbKaIEHDbfwKihcqeBTny6J/QI4v4Yxd8+Dih1ki4YyN39Lmg0pzv1
+         Invhp7stNSWXO7qH0TYQI+hs++ohl9UgXPxL2/B4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 100/112] Revert "can: xilinx_can: Limit CANFD brp to 2"
-Date:   Tue, 19 Jul 2022 13:54:33 +0200
-Message-Id: <20220719114636.525532808@linuxfoundation.org>
+Subject: [PATCH 5.15 142/167] ASoC: wm5110: Fix DRE control
+Date:   Tue, 19 Jul 2022 13:54:34 +0200
+Message-Id: <20220719114710.231987100@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Neeli <srinivas.neeli@xilinx.com>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit c6da4590fe819dfe28a4f8037a8dc1e056542fb4 ]
+[ Upstream commit 0bc0ae9a5938d512fd5d44f11c9c04892dcf4961 ]
 
-This reverts commit 05ca14fdb6fe65614e0652d03e44b02748d25af7.
+The DRE controls on wm5110 should return a value of 1 if the DRE state
+is actually changed, update to fix this.
 
-On early silicon engineering samples observed bit shrinking issue when
-we use brp as 1. Hence updated brp_min as 2. As in production silicon
-this issue is fixed, so reverting the patch.
-
-Link: https://lore.kernel.org/all/20220609082433.1191060-2-srinivas.neeli@xilinx.com
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220621102041.1713504-2-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/xilinx_can.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/codecs/wm5110.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index 1c42417810fc..1a3fba352cad 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -259,7 +259,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
- 	.tseg2_min = 1,
- 	.tseg2_max = 128,
- 	.sjw_max = 128,
--	.brp_min = 2,
-+	.brp_min = 1,
- 	.brp_max = 256,
- 	.brp_inc = 1,
- };
-@@ -272,7 +272,7 @@ static const struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
- 	.tseg2_min = 1,
- 	.tseg2_max = 16,
- 	.sjw_max = 16,
--	.brp_min = 2,
-+	.brp_min = 1,
- 	.brp_max = 256,
- 	.brp_inc = 1,
- };
+diff --git a/sound/soc/codecs/wm5110.c b/sound/soc/codecs/wm5110.c
+index 5c2d45d05c97..7c6e01720d65 100644
+--- a/sound/soc/codecs/wm5110.c
++++ b/sound/soc/codecs/wm5110.c
+@@ -413,6 +413,7 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
+ 	unsigned int rnew = (!!ucontrol->value.integer.value[1]) << mc->rshift;
+ 	unsigned int lold, rold;
+ 	unsigned int lena, rena;
++	bool change = false;
+ 	int ret;
+ 
+ 	snd_soc_dapm_mutex_lock(dapm);
+@@ -440,8 +441,8 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
+ 		goto err;
+ 	}
+ 
+-	ret = regmap_update_bits(arizona->regmap, ARIZONA_DRE_ENABLE,
+-				 mask, lnew | rnew);
++	ret = regmap_update_bits_check(arizona->regmap, ARIZONA_DRE_ENABLE,
++				       mask, lnew | rnew, &change);
+ 	if (ret) {
+ 		dev_err(arizona->dev, "Failed to set DRE: %d\n", ret);
+ 		goto err;
+@@ -454,6 +455,9 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
+ 	if (!rnew && rold)
+ 		wm5110_clear_pga_volume(arizona, mc->rshift);
+ 
++	if (change)
++		ret = 1;
++
+ err:
+ 	snd_soc_dapm_mutex_unlock(dapm);
+ 
 -- 
 2.35.1
 

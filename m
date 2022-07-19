@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22F0579304
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B300579306
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237010AbiGSGMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 02:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
+        id S237016AbiGSGNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 02:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234588AbiGSGMf (ORCPT
+        with ESMTP id S234444AbiGSGNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 02:12:35 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA41A237DD;
-        Mon, 18 Jul 2022 23:12:34 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id n185so8339363wmn.4;
-        Mon, 18 Jul 2022 23:12:34 -0700 (PDT)
+        Tue, 19 Jul 2022 02:13:47 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AE61C11F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:13:45 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id m8so4754809edd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0wMA9jMAuILoYnO43zm+jDHZKH9iuy2nJN0S0krKGAc=;
-        b=hEVimiHqOYBGhb+W9twulYdCq25kgNVSk673Tk+0SYxPu2VVVxpjPHUCM2OZ1j2lOw
-         UL2BGHaO4SlAecu0sHrNSaact+s/b1/BmY1WA0hOYUXsi3+X3W8TiqMj1gYzLQhBpoEG
-         WqZ71BtlWL2/6ipdDUmHAU0GCn7vdtEL+/MGdANAhM6YWq+Poel6DPafJJhnCEsdVvTZ
-         hSbQ64gSeH9tMbZl1u22U/PsJH/vVztoX5T+kphz0EuMSiIU7eQZPGo3WFpF0Xidzdp2
-         3dMBpuw0E8pZdmwe7MUz/J2NNGrKGdvY3j5jS1j4zHFHdrnpP9US0SQ3gsq+GrWVckBN
-         iGWQ==
+         :cc;
+        bh=7hkzYipv6QANdIAdRAg9h0BtLWb126ab0LzpcCvcOQM=;
+        b=BuDNkzf1smCEFzAxlPTgGFRgpgH+zyqAym6t26Sbn4+B4S1ZCBTYHqrps8aetR2D4J
+         5B0/1amoFrDnelpWHNGZbSxcMLW7KtuwE2UKarGqVTEHAPB9JzqOOmXLiJofMGGzxDuc
+         2crlL2Htv/HK3EfbruPAlp6RO7pRrx7Fjq78Yf0cK/5WnNQi9RTDqaRoBvE7okJdoGce
+         a2fSiE30PiMLxO2uC2SMd64tZw+tM6VsA7vFhd75iDthpqzy6HCuY3tmQQ7p+WYMDdDc
+         NI3PuKXhSbr9owsGxesgZVf3W0kI43qYhAmRhhKbSjnoEwUDEXIQab/YMqo1jOS8XX+E
+         5jtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0wMA9jMAuILoYnO43zm+jDHZKH9iuy2nJN0S0krKGAc=;
-        b=sHaivfu7Y72/4v8RWvp/mskTJEuWpHOVArlvtOzIY6uR+dcjoSGgeoIFXBAq5XiE54
-         o3xL0LlRg4yAgEcz8xwrJa2MY/gJ5d9zcnYkV8l4PiDd1MmFQ92oc1qL7/XNG1euiADh
-         xOW0KEZYm2NTmGGxWAfmTJvW0J6+lIb25+UitwQS0+UFIS74RMxd0xPnT9caaEgDIBYK
-         VYiGra0XHH4spytJV3QFyu/IMBln/nK8YJFG0QmMD3GZmIdC8a86WOlWxsXajoy4h10g
-         pGV7U6WfeWicdUByfml+sfG8QNntvEAbhq8mDOVsqFvlhAsEazx+EC1FFlGCm0AfBoWL
-         j5MQ==
-X-Gm-Message-State: AJIora/eVE890fagmos8Y0ePaWOuir/00r2nOF95W6v7UTw2zcvYpr/8
-        T9sJfll3MRm/LEs0lPqKAcSO2XG1DQotAf+sFwk=
-X-Google-Smtp-Source: AGRyM1upsSKJtr+QvGYlMKxDP610N/WNZrsp03+aWUM5IFs5OahQz7kmvSZGbsUSUBYi4e7uffy4OOyxzU5UI1DtzQs=
-X-Received: by 2002:a7b:c4c8:0:b0:3a3:1b77:61bf with SMTP id
- g8-20020a7bc4c8000000b003a31b7761bfmr7241829wmk.92.1658211153288; Mon, 18 Jul
- 2022 23:12:33 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=7hkzYipv6QANdIAdRAg9h0BtLWb126ab0LzpcCvcOQM=;
+        b=d249EId1BPfefP037mt3/6+jNIr75mUClj8SysnP8AXz5ncWya2+w9V6mFuSjbRqlD
+         bs5GSi/mv9Mu9fMHUzCOQJW54jGG7BjoE5rS/6spzOdnHXzZShWTyYDnTgTqn+RuTekI
+         dW0I61IQ+GMBdMOhXOZPqSy4L7rbLs6jTLOxIHf5guDNKNfvzhSqcj9t5LzX5KF6NK/0
+         LF//FacnhGzC5f8H+J2YNqXGJpfPJ3pPPZKfw4KObJ0ZgiOr3rmfXwU4KAGJfJPqFV6p
+         mUxkFtwdnzddPr1Qvl+mkIv+e1v/+HKLSo8XKSCRJSRmrrPTv6PNWn0uRHvaoDPWxVbY
+         n8IQ==
+X-Gm-Message-State: AJIora8CFb1+31wdywUyd7BWnUUHgf9bDBV1bFMMKtWeNC1e9BYg1hwK
+        tjSIwT4F69l4yoOT4SyQI5HluoOFETnxjqPBwBQ=
+X-Google-Smtp-Source: AGRyM1s8ILStky9/CfngvYEJvr8MP9YkikfhPxiKOdPPlC2R0k6OK9qqXKOnWoX/rcOyn9TDtq6xG41WOG0EXC2DfcQ=
+X-Received: by 2002:a05:6402:d53:b0:43b:a0cf:d970 with SMTP id
+ ec19-20020a0564020d5300b0043ba0cfd970mr367240edb.277.1658211223937; Mon, 18
+ Jul 2022 23:13:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <1658123163-10039-1-git-send-email-u0084500@gmail.com>
- <1658123163-10039-4-git-send-email-u0084500@gmail.com> <20220718180441.1363d2a6@jic23-huawei>
-In-Reply-To: <20220718180441.1363d2a6@jic23-huawei>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Tue, 19 Jul 2022 14:12:21 +0800
-Message-ID: <CADiBU3_Nb4Rio3Z7L-907TB1Gvq6d5_GSP6Av5ZjHzhoDtcEZA@mail.gmail.com>
-Subject: Re: [PATCH v7 3/3] Documentation: ABI: testing: rtq6056: Update ABI docs
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        cy_huang <cy_huang@richtek.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+References: <20220718090050.2261-1-21cnbao@gmail.com> <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
+ <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com> <87zgh5232o.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <416a06f6-ca7d-d4a9-2cda-af0ad6e28261@arm.com> <CAGsJ_4y7GyL5qtrBbhz_8bLuAGGHy7Ju0ucPjHp-ZeDHjQcTcw@mail.gmail.com>
+ <CAGsJ_4z3wXK8WqubkFdPT6ObBVtvzAjbS1=r9PDCCDvwDVf3rw@mail.gmail.com> <87o7xl1wpb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87o7xl1wpb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Tue, 19 Jul 2022 18:13:32 +1200
+Message-ID: <CAGsJ_4xECbs2Dxn8u4tCotNBZz5epFvAWANLiNg0dSzDcgORCA@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
+        hanchuanhua <hanchuanhua@oppo.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,97 +86,250 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Cameron <jic23@kernel.org> =E6=96=BC 2022=E5=B9=B47=E6=9C=8819=E6=
-=97=A5 =E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A812:54=E5=AF=AB=E9=81=93=EF=BC=
-=9A
+On Tue, Jul 19, 2022 at 5:47 PM Huang, Ying <ying.huang@intel.com> wrote:
 >
-> On Mon, 18 Jul 2022 13:46:03 +0800
-> cy_huang <u0084500@gmail.com> wrote:
+> Barry Song <21cnbao@gmail.com> writes:
 >
-> > From: ChiYuan Huang <cy_huang@richtek.com>
+> > On Tue, Jul 19, 2022 at 3:59 PM Barry Song <21cnbao@gmail.com> wrote:
+> >>
+> >> On Tue, Jul 19, 2022 at 3:35 PM Anshuman Khandual
+> >> <anshuman.khandual@arm.com> wrote:
+> >> >
+> >> >
+> >> >
+> >> > On 7/19/22 08:58, Huang, Ying wrote:
+> >> > > Anshuman Khandual <anshuman.khandual@arm.com> writes:
+> >> > >
+> >> > >> On 7/19/22 06:53, Barry Song wrote:
+> >> > >>> On Tue, Jul 19, 2022 at 12:44 PM Huang, Ying <ying.huang@intel.com> wrote:
+> >> > >>>>
+> >> > >>>> Barry Song <21cnbao@gmail.com> writes:
+> >> > >>>>
+> >> > >>>>> From: Barry Song <v-songbaohua@oppo.com>
+> >> > >>>>>
+> >> > >>>>> THP_SWAP has been proven to improve the swap throughput significantly
+> >> > >>>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
+> >> > >>>>> splitting THP after swapped out").
+> >> > >>>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
+> >> > >>>>> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
+> >> > >>>>> enabling it on arm64 will benefit arm64 as well.
+> >> > >>>>> A corner case is that MTE has an assumption that only base pages
+> >> > >>>>> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
+> >> > >>>>> MTE support until MTE is reworked to coexist with THP_SWAP.
+> >> > >>>>>
+> >> > >>>>> A micro-benchmark is written to measure thp swapout throughput as
+> >> > >>>>> below,
+> >> > >>>>>
+> >> > >>>>>  unsigned long long tv_to_ms(struct timeval tv)
+> >> > >>>>>  {
+> >> > >>>>>       return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+> >> > >>>>>  }
+> >> > >>>>>
+> >> > >>>>>  main()
+> >> > >>>>>  {
+> >> > >>>>>       struct timeval tv_b, tv_e;;
+> >> > >>>>>  #define SIZE 400*1024*1024
+> >> > >>>>>       volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+> >> > >>>>>                               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> >> > >>>>>       if (!p) {
+> >> > >>>>>               perror("fail to get memory");
+> >> > >>>>>               exit(-1);
+> >> > >>>>>       }
+> >> > >>>>>
+> >> > >>>>>       madvise(p, SIZE, MADV_HUGEPAGE);
+> >> > >>>>>       memset(p, 0x11, SIZE); /* write to get mem */
+> >> > >>>>>
+> >> > >>>>>       gettimeofday(&tv_b, NULL);
+> >> > >>>>>       madvise(p, SIZE, MADV_PAGEOUT);
+> >> > >>>>>       gettimeofday(&tv_e, NULL);
+> >> > >>>>>
+> >> > >>>>>       printf("swp out bandwidth: %ld bytes/ms\n",
+> >> > >>>>>                       SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
+> >> > >>>>>  }
+> >> > >>>>>
+> >> > >>>>> Testing is done on rk3568 64bit quad core processor Quad Core
+> >> > >>>>> Cortex-A55 platform - ROCK 3A.
+> >> > >>>>> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
+> >> > >>>>> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
+> >> > >>>>>
+> >> > >>>>> Cc: "Huang, Ying" <ying.huang@intel.com>
+> >> > >>>>> Cc: Minchan Kim <minchan@kernel.org>
+> >> > >>>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> >> > >>>>> Cc: Hugh Dickins <hughd@google.com>
+> >> > >>>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> >> > >>>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> >> > >>>>> Cc: Steven Price <steven.price@arm.com>
+> >> > >>>>> Cc: Yang Shi <shy828301@gmail.com>
+> >> > >>>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+> >> > >>>>> ---
+> >> > >>>>>  -v3:
+> >> > >>>>>  * refine the commit log;
+> >> > >>>>>  * add a benchmark result;
+> >> > >>>>>  * refine the macro of arch_thp_swp_supported
+> >> > >>>>>  Thanks to the comments of Anshuman, Andrew, Steven
+> >> > >>>>>
+> >> > >>>>>  arch/arm64/Kconfig               |  1 +
+> >> > >>>>>  arch/arm64/include/asm/pgtable.h |  6 ++++++
+> >> > >>>>>  include/linux/huge_mm.h          | 12 ++++++++++++
+> >> > >>>>>  mm/swap_slots.c                  |  2 +-
+> >> > >>>>>  4 files changed, 20 insertions(+), 1 deletion(-)
+> >> > >>>>>
+> >> > >>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> >> > >>>>> index 1652a9800ebe..e1c540e80eec 100644
+> >> > >>>>> --- a/arch/arm64/Kconfig
+> >> > >>>>> +++ b/arch/arm64/Kconfig
+> >> > >>>>> @@ -101,6 +101,7 @@ config ARM64
+> >> > >>>>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+> >> > >>>>>       select ARCH_WANT_LD_ORPHAN_WARN
+> >> > >>>>>       select ARCH_WANTS_NO_INSTR
+> >> > >>>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+> >> > >>>>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
+> >> > >>>>>       select ARM_AMBA
+> >> > >>>>>       select ARM_ARCH_TIMER
+> >> > >>>>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> >> > >>>>> index 0b6632f18364..78d6f6014bfb 100644
+> >> > >>>>> --- a/arch/arm64/include/asm/pgtable.h
+> >> > >>>>> +++ b/arch/arm64/include/asm/pgtable.h
+> >> > >>>>> @@ -45,6 +45,12 @@
+> >> > >>>>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
+> >> > >>>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+> >> > >>>>>
+> >> > >>>>> +static inline bool arch_thp_swp_supported(void)
+> >> > >>>>> +{
+> >> > >>>>> +     return !system_supports_mte();
+> >> > >>>>> +}
+> >> > >>>>> +#define arch_thp_swp_supported arch_thp_swp_supported
+> >> > >>>>> +
+> >> > >>>>>  /*
+> >> > >>>>>   * Outside of a few very special situations (e.g. hibernation), we always
+> >> > >>>>>   * use broadcast TLB invalidation instructions, therefore a spurious page
+> >> > >>>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> >> > >>>>> index de29821231c9..4ddaf6ad73ef 100644
+> >> > >>>>> --- a/include/linux/huge_mm.h
+> >> > >>>>> +++ b/include/linux/huge_mm.h
+> >> > >>>>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
+> >> > >>>>>       return split_huge_page_to_list(&folio->page, list);
+> >> > >>>>>  }
+> >> > >>>>>
+> >> > >>>>> +/*
+> >> > >>>>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
+> >> > >>>>> + * limitations in the implementation like arm64 MTE can override this to
+> >> > >>>>> + * false
+> >> > >>>>> + */
+> >> > >>>>> +#ifndef arch_thp_swp_supported
+> >> > >>>>> +static inline bool arch_thp_swp_supported(void)
+> >> > >>>>> +{
+> >> > >>>>> +     return true;
+> >> > >>>>> +}
+> >> > >>>>
+> >> > >>>> How about the following?
+> >> > >>>>
+> >> > >>>> static inline bool arch_wants_thp_swap(void)
+> >> > >>>> {
+> >> > >>>>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
+> >> > >>>> }
+> >> > >>>
+> >> > >>> This looks good. then i'll need to change arm64 to
+> >> > >>>
+> >> > >>>  +static inline bool arch_thp_swp_supported(void)
+> >> > >>>  +{
+> >> > >>>  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
+> >> > >>>  +}
+> >> > >>
+> >> > >> Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
+> >> > >> IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
+> >> > >> is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
+> >> > >> either in the generic fallback stub, or in arm64 platform override. Because
+> >> > >> without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
+> >> > >> be called in the first place.
+> >> > >
+> >> > > For the only caller now, the checking looks redundant.  But the original
+> >> > > proposed implementation as follows,
+> >> > >
+> >> > > static inline bool arch_thp_swp_supported(void)
+> >> > > {
+> >> > >      return true;
+> >> > > }
+> >> > >
+> >> > > will return true even on architectures that don't support/want THP swap.
+> >> >
+> >> > But the function will never be called on for those platforms.
+> >> >
+> >> > > That will confuse people too.
+> >> >
+> >> > I dont see how.
+> >> >
+> >> > >
+> >> > > And the "redundant" checking has no run time overhead, because compiler
+> >> > > will do the trick.
+> >> > I understand that, but dont think this indirection is necessary.
+> >>
+> >> Hi Anshuman, Hi Ying,
+> >> Thanks for the comments of both of you. Does the below look ok?
+> >>
+> >> generic,
+> >>
+> >>  static inline bool arch_wants_thp_swap(void)
+> >>   {
+> >>       return IS_ENABLED(CONFIG_THP_SWAP);
+> >>  }
+> >>
 > >
-> > Add documentation for the usage of voltage channel integration time.
+> > sorry, i actually meant arch_thp_swp_supported() but not
+> > arch_wants_thp_swap() in generic code,
 > >
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-bus-iio | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/AB=
-I/testing/sysfs-bus-iio
-> > index d4ccc68..1f7d327 100644
-> > --- a/Documentation/ABI/testing/sysfs-bus-iio
-> > +++ b/Documentation/ABI/testing/sysfs-bus-iio
-> > @@ -2030,3 +2030,13 @@ Description:
-> >               Available range for the forced calibration value, express=
-ed as:
-> >
-> >               - a range specified as "[min step max]"
-> > +
-> > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltageY_inte=
-gration_time
-> > +KernelVersion:       5.20
-> > +Contact:     linux-iio@vger.kernel.org
-> > +Description:
-> > +             For voltage sensing hardware, there may be different time=
- between
-> > +             channel conversion and sample update. 'Integration time' =
-is used to
-> > +             specify the channel internal conversion time. And sample =
-update
-> > +             interval is equal to average sample count multiple integr=
-ation time.
-> > +             Unit as microsecond.
+> >  static inline bool arch_thp_swp_supported(void)
+> >  {
+> >       return IS_ENABLED(CONFIG_THP_SWAP);
+> >  }
 >
-> Whilst I did suggest moving this to this file, I also suggested that it w=
-as the
-> wrong interface to use.  For similar cases we've used in_voltageY_samplin=
-g_frequency
-> in the past because this isn't really an integration time, but rather a r=
-eflection of
-> a bunch of other stuff that makes up the conversion time.  In IIO we chos=
-e a long
-> time ago to use 1/conversion_time as the exposed interface =3D=3D samplin=
-g_frequency
->
-> So, unless there is a strong reason to do otherwise, drop the overall sam=
-pling_frequency
-> attribute and use per channel ones instead.  Then update the main documen=
-tation
-> to make this usecase clear. Something in the block
-> https://elixir.bootlin.com/linux/latest/source/Documentation/ABI/testing/=
-sysfs-bus-iio#L89
-> like adding the in_voltageY_sampling_frequency entry to the What: list an=
-d a
-> sentence at the end that says something like:
->
-> "Some devices have separate controls of sampling frequency for individual=
- channels.
-> If multiple channels are enabled in a scan, then the sampling_frequency o=
-f the the
-> scan may be computed from the per channel sampling_frequencies."
->
-From my case, I need to specify
-in_voltageX_sampling_frequency/in_powerY_sampling_frequency/
-in_currentZ_sampling_frequency.
+> IS_ENABLED(CONFIG_THP_SWAP) doesn't match the name too.  It's an option
+> selected by users.  arch_thp_swp_supported() is to report the
+> capability.
 
-And describe all in the same sentence.
-Can I directly copy the sentence that you described above?
-I read the comment. The sentence that you wrote seems more generic.
+Hi Ying,
+CONFIG_THP_SWAP implicitly includes ARCH_WANTS_THP_SWAP. So it seems
+a bit odd to have still another arch_wants_thp_swap().
+if the name of arch_thp_swp_supported is not sensible to you, will
+thp_swp_supported()
+without arch_ make more sense? a similar example is,
 
-If any misunderstanding, please correct me.
-> Not something to put in the documentation, but for devices which do simul=
-taneous sampling
-> it is very unlikely we'll have per channel sampling frequencies so there =
-isn't an
-> ambiguity. The alternative we 'could' consider is to allow both overall s=
-ampling_frequency
-> and per channel in_voltageY_sampling_frequency but that is a bad idea bec=
-ause the
-> ABI (and most userspace software) assumes that more specific attributes o=
-verride the
-> values of more generic ones (rather than them having different meanings a=
-s would be
-> the case here).
+static inline bool gigantic_page_runtime_supported(void)
+{
+        return IS_ENABLED(CONFIG_ARCH_HAS_GIGANTIC_PAGE);
+}
+
+Otherwise, can we just keep the code as is according to Anshuman's suggestion?
+
+Thanks
+Barry
+
+}
+
+
+
 >
-> Jonathan
+> Best Regards,
+> Huang, Ying
+>
+> >> arm64,
+> >>
+> >> static inline bool arch_thp_swp_supported(void)
+> >> {
+> >>      return IS_ENABLED(CONFIG_THP_SWAP) &&  !system_supports_mte();
+> >> }
+> >>
+> >> caller,
+> >>
+> >> folio_alloc_swap(struct folio *folio)
+> >> {
+> >>
+> >>   if (folio_test_large(folio)) {
+> >>    - if (IS_ENABLED(CONFIG_THP_SWAP))
+> >>   + if (arch_thp_swp_supported())
+> >>         get_swap_pages(1, &entry, folio_nr_pages(folio));
+> >>        goto out;
+> >>   }
+> >>
+> >> Thanks
+> >> Barry

@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6E2578F18
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44343578F19
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbiGSAPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 20:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
+        id S236735AbiGSAPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 20:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236720AbiGSAPr (ORCPT
+        with ESMTP id S236721AbiGSAPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Jul 2022 20:15:47 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057A8DF6
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C6E37FB8
         for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:15:46 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1658189744;
+        t=1658189745;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nn1wRmXGNlycId97pMK2GGK/DQj9IfbkBYQ3B2Fk9HA=;
-        b=AgpB1/AhUXouCU+9FWLxvR4qtROoWxjrIHFdJKXGRu5em1LE96vrsCj2F2+4JgIo1ZW/sg
-        XSkCQ9Sc9PllQYVWN70e9jiZkYNC6V010cVyrwjLbYZa3GySFFCPbvKl1VBTMze09zUfse
-        7dOPakya88V93QnjdezPKJQdUYZwwkY=
+        bh=dEFlK3m+j6HFWp7YvmqmB+B3IIIjJFQIUVXb6/Nzt7c=;
+        b=CZ9H9Xz4JbHfmsg8eEGwUg6SGpvSNwc80fna4TaZB32kOnyhSydBTAU55KWA/7nsU0Yt7T
+        Ex2zNjdKIv8Qga4GTTmuTplYiC2D1x20y/fwH3BzvMER/NsIYiWnCzyuEFWp8B7Ibc52cO
+        UrYoPoUHwTa46NNY73M1L8U7VWoSdJo=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>
@@ -38,9 +38,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH mm v2 31/33] kasan: support kasan.stacktrace for SW_TAGS
-Date:   Tue, 19 Jul 2022 02:10:11 +0200
-Message-Id: <8db2d46b0e2c54aa7eaade18e39f68c0d9d09945.1658189199.git.andreyknvl@google.com>
+Subject: [PATCH mm v2 32/33] kasan: dynamically allocate stack ring entries
+Date:   Tue, 19 Jul 2022 02:10:12 +0200
+Message-Id: <4db564768f1cb900b9687849a062156b470eb902.1658189199.git.andreyknvl@google.com>
 In-Reply-To: <cover.1658189199.git.andreyknvl@google.com>
 References: <cover.1658189199.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -58,13 +58,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Add support for the kasan.stacktrace command-line argument for Software
-Tag-Based KASAN.
+Instead of using a large static array, allocate the stack ring dynamically
+via memblock_alloc().
 
-The following patch adds a command-line argument for selecting the stack
-ring size, and, as the stack ring is supported by both the Software and
-the Hardware Tag-Based KASAN modes, it is natural that both of them have
-support for kasan.stacktrace too.
+The size of the stack ring is controlled by a new kasan.stack_ring_size
+command-line parameter. When kasan.stack_ring_size is not provided, the
+default value of 32 << 10 is used.
+
+When the stack trace collection is disabled via kasan.stacktrace=off,
+the stack ring is not allocated.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
@@ -73,268 +75,103 @@ Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 Changes v1->v2:
 - This is a new patch.
 ---
- Documentation/dev-tools/kasan.rst | 15 ++++++-----
- mm/kasan/hw_tags.c                | 39 +---------------------------
- mm/kasan/kasan.h                  | 36 +++++++++++++++++---------
- mm/kasan/sw_tags.c                |  5 +++-
- mm/kasan/tags.c                   | 43 +++++++++++++++++++++++++++++++
- 5 files changed, 81 insertions(+), 57 deletions(-)
+ mm/kasan/kasan.h       |  5 +++--
+ mm/kasan/report_tags.c |  4 ++--
+ mm/kasan/tags.c        | 22 +++++++++++++++++++++-
+ 3 files changed, 26 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
-index 1772fd457fed..7bd38c181018 100644
---- a/Documentation/dev-tools/kasan.rst
-+++ b/Documentation/dev-tools/kasan.rst
-@@ -111,9 +111,15 @@ parameter can be used to control panic and reporting behaviour:
-   report or also panic the kernel (default: ``report``). The panic happens even
-   if ``kasan_multi_shot`` is enabled.
- 
--Hardware Tag-Based KASAN mode (see the section about various modes below) is
--intended for use in production as a security mitigation. Therefore, it supports
--additional boot parameters that allow disabling KASAN or controlling features:
-+Software and Hardware Tag-Based KASAN modes (see the section about various
-+modes below) support disabling stack trace collection:
-+
-+- ``kasan.stacktrace=off`` or ``=on`` disables or enables alloc and free stack
-+  traces collection (default: ``on``).
-+
-+Hardware Tag-Based KASAN mode is intended for use in production as a security
-+mitigation. Therefore, it supports additional boot parameters that allow
-+disabling KASAN altogether or controlling its features:
- 
- - ``kasan=off`` or ``=on`` controls whether KASAN is enabled (default: ``on``).
- 
-@@ -132,9 +138,6 @@ additional boot parameters that allow disabling KASAN or controlling features:
- - ``kasan.vmalloc=off`` or ``=on`` disables or enables tagging of vmalloc
-   allocations (default: ``on``).
- 
--- ``kasan.stacktrace=off`` or ``=on`` disables or enables alloc and free stack
--  traces collection (default: ``on``).
--
- Error reports
- ~~~~~~~~~~~~~
- 
-diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index 9ad8eff71b28..b22c4f461cb0 100644
---- a/mm/kasan/hw_tags.c
-+++ b/mm/kasan/hw_tags.c
-@@ -38,16 +38,9 @@ enum kasan_arg_vmalloc {
- 	KASAN_ARG_VMALLOC_ON,
- };
- 
--enum kasan_arg_stacktrace {
--	KASAN_ARG_STACKTRACE_DEFAULT,
--	KASAN_ARG_STACKTRACE_OFF,
--	KASAN_ARG_STACKTRACE_ON,
--};
--
- static enum kasan_arg kasan_arg __ro_after_init;
- static enum kasan_arg_mode kasan_arg_mode __ro_after_init;
- static enum kasan_arg_vmalloc kasan_arg_vmalloc __initdata;
--static enum kasan_arg_stacktrace kasan_arg_stacktrace __initdata;
- 
- /*
-  * Whether KASAN is enabled at all.
-@@ -66,9 +59,6 @@ EXPORT_SYMBOL_GPL(kasan_mode);
- /* Whether to enable vmalloc tagging. */
- DEFINE_STATIC_KEY_TRUE(kasan_flag_vmalloc);
- 
--/* Whether to collect alloc/free stack traces. */
--DEFINE_STATIC_KEY_TRUE(kasan_flag_stacktrace);
--
- /* kasan=off/on */
- static int __init early_kasan_flag(char *arg)
- {
-@@ -122,23 +112,6 @@ static int __init early_kasan_flag_vmalloc(char *arg)
- }
- early_param("kasan.vmalloc", early_kasan_flag_vmalloc);
- 
--/* kasan.stacktrace=off/on */
--static int __init early_kasan_flag_stacktrace(char *arg)
--{
--	if (!arg)
--		return -EINVAL;
--
--	if (!strcmp(arg, "off"))
--		kasan_arg_stacktrace = KASAN_ARG_STACKTRACE_OFF;
--	else if (!strcmp(arg, "on"))
--		kasan_arg_stacktrace = KASAN_ARG_STACKTRACE_ON;
--	else
--		return -EINVAL;
--
--	return 0;
--}
--early_param("kasan.stacktrace", early_kasan_flag_stacktrace);
--
- static inline const char *kasan_mode_info(void)
- {
- 	if (kasan_mode == KASAN_MODE_ASYNC)
-@@ -213,17 +186,7 @@ void __init kasan_init_hw_tags(void)
- 		break;
- 	}
- 
--	switch (kasan_arg_stacktrace) {
--	case KASAN_ARG_STACKTRACE_DEFAULT:
--		/* Default is specified by kasan_flag_stacktrace definition. */
--		break;
--	case KASAN_ARG_STACKTRACE_OFF:
--		static_branch_disable(&kasan_flag_stacktrace);
--		break;
--	case KASAN_ARG_STACKTRACE_ON:
--		static_branch_enable(&kasan_flag_stacktrace);
--		break;
--	}
-+	kasan_init_tags();
- 
- 	/* KASAN is now initialized, enable it. */
- 	static_branch_enable(&kasan_flag_enabled);
 diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index cfff81139d67..447baf1a7a2e 100644
+index 447baf1a7a2e..4afe4db751da 100644
 --- a/mm/kasan/kasan.h
 +++ b/mm/kasan/kasan.h
-@@ -8,13 +8,31 @@
- #include <linux/kfence.h>
- #include <linux/stackdepot.h>
+@@ -252,12 +252,13 @@ struct kasan_stack_ring_entry {
+ 	bool is_free;
+ };
  
--#ifdef CONFIG_KASAN_HW_TAGS
-+#if defined(CONFIG_KASAN_SW_TAGS) || defined(CONFIG_KASAN_HW_TAGS)
+-#define KASAN_STACK_RING_SIZE (32 << 10)
++#define KASAN_STACK_RING_SIZE_DEFAULT (32 << 10)
  
- #include <linux/static_key.h>
-+
-+DECLARE_STATIC_KEY_TRUE(kasan_flag_stacktrace);
-+
-+static inline bool kasan_stack_collection_enabled(void)
-+{
-+	return static_branch_unlikely(&kasan_flag_stacktrace);
-+}
-+
-+#else /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
-+
-+static inline bool kasan_stack_collection_enabled(void)
-+{
-+	return true;
-+}
-+
-+#endif /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
-+
-+#ifdef CONFIG_KASAN_HW_TAGS
-+
- #include "../slab.h"
+ struct kasan_stack_ring {
+ 	rwlock_t lock;
++	size_t size;
+ 	atomic64_t pos;
+-	struct kasan_stack_ring_entry entries[KASAN_STACK_RING_SIZE];
++	struct kasan_stack_ring_entry *entries;
+ };
  
- DECLARE_STATIC_KEY_TRUE(kasan_flag_vmalloc);
--DECLARE_STATIC_KEY_TRUE(kasan_flag_stacktrace);
+ #endif /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
+diff --git a/mm/kasan/report_tags.c b/mm/kasan/report_tags.c
+index a996489e6dac..7e267e69ce19 100644
+--- a/mm/kasan/report_tags.c
++++ b/mm/kasan/report_tags.c
+@@ -56,11 +56,11 @@ void kasan_complete_mode_report_info(struct kasan_report_info *info)
+ 	 * entries relevant to the buggy object can be overwritten.
+ 	 */
  
- enum kasan_mode {
- 	KASAN_MODE_SYNC,
-@@ -29,11 +47,6 @@ static inline bool kasan_vmalloc_enabled(void)
- 	return static_branch_likely(&kasan_flag_vmalloc);
- }
+-	for (u64 i = pos - 1; i != pos - 1 - KASAN_STACK_RING_SIZE; i--) {
++	for (u64 i = pos - 1; i != pos - 1 - stack_ring.size; i--) {
+ 		if (alloc_found && free_found)
+ 			break;
  
--static inline bool kasan_stack_collection_enabled(void)
--{
--	return static_branch_unlikely(&kasan_flag_stacktrace);
--}
--
- static inline bool kasan_async_fault_possible(void)
- {
- 	return kasan_mode == KASAN_MODE_ASYNC || kasan_mode == KASAN_MODE_ASYMM;
-@@ -46,11 +59,6 @@ static inline bool kasan_sync_fault_possible(void)
+-		entry = &stack_ring.entries[i % KASAN_STACK_RING_SIZE];
++		entry = &stack_ring.entries[i % stack_ring.size];
  
- #else /* CONFIG_KASAN_HW_TAGS */
- 
--static inline bool kasan_stack_collection_enabled(void)
--{
--	return true;
--}
--
- static inline bool kasan_async_fault_possible(void)
- {
- 	return false;
-@@ -410,6 +418,10 @@ static inline void kasan_enable_tagging(void) { }
- 
- #endif /* CONFIG_KASAN_HW_TAGS */
- 
-+#if defined(CONFIG_KASAN_SW_TAGS) || defined(CONFIG_KASAN_HW_TAGS)
-+void __init kasan_init_tags(void);
-+#endif /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
-+
- #if defined(CONFIG_KASAN_HW_TAGS) && IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
- 
- void kasan_force_async_fault(void);
-diff --git a/mm/kasan/sw_tags.c b/mm/kasan/sw_tags.c
-index 77f13f391b57..a3afaf2ad1b1 100644
---- a/mm/kasan/sw_tags.c
-+++ b/mm/kasan/sw_tags.c
-@@ -42,7 +42,10 @@ void __init kasan_init_sw_tags(void)
- 	for_each_possible_cpu(cpu)
- 		per_cpu(prng_state, cpu) = (u32)get_cycles();
- 
--	pr_info("KernelAddressSanitizer initialized (sw-tags)\n");
-+	kasan_init_tags();
-+
-+	pr_info("KernelAddressSanitizer initialized (sw-tags, stacktrace=%s)\n",
-+		kasan_stack_collection_enabled() ? "on" : "off");
- }
- 
- /*
+ 		/* Paired with smp_store_release() in save_stack_info(). */
+ 		ptr = (void *)smp_load_acquire(&entry->ptr);
 diff --git a/mm/kasan/tags.c b/mm/kasan/tags.c
-index 07828021c1f5..0eb6cf6717db 100644
+index 0eb6cf6717db..fd8c5f919156 100644
 --- a/mm/kasan/tags.c
 +++ b/mm/kasan/tags.c
-@@ -19,11 +19,54 @@
- #include "kasan.h"
- #include "../slab.h"
+@@ -10,6 +10,7 @@
+ #include <linux/init.h>
+ #include <linux/kasan.h>
+ #include <linux/kernel.h>
++#include <linux/memblock.h>
+ #include <linux/memory.h>
+ #include <linux/mm.h>
+ #include <linux/static_key.h>
+@@ -52,6 +53,16 @@ static int __init early_kasan_flag_stacktrace(char *arg)
+ }
+ early_param("kasan.stacktrace", early_kasan_flag_stacktrace);
  
-+enum kasan_arg_stacktrace {
-+	KASAN_ARG_STACKTRACE_DEFAULT,
-+	KASAN_ARG_STACKTRACE_OFF,
-+	KASAN_ARG_STACKTRACE_ON,
-+};
-+
-+static enum kasan_arg_stacktrace kasan_arg_stacktrace __initdata;
-+
-+/* Whether to collect alloc/free stack traces. */
-+DEFINE_STATIC_KEY_TRUE(kasan_flag_stacktrace);
-+
- /* Non-zero, as initial pointer values are 0. */
- #define STACK_RING_BUSY_PTR ((void *)1)
- 
- struct kasan_stack_ring stack_ring;
- 
-+/* kasan.stacktrace=off/on */
-+static int __init early_kasan_flag_stacktrace(char *arg)
++/* kasan.stack_ring_size=32768 */
++static int __init early_kasan_flag_stack_ring_size(char *arg)
 +{
 +	if (!arg)
 +		return -EINVAL;
 +
-+	if (!strcmp(arg, "off"))
-+		kasan_arg_stacktrace = KASAN_ARG_STACKTRACE_OFF;
-+	else if (!strcmp(arg, "on"))
-+		kasan_arg_stacktrace = KASAN_ARG_STACKTRACE_ON;
-+	else
-+		return -EINVAL;
-+
-+	return 0;
++	return kstrtoul(arg, 0, &stack_ring.size);
 +}
-+early_param("kasan.stacktrace", early_kasan_flag_stacktrace);
++early_param("kasan.stack_ring_size", early_kasan_flag_stack_ring_size);
 +
-+void __init kasan_init_tags(void)
-+{
-+	switch (kasan_arg_stacktrace) {
-+	case KASAN_ARG_STACKTRACE_DEFAULT:
-+		/* Default is specified by kasan_flag_stacktrace definition. */
-+		break;
-+	case KASAN_ARG_STACKTRACE_OFF:
-+		static_branch_disable(&kasan_flag_stacktrace);
-+		break;
-+	case KASAN_ARG_STACKTRACE_ON:
-+		static_branch_enable(&kasan_flag_stacktrace);
-+		break;
-+	}
-+}
-+
- static void save_stack_info(struct kmem_cache *cache, void *object,
- 			gfp_t gfp_flags, bool is_free)
+ void __init kasan_init_tags(void)
  {
+ 	switch (kasan_arg_stacktrace) {
+@@ -65,6 +76,15 @@ void __init kasan_init_tags(void)
+ 		static_branch_enable(&kasan_flag_stacktrace);
+ 		break;
+ 	}
++
++	if (kasan_stack_collection_enabled()) {
++		if (!stack_ring.size)
++			stack_ring.size = KASAN_STACK_RING_SIZE_DEFAULT;
++		stack_ring.entries = memblock_alloc(
++					sizeof(stack_ring.entries[0]) *
++						stack_ring.size,
++					SMP_CACHE_BYTES);
++	}
+ }
+ 
+ static void save_stack_info(struct kmem_cache *cache, void *object,
+@@ -86,7 +106,7 @@ static void save_stack_info(struct kmem_cache *cache, void *object,
+ 
+ next:
+ 	pos = atomic64_fetch_add(1, &stack_ring.pos);
+-	entry = &stack_ring.entries[pos % KASAN_STACK_RING_SIZE];
++	entry = &stack_ring.entries[pos % stack_ring.size];
+ 
+ 	/* Detect stack ring entry slots that are being written to. */
+ 	old_ptr = READ_ONCE(entry->ptr);
 -- 
 2.25.1
 

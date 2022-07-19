@@ -2,148 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B92C57AA8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD4C57AA8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239201AbiGSXmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 19:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S239280AbiGSXnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 19:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbiGSXmk (ORCPT
+        with ESMTP id S232291AbiGSXnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 19:42:40 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38C74E627
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658274159; x=1689810159;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c3GojyElAwtsHhl1C+xidr47ChYhd+KIKrRVsSZswB0=;
-  b=iTkqsbjG62jB9SUt1ZYOdnx6Lh9O80IbNQTJhthaPqkQ8xkBAkSfSYCs
-   eixCuzJUAYQX2OsPzxlYnHeTCsBR/lfDvy/KtDwMBh1Gegbk4NgpKPY4Y
-   E0peMYcjIV0pXQwsY1dpG6+HorL2CUtaScBzJ/finnrFkO3SJ61WGgKEj
-   HxXvj7Rh1oWiFz41PL7kthPKweUwGun6YZvI5EmAJwA20e2r9qkkMCq85
-   nWOLgbyLTPTY6+iIcG5Z/DoJ4Gz1WonLg83qDgvlBSsid7KZ6bdEjNxS+
-   e3zdRP9hKdN5TdpygdgqKGABv+OyQgupKAlfagko+d0YZZ6sdjPu4p8Wn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="285400732"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="285400732"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 16:42:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="656003983"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Jul 2022 16:42:38 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDwrN-0006EI-UH;
-        Tue, 19 Jul 2022 23:42:37 +0000
-Date:   Wed, 20 Jul 2022 07:41:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:338:45: error: call to
- '__compiletime_assert_282' declared with attribute error: BUILD_BUG_ON
- failed: SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH +
- ilog2(roundup_pow_of_two(NR_CPUS)) > 32
-Message-ID: <202207200715.MjFLhRDi-lkp@intel.com>
+        Tue, 19 Jul 2022 19:43:50 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2A64E627
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:43:49 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id o1so12537307qkg.9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:43:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ptG1sWGcXWUClftC0HzZgw9GrQMqzL3RYHOJxThs0Bs=;
+        b=NPnJjmSvPURXST1OOvqVi6nREGf+RuUtgBYgcCjm2MLZmR8p3mh4hr//dO6L7qpDWF
+         uyPkv4i3RKeBe03AApuq7Eq8KqX3Ie3BH3F4YZDR+Y3O8pft5tc4JToAKwKjiMTq+Lwa
+         enKlJs5AISZDxLIyTMOuO1HeR9bski1YjY147S09WdBC2k2OjTrw68dVLvyp//PmSAt3
+         ekPBPcf9WB6pR44AWSmMq1//3bLpcC1iRiIU95yOKmjvqwu+Ycc8R23rWdZAs6/2Q44g
+         IZga40QTV/VR8PWD4oY1STpPM6dn1S4pzr+ZwbxW2w3WrZbMCO8IwwJOVE9cySvYOhav
+         1isw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ptG1sWGcXWUClftC0HzZgw9GrQMqzL3RYHOJxThs0Bs=;
+        b=dcvdaDQkIUNuB3d38/grRVtlsKpizrPFoC6AF2WDTlyKuXR2WSdB/yKenEfRwz+7ZR
+         oC5TfzqJ8Z13mBV50fwO2UiEOyIhM9eAJWbOPLDbG/EZLcUwoa3LkmnzL0SJ+bgSmNVp
+         OxDmBFDiPnFgg5R1icfXkIq/AQfYdhWnFn8/cxewYUT8KWVlnNsnaHh826sF3Iw2LvLW
+         H+M9MSg8AU4Jq4eUoUAxZ0989qozDWHgzwudz3CTA/5zHPMspZLF/M+ZWq7H5HB1xoiN
+         WDeD8+qCKLcgNuJc9kPl1lYPpGj0A30SdLrOogKJyPMsvk+d9Are9vN3u3zl6iqSiAxe
+         39xw==
+X-Gm-Message-State: AJIora9kW44nN0g4oN+Hs3ct4wazKIr02WrDeZbiEdoHR47dwX90oxAX
+        W9wMx7dAwN8MSW82e+Z2MGByTKj5ag==
+X-Google-Smtp-Source: AGRyM1sjOie8V5VneT6+JsXjN/A9NEHbFmsmwoKBi+aMZ7OklYwakySJKtd4R65L5YcQuN7mdb0pig==
+X-Received: by 2002:a37:2cc7:0:b0:6b5:508a:f471 with SMTP id s190-20020a372cc7000000b006b5508af471mr22741115qkh.273.1658274228375;
+        Tue, 19 Jul 2022 16:43:48 -0700 (PDT)
+Received: from [192.168.1.161] (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id n24-20020ac86758000000b0031ed8ef7982sm9715714qtp.22.2022.07.19.16.43.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 16:43:47 -0700 (PDT)
+Message-ID: <7462e934-f746-eef7-ff92-0eeb8cc08b82@gmail.com>
+Date:   Tue, 19 Jul 2022 19:43:46 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 00/34] Printbufs - new data structure for building
+ strings
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com,
+        enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
+        willy@infradead.org
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+ <20220719191522.4002a5fb@gandalf.local.home>
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+In-Reply-To: <20220719191522.4002a5fb@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+On 7/19/22 19:15, Steven Rostedt wrote:
+> On Sun, 19 Jun 2022 20:41:59 -0400
+> Kent Overstreet <kent.overstreet@gmail.com> wrote:
+> 
+>> Core idea: Wouldn't it be nice if we had a common data structure and calling
+>> convention for outputting strings?
+> 
+> Because seq_buf gives us this already, the cover letter really just needs
+> to state exactly what the benefit is to replace seq_buf with printbuf (and
+> why seq_buf can not be simply extended to do some extra features).
 
-FYI, the error/warning still remains.
+  - seq_buf has the wrong semantics on overflow for what vsnprintf needs.
+  - seq_buf is somewhat unnecessarily coupled to tracing needs - the 
+readpos member has nothing to do with outputting formatting strings, and 
+some of the pretty-printers are tracing specific and don't really belong 
+in a generic pretty-printing library.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca85855bdcae8f84f1512e88b4c75009ea17ea2f
-commit: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-date:   2 years ago
-config: sparc64-randconfig-r024-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200715.MjFLhRDi-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash arch/sparc/
+And, when I tried to talk to you about changing seq_buf to be more 
+suitable you didn't respond - you just dropped off the IRC discussion we 
+were having.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> I just applied your series and ran the tracing selftests and several of
+> them failed.
+> 
+>   # cd tools/testing/selftests/ftrace/
+>   # ./ftracetest
 
-All errors (new ones prefixed by >>):
+Thank you for telling me where to find the tests. It would've saved us 
+some back and forth (and I could've gotten on this sooner) if you'd 
+responded when I asked before.
 
-   arch/sparc/mm/init_64.c: In function 'arch_hugetlb_valid_size':
-   arch/sparc/mm/init_64.c:354:24: error: variable 'hv_pgsz_idx' set but not used [-Werror=unused-but-set-variable]
-     354 |         unsigned short hv_pgsz_idx;
-         |                        ^~~~~~~~~~~
-   arch/sparc/mm/init_64.c: In function 'sun4v_linear_pte_xor_finalize':
-   arch/sparc/mm/init_64.c:2210:23: error: variable 'pagecv_flag' set but not used [-Werror=unused-but-set-variable]
-    2210 |         unsigned long pagecv_flag;
-         |                       ^~~~~~~~~~~
-   In file included from <command-line>:
-   arch/sparc/mm/init_64.c: In function 'paging_init':
->> include/linux/compiler_types.h:338:45: error: call to '__compiletime_assert_282' declared with attribute error: BUILD_BUG_ON failed: SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH + ilog2(roundup_pow_of_two(NR_CPUS)) > 32
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:319:25: note: in definition of macro '__compiletime_assert'
-     319 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:338:9: note: in expansion of macro '_compiletime_assert'
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/sparc/mm/init_64.c:2306:9: note: in expansion of macro 'BUILD_BUG_ON'
-    2306 |         BUILD_BUG_ON(SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH +
-         |         ^~~~~~~~~~~~
-   cc1: all warnings being treated as errors
+It may seem like the perfectly natural place to look to you - who works 
+on the code - but to someone who works on a variety of subsystems, each 
+of which puts their test code (if they have any!) in a different place, 
+it wasn't.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FRAME_POINTER
-   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS || MCOUNT
-   Selected by
-   - LOCKDEP && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !X86
+However, when I enabled all the tracing kernel config options, your 
+tests are now failing to run at all with:
 
+db_root: cannot open: /etc/target
 
-vim +/__compiletime_assert_282 +338 include/linux/compiler_types.h
-
-   324	
-   325	#define _compiletime_assert(condition, msg, prefix, suffix) \
-   326		__compiletime_assert(condition, msg, prefix, suffix)
-   327	
-   328	/**
-   329	 * compiletime_assert - break build and emit msg if condition is false
-   330	 * @condition: a compile-time constant condition to check
-   331	 * @msg:       a message to emit if condition is false
-   332	 *
-   333	 * In tradition of POSIX assert, this macro will break the build if the
-   334	 * supplied condition is *false*, emitting the supplied error message if the
-   335	 * compiler has support to do so.
-   336	 */
-   337	#define compiletime_assert(condition, msg) \
- > 338		_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-   339	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+So now I've got to debug your tests, too. Gah.

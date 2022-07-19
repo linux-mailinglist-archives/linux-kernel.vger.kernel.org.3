@@ -2,86 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AECD57A204
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC3757A206
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239271AbiGSOlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
+        id S239632AbiGSOmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239661AbiGSOky (ORCPT
+        with ESMTP id S239645AbiGSOlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:40:54 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B851005
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:37:26 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id b6so8557352wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=13i0/0dHDWi3Tz13pQIy2h+YZzYm8zFkGL1fzxGqmuY=;
-        b=Dc9qshxWkOXoVpeRUOWXqvpJrKUxArsmLW0NXjuZv5YDKKFa2Abk13pR9Fw7HOpsC2
-         hvtQ9aaLQPeb4FWX0Jroj+ryDzDFrO1N9NXIWCjcY0mb5M2qy+WXB//MHr2LQMoMKZAM
-         1lBh/D3EwLEd8QLtpTcdhfUEpXN2H0LTq/L5Wve+ABzp83zffEGvDZ6IUQ3rYjxwHBFo
-         EBW3biuXNrckDn19gRuWBo+/mVwT5c29SxdI6j4wr6iPHp7mzocV9p50UEuqNiDPYM4Q
-         mc2s1CbVjXq0TQUClYoHsIk3s7XtsEPsXuel2zD/ja6J4aLXc+Ud78OrJL0iz+37gN9S
-         XZtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=13i0/0dHDWi3Tz13pQIy2h+YZzYm8zFkGL1fzxGqmuY=;
-        b=FfuqvL0L6xmYcBf8KkfopwDeYpBfh9DbzfTJ199IkT6fZ9nTE/5dFGr0R0qZsTBOVh
-         H7o+2+LKA11NQCbKmyOY+xx+go7Bt6Iq3+FYYB0DJjARB6JpUwKwrGeAz1CP3KjXSWjH
-         xj5lcoWm1+1ppO81WvmSbXeIOpbEyXCprvSNz4ETZ42+rV4Y6yPiIcestJwoVuPAPbwR
-         HAPXxr4UDUEWN6BHmpOwY4vAce2mCS1HKDEFDJeGjJXJyOIuW22tAjA2o8puc0dgjpTR
-         BHK2vtlCGb6JsQz1QpEwXaXEXgy3dM2P2Rk7NssDnkpoNOJ55fht06y2g0/sDy5NfhWj
-         7KKg==
-X-Gm-Message-State: AJIora/6Gxvo0/IplOuuD0SXZkEf0vsz0ceAP6dmOchJ+rGrQh/FizKx
-        n861gjUWZ0nEQldVLwZ8cGQeTg==
-X-Google-Smtp-Source: AGRyM1tCx3e3TI0EjYZ4gYglOXYON94UkAj86OkaD0BcFK9/cemoKGaTW1p1o37GsZxCjg70+qR1LQ==
-X-Received: by 2002:a05:600c:190a:b0:3a2:e8cc:57ca with SMTP id j10-20020a05600c190a00b003a2e8cc57camr31823297wmq.118.1658241445315;
-        Tue, 19 Jul 2022 07:37:25 -0700 (PDT)
-Received: from [192.168.2.90] ([109.76.0.125])
-        by smtp.gmail.com with ESMTPSA id n3-20020a05600c4f8300b003a32297598csm2893662wmq.43.2022.07.19.07.37.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 07:37:24 -0700 (PDT)
-Message-ID: <73f9d00c-b64c-7c70-c49f-99d3894fad24@conchuod.ie>
-Date:   Tue, 19 Jul 2022 15:37:22 +0100
+        Tue, 19 Jul 2022 10:41:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA08A40BF6;
+        Tue, 19 Jul 2022 07:38:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3701B617DA;
+        Tue, 19 Jul 2022 14:38:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D190C341CB;
+        Tue, 19 Jul 2022 14:38:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658241511;
+        bh=pGf1YmN+o/VpKXgM03koQq4c5xvoYJDJMg48G91Fs5A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=mauTgrih6Ao+I8qPQF/CnqucCGeA9rOuIh7GuSnMETgQ7UqsGeI921C1ASGNR6K3W
+         nMQuQvS+07b+gyeVTVbiqVoUwnKBeLi0iJsslde8RQSEI3GXLtmUgNU8lqQBoJduM4
+         cvulXe7PXF/kcfqk6jZ65IWz+ODz5BolKky64zY2nPWtuzSTRgDxyROF0Y00BSB8XP
+         OdeZZqRpfKYJ06sW0ZhzOktJlKzH9fBNYV0pvQXa1CLgZSpu1vmKKT1UaqypmefqUw
+         7ONoJona0VYF/igaLoHNCOT9Z13QasZTLtwsmMSg1wRMgqHlmrPMTgp+IM6GO2FSYP
+         /lGCr3cJX9nYA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id DFC8C5C0813; Tue, 19 Jul 2022 07:38:30 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 07:38:30 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "frederic@kernel.org" <frederic@kernel.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] rcu-tasks: Make RCU Tasks Trace checking for
+ userspace execution
+Message-ID: <20220719143830.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220718001610.263700-1-qiang1.zhang@intel.com>
+ <20220718152132.GE1790663@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB58805ADED62CE2AF94647967DA8C9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <20220719002604.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB5880375F53618C19D944EB06DA8F9@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 09/21] arch_topology: Add support to parse and detect
- cache attributes
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        valentina.fernandezalanis@microchip.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Gavin Shan <gshan@redhat.com>
-References: <20220704101605.1318280-1-sudeep.holla@arm.com>
- <20220704101605.1318280-10-sudeep.holla@arm.com>
- <CAMuHMdUBZ791fxCPkKQ6HCwLE4GJB2S35QC=SQ+X8w5Q4C_70g@mail.gmail.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <CAMuHMdUBZ791fxCPkKQ6HCwLE4GJB2S35QC=SQ+X8w5Q4C_70g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PH0PR11MB5880375F53618C19D944EB06DA8F9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,104 +65,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/07/2022 15:22, Geert Uytterhoeven wrote:
-> Hi Sudeep,
->
+On Tue, Jul 19, 2022 at 04:34:58AM +0000, Zhang, Qiang1 wrote:
+> On Mon, Jul 18, 2022 at 11:54:53PM +0000, Zhang, Qiang1 wrote:
+> > On Mon, Jul 18, 2022 at 08:16:10AM +0800, Zqiang wrote:
+> > > For RCU tasks trace, the userspace execution is also a valid 
+> > > quiescent state, if the task is in userspace, the 
+> > > ->trc_reader_nesting should be zero and if the 
+> > > ->trc_reader_special.b.need_qs is not set, set the tasks 
+> > > ->trc_reader_special.b.need_qs is TRC_NEED_QS_CHECKED, this cause grace-period kthread remove it from holdout list if it remains here.
+> > > 
+> > > This commit add rcu_tasks_trace_qs() to rcu_flavor_sched_clock_irq() 
+> > > when the kernel built with no PREEMPT_RCU.
+> > > 
+> > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > >
+> > >The looks plausible to me, but can you tell me how this avoids the 
+> > >following sequence of events?
+> > >
+> > >o	CPU 0 takes a scheduling-clock interrupt.  Just before this
+> > >	point CPU 0 was running in user context, thus as you say
+> > >	should not be in an RCU Tasks quiescent state.
+> > >
+> > >o	CPU 0 enters an RCU Tasks Trace read-side critical section.
+> >                
+> >  if I understand correctly, you mean that CPU0 enters an RCU Tasks 
+> > Trace  read-side critical section in scheduling-clock interrupt context.
+> >
+> >Exactly, as might happen if one of the functions in the scheduling-clock interrupt hander were traced/instrumented.
+> >
+> > >o	CPU 1 starts a new RCU Tasks Trace grace period.
+> > 
+> > The grace period kthread will scan running tasks on each CPU, The 
+> > tasks currently running on CPU0 will be recorded in the holdout list.
+> >
+> >Yes, very good.
+> >
+> > >o	CPU 0 reaches the newly added rcu_note_voluntary_context_switch().
+> > 
+> > In this time, if CPU0 still in RCU Tasks Trace read-side critical 
+> > section, the tasks which running on CPU0 will insert CPU0 blocked 
+> > list. when this tasks exit RCU Tasks Trace read-side critical section, this task will remove from CPU0 block list.
+> > 
+> > Did I understand the scenario described above correctly?
+> >
+> >Looks like it to me.
+> >
+> >Could you please resend the patch with this explained in the commit log?  Possibly for the benefit of your future self.  ;-)
+> >
+> 
+> Hi Paul, 
+> 
+> I have resent v3 again, but maybe still need your wording 😊.
 
-Hey Geert,
+I do see both copies, thank you.  And yes, I am deferring the wordsmithing
+to  a time when I am awake.  ;-)
 
-  
-> On Mon, Jul 4, 2022 at 12:19 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->> Currently ACPI populates just the minimum information about the last
->> level cache from PPTT in order to feed the same to build sched_domains.
->> Similar support for DT platforms is not present.
->>
->> In order to enable the same, the entire cache hierarchy information can
->> be built as part of CPU topoplogy parsing both on ACPI and DT platforms.
->>
->> Note that this change builds the cacheinfo early even on ACPI systems,
->> but the current mechanism of building llc_sibling mask remains unchanged.
->>
->> Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
->> Reviewed-by: Gavin Shan <gshan@redhat.com>
->> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> 
-> Thanks for your patch!
-> 
->> --- a/drivers/base/arch_topology.c
->> +++ b/drivers/base/arch_topology.c
->> @@ -7,6 +7,7 @@
->>    */
->>
->>   #include <linux/acpi.h>
->> +#include <linux/cacheinfo.h>
->>   #include <linux/cpu.h>
->>   #include <linux/cpufreq.h>
->>   #include <linux/device.h>
->> @@ -780,15 +781,28 @@ __weak int __init parse_acpi_topology(void)
->>   #if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
->>   void __init init_cpu_topology(void)
->>   {
->> +       int ret, cpu;
->> +
->>          reset_cpu_topology();
->> +       ret = parse_acpi_topology();
->> +       if (!ret)
->> +               ret = of_have_populated_dt() && parse_dt_topology();
->>
->> -       /*
->> -        * Discard anything that was parsed if we hit an error so we
->> -        * don't use partial information.
->> -        */
->> -       if (parse_acpi_topology())
->> -               reset_cpu_topology();
->> -       else if (of_have_populated_dt() && parse_dt_topology())
->> +       if (ret) {
->> +               /*
->> +                * Discard anything that was parsed if we hit an error so we
->> +                * don't use partial information.
->> +                */
->>                  reset_cpu_topology();
->> +               return;
->> +       }
->> +
->> +       for_each_possible_cpu(cpu) {
->> +               ret = detect_cache_attributes(cpu);
->> +               if (ret) {
->> +                       pr_info("Early cacheinfo failed, ret = %d\n", ret);
-> 
-> This is triggered
-> 
->      Early cacheinfo failed, ret = -12
-> 
-> on all my RV64 platforms (K210, PolarFire, StarLight).
+							Thanx, Paul
 
-This should be fixed by Sudeeps most recent patchset, at least
-it was when I tested it!
-https://lore.kernel.org/all/20220713133344.1201247-1-sudeep.holla@arm.com/
-
-> -12 = -ENOMEM.
+> Thanks
+> Zqiang
 > 
-> The boot continues regardless, and the K210 even has enough spare
-> RAM after boot to run "ls", unlike two weeks ago ;-)
-> 
->> +                       break;
->> +               }
->> +       }
->>   }
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> >							Thanx, Paul
+> >
+> > Thanks
+> > Zqiang
+> > 
+> > >
+> > >	Except that the quiescent state implied by userspace execution
+> > >	was before the new grace period, and thus does not apply to it.
+> > >
+> > >(Yes, I know, if this is a bug in this patch, the bug already exists 
+> > >due to the call in rcu_flavor_sched_clock_irq() for !PREEMPT kernels, 
+> > >but if this change is safe, it should be possible to explain why.)
+> > >
+> > >							Thanx, Paul
+> > >
+> > > ---
+> > >  v1->v2:
+> > >  Fix build error due to undeclared rcu_tasks_trace_qs(), note in 
+> > > no-PREEMPT_RCU  kernel, the RCU Tasks is replaced by RCU, so 
+> > > rcu_note_voluntary_context_switch()
+> > >  only include rcu_tasks_trace_qs().
+> > > 
+> > >  kernel/rcu/tree_plugin.h | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h 
+> > > index 4152816dd29f..5fb0b2dd24fd 100644
+> > > --- a/kernel/rcu/tree_plugin.h
+> > > +++ b/kernel/rcu/tree_plugin.h
+> > > @@ -976,7 +976,7 @@ static void rcu_flavor_sched_clock_irq(int user)
+> > >  		 * neither access nor modify, at least not while the
+> > >  		 * corresponding CPU is online.
+> > >  		 */
+> > > -
+> > > +		rcu_note_voluntary_context_switch(current);
+> > >  		rcu_qs();
+> > >  	}
+> > >  }
+> > > --
+> > > 2.25.1
+> > > 

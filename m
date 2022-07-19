@@ -2,173 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E1057946B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C4C57946E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiGSHly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 03:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S235601AbiGSHms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 03:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236958AbiGSHlr (ORCPT
+        with ESMTP id S232009AbiGSHmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 03:41:47 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2087.outbound.protection.outlook.com [40.107.96.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927F819C30;
-        Tue, 19 Jul 2022 00:41:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TBz++goaVTZsGsUeGh8w0QOosuv8BNgX1fzkwt+Uy2PTAm0MvjJkwu9T3UY3fVh65ZuubbgZcxoMDN9QjkPllsbSwyEt+qSKRXsbfYN/PPz1ai9A+IaeDbKdnInIrqadTtS/NUHnhtZaO1hFlCLp38CM5Na8sWJrmckTnfvVBJBA58N7V7UbOrTE09Y79eiCJKw7+HXMd63atczz6I4JklNfxBkK6MsGgNGVna9auLxzGIxDCXQnlbNtJxp2fB5A3jZilR6kgmYCjT3bCs3pnU25T0zYHS6xrNiwI6wYbG0tA/ABM7ekZsPMnVGmegvJ5YQGiADSi/DSWWI9fUDS+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZuZrSyAIHXgD6fPTQ/hd+mJxfmof1ZW3wCToq1txlfc=;
- b=H3E3mz2qWlDXvpQ0d7xJKuGIOypBfglh9NlK+jsUqeXrE7woqA2OExFife6AxUtu/xENajmdcDKBctGUOmkngdNeUvbnwf0VFXxq32PPtxKU8TUW5J+3ZWQ3N2XZwzQdlPKmugef4cwk6qAuvyq1tPuYxQSGUjyE8i7tno9cecKGG5LgcQDQSmOf2mhcG5DUblrbpcQoCzmO6UftpjyCmUOkXUZf3T0DMj9kPRyuzsgabmk4PJp7ZUi0KKu1i44sPLDP07iRQVscnuBzAfx/j7CZWLai2L6zHh4t4fNlZu+4AYJ4KYcYahFGcn4Nsr1UmscGjilyg5YxvPhr5e9ByA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZuZrSyAIHXgD6fPTQ/hd+mJxfmof1ZW3wCToq1txlfc=;
- b=It9/l/1NcTNnpEicodmf1p/6lyq9MnfYSH9EyWFKhI/smr/FirM0h43skf19+5SwS1sd+mJ4Ji9KP/nlozhptLfwZY/rkNyzRyvo49Ltr4jc/B+rKlNJxInmEDV0nu7zLYT7Y9HR6irCF6DcsvWP0wWDozvR/mRvmfm0m9765tnSOOTqm8fpdp4RaRqH35ajCjjV4GEXN7OgYMHYBfPClh7oE9Wz77Srs+zEioWQeGxXArHeLqbwNEG0AjlQaXIoHuFhFNzI2oQMwY+/gOHRA6v7W0moE5NgKPqRApcOtMGO1OeaQGtR9sPKUnLLjquCkZshuUcsYKpfcalavpImwQ==
-Received: from SJ1PR12MB6339.namprd12.prod.outlook.com (2603:10b6:a03:454::10)
- by PH7PR12MB5784.namprd12.prod.outlook.com (2603:10b6:510:1d3::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Tue, 19 Jul
- 2022 07:41:43 +0000
-Received: from SJ1PR12MB6339.namprd12.prod.outlook.com
- ([fe80::2970:10e4:ca12:d4bd]) by SJ1PR12MB6339.namprd12.prod.outlook.com
- ([fe80::2970:10e4:ca12:d4bd%9]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
- 07:41:43 +0000
-From:   Akhil R <akhilrajeev@nvidia.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH v3 1/3] dt-bindings: dmaengine: Add compatible for
- Tegra234
-Thread-Topic: [PATCH v3 1/3] dt-bindings: dmaengine: Add compatible for
- Tegra234
-Thread-Index: AQHYlT1na+78Q7Y5EEKYW/nlrw2EZq2Ei0aAgADGxnA=
-Date:   Tue, 19 Jul 2022 07:41:43 +0000
-Message-ID: <SJ1PR12MB63391677B9E3249F98D8F1ABC08F9@SJ1PR12MB6339.namprd12.prod.outlook.com>
-References: <20220711154536.41736-1-akhilrajeev@nvidia.com>
- <20220711154536.41736-2-akhilrajeev@nvidia.com>
- <20220718191627.GA3375779-robh@kernel.org>
-In-Reply-To: <20220718191627.GA3375779-robh@kernel.org>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b8c4ccc3-b7bd-41bf-9e44-08da695a2032
-x-ms-traffictypediagnostic: PH7PR12MB5784:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fTxqu+bl58rd+2F+zQz4h/ijLkAS6uJ9mfLipF3P7de2gftC+Rfg2iclbxk5/cYQ0pCPTxlP5JjfCZsN7npORtRA3syI0I6C7IHXWKBp8OeJu3aKKqeMGOI8M0bXnlScdGkGYIIt0exXqY4XBN3H8Vvz0lGjMFj5cp89D7przV9ETJjFualxw8jNM4SvGzgui1ApohVEOFKjbAMX44jORqJH20rfgBL+cJrx7aM94wA6M92a0/8QvxtMqjEGCXcNMTiOUAbYAgl9ZYVHTK4iGzupll8Wj+ZpeMWkBJRonxB9Qsl/OdALFURlL3y4pr5IuI9lAIxe17lhmQG6qn7iVggAETEbCgop8IaEEgBNeRsvf7ydodAIjt49OR57Y5GtH30n3Yc8zW4oYxQ6E2CblhpR/xCO8Mi84Kb7X9tKYlotYdbbfBL8y56gobHVYBJlUftKdsktAI30m+ADha28AWxy76PxJ5NjjDGtl7rMGTJMxKRECPl5nKR+SIPo+s8bGfaVPPG7GmSc2bTuTMxi8pnjogjIwoHcY0V9/RTYkSoLZ3YZrF2IlkYxXXOj/nwzXchKsvSeGl6eS+aTkUDKMN5jyGRgG2nF22kfuIGNiqvZ6PkJcD0/5Uvr8bkaB9AjZEmxP+dggdmTN2yDz6dLqlPxV+3oPV8QhcoZEA2hd9yBHVAke/3N54OMs95+r0sQviLnmpz+FQqAP2uTLp3BRZH+Cjdqlh0zN9vguHklxDrfIwE+YLHvKH0xaphNoqDJVwU3CmgRWm+cSTeJGvx2R6ok76+4XnJcQ37yZlM8igLHyU+QLh2yCRs4BdhjRGam
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR12MB6339.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(376002)(366004)(136003)(76116006)(71200400001)(478600001)(38070700005)(186003)(316002)(26005)(7696005)(54906003)(55236004)(86362001)(6916009)(41300700001)(6506007)(66556008)(66476007)(4326008)(5660300002)(8936002)(9686003)(8676002)(66946007)(122000001)(2906002)(33656002)(38100700002)(64756008)(55016003)(52536014)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NN8N726Ycv81oJb2Vp0W1leyME0vL0l088AWOU2sycWY/DASLjvRcagKpyLq?=
- =?us-ascii?Q?J50uQFMzVPg4dhF8WIbbZfXrd64KEA7aweQiZNj/JooRx4tYBulYjmJiJmj+?=
- =?us-ascii?Q?YusBmbx7KLQuScvL/gIkGD96KL8DSJWur37FxIPsJx2r3SclivYkfc8+voVn?=
- =?us-ascii?Q?eKN6o3q2UWbzlSGN7tFMO7/4Q3P2U8GW7tgLCzGQkGNK9QDFcoi+kI8c1cG7?=
- =?us-ascii?Q?zDcXhQmvChsWgnM+bY7ZyNoDU5N8VjGYtOFHXEsQXMIDj4TG33xjHkc9is6R?=
- =?us-ascii?Q?R5Ofy6R+WmUdZ3T2CbFnDzUhWpkmdR3CMAs+fssODUo2058k97Zm2W+BpMTd?=
- =?us-ascii?Q?HGU7x/TpCJN7izAPyGms0zkkvc7Zg5SniwQjr8Q1D9TXFgfn6UJy5Z77XsJO?=
- =?us-ascii?Q?fwy/6QkMRi2261x0t4ITQsOvBCxtoLUiPXeDO6fVegAz0ErxkV5SjYSvP8Ob?=
- =?us-ascii?Q?9cIAtaBreO0n/COuUFl96hY3KPS/nd5JxFsNGR0Sf51UWvlb3rWYnbXxgT25?=
- =?us-ascii?Q?JGLz7s6AIn0Qnx4OpM13xgt5EGDQtgYPRZB2JyoaFNl1myCR/aMFt/MO/SPI?=
- =?us-ascii?Q?JyYwBObDSx6xwKT1EfxYmB5MLKyzUidKew+9U9vMcKBZKu79Jk4s78fIU0ha?=
- =?us-ascii?Q?T4Ja+S/UC//nsJB0xD5Z+za5HokMkwJsN9pIVHnFMHA81DPyn+YBtazaOZCe?=
- =?us-ascii?Q?gmEGmuuhlxaEwrEtPHx+AWMQJbWBrdSkUA3zeu21A+sBJxmybcuv4wGD9TQu?=
- =?us-ascii?Q?2eFgyrh1VMyE4VAGMlurBchzs50EyorMsRWgxsBf+jK9GYpu3Vjk/BhYU9EL?=
- =?us-ascii?Q?9RMbcirmY/cZk1givNoRzkvZ4nHvhP5PUPIJvdwqcTfkT93qjOar5eM37s+d?=
- =?us-ascii?Q?DFRrRCXVZ7h/Mc8LkwswslFAYRllaEQRUkIBvyZvSJr08LTzT5ECYI0dADn4?=
- =?us-ascii?Q?swWs1pfLdscJt1hEwxR26TTJ+AbCK03HSoKtPAh3PJc8mrhhB8ncQjsn2mkH?=
- =?us-ascii?Q?SdMYK6bzGotjcTORqPzWmVJjGazwa+4l2cAqIEq1TUQ+DKiVcqZgqH6fGk87?=
- =?us-ascii?Q?dkT+c46AdTKVUtGFcBRy29w634DoXtlnl6xo2HKXoiyKCMllGlBVIgD/npPl?=
- =?us-ascii?Q?hhb9AT0EfhP9cnHlj6GzuoKn3VAizhLpuVA2CDZKhsQFQAojuVhSxVzWEoQO?=
- =?us-ascii?Q?CT0nGdUhzSWYqAIVDErPI9rmu9UVVKToyfDMTW0gmDsxTPXkaDCPO73gZioq?=
- =?us-ascii?Q?CPUmf2HuScRA7jO4Oa2GzRdjOXuXujR7Blvduu92L7ziB+IFeb0bfI0G8i2I?=
- =?us-ascii?Q?FeJjd1pL9kGwBGGMfwizRnnK7rxUQ2fF0BbDvGpuDqGEEKDvY+7EZdWMf3Gb?=
- =?us-ascii?Q?wJtoZdQOJYcgY/8ZcSqndzMNce/YDuMWjNSk3Fi0MPQXS4DOC2If517BYRE4?=
- =?us-ascii?Q?/ht93e9t8QYfwgkjx75f/ynMfsxU3BxCi+3O/kRydHSMAO8Pp4i8nbI1kAGi?=
- =?us-ascii?Q?2j7VZ80SZBiixk0Z+igGBEIvNzwHEsB53+WghbTrq4ydgNyU55X1t2NkYMgh?=
- =?us-ascii?Q?AUIqVPSj1uPcmXsWkbXPL+4Zn6gAPdo/Rk1l/7jj?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 19 Jul 2022 03:42:45 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05D01CFF4;
+        Tue, 19 Jul 2022 00:42:43 -0700 (PDT)
+Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M9WmQ-1o8EE93mh2-005cve; Tue, 19 Jul 2022 09:42:42 +0200
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2ef5380669cso131879477b3.9;
+        Tue, 19 Jul 2022 00:42:41 -0700 (PDT)
+X-Gm-Message-State: AJIora+sI6R0lvS9NJoElRjYTk8+engM5UkA1MG7YoOLXeafFchSTS+z
+        yCrCBhKPXjgPJadvVssMJuPCZURb3EwvlAVXMO0=
+X-Google-Smtp-Source: AGRyM1tmWmPbrg7yvHE/w+kxpWNdDAwAPOmNtzvkbvYGb5Xfd7R1y42CocaChsPUNrPmhKIX5Ax/Xy/CbxUgIijf0jg=
+X-Received: by 2002:a81:d93:0:b0:31c:d32d:4d76 with SMTP id
+ 141-20020a810d93000000b0031cd32d4d76mr36630570ywn.135.1658216560443; Tue, 19
+ Jul 2022 00:42:40 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR12MB6339.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8c4ccc3-b7bd-41bf-9e44-08da695a2032
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2022 07:41:43.3881
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YTnuqI1s6EkARs5lbl/e5eh5kQ3h/I7tMEG3dwBpE0YpfIkLgUNm1tGFBg4xG8IFrvGWerj2Pmo7zYzB1hnGUg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5784
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220715185551.3951955-1-f.fainelli@gmail.com>
+In-Reply-To: <20220715185551.3951955-1-f.fainelli@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 19 Jul 2022 09:42:23 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3cuTknZaLZCFGwZtMfbd1qAFWEtXMcvVHsXoJn8EUCOg@mail.gmail.com>
+Message-ID: <CAK8P3a3cuTknZaLZCFGwZtMfbd1qAFWEtXMcvVHsXoJn8EUCOg@mail.gmail.com>
+Subject: Re: [PATCH] tools: Fixed MIPS builds due to struct flock re-definition
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Guo Ren <guoren@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ky8dpsE7cu3c6Z6P2Yk0eP1n/bwwSDeo5eN+FlUxRFUxs6lZ2lY
+ o5Nayj6PLtKg5TNjfnW+TdoOM6+BSNyCXr6NIaLy/Lq4GRchSiZ3yCqGSYWiu/NANHhcjef
+ WVWED498wvwni6aK8369+4Cadqz9ujOvvrAShox0UO+H9cNjJkgfyEdqSWIfWHMeWOtMX2W
+ TrYj66RUwAAIvX3mMKHEA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:J8uqqvEuugE=:QUjV7YsZvVnXWDK3Qzu7BU
+ AByfWq68sxYQbfLI0/KVYMOAnjwuBI7rHnv+UqNjk4CVsX3P6sbaH+eBL38A7ODhnzJCcY9+Z
+ AD2pDbmc83gO0XuflluCPfWbbAhY5M0wHLV3Da7mGvy5rjciszNLYiz3vITNRojE70nc2q3oO
+ bKtNSglacDVFCOuHfo106xDCJgi975NlQgCxP7LBiLLRYtNkNQTn97Fr9aX3WiRYgLZsnot0a
+ vNDYIVkOdlTitqmPTwWCo8UK81ZOmMjJuBj6yR1ME5e69QF4ypwOZQu79tnc8w4L7PelBR48f
+ 1NmOijRgK9hSp+wj5Hez0TboxGNO/fUHRPo10QFvYWWLkSbInK6oT28qQ64H/AGrDRkKPp8/S
+ 3qHgvkA5T8M1JeNYlZYEmVV0UMgLFz3y3gwHcwkpmk+c+z5EK4b0sEir9nrE81D6UBSfxRwrZ
+ dh3QIRkVj6pdDxJ0DizLGdru0r0jvhWP8fo8W7q5AykmKMkJSnup9C3n1fraXaPK1KSWqRrv0
+ Qe+Fj1Ac5MFMt/j7oBlIRWqc42+AUv1yEgNa7ys0qLXhX4lGTBhTLBxODwnOdcWlalyzSvOkR
+ ufladA82CeAKoFyNllAhisruOR5Jt7svIUO+MxkstMSzRdHgYtbNOkSBkiSgNg1u/HVF+EZtP
+ Xy0G+kkIskFrsrjk7VQd+kQl+n68c5rj7rMcITR3D5qdORIC0udTdARMiqd9upSIMFl2mvZXw
+ 2Y0N0Qj14yUfD53XkC6a2hHPi5wLDgUAk4bNlo4Q7kU/TyZq01EnIqcQqddehY2V/aYyCpFoS
+ bpJP9BgIub2s2thVwM3cI/ULZiHhvIkCRHkjLbcFR5WMe5+SOhMwMcpXtHsbJPpqvOr0z3tWS
+ 68hORh5oqzs9w/8bUVMg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Mon, Jul 11, 2022 at 09:15:34PM +0530, Akhil R wrote:
-> > Document the compatible string used by GPCDMA controller for Tegra234.
-> >
-> > Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> > ---
-> >  .../devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yaml      | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-
-> dma.yaml b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-
-> dma.yaml
-> > index 9dd1476d1849..399edcd5cecf 100644
-> > --- a/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-dma.yam=
-l
-> > +++ b/Documentation/devicetree/bindings/dma/nvidia,tegra186-gpc-
-> dma.yaml
-> > @@ -26,6 +26,10 @@ properties:
-> >            - const: nvidia,tegra194-gpcdma
-> >            - const: nvidia,tegra186-gpcdma
-> >
-> > +      - items:
-> > +          - const: nvidia,tegra234-gpcdma
->=20
-> This can be added to the above entry changing it from a const to enum.
->=20
-So, it could look like this, correct?
+On Fri, Jul 15, 2022 at 8:55 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> Building perf for MIPS failed after 9f79b8b72339 ("uapi: simplify
+> __ARCH_FLOCK{,64}_PAD a little") with the following error:
+>
+>   CC
+> /home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
+> In file included from
+> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
+>                  from ../include/uapi/linux/fcntl.h:5,
+>                  from trace/beauty/fcntl.c:10:
+> ../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of
+> 'struct flock'
+>  struct flock {
+>         ^~~~~
+> In file included from ../include/uapi/linux/fcntl.h:5,
+>                  from trace/beauty/fcntl.c:10:
+> ../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8:
+> note: originally defined here
+>  struct flock {
+>         ^~~~~
+>
+> This is due to the local copy under
+> tools/include/uapi/asm-generic/fcntl.h including the toolchain's kernel
+> headers which already define 'struct flock' and define
+> HAVE_ARCH_STRUCT_FLOCK to future inclusions make a decision as to
+> whether re-defining 'struct flock' is appropriate or not.
+>
+> Make sure what do not re-define 'struct flock'
+> when HAVE_ARCH_STRUCT_FLOCK is already defined.
+>
+> Fixes: 9f79b8b72339 ("uapi: simplify __ARCH_FLOCK{,64}_PAD a little")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  tools/include/uapi/asm-generic/fcntl.h | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+> index 0197042b7dfb..312881aa272b 100644
+> --- a/tools/include/uapi/asm-generic/fcntl.h
+> +++ b/tools/include/uapi/asm-generic/fcntl.h
+> @@ -185,6 +185,7 @@ struct f_owner_ex {
+>
+>  #define F_LINUX_SPECIFIC_BASE  1024
+>
+> +#ifndef HAVE_ARCH_STRUCT_FLOCK
+>  struct flock {
+>         short   l_type;
+>         short   l_whence;
+> @@ -209,5 +210,6 @@ struct flock64 {
+>         __ARCH_FLOCK64_PAD
+>  #endif
+>  };
+> +#endif /* HAVE_ARCH_STRUCT_FLOCK */
+>
 
-  compatible:
-    oneOf:
-      - const: nvidia,tegra186-gpcdma
-      - items:
-          - enum:
-              - nvidia,tegra234-gpcdma
-              - nvidia,tegra194-gpcdma
-          - const: nvidia,tegra186-gpcdma
+I applied this to the asm-generic tree, but now I'm having second thoughts, as
+this only changes the tools/include/ version but not the version we ship to user
+space. Normally these are meant to be kept in sync.
 
-Tried dt_binding_check and dtbs_check with this change and did not see any =
-error.
+It appears that commit 306f7cc1e906 ("uapi: always define
+F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h") already caused
+them to diverge, presumably the uapi version here is correct and we
+forgot to adapt the tools version at some point. There are also some
+non-functional differences from older patches.
 
-Regards,
-Akhil
+I think the correct fix to address the problem in both versions and
+get them back into sync would be something like the patch below.
+I have done zero testing on it though.
 
---
-nvpublic
+Christoph and Florian, any other suggestions?
 
+       Arnd
+
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index f13d37b60775..1ecdb911add8 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -192,6 +192,7 @@ struct f_owner_ex {
+
+ #define F_LINUX_SPECIFIC_BASE  1024
+
++#ifndef HAVE_ARCH_STRUCT_FLOCK
+ struct flock {
+        short   l_type;
+        short   l_whence;
+@@ -216,5 +217,6 @@ struct flock64 {
+        __ARCH_FLOCK64_PAD
+ #endif
+ };
++#endif /* HAVE_ARCH_STRUCT_FLOCK */
+
+ #endif /* _ASM_GENERIC_FCNTL_H */
+diff --git a/tools/include/uapi/asm-generic/fcntl.h
+b/tools/include/uapi/asm-generic/fcntl.h
+index 312881aa272b..1ecdb911add8 100644
+--- a/tools/include/uapi/asm-generic/fcntl.h
++++ b/tools/include/uapi/asm-generic/fcntl.h
+@@ -1,3 +1,4 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+ #ifndef _ASM_GENERIC_FCNTL_H
+ #define _ASM_GENERIC_FCNTL_H
+
+@@ -90,7 +91,7 @@
+
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+-#define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)
++#define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)
+
+ #ifndef O_NDELAY
+ #define O_NDELAY       O_NONBLOCK
+@@ -115,11 +116,13 @@
+ #define F_GETSIG       11      /* for sockets. */
+ #endif
+
++#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
+ #ifndef F_GETLK64
+ #define F_GETLK64      12      /*  using 'struct flock64' */
+ #define F_SETLK64      13
+ #define F_SETLKW64     14
+ #endif
++#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
+
+ #ifndef F_SETOWN_EX
+ #define F_SETOWN_EX    15
+@@ -178,6 +181,10 @@ struct f_owner_ex {
+                                   blocking */
+ #define LOCK_UN                8       /* remove lock */
+
++/*
++ * LOCK_MAND support has been removed from the kernel. We leave the symbols
++ * here to not break legacy builds, but these should not be used in new code.
++ */
+ #define LOCK_MAND      32      /* This is a mandatory flock ... */
+ #define LOCK_READ      64      /* which allows concurrent read operations */
+ #define LOCK_WRITE     128     /* which allows concurrent write operations */

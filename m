@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EE7579C12
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B323579E91
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240574AbiGSMfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        id S242802AbiGSNCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241041AbiGSMej (ORCPT
+        with ESMTP id S242971AbiGSM7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:34:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7A378233;
-        Tue, 19 Jul 2022 05:13:35 -0700 (PDT)
+        Tue, 19 Jul 2022 08:59:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580F95007D;
+        Tue, 19 Jul 2022 05:25:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65299B81B2C;
-        Tue, 19 Jul 2022 12:13:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA744C341C6;
-        Tue, 19 Jul 2022 12:13:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 547A16182C;
+        Tue, 19 Jul 2022 12:25:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2592BC341C6;
+        Tue, 19 Jul 2022 12:25:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232814;
-        bh=fvg2bkj8z5Ppk4ktr8qjTgz1iKiQ/89YzGS0rKplh3I=;
+        s=korg; t=1658233521;
+        bh=W61HKVJbMsqMD6iutIUHFWIUDrrKWcXaFRcxexO6GVM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ILihPOfB+TXX7/J+HO9it0Px5wmq/iYb1NUOhJPIcJbwErKmo/THsGk4CGfu3ZdXa
-         5BbZX8ZMVkn+QMWoQWiWTgfAIHDiR1nnU19LhmRnTtGOIo9UwpXy5gXV9e4yJdcVTh
-         zYUlViyZ3MkgWpfF2gMwneAUFGobj1oxClc05zwc=
+        b=dzoYzyCYCRsJpl3pD3Lscfcn4axl5FoCtyyE14ZDH878iLGpcv6zOtOleOu8lAwSr
+         osBaeHH3sngGlureeNwxzfZjJNYkW9Tb9SVuMEh4nRM/z0eDQ217Pl5YSbqEzlvJkG
+         Q5+vrnWzTg7i1A3+RxYoDZmnu5OCooRdzIIVoakc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bruce Chang <yu.bruce.chang@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 075/167] drm/i915/dg2: Add Wa_22011100796
-Date:   Tue, 19 Jul 2022 13:53:27 +0200
-Message-Id: <20220719114703.791187066@linuxfoundation.org>
+Subject: [PATCH 5.18 123/231] nexthop: Fix data-races around nexthop_compat_mode.
+Date:   Tue, 19 Jul 2022 13:53:28 +0200
+Message-Id: <20220719114724.792687497@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,46 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bruce Chang <yu.bruce.chang@intel.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 154cfae6158141b18d65abb0db679bb51a8294e7 ]
+[ Upstream commit bdf00bf24bef9be1ca641a6390fd5487873e0d2e ]
 
-Whenever Full soft reset is required, reset all individual engines
-first, and then do a full soft reset.
+While reading nexthop_compat_mode, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-Signed-off-by: Bruce Chang <yu.bruce.chang@intel.com>
-cc: Matt Roper <matthew.d.roper@intel.com>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
-Reviewed-by: Matthew Auld <matthew.auld@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220128185209.18077-5-ramalingam.c@intel.com
+Fixes: 4f80116d3df3 ("net: ipv4: add sysctl for nexthop api compatibility mode")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/gt/intel_reset.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ net/ipv4/fib_semantics.c |    2 +-
+ net/ipv4/nexthop.c       |    5 +++--
+ net/ipv6/route.c         |    2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_reset.c b/drivers/gpu/drm/i915/gt/intel_reset.c
-index 91200c43951f..b6697c1d260a 100644
---- a/drivers/gpu/drm/i915/gt/intel_reset.c
-+++ b/drivers/gpu/drm/i915/gt/intel_reset.c
-@@ -623,6 +623,15 @@ static int gen8_reset_engines(struct intel_gt *gt,
- 		 */
+--- a/net/ipv4/fib_semantics.c
++++ b/net/ipv4/fib_semantics.c
+@@ -1811,7 +1811,7 @@ int fib_dump_info(struct sk_buff *skb, u
+ 			goto nla_put_failure;
+ 		if (nexthop_is_blackhole(fi->nh))
+ 			rtm->rtm_type = RTN_BLACKHOLE;
+-		if (!fi->fib_net->ipv4.sysctl_nexthop_compat_mode)
++		if (!READ_ONCE(fi->fib_net->ipv4.sysctl_nexthop_compat_mode))
+ 			goto offload;
  	}
  
-+	/*
-+	 * Wa_22011100796:dg2, whenever Full soft reset is required,
-+	 * reset all individual engines firstly, and then do a full soft reset.
-+	 *
-+	 * This is best effort, so ignore any error from the initial reset.
-+	 */
-+	if (IS_DG2(gt->i915) && engine_mask == ALL_ENGINES)
-+		gen11_reset_engines(gt, gt->info.engine_mask, 0);
-+
- 	if (GRAPHICS_VER(gt->i915) >= 11)
- 		ret = gen11_reset_engines(gt, engine_mask, retry);
- 	else
--- 
-2.35.1
-
+--- a/net/ipv4/nexthop.c
++++ b/net/ipv4/nexthop.c
+@@ -1858,7 +1858,7 @@ static void __remove_nexthop_fib(struct
+ 		/* __ip6_del_rt does a release, so do a hold here */
+ 		fib6_info_hold(f6i);
+ 		ipv6_stub->ip6_del_rt(net, f6i,
+-				      !net->ipv4.sysctl_nexthop_compat_mode);
++				      !READ_ONCE(net->ipv4.sysctl_nexthop_compat_mode));
+ 	}
+ }
+ 
+@@ -2361,7 +2361,8 @@ out:
+ 	if (!rc) {
+ 		nh_base_seq_inc(net);
+ 		nexthop_notify(RTM_NEWNEXTHOP, new_nh, &cfg->nlinfo);
+-		if (replace_notify && net->ipv4.sysctl_nexthop_compat_mode)
++		if (replace_notify &&
++		    READ_ONCE(net->ipv4.sysctl_nexthop_compat_mode))
+ 			nexthop_replace_notify(net, new_nh, &cfg->nlinfo);
+ 	}
+ 
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -5737,7 +5737,7 @@ static int rt6_fill_node(struct net *net
+ 		if (nexthop_is_blackhole(rt->nh))
+ 			rtm->rtm_type = RTN_BLACKHOLE;
+ 
+-		if (net->ipv4.sysctl_nexthop_compat_mode &&
++		if (READ_ONCE(net->ipv4.sysctl_nexthop_compat_mode) &&
+ 		    rt6_fill_node_nexthop(skb, rt->nh, &nh_flags) < 0)
+ 			goto nla_put_failure;
+ 
 
 

@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7A85794B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CF15794B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235887AbiGSH5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 03:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S233420AbiGSH6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 03:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234892AbiGSH5s (ORCPT
+        with ESMTP id S236498AbiGSH5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 19 Jul 2022 03:57:48 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD68533A12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:57:46 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id v12so18477732edc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TZJK2+UHw9IfQSA8Jz9jMJzE6vbq53LySvelY/Wqz4Q=;
-        b=TbtXJsdN2sKD6oakm5TuE9Y8jv4K28Vl0MI8OF9L3RV6a0PaLRCf2jiTdvA8WCuiCZ
-         NKkzst65SFMbfHFotDaKH0LYahPClkhG0S5r5re9Luc0c1ElQKIegec37Jace4rnX4Eg
-         5GuknkNzK8iwSvqWrslLRJ0/h+FcMmOiExBCXfKE/wCOdFSSv8/6U12G+niEo8ZB3cnt
-         GrmXKGj8U1ttbkHfe8SZ/IKBffPn9GuTITucqsDDa+j/4ETSkg8e6zwMd4NRb7wyhqig
-         7P7IhopEVykaoXfiQBvWnpw/tZ233AZBt/Atd2WNkLTROimVQPs7O1H2QdnSGdkyAgLu
-         Y6kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TZJK2+UHw9IfQSA8Jz9jMJzE6vbq53LySvelY/Wqz4Q=;
-        b=FY8JrZIpdw1dmEwhsukEMHTZg4dcxSuCUV87KWkURxYxwUl1k1AtjlQBz46yrLX0K9
-         DraTPPgKok5gFi9tggSEHJgcb6I8tIDpamlKdlE4HG92W7P+A5iVVFj6tA22+5+jfTMK
-         UncqOgN1W9rpIFMmGN2SXGFevLc4SM221kDLuoGyxNbA6ojxfSQlya03ABNLiPxfXuHH
-         Rxq60Vsn7aaCmV6KRr/pRZ0ZaIQ2uHSsXQFp7w3guidSDI8OMf19WDH9jGU82uHpH1U5
-         snZKvpWjWuZWA2DxIyaJnwNTl2LSwdafi31yJxqZSmiXWL4zIZ/CyiRuBpI0Y+dPyOqU
-         yklA==
-X-Gm-Message-State: AJIora8keP6E4r3zIBqezDKtpuU9+fRCuH2rEQhZgfbhUI16WkFPVHtT
-        pWilIMLCXkYhfiog+rE79E80adk5iqIayiJcjDtllMVQv+m2VQ==
-X-Google-Smtp-Source: AGRyM1vWwZ3Nnv+ntVGlLCeOSX98ohxnMk2NDo2U3cEwAcSLyo/Glzw/lXPG62CCnWFqy6WGbkf8Cu/xfuKzhrkRunI=
-X-Received: by 2002:a05:6402:26c3:b0:43a:a846:b2c1 with SMTP id
- x3-20020a05640226c300b0043aa846b2c1mr42621866edd.133.1658217465302; Tue, 19
- Jul 2022 00:57:45 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0FE31DDE;
+        Tue, 19 Jul 2022 00:57:48 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F22E366019EC;
+        Tue, 19 Jul 2022 08:57:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658217466;
+        bh=nji9qQO/Fe2O7nOAQY8VO3ZafgMoj4sz1HhYEJVZAdc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ix8B24hH/TZI+YEepZqG05xijSJuRWOhrlSEX0WY4I3lJdsjFh1eEHKyftYjvPiPB
+         /6Yu9riUXYes7hcmonRoEMV7YX2CMSP4YLVsy8pqWs7EagsVHAKd7G+lrV3n1SX9tr
+         DRZFEuvuYYro2MpOuWRYPPfHCxo/fklVffK8hgTrgpQZtih7zTSgbkH28aEbWtSuEf
+         6Yz3pAXouf3ILg8LN1P331ibvFHYAJZpBljZnCfFlDritTt+mKhf9OGutCAu5nLxrz
+         YBoeRUTkSkS2K9QQa14SLvasvprvi/mhzBmMylNg6TP668V92PDkG88XCd4UcfCFEO
+         ovDLCLcCoa2vA==
+Message-ID: <26dc9eac-752d-4357-a793-be16554dcff6@collabora.com>
+Date:   Tue, 19 Jul 2022 09:57:43 +0200
 MIME-Version: 1.0
-References: <20220719022743.305189-1-trix@redhat.com>
-In-Reply-To: <20220719022743.305189-1-trix@redhat.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 19 Jul 2022 09:57:34 +0200
-Message-ID: <CACRpkdafsWC4VM4c623Q2prkG4uaQPpY0fUkM0wbmWqM0J4TFQ@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: ab8500: remove unused static local variable
-To:     Tom Rix <trix@redhat.com>
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] dt-bindings: power: mediatek: Update example to use
+ phandle to syscon
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        chun-jie.chen@mediatek.com, weiyi.lu@mediatek.com,
+        mbrugger@suse.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        nfraprado@collabora.com
+References: <20220711122503.286743-1-angelogioacchino.delregno@collabora.com>
+ <20220711122503.286743-3-angelogioacchino.delregno@collabora.com>
+ <20220718180654.GA3260460-robh@kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220718180654.GA3260460-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 4:27 AM Tom Rix <trix@redhat.com> wrote:
+Il 18/07/22 20:06, Rob Herring ha scritto:
+> On Mon, Jul 11, 2022 at 02:25:02PM +0200, AngeloGioacchino Del Regno wrote:
+>> The preferred way of declaring this node is by using a phandle to
+>> syscon: update the example to reflect that.
+> 
+> Preferred by who? Not me.
+>   
+> What problem are you trying to solve? Better be a good reason for
+> breaking compatibility.
+> 
+> 
 
-> cpp_check reports
-> [drivers/power/supply/ab8500_chargalg.c:493]: (style) Variable 'ab8500_chargalg_ex_ac_enable_toggle' is assigned a value that is never used.
->
-> From inspection, this variable is never used. So remove it.
->
-> Fixes: 6c50a08d9dd3 ("power: supply: ab8500: Drop external charger leftovers")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hello Rob,
 
-Thanks Tom!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+I've produced this series after a misunderstanding with Krzysztof (entirely my
+bad!), then the discussion [1] went on and I'm handing it to MediaTek to resolve.
 
-Yours,
-Linus Walleij
+Please ignore this series.
+
+
+[1]: 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220704100028.19932-9-tinghan.shen@mediatek.com/
+
+Regards,
+Angelo
+

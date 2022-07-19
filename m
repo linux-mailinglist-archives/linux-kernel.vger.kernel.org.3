@@ -2,216 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C31E57AA47
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF1657AA4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240590AbiGSXLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 19:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S240670AbiGSXMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 19:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233316AbiGSXLl (ORCPT
+        with ESMTP id S240594AbiGSXMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 19:11:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5953043E44
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658272300; x=1689808300;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gX+aXuy904qG7zowrwsZjreWxsmEUI/cyuZC9ZNlVr8=;
-  b=KRBVwZ/xh8kYUZaEuVfClVqmT+Fe98teVqBUQdNMWuPtMgTjcXC0mQDn
-   Y84xfLPYrIfAkkIYtf/Z653a42V/kUr+6vHN8P5TV4/9mGkVgV8DC0dB+
-   /6L5nviRgKxYXbAU/Yxej1nXSc0ivGP1hOoVrjEQYI/TTGndfAH/tB5KF
-   oX8sChTAIeOS/+20VNHmPGmHh4dnDEPDb/LONzLFO5/s5X3cJ299KlYwU
-   HloBFaTrRgaEe7H5tT5Nnxv8OkIrszi/oYkOFVH1fjZLkQMYWWEe+hJbP
-   SS1WMSo8+0IrNs9bWJ8kgPpD1EI1xIuNlkyq6/4kb0l4hGoCNAAoNAgSF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="285392788"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="285392788"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 16:11:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="924983401"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Jul 2022 16:11:38 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDwNN-0006D5-DZ;
-        Tue, 19 Jul 2022 23:11:37 +0000
-Date:   Wed, 20 Jul 2022 07:11:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: drivers/net/dsa/lan9303_i2c.c:87:34: warning: unused variable
- 'lan9303_i2c_of_match'
-Message-ID: <202207200746.F1Qd6rbA-lkp@intel.com>
+        Tue, 19 Jul 2022 19:12:13 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF5865542
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:11:59 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f11so13359415plr.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:11:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MDB/jWRc9Xajh23m6pM6TUJxABhzEhIq3KDDUhbiofM=;
+        b=hGnF4AGZK3imEyE7TkYljfjGVyObt+7NszLD1fgBVsB+iEts2eSwhfR4YgFFpJWXT9
+         SNIxu5rNarEWFGEwrI3oCekok5mmkm+0/daZVZnNgeZpk2jUdCm1jn3+hhWORpKSorgV
+         Vwose+V7rQm12OsQvryH5753vwlHC09DQYSGrYy0t7CCRz9HxtEjFI/6Boh4VFHwdGZE
+         3rKhblolLuTozatYPveOoLMHfMs3u+HA6kB59JRzlY78yFS1Swtp6ouLotDRPcx7dWQj
+         4H8h8mZj0XD3xFtvurly7AWLrfjA2l80pi5GX6WZZn9rOIeRxEfHUQaOQF06l9QBoVAj
+         t8WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MDB/jWRc9Xajh23m6pM6TUJxABhzEhIq3KDDUhbiofM=;
+        b=yrz7VDV4cg2nxDrwqT4UK+aROfcNZe7kr26B0cg9DGGfuaDpTAQJ2Z69sQfjAlBAAp
+         RrOwVdbCB8bjFlGYMJDbZhahFEZt+bMwWSBI18dy3RHAad+Ll48p0L3TZkTl0ds80FcS
+         6mzIicnCYhHFOc0w4pZ3gorgErlvetmMwhvBXnty2TcFeRojTmIMdnmW7lFOBWi5Gc/D
+         NX0y1Psbj/reOaZX92dLY3atTd9hlZ+3jK6UAgUaEzJ8tIBF1QYiH5sTpLuh5LjWAC0z
+         eFkZsMTfaNR5/1Rf2U3Yw19HFB4VnoxLDxj0jB5dMTuj81iX12mwZnyzLjA+78vRWBrs
+         Y7bQ==
+X-Gm-Message-State: AJIora8r5VS0aMlEIiH4xRMVMpFAy5WKkY1wEx6lHuONT6gRTPKh7Q8q
+        5PT+TfjyZlggG5MCCtff8BFQCg==
+X-Google-Smtp-Source: AGRyM1t2bInyU20r85cR9xQ0Th5SsGD18OhUuFnHiFyg50YICO9supSghTrIkBaT+4Nfiru98hkErg==
+X-Received: by 2002:a17:90b:4387:b0:1f1:f944:16f3 with SMTP id in7-20020a17090b438700b001f1f94416f3mr2014870pjb.118.1658272318844;
+        Tue, 19 Jul 2022 16:11:58 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id r3-20020a6560c3000000b0040de29f847asm10636530pgv.52.2022.07.19.16.11.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 16:11:58 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 23:11:55 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH V3 10/12] KVM: X86/MMU: Remove unused INVALID_PAE_ROOT
+ and IS_VALID_PAE_ROOT
+Message-ID: <Ytc6O2nsBVTLMiGA@google.com>
+References: <20220521131700.3661-1-jiangshanlai@gmail.com>
+ <20220521131700.3661-11-jiangshanlai@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220521131700.3661-11-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+On Sat, May 21, 2022, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> They are unused and replaced with 0ull like other zero sptes and
+> is_shadow_present_pte().
+> 
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> ---
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca85855bdcae8f84f1512e88b4c75009ea17ea2f
-commit: 227d72063fccb2d19b30fb4197fba478514f7d83 dsa: simplify Kconfig symbols and dependencies
-date:   1 year, 4 months ago
-config: s390-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200746.F1Qd6rbA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d74b88c69dc2644bd0dc5d64e2d7413a0d4040e5)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=227d72063fccb2d19b30fb4197fba478514f7d83
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 227d72063fccb2d19b30fb4197fba478514f7d83
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/dsa/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from drivers/net/dsa/lan9303_i2c.c:10:
-   In file included from drivers/net/dsa/lan9303.h:2:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/net/dsa/lan9303_i2c.c:10:
-   In file included from drivers/net/dsa/lan9303.h:2:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/net/dsa/lan9303_i2c.c:10:
-   In file included from drivers/net/dsa/lan9303.h:2:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/net/dsa/lan9303_i2c.c:10:
-   In file included from drivers/net/dsa/lan9303.h:2:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/dsa/lan9303_i2c.c:87:34: warning: unused variable 'lan9303_i2c_of_match' [-Wunused-const-variable]
-   static const struct of_device_id lan9303_i2c_of_match[] = {
-                                    ^
-   21 warnings generated.
-
-
-vim +/lan9303_i2c_of_match +87 drivers/net/dsa/lan9303_i2c.c
-
-be4e119f991451 Juergen Beisert 2017-04-18  86  
-be4e119f991451 Juergen Beisert 2017-04-18 @87  static const struct of_device_id lan9303_i2c_of_match[] = {
-be4e119f991451 Juergen Beisert 2017-04-18  88  	{ .compatible = "smsc,lan9303-i2c", },
-be4e119f991451 Juergen Beisert 2017-04-18  89  	{ /* sentinel */ },
-be4e119f991451 Juergen Beisert 2017-04-18  90  };
-be4e119f991451 Juergen Beisert 2017-04-18  91  MODULE_DEVICE_TABLE(of, lan9303_i2c_of_match);
-be4e119f991451 Juergen Beisert 2017-04-18  92  
-
-:::::: The code at line 87 was first introduced by commit
-:::::: be4e119f991451a3f3385b4d167c016c6eb49e78 net: dsa: LAN9303: add I2C managed mode support
-
-:::::: TO: Juergen Beisert <jbe@pengutronix.de>
-:::::: CC: David S. Miller <davem@davemloft.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Sean Christopherson <seanjc@google.com>

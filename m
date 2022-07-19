@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9225257A06B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790E657A06A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238145AbiGSOFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S238109AbiGSOF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235397AbiGSOE4 (ORCPT
+        with ESMTP id S237987AbiGSOEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:04:56 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65150643F;
-        Tue, 19 Jul 2022 06:18:36 -0700 (PDT)
-Received: from mail-yb1-f170.google.com ([209.85.219.170]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M4KFF-1oE46M0Qq1-000ODC; Tue, 19 Jul 2022 15:18:35 +0200
-Received: by mail-yb1-f170.google.com with SMTP id j67so3792601ybb.3;
-        Tue, 19 Jul 2022 06:18:34 -0700 (PDT)
-X-Gm-Message-State: AJIora+Ln0DM5rLJQh6Z2mZo2QKV84RRscnpXoCcMKargdVnDqJVW0cE
-        o3tLkld5Udhdw57vb0/Sg0Hw9rJAeGrCeTlcrhw=
-X-Google-Smtp-Source: AGRyM1sj2ZRWajYGSg8uf4g3MyEJ6xSd//jFiMZ2PQtMebEv5Hsb8H9cSwLXrU5Amq5R5Ua/8gA/pnz1fLkON0xIlXo=
-X-Received: by 2002:a25:6706:0:b0:670:8d4d:7832 with SMTP id
- b6-20020a256706000000b006708d4d7832mr812105ybc.106.1658236713658; Tue, 19 Jul
- 2022 06:18:33 -0700 (PDT)
+        Tue, 19 Jul 2022 10:04:54 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DBC5F52;
+        Tue, 19 Jul 2022 06:18:24 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id fy29so25977982ejc.12;
+        Tue, 19 Jul 2022 06:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Yc+h+ul4h9s6uUBRLUaqssxlPjgr6BM8cJCIGFPzipY=;
+        b=J9eUykm76fIdNj3kRL1+JyFpVIW499oT+DRmOXXFEDM7q+PEyc5jM94oOtz3Qz4wVX
+         bF84Pkt3xnsHhC4JEf4msMEOq+7Iy0SMQI2PPCGnJuVCqQ67FQNMHxK4SOndT/MvYfnK
+         d7bTsIeNPc9K/piu4RUryH0XTvKEDO+SeQKxNQWKdasT1ViiLcXdtf1CVEEPjdz0PYca
+         iTajalmvPI+9+JLxtQKf7IbzfgbbNh8PquCA4mN+C7xVbgmXOR1HbpzOyRXs1KtB7GrG
+         Y+6HLARwLGrVt2gPH/MhTC0Zwx+KmMZ2jDmrYSCDJU3XHmYobLzbi6dy+50GkdhDVdgX
+         PWEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Yc+h+ul4h9s6uUBRLUaqssxlPjgr6BM8cJCIGFPzipY=;
+        b=zWSj9iHz36IfRHOAoqgQ9TZXqdzFLBnhkuWYqR12w2VhjvTewXOvx8XDFvkxIHP+EP
+         x/ejw/kAD/4Q14FKfrMT+lv98BFefG5ggJ6QZwvk+KZNdXL0/DCU8Kv0GGAE3R7KRN4k
+         FNE4LRqEK/KlWdoRWk6jQoMDsmB5uEWJR3KEb+RI6rN1Y0gH3hSZx7d+ZBKqnYboRXHv
+         mxEoQXURF7FvhXNqPTwPMFgHz0grXMP/tmOsz2RzfTAQ7aywovJkjXc5fM22t3r72VvR
+         EQnGMhZxTlH2SJ8moB8KygnP8z1wN68MstjDvp9FdzHmdfL9Me+VrFBfiqWuWQGVC+yV
+         QUjg==
+X-Gm-Message-State: AJIora/OksKE7jHBaF9vqbngjNNK4EjF98ORjbGB6y1uHdOlGauNI5d2
+        trZS44Tt8KGTXd+kwwbQhSQ=
+X-Google-Smtp-Source: AGRyM1vc3d5ELKetSkvOgAd0hKsuPKWP4OeyXYnilUZDc2oB8n+LsY9tZjW49kh9c6fQjZYjNdGDaA==
+X-Received: by 2002:a17:906:cc45:b0:72b:313b:f3ee with SMTP id mm5-20020a170906cc4500b0072b313bf3eemr29551339ejb.362.1658236703117;
+        Tue, 19 Jul 2022 06:18:23 -0700 (PDT)
+Received: from skbuf ([188.27.185.104])
+        by smtp.gmail.com with ESMTPSA id c9-20020a170906528900b007262a1c8d20sm6715846ejm.19.2022.07.19.06.18.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 06:18:22 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 16:18:20 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v2 06/15] net: dsa: qca8k: move port set
+ status/eee/ethtool stats function to common code
+Message-ID: <20220719131820.7qs3w635sa6skaca@skbuf>
+References: <20220719005726.8739-1-ansuelsmth@gmail.com>
+ <20220719005726.8739-1-ansuelsmth@gmail.com>
+ <20220719005726.8739-8-ansuelsmth@gmail.com>
+ <20220719005726.8739-8-ansuelsmth@gmail.com>
+ <20220719131451.5o2sh3bf55knq3ly@skbuf>
+ <62d6aeab.1c69fb81.5d5ce.23b8@mx.google.com>
 MIME-Version: 1.0
-References: <20220717033453.2896843-1-shorne@gmail.com> <20220717033453.2896843-3-shorne@gmail.com>
- <YtTjeEnKr8f8z4JS@infradead.org> <CAK8P3a1KJe4K5g1z-Faoxc9NhXqjCUWxnvk2HPxsj2wzG_iDbg@mail.gmail.com>
- <CAAfxs740yz1vJmtFHOPTXT6fqi0+37SR_OhoGsONe4mx_21+_g@mail.gmail.com>
- <CAK8P3a1Mo9+-t21rkP8SDnPrmbj3-uuVPtmHbeUerAevxN3TNw@mail.gmail.com>
- <YtaNvpE7AA/4eV1I@antec> <CAK8P3a2UTND+F83k2uQ+f=o1GWV=oa5coshy8Hy+cKHUGuNzEg@mail.gmail.com>
- <YtaiSEAnMhVqR4HS@antec> <YtasKiPrkFlBXZvh@antec>
-In-Reply-To: <YtasKiPrkFlBXZvh@antec>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 19 Jul 2022 15:18:17 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0wraTmA6aEF+XJ0RyZV=LSrZ2uPvQmvdw=Pe=nktyGjQ@mail.gmail.com>
-Message-ID: <CAK8P3a0wraTmA6aEF+XJ0RyZV=LSrZ2uPvQmvdw=Pe=nktyGjQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] asm-generic: Add new pci.h and use it
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:JReNJ9TYqYW1jG6zuflAcJYsrp8I3rPMcDbRtNPOKoS2FAa86k6
- OxpXUiNMAdh4Ky+6PWw9PG8aDaUih9cykdTd5priqmosuvWf7BDjjsz8kU3OwqD3OOdXiYj
- LoSu7WWtVpiGM0bo6/n1WJ4jbcurAyqvrjiI7gQOpain4yPLtL+6Vw8DxpqOJBjIsfQuBum
- tYSTxLQODl4yLkXRKUq0A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:z6KeR9UUFvA=:t+hxNbe8GOzxAp5FaaiHSz
- 2P0eAqogTjA364gKUdh58byK4qEVqtCsINoYeHcwDWyo/Z8R+vDlllPZ7dtsNzUe5ULDS6sIR
- byNXURRPPmw4aH8dDneeyh109l8Z/FgQyqcYwqmnqCil/p0NT/wSnoMceblb22JXBn8y34sxC
- TiBf2ZH5aZbUBwFvWKGm+aZA5X6/2Q20psvNbFXTtEjMrCgxnlNkUJ71Ohvv+EVLC0SrKNAlv
- Gj0HKR3RLZou7xTBbMJlzCG12yQdQAnUhiGTmntN9UdlsiT5ExjI9tv8PsYpC7ARJB89lWb9w
- 6O1TGAfzFh8mjeg/4ykqTD3Lh/yyX9ggoaLyu4Y6+K2AWRQhDtXmZeMRde68EARxa/wBBa/bp
- G75reux/Gd69IjIVq0tm1F36LyvJHF+YCmHW1FdXUCG8JWFJSU/6Wm81Y7qHPu6qiWl2O9tlj
- a9djNZ1Uv9ajTfWr9Mr8JX9hUOsZ/k30PnBIrCvjPLUH3Q6yDA21osLjWRTljAvfdLRHfuTEO
- 6ilkNOkSR4Rk4/QgUIAheoQVOHpAprRZY8QHYLoz5nZXb9H3JiLmQDOxE09Kyg3azykNMIZvL
- Sf2gRdEeOefvfn9xLoeg28grFYBxv9IwtL/z7eeNMUG+foc/eRiOqTUYaG+7Skswh3X6izmQX
- RSxvYa1FDpZtLDUhrQuLpdBZygsyfIYXJ5PwK015FvobQ99UGof0FTM+DCrE0IGpYQmaNB7Sq
- vODWY9ScGTPNvfHbkaGLDaYzOCSNZoUt3kJ19g==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62d6aeab.1c69fb81.5d5ce.23b8@mx.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 3:05 PM Stafford Horne <shorne@gmail.com> wrote:
-> On Tue, Jul 19, 2022 at 09:23:36PM +0900, Stafford Horne wrote:
-> > On Tue, Jul 19, 2022 at 01:55:03PM +0200, Arnd Bergmann wrote:
+On Tue, Jul 19, 2022 at 03:16:24PM +0200, Christian Marangi wrote:
+> On Tue, Jul 19, 2022 at 04:14:51PM +0300, Vladimir Oltean wrote:
+> > On Tue, Jul 19, 2022 at 02:57:17AM +0200, Christian Marangi wrote:
+> > > The same logic to disable/enable port, set eee and get ethtool stats is
+> > > used by drivers based on qca8k family switch.
+> > > Move it to common code to make it accessible also by other drivers.
+> > > 
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > ---
+> > 
+> > Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> 
+> (considering the ethtool function will change, is it OK to keep the
+> review tag on the next revision?)
 
->
-> And this is the result, I will get this into the series and create a v4 tomorrow
-> if no issues.
-
-Looks good to me, just one detail:
-
-> diff --git a/include/linux/isa-dma.h b/include/linux/isa-dma.h
-> new file mode 100644
-> index 000000000000..9514f0949fa1
-> --- /dev/null
-> +++ b/include/linux/isa-dma.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef __LINUX_ISA_DMA_H
-> +#define __LINUX_ISA_DMA_H
-> +
-> +#if defined(CONFIG_PCI) && defined(CONFIG_X86_32)
-> +extern int isa_dma_bridge_buggy;
-> +#else
-> +#define isa_dma_bridge_buggy   (0)
-> +#endif
-> +
-> +#endif /* __LINUX_ISA_DMA_H */
-
-I would make this file #include <asm/dma.h> as a step towards making
-linux/isa-dma.h the official replacement for it in the driver api.
-
-Including asm/dma.h from a driver is already a bit awkward, since we
-are generally moving towards including only linux/*.h type headers, and
-the dma.h name is too generic for something that is completely obsolete.
-
-        Arnd
+As long as the removed code is identical to the added one, yes.
+If there are problems with the changes on the ethtool_stats function,
+I'll leave my comments there.

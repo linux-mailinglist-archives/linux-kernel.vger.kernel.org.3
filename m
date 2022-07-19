@@ -2,314 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37E557A3D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC7B57A3D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbiGSP6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36292 "EHLO
+        id S238621AbiGSP7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234781AbiGSP6n (ORCPT
+        with ESMTP id S233933AbiGSP7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:58:43 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B445B7A7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:58:41 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id d7-20020a17090a564700b001f209736b89so1683040pji.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:58:41 -0700 (PDT)
+        Tue, 19 Jul 2022 11:59:02 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AC85B79B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:59:00 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id o7so25565144lfq.9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GtB8BI3Lg6RgIY+Axlp49dX2tSqW+wRJGV6SskGWNCM=;
-        b=X9q2GMc7HLMzv8eirrUEa5w1MWi56Y0W9j1JKwKt/i1hk0onwXPhvLNJuaz04N5yLC
-         QFzEf+SdOP0+Ok5BCOqp5kJnwAlrPuXztiqghKC0+T7VuOmuNm/UA6mcOGMRX27SdVDg
-         MIHYRin+E7ZWiYZ64pkCzFtLSM0a92iD994BxYhngFMi8qh09rSjw+3UDF6EwPHAfNm0
-         lA+tnQFr3nLUQHma2Wk56b5JO57cQHqs2e03f+jJVKp1vvtgCSBMuGC2nf2OAwzSD6ZX
-         Te4nQTx1/QnL5hXh6coSlvDGehckBcBOi3cUsrRpSdcBDGWwC/K+te9+oMGQbZaDhnia
-         ojCw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X1S5TtoSQXqK5WqybYLUxhmaSOZ2u6wrxsL5YiBhSlg=;
+        b=jDY/hPetXJ/awjaBDcvbp+BF/EZNAfW3YImmfPTEDDQeTy2EXH1d7oWerkIicxi5J0
+         sN+RAl8O7EP93p6mDWVINNjuENWwRZnAlAE/hjbAQu0k0DCOaeg4/5u309kzvRq6P2//
+         m62lzwn1yKgXiBm4LXqa9oJrTGAaXj2FzcqeyjUgnicSsth5O8yRZRM7ErnSO6x/Z0Fo
+         +FBZB0rQwVAtntI5TSYHWVJomNBH0ZkJvE4isgl1fj/T1385APhLmT5lQjBiseWJTgxq
+         ce2QfSq9wunQFtMV+/C8WeyOgcq6rWm6+3MWMOvwkgXMOXvT9XozGaEBnsy9/f3GphIt
+         9gqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=GtB8BI3Lg6RgIY+Axlp49dX2tSqW+wRJGV6SskGWNCM=;
-        b=mHSPT3EUbchXbDIDHTSXwOs5NlO0yM1d6+0NSGmYBJaedz1FYFtrEfeInPuIjIqPvf
-         nrItETmBtdpkqSZUepZ88XRWL6lYwVaxoo95oq++SkjyPE5If4PURxx+MbWOe9hlGPt7
-         3/LTxu0YGCpoSZEgxHaDkUTYy41VSXl2qC/wbiOdiBgVoaHkNe35AwY0AuPMnO0cpIQg
-         szsvPOukdqZ6MydyMVLfaAP29f/J17qhh8yJs0pT/hCMzPlXVpkv4qV/ZWwqwyjEavJE
-         g/hrfxecka6qhqpH8PC+U+iPxCxBMo29Vqpz4T2UUBnwVOFceubkDnosKtOGPvBrI/y/
-         MjZA==
-X-Gm-Message-State: AJIora+yQt/GONwK96HS9b/Ppm9bTxgGTbtb4Cr0ZF/OJIBHUX6W7oeo
-        jIEJH94tqJuwDnUD2vdz74YpFZU9T7UjJg==
-X-Google-Smtp-Source: AGRyM1umXjHvfiCigjJ7IRDdLwG4rJDpGBCKgBPKB6XLgieis4LZ9EeDAGrjqpraxW+lvusRBwMHrQ==
-X-Received: by 2002:a17:902:eb86:b0:16c:c491:fce7 with SMTP id q6-20020a170902eb8600b0016cc491fce7mr24066423plg.14.1658246319913;
-        Tue, 19 Jul 2022 08:58:39 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id e2-20020a17090a118200b001ef3f85d1aasm14072478pja.9.2022.07.19.08.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 08:58:39 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 08:58:39 -0700 (PDT)
-X-Google-Original-Date: Tue, 19 Jul 2022 08:58:37 PDT (-0700)
-Subject:     Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
-In-Reply-To: <20220718004114.3925745-3-shorne@gmail.com>
-CC:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        shorne@gmail.com, catalin.marinas@arm.com,
-        Will Deacon <will@kernel.org>, guoren@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        bhelgaas@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     shorne@gmail.com
-Message-ID: <mhng-3ae42214-abe0-4fad-9fa9-8f19809fa4d9@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X1S5TtoSQXqK5WqybYLUxhmaSOZ2u6wrxsL5YiBhSlg=;
+        b=wK1ZIskRfDx762uKkl1dT1or1kOxpq0o+Rv4vAShjND8/6BYMcc/Ho8unJR22prpy1
+         YDW+7WWqL7tsUsWFive+6STCeWJH1Dib6FQRmTKERc8aMxDqA0xmS9FQos3IEQFr2fD4
+         +RLrBhzrUNDpyWuvI1cXSlwWPrrKUpdH/aLEXRVCH1qUEsmrLK3MWsuwmtWWltXJSCdb
+         KkghrMVKHsGpqIvbMGtSjfJFU6lWPRUZPLKg8MHUO7+KuWEkX5WrJqiMyKz59IxCrpj0
+         iKWjDt0GzMPrSog6M4qupWzVnRqOBNeS6ct20jz8kG8jeoNR5pf+dUNfKJjpfofCzet3
+         2kgw==
+X-Gm-Message-State: AJIora9TRYkV8jf+W2BgLec3g0f0OwRZtj2sGqk/avW3ElEkYDXyjp7F
+        +/ZsaQQ1CoPXo3JGAAEeAu9R1bctsE3EkR09wWfjUg==
+X-Google-Smtp-Source: AGRyM1tcfKUdWtrIwPmfry5TmGJLZZCKHdoMkL4f54xMW69je9PVb9qT13RT89mLIuR8fQeCsSVXVImpZmzuitTk0Y8=
+X-Received: by 2002:a05:6512:3ed:b0:48a:23fe:765f with SMTP id
+ n13-20020a05651203ed00b0048a23fe765fmr12187257lfq.592.1658246338717; Tue, 19
+ Jul 2022 08:58:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-16-jthoughton@google.com> <22b5aa01-239d-8a06-3aaf-18bbd109ede8@nutanix.com>
+In-Reply-To: <22b5aa01-239d-8a06-3aaf-18bbd109ede8@nutanix.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 19 Jul 2022 08:58:46 -0700
+Message-ID: <CADrL8HUdPNuH6=p_Js617E55U_eyaR2+pYgpBnGNo=sKdxyvkQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 15/26] hugetlb: make unmapping compatible with
+ high-granularity mappings
+To:     "manish.mishra" <manish.mishra@nutanix.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 17 Jul 2022 17:41:14 PDT (-0700), shorne@gmail.com wrote:
-> The asm/pci.h used for many newer architectures share similar
-> definitions.  Move the common parts to asm-generic/pci.h to allow for
-> sharing code.
+On Tue, Jul 19, 2022 at 3:20 AM manish.mishra <manish.mishra@nutanix.com> wrote:
 >
-> Two things to note are:
 >
->  - isa_dma_bridge_buggy, traditionally this is defined in asm/dma.h but
->    these architectures avoid creating that file and add the definition
->    to asm/pci.h.
->  - ARCH_GENERIC_PCI_MMAP_RESOURCE, csky does not define this so we
->    undefine it after including asm-generic/pci.h.  Why doesn't csky
->    define it?
->  - pci_get_legacy_ide_irq, This function is only used on architectures
->    that support PNP.  It is only maintained for arm64, in other
->    architectures it is removed.
+> On 24/06/22 11:06 pm, James Houghton wrote:
+> > This enlightens __unmap_hugepage_range to deal with high-granularity
+> > mappings. This doesn't change its API; it still must be called with
+> > hugepage alignment, but it will correctly unmap hugepages that have been
+> > mapped at high granularity.
+> >
+> > Analogous to the mapcount rules introduced by hugetlb_no_page, we only
+> > drop mapcount in this case if we are unmapping an entire hugepage in one
+> > operation. This is the case when a VMA is destroyed.
+> >
+> > Eventually, functionality here can be expanded to allow users to call
+> > MADV_DONTNEED on PAGE_SIZE-aligned sections of a hugepage, but that is
+> > not done here.
 >
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
-> Signed-off-by: Stafford Horne <shorne@gmail.com>
-> ---
-> Second note on isa_dma_bridge_buggy, this is set on x86 but it it also set in
-> pci/quirks.c.  We discussed limiting it only to x86 though as its a general
-> quick triggered by pci ids I think it will be more tricky than we thought so I
-> will leave as is.  It might be nice to move it out of asm/dma.h and into
-> asm/pci.h though.
+> Sorry i may have misunderstood something here, but allowing something like
 >
-> Since v2:
->  - Nothing
-> Since v1:
->  - Remove definition of pci_get_legacy_ide_irq
+> MADV_DONTNEED on PAGE_SIZE in hugetlbfs can cause fragmentation
 >
->  arch/arm64/include/asm/pci.h | 12 +++---------
->  arch/csky/include/asm/pci.h  | 24 ++++--------------------
->  arch/riscv/include/asm/pci.h | 25 +++----------------------
->  arch/um/include/asm/pci.h    | 24 ++----------------------
->  include/asm-generic/pci.h    | 36 ++++++++++++++++++++++++++++++++++++
->  5 files changed, 48 insertions(+), 73 deletions(-)
->  create mode 100644 include/asm-generic/pci.h
->
-> diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
-> index b33ca260e3c9..1180e83712f5 100644
-> --- a/arch/arm64/include/asm/pci.h
-> +++ b/arch/arm64/include/asm/pci.h
-> @@ -9,7 +9,6 @@
->  #include <asm/io.h>
->
->  #define PCIBIOS_MIN_IO		0x1000
-> -#define PCIBIOS_MIN_MEM		0
->
->  /*
->   * Set to 1 if the kernel should re-assign all PCI bus numbers
-> @@ -18,9 +17,6 @@
->  	(pci_has_flag(PCI_REASSIGN_ALL_BUS))
->
->  #define arch_can_pci_mmap_wc() 1
-> -#define ARCH_GENERIC_PCI_MMAP_RESOURCE	1
-> -
-> -extern int isa_dma_bridge_buggy;
->
->  #ifdef CONFIG_PCI
->  static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> @@ -28,11 +24,9 @@ static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
->  	/* no legacy IRQ on arm64 */
->  	return -ENODEV;
->  }
-> -
-> -static inline int pci_proc_domain(struct pci_bus *bus)
-> -{
-> -	return 1;
-> -}
->  #endif  /* CONFIG_PCI */
->
-> +/* Generic PCI */
-> +#include <asm-generic/pci.h>
-> +
->  #endif  /* __ASM_PCI_H */
-> diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
-> index ebc765b1f78b..44866c1ad461 100644
-> --- a/arch/csky/include/asm/pci.h
-> +++ b/arch/csky/include/asm/pci.h
-> @@ -9,26 +9,10 @@
->
->  #include <asm/io.h>
->
-> -#define PCIBIOS_MIN_IO		0
-> -#define PCIBIOS_MIN_MEM		0
-> +/* Generic PCI */
-> +#include <asm-generic/pci.h>
->
-> -/* C-SKY shim does not initialize PCI bus */
-> -#define pcibios_assign_all_busses() 1
-> -
-> -extern int isa_dma_bridge_buggy;
-> -
-> -#ifdef CONFIG_PCI
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -	/* no legacy IRQ on csky */
-> -	return -ENODEV;
-> -}
-> -
-> -static inline int pci_proc_domain(struct pci_bus *bus)
-> -{
-> -	/* always show the domain in /proc */
-> -	return 1;
-> -}
-> -#endif  /* CONFIG_PCI */
-> +/* csky doesn't use generic pci resource mapping */
-> +#undef ARCH_GENERIC_PCI_MMAP_RESOURCE
->
->  #endif  /* __ASM_CSKY_PCI_H */
-> diff --git a/arch/riscv/include/asm/pci.h b/arch/riscv/include/asm/pci.h
-> index 7fd52a30e605..12ce8150cfb0 100644
-> --- a/arch/riscv/include/asm/pci.h
-> +++ b/arch/riscv/include/asm/pci.h
-> @@ -12,29 +12,7 @@
->
->  #include <asm/io.h>
->
-> -#define PCIBIOS_MIN_IO		0
-> -#define PCIBIOS_MIN_MEM		0
+> in hugetlbfs pool which kind of looks opposite of prupose of hugetlbfs?
 
-My for-next changes these in bb356ddb78b2 ("RISC-V: PCI: Avoid handing 
-out address 0 to devices").  Do you mind either splitting out the 
-arch/riscv bits or having this in via some sort of shared tag?
+It can be helpful for some applications, like if we want to get page
+fault notifications through userfaultfd on a 4K piece of a hugepage.
+It kind of goes against the purpose of HugeTLB, but we sort of get
+this functionality automatically with this patch.
 
-> -
-> -/* RISC-V shim does not initialize PCI bus */
-> -#define pcibios_assign_all_busses() 1
-> -
-> -#define ARCH_GENERIC_PCI_MMAP_RESOURCE 1
-> -
-> -extern int isa_dma_bridge_buggy;
-> -
->  #ifdef CONFIG_PCI
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -	/* no legacy IRQ on risc-v */
-> -	return -ENODEV;
-> -}
-> -
-> -static inline int pci_proc_domain(struct pci_bus *bus)
-> -{
-> -	/* always show the domain in /proc */
-> -	return 1;
-> -}
-> -
->  #ifdef	CONFIG_NUMA
 >
->  static inline int pcibus_to_node(struct pci_bus *bus)
-> @@ -50,4 +28,7 @@ static inline int pcibus_to_node(struct pci_bus *bus)
+> >
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+> > ---
+> >   include/asm-generic/tlb.h |  6 +--
+> >   mm/hugetlb.c              | 85 ++++++++++++++++++++++++++-------------
+> >   2 files changed, 59 insertions(+), 32 deletions(-)
+> >
+> > diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+> > index ff3e82553a76..8daa3ae460d9 100644
+> > --- a/include/asm-generic/tlb.h
+> > +++ b/include/asm-generic/tlb.h
+> > @@ -562,9 +562,9 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
+> >               __tlb_remove_tlb_entry(tlb, ptep, address);     \
+> >       } while (0)
+> >
+> > -#define tlb_remove_huge_tlb_entry(h, tlb, ptep, address)     \
+> > +#define tlb_remove_huge_tlb_entry(tlb, hpte, address)        \
+> >       do {                                                    \
+> > -             unsigned long _sz = huge_page_size(h);          \
+> > +             unsigned long _sz = hugetlb_pte_size(&hpte);    \
+> >               if (_sz >= P4D_SIZE)                            \
+> >                       tlb_flush_p4d_range(tlb, address, _sz); \
+> >               else if (_sz >= PUD_SIZE)                       \
+> > @@ -573,7 +573,7 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
+> >                       tlb_flush_pmd_range(tlb, address, _sz); \
+> >               else                                            \
+> >                       tlb_flush_pte_range(tlb, address, _sz); \
+> > -             __tlb_remove_tlb_entry(tlb, ptep, address);     \
+> > +             __tlb_remove_tlb_entry(tlb, hpte.ptep, address);\
+> >       } while (0)
+> >
+> >   /**
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index da30621656b8..51fc1d3f122f 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -5120,24 +5120,20 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+> >   {
+> >       struct mm_struct *mm = vma->vm_mm;
+> >       unsigned long address;
+> > -     pte_t *ptep;
+> > +     struct hugetlb_pte hpte;
+> >       pte_t pte;
+> >       spinlock_t *ptl;
+> > -     struct page *page;
+> > +     struct page *hpage, *subpage;
+> >       struct hstate *h = hstate_vma(vma);
+> >       unsigned long sz = huge_page_size(h);
+> >       struct mmu_notifier_range range;
+> >       bool force_flush = false;
+> > +     bool hgm_enabled = hugetlb_hgm_enabled(vma);
+> >
+> >       WARN_ON(!is_vm_hugetlb_page(vma));
+> >       BUG_ON(start & ~huge_page_mask(h));
+> >       BUG_ON(end & ~huge_page_mask(h));
+> >
+> > -     /*
+> > -      * This is a hugetlb vma, all the pte entries should point
+> > -      * to huge page.
+> > -      */
+> > -     tlb_change_page_size(tlb, sz);
+> >       tlb_start_vma(tlb, vma);
+> >
+> >       /*
+> > @@ -5148,25 +5144,43 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+> >       adjust_range_if_pmd_sharing_possible(vma, &range.start, &range.end);
+> >       mmu_notifier_invalidate_range_start(&range);
+> >       address = start;
+> > -     for (; address < end; address += sz) {
+> > -             ptep = huge_pte_offset(mm, address, sz);
+> > -             if (!ptep)
+> > +
+> > +     while (address < end) {
+> > +             pte_t *ptep = huge_pte_offset(mm, address, sz);
+> > +
+> > +             if (!ptep) {
+> > +                     address += sz;
+> >                       continue;
+> > +             }
+> > +             hugetlb_pte_populate(&hpte, ptep, huge_page_shift(h));
+> > +             if (hgm_enabled) {
+> > +                     int ret = huge_pte_alloc_high_granularity(
+> > +                                     &hpte, mm, vma, address, PAGE_SHIFT,
+> > +                                     HUGETLB_SPLIT_NEVER,
+> > +                                     /*write_locked=*/true);
 >
->  #endif  /* CONFIG_PCI */
+> I see huge_pte_alloc_high_granularity with HUGETLB_SPLIT_NEVER just
 >
-> +/* Generic PCI */
-> +#include <asm-generic/pci.h>
-> +
->  #endif  /* _ASM_RISCV_PCI_H */
-> diff --git a/arch/um/include/asm/pci.h b/arch/um/include/asm/pci.h
-> index da13fd5519ef..34fe4921b5fa 100644
-> --- a/arch/um/include/asm/pci.h
-> +++ b/arch/um/include/asm/pci.h
-> @@ -4,28 +4,8 @@
->  #include <linux/types.h>
->  #include <asm/io.h>
+> do huge_tlb_walk. So is HUGETLB_SPLIT_NEVER even required, i mean
 >
-> -#define PCIBIOS_MIN_IO		0
-> -#define PCIBIOS_MIN_MEM		0
-> -
-> -#define pcibios_assign_all_busses() 1
-> -
-> -extern int isa_dma_bridge_buggy;
-> -
-> -#ifdef CONFIG_PCI
-> -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> -{
-> -	/* no legacy IRQs */
-> -	return -ENODEV;
-> -}
-> -#endif
-> -
-> -#ifdef CONFIG_PCI_DOMAINS
-> -static inline int pci_proc_domain(struct pci_bus *bus)
-> -{
-> -	/* always show the domain in /proc */
-> -	return 1;
-> -}
-> -#endif  /* CONFIG_PCI */
-> +/* Generic PCI */
-> +#include <asm-generic/pci.h>
+> for those cases you can directly do huge_tlb_walk? I mean name
 >
->  #ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
->  /*
-> diff --git a/include/asm-generic/pci.h b/include/asm-generic/pci.h
-> new file mode 100644
-> index 000000000000..fbc25741696a
-> --- /dev/null
-> +++ b/include/asm-generic/pci.h
-> @@ -0,0 +1,36 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +#ifndef __ASM_GENERIC_PCI_H
-> +#define __ASM_GENERIC_PCI_H
-> +
-> +#include <linux/types.h>
-> +
-> +#ifndef PCIBIOS_MIN_IO
-> +#define PCIBIOS_MIN_IO		0
-> +#endif
-> +
-> +#ifndef PCIBIOS_MIN_MEM
-> +#define PCIBIOS_MIN_MEM		0
-> +#endif
-> +
-> +#ifndef pcibios_assign_all_busses
-> +/* For bootloaders that do not initialize the PCI bus */
-> +#define pcibios_assign_all_busses() 1
-> +#endif
-> +
-> +extern int isa_dma_bridge_buggy;
-> +
-> +/* Enable generic resource mapping code in drivers/pci/ */
-> +#define ARCH_GENERIC_PCI_MMAP_RESOURCE
-> +
-> +#ifdef CONFIG_PCI
-> +
-> +static inline int pci_proc_domain(struct pci_bus *bus)
-> +{
-> +	/* always show the domain in /proc */
-> +	return 1;
-> +}
-> +
-> +#endif /* CONFIG_PCI */
-> +
-> +#endif /* __ASM_GENERIC_PCI_H */
+> huge_pte_alloc_high_granularity confuses for those cases.
+
+Agreed. huge_pte_alloc_high_granularity with HUGETLB_SPLIT_NEVER is
+pretty much the same as hugetlb_walk_to (+hugetlb_pte_init). It is
+confusing to have two ways of doing the exact same thing, so I'll get
+rid of HUGETLB_SPLIT_NEVER (and the "alloc" name is confusing in this
+case too, yeah).
+
+>
+> > +                     /*
+> > +                      * We will never split anything, so this should always
+> > +                      * succeed.
+> > +                      */
+> > +                     BUG_ON(ret);
+> > +             }
+> >
+> > -             ptl = huge_pte_lock(h, mm, ptep);
+> > -             if (huge_pmd_unshare(mm, vma, &address, ptep)) {
+> > +             ptl = hugetlb_pte_lock(mm, &hpte);
+> > +             if (!hgm_enabled && huge_pmd_unshare(
+> > +                                     mm, vma, &address, hpte.ptep)) {
+> >                       spin_unlock(ptl);
+> >                       tlb_flush_pmd_range(tlb, address & PUD_MASK, PUD_SIZE);
+> >                       force_flush = true;
+> > -                     continue;
+> > +                     goto next_hpte;
+> >               }
+> >
+> > -             pte = huge_ptep_get(ptep);
+> > -             if (huge_pte_none(pte)) {
+> > +             if (hugetlb_pte_none(&hpte)) {
+> >                       spin_unlock(ptl);
+> > -                     continue;
+> > +                     goto next_hpte;
+> >               }
+> >
+> > +             pte = hugetlb_ptep_get(&hpte);
+> > +
+> >               /*
+> >                * Migrating hugepage or HWPoisoned hugepage is already
+> >                * unmapped and its refcount is dropped, so just clear pte here.
+> > @@ -5180,24 +5194,27 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+> >                        */
+> >                       if (pte_swp_uffd_wp_any(pte) &&
+> >                           !(zap_flags & ZAP_FLAG_DROP_MARKER))
+> > -                             set_huge_pte_at(mm, address, ptep,
+> > +                             set_huge_pte_at(mm, address, hpte.ptep,
+> >                                               make_pte_marker(PTE_MARKER_UFFD_WP));
+> >                       else
+> > -                             huge_pte_clear(mm, address, ptep, sz);
+> > +                             huge_pte_clear(mm, address, hpte.ptep,
+> > +                                             hugetlb_pte_size(&hpte));
+> >                       spin_unlock(ptl);
+> > -                     continue;
+> > +                     goto next_hpte;
+> >               }
+> >
+> > -             page = pte_page(pte);
+> > +             subpage = pte_page(pte);
+> > +             BUG_ON(!subpage);
+> > +             hpage = compound_head(subpage);
+> >               /*
+> >                * If a reference page is supplied, it is because a specific
+> >                * page is being unmapped, not a range. Ensure the page we
+> >                * are about to unmap is the actual page of interest.
+> >                */
+> >               if (ref_page) {
+> > -                     if (page != ref_page) {
+> > +                     if (hpage != ref_page) {
+> >                               spin_unlock(ptl);
+> > -                             continue;
+> > +                             goto next_hpte;
+> >                       }
+> >                       /*
+> >                        * Mark the VMA as having unmapped its page so that
+> > @@ -5207,25 +5224,35 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
+> >                       set_vma_resv_flags(vma, HPAGE_RESV_UNMAPPED);
+> >               }
+> >
+> > -             pte = huge_ptep_get_and_clear(mm, address, ptep);
+> > -             tlb_remove_huge_tlb_entry(h, tlb, ptep, address);
+> > +             pte = huge_ptep_get_and_clear(mm, address, hpte.ptep);
+> > +             tlb_change_page_size(tlb, hugetlb_pte_size(&hpte));
+> > +             tlb_remove_huge_tlb_entry(tlb, hpte, address);
+> >               if (huge_pte_dirty(pte))
+> > -                     set_page_dirty(page);
+> > +                     set_page_dirty(hpage);
+> >               /* Leave a uffd-wp pte marker if needed */
+> >               if (huge_pte_uffd_wp(pte) &&
+> >                   !(zap_flags & ZAP_FLAG_DROP_MARKER))
+> > -                     set_huge_pte_at(mm, address, ptep,
+> > +                     set_huge_pte_at(mm, address, hpte.ptep,
+> >                                       make_pte_marker(PTE_MARKER_UFFD_WP));
+> > -             hugetlb_count_sub(pages_per_huge_page(h), mm);
+> > -             page_remove_rmap(page, vma, true);
+> > +
+> > +             hugetlb_count_sub(hugetlb_pte_size(&hpte)/PAGE_SIZE, mm);
+> > +
+> > +             /*
+> > +              * If we are unmapping the entire page, remove it from the
+> > +              * rmap.
+> > +              */
+> > +             if (IS_ALIGNED(address, sz) && address + sz <= end)
+> > +                     page_remove_rmap(hpage, vma, true);
+> >
+> >               spin_unlock(ptl);
+> > -             tlb_remove_page_size(tlb, page, huge_page_size(h));
+> > +             tlb_remove_page_size(tlb, subpage, hugetlb_pte_size(&hpte));
+> >               /*
+> >                * Bail out after unmapping reference page if supplied
+> >                */
+> >               if (ref_page)
+> >                       break;
+> > +next_hpte:
+> > +             address += hugetlb_pte_size(&hpte);
+> >       }
+> >       mmu_notifier_invalidate_range_end(&range);
+> >       tlb_end_vma(tlb, vma);

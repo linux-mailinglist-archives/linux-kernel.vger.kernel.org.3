@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B499A57982D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C73357982E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237426AbiGSLG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S237420AbiGSLHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiGSLGz (ORCPT
+        with ESMTP id S230098AbiGSLHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:06:55 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6892F02C;
-        Tue, 19 Jul 2022 04:06:51 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h17so21113597wrx.0;
-        Tue, 19 Jul 2022 04:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uYg14oNiGrfGWkj/lM06y2kVPbkDb3pZlFZT7zIN7Mg=;
-        b=W4HzHF6zb6Vv5K1FjCCqrmQ/oFtlgLrQN/6YyyYahENb2Q78zJeTpHVaQavFUqR96W
-         w54kqwFIzeZOzb9qcDRyYliKQ27F6tPDoxDQ6bcXnBhN3wwLkxssOf54NctyfuDDUAdN
-         jDynmK2RoSlnUuS88Omn3TEtXZFpx0vMldkZQQEgxoPcOwzG6F1ruHv8iBl/IT8QWqam
-         bPaMK7B9vAQ6ITcLplHeboI8ccd5cZVj2x3K51gjWT1tJruUmIaYmaj+xpiP1CzH8sVg
-         46LT1dwxXEt6WU1xJ0W+zEd2I1SyOPyQ9i67/bjfh5CkqyeOaDT8tqY6gNM0M1hOcZdT
-         dd3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uYg14oNiGrfGWkj/lM06y2kVPbkDb3pZlFZT7zIN7Mg=;
-        b=Yrmc6tHfWDBj4y3copP7klJumwc1EITc1VN/99ueXH/KGSe2vxndmZLCtcxYBdzpPp
-         4a4A5Jn0CADXHh6pt3TmLOtIpVENujCZUQRPuFey/6dhUINO1VVSb6vuFekKXd/c+i6+
-         FDnnrVUUomn4iBIhGqIGEBtglLU9gPhR6/gmNgb/WGqfthXAR1WAThme+ospg/9b2vYd
-         HqfhXJ8dsqsrTHV6d6aPdF1/bPRoD/oJg+R2s3fnvfJaIG5v/f+q/EwX27gn1uUzhue7
-         fctcCo9AH4qiDH4zVVvXoTR1YnUZjJm4hOeK7tMzqx2fLIsLujadF/8lLzJIYMXgyHCS
-         Vjug==
-X-Gm-Message-State: AJIora+B9XlAEj8YRw6IK/k69AuiitheU2VvrclKnuSS+LSry/bik7d4
-        zLs5+bTM/0mJLPRciwrtqDp1tLEzlZAv5g==
-X-Google-Smtp-Source: AGRyM1sc6wqunKQZaY9vburbZEeqwvmVqDs+wuAdswpOPkYI8Ux5VRsIuwjTsk1Z+bNGpvTY4QhQAw==
-X-Received: by 2002:adf:eace:0:b0:21d:6e90:2bf8 with SMTP id o14-20020adfeace000000b0021d6e902bf8mr24895959wrn.349.1658228810543;
-        Tue, 19 Jul 2022 04:06:50 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id a6-20020adfdd06000000b0021b970a68f9sm12936873wrm.26.2022.07.19.04.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 04:06:49 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Bean Huo <beanhuo@micron.com>, linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] scsi: ufs: core: Fix spelling mistake "Cannnot" -> "Cannot"
-Date:   Tue, 19 Jul 2022 12:06:49 +0100
-Message-Id: <20220719110649.759821-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 19 Jul 2022 07:07:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBD72F02C
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:07:30 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 11:07:27 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658228848;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2WSG/pyZMGCHztNuz9k5QlQcA5AS5ed3fLm1aMoY9eo=;
+        b=JFItsUU4e0jHQ7O1CjiRVs+oOxxlJ+LXeO3H1Gl0BEKPdlu/p2TsfEYZtmFdOa2uFOn3iv
+        K848C5Ori7zVqIhfEoOWlUo1sEpkxgjBJRG91fhTJlNJnxZSbgT9MCu7gsExTNnOrBq2ZY
+        ZCe0mAaMlCGEj4K/oa0CVEum/0wvDOLDllsGvDGsshQXaZqNQWi6Mqr9MTWmMaNxSgYnc3
+        UcpLgc5dau7XCcXVLtdymJf/XetvqmBuyIQzWPN1UTaF/z7F7rXH3Va+QjftD+SKPnhx82
+        Kf980PNHXU95xFPTFhgjeWqtvP0hmf7R1ePB/hBY0qqeQkx7FpSeIxOJ46xyNA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658228848;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2WSG/pyZMGCHztNuz9k5QlQcA5AS5ed3fLm1aMoY9eo=;
+        b=p2Qs6IWcXB1QmUb1HtkzH7vjoMv1lLYM3VmZrXCs1i1g9dj50MQjE+EDK1DeG1ZJbA9KpJ
+        ct3tbD6AP4sgMOCQ==
+From:   "irqchip-bot for Lad Prabhakar" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] dt-bindings: interrupt-controller:
+ renesas,rzg2l-irqc: Document RZ/V2L SoC
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220718193745.7472-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220718193745.7472-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
+Message-ID: <165822884740.15455.18037203729518776657.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_dbg message. Fix it.
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Commit-ID:     8cfc90ecd33e73f4a30207b316bc6886e3c3a166
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/8cfc90ecd33e73f4a30207b316bc6886e3c3a166
+Author:        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+AuthorDate:    Mon, 18 Jul 2022 20:37:45 +01:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Tue, 19 Jul 2022 12:00:10 +01:00
+
+dt-bindings: interrupt-controller: renesas,rzg2l-irqc: Document RZ/V2L SoC
+
+Document RZ/V2L (R9A07G054) IRQC bindings. The RZ/V2L IRQC block is
+identical to one found on the RZ/G2L SoC. No driver changes are
+required as generic compatible string "renesas,rzg2l-irqc" will be
+used as a fallback.
+
+While at it, update the comment "# RZ/G2L" to "# RZ/G2{L,LC}" for
+"renesas,r9a07g044-irqc" compatible string as both RZ/G2L and
+RZ/G2LC SoC's use the common SoC DTSI and have the same IRQC block.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220718193745.7472-1-prabhakar.mahadev-lad.rj@bp.renesas.com
 ---
- drivers/ufs/core/ufshcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index ddab087dd0bc..581d88af07ab 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8550,7 +8550,7 @@ static enum ufs_ref_clk_freq ufshcd_parse_ref_clk_property(struct ufs_hba *hba)
- 	int ret = device_property_read_u32(hba->dev, "ref-clk-freq", &freq);
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+index ffbb4ab..33b90e9 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+@@ -26,7 +26,8 @@ properties:
+   compatible:
+     items:
+       - enum:
+-          - renesas,r9a07g044-irqc    # RZ/G2L
++          - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
++          - renesas,r9a07g054-irqc    # RZ/V2L
+       - const: renesas,rzg2l-irqc
  
- 	if (ret) {
--		dev_dbg(hba->dev, "Cannnot query 'ref-clk-freq' property = %d", ret);
-+		dev_dbg(hba->dev, "Cannot query 'ref-clk-freq' property = %d", ret);
- 		return REF_CLK_FREQ_INVAL;
- 	}
- 
--- 
-2.35.3
-
+   '#interrupt-cells':

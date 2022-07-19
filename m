@@ -2,89 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B543F5799CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BE35799D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238139AbiGSMGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S238419AbiGSMHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238589AbiGSMEv (ORCPT
+        with ESMTP id S238143AbiGSMF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:04:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5893248EA5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:00:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D33A761697
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:00:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD9BC341CA;
-        Tue, 19 Jul 2022 12:00:48 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 13:00:44 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Conor.Dooley@microchip.com
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, sudeep.holla@arm.com, will@kernel.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        Daire.McNamara@microchip.com, niklas.cassel@wdc.com,
-        damien.lemoal@opensource.wdc.com, geert@linux-m68k.org,
-        zong.li@sifive.com, kernel@esmil.dk, hahnjo@hahnjo.de,
-        guoren@kernel.org, anup@brainfault.org, atishp@atishpatra.org,
-        heiko@sntech.de, philipp.tomsich@vrull.eu, robh@kernel.org,
-        maz@kernel.org, viresh.kumar@linaro.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Brice.Goglin@inria.fr
-Subject: Re: [PATCH v4 1/2] arm64: topology: move store_cpu_topology() to
- shared code
-Message-ID: <Ytac7G1zlq6WW4jt@arm.com>
-References: <20220715175155.3567243-1-mail@conchuod.ie>
- <20220715175155.3567243-2-mail@conchuod.ie>
- <YtaYTgFDpGSsG+H0@arm.com>
- <198b0486-29e7-9729-d137-0470e93038fa@microchip.com>
+        Tue, 19 Jul 2022 08:05:26 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10723459A2;
+        Tue, 19 Jul 2022 05:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658232060; x=1689768060;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=qdSDMszO7rtGPWMStk70YxXk8Tap3FTBbrpiSKKQbpI=;
+  b=kjr9W2yBSdeHYntH53WVNCafTz2E0pdzVNaCRcCsjLsF7Kva+7s03VdL
+   BZKlcglMNF+nqyLstoufIpuiYWhMi13fuDVmCRp+sf77UJWqLeEe/Nh1k
+   8WmNrN9c/iLfixMLlIj6LRg6zAXngbbPgRizlIpp7fM7e+ij7l8uYiWaY
+   wYX20RSYfihzWkfaiGNTu7+Guu1QQ2pCGFSHHhbpisVWD108rE1Lnlr69
+   5sPxJsGZTOEM8hjKICSVr8970WtZYrsSqjS0JIqfH3GYkwTBYv75CDAxL
+   cEnIS4dWtzI1txFBoiKf65kJA5EZUp+eJytgaYhJIwoQjnpnRDJyRMAQJ
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="172918483"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jul 2022 05:00:59 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 19 Jul 2022 05:00:59 -0700
+Received: from training-HP-280-G1-MT-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 19 Jul 2022 05:00:55 -0700
+From:   Divya Koppera <Divya.Koppera@microchip.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <richardcochran@gmail.com>
+CC:     <UNGLinuxDriver@microchip.com>, <Madhuri.Sripada@microchip.com>
+Subject: [PATCH v2 net] net: phy: micrel: Fix warn: passing zero to PTR_ERR
+Date:   Tue, 19 Jul 2022 17:30:52 +0530
+Message-ID: <20220719120052.26681-1-Divya.Koppera@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <198b0486-29e7-9729-d137-0470e93038fa@microchip.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 11:51:04AM +0000, Conor.Dooley@microchip.com wrote:
-> On 19/07/2022 12:41, Catalin Marinas wrote:
-> > On Fri, Jul 15, 2022 at 06:51:55PM +0100, Conor Dooley wrote:
-> >> From: Conor Dooley <conor.dooley@microchip.com>
-> >>
-> >> arm64's method of defining a default cpu topology requires only minimal
-> >> changes to apply to RISC-V also. The current arm64 implementation exits
-> >> early in a uniprocessor configuration by reading MPIDR & claiming that
-> >> uniprocessor can rely on the default values.
-> >>
-> >> This is appears to be a hangover from prior to '3102bc0e6ac7 ("arm64:
-> >> topology: Stop using MPIDR for topology information")', because the
-> >> current code just assigns default values for multiprocessor systems.
-> >>
-> >> With the MPIDR references removed, store_cpu_topolgy() can be moved to
-> >> the common arch_topology code.
-> >>
-> >> CC: stable@vger.kernel.org
-> > 
-> > I'd quantify how far back you want this to go. IIUC based on the Fixes
-> > tag in the other patch, it should stop at 5.4. If you send a pull
-> > request instead and have a fixed commit id, you could add it as a
-> > prerequisite on the following patch without a cc stable here.
-> 
-> I guess a PR might be the easiest way for it anyway, so that both
-> yourself and Palmer could merge it?
+Handle the NULL pointer case
 
-I guess so, a stable branch would do. Note that Will is handling the
-upcoming merging window.
+Fixes New smatch warnings:
+drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing zero to 'PTR_ERR'
 
+vim +/PTR_ERR +2613 drivers/net/phy/micrel.c
+
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
+Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
+---
+v1 -> v2:
+- Handled NULL pointer case
+- Changed subject line with net-next to net
+---
+ drivers/net/phy/micrel.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index e78d0bf69bc3..6be6ee156f40 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -2812,12 +2812,16 @@ static int lan8814_ptp_probe_once(struct phy_device *phydev)
+ 
+ 	shared->ptp_clock = ptp_clock_register(&shared->ptp_clock_info,
+ 					       &phydev->mdio.dev);
+-	if (IS_ERR_OR_NULL(shared->ptp_clock)) {
++	if (IS_ERR(shared->ptp_clock)) {
+ 		phydev_err(phydev, "ptp_clock_register failed %lu\n",
+ 			   PTR_ERR(shared->ptp_clock));
+ 		return -EINVAL;
+ 	}
+ 
++	/* Check if PHC support is missing at the configuration level */
++	if (!shared->ptp_clock)
++		return 0;
++
+ 	phydev_dbg(phydev, "successfully registered ptp clock\n");
+ 
+ 	shared->phydev = phydev;
 -- 
-Catalin
+2.17.1
+

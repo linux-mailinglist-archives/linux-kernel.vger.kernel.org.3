@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135E25797C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178325797CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236930AbiGSKhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 06:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
+        id S237056AbiGSKjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 06:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233843AbiGSKhp (ORCPT
+        with ESMTP id S233381AbiGSKjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 06:37:45 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACF3201B6;
-        Tue, 19 Jul 2022 03:37:44 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y4so18983225edc.4;
-        Tue, 19 Jul 2022 03:37:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=P5Lup3IwuAgdbs+YWwD6h52ky2fkf3Y/Vt2tw/TKWng=;
-        b=PyTrKjmUuJw+cEkSlyVr6l93dRC/1YV/gXxnzXZ+iwzPGkTYC2km6Q2LJNtF5POTkK
-         vtf9iTwhdcyxE9/azJFfs1eeHFskNsc0fLZaaE/gsSZtmXac1b9x67rXlCWRcoOrdh3o
-         he2kGp/V8ruWvA7VPmYhKHa6rIWM/ZBFnGv/t7PFYje7YA1XS2vbNPDONg0FLjLUw1O2
-         dj2/MkxDuZe3blVjTwHaY4EI42Vtvckw9gaN9r57lLyEbR5FXw/doRLkFIs+qUXGhYGC
-         2TiJLzDJ23u6yuIXnY3k37CkWmL97Q62xD/9KEOjZACVBnTuXzypXK0aHTWZte3zFhKg
-         RelQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P5Lup3IwuAgdbs+YWwD6h52ky2fkf3Y/Vt2tw/TKWng=;
-        b=Jpm1qH92seY+htH5pK5TILqnqo6ooYBGkkOY7UrYPf6fASEhOikrXUGcJxguIFb1pa
-         tKtWCpv5vi3azxz6jUj++U+nqAbDFwHUaOawcbC0a2QnRa2or58bE7JN8czesVrmWm+7
-         N0fhITAPNNrjD0MQjWPRyNazyEfXV6uoUat/hvtEbOjorHwRZ/wgi4220oe15DFoSqWd
-         eFkBBGz7SkYlpKaqqeVkC1xfCvyKqmoQFwdLGDc/HSYEYDGejOhRXGNFmz1vFf5Rk/pt
-         gFIA+/zRNT2+n1M2nDTwqRL4edlvS0uzT2oXMkI8qOQbxPyuLHYpxhboO2slym9ARA5S
-         eQig==
-X-Gm-Message-State: AJIora9ZPn7/Ynz9Bx0KlAMTq252GI+1k4jaEHBXCaHp5CFNQEu7x6Bq
-        5VJFHt+9lAtWViU8Blj3f9Y=
-X-Google-Smtp-Source: AGRyM1sA3vGOVS4cP7/S1aeuB9I+J62DE+fUgxiQpZo/CvJs/bZxT8Qd+NEkqJWGJQmFX9gcKZXtTw==
-X-Received: by 2002:a05:6402:d05:b0:435:b2a6:94eb with SMTP id eb5-20020a0564020d0500b00435b2a694ebmr42253989edb.87.1658227063270;
-        Tue, 19 Jul 2022 03:37:43 -0700 (PDT)
-Received: from skbuf ([188.27.185.104])
-        by smtp.gmail.com with ESMTPSA id i23-20020a056402055700b0043a2338ca10sm10124638edx.92.2022.07.19.03.37.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 03:37:42 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 13:37:40 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [RFC Patch net-next 02/10] net: dsa: microchip: add common
- gigabit set and get function
-Message-ID: <20220719103740.pk4cqzcfwu2byc5h@skbuf>
-References: <20220712160308.13253-1-arun.ramadoss@microchip.com>
- <20220712160308.13253-1-arun.ramadoss@microchip.com>
- <20220712160308.13253-3-arun.ramadoss@microchip.com>
- <20220712160308.13253-3-arun.ramadoss@microchip.com>
+        Tue, 19 Jul 2022 06:39:52 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10803AB3F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 03:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658227190; x=1689763190;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AH6u2SqPuDc0ZSfUwnzFcTuchyvVaMSRomRWCzwbamY=;
+  b=auqbRngh95VRr7xaHLSlIFe3UrwBP+iYLvNwpDCtWwBhZRLcj4K2uTsT
+   MO+iWqWdg9pAMlZdTaCb0p6V0rujwey+Iw20vgTvD2Mm0S9mDrtarlIYq
+   yCQJlMh+2z1GKY1UPJNmsIJ9DXNPyIFh1lhit+SiA7NhV3J+D5tWLQDt6
+   TrXNrQALKfUgvZ2LmIBjE5+cytT7yCtNKz/NLGRkZ6fZsKFQj+JElRiy/
+   rVbvBXcyt/gAQvpRI6nghUFuwwUOWgIDPYYo5ksFnujsHXqWv/Nlqdybw
+   GG63sffvFv11sTzTvzJceDj2t8NlqJ1Zp1cLL/tJI+aq4YRXWWcGuFMzW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="312143771"
+X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
+   d="scan'208";a="312143771"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 03:39:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
+   d="scan'208";a="572800499"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 19 Jul 2022 03:39:49 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDkdo-0005ZK-En;
+        Tue, 19 Jul 2022 10:39:48 +0000
+Date:   Tue, 19 Jul 2022 18:39:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: cmsg_sender.c:149:36: warning: excess elements in struct initializer
+Message-ID: <202207191852.s2Owu7Iz-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712160308.13253-3-arun.ramadoss@microchip.com>
- <20220712160308.13253-3-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 09:33:00PM +0530, Arun Ramadoss wrote:
-> This patch add helper function for setting and getting the gigabit
-> enable for the ksz series switch. KSZ8795 switch has different register
-> address compared to all other ksz switches. KSZ8795 series uses the Port
-> 5 Interface control 6 Bit 6 for configuring the 1Gbps or 100/10Mbps
-> speed selection. All other switches uses the xMII control 1 0xN301
-> register Bit6 for gigabit.
-> Further, for KSZ8795 & KSZ9893 switches if bit 1 then 1Gbps is chosen
-> and if bit 0 then 100/10Mbps is chosen. It is other way around for
-> other switches bit 0 is for 1Gbps. So, this patch implements the common
-> function for configuring the gigabit set and get capability.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ca85855bdcae8f84f1512e88b4c75009ea17ea2f
+commit: 4d397424a5e0e130d5e8d0023776f0aa2e791f51 selftests: net: cmsg_sender: support setting SO_TXTIME
+date:   5 months ago
+reproduce: make O=/tmp/kselftest -C tools/testing/selftests
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   cmsg_sender.c: In function 'cs_write_cmsg':
+   cmsg_sender.c:148:24: error: variable 'so_txtime' has initializer but incomplete type
+     148 |                 struct sock_txtime so_txtime = {
+         |                        ^~~~~~~~~~~
+   cmsg_sender.c:149:26: error: 'struct sock_txtime' has no member named 'clockid'
+     149 |                         .clockid = CLOCK_MONOTONIC,
+         |                          ^~~~~~~
+>> cmsg_sender.c:149:36: warning: excess elements in struct initializer
+     149 |                         .clockid = CLOCK_MONOTONIC,
+         |                                    ^~~~~~~~~~~~~~~
+   cmsg_sender.c:149:36: note: (near initialization for 'so_txtime')
+   cmsg_sender.c:148:36: error: storage size of 'so_txtime' isn't known
+     148 |                 struct sock_txtime so_txtime = {
+         |                                    ^~~~~~~~~
+   cmsg_sender.c:153:48: error: 'SO_TXTIME' undeclared (first use in this function)
+     153 |                 if (setsockopt(fd, SOL_SOCKET, SO_TXTIME,
+         |                                                ^~~~~~~~~
+   cmsg_sender.c:153:48: note: each undeclared identifier is reported only once for each function it appears in
+   cmsg_sender.c:167:35: error: 'SCM_TXTIME' undeclared (first use in this function)
+     167 |                 cmsg->cmsg_type = SCM_TXTIME;
+         |                                   ^~~~~~~~~~
+>> cmsg_sender.c:148:36: warning: unused variable 'so_txtime' [-Wunused-variable]
+     148 |                 struct sock_txtime so_txtime = {
+         |                                    ^~~~~~~~~
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

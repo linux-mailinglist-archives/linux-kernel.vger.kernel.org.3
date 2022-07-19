@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B628579B6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FE6579B68
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239894AbiGSM12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
+        id S239857AbiGSM1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239760AbiGSMZo (ORCPT
+        with ESMTP id S239593AbiGSMZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:25:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B07E61DB7;
-        Tue, 19 Jul 2022 05:09:59 -0700 (PDT)
+        Tue, 19 Jul 2022 08:25:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30E3509C5;
+        Tue, 19 Jul 2022 05:09:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B7426175C;
-        Tue, 19 Jul 2022 12:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E19C341CB;
-        Tue, 19 Jul 2022 12:09:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85C78B81B1A;
+        Tue, 19 Jul 2022 12:09:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA0ADC341C6;
+        Tue, 19 Jul 2022 12:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232587;
-        bh=2hxcyOrTSBY6NUhGwyWlaha8eRuFLOpauYLap/1TLQw=;
+        s=korg; t=1658232590;
+        bh=h7JjNDchfBZCJul5brCU/ZWQNoSqPcJ/+4p44Ch7AEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A1SIYHTydE3B+fyuVhWvnsj57y6APpw9qFjQ4+x2vvPQrIWJ0tZrlpXbVvkGerG7x
-         miHQp8LnrxowuZkZayzFp3uG1BYun+Bnjo4zYNTR+z1lLz6VZ4qp1uN5VdKsjsyoMc
-         yGOV87NLvmBsbWDQAq9cZlErSIlIQHhqbIqU2GoQ=
+        b=pInYzlMEra6k7DjBeLJvJayMPcWEWKElzg4Opcy9G7Kc+eNXdP+FQFf61/eHwySXD
+         FLUgY0dmvRfG87Jv25B+8nzHJ5OqvqBHctsm3c4PGpHoapeSBXaqm6kxWE4nSGPhUr
+         CIuZ5GZ/ZPmQtpeU0ZCh+Yjy5kkzJKTuOw+g/IWk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, stable <stable@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunojpg@gmail.com>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 5.10 109/112] serial: stm32: Clear prev values before setting RTS delays
-Date:   Tue, 19 Jul 2022 13:54:42 +0200
-Message-Id: <20220719114637.787036788@linuxfoundation.org>
+Subject: [PATCH 5.10 110/112] serial: pl011: UPSTAT_AUTORTS requires .throttle/unthrottle
+Date:   Tue, 19 Jul 2022 13:54:43 +0200
+Message-Id: <20220719114637.905796375@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
 References: <20220719114626.156073229@linuxfoundation.org>
@@ -55,32 +57,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit 5c5f44e36217de5ead789ff25da71c31c2331c96 upstream.
+commit 211565b100993c90b53bf40851eacaefc830cfe0 upstream.
 
-The code lacks clearing of previous DEAT/DEDT values. Thus, changing
-values on the fly results in garbage delays tending towards the maximum
-value as more and more bits are ORed together. (Leaving RS485 mode
-would have cleared the old values though).
+The driver must provide throttle and unthrottle in uart_ops when it
+sets UPSTAT_AUTORTS. Add them using existing stop_rx &
+enable_interrupts functions.
 
-Fixes: 1bcda09d2910 ("serial: stm32: add support for RS485 hardware control mode")
+Fixes: 2a76fa283098 (serial: pl011: Adopt generic flag to store auto RTS status)
 Cc: stable <stable@kernel.org>
+Cc: Lukas Wunner <lukas@wunner.de>
+Reported-by: Nuno Gonçalves <nunojpg@gmail.com>
+Tested-by: Nuno Gonçalves <nunojpg@gmail.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220627150753.34510-1-ilpo.jarvinen@linux.intel.com
+Link: https://lore.kernel.org/r/20220614075637.8558-1-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/stm32-usart.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/serial/amba-pl011.c |   23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -70,6 +70,8 @@ static void stm32_usart_config_reg_rs485
- 	*cr3 |= USART_CR3_DEM;
- 	over8 = *cr1 & USART_CR1_OVER8;
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -1326,6 +1326,15 @@ static void pl011_stop_rx(struct uart_po
+ 	pl011_dma_rx_stop(uap);
+ }
  
-+	*cr1 &= ~(USART_CR1_DEDT_MASK | USART_CR1_DEAT_MASK);
++static void pl011_throttle_rx(struct uart_port *port)
++{
++	unsigned long flags;
 +
- 	if (over8)
- 		rs485_deat_dedt = delay_ADE * baud * 8;
- 	else
++	spin_lock_irqsave(&port->lock, flags);
++	pl011_stop_rx(port);
++	spin_unlock_irqrestore(&port->lock, flags);
++}
++
+ static void pl011_enable_ms(struct uart_port *port)
+ {
+ 	struct uart_amba_port *uap =
+@@ -1717,9 +1726,10 @@ static int pl011_allocate_irq(struct uar
+  */
+ static void pl011_enable_interrupts(struct uart_amba_port *uap)
+ {
++	unsigned long flags;
+ 	unsigned int i;
+ 
+-	spin_lock_irq(&uap->port.lock);
++	spin_lock_irqsave(&uap->port.lock, flags);
+ 
+ 	/* Clear out any spuriously appearing RX interrupts */
+ 	pl011_write(UART011_RTIS | UART011_RXIS, uap, REG_ICR);
+@@ -1741,7 +1751,14 @@ static void pl011_enable_interrupts(stru
+ 	if (!pl011_dma_rx_running(uap))
+ 		uap->im |= UART011_RXIM;
+ 	pl011_write(uap->im, uap, REG_IMSC);
+-	spin_unlock_irq(&uap->port.lock);
++	spin_unlock_irqrestore(&uap->port.lock, flags);
++}
++
++static void pl011_unthrottle_rx(struct uart_port *port)
++{
++	struct uart_amba_port *uap = container_of(port, struct uart_amba_port, port);
++
++	pl011_enable_interrupts(uap);
+ }
+ 
+ static int pl011_startup(struct uart_port *port)
+@@ -2116,6 +2133,8 @@ static const struct uart_ops amba_pl011_
+ 	.stop_tx	= pl011_stop_tx,
+ 	.start_tx	= pl011_start_tx,
+ 	.stop_rx	= pl011_stop_rx,
++	.throttle	= pl011_throttle_rx,
++	.unthrottle	= pl011_unthrottle_rx,
+ 	.enable_ms	= pl011_enable_ms,
+ 	.break_ctl	= pl011_break_ctl,
+ 	.startup	= pl011_startup,
 
 

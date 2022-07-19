@@ -2,137 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FE557A99A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 366D757A99D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240716AbiGSWD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S240726AbiGSWE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235993AbiGSWD6 (ORCPT
+        with ESMTP id S235993AbiGSWE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:03:58 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029436051E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:03:57 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id a15so16062530pjs.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eRpbtTCZs+5+sX8LZNM3fMyA3I2miPI5w4wEOaR3Kd8=;
-        b=L0403lYdHQufM2qI/PJ7bMF875ZWcIbp65rgoZ6AMpKb9DrBBg49bzaDu5ytLIBR6k
-         cHR87boOdSCFHXqHuUB3bJ3/m7PmELpKkXaieFF2bfYDWIRfnshHrZtHtelbFxJG2ipx
-         acqsLcDu3PzNyZgPFGEAjSRO7dXCiAJSiucU2ODOr/1Tr1JIkYYK2Fv2bdo0VNTqWLkf
-         27Yod0pT5lTvMEaQ1SGB9pq7eaKnbjBzVayp4h+Mpk0V8S9mnFNArj8aPPKHWF+02ZJW
-         ML2WrV14/VEq64QAFmzb0Th4WQCIGfzCRUnjsH8+En28OeOHzbz3MLwbRFfyVZgsDFOf
-         sB3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eRpbtTCZs+5+sX8LZNM3fMyA3I2miPI5w4wEOaR3Kd8=;
-        b=rX9GA5YLjsidCML7a0fCwW7v+bFkHwtePMfT+JZ8IakgE22vMVxcghweuSOHOGsXGN
-         KQn+urMjsyMF5H2gAWsPXWmdb0rl9dw4bTZD9Rhx5QtjxOWhhLSk+DoOqi/G8WttbCW2
-         nkA8jpcqLyC+oQt/82OQQvfnZN3bfIaI+XnBjpxgNp9OZBc8LCoRgsgtu44fVsTr1d6v
-         W3BHXs40qSlhUUoj9+aRyaUlf4p+SREI/pBZD+uNkqwXe9E6DmKaE29vNR/Q+PFZOpb5
-         18KAcfYz2MBVI1HCWTXsGF+rzYSF6lWV9NjRM3J7O7WU+Fp3zoz+acPv55w1hsKXPi9W
-         K+Rg==
-X-Gm-Message-State: AJIora+W1CFZUc9WMGYTNTfl8i5Qq6TNVVfvUviFUFXvcgdOPRR//z1P
-        FNIIEYUSNFR/kWlU8xBDWs01W1YxdNQASQ==
-X-Google-Smtp-Source: AGRyM1uWRLpTQswtNfEV1mRoZyGTzfyIBqNcfPo/PX+Gng0urzkvIUjr27tzFPFz+Ervz6Jjs/53rA==
-X-Received: by 2002:a17:902:ce8c:b0:16c:4be6:254d with SMTP id f12-20020a170902ce8c00b0016c4be6254dmr35100092plg.51.1658268236359;
-        Tue, 19 Jul 2022 15:03:56 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id s5-20020a63e805000000b0041a411823d4sm2796267pgh.22.2022.07.19.15.03.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 15:03:55 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 22:03:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Subject: Re: [PATCH V3 02/12] KVM: X86/MMU: Add using_local_root_page()
-Message-ID: <YtcqR8jDM+NVXgG5@google.com>
-References: <20220521131700.3661-1-jiangshanlai@gmail.com>
- <20220521131700.3661-3-jiangshanlai@gmail.com>
+        Tue, 19 Jul 2022 18:04:57 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60F65FAFB;
+        Tue, 19 Jul 2022 15:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658268296; x=1689804296;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pvIxtNbWUdkbgcKb5Tspz0IgM/n/C0XFuT/gdjfEdHk=;
+  b=d+9SoWBzvY4RspCH01rdb72G1r3CGCbPL9uQvNpH6FCxp6/lvul4S8JU
+   dOyt6cNy8PmGlH+xpm8UQ9yPJOJctF50vMNCIO4ZlNWCDGMB/WPy4iz8O
+   zaTXOmIP4jlQN7Ad8K9XpfoE5TduQ0TLP1bpbMU8e/oaeNSbAVYabHDE2
+   WYPuL1EfiNOhGHY2tCmXOjkclFoMSXUWrUckT7UeUrD+nPo1KFs88bX2A
+   /OdjxZ/pao3S67KXaCQAxsFgx5AWiQ5ke3kw9drc/wiICv60bu1G+UgLp
+   eRnzszEaKyD+32QKpWW3LLQKrtlXrsdHmnUFmgYMmjvbTe48R1xRX2JKj
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="350603408"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="350603408"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 15:04:56 -0700
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="843817003"
+Received: from avandeve-mobl.amr.corp.intel.com (HELO [10.209.102.45]) ([10.209.102.45])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 15:04:53 -0700
+Message-ID: <4a9d64b5-0fa4-8294-c78c-37394a156325@linux.intel.com>
+Date:   Tue, 19 Jul 2022 15:04:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220521131700.3661-3-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 09/13] notifier: Show function names on notifier
+ routines if DEBUG_NOTIFIERS is set
+Content-Language: en-US
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Xiaoming Ni <nixiaoming@huawei.com>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-10-gpiccoli@igalia.com>
+ <e292e128-d732-e770-67d7-b6ed947cec7b@linux.intel.com>
+ <8e201d99-78a8-d68c-6d33-676a1ba5a6ee@igalia.com>
+ <c297ad10-fe5e-c2ee-5762-e037d051fe3b@linux.intel.com>
+ <8ef53978-f26e-89e3-8b04-6f0eb183f200@igalia.com>
+From:   Arjan van de Ven <arjan@linux.intel.com>
+In-Reply-To: <8ef53978-f26e-89e3-8b04-6f0eb183f200@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022, Lai Jiangshan wrote:
-> +static bool using_local_root_page(struct kvm_mmu *mmu)
+On 7/19/2022 2:00 PM, Guilherme G. Piccoli wrote:
+> On 19/07/2022 17:48, Arjan van de Ven wrote:
+>> [...]
+>> I would totally support an approach where instead of pr_info, there's a tracepoint
+>> for these events (and that shouldnt' need to be conditional on a config option)
+>>
+>> that's not what the patch does though.
+> 
+> This is a good idea Arjan! We could use trace events or pr_debug() -
+> which one do you prefer?
+> 
 
-Hmm, I agree with David that "local" isn't the most intuitive terminology.  But
-I also do want to avoid private vs. shared to avoid confusion with confidential VMs.
+I'd go for a trace point to be honest
 
-Luckily, I don't think we need to come up with new terminology, just be literal
-and call 'em "per-vCPU root pages".  E.g.
-
-  static bool kvm_mmu_has_per_vcpu_root_page()
-
-That way readers don't have to understand what "local" means, and that also captures
-per-vCPU roots are an exception, i.e. that most roots are NOT per-vCPU.
-
-> +{
-> +	return mmu->root_role.level == PT32E_ROOT_LEVEL ||
-> +	       (!mmu->root_role.direct && mmu->cpu_role.base.level <= PT32E_ROOT_LEVEL);
-> +}
-> +
->  static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct)
->  {
->  	struct kvm_mmu_page *sp;
-> @@ -4252,10 +4285,11 @@ static bool fast_pgd_switch(struct kvm *kvm, struct kvm_mmu *mmu,
->  {
->  	/*
->  	 * For now, limit the caching to 64-bit hosts+VMs in order to avoid
-> -	 * having to deal with PDPTEs. We may add support for 32-bit hosts/VMs
-> -	 * later if necessary.
-> +	 * having to deal with PDPTEs.  Local roots can not be put into
-> +	 * mmu->prev_roots[] because mmu->pae_root can not be shared for
-> +	 * different roots at the same time.
->  	 */
-> -	if (VALID_PAGE(mmu->root.hpa) && !to_shadow_page(mmu->root.hpa))
-> +	if (unlikely(using_local_root_page(mmu)))
-
-I don't know that I like using the local/per-vCPU helper.  The problem isn't _just_
-that KVM is using a per-vCPU root, KVM is also deliberately punting on dealing with
-PDTPRs.  E.g. the per-vCPU aspect doesn't explain why KVM doesn't allow reusing the
-current root.  I don't like that the using_local_root_page() obfuscates that check.
-
-My preference for this would be to revert back to a streamlined variation of the
-code prior to commit 5499ea73e7db ("KVM: x86/mmu: look for a cached PGD when going
-from 32-bit to 64-bit").
-
-KVM switched to the !to_shadow_page() check to _avoid_ consuming (what is now)
-mmu->root_role because, at the time of the patch, mmu held the _old_ data, which
-was wrong/stale for nested virtualization transitions.
-
-In other words, I would prefer that explicitly do (in a separate patch):
-
-	/*
-	 * For now, limit the fast switch to 64-bit VMs in order to avoid having
-	 * to deal with PDPTEs.  32-bit VMs can be supported later if necessary.
-	 */
-	if (new_role.level < PT64_ROOT_LEVEL4)
-		kvm_mmu_free_roots(kvm, mmu, KVM_MMU_ROOT_CURRENT);
-
-The "hosts+VMs" can be shortened to just "VMs", because running a 64-bit VM with
-a 32-bit host just doesn't work for a variety of reasons, i.e. doesn't need to be
-called out here.

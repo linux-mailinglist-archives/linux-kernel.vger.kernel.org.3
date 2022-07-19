@@ -2,191 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D3C57A183
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D4557A186
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237436AbiGSOaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
+        id S238115AbiGSOal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239546AbiGSO3g (ORCPT
+        with ESMTP id S238799AbiGSOaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:29:36 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD125FACE;
-        Tue, 19 Jul 2022 07:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658240241; x=1689776241;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=6PAXqYH/NtVLRyLe2sv7ux6nLdISex8fMwmJ79lrbUo=;
-  b=nncN1c8oYkRD3wkpyhekzipqYeQ7eh1QmHx5hlbIzDm/m/XjhWp+bQdX
-   tPwwIcGyzMl+JPadr6F9V+85G7NxEJbJ3fLE8hyldMARuGNY5EnuyYEO4
-   E30hISSnK5MOI3C1k3H2YwjthTFPyXoOqMJMigkVgPp4AMFTgdm2JQ+OJ
-   YOUi+RzTfSQ3XHWACwb5F6bSipUS95hMv8idGvTIJG0ZCBv1904UMkxYC
-   TR7NR0IJqTLUdLe5k8iFb7Rx0e1uapj+PPCY5GxgA1p7eH3yigjx69pqX
-   1Uf7HNBqBQBBiKhqoyceAL/4X84W92cJ4Jjdtsfy1HqIdty87L+XD2yfs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287247085"
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="287247085"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 07:17:21 -0700
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="630344929"
-Received: from dukechan-mobl.gar.corp.intel.com ([10.215.250.179])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 07:17:17 -0700
-Message-ID: <e3bfb483aa6ce09756b38b3a568fac819b154beb.camel@intel.com>
-Subject: Re: [PATCH v3 3/4] thermal/core: Build ascending ordered indexes
- for the trip points
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     quic_manafm@quicinc.com, amitk@kernel.org, lukasz.luba@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 19 Jul 2022 22:17:20 +0800
-In-Reply-To: <c0d3e523-d75a-d837-313f-bf46f3fab3b4@linaro.org>
-References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
-         <20220715210911.714479-3-daniel.lezcano@linaro.org>
-         <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
-         <04bd27a8-5148-c8eb-5687-83ef511618df@linaro.org>
-         <7ee301b76beb679f89e946dfb5921a2d853bd8dc.camel@intel.com>
-         <c0d3e523-d75a-d837-313f-bf46f3fab3b4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Tue, 19 Jul 2022 10:30:18 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A54B1FCC0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:18:59 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id w1so667841ilj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Dub3l+aOrPRkN0Y4VnwahemV1ZVLd29nIudTXm2vmc4=;
+        b=aI5HBTN/i9Y4rExE5UISfrsk5S/TrVNkYCyCqofhxbFzBxJKgqNCot1zEG4EST9wTx
+         8XclWoiO4FI5yU6b/3ABCpWgw6Bzd37Ha0+5iUl3eA0S+8DHHwzJTRUuZmswtyTjL6vb
+         fZnbVEn1WcAtZkxo7iHo4HV8LoxOQyqGoZDxIYi7ggEfbOOEQkhv3qZ8HrTtUeR3MPIs
+         WfhwmvBOEjCD09pbNYo9txkbKEOsKpXTV5QVLjZBsOn2y6lB+jk3eqO3lhD6dzoBDcTS
+         5Zg9r4BT7sjEaIEVGNHK/16275tm989FPlew43Xv+j1BdxCJc0ZHJ1oWmg31yNyFuy/P
+         E7gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Dub3l+aOrPRkN0Y4VnwahemV1ZVLd29nIudTXm2vmc4=;
+        b=1sdwPxeRJFpd5SiKGk9d46oCDQSu8mbBWBCHhETJLODkPFEArTD1tcrQ47mhyJNQdl
+         9N5Idt5iWw8sOOLfgHC4FEcsdmxMz2Q1NjCKJPYwxwsP80Dn+uz8SEL+ZzV61pSP7nG9
+         crhTFHHskdgsavOS0jqjopPtxsBm7+6p2rdgOOVj+uk3AXgaFvZ1Nd9RoUybpA0+C21y
+         1vnvSzmGpmH140L8NwiEV/sdmomlWlp2BBZl7vttDqa97gXHU4hlCy1NYohUZ71jmVWB
+         ZkrCW4gJTFJUAj35aHY7f/3wFDFLF8FmG8F+8jjvLZTsKOy+3NNYpntL0lM9v6e067k9
+         4QIA==
+X-Gm-Message-State: AJIora9Y6FGo/Jn/HbpkKdoWLEwOKScmhuPKWohBT5Qq4kyhFHDz27H+
+        0CxTc3cYiJQAzwQHUurg4LjUNg==
+X-Google-Smtp-Source: AGRyM1txDBUxGqaVEnpinafRgW6YDaawbDT3CmfZl10EDxtDS5S9aFQ1+S3qQv2Hc4X9mCE332I2jA==
+X-Received: by 2002:a05:6e02:152c:b0:2dc:9b02:b590 with SMTP id i12-20020a056e02152c00b002dc9b02b590mr16028278ilu.320.1658240338375;
+        Tue, 19 Jul 2022 07:18:58 -0700 (PDT)
+Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id x9-20020a026f09000000b00339cdf821dasm6713826jab.51.2022.07.19.07.18.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 07:18:58 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: ipa: initialize ring indexes to 0
+Date:   Tue, 19 Jul 2022 09:18:55 -0500
+Message-Id: <20220719141855.245994-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-19 at 09:22 +0200, Daniel Lezcano wrote:
-> On 19/07/2022 03:14, Zhang Rui wrote:
-> > On Mon, 2022-07-18 at 15:21 +0200, Daniel Lezcano wrote:
-> > >=20
-> > > Hi Zhang,
-> > >=20
-> > > thanks for the review
-> > >=20
-> > > On 18/07/2022 07:28, Zhang Rui wrote:
-> > > > On Fri, 2022-07-15 at 23:09 +0200, Daniel Lezcano wrote:
-> > >=20
-> > > [ ... ]
-> > >=20
-> > > > > Instead of taking the risk of breaking the existing
-> > > > > platforms,
-> > > > > use an
-> > > > > array of temperature ordered trip identifiers and make it
-> > > > > available
-> > > > > for the code needing to browse the trip points in an ordered
-> > > > > way.
-> > > > >=20
-> > > > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > > > > ---
-> > >=20
-> > > [ ... ]
-> > >=20
-> > > > > +static void sort_trips_indexes(struct thermal_zone_device
-> > > > > *tz)
-> > > > > +{
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int i, j;
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (i =3D 0; i < tz->=
-trips; i++)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0tz->trips_indexes[i] =3D i;
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (i =3D 0; i < tz->=
-trips; i++) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0for (j =3D i + 1; j < tz->trips; j++) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-int t1, t2;
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-tz->ops->get_trip_temp(tz, tz-
-> > > > > > trips_indexes[i], &t1);
-> > > >=20
-> > > > This line can be moved to the upper loop.
-> > >=20
-> > > Right, thanks!
-> > >=20
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-tz->ops->get_trip_temp(tz, tz-
-> > > > > > trips_indexes[j], &t2);
-> > > > > +
-> > > >=20
-> > > > what about the disabled trip points?
-> > > >=20
-> > > > we should ignore those trip points and check the return value
-> > > > to
-> > > > make
-> > > > sure we're comparing the valid trip_temp values.
-> > >=20
-> > > We don't have to care about, whatever the position, the
-> > > corresponding
-> > > trip id will be disabled by the trip init function before calling
-> > > this
-> > > one and ignored in the handle_thermal_trip() function
-> >=20
-> > hah, I missed this one and replied to your latest reply directly.
-> >=20
-> > The thing I'm concerning is that=C2=A0if we don't check the return
-> > value,
-> > for a disabled trip point, the trip_temp (t1/t2) returned is some
-> > random value, it all depends on the previous value set by last
-> > successful .get_trip_temp(), and this may screw up the sorting.
->=20
-> The indexes array is the same size as the trip array, that makes the=20
-> code much less prone to errors.
->=20
-> To have the same number of trip points, the index of the disabled
-> trip=20
-> must be inserted also in the array. We don't care about its position
-> in=20
-> the indexes array because it is discarded in the handle_trip_point()=20
-> function anyway. For this reason, the random temperature of the
-> disabled=20
-> trip point and the resulting position in the sorting is harmless.
->=20
-> It is made on purpose to ignore the return value, so we have a
-> simpler code.
->=20
-Let's take below case for example,
-say, we have three trip points 0, 1, 2, and trip point 1 is broken and
-disabled.
+When a GSI channel is initially allocated, and after it has been
+reset, the hardware assumes its ring index is 0.  And although we
+do initialize channels this way, the comments in the IPA code don't
+really explain this.  For event rings, it doesn't matter what value
+we use initially, so using 0 is just fine.
 
-trip temp for trip point 0 is 10 and for trip point 2 is 20.
-.get_trip_temp(tz, 1, &t) fails, and t is an uninitialized random value
+Add some information about the assumptions made by hardware above
+the definition of the gsi_ring structure in "gsi.h".
 
+Zero the index field for all rings (channel and event) when the ring
+is allocated.  As a result, that function initializes all fields in
+the structure.
 
-Initial:
-   trip_indexes[0]=3D0,trip_indexes[1]=3D1,trip_indexes[2]=3D2
-step1:
-   i=3D0,j=3D1
-   get trip temp for trip point trip_indexes[0]=3D0 and trip_indexes[1]=3D1
-   trip point 1 returns trip temp 5, and it swaps with trip point 0
-   so
-   trip_indexes[0]=3D1,trip_indexes[1]=3D0,trip_indexes[2]=3D2
-step2:
-   i=3D0,j=3D2
-   get trip temp for trip point trip_indexes[0]=3D1 and trip_indexes[2]=3D2
-   trip point 1 returns trip temp 25, and it swaps with trip point 2
-   so
-   trip_indexes[0]=3D2,trip_indexes[1]=3D0,trip_indexes[2]=3D1
+Stop zeroing the index the top of gsi_channel_program().  Initially
+we'll use the index value set when the channel ring was allocated.
+And we'll explicitly zero the index value in gsi_channel_reset()
+before programming the hardware, adding a comment explaining why
+it's required.
 
-And the sorting is broken now.
+For event rings, use the index initialized by gsi_ring_alloc()
+rather than 0 when ringing the doorbell in gsi_evt_ring_program().
+(It'll still be zero, but we won't assume that to be the case.)
 
-please correct me if I'm missing anything.
+Use a local variable in gsi_evt_ring_program() that represents the
+address of the event ring's ring structure.
 
-thanks,
-rui
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+ drivers/net/ipa/gsi.c | 18 ++++++++++--------
+ drivers/net/ipa/gsi.h |  5 +++--
+ 2 files changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
+index 4e46974a69ecd..fcd05acf893b3 100644
+--- a/drivers/net/ipa/gsi.c
++++ b/drivers/net/ipa/gsi.c
+@@ -665,7 +665,8 @@ static void gsi_evt_ring_doorbell(struct gsi *gsi, u32 evt_ring_id, u32 index)
+ static void gsi_evt_ring_program(struct gsi *gsi, u32 evt_ring_id)
+ {
+ 	struct gsi_evt_ring *evt_ring = &gsi->evt_ring[evt_ring_id];
+-	size_t size = evt_ring->ring.count * GSI_RING_ELEMENT_SIZE;
++	struct gsi_ring *ring = &evt_ring->ring;
++	size_t size;
+ 	u32 val;
+ 
+ 	/* We program all event rings as GPI type/protocol */
+@@ -674,6 +675,7 @@ static void gsi_evt_ring_program(struct gsi *gsi, u32 evt_ring_id)
+ 	val |= u32_encode_bits(GSI_RING_ELEMENT_SIZE, EV_ELEMENT_SIZE_FMASK);
+ 	iowrite32(val, gsi->virt + GSI_EV_CH_E_CNTXT_0_OFFSET(evt_ring_id));
+ 
++	size = ring->count * GSI_RING_ELEMENT_SIZE;
+ 	val = ev_r_length_encoded(gsi->version, size);
+ 	iowrite32(val, gsi->virt + GSI_EV_CH_E_CNTXT_1_OFFSET(evt_ring_id));
+ 
+@@ -681,9 +683,9 @@ static void gsi_evt_ring_program(struct gsi *gsi, u32 evt_ring_id)
+ 	 * high-order 32 bits of the address of the event ring,
+ 	 * respectively.
+ 	 */
+-	val = lower_32_bits(evt_ring->ring.addr);
++	val = lower_32_bits(ring->addr);
+ 	iowrite32(val, gsi->virt + GSI_EV_CH_E_CNTXT_2_OFFSET(evt_ring_id));
+-	val = upper_32_bits(evt_ring->ring.addr);
++	val = upper_32_bits(ring->addr);
+ 	iowrite32(val, gsi->virt + GSI_EV_CH_E_CNTXT_3_OFFSET(evt_ring_id));
+ 
+ 	/* Enable interrupt moderation by setting the moderation delay */
+@@ -700,8 +702,8 @@ static void gsi_evt_ring_program(struct gsi *gsi, u32 evt_ring_id)
+ 	iowrite32(0, gsi->virt + GSI_EV_CH_E_CNTXT_12_OFFSET(evt_ring_id));
+ 	iowrite32(0, gsi->virt + GSI_EV_CH_E_CNTXT_13_OFFSET(evt_ring_id));
+ 
+-	/* Finally, tell the hardware we've completed event 0 (arbitrary) */
+-	gsi_evt_ring_doorbell(gsi, evt_ring_id, 0);
++	/* Finally, tell the hardware our "last processed" event (arbitrary) */
++	gsi_evt_ring_doorbell(gsi, evt_ring_id, ring->index);
+ }
+ 
+ /* Find the transaction whose completion indicates a channel is quiesced */
+@@ -770,9 +772,6 @@ static void gsi_channel_program(struct gsi_channel *channel, bool doorbell)
+ 	u32 wrr_weight = 0;
+ 	u32 val;
+ 
+-	/* Arbitrarily pick TRE 0 as the first channel element to use */
+-	channel->tre_ring.index = 0;
+-
+ 	/* We program all channels as GPI type/protocol */
+ 	val = chtype_protocol_encoded(gsi->version, GSI_CHANNEL_TYPE_GPI);
+ 	if (channel->toward_ipa)
+@@ -949,6 +948,8 @@ void gsi_channel_reset(struct gsi *gsi, u32 channel_id, bool doorbell)
+ 	if (gsi->version < IPA_VERSION_4_0 && !channel->toward_ipa)
+ 		gsi_channel_reset_command(channel);
+ 
++	/* Hardware assumes this is 0 following reset */
++	channel->tre_ring.index = 0;
+ 	gsi_channel_program(channel, doorbell);
+ 	gsi_channel_trans_cancel_pending(channel);
+ 
+@@ -1433,6 +1434,7 @@ static int gsi_ring_alloc(struct gsi *gsi, struct gsi_ring *ring, u32 count)
+ 
+ 	ring->addr = addr;
+ 	ring->count = count;
++	ring->index = 0;
+ 
+ 	return 0;
+ }
+diff --git a/drivers/net/ipa/gsi.h b/drivers/net/ipa/gsi.h
+index bad1a78a96ede..982c57550ef37 100644
+--- a/drivers/net/ipa/gsi.h
++++ b/drivers/net/ipa/gsi.h
+@@ -48,12 +48,13 @@ struct gsi_ring {
+ 	 *
+ 	 * A channel ring consists of TRE entries filled by the AP and passed
+ 	 * to the hardware for processing.  For a channel ring, the ring index
+-	 * identifies the next unused entry to be filled by the AP.
++	 * identifies the next unused entry to be filled by the AP.  In this
++	 * case the initial value is assumed by hardware to be 0.
+ 	 *
+ 	 * An event ring consists of event structures filled by the hardware
+ 	 * and passed to the AP.  For event rings, the ring index identifies
+ 	 * the next ring entry that is not known to have been filled by the
+-	 * hardware.
++	 * hardware.  The initial value used is arbitrary (so we use 0).
+ 	 */
+ 	u32 index;
+ };
+-- 
+2.34.1
+

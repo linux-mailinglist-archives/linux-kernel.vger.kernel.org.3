@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF00F579D0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F144D579F0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241588AbiGSMp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S236631AbiGSNKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241572AbiGSMoI (ORCPT
+        with ESMTP id S243224AbiGSNIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:44:08 -0400
+        Tue, 19 Jul 2022 09:08:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086E383F08;
-        Tue, 19 Jul 2022 05:17:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB536550DF;
+        Tue, 19 Jul 2022 05:28:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CC39B81B37;
-        Tue, 19 Jul 2022 12:17:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3DCC36AE5;
-        Tue, 19 Jul 2022 12:17:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2AD6B81B84;
+        Tue, 19 Jul 2022 12:27:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48858C341C6;
+        Tue, 19 Jul 2022 12:27:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233031;
-        bh=V8Bnn0Qdmea87DKi19dp6Ps/3Mkn7B5N1/5lffCMd6U=;
+        s=korg; t=1658233659;
+        bh=U3MgG21b5SazhZDFf0lLfuAYMuBp9MqEc7e1BPZoKXY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lGy3EjwPWLuH2L9p7LuvZiVZzL+FdeNv8eXLq6pHeBF+zYR5AfZl/BUX04hEYygp2
-         g1wOMrTmWdEaVcsxnub/a4PRmkpYxkBse8hiIreE0GC9oJdDPDi+RhvmfPIgbrUTaA
-         QQxz3S8WNhn32iRgAcV6qPGRmSG1uLXm86P95G/A=
+        b=kE1sG8GKhYrTqbMn6/qqxfRXTMRM2g/E7S/jNLf0vc607z7flew4EdxMPIF3ZfNsT
+         ALNmyIe235SdqZyagNDq5+E7ynCdYjCiftURJz4S8fU+EEG4AAOa7ZKDmi7NO1LrK9
+         OT+lmPqT55HJpya0nLNHwHd44NtaDwyMzjCOhOEA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 150/167] soc: ixp4xx/npe: Fix unused match warning
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 197/231] ASoC: Intel: bytcr_wm5102: Fix GPIO related probe-ordering problem
 Date:   Tue, 19 Jul 2022 13:54:42 +0200
-Message-Id: <20220719114710.954356208@linuxfoundation.org>
+Message-Id: <20220719114730.648078383@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,43 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Walleij <linus.walleij@linaro.org>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 620f83b8326ce9706b1118334f0257ae028ce045 ]
+[ Upstream commit 4e07479eab8a044cc9542414ccb4aeb8eb033bde ]
 
-The kernel test robot found this inconsistency:
+The "wlf,spkvdd-ena" GPIO needed by the bytcr_wm5102 driver
+is made available through a gpio-lookup table.
 
-  drivers/soc/ixp4xx/ixp4xx-npe.c:737:34: warning:
-  'ixp4xx_npe_of_match' defined but not used [-Wunused-const-variable=]
-     737 | static const struct of_device_id ixp4xx_npe_of_match[] = {
+This gpio-lookup table is registered by drivers/mfd/arizona-spi.c, which
+may get probed after the bytcr_wm5102 driver.
 
-This is because the match is enclosed in the of_match_ptr()
-which compiles into NULL when OF is disabled and this
-is unnecessary.
+If the gpio-lookup table has not registered yet then the gpiod_get()
+will return -ENOENT. Treat -ENOENT as -EPROBE_DEFER to still keep
+things working in this case.
 
-Fix it by dropping of_match_ptr() around the match.
-
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20220626074315.61209-1-linus.walleij@linaro.org'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/r/20220612155652.107310-1-hdegoede@redhat.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/ixp4xx/ixp4xx-npe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/intel/boards/bytcr_wm5102.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/soc/ixp4xx/ixp4xx-npe.c b/drivers/soc/ixp4xx/ixp4xx-npe.c
-index f490c4ca51f5..a0159805d061 100644
---- a/drivers/soc/ixp4xx/ixp4xx-npe.c
-+++ b/drivers/soc/ixp4xx/ixp4xx-npe.c
-@@ -743,7 +743,7 @@ static const struct of_device_id ixp4xx_npe_of_match[] = {
- static struct platform_driver ixp4xx_npe_driver = {
- 	.driver = {
- 		.name           = "ixp4xx-npe",
--		.of_match_table = of_match_ptr(ixp4xx_npe_of_match),
-+		.of_match_table = ixp4xx_npe_of_match,
- 	},
- 	.probe = ixp4xx_npe_probe,
- 	.remove = ixp4xx_npe_remove,
+diff --git a/sound/soc/intel/boards/bytcr_wm5102.c b/sound/soc/intel/boards/bytcr_wm5102.c
+index 8d8e96e3cd2d..f6d0cef1b28c 100644
+--- a/sound/soc/intel/boards/bytcr_wm5102.c
++++ b/sound/soc/intel/boards/bytcr_wm5102.c
+@@ -421,8 +421,17 @@ static int snd_byt_wm5102_mc_probe(struct platform_device *pdev)
+ 	priv->spkvdd_en_gpio = gpiod_get(codec_dev, "wlf,spkvdd-ena", GPIOD_OUT_LOW);
+ 	put_device(codec_dev);
+ 
+-	if (IS_ERR(priv->spkvdd_en_gpio))
+-		return dev_err_probe(dev, PTR_ERR(priv->spkvdd_en_gpio), "getting spkvdd-GPIO\n");
++	if (IS_ERR(priv->spkvdd_en_gpio)) {
++		ret = PTR_ERR(priv->spkvdd_en_gpio);
++		/*
++		 * The spkvdd gpio-lookup is registered by: drivers/mfd/arizona-spi.c,
++		 * so -ENOENT means that arizona-spi hasn't probed yet.
++		 */
++		if (ret == -ENOENT)
++			ret = -EPROBE_DEFER;
++
++		return dev_err_probe(dev, ret, "getting spkvdd-GPIO\n");
++	}
+ 
+ 	/* override platform name, if required */
+ 	byt_wm5102_card.dev = dev;
 -- 
 2.35.1
 

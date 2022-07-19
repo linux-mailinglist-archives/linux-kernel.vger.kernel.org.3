@@ -2,124 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD65579057
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD002579059
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236559AbiGSCBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 22:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
+        id S236647AbiGSCBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 22:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236628AbiGSCBL (ORCPT
+        with ESMTP id S236651AbiGSCBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 22:01:11 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1293AE7C;
-        Mon, 18 Jul 2022 19:01:08 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 18 Jul 2022 22:01:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D833B94D;
+        Mon, 18 Jul 2022 19:01:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ln29q2srSz4xXj;
-        Tue, 19 Jul 2022 12:01:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658196063;
-        bh=Cd7a6kWCcHiJJ+yKIbT6zmzTP4Ew9jbPU/WunSGh7ms=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PMupFgHOw5YwVR2SY8gnRxomARwD/zk55ChAXY90h34+bRKY1KklWQz+SAXCb61cQ
-         zw6WHLLIMdIau97lZEDgWJcKHrptwY1AJqNIQVxQNwRpal+OyxjnqOH0d94cb/znnK
-         qZybFkTrNllUuhLbYg4nUH7YB+0iGVOxuUKhgd7IS/xzRsjQMx2qnYPql5kmQUP/5z
-         u+qclkTJhC3qt8JnmzCTYDQrNaavwDchzYPCKpMk7v/GBad8qboxqqiATUSzg4vmOj
-         sZkcZxnq1MbbJgjWLu8soHWTr9c14lZkd6dtchMBCKpgYN9+RJQ1FXVjzHItRHgAT/
-         9w6obcRROAVTA==
-Date:   Tue, 19 Jul 2022 12:00:41 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
-Message-ID: <20220719120041.0cb1d16a@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 981E2B816F8;
+        Tue, 19 Jul 2022 02:01:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 559F3C341C0;
+        Tue, 19 Jul 2022 02:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658196078;
+        bh=hsUkrPaFd478Emrc8EGUGtpEswMf8oLZ4LdEGp0TRUg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CNe6jQFYK4jCuCQRhAF560wteKtizVlqLCsgIEH67W8iLBNl7b1hceMlmj1v+xyVv
+         61eGhDbzEp/3ezsSo2Qu6za7yUxbYZ6nRDfvhd4u13GR8cPud4MDN/7Gmr5KTUHXkg
+         NywT/2uqaiJfrVH4FIF20PqKV8s2IR0hH1LPOYUZiMoWI8WC5P4AfQoH2ebudl3jsP
+         KUjCXWyiPJ9t1CaMSsDoPovSJEmSgeLZfQHmKu+k1KxZboXzJ7mWCDEa5FFr2OWWiK
+         J2V8hgiubv0AeQXUSI16xvLaDPMV6IW3DDt3qPml5sqPFGn7AuKa03vvBp5jyB7tXW
+         H8etwZ5mG/nOA==
+Date:   Mon, 18 Jul 2022 19:01:17 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     hch@lst.de, dchinner@redhat.com, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kelulanainsley@gmail.com,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH RESEND] xfs: fix for variable set but not used warning
+Message-ID: <YtYQbQ48Evn62pgb@magnolia>
+References: <20220719015442.646442-1-sunliming@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DH9UuOrJHjvpJdizQvM=3Kj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719015442.646442-1-sunliming@kylinos.cn>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/DH9UuOrJHjvpJdizQvM=3Kj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 19, 2022 at 09:54:42AM +0800, sunliming wrote:
+> Fix below kernel warning:
+> 
+> fs/xfs/scrub/repair.c:539:19: warning: variable 'agno' set but not used [-Wunused-but-set-variable]
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-Hi all,
+Ah, right, I did forget to push it in last week's batch, sorry about
+that.  It'll be in Thursday's posting, thank you for the reminder.
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+--D
 
-  drivers/gpu/drm/amd/display/Kconfig
-
-between commit:
-
-  d11219ad53dc ("amdgpu: disable powerpc support for the newer display engi=
-ne")
-
-from Linus' tree and commit:
-
-  3876a8b5e241 ("drm/amd/display: Enable building new display engine with K=
-COV enabled")
-
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-I have left the "|| PPC64" off the select line still.  Please let me
-know if this has been properly tested on PowerPC and I will change
-my resolution.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/display/Kconfig
-index 0ba0598eba20,96cbc87f7b6b..000000000000
---- a/drivers/gpu/drm/amd/display/Kconfig
-+++ b/drivers/gpu/drm/amd/display/Kconfig
-@@@ -6,7 -6,7 +6,7 @@@ config DRM_AMD_D
-  	bool "AMD DC - Enable new display engine"
-  	default y
-  	select SND_HDA_COMPONENT if SND_HDA_CORE
-- 	select DRM_AMD_DC_DCN if X86 && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COM=
-PARISONS)
- -	select DRM_AMD_DC_DCN if (X86 || PPC64)
-++	select DRM_AMD_DC_DCN if X86
-  	help
-  	  Choose this option if you want to use the new display engine
-  	  support for AMDGPU. This adds required support for Vega and
-
---Sig_/DH9UuOrJHjvpJdizQvM=3Kj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLWEEkACgkQAVBC80lX
-0GwNggf8ChpEvdyKyeRlOViMZf/kq0yfGsLVDizppwFZwPC+XJ/57f9yGNzm3tSI
-AzdY1YEUdk3IRu4DeYuXtn5HsYAcjzOnzrHMOO8kAZidGwRWyZSNCodcWVJvdrYS
-7inKgX5D8gMOZXaIikr8ezra/BoYQmOGb2jA7naoAE45WxIRyot6zRBOZgh76x0c
-qfVlzglsmoQDH6cWJPPyFs+FUCPQBzF5wVZHimII3BIzIR26LIjB0OyovGZRHV0U
-3Cb5++kaJVtsa+PU1/yYOizl+YmziS9eWx1K9OjB/1sl8pXLDABtSWK3mjlNcfdJ
-whoulG+RIuC4AnDMyHLbAbbferTxjQ==
-=oAMh
------END PGP SIGNATURE-----
-
---Sig_/DH9UuOrJHjvpJdizQvM=3Kj--
+> ---
+>  fs/xfs/scrub/repair.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/fs/xfs/scrub/repair.c b/fs/xfs/scrub/repair.c
+> index a02ec8fbc8ac..032de115e373 100644
+> --- a/fs/xfs/scrub/repair.c
+> +++ b/fs/xfs/scrub/repair.c
+> @@ -533,14 +533,12 @@ xrep_reap_block(
+>  {
+>  	struct xfs_btree_cur		*cur;
+>  	struct xfs_buf			*agf_bp = NULL;
+> -	xfs_agnumber_t			agno;
+>  	xfs_agblock_t			agbno;
+>  	bool				has_other_rmap;
+>  	int				error;
+>  
+> -	agno = XFS_FSB_TO_AGNO(sc->mp, fsbno);
+>  	agbno = XFS_FSB_TO_AGBNO(sc->mp, fsbno);
+> -	ASSERT(agno == sc->sa.pag->pag_agno);
+> +	ASSERT(XFS_FSB_TO_AGNO(sc->mp, fsbno) == sc->sa.pag->pag_agno);
+>  
+>  	/*
+>  	 * If we are repairing per-inode metadata, we need to read in the AGF
+> -- 
+> 2.25.1
+> 

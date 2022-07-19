@@ -2,128 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01055579020
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 03:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9B3579026
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 03:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbiGSByU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 21:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59394 "EHLO
+        id S236153AbiGSBy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 21:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGSByS (ORCPT
+        with ESMTP id S229478AbiGSBy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 21:54:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DACBBF;
-        Mon, 18 Jul 2022 18:54:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A338B816F8;
-        Tue, 19 Jul 2022 01:54:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83EC8C341C0;
-        Tue, 19 Jul 2022 01:54:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658195654;
-        bh=VH1DJCOtG1ThKB2ErFVdW1lYff4nEUEBBrcKbOBgThY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lFysAK4aT/3fpJnKtGvM5QvheEAlgj7BC3uuGZJHw8f57GQPn1p0k6KAAQYi67gnd
-         u4DqFmGX36mTQfRDh1g0SyWfw1StV+34MlBuh24wnc95yoNdtI287egvKzMglCv0IK
-         0/dJ9wvTAh0NQz7+vee6QfgMxvrMAQKiCE3Ku2oR2rHtWYI1DdGts72ZeGTERbUKLl
-         lp/GKOD1tPHeLOJ8zjUTtduXKlRUnchuUrg6zodT6EkV0Uo+u6RAuBno5Sr3UXu9WE
-         j8tcmky/HiqNiIrTj99ncQnEv6XLYMIrXonsNlRmRu7rqFfa+b676WcV2WKm3UBXEw
-         NIAWths5wTGcg==
-Date:   Mon, 18 Jul 2022 18:54:13 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Willem de Bruijn <willemb@google.com>
-Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
-        kernel-team@fb.com
-Subject: Re: [PATCH net-next v5 01/27] ipv4: avoid partial copy for zc
-Message-ID: <20220718185413.0f393c91@kernel.org>
-In-Reply-To: <0eb1cb5746e9ac938a7ba7848b33ccf680d30030.1657643355.git.asml.silence@gmail.com>
-References: <cover.1657643355.git.asml.silence@gmail.com>
-        <0eb1cb5746e9ac938a7ba7848b33ccf680d30030.1657643355.git.asml.silence@gmail.com>
+        Mon, 18 Jul 2022 21:54:56 -0400
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32B8DFA1;
+        Mon, 18 Jul 2022 18:54:54 -0700 (PDT)
+Received: by mail-pg1-f195.google.com with SMTP id bh13so12218234pgb.4;
+        Mon, 18 Jul 2022 18:54:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B8upiZS5al/5wRAnmjWIGAyvh6FRI4kM94MofET1E6A=;
+        b=bag8KY9apw2bpIcs6iF+Kc/fYfMt7GpD7pkwU8yVHFRbSDAA9vCWxkPKho9CXBsvGN
+         MsoqoH3P6GHW06qq6+KMnNmA8W8ReDW0dIg8mQan8oRGrobOL70mIY7MT/j9ItZlniW1
+         2XWT2wQSqeg2/sLIBOij7W/gzVGsSpv3rJIIBkqaK2ou6H9kOqMEAfJpHiM311GSrasf
+         kN/jZl7qMen4icwXMSz670ZDsKGYnrq90bGL0wy5lE5r6FIYZiIkN0rG2nTf32Vrl4cS
+         4zzGLGBFRzazaWokdy/9U6knwjYAjO89a7wSpeI7zX7QoxnO+lbB54wuhv45DQLRFiMk
+         A7wg==
+X-Gm-Message-State: AJIora8GBEDSrvB19yrGmQuzxRjMEHOzuu0ZpkNuOKuW9QYpxY+I+S0L
+        RsapG3zNJxjtNYjN8+wNzw==
+X-Google-Smtp-Source: AGRyM1sWSClpRg5b5nrJUXGJrwpyiDXXFo3zzkwosxsTeT+hYd3tSjeZy3MRIidcgKbgO0mQzKdbog==
+X-Received: by 2002:a63:500c:0:b0:412:a56c:9ac with SMTP id e12-20020a63500c000000b00412a56c09acmr27797159pgb.158.1658195694366;
+        Mon, 18 Jul 2022 18:54:54 -0700 (PDT)
+Received: from localhost.localdomain ([156.146.53.107])
+        by smtp.gmail.com with ESMTPSA id x1-20020a656aa1000000b0041a37441825sm1822137pgu.72.2022.07.18.18.54.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 18:54:53 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     hch@lst.de, djwong@kernel.org, dchinner@redhat.com
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kelulanainsley@gmail.com, sunliming <sunliming@kylinos.cn>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH RESEND] xfs: fix for variable set but not used warning
+Date:   Tue, 19 Jul 2022 09:54:42 +0800
+Message-Id: <20220719015442.646442-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022 21:52:25 +0100 Pavel Begunkov wrote:
-> Even when zerocopy transmission is requested and possible,
-> __ip_append_data() will still copy a small chunk of data just because it
-> allocated some extra linear space (e.g. 148 bytes). It wastes CPU cycles
-> on copy and iter manipulations and also misalignes potentially aligned
-> data. Avoid such coies. And as a bonus we can allocate smaller skb.
+Fix below kernel warning:
 
-s/coies/copies/ can fix when applying
+fs/xfs/scrub/repair.c:539:19: warning: variable 'agno' set but not used [-Wunused-but-set-variable]
 
-> 
-> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-> ---
->  net/ipv4/ip_output.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-> index 00b4bf26fd93..581d1e233260 100644
-> --- a/net/ipv4/ip_output.c
-> +++ b/net/ipv4/ip_output.c
-> @@ -969,7 +969,6 @@ static int __ip_append_data(struct sock *sk,
->  	struct inet_sock *inet = inet_sk(sk);
->  	struct ubuf_info *uarg = NULL;
->  	struct sk_buff *skb;
-> -
->  	struct ip_options *opt = cork->opt;
->  	int hh_len;
->  	int exthdrlen;
-> @@ -977,6 +976,7 @@ static int __ip_append_data(struct sock *sk,
->  	int copy;
->  	int err;
->  	int offset = 0;
-> +	bool zc = false;
->  	unsigned int maxfraglen, fragheaderlen, maxnonfragsize;
->  	int csummode = CHECKSUM_NONE;
->  	struct rtable *rt = (struct rtable *)cork->dst;
-> @@ -1025,6 +1025,7 @@ static int __ip_append_data(struct sock *sk,
->  		if (rt->dst.dev->features & NETIF_F_SG &&
->  		    csummode == CHECKSUM_PARTIAL) {
->  			paged = true;
-> +			zc = true;
->  		} else {
->  			uarg->zerocopy = 0;
->  			skb_zcopy_set(skb, uarg, &extra_uref);
-> @@ -1091,9 +1092,12 @@ static int __ip_append_data(struct sock *sk,
->  				 (fraglen + alloc_extra < SKB_MAX_ALLOC ||
->  				  !(rt->dst.dev->features & NETIF_F_SG)))
->  				alloclen = fraglen;
-> -			else {
-> +			else if (!zc) {
->  				alloclen = min_t(int, fraglen, MAX_HEADER);
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+---
+ fs/xfs/scrub/repair.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Willem, I think this came in with your GSO work, is there a reason we
-use MAX_HEADER here? I thought MAX_HEADER is for headers (i.e. more or
-less to be reserved) not for the min amount of data to be included.
-
-I wanna make sure we're not missing something about GSO here.
-
-Otherwise I don't think we need the extra branch but that can 
-be a follow up.
-
->  				pagedlen = fraglen - alloclen;
-> +			} else {
-> +				alloclen = fragheaderlen + transhdrlen;
-> +				pagedlen = datalen - transhdrlen;
->  			}
->  
->  			alloclen += alloc_extra;
+diff --git a/fs/xfs/scrub/repair.c b/fs/xfs/scrub/repair.c
+index a02ec8fbc8ac..032de115e373 100644
+--- a/fs/xfs/scrub/repair.c
++++ b/fs/xfs/scrub/repair.c
+@@ -533,14 +533,12 @@ xrep_reap_block(
+ {
+ 	struct xfs_btree_cur		*cur;
+ 	struct xfs_buf			*agf_bp = NULL;
+-	xfs_agnumber_t			agno;
+ 	xfs_agblock_t			agbno;
+ 	bool				has_other_rmap;
+ 	int				error;
+ 
+-	agno = XFS_FSB_TO_AGNO(sc->mp, fsbno);
+ 	agbno = XFS_FSB_TO_AGBNO(sc->mp, fsbno);
+-	ASSERT(agno == sc->sa.pag->pag_agno);
++	ASSERT(XFS_FSB_TO_AGNO(sc->mp, fsbno) == sc->sa.pag->pag_agno);
+ 
+ 	/*
+ 	 * If we are repairing per-inode metadata, we need to read in the AGF
+-- 
+2.25.1
 

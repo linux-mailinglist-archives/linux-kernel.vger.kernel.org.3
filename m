@@ -2,150 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5816257937A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A6F579385
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbiGSGuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 02:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S232796AbiGSGxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 02:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiGSGuT (ORCPT
+        with ESMTP id S230262AbiGSGxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 02:50:19 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4167125281;
-        Mon, 18 Jul 2022 23:50:18 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 620DE5C00E2;
-        Tue, 19 Jul 2022 02:50:17 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 19 Jul 2022 02:50:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1658213417; x=1658299817; bh=X2tTQCC0iW
-        qSbqbwa0QEysUBUs9rRD+BzpgOCtc5qW4=; b=PLCtiG0KrasR6cYhrj6Uq6RmUi
-        o+LC82MDqgYNeVcZR6kpXJuKGsJ5WPjZiSPiZDqYMj8StuIjUMr/Ygnon/UgkGd4
-        E4fxL6UrgWzd8cCjJUDnNWfHmg+bg4+Zmqn8M/DqrssF2kiSynMKTMaWyFPGHO9i
-        EjsRBElneb+z5lSXHL/kpuwpIoksTwBOdWUmXV4AOU1DrSc00qbql6mNn1kIFzQ6
-        pcINglLqrZL4sHukGk1nfgmXgt9EDRbdyT0gfkTO8BX6I4wx1s0n2SUdu/P8ExJy
-        lRUcVktT209m5BvzBqGPzbrgQjLJ8genIAwuYbcCCRmMW9DNRq3Rv16/Ay9A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1658213417; x=1658299817; bh=X2tTQCC0iWqSbqbwa0QEysUBUs9r
-        RD+BzpgOCtc5qW4=; b=eSAFAG1GLUkeJbi8OSJ30x0DSvlb7H5OSEIMVkots+U0
-        K4R3/qGHA3Kb3qzEZ0cBDB6mQb3DCe/SM9EUYqCyzL4rxGCRn4qItExXzePCGNyQ
-        bfej1M50Vn8D+ZtoM9pNnyQc4LZLR2sIn/RQAeHmCf6S9uqG6pwlxnahJ/GQOfXv
-        fDtcKZcELDt2jz88ismjaHgsz6ylSmUPLMflFJesJB6WUCEy1kHHuz28Ei1MlNdW
-        roOpcuU481+htPSLsv4s424M2BObkX1FRrtxDXuwl3SaagK8yhHVxAOahD9PeOyn
-        JSDJ4qAfPzGMKYMTNO5j4NpdAt/1uO1v7kn8kSQXlg==
-X-ME-Sender: <xms:KVTWYrOuBuru8DGNwdMnU428eS5L52hBeMXUGj-MiId7bgqaIWFY_Q>
-    <xme:KVTWYl9QxzSL6F2pi7caxwqB1J_soHwLXWWygzGp-plFWy2u3eW2piiYcq5llBjHu
-    ilkG35fRM-frQ>
-X-ME-Received: <xmr:KVTWYqTqBvzf_QluVdfTWR7PPwFw6kgVPNM4cVJ9zndcBriKtewuiGY8-3NR>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekledguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:KVTWYvur1FHCNIiBqSKZOg84sK5kY2KGW4XPApcyzNzWZnS0y9kKtw>
-    <xmx:KVTWYjeAuFvpt9PPudg15Se2pE_LSO8JY-Qsm7vEp_Us6roVTaHVwA>
-    <xmx:KVTWYr2dWjaIn2_0jnNzgEpFydIv-qZ1KboD-E9aceMzAHBUVVrvKg>
-    <xmx:KVTWYu2wvtHIPlY0k2j-EkcW8noLDIFi-i0VUc_qHIxuvizpabYhuQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 19 Jul 2022 02:50:16 -0400 (EDT)
-Date:   Tue, 19 Jul 2022 08:50:14 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <YtZUJr4oIIALgdO+@kroah.com>
-References: <20220718163158.42176b4e@canb.auug.org.au>
- <YtXF8TUZHNRUUyJh@kroah.com>
- <CACeCKafbgLmhLoYQiTTDkeeJ26HqFYBHXtcpwQkzOyO9LESEFw@mail.gmail.com>
+        Tue, 19 Jul 2022 02:53:48 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9021E2873F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:53:47 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31e560aa854so18944537b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u5KxztmCmMVHIN310A4ZHMWsumpUd/uei+99VlIfECo=;
+        b=g45peOwJLERlzIw9j9Qr3FglyHx1ejYM46zmBvA/t4aMhMusgrlHHP7DtNqT3w8UDx
+         +nBrmbn3AeWkJLwpUK3lBY+pXw5XeerP0NGTxCjRBjj8iozdPjAL8Jci7xtIVoqKdBHL
+         fEUljn0PqIWZr/hPjTugMvYwnqskDlL10SVhxZ8CnPVRvTIxBC5x8rAXgDmSAduRjwo4
+         vhYvaSwgrqv7mSpvQ5A7gKQbEfS+zIX/0XYSM/O/B+apqFIO+1NiJatid+NqnQIqIo7K
+         L1w3wWiR2lvJZHwarcjfbBoMYr2KyA83S8A3w/tgFxGpzA8wF+Vuh0UAE5vn24mWyr64
+         ig1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u5KxztmCmMVHIN310A4ZHMWsumpUd/uei+99VlIfECo=;
+        b=p+n/JAUnrhRXhj/hpDvF5fyzjuQyCdG8AZcmivP3SqpmGRL3EN2Iddz/ckmZ3F4wU4
+         y5Rg47MsKbHcPDcMRMkdpK2e2MWh+ardWWgN17ZEVLtVArqLARSu4FRQCJ894H0fcr+h
+         CRcDNUsmDb0US+kb0nSUkDE8Vj+7zy6ba0uJ6ScZdsRp4JFYeIIwO1dZyjvPk5FiPEMh
+         c7VHjMwJ0nsB1ZrkSiioRBssDdjfdF78uayUGK/ZC97NQGHoBK8LtdwResk6n16fVBDw
+         9nUIdQJ3cAahmJYRF2/rxZToYJT3XrDd1JagDYA5V0z8LTrmb3zAhvVz18XELA/OcJZA
+         U8CA==
+X-Gm-Message-State: AJIora+ko8zAIC6khWqM10eWYn8wGWjB9oAmIzbHpT0Fq72/6Tt+0JO0
+        6845Fz99EA0jhexPjO236pKRuctu+xI4Xo5l+WSfBQ==
+X-Google-Smtp-Source: AGRyM1vKSBqibQJYRQ+aqUzhML96/8AsNMD0slmFOO0+vHlS3+2F8QNM4+T5y938H9dnBSoBA29EmeNpgAcZLDGPnbA=
+X-Received: by 2002:a0d:ca88:0:b0:31d:c7a:6ec3 with SMTP id
+ m130-20020a0dca88000000b0031d0c7a6ec3mr35667468ywd.141.1658213626831; Mon, 18
+ Jul 2022 23:53:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACeCKafbgLmhLoYQiTTDkeeJ26HqFYBHXtcpwQkzOyO9LESEFw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220718083646.67601-1-hanjinke.666@bytedance.com>
+In-Reply-To: <20220718083646.67601-1-hanjinke.666@bytedance.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 19 Jul 2022 14:53:09 +0800
+Message-ID: <CAMZfGtVLkO6T-0n7fMBTvR84Ji8GhTO5==u9v+8f+dRkJhFHMA@mail.gmail.com>
+Subject: Re: [PATCH] block: don't allow the same type rq_qos add more than once
+To:     Jinke Han <hanjinke.666@bytedance.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 02:41:23PM -0700, Prashant Malani wrote:
-> Hi Stephen & Greg,
-> 
-> On Mon, Jul 18, 2022 at 1:43 PM Greg KH <greg@kroah.com> wrote:
-> >
-> > On Mon, Jul 18, 2022 at 04:31:58PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
-> > >
-> > > After merging the usb tree, today's linux-next build (arm
-> > > multi_v7_defconfig) failed like this:
-> > >
-> > > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_cmd_mux_set':
-> > > drivers/platform/chrome/cros_typec_switch.c:52:16: error: implicit declaration of function 'cros_ec_command'; did you mean 'cros_ec_cmd'? [-Werror=implicit-function-declaration]
-> > >    52 |         return cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
-> > >       |                ^~~~~~~~~~~~~~~
-> > >       |                cros_ec_cmd
-> > > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_register_switches':
-> > > drivers/platform/chrome/cros_typec_switch.c:244:23: error: implicit declaration of function 'acpi_evaluate_integer'; did you mean 'acpi_evaluate_object'? [-Werror=implicit-function-declaration]
-> > >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
-> > >       |                       ^~~~~~~~~~~~~~~~~~~~~
-> > >       |                       acpi_evaluate_object
-> > > drivers/platform/chrome/cros_typec_switch.c:244:49: error: invalid use of undefined type 'struct acpi_device'
-> > >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
-> > >       |                                                 ^~
-> > >
-> > > Caused by commit
-> > >
-> > >   e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
-> > >
-> > > and commits
-> > >
-> > >   34f375f0fdf6 ("platform/chrome: cros_typec_switch: Set EC retimer")
-> > >   bb53ad958012 ("platform/chrome: cros_typec_switch: Add event check")
-> > >
-> > > interacting with commit
-> > >
-> > >   b1d288d9c3c5 ("platform/chrome: cros_ec_proto: Rename cros_ec_command function")
-> > >
-> > > from the chrome-platform tree.
-> 
-> I am very sorry about the conflicts.
-> 
-> I can think of a few ways to address this:
-> 1. A fixup patch on top of linux-next updating the function signature
-> to cros_ec_cmd() ; I will send this out if you'd like.
-> 2. Pull in Commit b1d288d9c3c5 ("platform/chrome: cros_ec_proto:
-> Rename cros_ec_command function") to usb-next.
-> We will also have to pull in dependent commit 015cd0043503
-> ("regulator: cros-ec: Use common cros_ec_command()")
-> 3. Revert the entire cros-typec-switch (patches 3-9) series from
-> usb-next and wait till after the merge window to apply it to
-> chrome-platform directly.
+On Mon, Jul 18, 2022 at 4:37 PM Jinke Han <hanjinke.666@bytedance.com> wrote:
+>
+> From: hanjinke <hanjinke.666@bytedance.com>
+>
+> In our test of iocost, we encounttered some list add/del corrutions of
+> inner_walk list in ioc_timer_fn.
+> The resean can be descripted as follow:
+>
+> cpu 0                                           cpu 1
+> ioc_qos_write                                   ioc_qos_write
+>
+> ioc = q_to_ioc(bdev_get_queue(bdev));
+> if (!ioc) {
+>         ioc = kzalloc();                        ioc = q_to_ioc(bdev_get_queue(bdev));
+>                                                         if (!ioc) {
+>                                                                 ioc = kzalloc();
+>                                                                 ...
+>                                                                 rq_qos_add(q, rqos);
+>                                                          }
+>         ...
+>         rq_qos_add(q, rqos);
+>         ...
+> }
+>
+> When the io.cost.qos file is written by two cpu concurrently, rq_qos may
+> be added to one disk twice. In that case, there will be two iocs enabled
+> and running on one disk. They own different iocgs on their active list.
+> In the ioc_timer_fn function, because of the iocgs from two ioc have the
+> same root iocg, the root iocg's walk_list may be overwritten by each
+> other and this lead to list add/del corrutions in building or destorying
+> the inner_walk list.
+>
+> And so far, the blk-rq-qos framework works in case that one instance for
+> one type rq_qos per queue by default. This patch make this explicit and
+> also fix the crash above.
+>
+> Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
 
-I think I'll just do #3 to resolve the issue.  I'll do it in a few
-hours.
+The change LGTM. Maybe it is better to add a Fixes tag here so that
+others can easily know what Linux versions should be backported.
 
-thanks,
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-greg k-h
+Thanks.

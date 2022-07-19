@@ -2,123 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E5F57A18F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B4557A16F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237960AbiGSObF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
+        id S237627AbiGSO12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239667AbiGSO3p (ORCPT
+        with ESMTP id S237768AbiGSO1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:29:45 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7273161B1F;
-        Tue, 19 Jul 2022 07:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658240264; x=1689776264;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=uCiOnx7XhlhIdPTfR9PaYhGj+08ZCZ+aPucYOLw91eY=;
-  b=OzzfxIk0a+IGaEkdENZ8GOJ0xXoWWjSt7xK9IOEN6umzrYBSCDXMqCBV
-   aBFucqvgSeS1mk9zaPmZn9Sa+57cbgvT8bwAMNsYP1V0UXwi1pJPFwbZB
-   AZdHjoLHdHcgfBBAcVIrfmkeXvlE8YUt7Z37jiR7k4wspDU6D2gXEkPlq
-   /1zgyN5PMFKMefTfwqWQ2mzE+QBRsIwrpJ5gULnNtA/9rv++l3JU+5loD
-   MSRs4eHjdpdesroG5ym1A71mzr616YEFm8qOIBEBfvralXIkDvcJdXcR3
-   JmLhnsDBf0iceZuc6kBwGDg9BtaDjBerWKjWAKV0IUxEzV2hoHmYONnNF
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287247161"
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="287247161"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 07:17:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="655777767"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Jul 2022 07:17:33 -0700
-Date:   Tue, 19 Jul 2022 22:12:43 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 13/14] KVM: Enable and expose KVM_MEM_PRIVATE
-Message-ID: <20220719141243.GB84779@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-14-chao.p.peng@linux.intel.com>
- <de1e15b8-b7e7-d077-eff8-0992bd06e38a@amd.com>
+        Tue, 19 Jul 2022 10:27:06 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABEC58865
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:13:18 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658239997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WxbgGSEbEmVEKhaiEAclRG678MbyReuZv1istdnUhXM=;
+        b=Qu/X6ZmclEB5rhXNORnQVzFvwU4V75dHkcZZ0kRkqVzOIyqqPab7WS+20+AXT8bGgS4Cm8
+        Nm1HWXamkDIcySY4jr2a68+icv6A9iXLDhLSorLcrLi8CR3ekUcIAv2ICkohhRU0ab1iFO
+        +DOHULxlBnxJSeIPVI9RHHJQxIgJ7D3uLRB7Pg0YzFGIRoO8JQUYj2g826SBvivO12Onme
+        FuEmlmwFOM70oyKbDKNIOJzGqOEHHIybQoCJlOtdnZMC3Jp1w2mPcSjS9bIrlZ+Xu8mXYL
+        SG8qqWKFFFYBJc4STfaIWemQPvT96ej2qa3LVyjtKypfekGbUyZqv8u6ocOQIw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658239997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WxbgGSEbEmVEKhaiEAclRG678MbyReuZv1istdnUhXM=;
+        b=uvhkK3BiofREZ9FA6Sb2G4x0mONbagVf3ZAboefO12Q2JrLEhUIhNSu7PBusw+Oad8kqaX
+        bcue/gHLj4lMl2AQ==
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juergen Gross <jgross@suse.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "decui@microsoft.com" <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: Virt Call depth tracking mitigation
+In-Reply-To: <4ca4a4ab-6ea0-d94a-59cc-1ab99ff869d5@citrix.com>
+References: <20220716230344.239749011@linutronix.de>
+ <4ca4a4ab-6ea0-d94a-59cc-1ab99ff869d5@citrix.com>
+Date:   Tue, 19 Jul 2022 16:13:16 +0200
+Message-ID: <87a695ur5v.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de1e15b8-b7e7-d077-eff8-0992bd06e38a@amd.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 11:55:24AM +0200, Gupta, Pankaj wrote:
+On Tue, Jul 19 2022 at 10:24, Andrew Cooper wrote:
+> On 17/07/2022 00:17, Thomas Gleixner wrote:
+>> As IBRS is a performance horror show, Peter Zijstra and me revisited the
+>> call depth tracking approach and implemented it in a way which is hopefu=
+lly
+>> more palatable and avoids the downsides of the original attempt.
+>>
+>> We both unsurprisingly hate the result with a passion...
+>
+> And I hate to add more problems, but here we go.
+>
+> Under virt, it's not just SMI's which might run behind your back.=C2=A0
+> Regular interrupts/etc can probably be hand-waved away in the same way
+> that SMIs are.
 
-...
+You mean host side interrupts, right?
 
-> > @@ -4712,12 +4813,10 @@ static long kvm_vm_ioctl(struct file *filp,
-> >   			(u32 __user *)(argp + offsetof(typeof(mem), flags))))
-> >   			goto out;
-> > -		if (flags & KVM_MEM_PRIVATE) {
-> > -			r = -EINVAL;
-> > -			goto out;
-> > -		}
-> > -
-> > -		size = sizeof(struct kvm_userspace_memory_region);
-> > +		if (flags & KVM_MEM_PRIVATE)
-> > +			size = sizeof(struct kvm_userspace_memory_region_ext);
-> 
-> Not sure if we use kvm_userspace_memory_region_ext or kvm_user_mem_region,
-> just for readability.
+> Hypercalls however are a different matter.
+>
+> Xen and HyperV both have hypercall pages, where the hypervisor provides
+> some executable code for the guest kernel to use.
+>
+> Under the current scheme, the calls into the hypercall pages get
+> accounted, as objtool can see them, but the ret's don't.=C2=A0 This imbal=
+ance
+> is exasperated because some hypercalls are called in loops.
 
-Somehow, but majorly for code maintainability, kvm_user_mem_region is
-designed to be the alias of kvm_userspace_memory_region_ext so in the
-code we can access the 'unpacked' fields using something like
-'mem.usersapce_addr' instead of 'mem.region.userspace_addr'.
+Bah.
 
-Chao
-> 
-> > +		else
-> > +			size = sizeof(struct kvm_userspace_memory_region);
-> >   		if (copy_from_user(&mem, argp, size))
-> >   			goto out;
+> Worse however, it opens a hole where branch history is calculable and
+> the ret can reliably underflow.=C2=A0 This occurs when there's a minimal =
+call
+> depth in Linux to get to the hypercall, and then a call depth of >16 in
+> the hypervisor.
+>
+> The only variable in these cases is how much user control there is of
+> the registers, and I for one am not feeling lucky in face of the current
+> research.
+>
+> The only solution I see here is for Linux to ret-thunk the hypercall
+> page too.=C2=A0 Under Xen, the hypercall page is mutable by the guest and
+> there is room to turn every ret into a jmp, but obviously none of this
+> is covered by any formal ABI, and this probably needs more careful
+> consideration than the short time I've put towards it.
+
+Well, that makes the guest side "safe", but isn't a deep hypercall > 16
+already underflowing in the hypervisor code before it returns to the
+guest?
+
+> That said, after a return from the hypervisor, Linux has no idea what
+> state the RSB is in, so the only safe course of action is to re-stuff.
+
+Indeed.
+
+Another proof for my claim that virt creates more problems than it
+solves.
+
+Thanks,
+
+        tglx

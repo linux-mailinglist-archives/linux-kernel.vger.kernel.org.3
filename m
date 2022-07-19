@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F717579D12
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295CE579972
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238310AbiGSMpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S238040AbiGSMCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238568AbiGSMnm (ORCPT
+        with ESMTP id S237869AbiGSMCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:43:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FBF54C9E;
-        Tue, 19 Jul 2022 05:17:00 -0700 (PDT)
+        Tue, 19 Jul 2022 08:02:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54D44AD7B;
+        Tue, 19 Jul 2022 04:59:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4188861772;
-        Tue, 19 Jul 2022 12:16:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 330E8C341C6;
-        Tue, 19 Jul 2022 12:16:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56E3EB81A2E;
+        Tue, 19 Jul 2022 11:58:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91758C341C6;
+        Tue, 19 Jul 2022 11:58:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233016;
-        bh=ftRCXwc4371VseYpxVHNBx88Hlwn+pfvaap8UhlLLAs=;
+        s=korg; t=1658231938;
+        bh=dOUWYPQpNVpVhyXsakkkUnXoaoLoLPfPeUTtmZN9UfY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CCXD63i1slASWQYDX5IaGbB/Di3eFqKxpqU5r4Tvv0jnypgxWH1k6pKl+REJr3xTY
-         ifySHH6KzLzrTVfoT5s8YwRa6o+t2mD6AS5L9qVrViSx0MK3RKBMscOYKiGdFkCRVN
-         hYu/BgjN63sFhmaMOly9Zlw5iZJTFYvoejTqpIN4=
+        b=Y5CWTBHoFIy8ZZn6Ik/hZ6HeHvHXVriNZQmPxyeGGN3/eQNCfOsCxoiemyoS8vjGf
+         BkjFmRGqyoQy9ZAJMYenpeVi7glaS0wjxONykF/DFKhYuzh+d42M99kxsHLcwE3jBx
+         G6r8MpiIlPWJnRn0R8KTbwZDxoayNwKtCkyboaSE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 120/167] scsi: hisi_sas: Limit max hw sectors for v3 HW
+        stable@vger.kernel.org, Yi Yang <yiyang13@huawei.com>,
+        stable <stable@kernel.org>
+Subject: [PATCH 4.14 41/43] serial: 8250: fix return error code in serial8250_request_std_resource()
 Date:   Tue, 19 Jul 2022 13:54:12 +0200
-Message-Id: <20220719114708.176498383@linuxfoundation.org>
+Message-Id: <20220719114525.443477034@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
+References: <20220719114521.868169025@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +53,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Garry <john.garry@huawei.com>
+From: Yi Yang <yiyang13@huawei.com>
 
-[ Upstream commit fce54ed027577517df1e74b7d54dc2b1bd536887 ]
+commit 6e690d54cfa802f939cefbd2fa2c91bd0b8bd1b6 upstream.
 
-If the controller is behind an IOMMU then the IOMMU IOVA caching range can
-affect performance, as discussed in [0].
+If port->mapbase = NULL in serial8250_request_std_resource() , it need
+return a error code instead of 0. If uart_set_info() fail to request new
+regions by serial8250_request_std_resource() but the return value of
+serial8250_request_std_resource() is 0, The system incorrectly considers
+that the resource application is successful and does not attempt to
+restore the old setting. A null pointer reference is triggered when the
+port resource is later invoked.
 
-Limit the max HW sectors to not exceed this limit. We need to hardcode the
-value until a proper DMA mapping API is available.
-
-[0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
-
-Link: https://lore.kernel.org/r/1655988119-223714-1-git-send-email-john.garry@huawei.com
-Signed-off-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Yi Yang <yiyang13@huawei.com>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220628083515.64138-1-yiyang13@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/tty/serial/8250/8250_port.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 1f5e0688c0c8..15c7451fb30f 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2758,6 +2758,7 @@ static int slave_configure_v3_hw(struct scsi_device *sdev)
- 	struct hisi_hba *hisi_hba = shost_priv(shost);
- 	struct device *dev = hisi_hba->dev;
- 	int ret = sas_slave_configure(sdev);
-+	unsigned int max_sectors;
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2884,8 +2884,10 @@ static int serial8250_request_std_resour
+ 	case UPIO_MEM32BE:
+ 	case UPIO_MEM16:
+ 	case UPIO_MEM:
+-		if (!port->mapbase)
++		if (!port->mapbase) {
++			ret = -EINVAL;
+ 			break;
++		}
  
- 	if (ret)
- 		return ret;
-@@ -2775,6 +2776,12 @@ static int slave_configure_v3_hw(struct scsi_device *sdev)
- 		}
- 	}
- 
-+	/* Set according to IOMMU IOVA caching limit */
-+	max_sectors = min_t(size_t, queue_max_hw_sectors(sdev->request_queue),
-+			    (PAGE_SIZE * 32) >> SECTOR_SHIFT);
-+
-+	blk_queue_max_hw_sectors(sdev->request_queue, max_sectors);
-+
- 	return 0;
- }
- 
--- 
-2.35.1
-
+ 		if (!request_mem_region(port->mapbase, size, "serial")) {
+ 			ret = -EBUSY;
 
 

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD23579CD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59381579F1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241525AbiGSMnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S243239AbiGSNKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237992AbiGSMnI (ORCPT
+        with ESMTP id S243403AbiGSNJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:43:08 -0400
+        Tue, 19 Jul 2022 09:09:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3248051F;
-        Tue, 19 Jul 2022 05:16:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023E264E01;
+        Tue, 19 Jul 2022 05:28:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB07461835;
-        Tue, 19 Jul 2022 12:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDAAEC341C6;
-        Tue, 19 Jul 2022 12:16:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBDC660DF8;
+        Tue, 19 Jul 2022 12:28:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5549EC341DD;
+        Tue, 19 Jul 2022 12:28:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232999;
-        bh=xBPwjux9Bz7aWd1/UgILLOUdNPSQvAaFFU4PMe+ej7g=;
+        s=korg; t=1658233712;
+        bh=DX8GnNXoZmg5Xm54obL/bmHPMlMYP2TaYkBJHhzBO74=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x33v2dY3sYQ3yznBNoGNkYZYD+iQ2Td+paARRlPvSrOZhm0kXT8aFjjZFv9vcOqGM
-         qL7l24v5b/1xJpO0BGvqJ2ZptcaUb6lzYWoO4ADNl/4YY9SheuEc1/Kablqp2Yaray
-         RTcdKNf72Yw0W/IxzneE5g/egHH8EmmSIxL6pRgA=
+        b=JQGtSENbSCteUHjwzcR7DvulCrjg2NtMLv1YIaHi433rouqNqn+KBJrG3evTZE2uT
+         A+Jq7QoJqatuf27bZvyfsqzkUwYtHJYypzHhMgQR3PO2bNiEgzYtUNhhXyvHBs5JiJ
+         Iwhz89BMVnXFf6TBidm6inMHLfvR5LUMvSNPcnis=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,12 +38,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bard Liao <yung-chuan.liao@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 138/167] ASoC: codecs: rt700/rt711/rt711-sdca: initialize workqueues in probe
-Date:   Tue, 19 Jul 2022 13:54:30 +0200
-Message-Id: <20220719114709.860475784@linuxfoundation.org>
+Subject: [PATCH 5.18 186/231] ASoC: rt711-sdca-sdw: fix calibrate mutex initialization
+Date:   Tue, 19 Jul 2022 13:54:31 +0200
+Message-Id: <20220719114729.840207773@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,110 +59,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit ba98d7d8b60ba410aa03834f6aa48fd3b2e68478 ]
+[ Upstream commit ed0a7fb29c9fd4f53eeb37d1fe2354df7a038047 ]
 
-The workqueues are initialized in the io_init functions, which isn't
-quite right. In some tests, this leads to warnings throw from
-__queue_delayed_work()
+In codec driver bind/unbind test, the following warning is thrown:
 
-WARN_ON_FUNCTION_MISMATCH(timer->function, delayed_work_timer_fn);
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+...
+[  699.182495]  rt711_sdca_jack_init+0x1b/0x1d0 [snd_soc_rt711_sdca]
+[  699.182498]  rt711_sdca_set_jack_detect+0x3b/0x90 [snd_soc_rt711_sdca]
+[  699.182500]  snd_soc_component_set_jack+0x24/0x50 [snd_soc_core]
 
-Move all the initializations to the probe functions.
+A quick check in the code shows that the 'calibrate_mutex' used by
+this driver are not initialized at probe time. Moving the
+initialization to the probe removes the issue.
 
+BugLink: https://github.com/thesofproject/linux/issues/3644
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
 Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Link: https://lore.kernel.org/r/20220606203752.144159-7-pierre-louis.bossart@linux.intel.com
+Link: https://lore.kernel.org/r/20220606203752.144159-3-pierre-louis.bossart@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rt700.c      |   12 +++++-------
- sound/soc/codecs/rt711-sdca.c |   10 +++-------
- sound/soc/codecs/rt711.c      |   12 +++++-------
- 3 files changed, 13 insertions(+), 21 deletions(-)
+ sound/soc/codecs/rt711-sdca-sdw.c |    3 +++
+ sound/soc/codecs/rt711-sdca.c     |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- a/sound/soc/codecs/rt700.c
-+++ b/sound/soc/codecs/rt700.c
-@@ -1124,6 +1124,11 @@ int rt700_init(struct device *dev, struc
+--- a/sound/soc/codecs/rt711-sdca-sdw.c
++++ b/sound/soc/codecs/rt711-sdca-sdw.c
+@@ -373,6 +373,9 @@ static int rt711_sdca_sdw_remove(struct
+ 	if (rt711->first_hw_init)
+ 		pm_runtime_disable(&slave->dev);
  
- 	mutex_init(&rt700->disable_irq_lock);
- 
-+	INIT_DELAYED_WORK(&rt700->jack_detect_work,
-+			  rt700_jack_detect_handler);
-+	INIT_DELAYED_WORK(&rt700->jack_btn_check_work,
-+			  rt700_btn_check_handler);
++	mutex_destroy(&rt711->calibrate_mutex);
++	mutex_destroy(&rt711->disable_irq_lock);
 +
- 	/*
- 	 * Mark hw_init to false
- 	 * HW init will be performed when device reports present
-@@ -1218,13 +1223,6 @@ int rt700_io_init(struct device *dev, st
- 	/* Finish Initial Settings, set power to D3 */
- 	regmap_write(rt700->regmap, RT700_SET_AUDIO_POWER_STATE, AC_PWRST_D3);
+ 	return 0;
+ }
  
--	if (!rt700->first_hw_init) {
--		INIT_DELAYED_WORK(&rt700->jack_detect_work,
--			rt700_jack_detect_handler);
--		INIT_DELAYED_WORK(&rt700->jack_btn_check_work,
--			rt700_btn_check_handler);
--	}
--
- 	/*
- 	 * if set_jack callback occurred early than io_init,
- 	 * we set up the jack detection function now
 --- a/sound/soc/codecs/rt711-sdca.c
 +++ b/sound/soc/codecs/rt711-sdca.c
-@@ -1417,6 +1417,9 @@ int rt711_sdca_init(struct device *dev,
- 	mutex_init(&rt711->calibrate_mutex);
+@@ -1414,6 +1414,7 @@ int rt711_sdca_init(struct device *dev,
+ 	rt711->regmap = regmap;
+ 	rt711->mbq_regmap = mbq_regmap;
+ 
++	mutex_init(&rt711->calibrate_mutex);
  	mutex_init(&rt711->disable_irq_lock);
  
-+	INIT_DELAYED_WORK(&rt711->jack_detect_work, rt711_sdca_jack_detect_handler);
-+	INIT_DELAYED_WORK(&rt711->jack_btn_check_work, rt711_sdca_btn_check_handler);
-+
  	/*
- 	 * Mark hw_init to false
- 	 * HW init will be performed when device reports present
-@@ -1548,13 +1551,6 @@ int rt711_sdca_io_init(struct device *de
- 	rt711_sdca_index_update_bits(rt711, RT711_VENDOR_HDA_CTL,
- 		RT711_PUSH_BTN_INT_CTL0, 0x20, 0x00);
+@@ -1552,7 +1553,6 @@ int rt711_sdca_io_init(struct device *de
+ 			rt711_sdca_jack_detect_handler);
+ 		INIT_DELAYED_WORK(&rt711->jack_btn_check_work,
+ 			rt711_sdca_btn_check_handler);
+-		mutex_init(&rt711->calibrate_mutex);
+ 	}
  
--	if (!rt711->first_hw_init) {
--		INIT_DELAYED_WORK(&rt711->jack_detect_work,
--			rt711_sdca_jack_detect_handler);
--		INIT_DELAYED_WORK(&rt711->jack_btn_check_work,
--			rt711_sdca_btn_check_handler);
--	}
--
  	/* calibration */
- 	ret = rt711_sdca_calibration(rt711);
- 	if (ret < 0)
---- a/sound/soc/codecs/rt711.c
-+++ b/sound/soc/codecs/rt711.c
-@@ -1202,6 +1202,10 @@ int rt711_init(struct device *dev, struc
- 	mutex_init(&rt711->calibrate_mutex);
- 	mutex_init(&rt711->disable_irq_lock);
- 
-+	INIT_DELAYED_WORK(&rt711->jack_detect_work, rt711_jack_detect_handler);
-+	INIT_DELAYED_WORK(&rt711->jack_btn_check_work, rt711_btn_check_handler);
-+	INIT_WORK(&rt711->calibration_work, rt711_calibration_work);
-+
- 	/*
- 	 * Mark hw_init to false
- 	 * HW init will be performed when device reports present
-@@ -1309,14 +1313,8 @@ int rt711_io_init(struct device *dev, st
- 
- 	if (rt711->first_hw_init)
- 		rt711_calibration(rt711);
--	else {
--		INIT_DELAYED_WORK(&rt711->jack_detect_work,
--			rt711_jack_detect_handler);
--		INIT_DELAYED_WORK(&rt711->jack_btn_check_work,
--			rt711_btn_check_handler);
--		INIT_WORK(&rt711->calibration_work, rt711_calibration_work);
-+	else
- 		schedule_work(&rt711->calibration_work);
--	}
- 
- 	/*
- 	 * if set_jack callback occurred early than io_init,
 
 

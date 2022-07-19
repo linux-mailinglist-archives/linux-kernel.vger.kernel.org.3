@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3E7579E49
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1887B579C2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbiGSNA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        id S238176AbiGSMgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242520AbiGSM7H (ORCPT
+        with ESMTP id S240745AbiGSMgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:59:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8DC5FAFD;
-        Tue, 19 Jul 2022 05:23:55 -0700 (PDT)
+        Tue, 19 Jul 2022 08:36:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BE179ECD;
+        Tue, 19 Jul 2022 05:14:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C4EA61632;
-        Tue, 19 Jul 2022 12:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EA40C341C6;
-        Tue, 19 Jul 2022 12:23:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8D28616F8;
+        Tue, 19 Jul 2022 12:13:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9475C341C6;
+        Tue, 19 Jul 2022 12:13:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233434;
-        bh=Mg3fED1AAvaDbJxZHyGG4Bsb6lTRQRN91wZoWjfGKTo=;
+        s=korg; t=1658232797;
+        bh=2VpfmzO2i9ibqxokC7JLDiTparlUaunxAFDXgTG+bFM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kHdvHQ/pf08x16sFUwmi2UNmh5HBgJtiU6xcxqmy7i7Cxn9mEqBDNZe/4052gZnih
-         4PAjn51MXodNpo7MP/XmjfGVhzPfdA0rr3wEHyPaw7vcyd4hJNnTICjYvJxt/cr1WC
-         6Iu8DKWVPToMNvJRskIYE82x5gTDBsbDGtaH1iWg=
+        b=mYPKU9vYqByVQX8UlyXZMy12GSy9zrp1eAM2CU/aVl2gPZuz1kxhVp6yqRpQ27f6F
+         IQJXKHLyxbqSCGQ2eUG2aWhZ+RVCxmmk+747XIc1D6qoH8eIYE+WP7+Qp0xAPa5M+C
+         w/kN2laDYWBSVzmoGF1h/eg7MuWDFXca/lpGi4To=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "J. Bruce Fields" <bfields@fieldses.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
+        stable@vger.kernel.org,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 095/231] lockd: fix nlm_close_files
+Subject: [PATCH 5.15 048/167] ASoC: Intel: Skylake: Correct the handling of fmt_config flexible array
 Date:   Tue, 19 Jul 2022 13:53:00 +0200
-Message-Id: <20220719114722.758879857@linuxfoundation.org>
+Message-Id: <20220719114701.269629450@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +56,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Layton <jlayton@kernel.org>
+From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 
-[ Upstream commit 1197eb5906a5464dbaea24cac296dfc38499cc00 ]
+[ Upstream commit fc976f5629afb4160ee77798b14a693eac903ffd ]
 
-This loop condition tries a bit too hard to be clever. Just test for
-the two indices we care about explicitly.
+The struct nhlt_format's fmt_config is a flexible array, it must not be
+used as normal array.
+When moving to the next nhlt_fmt_cfg we need to take into account the data
+behind the ->config.caps (indicated by ->config.size).
 
-Cc: J. Bruce Fields <bfields@fieldses.org>
-Fixes: 7f024fcd5c97 ("Keep read and write fds with each nlm_file")
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+The logic of the code also changed: it is no longer saves the _last_
+fmt_cfg for all found rates.
+
+Fixes: bc2bd45b1f7f3 ("ASoC: Intel: Skylake: Parse nhlt and register clock device")
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+Link: https://lore.kernel.org/r/20220630065638.11183-3-peter.ujfalusi@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/lockd/svcsubs.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ sound/soc/intel/skylake/skl-nhlt.c | 37 ++++++++++++++++++++----------
+ 1 file changed, 25 insertions(+), 12 deletions(-)
 
-diff --git a/fs/lockd/svcsubs.c b/fs/lockd/svcsubs.c
-index b2f277727469..e1c4617de771 100644
---- a/fs/lockd/svcsubs.c
-+++ b/fs/lockd/svcsubs.c
-@@ -283,11 +283,10 @@ nlm_file_inuse(struct nlm_file *file)
+diff --git a/sound/soc/intel/skylake/skl-nhlt.c b/sound/soc/intel/skylake/skl-nhlt.c
+index cb02ec255728..74f60f5dfaef 100644
+--- a/sound/soc/intel/skylake/skl-nhlt.c
++++ b/sound/soc/intel/skylake/skl-nhlt.c
+@@ -213,11 +213,12 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
+ 	if (fmt->fmt_count == 0)
+ 		return;
  
- static void nlm_close_files(struct nlm_file *file)
++	fmt_cfg = (struct nhlt_fmt_cfg *)fmt->fmt_config;
+ 	for (i = 0; i < fmt->fmt_count; i++) {
++		struct nhlt_fmt_cfg *saved_fmt_cfg = fmt_cfg;
+ 		bool present = false;
+ 
+-		fmt_cfg = &fmt->fmt_config[i];
+-		wav_fmt = &fmt_cfg->fmt_ext;
++		wav_fmt = &saved_fmt_cfg->fmt_ext;
+ 
+ 		channels = wav_fmt->fmt.channels;
+ 		bps = wav_fmt->fmt.bits_per_sample;
+@@ -235,12 +236,18 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
+ 		 * derive the rate.
+ 		 */
+ 		for (j = i; j < fmt->fmt_count; j++) {
+-			fmt_cfg = &fmt->fmt_config[j];
+-			wav_fmt = &fmt_cfg->fmt_ext;
++			struct nhlt_fmt_cfg *tmp_fmt_cfg = fmt_cfg;
++
++			wav_fmt = &tmp_fmt_cfg->fmt_ext;
+ 			if ((fs == wav_fmt->fmt.samples_per_sec) &&
+-			   (bps == wav_fmt->fmt.bits_per_sample))
++			   (bps == wav_fmt->fmt.bits_per_sample)) {
+ 				channels = max_t(u16, channels,
+ 						wav_fmt->fmt.channels);
++				saved_fmt_cfg = tmp_fmt_cfg;
++			}
++			/* Move to the next nhlt_fmt_cfg */
++			tmp_fmt_cfg = (struct nhlt_fmt_cfg *)(tmp_fmt_cfg->config.caps +
++							      tmp_fmt_cfg->config.size);
+ 		}
+ 
+ 		rate = channels * bps * fs;
+@@ -256,8 +263,11 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
+ 
+ 		/* Fill rate and parent for sclk/sclkfs */
+ 		if (!present) {
++			struct nhlt_fmt_cfg *first_fmt_cfg;
++
++			first_fmt_cfg = (struct nhlt_fmt_cfg *)fmt->fmt_config;
+ 			i2s_config_ext = (struct skl_i2s_config_blob_ext *)
+-						fmt->fmt_config[0].config.caps;
++						first_fmt_cfg->config.caps;
+ 
+ 			/* MCLK Divider Source Select */
+ 			if (is_legacy_blob(i2s_config_ext->hdr.sig)) {
+@@ -271,6 +281,9 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
+ 
+ 			parent = skl_get_parent_clk(clk_src);
+ 
++			/* Move to the next nhlt_fmt_cfg */
++			fmt_cfg = (struct nhlt_fmt_cfg *)(fmt_cfg->config.caps +
++							  fmt_cfg->config.size);
+ 			/*
+ 			 * Do not copy the config data if there is no parent
+ 			 * clock available for this clock source select
+@@ -279,9 +292,9 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
+ 				continue;
+ 
+ 			sclk[id].rate_cfg[rate_index].rate = rate;
+-			sclk[id].rate_cfg[rate_index].config = fmt_cfg;
++			sclk[id].rate_cfg[rate_index].config = saved_fmt_cfg;
+ 			sclkfs[id].rate_cfg[rate_index].rate = rate;
+-			sclkfs[id].rate_cfg[rate_index].config = fmt_cfg;
++			sclkfs[id].rate_cfg[rate_index].config = saved_fmt_cfg;
+ 			sclk[id].parent_name = parent->name;
+ 			sclkfs[id].parent_name = parent->name;
+ 
+@@ -295,13 +308,13 @@ static void skl_get_mclk(struct skl_dev *skl, struct skl_ssp_clk *mclk,
  {
--	struct file *f;
--
--	for (f = file->f_file[0]; f <= file->f_file[1]; f++)
--		if (f)
--			nlmsvc_ops->fclose(f);
-+	if (file->f_file[O_RDONLY])
-+		nlmsvc_ops->fclose(file->f_file[O_RDONLY]);
-+	if (file->f_file[O_WRONLY])
-+		nlmsvc_ops->fclose(file->f_file[O_WRONLY]);
+ 	struct skl_i2s_config_blob_ext *i2s_config_ext;
+ 	struct skl_i2s_config_blob_legacy *i2s_config;
+-	struct nhlt_specific_cfg *fmt_cfg;
++	struct nhlt_fmt_cfg *fmt_cfg;
+ 	struct skl_clk_parent_src *parent;
+ 	u32 clkdiv, div_ratio;
+ 	u8 clk_src;
+ 
+-	fmt_cfg = &fmt->fmt_config[0].config;
+-	i2s_config_ext = (struct skl_i2s_config_blob_ext *)fmt_cfg->caps;
++	fmt_cfg = (struct nhlt_fmt_cfg *)fmt->fmt_config;
++	i2s_config_ext = (struct skl_i2s_config_blob_ext *)fmt_cfg->config.caps;
+ 
+ 	/* MCLK Divider Source Select and divider */
+ 	if (is_legacy_blob(i2s_config_ext->hdr.sig)) {
+@@ -330,7 +343,7 @@ static void skl_get_mclk(struct skl_dev *skl, struct skl_ssp_clk *mclk,
+ 		return;
+ 
+ 	mclk[id].rate_cfg[0].rate = parent->rate/div_ratio;
+-	mclk[id].rate_cfg[0].config = &fmt->fmt_config[0];
++	mclk[id].rate_cfg[0].config = fmt_cfg;
+ 	mclk[id].parent_name = parent->name;
  }
  
- /*
 -- 
 2.35.1
 

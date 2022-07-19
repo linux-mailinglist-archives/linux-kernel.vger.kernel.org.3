@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A490F579B65
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F3A5799A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239684AbiGSM1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39382 "EHLO
+        id S238058AbiGSMFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237241AbiGSMY4 (ORCPT
+        with ESMTP id S238099AbiGSMDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:24:56 -0400
+        Tue, 19 Jul 2022 08:03:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8317D5071E;
-        Tue, 19 Jul 2022 05:09:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E1A4BD0A;
+        Tue, 19 Jul 2022 04:59:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 306EEB81B32;
-        Tue, 19 Jul 2022 12:09:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BB6C36AE5;
-        Tue, 19 Jul 2022 12:09:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA9C6B81A2E;
+        Tue, 19 Jul 2022 11:59:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 247CDC341D0;
+        Tue, 19 Jul 2022 11:59:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232550;
-        bh=hPEDbcvAPKZfOqkxksytzGutu2Ale869Ev1r8RuDN8o=;
+        s=korg; t=1658231978;
+        bh=JIJUzDb0o+rJbqzCQAWSd05bBePyhZTphlerFNhxAdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NPmnYLYLxNabr/MVQKjUuQW0kryQhNSZgi2ScT/oFdKu18bAT+x++DBHwPTAm/fKo
-         QXIshbO68YpUVAnBQcUiaQp9rHA5QgaTT+wHyJC/QzSPdAuC2Lg4AuD2SgSawwrKi2
-         RVz26R8HkOYL5+cmO25c/w6fZQza3gWzrpGgpmyQ=
+        b=R3hgLC61NT8aCCJaqq7xfbbwclW1LPji/5e4R1fnOC6+2gVBJdUKGbyhVvMnKFveb
+         zWrmSK2m7SFVrM6UKl0tgcSVWzqWFLKF5XYfDvYTR58W3xs4zuadCNG/9oJJJCwnAo
+         eP9ac1OGI0+lhk1+PYA2RtMMQ+qUwfoZpUGeScfI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 063/112] nexthop: Fix data-races around nexthop_compat_mode.
+Subject: [PATCH 4.19 19/48] icmp: Fix a data-race around sysctl_icmp_ratelimit.
 Date:   Tue, 19 Jul 2022 13:53:56 +0200
-Message-Id: <20220719114632.594100958@linuxfoundation.org>
+Message-Id: <20220719114521.589392013@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +56,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit bdf00bf24bef9be1ca641a6390fd5487873e0d2e ]
+[ Upstream commit 2a4eb714841f288cf51c7d942d98af6a8c6e4b01 ]
 
-While reading nexthop_compat_mode, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its readers.
+While reading sysctl_icmp_ratelimit, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: 4f80116d3df3 ("net: ipv4: add sysctl for nexthop api compatibility mode")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/fib_semantics.c |    2 +-
- net/ipv4/nexthop.c       |    5 +++--
- net/ipv6/route.c         |    2 +-
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ net/ipv4/icmp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -1831,7 +1831,7 @@ int fib_dump_info(struct sk_buff *skb, u
- 			goto nla_put_failure;
- 		if (nexthop_is_blackhole(fi->nh))
- 			rtm->rtm_type = RTN_BLACKHOLE;
--		if (!fi->fib_net->ipv4.sysctl_nexthop_compat_mode)
-+		if (!READ_ONCE(fi->fib_net->ipv4.sysctl_nexthop_compat_mode))
- 			goto offload;
- 	}
+diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
+index 953cc70851cf..eb29da8971e1 100644
+--- a/net/ipv4/icmp.c
++++ b/net/ipv4/icmp.c
+@@ -333,7 +333,8 @@ static bool icmpv4_xrlim_allow(struct net *net, struct rtable *rt,
  
---- a/net/ipv4/nexthop.c
-+++ b/net/ipv4/nexthop.c
-@@ -882,7 +882,7 @@ static void __remove_nexthop_fib(struct
- 		/* __ip6_del_rt does a release, so do a hold here */
- 		fib6_info_hold(f6i);
- 		ipv6_stub->ip6_del_rt(net, f6i,
--				      !net->ipv4.sysctl_nexthop_compat_mode);
-+				      !READ_ONCE(net->ipv4.sysctl_nexthop_compat_mode));
- 	}
- }
- 
-@@ -1194,7 +1194,8 @@ out:
- 	if (!rc) {
- 		nh_base_seq_inc(net);
- 		nexthop_notify(RTM_NEWNEXTHOP, new_nh, &cfg->nlinfo);
--		if (replace_notify && net->ipv4.sysctl_nexthop_compat_mode)
-+		if (replace_notify &&
-+		    READ_ONCE(net->ipv4.sysctl_nexthop_compat_mode))
- 			nexthop_replace_notify(net, new_nh, &cfg->nlinfo);
- 	}
- 
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -5641,7 +5641,7 @@ static int rt6_fill_node(struct net *net
- 		if (nexthop_is_blackhole(rt->nh))
- 			rtm->rtm_type = RTN_BLACKHOLE;
- 
--		if (net->ipv4.sysctl_nexthop_compat_mode &&
-+		if (READ_ONCE(net->ipv4.sysctl_nexthop_compat_mode) &&
- 		    rt6_fill_node_nexthop(skb, rt->nh, &nh_flags) < 0)
- 			goto nla_put_failure;
- 
+ 	vif = l3mdev_master_ifindex(dst->dev);
+ 	peer = inet_getpeer_v4(net->ipv4.peers, fl4->daddr, vif, 1);
+-	rc = inet_peer_xrlim_allow(peer, net->ipv4.sysctl_icmp_ratelimit);
++	rc = inet_peer_xrlim_allow(peer,
++				   READ_ONCE(net->ipv4.sysctl_icmp_ratelimit));
+ 	if (peer)
+ 		inet_putpeer(peer);
+ out:
+-- 
+2.35.1
+
 
 

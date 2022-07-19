@@ -2,93 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9B3579026
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 03:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054E4579028
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 03:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbiGSBy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 21:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S235665AbiGSB4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 21:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGSBy4 (ORCPT
+        with ESMTP id S233487AbiGSB4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 21:54:56 -0400
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32B8DFA1;
-        Mon, 18 Jul 2022 18:54:54 -0700 (PDT)
-Received: by mail-pg1-f195.google.com with SMTP id bh13so12218234pgb.4;
-        Mon, 18 Jul 2022 18:54:54 -0700 (PDT)
+        Mon, 18 Jul 2022 21:56:00 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C712D205D6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 18:55:59 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 75so24126008ybf.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 18:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wuk/OrWyj29IoQDFQT7AD1mY7KZhXXM3ZlNUl93ihu4=;
+        b=iikN/Axlm8JDKbiz8Wd0AwK31mkN8xXj3UipQxeHvWF6bptpwYBpg9opf+F1o7jmmO
+         gmfBxXwP+I31zeUJCewcvMNpYC7L+VwkdJppG4RHgKB9ahm1S5o2YM6qRppyAllk34qR
+         fFhNv4LaUTkMfC6SRf0kBlqb6SJohO40vBhWjX1guyMNbDrVCSWQVGaWJDvDRBG1ud9R
+         Zwn/NWGEroeLah+8aoUmkJAJ4pGN1Z9krFDF+WeEmHe3CcN3Z6bKHm5bypZguJL/Isa6
+         jEFyFqqItABbfYDX1IdD21fprB+NOeCfffD++NfxaaAQsnubj54Xazt04mztlfP4y326
+         8AIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B8upiZS5al/5wRAnmjWIGAyvh6FRI4kM94MofET1E6A=;
-        b=bag8KY9apw2bpIcs6iF+Kc/fYfMt7GpD7pkwU8yVHFRbSDAA9vCWxkPKho9CXBsvGN
-         MsoqoH3P6GHW06qq6+KMnNmA8W8ReDW0dIg8mQan8oRGrobOL70mIY7MT/j9ItZlniW1
-         2XWT2wQSqeg2/sLIBOij7W/gzVGsSpv3rJIIBkqaK2ou6H9kOqMEAfJpHiM311GSrasf
-         kN/jZl7qMen4icwXMSz670ZDsKGYnrq90bGL0wy5lE5r6FIYZiIkN0rG2nTf32Vrl4cS
-         4zzGLGBFRzazaWokdy/9U6knwjYAjO89a7wSpeI7zX7QoxnO+lbB54wuhv45DQLRFiMk
-         A7wg==
-X-Gm-Message-State: AJIora8GBEDSrvB19yrGmQuzxRjMEHOzuu0ZpkNuOKuW9QYpxY+I+S0L
-        RsapG3zNJxjtNYjN8+wNzw==
-X-Google-Smtp-Source: AGRyM1sWSClpRg5b5nrJUXGJrwpyiDXXFo3zzkwosxsTeT+hYd3tSjeZy3MRIidcgKbgO0mQzKdbog==
-X-Received: by 2002:a63:500c:0:b0:412:a56c:9ac with SMTP id e12-20020a63500c000000b00412a56c09acmr27797159pgb.158.1658195694366;
-        Mon, 18 Jul 2022 18:54:54 -0700 (PDT)
-Received: from localhost.localdomain ([156.146.53.107])
-        by smtp.gmail.com with ESMTPSA id x1-20020a656aa1000000b0041a37441825sm1822137pgu.72.2022.07.18.18.54.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 18:54:53 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     hch@lst.de, djwong@kernel.org, dchinner@redhat.com
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kelulanainsley@gmail.com, sunliming <sunliming@kylinos.cn>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH RESEND] xfs: fix for variable set but not used warning
-Date:   Tue, 19 Jul 2022 09:54:42 +0800
-Message-Id: <20220719015442.646442-1-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wuk/OrWyj29IoQDFQT7AD1mY7KZhXXM3ZlNUl93ihu4=;
+        b=FkRji2lvqHK0OaxMvPuYNwH9r2MxxH+taB4b5R0EEo9WnAL4GsMtii5YHONnrFBGja
+         2vb8DPT4/JaIUy+VbAQ6qs1EswesaEt4g7JXMsh9SZbR/5wT+2BclF085oWoxovXIM6t
+         QWxxkq3oGICXUkC0I+wboQ4C1nILHIVM2EUNbvFiGT5rAmUabV/hZhVTmLUus87RHRpB
+         34ajC+l8HdXxgTtdGQa7tbSuf8A1dRhgfddmb8NiOa8uMaJb/dx3IgXXLyqfUF6QAU8i
+         csRHpknflulBtUFCv9U8MfLlwHAsEa02g6Mfk75YbT3g/tN+1lR+y1aCevfiy+LImcNa
+         s0/Q==
+X-Gm-Message-State: AJIora9zNAkHH3Tz83MZn+XLVheAdEjO+djIe4pktc2NGAgDtGuIs2lG
+        B2C4mI8h8XRUwqE4rvd1X8YT5SvrturTubMiWLUTXg==
+X-Google-Smtp-Source: AGRyM1ueWDg96EK5tkDjz/uDFR3xNoF3zJOdMXS3wbWKBejKWbsTrsrKh7ydRXXXAVz49kg/B9creCpAU4HfO02WHSE=
+X-Received: by 2002:a25:9947:0:b0:663:ec43:61eb with SMTP id
+ n7-20020a259947000000b00663ec4361ebmr30337760ybo.115.1658195758889; Mon, 18
+ Jul 2022 18:55:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <CGME20220705083944eucas1p23419f52b9529c79c03c8cc23e2aaf4c5@eucas1p2.samsung.com>
+ <20220705083934.3974140-1-saravanak@google.com> <7482d3af-4b02-4c1d-0386-b0a4ddf529da@samsung.com>
+ <8a04332e-e7b1-8bc3-d569-5052427bcb13@samsung.com> <CAGETcx93rWqt-Cyz_8JZ4mxcLpJruzSM1QOAgpkPSM-G1sBXWg@mail.gmail.com>
+ <20220713145827.yxeoqj6vmkzhrrpv@bogus>
+In-Reply-To: <20220713145827.yxeoqj6vmkzhrrpv@bogus>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 18 Jul 2022 18:55:23 -0700
+Message-ID: <CAGETcx_V9qxeO+vks8kwpwWZth+fys_TTt=JwV2JkvUNHvTtvA@mail.gmail.com>
+Subject: Re: [PATCH v4] amba: Remove deferred device addition
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix below kernel warning:
+On Wed, Jul 13, 2022 at 7:58 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Tue, Jul 12, 2022 at 12:38:33PM -0700, Saravana Kannan wrote:
+> > Sudeep,
+> >
+> > This makes me think the issue you are seeing is related to your
+> > hardware drivers. Can you look into those please? I'm leaning towards
+> > merging this amba clean up and adding delays (say 1ms) to your
+> > clock/power domain drivers to avoid the crash you are seeing. And then
+> > you can figure out the actual delays needed and update it.
+>
+> I haven't got a chance to debug the issue on Juno much further. One thing
+> about the platform is that we can't turn off the debug power domain that
+> most of the coresight devices share.
+>
+> One thing I also observed with -next+this patch is that with a little log
+> it can access the registers while adding first few devices and then crash
+> which doesn't align with platform behaviour as we can't turn off the domain
+> though we attached and turn on in amba_read_periphid and then turn off and
+> detach the power domain. Ideally if first device amba_read_periphid was
+> successful, it must be the case for all, but I see different behaviour.
+>
+> I need to check again to confirm if it is issue with platform power domain
+> driver. It is based on SCMI so there is some role played by the f/w as well.
 
-fs/xfs/scrub/repair.c:539:19: warning: variable 'agno' set but not used [-Wunused-but-set-variable]
+Yeah, this log timing based behavior is what makes me suspect it's not
+a problem with this patch itself.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: sunliming <sunliming@kylinos.cn>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
----
- fs/xfs/scrub/repair.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+However, just to rule it out, can you try making this change on top of
+v4 and give it a shot? This is related to the issue Marek reported,
+but those are more about permanent probe failures. Not a crash.
 
-diff --git a/fs/xfs/scrub/repair.c b/fs/xfs/scrub/repair.c
-index a02ec8fbc8ac..032de115e373 100644
---- a/fs/xfs/scrub/repair.c
-+++ b/fs/xfs/scrub/repair.c
-@@ -533,14 +533,12 @@ xrep_reap_block(
- {
- 	struct xfs_btree_cur		*cur;
- 	struct xfs_buf			*agf_bp = NULL;
--	xfs_agnumber_t			agno;
- 	xfs_agblock_t			agbno;
- 	bool				has_other_rmap;
- 	int				error;
- 
--	agno = XFS_FSB_TO_AGNO(sc->mp, fsbno);
- 	agbno = XFS_FSB_TO_AGBNO(sc->mp, fsbno);
--	ASSERT(agno == sc->sa.pag->pag_agno);
-+	ASSERT(XFS_FSB_TO_AGNO(sc->mp, fsbno) == sc->sa.pag->pag_agno);
- 
- 	/*
- 	 * If we are repairing per-inode metadata, we need to read in the AGF
--- 
-2.25.1
++++ b/drivers/amba/bus.c
+@@ -219,7 +219,7 @@ static int amba_match(struct device *dev, struct
+device_driver *drv)
+                 * none of the drivers match.
+                 */
+                if (ret)
+-                       return ret == -EPROBE_DEFER ? ret : 0;
++                       return -EPROBE_DEFER;
+                dev_set_uevent_suppress(dev, false);
+                kobject_uevent(&dev->kobj, KOBJ_ADD);
+        }
 
+-Saravana

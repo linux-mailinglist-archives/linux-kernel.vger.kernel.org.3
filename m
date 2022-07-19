@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDF6579EE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A490F579B65
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243121AbiGSNHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S239684AbiGSM1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243067AbiGSNGy (ORCPT
+        with ESMTP id S237241AbiGSMY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:06:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D05A024F;
-        Tue, 19 Jul 2022 05:27:20 -0700 (PDT)
+        Tue, 19 Jul 2022 08:24:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8317D5071E;
+        Tue, 19 Jul 2022 05:09:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A197B6195D;
-        Tue, 19 Jul 2022 12:26:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C46CC341C6;
-        Tue, 19 Jul 2022 12:26:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 306EEB81B32;
+        Tue, 19 Jul 2022 12:09:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BB6C36AE5;
+        Tue, 19 Jul 2022 12:09:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233609;
-        bh=1KmHyOePefQuZwKR3wjta7U25tAiCddu1jgMJvAPAfs=;
+        s=korg; t=1658232550;
+        bh=hPEDbcvAPKZfOqkxksytzGutu2Ale869Ev1r8RuDN8o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PYnCi6hIN9LkTtjNm4z6iDrzCQDwP7NcBUbytXNpc4PqZv1y61NKvPyaxqGNxf+TS
-         uYjOH5Q9BFUtNy982EkMY9OMyGnDiTezAMjqxQrHwekYuUDpMJyiQQWissfNItXX00
-         E+M5uLfUfxrCqtB3woSJ4Z0n6INlBGw8kB2gQXD8=
+        b=NPmnYLYLxNabr/MVQKjUuQW0kryQhNSZgi2ScT/oFdKu18bAT+x++DBHwPTAm/fKo
+         QXIshbO68YpUVAnBQcUiaQp9rHA5QgaTT+wHyJC/QzSPdAuC2Lg4AuD2SgSawwrKi2
+         RVz26R8HkOYL5+cmO25c/w6fZQza3gWzrpGgpmyQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 151/231] ARM: 9211/1: domain: drop modify_domain()
+Subject: [PATCH 5.10 063/112] nexthop: Fix data-races around nexthop_compat_mode.
 Date:   Tue, 19 Jul 2022 13:53:56 +0200
-Message-Id: <20220719114727.031651925@linuxfoundation.org>
+Message-Id: <20220719114632.594100958@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Walleij <linus.walleij@linaro.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit cc45b836388f0ccc6831288a08f77a33845f10b0 ]
+[ Upstream commit bdf00bf24bef9be1ca641a6390fd5487873e0d2e ]
 
-This function/macro isn't used anywhere in the kernel.
-The only user was set_fs() and was deleted in the set_fs()
-removal patch set.
+While reading nexthop_compat_mode, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its readers.
 
-Fixes: 8ac6f5d7f84b ("ARM: 9113/1: uaccess: remove set_fs() implementation")
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Fixes: 4f80116d3df3 ("net: ipv4: add sysctl for nexthop api compatibility mode")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/include/asm/domain.h | 13 -------------
- 1 file changed, 13 deletions(-)
+ net/ipv4/fib_semantics.c |    2 +-
+ net/ipv4/nexthop.c       |    5 +++--
+ net/ipv6/route.c         |    2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/include/asm/domain.h b/arch/arm/include/asm/domain.h
-index f1d0a7807cd0..41536feb4392 100644
---- a/arch/arm/include/asm/domain.h
-+++ b/arch/arm/include/asm/domain.h
-@@ -112,19 +112,6 @@ static __always_inline void set_domain(unsigned int val)
- }
- #endif
+--- a/net/ipv4/fib_semantics.c
++++ b/net/ipv4/fib_semantics.c
+@@ -1831,7 +1831,7 @@ int fib_dump_info(struct sk_buff *skb, u
+ 			goto nla_put_failure;
+ 		if (nexthop_is_blackhole(fi->nh))
+ 			rtm->rtm_type = RTN_BLACKHOLE;
+-		if (!fi->fib_net->ipv4.sysctl_nexthop_compat_mode)
++		if (!READ_ONCE(fi->fib_net->ipv4.sysctl_nexthop_compat_mode))
+ 			goto offload;
+ 	}
  
--#ifdef CONFIG_CPU_USE_DOMAINS
--#define modify_domain(dom,type)					\
--	do {							\
--		unsigned int domain = get_domain();		\
--		domain &= ~domain_mask(dom);			\
--		domain = domain | domain_val(dom, type);	\
--		set_domain(domain);				\
--	} while (0)
--
--#else
--static inline void modify_domain(unsigned dom, unsigned type)	{ }
--#endif
--
- /*
-  * Generate the T (user) versions of the LDR/STR and related
-  * instructions (inline assembly)
--- 
-2.35.1
-
+--- a/net/ipv4/nexthop.c
++++ b/net/ipv4/nexthop.c
+@@ -882,7 +882,7 @@ static void __remove_nexthop_fib(struct
+ 		/* __ip6_del_rt does a release, so do a hold here */
+ 		fib6_info_hold(f6i);
+ 		ipv6_stub->ip6_del_rt(net, f6i,
+-				      !net->ipv4.sysctl_nexthop_compat_mode);
++				      !READ_ONCE(net->ipv4.sysctl_nexthop_compat_mode));
+ 	}
+ }
+ 
+@@ -1194,7 +1194,8 @@ out:
+ 	if (!rc) {
+ 		nh_base_seq_inc(net);
+ 		nexthop_notify(RTM_NEWNEXTHOP, new_nh, &cfg->nlinfo);
+-		if (replace_notify && net->ipv4.sysctl_nexthop_compat_mode)
++		if (replace_notify &&
++		    READ_ONCE(net->ipv4.sysctl_nexthop_compat_mode))
+ 			nexthop_replace_notify(net, new_nh, &cfg->nlinfo);
+ 	}
+ 
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -5641,7 +5641,7 @@ static int rt6_fill_node(struct net *net
+ 		if (nexthop_is_blackhole(rt->nh))
+ 			rtm->rtm_type = RTN_BLACKHOLE;
+ 
+-		if (net->ipv4.sysctl_nexthop_compat_mode &&
++		if (READ_ONCE(net->ipv4.sysctl_nexthop_compat_mode) &&
+ 		    rt6_fill_node_nexthop(skb, rt->nh, &nh_flags) < 0)
+ 			goto nla_put_failure;
+ 
 
 

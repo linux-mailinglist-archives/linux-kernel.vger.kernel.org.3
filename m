@@ -2,112 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A6F579385
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71ACE57938B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbiGSGxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 02:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S233799AbiGSGyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 02:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiGSGxs (ORCPT
+        with ESMTP id S233025AbiGSGyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 02:53:48 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9021E2873F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:53:47 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-31e560aa854so18944537b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:53:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u5KxztmCmMVHIN310A4ZHMWsumpUd/uei+99VlIfECo=;
-        b=g45peOwJLERlzIw9j9Qr3FglyHx1ejYM46zmBvA/t4aMhMusgrlHHP7DtNqT3w8UDx
-         +nBrmbn3AeWkJLwpUK3lBY+pXw5XeerP0NGTxCjRBjj8iozdPjAL8Jci7xtIVoqKdBHL
-         fEUljn0PqIWZr/hPjTugMvYwnqskDlL10SVhxZ8CnPVRvTIxBC5x8rAXgDmSAduRjwo4
-         vhYvaSwgrqv7mSpvQ5A7gKQbEfS+zIX/0XYSM/O/B+apqFIO+1NiJatid+NqnQIqIo7K
-         L1w3wWiR2lvJZHwarcjfbBoMYr2KyA83S8A3w/tgFxGpzA8wF+Vuh0UAE5vn24mWyr64
-         ig1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u5KxztmCmMVHIN310A4ZHMWsumpUd/uei+99VlIfECo=;
-        b=p+n/JAUnrhRXhj/hpDvF5fyzjuQyCdG8AZcmivP3SqpmGRL3EN2Iddz/ckmZ3F4wU4
-         y5Rg47MsKbHcPDcMRMkdpK2e2MWh+ardWWgN17ZEVLtVArqLARSu4FRQCJ894H0fcr+h
-         CRcDNUsmDb0US+kb0nSUkDE8Vj+7zy6ba0uJ6ScZdsRp4JFYeIIwO1dZyjvPk5FiPEMh
-         c7VHjMwJ0nsB1ZrkSiioRBssDdjfdF78uayUGK/ZC97NQGHoBK8LtdwResk6n16fVBDw
-         9nUIdQJ3cAahmJYRF2/rxZToYJT3XrDd1JagDYA5V0z8LTrmb3zAhvVz18XELA/OcJZA
-         U8CA==
-X-Gm-Message-State: AJIora+ko8zAIC6khWqM10eWYn8wGWjB9oAmIzbHpT0Fq72/6Tt+0JO0
-        6845Fz99EA0jhexPjO236pKRuctu+xI4Xo5l+WSfBQ==
-X-Google-Smtp-Source: AGRyM1vKSBqibQJYRQ+aqUzhML96/8AsNMD0slmFOO0+vHlS3+2F8QNM4+T5y938H9dnBSoBA29EmeNpgAcZLDGPnbA=
-X-Received: by 2002:a0d:ca88:0:b0:31d:c7a:6ec3 with SMTP id
- m130-20020a0dca88000000b0031d0c7a6ec3mr35667468ywd.141.1658213626831; Mon, 18
- Jul 2022 23:53:46 -0700 (PDT)
+        Tue, 19 Jul 2022 02:54:18 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E5712873F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:54:17 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-h5d0l6MvOry9tQjiREc1Yw-1; Tue, 19 Jul 2022 02:54:06 -0400
+X-MC-Unique: h5d0l6MvOry9tQjiREc1Yw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A57641857F06;
+        Tue, 19 Jul 2022 06:54:05 +0000 (UTC)
+Received: from dreadlord.bne.redhat.com (fdacunha.bne.redhat.com [10.64.0.157])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 45023141511F;
+        Tue, 19 Jul 2022 06:54:01 +0000 (UTC)
+From:   Dave Airlie <airlied@gmail.com>
+To:     torvalds@linux-foundation.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, gregkh@linuxfoundation.org,
+        Daniel Vetter <daniel@ffwll.ch>, mcgrof@kernel.org
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.sf.net,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-media@vger.kernel.org,
+        linux-block@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: [PATCH] docs: driver-api: firmware: add driver firmware guidelines. (v2)
+Date:   Tue, 19 Jul 2022 16:53:57 +1000
+Message-Id: <20220719065357.2705918-1-airlied@gmail.com>
 MIME-Version: 1.0
-References: <20220718083646.67601-1-hanjinke.666@bytedance.com>
-In-Reply-To: <20220718083646.67601-1-hanjinke.666@bytedance.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 19 Jul 2022 14:53:09 +0800
-Message-ID: <CAMZfGtVLkO6T-0n7fMBTvR84Ji8GhTO5==u9v+8f+dRkJhFHMA@mail.gmail.com>
-Subject: Re: [PATCH] block: don't allow the same type rq_qos add more than once
-To:     Jinke Han <hanjinke.666@bytedance.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
-        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,SPOOF_GMAIL_MID
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 4:37 PM Jinke Han <hanjinke.666@bytedance.com> wrote:
->
-> From: hanjinke <hanjinke.666@bytedance.com>
->
-> In our test of iocost, we encounttered some list add/del corrutions of
-> inner_walk list in ioc_timer_fn.
-> The resean can be descripted as follow:
->
-> cpu 0                                           cpu 1
-> ioc_qos_write                                   ioc_qos_write
->
-> ioc = q_to_ioc(bdev_get_queue(bdev));
-> if (!ioc) {
->         ioc = kzalloc();                        ioc = q_to_ioc(bdev_get_queue(bdev));
->                                                         if (!ioc) {
->                                                                 ioc = kzalloc();
->                                                                 ...
->                                                                 rq_qos_add(q, rqos);
->                                                          }
->         ...
->         rq_qos_add(q, rqos);
->         ...
-> }
->
-> When the io.cost.qos file is written by two cpu concurrently, rq_qos may
-> be added to one disk twice. In that case, there will be two iocs enabled
-> and running on one disk. They own different iocgs on their active list.
-> In the ioc_timer_fn function, because of the iocgs from two ioc have the
-> same root iocg, the root iocg's walk_list may be overwritten by each
-> other and this lead to list add/del corrutions in building or destorying
-> the inner_walk list.
->
-> And so far, the blk-rq-qos framework works in case that one instance for
-> one type rq_qos per queue by default. This patch make this explicit and
-> also fix the crash above.
->
-> Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
+From: Dave Airlie <airlied@redhat.com>
 
-The change LGTM. Maybe it is better to add a Fixes tag here so that
-others can easily know what Linux versions should be backported.
+A recent snafu where Intel ignored upstream feedback on a firmware
+change, led to a late rc6 fix being required. In order to avoid this
+in the future we should document some expectations around
+linux-firmware.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+I was originally going to write this for drm, but it seems quite generic
+advice.
 
-Thanks.
+v2: rewritten with suggestions from Thorsten Leemhuis.
+
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Dave Airlie <airlied@redhat.com>
+---
+ Documentation/driver-api/firmware/core.rst    |  1 +
+ .../firmware/firmware-usage-guidelines.rst    | 34 +++++++++++++++++++
+ 2 files changed, 35 insertions(+)
+ create mode 100644 Documentation/driver-api/firmware/firmware-usage-guidelines.rst
+
+diff --git a/Documentation/driver-api/firmware/core.rst b/Documentation/driver-api/firmware/core.rst
+index 1d1688cbc078..803cd574bbd7 100644
+--- a/Documentation/driver-api/firmware/core.rst
++++ b/Documentation/driver-api/firmware/core.rst
+@@ -13,4 +13,5 @@ documents these features.
+    direct-fs-lookup
+    fallback-mechanisms
+    lookup-order
++   firmware-usage-guidelines
+ 
+diff --git a/Documentation/driver-api/firmware/firmware-usage-guidelines.rst b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
+new file mode 100644
+index 000000000000..34d2412e78c6
+--- /dev/null
++++ b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
+@@ -0,0 +1,34 @@
++===================
++Firmware Guidelines
++===================
++
++Drivers that use firmware from linux-firmware should attempt to follow
++the rules in this guide.
++
++* Firmware should be versioned with at least a major/minor version. It
++  is suggested that the firmware files in linux-firmware be named with
++  some device specific name, and just the major version. The
++  major/minor/patch versions should be stored in a header in the
++  firmware file for the driver to detect any non-ABI fixes/issues. The
++  firmware files in linux-firmware should be overwritten with the newest
++  compatible major version. Newer major version firmware should remain
++  compatible with all kernels that load that major number.
++
++* Users should *not* have to install newer firmware to use existing
++  hardware when they install a newer kernel.  If the hardware isn't
++  enabled by default or under development, this can be ignored, until
++  the first kernel release that enables that hardware.  This means no
++  major version bumps without the kernel retaining backwards
++  compatibility for the older major versions.  Minor version bumps
++  should not introduce new features that newer kernels depend on
++  non-optionally.
++
++* If a security fix needs lockstep firmware and kernel fixes in order to
++  be successful, then all supported major versions in the linux-firmware
++  repo should be updated with the security fix, and the kernel patches
++  should detect if the firmware is new enough to declare if the security
++  issue is fixed.  All communications around security fixes should point
++  at both the firmware and kernel fixes. If a security fix requires
++  deprecating old major versions, then this should only be done as a
++  last option, and be stated clearly in all communications.
++
+-- 
+2.36.1
+

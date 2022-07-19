@@ -2,165 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D9D57A7EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4D257A7F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234946AbiGSUDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 16:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
+        id S237194AbiGSUFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 16:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiGSUDl (ORCPT
+        with ESMTP id S229909AbiGSUFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 16:03:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7832639A;
-        Tue, 19 Jul 2022 13:03:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 19 Jul 2022 16:05:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F522BC0E;
+        Tue, 19 Jul 2022 13:05:38 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E4A0B81D0F;
-        Tue, 19 Jul 2022 20:03:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821F9C341C6;
-        Tue, 19 Jul 2022 20:03:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658261014;
-        bh=jS9jQjpTvmqYvhCTf7jn23RARd5IlPstW3ENMHvmq8g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ahRgqb3cHCCHisn2K9IjgZKpl2nwmI7I0nY3MWiImk8xw0mwb2QiC/97Emk9F1GaZ
-         T0CynCKRcV9qOZppEEQ6puxafZHmFo/11Mycxno+u6qlKUxYP4tRdeQDR26AhDMwKi
-         nfBxarM2Njjxt+t+4/5WDzqhHyT2W2iMaNIk/d/ZgZx3mtIL8VoECIM95PYbF1VV8r
-         fwY4hPaWwnJc8KQVPzW++uRN19zVc0pxtmDvE5YqpMKLe0MGxDpqWrbFkZmmIBhfxG
-         tUgI/O7lJtf7QXv27tk8dFHUYcp8wJyq3QN2ZR3UcaBnx8nmlXOk4uvjxYKWkboXU1
-         14bG4SztL5tmA==
-Date:   Tue, 19 Jul 2022 15:03:32 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     Jim Quinlan <jim2101024@gmail.com>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two
- funcs
-Message-ID: <20220719200332.GA1552587@bhelgaas>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8773166019F4;
+        Tue, 19 Jul 2022 21:05:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658261136;
+        bh=87heNz60iY2xXlfWeCdMcHlfvOyIp4RDnOqiE+7EyOg=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=klOb5xsgl6l9ubftW1+ax0k9cZtkpR2szLSY0RrNAUUhC80j9cYIvyx7gq8L/l4sQ
+         sCPxodFYLm8cs6LJuLmCgfGJsD8BX8RJ0cpaixj0UjYBDHsXPcXAJbLfScrWaMUl5X
+         p/wkh4kyop0Xmmtp+8262aY0Wor62j5jd4HSYKZ370A48M7D5QrqJnsIscNmaC3Eia
+         0j8c8rYOSxeZEg/93bpTWiR3rdmQr/8qej0g5rWxZsP9s0FIXV53EAVH1lMqfFhgYw
+         HuVA4WjPXUPCS8++l3ROc0LKS5ut6fthJb9IwFqa8va09T/4H3uZb2AiQ7A5DufA3O
+         IE4FiFlv7vybg==
+Message-ID: <43446124-b99a-32d8-f797-7ec0cdca9ee4@collabora.com>
+Date:   Tue, 19 Jul 2022 23:05:30 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+-6iNz8DTjAMXnWuOd=0W=qa6J4uD03oH3RJezEk1WxaUN1NA@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 4/6] dma-buf: Acquire wait-wound context on attachment
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220715005244.42198-1-dmitry.osipenko@collabora.com>
+ <20220715005244.42198-5-dmitry.osipenko@collabora.com>
+ <5ec9313e-8498-2838-0320-331c347ce905@amd.com>
+ <1ce233a2-36c9-3698-59f0-c4ff902bec60@collabora.com>
+In-Reply-To: <1ce233a2-36c9-3698-59f0-c4ff902bec60@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 09:08:48AM -0400, Jim Quinlan wrote:
-> On Mon, Jul 18, 2022 at 6:40 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Mon, Jul 18, 2022 at 02:56:03PM -0400, Jim Quinlan wrote:
-> > > On Mon, Jul 18, 2022 at 2:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Sat, Jul 16, 2022 at 06:24:49PM -0400, Jim Quinlan wrote:
-> > > > > Currently, the function does the setup for establishing PCIe link-up
-> > > > > with the downstream device, and it does the actual link-up as well.
-> > > > > The calling sequence is (roughly) the following in the probe:
-> > > > >
-> > > > > -> brcm_pcie_probe()
-> > > > >     -> brcm_pcie_setup();                       /* Set-up and link-up */
-> > > > >     -> pci_host_probe(bridge);
-> > > > >
-> > > > > This commit splits the setup function in two: brcm_pcie_setup(), which only
-> > > > > does the set-up, and brcm_pcie_start_link(), which only does the link-up.
-> > > > > The reason why we are doing this is to lay a foundation for subsequent
-> > > > > commits so that we can turn on any power regulators, as described in the
-> > > > > root port's DT node, prior to doing link-up.
-> > > >
-> > > > All drivers that care about power regulators turn them on before
-> > > > link-up, but typically those regulators are described directly under
-> > > > the host bridge itself.
-> > >
-> > > Actually, what you describe is what I proposed with my v1 back in Nov 2020.
-> > > The binding commit message said,
-> > >
-> > >     "Quite similar to the regulator bindings found in
-> > >     "rockchip-pcie-host.txt", this allows optional regulators to be
-> > >     attached and controlled by the PCIe RC driver."
-> > >
-> > > > IIUC the difference here is that you have regulators described under
-> > > > Root Ports (not the host bridge/Root Complex itself), so you don't
-> > > > know about them until you've enumerated the Root Ports.
-> > > > brcm_pcie_probe() can't turn them on directly because it doesn't know
-> > > > what Root Ports are present and doesn't know about regulators below
-> > > > them.
-> > >
-> > > The reviewer's requested me to move the regulator node(s)
-> > > elsewhere, and at some point later it was requested to be placed
-> > > under the Root Port driver.  I would love to return them under the
-> > > host bridge, just say the word!
-> >
-> > Actually, I think my understanding is wrong.  Even though the PCI core
-> > hasn't enumerated the Root Port as a pci_dev, brcm_pcie_setup() knows
-> > about it and should be able to look up the regulators and turn them
-> > on.
+On 7/15/22 09:59, Dmitry Osipenko wrote:
+> On 7/15/22 09:50, Christian König wrote:
+>> Am 15.07.22 um 02:52 schrieb Dmitry Osipenko:
+>>> Intel i915 GPU driver uses wait-wound mutex to lock multiple GEMs on the
+>>> attachment to the i915 dma-buf. In order to let all drivers utilize
+>>> shared
+>>> wait-wound context during attachment in a general way, make dma-buf
+>>> core to
+>>> acquire the ww context internally for the attachment operation and update
+>>> i915 driver to use the importer's ww context instead of the internal one.
+>>>
+>>>  From now on all dma-buf exporters shall use the importer's ww context
+>>> for
+>>> the attachment operation.
+>>>
+>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>> ---
+>>>   drivers/dma-buf/dma-buf.c                     |  8 +++++-
+>>>   drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |  2 +-
+>>>   .../gpu/drm/i915/gem/i915_gem_execbuffer.c    |  2 +-
+>>>   drivers/gpu/drm/i915/gem/i915_gem_object.h    |  6 ++---
+>>>   drivers/gpu/drm/i915/i915_gem_evict.c         |  2 +-
+>>>   drivers/gpu/drm/i915/i915_gem_ww.c            | 26 +++++++++++++++----
+>>>   drivers/gpu/drm/i915/i915_gem_ww.h            | 15 +++++++++--
+>>>   7 files changed, 47 insertions(+), 14 deletions(-)
+>>>
+>>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+>>> index 0ee588276534..37545ecb845a 100644
+>>> --- a/drivers/dma-buf/dma-buf.c
+>>> +++ b/drivers/dma-buf/dma-buf.c
+>>> @@ -807,6 +807,8 @@ static struct sg_table * __map_dma_buf(struct
+>>> dma_buf_attachment *attach,
+>>>    * Optionally this calls &dma_buf_ops.attach to allow
+>>> device-specific attach
+>>>    * functionality.
+>>>    *
+>>> + * Exporters shall use ww_ctx acquired by this function.
+>>> + *
+>>>    * Returns:
+>>>    *
+>>>    * A pointer to newly created &dma_buf_attachment on success, or a
+>>> negative
+>>> @@ -822,6 +824,7 @@ dma_buf_dynamic_attach_unlocked(struct dma_buf
+>>> *dmabuf, struct device *dev,
+>>>                   void *importer_priv)
+>>>   {
+>>>       struct dma_buf_attachment *attach;
+>>> +    struct ww_acquire_ctx ww_ctx;
+>>>       int ret;
+>>>         if (WARN_ON(!dmabuf || !dev))
+>>> @@ -841,7 +844,8 @@ dma_buf_dynamic_attach_unlocked(struct dma_buf
+>>> *dmabuf, struct device *dev,
+>>>       attach->importer_ops = importer_ops;
+>>>       attach->importer_priv = importer_priv;
+>>>   -    dma_resv_lock(dmabuf->resv, NULL);
+>>> +    ww_acquire_init(&ww_ctx, &reservation_ww_class);
+>>> +    dma_resv_lock(dmabuf->resv, &ww_ctx);
+>>
+>> That won't work like this. The core property of a WW context is that you
+>> need to unwind all the locks and re-quire them with the contended one
+>> first.
+>>
+>> When you statically lock the imported one here you can't do that any more.
 > 
-> One can do this with
->         regulator_bulk_get(NULL, ...);
+> You're right. I felt that something is missing here, but couldn't
+> notice. I'll think more about this and enable
+> CONFIG_DEBUG_WW_MUTEX_SLOWPATH. Thank you!
 > 
-> However, MarkB did not like the idea of a driver getting the
-> regulator from the global DT namespace [1].
-> 
-> For the RC driver, one  cannot invoke  regulator_bulk_get(dev, ...)
-> if there is not a direct child regulator node.  One needs to use the
-> Port driver device.  The Port driver device does not exist at this
-> point unless one tries to prematurely create it; I tried this and it
-> was a mess to say the least.
-> 
-> > Can you dig up the previous discussion about why the regulators need
-> > to be under the Root Port and why they can't be turned on before
-> > calling pci_host_probe()?
-> 
-> RobH did not want the regulators to be under the RC as he said their
-> DT location should resemble the HW [2].  The consensus evolved to
-> place it under the port driver, which can provide a general
-> mechanism for turning on regulators anywhere in the PCIe tree.
 
-I don't want to redesign this whole thing.  I just want a crisp
-rationale for the commit log.
+Christian, do you think we could make an excuse for the attach()
+callback and make the exporter responsible for taking the resv lock? It
+will be inconsistent with the rest of the callbacks, where importer
+takes the lock, but it will be the simplest and least invasive solution.
+It's very messy to do a cross-driver ww locking, I don't think it's the
+right approach.
 
-All other drivers (exynos, imx6, rw-rockchip, histb, qcom, tegra194,
-tegra, rockchip-host) have regulators for downstream PCIe power
-directly under the RC.  If putting the regulators under an RP instead
-is the direction of the future, I guess that might be OK, and I guess
-the reasons are:
-
-  1) Slot or device power regulators that are logically below the RP
-     should be described that way in the DT.
-
-  2) Associating regulators with a RP allows the possibility of
-     selectively controlling power to slots/devices below the RP,
-     e.g., to power down devices below RP A when suspending while
-     leaving wakeup devices below RP B powered up.
-
-I think in your case the motivating reason is 2).
-
-Your commit log for "Add mechanism to turn on subdev regulators"
-suggests that you want some user control of endpoint power, e.g., via
-sysfs, but I don't see that implemented yet except possibly via a
-"remove" file that would unbind the driver and remove the entire
-device.
-
-> [1] https://lore.kernel.org/linux-pci/20210329162539.GG5166@sirena.org.uk/
-> [2] https://lore.kernel.org/linux-pci/CAL_JsqKPKk3cPO8DG3FQVSHrKnO+Zed1R=PV7n7iAC+qJKgHcw@mail.gmail.com/
+-- 
+Best regards,
+Dmitry

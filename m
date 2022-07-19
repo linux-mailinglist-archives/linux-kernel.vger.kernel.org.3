@@ -2,124 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B9D579C5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C18579A58
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237904AbiGSMi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S239004AbiGSMNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240886AbiGSMiR (ORCPT
+        with ESMTP id S238948AbiGSMMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:38:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA19A47BB6;
-        Tue, 19 Jul 2022 05:14:49 -0700 (PDT)
+        Tue, 19 Jul 2022 08:12:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF49474E9;
+        Tue, 19 Jul 2022 05:03:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E195361632;
-        Tue, 19 Jul 2022 12:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BECBCC341CB;
-        Tue, 19 Jul 2022 12:14:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B143EB81B32;
+        Tue, 19 Jul 2022 12:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D47C341C6;
+        Tue, 19 Jul 2022 12:03:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232888;
-        bh=T0O0KgkJt/ofJDvterLLW1GOiWLpCRtQ9l7LyqAHt2Y=;
+        s=korg; t=1658232233;
+        bh=o5U7igLke337Ep7nyfJCFAfHS2q9vvxycoNcd3ZqOCI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=flwQ4okAf2GhaqLW6QDTmzkn3JpQANn6GzY3gcsLk1CuPf7cz8xJsktzX2ZPTW0SS
-         kj0Hb9/vNvj6wODUDz0I9BQuB5lERk2DH8KhamvD388XSjtDXDBr41L3V79YFGuri6
-         5m3rX7o6dCjn9dWSojoIG85MRYXlyDx7YzS72Elw=
+        b=LYltjtvkAE5pGG5nt48tteIOwcMvt1edRq1xLEldhXey4X3GdymPQJh6SVob0FeyX
+         k6wyyqhZQhIat6JNvUpggHYo0DRFSeMkHrbuG8Vg13e3O2yi/ggscMF5EhoZqHrJrU
+         k7KKw/4JEBFCek9Bdqr++KtAZizyIiCi5stcvzdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 101/167] seg6: fix skb checksum evaluation in SRH encapsulation/insertion
+Subject: [PATCH 5.4 30/71] ipv4: Fix a data-race around sysctl_fib_sync_mem.
 Date:   Tue, 19 Jul 2022 13:53:53 +0200
-Message-Id: <20220719114706.195980043@linuxfoundation.org>
+Message-Id: <20220719114555.238251125@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit df8386d13ea280d55beee1b95f61a59234a3798b ]
+[ Upstream commit 73318c4b7dbd0e781aaababff17376b2894745c0 ]
 
-Support for SRH encapsulation and insertion was introduced with
-commit 6c8702c60b88 ("ipv6: sr: add support for SRH encapsulation and
-injection with lwtunnels"), through the seg6_do_srh_encap() and
-seg6_do_srh_inline() functions, respectively.
-The former encapsulates the packet in an outer IPv6 header along with
-the SRH, while the latter inserts the SRH between the IPv6 header and
-the payload. Then, the headers are initialized/updated according to the
-operating mode (i.e., encap/inline).
-Finally, the skb checksum is calculated to reflect the changes applied
-to the headers.
+While reading sysctl_fib_sync_mem, it can be changed concurrently.
+So, we need to add READ_ONCE() to avoid a data-race.
 
-The IPv6 payload length ('payload_len') is not initialized
-within seg6_do_srh_{inline,encap}() but is deferred in seg6_do_srh(), i.e.
-the caller of seg6_do_srh_{inline,encap}().
-However, this operation invalidates the skb checksum, since the
-'payload_len' is updated only after the checksum is evaluated.
-
-To solve this issue, the initialization of the IPv6 payload length is
-moved from seg6_do_srh() directly into the seg6_do_srh_{inline,encap}()
-functions and before the skb checksum update takes place.
-
-Fixes: 6c8702c60b88 ("ipv6: sr: add support for SRH encapsulation and injection with lwtunnels")
-Reported-by: Paolo Abeni <pabeni@redhat.com>
-Link: https://lore.kernel.org/all/20220705190727.69d532417be7438b15404ee1@uniroma2.it
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 9ab948a91b2c ("ipv4: Allow amount of dirty memory from fib resizing to be controllable")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/seg6_iptunnel.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/ipv4/fib_trie.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
-index d64855010948..e756ba705fd9 100644
---- a/net/ipv6/seg6_iptunnel.c
-+++ b/net/ipv6/seg6_iptunnel.c
-@@ -189,6 +189,8 @@ int seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh, int proto)
- 	}
- #endif
- 
-+	hdr->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
-+
- 	skb_postpush_rcsum(skb, hdr, tot_len);
- 
- 	return 0;
-@@ -241,6 +243,8 @@ int seg6_do_srh_inline(struct sk_buff *skb, struct ipv6_sr_hdr *osrh)
- 	}
- #endif
- 
-+	hdr->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
-+
- 	skb_postpush_rcsum(skb, hdr, sizeof(struct ipv6hdr) + hdrlen);
- 
- 	return 0;
-@@ -302,7 +306,6 @@ static int seg6_do_srh(struct sk_buff *skb)
- 		break;
+diff --git a/net/ipv4/fib_trie.c b/net/ipv4/fib_trie.c
+index 51673d00bbea..a1f830da4ad3 100644
+--- a/net/ipv4/fib_trie.c
++++ b/net/ipv4/fib_trie.c
+@@ -500,7 +500,7 @@ static void tnode_free(struct key_vector *tn)
+ 		tn = container_of(head, struct tnode, rcu)->kv;
  	}
  
--	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
- 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
- 	nf_reset_ct(skb);
- 
+-	if (tnode_free_size >= sysctl_fib_sync_mem) {
++	if (tnode_free_size >= READ_ONCE(sysctl_fib_sync_mem)) {
+ 		tnode_free_size = 0;
+ 		synchronize_rcu();
+ 	}
 -- 
 2.35.1
 

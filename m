@@ -2,151 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57349578F3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DAA578F3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbiGSA0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 20:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34186 "EHLO
+        id S234499AbiGSA00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 20:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbiGSA0G (ORCPT
+        with ESMTP id S231673AbiGSA0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 20:26:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D2A33E3E;
-        Mon, 18 Jul 2022 17:26:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C4B7615F2;
-        Tue, 19 Jul 2022 00:26:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A84B8C341CA;
-        Tue, 19 Jul 2022 00:26:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658190364;
-        bh=g57rRM5qayf+HbUqWmyaj2hyK8CHEC1BKZBGNCwrYm0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=LNgst9mKG0W6gwKI76XymhMD0t4/CU49VAObkFntA1YNJte/qxVcH/CVBa4aIEcj/
-         KKJCjhTupwm55FURGPv4X4QEIft3mJEH4qNvaD2el+yavD9n79xBeY1jDKx8lqIU+J
-         WdLoCXXQku5Ky3VDK8sdi0yTwt8+JNqOqtzijbGnRUO2vCSl07d6UPNgEiL0VOm7dl
-         5slPEasg1WzlhB7lfWcTbCzYJlM+nHETh6rgrP47W0Ihd1IN7S/L08xfRoJqwRG6jK
-         vCpGe2/LktEqSFng5nor91Vg4YG+imJAVQbuz2w2kUthrTVEy8B1tCapX9j8lwRuaT
-         A8ToTQbf1Wczw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 437BF5C04D0; Mon, 18 Jul 2022 17:26:04 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 17:26:04 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] rcu-tasks: Make RCU Tasks Trace checking for
- userspace execution
-Message-ID: <20220719002604.GK1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220718001610.263700-1-qiang1.zhang@intel.com>
- <20220718152132.GE1790663@paulmck-ThinkPad-P17-Gen-1>
- <PH0PR11MB58805ADED62CE2AF94647967DA8C9@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Mon, 18 Jul 2022 20:26:24 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DDE33355
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:26:23 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id v5so10055945qvq.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5WGojSzYNyuicqU/p82Pg5ZIp68x6TVpfTqklv6NcTA=;
+        b=qExX/S0T+JQdPWcspHh/S4Km/TLwmfZ5Rp64akVCmZG1V6mUGcaiStB6knxGY21J8n
+         OlreIiLTm7/PmKIXHh/sJwRSHHKqtjN6/zL7m9twE9RFK/RKGBj56bJo+csH/yUX8nXh
+         LIbRyvAtT+fH+gu6msaBVwtKCkLXvdH1X4GVmDaKBVcLjjxNGRFxVWebKxFJQ5g2jehZ
+         MDIQS7QQULfAl6I/UtB+la3ba2gAzjtENLSu0+vjAQeuCnSJ1KcKePjA8sNCvRy0tp/T
+         0to/nm182Alx3urrkI7gNBwSwiW4Lz/k2lhwyOlM5WtLhoabTiKNSyZ72z7nX0Q/r0Iv
+         DWUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to;
+        bh=5WGojSzYNyuicqU/p82Pg5ZIp68x6TVpfTqklv6NcTA=;
+        b=Q8LDZOlSP3xOJlcR+RLDc0zArN/bgKSI5kg6LZ2NquqnbFGYe+OqNdFvaRuWKu35eF
+         LhycSKZpKb4IKblnaqf5mFdOHOf5E/skBDSYXlbVadESdtB/9atI5D1KkAHDUe0Jzi6M
+         8JeUlWi3SDe9CXnCDXeb/GoLukBJNIh2xnGlbEiv3AOmPSiB+wrNQ+7bYZ+nqYtYVSXu
+         Baj0mzxCqUbTrENNdaoGMJxcpxl4ofhN5UOH+xVdlXIizT/6HR9tIMmQCE3FNPLczXAg
+         LQSfRrKJWgnoptdUC62mtWDOXjj45pS/zhBa8GyyZ4TqwT6nVPqHVg7fOarA/+oO1BhJ
+         vEig==
+X-Gm-Message-State: AJIora+nbXI6rWKpVp3FdPb3DjI3HXEW5St4uEQ+DDygIzebHQbZw2wU
+        JBBpvcdUlqcBkFEQbjNpCQ==
+X-Google-Smtp-Source: AGRyM1sLWVwk38OJ0szHXdslhKy0W8avKB3g365xeQzNPL+RqzJbCCOdv7yuNr7VPoQGKZ2pc/bP7w==
+X-Received: by 2002:a05:6214:624:b0:473:27e8:95d6 with SMTP id a4-20020a056214062400b0047327e895d6mr22907776qvx.109.1658190382969;
+        Mon, 18 Jul 2022 17:26:22 -0700 (PDT)
+Received: from serve.minyard.net ([47.184.144.75])
+        by smtp.gmail.com with ESMTPSA id bt14-20020ac8690e000000b0031ef0081d77sm3097587qtb.79.2022.07.18.17.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 17:26:22 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:8d92:f4cf:23d:d106])
+        by serve.minyard.net (Postfix) with ESMTPSA id 699321800D9;
+        Tue, 19 Jul 2022 00:26:21 +0000 (UTC)
+Date:   Mon, 18 Jul 2022 19:26:20 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ipmi: Fix comment typo
+Message-ID: <20220719002620.GC40038@minyard.net>
+Reply-To: minyard@acm.org
+References: <20220715054156.6342-1-wangborong@cdjrlc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB58805ADED62CE2AF94647967DA8C9@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220715054156.6342-1-wangborong@cdjrlc.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 11:54:53PM +0000, Zhang, Qiang1 wrote:
-> On Mon, Jul 18, 2022 at 08:16:10AM +0800, Zqiang wrote:
-> > For RCU tasks trace, the userspace execution is also a valid quiescent
-> > state, if the task is in userspace, the ->trc_reader_nesting should be
-> > zero and if the ->trc_reader_special.b.need_qs is not set, set the
-> > tasks ->trc_reader_special.b.need_qs is TRC_NEED_QS_CHECKED, this cause
-> > grace-period kthread remove it from holdout list if it remains here.
-> > 
-> > This commit add rcu_tasks_trace_qs() to rcu_flavor_sched_clock_irq()
-> > when the kernel built with no PREEMPT_RCU.
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> >
-> >The looks plausible to me, but can you tell me how this avoids the
-> >following sequence of events?
-> >
-> >o	CPU 0 takes a scheduling-clock interrupt.  Just before this
-> >	point CPU 0 was running in user context, thus as you say
-> >	should not be in an RCU Tasks quiescent state.
-> >
-> >o	CPU 0 enters an RCU Tasks Trace read-side critical section.
->                
->  if I understand correctly, you mean that CPU0 enters an RCU Tasks Trace
->  read-side critical section in scheduling-clock interrupt context.
+On Fri, Jul 15, 2022 at 01:41:56PM +0800, Jason Wang wrote:
+> The double `the' is duplicated in line 4360, remove one.
 
-Exactly, as might happen if one of the functions in the scheduling-clock
-interrupt hander were traced/instrumented.
+Applied, thanks.
 
-> >o	CPU 1 starts a new RCU Tasks Trace grace period.
+-corey
+
 > 
-> The grace period kthread will scan running tasks on each CPU, 
-> The tasks currently running on CPU0 will be recorded in the holdout list.
-
-Yes, very good.
-
-> >o	CPU 0 reaches the newly added rcu_note_voluntary_context_switch().
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>  drivers/char/ipmi/ipmi_msghandler.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> In this time, if CPU0 still in RCU Tasks Trace read-side critical section, the tasks
-> which running on CPU0 will insert CPU0 blocked list. when this tasks exit 
-> RCU Tasks Trace read-side critical section, this task will remove from CPU0 block list.
+> diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
+> index 703433493c85..c8a3b208f923 100644
+> --- a/drivers/char/ipmi/ipmi_msghandler.c
+> +++ b/drivers/char/ipmi/ipmi_msghandler.c
+> @@ -4357,7 +4357,7 @@ static int handle_oem_get_msg_cmd(struct ipmi_smi *intf,
+>  
+>  			/*
+>  			 * The message starts at byte 4 which follows the
+> -			 * the Channel Byte in the "GET MESSAGE" command
+> +			 * Channel Byte in the "GET MESSAGE" command
+>  			 */
+>  			recv_msg->msg.data_len = msg->rsp_size - 4;
+>  			memcpy(recv_msg->msg_data, &msg->rsp[4],
+> -- 
+> 2.35.1
 > 
-> Did I understand the scenario described above correctly?
-
-Looks like it to me.
-
-Could you please resend the patch with this explained in the commit
-log?  Possibly for the benefit of your future self.  ;-)
-
-							Thanx, Paul
-
-> Thanks
-> Zqiang
-> 
-> >
-> >	Except that the quiescent state implied by userspace execution
-> >	was before the new grace period, and thus does not apply to it.
-> >
-> >(Yes, I know, if this is a bug in this patch, the bug already exists
-> >due to the call in rcu_flavor_sched_clock_irq() for !PREEMPT kernels,
-> >but if this change is safe, it should be possible to explain why.)
-> >
-> >							Thanx, Paul
-> >
-> > ---
-> >  v1->v2:
-> >  Fix build error due to undeclared rcu_tasks_trace_qs(), note in no-PREEMPT_RCU
-> >  kernel, the RCU Tasks is replaced by RCU, so rcu_note_voluntary_context_switch()
-> >  only include rcu_tasks_trace_qs().
-> > 
-> >  kernel/rcu/tree_plugin.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> > index 4152816dd29f..5fb0b2dd24fd 100644
-> > --- a/kernel/rcu/tree_plugin.h
-> > +++ b/kernel/rcu/tree_plugin.h
-> > @@ -976,7 +976,7 @@ static void rcu_flavor_sched_clock_irq(int user)
-> >  		 * neither access nor modify, at least not while the
-> >  		 * corresponding CPU is online.
-> >  		 */
-> > -
-> > +		rcu_note_voluntary_context_switch(current);
-> >  		rcu_qs();
-> >  	}
-> >  }
-> > -- 
-> > 2.25.1
-> > 

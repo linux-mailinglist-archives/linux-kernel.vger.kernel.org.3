@@ -2,116 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F078957A3AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B9357A3AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239472AbiGSPup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
+        id S239570AbiGSPvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239462AbiGSPu0 (ORCPT
+        with ESMTP id S238000AbiGSPvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:50:26 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363915019D;
-        Tue, 19 Jul 2022 08:50:20 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id f65so13828617pgc.12;
-        Tue, 19 Jul 2022 08:50:20 -0700 (PDT)
+        Tue, 19 Jul 2022 11:51:19 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F4F5A450
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:51:11 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so9437669wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:51:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1KmDVlh31ZPGT/1gu3CgqryQOvMMNoshEj5LmQLClLE=;
-        b=CF2Yl7/YP6QIiN+4C38UCBemOvDUzg7jlB4d1bqOkoD5yqqrJB+CRjWnNPHNlMgnu+
-         sEHUhgCfdAlKwXHI/PmOSb1YvCYyiwG1O6dWPjunb+ExP0lN64xjqmEH93/2nrrD5XZ6
-         N+pHWdcCKLfvI1mDWoLpIASJOORCjdgYfVpZzvo7/4exGllQykD5IexOfM+o02tkzLE/
-         OIbRgvakahk0q70n3fYO/zz2Vsjd2Q23JtRKHT4gS24Xmo874q9vUSkafxEMuQ5UgR+1
-         arPPp2PTOhN9BEo3i3LBk+xEy81ckUNH3Ck74QxAUAykiY5kjrK2ZIud4cL7Q9iNvME6
-         yyYQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XoVzJzZRO2y2NIpJ766MD/mBAH/yX0TDvkG6svd94H8=;
+        b=r7/qvOLD4VMPI1/y+e3jZe7mpTVXnfXEtZka1ARUROPywL+L3qAZpySajxhueO1Kpu
+         M7LsNaKR+S+4F5s0cDTymszobA3uFp12ks1aKXQ49KtpSDMLuNp86Q1b3UI8gYiksYb/
+         +j4aiW30BmREsworgTPfcWB8eOopqbH+/ZF9qjwRxUSRKifTga/oj/u/rOanzox8I8y0
+         3zsRcz9S43J6uQFsapP49nN+dzokDvraNQApllT5bNpeZIS3l6DHsAyPT5lIJ04IzIge
+         mSv6K/6mtLxlPD4gI5PVQUUHv2ew4bjL8+6887595fE2dYVOodygIIA0E5cgs++PVPGc
+         XmAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=1KmDVlh31ZPGT/1gu3CgqryQOvMMNoshEj5LmQLClLE=;
-        b=NS79c8Mulz/wjSutiumZQBfIIU+wXTm64ycGO7yKrEhnAJTmCPs8yMX1q11hddqrQa
-         KP0JinqGIPzSwodQlkvbYFCv5+v031d0hjehYVTP6dwQmdlE6plZtuvs4zWscbHJzrmf
-         pA8C7dValig3ch7CORQMGFlLgRqGyKZvZPuGyZCltpsr2MxGWIRm8drtig1FezHEkl7t
-         Kv/LMWHZHMRoIGvjY33tSYo4xGeW1kr8tbTneQsi0SPZlumq6qgF33L8Wzxfq7HRK9J+
-         esZUYzq6lZ0XBRhNvVyNrRUPJlRaR1OKbn1tTBDg0bJhBTQ/EdBQlZ36Iy/v0ZaYqSY8
-         SL1Q==
-X-Gm-Message-State: AJIora+XFR6W/+ACrFCyBI4A/FVjjzzTigRBA3uCtxiIuXkR2cI+Kjn+
-        HnhGwwlKF9spQK0pyURsA7ix4aRRdpo=
-X-Google-Smtp-Source: AGRyM1tL6lj/7a5Chb8Z0J9xbIW7Gt1EkHU36SQs0eRhYFiSuJqwwGeqiYt03NdfTgnXeQBdGjN8gA==
-X-Received: by 2002:a63:f90d:0:b0:419:b112:91ea with SMTP id h13-20020a63f90d000000b00419b11291eamr25506678pgi.592.1658245819292;
-        Tue, 19 Jul 2022 08:50:19 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:c106])
-        by smtp.gmail.com with ESMTPSA id e13-20020a170902ef4d00b0016d1ab31b05sm348255plx.42.2022.07.19.08.50.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 08:50:18 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 19 Jul 2022 05:50:16 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jinke Han <hanjinke.666@bytedance.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [PATCH v2] block: don't allow the same type rq_qos add more than
- once
-Message-ID: <YtbSuMqmrwGmAZti@slm.duckdns.org>
-References: <20220719070258.25721-1-hanjinke.666@bytedance.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XoVzJzZRO2y2NIpJ766MD/mBAH/yX0TDvkG6svd94H8=;
+        b=L88ibLRw0bd1IpeZKMQ4CACJBpj91QGKV+8aWHn10qDM7WNJLwnvrYJFQw4UDzRZsA
+         sywbQwpxYUvGG3MId472L7BWxiwI4kr3BjY/m0AwYnIYM9fikOWpXDuK2V4HEVRx4lqg
+         YkP5usKLjCgMNOfP7bI96oD3IuLFhH/14hkAVQ1dvb63bKSFt6cNEpsWblx9SRYsduZE
+         P2AAXyKRl1WKRhuqve4aoWRiwbnPOAqsCCLf8QCCERXtq1Xc6lHDaOQlfpGkAU+0QaUa
+         /MKcUa+9dWj/AGV2+VH82+dleRtXRFTBhbBRd3FnUFQs6mXXvArsIdhf351fQlB9caZ4
+         30DA==
+X-Gm-Message-State: AJIora+4uqEgZjHROnDlIGAf3gX5hoQbQOWiEjeNBD8U4pFbCfPTL4Ww
+        r/gufllbbK88klxFrOWCG2lkyNJMiidmFA7O7yBeqw==
+X-Google-Smtp-Source: AGRyM1vceqSoNSc5YhdoQQw9Db4vgKyVJ8WZr6dQmfvbPDtzwHI1k/kK9O+lz30Q6CLWDxnlVfpFjU7WmshvGLcKpf4=
+X-Received: by 2002:a05:600c:2854:b0:3a3:1551:d7d with SMTP id
+ r20-20020a05600c285400b003a315510d7dmr13856861wmb.174.1658245867928; Tue, 19
+ Jul 2022 08:51:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719070258.25721-1-hanjinke.666@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220609052355.1300162-1-irogers@google.com>
+In-Reply-To: <20220609052355.1300162-1-irogers@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 19 Jul 2022 08:50:55 -0700
+Message-ID: <CAP-5=fXJOB6aVcZdQ8cdejt5Jc_k_5jYGEGU7MJ++5qoxSsVpg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Tidy user rdpmc documentation and testing
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Cc:     Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:02:58PM +0800, Jinke Han wrote:
-> From: Jinke Han <hanjinke.666@bytedance.com>
-> 
-> In our test of iocost, we encounttered some list add/del corrutions of
-> inner_walk list in ioc_timer_fn.
-> 
-> The reason can be descripted as follow:
-> cpu 0						cpu 1
-> ioc_qos_write					ioc_qos_write
-> 
-> ioc = q_to_ioc(bdev_get_queue(bdev));
-> if (!ioc) {
->         ioc = kzalloc();			ioc = q_to_ioc(bdev_get_queue(bdev));
-> 						if (!ioc) {
-> 							ioc = kzalloc();
-> 							...
-> 							rq_qos_add(q, rqos);
-> 						}
->         ...
->         rq_qos_add(q, rqos);
->         ...
-> }
-> 
-> When the io.cost.qos file is written by two cpu concurrently, rq_qos may
-> be added to one disk twice. In that case, there will be two iocs enabled
-> and running on one disk. They own different iocgs on their active list.
-> In the ioc_timer_fn function, because of the iocgs from two ioc have the
-> same root iocg, the root iocg's walk_list may be overwritten by each
-> other and this lead to list add/del corrutions in building or destorying
-> the inner_walk list.
-> 
-> And so far, the blk-rq-qos framework works in case that one instance for
-> one type rq_qos per queue by default. This patch make this explicit and
-> also fix the crash above.
-> 
-> Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
+On Wed, Jun 8, 2022 at 10:24 PM Ian Rogers <irogers@google.com> wrote:
+>
+> libperf's perf_mmap__read_self and the addition of arm64 support mean
+> that the perf_event.h and the rdpmc perf test have become
+> stale. Refresh the documentation in perf_event.h, remove the x86 rdpmc
+> test and port the libperf test as a non-architecture specific test.
+>
+> Address sanitizer testing showed libperf leaking fds when the
+> perf_event_open failed, add error paths to handle this.
+>
+> A comment is added to perf_event.h to avoid a divide by zero when
+> scaling counts if the running time is 0. This was previously discussed
+> in this thread:
+> https://lore.kernel.org/lkml/CAP-5=fVRdqvswtyQMg5cB+ntTGda+SAYskjTQednEH-AeZo13g@mail.gmail.com/
+>
+> v2. Alters the skip in test_stat_user_read for open to always be a
+>     skip as perf_event_open may fail with EACCES (permissions), ENOSYS
+>     (not supported) and ENOENT (hypervisor). Adds Rob Herring's
+>     acked-by on patch 3.
+>
+> Ian Rogers (4):
+>   libperf evsel: Open shouldn't leak fd on failure
+>   perf: Align user space counter reading with code
+>   perf test: Remove x86 rdpmc test
+>   perf test: Add user space counter reading tests
 
-Acked-by: Tejun Heo <tj@kernel.org>
+Ping. Would be nice to get this cleaned up in the next release, plus
+better testing.
 
-Thanks.
+Thanks,
+Ian
 
--- 
-tejun
+>  include/uapi/linux/perf_event.h        |  32 +++--
+>  tools/include/uapi/linux/perf_event.h  |  32 +++--
+>  tools/lib/perf/evsel.c                 |  17 ++-
+>  tools/perf/arch/x86/tests/Build        |   1 -
+>  tools/perf/arch/x86/tests/arch-tests.c |   2 -
+>  tools/perf/arch/x86/tests/rdpmc.c      | 182 -------------------------
+>  tools/perf/tests/mmap-basic.c          | 127 ++++++++++++++++-
+>  7 files changed, 176 insertions(+), 217 deletions(-)
+>  delete mode 100644 tools/perf/arch/x86/tests/rdpmc.c
+>
+> --
+> 2.36.1.255.ge46751e96f-goog
+>

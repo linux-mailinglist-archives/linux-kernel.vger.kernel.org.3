@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FC257A2E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2920F57A2E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237944AbiGSPY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
+        id S238167AbiGSPZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239342AbiGSPYy (ORCPT
+        with ESMTP id S233726AbiGSPZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:24:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20F8564E7;
-        Tue, 19 Jul 2022 08:24:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 614196183C;
-        Tue, 19 Jul 2022 15:24:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C198C341C6;
-        Tue, 19 Jul 2022 15:24:49 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 11:24:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [for-next][PATCH 13/23] USB: mtu3: tracing: Use the new
- __vstring() helper
-Message-ID: <20220719112448.4e9915e0@gandalf.local.home>
-In-Reply-To: <2893728a294ef13bdeba9e587083b82fb794cc68.camel@mediatek.com>
-References: <20220714164256.403842845@goodmis.org>
-        <20220714164330.311734558@goodmis.org>
-        <1267b234b09280b9b475cfe2bb32580e967e2dac.camel@mediatek.com>
-        <20220715173944.386743d8@gandalf.local.home>
-        <2893728a294ef13bdeba9e587083b82fb794cc68.camel@mediatek.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 19 Jul 2022 11:25:46 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D28240A0;
+        Tue, 19 Jul 2022 08:25:45 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id z23so27847096eju.8;
+        Tue, 19 Jul 2022 08:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZH7Pn/I57bUXWGtdU7bf61RroXUjVX251kWCY9hsq4Y=;
+        b=UzC/7xvopJVsdv4jGEBq7Tu9ikuO292arAqnpQ2ZVsAceyfPUCVZcdWYAi990sEklL
+         /Qrq6zYv6QrfMYoNlYWyzJdKqSsnQHVBtV1ouUjeF5y8gB0EbdsI0DnoEI/MyUE5kyP7
+         57XKUbiEcCjX9w8hYQLVdQH3xbh/Xay54IipVmAlw7p9ZW05KEmShvf+uCEeOw7VHOrG
+         01dlbrAY0kqao12sE1/wPCS0nhzjFuEVY8VlyDlbOSmzLd1FEiznk+fZpWlRczAe3Skh
+         EHeRu8tXebfjb5zQ6hUs8mQjdcu0VgKsSM/DYKTkQD9Xp+p+u/ZMiK/0szWaBLppvuq7
+         AB1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZH7Pn/I57bUXWGtdU7bf61RroXUjVX251kWCY9hsq4Y=;
+        b=N1nqDHTNzCNFKLIOxczsNi4o83m4xabZGsvQFgNv1NUZd1S2Tl/3ubNdT3AX/WBysH
+         TfJkgIHbJBcpiQHzFFgeeTCn9ov6VAsn0Ege17el6HsMYXd1u5eFTTpO9ndcz7ScH++O
+         7+yjN5iqkMps271afCKIWJQTBXACGZDrco2EvzryDn4MP2xHqNyZryXD/fYYM1GZN2gc
+         9MlBfcCNJMsaQF22Mb0xrHdisTwit+uwiwJqdxPF0jDWzUqhZzU1E3ToyNISQn06T4lK
+         SiI00Gw08QXxV7MhOaXGlmoaABP4Bd1ckYoJYboi1b0QynDP9Mp//7Q6XpZD7Rkp1Cs8
+         AkiQ==
+X-Gm-Message-State: AJIora89Df7Ma6fUW5lAxeYa4QfozuYZFZuGj3SCgtUrZhneHdHKlbZE
+        OhkmX5cyNyAmRtrwAuqaLoo=
+X-Google-Smtp-Source: AGRyM1vatk5TFzxFEFwNt9LS2/4BdxUT9VICrFNvS8bqC/Uv8jcKr5XKGx9RSbKWcCXHBrrbqPW8UQ==
+X-Received: by 2002:a17:906:5d04:b0:722:f46c:b891 with SMTP id g4-20020a1709065d0400b00722f46cb891mr31704110ejt.4.1658244343619;
+        Tue, 19 Jul 2022 08:25:43 -0700 (PDT)
+Received: from skbuf ([188.27.185.104])
+        by smtp.gmail.com with ESMTPSA id a15-20020a1709066d4f00b00715705dd23asm6772150ejt.89.2022.07.19.08.25.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 08:25:42 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 18:25:39 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Shawn Guo <shawnguo@kernel.org>, UNGLinuxDriver@microchip.com,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [RFC PATCH net-next 0/9] net: pcs: Add support for devices
+ probed in the "usual" manner
+Message-ID: <20220719152539.i43kdp7nolbp2vnp@skbuf>
+References: <20220711160519.741990-1-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711160519.741990-1-sean.anderson@seco.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 13:23:06 +0800
-Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+Hi Sean,
 
-> > Care to send me a patch, and I'll just include it in my series?  
-> Seems no need add another patch, just modify this patch as below:
+On Mon, Jul 11, 2022 at 12:05:10PM -0400, Sean Anderson wrote:
+> For a long time, PCSs have been tightly coupled with their MACs. For
+> this reason, the MAC creates the "phy" or mdio device, and then passes
+> it to the PCS to initialize. This has a few disadvantages:
 > 
-> diff --git a/drivers/usb/mtu3/mtu3_trace.h
-> b/drivers/usb/mtu3/mtu3_trace.h
-> index a09deae1146f..03d2a9bac27e 100644
-> --- a/drivers/usb/mtu3/mtu3_trace.h
-> +++ b/drivers/usb/mtu3/mtu3_trace.h
-> @@ -18,18 +18,16 @@
+> - Each MAC must re-implement the same steps to look up/create a PCS
+> - The PCS cannot use functions tied to device lifetime, such as devm_*.
+> - Generally, the PCS does not have easy access to its device tree node
 > 
->  #include "mtu3.h"
+> I'm not sure if these are terribly large disadvantages. In fact, I'm not
+> sure if this series provides any benefit which could not be achieved
+> with judicious use of helper functions. In any case, here it is.
 > 
-> -#define MTU3_MSG_MAX   256
-> -
->  TRACE_EVENT(mtu3_log,
->         TP_PROTO(struct device *dev, struct va_format *vaf),
->         TP_ARGS(dev, vaf),
->         TP_STRUCT__entry(
->                 __string(name, dev_name(dev))
-> -               __dynamic_array(char, msg, MTU3_MSG_MAX)
-> +               __vstring(msg, vaf->fmt, vaf->va)
->         ),
->         TP_fast_assign(
->                 __assign_str(name, dev_name(dev));
-> -               vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf-
-> >va);  
-> +               __assign_vstr(msg, vaf->fmt, vaf->va);
->         ),
->         TP_printk("%s: %s", __get_str(name), __get_str(msg))
->  );
-> >   
-> 
-> remove below two lines
-> "
-> -#define MTU3_MSG_MAX   256
-> -
+> NB: Several (later) patches in this series should not be applied. See
+> the notes in each commit for details on when they can be applied.
 
-Fine.
+Sorry to burst your bubble, but the networking drivers on NXP LS1028A
+(device tree at arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi, drivers
+at drivers/net/ethernet/freescale/enetc/ and drivers/net/dsa/ocelot/)
+do not use the Lynx PCS through a pcs-handle, because the Lynx PCS in
+fact has no backing OF node there, nor do the internal MDIO buses of the
+ENETC and of the switch.
 
-Even though I already pushed to linux-next, I did something I seldom do. I
-rebased my for-next branch and removed this patch.
-
-I'll send a v2.
-
--- Steve
+It seems that I need to point this out explicitly: you need to provide
+at least a working migration path to your PCS driver model. Currently
+there isn't one, and as a result, networking is broken on the LS1028A
+with this patch set.

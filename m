@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A706A579CC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705F9579EF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241430AbiGSMmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S242945AbiGSNIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241266AbiGSMlp (ORCPT
+        with ESMTP id S243138AbiGSNHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:41:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD4C7E00C;
-        Tue, 19 Jul 2022 05:16:23 -0700 (PDT)
+        Tue, 19 Jul 2022 09:07:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2704DFA0;
+        Tue, 19 Jul 2022 05:27:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AC63B81B2E;
-        Tue, 19 Jul 2022 12:16:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47E0C341C6;
-        Tue, 19 Jul 2022 12:16:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EE316020F;
+        Tue, 19 Jul 2022 12:27:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC93C341C6;
+        Tue, 19 Jul 2022 12:27:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232979;
-        bh=I/S6MXKj+pJExOorvIiThOlDOL37GW0RHtgnBej/vcs=;
+        s=korg; t=1658233656;
+        bh=2RIulnpy12qPfd61qCeePjC6mrMyrKz5F9JHzlryf7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AZcpssql5OSZoMR13WRaYkPCtQfDCgkvA25JPJJl3HC8l+o2J04Y8tUaOhQ9Z2CL0
-         5SIYglFqAZ6CSPo6FFJm4YrkkhKoMN6bWRg0UAca7Hs2sdWLNEalx40Y2gvD8ZSQnS
-         AwK+W9220v1Eoer5ZQHios/2ctqhYeB6e6MiVXNI=
+        b=vyV/66snmrrRMqXOWXeksyywKZQBrReRayBhQaOIyxKZmeTtAtuo5Z0r8RNkU5kE9
+         1p95piaIJRocDKtQ28VD/2lgxhYV4lY8hGsw6HtnLT1Rie5fIRXfIO6vPcjdM8SFR/
+         bmXhsnpikEclOqD+du3+9SEdGpfhf/FRODYKC7mo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 132/167] pinctrl: aspeed: Fix potential NULL dereference in aspeed_pinmux_set_mux()
+Subject: [PATCH 5.18 179/231] NFC: nxp-nci: dont print header length mismatch on i2c error
 Date:   Tue, 19 Jul 2022 13:54:24 +0200
-Message-Id: <20220719114709.337233262@linuxfoundation.org>
+Message-Id: <20220719114729.260805577@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haowen Bai <baihaowen@meizu.com>
+From: Michael Walle <michael@walle.cc>
 
-[ Upstream commit 84a85d3fef2e75b1fe9fc2af6f5267122555a1ed ]
+[ Upstream commit 9577fc5fdc8b07b891709af6453545db405e24ad ]
 
-pdesc could be null but still dereference pdesc->name and it will lead to
-a null pointer access. So we move a null check before dereference.
+Don't print a misleading header length mismatch error if the i2c call
+returns an error. Instead just return the error code without any error
+message.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-Link: https://lore.kernel.org/r/1650508019-22554-1-git-send-email-baihaowen@meizu.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/aspeed/pinctrl-aspeed.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/nfc/nxp-nci/i2c.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/aspeed/pinctrl-aspeed.c b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
-index c94e24aadf92..83d47ff1cea8 100644
---- a/drivers/pinctrl/aspeed/pinctrl-aspeed.c
-+++ b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
-@@ -236,11 +236,11 @@ int aspeed_pinmux_set_mux(struct pinctrl_dev *pctldev, unsigned int function,
- 		const struct aspeed_sig_expr **funcs;
- 		const struct aspeed_sig_expr ***prios;
+--- a/drivers/nfc/nxp-nci/i2c.c
++++ b/drivers/nfc/nxp-nci/i2c.c
+@@ -122,7 +122,9 @@ static int nxp_nci_i2c_fw_read(struct nx
+ 	skb_put_data(*skb, &header, NXP_NCI_FW_HDR_LEN);
  
--		pr_debug("Muxing pin %s for %s\n", pdesc->name, pfunc->name);
--
- 		if (!pdesc)
- 			return -EINVAL;
+ 	r = i2c_master_recv(client, skb_put(*skb, frame_len), frame_len);
+-	if (r != frame_len) {
++	if (r < 0) {
++		goto fw_read_exit_free_skb;
++	} else if (r != frame_len) {
+ 		nfc_err(&client->dev,
+ 			"Invalid frame length: %u (expected %zu)\n",
+ 			r, frame_len);
+@@ -166,7 +168,9 @@ static int nxp_nci_i2c_nci_read(struct n
+ 		return 0;
  
-+		pr_debug("Muxing pin %s for %s\n", pdesc->name, pfunc->name);
-+
- 		prios = pdesc->prios;
- 
- 		if (!prios)
--- 
-2.35.1
-
+ 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
+-	if (r != header.plen) {
++	if (r < 0) {
++		goto nci_read_exit_free_skb;
++	} else if (r != header.plen) {
+ 		nfc_err(&client->dev,
+ 			"Invalid frame payload length: %u (expected %u)\n",
+ 			r, header.plen);
 
 

@@ -2,242 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7DF5793C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7795793C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbiGSHDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 03:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S234970AbiGSHEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 03:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbiGSHDP (ORCPT
+        with ESMTP id S234012AbiGSHEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 03:03:15 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B7F31DC9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:03:14 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id p9so13865347pjd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lrrNHRWM7NP+3zb8IFTvMKgPvWnG7x306BJK3kdaz5g=;
-        b=gSF+zaKOCHC74e9MjsTx+M3bHZSWBkw6yIO0SgtRd31uUqrk4B3Q1QJ2HLItKA1Aob
-         2lfewUZxxeL8Zh+pG7ZtNKsaH0NjyhyuPCJvBOeTcNXbXcFnzNZMVcKxM+M/yA2mXlD/
-         c3lEeTD11OdTl/npeekebAuUGfEmYGdgOfMMeRyifLa8xEmSUGKvexfdQ2B3Bwh6fEsT
-         J/9knYWFj8h7vpntccbxdAm3Hgd26MbitIakjnZghWCnby8SV+oGsIVEAcnpVD3oU1To
-         u6qxMMd0r8xPInVoPJ2PkVyI4rVsAZ4eL6za5HglT6CzLRo+x7Y9N9grCanzTpCIaziG
-         Kr5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lrrNHRWM7NP+3zb8IFTvMKgPvWnG7x306BJK3kdaz5g=;
-        b=lLLN1QyeNlodpiYg/jYGJRynqPGVznYA4PRcMrbJztzbRj4dS3L0wlAKg8O1ocl0FF
-         c3vU+1d3XYFp0AfpfqXMCK3GD3UnXbCLiH0JwiSoaVLt29bZtkIrW4E0EdsKticQlpm5
-         gWBC5mVXkif2wt0P/Kuj2e5fJZtRKyawOJ0RgMV3VC8xY0xaoROplq8k0lOR7p7bvP2k
-         FdfkZEvoZgw23MELWa/alsrVXp6W1XIMB+THzITTEdESFyuuI9zZpW0U9IIr1riFH0OQ
-         Q5qhDycTWxcf4zNsJcwkxSZ+jAIYq5n2bocTLBM4n0yZrN3iuRl7XIZIxyRHfTmfBjuA
-         LjHw==
-X-Gm-Message-State: AJIora+Up090UJOqKsTJi8/llwlBjAj3p9wct7ig8CKArByF+yxPG4TV
-        GKHR1NvKA0Chr7Wv68Lw5dveVQ==
-X-Google-Smtp-Source: AGRyM1tFs87s6yDOR/LgyQq0dOntOjHc7y4BXG4H+msvLKei6lPfqJ6T0D4367NppCi1f3OK6MULUg==
-X-Received: by 2002:a17:902:be16:b0:16d:b62:bc77 with SMTP id r22-20020a170902be1600b0016d0b62bc77mr1697742pls.74.1658214193731;
-        Tue, 19 Jul 2022 00:03:13 -0700 (PDT)
-Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id y10-20020aa7942a000000b0052890d61628sm10605268pfo.60.2022.07.19.00.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 00:03:13 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     axboe@kernel.dk, tj@kernel.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH v2] block: don't allow the same type rq_qos add more than once
-Date:   Tue, 19 Jul 2022 15:02:58 +0800
-Message-Id: <20220719070258.25721-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Tue, 19 Jul 2022 03:04:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C600331DFF;
+        Tue, 19 Jul 2022 00:04:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E96361658;
+        Tue, 19 Jul 2022 07:04:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F5C6C341C6;
+        Tue, 19 Jul 2022 07:04:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658214291;
+        bh=A4C0jcLWbw5eTQtyHQPhjBsYHmiVfNG4D86dfCO5Ujo=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=NCPJOa1HVRbRkzrVQhu12U8H2cs2fal6N1kdmBHkfV0rNMlk0luq5KneJuAQELE9C
+         nd2nC169BS9H+L/00LvyDzq7zZjmfF5l/pRIn7yZJNwyPNmNgq7m5pYXivS9iBLCKw
+         0cB9yl++pbbTllbIRqBZd+ytsdw1t7t16k0g71CewYcvVaIwlWjEOpNMBjzJO7VWB7
+         dE1T9LkoHT7XYMIPZY7qALeNzwKyxWTIZiUvJY6ErJ0N/1v954ROvDtRS2OhML1qRD
+         oy5ylyU1zseH9mVBLfoL+Id/v0cjxzFt0cSbB9PKfhFo+XWZNaU3Aup8bzM29a96VF
+         7r4o2wSIPCxgQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220704102845.168438-2-herve.codina@bootlin.com>
+References: <20220704102845.168438-1-herve.codina@bootlin.com> <20220704102845.168438-2-herve.codina@bootlin.com>
+Subject: Re: [PATCH v5 1/3] clk: lan966x: Fix the lan966x clock gate register address
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 19 Jul 2022 00:04:49 -0700
+User-Agent: alot/0.10
+Message-Id: <20220719070451.8F5C6C341C6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+Quoting Herve Codina (2022-07-04 03:28:43)
+> The register address used for the clock gate register is the base
+> register address coming from first reg map (ie. the generic
+> clock registers) instead of the second reg map defining the clock
+> gate register.
+>=20
+> Use the correct clock gate register address.
+>=20
+> Fixes: 5ad5915dea00 ("clk: lan966x: Extend lan966x clock driver for clock=
+ gating support")
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
 
-In our test of iocost, we encounttered some list add/del corrutions of
-inner_walk list in ioc_timer_fn.
-
-The reason can be descripted as follow:
-cpu 0						cpu 1
-ioc_qos_write					ioc_qos_write
-
-ioc = q_to_ioc(bdev_get_queue(bdev));
-if (!ioc) {
-        ioc = kzalloc();			ioc = q_to_ioc(bdev_get_queue(bdev));
-						if (!ioc) {
-							ioc = kzalloc();
-							...
-							rq_qos_add(q, rqos);
-						}
-        ...
-        rq_qos_add(q, rqos);
-        ...
-}
-
-When the io.cost.qos file is written by two cpu concurrently, rq_qos may
-be added to one disk twice. In that case, there will be two iocs enabled
-and running on one disk. They own different iocgs on their active list.
-In the ioc_timer_fn function, because of the iocgs from two ioc have the
-same root iocg, the root iocg's walk_list may be overwritten by each
-other and this lead to list add/del corrutions in building or destorying
-the inner_walk list.
-
-And so far, the blk-rq-qos framework works in case that one instance for
-one type rq_qos per queue by default. This patch make this explicit and
-also fix the crash above.
-
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
----
- block/blk-iocost.c    | 19 ++++++++++++-------
- block/blk-iolatency.c |  6 +++++-
- block/blk-ioprio.c    |  5 +++++
- block/blk-rq-qos.h    | 11 ++++++++++-
- block/blk-wbt.c       |  8 +++++++-
- 5 files changed, 39 insertions(+), 10 deletions(-)
-
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 33a11ba971ea..e058b51a4e63 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -2886,15 +2886,20 @@ static int blk_iocost_init(struct request_queue *q)
- 	 * called before policy activation completion, can't assume that the
- 	 * target bio has an iocg associated and need to test for NULL iocg.
- 	 */
--	rq_qos_add(q, rqos);
-+	ret = rq_qos_add(q, rqos);
-+	if (ret)
-+		goto err_free_ioc;
-+
- 	ret = blkcg_activate_policy(q, &blkcg_policy_iocost);
--	if (ret) {
--		rq_qos_del(q, rqos);
--		free_percpu(ioc->pcpu_stat);
--		kfree(ioc);
--		return ret;
--	}
-+	if (ret)
-+		goto err_del_qos;
- 	return 0;
-+err_del_qos:
-+	rq_qos_del(q, rqos);
-+err_free_ioc:
-+	free_percpu(ioc->pcpu_stat);
-+	kfree(ioc);
-+	return ret;
- }
- 
- static struct blkcg_policy_data *ioc_cpd_alloc(gfp_t gfp)
-diff --git a/block/blk-iolatency.c b/block/blk-iolatency.c
-index 9568bf8dfe82..9a572439f326 100644
---- a/block/blk-iolatency.c
-+++ b/block/blk-iolatency.c
-@@ -773,7 +773,11 @@ int blk_iolatency_init(struct request_queue *q)
- 	rqos->ops = &blkcg_iolatency_ops;
- 	rqos->q = q;
- 
--	rq_qos_add(q, rqos);
-+	ret = rq_qos_add(q, rqos);
-+	if (ret) {
-+		kfree(blkiolat);
-+		return ret;
-+	}
- 
- 	ret = blkcg_activate_policy(q, &blkcg_policy_iolatency);
- 	if (ret) {
-diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
-index 79e797f5d194..931bffdf0cab 100644
---- a/block/blk-ioprio.c
-+++ b/block/blk-ioprio.c
-@@ -251,6 +251,11 @@ int blk_ioprio_init(struct request_queue *q)
- 	 * rq-qos callbacks.
- 	 */
- 	rq_qos_add(q, rqos);
-+	if (ret) {
-+		blkcg_deactivate_policy(q, &ioprio_policy);
-+		kfree(blkioprio_blkg);
-+		return ret;
-+	}
- 
- 	return 0;
- }
-diff --git a/block/blk-rq-qos.h b/block/blk-rq-qos.h
-index 0e46052b018a..08b856570ad1 100644
---- a/block/blk-rq-qos.h
-+++ b/block/blk-rq-qos.h
-@@ -86,7 +86,7 @@ static inline void rq_wait_init(struct rq_wait *rq_wait)
- 	init_waitqueue_head(&rq_wait->wait);
- }
- 
--static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
-+static inline int rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
- {
- 	/*
- 	 * No IO can be in-flight when adding rqos, so freeze queue, which
-@@ -98,6 +98,8 @@ static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
- 	blk_mq_freeze_queue(q);
- 
- 	spin_lock_irq(&q->queue_lock);
-+	if (rq_qos_id(q, rqos->id))
-+		goto ebusy;
- 	rqos->next = q->rq_qos;
- 	q->rq_qos = rqos;
- 	spin_unlock_irq(&q->queue_lock);
-@@ -109,6 +111,13 @@ static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
- 		blk_mq_debugfs_register_rqos(rqos);
- 		mutex_unlock(&q->debugfs_mutex);
- 	}
-+
-+	return 0;
-+ebusy:
-+	spin_unlock_irq(&q->queue_lock);
-+	blk_mq_unfreeze_queue(q);
-+	return -EBUSY;
-+
- }
- 
- static inline void rq_qos_del(struct request_queue *q, struct rq_qos *rqos)
-diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-index 0c119be0e813..cc8f45929b31 100644
---- a/block/blk-wbt.c
-+++ b/block/blk-wbt.c
-@@ -820,6 +820,7 @@ int wbt_init(struct request_queue *q)
- {
- 	struct rq_wb *rwb;
- 	int i;
-+	int ret;
- 
- 	rwb = kzalloc(sizeof(*rwb), GFP_KERNEL);
- 	if (!rwb)
-@@ -846,7 +847,12 @@ int wbt_init(struct request_queue *q)
- 	/*
- 	 * Assign rwb and add the stats callback.
- 	 */
--	rq_qos_add(q, &rwb->rqos);
-+	ret = rq_qos_add(q, &rwb->rqos);
-+	if (ret) {
-+		blk_stat_free_callback(rwb->cb);
-+		kfree(rwb);
-+		return ret;
-+	}
- 	blk_stat_add_callback(q, rwb->cb);
- 
- 	rwb->min_lat_nsec = wbt_default_latency_nsec(q);
--- 
-2.20.1
-
+Applied to clk-fixes

@@ -2,119 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14B8578F7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8A1578FC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 03:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbiGSA7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 20:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
+        id S233680AbiGSBSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 21:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiGSA7U (ORCPT
+        with ESMTP id S236563AbiGSBSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 20:59:20 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2040.outbound.protection.outlook.com [40.107.223.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F274DE9A;
-        Mon, 18 Jul 2022 17:59:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FQaYKgwM8GA6Xnb5iXxfXqz/9pa3m6TXOk+QfPV4US+biUh8eGrrRNWrJ2pz6iTbPc2ofh3/P2MIGmfEuMpaWh462Nd1a+0XjIZ9esacmZ7Gj2OWv09dDCaY+Qig2FDsDTe6L/s8jbfv4RyiFq5mvDxE0AYdwmhELVCvCa2AdduAn4fXbuIN1vj1jWz7u0EpNFafD5yuw0VldG73j05BGtDS73rXf4izMJPWKQdP9oytwZSWZG+5SzdR8rMjEo/33/oqHnsRxy/+inNMzo9AZ5NjKaP0IUM6UGrifeKqX0OyyG+9o9GaMnhGfqG7hYvhSPr2IzlTtgvA1mt7mbGGWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1KCwqZ/xB9F6stJJos4NTog2L5+RU7czTj+XqZGQgGE=;
- b=h191C+QWE7KaG0KFDOQeWt2gi0aKDdrplyQVm7cTwzTJno1NcG2Re5SQ11b0JUHQFdfHP+/Srg/5CsxBFnCVF6w6Cs1V9CD+OpS+zG1u1Tm6kJ3Z/VJ5/LfqshwMwbf5l3fvuO6ZiZoRNXYAL5fo2LuQLq4LaybY/9vfX0c+Bj1UeHeeTciRFwKLE3pzfnNcNSalqDS25xxWbfLFiabuueeAU3WidGM95hVYEix849iP2L3TDjDLtBXcUOeg4Q0VURSH92fQqErWlLkR/fRuFN+rmu770vnnn7JYledMOa218qzgBW7hDHu5nEKRypgDJvjrCgCeZcXArt5bjLJMiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1KCwqZ/xB9F6stJJos4NTog2L5+RU7czTj+XqZGQgGE=;
- b=cNz+zNFpOTbD9VuVZko+qUa9fgzNtxDuBVdtF2aa7CoELY6dHPrrDVKfAxHUjhe8N7b+/1TKkBt/tJ9kOgZW4AW8t8BZsHdXwo9GV577FxwRy9Fg1a9TIRC+sKwFdyZ57OBmYmxjiwWJrkm6USh5JUDqCxufZAgNwIe84U/M6Jg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- DM6PR12MB2890.namprd12.prod.outlook.com (2603:10b6:5:15e::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5438.19; Tue, 19 Jul 2022 00:59:16 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::ec80:e3fd:e3e2:605d]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::ec80:e3fd:e3e2:605d%5]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
- 00:59:16 +0000
-Date:   Tue, 19 Jul 2022 08:58:52 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 08/13] cpufreq: amd-pstate: fix white-space
-Message-ID: <YtYBzFem+7SrhvqO@amd.com>
-References: <cover.1657876961.git.Perry.Yuan@amd.com>
- <3ef38105e85e6527d14d9d0e2f969fe2ff86ce45.1657876961.git.Perry.Yuan@amd.com>
+        Mon, 18 Jul 2022 21:18:05 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922122B278;
+        Mon, 18 Jul 2022 18:17:22 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id b26so19474994wrc.2;
+        Mon, 18 Jul 2022 18:17:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Qyis9VjhvZ+cwdZeHMSeyxQAUdHKU4k0+2e3ElZLB6U=;
+        b=pCInAUPK7vzH46AccJBJ45PfdMGerIGZicQd/EJYY7oRAbatbT4KZBB+vliHcl3q6e
+         ZQ6HThJZOeFJkR8IeP/LgNbtniEIOTIYpgJbL4NarvihyNAQYYT7z0vYJmsRAIhJ16Ly
+         ua7WaRykbxVmTOsJR9p5pVnU4iZrxL+ZXJMwjIO88KR4JZOHZLHX8ZCVaSmVba9phWOl
+         XtklCxads/UbQ/UW7RvfajBcQwnttyLhCfFjnnxEFfM1L+eNaJScJomvlbtNVGQYRO7d
+         6mdgR6JYCJLCMWAiLHpKF+KYxkOvtweGP72fGw+QZkVALPPL2koCLpzqnPtMJ2zmK7ML
+         Stvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qyis9VjhvZ+cwdZeHMSeyxQAUdHKU4k0+2e3ElZLB6U=;
+        b=0KppMvR375dokqk8YfM17bbglO134LTbSsWXawaOL7ZmsKvC8rX1Lt6tvcyUcR28OX
+         LBmtwNy2GNuKBXB3zX0HyP3u2gozMvbdBmaQAHIGUdrk8f/umVhll0VCZ5nF4ulr8dRe
+         2yylugSAU1NQ/PMHnE/ToFUonJteVm3Y6diWRA7/OqgPLO4kIX63V8tI0HEHBwnC3SL4
+         rVxfh6NHQ9enkfu/GXRxd9yY7cUJKiCon4xLft4KcQ6+PBMXEoITpmvGRjkH+DUZfyt/
+         Fg64Uug3XoiPUAF+Fxg/y6L5xycRCmMCUif103zztV7MXnHjN4jl7y02teCUFTwASSya
+         mx2Q==
+X-Gm-Message-State: AJIora8gB7QdODpEK1CAv4W+hFo/OE0KA1t1p2w51+y2O8qZhQq8YUwF
+        OyGp9T50AtCPalbSxCeTk7k=
+X-Google-Smtp-Source: AGRyM1su3XhjQWU6ukmMFO4CQo4TuUj9a2RM72b1NkQ2XvL2yDBnVMoVB7FpO86S7ulQAhAYiJjZeQ==
+X-Received: by 2002:a5d:46c7:0:b0:21e:3c82:2df with SMTP id g7-20020a5d46c7000000b0021e3c8202dfmr215009wrs.519.1658193440662;
+        Mon, 18 Jul 2022 18:17:20 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id d15-20020adffbcf000000b0020fff0ea0a3sm12024920wrs.116.2022.07.18.18.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 18:17:20 -0700 (PDT)
+Message-ID: <62d60620.1c69fb81.42957.a752@mx.google.com>
+X-Google-Original-Message-ID: <YtYCHZDs2zm9xGOj@Ansuel-xps.>
+Date:   Tue, 19 Jul 2022 03:00:13 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v2 03/15] net: dsa: qca8k: move
+ qca8kread/write/rmw and reg table to common code
+References: <20220719005726.8739-1-ansuelsmth@gmail.com>
+ <20220719005726.8739-5-ansuelsmth@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3ef38105e85e6527d14d9d0e2f969fe2ff86ce45.1657876961.git.Perry.Yuan@amd.com>
-X-ClientProxiedBy: SI2PR04CA0017.apcprd04.prod.outlook.com
- (2603:1096:4:197::15) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 73f0b956-d721-4322-47ec-08da6921e73d
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2890:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PzMezxxH8aUlTuQSPlR0ibked7X64obmpQTk7vD4YfL48+q2Lo8w7PlMOVuJbv8tFNs2haVmpGJAG3m7px8zciiMM+DsoyyWSMlnqq2LeBe86jUh2k2DFVARDh24OaNLeV/7mGn3liqUcGT4ZXTToMuChL2Bw+Dd376auHSFlOfIq7BhJm0kfs3Pz8jAr7acmtVRefhWUwVsrMmFy8zsi/P2zTyoqKc+EP3fHyEolIpCHZrJyIQcZ6d/Ac61PVrynQtfVgi4InJ4ud/RAhb0+mi61WGm3Das27umFyA7b3tkR2yHFLSrsgXTsC2cmluTwLRdwY+Nl00Yfp1GZ2YDMWaLqFMhkkxE5GyUCQP7yvvqj+iSfTM4SsSoKgKXsowItvMFLO8/s601bSR0gJDdxzl/R7xRgRbdZN6gntzGyuRcM93Hpf9TIsuJdr79/H3DkR0giStrqUnvyY5/zfmVY1c8T69OpGzy36Wfoq3LCxVpbt8qynLqgQ3dJ5/6Y7gdM3b8bRVElTr00ARhO3Hvmit+rY4wV1mJACVVYxGOZq2iRfttSlahxX4jJvzDEXuhPxGW/4Xbjd3o/8pkFf43cd9jdVWNuRzzJu7iUFSYp8bBazJY+89pC0Ys8LMSv8nIL1aJeWk7zIr1ueKzG7E+JnZAZ+/0GbfdXA2AJ8pdUZDHyP4MheaBHsrn+jWKzW5KF6mW2zBWUGYj/haAUHFMzl/eVTk+fysMEu4ORHJUscCbo43m8pvq/odgtlCfsXJB4IQSx5bPew09V4kpcr76FugJgcEoNFbbN2OdaqSuJbQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(39860400002)(346002)(366004)(478600001)(6486002)(86362001)(8676002)(4326008)(66476007)(5660300002)(41300700001)(66556008)(66946007)(37006003)(54906003)(316002)(83380400001)(6636002)(26005)(6512007)(6666004)(38100700002)(186003)(6506007)(2906002)(2616005)(6862004)(36756003)(8936002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/aakNLMflXWk8FSCW/+dKEcVI4KcEIKRDbwymZ8LVoxU018MEkVNzbpVllGT?=
- =?us-ascii?Q?c2aiUR8OD1Xr8j56w+M1eQTdBeiXUKfzwFygXyGpnicayJzQiYfDcno5o908?=
- =?us-ascii?Q?1BeSs5IWdHir82vstXiesLbuV6jN1AxS3MCcBMo8wvo0FwQI5od8RQ9NDUfw?=
- =?us-ascii?Q?4VKClHYn73r2Y0ebuU1/xpSpcPmeCbdC5/5Q+QGJEZ+yOJ2Z9e/Oxt/vURkn?=
- =?us-ascii?Q?y72Bbjp68nuKAdypgLQ4O32fpnciWgkEh/kInqnhByk+poqLaJ+7Fo5Z8M8j?=
- =?us-ascii?Q?EwL7TRE59dAL69YRfyzCqDY9M+ih3P3tv7/KnW+Q7CWdAijgYphNmvlKG/cR?=
- =?us-ascii?Q?v4OFfW9R614aMOsyT2iRavrbhooFnoA2C5dvIpcOlxkZrBXY6asbQSbzE5hf?=
- =?us-ascii?Q?TlMXe8zALkOT6nL3C7sM7ExQB9ITSn+HYIKrLeSXTdNXmUWRWVPl4pP+yGyS?=
- =?us-ascii?Q?jNNkwiJzj19/XCCDVrG9BQRQSmqIc/hj96Fp2e/L7dHqBDWNCT0w1N/Qiviq?=
- =?us-ascii?Q?+HpRCs62SA9NuS6yg0VZryecA86oz11vBh+SkGiSMSCHf+Rg3qdX0rM/gegr?=
- =?us-ascii?Q?9TRy/X93wYYwiSYzJtpq8D5iH4EOYak0Pbk0GT0NjEPVJVrmxFgGDlYGMHfT?=
- =?us-ascii?Q?e3QZW52UjRnNiFa128ooi4f/FttIrmUL6mjgGayFW1Rtb6v8S/evn1vYNlNx?=
- =?us-ascii?Q?Cx6nIMqi0TPV7Zp9lj27puPLakvCqcRPRePgSKz2ezhixJrd3vM1olE1nETJ?=
- =?us-ascii?Q?jwkcyGP/DmxxON6lMFlsCPJUuipa/WKy1eM0QytQVQ5sBFUbyUt6tMmJMuK3?=
- =?us-ascii?Q?KRxHisuh75OoIShih7M/uqcBQk9D3JqZWJFNLDkfDjjk3VKt2s6QfRfjrJ67?=
- =?us-ascii?Q?Q78d3h7FksKYHaxjh9GveNiCLiot6md1bJs3YIga2Bb/+fcdMZomz76RJNvS?=
- =?us-ascii?Q?+s9YB6vAxvjn4y6hm6DBeuEerI8Yq4oNJCSuV/TccE/9Em+On5k0yptO9+or?=
- =?us-ascii?Q?91n/iKr16WkAB8GkwDwmyqBqfOgLXJ9dA+8IuC5+n0NcGyWdZH7PWQ1tVCud?=
- =?us-ascii?Q?K+W7fHZqFJdn6NqPv4QggQp2jB+2ymtnm2MsPWpZJZRB48Ii4HOoyBjVMiO9?=
- =?us-ascii?Q?uHth+sV45HaNs2ooXaRUZZikcSMqnn0b6JpGEH+eVqmhe3Iq2EccMBRH1wx0?=
- =?us-ascii?Q?8xOqoenKM3DLY3Ef+cHNbtUgKNvPN4eFgdV2MusSiCHT24P2kyxK/8tOeV6E?=
- =?us-ascii?Q?ADbH5EdTgmDa0975beuNGy1G9EIyCXlHOKwAp0gKSJW6LLpzVKld2CfRZ/Jq?=
- =?us-ascii?Q?HVU/paf+gADRNyV6b6fDpT4IouyX9ZjluaNHq6gnxy9BQxoqzFu9VaKFMdtr?=
- =?us-ascii?Q?x9cuz4As+L/A4LIqo6FHxPcTlheqvJ/uNslB++JG5laMAeVAxDVQCS6+mL4K?=
- =?us-ascii?Q?DNV3wqDgNm5W29xnOSNRY0kEVrNG6YyCrwj3DsBsYx1Trwp5BAU9Go964CjO?=
- =?us-ascii?Q?qHGlEFmpJWU4emKhi1JAGgVTysJLf8gVByjqLGEX+qKi31dWXPG0SvTe6d4k?=
- =?us-ascii?Q?znRILXbsR2vjzs9zoYjGjY1zjJDaz4i+zD+DqVFA?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73f0b956-d721-4322-47ec-08da6921e73d
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 00:59:16.1986
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t795GWQaYSRyvbvRcRHBfx8md4+nx2/ruBhpRhvLINEzjoF4PEzOfucRm88OQugdNODc9r6smrf5mk6ZyO0Kvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2890
+In-Reply-To: <20220719005726.8739-5-ansuelsmth@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,40 +81,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 06:04:27PM +0800, Yuan, Perry wrote:
-> Remove the white space and correct mixed-up indentation
+On Tue, Jul 19, 2022 at 02:57:14AM +0200, Christian Marangi wrote:
+> The same reg table and function are used by drivers based on qca8k family
+> switch. Move them to common code to make it accessible also by other
+> drivers.
 > 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-
-Reviewed-by: Huang Rui <ray.huang@amd.com>
-
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
->  drivers/cpufreq/amd-pstate.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/net/dsa/qca/qca8k-8xxx.c   | 42 ------------------------------
+>  drivers/net/dsa/qca/qca8k-common.c | 39 +++++++++++++++++++++++++++
+>  drivers/net/dsa/qca/qca8k.h        |  6 +++++
+>  3 files changed, 45 insertions(+), 42 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index ebc7c6d389be..acb62ec5ebab 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -117,7 +117,7 @@ struct amd_cpudata {
->  	struct amd_aperf_mperf cur;
->  	struct amd_aperf_mperf prev;
+> diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
+> index 3f6c1427734d..46c371f5decc 100644
+> --- a/drivers/net/dsa/qca/qca8k-8xxx.c
+> +++ b/drivers/net/dsa/qca/qca8k-8xxx.c
+> @@ -133,24 +133,6 @@ qca8k_set_page(struct qca8k_priv *priv, u16 page)
+>  	return 0;
+>  }
 >  
-> -	u64 freq;
-> +	u64 	freq;
->  	bool	boost_supported;
->  	bool	precision_boost_off;
->  	u64 	cppc_hw_conf_cached;
-> @@ -674,7 +674,7 @@ static struct cpufreq_driver amd_pstate_driver = {
->  	.resume		= amd_pstate_cpu_resume,
->  	.set_boost	= amd_pstate_set_boost,
->  	.name		= "amd-pstate",
-> -	.attr           = amd_pstate_attr,
-> +	.attr		= amd_pstate_attr,
+> -static int
+> -qca8k_read(struct qca8k_priv *priv, u32 reg, u32 *val)
+> -{
+> -	return regmap_read(priv->regmap, reg, val);
+> -}
+> -
+> -static int
+> -qca8k_write(struct qca8k_priv *priv, u32 reg, u32 val)
+> -{
+> -	return regmap_write(priv->regmap, reg, val);
+> -}
+> -
+> -static int
+> -qca8k_rmw(struct qca8k_priv *priv, u32 reg, u32 mask, u32 write_val)
+> -{
+> -	return regmap_update_bits(priv->regmap, reg, mask, write_val);
+> -}
+> -
+>  static void qca8k_rw_reg_ack_handler(struct dsa_switch *ds, struct sk_buff *skb)
+>  {
+>  	struct qca8k_mgmt_eth_data *mgmt_eth_data;
+> @@ -483,30 +465,6 @@ qca8k_regmap_update_bits(void *ctx, uint32_t reg, uint32_t mask, uint32_t write_
+>  	return ret;
+>  }
+>  
+> -static const struct regmap_range qca8k_readable_ranges[] = {
+> -	regmap_reg_range(0x0000, 0x00e4), /* Global control */
+> -	regmap_reg_range(0x0100, 0x0168), /* EEE control */
+> -	regmap_reg_range(0x0200, 0x0270), /* Parser control */
+> -	regmap_reg_range(0x0400, 0x0454), /* ACL */
+> -	regmap_reg_range(0x0600, 0x0718), /* Lookup */
+> -	regmap_reg_range(0x0800, 0x0b70), /* QM */
+> -	regmap_reg_range(0x0c00, 0x0c80), /* PKT */
+> -	regmap_reg_range(0x0e00, 0x0e98), /* L3 */
+> -	regmap_reg_range(0x1000, 0x10ac), /* MIB - Port0 */
+> -	regmap_reg_range(0x1100, 0x11ac), /* MIB - Port1 */
+> -	regmap_reg_range(0x1200, 0x12ac), /* MIB - Port2 */
+> -	regmap_reg_range(0x1300, 0x13ac), /* MIB - Port3 */
+> -	regmap_reg_range(0x1400, 0x14ac), /* MIB - Port4 */
+> -	regmap_reg_range(0x1500, 0x15ac), /* MIB - Port5 */
+> -	regmap_reg_range(0x1600, 0x16ac), /* MIB - Port6 */
+> -
+> -};
+> -
+> -static const struct regmap_access_table qca8k_readable_table = {
+> -	.yes_ranges = qca8k_readable_ranges,
+> -	.n_yes_ranges = ARRAY_SIZE(qca8k_readable_ranges),
+> -};
+> -
+>  static struct regmap_config qca8k_regmap_config = {
+>  	.reg_bits = 16,
+>  	.val_bits = 32,
+> diff --git a/drivers/net/dsa/qca/qca8k-common.c b/drivers/net/dsa/qca/qca8k-common.c
+> index 7a63e96c8c08..1c2169e98f10 100644
+> --- a/drivers/net/dsa/qca/qca8k-common.c
+> +++ b/drivers/net/dsa/qca/qca8k-common.c
+> @@ -61,3 +61,42 @@ const struct qca8k_mib_desc ar8327_mib[] = {
+>  	MIB_DESC(1, 0xa8, "RXUnicast"),
+>  	MIB_DESC(1, 0xac, "TXUnicast"),
 >  };
+> +
+> +int qca8k_read(struct qca8k_priv *priv, u32 reg, u32 *val)
+> +{
+> +	return regmap_read(priv->regmap, reg, val);
+> +}
+> +
+> +int qca8k_write(struct qca8k_priv *priv, u32 reg, u32 val)
+> +{
+> +	return regmap_write(priv->regmap, reg, val);
+> +}
+> +
+> +int qca8k_rmw(struct qca8k_priv *priv, u32 reg, u32 mask, u32 write_val)
+> +{
+> +	return regmap_update_bits(priv->regmap, reg, mask, write_val);
+> +}
+> +
+> +static const struct regmap_range qca8k_readable_ranges[] = {
+> +	regmap_reg_range(0x0000, 0x00e4), /* Global control */
+> +	regmap_reg_range(0x0100, 0x0168), /* EEE control */
+> +	regmap_reg_range(0x0200, 0x0270), /* Parser control */
+> +	regmap_reg_range(0x0400, 0x0454), /* ACL */
+> +	regmap_reg_range(0x0600, 0x0718), /* Lookup */
+> +	regmap_reg_range(0x0800, 0x0b70), /* QM */
+> +	regmap_reg_range(0x0c00, 0x0c80), /* PKT */
+> +	regmap_reg_range(0x0e00, 0x0e98), /* L3 */
+> +	regmap_reg_range(0x1000, 0x10ac), /* MIB - Port0 */
+> +	regmap_reg_range(0x1100, 0x11ac), /* MIB - Port1 */
+> +	regmap_reg_range(0x1200, 0x12ac), /* MIB - Port2 */
+> +	regmap_reg_range(0x1300, 0x13ac), /* MIB - Port3 */
+> +	regmap_reg_range(0x1400, 0x14ac), /* MIB - Port4 */
+> +	regmap_reg_range(0x1500, 0x15ac), /* MIB - Port5 */
+> +	regmap_reg_range(0x1600, 0x16ac), /* MIB - Port6 */
+> +
+> +};
+> +
+> +const struct regmap_access_table qca8k_readable_table = {
+> +	.yes_ranges = qca8k_readable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(qca8k_readable_ranges),
+> +};
+> diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
+> index 0c9b60555670..20cceac494eb 100644
+> --- a/drivers/net/dsa/qca/qca8k.h
+> +++ b/drivers/net/dsa/qca/qca8k.h
+> @@ -419,5 +419,11 @@ struct qca8k_fdb {
 >  
->  static int __init amd_pstate_init(void)
+>  /* Common setup function */
+>  extern const struct qca8k_mib_desc ar8327_mib[];
+> +extern const struct regmap_access_table qca8k_readable_table;
+> +
+> +/* Common read/write/rmw function */
+> +int qca8k_read(struct qca8k_priv *priv, u32 reg, u32 *val);
+> +int qca8k_write(struct qca8k_priv *priv, u32 reg, u32 val);
+> +int qca8k_rmw(struct qca8k_priv *priv, u32 reg, u32 mask, u32 write_val);
+>  
+>  #endif /* __QCA8K_H */
 > -- 
-> 2.32.0
+> 2.36.1
 > 
+
+This slipped and was sent by mistake (and was just a typo fixed in the
+title)
+
+Please ignore. Sorry.
+
+-- 
+	Ansuel

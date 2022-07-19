@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7B4579A47
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 599875799C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238663AbiGSMMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S238298AbiGSMGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238603AbiGSMLp (ORCPT
+        with ESMTP id S238445AbiGSMEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:11:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8393F43E67;
-        Tue, 19 Jul 2022 05:03:34 -0700 (PDT)
+        Tue, 19 Jul 2022 08:04:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBAA4D169;
+        Tue, 19 Jul 2022 05:00:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1556F61720;
-        Tue, 19 Jul 2022 12:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75F6C341C6;
-        Tue, 19 Jul 2022 12:03:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B53D1B81A8F;
+        Tue, 19 Jul 2022 12:00:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F92CC341C6;
+        Tue, 19 Jul 2022 12:00:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232213;
-        bh=2RIulnpy12qPfd61qCeePjC6mrMyrKz5F9JHzlryf7A=;
+        s=korg; t=1658232032;
+        bh=hkNBwUYHFKGSvzmtLsoGiokgbvyoXmsQTklyeIXqUZs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wdo0ZN1WII16MF4YACpXB/JXwBuoqW3qsEYSH5NeAjZU5JTwbn2ZePeaCUVAji3Om
-         ZkaUrwYjlkqGN9pqMrotR5B72qEsSl6/hBrYWfYC7Ln0uJqvH4H0UNJ5aana5MJqsJ
-         gvNArF6sGLDKYaQxo4/y/3KOmqJX61JAi7VQ0VQU=
+        b=1Izjb21XW8oLdKkvpmqVyCKcifea6hx6//vCNf7+GPUxx6gvJKCAuIDeQ4BOwak09
+         thcTakhdJ+FdVEVhdwYKLa/DBTbqUbmpBHnO6xWm1YqW+mZajsZd5vd1oJSrTDujP/
+         Hq25bVvyjHQji7IxeRkLQqNsQjXab1pu9GG3LYpk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 51/71] NFC: nxp-nci: dont print header length mismatch on i2c error
-Date:   Tue, 19 Jul 2022 13:54:14 +0200
-Message-Id: <20220719114557.283043870@linuxfoundation.org>
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 38/48] x86: Clear .brk area at early boot
+Date:   Tue, 19 Jul 2022 13:54:15 +0200
+Message-Id: <20220719114523.233359797@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Juergen Gross <jgross@suse.com>
 
-[ Upstream commit 9577fc5fdc8b07b891709af6453545db405e24ad ]
+[ Upstream commit 38fa5479b41376dc9d7f57e71c83514285a25ca0 ]
 
-Don't print a misleading header length mismatch error if the i2c call
-returns an error. Instead just return the error code without any error
-message.
+The .brk section has the same properties as .bss: it is an alloc-only
+section and should be cleared before being used.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Not doing so is especially a problem for Xen PV guests, as the
+hypervisor will validate page tables (check for writable page tables
+and hypervisor private bits) before accepting them to be used.
+
+Make sure .brk is initially zero by letting clear_bss() clear the brk
+area, too.
+
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220630071441.28576-3-jgross@suse.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nfc/nxp-nci/i2c.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/x86/kernel/head64.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/nfc/nxp-nci/i2c.c
-+++ b/drivers/nfc/nxp-nci/i2c.c
-@@ -122,7 +122,9 @@ static int nxp_nci_i2c_fw_read(struct nx
- 	skb_put_data(*skb, &header, NXP_NCI_FW_HDR_LEN);
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 88dc38b4a147..90c2613af36b 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -383,6 +383,8 @@ static void __init clear_bss(void)
+ {
+ 	memset(__bss_start, 0,
+ 	       (unsigned long) __bss_stop - (unsigned long) __bss_start);
++	memset(__brk_base, 0,
++	       (unsigned long) __brk_limit - (unsigned long) __brk_base);
+ }
  
- 	r = i2c_master_recv(client, skb_put(*skb, frame_len), frame_len);
--	if (r != frame_len) {
-+	if (r < 0) {
-+		goto fw_read_exit_free_skb;
-+	} else if (r != frame_len) {
- 		nfc_err(&client->dev,
- 			"Invalid frame length: %u (expected %zu)\n",
- 			r, frame_len);
-@@ -166,7 +168,9 @@ static int nxp_nci_i2c_nci_read(struct n
- 		return 0;
- 
- 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
--	if (r != header.plen) {
-+	if (r < 0) {
-+		goto nci_read_exit_free_skb;
-+	} else if (r != header.plen) {
- 		nfc_err(&client->dev,
- 			"Invalid frame payload length: %u (expected %u)\n",
- 			r, header.plen);
+ static unsigned long get_cmd_line_ptr(void)
+-- 
+2.35.1
+
 
 

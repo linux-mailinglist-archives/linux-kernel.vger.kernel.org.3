@@ -2,94 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8697A5795BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD9C5795BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234636AbiGSJCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 05:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
+        id S232009AbiGSJFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 05:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGSJCT (ORCPT
+        with ESMTP id S229478AbiGSJFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:02:19 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6119D11834;
-        Tue, 19 Jul 2022 02:02:18 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id by8so12995340ljb.13;
-        Tue, 19 Jul 2022 02:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=p0E0Be3SRX+B6mBT6tjTQekPG7Azaelaf+cATs6Lt78=;
-        b=VVxqLw1tjJ7lPfAnKCisYxU17cXqNVbli66rHN/ODqG4ndZNHyVjlrEUUoO5Mj//XC
-         bmWerZaH8C+VVY8BJBsZybvBhVnkvzOTAgVlehrup0TQS0TsgXdNB/uYF6C5gg0clPoQ
-         smZWNlP5fKgf/LYQNoutEFf8G9rpyZumKwG7OnOK0R/5UiHg86mNEg7uqmRnHt6GfiAz
-         uXpfsVM/eYyrrp90TMHXZREhNZgCdvYwk+KY0QFH3rqnG2BHtH0Y+RYR2HDL6C3M935s
-         23W8qmbpxzpkMnBDp7098mh0Hq52+iCjWRrGmKwbnSH6iI2DQkR2Da1J7wo657cnJlnN
-         WFqQ==
+        Tue, 19 Jul 2022 05:05:52 -0400
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42177642A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:05:51 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id k7so7740613qkj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:05:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=p0E0Be3SRX+B6mBT6tjTQekPG7Azaelaf+cATs6Lt78=;
-        b=Cmec76GyaZo8vfEvgTiSPsms4Wm58nFrbPeYjzEILwIaWgBHcdzOgu6ij8VUy8Wpro
-         V9pNDEne2lH0/ICV9eff2jYYcP0wfN7WZBVr9PBkGjK2GV41mJvcyvghJIHrh+1Ivzhp
-         mnLuFWdryitFk94iDtt4nAN158qZHmdWjctrxd+FWOMwrlK6iRFJ+IQXl4MI5bUfbqEl
-         jbiRXkJ6jNJm2id5JUNfLDXlNZQLmQ/Qd/zhsimBbfYe14t68KwH2zYlAd3i8+ES8FaA
-         an2PrpnVVb9eWFXxRuiBQ1UPJiuS50DOGe3qziABqaAHutwRLvuNTd3CP/w3QRV4ocIe
-         SJ3g==
-X-Gm-Message-State: AJIora9k5x/brEEFnzEALxOMdM4P6MFAC0k9t6OlrfqKPRXFlzjf1uso
-        8LnXRmbPEHawl9vYiRedRmZHyYl9OV8=
-X-Google-Smtp-Source: AGRyM1veFmVZByMri4R3nt9nhYkOmvwTAW8R1MT9BZa8BpAwtKBu0M6OcVOYLLzX9nx4we9I+TWtcQ==
-X-Received: by 2002:a2e:92c6:0:b0:255:84cb:4eea with SMTP id k6-20020a2e92c6000000b0025584cb4eeamr14157626ljh.204.1658221336305;
-        Tue, 19 Jul 2022 02:02:16 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.75.224])
-        by smtp.gmail.com with ESMTPSA id o22-20020ac25e36000000b00482f206b087sm3123353lfg.39.2022.07.19.02.02.14
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4BTG+GIfVp80pynNmMgDJXtQXBY7HIBCNVIJqyKZSZY=;
+        b=VI1/yme6A0ak5sg4eI/4htETY+KS4/nUVlxnTp+iE/ccHgjUa+yVlzuwkl45gItecd
+         PmAaaSwtKPkwhJNR2f8grpq3+W9BJBukPIDxtTZUvAoo9ZIpzoXcSI92p57NRRK4pClg
+         pD1SzkMGoOhMYl+wv4MVk9zyS82lLeICZcMYATm6Mvlxcv40T0g9uRpUQjHj+E9x0Pdr
+         M/X9u3Oel3hkIXCVjXA4mZjOsBvyY+zYBbNzahBw11cGbaP7T6K584SHv1aWeeetaMjx
+         NW3aUSl2MGKqG/u1WSJIYQVf8e/bz7kNCDurk3r0pmQiGj2a+dOlFnw8jGGu2eVFik63
+         p7Kw==
+X-Gm-Message-State: AJIora8xFbMcswiBIDX+UGB8VN/cKysgCUZhVL+HJgdShEvZ7LdU1V3S
+        Oil761Tk0qWHkRGOBdsoh+Q34b4vHoy1lA==
+X-Google-Smtp-Source: AGRyM1uheFsws2V+i8gGyuhcYs+yt8kDNnrSihGlDn2R9rBQ7VSqJ5MTq4hx7hhXtntomJ33YE308g==
+X-Received: by 2002:a37:63cb:0:b0:6b5:d13a:67cc with SMTP id x194-20020a3763cb000000b006b5d13a67ccmr11604650qkb.165.1658221550128;
+        Tue, 19 Jul 2022 02:05:50 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id s5-20020a05620a0bc500b006b555509398sm14188593qki.136.2022.07.19.02.05.49
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 02:02:15 -0700 (PDT)
-Subject: Re: [PATCH v2 03/25] usb: gadget: f_tcm: Increase stream count
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
- <79dbca4db65f676df37462b7a008198c81a3297e.1658192351.git.Thinh.Nguyen@synopsys.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <c54b0d7a-eb97-2ffe-7169-51151707d4ce@gmail.com>
-Date:   Tue, 19 Jul 2022 12:02:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 19 Jul 2022 02:05:49 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-31e47ac84daso33523757b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:05:49 -0700 (PDT)
+X-Received: by 2002:a81:168f:0:b0:31e:6128:247d with SMTP id
+ 137-20020a81168f000000b0031e6128247dmr494511yww.383.1658221549285; Tue, 19
+ Jul 2022 02:05:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <79dbca4db65f676df37462b7a008198c81a3297e.1658192351.git.Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220715054224.6583-1-wangborong@cdjrlc.com>
+In-Reply-To: <20220715054224.6583-1-wangborong@cdjrlc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 19 Jul 2022 11:05:37 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVOF4PTEteRZr4OHYt5ZubUhXCdV=E85pyVr1h=avPkSg@mail.gmail.com>
+Message-ID: <CAMuHMdVOF4PTEteRZr4OHYt5ZubUhXCdV=E85pyVr1h=avPkSg@mail.gmail.com>
+Subject: Re: [PATCH] powerpc/ps3: Fix comment typo
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     Geoff Levand <geoff@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Mon, Jul 18, 2022 at 3:48 PM Jason Wang <wangborong@cdjrlc.com> wrote:
+> The double `when' is duplicated in line 1069, remove one.
+>
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 
-On 7/19/22 4:26 AM, Thinh Nguyen wrote:
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-> Some old builds of Microsoft Windows 10 UASP class driver reject USAP
+Gr{oetje,eeting}s,
 
-   UASP?
+                        Geert
 
-> device with stream count of 2^4. To keep compatibility with both Linux
-> and Windows, let's increase the stream count to 2^5. Also, internal
-> tests show that stream count of 2^5 increases performance slightly.
-> 
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-[...]
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-MBR, Sergey
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,143 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EC4578EDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E342578EF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236569AbiGSAMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 20:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
+        id S236582AbiGSANA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 20:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236542AbiGSALv (ORCPT
+        with ESMTP id S236602AbiGSAMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 20:11:51 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0616E33E05
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:11:49 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id e15so17522689edj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:11:48 -0700 (PDT)
+        Mon, 18 Jul 2022 20:12:52 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306DE37F89
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:12:51 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-f2a4c51c45so28216484fac.9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CMo0RZPvbvUkGqUmAbZDT304PxMfJDJI6wT8NNNm6AU=;
-        b=VbrxZfmbdb0fBotXV5gttLpu+DEloBL38HB3JH4U6m5dguc5xUADUlXG+eSWpusiLv
-         i74DqNQUdhVzgp/cIfLgp/4om4uIqRtsOZ1vz+HdJXv5xArhqyscy/PdBScscsaGLBrk
-         BaBMyKJtT5v6V5WLPdTd7jO3k96LyllQSx0QQ=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pCnOpb/tAWKWPuLC7zFzL9Qy3rXC3raHyDODfytTBvo=;
+        b=R4AhdQijFE22qPnuP8yQk+M/z15peEnGnkKXOCnjUdkAyL/8qYwcHUjbV158/lM6gk
+         sOyavYbNdkIe+MD0G2ei2o1p0XnUtTA2n1crgGwCQOVlDSiuU1QNw148fxYCb2Hn2CZ5
+         00w5GIrzsUT6WALe+OkBqMLXZNrKjZXV/x8xQSScsq84JE0y1I8C2OxrD2HrX35UrIDS
+         s/8jkY6F3XIMtaWX2O0R0XXeLtxRgzpwC9QLHT8YzHdbcbRJC6PQXYNlK3gb97tugHze
+         EAd1IOnVRw6dG/2+z2/q8ET2qWYmUZRPaLYmdlIiPl1rxuoxhQgPNeLNoyKou+G0Hlbi
+         KeVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CMo0RZPvbvUkGqUmAbZDT304PxMfJDJI6wT8NNNm6AU=;
-        b=MuTp8ck4UCTqlNMt7Dsh9u68ZwBavUDI+Qc4XvUdEFvbUEDqE2gFFJr0trTC0rVT9U
-         bWSL8T/kH6LCuvK5JsMvfV7MAAZWK91HffzPkcYzhpLjlSUP9lP90osXD/6xxFDl6EZu
-         meY1mCb24gtExHP9YLMerBD6yKm7tNAKlYfgy2VfQvB5YrqnbnRgVZV1c9yxHcnqsSOP
-         wF2iZa7py9ktV/NvFh9AA7cmjI/X+Ubm6N0MdxWy7YevkvLDzOLesNAVoEwhsf6aTfbB
-         wXwIPc5XoyNOmnBufiPK/IjZn5ZE3njDbeKPggalan5FxSaJwAaD4vqs+pWa0RVP/ABr
-         Hguw==
-X-Gm-Message-State: AJIora+KADmiuXzVp3yM4iwimJXyvyM7luy0kyRbm4dRJ7EDUtrMPppp
-        E5DRCWW01Gsrx3ahe81icZ4i1dcX3dtTwp2j2tI=
-X-Google-Smtp-Source: AGRyM1vI6CAjuvAOyHjdXGByArVDkLwqgK0oIAWj7JTLu46LemIgfduSMqw8jllCCrb1cjiA8Z+wtA==
-X-Received: by 2002:a05:6402:42c8:b0:43a:a1ee:a097 with SMTP id i8-20020a05640242c800b0043aa1eea097mr39900229edc.150.1658189507287;
-        Mon, 18 Jul 2022 17:11:47 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id t18-20020a1709067c1200b00722bc0aa9e3sm5987957ejo.162.2022.07.18.17.11.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 17:11:45 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id d16so19283311wrv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:11:44 -0700 (PDT)
-X-Received: by 2002:a5d:544b:0:b0:21d:70cb:b4a2 with SMTP id
- w11-20020a5d544b000000b0021d70cbb4a2mr24384691wrv.281.1658189503754; Mon, 18
- Jul 2022 17:11:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pCnOpb/tAWKWPuLC7zFzL9Qy3rXC3raHyDODfytTBvo=;
+        b=MEH/RQtBbxALy8fzTAy8mWf7nl/CSqs1Q4jYw8wqp22EhT9wU2kVe6C7K7Ru8cLXmd
+         dyURrr2y8qOxWKdffObZv/JzaY+iePuNlPrysd1Qk5owBjRsHYU2dkNG30eAWYQcYTOV
+         Gtm9BKtmrG/b/5FzGzP1qDpkOoogNUBtJYUrS2prx1xb6epkWsLF+lh2AFfRnwbMXUYA
+         1CRJFJX+UYUmFhOiTmkrME1Vmi4NKLOS5fmzDKRYdt/HzML4J4zzZoGEtDBdYBFNyRPU
+         2/qj5vcSTXlB1Jaq2wWWo51x4ATziErYSNGuKViKUZMLPfdLgrSdj9bQVj/UTFnwWWUM
+         fzSA==
+X-Gm-Message-State: AJIora+c3h0DS+adZc6Hs/4BkBtxei2gq/8IN6NIv3+eaoGTmlAYWW1N
+        YCDp9UeD8SbcqvZxEanmAobRrvOZEmik5w==
+X-Google-Smtp-Source: AGRyM1vHxTCyv1ECJGzC7VKq76lVZumQrcmY3StVxmqIC00SmPeiy/bVkrqijGWSzpEwnT9EqgONqg==
+X-Received: by 2002:a05:6870:2423:b0:fe:4131:6db9 with SMTP id n35-20020a056870242300b000fe41316db9mr15575223oap.75.1658189570175;
+        Mon, 18 Jul 2022 17:12:50 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id n23-20020a056870559700b0010c727a3c79sm7214120oao.26.2022.07.18.17.12.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 17:12:49 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 19:12:47 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] clk: qcom: gcc-ipq806x: remove cc_register_board
+ for pxo and cxo
+Message-ID: <YtX2///aNWyhKpJn@builder.lan>
+References: <20220706225321.26215-1-ansuelsmth@gmail.com>
+ <20220706225321.26215-5-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-References: <87tu7euska.ffs@tglx> <CAHk-=wjpzVRU0Yr_0DJSB_bKHW3_74UucNpJBjxfHPo_R=PYNg@mail.gmail.com>
- <87o7xmup5t.ffs@tglx> <YtXOMPpmx8TcFtOX@worktop.programming.kicks-ass.net>
- <87lesqukm5.ffs@tglx> <2f7f899cb75b79b08b0662ff4d2cb877@overdrivepizza.com>
- <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
- <87fsiyuhyz.ffs@tglx> <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
- <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
- <YtXzgWnbTQH48JGR@worktop.programming.kicks-ass.net> <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
-In-Reply-To: <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 18 Jul 2022 17:11:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
-Message-ID: <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
-Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Collingbourne <pcc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706225321.26215-5-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 5:03 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So it already only adds the pattern to things that have their address
-> taken, not all functions?
->
-> If so, that's simple enough to sort out: don't do any RSB stack
-> adjustment for those thunks AT ALL.
->
-> Because they should just then end up with a jump to the "real" target,
-> and that real target will do the RSB stack thing.
+On Wed 06 Jul 17:53 CDT 2022, Christian Marangi wrote:
 
-Put another way, let's say that you have a function that looks like this:
+> Now that these clock are defined as fixed clk in dts, we can drop the
+> register_board_clk for cxo_board and pxo_board in gcc_ipq806x_probe.
+> 
 
-  int silly(void)
-  {
-       return 0;
-  }
+Are you trying to say, that now that we have .fw_name based lookup of
+these clocks we don't need the globally registered [cp]xo clocks to
+bridge towards the [cp]xo_board_clocks which was introduced in:
 
-and now you have two cases:
+30fc4212d541 ("arm: dts: qcom: Add more board clocks")
 
- - the "direct callable version" of that function looks exactly the
-way it always has looked, and gets the 16 bytes of padding for it, and
-the RSB counting can happen in that padding
+I think this change would work out if you also replace .name = "pxo"
+with .name = "pxo_board_clk" (and same for cxo)...
 
- - the "somebody took the address of this function" creates code that
-has the hash marker before it, and has the hash check, and then does a
-"jmp silly" to actually jump to the real code.
 
-So what the RSB counting does is just ignore that second case entirely
-as far as the RSB code generation goes. No need to have any padding
-for it at all, it has that (completely different) kCFI padding
-instead.
+But I don't think we can just drop these, as it would break
+compatibility with existing devicetree.
 
-Instead, only the "real" silly function gets that RSB code, and the
-"jmp silly" from the kCFI thunk needs to be updated to point to the
-RSB thunk in front of it.
+Regards,
+Bjorn
 
-Yes, yes, it makes indirect calls slightly more expensive than direct
-calls (because that kCFI thing can't just fall through to the real
-thing), but considering all the *other* costs of indirect calls, the
-cost of having that one "jmp" instruction doesn't really seem to
-matter, does it?
-
-                    Linus
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  drivers/clk/qcom/gcc-ipq806x.c | 8 --------
+>  1 file changed, 8 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
+> index 718de17a1e60..883629de2751 100644
+> --- a/drivers/clk/qcom/gcc-ipq806x.c
+> +++ b/drivers/clk/qcom/gcc-ipq806x.c
+> @@ -3384,14 +3384,6 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
+>  	struct regmap *regmap;
+>  	int ret;
+>  
+> -	ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
+> -	if (ret)
+> -		return ret;
+> -
+>  	if (of_machine_is_compatible("qcom,ipq8065")) {
+>  		ubi32_core1_src_clk.freq_tbl = clk_tbl_nss_ipq8065;
+>  		ubi32_core2_src_clk.freq_tbl = clk_tbl_nss_ipq8065;
+> -- 
+> 2.36.1
+> 

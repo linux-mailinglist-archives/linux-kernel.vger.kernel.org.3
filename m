@@ -2,79 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C658457AA2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F9157AA34
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238664AbiGSXCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 19:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S238749AbiGSXEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 19:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238744AbiGSXCE (ORCPT
+        with ESMTP id S229784AbiGSXE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 19:02:04 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E205C34B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:02:02 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id l11so29211340ybu.13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:02:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=YeEFrOpnueqp49lpSsCtkyhW66cD5QzqZPU5hyS5TkM=;
-        b=IidRqp259LnIGwKSY8eSnwY2pSvVpnXgD6l4DtZ0nS1en5/eIODexxA8HY1P3fOj1G
-         k3L2dqT2adyYNMP0Xveqboy+8rHiXHxkUk7eN+Z4c1u4A1dmYZTv8XeBq3Mcqc8JpY/J
-         Y+FZqCw+ctBHW93xydCMO1T2zbJgKE6zi4yOKnSgCU0wXAb68jTgzbksOw/WF0fuySr4
-         IszSqaPAblIoqFUVbDoenHDcU4oM8zz2T2X2YOFu4paIHinYHYAEpHDagNDILO9VwXpP
-         1+8RZDNcKixJbUOVKzMHhr00ZyE0o1uffduD4Jla0qSaybMZB4f9mMaQZtZwFiKbVkVp
-         7loA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=YeEFrOpnueqp49lpSsCtkyhW66cD5QzqZPU5hyS5TkM=;
-        b=UcGg53hhwxLowSWimytOkvO9spBGr9Rxu2lGzgOsmUPMXu2j7p3o9FXpUL4kHSFmIi
-         ZUoTq2Z7qYuQckg1hD4LeeD6CAl/C3QoI9h5CeQgVfu++TvjZCsOMbIm+wPv+3ba/tvr
-         V7SidZ7CgBfIbDB6+ki/kh3nSKoKgj6AbPEIf2iK+cSnBIB2YIYzQlT01RXCguRfAQnE
-         AOme0zyiwmS8RlAUlPVf3pCXtvWS1uNFpqQioZtMVs4vGCMT9XajpI3y+ZfP8gsBB2QS
-         h6l5DzQGoieAwCYDENO+9iBGM3x1bFWqr10yu4MgaZxyDUyvtdIg+bJICOdbNztuqA8h
-         bACA==
-X-Gm-Message-State: AJIora+KUoMtUVUwnOyeeyjeaVjIz4EVQTMCUAXD9UW1kTFUnA0AV3NV
-        ZK78q8YyAvVZbXJtCdZ9HVripi1//glVjMiHfPQ=
-X-Google-Smtp-Source: AGRyM1sl0J4NyfzC2f29bqXT9oPchs8cDVndRHRbS2Q3refz6ns6Y35SIupBWILMCNYHx3pJ+wk7AlhI9UdwA1sMqK0=
-X-Received: by 2002:a25:850b:0:b0:66c:d287:625a with SMTP id
- w11-20020a25850b000000b0066cd287625amr35727355ybk.31.1658271721069; Tue, 19
- Jul 2022 16:02:01 -0700 (PDT)
+        Tue, 19 Jul 2022 19:04:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A882B5C945;
+        Tue, 19 Jul 2022 16:04:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 663EFB81DAD;
+        Tue, 19 Jul 2022 23:04:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C2C0C341C6;
+        Tue, 19 Jul 2022 23:04:22 +0000 (UTC)
+Date:   Tue, 19 Jul 2022 19:04:20 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Song Liu <song@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>
+Subject: Re: [PATCH v4 bpf-next 2/4] ftrace: allow IPMODIFY and DIRECT ops
+ on the same function
+Message-ID: <20220719190420.2121c659@gandalf.local.home>
+In-Reply-To: <C6229252-B41F-43B9-BABC-538947466710@fb.com>
+References: <20220718055449.3960512-1-song@kernel.org>
+        <20220718055449.3960512-3-song@kernel.org>
+        <20220719142856.7d87ea6d@gandalf.local.home>
+        <C6229252-B41F-43B9-BABC-538947466710@fb.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Sender: belloashawu72@gmail.com
-Received: by 2002:a05:7000:26b1:0:0:0:0 with HTTP; Tue, 19 Jul 2022 16:02:00
- -0700 (PDT)
-From:   Lisa Williams <lw23675851@gmail.com>
-Date:   Wed, 20 Jul 2022 00:02:00 +0100
-X-Google-Sender-Auth: BO4DmyfvjRINBOwOOpcYOq24sHk
-Message-ID: <CAOjupQKQ6zRjFB_6SefXkEmKaf0_dwC_KfS2LmZFQLFEaDr30A@mail.gmail.com>
-Subject: My name is Dr Lisa Williams
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
+On Tue, 19 Jul 2022 22:57:52 +0000
+Song Liu <songliubraving@fb.com> wrote:
 
-My name is Dr Lisa Williams from the United States.I am a French and
-American nationality (dual) living in the U.S and sometimes in France
-for Work Purpose.
+> >> +	hash = ops->func_hash->filter_hash;
+> >> +	size = 1 << hash->size_bits;
+> >> +	for (i = 0; i < size; i++) {
+> >> +		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+> >> +			unsigned long ip = entry->ip;
+> >> +			bool found_op = false;
+> >> +
+> >> +			mutex_lock(&ftrace_lock);
+> >> +			do_for_each_ftrace_op(op, ftrace_ops_list) {
+> >> +				if (!(op->flags & FTRACE_OPS_FL_DIRECT))
+> >> +					continue;
+> >> +				if (ops_references_ip(op, ip)) {
+> >> +					found_op = true;
+> >> +					break;  
+> > 
+> > I think you want a goto here. The macros "do_for_each_ftrace_op() { .. }
+> > while_for_each_ftrace_op()" is a double loop. The break just moves to the
+> > next set of pages and does not break out of the outer loop.  
+> 
+> Hmmm... really? I didn't see it ...
+> 
+> 
+> #define do_for_each_ftrace_op(op, list)                 \
+>         op = rcu_dereference_raw_check(list);                   \
+>         do
+> 
+> #define while_for_each_ftrace_op(op)                            \
+>         while (likely(op = rcu_dereference_raw_check((op)->next)) &&    \
+>                unlikely((op) != &ftrace_list_end))
+> 
+> Did I miss something...?
 
-I hope you consider my friend request. I will share some of my pics
-and more details about myself when I get your response.
+Bah, you're right. I was confusing it with do_for_each_ftrace_rec(), which
+*is* a double loop.
 
-Thanks
+Never mind ;-)
 
-With love
-Lisa
+> 
+> > 
+> > 					goto out_loop;
+> >   
+> >> +				}
+> >> +			} while_for_each_ftrace_op(op);  
+> 
+> [...]
+> 
+> >   
+> >> 	mutex_lock(&ftrace_lock);
+> >> 
+> >> 	ret = ftrace_startup(ops, 0);
+> >> 
+> >> 	mutex_unlock(&ftrace_lock);
+> >> 
+> >> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> >> +	if (direct_mutex_locked)
+> >> +		mutex_unlock(&direct_mutex);
+> >> +#endif  
+> > 
+> > Change this to:
+> > 
+> > out_unlock:
+> > 	mutex_unlock(&direct_mutex);
+> >   
+> 
+> We still need #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS, as 
+> direct_mutex is not defined without that config. 
+
+Ah, right. I just meant to get rid of the if statement.
+
+To keep the code clean, perhaps we should have:
+
+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+# define lock_direct_mutex()	mutex_lock(&direct_mutex)
+# define unlock_direct_mutex()	mutex_unlock(&direct_mutex)
+#else
+# define lock_direct_mutex()	do { } while (0)
+# define unlock_direct_mutex()	do { } while (0)
+#endif
+
+And use that here.
+
+-- Steve

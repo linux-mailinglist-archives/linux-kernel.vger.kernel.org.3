@@ -2,50 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C979857A49B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74E657A48F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237989AbiGSRGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S233911AbiGSRGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237828AbiGSRGZ (ORCPT
+        with ESMTP id S229869AbiGSRGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:06:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B7B4C605;
-        Tue, 19 Jul 2022 10:06:24 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LnQDR1fGxz685PJ;
-        Wed, 20 Jul 2022 01:04:39 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Jul 2022 19:06:21 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <quentin@isovalent.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <terrelln@fb.com>, <nathan@kernel.org>, <ndesaulniers@google.com>
-CC:     <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <llvm@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 4/4] build: Switch to new openssl API for test-libcrypto
-Date:   Tue, 19 Jul 2022 19:05:55 +0200
-Message-ID: <20220719170555.2576993-4-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220719170555.2576993-1-roberto.sassu@huawei.com>
-References: <20220719170555.2576993-1-roberto.sassu@huawei.com>
+        Tue, 19 Jul 2022 13:06:12 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A7B13F43
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:06:11 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id m10so7662241qvu.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:06:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pIGT3yPvX69DwERnWyavBFcR2mldyfX5zPuK+8fcqO8=;
+        b=XwlIfg7gruWwC48OEGG1CWr9Z8CT8odxCLNs5yfsz5pJLMUZeshjwOdQYyPlYH9Ept
+         2cDFwuk/OpgCR3whLmkzcLymvgIe0BpMME56zo2g4WuHRzTN0/B+F06lOR+RnMbpJwVd
+         4/nbPwy0VIuzyjcbFNHf+wncp65H74QVUNaaHqtxlXvVVW5/u/AarMLGPFuIBSERHWb2
+         PNXmPhZMpusMoA5vBUjRGDc/eQXW4JbO5TZFbLk6mPkyzKqtLFnJ3tD7j0ChVn9bPJNd
+         4lyseAcBtsTuFHqQGe1JfQnnLtZ3j5MnAnQ3+zkoeo9W2DUOlNU3lQnQq4cy7d1y07Vr
+         EfQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pIGT3yPvX69DwERnWyavBFcR2mldyfX5zPuK+8fcqO8=;
+        b=G0DFcUKfi3B5p7PLy+OwJJx9MpOrT03JBgK/95bhbzPRC8ubhljGQ0n4EKQbxZjCfo
+         DRDKWUcccPgljwKheSO8g/pmQqEb/vON3vXGG3gXMzorZrz/ZqvjvI8GBhySR6+0kyMj
+         0xI7lB+X472NdtRD9aH1YziVqaM02a81x57NpGoAcxKXDgxad9T4bUHnaexqaB9PDOnK
+         RF6Qzy5jMV+HgA2jBdJV5egsth68MyR4nbNR9xgbU1Z3pwpG1tzSuO5rikCrPwZu8M2V
+         ZhQ104DGeHAcTuWJhiYP4CxRGJzzplAbs25E+XP+5dd/2Fz6FPAcDp7b/78BTK3acHzw
+         4aGw==
+X-Gm-Message-State: AJIora9Em1I3YkDwOwwXeGH8TdzdsMMmPLGZc66L77geUJP8TIeR2NYV
+        CszrTgSQ4VQOJRhvM4GEJoVk2p502t+XehytZw8=
+X-Google-Smtp-Source: AGRyM1vwQuZ2p+lZiV35/OA0pT3+b29U+PgBa9JUdUwPYI8qezRsk/+h3Bd4M9GQk4kCfTtNAtXCKQSYvDN3xNaAAHw=
+X-Received: by 2002:ad4:5dc7:0:b0:473:e8d0:220d with SMTP id
+ m7-20020ad45dc7000000b00473e8d0220dmr4194410qvh.128.1658250370460; Tue, 19
+ Jul 2022 10:06:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CABXGCsPRrUoNtO4J8H8aLWRCGGZkwHqtOZV9Edamd2pXVB0ooA@mail.gmail.com>
+ <DM5PR12MB24695F88092ADF033A2522E6F18F9@DM5PR12MB2469.namprd12.prod.outlook.com>
+ <CAHbf0-GssD3jP4ZjVQeP1Bgu+uHE3OXAEWLeZJA5VdWHzqbBjQ@mail.gmail.com> <CABXGCsMvJ6JWc3yO8Lv38ZHEHzhhOZUipA4cuc5E=RPSt0WbZQ@mail.gmail.com>
+In-Reply-To: <CABXGCsMvJ6JWc3yO8Lv38ZHEHzhhOZUipA4cuc5E=RPSt0WbZQ@mail.gmail.com>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Tue, 19 Jul 2022 22:05:59 +0500
+Message-ID: <CABXGCsOpPb9YAjTpeOzgWS+dPaQA2UKA-cT=HhVeCskod+-OAg@mail.gmail.com>
+Subject: Re: Command "clinfo" causes BUG: kernel NULL pointer dereference,
+ address: 0000000000000008 on driver amdgpu
+To:     Mike Lothian <mike@fireburn.co.uk>
+Cc:     "Chen, Guchun" <Guchun.Chen@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,48 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch to new EVP API for detecting libcrypto, as Fedora 36 returns an
-error when it encounters the deprecated function MD5_Init() and the others.
-The error would be interpreted as missing libcrypto, while in reality it is
-not.
+On Tue, Jul 19, 2022 at 4:26 PM Mikhail Gavrilov
+<mikhail.v.gavrilov@gmail.com> wrote:
+> In the kernel log there is no error so it is most likely a user space issue , but I am not
+> sure about it.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- tools/build/feature/test-libcrypto.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+But I am confused by the message in the kernel log:
+[ 1962.000909] amdgpu: HIQ MQD's queue_doorbell_id0 is not 0, Queue
+preemption time out
+[ 1962.000912] amdgpu: Failed to evict process queues
+[ 1962.000918] amdgpu: Failed to quiesce KFD
+[ 1966.010395] amdgpu: HIQ MQD's queue_doorbell_id0 is not 0, Queue
+preemption time out
+[ 1966.010406] amdgpu: Resetting wave fronts (cpsch) on dev 00000000b40e7982
 
-diff --git a/tools/build/feature/test-libcrypto.c b/tools/build/feature/test-libcrypto.c
-index a98174e0569c..bc34a5bbb504 100644
---- a/tools/build/feature/test-libcrypto.c
-+++ b/tools/build/feature/test-libcrypto.c
-@@ -1,16 +1,23 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <openssl/evp.h>
- #include <openssl/sha.h>
- #include <openssl/md5.h>
- 
- int main(void)
- {
--	MD5_CTX context;
-+	EVP_MD_CTX *mdctx;
- 	unsigned char md[MD5_DIGEST_LENGTH + SHA_DIGEST_LENGTH];
- 	unsigned char dat[] = "12345";
-+	unsigned int digest_len;
- 
--	MD5_Init(&context);
--	MD5_Update(&context, &dat[0], sizeof(dat));
--	MD5_Final(&md[0], &context);
-+	mdctx = EVP_MD_CTX_new();
-+	if (!mdctx)
-+		return 0;
-+
-+	EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
-+	EVP_DigestUpdate(mdctx, &dat[0], sizeof(dat));
-+	EVP_DigestFinal_ex(mdctx, &md[0], &digest_len);
-+	EVP_MD_CTX_free(mdctx);
- 
- 	SHA1(&dat[0], sizeof(dat), &md[0]);
- 
+
 -- 
-2.25.1
-
+Best Regards,
+Mike Gavrilov.

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5CA579F03
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9305E579B82
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243209AbiGSNJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
+        id S240180AbiGSM2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242968AbiGSNIn (ORCPT
+        with ESMTP id S237054AbiGSM2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:08:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836B551413;
-        Tue, 19 Jul 2022 05:28:09 -0700 (PDT)
+        Tue, 19 Jul 2022 08:28:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7205070B;
+        Tue, 19 Jul 2022 05:10:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DC5A6090A;
-        Tue, 19 Jul 2022 12:28:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C50C341C6;
-        Tue, 19 Jul 2022 12:28:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4AA1B81B32;
+        Tue, 19 Jul 2022 12:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CF25C341C6;
+        Tue, 19 Jul 2022 12:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233688;
-        bh=0tB/LX5tbGmxD7/pJ3RV12uRuMbISjx0rX5KmfklPqQ=;
+        s=korg; t=1658232622;
+        bh=NS6Ip8n5acsijBVdlEeG+w91FXwLAGrzmxhdKFH/fpk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QloKiFyNfkVujndCLsG2/grMR/ObaBb9WYVNVBLiV+HSu2WoFKjb/Z5CcTLQRgULs
-         T4qeodEuvRvr7WltlywqVu9v/dl6bNnVu9j/ckhw4OqVC18VawqbVLQ8LWi4rekHOl
-         13ZZuh+JnHHDuJGdnWGAsUoo1Bp6qzt0yzuuclfg=
+        b=uvzbWeY1QRaZQDcvTXxUZ463FyxoFfhZvKtmoktRNACIptPblMCO3sMTcRKWWslqT
+         WgCre5mqGs4F/u41YEnC2poYZzy8CASWc23dvbbFpPSPV5ZlnxUuMMiWsjuQ6Uiwyy
+         HMvt1lO2NeW0s6r1SOJ7V21/VOhN98LdDfE1Ctao=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Wagner <dwagner@suse.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 180/231] nvme-tcp: always fail a request when sending it failed
+        stable@vger.kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 092/112] ASoC: dapm: Initialise kcontrol data for mux/demux controls
 Date:   Tue, 19 Jul 2022 13:54:25 +0200
-Message-Id: <20220719114729.353520239@linuxfoundation.org>
+Message-Id: <20220719114635.653780671@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sagi Grimberg <sagi@grimberg.me>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit 41d07df7de841bfbc32725ce21d933ad358f2844 ]
+[ Upstream commit 11d7a12f7f50baa5af9090b131c9b03af59503e7 ]
 
-queue stoppage and inflight requests cancellation is fully fenced from
-io_work and thus failing a request from this context. Hence we don't
-need to try to guess from the socket retcode if this failure is because
-the queue is about to be torn down or not.
+DAPM keeps a copy of the current value of mux/demux controls,
+however this value is only initialised in the case of autodisable
+controls. This leads to false notification events when first
+modifying a DAPM kcontrol that has a non-zero default.
 
-We are perfectly safe to just fail it, the request will not be cancelled
-later on.
+Autodisable controls are left as they are, since they already
+initialise the value, and there would be more work required to
+support autodisable muxes where the first option isn't disabled
+and/or that isn't the default.
 
-This solves possible very long shutdown delays when the users issues a
-'nvme disconnect-all'
+Technically this issue could affect mixer/switch elements as well,
+although not on any of the devices I am currently running. There
+is also a little more work to do to address the issue there due to
+that side supporting stereo controls, so that has not been tackled
+in this patch.
 
-Reported-by: Daniel Wagner <dwagner@suse.de>
-Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220623105120.1981154-1-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/tcp.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ sound/soc/soc-dapm.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
-index ad3a2bf2f1e9..e44d0570e694 100644
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -1180,8 +1180,7 @@ static int nvme_tcp_try_send(struct nvme_tcp_queue *queue)
- 	} else if (ret < 0) {
- 		dev_err(queue->ctrl->ctrl.device,
- 			"failed to send request %d\n", ret);
--		if (ret != -EPIPE && ret != -ECONNRESET)
--			nvme_tcp_fail_request(queue->request);
-+		nvme_tcp_fail_request(queue->request);
- 		nvme_tcp_done_send_req(queue);
- 	}
- 	return ret;
+diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
+index f2f7f2dde93c..754c1f16ee83 100644
+--- a/sound/soc/soc-dapm.c
++++ b/sound/soc/soc-dapm.c
+@@ -62,6 +62,8 @@ struct snd_soc_dapm_widget *
+ snd_soc_dapm_new_control_unlocked(struct snd_soc_dapm_context *dapm,
+ 			 const struct snd_soc_dapm_widget *widget);
+ 
++static unsigned int soc_dapm_read(struct snd_soc_dapm_context *dapm, int reg);
++
+ /* dapm power sequences - make this per codec in the future */
+ static int dapm_up_seq[] = {
+ 	[snd_soc_dapm_pre] = 1,
+@@ -442,6 +444,9 @@ static int dapm_kcontrol_data_alloc(struct snd_soc_dapm_widget *widget,
+ 
+ 			snd_soc_dapm_add_path(widget->dapm, data->widget,
+ 					      widget, NULL, NULL);
++		} else if (e->reg != SND_SOC_NOPM) {
++			data->value = soc_dapm_read(widget->dapm, e->reg) &
++				      (e->mask << e->shift_l);
+ 		}
+ 		break;
+ 	default:
 -- 
 2.35.1
 

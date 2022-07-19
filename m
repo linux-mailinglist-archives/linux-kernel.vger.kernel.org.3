@@ -2,71 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58965794C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723B15794CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235027AbiGSIBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 04:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50306 "EHLO
+        id S235191AbiGSIDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 04:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiGSIBp (ORCPT
+        with ESMTP id S232245AbiGSIDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:01:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF96286C6;
-        Tue, 19 Jul 2022 01:01:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27E08B81812;
-        Tue, 19 Jul 2022 08:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9901FC341C6;
-        Tue, 19 Jul 2022 08:01:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658217702;
-        bh=MPn31g5DM36GxUKdneF5aM9b7MR33ynCtw9uF8ye1Kw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JEKQQXvAtzyUr1Iy+FKp+r4lahFxgM3G2IvvoDbVvyB1Rskpgk9jZeP6wMQg78Nl/
-         kP64nwnlpXPjhhWjp/Ysn3+B36J1LDMJbE06U9xhokA4YPQ8tNwFoYTqN9fuO0Cqbr
-         T7U3TXLpr6AU6WGoOwytp8Oowx2aw85yfi0Z+Gvqy/8dJhkQWfSWr5Sk/aeeHcl1r0
-         4iXXRKyBzWEOCCMMjtCmLtXzjY4SerwE1xuI/RR9dznKg/dLeyloYeI8YSvkEir4Vn
-         KUGh97UvfLFD2XytrgfFVnQwhVKpwHZTvl20iYmaj2EZmaQXjjAnpno3TMFznEjeAV
-         Bs/AKrs1Hf9aQ==
-Date:   Tue, 19 Jul 2022 10:01:38 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Antoine Tenart <atenart@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: inside-secure: Add missing MODULE_DEVICE_TABLE
- for of
-Message-ID: <20220719100138.49f8ccab@dellmb>
-In-Reply-To: <20220719075403.15379-1-pali@kernel.org>
-References: <20220719075403.15379-1-pali@kernel.org>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 19 Jul 2022 04:03:32 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952F6286E3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:03:31 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id x91so18525052ede.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qUssEChQuwpiwUeyFYSOdlIgFZfxU+RbqNsZ8mfqrbc=;
+        b=tzgHZY9F4XUEf5LUJRY1/iD2qRw3u1cRlsx1CU6FWL5fWdJ+OOzreVaNmzqQ9ymhOf
+         q819ZVGU63OI1u+bzJ3wl8QhWQWuKC5/dzNYrZpGBRQlf8zmkUPk4frzrG1Lc2LxiNIK
+         gMXh43zq0QS74zDE2O8aBzbmF6e31UCmn/El6PwrgFgi4BA3EdmlDcORGybWV3qkNAWd
+         vMx16nOVU3gKI8VGLis1GakqhMDYZGlZw3H+uTbso02+jgv8FpmmcKBINIa+QgU47lKu
+         nVXh2wcjjeBhoLNAtviJ0DBU6cpPPnW3EfTzTRzLCLT9wZMDK2460t+zREK6C2bKfWWo
+         jnsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qUssEChQuwpiwUeyFYSOdlIgFZfxU+RbqNsZ8mfqrbc=;
+        b=WFoE3i5nLJlqRqCFEtEKq+Av/ufh7JQ8UdU9XmmD1R+hU/lVgeVJvIxORuyh1/6rZX
+         l/+E6d2y3cnFNRVH/0rtb/SlZwqn7Z+eqMyymiEgXrtGLp6iIjAbcpdJCZ/CO1Skz4u3
+         kPlPFfUEp/WwKJBsAnOxSTSp+jO3FwP8YYiYah253ohsPZTc8ts05LABUa060ugbDMQC
+         R6faz98sNYQ5sR8HVjqQrYfSx1VqH2IQpKqoqECBrGCbA/8kTSkNHOSpmrwtlnhOTH7g
+         CCHC4ZW5IaN8WZzPVWfs8mA8i7AB+KMQF9G+e6r04wasnuCc9Jj3AqbZ4QWJwMGvXqxN
+         1/Ag==
+X-Gm-Message-State: AJIora+z4JMsYlHzaEjfuNjvEF8W0w1zOgHn11NTksfmtWHWqk6Inthh
+        RYw7zEnhZctWURwIgLCXpoUUAUnopBGRo7AMdDAyJQ==
+X-Google-Smtp-Source: AGRyM1tyDhOckHQe/dGpY9K+LRxtBUnBuEg7EIc4fUoEZkGIapYvFnhaJVYTS/7T+cuSr10df3iP53TGFuFZMPn4KaU=
+X-Received: by 2002:a05:6402:42c3:b0:43a:46f6:ebd2 with SMTP id
+ i3-20020a05640242c300b0043a46f6ebd2mr42848042edc.213.1658217810011; Tue, 19
+ Jul 2022 01:03:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714020319.72952-1-warthog618@gmail.com>
+In-Reply-To: <20220714020319.72952-1-warthog618@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 19 Jul 2022 10:03:19 +0200
+Message-ID: <CAMRc=McYTg8fvbDTmo=_wfXoM+_UpiL=+Yh=k5Onw6+zBd32ig@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] gpiolib: cdev: code cleanup following hte integration
+To:     Kent Gibson <warthog618@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 09:54:03 +0200
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
+On Thu, Jul 14, 2022 at 4:03 AM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> This patch series is a collection of improvements to simplify the
+> code, improve readability, and compile out unused code.
+> There are no functional changes.
+>
+> The first patch is a cleanup for my recent linereq_free() fix. I
+> noted then that the edge_detector_stop() could probably be safely
+> moved inside the line desc check block, but wanted to keep that
+> change minimal just in case.  It can be safely moved, and so here
+> it is.
+>
+> Patch 2 makes use of an existing macro to simplify a call.
+>
+> Patch 3 replaces some more if-else chains with switches, which is
+> more readable (YMMV).
+>
+> Patch 4 reorganizes the line identification code to share code
+> common to alternate paths.
+>
+> Patch 5 consolidates a number of separate flags into one.  This
+> reduces code complexity, simplifies any future edge source additions,
+> and makes patch 6 significantly simpler.
+>
+> Patch 6 totally compiles out the hte specific code when CONFIG_HTE
+> is not selected.
+>
+> I've based this series on gpio/for-current, as it requires the fix
+> patch -
+> commit c8e27a4a5136 ("gpiolib: cdev: fix null pointer dereference in linereq_free()")
+> Happy to rebase if that doesn't suit.
+>
+> Dipen, I don't have any HTE compatible hardware to test with, so
+> could you check that this still works for you?
+>
+> Changes v1 -> v2:
+>  Address Andy's review comments, specifically
+>   - Patch 4 move ternary initializer into a helper function.
+>   - Patch 5 variable declaration ordering.
+>   - Patch 6 remove obsoleted comment and tidy some if expressions.
+>
+> Kent Gibson (6):
+>   gpiolib: cdev: simplify linereq_free
+>   gpiolib: cdev: simplify parameter in call to hte_edge_setup
+>   gpiolib: cdev: replace if-else chains with switches
+>   gpiolib: cdev: simplify line event identification
+>   gpiolib: cdev: consolidate edge detector configuration flags
+>   gpiolib: cdev: compile out HTE unless CONFIG_HTE selected
+>
+>  drivers/gpio/gpiolib-cdev.c | 291 +++++++++++++++++++-----------------
+>  1 file changed, 151 insertions(+), 140 deletions(-)
+>
+>
+> base-commit: 7329b071729645e243b6207e76bca2f4951c991b
+> --
+> 2.37.1
+>
 
-> Without MODULE_DEVICE_TABLE, crypto_safexcel.ko module is not automatical=
-ly
-> loaded on platforms where inside-secure crypto HW is specified in device
-> tree (e.g. Armada 3720). So add missing MODULE_DEVICE_TABLE for of.
->=20
-> Fixes: 1b44c5a60c13 ("crypto: inside-secure - add SafeXcel EIP197 crypto =
-engine driver")
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+Excellent work as usual, all applied.
 
-Acked-by: Marek Beh=C3=BAn <kabel@kernel.org>
+Bart

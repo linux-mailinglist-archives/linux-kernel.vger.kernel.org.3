@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D24579A6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5DE579C20
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239001AbiGSMQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
+        id S240292AbiGSMg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239305AbiGSMO3 (ORCPT
+        with ESMTP id S239792AbiGSMfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:14:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133274B4BE;
-        Tue, 19 Jul 2022 05:05:28 -0700 (PDT)
+        Tue, 19 Jul 2022 08:35:06 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184867A520;
+        Tue, 19 Jul 2022 05:13:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 471806165C;
-        Tue, 19 Jul 2022 12:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1467BC341C6;
-        Tue, 19 Jul 2022 12:05:24 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D4025CE1BE3;
+        Tue, 19 Jul 2022 12:13:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E68F0C341C6;
+        Tue, 19 Jul 2022 12:13:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232325;
-        bh=BfSC3aFZ9iSx+lS+0pmq96tWuG2ABybDSn/Mp4D7j/M=;
+        s=korg; t=1658232791;
+        bh=krPBsNYKPzoOFgBFy5vJEFUAPdi761bW4QBFCNBjFy8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LZ4P48r1RynsQumkglZkbHU2UqSpYI33sdR7VaA7W567Q2tjGE6hHkSqMhiBiJ85Z
-         N/Ew+lUobNxt8hUutu/YrYJR2qd9fz5zyIXSjQ1YmTfkgA8cmB+J47xDi5O6uJpBwb
-         rQL0SMZUfZUauRxiJfdXPMUgb6AUGwKYDqmZnAZg=
+        b=EnyMW80ze8IQknBsHDINR3VXIS8HgoVVMXqNhQmNECadVve5vWorA8OdnK3sHXPB5
+         uSTuTVb1/OqEQVSDlkIt+bVgpTuIXxoWHom1LQCgwhOi3CkFfybK0ue4N3ZvJL8FKZ
+         IdQteQ3ik8biY9BCOLwKIaDDVoz0gKH6crX6oOcI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 005/112] ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc221
+        stable@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 046/167] ASoC: tas2764: Fix amp gain register offset & default
 Date:   Tue, 19 Jul 2022 13:52:58 +0200
-Message-Id: <20220719114626.573913872@linuxfoundation.org>
+Message-Id: <20220719114701.091733980@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,58 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meng Tang <tangmeng@uniontech.com>
+From: Hector Martin <marcan@marcan.st>
 
-commit 4ba5c853d7945b3855c3dcb293f7f9f019db641e upstream.
+[ Upstream commit 1c4f29ec878bbf1cc0a1eb54ae7da5ff98e19641 ]
 
-On a HP 288 Pro G2 MT (X9W02AV), the front mic could not be detected.
-In order to get it working, the pin configuration needs to be set
-correctly, and the ALC221_FIXUP_HP_288PRO_MIC_NO_PRESENCE fixup needs
-to be applied.
+The register default is 0x28 per the datasheet, and the amp gain field
+is supposed to be shifted left by one. With the wrong default, the ALSA
+controls lie about the power-up state. With the wrong shift, we get only
+half the gain we expect.
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220713063332.30095-1-tangmeng@uniontech.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Fixes: 827ed8a0fa50 ("ASoC: tas2764: Add the driver for the TAS2764")
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+Link: https://lore.kernel.org/r/20220630075135.2221-4-povik+lin@cutebit.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ sound/soc/codecs/tas2764.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -6725,6 +6725,7 @@ enum {
- 	ALC298_FIXUP_LENOVO_SPK_VOLUME,
- 	ALC256_FIXUP_DELL_INSPIRON_7559_SUBWOOFER,
- 	ALC269_FIXUP_ATIV_BOOK_8,
-+	ALC221_FIXUP_HP_288PRO_MIC_NO_PRESENCE,
- 	ALC221_FIXUP_HP_MIC_NO_PRESENCE,
- 	ALC256_FIXUP_ASUS_HEADSET_MODE,
- 	ALC256_FIXUP_ASUS_MIC,
-@@ -7651,6 +7652,16 @@ static const struct hda_fixup alc269_fix
- 		.chained = true,
- 		.chain_id = ALC269_FIXUP_NO_SHUTUP
- 	},
-+	[ALC221_FIXUP_HP_288PRO_MIC_NO_PRESENCE] = {
-+		.type = HDA_FIXUP_PINS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+			{ 0x19, 0x01a1913c }, /* use as headset mic, without its own jack detect */
-+			{ 0x1a, 0x01813030 }, /* use as headphone mic, without its own jack detect */
-+			{ }
-+		},
-+		.chained = true,
-+		.chain_id = ALC269_FIXUP_HEADSET_MODE
-+	},
- 	[ALC221_FIXUP_HP_MIC_NO_PRESENCE] = {
- 		.type = HDA_FIXUP_PINS,
- 		.v.pins = (const struct hda_pintbl[]) {
-@@ -8758,6 +8769,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x103c, 0x2335, "HP", ALC269_FIXUP_HP_MUTE_LED_MIC1),
- 	SND_PCI_QUIRK(0x103c, 0x2336, "HP", ALC269_FIXUP_HP_MUTE_LED_MIC1),
- 	SND_PCI_QUIRK(0x103c, 0x2337, "HP", ALC269_FIXUP_HP_MUTE_LED_MIC1),
-+	SND_PCI_QUIRK(0x103c, 0x2b5e, "HP 288 Pro G2 MT", ALC221_FIXUP_HP_288PRO_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x802e, "HP Z240 SFF", ALC221_FIXUP_HP_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x802f, "HP Z240", ALC221_FIXUP_HP_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x8077, "HP", ALC256_FIXUP_HP_HEADSET_MIC),
+diff --git a/sound/soc/codecs/tas2764.c b/sound/soc/codecs/tas2764.c
+index bd79bc7ecf6b..ec13ba01e522 100644
+--- a/sound/soc/codecs/tas2764.c
++++ b/sound/soc/codecs/tas2764.c
+@@ -541,7 +541,7 @@ static DECLARE_TLV_DB_SCALE(tas2764_playback_volume, -10050, 50, 1);
+ static const struct snd_kcontrol_new tas2764_snd_controls[] = {
+ 	SOC_SINGLE_TLV("Speaker Volume", TAS2764_DVC, 0,
+ 		       TAS2764_DVC_MAX, 1, tas2764_playback_volume),
+-	SOC_SINGLE_TLV("Amp Gain Volume", TAS2764_CHNL_0, 0, 0x14, 0,
++	SOC_SINGLE_TLV("Amp Gain Volume", TAS2764_CHNL_0, 1, 0x14, 0,
+ 		       tas2764_digital_tlv),
+ };
+ 
+@@ -566,7 +566,7 @@ static const struct reg_default tas2764_reg_defaults[] = {
+ 	{ TAS2764_SW_RST, 0x00 },
+ 	{ TAS2764_PWR_CTRL, 0x1a },
+ 	{ TAS2764_DVC, 0x00 },
+-	{ TAS2764_CHNL_0, 0x00 },
++	{ TAS2764_CHNL_0, 0x28 },
+ 	{ TAS2764_TDM_CFG0, 0x09 },
+ 	{ TAS2764_TDM_CFG1, 0x02 },
+ 	{ TAS2764_TDM_CFG2, 0x0a },
+-- 
+2.35.1
+
 
 

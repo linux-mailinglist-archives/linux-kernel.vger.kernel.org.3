@@ -2,277 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9672157A338
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E29B57A331
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiGSPeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
+        id S232941AbiGSPdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbiGSPeA (ORCPT
+        with ESMTP id S229585AbiGSPdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:34:00 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B01F59277;
-        Tue, 19 Jul 2022 08:33:59 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JFNHOJ002662;
-        Tue, 19 Jul 2022 17:33:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=JTVMrQ2udSWsu5aIHPFuIMK4Kpc2RqIZUPbHZTtleog=;
- b=0AWsRJ2Z6i5npVNKhn/A+uHIe4LgEiiGj9TAEoHQPHPnkFb3IVuIbPqcnbY4AThZfk1A
- lz91a9jOD93hutxZJ4ZxBt3kF8GLMsywZp2IQ/XOwLcw228XwFnPV9126+EBE+/jHn/I
- b2OKel5bXtHG0LsteO1zUhgWxeBku4Y/G89+oe/IrX0E+CVArvkeUfGj0hYGVnDCbqop
- DDi/b3O/pnDgmQPZOZwzj7gveqaQ+zaL9ZF7M3sVZS6BMUoiLjF9sj7rmCjS+DsAEOUM
- Yqi5e7h095jLu7/5bCWqIK+2nYrkeM7q3hxaW4Ww0PBGsfnaUIxxnT5zMUz0YDBypwCJ wQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hbnkg8peu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Jul 2022 17:33:48 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BB40A100034;
-        Tue, 19 Jul 2022 17:33:47 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B6F7D22AFF6;
-        Tue, 19 Jul 2022 17:33:47 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 19 Jul
- 2022 17:33:47 +0200
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-To:     Jonathan Corbet <corbet@lwn.net>, Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-doc@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>
-Subject: [PATCH v3 6/6] dmaengine: stm32-mdma: add support to be triggered by STM32 DMA
-Date:   Tue, 19 Jul 2022 17:33:44 +0200
-Message-ID: <20220719153344.621750-2-amelie.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220719153344.621750-1-amelie.delaunay@foss.st.com>
-References: <20220719153344.621750-1-amelie.delaunay@foss.st.com>
+        Tue, 19 Jul 2022 11:33:52 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673B059242;
+        Tue, 19 Jul 2022 08:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1658244828;
+        bh=o8/VvZGzVY8iVXFAp5oEfYvr/GsS3dF+o8lFxhtgCJA=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=PbofVN986xAtI1Haki2qP+ZjEZJgCKi8X/k3523b0FnPHMVSxyf2zZcIXt52fk0nc
+         ypSjcjdQB4SkwOq+2E7OtZIuZPJCCzXy132NKji8XMr/cTD8+VJYSrQjsoS0LCbjwG
+         eY2zH8l0tqEZ+ApO9KGaRPDAKDDxfdxRjMSuDuaI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.36]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M7K3i-1oAWu02fV6-007lxK; Tue, 19
+ Jul 2022 17:33:48 +0200
+Message-ID: <1ca489cc-491d-f78f-5743-fd47d6c98efb@gmx.de>
+Date:   Tue, 19 Jul 2022 17:33:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-19_04,2022-07-19_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:cnzUCsaZfKmWiRrYHzYGVgnWMpBgsb2N3xKUo7oDgrEtb1fc5H3
+ Bg+racfYgch4fDkxSsq4fNINtw8VrDYlNjqy2yF/r/ULm/c7prO1dfDJB55EXq4LRquZQ2N
+ 919Tr6ILRrNj/JPhORJkRS+XTgE+RtVkqaajpB0ye4OXuyak8EcDtURdLUqgfupqcKcSirV
+ UtB2aQt7PoqdOxBwt4Kdg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jQmsN5d2eLY=:nz2pd/7FzIQ2h82YexzylW
+ +ix2Ck9sfpNeFgLs5z1fRH6ijqW6gZgiEIumGGaCU5G5Y17VYh3r3sROhZJOXiOlkEWKEKsH5
+ kjOCZkJcM60daZKUMDvP13YaCtHlUgMJ28uTP4QN0GD9ldtDNE0U/FNjn3AdnrSXOTDQLROhB
+ rrVSbbQ9W87vQu/b+XTIpElgE9k6o5WaQzdmbt9/Lulef7EcV5/ANw3SiBdqlg0H7Z2b+QofW
+ 7dDw65h1SheyVPILVYuChLHw44ws9iN1uTR9OxCgEfMABYcOAsscTczVhCZsdfOhyHKN+tVTS
+ PYDhfy95+BhD8eN3/qVJk2VscMly9TJv0XMkbdsh+dCxy/y+JHssDt3Kl9VaROtkI1SA0zmZb
+ Hq8HxId/WZxtn2iFMTo5MYDifNChX43XTePys2MzjgBdSuYg63uIAwqLnRHLQJd+CfFyr0azP
+ xoJVBdxJ2cDDNAZeDchrElMJY+45tVB3/U0Yy1dkteXQObPhM15dlMFfe4TSvrsm0GXuEVaLI
+ Co6uM/EFyOz33RLaKEgO2tZ8/q+Dibh0GpDMpgLCFmaztD2JS/ht1crMJBEpCkyOu75gkMlaJ
+ ddnQM3bLGlDRqJip4NZJg3yuYG5H2+qqwGjHw9JIDqJR2ln6N3TcpPZ8RdPWSCGQEmVwd+Q2W
+ 0ckTwTc3xmG4okYiO8hhrx+etGVB1CAtLlKxwZQjS48jygM4kDL9sokwLDLMEBMkHH5ZV7utZ
+ xCSL01fQYgBlLrZW8a8sNhSP9Bu0YnjIVwvWex1i46vvJXfHZP6LAZ2GUr72qsRxN48nCGt7Z
+ sNWNdJP4PAwz3+RV3O/9P4m7GWkIrucP0sI8IxDaCZ5yDkHqbW1gH+zsyIHsx0peCBUPH519l
+ Ay0xyPmeHZq4Z+4DNkpkRr5EuNFboC8+7Lx9bCgx1m3olugCePzDTNq3ayg+VPWXxIbraQD9H
+ 3Qtx+CGUjwI90cF8tHbVnNUi8CllyyZvKvhxDl6CCCysxjmnQ1JPGileKjTQM/Mrnjasq6yN/
+ eMufNYaqDWQBhTzfW/hkkTvzjDya8wYNMh07PODCpeEtDXMEWNN0PH98qlGE5rarYokEtlFI6
+ 3K0VRrcCxFSSX/20mgdz7wiLonkAtnLe714
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-STM32 MDMA can be triggered by STM32 DMA channels transfer complete.
+hallo Greg
 
-In case of non-null struct dma_slave_config .peripheral_size, it means the
-DMA client wants the DMA to trigger the MDMA.
+5.18.13-rc1
 
-stm32-mdma driver gets the request id, the mask_addr, and the mask_data in
-struct stm32_mdma_dma_config passed by DMA with struct dma_slave_config
-.peripheral_config/.peripheral_size.
+compiles here with a lot of warnings on an x86_64
+(Intel i5-11400, Fedora 36)
 
-Then, as DMA is configured in Double-Buffer mode, and MDMA channel will
-transfer data from/to SRAM to/from DDR, then bursts are optimized.
+warnings all over the tree like this:
+...
+arch/x86/crypto/twofish-x86_64-asm_64.o: warning: objtool:
+twofish_enc_blk()+0x7b2: 'naked' return found in RETPOLINE build
+arch/x86/crypto/twofish-x86_64-asm_64.o: warning: objtool:
+twofish_dec_blk()+0x7b2: 'naked' return found in RETPOLINE build
+...
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
----
-No changes in v3.
+patch was applied to an clean 5.18.12
 
-No changes in v2.
----
- drivers/dma/stm32-mdma.c | 70 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 69 insertions(+), 1 deletion(-)
+is it just me ?
 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index b11927ed4367..e28acbcb53f4 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -199,6 +199,7 @@ struct stm32_mdma_chan_config {
- 	u32 transfer_config;
- 	u32 mask_addr;
- 	u32 mask_data;
-+	bool m2m_hw; /* True when MDMA is triggered by STM32 DMA */
- };
- 
- struct stm32_mdma_hwdesc {
-@@ -227,6 +228,12 @@ struct stm32_mdma_desc {
- 	struct stm32_mdma_desc_node node[];
- };
- 
-+struct stm32_mdma_dma_config {
-+	u32 request;	/* STM32 DMA channel stream id, triggering MDMA */
-+	u32 cmar;	/* STM32 DMA interrupt flag clear register address */
-+	u32 cmdr;	/* STM32 DMA Transfer Complete flag */
-+};
-+
- struct stm32_mdma_chan {
- 	struct virt_dma_chan vchan;
- 	struct dma_pool *desc_pool;
-@@ -539,13 +546,23 @@ static int stm32_mdma_set_xfer_param(struct stm32_mdma_chan *chan,
- 		dst_addr = chan->dma_config.dst_addr;
- 
- 		/* Set device data size */
-+		if (chan_config->m2m_hw)
-+			dst_addr_width = stm32_mdma_get_max_width(dst_addr, buf_len,
-+								  STM32_MDMA_MAX_BUF_LEN);
- 		dst_bus_width = stm32_mdma_get_width(chan, dst_addr_width);
- 		if (dst_bus_width < 0)
- 			return dst_bus_width;
- 		ctcr &= ~STM32_MDMA_CTCR_DSIZE_MASK;
- 		ctcr |= STM32_MDMA_CTCR_DSIZE(dst_bus_width);
-+		if (chan_config->m2m_hw) {
-+			ctcr &= ~STM32_MDMA_CTCR_DINCOS_MASK;
-+			ctcr |= STM32_MDMA_CTCR_DINCOS(dst_bus_width);
-+		}
- 
- 		/* Set device burst value */
-+		if (chan_config->m2m_hw)
-+			dst_maxburst = STM32_MDMA_MAX_BUF_LEN / dst_addr_width;
-+
- 		dst_best_burst = stm32_mdma_get_best_burst(buf_len, tlen,
- 							   dst_maxburst,
- 							   dst_addr_width);
-@@ -588,13 +605,24 @@ static int stm32_mdma_set_xfer_param(struct stm32_mdma_chan *chan,
- 		src_addr = chan->dma_config.src_addr;
- 
- 		/* Set device data size */
-+		if (chan_config->m2m_hw)
-+			src_addr_width = stm32_mdma_get_max_width(src_addr, buf_len,
-+								  STM32_MDMA_MAX_BUF_LEN);
-+
- 		src_bus_width = stm32_mdma_get_width(chan, src_addr_width);
- 		if (src_bus_width < 0)
- 			return src_bus_width;
- 		ctcr &= ~STM32_MDMA_CTCR_SSIZE_MASK;
- 		ctcr |= STM32_MDMA_CTCR_SSIZE(src_bus_width);
-+		if (chan_config->m2m_hw) {
-+			ctcr &= ~STM32_MDMA_CTCR_SINCOS_MASK;
-+			ctcr |= STM32_MDMA_CTCR_SINCOS(src_bus_width);
-+		}
- 
- 		/* Set device burst value */
-+		if (chan_config->m2m_hw)
-+			src_maxburst = STM32_MDMA_MAX_BUF_LEN / src_addr_width;
-+
- 		src_best_burst = stm32_mdma_get_best_burst(buf_len, tlen,
- 							   src_maxburst,
- 							   src_addr_width);
-@@ -702,11 +730,15 @@ static int stm32_mdma_setup_xfer(struct stm32_mdma_chan *chan,
- {
- 	struct stm32_mdma_device *dmadev = stm32_mdma_get_dev(chan);
- 	struct dma_slave_config *dma_config = &chan->dma_config;
-+	struct stm32_mdma_chan_config *chan_config = &chan->chan_config;
- 	struct scatterlist *sg;
- 	dma_addr_t src_addr, dst_addr;
--	u32 ccr, ctcr, ctbr;
-+	u32 m2m_hw_period, ccr, ctcr, ctbr;
- 	int i, ret = 0;
- 
-+	if (chan_config->m2m_hw)
-+		m2m_hw_period = sg_dma_len(sgl);
-+
- 	for_each_sg(sgl, sg, sg_len, i) {
- 		if (sg_dma_len(sg) > STM32_MDMA_MAX_BLOCK_LEN) {
- 			dev_err(chan2dev(chan), "Invalid block len\n");
-@@ -716,6 +748,8 @@ static int stm32_mdma_setup_xfer(struct stm32_mdma_chan *chan,
- 		if (direction == DMA_MEM_TO_DEV) {
- 			src_addr = sg_dma_address(sg);
- 			dst_addr = dma_config->dst_addr;
-+			if (chan_config->m2m_hw && (i & 1))
-+				dst_addr += m2m_hw_period;
- 			ret = stm32_mdma_set_xfer_param(chan, direction, &ccr,
- 							&ctcr, &ctbr, src_addr,
- 							sg_dma_len(sg));
-@@ -723,6 +757,8 @@ static int stm32_mdma_setup_xfer(struct stm32_mdma_chan *chan,
- 					   src_addr);
- 		} else {
- 			src_addr = dma_config->src_addr;
-+			if (chan_config->m2m_hw && (i & 1))
-+				src_addr += m2m_hw_period;
- 			dst_addr = sg_dma_address(sg);
- 			ret = stm32_mdma_set_xfer_param(chan, direction, &ccr,
- 							&ctcr, &ctbr, dst_addr,
-@@ -755,6 +791,7 @@ stm32_mdma_prep_slave_sg(struct dma_chan *c, struct scatterlist *sgl,
- 			 unsigned long flags, void *context)
- {
- 	struct stm32_mdma_chan *chan = to_stm32_mdma_chan(c);
-+	struct stm32_mdma_chan_config *chan_config = &chan->chan_config;
- 	struct stm32_mdma_desc *desc;
- 	int i, ret;
- 
-@@ -777,6 +814,21 @@ stm32_mdma_prep_slave_sg(struct dma_chan *c, struct scatterlist *sgl,
- 	if (ret < 0)
- 		goto xfer_setup_err;
- 
-+	/*
-+	 * In case of M2M HW transfer triggered by STM32 DMA, we do not have to clear the
-+	 * transfer complete flag by hardware in order to let the CPU rearm the STM32 DMA
-+	 * with the next sg element and update some data in dmaengine framework.
-+	 */
-+	if (chan_config->m2m_hw && direction == DMA_MEM_TO_DEV) {
-+		struct stm32_mdma_hwdesc *hwdesc;
-+
-+		for (i = 0; i < sg_len; i++) {
-+			hwdesc = desc->node[i].hwdesc;
-+			hwdesc->cmar = 0;
-+			hwdesc->cmdr = 0;
-+		}
-+	}
-+
- 	desc->cyclic = false;
- 
- 	return vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
-@@ -798,6 +850,7 @@ stm32_mdma_prep_dma_cyclic(struct dma_chan *c, dma_addr_t buf_addr,
- 	struct stm32_mdma_chan *chan = to_stm32_mdma_chan(c);
- 	struct stm32_mdma_device *dmadev = stm32_mdma_get_dev(chan);
- 	struct dma_slave_config *dma_config = &chan->dma_config;
-+	struct stm32_mdma_chan_config *chan_config = &chan->chan_config;
- 	struct stm32_mdma_desc *desc;
- 	dma_addr_t src_addr, dst_addr;
- 	u32 ccr, ctcr, ctbr, count;
-@@ -858,8 +911,12 @@ stm32_mdma_prep_dma_cyclic(struct dma_chan *c, dma_addr_t buf_addr,
- 		if (direction == DMA_MEM_TO_DEV) {
- 			src_addr = buf_addr + i * period_len;
- 			dst_addr = dma_config->dst_addr;
-+			if (chan_config->m2m_hw && (i & 1))
-+				dst_addr += period_len;
- 		} else {
- 			src_addr = dma_config->src_addr;
-+			if (chan_config->m2m_hw && (i & 1))
-+				src_addr += period_len;
- 			dst_addr = buf_addr + i * period_len;
- 		}
- 
-@@ -1244,6 +1301,17 @@ static int stm32_mdma_slave_config(struct dma_chan *c,
- 
- 	memcpy(&chan->dma_config, config, sizeof(*config));
- 
-+	/* Check if user is requesting STM32 DMA to trigger MDMA */
-+	if (config->peripheral_size) {
-+		struct stm32_mdma_dma_config *mdma_config;
-+
-+		mdma_config = (struct stm32_mdma_dma_config *)chan->dma_config.peripheral_config;
-+		chan->chan_config.request = mdma_config->request;
-+		chan->chan_config.mask_addr = mdma_config->cmar;
-+		chan->chan_config.mask_data = mdma_config->cmdr;
-+		chan->chan_config.m2m_hw = true;
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.25.1
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 

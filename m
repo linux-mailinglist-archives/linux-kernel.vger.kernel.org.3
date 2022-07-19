@@ -2,100 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4755791A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 06:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36C65791A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 06:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbiGSEHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 00:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S236748AbiGSEHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 00:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiGSEHC (ORCPT
+        with ESMTP id S236723AbiGSEHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 00:07:02 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8594C2F028;
-        Mon, 18 Jul 2022 21:07:01 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id x21so10853322plb.3;
-        Mon, 18 Jul 2022 21:07:01 -0700 (PDT)
+        Tue, 19 Jul 2022 00:07:18 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CD432EF9;
+        Mon, 18 Jul 2022 21:07:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=b5C7S83LBN0Mb/XqzIaN+HXOmTIU+sTTk/HlHbA/cf8=;
-        b=e+nvavFelvtf9mw5zW/PUJdv/ajQZY2dDNTRnTvLW3hbAjW0CFWY3ic2J9NlePDzwl
-         0yKHSraowgnyzCiA86ZeQCxZA9aGvboqXA5O8IKlbrVtqYdRk9aRD1KYwg2ohmcLKSfi
-         jUm5Ulhi+tIUwiKl0HggOKvHXc71qNleK6HaNIGY6FuWJzCLWDh2s7xma4c8r7FY4sP4
-         zYJ+uX1OtGPpwIzBuqFn7MzbbHmzjxLfm6cAwi1hWCg9wWVl8NDIM5xi/xi1O5QabsHO
-         RNub80uRU20xPSeSqLuwxW3tg77+wEKPGRq71y3Cey/wWGky2kF0d7fvgA5uth/2+YSF
-         oDUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=b5C7S83LBN0Mb/XqzIaN+HXOmTIU+sTTk/HlHbA/cf8=;
-        b=kOlXP3ER1Fqfml6AqoJ4QojeEq6sb1NYb0FosPJCZY4wS+vffSkijvf0q5MZ6cwQ9+
-         nkq8pozynp/VI58k0RsnwbeWTXI8QC7NTD26pikLRjyPhRbt652Cx0saOyzt5QMVxzcN
-         g7mg14n0RiZKRs0j8A94TzdvUi5dBEm9tgtrgg/wwCME47ALqfmI04Q417bjtQDVOnjX
-         JIlIgRnmhzhwsNPePRNAAxKSwldLSBVqB9z0qEJmVe1i8cfI1iQlZBA42JMk3msEutO9
-         S3cd7W0x4CAutyazQE4XhYZXCHaPfydpJpY+4gblJPAsTH7VC/1rA200jzadH+W3KAeY
-         Ar9w==
-X-Gm-Message-State: AJIora8SvP9f/3czIWIHMSMZiWbUuEwwi93KTMwQ507CeZEjajAMw1XT
-        UE4zEYabafBh4WuA2VcH6WA=
-X-Google-Smtp-Source: AGRyM1vopXYjYWjtSk9JWUOj7czx5xa8slpPVSkutgIztzs29VFNW8c3XWSFAgJyawy46h+34AS6Jg==
-X-Received: by 2002:a17:90b:4d01:b0:1ef:d39b:b140 with SMTP id mw1-20020a17090b4d0100b001efd39bb140mr36005500pjb.82.1658203621019;
-        Mon, 18 Jul 2022 21:07:01 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id j24-20020a63cf18000000b0041975999455sm8995706pgg.75.2022.07.18.21.07.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 21:07:00 -0700 (PDT)
-Message-ID: <f77038b5-93f5-1a06-c433-2086df8c3f3d@gmail.com>
-Date:   Mon, 18 Jul 2022 21:06:59 -0700
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658203637; x=1689739637;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=jU56txNrlLvbYZzZ6gj0i6vcpYygudkLhnYlO1eIeYw=;
+  b=PVEn2N6NhanL20A8FTCfn+OaN8DHZGIE4JEY9hy+2O37VBe19HPk5XS+
+   s74j7Q0vVBcYn52sX1UVl3Ah2Y3hA6cF2hAYuV6+I2cEih8LLoWZnnckt
+   WlAQVhg/bgNwVquaByonXU04FHGmAZKWxkOFgLIzN1TpgD9zlFPsJbMgP
+   0=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 Jul 2022 21:07:17 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 21:07:17 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 18 Jul 2022 21:07:16 -0700
+Received: from [10.216.42.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 18 Jul
+ 2022 21:07:10 -0700
+Message-ID: <e4dcdd8d-18a9-8da3-7ac3-6cc792139f70@quicinc.com>
+Date:   Tue, 19 Jul 2022 09:37:05 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH] i2c: brcmstb: Fixed adapter named with optional
- interrupts
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [Freedreno] [PATCH v2 5/7] arm64: dts: qcom: sc7280: Update gpu
+ register list
 Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:BROADCOM BRCMSTB I2C DRIVER" <linux-i2c@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220706172115.224240-1-f.fainelli@gmail.com>
- <YtKxpz7kiER8ydcj@shikoro> <03065912-a9f0-6380-6f19-9db2f43be589@gmail.com>
- <YtYrnlmpfRxcWMga@shikoro>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <YtYrnlmpfRxcWMga@shikoro>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     Doug Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Taniya Das <quic_tdas@quicinc.com>, <quic_rjendra@quicinc.com>
+CC:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Jonathan Marek <jonathan@marek.ca>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <1657346375-1461-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220709112837.v2.5.I7291c830ace04fce07e6bd95a11de4ba91410f7b@changeid>
+ <CAD=FV=XzvcjS51q78BZ=FPCEVUDMD+VKJ70ksCm5V4qwHN_wRg@mail.gmail.com>
+ <c022538d-c616-8f1a-e1c2-c11b5f0de670@quicinc.com>
+In-Reply-To: <c022538d-c616-8f1a-e1c2-c11b5f0de670@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/14/2022 11:10 AM, Akhil P Oommen wrote:
+> On 7/12/2022 4:57 AM, Doug Anderson wrote:
+>> Hi,
+>>
+>> On Fri, Jul 8, 2022 at 11:00 PM Akhil P Oommen 
+>> <quic_akhilpo@quicinc.com> wrote:
+>>> Update gpu register array with gpucc memory region.
+>>>
+>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>>> ---
+>>>
+>>> (no changes since v1)
+>>>
+>>>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 6 ++++--
+>>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi 
+>>> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>>> index e66fc67..defdb25 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>>> @@ -2228,10 +2228,12 @@
+>>>                          compatible = "qcom,adreno-635.0", 
+>>> "qcom,adreno";
+>>>                          reg = <0 0x03d00000 0 0x40000>,
+>>>                                <0 0x03d9e000 0 0x1000>,
+>>> -                             <0 0x03d61000 0 0x800>;
+>>> +                             <0 0x03d61000 0 0x800>,
+>>> +                             <0 0x03d90000 0 0x2000>;
+>>>                          reg-names = "kgsl_3d0_reg_memory",
+>>>                                      "cx_mem",
+>>> -                                   "cx_dbgc";
+>>> +                                   "cx_dbgc",
+>>> +                                   "gpucc";
+>> This doesn't seem right. Shouldn't you be coordinating with the
+>> existing gpucc instead of reaching into its registers?
+>>
+>> -Doug
+> IIUC, qcom gdsc driver doesn't ensure hardware is collapsed since they 
+> are vote-able switches. Ideally, we should ensure that the hw has 
+> collapsed for gpu recovery because there could be transient votes from 
+> other subsystems like hypervisor using their vote register.
+> 
+> I am not sure how complex the plumbing to gpucc driver would be to allow 
+> gpu driver to check hw status. OTOH, with this patch, gpu driver does a 
+> read operation on a gpucc register which is in always-on domain. That 
+> means we don't need to vote any resource to access this register.
+> 
+> Stephen/Rajendra/Taniya, any suggestion?
+> 
+> -Akhil.
+> 
+> 
+Gentle ping.
 
+-Akhil
 
-On 7/18/2022 8:57 PM, Wolfram Sang wrote:
-> 
->> I was not sure if we could change the adapter name reported as one could
->> argue this is now ABI, but if we can, then using dev_name() is probably
->> better. You are the maintainer you so know the rules on what is considered
->> stable ABI and what is not :)
-> 
-> Well, then even removing ":" would break the ABI :)
-> 
-> Please use dev_name. Other drivers changed that string, too. We never
-> gave guarantees for that one.
-> 
-
-Fair enough, sent a v2 using dev_name(), thanks!
--- 
-Florian

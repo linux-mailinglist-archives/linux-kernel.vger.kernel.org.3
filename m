@@ -2,75 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FCA57A4B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825EF57A4C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238379AbiGSRMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
+        id S238442AbiGSRNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238311AbiGSRMo (ORCPT
+        with ESMTP id S238402AbiGSRNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:12:44 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E004F66B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:12:43 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id z3so177003plb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:12:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bul4f/ogPJoZ7GsIsEPnLV8s8aS6eNqTZiiR3CtFKmI=;
-        b=snT5Se+yuvdBC3zfM90TEFQsq1aLuAStrAnLKmhvGQIfSusy+bAUPqLvPfUN0F1ZHG
-         MNf0p2TOgFgZAPJ+VMxT+2VoFFLi6BTHTtubFaHCyKwe/NcceTbD4XwjpeBGCg+TxhHj
-         y2hEg5do6ERlc277ILrHKbmP9xSupIXEm9vY+3wbPAAfzr89BkjeZhxMopfoldjZZpWl
-         2kQ2HK0pQ7N5nC/veoIEkv9kzx2r73SFZ6soI5hI26zO/0hkeTx6VsyQesGReHtA5BPm
-         Nj9L1MWpKIWRuPqXiFf61aEBxq/7br+dqrqT6mgbmNli8dDp1WlV34Z/O9fWTGE0ygfo
-         v1Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bul4f/ogPJoZ7GsIsEPnLV8s8aS6eNqTZiiR3CtFKmI=;
-        b=iSrrXE0jNjRWyPj8y+0Yp48wFTzbDeSQCV7D61QW7NXC82P+fCBb77ACDZcbM62JfH
-         5ZSazNnxbwARLav5+7M4ldERp7iVg9ZoKcKZmDZhjfkMQTXEOd8UFkE6YYqVciyUVy6u
-         2E9zwnbvf98+rVgNavh4ZSjS78IoKaokk1w4OgjqRQwHyME1SqrlDpU5Y5VA49kEmdCi
-         PWYFR3Nu720Q2VWoZqwJZ2YaWoOWoVL4VM2ZZgXfhYgdyyPH1gTBM9rOlgeT/55ih/Pw
-         JoCwmU3PS/Xvn+hELCKEaq5NNKW47hMjSXSvHxQuRbU1B1Zx/1Q9n1NU5XmqQ1nP6S4c
-         5RCw==
-X-Gm-Message-State: AJIora8zP3k5NP0fbdvdIRgs6GfduNxco0Q4WDQLNGPCkPi710nurR20
-        weO+OwRQFyGs+AjI2+H89P1cRQ2gWuP83A==
-X-Google-Smtp-Source: AGRyM1sV9e556lhRpcwUhf+APORGa+ltMfdmr0G41MkEFEQQWnEbHdYK60phl2OY7t7IdSUn4IdiLA==
-X-Received: by 2002:a17:902:7c88:b0:16c:e485:51b1 with SMTP id y8-20020a1709027c8800b0016ce48551b1mr15607543pll.34.1658250762727;
-        Tue, 19 Jul 2022 10:12:42 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id a3-20020a1709027e4300b0016c500fb7bcsm5966504pln.140.2022.07.19.10.12.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 10:12:42 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 17:12:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, x86@kernel.org,
-        dave.hansen@linux.intel.com, nikunj@amd.com, hpa@zytor.com,
-        Abraham.Shaju@amd.com
-Subject: Re: [RFC FIX PATCH] x86/e820: Stop kernel boot when RAM resource
- reservation fails
-Message-ID: <YtbmBldwL+h2X+V4@google.com>
-References: <20220718085815.1943-1-bharata@amd.com>
- <E7A3FF43-C49F-415E-81C6-CD14F4107349@alien8.de>
- <be498c32-bed6-d31a-ae94-6006dd59ea1e@amd.com>
- <YtV3Ipvt96X/iO2J@zn.tnic>
- <24ccd22f-6708-3265-4012-66f01108ff22@amd.com>
+        Tue, 19 Jul 2022 13:13:13 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2077.outbound.protection.outlook.com [40.107.101.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE7C54667
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:13:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KIiqcRXZenq69FS1nnCH3ZAR+S1MpRcTwwdIc7xSVyrT1j35nVaKzxdoLYEbPHyES7RBBR5qKIg/Kx//ylzlrPU/RfNCp2uEWrdqqCB8oJrpm95HzH9YJwcK/Vd8gvXiR+jlW9GFnyn2W1XMHVHUT5F/rVOVUfntf1jJvtHpeTFl2IUf8+fK/NO4GcJY8qBvTTEpd4g04voVDBKE7ZiihzKTR9pq6ECdVMOd30tXjeOKOrsqx518JRCCRFI3GagoyrqHn+LZOPSQIEZ+atSwh0G5DfQMDj6SzEZEKvevfHeO+bqem23LK+Mg+Jq4+CAShUWulpyZSGchlfRxBtHkJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EHAyabTfYcT4LdxTc2BAjkFFpnLflIwskfObK6i0FwM=;
+ b=LdMy8wO136Kx2pVkwiL2K3/lmhIr2fOCMi9ATqreMg8mv9Fj5m55Hd3LfbVCerlHIZKzuEdOw2b6vGfi8NGM1ZhpzbZcNBWlcUWzwmunfa9BJ7mxOlySwWADcxoyB251gaGT07950oyoYPwIVnAl920IHaIfKZPxLi+xsVjozMTu1yEfPx5J8VVF0TRp6rJgVBcunWi9gG6gCaVPJz92R/oOgDTnEdXoZQ7rgYvQyiMu6r31XeaUwabLOvXLJC9OwkuJQasypzWM91gdnQtpKeySd53DvLis2OEKpB9TNsdOb6jgq+o96N8ca9tHMdOH9NKnUHvmPOj2cdkVlEj+rw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EHAyabTfYcT4LdxTc2BAjkFFpnLflIwskfObK6i0FwM=;
+ b=T8eZ7vbh2KYvz/0J+/mups/ji4ARpZIM7glF3ASbus3Kh5oN3gLnA0IeJNHGbgTv8x8p6qdVd/BXxE9+7qULfXlFQuM09Z699aAe5va/86XAbLeYRLXHmKG6Q9uXsi2tCYsonXJkiythRvtHHnAVxdsoDAhmcXNx66qFzkGMTrU=
+Received: from DM6PR02CA0158.namprd02.prod.outlook.com (2603:10b6:5:332::25)
+ by MWHPR12MB1582.namprd12.prod.outlook.com (2603:10b6:301:10::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.19; Tue, 19 Jul
+ 2022 17:13:09 +0000
+Received: from DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:332:cafe::74) by DM6PR02CA0158.outlook.office365.com
+ (2603:10b6:5:332::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.24 via Frontend
+ Transport; Tue, 19 Jul 2022 17:13:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT019.mail.protection.outlook.com (10.13.172.172) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5438.12 via Frontend Transport; Tue, 19 Jul 2022 17:13:08 +0000
+Received: from tlendack-t1.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 19 Jul
+ 2022 12:13:01 -0500
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>
+CC:     Borislav Petkov <bp@suse.de>, Michael Roth <michael.roth@amd.com>,
+        "Ashish Kalra" <ashish.kalra@amd.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] virt: sev-guest: Pass the appropriate argument type to iounmap()
+Date:   Tue, 19 Jul 2022 12:12:52 -0500
+Message-ID: <31a05c67017d023a61453787033ae16f04dd7377.1658250771.git.thomas.lendacky@amd.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24ccd22f-6708-3265-4012-66f01108ff22@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0fea0597-3e21-4345-b938-08da69a9f3c4
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1582:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KQY6LOrmwxHPCvHIN2SzVHGdMll3Nb0PQQ+Ve66/41vc6xY8NwE2p3vrXF/ErbXYwlxUJGpNSFkzBQB+KDTltatflwb+LzQX00qfFiPPukowvMb5JBRNsaL2X/UtkqdSdi5JZBCM9yW3S/mYz7G9dXAYoSLFGFao9GyOjGD3WJJ5Uc1PaIjMB3cGOGrfuciN3wMcBj8JSN9uSy2oY0ldBgc2bu3lOa4w8vCkpmz+QyeIII6C9PZ2bs0CZw2q2EWmnkpb7a9w/EwMyy+h1ZRRPqqXB8xhDBrswQHCCrJPLTJhM+owMUzS5jvdGG2iIODYzkKpOmnRAYioeGcm0RqI9jj0YT4qcK16hDmgq4dGxn4JlpKdsbuLHpPaS9Av/ymJ8N1Xv6G4Mg6o590zmcFaWd/wGGQy3hXPNSSiKqEoNhDgicunJ/8W2WKnLfn0FX0Q0OGpKZ5aDQLAe440+ra2q3OReIfWU6KQyU+9YZDbeq/0uto3rkx8ubuFqciUGLowhA4Qvc4VUY6qC008081wc2MWz+7CfTSKsi48cP/W8IGWmpvTdM1woWdJkWSOF5zRk3yej1bbmDfFl/17TtVvShAyK/OSpB6OA6iwPqkkqK1wnq19W2Yhn5Sy26P6XXkIMMDoZsAyjFXtWJVyuQDN2JwevbvvL4p0HEGay2CJRSJGf+32YOBxAbaOsPV/YWOr5EwSFa+pZZPe7iR3YKmhBD1YF64AkB2dWweKdaxOkDIN7/MfZJUa9nI3uhT+JuQf2GLQGncWRgOiJnQxh3Invo5nN7wRN86wxPzrcV0SQSgtzC2PBKw3DUPnK7Wlapk4Nl6kcqshq7KiwGnFPjApcg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(396003)(346002)(136003)(46966006)(36840700001)(40470700004)(4326008)(70206006)(41300700001)(8676002)(2906002)(70586007)(2616005)(478600001)(5660300002)(6666004)(7696005)(110136005)(186003)(86362001)(81166007)(26005)(40460700003)(8936002)(54906003)(82310400005)(36756003)(36860700001)(40480700001)(356005)(83380400001)(316002)(426003)(82740400003)(47076005)(16526019)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 17:13:08.5398
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fea0597-3e21-4345-b938-08da69a9f3c4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1582
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,26 +98,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022, Bharata B Rao wrote:
-> On 7/18/2022 8:37 PM, Borislav Petkov wrote:
-> > 
-> > I betcha you can generate a lot of "kernel bugs" with weird qemu
-> > options. If it is not a real use case, nobody cares.
-> 
-> I see that we will hit this problem by default when starting
-> a guest with 1T or more memory using QEMU.
+Fix a sparse warning in sev_guest_probe() where the wrong argument type is
+provided to iounmap().
 
-That a user can create a bad configuration using QEMU's default MAXPHYADDR doesn't
-change the fact that adding memory beyond MAXPHYADDR is firmly a configuration bug.
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: fce96cf04430 ("virt: Add SEV-SNP guest driver")
+Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+---
+ drivers/virt/coco/sev-guest/sev-guest.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-> > And even if it were a real use case, panicking the machine is not the
-> > right fix.
-> 
-> I couldn't see a clean exit/recovery option in setup_arch()->e820__reserve_resources()
-> where this happens. Any suggestions?
+diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+index 90ce16b6e05f..f422f9c58ba7 100644
+--- a/drivers/virt/coco/sev-guest/sev-guest.c
++++ b/drivers/virt/coco/sev-guest/sev-guest.c
+@@ -632,16 +632,19 @@ static int __init sev_guest_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct snp_guest_dev *snp_dev;
+ 	struct miscdevice *misc;
++	void __iomem *mapping;
+ 	int ret;
+ 
+ 	if (!dev->platform_data)
+ 		return -ENODEV;
+ 
+ 	data = (struct sev_guest_platform_data *)dev->platform_data;
+-	layout = (__force void *)ioremap_encrypted(data->secrets_gpa, PAGE_SIZE);
+-	if (!layout)
++	mapping = ioremap_encrypted(data->secrets_gpa, PAGE_SIZE);
++	if (!mapping)
+ 		return -ENODEV;
+ 
++	layout = (__force void *)mapping;
++
+ 	ret = -ENOMEM;
+ 	snp_dev = devm_kzalloc(&pdev->dev, sizeof(struct snp_guest_dev), GFP_KERNEL);
+ 	if (!snp_dev)
+@@ -706,7 +709,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
+ e_free_request:
+ 	free_shared_pages(snp_dev->request, sizeof(struct snp_guest_msg));
+ e_unmap:
+-	iounmap(layout);
++	iounmap(mapping);
+ 	return ret;
+ }
+ 
+-- 
+2.36.1
 
-WARN or pr_err/warn() and move on, or just do nothing.  Adding code to try and
-gracefully handle an architecturally impossible configuration is a waste of time
-and effort.  Like Boris said, there's practically a limitless number of bad setups
-QEMU can create, this one just happens to be easier to create than others due to
-shortcomings in QEMU.

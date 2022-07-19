@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A5D579A48
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89558579CB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbiGSMMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S241258AbiGSMlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238826AbiGSMMA (ORCPT
+        with ESMTP id S241382AbiGSMjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:12:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51E2528B5;
-        Tue, 19 Jul 2022 05:03:38 -0700 (PDT)
+        Tue, 19 Jul 2022 08:39:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7510F545D9;
+        Tue, 19 Jul 2022 05:15:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B7D3B81A8F;
-        Tue, 19 Jul 2022 12:03:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA31AC341C6;
-        Tue, 19 Jul 2022 12:03:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3B9A6177F;
+        Tue, 19 Jul 2022 12:15:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C034DC341CA;
+        Tue, 19 Jul 2022 12:15:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232216;
-        bh=Yw1cm3JhKlVE2R7wAKrVZv123GVIsGEG7oAIY1LzBr8=;
+        s=korg; t=1658232956;
+        bh=SuF4v3Uz5uTNz8Vjlm3/PnuewX3rlJ5M1kikWnOZ87c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ehwxmOatuIq2M7hewBebXqODoYgyr41COayCQEKrpBJobHwFsxi2y1SLCmnLXZloX
-         0LnIACKpZcI/NRp3XaCkp0pxqMCxNTWwpV2OUcsm6G+yvqqb/XZMKq0dcaGITMmzJu
-         vSl5JVSFmiqrhK6ZoWGXkdWNHESri+YSnKIlHGnc=
+        b=Z8cB3LE8xUlpXTSSUiFi5y43sS6R3DaiS1jSq29pTBJZuXKyP6uck9lTwhw9IHyHE
+         U6uEQsZBC+FF5GyZ/afJN4k8dSaDbNcLuDcVV/qqSq37hgqk71H6ICatIf/+F1lxlx
+         Qf+sK2MpFAbqONgKNQrfVjj26xthug8JtNhUYzvc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ruozhu Li <liruozhu@huawei.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 52/71] nvme: fix regression when disconnect a recovering ctrl
-Date:   Tue, 19 Jul 2022 13:54:15 +0200
-Message-Id: <20220719114557.374203935@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 124/167] firmware: sysfb: Add sysfb_disable() helper function
+Date:   Tue, 19 Jul 2022 13:54:16 +0200
+Message-Id: <20220719114708.604084714@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,141 +54,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ruozhu Li <liruozhu@huawei.com>
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-[ Upstream commit f7f70f4aa09dc43d7455c060143e86a017c30548 ]
+[ Upstream commit bde376e9de3c0bc55eedc8956b0f114c05531595 ]
 
-We encountered a problem that the disconnect command hangs.
-After analyzing the log and stack, we found that the triggering
-process is as follows:
-CPU0                          CPU1
-                                nvme_rdma_error_recovery_work
-                                  nvme_rdma_teardown_io_queues
-nvme_do_delete_ctrl                 nvme_stop_queues
-  nvme_remove_namespaces
-  --clear ctrl->namespaces
-                                    nvme_start_queues
-                                    --no ns in ctrl->namespaces
-    nvme_ns_remove                  return(because ctrl is deleting)
-      blk_freeze_queue
-        blk_mq_freeze_queue_wait
-        --wait for ns to unquiesce to clean infligt IO, hang forever
+This can be used by subsystems to unregister a platform device registered
+by sysfb and also to disable future platform device registration in sysfb.
 
-This problem was not found in older kernels because we will flush
-err work in nvme_stop_ctrl before nvme_remove_namespaces.It does not
-seem to be modified for functional reasons, the patch can be revert
-to solve the problem.
-
-Revert commit 794a4cb3d2f7 ("nvme: remove the .stop_ctrl callout")
-
-Signed-off-by: Ruozhu Li <liruozhu@huawei.com>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220607182338.344270-3-javierm@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/core.c |  2 ++
- drivers/nvme/host/nvme.h |  1 +
- drivers/nvme/host/rdma.c | 12 +++++++++---
- drivers/nvme/host/tcp.c  | 10 +++++++---
- 4 files changed, 19 insertions(+), 6 deletions(-)
+ .../driver-api/firmware/other_interfaces.rst  |  6 +++
+ drivers/firmware/sysfb.c                      | 54 ++++++++++++++++---
+ include/linux/sysfb.h                         | 12 +++++
+ 3 files changed, 66 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 79e22618817d..d2ea6ca37c41 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -4034,6 +4034,8 @@ void nvme_stop_ctrl(struct nvme_ctrl *ctrl)
- 	nvme_stop_keep_alive(ctrl);
- 	flush_work(&ctrl->async_event_work);
- 	cancel_work_sync(&ctrl->fw_act_work);
-+	if (ctrl->ops->stop_ctrl)
-+		ctrl->ops->stop_ctrl(ctrl);
- }
- EXPORT_SYMBOL_GPL(nvme_stop_ctrl);
+diff --git a/Documentation/driver-api/firmware/other_interfaces.rst b/Documentation/driver-api/firmware/other_interfaces.rst
+index b81794e0cfbb..06ac89adaafb 100644
+--- a/Documentation/driver-api/firmware/other_interfaces.rst
++++ b/Documentation/driver-api/firmware/other_interfaces.rst
+@@ -13,6 +13,12 @@ EDD Interfaces
+ .. kernel-doc:: drivers/firmware/edd.c
+    :internal:
  
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index 1d1431dd4f9e..81a5b968253f 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -402,6 +402,7 @@ struct nvme_ctrl_ops {
- 	void (*free_ctrl)(struct nvme_ctrl *ctrl);
- 	void (*submit_async_event)(struct nvme_ctrl *ctrl);
- 	void (*delete_ctrl)(struct nvme_ctrl *ctrl);
-+	void (*stop_ctrl)(struct nvme_ctrl *ctrl);
- 	int (*get_address)(struct nvme_ctrl *ctrl, char *buf, int size);
- };
++Generic System Framebuffers Interface
++-------------------------------------
++
++.. kernel-doc:: drivers/firmware/sysfb.c
++   :export:
++
+ Intel Stratix10 SoC Service Layer
+ ---------------------------------
+ Some features of the Intel Stratix10 SoC require a level of privilege
+diff --git a/drivers/firmware/sysfb.c b/drivers/firmware/sysfb.c
+index b032f40a92de..1f276f108cc9 100644
+--- a/drivers/firmware/sysfb.c
++++ b/drivers/firmware/sysfb.c
+@@ -34,21 +34,59 @@
+ #include <linux/screen_info.h>
+ #include <linux/sysfb.h>
  
-diff --git a/drivers/nvme/host/rdma.c b/drivers/nvme/host/rdma.c
-index 4213c71b02a4..d5d7b2f98edc 100644
---- a/drivers/nvme/host/rdma.c
-+++ b/drivers/nvme/host/rdma.c
-@@ -973,6 +973,14 @@ static void nvme_rdma_teardown_io_queues(struct nvme_rdma_ctrl *ctrl,
++static struct platform_device *pd;
++static DEFINE_MUTEX(disable_lock);
++static bool disabled;
++
++static bool sysfb_unregister(void)
++{
++	if (IS_ERR_OR_NULL(pd))
++		return false;
++
++	platform_device_unregister(pd);
++	pd = NULL;
++
++	return true;
++}
++
++/**
++ * sysfb_disable() - disable the Generic System Framebuffers support
++ *
++ * This disables the registration of system framebuffer devices that match the
++ * generic drivers that make use of the system framebuffer set up by firmware.
++ *
++ * It also unregisters a device if this was already registered by sysfb_init().
++ *
++ * Context: The function can sleep. A @disable_lock mutex is acquired to serialize
++ *          against sysfb_init(), that registers a system framebuffer device.
++ */
++void sysfb_disable(void)
++{
++	mutex_lock(&disable_lock);
++	sysfb_unregister();
++	disabled = true;
++	mutex_unlock(&disable_lock);
++}
++EXPORT_SYMBOL_GPL(sysfb_disable);
++
+ static __init int sysfb_init(void)
+ {
+ 	struct screen_info *si = &screen_info;
+ 	struct simplefb_platform_data mode;
+-	struct platform_device *pd;
+ 	const char *name;
+ 	bool compatible;
+-	int ret;
++	int ret = 0;
++
++	mutex_lock(&disable_lock);
++	if (disabled)
++		goto unlock_mutex;
+ 
+ 	/* try to create a simple-framebuffer device */
+ 	compatible = sysfb_parse_mode(si, &mode);
+ 	if (compatible) {
+ 		pd = sysfb_create_simplefb(si, &mode);
+ 		if (!IS_ERR(pd))
+-			return 0;
++			goto unlock_mutex;
  	}
+ 
+ 	/* if the FB is incompatible, create a legacy framebuffer device */
+@@ -60,8 +98,10 @@ static __init int sysfb_init(void)
+ 		name = "platform-framebuffer";
+ 
+ 	pd = platform_device_alloc(name, 0);
+-	if (!pd)
+-		return -ENOMEM;
++	if (!pd) {
++		ret = -ENOMEM;
++		goto unlock_mutex;
++	}
+ 
+ 	sysfb_apply_efi_quirks(pd);
+ 
+@@ -73,9 +113,11 @@ static __init int sysfb_init(void)
+ 	if (ret)
+ 		goto err;
+ 
+-	return 0;
++	goto unlock_mutex;
+ err:
+ 	platform_device_put(pd);
++unlock_mutex:
++	mutex_unlock(&disable_lock);
+ 	return ret;
  }
  
-+static void nvme_rdma_stop_ctrl(struct nvme_ctrl *nctrl)
-+{
-+	struct nvme_rdma_ctrl *ctrl = to_rdma_ctrl(nctrl);
-+
-+	cancel_work_sync(&ctrl->err_work);
-+	cancel_delayed_work_sync(&ctrl->reconnect_work);
-+}
-+
- static void nvme_rdma_free_ctrl(struct nvme_ctrl *nctrl)
- {
- 	struct nvme_rdma_ctrl *ctrl = to_rdma_ctrl(nctrl);
-@@ -1947,9 +1955,6 @@ static const struct blk_mq_ops nvme_rdma_admin_mq_ops = {
- 
- static void nvme_rdma_shutdown_ctrl(struct nvme_rdma_ctrl *ctrl, bool shutdown)
- {
--	cancel_work_sync(&ctrl->err_work);
--	cancel_delayed_work_sync(&ctrl->reconnect_work);
--
- 	nvme_rdma_teardown_io_queues(ctrl, shutdown);
- 	blk_mq_quiesce_queue(ctrl->ctrl.admin_q);
- 	if (shutdown)
-@@ -1999,6 +2004,7 @@ static const struct nvme_ctrl_ops nvme_rdma_ctrl_ops = {
- 	.submit_async_event	= nvme_rdma_submit_async_event,
- 	.delete_ctrl		= nvme_rdma_delete_ctrl,
- 	.get_address		= nvmf_get_address,
-+	.stop_ctrl		= nvme_rdma_stop_ctrl,
+diff --git a/include/linux/sysfb.h b/include/linux/sysfb.h
+index 708152e9037b..8ba8b5be5567 100644
+--- a/include/linux/sysfb.h
++++ b/include/linux/sysfb.h
+@@ -55,6 +55,18 @@ struct efifb_dmi_info {
+ 	int flags;
  };
  
- /*
-diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
-index 4378344f0e7a..2a27ac9aedba 100644
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -1973,9 +1973,6 @@ static void nvme_tcp_error_recovery_work(struct work_struct *work)
- 
- static void nvme_tcp_teardown_ctrl(struct nvme_ctrl *ctrl, bool shutdown)
- {
--	cancel_work_sync(&to_tcp_ctrl(ctrl)->err_work);
--	cancel_delayed_work_sync(&to_tcp_ctrl(ctrl)->connect_work);
--
- 	nvme_tcp_teardown_io_queues(ctrl, shutdown);
- 	blk_mq_quiesce_queue(ctrl->admin_q);
- 	if (shutdown)
-@@ -2014,6 +2011,12 @@ static void nvme_reset_ctrl_work(struct work_struct *work)
- 	nvme_tcp_reconnect_or_remove(ctrl);
- }
- 
-+static void nvme_tcp_stop_ctrl(struct nvme_ctrl *ctrl)
++#ifdef CONFIG_SYSFB
++
++void sysfb_disable(void);
++
++#else /* CONFIG_SYSFB */
++
++static inline void sysfb_disable(void)
 +{
-+	cancel_work_sync(&to_tcp_ctrl(ctrl)->err_work);
-+	cancel_delayed_work_sync(&to_tcp_ctrl(ctrl)->connect_work);
 +}
 +
- static void nvme_tcp_free_ctrl(struct nvme_ctrl *nctrl)
- {
- 	struct nvme_tcp_ctrl *ctrl = to_tcp_ctrl(nctrl);
-@@ -2322,6 +2325,7 @@ static const struct nvme_ctrl_ops nvme_tcp_ctrl_ops = {
- 	.submit_async_event	= nvme_tcp_submit_async_event,
- 	.delete_ctrl		= nvme_tcp_delete_ctrl,
- 	.get_address		= nvmf_get_address,
-+	.stop_ctrl		= nvme_tcp_stop_ctrl,
- };
++#endif /* CONFIG_SYSFB */
++
+ #ifdef CONFIG_EFI
  
- static bool
+ extern struct efifb_dmi_info efifb_dmi_list[];
 -- 
 2.35.1
 

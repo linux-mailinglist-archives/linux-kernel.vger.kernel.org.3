@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F72579F27
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5601E579CC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243236AbiGSNLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S241480AbiGSMmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243681AbiGSNJ4 (ORCPT
+        with ESMTP id S241025AbiGSMkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:09:56 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890C8BDA3D;
-        Tue, 19 Jul 2022 05:28:54 -0700 (PDT)
+        Tue, 19 Jul 2022 08:40:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087B97D1F7;
+        Tue, 19 Jul 2022 05:16:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 21611CE1BEC;
-        Tue, 19 Jul 2022 12:28:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C73C341DE;
-        Tue, 19 Jul 2022 12:28:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DBD8617B2;
+        Tue, 19 Jul 2022 12:16:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB95C341C6;
+        Tue, 19 Jul 2022 12:16:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233716;
-        bh=jw+ypiVsWe9hRlxeroVNTCj7pde/eDODxUktKaei0zA=;
+        s=korg; t=1658232973;
+        bh=QcGtGtCYqtma3sZUNavLiHZxpdlk17kScyhaXBAROMU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FuULoT7BybgnffE+CcPqlN91G/cNMuCj1WkPAq2yypxQdHl1bR0jZ5Ndg6ED6nUM/
-         3QEtvO/HguhUQxZiJaPlbNMDtCPN/dT5b7vnquxcJfJYgvlGGaUn06BgQIo7716GMK
-         AY16/G4xQ6myRCzmU4810QEQ8354djW4qYr4PaIA=
+        b=GZJJh6NZVguZVzjSQ/r2CetKMDh/6a2BVphfTkpoh1bvQxIsqiPPc8lVshMLt5+xN
+         QP/ZqAzIqvPwCCC2gQp7uB6CfQ3GcGMHzVyIN7HMycztnPS6/cscfbEX/idLDouHO3
+         vhyNr286kyzgYDVib5VYWbX4ExzshaTVHtcSaqq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
+        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 177/231] fbdev: Disable sysfb device registration when removing conflicting FBs
+Subject: [PATCH 5.15 130/167] net: sfp: fix memory leak in sfp_probe()
 Date:   Tue, 19 Jul 2022 13:54:22 +0200
-Message-Id: <20220719114729.070959230@linuxfoundation.org>
+Message-Id: <20220719114709.149050662@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,61 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Javier Martinez Canillas <javierm@redhat.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-[ Upstream commit ee7a69aa38d87a3bbced7b8245c732c05ed0c6ec ]
+[ Upstream commit 0a18d802d65cf662644fd1d369c86d84a5630652 ]
 
-The platform devices registered by sysfb match with firmware-based DRM or
-fbdev drivers, that are used to have early graphics using a framebuffer
-provided by the system firmware.
+sfp_probe() allocates a memory chunk from sfp with sfp_alloc(). When
+devm_add_action() fails, sfp is not freed, which leads to a memory leak.
 
-DRM or fbdev drivers later are probed and remove conflicting framebuffers,
-leading to these platform devices for generic drivers to be unregistered.
+We should use devm_add_action_or_reset() instead of devm_add_action().
 
-But the current solution has a race, since the sysfb_init() function could
-be called after a DRM or fbdev driver is probed and request to unregister
-the devices for drivers with conflicting framebuffes.
-
-To prevent this, disable any future sysfb platform device registration by
-calling sysfb_disable(), if a driver requests to remove the conflicting
-framebuffers.
-
-Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220607182338.344270-4-javierm@redhat.com
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Link: https://lore.kernel.org/r/20220629075550.2152003-1-niejianglei2021@163.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbmem.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/net/phy/sfp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -19,6 +19,7 @@
- #include <linux/kernel.h>
- #include <linux/major.h>
- #include <linux/slab.h>
-+#include <linux/sysfb.h>
- #include <linux/mm.h>
- #include <linux/mman.h>
- #include <linux/vt.h>
-@@ -1787,6 +1788,17 @@ int remove_conflicting_framebuffers(stru
- 		do_free = true;
- 	}
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 90dfefc1f5f8..028a5df5c538 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -2504,7 +2504,7 @@ static int sfp_probe(struct platform_device *pdev)
  
-+	/*
-+	 * If a driver asked to unregister a platform device registered by
-+	 * sysfb, then can be assumed that this is a driver for a display
-+	 * that is set up by the system firmware and has a generic driver.
-+	 *
-+	 * Drivers for devices that don't have a generic driver will never
-+	 * ask for this, so let's assume that a real driver for the display
-+	 * was already probed and prevent sysfb to register devices later.
-+	 */
-+	sysfb_disable();
-+
- 	mutex_lock(&registration_lock);
- 	do_remove_conflicting_framebuffers(a, name, primary);
- 	mutex_unlock(&registration_lock);
+ 	platform_set_drvdata(pdev, sfp);
+ 
+-	err = devm_add_action(sfp->dev, sfp_cleanup, sfp);
++	err = devm_add_action_or_reset(sfp->dev, sfp_cleanup, sfp);
+ 	if (err < 0)
+ 		return err;
+ 
+-- 
+2.35.1
+
 
 

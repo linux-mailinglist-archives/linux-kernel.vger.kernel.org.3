@@ -2,128 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB54957A443
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B18657A445
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233852AbiGSQjR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 19 Jul 2022 12:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
+        id S233796AbiGSQjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 12:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiGSQjK (ORCPT
+        with ESMTP id S229460AbiGSQjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 12:39:10 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387903AB3B;
-        Tue, 19 Jul 2022 09:39:09 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LnPYl67rsz6842y;
-        Wed, 20 Jul 2022 00:34:35 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Tue, 19 Jul 2022 18:39:06 +0200
-Received: from localhost (10.81.209.49) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 19 Jul
- 2022 17:39:06 +0100
-Date:   Tue, 19 Jul 2022 17:39:04 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "Ben Widawsky" <bwidawsk@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V14 5/7] driver-core: Introduce BIN_ATTR_ADMIN_{RO,RW}
-Message-ID: <20220719173904.00005c9a@Huawei.com>
-In-Reply-To: <20220715030424.462963-6-ira.weiny@intel.com>
-References: <20220715030424.462963-1-ira.weiny@intel.com>
-        <20220715030424.462963-6-ira.weiny@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 19 Jul 2022 12:39:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931F445043
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:39:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CBC3B81C0A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:39:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 114C9C341C6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:39:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658248784;
+        bh=0W/QCIeJd/PTxapDGvllkrZS/++cW7WMKwFqOsxn48A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=h1/TR9XC0U9T6KEybM7/vYJRPkl3WNGPVrjZ/PrEsMGeQQE6EodjPK5Dqz0a/YiZI
+         +gO8J/yVtI51Q9rRyx7eQKiEhdE33c52waKA+LfyMeOuGvZoYePJ9m5WPnQJZ3vHYd
+         I257gq5tQKJH8gZQsy/r3zn/bt7rK7VeTf0Ct7BVTV5wmXCQrth6WG2e2ynSp2eHTn
+         PrxP+uMK6+F/mrQu9Kz1RmYh2sUVlIJ9rSbvcQhv2r4OqDtBTSB3ZJTJuhnKjfbwjN
+         cmE8haYiMpHIVYxDpdartSFYDx3G3tjSzEL/8LFI8ZBQp8PghliTBa8nkRNZc65Z1o
+         cz9lOmZ6whnpg==
+Received: by mail-lf1-f46.google.com with SMTP id d12so25755239lfq.12
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:39:43 -0700 (PDT)
+X-Gm-Message-State: AJIora/T3Sq/CM5/H08yOeOacVReeDNi6Z5JZzCZj+akkUtwMAzT8s/r
+        MPQHqByqAM1Xvvc65Wa9SspR4U6HMLr/dotfBJI=
+X-Google-Smtp-Source: AGRyM1tGlEoLlq0vaN8ZQ4Lwp/heWhD5P5eOt1OBUNKhi09KvhnPgIo5SDU3upZxUXCqkMIafVH1GEvqUxYDj6kPEbs=
+X-Received: by 2002:a19:9101:0:b0:489:4f34:8c29 with SMTP id
+ t1-20020a199101000000b004894f348c29mr16699932lfd.620.1658248782077; Tue, 19
+ Jul 2022 09:39:42 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220719132400.75407-1-emil.renner.berthing@canonical.com>
+In-Reply-To: <20220719132400.75407-1-emil.renner.berthing@canonical.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 20 Jul 2022 00:39:30 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQW8BJKjnku8nSCTk5Ann8AdRde_g7fqA8d6GDd2MnAYg@mail.gmail.com>
+Message-ID: <CAJF2gTQW8BJKjnku8nSCTk5Ann8AdRde_g7fqA8d6GDd2MnAYg@mail.gmail.com>
+Subject: Re: [PATCH v2] riscv: compat: vdso: Fix vdso_install target
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Ben Hutchings <ben@decadent.org.uk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.81.209.49]
-X-ClientProxiedBy: lhreml749-chm.china.huawei.com (10.201.108.199) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022 20:04:22 -0700
-ira.weiny@intel.com wrote:
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Many binary attributes need to limit access to CAP_SYS_ADMIN only; ie
-> many binary attributes specify is_visible with 0400 or 0600.
-> 
-> Make setting the permissions of such attributes more explicit by
-> defining BIN_ATTR_ADMIN_{RO,RW}.
-> 
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Suggested-by: Dan Williams <dan.j.williams@intel.com>
-> Suggested-by: Krzysztof Wilczyński <kw@linux.com>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-Seems sensible.
+@Palmer Dabbelt
+Please have a look at the patch which fixes up the "make vdso_install"
+problem. I recommend it could be fixed in 5.19.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> 
+On Tue, Jul 19, 2022 at 9:24 PM Emil Renner Berthing
+<emil.renner.berthing@canonical.com> wrote:
+>
+> When CONFIG_COMPAT=y the vdso_install target fails:
+>
+> $ make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- vdso_install
+>   INSTALL vdso.so
+> make[1]: *** No rule to make target 'vdso_install'.  Stop.
+> make: *** [arch/riscv/Makefile:112: vdso_install] Error 2
+>
+> The problem is that arch/riscv/kernel/compat_vdso/Makefile doesn't
+> have a vdso_install target, but instead calls it compat_vdso_install.
+>
+> Fixes: 0715372a06ce ("riscv: compat: vdso: Add COMPAT_VDSO base code implementation")
+> Reported-by: Ben Hutchings <ben@decadent.org.uk>
+> Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 > ---
-> Changes from V12:
-> 	Pick up review tag
-> 	Bjorn:
-> 		NOTE: this has a lot of similarities to
-> 		https://lore.kernel.org/all/20210416205856.3234481-7-kw@linux.com/
-> 		I'm not sure why that patch was not picked up.  But I've
-> 		added Krzysztof as a suggested by if that is ok?
-> 
-> Changes from V11:
-> 	New Patch
-> ---
->  include/linux/sysfs.h | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
-> index e3f1e8ac1f85..fd3fe5c8c17f 100644
-> --- a/include/linux/sysfs.h
-> +++ b/include/linux/sysfs.h
-> @@ -235,6 +235,22 @@ struct bin_attribute bin_attr_##_name = __BIN_ATTR_WO(_name, _size)
->  #define BIN_ATTR_RW(_name, _size)					\
->  struct bin_attribute bin_attr_##_name = __BIN_ATTR_RW(_name, _size)
->  
-> +
-> +#define __BIN_ATTR_ADMIN_RO(_name, _size) {					\
-> +	.attr	= { .name = __stringify(_name), .mode = 0400 },		\
-> +	.read	= _name##_read,						\
-> +	.size	= _size,						\
-> +}
-> +
-> +#define __BIN_ATTR_ADMIN_RW(_name, _size)					\
-> +	__BIN_ATTR(_name, 0600, _name##_read, _name##_write, _size)
-> +
-> +#define BIN_ATTR_ADMIN_RO(_name, _size)					\
-> +struct bin_attribute bin_attr_##_name = __BIN_ATTR_ADMIN_RO(_name, _size)
-> +
-> +#define BIN_ATTR_ADMIN_RW(_name, _size)					\
-> +struct bin_attribute bin_attr_##_name = __BIN_ATTR_ADMIN_RW(_name, _size)
-> +
->  struct sysfs_ops {
->  	ssize_t	(*show)(struct kobject *, struct attribute *, char *);
->  	ssize_t	(*store)(struct kobject *, struct attribute *, const char *, size_t);
+> v2: Add Fixes and Reported-by tags
+>
+>  arch/riscv/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 34cf8a598617..5cfbef613e34 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -110,7 +110,7 @@ PHONY += vdso_install
+>  vdso_install:
+>         $(Q)$(MAKE) $(build)=arch/riscv/kernel/vdso $@
+>         $(if $(CONFIG_COMPAT),$(Q)$(MAKE) \
+> -               $(build)=arch/riscv/kernel/compat_vdso $@)
+> +               $(build)=arch/riscv/kernel/compat_vdso compat_$@)
+>
+>  ifeq ($(KBUILD_EXTMOD),)
+>  ifeq ($(CONFIG_MMU),y)
+> --
+> 2.37.1
+>
 
+
+-- 
+Best Regards
+ Guo Ren

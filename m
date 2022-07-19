@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E6E579F49
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C53579D2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243412AbiGSNMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S241653AbiGSMrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240144AbiGSNMA (ORCPT
+        with ESMTP id S241701AbiGSMqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:12:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD9A67581;
-        Tue, 19 Jul 2022 05:29:27 -0700 (PDT)
+        Tue, 19 Jul 2022 08:46:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB188AB02;
+        Tue, 19 Jul 2022 05:18:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4441260693;
-        Tue, 19 Jul 2022 12:29:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D6BC341C6;
-        Tue, 19 Jul 2022 12:29:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C3E06182A;
+        Tue, 19 Jul 2022 12:18:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBF2FC341CA;
+        Tue, 19 Jul 2022 12:18:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233766;
-        bh=o97yyzqXtkAi9dD3IykIm+0aHWiYI1dIxHa/BFEbvjI=;
+        s=korg; t=1658233082;
+        bh=B5R6E+ddq8m5/lQLkLjA5+soKj5kmq3p6rjJ4fQbuHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=POQNdwGWIbcKycLgJ/1c+h66YSYo87hqs9vxuBh4shPqTpMe4be1Hmn+WeihDJtzx
-         NtwPbCp4EKMvE3ADYqd2UCtXW3YzQFapwjpoG3kkUyXxIJr5Vu16o5OqCS0QHnwP8d
-         oyMHL4Cgdzj1Wa/XsnZPCvsvDJsY9dhzRL7zJKSE=
+        b=x/PweP/JoFVLgoeBmOhS744n19CQIjgrti/wD+kzCJTup5mckjpH6yLkoYQOd1WCl
+         ID7CSOGyEbNLa5P5IYLWMCfQ+yamHp+Aal6/dRr+IH5axDUxA2ylYxApmYiit00R89
+         01OvUzrjxrkq7PibKtjjLy9+wiL2MR5x//y5PhYM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Veness <john-linux@pelago.org.uk>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 213/231] ALSA: usb-audio: Add quirks for MacroSilicon MS2100/MS2106 devices
-Date:   Tue, 19 Jul 2022 13:54:58 +0200
-Message-Id: <20220719114731.767273548@linuxfoundation.org>
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.15 167/167] x86/pat: Fix x86_has_pat_wp()
+Date:   Tue, 19 Jul 2022 13:54:59 +0200
+Message-Id: <20220719114712.619651806@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,98 +53,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Veness <john-linux@pelago.org.uk>
+From: Juergen Gross <jgross@suse.com>
 
-[ Upstream commit 6e2c9105e0b743c92a157389d40f00b81bdd09fe ]
+commit 230ec83d4299b30c51a1c133b4f2a669972cc08a upstream.
 
-Treat the claimed 96kHz 1ch in the descriptors as 48kHz 2ch, so that
-the audio stream doesn't sound mono. Also fix initial stream
-alignment, so that left and right channels are in the correct order.
+x86_has_pat_wp() is using a wrong test, as it relies on the normal
+PAT configuration used by the kernel. In case the PAT MSR has been
+setup by another entity (e.g. Xen hypervisor) it might return false
+even if the PAT configuration is allowing WP mappings. This due to the
+fact that when running as Xen PV guest the PAT MSR is setup by the
+hypervisor and cannot be changed by the guest. This results in the WP
+related entry to be at a different position when running as Xen PV
+guest compared to the bare metal or fully virtualized case.
 
-Signed-off-by: John Veness <john-linux@pelago.org.uk>
-Link: https://lore.kernel.org/r/20220624140757.28758-1-john-linux@pelago.org.uk
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The correct way to test for WP support is:
+
+1. Get the PTE protection bits needed to select WP mode by reading
+   __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP] (depending on the PAT MSR
+   setting this might return protection bits for a stronger mode, e.g.
+   UC-)
+2. Translate those bits back into the real cache mode selected by those
+   PTE bits by reading __pte2cachemode_tbl[__pte2cm_idx(prot)]
+3. Test for the cache mode to be _PAGE_CACHE_MODE_WP
+
+Fixes: f88a68facd9a ("x86/mm: Extend early_memremap() support with additional attrs")
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org> # 4.14
+Link: https://lore.kernel.org/r/20220503132207.17234-1-jgross@suse.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/quirks-table.h |   48 +++++++++++++++++++++++++++++++++++++++++++++++
- sound/usb/quirks.c       |    3 ++
- 2 files changed, 51 insertions(+)
+ arch/x86/mm/init.c |   14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
---- a/sound/usb/quirks-table.h
-+++ b/sound/usb/quirks-table.h
-@@ -3803,6 +3803,54 @@ YAMAHA_DEVICE(0x7010, "UB99"),
- },
+--- a/arch/x86/mm/init.c
++++ b/arch/x86/mm/init.c
+@@ -78,10 +78,20 @@ static uint8_t __pte2cachemode_tbl[8] =
+ 	[__pte2cm_idx(_PAGE_PWT | _PAGE_PCD | _PAGE_PAT)] = _PAGE_CACHE_MODE_UC,
+ };
  
- /*
-+ * MacroSilicon MS2100/MS2106 based AV capture cards
-+ *
-+ * These claim 96kHz 1ch in the descriptors, but are actually 48kHz 2ch.
-+ * They also need QUIRK_FLAG_ALIGN_TRANSFER, which makes one wonder if
-+ * they pretend to be 96kHz mono as a workaround for stereo being broken
-+ * by that...
-+ *
-+ * They also have an issue with initial stream alignment that causes the
-+ * channels to be swapped and out of phase, which is dealt with in quirks.c.
-+ */
-+{
-+	USB_AUDIO_DEVICE(0x534d, 0x0021),
-+	.driver_info = (unsigned long) &(const struct snd_usb_audio_quirk) {
-+		.vendor_name = "MacroSilicon",
-+		.product_name = "MS210x",
-+		.ifnum = QUIRK_ANY_INTERFACE,
-+		.type = QUIRK_COMPOSITE,
-+		.data = &(const struct snd_usb_audio_quirk[]) {
-+			{
-+				.ifnum = 2,
-+				.type = QUIRK_AUDIO_STANDARD_MIXER,
-+			},
-+			{
-+				.ifnum = 3,
-+				.type = QUIRK_AUDIO_FIXED_ENDPOINT,
-+				.data = &(const struct audioformat) {
-+					.formats = SNDRV_PCM_FMTBIT_S16_LE,
-+					.channels = 2,
-+					.iface = 3,
-+					.altsetting = 1,
-+					.altset_idx = 1,
-+					.attributes = 0,
-+					.endpoint = 0x82,
-+					.ep_attr = USB_ENDPOINT_XFER_ISOC |
-+						USB_ENDPOINT_SYNC_ASYNC,
-+					.rates = SNDRV_PCM_RATE_CONTINUOUS,
-+					.rate_min = 48000,
-+					.rate_max = 48000,
-+				}
-+			},
-+			{
-+				.ifnum = -1
-+			}
-+		}
-+	}
-+},
-+
+-/* Check that the write-protect PAT entry is set for write-protect */
 +/*
-  * MacroSilicon MS2109 based HDMI capture cards
-  *
-  * These claim 96kHz 1ch in the descriptors, but are actually 48kHz 2ch.
---- a/sound/usb/quirks.c
-+++ b/sound/usb/quirks.c
-@@ -1478,6 +1478,7 @@ void snd_usb_set_format_quirk(struct snd
- 	case USB_ID(0x041e, 0x3f19): /* E-Mu 0204 USB */
- 		set_format_emu_quirk(subs, fmt);
- 		break;
-+	case USB_ID(0x534d, 0x0021): /* MacroSilicon MS2100/MS2106 */
- 	case USB_ID(0x534d, 0x2109): /* MacroSilicon MS2109 */
- 		subs->stream_offset_adj = 2;
- 		break;
-@@ -1908,6 +1909,8 @@ static const struct usb_audio_quirk_flag
- 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
- 	DEVICE_FLG(0x413c, 0xa506, /* Dell AE515 sound bar */
- 		   QUIRK_FLAG_GET_SAMPLE_RATE),
-+	DEVICE_FLG(0x534d, 0x0021, /* MacroSilicon MS2100/MS2106 */
-+		   QUIRK_FLAG_ALIGN_TRANSFER),
- 	DEVICE_FLG(0x534d, 0x2109, /* MacroSilicon MS2109 */
- 		   QUIRK_FLAG_ALIGN_TRANSFER),
- 	DEVICE_FLG(0x1224, 0x2a25, /* Jieli Technology USB PHY 2.0 */
++ * Check that the write-protect PAT entry is set for write-protect.
++ * To do this without making assumptions how PAT has been set up (Xen has
++ * another layout than the kernel), translate the _PAGE_CACHE_MODE_WP cache
++ * mode via the __cachemode2pte_tbl[] into protection bits (those protection
++ * bits will select a cache mode of WP or better), and then translate the
++ * protection bits back into the cache mode using __pte2cm_idx() and the
++ * __pte2cachemode_tbl[] array. This will return the really used cache mode.
++ */
+ bool x86_has_pat_wp(void)
+ {
+-	return __pte2cachemode_tbl[_PAGE_CACHE_MODE_WP] == _PAGE_CACHE_MODE_WP;
++	uint16_t prot = __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP];
++
++	return __pte2cachemode_tbl[__pte2cm_idx(prot)] == _PAGE_CACHE_MODE_WP;
+ }
+ 
+ enum page_cache_mode pgprot2cachemode(pgprot_t pgprot)
 
 

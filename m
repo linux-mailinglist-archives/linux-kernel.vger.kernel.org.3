@@ -2,136 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E2357A8DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3628857A8DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237027AbiGSVSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S237775AbiGSVTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233162AbiGSVSs (ORCPT
+        with ESMTP id S237492AbiGSVTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:18:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3537F5F9B4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658265527;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qQ4UdihwA3u3irfHx6eGnZO09RoO1lQsj+Krqj+1YXg=;
-        b=RoWbuINsL8OwNS97R9W0oNIQ9QUQF2McjHve7ZtabNaRRs5ih4ph9n5e4tv8WUpuftbcHA
-        clc2u1dYHrioCLYzRiT0M6eP7kdnBFlhrBGflaVMnWHR5cwDptLu3F2A18G94oyVu2VmRk
-        4mCb1w32CaUZ5ORkVbTbe4XKvnnBSb4=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-j_rRPVZtMa6rQywjMjas9A-1; Tue, 19 Jul 2022 17:18:38 -0400
-X-MC-Unique: j_rRPVZtMa6rQywjMjas9A-1
-Received: by mail-qt1-f198.google.com with SMTP id x16-20020ac85f10000000b0031d3262f264so11090873qta.22
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:18:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qQ4UdihwA3u3irfHx6eGnZO09RoO1lQsj+Krqj+1YXg=;
-        b=sV3ax9DjoOkkKfzcNh5uQFdXeCRkFn96r3PbHhl2/HnzsOk0fSvP15Zm0B6FxjKf/E
-         IAfNnS8bbcCKwR9KAzPrgHCsPgfFthmZX3QxPIoP5ZZt39dhtmO4bR/y7o/eo7f19olA
-         IrpdmvICllh+IZrGx1RLkmYFKtkwIIndPSS54b9spbDjOGTdXrraMLiaZQgkjoPhqQri
-         pinh1WEygiV8SF9E6GDbM25YxpejaYEixyQhQ/OiX0Hj3CQiWF5ileaRB+SurRXjI7T9
-         hJbm0YRraosENKECAOASEIYDWKrvKz3WN9NTC3t0csSV22gQQtk2zZlwhB8L7zGPMFJc
-         miOg==
-X-Gm-Message-State: AJIora8DFDsKgh2NLVedpGrYGWOt/iB/G8vhNhkrZr1kpOijE0ps8v0Y
-        DggATB5s0uPoYrQsOQyRgTJ339h1ElNh291vV1XsdJotQJPkm6QEF6gP2ROpYlf2QDyvbt1oWIA
-        A/2eMl+IUQvLCP6eZXq5te6zF
-X-Received: by 2002:a05:620a:469f:b0:6b6:74c:6b10 with SMTP id bq31-20020a05620a469f00b006b6074c6b10mr2002411qkb.80.1658265517809;
-        Tue, 19 Jul 2022 14:18:37 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1solk9LbHq5kw8KaBY3e4msSDmv+aW7vjooY/eq2+EXMQV5yRa7rp8kr6cJ8pNcJb3bUwoNpA==
-X-Received: by 2002:a05:620a:469f:b0:6b6:74c:6b10 with SMTP id bq31-20020a05620a469f00b006b6074c6b10mr2002393qkb.80.1658265517591;
-        Tue, 19 Jul 2022 14:18:37 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
-        by smtp.gmail.com with ESMTPSA id s10-20020ac85eca000000b0031ede43512bsm8530570qtx.44.2022.07.19.14.18.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 14:18:37 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 17:18:34 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] userfaultfd: add /dev/userfaultfd for fine
- grained access control
-Message-ID: <YtcfqpmpkVXz/Frl@xz-m1.local>
-References: <20220719195628.3415852-1-axelrasmussen@google.com>
- <20220719195628.3415852-3-axelrasmussen@google.com>
+        Tue, 19 Jul 2022 17:19:15 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB095FAEA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:19:11 -0700 (PDT)
+Received: from localhost.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id E8A0420055;
+        Tue, 19 Jul 2022 23:19:09 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/2] dt-bindings: leds: qcom-lpg: Add compatible for PM660L LPG block
+Date:   Tue, 19 Jul 2022 23:18:47 +0200
+Message-Id: <20220719211848.1653920-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220719195628.3415852-3-axelrasmussen@google.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 12:56:25PM -0700, Axel Rasmussen wrote:
-> Historically, it has been shown that intercepting kernel faults with
-> userfaultfd (thereby forcing the kernel to wait for an arbitrary amount
-> of time) can be exploited, or at least can make some kinds of exploits
-> easier. So, in 37cd0575b8 "userfaultfd: add UFFD_USER_MODE_ONLY" we
-> changed things so, in order for kernel faults to be handled by
-> userfaultfd, either the process needs CAP_SYS_PTRACE, or this sysctl
-> must be configured so that any unprivileged user can do it.
-> 
-> In a typical implementation of a hypervisor with live migration (take
-> QEMU/KVM as one such example), we do indeed need to be able to handle
-> kernel faults. But, both options above are less than ideal:
-> 
-> - Toggling the sysctl increases attack surface by allowing any
->   unprivileged user to do it.
-> 
-> - Granting the live migration process CAP_SYS_PTRACE gives it this
->   ability, but *also* the ability to "observe and control the
->   execution of another process [...], and examine and change [its]
->   memory and registers" (from ptrace(2)). This isn't something we need
->   or want to be able to do, so granting this permission violates the
->   "principle of least privilege".
-> 
-> This is all a long winded way to say: we want a more fine-grained way to
-> grant access to userfaultfd, without granting other additional
-> permissions at the same time.
-> 
-> To achieve this, add a /dev/userfaultfd misc device. This device
-> provides an alternative to the userfaultfd(2) syscall for the creation
-> of new userfaultfds. The idea is, any userfaultfds created this way will
-> be able to handle kernel faults, without the caller having any special
-> capabilities. Access to this mechanism is instead restricted using e.g.
-> standard filesystem permissions.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+Document the availability of an LPG configuration for the PM660L PMIC in
+the Qualcomm Light Pulse Generator driver.
 
-Thanks, this looks much better.
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Acked-by: Peter Xu <peterx@redhat.com>
+diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+index fe336fa16518..497db289169d 100644
+--- a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+@@ -17,6 +17,7 @@ description: >
+ properties:
+   compatible:
+     enum:
++      - qcom,pm660l-lpg
+       - qcom,pm8150b-lpg
+       - qcom,pm8150l-lpg
+       - qcom,pm8350c-pwm
 
+base-commit: 3b87ed7ea4d598c81a03317a92dfbd59102224fd
 -- 
-Peter Xu
+2.37.1
 

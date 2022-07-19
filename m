@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CB3579EDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530F2579A6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236360AbiGSNHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S239129AbiGSMQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243126AbiGSNGs (ORCPT
+        with ESMTP id S239386AbiGSMOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:06:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DF1106C7F;
-        Tue, 19 Jul 2022 05:27:15 -0700 (PDT)
+        Tue, 19 Jul 2022 08:14:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B408D4C612;
+        Tue, 19 Jul 2022 05:05:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D139861961;
-        Tue, 19 Jul 2022 12:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B033CC341C6;
-        Tue, 19 Jul 2022 12:27:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25A28B817AF;
+        Tue, 19 Jul 2022 12:04:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF84C341C6;
+        Tue, 19 Jul 2022 12:04:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233633;
-        bh=rWWBt7+PCOVJsLerpEIQnrCp9fpC9AdK50wZj8RXc8U=;
+        s=korg; t=1658232267;
+        bh=d+m4VWCUSsO3Sudpaqtn3IQBPQ5PF/wGQxEV8XVqCJo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UlDGEaakP2TGLPYbazZ0sOBqxzyzky5d6ad9Qa2SaPMikntt3NFSuag8qGbumSkEP
-         1QOfXs2c0DLh4zeUGx3t6zVjP95OHG+JOiJ6oTnJIthYfRH0SsO2F/qaR6nm3w9WhW
-         GXKagnBn32viTzSXd2EV5RpT085Wxvazu5uQpOwA=
+        b=zmPb+I4t0PFR9w4a0DlMugZcp9WuLhzyAf+fhoa6T7sPV73oLew3nz8fBoCnXXHKj
+         2AEABLVxJdAUFG5mTGaGm9/0cNCErYpof73h+5ybv6xTKTOwZ/cTJFny4aeMKjSOT2
+         mrA+CtR365POk2S8YnhimwlVa6QIuaYgZVkZY8ww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 189/231] ASoC: rt7*-sdw: harden jack_detect_handler
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 5.4 71/71] can: m_can: m_can_tx_handler(): fix use after free of skb
 Date:   Tue, 19 Jul 2022 13:54:34 +0200
-Message-Id: <20220719114730.083544650@linuxfoundation.org>
+Message-Id: <20220719114559.610828192@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,70 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 0484271ab0ce50649329fa9dc23c50853c5b26a4 ]
+commit 2e8e79c416aae1de224c0f1860f2e3350fa171f8 upstream.
 
-Realtek headset codec drivers typically check if the card is
-instantiated before proceeding with the jack detection.
+can_put_echo_skb() will clone skb then free the skb. Move the
+can_put_echo_skb() for the m_can version 3.0.x directly before the
+start of the xmit in hardware, similar to the 3.1.x branch.
 
-The rt700, rt711 and rt711-sdca are however missing a check on the
-card pointer, which can lead to NULL dereferences encountered in
-driver bind/unbind tests.
-
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Link: https://lore.kernel.org/r/20220606203752.144159-6-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 80646733f11c ("can: m_can: update to support CAN FD features")
+Link: https://lore.kernel.org/all/20220317081305.739554-1-mkl@pengutronix.de
+Cc: stable@vger.kernel.org
+Reported-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+[sudip: adjust context]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/rt700.c      | 2 +-
- sound/soc/codecs/rt711-sdca.c | 2 +-
- sound/soc/codecs/rt711.c      | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/can/m_can/m_can.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/rt700.c b/sound/soc/codecs/rt700.c
-index 360d61a36c35..b16fbde02986 100644
---- a/sound/soc/codecs/rt700.c
-+++ b/sound/soc/codecs/rt700.c
-@@ -162,7 +162,7 @@ static void rt700_jack_detect_handler(struct work_struct *work)
- 	if (!rt700->hs_jack)
- 		return;
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1443,8 +1443,6 @@ static netdev_tx_t m_can_tx_handler(stru
+ 					 M_CAN_FIFO_DATA(i / 4),
+ 					 *(u32 *)(cf->data + i));
  
--	if (!rt700->component->card->instantiated)
-+	if (!rt700->component->card || !rt700->component->card->instantiated)
- 		return;
- 
- 	reg = RT700_VERB_GET_PIN_SENSE | RT700_HP_OUT;
-diff --git a/sound/soc/codecs/rt711-sdca.c b/sound/soc/codecs/rt711-sdca.c
-index 8a0b74d3fa9e..83e4c4e4d1e2 100644
---- a/sound/soc/codecs/rt711-sdca.c
-+++ b/sound/soc/codecs/rt711-sdca.c
-@@ -294,7 +294,7 @@ static void rt711_sdca_jack_detect_handler(struct work_struct *work)
- 	if (!rt711->hs_jack)
- 		return;
- 
--	if (!rt711->component->card->instantiated)
-+	if (!rt711->component->card || !rt711->component->card->instantiated)
- 		return;
- 
- 	/* SDW_SCP_SDCA_INT_SDCA_0 is used for jack detection */
-diff --git a/sound/soc/codecs/rt711.c b/sound/soc/codecs/rt711.c
-index db70d8073c0b..18a0de77c477 100644
---- a/sound/soc/codecs/rt711.c
-+++ b/sound/soc/codecs/rt711.c
-@@ -242,7 +242,7 @@ static void rt711_jack_detect_handler(struct work_struct *work)
- 	if (!rt711->hs_jack)
- 		return;
- 
--	if (!rt711->component->card->instantiated)
-+	if (!rt711->component->card || !rt711->component->card->instantiated)
- 		return;
- 
- 	if (pm_runtime_status_suspended(rt711->slave->dev.parent)) {
--- 
-2.35.1
-
+-		can_put_echo_skb(skb, dev, 0);
+-
+ 		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD) {
+ 			cccr = m_can_read(cdev, M_CAN_CCCR);
+ 			cccr &= ~(CCCR_CMR_MASK << CCCR_CMR_SHIFT);
+@@ -1461,6 +1459,9 @@ static netdev_tx_t m_can_tx_handler(stru
+ 			m_can_write(cdev, M_CAN_CCCR, cccr);
+ 		}
+ 		m_can_write(cdev, M_CAN_TXBTIE, 0x1);
++
++		can_put_echo_skb(skb, dev, 0);
++
+ 		m_can_write(cdev, M_CAN_TXBAR, 0x1);
+ 		/* End of xmit function for version 3.0.x */
+ 	} else {
 
 

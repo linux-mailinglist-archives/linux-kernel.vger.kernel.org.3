@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC9D579E2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6596E579AE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242308AbiGSM6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S239316AbiGSMVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242481AbiGSM5q (ORCPT
+        with ESMTP id S239587AbiGSMTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:57:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7811B459B8;
-        Tue, 19 Jul 2022 05:23:15 -0700 (PDT)
+        Tue, 19 Jul 2022 08:19:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87ACA58874;
+        Tue, 19 Jul 2022 05:07:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E568D61632;
-        Tue, 19 Jul 2022 12:23:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB4FC341C6;
-        Tue, 19 Jul 2022 12:23:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98E0BB81B2C;
+        Tue, 19 Jul 2022 12:06:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08355C341C6;
+        Tue, 19 Jul 2022 12:06:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233394;
-        bh=rxlbLmPe2RGO+1IlEcnh73vt9heuUv2J9NYtvApGj6Y=;
+        s=korg; t=1658232406;
+        bh=TUEZca48WL3fXZha1QOFriX2mICYwGrA7prQ5bSVqUk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mZCVeGaNrSkxBbl8CuRTapX5HZj833RERxXH6GCKqgrRBjweo0XDii2gPR5/eVbyB
-         Dap/dKS5MNYI8x5w3c3r4H12/mliFbUs0udFDTK8y8DNOh21WqiHalb9iCqQpPLuBj
-         bHOrBM/tzIt//v+iFf+7CWa3rC3QcfIDHk3thHeY=
+        b=jnB8J1Wi29BNNf9N0v4k+Bqqh9zahFMMuCTkWeKLNs/O3tHADdS/7hiIMPWSdeODV
+         z7lktFpGprhqaY8H6Bvttzl/R0Y5Nzu/Mse8DUqE5h4IusLO9vZOEDZWyuA5ZKgkWS
+         auUiQwo0Vb/+5FIeyiX/sL1/7FEtCXt0NaObKNV4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Saravanan Vajravel <saravanan.vajravel@broadcom.com>,
-        Somnath Kotur <somnath.kotur@broadcom.com>,
-        Vikas Gupta <vikas.gupta@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 107/231] bnxt_en: fix livepatch query
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Steven Price <steven.price@arm.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: [PATCH 5.10 019/112] drm/panfrost: Fix shrinker list corruption by madvise IOCTL
 Date:   Tue, 19 Jul 2022 13:53:12 +0200
-Message-Id: <20220719114723.621691392@linuxfoundation.org>
+Message-Id: <20220719114627.846889705@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,45 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vikas Gupta <vikas.gupta@broadcom.com>
+From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-[ Upstream commit 619b9b1622c283cc5ca86f4c487db266a8f55dab ]
+commit 9fc33eaaa979d112d10fea729edcd2a2e21aa912 upstream.
 
-In the livepatch query fw_target BNXT_FW_SRT_PATCH is
-applicable for P5 chips only.
+Calling madvise IOCTL twice on BO causes memory shrinker list corruption
+and crashes kernel because BO is already on the list and it's added to
+the list again, while BO should be removed from the list before it's
+re-added. Fix it.
 
-Fixes: 3c4153394e2c ("bnxt_en: implement firmware live patching")
-Reviewed-by: Saravanan Vajravel <saravanan.vajravel@broadcom.com>
-Reviewed-by: Somnath Kotur <somnath.kotur@broadcom.com>
-Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 013b65101315 ("drm/panfrost: Add madvise and shrinker support")
+Acked-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+Reviewed-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Steven Price <steven.price@arm.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220630200601.1884120-3-dmitry.osipenko@collabora.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/panfrost/panfrost_drv.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
-index 0c17f90d44a2..3a9441fe4fd1 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
-@@ -979,9 +979,11 @@ static int bnxt_dl_info_get(struct devlink *dl, struct devlink_info_req *req,
- 	if (rc)
- 		return rc;
+--- a/drivers/gpu/drm/panfrost/panfrost_drv.c
++++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+@@ -427,8 +427,8 @@ static int panfrost_ioctl_madvise(struct
  
--	rc = bnxt_dl_livepatch_info_put(bp, req, BNXT_FW_SRT_PATCH);
--	if (rc)
--		return rc;
-+	if (BNXT_CHIP_P5(bp)) {
-+		rc = bnxt_dl_livepatch_info_put(bp, req, BNXT_FW_SRT_PATCH);
-+		if (rc)
-+			return rc;
-+	}
- 	return bnxt_dl_livepatch_info_put(bp, req, BNXT_FW_CRT_PATCH);
- 
- }
--- 
-2.35.1
-
+ 	if (args->retained) {
+ 		if (args->madv == PANFROST_MADV_DONTNEED)
+-			list_add_tail(&bo->base.madv_list,
+-				      &pfdev->shrinker_list);
++			list_move_tail(&bo->base.madv_list,
++				       &pfdev->shrinker_list);
+ 		else if (args->madv == PANFROST_MADV_WILLNEED)
+ 			list_del_init(&bo->base.madv_list);
+ 	}
 
 

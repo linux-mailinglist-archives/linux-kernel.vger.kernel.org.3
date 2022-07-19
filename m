@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2897F579D1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A4D579B4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239685AbiGSMrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S239921AbiGSM0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242107AbiGSMpT (ORCPT
+        with ESMTP id S240187AbiGSMYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:45:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E2E88CC9;
-        Tue, 19 Jul 2022 05:18:06 -0700 (PDT)
+        Tue, 19 Jul 2022 08:24:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC765005D;
+        Tue, 19 Jul 2022 05:09:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A5E5B81B13;
-        Tue, 19 Jul 2022 12:18:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0BDFC341C6;
-        Tue, 19 Jul 2022 12:18:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CA8F616DB;
+        Tue, 19 Jul 2022 12:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50402C36AEF;
+        Tue, 19 Jul 2022 12:09:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233085;
-        bh=oXmiPHef9sNQdd78/D5gyH14NvZuBXfGyDVPUHBBn3o=;
+        s=korg; t=1658232569;
+        bh=ZHDS7axaqv3eoGXc0bA8B+TANT3b2ltotVfUt2qyR04=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ag+s/q/s4OwuXZOY8hVYHqhcavOh3pSbQbqe1pYZdTOb+xlN6Cryb5cjQsR9Mjl9T
-         QWX0jQhTaYddKGp+BTjG+kmWc48zEVEqCTemwyQSe49OgO3zaLNzxWb+A9OnGp7MXr
-         Z9hnsK1uEfqfkcAhTb331frW6HJQxMC2un2LFL1k=
+        b=btHas5GYeBJ83ZYGYwaCeC+HW7/QIWF/Ij06xM8UJeAHWSJX/LMqv1ti/KIbg/ciL
+         VZJIdUABoyiDtL40kgVxz52EL+6kfvCk4DJ9FUqngfUT1+SGlKrYXqt2MVHYMM+P04
+         Zhm20ljV79IoKbAdbsJcgR2NF2Agfh9R3XNmcVG0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuming Fan <shumingf@realtek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 143/167] ASoC: rt711-sdca: fix kernel NULL pointer dereference when IO error
-Date:   Tue, 19 Jul 2022 13:54:35 +0200
-Message-Id: <20220719114710.325178974@linuxfoundation.org>
+        stable@vger.kernel.org, Lucien Buchmann <lucien.buchmann@gmx.net>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 103/112] USB: serial: ftdi_sio: add Belimo device ids
+Date:   Tue, 19 Jul 2022 13:54:36 +0200
+Message-Id: <20220719114636.922665740@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +53,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shuming Fan <shumingf@realtek.com>
+From: Lucien Buchmann <lucien.buchmann@gmx.net>
 
-[ Upstream commit 1df793d479bef546569fc2e409ff8bb3f0fb8e99 ]
+commit 7c239a071d1f04b7137789810807b4108d475c72 upstream.
 
-The initial settings will be written before the codec probe function.
-But, the rt711->component doesn't be assigned yet.
-If IO error happened during initial settings operations, it will cause the kernel panic.
-This patch changed component->dev to slave->dev to fix this issue.
+Those two product ids are known.
 
-Signed-off-by: Shuming Fan <shumingf@realtek.com>
-Link: https://lore.kernel.org/r/20220621090719.30558-1-shumingf@realtek.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Lucien Buchmann <lucien.buchmann@gmx.net>
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/rt711-sdca.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/serial/ftdi_sio.c     |    3 +++
+ drivers/usb/serial/ftdi_sio_ids.h |    6 ++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/sound/soc/codecs/rt711-sdca.c b/sound/soc/codecs/rt711-sdca.c
-index 60aef52b3fe4..3b5df3ea2f60 100644
---- a/sound/soc/codecs/rt711-sdca.c
-+++ b/sound/soc/codecs/rt711-sdca.c
-@@ -34,7 +34,7 @@ static int rt711_sdca_index_write(struct rt711_sdca_priv *rt711,
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1023,6 +1023,9 @@ static const struct usb_device_id id_tab
+ 	{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_DISPLAY_PID) },
+ 	{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_LITE_PID) },
+ 	{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_ANALOG_PID) },
++	/* Belimo Automation devices */
++	{ USB_DEVICE(FTDI_VID, BELIMO_ZTH_PID) },
++	{ USB_DEVICE(FTDI_VID, BELIMO_ZIP_PID) },
+ 	/* ICP DAS I-756xU devices */
+ 	{ USB_DEVICE(ICPDAS_VID, ICPDAS_I7560U_PID) },
+ 	{ USB_DEVICE(ICPDAS_VID, ICPDAS_I7561U_PID) },
+--- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -1569,6 +1569,12 @@
+ #define CHETCO_SEASMART_ANALOG_PID	0xA5AF /* SeaSmart Analog Adapter */
  
- 	ret = regmap_write(regmap, addr, value);
- 	if (ret < 0)
--		dev_err(rt711->component->dev,
-+		dev_err(&rt711->slave->dev,
- 			"Failed to set private value: %06x <= %04x ret=%d\n",
- 			addr, value, ret);
- 
-@@ -50,7 +50,7 @@ static int rt711_sdca_index_read(struct rt711_sdca_priv *rt711,
- 
- 	ret = regmap_read(regmap, addr, value);
- 	if (ret < 0)
--		dev_err(rt711->component->dev,
-+		dev_err(&rt711->slave->dev,
- 			"Failed to get private value: %06x => %04x ret=%d\n",
- 			addr, *value, ret);
- 
--- 
-2.35.1
-
+ /*
++ * Belimo Automation
++ */
++#define BELIMO_ZTH_PID			0x8050
++#define BELIMO_ZIP_PID			0xC811
++
++/*
+  * Unjo AB
+  */
+ #define UNJO_VID			0x22B7
 
 

@@ -2,195 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472A157AA76
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D6B57AA80
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238837AbiGSX2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 19:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S238897AbiGSXcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 19:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238173AbiGSX2M (ORCPT
+        with ESMTP id S235061AbiGSXcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 19:28:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0CA62A50;
-        Tue, 19 Jul 2022 16:28:11 -0700 (PDT)
+        Tue, 19 Jul 2022 19:32:41 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DF05A8A1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:32:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658273291; x=1689809291;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=T4kVmJLpu7UE0MsPr1RXmKdo4hskRHKOMDrvdsxMDDI=;
-  b=LqWNtAmrvtEZ1mxcuXoYi517jBhmQ1mC5DyM22Duu8Re1FAaaiExqAwx
-   rIHJR1vpMMQjfWbaXyS2JawtRi7Bwr0huOhClD1vIW2d0fBOhfMOFiKQE
-   peMx1Ofhtks/bGimLjk3j2PcHQ8ybO0Hajp5W5AQlbfDqwn/dZvTgQ8TC
-   p1Klhj9FwRJNkWTT4WFna+13AnJ2LH1uuE4ebTxVGMc0XFMPgOg7wik9C
-   FTQzD8vrJk+IonA0AhIXpmKQaJx2AJ/nbX24McKCC1xW/Xb7FmFwfeFpb
-   BaPq8jTLUqJ88wqhYjTjvUGWnJg0H4eY7OYRaakL0NhMCNnERaIwuqeZR
+  t=1658273560; x=1689809560;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Kjl/gJcXa9ywx9LBzGe6Gsh+uBAgtGqIZvjmO+m87YE=;
+  b=SwYbV+Y+TppOpCQrMiReGfYsjLQP7x32P2IbrA5Yt2IGecv9ouqNKVe9
+   hAHbzpV/N2c31KcBqomac5NdkWiemkpm08sw5PWHJVqHMR5DIHLAWt/rW
+   hm0dQImnQlpu9W1E53MBw5wbFTkzTdAy6LOxvA3CC1+QxhoEIepP7P8An
+   JhMgOYSNJ8Kwz7tUFJLVUl8cCVJC91i1RSFVSUZJYIa2E1fjOcirPAKi/
+   jBFQrOVl1faaZNbPFpoB3icDOIRfBrIK2z1/EI/jwJ7rsAAXsQKRArXXd
+   jkcDFKOTjZD/nWoRvqNrMd8QT/8hAGJo7PA6pkJ2huHIRPvcXmsJqhof+
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="287787413"
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="269659843"
 X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="287787413"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 16:28:10 -0700
+   d="scan'208";a="269659843"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 16:32:39 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="665640633"
-Received: from ecurtis-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.162.137])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 16:28:07 -0700
-Message-ID: <e8cd46df9e3ea5c8c97397a2e89057f521e9eb66.camel@intel.com>
-Subject: Re: [PATCH v5 07/22] x86/virt/tdx: Implement SEAMCALL function
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, peterz@infradead.org,
-        ak@linux.intel.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Wed, 20 Jul 2022 11:28:05 +1200
-In-Reply-To: <62d7085729358_97b64294f2@dwillia2-xfh.jf.intel.com.notmuch>
-References: <cover.1655894131.git.kai.huang@intel.com>
-         <095e6bbc57b4470e1e9a9104059a5238c9775f00.1655894131.git.kai.huang@intel.com>
-         <069a062e-a4a6-09af-7b74-7f4929f2ec0b@intel.com>
-         <5ce7ebfe54160ea35e432bf50207ebed32db31fc.camel@intel.com>
-         <84e93539-a2f9-f68e-416a-ea3d8fc725af@intel.com>
-         <6bef368ccc68676e4acaecc4b6dc52f598ea7f2f.camel@intel.com>
-         <62d7085729358_97b64294f2@dwillia2-xfh.jf.intel.com.notmuch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+   d="scan'208";a="548113329"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 19 Jul 2022 16:32:38 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDwhh-0006Du-Oo;
+        Tue, 19 Jul 2022 23:32:37 +0000
+Date:   Wed, 20 Jul 2022 07:31:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kbusch:dma-register 4/4] io_uring/rsrc.c:1242:12: error: 'struct
+ io_mapped_ubuf' has no member named 'dma_tag'
+Message-ID: <202207200749.b8XeMpQ8-lkp@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-19 at 12:39 -0700, Dan Williams wrote:
-> Kai Huang wrote:
-> > On Mon, 2022-06-27 at 13:58 -0700, Dave Hansen wrote:
-> > > On 6/26/22 22:23, Kai Huang wrote:
-> > > > On Fri, 2022-06-24 at 11:38 -0700, Dave Hansen wrote:
-> > > > > On 6/22/22 04:16, Kai Huang wrote:
-> > > > > > SEAMCALL instruction causes #GP when SEAMRR isn't enabled, and =
-#UD when
-> > > > > > CPU is not in VMX operation.  The TDX_MODULE_CALL macro doesn't=
- handle
-> > > > > > SEAMCALL exceptions.  Leave to the caller to guarantee those co=
-nditions
-> > > > > > before calling __seamcall().
-> > > > >=20
-> > > > > I was trying to make the argument earlier that you don't need *AN=
-Y*
-> > > > > detection for TDX, other than the ability to make a SEAMCALL.
-> > > > > Basically, patch 01/22 could go away.
-> > > ...
-> > > > > So what does patch 01/22 buy us?  One EXTABLE entry?
-> > > >=20
-> > > > There are below pros if we can detect whether TDX is enabled by BIO=
-S during boot
-> > > > before initializing the TDX Module:
-> > > >=20
-> > > > 1) There are requirements from customers to report whether platform=
- supports TDX
-> > > > and the TDX keyID numbers before initializing the TDX module so the=
- userspace
-> > > > cloud software can use this information to do something.  Sorry I c=
-annot find
-> > > > the lore link now.
-> > >=20
-> > > <sigh>
-> > >=20
-> > > Never listen to customers literally.  It'll just lead you down the wr=
-ong
-> > > path.  They told you, "we need $FOO in dmesg" and you ran with it
-> > > without understanding why.  The fact that you even *need* to find the
-> > > lore link is because you didn't bother to realize what they really ne=
-eded.
-> > >=20
-> > > dmesg is not ABI.  It's for humans.  If you need data out of the kern=
-el,
-> > > do it with a *REAL* ABI.  Not dmesg.
-> >=20
-> > Showing in the dmesg is the first step, but later we have plan to expos=
-e keyID
-> > info via /sysfs.  Of course, it's always arguable customer's such requi=
-rement is
-> > absolutely needed, but to me it's still a good thing to have code to de=
-tect TDX
-> > during boot.  The code isn't complicated as you can see.
-> >=20
-> > >=20
-> > > > 2) As you can see, it can be used to handle ACPI CPU/memory hotplug=
- and driver
-> > > > managed memory hotplug.  Kexec() support patch also can use it.
-> > > >=20
-> > > > Particularly, in concept, ACPI CPU/memory hotplug is only related t=
-o whether TDX
-> > > > is enabled by BIOS, but not whether TDX module is loaded, or the re=
-sult of
-> > > > initializing the TDX module.  So I think we should have some code t=
-o detect TDX
-> > > > during boot.
-> > >=20
-> > > This is *EXACTLY* why our colleagues at Intel needs to tell us about
-> > > what the OS and firmware should do when TDX is in varying states of d=
-ecay.
-> >=20
-> > Yes I am working on it to make it public.
-> >=20
-> > >=20
-> > > Does the mere presence of the TDX module prevent hotplug? =C2=A0
-> > >=20
-> >=20
-> > For ACPI CPU hotplug, yes.  The TDX module even doesn't need to be load=
-ed.=20
-> > Whether SEAMRR is enabled determines.
-> >=20
-> > For ACPI memory hotplug, in practice yes.  For architectural behaviour,=
- I'll
-> > work with others internally to get some public statement.
-> >=20
-> > > Or, if a
-> > > system has the TDX module loaded but no intent to ever use TDX, why
-> > > can't it just use hotplug like a normal system which is not addled wi=
-th
-> > > the TDX albatross around its neck?
-> >=20
-> > I think if a machine has enabled TDX in the BIOS, the user of the machi=
-ne very
-> > likely has intention to actually use TDX.
-> >=20
-> > Yes for driver-managed memory hotplug, it makes sense if user doesn't w=
-ant to
-> > use TDX, it's better to not disable it.  But to me it's also not a disa=
-ster if
-> > we just disable driver-managed memory hotplug if TDX is enabled by BIOS=
-.
->=20
-> No, driver-managed memory hotplug is how Linux handles "dedicated
-> memory" management. The architecture needs to comprehend that end users
-> may want to move address ranges into and out of Linux core-mm management
-> independently of whether those address ranges are also covered by a SEAM
-> range.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-register
+head:   9de6909fed20955193275bbf9c75ccc85553b7d8
+commit: 9de6909fed20955193275bbf9c75ccc85553b7d8 [4/4] dma-prereg: add memory cleanup
+config: openrisc-randconfig-r032-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200749.b8XeMpQ8-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=9de6909fed20955193275bbf9c75ccc85553b7d8
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch dma-register
+        git checkout 9de6909fed20955193275bbf9c75ccc85553b7d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash
 
-But to avoid GFP_TDX (and ZONE_TDX) staff, we need to guarantee all memory =
-pages
-in page allocator are TDX pages.  To me it's at least quite fair that user =
-needs
-to *choose* to use driver-managed memory hotplug or TDX.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-If automatically disable driver-managed memory hotplug on a TDX BIOS enable=
-d
-platform isn't desired, how about we introduce a kernel command line (i.e.
-use_tdx=3D{on|off}) to let user to choose?
+All errors (new ones prefixed by >>):
 
-If user specifies use_tdx=3Don, then user cannot use driver-managed memory
-hotplug.  if use_tdx=3Doff, then user cannot use TDX even it is enabled by =
-BIOS.
+   io_uring/rsrc.c: In function 'io_sqe_buffer_register':
+>> io_uring/rsrc.c:1242:12: error: 'struct io_mapped_ubuf' has no member named 'dma_tag'
+    1242 |         imu->dma_tag = 0;
+         |            ^~
+   io_uring/rsrc.c: In function 'io_import_fixed':
+   io_uring/rsrc.c:1337:16: error: 'struct io_mapped_ubuf' has no member named 'dma_tag'
+    1337 |         if (imu->dma_tag) {
+         |                ^~
+   io_uring/rsrc.c:1340:49: error: 'struct io_mapped_ubuf' has no member named 'dma_tag'
+    1340 |                 iov_iter_dma_tag(iter, ddir, imu->dma_tag, offset, nr_segs, len);
+         |                                                 ^~
 
+
+vim +1242 io_uring/rsrc.c
+
+129ce6a148558b Jens Axboe     2022-06-13  1192  
+129ce6a148558b Jens Axboe     2022-06-13  1193  static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+129ce6a148558b Jens Axboe     2022-06-13  1194  				  struct io_mapped_ubuf **pimu,
+129ce6a148558b Jens Axboe     2022-06-13  1195  				  struct page **last_hpage)
+129ce6a148558b Jens Axboe     2022-06-13  1196  {
+129ce6a148558b Jens Axboe     2022-06-13  1197  	struct io_mapped_ubuf *imu = NULL;
+129ce6a148558b Jens Axboe     2022-06-13  1198  	struct page **pages = NULL;
+129ce6a148558b Jens Axboe     2022-06-13  1199  	unsigned long off;
+129ce6a148558b Jens Axboe     2022-06-13  1200  	size_t size;
+129ce6a148558b Jens Axboe     2022-06-13  1201  	int ret, nr_pages, i;
+129ce6a148558b Jens Axboe     2022-06-13  1202  
+129ce6a148558b Jens Axboe     2022-06-13  1203  	*pimu = ctx->dummy_ubuf;
+faee7b38d3c3e4 Pavel Begunkov 2022-06-15  1204  	if (!iov->iov_base)
+129ce6a148558b Jens Axboe     2022-06-13  1205  		return 0;
+129ce6a148558b Jens Axboe     2022-06-13  1206  
+129ce6a148558b Jens Axboe     2022-06-13  1207  	ret = -ENOMEM;
+129ce6a148558b Jens Axboe     2022-06-13  1208  	pages = io_pin_pages((unsigned long) iov->iov_base, iov->iov_len,
+129ce6a148558b Jens Axboe     2022-06-13  1209  				&nr_pages);
+129ce6a148558b Jens Axboe     2022-06-13  1210  	if (IS_ERR(pages)) {
+129ce6a148558b Jens Axboe     2022-06-13  1211  		ret = PTR_ERR(pages);
+129ce6a148558b Jens Axboe     2022-06-13  1212  		pages = NULL;
+129ce6a148558b Jens Axboe     2022-06-13  1213  		goto done;
+129ce6a148558b Jens Axboe     2022-06-13  1214  	}
+129ce6a148558b Jens Axboe     2022-06-13  1215  
+129ce6a148558b Jens Axboe     2022-06-13  1216  	imu = kvmalloc(struct_size(imu, bvec, nr_pages), GFP_KERNEL);
+129ce6a148558b Jens Axboe     2022-06-13  1217  	if (!imu)
+129ce6a148558b Jens Axboe     2022-06-13  1218  		goto done;
+129ce6a148558b Jens Axboe     2022-06-13  1219  
+129ce6a148558b Jens Axboe     2022-06-13  1220  	ret = io_buffer_account_pin(ctx, pages, nr_pages, imu, last_hpage);
+129ce6a148558b Jens Axboe     2022-06-13  1221  	if (ret) {
+129ce6a148558b Jens Axboe     2022-06-13  1222  		unpin_user_pages(pages, nr_pages);
+129ce6a148558b Jens Axboe     2022-06-13  1223  		goto done;
+129ce6a148558b Jens Axboe     2022-06-13  1224  	}
+129ce6a148558b Jens Axboe     2022-06-13  1225  
+129ce6a148558b Jens Axboe     2022-06-13  1226  	off = (unsigned long) iov->iov_base & ~PAGE_MASK;
+129ce6a148558b Jens Axboe     2022-06-13  1227  	size = iov->iov_len;
+129ce6a148558b Jens Axboe     2022-06-13  1228  	for (i = 0; i < nr_pages; i++) {
+129ce6a148558b Jens Axboe     2022-06-13  1229  		size_t vec_len;
+129ce6a148558b Jens Axboe     2022-06-13  1230  
+129ce6a148558b Jens Axboe     2022-06-13  1231  		vec_len = min_t(size_t, size, PAGE_SIZE - off);
+129ce6a148558b Jens Axboe     2022-06-13  1232  		imu->bvec[i].bv_page = pages[i];
+129ce6a148558b Jens Axboe     2022-06-13  1233  		imu->bvec[i].bv_len = vec_len;
+129ce6a148558b Jens Axboe     2022-06-13  1234  		imu->bvec[i].bv_offset = off;
+129ce6a148558b Jens Axboe     2022-06-13  1235  		off = 0;
+129ce6a148558b Jens Axboe     2022-06-13  1236  		size -= vec_len;
+129ce6a148558b Jens Axboe     2022-06-13  1237  	}
+129ce6a148558b Jens Axboe     2022-06-13  1238  	/* store original address for later verification */
+129ce6a148558b Jens Axboe     2022-06-13  1239  	imu->ubuf = (unsigned long) iov->iov_base;
+129ce6a148558b Jens Axboe     2022-06-13  1240  	imu->ubuf_end = imu->ubuf + iov->iov_len;
+129ce6a148558b Jens Axboe     2022-06-13  1241  	imu->nr_bvecs = nr_pages;
+8c38d1fa715ef4 Keith Busch    2022-07-18 @1242  	imu->dma_tag = 0;
+129ce6a148558b Jens Axboe     2022-06-13  1243  	*pimu = imu;
+129ce6a148558b Jens Axboe     2022-06-13  1244  	ret = 0;
+129ce6a148558b Jens Axboe     2022-06-13  1245  done:
+129ce6a148558b Jens Axboe     2022-06-13  1246  	if (ret)
+129ce6a148558b Jens Axboe     2022-06-13  1247  		kvfree(imu);
+129ce6a148558b Jens Axboe     2022-06-13  1248  	kvfree(pages);
+129ce6a148558b Jens Axboe     2022-06-13  1249  	return ret;
+129ce6a148558b Jens Axboe     2022-06-13  1250  }
+129ce6a148558b Jens Axboe     2022-06-13  1251  
+
+:::::: The code at line 1242 was first introduced by commit
+:::::: 8c38d1fa715ef4cd8c42a27cd252e66f99a440a3 iouring/block/nvme: preregister dma mapped buffers
+
+:::::: TO: Keith Busch <kbusch@kernel.org>
+:::::: CC: Keith Busch <kbusch@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

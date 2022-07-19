@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE05579AEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4421579CA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239428AbiGSMVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S241389AbiGSMlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239750AbiGSMTv (ORCPT
+        with ESMTP id S241287AbiGSMjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:19:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CCE599CD;
-        Tue, 19 Jul 2022 05:07:12 -0700 (PDT)
+        Tue, 19 Jul 2022 08:39:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED6141D31;
+        Tue, 19 Jul 2022 05:15:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 928D0B81B2D;
-        Tue, 19 Jul 2022 12:07:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E549BC341CA;
-        Tue, 19 Jul 2022 12:07:08 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 60B5BCE1BD6;
+        Tue, 19 Jul 2022 12:15:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53FB6C341C6;
+        Tue, 19 Jul 2022 12:15:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232429;
-        bh=odMzcP6B526YaN5bzmYNomjGHeZ1A39Dsgl49anFcoo=;
+        s=korg; t=1658232936;
+        bh=4Ae9WzvhYzV9DqfC1sH5vWDfWr4NdbtZgH8jm50vzHg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fc6DqNeUE1K5ktPIFsAWveRDu1OROCknzZ7DKZdqG9ShguBEcrLL1Y8Ujmj5Q5XmS
-         uowloNA8ZZASGJYKidftvgFO9aNNmoVoSEdM9+6jp4+0YkvQiZs4KPDG3i0WZE2CRj
-         90eP8fADPdQsi0nlsKX9B9N8gEOVUWdeKl13kTj8=
+        b=jAivdXXhZJo9JAj7yIce1PrgInTx0xHt3C310/2aZ1CEfxpvpxgt1hh8JgfB2AMOJ
+         dQIX13KTSexNBwkuIbgQepTfUY1LFWjFidM6s60DqOG5hKdgYQehEQALWlezG+onxh
+         PEChvQpZwFetzYSWb2Ucu3JybYQeTZegF0IatJwc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 053/112] ipv4: Fix a data-race around sysctl_fib_sync_mem.
+Subject: [PATCH 5.15 094/167] net: stmmac: fix leaks in probe
 Date:   Tue, 19 Jul 2022 13:53:46 +0200
-Message-Id: <20220719114631.578554321@linuxfoundation.org>
+Message-Id: <20220719114705.592488765@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 73318c4b7dbd0e781aaababff17376b2894745c0 ]
+[ Upstream commit 23aa6d5088e3bd65de77c5c307237b9937f8b48a ]
 
-While reading sysctl_fib_sync_mem, it can be changed concurrently.
-So, we need to add READ_ONCE() to avoid a data-race.
+These two error paths should clean up before returning.
 
-Fixes: 9ab948a91b2c ("ipv4: Allow amount of dirty memory from fib resizing to be controllable")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Fixes: 2bb4b98b60d7 ("net: stmmac: Add Ingenic SoCs MAC support.")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/fib_trie.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv4/fib_trie.c b/net/ipv4/fib_trie.c
-index ffc5332f1390..a28f525e2c47 100644
---- a/net/ipv4/fib_trie.c
-+++ b/net/ipv4/fib_trie.c
-@@ -497,7 +497,7 @@ static void tnode_free(struct key_vector *tn)
- 		tn = container_of(head, struct tnode, rcu)->kv;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c
+index 9a6d819b84ae..378b4dd826bb 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c
+@@ -273,7 +273,8 @@ static int ingenic_mac_probe(struct platform_device *pdev)
+ 			mac->tx_delay = tx_delay_ps * 1000;
+ 		} else {
+ 			dev_err(&pdev->dev, "Invalid TX clock delay: %dps\n", tx_delay_ps);
+-			return -EINVAL;
++			ret = -EINVAL;
++			goto err_remove_config_dt;
+ 		}
  	}
  
--	if (tnode_free_size >= sysctl_fib_sync_mem) {
-+	if (tnode_free_size >= READ_ONCE(sysctl_fib_sync_mem)) {
- 		tnode_free_size = 0;
- 		synchronize_rcu();
+@@ -283,7 +284,8 @@ static int ingenic_mac_probe(struct platform_device *pdev)
+ 			mac->rx_delay = rx_delay_ps * 1000;
+ 		} else {
+ 			dev_err(&pdev->dev, "Invalid RX clock delay: %dps\n", rx_delay_ps);
+-			return -EINVAL;
++			ret = -EINVAL;
++			goto err_remove_config_dt;
+ 		}
  	}
+ 
 -- 
 2.35.1
 

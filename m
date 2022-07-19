@@ -2,334 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B300579306
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD34579334
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237016AbiGSGNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 02:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
+        id S237026AbiGSG3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 02:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234444AbiGSGNr (ORCPT
+        with ESMTP id S233462AbiGSG3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 02:13:47 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AE61C11F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:13:45 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id m8so4754809edd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:13:45 -0700 (PDT)
+        Tue, 19 Jul 2022 02:29:22 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3A929823
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:29:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658212159; x=1689748159;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=4v432h4KswnzyKqtipbimarmF9e7Mqa3M3b9Czy0JZY=;
+  b=jiVWDznkaotSg+pa83u614zX67REqnUeOYS2QIMp2BuIq2v7so1A+/xG
+   w5G8ONLUz+CvxgXt4tF5v0/b37e2sRM0nzLSFn+MPLtMiFquIxocCdubT
+   Czn5IFc205gkvXNoucfWAKX0fvE6p+74+2we2iPtNa0qNXTXDpXWuR9sC
+   1/PG0vp20w6gznXOrm8x/4xKrqfUZzY8W8uo/PzJgA13sMiJH1LOT1qmX
+   l9H55L0mcltXRi11Qu9FK4An9Yx/qHogR4oAyldPxIO3mDFLxvmvpAtkC
+   9pukbjSbYA6u0DFdoEhnVMSXuvqFSVYDHJDVS9YoUM2zesPfEMdsvX5yn
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
+   d="scan'208";a="105073978"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Jul 2022 23:29:12 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 18 Jul 2022 23:29:12 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Mon, 18 Jul 2022 23:29:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=adIOIdWhGeqJbYFx+TKl2tybniPm3gOuobuv3cmSZO3nw3MtrIjGVUPqpORDQ1AwE0Sx22RN2IS0o2zEBTKJ9/UzaxkDau0rzBoz36F2T5BQrXvkJI1QKpUaHf8ZBujotzpIQPp0ntT70x1vIkTp3aEAR1+1ZNAvJZYhsAyLuZTKsHzxOAVObq3QLYNEndlkeSYypEJTL3lgss0hZ7tQWItpIOmJiXkGtro/oNz1KFCVeW6HCZPZ/eTy6h0dFwIlU4G9V7OSzL0ot9aEq8w97GfnUpKBFgfmfOvr5fvNdW7ttaSI0BA4GprJ5GXQsmg+HfR+ns9xvv15xHhKQKrfrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4v432h4KswnzyKqtipbimarmF9e7Mqa3M3b9Czy0JZY=;
+ b=juQ29O5+l7JfxZ++eFr4zeGeZCHL9X2wLK/9NugDYaKVXCWQNaZyA9cg1+w/Tzupr+adY1BkZXaAoaNBBGd1avEI5U6RKfQwSgbgxW06K91IsY/08Fi60X2raMXj40Wz6vG2YTb0MbuKQQH0CzhD//vdknHNE4lfRAJDcbQPjNFPfa/f2SH53JWWG/etks3p9DsmYoF7Le0T+t/jHvUOJ508rQFWM0d+ubXlAUnXnCWwsT2z3CGZP9GO+IMOznHJBFMSdjAYfM5tKm4/WuFhbilUkS5/cueegSeCC8qj+qcFrv1BPwOsB0uF7hcWF5iQQK1cw0wsotvtiThqmpwoQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7hkzYipv6QANdIAdRAg9h0BtLWb126ab0LzpcCvcOQM=;
-        b=BuDNkzf1smCEFzAxlPTgGFRgpgH+zyqAym6t26Sbn4+B4S1ZCBTYHqrps8aetR2D4J
-         5B0/1amoFrDnelpWHNGZbSxcMLW7KtuwE2UKarGqVTEHAPB9JzqOOmXLiJofMGGzxDuc
-         2crlL2Htv/HK3EfbruPAlp6RO7pRrx7Fjq78Yf0cK/5WnNQi9RTDqaRoBvE7okJdoGce
-         a2fSiE30PiMLxO2uC2SMd64tZw+tM6VsA7vFhd75iDthpqzy6HCuY3tmQQ7p+WYMDdDc
-         NI3PuKXhSbr9owsGxesgZVf3W0kI43qYhAmRhhKbSjnoEwUDEXIQab/YMqo1jOS8XX+E
-         5jtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7hkzYipv6QANdIAdRAg9h0BtLWb126ab0LzpcCvcOQM=;
-        b=d249EId1BPfefP037mt3/6+jNIr75mUClj8SysnP8AXz5ncWya2+w9V6mFuSjbRqlD
-         bs5GSi/mv9Mu9fMHUzCOQJW54jGG7BjoE5rS/6spzOdnHXzZShWTyYDnTgTqn+RuTekI
-         dW0I61IQ+GMBdMOhXOZPqSy4L7rbLs6jTLOxIHf5guDNKNfvzhSqcj9t5LzX5KF6NK/0
-         LF//FacnhGzC5f8H+J2YNqXGJpfPJ3pPPZKfw4KObJ0ZgiOr3rmfXwU4KAGJfJPqFV6p
-         mUxkFtwdnzddPr1Qvl+mkIv+e1v/+HKLSo8XKSCRJSRmrrPTv6PNWn0uRHvaoDPWxVbY
-         n8IQ==
-X-Gm-Message-State: AJIora8CFb1+31wdywUyd7BWnUUHgf9bDBV1bFMMKtWeNC1e9BYg1hwK
-        tjSIwT4F69l4yoOT4SyQI5HluoOFETnxjqPBwBQ=
-X-Google-Smtp-Source: AGRyM1s8ILStky9/CfngvYEJvr8MP9YkikfhPxiKOdPPlC2R0k6OK9qqXKOnWoX/rcOyn9TDtq6xG41WOG0EXC2DfcQ=
-X-Received: by 2002:a05:6402:d53:b0:43b:a0cf:d970 with SMTP id
- ec19-20020a0564020d5300b0043ba0cfd970mr367240edb.277.1658211223937; Mon, 18
- Jul 2022 23:13:43 -0700 (PDT)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4v432h4KswnzyKqtipbimarmF9e7Mqa3M3b9Czy0JZY=;
+ b=PetPPrU0ys37ww90vUisSI7+48XQ7+lXnemV2qugnXPejdsHPmpQNaFg0tUl6k8ACDI+sPSZ0VrX+A/XdSY4EieAR2JRF5FrlMK20svzGxx+7Y7oly9zfFpsdN+ObyO3Fvpt+2glZcdZBGoiRGUNnW2gUPyj8m93T4UJxWQQO+g=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by BYAPR11MB3813.namprd11.prod.outlook.com (2603:10b6:a03:ff::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.20; Tue, 19 Jul
+ 2022 06:29:08 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::357a:acc9:829e:bf7b]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::357a:acc9:829e:bf7b%7]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
+ 06:29:08 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <Tudor.Ambarus@microchip.com>, <p.yadav@ti.com>
+CC:     <tudor.ambarus@gmail.com>, <vigneshr@ti.com>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <michael@walle.cc>
+Subject: Re: [PATCH] MAINTAINERS: Use my kernel.org email
+Thread-Topic: [PATCH] MAINTAINERS: Use my kernel.org email
+Thread-Index: AQHYmzjZwPx3+h4lsE+Zp+/GIkBDAA==
+Date:   Tue, 19 Jul 2022 06:29:07 +0000
+Message-ID: <6b9a2433-12de-eee4-02a0-3cf9ea8843e4@microchip.com>
+References: <20220718151243.1149442-1-p.yadav@ti.com>
+ <165820520992.90015.1804934724521244853.b4-ty@gmail.com>
+In-Reply-To: <165820520992.90015.1804934724521244853.b4-ty@gmail.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d70726e9-52c2-4234-99b4-08da694ffc1e
+x-ms-traffictypediagnostic: BYAPR11MB3813:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xZ4fv8tShoC/V2N/krydXtjHU71v/6+tcrmgyJVVHt398lC2QeByM3+lI3dqfCcrXtRXQksahGOZN5Oo3axZFrrBJXFmgzOKAsTohoxzgoYf2vEJCAQKseIR7SsJL0cL+3TMEaGkEyEdWSFiri0mrkVUQNphAaXCHU8pyLaHtGJMiFvaXKqeyuveOqQliZaLUj1qKf6xyTwjZ9T1+4PKiU99nbhrHRKzos2iELOKOs5ts1faTzX3BWVHm3EysAUJGo4nHh6dz+DJF37ZpueTdPo9KvowLJvwFWtzH5hpnplo2SYZ26W3VCpAAHaHuMWQJyBa7CIaI39l0cUkhYtNRLnV5+MH0PNyF6K+k/P2d9j+YAz9khk/n9xfubG+AAN2nojXgIL2+IMq6ucAi8BbBt3G4nlXipPozIWKjqwKHu2QZ/FX0zpUzL17IzP2gpjruP5Jm/KG9doTpwB3Ce3YM3uLMfGaMUDLUU8NdSoMaKl/7nLA3dRrXBG0A/A2Ig5RcjY5x6bwNGmREZEWTq5BAmFMNv39shECTkrQJFMDK6PLN7xw89sZnpTY0Guf1zjAS28+0oF193qK7dVOHJAiUebuF8UBivSAjh54k5aem+A8Y1PTXbmS/3NgZsrgHUkMd2TjKI3shz1tc+fkRRZsCkisFGQvVWDrAQwX+jRjOyTtPM4XZAZLQK8UIt1ScaKEZezGLzLzMlWeb5UNnXY9vlpTGa3ILep8WlACgYOEE8TqxQebF9W2EXrP0pd9YvRiZR1FAyJo9bDp2duMDmZzXvS9hO8U64gMXppjwiUgRUgOmEdNNnUv0lVOOaIBuEY+JwW6q+dePNYyEt11P0CUnnzssKj/EUX7lP8b/JMVl4+djRz+rjyYmUb9sD8eew3S1CdQhI8nNuDbOHxeRSHU3w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(39860400002)(366004)(346002)(376002)(2906002)(31686004)(36756003)(5660300002)(8936002)(186003)(31696002)(86362001)(4744005)(4326008)(64756008)(66556008)(316002)(66476007)(8676002)(91956017)(76116006)(66446008)(6506007)(2616005)(26005)(53546011)(966005)(6486002)(41300700001)(6512007)(54906003)(110136005)(66946007)(38070700005)(122000001)(478600001)(38100700002)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OUFsSU9uY1dNYWlpTlhtZ3lFd3E2Z2dSKzJMSC9vWks1clZEcjZ0T0hQaTNS?=
+ =?utf-8?B?a1NEMjJpVlVqdGMxQjNGeXBBemJnTFNyYUxXV1VyT1YrNFhuQ1haVVR2M1hR?=
+ =?utf-8?B?NGxyQnNFdnV6QXlheFNLU2dHa1lHeStsQTRvWUZQR3RFaUZXUVFhSWpEMW40?=
+ =?utf-8?B?aDBSYko5MWM2NGRvSHJZdm5yaGdXQyttWjNDK0U5S09vQmR0aHMzbjZhZ1Y5?=
+ =?utf-8?B?UXBITTZwOXo5Z3c2b1pScy9kVm1udFRtVDRTRUZNUFlhWFFlcXEwcVRDRUJK?=
+ =?utf-8?B?UEJrd09NNmFBYXVFSUxrV1RjVXdwL09jcFpNb0t5TE5ZK011SEp0ei80WXRX?=
+ =?utf-8?B?OXZJQmVsWnJ6NHVLMy9Od3BBN3MyZkNCKzVkeFB3ZGlKL2dmYVRmeHhrTUdr?=
+ =?utf-8?B?MUpGRnR2SkdyTUgrN0NUalgvM3JhQWVuU0pGa2NPQXUwM0hJSXUzKzF3Y1dV?=
+ =?utf-8?B?NWhndzVyeEhMckQrcSttaHU1UlMwcU9WYzltZlpSSHBnTHJCUnZnRENDZ2Ni?=
+ =?utf-8?B?NVZxTTNCVXJTSFR4Z2FJVVozVFVHYWpGNTBQTmtHaldFTURnSFZwV2lmSWdQ?=
+ =?utf-8?B?NExZaHRERXlJZHhBT09qUVY5R0pjOE5Qb0VGaHp4bjVuS3R3azJHUDZIS1FH?=
+ =?utf-8?B?MWd2dmtTbU9mZk83RUcxelJzZEhrTTZxSmpTMEl6c2w2QzVzazhjTVc1Zk9h?=
+ =?utf-8?B?RWVpUEtPVllsUnNjelBXSE9YbHZ5YUxNQjg2ZXRNcE5ZWGpheno2anQvQUF4?=
+ =?utf-8?B?SHdRWEgvTkZuTXVVejc5NUcvTFpNY2p6bGszbFhpeDVwOGppOXJ3Z0pPdFhH?=
+ =?utf-8?B?UnliS3VBV2JVRC9sRTI0ZXc5Yzlkb08xWkJGWmtvaHdkRWFsRWVtenJ6QVZw?=
+ =?utf-8?B?aEUyZHIyd3FLQTJyYnlXa3dRV0d1UHBueVF3NTVBNzY3NVR4enUxQXkyV3Fy?=
+ =?utf-8?B?R1VDVlRkdGIvc2xxZU5pYnh2U0V5cjUvZnpET3JZTlppeHkyM3lkRWhNc1dH?=
+ =?utf-8?B?Yzd2QlJXelQ0OVRtcFk3eDc4cys1K0RaSGFRc0JjMEV3VWZzd2t1Zzc1RGJZ?=
+ =?utf-8?B?N3MvSlJNY3RiRHN5T2xDM0JmaW9ybWVTVUh1T3ZiZmZWT1hvQytWWldEcElH?=
+ =?utf-8?B?Y3Rpb2lwMVJqSFBxbEdJa2wzSTFxanVQcmZnSEJXckZZc1ZjSmRKdktma0pQ?=
+ =?utf-8?B?aXZacGZCeFdOcURuSzE1NmtQenhuQVQzTlg3Rit4UzNjVlMwZEZvVzV4cFdZ?=
+ =?utf-8?B?TFB5cFM1ZERqcVFQSmF6bGFkN05IMVVsQnNDQTYrb1RPTXBtQWYreWhXbmVr?=
+ =?utf-8?B?NFhjNVY4UnBuM2h1NUVnejJVVld1Q3JSb2d6cTFxdlJJWDh2SDd5UE9jUHYz?=
+ =?utf-8?B?WUxLeEticTBqUk44MlJJQ1Q4Q3ZUK2xlZmhQM3FvUldPenJBemRQaHJDY3Vl?=
+ =?utf-8?B?VU1zMTE3RnowaHVrZ2dYR3M1bWRPUndDQlN1eHpzUWZndERPdXN1QUZCdWJq?=
+ =?utf-8?B?MklTVUdUc1YwdW9iOXlONHozdTNZanpNZy9veENuUm1NempBMzBtdURKbGxk?=
+ =?utf-8?B?c2FBK2dSQzJ0ZjNuc2Z6OXRWK3V5SVhLWHhvaVNXd253ak9EQjNNRHFMV20y?=
+ =?utf-8?B?Vk9wcElONGhETGxLWkN6NjZLcHB1TDUrSldIN1NlY1N5SnJaSEk0OEN2elhs?=
+ =?utf-8?B?MUUzV0Q5UmJqOXNuY0FNaVRYMEdMdlFiNVFpdWRGWjRaeFF5S1NaOTBTelBl?=
+ =?utf-8?B?cHFZQkZBZ0hrSms1Z2FxczMyU0hmOFFuWDFidjV4UlVSbU5lYkFiY0R6U3Nh?=
+ =?utf-8?B?OVhVVm9EMk5xemYrSk00a25zV3hPempKZ292dE9QSVI0T2RoeW9jMEZLK0dD?=
+ =?utf-8?B?U3BEV0NWUGk4QUpGZTQxb2NwMUJLb1FjMjVDenl6clpTazV6TzAyVTZ5STRx?=
+ =?utf-8?B?cVBnSWE2SVFWYm1tV2VVb0U4NmRkZWZMcFJTOFpUTDNwZ01Iek5PQ1N5QkE4?=
+ =?utf-8?B?allsanVGZnBwNjU5TGZvK1FtSnRxVDltZVpFSjEvdGxhbGNYR0VkeVovMktO?=
+ =?utf-8?B?SXkwNXUxYWpXZmdENUxQM1JRc3JWaUxaRyt1UzNnanU4a1VnOWVTNHllTkk3?=
+ =?utf-8?Q?Emev+45aVgiXIUGlfD5bg73Ro?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <212DBE6E9AA4FA4BAC1B1A9F7D9211ED@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220718090050.2261-1-21cnbao@gmail.com> <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
- <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com> <87zgh5232o.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <416a06f6-ca7d-d4a9-2cda-af0ad6e28261@arm.com> <CAGsJ_4y7GyL5qtrBbhz_8bLuAGGHy7Ju0ucPjHp-ZeDHjQcTcw@mail.gmail.com>
- <CAGsJ_4z3wXK8WqubkFdPT6ObBVtvzAjbS1=r9PDCCDvwDVf3rw@mail.gmail.com> <87o7xl1wpb.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <87o7xl1wpb.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Tue, 19 Jul 2022 18:13:32 +1200
-Message-ID: <CAGsJ_4xECbs2Dxn8u4tCotNBZz5epFvAWANLiNg0dSzDcgORCA@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Steven Price <steven.price@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d70726e9-52c2-4234-99b4-08da694ffc1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2022 06:29:07.8918
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iU5haB40N7LUEyZOlKB1pTa5pqb/c7Xk3wVJLerHGHPrJyeCuMuDFiZX846HSky4mwwCcip/E96iuY69pLnnbAlA2S+k5M50yhr66XfBiuI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3813
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 5:47 PM Huang, Ying <ying.huang@intel.com> wrote:
->
-> Barry Song <21cnbao@gmail.com> writes:
->
-> > On Tue, Jul 19, 2022 at 3:59 PM Barry Song <21cnbao@gmail.com> wrote:
-> >>
-> >> On Tue, Jul 19, 2022 at 3:35 PM Anshuman Khandual
-> >> <anshuman.khandual@arm.com> wrote:
-> >> >
-> >> >
-> >> >
-> >> > On 7/19/22 08:58, Huang, Ying wrote:
-> >> > > Anshuman Khandual <anshuman.khandual@arm.com> writes:
-> >> > >
-> >> > >> On 7/19/22 06:53, Barry Song wrote:
-> >> > >>> On Tue, Jul 19, 2022 at 12:44 PM Huang, Ying <ying.huang@intel.com> wrote:
-> >> > >>>>
-> >> > >>>> Barry Song <21cnbao@gmail.com> writes:
-> >> > >>>>
-> >> > >>>>> From: Barry Song <v-songbaohua@oppo.com>
-> >> > >>>>>
-> >> > >>>>> THP_SWAP has been proven to improve the swap throughput significantly
-> >> > >>>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
-> >> > >>>>> splitting THP after swapped out").
-> >> > >>>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
-> >> > >>>>> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
-> >> > >>>>> enabling it on arm64 will benefit arm64 as well.
-> >> > >>>>> A corner case is that MTE has an assumption that only base pages
-> >> > >>>>> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
-> >> > >>>>> MTE support until MTE is reworked to coexist with THP_SWAP.
-> >> > >>>>>
-> >> > >>>>> A micro-benchmark is written to measure thp swapout throughput as
-> >> > >>>>> below,
-> >> > >>>>>
-> >> > >>>>>  unsigned long long tv_to_ms(struct timeval tv)
-> >> > >>>>>  {
-> >> > >>>>>       return tv.tv_sec * 1000 + tv.tv_usec / 1000;
-> >> > >>>>>  }
-> >> > >>>>>
-> >> > >>>>>  main()
-> >> > >>>>>  {
-> >> > >>>>>       struct timeval tv_b, tv_e;;
-> >> > >>>>>  #define SIZE 400*1024*1024
-> >> > >>>>>       volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
-> >> > >>>>>                               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> >> > >>>>>       if (!p) {
-> >> > >>>>>               perror("fail to get memory");
-> >> > >>>>>               exit(-1);
-> >> > >>>>>       }
-> >> > >>>>>
-> >> > >>>>>       madvise(p, SIZE, MADV_HUGEPAGE);
-> >> > >>>>>       memset(p, 0x11, SIZE); /* write to get mem */
-> >> > >>>>>
-> >> > >>>>>       gettimeofday(&tv_b, NULL);
-> >> > >>>>>       madvise(p, SIZE, MADV_PAGEOUT);
-> >> > >>>>>       gettimeofday(&tv_e, NULL);
-> >> > >>>>>
-> >> > >>>>>       printf("swp out bandwidth: %ld bytes/ms\n",
-> >> > >>>>>                       SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
-> >> > >>>>>  }
-> >> > >>>>>
-> >> > >>>>> Testing is done on rk3568 64bit quad core processor Quad Core
-> >> > >>>>> Cortex-A55 platform - ROCK 3A.
-> >> > >>>>> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
-> >> > >>>>> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
-> >> > >>>>>
-> >> > >>>>> Cc: "Huang, Ying" <ying.huang@intel.com>
-> >> > >>>>> Cc: Minchan Kim <minchan@kernel.org>
-> >> > >>>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> >> > >>>>> Cc: Hugh Dickins <hughd@google.com>
-> >> > >>>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> >> > >>>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> >> > >>>>> Cc: Steven Price <steven.price@arm.com>
-> >> > >>>>> Cc: Yang Shi <shy828301@gmail.com>
-> >> > >>>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
-> >> > >>>>> ---
-> >> > >>>>>  -v3:
-> >> > >>>>>  * refine the commit log;
-> >> > >>>>>  * add a benchmark result;
-> >> > >>>>>  * refine the macro of arch_thp_swp_supported
-> >> > >>>>>  Thanks to the comments of Anshuman, Andrew, Steven
-> >> > >>>>>
-> >> > >>>>>  arch/arm64/Kconfig               |  1 +
-> >> > >>>>>  arch/arm64/include/asm/pgtable.h |  6 ++++++
-> >> > >>>>>  include/linux/huge_mm.h          | 12 ++++++++++++
-> >> > >>>>>  mm/swap_slots.c                  |  2 +-
-> >> > >>>>>  4 files changed, 20 insertions(+), 1 deletion(-)
-> >> > >>>>>
-> >> > >>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> >> > >>>>> index 1652a9800ebe..e1c540e80eec 100644
-> >> > >>>>> --- a/arch/arm64/Kconfig
-> >> > >>>>> +++ b/arch/arm64/Kconfig
-> >> > >>>>> @@ -101,6 +101,7 @@ config ARM64
-> >> > >>>>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-> >> > >>>>>       select ARCH_WANT_LD_ORPHAN_WARN
-> >> > >>>>>       select ARCH_WANTS_NO_INSTR
-> >> > >>>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
-> >> > >>>>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
-> >> > >>>>>       select ARM_AMBA
-> >> > >>>>>       select ARM_ARCH_TIMER
-> >> > >>>>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> >> > >>>>> index 0b6632f18364..78d6f6014bfb 100644
-> >> > >>>>> --- a/arch/arm64/include/asm/pgtable.h
-> >> > >>>>> +++ b/arch/arm64/include/asm/pgtable.h
-> >> > >>>>> @@ -45,6 +45,12 @@
-> >> > >>>>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
-> >> > >>>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-> >> > >>>>>
-> >> > >>>>> +static inline bool arch_thp_swp_supported(void)
-> >> > >>>>> +{
-> >> > >>>>> +     return !system_supports_mte();
-> >> > >>>>> +}
-> >> > >>>>> +#define arch_thp_swp_supported arch_thp_swp_supported
-> >> > >>>>> +
-> >> > >>>>>  /*
-> >> > >>>>>   * Outside of a few very special situations (e.g. hibernation), we always
-> >> > >>>>>   * use broadcast TLB invalidation instructions, therefore a spurious page
-> >> > >>>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> >> > >>>>> index de29821231c9..4ddaf6ad73ef 100644
-> >> > >>>>> --- a/include/linux/huge_mm.h
-> >> > >>>>> +++ b/include/linux/huge_mm.h
-> >> > >>>>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
-> >> > >>>>>       return split_huge_page_to_list(&folio->page, list);
-> >> > >>>>>  }
-> >> > >>>>>
-> >> > >>>>> +/*
-> >> > >>>>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
-> >> > >>>>> + * limitations in the implementation like arm64 MTE can override this to
-> >> > >>>>> + * false
-> >> > >>>>> + */
-> >> > >>>>> +#ifndef arch_thp_swp_supported
-> >> > >>>>> +static inline bool arch_thp_swp_supported(void)
-> >> > >>>>> +{
-> >> > >>>>> +     return true;
-> >> > >>>>> +}
-> >> > >>>>
-> >> > >>>> How about the following?
-> >> > >>>>
-> >> > >>>> static inline bool arch_wants_thp_swap(void)
-> >> > >>>> {
-> >> > >>>>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
-> >> > >>>> }
-> >> > >>>
-> >> > >>> This looks good. then i'll need to change arm64 to
-> >> > >>>
-> >> > >>>  +static inline bool arch_thp_swp_supported(void)
-> >> > >>>  +{
-> >> > >>>  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
-> >> > >>>  +}
-> >> > >>
-> >> > >> Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
-> >> > >> IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
-> >> > >> is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
-> >> > >> either in the generic fallback stub, or in arm64 platform override. Because
-> >> > >> without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
-> >> > >> be called in the first place.
-> >> > >
-> >> > > For the only caller now, the checking looks redundant.  But the original
-> >> > > proposed implementation as follows,
-> >> > >
-> >> > > static inline bool arch_thp_swp_supported(void)
-> >> > > {
-> >> > >      return true;
-> >> > > }
-> >> > >
-> >> > > will return true even on architectures that don't support/want THP swap.
-> >> >
-> >> > But the function will never be called on for those platforms.
-> >> >
-> >> > > That will confuse people too.
-> >> >
-> >> > I dont see how.
-> >> >
-> >> > >
-> >> > > And the "redundant" checking has no run time overhead, because compiler
-> >> > > will do the trick.
-> >> > I understand that, but dont think this indirection is necessary.
-> >>
-> >> Hi Anshuman, Hi Ying,
-> >> Thanks for the comments of both of you. Does the below look ok?
-> >>
-> >> generic,
-> >>
-> >>  static inline bool arch_wants_thp_swap(void)
-> >>   {
-> >>       return IS_ENABLED(CONFIG_THP_SWAP);
-> >>  }
-> >>
-> >
-> > sorry, i actually meant arch_thp_swp_supported() but not
-> > arch_wants_thp_swap() in generic code,
-> >
-> >  static inline bool arch_thp_swp_supported(void)
-> >  {
-> >       return IS_ENABLED(CONFIG_THP_SWAP);
-> >  }
->
-> IS_ENABLED(CONFIG_THP_SWAP) doesn't match the name too.  It's an option
-> selected by users.  arch_thp_swp_supported() is to report the
-> capability.
-
-Hi Ying,
-CONFIG_THP_SWAP implicitly includes ARCH_WANTS_THP_SWAP. So it seems
-a bit odd to have still another arch_wants_thp_swap().
-if the name of arch_thp_swp_supported is not sensible to you, will
-thp_swp_supported()
-without arch_ make more sense? a similar example is,
-
-static inline bool gigantic_page_runtime_supported(void)
-{
-        return IS_ENABLED(CONFIG_ARCH_HAS_GIGANTIC_PAGE);
-}
-
-Otherwise, can we just keep the code as is according to Anshuman's suggestion?
-
-Thanks
-Barry
-
-}
-
-
-
->
-> Best Regards,
-> Huang, Ying
->
-> >> arm64,
-> >>
-> >> static inline bool arch_thp_swp_supported(void)
-> >> {
-> >>      return IS_ENABLED(CONFIG_THP_SWAP) &&  !system_supports_mte();
-> >> }
-> >>
-> >> caller,
-> >>
-> >> folio_alloc_swap(struct folio *folio)
-> >> {
-> >>
-> >>   if (folio_test_large(folio)) {
-> >>    - if (IS_ENABLED(CONFIG_THP_SWAP))
-> >>   + if (arch_thp_swp_supported())
-> >>         get_swap_pages(1, &entry, folio_nr_pages(folio));
-> >>        goto out;
-> >>   }
-> >>
-> >> Thanks
-> >> Barry
+T24gMTkvMDcvMjAyMiAwNTozNCwgVHVkb3IgQW1iYXJ1cyB3cm90ZToNCj4gRnJvbTogVHVkb3Ig
+QW1iYXJ1cyA8dHVkb3IuYW1iYXJ1c0BnbWFpbC5jb20+DQo+IA0KPiBPbiBNb24sIDE4IEp1bCAy
+MDIyIDIwOjQyOjQzICswNTMwLCBQcmF0eXVzaCBZYWRhdiB3cm90ZToNCj4+IFVzZSB0aGUga2Vy
+bmVsLm9yZyBlbWFpbCBJIGhhdmUgZm9yIHJldmlld2luZyBwYXRjaGVzLg0KPj4NCj4+DQo+IA0K
+PiBBcHBsaWVkIHRvIHNwaS1ub3IvbmV4dCwgdGhhbmtzIQ0KPiANCj4gWzEvMV0gTUFJTlRBSU5F
+UlM6IFVzZSBteSBrZXJuZWwub3JnIGVtYWlsDQo+ICAgICAgICBodHRwczovL2dpdC5rZXJuZWwu
+b3JnL210ZC9jLzdkZTMwNzRiMjE4Zg0KPiANCg0KSGV5IFR1ZG9yLA0KSnVzdCBGWUkgdGhhdCBs
+aW5rIGRvZXMgbm90IHJlc29sdmUgdG8gYW4gb2JqZWN0Lg0KRm9yZ2V0IHRvIHB1c2g/DQpUaGFu
+a3MsDQpDb25vci4NCg==

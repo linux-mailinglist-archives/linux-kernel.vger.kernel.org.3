@@ -2,177 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964CD57A2FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0500C57A304
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236081AbiGSP20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        id S237768AbiGSP25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234007AbiGSP1z (ORCPT
+        with ESMTP id S233609AbiGSP2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:27:55 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2789B550B7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:27:51 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id AC39442EDA7;
-        Tue, 19 Jul 2022 11:27:49 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id IXgZueiyUcPX; Tue, 19 Jul 2022 11:27:49 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 3528642EDA6;
-        Tue, 19 Jul 2022 11:27:49 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 3528642EDA6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1658244469;
-        bh=E+HNW7nLIJW7fqYUl35eUhixtlC12tTJEei4Y9f6WpE=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=qu1umvtyI46GzTgjlr2pD0AFmK+ILT0VCBgDF9Uyi5bF4VwohulKo89ys59veaTia
-         WEQ1wuQglAJm8ASKv61YdP+XkkH3GyVJC1Vu7pb9dflN3ugCrZ05ylvjLrUjyZFw3/
-         U65G2fnCvde1G+atnaMa+wIj6VVl2ffDuLpDQQdT39RnfbkizgZAU/KMqwETrFpbbr
-         QZKSSAHblal+MXhl1VqiThZhVwt5UF6Q7sH9olA1VWVnZS4JahcXtX7lBJggsSmFvY
-         axyRjAMwaSm7PXzxp5bzzt5PzEg5mmfjQZcFTXzha/iw96AUy3jhaG14jln0YeDfRj
-         EyofOIYl9LyNg==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id D3U26s2JfJvr; Tue, 19 Jul 2022 11:27:49 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 2007742EDA5;
-        Tue, 19 Jul 2022 11:27:49 -0400 (EDT)
-Date:   Tue, 19 Jul 2022 11:27:49 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     James Morse <james.morse@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Russell King, ARM Linux" <linux@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Michael Jeanson <mjeanson@efficios.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Message-ID: <1084959304.73550.1658244469031.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CAK8P3a2hd5KDBSH1=23_+Qz+t2LUC6kcc+9_Z_xc-Zdy7N-FAQ@mail.gmail.com>
-References: <20220718145150.3344778-1-mathieu.desnoyers@efficios.com> <CAK8P3a2hd5KDBSH1=23_+Qz+t2LUC6kcc+9_Z_xc-Zdy7N-FAQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] arm: i.MX6 Cortex-A9: Fix memory ordering
- inconsistency by disabling prefetch instructions
-MIME-Version: 1.0
+        Tue, 19 Jul 2022 11:28:54 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2048.outbound.protection.outlook.com [40.107.21.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3A756BB1;
+        Tue, 19 Jul 2022 08:28:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f+dcR7rWWszFAoMdKAwG0avB3gxKcCpuEQoNq4NqpGiIdx0Ck215qEdb/KahCkXJwGhhzZA84Lvml/MwouGPcBqXSrRj5/eVD49o1ClIFgeMUsqu/6k//a2urPISYu5hOiY5LBoGr2+z1GKHlUPZ2FO/CDvj9iae7Ve0o8LDguYVPBpLNzSZs1EjblpyRtrCjbt98QbtbYcobdQkfFPR5h9IYDC+ynfNsHqx0u+Qe9HR72t5vntFKrq0Qec4k/9e3ORpneAAbAAuArqpG8S4NXtJSb9fSmFYNCpAm617c5BdJdTY8PChjnCzbWoTwpn/vU7Es1wJmNScii04KRR84g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5J2/JeInSoO16BTWYute604VeM0gBjpxNRmXKw/1AmQ=;
+ b=ktPflGKIl2FY8hpioH+yF03eAdG2kKCF0bAVhyRfx7O6ksct//1SSLaAJA7d8rFJ0bR0Bsc2mAZlcsKkAKyrvtP/rt1gXuMoi0AIvhUfp9pob8PFsaHZ3lzcpt4Y0VDnT+sau6JM+g1e57JQOQIyEbtW6w64X+1Vtqkl74U4HCuhwVfRBCr6K3rp3OCysQ/6cSXmWRwlWS8G3PGokFCzmzvcvfEmd35FWcg7YAnBpDubImg0c4sZf7LfzTXiicPzIDnxXaxwTp9yyyHHJ8fpmREbBObgG179/3IioqE8R2rH9rOQFj4eGdSOqwJmJ71gzO6DhAPVzOcjaoZshZA5Ig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5J2/JeInSoO16BTWYute604VeM0gBjpxNRmXKw/1AmQ=;
+ b=w9OkyFYbbfNkik0qm7hbuhtuRn5YZDyZkPQUd2PL0SMc+2n5ibp3MDX3wpFBGmJrf5VzqWBMa5wrfOlbgqQMuoU44+s1QkRBekJvUYULGMA5bVKsTpwkMF5jOz7A7wQE0Um1dnM8D2kT7sWhEk+exdzczbyu2ZL0N3ouU/uwaTXjsJRccOpQHT3CzSzLA5M79g/l/xZSo7Ti/IWvDE8b/P3pB/Aer8rml5nYJCHIUcZM7h4z3sU7ubfR0akFFn69flWW85vmYjUtc8ImnXDKtCGe/7ko3/DpeqdsjaOx7D2pFYW3pP/0ADUDhASfgLbT/lGkV8pEy5Q2r3xh2egqlw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by VI1PR03MB2909.eurprd03.prod.outlook.com (2603:10a6:802:39::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Tue, 19 Jul
+ 2022 15:28:49 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::757e:b75f:3449:45b1]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::757e:b75f:3449:45b1%6]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
+ 15:28:48 +0000
+Subject: Re: [RFC PATCH net-next 0/9] net: pcs: Add support for devices probed
+ in the "usual" manner
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Shawn Guo <shawnguo@kernel.org>, UNGLinuxDriver@microchip.com,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org
+References: <20220711160519.741990-1-sean.anderson@seco.com>
+ <20220719152539.i43kdp7nolbp2vnp@skbuf>
+From:   Sean Anderson <sean.anderson@seco.com>
+Message-ID: <bec4c9c3-e51b-5623-3cae-6df1a8ce898f@seco.com>
+Date:   Tue, 19 Jul 2022 11:28:42 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <20220719152539.i43kdp7nolbp2vnp@skbuf>
 Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4304)
-Thread-Topic: i.MX6 Cortex-A9: Fix memory ordering inconsistency by disabling prefetch instructions
-Thread-Index: vgjoUGf1wRMavO2U2/A+b9jreVv3/g==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: MN2PR08CA0009.namprd08.prod.outlook.com
+ (2603:10b6:208:239::14) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dc0675be-7d13-4525-75c0-08da699b6084
+X-MS-TrafficTypeDiagnostic: VI1PR03MB2909:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iATbABQ9c5yX6TDxjPnTcXaBog1Jhr0mCwRxfm5d8FAhkZVEKcRVgyWw+/YnrofF98JEQk6Bs17R9cRmFBmcYsQP+qJDXujzWW3yXnPPt5KIom4VCvG06kIb/arcLYYbSgQyz+cEhPWdiR0ASXgN2wdpvnEKHMSpzmZMMLs1k7wjtd6XOcwb0Z6NyWYzfxJ5Ie9l3HSKRdQrrWKErbt9A13Ke2Eh0MxYrtP1hWFZB8HiJtqKjT67WYALtcJBxEtiniaYmeQ2GbuSAsJscA6iGNFyZgmH8xDc+rm1k8hEuhut6FAg+azXm1qPfshpWl0uK36PUZXUPqMtuO3YY8sci2htbRbkqSLDGFDVttoLu0lIm4We4oRVjk4k4E2vK15Ao4vH1TiAPCH46bxVWuQw8ihUA67cxfs5HdAB3vNWAR3hiLxFMVsanI213u1MU24uNTJUOljPk+GHoQ30pKToHy/PK4GQWTRDyJEbbZQu4cz7t15EAB02TgdZKpd8GZ/TfNPWaXfq5dG6z+Gik36EQ1/rB1TKy4Bb9jyq5kVZQBGLHIDInyftXovdrOzdFsFWk/yjuA+pjtx8XJAk6rBc5zqPRWKEPvSc+BZSAmBTXji62jPtADFcEEhwtSZprGGVW8Cw1a4KCf3b9yBPOWLs7lMO2MsEQmm5ysXqkSpkiVEtJhnyAwpk7zxvk0Xl8j/qK+IQ6uZONJqncdR70AL2yRBbkMOPjEfv9HgEvmRLZXylj5/hnxuwS1oHmGTNgZsQDz5kbQUs8TjBI41/lMnZ7lPpqk4fkXyAHZrHAhxzbT38Wc0eqVeuXQ322/Z6FT1gswjEVFZJXp4st1B3f1DYXEtT0kyidP6Nccjh7AyBwOU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(376002)(396003)(346002)(39850400004)(2616005)(5660300002)(86362001)(53546011)(6506007)(2906002)(6486002)(83380400001)(52116002)(31696002)(8936002)(6512007)(26005)(7416002)(41300700001)(44832011)(478600001)(7406005)(4326008)(6666004)(186003)(31686004)(66476007)(36756003)(38100700002)(38350700002)(66556008)(66946007)(8676002)(6916009)(54906003)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UmIvWVlpTUF2NUt0RTVLNjM3UmdWZFJIb2Z3L0NVN0sxWHVrQjdPTUo0SEVZ?=
+ =?utf-8?B?eTFHbWxiSk01MjFvNGtWYXV3V2V6cERIU215MDNScVNJTXd3TUM1YndEeTZC?=
+ =?utf-8?B?M0VOWHFnSFlMT0hZQVdEYWR1VGNCamU4cE5pTlQyUnVGRVVLZllxZmlFbHpQ?=
+ =?utf-8?B?YkxOQ0FkUlV2c1FkYkEyWFNrVUdHNFlCcU1PaHc4ZFJBU0xjWW9uZ0JEcjlv?=
+ =?utf-8?B?SW5sQWhMQ013Z2hqVXErbmZ4UFR2UlNJcVU2RXc3ajdYcnE5ekpyc1piVDFV?=
+ =?utf-8?B?T05UVW5Cd0l2TlVaVUR2b1hSeUxDV215QlJiNTl6Mmk5elpZMjd0WHZxMDEw?=
+ =?utf-8?B?Q280cjVDY3Y0TVZhVmp6Y3lpMWcwUW5pOC9GdjZqRElMalNwbWVJcGlkRUxp?=
+ =?utf-8?B?OUZPTGE3WkVhU1Q3ZktySmFXQjk2eHZ6aXlvRFl2UmtQMUR6S0I3b1FTNjFN?=
+ =?utf-8?B?bVlEMVNLSll6SktJM3BQR2FaNEVLVkNTSjdIckg5MHpETkZ4QTNITzd3aThj?=
+ =?utf-8?B?ZjlmVkdYUTVvK3BjUVFSN3dyMWVrSVZHSGhJQnArU3dwU0FLTW5nVDhFeHdq?=
+ =?utf-8?B?NHc1WWpvT1VpVUEveDA4MldOL0xIcEVqRURrdTNSUXpKNnluM0RrQVJNQzRF?=
+ =?utf-8?B?SWE4UTcwZWNNSUM2ZmVGMDdDYmVKYWJJOHM3dkhoRm15ZWdGVVRjR1dRdzRy?=
+ =?utf-8?B?YjJlbEgyNVpZZ01ZQ043cHJ2RTRsYVZ5RVlmcG42bmFUbjA0aUpwNkpKbmRQ?=
+ =?utf-8?B?QU01T1VCZUZneXdIM3p4aDAwRXNVb0g2emc2eDNyL0RzRksxNXdOV05lSVEw?=
+ =?utf-8?B?MnRKY3hzYXdGV1lwQkgzZDZ6aTVHRFJiNm1TSWdFeXNaaUNrNXNlTVBvK1Ix?=
+ =?utf-8?B?bzVZTVJ0YncrUXI1MXk0V2UycDllUjRNUFdTcG9GRURlMzdqa1lndEtxYTU1?=
+ =?utf-8?B?M1o0alRQOEU0c0NRNkF1U3FCMHNIOFhJSWQ3UlpBNW8yVlBtcVBUVG9qeEpY?=
+ =?utf-8?B?aThuRVdLalgwOWlhaGNham1adUx4eEVVMFpSS0tGT2I0K09GTDlYTVZZVHhU?=
+ =?utf-8?B?dWVyTi80ZzRQMUtQeUt3VitWY09GcjFGV3F5MHdSUHNyQ0lJVXJvUHFJc3Ax?=
+ =?utf-8?B?cG1IL0ZLd0ptTUtwYUtnTlJjODFjYXB1UFVLZ3FFL3FTaFhYemhlOE9EZGJ2?=
+ =?utf-8?B?WkdUTVZCUHJGWXMrNGVzWFhEV293dWxUTWI0YWVjQjBKaDhHZ0FWTEtKcERZ?=
+ =?utf-8?B?RTB2d3BxM3NnYk1DZ0lpaGhGS2YwOEtQc0VhakU3UjRZaTJYUGxaY1Z2S0k3?=
+ =?utf-8?B?ZDhZeENBL2dLMjlkY0JJSVExVHlxaUlGOHhvVVlxa014UnV0amR0b1UrWENl?=
+ =?utf-8?B?bWIvdFZyKy9ldDVUelcyUzRyb2hRNWZsWDl2d0FFRDJ4bkxZL01NaThSeEJM?=
+ =?utf-8?B?eHAxZjNaVWZqMmJTbjNpS3N3Y1BpNldmUlpuMFZYcWJxa2tRcXdTdVg5UXJa?=
+ =?utf-8?B?dkVOa0l0NmlHOFdoUWdMTmNQOEtTT2lmQVhLaTRpbU0zODZkRVZNM1FTcm80?=
+ =?utf-8?B?MTBtVUhkWlJDeGVOd1VsbnFza0NFb01wVitjVTNXNHZXcDdVeFB0Rkc3ald5?=
+ =?utf-8?B?WTdDNDJEcmxqRlNoWnltemN3NnRja1ZUR3VCOGVGVmhtQlE2TWV5UmxsdHFr?=
+ =?utf-8?B?aUYyM2pUbDhxeFFkdi8zaWN4SWRrRWJYL0RKUUtXMGxJeGJXNHFlTElsWkJk?=
+ =?utf-8?B?WjUxNGI1U0FKNVlHODd3YTFFS2hYOTVIeS81S09qZHdkVXplZEtrcWhtbU9q?=
+ =?utf-8?B?eGJlYUE4cHpnWUFCSUlJL3dCekw2MWh1QmJCUmFrck1RMk90VTJ3NkRyT2M5?=
+ =?utf-8?B?ZlhRNHdZNm0rYytHUzVvWWFuUUxYWUpENjlYWkpuQ3EzZDMzTHdpaE1jbDFV?=
+ =?utf-8?B?UGZZUmM1YjhLV0dTQTF2blJKSUFHVzlyUzUwM2lWWHpFdFV6clptNnVNS3c4?=
+ =?utf-8?B?MG5mYkZTZnJrd3pDUjZZamVUaGE1RitrVk1ORVJnY0xhTmJGNk8xVm5kQWFm?=
+ =?utf-8?B?S3hVeHpnRDgrSmlBYmozeUdkbnNQY0szcldrbXlVWWNmalR3cnpxTlorRHB6?=
+ =?utf-8?B?YkRGamJqUktPaXl4VkpGQWpIUVhSZU9RK0d4d1FBOHJKWjd0ZkdSRHhnTVl1?=
+ =?utf-8?B?Q3c9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc0675be-7d13-4525-75c0-08da699b6084
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 15:28:48.8206
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5hQFQTD48rVntuei5qICQw7iNrrO6aM59YKMk4LaNhrL4ZDNgPdnd8ZwhTgMHcyMQcZtBzzLuFPiY8P6pH4sUQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB2909
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Jul 19, 2022, at 10:33 AM, Arnd Bergmann arnd@arndb.de wrote:
+Hi Vladimir,
 
-> On Mon, Jul 18, 2022 at 4:51 PM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
+On 7/19/22 11:25 AM, Vladimir Oltean wrote:
+> Hi Sean,
 > 
->> Request for Feedback
->> ====================
->>
->> This fix targets all i.MX configurations, but it is likely too broad (or
->> too narrow). It would be great if people with access to different
->> Freescale i.MX test boards, and test boards from other vendors, could try
->> to reproduce the issue to figure out what would be the right scope for
->> this fix.
->>
->> It would also be great if people with knowledge of the ARM CPU internals
->> could help understanding whether this fix really fixes an issue between
->> prefetch and memory barriers, or just happens to hide the issue. It
->> would be good to understand whether this issue only affects PLDW or if
->> it also affects the PLD instruction.
+> On Mon, Jul 11, 2022 at 12:05:10PM -0400, Sean Anderson wrote:
+>> For a long time, PCSs have been tightly coupled with their MACs. For
+>> this reason, the MAC creates the "phy" or mdio device, and then passes
+>> it to the PCS to initialize. This has a few disadvantages:
+>> 
+>> - Each MAC must re-implement the same steps to look up/create a PCS
+>> - The PCS cannot use functions tied to device lifetime, such as devm_*.
+>> - Generally, the PCS does not have easy access to its device tree node
+>> 
+>> I'm not sure if these are terribly large disadvantages. In fact, I'm not
+>> sure if this series provides any benefit which could not be achieved
+>> with judicious use of helper functions. In any case, here it is.
+>> 
+>> NB: Several (later) patches in this series should not be applied. See
+>> the notes in each commit for details on when they can be applied.
 > 
-> I don't have any relevant hardware at hand, but looked at this for a few
-> hours today, unfortunately without any notable success. Just documenting
-> what I did here:
+> Sorry to burst your bubble, but the networking drivers on NXP LS1028A
+> (device tree at arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi, drivers
+> at drivers/net/ethernet/freescale/enetc/ and drivers/net/dsa/ocelot/)
+> do not use the Lynx PCS through a pcs-handle, because the Lynx PCS in
+> fact has no backing OF node there, nor do the internal MDIO buses of the
+> ENETC and of the switch.
 > 
-> - looked at the errata lists for cortex-a9 r2, for pl310 and for
-> imxq6q to see if
->  anything stuck out. I assume you've already done the same, but I can confirm
->  that the errata that would match the symptom are listed as fixed in r2p10
->  or earlier.
-
-Yes, I've spent some quality time reading through those errata in the past 2 weeks,
-and did not find anything relevant for the r2p10.
-
+> It seems that I need to point this out explicitly: you need to provide
+> at least a working migration path to your PCS driver model. Currently
+> there isn't one, and as a result, networking is broken on the LS1028A
+> with this patch set.
 > 
-> - looked at objdump output from
->  linux-image-5.18.0-0.bpo.1-armmp_5.18.2-1~bpo11+1_armhf.deb
->  (not the same version, but hopefully be close enough), and compared that
->  to v5.18.2 built with the same config using gcc-7.5 and gcc-10.3 to
->  see if I could tell what is different. The output looks very similar, though
->  my own gcc-10 apparently fails to inline arch_futex_atomic_op_inuser()
->  and futex_atomic_op_inuser(). This looks like something we may want
->  to force-inline in principle, but it seems unrelated to the bug you found
->  since the debian vmlinux has these functions inlined and I don't think
->  they are actually part of the broken code path.
 
-Indeed, those op_inuser did not appear to be used in FUTEX_WAKE, FUTEX_WAIT
-AFAIR, so I don't think the delta is relevant here.
+Please refer to patches 4, 5, and 6.
 
-> 
-> - looked for other quad-core Cortex-A9 SoCs to find someone with a
->  similar revision to check if they have the same bug. The closest I
->  can  think of is the OMAP4 that uses an A9 r1p2.
-
-Good to know.
-
-> 
-> - Looked at the disabled errata handling in arch/arm/Kconfig.
->  Unfortunately a couple of the workarounds we have there are
->  now always disabled because of a dependency on
->  ARCH_MULTIPLATFORM. It's a long shot, but you could try
->  removing the dependencies and enabling all the Cortex-A9
->  fixes like ARM_ERRATA_742230, ARM_ERRATA_742231,
->  ARM_ERRATA_743622, ARM_ERRATA_751472, and
->  ARM_ERRATA_754327.
-
-I already attempted this, but ended up understanding that
-handling of those errata workarounds were simply moved to U-Boot,
-so it can set the relevant bits in the Diagnostic Control Register
-at boot-time when allowed by the current privilege level, before
-loading a secure boot Linux kernel. That being said, my test
-system does not use secure boot.
-
-U-Boot 2021.01+dfsg-4 has:
-
-/usr/share/doc/u-boot-imx/configs/config.wandboard.gz :
-
-CONFIG_ARM_ERRATA_743622=y
-CONFIG_ARM_ERRATA_751472=y
-CONFIG_ARM_ERRATA_761320=y
-CONFIG_ARM_ERRATA_794072=y
-CONFIG_ARM_ERRATA_845369=y
-
-About errata 742230 ("ARM errata: DMB operation may be faulty"), it only
-applies to Cortex-A9 r1p0..r2p2, which explains why the wandboard U-Boot
-config has it =n. Nevertheless, I attempted modifying the Linux kernel code
-to explicitly change the implementation of smp_mb() from dmb to dsb, but
-it did not solve the issue.
-
-About errata 754327 ("ARM errata: no automatic Store Buffer drain"), it
-applies prior to r2p0, and is enabled in my Debian kernel configuration
-already, because it does not depend on !ARCH_MULTIPLATFORM. The issue
-reproduces with this work-around enabled.
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--Sean

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65659579A22
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40716579AB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238696AbiGSMLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S239141AbiGSMRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238595AbiGSMJM (ORCPT
+        with ESMTP id S239226AbiGSMPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:09:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289EE5018B;
-        Tue, 19 Jul 2022 05:02:17 -0700 (PDT)
+        Tue, 19 Jul 2022 08:15:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBEB55088;
+        Tue, 19 Jul 2022 05:06:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2126616F9;
-        Tue, 19 Jul 2022 12:02:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D610C341C6;
-        Tue, 19 Jul 2022 12:02:15 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7BF69CE1BE5;
+        Tue, 19 Jul 2022 12:06:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59933C341CE;
+        Tue, 19 Jul 2022 12:06:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232135;
-        bh=91CFM+oOm7Elq/PRlgdF/KcoqwHtb4/4dLmL3LwEOPQ=;
+        s=korg; t=1658232368;
+        bh=tMNxQ2F3KZNLqDxrBWmtqWS2xQEseH1geOd7U1PyNjM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dH5b0sd1o4fRe9ix6IpAGrDiFdePlG+UqKJr1kUAk+z7ZdEtVsJEBoKhm67LiWAq3
-         eiSwMRqfAtwLRpY3XdfseWiB28mEhm9HieoVMamgsSnSTrnW1CAYWbXY9dUWhe7D1o
-         QpHSP42nWMpjzqDQvORQ7oPE7KFXoI6i880C7j/0=
+        b=MoRuRSJuQXDGrOSwW0vFeW1Svlc0xsMW3tcUG0OtNkEbsM2BhBFNT3h8sz0zna/Lx
+         adqBW8NNB1TiP02bxf87rUvN1tADGYGxL3xHkMW683SEJTGifNX3zeUpJkux1LedO7
+         vV3u0YyQWMHdfeISgSKJxXMX4hBeGTb4xdxxSbX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 03/71] ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc671
-Date:   Tue, 19 Jul 2022 13:53:26 +0200
-Message-Id: <20220719114552.758265548@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 034/112] ASoC: sgtl5000: Fix noise on shutdown/remove
+Date:   Tue, 19 Jul 2022 13:53:27 +0200
+Message-Id: <20220719114629.507107396@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meng Tang <tangmeng@uniontech.com>
+From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-commit dbe75d314748e08fc6e4576d153d8a69621ee5ca upstream.
+[ Upstream commit 040e3360af3736348112d29425bf5d0be5b93115 ]
 
-On a HP 288 Pro G6, the front mic could not be detected.In order to
-get it working, the pin configuration needs to be set correctly, and
-the ALC671_FIXUP_HP_HEADSET_MIC2 fixup needs to be applied.
+Put the SGTL5000 in a silent/safe state on shutdown/remove, this is
+required since the SGTL5000 produces a constant noise on its output
+after it is configured and its clock is removed. Without this change
+this is happening every time the module is unbound/removed or from
+reboot till the clock is enabled again.
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220712092222.21738-1-tangmeng@uniontech.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The issue was experienced on both a Toradex Colibri/Apalis iMX6, but can
+be easily reproduced everywhere just playing something on the codec and
+after that removing/unbinding the driver.
+
+Fixes: 9b34e6cc3bc2 ("ASoC: Add Freescale SGTL5000 codec support")
+Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+Reviewed-by: Fabio Estevam <festevam@denx.de>
+Link: https://lore.kernel.org/r/20220624101301.441314-1-francesco.dolcini@toradex.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/codecs/sgtl5000.c | 9 +++++++++
+ sound/soc/codecs/sgtl5000.h | 1 +
+ 2 files changed, 10 insertions(+)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -10261,6 +10261,7 @@ static const struct snd_pci_quirk alc662
- 	SND_PCI_QUIRK(0x103c, 0x1632, "HP RP5800", ALC662_FIXUP_HP_RP5800),
- 	SND_PCI_QUIRK(0x103c, 0x8719, "HP", ALC897_FIXUP_HP_HSMIC_VERB),
- 	SND_PCI_QUIRK(0x103c, 0x873e, "HP", ALC671_FIXUP_HP_HEADSET_MIC2),
-+	SND_PCI_QUIRK(0x103c, 0x877e, "HP 288 Pro G6", ALC671_FIXUP_HP_HEADSET_MIC2),
- 	SND_PCI_QUIRK(0x103c, 0x885f, "HP 288 Pro G8", ALC671_FIXUP_HP_HEADSET_MIC2),
- 	SND_PCI_QUIRK(0x1043, 0x1080, "Asus UX501VW", ALC668_FIXUP_HEADSET_MODE),
- 	SND_PCI_QUIRK(0x1043, 0x11cd, "Asus N550", ALC662_FIXUP_ASUS_Nx50),
+diff --git a/sound/soc/codecs/sgtl5000.c b/sound/soc/codecs/sgtl5000.c
+index 4c0e87e22b97..f066e016a874 100644
+--- a/sound/soc/codecs/sgtl5000.c
++++ b/sound/soc/codecs/sgtl5000.c
+@@ -1797,6 +1797,9 @@ static int sgtl5000_i2c_remove(struct i2c_client *client)
+ {
+ 	struct sgtl5000_priv *sgtl5000 = i2c_get_clientdata(client);
+ 
++	regmap_write(sgtl5000->regmap, SGTL5000_CHIP_DIG_POWER, SGTL5000_DIG_POWER_DEFAULT);
++	regmap_write(sgtl5000->regmap, SGTL5000_CHIP_ANA_POWER, SGTL5000_ANA_POWER_DEFAULT);
++
+ 	clk_disable_unprepare(sgtl5000->mclk);
+ 	regulator_bulk_disable(sgtl5000->num_supplies, sgtl5000->supplies);
+ 	regulator_bulk_free(sgtl5000->num_supplies, sgtl5000->supplies);
+@@ -1804,6 +1807,11 @@ static int sgtl5000_i2c_remove(struct i2c_client *client)
+ 	return 0;
+ }
+ 
++static void sgtl5000_i2c_shutdown(struct i2c_client *client)
++{
++	sgtl5000_i2c_remove(client);
++}
++
+ static const struct i2c_device_id sgtl5000_id[] = {
+ 	{"sgtl5000", 0},
+ 	{},
+@@ -1824,6 +1832,7 @@ static struct i2c_driver sgtl5000_i2c_driver = {
+ 		   },
+ 	.probe = sgtl5000_i2c_probe,
+ 	.remove = sgtl5000_i2c_remove,
++	.shutdown = sgtl5000_i2c_shutdown,
+ 	.id_table = sgtl5000_id,
+ };
+ 
+diff --git a/sound/soc/codecs/sgtl5000.h b/sound/soc/codecs/sgtl5000.h
+index 56ec5863f250..3a808c762299 100644
+--- a/sound/soc/codecs/sgtl5000.h
++++ b/sound/soc/codecs/sgtl5000.h
+@@ -80,6 +80,7 @@
+ /*
+  * SGTL5000_CHIP_DIG_POWER
+  */
++#define SGTL5000_DIG_POWER_DEFAULT		0x0000
+ #define SGTL5000_ADC_EN				0x0040
+ #define SGTL5000_DAC_EN				0x0020
+ #define SGTL5000_DAP_POWERUP			0x0010
+-- 
+2.35.1
+
 
 

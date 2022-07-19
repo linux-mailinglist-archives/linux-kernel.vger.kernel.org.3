@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113F4579AC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932B8579C3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239399AbiGSMST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
+        id S240968AbiGSMhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239195AbiGSMQ2 (ORCPT
+        with ESMTP id S240718AbiGSMgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:16:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B49558FB;
-        Tue, 19 Jul 2022 05:06:29 -0700 (PDT)
+        Tue, 19 Jul 2022 08:36:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA98BDFF2;
+        Tue, 19 Jul 2022 05:14:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56C246171F;
-        Tue, 19 Jul 2022 12:06:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B37C341C6;
-        Tue, 19 Jul 2022 12:06:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBC9CB81B29;
+        Tue, 19 Jul 2022 12:13:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE27C341C6;
+        Tue, 19 Jul 2022 12:13:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232380;
-        bh=K3+3I8AuxXsfpmIxT07yrpNeLwvQNN67D7m8sUQncCM=;
+        s=korg; t=1658232822;
+        bh=y9MZsfiKWmE9o7hdDmgnWIaSt3gGlLNSa1w+FAX5XZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ziiJW6yoB68ezjtiXTqVK4qN4fVk2bS71yra6+tVJOUxl22WIWZqYIyBXTgVdSkDM
-         6R+ktqdWsqY5OivF86FHtjNYdkWT1fSQE8nE9FCQKooWZ+FSEaqcq+1NyFIseNQmOu
-         xJ/EfWZnbQyGaZtJB1wASlVu5ZL2puHzFXP/mLzM=
+        b=Ace7C8U114FOe7bb1ZjC9M1GVuRFSqvKswqP2rrWRxm0UAriWJ7untQ0beNdcEtCd
+         9jHNiO78WjksPE1DBEacQxDL+dOusQFeAeBOkhzJ6tymvFq7vx93q1afpWfg0C7QeU
+         66lF9RLHP9dJdrTnMh/g4gouaGA4ZY6zYk1IFqVk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 037/112] ASoC: tas2764: Correct playback volume range
+Subject: [PATCH 5.15 078/167] drm/i915/uc: correctly track uc_fw init failure
 Date:   Tue, 19 Jul 2022 13:53:30 +0200
-Message-Id: <20220719114629.834912558@linuxfoundation.org>
+Message-Id: <20220719114704.104835461@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
 
-[ Upstream commit 3e99e5697e1f7120b5abc755e8a560b22612d6ed ]
+[ Upstream commit 35d4efec103e1afde968cfc9305f00f9aceb19cc ]
 
-DVC value 0xc8 is -100dB and 0xc9 is mute; this needs to map to
--100.5dB as far as the dB scale is concerned. Fix that and enable
-the mute flag, so alsamixer correctly shows the control as
-<0 dB .. -100 dB, mute>.
+The FAILURE state of uc_fw currently implies that the fw is loadable
+(i.e init completed), so we can't use it for init failures and instead
+need a dedicated error code.
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Fixes: 827ed8a0fa50 ("ASoC: tas2764: Add the driver for the TAS2764")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220630075135.2221-3-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Note that this currently does not cause any issues because if we fail to
+init any of the firmwares we abort the load, but better be accurate
+anyway in case things change in the future.
+
+Signed-off-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Reviewed-by: Matthew Brost <matthew.brost@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211211000756.1698923-2-daniele.ceraolospurio@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/tas2764.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gt/uc/intel_guc_fw.c |  2 +-
+ drivers/gpu/drm/i915/gt/uc/intel_huc.c    |  2 +-
+ drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c  |  4 ++--
+ drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h  | 17 +++++++++++------
+ 4 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/sound/soc/codecs/tas2764.c b/sound/soc/codecs/tas2764.c
-index b93e593788f2..33d7ce78aced 100644
---- a/sound/soc/codecs/tas2764.c
-+++ b/sound/soc/codecs/tas2764.c
-@@ -536,7 +536,7 @@ static int tas2764_codec_probe(struct snd_soc_component *component)
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_fw.c b/drivers/gpu/drm/i915/gt/uc/intel_guc_fw.c
+index 76fe766ad1bc..bb951b8d5203 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_guc_fw.c
++++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_fw.c
+@@ -159,6 +159,6 @@ int intel_guc_fw_upload(struct intel_guc *guc)
+ 	return 0;
+ 
+ out:
+-	intel_uc_fw_change_status(&guc->fw, INTEL_UC_FIRMWARE_FAIL);
++	intel_uc_fw_change_status(&guc->fw, INTEL_UC_FIRMWARE_LOAD_FAIL);
+ 	return ret;
+ }
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.c b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
+index fc5387b410a2..9ee22ac92540 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_huc.c
++++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
+@@ -191,7 +191,7 @@ int intel_huc_auth(struct intel_huc *huc)
+ 
+ fail:
+ 	i915_probe_error(gt->i915, "HuC: Authentication failed %d\n", ret);
+-	intel_uc_fw_change_status(&huc->fw, INTEL_UC_FIRMWARE_FAIL);
++	intel_uc_fw_change_status(&huc->fw, INTEL_UC_FIRMWARE_LOAD_FAIL);
+ 	return ret;
  }
  
- static DECLARE_TLV_DB_SCALE(tas2764_digital_tlv, 1100, 50, 0);
--static DECLARE_TLV_DB_SCALE(tas2764_playback_volume, -10000, 50, 0);
-+static DECLARE_TLV_DB_SCALE(tas2764_playback_volume, -10050, 50, 1);
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
+index 3a16d08608a5..6be7fbf9d18a 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
++++ b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
+@@ -526,7 +526,7 @@ int intel_uc_fw_upload(struct intel_uc_fw *uc_fw, u32 dst_offset, u32 dma_flags)
+ 	i915_probe_error(gt->i915, "Failed to load %s firmware %s (%d)\n",
+ 			 intel_uc_fw_type_repr(uc_fw->type), uc_fw->path,
+ 			 err);
+-	intel_uc_fw_change_status(uc_fw, INTEL_UC_FIRMWARE_FAIL);
++	intel_uc_fw_change_status(uc_fw, INTEL_UC_FIRMWARE_LOAD_FAIL);
+ 	return err;
+ }
  
- static const struct snd_kcontrol_new tas2764_snd_controls[] = {
- 	SOC_SINGLE_TLV("Speaker Volume", TAS2764_DVC, 0,
+@@ -544,7 +544,7 @@ int intel_uc_fw_init(struct intel_uc_fw *uc_fw)
+ 	if (err) {
+ 		DRM_DEBUG_DRIVER("%s fw pin-pages err=%d\n",
+ 				 intel_uc_fw_type_repr(uc_fw->type), err);
+-		intel_uc_fw_change_status(uc_fw, INTEL_UC_FIRMWARE_FAIL);
++		intel_uc_fw_change_status(uc_fw, INTEL_UC_FIRMWARE_INIT_FAIL);
+ 	}
+ 
+ 	return err;
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h
+index 99bb1fe1af66..c1a7246fb7d6 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h
++++ b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h
+@@ -31,11 +31,12 @@ struct intel_gt;
+  * |            |    MISSING <--/    |    \--> ERROR                |
+  * |   fetch    |                    V                              |
+  * |            |                 AVAILABLE                         |
+- * +------------+-                   |                             -+
++ * +------------+-                   |   \                         -+
++ * |            |                    |    \--> INIT FAIL            |
+  * |   init     |                    V                              |
+  * |            |        /------> LOADABLE <----<-----------\       |
+  * +------------+-       \         /    \        \           \     -+
+- * |            |         FAIL <--<      \--> TRANSFERRED     \     |
++ * |            |    LOAD FAIL <--<      \--> TRANSFERRED     \     |
+  * |   upload   |                  \           /   \          /     |
+  * |            |                   \---------/     \--> RUNNING    |
+  * +------------+---------------------------------------------------+
+@@ -49,8 +50,9 @@ enum intel_uc_fw_status {
+ 	INTEL_UC_FIRMWARE_MISSING, /* blob not found on the system */
+ 	INTEL_UC_FIRMWARE_ERROR, /* invalid format or version */
+ 	INTEL_UC_FIRMWARE_AVAILABLE, /* blob found and copied in mem */
++	INTEL_UC_FIRMWARE_INIT_FAIL, /* failed to prepare fw objects for load */
+ 	INTEL_UC_FIRMWARE_LOADABLE, /* all fw-required objects are ready */
+-	INTEL_UC_FIRMWARE_FAIL, /* failed to xfer or init/auth the fw */
++	INTEL_UC_FIRMWARE_LOAD_FAIL, /* failed to xfer or init/auth the fw */
+ 	INTEL_UC_FIRMWARE_TRANSFERRED, /* dma xfer done */
+ 	INTEL_UC_FIRMWARE_RUNNING /* init/auth done */
+ };
+@@ -121,10 +123,12 @@ const char *intel_uc_fw_status_repr(enum intel_uc_fw_status status)
+ 		return "ERROR";
+ 	case INTEL_UC_FIRMWARE_AVAILABLE:
+ 		return "AVAILABLE";
++	case INTEL_UC_FIRMWARE_INIT_FAIL:
++		return "INIT FAIL";
+ 	case INTEL_UC_FIRMWARE_LOADABLE:
+ 		return "LOADABLE";
+-	case INTEL_UC_FIRMWARE_FAIL:
+-		return "FAIL";
++	case INTEL_UC_FIRMWARE_LOAD_FAIL:
++		return "LOAD FAIL";
+ 	case INTEL_UC_FIRMWARE_TRANSFERRED:
+ 		return "TRANSFERRED";
+ 	case INTEL_UC_FIRMWARE_RUNNING:
+@@ -146,7 +150,8 @@ static inline int intel_uc_fw_status_to_error(enum intel_uc_fw_status status)
+ 		return -ENOENT;
+ 	case INTEL_UC_FIRMWARE_ERROR:
+ 		return -ENOEXEC;
+-	case INTEL_UC_FIRMWARE_FAIL:
++	case INTEL_UC_FIRMWARE_INIT_FAIL:
++	case INTEL_UC_FIRMWARE_LOAD_FAIL:
+ 		return -EIO;
+ 	case INTEL_UC_FIRMWARE_SELECTED:
+ 		return -ESTALE;
 -- 
 2.35.1
 

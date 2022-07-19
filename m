@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F0B57A974
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9BC57A97B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240689AbiGSVv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S240709AbiGSVwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240680AbiGSVvn (ORCPT
+        with ESMTP id S240711AbiGSVvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:51:43 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4D5643CB;
-        Tue, 19 Jul 2022 14:51:41 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id r70so11807145iod.10;
-        Tue, 19 Jul 2022 14:51:41 -0700 (PDT)
+        Tue, 19 Jul 2022 17:51:53 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56B56392B;
+        Tue, 19 Jul 2022 14:51:50 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id l24so12933454ion.13;
+        Tue, 19 Jul 2022 14:51:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=85HkroyRT6/KmmJdqn8bN9eBoKQ4n7OLsG/Ln9C62EQ=;
-        b=kWDJiN3lDToay+j3VSGp792TzIzl5iLfOhyIowWkBj0TI/uuj5FmPyzloOxuDoPRUH
-         /jLt2NXQxWWGLgrIBuxYOn6cIpb3a5Yhmz6TCY1tY5d6YVoiwouK6/v0ZAiB49ifGSjT
-         BUQwWLGiHsAHVtCcZvueHjIiOVmhlbckUzTd7mlouYUi02aWtQLrWCkkOGteD2Ki0kfF
-         Q/hdk/SZBHXhql1rTVL37WCPPJdCIBgLcTmlSgpMJmY++AYH3Fb7Y9z3UI/7DwI7PKkp
-         AJlcdKG37RW9A4uXKi74Wjr7/PYhTcQaJAnm/cKW3T5FaoGhuFZdH3PHkegASc3d5B1B
-         b8rQ==
-X-Gm-Message-State: AJIora9ojL0bLqMAMJzADocA8erFlCI8w0q0F21odtUaEwIWmV55J8oQ
-        5+a26QKnEQoUtk+xBV6EEgr/dWiwzA==
-X-Google-Smtp-Source: AGRyM1t2dFQzXrBsVPjnPKradNvoFPjaxAi4wE8hmllsMsGhgSvVg8wcKu0IgDqaWk3GBLDOiO9c3A==
-X-Received: by 2002:a05:6602:160a:b0:67c:28b:7627 with SMTP id x10-20020a056602160a00b0067c028b7627mr6695610iow.207.1658267500740;
-        Tue, 19 Jul 2022 14:51:40 -0700 (PDT)
+        bh=dcyGfZlm3obzql4ixYHJRhEx8klSCMxz9XKF4iIR0DU=;
+        b=AyZzKvRzmOLHiZ7cM7gKFWd86gsF2D3xm8OfTy/oqHkp0kWNziKqHL12qlOl+sFItK
+         okzhEP8uYJ7oyNsVsrc06f0WXtDApb1vKBOtXojGYHiwTKv4J1X/CjBko7H1/kCl06s2
+         rhjsjWRftuBpcuAFQAsSOxggwpyJlZGNSiE8Hf6I6dqye8HrYpdoCbqy1K2PjxsGU4zE
+         XqsyX6fSsF0Bvd7kJaUWd9oLIZ3/t3QkzkR8Hi5XvqADCbzXX7HRtvM07T++s9ECIQqk
+         CjB9XXFTi/6T1xTr5B5GNAfa5EYK9inqrJRGYrC0SGNZDwWkMvD/314C6ddA90yZjkSt
+         s58A==
+X-Gm-Message-State: AJIora9S48+aHwdqR0mLP6oXrLO9BftqsXYjBklkxRTJROSGsVBSigOf
+        /weCV34MBSDmq/vT3vudud9CJYEEoA==
+X-Google-Smtp-Source: AGRyM1vMHqrd31gyle8h59Be4LgPkz/USD3vqWagBxZkUmUntqsxRzTbYIDZ4BHIcHENl0M9R801aA==
+X-Received: by 2002:a02:c90a:0:b0:33e:fde0:b76 with SMTP id t10-20020a02c90a000000b0033efde00b76mr18640286jao.81.1658267509734;
+        Tue, 19 Jul 2022 14:51:49 -0700 (PDT)
 Received: from xps15.herring.priv ([64.188.179.248])
-        by smtp.googlemail.com with ESMTPSA id q128-20020a6b8e86000000b00678ea668a39sm7786798iod.36.2022.07.19.14.51.39
+        by smtp.googlemail.com with ESMTPSA id j2-20020a056e02124200b002dc9fdbf0a5sm5584640ilq.59.2022.07.19.14.51.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 14:51:40 -0700 (PDT)
+        Tue, 19 Jul 2022 14:51:49 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: dt-bindings: sgtl5000: Add missing type to 'micbias-voltage-m-volts'
-Date:   Tue, 19 Jul 2022 15:51:34 -0600
-Message-Id: <20220719215134.1877363-1-robh@kernel.org>
+Subject: [PATCH] dt-bindings: rtc: microcrystal,rv3032: Add missing type to 'trickle-voltage-millivolt'
+Date:   Tue, 19 Jul 2022 15:51:42 -0600
+Message-Id: <20220719215143.1877566-1-robh@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,27 +59,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'micbias-voltage-m-volts' is missing a type definition. '-m-volts' is
+'trickle-voltage-millivolt' is missing a type definition. '-millivolt' is
 not a standard unit (should be '-microvolt'). As the property is already
 in use, add a type reference.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/sound/sgtl5000.yaml | 1 +
+ Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/sgtl5000.yaml b/Documentation/devicetree/bindings/sound/sgtl5000.yaml
-index e762c320b574..2bc7f00ce4a2 100644
---- a/Documentation/devicetree/bindings/sound/sgtl5000.yaml
-+++ b/Documentation/devicetree/bindings/sound/sgtl5000.yaml
-@@ -47,6 +47,7 @@ properties:
-     description: The bias voltage to be used in mVolts. The voltage can take
-       values from 1.25V to 3V by 250mV steps. If this node is not mentioned
-       or the value is unknown, then the value is set to 1.25V.
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-     enum: [ 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000 ]
+diff --git a/Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml b/Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml
+index 9593840a4a2b..60f9027e8299 100644
+--- a/Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml
++++ b/Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml
+@@ -32,6 +32,7 @@ properties:
+       - 11000
  
-   lrclk-strength:
+   trickle-voltage-millivolt:
++    $ref: /schemas/types.yaml#/definitions/uint32
+     enum:
+       - 1750
+       - 3000
 -- 
 2.34.1
 

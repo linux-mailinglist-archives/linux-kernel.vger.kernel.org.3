@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0321D579C32
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BB5579C16
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240909AbiGSMhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
+        id S240700AbiGSMgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240767AbiGSMgX (ORCPT
+        with ESMTP id S241191AbiGSMex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:36:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEC721247;
-        Tue, 19 Jul 2022 05:14:11 -0700 (PDT)
+        Tue, 19 Jul 2022 08:34:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133764505C;
+        Tue, 19 Jul 2022 05:13:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAA506182C;
-        Tue, 19 Jul 2022 12:13:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E276C341C6;
-        Tue, 19 Jul 2022 12:13:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5E6861826;
+        Tue, 19 Jul 2022 12:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84860C341CB;
+        Tue, 19 Jul 2022 12:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232817;
-        bh=zB7fBImbL6S5dCvk5R6aCJWY4IS24Bb5+S+GtUzM51w=;
+        s=korg; t=1658232819;
+        bh=j7YTvMf/MkcVpUjLTGrJIDolAUr7q6yQhHElIIQcXbw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f3DP9dqa0Ua/M+zdcmEQhx0EDmPQ0BTDZvova+sjipMBhBykAflwE56X1UF2t6H2O
-         uGbw6Q31wmkuL5U62jTnUTgaY9gZIs7Vi7ZyJhUcbPjb+o8xBL0o5OQoz30o2iaBbe
-         fzbAjObYlMT1/qFSLavKOMWg5g8cbD+DP8i9vjuA=
+        b=2b3WX7bShEhlCkKQd4JDkoZZNaFFcYq9xv8w5rQo2/fV3gd13hhmzj0Ksg3EkzpvN
+         23kTaBA4FLvuNM+I943DXBeB4GFNMWgkTBW+IUFpNlPvoWlhWCGwW1NFsqgGN190Fc
+         C8w8wJhoHhy4AnzvyGVtTWNRyQ/41eSv1xdwSKME=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Andi Shyti <andi.shyti@intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
+        stable@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
         =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
         <thomas.hellstrom@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 076/167] drm/i915/gt: Serialize GRDOM access between multiple engine resets
-Date:   Tue, 19 Jul 2022 13:53:28 +0200
-Message-Id: <20220719114703.894354538@linuxfoundation.org>
+Subject: [PATCH 5.15 077/167] drm/i915/gt: Serialize TLB invalidates with GT resets
+Date:   Tue, 19 Jul 2022 13:53:29 +0200
+Message-Id: <20220719114703.990956888@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
 References: <20220719114656.750574879@linuxfoundation.org>
@@ -61,119 +59,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris@chris-wilson.co.uk>
+From: Chris Wilson <chris.p.wilson@intel.com>
 
-[ Upstream commit b24dcf1dc507f69ed3b5c66c2b6a0209ae80d4d4 ]
+[ Upstream commit a1c5a7bf79c1faa5633b918b5c0666545e84c4d1 ]
 
-Don't allow two engines to be reset in parallel, as they would both
-try to select a reset bit (and send requests to common registers)
-and wait on that register, at the same time. Serialize control of
-the reset requests/acks using the uncore->lock, which will also ensure
-that no other GT state changes at the same time as the actual reset.
+Avoid trying to invalidate the TLB in the middle of performing an
+engine reset, as this may result in the reset timing out. Currently,
+the TLB invalidate is only serialised by its own mutex, forgoing the
+uncore lock, but we can take the uncore->lock as well to serialise
+the mmio access, thereby serialising with the GDRST.
 
-Cc: stable@vger.kernel.org # v4.4 and upper
-Reported-by: Mika Kuoppala <mika.kuoppala@linux.intel.com>
-Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-Acked-by: Mika Kuoppala <mika.kuoppala@linux.intel.com>
-Reviewed-by: Andi Shyti <andi.shyti@intel.com>
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
+i915 selftest/hangcheck.
+
+Cc: stable@vger.kernel.org  # v4.4 and upper
+Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/e0a2d894e77aed7c2e36b0d1abdc7dbac3011729.1657639152.git.mchehab@kernel.org
-(cherry picked from commit 336561a914fc0c6f1218228718f633b31b7af1c3)
+Link: https://patchwork.freedesktop.org/patch/msgid/1e59a7c45dd919a530256b9ac721ac6ea86c0677.1657639152.git.mchehab@kernel.org
+(cherry picked from commit 33da97894758737895e90c909f16786052680ef4)
 Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/gt/intel_reset.c | 37 ++++++++++++++++++++-------
- 1 file changed, 28 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/i915/gt/intel_gt.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_reset.c b/drivers/gpu/drm/i915/gt/intel_reset.c
-index b6697c1d260a..18b0e57c58c1 100644
---- a/drivers/gpu/drm/i915/gt/intel_reset.c
-+++ b/drivers/gpu/drm/i915/gt/intel_reset.c
-@@ -293,9 +293,9 @@ static int gen6_hw_domain_reset(struct intel_gt *gt, u32 hw_domain_mask)
- 	return err;
- }
+diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
+index e1e1d17d49fd..3a76000d15bf 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gt.c
++++ b/drivers/gpu/drm/i915/gt/intel_gt.c
+@@ -970,6 +970,20 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+ 	mutex_lock(&gt->tlb_invalidate_lock);
+ 	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
  
--static int gen6_reset_engines(struct intel_gt *gt,
--			      intel_engine_mask_t engine_mask,
--			      unsigned int retry)
-+static int __gen6_reset_engines(struct intel_gt *gt,
-+				intel_engine_mask_t engine_mask,
-+				unsigned int retry)
- {
- 	static const u32 hw_engine_mask[] = {
- 		[RCS0]  = GEN6_GRDOM_RENDER,
-@@ -322,6 +322,20 @@ static int gen6_reset_engines(struct intel_gt *gt,
- 	return gen6_hw_domain_reset(gt, hw_mask);
- }
- 
-+static int gen6_reset_engines(struct intel_gt *gt,
-+			      intel_engine_mask_t engine_mask,
-+			      unsigned int retry)
-+{
-+	unsigned long flags;
-+	int ret;
++	spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
 +
-+	spin_lock_irqsave(&gt->uncore->lock, flags);
-+	ret = __gen6_reset_engines(gt, engine_mask, retry);
-+	spin_unlock_irqrestore(&gt->uncore->lock, flags);
++	for_each_engine(engine, gt, id) {
++		struct reg_and_bit rb;
 +
-+	return ret;
-+}
++		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
++		if (!i915_mmio_reg_offset(rb.reg))
++			continue;
 +
- static struct intel_engine_cs *find_sfc_paired_vecs_engine(struct intel_engine_cs *engine)
- {
- 	int vecs_id;
-@@ -488,9 +502,9 @@ static void gen11_unlock_sfc(struct intel_engine_cs *engine)
- 	rmw_clear_fw(uncore, sfc_lock.lock_reg, sfc_lock.lock_bit);
- }
- 
--static int gen11_reset_engines(struct intel_gt *gt,
--			       intel_engine_mask_t engine_mask,
--			       unsigned int retry)
-+static int __gen11_reset_engines(struct intel_gt *gt,
-+				 intel_engine_mask_t engine_mask,
-+				 unsigned int retry)
- {
- 	static const u32 hw_engine_mask[] = {
- 		[RCS0]  = GEN11_GRDOM_RENDER,
-@@ -601,8 +615,11 @@ static int gen8_reset_engines(struct intel_gt *gt,
- 	struct intel_engine_cs *engine;
- 	const bool reset_non_ready = retry >= 1;
- 	intel_engine_mask_t tmp;
-+	unsigned long flags;
- 	int ret;
- 
-+	spin_lock_irqsave(&gt->uncore->lock, flags);
++		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
++	}
 +
- 	for_each_engine_masked(engine, gt, engine_mask, tmp) {
- 		ret = gen8_engine_reset_prepare(engine);
- 		if (ret && !reset_non_ready)
-@@ -630,17 +647,19 @@ static int gen8_reset_engines(struct intel_gt *gt,
- 	 * This is best effort, so ignore any error from the initial reset.
- 	 */
- 	if (IS_DG2(gt->i915) && engine_mask == ALL_ENGINES)
--		gen11_reset_engines(gt, gt->info.engine_mask, 0);
-+		__gen11_reset_engines(gt, gt->info.engine_mask, 0);
- 
- 	if (GRAPHICS_VER(gt->i915) >= 11)
--		ret = gen11_reset_engines(gt, engine_mask, retry);
-+		ret = __gen11_reset_engines(gt, engine_mask, retry);
- 	else
--		ret = gen6_reset_engines(gt, engine_mask, retry);
-+		ret = __gen6_reset_engines(gt, engine_mask, retry);
- 
- skip_reset:
- 	for_each_engine_masked(engine, gt, engine_mask, tmp)
- 		gen8_engine_reset_cancel(engine);
- 
-+	spin_unlock_irqrestore(&gt->uncore->lock, flags);
++	spin_unlock_irq(&uncore->lock);
 +
- 	return ret;
- }
+ 	for_each_engine(engine, gt, id) {
+ 		/*
+ 		 * HW architecture suggest typical invalidation time at 40us,
+@@ -984,7 +998,6 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+ 		if (!i915_mmio_reg_offset(rb.reg))
+ 			continue;
  
+-		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
+ 		if (__intel_wait_for_register_fw(uncore,
+ 						 rb.reg, rb.bit, 0,
+ 						 timeout_us, timeout_ms,
 -- 
 2.35.1
 

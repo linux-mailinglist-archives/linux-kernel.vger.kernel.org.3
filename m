@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707F457A45D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121F957A464
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbiGSQx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 12:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
+        id S235950AbiGSQ4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 12:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234207AbiGSQx1 (ORCPT
+        with ESMTP id S235385AbiGSQ4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 12:53:27 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC5D51A00
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:53:25 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so16336025pjf.2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:53:25 -0700 (PDT)
+        Tue, 19 Jul 2022 12:56:05 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CADE4A804
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:56:02 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h17so22577662wrx.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:56:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EoDaqgrAHGBNbnVydHejL8jLbGI0Orhqw0A1Is/Hf1k=;
-        b=WdjdS6yNzpFf37fwaTPlL5P8cavy47olmzNwDCBOXKlQ0Uf1u9+5FMDEfjure1bBVm
-         T/dVR6zeopyHZiC7TM6PW8wOBQPv4TYcPIjKVt3ALjgaCcheQooncLhXxaykR0cq0DYY
-         cAhjsfd+XWludJnuE9HqXHMD45c0paLy6JgoZ+S2kT2g4ULezwtYfabqm6dUODC9zqy8
-         EklKjANJ8z5BpukBsSEUCGaxax2frmc/K9P+1mprEgHyWSIg/NvZXaKWTYf6CT/TwIMJ
-         X65WkIeVxzLTPCYU4UcUeCrRpYFIyJNhDhOfoAuAhsHpWuWsHdIaCOvWi8Bk4X8BSSPj
-         FuPQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gGiA6ckYRiubKjgpRJXUtNtdjW9CpRo2ZKSumqtjes8=;
+        b=c/q9gFkWi8Ec4wGMmFvun9zo+/LIbDeMaMKwcrXbQWo0rQesInT//edyGk5wYGc78D
+         svpmR36zodRYVVyXkCzQBEw0OS2MuwOXvSZXsMvZ2yHfs7WfajS9Q8ztNuiYry8fOc+i
+         BtSTTBp7Dy4zHfT0ODMmWp+jIuY+bmtJBOK4KOeha0KWAZKcPVBNbmqZr0ABqad+Tvrv
+         kzb2W0riTOCx9S5qKVG5cP6IWHbVRlbDboCfDmy0WBf3oiVXtVkwGUc2TMSztA+jlth5
+         ypRACkDQnR+L83TE224+uq75z1ival1O0Sunq3ROeAgFPYI4mf/bjMXKRjkl/+bt7QnC
+         NKtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EoDaqgrAHGBNbnVydHejL8jLbGI0Orhqw0A1Is/Hf1k=;
-        b=uXRzzNUDElUYFZ/aMbc83szOkzMMSfSO6TcuId/9SZzo68zn5k4TRk5sfFHdzmzhwJ
-         n7LFny2b8vKGBbkdMEZAqk9LeDfTueWNS9MWPx3B/Qa/sNrbvVV3uxnaR37MUWUQZkLG
-         BcOOjdrBr2EPc3iU8PGW2oQ6hdJU9FFJ42LCuKWgVWKQfcdUhU/PvrfXXJHHZQsHfjC7
-         3YQkMC+dKJGELLTatx8wPA0MWwYp3EIIckRxKEYLvUbtFX3rK9oJy4g3Z68YYvEvKUcj
-         oM3zVO4dvq6ychkAaXQUcb50ahhDnmADpEMt9Q+4HoOgE5rnfuR+K47FG7odI+1dah4m
-         fZrA==
-X-Gm-Message-State: AJIora+De1y+NLcOdAQcc6xh2KMJozjdFkmF+RmNFA+gdWjNqNKm5J1v
-        cMJCYJWt1Z9gKSQqPxpJwfGJaA==
-X-Google-Smtp-Source: AGRyM1uPInJKvCt5KS0hjyKpsbtZxidKKXWBNs7bgyTddEjm2uLYVaIXoVV2eRoMjw8JsZ4nqZVrgA==
-X-Received: by 2002:a17:903:22ca:b0:16c:4145:75a1 with SMTP id y10-20020a17090322ca00b0016c414575a1mr34004300plg.134.1658249605076;
-        Tue, 19 Jul 2022 09:53:25 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id oj4-20020a17090b4d8400b001ef8fb72224sm13901963pjb.53.2022.07.19.09.53.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 09:53:24 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     axboe@kernel.dk, tj@kernel.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, Jinke Han <hanjinke.666@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>, stable@vger.kernel.org
-Subject: [PATCH v3] block: don't allow the same type rq_qos add more than once
-Date:   Wed, 20 Jul 2022 00:53:13 +0800
-Message-Id: <20220719165313.51887-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gGiA6ckYRiubKjgpRJXUtNtdjW9CpRo2ZKSumqtjes8=;
+        b=3Dk8QN+NPdmdGKykJa/g/ztG4Lt90Wwn3whxM4Th/ivgSzBNBYUaOnonXKRDEC6cHB
+         XcQLinaibBO5ycQgOhZYvxwfqkVV7V/9IIV6sXa5Gzit1XaskrqcGH8nKQmPIwuN3Xym
+         TULplFHzStK07mBe0qSnK/58BtIlQal1NpkdygB8pLe5faSnUpdERyfj1mLKxls/YFeZ
+         ZkHmKlD5CnBeDZGydXWmxiKF+gntT2dlxTwgR2DDAf8JH+iP2cnaTe5AH0i/6H1UBfl5
+         mq+jjx6yGrUDbJLsLMJlkiUJ+Mi75jkEcNQyjVM/OARfibPX0mWO42WGrxQHv3mXv+ms
+         oItw==
+X-Gm-Message-State: AJIora/G/r1MYniCdVaKSLdFG5XBF+cK/1ow0pRdWEMJKafezv9B1OpW
+        uYMnVycGd++aXHSjQdd7l/1XYIssob7dkT2liX3ArciOKTqeVw==
+X-Google-Smtp-Source: AGRyM1u+nGoF3aNLBHbjiNHtUbf7L583xpdSE+hNRiQ3pEMVcPk8iojvNZpzMEuEhSVRlqxslbs6wF/2Qwk5ehx9790=
+X-Received: by 2002:a5d:4d8e:0:b0:21d:68d4:56eb with SMTP id
+ b14-20020a5d4d8e000000b0021d68d456ebmr26769704wru.40.1658249760787; Tue, 19
+ Jul 2022 09:56:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=ham
+References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-3-adrian.hunter@intel.com>
+In-Reply-To: <20220711093218.10967-3-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 19 Jul 2022 09:55:48 -0700
+Message-ID: <CAP-5=fXVrKir6VfkDOQ+sK-vqs-aCNBCu5uUVNAUPzW=G-z=cg@mail.gmail.com>
+Subject: Re: [PATCH 02/35] perf tools: Export dsos__for_each_with_build_id()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,231 +70,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+On Mon, Jul 11, 2022 at 2:32 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> Export dsos__for_each_with_build_id() so it can be used elsewhere.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
-In our test of iocost, we encounttered some list add/del corrutions of
-inner_walk list in ioc_timer_fn.
+Acked-by: Ian Rogers <irogers@google.com>
 
-The reason can be descripted as follow:
-cpu 0						cpu 1
-ioc_qos_write					ioc_qos_write
+Thanks,
+Ian
 
-ioc = q_to_ioc(bdev_get_queue(bdev));
-if (!ioc) {
-        ioc = kzalloc();			ioc = q_to_ioc(bdev_get_queue(bdev));
-						if (!ioc) {
-							ioc = kzalloc();
-							...
-							rq_qos_add(q, rqos);
-						}
-        ...
-        rq_qos_add(q, rqos);
-        ...
-}
-
-When the io.cost.qos file is written by two cpu concurrently, rq_qos may
-be added to one disk twice. In that case, there will be two iocs enabled
-and running on one disk. They own different iocgs on their active list.
-In the ioc_timer_fn function, because of the iocgs from two ioc have the
-same root iocg, the root iocg's walk_list may be overwritten by each
-other and this lead to list add/del corrutions in building or destorying
-the inner_walk list.
-
-And so far, the blk-rq-qos framework works in case that one instance for
-one type rq_qos per queue by default. This patch make this explicit and
-also fix the crash above.
-
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Cc: <stable@vger.kernel.org>
----
-Changes in v2:
--use goto in incost and rename the ebusy label
-Changes in v3
--use goto in all place
-
- block/blk-iocost.c    | 20 +++++++++++++-------
- block/blk-iolatency.c | 18 +++++++++++-------
- block/blk-ioprio.c    | 15 +++++++++++----
- block/blk-rq-qos.h    | 11 ++++++++++-
- block/blk-wbt.c       | 12 +++++++++++-
- 5 files changed, 56 insertions(+), 20 deletions(-)
-
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 33a11ba971ea..c6181357e545 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -2886,15 +2886,21 @@ static int blk_iocost_init(struct request_queue *q)
- 	 * called before policy activation completion, can't assume that the
- 	 * target bio has an iocg associated and need to test for NULL iocg.
- 	 */
--	rq_qos_add(q, rqos);
-+	ret = rq_qos_add(q, rqos);
-+	if (ret)
-+		goto err_free_ioc;
-+
- 	ret = blkcg_activate_policy(q, &blkcg_policy_iocost);
--	if (ret) {
--		rq_qos_del(q, rqos);
--		free_percpu(ioc->pcpu_stat);
--		kfree(ioc);
--		return ret;
--	}
-+	if (ret)
-+		goto err_del_qos;
- 	return 0;
-+
-+err_del_qos:
-+	rq_qos_del(q, rqos);
-+err_free_ioc:
-+	free_percpu(ioc->pcpu_stat);
-+	kfree(ioc);
-+	return ret;
- }
- 
- static struct blkcg_policy_data *ioc_cpd_alloc(gfp_t gfp)
-diff --git a/block/blk-iolatency.c b/block/blk-iolatency.c
-index 9568bf8dfe82..7845dca5fcfd 100644
---- a/block/blk-iolatency.c
-+++ b/block/blk-iolatency.c
-@@ -773,19 +773,23 @@ int blk_iolatency_init(struct request_queue *q)
- 	rqos->ops = &blkcg_iolatency_ops;
- 	rqos->q = q;
- 
--	rq_qos_add(q, rqos);
--
-+	ret = rq_qos_add(q, rqos);
-+	if (ret)
-+		goto err_free;
- 	ret = blkcg_activate_policy(q, &blkcg_policy_iolatency);
--	if (ret) {
--		rq_qos_del(q, rqos);
--		kfree(blkiolat);
--		return ret;
--	}
-+	if (ret)
-+		goto err_qos_del;
- 
- 	timer_setup(&blkiolat->timer, blkiolatency_timer_fn, 0);
- 	INIT_WORK(&blkiolat->enable_work, blkiolatency_enable_work_fn);
- 
- 	return 0;
-+
-+err_qos_del:
-+	rq_qos_del(q, rqos);
-+err_free:
-+	kfree(blkiolat);
-+	return ret;
- }
- 
- static void iolatency_set_min_lat_nsec(struct blkcg_gq *blkg, u64 val)
-diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
-index 79e797f5d194..528d3ffcd0ef 100644
---- a/block/blk-ioprio.c
-+++ b/block/blk-ioprio.c
-@@ -235,10 +235,8 @@ int blk_ioprio_init(struct request_queue *q)
- 		return -ENOMEM;
- 
- 	ret = blkcg_activate_policy(q, &ioprio_policy);
--	if (ret) {
--		kfree(blkioprio_blkg);
--		return ret;
--	}
-+	if (ret)
-+		goto err_free;
- 
- 	rqos = &blkioprio_blkg->rqos;
- 	rqos->id = RQ_QOS_IOPRIO;
-@@ -251,8 +249,17 @@ int blk_ioprio_init(struct request_queue *q)
- 	 * rq-qos callbacks.
- 	 */
- 	rq_qos_add(q, rqos);
-+	if (ret)
-+		goto err_deactivate_policy;
- 
- 	return 0;
-+
-+err_deactivate_policy:
-+	blkcg_deactivate_policy(q, &ioprio_policy);
-+err_free:
-+	kfree(blkioprio_blkg);
-+	return ret;
-+
- }
- 
- static int __init ioprio_init(void)
-diff --git a/block/blk-rq-qos.h b/block/blk-rq-qos.h
-index 0e46052b018a..08b856570ad1 100644
---- a/block/blk-rq-qos.h
-+++ b/block/blk-rq-qos.h
-@@ -86,7 +86,7 @@ static inline void rq_wait_init(struct rq_wait *rq_wait)
- 	init_waitqueue_head(&rq_wait->wait);
- }
- 
--static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
-+static inline int rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
- {
- 	/*
- 	 * No IO can be in-flight when adding rqos, so freeze queue, which
-@@ -98,6 +98,8 @@ static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
- 	blk_mq_freeze_queue(q);
- 
- 	spin_lock_irq(&q->queue_lock);
-+	if (rq_qos_id(q, rqos->id))
-+		goto ebusy;
- 	rqos->next = q->rq_qos;
- 	q->rq_qos = rqos;
- 	spin_unlock_irq(&q->queue_lock);
-@@ -109,6 +111,13 @@ static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
- 		blk_mq_debugfs_register_rqos(rqos);
- 		mutex_unlock(&q->debugfs_mutex);
- 	}
-+
-+	return 0;
-+ebusy:
-+	spin_unlock_irq(&q->queue_lock);
-+	blk_mq_unfreeze_queue(q);
-+	return -EBUSY;
-+
- }
- 
- static inline void rq_qos_del(struct request_queue *q, struct rq_qos *rqos)
-diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-index 0c119be0e813..ae6ea0b54579 100644
---- a/block/blk-wbt.c
-+++ b/block/blk-wbt.c
-@@ -820,6 +820,7 @@ int wbt_init(struct request_queue *q)
- {
- 	struct rq_wb *rwb;
- 	int i;
-+	int ret;
- 
- 	rwb = kzalloc(sizeof(*rwb), GFP_KERNEL);
- 	if (!rwb)
-@@ -846,7 +847,10 @@ int wbt_init(struct request_queue *q)
- 	/*
- 	 * Assign rwb and add the stats callback.
- 	 */
--	rq_qos_add(q, &rwb->rqos);
-+	ret = rq_qos_add(q, &rwb->rqos);
-+	if (ret)
-+		goto err_free;
-+
- 	blk_stat_add_callback(q, rwb->cb);
- 
- 	rwb->min_lat_nsec = wbt_default_latency_nsec(q);
-@@ -855,4 +859,10 @@ int wbt_init(struct request_queue *q)
- 	wbt_set_write_cache(q, test_bit(QUEUE_FLAG_WC, &q->queue_flags));
- 
- 	return 0;
-+
-+err_free:
-+	blk_stat_free_callback(rwb->cb);
-+	kfree(rwb);
-+	return ret;
-+
- }
--- 
-2.20.1
-
+> ---
+>  tools/perf/util/build-id.c | 6 ------
+>  tools/perf/util/dso.h      | 6 ++++++
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
+> index 328668f38c69..4c9093b64d1f 100644
+> --- a/tools/perf/util/build-id.c
+> +++ b/tools/perf/util/build-id.c
+> @@ -300,12 +300,6 @@ char *dso__build_id_filename(const struct dso *dso, char *bf, size_t size,
+>         return __dso__build_id_filename(dso, bf, size, is_debug, is_kallsyms);
+>  }
+>
+> -#define dsos__for_each_with_build_id(pos, head)        \
+> -       list_for_each_entry(pos, head, node)    \
+> -               if (!pos->has_build_id)         \
+> -                       continue;               \
+> -               else
+> -
+>  static int write_buildid(const char *name, size_t name_len, struct build_id *bid,
+>                          pid_t pid, u16 misc, struct feat_fd *fd)
+>  {
+> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> index 97047a11282b..66981c7a9a18 100644
+> --- a/tools/perf/util/dso.h
+> +++ b/tools/perf/util/dso.h
+> @@ -227,6 +227,12 @@ struct dso {
+>  #define dso__for_each_symbol(dso, pos, n)      \
+>         symbols__for_each_entry(&(dso)->symbols, pos, n)
+>
+> +#define dsos__for_each_with_build_id(pos, head)        \
+> +       list_for_each_entry(pos, head, node)    \
+> +               if (!pos->has_build_id)         \
+> +                       continue;               \
+> +               else
+> +
+>  static inline void dso__set_loaded(struct dso *dso)
+>  {
+>         dso->loaded = true;
+> --
+> 2.25.1
+>

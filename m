@@ -2,238 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFD357A9EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94FB57A9ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232742AbiGSWkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S237971AbiGSWkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239825AbiGSWkC (ORCPT
+        with ESMTP id S235472AbiGSWku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:40:02 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DE361106
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:40:00 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id o135-20020a25738d000000b0066f58989d75so12039632ybc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:40:00 -0700 (PDT)
+        Tue, 19 Jul 2022 18:40:50 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB01FC6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:40:49 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id os14so29941101ejb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:40:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=5gP4EEO7fRYa/ZF979Fgov75wP7f4iW36KSqNRKIqtw=;
-        b=SwJwQtLnoHivzH0++nMp8mt8ZCFfoEnbSEoXrSJyltk4j04W3e82JZSDLRBDB+xR9L
-         dN28kWWpdnYg0MIJ3gPWKC0KyKCIY+k2f+g7avfdFGEH9jkrHlHlwGIurZaLUVan3sb2
-         agy9JKX8NoVweUh5zqeIrNRB7P/oFfCkc705GUmKyYpHf6Rd4tLlx0d99mPBhys2QLXp
-         Ks7zjxAjUhHF9j5LUsuSPr/tF8aL1KT7vTdcNbG3XrgX4mKa+tmY7pktuWjAnrPDWg00
-         nauhm79HTvDcpblf8dD/CLjHYn0yUWRlMDxCNj36gy0r5dRZxVycz9+P/VPTCJZDj+Sh
-         XC8w==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=36+j+A/1DWKJeG29CSuGqRzbVrNZKvXAm48SwcsWC9Q=;
+        b=T5hPpPBFqoMWgNsSaumUPSHTwyol2HuOWiJK643KpafdASmbF8lXU4ViBJzhahA7yA
+         +bpMp5/lj+8od+3UcpqCoBRr4kzdcYgUFfUKAdGieFFRzzn1Huh5bMalP5kCjpWNDbYS
+         7bxfHHy9eCswbXZushJVIzlE9DpUXplbVqMzU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=5gP4EEO7fRYa/ZF979Fgov75wP7f4iW36KSqNRKIqtw=;
-        b=6NkfN6TaFPR06eD+Tug3OKjhiRPVeuaBS/QNvYNVlxvSSJoPXT203E63/22CexQyZZ
-         nnLU2Ak2s7FXKkrFrnf6actvSsLwEDDC5kstkaFoGfLaD2GqNWDjpY70eLYm6cKIkStt
-         kuQzz2mwZNoHEu9X8sEHa10ZjSVqP2fgxNnzYuxSyBkK/O6hTu1JMVYMlnyS8lG97X0V
-         Tje5Afy99oqLcLSnxajPiZqFrNfKT/Kia8/cDn4NlN/vPTlyyGuS3UeA6boBt8QnM4MZ
-         8mUG/1d0o0CNFr8TOHi6dNrsrB0PpnJbaEMdLIU+4Lm1yjWKJp/IzqpPLmY3xWsdbnIz
-         mUPw==
-X-Gm-Message-State: AJIora/CQc5YelFR1aamoIQacyz6ct15J7nC3oFBlRDv6c9LwEOIZYdp
-        a66Yuah/LWGlPUgL0y6+BHtGQIQuSihU
-X-Google-Smtp-Source: AGRyM1tNy/joF8aD47Ke5JvFXb/uYXvn6I/gafU5dLvOrfVHieMGmMhOjcI5z648M2/csI2UEQWZ4Uws+Dsj
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:1251:e27b:f589:696c])
- (user=irogers job=sendgmr) by 2002:a81:57ca:0:b0:31c:f774:42ff with SMTP id
- l193-20020a8157ca000000b0031cf77442ffmr37186820ywb.286.1658270400226; Tue, 19
- Jul 2022 15:40:00 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 15:39:46 -0700
-In-Reply-To: <20220719223946.176299-1-irogers@google.com>
-Message-Id: <20220719223946.176299-4-irogers@google.com>
-Mime-Version: 1.0
-References: <20220719223946.176299-1-irogers@google.com>
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v3 3/3] perf test: Add user space counter reading tests
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=36+j+A/1DWKJeG29CSuGqRzbVrNZKvXAm48SwcsWC9Q=;
+        b=U/yhIa4iWOKfmYbB0BYJik4qPeTywCB75+WM75zqN02ZM8AgoViWaY1rnhMDw+0KAY
+         gYR3GBiUWVJLpASQstHzMl6ZdQuO3XXIDllT6W9EosT6GzRIUBhp2mrCfoy8xdv/7HBD
+         w4jWyT7PXyIl65RXQ5pOrMHYTOLM2btEsA7wNjtGObYFlTcOLoxJEqByXZcGVU27sD+C
+         VhOXfsDmEkwWrmNV41aJ8lUEaioypfULyvVkUrswDc3Yct3+SFW2J5TX4FhEA2UpDH4g
+         nx1tPAwECo4b22d8mJZUumPACiTnPg6BZv/n8ma3RwyJH8RBvEw+R5YGLTpfZ0ZnGrKX
+         7NXw==
+X-Gm-Message-State: AJIora/ORhEUojQeYWSqPjSm1PjFzuQj0FmRfoGCJR7AHKRYkQWlfkV7
+        d58473Plx64ZfbtaBj/fp2vL4AAyUkw77/FkS8Q=
+X-Google-Smtp-Source: AGRyM1vk5jFu2iZZ8SpEiDeOPkCScktR1GaI0vmydsLyswa2pdip4tWSDPscllUMhWtEsgHSEs7ODg==
+X-Received: by 2002:a17:907:e8b:b0:72b:811a:1193 with SMTP id ho11-20020a1709070e8b00b0072b811a1193mr33518935ejc.265.1658270448198;
+        Tue, 19 Jul 2022 15:40:48 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id q25-20020a17090676d900b006fece722508sm7232846ejn.135.2022.07.19.15.40.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 15:40:46 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id r2so22658674wrs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:40:45 -0700 (PDT)
+X-Received: by 2002:a5d:5889:0:b0:21d:bccd:38e3 with SMTP id
+ n9-20020a5d5889000000b0021dbccd38e3mr27718830wrf.659.1658270445458; Tue, 19
+ Jul 2022 15:40:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220719203857.1488831-1-nfraprado@collabora.com> <20220719203857.1488831-2-nfraprado@collabora.com>
+In-Reply-To: <20220719203857.1488831-2-nfraprado@collabora.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 19 Jul 2022 15:40:32 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XgWAMXGAfBw9dBoKB6Y6_AAT6ccAtLg=jy3qLa2HOxBA@mail.gmail.com>
+Message-ID: <CAD=FV=XgWAMXGAfBw9dBoKB6Y6_AAT6ccAtLg=jy3qLa2HOxBA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] drm/panel-edp: Add panel entry for R140NWF5 RH
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These tests are based on test_stat_user_read in
-tools/lib/perf/tests/test-evsel.c. The tests are modified to skip if
-perf_event_open fails or rdpmc isn't supported.
+Hi,
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/mmap-basic.c | 127 +++++++++++++++++++++++++++++++++-
- 1 file changed, 126 insertions(+), 1 deletion(-)
+On Tue, Jul 19, 2022 at 1:39 PM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> Add panel identification entry for the IVO R140NWF5 RH (product ID:
+> 0x057d) panel.
+>
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+>
+> ---
+> The comments on the driver indicate that the T3 timing should be set on
+> hpd_absent, while hpd_reliable would have a shorter time just while the
+> HPD line stabilizes on low after power is supplied.
 
-diff --git a/tools/perf/tests/mmap-basic.c b/tools/perf/tests/mmap-basic.c
-index 30bbe144648a..dfb6173b2a82 100644
---- a/tools/perf/tests/mmap-basic.c
-+++ b/tools/perf/tests/mmap-basic.c
-@@ -170,14 +170,139 @@ static int test__basic_mmap(struct test_suite *test __maybe_unused, int subtest
- 	return err;
- }
- 
-+static int test_stat_user_read(int event)
-+{
-+	struct perf_counts_values counts = { .val = 0 };
-+	struct perf_thread_map *threads;
-+	struct perf_evsel *evsel;
-+	struct perf_event_mmap_page *pc;
-+	struct perf_event_attr attr = {
-+		.type	= PERF_TYPE_HARDWARE,
-+		.config	= event,
-+#ifdef __aarch64__
-+		.config1 = 0x2,		/* Request user access */
-+#endif
-+	};
-+	int err, i, ret = TEST_FAIL;
-+	bool opened = false, mapped = false;
-+
-+	threads = perf_thread_map__new_dummy();
-+	TEST_ASSERT_VAL("failed to create threads", threads);
-+
-+	perf_thread_map__set_pid(threads, 0, 0);
-+
-+	evsel = perf_evsel__new(&attr);
-+	TEST_ASSERT_VAL("failed to create evsel", evsel);
-+
-+	err = perf_evsel__open(evsel, NULL, threads);
-+	if (err) {
-+		pr_err("failed to open evsel: %s\n", strerror(-err));
-+		ret = TEST_SKIP;
-+		goto out;
-+	}
-+	opened = true;
-+
-+	err = perf_evsel__mmap(evsel, 0);
-+	if (err) {
-+		pr_err("failed to mmap evsel: %s\n", strerror(-err));
-+		goto out;
-+	}
-+	mapped = true;
-+
-+	pc = perf_evsel__mmap_base(evsel, 0, 0);
-+	if (!pc) {
-+		pr_err("failed to get mmapped address\n");
-+		goto out;
-+	}
-+
-+	if (!pc->cap_user_rdpmc || !pc->index) {
-+		pr_err("userspace counter access not %s\n",
-+			!pc->cap_user_rdpmc ? "supported" : "enabled");
-+		ret = TEST_SKIP;
-+		goto out;
-+	}
-+	if (pc->pmc_width < 32) {
-+		pr_err("userspace counter width not set (%d)\n", pc->pmc_width);
-+		goto out;
-+	}
-+
-+	perf_evsel__read(evsel, 0, 0, &counts);
-+	if (counts.val == 0) {
-+		pr_err("failed to read value for evsel\n");
-+		goto out;
-+	}
-+
-+	for (i = 0; i < 5; i++) {
-+		volatile int count = 0x10000 << i;
-+		__u64 start, end, last = 0;
-+
-+		pr_debug("\tloop = %u, ", count);
-+
-+		perf_evsel__read(evsel, 0, 0, &counts);
-+		start = counts.val;
-+
-+		while (count--) ;
-+
-+		perf_evsel__read(evsel, 0, 0, &counts);
-+		end = counts.val;
-+
-+		if ((end - start) < last) {
-+			pr_err("invalid counter data: end=%llu start=%llu last= %llu\n",
-+				end, start, last);
-+			goto out;
-+		}
-+		last = end - start;
-+		pr_debug("count = %llu\n", end - start);
-+	}
-+	ret = TEST_OK;
-+
-+out:
-+	if (mapped)
-+		perf_evsel__munmap(evsel);
-+	if (opened)
-+		perf_evsel__close(evsel);
-+	perf_evsel__delete(evsel);
-+
-+	perf_thread_map__put(threads);
-+	return ret;
-+}
-+
-+static int test__mmap_user_read_instr(struct test_suite *test __maybe_unused,
-+				      int subtest __maybe_unused)
-+{
-+	return test_stat_user_read(PERF_COUNT_HW_INSTRUCTIONS);
-+}
-+
-+static int test__mmap_user_read_cycles(struct test_suite *test __maybe_unused,
-+				       int subtest __maybe_unused)
-+{
-+	return test_stat_user_read(PERF_COUNT_HW_CPU_CYCLES);
-+}
-+
- static struct test_case tests__basic_mmap[] = {
- 	TEST_CASE_REASON("Read samples using the mmap interface",
- 			 basic_mmap,
- 			 "permissions"),
-+	TEST_CASE_REASON("User space counter reading of instructions",
-+			 mmap_user_read_instr,
-+#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
-+			 "permissions"
-+#else
-+			 "unsupported"
-+#endif
-+		),
-+	TEST_CASE_REASON("User space counter reading of cycles",
-+			 mmap_user_read_cycles,
-+#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
-+			 "permissions"
-+#else
-+			 "unsupported"
-+#endif
-+		),
- 	{	.name = NULL, }
- };
- 
- struct test_suite suite__basic_mmap = {
--	.desc = "Read samples using the mmap interface",
-+	.desc = "mmap interface tests",
- 	.test_cases = tests__basic_mmap,
- };
--- 
-2.37.0.170.g444d1eabd0-goog
+Right. Ideally hpd_reliable is 0 unless you've got a badly-designed panel.
 
+
+> But can we really assume that the HPD line will be reliable at all
+> before the DDIC is done booting up, at which point the HPD line is
+> brought up? IOW, shouldn't we always delay T3 (by setting hpd_reliable =
+=3D
+> T3), since only then we're really sure that the DDIC is done setting up
+> and the HPD line is reliable?
+
+If the panel is hooked up properly, then the HPD pin should be pulled
+low at the start and then should only go high after the panel is ready
+for us to talk to it, right? So it's not like the DDIC has to boot up
+and actively init the state. I would assume that the initial state of
+the "HPD output" from the panel's IC would be one of the following:
+* A floating input.
+* A pulled down input.
+* An output driven low.
+
+In any of those cases just adding a pull down on the line would be
+enough to ensure that the HPD line is reliable until the panel comes
+around and actively drives the line high.
+
+Remember, this is eDP and it's not something that's hot-plugged, so
+there's no debouncing involved and in a properly designed system there
+should be no time needed for the signal to stabilize. I would also
+point out that on the oficial eDP docs the eDP timing diagram doesn't
+show the initial state of "HPD" as "unknown". It shows it as low.
+
+Now, that all being said, I have seen at least one panel that glitched
+itself at bootup. After you powered it on it would blip its HPD line
+high before it had actually finished booting. Then the HPD would go
+low again before finally going high after the panel finished booting.
+This is the reason for "hpd_reliable".
+
+If you've got a board with a well-designed panel but the hookup
+between the panel and the board is wrong (maybe the board is missing a
+pulldown on the HPD line?) then you can just set the "no-hpd" property
+for your board. That will tell the kernel to just always delay the
+"hpd-absent" delay.
+
+> I've set the T3 delay to hpd_absent in this series, following what's
+> instructed in the comments, but I'd like to discuss whether we shouldn't
+> be setting T3 on hpd_reliable instead, for all panels, to be on the
+> safer side.
+
+The way it's specified right now is more flexible, though, isn't it?
+This way if you're on a board where the HPD truly _isn't_ stable then
+you can just set the "no-hpd" and it will automatically use the
+"hpd_absent" delay, right?
+
+
+>  drivers/gpu/drm/panel/panel-edp.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/pa=
+nel-edp.c
+> index 3626469c4cc2..675d793d925e 100644
+> --- a/drivers/gpu/drm/panel/panel-edp.c
+> +++ b/drivers/gpu/drm/panel/panel-edp.c
+> @@ -1854,6 +1854,12 @@ static const struct panel_delay delay_100_500_e200=
+ =3D {
+>         .enable =3D 200,
+>  };
+>
+> +static const struct panel_delay delay_200_500_e200 =3D {
+> +       .hpd_absent =3D 200,
+> +       .unprepare =3D 500,
+> +       .enable =3D 200,
+> +};
+> +
+>  #define EDP_PANEL_ENTRY(vend_chr_0, vend_chr_1, vend_chr_2, product_id, =
+_delay, _name) \
+>  { \
+>         .name =3D _name, \
+> @@ -1882,6 +1888,8 @@ static const struct edp_panel_entry edp_panels[] =
+=3D {
+>
+>         EDP_PANEL_ENTRY('C', 'M', 'N', 0x114c, &innolux_n116bca_ea1.delay=
+, "N116BCA-EA1"),
+>
+> +       EDP_PANEL_ENTRY('I', 'V', 'O', 0x057d, &delay_200_500_e200, "R140=
+NWF5 RH"),
+> +
+
+This looks fine to me:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+I'm happy to apply this in a day or two assuming you're OK with my
+explanation above.

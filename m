@@ -2,147 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D8D57A2F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D458957A2F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237527AbiGSP0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S238417AbiGSP13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238232AbiGSP0o (ORCPT
+        with ESMTP id S236168AbiGSP1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:26:44 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2A5564E0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:26:43 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id os14so27882399ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pY2CMxbe7mYFu8lMmKdq8QyweRoqymfe+8LQesF8uYE=;
-        b=fECi+8lG3d2QZQyelZpEsteMq5/Ly7PqyvAXApZORRN6U6VHI/Xd+RT65kVSQlhDfs
-         RIifDvE6urMrudmyO/TXET1KzXJlRNUevdgDbV4Gy8PkxHRcCI9979O3Pwkm1ooW1IZl
-         9k/2wyz4Y8r9wO9qqWZu5nBeC6mOWJ7ljwgzEKOPo3COpIzVJCP0oPj3c9atpX7OPNZW
-         B14tRFln6rYqvb17WBktV6HEXlgQX97UT3VJNDoFJE2QmKONgjh22rmFbr9Ou2oQNlUf
-         Q4trtaDSh5fGHLmUMI5/YAHF+CaUk6pM8Ghcb3JO/WsEeYAI131CpfPk9hn8m/fwMvfL
-         lesQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pY2CMxbe7mYFu8lMmKdq8QyweRoqymfe+8LQesF8uYE=;
-        b=iRf3c8lQCfME/vfUoemtvGPb5J8frLq0CTA7Y2flAB67CUc4YhPoZHgy4iM2pXTvB7
-         LfUaB2UAc3+GYsb0S53kDAJLPT6axaIhUpj1cF1Wnrr9L6gA3M0I13lOoODvHNE05YUF
-         NS/ML0RowGmKrxhh/8+iNZ8t35w7T/gHXCKpZQVJjAVrT9tKLxmuy/GdYoE8VayBIIIy
-         g2QODjKpPJ7GbZijw3drDHsVsnB21K6HIxSfhE0DVA/ZgDq/5qqtGUIDyduRBJejzA/0
-         d5r4RRArFTpVsSSvsetp7djYrlu2EVhwCd6dG4rsrZcGPQ8RYYswtnXgozAT2nxeQnda
-         Uhyg==
-X-Gm-Message-State: AJIora8OSLVaTJl8EIRNENSz/dRROEhnpV/GTa8G37+9uvgO7przOLzs
-        yv9huwoA1wdxnu8JNvb0cGypinGb26hGMyetwnBH/A==
-X-Google-Smtp-Source: AGRyM1s6y2msksPTZYolBnXWbfyuEFWIjNOwAkx3R6nBSLm9wzLQ6VqBIZlWJeeQ4oXvE+CAxIYjBR203JAhhI/UfDE=
-X-Received: by 2002:a17:907:7f9e:b0:72e:d375:431 with SMTP id
- qk30-20020a1709077f9e00b0072ed3750431mr27276672ejc.580.1658244401767; Tue, 19
- Jul 2022 08:26:41 -0700 (PDT)
+        Tue, 19 Jul 2022 11:27:22 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A866142AF7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:27:20 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JASFD6009799;
+        Tue, 19 Jul 2022 10:26:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=tRp0ATBo1z4/9fP7ZU/d5GfIkS5eLHP8Aq5Gl5wnJxQ=;
+ b=E8uWefqSr3lrQg+XL3DDJudOSQOR5C7QEu69+o7RpKBGpGBVW3Of4H2xhMxUh8Ax7oNT
+ L48BMgoelOCKEGFD8myvfCMeloL/0gdiAKRrpXCoXepxwWrnLBXcftxfnXomMuOueKSQ
+ vOLKh8c3QMPhjsG+NdVpuugyOM1W6JWkcb5IxHs3/eM/IMo4fL3PpTD6CzvfkeogbfXS
+ u5fnQ1DPxQAlo+8S0MoGI+Q60DZecOs0NhcVpr9BGem9KtBtbqOnHRQSr8lQwbGAuJdh
+ WoiHf2P8s4iXmvaUWP8cga3qF5DjrOKun+Q1Lqxz9G9ilYlw7S2qCNoji2dMw04l1bQO zw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3hdrqfgj84-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Jul 2022 10:26:51 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Tue, 19 Jul
+ 2022 10:26:49 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1118.9 via Frontend Transport; Tue, 19 Jul 2022 10:26:49 -0500
+Received: from [198.90.202.47] (unknown [198.90.202.47])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D765B477;
+        Tue, 19 Jul 2022 15:26:48 +0000 (UTC)
+Message-ID: <444a7ab6-d47e-6e0a-de0c-1efb292edb8a@opensource.cirrus.com>
+Date:   Tue, 19 Jul 2022 16:26:48 +0100
 MIME-Version: 1.0
-References: <20220713031547.11641-1-allen.chen@ite.com.tw>
-In-Reply-To: <20220713031547.11641-1-allen.chen@ite.com.tw>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 19 Jul 2022 17:26:30 +0200
-Message-ID: <CAG3jFyvDWXZsSKaztKgbAUOY8DNFb81KvSpG5fQC=t1dUZp8oA@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/bridge: it6505: Add i2c api power on check
-To:     allen <allen.chen@ite.com.tw>
-Cc:     Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Pin-yen Lin <treapking@google.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ALSA: hda/realtek: Enable speaker and mute LEDs for HP
+ laptops
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, <tiwai@suse.com>
+CC:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Kailang Yang <kailang@realtek.com>,
+        <linux-kernel@vger.kernel.org>, Meng Tang <tangmeng@uniontech.com>,
+        <alsa-devel@alsa-project.org>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Andy Chi <andy.chi@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Yong Wu <yong.wu@mediatek.com>
+References: <20220719142015.244426-1-kai.heng.feng@canonical.com>
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+In-Reply-To: <20220719142015.244426-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: Bi9dZeQRbcYU3iDeQk2fJVej360xCa5k
+X-Proofpoint-GUID: Bi9dZeQRbcYU3iDeQk2fJVej360xCa5k
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 at 05:16, allen <allen.chen@ite.com.tw> wrote:
->
-> From: allen chen <allen.chen@ite.com.tw>
->
-> Use i2c bus to read/write when it6505 power off will occur i2c error.
-> Add this check will prevent i2c error when it6505 power off.
->
-> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
-> Reviewed-by: Robert Foss <robert.foss@linaro.org>
-> ---
->  drivers/gpu/drm/bridge/ite-it6505.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index aa5e0aa1af85..cfd2c3275dc5 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -518,6 +518,9 @@ static int it6505_read(struct it6505 *it6505, unsigned int reg_addr)
->         int err;
->         struct device *dev = &it6505->client->dev;
->
-> +       if (!it6505->powered)
-> +               return -ENODEV;
-> +
->         err = regmap_read(it6505->regmap, reg_addr, &value);
->         if (err < 0) {
->                 dev_err(dev, "read failed reg[0x%x] err: %d", reg_addr, err);
-> @@ -533,6 +536,9 @@ static int it6505_write(struct it6505 *it6505, unsigned int reg_addr,
->         int err;
->         struct device *dev = &it6505->client->dev;
->
-> +       if (!it6505->powered)
-> +               return -ENODEV;
-> +
->         err = regmap_write(it6505->regmap, reg_addr, reg_val);
->
->         if (err < 0) {
-> @@ -550,6 +556,9 @@ static int it6505_set_bits(struct it6505 *it6505, unsigned int reg,
->         int err;
->         struct device *dev = &it6505->client->dev;
->
-> +       if (!it6505->powered)
-> +               return -ENODEV;
-> +
->         err = regmap_update_bits(it6505->regmap, reg, mask, value);
->         if (err < 0) {
->                 dev_err(dev, "write reg[0x%x] = 0x%x mask = 0x%x failed err %d",
-> @@ -2553,13 +2562,12 @@ static int it6505_poweron(struct it6505 *it6505)
->                 usleep_range(10000, 20000);
->         }
->
-> +       it6505->powered = true;
->         it6505_reset_logic(it6505);
->         it6505_int_mask_enable(it6505);
->         it6505_init(it6505);
->         it6505_lane_off(it6505);
->
-> -       it6505->powered = true;
-> -
->         return 0;
->  }
->
-> --
-> 2.25.1
->
 
-This patch no longer applies to the drm-misc-next tree, could you
-rebase it and send out a v3?
+On 7/19/22 15:20, Kai-Heng Feng wrote:
+> Two more HP laptops that use cs35l41 AMP for speaker and GPIO for mute
+> LEDs.
+>
+> So use the existing quirk to enable them accordingly.
+>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>   sound/pci/hda/patch_realtek.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+> index 2f55bc43bfa9c..cdbee71e83216 100644
+> --- a/sound/pci/hda/patch_realtek.c
+> +++ b/sound/pci/hda/patch_realtek.c
+> @@ -9109,6 +9109,8 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+>   	SND_PCI_QUIRK(0x103c, 0x89c3, "Zbook Studio G9", ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED),
+>   	SND_PCI_QUIRK(0x103c, 0x89c6, "Zbook Fury 17 G9", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+>   	SND_PCI_QUIRK(0x103c, 0x89ca, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+> +	SND_PCI_QUIRK(0x103c, 0x8ad1, "HP EliteBook 840 14 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+> +	SND_PCI_QUIRK(0x103c, 0x8ad2, "HP EliteBook 860 16 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+>   	SND_PCI_QUIRK(0x103c, 0x8a78, "HP Dev One", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
+>   	SND_PCI_QUIRK(0x103c, 0x8aa0, "HP ProBook 440 G9 (MB 8A9E)", ALC236_FIXUP_HP_GPIO_LED),
+>   	SND_PCI_QUIRK(0x103c, 0x8aa3, "HP ProBook 450 G9 (MB 8AA1)", ALC236_FIXUP_HP_GPIO_LED),
+
+Hi,
+
+Can you send us the ACPI dump (DSDT file) for review for both laptops?
+
+We want to ensure that the ACPI has the correct information so the 
+driver will work properly.
+
+Thanks
+
+Lucas Tanure
+

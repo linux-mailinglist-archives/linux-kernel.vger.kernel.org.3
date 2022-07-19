@@ -2,167 +2,754 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5225792ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495D85792F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236882AbiGSGAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 02:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
+        id S236981AbiGSGCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 02:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235951AbiGSGAv (ORCPT
+        with ESMTP id S235127AbiGSGCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 02:00:51 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE3139BAB
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:00:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1658210450; x=1689746450;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=gb4NMjYMHjOiF1KLyf2XtQT1dht/xadQ0X4G2uES+9E=;
-  b=XrHvAfLZ3TpoCKnpYfCi2tzSfiJb53ifWRva81+tY97gqAbg8UDYpybJ
-   CZSc+iCrCqr0YgBoy0cpIAtlBZMCoudgVnGj5KFzLOVRlLAYnsmF4niG9
-   Np/iiAPcV7quZ/6euDyQEhms+7TfqUU/XBzNYoSa61wkoxACdzshhS/mh
-   5hk+GIO8+4CNeWlI+TJ+LksUQiKEj8TMjIvTOjmei3dP2XX0jKEfrBRpf
-   2sJiboq/MyvbXlzFpjRRLPYLXhAqgmOXXjmoSz4AgR/05X574uXiFzqaP
-   sZZwzfFQTVP01KCFCZSjvg21wA1dNVuUbAZDEVh+MnrNyPzEz5uC3Sg5K
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="172880588"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Jul 2022 23:00:50 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 18 Jul 2022 23:00:48 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Mon, 18 Jul 2022 23:00:48 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E6DKiIOk9IDy5gZYS3s+gxaCR6fzFtCDXe8JQ7yP66LlTW1BLjLlM84itUvpkICJbQzysPYeYve9qb2jziseZOW5ZUSvaX2FR8Hn20VD/lyjhy5BmnvKkzIqcbp2JDktDu05J/oghc627TcEM5rxJJavb88U9maW9YgvKE4LVZ+mmX8rRTOkSt893CMEK+IxBbkFUu1vjpxin/KdlkSCMzBggM5UsIDEcqtGFGiUclbjTOF1pAWrpjwLRmpdyk+r4Q5FBE+QHVzWokFWGbE8vB4lxjXqg7DN0SRf2UEKkHEip5kjVMY4MHtWrmW3g3YbMZe+VBWAVzBLEImUprU8CA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gb4NMjYMHjOiF1KLyf2XtQT1dht/xadQ0X4G2uES+9E=;
- b=M9ddT+gMkJ6ByfPIRkTVp6x8yysKYrZdPkkFEcNgtp5bUmNgcp6tyZv9Cl3JKGVTfVPkqnb4g+vNjLPkXDJOQRXOaYOnJUDXsWea/r/wOTY3basTWivniy4jt+KuTUQkIbPFflBcqHPcA2CX03JBuIgT54wAWjb/aM16sr0yNIaZomsWVc1Q/cln26/kw4G9gSlfS18OcZkO6Y/Tkl+Hm1W5SKrXZtmz68hP9WBo0GHnUfcZO7G5vWznYChycuTdMkdkwvPZdSN9lPPgjywljis9q36Zy8SGzCkzWPQBuBNGYIPbXVt7yPyPFZJSluGy37kSGh+LiynkaWQWnt1Pbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gb4NMjYMHjOiF1KLyf2XtQT1dht/xadQ0X4G2uES+9E=;
- b=JaQoln2Cgm8BlXN7rrHuuM72JFLtPvLZ/baaSHVH7/n8ukuvNlhAT5wN5qVGFGuBZC+qTsrh5E6QfXWdo09gmn28xhUjmj2yN4pQ/GCyBjU1qPXapuLoEoEJ1WS3o6BvylSnhuPhTwFFDFFOASTvC/JsDrRLvNk8/HjX9Hzq+Mw=
-Received: from DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) by
- DM6PR11MB2921.namprd11.prod.outlook.com (2603:10b6:5:70::26) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5438.21; Tue, 19 Jul 2022 06:00:43 +0000
-Received: from DM4PR11MB6479.namprd11.prod.outlook.com
- ([fe80::1954:e4ab:eafd:9cb4]) by DM4PR11MB6479.namprd11.prod.outlook.com
- ([fe80::1954:e4ab:eafd:9cb4%5]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
- 06:00:43 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <michael@walle.cc>
-CC:     <p.yadav@ti.com>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <quic_c_sbhanu@quicinc.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] mtd: spi-nor: winbond: use SNOR_ID3() for w25q512nwm
-Thread-Topic: [PATCH 2/2] mtd: spi-nor: winbond: use SNOR_ID3() for w25q512nwm
-Thread-Index: AQHYlcsGaT91mZeLa0CO/P6y+1cRGg==
-Date:   Tue, 19 Jul 2022 06:00:43 +0000
-Message-ID: <3e018ae9-66b0-0699-1121-e55c88f37570@microchip.com>
-References: <20220510140232.3519184-1-michael@walle.cc>
- <20220510140232.3519184-3-michael@walle.cc>
- <735a88af-c4f1-a6b3-3f85-ea532b3f39c7@microchip.com>
- <305d3c9cf8a2362ad23a87f6ea92c6b4@walle.cc>
-In-Reply-To: <305d3c9cf8a2362ad23a87f6ea92c6b4@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: dcb6d466-b45f-4ce3-9e0a-08da694c03f3
-x-ms-traffictypediagnostic: DM6PR11MB2921:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eQn9+aQwaZj0btxKaJii0rh7KrJSWYJiafV/3M4H0JDkX6igr04fg+lMZuNbsUasgFYAcbkY/ZNTqWIK/5Y6UJUleNgjQH1V2yytQC+LeWUdULo/GkVCJzM3IedW/dviKpYW26k+Yx5o2f22QoxcGeN73O9CM943GuDQOoRn6iBka3iXUqVAVB8z06HNN8d8v3gABmKli71pxhTB2xVu+m53eQ0k3jsNcynCoHaBruTYT6smAxOLKlAAY9zF7ALik66kTBx5jnOei4Mx2p1QJNO/VzADRI58WZdoKs3vNJUaLSWC9QNBRabls7gtlS0zK99AGzNhmgwMgC/11TwxiEzu99L/Lkzvk+1SxJWs4NniBr77soJYMSL8fD9SLXCBHtgX1LrPgQpEscFRsQ9oF0GzYHb2tH0bAa6JLTv8orVU6eWXPOjEA4n/zB2F5W1EY+C1XnKRctvBTCSgSRU9nzrRG1ae99qJFhiOfMAkTD+1BasDSnbfZBdAsXYQKZjFs2ggcraiWRn/QmH31PXwvYaex7HckKvVhrDYPz4gytn3+xN9096T71BzaUb1QGKc5kZ1cFUiXV58fa6S5SKWvVnLAe0DC3yiI1OLZUuI1nG2Phc03V36EnkVDJb0xkP92BFvTRE2IgEjYHlUIYgZJOoL52gMC5h2evVHxK95rai+zdhTYatDs27GrJh4BwxttP303OQv9Lwcb1Z2XJglALVryyiofxXvGP3YNsNqILHsdPmp+p0GSd5PKg9Qn5f+jCXYin+NGosWV7z4sNp6dCWcupEHiMsNkfPTxue0ZC1pzulwQNyH6ucWFcnkAjC3lATuYFE1TK3NDRif+qyr7nIYxIkhkEF4qQGjMzEVQIpL5/GLfNEX0JC6kQfTdAJHM526vTI9UhWENhPU51AERw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6479.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(396003)(376002)(366004)(346002)(41300700001)(71200400001)(31696002)(86362001)(186003)(2616005)(38070700005)(6486002)(6506007)(53546011)(122000001)(478600001)(38100700002)(26005)(6512007)(8936002)(5660300002)(4744005)(91956017)(31686004)(76116006)(36756003)(2906002)(66946007)(8676002)(64756008)(66476007)(6916009)(316002)(54906003)(66446008)(4326008)(66556008)(138113003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?akdTbGZXVUkra3VpdXo0ZjZWTXc0MGptZUxFdWM2Mmt5ZkNoMVJjUDdtTWtr?=
- =?utf-8?B?ak5jNXpHWnZJbEF2RUZqL0ZXT3c0bmx1RnpkdVltcGFoRHFrejdTd0Q2R2F0?=
- =?utf-8?B?Q2RRdXRwTi9XSDM5eU9DRHE3UEtOam9HLzd5dVlPU3k5aHFxSHFVMStBcmNn?=
- =?utf-8?B?dUZMeVRReVljNVBkRmROK0dzc0ZLZEVvK0JTdktiTzNQUVU0VTU3T1ZKQS9h?=
- =?utf-8?B?ai9nMHRFNGlNUzZDdW93alRBTThhdUw5MXVLTk00Q2VVNCtKcDFwM2xtVGJx?=
- =?utf-8?B?cUthUTY0d25Fa3Z1dDdERFc4TWRJRVVXdE82RzM0RlRFSGRkQW9BUlN4VzJ0?=
- =?utf-8?B?MTl5dklNa3JpT2dVcmNHd0duRituYkhIdTNieTZrdzM2Mkp4WmJOWHUrOGpx?=
- =?utf-8?B?V0RqMTdhNEI1OSt0SnJGVjRLazhZTXFiS284K0tGK2laeS84V1JUN2kvVWhL?=
- =?utf-8?B?M2d5cC9MMitPeTh1aXdyWWJxaU1zeEozem9jeHd2bWtDejVRQlUvMDRSMkJt?=
- =?utf-8?B?L0xnMEhVMjdXa2paR0NFc3MxakRXTVZHbmxhVFFvbXB1K1JERVRrSzd5NG5L?=
- =?utf-8?B?ZjEyMWY0NGs5V2RjZWxpY2ErMTFLbzR6ZDFvcHBxbmYrR0o4YWkrZUplV1Uz?=
- =?utf-8?B?aS9yeEh6ZmxRWXV0OGxWdGI3VkRPT0hCM3VMWVVUMm94Y244bnFaN1VMMVJX?=
- =?utf-8?B?YXhCdWdjQ1RKU3ZVazRtZ2Z3ajJLSkdGMm1VS0FhQ1R0M1Z6YjBZRTJWcXgx?=
- =?utf-8?B?djBZbU45VDdqd1R6eE1qVWpiOUQrOFVMOHZzYlhNUW93c2NLM2JqSUd6MHhW?=
- =?utf-8?B?S0VZODdQYXFXOXR3S2JMTXp2OUtheTJ1ODBqZzdsZUJwVjM5TTYvc1ZHTTdK?=
- =?utf-8?B?QW1sNCtWNS9ueEpCemdybVZiYWY3ZlBTL1hLeTZzM2ZKY2Jwa1ZBMGNkdWJm?=
- =?utf-8?B?ckYvL242THMwRHhRd2dsSjJUSGVVanJPMlhUQVJmSVRtVjBTRU1BMjZKenpC?=
- =?utf-8?B?TkJhUUZKMm1xQSsvK2FSckxpVk1xd1AwZkFDUUJJck9nQlE1KzZ4dk5OZXdl?=
- =?utf-8?B?ZkNrZ2NHL0ZKWVo1WUxoUDZaVWN4MjlkZjJMcis1MFpQMTFJTlA1ZTFMajVz?=
- =?utf-8?B?bUNUbXdqdUlWdlkrZ1JIdWNmbXR1SWhMNk5mampFZ1l4R1VUSExnVkFXaE84?=
- =?utf-8?B?anFWRTM1MlUrdHRXeVAvbm0xMFNWU1NpdXZFdisvM2lVVUVlNnp0UUR3UTdP?=
- =?utf-8?B?SERDRmFDKzZRNkNTNmtvaXB4OFlKSE9IclRiZC9UeTVaTW9mSXRjeWFuVG02?=
- =?utf-8?B?QWE5MGpCQ053b3R3SHpJRW5GeHN0TnRyaFRwV3RoU2d1UXo3ejhkY0UyUnov?=
- =?utf-8?B?TWVuOG92b05yNjhMUlI0bm14QTVuQ1R1SkNjYXM3bzU0anVPd0d3NFRqTzJz?=
- =?utf-8?B?dDRlcUxZTnNad0hrYTBtWG5tQ3NGRDM1ZWhBcGVENkJMdXNWMmZtMGVZQzB4?=
- =?utf-8?B?MC95ck5CVXAwK3dManRxa0JIbUsxUmpld3JzL2trRHVrMFlvb2lRblJlOUtO?=
- =?utf-8?B?T0d1RHU0cDg1Tk16TzJSdzdibk5jcmJHdG5iNDVtQnR0a2RneGQrMktrb25T?=
- =?utf-8?B?aEQxSWtRNUpvNGZUTFBhZFBUZ3hCY3FSbnJVb2lZSlQ1NndHRnZ0YkxRZWJj?=
- =?utf-8?B?ZVNkSndNd3dOM3RnSGlSaEc4U2p2V2VSempOcFRMVVRRUjRwWEtJZGdUdk05?=
- =?utf-8?B?RGxKM09wQTVYNkI1eXdvazlkM0xKbUtxb2hEb0JnZXBRczMwWXZmU3QxY2VT?=
- =?utf-8?B?TjZMblppR0I3WmRCeEtMV2FPOHoweTRvRFJvOVNuekZUTjFjVWEyeEFTanE0?=
- =?utf-8?B?Sy85USsrYmsrZnRTMkhNMUVWS0REY2FzSHM5Sks3NmcwQXAyUmUwSWxBVWlP?=
- =?utf-8?B?K3VyKzNPM05DQmpqaW8vaWpzYmZUa3NoWjg2Z2VJMU9jRjlkeEpDUytoMmJk?=
- =?utf-8?B?RG5CMXJKczB3VVpLaXBZQ0dlUTYxWUU5cXdObUl5ZjNocnAxQm12eE9UWG05?=
- =?utf-8?B?djJZVlNkQVozR2VIWUdxdllldTAydmcydUZtU1crMjVTTXZ1Z1dHS2JYUDFP?=
- =?utf-8?B?UnJ4R3pkbHNHUDNKK0RUTVdqRnlSNGNUTTlFczUzTmNURFFOTEk5bnBnOUZw?=
- =?utf-8?B?Q1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D57208124098B64CBD693FBA822312F5@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 19 Jul 2022 02:02:13 -0400
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AE237F94;
+        Mon, 18 Jul 2022 23:02:11 -0700 (PDT)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 19 Jul
+ 2022 14:02:09 +0800
+Message-ID: <f5bf2abd-4d60-523a-3f84-879da2f1c78a@amlogic.com>
+Date:   Tue, 19 Jul 2022 14:02:08 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6479.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dcb6d466-b45f-4ce3-9e0a-08da694c03f3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2022 06:00:43.0438
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f997W00WxorLnxg8U8d3X/QNT/TOwGGsAWycTlAANRag1/UB4fm5Lcgqi1BOH9x/FlSb7J1YD9v2tjAE4aNgzOdfubGdUZ1SeSKiGIL5UKI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2921
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] clk: meson: s4: add s4 SoC clock controller driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220708062757.3662-1-yu.tu@amlogic.com>
+ <20220708062757.3662-4-yu.tu@amlogic.com>
+ <7fe9aab5-73a2-6209-ae65-d955c426f745@linaro.org>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <7fe9aab5-73a2-6209-ae65-d955c426f745@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gNy8xOC8yMiAxMDoyNSwgTWljaGFlbCBXYWxsZSB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6
-IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0
-aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBBbSAyMDIyLTA3LTEyIDEwOjQwLCBzY2hyaWViIFR1
-ZG9yLkFtYmFydXNAbWljcm9jaGlwLmNvbToNCj4+IFNoYWlrLCBjYW4gd2UgaGF2ZSB5b3VyIFRl
-c3RlZC1ieSB0YWcgb24gdGhpcz8NCj4gDQo+IFNpZ2guIEhpcyBlbWFpbCBhZGRyZXNzIGJvdW5j
-ZXMgd2l0aCAiVGhlIGVtYWlsIGFkZHJlc3MgeW91DQo+IGVudGVyZWQgY291bGRuJ3QgYmUgZm91
-bmQuIiBTbyBkb24ndCBleHBlY3QgYSBUZXN0ZWQtYnk6IGhlcmUuDQo+IA0KDQpXb3VsZCB5b3Ug
-ZHJvcCB0aGlzIGFuZCBwaWNrIHRoZSBvdGhlciBwYXRjaGVzIHRoYXQgdXNlIHlvdXIgU05PUl9J
-RDMNCmFuZCBzdWJtaXQgdGhlbSBhbGwgaW4gYSBzaW5nbGUgcGF0Y2ggc2V0Pw0K
+Hi Krzysztof,
+	Thank you for your advice.
+
+On 2022/7/12 17:44, Krzysztof Kozlowski wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> On 08/07/2022 08:27, Yu Tu wrote:
+>> Add the peripheral clock controller found in the s4 SoC family.
+>>
+>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>> ---
+>>   MAINTAINERS                |    2 +-
+>>   drivers/clk/meson/Kconfig  |   17 +
+>>   drivers/clk/meson/Makefile |    1 +
+>>   drivers/clk/meson/s4.c     | 4678 ++++++++++++++++++++++++++++++++++++
+>>   drivers/clk/meson/s4.h     |  156 ++
+>>   5 files changed, 4853 insertions(+), 1 deletion(-)
+>>   create mode 100644 drivers/clk/meson/s4.c
+>>   create mode 100644 drivers/clk/meson/s4.h
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index e4ca46c5c8a1..f116ec0642f2 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -1772,7 +1772,7 @@ M:	Jerome Brunet <jbrunet@baylibre.com>
+>>   L:	linux-amlogic@lists.infradead.org
+>>   S:	Maintained
+>>   F:	Documentation/devicetree/bindings/clock/amlogic*
+>> -F:	drivers/clk/meson/
+>> +F:	drivers/clk/meson/*
+> 
+> Why?
+Warning is displayed when using checkpatch. I will correct it.
+> 
+>>   F:	include/dt-bindings/clock/gxbb*
+>>   F:	include/dt-bindings/clock/meson*
+>>   F:	include/dt-bindings/clock/s*
+>> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+>> index fc002c155bc3..1a344b0564e8 100644
+>> --- a/drivers/clk/meson/Kconfig
+>> +++ b/drivers/clk/meson/Kconfig
+>> @@ -115,4 +115,21 @@ config COMMON_CLK_G12A
+>>   	help
+>>   	  Support for the clock controller on Amlogic S905D2, S905X2 and S905Y2
+>>   	  devices, aka g12a. Say Y if you want peripherals to work.
+>> +
+>> +config COMMON_CLK_S4
+>> +	tristate "S4 SoC clock controllers support"
+>> +	depends on ARM64
+>> +	default y
+>> +	select COMMON_CLK_MESON_REGMAP
+>> +	select HAVE_ARM_SMCCC
+>> +	select COMMON_CLK_MESON_DUALDIV
+>> +	select COMMON_CLK_MESON_MPLL
+>> +	select COMMON_CLK_MESON_PLL
+>> +	select COMMON_CLK_MESON_CPU_DYNDIV
+>> +	select COMMON_CLK_MESON_VID_PLL_DIV
+>> +	select MFD_SYSCON
+>> +	help
+>> +	  Support for the clock controller on Amlogic S805X2 and S905Y4 devices,
+>> +	  aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
+>> +	  Say Y if you want peripherals and CPU frequency scaling to work.
+>>   endmenu
+>> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+>> index 6eca2a406ee3..b3ef5f67820f 100644
+>> --- a/drivers/clk/meson/Makefile
+>> +++ b/drivers/clk/meson/Makefile
+>> @@ -19,3 +19,4 @@ obj-$(CONFIG_COMMON_CLK_AXG_AUDIO) += axg-audio.o
+>>   obj-$(CONFIG_COMMON_CLK_GXBB) += gxbb.o gxbb-aoclk.o
+>>   obj-$(CONFIG_COMMON_CLK_G12A) += g12a.o g12a-aoclk.o
+>>   obj-$(CONFIG_COMMON_CLK_MESON8B) += meson8b.o meson8-ddr.o
+>> +obj-$(CONFIG_COMMON_CLK_S4) += s4.o
+>> diff --git a/drivers/clk/meson/s4.c b/drivers/clk/meson/s4.c
+>> new file mode 100644
+>> index 000000000000..a97159222f0e
+>> --- /dev/null
+>> +++ b/drivers/clk/meson/s4.c
+>> @@ -0,0 +1,4678 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Amlogic Meson-S4 Clock Controller Driver
+>> + *
+>> + * Copyright (c) 2021 Amlogic, inc.
+>> + * Author: Yu Tu <yu.tu@amlogic.com>
+>> + */
+>> +
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/init.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/clk.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_address.h>
+>> +#include <dt-bindings/clock/s4-clkc.h>
+>> +
+>> +#include "clk-mpll.h"
+>> +#include "clk-pll.h"
+>> +#include "clk-regmap.h"
+>> +#include "vid-pll-div.h"
+>> +#include "clk-dualdiv.h"
+>> +#include "s4.h"
+>> +#include "meson-eeclk.h"
+>> +
+>> +static DEFINE_SPINLOCK(meson_clk_lock);
+>> +
+>> +static struct clk_regmap s4_fixed_pll_dco = {
+> 
+> None of these are const?
+I will correct it.
+> 
+>> +	.data = &(struct meson_clk_pll_data){
+>> +		.en = {
+>> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+>> +			.shift   = 28,
+>> +			.width   = 1,
+>> +		},
+>> +		.m = {
+>> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+>> +			.shift   = 0,
+>> +			.width   = 8,
+>> +		},
+>> +		.n = {
+>> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+>> +			.shift   = 10,
+>> +			.width   = 5,
+>> +		},
+>> +		.frac = {
+>> +			.reg_off = ANACTRL_FIXPLL_CTRL1,
+>> +			.shift   = 0,
+>> +			.width   = 17,
+>> +		},
+>> +		.l = {
+>> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+>> +			.shift   = 31,
+>> +			.width   = 1,
+>> +		},
+>> +		.rst = {
+>> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+>> +			.shift   = 29,
+>> +			.width   = 1,
+>> +		},
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fixed_pll_dco",
+>> +		.ops = &meson_clk_pll_ro_ops,
+>> +		.parent_data = (const struct clk_parent_data []) {
+>> +			{ .fw_name = "xtal", }
+>> +		},
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_regmap s4_fixed_pll = {
+>> +	.data = &(struct clk_regmap_div_data){
+>> +		.offset = ANACTRL_FIXPLL_CTRL0,
+>> +		.shift = 16,
+>> +		.width = 2,
+>> +		.flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fixed_pll",
+>> +		.ops = &clk_regmap_divider_ro_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +			&s4_fixed_pll_dco.hw
+>> +		},
+>> +		.num_parents = 1,
+>> +		/*
+>> +		 * This clock won't ever change at runtime so
+>> +		 * CLK_SET_RATE_PARENT is not required
+>> +		 */
+>> +	},
+>> +};
+>> +
+>> +static struct clk_fixed_factor s4_fclk_div2_div = {
+>> +	.mult = 1,
+>> +	.div = 2,
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div2_div",
+>> +		.ops = &clk_fixed_factor_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_regmap s4_fclk_div2 = {
+>> +	.data = &(struct clk_regmap_gate_data){
+>> +		.offset = ANACTRL_FIXPLL_CTRL1,
+>> +		.bit_idx = 24,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div2",
+>> +		.ops = &clk_regmap_gate_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +			&s4_fclk_div2_div.hw
+>> +		},
+>> +		.num_parents = 1,
+>> +		/*
+>> +		 * Similar to fclk_div3, it seems that this clock is used by
+>> +		 * the resident firmware and is required by the platform to
+>> +		 * operate correctly.
+>> +		 * Until the following condition are met, we need this clock to
+>> +		 * be marked as critical:
+>> +		 * a) Mark the clock used by a firmware resource, if possible
+>> +		 * b) CCF has a clock hand-off mechanism to make the sure the
+>> +		 *    clock stays on until the proper driver comes along
+>> +		 */
+>> +		.flags = CLK_IS_CRITICAL,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_fixed_factor s4_fclk_div3_div = {
+>> +	.mult = 1,
+>> +	.div = 3,
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div3_div",
+>> +		.ops = &clk_fixed_factor_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_regmap s4_fclk_div3 = {
+>> +	.data = &(struct clk_regmap_gate_data){
+>> +		.offset = ANACTRL_FIXPLL_CTRL1,
+>> +		.bit_idx = 20,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div3",
+>> +		.ops = &clk_regmap_gate_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +			&s4_fclk_div3_div.hw
+>> +		},
+>> +		.num_parents = 1,
+>> +		/*
+>> +		 * This clock is used by the resident firmware and is required
+>> +		 * by the platform to operate correctly.
+>> +		 * Until the following condition are met, we need this clock to
+>> +		 * be marked as critical:
+>> +		 * a) Mark the clock used by a firmware resource, if possible
+>> +		 * b) CCF has a clock hand-off mechanism to make the sure the
+>> +		 *    clock stays on until the proper driver comes along
+>> +		 */
+>> +		.flags = CLK_IS_CRITICAL,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_fixed_factor s4_fclk_div4_div = {
+>> +	.mult = 1,
+>> +	.div = 4,
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div4_div",
+>> +		.ops = &clk_fixed_factor_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_regmap s4_fclk_div4 = {
+>> +	.data = &(struct clk_regmap_gate_data){
+>> +		.offset = ANACTRL_FIXPLL_CTRL1,
+>> +		.bit_idx = 21,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div4",
+>> +		.ops = &clk_regmap_gate_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +			&s4_fclk_div4_div.hw
+>> +		},
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_fixed_factor s4_fclk_div5_div = {
+>> +	.mult = 1,
+>> +	.div = 5,
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div5_div",
+>> +		.ops = &clk_fixed_factor_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_regmap s4_fclk_div5 = {
+>> +	.data = &(struct clk_regmap_gate_data){
+>> +		.offset = ANACTRL_FIXPLL_CTRL1,
+>> +		.bit_idx = 22,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div5",
+>> +		.ops = &clk_regmap_gate_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +			&s4_fclk_div5_div.hw
+>> +		},
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_fixed_factor s4_fclk_div7_div = {
+>> +	.mult = 1,
+>> +	.div = 7,
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div7_div",
+>> +		.ops = &clk_fixed_factor_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_regmap s4_fclk_div7 = {
+>> +	.data = &(struct clk_regmap_gate_data){
+>> +		.offset = ANACTRL_FIXPLL_CTRL1,
+>> +		.bit_idx = 23,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div7",
+>> +		.ops = &clk_regmap_gate_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +			&s4_fclk_div7_div.hw
+>> +		},
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_fixed_factor s4_fclk_div2p5_div = {
+>> +	.mult = 2,
+>> +	.div = 5,
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div2p5_div",
+>> +		.ops = &clk_fixed_factor_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +			&s4_fixed_pll.hw
+>> +		},
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_regmap s4_fclk_div2p5 = {
+>> +	.data = &(struct clk_regmap_gate_data){
+>> +		.offset = ANACTRL_FIXPLL_CTRL1,
+>> +		.bit_idx = 25,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "fclk_div2p5",
+>> +		.ops = &clk_regmap_gate_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +			&s4_fclk_div2p5_div.hw
+>> +		},
+>> +		.num_parents = 1,
+>> +	},
+>> +};
+>> +
+>> +static const struct pll_mult_range s4_gp0_pll_mult_range = {
+> 
+> Not const?
+I will correct it.
+> 
+>> +	.min = 125,
+>> +	.max = 250,
+>> +};
+>> +
+> 
+> (...)
+> 
+>> +/* Convenience table to populate regmap in .probe */
+>> +static struct clk_regmap *const s4_clk_regmaps[] = {
+>> +	&s4_rtc_32k_by_oscin_clkin,
+>> +	&s4_rtc_32k_by_oscin_div,
+>> +	&s4_rtc_32k_by_oscin_sel,
+>> +	&s4_rtc_32k_by_oscin,
+>> +	&s4_rtc_clk,
+>> +
+>> +	&s4_sysclk_b_sel,
+>> +	&s4_sysclk_b_div,
+>> +	&s4_sysclk_b,
+>> +	&s4_sysclk_a_sel,
+>> +	&s4_sysclk_a_div,
+>> +	&s4_sysclk_a,
+>> +	&s4_sys_clk,
+>> +
+>> +	&s4_ceca_32k_clkin,
+>> +	&s4_ceca_32k_div,
+>> +	&s4_ceca_32k_sel_pre,
+>> +	&s4_ceca_32k_sel,
+>> +	&s4_ceca_32k_clkout,
+>> +	&s4_cecb_32k_clkin,
+>> +	&s4_cecb_32k_div,
+>> +	&s4_cecb_32k_sel_pre,
+>> +	&s4_cecb_32k_sel,
+>> +	&s4_cecb_32k_clkout,
+>> +
+>> +	&s4_sc_clk_mux,
+>> +	&s4_sc_clk_div,
+>> +	&s4_sc_clk_gate,
+>> +
+>> +	&s4_12_24M_clk_gate,
+>> +	&s4_12_24M_clk,
+>> +	&s4_vid_pll_div,
+>> +	&s4_vid_pll_sel,
+>> +	&s4_vid_pll,
+>> +	&s4_vclk_sel,
+>> +	&s4_vclk2_sel,
+>> +	&s4_vclk_input,
+>> +	&s4_vclk2_input,
+>> +	&s4_vclk_div,
+>> +	&s4_vclk2_div,
+>> +	&s4_vclk,
+>> +	&s4_vclk2,
+>> +	&s4_vclk_div1,
+>> +	&s4_vclk_div2_en,
+>> +	&s4_vclk_div4_en,
+>> +	&s4_vclk_div6_en,
+>> +	&s4_vclk_div12_en,
+>> +	&s4_vclk2_div1,
+>> +	&s4_vclk2_div2_en,
+>> +	&s4_vclk2_div4_en,
+>> +	&s4_vclk2_div6_en,
+>> +	&s4_vclk2_div12_en,
+>> +	&s4_cts_enci_sel,
+>> +	&s4_cts_encp_sel,
+>> +	&s4_cts_vdac_sel,
+>> +	&s4_hdmi_tx_sel,
+>> +	&s4_cts_enci,
+>> +	&s4_cts_encp,
+>> +	&s4_cts_vdac,
+>> +	&s4_hdmi_tx,
+>> +
+>> +	&s4_hdmi_sel,
+>> +	&s4_hdmi_div,
+>> +	&s4_hdmi,
+>> +	&s4_ts_clk_div,
+>> +	&s4_ts_clk_gate,
+>> +
+>> +	&s4_mali_0_sel,
+>> +	&s4_mali_0_div,
+>> +	&s4_mali_0,
+>> +	&s4_mali_1_sel,
+>> +	&s4_mali_1_div,
+>> +	&s4_mali_1,
+>> +	&s4_mali_mux,
+>> +
+>> +	&s4_vdec_p0_mux,
+>> +	&s4_vdec_p0_div,
+>> +	&s4_vdec_p0,
+>> +	&s4_vdec_p1_mux,
+>> +	&s4_vdec_p1_div,
+>> +	&s4_vdec_p1,
+>> +	&s4_vdec_mux,
+>> +
+>> +	&s4_hevcf_p0_mux,
+>> +	&s4_hevcf_p0_div,
+>> +	&s4_hevcf_p0,
+>> +	&s4_hevcf_p1_mux,
+>> +	&s4_hevcf_p1_div,
+>> +	&s4_hevcf_p1,
+>> +	&s4_hevcf_mux,
+>> +
+>> +	&s4_vpu_0_sel,
+>> +	&s4_vpu_0_div,
+>> +	&s4_vpu_0,
+>> +	&s4_vpu_1_sel,
+>> +	&s4_vpu_1_div,
+>> +	&s4_vpu_1,
+>> +	&s4_vpu,
+>> +	&s4_vpu_clkb_tmp_mux,
+>> +	&s4_vpu_clkb_tmp_div,
+>> +	&s4_vpu_clkb_tmp,
+>> +	&s4_vpu_clkb_div,
+>> +	&s4_vpu_clkb,
+>> +	&s4_vpu_clkc_p0_mux,
+>> +	&s4_vpu_clkc_p0_div,
+>> +	&s4_vpu_clkc_p0,
+>> +	&s4_vpu_clkc_p1_mux,
+>> +	&s4_vpu_clkc_p1_div,
+>> +	&s4_vpu_clkc_p1,
+>> +	&s4_vpu_clkc_mux,
+>> +
+>> +	&s4_vapb_0_sel,
+>> +	&s4_vapb_0_div,
+>> +	&s4_vapb_0,
+>> +	&s4_vapb_1_sel,
+>> +	&s4_vapb_1_div,
+>> +	&s4_vapb_1,
+>> +	&s4_vapb,
+>> +	&s4_ge2d_gate,
+>> +
+>> +	&s4_hdcp22_esmclk_mux,
+>> +	&s4_hdcp22_esmclk_div,
+>> +	&s4_hdcp22_esmclk_gate,
+>> +	&s4_hdcp22_skpclk_mux,
+>> +	&s4_hdcp22_skpclk_div,
+>> +	&s4_hdcp22_skpclk_gate,
+>> +
+>> +	&s4_vdin_meas_mux,
+>> +	&s4_vdin_meas_div,
+>> +	&s4_vdin_meas_gate,
+>> +
+>> +	&s4_sd_emmc_c_clk0_sel,
+>> +	&s4_sd_emmc_c_clk0_div,
+>> +	&s4_sd_emmc_c_clk0,
+>> +	&s4_sd_emmc_a_clk0_sel,
+>> +	&s4_sd_emmc_a_clk0_div,
+>> +	&s4_sd_emmc_a_clk0,
+>> +	&s4_sd_emmc_b_clk0_sel,
+>> +	&s4_sd_emmc_b_clk0_div,
+>> +	&s4_sd_emmc_b_clk0,
+>> +
+>> +	&s4_spicc0_mux,
+>> +	&s4_spicc0_div,
+>> +	&s4_spicc0_gate,
+>> +
+>> +	&s4_pwm_a_mux,
+>> +	&s4_pwm_a_div,
+>> +	&s4_pwm_a_gate,
+>> +	&s4_pwm_b_mux,
+>> +	&s4_pwm_b_div,
+>> +	&s4_pwm_b_gate,
+>> +	&s4_pwm_c_mux,
+>> +	&s4_pwm_c_div,
+>> +	&s4_pwm_c_gate,
+>> +	&s4_pwm_d_mux,
+>> +	&s4_pwm_d_div,
+>> +	&s4_pwm_d_gate,
+>> +	&s4_pwm_e_mux,
+>> +	&s4_pwm_e_div,
+>> +	&s4_pwm_e_gate,
+>> +	&s4_pwm_f_mux,
+>> +	&s4_pwm_f_div,
+>> +	&s4_pwm_f_gate,
+>> +	&s4_pwm_g_mux,
+>> +	&s4_pwm_g_div,
+>> +	&s4_pwm_g_gate,
+>> +	&s4_pwm_h_mux,
+>> +	&s4_pwm_h_div,
+>> +	&s4_pwm_h_gate,
+>> +	&s4_pwm_i_mux,
+>> +	&s4_pwm_i_div,
+>> +	&s4_pwm_i_gate,
+>> +	&s4_pwm_j_mux,
+>> +	&s4_pwm_j_div,
+>> +	&s4_pwm_j_gate,
+>> +
+>> +	&s4_saradc_mux,
+>> +	&s4_saradc_div,
+>> +	&s4_saradc_gate,
+>> +
+>> +	&s4_gen_clk_sel,
+>> +	&s4_gen_clk_div,
+>> +	&s4_gen_clk,
+>> +
+>> +	&s4_ddr,
+>> +	&s4_dos,
+>> +	&s4_ethphy,
+>> +	&s4_mali,
+>> +	&s4_aocpu,
+>> +	&s4_aucpu,
+>> +	&s4_cec,
+>> +	&s4_sdemmca,
+>> +	&s4_sdemmcb,
+>> +	&s4_nand,
+>> +	&s4_smartcard,
+>> +	&s4_acodec,
+>> +	&s4_spifc,
+>> +	&s4_msr_clk,
+>> +	&s4_ir_ctrl,
+>> +	&s4_audio,
+>> +	&s4_eth,
+>> +	&s4_uart_a,
+>> +	&s4_uart_b,
+>> +	&s4_uart_c,
+>> +	&s4_uart_d,
+>> +	&s4_uart_e,
+>> +	&s4_aififo,
+>> +	&s4_ts_ddr,
+>> +	&s4_ts_pll,
+>> +	&s4_g2d,
+>> +	&s4_spicc0,
+>> +	&s4_usb,
+>> +	&s4_i2c_m_a,
+>> +	&s4_i2c_m_b,
+>> +	&s4_i2c_m_c,
+>> +	&s4_i2c_m_d,
+>> +	&s4_i2c_m_e,
+>> +	&s4_hdmitx_apb,
+>> +	&s4_i2c_s_a,
+>> +	&s4_usb1_to_ddr,
+>> +	&s4_hdcp22,
+>> +	&s4_mmc_apb,
+>> +	&s4_rsa,
+>> +	&s4_cpu_debug,
+>> +	&s4_vpu_intr,
+>> +	&s4_demod,
+>> +	&s4_sar_adc,
+>> +	&s4_gic,
+>> +	&s4_pwm_ab,
+>> +	&s4_pwm_cd,
+>> +	&s4_pwm_ef,
+>> +	&s4_pwm_gh,
+>> +	&s4_pwm_ij,
+>> +	&s4_demod_core_clk_mux,
+>> +	&s4_demod_core_clk_div,
+>> +	&s4_demod_core_clk_gate,
+>> +	&s4_adc_extclk_in_mux,
+>> +	&s4_adc_extclk_in_div,
+>> +	&s4_adc_extclk_in_gate,
+>> +
+>> +	&s4_fixed_pll_dco,
+>> +	&s4_fixed_pll,
+>> +	&s4_fclk_div2,
+>> +	&s4_fclk_div3,
+>> +	&s4_fclk_div4,
+>> +	&s4_fclk_div5,
+>> +	&s4_fclk_div7,
+>> +	&s4_fclk_div2p5,
+>> +	&s4_gp0_pll_dco,
+>> +	&s4_gp0_pll,
+>> +
+>> +	&s4_hifi_pll_dco,
+>> +	&s4_hifi_pll,
+>> +	&s4_hdmi_pll_dco,
+>> +	&s4_hdmi_pll_od,
+>> +	&s4_hdmi_pll,
+>> +	&s4_mpll_50m,
+>> +	&s4_mpll0_div,
+>> +	&s4_mpll0,
+>> +	&s4_mpll1_div,
+>> +	&s4_mpll1,
+>> +	&s4_mpll2_div,
+>> +	&s4_mpll2,
+>> +	&s4_mpll3_div,
+>> +	&s4_mpll3,
+>> +};
+>> +
+>> +static const struct reg_sequence s4_init_regs[] = {
+>> +	{ .reg = ANACTRL_MPLL_CTRL0,	.def = 0x00000543 },
+>> +};
+>> +
+>> +static const struct meson_eeclkc_data s4_clkc_data = {
+>> +	.regmap_clks = s4_clk_regmaps,
+>> +	.regmap_clk_num = ARRAY_SIZE(s4_clk_regmaps),
+>> +	.hw_onecell_data = &s4_hw_onecell_data,
+>> +	.init_regs = s4_init_regs,
+>> +	.init_count = ARRAY_SIZE(s4_init_regs),
+>> +};
+>> +
+>> +static const struct of_device_id clkc_match_table[] = {
+>> +	{
+>> +		.compatible = "amlogic,s4-clkc",
+>> +		.data = &s4_clkc_data
+>> +	},
+>> +	{}
+>> +};
+>> +
+>> +static struct platform_driver s4_driver = {
+>> +	.probe		= meson_eeclkc_probe,
+>> +	.driver		= {
+>> +		.name	= "s4-clkc",
+>> +		.of_match_table = clkc_match_table,
+>> +	},
+>> +};
+>> +
+>> +module_platform_driver(s4_driver);
+>> +MODULE_LICENSE("GPL");
+>> diff --git a/drivers/clk/meson/s4.h b/drivers/clk/meson/s4.h
+>> new file mode 100644
+>> index 000000000000..d5563dcbd52e
+>> --- /dev/null
+>> +++ b/drivers/clk/meson/s4.h
+>> @@ -0,0 +1,156 @@
+>> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+>> +/*
+>> + * Copyright (c) 2021 Amlogic, inc.
+>> + * Author: Yu Tu <yu.tu@amlogic.com>
+>> + */
+>> +
+>> +#ifndef __S4_H
+>> +#define __S4_H
+>> +
+>> +/*
+>> + * Clock controller register offsets
+>> + * REG_BASE:  REGISTER_BASE_ADDR = 0xfe000000
+>> + */
+>> +#define CLKCTRL_OSCIN_CTRL                         ((0x0001 << 2))
+> 
+> No need for double ((
+I will correct it.
+> 
+>> +#define CLKCTRL_RTC_BY_OSCIN_CTRL0                 ((0x0002 << 2))
+>> +#define CLKCTRL_RTC_BY_OSCIN_CTRL1                 ((0x0003 << 2))
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+> .

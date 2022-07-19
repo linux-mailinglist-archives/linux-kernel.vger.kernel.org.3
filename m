@@ -2,124 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE6D57A995
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABA057A993
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240679AbiGSWB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
+        id S240526AbiGSWBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiGSWBy (ORCPT
+        with ESMTP id S231312AbiGSWBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:01:54 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24895FAE2;
-        Tue, 19 Jul 2022 15:01:51 -0700 (PDT)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JLddaZ028927;
-        Tue, 19 Jul 2022 22:01:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
- bh=b80BmTHDUvxgWBfZpilq92cpE2prsuFHX+9J9zCJOHY=;
- b=CEqsIAL+zqLjfuQKWZMjNeehk2rQ51DvbAIPOu1ixprZYCjul14IckpA6EP+8KhJcN38
- 0XXhWh65pv8/2BjjWQUmhjsWr64n9Dw5k0Q5ncNr903X+gRS4+EiFRRn0tfHQHkS7jAb
- 3LbR972YUGMGmDfiqim/tEwWdpRbs8V+sf6IAd2PAy8LWiunX0Ii1r8rvO/rjZJ2NJKk
- bTtxaP9jLgw8+VgSdYIkCVuM8vJQ39nJ5+k6EhQN10X8Hwup3S6I2kJ1C0eIBHA62Wp4
- qEgoaGYD6jhUusIbN40KRV9zvJTmY896gBN+mkaUhbRfcYMslq8J7daTC5LkcA9cbSD1 lg== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3he4qcr4kf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Jul 2022 22:01:27 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 66179800234;
-        Tue, 19 Jul 2022 22:01:26 +0000 (UTC)
-Received: from node1.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 7024E803965;
-        Tue, 19 Jul 2022 22:01:24 +0000 (UTC)
-From:   Toshi Kani <toshi.kani@hpe.com>
-To:     bp@alien8.de, rrichter@marvell.com, mchehab@kernel.org
-Cc:     toshi.kani@hpe.com, elliott@hpe.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>
-Subject: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
-Date:   Tue, 19 Jul 2022 16:01:24 -0600
-Message-Id: <20220719220124.760359-1-toshi.kani@hpe.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 19 Jul 2022 18:01:32 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B2C5F9BD;
+        Tue, 19 Jul 2022 15:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658268091; x=1689804091;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7YsCljn9/plJ4mNS6po3lPvMpYECRfazDmQwYeZV0aM=;
+  b=bGfk/AnDg+r0IJIPGqf5PeuPI2/Ekgt5WQKLamVlWT1W+pj1KHZrAXAU
+   TqaJRR19xSI16y8SUIQvqzYmx9vyn9Gyo2Vu1GvZ+kafHJ/SdyN6IAM5p
+   n5ZaC/TBjlfdUSJffJf/u4+Rif+VHvXf4n/6ScEXU+25o7bKmfVCD/agf
+   bghvc/gytg2wpB9twESZk9VV0yKJ+1ncHeA2szahXF5SL8PC/Y1JfzPlO
+   cVNWAXj0b4voeT4FyAI4VTQ/oMosCuh+aIILHa3ML7A7bIHoSOYPqzXq2
+   kaqgU9dFdaeRtwDFmLOgsl0ziHGox/Zvb2o16JaAFEDgpphQUv2U/asFL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="266396423"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="266396423"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 15:01:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="924964668"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Jul 2022 15:01:20 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id E322510E; Wed, 20 Jul 2022 01:01:28 +0300 (EEST)
+Date:   Wed, 20 Jul 2022 01:01:28 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>, Peter Gonda <pgonda@google.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Yao, Jiewen" <jiewen.yao@intel.com>
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
+ memory
+Message-ID: <20220719220128.xl7yo4lk6uxwxilf@black.fi.intel.com>
+References: <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
+ <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
+ <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
+ <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
+ <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
+ <YtcCWfCQuEsVhH6W@zn.tnic>
+ <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
+ <YtcgxxMyFTReuuRw@zn.tnic>
+ <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
+ <YtcnQbiRgZPtR+rQ@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: kXjlY3KTYTeeLIQ_X4HvqPMLR42WGhAv
-X-Proofpoint-GUID: kXjlY3KTYTeeLIQ_X4HvqPMLR42WGhAv
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-19_08,2022-07-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- mlxscore=0 malwarescore=0 bulkscore=0 phishscore=0 lowpriorityscore=0
- priorityscore=1501 clxscore=1011 adultscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207190090
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtcnQbiRgZPtR+rQ@zn.tnic>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following buffer overflow BUG was observed on an HPE system.
-ghes_edac_register() called strlen() on an uninitialized label,
-which had non-zero values from krealloc_array().
-Change dimm_setup_label() to always initialize the label.
+On Tue, Jul 19, 2022 at 11:50:57PM +0200, Borislav Petkov wrote:
+> On Tue, Jul 19, 2022 at 02:35:45PM -0700, Dave Hansen wrote:
+> > They're trying to design something that can (forever) handle guests that
+> > might not be able to accept memory. 
+> 
+> Wait, what?
+> 
+> If you can't modify those guests to teach them to accept memory, how do
+> you add TDX or SNP guest support to them?
+> 
+> I.e., you need to modify the guests and then you can add memory
+> acceptance. Basically, your point below...
+> 
+> > It's based on the idea that *something* needs to assume control and
+> > EFI doesn't have enough information to assume control.
+> >
+> > I wish we didn't need all this complexity, though.
+> > 
+> > There are three entities that can influence how much memory is accepted:
+> > 
+> > 1. The host
+> > 2. The guest firmware
+> > 3. The guest kernel (or bootloader or something after the firmware)
+> > 
+> > This whole thread is about how #2 and #3 talk to each other and make
+> > sure *someone* does it.
+> > 
+> > I kinda think we should just take the guest firmware out of the picture.
+> >  There are only going to be a few versions of the kernel that can boot
+> > under TDX (or SEV-SNP) and *can't* handle unaccepted memory.  It seems a
+> > bit silly to design this whole interface for a few versions of the OS
+> > that TDX folks tell me can't be used anyway.
+> > 
+> > I think we should just say if you want to run an OS that doesn't have
+> > unaccepted memory support, you can either:
+> > 
+> > 1. Deal with that at the host level configuration
+> > 2. Boot some intermediate thing like a bootloader that does acceptance
+> >    before running the stupid^Wunenlightended OS
+> > 3. Live with the 4GB of pre-accepted memory you get with no OS work.
+> > 
+> > Yeah, this isn't convenient for some hosts.  But, really, this is
+> > preferable to doing an EFI/OS dance until the end of time.
+> 
+> Ack. Definitely.
 
- detected buffer overflow in __fortify_strlen
- ------------[ cut here ]------------
- kernel BUG at lib/string_helpers.c:983!
- invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
- CPU: 1 PID: 1 Comm: swapper/0 Tainted: G          I       5.18.6-200.fc36.x86_64 #1
- Hardware name: HPE ProLiant DL360 Gen10/ProLiant DL360 Gen10, BIOS U32 03/15/2019
- RIP: 0010:fortify_panic+0xf/0x11
- ...
- Call Trace:
-  <TASK>
-  ghes_edac_register.cold+0x128/0x128
-  ghes_probe+0x142/0x3a0
-  platform_probe+0x41/0x90
-  really_probe+0x19e/0x370
-  __driver_probe_device+0xfc/0x170
-  driver_probe_device+0x1f/0x90
-  __driver_attach+0xbb/0x190
-  ? __device_attach_driver+0xe0/0xe0
-  bus_for_each_dev+0x5f/0x90
-  bus_add_driver+0x159/0x200
-  driver_register+0x89/0xd0
-  acpi_ghes_init+0x72/0xc3
-  acpi_init+0x441/0x493
-  ? acpi_sleep_proc_init+0x24/0x24
-  do_one_initcall+0x41/0x200
+I like it too as it is no-code solution :P
 
-Fixes: b9cae27728d1f ("EDAC/ghes: Scan the system once on driver init")
-Tested-by: Robert Elliott <elliott@hpe.com>
-Signed-off-by: Toshi Kani <toshi.kani@hpe.com>
-Cc: Robert Richter <rrichter@marvell.com>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
----
- drivers/edac/ghes_edac.c |    2 ++
- 1 file changed, 2 insertions(+)
+Peter, I'm pretty sure unaccepted memory support hits upstream well before
+TDX get adopted widely in production. I think it is pretty reasonable to
+deal with it on host side in meanwhile.
 
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index 59b0bedc9c24..3ad3d5fc45e0 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -106,6 +106,8 @@ static void dimm_setup_label(struct dimm_info *dimm, u16 handle)
- 	/* both strings must be non-zero */
- 	if (bank && *bank && device && *device)
- 		snprintf(dimm->label, sizeof(dimm->label), "%s %s", bank, device);
-+	else
-+		dimm->label[0] = '\0';
- }
- 
- static void assign_dmi_dimm_info(struct dimm_info *dimm, struct memdev_dmi_entry *entry)
+Any objections?
+
+-- 
+ Kirill A. Shutemov

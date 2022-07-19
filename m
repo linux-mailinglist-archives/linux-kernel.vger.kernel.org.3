@@ -2,152 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B21F579109
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C242057915A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 05:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbiGSCuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 22:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S236597AbiGSDbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 23:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbiGSCuc (ORCPT
+        with ESMTP id S234220AbiGSDbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 22:50:32 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E10137188;
-        Mon, 18 Jul 2022 19:50:32 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26IKZuS3024758;
-        Tue, 19 Jul 2022 02:50:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=rrCh1HiN3Kf/FlOzjac5kMje0WE7MFikMpqKO8b0i98=;
- b=g0qirfCgmp2qU+3LtM6dTgx6koAgYv7Er5iR+OPFqsGyri4RJWyCNoA4nqdYWRzt0cQn
- hiuk5DPtt7RjVTLi7rfuskH5HjJw/DeGvUToBlrTHQNgxvq3/GiAOtDmWR9b2pxY0994
- 2eDPhi/JGbXXYbP2KSOmfCUpDnFPNyyeF2m8nXpOYcGpoybfUj5lzHBlyjvJWPksFg4P
- MoAR3VQww6yShJctvZPwHhhgPpLUbObhHuJqF1TAt8nfxmiYJXDTzTlWQB1RIWTjSZtA
- JKtEVrug1KbjGJk0sZ/XglZ4YPpHoTaa/PW+CYwgeV5u1s1anbooF53pISEec5gToVC1 ow== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbm42cy1n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Jul 2022 02:50:16 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26J0kNcX006365;
-        Tue, 19 Jul 2022 02:50:15 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1gg272r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Jul 2022 02:50:15 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HITQ5JAvPI2znD6/VVRXsd3dhddZzXMUnFhgv77WHT2JmvbHMDNr5OlRQ9DvTG+kvBki1Skw1lSaMiPVJGuotFmFNWa3pIayj8DZQMturqpP3is4QCMg7mAdMnY6FjczzJLKvFXnwZjgByeflk7znLP9qUSP4MnVOhUCVeuxQdi8ygDfzPX9nmNgiggxVVLeAXSCa7v353aYuWZARD2jpCjvFlg1odyDAdh6ZJaCHAoH9V/ZPFpuscaWc803DP2hjaUiazfBm8OKlQFNE+Hu9mhqSghAE+xMeuH3oB2AypnRu50uCR2XErvBYRPgY749n4fEpIoU5LXTF7ioA1j7fA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rrCh1HiN3Kf/FlOzjac5kMje0WE7MFikMpqKO8b0i98=;
- b=IzG2VhzJe6LlfzP5ks6Ea+lxG1X2q+6uxBIWBR1hFrNo1BwNDZMEMcnFE3h+yPBHcTpI0HroJ1BxO1K/PxHy5oKpwQyZ0btMAGMgGlcNUyRCpi/9WxEsV8ueNRCWTNDrMF/kjNAVhdh/x60q4G1/jpP6glCEGG3FMHZwTVwEaRapNJNl9JAPYUblWVS9w9I1DMW85Mj//cnP3gL5NvXqXHJeYTRREfD3TX/LJGaOgLlFiMszqipWl4Lv3n5QtBvgrQFPHLczhHIDc7IdhmKAnSd8GEb8MPLIzAWWjmEGoFAmtxb+wDY6UOd7NTHLWdPzZC4Zpge57I8S6sL5CPlrpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rrCh1HiN3Kf/FlOzjac5kMje0WE7MFikMpqKO8b0i98=;
- b=L3zAC7Hd5q+vLFvpSHJeKwQnlaPyVG+D4+RM8wGdE4lXbb4kY+NZjHiKv9K/dAXGGNdlyV2UqWbyJ1ur1q0ajxD47KjV4wXwEIuY1Y0g8thuL6VgXHoK4x1mv95oCENtMVzJTBd37Lz4ZXgxIOk+WudwtuYedqLDGjaKi35QUNk=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by BN8PR10MB3379.namprd10.prod.outlook.com (2603:10b6:408:d0::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.20; Tue, 19 Jul
- 2022 02:50:13 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::6516:e908:d2bd:ca45]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::6516:e908:d2bd:ca45%6]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
- 02:50:13 +0000
-To:     Daniil Lunev <dlunev@chromium.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: ufshcd: Read device property for ref clock
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1fsixq0it.fsf@ca-mkp.ca.oracle.com>
-References: <20220715210230.1.I365d113d275117dee8fd055ce4fc7e6aebd0bce9@changeid>
-Date:   Mon, 18 Jul 2022 22:50:10 -0400
-In-Reply-To: <20220715210230.1.I365d113d275117dee8fd055ce4fc7e6aebd0bce9@changeid>
-        (Daniil Lunev's message of "Fri, 15 Jul 2022 21:03:53 +1000")
-Content-Type: text/plain
-X-ClientProxiedBy: SA9PR13CA0031.namprd13.prod.outlook.com
- (2603:10b6:806:22::6) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 171919be-f0ce-4957-75cf-08da69316759
-X-MS-TrafficTypeDiagnostic: BN8PR10MB3379:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /XmrtoEA4rqWcwXB0ObcnEvnP3SsmFHL46tKq9M2h6s75UHt5R2KE14KJnMwmHLEHApsL8M739Li2haKK4UjtqeOc0G63HCR2r4qT+yTJPPrUdPdEk9AnkJTj0TLJ+dxG3YtDGiVsHWfZXwmZN0t3Sm1HV/9JmuC+MVn+C0sfruOhWYWE2Fni3G2Qs0ZHn6jemRokL93WStap9eosBMG0dyi7XNStdSemoJYu5Q0qoecG6s7DOcQXUrquOX+2GYr03IQI3sQKa2y5U+z0MJ7fKkuvG8my9GY3x6K4wOLYlkZnTnC/TlDcDhEB3UKjjkiz5mj4jQQoCWMsSeS6H6cf27e1/pXI8SPHgS97xd+9eLikJcvBmWj4W0ESojx0vgnBdp0FWEXgR9cSr2Qt94/8mR9ZeA0TFDgJ4pWbKHZYkKUvXASYM7O/VOXMmsHgearu/ScZj0WVZMYAE9mCYrfFlyEpTQ37Ur4oQcxFM/zZbn6xMVzR76DQ45Q2mbaQSkeAG+PlLe/RwsGsqsKNvY1efdV0ZuuLfTbDK1mpH6qW0coImLdr7/6lZBeWDni3VoY3YQtKnqZRKW3f2l2H0PuJQuf/xXofAM08dG+ELr2nncIhSbGbnGAzYJdXZupYkYWH97bSvmEfmde0hedYW9XFqQtU8a3mXzMKBR/7+QNhBk7aAZpPNH4W/argvGn8TQXZXJoELVPiYiGzafXT/hnQLhcOylcmqt6mRwbtd6up2lYyfMPpU9BMpuA3CxdgF7+iwpxgUuX/6Xw5uz7Lu60BvnweLZuhfw5VbzZBSgrB5pZyBcAg8pVGuh+F2I5zo0i
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(396003)(366004)(376002)(346002)(136003)(7416002)(36916002)(186003)(41300700001)(2906002)(6486002)(4744005)(5660300002)(6512007)(26005)(478600001)(66556008)(4326008)(66476007)(66946007)(38350700002)(8936002)(86362001)(8676002)(6916009)(316002)(6506007)(54906003)(52116002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RxXA3vqnSCYM1N55ThNOtzgcrSZ6maF4fL5XL/ZH024jLKEXisER0yhqyjEi?=
- =?us-ascii?Q?lyFzXOwPWv37iBKeC5VlOW9wX9s06V1e1Y3du+aNywg/0UtzZKfIYtBBDqve?=
- =?us-ascii?Q?uSt8lsVJSb6qI3PRhLjM5Cj4mOiK5D/tMgj3VTCaxJm/7/6V3JB1wmYj0rsa?=
- =?us-ascii?Q?d5EQ6CtgQ/jNSZgBN4T5zi0b/YmXmiJAxGgkWPRdEKZzCXFziOTaqmh7bViZ?=
- =?us-ascii?Q?HyFvOZ8fnTaW1Og6GI3wPEMxkYhkL4WY3wX51Ity2K8ffjcdy/N4mUBAFtmX?=
- =?us-ascii?Q?n8oerNV+Mx1IpdwZVuipI61kvHsKtrmqcPEuHMCnN3YzU03GgFQz4Ref5v/G?=
- =?us-ascii?Q?OFdSNM4k0qpaBkibC6OMzmLP7qR/xU4hQJopkrGuWA56pmyrM9RnTyosPSJ9?=
- =?us-ascii?Q?PFqB/XtfBBQ8jojD9ZEA0Iv3Od7XG4rfsCFxrdN+6Jl0ajPtBz2Ao1qfEBHx?=
- =?us-ascii?Q?lqjj8zbKM0g0CBw25qTS48yDquTlKSERiqTJlUdjD14Gj1NMWR+HGJiAiLdk?=
- =?us-ascii?Q?w5n0fJjxYvD03YKGsaoZ6Qzkl7jTW8gMDKQ5gX4HHGbXNbTNp2UOla2utTVp?=
- =?us-ascii?Q?5PEaKBgodFXDIBBI3gy0C2e2rYLwfZyswGR042JeFkRkf0rkWGfipXgK4824?=
- =?us-ascii?Q?FyrThB2pIlozX3wYn+fh05V4Y+KmM+iU34WISzf/j0r7DSze9ak1GBsPESEJ?=
- =?us-ascii?Q?t3ewi/sTtMgid7SlUJMEubl1lZ3BPzfbPrdil0Io3wwMIdxpXSaEfD4McYJw?=
- =?us-ascii?Q?C3gm6z6wnEAfVF2GZWEKtfk3fWLg3czzrqpDBSE6MWJBJ91vDAMfvL+th9kg?=
- =?us-ascii?Q?dR8LCYW+T7mHOGof67gBNx86ubd7PZ/NIHaG5+HSbwKqGc+4zsGUwO6P29FI?=
- =?us-ascii?Q?VgvsVi5oQhv9RxaneLSok+Y4w78by4V1sbIpzlIOcBS6wePmIv8cg4UsGBFj?=
- =?us-ascii?Q?ejO8thYRB325sbh4tvIFLOSDZCBjkzUL5kL/wNsbVSy7OQqtF3OsfDbizH+I?=
- =?us-ascii?Q?a3hvXRXlXNf3jzo4a4jHsx/L0l5by7C6/Y1RoWYf5OZoujkjyui609c+WF4F?=
- =?us-ascii?Q?A5gcf2o9xN6/aMV9V8S/0BV5Avd0DHXEl6z/QPu7NClukeXrpKoYpXNlUsZk?=
- =?us-ascii?Q?pqUyYWvzjAiqQRjxVN46JSKGGAtRWDiA+UfgjlakAEIFUl/KY14oHgAeSdFE?=
- =?us-ascii?Q?oU2RzkzC7jnSegsG5eSaKNKdIpvg3/xmbePT3Wu6DPdOq4ECnL5Lnf0aPpnx?=
- =?us-ascii?Q?KtoC8O3b3L2DzLtsqR9ifMWO8umY7qLwNPQljsCB8JOiEs4RwtEdddyUKuY0?=
- =?us-ascii?Q?X0Q7G8stHACAU/sWX/Hw/FRUtStoajwlRqU3hohHZTdG7isr2bR5l4xkmrti?=
- =?us-ascii?Q?XI73nGJS/QglTNstOGEnBZMDyBquUH+Jl8HxMRq7Gpvo0nx5h526wtRApIKb?=
- =?us-ascii?Q?5wvQeQDky5+JDWQ/R0zxbDYEX65oTdyZSgCAnCVm+2pqqj9Eq7EzkrYngzl3?=
- =?us-ascii?Q?Igr4rwxYHpWZKvM03iwpQRD/VSy7M6dBDNqR7s0ZL9dOCNrnf1iVKiBbe/9K?=
- =?us-ascii?Q?hKHHY44sD0Fm3XVuW/Sfps5xdTmVJDns/aKzRgaclq2PoEmvur3xwR4Uv3d2?=
- =?us-ascii?Q?Kg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 171919be-f0ce-4957-75cf-08da69316759
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 02:50:13.5995
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qHCNP3v3H9hEy11Jj+ffO81mdsgQQxQbKcIcAPXco8vQoUI92eRr/3mw3ywrg7bk+gfnfsMqS+7XLEcO3FrRKJIcy+X6q6jsi6fAf/F6b9w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3379
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_22,2022-07-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 bulkscore=0
- malwarescore=0 adultscore=0 mlxscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207190008
-X-Proofpoint-ORIG-GUID: PS9zIV8O10aPaSiYTrtoC3JnfcA9-n3L
-X-Proofpoint-GUID: PS9zIV8O10aPaSiYTrtoC3JnfcA9-n3L
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 23:31:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550E325594;
+        Mon, 18 Jul 2022 20:31:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6075B33C42;
+        Tue, 19 Jul 2022 03:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658201493; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pkvLznJmCOLzAgbLSLBHczbN4GBylXyt4/rPo9JuOpI=;
+        b=MGchgFosaGDK72KdXjSY5BIPeOB8KC4hJ6dwbcxioiDecPsK2/rdJL/Ohb+Wa6/sB6MlhA
+        W3Q7BJoV6PUQvG8pp/beXHFqGEsyfI5PAb6jM8yB2hp7eoIwPc3jn0QZkZw1sLuUIjdGA4
+        8qLFBEIIvtptMGdyEqaOXTkakqWAgYc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658201493;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pkvLznJmCOLzAgbLSLBHczbN4GBylXyt4/rPo9JuOpI=;
+        b=V619nqHKSDQvBuzTYB9E+4Ung+dBq8Rx88j8rXQ8wZ2HbMcjZgluOkldV6KyyCGWAPQzFm
+        MRj8JqnhnScrlaDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D230213754;
+        Tue, 19 Jul 2022 03:31:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id t1GFKZMl1mKGWQAAMHmgww
+        (envelope-from <colyli@suse.de>); Tue, 19 Jul 2022 03:31:31 +0000
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH -next] bcache: Fix spelling mistakes and cleanup code
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <20220715071533.2729413-1-williamsukatube@163.com>
+Date:   Tue, 19 Jul 2022 10:50:24 +0800
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C2654CB9-1E35-45C3-BEAF-40503F9A9147@suse.de>
+References: <20220715071533.2729413-1-williamsukatube@163.com>
+To:     williamsukatube@163.com
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -155,14 +75,233 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Daniil,
 
-> UFS storage devices require bRefClkFreq attribute to be set to operate
-> correctly at high speed mode. The necessary value is determined by
-> what the SoC / board supports. The standard doesn't specify a method
-> to query the value, so the information needs to be fed in separately.
+> 2022=E5=B9=B47=E6=9C=8815=E6=97=A5 15:15=EF=BC=8Cwilliamsukatube@163.com=
+ =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> From: William Dean <williamsukatube@gmail.com>
+>=20
+> First, fix follow spelling misktakes:
+> 	automatical  =3D=3D> automatic
+> 	individial  =3D=3D> around
+> 	embeddded  =3D=3D> embedded
+> 	addionally  =3D=3D> addtionally
+> 	unncessary  =3D=3D> unnecessary
+> 	definitly  =3D=3D> definitely
+> Second, delete extra space or tab where
+> appropriate to make code format more standardized.
+>=20
+> Reported-by: Hacash Robot <hacashRobot@santino.com>
+> Signed-off-by: William Dean <williamsukatube@gmail.com>
 
-Applied to 5.20/scsi-staging, thanks!
+Hi William,
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+It should be better to split this patch into 2 parts, one is for typo =
+fixes, one is for extra space or tab fixes. Then it can be more =
+convenient for me to review and maintain.
+
+And BTW, addionally  =3D=3D> addtionally, I guess you meant =
+=E2=80=98additionally=E2=80=99, wasn=E2=80=99t it?
+
+Thanks.
+
+Coly Li
+
+> ---
+> drivers/md/bcache/bcache.h    | 2 +-
+> drivers/md/bcache/bset.h      | 2 +-
+> drivers/md/bcache/btree.c     | 6 +++---
+> drivers/md/bcache/btree.h     | 2 +-
+> drivers/md/bcache/journal.c   | 2 +-
+> drivers/md/bcache/request.c   | 5 ++---
+> drivers/md/bcache/stats.c     | 2 +-
+> drivers/md/bcache/super.c     | 2 +-
+> drivers/md/bcache/writeback.c | 2 +-
+> drivers/md/bcache/writeback.h | 2 +-
+> 10 files changed, 13 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/md/bcache/bcache.h b/drivers/md/bcache/bcache.h
+> index 2acda9cea0f9..2b35c0a14d4d 100644
+> --- a/drivers/md/bcache/bcache.h
+> +++ b/drivers/md/bcache/bcache.h
+> @@ -635,7 +635,7 @@ struct cache_set {
+> 	struct bkey		gc_done;
+>=20
+> 	/*
+> -	 * For automatical garbage collection after writeback completed, =
+this
+> +	 * For automatic garbage collection after writeback completed, =
+this
+> 	 * varialbe is used as bit fields,
+> 	 * - 0000 0001b (BCH_ENABLE_AUTO_GC): enable gc after writeback
+> 	 * - 0000 0010b (BCH_DO_AUTO_GC):     do gc after writeback
+> diff --git a/drivers/md/bcache/bset.h b/drivers/md/bcache/bset.h
+> index d795c84246b0..76f75bbcb731 100644
+> --- a/drivers/md/bcache/bset.h
+> +++ b/drivers/md/bcache/bset.h
+> @@ -45,7 +45,7 @@
+>  * 4 in memory - we lazily resort as needed.
+>  *
+>  * We implement code here for creating and maintaining auxiliary =
+search trees
+> - * (described below) for searching an individial bset, and on top of =
+that we
+> + * (described below) for searching an individual bset, and on top of =
+that we
+>  * implement a btree iterator.
+>  *
+>  * BTREE ITERATOR:
+> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+> index e136d6edc1ed..3d9fec07e862 100644
+> --- a/drivers/md/bcache/btree.c
+> +++ b/drivers/md/bcache/btree.c
+> @@ -154,7 +154,7 @@ void bch_btree_node_read_done(struct btree *b)
+> 	/*
+> 	 * c->fill_iter can allocate an iterator with more memory space
+> 	 * than static MAX_BSETS.
+> -	 * See the comment arount cache_set->fill_iter.
+> +	 * See the comment around cache_set->fill_iter.
+> 	 */
+> 	iter =3D mempool_alloc(&b->c->fill_iter, GFP_NOIO);
+> 	iter->size =3D b->c->cache->sb.bucket_size / =
+b->c->cache->sb.block_size;
+> @@ -2529,8 +2529,8 @@ int __bch_btree_map_nodes(struct btree_op *op, =
+struct cache_set *c,
+> }
+>=20
+> int bch_btree_map_keys_recurse(struct btree *b, struct btree_op *op,
+> -				      struct bkey *from, =
+btree_map_keys_fn *fn,
+> -				      int flags)
+> +			       struct bkey *from, btree_map_keys_fn *fn,
+> +			       int flags)
+> {
+> 	int ret =3D MAP_CONTINUE;
+> 	struct bkey *k;
+> diff --git a/drivers/md/bcache/btree.h b/drivers/md/bcache/btree.h
+> index 1b5fdbc0d83e..b46bf6268aca 100644
+> --- a/drivers/md/bcache/btree.h
+> +++ b/drivers/md/bcache/btree.h
+> @@ -54,7 +54,7 @@
+>  * Btree nodes never have to be explicitly read in; =
+bch_btree_node_get() handles
+>  * this.
+>  *
+> - * For writing, we have two btree_write structs embeddded in struct =
+btree - one
+> + * For writing, we have two btree_write structs embedded in struct =
+btree - one
+>  * write in flight, and one being set up, and we toggle between them.
+>  *
+>  * Writing is done with a single function -  bch_btree_write() really =
+serves two
+> diff --git a/drivers/md/bcache/journal.c b/drivers/md/bcache/journal.c
+> index e5da469a4235..c7f6d2611037 100644
+> --- a/drivers/md/bcache/journal.c
+> +++ b/drivers/md/bcache/journal.c
+> @@ -790,7 +790,7 @@ static void journal_write_unlocked(struct closure =
+*cl)
+>=20
+> 		atomic_long_add(sectors, &ca->meta_sectors_written);
+>=20
+> -		bio_reset(bio, ca->bdev, REQ_OP_WRITE |=20
+> +		bio_reset(bio, ca->bdev, REQ_OP_WRITE |
+> 			  REQ_SYNC | REQ_META | REQ_PREFLUSH | REQ_FUA);
+> 		bio->bi_iter.bi_sector	=3D PTR_OFFSET(k, i);
+> 		bio->bi_iter.bi_size =3D sectors << 9;
+> diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
+> index f2c5a7e06fa9..ceba536e0880 100644
+> --- a/drivers/md/bcache/request.c
+> +++ b/drivers/md/bcache/request.c
+> @@ -338,7 +338,6 @@ unsigned int bch_get_congested(const struct =
+cache_set *c)
+> 		return 0;
+>=20
+> 	i +=3D CONGESTED_MAX;
+> -
+> 	if (i > 0)
+> 		i =3D fract_exp_two(i, 6);
+>=20
+> @@ -1326,8 +1325,8 @@ static int flash_dev_ioctl(struct bcache_device =
+*d, fmode_t mode,
+>=20
+> void bch_flash_dev_request_init(struct bcache_device *d)
+> {
+> -	d->cache_miss				=3D =
+flash_dev_cache_miss;
+> -	d->ioctl				=3D flash_dev_ioctl;
+> +	d->cache_miss	=3D flash_dev_cache_miss;
+> +	d->ioctl	=3D flash_dev_ioctl;
+> }
+>=20
+> void bch_request_exit(void)
+> diff --git a/drivers/md/bcache/stats.c b/drivers/md/bcache/stats.c
+> index 68b02216033d..983d16822e53 100644
+> --- a/drivers/md/bcache/stats.c
+> +++ b/drivers/md/bcache/stats.c
+> @@ -11,7 +11,7 @@
+> #include "sysfs.h"
+>=20
+> /*
+> - * We keep absolute totals of various statistics, and addionally a =
+set of three
+> + * We keep absolute totals of various statistics, and addtionally a =
+set of three
+>  * rolling averages.
+>  *
+>  * Every so often, a timer goes off and rescales the rolling averages.
+> diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
+> index 3563d15dbaf2..aca27386cca2 100644
+> --- a/drivers/md/bcache/super.c
+> +++ b/drivers/md/bcache/super.c
+> @@ -686,6 +686,7 @@ int bch_prio_write(struct cache *ca, bool wait)
+>=20
+> 		ca->prio_last_buckets[i] =3D ca->prio_buckets[i];
+> 	}
+> +
+> 	return 0;
+> }
+>=20
+> @@ -2663,7 +2664,6 @@ static ssize_t register_bcache(struct kobject =
+*k, struct kobj_attribute *attr,
+> 	return ret;
+> }
+>=20
+> -
+> struct pdev {
+> 	struct list_head list;
+> 	struct cached_dev *dc;
+> diff --git a/drivers/md/bcache/writeback.c =
+b/drivers/md/bcache/writeback.c
+> index 3f0ff3aab6f2..bd83a33b8a2f 100644
+> --- a/drivers/md/bcache/writeback.c
+> +++ b/drivers/md/bcache/writeback.c
+> @@ -238,7 +238,7 @@ static void update_writeback_rate(struct =
+work_struct *work)
+> 	/*
+> 	 * If the whole cache set is idle, set_at_max_writeback_rate()
+> 	 * will set writeback rate to a max number. Then it is
+> -	 * unncessary to update writeback rate for an idle cache set
+> +	 * unnecessary to update writeback rate for an idle cache set
+> 	 * in maximum writeback rate number(s).
+> 	 */
+> 	if (atomic_read(&dc->has_dirty) && dc->writeback_percent &&
+> diff --git a/drivers/md/bcache/writeback.h =
+b/drivers/md/bcache/writeback.h
+> index 31df716951f6..37f66bea522f 100644
+> --- a/drivers/md/bcache/writeback.h
+> +++ b/drivers/md/bcache/writeback.h
+> @@ -69,7 +69,7 @@ static inline int offset_to_stripe(struct =
+bcache_device *d,
+> 	}
+>=20
+> 	/*
+> -	 * Here offset is definitly smaller than INT_MAX,
+> +	 * Here offset is definitely smaller than INT_MAX,
+> 	 * return it as int will never overflow.
+> 	 */
+> 	return offset;
+> --=20
+> 2.25.1
+>=20
+

@@ -2,134 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF681578F34
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97291578F35
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbiGSAXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 20:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S233990AbiGSAYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 20:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233216AbiGSAXp (ORCPT
+        with ESMTP id S231673AbiGSAY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 20:23:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E078F33353
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=co6Jv7mgpbM21F/ySZgejVa+xfgfIHwJOW7zyHk6RRw=; b=V9UMmiWLz6B624YTzjx8QNbpsj
-        XQ9Gpycq+ffDa9KEvuCt++XuvuqC1bG66/tX+vuXgOJb6jhUEHJkTHZ3eWDFazbn+TLKwfmPyTCMm
-        fNAVUkQUpFg80nt4uzdaiKYZmgbreie5sYPYY4pskkzmSiYOf44AVYc9mcIhzCySazBgo2A0TIWF9
-        X/HCMRGrdEF0BUwlREeE6kgSqiy8mz0Y5nOWPXoYeDMCrIdWbj7WGikNLSQo/E2z3zlG87VX7333k
-        83HNssLQjQYiMG8y8gMJzFN8lotZR/chjwlp4B41/+E5ZGVxX+5+FAR/+j2F1K6WSeVIRwlC4eOSa
-        2N/vDlDg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDb1H-00DAwU-Nb; Tue, 19 Jul 2022 00:23:23 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AC6F69802A7; Tue, 19 Jul 2022 02:23:22 +0200 (CEST)
-Date:   Tue, 19 Jul 2022 02:23:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-Message-ID: <YtX5enG0eN1XUzGR@worktop.programming.kicks-ass.net>
-References: <YtXOMPpmx8TcFtOX@worktop.programming.kicks-ass.net>
- <87lesqukm5.ffs@tglx>
- <2f7f899cb75b79b08b0662ff4d2cb877@overdrivepizza.com>
- <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
- <87fsiyuhyz.ffs@tglx>
- <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
- <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
- <YtXzgWnbTQH48JGR@worktop.programming.kicks-ass.net>
- <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
- <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
+        Mon, 18 Jul 2022 20:24:28 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E6CE15
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:24:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658190268; x=1689726268;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HC5Y5n+o0N1GDG9lfdnVAazFEF8Tun0jXYTQJnoSuZw=;
+  b=DFnAmUQzKhT8wrI4IPO5K2kOmHBR+gQnoreeavCzvzr2OceBsO1rLqcM
+   XDxo4lPx5YUbERyj/Ub1I8WqCg+Cz4NflDWXZvo/kEJm43iheXWylCWbK
+   /VQTBiPI0C18EGjKBKupLJyy7njq6BfmoOWZG6c3l0sL+W/Oba55AgMUV
+   7Wd1KUTVpT+Sm5IlSK12kwKkqdFMaVCoedqjWnJ1Li7IZnENgijjeqCUE
+   jUZzPnB3t9uymmAyQKWvxmAR4qlgJmbCtMKgo7n4TLoUG9OJ3gUV5ifiT
+   m6Ba0r8aWcfCz9OPt6EHQuZwg90e/WOQzn8XKRkiIuripCjk+LXoX2srL
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="285106978"
+X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
+   d="scan'208";a="285106978"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 17:24:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
+   d="scan'208";a="665209742"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Jul 2022 17:24:26 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDb2I-00051l-3m;
+        Tue, 19 Jul 2022 00:24:26 +0000
+Date:   Tue, 19 Jul 2022 08:24:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 1cf86c1c72384ec9e2f906dc0a428ea9314444d5
+Message-ID: <62d5f9b2.gCKLim+kLPUt3rjV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 05:11:27PM -0700, Linus Torvalds wrote:
-> On Mon, Jul 18, 2022 at 5:03 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > So it already only adds the pattern to things that have their address
-> > taken, not all functions?
-> >
-> > If so, that's simple enough to sort out: don't do any RSB stack
-> > adjustment for those thunks AT ALL.
-> >
-> > Because they should just then end up with a jump to the "real" target,
-> > and that real target will do the RSB stack thing.
-> 
-> Put another way, let's say that you have a function that looks like this:
-> 
->   int silly(void)
->   {
->        return 0;
->   }
-> 
-> and now you have two cases:
-> 
->  - the "direct callable version" of that function looks exactly the
-> way it always has looked, and gets the 16 bytes of padding for it, and
-> the RSB counting can happen in that padding
-> 
->  - the "somebody took the address of this function" creates code that
-> has the hash marker before it, and has the hash check, and then does a
-> "jmp silly" to actually jump to the real code.
-> 
-> So what the RSB counting does is just ignore that second case entirely
-> as far as the RSB code generation goes. No need to have any padding
-> for it at all, it has that (completely different) kCFI padding
-> instead.
-> 
-> Instead, only the "real" silly function gets that RSB code, and the
-> "jmp silly" from the kCFI thunk needs to be updated to point to the
-> RSB thunk in front of it.
-> 
-> Yes, yes, it makes indirect calls slightly more expensive than direct
-> calls (because that kCFI thing can't just fall through to the real
-> thing), but considering all the *other* costs of indirect calls, the
-> cost of having that one "jmp" instruction doesn't really seem to
-> matter, does it?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 1cf86c1c72384ec9e2f906dc0a428ea9314444d5  Merge sched/core into tip/master
 
-So it's like 2:15 am here, so I might not be following things right, but
-doesn't the above mean you have to play funny games with what a function
-pointer is?
+elapsed time: 729m
 
-That is, the content of a function pointer (address taken) no longer
-match the actual function? That gives grief with things like
-static_call(), ftrace and other things that write call instructions
-instead of doing indirect calls.
+configs tested: 52
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+sh                               allmodconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64               randconfig-a013-20220718
+x86_64               randconfig-a012-20220718
+x86_64               randconfig-a015-20220718
+x86_64               randconfig-a014-20220718
+x86_64               randconfig-a016-20220718
+x86_64               randconfig-a011-20220718
+i386                 randconfig-a011-20220718
+i386                 randconfig-a013-20220718
+i386                 randconfig-a016-20220718
+i386                 randconfig-a012-20220718
+i386                 randconfig-a015-20220718
+i386                 randconfig-a014-20220718
+arc                  randconfig-r043-20220718
+riscv                randconfig-r042-20220718
+s390                 randconfig-r044-20220718
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                 randconfig-a004-20220718
+i386                 randconfig-a003-20220718
+i386                 randconfig-a005-20220718
+i386                 randconfig-a001-20220718
+i386                 randconfig-a002-20220718
+i386                 randconfig-a006-20220718
+hexagon              randconfig-r041-20220718
+hexagon              randconfig-r045-20220718
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

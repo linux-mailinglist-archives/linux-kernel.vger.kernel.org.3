@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AF9579198
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 06:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185CB57919A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 06:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236578AbiGSEED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 00:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S236651AbiGSEGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 00:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236509AbiGSEEB (ORCPT
+        with ESMTP id S235670AbiGSEGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 00:04:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D67AF2BB3F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 21:04:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1BFFE1042;
-        Mon, 18 Jul 2022 21:04:01 -0700 (PDT)
-Received: from [10.162.41.8] (unknown [10.162.41.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D0E6A3F766;
-        Mon, 18 Jul 2022 21:03:54 -0700 (PDT)
-Message-ID: <05639c8d-73f7-7e12-9941-cae3037e44b4@arm.com>
-Date:   Tue, 19 Jul 2022 09:33:52 +0530
+        Tue, 19 Jul 2022 00:06:13 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDDE21E23;
+        Mon, 18 Jul 2022 21:06:12 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id t5-20020a17090a6a0500b001ef965b262eso14531919pjj.5;
+        Mon, 18 Jul 2022 21:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pjjviKAxMWKcEuuLQJoo7ikBZpRXy53qslO/fzhKHaA=;
+        b=n2Ec6vxbtolSecYkGQH4MNKSlooP6W0ajKlDuNMqgmT3w/dNEXOtrPCu6qkcueFXfs
+         f9Ii/XAj5a4P1fNZPIHd0pL5uMur+B3imbAqu1/GVN0pTOi1zFporlpiChowQTcPlJ+I
+         ysG9MwPr832fjSmh4Qo2TV5owvWaYbB21tIGXQRfAmiNWNHfq0vePMgc7tFjgUEPqgsJ
+         Ane+aaDd1GZkvWT8A87cj6pnkNJTaulY7yDXMIYisdrp+5Ur7p5IHCOGtK84+7yLfF86
+         RHiHiUCC73BoGpaso4EZUaHXOgJFoErvyJ9lP8u6iPKDhgnVlEweyhAZiE4beMF64375
+         2oXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pjjviKAxMWKcEuuLQJoo7ikBZpRXy53qslO/fzhKHaA=;
+        b=NZRDTo84Y85/Y/qx9wSm3Gf1AgsM8HWqBAovHbWCWRosTJo0qPGm/9r4K214a0214w
+         GvgaKLgu3MpHyAkiBVVrlKiJikfGp+JDy/h0AJmTp04iLtHdk/dYFoefmYnUEWovxdqC
+         tB54rFOaNtSTfvFI7a8GHFJp4drU7zm2V6/tfvimYFYjRnVBR0SHYU4CIZVnl4Wi2SvH
+         OkiKwC3WtRshaFRzEPQ3wFDV1LN2ul4qLPKapjr/1DtzRDueCv1mSuPd8dtbP1EowEUk
+         nNJ/PE8mgWXfnRawfMtzktmVxAvaKsEY5wWEaabwiLggZ+du+Za9FGxQjRdMmj9Nb4Z8
+         1yxg==
+X-Gm-Message-State: AJIora948lLgl6uums42vqqR9xx+2FdGR14zxPKXdTyIyZTIEjwYQvKj
+        7eJ8b3YJX2Fz+SmSbgAB2JJxYBLyS0I=
+X-Google-Smtp-Source: AGRyM1seCzeINhr9uRv1a7ySsJqo7WjngwlZMYwTJFpssi85iyNG9CdlesA8YvqWYXNam6Mrg3ujOw==
+X-Received: by 2002:a17:90b:4a4d:b0:1ef:bc34:405a with SMTP id lb13-20020a17090b4a4d00b001efbc34405amr35320947pjb.96.1658203571864;
+        Mon, 18 Jul 2022 21:06:11 -0700 (PDT)
+Received: from 7YHHR73.igp.broadcom.net (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id g5-20020a170902d1c500b0016bd72887fcsm10281807plb.59.2022.07.18.21.06.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 21:06:11 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-i2c@vger.kernel.org (open list:BROADCOM BRCMSTB I2C DRIVER),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
+        ARM ARCHITECTURE)
+Subject: [PATCH] i2c: brcmstb: Use dev_name() for adapter name
+Date:   Mon, 18 Jul 2022 21:06:10 -0700
+Message-Id: <20220719040611.13979-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
-Content-Language: en-US
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Steven Price <steven.price@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>
-References: <20220718090050.2261-1-21cnbao@gmail.com>
- <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
- <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com>
- <87zgh5232o.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <416a06f6-ca7d-d4a9-2cda-af0ad6e28261@arm.com>
- <CAGsJ_4y7GyL5qtrBbhz_8bLuAGGHy7Ju0ucPjHp-ZeDHjQcTcw@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <CAGsJ_4y7GyL5qtrBbhz_8bLuAGGHy7Ju0ucPjHp-ZeDHjQcTcw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,208 +73,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This make it easier to disambiguate the different i2c controllers
+present in a system, and then correlating with /proc/interrupts allows
+to know which instance is interrupt driven and which one is not.
 
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/i2c/busses/i2c-brcmstb.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-On 7/19/22 09:29, Barry Song wrote:
-> On Tue, Jul 19, 2022 at 3:35 PM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->>
->>
->>
->> On 7/19/22 08:58, Huang, Ying wrote:
->>> Anshuman Khandual <anshuman.khandual@arm.com> writes:
->>>
->>>> On 7/19/22 06:53, Barry Song wrote:
->>>>> On Tue, Jul 19, 2022 at 12:44 PM Huang, Ying <ying.huang@intel.com> wrote:
->>>>>>
->>>>>> Barry Song <21cnbao@gmail.com> writes:
->>>>>>
->>>>>>> From: Barry Song <v-songbaohua@oppo.com>
->>>>>>>
->>>>>>> THP_SWAP has been proven to improve the swap throughput significantly
->>>>>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
->>>>>>> splitting THP after swapped out").
->>>>>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
->>>>>>> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
->>>>>>> enabling it on arm64 will benefit arm64 as well.
->>>>>>> A corner case is that MTE has an assumption that only base pages
->>>>>>> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
->>>>>>> MTE support until MTE is reworked to coexist with THP_SWAP.
->>>>>>>
->>>>>>> A micro-benchmark is written to measure thp swapout throughput as
->>>>>>> below,
->>>>>>>
->>>>>>>  unsigned long long tv_to_ms(struct timeval tv)
->>>>>>>  {
->>>>>>>       return tv.tv_sec * 1000 + tv.tv_usec / 1000;
->>>>>>>  }
->>>>>>>
->>>>>>>  main()
->>>>>>>  {
->>>>>>>       struct timeval tv_b, tv_e;;
->>>>>>>  #define SIZE 400*1024*1024
->>>>>>>       volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
->>>>>>>                               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->>>>>>>       if (!p) {
->>>>>>>               perror("fail to get memory");
->>>>>>>               exit(-1);
->>>>>>>       }
->>>>>>>
->>>>>>>       madvise(p, SIZE, MADV_HUGEPAGE);
->>>>>>>       memset(p, 0x11, SIZE); /* write to get mem */
->>>>>>>
->>>>>>>       gettimeofday(&tv_b, NULL);
->>>>>>>       madvise(p, SIZE, MADV_PAGEOUT);
->>>>>>>       gettimeofday(&tv_e, NULL);
->>>>>>>
->>>>>>>       printf("swp out bandwidth: %ld bytes/ms\n",
->>>>>>>                       SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
->>>>>>>  }
->>>>>>>
->>>>>>> Testing is done on rk3568 64bit quad core processor Quad Core
->>>>>>> Cortex-A55 platform - ROCK 3A.
->>>>>>> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
->>>>>>> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
->>>>>>>
->>>>>>> Cc: "Huang, Ying" <ying.huang@intel.com>
->>>>>>> Cc: Minchan Kim <minchan@kernel.org>
->>>>>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
->>>>>>> Cc: Hugh Dickins <hughd@google.com>
->>>>>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
->>>>>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
->>>>>>> Cc: Steven Price <steven.price@arm.com>
->>>>>>> Cc: Yang Shi <shy828301@gmail.com>
->>>>>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
->>>>>>> ---
->>>>>>>  -v3:
->>>>>>>  * refine the commit log;
->>>>>>>  * add a benchmark result;
->>>>>>>  * refine the macro of arch_thp_swp_supported
->>>>>>>  Thanks to the comments of Anshuman, Andrew, Steven
->>>>>>>
->>>>>>>  arch/arm64/Kconfig               |  1 +
->>>>>>>  arch/arm64/include/asm/pgtable.h |  6 ++++++
->>>>>>>  include/linux/huge_mm.h          | 12 ++++++++++++
->>>>>>>  mm/swap_slots.c                  |  2 +-
->>>>>>>  4 files changed, 20 insertions(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->>>>>>> index 1652a9800ebe..e1c540e80eec 100644
->>>>>>> --- a/arch/arm64/Kconfig
->>>>>>> +++ b/arch/arm64/Kconfig
->>>>>>> @@ -101,6 +101,7 @@ config ARM64
->>>>>>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->>>>>>>       select ARCH_WANT_LD_ORPHAN_WARN
->>>>>>>       select ARCH_WANTS_NO_INSTR
->>>>>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
->>>>>>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
->>>>>>>       select ARM_AMBA
->>>>>>>       select ARM_ARCH_TIMER
->>>>>>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->>>>>>> index 0b6632f18364..78d6f6014bfb 100644
->>>>>>> --- a/arch/arm64/include/asm/pgtable.h
->>>>>>> +++ b/arch/arm64/include/asm/pgtable.h
->>>>>>> @@ -45,6 +45,12 @@
->>>>>>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
->>>>>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->>>>>>>
->>>>>>> +static inline bool arch_thp_swp_supported(void)
->>>>>>> +{
->>>>>>> +     return !system_supports_mte();
->>>>>>> +}
->>>>>>> +#define arch_thp_swp_supported arch_thp_swp_supported
->>>>>>> +
->>>>>>>  /*
->>>>>>>   * Outside of a few very special situations (e.g. hibernation), we always
->>>>>>>   * use broadcast TLB invalidation instructions, therefore a spurious page
->>>>>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
->>>>>>> index de29821231c9..4ddaf6ad73ef 100644
->>>>>>> --- a/include/linux/huge_mm.h
->>>>>>> +++ b/include/linux/huge_mm.h
->>>>>>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
->>>>>>>       return split_huge_page_to_list(&folio->page, list);
->>>>>>>  }
->>>>>>>
->>>>>>> +/*
->>>>>>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
->>>>>>> + * limitations in the implementation like arm64 MTE can override this to
->>>>>>> + * false
->>>>>>> + */
->>>>>>> +#ifndef arch_thp_swp_supported
->>>>>>> +static inline bool arch_thp_swp_supported(void)
->>>>>>> +{
->>>>>>> +     return true;
->>>>>>> +}
->>>>>>
->>>>>> How about the following?
->>>>>>
->>>>>> static inline bool arch_wants_thp_swap(void)
->>>>>> {
->>>>>>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
->>>>>> }
->>>>>
->>>>> This looks good. then i'll need to change arm64 to
->>>>>
->>>>>  +static inline bool arch_thp_swp_supported(void)
->>>>>  +{
->>>>>  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
->>>>>  +}
->>>>
->>>> Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
->>>> IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
->>>> is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
->>>> either in the generic fallback stub, or in arm64 platform override. Because
->>>> without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
->>>> be called in the first place.
->>>
->>> For the only caller now, the checking looks redundant.  But the original
->>> proposed implementation as follows,
->>>
->>> static inline bool arch_thp_swp_supported(void)
->>> {
->>>      return true;
->>> }
->>>
->>> will return true even on architectures that don't support/want THP swap.
->>
->> But the function will never be called on for those platforms.
->>
->>> That will confuse people too.
->>
->> I dont see how.
->>
->>>
->>> And the "redundant" checking has no run time overhead, because compiler
->>> will do the trick.
->> I understand that, but dont think this indirection is necessary.
-> 
-> Hi Anshuman, Hi Ying,
-> Thanks for the comments of both of you. Does the below look ok?
-> 
-> generic,
-> 
->  static inline bool arch_wants_thp_swap(void)
->   {
->       return IS_ENABLED(CONFIG_THP_SWAP);
->  }
-> 
-> arm64,
-> 
-> static inline bool arch_thp_swp_supported(void)
-> {
->      return IS_ENABLED(CONFIG_THP_SWAP) &&  !system_supports_mte();
-> }
-> 
-> caller,
-> 
-> folio_alloc_swap(struct folio *folio)
-> {
-> 
->   if (folio_test_large(folio)) {
->    - if (IS_ENABLED(CONFIG_THP_SWAP))
->   + if (arch_thp_swp_supported())
->         get_swap_pages(1, &entry, folio_nr_pages(folio));
->        goto out;
->   }
+diff --git a/drivers/i2c/busses/i2c-brcmstb.c b/drivers/i2c/busses/i2c-brcmstb.c
+index b00f35c0b066..3ba6cbbe84ac 100644
+--- a/drivers/i2c/busses/i2c-brcmstb.c
++++ b/drivers/i2c/busses/i2c-brcmstb.c
+@@ -684,9 +684,7 @@ static int brcmstb_i2c_probe(struct platform_device *pdev)
+ 	adap = &dev->adapter;
+ 	i2c_set_adapdata(adap, dev);
+ 	adap->owner = THIS_MODULE;
+-	strlcpy(adap->name, "Broadcom STB : ", sizeof(adap->name));
+-	if (int_name)
+-		strlcat(adap->name, int_name, sizeof(adap->name));
++	strlcpy(adap->name, dev_name(&pdev->dev), sizeof(adap->name));
+ 	adap->algo = &brcmstb_i2c_algo;
+ 	adap->dev.parent = &pdev->dev;
+ 	adap->dev.of_node = pdev->dev.of_node;
+-- 
+2.25.1
 
-Current proposal in this patch LGTM, I dont see any reason for these changes.

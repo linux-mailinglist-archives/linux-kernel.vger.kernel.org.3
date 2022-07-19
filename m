@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFBD57A61F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597BC57A624
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239847AbiGSSKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S239883AbiGSSK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 14:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233593AbiGSSKI (ORCPT
+        with ESMTP id S239862AbiGSSKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:10:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2401625C3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:10:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEC86B81CB8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:10:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5154DC341C6;
-        Tue, 19 Jul 2022 18:10:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658254204;
-        bh=cmRMdfnK3eg1c4qOOLtsspjkB4OOh1S9fEMyzJi09h8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vGsA3B1U4DU9meEMfdydgC8ynm8DIyAR6dhWs8qU1zsAHbNemoC8syT3lvitpqM5d
-         KeGqSCKCsdz1eABV3oYbNhiqkQ4c8vo+2e338mATDSp4tyWdhlh+xypXos51KgOk9u
-         XVWZpXpmwJlVkUSC5J8HaP5i/HzCQTRB6RHxuNig/4Tc0zz24YuHiSeECDrnos7b98
-         i16olnm1pwVkm43eXsYFvv4hFHUq/klDs0gyTFa5DwsJX7ujZyCfsyoSVCVe77KCI2
-         dtf8mt5TDVJbAnx3DjXBSVVymzLFboG9zwy6IrIYnrOmjYloTJ720dTaXWJolmkR2i
-         gWsG076rFWY0w==
-Date:   Tue, 19 Jul 2022 19:09:59 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, shan.gavin@gmail.com
-Subject: Re: [PATCH] arm64: numa: Don't check node against MAX_NUMNODES
-Message-ID: <20220719180959.GB14526@willie-the-truck>
-References: <20220718064232.3464373-1-gshan@redhat.com>
+        Tue, 19 Jul 2022 14:10:25 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4CC25E97
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:10:24 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id l11so5947030ilf.11
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JJzJdSN4mx1unTTYHy8WAkiuSN/NS3rGpjLdlkjRGlo=;
+        b=pSA3p02hSVdsyRZ4kG90DUEwztwP9KzGqlTPjN3LfLb9pfeyoT6tYI2XZyMmIcFzSN
+         TjTjI61pc4XT21TXmrpv0anRpZYfi6nBmlEMePOFzLnRY9r4v+sj1zrPHcURSDqU8fR8
+         C8Uy5WFJPwQOJUEukI+JSa1sMTTr9v3Hnp4gysUNd2zm9BWZWYaXbWcAuEm1oz007gUU
+         wN2vtKqy4PIxDsHPeaQ1L8aSygXs6uezk38U4AkM24EfaKHCeOzDb96u2BvpEMmSOsM+
+         EjIVp7lSBCv57lrPhv/ni0bztr/DbtsoSFhwL60LrGYmtZmxBqelT62uQVTnQ7iwIKWW
+         IDOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JJzJdSN4mx1unTTYHy8WAkiuSN/NS3rGpjLdlkjRGlo=;
+        b=BW2NRTwEadaYdO5eP24IwXo/k9llzNZnq1H1rqsdU6Gqadmm3tjNSHtPGX2UogOGzh
+         NSbuswLnipHWhgtdwoZ0DlaDd/Nb7fxfrWva1k/udHnTW14K3q1XC+GxvmWOKqgpE76S
+         KM4x89IsafIVGwBC3bATiPBcOBRhmmt0o1q7eExkBNBD2Gju62QI2UQJxhuu8nzLfzKR
+         rA6wD5ZWAJFrmUkqsPJ3I+AUnQndL+ACDl7XXALulX6o7CIrwFDRj9b4Gyzka5XUeWok
+         axcqTN87DnSiPChfWt5IWKIogOKaocVc2wQYA7TbBk6KDJsjESx3/HFLbD99UaCVbvyh
+         yyfw==
+X-Gm-Message-State: AJIora/kCy8qyxjinzq5xUJgh6pu5UNxgoPx4ZusjDsb5SYyh8GVmoYS
+        H/4Mx0Bm9OjqNdWbGN48IngTNg==
+X-Google-Smtp-Source: AGRyM1ucep2BSORS30efwbLFKp7cqppOBS7GnE3E8g0MW5OyhSiyEhsXUlgltK37QHT7ppEtncVbQA==
+X-Received: by 2002:a05:6e02:1043:b0:2dc:dab6:c704 with SMTP id p3-20020a056e02104300b002dcdab6c704mr8029909ilj.69.1658254223958;
+        Tue, 19 Jul 2022 11:10:23 -0700 (PDT)
+Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056e020b4600b002dae42fa5f2sm6089552ilu.56.2022.07.19.11.10.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 11:10:23 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 0/5] net: ipa: small transaction updates
+Date:   Tue, 19 Jul 2022 13:10:15 -0500
+Message-Id: <20220719181020.372697-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718064232.3464373-1-gshan@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,35 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 02:42:32PM +0800, Gavin Shan wrote:
-> When the NUMA nodes are sorted by checking ACPI SRAT (GICC AFFINITY)
-> sub-table, it's impossible for acpi_map_pxm_to_node() to return
-> any value, which is greater than or equal to MAX_NUMNODES. Lets drop
-> the unnecessary check in acpi_numa_gicc_affinity_init().
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->  arch/arm64/kernel/acpi_numa.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
-> index fdfecf0991ce..e51535a5f939 100644
-> --- a/arch/arm64/kernel/acpi_numa.c
-> +++ b/arch/arm64/kernel/acpi_numa.c
-> @@ -109,7 +109,7 @@ void __init acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa)
->  	pxm = pa->proximity_domain;
->  	node = acpi_map_pxm_to_node(pxm);
->  
-> -	if (node == NUMA_NO_NODE || node >= MAX_NUMNODES) {
-> +	if (node == NUMA_NO_NODE) {
->  		pr_err("SRAT: Too many proximity domains %d\n", pxm);
->  		bad_srat();
->  		return;
+Version 2 of this series corrects a misspelling of "outstanding"
+pointed out by the netdev test bots.  (For some reason I don't see
+that when I run "checkpatch".)  I found and fixed a second instance
+of that word being misspelled as well.
 
-This isn't "obviously" correct, but it does look like the way in which
-acpi_map_pxm_to_node() allocates nodes in 'nodes_found_map' means that this
-check is redundant, so I'll pick it up.
+This series includes three changes to the transaction code.  The
+first adds a new transaction list that represents a distinct state
+that has not been maintained.  The second moves a field in the
+transaction information structure, and reorders its initialization
+a bit.  The third skips a function call when it is known not to be
+necessary.
 
-Will
+The last two are very small "leftover" patches.
+
+					-Alex
+
+Alex Elder (5):
+  net: ipa: add a transaction committed list
+  net: ipa: rearrange transaction initialization
+  net: ipa: skip some cleanup for unused transactions
+  net: ipa: report when the driver has been removed
+  net: ipa: fix an outdated comment
+
+ drivers/net/ipa/gsi.c       |  5 ++-
+ drivers/net/ipa/gsi.h       |  8 ++--
+ drivers/net/ipa/gsi_trans.c | 89 +++++++++++++++++++++++--------------
+ drivers/net/ipa/ipa_main.c  |  2 +
+ 4 files changed, 66 insertions(+), 38 deletions(-)
+
+-- 
+2.34.1
+

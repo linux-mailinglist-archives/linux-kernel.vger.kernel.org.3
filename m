@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0055795AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285175795AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237175AbiGSI40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 04:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S237098AbiGSI57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 04:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237159AbiGSI4X (ORCPT
+        with ESMTP id S230263AbiGSI56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:56:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086561FCEB
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:56:21 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 966A434B89;
-        Tue, 19 Jul 2022 08:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1658220980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GIWvK6SdOkdTzLJ2dgaOPeK8zxVvAr1FGwnG8t4MDVQ=;
-        b=lA27UtdXd6BYpr2fHMRc/+rXqPbnU+dk/9tcQBYL1Ih5iPFQObdKP0+89QKxemOIfrN2U1
-        iWJrxg+EwpXCsDi9f7VRoVs575XFLbh3gBYaXxl1LUIam8/jE1v2aHN6KTjGWkaKfm0Ar/
-        7miOWPk1Pr95yUc5pQfqiOZOGac+P/U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1658220980;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GIWvK6SdOkdTzLJ2dgaOPeK8zxVvAr1FGwnG8t4MDVQ=;
-        b=Fb1TUitTC+JzYVidc8leyHcSjUHGwt76YjXhpmpPOzR3/+zlHG6jMt295m3I1pIPHkSrvt
-        BK86lzVaBGlQjVDQ==
-Received: from localhost.localdomain (unknown [10.100.201.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7405F2C141;
-        Tue, 19 Jul 2022 08:56:20 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH] posix-timers: make do_clock_gettime() static
-Date:   Tue, 19 Jul 2022 10:56:20 +0200
-Message-Id: <20220719085620.30567-1-jslaby@suse.cz>
-X-Mailer: git-send-email 2.37.1
+        Tue, 19 Jul 2022 04:57:58 -0400
+Received: from mail-m964.mail.126.com (mail-m964.mail.126.com [123.126.96.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B49A1FCD1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bFZb5
+        3iFBqVElDcNiNFVvqvwqJab5TzeqQEzJe2om6A=; b=X9N4FEyFW1TZNIm8Whs1S
+        oRjXR7g0OAxb7dz8evdHo3KqhYfpudbd9nOdU19W2NqXjhGUqhPCaNC5KJJQWozu
+        PrHD9WG9NI86KQpLy3pQkbi9dSx9cMafqpCILo0o6cbRCE79hMFS0LA6eNavYt3s
+        otHT8ITRtpOf+8hEKFPMqI=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp9 (Coremail) with SMTP id NeRpCgAn+cXJcdZif69rGw--.56295S2;
+        Tue, 19 Jul 2022 16:56:42 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH v2 1/2] memory: of: Fix refcount leak bug in of_get_ddr_timings()
+Date:   Tue, 19 Jul 2022 16:56:39 +0800
+Message-Id: <20220719085640.1210583-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: NeRpCgAn+cXJcdZif69rGw--.56295S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZw4kKry8WFWDJrykurW7Arb_yoWDArg_CF
+        4fXF17Wrn8WFnrGa17ta1fZr9Yyr4Fgr1kZFn2q3s3G3W8Zry3W3Z3Xr17Jw1UZFW7AFWU
+        A39YkrWFyr4rGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRA5r43UUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizg1DF18RPhVkEgABsF
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-do_clock_gettime() is used only in posix-stubs.c, so make it static. It avoids
-a compiler warning too:
-time/posix-stubs.c:73:5: warning: no previous prototype for ‘do_clock_gettime’ [-Wmissing-prototypes]
+We should add the of_node_put() when breaking out of
+for_each_child_of_node() as it will automatically increase
+and decrease the refcount.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Fixes: e6b42eb6a66c ("memory: emif: add device tree support to emif driver")
+Signed-off-by: Liang He <windhl@126.com>
 ---
- kernel/time/posix-stubs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ changelog:
 
-diff --git a/kernel/time/posix-stubs.c b/kernel/time/posix-stubs.c
-index fcb3b21d8bdc..90ea5f373e50 100644
---- a/kernel/time/posix-stubs.c
-+++ b/kernel/time/posix-stubs.c
-@@ -70,7 +70,7 @@ SYSCALL_DEFINE2(clock_settime, const clockid_t, which_clock,
- 	return do_sys_settimeofday64(&new_tp, NULL);
- }
- 
--int do_clock_gettime(clockid_t which_clock, struct timespec64 *tp)
-+static int do_clock_gettime(clockid_t which_clock, struct timespec64 *tp)
- {
- 	switch (which_clock) {
- 	case CLOCK_REALTIME:
-@@ -90,6 +90,7 @@ int do_clock_gettime(clockid_t which_clock, struct timespec64 *tp)
- 
- 	return 0;
- }
-+
- SYSCALL_DEFINE2(clock_gettime, const clockid_t, which_clock,
- 		struct __kernel_timespec __user *, tp)
- {
+ v2: split two fixes into two patches
+ v1: https://lore.kernel.org/all/20220716025043.447036-1-windhl@126.com/
+
+ drivers/memory/of_memory.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/memory/of_memory.c b/drivers/memory/of_memory.c
+index dbdf87bc0b78..8e2ef4bf6b17 100644
+--- a/drivers/memory/of_memory.c
++++ b/drivers/memory/of_memory.c
+@@ -134,6 +134,7 @@ const struct lpddr2_timings *of_get_ddr_timings(struct device_node *np_ddr,
+ 	for_each_child_of_node(np_ddr, np_tim) {
+ 		if (of_device_is_compatible(np_tim, tim_compat)) {
+ 			if (of_do_get_timings(np_tim, &timings[i])) {
++				of_node_put(np_tim);
+ 				devm_kfree(dev, timings);
+ 				goto default_timings;
+ 			}
 -- 
-2.37.1
+2.25.1
 

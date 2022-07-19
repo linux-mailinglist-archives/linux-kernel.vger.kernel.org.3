@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790E657A06A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C03A57A071
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238109AbiGSOF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S236866AbiGSOGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237987AbiGSOEy (ORCPT
+        with ESMTP id S237860AbiGSOFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:04:54 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DBC5F52;
-        Tue, 19 Jul 2022 06:18:24 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id fy29so25977982ejc.12;
-        Tue, 19 Jul 2022 06:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Yc+h+ul4h9s6uUBRLUaqssxlPjgr6BM8cJCIGFPzipY=;
-        b=J9eUykm76fIdNj3kRL1+JyFpVIW499oT+DRmOXXFEDM7q+PEyc5jM94oOtz3Qz4wVX
-         bF84Pkt3xnsHhC4JEf4msMEOq+7Iy0SMQI2PPCGnJuVCqQ67FQNMHxK4SOndT/MvYfnK
-         d7bTsIeNPc9K/piu4RUryH0XTvKEDO+SeQKxNQWKdasT1ViiLcXdtf1CVEEPjdz0PYca
-         iTajalmvPI+9+JLxtQKf7IbzfgbbNh8PquCA4mN+C7xVbgmXOR1HbpzOyRXs1KtB7GrG
-         Y+6HLARwLGrVt2gPH/MhTC0Zwx+KmMZ2jDmrYSCDJU3XHmYobLzbi6dy+50GkdhDVdgX
-         PWEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Yc+h+ul4h9s6uUBRLUaqssxlPjgr6BM8cJCIGFPzipY=;
-        b=zWSj9iHz36IfRHOAoqgQ9TZXqdzFLBnhkuWYqR12w2VhjvTewXOvx8XDFvkxIHP+EP
-         x/ejw/kAD/4Q14FKfrMT+lv98BFefG5ggJ6QZwvk+KZNdXL0/DCU8Kv0GGAE3R7KRN4k
-         FNE4LRqEK/KlWdoRWk6jQoMDsmB5uEWJR3KEb+RI6rN1Y0gH3hSZx7d+ZBKqnYboRXHv
-         mxEoQXURF7FvhXNqPTwPMFgHz0grXMP/tmOsz2RzfTAQ7aywovJkjXc5fM22t3r72VvR
-         EQnGMhZxTlH2SJ8moB8KygnP8z1wN68MstjDvp9FdzHmdfL9Me+VrFBfiqWuWQGVC+yV
-         QUjg==
-X-Gm-Message-State: AJIora/OksKE7jHBaF9vqbngjNNK4EjF98ORjbGB6y1uHdOlGauNI5d2
-        trZS44Tt8KGTXd+kwwbQhSQ=
-X-Google-Smtp-Source: AGRyM1vc3d5ELKetSkvOgAd0hKsuPKWP4OeyXYnilUZDc2oB8n+LsY9tZjW49kh9c6fQjZYjNdGDaA==
-X-Received: by 2002:a17:906:cc45:b0:72b:313b:f3ee with SMTP id mm5-20020a170906cc4500b0072b313bf3eemr29551339ejb.362.1658236703117;
-        Tue, 19 Jul 2022 06:18:23 -0700 (PDT)
-Received: from skbuf ([188.27.185.104])
-        by smtp.gmail.com with ESMTPSA id c9-20020a170906528900b007262a1c8d20sm6715846ejm.19.2022.07.19.06.18.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 06:18:22 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 16:18:20 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v2 06/15] net: dsa: qca8k: move port set
- status/eee/ethtool stats function to common code
-Message-ID: <20220719131820.7qs3w635sa6skaca@skbuf>
-References: <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-8-ansuelsmth@gmail.com>
- <20220719005726.8739-8-ansuelsmth@gmail.com>
- <20220719131451.5o2sh3bf55knq3ly@skbuf>
- <62d6aeab.1c69fb81.5d5ce.23b8@mx.google.com>
+        Tue, 19 Jul 2022 10:05:11 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D005E82C
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:19:38 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1oDn8O-0006Nm-UH; Tue, 19 Jul 2022 15:19:32 +0200
+Message-ID: <9011132e-d78b-8bec-10cb-2b3d77a4e1fc@maciej.szmigiero.name>
+Date:   Tue, 19 Jul 2022 15:19:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62d6aeab.1c69fb81.5d5ce.23b8@mx.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, keescook@chromium.org,
+        hjl.tools@gmail.com, andrew.cooper3@citrix.com,
+        mark.rutland@arm.com, will@kernel.org, ndesaulniers@google.com,
+        x86@kernel.org, Ankur Arora <ankur.a.arora@oracle.com>
+References: <20211204134338.760603010@infradead.org>
+ <20211204134908.140103474@infradead.org>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Missing SLS int3 in JMP_NOSPEC? (Was: [PATCH v2 6/6] x86: Add
+ straight-line-speculation mitigation)
+In-Reply-To: <20211204134908.140103474@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:16:24PM +0200, Christian Marangi wrote:
-> On Tue, Jul 19, 2022 at 04:14:51PM +0300, Vladimir Oltean wrote:
-> > On Tue, Jul 19, 2022 at 02:57:17AM +0200, Christian Marangi wrote:
-> > > The same logic to disable/enable port, set eee and get ethtool stats is
-> > > used by drivers based on qca8k family switch.
-> > > Move it to common code to make it accessible also by other drivers.
-> > > 
-> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > ---
-> > 
-> > Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+On 4.12.2021 14:43, Peter Zijlstra wrote:
+> Make use of an upcomming GCC feature to mitigate
+> straight-line-speculation for x86:
 > 
-> (considering the ethtool function will change, is it OK to keep the
-> review tag on the next revision?)
+>    https://gcc.gnu.org/g:53a643f8568067d7700a9f2facc8ba39974973d3
+>    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102952
+>    https://bugs.llvm.org/show_bug.cgi?id=52323
+> 
+> It's built tested on x86_64-allyesconfig using GCC-12 and GCC-11.
+> 
+> Maintenace overhead of this should be fairly low due to objtool
+> validation.
+> 
+> Size overhead of all these additional int3 instructions comes to:
+> 
+>     text	   data	    bss	    dec	    hex	filename
+> 22267751	6933356	2011368	31212475	1dc43bb	defconfig-build/vmlinux
+> 22804126	6933356	1470696	31208178	1dc32f2	defconfig-build/vmlinux.sls
+> 
+> Or roughly 2.4% additional text.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+(..)
+> --- a/arch/x86/lib/retpoline.S
+> +++ b/arch/x86/lib/retpoline.S
+> @@ -34,7 +34,7 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\re
+>   
+>   	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+>   		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
+> -		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_AMD
+> +		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_AMD
+>   
+>   .endm
+>   
 
-As long as the removed code is identical to the added one, yes.
-If there are problems with the changes on the ethtool_stats function,
-I'll leave my comments there.
+Looking at this __x86_indirect_thunk_* change makes me wonder why there is
+no similar int3 SLS protection in the X86_FEATURE_RETPOLINE_LFENCE case of
+JMP_NOSPEC in arch/x86/include/asm/nospec-branch.h:
+> .macro JMP_NOSPEC reg:req
+> #ifdef CONFIG_RETPOLINE
+> 	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+> 		      __stringify(jmp __x86_indirect_thunk_\reg), X86_FEATURE_RETPOLINE, \
+> 		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_LFENCE
+> #else
+
+JMP_NOSPEC users seem to have no explicit trailing int3 instructions
+either.
+
+Or am I missing something here?
+
+Thanks,
+Maciej

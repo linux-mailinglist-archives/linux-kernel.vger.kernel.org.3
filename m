@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C89D579DF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB09C579BCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242357AbiGSM4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
+        id S239030AbiGSMcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242282AbiGSMzd (ORCPT
+        with ESMTP id S240340AbiGSMa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:55:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6569A5C2;
-        Tue, 19 Jul 2022 05:22:10 -0700 (PDT)
+        Tue, 19 Jul 2022 08:30:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63866D540;
+        Tue, 19 Jul 2022 05:11:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A999B61632;
-        Tue, 19 Jul 2022 12:22:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B045C341C6;
-        Tue, 19 Jul 2022 12:22:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D176B81B84;
+        Tue, 19 Jul 2022 12:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC697C341CF;
+        Tue, 19 Jul 2022 12:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233329;
-        bh=Y5ulbQkpBh1mvGqG++QTnnact+0szAuiE1B9TbrCcZI=;
+        s=korg; t=1658232711;
+        bh=Nb1vW5IQk2Vln6SQhixDVXvDjPnKh1njt1nUAEYqPVA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0glW1TEmAO5ALk9+uVIfC3YB2D6G3ITLM573cYApwG7eZtePNomfIjgFN0CjgHZNF
-         rBVf31fg7XS9E8CJmewGdkVJOhJPaqicVowm1cUhjKtGx2CjWJOAWrrdnEC7wCdBrB
-         PQC9/7aiMe8ZTGryXfniMT997Gbyvp2moqDfLpGo=
+        b=vFChtpNIa7rzFzO7XhI8lZaGJrTcjXaHhSL/aot+OLuzGRd/Owk7w5dQ12GFwIiU8
+         vhFVUUyubEnuvMW2XzUi7qLSJA1vtG6R/R3AsIMAr91Ed9oHIUj61W8SSYf6g2A03K
+         jBuvLc73hFprgQM9pSwdr6Sp6pG4msruXc3qPkJ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Yan <tom.ty89@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 085/231] netfilter: nf_log: incorrect offset to network header
-Date:   Tue, 19 Jul 2022 13:52:50 +0200
-Message-Id: <20220719114721.974291914@linuxfoundation.org>
+Subject: [PATCH 5.15 039/167] net/mlx5e: Ring the TX doorbell on DMA errors
+Date:   Tue, 19 Jul 2022 13:52:51 +0200
+Message-Id: <20220719114700.464089487@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 7a847c00eeba9744353ecdfad253143b9115678a ]
+[ Upstream commit 5b759bf2f9d73db05369aef2344502095c4e5e73 ]
 
-NFPROTO_ARP is expecting to find the ARP header at the network offset.
+TX doorbells may be postponed, because sometimes the driver knows that
+another packet follows (for example, when xmit_more is true, or when a
+MPWQE session is closed before transmitting a packet).
 
-In the particular case of ARP, HTYPE= field shows the initial bytes of
-the ethernet header destination MAC address.
+However, the DMA mapping may fail for the next packet, in which case a
+new WQE is not posted, the doorbell isn't updated either, and the
+transmission of the previous packet will be delayed indefinitely.
 
- netdev out: IN= OUT=bridge0 MACSRC=c2:76:e5:71:e1:de MACDST=36:b0:4a:e2:72:ea MACPROTO=0806 ARP HTYPE=14000 PTYPE=0x4ae2 OPCODE=49782
+This commit fixes the described rare error flow by posting a NOP and
+ringing the doorbell on errors to flush all the previous packets. The
+MPWQE session is closed before that. DMA mapping in the MPWQE flow is
+moved to the beginning of mlx5e_sq_xmit_mpwqe, because empty sessions
+are not allowed. Stop room always has enough space for a NOP, because
+the actual TX WQE is not posted.
 
-NFPROTO_NETDEV egress hook is also expecting to find the IP headers at
-the network offset.
-
-Fixes: 35b9395104d5 ("netfilter: add generic ARP packet logger")
-Reported-by: Tom Yan <tom.ty89@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: e586b3b0baee ("net/mlx5: Ethernet Datapath files")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_log_syslog.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../net/ethernet/mellanox/mlx5/core/en_tx.c   | 39 ++++++++++++++-----
+ 1 file changed, 30 insertions(+), 9 deletions(-)
 
-diff --git a/net/netfilter/nf_log_syslog.c b/net/netfilter/nf_log_syslog.c
-index 13234641cdb3..7000e069bc07 100644
---- a/net/netfilter/nf_log_syslog.c
-+++ b/net/netfilter/nf_log_syslog.c
-@@ -61,7 +61,7 @@ dump_arp_packet(struct nf_log_buf *m,
- 	unsigned int logflags;
- 	struct arphdr _arph;
- 
--	ah = skb_header_pointer(skb, 0, sizeof(_arph), &_arph);
-+	ah = skb_header_pointer(skb, nhoff, sizeof(_arph), &_arph);
- 	if (!ah) {
- 		nf_log_buf_add(m, "TRUNCATED");
- 		return;
-@@ -90,7 +90,7 @@ dump_arp_packet(struct nf_log_buf *m,
- 	    ah->ar_pln != sizeof(__be32))
- 		return;
- 
--	ap = skb_header_pointer(skb, sizeof(_arph), sizeof(_arpp), &_arpp);
-+	ap = skb_header_pointer(skb, nhoff + sizeof(_arph), sizeof(_arpp), &_arpp);
- 	if (!ap) {
- 		nf_log_buf_add(m, " INCOMPLETE [%zu bytes]",
- 			       skb->len - sizeof(_arph));
-@@ -144,7 +144,7 @@ static void nf_log_arp_packet(struct net *net, u_int8_t pf,
- 
- 	nf_log_dump_packet_common(m, pf, hooknum, skb, in, out, loginfo,
- 				  prefix);
--	dump_arp_packet(m, loginfo, skb, 0);
-+	dump_arp_packet(m, loginfo, skb, skb_network_offset(skb));
- 
- 	nf_log_buf_close(m);
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+index 7fd33b356cc8..1544d4c2c636 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+@@ -429,6 +429,26 @@ static void mlx5e_tx_check_stop(struct mlx5e_txqsq *sq)
+ 	}
  }
-@@ -829,7 +829,7 @@ static void nf_log_ip_packet(struct net *net, u_int8_t pf,
- 	if (in)
- 		dump_ipv4_mac_header(m, loginfo, skb);
  
--	dump_ipv4_packet(net, m, loginfo, skb, 0);
-+	dump_ipv4_packet(net, m, loginfo, skb, skb_network_offset(skb));
- 
- 	nf_log_buf_close(m);
++static void mlx5e_tx_flush(struct mlx5e_txqsq *sq)
++{
++	struct mlx5e_tx_wqe_info *wi;
++	struct mlx5e_tx_wqe *wqe;
++	u16 pi;
++
++	/* Must not be called when a MPWQE session is active but empty. */
++	mlx5e_tx_mpwqe_ensure_complete(sq);
++
++	pi = mlx5_wq_cyc_ctr2ix(&sq->wq, sq->pc);
++	wi = &sq->db.wqe_info[pi];
++
++	*wi = (struct mlx5e_tx_wqe_info) {
++		.num_wqebbs = 1,
++	};
++
++	wqe = mlx5e_post_nop(&sq->wq, sq->sqn, &sq->pc);
++	mlx5e_notify_hw(&sq->wq, sq->pc, sq->uar_map, &wqe->ctrl);
++}
++
+ static inline void
+ mlx5e_txwqe_complete(struct mlx5e_txqsq *sq, struct sk_buff *skb,
+ 		     const struct mlx5e_tx_attr *attr,
+@@ -521,6 +541,7 @@ mlx5e_sq_xmit_wqe(struct mlx5e_txqsq *sq, struct sk_buff *skb,
+ err_drop:
+ 	stats->dropped++;
+ 	dev_kfree_skb_any(skb);
++	mlx5e_tx_flush(sq);
  }
+ 
+ static bool mlx5e_tx_skb_supports_mpwqe(struct sk_buff *skb, struct mlx5e_tx_attr *attr)
+@@ -622,6 +643,13 @@ mlx5e_sq_xmit_mpwqe(struct mlx5e_txqsq *sq, struct sk_buff *skb,
+ 	struct mlx5_wqe_ctrl_seg *cseg;
+ 	struct mlx5e_xmit_data txd;
+ 
++	txd.data = skb->data;
++	txd.len = skb->len;
++
++	txd.dma_addr = dma_map_single(sq->pdev, txd.data, txd.len, DMA_TO_DEVICE);
++	if (unlikely(dma_mapping_error(sq->pdev, txd.dma_addr)))
++		goto err_unmap;
++
+ 	if (!mlx5e_tx_mpwqe_session_is_active(sq)) {
+ 		mlx5e_tx_mpwqe_session_start(sq, eseg);
+ 	} else if (!mlx5e_tx_mpwqe_same_eseg(sq, eseg)) {
+@@ -631,18 +659,9 @@ mlx5e_sq_xmit_mpwqe(struct mlx5e_txqsq *sq, struct sk_buff *skb,
+ 
+ 	sq->stats->xmit_more += xmit_more;
+ 
+-	txd.data = skb->data;
+-	txd.len = skb->len;
+-
+-	txd.dma_addr = dma_map_single(sq->pdev, txd.data, txd.len, DMA_TO_DEVICE);
+-	if (unlikely(dma_mapping_error(sq->pdev, txd.dma_addr)))
+-		goto err_unmap;
+ 	mlx5e_dma_push(sq, txd.dma_addr, txd.len, MLX5E_DMA_MAP_SINGLE);
+-
+ 	mlx5e_skb_fifo_push(&sq->db.skb_fifo, skb);
+-
+ 	mlx5e_tx_mpwqe_add_dseg(sq, &txd);
+-
+ 	mlx5e_tx_skb_update_hwts_flags(skb);
+ 
+ 	if (unlikely(mlx5e_tx_mpwqe_is_full(&sq->mpwqe))) {
+@@ -664,6 +683,7 @@ mlx5e_sq_xmit_mpwqe(struct mlx5e_txqsq *sq, struct sk_buff *skb,
+ 	mlx5e_dma_unmap_wqe_err(sq, 1);
+ 	sq->stats->dropped++;
+ 	dev_kfree_skb_any(skb);
++	mlx5e_tx_flush(sq);
+ }
+ 
+ void mlx5e_tx_mpwqe_ensure_complete(struct mlx5e_txqsq *sq)
+@@ -1033,5 +1053,6 @@ void mlx5i_sq_xmit(struct mlx5e_txqsq *sq, struct sk_buff *skb,
+ err_drop:
+ 	stats->dropped++;
+ 	dev_kfree_skb_any(skb);
++	mlx5e_tx_flush(sq);
+ }
+ #endif
 -- 
 2.35.1
 

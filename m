@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EE9579E78
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8778D579AD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242721AbiGSNBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
+        id S230001AbiGSMUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242680AbiGSM70 (ORCPT
+        with ESMTP id S239335AbiGSMRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:59:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E204945F60;
-        Tue, 19 Jul 2022 05:24:26 -0700 (PDT)
+        Tue, 19 Jul 2022 08:17:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6521A558EB;
+        Tue, 19 Jul 2022 05:06:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 788B661924;
-        Tue, 19 Jul 2022 12:24:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D6DC341DA;
-        Tue, 19 Jul 2022 12:24:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EC2461768;
+        Tue, 19 Jul 2022 12:06:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E275C341C6;
+        Tue, 19 Jul 2022 12:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233465;
-        bh=xM1h63EzfJyAhP/Vsu8PXkT6uqn3siEWV0H/xcVOprY=;
+        s=korg; t=1658232400;
+        bh=/aLEQFCmFGIlnMdi7S7nNRU3mfK34kJHakA0v4YusS4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iku6esDkcr51/ler92EIDPSyQJwP01GkNQhGr9rXcGM35vZiIwWsU3HSfqImN0z+i
-         BM3GCV28K6c87DZcAW0Tdzr4EqPmlMc25k02Ufx5elKyFhg7azV3rhMSuanUo8sVkr
-         wh1IVhk+xzpQEB5wmAH12AkREuIjZiaAW5HB0Z1I=
+        b=tdwJoNhu1pC6pCFmTaNcagiQDZJSykWPafKBvAMLIUOc2omHYQCP2I2mQtA+FIXYh
+         ICuYqkcx7EcGB6yRzRF1Qp6q3t/PthIWzXLRTiFgG5j4qwnouT/4LSkDc6EtTIaBwU
+         oD9y2+WPNCl+WfPH48/YmjOy1/8n8AbzRs0QS59o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 132/231] drm/amd/display: Ensure valid event timestamp for cursor-only commits
+Subject: [PATCH 5.10 044/112] sysctl: Fix data races in proc_dointvec_minmax().
 Date:   Tue, 19 Jul 2022 13:53:37 +0200
-Message-Id: <20220719114725.544527782@linuxfoundation.org>
+Message-Id: <20220719114630.697790436@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,108 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michel Dänzer <mdaenzer@redhat.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 3283c83eb6fcfbda8ea03d7149d8e42e71c5d45e ]
+[ Upstream commit f613d86d014b6375a4085901de39406598121e35 ]
 
-Requires enabling the vblank machinery for them.
+A sysctl variable is accessed concurrently, and there is always a chance
+of data-race.  So, all readers and writers need some basic protection to
+avoid load/store-tearing.
 
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2030
-Signed-off-by: Michel Dänzer <mdaenzer@redhat.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+This patch changes proc_dointvec_minmax() to use READ_ONCE() and
+WRITE_ONCE() internally to fix data-races on the sysctl side.  For now,
+proc_dointvec_minmax() itself is tolerant to a data-race, but we still
+need to add annotations on the other subsystem's side.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |   43 ++++++++++++++++++++--
- 1 file changed, 40 insertions(+), 3 deletions(-)
+ kernel/sysctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -464,6 +464,26 @@ static void dm_pflip_high_irq(void *inte
- 		     vrr_active, (int) !e);
- }
- 
-+static void dm_crtc_handle_vblank(struct amdgpu_crtc *acrtc)
-+{
-+	struct drm_crtc *crtc = &acrtc->base;
-+	struct drm_device *dev = crtc->dev;
-+	unsigned long flags;
-+
-+	drm_crtc_handle_vblank(crtc);
-+
-+	spin_lock_irqsave(&dev->event_lock, flags);
-+
-+	/* Send completion event for cursor-only commits */
-+	if (acrtc->event && acrtc->pflip_status != AMDGPU_FLIP_SUBMITTED) {
-+		drm_crtc_send_vblank_event(crtc, acrtc->event);
-+		drm_crtc_vblank_put(crtc);
-+		acrtc->event = NULL;
-+	}
-+
-+	spin_unlock_irqrestore(&dev->event_lock, flags);
-+}
-+
- static void dm_vupdate_high_irq(void *interrupt_params)
- {
- 	struct common_irq_params *irq_params = interrupt_params;
-@@ -502,7 +522,7 @@ static void dm_vupdate_high_irq(void *in
- 		 * if a pageflip happened inside front-porch.
- 		 */
- 		if (vrr_active) {
--			drm_crtc_handle_vblank(&acrtc->base);
-+			dm_crtc_handle_vblank(acrtc);
- 
- 			/* BTR processing for pre-DCE12 ASICs */
- 			if (acrtc->dm_irq_params.stream &&
-@@ -554,7 +574,7 @@ static void dm_crtc_high_irq(void *inter
- 	 * to dm_vupdate_high_irq after end of front-porch.
- 	 */
- 	if (!vrr_active)
--		drm_crtc_handle_vblank(&acrtc->base);
-+		dm_crtc_handle_vblank(acrtc);
- 
- 	/**
- 	 * Following stuff must happen at start of vblank, for crc
-@@ -9199,6 +9219,7 @@ static void amdgpu_dm_commit_planes(stru
- 	struct amdgpu_bo *abo;
- 	uint32_t target_vblank, last_flip_vblank;
- 	bool vrr_active = amdgpu_dm_vrr_active(acrtc_state);
-+	bool cursor_update = false;
- 	bool pflip_present = false;
- 	struct {
- 		struct dc_surface_update surface_updates[MAX_SURFACES];
-@@ -9234,8 +9255,13 @@ static void amdgpu_dm_commit_planes(stru
- 		struct dm_plane_state *dm_new_plane_state = to_dm_plane_state(new_plane_state);
- 
- 		/* Cursor plane is handled after stream updates */
--		if (plane->type == DRM_PLANE_TYPE_CURSOR)
-+		if (plane->type == DRM_PLANE_TYPE_CURSOR) {
-+			if ((fb && crtc == pcrtc) ||
-+			    (old_plane_state->fb && old_plane_state->crtc == pcrtc))
-+				cursor_update = true;
-+
- 			continue;
-+		}
- 
- 		if (!fb || !crtc || pcrtc != crtc)
- 			continue;
-@@ -9397,6 +9423,17 @@ static void amdgpu_dm_commit_planes(stru
- 				bundle->stream_update.vrr_infopacket =
- 					&acrtc_state->stream->vrr_infopacket;
- 		}
-+	} else if (cursor_update && acrtc_state->active_planes > 0 &&
-+		   !acrtc_state->force_dpms_off &&
-+		   acrtc_attach->base.state->event) {
-+		drm_crtc_vblank_get(pcrtc);
-+
-+		spin_lock_irqsave(&pcrtc->dev->event_lock, flags);
-+
-+		acrtc_attach->event = acrtc_attach->base.state->event;
-+		acrtc_attach->base.state->event = NULL;
-+
-+		spin_unlock_irqrestore(&pcrtc->dev->event_lock, flags);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 30681afbdb70..1800907da60c 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -959,7 +959,7 @@ static int do_proc_dointvec_minmax_conv(bool *negp, unsigned long *lvalp,
+ 		if ((param->min && *param->min > tmp) ||
+ 		    (param->max && *param->max < tmp))
+ 			return -EINVAL;
+-		*valp = tmp;
++		WRITE_ONCE(*valp, tmp);
  	}
  
- 	/* Update the planes if changed or disable if we don't have any. */
+ 	return 0;
+-- 
+2.35.1
+
 
 

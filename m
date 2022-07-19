@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D731A579CC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ED0579B3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241470AbiGSMmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        id S239809AbiGSMZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241030AbiGSMkG (ORCPT
+        with ESMTP id S240027AbiGSMY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:40:06 -0400
+        Tue, 19 Jul 2022 08:24:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CA27D1EF;
-        Tue, 19 Jul 2022 05:16:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C0A61D55;
+        Tue, 19 Jul 2022 05:09:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6FB0B81B84;
-        Tue, 19 Jul 2022 12:16:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F00C341C6;
-        Tue, 19 Jul 2022 12:16:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8F13B81B81;
+        Tue, 19 Jul 2022 12:08:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E394C341C6;
+        Tue, 19 Jul 2022 12:08:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232970;
-        bh=9mbzvjLbLLILSJPUT6/t8HLb6lxmwvL77vuZWExpcNw=;
+        s=korg; t=1658232533;
+        bh=i8j8lN8pZ+HBk9c+r3zEGf+7yulVsOuUqHCIcEWp5X8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O9nytDDxww0hThFMreEMpKErgEaCUy92LdJa3+DqPPhP2qOjBmf5RxvN9AvLsmvyd
-         OL90aKznslHbJXMbi/7fAfDbtAuMZRpMn5JEbN0YwBLRvWKhaslVietCQZtaFCb00Y
-         8lvxm2cLi+jGFltPUFtWLVr+wAXnOmGogxAT9DHE=
+        b=VcussHJSiSg8BpJYjoeOxWCz6yFN1edrqduHXkVj67+3Nckua2t8BS66i88f9su4w
+         N/1lAO9Vbney/ryMTny73zyOGmBB7ixmkNZdXv7mTSTH3WiccGgnwKlY/ozClCOM96
+         KkP2m7B8cmidSDX3SyApY0MEEMoHDKfOlFMqlwWE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ruozhu Li <liruozhu@huawei.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 129/167] nvme: fix regression when disconnect a recovering ctrl
-Date:   Tue, 19 Jul 2022 13:54:21 +0200
-Message-Id: <20220719114709.063554380@linuxfoundation.org>
+        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 089/112] pinctrl: aspeed: Fix potential NULL dereference in aspeed_pinmux_set_mux()
+Date:   Tue, 19 Jul 2022 13:54:22 +0200
+Message-Id: <20220719114635.320856805@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,141 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ruozhu Li <liruozhu@huawei.com>
+From: Haowen Bai <baihaowen@meizu.com>
 
-[ Upstream commit f7f70f4aa09dc43d7455c060143e86a017c30548 ]
+[ Upstream commit 84a85d3fef2e75b1fe9fc2af6f5267122555a1ed ]
 
-We encountered a problem that the disconnect command hangs.
-After analyzing the log and stack, we found that the triggering
-process is as follows:
-CPU0                          CPU1
-                                nvme_rdma_error_recovery_work
-                                  nvme_rdma_teardown_io_queues
-nvme_do_delete_ctrl                 nvme_stop_queues
-  nvme_remove_namespaces
-  --clear ctrl->namespaces
-                                    nvme_start_queues
-                                    --no ns in ctrl->namespaces
-    nvme_ns_remove                  return(because ctrl is deleting)
-      blk_freeze_queue
-        blk_mq_freeze_queue_wait
-        --wait for ns to unquiesce to clean infligt IO, hang forever
+pdesc could be null but still dereference pdesc->name and it will lead to
+a null pointer access. So we move a null check before dereference.
 
-This problem was not found in older kernels because we will flush
-err work in nvme_stop_ctrl before nvme_remove_namespaces.It does not
-seem to be modified for functional reasons, the patch can be revert
-to solve the problem.
-
-Revert commit 794a4cb3d2f7 ("nvme: remove the .stop_ctrl callout")
-
-Signed-off-by: Ruozhu Li <liruozhu@huawei.com>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Link: https://lore.kernel.org/r/1650508019-22554-1-git-send-email-baihaowen@meizu.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/core.c |  2 ++
- drivers/nvme/host/nvme.h |  1 +
- drivers/nvme/host/rdma.c | 12 +++++++++---
- drivers/nvme/host/tcp.c  | 10 +++++++---
- 4 files changed, 19 insertions(+), 6 deletions(-)
+ drivers/pinctrl/aspeed/pinctrl-aspeed.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 19054b791c67..29b56ea01132 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -4385,6 +4385,8 @@ void nvme_stop_ctrl(struct nvme_ctrl *ctrl)
- 	nvme_stop_failfast_work(ctrl);
- 	flush_work(&ctrl->async_event_work);
- 	cancel_work_sync(&ctrl->fw_act_work);
-+	if (ctrl->ops->stop_ctrl)
-+		ctrl->ops->stop_ctrl(ctrl);
- }
- EXPORT_SYMBOL_GPL(nvme_stop_ctrl);
+diff --git a/drivers/pinctrl/aspeed/pinctrl-aspeed.c b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
+index 9c65d560d48f..e792318c3894 100644
+--- a/drivers/pinctrl/aspeed/pinctrl-aspeed.c
++++ b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
+@@ -235,11 +235,11 @@ int aspeed_pinmux_set_mux(struct pinctrl_dev *pctldev, unsigned int function,
+ 		const struct aspeed_sig_expr **funcs;
+ 		const struct aspeed_sig_expr ***prios;
  
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index 72bcd7e5716e..75a7e7baa1fc 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -495,6 +495,7 @@ struct nvme_ctrl_ops {
- 	void (*free_ctrl)(struct nvme_ctrl *ctrl);
- 	void (*submit_async_event)(struct nvme_ctrl *ctrl);
- 	void (*delete_ctrl)(struct nvme_ctrl *ctrl);
-+	void (*stop_ctrl)(struct nvme_ctrl *ctrl);
- 	int (*get_address)(struct nvme_ctrl *ctrl, char *buf, int size);
- };
- 
-diff --git a/drivers/nvme/host/rdma.c b/drivers/nvme/host/rdma.c
-index d51f52e296f5..2db9c166a1b7 100644
---- a/drivers/nvme/host/rdma.c
-+++ b/drivers/nvme/host/rdma.c
-@@ -1049,6 +1049,14 @@ static void nvme_rdma_teardown_io_queues(struct nvme_rdma_ctrl *ctrl,
- 	}
- }
- 
-+static void nvme_rdma_stop_ctrl(struct nvme_ctrl *nctrl)
-+{
-+	struct nvme_rdma_ctrl *ctrl = to_rdma_ctrl(nctrl);
-+
-+	cancel_work_sync(&ctrl->err_work);
-+	cancel_delayed_work_sync(&ctrl->reconnect_work);
-+}
-+
- static void nvme_rdma_free_ctrl(struct nvme_ctrl *nctrl)
- {
- 	struct nvme_rdma_ctrl *ctrl = to_rdma_ctrl(nctrl);
-@@ -2230,9 +2238,6 @@ static const struct blk_mq_ops nvme_rdma_admin_mq_ops = {
- 
- static void nvme_rdma_shutdown_ctrl(struct nvme_rdma_ctrl *ctrl, bool shutdown)
- {
--	cancel_work_sync(&ctrl->err_work);
--	cancel_delayed_work_sync(&ctrl->reconnect_work);
+-		pr_debug("Muxing pin %s for %s\n", pdesc->name, pfunc->name);
 -
- 	nvme_rdma_teardown_io_queues(ctrl, shutdown);
- 	blk_mq_quiesce_queue(ctrl->ctrl.admin_q);
- 	if (shutdown)
-@@ -2282,6 +2287,7 @@ static const struct nvme_ctrl_ops nvme_rdma_ctrl_ops = {
- 	.submit_async_event	= nvme_rdma_submit_async_event,
- 	.delete_ctrl		= nvme_rdma_delete_ctrl,
- 	.get_address		= nvmf_get_address,
-+	.stop_ctrl		= nvme_rdma_stop_ctrl,
- };
+ 		if (!pdesc)
+ 			return -EINVAL;
  
- /*
-diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
-index 1821d38e620e..20138e132558 100644
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -2163,9 +2163,6 @@ static void nvme_tcp_error_recovery_work(struct work_struct *work)
- 
- static void nvme_tcp_teardown_ctrl(struct nvme_ctrl *ctrl, bool shutdown)
- {
--	cancel_work_sync(&to_tcp_ctrl(ctrl)->err_work);
--	cancel_delayed_work_sync(&to_tcp_ctrl(ctrl)->connect_work);
--
- 	nvme_tcp_teardown_io_queues(ctrl, shutdown);
- 	blk_mq_quiesce_queue(ctrl->admin_q);
- 	if (shutdown)
-@@ -2205,6 +2202,12 @@ static void nvme_reset_ctrl_work(struct work_struct *work)
- 	nvme_tcp_reconnect_or_remove(ctrl);
- }
- 
-+static void nvme_tcp_stop_ctrl(struct nvme_ctrl *ctrl)
-+{
-+	cancel_work_sync(&to_tcp_ctrl(ctrl)->err_work);
-+	cancel_delayed_work_sync(&to_tcp_ctrl(ctrl)->connect_work);
-+}
++		pr_debug("Muxing pin %s for %s\n", pdesc->name, pfunc->name);
 +
- static void nvme_tcp_free_ctrl(struct nvme_ctrl *nctrl)
- {
- 	struct nvme_tcp_ctrl *ctrl = to_tcp_ctrl(nctrl);
-@@ -2528,6 +2531,7 @@ static const struct nvme_ctrl_ops nvme_tcp_ctrl_ops = {
- 	.submit_async_event	= nvme_tcp_submit_async_event,
- 	.delete_ctrl		= nvme_tcp_delete_ctrl,
- 	.get_address		= nvmf_get_address,
-+	.stop_ctrl		= nvme_tcp_stop_ctrl,
- };
+ 		prios = pdesc->prios;
  
- static bool
+ 		if (!prios)
 -- 
 2.35.1
 

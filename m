@@ -2,96 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F9157A613
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751D157A610
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239840AbiGSSGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
+        id S239602AbiGSSGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 14:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239230AbiGSSGt (ORCPT
+        with ESMTP id S230104AbiGSSGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:06:49 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F1248E91
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:06:49 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id t15so2100760pjo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Mzb5Z4lYzEx/QvNne+kWXHe3dE7MvmmW8R2SziljTZQ=;
-        b=iws/cgY/LU04Xj4DXlB/H4/xL2g/jmk3tvbLLtIS3LW88swZhh9p8V5IeWbcElmdJf
-         HSDpGB2J/p8yGEGisqXIrSnHnqwHR9Db/ldCkU16w6KhsfalI9zaohshdbOY4ZQP+Tqh
-         UHS3RTp5GiAZ5Hf1QStX/uJRWzoySC69LBZJlXFgf4A1kbeyPluI6z09gyJ4beylspE1
-         BKXROi2y9jGRIV13jDfHfiF1tB7w1nyaq7KyYoT+LOJsclHg9iVnUQU0DcB2f+zrvN8b
-         WrHX/OTZj+tzNi0x7/QHc9zA6BWE/gh318SjngnZlPvPYTqWTs8nh8TwP/9GvxQ4q5P7
-         o8og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Mzb5Z4lYzEx/QvNne+kWXHe3dE7MvmmW8R2SziljTZQ=;
-        b=TxUMlbdx/qEaaLde8zP4R7rZt/kSSghK0TYVoWajoCYRQAmAvE1cGu/3mWDzU9N3tg
-         uw3WMv0gNV7KbOLUqNKPsYQR2rwyIS5TpSz0LfsD8TqXwnfS8aWCEUWrvZE1KU8THN29
-         Ev7u/L9IMaSX4YACR/g1UZURhdp8lQZr3i53u8P5bQq3ZPDVfXnrYXgz8mT+hvCRq5rU
-         WlRsm8kWu1C9Qf36nU8bYV8WkidC25MRunatA8RrwjwuA02VsVJrnNlhUmNlGzpEOjjR
-         8a/qdy1haf0O2txcRcGk2D5fTHoDKybSI6xx8AcN8EhmfR0HMV/w3R1XV3Yfdw1MORjy
-         T9JA==
-X-Gm-Message-State: AJIora/Pi5uwPS+bpjUDxdPbhLV0n2bkytjO9OYGtBqH0FOPJSUOObYj
-        rVFDt3eMa16Pmm3hLu9oBhjSDA==
-X-Google-Smtp-Source: AGRyM1uagtiFU31sX/Y1AFnGSAEXE8zlgR6JV3fWyjCsmm1YRPewoYF8PxQI6c9GGHXU5D61L7upng==
-X-Received: by 2002:a17:902:70cc:b0:16c:60e0:50fb with SMTP id l12-20020a17090270cc00b0016c60e050fbmr34530051plt.156.1658254008214;
-        Tue, 19 Jul 2022 11:06:48 -0700 (PDT)
-Received: from google.com ([2620:15c:201:2:893a:f024:99b0:7299])
-        by smtp.gmail.com with ESMTPSA id b3-20020a170902bd4300b0016c1efb9195sm11972306plx.298.2022.07.19.11.06.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 11:06:47 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 11:06:40 -0700
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-Message-ID: <YtbysBfeEZJmHtiB@google.com>
-References: <2f7f899cb75b79b08b0662ff4d2cb877@overdrivepizza.com>
- <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
- <87fsiyuhyz.ffs@tglx>
- <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
- <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
- <CAHk-=wiYHXeWnF8Ea5xb735ehJ8FbjTT6UCvHYjX=Ooc7Z5sOw@mail.gmail.com>
- <0e038c2795784b7eb4de52f77b67206a@AcuMS.aculab.com>
- <CAHk-=whycTCSPwqV53ybUX=fDKMDk_Y8JaLug3KfUSiMF2TOQg@mail.gmail.com>
- <YtbolH9YegJWUmHT@google.com>
- <CAHk-=wghqo3OtyR54FkBjkuELubPE3RzRNYU1z90BYtfuaoxzA@mail.gmail.com>
+        Tue, 19 Jul 2022 14:06:47 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE00448E9C;
+        Tue, 19 Jul 2022 11:06:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iU3QdchkEUU6nHBvyUsFQb97VeCuAcL/1eOgouZe8T9EqiHSYmq9y4W7RUF6bBQH46jXMJ4K0YlBUr09QD63W2bIwBwV9MJKvQ2kWX23ZupB2tzQCDdvHnReIykFrWFCrfkQZIQDXhaegSHhcOTMnbc7sSGkDHot6OJGCkKa+vvH2/vCh9BCfFJlMBHBffikgBbcAb3E2sxp7v1HSrAOiB9R7zt9z9AfE8t1fFDGrgj0mw/30HmgFyKAsjzJ7Vq1SUCuNCf5O37L5Phinuw9PMRDDUhwmRqUsutZ/7b9wCwoG/z7JTYEBhBeYCtV+99hOBiqDhcwBl3XTS1F5WvlXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bHPfKJpnwHrAlIY2id26HRqOG2Wv3JTpG9MuIyWwViM=;
+ b=O/upCMDvNA9zpQP3AR3ildoKxXNjNOLneGWTd3YJU0rLIEqPdS7Ykrqv88HVbo8UutoTWiAH5w5FRrYK6a8JzNiwKzRCOCRh4RbhxNlXK9ZWjueTV4Xi+Zw8GZuynoJKfAaUnmBsJELm271ZNbC+Cz3N36T2DfpKj7hDM6IJIbez/Aam7DZpZ/E4nqEpSPeosFD6VLuUk+0Icdeut8TTjAHKZwSBMagQ0Eq/SPnZIFmhj18VVLBgiYPTf/4Pt+oK5PzzXY1zzDBJl+b5dP4A8QtV4h9Rt+/HAKWPM1jcyCBpfkhAt+T+r0nWtuQRPo9rrc3imaSIpsmjNL5/w+S19g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bHPfKJpnwHrAlIY2id26HRqOG2Wv3JTpG9MuIyWwViM=;
+ b=EmBL20pJ3+An21a/7CFRqMdrkwvt460ac0Q9cw93cLZ9ZWyN0onnzBsbhYD2NY0vIv01RdmpZGgTZh3aQASb7bg/V4668TKresL8QTwMYEQ4v6J2pUu5RbESid+QK2e+45uhe1ShbUzU+11UWWKcRN7hxEEpUB14T9eolFy8H4M=
+Received: from MW3PR12MB4411.namprd12.prod.outlook.com (2603:10b6:303:5e::24)
+ by BYAPR12MB3064.namprd12.prod.outlook.com (2603:10b6:a03:da::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.20; Tue, 19 Jul
+ 2022 18:06:42 +0000
+Received: from MW3PR12MB4411.namprd12.prod.outlook.com
+ ([fe80::ac68:8cd3:1191:f639]) by MW3PR12MB4411.namprd12.prod.outlook.com
+ ([fe80::ac68:8cd3:1191:f639%9]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
+ 18:06:42 +0000
+From:   "Gogada, Bharat Kumar" <bharat.kumar.gogada@amd.com>
+To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "michals@xilinx.com" <michals@xilinx.com>
+Subject: RE: [PATCH v6 0/2] Add support for Xilinx Versal CPM5 Root Port
+Thread-Topic: [PATCH v6 0/2] Add support for Xilinx Versal CPM5 Root Port
+Thread-Index: AQHYkF3x8YswtN9DtEuLQU3s9u3ckq2GE9AA
+Date:   Tue, 19 Jul 2022 18:06:42 +0000
+Message-ID: <MW3PR12MB4411B1735832905C337CAD00BA8F9@MW3PR12MB4411.namprd12.prod.outlook.com>
+References: <20220705105646.16980-1-bharat.kumar.gogada@xilinx.com>
+In-Reply-To: <20220705105646.16980-1-bharat.kumar.gogada@xilinx.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0a74446e-37f5-4c71-ab20-08da69b16f81
+x-ms-traffictypediagnostic: BYAPR12MB3064:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kjgdVq0BNILxhV/TAczRIhLnvplgO7jnB7uswLLY9NmqeX/AA00IBk5M3KLGQZZ+ARxlrv81tWDIzSvUmTqmxUQcjZ9F9KoJWt8AunaUqtpHlTOi3ru0oa9gUs0IiUncggIdPjJth8kBuN3yCI/OI1g5Xse4tL1eewjsh5hG8jdGMG8OE2Edo1jta0/DyYm/bZmbNWH+/HF5bprdVYMJ7NKaBKQb5CU+9xuYsxMTw/UqZ6en3gBhqwfUrZY66vwgI+DREJgDlrJ9r4Knu6dJUEk0FvcCAE462U5JvQMA+4ZpuNk41bxIStXVtRQyYIMts9vBDbMs6kzyNo8qfeKw2HH4ew9EO5Ru3qr0b0/sRjaVSSbKYWE6lmDfL8iIQwfEYyVPRLGE1Dwh25Zt9YD/S3Vy0Aj8/B2spW290LETf3JbYD9uISbXoU2j3yLPoVSUmedpt6/0yH9Ek0SA85v7VGOSld4hBZaWUom2jtBn9aqTxHAc73o2jtWJZr9uTxRrohtdoDE7G/AXfeivfJb9igmUFGk96OKabcvr2Pt/847GVGmtCSpJfSrNtETYVsBKIgV8iqX/U2Lk6tIxQs4ya9ZJb26kXuNloeOxa3WL0gN4xjMLKhAHDYmhUJbCpHrkqFvjz8yBGWN9G/Zx0tNOD1fV7g6CCuJyE0uETcaQmqQ/su2fE8wPjmRBIvsNGJuCIIkAwRbQxAk/pqNa9uASmjiF4ulF5Z6OFGekehCQKDZLLIcBOnAgvjZe+iyaeiFKbdMFQuV59dd2+7lwwVb0mepySN+LNcwnGjWbkHXeTamHMyL9XYnwkOjcN+x2IyoN
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4411.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(396003)(366004)(346002)(54906003)(66446008)(53546011)(110136005)(9686003)(55236004)(6506007)(478600001)(26005)(86362001)(64756008)(71200400001)(7696005)(41300700001)(2906002)(52536014)(66556008)(55016003)(8676002)(66946007)(4326008)(8936002)(5660300002)(316002)(66476007)(122000001)(186003)(33656002)(38100700002)(38070700005)(107886003)(83380400001)(76116006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gvj5qcwQGJYzSvEz2tbGXX4XT9ClUnBLCzX9IHKFtomJglFDXxjz5z/VJzNw?=
+ =?us-ascii?Q?dgnYRmXi9s/V4Q/TSTbLLOz0Bz9ok3CUwXzoKRbqGO83B6rppXMkQntF+BVG?=
+ =?us-ascii?Q?kP3/GS7SKvU7NSPcg5N4u1ebe6qhlElAvVikNOXYqKNG1KjrizQyGynVt6tA?=
+ =?us-ascii?Q?q9ptD3h22lVfTM1VLgwmIeE4l53hrv0bNtm7sRoLG61Jo6Csuksuv+tZqRzt?=
+ =?us-ascii?Q?lQS+QzPMUZkNqpsV21cvoQyhJOqkKYGOlJRo3b2ukKV4m9yzsPnn3o2Pvvre?=
+ =?us-ascii?Q?/eafDaK0Ee/mhT/fGL+v9ZZPWgF0+zJkh+XcRzGQoiGXylQRYqYd2j9z1NB4?=
+ =?us-ascii?Q?WW79yoaM9jWen90lFuY0+zqPvMooMArUnb9q6XRCTX7xBp/Mckp0aIOvnsh9?=
+ =?us-ascii?Q?PZ5xyBXClJO3R8ZarWkXFDKJvKoJeg7Vzq2iCDhPZ5bf/NfaGchGcCEXwJfb?=
+ =?us-ascii?Q?6HPkz6AcJHmxDb3S71AjArHyVt9UO5RPTNNGSbaJ2FBL4ZmgeHr0X1EZ1mBZ?=
+ =?us-ascii?Q?AqmMLBmOtJihc5S4sypg+0K53zDw0gNcrOJyOm56Srfkpw9qMJeCmH0sUIqK?=
+ =?us-ascii?Q?OaZ9JAQr4go56DagfigkhZnIN20snJy7NL2Cw7mOZk2W2Bv1y8a0r+yy7wor?=
+ =?us-ascii?Q?7tJ0sSWhlw7YUErwVnFqo4PbSpt9nAaIQyR2M/tJV8dNdt85PbP+1ftd6/uL?=
+ =?us-ascii?Q?BZkDK99KcqPdzM+t6nWEf75F1Pk7e9VmG2gLGYAGRcJ+urInjiTigws6tz/H?=
+ =?us-ascii?Q?knvDFN6xCCuV0XlZY6TD4CXH5mMen7rdTJyhWbp1ojVGe0fVwck6tgqRXSMq?=
+ =?us-ascii?Q?oFf/okpNqFwjRNJIo0fGwLRRnyN2wV0KZXcR5zSge/YSfulU8eAFAzZwfd4t?=
+ =?us-ascii?Q?QMoGHktEMrqVSmtEqbBM6Rvc0aOBb/el5ZEe2vrwL4uBxeW3bxXMar9nuAT5?=
+ =?us-ascii?Q?OQ4BVu+mMhTRdl4yjAwgwX4KrVXgvamEsKPPPNMw5zJwzi2o14lxsqqco9yq?=
+ =?us-ascii?Q?zozi4YJ1ssLIiFoA4XCZiad9wRts+yGzo1YB4q6iOcqL4NzJlMg9XcrglteT?=
+ =?us-ascii?Q?/z2IK6KnjcL8Oq2s5UmcjGfXCFoXkiNrMecKpz/S0Awsu7BIFTDI4vpi8LpG?=
+ =?us-ascii?Q?R1v2o2iER2bHb+ahtZKIAWmP9BgqZXo/iVosoIXlt/qOhrzsUjLjyR1HWKQk?=
+ =?us-ascii?Q?j3oBBePuu99t+QyO+I0fnD5rRPEBGNSjunM5F5r3mtMp1CNgeBaacSe9aKYF?=
+ =?us-ascii?Q?96J/9qDC58lrSITEgE/j5KFd/Uo/zFOl+dJSk27KGlWmeNNjZERWk8vonhK+?=
+ =?us-ascii?Q?ffmOKifc2SsJvTjzkHZt6px3Nz9Cc8T9fTTfSYDwScd02P5tHNl90ySphJJZ?=
+ =?us-ascii?Q?zNJKomOVnIbfUs+9GNVksyxTPv+1mOlHdxROVHzYVkt18I+xTvCnHMTZDtsc?=
+ =?us-ascii?Q?9VxNWD2pjXwTjhEW+ihFX4blzLt6RttKWZhD+DutVENlMhXBr8RyMz4ATrJv?=
+ =?us-ascii?Q?GD4RAsbbp6MWsUfOu4eqCedwYfs/5jbec3mwpGfe91yI30iXoaOdou9wD8fB?=
+ =?us-ascii?Q?wHyexD5A+G7bTW9idLU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wghqo3OtyR54FkBjkuELubPE3RzRNYU1z90BYtfuaoxzA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4411.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a74446e-37f5-4c71-ab20-08da69b16f81
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2022 18:06:42.6774
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sdC822D0buMiMbCHpZ0nCpPJzpypQ26RVgbcA9B8xsp7xn0Z3gZMVpzBXGFoIh67Xr4EmPLtImQs22n4ZzCFzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3064
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,23 +117,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 10:27:00AM -0700, Linus Torvalds wrote:
-> On Tue, Jul 19, 2022 at 10:23 AM Sami Tolvanen <samitolvanen@google.com> wrote:
-> >
-> > The preamble hash is encoded into an instruction just to avoid special
-> > casing objtool, which would otherwise get confused about the random
-> > bytes. On arm64, we just emit a bare constant before the function.
-> 
-> Ahh.
-> 
-> I think objtool would want to understand about kCFI anyway, so I think
-> in the long run that hack isn't a goog idea.
-> 
-> But I get why you'd do it as a "do this as just a compiler thing and
-> hide it from objtool" as a development strategy.
+Ping!
 
-I believe it was actually Peter's idea to use an instruction. :) In
-earlier revisions of KCFI, I did teach objtool about the preambles, but
-that was just so it can ignore them.
+> -----Original Message-----
+> From: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+> Sent: Tuesday, July 5, 2022 4:27 PM
+> To: linux-pci@vger.kernel.org; linux-kernel@vger.kernel.org
+> Cc: bhelgaas@google.com; michals@xilinx.com; Bharat Kumar Gogada
+> <bharat.kumar.gogada@xilinx.com>
+> Subject: [PATCH v6 0/2] Add support for Xilinx Versal CPM5 Root Port
+>=20
+> Xilinx Versal Premium series has CPM5 block which supports Root Port
+> functioning at Gen5 speed.
+>=20
+> Xilinx Versal CPM5 has few changes with existing CPM block.
+> - CPM5 has dedicated register space for control and status registers.
+> - CPM5 legacy interrupt handling needs additional register bit
+>   to enable and handle legacy interrupts.
+>=20
+> Changes in v6:
+> - Added of_device_get_match_data to identify CPM version.
+> - Used enum values to differentiate CPM version.
+>=20
+> Bharat Kumar Gogada (2):
+>   dt-bindings: PCI: xilinx-cpm: Add Versal CPM5 Root Port
+>   PCI: xilinx-cpm: Add support for Versal CPM5 Root Port
+>=20
+>  .../bindings/pci/xilinx-versal-cpm.yaml       | 38 ++++++++++-
+>  drivers/pci/controller/pcie-xilinx-cpm.c      | 64 ++++++++++++++++++-
+>  2 files changed, 98 insertions(+), 4 deletions(-)
+>=20
+> --
+> 2.17.1
 
-Sami

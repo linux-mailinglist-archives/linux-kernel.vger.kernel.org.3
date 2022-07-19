@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C955579BB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C263C579DFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240258AbiGSM3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S242379AbiGSM4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240119AbiGSM2o (ORCPT
+        with ESMTP id S242225AbiGSM4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:28:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A4D66AE1;
-        Tue, 19 Jul 2022 05:10:44 -0700 (PDT)
+        Tue, 19 Jul 2022 08:56:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C339A5E6;
+        Tue, 19 Jul 2022 05:22:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6497B81B37;
-        Tue, 19 Jul 2022 12:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A27C36AED;
-        Tue, 19 Jul 2022 12:10:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E54CB81B21;
+        Tue, 19 Jul 2022 12:22:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83AF9C341C6;
+        Tue, 19 Jul 2022 12:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232639;
-        bh=LJ0bZOhkY762LRAckvDUrHlvWHgbHjuwRbE7KKyNk/I=;
+        s=korg; t=1658233339;
+        bh=1LjhgkDeS4tZxzepd9SNmX+3UlHPlrsFyglNx5odCfc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fnanUM2ZKH2JkIilai8qTR4WY5Pl2U8RbC2eOz024ns0QDVFEcJQxjswebJ9ywgWb
-         mgeLnnRHZOwzvyDdSiqq3ZwyPFL8GThERwCz4zOoWPYP2qZZPNNZQQVMpaDSC0Ggld
-         PKzn1C0KLZY9O/9xRnpXO4T+K0MOXBra9ewK92bs=
+        b=c8Atj5K24pnZxidrCIOUKRqJj01v6tO1roMIeJL5NjOvAwhH9laSy2+RpkV/ZjwX0
+         ANMxcFlxSyMQuenqAMHwHyYhMNUG3MnBAmHfnv0dD0Y14KlEqgW32pkyTLIk+uLX+5
+         FSsSrsIx2o5eX6wZyyUj6kqUZDScMWnoFAj3sHr4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Edwin Brossette <edwin.brossette@6wind.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.15 014/167] ip: fix dflt addr selection for connected nexthop
-Date:   Tue, 19 Jul 2022 13:52:26 +0200
-Message-Id: <20220719114658.089156765@linuxfoundation.org>
+        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 062/231] netfilter: ecache: use dedicated list for event redelivery
+Date:   Tue, 19 Jul 2022 13:52:27 +0200
+Message-Id: <20220719114719.393791108@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,92 +54,329 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Florian Westphal <fw@strlen.de>
 
-commit 747c14307214b55dbd8250e1ab44cad8305756f1 upstream.
+[ Upstream commit 2ed3bf188b33630cf9d93b996ebf001847a00b5a ]
 
-When a nexthop is added, without a gw address, the default scope was set
-to 'host'. Thus, when a source address is selected, 127.0.0.1 may be chosen
-but rejected when the route is used.
+This disentangles event redelivery and the percpu dying list.
 
-When using a route without a nexthop id, the scope can be configured in the
-route, thus the problem doesn't exist.
+Because entries are now stored on a dedicated list, all
+entries are in NFCT_ECACHE_DESTROY_FAIL state and all entries
+still have confirmed bit set -- the reference count is at least 1.
 
-To explain more deeply: when a user creates a nexthop, it cannot specify
-the scope. To create it, the function nh_create_ipv4() calls fib_check_nh()
-with scope set to 0. fib_check_nh() calls fib_check_nh_nongw() wich was
-setting scope to 'host'. Then, nh_create_ipv4() calls
-fib_info_update_nhc_saddr() with scope set to 'host'. The src addr is
-chosen before the route is inserted.
+The 'struct net' back-pointer can be removed as well.
 
-When a 'standard' route (ie without a reference to a nexthop) is added,
-fib_create_info() calls fib_info_update_nhc_saddr() with the scope set by
-the user. iproute2 set the scope to 'link' by default.
+The pcpu dying list will be removed eventually, it has no functionality.
 
-Here is a way to reproduce the problem:
-ip netns add foo
-ip -n foo link set lo up
-ip netns add bar
-ip -n bar link set lo up
-sleep 1
-
-ip -n foo link add name eth0 type dummy
-ip -n foo link set eth0 up
-ip -n foo address add 192.168.0.1/24 dev eth0
-
-ip -n foo link add name veth0 type veth peer name veth1 netns bar
-ip -n foo link set veth0 up
-ip -n bar link set veth1 up
-
-ip -n bar address add 192.168.1.1/32 dev veth1
-ip -n bar route add default dev veth1
-
-ip -n foo nexthop add id 1 dev veth0
-ip -n foo route add 192.168.1.1 nhid 1
-
-Try to get/use the route:
-> $ ip -n foo route get 192.168.1.1
-> RTNETLINK answers: Invalid argument
-> $ ip netns exec foo ping -c1 192.168.1.1
-> ping: connect: Invalid argument
-
-Try without nexthop group (iproute2 sets scope to 'link' by dflt):
-ip -n foo route del 192.168.1.1
-ip -n foo route add 192.168.1.1 dev veth0
-
-Try to get/use the route:
-> $ ip -n foo route get 192.168.1.1
-> 192.168.1.1 dev veth0 src 192.168.0.1 uid 0
->     cache
-> $ ip netns exec foo ping -c1 192.168.1.1
-> PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
-> 64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.039 ms
->
-> --- 192.168.1.1 ping statistics ---
-> 1 packets transmitted, 1 received, 0% packet loss, time 0ms
-> rtt min/avg/max/mdev = 0.039/0.039/0.039/0.000 ms
-
-CC: stable@vger.kernel.org
-Fixes: 597cfe4fc339 ("nexthop: Add support for IPv4 nexthops")
-Reported-by: Edwin Brossette <edwin.brossette@6wind.com>
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Link: https://lore.kernel.org/r/20220713114853.29406-1-nicolas.dichtel@6wind.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/fib_semantics.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/net/netfilter/nf_conntrack.h        |   3 +-
+ include/net/netfilter/nf_conntrack_ecache.h |   2 -
+ net/netfilter/nf_conntrack_core.c           |  33 +++++-
+ net/netfilter/nf_conntrack_ecache.c         | 117 +++++++++-----------
+ 4 files changed, 82 insertions(+), 73 deletions(-)
 
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -1228,7 +1228,7 @@ static int fib_check_nh_nongw(struct net
+diff --git a/include/net/netfilter/nf_conntrack.h b/include/net/netfilter/nf_conntrack.h
+index 69e6c6a218be..28672a944499 100644
+--- a/include/net/netfilter/nf_conntrack.h
++++ b/include/net/netfilter/nf_conntrack.h
+@@ -45,7 +45,8 @@ union nf_conntrack_expect_proto {
  
- 	nh->fib_nh_dev = in_dev->dev;
- 	dev_hold(nh->fib_nh_dev);
--	nh->fib_nh_scope = RT_SCOPE_HOST;
-+	nh->fib_nh_scope = RT_SCOPE_LINK;
- 	if (!netif_carrier_ok(nh->fib_nh_dev))
- 		nh->fib_nh_flags |= RTNH_F_LINKDOWN;
- 	err = 0;
+ struct nf_conntrack_net_ecache {
+ 	struct delayed_work dwork;
+-	struct netns_ct *ct_net;
++	spinlock_t dying_lock;
++	struct hlist_nulls_head dying_list;
+ };
+ 
+ struct nf_conntrack_net {
+diff --git a/include/net/netfilter/nf_conntrack_ecache.h b/include/net/netfilter/nf_conntrack_ecache.h
+index 6c4c490a3e34..a6135b5030dd 100644
+--- a/include/net/netfilter/nf_conntrack_ecache.h
++++ b/include/net/netfilter/nf_conntrack_ecache.h
+@@ -14,7 +14,6 @@
+ #include <net/netfilter/nf_conntrack_extend.h>
+ 
+ enum nf_ct_ecache_state {
+-	NFCT_ECACHE_UNKNOWN,		/* destroy event not sent */
+ 	NFCT_ECACHE_DESTROY_FAIL,	/* tried but failed to send destroy event */
+ 	NFCT_ECACHE_DESTROY_SENT,	/* sent destroy event after failure */
+ };
+@@ -23,7 +22,6 @@ struct nf_conntrack_ecache {
+ 	unsigned long cache;		/* bitops want long */
+ 	u16 ctmask;			/* bitmask of ct events to be delivered */
+ 	u16 expmask;			/* bitmask of expect events to be delivered */
+-	enum nf_ct_ecache_state state:8;/* ecache state */
+ 	u32 missed;			/* missed events */
+ 	u32 portid;			/* netlink portid of destroyer */
+ };
+diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
+index 0164e5f522e8..ca1d1d105163 100644
+--- a/net/netfilter/nf_conntrack_core.c
++++ b/net/netfilter/nf_conntrack_core.c
+@@ -660,15 +660,12 @@ void nf_ct_destroy(struct nf_conntrack *nfct)
+ }
+ EXPORT_SYMBOL(nf_ct_destroy);
+ 
+-static void nf_ct_delete_from_lists(struct nf_conn *ct)
++static void __nf_ct_delete_from_lists(struct nf_conn *ct)
+ {
+ 	struct net *net = nf_ct_net(ct);
+ 	unsigned int hash, reply_hash;
+ 	unsigned int sequence;
+ 
+-	nf_ct_helper_destroy(ct);
+-
+-	local_bh_disable();
+ 	do {
+ 		sequence = read_seqcount_begin(&nf_conntrack_generation);
+ 		hash = hash_conntrack(net,
+@@ -681,12 +678,33 @@ static void nf_ct_delete_from_lists(struct nf_conn *ct)
+ 
+ 	clean_from_lists(ct);
+ 	nf_conntrack_double_unlock(hash, reply_hash);
++}
+ 
++static void nf_ct_delete_from_lists(struct nf_conn *ct)
++{
++	nf_ct_helper_destroy(ct);
++	local_bh_disable();
++
++	__nf_ct_delete_from_lists(ct);
+ 	nf_ct_add_to_dying_list(ct);
+ 
+ 	local_bh_enable();
+ }
+ 
++static void nf_ct_add_to_ecache_list(struct nf_conn *ct)
++{
++#ifdef CONFIG_NF_CONNTRACK_EVENTS
++	struct nf_conntrack_net *cnet = nf_ct_pernet(nf_ct_net(ct));
++
++	spin_lock(&cnet->ecache.dying_lock);
++	hlist_nulls_add_head_rcu(&ct->tuplehash[IP_CT_DIR_ORIGINAL].hnnode,
++				 &cnet->ecache.dying_list);
++	spin_unlock(&cnet->ecache.dying_lock);
++#else
++	nf_ct_add_to_dying_list(ct);
++#endif
++}
++
+ bool nf_ct_delete(struct nf_conn *ct, u32 portid, int report)
+ {
+ 	struct nf_conn_tstamp *tstamp;
+@@ -709,7 +727,12 @@ bool nf_ct_delete(struct nf_conn *ct, u32 portid, int report)
+ 		/* destroy event was not delivered. nf_ct_put will
+ 		 * be done by event cache worker on redelivery.
+ 		 */
+-		nf_ct_delete_from_lists(ct);
++		nf_ct_helper_destroy(ct);
++		local_bh_disable();
++		__nf_ct_delete_from_lists(ct);
++		nf_ct_add_to_ecache_list(ct);
++		local_bh_enable();
++
+ 		nf_conntrack_ecache_work(nf_ct_net(ct), NFCT_ECACHE_DESTROY_FAIL);
+ 		return false;
+ 	}
+diff --git a/net/netfilter/nf_conntrack_ecache.c b/net/netfilter/nf_conntrack_ecache.c
+index 0cb2da0a759a..2752859479b2 100644
+--- a/net/netfilter/nf_conntrack_ecache.c
++++ b/net/netfilter/nf_conntrack_ecache.c
+@@ -16,7 +16,6 @@
+ #include <linux/vmalloc.h>
+ #include <linux/stddef.h>
+ #include <linux/err.h>
+-#include <linux/percpu.h>
+ #include <linux/kernel.h>
+ #include <linux/netdevice.h>
+ #include <linux/slab.h>
+@@ -29,8 +28,9 @@
+ 
+ static DEFINE_MUTEX(nf_ct_ecache_mutex);
+ 
+-#define ECACHE_RETRY_WAIT (HZ/10)
+-#define ECACHE_STACK_ALLOC (256 / sizeof(void *))
++#define DYING_NULLS_VAL			((1 << 30) + 1)
++#define ECACHE_MAX_JIFFIES		msecs_to_jiffies(10)
++#define ECACHE_RETRY_JIFFIES		msecs_to_jiffies(10)
+ 
+ enum retry_state {
+ 	STATE_CONGESTED,
+@@ -38,58 +38,58 @@ enum retry_state {
+ 	STATE_DONE,
+ };
+ 
+-static enum retry_state ecache_work_evict_list(struct ct_pcpu *pcpu)
++static enum retry_state ecache_work_evict_list(struct nf_conntrack_net *cnet)
+ {
+-	struct nf_conn *refs[ECACHE_STACK_ALLOC];
++	unsigned long stop = jiffies + ECACHE_MAX_JIFFIES;
++	struct hlist_nulls_head evicted_list;
+ 	enum retry_state ret = STATE_DONE;
+ 	struct nf_conntrack_tuple_hash *h;
+ 	struct hlist_nulls_node *n;
+-	unsigned int evicted = 0;
++	unsigned int sent;
+ 
+-	spin_lock(&pcpu->lock);
++	INIT_HLIST_NULLS_HEAD(&evicted_list, DYING_NULLS_VAL);
+ 
+-	hlist_nulls_for_each_entry(h, n, &pcpu->dying, hnnode) {
++next:
++	sent = 0;
++	spin_lock_bh(&cnet->ecache.dying_lock);
++
++	hlist_nulls_for_each_entry_safe(h, n, &cnet->ecache.dying_list, hnnode) {
+ 		struct nf_conn *ct = nf_ct_tuplehash_to_ctrack(h);
+-		struct nf_conntrack_ecache *e;
+-
+-		if (!nf_ct_is_confirmed(ct))
+-			continue;
+-
+-		/* This ecache access is safe because the ct is on the
+-		 * pcpu dying list and we hold the spinlock -- the entry
+-		 * cannot be free'd until after the lock is released.
+-		 *
+-		 * This is true even if ct has a refcount of 0: the
+-		 * cpu that is about to free the entry must remove it
+-		 * from the dying list and needs the lock to do so.
+-		 */
+-		e = nf_ct_ecache_find(ct);
+-		if (!e || e->state != NFCT_ECACHE_DESTROY_FAIL)
+-			continue;
+ 
+-		/* ct is in NFCT_ECACHE_DESTROY_FAIL state, this means
+-		 * the worker owns this entry: the ct will remain valid
+-		 * until the worker puts its ct reference.
++		/* The worker owns all entries, ct remains valid until nf_ct_put
++		 * in the loop below.
+ 		 */
+ 		if (nf_conntrack_event(IPCT_DESTROY, ct)) {
+ 			ret = STATE_CONGESTED;
+ 			break;
+ 		}
+ 
+-		e->state = NFCT_ECACHE_DESTROY_SENT;
+-		refs[evicted] = ct;
++		hlist_nulls_del_rcu(&ct->tuplehash[IP_CT_DIR_ORIGINAL].hnnode);
++		hlist_nulls_add_head(&ct->tuplehash[IP_CT_DIR_REPLY].hnnode, &evicted_list);
+ 
+-		if (++evicted >= ARRAY_SIZE(refs)) {
++		if (time_after(stop, jiffies)) {
+ 			ret = STATE_RESTART;
+ 			break;
+ 		}
++
++		if (sent++ > 16) {
++			spin_unlock_bh(&cnet->ecache.dying_lock);
++			cond_resched();
++			goto next;
++		}
+ 	}
+ 
+-	spin_unlock(&pcpu->lock);
++	spin_unlock_bh(&cnet->ecache.dying_lock);
+ 
+-	/* can't _put while holding lock */
+-	while (evicted)
+-		nf_ct_put(refs[--evicted]);
++	hlist_nulls_for_each_entry_safe(h, n, &evicted_list, hnnode) {
++		struct nf_conn *ct = nf_ct_tuplehash_to_ctrack(h);
++
++		hlist_nulls_add_fake(&ct->tuplehash[IP_CT_DIR_ORIGINAL].hnnode);
++		hlist_nulls_del_rcu(&ct->tuplehash[IP_CT_DIR_REPLY].hnnode);
++		nf_ct_put(ct);
++
++		cond_resched();
++	}
+ 
+ 	return ret;
+ }
+@@ -97,35 +97,20 @@ static enum retry_state ecache_work_evict_list(struct ct_pcpu *pcpu)
+ static void ecache_work(struct work_struct *work)
+ {
+ 	struct nf_conntrack_net *cnet = container_of(work, struct nf_conntrack_net, ecache.dwork.work);
+-	struct netns_ct *ctnet = cnet->ecache.ct_net;
+-	int cpu, delay = -1;
+-	struct ct_pcpu *pcpu;
+-
+-	local_bh_disable();
+-
+-	for_each_possible_cpu(cpu) {
+-		enum retry_state ret;
+-
+-		pcpu = per_cpu_ptr(ctnet->pcpu_lists, cpu);
+-
+-		ret = ecache_work_evict_list(pcpu);
+-
+-		switch (ret) {
+-		case STATE_CONGESTED:
+-			delay = ECACHE_RETRY_WAIT;
+-			goto out;
+-		case STATE_RESTART:
+-			delay = 0;
+-			break;
+-		case STATE_DONE:
+-			break;
+-		}
++	int ret, delay = -1;
++
++	ret = ecache_work_evict_list(cnet);
++	switch (ret) {
++	case STATE_CONGESTED:
++		delay = ECACHE_RETRY_JIFFIES;
++		break;
++	case STATE_RESTART:
++		delay = 0;
++		break;
++	case STATE_DONE:
++		break;
+ 	}
+ 
+- out:
+-	local_bh_enable();
+-
+-	ctnet->ecache_dwork_pending = delay > 0;
+ 	if (delay >= 0)
+ 		schedule_delayed_work(&cnet->ecache.dwork, delay);
+ }
+@@ -199,7 +184,6 @@ int nf_conntrack_eventmask_report(unsigned int events, struct nf_conn *ct,
+ 		 */
+ 		if (e->portid == 0 && portid != 0)
+ 			e->portid = portid;
+-		e->state = NFCT_ECACHE_DESTROY_FAIL;
+ 	}
+ 
+ 	return ret;
+@@ -297,8 +281,10 @@ void nf_conntrack_ecache_work(struct net *net, enum nf_ct_ecache_state state)
+ 		schedule_delayed_work(&cnet->ecache.dwork, HZ);
+ 		net->ct.ecache_dwork_pending = true;
+ 	} else if (state == NFCT_ECACHE_DESTROY_SENT) {
+-		net->ct.ecache_dwork_pending = false;
+-		mod_delayed_work(system_wq, &cnet->ecache.dwork, 0);
++		if (!hlist_nulls_empty(&cnet->ecache.dying_list))
++			mod_delayed_work(system_wq, &cnet->ecache.dwork, 0);
++		else
++			net->ct.ecache_dwork_pending = false;
+ 	}
+ }
+ 
+@@ -311,8 +297,9 @@ void nf_conntrack_ecache_pernet_init(struct net *net)
+ 
+ 	net->ct.sysctl_events = nf_ct_events;
+ 
+-	cnet->ecache.ct_net = &net->ct;
+ 	INIT_DELAYED_WORK(&cnet->ecache.dwork, ecache_work);
++	INIT_HLIST_NULLS_HEAD(&cnet->ecache.dying_list, DYING_NULLS_VAL);
++	spin_lock_init(&cnet->ecache.dying_lock);
+ 
+ 	BUILD_BUG_ON(__IPCT_MAX >= 16);	/* e->ctmask is u16 */
+ }
+-- 
+2.35.1
+
 
 

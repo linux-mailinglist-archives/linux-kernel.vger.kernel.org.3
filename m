@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A70579696
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2BA579706
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237080AbiGSJph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 05:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
+        id S237335AbiGSKBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 06:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237436AbiGSJot (ORCPT
+        with ESMTP id S232216AbiGSKBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:44:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C631D27B06;
-        Tue, 19 Jul 2022 02:44:48 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D2E0B6601A84;
-        Tue, 19 Jul 2022 10:44:46 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658223887;
-        bh=iPLT7orT6p2DHBeQ2X3yYwTk7rc/ErbEjE1ySXD1v3Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fzvMLRp7lJ2PLEUHXHUHztyjmDw33j1uwd1Du70q+jT1wHneym8PzxMAowsLKg0JP
-         FXJxUo86sm4sz6lD/9QvRuTUwwY8T6EOVTG7zdKz4XGuwGI2WlNBRUPbi/1AUoOvO+
-         W/8C3V4icsAdswCTfzA2vQruq0pqfoLyai/fLzPKkXg+Pf62cvWNbPO8/dco7su4/9
-         aWypzqT5k6tLE1ph9gG1HuEKIzELNDmArEdR7dghn0qqCFeT0seOT1sLOe14Omn9lp
-         dD4xo8tc/khJCz0Lx27RwFwU7F2hMNED8EOh1CUWv6j2RnvtscbSxsdP/B6UQsqGbn
-         BE+hWOO6uvwFQ==
-Message-ID: <c764d5c1-2d4d-e829-a728-eed253a66701@collabora.com>
-Date:   Tue, 19 Jul 2022 11:44:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 1/1] dt-bindings: iio: adc: Add compatible for MT8188
-Content-Language: en-US
-To:     Hui Liu <hui.liu@mediatek.com>, jic23@kernel.org, lars@metafoo.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com
-Cc:     srv_heupstream@mediatek.com, zhiyong.tao@mediatek.com,
-        guodong.liu@mediatek.com, johnson.wang@mediatek.com,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220719014657.28714-1-hui.liu@mediatek.com>
- <20220719014657.28714-2-hui.liu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220719014657.28714-2-hui.liu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 19 Jul 2022 06:01:17 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E122B4AB;
+        Tue, 19 Jul 2022 03:01:16 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9887D200C38;
+        Tue, 19 Jul 2022 12:01:13 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 51CFA200C32;
+        Tue, 19 Jul 2022 12:01:13 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 63C0A180222C;
+        Tue, 19 Jul 2022 18:01:11 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
+        lorenzo.pieralisi@arm.com, shawnguo@kernel.org, kishon@ti.com,
+        kw@linux.com, frank.li@nxp.com
+Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: [PATCH v1 0/10] Add iMX PCIe EP mode support
+Date:   Tue, 19 Jul 2022 17:45:29 +0800
+Message-Id: <1658223939-25478-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/07/22 03:46, Hui Liu ha scritto:
-> From: "Hui.Liu" <hui.liu@mediatek.com>
-> 
-> Add dt-binding documentation of auxadc for MediaTek MT8188 SoC platform.
-> 
-> Signed-off-by: Hui.Liu <hui.liu@mediatek.com>
+i.MX PCIe controller is one dual mode PCIe controller, and can work either
+as RC or EP.
+This series add the i.MX PCIe EP mode support. And had been verified on
+i.MX8MQ and i.MX8MM EVK boards.
+In the verification, one EVK board used as RC, the other one used as EP.
+Use the cross TX/RX differential cable connect the two PCIe ports of these
+two EVK boards.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++-----------+                +------------+
+|   PCIe TX |<-------------->|PCIe RX     |
+|           |                |            |
+|EVK Board  |                |EVK Board   |
+|           |                |            |
+|   PCIe RX |<-------------->|PCIe TX     |
++-----------+                +------------+
 
+Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml |   2 +
+arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi             |  14 +++++++
+arch/arm64/boot/dts/freescale/imx8mm.dtsi                 |  20 ++++++++++
+arch/arm64/boot/dts/freescale/imx8mq-evk.dts              |  12 ++++++
+arch/arm64/boot/dts/freescale/imx8mq.dtsi                 |  27 +++++++++++++
+drivers/misc/pci_endpoint_test.c                          |   2 +
+drivers/pci/controller/dwc/Kconfig                        |  25 +++++++++++-
+drivers/pci/controller/dwc/pci-imx6.c                     | 180 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------
+8 files changed, 263 insertions(+), 19 deletions(-)
+
+[PATCH v1 01/10] dt-bindings: imx6q-pcie: Add iMX8MM PCIe EP mode
+[PATCH v1 02/10] dt-bindings: imx6q-pcie: Add iMX8MQ PCIe EP mode
+[PATCH v1 03/10] PCI: dwc: Kconfig: Add iMX PCIe EP mode support
+[PATCH v1 04/10] arm64: dts: Add iMX8MM PCIe EP support
+[PATCH v1 05/10] arm64: dts: Add iMX8MQ PCIe EP support
+[PATCH v1 06/10] arm64: dts: Add iMX8MM PCIe EP support on EVK board
+[PATCH v1 07/10] arm64: dts: Add iMX8MQ PCIe EP support on EVK board
+[PATCH v1 08/10] misc: pci_endpoint_test: Add iMX8 PCIe EP device
+[PATCH v1 09/10] PCI: imx6: Add iMX8MM PCIe EP mode
+[PATCH v1 10/10] PCI: imx6: Add iMX8MQ PCIe EP support

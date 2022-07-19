@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A78579E92
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92444579A29
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242813AbiGSNCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S238491AbiGSMLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243033AbiGSNAI (ORCPT
+        with ESMTP id S238681AbiGSMJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:00:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D5B60697;
-        Tue, 19 Jul 2022 05:25:30 -0700 (PDT)
+        Tue, 19 Jul 2022 08:09:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1869350724;
+        Tue, 19 Jul 2022 05:02:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7104CB81B21;
-        Tue, 19 Jul 2022 12:25:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D647DC341CB;
-        Tue, 19 Jul 2022 12:25:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F048B81B1A;
+        Tue, 19 Jul 2022 12:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03CE1C341C6;
+        Tue, 19 Jul 2022 12:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233527;
-        bh=4Ae9WzvhYzV9DqfC1sH5vWDfWr4NdbtZgH8jm50vzHg=;
+        s=korg; t=1658232147;
+        bh=lXblbA7GxQskJy4CPyQoy0xDyO1DhX55N+0uuLRgM04=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=or90O26Uq3doL5sixqECZLD7q6fa9O9r5zpWg0OaoxT2mmagojxyu+6r9vuJq5hUY
-         vQms5nvLoIRp3rwXA2tyxi8Y58GXFKw8QJEz8v9FEYey3phpOuKNfl9N8gEazWEQ85
-         Y08yhjbYnjHXQZZMmg9u2wevx2LdDyg+q4Fw2IJg=
+        b=rlQ5kYGiD4muP1Ikl2RPBw7ITdBfRrbKhg8RrU2yWIVQgwiOB5wRLTAjiFgjh80JF
+         72TJ/W02sJxTUTapuCQvnXzoDiQByJ9Wgwi+s6AUCUhyurdIroq4Y5uTKDq+Hw6ieY
+         8x0EV3fT21kukr47Z4V/oD3/Yls7RAGGsLqTsFy0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 125/231] net: stmmac: fix leaks in probe
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Zheng Yejian <zhengyejian1@huawei.com>
+Subject: [PATCH 5.4 07/71] tracing/histograms: Fix memory leak problem
 Date:   Tue, 19 Jul 2022 13:53:30 +0200
-Message-Id: <20220719114724.968377404@linuxfoundation.org>
+Message-Id: <20220719114553.014705161@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Zheng Yejian <zhengyejian1@huawei.com>
 
-[ Upstream commit 23aa6d5088e3bd65de77c5c307237b9937f8b48a ]
+commit 7edc3945bdce9c39198a10d6129377a5c53559c2 upstream.
 
-These two error paths should clean up before returning.
+This reverts commit 46bbe5c671e06f070428b9be142cc4ee5cedebac.
 
-Fixes: 2bb4b98b60d7 ("net: stmmac: Add Ingenic SoCs MAC support.")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+As commit 46bbe5c671e0 ("tracing: fix double free") said, the
+"double free" problem reported by clang static analyzer is:
+  > In parse_var_defs() if there is a problem allocating
+  > var_defs.expr, the earlier var_defs.name is freed.
+  > This free is duplicated by free_var_defs() which frees
+  > the rest of the list.
+
+However, if there is a problem allocating N-th var_defs.expr:
+  + in parse_var_defs(), the freed 'earlier var_defs.name' is
+    actually the N-th var_defs.name;
+  + then in free_var_defs(), the names from 0th to (N-1)-th are freed;
+
+                        IF ALLOCATING PROBLEM HAPPENED HERE!!! -+
+                                                                 \
+                                                                  |
+          0th           1th                 (N-1)-th      N-th    V
+          +-------------+-------------+-----+-------------+-----------
+var_defs: | name | expr | name | expr | ... | name | expr | name | ///
+          +-------------+-------------+-----+-------------+-----------
+
+These two frees don't act on same name, so there was no "double free"
+problem before. Conversely, after that commit, we get a "memory leak"
+problem because the above "N-th var_defs.name" is not freed.
+
+If enable CONFIG_DEBUG_KMEMLEAK and inject a fault at where the N-th
+var_defs.expr allocated, then execute on shell like:
+  $ echo 'hist:key=call_site:val=$v1,$v2:v1=bytes_req,v2=bytes_alloc' > \
+/sys/kernel/debug/tracing/events/kmem/kmalloc/trigger
+
+Then kmemleak reports:
+  unreferenced object 0xffff8fb100ef3518 (size 8):
+    comm "bash", pid 196, jiffies 4295681690 (age 28.538s)
+    hex dump (first 8 bytes):
+      76 31 00 00 b1 8f ff ff                          v1......
+    backtrace:
+      [<0000000038fe4895>] kstrdup+0x2d/0x60
+      [<00000000c99c049a>] event_hist_trigger_parse+0x206f/0x20e0
+      [<00000000ae70d2cc>] trigger_process_regex+0xc0/0x110
+      [<0000000066737a4c>] event_trigger_write+0x75/0xd0
+      [<000000007341e40c>] vfs_write+0xbb/0x2a0
+      [<0000000087fde4c2>] ksys_write+0x59/0xd0
+      [<00000000581e9cdf>] do_syscall_64+0x3a/0x80
+      [<00000000cf3b065c>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+Link: https://lkml.kernel.org/r/20220711014731.69520-1-zhengyejian1@huawei.com
+
+Cc: stable@vger.kernel.org
+Fixes: 46bbe5c671e0 ("tracing: fix double free")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Reviewed-by: Tom Zanussi <tom.zanussi@linux.intel.com>
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/trace/trace_events_hist.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c
-index 9a6d819b84ae..378b4dd826bb 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c
-@@ -273,7 +273,8 @@ static int ingenic_mac_probe(struct platform_device *pdev)
- 			mac->tx_delay = tx_delay_ps * 1000;
- 		} else {
- 			dev_err(&pdev->dev, "Invalid TX clock delay: %dps\n", tx_delay_ps);
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto err_remove_config_dt;
- 		}
- 	}
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -4832,6 +4832,8 @@ static int parse_var_defs(struct hist_tr
  
-@@ -283,7 +284,8 @@ static int ingenic_mac_probe(struct platform_device *pdev)
- 			mac->rx_delay = rx_delay_ps * 1000;
- 		} else {
- 			dev_err(&pdev->dev, "Invalid RX clock delay: %dps\n", rx_delay_ps);
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto err_remove_config_dt;
- 		}
- 	}
- 
--- 
-2.35.1
-
+ 			s = kstrdup(field_str, GFP_KERNEL);
+ 			if (!s) {
++				kfree(hist_data->attrs->var_defs.name[n_vars]);
++				hist_data->attrs->var_defs.name[n_vars] = NULL;
+ 				ret = -ENOMEM;
+ 				goto free;
+ 			}
 
 

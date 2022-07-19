@@ -2,126 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0DB57A8E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173A057A8E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238146AbiGSVTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S236269AbiGSVX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237769AbiGSVTR (ORCPT
+        with ESMTP id S232362AbiGSVXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:19:17 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891015FAD7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:19:16 -0700 (PDT)
-Received: from localhost.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 90DD52004B;
-        Tue, 19 Jul 2022 23:19:14 +0200 (CEST)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Subject: [PATCH v4 2/2] leds: qcom-lpg: Add PM660L configuration and compatible
-Date:   Tue, 19 Jul 2022 23:18:48 +0200
-Message-Id: <20220719211848.1653920-2-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719211848.1653920-1-marijn.suijten@somainline.org>
-References: <20220719211848.1653920-1-marijn.suijten@somainline.org>
+        Tue, 19 Jul 2022 17:23:23 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432F42B242
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oquyoviez5iOBeSIHe7GZpPLBcfIF6HmL2Win3qty5Q=; b=YmbGlbf/Fx5JLeannU5TWwkK/V
+        wLd2r13MmtQfd48EoiLg1Qh8wSKYFHEYknfoi9qgfRNNQ0N8Kiy4A65Bh0P/0yF64H7jwHhYutdeT
+        YKQnVaZzh68OLWBYU2KDMAtEm3mzY5KtbvT2h13vJIPwzYcX+tVWpuyjCt9r4dfusSsJEFfVruO4X
+        EBEmcbw5p5IFLSAyZHGMu9ddLDncgD+M8P3cUCPyjqL1SJSU8kf4ACNsbi5ir+XWLI8OL6YRuEyiG
+        tZeJSD6z6Zt4pNdS2sCuBcQf7DUtKkGMDeYQccPgRdTNZZXFYNoofAW7CVwIoZFQCSrQpfGi0Eh3i
+        opyiwe9A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDugO-00DtQ2-EZ; Tue, 19 Jul 2022 21:23:08 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 00DE99802BB; Tue, 19 Jul 2022 23:23:06 +0200 (CEST)
+Date:   Tue, 19 Jul 2022 23:23:06 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     linux-kernel@vger.kernel.org, keescook@chromium.org,
+        hjl.tools@gmail.com, andrew.cooper3@citrix.com,
+        mark.rutland@arm.com, will@kernel.org, ndesaulniers@google.com,
+        x86@kernel.org, Ankur Arora <ankur.a.arora@oracle.com>
+Subject: [RFC][PATCH] x86,nospec: Simplify {JMP,CALL}_NOSPEC
+Message-ID: <Ytcguqp+/aTiOcnN@worktop.programming.kicks-ass.net>
+References: <20211204134338.760603010@infradead.org>
+ <20211204134908.140103474@infradead.org>
+ <9011132e-d78b-8bec-10cb-2b3d77a4e1fc@maciej.szmigiero.name>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9011132e-d78b-8bec-10cb-2b3d77a4e1fc@maciej.szmigiero.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inherit PM660L PMIC LPG/triled block configuration from downstream
-drivers and DT sources, consisting of a triled block with automatic
-trickle charge control and source selection, three colored led channels
-belonging to the synchronized triled block and one loose PWM channel.
+On Tue, Jul 19, 2022 at 03:19:26PM +0200, Maciej S. Szmigiero wrote:
+> On 4.12.2021 14:43, Peter Zijlstra wrote:
+> > Make use of an upcomming GCC feature to mitigate
+> > straight-line-speculation for x86:
+> > 
+> >    https://gcc.gnu.org/g:53a643f8568067d7700a9f2facc8ba39974973d3
+> >    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102952
+> >    https://bugs.llvm.org/show_bug.cgi?id=52323
+> > 
+> > It's built tested on x86_64-allyesconfig using GCC-12 and GCC-11.
+> > 
+> > Maintenace overhead of this should be fairly low due to objtool
+> > validation.
+> > 
+> > Size overhead of all these additional int3 instructions comes to:
+> > 
+> >     text	   data	    bss	    dec	    hex	filename
+> > 22267751	6933356	2011368	31212475	1dc43bb	defconfig-build/vmlinux
+> > 22804126	6933356	1470696	31208178	1dc32f2	defconfig-build/vmlinux.sls
+> > 
+> > Or roughly 2.4% additional text.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> (..)
+> > --- a/arch/x86/lib/retpoline.S
+> > +++ b/arch/x86/lib/retpoline.S
+> > @@ -34,7 +34,7 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\re
+> >   	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+> >   		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
+> > -		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_AMD
+> > +		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_AMD
+> >   .endm
+> 
+> Looking at this __x86_indirect_thunk_* change makes me wonder why there is
+> no similar int3 SLS protection in the X86_FEATURE_RETPOLINE_LFENCE case of
+> JMP_NOSPEC in arch/x86/include/asm/nospec-branch.h:
+> > .macro JMP_NOSPEC reg:req
+> > #ifdef CONFIG_RETPOLINE
+> > 	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+> > 		      __stringify(jmp __x86_indirect_thunk_\reg), X86_FEATURE_RETPOLINE, \
+> > 		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_LFENCE
+> > #else
+> 
+> JMP_NOSPEC users seem to have no explicit trailing int3 instructions
+> either.
+> 
+> Or am I missing something here?
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Probably just forgot about those. I'm thinking we ought to do something
+like this...
+
 ---
+Subject: x86,nospec: Simplify {JMP,CALL}_NOSPEC
 
-Changes since v3:
-- Rebased on -next;
-- (series) dropped DTS patches that have been applied through the
-  Qualcomm DTS tree, leaving only leds changes (driver and
-  accompanying dt-bindings).
+Have {JMP,CALL}_NOSPEC generate the same code GCC does for indirect
+calls and rely on the objtool retpoline patching infrastructure.
 
-v3: https://lore.kernel.org/linux-arm-msm/20220511190718.764445-2-marijn.suijten@somainline.org/
+There's no reason these should be alternatives while the vast bulk of
+compiler generated retpolines are not.
 
-Changes since v2:
-- Constify channels struct-array (Bjorn);
-- Correct LUT size to 49 slots (Bjorn).
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/include/asm/nospec-branch.h | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-v2: https://lore.kernel.org/linux-leds/20220507221123.2201668-1-marijn.suijten@somainline.org/T/#u
-
-Changes since v1:
-- Rebased to pick up pm8350c in the diff-context (Pavel).
-
-v1: https://lore.kernel.org/linux-leds/20220504205704.699500-1-marijn.suijten@somainline.org/T/#u
-
- drivers/leds/rgb/leds-qcom-lpg.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
-index 02f51cc61837..102ab0c33887 100644
---- a/drivers/leds/rgb/leds-qcom-lpg.c
-+++ b/drivers/leds/rgb/leds-qcom-lpg.c
-@@ -1304,6 +1304,23 @@ static int lpg_remove(struct platform_device *pdev)
- 	return 0;
- }
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 10a3bfc1eb23..7bb319d2932c 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -93,6 +93,19 @@
+ #endif
+ .endm
  
-+static const struct lpg_data pm660l_lpg_data = {
-+	.lut_base = 0xb000,
-+	.lut_size = 49,
++/*
++ * Equivalent to -mindirect-branch-cs-prefix; emit the 5 byte jmp/call
++ * to the retpoline thunk with a CS prefix when the register requires
++ * a RAX prefix byte to encode. Also see apply_alternatives().
++ */
++.macro __CS_PREFIX reg:req
++	.irp rs,r8,r9,r10,r11,r12,r13,r14,r15
++	.ifc \reg,\rs
++	.byte 0x2e
++	.endif
++	.endr
++.endm
 +
-+	.triled_base = 0xd000,
-+	.triled_has_atc_ctl = true,
-+	.triled_has_src_sel = true,
-+
-+	.num_channels = 4,
-+	.channels = (const struct lpg_channel_data[]) {
-+		{ .base = 0xb100, .triled_mask = BIT(5) },
-+		{ .base = 0xb200, .triled_mask = BIT(6) },
-+		{ .base = 0xb300, .triled_mask = BIT(7) },
-+		{ .base = 0xb400 },
-+	},
-+};
-+
- static const struct lpg_data pm8916_pwm_data = {
- 	.num_channels = 1,
- 	.channels = (const struct lpg_channel_data[]) {
-@@ -1424,6 +1441,7 @@ static const struct lpg_data pm8350c_pwm_data = {
- };
+ /*
+  * JMP_NOSPEC and CALL_NOSPEC macros can be used instead of a simple
+  * indirect jmp/call which may be susceptible to the Spectre variant 2
+@@ -100,19 +113,18 @@
+  */
+ .macro JMP_NOSPEC reg:req
+ #ifdef CONFIG_RETPOLINE
+-	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+-		      __stringify(jmp __x86_indirect_thunk_\reg), X86_FEATURE_RETPOLINE, \
+-		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_LFENCE
++	__CS_PREFIX \reg
++	jmp	__x86_indirect_thunk_\reg
+ #else
+ 	jmp	*%\reg
++	int3
+ #endif
+ .endm
  
- static const struct of_device_id lpg_of_table[] = {
-+	{ .compatible = "qcom,pm660l-lpg", .data = &pm660l_lpg_data },
- 	{ .compatible = "qcom,pm8150b-lpg", .data = &pm8150b_lpg_data },
- 	{ .compatible = "qcom,pm8150l-lpg", .data = &pm8150l_lpg_data },
- 	{ .compatible = "qcom,pm8350c-pwm", .data = &pm8350c_pwm_data },
--- 
-2.37.1
-
+ .macro CALL_NOSPEC reg:req
+ #ifdef CONFIG_RETPOLINE
+-	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; call *%\reg), \
+-		      __stringify(call __x86_indirect_thunk_\reg), X86_FEATURE_RETPOLINE, \
+-		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; call *%\reg), X86_FEATURE_RETPOLINE_LFENCE
++	__CS_PREFIX \reg
++	call	__x86_indirect_thunk_\reg
+ #else
+ 	call	*%\reg
+ #endif

@@ -2,51 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262B75795C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 807715795C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbiGSJG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 05:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S234646AbiGSJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 05:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbiGSJG0 (ORCPT
+        with ESMTP id S233865AbiGSJHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:06:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D124205E5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:06:25 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oDjB6-000469-41; Tue, 19 Jul 2022 11:06:04 +0200
-Message-ID: <60cda0c11ce004c8e019b7bb7523d46b373dac58.camel@pengutronix.de>
-Subject: Re: [PATCH v3 1/2] power: domain: handle power supplies that need
- interrupts
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        aford173@gmail.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Tue, 19 Jul 2022 11:06:02 +0200
-In-Reply-To: <CAPDyKFrkwKrvEsPHjfXUhGPcRg8z7J4OkOKq8KDp_0xj78Gudg@mail.gmail.com>
-References: <20220718210302.674897-1-martin.kepplinger@puri.sm>
-         <CAPDyKFrkwKrvEsPHjfXUhGPcRg8z7J4OkOKq8KDp_0xj78Gudg@mail.gmail.com>
+        Tue, 19 Jul 2022 05:07:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E227420BC9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658221644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5xq3a91+TAH7Moxgf8B5LgoKm/+Ua2vqG4jjWG7x1VA=;
+        b=RwFarnVQCyAmukmwIJY3NMDfQvCYliQYLvkMj80B37F+3Div3LRV20zsYLClZDd6hw6qfP
+        okUdiL0ZDm0CCk99fypS1El3VIAfWuHlyEFdL7x59SVoOLKkOEZeTscT+rxVDSzD41/YDz
+        BjoQfjMjPTvSIAbXgYtlktdIHc4VmXg=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-YlPA9m-FO_-KRZ-L-mH6BQ-1; Tue, 19 Jul 2022 05:07:22 -0400
+X-MC-Unique: YlPA9m-FO_-KRZ-L-mH6BQ-1
+Received: by mail-qk1-f197.google.com with SMTP id o13-20020a05620a2a0d00b006b46c5414b0so11464235qkp.23
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:07:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=5xq3a91+TAH7Moxgf8B5LgoKm/+Ua2vqG4jjWG7x1VA=;
+        b=xbXSgMF6FRjY1dt6yPsAXGraVwJi9iIf24abz67mX/JHGAHnKRr2pTsviERPegwa3p
+         zMg44P/ynwB2asvZNwTpRmrhzpjsHcCdkr4LLwRKw2Pe7EkAB2Ud0w5K3Chlx+3j0KJp
+         LYib8BCOMBBpP7IiE7+TKwRtuVzRPc++u9aV6tLENQ8HgPmTMJUqhVbvzWkiMtMDodCV
+         n1R14wVpB5LRTMd+zNAb1hFhQsket4IZ0klmcXF5DNuO2b7+c+kOePaz+Z8YL3YjVxeI
+         AmZlvGPlxqSIxr/WIZtloNb03a1NAOeKfEIKVu3MazOf/S6PEIx3B4yJy7zDK6o7dj3U
+         CW1Q==
+X-Gm-Message-State: AJIora9Eyp5kVfcxuZMFjFT/n4BeWhlLsUF+H0RtwJ3P9PdpiQMZNzPl
+        eha66vzCwu+vShRA6cwWhRTUktgxQeKg9bg9cEszZHeYw8dWnF1S/BJAogOvnjVGtufbp8NCtkm
+        Hk9+fX9o2dJggK9+xaxEALsyB
+X-Received: by 2002:a05:622a:1794:b0:317:db58:f413 with SMTP id s20-20020a05622a179400b00317db58f413mr23730544qtk.505.1658221641986;
+        Tue, 19 Jul 2022 02:07:21 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uRKX09vnsNM2yGtz/6mob8/dB7WaX8W9gLTBKi64TLhFALZmpn6m1I/lQV/rd+tPtAJ0qMaw==
+X-Received: by 2002:a05:622a:1794:b0:317:db58:f413 with SMTP id s20-20020a05622a179400b00317db58f413mr23730525qtk.505.1658221641721;
+        Tue, 19 Jul 2022 02:07:21 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-104-164.dyn.eolo.it. [146.241.104.164])
+        by smtp.gmail.com with ESMTPSA id dm53-20020a05620a1d7500b006b4880b08a9sm14138074qkb.88.2022.07.19.02.07.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 02:07:21 -0700 (PDT)
+Message-ID: <00e2c14ffd5bb2214b4d5553c1ed1d331b4cc355.camel@redhat.com>
+Subject: Re: [PATCH V4 net-next] net: marvell: prestera: add phylink support
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "andrew@lunn.ch" <andrew@lunn.ch>
+Date:   Tue, 19 Jul 2022 11:07:17 +0200
+In-Reply-To: <GV1P190MB2019F8813E2E3A169076EE9AE48F9@GV1P190MB2019.EURP190.PROD.OUTLOOK.COM>
+References: <20220715193454.7627-1-oleksandr.mazur@plvision.eu>
+         <660684000d6820524c61d733fb076225202dad8e.camel@redhat.com>
+         <GV1P190MB2019F8813E2E3A169076EE9AE48F9@GV1P190MB2019.EURP190.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,196 +87,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, dem 19.07.2022 um 10:53 +0200 schrieb Ulf Hansson:
-> On Mon, 18 Jul 2022 at 23:04, Martin Kepplinger
-> <martin.kepplinger@puri.sm> wrote:
-> > 
-> > If the power-domains' power-supply node (regulator) needs
-> > interrupts to work, the current setup with noirq callbacks cannot
-> > work; for example a pmic regulator on i2c, when suspending, usually already
-> > times out during suspend_noirq:
-> > 
-> > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > 
-> > So fix system suspend and resume for these power-domains by using the
-> > "outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5 board,
-> > but by looking at the dts, this will fix imx8mq-evk and possibly other boards
-> > too.
-> > 
-> > Possibly one can find more changes than suspend/resume for this case. They
-> > can be added later when testing them: This is designed so that genpd
-> > providers just say "this power-supply" needs interrupts - without implying
-> > what exactly should be configured in genpd.
-> > 
-> > Initially system suspend problems had been discussed at
-> > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > which led to discussing the pmic that contains the regulators which
-> > serve as power-domain power-supplies:
-> > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> > 
-> > revision history
-> > ----------------
-> > v3: (thank you Ulf)
-> > * move DT parsing to gpcv2 and create a genpd flag that gets set
-> > 
-> > v2: (thank you Krzysztof)
-> > * rewrite: find possible regulators' interrupts property in parents
-> >   instead of inventing a new property.
-> > https://lore.kernel.org/linux-arm-kernel/20220712121832.3659769-1-martin.kepplinger@puri.sm/
-> > 
-> > v1: (initial idea)
-> > https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
-> > 
-> > 
-> >  drivers/base/power/domain.c | 19 +++++++++++++++++++
-> >  drivers/soc/imx/gpcv2.c     |  9 +++++++++
-> >  include/linux/pm_domain.h   |  6 ++++++
-> >  3 files changed, 34 insertions(+)
-> > 
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 739e52cd4aba..1437476c9086 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
-> >  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
-> >  #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
-> >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
-> > +#define genpd_ps_needs_irq(genpd)      (genpd->flags & GENPD_FLAG_IRQ_POWER_SUPPLY)
-> > 
-> >  static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
-> >                 const struct generic_pm_domain *genpd)
-> > @@ -2298,6 +2299,20 @@ static bool genpd_present(const struct generic_pm_domain *genpd)
-> >         return ret;
-> >  }
-> > 
-> > +/**
-> > + * of_genpd_get_power_supply_irq() - Adjust if power-supply needs interrupts
-> > + * @genpd: Pointer to PM domain associated with the PM domain provider.
-> > + */
-> > +static void of_genpd_config_power_supply_irq(struct generic_pm_domain *pd)
+On Tue, 2022-07-19 at 08:56 +0000, Oleksandr Mazur wrote:
+> > > +
+> > > +static void prestera_pcs_an_restart(struct phylink_pcs *pcs)
+> > > +{
+> > > +     /*
+> > > +      * TODO: add 100basex AN restart support
 > 
-> This isn't an "of" function. Moreover, I think we just skip the
-> function all together and have the code in pm_genpd_init() instead.
+> > Possibly typo above ? s/100basex/1000basex/
 > 
-> > +{
-> > +       if (genpd_ps_needs_irq(pd)) {
-> > +               pd->domain.ops.suspend = genpd_suspend_noirq;
-> > +               pd->domain.ops.resume = genpd_resume_noirq;
-> > +               pd->domain.ops.suspend_noirq = NULL;
-> > +               pd->domain.ops.resume_noirq = NULL;
-> > +       }
-> > +}
-> > +
-> >  /**
-> >   * of_genpd_add_provider_simple() - Register a simple PM domain provider
-> >   * @np: Device node pointer associated with the PM domain provider.
-> > @@ -2343,6 +2358,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
-> >         genpd->provider = &np->fwnode;
-> >         genpd->has_provider = true;
-> > 
-> > +       of_genpd_config_power_supply_irq(genpd);
-> 
-> Drop this. As stated above, I think the code belongs in pm_genpd_init().
-> 
-> > +
-> >         return 0;
-> >  }
-> >  EXPORT_SYMBOL_GPL(of_genpd_add_provider_simple);
-> > @@ -2394,6 +2411,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
-> > 
-> >                 genpd->provider = &np->fwnode;
-> >                 genpd->has_provider = true;
-> > +
-> > +               of_genpd_config_power_supply_irq(genpd);
-> 
-> Ditto.
-> 
-> >         }
-> > 
-> >         ret = genpd_add_provider(np, data->xlate, data);
-> > diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-> > index 85aa86e1338a..3a22bad07534 100644
-> > --- a/drivers/soc/imx/gpcv2.c
-> > +++ b/drivers/soc/imx/gpcv2.c
-> > @@ -1303,6 +1303,7 @@ static const struct imx_pgc_domain_data imx8mn_pgc_domain_data = {
-> >  static int imx_pgc_domain_probe(struct platform_device *pdev)
-> >  {
-> >         struct imx_pgc_domain *domain = pdev->dev.platform_data;
-> > +       struct device_node *dn;
-> >         int ret;
-> > 
-> >         domain->dev = &pdev->dev;
-> > @@ -1333,6 +1334,14 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
-> >                 regmap_update_bits(domain->regmap, domain->regs->map,
-> >                                    domain->bits.map, domain->bits.map);
-> > 
-> > +       dn = of_parse_phandle(domain->dev->of_node, "power-supply", 0);
-> > +       if (dn) {
-> > +               while ((dn = of_get_next_parent(dn))) {
-> > +                       if (of_get_property(dn, "interrupts", NULL))
-> > +                               domain->genpd.flags |= GENPD_FLAG_IRQ_POWER_SUPPLY;
-> > +               }
-> > +       }
-> > +
-> >         ret = pm_genpd_init(&domain->genpd, NULL, true);
-> >         if (ret) {
-> >                 dev_err(domain->dev, "Failed to init power domain\n");
-> > diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> > index ebc351698090..bcceaf376f36 100644
-> > --- a/include/linux/pm_domain.h
-> > +++ b/include/linux/pm_domain.h
-> > @@ -60,6 +60,11 @@
-> >   * GENPD_FLAG_MIN_RESIDENCY:   Enable the genpd governor to consider its
-> >   *                             components' next wakeup when determining the
-> >   *                             optimal idle state.
-> > + *
-> > + * GENPD_FLAG_IRQ_POWER_SUPPLY:        The power-domains' power-supply (regulator)
-> > + *                             needs interrupts to work. Adjust accordingly.
-> > + *                             Use the outer suspend/resume callbacks instead
-> > + *                             of noirq for example.
-> 
-> I prefer a more generic name. How about GENPD_FLAG_IRQ_ON.
-> 
-> For the description, I would rather state that the genpd needs irqs to
-> stay on to be able to manage power on/off. Or something along those
-> lines.
-> 
-> >   */
-> >  #define GENPD_FLAG_PM_CLK       (1U << 0)
-> >  #define GENPD_FLAG_IRQ_SAFE     (1U << 1)
-> > @@ -68,6 +73,7 @@
-> >  #define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
-> >  #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
-> >  #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
-> > +#define GENPD_FLAG_IRQ_POWER_SUPPLY (1U << 7)
-> > 
-> >  enum gpd_status {
-> >         GENPD_STATE_ON = 0,     /* PM domain is on */
-> > --
-> > 2.30.2
-> > 
-> 
-> BTW, a more generic question. If you move away from using the *noirq
-> callbacks to the other suspend/resume callbacks in genpd to solve this
-> problem, that requires all devices that is attached to the PM domain
-> (genpd) to also *not* be managed with the "late/early" or the "noirq"
-> callbacks too. In other case, we may power off the PM domain while
-> some devices may still rely on it to be on.
-> 
-> Are you sure that this is the case?
+> Hello Paolo, yes, you're right.
+> So, should i wait some time before resubmitting patch again with
+> changes - V5 - or it's okay to resubmit new version now?
 
-For the i.MX8M* it should be fine. While we have some devices that are
-using the noirq supend/resume callbacks, like PCIe, those are not in a
-power-domain where we would like to control an external regulator, so
-things should work fine for the targeted use-case.
+My personal take: v4 has been out for several days, so it's ok to
+submit a new revision now. Others may disagre, but you would be free to
+point the finger against me for the suggestion :)
 
-However, it may be a good idea to introduce some kind of kernel warning
-when a driver with noirq suspend/resume callbacks is attached to a
-GENPD_FLAG_IRQ_ON domain.
+Please additionally have a look to my other comment, regarding
+read_lock usage.
 
-Regards,
-Lucas
+Thanks!
+
+Paolo
 

@@ -2,97 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8C257A6FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDC157A6F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238930AbiGSTLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 15:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
+        id S234894AbiGSTLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 15:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235514AbiGSTLu (ORCPT
+        with ESMTP id S230157AbiGSTLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 19 Jul 2022 15:11:50 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67B9474E7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:11:49 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so1083797pjq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:11:49 -0700 (PDT)
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DE345F56
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:11:48 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id w17so18538190ljh.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:11:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5euGlNmAtOuwJge1OAZFWWG5YnuElfsaMVS/8+pCung=;
-        b=lYQH+CDAn8WlY9EcQ7lCQ2O1WMC+gU8t3Rx9MbHBA0vhwKJoliK4rvn1HphmSRntq4
-         Kg1d6NVzXVy58nXoP565l0UjAFOCEczZKjyLc6sSZnlWmWHs5hBUg18JWSanwXMYKXIG
-         mt5mMAdmpMlVdS4ZqudxBwVFs9vW9mmvuNJglFRnNEnYGuHCBdwFHeK9q2oCcXG0OEXp
-         PAf7c9M1SPksx49vKuh5Av3Y48SonMbZ5bljU4PXsLiAzr9vUEUsfPfzKGPCaB6E2Fyu
-         nTUPeMmSNOUOTzc1uMTVKT1o7FgRnUE44iY9J2TpZuPEF+7qM6XI3PfO6jeMH3LIE6BT
-         Tmng==
+        d=semihalf.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=7SV6cxwcWEiGaJqm53YhsvXnwanf2AoDb1dJfihwiuM=;
+        b=LyZaBRYjZ++sF/ivAbWDNgvWsCy3Ft14NyOoQR7nkoiDkDNe3Mm4G1ZlumVbMlr9ZK
+         fonUUJOrdmfTEy2gT9ZN0sfwora6dTjtX7MBJkfekJym8CM/Qqm2YF701dlXXvNMb6D5
+         EB2sI0TeWQrJoENC/9VOMGh+vw9y0qpl301yracsbYSiGwI6VM6ie+RC6kZSPqYD7TWG
+         PzIESqj+r3t3zoVvLdcsD8Xsxnscvk9GqXOH4BPMYboj7OjF182DCiSAgBvKhreR2NKL
+         4zzmccw4giOeaIRzlPV0d0RQdLXQFnbO8nV2jR8Qcoizo9M9KmAAYZPP11F35qb5nEgV
+         S32w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5euGlNmAtOuwJge1OAZFWWG5YnuElfsaMVS/8+pCung=;
-        b=3qckysvoxhxUu7g8nzDVRLt83cUErcPnc6HkFO/jMpVyZjusDMIJbRi492cgeF5Jwv
-         x2tV5Br+BgWSuuEsHl0QVOpVqkD1erbj/JMJWJNmB0IU5Hm20OoUm/Z3NRkjnQQT3W+0
-         vwNxC59hLGhcwxwNFCZBotsdMpFjdiAEzbvrR8znJ9wkFXhYbsAG7XYSooCgTmv1VgyF
-         cnoNt/ECciHwSbTX/n0EqzOpf5HBvPyzmMdbAxZUadkezj8NmV6jrTX1oqguKmct9Ro0
-         +83XWEd3Z1MllHfWKsCM6qEjZlWsuNjsH6a/XcFQrb/cZPHmRH4FsHZxYFkDBDekImJ7
-         NqHA==
-X-Gm-Message-State: AJIora+mOtC5+w45eMNuniAjSaRf9nM67ZXBxRmGUUaSHhYSb9R48Sby
-        i5cT3+JcNkx0xChI9ozFevSxaw==
-X-Google-Smtp-Source: AGRyM1ukVRoo46Z3XwAvvEFhfpu7v8Jc2npjQaPCc2VMImHDe3eUmh5Mh0gZd69IAhwax4PCXtNX1w==
-X-Received: by 2002:a17:90a:ce07:b0:1f0:d4b1:30a1 with SMTP id f7-20020a17090ace0700b001f0d4b130a1mr904119pju.165.1658257909015;
-        Tue, 19 Jul 2022 12:11:49 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id u190-20020a6279c7000000b0052b433aa45asm9004344pfc.159.2022.07.19.12.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 12:11:48 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 19:11:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        pbonzini@redhat.com, mlevitsk@redhat.com, jon.grimm@amd.com
-Subject: Re: [PATCH] KVM: SVM: Fix x2APIC MSRs interception
-Message-ID: <YtcB8EPnqdaasng3@google.com>
-References: <20220718083833.222117-1-suravee.suthikulpanit@amd.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=7SV6cxwcWEiGaJqm53YhsvXnwanf2AoDb1dJfihwiuM=;
+        b=owlLSnMuRTnM5AyE+6UPrSw/Slzx2ehVq6aaTcv9Sk43lfMJWjh/+gYbIJKhz62a35
+         KOJrrzn+tQexzCpoh+NQgs08BwRUd/XFAToMvXVc4RtamNO7XgguOrJZ5AMptScg5H/x
+         HBlvbFCrVTioeSx1ALjA9No6VWDf/SAMTxTJB2/9gfyMb/YlqVfx0yp+hVVVfH1IsZMR
+         /osXYKtbixdOddC6ThI9ZZQX2FJcqCVkT4VnIDXHPrOLYtKR0i8JkK2ghD5IlF+PfPc7
+         EAp9lwDxfyvttGE376TbnheciLWjFO/1Bp4oAUy9fComaRxZS4kjycZHpdIBpJYxarJD
+         wXug==
+X-Gm-Message-State: AJIora9lA+7SBA8ZsqDcbgUJFtN+9uSxtGfaJRmTfftu7htq/XaSHIks
+        +P6DrLIk3OFyMTaYSVNpPJSI7u4eMKxfrz9d
+X-Google-Smtp-Source: AGRyM1uOESYS4Whck2N14ZdE9rrXhBpV/yJJwFiLzXV44VcuHgb4mlzQgO/Ey/B75J9SexIskNAR5w==
+X-Received: by 2002:a2e:bea8:0:b0:25d:610f:5c02 with SMTP id a40-20020a2ebea8000000b0025d610f5c02mr14787392ljr.186.1658257906647;
+        Tue, 19 Jul 2022 12:11:46 -0700 (PDT)
+Received: from [10.43.1.253] ([83.142.187.84])
+        by smtp.gmail.com with ESMTPSA id p15-20020ac24ecf000000b0047f6f8f20dcsm2159491lfr.28.2022.07.19.12.11.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 12:11:46 -0700 (PDT)
+Message-ID: <5e6b3acf-1909-de42-3da7-c591e23ab221@semihalf.com>
+Date:   Tue, 19 Jul 2022 21:11:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718083833.222117-1-suravee.suthikulpanit@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] PCI/ASPM: Disable ASPM when save/restore PCI state
+Content-Language: en-US
+From:   Dmytro Maluka <dmy@semihalf.com>
+To:     Victor Ding <victording@google.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
+        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Zide Chen <zide.chen@intel.com>
+References: <20210311173433.GA2071075@bjorn-Precision-5520>
+ <20210726220307.GA647936@bjorn-Precision-5520>
+ <CANqTbdb_h_W+8kmh6s56deA8VKn6tO1KDJaS5Yasq5RFLtGUbQ@mail.gmail.com>
+ <820dff42-67e4-32d2-a72f-9e9bdb70609e@semihalf.com>
+In-Reply-To: <820dff42-67e4-32d2-a72f-9e9bdb70609e@semihalf.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022, Suravee Suthikulpanit wrote:
-> The index for svm_direct_access_msrs was incorrectly initialized with
-> the APIC MMIO register macros. Fix by introducing a macro for calculating
-> x2APIC MSRs.
+On 7/18/22 18:21, Dmytro Maluka wrote:
+> While we're at it, I'm also wondering why for the basic PCI config (the
+> first 256 bytes) Linux on x86 always uses the legacy 0xCF8/0xCFC method
+> instead of MMCFG, even if MMCFG is available. The legacy method is
+> inherently non-atomic and does require the global lock, while the MMCFG
+> method generally doesn't, so using MMCFG would significantly speed up
+> PCI config accesses in high-contention scenarios like the parallel
+> suspend/resume.
 > 
-> Fixes: 5c127c85472c ("KVM: SVM: Adding support for configuring x2APIC MSRs interception")
-> Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 52 ++++++++++++++++++++++--------------------
->  1 file changed, 27 insertions(+), 25 deletions(-)
+> I've tried the below change which forces using MMCFG for the first 256
+> bytes, and indeed, it makes suspend/resume of individual PCI devices
+> with pm_async=1 almost as fast as with pm_async=0. In particular, it
+> fixes the problem with slow GL9750 suspend/resume even without Victor's
+> patch.
 > 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index ba81a7e58f75..aef63aae922d 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -74,6 +74,8 @@ static uint64_t osvw_len = 4, osvw_status;
+> --- a/arch/x86/pci/common.c
+> +++ b/arch/x86/pci/common.c
+> @@ -40,20 +40,20 @@ const struct pci_raw_ops *__read_mostly raw_pci_ext_ops;
+>  int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
+>                                                 int reg, int len, u32 *val)
+>  {
+> -       if (domain == 0 && reg < 256 && raw_pci_ops)
+> -               return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
+>         if (raw_pci_ext_ops)
+>                 return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
+> +       if (domain == 0 && reg < 256 && raw_pci_ops)
+> +               return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
+>         return -EINVAL;
+>  }
 >  
->  static DEFINE_PER_CPU(u64, current_tsc_ratio);
+>  int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
+>                                                 int reg, int len, u32 val)
+>  {
+> -       if (domain == 0 && reg < 256 && raw_pci_ops)
+> -               return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
+>         if (raw_pci_ext_ops)
+>                 return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
+> +       if (domain == 0 && reg < 256 && raw_pci_ops)
+> +               return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
+>         return -EINVAL;
+>  }
 >  
-> +#define X2APIC_MSR(x)	(APIC_BASE_MSR + (x >> 4))
+> 
+> Sounds good if I submit a patch like this? (I'm not suggesting it
+> instead of Victor's patch, rather as a separate improvement.)
 
-Once this hits kvm/queue, I'll send a follow-up series to move X2APIC_MSR() to
-arch/x86/include/asm/apicdef.h.  Non-KVM APIC support open code the calculation
-in multiple places, and both VMX and SVM now have their own definitions.
+Ok, I found that a similar change was already suggested in the past by
+Thomas [1] and got rejected by Linus [2].
+
+Linus' arguments sound reasonable, and I understand that back then the
+only known case of an issue with PCI config lock contention was with
+Intel PMU counter registers which are in the extended config space
+anyway. But now we know another case of such a contention, concerning
+the basic config space too, namely: suspending or resuming many PCI
+devices in parallel during system suspend/resume.
+
+I've checked that on my box using MMCFG instead of Type 1 (i.e. using my
+above patch) reduces the total suspend or resume time by 15-20 ms on
+average. (I also had Victor's patch applied all the time, i.e. the ASPM
+L1 exit latency issue was already resolved, so my test was about the PCI
+lock contention in general.) So, not exactly a major improvement, yet
+not exactly a negligible one. Maybe it's worth optimizing, maybe not.
+
+Anyway, that's a bit of digression. Let's focus primarily on Victor's
+ASPM patch.
+
+[1]
+https://lore.kernel.org/all/tip-b5b0f00c760b6e9673ab79b88ede2f3c7a039f74@git.kernel.org/
+
+[2]
+https://lore.kernel.org/all/CA+55aFwi0tkdugfqNEz6M28RXM2jx6WpaDF4nfA=doUVdZgUNQ@mail.gmail.com/
+
+Thanks,
+Dmytro

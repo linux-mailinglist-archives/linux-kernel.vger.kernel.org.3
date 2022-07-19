@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF2A579BD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3E4579BCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240448AbiGSMcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
+        id S232908AbiGSMcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240072AbiGSMb1 (ORCPT
+        with ESMTP id S239026AbiGSMaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:31:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3808652883;
-        Tue, 19 Jul 2022 05:11:59 -0700 (PDT)
+        Tue, 19 Jul 2022 08:30:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B350D6D9E4;
+        Tue, 19 Jul 2022 05:11:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC8F7B81B2E;
-        Tue, 19 Jul 2022 12:11:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3CEC341CB;
-        Tue, 19 Jul 2022 12:11:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 737A3B81B31;
+        Tue, 19 Jul 2022 12:11:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA26DC341C6;
+        Tue, 19 Jul 2022 12:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232705;
-        bh=xXka3hcQsxFrFK2ApKm8SInwLLCYwCp3TXJmICQEvU8=;
+        s=korg; t=1658232708;
+        bh=rw7jY2zwDt3Jsu4RiDfcZvwp9AB82wUt80BndqxQa+o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DnBbOM3CyeK7eBqyFyvMHjN873dY/beM9a6dPR07B6GgWaID2X/GGpxVSEoOYhq+J
-         cCyNk6Af6Ey9kI6yV/eNB8Fxt/ZyrlgryjXEiTADJ29ve3bgsswbHDtyJdEPhY7mOt
-         vIbSW7+du+A7Dh9zxfXDcHI3iHiamwxfqxD0MWIg=
+        b=IH0S12Cv38F5XYiTcY+hA1gL7WxUofE2UQwhl1OJ9hDTKfB80iQuhZQH+XZKRCZAa
+         t66timSJWwtNbcm/1yS6nc7/oMDWL3aZ0cNl9OdaFP1X0TrSqDWrSGlGc3CT6Dn6t8
+         HU2RZT5Hb6nSkVmFMWjTtFPgZeOCDDbjFDVVIFWI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
-        Roi Dayan <roid@nvidia.com>,
+        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
         Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 037/167] net/mlx5e: Fix enabling sriov while tc nic rules are offloaded
-Date:   Tue, 19 Jul 2022 13:52:49 +0200
-Message-Id: <20220719114700.290640439@linuxfoundation.org>
+Subject: [PATCH 5.15 038/167] net/mlx5e: Fix capability check for updating vnic env counters
+Date:   Tue, 19 Jul 2022 13:52:50 +0200
+Message-Id: <20220719114700.370664064@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
 References: <20220719114656.750574879@linuxfoundation.org>
@@ -55,58 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Blakey <paulb@nvidia.com>
+From: Gal Pressman <gal@nvidia.com>
 
-[ Upstream commit 0c9d876545a56aebed30fa306d0460a4d28d271a ]
+[ Upstream commit 452133dd580811f184e76b1402983182ee425298 ]
 
-There is a total of four 4M entries flow tables. In sriov disabled
-mode, ct, ct_nat and post_act take three of them. When adding the
-first tc nic rule in this mode, it will take another 4M table
-for the tc <chain,prio> table. If user then enables sriov, the legacy
-flow table tries to take another 4M and fails, and so enablement fails.
+The existing capability check for vnic env counters only checks for
+receive steering discards, although we need the counters update for the
+exposed internal queue oob counter as well. This could result in the
+latter counter not being updated correctly when the receive steering
+discards counter is not supported.
+Fix that by checking whether any counter is supported instead of only
+the steering counter capability.
 
-To fix that, have legacy fdb take the next available maximum
-size from the fs ft pool.
-
-Fixes: 4a98544d1827 ("net/mlx5: Move chains ft pool to be used by all firmware steering")
-Signed-off-by: Paul Blakey <paulb@nvidia.com>
-Reviewed-by: Roi Dayan <roid@nvidia.com>
+Fixes: 0cfafd4b4ddf ("net/mlx5e: Add device out of buffer counter")
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/esw/legacy.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_stats.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/esw/legacy.c b/drivers/net/ethernet/mellanox/mlx5/core/esw/legacy.c
-index 0c4c743ca31e..3a2575dc5355 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/esw/legacy.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/esw/legacy.c
-@@ -11,6 +11,7 @@
- #include "mlx5_core.h"
- #include "eswitch.h"
- #include "fs_core.h"
-+#include "fs_ft_pool.h"
- #include "esw/qos.h"
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_stats.c b/drivers/net/ethernet/mellanox/mlx5/core/en_stats.c
+index e1dd17019030..5a5c6eda29d2 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_stats.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_stats.c
+@@ -614,7 +614,7 @@ static MLX5E_DECLARE_STATS_GRP_OP_UPDATE_STATS(vnic_env)
+ 	u32 in[MLX5_ST_SZ_DW(query_vnic_env_in)] = {};
+ 	struct mlx5_core_dev *mdev = priv->mdev;
  
- enum {
-@@ -95,8 +96,7 @@ static int esw_create_legacy_fdb_table(struct mlx5_eswitch *esw)
- 	if (!flow_group_in)
- 		return -ENOMEM;
+-	if (!MLX5_CAP_GEN(priv->mdev, nic_receive_steering_discard))
++	if (!mlx5e_stats_grp_vnic_env_num_stats(priv))
+ 		return;
  
--	table_size = BIT(MLX5_CAP_ESW_FLOWTABLE_FDB(dev, log_max_ft_size));
--	ft_attr.max_fte = table_size;
-+	ft_attr.max_fte = POOL_NEXT_SIZE;
- 	ft_attr.prio = LEGACY_FDB_PRIO;
- 	fdb = mlx5_create_flow_table(root_ns, &ft_attr);
- 	if (IS_ERR(fdb)) {
-@@ -105,6 +105,7 @@ static int esw_create_legacy_fdb_table(struct mlx5_eswitch *esw)
- 		goto out;
- 	}
- 	esw->fdb_table.legacy.fdb = fdb;
-+	table_size = fdb->max_fte;
- 
- 	/* Addresses group : Full match unicast/multicast addresses */
- 	MLX5_SET(create_flow_group_in, flow_group_in, match_criteria_enable,
+ 	MLX5_SET(query_vnic_env_in, in, opcode, MLX5_CMD_OP_QUERY_VNIC_ENV);
 -- 
 2.35.1
 

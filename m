@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF68579ED6
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72442579A30
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243159AbiGSNGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S238771AbiGSMLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243109AbiGSNGa (ORCPT
+        with ESMTP id S238908AbiGSMJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:06:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C07A0259;
-        Tue, 19 Jul 2022 05:27:04 -0700 (PDT)
+        Tue, 19 Jul 2022 08:09:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CAD509E2;
+        Tue, 19 Jul 2022 05:02:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9904A61978;
-        Tue, 19 Jul 2022 12:26:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C5CC341D0;
-        Tue, 19 Jul 2022 12:26:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FD55616B7;
+        Tue, 19 Jul 2022 12:02:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0101EC341C6;
+        Tue, 19 Jul 2022 12:02:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233615;
-        bh=FFOp3TiFjA6X4kN9wrJUlb/4XNEw+QMu8X8lFkJOVCY=;
+        s=korg; t=1658232167;
+        bh=cZgTHkVtlok+T5XHfZpzvaVm/8OrIF2Ls//nqAw6xA0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D0agrEKQWyai5kIrDILY7URGuGsgkE9ycirfTQPGjD/7WWP8+WELpUfhckwHxjcQS
-         FLZ0E0V4R9ssxPJCGiZ1QRcc+ea7fOFFuW3RNKErj5s2jTiNdmDoFYpnKsQoGzNLsz
-         y5p8sEyQy+5FCabkuGF2SkOXdAX5QO7m3iv1xUwU=
+        b=D8lqJ3WlHgBiTg0t8faq85PsP2u0eZDD8r23rJb9T9MIc2xrW9xuZRcz0DlhF9Rc2
+         gNrTNUZUPOzYRNlL4QMx6LZSVkJNyoBvqyJFCoUd0CRoZnVMnOoClIjb1isaJ+bdgM
+         2wn1E94PvHwobfujZcub1sOvMPxlsQbNNrS1U5wA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 153/231] ASoC: dt-bindings: Fix description for msm8916
-Date:   Tue, 19 Jul 2022 13:53:58 +0200
-Message-Id: <20220719114727.178368901@linuxfoundation.org>
+Subject: [PATCH 5.4 36/71] raw: Fix a data-race around sysctl_raw_l3mdev_accept.
+Date:   Tue, 19 Jul 2022 13:53:59 +0200
+Message-Id: <20220719114555.772754578@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,57 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 94c65dffd4c4af052b3ea8934fbcb2fa8da276a8 ]
+[ Upstream commit 1dace014928e6e385363032d359a04dee9158af0 ]
 
-For the existing msm8916 bindings the minimum reg/reg-names is 1 not 2.
-Similarly the minimum interrupt/interrupt-names is 1 not 2.
+While reading sysctl_raw_l3mdev_accept, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: f3fc4fbfa2d2 ("ASoC: dt-bindings: Add SC7280 lpass cpu bindings")
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220629114012.3282945-1-bryan.odonoghue@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 6897445fb194 ("net: provide a sysctl raw_l3mdev_accept for raw socket lookup with VRFs")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../devicetree/bindings/sound/qcom,lpass-cpu.yaml         | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ include/net/raw.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
-index 2c81efb5fa37..47bb67d43ac2 100644
---- a/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
-@@ -25,12 +25,12 @@ properties:
-       - qcom,sc7280-lpass-cpu
- 
-   reg:
--    minItems: 2
-+    minItems: 1
-     maxItems: 6
-     description: LPAIF core registers
- 
-   reg-names:
--    minItems: 2
-+    minItems: 1
-     maxItems: 6
- 
-   clocks:
-@@ -42,12 +42,12 @@ properties:
-     maxItems: 7
- 
-   interrupts:
--    minItems: 2
-+    minItems: 1
-     maxItems: 4
-     description: LPAIF DMA buffer interrupt
- 
-   interrupt-names:
--    minItems: 2
-+    minItems: 1
-     maxItems: 4
- 
-   qcom,adsp:
+diff --git a/include/net/raw.h b/include/net/raw.h
+index 8ad8df594853..c51a635671a7 100644
+--- a/include/net/raw.h
++++ b/include/net/raw.h
+@@ -75,7 +75,7 @@ static inline bool raw_sk_bound_dev_eq(struct net *net, int bound_dev_if,
+ 				       int dif, int sdif)
+ {
+ #if IS_ENABLED(CONFIG_NET_L3_MASTER_DEV)
+-	return inet_bound_dev_eq(!!net->ipv4.sysctl_raw_l3mdev_accept,
++	return inet_bound_dev_eq(READ_ONCE(net->ipv4.sysctl_raw_l3mdev_accept),
+ 				 bound_dev_if, dif, sdif);
+ #else
+ 	return inet_bound_dev_eq(true, bound_dev_if, dif, sdif);
 -- 
 2.35.1
 

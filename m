@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA0D57996B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A780D5799DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbiGSMCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
+        id S238428AbiGSMHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237683AbiGSMBl (ORCPT
+        with ESMTP id S238255AbiGSMHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:01:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F001E4331C;
-        Tue, 19 Jul 2022 04:58:45 -0700 (PDT)
+        Tue, 19 Jul 2022 08:07:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA314E63A;
+        Tue, 19 Jul 2022 05:01:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E78161654;
-        Tue, 19 Jul 2022 11:58:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ECA4C341C6;
-        Tue, 19 Jul 2022 11:58:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 521B1B81B2D;
+        Tue, 19 Jul 2022 12:01:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938F8C36AE2;
+        Tue, 19 Jul 2022 12:01:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231924;
-        bh=Bm9v9px20qjhnfPeUXRRvzIaEVzRnS3kuvbqmkLM0rU=;
+        s=korg; t=1658232067;
+        bh=3wNf9MU5nkqkVJi/QAPuv9CYhltkS5PKt+M/rdroE8Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i+5riCLc1fSo3ZSbLS1+TUrJ0Sv70VqyQf401rjOmgbjmRPHOTUajfdN4djOO4DaH
-         2fEBa4fb5mZuVgvILpRgNZD/GV6s86F+b/YrARrDLYn3mvIWz7PIfUikwyLNd3CqHJ
-         mTpUtfLc4aE3Wv1O2KoBmRExZDcICQ3fli9BsXdM=
+        b=BHhQbLUdV7CnkJdso3l8zCG7q0dODczTaFdI00DNQbRGLy7O26sdf4UpKlAw2driC
+         /qrgpaqjtsOmPa7tbJ5WLilAunOfile9Fw7ciIjp6Ag+FPfFrCnlcfPg9Rjanvrnul
+         Gds+KXeQjaCbwoUCjnWAKAPjQYBAoUcDHeKP4pHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Jorge Lopez <jorge.lopez2@hp.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 37/43] signal handling: dont use BUG_ON() for debugging
+Subject: [PATCH 4.19 31/48] platform/x86: hp-wmi: Ignore Sanitization Mode event
 Date:   Tue, 19 Jul 2022 13:54:08 +0200
-Message-Id: <20220719114525.140079922@linuxfoundation.org>
+Message-Id: <20220719114522.657993635@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
-References: <20220719114521.868169025@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-[ Upstream commit a382f8fee42ca10c9bfce0d2352d4153f931f5dc ]
+[ Upstream commit 9ab762a84b8094540c18a170e5ddd6488632c456 ]
 
-These are indeed "should not happen" situations, but it turns out recent
-changes made the 'task_is_stopped_or_trace()' case trigger (fix for that
-exists, is pending more testing), and the BUG_ON() makes it
-unnecessarily hard to actually debug for no good reason.
+After system resume the hp-wmi driver may complain:
+[ 702.620180] hp_wmi: Unknown event_id - 23 - 0x0
 
-It's been that way for a long time, but let's make it clear: BUG_ON() is
-not good for debugging, and should never be used in situations where you
-could just say "this shouldn't happen, but we can continue".
+According to HP it means 'Sanitization Mode' and it's harmless to just
+ignore the event.
 
-Use WARN_ON_ONCE() instead to make sure it gets logged, and then just
-continue running.  Instead of making the system basically unusuable
-because you crashed the machine while potentially holding some very core
-locks (eg this function is commonly called while holding 'tasklist_lock'
-for writing).
-
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jorge Lopez <jorge.lopez2@hp.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Link: https://lore.kernel.org/r/20220628123726.250062-1-kai.heng.feng@canonical.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/signal.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/platform/x86/hp-wmi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 3619ab24644f..7c3fe8e0230a 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -1662,12 +1662,12 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
- 	bool autoreap = false;
- 	u64 utime, stime;
+diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
+index 93fadd4abf14..f911410bb4c7 100644
+--- a/drivers/platform/x86/hp-wmi.c
++++ b/drivers/platform/x86/hp-wmi.c
+@@ -75,6 +75,7 @@ enum hp_wmi_event_ids {
+ 	HPWMI_BACKLIT_KB_BRIGHTNESS	= 0x0D,
+ 	HPWMI_PEAKSHIFT_PERIOD		= 0x0F,
+ 	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
++	HPWMI_SANITIZATION_MODE		= 0x17,
+ };
  
--	BUG_ON(sig == -1);
-+	WARN_ON_ONCE(sig == -1);
- 
-- 	/* do_notify_parent_cldstop should have been called instead.  */
-- 	BUG_ON(task_is_stopped_or_traced(tsk));
-+	/* do_notify_parent_cldstop should have been called instead.  */
-+	WARN_ON_ONCE(task_is_stopped_or_traced(tsk));
- 
--	BUG_ON(!tsk->ptrace &&
-+	WARN_ON_ONCE(!tsk->ptrace &&
- 	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
- 
- 	if (sig != SIGCHLD) {
+ struct bios_args {
+@@ -631,6 +632,8 @@ static void hp_wmi_notify(u32 value, void *context)
+ 		break;
+ 	case HPWMI_BATTERY_CHARGE_PERIOD:
+ 		break;
++	case HPWMI_SANITIZATION_MODE:
++		break;
+ 	default:
+ 		pr_info("Unknown event_id - %d - 0x%x\n", event_id, event_data);
+ 		break;
 -- 
 2.35.1
 

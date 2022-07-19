@@ -2,107 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48365790E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8038D5790EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbiGSCgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 22:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
+        id S234747AbiGSCii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 22:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiGSCgL (ORCPT
+        with ESMTP id S234639AbiGSCid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 22:36:11 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E3B1D0C8;
-        Mon, 18 Jul 2022 19:36:09 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 18 Jul 2022 22:38:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44332715C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 19:38:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ln2yJ1dRRz4xXD;
-        Tue, 19 Jul 2022 12:36:08 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658198168;
-        bh=qQmhpa9HzmEVe/Xt2MkQgH+IGQHrUPwe4dG561pSqVg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gp5bPKA0AJp2p5/m3iGIfEaLSdprf2XbbxRJRx9Y0hsN5BKKyK7CgIWeWsrYIEUmI
-         RLbTqeLUyrUTM4/sWH+TvAd4gsWZJRLjp/SQ8q9di5Yw8J9lA+S4UItSHKXlptTGor
-         VQbnLUJ4GohueCU2QvWGm2cZUlVgAgm6rI/mfLXahfPHnvfY36OykILbZgPjwrbvtJ
-         mA5+Px6/FHC/hCfqpQTL0l0na32PG7tQJrgUXH9hghrJ0DfYesKXkmx+WOiuAXbk6j
-         xTlZ4OZyGVJK6XnnI5wm7SOyy37Rxz7qLLEbkz5wL3eCLXbAj977cguHFFgcywrgSi
-         mj/xk5WBG9N7Q==
-Date:   Tue, 19 Jul 2022 12:36:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220719123607.63cbb3c5@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98110B817CA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:38:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 480D2C341CF
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658198310;
+        bh=eo8dR8UxBG4GcoyxQWNmWqivK6NI2ddRfXnjJa6OZHw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GxpXOovoD/dcd9csiboqWSW8yDJRQzsloauHWZnad+X5gl6UjgP1ff3zgsDg9WTef
+         o5nksAMD2/NHSqVCXzBZiw0YbBZIJkcnAiITUnLa2EULypVLyXJp81IlFXYXD1EkSC
+         J21UVXMh5fdXRDfKbj3NBIzz6n7xRwFwsz2yfJ9R/+k5mWcrV7Q9xpOKcpn/NG0aRh
+         61SajwaQ4OCULxUDMAbsoxgmEep+lZI5nWkwMFYdQLvehcmXfgE3r7CN1YTsDMOoKk
+         vMUeLVW92YVSq7J4PGPYlSoXXB5Cq8fdPAaMGKpY+aoR7/voiuCTRY89EpSyYAKHLN
+         4+nD9KcoboiOA==
+Received: by mail-ua1-f44.google.com with SMTP id s7so6267531uao.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 19:38:30 -0700 (PDT)
+X-Gm-Message-State: AJIora+IwwaG1cnN45AG0Wmgixjr2j5cJ2M9otiZL0eWV4WmanS+nqDK
+        Y9uSPTS231RnpDovoqZTxmQxPxy4blVxQpOr33E=
+X-Google-Smtp-Source: AGRyM1uq0+oApbWu0nRO+BDAaKnNcccyMDrhQZqa10uOBalRUFcDUxKy26H7RRIC+XTrmPzZxpXtryxpeqA8S0yWfHk=
+X-Received: by 2002:a9f:3253:0:b0:383:c330:68 with SMTP id y19-20020a9f3253000000b00383c3300068mr7232632uad.104.1658198309199;
+ Mon, 18 Jul 2022 19:38:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WKYGmpRW/SW7MMy8Lngx+cx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1658153621-40445-1-git-send-email-lvjianmin@loongson.cn> <1658153621-40445-12-git-send-email-lvjianmin@loongson.cn>
+In-Reply-To: <1658153621-40445-12-git-send-email-lvjianmin@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 19 Jul 2022 10:38:16 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6ap2pMR44JC7PEBB4RPKcUdJotXS-AHuCCfR7mXrnH0Q@mail.gmail.com>
+Message-ID: <CAAhV-H6ap2pMR44JC7PEBB4RPKcUdJotXS-AHuCCfR7mXrnH0Q@mail.gmail.com>
+Subject: Re: [PATCH V16 11/14] LoongArch: prepare to support multiple pch-pic
+ and pch-msi irqdomain
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WKYGmpRW/SW7MMy8Lngx+cx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi, Jianmin,
 
-Hi all,
+Please change "prepare" to "Prepare" in the title, and move this patch
+just after "LoongArch: Use ACPI_GENERIC_GSI for gsi handling", since
+the former patches are all "preparation".
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Huacai
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: I=
-n function 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerf=
-ormanceCalculation':
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:16=
-59:1: error: the frame size of 2144 bytes is larger than 2048 bytes [-Werro=
-r=3Dframe-larger-than=3D]
- 1659 | }
-      | ^
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: I=
-n function 'dml32_ModeSupportAndSystemConfigurationFull':
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:37=
-99:1: error: the frame size of 2464 bytes is larger than 2048 bytes [-Werro=
-r=3Dframe-larger-than=3D]
- 3799 | } // ModeSupportAndSystemConfigurationFull
-      | ^
-cc1: all warnings being treated as errors
-
-I can't see anything obvious that caused this.  The second one was
-previously fixed by commit
-
-  01cf387b1c7f ("drm/amdgpu/display: reduce stack size in dml32_ModeSupport=
-AndSystemConfigurationFull()")
-
-Usinf the amdgpu tree from next-20220718 fixes the problem, so I have
-done that for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/WKYGmpRW/SW7MMy8Lngx+cx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLWGJcACgkQAVBC80lX
-0Gyr/Qf/eU9PrxA94bNj/snSE455OvBxQWstXaznX5Dgu+hRAqDqQdkux6EZShsy
-8r2LcId5P0dcIfg16aOeOhI5oGfvRADycJ5n3gUxS0m25fT7CSXQxFcyUQq1b6YZ
-VNtPeRVgB79Mot8s82vGqyfC/S6IeNKaNGsRZw6URWJy6/Jl4Bw2ml2pND5y4Uaj
-4GpB0LtKch2M6cmVnNhJLNs+YCWR2Pempi4tfVvBxmQo3KJWILF6FUaz+vh6AJIh
-yYzI0Uv327PUhgE8egHc3s+32hrHtrsUH8OFEPUxftiA9tlTgIGtls8moWxsW/mu
-qrfcTZI2FASqNOFHdZsfqJiYSfx10A==
-=5XEZ
------END PGP SIGNATURE-----
-
---Sig_/WKYGmpRW/SW7MMy8Lngx+cx--
+On Mon, Jul 18, 2022 at 10:21 PM Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>
+> For systems with two chipsets, there are two related pch-pic and
+> pch-msi irqdomains, each of which has the same node id as its
+> parent irqdomain. So we use a structure to mantain the relation
+> of node and it's parent irqdomain as pch irqdomin, the 'pci_segment'
+> field is only used to match the pci segment of a pci device when
+> setting msi irqdomain for the device.
+>
+> struct acpi_vector_group {
+>         int node;
+>         int pci_segment;
+>         struct irq_domain *parent;
+> };
+>
+> The field 'pci_segment' and 'node' are initialized from MCFG, and
+> the parent irqdomain driver will set field 'parent' by matching same
+> 'node'.
+>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  arch/loongarch/include/asm/irq.h |  8 ++++++++
+>  arch/loongarch/kernel/irq.c      | 38 ++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 46 insertions(+)
+>
+> diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
+> index de8af43..c847300 100644
+> --- a/arch/loongarch/include/asm/irq.h
+> +++ b/arch/loongarch/include/asm/irq.h
+> @@ -48,6 +48,14 @@ static inline bool on_irq_stack(int cpu, unsigned long sp)
+>  #define MAX_IO_PICS 2
+>  #define NR_IRQS        (64 + (256 * MAX_IO_PICS))
+>
+> +struct acpi_vector_group {
+> +       int node;
+> +       int pci_segment;
+> +       struct irq_domain *parent;
+> +};
+> +extern struct acpi_vector_group pch_group[MAX_IO_PICS];
+> +extern struct acpi_vector_group msi_group[MAX_IO_PICS];
+> +
+>  #define CORES_PER_EIO_NODE     4
+>
+>  #define LOONGSON_CPU_UART0_VEC         10 /* CPU UART0 */
+> diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
+> index b04201c..06f2a15 100644
+> --- a/arch/loongarch/kernel/irq.c
+> +++ b/arch/loongarch/kernel/irq.c
+> @@ -26,6 +26,8 @@
+>  EXPORT_PER_CPU_SYMBOL(irq_stat);
+>
+>  struct irq_domain *cpu_domain;
+> +struct acpi_vector_group pch_group[MAX_IO_PICS];
+> +struct acpi_vector_group msi_group[MAX_IO_PICS];
+>
+>  /*
+>   * 'what should we do if we get a hw irq event on an illegal vector'.
+> @@ -52,6 +54,41 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+>         return 0;
+>  }
+>
+> +static int __init early_pci_mcfg_parse(struct acpi_table_header *header)
+> +{
+> +       struct acpi_table_mcfg *mcfg;
+> +       struct acpi_mcfg_allocation *mptr;
+> +       int i, n;
+> +
+> +       if (header->length < sizeof(struct acpi_table_mcfg))
+> +               return -EINVAL;
+> +
+> +       n = (header->length - sizeof(struct acpi_table_mcfg)) /
+> +                                       sizeof(struct acpi_mcfg_allocation);
+> +       mcfg = (struct acpi_table_mcfg *)header;
+> +       mptr = (struct acpi_mcfg_allocation *) &mcfg[1];
+> +
+> +       for (i = 0; i < n; i++, mptr++) {
+> +               msi_group[i].pci_segment = mptr->pci_segment;
+> +               pch_group[i].node = msi_group[i].node = (mptr->address >> 44) & 0xf;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static void __init init_vec_parent_group(void)
+> +{
+> +       int i;
+> +
+> +       for (i = 0; i < MAX_IO_PICS; i++) {
+> +               msi_group[i].pci_segment = -1;
+> +               msi_group[i].node = -1;
+> +               pch_group[i].node = -1;
+> +       }
+> +
+> +       acpi_table_parse(ACPI_SIG_MCFG, early_pci_mcfg_parse);
+> +}
+> +
+>  void __init init_IRQ(void)
+>  {
+>         int i;
+> @@ -65,6 +102,7 @@ void __init init_IRQ(void)
+>         clear_csr_ecfg(ECFG0_IM);
+>         clear_csr_estat(ESTATF_IP);
+>
+> +       init_vec_parent_group();
+>         irqchip_init();
+>  #ifdef CONFIG_SMP
+>         ipi_irq = EXCCODE_IPI - EXCCODE_INT_START;
+> --
+> 1.8.3.1
+>
+>

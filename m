@@ -2,121 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8EE5791A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 06:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0662B5791B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 06:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiGSEKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 00:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S236821AbiGSEOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 00:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbiGSEJ7 (ORCPT
+        with ESMTP id S233294AbiGSEOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 00:09:59 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BD03E765;
-        Mon, 18 Jul 2022 21:09:57 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ln52R2hSGz4xXF;
-        Tue, 19 Jul 2022 14:09:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658203793;
-        bh=QvJ/FceJdvHwM73DpSa5VCJrfobFpvQQEAqrJjR4+50=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mkWGYmAJSfBMFoupPUG8j/8Xq5pAz1k2v7XLLuThpxL4Td+mjH1tPRXQgyeUU9sJA
-         +oTmtpXy3r/7T2MEsP4P2a4R/c2LylmJobBcDXn8O+FB1d86nEBqaY6PmC9aJFIAWd
-         8ZjRc4W+r1BG+ejkZj7b7QzqCegEZ15pXSuNCcIthAOwVGa8sLyLCqerjPoCMiePVw
-         lwnf4QeqmWav6vYz86qrDBCfHu626uPcHmsA3/kmjaCp0hb/qSVNF05yMZVO+Qwk91
-         bLIxPFFxEu8icLiY/vHKjLKuTe9igRNFatxAeIG+L3V/dQayFUXm3WfD0SqxP83wYy
-         7YEqU36INaDTQ==
-Date:   Tue, 19 Jul 2022 14:09:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc:     Borislav Petkov <bp@suse.de>, Coiby Xu <coxu@redhat.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tip tree with the integrity tree
-Message-ID: <20220719140950.67296570@canb.auug.org.au>
+        Tue, 19 Jul 2022 00:14:52 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22A63ED5E
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 21:14:51 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso20125089pjc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 21:14:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PcoM/2VxSazYw3xrD2Doehr//Sh1eaqhYJJVE4GDy34=;
+        b=Opm4hi3omHyUJfxTX7A6AUKYKxH6SF2hvwXsFMaHw5vuVLEi1Nibi2mNaMXkfehTBR
+         WVtr/AdJ9d9ciIxMs8K6zTCGUiceENfLjIBKKjJBNhpV9xjHmfP/s5rg3Im4Hnsoax89
+         0DjC9YfKQuIUbrKs8sATbBnBaK0I2zihi67vJUSaWj/BtmCF1XuFyqwqOC4sT44FUNtX
+         iCYoNaY9rmSjFz/oKpdDoeq3OY6TnwglIlZYosgKCuKpvaUg3igxTi50q2nro5h515Z4
+         hL01oin4i/6j3NXa86htkVgHjC8ZcAP/WGYQrP/IRj5pFl62xB4GEmtBo3fTsBJPZth+
+         RJFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PcoM/2VxSazYw3xrD2Doehr//Sh1eaqhYJJVE4GDy34=;
+        b=HkdWC5pAoiS8ahG/QXCJdLOQBSWLIMVtjUqVl+wZNc9bC75t09nsusPFHtEMQjaqIe
+         isElS0oOphbPpdpj3vM797RoJ83FiZK0KZSl9O5ivnhytCoX0A9H8rl5ml/ckafs4Ht2
+         fMoHEagANGrx/fXzkuMaBejmG+Gk5RypI9qrBt3NyrpLhw8V9ac4FlV0L6l29yrj3mKN
+         i3YwqpkpAb7hOeA3BKOCYbbx66pcC7AnDF4doNko9q1e399yK73kcT+9IJwZ+EJaQogn
+         v6mUwyppDfKvKfW3MCpo3r6C4ClTqBltVVG4Ueap/0+2VU7dj43fvo4MxjjLCwHv8iHL
+         wp5Q==
+X-Gm-Message-State: AJIora/j/DpsqM7NOO9604ucCp6LPnAshC9Nljp69amN0lyOqY9MgaNC
+        V5xy+9d/oQyDxz5Ty9Rf05gdDQ==
+X-Google-Smtp-Source: AGRyM1tI6zyRWQfdZYvlnOak1NVPcELyI5ONB78Ywca0UFqiJ9+fItFi1nzNJgxXXUHg2SLi20/X1Q==
+X-Received: by 2002:a17:90b:3a88:b0:1f0:56d5:460e with SMTP id om8-20020a17090b3a8800b001f056d5460emr41219754pjb.208.1658204091145;
+        Mon, 18 Jul 2022 21:14:51 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id b32-20020a631b60000000b0040d48cf046csm8935574pgm.55.2022.07.18.21.14.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 21:14:50 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 09:44:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Di Shen <di.shen@unisoc.com>
+Cc:     lukasz.luba@arm.com, amitk@kernel.org, rui.zhang@intel.com,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
+        xuewen.yan94@gmail.com
+Subject: Re: [PATCH] thermal: cpufreq_cooling: Avoid all cluster using global
+ cooling_ops
+Message-ID: <20220719041448.iyavinsv3jzs3au4@vireshk-i7>
+References: <20220718122419.9409-1-di.shen@unisoc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2REtEWfzEoKM.S8d/NObwI1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718122419.9409-1-di.shen@unisoc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2REtEWfzEoKM.S8d/NObwI1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 18-07-22, 20:24, Di Shen wrote:
+> Now, all the cooling device use the globle cpufreq_cooling_ops. When the
+> CONFIG_THERMAL_GOV_POWER_ALLOCATOR is enabled, once one cluster init the
+> cpufreq_cooling_ops, it would make all cooling device use the power allocator's
+> ops. If one's em is error because of the "em_is_sane", it would cause the
+> em NULL, but the cooling device's ops is exist, as a result, it would cause
+> panic because of the em.
+> 
+> Add cpufreq_power_cooling_ops to avoid this case.
+> 
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+> ---
+>  drivers/thermal/cpufreq_cooling.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index b8151d95a806..af5cfb458370 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -493,6 +493,17 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
+>  	.set_cur_state		= cpufreq_set_cur_state,
+>  };
+>  
+> +#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+> +static struct thermal_cooling_device_ops cpufreq_power_cooling_ops = {
+> +	.get_max_state		= cpufreq_get_max_state,
+> +	.get_cur_state		= cpufreq_get_cur_state,
+> +	.set_cur_state		= cpufreq_set_cur_state,
+> +	.get_requested_power	= cpufreq_get_requested_power,
+> +	.state2power		= cpufreq_state2power,
+> +	.power2state		= cpufreq_power2state,
+> +};
+> +#endif
+> +
+>  /**
+>   * __cpufreq_cooling_register - helper function to create cpufreq cooling device
+>   * @np: a valid struct device_node to the cooling device device tree node
+> @@ -559,9 +570,7 @@ __cpufreq_cooling_register(struct device_node *np,
+>  #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+>  	if (em_is_sane(cpufreq_cdev, em)) {
+>  		cpufreq_cdev->em = em;
+> -		cooling_ops->get_requested_power = cpufreq_get_requested_power;
+> -		cooling_ops->state2power = cpufreq_state2power;
+> -		cooling_ops->power2state = cpufreq_power2state;
+> +		cooling_ops = &cpufreq_power_cooling_ops;
+>  	} else
+>  #endif
+>  	if (policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED) {
 
-Hi all,
+Please have a look at this patch in linux-next.
 
-Today's linux-next merge of the tip tree got a conflict in:
+commit 6ee324afdf30 ("drivers/thermal/cpufreq_cooling: Use private callback ops for each cooling device")
 
-  arch/x86/kernel/kexec-bzimage64.c
+This already fixes the problem, right ?
 
-between commit:
-
-  c903dae8941d ("kexec, KEYS: make the code in bzImage64_verify_sig generic=
-")
-
-from the integrity tree and commit:
-
-  68b8e9713c8e ("x86/setup: Use rng seeds from setup_data")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/kernel/kexec-bzimage64.c
-index f299b48f9c9f,b9bdb40364a6..000000000000
---- a/arch/x86/kernel/kexec-bzimage64.c
-+++ b/arch/x86/kernel/kexec-bzimage64.c
-@@@ -17,6 -17,8 +17,7 @@@
-  #include <linux/kernel.h>
-  #include <linux/mm.h>
-  #include <linux/efi.h>
- -#include <linux/verification.h>
-+ #include <linux/random.h>
- =20
-  #include <asm/bootparam.h>
-  #include <asm/setup.h>
-
---Sig_/2REtEWfzEoKM.S8d/NObwI1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLWLo4ACgkQAVBC80lX
-0GyWlwf/beoR63X8M01XkW+ECW3+xTckMcf30XYHAkdevi8SIVho25t+kxVwMyEE
-tQ9GvOqs50v0O0vvKUgda+j/yE1r/JyvNCJCFqWwbA+EfF7NqoYfhc+ZKUTmo9FY
-HKIIP+WO9tY+jf/AzpVMjnHJ6IX/SV7JXoekeYIMe6us8RWF1PAHxHzs3Wx4MoZ0
-B5+a2DZeR5ijawGTub5kUl1TeaCD0LtH5C9kVyHQq9f+rFzsZ+cRi25C+LBzWRzp
-QqcydfhyiccKi0C1QNWHvA9EgwbE76f0hkBfvv/qhc38DOyC8ykXRI5kd/jWbQrV
-WQ9a2zq2or/+wFne28rM4c2LhgMoPw==
-=GC2v
------END PGP SIGNATURE-----
-
---Sig_/2REtEWfzEoKM.S8d/NObwI1--
+-- 
+viresh

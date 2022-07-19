@@ -2,124 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CF157A688
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF29D57A694
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238515AbiGSScQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S238894AbiGSSfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 14:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233242AbiGSScP (ORCPT
+        with ESMTP id S234588AbiGSSfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:32:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE7657214;
-        Tue, 19 Jul 2022 11:32:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C564561787;
-        Tue, 19 Jul 2022 18:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16C0C341C6;
-        Tue, 19 Jul 2022 18:32:11 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 14:32:10 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Petr Mladek <pmladek@suse.com>, kernel test robot <lkp@intel.com>,
-        Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>
-Subject: Re: [PATCH v4 bpf-next 2/4] ftrace: allow IPMODIFY and DIRECT ops
- on the same function
-Message-ID: <20220719143210.08f9922b@gandalf.local.home>
-In-Reply-To: <9DAB0710-7D60-46AC-8A2F-ED4B8A1A4BC0@fb.com>
-References: <20220718055449.3960512-3-song@kernel.org>
-        <202207181552.VuKfz9zg-lkp@intel.com>
-        <YtVd4FKOcEmGfubm@alley>
-        <9DAB0710-7D60-46AC-8A2F-ED4B8A1A4BC0@fb.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 19 Jul 2022 14:35:53 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003534A82C;
+        Tue, 19 Jul 2022 11:35:51 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id b10so4652156pjq.5;
+        Tue, 19 Jul 2022 11:35:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bPNoRKQ8h2ZDOuTD44jnLk8tsWeAO41TwkS2ydw/TbQ=;
+        b=jdnGo14Gc1dg+16AlLMoWVN5cn6IB663ou106EHBv64+fmIyr6qJ/2Yk9T6tQs81lw
+         iDX10tDTKWldNHnJZzOdDhoU8eI5iRQjYsIiji+v8tYuPHvyClvxZqQeyfbkd4WLHsyZ
+         W5+hOP2v8z2h27bU7sXsrE4uTWLhcokV2TxMLtAezw7hZync5OuH/dIwyHuIHWUMYlEK
+         E30SxNo1Hd7Y5UXHTOL6MxXB0Dpjd7UQ/3wQiGH3GhodTa1UqgLVk/bgvy1RsHbJ0jR7
+         +6rkGdpQR5JFjlr4KaTkABJ9bOv91jX53IOs7VserNtEeAGV6/pBZo3Uc1NtS/UmQ1qq
+         2T6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bPNoRKQ8h2ZDOuTD44jnLk8tsWeAO41TwkS2ydw/TbQ=;
+        b=Tizg5NtovuPyH6I9Fwt59NoRN5xwOfXeJ2cX2aSvKb3qhUIE6J1Hi0aKsyjLB1e+Vb
+         RbSnRK6SjNP3tEkLB2me+U16g2sHJAW4utQlQshZGcw38HXExbQCYa8HHnHD5U+IhLf7
+         EcI+8XFVad6Iy7jrv+q4sSTJ93QdmmINvUOA+KRMrlx8CoNlW8bPc5sgJ53yAbMifgpG
+         oyGkFN6DV+oGAzvj9yvz18fNgrbGKXy6woDa0AoZxC6X2lMWCzhz2+KlGjrXFHvx/Yb7
+         nkWJAXLEq8RDCqepmD8tZ86qPOMtf5ZnC01Y+an/49k6P0p1h2aKuHBrJfH01HAkyp7R
+         BjVw==
+X-Gm-Message-State: AJIora8Cpz1bzX3Wk8jx881PPhhL5GtQAiA7MOGlj1Pv2rs8PNUZ1828
+        HzuRaM74be/4TT/hfpSX6hg=
+X-Google-Smtp-Source: AGRyM1scl4FUEsao1cWuj7dLRHf2KfCN+GENjNED/nKWOy0VmP6mAqh1zuy9jwY9DQMMT7m+eSx0lw==
+X-Received: by 2002:a17:902:e885:b0:16c:49c9:792a with SMTP id w5-20020a170902e88500b0016c49c9792amr35272167plg.11.1658255751365;
+        Tue, 19 Jul 2022 11:35:51 -0700 (PDT)
+Received: from [192.168.1.106] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id md11-20020a17090b23cb00b001f10b31e7a7sm10150861pjb.32.2022.07.19.11.35.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 11:35:50 -0700 (PDT)
+Message-ID: <1497bc10-6cce-3a2a-0140-fee428f9d09a@gmail.com>
+Date:   Tue, 19 Jul 2022 11:35:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH 5.10 000/112] 5.10.132-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220719114626.156073229@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 16:59:51 +0000
-Song Liu <songliubraving@fb.com> wrote:
 
-> >> vim +/direct_mutex_locked +8197 kernel/trace/ftrace.c
-> >> 
-> >>  8182	
-> >>  8183	/**
-> >>  8184	 * register_ftrace_function - register a function for profiling
-> >>  8185	 * @ops:	ops structure that holds the function for profiling.
-> >>  8186	 *
-> >>  8187	 * Register a function to be called by all functions in the
-> >>  8188	 * kernel.
-> >>  8189	 *
-> >>  8190	 * Note: @ops->func and all the functions it calls must be labeled
-> >>  8191	 *       with "notrace", otherwise it will go into a
-> >>  8192	 *       recursive loop.
-> >>  8193	 */
-> >>  8194	int register_ftrace_function(struct ftrace_ops *ops)
-> >>  8195		__releases(&direct_mutex)
-> >>  8196	{  
-> >>> 8197		bool direct_mutex_locked = false;  
-> >>  8198		int ret;
-> >>  8199	
-> >>  8200		ftrace_ops_init(ops);
-> >>  8201	
-> >>  8202		ret = prepare_direct_functions_for_ipmodify(ops);
-> >>  8203		if (ret < 0)
-> >>  8204			return ret;
-> >>  8205		else if (ret == 1)
-> >>  8206			direct_mutex_locked = true;  
-> > 
-> > Honestly, this is another horrible trick. Would it be possible to
-> > call prepare_direct_functions_for_ipmodify() with direct_mutex
-> > already taken?
 
-Agreed. I'm not sure why I didn't notice this in the other versions.
-Probably was looking too much at the other logic. :-/
-
-> > 
-> > I mean something like:
-> > 
-> > 	mutex_lock(&direct_mutex);
-> > 
-> > 	ret = prepare_direct_functions_for_ipmodify(ops);
-> > 	if (ret)
-> > 		goto out:
-> > 
-> > 	mutex_lock(&ftrace_lock);
-> > 	ret = ftrace_startup(ops, 0);
-> > 	mutex_unlock(&ftrace_lock);
-> > 
-> > out:
-> > 	mutex_unlock(&direct_mutex);
-> > 	return ret;  
+On 7/19/2022 4:52 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.132 release.
+> There are 112 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Yeah, we can actually do something like this. We can also move the
-> ops->flags & FTRACE_OPS_FL_IPMODIFY check to 
-> register_ftrace_function(), so we only lock direct_mutex when when
-> it is necessary. 
+> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.132-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-No need. Just take the direct_mutex, and perhaps add a:
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and built tested 
+with BMIPS_GENERIC (bmips_stb_defconfig):
 
-	lockdep_assert_held(&direct_mutex);
-
-in the prepare_direct_functions_for_ipmodify().
-
-This is far from a fast path to do any tricks in trying to optimize it.
-
--- Steve
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

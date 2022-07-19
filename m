@@ -2,458 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A4457A554
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEE957A55F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235892AbiGSRaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
+        id S239544AbiGSRb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbiGSRaU (ORCPT
+        with ESMTP id S239289AbiGSRbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:30:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E223122535;
-        Tue, 19 Jul 2022 10:30:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB0381570;
-        Tue, 19 Jul 2022 10:30:16 -0700 (PDT)
-Received: from [10.57.42.173] (unknown [10.57.42.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 933573F766;
-        Tue, 19 Jul 2022 10:30:14 -0700 (PDT)
-Message-ID: <ae61e907-cf88-873a-1925-878ad9293bc1@arm.com>
-Date:   Tue, 19 Jul 2022 18:30:12 +0100
+        Tue, 19 Jul 2022 13:31:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B69652FC6;
+        Tue, 19 Jul 2022 10:31:14 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 17:31:10 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658251871;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IvhpNtnA53mQIJQu4q781RlJrC8ZaJ8MpMbIu4iCaE0=;
+        b=vU4scu5r2DqWyz8GCXCZEgTMnCNp9+DtbPERPwwOzSQDYdSFLYUiXmlLoe1xBHLd9oiEhe
+        1yrlUG1zsYB2jJtcl7bCqtwXxyC6A857w+8s8FsVQBqTggVdAuq3EfP7xLuuTfhWWCeavR
+        jJlJEo1MYWvMLqHcuAXWdbjrO/EPFiBTileHPqRNv0h7gU9wfZyLGaGPgW7eAvVYPuBQN/
+        sKafR3NKqwrKbfG8+4BvmFizeqlYZ1upWVKIo9NlsBJ9iHjYckwEa1fKko6tdQTJO/mldo
+        o/BbVq2aqNRjSDJ+//A7GDjurjFtppySILaGuQfslO+TkugRzwn53/0keItY4w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658251871;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IvhpNtnA53mQIJQu4q781RlJrC8ZaJ8MpMbIu4iCaE0=;
+        b=Z/FgWHlt17Eb87K0lfR6p1t7gZo9c05jwRSg4XVKSrLSNTLWIYqJCWMHGqqlweq5Qrcmoi
+        27AYcLBIAKoGnBCA==
+From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/fpu] intel_idle: Add a new flag to initialize the AMX state
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220614164116.5196-1-chang.seok.bae@intel.com>
+References: <20220614164116.5196-1-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 01/13] coresight: trace-id: Add API to dynamically
- assign Trace ID values
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, quic_jinlmao@quicinc.com
-References: <20220704081149.16797-1-mike.leach@linaro.org>
- <20220704081149.16797-2-mike.leach@linaro.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220704081149.16797-2-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <165825187026.15455.14720979617017899333.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/fpu branch of tip:
 
-Hi Mike,
+Commit-ID:     9f01129382774d98ec21526f13da26a0630ee3d8
+Gitweb:        https://git.kernel.org/tip/9f01129382774d98ec21526f13da26a0630ee3d8
+Author:        Chang S. Bae <chang.seok.bae@intel.com>
+AuthorDate:    Mon, 18 Jul 2022 11:56:11 -07:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 19 Jul 2022 19:17:28 +02:00
 
-Thanks for the patch, please find my comments inline.
+intel_idle: Add a new flag to initialize the AMX state
 
+The non-initialized AMX state can be the cause of C-state demotion from C6
+to C1E. This low-power idle state may improve power savings and thus result
+in a higher available turbo frequency budget.
 
-On 04/07/2022 09:11, Mike Leach wrote:
-> The existing mechanism to assign Trace ID values to sources is limited
-> and does not scale for larger multicore / multi trace source systems.
-> 
-> The API introduces functions that reserve IDs based on availabilty
-> represented by a coresight_trace_id_map structure. This records the
-> used and free IDs in a bitmap.
-> 
-> CPU bound sources such as ETMs use the coresight_trace_id_get_cpu_id /
-> coresight_trace_id_put_cpu_id pair of functions. The API will record
-> the ID associated with the CPU. This ensures that the same ID will be
-> re-used while perf events are active on the CPU. The put_cpu_id function
-> will pend release of the ID until all perf cs_etm sessions are complete.
-> 
-> Non-cpu sources, such as the STM can use coresight_trace_id_get_system_id /
-> coresight_trace_id_put_system_id.
-> 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->   drivers/hwtracing/coresight/Makefile          |   2 +-
->   .../hwtracing/coresight/coresight-trace-id.c  | 230 ++++++++++++++++++
->   .../hwtracing/coresight/coresight-trace-id.h  |  65 +++++
->   3 files changed, 296 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
->   create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
-> 
-> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-> index b6c4a48140ec..329a0c704b87 100644
-> --- a/drivers/hwtracing/coresight/Makefile
-> +++ b/drivers/hwtracing/coresight/Makefile
-> @@ -6,7 +6,7 @@ obj-$(CONFIG_CORESIGHT) += coresight.o
->   coresight-y := coresight-core.o  coresight-etm-perf.o coresight-platform.o \
->   		coresight-sysfs.o coresight-syscfg.o coresight-config.o \
->   		coresight-cfg-preload.o coresight-cfg-afdo.o \
-> -		coresight-syscfg-configfs.o
-> +		coresight-syscfg-configfs.o coresight-trace-id.o
->   obj-$(CONFIG_CORESIGHT_LINK_AND_SINK_TMC) += coresight-tmc.o
->   coresight-tmc-y := coresight-tmc-core.o coresight-tmc-etf.o \
->   		      coresight-tmc-etr.o
-> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
-> new file mode 100644
-> index 000000000000..dac9c89ae00d
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/coresight-trace-id.c
-> @@ -0,0 +1,230 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022, Linaro Limited, All rights reserved.
-> + * Author: Mike Leach <mike.leach@linaro.org>
-> + */
-> +#include <linux/kernel.h>
-> +#include <linux/types.h>
-> +#include <linux/spinlock.h>
-> +
-> +#include "coresight-trace-id.h"
-> +
-> +/* need to keep data on ids & association with cpus. */
-> +struct cpu_id_info {
-> +	int id;
-> +	bool pend_rel;
-> +};
-> +
-> +/* default trace ID map. Used for systems that do not require per sink mappings */
-> +static struct coresight_trace_id_map id_map_default;
-> +
-> +/* maintain a record of the current mapping of cpu IDs */
-> +static DEFINE_PER_CPU(struct cpu_id_info, cpu_ids);
-> +
-> +/* perf session active flag */
-> +static int perf_cs_etm_session_active;
-> +
-> +/* lock to protect id_map and cpu data  */
-> +static DEFINE_SPINLOCK(id_map_lock);
-> +
-> +/* ID 0 is reserved */
-> +#define CORESIGHT_TRACE_ID_RES_0 0
-> +
-> +/* ID 0x70 onwards are reserved */
-> +#define CORESIGHT_TRACE_ID_RES_RANGE_LO 0x70
-> +#define CORESIGHT_TRACE_ID_RES_RANGE_HI 0x7F
+This behavior is implementation-specific. Initialize the state for the C6
+entrance of Sapphire Rapids as needed.
 
-Since this range is at the end of top, we could clip the
-MAX_IDS to 0x70 and skip all these unnecessary checks and reservations.
-Also, by modifying the find_bit and for_each_bit slightly we could
-get away with this reservation scheme and the IS_VALID(id) checks.
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Link: https://lkml.kernel.org/r/20220614164116.5196-1-chang.seok.bae@intel.com
+---
+ drivers/idle/intel_idle.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-> +#define IS_VALID_ID(id)	\
-> +	((id > CORESIGHT_TRACE_ID_RES_0) && (id < CORESIGHT_TRACE_ID_RES_RANGE_LO))
-> +
-> +static void coresight_trace_id_set_inuse(int id, struct coresight_trace_id_map *id_map)
-> +{
-> +	if (IS_VALID_ID(id))
-> +		set_bit(id, id_map->avail_ids);
-> +}
-
-Please see my comment around the definition of avail_ids.
-
-> +
-> +static void coresight_trace_id_clear_inuse(int id, struct coresight_trace_id_map *id_map)
-> +{
-> +	if (IS_VALID_ID(id))
-> +		clear_bit(id, id_map->avail_ids);
-> +}
-
-This could be :
-
-coresight_trace_id_free_id()
-
-> +
-> +static void coresight_trace_id_set_pend_rel(int id, struct coresight_trace_id_map *id_map)
-> +{
-> +	if (IS_VALID_ID(id))
-> +		set_bit(id, id_map->pend_rel_ids);
-> +}
-> +
-> +static void coresight_trace_id_clear_pend_rel(int id, struct coresight_trace_id_map *id_map)
-> +{
-> +	if (IS_VALID_ID(id))
-> +		clear_bit(id, id_map->pend_rel_ids);
-> +}
-> +
-
-
-> +static int coresight_trace_id_find_new_id(struct coresight_trace_id_map *id_map)
-
-minor nit: Could we call this :
-
-coresight_trace_id_alloc_new_id(id_map) and
-
-> +{
-> +	int id;
-> +
-> +	id = find_first_zero_bit(id_map->avail_ids, CORESIGHT_TRACE_IDS_MAX);
-
-minor nit: You could also do, to explicitly skip 0.
-
-     id = find_next_zero_bit(id_map->avail_ids, 1, CORESIGHT_TRACE_IDS_MAX);
-
-
-> +	if (id >= CORESIGHT_TRACE_IDS_MAX)
-> +		id = -EINVAL;
-
-Could we also mark the id as in use here itself ? All callers of this 
-function have to do that explicitly, anyways.
-
-> +	return id;
-> +}
-> +
-> +/* release all pending IDs for all current maps & clear CPU associations */
-> +static void coresight_trace_id_release_all_pending(void)
-> +{
-> +	struct coresight_trace_id_map *id_map = &id_map_default;
-> +	int cpu, bit;
-> +
-	int cpu, bit = 1;
-
-> +	for_each_set_bit(bit, id_map->pend_rel_ids, CORESIGHT_TRACE_IDS_MAX) {
-
-for_each_set_bit_from(bit, id_map...)
-
-> +		clear_bit(bit, id_map->avail_ids);
-> +		clear_bit(bit, id_map->pend_rel_ids);
-> +	}
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		if (per_cpu(cpu_ids, cpu).pend_rel) {
-> +			per_cpu(cpu_ids, cpu).pend_rel = false;
-> +			per_cpu(cpu_ids, cpu).id = 0;
-> +		}
-> +	}
-> +}
-> +
-> +static void coresight_trace_id_init_id_map(struct coresight_trace_id_map *id_map)
-> +{
-> +	int bit;
-> +
-> +	/* set all reserved bits as in-use */
-> +	set_bit(CORESIGHT_TRACE_ID_RES_0, id_map->avail_ids);
-
-> +	for (bit = CORESIGHT_TRACE_ID_RES_RANGE_LO;
-> +	     bit <= CORESIGHT_TRACE_ID_RES_RANGE_HI; bit++)
-> +		set_bit(bit, id_map->avail_ids);
-
-
-> +}
-> +
-> +static int coresight_trace_id_map_get_cpu_id(int cpu, struct coresight_trace_id_map *id_map)
-> +{
-> +	unsigned long flags;
-> +	int id;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +
-> +	/* check for existing allocation for this CPU */
-> +	id = per_cpu(cpu_ids, cpu).id;
-> +	if (id)
-> +		goto get_cpu_id_out;
-> +
-> +	/* find a new ID */
-> +	id = coresight_trace_id_find_new_id(id_map);
-> +	if (id < 0)
-> +		goto get_cpu_id_out;
-> +
-> +	/* got a valid new ID - save details */
-> +	per_cpu(cpu_ids, cpu).id = id;
-> +	per_cpu(cpu_ids, cpu).pend_rel = false;
-> +	coresight_trace_id_set_inuse(id, id_map);
-> +	coresight_trace_id_clear_pend_rel(id, id_map);
-> +
-> +get_cpu_id_out:
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +	return id;
-> +}
-> +
-> +static void coresight_trace_id_map_put_cpu_id(int cpu, struct coresight_trace_id_map *id_map)
-> +{
-> +	unsigned long flags;
-> +	int id;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	id = per_cpu(cpu_ids, cpu).id;
-> +	if (!id)
-> +		goto put_cpu_id_out;
-> +
-> +	if (perf_cs_etm_session_active) {
-> +		/* set release at pending if perf still active */
-> +		coresight_trace_id_set_pend_rel(id, id_map);
-> +		per_cpu(cpu_ids, cpu).pend_rel = true;
-> +	} else {
-> +		/* otherwise clear id */
-> +		coresight_trace_id_clear_inuse(id, id_map);
-> +		per_cpu(cpu_ids, cpu).id = 0;
-> +	}
-> +
-> + put_cpu_id_out:
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +
-> +static int coresight_trace_id_map_get_system_id(struct coresight_trace_id_map *id_map)
-> +{
-> +	unsigned long flags;
-> +	int id;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	id = coresight_trace_id_find_new_id(id_map);
-> +	if (id > 0)
-> +		coresight_trace_id_set_inuse(id, id_map);
-
-Please see my suggestion above on moving this to the place where we find 
-the bit.
-
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +
-> +	return id;
-> +}
-> +
-> +static void coresight_trace_id_map_put_system_id(struct coresight_trace_id_map *id_map, int id)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	coresight_trace_id_clear_inuse(id, id_map);
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +
-> +/* API functions */
-> +int coresight_trace_id_get_cpu_id(int cpu)
-> +{
-> +	return coresight_trace_id_map_get_cpu_id(cpu, &id_map_default);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_get_cpu_id);
-> +
-> +void coresight_trace_id_put_cpu_id(int cpu)
-> +{
-> +	coresight_trace_id_map_put_cpu_id(cpu, &id_map_default);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_put_cpu_id);
-> +
-> +int coresight_trace_id_get_system_id(void)
-> +{
-> +	return coresight_trace_id_map_get_system_id(&id_map_default);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_get_system_id);
-> +
-> +void coresight_trace_id_put_system_id(int id)
-> +{
-> +	coresight_trace_id_map_put_system_id(&id_map_default, id);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_put_system_id);
-> +
-> +void coresight_trace_id_perf_start(void)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	perf_cs_etm_session_active++;
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
-> +
-> +void coresight_trace_id_perf_stop(void)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	perf_cs_etm_session_active--;
-> +	if (!perf_cs_etm_session_active)
-> +		coresight_trace_id_release_all_pending();
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_stop);
-> +
-> +void coresight_trace_id_init_default_map(void)
-> +{
-> +	coresight_trace_id_init_id_map(&id_map_default);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_init_default_map);
-
-We may be able to get rid of this init. Otherwise we may convert this to
-a module_initcall() in the worst case. No need to export this.
-
-> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.h b/drivers/hwtracing/coresight/coresight-trace-id.h
-> new file mode 100644
-> index 000000000000..63950087edf6
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/coresight-trace-id.h
-> @@ -0,0 +1,65 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright(C) 2022 Linaro Limited. All rights reserved.
-> + * Author: Mike Leach <mike.leach@linaro.org>
-> + */
-> +
-> +#ifndef _CORESIGHT_TRACE_ID_H
-> +#define _CORESIGHT_TRACE_ID_H
-> +
-> +/*
-> + * Coresight trace ID allocation API
-> + *
-> + * With multi cpu systems, and more additional trace sources a scalable
-> + * trace ID reservation system is required.
-> + *
-> + * The system will allocate Ids on a demand basis, and allow them to be
-> + * released when done.
-> + *
-> + * In order to ensure that a consistent cpu / ID matching is maintained
-> + * throughout a perf cs_etm event session - a session in progress flag will
-> + * be maintained, and released IDs not cleared until the perf session is
-> + * complete. This allows the same CPU to be re-allocated its prior ID.
-> + *
-> + *
-> + * Trace ID maps will be created and initialised to prevent architecturally
-> + * reserved IDs from being allocated.
-> + *
-> + * API permits multiple maps to be maintained - for large systems where
-> + * different sets of cpus trace into different independent sinks.
-> + */
-
-Thanks for the detailed comment above.
-
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/types.h>
-> +
-> +
-> +/* architecturally we have 128 IDs some of which are reserved */
-> +#define CORESIGHT_TRACE_IDS_MAX 128
-
-Could we restrict the CORESIGHT_TRACE_IDS_MAX to 0x70, clipping the 
-upper range of reserved ids ? That way, we could skip bothering about
-checking it everywhere.
-
-> +
-> +/**
-> + * Trace ID map.
-> + *
-> + * @avail_ids:	Bitmap to register available (bit = 0) and in use (bit = 1) IDs.
-> + *		Initialised so that the reserved IDs are permanently marked as in use.
-
-To be honest this inverses the intution. Could we instead name this 
-used_ids ?
-
-i.e BIT(i) = 1 => implies trace id is in use.
-
-
-> + * @pend_rel_ids: CPU IDs that have been released by the trace source but not yet marked
-> + *                as available, to allow re-allocation to the same CPU during a perf session.
-> + */
-> +struct coresight_trace_id_map {
-> +	DECLARE_BITMAP(avail_ids, CORESIGHT_TRACE_IDS_MAX);
-> +	DECLARE_BITMAP(pend_rel_ids, CORESIGHT_TRACE_IDS_MAX);
-> +};
-
-Also, the definitions are split between the .c and .h. Could we keep all 
-of them at one place, .h preferrably ? Or if this is not at all needed 
-for the consumers of the API, we should keep all of this in the .c file.
-
-I guess in the future, with the sink specific scheme, we may need to
-expose the helpers which accept an id_map. So may be even move it here.
-
-
-Thanks
-Suzuki
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index f5c6802..1ec2210 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -56,6 +56,7 @@
+ #include <asm/nospec-branch.h>
+ #include <asm/mwait.h>
+ #include <asm/msr.h>
++#include <asm/fpu/api.h>
+ 
+ #define INTEL_IDLE_VERSION "0.5.1"
+ 
+@@ -114,6 +115,11 @@ static unsigned int mwait_substates __initdata;
+ #define CPUIDLE_FLAG_IBRS		BIT(16)
+ 
+ /*
++ * Initialize large xstate for the C6-state entrance.
++ */
++#define CPUIDLE_FLAG_INIT_XSTATE	BIT(17)
++
++/*
+  * MWAIT takes an 8-bit "hint" in EAX "suggesting"
+  * the C-state (top nibble) and sub-state (bottom nibble)
+  * 0x00 means "MWAIT(C1)", 0x10 means "MWAIT(C2)" etc.
+@@ -185,6 +191,13 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+ 	return ret;
+ }
+ 
++static __cpuidle int intel_idle_xstate(struct cpuidle_device *dev,
++				       struct cpuidle_driver *drv, int index)
++{
++	fpu_idle_fpregs();
++	return __intel_idle(dev, drv, index);
++}
++
+ /**
+  * intel_idle_s2idle - Ask the processor to enter the given idle state.
+  * @dev: cpuidle device of the target CPU.
+@@ -200,8 +213,12 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+ 				       struct cpuidle_driver *drv, int index)
+ {
+-	unsigned long eax = flg2MWAIT(drv->states[index].flags);
+ 	unsigned long ecx = 1; /* break on interrupt flag */
++	struct cpuidle_state *state = &drv->states[index];
++	unsigned long eax = flg2MWAIT(state->flags);
++
++	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
++		fpu_idle_fpregs();
+ 
+ 	mwait_idle_with_hints(eax, ecx);
+ 
+@@ -936,7 +953,8 @@ static struct cpuidle_state spr_cstates[] __initdata = {
+ 	{
+ 		.name = "C6",
+ 		.desc = "MWAIT 0x20",
+-		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
++		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED |
++					   CPUIDLE_FLAG_INIT_XSTATE,
+ 		.exit_latency = 290,
+ 		.target_residency = 800,
+ 		.enter = &intel_idle,
+@@ -1851,6 +1869,9 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 			drv->states[drv->state_count].enter = intel_idle_ibrs;
+ 		}
+ 
++		if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_INIT_XSTATE)
++			drv->states[drv->state_count].enter = intel_idle_xstate;
++
+ 		if ((disabled_states_mask & BIT(drv->state_count)) ||
+ 		    ((icpu->use_acpi || force_use_acpi) &&
+ 		     intel_idle_off_by_default(mwait_hint) &&

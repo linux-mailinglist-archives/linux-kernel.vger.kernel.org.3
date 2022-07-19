@@ -2,73 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD0157A774
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6087157A77F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234455AbiGSTws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 15:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
+        id S239022AbiGSTx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 15:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiGSTwr (ORCPT
+        with ESMTP id S238448AbiGSTxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 15:52:47 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD2252DD4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:52:45 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id f11so12941466plr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:52:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Hz6RNQpYNLS/y0QYmC1fYMnpSS2GeTHzolaO2NiULnw=;
-        b=DODJtFbxBiF70MVS7GwSLYSzSQ/DwBmYNe09upT7h3SL5NkF9Ob3moqtNqdswbZZQg
-         k9iJm9ZUVvT1G3ppPOzN/0sfNjH1S1Q3VrbrHmYinzMBXYo2BmJJQ8bz+uXT7/68DBc1
-         kcZuS7UaGdF4czgi9mCTw1xQfgu75ftUEv3OhaB+B+oKH9UI80FzJ5joDzAlUa2+gPrG
-         UGg0GwcCObas/Kvy1e1oFp6/Pvnptt90ZpkuOwPF9Gy9cCFaBp3i+pyxVmuN7/QFFw0g
-         jQ5U8vZsK4z6qtOOZ8N86lHw0khgsSQd2pRuuVh5JlNHgw3X262KSk/iZmhos+TGUWB9
-         0q3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Hz6RNQpYNLS/y0QYmC1fYMnpSS2GeTHzolaO2NiULnw=;
-        b=AaUev3hGEFk8EZUDuVvtUbIyHTtlrgnMCZBXRezl2h6FgW1/Abw7PH4OkEvDuoeLr1
-         wgtWMPnbaG7xeSzHceG9ieE6WUbokUiD6fNMIud7kbt8tqzwRrm9kFRGmV+PczY6rjws
-         IcZ89qejmK1TKK+fmZPIhBGOK9XbzMiEoaamewc/yHblBkjqX+gShQYlzmZYG1JZQpXI
-         3Xk0uWmKygyIENEt508XVY61EbEPTylDF9wlA5XZGSgeWhRvoO3xbUJpr38eOCRvvMqH
-         3Etd9VFo+Anu4H4bdrbMRdkgNX2qE5vbAFREZUZdQ7iamm5xLXHJadkx2Q4D9s5gcgpI
-         czyQ==
-X-Gm-Message-State: AJIora9zX12+un3xIROYim0MjHwLcYtuIYBxjTaMhigtqpE4ThuKsDII
-        a63FfkhvAyamjYSrFDMZYhvSBA==
-X-Google-Smtp-Source: AGRyM1sCqZ/94OQrbc0VgK56E56KNgWWZx1A4Pgtq3cUZmmExP5j/ftqtQSDwD4QwF/Q+29f/enmwg==
-X-Received: by 2002:a17:902:74cc:b0:16c:6435:8cac with SMTP id f12-20020a17090274cc00b0016c64358cacmr35637780plt.98.1658260364781;
-        Tue, 19 Jul 2022 12:52:44 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id t187-20020a625fc4000000b0052ab8a92496sm11461198pfb.168.2022.07.19.12.52.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 12:52:44 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 19:52:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Subject: Re: [PATCH 05/12] KVM: X86/MMU: Clear unsync bit directly in
- __mmu_unsync_walk()
-Message-ID: <YtcLiNskPb8z/2Qc@google.com>
-References: <20220605064342.309219-1-jiangshanlai@gmail.com>
- <20220605064342.309219-6-jiangshanlai@gmail.com>
+        Tue, 19 Jul 2022 15:53:10 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2060.outbound.protection.outlook.com [40.107.237.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC60E5508B;
+        Tue, 19 Jul 2022 12:53:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GDI0BZA13G1WdZSPka+jcuqwUoWJS0C13wqr6WU3WP5r2vPeq9shluiAhFjuvlI+dTsFhBnIzDzgdKiw2bD9AeJen1h3UTJHK4M1TGrDy/AGiFO+s0xbNpweEmSTOZGNtrcmeWdlWGOHcEDuspREiNQksoUvGnkaWhHRqVk+2srv4Ikr3lGHJp+fj309DrPGWN+5xYmSZwvhiGUcSIw03pGT1v2DvUaGPwgBX8xWVhH4kzoGytzULs/816owD0k42jEr8oW9frfKZDWjU1whrAfuVhJyExxie9MfJSdHE0CjluxJcxbqhRi/7ya/7//gkjIuD3Emj5Zy7MM3gdFNPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rFXhNKNRHns4z1GEKjmQhHONZe+SDBamt8UHJvhiWsU=;
+ b=hZow79E65RGTw0RKmoLYSy3tDBNKQbOaX/GDRINTxYmIrrZA4ua9G1dy0zD6NLrdGIAwTu2K2nfxWBUCPbBbjiIwuCkJgtwvVTouLm1oZ9n2o90Ai14DTZwjLrTqbiuxhnWY69b5cNiywKmf8AKXjS8LCJNc1i+2xCHqDikwPwa11psJ1sPaujipOH/RWWnYq66mA0uVXB0LN4A3BXVKxdBz7cdG0is470+bOXOLYfXqnVaxkKEcyWzCresTt3WnvgbIiZtoOjLo1U09o7iEp1EzwbO+KIJJkP4zMgdAS9sk+evC9dSOZ+5unEL/RTOwwsHQxdeXW+IdWMAu7t8y8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=ladisch.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rFXhNKNRHns4z1GEKjmQhHONZe+SDBamt8UHJvhiWsU=;
+ b=DZDoB93yonoYOb/6eE2POWgQLnM//HunWqj4SqA8G0u0fLf8vicvuCWd1Il6BGzFPZkzqiY9U5aCkyTU5qHKEa3ekaZvrJIrMrFW5W/hgT+rGNlKjZMkDWrI4rM/posDj8OpxxKKLWDVJvNcBQBn4N4NPl/KLL0//CjYQgG8q2k=
+Received: from MW4PR04CA0231.namprd04.prod.outlook.com (2603:10b6:303:87::26)
+ by BN8PR12MB3299.namprd12.prod.outlook.com (2603:10b6:408:9a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.22; Tue, 19 Jul
+ 2022 19:52:57 +0000
+Received: from CO1NAM11FT023.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:87:cafe::c9) by MW4PR04CA0231.outlook.office365.com
+ (2603:10b6:303:87::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.13 via Frontend
+ Transport; Tue, 19 Jul 2022 19:52:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT023.mail.protection.outlook.com (10.13.175.35) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5438.12 via Frontend Transport; Tue, 19 Jul 2022 19:52:56 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 19 Jul
+ 2022 14:52:55 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Clemens Ladisch <clemens@ladisch.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>
+CC:     <linux-hwmon@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+        <babu.moger@amd.com>, <yazen.ghannam@amd.com>,
+        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v3 RESEND 0/6] Add support for upcoming chips to k10temp and amd_nb
+Date:   Tue, 19 Jul 2022 14:52:50 -0500
+Message-ID: <20220719195256.1516-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220605064342.309219-6-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c5c1ec49-f566-4541-f6f0-08da69c046d6
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3299:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W47QVxcx0okJI4Z/CwuEW7H1SSU7nQ+uqKzrPlE0LW1raBoQeRwIuhAzHDIJUdnC+UZTxuRT5RyDgNCXBKm/n4y5w/19Ea8zOHdhA8ovDyI4tdcHTOZMZkm+Yz7M1PWw6ji8Ax/bO7eF9L+pVeYGcpelFHss8ePvLt2TTKkA2AvuKJUkjO34DMKooNCkRJFyoZA5szY5fVfOymoC3hKtFzczmAxqN4kMC+4nWUI1Fd3FepI3yCjG7W7bzG7dWUi5VXC8O2D4Gpx5VWENv/XeyL3rak0OJn9WMA1m7zguWw/ApDTJ4hZAg2gGis1cSfyXjn/Zgin0HIqO/oUeN0ZWaaycydS5r10h7NN72Bf9p2fPShBUIYJ6MaarzZkfg2EwmcinMBJWc53vCwrv8Dit2Q5QnD93ThNSYDWxK7MO6Ql72P3UHZGDMXy6YBUQDnyjacni/SETeDB4zXyBvCA5Hd1RSwMYZdmg9TOraH5c+RaamBMhaFE6Eyj4PuUMjJyY7yyhfr5V8bQuSA90HezWI0T41On5U+ZjSzC67FSjUF/OlI/ZuZ9vQyzNMbSvhcr3OHeEQtXpEpIUFMWuqE8s33ZLTew73u9CX5QG+GKIR0YsHkKmgOd5yBlXfJoSNK2E17+Xb1W9pKQSuhf9yedwNWAf+b55xcc3DFUt5wqQU6LyomKltHi2q0I4jvX9qU+Xfql1yPGKV3MkVIY7scMQgcJgj5bGWUd7fCxJrgCcNpnsktNHX7RRHHuFPUx7BowZEPmQ8T9aOFehBpsYDmdaC81kSEgSisconW3ftGrumIJ/p0w+f7jSnYIlidJhT/z4hRj2rgU4fiXsTG5AZyeNIl4jdGfHfA+3ZBKlImlHBOrn4XaGdIELyE2Q+qHMp3ra
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(396003)(376002)(39860400002)(36840700001)(46966006)(40470700004)(40480700001)(316002)(44832011)(40460700003)(5660300002)(54906003)(82740400003)(36860700001)(86362001)(356005)(2906002)(110136005)(81166007)(336012)(1076003)(41300700001)(8676002)(83380400001)(70586007)(70206006)(47076005)(4326008)(16526019)(426003)(186003)(478600001)(8936002)(966005)(26005)(36756003)(6666004)(82310400005)(7696005)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 19:52:56.7601
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5c1ec49-f566-4541-f6f0-08da69c046d6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT023.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3299
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,148 +102,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> 
-> mmu_unsync_walk() and __mmu_unsync_walk() requires the caller to clear
-> unsync for the shadow pages in the resulted pvec by synching them or
-> zapping them.
-> 
-> All callers does so.
-> 
-> Otherwise mmu_unsync_walk() and __mmu_unsync_walk() can't work because
-> they always walk from the beginning.
-> 
-> It is possible to make mmu_unsync_walk() and __mmu_unsync_walk() lists
-> unsync shadow pages in the resulted pvec without needing synching them
-> or zapping them later.  It would require to change mmu_unsync_walk()
-> and __mmu_unsync_walk() and make it walk from the last visited position
-> derived from the resulted pvec of the previous call of mmu_unsync_walk().
-> 
-> It would complicate the walk and no callers require the possible new
-> behavior.
-> 
-> It is better to keep the original behavior.
-> 
-> Since the shadow pages in the resulted pvec will be synced or zapped,
-> and clear_unsync_child_bit() for parents will be called anyway later.
-> 
-> Call clear_unsync_child_bit() earlier and directly in __mmu_unsync_walk()
-> to make the code more efficient (the memory of the shadow pages is hot
-> in the CPU cache, and no need to visit the shadow pages again later).
+This series started as what looked like a correction to previous
+commits, but I missed that the previous commits were for a different
+family with the same chip models.  So while fixing up the series I also
+noticed that a few upcoming chips have new PCIe IDs and CCD offsets not
+yet supported, so add them to amd_nb/k10temp.
 
-The changelog and shortlog do a poor job of capturing what this patch actually
-does.  This is a prime example of why I prefer that changelogs first document
-what the patch is doing, and only then dive into background details and alternatives.
+v2->v3
+ * Pick up tags
+ * Group "ROOT" PCI IDs with others in patches 2 and 3.
+v1->v2:
+ * Correct commit messages
+ * Add more missing chips and offsets
+ * since so much changed, do not include Bjorn's Ack.
 
-This changelog has 6-7 paragraphs talking about current KVM behaviors and
-alternatives before talking about the patch itself, and then doesn't actually
-describe the net effect of the change.
+V3 original submission:
+* https://lore.kernel.org/lkml/20220613192956.4911-1-mario.limonciello@amd.com/#t
 
-The use of "directly" in the shortlog is also confusing because __mmu_unsync_walk()
-already invokes clear_unsync_child_bit(), e.g. this patch only affects
-__mmu_unsync_walk().  IIUC, the change is that __mmu_unsync_walk() will clear
-the unsync info when adding to @pvec instead of having to redo the walk after
-zapping/synching the page.
+Mario Limonciello (6):
+  x86/amd_nb: Add AMD Family 17h A0-AF IDs
+  x86/amd_nb: Add Family 19h model 70h-7Fh IDs
+  x86/amd_nb: Add Family 19h model 60h-6Fh IDs
+  hwmon: (k10temp): Add support for family 17h models A0h-AFh
+  hwmon: (k10temp): Add support for family 19h models 70h-7Fh
+  hwmon: (k10temp): Add support for family 19h models 60h-6Fh
 
-  KVM: x86/mmu: Clear unsync child _before_ final zap/sync
+ arch/x86/kernel/amd_nb.c | 13 +++++++++++++
+ drivers/hwmon/k10temp.c  | 12 ++++++++++++
+ include/linux/pci_ids.h  |  3 +++
+ 3 files changed, 28 insertions(+)
 
-  Clear the unsync child information for a shadow page when adding it to
-  the array of to-be-zapped/synced shadow pages, i.e. _before_ the actual
-  zap/sync that effects the "no longer unsync" state change.  Callers of
-  mmu_unsync_walk() and __mmu_unsync_walk() are required to zap/sync all
-  entries in @pvec before dropping mmu_lock, i.e. once a shadow page is
-  added to the set of pages to zap/sync, success is guaranteed.
+-- 
+2.25.1
 
-  Clearing the unsync info when adding to the array yields more efficient
-  code as KVM will no longer need to rewalk the shadow pages to "discover"
-  that the child   pages is no longer unsync, and as a bonus, the metadata
-  for the shadow   page will be hot in the CPU cache.
-
-  Note, this obviously doesn't work if success isn't guaranteed, but
-  mmu_unsync_walk() and __mmu_unsync_walk() would require significant
-  changes to allow restarting a walk after failure to zap/sync.  I.e.
-  this is but one of many details that would need to change.
-
-> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 22 +++++++++++++---------
->  1 file changed, 13 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index f35fd5c59c38..2446ede0b7b9 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1794,19 +1794,23 @@ static int __mmu_unsync_walk(struct kvm_mmu_page *sp,
->  				return -ENOSPC;
->  
->  			ret = __mmu_unsync_walk(child, pvec);
-> -			if (!ret) {
-> -				clear_unsync_child_bit(sp, i);
-> -				continue;
-> -			} else if (ret > 0) {
-> -				nr_unsync_leaf += ret;
-> -			} else
-> +			if (ret < 0)
->  				return ret;
-> -		} else if (child->unsync) {
-> +			nr_unsync_leaf += ret;
-> +		}
-> +
-> +		/*
-> +		 * Clear unsync bit for @child directly if @child is fully
-> +		 * walked and all the unsync shadow pages descended from
-> +		 * @child (including itself) are added into @pvec, the caller
-> +		 * must sync or zap all the unsync shadow pages in @pvec.
-> +		 */
-> +		clear_unsync_child_bit(sp, i);
-> +		if (child->unsync) {
->  			nr_unsync_leaf++;
->  			if (mmu_pages_add(pvec, child, i))
-
-This ordering is wrong, no?  If the child itself is unsync and can't be added to
-@pvec, i.e. fails here, then clearing its bit in unsync_child_bitmap is wrong.
-
-I also dislike that that this patch obfuscates that a shadow page can't be unsync
-itself _and_ have unsync children (because only PG_LEVEL_4K can be unsync).  In
-other words, keep the
-
-	if (child->unsync_children) {
-
-	} else if (child->unsync) {
-
-	}
-
-And at that point, we can streamline this further:
-
-	int i, ret, nr_unsync_leaf = 0;
-
-	for_each_set_bit(i, sp->unsync_child_bitmap, 512) {
-		struct kvm_mmu_page *child;
-		u64 ent = sp->spt[i];
-
-		if (is_shadow_present_pte(ent) && !is_large_pte(ent)) {
-			child = to_shadow_page(ent & PT64_BASE_ADDR_MASK);
-			if (child->unsync_children) {
-				ret = __mmu_unsync_walk_and_clear(child, pvec);
-				if (ret < 0)
-					return ret;
-				nr_unsync_leaf += ret;
-			} else if (child->unsync) {
-				if (mmu_pages_add(pvec, child))
-					return -ENOSPC;
-				nr_unsync_leaf++;
-			}
-		}
-
-		/*
-		 * Clear the unsync info, the child is either already sync
-		 * (bitmap is stale) or is guaranteed to be zapped/synced by
-		 * the caller before mmu_lock is released.  Note, the caller is
-		 * required to zap/sync all entries in @pvec even if an error
-		 * is returned!
-		 */
-		clear_unsync_child_bit(sp, i);
-	}
-
-	return nr_unsync_leaf;

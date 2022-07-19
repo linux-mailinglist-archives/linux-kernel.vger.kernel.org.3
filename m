@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313E6579A43
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD3C5799E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238790AbiGSMMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        id S238474AbiGSMIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238675AbiGSMK4 (ORCPT
+        with ESMTP id S238231AbiGSMHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:10:56 -0400
+        Tue, 19 Jul 2022 08:07:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F041052887;
-        Tue, 19 Jul 2022 05:03:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B1245F40;
+        Tue, 19 Jul 2022 05:01:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38DE360F10;
-        Tue, 19 Jul 2022 12:03:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDA7C341C6;
-        Tue, 19 Jul 2022 12:03:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B1EC61632;
+        Tue, 19 Jul 2022 12:01:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD3AC341C6;
+        Tue, 19 Jul 2022 12:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232207;
-        bh=kPe8xopwvnNA8m2s6tHtebLGrFISyObFHT9vk0LshX8=;
+        s=korg; t=1658232078;
+        bh=XqlTd4nTiZWMDUpAlCHbBSebnj0dDtBFRM1zS2k8yng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HY2VccC95sa46trtHmx7XjESvyiiRNjAZZJ62aA1Ey3+qdxKv2/5orUhaazF361Ks
-         Tv6MTVvaYvVPhqUeKPG7F1x1JXjGRoyuEZo4Kq+DswcVbhY41PqFN9ukrwNJ6t/aGh
-         Tji4T8FF3wae9EKsigkDFwQ5Tp70aH9C3NC5gLQg=
+        b=VuVgFT7SJbojnGsZr1S9aMJ6/KBT8XZ41uQySwHRvBr2XwkrsosQAFJmI6cxryAeM
+         OAOZm7hgIEPVPe2Y7gn6Z9iTUwLDvcifyi8Y/vdlOVXy1j0DxUcjhDaQ7BwqojL25e
+         yUCTLos6KEbSzXoqxi7eUZ6R12Ht+NBSfad3iDkY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jorge Lopez <jorge.lopez2@hp.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 49/71] platform/x86: hp-wmi: Ignore Sanitization Mode event
+Subject: [PATCH 4.19 35/48] ASoC: ops: Fix off by one in range control validation
 Date:   Tue, 19 Jul 2022 13:54:12 +0200
-Message-Id: <20220719114557.081143562@linuxfoundation.org>
+Message-Id: <20220719114522.983985285@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 9ab762a84b8094540c18a170e5ddd6488632c456 ]
+[ Upstream commit 5871321fb4558c55bf9567052b618ff0be6b975e ]
 
-After system resume the hp-wmi driver may complain:
-[ 702.620180] hp_wmi: Unknown event_id - 23 - 0x0
+We currently report that range controls accept a range of 0..(max-min) but
+accept writes in the range 0..(max-min+1). Remove that extra +1.
 
-According to HP it means 'Sanitization Mode' and it's harmless to just
-ignore the event.
-
-Cc: Jorge Lopez <jorge.lopez2@hp.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Link: https://lore.kernel.org/r/20220628123726.250062-1-kai.heng.feng@canonical.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220604105246.4055214-1-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/hp-wmi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ sound/soc/soc-ops.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-index 63a530a3d9fe..c3fdb0ecad96 100644
---- a/drivers/platform/x86/hp-wmi.c
-+++ b/drivers/platform/x86/hp-wmi.c
-@@ -62,6 +62,7 @@ enum hp_wmi_event_ids {
- 	HPWMI_BACKLIT_KB_BRIGHTNESS	= 0x0D,
- 	HPWMI_PEAKSHIFT_PERIOD		= 0x0F,
- 	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
-+	HPWMI_SANITIZATION_MODE		= 0x17,
- };
+diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
+index 7a37312c8e0c..453b61b42dd9 100644
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -530,7 +530,7 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
+ 		return -EINVAL;
+ 	if (mc->platform_max && tmp > mc->platform_max)
+ 		return -EINVAL;
+-	if (tmp > mc->max - mc->min + 1)
++	if (tmp > mc->max - mc->min)
+ 		return -EINVAL;
  
- struct bios_args {
-@@ -629,6 +630,8 @@ static void hp_wmi_notify(u32 value, void *context)
- 		break;
- 	case HPWMI_BATTERY_CHARGE_PERIOD:
- 		break;
-+	case HPWMI_SANITIZATION_MODE:
-+		break;
- 	default:
- 		pr_info("Unknown event_id - %d - 0x%x\n", event_id, event_data);
- 		break;
+ 	if (invert)
+@@ -551,7 +551,7 @@ int snd_soc_put_volsw_range(struct snd_kcontrol *kcontrol,
+ 			return -EINVAL;
+ 		if (mc->platform_max && tmp > mc->platform_max)
+ 			return -EINVAL;
+-		if (tmp > mc->max - mc->min + 1)
++		if (tmp > mc->max - mc->min)
+ 			return -EINVAL;
+ 
+ 		if (invert)
 -- 
 2.35.1
 

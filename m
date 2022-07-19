@@ -2,189 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7064457A411
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810F357A419
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237766AbiGSQRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 12:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S235854AbiGSQTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 12:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234628AbiGSQRw (ORCPT
+        with ESMTP id S232148AbiGSQTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 12:17:52 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8ABB4F681
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:17:49 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id o18so13919864pgu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:17:49 -0700 (PDT)
+        Tue, 19 Jul 2022 12:19:44 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE914F6B9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:19:43 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id q7so17937879lji.12
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:19:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=j99v33ldlK2FlKWV4TdK79PiQjRVPI8FTWxxa1tOtzg=;
-        b=xyAHcPPkHVBNE/JfV8PykfXY21OGJO3tYb8jOvOdDWvKZ3n6FFrvFYly2ZDsyG47aq
-         LDQBdEnk2K9xm+YjB4uVZCbVDVu29dvWKW2IVRXnEiDaocXiyXdlDLMW6CXLIcz/kR81
-         nIDPKMWeMsTFjMSNMkLWDiTZTjJ3DSoEcakCVhvmMk0l5E0wQiCEkhHW8hlnI+jiVirF
-         Lx1fvZoAUDWnzq8elL8JxetYAqHgAH0KmeajbeP97UWhhZjqeGWM/KtuX9UcbStGUlXh
-         jEJVuSnIxIC7xB+ZC8a2XzNp/qRUdWGjoM19E5dj5SUjYXEOig0vb5TgH4ajeON2SD6q
-         8cQQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BrqvVrOaDm2mbyP/RnfrNJ8rtAxk2BgRZfLzeM1+qLc=;
+        b=Fk6lMSj51AUQX4dJS5Q2Kb0tfTfor4DoshfwFoKqjvNkOiduxXwJEIju1MzkIOm1p9
+         g83YE66Q5BYok/Oblfr7qAA7/y5PjXLmDei1U4f50WuZZ+O3OnNx+rR9kPIRi0SGkcz4
+         +4dQERTJBKGO0TfzbYaTtnM5ycSaT5tA423vIwe/Rv/UJ850JZ0xANli9XKdHqjXaZ5p
+         I86p78NN/+0lbPZsJJ+hH7KsVCn/lELJdIFFHAVyleOFkmPVEHYxcg1BFzT47OM8GtM/
+         yobhEhitHSeLHzdaOx4jOMBnoeoDi4kWkWBSlee7TnBm+3KuJN50ninNi3j55FpCGPfj
+         R0wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j99v33ldlK2FlKWV4TdK79PiQjRVPI8FTWxxa1tOtzg=;
-        b=4Dfmw0lLeFUI3ezG0sb1Dyg8rDxGKfsImbQNZc2WVIXP6CoX/khz6F/Fsaby3hyg7Q
-         ZEEKLqy1PGMsrWKxv6pH5MIcXg6Tso/zE7yg55C1UFxaaX7JLdqzuyhWMuzbW7J3VAMN
-         klC5vG/EMxkNEfAJqqcYLt+2HIqYO8Lvzn1guNotkmhxXpvRXUiZmVk/hVdkrXMOVdJo
-         WaRNd4FV6hCl681Lmx1CMupW/p4lRcyGysEdFQXpP/WmhTPog/UrA0DOtZgL9temIYoU
-         I9A3GvCym6TwE979VtpnBYwVYF0Ur6deh1v46rmVi6mS+2kSq0TSByqbLjTS4JmDUY8c
-         fbyA==
-X-Gm-Message-State: AJIora9uP/Ms552KfeuMWjzG5UYkfwblcCJ6H6zXukHRJsMCzpmFN8qt
-        rdNCG+x6dA+5Y+XAii3j0W5OVADoUsK4Uw==
-X-Google-Smtp-Source: AGRyM1uDNXtAFgSgT5rk5Rv6dIC3uv0YhISGtimtbCkCl2vkoNFU0onmeUEBjPOSoO32fjDz7J8wow==
-X-Received: by 2002:a63:3fcc:0:b0:408:c856:dd6d with SMTP id m195-20020a633fcc000000b00408c856dd6dmr29959582pga.354.1658247469226;
-        Tue, 19 Jul 2022 09:17:49 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id g26-20020aa796ba000000b0052ab5a740aesm11675817pfk.162.2022.07.19.09.17.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 09:17:48 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 10:17:46 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Puranjay Mohan <p-mohan@ti.com>
-Cc:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
-        linux-arm-kernel@lists.infradead.org, rogerq@kernel.org,
-        grygorii.strashko@ti.com, vigneshr@ti.com, kishon@ti.com,
-        robh@kernel.org
-Subject: Re: [PATCH v5 1/6] dt-bindings: remoteproc: Add PRU consumer bindings
-Message-ID: <20220719161746.GC3393732@p14s>
-References: <20220607045650.4999-1-p-mohan@ti.com>
- <20220607045650.4999-2-p-mohan@ti.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BrqvVrOaDm2mbyP/RnfrNJ8rtAxk2BgRZfLzeM1+qLc=;
+        b=IkWZAzmEsXQTB78RNxHjkZKQcwOySVWBqkZXl3lEwlF7ppeYpPnwIxguuzRyaPvkAY
+         6SkX0kIVhWd+ZynvAeF6wk7sBsGigGJ6DmoCq7BiQHPU+CHkNt0yWP7EKKkBBziGgXkw
+         6w369IRuySsW2tVnGp48HFMpvoB6Awc4aT3Na4buDLO+WYdwa5uXUxXB27IN62/+zofS
+         PJBoIwfO5V1MWerxjcK4bmtCPU4sBqUr+07l9O3sOtaz/ylVoAvmE+ybc5XOraUrTelm
+         NDanSc7MoLSjuvH6oH4hMo3DdhK07KMoI9c58CrWYlL6zFSC+i/AiEaSI/duSR9BnNo4
+         C+EA==
+X-Gm-Message-State: AJIora9u5HolEjQkkXtzgR6W5um/xPsG/ojVtxL4zMoDrP64hUUbe94W
+        HLajX1H8EPhSvxMr1awEoIU3737NvuP87mcoTtpR4Q==
+X-Google-Smtp-Source: AGRyM1s3zNzRHlduviUIC8xxk6nzKcSddZSv4/5KWyNs43Q4TF497LJ02HtDbh6DIQIo40ErvfWF+Dg0VsyvfC+qdow=
+X-Received: by 2002:a2e:7006:0:b0:25d:80b0:d16b with SMTP id
+ l6-20020a2e7006000000b0025d80b0d16bmr15834985ljc.436.1658247581361; Tue, 19
+ Jul 2022 09:19:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607045650.4999-2-p-mohan@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-18-jthoughton@google.com> <673a3024-bf82-3770-b737-4c7e53e70fe5@nutanix.com>
+In-Reply-To: <673a3024-bf82-3770-b737-4c7e53e70fe5@nutanix.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 19 Jul 2022 09:19:29 -0700
+Message-ID: <CADrL8HVFWidxaMZ++WfMfYb6pO2pEsDiVghe+8kKzE2kTvO9YA@mail.gmail.com>
+Subject: Re: [RFC PATCH 17/26] hugetlb: update follow_hugetlb_page to support HGM
+To:     "manish.mishra" <manish.mishra@nutanix.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 10:26:45AM +0530, Puranjay Mohan wrote:
-> From: Suman Anna <s-anna@ti.com>
-> 
-> Add a YAML binding document for PRU consumers. The binding includes
-> all the common properties that can be used by different PRU consumer
-> or application nodes and supported by the PRU remoteproc driver.
-> These are used to configure the PRU hardware for specific user
-> applications.
-> 
-> The application nodes themselves should define their own bindings.
-> 
-> Co-developed-by: Tero Kristo <t-kristo@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
-> V3->V4:
-> * Addressed Rob's comments regarding max and min Items.
-> * removed the dependencies tag as it was redundant.
-> ---
->  .../bindings/remoteproc/ti,pru-consumer.yaml  | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> new file mode 100644
-> index 000000000000..df384b44259b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Common TI PRU Consumer Binding
-> +
-> +maintainers:
-> +  - Suman Anna <s-anna@ti.com>
-> +
-> +description: |
-> +  A PRU application/consumer/user node typically uses one or more PRU device
-> +  nodes to implement a PRU application/functionality. Each application/client
-> +  node would need a reference to at least a PRU node, and optionally define
-> +  some properties needed for hardware/firmware configuration. The below
-> +  properties are a list of common properties supported by the PRU remoteproc
-> +  infrastructure.
-> +
-> +  The application nodes shall define their own bindings like regular platform
-> +  devices, so below are in addition to each node's bindings.
-> +
-> +properties:
-> +  ti,prus:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: phandles to the PRU, RTU or Tx_PRU nodes used
-> +    minItems: 1
-> +    maxItems: 6
-> +    items:
-> +      maxItems: 1
-> +
-> +  firmware-name:
-> +    $ref: /schemas/types.yaml#/definitions/string-array
-> +    minItems: 1
-> +    maxItems: 6
-> +    description: |
-> +      firmwares for the PRU cores, the default firmware for the core from
-> +      the PRU node will be used if not provided. The firmware names should
-> +      correspond to the PRU cores listed in the 'ti,prus' property
-> +
-> +  ti,pruss-gp-mux-sel:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 1
-> +    maxItems: 6
-> +    items:
-> +      enum: [0, 1, 2, 3, 4]
-> +    description: |
-> +      array of values for the GP_MUX_SEL under PRUSS_GPCFG register for a PRU.
-> +      This selects the internal muxing scheme for the PRU instance. Values
-> +      should correspond to the PRU cores listed in the 'ti,prus' property. The
-> +      GP_MUX_SEL setting is a per-slice setting (one setting for PRU0, RTU0,
-> +      and Tx_PRU0 on K3 SoCs). Use the same value for all cores within the
-> +      same slice in the associative array. If the array size is smaller than
-> +      the size of 'ti,prus' property, the default out-of-reset value (0) for the
-> +      PRU core is used.
-> +
-> +required:
-> +  - ti,prus
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    /* PRU application node example */
-> +    pru-app {
-> +        ti,prus = <&pru0>, <&pru1>;
-> +        firmware-name = "pruss-app-fw0", "pruss-app-fw1";
-> +        ti,pruss-gp-mux-sel = <2>, <1>;
-> +    };
+On Tue, Jul 19, 2022 at 3:48 AM manish.mishra <manish.mishra@nutanix.com> wrote:
+>
+>
+> On 24/06/22 11:06 pm, James Houghton wrote:
+> > This enables support for GUP, and it is needed for the KVM demand paging
+> > self-test to work.
+> >
+> > One important change here is that, before, we never needed to grab the
+> > i_mmap_sem, but now, to prevent someone from collapsing the page tables
+> > out from under us, we grab it for reading when doing high-granularity PT
+> > walks.
+> >
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+> > ---
+> >   mm/hugetlb.c | 70 ++++++++++++++++++++++++++++++++++++++++++----------
+> >   1 file changed, 57 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index f9c7daa6c090..aadfcee947cf 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -6298,14 +6298,18 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+> >       unsigned long vaddr = *position;
+> >       unsigned long remainder = *nr_pages;
+> >       struct hstate *h = hstate_vma(vma);
+> > +     struct address_space *mapping = vma->vm_file->f_mapping;
+> >       int err = -EFAULT, refs;
+> > +     bool has_i_mmap_sem = false;
+> >
+> >       while (vaddr < vma->vm_end && remainder) {
+> >               pte_t *pte;
+> >               spinlock_t *ptl = NULL;
+> >               bool unshare = false;
+> >               int absent;
+> > +             unsigned long pages_per_hpte;
+> >               struct page *page;
+> > +             struct hugetlb_pte hpte;
+> >
+> >               /*
+> >                * If we have a pending SIGKILL, don't keep faulting pages and
+> > @@ -6325,9 +6329,23 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+> >                */
+> >               pte = huge_pte_offset(mm, vaddr & huge_page_mask(h),
+> >                                     huge_page_size(h));
+> > -             if (pte)
+> > -                     ptl = huge_pte_lock(h, mm, pte);
+> > -             absent = !pte || huge_pte_none(huge_ptep_get(pte));
+> > +             if (pte) {
+> > +                     hugetlb_pte_populate(&hpte, pte, huge_page_shift(h));
+> > +                     if (hugetlb_hgm_enabled(vma)) {
+> > +                             BUG_ON(has_i_mmap_sem);
+>
+> Just thinking can we do without i_mmap_lock_read in most cases. Like earlier
+>
+> this function was good without i_mmap_lock_read doing almost everything
+>
+> which is happening now?
 
-It would be nice to have a full example in order to provide more context.
+We need something to prevent the page tables from being rearranged
+while we're walking them. In this RFC, I used the i_mmap_lock. I'm
+going to change it, probably to a per-VMA lock (or maybe a per-hpage
+lock. I'm trying to figure out if a system with PTLs/hugetlb_pte_lock
+could work too :)).
 
-I am done reviewing this set.
-
-Thanks,
-Mathieu
-
-> -- 
-> 2.17.1
-> 
+>
+> > +                             i_mmap_lock_read(mapping);
+> > +                             /*
+> > +                              * Need to hold the mapping semaphore for
+> > +                              * reading to do a HGM walk.
+> > +                              */
+> > +                             has_i_mmap_sem = true;
+> > +                             hugetlb_walk_to(mm, &hpte, vaddr, PAGE_SIZE,
+> > +                                             /*stop_at_none=*/true);
+> > +                     }
+> > +                     ptl = hugetlb_pte_lock(mm, &hpte);
+> > +             }
+> > +
+> > +             absent = !pte || hugetlb_pte_none(&hpte);
+> >
+> >               /*
+> >                * When coredumping, it suits get_dump_page if we just return
+> > @@ -6338,8 +6356,13 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+> >                */
+> >               if (absent && (flags & FOLL_DUMP) &&
+> >                   !hugetlbfs_pagecache_present(h, vma, vaddr)) {
+> > -                     if (pte)
+> > +                     if (pte) {
+> > +                             if (has_i_mmap_sem) {
+> > +                                     i_mmap_unlock_read(mapping);
+> > +                                     has_i_mmap_sem = false;
+> > +                             }
+> >                               spin_unlock(ptl);
+> > +                     }
+> >                       remainder = 0;
+> >                       break;
+> >               }
+> > @@ -6359,8 +6382,13 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+> >                       vm_fault_t ret;
+> >                       unsigned int fault_flags = 0;
+> >
+> > -                     if (pte)
+> > +                     if (pte) {
+> > +                             if (has_i_mmap_sem) {
+> > +                                     i_mmap_unlock_read(mapping);
+> > +                                     has_i_mmap_sem = false;
+> > +                             }
+> >                               spin_unlock(ptl);
+> > +                     }
+> >                       if (flags & FOLL_WRITE)
+> >                               fault_flags |= FAULT_FLAG_WRITE;
+> >                       else if (unshare)
+> > @@ -6403,8 +6431,11 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+> >                       continue;
+> >               }
+> >
+> > -             pfn_offset = (vaddr & ~huge_page_mask(h)) >> PAGE_SHIFT;
+> > -             page = pte_page(huge_ptep_get(pte));
+> > +             pfn_offset = (vaddr & ~hugetlb_pte_mask(&hpte)) >> PAGE_SHIFT;
+> > +             page = pte_page(hugetlb_ptep_get(&hpte));
+> > +             pages_per_hpte = hugetlb_pte_size(&hpte) / PAGE_SIZE;
+> > +             if (hugetlb_hgm_enabled(vma))
+> > +                     page = compound_head(page);
+> >
+> >               VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
+> >                              !PageAnonExclusive(page), page);
+> > @@ -6414,17 +6445,21 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+> >                * and skip the same_page loop below.
+> >                */
+> >               if (!pages && !vmas && !pfn_offset &&
+> > -                 (vaddr + huge_page_size(h) < vma->vm_end) &&
+> > -                 (remainder >= pages_per_huge_page(h))) {
+> > -                     vaddr += huge_page_size(h);
+> > -                     remainder -= pages_per_huge_page(h);
+> > -                     i += pages_per_huge_page(h);
+> > +                 (vaddr + pages_per_hpte < vma->vm_end) &&
+> > +                 (remainder >= pages_per_hpte)) {
+> > +                     vaddr += pages_per_hpte;
+> > +                     remainder -= pages_per_hpte;
+> > +                     i += pages_per_hpte;
+> >                       spin_unlock(ptl);
+> > +                     if (has_i_mmap_sem) {
+> > +                             has_i_mmap_sem = false;
+> > +                             i_mmap_unlock_read(mapping);
+> > +                     }
+> >                       continue;
+> >               }
+> >
+> >               /* vaddr may not be aligned to PAGE_SIZE */
+> > -             refs = min3(pages_per_huge_page(h) - pfn_offset, remainder,
+> > +             refs = min3(pages_per_hpte - pfn_offset, remainder,
+> >                   (vma->vm_end - ALIGN_DOWN(vaddr, PAGE_SIZE)) >> PAGE_SHIFT);
+> >
+> >               if (pages || vmas)
+> > @@ -6447,6 +6482,10 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+> >                       if (WARN_ON_ONCE(!try_grab_folio(pages[i], refs,
+> >                                                        flags))) {
+> >                               spin_unlock(ptl);
+> > +                             if (has_i_mmap_sem) {
+> > +                                     has_i_mmap_sem = false;
+> > +                                     i_mmap_unlock_read(mapping);
+> > +                             }
+> >                               remainder = 0;
+> >                               err = -ENOMEM;
+> >                               break;
+> > @@ -6458,8 +6497,13 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+> >               i += refs;
+> >
+> >               spin_unlock(ptl);
+> > +             if (has_i_mmap_sem) {
+> > +                     has_i_mmap_sem = false;
+> > +                     i_mmap_unlock_read(mapping);
+> > +             }
+> >       }
+> >       *nr_pages = remainder;
+> > +     BUG_ON(has_i_mmap_sem);
+> >       /*
+> >        * setting position is actually required only if remainder is
+> >        * not zero but it's faster not to add a "if (remainder)"
+>
+> Thanks
+>
+> Manish Mishra
+>

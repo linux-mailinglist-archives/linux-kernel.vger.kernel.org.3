@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14A05799B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F79579C55
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238224AbiGSMF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
+        id S238347AbiGSMio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238318AbiGSME2 (ORCPT
+        with ESMTP id S241021AbiGSMiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:04:28 -0400
+        Tue, 19 Jul 2022 08:38:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CC2237C5;
-        Tue, 19 Jul 2022 05:00:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D18A48E93;
+        Tue, 19 Jul 2022 05:14:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8F2BB81A8F;
-        Tue, 19 Jul 2022 12:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45CAFC341C6;
-        Tue, 19 Jul 2022 12:00:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC9DEB81B2E;
+        Tue, 19 Jul 2022 12:14:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36AA5C341C6;
+        Tue, 19 Jul 2022 12:14:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232015;
-        bh=jGPwMUwbfOZ7GpoOyhWdg7Ls+gHDhmAm/kZrbrmQ56A=;
+        s=korg; t=1658232879;
+        bh=O9al60/sdL+jit1M+gf1vVMmjpTVz41snS5/sD9cFeg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g6jDmmKYZ3CgAZKIpP1rJrmhFCY9phToWt4lmEQX4PK+EqthlPHZZC9DDnfPecn4Z
-         phrLe1apm6DkRM78UAZLDKDfV2p/waL5kSmKk1QRQgjN3tQbpWToNEIatHHwNjAMXL
-         Xo/J4jFFyG8EfrtmNP1AfSrHoETF/PCbgp16oQ7s=
+        b=sTVqRMrGbc87JV2s2PHydEd8YbDqAI7lZrnVy/L4vi5zd6vX6CStLuIejP9/Am1hk
+         MWMdYY3lrIHPG16nM/4bcXBvWpEm7jPmifjNTNF7zIEPNExVnUeKt75Cs1B4uYQFse
+         IKvI746Kam+efDTLYfd0NGVEX9uebXc9BxZRI13M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Fabio Estevam <festevam@denx.de>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+        Yefim Barashkin <mr.b34r@kolabnow.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 13/48] ASoC: sgtl5000: Fix noise on shutdown/remove
+Subject: [PATCH 5.15 098/167] drm/amd/pm: Prevent divide by zero
 Date:   Tue, 19 Jul 2022 13:53:50 +0200
-Message-Id: <20220719114521.041462345@linuxfoundation.org>
+Message-Id: <20220719114705.929728889@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
-References: <20220719114518.915546280@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,77 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Francesco Dolcini <francesco.dolcini@toradex.com>
+From: Yefim Barashkin <mr.b34r@kolabnow.com>
 
-[ Upstream commit 040e3360af3736348112d29425bf5d0be5b93115 ]
+[ Upstream commit 0638c98c17aa12fe914459c82cd178247e21fb2b ]
 
-Put the SGTL5000 in a silent/safe state on shutdown/remove, this is
-required since the SGTL5000 produces a constant noise on its output
-after it is configured and its clock is removed. Without this change
-this is happening every time the module is unbound/removed or from
-reboot till the clock is enabled again.
+divide error: 0000 [#1] SMP PTI
+CPU: 3 PID: 78925 Comm: tee Not tainted 5.15.50-1-lts #1
+Hardware name: MSI MS-7A59/Z270 SLI PLUS (MS-7A59), BIOS 1.90 01/30/2018
+RIP: 0010:smu_v11_0_set_fan_speed_rpm+0x11/0x110 [amdgpu]
 
-The issue was experienced on both a Toradex Colibri/Apalis iMX6, but can
-be easily reproduced everywhere just playing something on the codec and
-after that removing/unbinding the driver.
+Speed is user-configurable through a file.
+I accidentally set it to zero, and the driver crashed.
 
-Fixes: 9b34e6cc3bc2 ("ASoC: Add Freescale SGTL5000 codec support")
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-Reviewed-by: Fabio Estevam <festevam@denx.de>
-Link: https://lore.kernel.org/r/20220624101301.441314-1-francesco.dolcini@toradex.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Evan Quan <evan.quan@amd.com>
+Reviewed-by: André Almeida <andrealmeid@igalia.com>
+Signed-off-by: Yefim Barashkin <mr.b34r@kolabnow.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/sgtl5000.c | 9 +++++++++
- sound/soc/codecs/sgtl5000.h | 1 +
- 2 files changed, 10 insertions(+)
+ drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/codecs/sgtl5000.c b/sound/soc/codecs/sgtl5000.c
-index 17255e9683f5..13e752f8b3f7 100644
---- a/sound/soc/codecs/sgtl5000.c
-+++ b/sound/soc/codecs/sgtl5000.c
-@@ -1769,6 +1769,9 @@ static int sgtl5000_i2c_remove(struct i2c_client *client)
- {
- 	struct sgtl5000_priv *sgtl5000 = i2c_get_clientdata(client);
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
+index e6c93396434f..614c3d049514 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
+@@ -1235,6 +1235,8 @@ int smu_v11_0_set_fan_speed_rpm(struct smu_context *smu,
+ 	uint32_t crystal_clock_freq = 2500;
+ 	uint32_t tach_period;
  
-+	regmap_write(sgtl5000->regmap, SGTL5000_CHIP_DIG_POWER, SGTL5000_DIG_POWER_DEFAULT);
-+	regmap_write(sgtl5000->regmap, SGTL5000_CHIP_ANA_POWER, SGTL5000_ANA_POWER_DEFAULT);
-+
- 	clk_disable_unprepare(sgtl5000->mclk);
- 	regulator_bulk_disable(sgtl5000->num_supplies, sgtl5000->supplies);
- 	regulator_bulk_free(sgtl5000->num_supplies, sgtl5000->supplies);
-@@ -1776,6 +1779,11 @@ static int sgtl5000_i2c_remove(struct i2c_client *client)
- 	return 0;
- }
- 
-+static void sgtl5000_i2c_shutdown(struct i2c_client *client)
-+{
-+	sgtl5000_i2c_remove(client);
-+}
-+
- static const struct i2c_device_id sgtl5000_id[] = {
- 	{"sgtl5000", 0},
- 	{},
-@@ -1796,6 +1804,7 @@ static struct i2c_driver sgtl5000_i2c_driver = {
- 		   },
- 	.probe = sgtl5000_i2c_probe,
- 	.remove = sgtl5000_i2c_remove,
-+	.shutdown = sgtl5000_i2c_shutdown,
- 	.id_table = sgtl5000_id,
- };
- 
-diff --git a/sound/soc/codecs/sgtl5000.h b/sound/soc/codecs/sgtl5000.h
-index 066517e352a7..0ed4bad92cd1 100644
---- a/sound/soc/codecs/sgtl5000.h
-+++ b/sound/soc/codecs/sgtl5000.h
-@@ -80,6 +80,7 @@
- /*
-  * SGTL5000_CHIP_DIG_POWER
-  */
-+#define SGTL5000_DIG_POWER_DEFAULT		0x0000
- #define SGTL5000_ADC_EN				0x0040
- #define SGTL5000_DAC_EN				0x0020
- #define SGTL5000_DAP_POWERUP			0x0010
++	if (speed == 0)
++		return -EINVAL;
+ 	/*
+ 	 * To prevent from possible overheat, some ASICs may have requirement
+ 	 * for minimum fan speed:
 -- 
 2.35.1
 

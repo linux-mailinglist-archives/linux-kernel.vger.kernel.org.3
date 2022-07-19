@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563BC579D26
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE34579F08
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241534AbiGSMr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S238570AbiGSNKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241567AbiGSMp0 (ORCPT
+        with ESMTP id S243154AbiGSNIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:45:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437C389E8D;
-        Tue, 19 Jul 2022 05:18:12 -0700 (PDT)
+        Tue, 19 Jul 2022 09:08:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4521D550E4;
+        Tue, 19 Jul 2022 05:28:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DBB661826;
-        Tue, 19 Jul 2022 12:17:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5959C341D0;
-        Tue, 19 Jul 2022 12:17:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 321266020F;
+        Tue, 19 Jul 2022 12:28:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA306C341C6;
+        Tue, 19 Jul 2022 12:28:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233062;
-        bh=2gp7DdC32qpng2GORGOCcMiwSXXYzxqNPUfp1HwzPBY=;
+        s=korg; t=1658233691;
+        bh=TqZD68mi36gm9aiOSQeCq3F2D3ZSF1PXzG4Ef1OaD6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F5KyIUYsQGrFf5xGMpMvzeixgDmBdIhvSCuflI8bZFd0yPrNd4xj/bQK2DAhpWVK0
-         l/Hdp2Y1w8kujBeT0XqvK9A9vidfkEbv15QNHrS5ZcVOlF054/38pFwjmaczcNcU6c
-         yYcNQcazLLtl2angb62mMdtvGsq2FHCzGd7HA9EM=
+        b=sfw4Fp2TPm6VnP3fIJTSxQ+U7nW+OvMcnyeC7ZIGqjIGQgZqv4R8SsMDMcOc13Txw
+         lw9UJHsoNltYU25Ms7SdEUkKIkK/fk4O6ocr2frHcT6xlEvklzxPtfDBL6TA8mGJ6X
+         lwl4ZnP+OnqU9Gm26SGSyzhsYrJEYWJCS4Q3j4JE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 5.15 160/167] usb: dwc3: gadget: Fix event pending check
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 207/231] irqchip: or1k-pic: Undefine mask_ack for level triggered hardware
 Date:   Tue, 19 Jul 2022 13:54:52 +0200
-Message-Id: <20220719114711.966066385@linuxfoundation.org>
+Message-Id: <20220719114731.345635622@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,51 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+From: Stafford Horne <shorne@gmail.com>
 
-commit 7441b273388b9a59d8387a03ffbbca9d5af6348c upstream.
+[ Upstream commit 8520501346ed8d1c4a6dfa751cb57328a9c843f1 ]
 
-The DWC3_EVENT_PENDING flag is used to protect against invalid call to
-top-half interrupt handler, which can occur when there's a delay in
-software detection of the interrupt line deassertion.
+The mask_ack operation clears the interrupt by writing to the PICSR
+register.  This we don't want for level triggered interrupt because
+it does not actually clear the interrupt on the source hardware.
 
-However, the clearing of this flag was done prior to unmasking the
-interrupt line, creating opportunity where the top-half handler can
-come. This breaks the serialization and creates a race between the
-top-half and bottom-half handler, resulting in losing synchronization
-between the controller and the driver when processing events.
+This was causing issues in qemu with multi core setups where
+interrupts would continue to fire even though they had been cleared in
+PICSR.
 
-To fix this, make sure the clearing of the DWC3_EVENT_PENDING is done at
-the end of the bottom-half handler.
+Just remove the mask_ack operation.
 
-Fixes: d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events in event cache")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/8670aaf1cf52e7d1e6df2a827af2d77263b93b75.1656380429.git.Thinh.Nguyen@synopsys.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Stafford Horne <shorne@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/gadget.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-or1k-pic.c | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4149,7 +4149,6 @@ static irqreturn_t dwc3_process_event_bu
- 	}
- 
- 	evt->count = 0;
--	evt->flags &= ~DWC3_EVENT_PENDING;
- 	ret = IRQ_HANDLED;
- 
- 	/* Unmask interrupt */
-@@ -4162,6 +4161,9 @@ static irqreturn_t dwc3_process_event_bu
- 		dwc3_writel(dwc->regs, DWC3_DEV_IMOD(0), dwc->imod_interval);
- 	}
- 
-+	/* Keep the clearing of DWC3_EVENT_PENDING at the end */
-+	evt->flags &= ~DWC3_EVENT_PENDING;
-+
- 	return ret;
- }
- 
+diff --git a/drivers/irqchip/irq-or1k-pic.c b/drivers/irqchip/irq-or1k-pic.c
+index 49b47e787644..f289ccd95291 100644
+--- a/drivers/irqchip/irq-or1k-pic.c
++++ b/drivers/irqchip/irq-or1k-pic.c
+@@ -66,7 +66,6 @@ static struct or1k_pic_dev or1k_pic_level = {
+ 		.name = "or1k-PIC-level",
+ 		.irq_unmask = or1k_pic_unmask,
+ 		.irq_mask = or1k_pic_mask,
+-		.irq_mask_ack = or1k_pic_mask_ack,
+ 	},
+ 	.handle = handle_level_irq,
+ 	.flags = IRQ_LEVEL | IRQ_NOPROBE,
+-- 
+2.35.1
+
 
 

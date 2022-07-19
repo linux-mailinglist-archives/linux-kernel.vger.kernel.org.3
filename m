@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A600579D09
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 967F5579CF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241626AbiGSMpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S241300AbiGSMpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241603AbiGSMoN (ORCPT
+        with ESMTP id S241809AbiGSMol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:44:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7587A84ED3;
-        Tue, 19 Jul 2022 05:17:17 -0700 (PDT)
+        Tue, 19 Jul 2022 08:44:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990E487353;
+        Tue, 19 Jul 2022 05:17:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 243A5B81B1A;
-        Tue, 19 Jul 2022 12:17:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C0DC341C6;
-        Tue, 19 Jul 2022 12:17:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0E9BB81B21;
+        Tue, 19 Jul 2022 12:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B4BC341C6;
+        Tue, 19 Jul 2022 12:17:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233033;
-        bh=Z0MLB5sErD4u7jQkthnxO4/0hpaebS009ioAE/xLd9w=;
+        s=korg; t=1658233036;
+        bh=Gf0LKqlKu1/jTIdxolSfG0iMtIyumwv6zYWKDbpiuJ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h/qvezOH6iZdT+qzwEreSEJE44u9dwQpaDnpqIihaJ2Ckp/X2tb6IWRB0teenmFcp
-         FxmU33BrcRZz+EDtobndl6ZHaZhsp8O6hdItReVeg/jtfM8+Ab15/EAgFMvvl/jnI3
-         UIXkHGppRReeRtoRHa7WTm+seepQKeKAtDmKVMn4=
+        b=dc/aJ5zzu2SAtfZDC/iC+9UgBwpdrYq9CC1H9m5OJoff9GPShGaqHUiJuIBUkIlKA
+         RfwzRQItcldqjznysVcDAtiJTysJTBdrbTeIWfDlh0+3SfxMVdPmvEr7S+m8lUrXrU
+         2bPpEy7jUpIFg+tbGuHHsyJDuvYOIEfpeomBUcJU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        stable@vger.kernel.org, Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 151/167] ARM: dts: stm32: use the correct clock source for CEC on stm32mp151
-Date:   Tue, 19 Jul 2022 13:54:43 +0200
-Message-Id: <20220719114711.071166055@linuxfoundation.org>
+Subject: [PATCH 5.15 152/167] Revert "can: xilinx_can: Limit CANFD brp to 2"
+Date:   Tue, 19 Jul 2022 13:54:44 +0200
+Message-Id: <20220719114711.181717609@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
 References: <20220719114656.750574879@linuxfoundation.org>
@@ -55,32 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+From: Srinivas Neeli <srinivas.neeli@xilinx.com>
 
-[ Upstream commit 78ece8cce1ba0c3f3e5a7c6c1b914b3794f04c44 ]
+[ Upstream commit c6da4590fe819dfe28a4f8037a8dc1e056542fb4 ]
 
-The peripheral clock of CEC is not LSE but CEC.
+This reverts commit 05ca14fdb6fe65614e0652d03e44b02748d25af7.
 
-Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+On early silicon engineering samples observed bit shrinking issue when
+we use brp as 1. Hence updated brp_min as 2. As in production silicon
+this issue is fixed, so reverting the patch.
+
+Link: https://lore.kernel.org/all/20220609082433.1191060-2-srinivas.neeli@xilinx.com
+Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/stm32mp151.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/xilinx_can.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index a9b65b3bfda5..e0d483318798 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -553,7 +553,7 @@
- 			compatible = "st,stm32-cec";
- 			reg = <0x40016000 0x400>;
- 			interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&rcc CEC_K>, <&clk_lse>;
-+			clocks = <&rcc CEC_K>, <&rcc CEC>;
- 			clock-names = "cec", "hdmi-cec";
- 			status = "disabled";
- 		};
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index 262b783d1df8..a2e751f0ae0b 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -259,7 +259,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
+ 	.tseg2_min = 1,
+ 	.tseg2_max = 128,
+ 	.sjw_max = 128,
+-	.brp_min = 2,
++	.brp_min = 1,
+ 	.brp_max = 256,
+ 	.brp_inc = 1,
+ };
+@@ -272,7 +272,7 @@ static const struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
+ 	.tseg2_min = 1,
+ 	.tseg2_max = 16,
+ 	.sjw_max = 16,
+-	.brp_min = 2,
++	.brp_min = 1,
+ 	.brp_max = 256,
+ 	.brp_inc = 1,
+ };
 -- 
 2.35.1
 

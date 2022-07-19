@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D43579D23
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2145579EED
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241606AbiGSMrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S243042AbiGSNIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239317AbiGSMqm (ORCPT
+        with ESMTP id S242990AbiGSNHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:46:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A9E8BA85;
-        Tue, 19 Jul 2022 05:18:28 -0700 (PDT)
+        Tue, 19 Jul 2022 09:07:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902F9863C0;
+        Tue, 19 Jul 2022 05:27:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5398861746;
-        Tue, 19 Jul 2022 12:18:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44502C341C6;
-        Tue, 19 Jul 2022 12:18:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E540B81B38;
+        Tue, 19 Jul 2022 12:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA9D6C341C6;
+        Tue, 19 Jul 2022 12:27:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233105;
-        bh=RUUKpFFgLZU5wPepFLY7h5IaUmNL/AXE1xUV7qaneFM=;
+        s=korg; t=1658233630;
+        bh=PGWSdhX/3zv4TJ/w6fn2AbCsBncBUGQHcN7CV7vZPls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qzXDM5lZjA8/wxh/dsVhHcoubTpAH+nY/PiksvhnOqF0MLeWJ7EFWheUUTdUG6oE9
-         MZacW5BgZr/CpXQm9wKt9pZU2BvsXkZtR1nqNEt9eFpHSJK3jcremhxRvnRl76jmvY
-         A4ZEruvS7fAaTcnk16aISYwBo7/ZHpmbHE9PEuPc=
+        b=SjwqbJUp7O8ix6+eRTPr3chouvuHf6e1WlDV1hm67616MQ1LJ4Q+HgWGDxW4xr5JJ
+         /I4UHzkgDWQ0usqTLftR4wBGUW4b4OZOwzWj1Jx/gIwH1edcbncQuWn1Mm0BLfQe0Y
+         q8+qMr2ORxXCKf3XgCZKxi7rQKyqZkuvSyXC4AbU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        kernel test robot <lkp@intel.com>,
+        stable@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 140/167] ASoC: wcd938x: Fix event generation for some controls
-Date:   Tue, 19 Jul 2022 13:54:32 +0200
-Message-Id: <20220719114710.032619335@linuxfoundation.org>
+Subject: [PATCH 5.18 188/231] ASoC: rt711: fix calibrate mutex initialization
+Date:   Tue, 19 Jul 2022 13:54:33 +0200
+Message-Id: <20220719114730.015578035@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,70 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit 10e7ff0047921e32b919ecee7be706dd33c107f8 ]
+[ Upstream commit 08bb5dc6ce02374169213cea772b1c297eaf32d5 ]
 
-Currently wcd938x_*_put() unconditionally report that the value of the
-control changed, resulting in spurious events being generated. Return 0 in
-that case instead as we should. There is still an issue in the compander
-control which is a bit more complex.
+Follow the same flow as rt711-sdca and initialize all mutexes at probe
+time.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/r/20220603122526.3914942-1-broonie@kernel.org
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Link: https://lore.kernel.org/r/20220606203752.144159-5-pierre-louis.bossart@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wcd938x.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ sound/soc/codecs/rt711-sdw.c |    3 +++
+ sound/soc/codecs/rt711.c     |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index 4480c118ed5d..8cdc45e669f2 100644
---- a/sound/soc/codecs/wcd938x.c
-+++ b/sound/soc/codecs/wcd938x.c
-@@ -2517,6 +2517,9 @@ static int wcd938x_tx_mode_put(struct snd_kcontrol *kcontrol,
- 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
- 	int path = e->shift_l;
+--- a/sound/soc/codecs/rt711-sdw.c
++++ b/sound/soc/codecs/rt711-sdw.c
+@@ -474,6 +474,9 @@ static int rt711_sdw_remove(struct sdw_s
+ 	if (rt711->first_hw_init)
+ 		pm_runtime_disable(&slave->dev);
  
-+	if (wcd938x->tx_mode[path] == ucontrol->value.enumerated.item[0])
-+		return 0;
++	mutex_destroy(&rt711->calibrate_mutex);
++	mutex_destroy(&rt711->disable_irq_lock);
 +
- 	wcd938x->tx_mode[path] = ucontrol->value.enumerated.item[0];
+ 	return 0;
+ }
  
- 	return 1;
-@@ -2539,6 +2542,9 @@ static int wcd938x_rx_hph_mode_put(struct snd_kcontrol *kcontrol,
- 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
- 	struct wcd938x_priv *wcd938x = snd_soc_component_get_drvdata(component);
+--- a/sound/soc/codecs/rt711.c
++++ b/sound/soc/codecs/rt711.c
+@@ -1206,6 +1206,7 @@ int rt711_init(struct device *dev, struc
+ 	rt711->sdw_regmap = sdw_regmap;
+ 	rt711->regmap = regmap;
  
-+	if (wcd938x->hph_mode == ucontrol->value.enumerated.item[0])
-+		return 0;
-+
- 	wcd938x->hph_mode = ucontrol->value.enumerated.item[0];
++	mutex_init(&rt711->calibrate_mutex);
+ 	mutex_init(&rt711->disable_irq_lock);
  
- 	return 1;
-@@ -2630,6 +2636,9 @@ static int wcd938x_ldoh_put(struct snd_kcontrol *kcontrol,
- 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
- 	struct wcd938x_priv *wcd938x = snd_soc_component_get_drvdata(component);
- 
-+	if (wcd938x->ldoh == ucontrol->value.integer.value[0])
-+		return 0;
-+
- 	wcd938x->ldoh = ucontrol->value.integer.value[0];
- 
- 	return 1;
-@@ -2652,6 +2661,9 @@ static int wcd938x_bcs_put(struct snd_kcontrol *kcontrol,
- 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
- 	struct wcd938x_priv *wcd938x = snd_soc_component_get_drvdata(component);
- 
-+	if (wcd938x->bcs_dis == ucontrol->value.integer.value[0])
-+		return 0;
-+
- 	wcd938x->bcs_dis = ucontrol->value.integer.value[0];
- 
- 	return 1;
--- 
-2.35.1
-
+ 	/*
+@@ -1320,7 +1321,6 @@ int rt711_io_init(struct device *dev, st
+ 			rt711_jack_detect_handler);
+ 		INIT_DELAYED_WORK(&rt711->jack_btn_check_work,
+ 			rt711_btn_check_handler);
+-		mutex_init(&rt711->calibrate_mutex);
+ 		INIT_WORK(&rt711->calibration_work, rt711_calibration_work);
+ 		schedule_work(&rt711->calibration_work);
+ 	}
 
 

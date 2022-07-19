@@ -2,168 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681DC57A01C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FD457A01D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbiGSNwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S236906AbiGSNwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237819AbiGSNw1 (ORCPT
+        with ESMTP id S237115AbiGSNwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:52:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE2A29CE2B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658235880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/m2NS+tTnqV4bKM9ewNHJoxDhTc6Y1oQ8gKFxD1trHs=;
-        b=HNq5hpxj0IYa9fVhhKY1jWOdxEZSOyNOdX75O+f20xeujPxIJGZjUKF+1cR66cTw5GIaTP
-        w0Q6BpzPLbjas+AZQNIIVJw7kPjNSVMNLBaUxUcBvVapGjanFf6NX1LAESteZOldOYcfrj
-        bQx/IYNB38Dl3Jo9vlAOY7omlluZotw=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-fUpZfaEOOLCDe0o0xpFb0w-1; Tue, 19 Jul 2022 09:04:37 -0400
-X-MC-Unique: fUpZfaEOOLCDe0o0xpFb0w-1
-Received: by mail-ed1-f70.google.com with SMTP id h20-20020a05640250d400b0043b6a4a2f11so3408049edb.23
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:04:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/m2NS+tTnqV4bKM9ewNHJoxDhTc6Y1oQ8gKFxD1trHs=;
-        b=qVsPd8MSBR/sClwgQFq7Dq/mTu/E+nsuPBz418jSvkLpt77woMeBieErD1+KeMRNOg
-         OqW4hjUHIoiwEfdR+uWQ2nadta4LJd11c4LSbKw78fl0infA58q21JuD7mAHmBmh2gID
-         CRFOPj9Hr+UpZmoj0UglNUB58OtXgxXmZMSePXUMFMypkcDjnVx8Kw9JjSAtC7nmKCvx
-         ijqdrYo7UlzHtPqkE84qBURfUEcVvlkS686FUFGVN1xePNox+Wi8b81t58r+DNoAjdrX
-         ow3jS6PfYpnai9S9xVbSpMiyo9jBSPWlPQFVSp9hsCpobrCNcuZiYJOquO/Jy82GR0IX
-         kbkA==
-X-Gm-Message-State: AJIora9q9//L9XvSzovrLkfQQx/f8K4qXur8DMJr+usgZaiJJJHG7yAe
-        O+FhQTH4cyeoDFg28v/ultAz26PXGa6gZY20NhcvtOvU7SmukFcK72Z+yE8qMQvwkgRHAesvh/9
-        7VkpPaj7r5twD+nja7ZZ/g+mG
-X-Received: by 2002:a05:6402:350a:b0:43a:a486:102e with SMTP id b10-20020a056402350a00b0043aa486102emr43636760edd.372.1658235875759;
-        Tue, 19 Jul 2022 06:04:35 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s+cBWjyzT7qfuJ3TW1q0EwoQB2LiMwqu8M2+a2tuJ83sI8IhDZhkXHpLK2PXU5altkDE6pPg==
-X-Received: by 2002:a05:6402:350a:b0:43a:a486:102e with SMTP id b10-20020a056402350a00b0043aa486102emr43636731edd.372.1658235875538;
-        Tue, 19 Jul 2022 06:04:35 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id lv8-20020a170906bc8800b0072b91a3d7e9sm6670356ejb.28.2022.07.19.06.04.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 06:04:34 -0700 (PDT)
-Message-ID: <2b9070bd-61b2-0057-003e-f6c46f6c34a8@redhat.com>
-Date:   Tue, 19 Jul 2022 15:04:33 +0200
+        Tue, 19 Jul 2022 09:52:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E8A9D53D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:04:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEB3DB81B89
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:04:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9120C341CA;
+        Tue, 19 Jul 2022 13:04:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658235896;
+        bh=Bx7LKchDiAveeOBKr6k9XrTbJD0MgIx3qu4AgTFAg7g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hXYv6mCsUL2KvMdT3MTrGIW00v3SiZbFkDv9SsjSdo0RUA0ChAKssXSlyQ6j5Ri+C
+         AsbBNC/PliftRAw9RhMZjVUhS8V2mWFrZNKchu2MM62vmIShpO4KuWOpgw6AXnMRdu
+         GMCZQH6IN+SJpRlQFypH55KF0WGm1Fh4HEtpWvOadbQacSkN3sC59Ksuu3ml9x2xYX
+         I6VgN0VWxDiK5sZfboPec9kFe9fQOjXD+Ho1+mF5E+05QqHlQM0DzfuNYHC0RIEk9W
+         Vq8l9G0chQ0r0uMDG1bmok/6lkA8m6WeBS2FJRuhuq3E6SIiEh8+9osaq3ggk7A/yD
+         uHPBGi7Ip1jXw==
+Date:   Tue, 19 Jul 2022 14:04:51 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH] regmap: support regmap_field_write() on non-readable
+ fields
+Message-ID: <Ytar85UrdSeJuj2Y@sirena.org.uk>
+References: <20220719121446.375095-1-krzysztof.kozlowski@linaro.org>
+ <20220719125401.GA92394@ediswmail.ad.cirrus.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4] KVM: selftests: Fix target thread to be migrated in
- rseq_test
-Content-Language: en-US
-To:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com, shuah@kernel.org,
-        maz@kernel.org, shan.gavin@gmail.com
-References: <20220719020830.3479482-1-gshan@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220719020830.3479482-1-gshan@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="90wO/64vRt6w3wzR"
+Content-Disposition: inline
+In-Reply-To: <20220719125401.GA92394@ediswmail.ad.cirrus.com>
+X-Cookie: We have ears, earther...FOUR OF THEM!
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 04:08, Gavin Shan wrote:
-> In rseq_test, there are two threads, which are vCPU thread and migration
-> worker separately. Unfortunately, the test has the wrong PID passed to
-> sched_setaffinity() in the migration worker. It forces migration on the
-> migration worker because zeroed PID represents the calling thread, which
-> is the migration worker itself. It means the vCPU thread is never enforced
-> to migration and it can migrate at any time, which eventually leads to
-> failure as the following logs show.
-> 
->    host# uname -r
->    5.19.0-rc6-gavin+
->    host# # cat /proc/cpuinfo | grep processor | tail -n 1
->    processor    : 223
->    host# pwd
->    /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
->    host# for i in `seq 1 100`; do \
->          echo "--------> $i"; ./rseq_test; done
->    --------> 1
->    --------> 2
->    --------> 3
->    --------> 4
->    --------> 5
->    --------> 6
->    ==== Test Assertion Failure ====
->      rseq_test.c:265: rseq_cpu == cpu
->      pid=3925 tid=3925 errno=4 - Interrupted system call
->         1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
->         2  0x0000ffffb044affb: ?? ??:0
->         3  0x0000ffffb044b0c7: ?? ??:0
->         4  0x0000000000401a6f: _start at ??:?
->      rseq CPU = 4, sched CPU = 27
-> 
-> Fix the issue by passing correct parameter, TID of the vCPU thread, to
-> sched_setaffinity() in the migration worker.
-> 
-> Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
-> ---
-> v4: Pick the code change as Sean suggested.
-> ---
->   tools/testing/selftests/kvm/rseq_test.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index 4158da0da2bb..2237d1aac801 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -82,8 +82,9 @@ static int next_cpu(int cpu)
->   	return cpu;
->   }
->   
-> -static void *migration_worker(void *ign)
-> +static void *migration_worker(void *__rseq_tid)
->   {
-> +	pid_t rseq_tid = (pid_t)(unsigned long)__rseq_tid;
->   	cpu_set_t allowed_mask;
->   	int r, i, cpu;
->   
-> @@ -106,7 +107,7 @@ static void *migration_worker(void *ign)
->   		 * stable, i.e. while changing affinity is in-progress.
->   		 */
->   		smp_wmb();
-> -		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> +		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask), &allowed_mask);
->   		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
->   			    errno, strerror(errno));
->   		smp_wmb();
-> @@ -231,7 +232,8 @@ int main(int argc, char *argv[])
->   	vm = vm_create_default(VCPU_ID, 0, guest_code);
->   	ucall_init(vm, NULL);
->   
-> -	pthread_create(&migration_thread, NULL, migration_worker, 0);
-> +	pthread_create(&migration_thread, NULL, migration_worker,
-> +		       (void *)(unsigned long)gettid());
->   
->   	for (i = 0; !done; i++) {
->   		vcpu_run(vm, VCPU_ID);
 
-Queued, thanks.
+--90wO/64vRt6w3wzR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Paolo
+On Tue, Jul 19, 2022 at 12:54:02PM +0000, Charles Keepax wrote:
+> On Tue, Jul 19, 2022 at 02:14:46PM +0200, Krzysztof Kozlowski wrote:
 
+> > +	if (regmap_readable(field->regmap, field->reg))
+> > +		return regmap_update_bits_base(field->regmap, field->reg,
+> > +					       mask, val << field->shift,
+> > +					       change, async, force);
+
+> I think this will break other valid use-cases, regmap_readable (I
+> believe) returns if the register is physically readable, however
+> it should still be possible to use update bits if the register is
+> in the cache even if it can't physically be read. So really you
+> need to fall into this path if it is readable or in the cache.
+
+This is true, we don't currently have a readable_or_cached() check -
+this is implemented as trying the cache and only considering actually
+reading if there's a read, effectively what we want to do here is force
+a cache only read.
+
+--90wO/64vRt6w3wzR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLWq/IACgkQJNaLcl1U
+h9A3wAf8Dt/lXo81K54hsSzJBl/t8426SyZEwBd4MDYdc3TuCwgRKKizU7JvZMyI
+Dm2+3G16XPAL+JWuqB+scdyG1bHfTidPtX8KIbwUEJMwgUO07WNNAGWunP294TOO
+loAlZh9SUeq1by8eDaBwMDdKaT8Uvi9UYZ7hi+VqIoz1yiOJuRVmZPAEJRDM2q+f
+5OBp6WIQXtKqipQygLTM3KFAEyrivtXowUwaVYWlL4qYi5ROZ328/kmBK4HWSC2Y
+Kw/gMRunc3v9mL0ogANuBZBGBKXkEU2J6D3YfiZjQIGOYLX2eASJnrGIPUAu71iP
+dPCDsaaQrXD0jWiuXYBXPFSBnpbDKg==
+=sMAD
+-----END PGP SIGNATURE-----
+
+--90wO/64vRt6w3wzR--

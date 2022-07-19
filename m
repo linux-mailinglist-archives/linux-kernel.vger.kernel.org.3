@@ -2,100 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF7257A0E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAF657A0EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238667AbiGSOMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S238983AbiGSOMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239031AbiGSOMG (ORCPT
+        with ESMTP id S238388AbiGSOMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:12:06 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D2145991;
-        Tue, 19 Jul 2022 06:34:34 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id sz17so27187845ejc.9;
-        Tue, 19 Jul 2022 06:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z6xDSfAHK+BBQJZyK140qnQ9OO2D3PdlxD4xhuvsKj4=;
-        b=KEn4wOj0CcTFN+w68/vqdQUgXcJevK8GV52zDvtSu7OanGPud8r1CB0HPQqNpqLdLR
-         SVL6gt1GTmiLVPMuMWxbcKrkTGLV50U1cM1Df5+tpXnEIO1N5tu3rinaVf9jVtmvuf/E
-         h4+j/flwd1TuzCW8z+FvMQ1d0xwn+sJ6Dvk37KIU4iM3hHk6SalKeNEtFTmzNeDsY7uD
-         ZSHsn3amPpI4ghzyNJS01PtIzdhxIEb9zxE1dLbDNk0XmWng0PGJaNKbKojmqnYzIyED
-         mwuSDYyM/ctAMWDuUdNOkM+JncMo+7wFEr2o77rrjsd7mmBO/xBZj9/UF99Xl9h+8y0s
-         JheA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z6xDSfAHK+BBQJZyK140qnQ9OO2D3PdlxD4xhuvsKj4=;
-        b=MZUzPtN+2ZzVknLd1mYkL2hUM+3o2p7PIL1ciXfgELsRqxDPNv3lCQDqnPXQN/K+5k
-         nUzN1FzDDpyLFTTOHeRUQ6v+BawPxgnZ4W1heUepPQIEt9Ce5AjkWZdUbHocJ2Ri7qjd
-         A3hlrYESE6Z9/nmDY7XMqRIYuKRJtdGYFUdN6YMenrHovuyuWdeC8oYmtDs3lAve32Iv
-         Ysgp7w6lsikl5VXAFSyPBXVPPQrLZddowQlvBbTQU1dU/p9BB7ZjFHeeAgyLbZce5YME
-         aJm7X/41U9XVmXJhpl6ttCz1ivMbzLUp7d0E/7TvBj6eZlkiN7bYIMfnn/M4lcxSqUDX
-         ZwpA==
-X-Gm-Message-State: AJIora9PKzVbQXQK0l7WhiBAnCgx0CGHiWn3q8HQfbp1YMojrCGVk3h8
-        R2qvOWjfMpRhcxzfCu7VRNq2EhDd/1Bhuw==
-X-Google-Smtp-Source: AGRyM1vYlG9DRVyycefPGSd4rQth0b9k4pq9UAUJDsuPPsY5ODFj8zD4DDbavJVNIdsGJ4ZY0mY+Sw==
-X-Received: by 2002:a17:907:72ce:b0:72f:7b3:b9c8 with SMTP id du14-20020a17090772ce00b0072f07b3b9c8mr17643941ejc.248.1658237672545;
-        Tue, 19 Jul 2022 06:34:32 -0700 (PDT)
-Received: from skbuf ([188.27.185.104])
-        by smtp.gmail.com with ESMTPSA id r17-20020aa7d591000000b0043b9d4f7678sm801879edq.96.2022.07.19.06.34.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 06:34:31 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 16:34:29 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v2 03/15] net: dsa: qca8k: move
- qca8kread/write/rmw and reg table to common code
-Message-ID: <20220719133429.mhd5t4ekjlz7k6yw@skbuf>
-References: <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-5-ansuelsmth@gmail.com>
- <62d60620.1c69fb81.42957.a752@mx.google.com>
- <20220718183006.15e16e46@kernel.org>
- <62d609d8.1c69fb81.d2fea.5a4b@mx.google.com>
+        Tue, 19 Jul 2022 10:12:33 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236F1CE3C;
+        Tue, 19 Jul 2022 06:35:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 94DEA347EB;
+        Tue, 19 Jul 2022 13:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658237713; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dQkGZ2bUCaXoPh/D/Jj4IPkCDd93zpdb0jFOJ4x+L1k=;
+        b=RXpYSGlmRcef3l7YiwRFdAApPwXNCGsn0BDGq8RMYOlXFurF0+ck6ho6rGcVbsWtc/fUP6
+        De4sOP94LDSs7rGW7/DXiKXGZ3iMCVaCS8xrKMTqCvGXTFpvP8npNoI8fDTvetmmD0jubo
+        mc2b6WY+Bg2Qby9yeLCG9cnhEe+PPKo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5975513A72;
+        Tue, 19 Jul 2022 13:35:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id I8ALFRGz1mLrXQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 19 Jul 2022 13:35:13 +0000
+Date:   Tue, 19 Jul 2022 15:35:12 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Jing-Ting Wu <jing-ting.wu@mediatek.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Shakeel Butt <shakeelb@google.com>, wsd_upstream@mediatek.com,
+        lixiong.liu@mediatek.com, wenju.xu@mediatek.com,
+        jonathan.jmchen@mediatek.com
+Subject: Re: [Bug] race condition at rebind_subsystems()
+Message-ID: <20220719133512.GD897@blackbody.suse.cz>
+References: <1978e209e71905d89651e61abd07285912d412a1.camel@mediatek.com>
+ <20220715115938.GA8646@blackbody.suse.cz>
+ <YtGaP+e35DZYSQf0@slm.duckdns.org>
+ <d8f0bc5e2fb6ed259f9334c83279b4c011283c41.camel@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <62d609d8.1c69fb81.d2fea.5a4b@mx.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <d8f0bc5e2fb6ed259f9334c83279b4c011283c41.camel@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:16:05AM +0200, Christian Marangi wrote:
-> On Mon, Jul 18, 2022 at 06:30:06PM -0700, Jakub Kicinski wrote:
-> > On Tue, 19 Jul 2022 03:00:13 +0200 Christian Marangi wrote:
-> > > This slipped and was sent by mistake (and was just a typo fixed in the
-> > > title)
-> > > 
-> > > Please ignore. Sorry.
-> > 
-> > Please make sure you wait 24h before reposting, as per
-> 
-> Oh sorry... you are right, had a long discussion with Vladimir on the
-> changes to do and I thought it was a good idea (since v1 was really not
-> reviewable)
+On Mon, Jul 18, 2022 at 03:44:21PM +0800, Jing-Ting Wu <jing-ting.wu@mediatek.com> wrote:
+> Accroding your description, is the following patch corrent?
 
-I think Jakub said "please wait at least 24h until reposing v3". Your RFC v1
-was posted 3 days ago, I believe we all agree that's more than 24 hours ago,
-and therefore not what Jakub was talking about.
+Yes, this is what I meant (i.e. grace period before invalidating the
+removed rstat_css_node).
+
+> If the patch is correct, we will add this patch to our stability test.
+> And we will continue to observe whether the problem is solved.
+
+It'd be great to have such confirmation.
+
+Thanks,
+Michal

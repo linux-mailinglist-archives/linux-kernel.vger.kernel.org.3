@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A6C57A3FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9040857A3FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbiGSQL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 12:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S234077AbiGSQO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 12:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234043AbiGSQL5 (ORCPT
+        with ESMTP id S231350AbiGSQO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 12:11:57 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8CE4C612
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:11:56 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id n185so9247981wmn.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:11:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CsovjpFx2Rs2Y0JFrLb+Hq4dc68dG3XV8rFC1Zq84T8=;
-        b=doQnWADhaKk6qPTy26R7f5MIzve9vJhXF3Pak5oSaaSNwW90wBu9A6OKr8C/8egNZ1
-         dwW9WdCSEOZn71NWqZhPkHIju9obYIpXF3xni+tV7zIE83l4kNSnjtbOeUL5UvT6wyUw
-         x73INVpNYZaOvIl02K1HXEwiiG2N0jYrUwcLTmZAXm9L8HqX9gkzmE3e2yt94FkT93+6
-         Gx46+FmUwX2x4KZ+MH4Syl4pR+ty+TdHJeIZD8FdUNG3YywrSn5lcVfAnBlVrHn5dVai
-         yGt/YUFVpG75EFp9KsJ/x9LJqQoAe4DdJynOASaNBxXXWe04ioeu3Jo5Fz3PGZwQnL2G
-         /dsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CsovjpFx2Rs2Y0JFrLb+Hq4dc68dG3XV8rFC1Zq84T8=;
-        b=JCMGJ1TPQ4X5bw0ATM6mpElA3xWPkGOjTEVLlsHzHdbmluXQ8J1OkxzM/r/Ap5uOqq
-         p+dCYbxNQkbh1E/CeB826TJG+pSll8Kozlx6TWa3jbGddt/wFM33XNr9PMhp3O1IKme8
-         fy8UCTTyHEVitFVZDuJKKhMV0upOvKk5TmWlznU9/hcV0g6DO7v5FWuWvJBONZzcBwmk
-         zGbHgDsKlUBbmxeA+rMjpv1TOHIahqFYBv735s2HkqWJcSpiIr6cHEkvtp1K+O5SVUbJ
-         NlAboDdG1AeyxWcSdFWI87oikj6C8losvj9PN7tw0dgz/Auxk3HbBTQ++/0JdEQk2kgI
-         DyYw==
-X-Gm-Message-State: AJIora9DwOZqfF8r5U3a72A+Gd/kQuNwCiE2gX8uPIPHtbe+4vOV8ZEl
-        ppRgcoB/w7nU2+YbpmkDV8e3nA==
-X-Google-Smtp-Source: AGRyM1uFHQxYkO0zcfj9f+yh04ixVCkKMoHQ3d7PdKjKY8D9SveozmSB79iehDsK5GeDWJEHS78Rsg==
-X-Received: by 2002:a05:600c:511f:b0:3a3:254c:b079 with SMTP id o31-20020a05600c511f00b003a3254cb079mr87507wms.68.1658247114885;
-        Tue, 19 Jul 2022 09:11:54 -0700 (PDT)
-Received: from google.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id n125-20020a1ca483000000b003a02de5de80sm2056042wme.4.2022.07.19.09.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 09:11:54 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 16:11:50 +0000
-From:   Keir Fraser <keirf@google.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, kernel-team@android.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio: Force DMA restricted devices through DMA API
-Message-ID: <YtbXxl8STUtQkacb@google.com>
-References: <20220719100256.419780-1-keirf@google.com>
- <YtbMcBw4l0LAFn9+@infradead.org>
- <YtbRwO40CmIRWOUR@google.com>
- <YtbTGjRw65QEKkQA@infradead.org>
+        Tue, 19 Jul 2022 12:14:56 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411154C627
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:14:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658247295; x=1689783295;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ya8p/XqEQDXif9q0doVi81vKSiS2nfdwL0eQcA7VleQ=;
+  b=KfrdmgUx83DgPDljNccNQs2HNQULtxPYx9pFvSdFe7LTGFKZ8PwgjX0Y
+   TGWys6/lAGduJXfUss/NKIWdHeEGxy6alPtnEtWxbr6H1tjKnaz9C1QfQ
+   LDxuELJ0HCHorjdL4iu9pM/hfM4EIVGK4dlMnHYMAEXmLOPUL/h57Q4Xk
+   6/RBmO4bi6nKeRB5jELpyimtcO/+VRYOziRs4StBAi/xgVLFAuDb/cJDI
+   uOjhutiuANykUHnpq2Y/IdVPL5cm0GqVuEBQx3FDstUEfAoVaNt0ZzncD
+   lwhNvaJayhet1XFCrctJ4+T71B1lnh6Yr6rEqMqX6YhzeJwkJhGyJ/5Hf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="350496783"
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="350496783"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 09:13:28 -0700
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="572910114"
+Received: from twliston-mobl1.amr.corp.intel.com (HELO [10.212.132.190]) ([10.212.132.190])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 09:13:23 -0700
+Message-ID: <1648fbf5-0659-b480-1725-8a30eba51974@intel.com>
+Date:   Tue, 19 Jul 2022 09:13:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtbTGjRw65QEKkQA@infradead.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] x86/mm/tlb: ignore f->new_tlb_gen when zero
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>, linux-kernel@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Linux MM <linux-mm@kvack.org>,
+        Nadav Amit <namit@vmware.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>
+References: <20220710232837.3618-1-namit@vmware.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220710232837.3618-1-namit@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,33 +68,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 08:51:54AM -0700, Christoph Hellwig wrote:
-> On Tue, Jul 19, 2022 at 03:46:08PM +0000, Keir Fraser wrote:
-> > However, if the general idea at least is acceptable, would the
-> > implementation be acceptable if I add an explicit API for this to the
-> > DMA subsystem, and hide the detail there?
+On 7/10/22 16:28, Nadav Amit wrote:
+> From: Nadav Amit <namit@vmware.com>
 > 
-> I don't think so.  The right thing to key off is
-> VIRTIO_F_ACCESS_PLATFORM, which really should be set in any modern
-> virtio device after all the problems we had with the lack of it.
-
-Ok. Certainly the flag description in virtio spec fits the bill.
-
-> > Or a completely different approach would be to revert the patch
-> > e41b1355508d which clears VIRTIO_F_ACCESS_PLATFORM in the balloon
-> > driver. MST: That's back in your court, as it's your patch!
+> Commit aa44284960d5 ("x86/mm/tlb: Avoid reading mm_tlb_gen when
+> possible") introduced an optimization of skipping the flush if the TLB
+> generation that is flushed (as provided in flush_tlb_info) was already
+> flushed.
 > 
-> Which also means this needs to be addresses, but I don't think a
-> simple revert is enough.
+> However, arch_tlbbatch_flush() does not provide any generation in
+> flush_tlb_info. As a result, try_to_unmap_one() would not perform any
+> TLB flushes.
+> 
+> Fix it by checking whether f->new_tlb_gen is nonzero. Zero value is
+> anyhow is an invalid generation value. To avoid future confusions,
+> introduce TLB_GENERATION_INVALID constant and use it properly. Add some
+> assertions to check no partial flushes are done with
+> TLB_GENERATION_INVALID or when f->mm is NULL, since this does not make
+> any sense.
+> 
+> In addition, add the missing unlikely().
 
-Well here are two possible approaches:
+I've applied this:
 
-1. Revert e41b1355508d outright. I'm not even sure what it would mean
-for reported pages to go through IOMMU. And VIRTIO_F_ACCESS_PLATFORM
-is no longer IOMMU-specific anyway.
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/mm&id=8f1d56f64f8d6b80dea2d1978d10071132a695c5
 
-2. Continue to clear the flag during virtio_balloon negotiation, but
-remember that it was offered, and test for that in vring_use_dma_api()
-as well as, or instead of, virtio_has_dma_quirk().
-
-Do either of those appeal?
+Please double-check that my rewording of the commit message looks good
+to you.  I also replaced the VM_BUG_ON()'s with warnings.  Screwing up
+TLB flushing isn't great, but it's also not worth killing the system.

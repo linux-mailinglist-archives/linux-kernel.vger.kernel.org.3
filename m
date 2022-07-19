@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9665799ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476DA579C3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237442AbiGSMIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S240958AbiGSMha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238464AbiGSMIK (ORCPT
+        with ESMTP id S240682AbiGSMgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:08:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D3A4F64A;
-        Tue, 19 Jul 2022 05:01:33 -0700 (PDT)
+        Tue, 19 Jul 2022 08:36:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160B86464;
+        Tue, 19 Jul 2022 05:14:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 785A161632;
-        Tue, 19 Jul 2022 12:01:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43EFAC341C6;
-        Tue, 19 Jul 2022 12:01:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1507861746;
+        Tue, 19 Jul 2022 12:13:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB04C341C6;
+        Tue, 19 Jul 2022 12:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232092;
-        bh=TIZga61z8Flhpcj2l4lDEWxGGuqBCkdm0v/NzYuQNlA=;
+        s=korg; t=1658232831;
+        bh=USoxJJmNigTeOjCpA6MsQrQcsLyDaGVfZyfTu4lJXjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X5g7zLeCBfc9bziPw8IHHtykqWSEbD16dRaySQHghHTZBTEYHss9cm/ZdLwqIUmBm
-         CPF+Kro7GHysuDoXBfO7eY4zrqJMYXY/moDEW0J2+2BPNT3PVv9NlPILiyYZIW9fME
-         PVl67y+KyVlNVVIh7ycgxsdaeg7/ykhT3BP1QgQQ=
+        b=fCQ5TWP8OSY0HL8Y6eY2opfFQ2VkoG8w9ICHRuvpztYdBlGXT0sjdqycYNSUqPOtj
+         AQoGWia25V/BJMzJ/RequBmy1Do4JSOnHmXHD1ZgA8pwjlaydf6RHnSaNVkdICjSo1
+         QSU6qWC7B1WZystVnfBOpp0KtihwJ4d6RMKwl9+A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 5.4 10/71] ARM: 9213/1: Print message about disabled Spectre workarounds only once
+        stable@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>,
+        Pavan Chebbi <pavan.chebbi@broadcom.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 081/167] bnxt_en: Fix bnxt_refclk_read()
 Date:   Tue, 19 Jul 2022 13:53:33 +0200
-Message-Id: <20220719114553.274314334@linuxfoundation.org>
+Message-Id: <20220719114704.408719777@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+From: Pavan Chebbi <pavan.chebbi@broadcom.com>
 
-commit e4ced82deb5fb17222fb82e092c3f8311955b585 upstream.
+[ Upstream commit ddde5412fdaa5048bbca31529d46cb8da882870c ]
 
-Print the message about disabled Spectre workarounds only once. The
-message is printed each time CPU goes out from idling state on NVIDIA
-Tegra boards, causing storm in KMSG that makes system unusable.
+The upper 32-bit PHC register is not latched when reading the lower
+32-bit PHC register.  Current code leaves a small window where we may
+not read correct higher order bits if the lower order bits are just about
+to wrap around.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This patch fixes this by reading higher order bits twice and makes
+sure that final value is correctly paired with its lower 32 bits.
+
+Fixes: 30e96f487f64 ("bnxt_en: Do not read the PTP PHC during chip reset")
+Cc: Richard Cochran <richardcochran@gmail.com>
+Signed-off-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Signed-off-by: Michael Chan <michael.chan@broadcom.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mm/proc-v7-bugs.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
---- a/arch/arm/mm/proc-v7-bugs.c
-+++ b/arch/arm/mm/proc-v7-bugs.c
-@@ -109,8 +109,7 @@ static unsigned int spectre_v2_install_w
- #else
- static unsigned int spectre_v2_install_workaround(unsigned int method)
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
+index 62a931de5b1a..a78cc65a38f2 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
+@@ -61,14 +61,23 @@ static int bnxt_refclk_read(struct bnxt *bp, struct ptp_system_timestamp *sts,
+ 			    u64 *ns)
  {
--	pr_info("CPU%u: Spectre V2: workarounds disabled by configuration\n",
--		smp_processor_id());
-+	pr_info_once("Spectre V2: workarounds disabled by configuration\n");
+ 	struct bnxt_ptp_cfg *ptp = bp->ptp_cfg;
++	u32 high_before, high_now, low;
  
- 	return SPECTRE_VULNERABLE;
+ 	if (test_bit(BNXT_STATE_IN_FW_RESET, &bp->state))
+ 		return -EIO;
+ 
++	high_before = readl(bp->bar0 + ptp->refclk_mapped_regs[1]);
+ 	ptp_read_system_prets(sts);
+-	*ns = readl(bp->bar0 + ptp->refclk_mapped_regs[0]);
++	low = readl(bp->bar0 + ptp->refclk_mapped_regs[0]);
+ 	ptp_read_system_postts(sts);
+-	*ns |= (u64)readl(bp->bar0 + ptp->refclk_mapped_regs[1]) << 32;
++	high_now = readl(bp->bar0 + ptp->refclk_mapped_regs[1]);
++	if (high_now != high_before) {
++		ptp_read_system_prets(sts);
++		low = readl(bp->bar0 + ptp->refclk_mapped_regs[0]);
++		ptp_read_system_postts(sts);
++	}
++	*ns = ((u64)high_now << 32) | low;
++
+ 	return 0;
  }
+ 
+-- 
+2.35.1
+
 
 

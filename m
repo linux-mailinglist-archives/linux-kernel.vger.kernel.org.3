@@ -2,90 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02C457A6B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAFA57A6C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238528AbiGSSsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
+        id S238753AbiGSSuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 14:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237103AbiGSSsf (ORCPT
+        with ESMTP id S237655AbiGSSuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:48:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B51550E0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:48:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F48161799
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:48:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94896C341C6;
-        Tue, 19 Jul 2022 18:48:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658256513;
-        bh=FPj+PzUSyU21yajg2aJqxdlA2Q5B3EZYxVIDft8PGgM=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=IjLSxpJOip1e/q0DBRT2GMNS+cv8hHPdoniROg3MJdLacs0sW5Sq56FLjrtvMcA/r
-         8MgsIQnmvuDVEb/5FxlV9J58/MoZV3mOAyALhMWLO4xw6gAN+4hGEE5Lhzv6CRQUvw
-         vVURCTuMz6WeiLGZibUroLa4dMDDrv7c20takJ9JiuBrHgyhAE56VRM2w5JG9ACaVx
-         ONKQPIg5wrH9vxXnsjTp/AHheUT6Qgs/cx4kEXFphEnCJc2ka0QnsqNvW6jWcyGeEl
-         zpY6A/SnKhIbAgKK4SwYR349NDWHv78UUdrmce7O3oViUravQFKTHvhmJEzTx1CKGn
-         vjvs2BK5RP1Dw==
-From:   Mark Brown <broonie@kernel.org>
-To:     christian@kohlschutter.com
-Cc:     linux-kernel@vger.kernel.org, lgirdwood@gmail.com
-In-Reply-To: <FAFD5B39-E9C4-47C7-ACF1-2A04CD59758D@kohlschutter.com>
-References: <E25D6465-6475-42B4-90EB-3D2C3CAF3B20@kohlschuetter.com> <YtVTyzLREdkzYiKS@sirena.org.uk> <3270C618-E361-4BC1-B63A-917AE09DA60E@kohlschuetter.com> <FAFD5B39-E9C4-47C7-ACF1-2A04CD59758D@kohlschutter.com>
-Subject: Re: [PATCH REBASE] regulator: core: Fix off-on-delay-us for always-on/boot-on regulators
-Message-Id: <165825651232.448796.18429380716580437688.b4-ty@kernel.org>
-Date:   Tue, 19 Jul 2022 19:48:32 +0100
+        Tue, 19 Jul 2022 14:50:07 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2A42AD6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:50:05 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id os14so28939944ejb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:50:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=pYY3tyKw9W6VjPIyH/jbNB/HQ0+4A3S5F1kVg6d7zKo=;
+        b=k4offj5mDZeBIXNN1F9tpWytUxBTMf0LwLaXu0VcqzJw4BLSqdFx9AKW5mNqWPrOA8
+         wwui0eBp/pdKkEc8ByiDopArT2i2fIxrzbVfJn6BzXscQ1+IQIVQPexb2XFmUPw8aZyn
+         47NOE7rXeGDeolP3/1ujnTu+K/R8vL3OzboS613lZIH2pEvct7EEKOWOgOO7PkQQFl6a
+         +8G88aHaOq8OaREadVzDxLpB1JyJKnz3fUzz50C6s8/iX3I6UkmT5XNUGepcX30NmYOy
+         1vEWz7ZifWEsBgDmoLBqH7a2h53vwy0z3x+m6mpNjmIaez6VC6PVPYfhQyekSTZjirUe
+         6Ckw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pYY3tyKw9W6VjPIyH/jbNB/HQ0+4A3S5F1kVg6d7zKo=;
+        b=YeGFCESpmHLcBU4mGSi7pHpzIcPnQZtBuus/ioQiqOo+MhFcN9cHKXJfRoXnoD1f7u
+         /jkcUQWOXhDlOi9lmYqyJNvSq8DGwHeyZ4ZmFvH6DxHacIejm7Wx4gFCS86TU9p93L1V
+         pfEHJBpqSi60q9hIyMgJVQRDT/I7bOh6y5RqOucHmn/Sys80Xp1+LPDKqdOimP7MmKgv
+         KQQ2yQRCfNNqxOiXqVvAFdVEQ+8y5YUhR3vw4MwKAY1OdQ4dqdf4+UsSxE2VAnGNI4yX
+         dbG4QgkfTFmoqDciWaO9SpiDB/Ak8YtL9npwM5xoJv+10peJu+y14gIKAoE+2lf97ApD
+         T+ZQ==
+X-Gm-Message-State: AJIora+tzm+ZTAretoeH/4AWYU04KXLkN9G2TFTCq//0H9rwLoFIKla1
+        WunzEyUMRqy+olAJ/ilX2bPv5g==
+X-Google-Smtp-Source: AGRyM1sy1Dt3Pcdvm59/cWwFbr0uB0UA6+fPEvUbD2shef4RGDJFSFXZnpFW/tJsjkG5JepDRu5nBQ==
+X-Received: by 2002:a17:906:29d:b0:6f0:18d8:7be0 with SMTP id 29-20020a170906029d00b006f018d87be0mr30212587ejf.561.1658256604383;
+        Tue, 19 Jul 2022 11:50:04 -0700 (PDT)
+Received: from p330.fritz.box (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id i8-20020a50fd08000000b0043a554818afsm11062780eds.42.2022.07.19.11.50.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 11:50:03 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20Kohlschu=CC=88tter?= 
+        <christian@kohlschutter.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?q?Christian=20Kohlschu=CC=88tter?= 
+        <christian@kohlschutter.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH REBASE] regulator: core: Fix off-on-delay-us for always-on/boot-on regulators
+Date:   Tue, 19 Jul 2022 18:49:44 +0000
+Message-Id: <20220719184943.1566-1-christian@kohlschutter.com>
+X-Mailer: git-send-email 2.36.2
+In-Reply-To: <Yta/zrJxQOfYmN4C@sirena.org.uk>
+References: <Yta/zrJxQOfYmN4C@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 16:02:00 +0200, Christian Kohlschütter wrote:
-> Regulators marked with "regulator-always-on" or "regulator-boot-on"
-> as well as an "off-on-delay-us", may run into cycling issues that are
-> hard to detect.
-> 
-> This is caused by the "last_off" state not being initialized in this
-> case.
-> 
-> [...]
+Regulators marked with "regulator-always-on" or "regulator-boot-on"
+as well as an "off-on-delay-us", may run into cycling issues that are
+hard to detect.
 
-Applied to
+This is caused by the "last_off" state not being initialized in this
+case.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+Fix the "last_off" initialization by setting it to the current kernel
+time upon initialization, regardless of always_on/boot_on state.
 
-Thanks!
+Signed-off-by: Christian Kohlschütter <christian@kohlschutter.com>
+---
+ drivers/regulator/core.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-[1/1] regulator: core: Fix off-on-delay-us for always-on/boot-on regulators
-      commit: 218320fec29430438016f88dd4fbebfa1b95ad8d
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index 1e54a833f2c..398c8d6afd4 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -1565,6 +1565,9 @@ static int set_machine_constraints(struct regulator_dev *rdev)
+ 			rdev->constraints->always_on = true;
+ 	}
+ 
++	if (rdev->desc->off_on_delay)
++		rdev->last_off = ktime_get();
++
+ 	/* If the constraints say the regulator should be on at this point
+ 	 * and we have control then make sure it is enabled.
+ 	 */
+@@ -1592,8 +1595,6 @@ static int set_machine_constraints(struct regulator_dev *rdev)
+ 
+ 		if (rdev->constraints->always_on)
+ 			rdev->use_count++;
+-	} else if (rdev->desc->off_on_delay) {
+-		rdev->last_off = ktime_get();
+ 	}
+ 
+ 	print_constraints(rdev);
+-- 
+2.36.2
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

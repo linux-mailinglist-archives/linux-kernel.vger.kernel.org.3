@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A19579B62
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A706A579CC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240044AbiGSM1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S241430AbiGSMmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240339AbiGSMYw (ORCPT
+        with ESMTP id S241266AbiGSMlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:24:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF594A837;
-        Tue, 19 Jul 2022 05:09:42 -0700 (PDT)
+        Tue, 19 Jul 2022 08:41:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD4C7E00C;
+        Tue, 19 Jul 2022 05:16:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 693ACB81A8F;
-        Tue, 19 Jul 2022 12:09:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B49C341CA;
-        Tue, 19 Jul 2022 12:08:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AC63B81B2E;
+        Tue, 19 Jul 2022 12:16:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47E0C341C6;
+        Tue, 19 Jul 2022 12:16:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232539;
-        bh=SHNxE4xlnv1gGz834bAcXUBgymfEZ4EGdtH925eRxJs=;
+        s=korg; t=1658232979;
+        bh=I/S6MXKj+pJExOorvIiThOlDOL37GW0RHtgnBej/vcs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r2pzJorIdxnJbWM90ZDfbvLt09vFYr16Vl3IPxGq07LEDj+JcpensSQTO8/atL/Gu
-         ejBsYBa/Q0adWsjELW3MedRfxR0MtAaMPO/MfagVWk8NIUWGK5Wd8dVF1j5qQcxCa2
-         HyQQ0EED+DQlbFgq1PgkqPbESaPXTP8ZmuhnZn9g=
+        b=AZcpssql5OSZoMR13WRaYkPCtQfDCgkvA25JPJJl3HC8l+o2J04Y8tUaOhQ9Z2CL0
+         5SIYglFqAZ6CSPo6FFJm4YrkkhKoMN6bWRg0UAca7Hs2sdWLNEalx40Y2gvD8ZSQnS
+         AwK+W9220v1Eoer5ZQHios/2ctqhYeB6e6MiVXNI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 091/112] ASoC: wm5110: Fix DRE control
+Subject: [PATCH 5.15 132/167] pinctrl: aspeed: Fix potential NULL dereference in aspeed_pinmux_set_mux()
 Date:   Tue, 19 Jul 2022 13:54:24 +0200
-Message-Id: <20220719114635.532489969@linuxfoundation.org>
+Message-Id: <20220719114709.337233262@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Haowen Bai <baihaowen@meizu.com>
 
-[ Upstream commit 0bc0ae9a5938d512fd5d44f11c9c04892dcf4961 ]
+[ Upstream commit 84a85d3fef2e75b1fe9fc2af6f5267122555a1ed ]
 
-The DRE controls on wm5110 should return a value of 1 if the DRE state
-is actually changed, update to fix this.
+pdesc could be null but still dereference pdesc->name and it will lead to
+a null pointer access. So we move a null check before dereference.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220621102041.1713504-2-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Link: https://lore.kernel.org/r/1650508019-22554-1-git-send-email-baihaowen@meizu.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wm5110.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/pinctrl/aspeed/pinctrl-aspeed.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/wm5110.c b/sound/soc/codecs/wm5110.c
-index 4238929b2375..d0cef982215d 100644
---- a/sound/soc/codecs/wm5110.c
-+++ b/sound/soc/codecs/wm5110.c
-@@ -413,6 +413,7 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
- 	unsigned int rnew = (!!ucontrol->value.integer.value[1]) << mc->rshift;
- 	unsigned int lold, rold;
- 	unsigned int lena, rena;
-+	bool change = false;
- 	int ret;
+diff --git a/drivers/pinctrl/aspeed/pinctrl-aspeed.c b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
+index c94e24aadf92..83d47ff1cea8 100644
+--- a/drivers/pinctrl/aspeed/pinctrl-aspeed.c
++++ b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
+@@ -236,11 +236,11 @@ int aspeed_pinmux_set_mux(struct pinctrl_dev *pctldev, unsigned int function,
+ 		const struct aspeed_sig_expr **funcs;
+ 		const struct aspeed_sig_expr ***prios;
  
- 	snd_soc_dapm_mutex_lock(dapm);
-@@ -440,8 +441,8 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
- 		goto err;
- 	}
+-		pr_debug("Muxing pin %s for %s\n", pdesc->name, pfunc->name);
+-
+ 		if (!pdesc)
+ 			return -EINVAL;
  
--	ret = regmap_update_bits(arizona->regmap, ARIZONA_DRE_ENABLE,
--				 mask, lnew | rnew);
-+	ret = regmap_update_bits_check(arizona->regmap, ARIZONA_DRE_ENABLE,
-+				       mask, lnew | rnew, &change);
- 	if (ret) {
- 		dev_err(arizona->dev, "Failed to set DRE: %d\n", ret);
- 		goto err;
-@@ -454,6 +455,9 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
- 	if (!rnew && rold)
- 		wm5110_clear_pga_volume(arizona, mc->rshift);
- 
-+	if (change)
-+		ret = 1;
++		pr_debug("Muxing pin %s for %s\n", pdesc->name, pfunc->name);
 +
- err:
- 	snd_soc_dapm_mutex_unlock(dapm);
+ 		prios = pdesc->prios;
  
+ 		if (!prios)
 -- 
 2.35.1
 

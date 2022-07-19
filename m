@@ -2,124 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD10579406
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F25EE579407
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbiGSHUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 03:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S235880AbiGSHUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 03:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235928AbiGSHUA (ORCPT
+        with ESMTP id S235983AbiGSHUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 03:20:00 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6165E32EE0;
-        Tue, 19 Jul 2022 00:19:59 -0700 (PDT)
+        Tue, 19 Jul 2022 03:20:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB612DEE
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658215199; x=1689751199;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=efBx+cOjCDPM6QiEgXxI19AztXeKxc+R7d/gZgYJqAk=;
-  b=Vlj/tnv1hnUEGAdbKJg8Nkj4aoW7KN+0JdMKboRIVymvI9p+UHnR8C/J
-   5syW5HxekSNy/Gn9SDLD2wXGz7hpoE2kbxNV7iXnkwES7qEpyWTGhNwrf
-   RABVcmuAhz5gcVGhNOM7nrMYn2C6nxWgnYLLrFNTp89PENxNneWS/t89L
-   KnA/3Wtoxmch/+39LBjMSD5SEbdssO7E+GSbbtlWiCopRWkQVV0xV5y+q
-   qwPtvaE6QpP8qAwKRwPCCbvhJRnUkf2keI9knkrttn4DJYe9DHI8Zg4vC
-   aHOQ7k8gI94TBp9o/5/FOxV0rtlu0PcIA73UK0FuiVi8IwKPXW5Guk83R
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="266195978"
+  t=1658215206; x=1689751206;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=biaESJTSUbQQgecZrk3cqlebtNrxRUqpG5iCexsO7Fo=;
+  b=Fq85SMz3ObUV1TeJRKk8x2R7b3Ynj0PJbEFDDDX0W4F/QEMqRUXU8Lms
+   tzLYMTZnxMMQKryX95TYRcqNwXya+UU2wmDS9l3sZlnm5W5dxOnC5Oa9J
+   nf6V9jP6qcDiDMn8Erx+jWRaU8+Q8UlE+qDj1rxNd1bdpeqKti4gwGRY5
+   jWh53EcrDpEwtoDY4NcYabkCAHVe0Y6qTY6F9IyGZsoypsnmrCVhMVnCE
+   elrpedx0PzTd5idNE3bSCWvamPlS/szeQsRVjG/5sMJjudWPQ88kUiiwc
+   YtD0rT/qBZ1JuRg06iEB1mDxgXcAicHvrbKwo//ZMT5kGcWnz1++OdlQG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287567589"
 X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="266195978"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 00:19:58 -0700
+   d="scan'208";a="287567589"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 00:20:05 -0700
 X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="601492485"
-Received: from ssherida-mobl.ger.corp.intel.com (HELO [10.213.201.170]) ([10.213.201.170])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 00:19:55 -0700
-Message-ID: <4933d674-0b3e-0b79-7749-a796f7b1cb6f@linux.intel.com>
-Date:   Tue, 19 Jul 2022 08:19:54 +0100
+   d="scan'208";a="630225340"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 00:20:01 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        =?utf-8?B?6YOt5YGl?= <guojian@oppo.com>,
+        hanchuanhua <hanchuanhua@oppo.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        =?utf-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>
+Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
+References: <20220718090050.2261-1-21cnbao@gmail.com>
+        <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
+        <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com>
+        <87zgh5232o.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <416a06f6-ca7d-d4a9-2cda-af0ad6e28261@arm.com>
+        <CAGsJ_4y7GyL5qtrBbhz_8bLuAGGHy7Ju0ucPjHp-ZeDHjQcTcw@mail.gmail.com>
+        <CAGsJ_4z3wXK8WqubkFdPT6ObBVtvzAjbS1=r9PDCCDvwDVf3rw@mail.gmail.com>
+        <87o7xl1wpb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAGsJ_4xECbs2Dxn8u4tCotNBZz5epFvAWANLiNg0dSzDcgORCA@mail.gmail.com>
+        <87k0891uj6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAGsJ_4zBumnOR7eiPD=b+0dQCZctK+P=c=Mvb-24TXrzgM_Mug@mail.gmail.com>
+Date:   Tue, 19 Jul 2022 15:19:57 +0800
+In-Reply-To: <CAGsJ_4zBumnOR7eiPD=b+0dQCZctK+P=c=Mvb-24TXrzgM_Mug@mail.gmail.com>
+        (Barry Song's message of "Tue, 19 Jul 2022 19:01:03 +1200")
+Message-ID: <875yjt1sde.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [Intel-gfx] [PATCH v2 05/21] drm/i915/gt: Skip TLB invalidations
- once wedged
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Dave Airlie <airlied@redhat.com>, stable@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org
-References: <cover.1657800199.git.mchehab@kernel.org>
- <f20bd21c94610dae59824b8040e5a9400de6f963.1657800199.git.mchehab@kernel.org>
- <d51882e0-6864-7a49-ae16-f7213dc716c4@linux.intel.com>
- <20220718180630.7bef2fd9@maurocar-mobl2>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20220718180630.7bef2fd9@maurocar-mobl2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Barry Song <21cnbao@gmail.com> writes:
 
-On 18/07/2022 17:06, Mauro Carvalho Chehab wrote:
-> On Mon, 18 Jul 2022 14:45:22 +0100
-> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
-> 
->> On 14/07/2022 13:06, Mauro Carvalho Chehab wrote:
->>> From: Chris Wilson <chris.p.wilson@intel.com>
->>>
->>> Skip all further TLB invalidations once the device is wedged and
->>> had been reset, as, on such cases, it can no longer process instructions
->>> on the GPU and the user no longer has access to the TLB's in each engine.
->>>
->>> That helps to reduce the performance regression introduced by TLB
->>> invalidate logic.
->>>
->>> Cc: stable@vger.kernel.org
->>> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+> On Tue, Jul 19, 2022 at 6:33 PM Huang, Ying <ying.huang@intel.com> wrote:
 >>
->> Is the claim of a performance regression this solved based on a wedged
->> GPU which does not work any more to the extend where mmio tlb
->> invalidation requests keep timing out? If so please clarify in the
->> commit text and then it looks good to me. Even if it is IMO a very
->> borderline situation to declare something a fix.
-> 
-> Indeed this helps on a borderline situation: if GT is wedged, TLB
-> invalidation will timeout, so it makes sense to keep the patch with a
-> comment like:
-> 
->      drm/i915/gt: Skip TLB invalidations once wedged
->      
->      Skip all further TLB invalidations once the device is wedged and
->      had been reset, as, on such cases, it can no longer process instructions
->      on the GPU and the user no longer has access to the TLB's in each engine.
->      
->      So, an attempt to do a TLB cache invalidation will produce a timeout.
->      
->      That helps to reduce the performance regression introduced by TLB
->      invalidate logic.
+>> Barry Song <21cnbao@gmail.com> writes:
+>>
+>> > On Tue, Jul 19, 2022 at 5:47 PM Huang, Ying <ying.huang@intel.com> wrote:
+>> >>
+>> >> Barry Song <21cnbao@gmail.com> writes:
+>> >>
+>> >> > On Tue, Jul 19, 2022 at 3:59 PM Barry Song <21cnbao@gmail.com> wrote:
+>> >> >>
+>> >> >> On Tue, Jul 19, 2022 at 3:35 PM Anshuman Khandual
+>> >> >> <anshuman.khandual@arm.com> wrote:
+>> >> >> >
+>> >> >> >
+>> >> >> >
+>> >> >> > On 7/19/22 08:58, Huang, Ying wrote:
+>> >> >> > > Anshuman Khandual <anshuman.khandual@arm.com> writes:
+>> >> >> > >
+>> >> >> > >> On 7/19/22 06:53, Barry Song wrote:
+>> >> >> > >>> On Tue, Jul 19, 2022 at 12:44 PM Huang, Ying <ying.huang@intel.com> wrote:
+>> >> >> > >>>>
+>> >> >> > >>>> Barry Song <21cnbao@gmail.com> writes:
+>> >> >> > >>>>
+>> >> >> > >>>>> From: Barry Song <v-songbaohua@oppo.com>
+>> >> >> > >>>>>
+>> >> >> > >>>>> THP_SWAP has been proven to improve the swap throughput significantly
+>> >> >> > >>>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
+>> >> >> > >>>>> splitting THP after swapped out").
+>> >> >> > >>>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
+>> >> >> > >>>>> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
+>> >> >> > >>>>> enabling it on arm64 will benefit arm64 as well.
+>> >> >> > >>>>> A corner case is that MTE has an assumption that only base pages
+>> >> >> > >>>>> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
+>> >> >> > >>>>> MTE support until MTE is reworked to coexist with THP_SWAP.
+>> >> >> > >>>>>
+>> >> >> > >>>>> A micro-benchmark is written to measure thp swapout throughput as
+>> >> >> > >>>>> below,
+>> >> >> > >>>>>
+>> >> >> > >>>>>  unsigned long long tv_to_ms(struct timeval tv)
+>> >> >> > >>>>>  {
+>> >> >> > >>>>>       return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+>> >> >> > >>>>>  }
+>> >> >> > >>>>>
+>> >> >> > >>>>>  main()
+>> >> >> > >>>>>  {
+>> >> >> > >>>>>       struct timeval tv_b, tv_e;;
+>> >> >> > >>>>>  #define SIZE 400*1024*1024
+>> >> >> > >>>>>       volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+>> >> >> > >>>>>                               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>> >> >> > >>>>>       if (!p) {
+>> >> >> > >>>>>               perror("fail to get memory");
+>> >> >> > >>>>>               exit(-1);
+>> >> >> > >>>>>       }
+>> >> >> > >>>>>
+>> >> >> > >>>>>       madvise(p, SIZE, MADV_HUGEPAGE);
+>> >> >> > >>>>>       memset(p, 0x11, SIZE); /* write to get mem */
+>> >> >> > >>>>>
+>> >> >> > >>>>>       gettimeofday(&tv_b, NULL);
+>> >> >> > >>>>>       madvise(p, SIZE, MADV_PAGEOUT);
+>> >> >> > >>>>>       gettimeofday(&tv_e, NULL);
+>> >> >> > >>>>>
+>> >> >> > >>>>>       printf("swp out bandwidth: %ld bytes/ms\n",
+>> >> >> > >>>>>                       SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
+>> >> >> > >>>>>  }
+>> >> >> > >>>>>
+>> >> >> > >>>>> Testing is done on rk3568 64bit quad core processor Quad Core
+>> >> >> > >>>>> Cortex-A55 platform - ROCK 3A.
+>> >> >> > >>>>> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
+>> >> >> > >>>>> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
+>> >> >> > >>>>>
+>> >> >> > >>>>> Cc: "Huang, Ying" <ying.huang@intel.com>
+>> >> >> > >>>>> Cc: Minchan Kim <minchan@kernel.org>
+>> >> >> > >>>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
+>> >> >> > >>>>> Cc: Hugh Dickins <hughd@google.com>
+>> >> >> > >>>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+>> >> >> > >>>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+>> >> >> > >>>>> Cc: Steven Price <steven.price@arm.com>
+>> >> >> > >>>>> Cc: Yang Shi <shy828301@gmail.com>
+>> >> >> > >>>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+>> >> >> > >>>>> ---
+>> >> >> > >>>>>  -v3:
+>> >> >> > >>>>>  * refine the commit log;
+>> >> >> > >>>>>  * add a benchmark result;
+>> >> >> > >>>>>  * refine the macro of arch_thp_swp_supported
+>> >> >> > >>>>>  Thanks to the comments of Anshuman, Andrew, Steven
+>> >> >> > >>>>>
+>> >> >> > >>>>>  arch/arm64/Kconfig               |  1 +
+>> >> >> > >>>>>  arch/arm64/include/asm/pgtable.h |  6 ++++++
+>> >> >> > >>>>>  include/linux/huge_mm.h          | 12 ++++++++++++
+>> >> >> > >>>>>  mm/swap_slots.c                  |  2 +-
+>> >> >> > >>>>>  4 files changed, 20 insertions(+), 1 deletion(-)
+>> >> >> > >>>>>
+>> >> >> > >>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> >> >> > >>>>> index 1652a9800ebe..e1c540e80eec 100644
+>> >> >> > >>>>> --- a/arch/arm64/Kconfig
+>> >> >> > >>>>> +++ b/arch/arm64/Kconfig
+>> >> >> > >>>>> @@ -101,6 +101,7 @@ config ARM64
+>> >> >> > >>>>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>> >> >> > >>>>>       select ARCH_WANT_LD_ORPHAN_WARN
+>> >> >> > >>>>>       select ARCH_WANTS_NO_INSTR
+>> >> >> > >>>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+>> >> >> > >>>>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
+>> >> >> > >>>>>       select ARM_AMBA
+>> >> >> > >>>>>       select ARM_ARCH_TIMER
+>> >> >> > >>>>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+>> >> >> > >>>>> index 0b6632f18364..78d6f6014bfb 100644
+>> >> >> > >>>>> --- a/arch/arm64/include/asm/pgtable.h
+>> >> >> > >>>>> +++ b/arch/arm64/include/asm/pgtable.h
+>> >> >> > >>>>> @@ -45,6 +45,12 @@
+>> >> >> > >>>>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
+>> >> >> > >>>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>> >> >> > >>>>>
+>> >> >> > >>>>> +static inline bool arch_thp_swp_supported(void)
+>> >> >> > >>>>> +{
+>> >> >> > >>>>> +     return !system_supports_mte();
+>> >> >> > >>>>> +}
+>> >> >> > >>>>> +#define arch_thp_swp_supported arch_thp_swp_supported
+>> >> >> > >>>>> +
+>> >> >> > >>>>>  /*
+>> >> >> > >>>>>   * Outside of a few very special situations (e.g. hibernation), we always
+>> >> >> > >>>>>   * use broadcast TLB invalidation instructions, therefore a spurious page
+>> >> >> > >>>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+>> >> >> > >>>>> index de29821231c9..4ddaf6ad73ef 100644
+>> >> >> > >>>>> --- a/include/linux/huge_mm.h
+>> >> >> > >>>>> +++ b/include/linux/huge_mm.h
+>> >> >> > >>>>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
+>> >> >> > >>>>>       return split_huge_page_to_list(&folio->page, list);
+>> >> >> > >>>>>  }
+>> >> >> > >>>>>
+>> >> >> > >>>>> +/*
+>> >> >> > >>>>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
+>> >> >> > >>>>> + * limitations in the implementation like arm64 MTE can override this to
+>> >> >> > >>>>> + * false
+>> >> >> > >>>>> + */
+>> >> >> > >>>>> +#ifndef arch_thp_swp_supported
+>> >> >> > >>>>> +static inline bool arch_thp_swp_supported(void)
+>> >> >> > >>>>> +{
+>> >> >> > >>>>> +     return true;
+>> >> >> > >>>>> +}
+>> >> >> > >>>>
+>> >> >> > >>>> How about the following?
+>> >> >> > >>>>
+>> >> >> > >>>> static inline bool arch_wants_thp_swap(void)
+>> >> >> > >>>> {
+>> >> >> > >>>>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
+>> >> >> > >>>> }
+>> >> >> > >>>
+>> >> >> > >>> This looks good. then i'll need to change arm64 to
+>> >> >> > >>>
+>> >> >> > >>>  +static inline bool arch_thp_swp_supported(void)
+>> >> >> > >>>  +{
+>> >> >> > >>>  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
+>> >> >> > >>>  +}
+>> >> >> > >>
+>> >> >> > >> Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
+>> >> >> > >> IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
+>> >> >> > >> is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
+>> >> >> > >> either in the generic fallback stub, or in arm64 platform override. Because
+>> >> >> > >> without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
+>> >> >> > >> be called in the first place.
+>> >> >> > >
+>> >> >> > > For the only caller now, the checking looks redundant.  But the original
+>> >> >> > > proposed implementation as follows,
+>> >> >> > >
+>> >> >> > > static inline bool arch_thp_swp_supported(void)
+>> >> >> > > {
+>> >> >> > >      return true;
+>> >> >> > > }
+>> >> >> > >
+>> >> >> > > will return true even on architectures that don't support/want THP swap.
+>> >> >> >
+>> >> >> > But the function will never be called on for those platforms.
+>> >> >> >
+>> >> >> > > That will confuse people too.
+>> >> >> >
+>> >> >> > I dont see how.
+>> >> >> >
+>> >> >> > >
+>> >> >> > > And the "redundant" checking has no run time overhead, because compiler
+>> >> >> > > will do the trick.
+>> >> >> > I understand that, but dont think this indirection is necessary.
+>> >> >>
+>> >> >> Hi Anshuman, Hi Ying,
+>> >> >> Thanks for the comments of both of you. Does the below look ok?
+>> >> >>
+>> >> >> generic,
+>> >> >>
+>> >> >>  static inline bool arch_wants_thp_swap(void)
+>> >> >>   {
+>> >> >>       return IS_ENABLED(CONFIG_THP_SWAP);
+>> >> >>  }
+>> >> >>
+>> >> >
+>> >> > sorry, i actually meant arch_thp_swp_supported() but not
+>> >> > arch_wants_thp_swap() in generic code,
+>> >> >
+>> >> >  static inline bool arch_thp_swp_supported(void)
+>> >> >  {
+>> >> >       return IS_ENABLED(CONFIG_THP_SWAP);
+>> >> >  }
+>> >>
+>> >> IS_ENABLED(CONFIG_THP_SWAP) doesn't match the name too.  It's an option
+>> >> selected by users.  arch_thp_swp_supported() is to report the
+>> >> capability.
+>> >
+>> > Hi Ying,
+>> > CONFIG_THP_SWAP implicitly includes ARCH_WANTS_THP_SWAP. So it seems
+>> > a bit odd to have still another arch_wants_thp_swap().
+>> > if the name of arch_thp_swp_supported is not sensible to you, will
+>> > thp_swp_supported()
+>> > without arch_ make more sense? a similar example is,
+>> >
+>> > static inline bool gigantic_page_runtime_supported(void)
+>> > {
+>> >         return IS_ENABLED(CONFIG_ARCH_HAS_GIGANTIC_PAGE);
+>> > }
+>>
+>> Here, the capability of the architecture is reported.  But
+>> CONFIG_THP_SWAP is a user option.
+>>
+>> I'm OK with the function name "arch_thp_swp_supported()".  I just think
+>> that we should implement the function in a way that is consistent with
+>> the function name as much as possible.  That is, don't return true on
+>> architectures that THP swap isn't supported in fact.
+>
+> My point is that having a generic thp_swp_supported() which can combine
+> both IS_ENABLED(CONFIG_THP_SWP) && arch_thp_swp_thing().
+> then we can always only call this rather than checking two conditions.
+> Although there is only one caller for this moment, we might get more
+> later. So always calling this single function might make our life easier.
+>
+> we can treat
+>
+> static inline bool arch_thp_swp_supported(void)
+> {
+>        return IS_ENABLED(CONFIG_THP_SWAP);
+> }
 
-Yeah that is better but whether bothering stable with it is the 
-question. Wedged GPU means constant endless -EIO to userspace so very 
-hard to imagine that after a TLB invalidation timeout or two there would 
-be further ones. But okay, it's tiny so fine I guess.
+The issue is that IS_ENABLED(CONFIG_THP_SWAP) reports that whether THP
+swap is selected by the user, not just whether THP swap is supported by
+the architecture.
 
-Regards,
+Best Regards,
+Huang, Ying
 
-Tvrtko
+> as a virtual function in base class. thp_swp is generically true if platforms
+> are able to enable CONFIG_THP_SWAP.
+>
+> Derived classes like arm64 can overwrite it to false in some particular cases
+> based on their unique characteristics.
+>
+>>
+>> > Otherwise, can we just keep the code as is according to Anshuman's suggestion?
+>>
+>> Although I still think my way is better, I will not force you to do
+>> that.  If you don't think that is better, you can use your original
+>> implementation.
+>
+> Ok, fair enough. And thanks for your reviewing :-)
+>
+> Thanks
+> Barry

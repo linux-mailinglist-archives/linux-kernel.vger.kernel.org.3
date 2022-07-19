@@ -2,124 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F30057972C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDC3579732
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237566AbiGSKCj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 19 Jul 2022 06:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
+        id S237453AbiGSKDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 06:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237562AbiGSKCO (ORCPT
+        with ESMTP id S237585AbiGSKCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 06:02:14 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51F373DBE4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 03:01:58 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-321-44wpZVbANnSqGgqWPqcHHw-1; Tue, 19 Jul 2022 11:01:55 +0100
-X-MC-Unique: 44wpZVbANnSqGgqWPqcHHw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Tue, 19 Jul 2022 11:01:54 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Tue, 19 Jul 2022 11:01:54 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Shengjiu Wang' <shengjiu.wang@nxp.com>,
-        "shengjiu.wang@gmail.com" <shengjiu.wang@gmail.com>,
-        "Xiubo.Lee@gmail.com" <Xiubo.Lee@gmail.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "nicoleotsuka@gmail.com" <nicoleotsuka@gmail.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH -next 2/5] ASoC: fsl_asrc: force cast the asrc_format type
-Thread-Topic: [PATCH -next 2/5] ASoC: fsl_asrc: force cast the asrc_format
- type
-Thread-Index: AQHYm1RF9VBLG0gK5ky/ItlmeeUnS62FdfSA
-Date:   Tue, 19 Jul 2022 10:01:54 +0000
-Message-ID: <f2609401c8834e8bbe926200bfc87971@AcuMS.aculab.com>
-References: <1658222864-25378-1-git-send-email-shengjiu.wang@nxp.com>
- <1658222864-25378-3-git-send-email-shengjiu.wang@nxp.com>
-In-Reply-To: <1658222864-25378-3-git-send-email-shengjiu.wang@nxp.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 19 Jul 2022 06:02:54 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FB53B959;
+        Tue, 19 Jul 2022 03:02:28 -0700 (PDT)
+X-UUID: 15efdf309db2477391a962a2bd5cac8e-20220719
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:114e74ca-c1c9-4a93-aa9d-f3170abe1501,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:100
+X-CID-INFO: VERSION:1.1.8,REQID:114e74ca-c1c9-4a93-aa9d-f3170abe1501,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:100
+X-CID-META: VersionHash:0f94e32,CLOUDID:9912e4d7-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:3618e9eac85c,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 15efdf309db2477391a962a2bd5cac8e-20220719
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <jianhua.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 950618124; Tue, 19 Jul 2022 18:02:21 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 19 Jul 2022 18:02:20 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 19 Jul 2022 18:02:20 +0800
+From:   Jianhua Lin <jianhua.lin@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jianhua Lin <jianhua.lin@mediatek.com>
+Subject: [PATCH 1/2] dt-bindings: media: mediatek-jpeg-decoder: Add MT8188 compatible string
+Date:   Tue, 19 Jul 2022 18:02:13 +0800
+Message-ID: <20220719100214.2096-1-jianhua.lin@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shengjiu Wang
-> Sent: 19 July 2022 10:28
-> 
-> Fix sparse warning:
-> sound/soc/fsl/fsl_asrc.c:1177:60: sparse: warning: incorrect type in argument 3 (different base types)
-> sound/soc/fsl/fsl_asrc.c:1177:60: sparse:    expected unsigned int [usertype] *out_value
-> sound/soc/fsl/fsl_asrc.c:1177:60: sparse:    got restricted snd_pcm_format_t *
-> sound/soc/fsl/fsl_asrc.c:1200:47: sparse: warning: restricted snd_pcm_format_t degrades to integer
-> 
-> Fixes: 4520af41fd21 ("ASoC: fsl_asrc: Support new property fsl,asrc-format")
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> ---
->  sound/soc/fsl/fsl_asrc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/sound/soc/fsl/fsl_asrc.c b/sound/soc/fsl/fsl_asrc.c
-> index 20a9f8e924b3..544395efd605 100644
-> --- a/sound/soc/fsl/fsl_asrc.c
-> +++ b/sound/soc/fsl/fsl_asrc.c
-> @@ -1174,7 +1174,7 @@ static int fsl_asrc_probe(struct platform_device *pdev)
->  		return ret;
->  	}
-> 
-> -	ret = of_property_read_u32(np, "fsl,asrc-format", &asrc->asrc_format);
-> +	ret = of_property_read_u32(np, "fsl,asrc-format", (u32 *)&asrc->asrc_format);
+Add compatible for MT8188 jpeg decoder.
 
-Ugg, you really shouldn't need to do that.
-It means that something is badly wrong somewhere.
-Casting pointers to integer types is just asking for a bug.
+Signed-off-by: Jianhua Lin <jianhua.lin@mediatek.com>
+---
+ .../devicetree/bindings/media/mediatek-jpeg-decoder.yaml         | 1 +
+ 1 file changed, 1 insertion(+)
 
->  	if (ret) {
->  		ret = of_property_read_u32(np, "fsl,asrc-width", &width);
->  		if (ret) {
-> @@ -1197,7 +1197,7 @@ static int fsl_asrc_probe(struct platform_device *pdev)
->  		}
->  	}
-> 
-> -	if (!(FSL_ASRC_FORMATS & (1ULL << asrc->asrc_format))) {
-> +	if (!(FSL_ASRC_FORMATS & (1ULL << (__force u32)asrc->asrc_format))) {
-
-Ditto.
-
-	David
-
->  		dev_warn(&pdev->dev, "unsupported width, use default S24_LE\n");
->  		asrc->asrc_format = SNDRV_PCM_FORMAT_S24_LE;
->  	}
-> --
-> 2.34.1
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml
+index 052e752157b4..3c77adfa320c 100644
+--- a/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-decoder.yaml
+@@ -22,6 +22,7 @@ properties:
+       - items:
+           - enum:
+               - mediatek,mt7623-jpgdec
++              - mediatek,mt8188-jpgdec
+           - const: mediatek,mt2701-jpgdec
+ 
+   reg:
+-- 
+2.18.0
 

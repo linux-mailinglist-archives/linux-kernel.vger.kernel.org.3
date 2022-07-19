@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED8B57A8C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9104D57A8CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238196AbiGSVFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S232654AbiGSVQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbiGSVFc (ORCPT
+        with ESMTP id S229451AbiGSVQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:05:32 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CAB2E6BF;
-        Tue, 19 Jul 2022 14:05:31 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id b9so14727417pfp.10;
-        Tue, 19 Jul 2022 14:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2ZrOgFASjagYZ4odYgHkyul4cvC1DeA9O9rfOmRB2F0=;
-        b=h0uCCzo7buj+6Z9GyuEKnHMnOIBIaQxxdqKvgGdPiUbeFg1l/OOn/URJELDGJdkeEC
-         pNfqOWZYSL57CNe3UFi+SfR7au1UyDGURozuriur6ZLHR/kzZ95TTVVBbtlQZhbS3E+e
-         y/uHW/l8t1BmtkhZM7rX6e70Xp4tgBVG85VXdJ88+QGhhgiGAiKF1FqTCP75ArZgJJxC
-         j0n3VLUJND1wLKQAInGfy6Uu+fvxhBfYZv3igTDjiXALYMwjUAfqJ/yeOj/f17r6zf+O
-         4tv+8U9pHZNrBbfhcD9g8va0QrdRn1zF/JO4c5YsInwUoZk4FYm65DfuHwX6YzKJXYu3
-         sZfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2ZrOgFASjagYZ4odYgHkyul4cvC1DeA9O9rfOmRB2F0=;
-        b=bWSyYwTqV8cpH5sloA7NTxPzk3vO7xF9Xez2HSb9X1XdlvHdADUxfNhWwBwwhOp2vW
-         w81AM5CMccqmExTY3Ndc0cCfQEj00zY5kVTeDFLE32TUIcggGTT4ZOJh9b3pSqLwGBgu
-         l+2mNZKS1HV248Lj0CNoidSGdAuAm11GLmm2o17YEEFlkCZbBnxU0W2mnvqdQCpQzViI
-         f7yUwqEF1iKAa6QcjhApdz69szRlLw3D0Ow0IdAcWnjKFoJcSPDAl60Q4VPYRix9AIP9
-         xlgu3MOqRfHqJQYSVqiOaS7QyfheaIAPdddWTziqzIqnhqekE212VWwmGtCjBa+qnWEd
-         yEsA==
-X-Gm-Message-State: AJIora8WfwESs4QCl81rfh7ffAV3mjckqKDPIOoXBC4QrbRpkjJtnstF
-        ZiQmk1iuvhilemo7vchBk7M=
-X-Google-Smtp-Source: AGRyM1vLzxBtbNnhjaIMiRwxnDXP4sxra5Wn8IejeBFZ8uQ62Zshbv72qKLm14UkQZjNbN7nheeD0Q==
-X-Received: by 2002:a05:6a00:114c:b0:528:2c7a:6302 with SMTP id b12-20020a056a00114c00b005282c7a6302mr35600417pfm.37.1658264730955;
-        Tue, 19 Jul 2022 14:05:30 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170902f64500b0016a3248376esm12056059plg.181.2022.07.19.14.05.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 14:05:30 -0700 (PDT)
-Message-ID: <bb0d87a4-5cff-2b30-db5c-1e5c4fd192f1@gmail.com>
-Date:   Tue, 19 Jul 2022 14:05:27 -0700
+        Tue, 19 Jul 2022 17:16:01 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F3D101E8;
+        Tue, 19 Jul 2022 14:15:59 -0700 (PDT)
+Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MlwJv-1nmrE61ajr-00j5gi; Tue, 19 Jul 2022 23:15:57 +0200
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31e623a4ff4so22032987b3.4;
+        Tue, 19 Jul 2022 14:15:56 -0700 (PDT)
+X-Gm-Message-State: AJIora+T4xG4QDLOVkgBIYkCf3+PRmhpzQhW7lJWHafMDPRnzNv4RnvO
+        2rHl7gwbzFXU0Dg6z0n26s0/4e/781WjWExAUtU=
+X-Google-Smtp-Source: AGRyM1vouONdtWRC6uSgwsM19DKN9yNnXedmOnx5mzXB1WkttrHPn7qGRPbPc392P2G3LxDYHDbGxroARtvQ8zSdF5U=
+X-Received: by 2002:a81:6dce:0:b0:31e:5a3b:d3a2 with SMTP id
+ i197-20020a816dce000000b0031e5a3bd3a2mr5966976ywc.495.1658265355982; Tue, 19
+ Jul 2022 14:15:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220719114714.247441733@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220715185551.3951955-1-f.fainelli@gmail.com>
+ <CAK8P3a3cuTknZaLZCFGwZtMfbd1qAFWEtXMcvVHsXoJn8EUCOg@mail.gmail.com> <2656551b-2c6f-9f0d-93a6-ef6177ec265e@gmail.com>
+In-Reply-To: <2656551b-2c6f-9f0d-93a6-ef6177ec265e@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 19 Jul 2022 23:15:38 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1LnCz32DixQ2VuBh+c64+CNqNJ8v2Nk0X6P8kYA4=-gQ@mail.gmail.com>
+Message-ID: <CAK8P3a1LnCz32DixQ2VuBh+c64+CNqNJ8v2Nk0X6P8kYA4=-gQ@mail.gmail.com>
+Subject: Re: [PATCH] tools: Fixed MIPS builds due to struct flock re-definition
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Guo Ren <guoren@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:QV+yaOmp53gp6OjojdvV3ieXcFDNVjTN5PqmbJEzK8BPxF31qLU
+ HiGlhZgDWQRUAU3u/LpXKuwrwjSL9UuRkxZg4KRiPp64Otzcoms+Y5SmFFtcO0u2MMOkWrG
+ 3SZnUAwHA46H4uEDnN+W4WDYXu/9dCdBzp4N+63Ufn4ZjuIVcyUQWwibT02MOsu7KUzDxsc
+ Wy6AwRqtc+ps1KWWTBKHw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:10cdnJmKZtQ=:/QccC7jf5ms26fI4w4DM/A
+ 68WwR0xMqDB74n+nd1xapXgbQmr7DX0KwTTRVyeAOzD+FUP6BWfsHxg73hnz1JUpszIWKbGua
+ b4VMenmeevupq5QSX0whZEDbGkyk2fzJISCWMp8JFw3vAejk4YN55sIZVcv52TTz9BwUoOxMU
+ e3Wy/UXprMZzy5GK9+3QnYv0ggJAX9IB7iKXwxFWFORjAj/sDow4a2GjI8vxZDcZPGQFm+nIu
+ fIWWeIBCMntn3Uy3MDUaF6pyv3hj3KwS1D/elaTtU+iHrvWw4X8u6YRFCybYJEZyWybps8ToB
+ eBXwPVH71puSETIp2QOAj/BYMLCvvI1Kx2dg3bLPmaJ50BMKUciYT08ytcF21k+A5MIWo7mgl
+ /SDL91ClZg3n0YRXzKyLDJwJ3wbRGgN+aKmyNnNIBqLrX11YOQeoH056WwVii+fZ3QWMPCdsC
+ hmkw6yL1ztwCxMn9VxwK7eVP6FAHJYMeBVlOwWOAVsCiJOhBSHEwc6us0IAk8ZvBVDEguPdyk
+ g39MUAXELrJjGuFs52ysmBKcxpGG4SuwCfqJ4ZbxOp1w+FEGcRL3jARQFTDWzOOq4qPvFf9K7
+ 123EWoEkdwQMICu8ZJEiqT0XOmZzYNZJB/p13TcUVc3a3NEqcMB2+PYDxW/bOVT8l5kGTwhB1
+ qLk90KUshb9V6WNoA4XbzMGJwg2loSkgxYDC/4L/FKSFVdDTm7cWH9mbIRpEZGDJktyoYAv/B
+ I/tdCX9jsVQVJX40LP2R9lDYO3RFVCnCQXlBMA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 19, 2022 at 9:05 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> On 7/19/2022 12:42 AM, Arnd Bergmann wrote:
 
+> > I applied this to the asm-generic tree, but now I'm having second thoughts, as
+> > this only changes the tools/include/ version but not the version we ship to user
+> > space. Normally these are meant to be kept in sync.
+>
+> Thanks! Just to be clear, applying just your patch is not enough as the
+> original build issue is still present, so we would need my change plus
+> yours, I think that is what you intended but just wanted to double
+> confirm.
 
-On 7/19/2022 4:51 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.13 release.
-> There are 231 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Yes, this was just the diff on top of your patch, I've folded it into a single
+commit now.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and built tested 
-with BMIPS_GENERIC (bmips_stb_defconfig):
+> On a side note your tree at:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/refs/heads
+>
+> does not appear to have it included/pushed out yet, should I be looking
+> at another git tree?
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Pushed it out now. There is the main asm-generic branch that is in
+linux-next, and the asm-generic-fixes branch that I should send after
+the build bots report success.
+
+I've merged the fixes branch into the main branch for testing for the
+moment, but will undo the merge when I forward the contents.
+
+> > It appears that commit 306f7cc1e906 ("uapi: always define
+> > F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h") already caused
+> > them to diverge, presumably the uapi version here is correct and we
+> > forgot to adapt the tools version at some point. There are also some
+> > non-functional differences from older patches.
+> >
+> > I think the correct fix to address the problem in both versions and
+> > get them back into sync would be something like the patch below.
+> > I have done zero testing on it though.
+> >
+> > Christoph and Florian, any other suggestions?
+>
+> This works for me with my patch plus your patch in the following
+> configurations:
+>
+> - MIPS toolchain with kernel-headers 4.1.x
+> - MIPS toolchain with kernel headers using my patch plus your patch
+>
+> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+
+Thanks!
+
+       Arnd

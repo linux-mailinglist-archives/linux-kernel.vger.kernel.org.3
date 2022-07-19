@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92444579A29
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A01579ABB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238491AbiGSMLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S239228AbiGSMSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238681AbiGSMJa (ORCPT
+        with ESMTP id S239184AbiGSMP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:09:30 -0400
+        Tue, 19 Jul 2022 08:15:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1869350724;
-        Tue, 19 Jul 2022 05:02:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B78558CC;
+        Tue, 19 Jul 2022 05:06:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F048B81B1A;
-        Tue, 19 Jul 2022 12:02:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03CE1C341C6;
-        Tue, 19 Jul 2022 12:02:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8EFBB81B36;
+        Tue, 19 Jul 2022 12:06:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27830C341C6;
+        Tue, 19 Jul 2022 12:06:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232147;
-        bh=lXblbA7GxQskJy4CPyQoy0xDyO1DhX55N+0uuLRgM04=;
+        s=korg; t=1658232383;
+        bh=kHrv97/PWnzh3daBLb0DySuRRbMKWwZ8/uu4TDnmUyQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rlQ5kYGiD4muP1Ikl2RPBw7ITdBfRrbKhg8RrU2yWIVQgwiOB5wRLTAjiFgjh80JF
-         72TJ/W02sJxTUTapuCQvnXzoDiQByJ9Wgwi+s6AUCUhyurdIroq4Y5uTKDq+Hw6ieY
-         8x0EV3fT21kukr47Z4V/oD3/Yls7RAGGsLqTsFy0=
+        b=sL6hv8IV4iG4iyu+WTcQK6vzHnxltOexwjlawTWGL2E43FBhBhjcjaFC+FhI3agxm
+         0cQtnV+bELHGghrnKI+pJta5O4EAuM8WUYiJ02PRJUOq/tUuhsFpFyqkyXk95BJoI9
+         ywfrm2mMBxnWNF1hLpYNQ56b7ao2+CnhSDfaU5Xg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Zheng Yejian <zhengyejian1@huawei.com>
-Subject: [PATCH 5.4 07/71] tracing/histograms: Fix memory leak problem
-Date:   Tue, 19 Jul 2022 13:53:30 +0200
-Message-Id: <20220719114553.014705161@linuxfoundation.org>
+        stable@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 038/112] ASoC: tas2764: Fix amp gain register offset & default
+Date:   Tue, 19 Jul 2022 13:53:31 +0200
+Message-Id: <20220719114629.991733410@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,80 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yejian <zhengyejian1@huawei.com>
+From: Hector Martin <marcan@marcan.st>
 
-commit 7edc3945bdce9c39198a10d6129377a5c53559c2 upstream.
+[ Upstream commit 1c4f29ec878bbf1cc0a1eb54ae7da5ff98e19641 ]
 
-This reverts commit 46bbe5c671e06f070428b9be142cc4ee5cedebac.
+The register default is 0x28 per the datasheet, and the amp gain field
+is supposed to be shifted left by one. With the wrong default, the ALSA
+controls lie about the power-up state. With the wrong shift, we get only
+half the gain we expect.
 
-As commit 46bbe5c671e0 ("tracing: fix double free") said, the
-"double free" problem reported by clang static analyzer is:
-  > In parse_var_defs() if there is a problem allocating
-  > var_defs.expr, the earlier var_defs.name is freed.
-  > This free is duplicated by free_var_defs() which frees
-  > the rest of the list.
-
-However, if there is a problem allocating N-th var_defs.expr:
-  + in parse_var_defs(), the freed 'earlier var_defs.name' is
-    actually the N-th var_defs.name;
-  + then in free_var_defs(), the names from 0th to (N-1)-th are freed;
-
-                        IF ALLOCATING PROBLEM HAPPENED HERE!!! -+
-                                                                 \
-                                                                  |
-          0th           1th                 (N-1)-th      N-th    V
-          +-------------+-------------+-----+-------------+-----------
-var_defs: | name | expr | name | expr | ... | name | expr | name | ///
-          +-------------+-------------+-----+-------------+-----------
-
-These two frees don't act on same name, so there was no "double free"
-problem before. Conversely, after that commit, we get a "memory leak"
-problem because the above "N-th var_defs.name" is not freed.
-
-If enable CONFIG_DEBUG_KMEMLEAK and inject a fault at where the N-th
-var_defs.expr allocated, then execute on shell like:
-  $ echo 'hist:key=call_site:val=$v1,$v2:v1=bytes_req,v2=bytes_alloc' > \
-/sys/kernel/debug/tracing/events/kmem/kmalloc/trigger
-
-Then kmemleak reports:
-  unreferenced object 0xffff8fb100ef3518 (size 8):
-    comm "bash", pid 196, jiffies 4295681690 (age 28.538s)
-    hex dump (first 8 bytes):
-      76 31 00 00 b1 8f ff ff                          v1......
-    backtrace:
-      [<0000000038fe4895>] kstrdup+0x2d/0x60
-      [<00000000c99c049a>] event_hist_trigger_parse+0x206f/0x20e0
-      [<00000000ae70d2cc>] trigger_process_regex+0xc0/0x110
-      [<0000000066737a4c>] event_trigger_write+0x75/0xd0
-      [<000000007341e40c>] vfs_write+0xbb/0x2a0
-      [<0000000087fde4c2>] ksys_write+0x59/0xd0
-      [<00000000581e9cdf>] do_syscall_64+0x3a/0x80
-      [<00000000cf3b065c>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Link: https://lkml.kernel.org/r/20220711014731.69520-1-zhengyejian1@huawei.com
-
-Cc: stable@vger.kernel.org
-Fixes: 46bbe5c671e0 ("tracing: fix double free")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Reviewed-by: Tom Zanussi <tom.zanussi@linux.intel.com>
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Fixes: 827ed8a0fa50 ("ASoC: tas2764: Add the driver for the TAS2764")
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+Link: https://lore.kernel.org/r/20220630075135.2221-4-povik+lin@cutebit.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace_events_hist.c |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/codecs/tas2764.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -4832,6 +4832,8 @@ static int parse_var_defs(struct hist_tr
+diff --git a/sound/soc/codecs/tas2764.c b/sound/soc/codecs/tas2764.c
+index 33d7ce78aced..37588804a6b5 100644
+--- a/sound/soc/codecs/tas2764.c
++++ b/sound/soc/codecs/tas2764.c
+@@ -541,7 +541,7 @@ static DECLARE_TLV_DB_SCALE(tas2764_playback_volume, -10050, 50, 1);
+ static const struct snd_kcontrol_new tas2764_snd_controls[] = {
+ 	SOC_SINGLE_TLV("Speaker Volume", TAS2764_DVC, 0,
+ 		       TAS2764_DVC_MAX, 1, tas2764_playback_volume),
+-	SOC_SINGLE_TLV("Amp Gain Volume", TAS2764_CHNL_0, 0, 0x14, 0,
++	SOC_SINGLE_TLV("Amp Gain Volume", TAS2764_CHNL_0, 1, 0x14, 0,
+ 		       tas2764_digital_tlv),
+ };
  
- 			s = kstrdup(field_str, GFP_KERNEL);
- 			if (!s) {
-+				kfree(hist_data->attrs->var_defs.name[n_vars]);
-+				hist_data->attrs->var_defs.name[n_vars] = NULL;
- 				ret = -ENOMEM;
- 				goto free;
- 			}
+@@ -566,7 +566,7 @@ static const struct reg_default tas2764_reg_defaults[] = {
+ 	{ TAS2764_SW_RST, 0x00 },
+ 	{ TAS2764_PWR_CTRL, 0x1a },
+ 	{ TAS2764_DVC, 0x00 },
+-	{ TAS2764_CHNL_0, 0x00 },
++	{ TAS2764_CHNL_0, 0x28 },
+ 	{ TAS2764_TDM_CFG0, 0x09 },
+ 	{ TAS2764_TDM_CFG1, 0x02 },
+ 	{ TAS2764_TDM_CFG2, 0x0a },
+-- 
+2.35.1
+
 
 

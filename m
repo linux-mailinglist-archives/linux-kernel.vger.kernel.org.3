@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23EE85799B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1275799B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238207AbiGSMFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
+        id S238211AbiGSMFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238280AbiGSMET (ORCPT
+        with ESMTP id S238295AbiGSMEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:04:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B225364F1;
-        Tue, 19 Jul 2022 05:00:12 -0700 (PDT)
+        Tue, 19 Jul 2022 08:04:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C52420F66;
+        Tue, 19 Jul 2022 05:00:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A503B81A2E;
-        Tue, 19 Jul 2022 12:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B601C341C6;
-        Tue, 19 Jul 2022 12:00:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79B856163C;
+        Tue, 19 Jul 2022 12:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B76BC341C6;
+        Tue, 19 Jul 2022 12:00:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232009;
-        bh=EDNmQ1+sYRSp65hNXLPamaBrs9zfcm4Nudd6wYjBdLs=;
+        s=korg; t=1658232012;
+        bh=Qq1egKqaN2guD+MLaTNP3WxiufugS4HznBle4H2PDEA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oIP4FjokZC6ioEUBjuXkSMrGWATcNgDVy26n5dj0I2f/HmYH1Fbw1y4UvHaeA6E0W
-         T7kWz89S6UB4OueGVSg5P8z/rCSougjg4+0vsQIDqAujSQw6LZugdS77cRP/uQRdH/
-         8c9FlAB1UhktsgorH3KA3CIRTDLFn3UfeMKZlMr4=
+        b=JaRZDlG8l9aQ2ZbSKTO6IE3QHFjgFWIUqIMHnJoRLPwp/zNaXGa7n12EYnLZPYGlX
+         oEnANF1LgSv+WI/WpdDfCRTDXFxVP2Vkfk6C6ind41/r4dbswcf+f/O07c5W5jcoLL
+         aUqJJQVra7flMF4fEvjLmj+8vxljNxEjJ2GbzSiU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kris Bahnsen <kris@embeddedTS.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 11/48] ARM: dts: imx6qdl-ts7970: Fix ngpio typo and count
-Date:   Tue, 19 Jul 2022 13:53:48 +0200
-Message-Id: <20220719114520.916913225@linuxfoundation.org>
+Subject: [PATCH 4.19 12/48] ARM: 9209/1: Spectre-BHB: avoid pr_info() every time a CPU comes out of idle
+Date:   Tue, 19 Jul 2022 13:53:49 +0200
+Message-Id: <20220719114520.982991373@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
 References: <20220719114518.915546280@linuxfoundation.org>
@@ -55,37 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kris Bahnsen <kris@embeddedTS.com>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-[ Upstream commit e95ea0f687e679fcb0a3a67d0755b81ee7d60db0 ]
+[ Upstream commit 0609e200246bfd3b7516091c491bec4308349055 ]
 
-Device-tree incorrectly used "ngpio" which caused the driver to
-fallback to 32 ngpios.
+Jon reports that the Spectre-BHB init code is filling up the kernel log
+with spurious notifications about which mitigation has been enabled,
+every time any CPU comes out of a low power state.
 
-This platform has 62 GPIO registers.
+Given that Spectre-BHB mitigations are system wide, only a single
+mitigation can be enabled, and we already print an error if two types of
+CPUs coexist in a single system that require different Spectre-BHB
+mitigations.
 
-Fixes: 9ff8e9fccef9 ("ARM: dts: TS-7970: add basic device tree")
-Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+This means that the pr_info() that describes the selected mitigation
+does not need to be emitted for each CPU anyway, and so we can simply
+emit it only once.
+
+In order to clarify the above in the log message, update it to describe
+that the selected mitigation will be enabled on all CPUs, including ones
+that are unaffected. If another CPU comes up later that is affected and
+requires a different mitigation, we report an error as before.
+
+Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6qdl-ts7970.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mm/proc-v7-bugs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-ts7970.dtsi b/arch/arm/boot/dts/imx6qdl-ts7970.dtsi
-index f0be516dc28e..9181fbeb833d 100644
---- a/arch/arm/boot/dts/imx6qdl-ts7970.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-ts7970.dtsi
-@@ -226,7 +226,7 @@ gpio8: gpio@28 {
- 		reg = <0x28>;
- 		#gpio-cells = <2>;
- 		gpio-controller;
--		ngpio = <32>;
-+		ngpios = <62>;
- 	};
+diff --git a/arch/arm/mm/proc-v7-bugs.c b/arch/arm/mm/proc-v7-bugs.c
+index 40fb2900038e..e53f824a2583 100644
+--- a/arch/arm/mm/proc-v7-bugs.c
++++ b/arch/arm/mm/proc-v7-bugs.c
+@@ -222,10 +222,10 @@ static int spectre_bhb_install_workaround(int method)
+ 			return SPECTRE_VULNERABLE;
  
- 	sgtl5000: codec@a {
+ 		spectre_bhb_method = method;
+-	}
+ 
+-	pr_info("CPU%u: Spectre BHB: using %s workaround\n",
+-		smp_processor_id(), spectre_bhb_method_name(method));
++		pr_info("CPU%u: Spectre BHB: enabling %s workaround for all CPUs\n",
++			smp_processor_id(), spectre_bhb_method_name(method));
++	}
+ 
+ 	return SPECTRE_MITIGATED;
+ }
 -- 
 2.35.1
 

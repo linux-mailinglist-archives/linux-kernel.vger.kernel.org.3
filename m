@@ -2,106 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C73357982E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EDAC579834
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237420AbiGSLHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S237333AbiGSLL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiGSLHb (ORCPT
+        with ESMTP id S236042AbiGSLLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:07:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBD72F02C
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:07:30 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 11:07:27 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658228848;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2WSG/pyZMGCHztNuz9k5QlQcA5AS5ed3fLm1aMoY9eo=;
-        b=JFItsUU4e0jHQ7O1CjiRVs+oOxxlJ+LXeO3H1Gl0BEKPdlu/p2TsfEYZtmFdOa2uFOn3iv
-        K848C5Ori7zVqIhfEoOWlUo1sEpkxgjBJRG91fhTJlNJnxZSbgT9MCu7gsExTNnOrBq2ZY
-        ZCe0mAaMlCGEj4K/oa0CVEum/0wvDOLDllsGvDGsshQXaZqNQWi6Mqr9MTWmMaNxSgYnc3
-        UcpLgc5dau7XCcXVLtdymJf/XetvqmBuyIQzWPN1UTaF/z7F7rXH3Va+QjftD+SKPnhx82
-        Kf980PNHXU95xFPTFhgjeWqtvP0hmf7R1ePB/hBY0qqeQkx7FpSeIxOJ46xyNA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658228848;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2WSG/pyZMGCHztNuz9k5QlQcA5AS5ed3fLm1aMoY9eo=;
-        b=p2Qs6IWcXB1QmUb1HtkzH7vjoMv1lLYM3VmZrXCs1i1g9dj50MQjE+EDK1DeG1ZJbA9KpJ
-        ct3tbD6AP4sgMOCQ==
-From:   "irqchip-bot for Lad Prabhakar" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] dt-bindings: interrupt-controller:
- renesas,rzg2l-irqc: Document RZ/V2L SoC
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220718193745.7472-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220718193745.7472-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Tue, 19 Jul 2022 07:11:25 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C93A32BA7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:11:17 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1658229053tvikeula
+Received: from harry-jrlc.. ( [182.148.15.157])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 19 Jul 2022 19:10:45 +0800 (CST)
+X-QQ-SSF: 0100000000600030C000B00A0000020
+X-QQ-FEAT: sxL8zoGpsGeZDDSqZrLEZdJyVF+ZNsb/wAe8uGZJl6H9ScKdXB3WYaVRP5qSw
+        dwGyA+CsdugVfPVuuZaqk2PwqRXHQykRK+f46T4BXiDCvpuI+kFLtFRwlJz+OboWKQLL67F
+        VEYwBe/RYxYpM1Vp1oMSVcYRx+PKtDSKte58UM07TlDiHVcVnTWJdnI9UwT16zzc75S9gN8
+        BZdbraPin8bItv18yqMdRg6gCT4FMcaFAr8NYeE9QwXTSOKjrSOI4/Tha5pDmeyyVk69RPU
+        jNoUfDcuPmbrFVRmHe32o4Lx40xRx/RK0jWHn7A6F42kNTMRRg7LcwbXLl5Abq7RJx9Waed
+        UqOtFmgbO3g2Omz3fAEqMShq92tLVQ60/II6XOaJt8hlC5cb+HQhq/GvjUSAkyUcCdaF5OI
+X-QQ-GoodBg: 0
+From:   Xin Gao <gaoxin@cdjrlc.com>
+To:     mingo@redhat.com
+Cc:     peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, Xin Gao <gaoxin@cdjrlc.com>
+Subject: [PATCH] sched:Unneeded semicolon
+Date:   Tue, 19 Jul 2022 19:10:44 +0800
+Message-Id: <20220719111044.7095-1-gaoxin@cdjrlc.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Message-ID: <165822884740.15455.18037203729518776657.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+Unneeded semicolon
 
-Commit-ID:     8cfc90ecd33e73f4a30207b316bc6886e3c3a166
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/8cfc90ecd33e73f4a30207b316bc6886e3c3a166
-Author:        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-AuthorDate:    Mon, 18 Jul 2022 20:37:45 +01:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Tue, 19 Jul 2022 12:00:10 +01:00
-
-dt-bindings: interrupt-controller: renesas,rzg2l-irqc: Document RZ/V2L SoC
-
-Document RZ/V2L (R9A07G054) IRQC bindings. The RZ/V2L IRQC block is
-identical to one found on the RZ/G2L SoC. No driver changes are
-required as generic compatible string "renesas,rzg2l-irqc" will be
-used as a fallback.
-
-While at it, update the comment "# RZ/G2L" to "# RZ/G2{L,LC}" for
-"renesas,r9a07g044-irqc" compatible string as both RZ/G2L and
-RZ/G2LC SoC's use the common SoC DTSI and have the same IRQC block.
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220718193745.7472-1-prabhakar.mahadev-lad.rj@bp.renesas.com
+Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
 ---
- Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/sched/core_sched.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
-index ffbb4ab..33b90e9 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
-@@ -26,7 +26,8 @@ properties:
-   compatible:
-     items:
-       - enum:
--          - renesas,r9a07g044-irqc    # RZ/G2L
-+          - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
-+          - renesas,r9a07g054-irqc    # RZ/V2L
-       - const: renesas,rzg2l-irqc
+diff --git a/kernel/sched/core_sched.c b/kernel/sched/core_sched.c
+index 38a2cec21014..8d2dc54043de 100644
+--- a/kernel/sched/core_sched.c
++++ b/kernel/sched/core_sched.c
+@@ -204,7 +204,7 @@ int sched_core_share_pid(unsigned int cmd, pid_t pid, enum pid_type type,
+ 	default:
+ 		err = -EINVAL;
+ 		goto out;
+-	};
++	}
  
-   '#interrupt-cells':
+ 	if (type == PIDTYPE_PID) {
+ 		__sched_core_set(task, cookie);
+-- 
+2.30.2
+

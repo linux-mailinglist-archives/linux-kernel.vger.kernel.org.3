@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C655796D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2775796D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237380AbiGSJ4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 05:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
+        id S237378AbiGSJ41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 05:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235924AbiGSJ4f (ORCPT
+        with ESMTP id S237299AbiGSJ4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:56:35 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB86327FEE;
-        Tue, 19 Jul 2022 02:56:34 -0700 (PDT)
+        Tue, 19 Jul 2022 05:56:25 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589AD2B62F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:56:24 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z22so10229343lfu.7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:56:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658224595; x=1689760595;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kHrTHvQAepMAlMIEvJiZV9+AbwMmX43o50lpDv2fUtA=;
-  b=EQwFDrHMm6AW8p3AtFMhWRtCGCA3G3eB+QDekDULiMbUH8fKwIPmU2vK
-   1NHC0bx78Mtkd6TYM6KrKv4pn9BXIQmKFGeuKY9uMgKpps0jsy+9W28dB
-   3ggDAuGON3Aagz2Oue8/p3K+FeZ4b6y0R0H1GgFIP0yPDG0vEcoE0AAgw
-   k=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 Jul 2022 02:56:34 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 02:56:34 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 19 Jul 2022 02:56:33 -0700
-Received: from [10.216.50.81] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 19 Jul
- 2022 02:56:27 -0700
-Message-ID: <b6ab023b-601d-1df2-b04b-af5961b73bea@quicinc.com>
-Date:   Tue, 19 Jul 2022 15:26:15 +0530
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=EFk86uRdewz20VUPRQoIRx5Kk1NiNLCImIzNnjafFSw=;
+        b=NaEFPoUIoFBZewiWjqCiOipe2laBUlv8dhgR/MiPD0lhGWVW5G6q+Xcks8lKbu6TYi
+         52gJeMIctRvHSAAIoa1XlCU+fLNf9sjKiJcvbj471F/Uo2Gb1eRDRePSmzppxhbNdDMs
+         NIIsE2UL5FJ99T+GWfuXENJtkQlTortap7a9sNbvpKXq/3HhIrNo155OttfR5hYoO+t/
+         3NEiA9HQbbm7Oy/tUGFZs4DQgkDXJnDELmJokiXk1OEc7nvwuLRQ61WY7MBI87atPt7E
+         qXsQ2s00PsjS5vjkoWawQIef4tbig+2CApWdp3zYqJe0Ef8s6Dz4FmcVHSF8wPsVDdS+
+         tzoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EFk86uRdewz20VUPRQoIRx5Kk1NiNLCImIzNnjafFSw=;
+        b=Ufl2KSFp+cD4zAQ4arc44JSyEVRkr/ycfD250w5HggFCwIpcRZSLwzyJVucRDPwsCN
+         Q2mIdrctCNwvSS17ZYeWn/NgyUlGX0GptmasW5WZEGSLVQWOwyflApCQUYnWPjAKH6bm
+         +pCZmFqcYxlSnuqn5fYu+YZpky89jIWfOvswfPjt1Q4OkF/RaczaMxQzL+JVS+FMrCJk
+         EWaQWmvWop1zfAQStb14kB4vDvSA+MA1C7S0171l2kgshA6Gracxj55RnX7aLAoQ9O7w
+         7+1p20D/UCGHeEPvkxaaar3kfGk2h3eaJb4MFTLRal/bGYc77ScKiEApgFQUXLcw2Wn9
+         oDDw==
+X-Gm-Message-State: AJIora/1PxjQDSjfE93vppw5V+ZZBe1QBKaryYP2CY4OAvAehnm867Xg
+        rJxSfpHPDGotgSLjomehgdTFeA==
+X-Google-Smtp-Source: AGRyM1sba1t9L/GuBtsauW7d+8roMzRXpt0qdqU8mEVQ7dVaiHZev8zFGCXhF0HwZQzr8cIbmpgr6g==
+X-Received: by 2002:a05:6512:344e:b0:489:f4ad:88d8 with SMTP id j14-20020a056512344e00b00489f4ad88d8mr18715016lfr.297.1658224582722;
+        Tue, 19 Jul 2022 02:56:22 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id j18-20020a056512345200b0047f67dbb533sm3098436lfr.70.2022.07.19.02.56.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 02:56:22 -0700 (PDT)
+Message-ID: <7f2a4f21-5e07-9320-8f7b-573ccc562f43@linaro.org>
+Date:   Tue, 19 Jul 2022 11:56:20 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [Freedreno] [PATCH v2 5/7] arm64: dts: qcom: sc7280: Update gpu
- register list
+Subject: Re: [PATCH 1/2] ARM: dts: qcom: ipq8064: reorganize node order and
+ sort them
 Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-CC:     <devicetree@vger.kernel.org>, Jonathan Marek <jonathan@marek.ca>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+To:     Christian Marangi <ansuelsmth@gmail.com>,
         Andy Gross <agross@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <1657346375-1461-1-git-send-email-quic_akhilpo@quicinc.com>
- <20220709112837.v2.5.I7291c830ace04fce07e6bd95a11de4ba91410f7b@changeid>
- <CAD=FV=XzvcjS51q78BZ=FPCEVUDMD+VKJ70ksCm5V4qwHN_wRg@mail.gmail.com>
- <c022538d-c616-8f1a-e1c2-c11b5f0de670@quicinc.com>
- <e4dcdd8d-18a9-8da3-7ac3-6cc792139f70@quicinc.com>
- <CAE-0n52TG3hsytN5nRU7W=S6PffSj8yQDmuicN0-qxoW-jxiZQ@mail.gmail.com>
- <0c050434-27ca-1099-d93d-8ad6ace3396e@quicinc.com>
- <CAE-0n53J=dADDTrydVuNZzw38dW_-+Baf8cfn0Q6DSVX_6cLNg@mail.gmail.com>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <CAE-0n53J=dADDTrydVuNZzw38dW_-+Baf8cfn0Q6DSVX_6cLNg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220718153815.29414-1-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220718153815.29414-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,51 +79,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/19/2022 12:49 PM, Stephen Boyd wrote:
-> Quoting Akhil P Oommen (2022-07-18 23:37:16)
->> On 7/19/2022 11:19 AM, Stephen Boyd wrote:
->>> Quoting Akhil P Oommen (2022-07-18 21:07:05)
->>>> On 7/14/2022 11:10 AM, Akhil P Oommen wrote:
->>>>> IIUC, qcom gdsc driver doesn't ensure hardware is collapsed since they
->>>>> are vote-able switches. Ideally, we should ensure that the hw has
->>>>> collapsed for gpu recovery because there could be transient votes from
->>>>> other subsystems like hypervisor using their vote register.
->>>>>
->>>>> I am not sure how complex the plumbing to gpucc driver would be to allow
->>>>> gpu driver to check hw status. OTOH, with this patch, gpu driver does a
->>>>> read operation on a gpucc register which is in always-on domain. That
->>>>> means we don't need to vote any resource to access this register.
+On 18/07/2022 17:38, Christian Marangi wrote:
+> Reorganize node order and sort them by address.
 > 
-> Reading between the lines here, you're saying that you have to read the
-> gdsc register to make sure that the gdsc is in some state? Can you
-> clarify exactly what you're doing? And how do you know that something
-> else in the kernel can't cause the register to change after it is read?
-> It certainly seems like we can't be certain because there is voting
-> involved.
-
-yes, this looks like the best case effort to get the gpu to recover, but
-the kernel driver really has no control to make sure this condition can
-always be met (because it depends on other entities like hyp, trustzone etc right?)
-Why not just put a worst case polling delay?
-
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
 > 
->>>>>
->>>>> Stephen/Rajendra/Taniya, any suggestion?
->>> Why can't you assert a gpu reset signal with the reset APIs? This series
->>> seems to jump through a bunch of hoops to get the gdsc and power domain
->>> to "reset" when I don't know why any of that is necessary. Can't we
->>> simply assert a reset to the hardware after recovery completes so the
->>> device is back into a good known POR (power on reset) state?
->> That is because there is no register interface to reset GPU CX domain.
->> The recommended sequence from HW design folks is to collapse both cx and
->> gx gdsc to properly reset gpu/gmu.
->>
+> This was picked from for-next qcom branch [1]. Reorganize dtsi as requested.
 > 
-> Ok. One knee jerk reaction is to treat the gdsc as a reset then and
-> possibly mux that request along with any power domain on/off so that if
-> the reset is requested and the power domain is off nothing happens.
-> Otherwise if the power domain is on then it manually sequences and
-> controls the two gdscs so that the GPU is reset and then restores the
-> enable state of the power domain.
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/?h=for-next
+
+If this is picked by qcom branch, no need to resend it.
+
+I don't see value in such reshuffle. Reviewing is not possible and you
+did not mention tests (results should be equal).
+
+
+
+Best regards,
+Krzysztof

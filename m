@@ -2,84 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F65557A5EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB5757A5EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239776AbiGSR6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S239769AbiGSR6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236212AbiGSR6j (ORCPT
+        with ESMTP id S239615AbiGSR6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:58:39 -0400
-X-Greylist: delayed 63558 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Jul 2022 10:58:38 PDT
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3515B491F8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:58:37 -0700 (PDT)
-Received: (Authenticated sender: joao@overdrivepizza.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 352F6240006;
-        Tue, 19 Jul 2022 17:58:30 +0000 (UTC)
+        Tue, 19 Jul 2022 13:58:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EE14D163;
+        Tue, 19 Jul 2022 10:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=V0qiTrhKb5cDn7xIAf2JVpihXBS1asZkPJ9Pieu4GWQ=; b=TLdQhm87tVe/Km85VW344stqSW
+        sGnhygUmoZeMCvY+KgA6lZ97rKTdlG4gdJ0pxREFFi5A+679pJNM3qKHlmlIH58qU2zL5bJyGs76V
+        xw8+/fSGkRuqWq/8jpRptkA2FekKdawjW2AjvqNVN6wUhZXsEMatGmKeecDXx9Efww4Jbf+c6CXhh
+        TTui8HWbn63uFSFS9R/3QEAaeEAcu3QZaIE7Je5Gsh6lRahE5QrdW2lEYbkK5oBCndywlf0SMMJ9+
+        tQNUgEZo+vsiFwQ5SkTogBj5c7u8UaV/rfzaOW8/04ix8bTyftX45GC5s/n60llqQrZogkF99fhpi
+        ur5rOExA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oDrUb-00B2xA-Ge; Tue, 19 Jul 2022 17:58:45 +0000
+Date:   Tue, 19 Jul 2022 10:58:45 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-modules@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when
+ CONFIG_KUNIT=m
+Message-ID: <Ytbw1T6uspICqj5B@bombadil.infradead.org>
+References: <20220713005221.1926290-1-davidgow@google.com>
+ <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
 MIME-Version: 1.0
-Date:   Tue, 19 Jul 2022 10:58:30 -0700
-From:   Joao Moreira <joao@overdrivepizza.com>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-In-Reply-To: <YtboDUndGtMVGRCU@google.com>
-References: <87o7xmup5t.ffs@tglx>
- <YtXOMPpmx8TcFtOX@worktop.programming.kicks-ass.net> <87lesqukm5.ffs@tglx>
- <2f7f899cb75b79b08b0662ff4d2cb877@overdrivepizza.com>
- <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
- <87fsiyuhyz.ffs@tglx>
- <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
- <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
- <CAHk-=wiYHXeWnF8Ea5xb735ehJ8FbjTT6UCvHYjX=Ooc7Z5sOw@mail.gmail.com>
- <a6d75b81cdba4a244b142e2f8bb65d71@overdrivepizza.com>
- <YtboDUndGtMVGRCU@google.com>
-Message-ID: <656a965d6241d3a697180cc4d05ada2b@overdrivepizza.com>
-X-Sender: joao@overdrivepizza.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Clang always uses r11 for the indirect call with retpolines, so we'd
-> need to use another register. Nevertheless, splitting the constant into
-> two instructions would solve the call target gadget issue.
+On Wed, Jul 13, 2022 at 08:24:32AM -0700, Daniel Latypov wrote:
+> On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
+> >
+> > The new KUnit module handling has KUnit test suites listed in a
+> > .kunit_test_suites section of each module. This should be loaded when
+> > the module is, but at the moment this only happens if KUnit is built-in.
+> >
+> > Also load this when KUnit is enabled as a module: it'll not be usable
+> > unless KUnit is loaded, but such modules are likely to depend on KUnit
+> > anyway, so it's unlikely to ever be loaded needlessly.
+> 
+> This seems reasonable to me.
+> 
+> Question: what happens in this case?
+> 1. insmod <test-module>
+> 2. insmod kunit
+> 3. rmmod <test-module>
+> 
+> I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
+> for <test-module>, I think?
+> But we never called __kunit_test_suites_init().
+> My fear is what breaks as a result of this precondition break.
+> 
+> E.g. In the case that CONFIG_KUNIT_DEBUGFS is enabled, this includes a
+> call to kunit_debugfs_destroy_suite() with no previous call to
+> kunit_debugfs_create_suite().
+> That will include a call to debugfs_remove_recursive(suite->debugfs),
+> where suite->debugfs is an uninitialized pointer.
+> 
+> Maybe we can treat it as "undefined behavior" for now and proceed with
+> this patch.
+> 
+> In terms of long-term fixes, perhaps insmod kunit could trigger it to
+> 1. run all built-in tests (IIUC, it doesn't right now)
+> 2. run all the tests of currently loaded modules
+> 3. track which modules already ran so if you rmmod + insmod kunit
+> again, it won't rerun tests?
 
-Yeah, it clicked later yesterday. But, FWIIW, R10 is also considered a 
-scratch register, although used for passing static chain pointers which 
-I think is not a thing in kernel context. Last case scenario we can 
-always do liveness analysis and I doubt we'll have a significant (if 
-any) number of spills.
+Let's please address these considerations.
 
-If we are comparing through registers, I would suggest using a sub 
-instruction instead of a cmp, as this will destroy the contents of the 
-register and prevent it from being re-used on further unprotected 
-indirect branches, if any exists.
+  Luis

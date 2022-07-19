@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBF85793F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 514DF579402
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235766AbiGSHTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 03:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
+        id S235845AbiGSHTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 03:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234874AbiGSHTO (ORCPT
+        with ESMTP id S235817AbiGSHTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 03:19:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 013221EC7C
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658215151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c9hDHTDlizIptgWB6Wc2g1JY5Cp3r9WdCLFbnkktkQc=;
-        b=cbNS8XTXG58vc+T0/GV/cZZOGSyNoUNjfC1GWf3dtqEEv3pN9Hn+SOXu91gF7l91Vl4utJ
-        5yQW/tQYElI0UsHdwNUulc8oZ1D3BQsHJxm+OFj72LgBnPAs6uHeD7eP4TxMiProXgEao7
-        uUj+QxWUWFNeUlY1Q1n6+Kmt1M4/BBg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-567-O_Ja-1FgP_qAUBsSCsl5gw-1; Tue, 19 Jul 2022 03:19:10 -0400
-X-MC-Unique: O_Ja-1FgP_qAUBsSCsl5gw-1
-Received: by mail-wr1-f69.google.com with SMTP id s16-20020adf9790000000b0021e36810385so144037wrb.15
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:19:10 -0700 (PDT)
+        Tue, 19 Jul 2022 03:19:50 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E63932DAD
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:19:49 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10d6cdf829aso2286788fac.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=sbnnlm1/PjMSPmudPPg+00uf3vfTognMn8oMjSHYKvA=;
+        b=YvreDaoClCfLMVh0kuegRr5Tb20TtMuxjFsoBfeQ/aKfhGhBmftcSgjY4V2Eg+zSgl
+         FfyMhei9a9x1UwCOdq2HcUOaccXm4XzQ0NnNDXOcLgmYZL+zL3GQAn7DDfRiicse28f1
+         RN5kaIQCf4Z4fi199iVfV3TpzhhwXflVj8guQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=c9hDHTDlizIptgWB6Wc2g1JY5Cp3r9WdCLFbnkktkQc=;
-        b=AhrZOdVNlNfHg5fYVWc7aZGutiFIxnFVFt46SkX3QQDyj9wqdMKKy1pdfEDTIIMJub
-         n7yY7ChCppf7//lk7/ogJm2udhujs8PaZy9i4wZTOT3wTmtFFrfrvu/1xCkC/F8qh7jN
-         Fq3x6Dqvz4LOpldZdIPZ1qOvMhfXdjgGpnj3/xZuY3CiZajn4pEfoGXDxCzusKdJCDj9
-         uvt8eor3lvo6Kgr0sJlSqhjtplt6KYbBt9CaxHITlPe3anFfUjojOAOpb++ehrbUtLaA
-         dR2MSQF/ZzqtQJ4Fk37NjguT8rhnQ+VDWIY1HDJvJ6pFZ5a/1ov8Fdf+vWqmte3wXbHA
-         gVVQ==
-X-Gm-Message-State: AJIora/RGMWBTws8aSDRCF9s7scgNecf2oS0E3C/LILGdYZ8GlTAZ0HD
-        xZk2MTJLhgVaM8kVxBsytoV2pMWUsMbkkc4gJjsfdryssfRFhMaKPRteXifzgDQVNnZJ26OACCJ
-        YI3fDxVbXexrwiGryYYnA4xrd
-X-Received: by 2002:a05:600c:1e8d:b0:3a1:9eb0:fd81 with SMTP id be13-20020a05600c1e8d00b003a19eb0fd81mr28211948wmb.19.1658215149278;
-        Tue, 19 Jul 2022 00:19:09 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tAQs17h1Ymb8uk5JFCX89t+L/+vzCNvu6h2agEgN2ZYhi+24NX+nsWLtaM89NhetUbKjlAtg==
-X-Received: by 2002:a05:600c:1e8d:b0:3a1:9eb0:fd81 with SMTP id be13-20020a05600c1e8d00b003a19eb0fd81mr28211917wmb.19.1658215149021;
-        Tue, 19 Jul 2022 00:19:09 -0700 (PDT)
-Received: from localhost.localdomain ([151.29.54.74])
-        by smtp.gmail.com with ESMTPSA id j17-20020adfd211000000b002185631adf0sm12244730wrh.23.2022.07.19.00.19.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 00:19:08 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 09:19:05 +0200
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     Ankit Jain <ankitja@vmware.com>
-Cc:     "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sharan Turlapati <sturlapati@vmware.com>,
-        Him Kalyan Bordoloi <bordoloih@vmware.com>,
-        Keerthana Kalyanasundaram <keerthanak@vmware.com>,
-        Anish Swaminathan <anishs@vmware.com>,
-        Srivatsa Bhat <srivatsab@vmware.com>
-Subject: Re: [PATCH] sched/deadline: Fix BUG_ON condition for deboosted tasks
-Message-ID: <YtZa6YYnMPVUP345@localhost.localdomain>
-References: <20220713075014.411739-1-juri.lelli@redhat.com>
- <806a86d3-5204-145e-af46-023bf0142aa8@csail.mit.edu>
- <Ys/FiJ3tgc0CYDcu@localhost.localdomain>
- <D5F4086A-AD87-4CCB-B926-25713BBF00ED@vmware.com>
- <YtEbd2WjIOB6nXvr@localhost.localdomain>
- <DC16804A-D429-402E-B076-783B6373D21C@vmware.com>
- <YtVZokpe+l50EpWs@localhost.localdomain>
- <B466E709-EFCF-4B27-B3F6-D7561C381BF7@vmware.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=sbnnlm1/PjMSPmudPPg+00uf3vfTognMn8oMjSHYKvA=;
+        b=V3SncA94dpB4VfU9cdSrdfPi3H4COZLMCA/26KMaM482kBR57Zwht+cByiM33Bq8mS
+         PrG2F+ExPu9CgcfGDnsj5CTC9sZzLL3JFH2avDKM5LKgE/WUtIuAHrkcjqtMZx0IiEBe
+         DSscxKz3M9ufI0+9qAtUzXG5rEGoaWpoLU1FfT7bVLc/i5MufeAi4cg2YcFXT4ugBxWU
+         HiiySrvIy8fPAG7k7RwLL7hMFdYWdPr1OqRblaCVaPZa28mvLe2QQ6VgU+SNcJJR4kkz
+         7T5WPq42NVFEjqEUYvnXjNp+bC5OfHZ4I8u6gqP7wiyY5CNqKlyfdzd99JaYZ1uW8dtN
+         OJxw==
+X-Gm-Message-State: AJIora+L40RFmV5zaBWH8a9BWmpU/+S9v7zJwvEzelizJa5Izssw67em
+        LJU8CmxlavUV1YvzkBoSaA8WqAusoSf2ENDsCMnGsw==
+X-Google-Smtp-Source: AGRyM1tdmvnEmkKpCicr8GGagWVe2Y/bXDhFisbQ7fpg4AqrDBUi60mDeIFUloIr9xJ8nhMLsB/zEqXvdphhfCcaqo4=
+X-Received: by 2002:aca:db56:0:b0:33a:3dd5:86ed with SMTP id
+ s83-20020acadb56000000b0033a3dd586edmr11336531oig.0.1658215188633; Tue, 19
+ Jul 2022 00:19:48 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 19 Jul 2022 03:19:48 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <B466E709-EFCF-4B27-B3F6-D7561C381BF7@vmware.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0c050434-27ca-1099-d93d-8ad6ace3396e@quicinc.com>
+References: <1657346375-1461-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220709112837.v2.5.I7291c830ace04fce07e6bd95a11de4ba91410f7b@changeid>
+ <CAD=FV=XzvcjS51q78BZ=FPCEVUDMD+VKJ70ksCm5V4qwHN_wRg@mail.gmail.com>
+ <c022538d-c616-8f1a-e1c2-c11b5f0de670@quicinc.com> <e4dcdd8d-18a9-8da3-7ac3-6cc792139f70@quicinc.com>
+ <CAE-0n52TG3hsytN5nRU7W=S6PffSj8yQDmuicN0-qxoW-jxiZQ@mail.gmail.com> <0c050434-27ca-1099-d93d-8ad6ace3396e@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 19 Jul 2022 03:19:48 -0400
+Message-ID: <CAE-0n53J=dADDTrydVuNZzw38dW_-+Baf8cfn0Q6DSVX_6cLNg@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH v2 5/7] arm64: dts: qcom: sc7280: Update gpu
+ register list
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Taniya Das <quic_tdas@quicinc.com>, quic_rjendra@quicinc.com
+Cc:     devicetree@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/07/22 05:30, Ankit Jain wrote:
-> 
-> 
-> > On 18-Jul-2022, at 6:31 PM, Juri Lelli <juri.lelli@redhat.com> wrote:
-> > 
-> > ⚠ External Email
-> > 
-> > On 18/07/22 07:46, Ankit Jain wrote:
-> > 
-> > ...
-> > 
-> >> Hi Juri,
-> >> 
-> >> Actually, while testing I already included below commits in 4.19-rt :
-> >> 
-> >> feff2e65efd8d84cf831668e182b2ce73c604bbb (sched/deadline: Unthrottle PI boosted threads while
-> >> enqueuing)
-> >> 46fcc4b00c3cca8adb9b7c9afdd499f64e427135 (sched/deadline: Fix stale throttling on de-/boosted tasks)
-> >> 2279f540ea7d05f22d2f0c4224319330228586bc (sched/deadline: Fix priority inheritance with multiple)
-> >> 0e3872499de1a1230cef5221607d71aa09264bd5 (kernel/sched: Remove dl_boosted flag comment)
-> > 
-> > Interesting.
-> > 
-> > Is the workload you are using to test this easily reproducible? I'd like
-> > to try that out on my end to check if I see the same (of course the
-> > issue I was working on goes away with my fix :).
-> > 
-> > Best,
-> > Juri
-> > 
-> 
-> Hi Juri,
-> 
-> The test with which i am able to hit the issue is as follows:
-> 	• Schedule SCHED_FIFO/55 (sched_priority = 55) tasks running infinite loop on all isolated cores.
-> 	• spwan 30-40 docker containers in loop (docker load , docker run)
-> 	• Immediately after that schedule SCHED_FIFO/55 (sched_priority = 55) tasks running infinite loop on all isolated cores again.
-> 	• BUG_ON gets hit almost every time.
-> System config as follows:
-> 	• 4.19-rt kernel
-> 	• 40 cpu (0-1 housekeeping, 2-39 isol cpus)
-> 	• stalld-1.3.0 with the fixes from latest version (for task starvation avoidance), "tuned" with real-time profile 
+Quoting Akhil P Oommen (2022-07-18 23:37:16)
+> On 7/19/2022 11:19 AM, Stephen Boyd wrote:
+> > Quoting Akhil P Oommen (2022-07-18 21:07:05)
+> >> On 7/14/2022 11:10 AM, Akhil P Oommen wrote:
+> >>> IIUC, qcom gdsc driver doesn't ensure hardware is collapsed since they
+> >>> are vote-able switches. Ideally, we should ensure that the hw has
+> >>> collapsed for gpu recovery because there could be transient votes from
+> >>> other subsystems like hypervisor using their vote register.
+> >>>
+> >>> I am not sure how complex the plumbing to gpucc driver would be to allow
+> >>> gpu driver to check hw status. OTOH, with this patch, gpu driver does a
+> >>> read operation on a gpucc register which is in always-on domain. That
+> >>> means we don't need to vote any resource to access this register.
 
-Thanks for the details. Yeah, I should be able to set this up on my end.
-It might just take a bit though, as I have some pto planned coming up.
-But, I'll get to it eventually.
+Reading between the lines here, you're saying that you have to read the
+gdsc register to make sure that the gdsc is in some state? Can you
+clarify exactly what you're doing? And how do you know that something
+else in the kernel can't cause the register to change after it is read?
+It certainly seems like we can't be certain because there is voting
+involved.
 
-Thanks again,
-Juri
+> >>>
+> >>> Stephen/Rajendra/Taniya, any suggestion?
+> > Why can't you assert a gpu reset signal with the reset APIs? This series
+> > seems to jump through a bunch of hoops to get the gdsc and power domain
+> > to "reset" when I don't know why any of that is necessary. Can't we
+> > simply assert a reset to the hardware after recovery completes so the
+> > device is back into a good known POR (power on reset) state?
+> That is because there is no register interface to reset GPU CX domain.
+> The recommended sequence from HW design folks is to collapse both cx and
+> gx gdsc to properly reset gpu/gmu.
+>
 
+Ok. One knee jerk reaction is to treat the gdsc as a reset then and
+possibly mux that request along with any power domain on/off so that if
+the reset is requested and the power domain is off nothing happens.
+Otherwise if the power domain is on then it manually sequences and
+controls the two gdscs so that the GPU is reset and then restores the
+enable state of the power domain.

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705F9579EF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E6D5799D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242945AbiGSNIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S238387AbiGSMHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243138AbiGSNHn (ORCPT
+        with ESMTP id S238374AbiGSMGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:07:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2704DFA0;
-        Tue, 19 Jul 2022 05:27:37 -0700 (PDT)
+        Tue, 19 Jul 2022 08:06:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFCF4E608;
+        Tue, 19 Jul 2022 05:01:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EE316020F;
-        Tue, 19 Jul 2022 12:27:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC93C341C6;
-        Tue, 19 Jul 2022 12:27:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A04CB81B2C;
+        Tue, 19 Jul 2022 12:01:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02B5C341C6;
+        Tue, 19 Jul 2022 12:01:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233656;
-        bh=2RIulnpy12qPfd61qCeePjC6mrMyrKz5F9JHzlryf7A=;
+        s=korg; t=1658232064;
+        bh=/yrqfbRHLXgoUsJxyTlMWBqWwlFgWKUfcpZ8NX38z74=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vyV/66snmrrRMqXOWXeksyywKZQBrReRayBhQaOIyxKZmeTtAtuo5Z0r8RNkU5kE9
-         1p95piaIJRocDKtQ28VD/2lgxhYV4lY8hGsw6HtnLT1Rie5fIRXfIO6vPcjdM8SFR/
-         bmXhsnpikEclOqD+du3+9SEdGpfhf/FRODYKC7mo=
+        b=elyxIlc4x5o7qBqXJmbW/2WOKW0QQh69eeIycVzRoJWh67OFTGUICXvVF1eSThXFz
+         aiIljCqAa1oVbo/JQbLVbCbj66o2HkuS1Fl5cI9VVnLgXEFeZOtNCXs0OM4BtoDhqO
+         vIZMYdvYE4vFn5zpY+3ULAr7mmyRayAmTIxh691c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 179/231] NFC: nxp-nci: dont print header length mismatch on i2c error
-Date:   Tue, 19 Jul 2022 13:54:24 +0200
-Message-Id: <20220719114729.260805577@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 4.19 48/48] can: m_can: m_can_tx_handler(): fix use after free of skb
+Date:   Tue, 19 Jul 2022 13:54:25 +0200
+Message-Id: <20220719114524.075476331@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-[ Upstream commit 9577fc5fdc8b07b891709af6453545db405e24ad ]
+commit 2e8e79c416aae1de224c0f1860f2e3350fa171f8 upstream.
 
-Don't print a misleading header length mismatch error if the i2c call
-returns an error. Instead just return the error code without any error
-message.
+can_put_echo_skb() will clone skb then free the skb. Move the
+can_put_echo_skb() for the m_can version 3.0.x directly before the
+start of the xmit in hardware, similar to the 3.1.x branch.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 80646733f11c ("can: m_can: update to support CAN FD features")
+Link: https://lore.kernel.org/all/20220317081305.739554-1-mkl@pengutronix.de
+Cc: stable@vger.kernel.org
+Reported-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+[sudip: adjust context]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nfc/nxp-nci/i2c.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/net/can/m_can/m_can.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/nfc/nxp-nci/i2c.c
-+++ b/drivers/nfc/nxp-nci/i2c.c
-@@ -122,7 +122,9 @@ static int nxp_nci_i2c_fw_read(struct nx
- 	skb_put_data(*skb, &header, NXP_NCI_FW_HDR_LEN);
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1438,8 +1438,6 @@ static netdev_tx_t m_can_start_xmit(stru
+ 					 M_CAN_FIFO_DATA(i / 4),
+ 					 *(u32 *)(cf->data + i));
  
- 	r = i2c_master_recv(client, skb_put(*skb, frame_len), frame_len);
--	if (r != frame_len) {
-+	if (r < 0) {
-+		goto fw_read_exit_free_skb;
-+	} else if (r != frame_len) {
- 		nfc_err(&client->dev,
- 			"Invalid frame length: %u (expected %zu)\n",
- 			r, frame_len);
-@@ -166,7 +168,9 @@ static int nxp_nci_i2c_nci_read(struct n
- 		return 0;
- 
- 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
--	if (r != header.plen) {
-+	if (r < 0) {
-+		goto nci_read_exit_free_skb;
-+	} else if (r != header.plen) {
- 		nfc_err(&client->dev,
- 			"Invalid frame payload length: %u (expected %u)\n",
- 			r, header.plen);
+-		can_put_echo_skb(skb, dev, 0);
+-
+ 		if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
+ 			cccr = m_can_read(priv, M_CAN_CCCR);
+ 			cccr &= ~(CCCR_CMR_MASK << CCCR_CMR_SHIFT);
+@@ -1456,6 +1454,9 @@ static netdev_tx_t m_can_start_xmit(stru
+ 			m_can_write(priv, M_CAN_CCCR, cccr);
+ 		}
+ 		m_can_write(priv, M_CAN_TXBTIE, 0x1);
++
++		can_put_echo_skb(skb, dev, 0);
++
+ 		m_can_write(priv, M_CAN_TXBAR, 0x1);
+ 		/* End of xmit function for version 3.0.x */
+ 	} else {
 
 

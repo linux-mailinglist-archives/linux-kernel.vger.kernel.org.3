@@ -2,180 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EAB57AA02
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5FD57A9FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240388AbiGSWqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S240338AbiGSWqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbiGSWqP (ORCPT
+        with ESMTP id S232110AbiGSWp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:46:15 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5038F4E87D
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:46:14 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id n7so13031749ioo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:46:14 -0700 (PDT)
+        Tue, 19 Jul 2022 18:45:57 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730084D4D6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:45:56 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id t3so21607241edd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:45:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=lnuskSEx1rWRFyExO7VDAIyPqC7rs15nNdWPt5ojSJo=;
-        b=MjL9o3vEOb0cC/AOC29+FJHaYEDdp3YF4uPnUKdH2MSDVyDrF7ODr3Ke0Wcy4ilYzf
-         BzCFwxsZ/XHiEHTOzXcQJv3vCytelIwqMbSVQy/FRLtlMuURP6ov3NWCIw8RZPLahcDd
-         C48SeV+unpKZ2XPeGrdmEDCsa6LF6ZASoymNm+TqHMtWQYybbebrFT/9bV5YYeMDLZ4x
-         oaPJRoZ/aZAKBfaZ9E6cpvtaiAhFYSDi9LC7qcvIPN12naTuSVOg+/o2fA2e6EiO7Fa0
-         xHvsR1NLSDdqKv1q7gdh+mZLQNyp7KE54xFUiOdTzB8i+cvo8dMLbT1d0lXkvAObz4G2
-         IAjg==
+        bh=fv+GNXlN9UxF9XBdT2UlE6jI8/2x/dbHCuQ1tk+iXUs=;
+        b=ZmE6QeSILOLriTuD+A60orcSHG5MM5lDq068GNLBGBf0gp2j+kgRdIcg4p5EzEAsg0
+         NJc57UwpNJmUS20kWorgRWJzqgWdOVzT47jIrMIccxokQbbxJNZv0Dl0Xjh8tkuEieKa
+         9fG5elw4bKwSsGETu04l7LiBnxio5sYPavxD4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lnuskSEx1rWRFyExO7VDAIyPqC7rs15nNdWPt5ojSJo=;
-        b=40rUBBxmN7g2JBYANA/Jn3Ok9gRwToBMNbJxnWK5WI+U+IeZaGtGMir2qg3SjIYhkw
-         RXffWuXt0eXWAHMniwpEflByYmLslCgc/1rAcgm1DpOejvlMv8JPJS56OWr4CGb5SW7m
-         Wfx55+ueYg/kXMjM5z+oXs8oUmiLO3gfZcjY+c9FPnTIgIDnj4DQcS4+J0pgWKUTK4Qx
-         f/1ROJ7LCNR0gBjQ0w+vAxKd2dg484YFqQz6Onz9RonlnN/Jm8GP9nEANu1ls5GmOWLd
-         dVKstiReRkRDT1HTNP0AgQthghHyNjgpiTSLGKJm8T6qWreDYVTOpMhg6e653EPfCB2h
-         QgiA==
-X-Gm-Message-State: AJIora/tElblCs1X4tK/4t8x+JhjLIvuOtmmkaMVnXBRq0uX7Dns7o3J
-        7b4pfAzs+Bba7QKZIkxF7GCPcQfTar1tUV02lZE6dQ==
-X-Google-Smtp-Source: AGRyM1scKsvkgjvOBcySMD8ANT00O0TRABCY2NJ0UUBywdxmH7xhFhuqq83FJ/2EITJFvKlSUEurf8W9R+8SpfjeE5I=
-X-Received: by 2002:a05:6602:1644:b0:678:8ba4:8df6 with SMTP id
- y4-20020a056602164400b006788ba48df6mr16243773iow.138.1658270773545; Tue, 19
- Jul 2022 15:46:13 -0700 (PDT)
+        bh=fv+GNXlN9UxF9XBdT2UlE6jI8/2x/dbHCuQ1tk+iXUs=;
+        b=XGZnuIkE3YsmSHWfyufUzeC+JyzFUEX3vnFnhJ83HytlBDcryi1DThHOaBp0YRKOmp
+         ux8PxexI8zsXRwPnM81AaMLg01DIMxizmnn3kyPixD9U0/Uf+kVxDReK9Bx7I5B6X5IC
+         5jO0X0YTDAWn1yYIusFf1AZ0OCiRU8MZII1z4Jsqypb6ehX73ZjKyqto7ZvJTtZ0hX1d
+         rykR+CDcnXnGzj+z+o0lnP7Fg1lF8iwou89RXw4TXWBeEHPj7FP7l2bReazP7RBudaJz
+         8MeSjDpShRcCslLfWW3zsc0DcjxGv1Wv11FW+FRiKSONNh5YzHTHpn/BegzPNxIjmGkX
+         T8YQ==
+X-Gm-Message-State: AJIora9Xo5Q2qRmhn56vc3FEdyPpE3YQ64OMPRKLIb65aOCwunu+wi8Z
+        M24Wq3UYDUJuC+5lUNQLnJ4RsF2u/TBlWLDLqjg=
+X-Google-Smtp-Source: AGRyM1sXN6QnJXreRfddX4SZ7vNO4gc/sYMQ0SnoiaQfNwH3VgijLfJTDefOOiRHG4T0wdCSIzo4OQ==
+X-Received: by 2002:a05:6402:48c:b0:43a:8bc7:f440 with SMTP id k12-20020a056402048c00b0043a8bc7f440mr46855597edv.8.1658270754856;
+        Tue, 19 Jul 2022 15:45:54 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id ah8-20020a1709069ac800b00722d5b26ecesm7111258ejc.205.2022.07.19.15.45.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 15:45:53 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id z13so4119481wro.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:45:53 -0700 (PDT)
+X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
+ c18-20020adffb12000000b0020c79b2a200mr28616133wrr.617.1658270752900; Tue, 19
+ Jul 2022 15:45:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220719195628.3415852-1-axelrasmussen@google.com>
- <20220719195628.3415852-3-axelrasmussen@google.com> <D43534E1-7982-45EE-8B16-2C4687F49E77@vmware.com>
-In-Reply-To: <D43534E1-7982-45EE-8B16-2C4687F49E77@vmware.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 19 Jul 2022 15:45:37 -0700
-Message-ID: <CAJHvVcigVqAibm0JODkiR=Pcd3E14xp0NB6acw2q2enwnrnLSA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20220719203857.1488831-1-nfraprado@collabora.com> <20220719203857.1488831-4-nfraprado@collabora.com>
+In-Reply-To: <20220719203857.1488831-4-nfraprado@collabora.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 19 Jul 2022 15:45:39 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X0End8u3nNNXSMVhuJo0KWmJYRNg3yeC9yQ+5bLKTmYg@mail.gmail.com>
+Message-ID: <CAD=FV=X0End8u3nNNXSMVhuJo0KWmJYRNg3yeC9yQ+5bLKTmYg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] drm/panel-edp: Fix variable typo when saving hpd
+ absent delay from DT
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 3:32 PM Nadav Amit <namit@vmware.com> wrote:
->
-> On Jul 19, 2022, at 12:56 PM, Axel Rasmussen <axelrasmussen@google.com> w=
-rote:
->
-> > Historically, it has been shown that intercepting kernel faults with
-> > userfaultfd (thereby forcing the kernel to wait for an arbitrary amount
-> > of time) can be exploited, or at least can make some kinds of exploits
-> > easier. So, in 37cd0575b8 "userfaultfd: add UFFD_USER_MODE_ONLY" we
-> > changed things so, in order for kernel faults to be handled by
-> > userfaultfd, either the process needs CAP_SYS_PTRACE, or this sysctl
-> > must be configured so that any unprivileged user can do it.
-> >
-> > In a typical implementation of a hypervisor with live migration (take
-> > QEMU/KVM as one such example), we do indeed need to be able to handle
-> > kernel faults. But, both options above are less than ideal:
-> >
-> > - Toggling the sysctl increases attack surface by allowing any
-> >  unprivileged user to do it.
-> >
-> > - Granting the live migration process CAP_SYS_PTRACE gives it this
-> >  ability, but *also* the ability to "observe and control the
-> >  execution of another process [...], and examine and change [its]
-> >  memory and registers" (from ptrace(2)). This isn't something we need
-> >  or want to be able to do, so granting this permission violates the
-> >  "principle of least privilege".
-> >
-> > This is all a long winded way to say: we want a more fine-grained way t=
-o
-> > grant access to userfaultfd, without granting other additional
-> > permissions at the same time.
-> >
-> > To achieve this, add a /dev/userfaultfd misc device. This device
-> > provides an alternative to the userfaultfd(2) syscall for the creation
-> > of new userfaultfds. The idea is, any userfaultfds created this way wil=
-l
-> > be able to handle kernel faults, without the caller having any special
-> > capabilities. Access to this mechanism is instead restricted using e.g.
-> > standard filesystem permissions.
->
-> Are there any other =E2=80=9Cdevices" that when opened by different proce=
-sses
-> provide such isolated interfaces in each process? I.e., devices that if y=
-ou
-> read from them in different processes you get completely unrelated data?
-> (putting aside namespaces).
->
-> It all sounds so wrong to me, that I am going to try again to pushback
-> (sorry).
+Hi,
 
-No need to be sorry. :)
-
+On Tue, Jul 19, 2022 at 1:39 PM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
 >
-> From a semantic point of view - userfaultfd is process specific. It is
-> therefore similar to /proc/[pid]/mem (or /proc/[pid]/pagemap and so on).
+> The value read from the "hpd-absent-delay-ms" property in DT was being
+> saved to the wrong variable, overriding the hpd_reliable delay. Fix the
+> typo.
 >
-> So why can=E2=80=99t we put it there? I saw that you argued against it in=
- your
-> cover-letter, and I think that your argument is you would need
-> CAP_SYS_PTRACE if you want to access userfaultfd of other processes. But
-> this is EXACTLY the way opening /proc/[pid]/mem is performed - see
-> proc_mem_open().
+> Fixes: 5540cf8f3e8d ("drm/panel-edp: Implement generic "edp-panel"s probe=
+d by EDID")
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
 >
-> So instead of having some strange device that behaves differently in the
-> context of each process, you can just have /proc/[pid]/userfaultfd and th=
-en
-> use mm_access() to check if you have permissions to access userfaultfd (j=
-ust
-> like proc_mem_open() does). This would be more intuitive for users as it =
-is
-> similar to other /proc/[pid]/X, and would cover both local and remote
-> use-cases.
-
-Ah, so actually I find this argument much more compelling.
-
-I don't find it persuasive that we should put it in /proc for the
-purpose of supporting cross-process memory manipulation, because I
-think the syscall works better for that, and in that case we don't
-mind depending on CAP_SYS_PTRACE.
-
-But, what you've argued here I do find persuasive. :) You are right, I
-can't think of any other example of a device node in /dev that works
-like this, where it is completely independent on a per-process basis.
-The closest I could come up with was /dev/zero or /dev/null or
-similar. You won't affect any other process by touching these, but I
-don't think these are good examples.
-
-I'll send a v5 which does this. I do worry that cross-process support
-is probably complex to get right, so I might leave that out and only
-allow a process to open its own device for now.
-
+>  drivers/gpu/drm/panel/panel-edp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
+> diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/pa=
+nel-edp.c
+> index 152e00eb846f..b3536d8600f4 100644
+> --- a/drivers/gpu/drm/panel/panel-edp.c
+> +++ b/drivers/gpu/drm/panel/panel-edp.c
+> @@ -738,7 +738,7 @@ static int generic_edp_panel_probe(struct device *dev=
+, struct panel_edp *panel)
+>         of_property_read_u32(dev->of_node, "hpd-reliable-delay-ms", &reli=
+able_ms);
+>         desc->delay.hpd_reliable =3D reliable_ms;
+>         of_property_read_u32(dev->of_node, "hpd-absent-delay-ms", &absent=
+_ms);
+> -       desc->delay.hpd_reliable =3D absent_ms;
+> +       desc->delay.hpd_absent =3D absent_ms;
+
+Well that's embarrassing. In the end I never used any of these
+properties for anything shipping since HPD was always hooked up on
+later boards and the only board that needed "hpd_reliable" never ended
+up switching to the generic "edp-panel".
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+I'll apply this right away to drm-misc-fixes.

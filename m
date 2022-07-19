@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5F2579D22
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CB3579EDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241561AbiGSMrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
+        id S236360AbiGSNHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239414AbiGSMpW (ORCPT
+        with ESMTP id S243126AbiGSNGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:45:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC3F558FF;
-        Tue, 19 Jul 2022 05:18:09 -0700 (PDT)
+        Tue, 19 Jul 2022 09:06:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DF1106C7F;
+        Tue, 19 Jul 2022 05:27:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEF78B81B1C;
-        Tue, 19 Jul 2022 12:17:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1547C341C6;
-        Tue, 19 Jul 2022 12:17:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D139861961;
+        Tue, 19 Jul 2022 12:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B033CC341C6;
+        Tue, 19 Jul 2022 12:27:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233059;
-        bh=JG031+SIFPqD7zsmkiMMSaalhVUkd4njI1+DibBd8D0=;
+        s=korg; t=1658233633;
+        bh=rWWBt7+PCOVJsLerpEIQnrCp9fpC9AdK50wZj8RXc8U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TaJ2u9yEUbNg1SQTRAg2vjtu/kfKecrpVZt4Sn5eKbZMJ/5OKQg77y2tQ8h1VcRd5
-         QX3QTtQPdsUflbKaIEHDbfwKihcqeBTny6J/QI4v4Yxd8+Dih1ki4YyN39Lmg0pzv1
-         Invhp7stNSWXO7qH0TYQI+hs++ohl9UgXPxL2/B4=
+        b=UlDGEaakP2TGLPYbazZ0sOBqxzyzky5d6ad9Qa2SaPMikntt3NFSuag8qGbumSkEP
+         1QOfXs2c0DLh4zeUGx3t6zVjP95OHG+JOiJ6oTnJIthYfRH0SsO2F/qaR6nm3w9WhW
+         GXKagnBn32viTzSXd2EV5RpT085Wxvazu5uQpOwA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 142/167] ASoC: wm5110: Fix DRE control
+Subject: [PATCH 5.18 189/231] ASoC: rt7*-sdw: harden jack_detect_handler
 Date:   Tue, 19 Jul 2022 13:54:34 +0200
-Message-Id: <20220719114710.231987100@linuxfoundation.org>
+Message-Id: <20220719114730.083544650@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit 0bc0ae9a5938d512fd5d44f11c9c04892dcf4961 ]
+[ Upstream commit 0484271ab0ce50649329fa9dc23c50853c5b26a4 ]
 
-The DRE controls on wm5110 should return a value of 1 if the DRE state
-is actually changed, update to fix this.
+Realtek headset codec drivers typically check if the card is
+instantiated before proceeding with the jack detection.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220621102041.1713504-2-ckeepax@opensource.cirrus.com
+The rt700, rt711 and rt711-sdca are however missing a check on the
+card pointer, which can lead to NULL dereferences encountered in
+driver bind/unbind tests.
+
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Link: https://lore.kernel.org/r/20220606203752.144159-6-pierre-louis.bossart@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wm5110.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ sound/soc/codecs/rt700.c      | 2 +-
+ sound/soc/codecs/rt711-sdca.c | 2 +-
+ sound/soc/codecs/rt711.c      | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/wm5110.c b/sound/soc/codecs/wm5110.c
-index 5c2d45d05c97..7c6e01720d65 100644
---- a/sound/soc/codecs/wm5110.c
-+++ b/sound/soc/codecs/wm5110.c
-@@ -413,6 +413,7 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
- 	unsigned int rnew = (!!ucontrol->value.integer.value[1]) << mc->rshift;
- 	unsigned int lold, rold;
- 	unsigned int lena, rena;
-+	bool change = false;
- 	int ret;
+diff --git a/sound/soc/codecs/rt700.c b/sound/soc/codecs/rt700.c
+index 360d61a36c35..b16fbde02986 100644
+--- a/sound/soc/codecs/rt700.c
++++ b/sound/soc/codecs/rt700.c
+@@ -162,7 +162,7 @@ static void rt700_jack_detect_handler(struct work_struct *work)
+ 	if (!rt700->hs_jack)
+ 		return;
  
- 	snd_soc_dapm_mutex_lock(dapm);
-@@ -440,8 +441,8 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
- 		goto err;
- 	}
+-	if (!rt700->component->card->instantiated)
++	if (!rt700->component->card || !rt700->component->card->instantiated)
+ 		return;
  
--	ret = regmap_update_bits(arizona->regmap, ARIZONA_DRE_ENABLE,
--				 mask, lnew | rnew);
-+	ret = regmap_update_bits_check(arizona->regmap, ARIZONA_DRE_ENABLE,
-+				       mask, lnew | rnew, &change);
- 	if (ret) {
- 		dev_err(arizona->dev, "Failed to set DRE: %d\n", ret);
- 		goto err;
-@@ -454,6 +455,9 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
- 	if (!rnew && rold)
- 		wm5110_clear_pga_volume(arizona, mc->rshift);
+ 	reg = RT700_VERB_GET_PIN_SENSE | RT700_HP_OUT;
+diff --git a/sound/soc/codecs/rt711-sdca.c b/sound/soc/codecs/rt711-sdca.c
+index 8a0b74d3fa9e..83e4c4e4d1e2 100644
+--- a/sound/soc/codecs/rt711-sdca.c
++++ b/sound/soc/codecs/rt711-sdca.c
+@@ -294,7 +294,7 @@ static void rt711_sdca_jack_detect_handler(struct work_struct *work)
+ 	if (!rt711->hs_jack)
+ 		return;
  
-+	if (change)
-+		ret = 1;
-+
- err:
- 	snd_soc_dapm_mutex_unlock(dapm);
+-	if (!rt711->component->card->instantiated)
++	if (!rt711->component->card || !rt711->component->card->instantiated)
+ 		return;
  
+ 	/* SDW_SCP_SDCA_INT_SDCA_0 is used for jack detection */
+diff --git a/sound/soc/codecs/rt711.c b/sound/soc/codecs/rt711.c
+index db70d8073c0b..18a0de77c477 100644
+--- a/sound/soc/codecs/rt711.c
++++ b/sound/soc/codecs/rt711.c
+@@ -242,7 +242,7 @@ static void rt711_jack_detect_handler(struct work_struct *work)
+ 	if (!rt711->hs_jack)
+ 		return;
+ 
+-	if (!rt711->component->card->instantiated)
++	if (!rt711->component->card || !rt711->component->card->instantiated)
+ 		return;
+ 
+ 	if (pm_runtime_status_suspended(rt711->slave->dev.parent)) {
 -- 
 2.35.1
 

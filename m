@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6402E57A1F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1B957A201
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239649AbiGSOko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S239520AbiGSOlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239405AbiGSOkE (ORCPT
+        with ESMTP id S239521AbiGSOkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:40:04 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499CA54AE7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:36:03 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id v185so11920941ioe.11
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:36:03 -0700 (PDT)
+        Tue, 19 Jul 2022 10:40:24 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C10F77;
+        Tue, 19 Jul 2022 07:36:35 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id z12so21912214wrq.7;
+        Tue, 19 Jul 2022 07:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wk2czZHfKCNnzO8KQpU2wlKEqgQnnAKT3z+bj9HU5pA=;
-        b=NcQSvw7Gb7qySkIMjDLseOccJuRspSwEBfpM8Wp2nKjABwffQqHD7FWib+EWERoRv3
-         Lcx4qq3k5nXxBqjeiIfEFNQsVd1k4Db1Q0nl8LkiGZHEb7L+AFAQTP4ruD2wMYWXg+lT
-         KvG48Eeu1l/QQY2ubIns1KycpBaH72PmaViZxfK7YH4QffoYuOrZP8M8e+alTli04FnT
-         8lpmNgWGihFwumW4pgATYsvW9thPOG8MkDiyuRWjcfeGJ6zUQy5s7kKKhoNooZYSgqu1
-         WnX+/f/dbNWTHDk2rGOkEYgbqDN/5leGEtE2BapEBETLY7C4gZG7EvXqmwZRaTM7l3lV
-         tylQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=+my388e5tPnWcJpGm6Gte0J2XmbtF7HUvaYs2w8CeFg=;
+        b=cKaVd9RppTLMlbd0s1GsZXbV1EhR75l9lVjUmohRvEc8oEAhbZJip9LcJMTJKk5LaG
+         TMBTna2MOBiFg4Oy+BvEAfgmXZ3rGTjJYTwenyzoA29bu7dOW44BRScqxEzktDynVjud
+         DQN0N9i70wT2VYFG0eEbbNZqxWOlW/sMyKzmpTTUDCbNiu3jxQtsZq+0og5IJ7fJDeIG
+         kGKndH1pGdJyKgR+1+aE4o3S7gtQmhxkUUb9LSuTn0ELrpGmRuQvqJ1vD/njx5uiJtj2
+         JYYnoZksjSN7CXNPD02IxG4bb0/MtCHedS62C2m4Oi8t99TA/rU43ukag0x7ypxObE9R
+         KviQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wk2czZHfKCNnzO8KQpU2wlKEqgQnnAKT3z+bj9HU5pA=;
-        b=XaO+nthf7efR6CtP+XOoX7mcST8a5+HYQQ9NgccVYjOK5lGv+yQQ0YBURl8rjkbO/y
-         YRkx2aCZ9+iFCnrsGazhoelnbK8WCNG5CpenMR5aWjYo00w/OIeWhetTXnlGUM+Txk81
-         Lj3w4hK61VgHcFPvqVMBsThOn3l+i5OrzOPjumc6drLaRdaseVAsWCszALudR0Bm/cXC
-         YN6W4NrJJralb8KF1eA7+f7zIUe6Ffw7H8MQDl5Cpki2oRPF2qHp5JgijWPzr6NZ4Bjy
-         qDf7OL8rS63q3GutAmWJ7Rd/zCostY5+kqV57TDhf67gMSW0jXu3pgzvZNp9VklU7EUR
-         sxEw==
-X-Gm-Message-State: AJIora+IYXe2YZap3RTEqB1dct3MqgLPDMqfNg+mt79XjxU3fWvSeOS0
-        W/2REJASaZp8ifrqFyPOVkBxbQ==
-X-Google-Smtp-Source: AGRyM1umkGAm0Fy8Nvn7mJsnFAGVW42OOmvuy4PoGRqz0pD7C9alR/0i4ymidJaA2pOYCgvnVhpWWA==
-X-Received: by 2002:a05:6638:3043:b0:335:ce04:2053 with SMTP id u3-20020a056638304300b00335ce042053mr17986644jak.294.1658241362460;
-        Tue, 19 Jul 2022 07:36:02 -0700 (PDT)
-Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id t16-20020a056602141000b00675a83bc1e3sm7286559iov.13.2022.07.19.07.36.01
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=+my388e5tPnWcJpGm6Gte0J2XmbtF7HUvaYs2w8CeFg=;
+        b=WfJnAVHcILJsIzlqcBsKfJCBJ2Q7vCoosttS6fduVzEzwJx82ryAuVw/Fxr7xP8aV/
+         OlkuUC/vw1s0GdzpPeD0yvQCdYYPKFQqEYHWQFaJVmAe0rK7UVNM/OAyTP+/GWENvBzA
+         6WJIr7DCJERXl2tQyehw1QINbWXkfl2MqBKHlsUHMjuX2gOgPhYHJ5b7dFtU6LJSiK9l
+         RGEv9OcMLBr8LxQh4ZV1WPz8w7PO/3H+EBUHTOQZWXJE1y9bhpfx7MhIta/AERxq6Kd4
+         82gnBXVWiXNu7dZ4a5uTJFYhsCHhUJ+1gA58FW9nF6LFHWlS9U6Ed6vnwVztFzSBDvqA
+         wsrQ==
+X-Gm-Message-State: AJIora9rwiF8jNGPGijHWxLojFc98qdui5ow0roStWhN/jQJUcJZV2j/
+        xzBMmdbQMrt+p3KJFr1my8g=
+X-Google-Smtp-Source: AGRyM1unVBO5JXk+ZwBRLtEzVYrlfSnpQoY6dSsXzaaJsB7F06eubwEBLfjjLCpNP289vy//wvgL1A==
+X-Received: by 2002:a5d:6481:0:b0:21d:9c1b:ad8a with SMTP id o1-20020a5d6481000000b0021d9c1bad8amr27362490wri.67.1658241393863;
+        Tue, 19 Jul 2022 07:36:33 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id s6-20020adfecc6000000b0021d74906683sm13951078wro.28.2022.07.19.07.36.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 07:36:02 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 5/5] net: ipa: fix an outdated comment
-Date:   Tue, 19 Jul 2022 09:35:53 -0500
-Message-Id: <20220719143553.280908-6-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220719143553.280908-1-elder@linaro.org>
-References: <20220719143553.280908-1-elder@linaro.org>
+        Tue, 19 Jul 2022 07:36:33 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 15:36:31 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: build failure of next-20220719 due to 'missing MODULE_LICENSE() in
+ lib/crypto/libsha1.o'
+Message-ID: <YtbBb3gCsKfpsaXP@debian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 8797972afff3d ("net: ipa: remove command info pool"),
-we don't allocate "command info" entries for command channel
-transactions.  Fix a comment that seems to suggest we still do.
-(Even before that commit, the comment was out of place.)
+Hi All,
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/gsi_trans.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not sure if it has been reported, builds of arm milbeaut_m10v_defconfig
+have failed to build next-20220719 with the error:
 
-diff --git a/drivers/net/ipa/gsi_trans.c b/drivers/net/ipa/gsi_trans.c
-index b298ca7968907..76c440cee2e60 100644
---- a/drivers/net/ipa/gsi_trans.c
-+++ b/drivers/net/ipa/gsi_trans.c
-@@ -362,7 +362,7 @@ struct gsi_trans *gsi_channel_trans_alloc(struct gsi *gsi, u32 channel_id,
- 	trans->rsvd_count = tre_count;
- 	init_completion(&trans->completion);
- 
--	/* Allocate the scatterlist and (if requested) info entries. */
-+	/* Allocate the scatterlist */
- 	trans->sgl = gsi_trans_pool_alloc(&trans_info->sg_pool, tre_count);
- 	sg_init_marker(trans->sgl, tre_count);
- 
--- 
-2.34.1
+ERROR: modpost: missing MODULE_LICENSE() in lib/crypto/libsha1.o
 
+caused by ec8f7f4821d5 ("crypto: lib - make the sha1 library optional").
+
+
+--
+Regards
+Sudip

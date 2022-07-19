@@ -2,105 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0968F57A29A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1849157A29F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238128AbiGSPFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
+        id S231687AbiGSPHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239043AbiGSPFT (ORCPT
+        with ESMTP id S229818AbiGSPHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:05:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 953F133E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:05:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC52813D5;
-        Tue, 19 Jul 2022 08:05:18 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3948A3F70D;
-        Tue, 19 Jul 2022 08:05:16 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 16:05:13 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        valentina.fernandezalanis@microchip.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v6 09/21] arch_topology: Add support to parse and detect
- cache attributes
-Message-ID: <20220719150513.a525arh663qlhkob@bogus>
-References: <20220704101605.1318280-1-sudeep.holla@arm.com>
- <20220704101605.1318280-10-sudeep.holla@arm.com>
- <CAMuHMdUBZ791fxCPkKQ6HCwLE4GJB2S35QC=SQ+X8w5Q4C_70g@mail.gmail.com>
- <73f9d00c-b64c-7c70-c49f-99d3894fad24@conchuod.ie>
+        Tue, 19 Jul 2022 11:07:07 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9C450055;
+        Tue, 19 Jul 2022 08:07:05 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 26JF6laN011624;
+        Wed, 20 Jul 2022 00:06:48 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 26JF6laN011624
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1658243208;
+        bh=47Thq0tgoItC66wL0kCGaGxa+Gw0qIdlUWgCm8wFWDs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=2jSEeW9OQvykyuUbv4OfGKJFsNdkZKz5+kgXu1FfVdhvwlagUXrGu+YA0GYVIgkS2
+         /HFjy3KXMqZImJ2hK6SWvEslUGdxrmDgwS8vjyC7HtCLq4Bx4vQh1yXKcKDLxZgzIN
+         ZmoZVomebxCZwToX9mZDzO+h9sBO6OSr3ZoMY6J0kOxjppWHfdo3M2vVYn+XKeSvP7
+         nQyhz85GiSgI/k0Ev5H2Ot/1ylyIjn+StzeENKuigH0DVkykLNgYjBU6KENML51OBy
+         8ApSQtjA0PWpxkwa3kNa1h+S5Lu3XX3zTmU9R84hnE4iZayGfLWuIlv70qLd5Zmq3s
+         w03wn5qmlfBSQ==
+X-Nifty-SrcIP: [209.85.221.47]
+Received: by mail-wr1-f47.google.com with SMTP id bu1so22024199wrb.9;
+        Tue, 19 Jul 2022 08:06:48 -0700 (PDT)
+X-Gm-Message-State: AJIora9TiICojDdCtnNN5DpMs1afzrznJLXJajQPQfguo9f66L4ypfqR
+        EfrFXqsSuhsQiojhX0qeQ+ygzqNUWI+YmVfcVPM=
+X-Google-Smtp-Source: AGRyM1vjG/h+aEXj/cQ+xfWWMuq+d9ijKdhDJytxZETjtAPWYNlpmIypTlQXi0YCwTUeNbUteC+Extr7GsGkEtVrJUQ=
+X-Received: by 2002:a5d:4e08:0:b0:21d:a689:7dd1 with SMTP id
+ p8-20020a5d4e08000000b0021da6897dd1mr27148089wrt.477.1658243206520; Tue, 19
+ Jul 2022 08:06:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <73f9d00c-b64c-7c70-c49f-99d3894fad24@conchuod.ie>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <a7af58feaa6ae6d3b0c8c55972a470cec62341e5.1657693952.git.guillaume.tucker@collabora.com>
+ <f35a71d6-bd96-7aa9-c143-39ae88bc85d5@linuxfoundation.org> <8fc9d169-78ff-0fe4-67c0-784097861f12@collabora.com>
+In-Reply-To: <8fc9d169-78ff-0fe4-67c0-784097861f12@collabora.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 20 Jul 2022 00:06:05 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ4iMBwu4bOmmOrMudNH49ruz-7AK_H3-ceTixd=G+brQ@mail.gmail.com>
+Message-ID: <CAK7LNAQ4iMBwu4bOmmOrMudNH49ruz-7AK_H3-ceTixd=G+brQ@mail.gmail.com>
+Subject: Re: [PATCH] Makefile: replace headers_install with headers for kselftest
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Tim Bird <Tim.Bird@sony.com>, kernel@collabora.com,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:37:22PM +0100, Conor Dooley wrote:
-> On 19/07/2022 15:22, Geert Uytterhoeven wrote:
-> > Hi Sudeep,
-> > 
-> 
-> Hey Geert,
-> 
-[...]
-
-> > 
-> > This is triggered
-> > 
-> >      Early cacheinfo failed, ret = -12
-> > 
-> > on all my RV64 platforms (K210, PolarFire, StarLight).
-> 
-> This should be fixed by Sudeeps most recent patchset, at least
-> it was when I tested it!
-> https://lore.kernel.org/all/20220713133344.1201247-1-sudeep.holla@arm.com/
+On Tue, Jul 19, 2022 at 9:37 PM Guillaume Tucker
+<guillaume.tucker@collabora.com> wrote:
 >
+> On 14/07/2022 22:45, Shuah Khan wrote:
+> > On 7/13/22 12:33 AM, Guillaume Tucker wrote:
+> >> Replace headers_install with headers as kselftest uses the header
+> >> files from within the kernel tree rather than from a system-wide
+> >> installation.
+> >>
+> >> We can still run this directly:
+> >>
+> >>    $ make O=build kselftest-all
+> >>
+> >> and when building from the selftests directory:
+> >>
+> >>    $ make O=build headers
+> >>    $ make O=build -C tools/testing/selftests all
+> >>
+> >> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> >> Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+> >> ---
+> >>   Makefile | 4 ++--
+> >>   1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/Makefile b/Makefile
+> >> index fb2f3bb53a6b..5c934d16664c 100644
+> >> --- a/Makefile
+> >> +++ b/Makefile
+> >> @@ -1347,10 +1347,10 @@ tools/%: FORCE
+> >>   # Kernel selftest
+> >>     PHONY += kselftest
+> >> -kselftest: headers_install
+> >> +kselftest: headers
+> >>       $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> >>   -kselftest-%: headers_install FORCE
+> >> +kselftest-%: headers FORCE
+> >>       $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
+> >>     PHONY += kselftest-merge
+> >>
+> >
+> > Thank you for taking care of this. This will go through kbuild?
+>
+> You're welcome.
+>
+> Masahiro-san,
+>
+> A you OK with applying this in the kbuild tree ahead of the
+> upcoming merge window?
 
-Conor you beat me in the response speed :).
 
-> > -12 = -ENOMEM.
-> > 
-> > The boot continues regardless, and the K210 even has enough spare
-> > RAM after boot to run "ls", unlike two weeks ago ;-)
+No.
+
+This is a fix-up patch on top of the previous one [1],
+which  was applied to the kselftest tree.
+
+This cannot apply to the kbuild tree.
+
+[1]: https://lore.kernel.org/linux-kbuild/168ede35-12e0-c535-9d94-23b65a1beb28@collabora.com/T/#mb8ec7004f7c9b89fbb50c19022760e19701af7f6
+
+
+
+
+
+
+> Best wishes,
+> Guillaume
+>
+> > Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> >
+> > thanks,
+> > -- Shuah
 > >
 
-Yes Conor initially reported this and I suspected something to do with
-per-cpu allocation as the early cacheinfo failed but succeeded in device
-initcall level. However when fixing some hotplug issue, I moved the
-detection of cache attributes on all cpus from boot cpu to individual
-CPUs in the secondary startup which seem to fix the issue as I assume the
-per-cpu allocation is ready to use at that stage.
 
-However we still have one pending issue[0] to address even after [1], but
-that doesn't affect DT platforms.
 
 -- 
-Regards,
-Sudeep
-
-[0] https://lore.kernel.org/all/20220718174151.GA462603@roeck-us.net/
-[1] https://lore.kernel.org/all/20220715102609.2160689-1-sudeep.holla@arm.com/
+Best Regards
+Masahiro Yamada

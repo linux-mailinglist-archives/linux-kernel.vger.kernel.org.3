@@ -2,131 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489DE57A299
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0968F57A29A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiGSPE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S238128AbiGSPFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238483AbiGSPEZ (ORCPT
+        with ESMTP id S239043AbiGSPFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:04:25 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC6D4D4DA;
-        Tue, 19 Jul 2022 08:04:25 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id b7-20020a17090a12c700b001f20eb82a08so1086934pjg.3;
-        Tue, 19 Jul 2022 08:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eKcTqsNwSSuOFT+Ql0M87PqnleLM6znmzYu6pJpa+4k=;
-        b=cdqzTRcmZWlHu0awENUx4WVU/0T2KPzbHeiEwex/6WGqXjxor+ok9Oh4LEHMTTHf5X
-         6r1awrZkZ1kuubEtdJBf3eVG5Fin1dGl32sDGHfEGGdrCkdwEs5HJI7X40cGJnyO1tp0
-         VXrEkqNN568KMpWUA0/RRLzW5zXdZw0Ga2GdPXbJql8169LZsihqpCc+/YOw2cW5Rf4T
-         NQfWJByZ0OxlRHMIx5udImECCrIWip0Q4HkaRberO+JILq/B9/2Gvswu1zXBtcrqj9V0
-         4L8Loib19W8P8m2I8lHn2VXRX2jIlcM/mGmWQ0Nq6pCRPUDQa+mPsUA1fh2OZniteCoY
-         Xhww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eKcTqsNwSSuOFT+Ql0M87PqnleLM6znmzYu6pJpa+4k=;
-        b=isjClFA43pdo2YWvg08Zu8pDYUrE+ZZfEQ/Gf4VvszI4c+MbEd7BPJ7b968D4U9j6p
-         ORa7dd+h6VxVuv3G5cForgPbEM0ScnEWP+GlfevT5Yc2yqfvfPAYeCxSA0EyYdTUNkw1
-         6HFViv1zKOjE1gtnECFaQXKj90fk+mSGuUBfEPkFTwVQuIdWh+L1TucWHnwKZBo/mltX
-         7BkKhCkSKVXLwkHoxsQMLp4nQ/YxFvBfIp4XXxkvaT+4MslCdPCdPb6ArA+0v+ruvO4s
-         tTTuax1uoYth7HYmqjmr+ZzS5fPNvgGqMrnbFM1PYRjVxT44pLAOzR5sIeYdw4YFt+xS
-         CRFw==
-X-Gm-Message-State: AJIora+GMwLmJxr2m3apBmlUz3ZpvsFIFsNcPtIApO7ezlMkpe3qXjv4
-        lbH18JZgsYLWNWETJjSVjJA=
-X-Google-Smtp-Source: AGRyM1sIE9BeEHBGrgdRgrrSUVEulxTzOUymGx3HCMMvuSO9M14eFrp3rV0/MEqRxs6lQy0n541HZg==
-X-Received: by 2002:a17:902:e84e:b0:16b:f773:4692 with SMTP id t14-20020a170902e84e00b0016bf7734692mr33531902plg.19.1658243064426;
-        Tue, 19 Jul 2022 08:04:24 -0700 (PDT)
-Received: from localhost (fmdmzpr02-ext.fm.intel.com. [192.55.54.37])
-        by smtp.gmail.com with ESMTPSA id j20-20020a170902759400b00161ccdc172dsm11726149pll.300.2022.07.19.08.04.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 08:04:23 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 08:04:22 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v7 043/102] KVM: x86/mmu: Focibly use TDP MMU for TDX
-Message-ID: <20220719150422.GY1379820@ls.amr.corp.intel.com>
-References: <cover.1656366337.git.isaku.yamahata@intel.com>
- <c198d2be26aa9a041176826cf86b51a337427783.1656366338.git.isaku.yamahata@intel.com>
- <Ysw6HdGSIECkP5RC@google.com>
+        Tue, 19 Jul 2022 11:05:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 953F133E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:05:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC52813D5;
+        Tue, 19 Jul 2022 08:05:18 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3948A3F70D;
+        Tue, 19 Jul 2022 08:05:16 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 16:05:13 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        valentina.fernandezalanis@microchip.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v6 09/21] arch_topology: Add support to parse and detect
+ cache attributes
+Message-ID: <20220719150513.a525arh663qlhkob@bogus>
+References: <20220704101605.1318280-1-sudeep.holla@arm.com>
+ <20220704101605.1318280-10-sudeep.holla@arm.com>
+ <CAMuHMdUBZ791fxCPkKQ6HCwLE4GJB2S35QC=SQ+X8w5Q4C_70g@mail.gmail.com>
+ <73f9d00c-b64c-7c70-c49f-99d3894fad24@conchuod.ie>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ysw6HdGSIECkP5RC@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <73f9d00c-b64c-7c70-c49f-99d3894fad24@conchuod.ie>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 02:56:29PM +0000,
-Sean Christopherson <seanjc@google.com> wrote:
-
-> s/Focibly/Forcibly, but that's a moot point because KVM shouldn't override the
-> the module param.  KVM should instead _require_ the TDP MMU to be enabled.  E.g.
-> if userspace disables the TDP MMU to workaround a fatal bug, then forcing the TDP
-> MMU may silently expose KVM to said bug.
-> 
-> And overriding tdp_enabled is just mind-boggling broken, all of the SPTE masks
-> will be wrong.
-> 
-> On Mon, Jun 27, 2022, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Tue, Jul 19, 2022 at 03:37:22PM +0100, Conor Dooley wrote:
+> On 19/07/2022 15:22, Geert Uytterhoeven wrote:
+> > Hi Sudeep,
 > > 
-> > In this patch series, TDX supports only TDP MMU and doesn't support legacy
-> > MMU.  Forcibly use TDP MMU for TDX irrelevant of kernel parameter to
-> > disable TDP MMU.
 > 
-> Do not refer to the "patch series", instead phrase the statement with respect to
-> what KVM support.
+> Hey Geert,
 > 
->   Require the TDP MMU for TDX guests, the so called "shadow" MMU does not
->   support mapping guest private memory, i.e. does not support Secure-EPT.
+[...]
 
-Thanks for rewrite of the commit message.  Now the TDP MMU is default, I'll change
-
-> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> > ---
-> >  arch/x86/kvm/mmu/tdp_mmu.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
 > > 
-> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > index 82f1bfac7ee6..7eb41b176d1e 100644
-> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > @@ -18,8 +18,13 @@ int kvm_mmu_init_tdp_mmu(struct kvm *kvm)
-> >  {
-> >  	struct workqueue_struct *wq;
-> >  
-> > -	if (!tdp_enabled || !READ_ONCE(tdp_mmu_enabled))
-> > -		return 0;
-> > +	/*
-> > +	 *  Because TDX supports only TDP MMU, forcibly use TDP MMU in the case
-> > +	 *  of TDX.
-> > +	 */
-> > +	if (kvm->arch.vm_type != KVM_X86_TDX_VM &&
-> > +		(!tdp_enabled || !READ_ONCE(tdp_mmu_enabled)))
-> > +		return false;
+> > This is triggered
+> > 
+> >      Early cacheinfo failed, ret = -12
+> > 
+> > on all my RV64 platforms (K210, PolarFire, StarLight).
 > 
-> Yeah, no.
-> 
-> 	if (!tdp_enabled || !READ_ONCE(tdp_mmu_enabled))
-> 		return kvm->arch.vm_type == KVM_X86_TDX_VM ? -EINVAL : 0;
+> This should be fixed by Sudeeps most recent patchset, at least
+> it was when I tested it!
+> https://lore.kernel.org/all/20220713133344.1201247-1-sudeep.holla@arm.com/
+>
 
-I'll use -EOPNOTSUPP instead of -EINVAL.
+Conor you beat me in the response speed :).
+
+> > -12 = -ENOMEM.
+> > 
+> > The boot continues regardless, and the K210 even has enough spare
+> > RAM after boot to run "ls", unlike two weeks ago ;-)
+> >
+
+Yes Conor initially reported this and I suspected something to do with
+per-cpu allocation as the early cacheinfo failed but succeeded in device
+initcall level. However when fixing some hotplug issue, I moved the
+detection of cache attributes on all cpus from boot cpu to individual
+CPUs in the secondary startup which seem to fix the issue as I assume the
+per-cpu allocation is ready to use at that stage.
+
+However we still have one pending issue[0] to address even after [1], but
+that doesn't affect DT platforms.
+
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Regards,
+Sudeep
+
+[0] https://lore.kernel.org/all/20220718174151.GA462603@roeck-us.net/
+[1] https://lore.kernel.org/all/20220715102609.2160689-1-sudeep.holla@arm.com/

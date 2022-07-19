@@ -2,171 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E394B579F2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31436579F4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243281AbiGSNLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        id S243494AbiGSNMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243223AbiGSNK2 (ORCPT
+        with ESMTP id S243370AbiGSNMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:10:28 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122B351A1E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:29:03 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0F4111F97A;
-        Tue, 19 Jul 2022 12:28:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658233727; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=RpkV5mcoZ7zrPk8rSX22oR+IY3gNnX4++yEhuGc6rwo=;
-        b=Nf7wuiJSo8jt+B+HDwMMDCqyySI1BsWyIoiSGY/zvIdWm+wBxTUVD5h0r4/g8jVypZOGNW
-        yY5z06qNQI06quegVNWbgaWQrtFR8UvJHxUz07ETsZV7/SeExBDG/NjAZHxC37zUsHJ58W
-        shTblCU0iyJsywWgKLZA+relSNGFzg0=
-Received: from alley.suse.cz (unknown [10.100.201.202])
-        by relay2.suse.de (Postfix) with ESMTP id BBD442C141;
-        Tue, 19 Jul 2022 12:28:46 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>
-Cc:     Antonio Borneo <antonio.borneo@foss.st.com>,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v2] scripts/gdb: fix 'lx-dmesg' on 32 bits arch
-Date:   Tue, 19 Jul 2022 14:28:31 +0200
-Message-Id: <20220719122831.19890-1-pmladek@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 19 Jul 2022 09:12:07 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF69752445;
+        Tue, 19 Jul 2022 05:29:35 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id n12so8510836wrc.8;
+        Tue, 19 Jul 2022 05:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BPGA8CVzq5tUbxFgoR8mOaYivOScxzcIsTIwb0n/HjQ=;
+        b=NMiRRM4ygQScX6CHZNhNLIowqiO7p3Ujk/WGKHm0kxHmMppumn936uJ3xlCcD7OdU8
+         WCNaoh+idQnQNvrRCSe+46CYEAvTnCDMLHqaQ+JBkNOKsVWFyFX14Tjmsi28c2ZeJJIw
+         j8Nt22IQCu/K3nKSmEbFHs6UB2KAFVCDbRagp/4KmzpWDpluYlxGZgcoAtzqxfUoBW2O
+         b7+AowTiYdriHXKuABNgodpuqfqwddaPPU6ynpCr//WedUN+C8RoOazpmcj/L5OoHmRb
+         /ADSip0e6F2LXP+Eu4ScPlz4ADvcY5mRgnhHnu/rQYn9yQwH/OXLq7UvehzkghvYkgPt
+         P9PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BPGA8CVzq5tUbxFgoR8mOaYivOScxzcIsTIwb0n/HjQ=;
+        b=7U1kE+bV9jP054dh0aYE6RwyQE9nfshNddSFOtcsju7sJJz23dlZBIzB0UNQ8On+a0
+         8t4R9jX6CsxnyiuXFu9NXg3vcpnmEyZyK4siE6jsyFZtedheEdG4oNtwuubyGDLZ+QGc
+         VlhGQeXdZv1EelgernDHS/yTG6R+Euj5x0C2egE6u6ioAvi+eypfDyo7B5Mmd0Lpb57V
+         C9urnaukMvz6bl6r1QDfgztxMECc3SF27i6fy0gwndqvTAx2z9Pp/rXLptknazdDlgYO
+         swRf1LoTwPJdbcnKHmplr2UmzWMuuB92W4NV/RQnoykuxHRv4dVjRmFJ3zmW/tVuIFWI
+         YwGA==
+X-Gm-Message-State: AJIora91arV3SuRXT3xtllekqCCEg7SPPljxSt8afqpmOxw71mKAgdyq
+        Z9X766ajYfYbl+TOBMGBMrQ=
+X-Google-Smtp-Source: AGRyM1suSHp0sJMoI1+9oy1P/fM/5Xe4wR6xj5TapIfLUdvodiA4VzWOTw7+k9S6OHTl1eRpbaQd/w==
+X-Received: by 2002:a05:6000:144b:b0:21d:a57d:8000 with SMTP id v11-20020a056000144b00b0021da57d8000mr27103882wrx.204.1658233774143;
+        Tue, 19 Jul 2022 05:29:34 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-208-75.ip51.fastwebnet.it. [93.34.208.75])
+        by smtp.gmail.com with ESMTPSA id p6-20020adfe606000000b0021d73772c87sm1518498wrm.91.2022.07.19.05.29.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 05:29:33 -0700 (PDT)
+Message-ID: <62d6a3ad.1c69fb81.8f261.32f5@mx.google.com>
+X-Google-Original-Message-ID: <YtajqhJ1/C9Sc2IC@Ansuel-xps.>
+Date:   Tue, 19 Jul 2022 14:29:30 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v2 01/15] net: dsa: qca8k: make mib autocast
+ feature optional
+References: <20220719005726.8739-1-ansuelsmth@gmail.com>
+ <20220719005726.8739-1-ansuelsmth@gmail.com>
+ <20220719005726.8739-2-ansuelsmth@gmail.com>
+ <20220719005726.8739-2-ansuelsmth@gmail.com>
+ <20220719122636.rsfkejgampb5kcp2@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719122636.rsfkejgampb5kcp2@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antonio Borneo <antonio.borneo@foss.st.com>
+On Tue, Jul 19, 2022 at 03:26:36PM +0300, Vladimir Oltean wrote:
+> On Tue, Jul 19, 2022 at 02:57:11AM +0200, Christian Marangi wrote:
+> > Some switch may not support mib autocast feature and require the legacy
+> > way of reading the regs directly.
+> > Make the mib autocast feature optional and permit to declare support for
+> > it using match_data struct.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> >  drivers/net/dsa/qca/qca8k.c | 11 +++++++----
+> >  drivers/net/dsa/qca/qca8k.h |  1 +
+> >  2 files changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/net/dsa/qca/qca8k.c b/drivers/net/dsa/qca/qca8k.c
+> > index 1cbb05b0323f..a57c53ce2f0c 100644
+> > --- a/drivers/net/dsa/qca/qca8k.c
+> > +++ b/drivers/net/dsa/qca/qca8k.c
+> > @@ -2112,12 +2112,12 @@ qca8k_get_ethtool_stats(struct dsa_switch *ds, int port,
+> >  	u32 hi = 0;
+> >  	int ret;
+> >  
+> > -	if (priv->mgmt_master &&
+> > -	    qca8k_get_ethtool_stats_eth(ds, port, data) > 0)
+> > -		return;
+> > -
+> >  	match_data = of_device_get_match_data(priv->dev);
+> 
+> I didn't notice at the time that you already call of_device_get_match_data()
+> at driver runtime, but please be aware that it is a relatively expensive
+> operation (takes raw spinlocks, iterates etc), or at least much more
+> expensive than it needs to be. What other drivers do is cache the result
+> of this function once in priv->info and just use priv->info, since it
+> won't change during the lifetime of the driver.
+>
 
-The type atomic_long_t can have size 4 or 8 bytes, depending on
-CONFIG_64BIT; it's only content, the field 'counter', is either an
-int or a s64 value.
+Ok makes sense. Can I make a patch drop the use of
+of_device_get_match_data and then apply this on top?
 
-Current code incorrectly uses the fixed size utils.read_u64() to
-read the field 'counter' inside atomic_long_t.
+(we use of_device_get_match_data also in other functions)
 
-On 32 bits architectures reading the last element 'tail_id' of the
-struct prb_desc_ring:
-	struct prb_desc_ring {
-		...
-		atomic_long_t tail_id;
-	};
-causes the utils.read_u64() to access outside the boundary of the
-struct and the gdb command 'lx-dmesg' exits with error:
-	Python Exception <class 'IndexError'>: index out of range
-	Error occurred in Python: index out of range
+> >  
+> > +	if (priv->mgmt_master && match_data->autocast_mib &&
+> > +	    match_data->autocast_mib(ds, port, data) > 0)
+> > +		return;
+> > +
+> >  	for (i = 0; i < match_data->mib_count; i++) {
+> >  		mib = &ar8327_mib[i];
+> >  		reg = QCA8K_PORT_MIB_COUNTER(port) + mib->offset;
+> > @@ -3260,16 +3260,19 @@ static const struct qca8k_match_data qca8327 = {
+> >  	.id = QCA8K_ID_QCA8327,
+> >  	.reduced_package = true,
+> >  	.mib_count = QCA8K_QCA832X_MIB_COUNT,
+> > +	.autocast_mib = qca8k_get_ethtool_stats_eth,
+> 
+> I thought you were going to create a dedicated sub-structure for
+> function pointers?
+> 
 
-Query the really used atomic_long_t counter type size.
+Sorry... totally forgot this as I was very busy with giving good series.
+Will handle this in the next version.
 
-Fixes: e60768311af8 ("scripts/gdb: update for lockless printk ringbuffer")
-Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
-[pmladek@suse.com: Query the really used atomic_long_t counter type size]
-Tested-by: Antonio Borneo <antonio.borneo@foss.st.com>
-Link: https://lore.kernel.org/r/20220617143758.137307-1-antonio.borneo@foss.st.com
----
-This has somehow fallen through the cracks. Sending as proper patch for review.
+(will be also useful later for the single dsa_switch_ops transition if
+we want to put all of them there)
 
-Changes against v1:
+> >  };
+> >  
+> >  static const struct qca8k_match_data qca8328 = {
+> >  	.id = QCA8K_ID_QCA8327,
+> >  	.mib_count = QCA8K_QCA832X_MIB_COUNT,
+> > +	.autocast_mib = qca8k_get_ethtool_stats_eth,
+> >  };
+> >  
+> >  static const struct qca8k_match_data qca833x = {
+> >  	.id = QCA8K_ID_QCA8337,
+> >  	.mib_count = QCA8K_QCA833X_MIB_COUNT,
+> > +	.autocast_mib = qca8k_get_ethtool_stats_eth,
+> >  };
+> >  
+> >  static const struct of_device_id qca8k_of_match[] = {
+> > diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
+> > index ec58d0e80a70..c3df0a56cda4 100644
+> > --- a/drivers/net/dsa/qca/qca8k.h
+> > +++ b/drivers/net/dsa/qca/qca8k.h
+> > @@ -328,6 +328,7 @@ struct qca8k_match_data {
+> >  	u8 id;
+> >  	bool reduced_package;
+> >  	u8 mib_count;
+> > +	int (*autocast_mib)(struct dsa_switch *ds, int port, u64 *data);
+> >  };
+> >  
+> >  enum {
+> > -- 
+> > 2.36.1
+> > 
+> 
 
-	+ Query the really used atomic_long_t counter type size
-
- scripts/gdb/linux/dmesg.py |  9 +++------
- scripts/gdb/linux/utils.py | 14 ++++++++++++--
- 2 files changed, 15 insertions(+), 8 deletions(-)
-
-diff --git a/scripts/gdb/linux/dmesg.py b/scripts/gdb/linux/dmesg.py
-index d5983cf3db7d..c771831eb077 100644
---- a/scripts/gdb/linux/dmesg.py
-+++ b/scripts/gdb/linux/dmesg.py
-@@ -22,7 +22,6 @@ prb_desc_type = utils.CachedType("struct prb_desc")
- prb_desc_ring_type = utils.CachedType("struct prb_desc_ring")
- prb_data_ring_type = utils.CachedType("struct prb_data_ring")
- printk_ringbuffer_type = utils.CachedType("struct printk_ringbuffer")
--atomic_long_type = utils.CachedType("atomic_long_t")
- 
- class LxDmesg(gdb.Command):
-     """Print Linux kernel log buffer."""
-@@ -68,8 +67,6 @@ class LxDmesg(gdb.Command):
-         off = prb_data_ring_type.get_type()['data'].bitpos // 8
-         text_data_addr = utils.read_ulong(text_data_ring, off)
- 
--        counter_off = atomic_long_type.get_type()['counter'].bitpos // 8
--
-         sv_off = prb_desc_type.get_type()['state_var'].bitpos // 8
- 
-         off = prb_desc_type.get_type()['text_blk_lpos'].bitpos // 8
-@@ -89,9 +86,9 @@ class LxDmesg(gdb.Command):
- 
-         # read in tail and head descriptor ids
-         off = prb_desc_ring_type.get_type()['tail_id'].bitpos // 8
--        tail_id = utils.read_u64(desc_ring, off + counter_off)
-+        tail_id = utils.read_atomic_long(desc_ring, off)
-         off = prb_desc_ring_type.get_type()['head_id'].bitpos // 8
--        head_id = utils.read_u64(desc_ring, off + counter_off)
-+        head_id = utils.read_atomic_long(desc_ring, off)
- 
-         did = tail_id
-         while True:
-@@ -102,7 +99,7 @@ class LxDmesg(gdb.Command):
-             desc = utils.read_memoryview(inf, desc_addr + desc_off, desc_sz).tobytes()
- 
-             # skip non-committed record
--            state = 3 & (utils.read_u64(desc, sv_off + counter_off) >> desc_flags_shift)
-+            state = 3 & (utils.read_atomic_long(desc, sv_off) >> desc_flags_shift)
-             if state != desc_committed and state != desc_finalized:
-                 if did == head_id:
-                     break
-diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
-index ff7c1799d588..1553f68716cc 100644
---- a/scripts/gdb/linux/utils.py
-+++ b/scripts/gdb/linux/utils.py
-@@ -35,13 +35,12 @@ class CachedType:
- 
- 
- long_type = CachedType("long")
--
-+atomic_long_type = CachedType("atomic_long_t")
- 
- def get_long_type():
-     global long_type
-     return long_type.get_type()
- 
--
- def offset_of(typeobj, field):
-     element = gdb.Value(0).cast(typeobj)
-     return int(str(element[field].address).split()[0], 16)
-@@ -129,6 +128,17 @@ def read_ulong(buffer, offset):
-     else:
-         return read_u32(buffer, offset)
- 
-+atomic_long_counter_offset = atomic_long_type.get_type()['counter'].bitpos
-+atomic_long_counter_sizeof = atomic_long_type.get_type()['counter'].type.sizeof
-+
-+def read_atomic_long(buffer, offset):
-+    global atomic_long_counter_offset
-+    global atomic_long_counter_sizeof
-+
-+    if atomic_long_counter_sizeof == 8:
-+        return read_u64(buffer, offset + atomic_long_counter_offset)
-+    else:
-+        return read_u32(buffer, offset + atomic_long_counter_offset)
- 
- target_arch = None
- 
 -- 
-2.35.3
-
+	Ansuel

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C4D579C36
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F1D579AB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237870AbiGSMhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
+        id S239110AbiGSMRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240781AbiGSMgY (ORCPT
+        with ESMTP id S239171AbiGSMPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:36:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199157AC37;
-        Tue, 19 Jul 2022 05:14:13 -0700 (PDT)
+        Tue, 19 Jul 2022 08:15:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDA455084;
+        Tue, 19 Jul 2022 05:06:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 892C6B81B2C;
-        Tue, 19 Jul 2022 12:14:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5884C341C6;
-        Tue, 19 Jul 2022 12:14:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 907BDB81B13;
+        Tue, 19 Jul 2022 12:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC414C341C6;
+        Tue, 19 Jul 2022 12:05:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232851;
-        bh=DSOrFJWoemyjMqyL/SN8AkbBosZm+agx+lAnDevKj0A=;
+        s=korg; t=1658232348;
+        bh=fOlF4eY+hzJn4YXVxFeaaXj09DXc9UVTfIYTLEV6CfY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t17CwURPBeiTX3f4rO0+GU+nsC1i9ZuEBwrNbVL65M6FwUyuJAaQjNL1J6+PJPjxs
-         mcS7N1hBfOzNHGyVsPksQdUwb+im6MyBWVZfvq/KjYsD5lMx+m8an8cI41YdSrS/nC
-         hBkQoCvID1L5OU5sKap2dN1ihUb3BYZ+DQ4WPwOw=
+        b=fiJprmg0diloWLFCvj6hzV0RoU4UeWbARVMLPKm5rzHz3CCkNamX7739zY3kjb7zH
+         wMdP9m3G2gUuBhRooDzE7zA3BfR4x5m7Y3AHMk+soHgsJxUBRhXLM3s/Ze1XzpnDAq
+         hJk300JADvrENZXFasQJtRc+pd6X+ukD9NPYbPak=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 068/167] netfilter: nf_tables: replace BUG_ON by element length check
+Subject: [PATCH 5.10 027/112] ARM: 9209/1: Spectre-BHB: avoid pr_info() every time a CPU comes out of idle
 Date:   Tue, 19 Jul 2022 13:53:20 +0200
-Message-Id: <20220719114703.089125101@linuxfoundation.org>
+Message-Id: <20220719114628.659718650@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,213 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-[ Upstream commit c39ba4de6b0a843bec5d46c2b6f2064428dada5e ]
+[ Upstream commit 0609e200246bfd3b7516091c491bec4308349055 ]
 
-BUG_ON can be triggered from userspace with an element with a large
-userdata area. Replace it by length check and return EINVAL instead.
-Over time extensions have been growing in size.
+Jon reports that the Spectre-BHB init code is filling up the kernel log
+with spurious notifications about which mitigation has been enabled,
+every time any CPU comes out of a low power state.
 
-Pick a sufficiently old Fixes: tag to propagate this fix.
+Given that Spectre-BHB mitigations are system wide, only a single
+mitigation can be enabled, and we already print an error if two types of
+CPUs coexist in a single system that require different Spectre-BHB
+mitigations.
 
-Fixes: 7d7402642eaf ("netfilter: nf_tables: variable sized set element keys / data")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+This means that the pr_info() that describes the selected mitigation
+does not need to be emitted for each CPU anyway, and so we can simply
+emit it only once.
+
+In order to clarify the above in the log message, update it to describe
+that the selected mitigation will be enabled on all CPUs, including ones
+that are unaffected. If another CPU comes up later that is affected and
+requires a different mitigation, we report an error as before.
+
+Fixes: b9baf5c8c5c3 ("ARM: Spectre-BHB workaround")
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/netfilter/nf_tables.h |   14 ++++---
- net/netfilter/nf_tables_api.c     |   72 ++++++++++++++++++++++++++------------
- 2 files changed, 60 insertions(+), 26 deletions(-)
+ arch/arm/mm/proc-v7-bugs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/include/net/netfilter/nf_tables.h
-+++ b/include/net/netfilter/nf_tables.h
-@@ -642,18 +642,22 @@ static inline void nft_set_ext_prepare(s
- 	tmpl->len = sizeof(struct nft_set_ext);
- }
+diff --git a/arch/arm/mm/proc-v7-bugs.c b/arch/arm/mm/proc-v7-bugs.c
+index f9730eba0632..8bc7a2d6d6c7 100644
+--- a/arch/arm/mm/proc-v7-bugs.c
++++ b/arch/arm/mm/proc-v7-bugs.c
+@@ -208,10 +208,10 @@ static int spectre_bhb_install_workaround(int method)
+ 			return SPECTRE_VULNERABLE;
  
--static inline void nft_set_ext_add_length(struct nft_set_ext_tmpl *tmpl, u8 id,
--					  unsigned int len)
-+static inline int nft_set_ext_add_length(struct nft_set_ext_tmpl *tmpl, u8 id,
-+					 unsigned int len)
- {
- 	tmpl->len	 = ALIGN(tmpl->len, nft_set_ext_types[id].align);
--	BUG_ON(tmpl->len > U8_MAX);
-+	if (tmpl->len > U8_MAX)
-+		return -EINVAL;
-+
- 	tmpl->offset[id] = tmpl->len;
- 	tmpl->len	+= nft_set_ext_types[id].len + len;
-+
-+	return 0;
- }
+ 		spectre_bhb_method = method;
+-	}
  
--static inline void nft_set_ext_add(struct nft_set_ext_tmpl *tmpl, u8 id)
-+static inline int nft_set_ext_add(struct nft_set_ext_tmpl *tmpl, u8 id)
- {
--	nft_set_ext_add_length(tmpl, id, 0);
-+	return nft_set_ext_add_length(tmpl, id, 0);
- }
- 
- static inline void nft_set_ext_init(struct nft_set_ext *ext,
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -5736,8 +5736,11 @@ static int nft_add_set_elem(struct nft_c
- 	if (!nla[NFTA_SET_ELEM_KEY] && !(flags & NFT_SET_ELEM_CATCHALL))
- 		return -EINVAL;
- 
--	if (flags != 0)
--		nft_set_ext_add(&tmpl, NFT_SET_EXT_FLAGS);
-+	if (flags != 0) {
-+		err = nft_set_ext_add(&tmpl, NFT_SET_EXT_FLAGS);
-+		if (err < 0)
-+			return err;
+-	pr_info("CPU%u: Spectre BHB: using %s workaround\n",
+-		smp_processor_id(), spectre_bhb_method_name(method));
++		pr_info("CPU%u: Spectre BHB: enabling %s workaround for all CPUs\n",
++			smp_processor_id(), spectre_bhb_method_name(method));
 +	}
  
- 	if (set->flags & NFT_SET_MAP) {
- 		if (nla[NFTA_SET_ELEM_DATA] == NULL &&
-@@ -5846,7 +5849,9 @@ static int nft_add_set_elem(struct nft_c
- 		if (err < 0)
- 			goto err_set_elem_expr;
- 
--		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY, set->klen);
-+		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY, set->klen);
-+		if (err < 0)
-+			goto err_parse_key;
- 	}
- 
- 	if (nla[NFTA_SET_ELEM_KEY_END]) {
-@@ -5855,22 +5860,31 @@ static int nft_add_set_elem(struct nft_c
- 		if (err < 0)
- 			goto err_parse_key;
- 
--		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY_END, set->klen);
-+		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY_END, set->klen);
-+		if (err < 0)
-+			goto err_parse_key_end;
- 	}
- 
- 	if (timeout > 0) {
--		nft_set_ext_add(&tmpl, NFT_SET_EXT_EXPIRATION);
--		if (timeout != set->timeout)
--			nft_set_ext_add(&tmpl, NFT_SET_EXT_TIMEOUT);
-+		err = nft_set_ext_add(&tmpl, NFT_SET_EXT_EXPIRATION);
-+		if (err < 0)
-+			goto err_parse_key_end;
-+
-+		if (timeout != set->timeout) {
-+			err = nft_set_ext_add(&tmpl, NFT_SET_EXT_TIMEOUT);
-+			if (err < 0)
-+				goto err_parse_key_end;
-+		}
- 	}
- 
- 	if (num_exprs) {
- 		for (i = 0; i < num_exprs; i++)
- 			size += expr_array[i]->ops->size;
- 
--		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_EXPRESSIONS,
--				       sizeof(struct nft_set_elem_expr) +
--				       size);
-+		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_EXPRESSIONS,
-+					     sizeof(struct nft_set_elem_expr) + size);
-+		if (err < 0)
-+			goto err_parse_key_end;
- 	}
- 
- 	if (nla[NFTA_SET_ELEM_OBJREF] != NULL) {
-@@ -5885,7 +5899,9 @@ static int nft_add_set_elem(struct nft_c
- 			err = PTR_ERR(obj);
- 			goto err_parse_key_end;
- 		}
--		nft_set_ext_add(&tmpl, NFT_SET_EXT_OBJREF);
-+		err = nft_set_ext_add(&tmpl, NFT_SET_EXT_OBJREF);
-+		if (err < 0)
-+			goto err_parse_key_end;
- 	}
- 
- 	if (nla[NFTA_SET_ELEM_DATA] != NULL) {
-@@ -5919,7 +5935,9 @@ static int nft_add_set_elem(struct nft_c
- 							  NFT_VALIDATE_NEED);
- 		}
- 
--		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_DATA, desc.len);
-+		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_DATA, desc.len);
-+		if (err < 0)
-+			goto err_parse_data;
- 	}
- 
- 	/* The full maximum length of userdata can exceed the maximum
-@@ -5929,9 +5947,12 @@ static int nft_add_set_elem(struct nft_c
- 	ulen = 0;
- 	if (nla[NFTA_SET_ELEM_USERDATA] != NULL) {
- 		ulen = nla_len(nla[NFTA_SET_ELEM_USERDATA]);
--		if (ulen > 0)
--			nft_set_ext_add_length(&tmpl, NFT_SET_EXT_USERDATA,
--					       ulen);
-+		if (ulen > 0) {
-+			err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_USERDATA,
-+						     ulen);
-+			if (err < 0)
-+				goto err_parse_data;
-+		}
- 	}
- 
- 	err = -ENOMEM;
-@@ -6157,8 +6178,11 @@ static int nft_del_setelem(struct nft_ct
- 
- 	nft_set_ext_prepare(&tmpl);
- 
--	if (flags != 0)
--		nft_set_ext_add(&tmpl, NFT_SET_EXT_FLAGS);
-+	if (flags != 0) {
-+		err = nft_set_ext_add(&tmpl, NFT_SET_EXT_FLAGS);
-+		if (err < 0)
-+			return err;
-+	}
- 
- 	if (nla[NFTA_SET_ELEM_KEY]) {
- 		err = nft_setelem_parse_key(ctx, set, &elem.key.val,
-@@ -6166,16 +6190,20 @@ static int nft_del_setelem(struct nft_ct
- 		if (err < 0)
- 			return err;
- 
--		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY, set->klen);
-+		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY, set->klen);
-+		if (err < 0)
-+			goto fail_elem;
- 	}
- 
- 	if (nla[NFTA_SET_ELEM_KEY_END]) {
- 		err = nft_setelem_parse_key(ctx, set, &elem.key_end.val,
- 					    nla[NFTA_SET_ELEM_KEY_END]);
- 		if (err < 0)
--			return err;
-+			goto fail_elem;
- 
--		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY_END, set->klen);
-+		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY_END, set->klen);
-+		if (err < 0)
-+			goto fail_elem_key_end;
- 	}
- 
- 	err = -ENOMEM;
-@@ -6183,7 +6211,7 @@ static int nft_del_setelem(struct nft_ct
- 				      elem.key_end.val.data, NULL, 0, 0,
- 				      GFP_KERNEL);
- 	if (elem.priv == NULL)
--		goto fail_elem;
-+		goto fail_elem_key_end;
- 
- 	ext = nft_set_elem_ext(set, elem.priv);
- 	if (flags)
-@@ -6207,6 +6235,8 @@ fail_ops:
- 	kfree(trans);
- fail_trans:
- 	kfree(elem.priv);
-+fail_elem_key_end:
-+	nft_data_release(&elem.key_end.val, NFT_DATA_VALUE);
- fail_elem:
- 	nft_data_release(&elem.key.val, NFT_DATA_VALUE);
- 	return err;
+ 	return SPECTRE_MITIGATED;
+ }
+-- 
+2.35.1
+
 
 

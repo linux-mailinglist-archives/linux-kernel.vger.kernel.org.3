@@ -2,140 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B4557A16F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF37457A17C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237627AbiGSO12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S234604AbiGSO2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237768AbiGSO1G (ORCPT
+        with ESMTP id S237828AbiGSO1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:27:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABEC58865
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:13:18 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658239997;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WxbgGSEbEmVEKhaiEAclRG678MbyReuZv1istdnUhXM=;
-        b=Qu/X6ZmclEB5rhXNORnQVzFvwU4V75dHkcZZ0kRkqVzOIyqqPab7WS+20+AXT8bGgS4Cm8
-        Nm1HWXamkDIcySY4jr2a68+icv6A9iXLDhLSorLcrLi8CR3ekUcIAv2ICkohhRU0ab1iFO
-        +DOHULxlBnxJSeIPVI9RHHJQxIgJ7D3uLRB7Pg0YzFGIRoO8JQUYj2g826SBvivO12Onme
-        FuEmlmwFOM70oyKbDKNIOJzGqOEHHIybQoCJlOtdnZMC3Jp1w2mPcSjS9bIrlZ+Xu8mXYL
-        SG8qqWKFFFYBJc4STfaIWemQPvT96ej2qa3LVyjtKypfekGbUyZqv8u6ocOQIw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658239997;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WxbgGSEbEmVEKhaiEAclRG678MbyReuZv1istdnUhXM=;
-        b=uvhkK3BiofREZ9FA6Sb2G4x0mONbagVf3ZAboefO12Q2JrLEhUIhNSu7PBusw+Oad8kqaX
-        bcue/gHLj4lMl2AQ==
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "decui@microsoft.com" <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: Virt Call depth tracking mitigation
-In-Reply-To: <4ca4a4ab-6ea0-d94a-59cc-1ab99ff869d5@citrix.com>
-References: <20220716230344.239749011@linutronix.de>
- <4ca4a4ab-6ea0-d94a-59cc-1ab99ff869d5@citrix.com>
-Date:   Tue, 19 Jul 2022 16:13:16 +0200
-Message-ID: <87a695ur5v.ffs@tglx>
+        Tue, 19 Jul 2022 10:27:44 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5029B4AD70
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:14:32 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id n7so11864153ioo.7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pkt2mZa+r6CsVBvHdxfl9ZtYgfYBiGtwJR0TyBmBn2k=;
+        b=SlzhZyt9l+GNXk4dk//RRG6m0fZZEzA7Cl4rmeOvfS+69bthJYXVogYlM3UbfRFlGJ
+         FpW3W361WFdTPhlrtyjkLorAsasxSCrmJMdm4eIvabjLg+adPIAhC4lCzyJ5/RygPjQ5
+         BOtavsMGUl4fiP7eIe6BpaIXPhje757ZYr2pqHzz6Lw62+qvOihvU0hbg/uvSW1QaBE1
+         5wEggFBvpbLJZ5VmG6iAhZsoCMb/2oS1yZGMdcdUMoYrJfyA0iFykIGZBz7RPy4oj/KK
+         O7T6PBOCXChw5yAzd0b7MYzo2xAt6r6aLu65XR59PvTL3a+Q83cg+rXA8975vw32XSkm
+         0bmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pkt2mZa+r6CsVBvHdxfl9ZtYgfYBiGtwJR0TyBmBn2k=;
+        b=oLVhQEq/6HMgHCo3wICp4jTE1blz7Ryqk4/hv0V0CwdQgJyBUmsKISzkof39h//lHe
+         kN64l4OZvdRYAkAqvKo2ebCzSJyKL3zfZvWfNMaodUZDu4K1UEo+2xnlFfKtYI5dKnB5
+         O8m1zGaKq4ZRvqf2vGcecnGyQRXpzSLq8CSUZnHBNOZ2naxJ0ZOSC1fhsX1mzPYxAwqz
+         7WJkndN40WPes43KmbS5RXZ/jx3Aud8UsiWTOnuDE6vGIbY6cM2GyU+6RD5I3WgwvGsN
+         0o+uYnbumdTs2vpHhHq+GP6ZFIPULcKyMfWRAIQAwo+Y9HKt+IYBXwh7ee0YGJ+mREsj
+         Bgyg==
+X-Gm-Message-State: AJIora/cEFgkL0uMoHLAld5TVqcTDI3TYdq6vAk2m5/GDKb2pw6UGu9J
+        zZTtMXY/ZrKdXxhtT2qePmpz7g==
+X-Google-Smtp-Source: AGRyM1ssez9DZVLlBwQkrRccXEisCNfk4Fizssx9NwajhOtCz64G7Q7uywGs7C+r27zJgLBtjQQU0Q==
+X-Received: by 2002:a05:6602:2e8e:b0:669:d5b1:3fc9 with SMTP id m14-20020a0566022e8e00b00669d5b13fc9mr15406444iow.210.1658240071485;
+        Tue, 19 Jul 2022 07:14:31 -0700 (PDT)
+Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id g7-20020a05663816c700b00335d7c314b1sm6727565jat.53.2022.07.19.07.14.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 07:14:30 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: ipa: add an endpoint device attribute group
+Date:   Tue, 19 Jul 2022 09:14:28 -0500
+Message-Id: <20220719141428.233047-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19 2022 at 10:24, Andrew Cooper wrote:
-> On 17/07/2022 00:17, Thomas Gleixner wrote:
->> As IBRS is a performance horror show, Peter Zijstra and me revisited the
->> call depth tracking approach and implemented it in a way which is hopefu=
-lly
->> more palatable and avoids the downsides of the original attempt.
->>
->> We both unsurprisingly hate the result with a passion...
->
-> And I hate to add more problems, but here we go.
->
-> Under virt, it's not just SMI's which might run behind your back.=C2=A0
-> Regular interrupts/etc can probably be hand-waved away in the same way
-> that SMIs are.
+Create a new attribute group meant to provide a single place that
+defines endpoint IDs that might be needed by user space.  Not all
+defined endpoints are presented, and only those that are defined
+will be made visible.
 
-You mean host side interrupts, right?
+The new attributes use "extended" device attributes to hold endpoint
+IDs, which is a little more compact and efficient.  Reimplement the
+existing modem endpoint ID attribute files using common code.
 
-> Hypercalls however are a different matter.
->
-> Xen and HyperV both have hypercall pages, where the hypervisor provides
-> some executable code for the guest kernel to use.
->
-> Under the current scheme, the calls into the hypercall pages get
-> accounted, as objtool can see them, but the ret's don't.=C2=A0 This imbal=
-ance
-> is exasperated because some hypercalls are called in loops.
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+ .../testing/sysfs-devices-platform-soc-ipa    | 62 +++++++++++++----
+ drivers/net/ipa/ipa_main.c                    |  1 +
+ drivers/net/ipa/ipa_sysfs.c                   | 69 ++++++++++++++-----
+ drivers/net/ipa/ipa_sysfs.h                   |  1 +
+ 4 files changed, 102 insertions(+), 31 deletions(-)
 
-Bah.
+diff --git a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
+index c56dcf15bf29d..364b1ba412427 100644
+--- a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
++++ b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
+@@ -46,33 +46,69 @@ Description:
+ 		that is supported by the hardware.  The possible values
+ 		are "MAPv4" or "MAPv5".
+ 
++What:		.../XXXXXXX.ipa/endpoint_id/
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/ directory contains
++		attributes that define IDs associated with IPA
++		endpoints.  The "rx" or "tx" in an endpoint name is
++		from the perspective of the AP.  An endpoint ID is a
++		small unsigned integer.
++
++What:		.../XXXXXXX.ipa/endpoint_id/modem_rx
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/modem_rx file contains
++		the ID of the AP endpoint on which packets originating
++		from the embedded modem are received.
++
++What:		.../XXXXXXX.ipa/endpoint_id/modem_tx
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/modem_tx file contains
++		the ID of the AP endpoint on which packets destined
++		for the embedded modem are sent.
++
++What:		.../XXXXXXX.ipa/endpoint_id/monitor_rx
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/monitor_rx file contains
++		the ID of the AP endpoint on which IPA "monitor" data is
++		received.  The monitor endpoint supplies replicas of
++		packets that enter the IPA hardware for processing.
++		Each replicated packet is preceded by a fixed-size "ODL"
++		header (see .../XXXXXXX.ipa/feature/monitor, above).
++		Large packets are truncated, to reduce the bandwidth
++		required to provide the monitor function.
++
+ What:		.../XXXXXXX.ipa/modem/
+ Date:		June 2021
+ KernelVersion:	v5.14
+ Contact:	Alex Elder <elder@kernel.org>
+ Description:
+-		The .../XXXXXXX.ipa/modem/ directory contains a set of
+-		attributes describing properties of the modem execution
+-		environment reachable by the IPA hardware.
++		The .../XXXXXXX.ipa/modem/ directory contains attributes
++		describing properties of the modem embedded in the SoC.
+ 
+ What:		.../XXXXXXX.ipa/modem/rx_endpoint_id
+ Date:		June 2021
+ KernelVersion:	v5.14
+ Contact:	Alex Elder <elder@kernel.org>
+ Description:
+-		The .../XXXXXXX.ipa/feature/rx_endpoint_id file contains
+-		the AP endpoint ID that receives packets originating from
+-		the modem execution environment.  The "rx" is from the
+-		perspective of the AP; this endpoint is considered an "IPA
+-		producer".  An endpoint ID is a small unsigned integer.
++		The .../XXXXXXX.ipa/modem/rx_endpoint_id file duplicates
++		the value found in .../XXXXXXX.ipa/endpoint_id/modem_rx.
+ 
+ What:		.../XXXXXXX.ipa/modem/tx_endpoint_id
+ Date:		June 2021
+ KernelVersion:	v5.14
+ Contact:	Alex Elder <elder@kernel.org>
+ Description:
+-		The .../XXXXXXX.ipa/feature/tx_endpoint_id file contains
+-		the AP endpoint ID used to transmit packets destined for
+-		the modem execution environment.  The "tx" is from the
+-		perspective of the AP; this endpoint is considered an "IPA
+-		consumer".  An endpoint ID is a small unsigned integer.
++		The .../XXXXXXX.ipa/modem/tx_endpoint_id file duplicates
++		the value found in .../XXXXXXX.ipa/endpoint_id/modem_tx.
+diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
+index 3757ce3de2c59..b989259b02047 100644
+--- a/drivers/net/ipa/ipa_main.c
++++ b/drivers/net/ipa/ipa_main.c
+@@ -851,6 +851,7 @@ static void ipa_shutdown(struct platform_device *pdev)
+ static const struct attribute_group *ipa_attribute_groups[] = {
+ 	&ipa_attribute_group,
+ 	&ipa_feature_attribute_group,
++	&ipa_endpoint_id_attribute_group,
+ 	&ipa_modem_attribute_group,
+ 	NULL,
+ };
+diff --git a/drivers/net/ipa/ipa_sysfs.c b/drivers/net/ipa/ipa_sysfs.c
+index ff61dbdd70d8c..747920a23b2b7 100644
+--- a/drivers/net/ipa/ipa_sysfs.c
++++ b/drivers/net/ipa/ipa_sysfs.c
+@@ -96,38 +96,71 @@ const struct attribute_group ipa_feature_attribute_group = {
+ 	.attrs		= ipa_feature_attrs,
+ };
+ 
+-static ssize_t
+-ipa_endpoint_id_show(struct ipa *ipa, char *buf, enum ipa_endpoint_name name)
++static umode_t ipa_endpoint_id_is_visible(struct kobject *kobj,
++					  struct attribute *attr, int n)
+ {
+-	u32 endpoint_id = ipa->name_map[name]->endpoint_id;
++	struct ipa *ipa = dev_get_drvdata(kobj_to_dev(kobj));
++	struct device_attribute *dev_attr;
++	struct dev_ext_attribute *ea;
++	bool visible;
+ 
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", endpoint_id);
++	/* An endpoint id attribute is only visible if it's defined */
++	dev_attr = container_of(attr, struct device_attribute, attr);
++	ea = container_of(dev_attr, struct dev_ext_attribute, attr);
++
++	visible = !!ipa->name_map[(enum ipa_endpoint_name)ea->var];
++
++	return visible ? attr->mode : 0;
+ }
+ 
+-static ssize_t rx_endpoint_id_show(struct device *dev,
+-				   struct device_attribute *attr, char *buf)
++static ssize_t endpoint_id_attr_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
+ {
+ 	struct ipa *ipa = dev_get_drvdata(dev);
++	struct ipa_endpoint *endpoint;
++	struct dev_ext_attribute *ea;
+ 
+-	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_RX);
++	ea = container_of(attr, struct dev_ext_attribute, attr);
++	endpoint = ipa->name_map[(enum ipa_endpoint_name)ea->var];
++
++	return sysfs_emit(buf, "%u\n", endpoint->endpoint_id);
+ }
+ 
+-static DEVICE_ATTR_RO(rx_endpoint_id);
++#define ENDPOINT_ID_ATTR(_n, _endpoint_name)				    \
++	static struct dev_ext_attribute dev_attr_endpoint_id_ ## _n = {	    \
++		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
++		.var	= (void *)(_endpoint_name),			    \
++	}
+ 
+-static ssize_t tx_endpoint_id_show(struct device *dev,
+-				   struct device_attribute *attr, char *buf)
+-{
+-	struct ipa *ipa = dev_get_drvdata(dev);
++ENDPOINT_ID_ATTR(modem_rx, IPA_ENDPOINT_AP_MODEM_RX);
++ENDPOINT_ID_ATTR(modem_tx, IPA_ENDPOINT_AP_MODEM_TX);
+ 
+-	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_TX);
+-}
++static struct attribute *ipa_endpoint_id_attrs[] = {
++	&dev_attr_endpoint_id_modem_rx.attr.attr,
++	&dev_attr_endpoint_id_modem_tx.attr.attr,
++	NULL
++};
++
++const struct attribute_group ipa_endpoint_id_attribute_group = {
++	.name		= "endpoint_id",
++	.is_visible	= ipa_endpoint_id_is_visible,
++	.attrs		= ipa_endpoint_id_attrs,
++};
++
++/* Reuse endpoint ID attributes for the legacy modem endpoint IDs */
++#define MODEM_ATTR(_n, _endpoint_name)					    \
++	static struct dev_ext_attribute dev_attr_modem_ ## _n = {	    \
++		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
++		.var	= (void *)(_endpoint_name),			    \
++	}
+ 
+-static DEVICE_ATTR_RO(tx_endpoint_id);
++MODEM_ATTR(rx_endpoint_id, IPA_ENDPOINT_AP_MODEM_RX);
++MODEM_ATTR(tx_endpoint_id, IPA_ENDPOINT_AP_MODEM_TX);
+ 
+ static struct attribute *ipa_modem_attrs[] = {
+-	&dev_attr_rx_endpoint_id.attr,
+-	&dev_attr_tx_endpoint_id.attr,
+-	NULL
++	&dev_attr_modem_rx_endpoint_id.attr.attr,
++	&dev_attr_modem_tx_endpoint_id.attr.attr,
++	NULL,
+ };
+ 
+ const struct attribute_group ipa_modem_attribute_group = {
+diff --git a/drivers/net/ipa/ipa_sysfs.h b/drivers/net/ipa/ipa_sysfs.h
+index b34e5650bf8cd..4a3ffd1e4e3fb 100644
+--- a/drivers/net/ipa/ipa_sysfs.h
++++ b/drivers/net/ipa/ipa_sysfs.h
+@@ -10,6 +10,7 @@ struct attribute_group;
+ 
+ extern const struct attribute_group ipa_attribute_group;
+ extern const struct attribute_group ipa_feature_attribute_group;
++extern const struct attribute_group ipa_endpoint_id_attribute_group;
+ extern const struct attribute_group ipa_modem_attribute_group;
+ 
+ #endif /* _IPA_SYSFS_H_ */
+-- 
+2.34.1
 
-> Worse however, it opens a hole where branch history is calculable and
-> the ret can reliably underflow.=C2=A0 This occurs when there's a minimal =
-call
-> depth in Linux to get to the hypercall, and then a call depth of >16 in
-> the hypervisor.
->
-> The only variable in these cases is how much user control there is of
-> the registers, and I for one am not feeling lucky in face of the current
-> research.
->
-> The only solution I see here is for Linux to ret-thunk the hypercall
-> page too.=C2=A0 Under Xen, the hypercall page is mutable by the guest and
-> there is room to turn every ret into a jmp, but obviously none of this
-> is covered by any formal ABI, and this probably needs more careful
-> consideration than the short time I've put towards it.
-
-Well, that makes the guest side "safe", but isn't a deep hypercall > 16
-already underflowing in the hypervisor code before it returns to the
-guest?
-
-> That said, after a return from the hypervisor, Linux has no idea what
-> state the RSB is in, so the only safe course of action is to re-stuff.
-
-Indeed.
-
-Another proof for my claim that virt creates more problems than it
-solves.
-
-Thanks,
-
-        tglx

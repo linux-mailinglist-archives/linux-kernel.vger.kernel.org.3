@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF905799EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92956579ABF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238438AbiGSMIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S239293AbiGSMSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238182AbiGSMII (ORCPT
+        with ESMTP id S239092AbiGSMQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:08:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C934E86E;
-        Tue, 19 Jul 2022 05:01:32 -0700 (PDT)
+        Tue, 19 Jul 2022 08:16:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C9B558E3;
+        Tue, 19 Jul 2022 05:06:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 146FCB81B37;
-        Tue, 19 Jul 2022 12:01:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C1CEC341C6;
-        Tue, 19 Jul 2022 12:01:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 807F1616FD;
+        Tue, 19 Jul 2022 12:06:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC0DC341C6;
+        Tue, 19 Jul 2022 12:06:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232089;
-        bh=h+Cr2yddFtNq9kkW9TnvjCKlbAIUGE+R575RriMpvYw=;
+        s=korg; t=1658232362;
+        bh=Y1ibfx5gZ3x+9GRpzoeqWy0wy1zYbYYTTXhhhPIAmSQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ta1IaAtz0iZxjHkUPLBoRuxl0gmEHZSL0QG/P46BA128FMer4xrGHQlDv3hNMcDD/
-         Tblz9UljXrXFq8FpVT1oAO9QAkT+ymBlmp69JwjgRA968ay3bMOiGVHOWqJSk9FCZ7
-         XB3fTRCBfTJJgZtc24vO0BSGaL+wNvqacefzlWmM=
+        b=TN4ARJhzkJ4OyeI7NfQolbsx8qO+WhmGvHpb2RJvuquNMVFVXMK9EmCezaTsqS5Ac
+         ZeybyNxlIwy7PRsL55eZhs1/6JfeRRhCibmxBJ7KKACmu75wfvf2BOZZNKVGxIrYnu
+         bni1Utm6h2VpPnvxSBQLf0KhBxQ28oVX1+VHTtVU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 01/71] ALSA: hda - Add fixup for Dell Latitidue E5430
-Date:   Tue, 19 Jul 2022 13:53:24 +0200
-Message-Id: <20220719114552.610130463@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 032/112] drm/i915: fix a possible refcount leak in intel_dp_add_mst_connector()
+Date:   Tue, 19 Jul 2022 13:53:25 +0200
+Message-Id: <20220719114629.240121234@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,31 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Meng Tang <tangmeng@uniontech.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit 841bdf85c226803a78a9319af9b2caa9bf3e2eda upstream.
+[ Upstream commit 85144df9ff4652816448369de76897c57cbb1b93 ]
 
-Another Dell model, another fixup entry: Latitude E5430 needs the same
-fixup as other Latitude E series as workaround for noise problems.
+If drm_connector_init fails, intel_connector_free will be called to take
+care of proper free. So it is necessary to drop the refcount of port
+before intel_connector_free.
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220712060005.20176-1-tangmeng@uniontech.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 091a4f91942a ("drm/i915: Handle drm-layer errors in intel_dp_add_mst_connector")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: José Roberto de Souza <jose.souza@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220624130406.17996-1-jose.souza@intel.com
+Signed-off-by: José Roberto de Souza <jose.souza@intel.com>
+(cherry picked from commit cea9ed611e85d36a05db52b6457bf584b7d969e2)
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
+ drivers/gpu/drm/i915/display/intel_dp_mst.c | 1 +
  1 file changed, 1 insertion(+)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8056,6 +8056,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1025, 0x142b, "Acer Swift SF314-42", ALC255_FIXUP_ACER_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1025, 0x1430, "Acer TravelMate B311R-31", ALC256_FIXUP_ACER_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1028, 0x0470, "Dell M101z", ALC269_FIXUP_DELL_M101Z),
-+	SND_PCI_QUIRK(0x1028, 0x053c, "Dell Latitude E5430", ALC292_FIXUP_DELL_E7X),
- 	SND_PCI_QUIRK(0x1028, 0x054b, "Dell XPS one 2710", ALC275_FIXUP_DELL_XPS),
- 	SND_PCI_QUIRK(0x1028, 0x05bd, "Dell Latitude E6440", ALC292_FIXUP_DELL_E7X),
- 	SND_PCI_QUIRK(0x1028, 0x05be, "Dell Latitude E6540", ALC292_FIXUP_DELL_E7X),
+diff --git a/drivers/gpu/drm/i915/display/intel_dp_mst.c b/drivers/gpu/drm/i915/display/intel_dp_mst.c
+index ecaa538b2d35..ef7878193491 100644
+--- a/drivers/gpu/drm/i915/display/intel_dp_mst.c
++++ b/drivers/gpu/drm/i915/display/intel_dp_mst.c
+@@ -790,6 +790,7 @@ static struct drm_connector *intel_dp_add_mst_connector(struct drm_dp_mst_topolo
+ 	ret = drm_connector_init(dev, connector, &intel_dp_mst_connector_funcs,
+ 				 DRM_MODE_CONNECTOR_DisplayPort);
+ 	if (ret) {
++		drm_dp_mst_put_port_malloc(port);
+ 		intel_connector_free(intel_connector);
+ 		return NULL;
+ 	}
+-- 
+2.35.1
+
 
 

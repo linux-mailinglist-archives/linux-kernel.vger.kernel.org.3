@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951F6579CD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D424579EEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241251AbiGSMnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S243092AbiGSNII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241148AbiGSMnJ (ORCPT
+        with ESMTP id S243002AbiGSNHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:43:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDE78052D;
-        Tue, 19 Jul 2022 05:16:44 -0700 (PDT)
+        Tue, 19 Jul 2022 09:07:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B17E1408D;
+        Tue, 19 Jul 2022 05:27:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 737DAB81B34;
-        Tue, 19 Jul 2022 12:16:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B76A5C341CA;
-        Tue, 19 Jul 2022 12:16:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1015FCE1BE1;
+        Tue, 19 Jul 2022 12:27:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0799CC341C6;
+        Tue, 19 Jul 2022 12:27:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233002;
-        bh=lcLO34MoPCLKVA/bKtAqWCoHH3fr4L1nHGwf+6hf4KU=;
+        s=korg; t=1658233627;
+        bh=RSnp9C2IndBNx40Bwal1Q5B/rLmbGmA+LVLBOoQj7bo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SaqOjyYk/PTaeVTfWopdMPhjwg/Sgs53GdynIZnZqE27N/LX/+yTWxJN2OWLZqk70
-         2MtaxtmXtlLZV0851JBirU27BeUOA2zpK5WlFtogxbpvsBoqf7oFywm7YjRuOluqTZ
-         wUz3r5wvE8vJ9ULIMCLbe52ZJwHYcJdkkn5lNc3o=
+        b=kJnCEEB/NtalAfwQq5kwbRcm9Ms5lEmTN/seQCr9rMfQjVkgX01rLVSCW4twv4JkD
+         fi0BCUhGl+bFh+5RzECa08ID4SLrDavI8plDsGfWSjQCjXOXSAaN0+u2NEQGSFslq3
+         pv0ZQzyj+kdd8cLnN3bCWf4wawQft9eMt7XDlAH8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
         Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
         Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 139/167] ASoC: SOF: Intel: hda-loader: Clarify the cl_dsp_init() flow
-Date:   Tue, 19 Jul 2022 13:54:31 +0200
-Message-Id: <20220719114709.946573895@linuxfoundation.org>
+Subject: [PATCH 5.18 187/231] ASoC: Intel: sof_sdw: handle errors on card registration
+Date:   Tue, 19 Jul 2022 13:54:32 +0200
+Message-Id: <20220719114729.927181646@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,52 +57,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit bbfef046c6613404c01aeb9e9928bebb78dd327a ]
+[ Upstream commit fe154c4ff376bc31041c6441958a08243df09c99 ]
 
-Update the comment for the cl_dsp_init() to clarify what is done by the
-function and use the chip->init_core_mask instead of BIT(0) when
-unstalling/running the init core.
+If the card registration fails, typically because of deferred probes,
+the device properties added for headset codecs are not removed, which
+leads to kernel oopses in driver bind/unbind tests.
 
-Complements: 2a68ff846164 ("ASoC: SOF: Intel: hda: Revisit IMR boot sequence")
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+We already clean-up the device properties when the card is removed,
+this code can be moved as a helper and called upon card registration
+errors.
+
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
 Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Link: https://lore.kernel.org/r/20220609085949.29062-4-peter.ujfalusi@linux.intel.com
+Link: https://lore.kernel.org/r/20220606203752.144159-4-pierre-louis.bossart@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sof/intel/hda-loader.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ sound/soc/intel/boards/sof_sdw.c | 51 ++++++++++++++++++--------------
+ 1 file changed, 29 insertions(+), 22 deletions(-)
 
-diff --git a/sound/soc/sof/intel/hda-loader.c b/sound/soc/sof/intel/hda-loader.c
-index 14469e087b00..ee09393d42cb 100644
---- a/sound/soc/sof/intel/hda-loader.c
-+++ b/sound/soc/sof/intel/hda-loader.c
-@@ -80,9 +80,9 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
- }
+diff --git a/sound/soc/intel/boards/sof_sdw.c b/sound/soc/intel/boards/sof_sdw.c
+index 1f00679b4240..ad826ad82d51 100644
+--- a/sound/soc/intel/boards/sof_sdw.c
++++ b/sound/soc/intel/boards/sof_sdw.c
+@@ -1398,6 +1398,33 @@ static struct snd_soc_card card_sof_sdw = {
+ 	.late_probe = sof_sdw_card_late_probe,
+ };
  
- /*
-- * first boot sequence has some extra steps. core 0 waits for power
-- * status on core 1, so power up core 1 also momentarily, keep it in
-- * reset/stall and then turn it off
-+ * first boot sequence has some extra steps.
-+ * power on all host managed cores and only unstall/run the boot core to boot the
-+ * DSP then turn off all non boot cores (if any) is powered on.
-  */
- static int cl_dsp_init(struct snd_sof_dev *sdev, int stream_tag)
++static void mc_dailink_exit_loop(struct snd_soc_card *card)
++{
++	struct snd_soc_dai_link *link;
++	int ret;
++	int i, j;
++
++	for (i = 0; i < ARRAY_SIZE(codec_info_list); i++) {
++		if (!codec_info_list[i].exit)
++			continue;
++		/*
++		 * We don't need to call .exit function if there is no matched
++		 * dai link found.
++		 */
++		for_each_card_prelinks(card, j, link) {
++			if (!strcmp(link->codecs[0].dai_name,
++				    codec_info_list[i].dai_name)) {
++				ret = codec_info_list[i].exit(card, link);
++				if (ret)
++					dev_warn(card->dev,
++						 "codec exit failed %d\n",
++						 ret);
++				break;
++			}
++		}
++	}
++}
++
+ static int mc_probe(struct platform_device *pdev)
  {
-@@ -117,7 +117,7 @@ static int cl_dsp_init(struct snd_sof_dev *sdev, int stream_tag)
- 			  ((stream_tag - 1) << 9)));
+ 	struct snd_soc_card *card = &card_sof_sdw;
+@@ -1462,6 +1489,7 @@ static int mc_probe(struct platform_device *pdev)
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 	if (ret) {
+ 		dev_err(card->dev, "snd_soc_register_card failed %d\n", ret);
++		mc_dailink_exit_loop(card);
+ 		return ret;
+ 	}
  
- 	/* step 3: unset core 0 reset state & unstall/run core 0 */
--	ret = hda_dsp_core_run(sdev, BIT(0));
-+	ret = hda_dsp_core_run(sdev, chip->init_core_mask);
- 	if (ret < 0) {
- 		if (hda->boot_iteration == HDA_FW_BOOT_ATTEMPTS)
- 			dev_err(sdev->dev,
+@@ -1473,29 +1501,8 @@ static int mc_probe(struct platform_device *pdev)
+ static int mc_remove(struct platform_device *pdev)
+ {
+ 	struct snd_soc_card *card = platform_get_drvdata(pdev);
+-	struct snd_soc_dai_link *link;
+-	int ret;
+-	int i, j;
+ 
+-	for (i = 0; i < ARRAY_SIZE(codec_info_list); i++) {
+-		if (!codec_info_list[i].exit)
+-			continue;
+-		/*
+-		 * We don't need to call .exit function if there is no matched
+-		 * dai link found.
+-		 */
+-		for_each_card_prelinks(card, j, link) {
+-			if (!strcmp(link->codecs[0].dai_name,
+-				    codec_info_list[i].dai_name)) {
+-				ret = codec_info_list[i].exit(card, link);
+-				if (ret)
+-					dev_warn(&pdev->dev,
+-						 "codec exit failed %d\n",
+-						 ret);
+-				break;
+-			}
+-		}
+-	}
++	mc_dailink_exit_loop(card);
+ 
+ 	return 0;
+ }
 -- 
 2.35.1
 

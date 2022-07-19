@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F89579963
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80534579966
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237978AbiGSMCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
+        id S237377AbiGSMCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237861AbiGSMBV (ORCPT
+        with ESMTP id S237868AbiGSMBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:01:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CF446D97;
-        Tue, 19 Jul 2022 04:58:35 -0700 (PDT)
+        Tue, 19 Jul 2022 08:01:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82A44A80F;
+        Tue, 19 Jul 2022 04:58:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70AEAB81A2E;
-        Tue, 19 Jul 2022 11:58:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29A1C341C6;
-        Tue, 19 Jul 2022 11:58:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 614DCB81A2E;
+        Tue, 19 Jul 2022 11:58:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CC6C341CA;
+        Tue, 19 Jul 2022 11:58:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231913;
-        bh=n0mhtTbRmKMrtDsxbt0+8JC74G0b+EOPSqVSehfbq3U=;
+        s=korg; t=1658231916;
+        bh=VkbUFaDmG9Xa9DmLLAlbDfm/hVHUrMmPVbAO0A7Ct6M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fH9THlhCxG37iDr4iMEXgvHHjimas5UlWzSrynFrTUJAqHKrWi8qPjKUJCagej/Y5
-         NSQT7lqq79DYajuuIR6eS3kT5tvKDiDJk+RN514B9w9jtGS2tKqE6IKWrQVkCMUPqW
-         x535AycSkUqmhsfM7s+cuCJQOPqkwJ4PEGncNAk0=
+        b=lfIAeuZyKJ9Uzc/IRXGjSegS67f9Om2Y75St7WaDkV7axfmbKoxkDRO4G60LGEfi8
+         kITgKFcZplfElbmUnhYelrMm0OaRK3wQFfvuupiJPs9s4sXJRubi2smY5BE54QqOV+
+         B0N7ldXzzA19DutXToY+j3sdT7ZFUZZxgBY4e+uk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        Tommy Pettersson <ptp@lysator.liu.se>,
-        Ciprian Craciun <ciprian.craciun@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.14 08/43] nilfs2: fix incorrect masking of permission flags for symlinks
-Date:   Tue, 19 Jul 2022 13:53:39 +0200
-Message-Id: <20220719114522.795353601@linuxfoundation.org>
+        stable@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 09/43] net: dsa: bcm_sf2: force pause link settings
+Date:   Tue, 19 Jul 2022 13:53:40 +0200
+Message-Id: <20220719114522.863731509@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
 References: <20220719114521.868169025@linuxfoundation.org>
@@ -56,45 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+From: Doug Berger <opendmb@gmail.com>
 
-commit 5924e6ec1585445f251ea92713eb15beb732622a upstream.
+commit 7c97bc0128b2eecc703106112679a69d446d1a12 upstream.
 
-The permission flags of newly created symlinks are wrongly dropped on
-nilfs2 with the current umask value even though symlinks should have 777
-(rwxrwxrwx) permissions:
+The pause settings reported by the PHY should also be applied to the GMII port
+status override otherwise the switch will not generate pause frames towards the
+link partner despite the advertisement saying otherwise.
 
- $ umask
- 0022
- $ touch file && ln -s file symlink; ls -l file symlink
- -rw-r--r--. 1 root root 0 Jun 23 16:29 file
- lrwxr-xr-x. 1 root root 4 Jun 23 16:29 symlink -> file
-
-This fixes the bug by inserting a missing check that excludes
-symlinks.
-
-Link: https://lkml.kernel.org/r/1655974441-5612-1-git-send-email-konishi.ryusuke@gmail.com
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Reported-by: Tommy Pettersson <ptp@lysator.liu.se>
-Reported-by: Ciprian Craciun <ciprian.craciun@gmail.com>
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 246d7f773c13 ("net: dsa: add Broadcom SF2 switch driver")
+Signed-off-by: Doug Berger <opendmb@gmail.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220623030204.1966851-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nilfs2/nilfs.h |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/dsa/bcm_sf2.c |   19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
---- a/fs/nilfs2/nilfs.h
-+++ b/fs/nilfs2/nilfs.h
-@@ -212,6 +212,9 @@ static inline int nilfs_acl_chmod(struct
+--- a/drivers/net/dsa/bcm_sf2.c
++++ b/drivers/net/dsa/bcm_sf2.c
+@@ -625,7 +625,9 @@ static void bcm_sf2_sw_adjust_link(struc
+ 	struct bcm_sf2_priv *priv = bcm_sf2_to_priv(ds);
+ 	struct ethtool_eee *p = &priv->port_sts[port].eee;
+ 	u32 id_mode_dis = 0, port_mode;
++	u16 lcl_adv = 0, rmt_adv = 0;
+ 	const char *str = NULL;
++	u8 flowctrl = 0;
+ 	u32 reg, offset;
  
- static inline int nilfs_init_acl(struct inode *inode, struct inode *dir)
- {
-+	if (S_ISLNK(inode->i_mode))
-+		return 0;
+ 	if (priv->type == BCM7445_DEVICE_ID)
+@@ -697,10 +699,27 @@ force_link:
+ 		break;
+ 	}
+ 
++	if (phydev->duplex == DUPLEX_FULL &&
++	    phydev->autoneg == AUTONEG_ENABLE) {
++		if (phydev->pause)
++			rmt_adv = LPA_PAUSE_CAP;
++		if (phydev->asym_pause)
++			rmt_adv |= LPA_PAUSE_ASYM;
++		if (phydev->advertising & ADVERTISED_Pause)
++			lcl_adv = ADVERTISE_PAUSE_CAP;
++		if (phydev->advertising & ADVERTISED_Asym_Pause)
++			lcl_adv |= ADVERTISE_PAUSE_ASYM;
++		flowctrl = mii_resolve_flowctrl_fdx(lcl_adv, rmt_adv);
++	}
 +
- 	inode->i_mode &= ~current_umask();
- 	return 0;
- }
+ 	if (phydev->link)
+ 		reg |= LINK_STS;
+ 	if (phydev->duplex == DUPLEX_FULL)
+ 		reg |= DUPLX_MODE;
++	if (flowctrl & FLOW_CTRL_TX)
++		reg |= TXFLOW_CNTL;
++	if (flowctrl & FLOW_CTRL_RX)
++		reg |= RXFLOW_CNTL;
+ 
+ 	core_writel(priv, reg, offset);
+ 
 
 

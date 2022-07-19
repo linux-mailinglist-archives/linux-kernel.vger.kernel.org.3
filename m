@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31084579A00
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8E2579AED
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238429AbiGSMKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
+        id S239493AbiGSMV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238493AbiGSMIv (ORCPT
+        with ESMTP id S239780AbiGSMTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:08:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A263C50045;
-        Tue, 19 Jul 2022 05:01:53 -0700 (PDT)
+        Tue, 19 Jul 2022 08:19:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2FB599F1;
+        Tue, 19 Jul 2022 05:07:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2200A616FB;
-        Tue, 19 Jul 2022 12:01:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05C2AC341CA;
-        Tue, 19 Jul 2022 12:01:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C6D5B81B31;
+        Tue, 19 Jul 2022 12:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF7DEC341C6;
+        Tue, 19 Jul 2022 12:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232112;
-        bh=ma7NhXFgC+7hwyuEmkcP1+W4Jkc830HpQ+gJrpBWGww=;
+        s=korg; t=1658232412;
+        bh=Tanvov2tDXLHsQ3vBMTvXUmEUNLrX0p75EV+44Ib+JI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qDbFMGwbKqMmi+SVtySq6LrGW67wRT/k5qj/iumVfTkNV5tFRU+bIyXDKFgulOJqo
-         Nlqpym5i3JRTFh4iH9qRY7VOcnDD4wTTFbqJTGzrW4FEwGpPE/TqeDvidaCTOFKLmt
-         DnXJbN+KGx4zQaKMRulcyQi92rrb/UbsBhg8xYck=
+        b=y+zIaQY7YzJ4g94pEEZ1xIVucKPLPvjA+Yw32558HTH2r44zq9Vg+Q84gGoIom5i0
+         AnwJkQhB7UeLZ1iJX4cgBAP7CFoWmW5OcOOF6haIK9xcpswcdxBcRMPe6mttuYoiO6
+         1Ug2By0FDDu5WxQeZlc34bI1TzE/TC1Ilaw5qw4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Wei Wang <wvw@google.com>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [PATCH 5.4 17/71] sched/rt: Disable RT_RUNTIME_SHARE by default
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 047/112] sysctl: Fix data races in proc_dointvec_jiffies().
 Date:   Tue, 19 Jul 2022 13:53:40 +0200
-Message-Id: <20220719114553.906618615@linuxfoundation.org>
+Message-Id: <20220719114631.015837807@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@redhat.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-commit 2586af1ac187f6b3a50930a4e33497074e81762d upstream.
+[ Upstream commit e877820877663fbae8cb9582ea597a7230b94df3 ]
 
-The RT_RUNTIME_SHARE sched feature enables the sharing of rt_runtime
-between CPUs, allowing a CPU to run a real-time task up to 100% of the
-time while leaving more space for non-real-time tasks to run on the CPU
-that lend rt_runtime.
+A sysctl variable is accessed concurrently, and there is always a chance
+of data-race.  So, all readers and writers need some basic protection to
+avoid load/store-tearing.
 
-The problem is that a CPU can easily borrow enough rt_runtime to allow
-a spinning rt-task to run forever, starving per-cpu tasks like kworkers,
-which are non-real-time by design.
+This patch changes proc_dointvec_jiffies() to use READ_ONCE() and
+WRITE_ONCE() internally to fix data-races on the sysctl side.  For now,
+proc_dointvec_jiffies() itself is tolerant to a data-race, but we still
+need to add annotations on the other subsystem's side.
 
-This patch disables RT_RUNTIME_SHARE by default, avoiding this problem.
-The feature will still be present for users that want to enable it,
-though.
-
-Signed-off-by: Daniel Bristot de Oliveira <bristot@redhat.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Wei Wang <wvw@google.com>
-Link: https://lkml.kernel.org/r/b776ab46817e3db5d8ef79175fa0d71073c051c7.1600697903.git.bristot@redhat.com
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/features.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/sysctl.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/kernel/sched/features.h
-+++ b/kernel/sched/features.h
-@@ -77,7 +77,7 @@ SCHED_FEAT(WARN_DOUBLE_CLOCK, false)
- SCHED_FEAT(RT_PUSH_IPI, true)
- #endif
- 
--SCHED_FEAT(RT_RUNTIME_SHARE, true)
-+SCHED_FEAT(RT_RUNTIME_SHARE, false)
- SCHED_FEAT(LB_MIN, false)
- SCHED_FEAT(ATTACH_AGE_LOAD, true)
- 
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index e7409788db64..83241a56539b 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1276,9 +1276,12 @@ static int do_proc_dointvec_jiffies_conv(bool *negp, unsigned long *lvalp,
+ 	if (write) {
+ 		if (*lvalp > INT_MAX / HZ)
+ 			return 1;
+-		*valp = *negp ? -(*lvalp*HZ) : (*lvalp*HZ);
++		if (*negp)
++			WRITE_ONCE(*valp, -*lvalp * HZ);
++		else
++			WRITE_ONCE(*valp, *lvalp * HZ);
+ 	} else {
+-		int val = *valp;
++		int val = READ_ONCE(*valp);
+ 		unsigned long lval;
+ 		if (val < 0) {
+ 			*negp = true;
+-- 
+2.35.1
+
 
 

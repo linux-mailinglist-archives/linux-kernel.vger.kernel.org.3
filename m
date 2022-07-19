@@ -2,129 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71ACE57938B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E32579399
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbiGSGyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 02:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
+        id S234044AbiGSGz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 02:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233025AbiGSGyS (ORCPT
+        with ESMTP id S230001AbiGSGzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 02:54:18 -0400
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E5712873F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:54:17 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-h5d0l6MvOry9tQjiREc1Yw-1; Tue, 19 Jul 2022 02:54:06 -0400
-X-MC-Unique: h5d0l6MvOry9tQjiREc1Yw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A57641857F06;
-        Tue, 19 Jul 2022 06:54:05 +0000 (UTC)
-Received: from dreadlord.bne.redhat.com (fdacunha.bne.redhat.com [10.64.0.157])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 45023141511F;
-        Tue, 19 Jul 2022 06:54:01 +0000 (UTC)
-From:   Dave Airlie <airlied@gmail.com>
-To:     torvalds@linux-foundation.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, gregkh@linuxfoundation.org,
-        Daniel Vetter <daniel@ffwll.ch>, mcgrof@kernel.org
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.sf.net,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-media@vger.kernel.org,
-        linux-block@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: [PATCH] docs: driver-api: firmware: add driver firmware guidelines. (v2)
-Date:   Tue, 19 Jul 2022 16:53:57 +1000
-Message-Id: <20220719065357.2705918-1-airlied@gmail.com>
+        Tue, 19 Jul 2022 02:55:55 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B045822BF4;
+        Mon, 18 Jul 2022 23:55:53 -0700 (PDT)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ln8f42K0Wz6J65C;
+        Tue, 19 Jul 2022 14:52:28 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Tue, 19 Jul 2022 08:55:50 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Tue, 19 Jul 2022 08:55:50 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Jim Baxter <jim_baxter@mentor.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>
+CC:     Rob Landley <rob@landley.net>, "hpa@zytor.com" <hpa@zytor.com>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        "Mimi Zohar" <zohar@linux.ibm.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
+        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
+        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
+        "takondra@cisco.com" <takondra@cisco.com>,
+        "kamensky@cisco.com" <kamensky@cisco.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: RE: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Thread-Topic: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
+ ram disk
+Thread-Index: AQHYe+tsPH1HC/8x8Uq7oovD5MPpKK1G5r2QgAG+ywCAACILEIAHUz4AgDRUxQCAACKFgP//9y0AgAD3swA=
+Date:   Tue, 19 Jul 2022 06:55:50 +0000
+Message-ID: <8e6a723874644449be99fcebb0905058@huawei.com>
+References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
+ <1561909199.3985.33.camel@linux.ibm.com>
+ <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
+ <1561991485.4067.14.camel@linux.ibm.com>
+ <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
+ <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
+ <20220609102627.GA3922@lxhi-065>
+ <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
+ <20220610153336.GA8881@lxhi-065>
+ <4bc349a59e4042f7831b1190914851fe@huawei.com>
+ <20220615092712.GA4068@lxhi-065>
+ <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
+ <f82d4961986547b28b6de066219ad08b@huawei.com>
+ <737ddf72-05f4-a47e-c901-fec5b1dfa7a6@mentor.com>
+In-Reply-To: <737ddf72-05f4-a47e-c901-fec5b1dfa7a6@mentor.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,SPOOF_GMAIL_MID
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Airlie <airlied@redhat.com>
-
-A recent snafu where Intel ignored upstream feedback on a firmware
-change, led to a late rc6 fix being required. In order to avoid this
-in the future we should document some expectations around
-linux-firmware.
-
-I was originally going to write this for drm, but it seems quite generic
-advice.
-
-v2: rewritten with suggestions from Thorsten Leemhuis.
-
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Dave Airlie <airlied@redhat.com>
----
- Documentation/driver-api/firmware/core.rst    |  1 +
- .../firmware/firmware-usage-guidelines.rst    | 34 +++++++++++++++++++
- 2 files changed, 35 insertions(+)
- create mode 100644 Documentation/driver-api/firmware/firmware-usage-guidelines.rst
-
-diff --git a/Documentation/driver-api/firmware/core.rst b/Documentation/driver-api/firmware/core.rst
-index 1d1688cbc078..803cd574bbd7 100644
---- a/Documentation/driver-api/firmware/core.rst
-+++ b/Documentation/driver-api/firmware/core.rst
-@@ -13,4 +13,5 @@ documents these features.
-    direct-fs-lookup
-    fallback-mechanisms
-    lookup-order
-+   firmware-usage-guidelines
- 
-diff --git a/Documentation/driver-api/firmware/firmware-usage-guidelines.rst b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
-new file mode 100644
-index 000000000000..34d2412e78c6
---- /dev/null
-+++ b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
-@@ -0,0 +1,34 @@
-+===================
-+Firmware Guidelines
-+===================
-+
-+Drivers that use firmware from linux-firmware should attempt to follow
-+the rules in this guide.
-+
-+* Firmware should be versioned with at least a major/minor version. It
-+  is suggested that the firmware files in linux-firmware be named with
-+  some device specific name, and just the major version. The
-+  major/minor/patch versions should be stored in a header in the
-+  firmware file for the driver to detect any non-ABI fixes/issues. The
-+  firmware files in linux-firmware should be overwritten with the newest
-+  compatible major version. Newer major version firmware should remain
-+  compatible with all kernels that load that major number.
-+
-+* Users should *not* have to install newer firmware to use existing
-+  hardware when they install a newer kernel.  If the hardware isn't
-+  enabled by default or under development, this can be ignored, until
-+  the first kernel release that enables that hardware.  This means no
-+  major version bumps without the kernel retaining backwards
-+  compatibility for the older major versions.  Minor version bumps
-+  should not introduce new features that newer kernels depend on
-+  non-optionally.
-+
-+* If a security fix needs lockstep firmware and kernel fixes in order to
-+  be successful, then all supported major versions in the linux-firmware
-+  repo should be updated with the security fix, and the kernel patches
-+  should detect if the firmware is new enough to declare if the security
-+  issue is fixed.  All communications around security fixes should point
-+  at both the firmware and kernel fixes. If a security fix requires
-+  deprecating old major versions, then this should only be done as a
-+  last option, and be stated clearly in all communications.
-+
--- 
-2.36.1
-
+PiBGcm9tOiBKaW0gQmF4dGVyIFttYWlsdG86amltX2JheHRlckBtZW50b3IuY29tXQ0KPiBTZW50
+OiBNb25kYXksIEp1bHkgMTgsIDIwMjIgODowOCBQTQ0KPiANCj4gDQo+IA0KPiBCZXN0IHJlZ2Fy
+ZHMsDQo+IA0KPiAqSmltIEJheHRlcioNCj4gDQo+IFNpZW1lbnMgRGlnaXRhbCBJbmR1c3RyaWVz
+IFNvZnR3YXJlDQo+IEF1dG9tb3RpdmUgQnVzaW5lc3MgVW5pdA0KPiBESSBTVyBTVFMgQUJVDQo+
+IFVLDQo+IFRlbC46ICs0NCAoMTYxKSA5MjYtMTY1Ng0KPiBtYWlsdG86amltLmJheHRlckBzaWVt
+ZW5zLmNvbSA8bWFpbHRvOmppbS5iYXh0ZXJAc2llbWVucy5jb20+DQo+IHN3LnNpZW1lbnMuY29t
+IDxodHRwczovL3N3LnNpZW1lbnMuY29tLz4NCj4gDQo+IE9uIDE4LzA3LzIwMjIgMTc6NDksIFJv
+YmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4+IEZyb206IEppbSBCYXh0ZXIgW21haWx0bzpqaW1fYmF4
+dGVyQG1lbnRvci5jb21dDQo+ID4+IFNlbnQ6IE1vbmRheSwgSnVseSAxOCwgMjAyMiA2OjM2IFBN
+DQo+ID4+DQo+ID4+DQo+ID4+IEhlbGxvLA0KPiA+Pg0KPiA+PiBJIGhhdmUgYmVlbiB0ZXN0aW5n
+IHRoZXNlIHBhdGNoZXMgYW5kIGRvIG5vdCBzZWUgdGhlIHhhdHRyIGluZm9ybWF0aW9uIHdoZW4N
+Cj4gPj4gdHJ5aW5nIHRvIHJldHJpZXZlIGl0IHdpdGhpbiB0aGUgaW5pdHJhbWZzLCBkbyB5b3Ug
+aGF2ZSBhbiBleGFtcGxlIG9mIGhvdw0KPiA+PiB5b3UgdGVzdGVkIHRoaXMgb3JpZ2luYWxseT8N
+Cj4gPg0KPiA+IEhpIEppbSwgYWxsDQo+ID4NCj4gPiBhcG9sb2dpZXMsIEkgZGlkbid0IGZpbmQg
+eWV0IHRoZSB0aW1lIHRvIGxvb2sgYXQgdGhpcy4NCj4gDQo+IEhlbGxvIFJvYmVydG8sDQo+IA0K
+PiBUaGFuayB5b3UgZm9yIHlvdXIgcmVzcG9uc2UsIEkgY2FuIHdhaXQgdW50aWwgeW91IGhhdmUg
+bG9va2VkIGF0IHRoZSBwYXRjaGVzLA0KPiBJIGFza2VkIHRoZSBxdWVzdGlvbiB0byBtYWtlIHN1
+cmUgaXQgd2FzIG5vdCBzb21ldGhpbmcgd3JvbmcgaW4gbXkNCj4gY29uZmlndXJhdGlvbi4NCj4g
+DQo+ID4NCj4gPiBVaG0sIEkgZ3Vlc3MgdGhpcyBjb3VsZCBiZSBzb2x2ZWQgd2l0aDoNCj4gPg0K
+PiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9vcGVuZXVsZXItDQo+IG1pcnJvci9rZXJuZWwvY29tbWl0
+LzE4YTUwMmY3ZTNiMWRlN2I5YmEwYzcwODk2Y2UwOGVlMTNkMDUyZGENCj4gPg0KPiA+IGFuZCBh
+ZGRpbmcgaW5pdHJhbXRtcGZzIHRvIHRoZSBrZXJuZWwgY29tbWFuZCBsaW5lLiBZb3UgYXJlDQo+
+ID4gcHJvYmFibHkgdXNpbmcgcmFtZnMsIHdoaWNoIGRvZXMgbm90IGhhdmUgeGF0dHIgc3VwcG9y
+dC4NCj4gPg0KPiANCj4gDQo+IFRoYW5rIHlvdSwgSSBoYXZlIHRlc3RlZCB0aGF0IHBhdGNoIGJ1
+dCB0aGUgcHJvYmxlbSByZW1haW5lZC4gSGVyZSBpcyBteQ0KPiBjb21tYW5kIGxpbmUsIEkgd29u
+ZGVyIGlmIHRoZXJlIGlzIHNvbWV0aGluZyB3cm9uZy4NCj4gDQo+IEtlcm5lbCBjb21tYW5kIGxp
+bmU6IHJ3IHJvb3Rmc3R5cGU9aW5pdHJhbXRtcGZzIHJvb3Q9L2Rldi9yYW0wDQo+IGluaXRyZD0w
+eDUwMDAwMDAwMCByb290d2FpdA0KDQpJdCBpcyBqdXN0IGluaXRyYW10bXBmcywgd2l0aG91dCBy
+b290ZnN0eXBlPS4NCg0KUm9iZXJ0bw0K

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE53579A1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA43579EAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238657AbiGSMKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S242780AbiGSNDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238553AbiGSMJF (ORCPT
+        with ESMTP id S242717AbiGSM73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:09:05 -0400
+        Tue, 19 Jul 2022 08:59:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85F946D8E;
-        Tue, 19 Jul 2022 05:02:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4D246D84;
+        Tue, 19 Jul 2022 05:24:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A89EB81A2E;
-        Tue, 19 Jul 2022 12:02:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA65BC341C6;
-        Tue, 19 Jul 2022 12:02:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6ED8AB81B36;
+        Tue, 19 Jul 2022 12:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9066FC341D3;
+        Tue, 19 Jul 2022 12:24:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232130;
-        bh=/54opaxZzA9inRinu6kZ36+7FYhDedqpCarzFS/hmwY=;
+        s=korg; t=1658233494;
+        bh=7dVizbUshcZcXEg8DTB9O6088LdUH2iKBxS14dy8z6w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=duQS7WXIp9TghpiktfsENeUN7GpvV5kPYCiTPXvHe0IQFzURIyMm7MBFq5Cdk9OSU
-         8w3qBTp+5YhxjVLEs4TeeW4klol3kjNNj7+7Gvveci2aWRidpGeyOMaT2tkZKz2V1L
-         +OO21ANYiy05P20pAwwvZV1jwIgfdo88yPz/CxyA=
+        b=Wu81fupvCWKx4ShJbouMJZeFbcQlI+psetdNEYpOqsxBtKW4BqeDVLQU1qNA4LHbk
+         Qws0KRxyWmcs3dDyxUCBrCnI8GZxRtCNAMiV5WtCSKnVpP1LNOC7gCE5Iyg6wh9WyG
+         dzyliQw9NiNc3c3bYXIflV7QYTDDbVW1kt2Or7cU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        stable@vger.kernel.org,
+        "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 22/71] drm/i915: fix a possible refcount leak in intel_dp_add_mst_connector()
+Subject: [PATCH 5.18 140/231] net: atlantic: remove deep parameter on suspend/resume functions
 Date:   Tue, 19 Jul 2022 13:53:45 +0200
-Message-Id: <20220719114554.365939156@linuxfoundation.org>
+Message-Id: <20220719114726.159402867@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 
-[ Upstream commit 85144df9ff4652816448369de76897c57cbb1b93 ]
+[ Upstream commit 0f33250760384e05c36466b0a2f92f3c6007ba92 ]
 
-If drm_connector_init fails, intel_connector_free will be called to take
-care of proper free. So it is necessary to drop the refcount of port
-before intel_connector_free.
+Below commit claims that atlantic NIC requires to reset the device on pm
+op, and had set the deep to true for all suspend/resume functions.
+commit 1809c30b6e5a ("net: atlantic: always deep reset on pm op, fixing up my null deref regression")
+So, we could remove deep parameter on suspend/resume functions without
+any functional change.
 
-Fixes: 091a4f91942a ("drm/i915: Handle drm-layer errors in intel_dp_add_mst_connector")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Reviewed-by: José Roberto de Souza <jose.souza@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220624130406.17996-1-jose.souza@intel.com
-Signed-off-by: José Roberto de Souza <jose.souza@intel.com>
-(cherry picked from commit cea9ed611e85d36a05db52b6457bf584b7d969e2)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Fixes: 1809c30b6e5a ("net: atlantic: always deep reset on pm op, fixing up my null deref regression")
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+Link: https://lore.kernel.org/r/20220713111224.1535938-1-acelan.kao@canonical.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/display/intel_dp_mst.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../ethernet/aquantia/atlantic/aq_pci_func.c  | 24 ++++++++-----------
+ 1 file changed, 10 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/display/intel_dp_mst.c b/drivers/gpu/drm/i915/display/intel_dp_mst.c
-index 74d45a0eecb8..c59b43fb34a8 100644
---- a/drivers/gpu/drm/i915/display/intel_dp_mst.c
-+++ b/drivers/gpu/drm/i915/display/intel_dp_mst.c
-@@ -520,6 +520,7 @@ static struct drm_connector *intel_dp_add_mst_connector(struct drm_dp_mst_topolo
- 	ret = drm_connector_init(dev, connector, &intel_dp_mst_connector_funcs,
- 				 DRM_MODE_CONNECTOR_DisplayPort);
- 	if (ret) {
-+		drm_dp_mst_put_port_malloc(port);
- 		intel_connector_free(intel_connector);
- 		return NULL;
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+index 831833911a52..dbd5263130f9 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+@@ -379,7 +379,7 @@ static void aq_pci_shutdown(struct pci_dev *pdev)
  	}
+ }
+ 
+-static int aq_suspend_common(struct device *dev, bool deep)
++static int aq_suspend_common(struct device *dev)
+ {
+ 	struct aq_nic_s *nic = pci_get_drvdata(to_pci_dev(dev));
+ 
+@@ -392,17 +392,15 @@ static int aq_suspend_common(struct device *dev, bool deep)
+ 	if (netif_running(nic->ndev))
+ 		aq_nic_stop(nic);
+ 
+-	if (deep) {
+-		aq_nic_deinit(nic, !nic->aq_hw->aq_nic_cfg->wol);
+-		aq_nic_set_power(nic);
+-	}
++	aq_nic_deinit(nic, !nic->aq_hw->aq_nic_cfg->wol);
++	aq_nic_set_power(nic);
+ 
+ 	rtnl_unlock();
+ 
+ 	return 0;
+ }
+ 
+-static int atl_resume_common(struct device *dev, bool deep)
++static int atl_resume_common(struct device *dev)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(dev);
+ 	struct aq_nic_s *nic;
+@@ -415,10 +413,8 @@ static int atl_resume_common(struct device *dev, bool deep)
+ 	pci_set_power_state(pdev, PCI_D0);
+ 	pci_restore_state(pdev);
+ 
+-	if (deep) {
+-		/* Reinitialize Nic/Vecs objects */
+-		aq_nic_deinit(nic, !nic->aq_hw->aq_nic_cfg->wol);
+-	}
++	/* Reinitialize Nic/Vecs objects */
++	aq_nic_deinit(nic, !nic->aq_hw->aq_nic_cfg->wol);
+ 
+ 	if (netif_running(nic->ndev)) {
+ 		ret = aq_nic_init(nic);
+@@ -444,22 +440,22 @@ static int atl_resume_common(struct device *dev, bool deep)
+ 
+ static int aq_pm_freeze(struct device *dev)
+ {
+-	return aq_suspend_common(dev, true);
++	return aq_suspend_common(dev);
+ }
+ 
+ static int aq_pm_suspend_poweroff(struct device *dev)
+ {
+-	return aq_suspend_common(dev, true);
++	return aq_suspend_common(dev);
+ }
+ 
+ static int aq_pm_thaw(struct device *dev)
+ {
+-	return atl_resume_common(dev, true);
++	return atl_resume_common(dev);
+ }
+ 
+ static int aq_pm_resume_restore(struct device *dev)
+ {
+-	return atl_resume_common(dev, true);
++	return atl_resume_common(dev);
+ }
+ 
+ static const struct dev_pm_ops aq_pm_ops = {
 -- 
 2.35.1
 

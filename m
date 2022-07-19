@@ -2,49 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA30579EE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542FA579B69
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242498AbiGSNHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
+        id S240083AbiGSM1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243037AbiGSNHM (ORCPT
+        with ESMTP id S239713AbiGSMZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:07:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6A9B9A15;
-        Tue, 19 Jul 2022 05:27:23 -0700 (PDT)
+        Tue, 19 Jul 2022 08:25:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AD7509E0;
+        Tue, 19 Jul 2022 05:09:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B376E6020F;
-        Tue, 19 Jul 2022 12:27:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94551C341CB;
-        Tue, 19 Jul 2022 12:27:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48D9FB81B98;
+        Tue, 19 Jul 2022 12:09:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73CA4C36AE9;
+        Tue, 19 Jul 2022 12:09:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233642;
-        bh=Nu25KeaHG2mnQyV9qxyD+sSs3aEncDCtP3ul7XyJKUg=;
+        s=korg; t=1658232575;
+        bh=d7oSOougbccn39NI/rBopjts/SuX7tcbX+JuMVyU66A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U2MK59tKZPlru2QYjxAmc6XuA6V1aCf8JZpjUAAwLk+OwZibIoyfloTQOsG05R7xW
-         p6WVIcVBraaBKLgBQsh+rdgVh+1FKfepEVejOt09zzRVGqTyMIza9vjfcm/rxHQeXB
-         j7/7bRWbesoEPv2mqbJs6SY5RNdN/sQBvwY4wfM4=
+        b=ySrUqNTJLxxEHiwFWTOAddEKvyGQWdK7RyLETIC6PutNcnZw7aGTyDg8zoxJpTbkx
+         K1iQvtRekWiP33bVaYKpI4Uo1XJ7RlMlDIEYESVe+w32rzPNCk4MGtt2LBAPdjrTla
+         7yLeWqp8oU9PTW/JyZX88W8zpVdbI8xeRFGP00BU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 192/231] ASoC: SOF: Intel: hda-loader: Make sure that the fw load sequence is followed
-Date:   Tue, 19 Jul 2022 13:54:37 +0200
-Message-Id: <20220719114730.293222807@linuxfoundation.org>
+        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH 5.10 105/112] usb: dwc3: gadget: Fix event pending check
+Date:   Tue, 19 Jul 2022 13:54:38 +0200
+Message-Id: <20220719114637.220624404@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,43 +52,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-[ Upstream commit c31691e0d126ec5d60d2b6b03f699c11b613b219 ]
+commit 7441b273388b9a59d8387a03ffbbca9d5af6348c upstream.
 
-The hda_dsp_enable_core() is powering up _and_ unstall the core in one
-call while the first step of the firmware loading  must not unstall the
-core.
-The core can be unstalled only after the set cpb_cfp and the configuration
-of the IPC register for the ROM_CONTROL message.
+The DWC3_EVENT_PENDING flag is used to protect against invalid call to
+top-half interrupt handler, which can occur when there's a delay in
+software detection of the interrupt line deassertion.
 
-Complements: 2a68ff846164 ("ASoC: SOF: Intel: hda: Revisit IMR boot sequence")
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Link: https://lore.kernel.org/r/20220609085949.29062-3-peter.ujfalusi@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+However, the clearing of this flag was done prior to unmasking the
+interrupt line, creating opportunity where the top-half handler can
+come. This breaks the serialization and creates a race between the
+top-half and bottom-half handler, resulting in losing synchronization
+between the controller and the driver when processing events.
+
+To fix this, make sure the clearing of the DWC3_EVENT_PENDING is done at
+the end of the bottom-half handler.
+
+Fixes: d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events in event cache")
+Cc: stable@vger.kernel.org
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Link: https://lore.kernel.org/r/8670aaf1cf52e7d1e6df2a827af2d77263b93b75.1656380429.git.Thinh.Nguyen@synopsys.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/sof/intel/hda-loader.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc3/gadget.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/sof/intel/hda-loader.c b/sound/soc/sof/intel/hda-loader.c
-index 2ac5d9d0719b..9f624a84182b 100644
---- a/sound/soc/sof/intel/hda-loader.c
-+++ b/sound/soc/sof/intel/hda-loader.c
-@@ -112,7 +112,7 @@ static int cl_dsp_init(struct snd_sof_dev *sdev, int stream_tag)
- 	int ret;
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -3781,7 +3781,6 @@ static irqreturn_t dwc3_process_event_bu
+ 	}
  
- 	/* step 1: power up corex */
--	ret = hda_dsp_enable_core(sdev, chip->host_managed_cores_mask);
-+	ret = hda_dsp_core_power_up(sdev, chip->host_managed_cores_mask);
- 	if (ret < 0) {
- 		if (hda->boot_iteration == HDA_FW_BOOT_ATTEMPTS)
- 			dev_err(sdev->dev, "error: dsp core 0/1 power up failed\n");
--- 
-2.35.1
-
+ 	evt->count = 0;
+-	evt->flags &= ~DWC3_EVENT_PENDING;
+ 	ret = IRQ_HANDLED;
+ 
+ 	/* Unmask interrupt */
+@@ -3794,6 +3793,9 @@ static irqreturn_t dwc3_process_event_bu
+ 		dwc3_writel(dwc->regs, DWC3_DEV_IMOD(0), dwc->imod_interval);
+ 	}
+ 
++	/* Keep the clearing of DWC3_EVENT_PENDING at the end */
++	evt->flags &= ~DWC3_EVENT_PENDING;
++
+ 	return ret;
+ }
+ 
 
 

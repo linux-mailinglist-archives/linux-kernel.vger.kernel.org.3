@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA8D57A52A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2152857A574
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239081AbiGSR0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S239700AbiGSRfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238253AbiGSR0f (ORCPT
+        with ESMTP id S237992AbiGSRfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:26:35 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0023E49B46;
-        Tue, 19 Jul 2022 10:26:33 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r6so20576892edd.7;
-        Tue, 19 Jul 2022 10:26:33 -0700 (PDT)
+        Tue, 19 Jul 2022 13:35:11 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0747E0C1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:35:09 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id ss3so28483771ejc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:35:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DgVQsDcIh7hMG88c9U3+sbfPk+o0H8fxritPjqEqUmM=;
-        b=ewy8UWmTZSOlmHm93dXdsj+T9KMMunUesjU+yZoFsRUP5M4T1HZ6p/YEafbPWoBL77
-         wtHP/Il2PgT+Yp3AbwsTQWLJkdwDOEvyeCF9DSnG/VizG+lDsMq7lKUGbn8gPe6AFaTh
-         3KENwOUzWnXHBiEo5yfUzq2bVdE04Vqw29inUoV0BGuJr3XK98uNPqrvEoZu/gn+dxux
-         xFoE51wcf/8GYqXOASHhUxTxhqAdkFf0YHe3LtMpa+kdF0sWKh5VKZ0E4HWTRFQQxoOB
-         UlHiv/Q4JDjy/TTlngIwlpM53/xJXRnqyYiN1w+Lle3UOGNcvoXko4TmesLvyp+MUG1j
-         2fZA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tnyHXEPt7s4Hu+atwyWT41QjMNO3QXDExK9gYwA1iFo=;
+        b=cHu51hj12r7iQc2qyxLjkVoVif3j6nsczpvsYRyUA1j/of+rBAWUDd6qw2jKlzno7F
+         r56GwpxwoYHkkUsfxkv1NRmshwA+9f2LnrYO7lDBkrFwqsd1nKbkoG7yEBcSScGiKkjb
+         OFEzxrZPv8a2GJc7DF6gAf3Ukd5+mM1000gZE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DgVQsDcIh7hMG88c9U3+sbfPk+o0H8fxritPjqEqUmM=;
-        b=KY+AQ++wD8fPVnDLNvM2UpjgNNngPTfT30pvElXR73KckgRys2bbpdX7DHE7WbcivN
-         y7xjUyQxrc3yQ0dARKnDSIHrB8lNzRJsNLHxXhrvvviBfK89Z9PzhrGvmegVrCgUeWPI
-         +5wk0vaVzbP6KYQJyHK9Y6D8zVxzXqZRYshXRxCa40Az6/XfSTvG9z9J7bzp/kMoPD3C
-         AKgGRHLJna6T9dHpY+fvMJ8ZWv5NvMkghWvGawVWu9vhBeEkMsOe5ouARibZfFvjKv+W
-         oJV+SoZgjOAnoDDRfNEw41RHXI/or1TR+GJrynREG8XHgwx6ZwnqrdPeOBuLDTIF2wkB
-         fMmw==
-X-Gm-Message-State: AJIora+pDxkP/mmbd/EMry3JArSvS86wgyrAlSZPcjOFYevOR7gE5T4p
-        cX1cxDEgUcBJQn1fyqFVXrw=
-X-Google-Smtp-Source: AGRyM1stKEj1phZY3OyPjS19E+XvHR0R7QOcStoagXx3gBsiHUU0/m9fj5G6GcYPSUtAa1ULGUwL9A==
-X-Received: by 2002:aa7:c9d3:0:b0:43a:67b9:6eea with SMTP id i19-20020aa7c9d3000000b0043a67b96eeamr44610946edt.94.1658251592341;
-        Tue, 19 Jul 2022 10:26:32 -0700 (PDT)
-Received: from skbuf ([188.27.185.104])
-        by smtp.gmail.com with ESMTPSA id h9-20020aa7c609000000b0043ab1ad0b6bsm10825065edq.37.2022.07.19.10.26.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 10:26:30 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 20:26:28 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [RFC PATCH net-next 5/9] net: pcs: lynx: Use pcs_get_by_provider
- to get PCS
-Message-ID: <20220719172628.vkkrarx5zkiyumze@skbuf>
-References: <20220711160519.741990-1-sean.anderson@seco.com>
- <20220711160519.741990-6-sean.anderson@seco.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tnyHXEPt7s4Hu+atwyWT41QjMNO3QXDExK9gYwA1iFo=;
+        b=azTCWHujfBA0n0v2dw351GxmNrmn/07O8akf1RdEkZjDRU8fPtEgPiQh738AxyhjzX
+         v4/nGkR9rnTYfZa2UmnKDZN+KTEq1BqGsFCZif8/5anZ15SeOX749SnQ0wm6GWqqOcmO
+         Ww64IJfjMtpAmNQjVKxR0vvaE9quduXgU7VOhnEBLxDzkOc1G2K7maO6GCX0SxzwokkR
+         2+skkVUthrUqTFVuw9UskjFhB/fmsRUguCZKUMPLmkDF8lyA4Vw6d3JXwfNxWC5wSIak
+         V+qvKOJZzvP7BRuJ9ahqvyprTn5kIzo3/kYJa/bdC9OzL+FyXZs64emzSJtjjoCn/IEP
+         9HdQ==
+X-Gm-Message-State: AJIora97VC4E20JLIdtDYnx+egEsXOUWOX7VfD3JQxA1D0SHdzypqBCj
+        4/fHbSzd1C7L2djuy6clQIXE4cgUi9ZJ9nAMKoM=
+X-Google-Smtp-Source: AGRyM1vife3EXrGXSJqBtpSvbY2GpVfynLxUPT40S2OETVMxFmBAEKOuWlS6vgakTcGpZiPNkv2tPw==
+X-Received: by 2002:a17:907:6890:b0:72c:7533:8901 with SMTP id qy16-20020a170907689000b0072c75338901mr30734815ejc.100.1658252108251;
+        Tue, 19 Jul 2022 10:35:08 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170906560d00b006fee98045cdsm7012568ejq.10.2022.07.19.10.35.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 10:35:08 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id n185so9383841wmn.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:35:07 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ec9:b0:3a2:e9bd:fcd9 with SMTP id
+ g9-20020a05600c4ec900b003a2e9bdfcd9mr352500wmq.154.1658251636400; Tue, 19 Jul
+ 2022 10:27:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711160519.741990-6-sean.anderson@seco.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <YtXOMPpmx8TcFtOX@worktop.programming.kicks-ass.net>
+ <87lesqukm5.ffs@tglx> <2f7f899cb75b79b08b0662ff4d2cb877@overdrivepizza.com>
+ <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
+ <87fsiyuhyz.ffs@tglx> <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
+ <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
+ <CAHk-=wiYHXeWnF8Ea5xb735ehJ8FbjTT6UCvHYjX=Ooc7Z5sOw@mail.gmail.com>
+ <0e038c2795784b7eb4de52f77b67206a@AcuMS.aculab.com> <CAHk-=whycTCSPwqV53ybUX=fDKMDk_Y8JaLug3KfUSiMF2TOQg@mail.gmail.com>
+ <YtbolH9YegJWUmHT@google.com>
+In-Reply-To: <YtbolH9YegJWUmHT@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 19 Jul 2022 10:27:00 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wghqo3OtyR54FkBjkuELubPE3RzRNYU1z90BYtfuaoxzA@mail.gmail.com>
+Message-ID: <CAHk-=wghqo3OtyR54FkBjkuELubPE3RzRNYU1z90BYtfuaoxzA@mail.gmail.com>
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Collingbourne <pcc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,312 +99,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 12:05:15PM -0400, Sean Anderson wrote:
-> There is a common flow in several drivers where a lynx PCS is created
-> without a corresponding firmware node. Consolidate these into one helper
-> function. Because we control when the mdiodev is registered, we can add
-> a custom match function which will automatically bind our driver
-> (instead of using device_driver_attach).
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
-> 
->  drivers/net/dsa/ocelot/felix_vsc9959.c        | 25 ++++---------------
->  drivers/net/dsa/ocelot/seville_vsc9953.c      | 25 ++++---------------
->  .../net/ethernet/freescale/enetc/enetc_pf.c   | 21 +++-------------
->  drivers/net/pcs/pcs-lynx.c                    | 24 ++++++++++++++++++
->  include/linux/pcs-lynx.h                      |  1 +
->  5 files changed, 39 insertions(+), 57 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/ocelot/felix_vsc9959.c b/drivers/net/dsa/ocelot/felix_vsc9959.c
-> index 57634e2296c0..0a756c25d5e8 100644
-> --- a/drivers/net/dsa/ocelot/felix_vsc9959.c
-> +++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
-> @@ -11,6 +11,7 @@
->  #include <net/tc_act/tc_gate.h>
->  #include <soc/mscc/ocelot.h>
->  #include <linux/dsa/ocelot.h>
-> +#include <linux/pcs.h>
->  #include <linux/pcs-lynx.h>
->  #include <net/pkt_sched.h>
->  #include <linux/iopoll.h>
-> @@ -1089,16 +1090,9 @@ static int vsc9959_mdio_bus_alloc(struct ocelot *ocelot)
->  		if (ocelot_port->phy_mode == PHY_INTERFACE_MODE_INTERNAL)
->  			continue;
->  
-> -		mdio_device = mdio_device_create(felix->imdio, port);
-> -		if (IS_ERR(mdio_device))
-> +		phylink_pcs = lynx_pcs_create_on_bus(felix->imdio, port);
-> +		if (IS_ERR(phylink_pcs))
->  			continue;
-> -
-> -		phylink_pcs = lynx_pcs_create(mdio_device);
-> -		if (IS_ERR(phylink_pcs)) {
-> -			mdio_device_free(mdio_device);
-> -			continue;
-> -		}
-> -
->  		felix->pcs[port] = phylink_pcs;
->  
->  		dev_info(dev, "Found PCS at internal MDIO address %d\n", port);
-> @@ -1112,17 +1106,8 @@ static void vsc9959_mdio_bus_free(struct ocelot *ocelot)
->  	struct felix *felix = ocelot_to_felix(ocelot);
->  	int port;
->  
-> -	for (port = 0; port < ocelot->num_phys_ports; port++) {
-> -		struct phylink_pcs *phylink_pcs = felix->pcs[port];
-> -		struct mdio_device *mdio_device;
-> -
-> -		if (!phylink_pcs)
-> -			continue;
-> -
-> -		mdio_device = lynx_get_mdio_device(phylink_pcs);
-> -		mdio_device_free(mdio_device);
-> -		lynx_pcs_destroy(phylink_pcs);
-> -	}
-> +	for (port = 0; port < ocelot->num_phys_ports; port++)
-> +		pcs_put(felix->pcs[port]);
->  	mdiobus_unregister(felix->imdio);
->  	mdiobus_free(felix->imdio);
->  }
-> diff --git a/drivers/net/dsa/ocelot/seville_vsc9953.c b/drivers/net/dsa/ocelot/seville_vsc9953.c
-> index 8c52de5d0b02..9006dec85ef0 100644
-> --- a/drivers/net/dsa/ocelot/seville_vsc9953.c
-> +++ b/drivers/net/dsa/ocelot/seville_vsc9953.c
-> @@ -9,6 +9,7 @@
->  #include <linux/mdio/mdio-mscc-miim.h>
->  #include <linux/of_mdio.h>
->  #include <linux/of_platform.h>
-> +#include <linux/pcs.h>
->  #include <linux/pcs-lynx.h>
->  #include <linux/dsa/ocelot.h>
->  #include <linux/iopoll.h>
-> @@ -1044,16 +1045,9 @@ static int vsc9953_mdio_bus_alloc(struct ocelot *ocelot)
->  		if (ocelot_port->phy_mode == PHY_INTERFACE_MODE_INTERNAL)
->  			continue;
->  
-> -		mdio_device = mdio_device_create(felix->imdio, addr);
-> -		if (IS_ERR(mdio_device))
-> +		phylink_pcs = lynx_pcs_create_on_bus(felix->imdio, addr);
-> +		if (IS_ERR(phylink_pcs))
->  			continue;
-> -
-> -		phylink_pcs = lynx_pcs_create(mdio_device);
-> -		if (IS_ERR(phylink_pcs)) {
-> -			mdio_device_free(mdio_device);
-> -			continue;
-> -		}
-> -
->  		felix->pcs[port] = phylink_pcs;
->  
->  		dev_info(dev, "Found PCS at internal MDIO address %d\n", addr);
-> @@ -1067,17 +1061,8 @@ static void vsc9953_mdio_bus_free(struct ocelot *ocelot)
->  	struct felix *felix = ocelot_to_felix(ocelot);
->  	int port;
->  
-> -	for (port = 0; port < ocelot->num_phys_ports; port++) {
-> -		struct phylink_pcs *phylink_pcs = felix->pcs[port];
-> -		struct mdio_device *mdio_device;
-> -
-> -		if (!phylink_pcs)
-> -			continue;
-> -
-> -		mdio_device = lynx_get_mdio_device(phylink_pcs);
-> -		mdio_device_free(mdio_device);
-> -		lynx_pcs_destroy(phylink_pcs);
-> -	}
-> +	for (port = 0; port < ocelot->num_phys_ports; port++)
-> +		pcs_put(felix->pcs[port]);
->  
->  	/* mdiobus_unregister and mdiobus_free handled by devres */
->  }
-> diff --git a/drivers/net/ethernet/freescale/enetc/enetc_pf.c b/drivers/net/ethernet/freescale/enetc/enetc_pf.c
-> index 8c923a93da88..8da7c8644e44 100644
-> --- a/drivers/net/ethernet/freescale/enetc/enetc_pf.c
-> +++ b/drivers/net/ethernet/freescale/enetc/enetc_pf.c
-> @@ -8,6 +8,7 @@
->  #include <linux/of_platform.h>
->  #include <linux/of_mdio.h>
->  #include <linux/of_net.h>
-> +#include <linux/pcs.h>
->  #include <linux/pcs-lynx.h>
->  #include "enetc_ierb.h"
->  #include "enetc_pf.h"
-> @@ -827,7 +828,6 @@ static int enetc_imdio_create(struct enetc_pf *pf)
->  	struct device *dev = &pf->si->pdev->dev;
->  	struct enetc_mdio_priv *mdio_priv;
->  	struct phylink_pcs *phylink_pcs;
-> -	struct mdio_device *mdio_device;
->  	struct mii_bus *bus;
->  	int err;
->  
-> @@ -851,16 +851,8 @@ static int enetc_imdio_create(struct enetc_pf *pf)
->  		goto free_mdio_bus;
->  	}
->  
-> -	mdio_device = mdio_device_create(bus, 0);
-> -	if (IS_ERR(mdio_device)) {
-> -		err = PTR_ERR(mdio_device);
-> -		dev_err(dev, "cannot create mdio device (%d)\n", err);
-> -		goto unregister_mdiobus;
-> -	}
-> -
-> -	phylink_pcs = lynx_pcs_create(mdio_device);
-> +	phylink_pcs = lynx_pcs_create_on_bus(bus, 0);
->  	if (IS_ERR(phylink_pcs)) {
-> -		mdio_device_free(mdio_device);
->  		err = PTR_ERR(phylink_pcs);
->  		dev_err(dev, "cannot create lynx pcs (%d)\n", err);
->  		goto unregister_mdiobus;
-> @@ -880,13 +872,8 @@ static int enetc_imdio_create(struct enetc_pf *pf)
->  
->  static void enetc_imdio_remove(struct enetc_pf *pf)
->  {
-> -	struct mdio_device *mdio_device;
-> -
-> -	if (pf->pcs) {
-> -		mdio_device = lynx_get_mdio_device(pf->pcs);
-> -		mdio_device_free(mdio_device);
-> -		lynx_pcs_destroy(pf->pcs);
-> -	}
-> +	if (pf->pcs)
-> +		pcs_put(pf->pcs);
->  	if (pf->imdio) {
->  		mdiobus_unregister(pf->imdio);
->  		mdiobus_free(pf->imdio);
-> diff --git a/drivers/net/pcs/pcs-lynx.c b/drivers/net/pcs/pcs-lynx.c
-> index 8272072698e4..adb9fd5ce72e 100644
-> --- a/drivers/net/pcs/pcs-lynx.c
-> +++ b/drivers/net/pcs/pcs-lynx.c
-> @@ -403,6 +403,30 @@ struct phylink_pcs *lynx_pcs_create(struct mdio_device *mdio)
->  }
->  EXPORT_SYMBOL(lynx_pcs_create);
->  
-> +struct phylink_pcs *lynx_pcs_create_on_bus(struct mii_bus *bus, int addr)
-> +{
-> +	struct mdio_device *mdio;
-> +	struct phylink_pcs *pcs;
-> +	int err;
-> +
-> +	mdio = mdio_device_create(bus, addr);
-> +	if (IS_ERR(mdio))
-> +		return ERR_CAST(mdio);
-> +
-> +	mdio->bus_match = mdio_device_bus_match;
-> +	strncpy(mdio->modalias, "lynx-pcs", sizeof(mdio->modalias));
-> +	err = mdio_device_register(mdio);
+On Tue, Jul 19, 2022 at 10:23 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+>
+> The preamble hash is encoded into an instruction just to avoid special
+> casing objtool, which would otherwise get confused about the random
+> bytes. On arm64, we just emit a bare constant before the function.
 
-Yeah, so the reason why mdio_device_register() fails with -EBUSY for the
-PCS devices created by felix_vsc9959.c is this:
+Ahh.
 
-int mdiobus_register_device(struct mdio_device *mdiodev)
-{
-	int err;
+I think objtool would want to understand about kCFI anyway, so I think
+in the long run that hack isn't a goog idea.
 
-	if (mdiodev->bus->mdio_map[mdiodev->addr])
-		return -EBUSY;
+But I get why you'd do it as a "do this as just a compiler thing and
+hide it from objtool" as a development strategy.
 
-In other words, we already have an existing mdiodev on the bus at
-address mdiodev->addr. Funnily enough, that device is actually us.
-It was created at MDIO bus creation time, a dummy phydev that no one
-connects to, found by mdiobus_scan(). I knew this was taking place,
-but forgot/didn't realize the connection with this patch set, and that
-dummy phy_device was completely harmless until now.
-
-I can suppress its creation like this:
-
-From b1d1cd1625a27a62fd02598c7015b8ff0afdd28a Mon Sep 17 00:00:00 2001
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-Date: Tue, 19 Jul 2022 20:15:52 +0300
-Subject: [PATCH] net: dsa: ocelot: suppress PHY device scanning on the
- internal MDIO bus
-
-This bus contains Lynx PCS devices, and if the lynx-pcs driver ever
-decided to call mdio_device_register(), it would fail due to
-mdiobus_scan() having created a dummy phydev for the same address
-(the PCS responds to standard clause 22 PHY ID registers and can
-therefore by autodetected by phylib which thinks it's a PHY).
-
-On the Seville driver, things are a bit more complicated, since bus
-creation is handled by mscc_miim_setup() and that is shared with the
-dedicated mscc-miim driver. Suppress PHY scanning only for the Seville
-internal MDIO bus rather than for the whole mscc-miim driver, since we
-know that on NXP T1040, this bus only contains Lynx PCS devices.
-
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
- drivers/net/dsa/ocelot/felix_vsc9959.c   | 4 ++++
- drivers/net/dsa/ocelot/seville_vsc9953.c | 6 +++++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/dsa/ocelot/felix_vsc9959.c b/drivers/net/dsa/ocelot/felix_vsc9959.c
-index 927225e51f05..1ff71f1df316 100644
---- a/drivers/net/dsa/ocelot/felix_vsc9959.c
-+++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
-@@ -1062,6 +1062,10 @@ static int vsc9959_mdio_bus_alloc(struct ocelot *ocelot)
- 	bus->read = enetc_mdio_read;
- 	bus->write = enetc_mdio_write;
- 	bus->parent = dev;
-+	/* Suppress PHY device creation in mdiobus_scan(),
-+	 * we have Lynx PCSs
-+	 */
-+	bus->phy_mask = ~0;
- 	mdio_priv = bus->priv;
- 	mdio_priv->hw = hw;
- 	/* This gets added to imdio_regs, which already maps addresses
-diff --git a/drivers/net/dsa/ocelot/seville_vsc9953.c b/drivers/net/dsa/ocelot/seville_vsc9953.c
-index 9006dec85ef0..9f400867fce3 100644
---- a/drivers/net/dsa/ocelot/seville_vsc9953.c
-+++ b/drivers/net/dsa/ocelot/seville_vsc9953.c
-@@ -1018,12 +1018,16 @@ static int vsc9953_mdio_bus_alloc(struct ocelot *ocelot)
- 	rc = mscc_miim_setup(dev, &bus, "VSC9953 internal MDIO bus",
- 			     ocelot->targets[GCB],
- 			     ocelot->map[GCB][GCB_MIIM_MII_STATUS & REG_MASK]);
--
- 	if (rc) {
- 		dev_err(dev, "failed to setup MDIO bus\n");
- 		return rc;
- 	}
- 
-+	/* Suppress PHY device creation in mdiobus_scan(),
-+	 * we have Lynx PCSs
-+	 */
-+	bus->phy_mask = ~0;
-+
- 	/* Needed in order to initialize the bus mutex lock */
- 	rc = devm_of_mdiobus_register(dev, bus, NULL);
- 	if (rc < 0) {
--- 
-2.34.1
-
-and then things start working (including traffic).
-
-> +	if (err) {
-> +		mdio_device_free(mdio);
-> +		return ERR_PTR(err);
-> +	}
-> +
-> +	pcs = pcs_get_by_provider(&mdio->dev);
-> +	mdio_device_free(mdio);
-> +	return pcs;
-> +}
-> +EXPORT_SYMBOL(lynx_pcs_create_on_bus);
-> +
->  void lynx_pcs_destroy(struct phylink_pcs *pcs)
->  {
->  	pcs_put(pcs);
-> diff --git a/include/linux/pcs-lynx.h b/include/linux/pcs-lynx.h
-> index 5712cc2ce775..1c14342bb8c4 100644
-> --- a/include/linux/pcs-lynx.h
-> +++ b/include/linux/pcs-lynx.h
-> @@ -12,6 +12,7 @@
->  struct mdio_device *lynx_get_mdio_device(struct phylink_pcs *pcs);
->  
->  struct phylink_pcs *lynx_pcs_create(struct mdio_device *mdio);
-> +struct phylink_pcs *lynx_pcs_create_on_bus(struct mii_bus *bus, int addr);
->  
->  void lynx_pcs_destroy(struct phylink_pcs *pcs);
->  
-> -- 
-> 2.35.1.1320.gc452695387.dirty
-> 
+                Linus

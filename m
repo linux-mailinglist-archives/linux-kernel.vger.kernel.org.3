@@ -2,80 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DA257A148
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9224557A17B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238132AbiGSOXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
+        id S239047AbiGSO2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238340AbiGSOW7 (ORCPT
+        with ESMTP id S237767AbiGSO1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:22:59 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980FB48C94;
-        Tue, 19 Jul 2022 07:06:32 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26JE64Hc032665
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Jul 2022 10:06:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1658239567; bh=pFRhtD0UYXegEYar/cYUoYiQFDVavLLZf/TJ5SxzjKk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=pyGsb0Tfd4JJA+w/5eG0B95/9hfD4SG6u4KsBEoSxCrMF0ybcPQrYIlylp7JLQlYv
-         nP09zeoD07k7y4ujU+gT4zDxYrZV1IKtksbIsKMLv4J4tU5fabUfLQ8sU0BVlYw/sV
-         O1sUlDX3YQkCcrRw/3ijBTgaZJSMRemagBBWv+6WE+iSYQwAs1/96nmr6V6Fk/wT2t
-         XAZ5g7SaN+/h5WNxMFrzGebpflAFrD1nkxO7ghfHUQpp74Nw6TFtpJ4tXaPIHjCkxH
-         LSRSYPAoou8dJ1SqJOSiVyLm3/PWASj7OxHp/CqegeG3nlc93wQHxAuSz13m3GXF5o
-         CiaLe4ypKE2mw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 7BEB815C00E4; Tue, 19 Jul 2022 10:06:04 -0400 (EDT)
-Date:   Tue, 19 Jul 2022 10:06:04 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Baokun Li <libaokun1@huawei.com>, stable@vger.kernel.org,
-        linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca, jack@suse.cz,
-        ritesh.list@gmail.com, lczerner@redhat.com, enwlinux@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yebin10@huawei.com, yukuai3@huawei.com,
-        Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH 4.19] ext4: fix race condition between
- ext4_ioctl_setflags and ext4_fiemap
-Message-ID: <Yta6THyDwHulhfi5@mit.edu>
-References: <20220715023928.2701166-1-libaokun1@huawei.com>
- <YtF1XygwvIo2Dwae@kroah.com>
- <425ab528-7d9a-975a-7f4c-5f903cedd8bc@huawei.com>
- <YtaVAWMlxrQNcS34@kroah.com>
+        Tue, 19 Jul 2022 10:27:44 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B37BDF;
+        Tue, 19 Jul 2022 07:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658240047; x=1689776047;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=/UxCRrCRwzJ4X66ZQ0IeKBQtuQGxvYag5toGoeMRWuQ=;
+  b=CZYyYygzXCqloUO9aGVdDcJXYjTh9oYBJFxUMSxe3vvRKpU4gOckgOMn
+   JilTFTI6emQSdx8rywraLU90dhr1EOEFNhKfhHa+WsZwIMkLeSH7zbqq8
+   FJouPrO28zJUxeb/SxE4iTLfLasD7me/K4TWdAjq7X4a2dohduIirBRKf
+   WNMDKsJHPtvSN0BsTYzXvXe3ManHlqTz4kQe21r9Bp/HBTiLQpGGnwOKd
+   U3tdxxcsUWbu4QZv9FYTSDAfiMSLeYxqi5lVXlJjruhpOV6n6KK1zvRtZ
+   q9yPYIc6RAqbyfUskmfkyguvP+kJlEdUqp0XNo4+JbI2iX1YsPRQhKoAg
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="284063648"
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="284063648"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 07:13:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="655776691"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Jul 2022 07:13:34 -0700
+Date:   Tue, 19 Jul 2022 22:08:43 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Message-ID: <20220719140843.GA84779@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+ <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtaVAWMlxrQNcS34@kroah.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 01:26:57PM +0200, Greg KH wrote:
-> On Sat, Jul 16, 2022 at 10:33:30AM +0800, Baokun Li wrote:
-> > This problem persists until the patch d3b6f23f7167("ext4: move ext4_fiemap
-> > to use iomap framework") is incorporated in v5.7-rc1.
+On Tue, Jul 19, 2022 at 10:00:23AM +0200, Gupta, Pankaj wrote:
+
+...
+
+> > +bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
+> > +{
+> > +	return false;
+> > +}
 > 
-> Then why not ask for that change to be added instead?
+> Does this function has to be overriden by SEV and TDX to support the private
+> regions?
 
-Switching over to use the iomap framework is a quite invasive change,
-which is fraught with danager and potential performance regressions.
-So it's really not something that would be considered safe for an LTS
-kernel.
+Yes it should be overridden by architectures which want to support it.
 
-As an upstream developer I'd ask why are people trying to use a kernel
-as old as 4.19, but RHEL has done more insane things than that.  Also,
-I know what the answer is, and it's just too depressing for a nice
-summer day like this.  :-)
+> 
+> > +
+> >   static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
+> >   {
+> >   	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+> > @@ -4689,6 +4729,22 @@ static long kvm_vm_ioctl(struct file *filp,
+> >   		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+> >   		break;
+> >   	}
+> > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
+> > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+> > +		struct kvm_enc_region region;
+> > +
+> > +		if (!kvm_arch_private_mem_supported(kvm))
+> > +			goto arch_vm_ioctl;
+> > +
+> > +		r = -EFAULT;
+> > +		if (copy_from_user(&region, argp, sizeof(region)))
+> > +			goto out;
+> > +
+> > +		r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
+> 
+> this is to store private region metadata not only the encrypted region?
 
-       	  	    	     	       - Ted
+Correct.
+
+> 
+> Also, seems same ioctl can be used to put other regions (e.g firmware, later
+> maybe DAX backend etc) into private memory?
+
+Possibly. Depends on what exactly the semantics is. If just want to set
+those regions as private current code already support that.
+
+Chao
+> 
+> > +		break;
+> > +	}
+> > +#endif
+> >   	case KVM_GET_DIRTY_LOG: {
+> >   		struct kvm_dirty_log log;
+> > @@ -4842,6 +4898,7 @@ static long kvm_vm_ioctl(struct file *filp,
+> >   		r = kvm_vm_ioctl_get_stats_fd(kvm);
+> >   		break;
+> >   	default:
+> > +arch_vm_ioctl:
+> >   		r = kvm_arch_vm_ioctl(filp, ioctl, arg);
+> >   	}
+> >   out:
+> 

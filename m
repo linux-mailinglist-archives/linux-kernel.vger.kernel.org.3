@@ -2,132 +2,504 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686D957A659
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBAC57A65B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240046AbiGSSTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
+        id S240051AbiGSSUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 14:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235944AbiGSSTH (ORCPT
+        with ESMTP id S234972AbiGSSUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:19:07 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D0752DE8;
-        Tue, 19 Jul 2022 11:19:05 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id j67so5414181ybb.3;
-        Tue, 19 Jul 2022 11:19:05 -0700 (PDT)
+        Tue, 19 Jul 2022 14:20:17 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C39DEE7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:20:15 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id d66-20020a636845000000b0040a88edd9c1so7461967pgc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=hD0OsSSpGsWhR3DWp0Z4bxOA8N5ibPiRWaeg3F3tmCU=;
+        b=SNNDBRN2Czf466QLQGizpO48OuOLB2LOCwdobZ193KieNneJIeHb6Xad7/51EhFEW9
+         y0eSgPxB5JUFnj7LfvG2f7LIo4BjgFpN1+GzsTrhXKvJnyXznQuhbNDGs1gjwRl2WsQj
+         WgVsc3EhecPlCjLeBINlUZbOXOKhzAbHo5SBgD3QzTu5huFcS9+WKDp3vd6b0xTVuaIS
+         6kISsPf5+Wgcf9pGpQ6/qEzD4MDZK3TzgA4nGNkDuKLZul/gp5TElbNoHB+31W9jDH1e
+         RWQU5R6cK0eMe+sOtu9N/OkYV5vmSFwa4fF1+mVQsKIA6sgtpNXhOkxkIpOlIIvBg16K
+         HiMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BbNTOKbao1e8ZUyoBAhHzMW32PEnP+e69owespR4fKw=;
-        b=kyatzOoFsD6ob1pXndrBLczTAow5blFfnAdB3l5EFhKTKTsGX1kb/FLAHGmGpIgx+/
-         8HJx3OTeREJzFmCUceWbJImZfKr/KuGxA5bBr6IiTNIX0rBdNrk4zHhTeBWX7oDPhjsS
-         5eXZXuvStUR8fy2Qab1c+SHEC9W8XmRHMePAFhLm6dTEcw3gDmc2IVHiq+yERLxpe/2U
-         3sHdiZXdVFpYRfK8CMNH+aEVyC66eCIORLdzF2AawNrwrfu7M07RzwGzhjcRTRk/qKC4
-         gdWGTSLbNAz8W5cNIoOvR62LYUjsxHZkAkryEVuXd08+MVzCL23cXWCvbzw3iN7rTEA2
-         2QtA==
-X-Gm-Message-State: AJIora85aSacFtrePEktDlsV5Y8vydN/9MwFk1kchDYgDmXNuoc+rzew
-        OO1p1VBiheS7nTvDIqHXbcXpdkNx6viCS/ySsj0=
-X-Google-Smtp-Source: AGRyM1vgi+IyezsRRUw8FfUHz1dtFKAMtmhq9UKGxwEHBlqaJUozAmNS3yiCuuOmSx/eVaRZh8X6OsqM6vlckwEnSd4=
-X-Received: by 2002:a5b:202:0:b0:66f:aab4:9c95 with SMTP id
- z2-20020a5b0202000000b0066faab49c95mr32218969ybl.81.1658254744897; Tue, 19
- Jul 2022 11:19:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220710123512.1714714-1-daniel.lezcano@linexp.org> <20220710123512.1714714-10-daniel.lezcano@linexp.org>
-In-Reply-To: <20220710123512.1714714-10-daniel.lezcano@linexp.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Jul 2022 20:18:54 +0200
-Message-ID: <CAJZ5v0iT8w7APyNKDQ-Q-vO33-BN4_vh_HtiCxpCJZu_QzC4Ug@mail.gmail.com>
-Subject: Re: [PATCH v5 08/12] thermal/core: Add thermal_trip in thermal_zone
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=hD0OsSSpGsWhR3DWp0Z4bxOA8N5ibPiRWaeg3F3tmCU=;
+        b=rmG2Jc940TMLuSX0Vhg2NzKtk6GFqPyh16AxFLfZATSvtndh5XnEO3BjFYCOjvgvn4
+         yhfvbbNvkXyPXIxsTXzJTpS23jKtBBxHgh2283v0ckXUfuh6DNWyoqJXrPyyeOpS2Ulv
+         cs+41EfKCPGngyoXV1BvajpyhFmmDssaelVNoF/KS3A3oRMANRKWMe0XV1QLFuLZm2En
+         pyYHL0bFN9ylz3nKDJbfkkSccvLSEpzeuxxh10lhleU/luWw7DbQY7xTpWsfsZJbLMuH
+         f/74gPKu9TYhpZS4tLLT0R08D8GYQVtOHxGyQ91O9LW6Kv2pdLkmGQRpSDpJMD6Zhj+T
+         8Fwg==
+X-Gm-Message-State: AJIora81ibDllFtuEosyms7irllSxQMfk08rTaky34PdsHUXjfSpzT90
+        Xrs9QMurAm9WaSc2ClFsrxoiaMeUM0E66CQ=
+X-Google-Smtp-Source: AGRyM1vJsCqnDYvWo6hy+oKHo/54pkCm26XpiS8dRBBQgSsjEefx0357y8EYZqsQ+ikXVt1XoMu2bmvwVOUUUgA=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:cfc6:d8cd:21a3:aee1])
+ (user=saravanak job=sendgmr) by 2002:a65:6a0e:0:b0:405:2310:22d0 with SMTP id
+ m14-20020a656a0e000000b00405231022d0mr30792139pgu.290.1658254815261; Tue, 19
+ Jul 2022 11:20:15 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 11:20:10 -0700
+Message-Id: <20220719182010.637337-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH v5] amba: Remove deferred device addition
+From:   Saravana Kannan <saravanak@google.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 10, 2022 at 2:35 PM Daniel Lezcano
-<daniel.lezcano@linexp.org> wrote:
->
-> The thermal trip points are properties of a thermal zone and the
-> different sub systems should be able to save them in the thermal zone
-> structure instead of having their own definition.
->
-> Give the opportunity to the drivers to create a thermal zone with
-> thermal trips which will be accessible directly from the thermal core
-> framework.
->
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> ---
->  drivers/thermal/thermal_core.h | 10 ++++++++++
->  include/linux/thermal.h        |  2 ++
->  2 files changed, 12 insertions(+)
->
-> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-> index c991bb290512..a4e730391cab 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -113,6 +113,16 @@ int thermal_build_list_of_policies(char *buf);
->  /* Helpers */
->  void thermal_zone_set_trips(struct thermal_zone_device *tz);
->
-> +static inline struct thermal_trip *thermal_zone_get_trips(struct thermal_zone_device *tz)
-> +{
-> +       return tz->trips;
-> +}
-> +
-> +static inline int thermal_zone_get_num_trips(struct thermal_zone_device *tz)
-> +{
-> +       return tz->num_trips;
-> +}
+The uevents generated for an amba device need PID and CID information
+that's available only when the amba device is powered on, clocked and
+out of reset. So, if those resources aren't available, the information
+can't be read to generate the uevents. To workaround this requirement,
+if the resources weren't available, the device addition was deferred and
+retried periodically.
 
-I'm not sure if these are really useful.
+However, this deferred addition retry isn't based on resources becoming
+available. Instead, it's retried every 5 seconds and causes arbitrary
+probe delays for amba devices and their consumers.
 
-> +
->  /* sysfs I/F */
->  int thermal_zone_create_device_groups(struct thermal_zone_device *, int);
->  void thermal_zone_destroy_device_groups(struct thermal_zone_device *);
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 03e968d61471..c7fcb9e2a4fc 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -125,6 +125,7 @@ struct thermal_cooling_device {
->   * @trip_hyst_attrs:   attributes for trip points for sysfs: trip hysteresis
->   * @mode:              current mode of this thermal zone
->   * @devdata:   private pointer for device private data
-> + * @trips:     an array of struct thermal_trip
->   * @num_trips: number of trip points the thermal zone supports
->   * @trips_disabled;    bitmap for disabled trips
->   * @passive_delay_jiffies: number of jiffies to wait between polls when
-> @@ -165,6 +166,7 @@ struct thermal_zone_device {
->         struct thermal_attr *trip_hyst_attrs;
->         enum thermal_device_mode mode;
->         void *devdata;
-> +       struct thermal_trip *trips;
+Also, maintaining a separate deferred-probe like mechanism is
+maintenance headache.
 
-And I would fold this change into the patch introducing its first user.
+With this commit, instead of deferring the device addition, we simply
+defer the generation of uevents for the device and probing of the device
+(because drivers needs PID and CID to match) until the PID and CID
+information can be read. This allows us to delete all the amba specific
+deferring code and also avoid the arbitrary probing delays.
 
->         int num_trips;
->         unsigned long trips_disabled;   /* bitmap for disabled trips */
->         unsigned long passive_delay_jiffies;
-> --
-> 2.25.1
->
+Cc: Rob Herring <robh@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Saravana Kannan <saravanak@google.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ drivers/amba/bus.c | 313 +++++++++++++++++++++------------------------
+ 1 file changed, 145 insertions(+), 168 deletions(-)
+
+
+v1 -> v2:
+- Dropped RFC tag
+- Complete rewrite to not use stub devices.
+
+v2 -> v3:
+- Flipped the if() condition for hard-coded periphids.
+- Added a stub driver to handle the case where all amba drivers are
+  modules loaded by uevents.
+- Cc Marek after I realized I forgot to add him.
+
+v3 -> v4:
+- Finally figured out and fixed the issue reported by Kefeng (bus match
+  can't return an error other than -EPROBE_DEFER).
+- I tested the patch on "V2P-CA15" on qemu
+- Marek tested v3, but that was so long ago and the rebase wasn't clean,
+  so I didn't include the tested-by.
+
+v4 -> v5:
+- Fixed up amba_match() to always return -EPROBE_DEFER on any failure.
+  This fixes the issue Sudeep reported on Juno.
+- Rebased the patch on top of Russell's for-next branch to avoid
+  conflict with linux-next.
+
+Sudeep,
+
+Feel free to add your tested-by.
+
+Russell,
+
+Can you pick up this patch please?
+
+-Saravana
+
+diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+index 0cb20324da16..32b0e0b930c1 100644
+--- a/drivers/amba/bus.c
++++ b/drivers/amba/bus.c
+@@ -130,11 +130,100 @@ static struct attribute *amba_dev_attrs[] = {
+ };
+ ATTRIBUTE_GROUPS(amba_dev);
+ 
++static int amba_read_periphid(struct amba_device *dev)
++{
++	struct reset_control *rstc;
++	u32 size, pid, cid;
++	void __iomem *tmp;
++	int i, ret;
++
++	ret = dev_pm_domain_attach(&dev->dev, true);
++	if (ret) {
++		dev_dbg(&dev->dev, "can't get PM domain: %d\n", ret);
++		goto err_out;
++	}
++
++	ret = amba_get_enable_pclk(dev);
++	if (ret) {
++		dev_dbg(&dev->dev, "can't get pclk: %d\n", ret);
++		goto err_pm;
++	}
++
++	/*
++	 * Find reset control(s) of the amba bus and de-assert them.
++	 */
++	rstc = of_reset_control_array_get_optional_shared(dev->dev.of_node);
++	if (IS_ERR(rstc)) {
++		ret = PTR_ERR(rstc);
++		if (ret != -EPROBE_DEFER)
++			dev_err(&dev->dev, "can't get reset: %d\n", ret);
++		goto err_clk;
++	}
++	reset_control_deassert(rstc);
++	reset_control_put(rstc);
++
++	size = resource_size(&dev->res);
++	tmp = ioremap(dev->res.start, size);
++	if (!tmp) {
++		ret = -ENOMEM;
++		goto err_clk;
++	}
++
++	/*
++	 * Read pid and cid based on size of resource
++	 * they are located at end of region
++	 */
++	for (pid = 0, i = 0; i < 4; i++)
++		pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) << (i * 8);
++	for (cid = 0, i = 0; i < 4; i++)
++		cid |= (readl(tmp + size - 0x10 + 4 * i) & 255) << (i * 8);
++
++	if (cid == CORESIGHT_CID) {
++		/* set the base to the start of the last 4k block */
++		void __iomem *csbase = tmp + size - 4096;
++
++		dev->uci.devarch = readl(csbase + UCI_REG_DEVARCH_OFFSET);
++		dev->uci.devtype = readl(csbase + UCI_REG_DEVTYPE_OFFSET) & 0xff;
++	}
++
++	if (cid == AMBA_CID || cid == CORESIGHT_CID) {
++		dev->periphid = pid;
++		dev->cid = cid;
++	}
++
++	if (!dev->periphid)
++		ret = -ENODEV;
++
++	iounmap(tmp);
++
++err_clk:
++	amba_put_disable_pclk(dev);
++err_pm:
++	dev_pm_domain_detach(&dev->dev, true);
++err_out:
++	return ret;
++}
++
+ static int amba_match(struct device *dev, struct device_driver *drv)
+ {
+ 	struct amba_device *pcdev = to_amba_device(dev);
+ 	struct amba_driver *pcdrv = to_amba_driver(drv);
+ 
++	if (!pcdev->periphid) {
++		int ret = amba_read_periphid(pcdev);
++
++		/*
++		 * Returning any error other than -EPROBE_DEFER from bus match
++		 * can cause driver registration failure. So, if there's a
++		 * permanent failure in reading pid and cid, simply map it to
++		 * -EPROBE_DEFER.
++		 */
++		if (ret)
++			return -EPROBE_DEFER;
++		dev_set_uevent_suppress(dev, false);
++		kobject_uevent(&dev->kobj, KOBJ_ADD);
++	}
++
+ 	/* When driver_override is set, only bind to the matching driver */
+ 	if (pcdev->driver_override)
+ 		return !strcmp(pcdev->driver_override, drv->name);
+@@ -368,6 +457,42 @@ static int __init amba_init(void)
+ 
+ postcore_initcall(amba_init);
+ 
++static int amba_proxy_probe(struct amba_device *adev,
++			    const struct amba_id *id)
++{
++	WARN(1, "Stub driver should never match any device.\n");
++	return -ENODEV;
++}
++
++static const struct amba_id amba_stub_drv_ids[] = {
++	{ 0, 0 },
++};
++
++static struct amba_driver amba_proxy_drv = {
++	.drv = {
++		.name = "amba-proxy",
++	},
++	.probe = amba_proxy_probe,
++	.id_table = amba_stub_drv_ids,
++};
++
++static int __init amba_stub_drv_init(void)
++{
++	if (!IS_ENABLED(CONFIG_MODULES))
++		return 0;
++
++	/*
++	 * The amba_match() function will get called only if there is at least
++	 * one amba driver registered. If all amba drivers are modules and are
++	 * only loaded based on uevents, then we'll hit a chicken-and-egg
++	 * situation where amba_match() is waiting on drivers and drivers are
++	 * waiting on amba_match(). So, register a stub driver to make sure
++	 * amba_match() is called even if no amba driver has been registered.
++	 */
++	return amba_driver_register(&amba_proxy_drv);
++}
++late_initcall_sync(amba_stub_drv_init);
++
+ /**
+  *	amba_driver_register - register an AMBA device driver
+  *	@drv: amba device driver structure
+@@ -410,156 +535,6 @@ static void amba_device_release(struct device *dev)
+ 	kfree(d);
+ }
+ 
+-static int amba_read_periphid(struct amba_device *dev)
+-{
+-	struct reset_control *rstc;
+-	u32 size, pid, cid;
+-	void __iomem *tmp;
+-	int i, ret;
+-
+-	ret = dev_pm_domain_attach(&dev->dev, true);
+-	if (ret)
+-		goto err_out;
+-
+-	ret = amba_get_enable_pclk(dev);
+-	if (ret)
+-		goto err_pm;
+-
+-	/*
+-	 * Find reset control(s) of the amba bus and de-assert them.
+-	 */
+-	rstc = of_reset_control_array_get_optional_shared(dev->dev.of_node);
+-	if (IS_ERR(rstc)) {
+-		ret = PTR_ERR(rstc);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&dev->dev, "can't get reset: %d\n", ret);
+-		goto err_clk;
+-	}
+-	reset_control_deassert(rstc);
+-	reset_control_put(rstc);
+-
+-	size = resource_size(&dev->res);
+-	tmp = ioremap(dev->res.start, size);
+-	if (!tmp) {
+-		ret = -ENOMEM;
+-		goto err_clk;
+-	}
+-
+-	/*
+-	 * Read pid and cid based on size of resource
+-	 * they are located at end of region
+-	 */
+-	for (pid = 0, i = 0; i < 4; i++)
+-		pid |= (readl(tmp + size - 0x20 + 4 * i) & 255) << (i * 8);
+-	for (cid = 0, i = 0; i < 4; i++)
+-		cid |= (readl(tmp + size - 0x10 + 4 * i) & 255) << (i * 8);
+-
+-	if (cid == CORESIGHT_CID) {
+-		/* set the base to the start of the last 4k block */
+-		void __iomem *csbase = tmp + size - 4096;
+-
+-		dev->uci.devarch = readl(csbase + UCI_REG_DEVARCH_OFFSET);
+-		dev->uci.devtype = readl(csbase + UCI_REG_DEVTYPE_OFFSET) & 0xff;
+-	}
+-
+-	if (cid == AMBA_CID || cid == CORESIGHT_CID) {
+-		dev->periphid = pid;
+-		dev->cid = cid;
+-	}
+-
+-	if (!dev->periphid)
+-		ret = -ENODEV;
+-
+-	iounmap(tmp);
+-
+-err_clk:
+-	amba_put_disable_pclk(dev);
+-err_pm:
+-	dev_pm_domain_detach(&dev->dev, true);
+-err_out:
+-	return ret;
+-}
+-
+-static int amba_device_try_add(struct amba_device *dev, struct resource *parent)
+-{
+-	int ret;
+-
+-	ret = request_resource(parent, &dev->res);
+-	if (ret)
+-		goto err_out;
+-
+-	/* Hard-coded primecell ID instead of plug-n-play */
+-	if (dev->periphid != 0)
+-		goto skip_probe;
+-
+-	ret = amba_read_periphid(dev);
+-	if (ret)
+-		goto err_release;
+-
+-skip_probe:
+-	ret = device_add(&dev->dev);
+-err_release:
+-	if (ret)
+-		release_resource(&dev->res);
+-err_out:
+-	return ret;
+-}
+-
+-/*
+- * Registration of AMBA device require reading its pid and cid registers.
+- * To do this, the device must be turned on (if it is a part of power domain)
+- * and have clocks enabled. However in some cases those resources might not be
+- * yet available. Returning EPROBE_DEFER is not a solution in such case,
+- * because callers don't handle this special error code. Instead such devices
+- * are added to the special list and their registration is retried from
+- * periodic worker, until all resources are available and registration succeeds.
+- */
+-struct deferred_device {
+-	struct amba_device *dev;
+-	struct resource *parent;
+-	struct list_head node;
+-};
+-
+-static LIST_HEAD(deferred_devices);
+-static DEFINE_MUTEX(deferred_devices_lock);
+-
+-static void amba_deferred_retry_func(struct work_struct *dummy);
+-static DECLARE_DELAYED_WORK(deferred_retry_work, amba_deferred_retry_func);
+-
+-#define DEFERRED_DEVICE_TIMEOUT (msecs_to_jiffies(5 * 1000))
+-
+-static int amba_deferred_retry(void)
+-{
+-	struct deferred_device *ddev, *tmp;
+-
+-	mutex_lock(&deferred_devices_lock);
+-
+-	list_for_each_entry_safe(ddev, tmp, &deferred_devices, node) {
+-		int ret = amba_device_try_add(ddev->dev, ddev->parent);
+-
+-		if (ret == -EPROBE_DEFER)
+-			continue;
+-
+-		list_del_init(&ddev->node);
+-		amba_device_put(ddev->dev);
+-		kfree(ddev);
+-	}
+-
+-	mutex_unlock(&deferred_devices_lock);
+-
+-	return 0;
+-}
+-late_initcall(amba_deferred_retry);
+-
+-static void amba_deferred_retry_func(struct work_struct *dummy)
+-{
+-	amba_deferred_retry();
+-
+-	if (!list_empty(&deferred_devices))
+-		schedule_delayed_work(&deferred_retry_work,
+-				      DEFERRED_DEVICE_TIMEOUT);
+-}
+-
+ /**
+  *	amba_device_add - add a previously allocated AMBA device structure
+  *	@dev: AMBA device allocated by amba_device_alloc
+@@ -571,28 +546,30 @@ static void amba_deferred_retry_func(struct work_struct *dummy)
+  */
+ int amba_device_add(struct amba_device *dev, struct resource *parent)
+ {
+-	int ret = amba_device_try_add(dev, parent);
+-
+-	if (ret == -EPROBE_DEFER) {
+-		struct deferred_device *ddev;
+-
+-		ddev = kmalloc(sizeof(*ddev), GFP_KERNEL);
+-		if (!ddev)
+-			return -ENOMEM;
++	int ret;
+ 
+-		ddev->dev = dev;
+-		ddev->parent = parent;
+-		ret = 0;
++	ret = request_resource(parent, &dev->res);
++	if (ret)
++		return ret;
+ 
+-		mutex_lock(&deferred_devices_lock);
++	/* If primecell ID isn't hard-coded, figure it out */
++	if (!dev->periphid) {
++		/*
++		 * AMBA device uevents require reading its pid and cid
++		 * registers.  To do this, the device must be on, clocked and
++		 * out of reset.  However in some cases those resources might
++		 * not yet be available.  If that's the case, we suppress the
++		 * generation of uevents until we can read the pid and cid
++		 * registers.  See also amba_match().
++		 */
++		if (amba_read_periphid(dev))
++			dev_set_uevent_suppress(&dev->dev, true);
++	}
+ 
+-		if (list_empty(&deferred_devices))
+-			schedule_delayed_work(&deferred_retry_work,
+-					      DEFERRED_DEVICE_TIMEOUT);
+-		list_add_tail(&ddev->node, &deferred_devices);
++	ret = device_add(&dev->dev);
++	if (ret)
++		release_resource(&dev->res);
+ 
+-		mutex_unlock(&deferred_devices_lock);
+-	}
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(amba_device_add);
+-- 
+2.37.0.170.g444d1eabd0-goog
+

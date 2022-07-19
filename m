@@ -2,141 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8155E57A9AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D6957A9B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235113AbiGSWQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S237268AbiGSWTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiGSWQp (ORCPT
+        with ESMTP id S236334AbiGSWTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:16:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8FC4C62C;
-        Tue, 19 Jul 2022 15:16:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EACCDB81D78;
-        Tue, 19 Jul 2022 22:16:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC72C341CA;
-        Tue, 19 Jul 2022 22:16:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658268999;
-        bh=mYGEOu11Ux+xMeeiBucT0QIkBYxBBFukVuPKg0cuYv0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=vLyWN6P4TRw1hKQN86GnXE4o6I0Q6Cll+rIOfs4lDOP14D1qtAlX6AAFEZ6xvRmIF
-         cqsRhUY1mzKXqFL982KD6QQfystVrLY5hNRVdamwFPLfdlkNa8rGfASy9qnA0tFcpg
-         SLcjVpb+p2l216lkKklVE7+Dph3XzutZIIlQCX+mwD/lUsOqW5t+0CLdABUFCCYtd4
-         8bL7w6s5IT6Q3TNxTCtF1G2jhLtKk3+XsJyYakqMe7xAVu+eKLNaSORi2WPkSGgbhD
-         wOd9Rg0FuWvjuSX3bBlB9k42jZp5v9UkyEkF/0MlDTDSEJQMJXGPyzNWMaK8iQRKQb
-         YnYz+bSwBzVkg==
-Date:   Tue, 19 Jul 2022 17:16:37 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V16 4/6] cxl/pci: Create PCI DOE mailbox's for memory
- devices
-Message-ID: <20220719221637.GA1585132@bhelgaas>
+        Tue, 19 Jul 2022 18:19:32 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8353F54645
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:19:29 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id j3so8753395oif.8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CRBhHPNd8lkmJ/xyyV0gCO7YkNC1yX8SCs8PR5uQJIQ=;
+        b=tSY7/OtHYLqnxjYX7qF+CiOMHcE4AiqiraYqXnuB2wZu9Z3IsdH5Tj5WYfS8R55Kcm
+         PqPeMzZ6NTAiID6lp6MPyhnWvXNpNxpFGUrp5EeqcGGyYpGSCsD1Yr3gTZKDV9xX99PM
+         uy5I8KF9watPaMYZLrXxeQkoCvHPHnTy5sCkepBJz9NqaykwG+bbm3brIH/Vygl1ozxx
+         f6tZVmSXRvQnzU8FrlGW1koqtjR8gIQ/rxvjH0BDRs5nKNjXo47FfEbYsXklcI2doN2H
+         Nmj6sI/A9RXphA0LZjRJREM3/XL/nUnA07qCeV4EBDU145le06PG2+zQgsjh12P4LZLp
+         VkoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CRBhHPNd8lkmJ/xyyV0gCO7YkNC1yX8SCs8PR5uQJIQ=;
+        b=gTPr/CNjImDjHSfq3rWNvR/ivNYWR19ncrD3W42DU6ZGQMvibXkXWsbpTDh7ZfFvRG
+         ggHuJhmITqb0HGlZf9s2/+ADftXb2IjmhwrIRIL1LCEQOXLOn1poOLUt6sxdTnRvYzXo
+         FDK4Tac4btu06V+GTdg896oi/RQG91etrZ1+snQQ+sTPnJ+GB0JH3kmX+pntwrzdmiZV
+         IXy5gxHqf73c/NXl08ELmeecPRrm4LJHBlfUXZ5j81Hckx9QrRUe8k9qgUnUKx9acqHm
+         HFjzorisD+wB/7E/yGgC4ZTjEwY6V8AY+cqSLjuOUBv79Bn4HsyCEjZpFEBFd0vSKP70
+         euBg==
+X-Gm-Message-State: AJIora/si2r/vkll9qYulr5TzPPGkvvSpVVYvrhl0Yq4vnLRpjrjTpC5
+        hKtTtyO9O7yWUoNQs/JdofSu2g==
+X-Google-Smtp-Source: AGRyM1tHME1bRoBD15TC5jZn2/JyI3PJMNYV0SSySQZH9tYLXGVz2G4SriJU0tXmlpR34OVN8Juu1Q==
+X-Received: by 2002:a05:6808:1885:b0:33a:74ac:8b79 with SMTP id bi5-20020a056808188500b0033a74ac8b79mr868009oib.237.1658269168799;
+        Tue, 19 Jul 2022 15:19:28 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id z34-20020a056870d6a200b0010c5005d427sm8194177oap.33.2022.07.19.15.19.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 15:19:27 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 17:19:25 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        robh@kernel.org, linux-leds@vger.kernel.org, pavel@ucw.cz,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] arm64: dts: qcom: Fix 'dtbs_check' errors for
+ pm8350c & sc8280xp pwm nodes
+Message-ID: <Ytct7QzHOlvXH7s3@builder.lan>
+References: <20220719205058.1004942-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220719205249.566684-5-ira.weiny@intel.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220719205058.1004942-1-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In subject, s/mailbox's/mailboxes/
+On Tue 19 Jul 15:50 CDT 2022, Bhupesh Sharma wrote:
 
-On Tue, Jul 19, 2022 at 01:52:47PM -0700, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
+> make dtbs_check currently reports the following errors
+> with pm8350c & sc8280xp pwm nodes:
 > 
-> DOE mailbox objects will be needed for various mailbox communications
-> with each memory device.
+> arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dtb:
+>  pwm@e800: 'reg' does not match any of the regexes:
+>  '^led@[0-9a-f]$', 'pinctrl-[0-9]+'
 > 
-> Iterate each DOE mailbox capability and create PCI DOE mailbox objects
-> as found.
+> Fix the same.
 > 
-> It is not anticipated that this is the final resting place for the
-> iteration of the DOE devices.  The support of switch ports will drive
-> this code into the PCIe side.  In this imagined architecture the CXL
-> port driver would then query into the PCI device for the DOE mailbox
-> array.
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/pm8350c.dtsi        | 1 -
+>  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 1 -
+>  2 files changed, 2 deletions(-)
 > 
-> For now creating the mailboxes in the CXL port is good enough for the
-> endpoints.  Later PCIe ports will need to support this to support switch
-> ports more generically.
-
-> +static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	u16 off = 0;
-> +
-> +	xa_init(&cxlds->doe_mbs);
-> +	if (devm_add_action(&pdev->dev, cxl_pci_destroy_doe, &cxlds->doe_mbs)) {
-> +		dev_err(dev, "Failed to create XArray for DOE's\n");
-
-s/DOE's/DOEs/
-
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * Mailbox creation is best effort.  Higher layers must determine if
-> +	 * the lack of a mailbox for their protocol is a device failure or not.
-> +	 */
-> +	pci_doe_for_each_off(pdev, off) {
-> +		struct pci_doe_mb *doe_mb;
-> +
-> +		doe_mb = pcim_doe_create_mb(pdev, off);
-> +		if (IS_ERR(doe_mb)) {
-> +			dev_err(dev, "Failed to create MB object for MB @ %x\n",
-
-Maybe "%#x" to avoid ambiguity?  Also below.
-
-> +				off);
-> +			continue;
-> +		}
-> +
-> +		if (xa_insert(&cxlds->doe_mbs, off, doe_mb, GFP_KERNEL)) {
-> +			dev_err(dev, "xa_insert failed to insert MB @ %x\n",
-> +				off);
-> +			continue;
-> +		}
-> +
-> +		dev_dbg(dev, "Created DOE mailbox @%x\n", off);
-> +	}
-> +}
-> +
->  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
->  	struct cxl_register_map map;
-> @@ -434,6 +476,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> diff --git a/arch/arm64/boot/dts/qcom/pm8350c.dtsi b/arch/arm64/boot/dts/qcom/pm8350c.dtsi
+> index e0bbb67717fe..33f939132571 100644
+> --- a/arch/arm64/boot/dts/qcom/pm8350c.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/pm8350c.dtsi
+> @@ -32,7 +32,6 @@ pm8350c_gpios: gpio@8800 {
 >  
->  	cxlds->component_reg_phys = cxl_regmap_to_base(pdev, &map);
+>  		pm8350c_pwm: pwm@e800 {
+
+You need to also drop the unit address.
+
+That said, looking at the dts it's quite nice to have the address of
+these nodes. So perhaps we should fix up the binding and populate reg
+instead?
+
+Regards,
+Bjorn
+
+>  			compatible = "qcom,pm8350c-pwm";
+> -			reg = <0xe800>;
+>  			#pwm-cells = <2>;
+>  			status = "disabled";
+>  		};
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+> index ae90b97aecb8..69f5bc8127b2 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+> @@ -62,7 +62,6 @@ pmc8280c_gpios: gpio@8800 {
 >  
-> +	devm_cxl_pci_create_doe(cxlds);
-> +
->  	rc = cxl_pci_setup_mailbox(cxlds);
->  	if (rc)
->  		return rc;
+>  		pmc8280c_lpg: lpg@e800 {
+>  			compatible = "qcom,pm8350c-pwm";
+> -			reg = <0xe800>;
+>  
+>  			#address-cells = <1>;
+>  			#size-cells = <0>;
 > -- 
 > 2.35.3
 > 

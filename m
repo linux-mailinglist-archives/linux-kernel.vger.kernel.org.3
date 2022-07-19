@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9C5579518
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B0A57951B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236085AbiGSIRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 04:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
+        id S236764AbiGSIR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 04:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234967AbiGSIRE (ORCPT
+        with ESMTP id S234967AbiGSIR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:17:04 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78E1248DA
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:17:02 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id r6so18538345edd.7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:17:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UXsZJsgsSiHl9h8RmO5qeLacMCfPdBxMaAGdhnsVAEI=;
-        b=wDHr4F7sTbDK+tOafzkIIYA5Xc1iZGxmrC6Pi76n7uaHfMuTIwidIqjeGRB40fqnCK
-         hB31oNLMZ6qNAuZEok/jWJMk4h1Zs4RPp/tHACBF6aqJgacAP7SM8KoK5LlESQ3BY3zR
-         +2byXG0Fe9EstkciQN6oHNR0fuClRAvFE/vmW55SI9vPKc1RKWznzh0iZKzV524OhZdK
-         kZqbV9VroCYE+PeL5rYKg5yMpIWEWHajN5Y/omP3JoDCNsW732wSZ+bMaW4uFV6riSM0
-         eYMxv5pSO5CxFMM1F7QKnYrCoY6Js5Sqhh3vhbBgCIjVETwl4eqwjgxO+F0D82iDJ8VT
-         h3gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UXsZJsgsSiHl9h8RmO5qeLacMCfPdBxMaAGdhnsVAEI=;
-        b=NacnWhBqBoDjAZh2bwmlZnCT/FoIDMpv+51E9H1cRyYKp6Z18rX0wfHglV+0K0QgkL
-         AEYbIoAnRP/oJHozXd+o+/+SYAId+vSLBQQEtYvN+ydizgyeQtDhMaxMYzhXpncfETK3
-         XDvVl+O0i67BhfHiRK8C02BGb8iGlO+iCgf1RXC9FSbzzMi/aYCABzd99pA5zTI0KEVC
-         0tE0rD9urkTH+xTmSE18IXr6nv96NlyJKmYjpBoKXDk0n3IhYJcLOzDFuhCdNjBO3EgW
-         DQc/iZqS16DdBh6EyPsDSWea1RkVhdOUY4V1ZJvsBBEAncZktar28kP3fkQRNdqmAAZg
-         pHtQ==
-X-Gm-Message-State: AJIora9ULzA81dKvDV9Z7vHqF1KSQYIQUdOnF51ff2a/Nr2AX9lcAgpY
-        /mfGu5ShJBd4T6MDWeJ4ORdf0E2nOt333cw3Es4ClQ==
-X-Google-Smtp-Source: AGRyM1tkBVfbS/WPKnxaS2KbVDC/keFlDelm0NcUe5mIC0qaW1Ydh0VTld8nwZUz3COVJzBuqULd3kayOkDFMz4FOIQ=
-X-Received: by 2002:a05:6402:4c3:b0:43a:f612:179d with SMTP id
- n3-20020a05640204c300b0043af612179dmr42516765edw.422.1658218621366; Tue, 19
- Jul 2022 01:17:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220718220252.16923-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220718220252.16923-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 19 Jul 2022 10:16:50 +0200
-Message-ID: <CAMRc=MfA7Bea3MHMx0Q0dyNa096po_Pcs54vtV+PQ6h4tMduPA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] gpio: 74xx-mmio: Make use of device properties
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
+        Tue, 19 Jul 2022 04:17:26 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F2724F18;
+        Tue, 19 Jul 2022 01:17:25 -0700 (PDT)
+X-UUID: d21d494d581d44cd925db6dcf01ec486-20220719
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:4fd9f2e5-67de-4d5d-8288-37defb56e580,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:768fae64-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: d21d494d581d44cd925db6dcf01ec486-20220719
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1610973080; Tue, 19 Jul 2022 16:17:17 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 19 Jul 2022 16:17:16 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 19 Jul 2022 16:17:16 +0800
+Message-ID: <c4480c9ea0822ae693ff6a501c073c365e983b83.camel@mediatek.com>
+Subject: Re: [PATCH v2 03/19] dt-bindings: power: mediatek: Add bindings for
+ MediaTek SCPSYS
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>
+CC:     <iommu@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 19 Jul 2022 16:17:16 +0800
+In-Reply-To: <46df4ad5-5102-b5fe-95b7-5b157fb28f01@linaro.org>
+References: <20220714122837.20094-1-tinghan.shen@mediatek.com>
+         <20220714122837.20094-4-tinghan.shen@mediatek.com>
+         <46df4ad5-5102-b5fe-95b7-5b157fb28f01@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,50 +72,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 12:02 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Convert the module to be property provider agnostic and allow
-> it to be used on non-OF platforms.
->
-> Add mod_devicetable.h include.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/gpio/gpio-74xx-mmio.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-74xx-mmio.c b/drivers/gpio/gpio-74xx-mmio.c
-> index 173e06758e6c..5e3c948ddb73 100644
-> --- a/drivers/gpio/gpio-74xx-mmio.c
-> +++ b/drivers/gpio/gpio-74xx-mmio.c
-> @@ -6,10 +6,11 @@
->   */
->
->  #include <linux/err.h>
-> -#include <linux/module.h>
-> -#include <linux/of_device.h>
->  #include <linux/gpio/driver.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
->  #include <linux/platform_device.h>
-> +#include <linux/property.h>
->
->  #define MMIO_74XX_DIR_IN       (0 << 8)
->  #define MMIO_74XX_DIR_OUT      (1 << 8)
-> @@ -112,7 +113,7 @@ static int mmio_74xx_gpio_probe(struct platform_device *pdev)
->         if (!priv)
->                 return -ENOMEM;
->
-> -       priv->flags = (uintptr_t)of_device_get_match_data(&pdev->dev);
-> +       priv->flags = (uintptr_t)device_get_match_data(&pdev->dev);
->
->         dat = devm_platform_ioremap_resource(pdev, 0);
->         if (IS_ERR(dat))
-> --
-> 2.35.1
->
+Hi Krzysztof,
 
-All three applied, thanks!
+On Fri, 2022-07-15 at 09:57 +0200, Krzysztof Kozlowski wrote:
+> On 14/07/2022 14:28, Tinghan Shen wrote:
+> > The System Control Processor System (SCPSYS) has several power
+> > management related tasks in the system. Add the bindings for it.
+> > 
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > ---
+> >  .../bindings/mfd/mediatek,scpsys.yaml         | 62 +++++++++++++++++++
+> >  1 file changed, 62 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,scpsys.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mfd/mediatek,scpsys.yaml
+> > b/Documentation/devicetree/bindings/mfd/mediatek,scpsys.yaml
+> > new file mode 100644
+> > index 000000000000..a8b9220f2f27
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mfd/mediatek,scpsys.yaml
+> > @@ -0,0 +1,62 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > https://urldefense.com/v3/__http://devicetree.org/schemas/mfd/mediatek,scpsys.yaml*__;Iw!!CTRNKA9wMg0ARbw!1TUl-dhD0p8qh3rYVk8RtfoKEP88jg8OADMd19qP6siBCQHhFnHWCgsyUqiETyBzxw8$
+> >  
+> > +$schema: 
+> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!1TUl-dhD0p8qh3rYVk8RtfoKEP88jg8OADMd19qP6siBCQHhFnHWCgsyUqiEJQmakAI$
+> >  
+> > +
+> > +title: MediaTek System Control Processor System
+> > +
+> > +maintainers:
+> > +  - MandyJH Liu <mandyjh.liu@mediatek.com>
+> > +
+> > +description:
+> > +  MediaTek System Control Processor System (SCPSYS) has several
+> > +  power management tasks. The tasks include MTCMOS power
+> > +  domain control, thermal measurement, DVFS, etc.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - const: mediatek,scpsys
+> > +      - const: syscon
+> > +      - const: simple-mfd
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  power-controller:
+> > +    $ref: /schemas/power/mediatek,power-controller.yaml#
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/mt8195-clk.h>
+> > +    #include <dt-bindings/power/mt8195-power.h>
+> > +
+> > +    syscon@10006000 {
+> > +        compatible = "mediatek,scpsys", "syscon", "simple-mfd";
+> 
+> This should be a SoC-specific compatible (and filename).
 
-Bart
+Ok. I think that you mean "mediatek,mt8195-scpsys".
+I'll update it in next version.
+
+> 
+> > +        reg = <0x10006000 0x100>;
+> > +
+> > +        spm: power-controller {
+> 
+> I think you created before less-portable, quite constrained bindings for
+> power controller. You now require that mt8195-power-controller is always
+> a child of some parent device which will share its regmap/MMIO with it.
+> 
+> And what if in your next block there is no scpsys block and power
+> controller is the scpsys alone? It's not possible with your bindings.
+
+Do you mean a power controller node that looks like this?
+
+scpsys: power-controller@10006000 {
+	compatible = "mediatek,mt6797-scpsys";
+	#power-domain-cells = <1>;
+
+	// ...
+};
+
+> 
+> Wouldn't it be better to assign some address space to the
+> power-controller (now as an offset from scpsys)?
+
+Is this mean adding an offset after the node name?
+
+spm: power-controller@0 {
+                     ^^
+
+> 
+> This is just wondering (Rockchip did the same...) and not a blocker as
+> power-controller bindings are done.
+> 
+> Best regards,
+> Krzysztof
+
+
+Thanks,
+TingHan
+
+

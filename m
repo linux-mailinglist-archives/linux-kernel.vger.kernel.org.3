@@ -2,104 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BE35799D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8DD579F59
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238419AbiGSMHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S243066AbiGSNOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238143AbiGSMF0 (ORCPT
+        with ESMTP id S243388AbiGSNNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:05:26 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10723459A2;
-        Tue, 19 Jul 2022 05:01:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1658232060; x=1689768060;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=qdSDMszO7rtGPWMStk70YxXk8Tap3FTBbrpiSKKQbpI=;
-  b=kjr9W2yBSdeHYntH53WVNCafTz2E0pdzVNaCRcCsjLsF7Kva+7s03VdL
-   BZKlcglMNF+nqyLstoufIpuiYWhMi13fuDVmCRp+sf77UJWqLeEe/Nh1k
-   8WmNrN9c/iLfixMLlIj6LRg6zAXngbbPgRizlIpp7fM7e+ij7l8uYiWaY
-   wYX20RSYfihzWkfaiGNTu7+Guu1QQ2pCGFSHHhbpisVWD108rE1Lnlr69
-   5sPxJsGZTOEM8hjKICSVr8970WtZYrsSqjS0JIqfH3GYkwTBYv75CDAxL
-   cEnIS4dWtzI1txFBoiKf65kJA5EZUp+eJytgaYhJIwoQjnpnRDJyRMAQJ
-   g==;
-X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
-   d="scan'208";a="172918483"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jul 2022 05:00:59 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 19 Jul 2022 05:00:59 -0700
-Received: from training-HP-280-G1-MT-PC.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 19 Jul 2022 05:00:55 -0700
-From:   Divya Koppera <Divya.Koppera@microchip.com>
-To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <richardcochran@gmail.com>
-CC:     <UNGLinuxDriver@microchip.com>, <Madhuri.Sripada@microchip.com>
-Subject: [PATCH v2 net] net: phy: micrel: Fix warn: passing zero to PTR_ERR
-Date:   Tue, 19 Jul 2022 17:30:52 +0530
-Message-ID: <20220719120052.26681-1-Divya.Koppera@microchip.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 19 Jul 2022 09:13:39 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692076B75C;
+        Tue, 19 Jul 2022 05:30:36 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 101C95C012F;
+        Tue, 19 Jul 2022 08:30:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 19 Jul 2022 08:30:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1658233833; x=1658320233; bh=9U1EtS+bl9
+        piaVSNmdqe4t1gv74fQ46TH+YS38s6hTI=; b=DE0E3SifcrcnNFbmCZa1AaELa4
+        ysDs1hTNfRFIkfw0txi80pUT8CIyxDw9kWM0NME7d7IzD39gAasl9wk3p5oqgp8x
+        JAZBI8ds9n3QRr/cswlSFq2u/TowsCRn4mBjPTEzr5847AhMxhkvhGlB9LwA7qfn
+        ryVNXH9OE1eptn3aJt/g43ud/UV1OufQKbhGr9BFEhsV5AO35dFPSC4Ktb1db9Pd
+        s43vrfUbbZSJViClWbt36MvHCWM24hvqmBkDDdiozt8ZSAU22LfRWrVrd9yBFmrh
+        3GExlLbdj/NT+0X0mkWkThAPfNN6pexKie/NhkkJUAtIleAI67bxpaKOPtrA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1658233833; x=1658320233; bh=9U1EtS+bl9piaVSNmdqe4t1gv74f
+        Q46TH+YS38s6hTI=; b=H1OUZ9jO/J9mPC9hHUhmGMxyaj0Ob+m0tppT7JogqtnD
+        PSa3GH+DMt6rnJj5MLUfsuP1KBU11GTi2G02EKDmKhN75syz7lXaO4MJ+rE2+L2Q
+        UM6RD3jM9h0W9cZ01KC4VzbDXbapsdv0YxuoDuoejTGLNUsBYsU7TJptSTkVWz6Y
+        6vG5Z918vG0XANAV3m3PyuWm2ldh7+AQPjhAa9Cpiggr29OSYuXfm+HY+G20Nrsw
+        lzFpgjm2WzKrc7SpmiyifYuB8seJBwKG70xHyv6jdz9pX2/yIbye8Dw2eJks9o9W
+        PmcfjtvK4bWMDcQLbizWSi1347XxjAlCiaoFcltT8Q==
+X-ME-Sender: <xms:6KPWYs_0XZRkvumOavAm7CL-J0KN1w6DP8mxMg2HWZ6-DMAlEEdegQ>
+    <xme:6KPWYktSvQ7N5HXXt2YDa8tEBJvbN6otOftY3wuZWdZy6aMEf9UQu0yk0ZGmzpuDR
+    JxXQgltZPZfgQ>
+X-ME-Received: <xmr:6KPWYiDEDz1o3uekzvKLLTa7MHZGx21BtZ6o-mA2U5iYAfFw9ubTq8aoTQ42>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeltddgheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:6KPWYsetTvxqB-9oOzoCs1IdPH-RSFSvMpap7fikPpol3n83qAX5jQ>
+    <xmx:6KPWYhOMWB8L76IPijy4A8aZykqvWKMBjFKWqjosbbWntNiSJrAd9w>
+    <xmx:6KPWYmlS9wJF4MjJAPAQVucIMOsghvM6LPKyewero2kh8bqO1m3NVA>
+    <xmx:6aPWYom9_FCFrjCcWGSkEVbuxQuQBMyUUALWzWUV8WZ1wJJc8AayUQ>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 19 Jul 2022 08:30:32 -0400 (EDT)
+Date:   Tue, 19 Jul 2022 14:01:23 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Benson Leung <bleung@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the usb tree
+Message-ID: <YtadE201j+dt5jJx@kroah.com>
+References: <20220718163158.42176b4e@canb.auug.org.au>
+ <YtXF8TUZHNRUUyJh@kroah.com>
+ <CACeCKafbgLmhLoYQiTTDkeeJ26HqFYBHXtcpwQkzOyO9LESEFw@mail.gmail.com>
+ <YtZUJr4oIIALgdO+@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtZUJr4oIIALgdO+@kroah.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Handle the NULL pointer case
+On Tue, Jul 19, 2022 at 08:50:14AM +0200, Greg KH wrote:
+> On Mon, Jul 18, 2022 at 02:41:23PM -0700, Prashant Malani wrote:
+> > Hi Stephen & Greg,
+> > 
+> > On Mon, Jul 18, 2022 at 1:43 PM Greg KH <greg@kroah.com> wrote:
+> > >
+> > > On Mon, Jul 18, 2022 at 04:31:58PM +1000, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > >
+> > > > After merging the usb tree, today's linux-next build (arm
+> > > > multi_v7_defconfig) failed like this:
+> > > >
+> > > > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_cmd_mux_set':
+> > > > drivers/platform/chrome/cros_typec_switch.c:52:16: error: implicit declaration of function 'cros_ec_command'; did you mean 'cros_ec_cmd'? [-Werror=implicit-function-declaration]
+> > > >    52 |         return cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
+> > > >       |                ^~~~~~~~~~~~~~~
+> > > >       |                cros_ec_cmd
+> > > > drivers/platform/chrome/cros_typec_switch.c: In function 'cros_typec_register_switches':
+> > > > drivers/platform/chrome/cros_typec_switch.c:244:23: error: implicit declaration of function 'acpi_evaluate_integer'; did you mean 'acpi_evaluate_object'? [-Werror=implicit-function-declaration]
+> > > >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+> > > >       |                       ^~~~~~~~~~~~~~~~~~~~~
+> > > >       |                       acpi_evaluate_object
+> > > > drivers/platform/chrome/cros_typec_switch.c:244:49: error: invalid use of undefined type 'struct acpi_device'
+> > > >   244 |                 ret = acpi_evaluate_integer(adev->handle, "_ADR", NULL, &index);
+> > > >       |                                                 ^~
+> > > >
+> > > > Caused by commit
+> > > >
+> > > >   e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
+> > > >
+> > > > and commits
+> > > >
+> > > >   34f375f0fdf6 ("platform/chrome: cros_typec_switch: Set EC retimer")
+> > > >   bb53ad958012 ("platform/chrome: cros_typec_switch: Add event check")
+> > > >
+> > > > interacting with commit
+> > > >
+> > > >   b1d288d9c3c5 ("platform/chrome: cros_ec_proto: Rename cros_ec_command function")
+> > > >
+> > > > from the chrome-platform tree.
+> > 
+> > I am very sorry about the conflicts.
+> > 
+> > I can think of a few ways to address this:
+> > 1. A fixup patch on top of linux-next updating the function signature
+> > to cros_ec_cmd() ; I will send this out if you'd like.
+> > 2. Pull in Commit b1d288d9c3c5 ("platform/chrome: cros_ec_proto:
+> > Rename cros_ec_command function") to usb-next.
+> > We will also have to pull in dependent commit 015cd0043503
+> > ("regulator: cros-ec: Use common cros_ec_command()")
+> > 3. Revert the entire cros-typec-switch (patches 3-9) series from
+> > usb-next and wait till after the merge window to apply it to
+> > chrome-platform directly.
+> 
+> I think I'll just do #3 to resolve the issue.  I'll do it in a few
+> hours.
 
-Fixes New smatch warnings:
-drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing zero to 'PTR_ERR'
+Now all reverted from my tree.  Please send these changs through the
+platform tree after the next -rc1 is released so that you don't end up
+with build problems again.
 
-vim +/PTR_ERR +2613 drivers/net/phy/micrel.c
+thanks,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
-Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
----
-v1 -> v2:
-- Handled NULL pointer case
-- Changed subject line with net-next to net
----
- drivers/net/phy/micrel.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index e78d0bf69bc3..6be6ee156f40 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -2812,12 +2812,16 @@ static int lan8814_ptp_probe_once(struct phy_device *phydev)
- 
- 	shared->ptp_clock = ptp_clock_register(&shared->ptp_clock_info,
- 					       &phydev->mdio.dev);
--	if (IS_ERR_OR_NULL(shared->ptp_clock)) {
-+	if (IS_ERR(shared->ptp_clock)) {
- 		phydev_err(phydev, "ptp_clock_register failed %lu\n",
- 			   PTR_ERR(shared->ptp_clock));
- 		return -EINVAL;
- 	}
- 
-+	/* Check if PHC support is missing at the configuration level */
-+	if (!shared->ptp_clock)
-+		return 0;
-+
- 	phydev_dbg(phydev, "successfully registered ptp clock\n");
- 
- 	shared->phydev = phydev;
--- 
-2.17.1
-
+greg k-h

@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BC45795E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA60A5795E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236560AbiGSJQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 05:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
+        id S236731AbiGSJQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 05:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234384AbiGSJQF (ORCPT
+        with ESMTP id S234384AbiGSJQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:16:05 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FDA192B9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:16:03 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26J8t3nU010153;
-        Tue, 19 Jul 2022 09:16:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=bb5EIMLfFWIMK62XXQnbU6dWC4qdzyIjQZ4VlcqlQaU=;
- b=WURkEaUkKt/l7iv2nwl24zw8paEyNJ5wV6D5mXMCgjXBelWHczEGHm0ebNInxxOQuWFa
- HPu8p9PbR6ZUBd1JWNOHbiVjbCHQLOhzxT0NVjOFnu59MsaT+SNEghtqFO5Xa+MsmBqL
- exXB/V7c6/BEt5n754j20j8G3p9oVNb3qdh6UgTDro6Zd1o0tg7Bz6xnOtFpiHF2QSbq
- I6q0aQUIFRWQj1itWJEeI6rdAhwaXSh27q22o9ZxDzSft0UW8k1RCM+f21r1r2yl30RU
- H+QE8LtU4jjfB8qwP0Qc7c6cWXcHsOMe1NsI1fydyVuwM04j76beulecQl4iR7nxFOen TQ== 
-Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hdknk0mns-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Jul 2022 09:16:01 +0000
-Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 26J9FxcK006088;
-        Tue, 19 Jul 2022 09:15:59 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTPS id 3hc6rjbwrs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 19 Jul 2022 09:15:59 +0000
-Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26J9FwoG006082;
-        Tue, 19 Jul 2022 09:15:58 GMT
-Received: from jiacangl2-gv.qualcomm.com (jiacangl2-gv.qualcomm.com [10.231.253.177])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 26J9FwLb006081;
-        Tue, 19 Jul 2022 09:15:58 +0000
-Received: by jiacangl2-gv.qualcomm.com (Postfix, from userid 399080)
-        id 6E77F37A69D; Tue, 19 Jul 2022 17:15:57 +0800 (CST)
-From:   Kassey Li <quic_yingangl@quicinc.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, Kassey Li <quic_yingangl@quicinc.com>
-Subject: [PATCH] mm/cma_debug.c: align the name buffer length as struct cma
-Date:   Tue, 19 Jul 2022 17:15:54 +0800
-Message-Id: <20220719091554.27864-1-quic_yingangl@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ULwnNTs9qNRwFueSUGn7TOlGtQfu8BiK
-X-Proofpoint-ORIG-GUID: ULwnNTs9qNRwFueSUGn7TOlGtQfu8BiK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_22,2022-07-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 bulkscore=0 impostorscore=0 malwarescore=0
- mlxlogscore=352 adultscore=0 suspectscore=0 priorityscore=1501
- clxscore=1011 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207190039
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 19 Jul 2022 05:16:16 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8744E192A9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:16:15 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id u15so16612936lji.10
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:16:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=EiPIlo7Vs9DiAdVRyUDYHpIazmfJsBIl7QHLBcvn4ws=;
+        b=hM+2WuSbikErcQCOyaqBuoFCnyPuxWNYo2/OMPttH7Y+o88vMjcPOOVYbMmyYshBoC
+         0Zd0smGcJAQi+FWY5zER6o4dtm2BcBXLViOZAsX8cMDsfyFjLCun/gcf2YfnvaWOu8+4
+         gAaOfvj+DZKGqN0AU3gu/5I6Sh4TCcmM4l3I/98FBFhBYRq9fwjh+ayXkfuH1btdPbFh
+         hzdb8EH68P8mQkg15y2/ULYK1FffxEWB5nzdqnnNb/6oU8me87tFyH4/iTHA16nvIzSH
+         7sKeLscjXs42YoBmS/DBQHkZ1z9CS9qRJ7DVHA/yMS0Kg3LQ5eGKzAdUy7b9Y3UBd6Cf
+         g5eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EiPIlo7Vs9DiAdVRyUDYHpIazmfJsBIl7QHLBcvn4ws=;
+        b=s8pxMpzgO2SDOVTrl7JCMvYQkUqiC+wAjStN5K6JFQepsutcBC0gp9xV4N6FNM/N05
+         zmkkjn1QiO37vVicc64J6RZlW/dLf6as2k0R/xhLwl8LtIw4Fx5Rul+Qwxvourbt9X7G
+         ND6QQPwW0mymTTFEQyMcT4jSwiD8/Kf53Gyqf93wmBFWfIWNHeP+RmkaWQ6KoFNYThug
+         ehAh/SNYObjKLq2EjBoJyPERyM+Kap0omAT+jkGLNQCag7t8qj18fMoR6DvbaSDFPCiN
+         9Z3ThIwkcs6iKFH4wAZ/UzVWbFgnthsAIf3xhCyftvbli+h/I5EQMiPE44IDP1QylS+E
+         B0SQ==
+X-Gm-Message-State: AJIora8OorWmRfENoRQNJ3hE5Hkp6Ln6WagbAj4sHe8OmbSh20t5xlG6
+        QGNR3Omr3j4O36ZaCN57sjwQhGoByaPtybf0
+X-Google-Smtp-Source: AGRyM1txHvTPBz/ixiFNirvCteHCwgqLtyp+MG5YZV/K19suXdDeTkonWbQZ05h4gzqVViTBzrj3JA==
+X-Received: by 2002:a2e:87d9:0:b0:25d:88e1:d710 with SMTP id v25-20020a2e87d9000000b0025d88e1d710mr14162688ljj.361.1658222173596;
+        Tue, 19 Jul 2022 02:16:13 -0700 (PDT)
+Received: from krzk-bin.. (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id c23-20020a2e9497000000b0025d520648d1sm2549062ljh.43.2022.07.19.02.16.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 02:16:13 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     linux-kernel@vger.kernel.org, windhl@126.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 1/2] memory: of: Fix refcount leak bug in of_get_ddr_timings()
+Date:   Tue, 19 Jul 2022 11:16:11 +0200
+Message-Id: <165822216749.37301.12699502568759184723.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220719085640.1210583-1-windhl@126.com>
+References: <20220719085640.1210583-1-windhl@126.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
----
- mm/cma_debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 19 Jul 2022 16:56:39 +0800, Liang He wrote:
+> We should add the of_node_put() when breaking out of
+> for_each_child_of_node() as it will automatically increase
+> and decrease the refcount.
+> 
+> 
 
-diff --git a/mm/cma_debug.c b/mm/cma_debug.c
-index 2e7704955f4f..c3ffe253e055 100644
---- a/mm/cma_debug.c
-+++ b/mm/cma_debug.c
-@@ -163,7 +163,7 @@ DEFINE_DEBUGFS_ATTRIBUTE(cma_alloc_fops, NULL, cma_alloc_write, "%llu\n");
- static void cma_debugfs_add_one(struct cma *cma, struct dentry *root_dentry)
- {
- 	struct dentry *tmp;
--	char name[16];
-+	char name[CMA_MAX_NAME];
- 
- 	scnprintf(name, sizeof(name), "cma-%s", cma->name);
- 
+Applied, thanks!
+
+[1/2] memory: of: Fix refcount leak bug in of_get_ddr_timings()
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/b54af20531018c2bb7181ba2f511327b3c9f1cef
+[2/2] memory: of: Fix refcount leak bug in of_lpddr3_get_ddr_timings()
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/2f1b3550a152baa8287ee95586f0385410a5296b
+
+Best regards,
 -- 
-2.17.1
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

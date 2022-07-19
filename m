@@ -2,75 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B9357A3AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF45257A3B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239570AbiGSPvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S239651AbiGSPvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238000AbiGSPvT (ORCPT
+        with ESMTP id S239495AbiGSPva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:51:19 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F4F5A450
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:51:11 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so9437669wmb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XoVzJzZRO2y2NIpJ766MD/mBAH/yX0TDvkG6svd94H8=;
-        b=r7/qvOLD4VMPI1/y+e3jZe7mpTVXnfXEtZka1ARUROPywL+L3qAZpySajxhueO1Kpu
-         M7LsNaKR+S+4F5s0cDTymszobA3uFp12ks1aKXQ49KtpSDMLuNp86Q1b3UI8gYiksYb/
-         +j4aiW30BmREsworgTPfcWB8eOopqbH+/ZF9qjwRxUSRKifTga/oj/u/rOanzox8I8y0
-         3zsRcz9S43J6uQFsapP49nN+dzokDvraNQApllT5bNpeZIS3l6DHsAyPT5lIJ04IzIge
-         mSv6K/6mtLxlPD4gI5PVQUUHv2ew4bjL8+6887595fE2dYVOodygIIA0E5cgs++PVPGc
-         XmAA==
+        Tue, 19 Jul 2022 11:51:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 050542B601
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658245861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bytx0BWlQSL3lnY+bN1k2KN/IEh6mXjIzTlnoLU+R44=;
+        b=VsxtqhLh9DuwjDV+pW4xcrtf3+qf5fzcAArojjp6rrjVHbQLMEL6H5kPaPcgtUscfe96Wy
+        lxrO448/RKjzxFvDYO+IUTS3khYEZN9/cgSw2K/RcrHuySkYG5An0gvha6f72MEHxb18CF
+        0tKpCRSSi8ovOiW9NEMeOFOwoYh58ug=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-343-P3vdoqYONUOSIPFbaJCB0A-1; Tue, 19 Jul 2022 11:50:59 -0400
+X-MC-Unique: P3vdoqYONUOSIPFbaJCB0A-1
+Received: by mail-wr1-f72.google.com with SMTP id i13-20020adfaacd000000b0021d96b4da5eso2708123wrc.18
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:50:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XoVzJzZRO2y2NIpJ766MD/mBAH/yX0TDvkG6svd94H8=;
-        b=L88ibLRw0bd1IpeZKMQ4CACJBpj91QGKV+8aWHn10qDM7WNJLwnvrYJFQw4UDzRZsA
-         sywbQwpxYUvGG3MId472L7BWxiwI4kr3BjY/m0AwYnIYM9fikOWpXDuK2V4HEVRx4lqg
-         YkP5usKLjCgMNOfP7bI96oD3IuLFhH/14hkAVQ1dvb63bKSFt6cNEpsWblx9SRYsduZE
-         P2AAXyKRl1WKRhuqve4aoWRiwbnPOAqsCCLf8QCCERXtq1Xc6lHDaOQlfpGkAU+0QaUa
-         /MKcUa+9dWj/AGV2+VH82+dleRtXRFTBhbBRd3FnUFQs6mXXvArsIdhf351fQlB9caZ4
-         30DA==
-X-Gm-Message-State: AJIora+4uqEgZjHROnDlIGAf3gX5hoQbQOWiEjeNBD8U4pFbCfPTL4Ww
-        r/gufllbbK88klxFrOWCG2lkyNJMiidmFA7O7yBeqw==
-X-Google-Smtp-Source: AGRyM1vceqSoNSc5YhdoQQw9Db4vgKyVJ8WZr6dQmfvbPDtzwHI1k/kK9O+lz30Q6CLWDxnlVfpFjU7WmshvGLcKpf4=
-X-Received: by 2002:a05:600c:2854:b0:3a3:1551:d7d with SMTP id
- r20-20020a05600c285400b003a315510d7dmr13856861wmb.174.1658245867928; Tue, 19
- Jul 2022 08:51:07 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=bytx0BWlQSL3lnY+bN1k2KN/IEh6mXjIzTlnoLU+R44=;
+        b=eSsWy+RReFRzn0pc//aV+HGdgzt0nntoVKtsiFJVNa6/rB1X+IZ5FOTXBfxBiNgdsT
+         6pSDEpkTxY6HkjYtmFLGnT8JNBpZnWZoDojVmQjXguFtJgpoEYaebAwgLziRb9omJ1E7
+         o6/pTu3cSG+1cUxyc3kQP2Gr1T098WaaAdWFE//5n378qmwG8PmpBl+9baMI+iJUEPiU
+         ajVe+JvOs6vfNisIT0yIls3BDDSEeo32me72/ebDVPQgGMGkFnpJlSqBaXCRlsJGEoZs
+         lWCUdPnmFLBVGLPrvWWSy2aC8PXohHJ6cm+buy4+c3LWza0fgFUf9sAyuxDLyBarzPcr
+         ejRg==
+X-Gm-Message-State: AJIora/fkvBaT+FSqRivc1NtIObbRnockUoN18T1DGfl6k1tmkxrj8Yr
+        URJiQ0i4Ryi9Kbn7EKN/YI7rWz6LahaY1sfWI0vKlBOCKEx6J1RbPfSo/Xn+RAkLykK6IfytPBw
+        p+prw7fJAhB2IvY165yJQtPhj
+X-Received: by 2002:a5d:6489:0:b0:21d:a9a1:3511 with SMTP id o9-20020a5d6489000000b0021da9a13511mr26418130wri.626.1658245858375;
+        Tue, 19 Jul 2022 08:50:58 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sMzKHTkKdvFnFWDj04IvUBb2vwu3An8lHFZRWwftgjMUJ3NyEdhiR7vhJwlkJKNTox9kKrug==
+X-Received: by 2002:a5d:6489:0:b0:21d:a9a1:3511 with SMTP id o9-20020a5d6489000000b0021da9a13511mr26418114wri.626.1658245858130;
+        Tue, 19 Jul 2022 08:50:58 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:600:7807:c947:bc5a:1aea? (p200300cbc70906007807c947bc5a1aea.dip0.t-ipconnect.de. [2003:cb:c709:600:7807:c947:bc5a:1aea])
+        by smtp.gmail.com with ESMTPSA id m18-20020a7bca52000000b003a320e6f011sm4223270wml.1.2022.07.19.08.50.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 08:50:57 -0700 (PDT)
+Message-ID: <ecada69b-03e4-4214-ed8e-f25ac74c19e1@redhat.com>
+Date:   Tue, 19 Jul 2022 17:50:56 +0200
 MIME-Version: 1.0
-References: <20220609052355.1300162-1-irogers@google.com>
-In-Reply-To: <20220609052355.1300162-1-irogers@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 08:50:55 -0700
-Message-ID: <CAP-5=fXJOB6aVcZdQ8cdejt5Jc_k_5jYGEGU7MJ++5qoxSsVpg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Tidy user rdpmc documentation and testing
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Cc:     Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Charan Teja Kalla <quic_charante@quicinc.com>,
+        akpm@linux-foundation.org, pasha.tatashin@soleen.com,
+        sjpark@amazon.de, sieberf@amazon.com, shakeelb@google.com,
+        dhowells@redhat.com, willy@infradead.org, vbabka@suse.cz,
+        minchan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>
+References: <1657810063-28938-1-git-send-email-quic_charante@quicinc.com>
+ <YtVJBQ/ZOt22o8+B@dhcp22.suse.cz>
+ <fca23df7-37b0-f32d-ece3-58317dfad210@quicinc.com>
+ <YtV0PSMAGG46Pq0K@dhcp22.suse.cz>
+ <6fa6b7aa-731e-891c-3efb-a03d6a700efa@redhat.com>
+ <YtbPqrNtlr72+qx9@dhcp22.suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm: fix use-after free of page_ext after race with
+ memory-offline
+In-Reply-To: <YtbPqrNtlr72+qx9@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,48 +93,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 10:24 PM Ian Rogers <irogers@google.com> wrote:
->
-> libperf's perf_mmap__read_self and the addition of arm64 support mean
-> that the perf_event.h and the rdpmc perf test have become
-> stale. Refresh the documentation in perf_event.h, remove the x86 rdpmc
-> test and port the libperf test as a non-architecture specific test.
->
-> Address sanitizer testing showed libperf leaking fds when the
-> perf_event_open failed, add error paths to handle this.
->
-> A comment is added to perf_event.h to avoid a divide by zero when
-> scaling counts if the running time is 0. This was previously discussed
-> in this thread:
-> https://lore.kernel.org/lkml/CAP-5=fVRdqvswtyQMg5cB+ntTGda+SAYskjTQednEH-AeZo13g@mail.gmail.com/
->
-> v2. Alters the skip in test_stat_user_read for open to always be a
->     skip as perf_event_open may fail with EACCES (permissions), ENOSYS
->     (not supported) and ENOENT (hypervisor). Adds Rob Herring's
->     acked-by on patch 3.
->
-> Ian Rogers (4):
->   libperf evsel: Open shouldn't leak fd on failure
->   perf: Align user space counter reading with code
->   perf test: Remove x86 rdpmc test
->   perf test: Add user space counter reading tests
+> 
+>> 2) I really dislike having to scatter section online checks all over the
+>> place in page ext code. Once there is a difference between active vs.
+>> stale page ext data things get a bit messy and error prone. This is
+>> already ugly enough in our generic memmap handling code IMHO.
+> 
+> They should represent a free page in any case so even they are stall
+> they shouldn't be really dangerous, right?
+Good question. The use-after-free tells me that there could at least be
+something accessing page_ext data after offlining right now. As long as
+it's only unsynchronized read access, we should be fine.
 
-Ping. Would be nice to get this cleaned up in the next release, plus
-better testing.
+> 
+>> 3) Having on-demand allocations, such as KASAN or page ext from the
+>> memory online notifier is at least currently cleaner, because we don't
+>> have to handle each and every subsystem that hooks into that during the
+>> core memory hotadd/remove phase, which primarily only setups the
+>> vmemmap, direct map and memory block devices.
+> 
+> Cannot this hook into __add_pages which is the real implementation of
+> the arch independent way to allocate vmemmap. Or at the sparsemem level
+> because we do not (and very likely won't) support memory hotplug on
+> any other memory model.
 
+As __add_pages() is also called from mm/memremap.c where we don't want
+that metadata, we'd have to special-case (would need a new parameter I
+guess).
+
+> 
+>> Personally, I think what we have in this patch is quite nice and clean.
+>> But I won't object if it can be similarly done in a clean way from
+>> hot(un)plug code.
+> 
+> Well, if the scheme can be done without synchronize_rcu for each section
+> which can backfire and if the scheme doesn't add too much complexity to
+> achieve that then sure I won't object. I just do not get why page_ext
+> should have a different allocation lifetime expectancy than a real page.
+> Quite confusing if you ask me.
+
+In contrast to memmap, people actually test for zero pointers here.
+
+If you ask me the memmap access is ugly enough and I don't really enjoy
+other metadata following that pattern of "stale and suddenly removed".
+Here seems to be an easy way to do it in a clean way.
+
+But yes, if the synchronize_rcu turns out problematic, we'd either have
+to optimize or move the allcoation/free phase.
+
+-- 
 Thanks,
-Ian
 
->  include/uapi/linux/perf_event.h        |  32 +++--
->  tools/include/uapi/linux/perf_event.h  |  32 +++--
->  tools/lib/perf/evsel.c                 |  17 ++-
->  tools/perf/arch/x86/tests/Build        |   1 -
->  tools/perf/arch/x86/tests/arch-tests.c |   2 -
->  tools/perf/arch/x86/tests/rdpmc.c      | 182 -------------------------
->  tools/perf/tests/mmap-basic.c          | 127 ++++++++++++++++-
->  7 files changed, 176 insertions(+), 217 deletions(-)
->  delete mode 100644 tools/perf/arch/x86/tests/rdpmc.c
->
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+David / dhildenb
+

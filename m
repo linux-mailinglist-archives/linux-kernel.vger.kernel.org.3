@@ -2,81 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31436579F4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987A9579F64
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243494AbiGSNMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        id S238238AbiGSNRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243370AbiGSNMH (ORCPT
+        with ESMTP id S243282AbiGSNRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:12:07 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF69752445;
-        Tue, 19 Jul 2022 05:29:35 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id n12so8510836wrc.8;
-        Tue, 19 Jul 2022 05:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BPGA8CVzq5tUbxFgoR8mOaYivOScxzcIsTIwb0n/HjQ=;
-        b=NMiRRM4ygQScX6CHZNhNLIowqiO7p3Ujk/WGKHm0kxHmMppumn936uJ3xlCcD7OdU8
-         WCNaoh+idQnQNvrRCSe+46CYEAvTnCDMLHqaQ+JBkNOKsVWFyFX14Tjmsi28c2ZeJJIw
-         j8Nt22IQCu/K3nKSmEbFHs6UB2KAFVCDbRagp/4KmzpWDpluYlxGZgcoAtzqxfUoBW2O
-         b7+AowTiYdriHXKuABNgodpuqfqwddaPPU6ynpCr//WedUN+C8RoOazpmcj/L5OoHmRb
-         /ADSip0e6F2LXP+Eu4ScPlz4ADvcY5mRgnhHnu/rQYn9yQwH/OXLq7UvehzkghvYkgPt
-         P9PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BPGA8CVzq5tUbxFgoR8mOaYivOScxzcIsTIwb0n/HjQ=;
-        b=7U1kE+bV9jP054dh0aYE6RwyQE9nfshNddSFOtcsju7sJJz23dlZBIzB0UNQ8On+a0
-         8t4R9jX6CsxnyiuXFu9NXg3vcpnmEyZyK4siE6jsyFZtedheEdG4oNtwuubyGDLZ+QGc
-         VlhGQeXdZv1EelgernDHS/yTG6R+Euj5x0C2egE6u6ioAvi+eypfDyo7B5Mmd0Lpb57V
-         C9urnaukMvz6bl6r1QDfgztxMECc3SF27i6fy0gwndqvTAx2z9Pp/rXLptknazdDlgYO
-         swRf1LoTwPJdbcnKHmplr2UmzWMuuB92W4NV/RQnoykuxHRv4dVjRmFJ3zmW/tVuIFWI
-         YwGA==
-X-Gm-Message-State: AJIora91arV3SuRXT3xtllekqCCEg7SPPljxSt8afqpmOxw71mKAgdyq
-        Z9X766ajYfYbl+TOBMGBMrQ=
-X-Google-Smtp-Source: AGRyM1suSHp0sJMoI1+9oy1P/fM/5Xe4wR6xj5TapIfLUdvodiA4VzWOTw7+k9S6OHTl1eRpbaQd/w==
-X-Received: by 2002:a05:6000:144b:b0:21d:a57d:8000 with SMTP id v11-20020a056000144b00b0021da57d8000mr27103882wrx.204.1658233774143;
-        Tue, 19 Jul 2022 05:29:34 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-208-75.ip51.fastwebnet.it. [93.34.208.75])
-        by smtp.gmail.com with ESMTPSA id p6-20020adfe606000000b0021d73772c87sm1518498wrm.91.2022.07.19.05.29.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 05:29:33 -0700 (PDT)
-Message-ID: <62d6a3ad.1c69fb81.8f261.32f5@mx.google.com>
-X-Google-Original-Message-ID: <YtajqhJ1/C9Sc2IC@Ansuel-xps.>
-Date:   Tue, 19 Jul 2022 14:29:30 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v2 01/15] net: dsa: qca8k: make mib autocast
- feature optional
-References: <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-2-ansuelsmth@gmail.com>
- <20220719005726.8739-2-ansuelsmth@gmail.com>
- <20220719122636.rsfkejgampb5kcp2@skbuf>
+        Tue, 19 Jul 2022 09:17:39 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2049.outbound.protection.outlook.com [40.107.102.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB6572EF3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:33:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MH1kGJ5ZVf2wpVgrRQ0ngDEMb3lIqg+AQ58Yaxau9zvDNFeGHnjBoi5Krr72EEuLzJLzJOQ89wS/ZObWk5AqZLgd3MWzTP8Ok29dbUZpYXxskoYy+Jg7vTYQCokZy3LKhY9bac3srY2BJzURanWrsUEw13PfOYzcnngQMAucNIrQyrpHhmQ4Z7ClbLecMlUL9OHRozezSAjygv6hloIfzo7tfAWpsBT4imuFN9+HYvjoaCfSHD0LZsbmattXyncaNg11COUY0iAwdmh8KGTeXACGe9yP8v/ziEJltnwsvFf19MZs1QVIWGdnqjxr3zF37FahrXmHc2obcAkNDANYzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DA90YvujaYDnQjIkwGxveD0M7NqK0ULpi/5zYfIABds=;
+ b=RX8lr1M/8dEFXnJvjoY3vV4fRduKU2HBPjRU4pPeKVzzqPFCK7DGvwImUJ7f+RW1zRwwj7/qtzcXJX1HDSDIqZ+HNpUzmEDwEne4YOb4NcM9admljU4GLZiIqS/8qM4A4uwxhmD2qiZiHwl5bLAUV3Ug1FG9+eJ8zlFpsMRui1WOkVh6MWJg9C7Zwi0gMPULc6ScZ1lVGtwbv2RcWD6lm3LZLifCUbcig0P98qL10j5ueGxnPJM323JMONanOQ2uWhN+2lfT8cMrdv0+9UIFokxg22uv01rt3ipwmRX3YYAYzJT7hisMk2VLtkO/ABhXy7F0p8kSZpRSHjhDSnrxqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DA90YvujaYDnQjIkwGxveD0M7NqK0ULpi/5zYfIABds=;
+ b=KtvwUzoaYXxZbvP+rppeJ5B2CfALTsQg/3FTwCuwogSyZOkycfRs0gsadVFJ/dLhY57HRRrFZqB5KPcJ5EHY2A/aL0uNMvurbDxv1JO82m9zUgpRNJ/vLnjEopGi9GTM8GWW5ZyD4eVeUTUQXTfy6x1oXYySUli+ShGhNAUXWHI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BY5PR12MB4917.namprd12.prod.outlook.com (2603:10b6:a03:1d1::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.13; Tue, 19 Jul
+ 2022 12:33:55 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5438.024; Tue, 19 Jul 2022
+ 12:33:55 +0000
+Message-ID: <ada7fc21-17e3-d3e0-5316-55ee6669ccd3@amd.com>
+Date:   Tue, 19 Jul 2022 14:33:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm/radeon: Fix comment typo
+Content-Language: en-US
+To:     Jason Wang <wangborong@cdjrlc.com>, daniel@ffwll.ch
+Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220716035732.30449-1-wangborong@cdjrlc.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220716035732.30449-1-wangborong@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0077.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1e::16) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719122636.rsfkejgampb5kcp2@skbuf>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0d1a5e3a-edb7-4d4b-bb9d-08da6982f1cd
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4917:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: roqHP2erNd9YhMTWLTPh2k2QqUOdrXZTJXD4rbMrj1Y2VqetexBD1Wg3sHitxI8AtwNpEYS1WWo2d7PiJC7MVjbYmsR6GNgjJQDEzpPOXgETLkwVniPjfWxBh2EbA7h39Z9MHG7SQD5iiMXNmhTM9Owk9lXDjnmbu1r1F/xI/ay8h9A0AjvI+M2oxnQ8W2jjJGlpH1L9UBIIUyxZ1WkyZmpSM2+PZLjLkTCiWXRA4pQQncYSjjFdM14uJyuQJZVOyUGXE1CVUaDwtZj5N77rhsi6e/yWOtB/uDQ+hvVwU/f9fC1HJ3bSpoiS5t9wxgirMa3SyY8hu4YfXEP4NUXqedy/5Mu3KpEcQLNVWc5xrtuW2SWdXY+ngJU8hQ0ze/M6flHjz2if+sWwcRZO/gssLnBeAiWbFGRSIpi++BiM6Gu9R6dORy4eMLMHGDTjR9Ob/OiZYNdMadGyxzMIV74NRWm9eTaqHvU3v0HcZGzagcG4i6S52xF0g1pInkP6VYbfGVgPFS85j9jJ6PaDwEsunJIT8i26uiTR+LdnAnRmBPcgWI7p9cOUSooUfR+x0xNYKo1Pv8/xrowYUrnnx4AMyHZq76Qt+hVdUKnk4WE2vUggBcy77aYVFi0DvkwTCdGBwSyRPj5XcGnbcQBChmx8ikAzajHNxT15c06ZtVJqPDV3hFkpzKzh75TUqipxF5/EwXSTEW8lFos9RTjp/XCtZwvCMbExNZ0x7PLJ5uuweHsbzdqdiG5bkV+oc8il+4AbH0Is1y9mo8E7rBhjjlOnCPvGZ62f1lrBAnpzL9f0Lo+6bg8DtImM2+KvWKgNUHsCLd4DijRiwMKjFjVqQvtyCQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(346002)(376002)(136003)(39860400002)(186003)(2616005)(66574015)(6486002)(66476007)(4326008)(66946007)(8676002)(66556008)(316002)(31686004)(36756003)(86362001)(31696002)(6666004)(41300700001)(6506007)(6512007)(8936002)(38100700002)(5660300002)(83380400001)(2906002)(478600001)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?alUzeTRCdXN1T2FlWU4vZWpzVnIrbHN3R3lpYjM3TGN4Q1RoWTEzOUZsKzJ0?=
+ =?utf-8?B?cm1ySVlVRWJ2ejAyS3FyVXZYblB5dTR4MytTcHpNbFIxMFdDeUZTdG44Vkt5?=
+ =?utf-8?B?THNydE5oZlcxdXBKdEhkWm95Z3VTN0ZNTG1LSk5WNlZCcWg3R1V1YUJUYzBl?=
+ =?utf-8?B?SjZ0Y0xjdUxSMDVvS242SnVpWVZpZkc3bk1oU0djaHlqTTZtdXE0MlRQM1VQ?=
+ =?utf-8?B?NFAzTFJOSTdYL2FteDRVc2FOS3NOSVNuOFlmRUVnTCtjQk04T3ZOd2tMUjlC?=
+ =?utf-8?B?ek55Z1VvSHNDSXJ2b3F3REVNSllMTXFKd0RmNGlzckkzbkE1THQvUWRFQnNk?=
+ =?utf-8?B?R2p0K1l0eG83T1ZwSDZsRnVMeWRiUVcwWlZvMmhGeHEzVmZSOWI5U2YrWllE?=
+ =?utf-8?B?LzVvUUlMQmkzb3pmallmTGpiNHozT2MxbTczbmRuWnRLUlFuRWN6dEQ3bWR1?=
+ =?utf-8?B?V1h1bHBJc1hTeUZwR1BacTU4Z2ZHSXBXMHRnZ1lhM2lvbFN3Z0h5bm1uTE0r?=
+ =?utf-8?B?YjZrUDA1eUs5S1dCV2JlY3R0ck5VVVhVOGNGeWxzbFZTUFFMVGVUNkluOUJH?=
+ =?utf-8?B?aVZKb3pqNEViaktPSTFwaTlRYnZiTTU1OXJtYTlFLy94QmloSjlaUUl0bWhj?=
+ =?utf-8?B?MkdDYitYYURITTE0VEhPeER1ZDZod0V0Ulc2c1Q5MEw0SWtGTm5DeTZqakVu?=
+ =?utf-8?B?Y1BoakZCUlhkaUhaVHdnOGJzbEx5TzRET3M2TnNMNzFBYlFwNUlHemlnTHpY?=
+ =?utf-8?B?b3ZmZWdFWnF3TlJlUlRlVjZIUDFSeFpCUkQrWW8reGxycGRNR2o2aUR5aHlE?=
+ =?utf-8?B?Zjcvakdic1hSNjQ1eFZyMm92dmpLckdwa1NMb2tIWUVzUHladzNvTDBNdWd0?=
+ =?utf-8?B?ZW8ySEVWK0Vpcmo5RzQ5L3NvbWVDQkVFbE93cnAyRk16bDBMV3ZPczBaQXFR?=
+ =?utf-8?B?VWROK1drWTU3NmMydzkxK2gveFJHU3pzeXlOQ2VEdU91cDRJdXVLUnMvZ0pZ?=
+ =?utf-8?B?M0RMNGNrWERmRUxSOHFYeEdNVzF3TFlDNnVVcG4xTFgwOWRhMTF3WVdzLzdT?=
+ =?utf-8?B?MnJkbStQNll1STl5b2xIVzVnYUZPb3pYYjc1bS9wY1pWUlg3cjhxYVIxRWtB?=
+ =?utf-8?B?QkRiTkFQS001OVJsNXh3NHdhK0lHSU00S3pPdnJzdlFZYmNyWjlZTlFBU2kz?=
+ =?utf-8?B?dFpSeGtQVHlNcWpTYXRhdkl3eXEvSk1NQmVzR2FUQ002RmRPdEE4T2I2OTFP?=
+ =?utf-8?B?cCtkeFFPU0RWY3Q2TGU4N3did2FleGRJQjZjWWZLMHc4bXVDQlR1NXVxV1Ni?=
+ =?utf-8?B?VmMvUkJ1SnluQmEzREFNbzE0MWhYRTRzNEpHVGpWd1NUbjZUbGsxRGJidi9C?=
+ =?utf-8?B?ajQ3V09WQi9DRDZSc0lKQm9VSzFFSmV2VTk2MjR0SEsrMkpUa2hLV0p2aUlZ?=
+ =?utf-8?B?a0tPUWFDK25GTW5pYmZPTWtMejlKaVdhdWdQemNKZ1UwWmFtQmNrNmZ0UlpJ?=
+ =?utf-8?B?K29DTWRFclNER0NJYWE1ZlNOVXR3V3Z1RWtmOWhIODV3bEx5WDhra2lvTjdJ?=
+ =?utf-8?B?UkdGN3BqWUVLeldSTWYvNHFiUnRTQXVFeC90dy8yRExnOHQxK0NmemlnbW1t?=
+ =?utf-8?B?RkJ4SVlsME84VlY3VWpiR2RLOXpCTCttV1FwMHUrWkR1VmxpQ2NJNWw4dHNn?=
+ =?utf-8?B?VGdPTDVVeC91ZDhUck14TFg0TmFRZ0d5UHREaFRuNm1VKzNTelJwOGwwNG1p?=
+ =?utf-8?B?aE5yVXhFOFNOU2hNYlV6VFV1d2lSaHNQclBNZ1F4OUhxbkkxL1dmTzFXc3Yz?=
+ =?utf-8?B?SldrcFlzVzYraWhEeXhhZkZTRVB5bS82bzVGOFVsampHZTNhOWwwYjNyWGN5?=
+ =?utf-8?B?ajJubUw1c0kvbGRiYlQ3S05UUDBCeUpLcFd3ZzFXdDJNS1pGQVhCbmtNMXVW?=
+ =?utf-8?B?U0NNQXpnRDQyeVRGMUFrV0RmVnBDUDcxbmQ3ZmwvbHhZMWRzRG40SWZ2RDFE?=
+ =?utf-8?B?Zjdlb2s2VVNXYkV5Nkl1d1gzZDIxdUhyd1dOY0ZwbjNMK25ENitWSXdDcFY5?=
+ =?utf-8?B?VHhDbG9tL1BsVWpBVWxuZzFYT054MDRwWXZ2OE1TTkh4TE9oWGJ6aklUdjZu?=
+ =?utf-8?B?RXdCakRDc1J1UGpSNENsTktGSHloSXViV1dsOFY2Tm1WV1IzblVXN2NWaTFx?=
+ =?utf-8?Q?25yTLEuEHFhMAeiycNQxLloa/HvdEFh45z1tMliflRsE?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d1a5e3a-edb7-4d4b-bb9d-08da6982f1cd
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 12:33:55.2147
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yyWDxykkDZisvZOxehWBjnqbQ2xlKMfAHZQihyDr0iz4EFaHJahVq6qr4SfUJi/j
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4917
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,101 +126,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:26:36PM +0300, Vladimir Oltean wrote:
-> On Tue, Jul 19, 2022 at 02:57:11AM +0200, Christian Marangi wrote:
-> > Some switch may not support mib autocast feature and require the legacy
-> > way of reading the regs directly.
-> > Make the mib autocast feature optional and permit to declare support for
-> > it using match_data struct.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  drivers/net/dsa/qca/qca8k.c | 11 +++++++----
-> >  drivers/net/dsa/qca/qca8k.h |  1 +
-> >  2 files changed, 8 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/net/dsa/qca/qca8k.c b/drivers/net/dsa/qca/qca8k.c
-> > index 1cbb05b0323f..a57c53ce2f0c 100644
-> > --- a/drivers/net/dsa/qca/qca8k.c
-> > +++ b/drivers/net/dsa/qca/qca8k.c
-> > @@ -2112,12 +2112,12 @@ qca8k_get_ethtool_stats(struct dsa_switch *ds, int port,
-> >  	u32 hi = 0;
-> >  	int ret;
-> >  
-> > -	if (priv->mgmt_master &&
-> > -	    qca8k_get_ethtool_stats_eth(ds, port, data) > 0)
-> > -		return;
-> > -
-> >  	match_data = of_device_get_match_data(priv->dev);
-> 
-> I didn't notice at the time that you already call of_device_get_match_data()
-> at driver runtime, but please be aware that it is a relatively expensive
-> operation (takes raw spinlocks, iterates etc), or at least much more
-> expensive than it needs to be. What other drivers do is cache the result
-> of this function once in priv->info and just use priv->info, since it
-> won't change during the lifetime of the driver.
+Am 16.07.22 um 05:57 schrieb Jason Wang:
+> The double `have' is duplicated in line 696, remove one.
 >
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 
-Ok makes sense. Can I make a patch drop the use of
-of_device_get_match_data and then apply this on top?
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
-(we use of_device_get_match_data also in other functions)
+> ---
+>   drivers/gpu/drm/radeon/radeon_gem.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
+> index 84843b3b3aef..261fcbae88d7 100644
+> --- a/drivers/gpu/drm/radeon/radeon_gem.c
+> +++ b/drivers/gpu/drm/radeon/radeon_gem.c
+> @@ -693,7 +693,7 @@ int radeon_gem_va_ioctl(struct drm_device *dev, void *data,
+>   	}
+>   
+>   	/* !! DONT REMOVE !!
+> -	 * We don't support vm_id yet, to be sure we don't have have broken
+> +	 * We don't support vm_id yet, to be sure we don't have broken
+>   	 * userspace, reject anyone trying to use non 0 value thus moving
+>   	 * forward we can use those fields without breaking existant userspace
+>   	 */
 
-> >  
-> > +	if (priv->mgmt_master && match_data->autocast_mib &&
-> > +	    match_data->autocast_mib(ds, port, data) > 0)
-> > +		return;
-> > +
-> >  	for (i = 0; i < match_data->mib_count; i++) {
-> >  		mib = &ar8327_mib[i];
-> >  		reg = QCA8K_PORT_MIB_COUNTER(port) + mib->offset;
-> > @@ -3260,16 +3260,19 @@ static const struct qca8k_match_data qca8327 = {
-> >  	.id = QCA8K_ID_QCA8327,
-> >  	.reduced_package = true,
-> >  	.mib_count = QCA8K_QCA832X_MIB_COUNT,
-> > +	.autocast_mib = qca8k_get_ethtool_stats_eth,
-> 
-> I thought you were going to create a dedicated sub-structure for
-> function pointers?
-> 
-
-Sorry... totally forgot this as I was very busy with giving good series.
-Will handle this in the next version.
-
-(will be also useful later for the single dsa_switch_ops transition if
-we want to put all of them there)
-
-> >  };
-> >  
-> >  static const struct qca8k_match_data qca8328 = {
-> >  	.id = QCA8K_ID_QCA8327,
-> >  	.mib_count = QCA8K_QCA832X_MIB_COUNT,
-> > +	.autocast_mib = qca8k_get_ethtool_stats_eth,
-> >  };
-> >  
-> >  static const struct qca8k_match_data qca833x = {
-> >  	.id = QCA8K_ID_QCA8337,
-> >  	.mib_count = QCA8K_QCA833X_MIB_COUNT,
-> > +	.autocast_mib = qca8k_get_ethtool_stats_eth,
-> >  };
-> >  
-> >  static const struct of_device_id qca8k_of_match[] = {
-> > diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
-> > index ec58d0e80a70..c3df0a56cda4 100644
-> > --- a/drivers/net/dsa/qca/qca8k.h
-> > +++ b/drivers/net/dsa/qca/qca8k.h
-> > @@ -328,6 +328,7 @@ struct qca8k_match_data {
-> >  	u8 id;
-> >  	bool reduced_package;
-> >  	u8 mib_count;
-> > +	int (*autocast_mib)(struct dsa_switch *ds, int port, u64 *data);
-> >  };
-> >  
-> >  enum {
-> > -- 
-> > 2.36.1
-> > 
-> 
-
--- 
-	Ansuel

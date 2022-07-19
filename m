@@ -2,137 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04CD57AA0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3DC57AA12
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbiGSWwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S237089AbiGSWxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240360AbiGSWwY (ORCPT
+        with ESMTP id S233843AbiGSWxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:52:24 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCAB51A39
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:52:22 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id o9-20020a056e0214c900b002dc29c288bfso10209340ilk.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:52:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Cw/83ZRguJMt0yiilk+Lb82H2QSEAUnRgoZjDw4ouAE=;
-        b=bv0dt+WK2FJsG1J+jdqvGPbCfghTt0vQXmEUOWGUPKRuGZBcgyjAhuf7zANjAb0CJZ
-         L/+wa6Gk+TvgPTP9zY3PmyQ1Ms3o8SjephWSlPo1DKUh3nf7mYLEfMDPoauCOifTuUH6
-         MKX0bLisqiXAOWqEOr5LnyQKTvFSMwE0m2bbf1+MHDXDbD8ibQkY/F8tzCEHthykyvg6
-         8/CS+DaNuIjrp+bubfIuoQip9Dtvq34+zbUsWvzyvZst0C5RyjqUcvlpU4gsSoh66Cnb
-         EpUXwUVWu32ucSoYdBUfJ2JbtOlNCu3McVMZ/mx5dMD0ctNPo16ypHcYitXlf1Ig39sn
-         SS0Q==
-X-Gm-Message-State: AJIora9RgYwE+LmWj7bYKW6nnNgK/iIwLnYxYvTOOKCZ7ZXtoQUN5yGy
-        ml/4fa4wCnLL5zWzCoip2bedRH89EtEL1Q6htuQatPSIXvll
-X-Google-Smtp-Source: AGRyM1tCMNaxi+/GelASO+/vvssVObVcBa3Px2G+G8riojy54xxV/FHcaXdo3XqEfLE6HpWCvrJWxKaeNv/3mlTYN3DOK+43ysXG
+        Tue, 19 Jul 2022 18:53:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9FC58872;
+        Tue, 19 Jul 2022 15:53:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E50CCCE1DE3;
+        Tue, 19 Jul 2022 22:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA55C341C6;
+        Tue, 19 Jul 2022 22:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658271187;
+        bh=iIrxHwTlhHvNJJB96yEsjhslzR36uWq7rVdNuINgEV8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=C7lex1l/cQUxYT+g92kRJps1p7p4G+NOa1By8/aDfFWag9BOFoYjhKLMRU4xLw56Z
+         6+0bKvej2dPVTg1FCxA67zowNfj5HVbMB6FEUEY2tcmGBP2UuHVyPsxkG/lGrKdPmF
+         OgO80g4PrHZ+SAsI6Ao3lkTU9q9FjP7v1b+LmMgc0R54QaG7kB3O3GfXjDodZ7GL3/
+         ZTyGvj3gY/hicOaPGhvSOKYRF6ZDvYiL1r3VqW5JpYbr8zPjXzUpuB4qOjSmXEABq7
+         mFoZ3fydrEXv6vqrl04vR37qCdOz/4bVA3Dv/Xa5/1eckR9/aXka3cKyXBfD0n4/7f
+         U2I+1fGPFDa/w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9A09E5C042E; Tue, 19 Jul 2022 15:53:06 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 15:53:06 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, Kalesh Singh <kaleshsingh@google.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH rcu 4/7] rcu/nocb: Add an option to offload all CPUs on
+ boot
+Message-ID: <20220719225306.GY1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220620224455.GA3840881@paulmck-ThinkPad-P17-Gen-1>
+ <20220620224503.3841196-4-paulmck@kernel.org>
+ <7a09896b-88dd-040b-86c0-863f8279a04e@quicinc.com>
+ <20220719181257.GR1790663@paulmck-ThinkPad-P17-Gen-1>
+ <530b3bf4-f790-2973-5bc5-6ccd4797ae2a@joelfernandes.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c89:b0:2dc:7f32:793b with SMTP id
- w9-20020a056e021c8900b002dc7f32793bmr18131888ill.189.1658271141511; Tue, 19
- Jul 2022 15:52:21 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 15:52:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000054c80705e4305617@google.com>
-Subject: [syzbot] WARNING in ieee80211_do_stop
-From:   syzbot <syzbot+947c6f69525f513f8f14@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <530b3bf4-f790-2973-5bc5-6ccd4797ae2a@joelfernandes.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jul 19, 2022 at 06:42:00PM -0400, Joel Fernandes wrote:
+> 
+> 
+> On 7/19/2022 2:12 PM, Paul E. McKenney wrote:
+> > On Tue, Jul 19, 2022 at 03:04:07PM +0530, Neeraj Upadhyay wrote:
+> >>
+> >>
+> >> On 6/21/2022 4:15 AM, Paul E. McKenney wrote:
+> >>> From: Joel Fernandes <joel@joelfernandes.org>
+> >>>
+> >>> Systems built with CONFIG_RCU_NOCB_CPU=y but booted without either
+> >>> the rcu_nocbs= or rcu_nohz_full= kernel-boot parameters will not have
+> >>> callback offloading on any of the CPUs, nor can any of the CPUs be
+> >>> switched to enable callback offloading at runtime.  Although this is
+> >>> intentional, it would be nice to have a way to offload all the CPUs
+> >>> without having to make random bootloaders specify either the rcu_nocbs=
+> >>> or the rcu_nohz_full= kernel-boot parameters.
+> >>>
+> >>> This commit therefore provides a new CONFIG_RCU_NOCB_CPU_DEFAULT_ALL
+> >>> Kconfig option that switches the default so as to offload callback
+> >>> processing on all of the CPUs.  This default can still be overridden
+> >>> using the rcu_nocbs= and rcu_nohz_full= kernel-boot parameters.
+> >>>
+> >>> Reviewed-by: Kalesh Singh <kaleshsingh@google.com>
+> >>> Reviewed-by: Uladzislau Rezki <urezki@gmail.com>
+> >>> (In v4.1, fixed issues with CONFIG maze reported by kernel test robot).
+> >>> Reported-by: kernel test robot <lkp@intel.com>
+> >>> Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
+> >>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> >>> ---
+> >>
+> >>
+> >> Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> >>
+> >> One query on cpumask_setall() below
+> >>
+> >>>   Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
+> >>>   kernel/rcu/Kconfig                              | 13 +++++++++++++
+> >>>   kernel/rcu/tree_nocb.h                          | 15 ++++++++++++++-
+> >>>   3 files changed, 33 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> >>> index 2522b11e593f2..34605c275294c 100644
+> >>> --- a/Documentation/admin-guide/kernel-parameters.txt
+> >>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> >>> @@ -3659,6 +3659,9 @@
+> >>>   			just as if they had also been called out in the
+> >>>   			rcu_nocbs= boot parameter.
+> >>> +			Note that this argument takes precedence over
+> >>> +			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
+> >>> +
+> >>>   	noiotrap	[SH] Disables trapped I/O port accesses.
+> >>>   	noirqdebug	[X86-32] Disables the code which attempts to detect and
+> >>> @@ -4557,6 +4560,9 @@
+> >>>   			no-callback mode from boot but the mode may be
+> >>>   			toggled at runtime via cpusets.
+> >>> +			Note that this argument takes precedence over
+> >>> +			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
+> >>> +
+> >>>   	rcu_nocb_poll	[KNL]
+> >>>   			Rather than requiring that offloaded CPUs
+> >>>   			(specified by rcu_nocbs= above) explicitly
+> >>> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> >>> index 1c630e573548d..27aab870ae4cf 100644
+> >>> --- a/kernel/rcu/Kconfig
+> >>> +++ b/kernel/rcu/Kconfig
+> >>> @@ -262,6 +262,19 @@ config RCU_NOCB_CPU
+> >>>   	  Say Y here if you need reduced OS jitter, despite added overhead.
+> >>>   	  Say N here if you are unsure.
+> >>> +config RCU_NOCB_CPU_DEFAULT_ALL
+> >>> +	bool "Offload RCU callback processing from all CPUs by default"
+> >>> +	depends on RCU_NOCB_CPU
+> >>> +	default n
+> >>> +	help
+> >>> +	  Use this option to offload callback processing from all CPUs
+> >>> +	  by default, in the absence of the rcu_nocbs or nohz_full boot
+> >>> +	  parameter. This also avoids the need to use any boot parameters
+> >>> +	  to achieve the effect of offloading all CPUs on boot.
+> >>> +
+> >>> +	  Say Y here if you want offload all CPUs by default on boot.
+> >>> +	  Say N here if you are unsure.
+> >>> +
+> >>>   config TASKS_TRACE_RCU_READ_MB
+> >>>   	bool "Tasks Trace RCU readers use memory barriers in user and idle"
+> >>>   	depends on RCU_EXPERT && TASKS_TRACE_RCU
+> >>> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> >>> index 4cf9a29bba79d..60cc92cc66552 100644
+> >>> --- a/kernel/rcu/tree_nocb.h
+> >>> +++ b/kernel/rcu/tree_nocb.h
+> >>> @@ -1197,11 +1197,21 @@ void __init rcu_init_nohz(void)
+> >>>   {
+> >>>   	int cpu;
+> >>>   	bool need_rcu_nocb_mask = false;
+> >>> +	bool offload_all = false;
+> >>>   	struct rcu_data *rdp;
+> >>> +#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
+> >>> +	if (!rcu_state.nocb_is_setup) {
+> >>> +		need_rcu_nocb_mask = true;
+> >>> +		offload_all = true;
+> >>> +	}
+> >>> +#endif /* #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) */
+> >>> +
+> >>>   #if defined(CONFIG_NO_HZ_FULL)
+> >>> -	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
+> >>> +	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
+> >>>   		need_rcu_nocb_mask = true;
+> >>> +		offload_all = false; /* NO_HZ_FULL has its own mask. */
+> >>> +	}
+> >>>   #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+> >>>   	if (need_rcu_nocb_mask) {
+> >>> @@ -1222,6 +1232,9 @@ void __init rcu_init_nohz(void)
+> >>>   		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
+> >>>   #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+> >>> +	if (offload_all)
+> >>> +		cpumask_setall(rcu_nocb_mask);
+> >>
+> >> Do we need to do a cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+> >> rcu_nocb_mask) after setting all cpus in rcu_nocb_mask (cpumask_subset()
+> >> check below takes care of it though)?
+> > 
+> > Without that cpumask_and(), systems with sparse CPU numbering schemes
+> > (for example, 0, 4, 8, 12, ...) will get a pr_info(), and as you noted,
+> > the needed cpumask_and().
+> > 
+> > I am inclined to see a complaint before we change this.  And perhaps if
+> > this is to change, the change should be in cpumask_setall() rather than
+> > in rcu_init_nohz().  But that is an argument for later, if at all.  ;-)
+> > 
+> >>> +
+> >>>   	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+> 
+> We could also suppress the pr_info() by making it conditional.
+> 
+> like:
+> 
+> if (!CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) {
+> 	pr_info(...);
+> }
+> 
+> In other words, we could make the cpumask_and() as expected/normal on
+> systems with sparse CPU numbering schemes. Would that work?
 
-syzbot found the following issue on:
+That would be a good within-RCU workaround if we get an urgent complaint,
+but if this requires a change, shouldn't cpumask_setall() refrain from
+setting bits for non-existent CPUs?  It does refrain from setting any
+bits beyond the largest-numbered CPU.
 
-HEAD commit:    cb71b93c2dc3 Add linux-next specific files for 20220628
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1369f77c080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=947c6f69525f513f8f14
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+But perhaps there is an early boot reason why cpumask_setall() cannot
+do this?
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Either way, we are just doing a pr_info(), not a WARN_ON() or similar,
+so the current state is probably fine.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+947c6f69525f513f8f14@syzkaller.appspotmail.com
+							Thanx, Paul
 
-netdevsim netdevsim5 netdevsim1: unset [1, 0] type 2 family 0 port 6081 - 0
-netdevsim netdevsim5 netdevsim2: unset [1, 0] type 2 family 0 port 6081 - 0
-netdevsim netdevsim5 netdevsim3: unset [1, 0] type 2 family 0 port 6081 - 0
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 581 at net/mac80211/iface.c:428 ieee80211_do_stop+0x23e/0x2090 net/mac80211/iface.c:428
-Modules linked in:
-CPU: 0 PID: 581 Comm: syz-executor.5 Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-RIP: 0010:ieee80211_do_stop+0x23e/0x2090 net/mac80211/iface.c:428
-Code: 00 89 ee e8 44 56 b4 f8 83 fd 04 0f 84 34 0b 00 00 e8 66 59 b4 f8 31 ff 44 89 e6 e8 2c 56 b4 f8 45 85 e4 7e 07 e8 52 59 b4 f8 <0f> 0b e8 4b 59 b4 f8 48 8b 44 24 10 48 8d b8 f8 08 00 00 48 b8 00
-RSP: 0018:ffffc900148e6ef8 EFLAGS: 00010246
-RAX: 0000000000040000 RBX: ffff888063179568 RCX: ffffc90003944000
-RDX: 0000000000040000 RSI: ffffffff88c65dbe RDI: 0000000000000005
-RBP: 0000000000000002 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
-R13: ffff888063178c80 R14: ffff888063178c80 R15: ffff888063178268
-FS:  00007ff2e381d700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f18f9f6d058 CR3: 000000006e168000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- ieee80211_stop+0xc5/0x600 net/mac80211/iface.c:686
- __dev_close_many+0x1b6/0x2e0 net/core/dev.c:1516
- __dev_close net/core/dev.c:1528 [inline]
- __dev_change_flags+0x2ca/0x750 net/core/dev.c:8549
- dev_change_flags+0x93/0x170 net/core/dev.c:8622
- do_setlink+0x961/0x3bb0 net/core/rtnetlink.c:2780
- rtnl_group_changelink net/core/rtnetlink.c:3302 [inline]
- __rtnl_newlink+0xb96/0x17e0 net/core/rtnetlink.c:3556
- rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3593
- rtnetlink_rcv_msg+0x43a/0xc90 net/core/rtnetlink.c:6089
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x6eb/0x810 net/socket.c:2485
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2539
- __sys_sendmsg net/socket.c:2568 [inline]
- __do_sys_sendmsg net/socket.c:2577 [inline]
- __se_sys_sendmsg net/socket.c:2575 [inline]
- __x64_sys_sendmsg+0x132/0x220 net/socket.c:2575
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7ff2e2689199
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff2e381d168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007ff2e279bf60 RCX: 00007ff2e2689199
-RDX: 0000000000000000 RSI: 0000000020000140 RDI: 0000000000000006
-RBP: 00007ff2e26e313b R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffee21e618f R14: 00007ff2e381d300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> Thanks,
+> 
+>  - Joel
+> 
+> 
+> >>>   		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+> 
+> 
+> 
+> >>>   		cpumask_and(rcu_nocb_mask, cpu_possible_mask,

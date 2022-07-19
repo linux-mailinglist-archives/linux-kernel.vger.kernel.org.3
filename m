@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A62579B7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D078579B46
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239891AbiGSM2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
+        id S239890AbiGSM0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239893AbiGSM1Z (ORCPT
+        with ESMTP id S240132AbiGSMYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:27:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4F65019E;
-        Tue, 19 Jul 2022 05:10:20 -0700 (PDT)
+        Tue, 19 Jul 2022 08:24:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774E646D82;
+        Tue, 19 Jul 2022 05:09:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 437126177D;
-        Tue, 19 Jul 2022 12:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37AFCC341C6;
-        Tue, 19 Jul 2022 12:10:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A16DB81B8C;
+        Tue, 19 Jul 2022 12:09:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44624C341D0;
+        Tue, 19 Jul 2022 12:09:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232619;
-        bh=LR5BiutOma/0B/U/EoBoNYPeDfUNWk7C5GzJ7/aCzNI=;
+        s=korg; t=1658232566;
+        bh=VZ/ySEKwch8hX9Yt/2DDVKTkE+/L3t9gTkYGiHmEYrA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gg3yJsGN13Wm8afHrKFAu/IHsmzX7GcL2D0n/vZp9ijCAreRPs8rSkCDGy/f1sctV
-         U4xP6RMXhgCQ+sQCih5bSPDqaoocxPnlrB7/UGWXjR1LTVkRd2a8RfiuULsPgXcThI
-         l73KvvT5xVlf0XzQDj9EqbC6eAQ1QqPjm2TSMRSA=
+        b=JdgJ4H6QBCQtycZoA7XjHj+Ihw/kC2yfvig0KVGpSdAN3GqT5WmC87KcH7nUu4Zq8
+         ouzIrLj0tSiAt7ZAeidA11RfHF+Djg4Gzuyl0pK+8BOqWdLfNvQYD6p1irhemBg06A
+         C8uS98sQzC98bGqJv3SLDuOxTLldJQwlVbqFlV/4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chris Egolf <cegolf@ugholf.net>,
-        Keith Busch <kbusch@kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 101/112] nvme-pci: phison e16 has bogus namespace ids
-Date:   Tue, 19 Jul 2022 13:54:34 +0200
-Message-Id: <20220719114636.638270322@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 102/112] signal handling: dont use BUG_ON() for debugging
+Date:   Tue, 19 Jul 2022 13:54:35 +0200
+Message-Id: <20220719114636.778396562@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
 References: <20220719114626.156073229@linuxfoundation.org>
@@ -55,36 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 73029c9b23cf1213e5f54c2b59efce08665199e7 ]
+[ Upstream commit a382f8fee42ca10c9bfce0d2352d4153f931f5dc ]
 
-Add the quirk.
+These are indeed "should not happen" situations, but it turns out recent
+changes made the 'task_is_stopped_or_trace()' case trigger (fix for that
+exists, is pending more testing), and the BUG_ON() makes it
+unnecessarily hard to actually debug for no good reason.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216049
-Reported-by: Chris Egolf <cegolf@ugholf.net>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+It's been that way for a long time, but let's make it clear: BUG_ON() is
+not good for debugging, and should never be used in situations where you
+could just say "this shouldn't happen, but we can continue".
+
+Use WARN_ON_ONCE() instead to make sure it gets logged, and then just
+continue running.  Instead of making the system basically unusuable
+because you crashed the machine while potentially holding some very core
+locks (eg this function is commonly called while holding 'tasklist_lock'
+for writing).
+
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/signal.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 3622c5c9515f..ce129655ef0a 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3234,7 +3234,8 @@ static const struct pci_device_id nvme_id_table[] = {
- 				NVME_QUIRK_DISABLE_WRITE_ZEROES|
- 				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
- 	{ PCI_DEVICE(0x1987, 0x5016),	/* Phison E16 */
--		.driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN, },
-+		.driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN |
-+				NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1b4b, 0x1092),	/* Lexar 256 GB SSD */
- 		.driver_data = NVME_QUIRK_NO_NS_DESC_LIST |
- 				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 6bb2df4f6109..d05f783d5a5e 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1912,12 +1912,12 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
+ 	bool autoreap = false;
+ 	u64 utime, stime;
+ 
+-	BUG_ON(sig == -1);
++	WARN_ON_ONCE(sig == -1);
+ 
+- 	/* do_notify_parent_cldstop should have been called instead.  */
+- 	BUG_ON(task_is_stopped_or_traced(tsk));
++	/* do_notify_parent_cldstop should have been called instead.  */
++	WARN_ON_ONCE(task_is_stopped_or_traced(tsk));
+ 
+-	BUG_ON(!tsk->ptrace &&
++	WARN_ON_ONCE(!tsk->ptrace &&
+ 	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
+ 
+ 	/* Wake up all pidfd waiters */
 -- 
 2.35.1
 

@@ -2,408 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D08579133
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 05:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE996579135
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 05:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbiGSDPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 23:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
+        id S230230AbiGSDQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 23:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiGSDPn (ORCPT
+        with ESMTP id S233620AbiGSDQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 23:15:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75BC63CA
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 20:15:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 380476121A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 03:15:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6721DC341C0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 03:15:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658200540;
-        bh=1a2UcRumZxQDdzskJ5zkTcqFb3vj1djobXIz+Y5Bj4k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LPUmfGnEnqu9q/CgstfgbnicClYXeRR6rwzw/Yksen8RA0GX/00+lp+NY/61IcSt0
-         8ROkk/Vk11hJukKSz0jQDdje2NyPRjYKDT+Sb4Jd3sGILxP/e3c0jC8dym+2vjmbE6
-         GvSGtKo1CTlyYtsnpnclRxPKq63BLI7B/GSqDWfg4jKRjwKFGrBIF5Ef14anSpNFlJ
-         86ozzz4Qa2Po3C3X8HzrAehgpPCUCzfMwHcCKli0U3fedUlQ/gAFZvCBhoYBScRzto
-         POaZquol1ehU8sNpkIYc8nuH9uMuzytwhtx0rH6Hxhcf9VxEmDaJPOApbJYYsIsQIz
-         yqXkDwOULuelA==
-Received: by mail-vs1-f50.google.com with SMTP id t127so12254936vsb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 20:15:40 -0700 (PDT)
-X-Gm-Message-State: AJIora9N3syBD4keyODi5K5xeMMlrFt0IyCWIt3hnrmm09WZltRaIIpg
-        g6l0AcG+rIZ/1nqlOAFDWUi1puGkL8OMTZLsjh8=
-X-Google-Smtp-Source: AGRyM1sWzB7vut631TerIdgnb7BeEyce3PUqIjZEM461+d8VqKuQuulwlsBFupoLD8mGbExJmRhL7Pta1kBbvnAL/xU=
-X-Received: by 2002:a05:6102:3f06:b0:356:f57f:4f59 with SMTP id
- k6-20020a0561023f0600b00356f57f4f59mr10396947vsv.70.1658200539337; Mon, 18
- Jul 2022 20:15:39 -0700 (PDT)
+        Mon, 18 Jul 2022 23:16:03 -0400
+Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E122A65D1;
+        Mon, 18 Jul 2022 20:15:58 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1658200549t8zbsz5q
+Received: from harry-jrlc.. ( [182.148.15.157])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 19 Jul 2022 11:15:35 +0800 (CST)
+X-QQ-SSF: 0100000000000030C000000A0000020
+X-QQ-FEAT: FsG0r2mBeltI1VOefITHTvE/PeY8tbn3ltQ6K0aV9d4v7CGQwCWh39Xc8V5pQ
+        EEp3CltAtiI5WnPcQXKVMYN00hdRdSgu8RZR1iWJdGbLkDECI2Pw/kHhtGA2AaZG8AjkVk4
+        w9LM8xK3SwNTYAtqeH9kXH/grJvuRVGbwtkrOustcf+5MfxKJG63pxibFcLYtnQ/aZhcb+Y
+        xo2iaEz80p1NKbgrT/duWJpZz3lwbCulU7x+7bqF/xBhTstwSX7DpeZk0OM3RXeZkiQ5e8Q
+        +egFq6hii5DWdsYnwFLg29L6tbxKotM0TU0VhbasBtgq5nNnXN80aqCCVUOIw8HnRif3W6b
+        Ix8wHL5KJtGTDWOy47PImiPBUkagaMZdSOwyom7apUpOnh2K3xABC8SvUw7kg==
+X-QQ-GoodBg: 0
+From:   Xin Gao <gaoxin@cdjrlc.com>
+To:     shuah@kernel.org
+Cc:     jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Xin Gao <gaoxin@cdjrlc.com>
+Subject: [PATCH] selftests:Unneeded semicolon
+Date:   Tue, 19 Jul 2022 11:15:33 +0800
+Message-Id: <20220719031533.5023-1-gaoxin@cdjrlc.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <1658153621-40445-1-git-send-email-lvjianmin@loongson.cn> <1658153621-40445-9-git-send-email-lvjianmin@loongson.cn>
-In-Reply-To: <1658153621-40445-9-git-send-email-lvjianmin@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 19 Jul 2022 11:15:26 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7Kb6BNi-etpJQ4rnrn13bx9iq0vw4p_KUmKpcgWcYLkA@mail.gmail.com>
-Message-ID: <CAAhV-H7Kb6BNi-etpJQ4rnrn13bx9iq0vw4p_KUmKpcgWcYLkA@mail.gmail.com>
-Subject: Re: [PATCH V16 08/14] irqchip/loongson-pch-pic: Add ACPI init support
-To:     Jianmin Lv <lvjianmin@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:14 PM Jianmin Lv <lvjianmin@loongson.cn> wrote:
->
-> From: Huacai Chen <chenhuacai@loongson.cn>
->
-> PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
-> Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
-> please refer Documentation/loongarch/irq-chip-model.rst.
->
-> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/loongarch/include/asm/irq.h            |   5 +-
->  arch/loongarch/kernel/irq.c                 |   1 -
->  arch/mips/include/asm/mach-loongson64/irq.h |   2 +-
->  drivers/irqchip/irq-loongson-pch-pic.c      | 178 +++++++++++++++++++++++-----
->  4 files changed, 151 insertions(+), 35 deletions(-)
->
-> diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-> index 48c0ce4..74fef60 100644
-> --- a/arch/loongarch/include/asm/irq.h
-> +++ b/arch/loongarch/include/asm/irq.h
-> @@ -108,8 +108,9 @@ int pch_lpc_acpi_init(struct irq_domain *parent,
->                                         struct acpi_madt_lpc_pic *acpi_pchlpc);
->  struct irq_domain *pch_msi_acpi_init(struct irq_domain *parent,
->                                         struct acpi_madt_msi_pic *acpi_pchmsi);
-> -struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
-> +int pch_pic_acpi_init(struct irq_domain *parent,
->                                         struct acpi_madt_bio_pic *acpi_pchpic);
-> +int find_pch_pic(u32 gsi);
->
->  extern struct acpi_madt_lio_pic *acpi_liointc;
->  extern struct acpi_madt_eio_pic *acpi_eiointc[MAX_IO_PICS];
-> @@ -123,7 +124,7 @@ struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
->  extern struct irq_domain *liointc_domain;
->  extern struct fwnode_handle *pch_lpc_handle;
->  extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
-> -extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
-> +extern struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
->
->  extern irqreturn_t loongson3_ipi_interrupt(int irq, void *dev);
->
-> diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
-> index 07d6059..866b2ee 100644
-> --- a/arch/loongarch/kernel/irq.c
-> +++ b/arch/loongarch/kernel/irq.c
-> @@ -28,7 +28,6 @@
->  struct irq_domain *cpu_domain;
->  struct irq_domain *liointc_domain;
->  struct irq_domain *pch_msi_domain[MAX_IO_PICS];
-> -struct irq_domain *pch_pic_domain[MAX_IO_PICS];
->
->  /*
->   * 'what should we do if we get a hw irq event on an illegal vector'.
-> diff --git a/arch/mips/include/asm/mach-loongson64/irq.h b/arch/mips/include/asm/mach-loongson64/irq.h
-> index 98ea977..55e0dee 100644
-> --- a/arch/mips/include/asm/mach-loongson64/irq.h
-> +++ b/arch/mips/include/asm/mach-loongson64/irq.h
-> @@ -7,7 +7,7 @@
->  #define NR_MIPS_CPU_IRQS       8
->  #define NR_MAX_CHAINED_IRQS    40 /* Chained IRQs means those not directly used by devices */
->  #define NR_IRQS                        (NR_IRQS_LEGACY + NR_MIPS_CPU_IRQS + NR_MAX_CHAINED_IRQS + 256)
-> -
-> +#define MAX_IO_PICS            1
->  #define MIPS_CPU_IRQ_BASE      NR_IRQS_LEGACY
->
->  #include <asm/mach-generic/irq.h>
-> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
-> index a4eb8a2..b6a73c8 100644
-> --- a/drivers/irqchip/irq-loongson-pch-pic.c
-> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
-> @@ -33,13 +33,40 @@
->  #define PIC_REG_IDX(irq_id)    ((irq_id) / PIC_COUNT_PER_REG)
->  #define PIC_REG_BIT(irq_id)    ((irq_id) % PIC_COUNT_PER_REG)
->
-> +static int nr_pics;
-> +
->  struct pch_pic {
->         void __iomem            *base;
->         struct irq_domain       *pic_domain;
->         u32                     ht_vec_base;
->         raw_spinlock_t          pic_lock;
-> +       u32                     vec_count;
-> +       u32                     gsi_base;
->  };
->
-> +static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
-> +
-> +struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
-> +
-> +int find_pch_pic(u32 gsi)
-> +{
-> +       int i;
-> +
-> +       /* Find the PCH_PIC that manages this GSI. */
-> +       for (i = 0; i < MAX_IO_PICS; i++) {
-> +               struct pch_pic *priv = pch_pic_priv[i];
-> +
-> +               if (!priv)
-> +                       return -1;
-> +
-> +               if (gsi >= priv->gsi_base && gsi < (priv->gsi_base + priv->vec_count))
-> +                       return i;
-> +       }
-> +
-> +       pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
-> +       return -1;
-> +}
-> +
->  static void pch_pic_bitset(struct pch_pic *priv, int offset, int bit)
->  {
->         u32 reg;
-> @@ -139,6 +166,28 @@ static void pch_pic_ack_irq(struct irq_data *d)
->         .irq_set_type           = pch_pic_set_type,
->  };
->
-> +static int pch_pic_domain_translate(struct irq_domain *d,
-> +                                       struct irq_fwspec *fwspec,
-> +                                       unsigned long *hwirq,
-> +                                       unsigned int *type)
-> +{
-> +       struct pch_pic *priv = d->host_data;
-> +       struct device_node *of_node = to_of_node(fwspec->fwnode);
-> +
-> +       if (fwspec->param_count < 1)
-> +               return -EINVAL;
-> +
-> +       if (of_node) {
-> +               *hwirq = fwspec->param[0] + priv->ht_vec_base;
-> +               *type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
-> +       } else {
-> +               *hwirq = fwspec->param[0] - priv->gsi_base;
-> +               *type = IRQ_TYPE_NONE;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
->                               unsigned int nr_irqs, void *arg)
->  {
-> @@ -149,13 +198,13 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
->         struct irq_fwspec parent_fwspec;
->         struct pch_pic *priv = domain->host_data;
->
-> -       err = irq_domain_translate_twocell(domain, fwspec, &hwirq, &type);
-> +       err = pch_pic_domain_translate(domain, fwspec, &hwirq, &type);
->         if (err)
->                 return err;
->
->         parent_fwspec.fwnode = domain->parent->fwnode;
->         parent_fwspec.param_count = 1;
-> -       parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
-> +       parent_fwspec.param[0] = hwirq;
->
->         err = irq_domain_alloc_irqs_parent(domain, virq, 1, &parent_fwspec);
->         if (err)
-> @@ -170,7 +219,7 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
->  }
->
->  static const struct irq_domain_ops pch_pic_domain_ops = {
-> -       .translate      = irq_domain_translate_twocell,
-> +       .translate      = pch_pic_domain_translate,
->         .alloc          = pch_pic_alloc,
->         .free           = irq_domain_free_irqs_parent,
->  };
-> @@ -180,7 +229,7 @@ static void pch_pic_reset(struct pch_pic *priv)
->         int i;
->
->         for (i = 0; i < PIC_COUNT; i++) {
-> -               /* Write vectored ID */
-> +               /* Write vector ID */
->                 writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(i));
->                 /* Hardcode route to HT0 Lo */
->                 writeb(1, priv->base + PCH_INT_ROUTE(i));
-> @@ -198,50 +247,37 @@ static void pch_pic_reset(struct pch_pic *priv)
->         }
->  }
->
-> -static int pch_pic_of_init(struct device_node *node,
-> -                               struct device_node *parent)
-> +static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
-> +                       struct irq_domain *parent_domain, struct fwnode_handle *domain_handle,
-> +                       u32 gsi_base)
->  {
->         struct pch_pic *priv;
-> -       struct irq_domain *parent_domain;
-> -       int err;
->
->         priv = kzalloc(sizeof(*priv), GFP_KERNEL);
->         if (!priv)
->                 return -ENOMEM;
->
->         raw_spin_lock_init(&priv->pic_lock);
-> -       priv->base = of_iomap(node, 0);
-> -       if (!priv->base) {
-> -               err = -ENOMEM;
-> +       priv->base = ioremap(addr, size);
-> +       if (!priv->base)
->                 goto free_priv;
-> -       }
-> -
-> -       parent_domain = irq_find_host(parent);
-> -       if (!parent_domain) {
-> -               pr_err("Failed to find the parent domain\n");
-> -               err = -ENXIO;
-> -               goto iounmap_base;
-> -       }
->
-> -       if (of_property_read_u32(node, "loongson,pic-base-vec",
-> -                               &priv->ht_vec_base)) {
-> -               pr_err("Failed to determine pic-base-vec\n");
-> -               err = -EINVAL;
-> -               goto iounmap_base;
-> -       }
-> +       priv->ht_vec_base = vec_base;
-> +       priv->vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
-> +       priv->gsi_base = gsi_base;
->
->         priv->pic_domain = irq_domain_create_hierarchy(parent_domain, 0,
-> -                                                      PIC_COUNT,
-> -                                                      of_node_to_fwnode(node),
-> -                                                      &pch_pic_domain_ops,
-> -                                                      priv);
-> +                                               priv->vec_count, domain_handle,
-> +                                               &pch_pic_domain_ops, priv);
-> +
->         if (!priv->pic_domain) {
->                 pr_err("Failed to create IRQ domain\n");
-> -               err = -ENOMEM;
->                 goto iounmap_base;
->         }
->
->         pch_pic_reset(priv);
-> +       pch_pic_handle[nr_pics] = domain_handle;
-> +       pch_pic_priv[nr_pics++] = priv;
->
->         return 0;
->
-> @@ -250,7 +286,87 @@ static int pch_pic_of_init(struct device_node *node,
->  free_priv:
->         kfree(priv);
->
-> -       return err;
-> +       return -EINVAL;
-> +}
-> +
-> +#ifdef CONFIG_OF
-> +
-> +static int pch_pic_of_init(struct device_node *node,
-> +                               struct device_node *parent)
-> +{
-> +       int err, vec_base;
-> +       struct resource res;
-> +       struct irq_domain *parent_domain;
-> +
-> +       if (of_address_to_resource(node, 0, &res))
-> +               return -EINVAL;
-> +
-> +       parent_domain = irq_find_host(parent);
-> +       if (!parent_domain) {
-> +               pr_err("Failed to find the parent domain\n");
-> +               return -ENXIO;
-> +       }
-> +
-> +       if (of_property_read_u32(node, "loongson,pic-base-vec", &vec_base)) {
-> +               pr_err("Failed to determine pic-base-vec\n");
-> +               return -EINVAL;
-> +       }
-> +
-> +       err = pch_pic_init(res.start, resource_size(&res), vec_base,
-> +                               parent_domain, of_node_to_fwnode(node), 0);
-> +       if (err < 0)
-> +               return err;
-> +
-> +       return 0;
->  }
->
->  IRQCHIP_DECLARE(pch_pic, "loongson,pch-pic-1.0", pch_pic_of_init);
-> +
-> +#endif
-> +
-> +#ifdef CONFIG_ACPI
-> +static int __init
-> +lpcintc_parse_madt(union acpi_subtable_headers *header,
-> +                      const unsigned long end)
-> +{
-> +       struct acpi_madt_lpc_pic *lpcintc_entry = (struct acpi_madt_lpc_pic *)header;
-> +
-> +       return pch_lpc_acpi_init(pch_pic_priv[0]->pic_domain, lpcintc_entry);
-> +}
-> +
-> +static int __init acpi_cascade_irqdomain_init(void)
-> +{
-> +       acpi_table_parse_madt(ACPI_MADT_TYPE_LPC_PIC,
-> +                             lpcintc_parse_madt, 0);
-> +       return 0;
-> +}
-> +
-> +int __init pch_pic_acpi_init(struct irq_domain *parent,
-> +                                       struct acpi_madt_bio_pic *acpi_pchpic)
-> +{
-> +       int ret, vec_base;
-> +       struct fwnode_handle *domain_handle;
-> +
-> +       if (!acpi_pchpic)
-> +               return -EINVAL;
-> +
-> +       vec_base = acpi_pchpic->gsi_base - GSI_MIN_PCH_IRQ;
-> +
-> +       domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_pchpic);
-> +       if (!domain_handle) {
-> +               pr_err("Unable to allocate domain handle\n");
-> +               return -ENOMEM;
-> +       }
-> +
-> +       ret = pch_pic_init(acpi_pchpic->address, acpi_pchpic->size,
-> +                               vec_base, parent, domain_handle, acpi_pchpic->gsi_base);
-> +
-> +       if (!ret) {
-> +               if (acpi_pchpic->id == 0)
-> +                       acpi_cascade_irqdomain_init();
-> +       } else
-> +               irq_domain_free_fwnode(domain_handle);
-Another suggestion, the below control flow seems more natural:
-        if (ret < 0) {
-                irq_domain_free_fwnode(domain_handle);
-                return ret;
-        }
+Unneeded semicolon
 
-        if (acpi_pchpic->id == 0)
-                acpi_cascade_irqdomain_init();
+Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
+---
+ tools/testing/selftests/timers/nsleep-lat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +
-> +       return ret;
-> +}
-> +#endif
-> --
-> 1.8.3.1
->
->
+diff --git a/tools/testing/selftests/timers/nsleep-lat.c b/tools/testing/selftests/timers/nsleep-lat.c
+index eb3e79ed7b4a..a7ca9825e106 100644
+--- a/tools/testing/selftests/timers/nsleep-lat.c
++++ b/tools/testing/selftests/timers/nsleep-lat.c
+@@ -72,7 +72,7 @@ char *clockstring(int clockid)
+ 		return "CLOCK_BOOTTIME_ALARM";
+ 	case CLOCK_TAI:
+ 		return "CLOCK_TAI";
+-	};
++	}
+ 	return "UNKNOWN_CLOCKID";
+ }
+ 
+-- 
+2.30.2
+

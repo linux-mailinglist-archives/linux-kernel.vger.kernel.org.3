@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AF5579CFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35382579D01
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238555AbiGSMqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
+        id S241420AbiGSMqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241640AbiGSMpc (ORCPT
+        with ESMTP id S239404AbiGSMpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:45:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FC48AB05;
-        Tue, 19 Jul 2022 05:18:16 -0700 (PDT)
+        Tue, 19 Jul 2022 08:45:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F188AEC4;
+        Tue, 19 Jul 2022 05:18:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6C9B61812;
-        Tue, 19 Jul 2022 12:17:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C981DC341C6;
-        Tue, 19 Jul 2022 12:17:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 685D5B81B2C;
+        Tue, 19 Jul 2022 12:17:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9EB7C341CB;
+        Tue, 19 Jul 2022 12:17:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233065;
-        bh=qMqGTcyTV1zKuzj9JV7oWfW0roSzsFgkuVU8ppy6/Sk=;
+        s=korg; t=1658233068;
+        bh=uWP81HW1luT6RyI7hLaOnr6CpVhKPPiiN3KFfDvXEsQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ji9g+fETgz9dvxm9hDevjvghDdE5hpDNjBnpphyy6xaDTagzQ2ejwciQKOzrDYVmf
-         K5cQl+LeQX70GzPE1/z0AczzVRmutEgBYI3R7HRsbWLGN8DKh4tH2QJSEjX4MvQm2T
-         Tv5gL+B/YBPWaZHmXZDke+4F7WN8fGNTG6jUCTwg=
+        b=QRVecvAj5Q2KS5sIiNg3NcPJn3L+SGgWnLIny9g/5p8N7Z/NEBUQ2DbwPx0HtBzOV
+         Q8o+RBZfr8fQMsRzT6XAOcRfIPXFIQesrHx8YoMripcsS7ut0oLMAVwg9TxDyX6MCN
+         Q0Um0rExSpS/GFsiNSs/hmURdlIzyJ6irL9rCgPc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, stable <stable@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chanho Park <chanho61.park@samsung.com>
-Subject: [PATCH 5.15 161/167] tty: serial: samsung_tty: set dma burst_size to 1
-Date:   Tue, 19 Jul 2022 13:54:53 +0200
-Message-Id: <20220719114712.069259484@linuxfoundation.org>
+        Yangxi Xiang <xyangxi5@gmail.com>
+Subject: [PATCH 5.15 162/167] vt: fix memory overlapping when deleting chars in the buffer
+Date:   Tue, 19 Jul 2022 13:54:54 +0200
+Message-Id: <20220719114712.152890944@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
 References: <20220719114656.750574879@linuxfoundation.org>
@@ -55,45 +53,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chanho Park <chanho61.park@samsung.com>
+From: Yangxi Xiang <xyangxi5@gmail.com>
 
-commit f7e35e4bf1e8dc2c8cbd5e0955dc1bd58558dae0 upstream.
+commit 39cdb68c64d84e71a4a717000b6e5de208ee60cc upstream.
 
-The src_maxburst and dst_maxburst have been changed to 1 but the settings
-of the UCON register aren't changed yet. They should be changed as well
-according to the dmaengine slave config.
+A memory overlapping copy occurs when deleting a long line. This memory
+overlapping copy can cause data corruption when scr_memcpyw is optimized
+to memcpy because memcpy does not ensure its behavior if the destination
+buffer overlaps with the source buffer. The line buffer is not always
+broken, because the memcpy utilizes the hardware acceleration, whose
+result is not deterministic.
 
-Fixes: aa2f80e752c7 ("serial: samsung: fix maxburst parameter for DMA transactions")
+Fix this problem by using replacing the scr_memcpyw with scr_memmovew.
+
+Fixes: 81732c3b2fed ("tty vt: Fix line garbage in virtual console on command line edition")
 Cc: stable <stable@kernel.org>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Chanho Park <chanho61.park@samsung.com>
-Link: https://lore.kernel.org/r/20220627065113.139520-1-chanho61.park@samsung.com
+Signed-off-by: Yangxi Xiang <xyangxi5@gmail.com>
+Link: https://lore.kernel.org/r/20220628093322.5688-1-xyangxi5@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/samsung_tty.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/tty/vt/vt.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/tty/serial/samsung_tty.c
-+++ b/drivers/tty/serial/samsung_tty.c
-@@ -378,8 +378,7 @@ static void enable_tx_dma(struct s3c24xx
- 	/* Enable tx dma mode */
- 	ucon = rd_regl(port, S3C2410_UCON);
- 	ucon &= ~(S3C64XX_UCON_TXBURST_MASK | S3C64XX_UCON_TXMODE_MASK);
--	ucon |= (dma_get_cache_alignment() >= 16) ?
--		S3C64XX_UCON_TXBURST_16 : S3C64XX_UCON_TXBURST_1;
-+	ucon |= S3C64XX_UCON_TXBURST_1;
- 	ucon |= S3C64XX_UCON_TXMODE_DMA;
- 	wr_regl(port,  S3C2410_UCON, ucon);
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -855,7 +855,7 @@ static void delete_char(struct vc_data *
+ 	unsigned short *p = (unsigned short *) vc->vc_pos;
  
-@@ -675,7 +674,7 @@ static void enable_rx_dma(struct s3c24xx
- 			S3C64XX_UCON_DMASUS_EN |
- 			S3C64XX_UCON_TIMEOUT_EN |
- 			S3C64XX_UCON_RXMODE_MASK);
--	ucon |= S3C64XX_UCON_RXBURST_16 |
-+	ucon |= S3C64XX_UCON_RXBURST_1 |
- 			0xf << S3C64XX_UCON_TIMEOUT_SHIFT |
- 			S3C64XX_UCON_EMPTYINT_EN |
- 			S3C64XX_UCON_TIMEOUT_EN |
+ 	vc_uniscr_delete(vc, nr);
+-	scr_memcpyw(p, p + nr, (vc->vc_cols - vc->state.x - nr) * 2);
++	scr_memmovew(p, p + nr, (vc->vc_cols - vc->state.x - nr) * 2);
+ 	scr_memsetw(p + vc->vc_cols - vc->state.x - nr, vc->vc_video_erase_char,
+ 			nr * 2);
+ 	vc->vc_need_wrap = 0;
 
 

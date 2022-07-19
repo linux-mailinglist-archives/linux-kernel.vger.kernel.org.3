@@ -2,105 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CD757A0FF
+	by mail.lfdr.de (Postfix) with ESMTP id BF80C57A101
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237924AbiGSOP4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 19 Jul 2022 10:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S238577AbiGSOPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235080AbiGSOP3 (ORCPT
+        with ESMTP id S233997AbiGSOP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 19 Jul 2022 10:15:29 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D73C4E854
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:44:18 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LnKk46619zjX4T;
-        Tue, 19 Jul 2022 21:41:32 +0800 (CST)
-Received: from dggpemm100001.china.huawei.com (7.185.36.93) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Jul 2022 21:44:15 +0800
-Received: from kwepemi500012.china.huawei.com (7.221.188.12) by
- dggpemm100001.china.huawei.com (7.185.36.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Jul 2022 21:44:15 +0800
-Received: from kwepemi500012.china.huawei.com ([7.221.188.12]) by
- kwepemi500012.china.huawei.com ([7.221.188.12]) with mapi id 15.01.2375.024;
- Tue, 19 Jul 2022 21:44:15 +0800
-From:   "xuqiang (M)" <xuqiang36@huawei.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "weiyongjun (A)" <weiyongjun1@huawei.com>,
-        "Guohanjun (Hanjun Guo)" <guohanjun@huawei.com>
-Subject: Re: [PATCH v2 -next 2/2] irqdomain: Replace revmap_direct_max_irq
- field with hwirq_max field
-Thread-Topic: [PATCH v2 -next 2/2] irqdomain: Replace revmap_direct_max_irq
- field with hwirq_max field
-Thread-Index: AQHYmzpBZhMLU8dgIUSvhshLWJNuNw==
-Date:   Tue, 19 Jul 2022 13:44:15 +0000
-Message-ID: <b06c6275446948ad9be2a0bb4c1a8ce4@huawei.com>
-References: <20220719063641.56541-1-xuqiang36@huawei.com>
- <20220719063641.56541-3-xuqiang36@huawei.com> <87k089z9ho.wl-maz@kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.179.28]
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: 8BIT
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D0C4F18C;
+        Tue, 19 Jul 2022 06:44:32 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id mf4so27280818ejc.3;
+        Tue, 19 Jul 2022 06:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oD0/tmmh2SYshMDeiEQ3PzO3Ao4yC2o+AzCLepDtF1c=;
+        b=lhtxbx+kEExP6P0W4TaTduw1nqNqYlJLfNeA16hBVgXPCLQqK03t8cJKwBFpJvj8Jo
+         3+F8KqRwotdSlBsyOlL0hi+w+1U70gDJbfc57nodec0VIqMY+WCFAOCUqlmJNkkdPK7Z
+         jVAY9ltgqP41WZBS76Zri/oSpsxbpmhjYZ9PSrW5kykE9uA+dFpccGqrn2GRfTibWiCO
+         J3ccIigBV4NEc/n7GRcy/tVeBypIBUNflvkf245Lw43OZOBbQq3esUqqjmCun9rWIn+r
+         oKH/OuQ74XkgiHXgd7d1i5+EWvt40opobU45TptsqmGtYM1m1uQE5lw+sdswiKQoJSsj
+         bkSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oD0/tmmh2SYshMDeiEQ3PzO3Ao4yC2o+AzCLepDtF1c=;
+        b=lVgpCsitrs2Ml5BpBRCWcr3oFkZrW1yYvZfOTk6mgWsCNEkVq4UFVDM8RhmG8pQKNz
+         bWJSbumwr+4yMox7EKHqwVOy5uF4F4evguAX72dSbYI5/MS4D2UJwbiGrLAfVSQ+tvzx
+         SQg7dYM/+vYG/t5KCc5IXz2dnjEibpcYRAhaZ0DlNN7LV5CUyNdNUxLR4aLb691Zy/Ac
+         IZZh+ZAN21ukpXIESSpoxt/BH7eXrNtMhD/PmvbuJ8zjlBbmWqoUGhOfW++IbPp5o+dH
+         f8ZD5YkTK/9KGpKurIrUBalX0h6aoSA63n4lhNLOoFEym6TvhKGUqWfcxzPtM24Mw7Kd
+         f0+Q==
+X-Gm-Message-State: AJIora+u0fNjtCz4ZRF/jWEgOQZkkt47Dfd/+H63SLlyM+dmROh9K5EJ
+        9pYbFlBRFpHXeSwd+ceIQg8=
+X-Google-Smtp-Source: AGRyM1sN8frJRiRTwVdvxtbt/bA+p8fdPQuDNrvcBQ6nfdigOUQOxXRPUMytp5elQSWfT+GqDFzUew==
+X-Received: by 2002:a17:907:87b0:b0:72b:9f0d:3f89 with SMTP id qv48-20020a17090787b000b0072b9f0d3f89mr29307197ejc.734.1658238270867;
+        Tue, 19 Jul 2022 06:44:30 -0700 (PDT)
+Received: from skbuf ([188.27.185.104])
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090676ce00b00722e50dab2csm6671879ejn.109.2022.07.19.06.44.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 06:44:30 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 16:44:27 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v2 15/15] net: dsa: qca8k: drop unnecessary
+ exposed function and make them static
+Message-ID: <20220719134427.qlqm7xp4yyqs2zip@skbuf>
+References: <20220719005726.8739-1-ansuelsmth@gmail.com>
+ <20220719005726.8739-1-ansuelsmth@gmail.com>
+ <20220719005726.8739-17-ansuelsmth@gmail.com>
+ <20220719005726.8739-17-ansuelsmth@gmail.com>
+ <20220719132931.p3amcmjsjzefmukq@skbuf>
+ <62d6b319.1c69fb81.6be76.d6b1@mx.google.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62d6b319.1c69fb81.6be76.d6b1@mx.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/7/19 18:24, Marc Zyngier 写道:
-> On Tue, 19 Jul 2022 07:36:41 +0100,
-> Xu Qiang <xuqiang36@huawei.com> wrote:
->> In commit "4f86a06e2d6e irqdomain: Make normal and nomap irqdomains exclusive",
->> use revmap_size field instead of revmap_direct_max_irq. revmap_size field
->> originally indicates the maximum hwirq of linear Mapping. This results in
->> revmap_size having two different layers of meaning that can be confusing.
->>
->> This patch optimization point is to solve this confusion point. During
->> direct mapping, the values of hwirq_max and revmap_direct_max_irq are the same
->> and have the same meanings. They both indicate the maximum hwirq supported by
->> direct Mapping. The optimization method is to delete revmap_direct_max_irq
->> field and use hwirq_max instead of revmap_direct_max_irq.
->>
->> Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
-> You keep referencing revmap_direct_max_irq, which is long gone.
->
-> How about instead:
->
-> <commit>
-> NOMAP irq domains use the revmap_size field to indicate the maximum
-> hwirq number the domain accepts. This is a bit confusing as
-> revmap_size is usually used to indicate the size of the revmap array,
-> which a NOMAP domain doesn't have.
->
-> Instead, use the hwirq_max field which has the correct semantics, and
-> keep revmap_size to 0 for a NOMAP domain.
-> </commit>
->
-> If you agree with this, please say so (no need to respin for this).
+On Tue, Jul 19, 2022 at 03:35:18PM +0200, Christian Marangi wrote:
+> On Tue, Jul 19, 2022 at 04:29:31PM +0300, Vladimir Oltean wrote:
+> > On Tue, Jul 19, 2022 at 02:57:26AM +0200, Christian Marangi wrote:
+> > > Some function were exposed to permit migration to common code. Drop them
+> > > and make them static now that the user are in the same common code.
+> > > 
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > ---
+> > 
+> > Hmm, ideally the last patch that removes a certain function from being
+> > called from qca8k-8xxx.c would also delete its prototype and make it
+> > static in qca8k-common.c. Would that be hard to change?
+> 
+> Can be done, it's really to compile check the changes and fix them.
+> Problem is that the patch number would explode. (ok explode is a big
+> thing but i think that would add 2-3 more patch to this big series...
+> this is why I did the static change as the last patch instead of in the
+> middle of the series)
+> 
+> But yes it's totally doable and not that hard honestly.
 
-Yes, I agree.
+Why would it add to the patch count? I don't think you understood what I
+meant.
 
-Thanks,
-
-                Xu.
-
->
-> Thanks,
->
-> 	M.
->
-
+Take for example qca8k_bulk_read(). You migrated it in patch 4, but
+there was still a user left in qca8k_fdb_read(), which you migrated in
+patch 5. After patch 5 and until the last one, the prototype of
+qca8k_bulk_read() was essentially dangling, but you only removed it in
+the last patch. My request is that you prune the dangling definitions
+after each patch that stops using something exported. That won't
+increase the number of changes, but eliminate the last one.
+Also, it would be great if you could create a dependency graph such that
+you could avoid temporarily exporting some functions that don't need to be.

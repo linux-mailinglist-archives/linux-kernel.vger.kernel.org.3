@@ -2,240 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB19457986A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C71579894
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbiGSL05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
+        id S237294AbiGSLfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235962AbiGSL0x (ORCPT
+        with ESMTP id S236057AbiGSLfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:26:53 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF4112749
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:26:51 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10d6ddda695so3273903fac.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=020GL0O0hflXIxVwmtfRiD+2r8usxk+LpcYhr4gv+S8=;
-        b=jTC6FmREwwRm6mWYH7G34+k++tluRwbkr8cS0HSWRGwVLzTj+m4tF48rD3YjRQr3+L
-         gtQ7k1PWASf2VskYTcp9cMIrGDV/Rn1Br+cFrmDn6WpQaxOYKGirm6oDYmQ1HbrGEUXG
-         W+ZW/je304Bx1ohhsGP0TgQquEH5m5vDnA6Q/FaHnWvLpp8YcHPK7aD2W37sBKT40JV2
-         0kMXTdElzVdfKGd/ut+q/eDzqjq+mPt01qdKu+m/j2RHRzjdB/lcwvw2kG+JYZLLpi9Y
-         whdPBeRqdkgP6b4vauNBo1eCvEpSy036spvRs6EPK+66TAg1gjDmfNO9viCGyQAofFJg
-         x1uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=020GL0O0hflXIxVwmtfRiD+2r8usxk+LpcYhr4gv+S8=;
-        b=WwUDe10UBz6SnZyCbR09lVGksMvZodfj1pWC2ZjXd4gOkmzu8tAN5knwYC1h0qBwRd
-         MuhX9M873zhtSy2rZAji05AtIDonCApEvNC8Aj1p7z8c9rMpX28kHT6+5yvoqYPqbuLl
-         WSryBp20DLH6aoirRIb4I/qtP5jZt+BFZ0AqxlbZK8FbYugyKkIpTAX4oWLiLYv1VH2S
-         OVgdU8/tzaRbpbl/NDX7j7mU83EWZFm9c4JdMpNZ5VYkKXT5KMqSBM4M+SkslhkfYi4R
-         5gHNg8fH8CvlMqK9B9pHQ3ogxMe8BvTf+l8lvS0xdG82BLL5688KQCw7Ovf4HXsHTuMk
-         ZxDQ==
-X-Gm-Message-State: AJIora9mdvXFg6GqwNnyNGaAkA41HKmj+TLzbAQ1pJ9dsnZ8lalt3Hzr
-        6H7DlJuF9L4N3SCIlIwlynhi+g==
-X-Google-Smtp-Source: AGRyM1tk8HI8+1ViLbB6aMm2aE0/A4gRLdN+YTFW9qiCQewVFUO0cN0LIZLYNEfPELYIwGnDIdRbsA==
-X-Received: by 2002:a05:6871:890:b0:10b:f3eb:b45d with SMTP id r16-20020a056871089000b0010bf3ebb45dmr18169031oaq.294.1658230010898;
-        Tue, 19 Jul 2022 04:26:50 -0700 (PDT)
-Received: from [192.168.86.210] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id cb1-20020a056830618100b00616c46f6daasm6116229otb.31.2022.07.19.04.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 04:26:50 -0700 (PDT)
-Message-ID: <14f9274e-87bd-9202-59c0-7f2ca836144d@landley.net>
-Date:   Tue, 19 Jul 2022 06:33:42 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 0/3] initramfs: add support for xattrs in the initial
- ram disk
-Content-Language: en-US
-To:     Jim Baxter <jim_baxter@mentor.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "initramfs@vger.kernel.org" <initramfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Tue, 19 Jul 2022 07:35:02 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2050.outbound.protection.outlook.com [40.107.220.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B93A1EADB;
+        Tue, 19 Jul 2022 04:35:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l+/AJdKPiiLhK7WkCykZLEYuCgTpIaufhUPDxoi1WLtUZzgJVAXyRq3+DweE/tKZVq2GnJCeia2UTRNmPQCAcZiqtgGj85lTb1/hqx+woxpzHmmYWJDxAZm/U25EQpOTgLYSESJPJSouk75HqgAsAhFUpjwHUS9tmREph/RaBCBpWNdNPD6DQlJx1Gp+2GUBT/WZsH6gjXqZ0GI/JSkM26D6nu/QN4Rg/1EcXsgujsdoripBLUVkYGdLUYBSFdPhPIEmqKJ/I45qccp0HjXk82j/hwmhTWdnw5HuBmOTax+PjdoV+f3Pl6WkYobqwI0oSPK2KBHihX3q07Xy+LIRkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V9gdmaiJV9xqIAFH+FwAMQbqzTcERRLe8bUe4lRqrkA=;
+ b=VkTUU2cXQcs9z3J8U7dq+p7HldtmyZ0LKL2hVSUy6S8zpqT0EEQWNkGuZVxBJDPnwmVZeGuckrjHkl5XPo0l6dUecgx+AjJ1tNbVdtQymx33a2QKtp1Lop58CT7C7JTy+vF6ZZMZyGjcx4HZy4zLqnM8OqP63FC7egXJtel1znCrwXTrl1beu32tP8vLEtdE4wWF+csxEqnx3XUJVPIL460T9oNIcM+lR+C9QQQlLBQQN0vys842SbPJPPbdXr8aXn3I7+Ps2oeXeP6Pv78ifryQvtjqHaYbZ2UixzDn9MVarT/wQ/Udl9eQ4KvXbjNka2JdnixiIPG/KS3XDgnqpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V9gdmaiJV9xqIAFH+FwAMQbqzTcERRLe8bUe4lRqrkA=;
+ b=2DBqaTlJrSXmXmOqVogqm4sJ2s1bKs8X54yq0KqpBIrVWXNejJN0NubUhWlvAL1r40torqULMQYl40xWYxBZUZFpYPiDU5uqZJpvSCmgaw++7Ah3+KEhhdNlgAdp1XnbpjJBs447I/IqYr+oWH+Ymh4oE6cGS/ljjkwtJZ+sUx8=
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
+ by SN6PR12MB4702.namprd12.prod.outlook.com (2603:10b6:805:e4::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.15; Tue, 19 Jul
+ 2022 11:34:58 +0000
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::8953:6baa:97bb:a15d]) by SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::8953:6baa:97bb:a15d%7]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
+ 11:34:58 +0000
+From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "x86@kernel.org" <x86@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bug-cpio@gnu.org" <bug-cpio@gnu.org>,
-        "zohar@linux.vnet.ibm.com" <zohar@linux.vnet.ibm.com>,
-        Silviu Vlasceanu <Silviu.Vlasceanu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@huawei.com>,
-        "takondra@cisco.com" <takondra@cisco.com>,
-        "kamensky@cisco.com" <kamensky@cisco.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "james.w.mcmechan@gmail.com" <james.w.mcmechan@gmail.com>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-References: <33cfb804-6a17-39f0-92b7-01d54e9c452d@huawei.com>
- <1561909199.3985.33.camel@linux.ibm.com>
- <45164486-782f-a442-e442-6f56f9299c66@huawei.com>
- <1561991485.4067.14.camel@linux.ibm.com>
- <f85ed711-f583-51cd-34e2-80018a592280@huawei.com>
- <0c17bf9e-9b0b-b067-cf18-24516315b682@huawei.com>
- <20220609102627.GA3922@lxhi-065>
- <21b3aeab20554a30b9796b82cc58e55b@huawei.com>
- <20220610153336.GA8881@lxhi-065>
- <4bc349a59e4042f7831b1190914851fe@huawei.com>
- <20220615092712.GA4068@lxhi-065>
- <032ade35-6eb8-d698-ac44-aa45d46752dd@mentor.com>
- <f82d4961986547b28b6de066219ad08b@huawei.com>
- <737ddf72-05f4-a47e-c901-fec5b1dfa7a6@mentor.com>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <737ddf72-05f4-a47e-c901-fec5b1dfa7a6@mentor.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Subject: RE: [PATCH Part2 v6 03/49] x86/sev: Add the host SEV-SNP
+ initialization support
+Thread-Topic: [PATCH Part2 v6 03/49] x86/sev: Add the host SEV-SNP
+ initialization support
+Thread-Index: AQHYmcRAcxQqbwBTdUCpGH+ovKgAp62Ei1rQgADW2wCAADAUMA==
+Date:   Tue, 19 Jul 2022 11:34:57 +0000
+Message-ID: <SN6PR12MB2767FA7BBC983E63C2A0F0CA8E8F9@SN6PR12MB2767.namprd12.prod.outlook.com>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <8f4eef289aba5067582d0d3535299c22a4e5c4c4.1655761627.git.ashish.kalra@amd.com>
+ <YtPeF0r69UbwNTMJ@zn.tnic>
+ <SN6PR12MB27674548A8C8ACF5E53C0DB78E8F9@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <YtZtcHYGFLC4i9dn@zn.tnic>
+In-Reply-To: <YtZtcHYGFLC4i9dn@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-07-19T11:30:13Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=a271e787-877a-4a4c-a4ac-c55a3dd4f952;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-07-19T11:34:56Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: b313ba1b-6480-43ce-aea1-60d2d502a84f
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bb57b2bb-5f7e-45c3-ac46-08da697ab58f
+x-ms-traffictypediagnostic: SN6PR12MB4702:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +RDY1oaE44oJ3K/7+57FCQcqpj4xLu2+EGWl+l4JekrfEd/0AyNzQNTsw6hwsUcdNxF05UkASGLvEbDY6zyia3QFbQ+7iJ2mB1KGf67spVXqDD18uSwQs/NBWPisp5NMtqNL5PZ7+oB9FrwJdoHT2MQp+V07ZzzSpbNUs5T5ZQVqVRi2jqL9TdwTSKVazaaEWLRfQKw8hz/zFrw+9InvIcsl6YGwwjYlkpsmkbuMGh9atWsjOOgHbR5qSm+arZ5mC3NeRa9Occ1mzRKZsjZig1KZ/zxzdieoWLKncu8CAxuNX/Wu94FwKhpN7xMOjYsGRgIjEZFzmqy6RRKQ29abBXMURvvjpXquo49jYwKbQIzuP9dAxbARnkkOeVlMs4j1FRIB0JvVpJ0yrPGVgfhpCUiFsfX8v0ODKRdHiIVctbACdBnniGCyhLXwzaH4cwbe2mVewZaEpdMxhNE0ZRVjYq1qr7MklZG8FXq91hbkZhC23AcR/opnHBhLWxc2oqxtOTl15Up1Hf5eS62gorVlP2xraJF6BZKCirbqFMSN5Pelq6y8D0B7Hp/43GHEfcIHwiYg4BWS/qQgnjEX7FKlwbdM/eEBSoqc2N1TTuh/fZz38qB0rdUbqA+J2LOUm29x2HpeYd7zun3qOmnA7YklDl3tMnv4+bva+Qo9mZRfPoM/CKcyjCn26fWJAyZdhsG1RmaQwMFwCMLZQy+zcS4fVWoj83IA0Z/ns6FIeL57CbPzhy/zJEjMd9+HURwfe6Eo3rW7WUuSPOBxUa9fa4jV9vxUjbcNrs64JhD3znJpu27wH9onDxwRJF1hzJD7A/iB
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(366004)(396003)(136003)(71200400001)(54906003)(478600001)(38070700005)(33656002)(38100700002)(6506007)(7696005)(26005)(41300700001)(9686003)(6916009)(316002)(186003)(55016003)(8936002)(52536014)(5660300002)(7416002)(7406005)(4326008)(8676002)(64756008)(66446008)(66476007)(66556008)(66946007)(76116006)(86362001)(2906002)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lNe9dlvryTo9FqDaHwryK7bO2DqYqlAQW5yjVfa7UkRKZZR+NN64i+8sRTmZ?=
+ =?us-ascii?Q?qaD8zyjKSBOAFNRgHlP/croSJ5/02Cpe1V65XrP93x7n3YxaYXeAn/qiX0cr?=
+ =?us-ascii?Q?c+80J7FmWBdwCXjq7ouHXHzyTbS3fPtG2dc0IBY9kFm3fnu1Z4fUo9WCiIfI?=
+ =?us-ascii?Q?TT/sIC8IgcP2b8t9lrthcZOMlVE2K6tnqWApfVioI1JI6kvPm9OC0skyYAfi?=
+ =?us-ascii?Q?5ipTS6WnS8frIrruH2KsATSnSN9YXbmHBbnxd4JMkMjuBxQ55dSZqzkoGCzc?=
+ =?us-ascii?Q?6m4pGHf3YrqelORPGdTEvpzgQNzVv6teWkI3e9/iiL83SHbDNPc3RQ/oXK7o?=
+ =?us-ascii?Q?/zzU0IEJsd4YImxa5SwxY6IMNXOlBwBwYSec3wCdy9gnsVYoGnh2MIH2DUqJ?=
+ =?us-ascii?Q?qhSVd3uQamQPdmCqtC/VnJElulhH8PU7F/zPwvo7MV6UI7AIBIddsq6BwKV8?=
+ =?us-ascii?Q?2ZJdRiYtljyIk3MYuy3vvTw1n6tNdgDEjR1uL982j8END2QWO+LwcIv63l1K?=
+ =?us-ascii?Q?Md0aiBYyzkr6L/Fo/2nTo/sDS5b8yNpaf4nlbsI1UNHmJ2L+V+cOUz8nF5PT?=
+ =?us-ascii?Q?rguCqiMFwgYqMT8Zles8Iv9041yVmTJwvYXBdUrgRw1wXdmGqNrK8oWd0088?=
+ =?us-ascii?Q?oOO32BWhV29Grv9q3nfo/N0Gv5Y2m9rOd0MdgUcC8Te6TNU7ggfdLRh+YsMm?=
+ =?us-ascii?Q?ihwHCHXwl5UK0Z/BhZvLGrmQjDWQUFRs69wOnWPH/F3iQqmJERZ16wkk1RV3?=
+ =?us-ascii?Q?k45iOYPtqjCdVA26YWTnacac3yLgkYKCvHfLtjsik1y/JwhrkkyK7Uvwx39o?=
+ =?us-ascii?Q?91GjyX7dTMVrZVl2BhnBWe4NWrCdVb/OOvDRn7SBPF4H4CHdJPnUXklrRHTR?=
+ =?us-ascii?Q?/cluk5f1ePmBSbmDlSErbhA2vp65MT8nzt2f1AoLvdQOew85iDDf2yDbLlwX?=
+ =?us-ascii?Q?PmrkHeglv9Gd19dfTaQJB7aavUsE5jeJCgg+FHFl7+SPJPqnzUA13p0FPPDr?=
+ =?us-ascii?Q?F2IlWFH2YuPhtqS73ESxDpKE4Pc9ZpFM8TW1Gydoc+QAp8p/dZQsVhqhJbwU?=
+ =?us-ascii?Q?XE/YfxqaWMzcSRRGnwz1OlTFw1Suo+myKYzUdEVViS8QVsaUt01R0TAqIUA6?=
+ =?us-ascii?Q?m56I6em196SZzVHBL7KK3tKX32ahVPsIkJ1o5oINyQgJ6iNPFfzXyp+ClX7A?=
+ =?us-ascii?Q?rs3xxvb9hPmqOGOutKxj/G2RGFF8DPt94Z0FrTlgS1sixm2/gVAVZDMYBT7y?=
+ =?us-ascii?Q?Py8FQze6sESVwq9cwOtR7/Ct9ibQPVbKjHZAG6eUCDWYNdesTa/qGLnVX9tm?=
+ =?us-ascii?Q?RoxgKpAeNK3n3ven7qzfJGCVyyIZmuqWUQogptj4tkqkQzf1/mMYp8Ettk4R?=
+ =?us-ascii?Q?rRv+owOKQJLWhSc8AzMCJMRFgOEOOQtuHuJXqxT//QI071mS5OLWWUKs+prt?=
+ =?us-ascii?Q?or2KEtKx0EkUK2quK8BoGw2BHEvZsq/F6MaieqcdYeW47DqJsqR0se2pX04P?=
+ =?us-ascii?Q?AcegmtDKqHXvNDr4i1m/f1uSks5LjlTrKAHz/riE8ckqzhRT4VoVAO7fpk8a?=
+ =?us-ascii?Q?rhwJUqNkS+3FpRyQlpQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb57b2bb-5f7e-45c3-ac46-08da697ab58f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2022 11:34:57.8739
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oiDvXDrSZTvQs030r06rD9eSEVbQaZxfON5YnPZ4WgTwBKj5CF1MLsQrv5A+qQl28nn6WXAEFN0ZnBsQ3EyjjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4702
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[AMD Official Use Only - General]
 
+Hello Boris,
 
-On 7/18/22 13:08, Jim Baxter wrote:
-> 
-> 
-> Best regards,
-> 
-> *Jim Baxter*
-> 
-> Siemens Digital Industries Software
-> Automotive Business Unit
-> DI SW STS ABU
-> UK
-> Tel.: +44 (161) 926-1656
-> mailto:jim.baxter@siemens.com <mailto:jim.baxter@siemens.com>
-> sw.siemens.com <https://sw.siemens.com/>
-> 
-> On 18/07/2022 17:49, Roberto Sassu wrote:
->>> From: Jim Baxter [mailto:jim_baxter@mentor.com]
->>> Sent: Monday, July 18, 2022 6:36 PM
->>>
->>>
->>> Hello,
->>>
->>> I have been testing these patches and do not see the xattr information when
->>> trying to retrieve it within the initramfs, do you have an example of how
->>> you tested this originally?
->> 
->> Hi Jim, all
->> 
->> apologies, I didn't find yet the time to look at this.
-> 
-> Hello Roberto,
-> 
-> Thank you for your response, I can wait until you have looked at the patches,
-> I asked the question to make sure it was not something wrong in my
-> configuration.
-> 
->> 
->> Uhm, I guess this could be solved with:
->> 
->> https://github.com/openeuler-mirror/kernel/commit/18a502f7e3b1de7b9ba0c70896ce08ee13d052da
->> 
->> and adding initramtmpfs to the kernel command line. You are
->> probably using ramfs, which does not have xattr support.
->> 
-> 
-> 
-> Thank you, I have tested that patch but the problem remained. Here is my
-> command line, I wonder if there is something wrong.
-> 
-> Kernel command line: rw rootfstype=initramtmpfs root=/dev/ram0 initrd=0x500000000 rootwait 
+>> > That section number will change over time - if you want to refer to=20
+>> > some section just use its title so that people can at least grep for=20
+>> > the relevant text.
+>>
+>> This will all go into sev.c, instead of the header file, as this is=20
+>> non-architectural and per-processor and the structure won't be exposed=20
+>> to the rest of the kernel. The above PPR reference and potentially in=20
+>> future an architectural method of reading the RMP table entries will=20
+>> be moved into it.
 
-/dev/ram0 is a block device. Trying to provide it to tmpfs is like trying to say:
+>I fail to see how this addresses my comment... All I'm saying is, the "sec=
+tion 2.1.4.2" number will change so don't quote it in the text but quote th=
+e section *name* instead.
 
-  mount -t proc /dev/sda1 /proc
+Yes I agree with your comments, all I am saying is that these comments will=
+ move into sev.c instead of the header file.
 
-There's nowhere for the block device to GO because it's not a block backed
-filesystem.
+>> I believe that with kexec and after issuing the shutdown command, the=20
+>> RMP table needs to be fully initialized, so we should be=20
+>> re-initializing the RMP table to zero here.
 
-There's four types of filesystem: block back, pipe backed, ram backed, and
-synthetic.
+>And yet you're doing:
 
-- Only block backed filesystems take a block device argument. Block backed
-filesystems require two drivers: one to handle I/O to the block device and one
-to interpret the filesystem format with the block device. You do not "format"
-any other kind of filesystem. (There's no mkfs.nfs or mkfs.proc: it doesn't work
-that way.)
+ >       /*
+ >        * Check if SEV-SNP is already enabled, this can happen if we are =
+coming from
+ >        * kexec boot.
+ >        */
+ >       rdmsrl(MSR_AMD64_SYSCFG, val);
+ >       if (val & MSR_AMD64_SYSCFG_SNP_EN)
+ >               goto skip_enable;		<-------- skip zeroing
 
-- Pipe backed ones include network filesystems (nfs, samba), FUSE filesystems,
-or hybrid weirdness like https://wiki.qemu.org/Documentation/9psetup . These
-drivers talk a protocol over a pipe (or network socket, or char device, or...)
-to a server at the far end that serves up the filesystem contents. Usually their
-source argument is a server address plus filesystem identification plus login
-credentials. Often they have a wrapper program that assembles this argument for you.
+>So which is it?
 
-- Ram backed filesystems (ramfs, tmpfs) treat the "source" argument to mount(2)
-as basically a comment, and ignore it. When you're adding things like size
-limitations, it goes in the "data" argument (I.E. mount -o thingy).
+Again what I meant is that this will be fixed to reset the RMP table for ke=
+xec boot too.
 
-- synthetic filesystems are just interfaces to the kernel that make up their
-contents programmatically (proc, sys, cgroup...) and no two are alike, although
-they generally ignore their "source" argument and look at "data" too.
+>> Yes, IOMMU is enforced for SNP to ensure that HV cannot program DMA=20
+>> directly into guest private memory. In case of SNP, the IOMMU makes=20
+>> sure that the page(s) used for DMA are HV owned.
 
-I wrote up documention about this many years ago...
+>>Yes, now put that in the comment above the
 
-  https://landley.net/toybox/doc/mount.html
+>	fs_initcall(snp_rmptable_init);
 
-> I also found that root is always mounted as rootfs in my initramfs system
-> which I understood to be tmpfs, is that incorrect?
+>line.
 
-Yes, although the kernel tries to hide this by lying in /proc/mounts for bad
-reasons.
-> I modified the file before packing. To pack I use the following commands:
-> 
-> $ ./usr/gen_initramfs.sh -l initramfs.list -e xattr ../rootfs > initramfs.cpio
-> $ gzip initramfs.cpio
-> $ mkimage -A arm64 -O linux -T ramdisk -d initramfs.cpio.gz uRamdisk
-> 
-> The kernel is loaded using:
-> booti ${kernaddr} ${initramaddr} ${dtbaddr}
+Yes.
 
-Remove the root= argument from your kernel command line. It is explicitly
-telling the kernel "we will not be staying in rootfs" and thus it doesn't use
-tmpfs for it. In your case, you're saying "we're going to overmount the initial
-ramfs with a ram disk block device", which is nonsensical because nothing can
-have populated it so it will be all zeroes (unformatted) and thus the filesystem
-type detection staircase in
-https://github.com/torvalds/linux/blob/v5.18/init/do_mounts_rd.c#L38 won't be
-able to find a filesystem type to mount on it and it's guaranteed to fail.
-
-Note: initramfs was introduced in the early 2000s, and back in the 1990s there
-was an older "initrd" mechanism that DID use ramdisks (which are a chunk of ram
-used as a block device). I wrote documention about THAT too:
-
-  https://www.kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt
-
-Basically the mechanism you're feeding init.cpio.gz in through was originally
-written to populate a ramdisk, and you'd make an ext2 image or something and
-gzip that. These days, the kernel decompresses the first few bytes of the file
-and if the result is a cpio signature it calls the initramfs plumbing
-(extracting the archive into the ram backed filesystem) and if not it extracts
-it into the /dev/ram0 block device and treats it as an initial ram disk. In
-NEITHER case do you need root= because that's used AFTER initramfs and initrd
-have both failed to find an /init program. (Well initrd looks for /linuxrc
-instead of /init because historical cruft, and then there was pivot_root...
-Don't go there.)
-
-Rob
+Thanks,
+Ashish

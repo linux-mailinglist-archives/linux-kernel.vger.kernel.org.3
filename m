@@ -2,175 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC3457A6C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DBD57A6CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237732AbiGSSwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S238267AbiGSSy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 14:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGSSwH (ORCPT
+        with ESMTP id S230249AbiGSSyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:52:07 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092E713E03
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:52:05 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JGmRWv003839;
-        Tue, 19 Jul 2022 18:52:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : content-type : content-transfer-encoding :
- mime-version; s=corp-2022-7-12;
- bh=wdrbT6H7R1b6HxGHNIvEFLdY65u3lFPsCMTAonDWDY4=;
- b=ilOlSq2MpG3p6rV9BfiVw9IiA/gaXj71Jo6D2aI9ZvOzttFGZBGXCSUpHxue9EaL94+0
- 7EZBdSNMBCwzXpayho2xxzuzIfxoQWan5isGXl/C4R7SinruXeXClw7YRwjMk28mv2+9
- ujToFrjxJgUzgLNwe/5otNrlLxOHoKCfWM0tpUg3JIfLgE4voQz0scDCAxeFlkx7vTD8
- lN7PzXsW6JMcDIibFw82Io1KFk8nx4L0iEyuLc53K5bNH1X3OoCuqx/tJ3THIzlHEuDg
- OwzvdOv8kRPRgG5lzk89h1TtDPagj+ul/kgTVMmEFA4jB/Fj981I1exquSC216nchedV Nw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbmxs7cwg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Jul 2022 18:52:00 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26JI08l0002689;
-        Tue, 19 Jul 2022 18:51:59 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2171.outbound.protection.outlook.com [104.47.59.171])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1mbdg35-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Jul 2022 18:51:59 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oPcQA3jRwsqnB4U+p0/B3ddBfWZ2Np2UFLh/zbfMoTgRj27Z2eIVfAk27aAcZ9u+v5yE5tLMN5j8okHoD2dLXY0SX4BMcMfSsUHbRvetBGhrYP8ZZILhURA1mkJPWdzseXmUL0n4VUgg5pf8OyOw1J90Qcgy3+vnA+SKS7slFSyw8qZiAuPCnleqAtQKMTk/DpcAWvFIbspyH9J10Thqj0jA8+nQVD+HUiUvjsVfkbsnp7LlZGMXMjoN4gFnLeI4hRzqaJYFkRpWSeSGxDz+AI+ZEkcx2+lNw8sUb7cY7qClbzaUzz5gRUgZV9A7zJrk7e25sbfpfl4VtvccqMDkTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wdrbT6H7R1b6HxGHNIvEFLdY65u3lFPsCMTAonDWDY4=;
- b=hy7p3mL3WvMpEl85rA1yFoZWSpL61EzoqXMrX0anYuAUz8jsMcLqWDme8RP/0nsKdtHpQAEh/Uw4YPTXrop4neeYMbb47ZnQa6Tug6O42C/OccHELdvwbm8R+huTr+mVsFGxzJ8coy/+VfeH1CWffCGcEpkTvtz+VzIeg2+KJGVyWOFKtpSVN+q6cwjOYRSBazjubeo/O5/cHxW7EYR6r9pQy7KYuiiTIq75z7wqZ0V7iXy8Nf1qijF16M0BV/glGCZ/U0KvUJmHTb+rp7eLPWlpUt9sG4L2M4iN+qHH8W3W5zJElXYX8SnMC0RU71tZP/tcGtNVzbgTF8ERUaOvew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 19 Jul 2022 14:54:55 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFB313E03
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:54:54 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id m16so20853235edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:54:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wdrbT6H7R1b6HxGHNIvEFLdY65u3lFPsCMTAonDWDY4=;
- b=Tn9z4HKzk5gHAg+ySH7SHLw5Gf7bB/Wd9OFGI2wXSaGqgblvyr70IA75lZf/DcpHGqA61293pgC9wX6THnc8g5wAnApsuFh2KraiGmSjzxpR7tcmRiqm7NR/in7odFr/ptdfi2swocsqtfnfutMNN9q34idPWAy+apZ9dTFPe2w=
-Received: from BL0PR10MB3011.namprd10.prod.outlook.com (2603:10b6:208:7e::29)
- by SJ0PR10MB4479.namprd10.prod.outlook.com (2603:10b6:a03:2af::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Tue, 19 Jul
- 2022 18:51:57 +0000
-Received: from BL0PR10MB3011.namprd10.prod.outlook.com
- ([fe80::7c45:9b1:38eb:ca87]) by BL0PR10MB3011.namprd10.prod.outlook.com
- ([fe80::7c45:9b1:38eb:ca87%4]) with mapi id 15.20.5438.024; Tue, 19 Jul 2022
- 18:51:57 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>, Hugh Dickins <hughd@google.com>
-Subject: [PATCH] maple_tree: Fix bitwise for logical operator in
- mas_validate_limits()
-Thread-Topic: [PATCH] maple_tree: Fix bitwise for logical operator in
- mas_validate_limits()
-Thread-Index: AQHYm6CfSrZ7XVpc4kC0V3L5au8Uew==
-Date:   Tue, 19 Jul 2022 18:51:57 +0000
-Message-ID: <20220719185142.3360559-1-Liam.Howlett@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.35.1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4fc143b3-7894-4d93-24a7-08da69b7c189
-x-ms-traffictypediagnostic: SJ0PR10MB4479:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: F7BiI3mbwr6aAcfUVQSMw/YLAkrvIndbjoQTC8I4iIvCs6V81lgHjnw5ly3u+dxpyE2/clrobadRDbLzcN91NOAITNR3UPXQ8Q55h7fsRBeaTu3UfPj78XjU0UiIKm+sGmDJD0sOw2WXVEajdIqCTi5ohPWXeL7gb/V5QYNemb3yreBI30yLbA+MYUc2SDfrvEv68orUuNOf/fo0gUOnOr9N82Ai60q+SI56ZJe8koC0rcnkAOzaPTHqMM+afQQbS2VklvDmancITp3fPfk3HFnM3LIvKf3QIZGHv+H4YKEw0JbBNUJJukl/WqQ8zxV0Fg73BqtuW8MSgH8JRYtpixLkD1CaBMIfe79X0IruGlhW6ANruFGTjix1rdOMBr7jAR2zPoQkvqU8pC71nQI856wB77YiQSnLmdVWMw3zJ52gomYAbB0l++4OeNJvL3kiZznS+fP4mYt7mpPhsB6F+nyqV9ET/aImS7Io+Zf7ITOV7zTSp+aF2C+8WoocvJqxO9+V4mtORgTGrpSLwt3QGq+E67OYs2l1wzXsqHX1Me6PB6U+ymO/Jqw+BF/Ugmx7Kh68wiVELVN4XM2kmSJIUEglLNlzU4xjblpGOD/2oovbU31DYdbVc6cZPOpjL/WMuh67E+ngoAjjlg9K1jTAOrOT6yjeMX7SgrgJjhmqJ11JcQVKT5MqxGQThnyI1wPJObGhhSrVJxBZYabIdhWLiJ8cwP09/pg65AIJI28NCp6gKKLLpSi7UDoMP9PVSpbDcLmzSc4YRCpA5Zg+UXxv+H5ZeJRkzjPkRu1S7c9bClArCgPhsRoCYx6SGS3TJIDB
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR10MB3011.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(346002)(376002)(136003)(39860400002)(2616005)(316002)(186003)(64756008)(8676002)(110136005)(86362001)(2906002)(1076003)(36756003)(38100700002)(478600001)(6486002)(5660300002)(8936002)(71200400001)(38070700005)(122000001)(41300700001)(6506007)(6512007)(66556008)(66446008)(91956017)(83380400001)(66946007)(66476007)(26005)(76116006)(4744005)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?YP6njaovluQk7aQIj99wmUUa1TX1/N6ZS/gwzTb+oVosnpZSpcHWCo5778?=
- =?iso-8859-1?Q?NMYKR1VlNNfwlAS7c6TA4aa4SzCmuBZt/x2xCUL7i1oHQMlj2oiTEnrJjt?=
- =?iso-8859-1?Q?sKFsm/DWTgY4O01ntowvjltYFkyexEt8Dm1I/ZLz28+yA127B918zygINN?=
- =?iso-8859-1?Q?pDscc1jIRRfKxBCVxgPAQ9JOhW2jCepAIOlJVH5SNcVYxBvbWcekzSzF0X?=
- =?iso-8859-1?Q?twI7C9bcsZWJwWE9FMHMAKduAGslBQqfHIl09REeVd6i7mq96M79T2m5Fz?=
- =?iso-8859-1?Q?7SasEZqjpPg8oizQmd8VYMKW759sSD/5rFx9uLu4Kju/ZPhnk60K88NtRL?=
- =?iso-8859-1?Q?AJ2dOoTH4TwXXplaft7A644pGLPX6is7f5Jr/Y54GmNaGZjrWWEOuX/r78?=
- =?iso-8859-1?Q?EqQ9ovx1oMVbVQwNIFJYu2YpVunAsrkuZuWu8nJcjTabIpvtwuuz1UlDEd?=
- =?iso-8859-1?Q?qKCJLuvynj1quTT4no38MzBHQtrcAyXBpv2R6ePmPxejwA6FBhU+yqidDw?=
- =?iso-8859-1?Q?qh0FWU68nlUiKs5uTkjl/pe8psO/c7nUBD9qfxlfxLnTOw/+Ft3iWq7l/l?=
- =?iso-8859-1?Q?KuPLTm5yBRGJ120+KBWxGTah3p3Wv4LcyqE5wrQDmkppqZrDOsAAHT8KCa?=
- =?iso-8859-1?Q?W44E+ZZBNS0VlF6TDEwsOcaznHSmm6dLfrLs6TTDJp7drtOX65gaodSFJP?=
- =?iso-8859-1?Q?gRoU8jaPWjbY+dX3ugDLBVQ/hNcdqaxgReXKynnmQHFkBTncw4EeU0+XJZ?=
- =?iso-8859-1?Q?6B670LEf5cgsb6kHPXNo0DAicgzLwFnBmYz39BBR/wKfaJK67I+ug72i4d?=
- =?iso-8859-1?Q?Fm7aVERmBYKW168fofNThRsYTnJwdQiJzXiImlY6Jp7wXI8pW8MQATfWEr?=
- =?iso-8859-1?Q?VBxAfZAL93RU4/JDn7XLVgSOXrAnktYPBoifC+0gsiaApChaEPAshbHXED?=
- =?iso-8859-1?Q?v/JF1TTODl5pBlAU5+Sk4u2Ln7QNHAibbrcZhxNEil6nWfxMntuALno9xG?=
- =?iso-8859-1?Q?61HRypWIgZLWNWhYAxtaqpOz3xSLai8M0g53Z0hpRHp23e2nZGXU7RVggP?=
- =?iso-8859-1?Q?tuKGMgoRrp61DE9gEWv4XTD8QiETKuxAnAtzkDN0dgNiALKbnJQHRoTPHf?=
- =?iso-8859-1?Q?ER533OSmiWgGNr0VC4YggptXCP9Q6b8erJYx1LJhB+0WiaSmIzNSV4XT7s?=
- =?iso-8859-1?Q?G3rYa3nnNGo8sm/cW7kASSoG1Vgepr8+K3XPM0Xy4QoRXENZuXuQ5mrPri?=
- =?iso-8859-1?Q?ujRdK8skzV9z7f4L/Zbhu8Ab0bZm0SKJXwDWgSY7YfoLyRa+IAbaY9xZNM?=
- =?iso-8859-1?Q?ADOdbfcvH0ix3MNkUS3N79H1JtPKhrIpeDJpY9dVzhNHGdkbJrzClZSxCP?=
- =?iso-8859-1?Q?BPSMUxfZEV7ka/CgGYivvCSeZClMJAG7tTH2AYjmNHmf1F2A65PzkoCdNV?=
- =?iso-8859-1?Q?YRa9mcwovAje0veMDClP0lfiGfRPn9QxqNfQaPR/Gh6wXSXwBNMHewaUXK?=
- =?iso-8859-1?Q?H70D8uOLaHYjqQkmvzMmGRQbaKEBxRK1A3DQhKZdyX14cWaQyPBxfStUlH?=
- =?iso-8859-1?Q?5u9zXAgiEdYVc6cgQ/CJRhBpDy+YsykerQMLX68W00Rh5A7PQvnbC6l6qq?=
- =?iso-8859-1?Q?YCTKVj9Ei7Sdg5dlYFsZvxoS4HEU4PKdGNVJVLjKNzlN/qRmM/wXXOkw?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
+        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=jvlbyga+aybcQE2QVFUOWHDT9IYYpSQipByXARrXszA=;
+        b=3LDvZ6cyfu+Hes5Js9bk/jI/uuaxOfOG2yT8IR7xG17AZgIjYp5kfoxWpzQui7qOG9
+         8oVOymaa2FPZhm20prchBYNHvWneiuaMNWmmzeEjbVulMS+ecZ/w+8lMauhw3gTokdJw
+         PE9/vyZzDTBU10RGvl8YQvSjsID0UifxGS3wky1F/sRoR/BAhFWPR9snwwYHo0bhoRzQ
+         zlVEoRqpW+dx7vLaNy/2wU7LezxVvQBxK7D101Tus6hMFIz8L1CAgjo12A0zjwqNz0+F
+         MmR5woIiEV1MHOILGws2oyQHx6OKtiZknjIEkvIfdfccH16qqgeBfSTQDiOjmRYGHd+9
+         qgmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=jvlbyga+aybcQE2QVFUOWHDT9IYYpSQipByXARrXszA=;
+        b=iWhEy8QjbV5/dLsAQhfmMn3gNrQbEdggJ+dqdLbpPtXF5O27+PXFE0Q2qKH0YXADCg
+         qbXPlyLmCPb8vshlU+w60JQpFS/iYXKDd34P7UrDIqsokiVcQQ4FuHgkql7eJzlUYCaj
+         q9Z5wfXXcuHw1+hfm6QzGZfB3ln9i6NhUsOFHjoamjK67uX0a2KRs6+YtSvZ/nvNkz/y
+         7JhdZH/9L3izid1qjSSxyZ/mfmZCClLR98XkiT1FaEsLh4laB0iCdOlK3MJ/23UbIW+U
+         MzwFgO6fStfy4HudV4iAhBGuhjDhNCP5y1Mu/8AmDFeXGPaDgSKKbQcqG+a3eHqLomfp
+         dcXw==
+X-Gm-Message-State: AJIora+1S7FlaqtgLHjWI8zLHXcYMLVF12xd0TP8HxOJLqCUP8rIenOd
+        pfkfdf5fveriWTPmHpXIovwGdg==
+X-Google-Smtp-Source: AGRyM1vM7GxtMIs06vDeXZOshNbmHR6ynLTDlSsuoCcSM6mw+Z1/vTTqNbsiydFVFLiE80jW3Y59hw==
+X-Received: by 2002:a50:ee8d:0:b0:43b:b678:114c with SMTP id f13-20020a50ee8d000000b0043bb678114cmr1154292edr.12.1658256892927;
+        Tue, 19 Jul 2022 11:54:52 -0700 (PDT)
+Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
+        by smtp.gmail.com with ESMTPSA id k15-20020a05640212cf00b0043b92f805eesm1368235edx.70.2022.07.19.11.54.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 19 Jul 2022 11:54:52 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH REBASE] regulator: core: Fix off-on-delay-us for
+ always-on/boot-on regulators
+From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>
+In-Reply-To: <165825651232.448796.18429380716580437688.b4-ty@kernel.org>
+Date:   Tue, 19 Jul 2022 20:54:51 +0200
+Cc:     linux-kernel@vger.kernel.org, lgirdwood@gmail.com
 Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR10MB3011.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4fc143b3-7894-4d93-24a7-08da69b7c189
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2022 18:51:57.3112
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Gj9B4O4DWdS7uDBhxUAwSb6On8KkgLm3/CpJA57PA3NHSq10jlS60lGOffId7pbt4DsrTk+Ha+Idolwf2fYjoA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4479
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-19_06,2022-07-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
- suspectscore=0 mlxlogscore=999 adultscore=0 spamscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207190079
-X-Proofpoint-GUID: aUw7bAyebej3oUUjqqbLYm0Elm8UtAXF
-X-Proofpoint-ORIG-GUID: aUw7bAyebej3oUUjqqbLYm0Elm8UtAXF
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <E5208D84-9501-4ADD-9747-817E8ADE75E7@kohlschutter.com>
+References: <E25D6465-6475-42B4-90EB-3D2C3CAF3B20@kohlschuetter.com>
+ <YtVTyzLREdkzYiKS@sirena.org.uk>
+ <3270C618-E361-4BC1-B63A-917AE09DA60E@kohlschuetter.com>
+ <FAFD5B39-E9C4-47C7-ACF1-2A04CD59758D@kohlschutter.com>
+ <165825651232.448796.18429380716580437688.b4-ty@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the correct operator.
+Woohoo, my first patch =E2=80=94 thanks a lot, Mark!
 
-Fixes: fb7297e8a66b (Maple Tree: add new data structure)
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
----
- lib/maple_tree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Am 19.07.2022 um 20:48 schrieb Mark Brown <broonie@kernel.org>:
+>=20
+> On Tue, 19 Jul 2022 16:02:00 +0200, Christian Kohlsch=C3=BCtter wrote:
+>> Regulators marked with "regulator-always-on" or "regulator-boot-on"
+>> as well as an "off-on-delay-us", may run into cycling issues that are
+>> hard to detect.
+>>=20
+>> This is caused by the "last_off" state not being initialized in this
+>> case.
+>>=20
+>> [...]
+>=20
+> Applied to
+>=20
+>   =
+https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git =
+for-next
+>=20
+> Thanks!
+>=20
+> [1/1] regulator: core: Fix off-on-delay-us for always-on/boot-on =
+regulators
+>      commit: 218320fec29430438016f88dd4fbebfa1b95ad8d
+>=20
+> All being well this means that it will be integrated into the =
+linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+>=20
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems =
+and
+> send followup patches addressing any issues that are reported if =
+needed.
+>=20
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+>=20
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+>=20
+> Thanks,
+> Mark
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 0c0bda979693..d5b310e73068 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -6966,7 +6966,7 @@ static void mas_validate_limits(struct ma_state *mas)
-=20
- 		piv =3D mas_safe_pivot(mas, pivots, i, type);
-=20
--		if (!piv & (i !=3D 0))
-+		if (!piv && (i !=3D 0))
- 			break;
-=20
- 		if (!mte_is_leaf(mas->node)) {
---=20
-2.35.1

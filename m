@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EDB579A7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F72579F27
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239285AbiGSMQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S243236AbiGSNLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239008AbiGSMNo (ORCPT
+        with ESMTP id S243681AbiGSNJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:13:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924671A3B0;
-        Tue, 19 Jul 2022 05:04:52 -0700 (PDT)
+        Tue, 19 Jul 2022 09:09:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890C8BDA3D;
+        Tue, 19 Jul 2022 05:28:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA2BFB81B25;
-        Tue, 19 Jul 2022 12:04:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42CD0C341C6;
-        Tue, 19 Jul 2022 12:04:36 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 21611CE1BEC;
+        Tue, 19 Jul 2022 12:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C73C341DE;
+        Tue, 19 Jul 2022 12:28:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232276;
-        bh=2qjO8+odQ7oxEl1fALycalDewY6Q0DjTfZWWlCdvWKE=;
+        s=korg; t=1658233716;
+        bh=jw+ypiVsWe9hRlxeroVNTCj7pde/eDODxUktKaei0zA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a12UsTz1srr39q3g/VjFObfRW62zvWlfARFa7jJthSCwmIXfUWFIVi55zCr915+IQ
-         cbhD4thSOI8XU8HamUg1lEgz17v1G0LZ3ME1lFXMRij+mJbW/lobqwaQE6ttZLF+x1
-         hsk1q2PgMPqFiotopuI6iGbVAR4k4B6/xwAMULmE=
+        b=FuULoT7BybgnffE+CcPqlN91G/cNMuCj1WkPAq2yypxQdHl1bR0jZ5Ndg6ED6nUM/
+         3QEtvO/HguhUQxZiJaPlbNMDtCPN/dT5b7vnquxcJfJYgvlGGaUn06BgQIo7716GMK
+         AY16/G4xQ6myRCzmU4810QEQ8354djW4qYr4PaIA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
+        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 59/71] irqchip: or1k-pic: Undefine mask_ack for level triggered hardware
+Subject: [PATCH 5.18 177/231] fbdev: Disable sysfb device registration when removing conflicting FBs
 Date:   Tue, 19 Jul 2022 13:54:22 +0200
-Message-Id: <20220719114558.070990368@linuxfoundation.org>
+Message-Id: <20220719114729.070959230@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stafford Horne <shorne@gmail.com>
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-[ Upstream commit 8520501346ed8d1c4a6dfa751cb57328a9c843f1 ]
+[ Upstream commit ee7a69aa38d87a3bbced7b8245c732c05ed0c6ec ]
 
-The mask_ack operation clears the interrupt by writing to the PICSR
-register.  This we don't want for level triggered interrupt because
-it does not actually clear the interrupt on the source hardware.
+The platform devices registered by sysfb match with firmware-based DRM or
+fbdev drivers, that are used to have early graphics using a framebuffer
+provided by the system firmware.
 
-This was causing issues in qemu with multi core setups where
-interrupts would continue to fire even though they had been cleared in
-PICSR.
+DRM or fbdev drivers later are probed and remove conflicting framebuffers,
+leading to these platform devices for generic drivers to be unregistered.
 
-Just remove the mask_ack operation.
+But the current solution has a race, since the sysfb_init() function could
+be called after a DRM or fbdev driver is probed and request to unregister
+the devices for drivers with conflicting framebuffes.
 
-Acked-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Stafford Horne <shorne@gmail.com>
+To prevent this, disable any future sysfb platform device registration by
+calling sysfb_disable(), if a driver requests to remove the conflicting
+framebuffers.
+
+Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220607182338.344270-4-javierm@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-or1k-pic.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/video/fbdev/core/fbmem.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/irqchip/irq-or1k-pic.c b/drivers/irqchip/irq-or1k-pic.c
-index 03d2366118dd..d5f1fabc45d7 100644
---- a/drivers/irqchip/irq-or1k-pic.c
-+++ b/drivers/irqchip/irq-or1k-pic.c
-@@ -66,7 +66,6 @@ static struct or1k_pic_dev or1k_pic_level = {
- 		.name = "or1k-PIC-level",
- 		.irq_unmask = or1k_pic_unmask,
- 		.irq_mask = or1k_pic_mask,
--		.irq_mask_ack = or1k_pic_mask_ack,
- 	},
- 	.handle = handle_level_irq,
- 	.flags = IRQ_LEVEL | IRQ_NOPROBE,
--- 
-2.35.1
-
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -19,6 +19,7 @@
+ #include <linux/kernel.h>
+ #include <linux/major.h>
+ #include <linux/slab.h>
++#include <linux/sysfb.h>
+ #include <linux/mm.h>
+ #include <linux/mman.h>
+ #include <linux/vt.h>
+@@ -1787,6 +1788,17 @@ int remove_conflicting_framebuffers(stru
+ 		do_free = true;
+ 	}
+ 
++	/*
++	 * If a driver asked to unregister a platform device registered by
++	 * sysfb, then can be assumed that this is a driver for a display
++	 * that is set up by the system firmware and has a generic driver.
++	 *
++	 * Drivers for devices that don't have a generic driver will never
++	 * ask for this, so let's assume that a real driver for the display
++	 * was already probed and prevent sysfb to register devices later.
++	 */
++	sysfb_disable();
++
+ 	mutex_lock(&registration_lock);
+ 	do_remove_conflicting_framebuffers(a, name, primary);
+ 	mutex_unlock(&registration_lock);
 
 

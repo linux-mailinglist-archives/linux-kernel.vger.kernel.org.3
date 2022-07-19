@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EA3579B14
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98700579E95
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239601AbiGSMZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S242819AbiGSNC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239634AbiGSMYH (ORCPT
+        with ESMTP id S243095AbiGSNAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:24:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81B45FAD2;
-        Tue, 19 Jul 2022 05:08:55 -0700 (PDT)
+        Tue, 19 Jul 2022 09:00:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B9E61B01;
+        Tue, 19 Jul 2022 05:25:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44DDE616FD;
-        Tue, 19 Jul 2022 12:07:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11DEFC341C6;
-        Tue, 19 Jul 2022 12:07:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 984F461934;
+        Tue, 19 Jul 2022 12:25:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6445FC341C6;
+        Tue, 19 Jul 2022 12:25:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232464;
-        bh=/zK32ft4S+oGulxYs7170gjT3SrkyDPt0R3DVNAN6xk=;
+        s=korg; t=1658233535;
+        bh=20Wvy7dWanmVA15XdUW1kahzz5ehVrK7I4KjMlxaWlM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hOsD66bZUKIa82G7ifV91TazDJpH99AnmdnB5sRuhtvDLJECipeUTX4MTEG0vvySz
-         b0z/2iqgWwDy6BI1XP2ecrKM2uQso8b1M1XY8KeXjTiQJ945omQ3Hu84Guzcw5axFY
-         STnRUrw1LTdC+z99W52p7dCSdVplquN6X2VXXl9A=
+        b=f/13cvNg05fDQscSYz6LrEmijZopQZbKNlcN/uc6d8Q07YVJ4VzBfEURhUTmkhvTe
+         QmHwHi+cOaIviW9WAkvFi8CN+mEMZwQqqFRgxfhuQqNuA4J4BVnVMXgLpy3yqCiG3U
+         4TeyncgY2jWNn4jonRG+6iUNIYz7W+OWfQlrd+kY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yanghang Liu <yanghliu@redhat.com>,
-        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 067/112] sfc: fix use after free when disabling sriov
+        stable@vger.kernel.org, Hillf Danton <hdanton@sina.com>,
+        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Jiri Slaby <jslaby@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 155/231] tty: extract tty_flip_buffer_commit() from tty_flip_buffer_push()
 Date:   Tue, 19 Jul 2022 13:54:00 +0200
-Message-Id: <20220719114633.002242858@linuxfoundation.org>
+Message-Id: <20220719114727.324996824@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,108 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Íñigo Huguet <ihuguet@redhat.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit ebe41da5d47ac0fff877e57bd14c54dccf168827 ]
+[ Upstream commit 716b10580283fda66f2b88140e3964f8a7f9da89 ]
 
-Use after free is detected by kfence when disabling sriov. What was read
-after being freed was vf->pci_dev: it was freed from pci_disable_sriov
-and later read in efx_ef10_sriov_free_vf_vports, called from
-efx_ef10_sriov_free_vf_vswitching.
+We will need this new helper in the next patch.
 
-Set the pointer to NULL at release time to not trying to read it later.
-
-Reproducer and dmesg log (note that kfence doesn't detect it every time):
-$ echo 1 > /sys/class/net/enp65s0f0np0/device/sriov_numvfs
-$ echo 0 > /sys/class/net/enp65s0f0np0/device/sriov_numvfs
-
- BUG: KFENCE: use-after-free read in efx_ef10_sriov_free_vf_vswitching+0x82/0x170 [sfc]
-
- Use-after-free read at 0x00000000ff3c1ba5 (in kfence-#224):
-  efx_ef10_sriov_free_vf_vswitching+0x82/0x170 [sfc]
-  efx_ef10_pci_sriov_disable+0x38/0x70 [sfc]
-  efx_pci_sriov_configure+0x24/0x40 [sfc]
-  sriov_numvfs_store+0xfe/0x140
-  kernfs_fop_write_iter+0x11c/0x1b0
-  new_sync_write+0x11f/0x1b0
-  vfs_write+0x1eb/0x280
-  ksys_write+0x5f/0xe0
-  do_syscall_64+0x5c/0x80
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
- kfence-#224: 0x00000000edb8ef95-0x00000000671f5ce1, size=2792, cache=kmalloc-4k
-
- allocated by task 6771 on cpu 10 at 3137.860196s:
-  pci_alloc_dev+0x21/0x60
-  pci_iov_add_virtfn+0x2a2/0x320
-  sriov_enable+0x212/0x3e0
-  efx_ef10_sriov_configure+0x67/0x80 [sfc]
-  efx_pci_sriov_configure+0x24/0x40 [sfc]
-  sriov_numvfs_store+0xba/0x140
-  kernfs_fop_write_iter+0x11c/0x1b0
-  new_sync_write+0x11f/0x1b0
-  vfs_write+0x1eb/0x280
-  ksys_write+0x5f/0xe0
-  do_syscall_64+0x5c/0x80
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
- freed by task 6771 on cpu 12 at 3170.991309s:
-  device_release+0x34/0x90
-  kobject_cleanup+0x3a/0x130
-  pci_iov_remove_virtfn+0xd9/0x120
-  sriov_disable+0x30/0xe0
-  efx_ef10_pci_sriov_disable+0x57/0x70 [sfc]
-  efx_pci_sriov_configure+0x24/0x40 [sfc]
-  sriov_numvfs_store+0xfe/0x140
-  kernfs_fop_write_iter+0x11c/0x1b0
-  new_sync_write+0x11f/0x1b0
-  vfs_write+0x1eb/0x280
-  ksys_write+0x5f/0xe0
-  do_syscall_64+0x5c/0x80
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: 3c5eb87605e85 ("sfc: create vports for VFs and assign random MAC addresses")
-Reported-by: Yanghang Liu <yanghliu@redhat.com>
-Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
-Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
-Link: https://lore.kernel.org/r/20220712062642.6915-1-ihuguet@redhat.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: Hillf Danton <hdanton@sina.com>
+Cc: 一只狗 <chennbnbnb@gmail.com>
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20220707082558.9250-1-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/ef10_sriov.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/tty/tty_buffer.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/ef10_sriov.c b/drivers/net/ethernet/sfc/ef10_sriov.c
-index 84041cd587d7..b44acb6e3953 100644
---- a/drivers/net/ethernet/sfc/ef10_sriov.c
-+++ b/drivers/net/ethernet/sfc/ef10_sriov.c
-@@ -411,8 +411,9 @@ static int efx_ef10_pci_sriov_enable(struct efx_nic *efx, int num_vfs)
- static int efx_ef10_pci_sriov_disable(struct efx_nic *efx, bool force)
+diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
+index bfa431a8e690..303a26c1b821 100644
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -532,6 +532,15 @@ static void flush_to_ldisc(struct work_struct *work)
+ 
+ }
+ 
++static inline void tty_flip_buffer_commit(struct tty_buffer *tail)
++{
++	/*
++	 * Paired w/ acquire in flush_to_ldisc(); ensures flush_to_ldisc() sees
++	 * buffer data.
++	 */
++	smp_store_release(&tail->commit, tail->used);
++}
++
+ /**
+  * tty_flip_buffer_push		-	push terminal buffers
+  * @port: tty port to push
+@@ -546,11 +555,7 @@ void tty_flip_buffer_push(struct tty_port *port)
  {
- 	struct pci_dev *dev = efx->pci_dev;
-+	struct efx_ef10_nic_data *nic_data = efx->nic_data;
- 	unsigned int vfs_assigned = pci_vfs_assigned(dev);
--	int rc = 0;
-+	int i, rc = 0;
+ 	struct tty_bufhead *buf = &port->buf;
  
- 	if (vfs_assigned && !force) {
- 		netif_info(efx, drv, efx->net_dev, "VFs are assigned to guests; "
-@@ -420,10 +421,13 @@ static int efx_ef10_pci_sriov_disable(struct efx_nic *efx, bool force)
- 		return -EBUSY;
- 	}
- 
--	if (!vfs_assigned)
-+	if (!vfs_assigned) {
-+		for (i = 0; i < efx->vf_count; i++)
-+			nic_data->vf[i].pci_dev = NULL;
- 		pci_disable_sriov(dev);
--	else
-+	} else {
- 		rc = -EBUSY;
-+	}
- 
- 	efx_ef10_sriov_free_vf_vswitching(efx);
- 	efx->vf_count = 0;
+-	/*
+-	 * Paired w/ acquire in flush_to_ldisc(); ensures flush_to_ldisc() sees
+-	 * buffer data.
+-	 */
+-	smp_store_release(&buf->tail->commit, buf->tail->used);
++	tty_flip_buffer_commit(buf->tail);
+ 	queue_work(system_unbound_wq, &buf->work);
+ }
+ EXPORT_SYMBOL(tty_flip_buffer_push);
 -- 
 2.35.1
 

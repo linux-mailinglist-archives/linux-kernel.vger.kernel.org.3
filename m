@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89F1579C35
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DD5579A77
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240921AbiGSMhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S236240AbiGSMQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240774AbiGSMgY (ORCPT
+        with ESMTP id S239673AbiGSMOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:36:24 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357CB24944;
-        Tue, 19 Jul 2022 05:14:11 -0700 (PDT)
+        Tue, 19 Jul 2022 08:14:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8FE53D26;
+        Tue, 19 Jul 2022 05:05:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 850AECE1BE5;
-        Tue, 19 Jul 2022 12:14:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2A1C341C6;
-        Tue, 19 Jul 2022 12:14:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FDAC6163C;
+        Tue, 19 Jul 2022 12:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0001FC341CA;
+        Tue, 19 Jul 2022 12:05:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232842;
-        bh=Y5ulbQkpBh1mvGqG++QTnnact+0szAuiE1B9TbrCcZI=;
+        s=korg; t=1658232345;
+        bh=DAD+Pjwh8/AMSXxjKUmXsLwsZvgalbFQCH6aTqtkqc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SO8MlbvvCIYG5mAB/6/mnwab+OXZt0ykPdjID+Yx1LHIQju1wthnXCbmyraPku6Iy
-         9vJ4AhnJk5WYt34VEoxA1Wi+HTCFQcbqRZw9YdgMl8OVyJTD0pK6YlmZ0lIuhi7zNt
-         RjcTyUOPyy83tLapUYHAEz5NHN04DeWB8gLHWJYQ=
+        b=SfAU/Ki1FMI4hUsR6uzGFjCKat1emWo5crystVE+D2rmXe5905aLVNuKa6Rw+rPXI
+         kI7ZDPqzakuSGXd1Pt5+sSroo/3BwXvUPjhm7+7L2PHuNWP3+HQoLGuhcwhewpbhOQ
+         PzbVIgF5foMXePJGXaUjJuTJ8s/xP5m4He6DPXYQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Yan <tom.ty89@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org,
+        Anastasios Vacharakis <vacharakis@o2mail.de>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 067/167] netfilter: nf_log: incorrect offset to network header
+Subject: [PATCH 5.10 026/112] spi: amd: Limit max transfer and message size
 Date:   Tue, 19 Jul 2022 13:53:19 +0200
-Message-Id: <20220719114703.008907738@linuxfoundation.org>
+Message-Id: <20220719114628.562665124@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 
-[ Upstream commit 7a847c00eeba9744353ecdfad253143b9115678a ]
+[ Upstream commit 6ece49c56965544262523dae4a071ace3db63507 ]
 
-NFPROTO_ARP is expecting to find the ARP header at the network offset.
+Enabling the SPI CS35L41 audio codec driver for Steam Deck [1]
+revealed a problem with the current AMD SPI controller driver
+implementation, consisting of an unrecoverable system hang.
 
-In the particular case of ARP, HTYPE= field shows the initial bytes of
-the ethernet header destination MAC address.
+The issue can be prevented if we ensure the max transfer size
+and the max message size do not exceed the FIFO buffer size.
 
- netdev out: IN= OUT=bridge0 MACSRC=c2:76:e5:71:e1:de MACDST=36:b0:4a:e2:72:ea MACPROTO=0806 ARP HTYPE=14000 PTYPE=0x4ae2 OPCODE=49782
+According to the implementation of the downstream driver, the
+AMD SPI controller is not able to handle more than 70 bytes per
+transfer, which corresponds to the size of the FIFO buffer.
 
-NFPROTO_NETDEV egress hook is also expecting to find the IP headers at
-the network offset.
+Hence, let's fix this by setting the SPI limits mentioned above.
 
-Fixes: 35b9395104d5 ("netfilter: add generic ARP packet logger")
-Reported-by: Tom Yan <tom.ty89@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+[1] https://lore.kernel.org/r/20220621213819.262537-1-cristian.ciocaltea@collabora.com
+
+Reported-by: Anastasios Vacharakis <vacharakis@o2mail.de>
+Fixes: bbb336f39efc ("spi: spi-amd: Add AMD SPI controller driver support")
+Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Link: https://lore.kernel.org/r/20220706100626.1234731-2-cristian.ciocaltea@collabora.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_log_syslog.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/spi/spi-amd.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/net/netfilter/nf_log_syslog.c b/net/netfilter/nf_log_syslog.c
-index 13234641cdb3..7000e069bc07 100644
---- a/net/netfilter/nf_log_syslog.c
-+++ b/net/netfilter/nf_log_syslog.c
-@@ -61,7 +61,7 @@ dump_arp_packet(struct nf_log_buf *m,
- 	unsigned int logflags;
- 	struct arphdr _arph;
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index 7f629544060d..a027cfd49df8 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -28,6 +28,7 @@
+ #define AMD_SPI_RX_COUNT_REG	0x4B
+ #define AMD_SPI_STATUS_REG	0x4C
  
--	ah = skb_header_pointer(skb, 0, sizeof(_arph), &_arph);
-+	ah = skb_header_pointer(skb, nhoff, sizeof(_arph), &_arph);
- 	if (!ah) {
- 		nf_log_buf_add(m, "TRUNCATED");
- 		return;
-@@ -90,7 +90,7 @@ dump_arp_packet(struct nf_log_buf *m,
- 	    ah->ar_pln != sizeof(__be32))
- 		return;
++#define AMD_SPI_FIFO_SIZE	70
+ #define AMD_SPI_MEM_SIZE	200
  
--	ap = skb_header_pointer(skb, sizeof(_arph), sizeof(_arpp), &_arpp);
-+	ap = skb_header_pointer(skb, nhoff + sizeof(_arph), sizeof(_arpp), &_arpp);
- 	if (!ap) {
- 		nf_log_buf_add(m, " INCOMPLETE [%zu bytes]",
- 			       skb->len - sizeof(_arph));
-@@ -144,7 +144,7 @@ static void nf_log_arp_packet(struct net *net, u_int8_t pf,
- 
- 	nf_log_dump_packet_common(m, pf, hooknum, skb, in, out, loginfo,
- 				  prefix);
--	dump_arp_packet(m, loginfo, skb, 0);
-+	dump_arp_packet(m, loginfo, skb, skb_network_offset(skb));
- 
- 	nf_log_buf_close(m);
+ /* M_CMD OP codes for SPI */
+@@ -245,6 +246,11 @@ static int amd_spi_master_transfer(struct spi_master *master,
+ 	return 0;
  }
-@@ -829,7 +829,7 @@ static void nf_log_ip_packet(struct net *net, u_int8_t pf,
- 	if (in)
- 		dump_ipv4_mac_header(m, loginfo, skb);
  
--	dump_ipv4_packet(net, m, loginfo, skb, 0);
-+	dump_ipv4_packet(net, m, loginfo, skb, skb_network_offset(skb));
++static size_t amd_spi_max_transfer_size(struct spi_device *spi)
++{
++	return AMD_SPI_FIFO_SIZE;
++}
++
+ static int amd_spi_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -278,6 +284,8 @@ static int amd_spi_probe(struct platform_device *pdev)
+ 	master->flags = SPI_MASTER_HALF_DUPLEX;
+ 	master->setup = amd_spi_master_setup;
+ 	master->transfer_one_message = amd_spi_master_transfer;
++	master->max_transfer_size = amd_spi_max_transfer_size;
++	master->max_message_size = amd_spi_max_transfer_size;
  
- 	nf_log_buf_close(m);
- }
+ 	/* Register the controller with SPI framework */
+ 	err = devm_spi_register_master(dev, master);
 -- 
 2.35.1
 

@@ -2,139 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3205A579557
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F3D579555
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbiGSIil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 04:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S235496AbiGSIiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 04:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiGSIi0 (ORCPT
+        with ESMTP id S230263AbiGSIiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:38:26 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7141E22BDA;
-        Tue, 19 Jul 2022 01:38:25 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297609329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7609:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 19 Jul 2022 04:38:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C52922BDA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:38:21 -0700 (PDT)
+Received: from [IPv6:2a00:23c6:c30a:1501:8302:3eab:dcff:989c] (unknown [IPv6:2a00:23c6:c30a:1501:8302:3eab:dcff:989c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B99D01EC02AD;
-        Tue, 19 Jul 2022 10:38:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658219898;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=qVMCC53jDfsDETOjkARWAskhQ1CcMUI8NvGtWsmKYHI=;
-        b=PmlHZUI4lxShJLTZsEoznLLyjf5YaLiBFEK8h4S9Aif/LfXnDcgEVpN4FmM6Lxqp/ohOYB
-        laxHZIMUJXM2IqCEvNZBgnsop4md9/gV1ladEsq0ETS3H4rKmBve+cfawWbbCewgs+DkpW
-        Z0sa8anUvVc3/0nEGFuF+6ge3F4OoRA=
-Date:   Tue, 19 Jul 2022 10:38:08 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: Re: [PATCH Part2 v6 03/49] x86/sev: Add the host SEV-SNP
- initialization support
-Message-ID: <YtZtcHYGFLC4i9dn@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <8f4eef289aba5067582d0d3535299c22a4e5c4c4.1655761627.git.ashish.kalra@amd.com>
- <YtPeF0r69UbwNTMJ@zn.tnic>
- <SN6PR12MB27674548A8C8ACF5E53C0DB78E8F9@SN6PR12MB2767.namprd12.prod.outlook.com>
+        (Authenticated sender: martyn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 830A566019EC;
+        Tue, 19 Jul 2022 09:38:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.co.uk;
+        s=mail; t=1658219899;
+        bh=pT9LsgDPXQ0N4ZUhydSJXzlbrrIU5pdJxpX8OgBtKKo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ZAM2U4AliGF0UNCwIZdgWYgG1mlKiLMsrfpv5iI8xik1utJb6T2n3DYMDooKyGdii
+         UyWldvFNAg0/J1orEkFTg/P7M1qwUbLupaEh8xIUuZwqUsE6yrKPII8o4NhouLdsE7
+         jzf2IfHDBSYRMKl5bMZ5QH1Id9d2Fph58g2WEaAp3UiqQUFYOhf12OXgWJSihkncZY
+         uOxJsKudggnNoyJ5DTodeHcrFrhRb/StTMuvFMFH7T29SjMeTg6Eojk9nCbcBGCRy3
+         6lp9Ib0YSu/6E8x5UGiXqm1jnze3N7mN5qhqxQbYZyP57yYcEuGeHxGNUAucthTckc
+         gA1I1JhXry0kg==
+Message-ID: <946c008942f4ef4ca642818b23e9941c162383e3.camel@collabora.co.uk>
+Subject: Re: [PATCH] drm/bridge: megachips: Fix a null pointer dereference
+ bug
+From:   Martyn Welch <martyn.welch@collabora.co.uk>
+To:     Zheyu Ma <zheyuma97@gmail.com>, peter.senna@gmail.com,
+        martin.donnelly@ge.com, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Date:   Tue, 19 Jul 2022 09:38:16 +0100
+In-Reply-To: <20220716081304.2762135-1-zheyuma97@gmail.com>
+References: <20220716081304.2762135-1-zheyuma97@gmail.com>
+Organization: Collabora Ltd.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SN6PR12MB27674548A8C8ACF5E53C0DB78E8F9@SN6PR12MB2767.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:56:25AM +0000, Kalra, Ashish wrote:
-> > That section number will change over time - if you want to refer to
-> > some section just use its title so that people can at least grep for
-> > the relevant text.
->
-> This will all go into sev.c, instead of the header file, as this is
-> non-architectural and per-processor and the structure won't be exposed
-> to the rest of the kernel. The above PPR reference and potentially in
-> future an architectural method of reading the RMP table entries will
-> be moved into it.
+On Sat, 2022-07-16 at 16:13 +0800, Zheyu Ma wrote:
+> When removing the module we will get the following warning:
+>=20
+> [=C2=A0=C2=A0 31.911505] i2c-core: driver [stdp2690-ge-b850v3-fw] unregis=
+tered
+> [=C2=A0=C2=A0 31.912484] general protection fault, probably for non-canon=
+ical
+> address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN PTI
+> [=C2=A0=C2=A0 31.913338] KASAN: null-ptr-deref in range [0x00000000000000=
+08-
+> 0x000000000000000f]
+> [=C2=A0=C2=A0 31.915280] RIP: 0010:drm_bridge_remove+0x97/0x130
+> [=C2=A0=C2=A0 31.921825] Call Trace:
+> [=C2=A0=C2=A0 31.922533]=C2=A0 stdp4028_ge_b850v3_fw_remove+0x34/0x60
+> [megachips_stdpxxxx_ge_b850v3_fw]
+> [=C2=A0=C2=A0 31.923139]=C2=A0 i2c_device_remove+0x181/0x1f0
+>=20
+> The two bridges (stdp2690, stdp4028) do not probe at the same time,
+> so
+> the driver does not call ge_b850v3_resgiter() when probing, causing
+> the
+> driver to try to remove the object that has not been initialized.
+>=20
+> Fix this by checking whether both the bridges are probed.
+>=20
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 
-I fail to see how this addresses my comment... All I'm saying is, the
-"section 2.1.4.2" number will change so don't quote it in the text but
-quote the section *name* instead.
+Good catch!
 
-> I believe that with kexec and after issuing the shutdown command,
-> the RMP table needs to be fully initialized, so we should be
-> re-initializing the RMP table to zero here.
+Acked-by: Martyn Welch <martyn.welch@collabora.com>
 
-And yet you're doing:
+Would be worth adding:
 
-        /*
-         * Check if SEV-SNP is already enabled, this can happen if we are coming from
-         * kexec boot.
-         */
-        rdmsrl(MSR_AMD64_SYSCFG, val);
-        if (val & MSR_AMD64_SYSCFG_SNP_EN)
-                goto skip_enable;		<-------- skip zeroing
+Fixes: 11632d4aa2b3 ("drm/bridge: megachips: Ensure both bridges are
+probed before registration")
 
+> ---
+> =C2=A0drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c | 4 +++-
+> =C2=A01 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> index cce98bf2a4e7..c68a4cdf4625 100644
+> --- a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> +++ b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> @@ -296,7 +296,9 @@ static void ge_b850v3_lvds_remove(void)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * This check is to avoid=
+ both the drivers
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * removing the bridge in=
+ their remove() function
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!ge_b850v3_lvds_ptr)
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!ge_b850v3_lvds_ptr ||
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0!ge_b850v3_lvds_ptr->stdp2690_i2c ||
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0!ge_b850v3_lvds_ptr->stdp4028_i2c)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0goto out;
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drm_bridge_remove(&ge_b85=
+0v3_lvds_ptr->bridge);
 
-So which is it?
-
-> Yes, IOMMU is enforced for SNP to ensure that HV cannot program DMA
-> directly into guest private memory. In case of SNP, the IOMMU makes
-> sure that the page(s) used for DMA are HV owned.
-
-Yes, now put that in the comment above the
-
-	fs_initcall(snp_rmptable_init);
-
-line.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

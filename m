@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FB9579CB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EF7579EC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238072AbiGSMlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
+        id S242906AbiGSNFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241447AbiGSMjk (ORCPT
+        with ESMTP id S243038AbiGSNEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:39:40 -0400
+        Tue, 19 Jul 2022 09:04:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A36754678;
-        Tue, 19 Jul 2022 05:16:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDF49D520;
+        Tue, 19 Jul 2022 05:26:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48EABB81B2C;
-        Tue, 19 Jul 2022 12:16:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD2BC341C6;
-        Tue, 19 Jul 2022 12:15:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34AE1B81B82;
+        Tue, 19 Jul 2022 12:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C92C341C6;
+        Tue, 19 Jul 2022 12:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232959;
-        bh=8O3ZQuy9J4xSUIsyBruFrghnBpeTv8Iso0xD86jU81w=;
+        s=korg; t=1658233587;
+        bh=GitRd9YEWePul5rGo7gfgSKkUyHTe2oSCQiqVeiTiec=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z1hW1NUco6fH8yVAJdRiZowlEqmqupn5FBvJCVNcfdOhYIwDJ8/4eZvujCKT1F0Rm
-         QBQOFodulWTuokggHS4omklHNTegv6ROn3tgYs0f4waEvp7J4SV300At0uO56FnRQr
-         mz1RJEZy2gXXAFVKaOn8o6zzad/wpfKN0bAZ9/8w=
+        b=Cr/1VgvEyltW6WHz+k2BM1kKju5Qc49GY3cz7S4rh6Q+KB13ripNIbDaLTGX6/293
+         RhTftH+0w4wGGSdaHw1zME4lec3HRw0vVdthQPnki0Y0CZdNTgYctISsN9nyDxoOtI
+         TNrR25z9O29kowxPtKzVHjlhLxM4A1uq+kczIvX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
+        stable@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Mark Pearson <markpearson@lenovo.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 125/167] fbdev: Disable sysfb device registration when removing conflicting FBs
+Subject: [PATCH 5.18 172/231] platform/x86: thinkpad-acpi: profile capabilities as integer
 Date:   Tue, 19 Jul 2022 13:54:17 +0200
-Message-Id: <20220719114708.699232278@linuxfoundation.org>
+Message-Id: <20220719114728.621505074@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,61 +56,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Javier Martinez Canillas <javierm@redhat.com>
+From: Mark Pearson <markpearson@lenovo.com>
 
-[ Upstream commit ee7a69aa38d87a3bbced7b8245c732c05ed0c6ec ]
+[ Upstream commit 42504af775361ca2330a2bfde496a5ebc5655c86 ]
 
-The platform devices registered by sysfb match with firmware-based DRM or
-fbdev drivers, that are used to have early graphics using a framebuffer
-provided by the system firmware.
+Currently the active mode (PSC/MMC) is stored in an enum and queried
+throughout the driver.
 
-DRM or fbdev drivers later are probed and remove conflicting framebuffers,
-leading to these platform devices for generic drivers to be unregistered.
+Other driver changes will enumerate additional submodes that are relevant
+to be tracked, so instead track PSC/MMC in a single integer variable.
 
-But the current solution has a race, since the sysfb_init() function could
-be called after a DRM or fbdev driver is probed and request to unregister
-the devices for drivers with conflicting framebuffes.
-
-To prevent this, disable any future sysfb platform device registration by
-calling sysfb_disable(), if a driver requests to remove the conflicting
-framebuffers.
-
-Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220607182338.344270-4-javierm@redhat.com
+Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Mark Pearson <markpearson@lenovo.com>
+Link: https://lore.kernel.org/r/20220603170212.164963-1-markpearson@lenovo.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbmem.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/platform/x86/thinkpad_acpi.c |   45 ++++++++++++++---------------------
+ 1 file changed, 18 insertions(+), 27 deletions(-)
 
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -19,6 +19,7 @@
- #include <linux/kernel.h>
- #include <linux/major.h>
- #include <linux/slab.h>
-+#include <linux/sysfb.h>
- #include <linux/mm.h>
- #include <linux/mman.h>
- #include <linux/vt.h>
-@@ -1786,6 +1787,17 @@ int remove_conflicting_framebuffers(stru
- 		do_free = true;
- 	}
+--- a/drivers/platform/x86/thinkpad_acpi.c
++++ b/drivers/platform/x86/thinkpad_acpi.c
+@@ -10300,21 +10300,15 @@ static struct ibm_struct proxsensor_driv
+ #define DYTC_DISABLE_CQL DYTC_SET_COMMAND(DYTC_FUNCTION_CQL, DYTC_MODE_MMC_BALANCE, 0)
+ #define DYTC_ENABLE_CQL DYTC_SET_COMMAND(DYTC_FUNCTION_CQL, DYTC_MODE_MMC_BALANCE, 1)
  
-+	/*
-+	 * If a driver asked to unregister a platform device registered by
-+	 * sysfb, then can be assumed that this is a driver for a display
-+	 * that is set up by the system firmware and has a generic driver.
-+	 *
-+	 * Drivers for devices that don't have a generic driver will never
-+	 * ask for this, so let's assume that a real driver for the display
-+	 * was already probed and prevent sysfb to register devices later.
-+	 */
-+	sysfb_disable();
-+
- 	mutex_lock(&registration_lock);
- 	do_remove_conflicting_framebuffers(a, name, primary);
- 	mutex_unlock(&registration_lock);
+-enum dytc_profile_funcmode {
+-	DYTC_FUNCMODE_NONE = 0,
+-	DYTC_FUNCMODE_MMC,
+-	DYTC_FUNCMODE_PSC,
+-};
+-
+-static enum dytc_profile_funcmode dytc_profile_available;
+ static enum platform_profile_option dytc_current_profile;
+ static atomic_t dytc_ignore_event = ATOMIC_INIT(0);
+ static DEFINE_MUTEX(dytc_mutex);
++static int dytc_capabilities;
+ static bool dytc_mmc_get_available;
+ 
+ static int convert_dytc_to_profile(int dytcmode, enum platform_profile_option *profile)
+ {
+-	if (dytc_profile_available == DYTC_FUNCMODE_MMC) {
++	if (dytc_capabilities & BIT(DYTC_FC_MMC)) {
+ 		switch (dytcmode) {
+ 		case DYTC_MODE_MMC_LOWPOWER:
+ 			*profile = PLATFORM_PROFILE_LOW_POWER;
+@@ -10331,7 +10325,7 @@ static int convert_dytc_to_profile(int d
+ 		}
+ 		return 0;
+ 	}
+-	if (dytc_profile_available == DYTC_FUNCMODE_PSC) {
++	if (dytc_capabilities & BIT(DYTC_FC_PSC)) {
+ 		switch (dytcmode) {
+ 		case DYTC_MODE_PSC_LOWPOWER:
+ 			*profile = PLATFORM_PROFILE_LOW_POWER;
+@@ -10353,21 +10347,21 @@ static int convert_profile_to_dytc(enum
+ {
+ 	switch (profile) {
+ 	case PLATFORM_PROFILE_LOW_POWER:
+-		if (dytc_profile_available == DYTC_FUNCMODE_MMC)
++		if (dytc_capabilities & BIT(DYTC_FC_MMC))
+ 			*perfmode = DYTC_MODE_MMC_LOWPOWER;
+-		else if (dytc_profile_available == DYTC_FUNCMODE_PSC)
++		else if (dytc_capabilities & BIT(DYTC_FC_PSC))
+ 			*perfmode = DYTC_MODE_PSC_LOWPOWER;
+ 		break;
+ 	case PLATFORM_PROFILE_BALANCED:
+-		if (dytc_profile_available == DYTC_FUNCMODE_MMC)
++		if (dytc_capabilities & BIT(DYTC_FC_MMC))
+ 			*perfmode = DYTC_MODE_MMC_BALANCE;
+-		else if (dytc_profile_available == DYTC_FUNCMODE_PSC)
++		else if (dytc_capabilities & BIT(DYTC_FC_PSC))
+ 			*perfmode = DYTC_MODE_PSC_BALANCE;
+ 		break;
+ 	case PLATFORM_PROFILE_PERFORMANCE:
+-		if (dytc_profile_available == DYTC_FUNCMODE_MMC)
++		if (dytc_capabilities & BIT(DYTC_FC_MMC))
+ 			*perfmode = DYTC_MODE_MMC_PERFORM;
+-		else if (dytc_profile_available == DYTC_FUNCMODE_PSC)
++		else if (dytc_capabilities & BIT(DYTC_FC_PSC))
+ 			*perfmode = DYTC_MODE_PSC_PERFORM;
+ 		break;
+ 	default: /* Unknown profile */
+@@ -10446,7 +10440,7 @@ static int dytc_profile_set(struct platf
+ 	if (err)
+ 		goto unlock;
+ 
+-	if (dytc_profile_available == DYTC_FUNCMODE_MMC) {
++	if (dytc_capabilities & BIT(DYTC_FC_MMC)) {
+ 		if (profile == PLATFORM_PROFILE_BALANCED) {
+ 			/*
+ 			 * To get back to balanced mode we need to issue a reset command.
+@@ -10465,7 +10459,7 @@ static int dytc_profile_set(struct platf
+ 				goto unlock;
+ 		}
+ 	}
+-	if (dytc_profile_available == DYTC_FUNCMODE_PSC) {
++	if (dytc_capabilities & BIT(DYTC_FC_PSC)) {
+ 		err = dytc_command(DYTC_SET_COMMAND(DYTC_FUNCTION_PSC, perfmode, 1), &output);
+ 		if (err)
+ 			goto unlock;
+@@ -10484,12 +10478,12 @@ static void dytc_profile_refresh(void)
+ 	int perfmode;
+ 
+ 	mutex_lock(&dytc_mutex);
+-	if (dytc_profile_available == DYTC_FUNCMODE_MMC) {
++	if (dytc_capabilities & BIT(DYTC_FC_MMC)) {
+ 		if (dytc_mmc_get_available)
+ 			err = dytc_command(DYTC_CMD_MMC_GET, &output);
+ 		else
+ 			err = dytc_cql_command(DYTC_CMD_GET, &output);
+-	} else if (dytc_profile_available == DYTC_FUNCMODE_PSC)
++	} else if (dytc_capabilities & BIT(DYTC_FC_PSC))
+ 		err = dytc_command(DYTC_CMD_GET, &output);
+ 
+ 	mutex_unlock(&dytc_mutex);
+@@ -10518,7 +10512,6 @@ static int tpacpi_dytc_profile_init(stru
+ 	set_bit(PLATFORM_PROFILE_BALANCED, dytc_profile.choices);
+ 	set_bit(PLATFORM_PROFILE_PERFORMANCE, dytc_profile.choices);
+ 
+-	dytc_profile_available = DYTC_FUNCMODE_NONE;
+ 	err = dytc_command(DYTC_CMD_QUERY, &output);
+ 	if (err)
+ 		return err;
+@@ -10531,13 +10524,12 @@ static int tpacpi_dytc_profile_init(stru
+ 		return -ENODEV;
+ 
+ 	/* Check what capabilities are supported */
+-	err = dytc_command(DYTC_CMD_FUNC_CAP, &output);
++	err = dytc_command(DYTC_CMD_FUNC_CAP, &dytc_capabilities);
+ 	if (err)
+ 		return err;
+ 
+-	if (output & BIT(DYTC_FC_MMC)) { /* MMC MODE */
+-		dytc_profile_available = DYTC_FUNCMODE_MMC;
+-
++	if (dytc_capabilities & BIT(DYTC_FC_MMC)) { /* MMC MODE */
++		pr_debug("MMC is supported\n");
+ 		/*
+ 		 * Check if MMC_GET functionality available
+ 		 * Version > 6 and return success from MMC_GET command
+@@ -10548,8 +10540,8 @@ static int tpacpi_dytc_profile_init(stru
+ 			if (!err && ((output & DYTC_ERR_MASK) == DYTC_ERR_SUCCESS))
+ 				dytc_mmc_get_available = true;
+ 		}
+-	} else if (output & BIT(DYTC_FC_PSC)) { /* PSC MODE */
+-		dytc_profile_available = DYTC_FUNCMODE_PSC;
++	} else if (dytc_capabilities & BIT(DYTC_FC_PSC)) { /* PSC MODE */
++		pr_debug("PSC is supported\n");
+ 	} else {
+ 		dbg_printk(TPACPI_DBG_INIT, "No DYTC support available\n");
+ 		return -ENODEV;
+@@ -10575,7 +10567,6 @@ static int tpacpi_dytc_profile_init(stru
+ 
+ static void dytc_profile_exit(void)
+ {
+-	dytc_profile_available = DYTC_FUNCMODE_NONE;
+ 	platform_profile_remove();
+ }
+ 
 
 

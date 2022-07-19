@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4991D579CF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F01F579AAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239938AbiGSMps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
+        id S238684AbiGSMRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241698AbiGSMoY (ORCPT
+        with ESMTP id S238655AbiGSMNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:44:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5F486884;
-        Tue, 19 Jul 2022 05:17:28 -0700 (PDT)
+        Tue, 19 Jul 2022 08:13:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F73167F7;
+        Tue, 19 Jul 2022 05:04:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68289B81B95;
-        Tue, 19 Jul 2022 12:17:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0888C341CA;
-        Tue, 19 Jul 2022 12:17:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43586B81B13;
+        Tue, 19 Jul 2022 12:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C1DBC341C6;
+        Tue, 19 Jul 2022 12:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233028;
-        bh=/sX5PM90a21Ru7lX9KW7DDa/MPScR0rwjAmahjAtP5g=;
+        s=korg; t=1658232265;
+        bh=idIgHxzFR0bsPwk/cCgE2kIAYig5esRDLPEC9iqLQik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y+xkz8iVgJuw7H4eEhd7jwvyBEiB00m93eXN4w1J9UgipLTgp7ZtRrlXRsoRUS5lZ
-         ysUOG1yAK026E+LtgEzsP/WoijujzhqqaE1GMMnb/tuwOfLr9IgXq+Nz/gdAYVGlk8
-         3CWIIz9C78Nq/Y4lACdM7/qQkBfhOjwTEfDGdeds=
+        b=F9VGk3JO3OUrz6MjXj8QjuMWEaUa6BkACBKLP+S/fJvTLYT7v96Lq2xHmtzCVgvJc
+         RA8l6ShgJSQWW8dnUHIrMek3l0/IAY9TvsO8AdwwkhLyObzJ2YEQQiz7NAzBAW866V
+         zBQmZYFCHJQwdCiVXdHD2dTyFb4iriI7D/dYM9+Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 141/167] ASoC: Intel: bytcr_wm5102: Fix GPIO related probe-ordering problem
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunojpg@gmail.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5.4 70/71] serial: pl011: UPSTAT_AUTORTS requires .throttle/unthrottle
 Date:   Tue, 19 Jul 2022 13:54:33 +0200
-Message-Id: <20220719114710.122445444@linuxfoundation.org>
+Message-Id: <20220719114559.481813349@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit 4e07479eab8a044cc9542414ccb4aeb8eb033bde ]
+commit 211565b100993c90b53bf40851eacaefc830cfe0 upstream.
 
-The "wlf,spkvdd-ena" GPIO needed by the bytcr_wm5102 driver
-is made available through a gpio-lookup table.
+The driver must provide throttle and unthrottle in uart_ops when it
+sets UPSTAT_AUTORTS. Add them using existing stop_rx &
+enable_interrupts functions.
 
-This gpio-lookup table is registered by drivers/mfd/arizona-spi.c, which
-may get probed after the bytcr_wm5102 driver.
-
-If the gpio-lookup table has not registered yet then the gpiod_get()
-will return -ENOENT. Treat -ENOENT as -EPROBE_DEFER to still keep
-things working in this case.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20220612155652.107310-1-hdegoede@redhat.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 2a76fa283098 (serial: pl011: Adopt generic flag to store auto RTS status)
+Cc: stable <stable@kernel.org>
+Cc: Lukas Wunner <lukas@wunner.de>
+Reported-by: Nuno Gonçalves <nunojpg@gmail.com>
+Tested-by: Nuno Gonçalves <nunojpg@gmail.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220614075637.8558-1-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/intel/boards/bytcr_wm5102.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ drivers/tty/serial/amba-pl011.c |   23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/intel/boards/bytcr_wm5102.c b/sound/soc/intel/boards/bytcr_wm5102.c
-index 580d5fddae5a..bb669d58eb8b 100644
---- a/sound/soc/intel/boards/bytcr_wm5102.c
-+++ b/sound/soc/intel/boards/bytcr_wm5102.c
-@@ -421,8 +421,17 @@ static int snd_byt_wm5102_mc_probe(struct platform_device *pdev)
- 	priv->spkvdd_en_gpio = gpiod_get(codec_dev, "wlf,spkvdd-ena", GPIOD_OUT_LOW);
- 	put_device(codec_dev);
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -1335,6 +1335,15 @@ static void pl011_stop_rx(struct uart_po
+ 	pl011_dma_rx_stop(uap);
+ }
  
--	if (IS_ERR(priv->spkvdd_en_gpio))
--		return dev_err_probe(dev, PTR_ERR(priv->spkvdd_en_gpio), "getting spkvdd-GPIO\n");
-+	if (IS_ERR(priv->spkvdd_en_gpio)) {
-+		ret = PTR_ERR(priv->spkvdd_en_gpio);
-+		/*
-+		 * The spkvdd gpio-lookup is registered by: drivers/mfd/arizona-spi.c,
-+		 * so -ENOENT means that arizona-spi hasn't probed yet.
-+		 */
-+		if (ret == -ENOENT)
-+			ret = -EPROBE_DEFER;
++static void pl011_throttle_rx(struct uart_port *port)
++{
++	unsigned long flags;
 +
-+		return dev_err_probe(dev, ret, "getting spkvdd-GPIO\n");
-+	}
++	spin_lock_irqsave(&port->lock, flags);
++	pl011_stop_rx(port);
++	spin_unlock_irqrestore(&port->lock, flags);
++}
++
+ static void pl011_enable_ms(struct uart_port *port)
+ {
+ 	struct uart_amba_port *uap =
+@@ -1728,9 +1737,10 @@ static int pl011_allocate_irq(struct uar
+  */
+ static void pl011_enable_interrupts(struct uart_amba_port *uap)
+ {
++	unsigned long flags;
+ 	unsigned int i;
  
- 	/* override platform name, if required */
- 	byt_wm5102_card.dev = dev;
--- 
-2.35.1
-
+-	spin_lock_irq(&uap->port.lock);
++	spin_lock_irqsave(&uap->port.lock, flags);
+ 
+ 	/* Clear out any spuriously appearing RX interrupts */
+ 	pl011_write(UART011_RTIS | UART011_RXIS, uap, REG_ICR);
+@@ -1752,7 +1762,14 @@ static void pl011_enable_interrupts(stru
+ 	if (!pl011_dma_rx_running(uap))
+ 		uap->im |= UART011_RXIM;
+ 	pl011_write(uap->im, uap, REG_IMSC);
+-	spin_unlock_irq(&uap->port.lock);
++	spin_unlock_irqrestore(&uap->port.lock, flags);
++}
++
++static void pl011_unthrottle_rx(struct uart_port *port)
++{
++	struct uart_amba_port *uap = container_of(port, struct uart_amba_port, port);
++
++	pl011_enable_interrupts(uap);
+ }
+ 
+ static int pl011_startup(struct uart_port *port)
+@@ -2127,6 +2144,8 @@ static const struct uart_ops amba_pl011_
+ 	.stop_tx	= pl011_stop_tx,
+ 	.start_tx	= pl011_start_tx,
+ 	.stop_rx	= pl011_stop_rx,
++	.throttle	= pl011_throttle_rx,
++	.unthrottle	= pl011_unthrottle_rx,
+ 	.enable_ms	= pl011_enable_ms,
+ 	.break_ctl	= pl011_break_ctl,
+ 	.startup	= pl011_startup,
 
 

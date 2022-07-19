@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BDA579C03
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11395579EA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240518AbiGSMfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
+        id S242561AbiGSND0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240490AbiGSMdy (ORCPT
+        with ESMTP id S242498AbiGSM6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:33:54 -0400
+        Tue, 19 Jul 2022 08:58:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D0774DE7;
-        Tue, 19 Jul 2022 05:12:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F865FAC1;
+        Tue, 19 Jul 2022 05:23:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 484C2B81B1A;
-        Tue, 19 Jul 2022 12:12:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DEAC341C6;
-        Tue, 19 Jul 2022 12:12:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18CFCB81B1A;
+        Tue, 19 Jul 2022 12:23:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BD50C341C6;
+        Tue, 19 Jul 2022 12:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232777;
-        bh=ZG3776QSZuja70voJ1g0ymRaEyAfYER6qQIvzhPcQ40=;
+        s=korg; t=1658233425;
+        bh=HKGprwcnT1YdPLJuQxKd7WT80DyoJdHRFOt6AchiGk0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H1m2jRhYqx8wlhZjNezYZ0Ts3I/tRgz2WP46jf2NnEgZekW5TkPj6bvUstR+UOXAe
-         atp9FF+c5nzIa28EigrWJNDYzdUS81QUDftqJbCWv77v9Trm2SVfoCWmrJR7Ujdl+3
-         qVTfmjsqKGBXPHv+w15KDu193msO7a4NWtCK/NSE=
+        b=a3iK/VgCvswVxYSm3MAnwSggpAM//E1QTbIDRktbw9yGgWrKA52RRFLD+UhCUjkiU
+         HfLYRiJ2xrWDpvgbVP0Un/vL4nxBgbBhPNilYXRdjwPZjm22WFUK2SjFWDqsIqVAsA
+         pVZJzO/kHQtFk/R/7qxo5ZM5ONrf+ImkpR/rob3c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, van fantasy <g1042620637@gmail.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 044/167] ASoC: tas2764: Fix and extend FSYNC polarity handling
-Date:   Tue, 19 Jul 2022 13:52:56 +0200
-Message-Id: <20220719114700.919550761@linuxfoundation.org>
+Subject: [PATCH 5.18 092/231] mptcp: fix subflow traversal at disconnect time
+Date:   Tue, 19 Jul 2022 13:52:57 +0200
+Message-Id: <20220719114722.468349573@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,132 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Paolo Abeni <pabeni@redhat.com>
 
-[ Upstream commit d1a10f1b48202e2d183cce144c218a211e98d906 ]
+[ Upstream commit 5c835bb142d4013c2ab24bff5ae9f6709a39cbcf ]
 
-Fix setting of FSYNC polarity in case of LEFT_J and DSP_A/B formats.
-Do NOT set the SCFG field as was previously done, because that is not
-correct and is also in conflict with the "ASI1 Source" control which
-sets the same SCFG field!
+At disconnect time the MPTCP protocol traverse the subflows
+list closing each of them. In some circumstances - MPJ subflow,
+passive MPTCP socket, the latter operation can remove the
+subflow from the list, invalidating the current iterator.
 
-Also add support for explicit polarity inversion.
+Address the issue using the safe list traversing helper
+variant.
 
-Fixes: 827ed8a0fa50 ("ASoC: tas2764: Add the driver for the TAS2764")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Link: https://lore.kernel.org/r/20220630075135.2221-2-povik+lin@cutebit.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reported-by: van fantasy <g1042620637@gmail.com>
+Fixes: b29fcfb54cd7 ("mptcp: full disconnect implementation")
+Tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/tas2764.c | 30 +++++++++++++++++-------------
- sound/soc/codecs/tas2764.h |  6 ++----
- 2 files changed, 19 insertions(+), 17 deletions(-)
+ net/mptcp/protocol.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/tas2764.c b/sound/soc/codecs/tas2764.c
-index edc66ff6dc49..46c815650b2c 100644
---- a/sound/soc/codecs/tas2764.c
-+++ b/sound/soc/codecs/tas2764.c
-@@ -135,7 +135,8 @@ static const char * const tas2764_ASI1_src[] = {
- };
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -2840,12 +2840,12 @@ static void mptcp_copy_inaddrs(struct so
  
- static SOC_ENUM_SINGLE_DECL(
--	tas2764_ASI1_src_enum, TAS2764_TDM_CFG2, 4, tas2764_ASI1_src);
-+	tas2764_ASI1_src_enum, TAS2764_TDM_CFG2, TAS2764_TDM_CFG2_SCFG_SHIFT,
-+	tas2764_ASI1_src);
- 
- static const struct snd_kcontrol_new tas2764_asi1_mux =
- 	SOC_DAPM_ENUM("ASI1 Source", tas2764_ASI1_src_enum);
-@@ -333,20 +334,22 @@ static int tas2764_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+ static int mptcp_disconnect(struct sock *sk, int flags)
  {
- 	struct snd_soc_component *component = dai->component;
- 	struct tas2764_priv *tas2764 = snd_soc_component_get_drvdata(component);
--	u8 tdm_rx_start_slot = 0, asi_cfg_1 = 0;
--	int iface;
-+	u8 tdm_rx_start_slot = 0, asi_cfg_0 = 0, asi_cfg_1 = 0;
- 	int ret;
+-	struct mptcp_subflow_context *subflow;
++	struct mptcp_subflow_context *subflow, *tmp;
+ 	struct mptcp_sock *msk = mptcp_sk(sk);
  
- 	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
-+	case SND_SOC_DAIFMT_NB_IF:
-+		asi_cfg_0 ^= TAS2764_TDM_CFG0_FRAME_START;
-+		fallthrough;
- 	case SND_SOC_DAIFMT_NB_NF:
- 		asi_cfg_1 = TAS2764_TDM_CFG1_RX_RISING;
- 		break;
-+	case SND_SOC_DAIFMT_IB_IF:
-+		asi_cfg_0 ^= TAS2764_TDM_CFG0_FRAME_START;
-+		fallthrough;
- 	case SND_SOC_DAIFMT_IB_NF:
- 		asi_cfg_1 = TAS2764_TDM_CFG1_RX_FALLING;
- 		break;
--	default:
--		dev_err(tas2764->dev, "ASI format Inverse is not found\n");
--		return -EINVAL;
- 	}
+ 	inet_sk_state_store(sk, TCP_CLOSE);
  
- 	ret = snd_soc_component_update_bits(component, TAS2764_TDM_CFG1,
-@@ -357,13 +360,13 @@ static int tas2764_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+-	mptcp_for_each_subflow(msk, subflow) {
++	list_for_each_entry_safe(subflow, tmp, &msk->conn_list, node) {
+ 		struct sock *ssk = mptcp_subflow_tcp_sock(subflow);
  
- 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
- 	case SND_SOC_DAIFMT_I2S:
-+		asi_cfg_0 ^= TAS2764_TDM_CFG0_FRAME_START;
-+		fallthrough;
- 	case SND_SOC_DAIFMT_DSP_A:
--		iface = TAS2764_TDM_CFG2_SCFG_I2S;
- 		tdm_rx_start_slot = 1;
- 		break;
- 	case SND_SOC_DAIFMT_DSP_B:
- 	case SND_SOC_DAIFMT_LEFT_J:
--		iface = TAS2764_TDM_CFG2_SCFG_LEFT_J;
- 		tdm_rx_start_slot = 0;
- 		break;
- 	default:
-@@ -372,14 +375,15 @@ static int tas2764_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
- 		return -EINVAL;
- 	}
- 
--	ret = snd_soc_component_update_bits(component, TAS2764_TDM_CFG1,
--					    TAS2764_TDM_CFG1_MASK,
--					    (tdm_rx_start_slot << TAS2764_TDM_CFG1_51_SHIFT));
-+	ret = snd_soc_component_update_bits(component, TAS2764_TDM_CFG0,
-+					    TAS2764_TDM_CFG0_FRAME_START,
-+					    asi_cfg_0);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = snd_soc_component_update_bits(component, TAS2764_TDM_CFG2,
--					    TAS2764_TDM_CFG2_SCFG_MASK, iface);
-+	ret = snd_soc_component_update_bits(component, TAS2764_TDM_CFG1,
-+					    TAS2764_TDM_CFG1_MASK,
-+					    (tdm_rx_start_slot << TAS2764_TDM_CFG1_51_SHIFT));
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/sound/soc/codecs/tas2764.h b/sound/soc/codecs/tas2764.h
-index 67d6fd903c42..f015f22a083b 100644
---- a/sound/soc/codecs/tas2764.h
-+++ b/sound/soc/codecs/tas2764.h
-@@ -47,6 +47,7 @@
- #define TAS2764_TDM_CFG0_MASK		GENMASK(3, 1)
- #define TAS2764_TDM_CFG0_44_1_48KHZ	BIT(3)
- #define TAS2764_TDM_CFG0_88_2_96KHZ	(BIT(3) | BIT(1))
-+#define TAS2764_TDM_CFG0_FRAME_START	BIT(0)
- 
- /* TDM Configuration Reg1 */
- #define TAS2764_TDM_CFG1		TAS2764_REG(0X0, 0x09)
-@@ -66,10 +67,7 @@
- #define TAS2764_TDM_CFG2_RXS_16BITS	0x0
- #define TAS2764_TDM_CFG2_RXS_24BITS	BIT(0)
- #define TAS2764_TDM_CFG2_RXS_32BITS	BIT(1)
--#define TAS2764_TDM_CFG2_SCFG_MASK	GENMASK(5, 4)
--#define TAS2764_TDM_CFG2_SCFG_I2S	0x0
--#define TAS2764_TDM_CFG2_SCFG_LEFT_J	BIT(4)
--#define TAS2764_TDM_CFG2_SCFG_RIGHT_J	BIT(5)
-+#define TAS2764_TDM_CFG2_SCFG_SHIFT	4
- 
- /* TDM Configuration Reg3 */
- #define TAS2764_TDM_CFG3		TAS2764_REG(0X0, 0x0c)
--- 
-2.35.1
-
+ 		__mptcp_close_ssk(sk, ssk, subflow, MPTCP_CF_FASTCLOSE);
 
 

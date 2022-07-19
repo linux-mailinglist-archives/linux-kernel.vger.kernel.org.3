@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3737579EF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F1B579B6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243169AbiGSNIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
+        id S240092AbiGSM1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243026AbiGSNII (ORCPT
+        with ESMTP id S239734AbiGSMZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:08:08 -0400
+        Tue, 19 Jul 2022 08:25:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B287021E19;
-        Tue, 19 Jul 2022 05:27:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FEE509F4;
+        Tue, 19 Jul 2022 05:09:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 234D8609FB;
-        Tue, 19 Jul 2022 12:27:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 021BEC341C6;
-        Tue, 19 Jul 2022 12:27:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06A6D615F4;
+        Tue, 19 Jul 2022 12:09:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE3A3C341C6;
+        Tue, 19 Jul 2022 12:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233665;
-        bh=URhcXxTWUNtIzStOAzJURnj/9iuxRya7GBYaj5eiSz0=;
+        s=korg; t=1658232593;
+        bh=E8+69TaZ2IM2aWfcdtetfdC5ymtkGiNUfdOUYrUlMMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gUSgJkGTPuJGtAhRlF79frdMl37EObYn9U9TVh8lai4SG0VM3v8ewhnYzVCkmtX3+
-         mT7/35jtlOFo3jtfUb3aWcwhjzixYTOrSE7sGiNkHKweS/qqK64mphGz2qIvINFVMn
-         gwoHUxkz6Dm3IVXRRS7KigJDVK0SSGd01oVc31/Q=
+        b=1z6n6kMAePRA8N987EF1PVxgOF0IJqvD+mBjjBZjvI2lEGATkCfAnS7Bbco5Em3Fs
+         VElIZv8bQBHH7zyCcmt+bcZTSOBubOltX5UB+NQQC++q6+57WzBzli8m0srwFEwGPq
+         Cb+KBz1xciJPTqSI2UMUt3X/oulOOqaHy2mR9o0I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 199/231] ASoC: wm5110: Fix DRE control
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5.10 111/112] serial: 8250: Fix PM usage_count for console handover
 Date:   Tue, 19 Jul 2022 13:54:44 +0200
-Message-Id: <20220719114730.787286403@linuxfoundation.org>
+Message-Id: <20220719114638.023993965@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +55,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit 0bc0ae9a5938d512fd5d44f11c9c04892dcf4961 ]
+commit f9b11229b79c0fb2100b5bb4628a101b1d37fbf6 upstream.
 
-The DRE controls on wm5110 should return a value of 1 if the DRE state
-is actually changed, update to fix this.
+When console is enabled, univ8250_console_setup() calls
+serial8250_console_setup() before .dev is set to uart_port. Therefore,
+it will not call pm_runtime_get_sync(). Later, when the actual driver
+is going to take over univ8250_console_exit() is called. As .dev is
+already set, serial8250_console_exit() makes pm_runtime_put_sync() call
+with usage count being zero triggering PM usage count warning
+(extra debug for univ8250_console_setup(), univ8250_console_exit(), and
+serial8250_register_ports()):
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220621102041.1713504-2-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[    0.068987] univ8250_console_setup ttyS0 nodev
+[    0.499670] printk: console [ttyS0] enabled
+[    0.717955] printk: console [ttyS0] printing thread started
+[    1.960163] serial8250_register_ports assigned dev for ttyS0
+[    1.976830] printk: console [ttyS0] disabled
+[    1.976888] printk: console [ttyS0] printing thread stopped
+[    1.977073] univ8250_console_exit ttyS0 usage:0
+[    1.977075] serial8250 serial8250: Runtime PM usage count underflow!
+[    1.977429] dw-apb-uart.6: ttyS0 at MMIO 0x4010006000 (irq = 33, base_baud = 115200) is a 16550A
+[    1.977812] univ8250_console_setup ttyS0 usage:2
+[    1.978167] printk: console [ttyS0] printing thread started
+[    1.978203] printk: console [ttyS0] enabled
+
+To fix the issue, call pm_runtime_get_sync() in
+serial8250_register_ports() as soon as .dev is set for an uart_port
+if it has console enabled.
+
+This problem became apparent only recently because 82586a721595 ("PM:
+runtime: Avoid device usage count underflows") added the warning
+printout. I confirmed this problem also occurs with v5.18 (w/o the
+warning printout, obviously).
+
+Fixes: bedb404e91bb ("serial: 8250_port: Don't use power management for kernel console")
+Cc: stable <stable@kernel.org>
+Tested-by: Tony Lindgren <tony@atomide.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/b4f428e9-491f-daf2-2232-819928dc276e@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/wm5110.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/tty/serial/8250/8250_core.c |    4 ++++
+ drivers/tty/serial/serial_core.c    |    5 -----
+ include/linux/serial_core.h         |    5 +++++
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/codecs/wm5110.c b/sound/soc/codecs/wm5110.c
-index 4973ba1ed779..4ab7a672f8de 100644
---- a/sound/soc/codecs/wm5110.c
-+++ b/sound/soc/codecs/wm5110.c
-@@ -413,6 +413,7 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
- 	unsigned int rnew = (!!ucontrol->value.integer.value[1]) << mc->rshift;
- 	unsigned int lold, rold;
- 	unsigned int lena, rena;
-+	bool change = false;
- 	int ret;
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -23,6 +23,7 @@
+ #include <linux/sysrq.h>
+ #include <linux/delay.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/tty.h>
+ #include <linux/ratelimit.h>
+ #include <linux/tty_flip.h>
+@@ -571,6 +572,9 @@ serial8250_register_ports(struct uart_dr
  
- 	snd_soc_dapm_mutex_lock(dapm);
-@@ -440,8 +441,8 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
- 		goto err;
- 	}
+ 		up->port.dev = dev;
  
--	ret = regmap_update_bits(arizona->regmap, ARIZONA_DRE_ENABLE,
--				 mask, lnew | rnew);
-+	ret = regmap_update_bits_check(arizona->regmap, ARIZONA_DRE_ENABLE,
-+				       mask, lnew | rnew, &change);
- 	if (ret) {
- 		dev_err(arizona->dev, "Failed to set DRE: %d\n", ret);
- 		goto err;
-@@ -454,6 +455,9 @@ static int wm5110_put_dre(struct snd_kcontrol *kcontrol,
- 	if (!rnew && rold)
- 		wm5110_clear_pga_volume(arizona, mc->rshift);
- 
-+	if (change)
-+		ret = 1;
++		if (uart_console_enabled(&up->port))
++			pm_runtime_get_sync(up->port.dev);
 +
- err:
- 	snd_soc_dapm_mutex_unlock(dapm);
+ 		serial8250_apply_quirks(up);
+ 		uart_add_one_port(drv, &up->port);
+ 	}
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1941,11 +1941,6 @@ static int uart_proc_show(struct seq_fil
+ }
+ #endif
  
--- 
-2.35.1
-
+-static inline bool uart_console_enabled(struct uart_port *port)
+-{
+-	return uart_console(port) && (port->cons->flags & CON_ENABLED);
+-}
+-
+ static void uart_port_spin_lock_init(struct uart_port *port)
+ {
+ 	spin_lock_init(&port->lock);
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -394,6 +394,11 @@ static const bool earlycon_acpi_spcr_ena
+ static inline int setup_earlycon(char *buf) { return 0; }
+ #endif
+ 
++static inline bool uart_console_enabled(struct uart_port *port)
++{
++	return uart_console(port) && (port->cons->flags & CON_ENABLED);
++}
++
+ struct uart_port *uart_get_console(struct uart_port *ports, int nr,
+ 				   struct console *c);
+ int uart_parse_earlycon(char *p, unsigned char *iotype, resource_size_t *addr,
 
 

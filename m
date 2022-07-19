@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68FC57A369
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874F857A34A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238377AbiGSPpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S237304AbiGSPgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbiGSPpg (ORCPT
+        with ESMTP id S235987AbiGSPgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:45:36 -0400
-X-Greylist: delayed 537 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Jul 2022 08:45:35 PDT
-Received: from simonwunderlich.de (simonwunderlich.de [23.88.38.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51694BD13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:45:35 -0700 (PDT)
-Received: from [IPV6:2003:c5:973c:81a8::792] (p200300C5973c81a80000000000000792.dip0.t-ipconnect.de [IPv6:2003:c5:973c:81a8::792])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by simonwunderlich.de (Postfix) with ESMTPSA id 3F354FA86A;
-        Tue, 19 Jul 2022 17:36:34 +0200 (CEST)
-Message-ID: <31e87fa2-6fea-5fe2-ab80-6050da9af7ce@simonwunderlich.de>
-Date:   Tue, 19 Jul 2022 17:36:33 +0200
+        Tue, 19 Jul 2022 11:36:43 -0400
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FB2474DA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:36:41 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id DpH2oh7Z2sKAkDpH2oqpnh; Tue, 19 Jul 2022 17:36:39 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 19 Jul 2022 17:36:39 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <7075158a-64c1-8f69-7de1-9a60ee914f05@wanadoo.fr>
+Date:   Tue, 19 Jul 2022 17:36:36 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH] mac80211: Fix wrong channel bandwidths reported for
- aggregates
-To:     Adrian Chadd <adrian@freebsd.org>,
-        =?UTF-8?Q?Linus_L=c3=bcssing?= <linus.luessing@c0d3.blue>
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>, Felix Fietkau <nbd@nbd.name>,
-        Simon Wunderlich <sw@simonwunderlich.de>,
-        Sven Eckelmann <sven@narfation.org>,
-        ath10k <ath10k@lists.infradead.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220718222804.21708-1-linus.luessing@c0d3.blue>
- <CAJ-VmomaQ-ai7n5i8-8sXsgaih4vjjHXyw+JQESGMERgC8Qqdw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] RDMA/erdma: Use the bitmap API to allocate bitmaps
 Content-Language: en-US
-From:   =?UTF-8?Q?Linus_L=c3=bcssing?= <ll@simonwunderlich.de>
-In-Reply-To: <CAJ-VmomaQ-ai7n5i8-8sXsgaih4vjjHXyw+JQESGMERgC8Qqdw@mail.gmail.com>
+To:     Cheng Xu <chengyou@linux.alibaba.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Kai Shen <kaishen@linux.alibaba.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+References: <2764b6e204b32ef8c198a5efaf6c6bc4119f7665.1657301795.git.christophe.jaillet@wanadoo.fr>
+ <670c57a2-6432-80c9-cdc0-496d836d7bf0@linux.alibaba.com>
+ <20220712090110.GL2338@kadam> <20220719125434.GG5049@ziepe.ca>
+ <20220719130125.GB2316@kadam>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220719130125.GB2316@kadam>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/07/2022 17:03, Adrian Chadd wrote:
-> Hi!
+Le 19/07/2022 à 15:01, Dan Carpenter a écrit :
+> On Tue, Jul 19, 2022 at 09:54:34AM -0300, Jason Gunthorpe wrote:
+>> On Tue, Jul 12, 2022 at 12:01:10PM +0300, Dan Carpenter wrote:
+>>
+>>> Best not to use any auto-formatting tools.  They are all bad.
+>>
+>> Have you tried clang-format? I wouldn't call it bad..
 > 
-> It's not a hardware bug. Dating back to the original AR5416 11n chip,
-> most flags aren't valid for subframes in an aggregate. Only the final
-> frame has valid flags. This was explicitly covered internally way back
-> when.
+> I prefered Christophe's formatting to clang's.  ;)
+> 
+> regards,
+> dan carpenter
+> 
+> 
 
-Ah, thanks for the clarification! I see it in the datasheet for the 
-QCA9531, too, now. And thanks for the confirmation, that what we are 
-doing so far is not correct for ath9k.
+Hi,
 
-Words 0+2 are valid for all RX descriptors, 0+2+11 valid for the last RX 
-descriptor of each packet and 0-11 for the last RX descriptor of an 
-aggregate or last RX descriptor of a stand-alone packet. Or in other 
-words, word 4, which contains the 20 vs. 40 MHz indicator, is invalid 
-for any aggregate sub-frame other than the last one. I can rename that 
-in the commit message.
+checkpatch.pl only gives hints and should not blindly be taken as THE 
+reference, but:
+
+   ./scripts/checkpatch.pl -f --strict 
+drivers/infiniband/hw/erdma/erdma_cmdq.c
+
+gives:
+   CHECK: Lines should not end with a '('
+   #81: FILE: drivers/infiniband/hw/erdma/erdma_cmdq.c:81:
+   +	cmdq->comp_wait_bitmap = devm_bitmap_zalloc(
+
+   total: 0 errors, 0 warnings, 1 checks, 493 lines checked
+
+(some other files in the same directory also have some checkpatch 
+warning/error)
 
 
-Another approach that also came to my mind was introducing more explicit 
-flags in cfg80211.h's "struct rate_info", like a RATE_INFO_BW_UNKNOWN in 
-"enum rate_info_bw" and/or RATE_INFO_FLAGS_UNKNOWN in "enum 
-rate_info_flags". And setting those flags in ath9k_cmn_process_rate().
 
-The current approach is smaller though, as it simply uses the already 
-existing flags. If anyone has any preferences, please let me know.
+Don't know if it may be an issue for maintainers.
 
-Regards, Linus
+CJ

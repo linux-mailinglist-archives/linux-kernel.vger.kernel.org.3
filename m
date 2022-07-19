@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E20579EC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60CE5799CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242939AbiGSNFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
+        id S238367AbiGSMGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243100AbiGSNEl (ORCPT
+        with ESMTP id S238533AbiGSMEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:04:41 -0400
+        Tue, 19 Jul 2022 08:04:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6657B9DED5;
-        Tue, 19 Jul 2022 05:26:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9719E48E8E;
+        Tue, 19 Jul 2022 05:00:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C365B81B21;
-        Tue, 19 Jul 2022 12:26:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA0AC341C6;
-        Tue, 19 Jul 2022 12:26:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51A34B81B31;
+        Tue, 19 Jul 2022 12:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B65C341C6;
+        Tue, 19 Jul 2022 12:00:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233592;
-        bh=SXBs8PJTooKJkdHbWMfHeTXXHYAQPjBwFTdpDhHDu64=;
+        s=korg; t=1658232044;
+        bh=ES3jCABGWaJeiAsQ41GjKuDFxbpfHEQUHk5cjzVStno=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=11XFVIowsMle7tLO1BVYnPlEs2bwE9X7NpSA0dhng3esQBx/XR76v4a+uNLtIxubk
-         MNdt3fTwz+v9SwETA4XfbRhkF7WRPVygIA6PJ0Gat+ebAR8GWrH6qqc+oBfCgCisKE
-         nYhZnpO6lGFiwv821Ol9aCs5lYQl/604bb9NtaF0=
+        b=sF4MgDndMdqq3uUx5LJZmxjQc4vgDTJAhrLGkbql/UQQ7z11/GzMi6Qm3zDcaNV57
+         U4CYhbL5wcPFv8lU5aVtVSHT1W4Sty17udkVrFCSbnEUMaeR1+AQjbd1TOp6RCabiF
+         gaqjL78y1D1g/qE45EyJKjaSC48ZBdrrqYso4sw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jorge Lopez <jorge.lopez2@hp.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 174/231] platform/x86: hp-wmi: Ignore Sanitization Mode event
+        stable@vger.kernel.org, Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH 4.19 42/48] usb: typec: add missing uevent when partner support PD
 Date:   Tue, 19 Jul 2022 13:54:19 +0200
-Message-Id: <20220719114728.793280561@linuxfoundation.org>
+Message-Id: <20220719114523.544953666@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +52,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+From: Linyu Yuan <quic_linyyuan@quicinc.com>
 
-[ Upstream commit 9ab762a84b8094540c18a170e5ddd6488632c456 ]
+commit 6fb9e1d94789e8ee5a258a23bc588693f743fd6c upstream.
 
-After system resume the hp-wmi driver may complain:
-[ 702.620180] hp_wmi: Unknown event_id - 23 - 0x0
+System like Android allow user control power role from UI, it is possible
+to implement application base on typec uevent to refresh UI, but found
+there is chance that UI show different state from typec attribute file.
 
-According to HP it means 'Sanitization Mode' and it's harmless to just
-ignore the event.
+In typec_set_pwr_opmode(), when partner support PD, there is no uevent
+send to user space which cause the problem.
 
-Cc: Jorge Lopez <jorge.lopez2@hp.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Link: https://lore.kernel.org/r/20220628123726.250062-1-kai.heng.feng@canonical.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fix it by sending uevent notification when change power mode to PD.
+
+Fixes: bdecb33af34f ("usb: typec: API for controlling USB Type-C Multiplexers")
+Cc: stable@vger.kernel.org
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+Link: https://lore.kernel.org/r/1656662934-10226-1-git-send-email-quic_linyyuan@quicinc.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/x86/hp-wmi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/typec/class.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-index 0e6ed75c70f3..c63ec1471b84 100644
---- a/drivers/platform/x86/hp-wmi.c
-+++ b/drivers/platform/x86/hp-wmi.c
-@@ -89,6 +89,7 @@ enum hp_wmi_event_ids {
- 	HPWMI_BACKLIT_KB_BRIGHTNESS	= 0x0D,
- 	HPWMI_PEAKSHIFT_PERIOD		= 0x0F,
- 	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
-+	HPWMI_SANITIZATION_MODE		= 0x17,
- };
- 
- /*
-@@ -846,6 +847,8 @@ static void hp_wmi_notify(u32 value, void *context)
- 		break;
- 	case HPWMI_BATTERY_CHARGE_PERIOD:
- 		break;
-+	case HPWMI_SANITIZATION_MODE:
-+		break;
- 	default:
- 		pr_info("Unknown event_id - %d - 0x%x\n", event_id, event_data);
- 		break;
--- 
-2.35.1
-
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -1377,6 +1377,7 @@ void typec_set_pwr_opmode(struct typec_p
+ 			partner->usb_pd = 1;
+ 			sysfs_notify(&partner_dev->kobj, NULL,
+ 				     "supports_usb_power_delivery");
++			kobject_uevent(&partner_dev->kobj, KOBJ_CHANGE);
+ 		}
+ 		put_device(partner_dev);
+ 	}
 
 

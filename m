@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7E65798FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A325798FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237437AbiGSL5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
+        id S237581AbiGSL5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237388AbiGSL4p (ORCPT
+        with ESMTP id S237476AbiGSL4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:56:45 -0400
+        Tue, 19 Jul 2022 07:56:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27BB41D23;
-        Tue, 19 Jul 2022 04:56:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBF0422FE;
+        Tue, 19 Jul 2022 04:56:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9AEE615AC;
-        Tue, 19 Jul 2022 11:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C98FAC341C6;
-        Tue, 19 Jul 2022 11:56:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE7D961658;
+        Tue, 19 Jul 2022 11:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0479C341CA;
+        Tue, 19 Jul 2022 11:56:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231783;
-        bh=yd5HkConk9AToKBAjvmWRTwiO83EIrU8tnz2wCGqUpk=;
+        s=korg; t=1658231786;
+        bh=pneqByNjx/sGoWroweySELz1T991Ow00L40BUVLYOUY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AWqrxop7FPHEQ0qqgiWRn2PcLvlvP+KrnInxvA4MPJR8MGoSXRQ2cxrJN0Imb0k4t
-         g3tq6S64Y3aXnCqtpji1BFeBjV8lQ0tQAxeI6NflJNxFw2Ip6FYSeIiWayBv0ZKZa3
-         5H3iR03L7LylSK/j6fn6TL7EkfmXVvTgfSIyZNf4=
+        b=qdktbnFjFF5lcnIli2KG7Y3zuiYuysAvWChvHB6qoxh0PvJX/heZouCdlnSV3fuCq
+         U7RbZ0L5SI3LiY2EcCatAoCuzkwbwOr0nQAkdWLqIK8p+EXvFVGrklsS+hlTTvvHUo
+         G2u9Y3zTaUmLUi7+P+DpbLWt7N1MhtgoyL4v58AA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 4.9 24/28] usb: dwc3: gadget: Fix event pending check
-Date:   Tue, 19 Jul 2022 13:54:02 +0200
-Message-Id: <20220719114458.417596362@linuxfoundation.org>
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH 4.9 25/28] tty: serial: samsung_tty: set dma burst_size to 1
+Date:   Tue, 19 Jul 2022 13:54:03 +0200
+Message-Id: <20220719114458.480800734@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114455.701304968@linuxfoundation.org>
 References: <20220719114455.701304968@linuxfoundation.org>
@@ -52,51 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+From: Chanho Park <chanho61.park@samsung.com>
 
-commit 7441b273388b9a59d8387a03ffbbca9d5af6348c upstream.
+commit f7e35e4bf1e8dc2c8cbd5e0955dc1bd58558dae0 upstream.
 
-The DWC3_EVENT_PENDING flag is used to protect against invalid call to
-top-half interrupt handler, which can occur when there's a delay in
-software detection of the interrupt line deassertion.
+The src_maxburst and dst_maxburst have been changed to 1 but the settings
+of the UCON register aren't changed yet. They should be changed as well
+according to the dmaengine slave config.
 
-However, the clearing of this flag was done prior to unmasking the
-interrupt line, creating opportunity where the top-half handler can
-come. This breaks the serialization and creates a race between the
-top-half and bottom-half handler, resulting in losing synchronization
-between the controller and the driver when processing events.
-
-To fix this, make sure the clearing of the DWC3_EVENT_PENDING is done at
-the end of the bottom-half handler.
-
-Fixes: d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events in event cache")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/8670aaf1cf52e7d1e6df2a827af2d77263b93b75.1656380429.git.Thinh.Nguyen@synopsys.com
+Fixes: aa2f80e752c7 ("serial: samsung: fix maxburst parameter for DMA transactions")
+Cc: stable <stable@kernel.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Chanho Park <chanho61.park@samsung.com>
+Link: https://lore.kernel.org/r/20220627065113.139520-1-chanho61.park@samsung.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc3/gadget.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/tty/serial/samsung.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2886,7 +2886,6 @@ static irqreturn_t dwc3_process_event_bu
- 	}
+--- a/drivers/tty/serial/samsung.c
++++ b/drivers/tty/serial/samsung.c
+@@ -241,8 +241,7 @@ static void enable_tx_dma(struct s3c24xx
+ 	/* Enable tx dma mode */
+ 	ucon = rd_regl(port, S3C2410_UCON);
+ 	ucon &= ~(S3C64XX_UCON_TXBURST_MASK | S3C64XX_UCON_TXMODE_MASK);
+-	ucon |= (dma_get_cache_alignment() >= 16) ?
+-		S3C64XX_UCON_TXBURST_16 : S3C64XX_UCON_TXBURST_1;
++	ucon |= S3C64XX_UCON_TXBURST_1;
+ 	ucon |= S3C64XX_UCON_TXMODE_DMA;
+ 	wr_regl(port,  S3C2410_UCON, ucon);
  
- 	evt->count = 0;
--	evt->flags &= ~DWC3_EVENT_PENDING;
- 	ret = IRQ_HANDLED;
- 
- 	/* Unmask interrupt */
-@@ -2894,6 +2893,9 @@ static irqreturn_t dwc3_process_event_bu
- 	reg &= ~DWC3_GEVNTSIZ_INTMASK;
- 	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0), reg);
- 
-+	/* Keep the clearing of DWC3_EVENT_PENDING at the end */
-+	evt->flags &= ~DWC3_EVENT_PENDING;
-+
- 	return ret;
- }
- 
+@@ -515,7 +514,7 @@ static void enable_rx_dma(struct s3c24xx
+ 			S3C64XX_UCON_DMASUS_EN |
+ 			S3C64XX_UCON_TIMEOUT_EN |
+ 			S3C64XX_UCON_RXMODE_MASK);
+-	ucon |= S3C64XX_UCON_RXBURST_16 |
++	ucon |= S3C64XX_UCON_RXBURST_1 |
+ 			0xf << S3C64XX_UCON_TIMEOUT_SHIFT |
+ 			S3C64XX_UCON_EMPTYINT_EN |
+ 			S3C64XX_UCON_TIMEOUT_EN |
 
 

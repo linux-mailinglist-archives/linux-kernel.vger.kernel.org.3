@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2AC579123
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 05:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3470957912A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 05:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235402AbiGSDIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 23:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S236542AbiGSDJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 23:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiGSDIU (ORCPT
+        with ESMTP id S236049AbiGSDJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 23:08:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B50C252A2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 20:08:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7625C1042;
-        Mon, 18 Jul 2022 20:08:19 -0700 (PDT)
-Received: from [10.162.41.8] (unknown [10.162.41.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 60D713F766;
-        Mon, 18 Jul 2022 20:08:13 -0700 (PDT)
-Message-ID: <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com>
-Date:   Tue, 19 Jul 2022 08:38:10 +0530
+        Mon, 18 Jul 2022 23:09:15 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD803AE73;
+        Mon, 18 Jul 2022 20:09:14 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26J32xFo013956;
+        Tue, 19 Jul 2022 03:09:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2022-7-12;
+ bh=0Yvig2rZZR5x90mVUypP2XrcbbnAsqsInJnyfw4//7w=;
+ b=JKg6FnWPJDJP3ot6vFlECSGQM4EHyzfITVk+kkHj3q8AH3RXboppZUm+LR45T5HKT4O7
+ OyXys6zWZxLzWKRK+9EqswL8XrA9aPjdtGt8Urp3FnhpIQGPf0m2zulsETNUxlJLDof4
+ Jl+8fn8x1d13Qziu5UmSPPoYj6n0aUqg6zVAvETr/la9YBWa/LXC/vh8owSLERdxMM9E
+ 98G+4riyG6YE/epJQJ/yAvx/Juwmg1jgA26OmjfnEbDEIXdoXAEUk+hd9TRL+LB2UKnz
+ 4CjCZnyqlDD2J6oo0+qBja3xHQMYTJ7Z2AhiPqKbWSuoIqJAeNy0I886tfyGhbCGAnH2 YA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbmxs4xed-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Jul 2022 03:09:11 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26IND6rR002047;
+        Tue, 19 Jul 2022 03:09:03 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1k2yptj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Jul 2022 03:09:03 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26J391U5016855;
+        Tue, 19 Jul 2022 03:09:03 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3hc1k2ypt1-3;
+        Tue, 19 Jul 2022 03:09:03 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     sebaddel@cisco.com, Karan Tilak Kumar <kartilak@cisco.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        gvaradar@cisco.com, djhawar@cisco.com, jejb@linux.ibm.com,
+        satishkh@cisco.com, gcboffa@cisco.com,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        arulponn@cisco.com
+Subject: Re: [PATCH] scsi: fnic: refactor code in fnic probe to initialize scsi layer
+Date:   Mon, 18 Jul 2022 23:08:56 -0400
+Message-Id: <165820009734.29375.2668957033788213674.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220707205155.692688-1-kartilak@cisco.com>
+References: <20220707205155.692688-1-kartilak@cisco.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
-Content-Language: en-US
-To:     Barry Song <21cnbao@gmail.com>,
-        "Huang, Ying" <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Steven Price <steven.price@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>
-References: <20220718090050.2261-1-21cnbao@gmail.com>
- <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-18_22,2022-07-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 phishscore=0
+ mlxlogscore=859 spamscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207190011
+X-Proofpoint-GUID: VQXUDUkziZOA_SCesj40hU-mYvTftuwd
+X-Proofpoint-ORIG-GUID: VQXUDUkziZOA_SCesj40hU-mYvTftuwd
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,173 +79,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 7 Jul 2022 13:51:55 -0700, Karan Tilak Kumar wrote:
 
+> Refactor code from fnic probe into a different function so that
+> scsi layer initialization code is grouped together.
+> Also, add log messages for better debugging.
+> 
+> 
 
-On 7/19/22 06:53, Barry Song wrote:
-> On Tue, Jul 19, 2022 at 12:44 PM Huang, Ying <ying.huang@intel.com> wrote:
->>
->> Barry Song <21cnbao@gmail.com> writes:
->>
->>> From: Barry Song <v-songbaohua@oppo.com>
->>>
->>> THP_SWAP has been proven to improve the swap throughput significantly
->>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
->>> splitting THP after swapped out").
->>> As long as arm64 uses 4K page size, it is quite similar with x86_64
->>> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
->>> enabling it on arm64 will benefit arm64 as well.
->>> A corner case is that MTE has an assumption that only base pages
->>> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
->>> MTE support until MTE is reworked to coexist with THP_SWAP.
->>>
->>> A micro-benchmark is written to measure thp swapout throughput as
->>> below,
->>>
->>>  unsigned long long tv_to_ms(struct timeval tv)
->>>  {
->>>       return tv.tv_sec * 1000 + tv.tv_usec / 1000;
->>>  }
->>>
->>>  main()
->>>  {
->>>       struct timeval tv_b, tv_e;;
->>>  #define SIZE 400*1024*1024
->>>       volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
->>>                               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->>>       if (!p) {
->>>               perror("fail to get memory");
->>>               exit(-1);
->>>       }
->>>
->>>       madvise(p, SIZE, MADV_HUGEPAGE);
->>>       memset(p, 0x11, SIZE); /* write to get mem */
->>>
->>>       gettimeofday(&tv_b, NULL);
->>>       madvise(p, SIZE, MADV_PAGEOUT);
->>>       gettimeofday(&tv_e, NULL);
->>>
->>>       printf("swp out bandwidth: %ld bytes/ms\n",
->>>                       SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
->>>  }
->>>
->>> Testing is done on rk3568 64bit quad core processor Quad Core
->>> Cortex-A55 platform - ROCK 3A.
->>> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
->>> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
->>>
->>> Cc: "Huang, Ying" <ying.huang@intel.com>
->>> Cc: Minchan Kim <minchan@kernel.org>
->>> Cc: Johannes Weiner <hannes@cmpxchg.org>
->>> Cc: Hugh Dickins <hughd@google.com>
->>> Cc: Andrea Arcangeli <aarcange@redhat.com>
->>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
->>> Cc: Steven Price <steven.price@arm.com>
->>> Cc: Yang Shi <shy828301@gmail.com>
->>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
->>> ---
->>>  -v3:
->>>  * refine the commit log;
->>>  * add a benchmark result;
->>>  * refine the macro of arch_thp_swp_supported
->>>  Thanks to the comments of Anshuman, Andrew, Steven
->>>
->>>  arch/arm64/Kconfig               |  1 +
->>>  arch/arm64/include/asm/pgtable.h |  6 ++++++
->>>  include/linux/huge_mm.h          | 12 ++++++++++++
->>>  mm/swap_slots.c                  |  2 +-
->>>  4 files changed, 20 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->>> index 1652a9800ebe..e1c540e80eec 100644
->>> --- a/arch/arm64/Kconfig
->>> +++ b/arch/arm64/Kconfig
->>> @@ -101,6 +101,7 @@ config ARM64
->>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->>>       select ARCH_WANT_LD_ORPHAN_WARN
->>>       select ARCH_WANTS_NO_INSTR
->>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
->>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
->>>       select ARM_AMBA
->>>       select ARM_ARCH_TIMER
->>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->>> index 0b6632f18364..78d6f6014bfb 100644
->>> --- a/arch/arm64/include/asm/pgtable.h
->>> +++ b/arch/arm64/include/asm/pgtable.h
->>> @@ -45,6 +45,12 @@
->>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
->>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->>>
->>> +static inline bool arch_thp_swp_supported(void)
->>> +{
->>> +     return !system_supports_mte();
->>> +}
->>> +#define arch_thp_swp_supported arch_thp_swp_supported
->>> +
->>>  /*
->>>   * Outside of a few very special situations (e.g. hibernation), we always
->>>   * use broadcast TLB invalidation instructions, therefore a spurious page
->>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
->>> index de29821231c9..4ddaf6ad73ef 100644
->>> --- a/include/linux/huge_mm.h
->>> +++ b/include/linux/huge_mm.h
->>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
->>>       return split_huge_page_to_list(&folio->page, list);
->>>  }
->>>
->>> +/*
->>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
->>> + * limitations in the implementation like arm64 MTE can override this to
->>> + * false
->>> + */
->>> +#ifndef arch_thp_swp_supported
->>> +static inline bool arch_thp_swp_supported(void)
->>> +{
->>> +     return true;
->>> +}
->>
->> How about the following?
->>
->> static inline bool arch_wants_thp_swap(void)
->> {
->>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
->> }
-> 
-> This looks good. then i'll need to change arm64 to
-> 
->  +static inline bool arch_thp_swp_supported(void)
->  +{
->  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
->  +}
+Applied to 5.20/scsi-queue, thanks!
 
-Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
-IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
-is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
-either in the generic fallback stub, or in arm64 platform override. Because
-without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
-be called in the first place.
+[1/1] scsi: fnic: refactor code in fnic probe to initialize scsi layer
+      https://git.kernel.org/mkp/scsi/c/aec95e3a8ded
 
-> 
->>
->> Best Regards,
->> Huang, Ying
->>
->>> +#endif
->>> +
->>>  #endif /* _LINUX_HUGE_MM_H */
->>> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
->>> index 2a65a89b5b4d..10b94d64cc25 100644
->>> --- a/mm/swap_slots.c
->>> +++ b/mm/swap_slots.c
->>> @@ -307,7 +307,7 @@ swp_entry_t folio_alloc_swap(struct folio *folio)
->>>       entry.val = 0;
->>>
->>>       if (folio_test_large(folio)) {
->>> -             if (IS_ENABLED(CONFIG_THP_SWAP))
->>> +             if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
->>>                       get_swap_pages(1, &entry, folio_nr_pages(folio));
->>>               goto out;
->>>       }
-> 
-> Thanks
-> Barry
-> 
+-- 
+Martin K. Petersen	Oracle Linux Engineering

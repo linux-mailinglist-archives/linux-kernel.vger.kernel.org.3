@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C56579988
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153B9579A20
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238150AbiGSMEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S238687AbiGSMK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237884AbiGSMDU (ORCPT
+        with ESMTP id S238592AbiGSMJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:03:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB7647B96;
-        Tue, 19 Jul 2022 04:59:33 -0700 (PDT)
+        Tue, 19 Jul 2022 08:09:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0C850183;
+        Tue, 19 Jul 2022 05:02:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8313FCE1BE2;
-        Tue, 19 Jul 2022 11:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E31C341CB;
-        Tue, 19 Jul 2022 11:59:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F0EDB81B2D;
+        Tue, 19 Jul 2022 12:02:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D170C341C6;
+        Tue, 19 Jul 2022 12:02:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231970;
-        bh=p1p6gOChjy5Orh7Wm6A8qEeo5ehxKGLyGDSGixMUTL4=;
+        s=korg; t=1658232133;
+        bh=/YKQ7D/w6ff5ZwaE0DJ2ZPHJml5aPh3NmKusv3Ju3jE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DXVECN29S6tWj+0ov+GF0c/bJI8UeOWDmIVj9/K9oGpLrDJCBckqCPC/3RIEfzXCN
-         XTgmAXuNaUEoM94m4yqfemUAqs2snx4h0eUOYlLPfsXBBrvrUyJnFcKoBL98AdiEzM
-         zjCaN/DpzaJ5UmbpYoukRuH4bWFgqghGyeOdAFTI=
+        b=nXhl57HNOayFQVrN9yserNxbg6s5byMT7ZHTZjXVdOQqldoDrtUQAz4GtlNiMqXRA
+         bkw6pXDmrNQlCn04XAiq6C2dfzPaY0D5IgIOOrGRd2MhrkHsK9Y9lwsPTEfJEd/2tL
+         W9BIak7K+QjhhLkAnSdKt5yq7PBgPa3taWjBFuCo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 4.19 08/48] ARM: 9214/1: alignment: advance IT state after emulating Thumb instruction
-Date:   Tue, 19 Jul 2022 13:53:45 +0200
-Message-Id: <20220719114520.681348458@linuxfoundation.org>
+        stable@vger.kernel.org, Huaxin Lu <luhuaxin1@huawei.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 23/71] ima: Fix a potential integer overflow in ima_appraise_measurement
+Date:   Tue, 19 Jul 2022 13:53:46 +0200
+Message-Id: <20220719114554.491545435@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
-References: <20220719114518.915546280@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,117 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ard Biesheuvel <ardb@kernel.org>
+From: Huaxin Lu <luhuaxin1@huawei.com>
 
-commit e5c46fde75e43c15a29b40e5fc5641727f97ae47 upstream.
+[ Upstream commit d2ee2cfc4aa85ff6a2a3b198a3a524ec54e3d999 ]
 
-After emulating a misaligned load or store issued in Thumb mode, we have
-to advance the IT state by hand, or it will get out of sync with the
-actual instruction stream, which means we'll end up applying the wrong
-condition code to subsequent instructions. This might corrupt the
-program state rather catastrophically.
+When the ima-modsig is enabled, the rc passed to evm_verifyxattr() may be
+negative, which may cause the integer overflow problem.
 
-So borrow the it_advance() helper from the probing code, and use it on
-CPSR if the emulated instruction is Thumb.
-
-Cc: <stable@vger.kernel.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 39b07096364a ("ima: Implement support for module-style appended signatures")
+Signed-off-by: Huaxin Lu <luhuaxin1@huawei.com>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/include/asm/ptrace.h |   26 ++++++++++++++++++++++++++
- arch/arm/mm/alignment.c       |    3 +++
- arch/arm/probes/decode.h      |   26 +-------------------------
- 3 files changed, 30 insertions(+), 25 deletions(-)
+ security/integrity/ima/ima_appraise.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/arm/include/asm/ptrace.h
-+++ b/arch/arm/include/asm/ptrace.h
-@@ -167,5 +167,31 @@ static inline unsigned long user_stack_p
- 		((current_stack_pointer | (THREAD_SIZE - 1)) - 7) - 1;	\
- })
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index 23b04c6521b2..9368688449b0 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -352,7 +352,8 @@ int ima_appraise_measurement(enum ima_hooks func,
+ 		goto out;
+ 	}
  
-+
-+/*
-+ * Update ITSTATE after normal execution of an IT block instruction.
-+ *
-+ * The 8 IT state bits are split into two parts in CPSR:
-+ *	ITSTATE<1:0> are in CPSR<26:25>
-+ *	ITSTATE<7:2> are in CPSR<15:10>
-+ */
-+static inline unsigned long it_advance(unsigned long cpsr)
-+{
-+	if ((cpsr & 0x06000400) == 0) {
-+		/* ITSTATE<2:0> == 0 means end of IT block, so clear IT state */
-+		cpsr &= ~PSR_IT_MASK;
-+	} else {
-+		/* We need to shift left ITSTATE<4:0> */
-+		const unsigned long mask = 0x06001c00;  /* Mask ITSTATE<4:0> */
-+		unsigned long it = cpsr & mask;
-+		it <<= 1;
-+		it |= it >> (27 - 10);  /* Carry ITSTATE<2> to correct place */
-+		it &= mask;
-+		cpsr &= ~mask;
-+		cpsr |= it;
-+	}
-+	return cpsr;
-+}
-+
- #endif /* __ASSEMBLY__ */
- #endif
---- a/arch/arm/mm/alignment.c
-+++ b/arch/arm/mm/alignment.c
-@@ -936,6 +936,9 @@ do_alignment(unsigned long addr, unsigne
- 	if (type == TYPE_LDST)
- 		do_alignment_finish_ldst(addr, instr, regs, offset);
- 
-+	if (thumb_mode(regs))
-+		regs->ARM_cpsr = it_advance(regs->ARM_cpsr);
-+
- 	return 0;
- 
-  bad_or_fault:
---- a/arch/arm/probes/decode.h
-+++ b/arch/arm/probes/decode.h
-@@ -22,6 +22,7 @@
- #include <linux/types.h>
- #include <linux/stddef.h>
- #include <asm/probes.h>
-+#include <asm/ptrace.h>
- #include <asm/kprobes.h>
- 
- void __init arm_probes_decode_init(void);
-@@ -43,31 +44,6 @@ void __init find_str_pc_offset(void);
- #endif
- 
- 
--/*
-- * Update ITSTATE after normal execution of an IT block instruction.
-- *
-- * The 8 IT state bits are split into two parts in CPSR:
-- *	ITSTATE<1:0> are in CPSR<26:25>
-- *	ITSTATE<7:2> are in CPSR<15:10>
-- */
--static inline unsigned long it_advance(unsigned long cpsr)
--	{
--	if ((cpsr & 0x06000400) == 0) {
--		/* ITSTATE<2:0> == 0 means end of IT block, so clear IT state */
--		cpsr &= ~PSR_IT_MASK;
--	} else {
--		/* We need to shift left ITSTATE<4:0> */
--		const unsigned long mask = 0x06001c00;  /* Mask ITSTATE<4:0> */
--		unsigned long it = cpsr & mask;
--		it <<= 1;
--		it |= it >> (27 - 10);  /* Carry ITSTATE<2> to correct place */
--		it &= mask;
--		cpsr &= ~mask;
--		cpsr |= it;
--	}
--	return cpsr;
--}
--
- static inline void __kprobes bx_write_pc(long pcv, struct pt_regs *regs)
- {
- 	long cpsr = regs->ARM_cpsr;
+-	status = evm_verifyxattr(dentry, XATTR_NAME_IMA, xattr_value, rc, iint);
++	status = evm_verifyxattr(dentry, XATTR_NAME_IMA, xattr_value,
++				 rc < 0 ? 0 : rc, iint);
+ 	switch (status) {
+ 	case INTEGRITY_PASS:
+ 	case INTEGRITY_PASS_IMMUTABLE:
+-- 
+2.35.1
+
 
 

@@ -2,165 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDC157A6F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C92F57A6FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbiGSTLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 15:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
+        id S239010AbiGSTOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 15:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiGSTLu (ORCPT
+        with ESMTP id S234410AbiGSTOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 15:11:50 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DE345F56
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:11:48 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id w17so18538190ljh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:11:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=7SV6cxwcWEiGaJqm53YhsvXnwanf2AoDb1dJfihwiuM=;
-        b=LyZaBRYjZ++sF/ivAbWDNgvWsCy3Ft14NyOoQR7nkoiDkDNe3Mm4G1ZlumVbMlr9ZK
-         fonUUJOrdmfTEy2gT9ZN0sfwora6dTjtX7MBJkfekJym8CM/Qqm2YF701dlXXvNMb6D5
-         EB2sI0TeWQrJoENC/9VOMGh+vw9y0qpl301yracsbYSiGwI6VM6ie+RC6kZSPqYD7TWG
-         PzIESqj+r3t3zoVvLdcsD8Xsxnscvk9GqXOH4BPMYboj7OjF182DCiSAgBvKhreR2NKL
-         4zzmccw4giOeaIRzlPV0d0RQdLXQFnbO8nV2jR8Qcoizo9M9KmAAYZPP11F35qb5nEgV
-         S32w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=7SV6cxwcWEiGaJqm53YhsvXnwanf2AoDb1dJfihwiuM=;
-        b=owlLSnMuRTnM5AyE+6UPrSw/Slzx2ehVq6aaTcv9Sk43lfMJWjh/+gYbIJKhz62a35
-         KOJrrzn+tQexzCpoh+NQgs08BwRUd/XFAToMvXVc4RtamNO7XgguOrJZ5AMptScg5H/x
-         HBlvbFCrVTioeSx1ALjA9No6VWDf/SAMTxTJB2/9gfyMb/YlqVfx0yp+hVVVfH1IsZMR
-         /osXYKtbixdOddC6ThI9ZZQX2FJcqCVkT4VnIDXHPrOLYtKR0i8JkK2ghD5IlF+PfPc7
-         EAp9lwDxfyvttGE376TbnheciLWjFO/1Bp4oAUy9fComaRxZS4kjycZHpdIBpJYxarJD
-         wXug==
-X-Gm-Message-State: AJIora9lA+7SBA8ZsqDcbgUJFtN+9uSxtGfaJRmTfftu7htq/XaSHIks
-        +P6DrLIk3OFyMTaYSVNpPJSI7u4eMKxfrz9d
-X-Google-Smtp-Source: AGRyM1uOESYS4Whck2N14ZdE9rrXhBpV/yJJwFiLzXV44VcuHgb4mlzQgO/Ey/B75J9SexIskNAR5w==
-X-Received: by 2002:a2e:bea8:0:b0:25d:610f:5c02 with SMTP id a40-20020a2ebea8000000b0025d610f5c02mr14787392ljr.186.1658257906647;
-        Tue, 19 Jul 2022 12:11:46 -0700 (PDT)
-Received: from [10.43.1.253] ([83.142.187.84])
-        by smtp.gmail.com with ESMTPSA id p15-20020ac24ecf000000b0047f6f8f20dcsm2159491lfr.28.2022.07.19.12.11.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 12:11:46 -0700 (PDT)
-Message-ID: <5e6b3acf-1909-de42-3da7-c591e23ab221@semihalf.com>
-Date:   Tue, 19 Jul 2022 21:11:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] PCI/ASPM: Disable ASPM when save/restore PCI state
-Content-Language: en-US
-From:   Dmytro Maluka <dmy@semihalf.com>
-To:     Victor Ding <victording@google.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
-        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Tue, 19 Jul 2022 15:14:01 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C31F474F1;
+        Tue, 19 Jul 2022 12:13:59 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297609329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7609:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 74F971EC0138;
+        Tue, 19 Jul 2022 21:13:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658258034;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YtDNrDoiP/YwCtnXFCAYb4Hl8NXDzFtCiOlz4jSq9Ro=;
+        b=n73dc2tkN7SSfchiNt09DoO+Giut6lvnYRRC54C8OBl/IBIvIFfEmvXNcPAB+ZeDqQkg0x
+        mBmdpV8Dpf28ML3SjyDkGrIK+sG14tR2GB2DHtIaifH68mRCkhPCrDTIpGPq0Ad/fnAEuO
+        VPyM9cE+UpZjUFVK/qLcV7rzun1mF+o=
+Date:   Tue, 19 Jul 2022 21:13:50 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dionna Amalie Glaze <dionnaglaze@google.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Gonda <pgonda@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Zide Chen <zide.chen@intel.com>
-References: <20210311173433.GA2071075@bjorn-Precision-5520>
- <20210726220307.GA647936@bjorn-Precision-5520>
- <CANqTbdb_h_W+8kmh6s56deA8VKn6tO1KDJaS5Yasq5RFLtGUbQ@mail.gmail.com>
- <820dff42-67e4-32d2-a72f-9e9bdb70609e@semihalf.com>
-In-Reply-To: <820dff42-67e4-32d2-a72f-9e9bdb70609e@semihalf.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Yao, Jiewen" <jiewen.yao@intel.com>
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
+ memory
+Message-ID: <YtcCWfCQuEsVhH6W@zn.tnic>
+References: <CAMj1kXHD5XBAS1aBjzg1RCeK6qgtanUSED_xyTZ0v1j+UShMKw@mail.gmail.com>
+ <20220627122230.7eetepoufd5w3lxd@black.fi.intel.com>
+ <CAMkAt6oJJaRM_dy=y2BP99VziPriVuA4jAmMc=G7njwJYKFgyg@mail.gmail.com>
+ <CAMj1kXHpS2B9Q7AaQ1euGidZUEyR6gfi=e+t1J_Cr8bmK_9mTw@mail.gmail.com>
+ <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
+ <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
+ <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
+ <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
+ <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
+ <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/18/22 18:21, Dmytro Maluka wrote:
-> While we're at it, I'm also wondering why for the basic PCI config (the
-> first 256 bytes) Linux on x86 always uses the legacy 0xCF8/0xCFC method
-> instead of MMCFG, even if MMCFG is available. The legacy method is
-> inherently non-atomic and does require the global lock, while the MMCFG
-> method generally doesn't, so using MMCFG would significantly speed up
-> PCI config accesses in high-contention scenarios like the parallel
-> suspend/resume.
+On Tue, Jul 19, 2022 at 11:29:32AM -0700, Dionna Amalie Glaze wrote:
+> How about instead of the limited resource of UTS_VERSION, we add a
+> SETUP_BOOT_FEATURES enum for setup_data in the boot header? That would
+> be easier to parse out and more extensible in the future.
+> https://www.kernel.org/doc/html/latest/x86/boot.html?highlight=boot
 > 
-> I've tried the below change which forces using MMCFG for the first 256
-> bytes, and indeed, it makes suspend/resume of individual PCI devices
-> with pm_async=1 almost as fast as with pm_async=0. In particular, it
-> fixes the problem with slow GL9750 suspend/resume even without Victor's
-> patch.
-> 
-> --- a/arch/x86/pci/common.c
-> +++ b/arch/x86/pci/common.c
-> @@ -40,20 +40,20 @@ const struct pci_raw_ops *__read_mostly raw_pci_ext_ops;
->  int raw_pci_read(unsigned int domain, unsigned int bus, unsigned int devfn,
->                                                 int reg, int len, u32 *val)
->  {
-> -       if (domain == 0 && reg < 256 && raw_pci_ops)
-> -               return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
->         if (raw_pci_ext_ops)
->                 return raw_pci_ext_ops->read(domain, bus, devfn, reg, len, val);
-> +       if (domain == 0 && reg < 256 && raw_pci_ops)
-> +               return raw_pci_ops->read(domain, bus, devfn, reg, len, val);
->         return -EINVAL;
->  }
->  
->  int raw_pci_write(unsigned int domain, unsigned int bus, unsigned int devfn,
->                                                 int reg, int len, u32 val)
->  {
-> -       if (domain == 0 && reg < 256 && raw_pci_ops)
-> -               return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
->         if (raw_pci_ext_ops)
->                 return raw_pci_ext_ops->write(domain, bus, devfn, reg, len, val);
-> +       if (domain == 0 && reg < 256 && raw_pci_ops)
-> +               return raw_pci_ops->write(domain, bus, devfn, reg, len, val);
->         return -EINVAL;
->  }
->  
-> 
-> Sounds good if I submit a patch like this? (I'm not suggesting it
-> instead of Victor's patch, rather as a separate improvement.)
+> This can contain a bitmap of a number of features that we currently
+> need manual tagging for, such as SEV guest support, SEV-SNP guest
+> support, TDX guest support, and (CONFIG_UNACCEPTED_MEMORY, TDX) or
+> (CONFIG_UNACCEPTED_MEMORY, SEV-SNP).
+> The VMM, UEFI, or boot loader can read these from the images/kernels
+> and have the appropriate behavior.
 
-Ok, I found that a similar change was already suggested in the past by
-Thomas [1] and got rejected by Linus [2].
+I think for stuff like that you want loadflags or xloadflags in the
+setup header.
 
-Linus' arguments sound reasonable, and I understand that back then the
-only known case of an issue with PCI config lock contention was with
-Intel PMU counter registers which are in the extended config space
-anyway. But now we know another case of such a contention, concerning
-the basic config space too, namely: suspending or resuming many PCI
-devices in parallel during system suspend/resume.
+-- 
+Regards/Gruss,
+    Boris.
 
-I've checked that on my box using MMCFG instead of Type 1 (i.e. using my
-above patch) reduces the total suspend or resume time by 15-20 ms on
-average. (I also had Victor's patch applied all the time, i.e. the ASPM
-L1 exit latency issue was already resolved, so my test was about the PCI
-lock contention in general.) So, not exactly a major improvement, yet
-not exactly a negligible one. Maybe it's worth optimizing, maybe not.
-
-Anyway, that's a bit of digression. Let's focus primarily on Victor's
-ASPM patch.
-
-[1]
-https://lore.kernel.org/all/tip-b5b0f00c760b6e9673ab79b88ede2f3c7a039f74@git.kernel.org/
-
-[2]
-https://lore.kernel.org/all/CA+55aFwi0tkdugfqNEz6M28RXM2jx6WpaDF4nfA=doUVdZgUNQ@mail.gmail.com/
-
-Thanks,
-Dmytro
+https://people.kernel.org/tglx/notes-about-netiquette

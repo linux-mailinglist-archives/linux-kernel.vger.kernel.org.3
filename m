@@ -2,69 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2490579529
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910F4579533
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbiGSIXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 04:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S236958AbiGSI0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 04:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiGSIXA (ORCPT
+        with ESMTP id S231645AbiGSIZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:23:00 -0400
-Received: from m1524.mail.126.com (m1524.mail.126.com [220.181.15.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB2512AC72
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=Bcg5u
-        Zu5ki+YAprWv2idWDCZMOwOYaQUQoRry7KMe7E=; b=k2gLTM3crUa5UGLfegq7z
-        nx/pyBYt/re7dVSSL40Q5PEHpwkR+rZnpOP/HpJ41X4WvP5YF6ValEwyPnqmBAPm
-        V1ug2V+/KIBKJY4N5rRNlaT/9m2669zTk8x9vM4zjoPWM04bcr7p24jzoQnvXRvz
-        bzOJpHj0TQnnJQ3fTsVL7M=
-Received: from windhl$126.com ( [124.16.139.61] ) by ajax-webmail-wmsvr24
- (Coremail) ; Tue, 19 Jul 2022 16:22:40 +0800 (CST)
-X-Originating-IP: [124.16.139.61]
-Date:   Tue, 19 Jul 2022 16:22:40 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] memory: of: Add of_node_put() when breaking out of
- for_each_child_of_node()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <4be14ed4-17de-a90b-e899-536552d6c3c7@linaro.org>
-References: <20220716025043.447036-1-windhl@126.com>
- <4be14ed4-17de-a90b-e899-536552d6c3c7@linaro.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Tue, 19 Jul 2022 04:25:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A86865A2;
+        Tue, 19 Jul 2022 01:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658219153; x=1689755153;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CAAeOGWYGAB27VN2UmCW2WgUwGTXzndU5ncbrTlDjyU=;
+  b=P390k6f2/Jctxs+/YX9s4OIBHd7zhPSt53DKL5AKfXdmQDqFFGsGE2FZ
+   txq6AQHeczVVKmhC3u5eb1LajVR45XGBpr67IrpSknSiAWyYHnu/3F6yt
+   oeOp+zRMoT1YlgRzGeW2nz21tzIqg5248/oieSbaiXCXR12e+AgVAiEKf
+   lBNCJ0sZqr8TfLjnBuMF8I+uG4BktZa4jHw9Rit5lyrcT1XUJ4uuGCqQX
+   OolbDAHyQjjqTsiJHDChRf+UMOMjH3DfURkN382W0fteflfKDDeGwhPgs
+   1bgsGqJ/rpM7dvuwRV/rJuujp+ZrQH3/xmnfVwXlKmV1w29TeVts5l3ej
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="348122972"
+X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
+   d="scan'208";a="348122972"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 01:25:53 -0700
+X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
+   d="scan'208";a="924685104"
+Received: from zhenzhu-mobl1.ccr.corp.intel.com (HELO jiezho4x-mobl1.ccr.corp.intel.com) ([10.255.31.69])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 01:25:47 -0700
+From:   Jie2x Zhou <jie2x.zhou@intel.com>
+To:     jie2x.zhou@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] tools/testing/selftests/bpf/test_xdp_veth.sh: fix Couldn't retrieve pinned program
+Date:   Tue, 19 Jul 2022 16:24:30 +0800
+Message-Id: <20220719082430.9916-1-jie2x.zhou@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Message-ID: <5dbca3c0.5353.182158d5797.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: GMqowAAnLyfRadZiR9FKAA--.31740W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2h9DF1uwMbmb1gABs+
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CkF0IDIwMjItMDctMTkgMTY6MTg6MzEsICJLcnp5c3p0b2YgS296bG93c2tpIiA8a3J6eXN6dG9m
-Lmtvemxvd3NraUBsaW5hcm8ub3JnPiB3cm90ZToKPk9uIDE2LzA3LzIwMjIgMDQ6NTAsIExpYW5n
-IEhlIHdyb3RlOgo+PiBJbiBvZl9nZXRfZGRyX3RpbWluZ3MoKSBhbmQgb2ZfbHBkZHIzX2dldF9k
-ZHJfdGltaW5ncygpLCB3ZSBzaG91bGQKPj4gYWRkIHRoZSBvZl9ub2RlX3B1dCgpIHdoZW4gYnJl
-YWtpbmcgb3V0IG9mIGZvcl9lYWNoX2NoaWxkX29mX25vZGUoKQo+PiBhcyBpdCB3aWxsIGF1dG9t
-YXRpY2FsbHkgaW5jcmVhc2UgYW5kIGRlY3JlYXNlIHRoZSByZWZjb3VudC4KPj4gCj4KPlRoYW5r
-IHlvdSBmb3IgeW91ciBwYXRjaC4gVGhlcmUgaXMgc29tZXRoaW5nIHRvIGRpc2N1c3MvaW1wcm92
-ZS4KPgo+PiBGaXhlczogOTc2ODk3ZGQ5NmRiICgibWVtb3J5OiBFeHRlbmQgb2ZfbWVtb3J5IHdp
-dGggTFBERFIzIHN1cHBvcnQiKQo+PiBGaXhlczogZTZiNDJlYjZhNjZjICgibWVtb3J5OiBlbWlm
-OiBhZGQgZGV2aWNlIHRyZWUgc3VwcG9ydCB0byBlbWlmIGRyaXZlciIpCj4KPlBsZWFzZSBzcGxp
-dCB0aGUgcGF0Y2hlcyBpbnRvIHR3byBzZXBhcmF0ZSBmaXhlcy4KPgo+PiBTaWduZWQtb2ZmLWJ5
-OiBMaWFuZyBIZSA8d2luZGhsQDEyNi5jb20+Cj4+IC0tLQo+PiAgZHJpdmVycy9tZW1vcnkvb2Zf
-bWVtb3J5LmMgfCAyICsrCj4+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspCj5CZXN0
-IHJlZ2FyZHMsCj5Lcnp5c3p0b2YKCkkgd2lsbCBkbyB0aGF0IHNvb24uCgpUaGFua3MsIApMaWFu
-Zwo=
+Before change:
+ selftests: bpf: test_xdp_veth.sh
+ Couldn't retrieve pinned program '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
+ selftests: xdp_veth [SKIP]
+ok 20 selftests: bpf: test_xdp_veth.sh # SKIP
+
+After change:
+PING 10.1.1.33 (10.1.1.33) 56(84) bytes of data.
+64 bytes from 10.1.1.33: icmp_seq=1 ttl=64 time=0.320 ms--- 10.1.1.33 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.320/0.320/0.320/0.000 ms
+selftests: xdp_veth [PASS]
+
+In test:
+ls /sys/fs/bpf/test_xdp_veth/progs/redirect_map_0
+ls: cannot access '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
+ls /sys/fs/bpf/test_xdp_veth/progs/
+xdp_redirect_map_0  xdp_redirect_map_1  xdp_redirect_map_2
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
+---
+ tools/testing/selftests/bpf/test_xdp_veth.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
+index 392d28cc4e58..49936c4c8567 100755
+--- a/tools/testing/selftests/bpf/test_xdp_veth.sh
++++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
+@@ -106,9 +106,9 @@ bpftool prog loadall \
+ bpftool map update pinned $BPF_DIR/maps/tx_port key 0 0 0 0 value 122 0 0 0
+ bpftool map update pinned $BPF_DIR/maps/tx_port key 1 0 0 0 value 133 0 0 0
+ bpftool map update pinned $BPF_DIR/maps/tx_port key 2 0 0 0 value 111 0 0 0
+-ip link set dev veth1 xdp pinned $BPF_DIR/progs/redirect_map_0
+-ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
+-ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
++ip link set dev veth1 xdp pinned $BPF_DIR/progs/xdp_redirect_map_0
++ip link set dev veth2 xdp pinned $BPF_DIR/progs/xdp_redirect_map_1
++ip link set dev veth3 xdp pinned $BPF_DIR/progs/xdp_redirect_map_2
+ 
+ ip -n ${NS1} link set dev veth11 xdp obj xdp_dummy.o sec xdp
+ ip -n ${NS2} link set dev veth22 xdp obj xdp_tx.o sec xdp
+-- 
+2.36.1
+

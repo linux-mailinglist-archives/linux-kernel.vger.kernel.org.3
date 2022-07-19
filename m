@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D7257A36A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD8157A36D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238456AbiGSPqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S238441AbiGSPq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238441AbiGSPqO (ORCPT
+        with ESMTP id S238485AbiGSPqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:46:14 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27A15466B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:46:13 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so9421736wmb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:46:13 -0700 (PDT)
+        Tue, 19 Jul 2022 11:46:25 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9128D54672
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:46:24 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id g17so12321564plh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:46:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+kqnEGuwdGL/9ka9VI5SH5OR/R6+4E4AxuYZiFP6QOA=;
-        b=DgwVaZAuXJgpKNuo/mQO2VpGOFldoshJHhrRh5+WU47YO4bxB8XHgjPKF21snVQzEh
-         AF0W9yap/1oEQ/9DrgFLEaueqzmGPcWUpTID9Brn4WnnglQsXQHTf5a93fYYNLyl/cco
-         wg3vW0w2ovG5u9qiKjg5/P1kUCFlXbYrX5sXivV8yr2Ue/tucgeQGtRXM/7YmPYucGjw
-         h/5BFS7p7tI8/NZ1Vjr15C1Hs6yQaKWwTrR8nzIygGECEEvjNC7tKwUAvNK9Cw1mEtYT
-         cAzMdcxfh5L4mbcUvT6SkEEMR6ICELlFQ1AU48lFdG1uCq+FDDjaLySKsnG9b9mH7exM
-         p2PQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rLGineCxzdUhqZ0totHv9/HyxhWkFQEif+a4cEJSDL8=;
+        b=DW0EnfRwpOw1uNv4VAVwjEIGLJYOoNSuCcD40y6h3lKcLGS+MBuBuVX/UegUgNbGel
+         +ty0PUe3Zb5MGym/CRL0C7cxczOoUDRB2VP8Z7dfuTUi4o4EzqlWCDqwMCwNw0ZqySm8
+         dGT45EkwtMUdEu1hOA4Fq6e2jBTS1CT/czPuB5AIWXV/0cy0/bwFrjwF74jEBzBgiLhA
+         zFXzOZPXeQbAVHysr3nHY0jIK04lSl1vTt7r6/RsCR+Sq7IF/S/yNCcDX1b/aF1DMQfz
+         SBLxG1AP0/K0cftPJ8Yez80ecG/GS7X5fD7ZYwk/Nzq9o9RNTDtp/ZjTBQQnUpbL3rxI
+         Ndtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+kqnEGuwdGL/9ka9VI5SH5OR/R6+4E4AxuYZiFP6QOA=;
-        b=wbmp0Wq2DWlQyTJBuICOEwkgOkTSB15Ib0DDMl5a8QDSqUVSN1qL1CpcwB965wGX5F
-         qOs0Q4u0jn3KZ21ymzDF/uTCmDaJkjd/773yONTRYoVJTgVMJ2n2gYbC1IOX5r8Je403
-         RyCWgzpR+dFksZpohRT/X4Az98dVcsh0HFgQUkE5E7GnnfjdjuwI0/tJ2OHDUmx18HaE
-         wr/UCSWYH8YI44+BgfGVOAxZj/KMD23HypknQ2TvzFC8Ld1GUd4dK8zkELF9fSktySbM
-         9l9RSH21plOClu5hlUKlbhN0Z41qK1bCMJUDIicHIzBp0Dal9o037fqsLX6wbNv3qypQ
-         wfXQ==
-X-Gm-Message-State: AJIora+4ikLHDQ9Kf1hiHKNTyY7EppHWnZQp1W/lA1OWBpxf0sbv+dvE
-        vN8LsT/CSXo5R0rz26f157U9EQ==
-X-Google-Smtp-Source: AGRyM1vS1EEs2tjnXlD0CCiCQ+rDlIaT/ApLJbmp6pmhhDNOgkNHr7nIR7GFrG6LQGRWxqN4zTJa/A==
-X-Received: by 2002:a05:600c:190d:b0:3a0:585a:256 with SMTP id j13-20020a05600c190d00b003a0585a0256mr29780283wmq.54.1658245572362;
-        Tue, 19 Jul 2022 08:46:12 -0700 (PDT)
-Received: from google.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id t4-20020a1c7704000000b003a308e9a192sm16733494wmi.30.2022.07.19.08.46.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 08:46:11 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 15:46:08 +0000
-From:   Keir Fraser <keirf@google.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, kernel-team@android.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio: Force DMA restricted devices through DMA API
-Message-ID: <YtbRwO40CmIRWOUR@google.com>
-References: <20220719100256.419780-1-keirf@google.com>
- <YtbMcBw4l0LAFn9+@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rLGineCxzdUhqZ0totHv9/HyxhWkFQEif+a4cEJSDL8=;
+        b=IlQqOd7Iaz3nWbUBy8EhiYWq24phUt2upSRu+xxwfiqWZ2g8jfoKJ0+AfFsLFEIkpk
+         R2kHpNRz5JbJtq64XOVvAvCEnw+nVYxhGtQHydsuhCQ7jyPuSSgrnaD1uDsuaz3nvnnO
+         JFdDN0cNrkfvLtyRuEY+CFRhTbAq1LsxJG53yEvAkavRS9OUGJUnotRax1M0yv/6irXK
+         GWBs7IJ5MPUnqfapynQEvV81sKdMUUqXpC+cYj6DHPASoB78VX/AyDja4z1NpT699Ngc
+         1rRM+G190CVIm+gSSGtxBnYYY1oUyN2lk/UJAfWPuM/fg0mO7bg/VApPM7GKtf9c+1I4
+         Agdw==
+X-Gm-Message-State: AJIora9i4g+xHH5uqOpomSc7MnK5HMoiGc0cyddzYa7mmatyArq3ufIE
+        r47HywcL3Mnbtcxt+R5enb9S+UqSJnJWCmCx7k0OGpL5cie4PA==
+X-Google-Smtp-Source: AGRyM1vtvaCffnh2l4f56YAsiMoaolRPJSDOCqynhJ372P0N1qzCRKtatEZUvXr8ozYvnmieW+RNiA+CsPVXAjtJMZE=
+X-Received: by 2002:a17:902:db11:b0:16c:3e90:12e5 with SMTP id
+ m17-20020a170902db1100b0016c3e9012e5mr33546576plx.73.1658245583818; Tue, 19
+ Jul 2022 08:46:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtbMcBw4l0LAFn9+@infradead.org>
+References: <1658221305-35718-1-git-send-email-xujia39@huawei.com>
+In-Reply-To: <1658221305-35718-1-git-send-email-xujia39@huawei.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 19 Jul 2022 08:46:12 -0700
+Message-ID: <CAKH8qBuwm75KirLSrTh1jeYqDAn78Ki5sgiAY8y2G2OCsDJP5w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: fix bpf compile error caused by CONFIG_CGROUP_BPF
+To:     Xu Jia <xujia39@huawei.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,21 +68,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 08:23:28AM -0700, Christoph Hellwig wrote:
-> On Tue, Jul 19, 2022 at 10:02:56AM +0000, Keir Fraser wrote:
-> > +#include <linux/swiotlb.h>
-> 
-> Drivers must never use this header.  We have a few pre-existing abuses
-> in the drm code, but they will go away.
-> 
+On Tue, Jul 19, 2022 at 1:49 AM Xu Jia <xujia39@huawei.com> wrote:
+>
+> We failed to compile when CONFIG_BPF_LSM is enabled but CONFIG_CGROUP_BPF
+> is not set. The failings are shown as below:
+>
+> kernel/bpf/trampoline.o: in function `bpf_trampoline_link_cgroup_shim'
+> trampoline.c: undefined reference to `bpf_cgroup_atype_get'
+> kernel/bpf/bpf_lsm.o: In function `bpf_lsm_find_cgroup_shim':
+> bpf_lsm.c: undefined reference to `__cgroup_bpf_run_lsm_current'
+> bpf_lsm.c: undefined reference to `__cgroup_bpf_run_lsm_sock'
+> bpf_lsm.c: undefined reference to `__cgroup_bpf_run_lsm_socket'
+>
+> Fix them by protecting these functions with CONFIG_CGROUP_BPF.
 
-Ok fair enough, and I'll admit I don't like my use of
-swiotlb_for_alloc() a lot either.
+Should be fixed by the following?
 
-However, if the general idea at least is acceptable, would the
-implementation be acceptable if I add an explicit API for this to the
-DMA subsystem, and hide the detail there?
+https://lore.kernel.org/bpf/20220714185404.3647772-1-sdf@google.com/
 
-Or a completely different approach would be to revert the patch
-e41b1355508d which clears VIRTIO_F_ACCESS_PLATFORM in the balloon
-driver. MST: That's back in your court, as it's your patch!
+> Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
+> Signed-off-by: Xu Jia <xujia39@huawei.com>
+> ---
+>  include/linux/bpf.h     | 12 +++++++++---
+>  include/linux/bpf_lsm.h | 10 ++++++----
+>  kernel/bpf/bpf_lsm.c    |  2 ++
+>  kernel/bpf/trampoline.c |  2 ++
+>  4 files changed, 19 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 2b21f2a3452f..add8895c02cc 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1255,9 +1255,7 @@ struct bpf_dummy_ops {
+>  int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
+>                             union bpf_attr __user *uattr);
+>  #endif
+> -int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+> -                                   int cgroup_atype);
+> -void bpf_trampoline_unlink_cgroup_shim(struct bpf_prog *prog);
+> +
+>  #else
+>  static inline const struct bpf_struct_ops *bpf_struct_ops_find(u32 type_id)
+>  {
+> @@ -1281,6 +1279,14 @@ static inline int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map *map,
+>  {
+>         return -EINVAL;
+>  }
+> +#endif
+> +
+> +#if defined(CONFIG_BPF_JIT) && defined(CONFIG_BPF_SYSCALL) && \
+> +    defined(CONFIG_CGROUP_BPF)
+> +int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+> +                                   int cgroup_atype);
+> +void bpf_trampoline_unlink_cgroup_shim(struct bpf_prog *prog);
+> +#else
+>  static inline int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+>                                                   int cgroup_atype)
+>  {
+> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> index 4bcf76a9bb06..bed45a0c8a9c 100644
+> --- a/include/linux/bpf_lsm.h
+> +++ b/include/linux/bpf_lsm.h
+> @@ -42,8 +42,6 @@ extern const struct bpf_func_proto bpf_inode_storage_get_proto;
+>  extern const struct bpf_func_proto bpf_inode_storage_delete_proto;
+>  void bpf_inode_storage_free(struct inode *inode);
+>
+> -void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func);
+> -
+>  #else /* !CONFIG_BPF_LSM */
+>
+>  static inline bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+> @@ -67,11 +65,15 @@ static inline void bpf_inode_storage_free(struct inode *inode)
+>  {
+>  }
+>
+> +#endif /* CONFIG_BPF_LSM */
+> +
+> +#if defined(CONFIG_BPF_LSM) && defined(CONFIG_BPF_CGROUP)
+> +void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func);
+> +#else
+>  static inline void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
+>                                            bpf_func_t *bpf_func)
+>  {
+>  }
+> -
+> -#endif /* CONFIG_BPF_LSM */
+> +#endif
+>
+>  #endif /* _LINUX_BPF_LSM_H */
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index d469b7f3deef..29527828b38b 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -63,6 +63,7 @@ BTF_ID(func, bpf_lsm_socket_post_create)
+>  BTF_ID(func, bpf_lsm_socket_socketpair)
+>  BTF_SET_END(bpf_lsm_unlocked_sockopt_hooks)
+>
+> +#ifdef CONFIG_BPF_CGROUP
+>  void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
+>                              bpf_func_t *bpf_func)
+>  {
+> @@ -86,6 +87,7 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
+>  #endif
+>                 *bpf_func = __cgroup_bpf_run_lsm_current;
+>  }
+> +#endif /* CONFIG_BPF_CGROUP */
+>
+>  int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+>                         const struct bpf_prog *prog)
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index 6cd226584c33..127924711935 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -525,6 +525,7 @@ static const struct bpf_link_ops bpf_shim_tramp_link_lops = {
+>         .dealloc = bpf_shim_tramp_link_dealloc,
+>  };
+>
+> +#ifdef CONFIG_CGROUP_BPF
+>  static struct bpf_shim_tramp_link *cgroup_shim_alloc(const struct bpf_prog *prog,
+>                                                      bpf_func_t bpf_func,
+>                                                      int cgroup_atype)
+> @@ -668,6 +669,7 @@ void bpf_trampoline_unlink_cgroup_shim(struct bpf_prog *prog)
+>
+>         bpf_trampoline_put(tr); /* bpf_trampoline_lookup above */
+>  }
+> +#endif /* CONFIG_CGROUP_BPF */
+>  #endif
+>
+>  struct bpf_trampoline *bpf_trampoline_get(u64 key,
+> --
+> 2.25.1
+>

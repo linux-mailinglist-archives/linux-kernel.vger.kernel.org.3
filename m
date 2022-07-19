@@ -2,142 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADAD57A96A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3B757A96E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240516AbiGSVvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
+        id S240648AbiGSVvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240613AbiGSVvI (ORCPT
+        with ESMTP id S232432AbiGSVvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:51:08 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E20B56B83;
+        Tue, 19 Jul 2022 17:51:09 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5145C37D;
+        Tue, 19 Jul 2022 14:51:08 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id y2so12941508ior.12;
+        Tue, 19 Jul 2022 14:51:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I8c2TFEN+S/0gvT4p6LXKR0gvKXF+DViHab2/NYh2mU=;
+        b=Igxe429jjjha5qR/kKPqDWH/56wruFKnzEnR9w6YiqQxLmbuJNrylIWQQ5c2U1X9SB
+         XKsVbr+kdyWlZm3feC4yH6fD06QVcPXuACxGC0Wpd/8l3DVKskSesha9ThkOc6Fq7OyK
+         jyRc4Xh6qQJYaXBN0YpSfDXinkXvfgqz5W6SXyZfy/N2WsqlHVEvzZQAqNcDNpSKgpLN
+         SA0kBy64g61a+Mt/dM8V0uhUO7O5ZO+iJB4OIXulrvoXt5MQVKmUHt03eQwnPJtCCrJm
+         mPb2mUHassPi8RkUvmvzWCmUbQBpn/j+QaZEJtz3mITJV7H4+3YVHF5zkLn+ec1xZDBh
+         is3Q==
+X-Gm-Message-State: AJIora9+soq7o08z6hSwdKhOLdsQbB/0cjpNIvmBUTpC9XcljUdnKdy6
+        csbSBP+X2SzyyPYT5goNWg==
+X-Google-Smtp-Source: AGRyM1uaIxpWFrSiQqMgE6pamK4CCrWyA40fkLr6Me73ZMW7txiNJRGKx3WrtcZIuAsgOj0G0QjfmQ==
+X-Received: by 2002:a05:6638:238a:b0:341:55ac:193b with SMTP id q10-20020a056638238a00b0034155ac193bmr10876991jat.208.1658267467478;
         Tue, 19 Jul 2022 14:51:07 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297609329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7609:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9B7301EC0645;
-        Tue, 19 Jul 2022 23:51:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658267461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=RiLRSeSrQbdMG2zQCqhnnPnmcRmrvC4CXHKDD5x+nVw=;
-        b=hiCRIz2M+wi07p91BD9LK8bIexysFg9QoRVs5JmpL35MTXXCvCLiMLaulnJEKVj3fURGNF
-        rHSHSsauaNe8BSd93KjcwtyB5cY3MkeqYoNU7bNOhpex7K0HvwpSXxDwpY6IzywYQSemv9
-        nLaNM9g+XIpBA/eYS4hizIgojlpANOM=
-Date:   Tue, 19 Jul 2022 23:50:57 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
- memory
-Message-ID: <YtcnQbiRgZPtR+rQ@zn.tnic>
-References: <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
- <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
- <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
- <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
- <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
- <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
- <YtcCWfCQuEsVhH6W@zn.tnic>
- <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
- <YtcgxxMyFTReuuRw@zn.tnic>
- <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
+Received: from xps15.herring.priv ([64.188.179.248])
+        by smtp.googlemail.com with ESMTPSA id a13-20020a92d58d000000b002dc616d93acsm6171367iln.28.2022.07.19.14.51.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 14:51:07 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: net: ethernet-controller: Rework 'fixed-link' schema
+Date:   Tue, 19 Jul 2022 15:50:59 -0600
+Message-Id: <20220719215100.1876577-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 02:35:45PM -0700, Dave Hansen wrote:
-> They're trying to design something that can (forever) handle guests that
-> might not be able to accept memory. 
+While the if/then schemas mostly work, there's a few issues. The 'allOf'
+schema will also be true if 'fixed-link' is not an array or object as a
+false 'if' schema (without an 'else') will be true. In the array case
+doesn't set the type (uint32-array) in the 'then' clause. In the node case,
+'additionalProperties' is missing.
 
-Wait, what?
+Rework the schema to use oneOf with each possible type.
 
-If you can't modify those guests to teach them to accept memory, how do
-you add TDX or SNP guest support to them?
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/net/ethernet-controller.yaml     | 123 +++++++++---------
+ 1 file changed, 59 insertions(+), 64 deletions(-)
 
-I.e., you need to modify the guests and then you can add memory
-acceptance. Basically, your point below...
-
-> It's based on the idea that *something* needs to assume control and
-> EFI doesn't have enough information to assume control.
->
-> I wish we didn't need all this complexity, though.
-> 
-> There are three entities that can influence how much memory is accepted:
-> 
-> 1. The host
-> 2. The guest firmware
-> 3. The guest kernel (or bootloader or something after the firmware)
-> 
-> This whole thread is about how #2 and #3 talk to each other and make
-> sure *someone* does it.
-> 
-> I kinda think we should just take the guest firmware out of the picture.
->  There are only going to be a few versions of the kernel that can boot
-> under TDX (or SEV-SNP) and *can't* handle unaccepted memory.  It seems a
-> bit silly to design this whole interface for a few versions of the OS
-> that TDX folks tell me can't be used anyway.
-> 
-> I think we should just say if you want to run an OS that doesn't have
-> unaccepted memory support, you can either:
-> 
-> 1. Deal with that at the host level configuration
-> 2. Boot some intermediate thing like a bootloader that does acceptance
->    before running the stupid^Wunenlightended OS
-> 3. Live with the 4GB of pre-accepted memory you get with no OS work.
-> 
-> Yeah, this isn't convenient for some hosts.  But, really, this is
-> preferable to doing an EFI/OS dance until the end of time.
-
-Ack. Definitely.
-
-Thx.
-
+diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+index 4f15463611f8..170cd201adc2 100644
+--- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
++++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+@@ -167,70 +167,65 @@ properties:
+       - in-band-status
+ 
+   fixed-link:
+-    allOf:
+-      - if:
+-          type: array
+-        then:
+-          deprecated: true
+-          items:
+-            - minimum: 0
+-              maximum: 31
+-              description:
+-                Emulated PHY ID, choose any but unique to the all
+-                specified fixed-links
+-
+-            - enum: [0, 1]
+-              description:
+-                Duplex configuration. 0 for half duplex or 1 for
+-                full duplex
+-
+-            - enum: [10, 100, 1000, 2500, 10000]
+-              description:
+-                Link speed in Mbits/sec.
+-
+-            - enum: [0, 1]
+-              description:
+-                Pause configuration. 0 for no pause, 1 for pause
+-
+-            - enum: [0, 1]
+-              description:
+-                Asymmetric pause configuration. 0 for no asymmetric
+-                pause, 1 for asymmetric pause
+-
+-
+-      - if:
+-          type: object
+-        then:
+-          properties:
+-            speed:
+-              description:
+-                Link speed.
+-              $ref: /schemas/types.yaml#/definitions/uint32
+-              enum: [10, 100, 1000, 2500, 10000]
+-
+-            full-duplex:
+-              $ref: /schemas/types.yaml#/definitions/flag
+-              description:
+-                Indicates that full-duplex is used. When absent, half
+-                duplex is assumed.
+-
+-            pause:
+-              $ref: /schemas/types.yaml#definitions/flag
+-              description:
+-                Indicates that pause should be enabled.
+-
+-            asym-pause:
+-              $ref: /schemas/types.yaml#/definitions/flag
+-              description:
+-                Indicates that asym_pause should be enabled.
+-
+-            link-gpios:
+-              maxItems: 1
+-              description:
+-                GPIO to determine if the link is up
+-
+-          required:
+-            - speed
++    oneOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32-array
++        deprecated: true
++        items:
++          - minimum: 0
++            maximum: 31
++            description:
++              Emulated PHY ID, choose any but unique to the all
++              specified fixed-links
++
++          - enum: [0, 1]
++            description:
++              Duplex configuration. 0 for half duplex or 1 for
++              full duplex
++
++          - enum: [10, 100, 1000, 2500, 10000]
++            description:
++              Link speed in Mbits/sec.
++
++          - enum: [0, 1]
++            description:
++              Pause configuration. 0 for no pause, 1 for pause
++
++          - enum: [0, 1]
++            description:
++              Asymmetric pause configuration. 0 for no asymmetric
++              pause, 1 for asymmetric pause
++      - type: object
++        additionalProperties: false
++        properties:
++          speed:
++            description:
++              Link speed.
++            $ref: /schemas/types.yaml#/definitions/uint32
++            enum: [10, 100, 1000, 2500, 10000]
++
++          full-duplex:
++            $ref: /schemas/types.yaml#/definitions/flag
++            description:
++              Indicates that full-duplex is used. When absent, half
++              duplex is assumed.
++
++          pause:
++            $ref: /schemas/types.yaml#definitions/flag
++            description:
++              Indicates that pause should be enabled.
++
++          asym-pause:
++            $ref: /schemas/types.yaml#/definitions/flag
++            description:
++              Indicates that asym_pause should be enabled.
++
++          link-gpios:
++            maxItems: 1
++            description:
++              GPIO to determine if the link is up
++
++        required:
++          - speed
+ 
+ additionalProperties: true
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

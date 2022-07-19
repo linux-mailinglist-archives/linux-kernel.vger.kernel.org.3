@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266AF5799B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F66A579E97
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238152AbiGSMF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S242827AbiGSNDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238160AbiGSMEH (ORCPT
+        with ESMTP id S243111AbiGSNA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:04:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D0A45075;
-        Tue, 19 Jul 2022 04:59:55 -0700 (PDT)
+        Tue, 19 Jul 2022 09:00:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E9561D51;
+        Tue, 19 Jul 2022 05:25:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F130B81B2A;
-        Tue, 19 Jul 2022 11:59:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75231C341C6;
-        Tue, 19 Jul 2022 11:59:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E5CD61924;
+        Tue, 19 Jul 2022 12:25:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352FCC341C6;
+        Tue, 19 Jul 2022 12:25:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231992;
-        bh=FW+wkwAP1yoydPb5SuQr7Hc5acBNohEvdSAzABYv3pU=;
+        s=korg; t=1658233538;
+        bh=EoF8bNOEoj8ax9IoyF9CUtfhFvGyLJHKTfdbRXMpLM0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sR6rbyqDwiv2c4eW5C4Ay4JtiN7EOXf6aj+H1dLxIj4wijZZ22miaGfCZo2EhNh16
-         v4BoIj3EZ5+xDzQss0yC47Zy5Yi6p8OW9cxCJLVBQMNoBZm5wWqpi84/FQirWS5OxZ
-         pEwEsQqVznAFJLQndc4qillbfC+uWxaa6OOm95RI=
+        b=SiDiDYoCfYrZ2XpTpUwWRm5dVSTQ7z0oebAP69dGxIjPPsU+yNUkaAnt/4r9AKhOo
+         s6HtobAHIf+8G1kOkj+k2gg6yw+NWpSadV6e1lLajhXPS1TucwWUDg1wE9FrqEV8z4
+         CQWWmXN56Ut4MN1U/eoAvrq60d1WPrnJPQwCnh8s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrea Mayer <andrea.mayer@uniroma2.it>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?=E4=B8=80=E5=8F=AA=E7=8B=97?= <chennbnbnb@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Hillf Danton <hdanton@sina.com>, Jiri Slaby <jslaby@suse.cz>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 24/48] seg6: fix skb checksum in SRv6 End.B6 and End.B6.Encaps behaviors
+Subject: [PATCH 5.18 156/231] tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
 Date:   Tue, 19 Jul 2022 13:54:01 +0200
-Message-Id: <20220719114522.039706892@linuxfoundation.org>
+Message-Id: <20220719114727.397754517@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
-References: <20220719114518.915546280@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +56,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit f048880fc77058d864aff5c674af7918b30f312a ]
+[ Upstream commit a501ab75e7624d133a5a3c7ec010687c8b961d23 ]
 
-The SRv6 End.B6 and End.B6.Encaps behaviors rely on functions
-seg6_do_srh_{encap,inline}() to, respectively: i) encapsulate the
-packet within an outer IPv6 header with the specified Segment Routing
-Header (SRH); ii) insert the specified SRH directly after the IPv6
-header of the packet.
+There is a race in pty_write(). pty_write() can be called in parallel
+with e.g. ioctl(TIOCSTI) or ioctl(TCXONC) which also inserts chars to
+the buffer. Provided, tty_flip_buffer_push() in pty_write() is called
+outside the lock, it can commit inconsistent tail. This can lead to out
+of bounds writes and other issues. See the Link below.
 
-This patch removes the initialization of the IPv6 header payload length
-from the input_action_end_b6{_encap}() functions, as it is now handled
-properly by seg6_do_srh_{encap,inline}() to avoid corruption of the skb
-checksum.
+To fix this, we have to introduce a new helper called
+tty_insert_flip_string_and_push_buffer(). It does both
+tty_insert_flip_string() and tty_flip_buffer_commit() under the port
+lock. It also calls queue_work(), but outside the lock. See
+71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in
+pty_write) for the reasons.
 
-Fixes: 140f04c33bbc ("ipv6: sr: implement several seg6local actions")
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Keep the helper internal-only (in drivers' tty.h). It is not intended to
+be used widely.
+
+Link: https://seclists.org/oss-sec/2022/q2/155
+Fixes: 71a174b39f10 (pty: do tty_flip_buffer_push without port->lock in pty_write)
+Cc: 一只狗 <chennbnbnb@gmail.com>
+Cc: Dan Carpenter <dan.carpenter@oracle.com>
+Suggested-by: Hillf Danton <hdanton@sina.com>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20220707082558.9250-2-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/seg6_local.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/tty/pty.c        | 14 ++------------
+ drivers/tty/tty.h        |  3 +++
+ drivers/tty/tty_buffer.c | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 12 deletions(-)
 
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 607709a8847c..18970f6a68c6 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -415,7 +415,6 @@ static int input_action_end_b6(struct sk_buff *skb, struct seg6_local_lwt *slwt)
- 	if (err)
- 		goto drop;
+diff --git a/drivers/tty/pty.c b/drivers/tty/pty.c
+index 74bfabe5b453..752dab3356d7 100644
+--- a/drivers/tty/pty.c
++++ b/drivers/tty/pty.c
+@@ -111,21 +111,11 @@ static void pty_unthrottle(struct tty_struct *tty)
+ static int pty_write(struct tty_struct *tty, const unsigned char *buf, int c)
+ {
+ 	struct tty_struct *to = tty->link;
+-	unsigned long flags;
  
--	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
- 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
+-	if (tty->flow.stopped)
++	if (tty->flow.stopped || !c)
+ 		return 0;
  
- 	seg6_lookup_nexthop(skb, NULL, 0);
-@@ -447,7 +446,6 @@ static int input_action_end_b6_encap(struct sk_buff *skb,
- 	if (err)
- 		goto drop;
+-	if (c > 0) {
+-		spin_lock_irqsave(&to->port->lock, flags);
+-		/* Stuff the data into the input queue of the other end */
+-		c = tty_insert_flip_string(to->port, buf, c);
+-		spin_unlock_irqrestore(&to->port->lock, flags);
+-		/* And shovel */
+-		if (c)
+-			tty_flip_buffer_push(to->port);
+-	}
+-	return c;
++	return tty_insert_flip_string_and_push_buffer(to->port, buf, c);
+ }
  
--	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
- 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
+ /**
+diff --git a/drivers/tty/tty.h b/drivers/tty/tty.h
+index b710c5ef89ab..f310a8274df1 100644
+--- a/drivers/tty/tty.h
++++ b/drivers/tty/tty.h
+@@ -111,4 +111,7 @@ static inline void tty_audit_tiocsti(struct tty_struct *tty, char ch)
  
- 	seg6_lookup_nexthop(skb, NULL, 0);
+ ssize_t redirected_tty_write(struct kiocb *, struct iov_iter *);
+ 
++int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
++		const unsigned char *chars, size_t cnt);
++
+ #endif
+diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
+index 303a26c1b821..595d8b49c745 100644
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -560,6 +560,37 @@ void tty_flip_buffer_push(struct tty_port *port)
+ }
+ EXPORT_SYMBOL(tty_flip_buffer_push);
+ 
++/**
++ * tty_insert_flip_string_and_push_buffer - add characters to the tty buffer and
++ *	push
++ * @port: tty port
++ * @chars: characters
++ * @size: size
++ *
++ * The function combines tty_insert_flip_string() and tty_flip_buffer_push()
++ * with the exception of properly holding the @port->lock.
++ *
++ * To be used only internally (by pty currently).
++ *
++ * Returns: the number added.
++ */
++int tty_insert_flip_string_and_push_buffer(struct tty_port *port,
++		const unsigned char *chars, size_t size)
++{
++	struct tty_bufhead *buf = &port->buf;
++	unsigned long flags;
++
++	spin_lock_irqsave(&port->lock, flags);
++	size = tty_insert_flip_string(port, chars, size);
++	if (size)
++		tty_flip_buffer_commit(buf->tail);
++	spin_unlock_irqrestore(&port->lock, flags);
++
++	queue_work(system_unbound_wq, &buf->work);
++
++	return size;
++}
++
+ /**
+  * tty_buffer_init		-	prepare a tty buffer structure
+  * @port: tty port to initialise
 -- 
 2.35.1
 

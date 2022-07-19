@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EF7579EC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C12579B5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242906AbiGSNFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S240009AbiGSM0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243038AbiGSNEb (ORCPT
+        with ESMTP id S239750AbiGSMYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:04:31 -0400
+        Tue, 19 Jul 2022 08:24:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDF49D520;
-        Tue, 19 Jul 2022 05:26:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3411445F67;
+        Tue, 19 Jul 2022 05:09:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34AE1B81B82;
-        Tue, 19 Jul 2022 12:26:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C92C341C6;
-        Tue, 19 Jul 2022 12:26:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFA57B81B2D;
+        Tue, 19 Jul 2022 12:08:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C55C341C6;
+        Tue, 19 Jul 2022 12:08:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233587;
-        bh=GitRd9YEWePul5rGo7gfgSKkUyHTe2oSCQiqVeiTiec=;
+        s=korg; t=1658232516;
+        bh=2RIulnpy12qPfd61qCeePjC6mrMyrKz5F9JHzlryf7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cr/1VgvEyltW6WHz+k2BM1kKju5Qc49GY3cz7S4rh6Q+KB13ripNIbDaLTGX6/293
-         RhTftH+0w4wGGSdaHw1zME4lec3HRw0vVdthQPnki0Y0CZdNTgYctISsN9nyDxoOtI
-         TNrR25z9O29kowxPtKzVHjlhLxM4A1uq+kczIvX8=
+        b=QBFbqEnbGtFyoOsFIvQM9iUS8Zbd1yNRCzbjTrWGckMW4dZbcERXV3XjWWzVUvJEY
+         yKlYJnn7eK9v73D55Cc0v9RU/7antg8m7Ykw08HqGNNyJgyQJGwzMREC4vf0M7+8ja
+         uIwlTqKIxp0IOGcpTK9Glf6e1Kvo680UCm/IQ1eQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mark Pearson <markpearson@lenovo.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 172/231] platform/x86: thinkpad-acpi: profile capabilities as integer
+Subject: [PATCH 5.10 084/112] NFC: nxp-nci: dont print header length mismatch on i2c error
 Date:   Tue, 19 Jul 2022 13:54:17 +0200
-Message-Id: <20220719114728.621505074@linuxfoundation.org>
+Message-Id: <20220719114634.750619240@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,166 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Pearson <markpearson@lenovo.com>
+From: Michael Walle <michael@walle.cc>
 
-[ Upstream commit 42504af775361ca2330a2bfde496a5ebc5655c86 ]
+[ Upstream commit 9577fc5fdc8b07b891709af6453545db405e24ad ]
 
-Currently the active mode (PSC/MMC) is stored in an enum and queried
-throughout the driver.
+Don't print a misleading header length mismatch error if the i2c call
+returns an error. Instead just return the error code without any error
+message.
 
-Other driver changes will enumerate additional submodes that are relevant
-to be tracked, so instead track PSC/MMC in a single integer variable.
-
-Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Mark Pearson <markpearson@lenovo.com>
-Link: https://lore.kernel.org/r/20220603170212.164963-1-markpearson@lenovo.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/thinkpad_acpi.c |   45 ++++++++++++++---------------------
- 1 file changed, 18 insertions(+), 27 deletions(-)
+ drivers/nfc/nxp-nci/i2c.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/platform/x86/thinkpad_acpi.c
-+++ b/drivers/platform/x86/thinkpad_acpi.c
-@@ -10300,21 +10300,15 @@ static struct ibm_struct proxsensor_driv
- #define DYTC_DISABLE_CQL DYTC_SET_COMMAND(DYTC_FUNCTION_CQL, DYTC_MODE_MMC_BALANCE, 0)
- #define DYTC_ENABLE_CQL DYTC_SET_COMMAND(DYTC_FUNCTION_CQL, DYTC_MODE_MMC_BALANCE, 1)
+--- a/drivers/nfc/nxp-nci/i2c.c
++++ b/drivers/nfc/nxp-nci/i2c.c
+@@ -122,7 +122,9 @@ static int nxp_nci_i2c_fw_read(struct nx
+ 	skb_put_data(*skb, &header, NXP_NCI_FW_HDR_LEN);
  
--enum dytc_profile_funcmode {
--	DYTC_FUNCMODE_NONE = 0,
--	DYTC_FUNCMODE_MMC,
--	DYTC_FUNCMODE_PSC,
--};
--
--static enum dytc_profile_funcmode dytc_profile_available;
- static enum platform_profile_option dytc_current_profile;
- static atomic_t dytc_ignore_event = ATOMIC_INIT(0);
- static DEFINE_MUTEX(dytc_mutex);
-+static int dytc_capabilities;
- static bool dytc_mmc_get_available;
- 
- static int convert_dytc_to_profile(int dytcmode, enum platform_profile_option *profile)
- {
--	if (dytc_profile_available == DYTC_FUNCMODE_MMC) {
-+	if (dytc_capabilities & BIT(DYTC_FC_MMC)) {
- 		switch (dytcmode) {
- 		case DYTC_MODE_MMC_LOWPOWER:
- 			*profile = PLATFORM_PROFILE_LOW_POWER;
-@@ -10331,7 +10325,7 @@ static int convert_dytc_to_profile(int d
- 		}
+ 	r = i2c_master_recv(client, skb_put(*skb, frame_len), frame_len);
+-	if (r != frame_len) {
++	if (r < 0) {
++		goto fw_read_exit_free_skb;
++	} else if (r != frame_len) {
+ 		nfc_err(&client->dev,
+ 			"Invalid frame length: %u (expected %zu)\n",
+ 			r, frame_len);
+@@ -166,7 +168,9 @@ static int nxp_nci_i2c_nci_read(struct n
  		return 0;
- 	}
--	if (dytc_profile_available == DYTC_FUNCMODE_PSC) {
-+	if (dytc_capabilities & BIT(DYTC_FC_PSC)) {
- 		switch (dytcmode) {
- 		case DYTC_MODE_PSC_LOWPOWER:
- 			*profile = PLATFORM_PROFILE_LOW_POWER;
-@@ -10353,21 +10347,21 @@ static int convert_profile_to_dytc(enum
- {
- 	switch (profile) {
- 	case PLATFORM_PROFILE_LOW_POWER:
--		if (dytc_profile_available == DYTC_FUNCMODE_MMC)
-+		if (dytc_capabilities & BIT(DYTC_FC_MMC))
- 			*perfmode = DYTC_MODE_MMC_LOWPOWER;
--		else if (dytc_profile_available == DYTC_FUNCMODE_PSC)
-+		else if (dytc_capabilities & BIT(DYTC_FC_PSC))
- 			*perfmode = DYTC_MODE_PSC_LOWPOWER;
- 		break;
- 	case PLATFORM_PROFILE_BALANCED:
--		if (dytc_profile_available == DYTC_FUNCMODE_MMC)
-+		if (dytc_capabilities & BIT(DYTC_FC_MMC))
- 			*perfmode = DYTC_MODE_MMC_BALANCE;
--		else if (dytc_profile_available == DYTC_FUNCMODE_PSC)
-+		else if (dytc_capabilities & BIT(DYTC_FC_PSC))
- 			*perfmode = DYTC_MODE_PSC_BALANCE;
- 		break;
- 	case PLATFORM_PROFILE_PERFORMANCE:
--		if (dytc_profile_available == DYTC_FUNCMODE_MMC)
-+		if (dytc_capabilities & BIT(DYTC_FC_MMC))
- 			*perfmode = DYTC_MODE_MMC_PERFORM;
--		else if (dytc_profile_available == DYTC_FUNCMODE_PSC)
-+		else if (dytc_capabilities & BIT(DYTC_FC_PSC))
- 			*perfmode = DYTC_MODE_PSC_PERFORM;
- 		break;
- 	default: /* Unknown profile */
-@@ -10446,7 +10440,7 @@ static int dytc_profile_set(struct platf
- 	if (err)
- 		goto unlock;
  
--	if (dytc_profile_available == DYTC_FUNCMODE_MMC) {
-+	if (dytc_capabilities & BIT(DYTC_FC_MMC)) {
- 		if (profile == PLATFORM_PROFILE_BALANCED) {
- 			/*
- 			 * To get back to balanced mode we need to issue a reset command.
-@@ -10465,7 +10459,7 @@ static int dytc_profile_set(struct platf
- 				goto unlock;
- 		}
- 	}
--	if (dytc_profile_available == DYTC_FUNCMODE_PSC) {
-+	if (dytc_capabilities & BIT(DYTC_FC_PSC)) {
- 		err = dytc_command(DYTC_SET_COMMAND(DYTC_FUNCTION_PSC, perfmode, 1), &output);
- 		if (err)
- 			goto unlock;
-@@ -10484,12 +10478,12 @@ static void dytc_profile_refresh(void)
- 	int perfmode;
- 
- 	mutex_lock(&dytc_mutex);
--	if (dytc_profile_available == DYTC_FUNCMODE_MMC) {
-+	if (dytc_capabilities & BIT(DYTC_FC_MMC)) {
- 		if (dytc_mmc_get_available)
- 			err = dytc_command(DYTC_CMD_MMC_GET, &output);
- 		else
- 			err = dytc_cql_command(DYTC_CMD_GET, &output);
--	} else if (dytc_profile_available == DYTC_FUNCMODE_PSC)
-+	} else if (dytc_capabilities & BIT(DYTC_FC_PSC))
- 		err = dytc_command(DYTC_CMD_GET, &output);
- 
- 	mutex_unlock(&dytc_mutex);
-@@ -10518,7 +10512,6 @@ static int tpacpi_dytc_profile_init(stru
- 	set_bit(PLATFORM_PROFILE_BALANCED, dytc_profile.choices);
- 	set_bit(PLATFORM_PROFILE_PERFORMANCE, dytc_profile.choices);
- 
--	dytc_profile_available = DYTC_FUNCMODE_NONE;
- 	err = dytc_command(DYTC_CMD_QUERY, &output);
- 	if (err)
- 		return err;
-@@ -10531,13 +10524,12 @@ static int tpacpi_dytc_profile_init(stru
- 		return -ENODEV;
- 
- 	/* Check what capabilities are supported */
--	err = dytc_command(DYTC_CMD_FUNC_CAP, &output);
-+	err = dytc_command(DYTC_CMD_FUNC_CAP, &dytc_capabilities);
- 	if (err)
- 		return err;
- 
--	if (output & BIT(DYTC_FC_MMC)) { /* MMC MODE */
--		dytc_profile_available = DYTC_FUNCMODE_MMC;
--
-+	if (dytc_capabilities & BIT(DYTC_FC_MMC)) { /* MMC MODE */
-+		pr_debug("MMC is supported\n");
- 		/*
- 		 * Check if MMC_GET functionality available
- 		 * Version > 6 and return success from MMC_GET command
-@@ -10548,8 +10540,8 @@ static int tpacpi_dytc_profile_init(stru
- 			if (!err && ((output & DYTC_ERR_MASK) == DYTC_ERR_SUCCESS))
- 				dytc_mmc_get_available = true;
- 		}
--	} else if (output & BIT(DYTC_FC_PSC)) { /* PSC MODE */
--		dytc_profile_available = DYTC_FUNCMODE_PSC;
-+	} else if (dytc_capabilities & BIT(DYTC_FC_PSC)) { /* PSC MODE */
-+		pr_debug("PSC is supported\n");
- 	} else {
- 		dbg_printk(TPACPI_DBG_INIT, "No DYTC support available\n");
- 		return -ENODEV;
-@@ -10575,7 +10567,6 @@ static int tpacpi_dytc_profile_init(stru
- 
- static void dytc_profile_exit(void)
- {
--	dytc_profile_available = DYTC_FUNCMODE_NONE;
- 	platform_profile_remove();
- }
- 
+ 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
+-	if (r != header.plen) {
++	if (r < 0) {
++		goto nci_read_exit_free_skb;
++	} else if (r != header.plen) {
+ 		nfc_err(&client->dev,
+ 			"Invalid frame payload length: %u (expected %u)\n",
+ 			r, header.plen);
 
 

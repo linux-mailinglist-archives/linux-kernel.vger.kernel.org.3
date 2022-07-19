@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011AA579CEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C67579B2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242148AbiGSMpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
+        id S236173AbiGSMZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241669AbiGSMoU (ORCPT
+        with ESMTP id S239736AbiGSMYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:44:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD1485F8D;
-        Tue, 19 Jul 2022 05:17:24 -0700 (PDT)
+        Tue, 19 Jul 2022 08:24:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2D961134;
+        Tue, 19 Jul 2022 05:09:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7943EB81B2C;
-        Tue, 19 Jul 2022 12:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5840C36AE2;
-        Tue, 19 Jul 2022 12:17:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09FDD6165C;
+        Tue, 19 Jul 2022 12:08:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA8FAC341C6;
+        Tue, 19 Jul 2022 12:08:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233025;
-        bh=cJ4EpiTnne1jAnseMdkgLxRJnnbD3zSSBr50r+xpmcs=;
+        s=korg; t=1658232482;
+        bh=+gmyvOgCkIdlZeHOrXPsGFQ4i4vUrAXEpwwq4tJ8hdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IueIeImOeVSOS+6d92nDxuJirC18GcFwj0v2j9w6b0ii6RflmfPQfb2nh6k+MLZCr
-         VWJ+ke+f6g+SgZQRGTl5hR6SsG1xcJdNRzenTG0oZwYZFAttG3//5sEXail7lspds0
-         oI3zZAvUL8jiiKCDsFQWScE9Kr1cTnDW1UxDIJEY=
+        b=uD3hLWWWhvVfAzXvvKVCi4nXT+lqHWRIwFLRri5GmUcdvdmKTMRC/KJQ9amvK7HlF
+         5AUZfTrCMM8PuJVRMv3STc5GhnB3QJr+nuiOd09PE0pSgXodlpjZ99+dBQ/WsXvF0A
+         9zaMKmMfTGfJkLKxIUihH2EwAb6oaY9TQDSigvUE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Namjae Jeon <linkinjeon@kerne.org>,
-        Hyunchul Lee <hyc.lee@gmail.com>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org,
+        "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 113/167] ksmbd: use SOCK_NONBLOCK type for kernel_accept()
-Date:   Tue, 19 Jul 2022 13:54:05 +0200
-Message-Id: <20220719114707.456060283@linuxfoundation.org>
+Subject: [PATCH 5.10 073/112] net: atlantic: remove aq_nic_deinit() when resume
+Date:   Tue, 19 Jul 2022 13:54:06 +0200
+Message-Id: <20220719114633.549666637@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
 
-[ Upstream commit fe0fde09e1cb83effcf8fafa372533f438d93a1a ]
+[ Upstream commit 2e15c51fefaffaf9f72255eaef4fada05055e4c5 ]
 
-I found that normally it is O_NONBLOCK but there are different value
-for some arch.
+aq_nic_deinit() has been called while suspending, so we don't have to call
+it again on resume.
+Actually, call it again leads to another hang issue when resuming from
+S3.
 
-/include/linux/net.h:
-#ifndef SOCK_NONBLOCK
-#define SOCK_NONBLOCK   O_NONBLOCK
-#endif
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992345] Call Trace:
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992346] <TASK>
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992348] aq_nic_deinit+0xb4/0xd0 [atlantic]
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992356] aq_pm_thaw+0x7f/0x100 [atlantic]
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992362] pci_pm_resume+0x5c/0x90
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992366] ? pci_pm_thaw+0x80/0x80
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992368] dpm_run_callback+0x4e/0x120
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992371] device_resume+0xad/0x200
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992373] async_resume+0x1e/0x40
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992374] async_run_entry_fn+0x33/0x120
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992377] process_one_work+0x220/0x3c0
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992380] worker_thread+0x4d/0x3f0
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992382] ? process_one_work+0x3c0/0x3c0
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992384] kthread+0x12a/0x150
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992386] ? set_kthread_struct+0x40/0x40
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992387] ret_from_fork+0x22/0x30
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992391] </TASK>
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992392] ---[ end trace 1ec8c79604ed5e0d ]---
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992394] PM: dpm_run_callback(): pci_pm_resume+0x0/0x90 returns -110
+Jul 8 03:09:44 u-Precision-7865-Tower kernel: [ 5910.992397] atlantic 0000:02:00.0: PM: failed to resume async: error -110
 
-/arch/alpha/include/asm/socket.h:
-#define SOCK_NONBLOCK   0x40000000
-
-Use SOCK_NONBLOCK instead of O_NONBLOCK for kernel_accept().
-
-Suggested-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kerne.org>
-Reviewed-by: Hyunchul Lee <hyc.lee@gmail.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Fixes: 1809c30b6e5a ("net: atlantic: always deep reset on pm op, fixing up my null deref regression")
+Signed-off-by: Chia-Lin Kao (AceLan) <acelan.kao@canonical.com>
+Link: https://lore.kernel.org/r/20220713111224.1535938-2-acelan.kao@canonical.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ksmbd/transport_tcp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/fs/ksmbd/transport_tcp.c b/fs/ksmbd/transport_tcp.c
-index 82a1429bbe12..755329c295ca 100644
---- a/fs/ksmbd/transport_tcp.c
-+++ b/fs/ksmbd/transport_tcp.c
-@@ -230,7 +230,7 @@ static int ksmbd_kthread_fn(void *p)
- 			break;
- 		}
- 		ret = kernel_accept(iface->ksmbd_socket, &client_sk,
--				    O_NONBLOCK);
-+				    SOCK_NONBLOCK);
- 		mutex_unlock(&iface->sock_release_lock);
- 		if (ret) {
- 			if (ret == -EAGAIN)
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+index 8c05b2b79339..a0ce213c473b 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+@@ -419,9 +419,6 @@ static int atl_resume_common(struct device *dev)
+ 	pci_set_power_state(pdev, PCI_D0);
+ 	pci_restore_state(pdev);
+ 
+-	/* Reinitialize Nic/Vecs objects */
+-	aq_nic_deinit(nic, !nic->aq_hw->aq_nic_cfg->wol);
+-
+ 	if (netif_running(nic->ndev)) {
+ 		ret = aq_nic_init(nic);
+ 		if (ret)
 -- 
 2.35.1
 

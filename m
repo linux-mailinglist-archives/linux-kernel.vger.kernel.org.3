@@ -2,117 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C4C57A998
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FE557A99A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240701AbiGSWCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S240716AbiGSWD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiGSWCa (ORCPT
+        with ESMTP id S235993AbiGSWD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:02:30 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B362A5FAF5;
-        Tue, 19 Jul 2022 15:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658268149; x=1689804149;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zqYQJv/XFExUA8Fi57QQgZNmV5/oX/XVpYLW9fg17RU=;
-  b=EQWS2YWoP6ts0rHG8l5NnVK+EJXdxvKxe/UNMbIJuatbRZUhVdK0CgTE
-   S1Zq+WRGs46emQtVOSvtVytu1+2UdoUyJp2uW0/B0LJC2+UZzEOvX9znI
-   Zbfmho8bHbdDg5GUuR76MopoaOqnJHDytMwmihEDbI+rk7U98034yxZPL
-   m22lsDBIPt50WV3ig+Oaqg1+pMOrSXb6H38EEXnUgVtoKB1kOGWSzVz/P
-   m+l9KsLvKLIbpndHLaSupr860htr6GOFSl3KvwqMcYxDGNEjzBi/fivUR
-   JaYCyAkZJOlFeRvjr3935HspVoCNNkeDvuIIOXsAV4VH8vs4s2pbeSvuF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="273454518"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="273454518"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 15:02:29 -0700
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="687279751"
-Received: from twliston-mobl1.amr.corp.intel.com (HELO [10.212.132.190]) ([10.212.132.190])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 15:02:27 -0700
-Message-ID: <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
-Date:   Tue, 19 Jul 2022 15:02:26 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
- memory
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Tue, 19 Jul 2022 18:03:58 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029436051E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:03:57 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id a15so16062530pjs.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eRpbtTCZs+5+sX8LZNM3fMyA3I2miPI5w4wEOaR3Kd8=;
+        b=L0403lYdHQufM2qI/PJ7bMF875ZWcIbp65rgoZ6AMpKb9DrBBg49bzaDu5ytLIBR6k
+         cHR87boOdSCFHXqHuUB3bJ3/m7PmELpKkXaieFF2bfYDWIRfnshHrZtHtelbFxJG2ipx
+         acqsLcDu3PzNyZgPFGEAjSRO7dXCiAJSiucU2ODOr/1Tr1JIkYYK2Fv2bdo0VNTqWLkf
+         27Yod0pT5lTvMEaQ1SGB9pq7eaKnbjBzVayp4h+Mpk0V8S9mnFNArj8aPPKHWF+02ZJW
+         ML2WrV14/VEq64QAFmzb0Th4WQCIGfzCRUnjsH8+En28OeOHzbz3MLwbRFfyVZgsDFOf
+         sB3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eRpbtTCZs+5+sX8LZNM3fMyA3I2miPI5w4wEOaR3Kd8=;
+        b=rX9GA5YLjsidCML7a0fCwW7v+bFkHwtePMfT+JZ8IakgE22vMVxcghweuSOHOGsXGN
+         KQn+urMjsyMF5H2gAWsPXWmdb0rl9dw4bTZD9Rhx5QtjxOWhhLSk+DoOqi/G8WttbCW2
+         nkA8jpcqLyC+oQt/82OQQvfnZN3bfIaI+XnBjpxgNp9OZBc8LCoRgsgtu44fVsTr1d6v
+         W3BHXs40qSlhUUoj9+aRyaUlf4p+SREI/pBZD+uNkqwXe9E6DmKaE29vNR/Q+PFZOpb5
+         18KAcfYz2MBVI1HCWTXsGF+rzYSF6lWV9NjRM3J7O7WU+Fp3zoz+acPv55w1hsKXPi9W
+         K+Rg==
+X-Gm-Message-State: AJIora+W1CFZUc9WMGYTNTfl8i5Qq6TNVVfvUviFUFXvcgdOPRR//z1P
+        FNIIEYUSNFR/kWlU8xBDWs01W1YxdNQASQ==
+X-Google-Smtp-Source: AGRyM1uWRLpTQswtNfEV1mRoZyGTzfyIBqNcfPo/PX+Gng0urzkvIUjr27tzFPFz+Ervz6Jjs/53rA==
+X-Received: by 2002:a17:902:ce8c:b0:16c:4be6:254d with SMTP id f12-20020a170902ce8c00b0016c4be6254dmr35100092plg.51.1658268236359;
+        Tue, 19 Jul 2022 15:03:56 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id s5-20020a63e805000000b0041a411823d4sm2796267pgh.22.2022.07.19.15.03.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 15:03:55 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 22:03:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-References: <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
- <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
- <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
- <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
- <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
- <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
- <YtcCWfCQuEsVhH6W@zn.tnic>
- <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
- <YtcgxxMyFTReuuRw@zn.tnic> <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
- <YtcnQbiRgZPtR+rQ@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YtcnQbiRgZPtR+rQ@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH V3 02/12] KVM: X86/MMU: Add using_local_root_page()
+Message-ID: <YtcqR8jDM+NVXgG5@google.com>
+References: <20220521131700.3661-1-jiangshanlai@gmail.com>
+ <20220521131700.3661-3-jiangshanlai@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521131700.3661-3-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 14:50, Borislav Petkov wrote:
-> On Tue, Jul 19, 2022 at 02:35:45PM -0700, Dave Hansen wrote:
->> They're trying to design something that can (forever) handle guests that
->> might not be able to accept memory. 
-> Wait, what?
-> 
-> If you can't modify those guests to teach them to accept memory, how do
-> you add TDX or SNP guest support to them?
+On Sat, May 21, 2022, Lai Jiangshan wrote:
+> +static bool using_local_root_page(struct kvm_mmu *mmu)
 
-Mainline today, for instance, doesn't have unaccepted memory support for
-TDX or SEV-SNP guests.  But, they both still boot fine because folks
-either configure it on the host side not to *have* any unaccepted
-memory.  Or, they just live with the small (4GB??) amount of
-pre-accepted memory, which is fine for testing things.
+Hmm, I agree with David that "local" isn't the most intuitive terminology.  But
+I also do want to avoid private vs. shared to avoid confusion with confidential VMs.
 
+Luckily, I don't think we need to come up with new terminology, just be literal
+and call 'em "per-vCPU root pages".  E.g.
+
+  static bool kvm_mmu_has_per_vcpu_root_page()
+
+That way readers don't have to understand what "local" means, and that also captures
+per-vCPU roots are an exception, i.e. that most roots are NOT per-vCPU.
+
+> +{
+> +	return mmu->root_role.level == PT32E_ROOT_LEVEL ||
+> +	       (!mmu->root_role.direct && mmu->cpu_role.base.level <= PT32E_ROOT_LEVEL);
+> +}
+> +
+>  static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct)
+>  {
+>  	struct kvm_mmu_page *sp;
+> @@ -4252,10 +4285,11 @@ static bool fast_pgd_switch(struct kvm *kvm, struct kvm_mmu *mmu,
+>  {
+>  	/*
+>  	 * For now, limit the caching to 64-bit hosts+VMs in order to avoid
+> -	 * having to deal with PDPTEs. We may add support for 32-bit hosts/VMs
+> -	 * later if necessary.
+> +	 * having to deal with PDPTEs.  Local roots can not be put into
+> +	 * mmu->prev_roots[] because mmu->pae_root can not be shared for
+> +	 * different roots at the same time.
+>  	 */
+> -	if (VALID_PAGE(mmu->root.hpa) && !to_shadow_page(mmu->root.hpa))
+> +	if (unlikely(using_local_root_page(mmu)))
+
+I don't know that I like using the local/per-vCPU helper.  The problem isn't _just_
+that KVM is using a per-vCPU root, KVM is also deliberately punting on dealing with
+PDTPRs.  E.g. the per-vCPU aspect doesn't explain why KVM doesn't allow reusing the
+current root.  I don't like that the using_local_root_page() obfuscates that check.
+
+My preference for this would be to revert back to a streamlined variation of the
+code prior to commit 5499ea73e7db ("KVM: x86/mmu: look for a cached PGD when going
+from 32-bit to 64-bit").
+
+KVM switched to the !to_shadow_page() check to _avoid_ consuming (what is now)
+mmu->root_role because, at the time of the patch, mmu held the _old_ data, which
+was wrong/stale for nested virtualization transitions.
+
+In other words, I would prefer that explicitly do (in a separate patch):
+
+	/*
+	 * For now, limit the fast switch to 64-bit VMs in order to avoid having
+	 * to deal with PDPTEs.  32-bit VMs can be supported later if necessary.
+	 */
+	if (new_role.level < PT64_ROOT_LEVEL4)
+		kvm_mmu_free_roots(kvm, mmu, KVM_MMU_ROOT_CURRENT);
+
+The "hosts+VMs" can be shortened to just "VMs", because running a 64-bit VM with
+a 32-bit host just doesn't work for a variety of reasons, i.e. doesn't need to be
+called out here.

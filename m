@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39188579E6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A5F579AB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242456AbiGSNBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
+        id S239149AbiGSMRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242634AbiGSM7S (ORCPT
+        with ESMTP id S239822AbiGSMPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:59:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FBB49B50;
-        Tue, 19 Jul 2022 05:24:05 -0700 (PDT)
+        Tue, 19 Jul 2022 08:15:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3595D53D15;
+        Tue, 19 Jul 2022 05:05:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A80E261921;
-        Tue, 19 Jul 2022 12:24:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F30DC341CF;
-        Tue, 19 Jul 2022 12:24:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50B7EB81B25;
+        Tue, 19 Jul 2022 12:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A501C341C6;
+        Tue, 19 Jul 2022 12:05:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233443;
-        bh=l1kNMadkvYVvVheARyYreP6xCmK8rdh3y0HThwRVqco=;
+        s=korg; t=1658232354;
+        bh=Z9cb4tngyFvGgubBVJ2Gc3bCPDQsca6rMaH5UdCeYb8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bfy/A7f2eab3dX8XwDTaMKpzinSVt+m5h7RWnZQsY6YdR3g+dE9i2DTgsDA1pc8dx
-         apBJcEs5Re0NMs6BEIx/FxGsZQFE8rS018xvlCGVAXVm6JrtFx5ga9IGLzz7zS0iem
-         kbRDlBa8y+MhWLfJGUzDHipTKN0vmc/o2O2mU790=
+        b=B8A/yQlT/xkFhYrd2hjm/3enJ4zS5DybYNUGrxl83tZXag2yC9OxHpz06hhrj+xp0
+         RLqn6vBXC8M3NKJZdrZR3wEbwRjuuCS72QWcnKaRN5sMWLxSVpDWyFpV8UNg1CQHUx
+         3+juG+UwflebrLSxuB87nzaskqKnK6LKHXKZqgWA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 117/231] icmp: Fix a data-race around sysctl_icmp_ratelimit.
+Subject: [PATCH 5.10 029/112] net/mlx5e: kTLS, Fix build time constant test in TX
 Date:   Tue, 19 Jul 2022 13:53:22 +0200
-Message-Id: <20220719114724.327043094@linuxfoundation.org>
+Message-Id: <20220719114628.897273314@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Tariq Toukan <tariqt@nvidia.com>
 
-[ Upstream commit 2a4eb714841f288cf51c7d942d98af6a8c6e4b01 ]
+[ Upstream commit 6cc2714e85754a621219693ea8aa3077d6fca0cb ]
 
-While reading sysctl_icmp_ratelimit, it can be changed concurrently.
-Thus, we need to add READ_ONCE() to its reader.
+Use the correct constant (TLS_DRIVER_STATE_SIZE_TX) in the comparison
+against the size of the private TX TLS driver context.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: df8d866770f9 ("net/mlx5e: kTLS, Use kernel API to extract private offload context")
+Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+Reviewed-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/icmp.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_tx.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
-index 37ba5f042908..41efb7381859 100644
---- a/net/ipv4/icmp.c
-+++ b/net/ipv4/icmp.c
-@@ -320,7 +320,8 @@ static bool icmpv4_xrlim_allow(struct net *net, struct rtable *rt,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_tx.c
+index b140e13fdcc8..679747db3110 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_tx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_tx.c
+@@ -63,8 +63,7 @@ mlx5e_set_ktls_tx_priv_ctx(struct tls_context *tls_ctx,
+ 	struct mlx5e_ktls_offload_context_tx **ctx =
+ 		__tls_driver_ctx(tls_ctx, TLS_OFFLOAD_CTX_DIR_TX);
  
- 	vif = l3mdev_master_ifindex(dst->dev);
- 	peer = inet_getpeer_v4(net->ipv4.peers, fl4->daddr, vif, 1);
--	rc = inet_peer_xrlim_allow(peer, net->ipv4.sysctl_icmp_ratelimit);
-+	rc = inet_peer_xrlim_allow(peer,
-+				   READ_ONCE(net->ipv4.sysctl_icmp_ratelimit));
- 	if (peer)
- 		inet_putpeer(peer);
- out:
+-	BUILD_BUG_ON(sizeof(struct mlx5e_ktls_offload_context_tx *) >
+-		     TLS_OFFLOAD_CONTEXT_SIZE_TX);
++	BUILD_BUG_ON(sizeof(priv_tx) > TLS_DRIVER_STATE_SIZE_TX);
+ 
+ 	*ctx = priv_tx;
+ }
 -- 
 2.35.1
 

@@ -2,232 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154B657953B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8888E57955E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235018AbiGSI3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 04:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S236725AbiGSIlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 04:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233519AbiGSI3v (ORCPT
+        with ESMTP id S233598AbiGSIk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:29:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3F0DF5F;
-        Tue, 19 Jul 2022 01:29:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDA34B819F0;
-        Tue, 19 Jul 2022 08:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49D4C341C6;
-        Tue, 19 Jul 2022 08:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658219387;
-        bh=SKQvH0l9i1NrgVLmaNl8gzEnbJBWUdMAhjKR9bO0AjE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r7knTF7e8LYSjerRRSQ5wWO91YfBEr7Wg7YleO0cV+voVfe/rxXk7bZzOU5okPpcx
-         3Ogp0EBJyEMQu5ClGSaUQJgtYgmpcjfZR0BI3Vs7HxR4avdV2TCUyhKNTLmxLUV7G+
-         qdyWZG+soz8R12EcpDwdAbL3P7y/aUHjkuj8zFVA0j8mx9dHDSJDet90Ok1/BmdweU
-         m0M3ZHgsYzuWqS+b3IKhlgNC+rVoEKbI2CpMqdlF8A98/NF3ZpwlLaIOmVCn1i3Mpr
-         MU5u85paiQwWdLfCM3oOF3FDRLlkvmulCR7iQsZ65RU1b5i8jqll7gPqSH5ru2tYoa
-         f54vPVMK9Os5A==
-Date:   Tue, 19 Jul 2022 09:39:44 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     LI Qingwu <qing-wu.li@leica-geosystems.com.cn>
-Cc:     "lars@metafoo.de" <lars@metafoo.de>,
-        "tomas.melin@vaisala.com" <tomas.melin@vaisala.com>,
-        "nuno.sa@analog.com" <nuno.sa@analog.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        GEO-CHHER-bsp-development 
-        <bsp-development.geo@leica-geosystems.com>
-Subject: Re: [PATCH V1 1/1] iio: accel: sca3300: Extend the trigger buffer
- from 16 to 32 bytes
-Message-ID: <20220719093944.0c10bae3@jic23-huawei>
-In-Reply-To: <AM9PR06MB78447C75482FA9179A601BFDD7BE9@AM9PR06MB7844.eurprd06.prod.outlook.com>
-References: <20220701023030.2527019-1-Qing-wu.Li@leica-geosystems.com.cn>
-        <20220701023030.2527019-2-Qing-wu.Li@leica-geosystems.com.cn>
-        <20220701174602.68b20753@jic23-huawei>
-        <AM9PR06MB78447C75482FA9179A601BFDD7BE9@AM9PR06MB7844.eurprd06.prod.outlook.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Tue, 19 Jul 2022 04:40:59 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E2DB1F6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:40:58 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so30252466fac.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fireburn-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SjTMYyNdBeUu7iomKZchO0cdHcESp1feqssx2cB1fms=;
+        b=73FS09WA3/I7Q5DJHVJdYGp21QdQ/EcCS2t02L8sMAMb5r4K+NbYLj6EKD2qO+E04n
+         +Es7yB8DjJCJ/445YlF46KW9w108Y/KR0xllDNsmgUmd6vbzlVeqnhVmWsX6MFHZ7PUN
+         nQhsQLT81guwsIFf72u8nMG5Kmb7MudZNWNhxKGUSz9NrjlawyjETh8swwMNMNsSLMvz
+         VgOB9AUpfuPjBi+qIx9aOCq/jDGsZeD+13vs4JTSgKpn/NVuAKlu/q/WtmB1ZtYr1Si9
+         5YALk5mdUYNtsT100hDNm+d+GoNTbP9iAzFNWeehUWRHx8bPFyBKfcRp7ZKIF3Uu+uT0
+         ekbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SjTMYyNdBeUu7iomKZchO0cdHcESp1feqssx2cB1fms=;
+        b=WqsfZuSyvMvx1w/hI5GRfXGjkk/JkfWMO3cRlPNSVDzF3yoy+GCsBlAFAmMF5+FQV+
+         OdE4eHkBXCB8LWTfu3EVICije1Yd/GRRvAL1Kl+GKtXtyR+t46ezGDNb61jrjzJjsYv9
+         TzNlOmac2ZbMqnMTn2jQsZKeWz21NIbsn6tiO8NygoJOxHUPfHqLESNFoOS0az95TNnZ
+         ndenn90Q2rAymBFJ7UTXih83S+QuFXV0W2DYYCLtKVfQlIpLubWdxDDhe22bpGjOu5fF
+         ak7ZtBUvQQbUpFp4sByDS+boHQt1EsgTKuhoF3HCz+cLdSfy/er7rhN5eBhtzYxLSH3A
+         3x+Q==
+X-Gm-Message-State: AJIora/MNfH6/qmtVsO64VAve0jCqwX4hGc6Iv8mbhsOHpYWouPPO32d
+        Ff25UumeywLrltkVbHPyuI0fb7fCyVzyHkr1qZBU1Aul1zj9NQ==
+X-Google-Smtp-Source: AGRyM1tsVwlXGy0aUgRSYFGzXhmchcLKINd9UasySXdc4KsjpivFEr+j9ktcFKrrWQQQg71eQZ/+XTkGC+OS/qdZRik=
+X-Received: by 2002:a05:6870:c10b:b0:10d:1992:f249 with SMTP id
+ f11-20020a056870c10b00b0010d1992f249mr10553048oad.256.1658220057827; Tue, 19
+ Jul 2022 01:40:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CABXGCsPRrUoNtO4J8H8aLWRCGGZkwHqtOZV9Edamd2pXVB0ooA@mail.gmail.com>
+ <DM5PR12MB24695F88092ADF033A2522E6F18F9@DM5PR12MB2469.namprd12.prod.outlook.com>
+In-Reply-To: <DM5PR12MB24695F88092ADF033A2522E6F18F9@DM5PR12MB2469.namprd12.prod.outlook.com>
+From:   Mike Lothian <mike@fireburn.co.uk>
+Date:   Tue, 19 Jul 2022 09:40:46 +0100
+Message-ID: <CAHbf0-GssD3jP4ZjVQeP1Bgu+uHE3OXAEWLeZJA5VdWHzqbBjQ@mail.gmail.com>
+Subject: Re: Command "clinfo" causes BUG: kernel NULL pointer dereference,
+ address: 0000000000000008 on driver amdgpu
+To:     "Chen, Guchun" <Guchun.Chen@amd.com>
+Cc:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Jul 2022 01:01:46 +0000
-LI Qingwu <qing-wu.li@leica-geosystems.com.cn> wrote:
+I was told that this patch replaces the patch you mentioned
+https://patchwork.freedesktop.org/series/106078/ and it the one
+that'll hopefully land in Linus's tree
 
-> > -----Original Message-----
-> > From: Jonathan Cameron <jic23@kernel.org>
-> > Sent: Saturday, July 2, 2022 12:46 AM
-> > To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-> > Cc: lars@metafoo.de; tomas.melin@vaisala.com; nuno.sa@analog.com;
-> > linux-iio@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > GEO-CHHER-bsp-development <bsp-development.geo@leica-geosystems.com>
-> > Subject: Re: [PATCH V1 1/1] iio: accel: sca3300: Extend the trigger buffer from
-> > 16 to 32 bytes
-> > 
-> > [Some people who received this message don't often get email from
-> > jic23@kernel.org. Learn why this is important at
-> > https://aka.ms/LearnAboutSenderIdentification ]
-> > 
-> > This email is not from Hexagon's Office 365 instance. Please be careful while
-> > clicking links, opening attachments, or replying to this email.
-> > 
-> > 
-> > On Fri,  1 Jul 2022 02:30:30 +0000
-> > LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn> wrote:
-> >   
-> > > After added inclination angle channels, the trigger buffer size is
-> > > insufficient. Extend the buffer size from 16 to 32 bytes, and change
-> > > the trigger buffer from the struct to a u8 array to adapt the sensor
-> > > with/without inclination angles output.
-> > > New trigger buffer data:
-> > >   - SCA3300: 3 accel channels, temp, and timestamp.
-> > >   - SCL3300: 3 accel channels, temp, 3 incli channels, and timestamp.
-> > > Readjustment the scan index to make it consistent with the buffer data.
-> > >
-> > > Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>  
-> > 
-> > Hi.
-> > 
-> > Looks good. A trivial suggestion inline to make the code a little more 'self
-> > documenting'.  It's a minor change so if you are happy with the suggestion I
-> > can tweak that whilst applying.
-> > 
-> > Thanks,
-> > 
-> > Jonathan
-> >   
-> 
-> Yes, sure, absolutely agree, Thank you!
-Looks like I should be able to sneak in a last pull request for this cycle
-before the merge window (it was delayed a week).  Hence I've applied this
-to the togreg branch of iio.git 
-
-Thanks,
-
-Jonathan
-
-> 
-> LI Qingwu
-> 
-> > > ---
-> > >  drivers/iio/accel/sca3300.c | 29 ++++++++++++++++++-----------
-> > >  1 file changed, 18 insertions(+), 11 deletions(-)
-> > >
-> > > diff --git a/drivers/iio/accel/sca3300.c b/drivers/iio/accel/sca3300.c
-> > > index 3c4827bfef53..820dfb635bf1 100644
-> > > --- a/drivers/iio/accel/sca3300.c
-> > > +++ b/drivers/iio/accel/sca3300.c
-> > > @@ -47,12 +47,20 @@
-> > >  #define SCL3300_REG_ANG_CTRL 0x0C
-> > >  #define SCL3300_ANG_ENABLE   0x1F
-> > >
-> > > +/*
-> > > + * Buffer size max case:
-> > > + * Three accel channels, two bytes per channel.
-> > > + * Temperature channel, two bytes.
-> > > + * Three incli channels, two bytes per channel.
-> > > + * Timestamp channel, eight bytes.
-> > > + */
-> > > +#define SCA3300_MAX_BUFFER_SIZE (ALIGN(2 * 7, sizeof(s64)) +
-> > > +sizeof(s64))  
-> > 
-> > Instead of the 2 use sizeof(s16)
-> >  Also now you don't have timestamp in your enum sca3000_scan_indexes you
-> > could add a 'tail' element to the enum such as SCA3000_SCAN_MAX then use
-> > that instead of the 7 here.  Hopefully that would make this more self
-> > documenting.  
-> 
-> 
-> >   
-> > > +
-> > >  enum sca3300_scan_indexes {
-> > >       SCA3300_ACC_X = 0,
-> > >       SCA3300_ACC_Y,
-> > >       SCA3300_ACC_Z,
-> > >       SCA3300_TEMP,
-> > > -     SCA3300_TIMESTAMP,
-> > >       SCA3300_INCLI_X,
-> > >       SCA3300_INCLI_Y,
-> > >       SCA3300_INCLI_Z,
-> > > @@ -140,10 +148,10 @@ static const struct iio_chan_spec scl3300_channels[]  
-> > = {  
-> > >       SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Y, 0x2, Y),
-> > >       SCA3300_ACCEL_CHANNEL(SCA3300_ACC_Z, 0x3, Z),
-> > >       SCA3300_TEMP_CHANNEL(SCA3300_TEMP, 0x05),
-> > > -     IIO_CHAN_SOFT_TIMESTAMP(4),
-> > >       SCA3300_INCLI_CHANNEL(SCA3300_INCLI_X, 0x09, X),
-> > >       SCA3300_INCLI_CHANNEL(SCA3300_INCLI_Y, 0x0A, Y),
-> > >       SCA3300_INCLI_CHANNEL(SCA3300_INCLI_Z, 0x0B, Z),
-> > > +     IIO_CHAN_SOFT_TIMESTAMP(7),
-> > >  };
-> > >
-> > >  static const unsigned long sca3300_scan_masks[] = { @@ -184,7 +192,9
-> > > @@ struct sca3300_chip_info {
-> > >   * @spi: SPI device structure
-> > >   * @lock: Data buffer lock
-> > >   * @chip: Sensor chip specific information
-> > > - * @scan: Triggered buffer. Four channel 16-bit data + 64-bit
-> > > timestamp
-> > > + * @buffer: Triggered buffer:
-> > > + *          -SCA3300: 4 channel 16-bit data + 64-bit timestamp
-> > > + *          -SCL3300: 7 channel 16-bit data + 64-bit timestamp
-> > >   * @txbuf: Transmit buffer
-> > >   * @rxbuf: Receive buffer
-> > >   */
-> > > @@ -192,10 +202,7 @@ struct sca3300_data {
-> > >       struct spi_device *spi;
-> > >       struct mutex lock;
-> > >       const struct sca3300_chip_info *chip;
-> > > -     struct {
-> > > -             s16 channels[4];
-> > > -             s64 ts __aligned(sizeof(s64));
-> > > -     } scan;
-> > > +     u8 buffer[SCA3300_MAX_BUFFER_SIZE] __aligned(sizeof(s64));
-> > >       u8 txbuf[4] __aligned(IIO_DMA_MINALIGN);
-> > >       u8 rxbuf[4];
-> > >  };
-> > > @@ -484,21 +491,21 @@ static irqreturn_t sca3300_trigger_handler(int irq,  
-> > void *p)  
-> > >       struct iio_dev *indio_dev = pf->indio_dev;
-> > >       struct sca3300_data *data = iio_priv(indio_dev);
-> > >       int bit, ret, val, i = 0;
-> > > +     s16 *channels = (s16 *)data->buffer;
-> > >
-> > >       for_each_set_bit(bit, indio_dev->active_scan_mask,
-> > >                        indio_dev->masklength) {
-> > > -             ret = sca3300_read_reg(data,  
-> > sca3300_channels[bit].address,  
-> > > -                                    &val);
-> > > +             ret = sca3300_read_reg(data,
-> > > + indio_dev->channels[bit].address, &val);
-> > >               if (ret) {
-> > >                       dev_err_ratelimited(&data->spi->dev,
-> > >                               "failed to read register, error: %d\n",  
-> > ret);  
-> > >                       /* handled, but bailing out due to errors */
-> > >                       goto out;
-> > >               }
-> > > -             data->scan.channels[i++] = val;
-> > > +             channels[i++] = val;
-> > >       }
-> > >
-> > > -     iio_push_to_buffers_with_timestamp(indio_dev, &data->scan,
-> > > +     iio_push_to_buffers_with_timestamp(indio_dev, data->buffer,
-> > >  
-> > iio_get_time_ns(indio_dev));  
-> > >  out:
-> > >       iio_trigger_notify_done(indio_dev->trig);  
-> 
-
+On Tue, 19 Jul 2022 at 03:33, Chen, Guchun <Guchun.Chen@amd.com> wrote:
+>
+> Patch https://patchwork.freedesktop.org/series/106024/ should fix this.
+>
+> Regards,
+> Guchun
+>
+> -----Original Message-----
+> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of Mikhai=
+l Gavrilov
+> Sent: Tuesday, July 19, 2022 7:50 AM
+> To: amd-gfx list <amd-gfx@lists.freedesktop.org>; Linux List Kernel Maili=
+ng <linux-kernel@vger.kernel.org>; Christian K=C3=B6nig <ckoenig.leichtzume=
+rken@gmail.com>
+> Subject: Command "clinfo" causes BUG: kernel NULL pointer dereference, ad=
+dress: 0000000000000008 on driver amdgpu
+>
+> Hi guys I continue testing 5.19 rc7 and found the bug.
+> Command "clinfo" causes BUG: kernel NULL pointer dereference, address:
+> 0000000000000008 on driver amdgpu.
+>
+> Here is trace:
+> [ 1320.203332] BUG: kernel NULL pointer dereference, address: 00000000000=
+00008 [ 1320.203338] #PF: supervisor read access in kernel mode [ 1320.2033=
+40] #PF: error_code(0x0000) - not-present page [ 1320.203341] PGD 0 P4D 0 [=
+ 1320.203344] Oops: 0000 [#1] PREEMPT SMP NOPTI [ 1320.203346] CPU: 5 PID: =
+1226 Comm: kworker/5:2 Tainted: G W L
+> -------- --- 5.19.0-0.rc7.53.fc37.x86_64+debug #1 [ 1320.203348] Hardware=
+ name: System manufacturer System Product Name/ROG STRIX X570-I GAMING, BIO=
+S 4403 04/27/2022 [ 1320.203350] Workqueue: events delayed_fput [ 1320.2033=
+54] RIP: 0010:dma_resv_add_fence+0x5a/0x2d0
+> [ 1320.203358] Code: 85 c0 0f 84 43 02 00 00 8d 50 01 09 c2 0f 88 47
+> 02 00 00 8b 15 73 10 99 01 49 8d 45 70 48 89 44 24 10 85 d2 0f 85 05
+> 02 00 00 <49> 8b 44 24 08 48 3d 80 93 53 97 0f 84 06 01 00 00 48 3d 20
+> 93 53
+> [ 1320.203360] RSP: 0018:ffffaf4cc1adfc68 EFLAGS: 00010246 [ 1320.203362]=
+ RAX: ffff976660408208 RBX: ffff975f545f2000 RCX: 0000000000000000 [ 1320.2=
+03363] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff976660408198 [ =
+1320.203364] RBP: ffff976806f6e800 R08: 0000000000000000 R09: 0000000000000=
+000 [ 1320.203366] R10: 0000000000000000 R11: 0000000000000001 R12: 0000000=
+000000000 [ 1320.203367] R13: ffff976660408198 R14: ffff975f545f2000 R15: f=
+fff976660408198 [ 1320.203368] FS: 0000000000000000(0000) GS:ffff976de12000=
+00(0000)
+> knlGS:0000000000000000
+> [ 1320.203370] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033 [ 1320.20=
+3371] CR2: 0000000000000008 CR3: 00000007fb31c000 CR4: 0000000000350ee0 [ 1=
+320.203372] Call Trace:
+> [ 1320.203374] <TASK>
+> [ 1320.203378] amdgpu_amdkfd_gpuvm_destroy_cb+0x5d/0x1e0 [amdgpu] [ 1320.=
+203516] amdgpu_vm_fini+0x2f/0x4e0 [amdgpu] [ 1320.203625] ? mutex_destroy+0=
+x21/0x50 [ 1320.203629] amdgpu_driver_postclose_kms+0x1da/0x2b0 [amdgpu] [ =
+1320.203734] drm_file_free.part.0+0x20d/0x260 [ 1320.203738] drm_release+0x=
+6a/0x120 [ 1320.203741] __fput+0xab/0x270 [ 1320.203743] delayed_fput+0x1f/=
+0x30 [ 1320.203745] process_one_work+0x2a0/0x600 [ 1320.203749] worker_thre=
+ad+0x4f/0x3a0 [ 1320.203751] ? process_one_work+0x600/0x600 [ 1320.203753] =
+kthread+0xf5/0x120 [ 1320.203755] ? kthread_complete_and_exit+0x20/0x20
+> [ 1320.203758] ret_from_fork+0x22/0x30
+> [ 1320.203764] </TASK>
+>
+> Full kernel log is here:
+> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpaste=
+bin.com%2FEeKh2LEr&amp;data=3D05%7C01%7Cguchun.chen%40amd.com%7C06749e19d65=
+b418748dc08da6918435f%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C63793785=
+0184140997%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJB=
+TiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3Dx1%2FR7m9Vy2XwkXKXsm=
+EOeaAyv44ZKNsU4caZJOOSIvY%3D&amp;reserved=3D0
+>
+> And one hour later after a lot of messages "BUG: workqueue lockup" GPU co=
+mpletely hung.
+>
+> I will be glad to test patches that fix this bug.
+>
+> --
+> Best Regards,
+> Mike Gavrilov.

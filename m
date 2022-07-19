@@ -2,70 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8C1579121
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 05:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2AC579123
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 05:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbiGSDHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 23:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S235402AbiGSDIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 23:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiGSDHc (ORCPT
+        with ESMTP id S229793AbiGSDIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 23:07:32 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8153925587;
-        Mon, 18 Jul 2022 20:07:31 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id q13-20020a17090a304d00b001f1af9a18a2so5931714pjl.5;
-        Mon, 18 Jul 2022 20:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BpsIYGCJRtvbx2TcIK1tJ0iVgorLSfDv+9DFPy2DSN4=;
-        b=DpCSYVK482KEJwYyLtyS4b1uh6RM9EObs1tmhkHPrDPWN47UsQFBicetHG/hWMjU/j
-         Vqm8QLr5s4Z1ffsShixACwkoMGWcHMMGY1KJcRZtCD9WLDCESSGjGmQLyuL6OnXct7pU
-         qWMdN8+cGedeOBgwjCQjuJnPHhR6CY0kprKSBjIzfHHOuRV1lw/n3gSPOlv+YYxdFP5d
-         OKb9mWjeibKzKd3/+7qvV2Ib2kDsmrhcQsg1WjYV2kWTGEaIBroB0iTA8dAOjH4cjAh6
-         s9RqRtcbk3a2n2Wb7DdZ1QzMa9b5SilisJAbcHBO0kpS87LSAAFRA+NRiQGSe1KMNpzf
-         PBcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BpsIYGCJRtvbx2TcIK1tJ0iVgorLSfDv+9DFPy2DSN4=;
-        b=pqNShbdwAntZp06VCYEEOjB5RwG5N3uvao0H5fN0Tq2BrR066s1LFICIelv87PVzwY
-         okxXxHORW/6Q47I6agIyZNzgX9LDsZ0GzdoxAcYi1k7exPyHIzPSdcn+2AhlaKdE65BM
-         sKLWtXsJC2CFtCRs7RAuLgdFWbnoxl2sh2RXV7+P107gAU5LmFFDaWMKyE6s6dDuy2Wn
-         DtAuAnDO3fDOS6Ex2TPHl+zsZtQk9663rEBY28ZB4cZpkKMnK0qUwMSRbdWZYle7MsrJ
-         6AGuaEabeDfOTaXc3yjBQvRfP1m2HnNfna4JWiubaUPQtFzdoe8XPLD6yf51jy2VCqbs
-         Qr+w==
-X-Gm-Message-State: AJIora+0YY7mqsyDqyin2Qa59XHhwP/KKuvinHyPdfFLfpNx1CDh2oNj
-        yauUyhiIfqLwAh3XnHWRC4M=
-X-Google-Smtp-Source: AGRyM1tQzZAiyZf1SK2+bmxzGqHUtXuR/IFD4oodzTgNL8yVoDtRiJHrLtpli7/2d4Kmuh+RSMayHA==
-X-Received: by 2002:a17:902:ab53:b0:16b:ecde:3dfc with SMTP id ij19-20020a170902ab5300b0016becde3dfcmr30761503plb.131.1658200051014;
-        Mon, 18 Jul 2022 20:07:31 -0700 (PDT)
-Received: from debian.moxa.com ([123.51.145.104])
-        by smtp.gmail.com with ESMTPSA id i6-20020a62c106000000b0052594a3ba89sm10096857pfg.65.2022.07.18.20.07.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 20:07:30 -0700 (PDT)
-From:   Jimmy Chen <u7702045@gmail.com>
-X-Google-Original-From: Jimmy Chen <jimmy.chen@moxa.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
-Cc:     Jimmy Chen <jimmy.chen@moxa.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/2] dt-bindings: arm: fsl: Add Moxa UC8210/8220 series
-Date:   Tue, 19 Jul 2022 11:07:16 +0800
-Message-Id: <20220719030718.28826-2-jimmy.chen@moxa.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220719030718.28826-1-jimmy.chen@moxa.com>
-References: <20220719030718.28826-1-jimmy.chen@moxa.com>
+        Mon, 18 Jul 2022 23:08:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B50C252A2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 20:08:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7625C1042;
+        Mon, 18 Jul 2022 20:08:19 -0700 (PDT)
+Received: from [10.162.41.8] (unknown [10.162.41.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 60D713F766;
+        Mon, 18 Jul 2022 20:08:13 -0700 (PDT)
+Message-ID: <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com>
+Date:   Tue, 19 Jul 2022 08:38:10 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
+Content-Language: en-US
+To:     Barry Song <21cnbao@gmail.com>,
+        "Huang, Ying" <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
+        hanchuanhua <hanchuanhua@oppo.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>
+References: <20220718090050.2261-1-21cnbao@gmail.com>
+ <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,26 +63,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT compatible string for Moxa UC8210/8220 i.MX7D board.
 
-Signed-off-by: Jimmy Chen <jimmy.chen@moxa.com>
----
- Documentation/devicetree/bindings/arm/fsl.yaml | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index ef524378d449..fd26b93b4388 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -756,6 +756,8 @@ properties:
-               - fsl,imx7d-sdb-reva        # i.MX7 SabreSD Rev-A Board
-               - kam,imx7d-flex-concentrator       # Kamstrup OMNIA Flex Concentrator
-               - kam,imx7d-flex-concentrator-mfg   # Kamstrup OMNIA Flex Concentrator in manufacturing mode
-+              - moxa,uc-8210              # MOXA UC-8210 board
-+              - moxa,uc-8220              # MOXA UC-8220 board
-               - novtech,imx7d-meerkat96   # i.MX7 Meerkat96 Board
-               - remarkable,imx7d-remarkable2  # i.MX7D ReMarkable 2 E-Ink Tablet
-               - storopack,imx7d-smegw01       # Storopack i.MX7D SMEGW01
--- 
-2.20.1
+On 7/19/22 06:53, Barry Song wrote:
+> On Tue, Jul 19, 2022 at 12:44 PM Huang, Ying <ying.huang@intel.com> wrote:
+>>
+>> Barry Song <21cnbao@gmail.com> writes:
+>>
+>>> From: Barry Song <v-songbaohua@oppo.com>
+>>>
+>>> THP_SWAP has been proven to improve the swap throughput significantly
+>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
+>>> splitting THP after swapped out").
+>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
+>>> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
+>>> enabling it on arm64 will benefit arm64 as well.
+>>> A corner case is that MTE has an assumption that only base pages
+>>> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
+>>> MTE support until MTE is reworked to coexist with THP_SWAP.
+>>>
+>>> A micro-benchmark is written to measure thp swapout throughput as
+>>> below,
+>>>
+>>>  unsigned long long tv_to_ms(struct timeval tv)
+>>>  {
+>>>       return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+>>>  }
+>>>
+>>>  main()
+>>>  {
+>>>       struct timeval tv_b, tv_e;;
+>>>  #define SIZE 400*1024*1024
+>>>       volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+>>>                               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>>>       if (!p) {
+>>>               perror("fail to get memory");
+>>>               exit(-1);
+>>>       }
+>>>
+>>>       madvise(p, SIZE, MADV_HUGEPAGE);
+>>>       memset(p, 0x11, SIZE); /* write to get mem */
+>>>
+>>>       gettimeofday(&tv_b, NULL);
+>>>       madvise(p, SIZE, MADV_PAGEOUT);
+>>>       gettimeofday(&tv_e, NULL);
+>>>
+>>>       printf("swp out bandwidth: %ld bytes/ms\n",
+>>>                       SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
+>>>  }
+>>>
+>>> Testing is done on rk3568 64bit quad core processor Quad Core
+>>> Cortex-A55 platform - ROCK 3A.
+>>> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
+>>> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
+>>>
+>>> Cc: "Huang, Ying" <ying.huang@intel.com>
+>>> Cc: Minchan Kim <minchan@kernel.org>
+>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
+>>> Cc: Hugh Dickins <hughd@google.com>
+>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+>>> Cc: Steven Price <steven.price@arm.com>
+>>> Cc: Yang Shi <shy828301@gmail.com>
+>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+>>> ---
+>>>  -v3:
+>>>  * refine the commit log;
+>>>  * add a benchmark result;
+>>>  * refine the macro of arch_thp_swp_supported
+>>>  Thanks to the comments of Anshuman, Andrew, Steven
+>>>
+>>>  arch/arm64/Kconfig               |  1 +
+>>>  arch/arm64/include/asm/pgtable.h |  6 ++++++
+>>>  include/linux/huge_mm.h          | 12 ++++++++++++
+>>>  mm/swap_slots.c                  |  2 +-
+>>>  4 files changed, 20 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>>> index 1652a9800ebe..e1c540e80eec 100644
+>>> --- a/arch/arm64/Kconfig
+>>> +++ b/arch/arm64/Kconfig
+>>> @@ -101,6 +101,7 @@ config ARM64
+>>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>>>       select ARCH_WANT_LD_ORPHAN_WARN
+>>>       select ARCH_WANTS_NO_INSTR
+>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+>>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
+>>>       select ARM_AMBA
+>>>       select ARM_ARCH_TIMER
+>>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+>>> index 0b6632f18364..78d6f6014bfb 100644
+>>> --- a/arch/arm64/include/asm/pgtable.h
+>>> +++ b/arch/arm64/include/asm/pgtable.h
+>>> @@ -45,6 +45,12 @@
+>>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
+>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>>>
+>>> +static inline bool arch_thp_swp_supported(void)
+>>> +{
+>>> +     return !system_supports_mte();
+>>> +}
+>>> +#define arch_thp_swp_supported arch_thp_swp_supported
+>>> +
+>>>  /*
+>>>   * Outside of a few very special situations (e.g. hibernation), we always
+>>>   * use broadcast TLB invalidation instructions, therefore a spurious page
+>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+>>> index de29821231c9..4ddaf6ad73ef 100644
+>>> --- a/include/linux/huge_mm.h
+>>> +++ b/include/linux/huge_mm.h
+>>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
+>>>       return split_huge_page_to_list(&folio->page, list);
+>>>  }
+>>>
+>>> +/*
+>>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
+>>> + * limitations in the implementation like arm64 MTE can override this to
+>>> + * false
+>>> + */
+>>> +#ifndef arch_thp_swp_supported
+>>> +static inline bool arch_thp_swp_supported(void)
+>>> +{
+>>> +     return true;
+>>> +}
+>>
+>> How about the following?
+>>
+>> static inline bool arch_wants_thp_swap(void)
+>> {
+>>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
+>> }
+> 
+> This looks good. then i'll need to change arm64 to
+> 
+>  +static inline bool arch_thp_swp_supported(void)
+>  +{
+>  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
+>  +}
 
+Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
+IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
+is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
+either in the generic fallback stub, or in arm64 platform override. Because
+without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
+be called in the first place.
+
+> 
+>>
+>> Best Regards,
+>> Huang, Ying
+>>
+>>> +#endif
+>>> +
+>>>  #endif /* _LINUX_HUGE_MM_H */
+>>> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
+>>> index 2a65a89b5b4d..10b94d64cc25 100644
+>>> --- a/mm/swap_slots.c
+>>> +++ b/mm/swap_slots.c
+>>> @@ -307,7 +307,7 @@ swp_entry_t folio_alloc_swap(struct folio *folio)
+>>>       entry.val = 0;
+>>>
+>>>       if (folio_test_large(folio)) {
+>>> -             if (IS_ENABLED(CONFIG_THP_SWAP))
+>>> +             if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
+>>>                       get_swap_pages(1, &entry, folio_nr_pages(folio));
+>>>               goto out;
+>>>       }
+> 
+> Thanks
+> Barry
+> 

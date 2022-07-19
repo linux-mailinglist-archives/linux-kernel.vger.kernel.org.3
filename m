@@ -2,106 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B263057A579
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF6357A57B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239710AbiGSRgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S239719AbiGSRg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiGSRgS (ORCPT
+        with ESMTP id S239716AbiGSRgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:36:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBCC4C63A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:36:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 361C061542
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:36:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4BAC341C6;
-        Tue, 19 Jul 2022 17:36:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658252176;
-        bh=gDYE8ppwu4c1VBpCapCFmc8Ncr59buDgfCRpCfpBWao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NQ/tzIcYwRa/8vFPHrtwoZ3BQGroiMAvYMrUVB3PvCWLsfF/G0f/UfevKmHRyA0CP
-         Lwen4a4231vb+tULXGgwtqcFCtu8tAzfv5TjBvW2Eyt6nYiZV4ihTCNnT6BJINjtHd
-         bKWVdEAjLu7cqXSwJ30axvps5Gq329wcV5Gnt/xGbVCMeXcXfJy0YdC/cmgZs1znc2
-         jNGI/WQ4uq4KId6yDE4GzKKfVRfA+bur5CcEGQqivTLpsILKKtjPaIgJk2yfviuY3Y
-         yovmdFzePKMyFjghQStzwMmJyfM6uLFmc3RzZJ2AvAssPvo7t9MThV2FdGVnmZjObg
-         IF4e6Io1MioiA==
-Date:   Tue, 19 Jul 2022 18:36:10 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Subkhankulov Rustam <subkhankulov@ispras.ru>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org
-Subject: Re: [POSSIBLE BUG] iommu/io-pgtable-arm: possible dereferencing of
- NULL pointer
-Message-ID: <20220719173610.GA14526@willie-the-truck>
-References: <28df50012344fb1c925a7ceaf55ae400152ffb48.camel@ispras.ru>
+        Tue, 19 Jul 2022 13:36:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA8B2564D2;
+        Tue, 19 Jul 2022 10:36:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF6E91596;
+        Tue, 19 Jul 2022 10:36:21 -0700 (PDT)
+Received: from [10.57.42.173] (unknown [10.57.42.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0D243F766;
+        Tue, 19 Jul 2022 10:36:19 -0700 (PDT)
+Message-ID: <1019b931-4d0d-ecea-c170-29e3899acd9b@arm.com>
+Date:   Tue, 19 Jul 2022 18:36:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28df50012344fb1c925a7ceaf55ae400152ffb48.camel@ispras.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 02/13] coresight: trace-id: update CoreSight core to
+ use Trace ID API
+To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, linux-perf-users@vger.kernel.org,
+        leo.yan@linaro.org, quic_jinlmao@quicinc.com
+References: <20220704081149.16797-1-mike.leach@linaro.org>
+ <20220704081149.16797-3-mike.leach@linaro.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220704081149.16797-3-mike.leach@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:20:06PM +0300, Subkhankulov Rustam wrote:
-> Version: 5-19-rc6
+Hi Mike
+
+On 04/07/2022 09:11, Mike Leach wrote:
+> Initialises the default trace ID map.
 > 
-> In function '__arm_lpae_alloc_pages' pointer 'dev' is compared with 
-> NULL at [drivers/iommu/io-pgtable-arm.c: 203]. This means that the 
-> pointer can be NULL.
+> This will be used by all source drivers to be allocated their trace IDs.
+
+As per previous patch, we may not need an explicit call from here.
+
 > 
-> -----------------------------------------------------------------------
-> 203 	p = alloc_pages_node(dev ? dev_to_node(dev) : NUMA_NO_NODE,
-> 204 			     gfp | __GFP_ZERO, order);
-> -----------------------------------------------------------------------
+> The checks for sources to have unique IDs has been removed - this is now
+> guaranteed by the ID allocation mechanisms, and inappropriate where
+> multiple ID maps are in use in larger systems
 > 
-> Then, if cfg->coherent_walk == 0 at [drivers/iommu/io-pgtable-arm.c: 
-> 209], function 'dma_map_single', which is defined as 
-> 'dma_map_single_attrs', is called and pointer dev is passed as 
-> first parameter.
-> 
-> -----------------------------------------------------------------------
-> 209 	if (!cfg->coherent_walk) {
-> 208 		dma = dma_map_single(dev, pages, size, DMA_TO_DEVICE);
-> -----------------------------------------------------------------------
-> 
-> Therefore, pointer 'dev' passed to function 'dev_driver_string' 
-> in macro 'dev_WARN_ONCE' at [include/linux/dma-mapping.h: 326], 
-> where it is dereferenced at [drivers/base/core.c: 2091].
-> 
-> -----------------------------------------------------------------------
-> 2083	const char *dev_driver_string(const struct device *dev)
-> 2084	{
-> 2085		struct device_driver *drv;
-> 2086
+
+And this looks like a candidate for a separate patch, as the sources do
+not use the new API yet ? Once they do, in the following patches, we
+could remove this code.
+
+
+All said, this patch could be renamed and moved to the bottom of the 
+series, with :
+
+  "coresight: Remove obsolete trace-id uniqueness checks"
+
+Otherwise, looks good to me.
+
+
+
+> Signed-off-by: Mike Leach <mike.leach@linaro.org>
 > ---
-> 2091		drv = READ_ONCE(dev->driver);
-> -----------------------------------------------------------------------
+>   drivers/hwtracing/coresight/coresight-core.c | 49 ++------------------
+>   1 file changed, 4 insertions(+), 45 deletions(-)
 > 
-> Thus, if it is possible that 'dev' is null at the same time 
-> that flag 'coherent_walk' is 0, then NULL pointer will be 
-> dereferenced.
-> 
-> Should we somehow avoid NULL pointer dereference or is this 
-> situation impossible and we should remove comparison with NULL?
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index 1edfec1e9d18..be69e05fde1f 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -22,6 +22,7 @@
+>   #include "coresight-etm-perf.h"
+>   #include "coresight-priv.h"
+>   #include "coresight-syscfg.h"
+> +#include "coresight-trace-id.h"
+>   
+>   static DEFINE_MUTEX(coresight_mutex);
+>   static DEFINE_PER_CPU(struct coresight_device *, csdev_sink);
+> @@ -84,45 +85,6 @@ struct coresight_device *coresight_get_percpu_sink(int cpu)
+>   }
+>   EXPORT_SYMBOL_GPL(coresight_get_percpu_sink);
+>   
+> -static int coresight_id_match(struct device *dev, void *data)
+> -{
+> -	int trace_id, i_trace_id;
+> -	struct coresight_device *csdev, *i_csdev;
+> -
+> -	csdev = data;
+> -	i_csdev = to_coresight_device(dev);
+> -
+> -	/*
+> -	 * No need to care about oneself and components that are not
+> -	 * sources or not enabled
+> -	 */
+> -	if (i_csdev == csdev || !i_csdev->enable ||
+> -	    i_csdev->type != CORESIGHT_DEV_TYPE_SOURCE)
+> -		return 0;
+> -
+> -	/* Get the source ID for both components */
+> -	trace_id = source_ops(csdev)->trace_id(csdev);
+> -	i_trace_id = source_ops(i_csdev)->trace_id(i_csdev);
+> -
+> -	/* All you need is one */
+> -	if (trace_id == i_trace_id)
+> -		return 1;
+> -
+> -	return 0;
+> -}
+> -
+> -static int coresight_source_is_unique(struct coresight_device *csdev)
+> -{
+> -	int trace_id = source_ops(csdev)->trace_id(csdev);
+> -
+> -	/* this shouldn't happen */
+> -	if (trace_id < 0)
+> -		return 0;
+> -
+> -	return !bus_for_each_dev(&coresight_bustype, NULL,
+> -				 csdev, coresight_id_match);
+> -}
+> -
+>   static int coresight_find_link_inport(struct coresight_device *csdev,
+>   				      struct coresight_device *parent)
+>   {
+> @@ -431,12 +393,6 @@ static int coresight_enable_source(struct coresight_device *csdev, u32 mode)
+>   {
+>   	int ret;
+>   
+> -	if (!coresight_source_is_unique(csdev)) {
+> -		dev_warn(&csdev->dev, "traceID %d not unique\n",
+> -			 source_ops(csdev)->trace_id(csdev));
+> -		return -EINVAL;
+> -	}
+> -
+>   	if (!csdev->enable) {
+>   		if (source_ops(csdev)->enable) {
+>   			ret = coresight_control_assoc_ectdev(csdev, true);
+> @@ -1775,6 +1731,9 @@ static int __init coresight_init(void)
+>   	if (ret)
+>   		goto exit_bus_unregister;
+>   
+> +	/* initialise the default trace ID map */
+> +	coresight_trace_id_init_default_map();
+> +
+>   	/* initialise the coresight syscfg API */
+>   	ret = cscfg_init();
+>   	if (!ret)
 
-I think 'dev' is only null in the case of the selftest initcall
-(see arm_lpae_do_selftests()), and 'coherent_walk' is always true there.
 
-Will
+Suzuki

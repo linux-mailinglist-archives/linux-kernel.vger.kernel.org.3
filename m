@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE5A579AE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5B8579E7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238986AbiGSMUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S242650AbiGSNBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239034AbiGSMSr (ORCPT
+        with ESMTP id S242662AbiGSM7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:18:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEE4459AA;
-        Tue, 19 Jul 2022 05:06:45 -0700 (PDT)
+        Tue, 19 Jul 2022 08:59:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DD349B66;
+        Tue, 19 Jul 2022 05:24:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78240B81B2D;
-        Tue, 19 Jul 2022 12:06:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6BBEC341C6;
-        Tue, 19 Jul 2022 12:06:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A5261921;
+        Tue, 19 Jul 2022 12:24:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD314C341D5;
+        Tue, 19 Jul 2022 12:24:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232389;
-        bh=IFZjXbJ7sgr7lOozH+tV907JnfMAKDS4Ba+tDZu8KHk=;
+        s=korg; t=1658233456;
+        bh=rO+12WaTA7CEK346tI4sccEoEMeXEJJq6yWPr6caLSA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RJIAzUJpYBo3FobnHPheTvaFUGzbZLHzmSyOwdrn2x6fVvo17F8cAycAvyljVW2Hc
-         G1sbm8muaIVW+hkKt2S1zrtJD5zaUU0PPkUxoyuUDflhdoIXcag/606w/l/wbPZNU5
-         Q+cDCFcbZdZU7oh2R4u3YdHSIJ4X/FFRgtXxkGtI=
+        b=B5v/E3FpdbmQOMcKgUTmbBm2jzgS9rxQzN328ijse26cQMyMWv9KHFcQLf/rIQDdN
+         IZ6eKBxjErScUz2ktug/b5u6vXtw/YcwOC+C9BH+JsY9EWPRwKffMNyTMvQHhV7RgX
+         DcvmX1acreUNKvC0P1BtRTJtl1l05LCaeUQ0OuEs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Prike Liang <Prike.Liang@amd.com>,
+        Aaron Liu <aaron.liu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 040/112] ASoC: Intel: Skylake: Correct the handling of fmt_config flexible array
-Date:   Tue, 19 Jul 2022 13:53:33 +0200
-Message-Id: <20220719114630.202019099@linuxfoundation.org>
+Subject: [PATCH 5.18 129/231] drm/amdkfd: correct the MEC atomic support firmware checking for GC 10.3.7
+Date:   Tue, 19 Jul 2022 13:53:34 +0200
+Message-Id: <20220719114725.304038043@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,130 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+From: Prike Liang <Prike.Liang@amd.com>
 
-[ Upstream commit fc976f5629afb4160ee77798b14a693eac903ffd ]
+[ Upstream commit c0044865480a162146b9dfe7783e73a08e97b2b9 ]
 
-The struct nhlt_format's fmt_config is a flexible array, it must not be
-used as normal array.
-When moving to the next nhlt_fmt_cfg we need to take into account the data
-behind the ->config.caps (indicated by ->config.size).
+On the GC 10.3.7 platform the initial MEC release version #3 can support
+atomic operation,so need correct and set its MEC atomic support version to #3.
 
-The logic of the code also changed: it is no longer saves the _last_
-fmt_cfg for all found rates.
-
-Fixes: bc2bd45b1f7f3 ("ASoC: Intel: Skylake: Parse nhlt and register clock device")
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Link: https://lore.kernel.org/r/20220630065638.11183-3-peter.ujfalusi@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Prike Liang <Prike.Liang@amd.com>
+Reviewed-by: Aaron Liu <aaron.liu@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org # 5.18.x
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/intel/skylake/skl-nhlt.c | 37 ++++++++++++++++++++----------
- 1 file changed, 25 insertions(+), 12 deletions(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_device.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/intel/skylake/skl-nhlt.c b/sound/soc/intel/skylake/skl-nhlt.c
-index c668e10baade..3b3868df9f67 100644
---- a/sound/soc/intel/skylake/skl-nhlt.c
-+++ b/sound/soc/intel/skylake/skl-nhlt.c
-@@ -213,11 +213,12 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
- 	if (fmt->fmt_count == 0)
- 		return;
- 
-+	fmt_cfg = (struct nhlt_fmt_cfg *)fmt->fmt_config;
- 	for (i = 0; i < fmt->fmt_count; i++) {
-+		struct nhlt_fmt_cfg *saved_fmt_cfg = fmt_cfg;
- 		bool present = false;
- 
--		fmt_cfg = &fmt->fmt_config[i];
--		wav_fmt = &fmt_cfg->fmt_ext;
-+		wav_fmt = &saved_fmt_cfg->fmt_ext;
- 
- 		channels = wav_fmt->fmt.channels;
- 		bps = wav_fmt->fmt.bits_per_sample;
-@@ -235,12 +236,18 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
- 		 * derive the rate.
- 		 */
- 		for (j = i; j < fmt->fmt_count; j++) {
--			fmt_cfg = &fmt->fmt_config[j];
--			wav_fmt = &fmt_cfg->fmt_ext;
-+			struct nhlt_fmt_cfg *tmp_fmt_cfg = fmt_cfg;
-+
-+			wav_fmt = &tmp_fmt_cfg->fmt_ext;
- 			if ((fs == wav_fmt->fmt.samples_per_sec) &&
--			   (bps == wav_fmt->fmt.bits_per_sample))
-+			   (bps == wav_fmt->fmt.bits_per_sample)) {
- 				channels = max_t(u16, channels,
- 						wav_fmt->fmt.channels);
-+				saved_fmt_cfg = tmp_fmt_cfg;
-+			}
-+			/* Move to the next nhlt_fmt_cfg */
-+			tmp_fmt_cfg = (struct nhlt_fmt_cfg *)(tmp_fmt_cfg->config.caps +
-+							      tmp_fmt_cfg->config.size);
- 		}
- 
- 		rate = channels * bps * fs;
-@@ -256,8 +263,11 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
- 
- 		/* Fill rate and parent for sclk/sclkfs */
- 		if (!present) {
-+			struct nhlt_fmt_cfg *first_fmt_cfg;
-+
-+			first_fmt_cfg = (struct nhlt_fmt_cfg *)fmt->fmt_config;
- 			i2s_config_ext = (struct skl_i2s_config_blob_ext *)
--						fmt->fmt_config[0].config.caps;
-+						first_fmt_cfg->config.caps;
- 
- 			/* MCLK Divider Source Select */
- 			if (is_legacy_blob(i2s_config_ext->hdr.sig)) {
-@@ -271,6 +281,9 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
- 
- 			parent = skl_get_parent_clk(clk_src);
- 
-+			/* Move to the next nhlt_fmt_cfg */
-+			fmt_cfg = (struct nhlt_fmt_cfg *)(fmt_cfg->config.caps +
-+							  fmt_cfg->config.size);
- 			/*
- 			 * Do not copy the config data if there is no parent
- 			 * clock available for this clock source select
-@@ -279,9 +292,9 @@ static void skl_get_ssp_clks(struct skl_dev *skl, struct skl_ssp_clk *ssp_clks,
- 				continue;
- 
- 			sclk[id].rate_cfg[rate_index].rate = rate;
--			sclk[id].rate_cfg[rate_index].config = fmt_cfg;
-+			sclk[id].rate_cfg[rate_index].config = saved_fmt_cfg;
- 			sclkfs[id].rate_cfg[rate_index].rate = rate;
--			sclkfs[id].rate_cfg[rate_index].config = fmt_cfg;
-+			sclkfs[id].rate_cfg[rate_index].config = saved_fmt_cfg;
- 			sclk[id].parent_name = parent->name;
- 			sclkfs[id].parent_name = parent->name;
- 
-@@ -295,13 +308,13 @@ static void skl_get_mclk(struct skl_dev *skl, struct skl_ssp_clk *mclk,
- {
- 	struct skl_i2s_config_blob_ext *i2s_config_ext;
- 	struct skl_i2s_config_blob_legacy *i2s_config;
--	struct nhlt_specific_cfg *fmt_cfg;
-+	struct nhlt_fmt_cfg *fmt_cfg;
- 	struct skl_clk_parent_src *parent;
- 	u32 clkdiv, div_ratio;
- 	u8 clk_src;
- 
--	fmt_cfg = &fmt->fmt_config[0].config;
--	i2s_config_ext = (struct skl_i2s_config_blob_ext *)fmt_cfg->caps;
-+	fmt_cfg = (struct nhlt_fmt_cfg *)fmt->fmt_config;
-+	i2s_config_ext = (struct skl_i2s_config_blob_ext *)fmt_cfg->config.caps;
- 
- 	/* MCLK Divider Source Select and divider */
- 	if (is_legacy_blob(i2s_config_ext->hdr.sig)) {
-@@ -330,7 +343,7 @@ static void skl_get_mclk(struct skl_dev *skl, struct skl_ssp_clk *mclk,
- 		return;
- 
- 	mclk[id].rate_cfg[0].rate = parent->rate/div_ratio;
--	mclk[id].rate_cfg[0].config = &fmt->fmt_config[0];
-+	mclk[id].rate_cfg[0].config = fmt_cfg;
- 	mclk[id].parent_name = parent->name;
- }
- 
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device.c b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
+index 651498bfecc8..2059c3138410 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
+@@ -158,6 +158,8 @@ static void kfd_device_info_init(struct kfd_dev *kfd,
+ 			/* Navi2x+, Navi1x+ */
+ 			if (gc_version == IP_VERSION(10, 3, 6))
+ 				kfd->device_info.no_atomic_fw_version = 14;
++			else if (gc_version == IP_VERSION(10, 3, 7))
++				kfd->device_info.no_atomic_fw_version = 3;
+ 			else if (gc_version >= IP_VERSION(10, 3, 0))
+ 				kfd->device_info.no_atomic_fw_version = 92;
+ 			else if (gc_version >= IP_VERSION(10, 1, 1))
 -- 
 2.35.1
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A5B579953
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EC55798FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237908AbiGSMBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
+        id S237585AbiGSL5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237794AbiGSMAx (ORCPT
+        with ESMTP id S237528AbiGSL4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:00:53 -0400
+        Tue, 19 Jul 2022 07:56:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6B245F5F;
-        Tue, 19 Jul 2022 04:58:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A136A42AC5;
+        Tue, 19 Jul 2022 04:56:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0ED5CB81B2C;
-        Tue, 19 Jul 2022 11:58:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C2BFC385A5;
-        Tue, 19 Jul 2022 11:58:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 551BAB81B25;
+        Tue, 19 Jul 2022 11:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FD53C341C6;
+        Tue, 19 Jul 2022 11:56:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231892;
-        bh=SIc6DlfuX0l6uonIbPt33V4X9eiPE/u2ceNGgrYJ224=;
+        s=korg; t=1658231789;
+        bh=VLVde4WyU3r9G4I6zy3LLwY24OSGIE0AYQEeL+lw+FA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vW4eiqYDwm6OWaVdWoalpLJbLUuwp0zx+4o3TAMalwzRWFXfwkwETbDneFq8/CWp0
-         4jOeyYWbu6JK+nZnBe4XVO7SA/4pY4Rs1cKyIO0mXSavIoSQoeGi0qOj252MR1a8tc
-         My4Z52tq84YolGyIvDxE/gtyAFpr1KXuhVxjDkvk=
+        b=BDEhM7sMcN39pWhs7bKJeNJ5QePUsvN5+pPEK9XSsF+Y+9NtXbsHOq6XDOT+xp11w
+         TfGzODgoZQ5R0YOj+qdYNtkrKwwHdXIAVuE63JXZQL0z/p5siSJXgTcbO9R8bWAcsz
+         BFVi/9L/19N3iExLNSrZZ+nH9bVgRJfMNPtHufvc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 32/43] net: sfp: fix memory leak in sfp_probe()
-Date:   Tue, 19 Jul 2022 13:54:03 +0200
-Message-Id: <20220719114524.759310436@linuxfoundation.org>
+        stable@vger.kernel.org, Yi Yang <yiyang13@huawei.com>,
+        stable <stable@kernel.org>
+Subject: [PATCH 4.9 26/28] serial: 8250: fix return error code in serial8250_request_std_resource()
+Date:   Tue, 19 Jul 2022 13:54:04 +0200
+Message-Id: <20220719114458.550479689@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
-References: <20220719114521.868169025@linuxfoundation.org>
+In-Reply-To: <20220719114455.701304968@linuxfoundation.org>
+References: <20220719114455.701304968@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +53,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: Yi Yang <yiyang13@huawei.com>
 
-[ Upstream commit 0a18d802d65cf662644fd1d369c86d84a5630652 ]
+commit 6e690d54cfa802f939cefbd2fa2c91bd0b8bd1b6 upstream.
 
-sfp_probe() allocates a memory chunk from sfp with sfp_alloc(). When
-devm_add_action() fails, sfp is not freed, which leads to a memory leak.
+If port->mapbase = NULL in serial8250_request_std_resource() , it need
+return a error code instead of 0. If uart_set_info() fail to request new
+regions by serial8250_request_std_resource() but the return value of
+serial8250_request_std_resource() is 0, The system incorrectly considers
+that the resource application is successful and does not attempt to
+restore the old setting. A null pointer reference is triggered when the
+port resource is later invoked.
 
-We should use devm_add_action_or_reset() instead of devm_add_action().
-
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Link: https://lore.kernel.org/r/20220629075550.2152003-1-niejianglei2021@163.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Yi Yang <yiyang13@huawei.com>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220628083515.64138-1-yiyang13@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/sfp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/8250/8250_port.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index 9f6e737d9fc9..c0f9de3be217 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -830,7 +830,7 @@ static int sfp_probe(struct platform_device *pdev)
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2789,8 +2789,10 @@ static int serial8250_request_std_resour
+ 	case UPIO_MEM32BE:
+ 	case UPIO_MEM16:
+ 	case UPIO_MEM:
+-		if (!port->mapbase)
++		if (!port->mapbase) {
++			ret = -EINVAL;
+ 			break;
++		}
  
- 	platform_set_drvdata(pdev, sfp);
- 
--	err = devm_add_action(sfp->dev, sfp_cleanup, sfp);
-+	err = devm_add_action_or_reset(sfp->dev, sfp_cleanup, sfp);
- 	if (err < 0)
- 		return err;
- 
--- 
-2.35.1
-
+ 		if (!request_mem_region(port->mapbase, size, "serial")) {
+ 			ret = -EBUSY;
 
 

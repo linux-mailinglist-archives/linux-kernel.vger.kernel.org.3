@@ -2,127 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A0657A3A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D4057A3AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239332AbiGSPtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
+        id S239458AbiGSPu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239143AbiGSPtV (ORCPT
+        with ESMTP id S239376AbiGSPuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:49:21 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D837A599DA;
-        Tue, 19 Jul 2022 08:49:19 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JF18n2006836;
-        Tue, 19 Jul 2022 17:49:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=xNJ4ErN3u9jkwMCarC2DByfr3qT4TwK9Imt9o2bL5z0=;
- b=GBgzepkdJdsFAckF9I/WRy8sXMFk7VCCjo7Y7HRdF1F76W5b6gsikNP3c+7PLlUGZoQP
- DgKLybIfd/dd/XzIrk7sodntJHPa/do2UvuMDiPJHd/9cI4cUdBQIMYAqv1i+sQE0rSM
- 3ViMAILa5kcIyZmUn6VvAB2B0EzexNri17aJD3gV0DtHvylzakv8JM92s1oXpCSr8aS9
- EAcEtUe5fybPg1YAt6w/dO1PR9nT/rC3OQUoLIlKBhJoa6LatC/j341H4yooZDIksZTz
- 72/e/3Qoq0bcwb8kne9yJdBvA/dj3BJa9ovKz/CWwa4zepmuyuSK3Ikh5/T38E++IslD 9w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hbnp60r8v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Jul 2022 17:49:08 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 09E6610002A;
-        Tue, 19 Jul 2022 17:49:08 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0502522D17D;
-        Tue, 19 Jul 2022 17:49:08 +0200 (CEST)
-Received: from [10.201.20.208] (10.75.127.44) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 19 Jul
- 2022 17:49:04 +0200
-Message-ID: <011c1254-f3e9-f363-52a5-c71f7b5a2805@foss.st.com>
-Date:   Tue, 19 Jul 2022 17:49:03 +0200
+        Tue, 19 Jul 2022 11:50:17 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E211B7BD
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:50:11 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id q14so12106304iod.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a5wNjIEcOp/KS8l2AXD7eBUaUvKBjHJrJEs+OiuGU30=;
+        b=JbMwpb3+lkpF1+cK06G+at7EwuWPbFViWV5LKH7trDd24T9LaKUsIde10KrwWcdZXE
+         uSAQslRUfSEQ0J/dixVjAiXVMP1UDG9uGw0xAX9014xTp02j44Fp/LA5vCA+ytA2nL63
+         GZ3ApV/W28WUMgW0R2eCPoNqhyfkcEz/7UtfdNnb9wWACymgGX4NDXXXfIFcVtvww6K6
+         2MMOrlHjQkvM0dIiwnMc6k2QLFPNSMnHqfFbcAerHXaThIQE487o4dTV1zBJbtZvdjSF
+         dV/DPHNmOX31jlkYTJjIyAd901m75QgTi7By5tLV1cDUEkuTY/aV4Cs9QO/YSJA/WwqW
+         sl0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a5wNjIEcOp/KS8l2AXD7eBUaUvKBjHJrJEs+OiuGU30=;
+        b=ZLMT/gs8hfF8U432+tEQy2OeOF2xF5jGSqtlkIWj0Yq9QBfIL0b/n6TIf4PkDO1UtR
+         AU7PZo2xSGypI0qDRxJ/6us+EeEkc4o19CStCji3RZMsVh6JB1lHx2xv/H7S0AXqtqIf
+         5gSY4FB8VG4Fx0vVekWBstgkpQUHAAoXi+LXL3d6VGOQz6s7J7w98N0PpOrUmlVYkdVv
+         R2LyXpqKMl6I9qV4cing32+au/7pyfd7KaiUUR8E07LeDxfiHoD5nWR15KyLTtiNv1P9
+         L/9u/FXz9rEFDwKBWW/PT4ElA8GElAuVgAjJ7m619dOWnTuS5fgIpvBqpH9BCJKC/zjX
+         LKbg==
+X-Gm-Message-State: AJIora/ljZFcIwWMOdGxllFihZEDtG71QjsFtV3ERpBmVPCEr16VHOPp
+        rHAbJiQEgI2y6xBcHn9swyi8YA==
+X-Google-Smtp-Source: AGRyM1u4pnCt7wOuImhBZ742yWWQv5dMDCVZZSAf1RDs/pn0Ee8dlehRipudG33RXXgwFNksskcQwg==
+X-Received: by 2002:a02:9711:0:b0:341:4359:2576 with SMTP id x17-20020a029711000000b0034143592576mr13465790jai.112.1658245810491;
+        Tue, 19 Jul 2022 08:50:10 -0700 (PDT)
+Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id o4-20020a02a1c4000000b0033f2f249a69sm6802751jah.129.2022.07.19.08.50.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 08:50:10 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2] net: ipa: add an endpoint device attribute group
+Date:   Tue, 19 Jul 2022 10:50:06 -0500
+Message-Id: <20220719155006.312381-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 0/6] STM32 DMA-MDMA chaining feature
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-doc@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>
-References: <20220719153122.620730-1-amelie.delaunay@foss.st.com>
-From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
-In-Reply-To: <20220719153122.620730-1-amelie.delaunay@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-19_04,2022-07-19_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please drop this malformed patchset, I'll send a new one.
+Create a new attribute group meant to provide a single place that
+defines endpoint IDs that might be needed by user space.  Not all
+defined endpoints are presented, and only those that are defined
+will be made visible.
 
-On 7/19/22 17:31, Amelie Delaunay wrote:
-> This patchset (re)introduces STM32 DMA-MDMA chaining feature.
-> 
-> As the DMA is not able to generate convenient burst transfer on the DDR,
-> it penalises the AXI bus when accessing the DDR. While it accesses
-> optimally the SRAM. The DMA-MDMA chaining then consists in having an SRAM
-> buffer between DMA and MDMA, so the DMA deals with peripheral and SRAM,
-> and the MDMA with SRAM and DDR.
-> 
-> The feature relies on the fact that DMA channel Transfer Complete signal
-> can trigger a MDMA channel transfer and MDMA can clear the DMA request by
-> writing to DMA Interrupt Clear register.
-> 
-> A deeper introduction can be found in patch 1.
-> 
-> Previous implementation [1] has been dropped as nacked.
-> Unlike this previous implementation (where all the stuff was embedded in
-> stm32-dma driver), the user (in peripheral drivers using dma) has now to
-> configure the MDMA channel.
-> 
-> [1] https://lore.kernel.org/lkml/1538139715-24406-1-git-send-email-pierre-yves.mordret@st.com/
-> 
-> Changes in v3:
-> - introduce two prior patches to help readibility
-> - fix stm32-dma struct stm32_dma_mdma_config documentation
-> 
-> Changes in v2:
-> - wrap to 80-column limit for documentation
-> - add an entry for this documentation in index.rst
-> - use simple table instead of csv-table in documentation
-> 
-> 
-> Amelie Delaunay (6):
->    dmaengine: stm32-dma: introduce 3 helpers to address channel flags
->    dmaengine: stm32-dma: use bitfield helpers
->    docs: arm: stm32: introduce STM32 DMA-MDMA chaining feature
->    dmaengine: stm32-dmamux: set dmamux channel id in dma features
->      bitfield
->    dmaengine: stm32-dma: add support to trigger STM32 MDMA
->    dmaengine: stm32-mdma: add support to be triggered by STM32 DMA
-> 
->   Documentation/arm/index.rst                   |   1 +
->   .../arm/stm32/stm32-dma-mdma-chaining.rst     | 415 ++++++++++++++++++
->   drivers/dma/stm32-dma.c                       | 136 +++---
->   drivers/dma/stm32-dmamux.c                    |   2 +-
->   drivers/dma/stm32-mdma.c                      |  70 ++-
->   5 files changed, 569 insertions(+), 55 deletions(-)
->   create mode 100644 Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
-> 
+The new attributes use "extended" device attributes to hold endpoint
+IDs, which is a little more compact and efficient.  Reimplement the
+existing modem endpoint ID attribute files using common code.
+
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+v2: Use uintptr_t to try to avoid a "cast to smaller integer type"
+    warning produced by "clang". 
+
+ .../testing/sysfs-devices-platform-soc-ipa    | 62 +++++++++++++----
+ drivers/net/ipa/ipa_main.c                    |  1 +
+ drivers/net/ipa/ipa_sysfs.c                   | 69 ++++++++++++++-----
+ drivers/net/ipa/ipa_sysfs.h                   |  1 +
+ 4 files changed, 102 insertions(+), 31 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
+index c56dcf15bf29d..364b1ba412427 100644
+--- a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
++++ b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
+@@ -46,33 +46,69 @@ Description:
+ 		that is supported by the hardware.  The possible values
+ 		are "MAPv4" or "MAPv5".
+ 
++What:		.../XXXXXXX.ipa/endpoint_id/
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/ directory contains
++		attributes that define IDs associated with IPA
++		endpoints.  The "rx" or "tx" in an endpoint name is
++		from the perspective of the AP.  An endpoint ID is a
++		small unsigned integer.
++
++What:		.../XXXXXXX.ipa/endpoint_id/modem_rx
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/modem_rx file contains
++		the ID of the AP endpoint on which packets originating
++		from the embedded modem are received.
++
++What:		.../XXXXXXX.ipa/endpoint_id/modem_tx
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/modem_tx file contains
++		the ID of the AP endpoint on which packets destined
++		for the embedded modem are sent.
++
++What:		.../XXXXXXX.ipa/endpoint_id/monitor_rx
++Date:		July 2022
++KernelVersion:	v5.19
++Contact:	Alex Elder <elder@kernel.org>
++Description:
++		The .../XXXXXXX.ipa/endpoint_id/monitor_rx file contains
++		the ID of the AP endpoint on which IPA "monitor" data is
++		received.  The monitor endpoint supplies replicas of
++		packets that enter the IPA hardware for processing.
++		Each replicated packet is preceded by a fixed-size "ODL"
++		header (see .../XXXXXXX.ipa/feature/monitor, above).
++		Large packets are truncated, to reduce the bandwidth
++		required to provide the monitor function.
++
+ What:		.../XXXXXXX.ipa/modem/
+ Date:		June 2021
+ KernelVersion:	v5.14
+ Contact:	Alex Elder <elder@kernel.org>
+ Description:
+-		The .../XXXXXXX.ipa/modem/ directory contains a set of
+-		attributes describing properties of the modem execution
+-		environment reachable by the IPA hardware.
++		The .../XXXXXXX.ipa/modem/ directory contains attributes
++		describing properties of the modem embedded in the SoC.
+ 
+ What:		.../XXXXXXX.ipa/modem/rx_endpoint_id
+ Date:		June 2021
+ KernelVersion:	v5.14
+ Contact:	Alex Elder <elder@kernel.org>
+ Description:
+-		The .../XXXXXXX.ipa/feature/rx_endpoint_id file contains
+-		the AP endpoint ID that receives packets originating from
+-		the modem execution environment.  The "rx" is from the
+-		perspective of the AP; this endpoint is considered an "IPA
+-		producer".  An endpoint ID is a small unsigned integer.
++		The .../XXXXXXX.ipa/modem/rx_endpoint_id file duplicates
++		the value found in .../XXXXXXX.ipa/endpoint_id/modem_rx.
+ 
+ What:		.../XXXXXXX.ipa/modem/tx_endpoint_id
+ Date:		June 2021
+ KernelVersion:	v5.14
+ Contact:	Alex Elder <elder@kernel.org>
+ Description:
+-		The .../XXXXXXX.ipa/feature/tx_endpoint_id file contains
+-		the AP endpoint ID used to transmit packets destined for
+-		the modem execution environment.  The "tx" is from the
+-		perspective of the AP; this endpoint is considered an "IPA
+-		consumer".  An endpoint ID is a small unsigned integer.
++		The .../XXXXXXX.ipa/modem/tx_endpoint_id file duplicates
++		the value found in .../XXXXXXX.ipa/endpoint_id/modem_tx.
+diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
+index 3757ce3de2c59..b989259b02047 100644
+--- a/drivers/net/ipa/ipa_main.c
++++ b/drivers/net/ipa/ipa_main.c
+@@ -851,6 +851,7 @@ static void ipa_shutdown(struct platform_device *pdev)
+ static const struct attribute_group *ipa_attribute_groups[] = {
+ 	&ipa_attribute_group,
+ 	&ipa_feature_attribute_group,
++	&ipa_endpoint_id_attribute_group,
+ 	&ipa_modem_attribute_group,
+ 	NULL,
+ };
+diff --git a/drivers/net/ipa/ipa_sysfs.c b/drivers/net/ipa/ipa_sysfs.c
+index ff61dbdd70d8c..74df4709361c2 100644
+--- a/drivers/net/ipa/ipa_sysfs.c
++++ b/drivers/net/ipa/ipa_sysfs.c
+@@ -96,38 +96,71 @@ const struct attribute_group ipa_feature_attribute_group = {
+ 	.attrs		= ipa_feature_attrs,
+ };
+ 
+-static ssize_t
+-ipa_endpoint_id_show(struct ipa *ipa, char *buf, enum ipa_endpoint_name name)
++static umode_t ipa_endpoint_id_is_visible(struct kobject *kobj,
++					  struct attribute *attr, int n)
+ {
+-	u32 endpoint_id = ipa->name_map[name]->endpoint_id;
++	struct ipa *ipa = dev_get_drvdata(kobj_to_dev(kobj));
++	struct device_attribute *dev_attr;
++	struct dev_ext_attribute *ea;
++	bool visible;
+ 
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", endpoint_id);
++	/* An endpoint id attribute is only visible if it's defined */
++	dev_attr = container_of(attr, struct device_attribute, attr);
++	ea = container_of(dev_attr, struct dev_ext_attribute, attr);
++
++	visible = !!ipa->name_map[(enum ipa_endpoint_name)(uintptr_t)ea->var];
++
++	return visible ? attr->mode : 0;
+ }
+ 
+-static ssize_t rx_endpoint_id_show(struct device *dev,
+-				   struct device_attribute *attr, char *buf)
++static ssize_t endpoint_id_attr_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
+ {
+ 	struct ipa *ipa = dev_get_drvdata(dev);
++	struct ipa_endpoint *endpoint;
++	struct dev_ext_attribute *ea;
+ 
+-	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_RX);
++	ea = container_of(attr, struct dev_ext_attribute, attr);
++	endpoint = ipa->name_map[(enum ipa_endpoint_name)ea->var];
++
++	return sysfs_emit(buf, "%u\n", endpoint->endpoint_id);
+ }
+ 
+-static DEVICE_ATTR_RO(rx_endpoint_id);
++#define ENDPOINT_ID_ATTR(_n, _endpoint_name)				    \
++	static struct dev_ext_attribute dev_attr_endpoint_id_ ## _n = {	    \
++		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
++		.var	= (void *)(_endpoint_name),			    \
++	}
+ 
+-static ssize_t tx_endpoint_id_show(struct device *dev,
+-				   struct device_attribute *attr, char *buf)
+-{
+-	struct ipa *ipa = dev_get_drvdata(dev);
++ENDPOINT_ID_ATTR(modem_rx, IPA_ENDPOINT_AP_MODEM_RX);
++ENDPOINT_ID_ATTR(modem_tx, IPA_ENDPOINT_AP_MODEM_TX);
+ 
+-	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_TX);
+-}
++static struct attribute *ipa_endpoint_id_attrs[] = {
++	&dev_attr_endpoint_id_modem_rx.attr.attr,
++	&dev_attr_endpoint_id_modem_tx.attr.attr,
++	NULL
++};
++
++const struct attribute_group ipa_endpoint_id_attribute_group = {
++	.name		= "endpoint_id",
++	.is_visible	= ipa_endpoint_id_is_visible,
++	.attrs		= ipa_endpoint_id_attrs,
++};
++
++/* Reuse endpoint ID attributes for the legacy modem endpoint IDs */
++#define MODEM_ATTR(_n, _endpoint_name)					    \
++	static struct dev_ext_attribute dev_attr_modem_ ## _n = {	    \
++		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
++		.var	= (void *)(_endpoint_name),			    \
++	}
+ 
+-static DEVICE_ATTR_RO(tx_endpoint_id);
++MODEM_ATTR(rx_endpoint_id, IPA_ENDPOINT_AP_MODEM_RX);
++MODEM_ATTR(tx_endpoint_id, IPA_ENDPOINT_AP_MODEM_TX);
+ 
+ static struct attribute *ipa_modem_attrs[] = {
+-	&dev_attr_rx_endpoint_id.attr,
+-	&dev_attr_tx_endpoint_id.attr,
+-	NULL
++	&dev_attr_modem_rx_endpoint_id.attr.attr,
++	&dev_attr_modem_tx_endpoint_id.attr.attr,
++	NULL,
+ };
+ 
+ const struct attribute_group ipa_modem_attribute_group = {
+diff --git a/drivers/net/ipa/ipa_sysfs.h b/drivers/net/ipa/ipa_sysfs.h
+index b34e5650bf8cd..4a3ffd1e4e3fb 100644
+--- a/drivers/net/ipa/ipa_sysfs.h
++++ b/drivers/net/ipa/ipa_sysfs.h
+@@ -10,6 +10,7 @@ struct attribute_group;
+ 
+ extern const struct attribute_group ipa_attribute_group;
+ extern const struct attribute_group ipa_feature_attribute_group;
++extern const struct attribute_group ipa_endpoint_id_attribute_group;
+ extern const struct attribute_group ipa_modem_attribute_group;
+ 
+ #endif /* _IPA_SYSFS_H_ */
+-- 
+2.34.1
+

@@ -2,68 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9A6578E60
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F43578EB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiGRXkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 19:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
+        id S235542AbiGSAIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 20:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiGRXkt (ORCPT
+        with ESMTP id S236140AbiGSAIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 19:40:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DC361CFF1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658187647;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3dTnes+KzHJaFJH05bFK49SXDq+onLA3FIpvx1ZPC08=;
-        b=CkFJK7ff39lYpF+ESsHK0fTQRYJNgsYTEknGrgKE5OeFe5Y6E2AcY/2ZI02XJwOmuoimsG
-        3ovl4vplNZJTyG5pe1oQn/N699eVLsjNlrbEUrdXon+8ICIaihUur1RWPQCXBEz5iqafsU
-        TNtc8/waQJDZZVu+XX7Ul0GRAZlCBr8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-265-Oq18XETuPuGoD7EdNskPDQ-1; Mon, 18 Jul 2022 19:40:43 -0400
-X-MC-Unique: Oq18XETuPuGoD7EdNskPDQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34759101A54E;
-        Mon, 18 Jul 2022 23:40:43 +0000 (UTC)
-Received: from [10.64.54.37] (vpn2-54-37.bne.redhat.com [10.64.54.37])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4916B1121314;
-        Mon, 18 Jul 2022 23:40:38 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2] KVM: selftests: Fix target thread to be migrated in
- rseq_test
-From:   Gavin Shan <gshan@redhat.com>
-To:     oliver.upton@linux.dev, kvmarm@lists.cs.columbia.edu
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, seanjc@google.com,
-        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
-        shan.gavin@gmail.com
-References: <20220716144537.3436743-1-gshan@redhat.com>
- <385aa28ad559874da8429c40a68570df@linux.dev>
- <4bdaa1cd-39f4-97d7-ba33-ee5cdc7d609e@redhat.com>
-Message-ID: <087c2e7e-998a-b807-0b4e-3c42aca1b5f7@redhat.com>
-Date:   Tue, 19 Jul 2022 11:40:18 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Mon, 18 Jul 2022 20:08:20 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4447532D83
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:08:18 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id w12so17462805edd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a+cot110De+UzG3wtW+Sy/wDH7YJ9KM5/a2EnekXAdA=;
+        b=cnBODFppPN/QvytnTP/lRKnwByklCxNj/EX3D6zURE6vFkzZTEi+ZSCE3JvX/E75gX
+         Ft/sJfCxXwc3LbvLSdi6LsjVl26SpqCXat727Jk5pfwbdOvF8oPbkt5ZfJ0lwJ7XqrXR
+         LsgzqxgQQxn1h00DrWAKZRocBut9YdbKL+cp4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a+cot110De+UzG3wtW+Sy/wDH7YJ9KM5/a2EnekXAdA=;
+        b=PiAqil+6CurhFAMvsPesONWJcqxJnpP5wL0euy1bAdkQhZ5URYMmQByZFAYj9M7RyU
+         wRAaQMGw31y0XiKml/MeLXTEkNvKyNyH85GmI7DExZ7ET/ZcG9D1KOPLmnvuOB6Gggdd
+         X+MM1BlAVhcN72A1eAmHKrT6CgjRL2htgFMNNgDYk0rSpPyMY10QoB6fTo1cG0hYmked
+         JM2qlf3oXKTtehwVNxrnAfPYXT3YyHlIeLbx8EYP5Qbh6bMgZzcfQU1p519mX2naSizy
+         bI1zhsHDek7NgDQQkT1eSxCFCFSvZlR9b14/KQnfUEbHd6mcBQOYYaxPeweqCTKCjJCM
+         E8mQ==
+X-Gm-Message-State: AJIora+7RGRjeARvLMQV2Oel1zmRuHQIa17M/Odmhv+Dh1BY2qip1zRE
+        oJBogGWWSyUUqMW0Rgb/tWGSd0fb/bHrJWNZcSk=
+X-Google-Smtp-Source: AGRyM1vsnv5KjxRQJBynCHIEKxoLT2TCvXrl3rsJra+p+oP3GJ4fjoxtTN2rwmAtfteOdCc72dI34Q==
+X-Received: by 2002:a05:6402:2936:b0:43a:711c:7c9b with SMTP id ee54-20020a056402293600b0043a711c7c9bmr41267600edb.144.1658189296568;
+        Mon, 18 Jul 2022 17:08:16 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906201100b00722e0b1fa8esm5987387ejo.164.2022.07.18.17.08.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 17:08:16 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so41255wmm.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:08:15 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ec9:b0:3a2:e9bd:fcd9 with SMTP id
+ g9-20020a05600c4ec900b003a2e9bdfcd9mr35068586wmq.154.1658188924208; Mon, 18
+ Jul 2022 17:02:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <4bdaa1cd-39f4-97d7-ba33-ee5cdc7d609e@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220716230344.239749011@linutronix.de> <87wncauslw.ffs@tglx>
+ <87tu7euska.ffs@tglx> <CAHk-=wjpzVRU0Yr_0DJSB_bKHW3_74UucNpJBjxfHPo_R=PYNg@mail.gmail.com>
+ <87o7xmup5t.ffs@tglx> <YtXOMPpmx8TcFtOX@worktop.programming.kicks-ass.net>
+ <87lesqukm5.ffs@tglx> <2f7f899cb75b79b08b0662ff4d2cb877@overdrivepizza.com>
+ <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
+ <87fsiyuhyz.ffs@tglx> <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
+ <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
+In-Reply-To: <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 18 Jul 2022 17:01:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiYHXeWnF8Ea5xb735ehJ8FbjTT6UCvHYjX=Ooc7Z5sOw@mail.gmail.com>
+Message-ID: <CAHk-=wiYHXeWnF8Ea5xb735ehJ8FbjTT6UCvHYjX=Ooc7Z5sOw@mail.gmail.com>
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Collingbourne <pcc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,107 +97,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/17/22 1:11 PM, Gavin Shan wrote:
-> On 7/17/22 7:48 AM, oliver.upton@linux.dev wrote:
->> July 16, 2022 7:45 AM, "Gavin Shan" <gshan@redhat.com> wrote:
->>> In rseq_test, there are two threads, which are thread group leader
->>> and migration worker. The migration worker relies on sched_setaffinity()
->>> to force migration on the thread group leader.
->>
->> It may be clearer to describe it as a vCPU thread and a migration worker
->> thread. The meat of this test is to catch a regression in KVM.
->>
->>> Unfortunately, we have
->>
->> s/we have/the test has the/
->>
->>> wrong parameter (0) passed to sched_getaffinity().
->>
->> wrong PID
->>
-> 
-> Yep, it's much clearer to describe it as vCPU thread and migration worker.
-> 
->>> It's actually
->>> forcing migration on the migration worker instead of the thread group
->>> leader.
->>
->> What's missing is _why_ the migration worker is getting moved around by
->> the call. Perhaps instead it is better to state what a PID of 0 implies,
->> for those of us who haven't read their manpages in a while ;-)
->>
-> 
-> Yes, it's good idea. I will have something like below in next revision :)
-> 
->      In rseq_test, there are two threads, which are vCPU thread and migration
->      worker separately. Unfortunately, the test has the wrong PID passed to
->      sched_setaffinity() in the migration worker. It forces migration on the
->      migration worker because zeroed PID represents the calling thread, which
->      is the migration worker itself. It means the vCPU thread is never enforced
->      to migration and it can migrate at any time, which eventually leads to
->      failure as the following logs show.
->          :
->          :
->      Fix the issue by passing correct parameter, TID of the vCPU thread, to
->      sched_setaffinity() in the migration worker.
-> 
-> 
->>> It also means migration can happen on the thread group leader
->>> at any time, which eventually leads to failure as the following logs
->>> show.
->>>
->>> host# uname -r
->>> 5.19.0-rc6-gavin+
->>> host# # cat /proc/cpuinfo | grep processor | tail -n 1
->>> processor : 223
->>> host# pwd
->>> /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
->>> host# for i in `seq 1 100`; \
->>> do echo "--------> $i"; ./rseq_test; done
->>> --------> 1
->>> --------> 2
->>> --------> 3
->>> --------> 4
->>> --------> 5
->>> --------> 6
->>> ==== Test Assertion Failure ====
->>> rseq_test.c:265: rseq_cpu == cpu
->>> pid=3925 tid=3925 errno=4 - Interrupted system call
->>> 1 0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
->>> 2 0x0000ffffb044affb: ?? ??:0
->>> 3 0x0000ffffb044b0c7: ?? ??:0
->>> 4 0x0000000000401a6f: _start at ??:?
->>> rseq CPU = 4, sched CPU = 27
->>>
->>> This fixes the issue by passing correct parameter, tid of the group
->>> thread leader, to sched_setaffinity().
->>
->> Kernel commit messages should have an imperative tone:
->>
->> Fix the issue by ...
->>
-> 
-> Ok. I've been having my style for long time. Actually, the style was
-> shared by some one when I worked for IBM long time ago. I will bear
-> it in mind to use imperative expression since now on :)
-> 
-> All your comments will be fixed in next revision, but I would delay
-> the posting a bit to see Sean or Paolo have more comments. In that
-> case, I can fix all of them at once.
-> 
+On Mon, Jul 18, 2022 at 4:52 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Honestly, I think that would be a better model - yes, you lose 8 bits
+> of hash, but considering that apparently the current KCFI code
+> *guarantees* that the hash pattern will exist even outside the actual
+> target pattern,
 
-v3 was just posted.
+Gaah, I'm being stupid,. You still get the value collision, since the
+int3 byte pattern would just be part of the compare pattern.
 
-https://lore.kernel.org/kvmarm/20220719013540.3477946-1-gshan@redhat.com/T/#u
+You'd have to use some multi-instruction compare to avoid having the
+pattern in the instruction stream. Probably with another register.
+Like
 
->>> Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
->>> Signed-off-by: Gavin Shan <gshan@redhat.com>
->>
->> With the comments on the commit message addressed:
->>
->> Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
->>
+        movl -FIXED_OFFSET(%eax),%rdx
+        addl $ANTI_PATTERN,%rdx
+        je ok
 
-Thanks,
-Gavin
+so that the "compare" wouldn't use the same pattern value, but be an
+add with the negated pattern value instead.
 
+The extra instruction is likely less of a problem than the extra register used.
+
+             Linus

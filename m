@@ -2,154 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0C9579072
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE51F5790BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236712AbiGSCGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 22:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
+        id S236891AbiGSCSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 22:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbiGSCGh (ORCPT
+        with ESMTP id S235588AbiGSCSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 22:06:37 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7F73C17B;
-        Mon, 18 Jul 2022 19:06:35 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ln2Gp1T5jzFqBD;
-        Tue, 19 Jul 2022 10:05:22 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 19 Jul
- 2022 10:06:23 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liulongfang@huawei.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>
-CC:     <xuzaibo@huawei.com>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH] crypto: hisilicon/hpre - don't use GFP_KERNEL to alloc mem during softirq
-Date:   Tue, 19 Jul 2022 10:10:42 +0800
-Message-ID: <20220719021042.250882-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 22:18:43 -0400
+Received: from mr85p00im-ztdg06011901.me.com (mr85p00im-ztdg06011901.me.com [17.58.23.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37023C8E9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 19:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+        s=1a1hai; t=1658196704;
+        bh=T4xK7W1C8/EAKpZlNLBDLSvbQJQGFkNtPL6rJnWFjMw=;
+        h=Content-Type:From:Mime-Version:Subject:Message-Id:Date:To;
+        b=X5cnwMG7gsS20huIL/ZBS0AlIG1NvH37KKHp57BZgvKa2V/TbAaWoBUTy5awoXA//
+         Zu3DVR8+lr0GSDRJgeKbScojjeoBvI+Kay06EaCQG+nAlAy03MsGiidyAmIjFIh2z1
+         xt0eehL6zIcCKe0s28XrhWqIiAjCsF+bzSuUqzbDvpPTLy0FQjYg/r/1EmvUG0eHKI
+         G3GF5B1MTOph6rfkKx5XDRGW6CHwEBlWPt3n3G707rO5doOgRGnLkVQ1+gLDbIHg8u
+         Myl0ogxbQoJM8ChtFXSCuv1PL+S2EJVe7sgbrXRt5xJlJhfVldOFlVhHZc8Tp2Q8ry
+         bfPpel15XldYQ==
+Received: from smtpclient.apple (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+        by mr85p00im-ztdg06011901.me.com (Postfix) with ESMTPSA id 6C732900474;
+        Tue, 19 Jul 2022 02:11:44 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Robin Naccari <robianna1973@icloud.com>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v2 3/4] seccomp: Support atomic "addfd + send reply"
+Message-Id: <197A77C8-41B4-43E9-9779-CA68F39FD92E@icloud.com>
+Date:   Mon, 18 Jul 2022 19:11:43 -0700
+Cc:     christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        gscrivan@redhat.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mauricio@kinvolk.io,
+        mic@linux.microsoft.com, rodrigo@kinvolk.io, tycho@tycho.pizza
+To:     robianna1973@icloud.com
+X-Mailer: iPad Mail (19F77)
+X-Proofpoint-GUID: 1SsgwYhOc9jBbmZaufleECSYZXZX-DG5
+X-Proofpoint-ORIG-GUID: 1SsgwYhOc9jBbmZaufleECSYZXZX-DG5
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 phishscore=0 clxscore=1011 mlxscore=0
+ adultscore=0 mlxlogscore=519 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2207190006
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hpre encryption driver may be used to encrypt and decrypt packets
-during the rx softirq, it is not allowed to use GFP_KERNEL.
+=EF=BB=BF
 
-Fixes: c8b4b477079d ("crypto: hisilicon - add HiSilicon HPRE accelerator")
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 
-This patch is not tested, compiled only.
----
- drivers/crypto/hisilicon/hpre/hpre_crypto.c | 28 +++++++++++++--------
- 1 file changed, 18 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/crypto/hisilicon/hpre/hpre_crypto.c b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-index 97d54c1465c2..cf098fa673f4 100644
---- a/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-+++ b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-@@ -241,7 +241,7 @@ static int hpre_get_data_dma_addr(struct hpre_asym_request *hpre_req,
- 
- static int hpre_prepare_dma_buf(struct hpre_asym_request *hpre_req,
- 				struct scatterlist *data, unsigned int len,
--				int is_src, dma_addr_t *tmp)
-+				int is_src, dma_addr_t *tmp, gfp_t flags)
- {
- 	struct hpre_ctx *ctx = hpre_req->ctx;
- 	struct device *dev = ctx->dev;
-@@ -252,7 +252,7 @@ static int hpre_prepare_dma_buf(struct hpre_asym_request *hpre_req,
- 	if (unlikely(shift < 0))
- 		return -EINVAL;
- 
--	ptr = dma_alloc_coherent(dev, ctx->key_sz, tmp, GFP_KERNEL);
-+	ptr = dma_alloc_coherent(dev, ctx->key_sz, tmp, flags);
- 	if (unlikely(!ptr))
- 		return -ENOMEM;
- 
-@@ -268,7 +268,7 @@ static int hpre_prepare_dma_buf(struct hpre_asym_request *hpre_req,
- 
- static int hpre_hw_data_init(struct hpre_asym_request *hpre_req,
- 			     struct scatterlist *data, unsigned int len,
--			     int is_src, int is_dh)
-+			     int is_src, int is_dh, u32 flags)
- {
- 	struct hpre_sqe *msg = &hpre_req->req;
- 	struct hpre_ctx *ctx = hpre_req->ctx;
-@@ -280,7 +280,9 @@ static int hpre_hw_data_init(struct hpre_asym_request *hpre_req,
- 	    ((is_dh && !is_src) || !is_dh))
- 		ret = hpre_get_data_dma_addr(hpre_req, data, len, is_src, &tmp);
- 	else
--		ret = hpre_prepare_dma_buf(hpre_req, data, len, is_src, &tmp);
-+		ret = hpre_prepare_dma_buf(hpre_req, data, len, is_src, &tmp,
-+					   (flags & CRYPTO_TFM_REQ_MAY_SLEEP) ?
-+					   GFP_KERNEL : GFP_ATOMIC);
- 
- 	if (unlikely(ret))
- 		return ret;
-@@ -585,14 +587,16 @@ static int hpre_dh_compute_value(struct kpp_request *req)
- 		return ret;
- 
- 	if (req->src) {
--		ret = hpre_hw_data_init(hpre_req, req->src, req->src_len, 1, 1);
-+		ret = hpre_hw_data_init(hpre_req, req->src, req->src_len, 1, 1,
-+					req->base.flags);
- 		if (unlikely(ret))
- 			goto clear_all;
- 	} else {
- 		msg->in = cpu_to_le64(ctx->dh.dma_g);
- 	}
- 
--	ret = hpre_hw_data_init(hpre_req, req->dst, req->dst_len, 0, 1);
-+	ret = hpre_hw_data_init(hpre_req, req->dst, req->dst_len, 0, 1,
-+				req->base.flags);
- 	if (unlikely(ret))
- 		goto clear_all;
- 
-@@ -800,11 +804,13 @@ static int hpre_rsa_enc(struct akcipher_request *req)
- 	msg->dw0 |= cpu_to_le32(HPRE_ALG_NC_NCRT);
- 	msg->key = cpu_to_le64(ctx->rsa.dma_pubkey);
- 
--	ret = hpre_hw_data_init(hpre_req, req->src, req->src_len, 1, 0);
-+	ret = hpre_hw_data_init(hpre_req, req->src, req->src_len, 1, 0,
-+				req->base.flags);
- 	if (unlikely(ret))
- 		goto clear_all;
- 
--	ret = hpre_hw_data_init(hpre_req, req->dst, req->dst_len, 0, 0);
-+	ret = hpre_hw_data_init(hpre_req, req->dst, req->dst_len, 0, 0,
-+				req->base.flags);
- 	if (unlikely(ret))
- 		goto clear_all;
- 
-@@ -855,11 +861,13 @@ static int hpre_rsa_dec(struct akcipher_request *req)
- 				       HPRE_ALG_NC_NCRT);
- 	}
- 
--	ret = hpre_hw_data_init(hpre_req, req->src, req->src_len, 1, 0);
-+	ret = hpre_hw_data_init(hpre_req, req->src, req->src_len, 1, 0,
-+				req->base.flags);
- 	if (unlikely(ret))
- 		goto clear_all;
- 
--	ret = hpre_hw_data_init(hpre_req, req->dst, req->dst_len, 0, 0);
-+	ret = hpre_hw_data_init(hpre_req, req->dst, req->dst_len, 0, 0,
-+				req->base.flags);
- 	if (unlikely(ret))
- 		goto clear_all;
- 
--- 
-2.17.1
-
+Sent from my iPad=

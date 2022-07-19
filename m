@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34CE1579CA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1A0579A2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241308AbiGSMlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S238739AbiGSML3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241328AbiGSMjW (ORCPT
+        with ESMTP id S238800AbiGSMJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:39:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B247A52FDF;
-        Tue, 19 Jul 2022 05:15:45 -0700 (PDT)
+        Tue, 19 Jul 2022 08:09:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BBB50732;
+        Tue, 19 Jul 2022 05:02:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48AC56178A;
-        Tue, 19 Jul 2022 12:15:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A91C341C6;
-        Tue, 19 Jul 2022 12:15:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D85DBB81B2C;
+        Tue, 19 Jul 2022 12:02:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4052EC341C6;
+        Tue, 19 Jul 2022 12:02:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232944;
-        bh=sXZL6Z37ACoS8mPQ/3ZughF+dsMb+90JYpKbHlk9Vzc=;
+        s=korg; t=1658232158;
+        bh=abuv2G4a+3kPQ4K/+ciHhydB7EHCOnoXovDGLggx34M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q0oA2wLBCByUtKMd5s7Eb5qjO2jYjiZFhOPoQT2DRw5l3eiVfOWkzg3sol6N1Lh5V
-         8dw5GPULp6KcifDb305aU0jNZz9Wn3hO2TpnICTOglfi9sG+js4ml0mDiZAEU/0xNE
-         9tH9Mu94cC/71F8WXji+Mjsp0/6g28HwKM0gxFig=
+        b=B4AaJe5OcqL2ggjuVk6eFzKPHi9bD+6IWnTd/n+6/fgfK5tOOgP+hgrphl5paL7sy
+         JZL+32UShRp8Cg/4SnLTPG+u8FMTLjncVtQx+daxiyyNVyzIhuuHJ35tvYAnSjeoNk
+         q8U1IfEWsoCs/stlPLcgplmlIqnN0pLYTrBA8yJE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 096/167] ima: Fix potential memory leak in ima_init_crypto()
+Subject: [PATCH 5.4 25/71] net: stmmac: dwc-qos: Disable split header for Tegra194
 Date:   Tue, 19 Jul 2022 13:53:48 +0200
-Message-Id: <20220719114705.765300501@linuxfoundation.org>
+Message-Id: <20220719114554.676335939@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: Jon Hunter <jonathanh@nvidia.com>
 
-[ Upstream commit 067d2521874135267e681c19d42761c601d503d6 ]
+[ Upstream commit 029c1c2059e9c4b38f97a06204cdecd10cfbeb8a ]
 
-On failure to allocate the SHA1 tfm, IMA fails to initialize and exits
-without freeing the ima_algo_array. Add the missing kfree() for
-ima_algo_array to avoid the potential memory leak.
+There is a long-standing issue with the Synopsys DWC Ethernet driver
+for Tegra194 where random system crashes have been observed [0]. The
+problem occurs when the split header feature is enabled in the stmmac
+driver. In the bad case, a larger than expected buffer length is
+received and causes the calculation of the total buffer length to
+overflow. This results in a very large buffer length that causes the
+kernel to crash. Why this larger buffer length is received is not clear,
+however, the feedback from the NVIDIA design team is that the split
+header feature is not supported for Tegra194. Therefore, disable split
+header support for Tegra194 to prevent these random crashes from
+occurring.
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Fixes: 6d94809af6b0 ("ima: Allocate and initialize tfm for each PCR bank")
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+[0] https://lore.kernel.org/linux-tegra/b0b17697-f23e-8fa5-3757-604a86f3a095@nvidia.com/
+
+Fixes: 67afd6d1cfdf ("net: stmmac: Add Split Header support and enable it in XGMAC cores")
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+Link: https://lore.kernel.org/r/20220706083913.13750-1-jonathanh@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/integrity/ima/ima_crypto.c | 1 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index a7206cc1d7d1..64499056648a 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -205,6 +205,7 @@ int __init ima_init_crypto(void)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c
+index dd9967aeda22..0f0094ced776 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c
+@@ -357,6 +357,7 @@ static void *tegra_eqos_probe(struct platform_device *pdev,
+ 	data->fix_mac_speed = tegra_eqos_fix_speed;
+ 	data->init = tegra_eqos_init;
+ 	data->bsp_priv = eqos;
++	data->sph_disable = 1;
  
- 		crypto_free_shash(ima_algo_array[i].tfm);
- 	}
-+	kfree(ima_algo_array);
- out:
- 	crypto_free_shash(ima_shash_tfm);
- 	return rc;
+ 	err = tegra_eqos_init(pdev, eqos);
+ 	if (err < 0)
 -- 
 2.35.1
 

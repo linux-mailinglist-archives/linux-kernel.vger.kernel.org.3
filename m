@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88673579F54
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF15E579D02
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243336AbiGSNNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
+        id S241716AbiGSMqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243313AbiGSNMM (ORCPT
+        with ESMTP id S241679AbiGSMpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:12:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BE8419B9;
-        Tue, 19 Jul 2022 05:29:45 -0700 (PDT)
+        Tue, 19 Jul 2022 08:45:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A988AED4;
+        Tue, 19 Jul 2022 05:18:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E392B60DE0;
-        Tue, 19 Jul 2022 12:29:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF68FC341C6;
-        Tue, 19 Jul 2022 12:29:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9941061772;
+        Tue, 19 Jul 2022 12:17:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BE47C341C6;
+        Tue, 19 Jul 2022 12:17:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233784;
-        bh=1rsOjCzTzZZGjsOkD4VV/Yi0b4wpzhVrNjevvk3ABTM=;
+        s=korg; t=1658233070;
+        bh=WIQF5vxdOZ2KF4yk/EEVlLDaVI0fgt+mpRIAAVOSRjk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B7YiVPHPq+/BIewCuIuothP172iHYQpS4WpgY+BiRyEsPrZrSHoWvDxhgtaHGzrWO
-         JLjif9vG2qINdlggH3PF8/eDELsTQ+/OGgkeWqdrWPI3Jxft/90t4J9JdDmrln+8wt
-         WwzzNjxzkpYsugtuThhxPb6IxQres3zz6d/05xOQ=
+        b=Y7ssVWdy9qVZPk3+DkpHBQ7qUa/iqUSsUoPNP9LFdryTOUm9LPePJH9PlWYkgaT0j
+         o7bzIXlXyFriiFfm0jIN1RI97eEs3klBNP1cHT3602pGZFeDqXTcb+Rjw29IgzJVP8
+         R+E/L7wsjzEqlcuRX1U7CISUdeDJNSwoZmgkPNAg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 209/231] x86: Clear .brk area at early boot
-Date:   Tue, 19 Jul 2022 13:54:54 +0200
-Message-Id: <20220719114731.488525670@linuxfoundation.org>
+        stable@vger.kernel.org, Yi Yang <yiyang13@huawei.com>,
+        stable <stable@kernel.org>
+Subject: [PATCH 5.15 163/167] serial: 8250: fix return error code in serial8250_request_std_resource()
+Date:   Tue, 19 Jul 2022 13:54:55 +0200
+Message-Id: <20220719114712.236443969@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,43 +53,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Yi Yang <yiyang13@huawei.com>
 
-[ Upstream commit 38fa5479b41376dc9d7f57e71c83514285a25ca0 ]
+commit 6e690d54cfa802f939cefbd2fa2c91bd0b8bd1b6 upstream.
 
-The .brk section has the same properties as .bss: it is an alloc-only
-section and should be cleared before being used.
+If port->mapbase = NULL in serial8250_request_std_resource() , it need
+return a error code instead of 0. If uart_set_info() fail to request new
+regions by serial8250_request_std_resource() but the return value of
+serial8250_request_std_resource() is 0, The system incorrectly considers
+that the resource application is successful and does not attempt to
+restore the old setting. A null pointer reference is triggered when the
+port resource is later invoked.
 
-Not doing so is especially a problem for Xen PV guests, as the
-hypervisor will validate page tables (check for writable page tables
-and hypervisor private bits) before accepting them to be used.
-
-Make sure .brk is initially zero by letting clear_bss() clear the brk
-area, too.
-
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220630071441.28576-3-jgross@suse.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Yi Yang <yiyang13@huawei.com>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220628083515.64138-1-yiyang13@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/head64.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/tty/serial/8250/8250_port.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 2e10a33778cf..92eae95f1a0b 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -425,6 +425,8 @@ void __init clear_bss(void)
- {
- 	memset(__bss_start, 0,
- 	       (unsigned long) __bss_stop - (unsigned long) __bss_start);
-+	memset(__brk_base, 0,
-+	       (unsigned long) __brk_limit - (unsigned long) __brk_base);
- }
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2982,8 +2982,10 @@ static int serial8250_request_std_resour
+ 	case UPIO_MEM32BE:
+ 	case UPIO_MEM16:
+ 	case UPIO_MEM:
+-		if (!port->mapbase)
++		if (!port->mapbase) {
++			ret = -EINVAL;
+ 			break;
++		}
  
- static unsigned long get_cmd_line_ptr(void)
--- 
-2.35.1
-
+ 		if (!request_mem_region(port->mapbase, size, "serial")) {
+ 			ret = -EBUSY;
 
 

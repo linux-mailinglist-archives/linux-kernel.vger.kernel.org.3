@@ -2,128 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA9F5798BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427795798C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbiGSLpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S234281AbiGSLuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGSLpm (ORCPT
+        with ESMTP id S233272AbiGSLuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:45:42 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79330E0F8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1658231141; x=1689767141;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HoB6mNAGD8qprJcACnGtFLQCTHjRhxeUO8i/3z716MM=;
-  b=PYEk0WcxkxOO88/L0Z2FftSqMA6rXQ8+MLB/tRwt98UcZjieqGXiNEsc
-   3/JWfHJCRd9ogVmFaQf66ygTQpBDNWDw85sP0dcJDYWYAMXv2ZJU/0vsq
-   HfC8gYMerKtmytFF6lc4oux5yu6TrpItGuo8QaukGELmQlIlAc03ClcDy
-   JORmHtCbD8RVCnyXwCzwY6pTnv1kwtHz3ryfihd+g5M/2xTUVxSqLxs8w
-   +sgZEku2+ktZ6nMYMs6vsWsgceYI92yavibRqUQ82Zxl9Nq+KPJHKertd
-   g1uVD6h3trLN+sDYuo1JOp2lrNIYqSUpKKWZrMuvsguPQvS6GkezEnTof
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,284,1650902400"; 
-   d="scan'208";a="310657184"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 19 Jul 2022 19:45:39 +0800
-IronPort-SDR: 6tfmzZ6IuthX6ogYvaQqbZg6UjTASBZOhukABDlmFLQrfQ01tD16qdKPak0t/QmFTwUxku1foV
- pBoT9kda+1fQi8ncQgugDCs2UJj+H039NbElIs3HMNcvFtPARF0ZH8CIpst12iwL/laL8Ww+m4
- Is7skO/kxEESzMV++DbQVIzlf961hjS4yVMYDzi2akXdcTHTPZITxWHB1tWkBwdkK2P5HvTkm3
- U204B8Zf42s2XNXePLGFP/E7RJnppQvGbJJMr/pt4PYftdhbtwGeaqRvZ3OaU2/QM3yAkIWVIG
- 4JgneVY+Nx982vQAWZcmmoZu
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Jul 2022 04:07:04 -0700
-IronPort-SDR: O3RU0I95HAqmQN3QSuJZPTE+fzz2KEGuAwyxmz9Fm8GJyGCc8omcmIZoi+LDF03s9p3ojWV7ss
- DNLG92KLqX7J88iDHIW7zlixwf+DKSQhQEEVK7QhXrEEJm2bIIadM1XzbufPgCGlMPenTD4v68
- vh1R1Z+lqXV9yQdkGAfQkud9ZkRFJH2FdNP0bo+vV7aQWpIY70EvyvUv7rqE1vUl5JEH+T1Cla
- 0l7TJk9pXFeawG5LsKDeDKnZhkMDZ4jfs7UsyZx9Hn0rZpMZW9DZJtd45xgnEal/TfB493hf/Q
- MkY=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Jul 2022 04:45:40 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LnH8M4Jp6z1Rw4L
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:45:39 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1658231139; x=1660823140; bh=HoB6mNAGD8qprJcACnGtFLQCTHjRhxeUO8i
-        /3z716MM=; b=bI5x5AJX6ASzFR52bquaFd1g4HlLNDkT32aXjh+B8xLB4T+qrtk
-        gTRUnCyUTs1LiiViBL8gcDXT0iz/hVHOqGoER9t4rDE0JcSXAMCgJ1sWwcDzaWaz
-        Es7kcmfWWXS/wUYBWOJmA9FeXQQhyA0Hv02zUFBf0aV5qsRWGfQQ2hktV43yaqGO
-        b9FEw4jJhChG+2qCPX7hI3f/WNTtGFcxIpsb1fGYW+BmgfVL+DwXSqY3ZAu7okeg
-        Q/dgGSTMAug8IVoxiF3Z9j4YlmzSl9pfFwXIM6I3cqGGjE27MJflJtcptRdOvYRw
-        /xYSWY93gPea66g8if+8zZ1OjI8hXkFPsIw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id grc4N7eRfhVF for <linux-kernel@vger.kernel.org>;
-        Tue, 19 Jul 2022 04:45:39 -0700 (PDT)
-Received: from [10.225.163.120] (unknown [10.225.163.120])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LnH8L4MyNz1RtVk;
-        Tue, 19 Jul 2022 04:45:38 -0700 (PDT)
-Message-ID: <1ac89860-957f-a24d-82ee-d40e5345d04e@opensource.wdc.com>
-Date:   Tue, 19 Jul 2022 20:45:37 +0900
+        Tue, 19 Jul 2022 07:50:22 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175A09FF1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:50:21 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id r24so613938plg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qafXaXkIM/uHsJQqJP5nDPOn9hfjFKGF8wnaV/Bkdes=;
+        b=tusAWoyw3TsYqhLLXBcTMYpo1xp/IdnAPgB7Z1dyi9njONTu1eYg82N8fG1GIDEY5+
+         ReXJ4EprggsoH0SPnIRE26aQEu8Ve8VOmPz2M/hpYAGDWS5TauLNj3v9BXFG8lAd28tJ
+         z4LYvPRw650AAxwx5IHSEiYYpk/anDTIJ6hhSYVZdu2JJXvW8ZtS8uc8XE+SsCpqeOik
+         nRnKbqUC3x+qHxLZ/jIW6nVT/3Jbzsod7fr5cq9YW3NGz/Xrv6o4lppbwQzbV4zC27N3
+         GDeLdI9nuXOJRYdsAU7LBQCceS/S5BTGyN1QCreL1KcWgNRXX2LIar+oHPfqmFX6qwNX
+         jwcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qafXaXkIM/uHsJQqJP5nDPOn9hfjFKGF8wnaV/Bkdes=;
+        b=6DR9ewbM4ga7RzSF+9kz/FKQP+YcUor7SBbX8HK3uZIbAEvMIr29SDuxu+ox54MSV8
+         RIAyldKRmDF+3MzPip5UrjIDH8TK9N2nfMlqRV+aTp8NG3bghgs0baeal6zSSD30Idl7
+         tyjeqMRpjDDFn6MzOoRa5WoCGs/zOYNShHG1wTW1fBjz280ksF9DituGbNo/GZX0BZEr
+         47oNRzEzgEvGxDgp91Bn8FH+c3SR1frIfQwNPZwH8suF4l9AqRUvat5BTKts3fBDY7yc
+         sMrd5EhexlWkjOIZqWw1BZxOAfsdTk5HJNET7aYO0aYJ8lFzqFM/D+5QzLuh4zAWRJI2
+         JeGQ==
+X-Gm-Message-State: AJIora/Qc8Hx7eS4eSPtWT13hb6P0cq8Aw5EcbExcSeyGCxcSetlmLgP
+        /2gBJgGOvVVwWKclnRmxj6lhSA==
+X-Google-Smtp-Source: AGRyM1uLQnncqRk8F0w7HNZ+X3qpphGJmFRIOJpOFskO1lX2aBT2K5cte86IfEZhj9Rm4LxS3RDJYw==
+X-Received: by 2002:a17:902:aa82:b0:16c:4bee:1f90 with SMTP id d2-20020a170902aa8200b0016c4bee1f90mr33458243plr.69.1658231420542;
+        Tue, 19 Jul 2022 04:50:20 -0700 (PDT)
+Received: from n37-155-090.byted.org. ([121.30.179.126])
+        by smtp.gmail.com with ESMTPSA id a3-20020a170902ecc300b0016be4d78792sm11372606plh.257.2022.07.19.04.50.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 04:50:19 -0700 (PDT)
+From:   Qifu Zhang <zhangqifu@bytedance.com>
+To:     rafael@kernel.org
+Cc:     lenb@kernel.org, jarkko@kernel.org, tony.luck@intel.com,
+        dave.hansen@linux.intel.com, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qifu Zhang <zhangqifu@bytedance.com>
+Subject: [PATCH] Documentation: ACPI: EINJ: Fix obsolete example
+Date:   Tue, 19 Jul 2022 19:50:13 +0800
+Message-Id: <20220719115013.744751-1-zhangqifu@bytedance.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] Date:do not initialise statics to 0
-Content-Language: en-US
-To:     Xin Gao <gaoxin@cdjrlc.com>
-Cc:     s.shtylyov@omp.ru, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220719112908.7333-1-gaoxin@cdjrlc.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220719112908.7333-1-gaoxin@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 20:29, Xin Gao wrote:
-> do not initialise statics to 0
-> 
-> Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
-> ---
->  drivers/ata/pata_artop.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ata/pata_artop.c b/drivers/ata/pata_artop.c
-> index 20a8f31a3f57..1aad8df2ea87 100644
-> --- a/drivers/ata/pata_artop.c
-> +++ b/drivers/ata/pata_artop.c
-> @@ -37,7 +37,7 @@
->   *	test stuff.
->   */
->  
-> -static int clock = 0;
-> +static int clock;
->  
->  /**
->   *	artop62x0_pre_reset	-	probe begin
+Since commit 488dac0c9237 ("libfs: fix error cast of negative value in
+simple_attr_write()"), the EINJ debugfs interface no longer accepts
+negative values as input. Attempt to do so will result in EINVAL.
 
-Very weird patch title.
+Signed-off-by: Qifu Zhang <zhangqifu@bytedance.com>
+---
+ Documentation/firmware-guide/acpi/apei/einj.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is this solving any static analyzer or compiler warning ? If not, this is
-not a very useful change.
-
+diff --git a/Documentation/firmware-guide/acpi/apei/einj.rst b/Documentation/firmware-guide/acpi/apei/einj.rst
+index 55e2331a6438..d6b61d22f525 100644
+--- a/Documentation/firmware-guide/acpi/apei/einj.rst
++++ b/Documentation/firmware-guide/acpi/apei/einj.rst
+@@ -168,7 +168,7 @@ An error injection example::
+   0x00000008	Memory Correctable
+   0x00000010	Memory Uncorrectable non-fatal
+   # echo 0x12345000 > param1		# Set memory address for injection
+-  # echo $((-1 << 12)) > param2		# Mask 0xfffffffffffff000 - anywhere in this page
++  # echo 0xfffffffffffff000 > param2		# Mask - anywhere in this page
+   # echo 0x8 > error_type			# Choose correctable memory error
+   # echo 1 > error_inject			# Inject now
+ 
 -- 
-Damien Le Moal
-Western Digital Research
+2.20.1
+

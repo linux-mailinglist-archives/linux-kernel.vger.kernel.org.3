@@ -2,109 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CA257A8D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC4857A8D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235387AbiGSVRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
+        id S229451AbiGSVR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiGSVRR (ORCPT
+        with ESMTP id S235395AbiGSVR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:17:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C045E828
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:17:15 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658265433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kVIl7iEgu0ZdY7jzgIhRNKikR8k+UskPQ9rWSyQBgZw=;
-        b=jTFSS6ba7q8vnrgnUmytiGDAUnoMiM92ED6bISL6vLHf99+v4RzYDxziE2vZgh+AhQul38
-        E6AdU5gGQAD3X5pjU2N2GCOI99Ix8PbjDVx935U9m9Vdxln2LcHuF3iBz5kUxnZkNJiELK
-        vetI9vEWFRuHjHEnSO3OE0PtCJ4i7XDx+DV3eLnLyKMa3ARaLaYtngkZ98DmnbJHq9M8Kq
-        1SHL4enZ0Clluxgk2Qya7kK8Rt9kYC7jBIj1YLQOrxwyMv4McQtjhjvpKxj5zO1N8F5wCU
-        mnmJkWRveTH4Pj0dO+OJrkEgOAk24/+8TwCHClRNuhELlHrlZ8JnHPOIr6Jx8A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658265433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kVIl7iEgu0ZdY7jzgIhRNKikR8k+UskPQ9rWSyQBgZw=;
-        b=2EVBfOisCwF4hyEr/7qNgCkqdpuAMkpKPL7+LzJEqpzEsFrtSj1uU9nRaeB6aBJnD3MNZ2
-        BXCYTl+neKe8uPDg==
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juergen Gross <jgross@suse.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "decui@microsoft.com" <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: Virt Call depth tracking mitigation
-In-Reply-To: <261e141a-7e7f-ce26-60fe-df1957e393df@citrix.com>
-References: <20220716230344.239749011@linutronix.de>
- <4ca4a4ab-6ea0-d94a-59cc-1ab99ff869d5@citrix.com> <87a695ur5v.ffs@tglx>
- <261e141a-7e7f-ce26-60fe-df1957e393df@citrix.com>
-Date:   Tue, 19 Jul 2022 23:17:12 +0200
-Message-ID: <877d48vm3r.ffs@tglx>
+        Tue, 19 Jul 2022 17:17:27 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E331C5E82B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:17:25 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id q5so13127215plr.11
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cYVp/nlRdcsoI2H32MIQGQAodRMFGI+WBzT8OOmcyxw=;
+        b=FN47cqTCWHvViTc/VanAjbyeK5K6/xJChcATpbdMDsb0p1T3Zx4YfI0Q6f4L36zHnv
+         lCIs8nuOTgbW6Khw0Y4RDRBZj2T3P0KYDw/0Ha6zYO/rkeTK+VkCNfPa6+Miq8T+5Mzx
+         Uix3Gaq6nUWrdzSk3/Ab2+UDCu5L7gIcqx3BmoPxzvQyqLw9EiJYZeliUxnL6h4LU1Qe
+         6QosoYVrSXW16f28U2CoEgMmjiPDcMXgDL6dF4bWzoYPzxtRGCdWJ2N0C76RBszyUVdi
+         QOZzWPZ58UrUZoYpA8UAnhTwc2DVZpeWmjJoufq43mVhO+HZJpf6D6bn1Prl+KauGQWk
+         N8YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cYVp/nlRdcsoI2H32MIQGQAodRMFGI+WBzT8OOmcyxw=;
+        b=CXd5aPnHpQXM+zRIIGfsjjgFuPIlQ3jfQZn3ePgmKeXT7+KbNj+3+szPxnD1xPoP/T
+         JSzp0vohSq+dOu/r2QaCrtxuBOPVfMQXvl2dfIsOpNrcij+loyWzhW85P3voVqBqDf++
+         /Z67scXw/xp4z0RvFqNnCgDQ+l2EkiS2gXcTcpsF0Ze1/pUvKJzx1EeHpYi4IJEpwqER
+         8tSH27R2lHAcTjBezUGCzpRSpntoWCCCtLWjo+kMuaBZfXbl8f961HocIa/2hB2RnmmX
+         ZGudIBbImRDhqcHqlW5CI3X7pnhxpX4AMmSyLHzQqAW8OfM22qKac6+1IQyX5xSKiewg
+         Hhkw==
+X-Gm-Message-State: AJIora9IZiyVhm84jKWZRrMgxAETQy7xU5KieLxENZKfoGa1dB1PN+9F
+        KEt0QCPAVGdJaQCeQpfdgry2YTCNmUNE1g==
+X-Google-Smtp-Source: AGRyM1vQ+mOFc9/lMSw5mfy4zUV1zKPzskN0dv4kT8A4Pl9S50UIMnNfHHa/aU5GQShALPY4SR8vBg==
+X-Received: by 2002:a17:902:f788:b0:16c:f48b:905e with SMTP id q8-20020a170902f78800b0016cf48b905emr11466413pln.60.1658265445209;
+        Tue, 19 Jul 2022 14:17:25 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id n17-20020a170902e55100b0016c1b178628sm12217292plf.269.2022.07.19.14.17.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 14:17:24 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 21:17:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH V3 01/12] KVM: X86/MMU: Verify PDPTE for nested NPT in
+ PAE paging mode when page fault
+Message-ID: <YtcfYX5KkF0ZhLR/@google.com>
+References: <20220521131700.3661-1-jiangshanlai@gmail.com>
+ <20220521131700.3661-2-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521131700.3661-2-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19 2022 at 16:23, Andrew Cooper wrote:
-> On 19/07/2022 15:13, Thomas Gleixner wrote:
->> Well, that makes the guest side "safe", but isn't a deep hypercall > 16
->> already underflowing in the hypervisor code before it returns to the
->> guest?
->
-> Yeah, but that's the hypervisor's problem to deal with, in whatever
-> manner it sees fit.
->
-> And if the hypervisor is using IBeeRS then the first ret in guest
-> context will underflow.
+On Sat, May 21, 2022, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> Fixes: e4e517b4be01 ("KVM: MMU: Do not unconditionally read PDPTE from guest memory")
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> ---
+>  arch/x86/kvm/mmu/paging_tmpl.h | 39 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index db80f7ccaa4e..6e3df84e8455 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -870,6 +870,44 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	if (is_page_fault_stale(vcpu, fault, mmu_seq))
+>  		goto out_unlock;
+>  
+> +	/*
+> +	 * When nested NPT enabled and L1 is PAE paging, mmu->get_pdptrs()
+> +	 * which is nested_svm_get_tdp_pdptr() reads the guest NPT's PDPTE
+> +	 * from memory unconditionally for each call.
+> +	 *
+> +	 * The guest PAE root page is not write-protected.
 
-I have a look tomorrow.
+I think it's worth calling out that it's simply not feasible to write-protect
+PDPTEs due to them not covering a full page.
 
->>> That said, after a return from the hypervisor, Linux has no idea what
->>> state the RSB is in, so the only safe course of action is to re-stuff.
->> Indeed.
->>
->> Another proof for my claim that virt creates more problems than it
->> solves.
->
-> So how did you like debugging the gsbase crash on native hardware. :)
+And looking at this comment as a whole, while I love detailed comments, I think
+it'd be better off to avoid referring to mmu->get_pdptrs() and use more generic
+terminology when talking about KVM.
 
-First of all I said it's creating more problems than it solves, which
-means it solves some problems.
+I think this is accurate?
 
-But more important, I'm not a wimp.
+	/*
+	 * If KVM is shadowing nested NPT and L1 is using PAE paging, zap the
+	 * root for the PDPTE if the cached value doesn't match the entry at the
+	 * time of the page fault, and resume the guest to rebuid the root.
+	 * This is effectively a variation of write-protection, where the target
+	 * SPTE(s) is zapped on use instead of on write.
+	 *
+	 * Under SVM with NPT+PAE, the CPU does NOT cache PDPTEs and instead
+	 * handles them as it would any other page table entry.  I.e. KVM can't
+	 * cache PDPTEs at nested VMRUN without violating the SVM architecture.
+	 *
+	 * KVM doesn't write-protect PDPTEs because CR3 only needs to be 32-byte
+	 * aligned and sized when using PAE paging, whereas write-protection
+	 * works at page granularity.
+	 */
 
-Thanks,
+> +	 *
+> +	 * The mmu->get_pdptrs() in FNAME(walk_addr_generic) might get a value
+> +	 * different from previous calls or different from the return value of
+> +	 * mmu->get_pdptrs() in mmu_alloc_shadow_roots().
+> +	 *
+> +	 * It will cause FNAME(fetch) installs the spte in a wrong sp or links
+> +	 * a sp to a wrong parent if the return value of mmu->get_pdptrs()
+> +	 * is not verified unchanged since FNAME(gpte_changed) can't check
+> +	 * this kind of change.
+> +	 *
+> +	 * Verify the return value of mmu->get_pdptrs() (only the gfn in it
+> +	 * needs to be checked) and do kvm_mmu_free_roots() like load_pdptr()
+> +	 * if the gfn isn't matched.
+> +	 *
+> +	 * Do the verifying unconditionally when the guest is PAE paging no
+> +	 * matter whether it is nested NPT or not to avoid complicated code.
 
-        tglx
+Doing this unconditionally just trades one architecturally incorrect behavior
+with another.  Does any real world use case actually care?  Probably not.  But the
+behavior is visible to software, and I don't think it costs us much to get it right.
+
+There are a number of ways to handle this, e.g. set a flag in kvm_init_shadow_npt_mmu()
+and consume it here.  We could probably even burn a bit in kvm_mmu_extended_role
+since we have lots of bits to burn.  E.g.
+
+	if (vcpu->arch.mmu->cpu_role.ext.npt_pae) {
+
+	}
+
+
+> +	 */
+> +	if (vcpu->arch.mmu->cpu_role.base.level == PT32E_ROOT_LEVEL) {
+> +		u64 pdpte = vcpu->arch.mmu->pae_root[(fault->addr >> 30) & 3];
+> +		struct kvm_mmu_page *sp = NULL;
+> +
+> +		if (IS_VALID_PAE_ROOT(pdpte))
+> +			sp = to_shadow_page(pdpte & PT64_BASE_ADDR_MASK);
+> +
+> +		if (!sp || walker.table_gfn[PT32E_ROOT_LEVEL - 2] != sp->gfn) {
+> +			write_unlock(&vcpu->kvm->mmu_lock);
+> +			kvm_mmu_free_roots(vcpu->kvm, vcpu->arch.mmu,
+> +					   KVM_MMU_ROOT_CURRENT);
+> +			goto release_clean;
+> +		}
+> +	}
+> +
+>  	r = make_mmu_pages_available(vcpu);
+>  	if (r)
+>  		goto out_unlock;
+> @@ -877,6 +915,7 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  
+>  out_unlock:
+>  	write_unlock(&vcpu->kvm->mmu_lock);
+> +release_clean:
+>  	kvm_release_pfn_clean(fault->pfn);
+>  	return r;
+>  }
+> -- 
+> 2.19.1.6.gb485710b
+> 

@@ -2,89 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3304257A9CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC7D57A9D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238004AbiGSW1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        id S239400AbiGSW2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbiGSW0n (ORCPT
+        with ESMTP id S238262AbiGSW2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:26:43 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74A342AEF;
-        Tue, 19 Jul 2022 15:26:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LnYN01lWyz4x1c;
-        Wed, 20 Jul 2022 08:26:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658269600;
-        bh=Dnd8XrokloWaq00/sVIBE41CvanndXephbaBFx7ZZ6E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=d5dZlRd15Qfhen+ZiGTDoKe+dcf8UX3U1NbBfmGMf6tX2yVxwDa0cpzMRgpVGG7Zw
-         3fagZWzYQyy2/8yx94pBX3jH2HNekwFI9d39Oq9/8BggnkdoTR+AZhxn0/HCO9F2gI
-         xuvhuLivgep+ck6XJYC4qxvpDlPYqiiyuC6W1ryrTkY6Kq39hAhHvFrM2bRjFH/f/F
-         bKrh+rWt2UvrtY5Qgs74XlMZxboR+WZAZkQd1P9WomZgj6zctrIWtCK2klAj06VINR
-         e0g8hVXrOjydO/if2v5zuNi20SBJi0ZDCvRG+NUvH3+0Sc7e8iM6FDPAWMoRkyPSbG
-         EKQ2P+NTnBA5g==
-Date:   Wed, 20 Jul 2022 08:26:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the kvms390 tree
-Message-ID: <20220720082639.72a0f57c@canb.auug.org.au>
+        Tue, 19 Jul 2022 18:28:07 -0400
+Received: from m1322.mail.163.com (m1322.mail.163.com [220.181.13.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CD4B54640;
+        Tue, 19 Jul 2022 15:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=+15mK
+        BPYs1qBfs6/EfK1JusOug9HlD34zW4LwUmpuFc=; b=nbLKuWZWHlbWeTwN/TJd+
+        Qi8+TmbVUljnMllD3kfgGfP0kryw0Q6cNPb6vDpyG+5bt2nRZ8tnJ//5aLoFGuth
+        k/nVmCqV5ZeBZCQv1yeraxrs2ASo+zoPeZJznAAYnxPhH45cK1bbxTCSH0rKYF6r
+        hMQJzMuIGWrCJaRT9J0njY=
+Received: from chen45464546$163.com ( [171.221.148.42] ) by
+ ajax-webmail-wmsvr22 (Coremail) ; Wed, 20 Jul 2022 06:27:00 +0800 (CST)
+X-Originating-IP: [171.221.148.42]
+Date:   Wed, 20 Jul 2022 06:27:00 +0800 (CST)
+From:   "Chen Lin" <chen45464546@163.com>
+To:     "Alexander Duyck" <alexander.duyck@gmail.com>
+Cc:     "Maurizio Lombardi" <mlombard@redhat.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Subject: Re:Re: Re: [PATCH V3] mm: prevent page_frag_alloc() from corrupting
+ the memory
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <CAKgT0Uejy66aFAdD+vMPYFtSu2BWRgTxBG0mO+BLayk3nNuQMw@mail.gmail.com>
+References: <20220715125013.247085-1-mlombard@redhat.com>
+ <5a469c5a.8b85.1821171d9de.Coremail.chen45464546@163.com>
+ <CAFL455nnc04q8TohH+Qbv36Bo3=KKxMWr=diK_F5Ds5K-h5etw@mail.gmail.com>
+ <22bf39a6.8f5e.18211c0898a.Coremail.chen45464546@163.com>
+ <CAFL455mXFY5AFOoXxhpUY6EkPzc1677cRPQ8UX-RSykhm_52Nw@mail.gmail.com>
+ <CAKgT0Uejy66aFAdD+vMPYFtSu2BWRgTxBG0mO+BLayk3nNuQMw@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kC/Zb8il+rXqi6SZHPMefJ5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <8a7e9cf.1b9.18218925734.Coremail.chen45464546@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: FsGowAAn5ji0L9di21xQAA--.22583W
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbBdghDnmDkn-vhVAABs3
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/kC/Zb8il+rXqi6SZHPMefJ5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-Commits
-
-  52db9dcc7b3b ("KVM: s390: resetting the Topology-Change-Report")
-  a20e4a94c7e8 ("KVM: s390: guest support for topology function")
-  117e052974c0 ("KVM: s390: Cleanup ipte lock access and SIIF facility chec=
-ks")
-
-are missing a Signed-off-by from their committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/kC/Zb8il+rXqi6SZHPMefJ5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLXL58ACgkQAVBC80lX
-0GzeQAf/WiiKfSL8yA5lp5keEUcXzuhHIPuZOiRwCcAPppnZpBE84rSabl+PpqUC
-euK71bKxMuBUU8m8o01fyjmYjSboRS1BrTH8fFpB5mRPeEEAtnRTDzOICREPtIIl
-6QrnaieCCNo5yWuayX16lI8l6slm5+7Vd8e3PBGm8VKaA6f/5QpER8GyqTgGF+dv
-P4Spp+uTbuu+JKVrBbsUNiNLC4WRUThve3SAmb2yGL1sw90gjtb/T25FVM0yo4LF
-+H+LFHkXphAQ8zBtdPNw/BH7j62yiuT7zAmefikoLT+7cL9R4yolsGEQ5ANzIMos
-4GhsTtInKLSR60Ep47ptfj/bIXI8Yg==
-=V4Du
------END PGP SIGNATURE-----
-
---Sig_/kC/Zb8il+rXqi6SZHPMefJ5--
+QXQgMjAyMi0wNy0xOCAyMzozMzo0MiwgIkFsZXhhbmRlciBEdXljayIgPGFsZXhhbmRlci5kdXlj
+a0BnbWFpbC5jb20+IHdyb3RlOgo+T24gTW9uLCBKdWwgMTgsIDIwMjIgYXQgODoyNSBBTSBNYXVy
+aXppbyBMb21iYXJkaSA8bWxvbWJhcmRAcmVkaGF0LmNvbT4gd3JvdGU6Cj4+Cj4+IHBvIDE4LiA3
+LiAyMDIyIHYgMTY6NDAgb2Rlc6iqbGF0ZWwgQ2hlbiBMaW4gPGNoZW40NTQ2NDU0NkAxNjMuY29t
+PiBuYXBzYWw6Cj4+ID4KPj4gPiBCdXQgdGhlIG9yaWdpbmFsIGludGVudGlvbiBvZiBwYWdlIGZy
+YWcgaW50ZXJmYWNlIGlzIGluZGVlZCB0byBhbGxvY2F0ZSBtZW1vcnkKPj4gPiBsZXNzIHRoYW4g
+b25lIHBhZ2UuIEl0J3Mgbm90IGEgZ29vZCBpZGVhIHRvICBjb21wbGljYXRlIHRoZSBkZWZpbml0
+aW9uIG9mCj4+ID4gInBhZ2UgZnJhZ21lbnQiLgo+Pgo+PiBJIHNlZSB5b3VyIHBvaW50LCBJIGp1
+c3QgZG9uJ3QgdGhpbmsgaXQgbWFrZXMgbXVjaCBzZW5zZSB0byBicmVhawo+PiBkcml2ZXJzIGhl
+cmUgYW5kIHRoZXJlCj4+IHdoZW4gYSBwcmFjdGljYWxseSBpZGVudGljYWwgMi1saW5lcyBwYXRj
+aCBjYW4gZml4IHRoZSBtZW1vcnkgY29ycnVwdGlvbiBidWcKPj4gd2l0aG91dCBjaGFuZ2luZyBh
+IHNpbmdsZSBsaW5lIG9mIGNvZGUgaW4gdGhlIGRyaXZlcnMuCj4+Cj4+IEJ5IHRoZSB3YXksIEkg
+d2lsbCB3YWl0IGZvciB0aGUgbWFpbnRhaW5lcnMgdG8gZGVjaWRlIG9uIHRoZSBtYXR0ZXIuCj4+
+Cj4+IE1hdXJpemlvCj4KPkknbSBnb29kIHdpdGggdGhpcyBzbWFsbGVyIGFwcHJvYWNoLiBJZiBp
+dCBmYWlscyBvbmx5IHVuZGVyIG1lbW9yeQo+cHJlc3N1cmUgSSBhbSBnb29kIHdpdGggdGhhdC4g
+VGhlIGlzc3VlIHdpdGggdGhlIHN0cmljdGVyIGNoZWNraW5nIGlzCj50aGF0IGl0IHdpbGwgYWRk
+IGFkZGl0aW9uYWwgb3ZlcmhlYWQgdGhhdCBkb2Vzbid0IGFkZCBtdWNoIHZhbHVlIHRvCj50aGUg
+Y29kZS4KPgo+VGhhbmtzLAo+Cgo+LSBBbGV4CgpPbmUgYWRkaXRpb25hbCBxdWVzdGlvbqO6Ckkg
+ZG9uJ3QgdW5kZXJzdGFuZCB0b28gbXVjaCBhYm91dCAgd2h5IHBvaW50ID6jwTwgIGhhdmUgbW9y
+ZSBvdmVyaGVhZCB0aGFuIHBvaW50ID5CPC4gCkl0IGFsbCBsb29rcyB0aGUgc2FtZSwgZXhjZXB0
+IGZvciBqdW1waW5nIHRvIHRoZSByZWZpbGwgcHJvY2VzcywgYW5kIHRoZSByZWZpbGwgaXMgYSB2
+ZXJ5IGxvbmcgcHJvY2Vzcy4KQ291bGQgeW91IHBsZWFzZSBnaXZlIG1vcmUgZXhwbGFpbqO/CgoJ
+aWYgKHVubGlrZWx5KG9mZnNldCA8IDApKSB7CiAgICAgICAgICAgICAgICAgLS0tLS0tLS0tLS0t
+LS0+o8E8LS0tLS0tLS0tLS0tCgkJcGFnZSA9IHZpcnRfdG9fcGFnZShuYy0+dmEpOwoKCQlpZiAo
+IXBhZ2VfcmVmX3N1Yl9hbmRfdGVzdChwYWdlLCBuYy0+cGFnZWNudF9iaWFzKSkKCQkJZ290byBy
+ZWZpbGw7CgoJCWlmICh1bmxpa2VseShuYy0+cGZtZW1hbGxvYykpIHsKCQkJZnJlZV90aGVfcGFn
+ZShwYWdlLCBjb21wb3VuZF9vcmRlcihwYWdlKSk7CgkJCWdvdG8gcmVmaWxsOwoJCX0KCiNpZiAo
+UEFHRV9TSVpFIDwgUEFHRV9GUkFHX0NBQ0hFX01BWF9TSVpFKQoJCS8qIGlmIHNpemUgY2FuIHZh
+cnkgdXNlIHNpemUgZWxzZSBqdXN0IHVzZSBQQUdFX1NJWkUgKi8KCQlzaXplID0gbmMtPnNpemU7
+CiNlbmRpZgoJCS8qIE9LLCBwYWdlIGNvdW50IGlzIDAsIHdlIGNhbiBzYWZlbHkgc2V0IGl0ICov
+CgkJc2V0X3BhZ2VfY291bnQocGFnZSwgUEFHRV9GUkFHX0NBQ0hFX01BWF9TSVpFICsgMSk7CgoJ
+CS8qIHJlc2V0IHBhZ2UgY291bnQgYmlhcyBhbmQgb2Zmc2V0IHRvIHN0YXJ0IG9mIG5ldyBmcmFn
+ICovCgkJbmMtPnBhZ2VjbnRfYmlhcyA9IFBBR0VfRlJBR19DQUNIRV9NQVhfU0laRSArIDE7CgkJ
+b2Zmc2V0ID0gc2l6ZSAtIGZyYWdzejsKICAgICAgICAgICAgICAgICAtLS0tLS0tLS0tLS0tLT5C
+PC0tLS0tLS0tLS0tLQoJfQoK

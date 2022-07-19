@@ -2,179 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C159057977A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C8F579778
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbiGSKSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 06:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiGSKSU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234802AbiGSKSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 19 Jul 2022 06:18:20 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFA71EADB
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 03:18:19 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id o7so23944733lfq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 03:18:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HZD7T1gxtEeAzeoFFsALVdksuXlmXNfVHNJZv3styWM=;
-        b=gQOKSAVXqpEysN/1h60akxKzcdBV6RwTwZMVqIJiYdg2DIKxFZc7njyVrMWb8ImTeY
-         nxvun71LjKPLM8LiDsaz7S7BGU7KijqNYaV/DJho3gAna3857+lJ/fx5jfU1U3MWgMhs
-         rGmIFUMCt3cgUeEGUNDDZeK1tUrxVRTTve2Pg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HZD7T1gxtEeAzeoFFsALVdksuXlmXNfVHNJZv3styWM=;
-        b=AdqcBMJ2+fRk4O7mraDnuTkcVQPmmDNiMrLByFwIUICDAmZ+7cUkPfD8BDMWsFwiK9
-         o4jSLXQC6KlRi/gOcj1jQhL47hauY8mKfnEzjkePAwicOttQ3MgFBfchbW2hGiQ/wsyU
-         5jeExYs5W4ekn4STUONRVh9cn+JIDXW4jKMb7pLReqrwy86dxr2tjl3LUoRQrzNlYRYI
-         E2DqQKHbiXX4aYhZdkbl7bL/USMSz98XVe4TXm0XmuocE+wNk/Vk+VQjMucjIVNzVevL
-         T0K6YdZfoK6qoVnvyduz2omRqZKq9AvgpZvkfp7qmztLe7b2JKVwe6bXkFrmzKPC5Z4y
-         eRNg==
-X-Gm-Message-State: AJIora8+vC/9I/HWC2tH9V4BuOnZ1csNvDOdSPMWlNUlBFzT7zc5VbVa
-        OUzC0r4pB6nE/tGx+euDiCjYY7HnL0F6j/NhM2S8nQ==
-X-Google-Smtp-Source: AGRyM1vWZYdf3RxigFOz2S5jXb76kASW4Vsi3luTqT/0DxUcCxPXHuG4L6ZmeF23XXPmputBt2fyE2OyVUybDZnVp5c=
-X-Received: by 2002:a05:6512:230f:b0:489:676f:2705 with SMTP id
- o15-20020a056512230f00b00489676f2705mr16467995lfu.419.1658225897846; Tue, 19
- Jul 2022 03:18:17 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230148AbiGSKSR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 19 Jul 2022 06:18:17 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5731A3A6;
+        Tue, 19 Jul 2022 03:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658225895; x=1689761895;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=l2szk8FN3725tnHL17BJQNWuj8HvSKSQKxxvRKjThkk=;
+  b=CwWXUsJ/epsjM234b4QQ+TPOuACK++Y+h3yB+IPnXvW1veh2RIeOED1m
+   H8iy5mQMR8IZEdZNF8MHZdpobeAGKHeNnL2Vp0aR5FkLImTIoi7HYyrlC
+   Cm1hk2ar9uj29LNEQaS+U0bX/9VaIKyCeYvLk3trGB3B+b9DFJ20sKq5H
+   EJzxRbb1Fov2Zp2yHRYJtpTFwJZ1OqNsVfUElWR3V+CJgRKdHdjR+ktF4
+   UUP3/k9p2U9ANjxIrp6sX0UkxK8VsKWv527zKP+gIWowxTEvO+P5e++ip
+   gpviXF8o1Sr0SUsnbPFPZCv09ekppKxujV/H6FEe1vEYYXInkk/4LRZB+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287604532"
+X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
+   d="scan'208";a="287604532"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 03:18:15 -0700
+X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
+   d="scan'208";a="572794100"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.41.111])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 03:18:13 -0700
+Message-ID: <569b5766-eb6f-8811-c5e5-f5a6972a0fd5@intel.com>
+Date:   Tue, 19 Jul 2022 13:18:08 +0300
 MIME-Version: 1.0
-References: <0220707182950.29348-1-vikas.gupta@broadcom.com>
- <20220718062032.22426-1-vikas.gupta@broadcom.com> <20220718062032.22426-2-vikas.gupta@broadcom.com>
- <20220718203346.6aab5c4e@kernel.org>
-In-Reply-To: <20220718203346.6aab5c4e@kernel.org>
-From:   Vikas Gupta <vikas.gupta@broadcom.com>
-Date:   Tue, 19 Jul 2022 15:48:05 +0530
-Message-ID: <CAHLZf_uLHdz3hxz+ZtkoK_wGLpfPbh_cdkWOnmpRBX6TpNTDEg@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 1/3] devlink: introduce framework for selftests
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>, dsahern@kernel.org,
-        stephen@networkplumber.org, Eric Dumazet <edumazet@google.com>,
-        pabeni@redhat.com, ast@kernel.org, leon@kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
-        Michael Chan <michael.chan@broadcom.com>,
-        Andrew Gospodarek <andrew.gospodarek@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000009d8dbd05e425cd2c"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 01/35] perf tools: Fix dso_id inode generation comparison
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220711093218.10967-1-adrian.hunter@intel.com>
+ <20220711093218.10967-2-adrian.hunter@intel.com>
+ <YtV0vXJLbfTywZ1B@kernel.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <YtV0vXJLbfTywZ1B@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009d8dbd05e425cd2c
-Content-Type: text/plain; charset="UTF-8"
+On 18/07/22 17:57, Arnaldo Carvalho de Melo wrote:
+> Em Mon, Jul 11, 2022 at 12:31:44PM +0300, Adrian Hunter escreveu:
+>> Synthesized MMAP events have zero ino_generation, so do not compare zero
+>> values.
+>>
+>> Fixes: 0e3149f86b99 ("perf dso: Move dso_id from 'struct map' to 'struct dso'")
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>  tools/perf/util/dsos.c | 10 ++++++++--
+>>  1 file changed, 8 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
+>> index b97366f77bbf..839a1f384733 100644
+>> --- a/tools/perf/util/dsos.c
+>> +++ b/tools/perf/util/dsos.c
+>> @@ -23,8 +23,14 @@ static int __dso_id__cmp(struct dso_id *a, struct dso_id *b)
+>>  	if (a->ino > b->ino) return -1;
+>>  	if (a->ino < b->ino) return 1;
+>>  
+>> -	if (a->ino_generation > b->ino_generation) return -1;
+>> -	if (a->ino_generation < b->ino_generation) return 1;
+>> +	/*
+>> +	 * Synthesized MMAP events have zero ino_generation, so do not compare
+>> +	 * zero values.
+>> +	 */
+>> +	if (a->ino_generation && b->ino_generation) {
+>> +		if (a->ino_generation > b->ino_generation) return -1;
+>> +		if (a->ino_generation < b->ino_generation) return 1;
+>> +	}
+> 
+> But comparing didn't harm right? when its !0 now we may have three
+> comparisions instead of 2 :-\
+> 
+> The comment has some value tho, so I'm merging this :-)
 
-Hi Jakub,
-
-On Tue, Jul 19, 2022 at 9:03 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Mon, 18 Jul 2022 11:50:30 +0530 Vikas Gupta wrote:
-> > +     for (i = 1; i < DEVLINK_SELFTEST_ATTR_MAX + 1; i++) {
-> > +             u8 res;
-> > +
-> > +             if (nla_get_flag(tb[i])) {
-> > +                     res = devlink->ops->selftest_run(devlink, i,
->
-> Shouldn't we selftest_check() first to make sure the driver supports
-> given test?
- Yes, I`ll add selftest_check() here rather than letting the driver return SKIP.
-
-Thanks,
-Vikas
-
->
-> > +     [DEVLINK_ATTR_SELFTESTS_INFO] = { .type = NLA_NESTED },
->
->         ... = NLA_POLICY_NESTED(devlink_selftest_nl_policy),
-
---0000000000009d8dbd05e425cd2c
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-I7qKxvF8Yo7eGTnHRTa99J+6yTd88AKVuhM5TEhpC8cS7qvrQXJje+Uing2xWC4FH76LEWIFH0Pt
-x8C1WoCU0ClXHU/XfzH2mYrFANBSCeP1Co6QdEfRAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
-BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
-NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
-A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
-aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
-cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
-MBqBGHZpa2FzLmd1cHRhQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
-GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUc6J11rH3s6PyZQ0zIVZHIuP20Yw
-DQYJKoZIhvcNAQELBQADggEBALvCjXn9gy9a2nU/Ey0nphGZefIP33ggiyuKnmqwBt7Wk/uDHIIc
-kkIlqtTbo0x0PqphS9A23CxCDjKqZq2WN34fL5MMW83nrK0vqnPloCaxy9/6yuLbottBY4STNuvA
-mQ//Whh+PE+DZadqiDbxXbos3IH8AeFXH4A1zIqIrc0Um2/CSD/T6pvu9QrchtvemfP0z/f1Bk+8
-QbQ4ARVP93WV1I13US69evWXw+mOv9VnejShU9PMcDK203xjXbBOi9Hm+fthrWfwIyGoC5aEf7vd
-PKkEDt4VZ9RbudZU/c3N8+kURaHNtrvu2K+mQs5w/AF7HYZThqmOzQJnvMRjuL8xggJtMIICaQIB
-ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
-bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwYjepatB64S625eswwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPeRd4ySqSrwDRvaR7uQAXeJPfGMD381HI/X
-ZR+Cjo/1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDcxOTEw
-MTgxOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
-AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQBGGKJwBUM5c3nK3Jc7Drp2EObFASrrI9baq1lRVGzkl5OS1+BDA5CX
-YDSYVR4Bv8OW4OlyEVZlDLjIRJ5NNYxlfMBQtqIbouM5Lw5aVfJGlskOAj62HrJbrDe4rVeTYZMM
-x9moEVEjmg4C0STTm8Zqsd90pjttnmT3GQppZY0C0qYGzsz364i3I+FNkzxePLNqOKto4/bUQmSA
-qTfeqlcqB5A6nsX/VnfE6k1uplrVdXYEtY4jIN1QcWnVc0i6VAaqJnLtytZHs+xHkuMi4CaE5/bf
-BOORt3rxavcnFGKMeEYCehs/Pmp9QqO5R8GmcYmhyRnVWZp8OqngOZX1nfEO
---0000000000009d8dbd05e425cd2c--
+Thanks. I found it harmful because the mismatch resulted in a new
+dso that did not have a build ID whereas the original dso did have
+a build ID.  The build ID was essential because the object was not
+found otherwise.

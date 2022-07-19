@@ -2,77 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBF55797F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DFF579800
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237368AbiGSKxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 06:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
+        id S237366AbiGSK4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 06:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237164AbiGSKxF (ORCPT
+        with ESMTP id S235386AbiGSK4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 06:53:05 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD5A2714D;
-        Tue, 19 Jul 2022 03:53:03 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id m8so5584174edd.9;
-        Tue, 19 Jul 2022 03:53:03 -0700 (PDT)
+        Tue, 19 Jul 2022 06:56:02 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB2528703;
+        Tue, 19 Jul 2022 03:56:01 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id w185so13198843pfb.4;
+        Tue, 19 Jul 2022 03:56:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=RCwtQ+WO02leu9oWS9PPPUJXjwgAtwBAQuSMBG13QCM=;
-        b=n4t5D7783Okh4he+5yCQAJdyOxGPWhYdHw3ZyttkmQxjNDgstwrnVemImfjdYT/0Ze
-         peC9c6EihkR1hsWUPmZzeZDKobmeeJbS+M44/iysXkdEOU7jpBObXjbCDU3w06QUEM0u
-         RE5bdy1tswQC3UGSbuPM7ZmV5HfH7H9aJq0iEcqOpoYPem/ImW2NiSErVuN2D8ghSDeK
-         mA6WRFi0HIKpLRW8jwGza/qFy6f5cCx20VdTOp04hgUn1NIpQ4TIo9R/P6V5mH6SGbaO
-         oAwGRNkOJ8YYDAJMI55/fuqTxe+zwAk0qQYp9hFGgZXkNW3pE4LGux8hRXpbOzwxILN8
-         /MUg==
+        bh=jqUQh3DjM8ZqS4zR5Pyl1XmHXdFMTXtpYO7CRcJ8kXc=;
+        b=RXuqqdktl/r2ImUrJKyuAoct8ZkcUcMy1RfX1r3ogHvjuTmv6yOfd4kfYqBXFo+bQa
+         VXbnqxtkJL3fISkD87xkYiKDDHnGeFk2JXjm2H7XMErajmikSr/lxMYr//5nz5iDt8Xe
+         pMAKglNBxdLETytDYMuVKt5629G7RFy2U1luW0LVOWlLMOgc/uhzMRz5kgyM5D6xOsOi
+         G8BH5lUnbxccLAfz3ohp/22C9UVwCNkLyeAF7PrOY5l0PP06frqlMOWsdjvcIln456eH
+         5oAgexoSRCZtc89MtewsvSYxiLrvRq0bdQurtd4ftkz9tCoeLgC3/44IZplKHGhBTdpp
+         YT/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=RCwtQ+WO02leu9oWS9PPPUJXjwgAtwBAQuSMBG13QCM=;
-        b=QkpWvnGLPRjvwKGoO33ofu6fVJJpfPcaGZ5JlI9p61aFjzK70bMfgtjqsyowLBTtfm
-         Bp9cwu+g68llyeBCGtlF4wPPXMCmFbol3/0Xd/LJOipDkrbE2SUTNoEKEdJrEAs9nRS6
-         V6vfZ/4aSSDbU9uBP2tO4AqLu5xlXsB1DMprH89SPqDlcrvlC+JBhsRHEDHWdFwgS2n7
-         RER4yMwE0a7igiwf4Q525Nu95xxC9avxXdZ94HCSq8fBYVvFPTtRbQ3kimMW8ZeoUDDy
-         JELwI/aVYyuCIvYivDE9I5Xc1MH9g7enfxIYZurT2vD8unyTKB9j9ErTQztRmaRYV2p2
-         RtuA==
-X-Gm-Message-State: AJIora/atiD/rOD/2HzOajrM+Y6x7OZoLNFv+iBeimJE9LIe4lWpRl6B
-        qtl/FzIcNgrz9mwIDAQpobwMX1OCR8U=
-X-Google-Smtp-Source: AGRyM1vcWlHL5O1QumWoJ5e5aSuGTz1RF/ZHn65dG7Xz0FFtIRjTpV+fzKbdOu2r9jho/GEY1dTqvw==
-X-Received: by 2002:a05:6402:51cb:b0:43a:e94c:a841 with SMTP id r11-20020a05640251cb00b0043ae94ca841mr43121442edd.212.1658227982232;
-        Tue, 19 Jul 2022 03:53:02 -0700 (PDT)
-Received: from skbuf ([188.27.185.104])
-        by smtp.gmail.com with ESMTPSA id g23-20020a170906539700b006fef0c7072esm6664658ejo.144.2022.07.19.03.53.00
+        bh=jqUQh3DjM8ZqS4zR5Pyl1XmHXdFMTXtpYO7CRcJ8kXc=;
+        b=uDUYVSifO8ky3igPfCKzqtVgE1ruLIKuiWc2BqhCUYyRB1U0REqo7uUwGdF1w+PXc3
+         PANg8OCzbQKN/wEZKWUidjKtRibwSdXcGQoAWbjoRTuZirGo3mEG1wIgpDzdWWCE9h3k
+         dsdA3c4gtNv5TrkWNSRQu7fOkT49cFVk09IR9Z77Dwh9/ETwBStoKKdbB6XFPu4xKOoz
+         N+86BOFNeByjKSbIDBZYiSYsdvwLq4U2dX3zb/zDbmE4aeAtUK52N9bIpaXi1OoGFZvj
+         y91XPYHmu1tPcqY6wVdg+UDBgvKSqwmPC7exNBmYQ43YSW89z+aPHjLWpaBGS0zMWQG7
+         pL5Q==
+X-Gm-Message-State: AJIora/aJvDWt35tgoBi1JBmkomAxhoBzc8xcW+hvB5ao1mirqGQCWYN
+        8vr1gkliKnV1MR3NPZaUkeT2saOmXTJa1Q==
+X-Google-Smtp-Source: AGRyM1taRmeVEuAQW8FbPRjqRyf95XmuSzpjoAKvmlJSD5JGCH2/Bfg7Okm9KF9IPGvTp0P7uOE9wQ==
+X-Received: by 2002:a63:84c7:0:b0:412:a0b2:3add with SMTP id k190-20020a6384c7000000b00412a0b23addmr28965015pgd.511.1658228160909;
+        Tue, 19 Jul 2022 03:56:00 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id p7-20020a17090a748700b001ece55b938asm13291111pjk.32.2022.07.19.03.55.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 03:53:01 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 13:52:59 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [RFC Patch net-next 04/10] net: dsa: microchip: add common
- duplex and flow control function
-Message-ID: <20220719105259.h2pbg4jdjhblbkv5@skbuf>
-References: <20220712160308.13253-1-arun.ramadoss@microchip.com>
- <20220712160308.13253-1-arun.ramadoss@microchip.com>
- <20220712160308.13253-5-arun.ramadoss@microchip.com>
- <20220712160308.13253-5-arun.ramadoss@microchip.com>
+        Tue, 19 Jul 2022 03:56:00 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 19:55:58 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] asm-generic: Add new pci.h and use it
+Message-ID: <YtaNvpE7AA/4eV1I@antec>
+References: <20220717033453.2896843-1-shorne@gmail.com>
+ <20220717033453.2896843-3-shorne@gmail.com>
+ <YtTjeEnKr8f8z4JS@infradead.org>
+ <CAK8P3a1KJe4K5g1z-Faoxc9NhXqjCUWxnvk2HPxsj2wzG_iDbg@mail.gmail.com>
+ <CAAfxs740yz1vJmtFHOPTXT6fqi0+37SR_OhoGsONe4mx_21+_g@mail.gmail.com>
+ <CAK8P3a1Mo9+-t21rkP8SDnPrmbj3-uuVPtmHbeUerAevxN3TNw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220712160308.13253-5-arun.ramadoss@microchip.com>
- <20220712160308.13253-5-arun.ramadoss@microchip.com>
+In-Reply-To: <CAK8P3a1Mo9+-t21rkP8SDnPrmbj3-uuVPtmHbeUerAevxN3TNw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -83,265 +90,354 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 09:33:02PM +0530, Arun Ramadoss wrote:
-> This patch add common function for configuring the Full/Half duplex and
-> transmit/receive flow control. KSZ8795 uses the Global control register
-> 4 for configuring the duplex and flow control, whereas all other KSZ9477
-> based switch uses the xMII Control 0 register.
+On Tue, Jul 19, 2022 at 09:45:58AM +0200, Arnd Bergmann wrote:
+> On Tue, Jul 19, 2022 at 1:19 AM Stafford Horne <shorne@gmail.com> wrote:
+> > On Mon, Jul 18, 2022, 3:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >>
+> >> As mentioned before, it would be even better to just remove it
+> >> entirely from everything except x86, and enclose the four
+> >> references in an explicit "#ifdef X86_32". The variable declaration
+> >> only exists because drivers/pci/quirks.c is compiled on all
+> >> architecture, but the individual quirk is only active  based on
+> >> the PCI device ID of certain early PCI-ISA bridges.
+> >
+> >
+> > Ok, I was thinking of that route but once I saw the pci device IDs I
+> > wasn't so sure it was limited to x86.  I'll go ahead with that approach.
 > 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
->  drivers/net/dsa/microchip/ksz9477_reg.h  |  1 -
->  drivers/net/dsa/microchip/ksz_common.c   | 64 ++++++++++++++++++++++++
->  drivers/net/dsa/microchip/ksz_common.h   |  8 +++
->  drivers/net/dsa/microchip/lan937x_main.c | 24 +++------
->  drivers/net/dsa/microchip/lan937x_reg.h  |  3 --
->  5 files changed, 80 insertions(+), 20 deletions(-)
+> Ok, thanks!
 > 
-> diff --git a/drivers/net/dsa/microchip/ksz9477_reg.h b/drivers/net/dsa/microchip/ksz9477_reg.h
-> index 2649fdf0bae1..6ca859345932 100644
-> --- a/drivers/net/dsa/microchip/ksz9477_reg.h
-> +++ b/drivers/net/dsa/microchip/ksz9477_reg.h
-> @@ -1178,7 +1178,6 @@
->  #define REG_PORT_XMII_CTRL_0		0x0300
->  
->  #define PORT_SGMII_SEL			BIT(7)
-> -#define PORT_MII_FULL_DUPLEX		BIT(6)
->  #define PORT_GRXC_ENABLE		BIT(0)
->  
->  #define REG_PORT_XMII_CTRL_1		0x0301
-> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> index f41cd2801210..4ef0ee9a245d 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -280,6 +280,8 @@ static const u32 ksz8795_masks[] = {
->  	[DYNAMIC_MAC_TABLE_FID]		= GENMASK(26, 20),
->  	[DYNAMIC_MAC_TABLE_SRC_PORT]	= GENMASK(26, 24),
->  	[DYNAMIC_MAC_TABLE_TIMESTAMP]	= GENMASK(28, 27),
-> +	[P_MII_TX_FLOW_CTRL]		= BIT(5),
-> +	[P_MII_RX_FLOW_CTRL]		= BIT(5),
+> I checked all the PCI IDs yesterday, and I'm fairly sure they are x86
+> specific. While some related products are general-purpose PCI-ISA
+> bridges that have shown up on mips or arm boards, the ones listed
+> here should all be safe.
 
-The masks are the same for TX and RX flow control and the writes are to
-the same register (regs[P_XMII_CTRL_0]), is this an error?
+This is what I have now, I will add a similar patch between 1/2 and 2/2, if this
+looks ok.
 
->  };
->  
->  static const u8 ksz8795_values[] = {
-> @@ -287,6 +289,8 @@ static const u8 ksz8795_values[] = {
->  	[P_MII_NOT_1GBIT]		= 0,
->  	[P_MII_100MBIT]			= 0,
->  	[P_MII_10MBIT]			= 1,
-> +	[P_MII_FULL_DUPLEX]		= 0,
-> +	[P_MII_HALF_DUPLEX]		= 1,
->  };
->  
->  static const u8 ksz8795_shifts[] = {
-> @@ -366,6 +370,8 @@ static const u16 ksz9477_regs[] = {
->  static const u32 ksz9477_masks[] = {
->  	[ALU_STAT_WRITE]		= 0,
->  	[ALU_STAT_READ]			= 1,
-> +	[P_MII_TX_FLOW_CTRL]		= BIT(5),
-> +	[P_MII_RX_FLOW_CTRL]		= BIT(3),
->  };
->  
->  static const u8 ksz9477_shifts[] = {
-> @@ -377,6 +383,8 @@ static const u8 ksz9477_values[] = {
->  	[P_MII_NOT_1GBIT]		= 1,
->  	[P_MII_100MBIT]			= 1,
->  	[P_MII_10MBIT]			= 0,
-> +	[P_MII_FULL_DUPLEX]		= 1,
-> +	[P_MII_HALF_DUPLEX]		= 0,
->  };
->  
->  static const u8 ksz9893_values[] = {
-> @@ -384,11 +392,15 @@ static const u8 ksz9893_values[] = {
->  	[P_MII_NOT_1GBIT]		= 0,
->  	[P_MII_100MBIT]			= 1,
->  	[P_MII_10MBIT]			= 0,
-> +	[P_MII_FULL_DUPLEX]		= 1,
-> +	[P_MII_HALF_DUPLEX]		= 0,
->  };
->  
->  static const u32 lan937x_masks[] = {
->  	[ALU_STAT_WRITE]		= 1,
->  	[ALU_STAT_READ]			= 2,
-> +	[P_MII_TX_FLOW_CTRL]		= BIT(5),
-> +	[P_MII_RX_FLOW_CTRL]		= BIT(3),
->  };
->  
->  static const u8 lan937x_shifts[] = {
-> @@ -1447,6 +1459,58 @@ void ksz_set_100_10mbit(struct ksz_device *dev, int port, int speed)
->  	ksz_pwrite8(dev, port, regs[P_XMII_CTRL_0], data8);
->  }
->  
-> +void ksz_set_fullduplex(struct ksz_device *dev, int port, bool val)
-> +{
-> +	const u8 *bitval = dev->info->bitval;
-> +	const u16 *regs = dev->info->regs;
-> +	u8 data8;
-> +
-> +	ksz_pread8(dev, port, regs[P_XMII_CTRL_0], &data8);
-> +
-> +	data8 &= ~P_MII_DUPLEX_M;
-> +
-> +	if (val)
-> +		data8 |= FIELD_PREP(P_MII_DUPLEX_M,
-> +				    bitval[P_MII_FULL_DUPLEX]);
-> +	else
-> +		data8 |= FIELD_PREP(P_MII_DUPLEX_M,
-> +				    bitval[P_MII_HALF_DUPLEX]);
-> +
-> +	ksz_pwrite8(dev, port, regs[P_XMII_CTRL_0], data8);
-> +}
-> +
-> +void ksz_set_tx_pause(struct ksz_device *dev, int port, bool val)
-> +{
-> +	const u32 *masks = dev->info->masks;
-> +	const u16 *regs = dev->info->regs;
-> +	u8 data8;
-> +
-> +	ksz_pread8(dev, port, regs[P_XMII_CTRL_0], &data8);
-> +
-> +	if (val)
-> +		data8 |= masks[P_MII_TX_FLOW_CTRL];
-> +	else
-> +		data8 &= ~masks[P_MII_TX_FLOW_CTRL];
-> +
-> +	ksz_pwrite8(dev, port, regs[P_XMII_CTRL_0], data8);
-> +}
-> +
-> +void ksz_set_rx_pause(struct ksz_device *dev, int port, bool val)
-> +{
-> +	const u32 *masks = dev->info->masks;
-> +	const u16 *regs = dev->info->regs;
-> +	u8 data8;
-> +
-> +	ksz_pread8(dev, port, regs[P_XMII_CTRL_0], &data8);
-> +
-> +	if (val)
-> +		data8 |= masks[P_MII_RX_FLOW_CTRL];
-> +	else
-> +		data8 &= ~masks[P_MII_RX_FLOW_CTRL];
-> +
-> +	ksz_pwrite8(dev, port, regs[P_XMII_CTRL_0], data8);
-> +}
-> +
->  static void ksz_phylink_mac_link_up(struct dsa_switch *ds, int port,
->  				    unsigned int mode,
->  				    phy_interface_t interface,
-> diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-> index f1fa6feca559..851ee50895a4 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.h
-> +++ b/drivers/net/dsa/microchip/ksz_common.h
-> @@ -198,6 +198,8 @@ enum ksz_masks {
->  	DYNAMIC_MAC_TABLE_TIMESTAMP,
->  	ALU_STAT_WRITE,
->  	ALU_STAT_READ,
-> +	P_MII_TX_FLOW_CTRL,
-> +	P_MII_RX_FLOW_CTRL,
->  };
->  
->  enum ksz_shifts {
-> @@ -218,6 +220,8 @@ enum ksz_values {
->  	P_MII_NOT_1GBIT,
->  	P_MII_100MBIT,
->  	P_MII_10MBIT,
-> +	P_MII_FULL_DUPLEX,
-> +	P_MII_HALF_DUPLEX,
->  };
->  
->  struct alu_struct {
-> @@ -308,6 +312,9 @@ void ksz_port_stp_state_set(struct dsa_switch *ds, int port, u8 state);
->  bool ksz_get_gbit(struct ksz_device *dev, int port);
->  void ksz_set_gbit(struct ksz_device *dev, int port, bool gbit);
->  void ksz_set_100_10mbit(struct ksz_device *dev, int port, int speed);
-> +void ksz_set_fullduplex(struct ksz_device *dev, int port, bool val);
-> +void ksz_set_tx_pause(struct ksz_device *dev, int port, bool val);
-> +void ksz_set_rx_pause(struct ksz_device *dev, int port, bool val);
->  extern const struct ksz_chip_data ksz_switch_chips[];
->  
->  /* Common register access functions */
-> @@ -472,6 +479,7 @@ static inline int is_lan937x(struct ksz_device *dev)
->  #define SW_START			0x01
->  
->  /* xMII configuration */
-> +#define P_MII_DUPLEX_M			BIT(6)
->  #define P_MII_100MBIT_M			BIT(4)
->  
->  #define P_MII_1GBIT_M			BIT(6)
-> diff --git a/drivers/net/dsa/microchip/lan937x_main.c b/drivers/net/dsa/microchip/lan937x_main.c
-> index 37f63110e5bb..67b03ab0ede3 100644
-> --- a/drivers/net/dsa/microchip/lan937x_main.c
-> +++ b/drivers/net/dsa/microchip/lan937x_main.c
-> @@ -234,6 +234,8 @@ int lan937x_reset_switch(struct ksz_device *dev)
->  
->  void lan937x_port_setup(struct ksz_device *dev, int port, bool cpu_port)
->  {
-> +	const u32 *masks = dev->info->masks;
-> +	const u16 *regs = dev->info->regs;
->  	struct dsa_switch *ds = dev->ds;
->  	u8 member;
->  
-> @@ -254,8 +256,9 @@ void lan937x_port_setup(struct ksz_device *dev, int port, bool cpu_port)
->  	lan937x_port_cfg(dev, port, P_PRIO_CTRL, PORT_802_1P_PRIO_ENABLE, true);
->  
->  	if (!dev->info->internal_phy[port])
-> -		lan937x_port_cfg(dev, port, REG_PORT_XMII_CTRL_0,
-> -				 PORT_MII_TX_FLOW_CTRL | PORT_MII_RX_FLOW_CTRL,
-> +		lan937x_port_cfg(dev, port, regs[P_XMII_CTRL_0],
-> +				 masks[P_MII_TX_FLOW_CTRL] |
-> +				 masks[P_MII_RX_FLOW_CTRL],
->  				 true);
->  
->  	if (cpu_port)
-> @@ -346,29 +349,18 @@ static void lan937x_config_interface(struct ksz_device *dev, int port,
->  				     int speed, int duplex,
->  				     bool tx_pause, bool rx_pause)
->  {
-> -	u8 xmii_ctrl0;
-> -
-> -	ksz_pread8(dev, port, REG_PORT_XMII_CTRL_0, &xmii_ctrl0);
-> -
-> -	xmii_ctrl0 &= ~(PORT_MII_FULL_DUPLEX | PORT_MII_TX_FLOW_CTRL |
-> -			PORT_MII_RX_FLOW_CTRL);
-> -
->  	if (speed == SPEED_1000)
->  		ksz_set_gbit(dev, port, true);
->  
->  	if (speed == SPEED_100 || speed == SPEED_10)
->  		ksz_set_100_10mbit(dev, port, speed);
->  
-> -	if (duplex)
-> -		xmii_ctrl0 |= PORT_MII_FULL_DUPLEX;
-> +	ksz_set_fullduplex(dev, port, duplex);
->  
-> -	if (tx_pause)
-> -		xmii_ctrl0 |= PORT_MII_TX_FLOW_CTRL;
-> +	ksz_set_tx_pause(dev, port, tx_pause);
->  
-> -	if (rx_pause)
-> -		xmii_ctrl0 |= PORT_MII_RX_FLOW_CTRL;
-> +	ksz_set_rx_pause(dev, port, rx_pause);
->  
-> -	ksz_pwrite8(dev, port, REG_PORT_XMII_CTRL_0, xmii_ctrl0);
->  }
->  
->  void lan937x_phylink_get_caps(struct ksz_device *dev, int port,
-> diff --git a/drivers/net/dsa/microchip/lan937x_reg.h b/drivers/net/dsa/microchip/lan937x_reg.h
-> index b9364f6a4f8f..d5eb6dc3a739 100644
-> --- a/drivers/net/dsa/microchip/lan937x_reg.h
-> +++ b/drivers/net/dsa/microchip/lan937x_reg.h
-> @@ -133,9 +133,6 @@
->  /* 3 - xMII */
->  #define REG_PORT_XMII_CTRL_0		0x0300
->  #define PORT_SGMII_SEL			BIT(7)
-> -#define PORT_MII_FULL_DUPLEX		BIT(6)
-> -#define PORT_MII_TX_FLOW_CTRL		BIT(5)
-> -#define PORT_MII_RX_FLOW_CTRL		BIT(3)
->  #define PORT_GRXC_ENABLE		BIT(0)
->  
->  #define REG_PORT_XMII_CTRL_1		0x0301
-> -- 
-> 2.36.1
-> 
+It adds a few ifdef's which might be controversial but I think it provides more
+cleanup than added complexity.  I compile tested with x86_64, x86_32 and
+OpenRISC.
 
+diff --git a/arch/alpha/include/asm/dma.h b/arch/alpha/include/asm/dma.h
+index 28610ea7786d..a04d76b96089 100644
+--- a/arch/alpha/include/asm/dma.h
++++ b/arch/alpha/include/asm/dma.h
+@@ -365,13 +365,4 @@ extern void free_dma(unsigned int dmanr);	/* release it again */
+ #define KERNEL_HAVE_CHECK_DMA
+ extern int check_dma(unsigned int dmanr);
+ 
+-/* From PCI */
+-
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy 	(0)
+-#endif
+-
+-
+ #endif /* _ASM_DMA_H */
+diff --git a/arch/arc/include/asm/dma.h b/arch/arc/include/asm/dma.h
+index 5b744f4b10a7..02431027ed2f 100644
+--- a/arch/arc/include/asm/dma.h
++++ b/arch/arc/include/asm/dma.h
+@@ -7,10 +7,5 @@
+ #define ASM_ARC_DMA_H
+ 
+ #define MAX_DMA_ADDRESS 0xC0000000
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy	0
+-#endif
+ 
+ #endif
+diff --git a/arch/arm/include/asm/dma.h b/arch/arm/include/asm/dma.h
+index a81dda65c576..907d139be431 100644
+--- a/arch/arm/include/asm/dma.h
++++ b/arch/arm/include/asm/dma.h
+@@ -143,10 +143,4 @@ extern int  get_dma_residue(unsigned int chan);
+ 
+ #endif /* CONFIG_ISA_DMA_API */
+ 
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy    (0)
+-#endif
+-
+ #endif /* __ASM_ARM_DMA_H */
+diff --git a/arch/ia64/include/asm/dma.h b/arch/ia64/include/asm/dma.h
+index 59625e9c1f9c..eaed2626ffda 100644
+--- a/arch/ia64/include/asm/dma.h
++++ b/arch/ia64/include/asm/dma.h
+@@ -12,8 +12,6 @@
+ 
+ extern unsigned long MAX_DMA_ADDRESS;
+ 
+-extern int isa_dma_bridge_buggy;
+-
+ #define free_dma(x)
+ 
+ #endif /* _ASM_IA64_DMA_H */
+diff --git a/arch/m68k/include/asm/dma.h b/arch/m68k/include/asm/dma.h
+index f6c5e0dfb4e5..1c8d9c5bc2fa 100644
+--- a/arch/m68k/include/asm/dma.h
++++ b/arch/m68k/include/asm/dma.h
+@@ -6,10 +6,4 @@
+    bootmem allocator (but this should do it for this) */
+ #define MAX_DMA_ADDRESS PAGE_OFFSET
+ 
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy    (0)
+-#endif
+-
+ #endif /* _M68K_DMA_H */
+diff --git a/arch/microblaze/include/asm/dma.h b/arch/microblaze/include/asm/dma.h
+index f801582be912..7484c9eb66c4 100644
+--- a/arch/microblaze/include/asm/dma.h
++++ b/arch/microblaze/include/asm/dma.h
+@@ -9,10 +9,4 @@
+ /* Virtual address corresponding to last available physical memory address.  */
+ #define MAX_DMA_ADDRESS (CONFIG_KERNEL_START + memory_size - 1)
+ 
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy     (0)
+-#endif
+-
+ #endif /* _ASM_MICROBLAZE_DMA_H */
+diff --git a/arch/mips/include/asm/dma.h b/arch/mips/include/asm/dma.h
+index be726b943530..d6186e6bea7e 100644
+--- a/arch/mips/include/asm/dma.h
++++ b/arch/mips/include/asm/dma.h
+@@ -307,12 +307,4 @@ static __inline__ int get_dma_residue(unsigned int dmanr)
+ extern int request_dma(unsigned int dmanr, const char * device_id);	/* reserve a DMA channel */
+ extern void free_dma(unsigned int dmanr);	/* release it again */
+ 
+-/* From PCI */
+-
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy	(0)
+-#endif
+-
+ #endif /* _ASM_DMA_H */
+diff --git a/arch/parisc/include/asm/dma.h b/arch/parisc/include/asm/dma.h
+index eea80ed34e6d..9e8c101de902 100644
+--- a/arch/parisc/include/asm/dma.h
++++ b/arch/parisc/include/asm/dma.h
+@@ -176,10 +176,4 @@ static __inline__ void set_dma_count(unsigned int dmanr, unsigned int count)
+ 
+ #define free_dma(dmanr)
+ 
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy 	(0)
+-#endif
+-
+ #endif /* _ASM_DMA_H */
+diff --git a/arch/powerpc/include/asm/dma.h b/arch/powerpc/include/asm/dma.h
+index 6161a9596196..d97c66d9ae34 100644
+--- a/arch/powerpc/include/asm/dma.h
++++ b/arch/powerpc/include/asm/dma.h
+@@ -340,11 +340,5 @@ extern int request_dma(unsigned int dmanr, const char *device_id);
+ /* release it again */
+ extern void free_dma(unsigned int dmanr);
+ 
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy	(0)
+-#endif
+-
+ #endif /* __KERNEL__ */
+ #endif	/* _ASM_POWERPC_DMA_H */
+diff --git a/arch/s390/include/asm/dma.h b/arch/s390/include/asm/dma.h
+index 6f26f35d4a71..dec1c4ce628c 100644
+--- a/arch/s390/include/asm/dma.h
++++ b/arch/s390/include/asm/dma.h
+@@ -11,10 +11,4 @@
+  */
+ #define MAX_DMA_ADDRESS         0x80000000
+ 
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy	(0)
+-#endif
+-
+ #endif /* _ASM_S390_DMA_H */
+diff --git a/arch/sh/include/asm/dma.h b/arch/sh/include/asm/dma.h
+index 17d23ae98c77..c8bee3f985a2 100644
+--- a/arch/sh/include/asm/dma.h
++++ b/arch/sh/include/asm/dma.h
+@@ -137,10 +137,4 @@ extern int register_chan_caps(const char *dmac, struct dma_chan_caps *capslist);
+ extern int dma_create_sysfs_files(struct dma_channel *, struct dma_info *);
+ extern void dma_remove_sysfs_files(struct dma_channel *, struct dma_info *);
+ 
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy	(0)
+-#endif
+-
+ #endif /* __ASM_SH_DMA_H */
+diff --git a/arch/sparc/include/asm/dma.h b/arch/sparc/include/asm/dma.h
+index 462e7c794a09..08043f35b110 100644
+--- a/arch/sparc/include/asm/dma.h
++++ b/arch/sparc/include/asm/dma.h
+@@ -82,14 +82,6 @@
+ #define DMA_BURST64      0x40
+ #define DMA_BURSTBITS    0x7f
+ 
+-/* From PCI */
+-
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy 	(0)
+-#endif
+-
+ #ifdef CONFIG_SPARC32
+ struct device;
+ 
+diff --git a/arch/x86/include/asm/dma.h b/arch/x86/include/asm/dma.h
+index 8e95aa4b0d17..0c34c658f57d 100644
+--- a/arch/x86/include/asm/dma.h
++++ b/arch/x86/include/asm/dma.h
+@@ -309,10 +309,12 @@ extern void free_dma(unsigned int dmanr);
+ 
+ /* From PCI */
+ 
++#ifdef CONFIG_X86_32
+ #ifdef CONFIG_PCI
+ extern int isa_dma_bridge_buggy;
+ #else
+ #define isa_dma_bridge_buggy	(0)
+-#endif
++#endif /* CONFIG_PCI */
++#endif /* CONFIG_X86_32 */
+ 
+ #endif /* _ASM_X86_DMA_H */
+diff --git a/arch/xtensa/include/asm/dma.h b/arch/xtensa/include/asm/dma.h
+index bb099a373b5a..172644539032 100644
+--- a/arch/xtensa/include/asm/dma.h
++++ b/arch/xtensa/include/asm/dma.h
+@@ -52,11 +52,4 @@
+ extern int request_dma(unsigned int dmanr, const char * device_id);
+ extern void free_dma(unsigned int dmanr);
+ 
+-#ifdef CONFIG_PCI
+-extern int isa_dma_bridge_buggy;
+-#else
+-#define isa_dma_bridge_buggy 	(0)
+-#endif
+-
+-
+ #endif
+diff --git a/drivers/comedi/drivers/comedi_isadma.c b/drivers/comedi/drivers/comedi_isadma.c
+index 700982464c53..508421809128 100644
+--- a/drivers/comedi/drivers/comedi_isadma.c
++++ b/drivers/comedi/drivers/comedi_isadma.c
+@@ -104,8 +104,10 @@ unsigned int comedi_isadma_poll(struct comedi_isadma *dma)
+ 
+ 	flags = claim_dma_lock();
+ 	clear_dma_ff(desc->chan);
++#ifdef CONFIG_X86_32
+ 	if (!isa_dma_bridge_buggy)
+ 		disable_dma(desc->chan);
++#endif
+ 	result = get_dma_residue(desc->chan);
+ 	/*
+ 	 * Read the counter again and choose higher value in order to
+@@ -113,8 +115,10 @@ unsigned int comedi_isadma_poll(struct comedi_isadma *dma)
+ 	 * isa_dma_bridge_buggy is set.
+ 	 */
+ 	result1 = get_dma_residue(desc->chan);
++#ifdef CONFIG_X86_32
+ 	if (!isa_dma_bridge_buggy)
+ 		enable_dma(desc->chan);
++#endif
+ 	release_dma_lock(flags);
+ 
+ 	if (result < result1)
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index cfaf40a540a8..60c55d2cb2cc 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -41,8 +41,10 @@ const char *pci_power_names[] = {
+ };
+ EXPORT_SYMBOL_GPL(pci_power_names);
+ 
++#ifdef CONFIG_X86_32
+ int isa_dma_bridge_buggy;
+ EXPORT_SYMBOL(isa_dma_bridge_buggy);
++#endif
+ 
+ int pci_pci_problems;
+ EXPORT_SYMBOL(pci_pci_problems);
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 41aeaa235132..cb7715a0f339 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -239,6 +239,7 @@ static void quirk_passive_release(struct pci_dev *dev)
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	PCI_DEVICE_ID_INTEL_82441,	quirk_passive_release);
+ DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_INTEL,	PCI_DEVICE_ID_INTEL_82441,	quirk_passive_release);
+ 
++#ifdef CONFIG_X86_32
+ /*
+  * The VIA VP2/VP3/MVP3 seem to have some 'features'. There may be a
+  * workaround but VIA don't answer queries. If you happen to have good
+@@ -265,6 +266,7 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AL,	PCI_DEVICE_ID_AL_M1533,		quirk_isa_dma
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_1,	quirk_isa_dma_hangs);
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_2,	quirk_isa_dma_hangs);
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_3,	quirk_isa_dma_hangs);
++#endif
+ 
+ /*
+  * Intel NM10 "TigerPoint" LPC PM1a_STS.BM_STS must be clear
+diff --git a/include/asm-generic/pci.h b/include/asm-generic/pci.h
+index 556147983911..3ceb0cb12321 100644
+--- a/include/asm-generic/pci.h
++++ b/include/asm-generic/pci.h
+@@ -18,8 +18,6 @@
+ #define pcibios_assign_all_busses() 1
+ #endif
+ 
+-extern int isa_dma_bridge_buggy;
+-
+ /* Enable generic resource mapping code in drivers/pci/ */
+ #define ARCH_GENERIC_PCI_MMAP_RESOURCE
+ 
+diff --git a/sound/core/isadma.c b/sound/core/isadma.c
+index 1f45ede023b4..8a6397109c56 100644
+--- a/sound/core/isadma.c
++++ b/sound/core/isadma.c
+@@ -73,8 +73,10 @@ unsigned int snd_dma_pointer(unsigned long dma, unsigned int size)
+ 
+ 	flags = claim_dma_lock();
+ 	clear_dma_ff(dma);
++#ifdef CONFIG_X86_32
+ 	if (!isa_dma_bridge_buggy)
+ 		disable_dma(dma);
++#endif
+ 	result = get_dma_residue(dma);
+ 	/*
+ 	 * HACK - read the counter again and choose higher value in order to
+@@ -82,8 +84,10 @@ unsigned int snd_dma_pointer(unsigned long dma, unsigned int size)
+ 	 * isa_dma_bridge_buggy is set.
+ 	 */
+ 	result1 = get_dma_residue(dma);
++#ifdef CONFIG_X86_32
+ 	if (!isa_dma_bridge_buggy)
+ 		enable_dma(dma);
++#endif
+ 	release_dma_lock(flags);
+ 	if (unlikely(result < result1))
+ 		result = result1;

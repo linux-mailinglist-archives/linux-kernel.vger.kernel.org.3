@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE15257A0D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EAE57A0DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239083AbiGSOLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
+        id S238853AbiGSOL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238833AbiGSOK1 (ORCPT
+        with ESMTP id S238720AbiGSOLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:10:27 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF7AA19C;
-        Tue, 19 Jul 2022 06:29:35 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id v12so19586103edc.10;
-        Tue, 19 Jul 2022 06:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7WHAfOkhC9F+z/OW67LryPBcqkUfwOKddTQPn9vK3kE=;
-        b=bZpu4dW/HUvkf0L8vIVI7WkLRas6LDpQyyvRSBelZioFpjCA/ApzeoYg+UwcC6m2tk
-         V9c3v+SIvzJHtmcKPZsS+gZq4IWKh5vqfPSVf94Pda1yUB6iz4o7BIjN9LZQD0qj8V17
-         D+1Py/tWRL9t4nKofJAz9pPcDkCXJu+V/EfYoPBYMqyjzGdYno6x4ikhAt/EvhWIHgkv
-         xOLZ/7ZXz8RBgKfFMqy1uBv16c+9kMkZhAgnAbmuQowRdrOS/Dwt4h1KUxQq9ihwGLK9
-         Dk6fs3zqAL9+uP9Vvksjb+bvAdZqQKzv6iev6uaFHGK+e96SV141COVGMeoLynjJfrKw
-         Jp6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7WHAfOkhC9F+z/OW67LryPBcqkUfwOKddTQPn9vK3kE=;
-        b=g2a5VTLIilueWN/ZWGhfKmbGIrd9IIU832m7XIeEMIZojf3ycedu2FdoAY1icTUPsS
-         abZMgPzm0I67A69q66WrfovpMHTBITEcFrGsYVLUrhszED2hVZcWf8qaUqdPrePBFDsq
-         wNDo7axUtsdVuQCVTrWFLKv+LQDPnbKqJDuJ+vPw2kRj352hy6+rbLqnbUxyCtFr/nF5
-         TDOx6QADVSpexxv85mWGxMmsP2wQ7J8lrL15zZv/RbfhTCiBTA+XO+Qpc6I6gYCdtzzn
-         rkr/RVg8SMn3lgrhm+YpPbPoWUkbXL1ynEoao9Q0V/cEdDldJ/u9GHI2vNXWdb879ReY
-         Sk4w==
-X-Gm-Message-State: AJIora/NCr0wZ2wMq3JGGwBfctuODwu6QUAN+oqUqoiTMSSKbQ7TQeJ+
-        Hq5b1QdBssC7QCRXkeEfm9w=
-X-Google-Smtp-Source: AGRyM1toR1MOX85UnnhHil3dzsAdsJ0gH7b7cs2+TwebFqyUxWjtSYHTfvnuCev3a77yLoGEJl63RA==
-X-Received: by 2002:a05:6402:ea7:b0:43a:ecea:76e with SMTP id h39-20020a0564020ea700b0043aecea076emr44761193eda.77.1658237374195;
-        Tue, 19 Jul 2022 06:29:34 -0700 (PDT)
-Received: from skbuf ([188.27.185.104])
-        by smtp.gmail.com with ESMTPSA id w6-20020a50fa86000000b0043ba0cf5dbasm729892edr.2.2022.07.19.06.29.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 06:29:33 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 16:29:31 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v2 15/15] net: dsa: qca8k: drop unnecessary
- exposed function and make them static
-Message-ID: <20220719132931.p3amcmjsjzefmukq@skbuf>
-References: <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-17-ansuelsmth@gmail.com>
- <20220719005726.8739-17-ansuelsmth@gmail.com>
+        Tue, 19 Jul 2022 10:11:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7B2804AF;
+        Tue, 19 Jul 2022 06:32:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7C02420040;
+        Tue, 19 Jul 2022 13:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658237527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=CHIjTuHv9bNt731So7n3G26Wh0Oy/lleHB5H/W3dlvU=;
+        b=tH39tYXWGfNlsnEER4nMOA+IEVbE12OCemiSiQ9NavHzxxtNgSu+SwoVQBZPlU/LVqoLkJ
+        z7HntRwzng3TbS9XFB7hRkDRjT6iumuPC2HIygrmu47FlUVwm9ScJ5B3RGL8Jv81xMS2o6
+        RaYdjOf0Ax9V3WFIW5HTbACb5Fp3Wz4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658237527;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=CHIjTuHv9bNt731So7n3G26Wh0Oy/lleHB5H/W3dlvU=;
+        b=H1lxNaKSipvJiZiLT9TAChz8+VaBDpHDulgyUQL2dyVPhleowvbbcU029EcAGPcZq/bGrI
+        2vPifpja35AAznCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D5AD13A72;
+        Tue, 19 Jul 2022 13:32:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xHgTFley1mKLXAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 19 Jul 2022 13:32:07 +0000
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: i8042 - Apply probe defer to more ASUS ZenBook models
+Date:   Tue, 19 Jul 2022 15:31:50 +0200
+Message-Id: <20220719133150.31257-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719005726.8739-17-ansuelsmth@gmail.com>
- <20220719005726.8739-17-ansuelsmth@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 02:57:26AM +0200, Christian Marangi wrote:
-> Some function were exposed to permit migration to common code. Drop them
-> and make them static now that the user are in the same common code.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
+There are yet a few more ASUS ZenBook models that require the deferred
+probe.  At least, there are different ZenBook UX325x and UX425x
+models.  Let's extend the DMI matching table entries for adapting
+those missing models.
 
-Hmm, ideally the last patch that removes a certain function from being
-called from qca8k-8xxx.c would also delete its prototype and make it
-static in qca8k-common.c. Would that be hard to change?
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1190256
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ drivers/input/serio/i8042-x86ia64io.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
+index 4fbec7bbecca..5043dc7b8fb3 100644
+--- a/drivers/input/serio/i8042-x86ia64io.h
++++ b/drivers/input/serio/i8042-x86ia64io.h
+@@ -114,18 +114,18 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
+ 		.driver_data = (void *)(SERIO_QUIRK_NOMUX | SERIO_QUIRK_RESET_NEVER)
+ 	},
+ 	{
+-		/* ASUS ZenBook UX425UA */
++		/* ASUS ZenBook UX425UA/QA */
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX425UA"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX425"),
+ 		},
+ 		.driver_data = (void *)(SERIO_QUIRK_PROBE_DEFER | SERIO_QUIRK_RESET_NEVER)
+ 	},
+ 	{
+-		/* ASUS ZenBook UM325UA */
++		/* ASUS ZenBook UM325UA/QA */
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325"),
+ 		},
+ 		.driver_data = (void *)(SERIO_QUIRK_PROBE_DEFER | SERIO_QUIRK_RESET_NEVER)
+ 	},
+-- 
+2.35.3
+

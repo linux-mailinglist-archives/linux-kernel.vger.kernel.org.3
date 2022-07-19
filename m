@@ -2,169 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F4F5795E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121575795EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236424AbiGSJOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 05:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S231407AbiGSJQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 05:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236495AbiGSJOE (ORCPT
+        with ESMTP id S236529AbiGSJQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:14:04 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8AB25582
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:14:03 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10d7170b2fcso1831961fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=USiHEWO3jenD+4D67wgYkGKlAcIRmi0lfoN5PdFyKzQ=;
-        b=dFYdzZzeGTwRc0FPEgBG5fRwMWNVjXZzxLxwtIHOW4IyAUtC1iJhL8ze0h/ntk8Iq4
-         lKlrAFaVxT4/pV4802tsmPOfXqrd/5krNwAeme2Ty0hfRzSXMQ2O+C/Kf1izAeM/mOcz
-         8LysLHAdaCtPPppxeQNBi2EL1ZGV/VNGij1I4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=USiHEWO3jenD+4D67wgYkGKlAcIRmi0lfoN5PdFyKzQ=;
-        b=o4AAvdqjZZS15vckTKixwCiyiIcInwbJPw+fqv7G5W0XbmDAiU5uxTKGZSe8q3/LYY
-         5feKkUooS/fzOtdmB2sLseF9tf116eQqFVJufLlYgQeGfGFQ+1AGeotUbH6mw46VHXuP
-         dq8xTjQYbrHqjgCN8OwLHF05EjtHH1sNQWmev4KkxcPYRGuLp7u0Ltjai0a667mXLigQ
-         rDzb+Y4RdTyPfkR11NW6yyRlymJjtiyC/ZhwQhceERLj6hXAoqQifH1vZl85F6F++clP
-         3prdPSqrUQMNdHskJ9v29UedBabkWTt4MOOi8GOEGM1bpVxyIn2Fcryg7OLIDMAOrYDe
-         8MPA==
-X-Gm-Message-State: AJIora+NY+AxahKhEzxCJ2FYyTICAeh0zKDdKRf3LGdwaD/3eaSJaoY3
-        2ydtqeVrId4N+DRT36Uyvm8BDCQ9gW8KDQ==
-X-Google-Smtp-Source: AGRyM1ux8uO+NaOvSe5xzvH8ZdXGt+LLw5w0njQgHregikbK07S5kZWhHT5tEdyl7MMd9QmXqkvQ+w==
-X-Received: by 2002:a05:6808:200d:b0:33a:98f4:c784 with SMTP id q13-20020a056808200d00b0033a98f4c784mr227174oiw.274.1658222042898;
-        Tue, 19 Jul 2022 02:14:02 -0700 (PDT)
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com. [209.85.161.41])
-        by smtp.gmail.com with ESMTPSA id er10-20020a056870c88a00b0010cbd1baf5esm7308434oab.51.2022.07.19.02.14.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 02:14:02 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id q207-20020a4a33d8000000b0043572da7bdfso2728656ooq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:14:01 -0700 (PDT)
-X-Received: by 2002:a81:6ccd:0:b0:31d:c77:73e5 with SMTP id
- h196-20020a816ccd000000b0031d0c7773e5mr33706265ywc.314.1658222030025; Tue, 19
- Jul 2022 02:13:50 -0700 (PDT)
+        Tue, 19 Jul 2022 05:16:46 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878471FCD5;
+        Tue, 19 Jul 2022 02:16:45 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 26J9GEOS019313;
+        Tue, 19 Jul 2022 18:16:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 26J9GEOS019313
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1658222175;
+        bh=E6Fkm5tCJlGuOKWaAMEh0ilTa5IY0MFugXH1W5B6FaI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DfcznssbMealKDrdn4IXdRIBZ7GjmWfPe/ze3vNwUO2L6C4uzn+EwsiskwwEfIWNz
+         H/CQUq7T6ZUCkrs0wvxXJqbXQGEPtS6pIqOhQGQtLvyMj3AYv2aaYA0jM4aE253QcY
+         3cILq9DIvkjKjgjY6Zryl/YzkXt9z7oECboAjbObA40MyPXnDUxXdswyHjkR5rMg8L
+         7ULlyKI7IISilSMu5kmq9QqYlczn9Yj4F9PTvYHbKFp+Ctqgs7oHhnIGvbMZMsfeC1
+         /k/KNd3VZBdGKL6nLk4HGCOEFftENcehx6Mp+3NimqLPtNIvFB4DKNpogbGmNwFCDY
+         ayo88BdrLgJ0w==
+X-Nifty-SrcIP: [209.85.221.49]
+Received: by mail-wr1-f49.google.com with SMTP id n12so7788881wrc.8;
+        Tue, 19 Jul 2022 02:16:15 -0700 (PDT)
+X-Gm-Message-State: AJIora+HDSLk9M95VvJBeGrafEkPOpfbT5lvDPODOE6DscMPgpw3JWOt
+        Pfvqq0G/QUiDMoSivteZW7spjL1b2BjW+4+Uk3M=
+X-Google-Smtp-Source: AGRyM1t0LcKuGmlIJeETeYT7z2TiaHuzBecJ8jPSuoHQM9Xu+Ks2gE3l3ufKz54a41kTLel2HtK50jsvTgq9dzG1YDM=
+X-Received: by 2002:adf:979b:0:b0:21d:868a:7f2f with SMTP id
+ s27-20020adf979b000000b0021d868a7f2fmr25642176wrb.409.1658222173652; Tue, 19
+ Jul 2022 02:16:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220715005244.42198-1-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220715005244.42198-1-dmitry.osipenko@collabora.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 19 Jul 2022 18:13:39 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5C0dx5X=VEqXDyj22fbxs1jhOQLLid3vSNfAc9vataPhg@mail.gmail.com>
-Message-ID: <CAAFQd5C0dx5X=VEqXDyj22fbxs1jhOQLLid3vSNfAc9vataPhg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/6] Move all drivers to a common dma-buf locking convention
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
+References: <20220719084149.29950-1-jslaby@suse.cz>
+In-Reply-To: <20220719084149.29950-1-jslaby@suse.cz>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 19 Jul 2022 18:15:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQa0QqEG1PLY3nr_ajP59d9cNU-0FBq2WGKnvEnZGJ1MA@mail.gmail.com>
+Message-ID: <CAK7LNAQa0QqEG1PLY3nr_ajP59d9cNU-0FBq2WGKnvEnZGJ1MA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] kbuild: pass jobserver to cmd_ld_vmlinux.o
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Signed-off-by : Martin Liska" <mliska@suse.cz>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 9:53 AM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
+On Tue, Jul 19, 2022 at 5:41 PM Jiri Slaby <jslaby@suse.cz> wrote:
 >
-> Hello,
+> Until the link-vmlinux.sh split (cf. the commit below), the linker was
+> run with jobserver set in MAKEFLAGS. After the split, the command in
+> Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
+> is lost.
 >
-> This series moves all drivers to a dynamic dma-buf locking specification.
-> From now on all dma-buf importers are made responsible for holding
-> dma-buf's reservation lock around all operations performed over dma-bufs.
-> This common locking convention allows us to utilize reservation lock more
-> broadly around kernel without fearing of potential dead locks.
+> Restore it as linkers working in parallel (esp. the LTO ones) make a use
+> of it. In this case, it is gcc producing this warning otherwise:
+> lto-wrapper: warning: jobserver is not available: =E2=80=98--jobserver-au=
+th=3D=E2=80=99 is not present in =E2=80=98MAKEFLAGS=E2=80=99
 >
-> This patchset passes all i915 selftests. It was also tested using VirtIO,
-> Panfrost, Lima and Tegra drivers. I tested cases of display+GPU,
-> display+V4L and GPU+V4L dma-buf sharing, which covers majority of kernel
-> drivers since rest of the drivers share same or similar code paths.
+> Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Michal Marek <michal.lkml@markovi.net>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Signed-off-by: Martin Liska <mliska@suse.cz>
+> Fixes: 5d45950dfbb1 (kbuild: move vmlinux.o link to scripts/Makefile.vmli=
+nux_o)
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> ---
 >
-> This is a continuation of [1] where Christian K=C3=B6nig asked to factor =
-out
-> the dma-buf locking changes into separate series.
->
-> [1] https://lore.kernel.org/dri-devel/20220526235040.678984-1-dmitry.osip=
-enko@collabora.com/
->
-> Dmitry Osipenko (6):
->   dma-buf: Add _unlocked postfix to function names
->   drm/gem: Take reservation lock for vmap/vunmap operations
->   dma-buf: Move all dma-bufs to dynamic locking specification
->   dma-buf: Acquire wait-wound context on attachment
->   media: videobuf2: Stop using internal dma-buf lock
->   dma-buf: Remove internal lock
->
->  drivers/dma-buf/dma-buf.c                     | 198 +++++++++++-------
->  drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c   |   4 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c       |   4 +-
->  drivers/gpu/drm/armada/armada_gem.c           |  14 +-
->  drivers/gpu/drm/drm_client.c                  |   4 +-
->  drivers/gpu/drm/drm_gem.c                     |  28 +++
->  drivers/gpu/drm/drm_gem_cma_helper.c          |   6 +-
->  drivers/gpu/drm/drm_gem_framebuffer_helper.c  |   6 +-
->  drivers/gpu/drm/drm_gem_shmem_helper.c        |   6 +-
->  drivers/gpu/drm/drm_prime.c                   |  12 +-
->  drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   6 +-
->  drivers/gpu/drm/exynos/exynos_drm_gem.c       |   2 +-
->  drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |  20 +-
->  .../gpu/drm/i915/gem/i915_gem_execbuffer.c    |   2 +-
->  drivers/gpu/drm/i915/gem/i915_gem_object.h    |   6 +-
->  .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |  20 +-
->  drivers/gpu/drm/i915/i915_gem_evict.c         |   2 +-
->  drivers/gpu/drm/i915/i915_gem_ww.c            |  26 ++-
->  drivers/gpu/drm/i915/i915_gem_ww.h            |  15 +-
->  drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c     |   8 +-
->  drivers/gpu/drm/qxl/qxl_object.c              |  17 +-
->  drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
->  drivers/gpu/drm/tegra/gem.c                   |  27 +--
->  drivers/infiniband/core/umem_dmabuf.c         |  11 +-
->  .../common/videobuf2/videobuf2-dma-contig.c   |  26 +--
->  .../media/common/videobuf2/videobuf2-dma-sg.c |  23 +-
->  .../common/videobuf2/videobuf2-vmalloc.c      |  17 +-
+> Notes:
+>     [v2] only commit message updated
 
-For the videobuf2 changes:
 
-Acked-by: Tomasz Figa <tfiga@chromium.org>
+Did you read my previous email?
 
-Best regards,
-Tomasz
+https://lore.kernel.org/linux-kbuild/CAK7LNAS46hrVh3FNiHHL8_Hqp85VgWnsHyjQ4=
+t-TFH_H344NOg@mail.gmail.com/
+
+
+
+
+
+
+>
+>  scripts/Makefile.vmlinux_o | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+> index 84019814f33f..886db0659d9c 100644
+> --- a/scripts/Makefile.vmlinux_o
+> +++ b/scripts/Makefile.vmlinux_o
+> @@ -65,7 +65,7 @@ define rule_ld_vmlinux.o
+>  endef
+>
+>  vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS=
+) FORCE
+> -       $(call if_changed_rule,ld_vmlinux.o)
+> +       +$(call if_changed_rule,ld_vmlinux.o)
+>
+>  targets +=3D vmlinux.o
+>
+> --
+> 2.37.1
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada

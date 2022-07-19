@@ -2,64 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF91579587
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902C857958F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235940AbiGSIt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 04:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+        id S237087AbiGSIur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 04:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiGSIty (ORCPT
+        with ESMTP id S237106AbiGSIue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:49:54 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0112D3CBCD
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:49:53 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id c131so24597259ybf.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:49:53 -0700 (PDT)
+        Tue, 19 Jul 2022 04:50:34 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21916DECF
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:50:32 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id r9so23586005lfp.10
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3vHg8DQ2Tg8YgLGt/VZUAEDbWYI/+dfDPC1iJtL/ZaQ=;
-        b=qoaVeQy03AOCvYuaoC3xcs18H1fPNZnmn5ICr8KOHkg/cA4JWayA+FR4H5lRLbAH6z
-         Sp/msF5Qj7Nd1llGVhs5AyiRQ40xdcAHpj0wRGQEIWM906TArjsdTQN6hKthyWiuMVxc
-         7EL5+TW+9cDh90DrbQai0900mc+k0cVg4G20NK4xtA+B2PsYf6RYERN5FWPu0sgIl7Dn
-         njSf/zwZhtctLQYxCsurCxJDpzF/VmIcmIILeiTzPVuz5CVJEh9kemu81KOs8ObC7PSO
-         BN4eLCEEsaal8v88eULhoS7TGRErLiiuIdnHo6lD1DYfHnmUiLbJjvROCtsLXmQcL5qY
-         dIQQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3pxJNE6gYc8cb6d4rkA2eV3Aswi0lfTlAlrCacdvP2w=;
+        b=ijFr0es238AtzUmBFcdhNq9P7S2bQTfENXLr/NSqt5rREGLk235GS2OEVXk806dVZu
+         LZhIf326MJ344Gx/3K/y1+Q6E/BWtau/4SA8q6hRckQA2KZEcTBciFBoUT+zTJN3gZaw
+         bFBVZKNsc1osyAVPJRoYq8QtRgh72fYlykSBxstzpzgPawA/NqvgBZs+xrpGXLRWJhjT
+         9SD45XZSuqB7Vs8eD2J9dcHuuZZpQhFfY+3HxlEDezCy6d74cAfqv7KzmJjpiPVDUPtG
+         V1426Zg579DI0aFdtzg9S6F1fJK5ZFHyrAIZvjtii2W5Ch4dtUqAJY9efj+r6HtPk7BL
+         k65Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3vHg8DQ2Tg8YgLGt/VZUAEDbWYI/+dfDPC1iJtL/ZaQ=;
-        b=Jy5sUvueiKfvZ+I+2iVRhnPVLrARrG2bZ7wXYemq/v035PM5sQDTZsoYguybPjqiqz
-         5WEKw1D7aWvCAHsIJfrJOMPEzJl8EyEa6S62duvgONFLIRB8k+Wbt4B8WQ4oTEPYivF4
-         M7Edw81fIqepKu8zg9sRcNBpVc+g+yECB0NJ/bgVCHG5Z29kXLGGDYRS9L3O/4GfE+JW
-         A+g4H+n9IRy5sFZVuNYgqepiD4KGnfpyDuNt/8Gru2HcleSJ9WWxqAknqjfBCXSUPs0x
-         Iz9F9XwF4mFRU8AX3T8QO1BaF/5moPZSFq8r7t0LJh1W93bn3j1b077s8s61fYU/7v5n
-         gcfA==
-X-Gm-Message-State: AJIora/FSpsFaHeKGpfaEpG3PEv7Vy4H0tuPDS1ue0ACjJRxxKseYBUu
-        UmELH/wXymsHpjUwpU99Jqae73xIjCgaJS3GVrJZVWClIPg=
-X-Google-Smtp-Source: AGRyM1tiNePdb+JvSdi9PmHXpGIZeM+KdpbzCcvfwfsWghqHWnuBGGR1j+BBt0qSt5cHh/AkCVdP4PXYz2EkidfOOiM=
-X-Received: by 2002:a25:76cd:0:b0:66e:c634:1047 with SMTP id
- r196-20020a2576cd000000b0066ec6341047mr31269332ybc.241.1658220593168; Tue, 19
- Jul 2022 01:49:53 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3pxJNE6gYc8cb6d4rkA2eV3Aswi0lfTlAlrCacdvP2w=;
+        b=SWEvQJJvgX4rlyXNFiJgg0YMgc1P8L/BuZ0yRqwlH0yeeowf2Bj+IXI5ebt/cD1JbL
+         XNuaORxWmvZ2bQKGgeVvTo7KZFDfSjrFkjDH3/A2AxLm278R7dBKw3YSAwo0mg69ZTP7
+         ppZbb+4zF3K9lx+VfcdVm7aLEkStakHhbkQIayULHCYrVG5cZ52XR8Xy6H4sjUl8muYr
+         hsQ7dGgvelKI1ymu98xQwXeiB7f3L1JRRxbfkPPkQg/IzImGKol7vfye1zoe+zA1AFj2
+         8uUYHcF6JhDzFHOevYRrRCe9TuozA3ouJ/jWJOvQ5in/nOokJQeOh/FAupvSZiDg+XcR
+         R+KQ==
+X-Gm-Message-State: AJIora9EvruEjTb554/U3ZKW+hHn7DvbyNl3RPGnWIQoEPg2Rc/eLwsF
+        jx8CAWZ1vtx3KkDK06FEF6V9Qw==
+X-Google-Smtp-Source: AGRyM1us868YPpB392tMn7H3KK4A7rfaBwjaayrkHiss5VCTlo/g5OiMzIp0NjvcgAuBi9wC02cPVg==
+X-Received: by 2002:a05:6512:1595:b0:489:da32:ec68 with SMTP id bp21-20020a056512159500b00489da32ec68mr16232700lfb.573.1658220631316;
+        Tue, 19 Jul 2022 01:50:31 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id e22-20020a195016000000b00489de206812sm3061580lfb.151.2022.07.19.01.50.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 01:50:30 -0700 (PDT)
+Message-ID: <2a7280cb-2bcc-4297-8beb-a9249c5bf899@linaro.org>
+Date:   Tue, 19 Jul 2022 10:50:29 +0200
 MIME-Version: 1.0
-References: <20220713040430.25778-1-zhouchengming@bytedance.com> <20220713040430.25778-6-zhouchengming@bytedance.com>
-In-Reply-To: <20220713040430.25778-6-zhouchengming@bytedance.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 19 Jul 2022 10:49:41 +0200
-Message-ID: <CAKfTPtCe3x06+O76ORcpVxJdp3qrrYN79m34YxmogyA0eVDMCw@mail.gmail.com>
-Subject: Re: [PATCH v2 05/10] sched/fair: reset sched_avg last_update_time
- before set_task_rq()
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 03/19] dt-bindings: power: mediatek: Add bindings for
+ MediaTek SCPSYS
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>
+Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220714122837.20094-1-tinghan.shen@mediatek.com>
+ <20220714122837.20094-4-tinghan.shen@mediatek.com>
+ <46df4ad5-5102-b5fe-95b7-5b157fb28f01@linaro.org>
+ <c4480c9ea0822ae693ff6a501c073c365e983b83.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c4480c9ea0822ae693ff6a501c073c365e983b83.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +88,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 at 06:05, Chengming Zhou
-<zhouchengming@bytedance.com> wrote:
->
-> set_task_rq() -> set_task_rq_fair() will try to synchronize the blocked
-> task's sched_avg when migrate, which is not needed for already detached
-> task.
->
-> task_change_group_fair() will detached the task sched_avg from prev cfs_rq
-> first, so reset sched_avg last_update_time before set_task_rq() to avoid that.
->
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+On 19/07/2022 10:17, Tinghan Shen wrote:
+>>> +    syscon@10006000 {
+>>> +        compatible = "mediatek,scpsys", "syscon", "simple-mfd";
+>>
+>> This should be a SoC-specific compatible (and filename).
+> 
+> Ok. I think that you mean "mediatek,mt8195-scpsys".
+> I'll update it in next version.
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Yes.
 
-> ---
->  kernel/sched/fair.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 8992ce5e73d2..171bc22bc142 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -11637,12 +11637,12 @@ void init_cfs_rq(struct cfs_rq *cfs_rq)
->  static void task_change_group_fair(struct task_struct *p)
->  {
->         detach_task_cfs_rq(p);
-> -       set_task_rq(p, task_cpu(p));
->
->  #ifdef CONFIG_SMP
->         /* Tell se's cfs_rq has been changed -- migrated */
->         p->se.avg.last_update_time = 0;
->  #endif
-> +       set_task_rq(p, task_cpu(p));
->         attach_task_cfs_rq(p);
->  }
->
-> --
-> 2.36.1
->
+> 
+>>
+>>> +        reg = <0x10006000 0x100>;
+>>> +
+>>> +        spm: power-controller {
+>>
+>> I think you created before less-portable, quite constrained bindings for
+>> power controller. You now require that mt8195-power-controller is always
+>> a child of some parent device which will share its regmap/MMIO with it.
+>>
+>> And what if in your next block there is no scpsys block and power
+>> controller is the scpsys alone? It's not possible with your bindings.
+> 
+> Do you mean a power controller node that looks like this?
+> 
+> scpsys: power-controller@10006000 {
+> 	compatible = "mediatek,mt6797-scpsys";
+> 	#power-domain-cells = <1>;
+> 
+> 	// ...
+> };
+
+Yes, I mean, with an unit address.
+
+> 
+>>
+>> Wouldn't it be better to assign some address space to the
+>> power-controller (now as an offset from scpsys)?
+> 
+> Is this mean adding an offset after the node name?
+> 
+> spm: power-controller@0 {
+
+This or above. I think it does not matter for the bindings - it's an
+implementation detail, whether you give to the child absolute SoC
+address or you give an bus-specific (scpsys) sub-address/offset.
+
+The point is that you have an unit address, thus in the future this
+could be a device node separate from scpsys.
+
+Best regards,
+Krzysztof

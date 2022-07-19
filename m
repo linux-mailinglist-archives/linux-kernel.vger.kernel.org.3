@@ -2,85 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBAF657A0EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D3157A0EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238983AbiGSOMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S237410AbiGSOM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238388AbiGSOMd (ORCPT
+        with ESMTP id S238995AbiGSOMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:12:33 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236F1CE3C;
-        Tue, 19 Jul 2022 06:35:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 94DEA347EB;
-        Tue, 19 Jul 2022 13:35:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658237713; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dQkGZ2bUCaXoPh/D/Jj4IPkCDd93zpdb0jFOJ4x+L1k=;
-        b=RXpYSGlmRcef3l7YiwRFdAApPwXNCGsn0BDGq8RMYOlXFurF0+ck6ho6rGcVbsWtc/fUP6
-        De4sOP94LDSs7rGW7/DXiKXGZ3iMCVaCS8xrKMTqCvGXTFpvP8npNoI8fDTvetmmD0jubo
-        mc2b6WY+Bg2Qby9yeLCG9cnhEe+PPKo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5975513A72;
-        Tue, 19 Jul 2022 13:35:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id I8ALFRGz1mLrXQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 19 Jul 2022 13:35:13 +0000
-Date:   Tue, 19 Jul 2022 15:35:12 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Jing-Ting Wu <jing-ting.wu@mediatek.com>
-Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Shakeel Butt <shakeelb@google.com>, wsd_upstream@mediatek.com,
-        lixiong.liu@mediatek.com, wenju.xu@mediatek.com,
-        jonathan.jmchen@mediatek.com
-Subject: Re: [Bug] race condition at rebind_subsystems()
-Message-ID: <20220719133512.GD897@blackbody.suse.cz>
-References: <1978e209e71905d89651e61abd07285912d412a1.camel@mediatek.com>
- <20220715115938.GA8646@blackbody.suse.cz>
- <YtGaP+e35DZYSQf0@slm.duckdns.org>
- <d8f0bc5e2fb6ed259f9334c83279b4c011283c41.camel@mediatek.com>
+        Tue, 19 Jul 2022 10:12:34 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E954F6B2;
+        Tue, 19 Jul 2022 06:35:23 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id p26-20020a1c545a000000b003a2fb7c1274so7365584wmi.1;
+        Tue, 19 Jul 2022 06:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+mWM93Q+TpkuMlgUY+I/2gZxaDcQ/qDofIHKazp4GBU=;
+        b=DZlplFNKzcDX7MdSmlBxVjxEoFu6oLldVocKLLkgiIepUZa5m9klQU5Wb2jYY1LVky
+         W0/Aa0UcyntaBUxKCUDnk+3KTowEg6+kcxU8FAluW2kbxsw1xdXKzfECJXmH2P3R07bA
+         3FYtipb7H0NTnAfupyCp63XHbnC/D9Vx5t9wv5fFl4YWj+bEXwU9kWB82tkMBtG/vKJ/
+         2kBwa6bcssoIvBK34Urkd8AMcgXPPpP7Ry52k+tJ/fmPFnHpn5AJB3Bb76SrJVC4Cxh6
+         wc60TnUcPf3wFWvL5Dak0ZQQcrQRyyLOAR2CQ5U3aR5TQtvOREk1SewrEuwtUFlkS2Q3
+         3ZlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+mWM93Q+TpkuMlgUY+I/2gZxaDcQ/qDofIHKazp4GBU=;
+        b=68d6x7PeGwl9XdjtPSf9ddvvOHVlV9dxkfV7qsmPKpVSEDsq6IDWQHUmcMolcfOG9K
+         bo/t9gTBWhccNxdxe18lAWADnAh6j9wdoZ+/yRLJZP+rBtHQ4v3eD3i/jjy6Ywg1HUCH
+         IDiaPqCSxc7TUT0buU3iZavEwRQJ5FKx4MTDc6WDWso9amIRhRTZtcqxRM7Xk9pEPkJS
+         0Y+4WMqi7fhuvfCtL+5S2H4MDwWEMs+Fi2CnPRVALUL6PP9tA6cKZDXS9O+l5/0/Rwrv
+         EErIfo3VCu410Mr0zAE1A+vJoTfN3swEJsI/Na1gTAaZf/6GWCUny6rr24lSrw49reqq
+         K0ug==
+X-Gm-Message-State: AJIora/sbxrcXmEI9Gm3ZrcdzCvZk7XaHe8vlaTdVEtiFFK+ppBeq/ua
+        eUJGgGpy70gkHkeFp+lxUjc=
+X-Google-Smtp-Source: AGRyM1sUpMCasnEebNz4vETaSZnQDmhTaA3l5s/i4V1JnufKC10MFOBE6ObeZA7+9leaXoCWCLu4dg==
+X-Received: by 2002:a7b:cbd4:0:b0:3a3:20eb:2b80 with SMTP id n20-20020a7bcbd4000000b003a320eb2b80mr5076876wmi.175.1658237722286;
+        Tue, 19 Jul 2022 06:35:22 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-208-75.ip51.fastwebnet.it. [93.34.208.75])
+        by smtp.gmail.com with ESMTPSA id n15-20020adffe0f000000b0021d96b3b6adsm13441856wrr.106.2022.07.19.06.35.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 06:35:21 -0700 (PDT)
+Message-ID: <62d6b319.1c69fb81.6be76.d6b1@mx.google.com>
+X-Google-Original-Message-ID: <YtazFllzzK6Mevin@Ansuel-xps.>
+Date:   Tue, 19 Jul 2022 15:35:18 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v2 15/15] net: dsa: qca8k: drop unnecessary
+ exposed function and make them static
+References: <20220719005726.8739-1-ansuelsmth@gmail.com>
+ <20220719005726.8739-1-ansuelsmth@gmail.com>
+ <20220719005726.8739-17-ansuelsmth@gmail.com>
+ <20220719005726.8739-17-ansuelsmth@gmail.com>
+ <20220719132931.p3amcmjsjzefmukq@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d8f0bc5e2fb6ed259f9334c83279b4c011283c41.camel@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220719132931.p3amcmjsjzefmukq@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 03:44:21PM +0800, Jing-Ting Wu <jing-ting.wu@mediatek.com> wrote:
-> Accroding your description, is the following patch corrent?
+On Tue, Jul 19, 2022 at 04:29:31PM +0300, Vladimir Oltean wrote:
+> On Tue, Jul 19, 2022 at 02:57:26AM +0200, Christian Marangi wrote:
+> > Some function were exposed to permit migration to common code. Drop them
+> > and make them static now that the user are in the same common code.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> 
+> Hmm, ideally the last patch that removes a certain function from being
+> called from qca8k-8xxx.c would also delete its prototype and make it
+> static in qca8k-common.c. Would that be hard to change?
 
-Yes, this is what I meant (i.e. grace period before invalidating the
-removed rstat_css_node).
+Can be done, it's really to compile check the changes and fix them.
+Problem is that the patch number would explode. (ok explode is a big
+thing but i think that would add 2-3 more patch to this big series...
+this is why I did the static change as the last patch instead of in the
+middle of the series)
 
-> If the patch is correct, we will add this patch to our stability test.
-> And we will continue to observe whether the problem is solved.
+But yes it's totally doable and not that hard honestly.
 
-It'd be great to have such confirmation.
-
-Thanks,
-Michal
+-- 
+	Ansuel

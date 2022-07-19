@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0456E57A2A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1DA57A2AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbiGSPIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
+        id S238119AbiGSPIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiGSPIe (ORCPT
+        with ESMTP id S235872AbiGSPIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:08:34 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37160501B3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:08:32 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id u20so12025263iob.8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:08:32 -0700 (PDT)
+        Tue, 19 Jul 2022 11:08:35 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19835070E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:08:33 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id e69so4501538iof.5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m5k0cuBRzxttHE7GVJkk3o+wsYF0B3xx4pPqXHWMLdI=;
-        b=DC2gCfCeA3w8wg+Lbij50s0A4AvHV7BOjO1xVFB8eeEd6b+zZ6IFkrYjrU33Mb9IZk
-         tbpS2xbZ6+Yh9zAsYIbHxp0wkNoD1+UWGc5Pph8dE0DNw0eHKMQNIP1vyenS6jh5aFy+
-         HYt9vWlt0+B79J8V8AZQhwX/3lfZ03gKKBvGAqVbsj5Ck7A3QHSJo6zxwBVIfVWk9HTH
-         5icIWD+ufQy8HHrXy10IDz21Q7sQds+s0X2cbKA/fEX579VV06SLe96yPzn6psOtBNti
-         QwRaY/IuLY3Lc3d07DvER+X0oHDaKPLGjbOteBkgcZ84snCxiJSFBbSjMZwOrX4ZpPvp
-         G7eA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kIFU1jp09kvp9pOU+lISTQVP4Oocjv9byOfY/PaGMKs=;
+        b=yVDFOGATfBJpUQ5E/YX0mDcDVwCeWfh2CX5INmPzI2fuUguRi54j5Qf03k26iYHTgk
+         KYxxxyYqUnG7ehlDUeDIyP+m9bNBcfqWH+RkOMbVK4ZomWDJcK5BllyrzvTMiAZuwlVF
+         oToeevdtDUkpZDLHSVS75CKTB9F8ZZXKk2YnmiMqm0SpJthoKIxOtfaUFuSXnZzAd5gv
+         zzr1+BJ59UsEaJuhAHgsSyUjn4UD9SywbCQr1GDxAhjq5hR7pUM9c3JDgrycJUJTF17a
+         TbcLP9XwP607YtJImiRuNlLD2NnbhOwca96q3aXWIaffMmRU53FkI8lMpsIPELOD9FU1
+         /Q6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m5k0cuBRzxttHE7GVJkk3o+wsYF0B3xx4pPqXHWMLdI=;
-        b=qTc4TmqF7h5sK9XA/dVPkKABL5RiEjaQ1TjC66Z+4X1GRm1LrKuSBZyGn/zIKorqyL
-         K0WncS10qYLfl1G7pFv0PDejUFtfRgpEjQc2awvOlxoXDV4Y70kJgMUWoKwUPv6oh2jH
-         wKEEda+cUoet60XCmsjOlpkPZIXYHCTKRfRVDCRteMX/Fz7ePfWG7jeIOZT2c3rl0opM
-         sfNWxQnhzRuJxyZIfmFMhPwcX8PxXQqtyw/hjL2GnzxiXXyW1rn5xMdC8QzPi5tmIPBF
-         /vtfdbRaG4m0E35W3dvh41+qAEg8AfFTGH2hInYpbGPMqPpqRCPx50ph+lcBYHPS0oFw
-         sQGw==
-X-Gm-Message-State: AJIora/H8tDWhXOTPAFIS8lL6WI2MhDRq8BshHm6bMtWWnEcl2npl+iy
-        Bd9VAJeLr+OYdNk5kCJBM/d1ig==
-X-Google-Smtp-Source: AGRyM1u1JU55oW8am5h00wu9CzsUOP0Cp5WsoRmZxjEdxs8MYlKG70wj2RmdH3/TrYerF15CsTsILQ==
-X-Received: by 2002:a05:6602:14d6:b0:67b:f961:8c84 with SMTP id b22-20020a05660214d600b0067bf9618c84mr6815436iow.69.1658243311525;
-        Tue, 19 Jul 2022 08:08:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kIFU1jp09kvp9pOU+lISTQVP4Oocjv9byOfY/PaGMKs=;
+        b=5KV+y9+WyZoFePtdNkuonCrkKRYfg3KSgPIUNAQ5ZA/0X0zbig3sXPQUKp0bpqSYqy
+         sznGThGeLCgR0wxSISRxHGeMmbP/F+Kdu+l5lbPVe3aWE/syosduMO3SHcn/vp8Gg3qo
+         8LzGTLhbMfnq3Q+xT68OiKhlL5aLUwI/jPbIfVSFW+AbgYsgXRNEiHJVVR3wgN6YdIZA
+         sQT4X2+k4gLDHibwm0k3fkjBMBCdI7fTvZunlrgrziXzOpYkQSClzc++3Jr9Xrmi6Gu/
+         1h4pZOj5+0TPie3BPa+XmxoMaASBxwXWPFiUYYDko4xvdMoV4mzPiLfVu0wPIvAm4WiG
+         5p6A==
+X-Gm-Message-State: AJIora/4f75qys+8qCSm2ykweMRpV8p2FJWEhExeizuIm25DMQ5lCG6c
+        45/9TQDoA+t9NWBa8UAwN+zp4w==
+X-Google-Smtp-Source: AGRyM1tW3mLbXV5FhKtay1jJRdQnpHA1GeRZ+FTAJyparomRP5e/TeMEkXnNX3HnxGDvD7tS41WSXQ==
+X-Received: by 2002:a05:6638:268a:b0:341:529a:5133 with SMTP id o10-20020a056638268a00b00341529a5133mr10022628jat.18.1658243313053;
+        Tue, 19 Jul 2022 08:08:33 -0700 (PDT)
 Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id f6-20020a056e020b4600b002dae42fa5f2sm5944899ilu.56.2022.07.19.08.08.29
+        by smtp.gmail.com with ESMTPSA id f6-20020a056e020b4600b002dae42fa5f2sm5944899ilu.56.2022.07.19.08.08.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 08:08:31 -0700 (PDT)
+        Tue, 19 Jul 2022 08:08:32 -0700 (PDT)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com
@@ -56,48 +56,56 @@ Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
         quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
         elder@kernel.org, netdev@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 0/2] net: ipa: move configuration data files
-Date:   Tue, 19 Jul 2022 10:08:25 -0500
-Message-Id: <20220719150827.295248-1-elder@linaro.org>
+Subject: [PATCH net-next 1/2] net: ipa: list supported IPA versions in the Makefile
+Date:   Tue, 19 Jul 2022 10:08:26 -0500
+Message-Id: <20220719150827.295248-2-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220719150827.295248-1-elder@linaro.org>
+References: <20220719150827.295248-1-elder@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series moves the "ipa_data-vX.Y.c" files into a subdirectory.
-The first patch adds a Makefile variable containing the list of
-supported IPA versions, and uses it to simplify the way these files
-are specified.
+Create a variable in the Makefile listing the IPA versions supported
+by the driver.  Use that to create the list of configuration data
+object files used (rather than listing them all individually).
 
-					-Alex
+Add a SPDX license comment.
 
-Alex Elder (2):
-  net: ipa: list supported IPA versions in the Makefile
-  net: ipa: move configuration data files into a subdirectory
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+ drivers/net/ipa/Makefile | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
- drivers/net/ipa/Makefile                     | 10 +++++++---
- drivers/net/ipa/{ => data}/ipa_data-v3.1.c   |  0
- drivers/net/ipa/{ => data}/ipa_data-v3.5.1.c |  0
- drivers/net/ipa/{ => data}/ipa_data-v4.11.c  |  0
- drivers/net/ipa/{ => data}/ipa_data-v4.2.c   |  0
- drivers/net/ipa/{ => data}/ipa_data-v4.5.c   |  0
- drivers/net/ipa/{ => data}/ipa_data-v4.9.c   |  0
- 7 files changed, 7 insertions(+), 3 deletions(-)
- rename drivers/net/ipa/{ => data}/ipa_data-v3.1.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v3.5.1.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v4.11.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v4.2.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v4.5.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v4.9.c (100%)
-
+diff --git a/drivers/net/ipa/Makefile b/drivers/net/ipa/Makefile
+index bdfb2430ab2c7..14b313fefa3a3 100644
+--- a/drivers/net/ipa/Makefile
++++ b/drivers/net/ipa/Makefile
+@@ -1,3 +1,9 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Makefile for the Qualcomm IPA driver.
++
++IPA_VERSIONS		:=	3.1 3.5.1 4.2 4.5 4.9 4.11
++
+ obj-$(CONFIG_QCOM_IPA)	+=	ipa.o
+ 
+ ipa-y			:=	ipa_main.o ipa_power.o ipa_reg.o ipa_mem.o \
+@@ -7,6 +13,4 @@ ipa-y			:=	ipa_main.o ipa_power.o ipa_reg.o ipa_mem.o \
+ 				ipa_resource.o ipa_qmi.o ipa_qmi_msg.o \
+ 				ipa_sysfs.o
+ 
+-ipa-y			+=	ipa_data-v3.1.o ipa_data-v3.5.1.o \
+-				ipa_data-v4.2.o ipa_data-v4.5.o \
+-				ipa_data-v4.9.o ipa_data-v4.11.o
++ipa-y			+=	$(IPA_VERSIONS:%=ipa_data-v%.o)
 -- 
 2.34.1
 

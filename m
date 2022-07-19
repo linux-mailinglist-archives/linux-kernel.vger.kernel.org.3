@@ -2,117 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C775792F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124AB5792FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235975AbiGSGDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 02:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S236992AbiGSGJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 02:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232634AbiGSGDc (ORCPT
+        with ESMTP id S229620AbiGSGJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 02:03:32 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115FA39BBB
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:03:30 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id ss3so25163483ejc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:03:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=w3KnyRzoVlmR1JYgtXnkig7qjIN2/mRzvIU/x6QrvF8=;
-        b=QAuYcboAkd6cLBrAnN568ZNc9Yyb48DbIodEflHQPa5V02qpveLNLkB9s+b+B2mFtf
-         tdGbndPRORRXc41pdI2U6oN27qA+EW1XH1Re/PB0wK6caucChVFXq9iLykmN78CFcLBz
-         pPQdgl4Ar+HG1XuhycMFieLDqCUeZwHyDvXpNuSjq8Mz/WerKaun29Y4u8PwfBDV9OnB
-         vE6Jnt8ckoCTjK/hXo7qg+ooQwluXw7sQHR0qCXwoOQG7+4BYaw2IdUhQoRcGuvk/ziM
-         zWdxHKo2OOPI66ilvNJUvfIeq+VhzH9acE2q2hyqF0jW1C8rvLE8V3/MSnRBRrK/SNxT
-         Xc7g==
-X-Gm-Message-State: AJIora8KGtk4NfZARMgKssbpMRDdc7Nd+84oL4kod7ElrNt3hK7bFfuB
-        O3h72x0yFaYPJu3gCYR4f4k=
-X-Google-Smtp-Source: AGRyM1t0Geho1jRj6KPZ9jqaL04kQ3k1ocK8uTfDGHuVogn4GW9W1Z25iw+y+d3VecxZMKsejKvzxA==
-X-Received: by 2002:a17:906:9bef:b0:72b:40d1:4276 with SMTP id de47-20020a1709069bef00b0072b40d14276mr28058657ejc.360.1658210608537;
-        Mon, 18 Jul 2022 23:03:28 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id b6-20020aa7cd06000000b004355998ec1asm9848211edw.14.2022.07.18.23.03.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 23:03:27 -0700 (PDT)
-Message-ID: <7026ec81-fa6e-a470-cd10-9894050e7f0d@kernel.org>
-Date:   Tue, 19 Jul 2022 08:03:26 +0200
+        Tue, 19 Jul 2022 02:09:02 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE722B8;
+        Mon, 18 Jul 2022 23:09:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ln7gq6n5Dz4xRC;
+        Tue, 19 Jul 2022 16:08:55 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658210936;
+        bh=U9LWxIpSsbLDUfTG1gQS2qEa9bbpA/+7+e54gl4F0Hk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q0mgnk4njJq6DPzA096X5G4GZqNF9HXvH8OuI/FVOf3iBfuS93EFFlGE+Gif6eHkE
+         NCVdAm+LR5ITClp1SBkDgCqDXl3F2TV5oFCad+d7K3ogOrISgXSiJgAD4GdSsdGfKu
+         JwVtZ1R1r4wryYPWjsugHH7xZT0gBCEA8GXIlu+0+KIPi26wGruid71AtApI3CU0k1
+         kEFuwLuTEIh/YJGYfcH84YKw4jk2JZozERWJcxYJ3RR555vgDzHA1LDuXK7noTgsRt
+         np5Y3Zyj4OCXqrvkd9lYT5SlMzToclkI8ildtsJ1PQpNul85UeUYxRHvaWxm4tKvUM
+         oaT2Q4FY/ZuCA==
+Date:   Tue, 19 Jul 2022 16:08:53 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Benson Leung <bleung@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the usb tree
+Message-ID: <20220719160821.5e68e30b@oak.ozlabs.ibm.com>
+In-Reply-To: <YtXF8TUZHNRUUyJh@kroah.com>
+References: <20220718163158.42176b4e@canb.auug.org.au>
+        <YtXF8TUZHNRUUyJh@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] tty: vt: initialize unicode screen buffer
-Content-Language: en-US
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <000000000000eca3eb0598e26a3d@google.com>
- <0000000000000bd4d405ae9d32a4@google.com>
- <4ef053cf-e796-fb5e-58b7-3ae58242a4ad@I-love.SAKURA.ne.jp>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <4ef053cf-e796-fb5e-58b7-3ae58242a4ad@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/exaMxt4Wim5.9/J8QGNrfmb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19. 07. 22, 7:49, Tetsuo Handa wrote:
-> syzbot reports kernel infoleak at vcs_read() [1], for buffer can be read
-> immediately after resize operation. Initialize buffer using kzalloc().
-> 
->    ----------
->    #include <fcntl.h>
->    #include <unistd.h>
->    #include <sys/ioctl.h>
->    #include <linux/fb.h>
-> 
->    int main(int argc, char *argv[])
->    {
->      struct fb_var_screeninfo var = { };
->      const int fb_fd = open("/dev/fb0", 3);
->      ioctl(fb_fd, FBIOGET_VSCREENINFO, &var);
->      var.yres = 0x21;
->      ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var);
->      return read(open("/dev/vcsu", O_RDONLY), &var, sizeof(var)) == -1;
->    }
->    ----------
-> 
-> Link: https://syzkaller.appspot.com/bug?extid=31a641689d43387f05d3 [1]
-> Reported-by: syzbot <syzbot+31a641689d43387f05d3@syzkaller.appspotmail.com>
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+--Sig_/exaMxt4Wim5.9/J8QGNrfmb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, it makes sense.
+Hi Greg,
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+On Mon, 18 Jul 2022 22:43:29 +0200 Greg KH <greg@kroah.com> wrote:
+>
+> > Caused by commit
+> >=20
+> >   e54369058f3d ("platform/chrome: cros_typec_switch: Add switch driver")
+> >=20
+> > and commits
+> >=20
+> >   34f375f0fdf6 ("platform/chrome: cros_typec_switch: Set EC retimer")
+> >   bb53ad958012 ("platform/chrome: cros_typec_switch: Add event check")
+> >=20
+> > interacting with commit
+> >=20
+> >   b1d288d9c3c5 ("platform/chrome: cros_ec_proto: Rename cros_ec_command=
+ function")
+> >=20
+> > from the chrome-platform tree.
+> >=20
+> > I have used the usb tree from next-20220715 for today.
+> >=20
+> > I will fix up the cros_ec_command() rename with a merge fix patch after
+> > the apci usage problem is solved. =20
+>=20
+> The ACPI issue should now be solved in my tree.
 
-> ---
->   drivers/tty/vt/vt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-> index f8c87c4d7399..6968517d6f8b 100644
-> --- a/drivers/tty/vt/vt.c
-> +++ b/drivers/tty/vt/vt.c
-> @@ -344,7 +344,7 @@ static struct uni_screen *vc_uniscr_alloc(unsigned int cols, unsigned int rows)
->   	/* allocate everything in one go */
->   	memsize = cols * rows * sizeof(char32_t);
->   	memsize += rows * sizeof(char32_t *);
-> -	p = vmalloc(memsize);
-> +	p = vzalloc(memsize);
->   	if (!p)
->   		return NULL;
->   
+OK, so I have applied the following merge fix patch from today.  So
+Linus will need to know about this when the usb and chrome-platform
+trees are merged.
 
-thanks,
--- 
-js
-suse labs
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 19 Jul 2022 15:57:13 +1000
+Subject: [PATCH] fix up for "platform/chrome: cros_ec_proto: Rename cros_ec=
+_command function"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/platform/chrome/cros_typec_switch.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/platform/chrome/cros_typec_switch.c b/drivers/platform=
+/chrome/cros_typec_switch.c
+index 024a2bb146b2..38ac20d52c88 100644
+--- a/drivers/platform/chrome/cros_typec_switch.c
++++ b/drivers/platform/chrome/cros_typec_switch.c
+@@ -49,7 +49,7 @@ static int cros_typec_cmd_mux_set(struct cros_typec_switc=
+h_data *sdata, int port
+ 		.mux_params =3D params,
+ 	};
+=20
+-	return cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
++	return cros_ec_cmd(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
+ 			       sizeof(req), NULL, 0);
+ }
+=20
+@@ -76,7 +76,7 @@ static int cros_typec_send_clear_event(struct cros_typec_=
+switch_data *sdata, int
+ 		.clear_events_mask =3D events_mask,
+ 	};
+=20
+-	return cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
++	return cros_ec_cmd(sdata->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
+ 			       sizeof(req), NULL, 0);
+ }
+=20
+@@ -88,7 +88,7 @@ static bool cros_typec_check_event(struct cros_typec_swit=
+ch_data *sdata, int por
+ 	};
+ 	int ret;
+=20
+-	ret =3D cros_ec_command(sdata->ec, 0, EC_CMD_TYPEC_STATUS, &req, sizeof(r=
+eq),
++	ret =3D cros_ec_cmd(sdata->ec, 0, EC_CMD_TYPEC_STATUS, &req, sizeof(req),
+ 			      &resp, sizeof(resp));
+ 	if (ret < 0) {
+ 		dev_warn(sdata->dev, "EC_CMD_TYPEC_STATUS failed for port: %d\n", port_n=
+um);
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/exaMxt4Wim5.9/J8QGNrfmb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLWSnUACgkQAVBC80lX
+0GwAJAgAmN75xRoz4gV6KU1Be1ht2ebwiit/RRbeqfbWoniP24i7fxSDd66kuZ1Y
+Q78jcwq084pi6FD283w4S/uuixLs7kiZyJXUcYsZl2ft22o59DoJ5J4yIWssQET0
+oRYHXaxIr/cb8pJy5bthSAH+jL+cHmBQ50U1S8LY6h4nnIw52g5o7kY6SupfOBeN
+fgs8TzkpjFWZXvRxyO2zlnuDnuH6Hol7cdOj1FWtYyg0W5Jf4TC6CKHW07FgbTU9
+P350HiOXPLDn/6xN9B2TpXv9Rh90n53hKMVlxPIk+lAUxUkjr0ELoJUMCCzStTiE
+6cFTCRfk0qxL+iuf/4jSrjyMycA4IQ==
+=nOE3
+-----END PGP SIGNATURE-----
+
+--Sig_/exaMxt4Wim5.9/J8QGNrfmb--

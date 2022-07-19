@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD39B579E9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028FB579B2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242843AbiGSNDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        id S239717AbiGSMZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243229AbiGSNAk (ORCPT
+        with ESMTP id S239735AbiGSMYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:00:40 -0400
+        Tue, 19 Jul 2022 08:24:15 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D27889A96;
-        Tue, 19 Jul 2022 05:25:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F9661135;
+        Tue, 19 Jul 2022 05:09:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 233C2CE1BE1;
-        Tue, 19 Jul 2022 12:25:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02157C341C6;
-        Tue, 19 Jul 2022 12:25:46 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 295DACE1BE2;
+        Tue, 19 Jul 2022 12:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E692CC341C6;
+        Tue, 19 Jul 2022 12:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233547;
-        bh=d6X8epdJyYdYwTs1Av6IZVYpzkha2ZC1H1i8X3du+K0=;
+        s=korg; t=1658232476;
+        bh=TowrKb8G5TdIC9gGhKJdMt+9W5rjZOZsSfutDb6ykYE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W9TCqyuac5uimWh5Wqhs4U9kiLYM7ZhME+pWC2X0LI/zcwae8PZQprSEE0vvCGRNf
-         PKyUnNdHsIRtC0YLML3z3tgMUWlY4bKmLTM5AzojOwVlVwRXMcSTaJhB1DA34fkNxJ
-         muB+7YpPc7Qwoem5eflhFL6iFZ95c2mHK91TRVrk=
+        b=wTNU0yWgFePoSL6JndgnQ4CRRBV31yqlAemdcUaIAMl2Y4y4xUpYp1zVY8iND/Etb
+         MGd4X3jV/MYyUM7e4BIj8oCN2I0WJHQUgegQ6Tu28jzSRx9A//Rn9w4XVtK/CGAgQJ
+         ldOPb0PPm2xoBIYHYoKveLko5NAX8D9m/dz++R18=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Ma Yuying <yuma@redhat.com>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 159/231] scsi: ufs: core: Drop loglevel of WriteBoost message
+Subject: [PATCH 5.10 071/112] sfc: fix kernel panic when creating VF
 Date:   Tue, 19 Jul 2022 13:54:04 +0200
-Message-Id: <20220719114727.623214703@linuxfoundation.org>
+Message-Id: <20220719114633.349673504@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+From: Íñigo Huguet <ihuguet@redhat.com>
 
-[ Upstream commit 2ae57c995003a7840cb6b5ec5f0c06193695321b ]
+[ Upstream commit ada74c5539eba06cf8b47d068f92e0b3963a9a6e ]
 
-Commit '3b5f3c0d0548 ("scsi: ufs: core: Tidy up WB configuration code")'
-changed the log level of the write boost enable/disable notification from
-debug to info. This results in a lot of noise in the kernel log during
-normal operation.
+When creating VFs a kernel panic can happen when calling to
+efx_ef10_try_update_nic_stats_vf.
 
-Drop it back to debug level to avoid this.
+When releasing a DMA coherent buffer, sometimes, I don't know in what
+specific circumstances, it has to unmap memory with vunmap. It is
+disallowed to do that in IRQ context or with BH disabled. Otherwise, we
+hit this line in vunmap, causing the crash:
+  BUG_ON(in_interrupt());
 
-Link: https://lore.kernel.org/r/20220709000027.3929970-1-bjorn.andersson@linaro.org
-Fixes: 3b5f3c0d0548 ("scsi: ufs: core: Tidy up WB configuration code")
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Acked-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+This patch reenables BH to release the buffer.
+
+Log messages when the bug is hit:
+ kernel BUG at mm/vmalloc.c:2727!
+ invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 6 PID: 1462 Comm: NetworkManager Kdump: loaded Tainted: G          I      --------- ---  5.14.0-119.el9.x86_64 #1
+ Hardware name: Dell Inc. PowerEdge R740/06WXJT, BIOS 2.8.2 08/27/2020
+ RIP: 0010:vunmap+0x2e/0x30
+ ...skip...
+ Call Trace:
+  __iommu_dma_free+0x96/0x100
+  efx_nic_free_buffer+0x2b/0x40 [sfc]
+  efx_ef10_try_update_nic_stats_vf+0x14a/0x1c0 [sfc]
+  efx_ef10_update_stats_vf+0x18/0x40 [sfc]
+  efx_start_all+0x15e/0x1d0 [sfc]
+  efx_net_open+0x5a/0xe0 [sfc]
+  __dev_open+0xe7/0x1a0
+  __dev_change_flags+0x1d7/0x240
+  dev_change_flags+0x21/0x60
+  ...skip...
+
+Fixes: d778819609a2 ("sfc: DMA the VF stats only when requested")
+Reported-by: Ma Yuying <yuma@redhat.com>
+Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+Acked-by: Edward Cree <ecree.xilinx@gmail.com>
+Link: https://lore.kernel.org/r/20220713092116.21238-1-ihuguet@redhat.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/sfc/ef10.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 4c9eb4be449c..452ad0612067 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -5722,7 +5722,7 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
- 	}
+diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
+index fa1a872c4bc8..5b7413305be6 100644
+--- a/drivers/net/ethernet/sfc/ef10.c
++++ b/drivers/net/ethernet/sfc/ef10.c
+@@ -1916,7 +1916,10 @@ static int efx_ef10_try_update_nic_stats_vf(struct efx_nic *efx)
  
- 	hba->dev_info.wb_enabled = enable;
--	dev_info(hba->dev, "%s Write Booster %s\n",
-+	dev_dbg(hba->dev, "%s Write Booster %s\n",
- 			__func__, enable ? "enabled" : "disabled");
+ 	efx_update_sw_stats(efx, stats);
+ out:
++	/* releasing a DMA coherent buffer with BH disabled can panic */
++	spin_unlock_bh(&efx->stats_lock);
+ 	efx_nic_free_buffer(efx, &stats_buf);
++	spin_lock_bh(&efx->stats_lock);
+ 	return rc;
+ }
  
- 	return ret;
 -- 
 2.35.1
 

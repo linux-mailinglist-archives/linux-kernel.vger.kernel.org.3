@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D255790CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A8F579076
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236883AbiGSCYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 22:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
+        id S236730AbiGSCG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 22:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiGSCYt (ORCPT
+        with ESMTP id S235510AbiGSCGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 22:24:49 -0400
+        Mon, 18 Jul 2022 22:06:54 -0400
 Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E92033E20;
-        Mon, 18 Jul 2022 19:24:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A5D3C8D9;
+        Mon, 18 Jul 2022 19:06:53 -0700 (PDT)
 Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
-        by mx0b-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26ILoCF6020763;
-        Mon, 18 Jul 2022 18:26:25 -0700
+        by mx0b-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26ILooam020734;
+        Mon, 18 Jul 2022 18:26:31 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=date : message-id :
  in-reply-to : references : from : subject : to : cc; s=pfptdkimsnps;
- bh=wJLBErIwYYuh2hawl3dyRP19SnzNtsp24HjH65Z2HG8=;
- b=LB2kEkZHqHjFisGsOAhyhkG7edkLWVm7ix45nNw9O4uvf/rC3opylgYYrUKFPOaUYplo
- Tno/cB1M2QiyG2Kn7Wh3a5R71ZqZ5Gd82MbUDskvCzE3Hp9YpmjqVwXEokDRXfYXK8+W
- DVol6NhLEgL3Gh3HV1VLhDqBPeiH7tjVIYU9FxxCK3I0A1+4xXfzPSgyjDl3HcaZw4qI
- gK2q6krcI3UFoMF9bwOJGxjE25TD2zXiiGPJkEzzIR/jLiYl7x2Emxu32QaguKoRfJ4J
- 43HJe1UySYbZU1g0ztUIoL4uffplEcQIaWKVnzaPx5U2QVeAFJWFimNZDkRvrvF5mJGj oQ== 
+ bh=5JtutWQ3TvVbO9MexC8Mla+M0EsNrFxPIoJRfZIzkIA=;
+ b=GmUGd/WqaXGlCOJjolQhAzofyZnqQ80rWXby0hsxHFm173MuxVMqJnz/yfVbFdQScbSl
+ oXI5zDUf2wMJgkoKdCa2M7tPH/VXQ6AngDnWRypUBgcge4lbsEDBlXwy71QaEdigQDOt
+ epnI5ngN+U+7BeOFcTUOEVpMNtgbD7P62/hbxk2/Ce6p4A2by/9bB7z5ETRJAM03hB3D
+ iZ7vrmO64DrxKRo72wYkeJw9g3CM687PTu041HB9NfFKNYz7QWJyI7Asnwgxw8ss8Ew8
+ D14+7ynAFh+j9oOmTnZ2ct9nrdJxRhD3xPaxmyjTmMEqx1kLgRRd0SoqNUR8T0HmCPsh Fw== 
 Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3hc6c344w3-1
+        by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3hc6c344we-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Jul 2022 18:26:25 -0700
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        Mon, 18 Jul 2022 18:26:31 -0700
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 9A9E0C0649;
-        Tue, 19 Jul 2022 01:26:24 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B6AD6C0649;
+        Tue, 19 Jul 2022 01:26:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1658193984; bh=rV2b9OgEtHbGnZVIuN0NlxP74jauj/eZVINv1IvF/24=;
+        t=1658193990; bh=g644d0gYPJVQYiL4nKwFKzkvaaT1M/KFt0n+kHVCwEs=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=JPoEEy39bnGv532h6w1knmPNe3NfcPQacVvtQ6xwCHfWV6KBpm+X6Hc7nQPPnE1PR
-         7bU1egqy2utfc8wa8YwWe4FyL11S4efF1sYsT6lSz+qdKLvqelLhKbehlBtdFvZmio
-         ESuQQqJtyhB5RGKw6UkYORbX60BgBZnW+1JYFVRkMgbQDOG7kPUIRJCwL2nFjvnCb/
-         UJcGtK+MYmVQ9qxvEsSRl63x+DrxSXxwJlnhpOZj3iBz3lOwbau6sw0LoRnkhGWQjU
-         AbOuPbKZvNyI09Dv91BG91sBS03wrG9P4BUTqR0RvFamVFGrUTXuncSkkb6m/GKfxL
-         QvZZsI2tjBRPg==
+        b=RN6mUNigP63geO2l9KAsaLAAjMKuBsniGJqWPw5bvISJ8s6k8AcaNEhHfShS9Hj1e
+         TCFdnaaIQ8+pCxF7tZjegAh/eobt3QyoZcD1gshwsTr9e6Yri15wwGSOCdqd8HbonT
+         zR8PM14hY7dIl8+W9z8Kp/CSozRvXRZg7Krb6/6vaalyA/gD5999mFQXUeUFEfDCL6
+         EVXWhRXvlmI/Wkc84JmsDRLhRQN2L75cy1a65N5FZmWnZyI6O7o9ieCX8ytz+GdM/s
+         6hvkI8pd908R/5BOhC9O6CQn5SPbmZCu+AfASYktBWeZ+SzOLED/FK9+yxjk4ntnkb
+         hgogrf5etZj7g==
 Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id EC046A0068;
-        Tue, 19 Jul 2022 01:26:22 +0000 (UTC)
-Received: by te-lab16-v2 (sSMTP sendmail emulation); Mon, 18 Jul 2022 18:26:22 -0700
-Date:   Mon, 18 Jul 2022 18:26:22 -0700
-Message-Id: <79dbca4db65f676df37462b7a008198c81a3297e.1658192351.git.Thinh.Nguyen@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 7B898A0096;
+        Tue, 19 Jul 2022 01:26:29 +0000 (UTC)
+Received: by te-lab16-v2 (sSMTP sendmail emulation); Mon, 18 Jul 2022 18:26:29 -0700
+Date:   Mon, 18 Jul 2022 18:26:29 -0700
+Message-Id: <93ccca7015e6b10e904c26fd2653c6026b606644.1658192351.git.Thinh.Nguyen@synopsys.com>
 In-Reply-To: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
 References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 03/25] usb: gadget: f_tcm: Increase stream count
+Subject: [PATCH v2 04/25] usb: gadget: f_tcm: Increase bMaxBurst
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Bogdanov <d.bogdanov@yadro.com>
 Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-X-Proofpoint-ORIG-GUID: _6NFdC33YKtdkKoJ-b64cooS6uPQgnTM
-X-Proofpoint-GUID: _6NFdC33YKtdkKoJ-b64cooS6uPQgnTM
+X-Proofpoint-ORIG-GUID: iOya1dphKypYK6_ArQddTz3Ae_OWd1NU
+X-Proofpoint-GUID: iOya1dphKypYK6_ArQddTz3Ae_OWd1NU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-18_22,2022-07-18_01,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
  malwarescore=0 priorityscore=1501 mlxscore=0 impostorscore=0 spamscore=0
- bulkscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=723 phishscore=0
+ bulkscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=756 phishscore=0
  clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2206140000 definitions=main-2207190004
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,32 +82,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some old builds of Microsoft Windows 10 UASP class driver reject USAP
-device with stream count of 2^4. To keep compatibility with both Linux
-and Windows, let's increase the stream count to 2^5. Also, internal
-tests show that stream count of 2^5 increases performance slightly.
+Currently the default bMaxBurst is 0. Set default bMaxBurst to 15 (i.e.
+16 bursts) to Data IN and OUT endpoints to improve performance. It
+should be fine for a controller that supports less than 16 bursts. It
+should be able to negotiate properly with the host at packet level for
+the end of burst.
+
+If the controller can't handle a burst of 16, and high performance isn't
+important, the user can use BOT protocol from mass_storage gadget driver
+instead.
 
 Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
  Changes in v2:
  - None
 
- drivers/usb/gadget/function/tcm.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_tcm.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/tcm.h b/drivers/usb/gadget/function/tcm.h
-index 3cd565794ad7..6cb05dcd19ff 100644
---- a/drivers/usb/gadget/function/tcm.h
-+++ b/drivers/usb/gadget/function/tcm.h
-@@ -13,7 +13,7 @@
- #define USBG_NAMELEN 32
+diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+index 8e17ac831be0..270ec631481d 100644
+--- a/drivers/usb/gadget/function/f_tcm.c
++++ b/drivers/usb/gadget/function/f_tcm.c
+@@ -1774,7 +1774,7 @@ static struct usb_endpoint_descriptor uasp_ss_bi_desc = {
+ static struct usb_ss_ep_comp_descriptor uasp_bi_ep_comp_desc = {
+ 	.bLength =		sizeof(uasp_bi_ep_comp_desc),
+ 	.bDescriptorType =	USB_DT_SS_ENDPOINT_COMP,
+-	.bMaxBurst =		0,
++	.bMaxBurst =		15,
+ 	.bmAttributes =		UASP_SS_EP_COMP_LOG_STREAMS,
+ 	.wBytesPerInterval =	0,
+ };
+@@ -1782,7 +1782,7 @@ static struct usb_ss_ep_comp_descriptor uasp_bi_ep_comp_desc = {
+ static struct usb_ss_ep_comp_descriptor bot_bi_ep_comp_desc = {
+ 	.bLength =		sizeof(bot_bi_ep_comp_desc),
+ 	.bDescriptorType =	USB_DT_SS_ENDPOINT_COMP,
+-	.bMaxBurst =		0,
++	.bMaxBurst =		15,
+ };
  
- #define fuas_to_gadget(f)	(f->function.config->cdev->gadget)
--#define UASP_SS_EP_COMP_LOG_STREAMS 4
-+#define UASP_SS_EP_COMP_LOG_STREAMS 5
- #define UASP_SS_EP_COMP_NUM_STREAMS (1 << UASP_SS_EP_COMP_LOG_STREAMS)
+ static struct usb_endpoint_descriptor uasp_bo_desc = {
+@@ -1817,12 +1817,14 @@ static struct usb_endpoint_descriptor uasp_ss_bo_desc = {
+ static struct usb_ss_ep_comp_descriptor uasp_bo_ep_comp_desc = {
+ 	.bLength =		sizeof(uasp_bo_ep_comp_desc),
+ 	.bDescriptorType =	USB_DT_SS_ENDPOINT_COMP,
++	.bMaxBurst =		15,
+ 	.bmAttributes =		UASP_SS_EP_COMP_LOG_STREAMS,
+ };
  
- enum {
+ static struct usb_ss_ep_comp_descriptor bot_bo_ep_comp_desc = {
+ 	.bLength =		sizeof(bot_bo_ep_comp_desc),
+ 	.bDescriptorType =	USB_DT_SS_ENDPOINT_COMP,
++	.bMaxBurst =		15,
+ };
+ 
+ static struct usb_endpoint_descriptor uasp_status_desc = {
 -- 
 2.28.0
 

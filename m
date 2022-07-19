@@ -2,304 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BF257A70E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A387457A716
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235926AbiGSTQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 15:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
+        id S236801AbiGSTSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 15:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239092AbiGSTQq (ORCPT
+        with ESMTP id S234436AbiGSTSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 15:16:46 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD8C54074
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:16:45 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id w16so7714410ilh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RWDkfGVRx+wQM0pBjcpjxk1NXofDxfBOWbBaZKQQ3Bw=;
-        b=rc25gT0hqLHAsoJ90/h35TVtpKkn0P+zKeyZBXWC+h9soMiNLp6BH8OHV8Tvm1VjX9
-         grAFACvXigtURXa9ykURx/Mfz7lT2Q9TqNJydjIhgmat8WPOvau3kiS/6+oA9ADkp2N7
-         uN8Ih68aY3F0EsuJXx1VoVZbJ6gsWzf39Y08wYUfYLoAS5MBt9//0X0xuovElTtCyOSe
-         71DfgBJfn2WyucmLnFQL+nzpdHoS/vAJlZhHhe305A36WZ+Z6dPtPg9olngjR/xNEBpL
-         TxXMY+C1pnY53zyvYFxp/0O7c5Xlr1xUuVkbidWOe9zKp/h5Lbkyx8tFl/BiExc0IvKc
-         kFPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RWDkfGVRx+wQM0pBjcpjxk1NXofDxfBOWbBaZKQQ3Bw=;
-        b=bdphxh4BwM/fxb9Pt8lvquWo+K664u/jNdc+ghkMg68jdvvlQ4zgmVdD+pVRs2SxQt
-         ndEX92KLCNXJ8tsuvbE+LVVWdwf2pLxjaiVtybm81fmfgLn3ZS8WgiGQFEGD79R812DU
-         OMWOOjd4GZqGIuSVPJYlYOEsMlJuvZyDwkbQVp+7osia5MMHakPQ/ScA8/D/IRtpq8cc
-         x0KWMjhOQGo2PuYm4Bf3MWbOO1sj0Os7SPsUqzcUWrClMIATjAMQqrm9jTHKXf1IhRw2
-         cpM/jeCMuqfAjQgLM5V8D/5/7Cc4YTz9/y4qh4hGJWDyMZ1JxMlDKyeNJvQFdyF31Hg0
-         uAfg==
-X-Gm-Message-State: AJIora8kXTo0oJY6JEep6cBNL40SmoMx06soQiYC+yWPXkh5P0Kmstom
-        NIlDbzbk+ivbdZFBNWqOfWb/kA==
-X-Google-Smtp-Source: AGRyM1uyjGECdZVidczMAGXR7PmaLcmRyXPAcqHx8EGXPw5l/fraFnsLVQ2VySfRtipJxgXqSSrdnA==
-X-Received: by 2002:a05:6e02:1a0a:b0:2dc:7a5e:5869 with SMTP id s10-20020a056e021a0a00b002dc7a5e5869mr17168484ild.90.1658258204439;
-        Tue, 19 Jul 2022 12:16:44 -0700 (PDT)
-Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id n1-20020a056638110100b0033ed97119ccsm6977090jal.1.2022.07.19.12.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 12:16:43 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH net-next v4] net: ipa: add an endpoint device attribute group
-Date:   Tue, 19 Jul 2022 14:16:39 -0500
-Message-Id: <20220719191639.373249-1-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 19 Jul 2022 15:18:31 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9589254665;
+        Tue, 19 Jul 2022 12:18:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658258310; x=1689794310;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hueuKSEXs+VQTfQVvnpjXB2DYGdmq574GA27A2Tm5zs=;
+  b=EPJTiV359tbXklVoRTksGaolse+VDi39Akmm4Jbnt7W7cYkuWdcADzgq
+   DRzKZtCSXhqDFcF192c9+dHpF0ZmTIyWbQiMO9++ln+vUiM29ZaioEI8A
+   ayEDhLdM4/RAOGEDHa60n2s/amOhuRDxuJ9UJxgwFYrYi72ncb+mDUOCV
+   tkv8641TdalOiEZRO3+ld1Wm41dHbWldHoyYZ8AwPCspB/wX/XSnM4ARh
+   peohN1oo7QG0sf7EP0rJDVNDCrX4q0wjLw6MLRtdFEWFI5J89sjK6qNPQ
+   Ay06cOTYKdd219K0UIXL0Rbi++EpPVCtlCdCTGpNJSFaTDTesS9AgH+BY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="273412258"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="273412258"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 12:18:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="548030295"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 19 Jul 2022 12:18:26 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDsjh-0005wc-UP;
+        Tue, 19 Jul 2022 19:18:25 +0000
+Date:   Wed, 20 Jul 2022 03:17:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Judy Hsiao <judyhsiao@chromium.org>, Andy Gross <agross@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
+        judyhsiao@google.com, swboyd@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Judy Hsiao <judyhsiao@chromium.org>
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc7280: include
+ sc7280-herobrine-audio-rt5682.dtsi in herobrine-r1
+Message-ID: <202207200353.1Eary79U-lkp@intel.com>
+References: <20220718080252.789585-4-judyhsiao@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718080252.789585-4-judyhsiao@chromium.org>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a new attribute group meant to provide a single place that
-defines endpoint IDs that might be needed by user space.  Not all
-defined endpoints are presented, and only those that are defined
-will be made visible.
+Hi Judy,
 
-The new attributes use "extended" device attributes to hold endpoint
-IDs, which is a little more compact and efficient.  Reimplement the
-existing modem endpoint ID attribute files using common code.
+Thank you for the patch! Yet something to improve:
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
-v4: Identical to v3; added missing addresses on Cc: list.
-v3: Use uintptr_t in a second spot, missed the first time...
-v2: Use uintptr_t to try to avoid a "cast to smaller integer type"
-    warning produced by "clang".
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on arm/for-next arm64/for-next/core clk/clk-next kvmarm/next rockchip/for-next shawnguo/for-next soc/for-next linus/master v5.19-rc7 next-20220718]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- .../testing/sysfs-devices-platform-soc-ipa    | 62 +++++++++++++----
- drivers/net/ipa/ipa_main.c                    |  1 +
- drivers/net/ipa/ipa_sysfs.c                   | 69 ++++++++++++++-----
- drivers/net/ipa/ipa_sysfs.h                   |  1 +
- 4 files changed, 102 insertions(+), 31 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Judy-Hsiao/Add-dtsi-for-sc7280-herobrine-boards-that-using/20220718-161009
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-buildonly-randconfig-r005-20220717 (https://download.01.org/0day-ci/archive/20220720/202207200353.1Eary79U-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/82e8a096331437f4e06ac3d344bdc9e9950e27b7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Judy-Hsiao/Add-dtsi-for-sc7280-herobrine-boards-that-using/20220718-161009
+        git checkout 82e8a096331437f4e06ac3d344bdc9e9950e27b7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
-index c56dcf15bf29d..364b1ba412427 100644
---- a/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
-+++ b/Documentation/ABI/testing/sysfs-devices-platform-soc-ipa
-@@ -46,33 +46,69 @@ Description:
- 		that is supported by the hardware.  The possible values
- 		are "MAPv4" or "MAPv5".
- 
-+What:		.../XXXXXXX.ipa/endpoint_id/
-+Date:		July 2022
-+KernelVersion:	v5.19
-+Contact:	Alex Elder <elder@kernel.org>
-+Description:
-+		The .../XXXXXXX.ipa/endpoint_id/ directory contains
-+		attributes that define IDs associated with IPA
-+		endpoints.  The "rx" or "tx" in an endpoint name is
-+		from the perspective of the AP.  An endpoint ID is a
-+		small unsigned integer.
-+
-+What:		.../XXXXXXX.ipa/endpoint_id/modem_rx
-+Date:		July 2022
-+KernelVersion:	v5.19
-+Contact:	Alex Elder <elder@kernel.org>
-+Description:
-+		The .../XXXXXXX.ipa/endpoint_id/modem_rx file contains
-+		the ID of the AP endpoint on which packets originating
-+		from the embedded modem are received.
-+
-+What:		.../XXXXXXX.ipa/endpoint_id/modem_tx
-+Date:		July 2022
-+KernelVersion:	v5.19
-+Contact:	Alex Elder <elder@kernel.org>
-+Description:
-+		The .../XXXXXXX.ipa/endpoint_id/modem_tx file contains
-+		the ID of the AP endpoint on which packets destined
-+		for the embedded modem are sent.
-+
-+What:		.../XXXXXXX.ipa/endpoint_id/monitor_rx
-+Date:		July 2022
-+KernelVersion:	v5.19
-+Contact:	Alex Elder <elder@kernel.org>
-+Description:
-+		The .../XXXXXXX.ipa/endpoint_id/monitor_rx file contains
-+		the ID of the AP endpoint on which IPA "monitor" data is
-+		received.  The monitor endpoint supplies replicas of
-+		packets that enter the IPA hardware for processing.
-+		Each replicated packet is preceded by a fixed-size "ODL"
-+		header (see .../XXXXXXX.ipa/feature/monitor, above).
-+		Large packets are truncated, to reduce the bandwidth
-+		required to provide the monitor function.
-+
- What:		.../XXXXXXX.ipa/modem/
- Date:		June 2021
- KernelVersion:	v5.14
- Contact:	Alex Elder <elder@kernel.org>
- Description:
--		The .../XXXXXXX.ipa/modem/ directory contains a set of
--		attributes describing properties of the modem execution
--		environment reachable by the IPA hardware.
-+		The .../XXXXXXX.ipa/modem/ directory contains attributes
-+		describing properties of the modem embedded in the SoC.
- 
- What:		.../XXXXXXX.ipa/modem/rx_endpoint_id
- Date:		June 2021
- KernelVersion:	v5.14
- Contact:	Alex Elder <elder@kernel.org>
- Description:
--		The .../XXXXXXX.ipa/feature/rx_endpoint_id file contains
--		the AP endpoint ID that receives packets originating from
--		the modem execution environment.  The "rx" is from the
--		perspective of the AP; this endpoint is considered an "IPA
--		producer".  An endpoint ID is a small unsigned integer.
-+		The .../XXXXXXX.ipa/modem/rx_endpoint_id file duplicates
-+		the value found in .../XXXXXXX.ipa/endpoint_id/modem_rx.
- 
- What:		.../XXXXXXX.ipa/modem/tx_endpoint_id
- Date:		June 2021
- KernelVersion:	v5.14
- Contact:	Alex Elder <elder@kernel.org>
- Description:
--		The .../XXXXXXX.ipa/feature/tx_endpoint_id file contains
--		the AP endpoint ID used to transmit packets destined for
--		the modem execution environment.  The "tx" is from the
--		perspective of the AP; this endpoint is considered an "IPA
--		consumer".  An endpoint ID is a small unsigned integer.
-+		The .../XXXXXXX.ipa/modem/tx_endpoint_id file duplicates
-+		the value found in .../XXXXXXX.ipa/endpoint_id/modem_tx.
-diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
-index 3757ce3de2c59..b989259b02047 100644
---- a/drivers/net/ipa/ipa_main.c
-+++ b/drivers/net/ipa/ipa_main.c
-@@ -851,6 +851,7 @@ static void ipa_shutdown(struct platform_device *pdev)
- static const struct attribute_group *ipa_attribute_groups[] = {
- 	&ipa_attribute_group,
- 	&ipa_feature_attribute_group,
-+	&ipa_endpoint_id_attribute_group,
- 	&ipa_modem_attribute_group,
- 	NULL,
- };
-diff --git a/drivers/net/ipa/ipa_sysfs.c b/drivers/net/ipa/ipa_sysfs.c
-index ff61dbdd70d8c..c0c8641cdd14a 100644
---- a/drivers/net/ipa/ipa_sysfs.c
-+++ b/drivers/net/ipa/ipa_sysfs.c
-@@ -96,38 +96,71 @@ const struct attribute_group ipa_feature_attribute_group = {
- 	.attrs		= ipa_feature_attrs,
- };
- 
--static ssize_t
--ipa_endpoint_id_show(struct ipa *ipa, char *buf, enum ipa_endpoint_name name)
-+static umode_t ipa_endpoint_id_is_visible(struct kobject *kobj,
-+					  struct attribute *attr, int n)
- {
--	u32 endpoint_id = ipa->name_map[name]->endpoint_id;
-+	struct ipa *ipa = dev_get_drvdata(kobj_to_dev(kobj));
-+	struct device_attribute *dev_attr;
-+	struct dev_ext_attribute *ea;
-+	bool visible;
- 
--	return scnprintf(buf, PAGE_SIZE, "%u\n", endpoint_id);
-+	/* An endpoint id attribute is only visible if it's defined */
-+	dev_attr = container_of(attr, struct device_attribute, attr);
-+	ea = container_of(dev_attr, struct dev_ext_attribute, attr);
-+
-+	visible = !!ipa->name_map[(enum ipa_endpoint_name)(uintptr_t)ea->var];
-+
-+	return visible ? attr->mode : 0;
- }
- 
--static ssize_t rx_endpoint_id_show(struct device *dev,
--				   struct device_attribute *attr, char *buf)
-+static ssize_t endpoint_id_attr_show(struct device *dev,
-+				     struct device_attribute *attr, char *buf)
- {
- 	struct ipa *ipa = dev_get_drvdata(dev);
-+	struct ipa_endpoint *endpoint;
-+	struct dev_ext_attribute *ea;
- 
--	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_RX);
-+	ea = container_of(attr, struct dev_ext_attribute, attr);
-+	endpoint = ipa->name_map[(enum ipa_endpoint_name)(uintptr_t)ea->var];
-+
-+	return sysfs_emit(buf, "%u\n", endpoint->endpoint_id);
- }
- 
--static DEVICE_ATTR_RO(rx_endpoint_id);
-+#define ENDPOINT_ID_ATTR(_n, _endpoint_name)				    \
-+	static struct dev_ext_attribute dev_attr_endpoint_id_ ## _n = {	    \
-+		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
-+		.var	= (void *)(_endpoint_name),			    \
-+	}
- 
--static ssize_t tx_endpoint_id_show(struct device *dev,
--				   struct device_attribute *attr, char *buf)
--{
--	struct ipa *ipa = dev_get_drvdata(dev);
-+ENDPOINT_ID_ATTR(modem_rx, IPA_ENDPOINT_AP_MODEM_RX);
-+ENDPOINT_ID_ATTR(modem_tx, IPA_ENDPOINT_AP_MODEM_TX);
- 
--	return ipa_endpoint_id_show(ipa, buf, IPA_ENDPOINT_AP_MODEM_TX);
--}
-+static struct attribute *ipa_endpoint_id_attrs[] = {
-+	&dev_attr_endpoint_id_modem_rx.attr.attr,
-+	&dev_attr_endpoint_id_modem_tx.attr.attr,
-+	NULL
-+};
-+
-+const struct attribute_group ipa_endpoint_id_attribute_group = {
-+	.name		= "endpoint_id",
-+	.is_visible	= ipa_endpoint_id_is_visible,
-+	.attrs		= ipa_endpoint_id_attrs,
-+};
-+
-+/* Reuse endpoint ID attributes for the legacy modem endpoint IDs */
-+#define MODEM_ATTR(_n, _endpoint_name)					    \
-+	static struct dev_ext_attribute dev_attr_modem_ ## _n = {	    \
-+		.attr	= __ATTR(_n, 0444, endpoint_id_attr_show, NULL),    \
-+		.var	= (void *)(_endpoint_name),			    \
-+	}
- 
--static DEVICE_ATTR_RO(tx_endpoint_id);
-+MODEM_ATTR(rx_endpoint_id, IPA_ENDPOINT_AP_MODEM_RX);
-+MODEM_ATTR(tx_endpoint_id, IPA_ENDPOINT_AP_MODEM_TX);
- 
- static struct attribute *ipa_modem_attrs[] = {
--	&dev_attr_rx_endpoint_id.attr,
--	&dev_attr_tx_endpoint_id.attr,
--	NULL
-+	&dev_attr_modem_rx_endpoint_id.attr.attr,
-+	&dev_attr_modem_tx_endpoint_id.attr.attr,
-+	NULL,
- };
- 
- const struct attribute_group ipa_modem_attribute_group = {
-diff --git a/drivers/net/ipa/ipa_sysfs.h b/drivers/net/ipa/ipa_sysfs.h
-index b34e5650bf8cd..4a3ffd1e4e3fb 100644
---- a/drivers/net/ipa/ipa_sysfs.h
-+++ b/drivers/net/ipa/ipa_sysfs.h
-@@ -10,6 +10,7 @@ struct attribute_group;
- 
- extern const struct attribute_group ipa_attribute_group;
- extern const struct attribute_group ipa_feature_attribute_group;
-+extern const struct attribute_group ipa_endpoint_id_attribute_group;
- extern const struct attribute_group ipa_modem_attribute_group;
- 
- #endif /* _IPA_SYSFS_H_ */
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   Error: arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi:615.1-13 Label or path mi2s1_data0 not found
+   Error: arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi:620.1-12 Label or path mi2s1_sclk not found
+   Error: arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi:625.1-10 Label or path mi2s1_ws not found
+>> Error: arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi:28.29-30 syntax error
+   FATAL ERROR: Unable to parse input tree
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

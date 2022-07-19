@@ -2,125 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9921557A3E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D908E57A3E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237857AbiGSQBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 12:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S238548AbiGSQB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 12:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiGSQA6 (ORCPT
+        with ESMTP id S238478AbiGSQBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 12:00:58 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CB047B8D
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:00:57 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d12so25554698lfq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:00:57 -0700 (PDT)
+        Tue, 19 Jul 2022 12:01:23 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCEA4B4B4;
+        Tue, 19 Jul 2022 09:01:21 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id y8so20250674eda.3;
+        Tue, 19 Jul 2022 09:01:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=DcU8Rt07AOR5UstJNBtllWkJabCi/u3+ZCpZfNLmVjg=;
-        b=KKgz0fOiz3XdAZAYPr7mXNGhI7Ac+HeN442R5+8sdARHvwqZnirD6cvM9VNsEMuhUQ
-         v9ezTTbDoTiaa8TxHnv5oTv+pwUVRpJLf/VBc5yaMn8jj9/wHr2dN68vbIjetICaQbHS
-         opAAxtps0XRBCJUZMk4ElaOc/nC50OEmO1SmJgEorMgXicmibLsjO7G5ftfFhcmh3ixl
-         TfgFA2phkmuUyEfwKsKjOIBwqZhhx6FWj+1HJaG4lyOEamTfuWkg5+sL0fL2iF5Oav9b
-         sLtgZu8pvZw1ibMqMa6gx4HGJc90nQYUeKyB16qUQ9Ae2RRpqAzQzEopUmXQ6y9OD3dk
-         BMWA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=R5NV8lh/QLSBV5SugqSDICrSggFKXremEtlOyKUbbQU=;
+        b=Fs1ZG2nAZzCgWO5nKCe1YjXiuNItgQzGKlnH0D9WO0+nhW67uyq5/Tn60RJu7HEych
+         HemK1Xq8ceBRUn+Oez7ARmmYMqkMEGFs0wQFSTNqZ4Fp1W64NbM6IhKC/1KInHGvXYpA
+         FYjAZIzBKd7w736WfUOOoJ8yLy/9qSfsE38hdhOipYSMEIrliOj/I5l1Gr8v/dDz1Xzz
+         xhEk9Q2iqQJSUVxmDiedQ+cXjMZoUO24H6y1Dap899dJ4L/Sh46Y83umL7JYd6cDgTxT
+         VBBuH5nV3hIf1iX8KcC5jFwfRsfg7gY+Y3ayprCegXfyWuz1BKEgeGBhT6mxZUvvqUbc
+         PC7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=DcU8Rt07AOR5UstJNBtllWkJabCi/u3+ZCpZfNLmVjg=;
-        b=so8mSVV+JfKjBXbmCINyHTi7nGgrx9noiXWhLxbeKXWTcZHOj5+a1d27zw0np41gou
-         Bmxkz7y6rJoQdG0Md2bgjdskMHcsmFesYiub8NtYbxPIJmrZRa7qZ7lygq+IBsau2hLf
-         W26GOk9ILUSK5yn3XIALqdFzkprL+FcLNc0k5dSVhIlvUylS4UqVXoMjruQa3B6d9+ZR
-         +6B8iEpusiPyZ9zcqeqkY0TQwn4miTHw9AM0ccaBerCdCJaYLeXMrymNsbPXOZGHpwIS
-         2jYY9Xd95nVqG1DYH8BsmXfigOpFBWyEjh63yqkTL3E7z6Kc3b2fk8xXoo7mjsM8nUNh
-         5G4w==
-X-Gm-Message-State: AJIora96YjB8vhE/Y0U/0MqWle5rJWAPc2Gmn05C988SmYG1IzKkpjWh
-        kg+xcj0mnJ+wP6LBmYU9PPdUcQ==
-X-Google-Smtp-Source: AGRyM1upUpkQqlKsacg9me3oLB7Mf83Q41aCw8Fy1xU1gd1hjql/sr92O+sUl4uvXVp8ffHwtJV2Rw==
-X-Received: by 2002:a05:6512:304a:b0:489:d7eb:82c7 with SMTP id b10-20020a056512304a00b00489d7eb82c7mr18479248lfb.314.1658246456275;
-        Tue, 19 Jul 2022 09:00:56 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056512200c00b00489e38c4fc4sm3265799lfb.276.2022.07.19.09.00.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 09:00:55 -0700 (PDT)
-Message-ID: <53242a5b-0ba0-71c6-3b6c-e3a628b7eda1@linaro.org>
-Date:   Tue, 19 Jul 2022 18:00:53 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R5NV8lh/QLSBV5SugqSDICrSggFKXremEtlOyKUbbQU=;
+        b=L85+SQ13mjzWAR+8y4owf6joO0qkWPT76KuAheXcaR2udO2pf+54idVpkEh1KO+ywz
+         gIBXw2X6tFlbpMtHKxRe7SJXdy5qABAWyBIgOf3j+nUc8V4MFtWSeCdaEf/Bz+vzBHj+
+         8EwXHfJSOfhZhQ0lgF6g4SXnvCBOJkjIlr6ncgd9KMRd2mXxr+Z7Jev0ouKyHlHbmZS1
+         53J/94VVOMod+sjKwa2NjDmRP/IRjvtJ3TJV1tk915ygpZtKn76dTEy6wkW2bkD6T3AG
+         hey/givANpPYlWrLpypq3vjqs7bXX4+wBIot20apppySVdMdaZYhe7XvvsIDgyMatRB6
+         Rr/Q==
+X-Gm-Message-State: AJIora8ywhb3pBea0rKgqCIOIo2cn6Fs5Lkxsc3XUNl3TeB/TVRwJqEG
+        RYpGXCNtN6TmvvLdHtNWK2A=
+X-Google-Smtp-Source: AGRyM1tYQiiEUmjS3ra7wGFU09/02p9zdPam6rfl1aAJ+JXhmwTUJNMRYCS75qzDwDCSaAeO/1aliA==
+X-Received: by 2002:a05:6402:149:b0:431:7dde:9b59 with SMTP id s9-20020a056402014900b004317dde9b59mr44945835edu.339.1658246480420;
+        Tue, 19 Jul 2022 09:01:20 -0700 (PDT)
+Received: from skbuf ([188.27.185.104])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170906038600b00711edab7622sm6811992eja.40.2022.07.19.09.01.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 09:01:19 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 19:01:17 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        UNGLinuxDriver@microchip.com,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [RFC PATCH net-next 4/9] net: pcs: lynx: Convert to an mdio
+ driver
+Message-ID: <20220719160117.7pftbeytuqkjagsm@skbuf>
+References: <20220711160519.741990-1-sean.anderson@seco.com>
+ <20220711160519.741990-5-sean.anderson@seco.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] regmap: support regmap_field_write() on non-readable
- fields
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220719121446.375095-1-krzysztof.kozlowski@linaro.org>
- <20220719125401.GA92394@ediswmail.ad.cirrus.com>
- <d04ef271-9404-481c-f2fa-268ff51ee3dc@linaro.org>
- <Yta0nKlqOcimEH/Q@sirena.org.uk>
- <e981f4f5-fe8f-a733-9ab3-b2c8febd0516@linaro.org>
-In-Reply-To: <e981f4f5-fe8f-a733-9ab3-b2c8febd0516@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220711160519.741990-5-sean.anderson@seco.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/07/2022 16:30, Krzysztof Kozlowski wrote:
-> On 19/07/2022 15:41, Mark Brown wrote:
->> On Tue, Jul 19, 2022 at 03:13:11PM +0200, Krzysztof Kozlowski wrote:
->>> On 19/07/2022 14:54, Charles Keepax wrote:
->>
->>>> I think this will break other valid use-cases, regmap_readable (I
->>>> believe) returns if the register is physically readable, however
->>>> it should still be possible to use update bits if the register is
->>>> in the cache even if it can't physically be read. So really you
->>>> need to fall into this path if it is readable or in the cache.
->>
->>> But what type of real use case this would be trying to solve? Either
->>> register is readable or not. The presence of cache is just optimization
->>> and does not change the fact that we cannot read from register thus no
->>> need to go via updates.
->>
->> The original reason for creating the cache code was to simulate
->> readability on devices that have no read support at all (think 7x9
->> format I2C devices) so we can have things like helpers to map bitfields
->> directly to subsystems (like ASoC uses extensively).  The fact that it
->> also improves performance when the hardware does support reads is nice
->> too of course.
->>
->>>> Which does I guess also raise the question if your problem would
->>>> be better solved with caching the register?
->>
->>> And how the value would appear in the cache? Since register cannot be
->>> read, I expect the cache to be filled on first update. First update
->>> would be read+write, so we are stuck again.
->>
->> This is one reason we allow cache defaults to be specified (it was the
->> original reason, we later started using them to optimise out I/O during
->> resyncs).
+On Mon, Jul 11, 2022 at 12:05:14PM -0400, Sean Anderson wrote:
+> This converts the lynx PCS driver to a proper MDIO driver. This allows
+> using a more conventional driver lifecycle (e.g. with a probe and
+> remove). For compatibility with existing device trees lacking a
+> compatible property, we bind the driver in lynx_pcs_create. This is
+> intended only as a transitional method. After compatible properties are
+> added to all existing device trees (and a reasonable amount of time has
+> passed), then lynx_pcs_create can be removed, and users can be converted
+> to pcs_get_fwnode.
 > 
-> Thanks Mark and Charles. Let me try the cache.
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
 
-cache + forced write works for me, so I guess this patch is not really
-necessary.
+I'm compiling and testing patch by patch now. Here's how things go on
+LS1028A at this stage:
 
-Best regards,
-Krzysztof
+[    6.317357] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000110
+[    6.326219] Mem abort info:
+[    6.329027]   ESR = 0x0000000096000004
+[    6.332815]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    6.338182]   SET = 0, FnV = 0
+[    6.341252]   EA = 0, S1PTW = 0
+[    6.344436]   FSC = 0x04: level 0 translation fault
+[    6.349378] Data abort info:
+[    6.352273]   ISV = 0, ISS = 0x00000004
+[    6.356154]   CM = 0, WnR = 0
+[    6.359164] [0000000000000110] user address but active_mm is swapper
+[    6.365629] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+[    6.371221] Modules linked in:
+[    6.374284] CPU: 1 PID: 8 Comm: kworker/u4:0 Not tainted 5.19.0-rc6-07010-ga9b9500ffaac-dirty #3317
+[    6.383364] Hardware name: LS1028A RDB Board (DT)
+[    6.388081] Workqueue: events_unbound deferred_probe_work_func
+[    6.393939] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    6.400926] pc : __driver_probe_device+0x1c/0x150
+[    6.405646] lr : device_driver_attach+0x58/0xc0
+[    6.410190] sp : ffff8000085639c0
+[    6.413510] x29: ffff8000085639c0 x28: ffffb1a2587dae50 x27: ffff2b6943304bc0
+[    6.420676] x26: ffff2b694330c000 x25: ffff2b69433010a0 x24: ffff2b69bf719898
+[    6.427840] x23: ffff2b6941074000 x22: ffff2b6943304000 x21: ffff2b6943301880
+[    6.435004] x20: ffff2b6943301800 x19: ffffb1a259faf3d0 x18: ffffffffffffffff
+[    6.442168] x17: 000000002b64f81b x16: 000000006d50a0b2 x15: ffff2b6943307196
+[    6.449332] x14: 0000000000000002 x13: ffff2b6943307194 x12: 0000000000000003
+[    6.456497] x11: ffff2b69433018f0 x10: 0000000000000003 x9 : ffffb1a2578b1e08
+[    6.463662] x8 : ffff2b6940b36200 x7 : ffffb1a25a0da000 x6 : 000000003225858e
+[    6.470826] x5 : 0000000000000000 x4 : ffff79c76227a000 x3 : 0000000000000000
+[    6.477989] x2 : 0000000000000000 x1 : ffff2b6943301800 x0 : ffffb1a259faf3d0
+[    6.485153] Call trace:
+[    6.487601]  __driver_probe_device+0x1c/0x150
+[    6.491971]  device_driver_attach+0x58/0xc0
+[    6.496167]  lynx_pcs_create+0x30/0x7c
+[    6.499927]  enetc_pf_probe+0x984/0xeb0
+[    6.503775]  local_pci_probe+0x4c/0xc0
+[    6.507536]  pci_device_probe+0xb8/0x210
+[    6.511470]  really_probe.part.0+0xa4/0x2b0
+[    6.515665]  __driver_probe_device+0xa0/0x150
+[    6.520033]  driver_probe_device+0xb4/0x150
+[    6.524228]  __device_attach_driver+0xc4/0x130
+[    6.528684]  bus_for_each_drv+0x84/0xe0
+[    6.532529]  __device_attach+0xb0/0x1d0
+[    6.536375]  device_initial_probe+0x20/0x2c
+[    6.540569]  bus_probe_device+0xac/0xb4
+[    6.544414]  deferred_probe_work_func+0x98/0xd4
+[    6.548956]  process_one_work+0x294/0x6d0
+[    6.552979]  worker_thread+0x80/0x460
+[    6.556651]  kthread+0x124/0x130
+[    6.559887]  ret_from_fork+0x10/0x20
+[    6.563475] Code: a9bd7bfd 910003fd a90153f3 f9402422 (39444042)
+
+Disassembly of drivers/base/dd.c shows that dev->p is a NULL pointer,
+and dev->p->dead goes right through it. How did we even get here...
+device_private_init() should be called by device_add().
+
+Curiously enough, mdio_device_create() only calls device_initialize().
+It's mdio_device_register() that calls device_add(). So after this
+patch, we cannot call lynx_pcs_create() without calling
+mdio_device_register().

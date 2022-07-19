@@ -2,124 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88426579FBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D15F579FC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238671AbiGSNeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S235465AbiGSNgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237515AbiGSNee (ORCPT
+        with ESMTP id S237934AbiGSNgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:34:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C3488E6F0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658234948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SQ7i8DMmDNLQBzOxesas/9REVBIK8tkfXNsEsnI0ryg=;
-        b=Rq/ifcv1AdJVs/VpkGcVe41ohxb3Kbj8iReyWfnJSZyXk68CNlk6LQY42wQ3cYdYWewDaK
-        r2V7PzCSg3nUevyy5XJ5e/at/wSys11hGMcwMJiIVrIb9Ia79KTLZrZJG6B2yk9+0XNX90
-        vejHKAFqaeVATduPEcXFPQi0Jj/f9iU=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-HldKJFIKNCazhkVptSN6_g-1; Tue, 19 Jul 2022 08:49:07 -0400
-X-MC-Unique: HldKJFIKNCazhkVptSN6_g-1
-Received: by mail-qk1-f200.google.com with SMTP id i15-20020a05620a404f00b006b55998179bso11618875qko.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:49:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SQ7i8DMmDNLQBzOxesas/9REVBIK8tkfXNsEsnI0ryg=;
-        b=PSiZO1nDH085BFcHZkNNS81TmUAJfgUdrmhDKgK5uYSp4Ob/wdyqhHcOEKOn/irMDH
-         7ZT/B/AGrY/nyAHKaE53ZhA8C1Fp5D/17M64veq+AGs+f7/k/l3yWP8bggGKU5yWxySW
-         9jqzYtTAyNsMoBRpX0P68LAVRF01HjE0JBCdeArkU0REgjOhvf3gAojxJP8EbWh0apDu
-         qr0YITNlGyaUVVSGWMUn/xGSsYKaqqkWDqB8dM3zGMrFFcjI3dhh91Jqocu2wosA64Md
-         zar+XVzv7LMUb1iTz6sUnDiIa7LO+1w0MvqM+OKGZJfzYmYh6cLhV6qyRV4BLszyMFW7
-         7xMA==
-X-Gm-Message-State: AJIora/zOALviKcuPh668khCtJLwvwXAolicdqwaqQSbWatgi/p2iDey
-        AYzaYElfH5TXuKagc+gCPixbnzXEr7gHDOA3aRugpGGe+bTI3V5jQdrRSX28y8QEmIoY4XtKx3B
-        HaelhpC0pZNfz5GrbXy15fSB3
-X-Received: by 2002:a05:6214:5285:b0:472:ed70:23a0 with SMTP id kj5-20020a056214528500b00472ed7023a0mr24653528qvb.121.1658234946739;
-        Tue, 19 Jul 2022 05:49:06 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uZuaMPjQgfS6W9/DnlaK0uE0XgUkrEb2ofE1GV4HHuSsM3Xbj6XHQUCZkbhYbWbuoG/U//nQ==
-X-Received: by 2002:a05:6214:5285:b0:472:ed70:23a0 with SMTP id kj5-20020a056214528500b00472ed7023a0mr24653509qvb.121.1658234946505;
-        Tue, 19 Jul 2022 05:49:06 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id dm53-20020a05620a1d7500b006b4880b08a9sm14522441qkb.88.2022.07.19.05.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 05:49:05 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 14:48:57 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 2/3] virtio/vsock: use 'target' in notify_poll_in,
- callback.
-Message-ID: <20220719124857.akv25sgp6np3pdaw@sgarzare-redhat>
-References: <c8de13b1-cbd8-e3e0-5728-f3c3648c69f7@sberdevices.ru>
- <358f8d52-fd88-ad2e-87e2-c64bfa516a58@sberdevices.ru>
+        Tue, 19 Jul 2022 09:36:20 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02033ECC18
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658235076; x=1689771076;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XVnwW5yQMLs1C1Pl9K+m6/j422kvsZUzXnCAIhIULqY=;
+  b=fD7zXW8yQnTwDf31a9QXxAECD2EjRkX6D4UtQBcVoukUXV8w67ds+5PR
+   hILp7tiTQ1+bD6yAH8/c9Xdw8aRpoAuYxVEA4poV0NzfFTnrORBNz0pX2
+   phD5GP5zA1bgvmofdTYFFjG+9/YJNN9Zu2D+FO4diAg1w3taL82fiAOLP
+   48fUDCy+A24cALZB5n+buUbi+TAXO4d6Qp5hnby5u8YeQTw3FFRd7SgP9
+   x40LreIDoqsnSMxEwHBQ9n/lImyQoYo3tS9/TLhNa43iTmaSL1wnj+Hec
+   ZTS2jri870aH/K9ry2J5djl7tKLQCsouoSn4RQ0VZe0JIim7KCpzmWh/h
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="312169475"
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="312169475"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 05:51:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="924764102"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Jul 2022 05:51:13 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDmgz-0005f4-8j;
+        Tue, 19 Jul 2022 12:51:13 +0000
+Date:   Tue, 19 Jul 2022 20:51:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     ckkim <changkon12@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dongjin Kim <tobetter@gmail.com>
+Subject: drivers/power/reset/odroid-reboot.c:63:6: warning: no previous
+ prototype for 'odroid_card_reset'
+Message-ID: <202207192004.EsFWlLBl-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <358f8d52-fd88-ad2e-87e2-c64bfa516a58@sberdevices.ru>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 08:17:31AM +0000, Arseniy Krasnov wrote:
->This callback controls setting of POLLIN,POLLRDNORM output bits
->of poll() syscall,but in some cases,it is incorrectly to set it,
->when socket has at least 1 bytes of available data. Use 'target'
->which is already exists and equal to sk_rcvlowat in this case.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> net/vmw_vsock/virtio_transport_common.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index ec2c2afbf0d0..591908740992 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -634,7 +634,7 @@ virtio_transport_notify_poll_in(struct vsock_sock *vsk,
-> 				size_t target,
-> 				bool *data_ready_now)
-> {
->-	if (vsock_stream_has_data(vsk))
->+	if (vsock_stream_has_data(vsk) >= target)
-> 		*data_ready_now = true;
-> 	else
-> 		*data_ready_now = false;
+tree:   https://github.com/tobetter/linux odroid-5.19.y
+head:   0569e1291a824471ea27c9e90132881c0232a3a0
+commit: 9aa3f0db97ed4d976f3640f69d177bf27e78099d ODROID-COMMON: power:reset: Add odroid support
+date:   8 days ago
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220719/202207192004.EsFWlLBl-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/tobetter/linux/commit/9aa3f0db97ed4d976f3640f69d177bf27e78099d
+        git remote add tobetter https://github.com/tobetter/linux
+        git fetch --no-tags tobetter odroid-5.19.y
+        git checkout 9aa3f0db97ed4d976f3640f69d177bf27e78099d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/power/reset/
 
-Perhaps we can take the opportunity to clean up the code in this way:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-	*data_ready_now = vsock_stream_has_data(vsk) >= target;
+All warnings (new ones prefixed by >>):
 
-Anyway, I think we also need to fix the other transports (vmci and 
-hyperv), what do you think?
+>> drivers/power/reset/odroid-reboot.c:63:6: warning: no previous prototype for 'odroid_card_reset' [-Wmissing-prototypes]
+      63 | void odroid_card_reset(void)
+         |      ^~~~~~~~~~~~~~~~~
+   drivers/power/reset/odroid-reboot.c: In function 'odroid_restart_probe':
+   drivers/power/reset/odroid-reboot.c:141:17: error: 'arm_pm_restart' undeclared (first use in this function); did you mean 'alarm_restart'?
+     141 |                 arm_pm_restart = do_odroid_restart;
+         |                 ^~~~~~~~~~~~~~
+         |                 alarm_restart
+   drivers/power/reset/odroid-reboot.c:141:17: note: each undeclared identifier is reported only once for each function it appears in
 
-Thanks,
-Stefano
 
+vim +/odroid_card_reset +63 drivers/power/reset/odroid-reboot.c
+
+    62	
+  > 63	void odroid_card_reset(void)
+    64	{
+    65		int ret = 0;
+    66	
+    67		if ((sd_vqsw == 0) && (sd_vmmc == 0))
+    68			return;
+    69	
+    70		if (sd_vqen == 0) {
+    71			gpio_free(sd_vqsw);
+    72			gpio_free(sd_vmmc);
+    73			ret = gpio_request_one(sd_vqsw,
+    74					GPIOF_OUT_INIT_LOW, "REBOOT");
+    75			CHECK_RET(ret);
+    76			mdelay(10);
+    77			ret = gpio_direction_output(sd_vqsw, 1);
+    78			CHECK_RET(ret);
+    79			ret = gpio_request_one(sd_vmmc,
+    80					GPIOF_OUT_INIT_LOW, "REBOOT");
+    81			CHECK_RET(ret);
+    82			mdelay(10);
+    83			ret = gpio_direction_output(sd_vqsw, 0);
+    84			CHECK_RET(ret);
+    85			ret = gpio_direction_output(sd_vmmc, 1);
+    86			CHECK_RET(ret);
+    87			mdelay(5);
+    88			gpio_free(sd_vqsw);
+    89			gpio_free(sd_vmmc);
+    90		} else {
+    91			gpio_free(sd_vqsw);
+    92			gpio_free(sd_vqen);
+    93			gpio_free(sd_vmmc);
+    94	
+    95			ret = gpio_request_one(sd_vqsw,
+    96					GPIOF_OUT_INIT_LOW, "REBOOT");
+    97			CHECK_RET(ret);
+    98			ret = gpio_request_one(sd_vqen,
+    99					GPIOF_OUT_INIT_LOW, "REBOOT");
+   100			CHECK_RET(ret);
+   101			ret = gpio_request_one(sd_vmmc,
+   102					GPIOF_OUT_INIT_LOW, "REBOOT");
+   103			CHECK_RET(ret);
+   104			mdelay(100);
+   105			ret = gpio_direction_input(sd_vqen);
+   106			CHECK_RET(ret);
+   107			ret = gpio_direction_input(sd_vmmc);
+   108			CHECK_RET(ret);
+   109			ret = gpio_direction_input(sd_vqsw);
+   110			CHECK_RET(ret);
+   111			mdelay(5);
+   112			gpio_free(sd_vqen);
+   113			gpio_free(sd_vmmc);
+   114			gpio_free(sd_vqsw);
+   115		}
+   116	}
+   117	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

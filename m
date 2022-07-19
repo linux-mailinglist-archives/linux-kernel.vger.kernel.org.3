@@ -2,85 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9260F57A1DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888E857A1EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239295AbiGSOjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S239555AbiGSOkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239334AbiGSOi6 (ORCPT
+        with ESMTP id S239329AbiGSOj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:38:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 298372674
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:34:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658241251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q1yQacfB3hLbpLHmQUXt3vJmaATxthgTSKeJu9pPsQE=;
-        b=DRX9ueBuMY2oMrMV72HpOJzkzxSKDbqareEPrh05chA1qmqMvpfTQsSoY0dA4aKVB2Dy8q
-        cQ3K2U+gkquw9JQp7nDIW7G7fyISoudNFR+iQE7j1rRvALLcquUfNsFAKgBMRezdgEyV/b
-        8/rzGuAXQSC1mKp4JOTufQCPmCOD+go=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-pKg275crNuS2U-SShTnPRQ-1; Tue, 19 Jul 2022 10:34:09 -0400
-X-MC-Unique: pKg275crNuS2U-SShTnPRQ-1
-Received: by mail-wm1-f69.google.com with SMTP id c17-20020a7bc011000000b003a2bfaf8d3dso6888598wmb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:34:09 -0700 (PDT)
+        Tue, 19 Jul 2022 10:39:57 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C818854ACD
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:35:57 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id n138so10688330iod.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0BjWGlK630QXayY7IJgfAR9lOEt/Zu0JUnJ3PIy+Dok=;
+        b=WF/dbHsOdzJ1VTngL102ErO61fUWa0iCm76xtFZijwQCoZc9fWP6CbuAEq2wYqyuWA
+         sHg+et+tbk4UjBTy7aJVlMCkSdUDQbrcDatNEJqX0IcSWsE0+aM8emv9waHZNruTEeG3
+         WV7ctcsHv1yhExgWPo2j32CzPjJOOCBBM6hnqYsGlpFtOhPzV2TIezbgTOQvWU+/hwR2
+         Ghas3GoExiJ6uKXsnEoMZJMszKTatZy8O20xqpHLi2pHza9BFqhXlGMgYAgA0DqHeLXS
+         iaIUBfvmaIWh1sEBdt/sg5vc/8bZyxSCZ0n5UnHovgcdXJWeNBIQYZ8Mv3c3V+sUfQ3g
+         3MdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=q1yQacfB3hLbpLHmQUXt3vJmaATxthgTSKeJu9pPsQE=;
-        b=d3RErBk8yE+Zvs+iBu5ShdeGwKicQZEUuuncbda9dfHzkbT6hyrkVvnfuu0ddtgQg8
-         bhqHch5xYXvRFcLL+oU3WAcExf6lDLE2d3GVWELsv4Z7L6qT0660kigibv34KPKRd2oy
-         sZmVFjtERWnyAanF8bN3BiGHj/3DyG6J+/QFj2o5cV3uunqlEMjdVCgLOLo8MplurAPa
-         uuyvzt5DLLXWoxvALhFafhQR39jU3dzWVjDwnA0NvO7zORHUi45uYVMU6d3wXUcv6IcM
-         EQvPWnTo+fTxgLXQSIJQXnqLSRKD2V1HvsUXpLXbgM0exzt/4ubKTduBeh6HbMErylAI
-         UGew==
-X-Gm-Message-State: AJIora85iaessHRX8+SbUQ8jNr09fVfwjLHWJL31GXzvsI2qGqmqq8NU
-        6U3L5X0ea+Obh7XQHsXsrt9cqm+yF9BgQIcQmYnwJW/t1C7gPl1rp6YQLBJuZwMLRcxIzN+68+/
-        OckWHLJ+i3BUl4mWTxi/gEJoO
-X-Received: by 2002:a05:6000:1d96:b0:21e:3e47:4558 with SMTP id bk22-20020a0560001d9600b0021e3e474558mr2281810wrb.253.1658241248799;
-        Tue, 19 Jul 2022 07:34:08 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uTWDSdIJ3vFJzY1HG6rASVk4nIiPxphveENq1YEt5pXz7tSZkFrUKW6JuNJNVSt9b5R30XyA==
-X-Received: by 2002:a05:6000:1d96:b0:21e:3e47:4558 with SMTP id bk22-20020a0560001d9600b0021e3e474558mr2281802wrb.253.1658241248652;
-        Tue, 19 Jul 2022 07:34:08 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id bd20-20020a05600c1f1400b003a3211112f8sm3443171wmb.46.2022.07.19.07.34.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0BjWGlK630QXayY7IJgfAR9lOEt/Zu0JUnJ3PIy+Dok=;
+        b=lLIWxGDGvfSsECZX65YErzjz8HjavOkD15JSjx7EZZkQ8QY6TDrsSBq5VFOxcKjulu
+         6apRUSB/9wRSRh8V7t7f232xKap/wVSSDg9vbdcrtA5u+aislkY/bPbrbAmW0bY7Nogu
+         AjPbBKCqt7ARx3JO0RiphhEnIMmGmqaXrRISe+W8RNSLW2+DG3NfBw1+3cG8F7EkakuP
+         /XDQOyDU46YDFbh+3b7uhv9DbAx/G5BZcXOJy1RxjG37rm0S6bfSPiVc9d1RpVuk2sSE
+         +zzXrSuSn8Lvtxt9lPPwAnrBAzuTNOLOViDhnb7fbiw5w5Yq81pRxBvN5cV8YbypkJZ8
+         pteA==
+X-Gm-Message-State: AJIora9rGRF60fuiACH6HDM4vGHuw9PB7n8jymG05jJN8eQyqpAywIgx
+        fiOqowCwT3fzRG0vPXN/DGgblg==
+X-Google-Smtp-Source: AGRyM1sr1oAIhANTJzfCV4iqPvLmtDzqH7kfijam2HMWSxAXMQaxSqWzgC4JjZ3eYhP+jQe6LXTOEQ==
+X-Received: by 2002:a05:6602:1681:b0:678:9e4e:cd76 with SMTP id s1-20020a056602168100b006789e4ecd76mr15009127iow.80.1658241357200;
+        Tue, 19 Jul 2022 07:35:57 -0700 (PDT)
+Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id t16-20020a056602141000b00675a83bc1e3sm7286559iov.13.2022.07.19.07.35.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 07:34:08 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v3 2/2] cpuhp: Set cpuhp target for boot cpu
-In-Reply-To: <20220711211619.112854-3-pauld@redhat.com>
-References: <20220711211619.112854-1-pauld@redhat.com>
- <20220711211619.112854-3-pauld@redhat.com>
-Date:   Tue, 19 Jul 2022 15:34:06 +0100
-Message-ID: <xhsmhilnt6ujl.mognet@vschneid.remote.csb>
+        Tue, 19 Jul 2022 07:35:56 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
+        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
+        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
+        elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/5] net: ipa: small transaction updates
+Date:   Tue, 19 Jul 2022 09:35:48 -0500
+Message-Id: <20220719143553.280908-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/22 17:16, Phil Auld wrote:
-> Since the boot cpu does not go through the hotplug process it ends
-> up with state == CPUHP_ONLINE but target == CPUHP_OFFLINE.
-> Set the target to match in boot_cpu_hotplug_init().
->
-> Signed-off-by: Phil Auld <pauld@redhat.com>
+This series includes three changes to the transaction code.  The
+first adds a new transaction list that represents a distinct state
+that has not been maintained.  The second moves a field in the
+transaction information structure, and reorders its initialization
+a bit.  The third skips a function call when it is known not to be
+necessary.
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+The last two are very small "leftover" patches.
+
+					-Alex
+
+Alex Elder (5):
+  net: ipa: add a transaction committed list
+  net: ipa: rearrange transaction initialization
+  net: ipa: skip some cleanup for unused transactions
+  net: ipa: report when the driver has been removed
+  net: ipa: fix an outdated comment
+
+ drivers/net/ipa/gsi.c       |  5 ++-
+ drivers/net/ipa/gsi.h       |  6 ++-
+ drivers/net/ipa/gsi_trans.c | 89 +++++++++++++++++++++++--------------
+ drivers/net/ipa/ipa_main.c  |  2 +
+ 4 files changed, 65 insertions(+), 37 deletions(-)
+
+-- 
+2.34.1
 

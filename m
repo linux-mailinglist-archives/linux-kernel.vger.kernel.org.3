@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F915799C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A17579B5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238353AbiGSMGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S240026AbiGSM0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238486AbiGSMEn (ORCPT
+        with ESMTP id S240089AbiGSMYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:04:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CEE4D4CD;
-        Tue, 19 Jul 2022 05:00:39 -0700 (PDT)
+        Tue, 19 Jul 2022 08:24:32 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4F161D80;
+        Tue, 19 Jul 2022 05:09:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12A5A61655;
-        Tue, 19 Jul 2022 12:00:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E59ABC341CF;
-        Tue, 19 Jul 2022 12:00:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 01A70CE1BE6;
+        Tue, 19 Jul 2022 12:08:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F52C341C6;
+        Tue, 19 Jul 2022 12:08:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232038;
-        bh=l1u1mqPWr6KkvTGe6RxTRSXt6DLJuiZb38yg1TUF2gA=;
+        s=korg; t=1658232519;
+        bh=/PBo5aChT/HITL0n8XQjCAQovVMDJHQ5AmS2ELAt8oo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0hysTn1B4clQ3hZ1glUGjcFSDBj0FbiMkCfHs382x2sO+lfWxlAUcYfh6Z4/hCjgK
-         YpllUlYn4yeWY/62NS87KklkJ3SLEYoW6v3BK2mmM0oa1H1pC/fko4ArVZJAXPB2P4
-         +/AjXFZlOd3FFEPhNUWn64T54D9EorDcHdnZyTpw=
+        b=VoU5Koc0IYCHHU4UzIV7MeDe59RIOMQfouLGslBmCen5tKo2JygY/x1/TiUVtvU6a
+         mn8o7JuOy8j/pK0zC+mw8hV8l7jBJTNSLgxUDeMPFjMde4T/MY1m/aa4ib4o2JkBiB
+         9DwKfLwQtA11BiX+rdhZbNKiLESWBwOUxMHZ495A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 40/48] signal handling: dont use BUG_ON() for debugging
-Date:   Tue, 19 Jul 2022 13:54:17 +0200
-Message-Id: <20220719114523.368849978@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Wagner <dwagner@suse.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 085/112] nvme-tcp: always fail a request when sending it failed
+Date:   Tue, 19 Jul 2022 13:54:18 +0200
+Message-Id: <20220719114634.861288875@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
-References: <20220719114518.915546280@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Sagi Grimberg <sagi@grimberg.me>
 
-[ Upstream commit a382f8fee42ca10c9bfce0d2352d4153f931f5dc ]
+[ Upstream commit 41d07df7de841bfbc32725ce21d933ad358f2844 ]
 
-These are indeed "should not happen" situations, but it turns out recent
-changes made the 'task_is_stopped_or_trace()' case trigger (fix for that
-exists, is pending more testing), and the BUG_ON() makes it
-unnecessarily hard to actually debug for no good reason.
+queue stoppage and inflight requests cancellation is fully fenced from
+io_work and thus failing a request from this context. Hence we don't
+need to try to guess from the socket retcode if this failure is because
+the queue is about to be torn down or not.
 
-It's been that way for a long time, but let's make it clear: BUG_ON() is
-not good for debugging, and should never be used in situations where you
-could just say "this shouldn't happen, but we can continue".
+We are perfectly safe to just fail it, the request will not be cancelled
+later on.
 
-Use WARN_ON_ONCE() instead to make sure it gets logged, and then just
-continue running.  Instead of making the system basically unusuable
-because you crashed the machine while potentially holding some very core
-locks (eg this function is commonly called while holding 'tasklist_lock'
-for writing).
+This solves possible very long shutdown delays when the users issues a
+'nvme disconnect-all'
 
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: Daniel Wagner <dwagner@suse.de>
+Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/signal.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/nvme/host/tcp.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 4cc3f3ba13a9..c79b87ac1041 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -1825,12 +1825,12 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
- 	bool autoreap = false;
- 	u64 utime, stime;
- 
--	BUG_ON(sig == -1);
-+	WARN_ON_ONCE(sig == -1);
- 
-- 	/* do_notify_parent_cldstop should have been called instead.  */
-- 	BUG_ON(task_is_stopped_or_traced(tsk));
-+	/* do_notify_parent_cldstop should have been called instead.  */
-+	WARN_ON_ONCE(task_is_stopped_or_traced(tsk));
- 
--	BUG_ON(!tsk->ptrace &&
-+	WARN_ON_ONCE(!tsk->ptrace &&
- 	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
- 
- 	if (sig != SIGCHLD) {
+diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
+index 7e3932033707..d5e162f2c23a 100644
+--- a/drivers/nvme/host/tcp.c
++++ b/drivers/nvme/host/tcp.c
+@@ -1149,8 +1149,7 @@ static int nvme_tcp_try_send(struct nvme_tcp_queue *queue)
+ 	} else if (ret < 0) {
+ 		dev_err(queue->ctrl->ctrl.device,
+ 			"failed to send request %d\n", ret);
+-		if (ret != -EPIPE && ret != -ECONNRESET)
+-			nvme_tcp_fail_request(queue->request);
++		nvme_tcp_fail_request(queue->request);
+ 		nvme_tcp_done_send_req(queue);
+ 	}
+ 	return ret;
 -- 
 2.35.1
 

@@ -2,351 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25EE579407
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E0957940D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 09:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235880AbiGSHUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 03:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
+        id S236114AbiGSHWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 03:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235983AbiGSHUI (ORCPT
+        with ESMTP id S235378AbiGSHWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 03:20:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB612DEE
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658215206; x=1689751206;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=biaESJTSUbQQgecZrk3cqlebtNrxRUqpG5iCexsO7Fo=;
-  b=Fq85SMz3ObUV1TeJRKk8x2R7b3Ynj0PJbEFDDDX0W4F/QEMqRUXU8Lms
-   tzLYMTZnxMMQKryX95TYRcqNwXya+UU2wmDS9l3sZlnm5W5dxOnC5Oa9J
-   nf6V9jP6qcDiDMn8Erx+jWRaU8+Q8UlE+qDj1rxNd1bdpeqKti4gwGRY5
-   jWh53EcrDpEwtoDY4NcYabkCAHVe0Y6qTY6F9IyGZsoypsnmrCVhMVnCE
-   elrpedx0PzTd5idNE3bSCWvamPlS/szeQsRVjG/5sMJjudWPQ88kUiiwc
-   YtD0rT/qBZ1JuRg06iEB1mDxgXcAicHvrbKwo//ZMT5kGcWnz1++OdlQG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="287567589"
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="287567589"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 00:20:05 -0700
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="630225340"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 00:20:01 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Steven Price <steven.price@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        =?utf-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        =?utf-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>
-Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
-References: <20220718090050.2261-1-21cnbao@gmail.com>
-        <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
-        <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com>
-        <87zgh5232o.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <416a06f6-ca7d-d4a9-2cda-af0ad6e28261@arm.com>
-        <CAGsJ_4y7GyL5qtrBbhz_8bLuAGGHy7Ju0ucPjHp-ZeDHjQcTcw@mail.gmail.com>
-        <CAGsJ_4z3wXK8WqubkFdPT6ObBVtvzAjbS1=r9PDCCDvwDVf3rw@mail.gmail.com>
-        <87o7xl1wpb.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAGsJ_4xECbs2Dxn8u4tCotNBZz5epFvAWANLiNg0dSzDcgORCA@mail.gmail.com>
-        <87k0891uj6.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAGsJ_4zBumnOR7eiPD=b+0dQCZctK+P=c=Mvb-24TXrzgM_Mug@mail.gmail.com>
-Date:   Tue, 19 Jul 2022 15:19:57 +0800
-In-Reply-To: <CAGsJ_4zBumnOR7eiPD=b+0dQCZctK+P=c=Mvb-24TXrzgM_Mug@mail.gmail.com>
-        (Barry Song's message of "Tue, 19 Jul 2022 19:01:03 +1200")
-Message-ID: <875yjt1sde.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 19 Jul 2022 03:22:08 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C7C3207A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:22:06 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id z13so661605wro.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 00:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zhZx7OelFktddqeuw5G8PgvrBIH+jYWzqpM0BySOSho=;
+        b=jHwP4d8nPt5m3OcG9yygEJvr3q4paVLcrXvrPkHX+dNeG1La0W38p54fQvK9useFj6
+         K10OGAWmVX+PF8YBZZyY5C6rjsoY+WBDDFMXtTtwCB0EiW7I1z/07kcUG3WY4LcdhOoC
+         4xp7QbrtqlZOYOu9smorDW68ehKkUi8cSl6FlzVQn+It2SPxDhOdzUpwHqOxxlRzbLr5
+         khqoa3oSaJOXDFvkSUVmvBC2NEADAduVoleA0tb+ZI3dq17VLzoVVS0mpsNV4GnbGRI2
+         UDTgiFZ5rs9wN4PSwImYHipQ0T3zbcSSS43vLRrD8v/eFUCSYVf2VfT4kVPca8EjHSCX
+         0JPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zhZx7OelFktddqeuw5G8PgvrBIH+jYWzqpM0BySOSho=;
+        b=CnujqenIc6CSRKe2OEpLgORImRPVUoptJAxfPZK7lS7z2YRWaH5hkYjGW/iIE7nvhc
+         H/SBXjzXSXX+EAJFv8KfhJlYKMP0LytnsIeUA5Ot3WOSm6ijJVoNeLMG1nRNrocDTArx
+         k+snibRx4nFLTtHbG/bmKAmYSOZsR5BfUNw5e07PnRPPDG5NBXfuin1m8lldRJ9A3K1i
+         nhFwl5pBZaKsCcio03VuaLFkpbm09rrqBV2Pi/AvuSb99OevJ8Qg1+8KjczISap3Y3TO
+         x9waB+0b39rPzkUGXSD2cdx3+A9kBk9JYfB5WpgyBXmBYTpJ/xrKLhOylO/W3wMVeVyC
+         mHog==
+X-Gm-Message-State: AJIora/HjSkun4SXdjmj9SrgqwObd3xvBjSfBPHNotcw/yei/Xoi4oMC
+        XCEKRH6Ugx5/X/HKB+amq61zJw==
+X-Google-Smtp-Source: AGRyM1txegwX6PPB6J4yWQk8XjE3s0d4QXmt0iUioRmC+ZAaCuKV2FCUQYXYXT5kwow3JR5z+bvdNg==
+X-Received: by 2002:adf:e28a:0:b0:210:b31:722 with SMTP id v10-20020adfe28a000000b002100b310722mr25735689wri.65.1658215325276;
+        Tue, 19 Jul 2022 00:22:05 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:496e:2d41:fd5a:4e5e? ([2a05:6e02:1041:c10:496e:2d41:fd5a:4e5e])
+        by smtp.googlemail.com with ESMTPSA id az36-20020a05600c602400b003a31ba538c2sm6018930wmb.40.2022.07.19.00.22.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 00:22:04 -0700 (PDT)
+Message-ID: <c0d3e523-d75a-d837-313f-bf46f3fab3b4@linaro.org>
+Date:   Tue, 19 Jul 2022 09:22:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 3/4] thermal/core: Build ascending ordered indexes for
+ the trip points
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>, rafael@kernel.org
+Cc:     quic_manafm@quicinc.com, amitk@kernel.org, lukasz.luba@arm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220715210911.714479-1-daniel.lezcano@linaro.org>
+ <20220715210911.714479-3-daniel.lezcano@linaro.org>
+ <6d08939a167870ff7c1c83bb254fda5939f1d648.camel@intel.com>
+ <04bd27a8-5148-c8eb-5687-83ef511618df@linaro.org>
+ <7ee301b76beb679f89e946dfb5921a2d853bd8dc.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <7ee301b76beb679f89e946dfb5921a2d853bd8dc.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Barry Song <21cnbao@gmail.com> writes:
+On 19/07/2022 03:14, Zhang Rui wrote:
+> On Mon, 2022-07-18 at 15:21 +0200, Daniel Lezcano wrote:
+>>
+>> Hi Zhang,
+>>
+>> thanks for the review
+>>
+>> On 18/07/2022 07:28, Zhang Rui wrote:
+>>> On Fri, 2022-07-15 at 23:09 +0200, Daniel Lezcano wrote:
+>>
+>> [ ... ]
+>>
+>>>> Instead of taking the risk of breaking the existing platforms,
+>>>> use an
+>>>> array of temperature ordered trip identifiers and make it
+>>>> available
+>>>> for the code needing to browse the trip points in an ordered way.
+>>>>
+>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>> ---
+>>
+>> [ ... ]
+>>
+>>>> +static void sort_trips_indexes(struct thermal_zone_device *tz)
+>>>> +{
+>>>> +       int i, j;
+>>>> +
+>>>> +       for (i = 0; i < tz->trips; i++)
+>>>> +               tz->trips_indexes[i] = i;
+>>>> +
+>>>> +       for (i = 0; i < tz->trips; i++) {
+>>>> +               for (j = i + 1; j < tz->trips; j++) {
+>>>> +                       int t1, t2;
+>>>> +
+>>>> +                       tz->ops->get_trip_temp(tz, tz-
+>>>>> trips_indexes[i], &t1);
+>>>
+>>> This line can be moved to the upper loop.
+>>
+>> Right, thanks!
+>>
+>>>> +                       tz->ops->get_trip_temp(tz, tz-
+>>>>> trips_indexes[j], &t2);
+>>>> +
+>>>
+>>> what about the disabled trip points?
+>>>
+>>> we should ignore those trip points and check the return value to
+>>> make
+>>> sure we're comparing the valid trip_temp values.
+>>
+>> We don't have to care about, whatever the position, the corresponding
+>> trip id will be disabled by the trip init function before calling
+>> this
+>> one and ignored in the handle_thermal_trip() function
+> 
+> hah, I missed this one and replied to your latest reply directly.
+> 
+> The thing I'm concerning is that if we don't check the return value,
+> for a disabled trip point, the trip_temp (t1/t2) returned is some
+> random value, it all depends on the previous value set by last
+> successful .get_trip_temp(), and this may screw up the sorting.
 
-> On Tue, Jul 19, 2022 at 6:33 PM Huang, Ying <ying.huang@intel.com> wrote:
->>
->> Barry Song <21cnbao@gmail.com> writes:
->>
->> > On Tue, Jul 19, 2022 at 5:47 PM Huang, Ying <ying.huang@intel.com> wrote:
->> >>
->> >> Barry Song <21cnbao@gmail.com> writes:
->> >>
->> >> > On Tue, Jul 19, 2022 at 3:59 PM Barry Song <21cnbao@gmail.com> wrote:
->> >> >>
->> >> >> On Tue, Jul 19, 2022 at 3:35 PM Anshuman Khandual
->> >> >> <anshuman.khandual@arm.com> wrote:
->> >> >> >
->> >> >> >
->> >> >> >
->> >> >> > On 7/19/22 08:58, Huang, Ying wrote:
->> >> >> > > Anshuman Khandual <anshuman.khandual@arm.com> writes:
->> >> >> > >
->> >> >> > >> On 7/19/22 06:53, Barry Song wrote:
->> >> >> > >>> On Tue, Jul 19, 2022 at 12:44 PM Huang, Ying <ying.huang@intel.com> wrote:
->> >> >> > >>>>
->> >> >> > >>>> Barry Song <21cnbao@gmail.com> writes:
->> >> >> > >>>>
->> >> >> > >>>>> From: Barry Song <v-songbaohua@oppo.com>
->> >> >> > >>>>>
->> >> >> > >>>>> THP_SWAP has been proven to improve the swap throughput significantly
->> >> >> > >>>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
->> >> >> > >>>>> splitting THP after swapped out").
->> >> >> > >>>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
->> >> >> > >>>>> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
->> >> >> > >>>>> enabling it on arm64 will benefit arm64 as well.
->> >> >> > >>>>> A corner case is that MTE has an assumption that only base pages
->> >> >> > >>>>> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
->> >> >> > >>>>> MTE support until MTE is reworked to coexist with THP_SWAP.
->> >> >> > >>>>>
->> >> >> > >>>>> A micro-benchmark is written to measure thp swapout throughput as
->> >> >> > >>>>> below,
->> >> >> > >>>>>
->> >> >> > >>>>>  unsigned long long tv_to_ms(struct timeval tv)
->> >> >> > >>>>>  {
->> >> >> > >>>>>       return tv.tv_sec * 1000 + tv.tv_usec / 1000;
->> >> >> > >>>>>  }
->> >> >> > >>>>>
->> >> >> > >>>>>  main()
->> >> >> > >>>>>  {
->> >> >> > >>>>>       struct timeval tv_b, tv_e;;
->> >> >> > >>>>>  #define SIZE 400*1024*1024
->> >> >> > >>>>>       volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
->> >> >> > >>>>>                               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->> >> >> > >>>>>       if (!p) {
->> >> >> > >>>>>               perror("fail to get memory");
->> >> >> > >>>>>               exit(-1);
->> >> >> > >>>>>       }
->> >> >> > >>>>>
->> >> >> > >>>>>       madvise(p, SIZE, MADV_HUGEPAGE);
->> >> >> > >>>>>       memset(p, 0x11, SIZE); /* write to get mem */
->> >> >> > >>>>>
->> >> >> > >>>>>       gettimeofday(&tv_b, NULL);
->> >> >> > >>>>>       madvise(p, SIZE, MADV_PAGEOUT);
->> >> >> > >>>>>       gettimeofday(&tv_e, NULL);
->> >> >> > >>>>>
->> >> >> > >>>>>       printf("swp out bandwidth: %ld bytes/ms\n",
->> >> >> > >>>>>                       SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
->> >> >> > >>>>>  }
->> >> >> > >>>>>
->> >> >> > >>>>> Testing is done on rk3568 64bit quad core processor Quad Core
->> >> >> > >>>>> Cortex-A55 platform - ROCK 3A.
->> >> >> > >>>>> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
->> >> >> > >>>>> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
->> >> >> > >>>>>
->> >> >> > >>>>> Cc: "Huang, Ying" <ying.huang@intel.com>
->> >> >> > >>>>> Cc: Minchan Kim <minchan@kernel.org>
->> >> >> > >>>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
->> >> >> > >>>>> Cc: Hugh Dickins <hughd@google.com>
->> >> >> > >>>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
->> >> >> > >>>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
->> >> >> > >>>>> Cc: Steven Price <steven.price@arm.com>
->> >> >> > >>>>> Cc: Yang Shi <shy828301@gmail.com>
->> >> >> > >>>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
->> >> >> > >>>>> ---
->> >> >> > >>>>>  -v3:
->> >> >> > >>>>>  * refine the commit log;
->> >> >> > >>>>>  * add a benchmark result;
->> >> >> > >>>>>  * refine the macro of arch_thp_swp_supported
->> >> >> > >>>>>  Thanks to the comments of Anshuman, Andrew, Steven
->> >> >> > >>>>>
->> >> >> > >>>>>  arch/arm64/Kconfig               |  1 +
->> >> >> > >>>>>  arch/arm64/include/asm/pgtable.h |  6 ++++++
->> >> >> > >>>>>  include/linux/huge_mm.h          | 12 ++++++++++++
->> >> >> > >>>>>  mm/swap_slots.c                  |  2 +-
->> >> >> > >>>>>  4 files changed, 20 insertions(+), 1 deletion(-)
->> >> >> > >>>>>
->> >> >> > >>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> >> >> > >>>>> index 1652a9800ebe..e1c540e80eec 100644
->> >> >> > >>>>> --- a/arch/arm64/Kconfig
->> >> >> > >>>>> +++ b/arch/arm64/Kconfig
->> >> >> > >>>>> @@ -101,6 +101,7 @@ config ARM64
->> >> >> > >>>>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->> >> >> > >>>>>       select ARCH_WANT_LD_ORPHAN_WARN
->> >> >> > >>>>>       select ARCH_WANTS_NO_INSTR
->> >> >> > >>>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
->> >> >> > >>>>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
->> >> >> > >>>>>       select ARM_AMBA
->> >> >> > >>>>>       select ARM_ARCH_TIMER
->> >> >> > >>>>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->> >> >> > >>>>> index 0b6632f18364..78d6f6014bfb 100644
->> >> >> > >>>>> --- a/arch/arm64/include/asm/pgtable.h
->> >> >> > >>>>> +++ b/arch/arm64/include/asm/pgtable.h
->> >> >> > >>>>> @@ -45,6 +45,12 @@
->> >> >> > >>>>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
->> >> >> > >>>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->> >> >> > >>>>>
->> >> >> > >>>>> +static inline bool arch_thp_swp_supported(void)
->> >> >> > >>>>> +{
->> >> >> > >>>>> +     return !system_supports_mte();
->> >> >> > >>>>> +}
->> >> >> > >>>>> +#define arch_thp_swp_supported arch_thp_swp_supported
->> >> >> > >>>>> +
->> >> >> > >>>>>  /*
->> >> >> > >>>>>   * Outside of a few very special situations (e.g. hibernation), we always
->> >> >> > >>>>>   * use broadcast TLB invalidation instructions, therefore a spurious page
->> >> >> > >>>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
->> >> >> > >>>>> index de29821231c9..4ddaf6ad73ef 100644
->> >> >> > >>>>> --- a/include/linux/huge_mm.h
->> >> >> > >>>>> +++ b/include/linux/huge_mm.h
->> >> >> > >>>>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
->> >> >> > >>>>>       return split_huge_page_to_list(&folio->page, list);
->> >> >> > >>>>>  }
->> >> >> > >>>>>
->> >> >> > >>>>> +/*
->> >> >> > >>>>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
->> >> >> > >>>>> + * limitations in the implementation like arm64 MTE can override this to
->> >> >> > >>>>> + * false
->> >> >> > >>>>> + */
->> >> >> > >>>>> +#ifndef arch_thp_swp_supported
->> >> >> > >>>>> +static inline bool arch_thp_swp_supported(void)
->> >> >> > >>>>> +{
->> >> >> > >>>>> +     return true;
->> >> >> > >>>>> +}
->> >> >> > >>>>
->> >> >> > >>>> How about the following?
->> >> >> > >>>>
->> >> >> > >>>> static inline bool arch_wants_thp_swap(void)
->> >> >> > >>>> {
->> >> >> > >>>>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
->> >> >> > >>>> }
->> >> >> > >>>
->> >> >> > >>> This looks good. then i'll need to change arm64 to
->> >> >> > >>>
->> >> >> > >>>  +static inline bool arch_thp_swp_supported(void)
->> >> >> > >>>  +{
->> >> >> > >>>  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
->> >> >> > >>>  +}
->> >> >> > >>
->> >> >> > >> Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
->> >> >> > >> IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
->> >> >> > >> is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
->> >> >> > >> either in the generic fallback stub, or in arm64 platform override. Because
->> >> >> > >> without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
->> >> >> > >> be called in the first place.
->> >> >> > >
->> >> >> > > For the only caller now, the checking looks redundant.  But the original
->> >> >> > > proposed implementation as follows,
->> >> >> > >
->> >> >> > > static inline bool arch_thp_swp_supported(void)
->> >> >> > > {
->> >> >> > >      return true;
->> >> >> > > }
->> >> >> > >
->> >> >> > > will return true even on architectures that don't support/want THP swap.
->> >> >> >
->> >> >> > But the function will never be called on for those platforms.
->> >> >> >
->> >> >> > > That will confuse people too.
->> >> >> >
->> >> >> > I dont see how.
->> >> >> >
->> >> >> > >
->> >> >> > > And the "redundant" checking has no run time overhead, because compiler
->> >> >> > > will do the trick.
->> >> >> > I understand that, but dont think this indirection is necessary.
->> >> >>
->> >> >> Hi Anshuman, Hi Ying,
->> >> >> Thanks for the comments of both of you. Does the below look ok?
->> >> >>
->> >> >> generic,
->> >> >>
->> >> >>  static inline bool arch_wants_thp_swap(void)
->> >> >>   {
->> >> >>       return IS_ENABLED(CONFIG_THP_SWAP);
->> >> >>  }
->> >> >>
->> >> >
->> >> > sorry, i actually meant arch_thp_swp_supported() but not
->> >> > arch_wants_thp_swap() in generic code,
->> >> >
->> >> >  static inline bool arch_thp_swp_supported(void)
->> >> >  {
->> >> >       return IS_ENABLED(CONFIG_THP_SWAP);
->> >> >  }
->> >>
->> >> IS_ENABLED(CONFIG_THP_SWAP) doesn't match the name too.  It's an option
->> >> selected by users.  arch_thp_swp_supported() is to report the
->> >> capability.
->> >
->> > Hi Ying,
->> > CONFIG_THP_SWAP implicitly includes ARCH_WANTS_THP_SWAP. So it seems
->> > a bit odd to have still another arch_wants_thp_swap().
->> > if the name of arch_thp_swp_supported is not sensible to you, will
->> > thp_swp_supported()
->> > without arch_ make more sense? a similar example is,
->> >
->> > static inline bool gigantic_page_runtime_supported(void)
->> > {
->> >         return IS_ENABLED(CONFIG_ARCH_HAS_GIGANTIC_PAGE);
->> > }
->>
->> Here, the capability of the architecture is reported.  But
->> CONFIG_THP_SWAP is a user option.
->>
->> I'm OK with the function name "arch_thp_swp_supported()".  I just think
->> that we should implement the function in a way that is consistent with
->> the function name as much as possible.  That is, don't return true on
->> architectures that THP swap isn't supported in fact.
->
-> My point is that having a generic thp_swp_supported() which can combine
-> both IS_ENABLED(CONFIG_THP_SWP) && arch_thp_swp_thing().
-> then we can always only call this rather than checking two conditions.
-> Although there is only one caller for this moment, we might get more
-> later. So always calling this single function might make our life easier.
->
-> we can treat
->
-> static inline bool arch_thp_swp_supported(void)
-> {
->        return IS_ENABLED(CONFIG_THP_SWAP);
-> }
+The indexes array is the same size as the trip array, that makes the 
+code much less prone to errors.
 
-The issue is that IS_ENABLED(CONFIG_THP_SWAP) reports that whether THP
-swap is selected by the user, not just whether THP swap is supported by
-the architecture.
+To have the same number of trip points, the index of the disabled trip 
+must be inserted also in the array. We don't care about its position in 
+the indexes array because it is discarded in the handle_trip_point() 
+function anyway. For this reason, the random temperature of the disabled 
+trip point and the resulting position in the sorting is harmless.
 
-Best Regards,
-Huang, Ying
+It is made on purpose to ignore the return value, so we have a simpler code.
 
-> as a virtual function in base class. thp_swp is generically true if platforms
-> are able to enable CONFIG_THP_SWAP.
->
-> Derived classes like arm64 can overwrite it to false in some particular cases
-> based on their unique characteristics.
->
->>
->> > Otherwise, can we just keep the code as is according to Anshuman's suggestion?
->>
->> Although I still think my way is better, I will not force you to do
->> that.  If you don't think that is better, you can use your original
->> implementation.
->
-> Ok, fair enough. And thanks for your reviewing :-)
->
-> Thanks
-> Barry
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

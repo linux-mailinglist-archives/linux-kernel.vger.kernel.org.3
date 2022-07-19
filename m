@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8084057A109
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F8457A110
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235378AbiGSOQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
+        id S237809AbiGSORR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237085AbiGSOQX (ORCPT
+        with ESMTP id S238838AbiGSOQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:16:23 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B3EDFCF;
-        Tue, 19 Jul 2022 06:47:13 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id mf4so27295977ejc.3;
-        Tue, 19 Jul 2022 06:47:13 -0700 (PDT)
+        Tue, 19 Jul 2022 10:16:59 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABA361D78;
+        Tue, 19 Jul 2022 06:48:25 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id m8so6220328edd.9;
+        Tue, 19 Jul 2022 06:48:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ETPYyloEFdyBzQWObajkaBRkKPp4gQ7kPv9PBYe2erc=;
-        b=YgbtmXtrMSveGqTKsERJ1+XFFwGK5viciTFGd14IPy1eWnpxCtJ0ZizkJJI34RP0E3
-         Wa7l7Sr1HLVkRQ0qCPY1Q3rmvvm1jHbl3Rd0/Z8WrObwCL6XdGHEWHurHlUTAI7jqFHh
-         4P66yW5eRdoKb8iQPxLXqYLFPqPbKO1aveL6CPiw1YPuSdDE32GRPzNJbYnXVbql/Jhw
-         M/Er7ixdFA0anT3X57DKQ4ODT0zVCTDxTa4b9nSQR2L22OSaHVjP9b9igGnGW9pAHE0D
-         /eZ3GErLNjQMXiHqXHCeRdvufrWXB0J2Xx737QQyFvVtDMrBATar3ADeR+UKtQY4qmKf
-         +qRw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=H/QcNljsBbmdjrwrwjwtjEvq2HQmGFprhuK7NiBbLCY=;
+        b=hLYimp8Okd9vJhnWXpRDdSRvTL1boG2q8EvYEEyc85GQ9lkfLa6YdBtEzDouHm6rJ+
+         LPWjEXaeqGh/rVPplyIzvJDel4t8LcmKGAtG78Kuhv4Q+NQlFoZTJ1//dzvsgrJNS/Hf
+         n4eBPbw0WinGSHbJowo1VrRODCGSGvxZIVj3wEaRAcZQNTlqJwmbluqSTM5dOxavCC+0
+         UY5BXyZlLW3sXUstjgaWm+0C59Hsp/4YszXJIeygPrAGWUqvjqJSX4hvZlehk2arTjkM
+         TA4htYczsZU7t+q0wWIfTUsaNlsy0LPo5WSARGMWS88sJXfMMalRLLXhUogpc+5amebS
+         jnRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ETPYyloEFdyBzQWObajkaBRkKPp4gQ7kPv9PBYe2erc=;
-        b=yDSC3z90PDIhxb7oOgA6ECmex1K+oG4BKS6W4NeS0UzoPANlUSLjo4u3jh8oibnhqF
-         rwKhU9gUimYKM/3t8mjBOlkmKBzsKawi3ZK6ZvirTB423E5zbkLXcTVX7AMigPXXDote
-         iBFvhbXI6BQLoK8HCaaLBkDHyhNP4ce9Z+vmSyHxlwIoCjBgO+TEvihgsHOGSFrI+maJ
-         UWfm2yWK+OP4NixL2pPL7rI5/QBIdXS/cTCzOXLUIfu1sKQzgLd9q/ZV/MJd/mdlD4jn
-         aIBeo2ovSXA4LdR9LcrU+bIc5YmJ6MVCnBQLS4MQPXfx0aXEnLmVcRBD1QB8OkpbOsHc
-         VCKA==
-X-Gm-Message-State: AJIora+2Tc6/gnT80hdEtXLJn9P6QxWuqf/DwHJZLCd3c1hsPOcRW0Pe
-        nxlRTBcdF9LBnQYLTp00RiY=
-X-Google-Smtp-Source: AGRyM1vjayw4zUofmU9mkBXEG0SQV1Eh/t4ctobL0/nokmQOXLRxaBzoH+p1WkK9POQwfSw3SceF7g==
-X-Received: by 2002:a17:907:2887:b0:72b:68ce:2fff with SMTP id em7-20020a170907288700b0072b68ce2fffmr30090257ejc.423.1658238432105;
-        Tue, 19 Jul 2022 06:47:12 -0700 (PDT)
-Received: from skbuf ([188.27.185.104])
-        by smtp.gmail.com with ESMTPSA id mb17-20020a170906eb1100b006fe9ec4ba9esm6693846ejb.52.2022.07.19.06.47.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 06:47:11 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 16:47:09 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v2 15/15] net: dsa: qca8k: drop unnecessary
- exposed function and make them static
-Message-ID: <20220719134709.um3rj2ocze65qqej@skbuf>
-References: <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-1-ansuelsmth@gmail.com>
- <20220719005726.8739-17-ansuelsmth@gmail.com>
- <20220719005726.8739-17-ansuelsmth@gmail.com>
- <20220719132931.p3amcmjsjzefmukq@skbuf>
- <62d6b319.1c69fb81.6be76.d6b1@mx.google.com>
- <20220719134427.qlqm7xp4yyqs2zip@skbuf>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=H/QcNljsBbmdjrwrwjwtjEvq2HQmGFprhuK7NiBbLCY=;
+        b=P3clVFcq1w0gaf6k0Gy/TJcGRJJyRTFrpspP18inO5NGOpv8qdW7LbttN5Ci2cijly
+         g9xrWFyaegAaqHqtG8Z8EvL/KY5wY9QfrDh0ZR9D62/p381tjUU8ldMGMNLO7Ng9aTId
+         DViCQvqjIrgZdv/Rl3CER6KJi8jZEuh/K/BhqVABJLmpldQ3a13YCcqzq9xqp9hYjfg5
+         1PvJ7SYW6zIDRGwUBrtAH9tFruK5x3HO7XkO9Heq3Hf3+eIJDn1TgzsAQp01ljKUgNVD
+         DAmB+azZgC1rTwVf6zu/yy0heEahQmIk5mHrniCedM6F4gh12CUQXyTYSBZQ1mR+WnSv
+         rU8Q==
+X-Gm-Message-State: AJIora+7ETgv3FNMFD6A/Hi+ozSZvkwtC1aeZPwhRNYHACGKkcYySSlQ
+        HglekL9CqwBwKbAyRAnqWnu+R7ZRXXM=
+X-Google-Smtp-Source: AGRyM1vfB8m0S9L87u7x8sMnidtJ7ms8KbYxF6JCQWGFj227DYAusFol270rKqeVp2RsdAd7Nzr2Dg==
+X-Received: by 2002:a05:6402:c0b:b0:43a:25ff:ff08 with SMTP id co11-20020a0564020c0b00b0043a25ffff08mr44462159edb.148.1658238504156;
+        Tue, 19 Jul 2022 06:48:24 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id v18-20020a170906293200b00721d8e5bf0bsm6758112ejd.6.2022.07.19.06.48.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 06:48:23 -0700 (PDT)
+Subject: Re: [PATCH bpf-next v2 0/5] cleanup for data casting
+To:     Pu Lehui <pulehui@huawei.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220718132938.1031864-1-pulehui@huawei.com>
+ <CAADnVQJQ_WU6wfyaAkk3f9DaawDtsDT4BLZeBp2aPEZ4TMaYVQ@mail.gmail.com>
+ <b5c03458-7fd8-3739-63b1-11618f4b8a6a@huawei.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <df76c412-d9e4-b89d-1bd3-eefb50280f57@gmail.com>
+Date:   Tue, 19 Jul 2022 14:48:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719134427.qlqm7xp4yyqs2zip@skbuf>
+In-Reply-To: <b5c03458-7fd8-3739-63b1-11618f4b8a6a@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,8 +78,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 04:44:27PM +0300, Vladimir Oltean wrote:
-> My request is that you prune the dangling definitions after each patch
-> that stops using something exported.
+>> On Mon, Jul 18, 2022 at 5:59 AM Pu Lehui <pulehui@huawei.com> wrote:
+>>> Previously, we found that memory address casting in libbpf
+>>> was not appropriate [0]. Memory addresses are conceptually
+>>> unsigned, (unsigned long) casting makes more sense. With the
+>>> suggestion of Daniel, we applied this cleanup to the entire
+>>> bpf, and there is no functional change.
+Fwiw, pointers in C aren't necessarily unsigned; some versions of
+ gcc have treated them as signed and — if no object can straddle
+ the sign boundary — it's even allowed by the standard. [1]
+(And at a hardware level, a memory address is just a pattern of
+ bits on an address bus, which isn't arithmetic at all.)
 
-Not "after" each patch, but "as part" of each patch.
+-ed
+
+[1]: https://yarchive.net/comp/linux/signed_pointers.html

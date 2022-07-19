@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3FA6579E13
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6726C579AA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242229AbiGSM5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
+        id S239267AbiGSMPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242328AbiGSM4n (ORCPT
+        with ESMTP id S239172AbiGSMOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:56:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78505C962;
-        Tue, 19 Jul 2022 05:22:48 -0700 (PDT)
+        Tue, 19 Jul 2022 08:14:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB15B1010;
+        Tue, 19 Jul 2022 05:05:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ADF26177D;
-        Tue, 19 Jul 2022 12:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4715BC341C6;
-        Tue, 19 Jul 2022 12:22:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AED31B81B38;
+        Tue, 19 Jul 2022 12:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D446C341C6;
+        Tue, 19 Jul 2022 12:05:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233367;
-        bh=TbdUjynScr+nnVAJZyWxktS96gdnHpTb1GUq694sUlE=;
+        s=korg; t=1658232302;
+        bh=kPJAsjLpGBb2Q5ipTE7OnPID7nGe121aKEl9He9CuPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jD3gcjzkk7xOhDU+SZp4pX+TMwwWD/vkcovqosQFDmTxKBSjs99YHQgjYv8dv2k03
-         19kN1yPeiBwUp7g6nXQWaWLeseqjO7cHFeN+JDwliNIZHC0lwrnIseD5i2K1maWYo2
-         v45Cpk549Q+LHJIaTqwt3zHg+xm7XDU6DBBFajQs=
+        b=MacgMPSjZ/XMYwnwS2u8yMlRc60TBzyI75CUbgbKGlA9o/qaKC0uM6VqsAi4BoPL4
+         WqxtPhpPL+6/iQhoVdZoDloUZz1+d3tg+XPFyl4CSMM0DE6mnGv5k985Zzx56belx5
+         /p8XgJjCyJlbhNRg3k6oJNhUY0lA86CmBEGiypIo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 099/231] tracing: Fix sleeping while atomic in kdb ftdump
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 011/112] net: sock: tracing: Fix sock_exceed_buf_limit not to dereference stale pointer
 Date:   Tue, 19 Jul 2022 13:53:04 +0200
-Message-Id: <20220719114723.033189917@linuxfoundation.org>
+Message-Id: <20220719114627.095104940@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,71 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Anderson <dianders@chromium.org>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[ Upstream commit 495fcec8648cdfb483b5b9ab310f3839f07cb3b8 ]
+commit 820b8963adaea34a87abbecb906d1f54c0aabfb7 upstream.
 
-If you drop into kdb and type "ftdump" you'll get a sleeping while
-atomic warning from memory allocation in trace_find_next_entry().
+The trace event sock_exceed_buf_limit saves the prot->sysctl_mem pointer
+and then dereferences it in the TP_printk() portion. This is unsafe as the
+TP_printk() portion is executed at the time the buffer is read. That is,
+it can be seconds, minutes, days, months, even years later. If the proto
+is freed, then this dereference will can also lead to a kernel crash.
 
-This appears to have been caused by commit ff895103a84a ("tracing:
-Save off entry when peeking at next entry"), which added the
-allocation in that path. The problematic commit was already fixed by
-commit 8e99cf91b99b ("tracing: Do not allocate buffer in
-trace_find_next_entry() in atomic") but that fix missed the kdb case.
+Instead, save the sysctl_mem array into the ring buffer and have the
+TP_printk() reference that instead. This is the proper and safe way to
+read pointers in trace events.
 
-The fix here is easy: just move the assignment of the static buffer to
-the place where it should have been to begin with:
-trace_init_global_iter(). That function is called in two places, once
-is right before the assignment of the static buffer added by the
-previous fix and once is in kdb.
+Link: https://lore.kernel.org/all/20220706052130.16368-12-kuniyu@amazon.com/
 
-Note that it appears that there's a second static buffer that we need
-to assign that was added in commit efbbdaa22bb7 ("tracing: Show real
-address for trace event arguments"), so we'll move that too.
-
-Link: https://lkml.kernel.org/r/20220708170919.1.I75844e5038d9425add2ad853a608cb44bb39df40@changeid
-
-Fixes: ff895103a84a ("tracing: Save off entry when peeking at next entry")
-Fixes: efbbdaa22bb7 ("tracing: Show real address for trace event arguments")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Cc: stable@vger.kernel.org
+Fixes: 3847ce32aea9f ("core: add tracepoints for queueing skb to rcvbuf")
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Acked-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ include/trace/events/sock.h |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 114c31bdf8f9..c0c98b0c86e7 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -9863,6 +9863,12 @@ void trace_init_global_iter(struct trace_iterator *iter)
- 	/* Output in nanoseconds only if we are using a clock in nanoseconds. */
- 	if (trace_clocks[iter->tr->clock_id].in_ns)
- 		iter->iter_flags |= TRACE_FILE_TIME_IN_NS;
-+
-+	/* Can not use kmalloc for iter.temp and iter.fmt */
-+	iter->temp = static_temp_buf;
-+	iter->temp_size = STATIC_TEMP_BUF_SIZE;
-+	iter->fmt = static_fmt_buf;
-+	iter->fmt_size = STATIC_FMT_BUF_SIZE;
- }
+--- a/include/trace/events/sock.h
++++ b/include/trace/events/sock.h
+@@ -98,7 +98,7 @@ TRACE_EVENT(sock_exceed_buf_limit,
  
- void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
-@@ -9895,11 +9901,6 @@ void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
+ 	TP_STRUCT__entry(
+ 		__array(char, name, 32)
+-		__field(long *, sysctl_mem)
++		__array(long, sysctl_mem, 3)
+ 		__field(long, allocated)
+ 		__field(int, sysctl_rmem)
+ 		__field(int, rmem_alloc)
+@@ -110,7 +110,9 @@ TRACE_EVENT(sock_exceed_buf_limit,
  
- 	/* Simulate the iterator */
- 	trace_init_global_iter(&iter);
--	/* Can not use kmalloc for iter.temp and iter.fmt */
--	iter.temp = static_temp_buf;
--	iter.temp_size = STATIC_TEMP_BUF_SIZE;
--	iter.fmt = static_fmt_buf;
--	iter.fmt_size = STATIC_FMT_BUF_SIZE;
- 
- 	for_each_tracing_cpu(cpu) {
- 		atomic_inc(&per_cpu_ptr(iter.array_buffer->data, cpu)->disabled);
--- 
-2.35.1
-
+ 	TP_fast_assign(
+ 		strncpy(__entry->name, prot->name, 32);
+-		__entry->sysctl_mem = prot->sysctl_mem;
++		__entry->sysctl_mem[0] = READ_ONCE(prot->sysctl_mem[0]);
++		__entry->sysctl_mem[1] = READ_ONCE(prot->sysctl_mem[1]);
++		__entry->sysctl_mem[2] = READ_ONCE(prot->sysctl_mem[2]);
+ 		__entry->allocated = allocated;
+ 		__entry->sysctl_rmem = sk_get_rmem0(sk, prot);
+ 		__entry->rmem_alloc = atomic_read(&sk->sk_rmem_alloc);
 
 

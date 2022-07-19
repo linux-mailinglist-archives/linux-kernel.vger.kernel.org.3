@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1866257A7D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C086657A7DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240221AbiGST7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 15:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
+        id S240214AbiGSUAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 16:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240329AbiGST7R (ORCPT
+        with ESMTP id S240185AbiGST7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 15:59:17 -0400
+        Tue, 19 Jul 2022 15:59:44 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C4B599E1;
-        Tue, 19 Jul 2022 12:58:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF76F59264;
+        Tue, 19 Jul 2022 12:59:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1658260720; x=1689796720;
+  t=1658260751; x=1689796751;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=tPtPB7gEIdG+j7cej44s8jQsR5obrLeMzi2gzAetFUA=;
-  b=UI688Cr77ybQxf18C4X4CdeKC9XGZdmx8J+F9bUheKijSYpk/x3CK7Cv
-   yFWwpOJBsvJqu25MAc7upno4HYTqBu3jfk0NWhIykObj4fYFRPjzn7fcz
-   wgFoDIZHK5+LDv5txHISN4+Jf5cMmF8ILpHfZRxXM2N5o1Ph6I+QkeGa2
-   FBGRSLGBSsQ0cemkjbldjF8C41GCg1uoS7jU4/XQXPaPfbc5lKvCQDfCI
-   Nf+/LskWLS588JbFr8uTX5SwG0YeGWesPSSs2uR3tqIVYuUWCpHOaGFWi
-   dANJ6MTOHIfgwSgKxw2CUYuBo/Ib3hqDV/sxkOtR5+soKXUvUQN+X+aov
+  bh=SsUZkM33DBmffJBizAMVHUd8LRrUyoPkXeEQMPBBmUw=;
+  b=H98vuN/kdBc8VInRcAoSUuulovPV/u60mphhs0mA0iwzL+iV9AdYJKpu
+   njkdK+WlLt8/P5UedBqGr42o/EA0yr3qx8XKUiYs57wFqJ+yQ+kEO5or2
+   NIyFHen3NQUPf/gO+7cof+ijVyLu0vdT8DpG53RJ6dH+LvQqbl8nvDzIB
+   6t+bdnzaCa/3Ej4YsYjIxgkWBe7Zf5+1JhLvp68yc9BAYiGqkGzpQBfvb
+   Q7WL5wp6W2+M/bFWnyZE01zbyHK7GdCudVMQX3CXpXaN0SfnREDZmCkMJ
+   7w+Vs22fVGbaOYa3xaAntBNG0ZelhAo5KBbssBu37yZkrC6vMSNefRxtv
    A==;
 X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="165487102"
+   d="scan'208";a="168592317"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jul 2022 12:58:39 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jul 2022 12:59:11 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 19 Jul 2022 12:58:28 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 19 Jul 2022 12:58:28 -0700
-Date:   Tue, 19 Jul 2022 22:02:35 +0200
+ 15.1.2375.17; Tue, 19 Jul 2022 12:59:11 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 19 Jul 2022 12:59:10 -0700
+Date:   Tue, 19 Jul 2022 22:03:17 +0200
 From:   Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
 To:     Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>
 CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
@@ -50,15 +50,15 @@ CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
         UNGLinuxDriver <UNGLinuxDriver@microchip.com>,
         "maxime.chevallier@bootlin.com" <maxime.chevallier@bootlin.com>
-Subject: Re: [PATCH 1/3] ARM: dts: lan966x: Add gpio-restart
-Message-ID: <20220719200235.sojkdhcfbnzsvund@soft-dev3-1.localhost>
+Subject: Re: [PATCH 2/3] ARM: dts: lan966x: Disable can0 on pcb8291
+Message-ID: <20220719200317.m6cynb3l7wneuxoy@soft-dev3-1.localhost>
 References: <20220718212921.1506984-1-horatiu.vultur@microchip.com>
- <20220718212921.1506984-2-horatiu.vultur@microchip.com>
- <3e0b7137-08d1-fef2-86b5-a48419dd2101@microchip.com>
+ <20220718212921.1506984-3-horatiu.vultur@microchip.com>
+ <530ef4f3-26ce-5a90-f2f7-d6163124bfec@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <3e0b7137-08d1-fef2-86b5-a48419dd2101@microchip.com>
+In-Reply-To: <530ef4f3-26ce-5a90-f2f7-d6163124bfec@microchip.com>
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,44 +68,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 07/19/2022 07:52, Claudiu Beznea - M18063 wrote:
+The 07/19/2022 07:55, Claudiu Beznea - M18063 wrote:
 > On 19.07.2022 00:29, Horatiu Vultur wrote:
-> > The pcb8291 can be rebooted by toggling the GPIO 56. Therefore enable
-> > this in DT.
+> > On pcb8291, can0 and the network driver share some of the GPIOs so only
+> > 1 device can be active. Therefore disable can0 as we want to enable the
+> > network driver.
 > > 
 > > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 > > ---
-> >  arch/arm/boot/dts/lan966x-pcb8291.dts | 6 ++++++
-> >  1 file changed, 6 insertions(+)
+> >  arch/arm/boot/dts/lan966x-pcb8291.dts | 12 ------------
+> >  1 file changed, 12 deletions(-)
 > > 
 > > diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
-> > index d56d2054c38d..02fbf7371a8d 100644
+> > index 02fbf7371a8d..2cb532aa33f0 100644
 > > --- a/arch/arm/boot/dts/lan966x-pcb8291.dts
 > > +++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
-> > @@ -16,6 +16,12 @@ chosen {
-> >  	aliases {
-> >  		serial0 = &usart3;
+> > @@ -30,18 +30,6 @@ fc3_b_pins: fc3-b-pins {
+> >  		pins = "GPIO_52", "GPIO_53";
+> >  		function = "fc3_b";
 > >  	};
-> > +
-> > +	gpio-restart {
-> > +		compatible = "gpio-restart";
-> > +		gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
+> > -
+> > -	can0_b_pins:  can0-b-pins {
+> > -		/* RX, TX */
+> > -		pins = "GPIO_35", "GPIO_36";
+> > -		function = "can0_b";
+> > -	};
+> > -};
+> > -
+> > -&can0 {
+> > -	pinctrl-0 = <&can0_b_pins>;
+> > -	pinctrl-names = "default";
+> > -	status = "okay";
 > 
-> Could you, please, add also pinctrl-names, pinctrl-0 for this gpio?
+> You can just delete the status line here or change it to "disabled" and
+> leave the rest for reference. For evaluation one could just enable it here
+> afterwards. On the other AT91 specific boards we are using status =
+> "disabled"; and a short comment after like this:
+> 
+> 	status = "disabled"; /* Conflict with gmac0. */
 
-I am not sure I need to set pinctrl-names and pinctrl-0.
-Because I don't need to setup any function for GPIO 56 to be able to
-reset.
-It is something similar sparx5 [1].
-
-[1] https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi#L10
+That is a great idea. Yes I will do that.
 
 > 
-> > +		priority = <200>;
-> > +	};
 > >  };
 > >  
-> >  &gpio {
+> >  &flx3 {
 > 
 
 -- 

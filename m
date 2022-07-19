@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B224B579C4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE18579E8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240947AbiGSMia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
+        id S242590AbiGSNCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240924AbiGSMh5 (ORCPT
+        with ESMTP id S242919AbiGSM7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:37:57 -0400
+        Tue, 19 Jul 2022 08:59:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7367DF6;
-        Tue, 19 Jul 2022 05:14:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA4E4BD06;
+        Tue, 19 Jul 2022 05:25:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89C50B81B1A;
-        Tue, 19 Jul 2022 12:14:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB248C341C6;
-        Tue, 19 Jul 2022 12:14:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13D58B81B82;
+        Tue, 19 Jul 2022 12:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF8DC341C6;
+        Tue, 19 Jul 2022 12:25:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232868;
-        bh=x0+4UCqMcFvc411OmzWF/tUroj0lfUAwCABl3Uwn5qA=;
+        s=korg; t=1658233515;
+        bh=LNbB8tIV6AgkH04KAZ85y76xz1DHDWBXK4uA1vgSrE4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Du64/rxdBkd3X5c5qSFEr6+bMNg7gl8oEu6/Iksw+S6kll2Z8o66y0dw5Gc6E+1YM
-         PrG0+fOIYaUipMRuuijv8Mt836klXKgVNqQWhqicUPZ5xQUGMYMXd8p+43GrTeKZkX
-         TZTpT6vKaclQipCX16a1CaXyA1mjRgOtG4HkLF1g=
+        b=Y5JddwXX3gNtKscOAmEMCC2B3eg/AysmDtjAhOd66koG5S1rB3b0p+5SslRWpZ1lQ
+         mrSImOgMxDAwndMQ++2kOIDb87zQlf6Yyib+izIAxnwXW5lakDoUsb5TEmM2DmF6sO
+         eXsneFcFXfv/lF8cgwn1ksgv0GXa6wuCiEcJojIk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 074/167] drm/i915/selftests: fix a couple IS_ERR() vs NULL tests
+Subject: [PATCH 5.18 121/231] tcp: Fix a data-race around sysctl_tcp_ecn_fallback.
 Date:   Tue, 19 Jul 2022 13:53:26 +0200
-Message-Id: <20220719114703.677828621@linuxfoundation.org>
+Message-Id: <20220719114724.628158175@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 896dcabd1f8f613c533d948df17408c41f8929f5 ]
+[ Upstream commit 12b8d9ca7e678abc48195294494f1815b555d658 ]
 
-The shmem_pin_map() function doesn't return error pointers, it returns
-NULL.
+While reading sysctl_tcp_ecn_fallback, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: be1cb55a07bf ("drm/i915/gt: Keep a no-frills swappable copy of the default context state")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Matthew Auld <matthew.auld@intel.com>
-Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220708094104.GL2316@kadam
-(cherry picked from commit d50f5a109cf4ed50c5b575c1bb5fc3bd17b23308)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Fixes: 492135557dc0 ("tcp: add rfc3168, section 6.1.1.1. fallback")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/gt/selftest_lrc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ net/ipv4/sysctl_net_ipv4.c | 2 ++
+ net/ipv4/tcp_output.c      | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/selftest_lrc.c b/drivers/gpu/drm/i915/gt/selftest_lrc.c
-index b0977a3b699b..bc2950fbbaf9 100644
---- a/drivers/gpu/drm/i915/gt/selftest_lrc.c
-+++ b/drivers/gpu/drm/i915/gt/selftest_lrc.c
-@@ -153,8 +153,8 @@ static int live_lrc_layout(void *arg)
- 			continue;
+diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+index 11add5214713..ffe0264a51b8 100644
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@ -689,6 +689,8 @@ static struct ctl_table ipv4_net_table[] = {
+ 		.maxlen		= sizeof(u8),
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dou8vec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
+ 	},
+ 	{
+ 		.procname	= "ip_dynaddr",
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 9eefe7f6370f..34249469e361 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -346,7 +346,7 @@ static void tcp_ecn_send_syn(struct sock *sk, struct sk_buff *skb)
  
- 		hw = shmem_pin_map(engine->default_state);
--		if (IS_ERR(hw)) {
--			err = PTR_ERR(hw);
-+		if (!hw) {
-+			err = -ENOMEM;
- 			break;
- 		}
- 		hw += LRC_STATE_OFFSET / sizeof(*hw);
-@@ -329,8 +329,8 @@ static int live_lrc_fixed(void *arg)
- 			continue;
- 
- 		hw = shmem_pin_map(engine->default_state);
--		if (IS_ERR(hw)) {
--			err = PTR_ERR(hw);
-+		if (!hw) {
-+			err = -ENOMEM;
- 			break;
- 		}
- 		hw += LRC_STATE_OFFSET / sizeof(*hw);
+ static void tcp_ecn_clear_syn(struct sock *sk, struct sk_buff *skb)
+ {
+-	if (sock_net(sk)->ipv4.sysctl_tcp_ecn_fallback)
++	if (READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_fallback))
+ 		/* tp->ecn_flags are cleared at a later point in time when
+ 		 * SYN ACK is ultimatively being received.
+ 		 */
 -- 
 2.35.1
 

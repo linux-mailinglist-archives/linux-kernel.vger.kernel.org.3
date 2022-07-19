@@ -2,98 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FE657A90E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5731E57A91E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238416AbiGSVg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
+        id S237542AbiGSVlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239758AbiGSVgy (ORCPT
+        with ESMTP id S232527AbiGSVlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:36:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD205C343;
-        Tue, 19 Jul 2022 14:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658266614; x=1689802614;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lZfxsCoZwidUXvUg1h38BCfji1GHOSEqDIubN9Z3IFE=;
-  b=TtVDgTX2aNKX+WBJlsBLmOusKL3LgkIdb9dReAcUjpRMidATh4vxBVzM
-   +EhEmFuxYP+zHr55nS9t1guguoacQlNKp/FwELwB6qF4q25dkXHO1Leps
-   1CygA7v1E9ivn+klNXMPcxhxfc1TyNY4Q/J2MFaI3JKJm4F76ix1KLHvC
-   rT1YMjlTmQ+TDaV0NuDIb0ScDGXwsdQfhieyHaSUj44XT26vru9i/tPb9
-   jxHjyPMOxkUAuyxQKB185fn8rkqw7XLrgN7epIhj43h2XjznUNlT5VnVd
-   leQaIdTMk+aqFipQEiX0htjQ2AoFlnO5n+gKespYI0lSMisXrUcBAARmR
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372916179"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="372916179"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 14:35:48 -0700
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="687272611"
-Received: from twliston-mobl1.amr.corp.intel.com (HELO [10.212.132.190]) ([10.212.132.190])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 14:35:45 -0700
-Message-ID: <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
-Date:   Tue, 19 Jul 2022 14:35:45 -0700
+        Tue, 19 Jul 2022 17:41:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D831F2019E;
+        Tue, 19 Jul 2022 14:41:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 010E71576;
+        Tue, 19 Jul 2022 14:41:38 -0700 (PDT)
+Received: from [10.57.42.173] (unknown [10.57.42.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C38E63F70D;
+        Tue, 19 Jul 2022 14:41:36 -0700 (PDT)
+Message-ID: <d3f3d49e-015d-9419-e98b-115c67b258ea@arm.com>
+Date:   Tue, 19 Jul 2022 22:41:35 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
- memory
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>, Ard Biesheuvel <ardb@kernel.org>
-Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-References: <CAMkAt6oJJaRM_dy=y2BP99VziPriVuA4jAmMc=G7njwJYKFgyg@mail.gmail.com>
- <CAMj1kXHpS2B9Q7AaQ1euGidZUEyR6gfi=e+t1J_Cr8bmK_9mTw@mail.gmail.com>
- <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
- <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
- <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
- <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
- <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
- <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
- <YtcCWfCQuEsVhH6W@zn.tnic>
- <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
- <YtcgxxMyFTReuuRw@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YtcgxxMyFTReuuRw@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 04/13] coresight: etm4x: Update ETM4 driver to use
+ Trace ID API
+To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, linux-perf-users@vger.kernel.org,
+        leo.yan@linaro.org, quic_jinlmao@quicinc.com
+References: <20220704081149.16797-1-mike.leach@linaro.org>
+ <20220704081149.16797-5-mike.leach@linaro.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220704081149.16797-5-mike.leach@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,56 +48,255 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 14:23, Borislav Petkov wrote:
-> On Tue, Jul 19, 2022 at 10:45:06PM +0200, Ard Biesheuvel wrote:
->> So let's define a way for the EFI stub to signal to the firmware
->> (before EBS()) that it will take control of accepting memory. The
->> 'bootloader that calls EBS()' case can invent something along the
->> lines of what has been proposed in this thread to infer the
->> capabilities of the kernel (and decide what to signal to the
->> firmware). But we have no need for this additional complexity on
->> Linux.
-> To tell you the truth, I've been perusing this thread from the sidelines
-> and am wondering why does this need this special dance at all?
+On 04/07/2022 09:11, Mike Leach wrote:
+> The trace ID API is now used to allocate trace IDs for ETM4.x / ETE
+> devices.
 > 
-> If EFI takes control of accepting memory, then when the guest kernel
-> boots, it'll find all memory accepted and not do anything.
+> For perf sessions, these will be allocated on enable, and released on
+> disable.
 > 
-> If EFI doesn't accept memory, then the guest kernel will boot and do the
-> accepting itself.
+> For sysfs sessions, these will be allocated on enable, but only released
+> on reset. This allows the sysfs session to interrogate the Trace ID used
+> after the session is over - maintaining functional consistency with the
+> previous allocation scheme.
 > 
-> So either I'm missing something or we're overengineering this for no
-> good reason...
+> The trace ID will also be allocated on read of the mgmt/trctraceid file.
+> This ensures that if perf or sysfs read this before enabling trace, the
+> value will be the one used for the trace session.
+> 
+> Trace ID initialisation is removed from the _probe() function.
+> 
+> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> ---
+>   .../coresight/coresight-etm4x-core.c          | 65 +++++++++++++++++--
+>   .../coresight/coresight-etm4x-sysfs.c         | 32 ++++++++-
+>   drivers/hwtracing/coresight/coresight-etm4x.h |  3 +
+>   3 files changed, 91 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index 87299e99dabb..3f4f7ddd14ec 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -42,6 +42,7 @@
+>   #include "coresight-etm4x-cfg.h"
+>   #include "coresight-self-hosted-trace.h"
+>   #include "coresight-syscfg.h"
+> +#include "coresight-trace-id.h"
+>   
+>   static int boot_enable;
+>   module_param(boot_enable, int, 0444);
+> @@ -234,6 +235,38 @@ static int etm4_trace_id(struct coresight_device *csdev)
+>   	return drvdata->trcid;
+>   }
+>   
+> +int etm4_read_alloc_trace_id(struct etmv4_drvdata *drvdata)
+> +{
+> +	int trace_id;
+> +
+> +	/*
+> +	 * This will allocate a trace ID to the cpu,
+> +	 * or return the one currently allocated.
+> +	 */
+> +	spin_lock(&drvdata->spinlock);
+> +	trace_id = drvdata->trcid;
+> +	if (!trace_id) {
+> +		trace_id = coresight_trace_id_get_cpu_id(drvdata->cpu);
+> +		if (trace_id > 0)
+> +			drvdata->trcid = (u8)trace_id;
+> +	}
+> +	spin_unlock(&drvdata->spinlock);
+> +
+> +	if (trace_id <= 0)
+> +		pr_err("Failed to allocate trace ID for %s on CPU%d\n",
+> +		       dev_name(&drvdata->csdev->dev), drvdata->cpu);
 
-They're trying to design something that can (forever) handle guests that
-might not be able to accept memory.  It's based on the idea that
-*something* needs to assume control and EFI doesn't have enough
-information to assume control.
+dev_err(&drvdata->csdev->dev, ....);
 
-I wish we didn't need all this complexity, though.
+> +
+> +	return trace_id;
+> +}
+> +
+> +void etm4_release_trace_id(struct etmv4_drvdata *drvdata)
+> +{
+> +	spin_lock(&drvdata->spinlock);
+> +	coresight_trace_id_put_cpu_id(drvdata->cpu);
+> +	drvdata->trcid = 0;
+> +	spin_unlock(&drvdata->spinlock);
+> +}
+> +
+>   struct etm4_enable_arg {
+>   	struct etmv4_drvdata *drvdata;
+>   	int rc;
+> @@ -715,9 +748,18 @@ static int etm4_enable_perf(struct coresight_device *csdev,
+>   	ret = etm4_parse_event_config(csdev, event);
+>   	if (ret)
+>   		goto out;
+> +
+> +	/* allocate a trace ID */
+> +	ret =  etm4_read_alloc_trace_id(drvdata);
+> +	if (ret < 0)
+> +		goto out;
+> +
+>   	/* And enable it */
+>   	ret = etm4_enable_hw(drvdata);
+>   
+> +	/* failed to enable */
+> +	if (ret)
+> +		etm4_release_trace_id(drvdata);
+>   out:
+>   	return ret;
+>   }
+> @@ -737,6 +779,11 @@ static int etm4_enable_sysfs(struct coresight_device *csdev)
+>   			return ret;
+>   	}
+>   
+> +	/* allocate a trace ID */
+> +	ret = etm4_read_alloc_trace_id(drvdata);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>   	spin_lock(&drvdata->spinlock);
+>   
+>   	/*
+> @@ -754,6 +801,8 @@ static int etm4_enable_sysfs(struct coresight_device *csdev)
+>   
+>   	if (!ret)
+>   		dev_dbg(&csdev->dev, "ETM tracing enabled\n");
+> +	else
+> +		etm4_release_trace_id(drvdata);
+>   	return ret;
+>   }
+>   
+> @@ -881,6 +930,9 @@ static int etm4_disable_perf(struct coresight_device *csdev,
+>   	/* TRCVICTLR::SSSTATUS, bit[9] */
+>   	filters->ssstatus = (control & BIT(9));
+>   
+> +	/* release trace ID - this may pend release if perf session is still active */
+> +	etm4_release_trace_id(drvdata);
+> +
+>   	return 0;
+>   }
+>   
+> @@ -906,6 +958,13 @@ static void etm4_disable_sysfs(struct coresight_device *csdev)
+>   	spin_unlock(&drvdata->spinlock);
+>   	cpus_read_unlock();
+>   
+> +	/*
+> +	 * unlike for perf session - we only release trace IDs when resetting
+> +	 * sysfs. This permits sysfs users to read the trace ID after the trace
+> +	 * session has completed. This maintains operational behaviour with
+> +	 * prior trace id allocation method
+> +	 */
+> +
+>   	dev_dbg(&csdev->dev, "ETM tracing disabled\n");
+>   }
+>   
+> @@ -1548,11 +1607,6 @@ static int etm4_dying_cpu(unsigned int cpu)
+>   	return 0;
+>   }
+>   
+> -static void etm4_init_trace_id(struct etmv4_drvdata *drvdata)
+> -{
+> -	drvdata->trcid = coresight_get_trace_id(drvdata->cpu);
+> -}
+> -
+>   static int __etm4_cpu_save(struct etmv4_drvdata *drvdata)
+>   {
+>   	int i, ret = 0;
+> @@ -1957,7 +2011,6 @@ static int etm4_probe(struct device *dev, void __iomem *base, u32 etm_pid)
+>   	if (!desc.name)
+>   		return -ENOMEM;
+>   
+> -	etm4_init_trace_id(drvdata);
+>   	etm4_set_default(&drvdata->config);
+>   
+>   	pdata = coresight_get_platform_data(dev);
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> index 6ea8181816fc..c7f896a020d9 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
+> @@ -266,10 +266,11 @@ static ssize_t reset_store(struct device *dev,
+>   	config->vmid_mask0 = 0x0;
+>   	config->vmid_mask1 = 0x0;
+>   
+> -	drvdata->trcid = drvdata->cpu + 1;
+> -
+>   	spin_unlock(&drvdata->spinlock);
+>   
+> +	/* for sysfs - only release trace id when resetting */
+> +	etm4_release_trace_id(drvdata);
+> +
+>   	cscfg_csdev_reset_feats(to_coresight_device(dev));
+>   
+>   	return size;
+> @@ -2363,6 +2364,31 @@ static struct attribute *coresight_etmv4_attrs[] = {
+>   	NULL,
+>   };
+>   
+> +/*
+> + * Trace ID allocated dynamically on enable - but also allocate on read
+> + * in case sysfs or perf read before enable to ensure consistent metadata
+> + * information for trace decode
+> + */
+> +static ssize_t trctraceid_show(struct device *dev,
+> +			       struct device_attribute *attr,
+> +			       char *buf)
+> +{
+> +	int trace_id;
+> +	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	trace_id = etm4_read_alloc_trace_id(drvdata);
+> +	if (trace_id < 0)
+> +		return trace_id;
+> +
+> +	return scnprintf(buf, PAGE_SIZE, "0x%x\n", trace_id);
 
-There are three entities that can influence how much memory is accepted:
+nit: sysfs_emit(buf, "0x%x\n", trace_id);
 
-1. The host
-2. The guest firmware
-3. The guest kernel (or bootloader or something after the firmware)
 
-This whole thread is about how #2 and #3 talk to each other and make
-sure *someone* does it.
+> +}
+> +
+> +/* mgmt group uses extended attributes - no standard macro available */
 
-I kinda think we should just take the guest firmware out of the picture.
- There are only going to be a few versions of the kernel that can boot
-under TDX (or SEV-SNP) and *can't* handle unaccepted memory.  It seems a
-bit silly to design this whole interface for a few versions of the OS
-that TDX folks tell me can't be used anyway.
+That doesn't prevent us from using dev_attribute for traceid.
+In the end, mgmt group is a collection of "struct attribute *".
+All it matters is for the "show" function to decode how to print
+the value from the "attribute".
 
-I think we should just say if you want to run an OS that doesn't have
-unaccepted memory support, you can either:
+You should be able to use DEVICE_ATTR_RO here ...
 
-1. Deal with that at the host level configuration
-2. Boot some intermediate thing like a bootloader that does acceptance
-   before running the stupid^Wunenlightended OS
-3. Live with the 4GB of pre-accepted memory you get with no OS work.
+> +static struct dev_ext_attribute dev_attr_trctraceid = {
+> +		__ATTR(trctraceid, 0444, trctraceid_show, NULL),
+> +		(void *)(unsigned long)TRCTRACEIDR > +};
+> +
 
-Yeah, this isn't convenient for some hosts.  But, really, this is
-preferable to doing an EFI/OS dance until the end of time.
+... and get rid of this. Otherwise looks fine to me.
+
+Suzuki
+
+
+>   struct etmv4_reg {
+>   	struct coresight_device *csdev;
+>   	u32 offset;
+> @@ -2499,7 +2525,7 @@ static struct attribute *coresight_etmv4_mgmt_attrs[] = {
+>   	coresight_etm4x_reg(trcpidr3, TRCPIDR3),
+>   	coresight_etm4x_reg(trcoslsr, TRCOSLSR),
+>   	coresight_etm4x_reg(trcconfig, TRCCONFIGR),
+> -	coresight_etm4x_reg(trctraceid, TRCTRACEIDR),
+> +	&dev_attr_trctraceid.attr.attr,
+>   	coresight_etm4x_reg(trcdevarch, TRCDEVARCH),
+>   	NULL,
+>   };
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+> index 33869c1d20c3..e0a9d334375d 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+> @@ -1094,4 +1094,7 @@ static inline bool etm4x_is_ete(struct etmv4_drvdata *drvdata)
+>   {
+>   	return drvdata->arch >= ETM_ARCH_ETE;
+>   }
+> +
+> +int etm4_read_alloc_trace_id(struct etmv4_drvdata *drvdata);
+> +void etm4_release_trace_id(struct etmv4_drvdata *drvdata);
+>   #endif
+

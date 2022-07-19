@@ -2,125 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DBD57A6CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0E057A6CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238267AbiGSSy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
+        id S229460AbiGSS4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 14:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiGSSyz (ORCPT
+        with ESMTP id S230249AbiGSS4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:54:55 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFB313E03
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:54:54 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id m16so20853235edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 11:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=jvlbyga+aybcQE2QVFUOWHDT9IYYpSQipByXARrXszA=;
-        b=3LDvZ6cyfu+Hes5Js9bk/jI/uuaxOfOG2yT8IR7xG17AZgIjYp5kfoxWpzQui7qOG9
-         8oVOymaa2FPZhm20prchBYNHvWneiuaMNWmmzeEjbVulMS+ecZ/w+8lMauhw3gTokdJw
-         PE9/vyZzDTBU10RGvl8YQvSjsID0UifxGS3wky1F/sRoR/BAhFWPR9snwwYHo0bhoRzQ
-         zlVEoRqpW+dx7vLaNy/2wU7LezxVvQBxK7D101Tus6hMFIz8L1CAgjo12A0zjwqNz0+F
-         MmR5woIiEV1MHOILGws2oyQHx6OKtiZknjIEkvIfdfccH16qqgeBfSTQDiOjmRYGHd+9
-         qgmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=jvlbyga+aybcQE2QVFUOWHDT9IYYpSQipByXARrXszA=;
-        b=iWhEy8QjbV5/dLsAQhfmMn3gNrQbEdggJ+dqdLbpPtXF5O27+PXFE0Q2qKH0YXADCg
-         qbXPlyLmCPb8vshlU+w60JQpFS/iYXKDd34P7UrDIqsokiVcQQ4FuHgkql7eJzlUYCaj
-         q9Z5wfXXcuHw1+hfm6QzGZfB3ln9i6NhUsOFHjoamjK67uX0a2KRs6+YtSvZ/nvNkz/y
-         7JhdZH/9L3izid1qjSSxyZ/mfmZCClLR98XkiT1FaEsLh4laB0iCdOlK3MJ/23UbIW+U
-         MzwFgO6fStfy4HudV4iAhBGuhjDhNCP5y1Mu/8AmDFeXGPaDgSKKbQcqG+a3eHqLomfp
-         dcXw==
-X-Gm-Message-State: AJIora+1S7FlaqtgLHjWI8zLHXcYMLVF12xd0TP8HxOJLqCUP8rIenOd
-        pfkfdf5fveriWTPmHpXIovwGdg==
-X-Google-Smtp-Source: AGRyM1vM7GxtMIs06vDeXZOshNbmHR6ynLTDlSsuoCcSM6mw+Z1/vTTqNbsiydFVFLiE80jW3Y59hw==
-X-Received: by 2002:a50:ee8d:0:b0:43b:b678:114c with SMTP id f13-20020a50ee8d000000b0043bb678114cmr1154292edr.12.1658256892927;
-        Tue, 19 Jul 2022 11:54:52 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id k15-20020a05640212cf00b0043b92f805eesm1368235edx.70.2022.07.19.11.54.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 Jul 2022 11:54:52 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH REBASE] regulator: core: Fix off-on-delay-us for
- always-on/boot-on regulators
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-In-Reply-To: <165825651232.448796.18429380716580437688.b4-ty@kernel.org>
-Date:   Tue, 19 Jul 2022 20:54:51 +0200
-Cc:     linux-kernel@vger.kernel.org, lgirdwood@gmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E5208D84-9501-4ADD-9747-817E8ADE75E7@kohlschutter.com>
-References: <E25D6465-6475-42B4-90EB-3D2C3CAF3B20@kohlschuetter.com>
- <YtVTyzLREdkzYiKS@sirena.org.uk>
- <3270C618-E361-4BC1-B63A-917AE09DA60E@kohlschuetter.com>
- <FAFD5B39-E9C4-47C7-ACF1-2A04CD59758D@kohlschutter.com>
- <165825651232.448796.18429380716580437688.b4-ty@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Tue, 19 Jul 2022 14:56:16 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704DA27CD0;
+        Tue, 19 Jul 2022 11:56:15 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-232.nat.spd-mgts.ru [109.252.119.232])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A48B366019F4;
+        Tue, 19 Jul 2022 19:56:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658256973;
+        bh=Pmpn1KNodZGi3VW2Y2bnZCKePhymp3labejgNlq3r8I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GO9pxN3Fbw/c0pt1D/zMDFY2ys9X+ZsZ0CV7fMCGE2ELu0ZugrwevglWrR2cuqpD/
+         KHFz3HwRE/SWP1cpet3PAZtDcLUCm6i3LxZzLcZmxiFKMAfcrPoIfeE1+e5jJSISjS
+         CEF/aaKp4x3JW81fnP2axbdi+/ZWrHpfYew+JQnslN4gtTTg/PFNAj+4Rue33vdeXJ
+         Zvg+v+zIS+7AIui/PCX7L7LL834VxjxAIYeFDGzZNZ9mQ1K6SMTLhWY4qncaPCPoxe
+         qo/r1Rbr+DMS0JuPSH2zRguKXNC7T4zbhMnOCInL9GV93rseG6GOv+MbAWfQVTZJb9
+         FqOi+Saf0NNAA==
+Message-ID: <c5beb186-96d3-59d7-fad8-987bb8125de1@collabora.com>
+Date:   Tue, 19 Jul 2022 21:56:09 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 09/13] drm/gem: Add LRU/shrinker helper
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220719171900.289265-1-robdclark@gmail.com>
+ <20220719171900.289265-10-robdclark@gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20220719171900.289265-10-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Woohoo, my first patch =E2=80=94 thanks a lot, Mark!
+On 7/19/22 20:18, Rob Clark wrote:
+> +void
+> +drm_gem_lru_move_tail_locked(struct drm_gem_lru *lru, struct drm_gem_object *obj)
+> +{
+> +	WARN_ON(!mutex_is_locked(lru->lock));
 
-> Am 19.07.2022 um 20:48 schrieb Mark Brown <broonie@kernel.org>:
->=20
-> On Tue, 19 Jul 2022 16:02:00 +0200, Christian Kohlsch=C3=BCtter wrote:
->> Regulators marked with "regulator-always-on" or "regulator-boot-on"
->> as well as an "off-on-delay-us", may run into cycling issues that are
->> hard to detect.
->>=20
->> This is caused by the "last_off" state not being initialized in this
->> case.
->>=20
->> [...]
->=20
-> Applied to
->=20
->   =
-https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git =
-for-next
->=20
-> Thanks!
->=20
-> [1/1] regulator: core: Fix off-on-delay-us for always-on/boot-on =
-regulators
->      commit: 218320fec29430438016f88dd4fbebfa1b95ad8d
->=20
-> All being well this means that it will be integrated into the =
-linux-next
-> tree (usually sometime in the next 24 hours) and sent to Linus during
-> the next merge window (or sooner if it is a bug fix), however if
-> problems are discovered then the patch may be dropped or reverted.
->=20
-> You may get further e-mails resulting from automated or manual testing
-> and review of the tree, please engage with people reporting problems =
-and
-> send followup patches addressing any issues that are reported if =
-needed.
->=20
-> If any updates are required or you are submitting further changes they
-> should be sent as incremental updates against current git, existing
-> patches will not be replaced.
->=20
-> Please add any relevant lists and maintainers to the CCs when replying
-> to this mail.
->=20
-> Thanks,
-> Mark
+Nit: What about lockdep_assert_held_once(&lru->lock->base)) ?
 
+Otherwise, looks good! I'll use it for the DRM-SHMEM shrinker after
+completing the work on the dma-buf locks.
+
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+
+-- 
+Best regards,
+Dmitry

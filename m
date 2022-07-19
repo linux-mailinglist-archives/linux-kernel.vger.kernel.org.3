@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB03579933
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3B95798EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237748AbiGSMAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S237522AbiGSL40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237700AbiGSL7b (ORCPT
+        with ESMTP id S237261AbiGSL4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:59:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349134507F;
-        Tue, 19 Jul 2022 04:57:45 -0700 (PDT)
+        Tue, 19 Jul 2022 07:56:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19E2422F4;
+        Tue, 19 Jul 2022 04:56:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C0CB615AC;
-        Tue, 19 Jul 2022 11:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D98C341C6;
-        Tue, 19 Jul 2022 11:57:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31E7DB81A8F;
+        Tue, 19 Jul 2022 11:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858F2C385A2;
+        Tue, 19 Jul 2022 11:55:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231863;
-        bh=YWGmD7EOXOZMv1GFRNn3KAWHs8vkGobCT8D4A5x8278=;
+        s=korg; t=1658231759;
+        bh=X1HuKRt0LWoedxoY1R+Lv8GBU7vpc+yZbocg1ZBZ8JI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XNiXMkzmlcnUIfMs/SB7I5rBF1VEBnxydxWdhm0WWSCMhi5uXRzeI8+YbpvEMRjq7
-         x+icfpCj1fLUtx3JbtDGZhP+5rLAfDkQI6JidX1/xAscfh5l6y5ffJV4+FyfUVLVWv
-         eogghyRUZFXDdIt62q1ZQbHqm9F8TZPQoMB/tMbw=
+        b=M8BpoxU52JzIUQ3QZJo/DLaqv58NBVkggG8IuwyzOugzvBpGFWyIOSYaCQirLEbZr
+         0Y+XbkJ+b2TZe8MdoQwRsera/RDC/vP6mRUBMblidMVKicOyz18W6XbjUvEFzBs+8C
+         dFo47308N7dZHrQ00d29tRvf6FPnXjagixWiTEww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrea Mayer <andrea.mayer@uniroma2.it>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Tung Nguyen <tung.q.nguyen@dektech.com.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 23/43] seg6: fix skb checksum in SRv6 End.B6 and End.B6.Encaps behaviors
-Date:   Tue, 19 Jul 2022 13:53:54 +0200
-Message-Id: <20220719114524.009871092@linuxfoundation.org>
+Subject: [PATCH 4.9 17/28] net: tipc: fix possible refcount leak in tipc_sk_create()
+Date:   Tue, 19 Jul 2022 13:53:55 +0200
+Message-Id: <20220719114457.866181299@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
-References: <20220719114521.868169025@linuxfoundation.org>
+In-Reply-To: <20220719114455.701304968@linuxfoundation.org>
+References: <20220719114455.701304968@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit f048880fc77058d864aff5c674af7918b30f312a ]
+[ Upstream commit 00aff3590fc0a73bddd3b743863c14e76fd35c0c ]
 
-The SRv6 End.B6 and End.B6.Encaps behaviors rely on functions
-seg6_do_srh_{encap,inline}() to, respectively: i) encapsulate the
-packet within an outer IPv6 header with the specified Segment Routing
-Header (SRH); ii) insert the specified SRH directly after the IPv6
-header of the packet.
+Free sk in case tipc_sk_insert() fails.
 
-This patch removes the initialization of the IPv6 header payload length
-from the input_action_end_b6{_encap}() functions, as it is now handled
-properly by seg6_do_srh_{encap,inline}() to avoid corruption of the skb
-checksum.
-
-Fixes: 140f04c33bbc ("ipv6: sr: implement several seg6local actions")
-Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Tung Nguyen <tung.q.nguyen@dektech.com.au>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/seg6_local.c | 2 --
- 1 file changed, 2 deletions(-)
+ net/tipc/socket.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 9a01f72d907f..8f8ea7a76b99 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -405,7 +405,6 @@ static int input_action_end_b6(struct sk_buff *skb, struct seg6_local_lwt *slwt)
- 	if (err)
- 		goto drop;
- 
--	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
- 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
- 
- 	lookup_nexthop(skb, NULL, 0);
-@@ -437,7 +436,6 @@ static int input_action_end_b6_encap(struct sk_buff *skb,
- 	if (err)
- 		goto drop;
- 
--	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
- 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
- 
- 	lookup_nexthop(skb, NULL, 0);
+diff --git a/net/tipc/socket.c b/net/tipc/socket.c
+index 9f39276e5d4e..1b3516368057 100644
+--- a/net/tipc/socket.c
++++ b/net/tipc/socket.c
+@@ -341,6 +341,7 @@ static int tipc_sk_create(struct net *net, struct socket *sock,
+ 	sock->state = state;
+ 	sock_init_data(sock, sk);
+ 	if (tipc_sk_insert(tsk)) {
++		sk_free(sk);
+ 		pr_warn("Socket create failed; port number exhausted\n");
+ 		return -EINVAL;
+ 	}
 -- 
 2.35.1
 

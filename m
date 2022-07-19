@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B1857A893
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5817D57A899
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240457AbiGSUvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 16:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S232159AbiGSUwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 16:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240385AbiGSUv2 (ORCPT
+        with ESMTP id S240377AbiGSUwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 16:51:28 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BEC5FAC9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:51:16 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id q16so11466348pgq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:51:16 -0700 (PDT)
+        Tue, 19 Jul 2022 16:52:32 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A2C5D581
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:52:30 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id y11so26944194lfs.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:52:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tWj+Tj/y/i/0qwwBOcJAxizlMqe1RocItPE2akyhLeI=;
-        b=QqAp6C9Ot2OUxEdK0Vxczq1+sB18TvGiwRAL4t3xGJBOQbngC0mBQM7pU3pG7OkF45
-         cuhme/T2NYS0Ke+Yw83Pa6iXkRFEV2+bSwyfERWoG18Fac6e0Ersm3NWJZGDHxuVO2HR
-         yX++yCRwxH2InH7BF4c2BwEzZuf4+1rhBq1wk1cVGQS5rbwusF8ID7vj6nUf0N37mAAt
-         Jx5yqp9m2AESvGSsYDRefdXHVjKk4eSdzqU/s2Zw3O+rVtiH2hX0pE5dvFDAlt3uL9Vn
-         AJo8MvTiUNl/cOHFLThLLn12RCFmAnNfeHK5Lbw0dI5GqBY2U/nGzLoLcvrQCxAnzvX7
-         Sfzg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ho1u9oc1apc82F45Rk9oxun953BzeyPs1KX47hNllAI=;
+        b=kMqqrL9JmL46yF6vvzkb6mZxFbj79pluny/lypH5z4MCS7+BX/TzZUUukMm4C0lb8Q
+         Bdtw0CDN3xAOOVCNoSLR4RAPyF2hIjFsrUuHvg3jrPbU5/JEUEcUXrQ525Yl8gJ6TRYC
+         NMEUG2DKs+K7xldhKKRt+IYtZi9TXCb839mZuWJxQ583Hlj9cphocZuSQEnvrxyRYh6y
+         /3Q+pmAAyVZfYeJcLCjTsKrVA3V6kDrcSML76HPPq8yq13GRl8bG7yZqLuGggIWDDsqf
+         GHfep0RiP11ydodmMsQKicsYFIN0qqhAIHcuoub8oys5Dgz54sk2O7BhkW6K1W68e2gy
+         Gxig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tWj+Tj/y/i/0qwwBOcJAxizlMqe1RocItPE2akyhLeI=;
-        b=ITcbodxfqyFe8buB0UOv9xdlwDAO+yf1dgH3b5/HqKERnXXVUsReNJULhocx5RT3s6
-         HqYqfEmds3u/0BPXn0nGp8x4Ym7RWYoGAzKQzA6ZQe1w5iPzcj+bpIHq4F7QfIjETRcw
-         P2JNOiNHdw6pNR7kiMMAJKR0uJ9IH8eHFXkcIoFgYiz18mVop9PWPpgCglkYS56CCGYK
-         z/lU0GgQwjVCGCB96XOPpXtPed3mlT65r6mz3PIVIlHvxliZN6sprarjeWea5DtdDfYc
-         fg+jVkr/fGnx5eabjt17a7i5kYVwLLzdGIPuiyxaQLBpiSe1MB8zUZGdnsixr0aSTVXR
-         HoZA==
-X-Gm-Message-State: AJIora/kjwMcz38pZT9qv45IL/pWJHSMe+1zVBV/aw91NCfFGbYQZ1gZ
-        uYNVxfx2ldek2fFIz4lUHA/lSw==
-X-Google-Smtp-Source: AGRyM1uc88s+D41jOioP3Vay/EaTZ/gyjlUmb0QI6ibi2ri80bmXk8cO4sEwiXPljG0BEWtQGWCALg==
-X-Received: by 2002:a63:2a8f:0:b0:412:5278:b90 with SMTP id q137-20020a632a8f000000b0041252780b90mr30319589pgq.363.1658263876420;
-        Tue, 19 Jul 2022 13:51:16 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
-        by smtp.gmail.com with ESMTPSA id n1-20020a622701000000b00525496442ccsm11929173pfn.216.2022.07.19.13.51.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 13:51:15 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, robh@kernel.org,
-        linux-leds@vger.kernel.org, pavel@ucw.cz,
-        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH 3/3] arm64: dts: qcom: qrb5165-rb5: Fix 'dtbs_check' error for led nodes
-Date:   Wed, 20 Jul 2022 02:20:58 +0530
-Message-Id: <20220719205058.1004942-3-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220719205058.1004942-1-bhupesh.sharma@linaro.org>
-References: <20220719205058.1004942-1-bhupesh.sharma@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ho1u9oc1apc82F45Rk9oxun953BzeyPs1KX47hNllAI=;
+        b=d6AioR708cweGu1q80uiyI1SvIPHHwOWBSUvIhOQe5v/Vi5+/BDiTewp4ueQfu1Wp6
+         OsSiA/xG47LM28OybqedZaxSf0Uda5VLgTqRS2dlHOUItFxWEIkyEr1l5HU4oOIVuFRO
+         poGv6vhU4iuEWN80z8hgS/qgRxlSSVL5AZKPIR0DyyVOtxhAyuQknAG+zaN9Qimafb53
+         7U+BC9un4ebQe018O2s4LxN4VWhmCtOOZlX2/JS7kpJOAydKZkFhbfOavbOrIR5R/LxQ
+         gNnb0ZyGv4dHjyNwpvLplJBn3woL6idMwZxum/ocaRyj855pqmg/L+EeFmWz3kucW62P
+         f2Ug==
+X-Gm-Message-State: AJIora/TkJJ+62cP05MG1+84sm9tMdOKW9sLRE+I01j1YRieWDh6/0tU
+        +pxmCj7M4ZPPZMWRFYZee2bBVw==
+X-Google-Smtp-Source: AGRyM1uHBdLqv9xfynVEESfNHGsY84N+vmJ7Np/W4Vb8HenavrduZnQQC7IhqClIQvuuCXS9EBNC8w==
+X-Received: by 2002:ac2:4e12:0:b0:489:ddbe:83c5 with SMTP id e18-20020ac24e12000000b00489ddbe83c5mr19543003lfr.371.1658263948809;
+        Tue, 19 Jul 2022 13:52:28 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05651234c800b00489dedf1dcfsm3375566lfr.289.2022.07.19.13.52.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 13:52:28 -0700 (PDT)
+Message-ID: <bdfdc102-7d42-dc36-5b54-664aa7392efa@linaro.org>
+Date:   Tue, 19 Jul 2022 23:52:27 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: qrb5165-rb5: Fix 'dtbs_check' error
+ for led nodes
+Content-Language: en-GB
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, robh@kernel.org,
+        linux-leds@vger.kernel.org, pavel@ucw.cz, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org
+References: <20220719205058.1004942-1-bhupesh.sharma@linaro.org>
+ <20220719205058.1004942-3-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220719205058.1004942-3-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-make dtbs_check currently reports the following errors
-with qrb5165-rb5 led nodes:
+On 19/07/2022 23:50, Bhupesh Sharma wrote:
+> make dtbs_check currently reports the following errors
+> with qrb5165-rb5 led nodes:
+> 
+> arch/arm64/boot/dts/qcom/qrb5165-rb5.dtb:
+>   leds: 'bt', 'user4', 'wlan' do not match any of the regexes:
+>    '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
+> 
+> Fix the same.
+> 
+> Also while at it, fix a blank line issue in the led
+> node.
+> 
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
-arch/arm64/boot/dts/qcom/qrb5165-rb5.dtb:
- leds: 'bt', 'user4', 'wlan' do not match any of the regexes:
-  '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Fix the same.
-
-Also while at it, fix a blank line issue in the led
-node.
-
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-index a7278928efc1..bf8077a1cf9a 100644
---- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-@@ -58,7 +58,7 @@ hdmi_con: endpoint {
- 	leds {
- 		compatible = "gpio-leds";
- 
--		user4 {
-+		led-user4 {
- 			label = "green:user4";
- 			function = LED_FUNCTION_INDICATOR;
- 			color = <LED_COLOR_ID_GREEN>;
-@@ -67,7 +67,7 @@ user4 {
- 			default-state = "off";
- 		};
- 
--		wlan {
-+		led-wlan {
- 			label = "yellow:wlan";
- 			function = LED_FUNCTION_WLAN;
- 			color = <LED_COLOR_ID_YELLOW>;
-@@ -76,7 +76,7 @@ wlan {
- 			default-state = "off";
- 		};
- 
--		bt {
-+		led-bt {
- 			label = "blue:bt";
- 			function = LED_FUNCTION_BLUETOOTH;
- 			color = <LED_COLOR_ID_BLUE>;
-@@ -84,7 +84,6 @@ bt {
- 			linux,default-trigger = "bluetooth-power";
- 			default-state = "off";
- 		};
--
- 	};
- 
- 	lt9611_1v2: lt9611-vdd12-regulator {
 -- 
-2.35.3
-
+With best wishes
+Dmitry

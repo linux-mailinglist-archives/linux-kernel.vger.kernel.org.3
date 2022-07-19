@@ -2,171 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173A057A8E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B821F57A8EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236269AbiGSVX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S238343AbiGSVXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232362AbiGSVXX (ORCPT
+        with ESMTP id S237544AbiGSVXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:23:23 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432F42B242
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oquyoviez5iOBeSIHe7GZpPLBcfIF6HmL2Win3qty5Q=; b=YmbGlbf/Fx5JLeannU5TWwkK/V
-        wLd2r13MmtQfd48EoiLg1Qh8wSKYFHEYknfoi9qgfRNNQ0N8Kiy4A65Bh0P/0yF64H7jwHhYutdeT
-        YKQnVaZzh68OLWBYU2KDMAtEm3mzY5KtbvT2h13vJIPwzYcX+tVWpuyjCt9r4dfusSsJEFfVruO4X
-        EBEmcbw5p5IFLSAyZHGMu9ddLDncgD+M8P3cUCPyjqL1SJSU8kf4ACNsbi5ir+XWLI8OL6YRuEyiG
-        tZeJSD6z6Zt4pNdS2sCuBcQf7DUtKkGMDeYQccPgRdTNZZXFYNoofAW7CVwIoZFQCSrQpfGi0Eh3i
-        opyiwe9A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDugO-00DtQ2-EZ; Tue, 19 Jul 2022 21:23:08 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 00DE99802BB; Tue, 19 Jul 2022 23:23:06 +0200 (CEST)
-Date:   Tue, 19 Jul 2022 23:23:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     linux-kernel@vger.kernel.org, keescook@chromium.org,
-        hjl.tools@gmail.com, andrew.cooper3@citrix.com,
-        mark.rutland@arm.com, will@kernel.org, ndesaulniers@google.com,
-        x86@kernel.org, Ankur Arora <ankur.a.arora@oracle.com>
-Subject: [RFC][PATCH] x86,nospec: Simplify {JMP,CALL}_NOSPEC
-Message-ID: <Ytcguqp+/aTiOcnN@worktop.programming.kicks-ass.net>
-References: <20211204134338.760603010@infradead.org>
- <20211204134908.140103474@infradead.org>
- <9011132e-d78b-8bec-10cb-2b3d77a4e1fc@maciej.szmigiero.name>
+        Tue, 19 Jul 2022 17:23:39 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF396170C;
+        Tue, 19 Jul 2022 14:23:34 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297609329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7609:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E629F1EC0644;
+        Tue, 19 Jul 2022 23:23:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658265808;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=9enq0fgxD5G4aG3v4Ve8uLcTEh3C8HVLu42xXwSENQs=;
+        b=Nepl+HfvfnIeaiJV3nAMnxEVX+rd09745zFNBMV7IvHW/EAVv0blS62razb3b9KTO9qOoA
+        S28eL2neJFYrwuoZl4vDQ+2PrCE5Ie0OcYUc+Ru6rBXZFKh1iPj+qp5/MuPLDQJf/1U2Me
+        Lr2aHQ7qIx0xQpAbilMYQxlmcvQYAPk=
+Date:   Tue, 19 Jul 2022 23:23:19 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Gonda <pgonda@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Yao, Jiewen" <jiewen.yao@intel.com>
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
+ memory
+Message-ID: <YtcgxxMyFTReuuRw@zn.tnic>
+References: <CAMkAt6oJJaRM_dy=y2BP99VziPriVuA4jAmMc=G7njwJYKFgyg@mail.gmail.com>
+ <CAMj1kXHpS2B9Q7AaQ1euGidZUEyR6gfi=e+t1J_Cr8bmK_9mTw@mail.gmail.com>
+ <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
+ <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
+ <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
+ <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
+ <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
+ <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
+ <YtcCWfCQuEsVhH6W@zn.tnic>
+ <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9011132e-d78b-8bec-10cb-2b3d77a4e1fc@maciej.szmigiero.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:19:26PM +0200, Maciej S. Szmigiero wrote:
-> On 4.12.2021 14:43, Peter Zijlstra wrote:
-> > Make use of an upcomming GCC feature to mitigate
-> > straight-line-speculation for x86:
-> > 
-> >    https://gcc.gnu.org/g:53a643f8568067d7700a9f2facc8ba39974973d3
-> >    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102952
-> >    https://bugs.llvm.org/show_bug.cgi?id=52323
-> > 
-> > It's built tested on x86_64-allyesconfig using GCC-12 and GCC-11.
-> > 
-> > Maintenace overhead of this should be fairly low due to objtool
-> > validation.
-> > 
-> > Size overhead of all these additional int3 instructions comes to:
-> > 
-> >     text	   data	    bss	    dec	    hex	filename
-> > 22267751	6933356	2011368	31212475	1dc43bb	defconfig-build/vmlinux
-> > 22804126	6933356	1470696	31208178	1dc32f2	defconfig-build/vmlinux.sls
-> > 
-> > Or roughly 2.4% additional text.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> (..)
-> > --- a/arch/x86/lib/retpoline.S
-> > +++ b/arch/x86/lib/retpoline.S
-> > @@ -34,7 +34,7 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\re
-> >   	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
-> >   		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
-> > -		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_AMD
-> > +		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_AMD
-> >   .endm
-> 
-> Looking at this __x86_indirect_thunk_* change makes me wonder why there is
-> no similar int3 SLS protection in the X86_FEATURE_RETPOLINE_LFENCE case of
-> JMP_NOSPEC in arch/x86/include/asm/nospec-branch.h:
-> > .macro JMP_NOSPEC reg:req
-> > #ifdef CONFIG_RETPOLINE
-> > 	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
-> > 		      __stringify(jmp __x86_indirect_thunk_\reg), X86_FEATURE_RETPOLINE, \
-> > 		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_LFENCE
-> > #else
-> 
-> JMP_NOSPEC users seem to have no explicit trailing int3 instructions
-> either.
-> 
-> Or am I missing something here?
+On Tue, Jul 19, 2022 at 10:45:06PM +0200, Ard Biesheuvel wrote:
+> So let's define a way for the EFI stub to signal to the firmware
+> (before EBS()) that it will take control of accepting memory. The
+> 'bootloader that calls EBS()' case can invent something along the
+> lines of what has been proposed in this thread to infer the
+> capabilities of the kernel (and decide what to signal to the
+> firmware). But we have no need for this additional complexity on
+> Linux.
 
-Probably just forgot about those. I'm thinking we ought to do something
-like this...
+To tell you the truth, I've been perusing this thread from the sidelines
+and am wondering why does this need this special dance at all?
 
----
-Subject: x86,nospec: Simplify {JMP,CALL}_NOSPEC
+If EFI takes control of accepting memory, then when the guest kernel
+boots, it'll find all memory accepted and not do anything.
 
-Have {JMP,CALL}_NOSPEC generate the same code GCC does for indirect
-calls and rely on the objtool retpoline patching infrastructure.
+If EFI doesn't accept memory, then the guest kernel will boot and do the
+accepting itself.
 
-There's no reason these should be alternatives while the vast bulk of
-compiler generated retpolines are not.
+So either I'm missing something or we're overengineering this for no
+good reason...
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/include/asm/nospec-branch.h | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+-- 
+Regards/Gruss,
+    Boris.
 
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index 10a3bfc1eb23..7bb319d2932c 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -93,6 +93,19 @@
- #endif
- .endm
- 
-+/*
-+ * Equivalent to -mindirect-branch-cs-prefix; emit the 5 byte jmp/call
-+ * to the retpoline thunk with a CS prefix when the register requires
-+ * a RAX prefix byte to encode. Also see apply_alternatives().
-+ */
-+.macro __CS_PREFIX reg:req
-+	.irp rs,r8,r9,r10,r11,r12,r13,r14,r15
-+	.ifc \reg,\rs
-+	.byte 0x2e
-+	.endif
-+	.endr
-+.endm
-+
- /*
-  * JMP_NOSPEC and CALL_NOSPEC macros can be used instead of a simple
-  * indirect jmp/call which may be susceptible to the Spectre variant 2
-@@ -100,19 +113,18 @@
-  */
- .macro JMP_NOSPEC reg:req
- #ifdef CONFIG_RETPOLINE
--	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
--		      __stringify(jmp __x86_indirect_thunk_\reg), X86_FEATURE_RETPOLINE, \
--		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_LFENCE
-+	__CS_PREFIX \reg
-+	jmp	__x86_indirect_thunk_\reg
- #else
- 	jmp	*%\reg
-+	int3
- #endif
- .endm
- 
- .macro CALL_NOSPEC reg:req
- #ifdef CONFIG_RETPOLINE
--	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; call *%\reg), \
--		      __stringify(call __x86_indirect_thunk_\reg), X86_FEATURE_RETPOLINE, \
--		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; call *%\reg), X86_FEATURE_RETPOLINE_LFENCE
-+	__CS_PREFIX \reg
-+	call	__x86_indirect_thunk_\reg
- #else
- 	call	*%\reg
- #endif
+https://people.kernel.org/tglx/notes-about-netiquette

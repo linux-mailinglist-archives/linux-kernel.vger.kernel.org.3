@@ -2,85 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDB4579818
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79F557981C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234271AbiGSLDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
+        id S237019AbiGSLEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiGSLDv (ORCPT
+        with ESMTP id S234440AbiGSLD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:03:51 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA824255BB;
-        Tue, 19 Jul 2022 04:03:50 -0700 (PDT)
-Received: from localhost.localdomain (unknown [83.149.199.65])
-        by mail.ispras.ru (Postfix) with ESMTPS id 9F00340D403D;
-        Tue, 19 Jul 2022 11:03:48 +0000 (UTC)
-From:   Andrey Strachuk <strochuk@ispras.ru>
-To:     Mattia Dongili <malattia@linux.it>
-Cc:     Andrey Strachuk <strochuk@ispras.ru>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-Subject: [PATCH] platform/x86: remove useless comparisons in sony_pic_read_possible_resource()
-Date:   Tue, 19 Jul 2022 14:03:41 +0300
-Message-Id: <20220719110341.7239-1-strochuk@ispras.ru>
-X-Mailer: git-send-email 2.25.1
+        Tue, 19 Jul 2022 07:03:59 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2582A248
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:03:58 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id t1so24094144lft.8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=F+YPwJ3OalhF2uEWkjDZQjPsGGtm1z0ZYbOsdNSmeBk=;
+        b=F5hG1ciIO8BTpnanp2tu67fMURJ1JoFRQAsbWNKS+Qy3/N5k6mavM+zpyEWnGsIdWo
+         RuWXixPtQoYxXTpoEJEe4UmuQsWuNyrbXP3aDttJRQ1sVDbH3Wz/oxyWpwpMCmb/r4PZ
+         nd3hgz4cjIwihxH3xKIxaZ8hN2H0Be8q6COFpq8YhvYFXfSx7X+d5xBilNwzVM0bOyAL
+         CxyPr+gXDfqFvXtkwLPNFm2YVc14Z3kTlgbq7/iPHhyaGoGYZAGEreuNGxOzPLvttrrT
+         vLL/krA71tiQdyfBRhDgwlSWNAj42JQDyJtqEOPpM+nIdA7QU8DMmGC8MWhzrlzlyFue
+         YXPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=F+YPwJ3OalhF2uEWkjDZQjPsGGtm1z0ZYbOsdNSmeBk=;
+        b=GxZM8nkAJVLwr4RaWEZLgnx1YU5dZCVCiSNDbDe788BPbUyg+uS734BjY+g21FiYb/
+         2pV8sjbqdXB1GAYNWiqYBlf80LzxXXzgmB8KMSwJqokBamv5l9K2UytA8FAjZMkDOka/
+         KrXvDuVg44+IWCuHI8R2GirzrIwTc3jihBsfYenF9rmRPHQe3GwgfIcFXHiFSP+/lFCb
+         YPoT5Ll5OoVqJlY0Et088OjhnZdC6rK3JpeaXz1Bfwa+obE/7N16/EwTB6ljcif7j3GY
+         cdK8gIyVoaKAq0en+ALVGB804LvMqH2mNwpIYlCA0JSSDSNohgAwNxqitGgEfTaDXPkO
+         pTYA==
+X-Gm-Message-State: AJIora9vW7vj+32MMw8XYqoGHCgBKfgYTIhnKuNyzkgVRkQJmEhYB2SC
+        8RSgb3rkeJEcx6iIYkTYK6+l2g==
+X-Google-Smtp-Source: AGRyM1ttFWfCdMSUUs3sHQIw2bbRarjjsjCbfQfhB4v3yEDUBVXvq/IImwKAuowuawz9yl8kOULpcg==
+X-Received: by 2002:a05:6512:3b9f:b0:489:e009:ae0c with SMTP id g31-20020a0565123b9f00b00489e009ae0cmr18648844lfv.213.1658228637111;
+        Tue, 19 Jul 2022 04:03:57 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id 11-20020ac25f0b000000b0047862287498sm3153889lfq.208.2022.07.19.04.03.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 04:03:56 -0700 (PDT)
+Message-ID: <ba62b5a9-cf95-8ad2-3bd1-e2f2de5ab6d1@linaro.org>
+Date:   Tue, 19 Jul 2022 13:03:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/2] ASoC: dt-bindings: atmel-classd: Convert to
+ json-schema
+Content-Language: en-US
+To:     Ryan.Wanner@microchip.com, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220715162922.660859-1-Ryan.Wanner@microchip.com>
+ <20220715162922.660859-2-Ryan.Wanner@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220715162922.660859-2-Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Local variable 'p' is initialized by an address
-of field of acpi_resource structure, so it does
-not make sense to compare 'p' with NULL.
+On 15/07/2022 18:29, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> Convert atmel CLASSD devicetree binding to json-schema.
+> Change file name to match json-scheme naming.
+> 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Local variable 'io' is initialized by an address
-of field of acpi_resource structure, so it does
-not make sense to compare 'io' with NULL.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
-Fixes: 41b16dce3905 ("create drivers/platform/x86/ from drivers/misc/")
----
- drivers/platform/x86/sony-laptop.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/platform/x86/sony-laptop.c b/drivers/platform/x86/sony-laptop.c
-index d8d0c0bed5e9..07ef05f727a2 100644
---- a/drivers/platform/x86/sony-laptop.c
-+++ b/drivers/platform/x86/sony-laptop.c
-@@ -4341,7 +4341,7 @@ sony_pic_read_possible_resource(struct acpi_resource *resource, void *context)
- 		{
- 			struct acpi_resource_irq *p = &resource->data.irq;
- 			struct sony_pic_irq *interrupt = NULL;
--			if (!p || !p->interrupt_count) {
-+			if (!p->interrupt_count) {
- 				/*
- 				 * IRQ descriptors may have no IRQ# bits set,
- 				 * particularly those those w/ _STA disabled
-@@ -4374,11 +4374,6 @@ sony_pic_read_possible_resource(struct acpi_resource *resource, void *context)
- 			struct acpi_resource_io *io = &resource->data.io;
- 			struct sony_pic_ioport *ioport =
- 				list_first_entry(&dev->ioports, struct sony_pic_ioport, list);
--			if (!io) {
--				dprintk("Blank IO resource\n");
--				return AE_OK;
--			}
--
- 			if (!ioport->io1.minimum) {
- 				memcpy(&ioport->io1, io, sizeof(*io));
- 				dprintk("IO1 at 0x%.4x (0x%.2x)\n", ioport->io1.minimum,
--- 
-2.25.1
-
+Best regards,
+Krzysztof

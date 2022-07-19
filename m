@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476F0579EA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED8E579E0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242880AbiGSNDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
+        id S242432AbiGSM5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242629AbiGSM7R (ORCPT
+        with ESMTP id S242317AbiGSM4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:59:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CBD9B55C;
-        Tue, 19 Jul 2022 05:24:04 -0700 (PDT)
+        Tue, 19 Jul 2022 08:56:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A325C951;
+        Tue, 19 Jul 2022 05:22:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6D54CCE1BCF;
-        Tue, 19 Jul 2022 12:24:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253F4C341CB;
-        Tue, 19 Jul 2022 12:23:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1969618CF;
+        Tue, 19 Jul 2022 12:22:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AABD5C341C6;
+        Tue, 19 Jul 2022 12:22:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233440;
-        bh=3sXG+VTt4xWZvQsDFeqcthLuMkGVH+7fXqtk7X35lCE=;
+        s=korg; t=1658233359;
+        bh=TxSvIfCPAWAUFoR92x9f5Kk9Nbz45mlHnmPjtMhuEKY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mb0yolcGQBkSr9A/gYgf/h52+n5vVbERcKlhhVD5AZCH/VP42sEAZWanlHCTwyHNh
-         jWG40tbKp/b/OoKyTo5iUuchaIHobmXwI4qONYtYY/DD3nHLaPk1jkECcBWMvxXvuO
-         NLFjghiQ3T13uBisHgR/+tuCtJwKxAYquqagnq9M=
+        b=JVUogf3i5tJd8UEo7qnZ1TJ7qqvLThrKRCUeo8p7YGwTTSkFHDtbzEZEB8vUPuaT8
+         xuJKZ/o/E+ujWDgJhrXyU6ZtvGkeweTwu5sgfis8JsA8FGAvGNmVbIRBtnAAA26JC5
+         noxnwn+LSCo+IvQfZBOnSS1wYG43uByzfShJ1+bY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 087/231] vlan: fix memory leak in vlan_newlink()
-Date:   Tue, 19 Jul 2022 13:52:52 +0200
-Message-Id: <20220719114722.113428923@linuxfoundation.org>
+Subject: [PATCH 5.18 088/231] netfilter: nf_tables: replace BUG_ON by element length check
+Date:   Tue, 19 Jul 2022 13:52:53 +0200
+Message-Id: <20220719114722.184024484@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
 References: <20220719114714.247441733@linuxfoundation.org>
@@ -56,92 +53,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 72a0b329114b1caa8e69dfa7cdad1dd3c69b8602 ]
+[ Upstream commit c39ba4de6b0a843bec5d46c2b6f2064428dada5e ]
 
-Blamed commit added back a bug I fixed in commit 9bbd917e0bec
-("vlan: fix memory leak in vlan_dev_set_egress_priority")
+BUG_ON can be triggered from userspace with an element with a large
+userdata area. Replace it by length check and return EINVAL instead.
+Over time extensions have been growing in size.
 
-If a memory allocation fails in vlan_changelink() after other allocations
-succeeded, we need to call vlan_dev_free_egress_priority()
-to free all allocated memory because after a failed ->newlink()
-we do not call any methods like ndo_uninit() or dev->priv_destructor().
+Pick a sufficiently old Fixes: tag to propagate this fix.
 
-In following example, if the allocation for last element 2000:2001 fails,
-we need to free eight prior allocations:
-
-ip link add link dummy0 dummy0.100 type vlan id 100 \
-	egress-qos-map 1:2 2:3 3:4 4:5 5:6 6:7 7:8 8:9 2000:2001
-
-syzbot report was:
-
-BUG: memory leak
-unreferenced object 0xffff888117bd1060 (size 32):
-comm "syz-executor408", pid 3759, jiffies 4294956555 (age 34.090s)
-hex dump (first 32 bytes):
-09 00 00 00 00 a0 00 00 00 00 00 00 00 00 00 00 ................
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
-backtrace:
-[<ffffffff83fc60ad>] kmalloc include/linux/slab.h:600 [inline]
-[<ffffffff83fc60ad>] vlan_dev_set_egress_priority+0xed/0x170 net/8021q/vlan_dev.c:193
-[<ffffffff83fc6628>] vlan_changelink+0x178/0x1d0 net/8021q/vlan_netlink.c:128
-[<ffffffff83fc67c8>] vlan_newlink+0x148/0x260 net/8021q/vlan_netlink.c:185
-[<ffffffff838b1278>] rtnl_newlink_create net/core/rtnetlink.c:3363 [inline]
-[<ffffffff838b1278>] __rtnl_newlink+0xa58/0xdc0 net/core/rtnetlink.c:3580
-[<ffffffff838b1629>] rtnl_newlink+0x49/0x70 net/core/rtnetlink.c:3593
-[<ffffffff838ac66c>] rtnetlink_rcv_msg+0x21c/0x5c0 net/core/rtnetlink.c:6089
-[<ffffffff839f9c37>] netlink_rcv_skb+0x87/0x1d0 net/netlink/af_netlink.c:2501
-[<ffffffff839f8da7>] netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
-[<ffffffff839f8da7>] netlink_unicast+0x397/0x4c0 net/netlink/af_netlink.c:1345
-[<ffffffff839f9266>] netlink_sendmsg+0x396/0x710 net/netlink/af_netlink.c:1921
-[<ffffffff8384dbf6>] sock_sendmsg_nosec net/socket.c:714 [inline]
-[<ffffffff8384dbf6>] sock_sendmsg+0x56/0x80 net/socket.c:734
-[<ffffffff8384e15c>] ____sys_sendmsg+0x36c/0x390 net/socket.c:2488
-[<ffffffff838523cb>] ___sys_sendmsg+0x8b/0xd0 net/socket.c:2542
-[<ffffffff838525b8>] __sys_sendmsg net/socket.c:2571 [inline]
-[<ffffffff838525b8>] __do_sys_sendmsg net/socket.c:2580 [inline]
-[<ffffffff838525b8>] __se_sys_sendmsg net/socket.c:2578 [inline]
-[<ffffffff838525b8>] __x64_sys_sendmsg+0x78/0xf0 net/socket.c:2578
-[<ffffffff845ad8d5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-[<ffffffff845ad8d5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-[<ffffffff8460006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Fixes: 37aa50c539bc ("vlan: introduce vlan_dev_free_egress_priority")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Xin Long <lucien.xin@gmail.com>
-Reviewed-by: Xin Long <lucien.xin@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 7d7402642eaf ("netfilter: nf_tables: variable sized set element keys / data")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/8021q/vlan_netlink.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ include/net/netfilter/nf_tables.h |   14 ++++---
+ net/netfilter/nf_tables_api.c     |   72 ++++++++++++++++++++++++++------------
+ 2 files changed, 60 insertions(+), 26 deletions(-)
 
-diff --git a/net/8021q/vlan_netlink.c b/net/8021q/vlan_netlink.c
-index 53b1955b027f..214532173536 100644
---- a/net/8021q/vlan_netlink.c
-+++ b/net/8021q/vlan_netlink.c
-@@ -182,10 +182,14 @@ static int vlan_newlink(struct net *src_net, struct net_device *dev,
- 	else if (dev->mtu > max_mtu)
+--- a/include/net/netfilter/nf_tables.h
++++ b/include/net/netfilter/nf_tables.h
+@@ -657,18 +657,22 @@ static inline void nft_set_ext_prepare(s
+ 	tmpl->len = sizeof(struct nft_set_ext);
+ }
+ 
+-static inline void nft_set_ext_add_length(struct nft_set_ext_tmpl *tmpl, u8 id,
+-					  unsigned int len)
++static inline int nft_set_ext_add_length(struct nft_set_ext_tmpl *tmpl, u8 id,
++					 unsigned int len)
+ {
+ 	tmpl->len	 = ALIGN(tmpl->len, nft_set_ext_types[id].align);
+-	BUG_ON(tmpl->len > U8_MAX);
++	if (tmpl->len > U8_MAX)
++		return -EINVAL;
++
+ 	tmpl->offset[id] = tmpl->len;
+ 	tmpl->len	+= nft_set_ext_types[id].len + len;
++
++	return 0;
+ }
+ 
+-static inline void nft_set_ext_add(struct nft_set_ext_tmpl *tmpl, u8 id)
++static inline int nft_set_ext_add(struct nft_set_ext_tmpl *tmpl, u8 id)
+ {
+-	nft_set_ext_add_length(tmpl, id, 0);
++	return nft_set_ext_add_length(tmpl, id, 0);
+ }
+ 
+ static inline void nft_set_ext_init(struct nft_set_ext *ext,
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -5831,8 +5831,11 @@ static int nft_add_set_elem(struct nft_c
+ 	if (!nla[NFTA_SET_ELEM_KEY] && !(flags & NFT_SET_ELEM_CATCHALL))
  		return -EINVAL;
  
-+	/* Note: If this initial vlan_changelink() fails, we need
-+	 * to call vlan_dev_free_egress_priority() to free memory.
-+	 */
- 	err = vlan_changelink(dev, tb, data, extack);
--	if (err)
--		return err;
--	err = register_vlan_dev(dev, extack);
+-	if (flags != 0)
+-		nft_set_ext_add(&tmpl, NFT_SET_EXT_FLAGS);
++	if (flags != 0) {
++		err = nft_set_ext_add(&tmpl, NFT_SET_EXT_FLAGS);
++		if (err < 0)
++			return err;
++	}
+ 
+ 	if (set->flags & NFT_SET_MAP) {
+ 		if (nla[NFTA_SET_ELEM_DATA] == NULL &&
+@@ -5941,7 +5944,9 @@ static int nft_add_set_elem(struct nft_c
+ 		if (err < 0)
+ 			goto err_set_elem_expr;
+ 
+-		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY, set->klen);
++		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY, set->klen);
++		if (err < 0)
++			goto err_parse_key;
+ 	}
+ 
+ 	if (nla[NFTA_SET_ELEM_KEY_END]) {
+@@ -5950,22 +5955,31 @@ static int nft_add_set_elem(struct nft_c
+ 		if (err < 0)
+ 			goto err_parse_key;
+ 
+-		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY_END, set->klen);
++		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY_END, set->klen);
++		if (err < 0)
++			goto err_parse_key_end;
+ 	}
+ 
+ 	if (timeout > 0) {
+-		nft_set_ext_add(&tmpl, NFT_SET_EXT_EXPIRATION);
+-		if (timeout != set->timeout)
+-			nft_set_ext_add(&tmpl, NFT_SET_EXT_TIMEOUT);
++		err = nft_set_ext_add(&tmpl, NFT_SET_EXT_EXPIRATION);
++		if (err < 0)
++			goto err_parse_key_end;
 +
-+	if (!err)
-+		err = register_vlan_dev(dev, extack);
-+
- 	if (err)
- 		vlan_dev_free_egress_priority(dev);
++		if (timeout != set->timeout) {
++			err = nft_set_ext_add(&tmpl, NFT_SET_EXT_TIMEOUT);
++			if (err < 0)
++				goto err_parse_key_end;
++		}
+ 	}
+ 
+ 	if (num_exprs) {
+ 		for (i = 0; i < num_exprs; i++)
+ 			size += expr_array[i]->ops->size;
+ 
+-		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_EXPRESSIONS,
+-				       sizeof(struct nft_set_elem_expr) +
+-				       size);
++		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_EXPRESSIONS,
++					     sizeof(struct nft_set_elem_expr) + size);
++		if (err < 0)
++			goto err_parse_key_end;
+ 	}
+ 
+ 	if (nla[NFTA_SET_ELEM_OBJREF] != NULL) {
+@@ -5980,7 +5994,9 @@ static int nft_add_set_elem(struct nft_c
+ 			err = PTR_ERR(obj);
+ 			goto err_parse_key_end;
+ 		}
+-		nft_set_ext_add(&tmpl, NFT_SET_EXT_OBJREF);
++		err = nft_set_ext_add(&tmpl, NFT_SET_EXT_OBJREF);
++		if (err < 0)
++			goto err_parse_key_end;
+ 	}
+ 
+ 	if (nla[NFTA_SET_ELEM_DATA] != NULL) {
+@@ -6014,7 +6030,9 @@ static int nft_add_set_elem(struct nft_c
+ 							  NFT_VALIDATE_NEED);
+ 		}
+ 
+-		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_DATA, desc.len);
++		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_DATA, desc.len);
++		if (err < 0)
++			goto err_parse_data;
+ 	}
+ 
+ 	/* The full maximum length of userdata can exceed the maximum
+@@ -6024,9 +6042,12 @@ static int nft_add_set_elem(struct nft_c
+ 	ulen = 0;
+ 	if (nla[NFTA_SET_ELEM_USERDATA] != NULL) {
+ 		ulen = nla_len(nla[NFTA_SET_ELEM_USERDATA]);
+-		if (ulen > 0)
+-			nft_set_ext_add_length(&tmpl, NFT_SET_EXT_USERDATA,
+-					       ulen);
++		if (ulen > 0) {
++			err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_USERDATA,
++						     ulen);
++			if (err < 0)
++				goto err_parse_data;
++		}
+ 	}
+ 
+ 	err = -ENOMEM;
+@@ -6252,8 +6273,11 @@ static int nft_del_setelem(struct nft_ct
+ 
+ 	nft_set_ext_prepare(&tmpl);
+ 
+-	if (flags != 0)
+-		nft_set_ext_add(&tmpl, NFT_SET_EXT_FLAGS);
++	if (flags != 0) {
++		err = nft_set_ext_add(&tmpl, NFT_SET_EXT_FLAGS);
++		if (err < 0)
++			return err;
++	}
+ 
+ 	if (nla[NFTA_SET_ELEM_KEY]) {
+ 		err = nft_setelem_parse_key(ctx, set, &elem.key.val,
+@@ -6261,16 +6285,20 @@ static int nft_del_setelem(struct nft_ct
+ 		if (err < 0)
+ 			return err;
+ 
+-		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY, set->klen);
++		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY, set->klen);
++		if (err < 0)
++			goto fail_elem;
+ 	}
+ 
+ 	if (nla[NFTA_SET_ELEM_KEY_END]) {
+ 		err = nft_setelem_parse_key(ctx, set, &elem.key_end.val,
+ 					    nla[NFTA_SET_ELEM_KEY_END]);
+ 		if (err < 0)
+-			return err;
++			goto fail_elem;
+ 
+-		nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY_END, set->klen);
++		err = nft_set_ext_add_length(&tmpl, NFT_SET_EXT_KEY_END, set->klen);
++		if (err < 0)
++			goto fail_elem_key_end;
+ 	}
+ 
+ 	err = -ENOMEM;
+@@ -6278,7 +6306,7 @@ static int nft_del_setelem(struct nft_ct
+ 				      elem.key_end.val.data, NULL, 0, 0,
+ 				      GFP_KERNEL_ACCOUNT);
+ 	if (elem.priv == NULL)
+-		goto fail_elem;
++		goto fail_elem_key_end;
+ 
+ 	ext = nft_set_elem_ext(set, elem.priv);
+ 	if (flags)
+@@ -6302,6 +6330,8 @@ fail_ops:
+ 	kfree(trans);
+ fail_trans:
+ 	kfree(elem.priv);
++fail_elem_key_end:
++	nft_data_release(&elem.key_end.val, NFT_DATA_VALUE);
+ fail_elem:
+ 	nft_data_release(&elem.key.val, NFT_DATA_VALUE);
  	return err;
--- 
-2.35.1
-
 
 

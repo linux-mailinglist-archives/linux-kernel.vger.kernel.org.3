@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF29D57A694
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C233357A697
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238894AbiGSSfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
+        id S238794AbiGSSh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 14:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234588AbiGSSfx (ORCPT
+        with ESMTP id S233698AbiGSShZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:35:53 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003534A82C;
-        Tue, 19 Jul 2022 11:35:51 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id b10so4652156pjq.5;
-        Tue, 19 Jul 2022 11:35:51 -0700 (PDT)
+        Tue, 19 Jul 2022 14:37:25 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835AD4D147;
+        Tue, 19 Jul 2022 11:37:24 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id r193-20020a4a37ca000000b0043578138958so2792521oor.4;
+        Tue, 19 Jul 2022 11:37:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bPNoRKQ8h2ZDOuTD44jnLk8tsWeAO41TwkS2ydw/TbQ=;
-        b=jdnGo14Gc1dg+16AlLMoWVN5cn6IB663ou106EHBv64+fmIyr6qJ/2Yk9T6tQs81lw
-         iDX10tDTKWldNHnJZzOdDhoU8eI5iRQjYsIiji+v8tYuPHvyClvxZqQeyfbkd4WLHsyZ
-         W5+hOP2v8z2h27bU7sXsrE4uTWLhcokV2TxMLtAezw7hZync5OuH/dIwyHuIHWUMYlEK
-         E30SxNo1Hd7Y5UXHTOL6MxXB0Dpjd7UQ/3wQiGH3GhodTa1UqgLVk/bgvy1RsHbJ0jR7
-         +6rkGdpQR5JFjlr4KaTkABJ9bOv91jX53IOs7VserNtEeAGV6/pBZo3Uc1NtS/UmQ1qq
-         2T6w==
+        bh=gf82HO1596zr/ZdVJzwHUoOwQLVuNiT/mo6nU8RmnGQ=;
+        b=jeIFGH+KzDKcl+MBCucwjiQRaU0pRfTTCh9SJj++4Osn6QQR73xSYQLvIuI63x7ffl
+         9VkEyM+FY3onrDQaFNgFyPCVYfeXSJ+r84k3HI8jq/fqMxd2Mm80ApYgDg/E8KGk2LLm
+         0AXTwuXwIQEnej0dTh0OJMgcvhK/8LyXaainPd3F7x3iQ23dr+CjnHAWodEq2ohxzcyg
+         I8ewG9gCaz/urqgROryMdBwuwX+cAxBySsOFMWf0y2ulVBOVzn8pfgeFQZ/6mRDJHfYW
+         7aLmho2QpsLOFDYWnRehI2leiQOzjNY+pOTTBYft9Vnt0wn8NLF3RlpjjXlt7txx5JmU
+         C0/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=bPNoRKQ8h2ZDOuTD44jnLk8tsWeAO41TwkS2ydw/TbQ=;
-        b=Tizg5NtovuPyH6I9Fwt59NoRN5xwOfXeJ2cX2aSvKb3qhUIE6J1Hi0aKsyjLB1e+Vb
-         RbSnRK6SjNP3tEkLB2me+U16g2sHJAW4utQlQshZGcw38HXExbQCYa8HHnHD5U+IhLf7
-         EcI+8XFVad6Iy7jrv+q4sSTJ93QdmmINvUOA+KRMrlx8CoNlW8bPc5sgJ53yAbMifgpG
-         oyGkFN6DV+oGAzvj9yvz18fNgrbGKXy6woDa0AoZxC6X2lMWCzhz2+KlGjrXFHvx/Yb7
-         nkWJAXLEq8RDCqepmD8tZ86qPOMtf5ZnC01Y+an/49k6P0p1h2aKuHBrJfH01HAkyp7R
-         BjVw==
-X-Gm-Message-State: AJIora8Cpz1bzX3Wk8jx881PPhhL5GtQAiA7MOGlj1Pv2rs8PNUZ1828
-        HzuRaM74be/4TT/hfpSX6hg=
-X-Google-Smtp-Source: AGRyM1scl4FUEsao1cWuj7dLRHf2KfCN+GENjNED/nKWOy0VmP6mAqh1zuy9jwY9DQMMT7m+eSx0lw==
-X-Received: by 2002:a17:902:e885:b0:16c:49c9:792a with SMTP id w5-20020a170902e88500b0016c49c9792amr35272167plg.11.1658255751365;
-        Tue, 19 Jul 2022 11:35:51 -0700 (PDT)
-Received: from [192.168.1.106] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id md11-20020a17090b23cb00b001f10b31e7a7sm10150861pjb.32.2022.07.19.11.35.49
+        bh=gf82HO1596zr/ZdVJzwHUoOwQLVuNiT/mo6nU8RmnGQ=;
+        b=fD9Z+BJmHeM5lB9LZt1MyxS3l54d3+w/6KoLlqUzRnWXcNjPp7uzmuBdCKVbUJ9bcv
+         4WOj+PFgatB0+iISP17Snnm1L7ZVRqecwYjnh6P3+f988FphMW8tckk4c8K0sjoQhsEj
+         SEAKDA55kauqrKJMUCgxo5XSfYnt+OHYEWGe7c43BCoXwS0GdWzh2iaFkAsBPVWrhlsh
+         wlt4ghGgkUbDl0TK9QOR0ATnojrFCvIYS61ASarmOyqrOC5nPcp0x3s6EWWI/k/UyfCc
+         JRPiJB+w557LF9TwArk+9ua7VM8U+oqeqrU+DbALoR4ZOF8r8vbxm9zZmMlpF1wXTdSX
+         eDJA==
+X-Gm-Message-State: AJIora9iJseV/q1wibKF+bKm61AQBQdE9LqqSVuJi3Cn1K3h/wlE0j1E
+        eXrJtP7rV21ZL6AM/4ZWWSU=
+X-Google-Smtp-Source: AGRyM1tt0u4BvgNqwgDe4zS80Vp20ZUXB1ZBsZUjkl3fsyZyxbDag+KEFYkMXfP5E9TiwL7bgNQNqA==
+X-Received: by 2002:a4a:ca8d:0:b0:435:772d:fca0 with SMTP id x13-20020a4aca8d000000b00435772dfca0mr9282989ooq.94.1658255843853;
+        Tue, 19 Jul 2022 11:37:23 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:18b3:c058:b2c3:9b8? ([2600:1700:2442:6db0:18b3:c058:b2c3:9b8])
+        by smtp.gmail.com with ESMTPSA id l15-20020a05683016cf00b0061c98bd6278sm3630859otr.73.2022.07.19.11.37.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 11:35:50 -0700 (PDT)
-Message-ID: <1497bc10-6cce-3a2a-0140-fee428f9d09a@gmail.com>
-Date:   Tue, 19 Jul 2022 11:35:48 -0700
+        Tue, 19 Jul 2022 11:37:23 -0700 (PDT)
+Message-ID: <aac636b3-eb69-2add-86f3-b2961c30fd07@gmail.com>
+Date:   Tue, 19 Jul 2022 13:37:22 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH 5.10 000/112] 5.10.132-rc1 review
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 0/2] of: overlay: Miscellaneous improvements
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220719114626.156073229@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1657893306.git.geert+renesas@glider.be>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <cover.1657893306.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
@@ -78,30 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/19/2022 4:52 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.132 release.
-> There are 112 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 7/15/22 09:03, Geert Uytterhoeven wrote:
+> 	Hi,
 > 
-> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
-> Anything received after that time might be too late.
+> While performing the long-overdue rebase of my topic/overlays branch[1]
+> on top of the overlay rework in v5.19-rc1, I identified a few areas for
+> improvement in the upstream code.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.132-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> Thanks for your comments!
 > 
-> thanks,
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/?h=topic/overlays
 > 
-> greg k-h
+> Geert Uytterhoeven (2):
+>   of: overlay: Move devicetree_corrupt() check up
+>   of: overlay: Simplify of_overlay_fdt_apply() tail
+> 
+>  drivers/of/overlay.c | 20 +++++++-------------
+>  1 file changed, 7 insertions(+), 13 deletions(-)
+> 
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and built tested 
-with BMIPS_GENERIC (bmips_stb_defconfig):
+For the entire series:
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+Tested-by: Frank Rowand <frank.rowand@sony.com>

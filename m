@@ -2,123 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A798657A592
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B229857A594
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237928AbiGSRlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S238803AbiGSRmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiGSRle (ORCPT
+        with ESMTP id S236236AbiGSRmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:41:34 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DD21929A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:41:34 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JHL3sE037471;
-        Tue, 19 Jul 2022 17:41:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=I+EnxDpbKDgUP9CK0hvKo2Z36XDGJ3qr3sTbOeD878Q=;
- b=GdkJ50f0VxzGlW6SPr1UR/vX7gYgh7cJGkXqUzebV3FYzMq55/BKc+lFIgK/ukdpagDW
- IpsygQaKDkSe+WMgWJGgqdDr+MUPalDqM6zElRI1dLF9QoN+EBRgUlpe8kD4aFrnVc3m
- cUD3nlC16OfbZ5sPPAAI3IVTTkGf0C7Ue18L27rdWW+1uExgwqZWHGSXZwojcY3lJbLS
- 0Ky37s80rqz8s5yk1BRlycW1sqCC2jsDNHcXB0kBQU1mDti0WX9QTX8+ltpCyR1Bgm8a
- 3IHVuEjkHG1oi9ZiVnOHNB+mWiHGbFgcnC543fKTatV0yKS4NPKPfj+G7fBS4/nxeDXn Gw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3he0xf8ug8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Jul 2022 17:41:25 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26JHL42a037494;
-        Tue, 19 Jul 2022 17:40:31 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3he0xf8qwr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Jul 2022 17:40:30 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26JHcx8q001373;
-        Tue, 19 Jul 2022 17:39:44 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3hbmy8vebg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Jul 2022 17:39:43 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26JHdfnJ23593406
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Jul 2022 17:39:41 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9B373AE055;
-        Tue, 19 Jul 2022 17:39:41 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 57E27AE053;
-        Tue, 19 Jul 2022 17:39:41 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 19 Jul 2022 17:39:41 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>, Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH] maple_tree: Fix mas_empty_area() wrapping
-References: <20220719170118.3296447-1-Liam.Howlett@oracle.com>
-Date:   Tue, 19 Jul 2022 19:39:41 +0200
-In-Reply-To: <20220719170118.3296447-1-Liam.Howlett@oracle.com> (Liam
-        Howlett's message of "Tue, 19 Jul 2022 17:01:30 +0000")
-Message-ID: <yt9dtu7dhuhu.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Tue, 19 Jul 2022 13:42:00 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3876D54651
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:41:59 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id s200so5855901vkb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DcsoP6m8Kg52tZZeH6+q4l07BNbA0q//GElbOkdpfLI=;
+        b=VXCBjhV0D4wa+CYkZfeA8YOcthqJHWDWE2QuicigRoQyWltCf4zpG2IdAAsETDUsLy
+         ZSs7WtSMX7VKnIEijXboD2rl1qfHJbAFV20txcPFCt5aBIZvpN0MLlJxQYHTEd5+dH84
+         UBEJrSptpPEoWNYQ9TkPDTZ98PEdr+JYUdt2y0AFooq4DH74pDOAINsLp8B3t4YwxQ8W
+         nb+9Xn4r7FnbQDCiMfq+dRoHBZrxREmrJpmqjIaXd9XQ3a5Ke+XHTNCnwLXqPBBjdmYX
+         xprtchgWuUeYQJVwh4RbOlRmBxIY57rks2b0vENdvIx5+Gf9NpBvdMeZzyDylxTS8juU
+         6OhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DcsoP6m8Kg52tZZeH6+q4l07BNbA0q//GElbOkdpfLI=;
+        b=nSFmk6Ol2ArF9SO3QT9BVRz//9nL3ietmWzcyeDNTIrpCXbIPe6RP46CtzaFsxr4IW
+         0N7vNnMBb1Epr+zFQg0anac38OAiLeTS/A/UZCZqkaN/SPilbNlEFGtiGRZk8C5szhrF
+         +/drKLPyWfJOcVjfC2+ueWGqmpKGbFm5JNsOUsK9c7hj0rEj/HcGSMNGSnQ9EsFMcMma
+         yQEEAFBt3xKQQbsWHjR7PPMp+gAcpBsIrjhNbn3dpXml6TDBSmM4/Z4/nKHBVUtsTgEE
+         8UiqTGa+h5fDhg2kGBcQ1LThWAxgIHv0x0J+Tz0Wyt1zMJs5OoNXzPHSl1+S4rzqeunU
+         40Cg==
+X-Gm-Message-State: AJIora9p0gulU+UYqn37upEfzyT5mQREGAkZFboqLOA/yiD42nNFN99/
+        TC5nwOiV9+qATCqHK2cgmCJGHa0019UynVVhYEljyw==
+X-Google-Smtp-Source: AGRyM1soQmHY+yPtvTig/Grv4PW8gjJgHHKoQhuc5aas1Yr+zzM5GZXrTrkB0Z4j4ojXzSjeHT4fM2A7l4KjCtXCS1g=
+X-Received: by 2002:ac5:ccd4:0:b0:374:bdb0:8e92 with SMTP id
+ j20-20020ac5ccd4000000b00374bdb08e92mr12187821vkn.30.1658252518084; Tue, 19
+ Jul 2022 10:41:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6szJFc1eY-Op8X9Q23JGefi_MkiVXlGF
-X-Proofpoint-GUID: Lxh-I1gHtH4EF0kob8tkaIm8xwvG9E4w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-19_06,2022-07-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 spamscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207190074
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-9-adrian.hunter@intel.com>
+In-Reply-To: <20220711093218.10967-9-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 19 Jul 2022 10:41:46 -0700
+Message-ID: <CAP-5=fUF_feSL-+=LQpg=6cRd_nXTWKCM4zU1k8TP-6veP26Rw@mail.gmail.com>
+Subject: Re: [PATCH 08/35] perf buildid-cache: Add guestmount'd files to the
+ build ID cache
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Liam Howlett <liam.howlett@oracle.com> writes:
-
-> Set the error code correctly when at the left most node and search has
-> been exhausted.  This was an overflow bug.
+On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> Reported-by: Sven Schnelle <svens@linux.ibm.com>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> When the guestmount option is used, a guest machine's file system mount
+> point is recorded in machine->root_dir.
+>
+> perf already iterates guest machines when adding files to the build ID
+> cache, but does not take machine->root_dir into account.
+>
+> Use machine->root_dir to find files for guest build IDs, and add them to
+> the build ID cache using the "proper" name i.e. relative to the guest root
+> directory not the host root directory.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
-That fixes it, thanks!
+Is it plausible to add a test for this? Our tests create workload but
+there's no existing hypervisor way to do this. Perhaps the test can
+run in a hypervisor? Or maybe there's a route that doesn't involve
+hypervisors.
 
-Tested-by: Sven Schnelle <svens@linux.ibm.com>
+Acked-by: Ian Rogers <irogers@google.com>
+
+Thanks,
+Ian
 
 > ---
->  lib/maple_tree.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/perf/util/build-id.c | 67 +++++++++++++++++++++++++++++---------
+>  tools/perf/util/build-id.h | 16 ++++++---
+>  2 files changed, 63 insertions(+), 20 deletions(-)
 >
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index 1b8130f19c2e..0c0bda979693 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -4994,7 +4994,7 @@ static inline bool mas_anode_descend(struct ma_state *mas, unsigned long size)
->  		}
->  next_slot:
->  		min = pivot + 1;
-> -		if (mas->last < min) {
-> +		if (mas->last <= pivot) {
->  			mas_set_err(mas, -EBUSY);
->  			return true;
->  		}
+> diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
+> index 4c9093b64d1f..7c9f441936ee 100644
+> --- a/tools/perf/util/build-id.c
+> +++ b/tools/perf/util/build-id.c
+> @@ -625,9 +625,12 @@ static int build_id_cache__add_sdt_cache(const char *sbuild_id,
+>  #endif
+>
+>  static char *build_id_cache__find_debug(const char *sbuild_id,
+> -                                       struct nsinfo *nsi)
+> +                                       struct nsinfo *nsi,
+> +                                       const char *root_dir)
+>  {
+> +       const char *dirname = "/usr/lib/debug/.build-id/";
+>         char *realname = NULL;
+> +       char dirbuf[PATH_MAX];
+>         char *debugfile;
+>         struct nscookie nsc;
+>         size_t len = 0;
+> @@ -636,8 +639,12 @@ static char *build_id_cache__find_debug(const char *sbuild_id,
+>         if (!debugfile)
+>                 goto out;
+>
+> -       len = __symbol__join_symfs(debugfile, PATH_MAX,
+> -                                  "/usr/lib/debug/.build-id/");
+> +       if (root_dir) {
+> +               path__join(dirbuf, PATH_MAX, root_dir, dirname);
+> +               dirname = dirbuf;
+> +       }
+> +
+> +       len = __symbol__join_symfs(debugfile, PATH_MAX, dirname);
+>         snprintf(debugfile + len, PATH_MAX - len, "%.2s/%s.debug", sbuild_id,
+>                  sbuild_id + 2);
+>
+> @@ -668,14 +675,18 @@ static char *build_id_cache__find_debug(const char *sbuild_id,
+>
+>  int
+>  build_id_cache__add(const char *sbuild_id, const char *name, const char *realname,
+> -                   struct nsinfo *nsi, bool is_kallsyms, bool is_vdso)
+> +                   struct nsinfo *nsi, bool is_kallsyms, bool is_vdso,
+> +                   const char *proper_name, const char *root_dir)
+>  {
+>         const size_t size = PATH_MAX;
+>         char *filename = NULL, *dir_name = NULL, *linkname = zalloc(size), *tmp;
+>         char *debugfile = NULL;
+>         int err = -1;
+>
+> -       dir_name = build_id_cache__cachedir(sbuild_id, name, nsi, is_kallsyms,
+> +       if (!proper_name)
+> +               proper_name = name;
+> +
+> +       dir_name = build_id_cache__cachedir(sbuild_id, proper_name, nsi, is_kallsyms,
+>                                             is_vdso);
+>         if (!dir_name)
+>                 goto out_free;
+> @@ -715,7 +726,7 @@ build_id_cache__add(const char *sbuild_id, const char *name, const char *realnam
+>          */
+>         if (!is_kallsyms && !is_vdso &&
+>             strncmp(".ko", name + strlen(name) - 3, 3)) {
+> -               debugfile = build_id_cache__find_debug(sbuild_id, nsi);
+> +               debugfile = build_id_cache__find_debug(sbuild_id, nsi, root_dir);
+>                 if (debugfile) {
+>                         zfree(&filename);
+>                         if (asprintf(&filename, "%s/%s", dir_name,
+> @@ -781,8 +792,9 @@ build_id_cache__add(const char *sbuild_id, const char *name, const char *realnam
+>         return err;
+>  }
+>
+> -int build_id_cache__add_s(const char *sbuild_id, const char *name,
+> -                         struct nsinfo *nsi, bool is_kallsyms, bool is_vdso)
+> +int __build_id_cache__add_s(const char *sbuild_id, const char *name,
+> +                           struct nsinfo *nsi, bool is_kallsyms, bool is_vdso,
+> +                           const char *proper_name, const char *root_dir)
+>  {
+>         char *realname = NULL;
+>         int err = -1;
+> @@ -796,8 +808,8 @@ int build_id_cache__add_s(const char *sbuild_id, const char *name,
+>                         goto out_free;
+>         }
+>
+> -       err = build_id_cache__add(sbuild_id, name, realname, nsi, is_kallsyms, is_vdso);
+> -
+> +       err = build_id_cache__add(sbuild_id, name, realname, nsi,
+> +                                 is_kallsyms, is_vdso, proper_name, root_dir);
+>  out_free:
+>         if (!is_kallsyms)
+>                 free(realname);
+> @@ -806,14 +818,16 @@ int build_id_cache__add_s(const char *sbuild_id, const char *name,
+>
+>  static int build_id_cache__add_b(const struct build_id *bid,
+>                                  const char *name, struct nsinfo *nsi,
+> -                                bool is_kallsyms, bool is_vdso)
+> +                                bool is_kallsyms, bool is_vdso,
+> +                                const char *proper_name,
+> +                                const char *root_dir)
+>  {
+>         char sbuild_id[SBUILD_ID_SIZE];
+>
+>         build_id__sprintf(bid, sbuild_id);
+>
+> -       return build_id_cache__add_s(sbuild_id, name, nsi, is_kallsyms,
+> -                                    is_vdso);
+> +       return __build_id_cache__add_s(sbuild_id, name, nsi, is_kallsyms,
+> +                                      is_vdso, proper_name, root_dir);
+>  }
+>
+>  bool build_id_cache__cached(const char *sbuild_id)
+> @@ -896,6 +910,10 @@ static int dso__cache_build_id(struct dso *dso, struct machine *machine,
+>         bool is_kallsyms = dso__is_kallsyms(dso);
+>         bool is_vdso = dso__is_vdso(dso);
+>         const char *name = dso->long_name;
+> +       const char *proper_name = NULL;
+> +       const char *root_dir = NULL;
+> +       char *allocated_name = NULL;
+> +       int ret = 0;
+>
+>         if (!dso->has_build_id)
+>                 return 0;
+> @@ -905,11 +923,28 @@ static int dso__cache_build_id(struct dso *dso, struct machine *machine,
+>                 name = machine->mmap_name;
+>         }
+>
+> +       if (!machine__is_host(machine)) {
+> +               if (*machine->root_dir) {
+> +                       root_dir = machine->root_dir;
+> +                       ret = asprintf(&allocated_name, "%s/%s", root_dir, name);
+> +                       if (ret < 0)
+> +                               return ret;
+> +                       proper_name = name;
+> +                       name = allocated_name;
+> +               } else if (is_kallsyms) {
+> +                       /* Cannot get guest kallsyms */
+> +                       return 0;
+> +               }
+> +       }
+> +
+>         if (!is_kallsyms && dso__build_id_mismatch(dso, name))
+> -               return 0;
+> +               goto out_free;
+>
+> -       return build_id_cache__add_b(&dso->bid, name, dso->nsinfo,
+> -                                    is_kallsyms, is_vdso);
+> +       ret = build_id_cache__add_b(&dso->bid, name, dso->nsinfo,
+> +                                   is_kallsyms, is_vdso, proper_name, root_dir);
+> +out_free:
+> +       free(allocated_name);
+> +       return ret;
+>  }
+>
+>  static int
+> diff --git a/tools/perf/util/build-id.h b/tools/perf/util/build-id.h
+> index c19617151670..4e3a1169379b 100644
+> --- a/tools/perf/util/build-id.h
+> +++ b/tools/perf/util/build-id.h
+> @@ -66,10 +66,18 @@ int build_id_cache__list_build_ids(const char *pathname, struct nsinfo *nsi,
+>                                    struct strlist **result);
+>  bool build_id_cache__cached(const char *sbuild_id);
+>  int build_id_cache__add(const char *sbuild_id, const char *name, const char *realname,
+> -                       struct nsinfo *nsi, bool is_kallsyms, bool is_vdso);
+> -int build_id_cache__add_s(const char *sbuild_id,
+> -                         const char *name, struct nsinfo *nsi,
+> -                         bool is_kallsyms, bool is_vdso);
+> +                       struct nsinfo *nsi, bool is_kallsyms, bool is_vdso,
+> +                       const char *proper_name, const char *root_dir);
+> +int __build_id_cache__add_s(const char *sbuild_id,
+> +                           const char *name, struct nsinfo *nsi,
+> +                           bool is_kallsyms, bool is_vdso,
+> +                           const char *proper_name, const char *root_dir);
+> +static inline int build_id_cache__add_s(const char *sbuild_id,
+> +                                       const char *name, struct nsinfo *nsi,
+> +                                       bool is_kallsyms, bool is_vdso)
+> +{
+> +       return __build_id_cache__add_s(sbuild_id, name, nsi, is_kallsyms, is_vdso, NULL, NULL);
+> +}
+>  int build_id_cache__remove_s(const char *sbuild_id);
+>
+>  extern char buildid_dir[];
+> --
+> 2.25.1
+>

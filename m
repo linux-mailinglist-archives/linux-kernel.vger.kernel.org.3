@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AD0579CE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D042C579971
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241200AbiGSMoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S238033AbiGSMCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241119AbiGSMnW (ORCPT
+        with ESMTP id S237782AbiGSMCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:43:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86065820F0;
-        Tue, 19 Jul 2022 05:16:55 -0700 (PDT)
+        Tue, 19 Jul 2022 08:02:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DE543E4E;
+        Tue, 19 Jul 2022 04:58:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8E36B81B1A;
-        Tue, 19 Jul 2022 12:16:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36091C341CA;
-        Tue, 19 Jul 2022 12:16:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79CBFB81A8F;
+        Tue, 19 Jul 2022 11:58:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3344C341CA;
+        Tue, 19 Jul 2022 11:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233013;
-        bh=GqYSiyEiYN54B9KbL1CA43tpPPB30YDlNdA9ZXdKhCM=;
+        s=korg; t=1658231933;
+        bh=pneqByNjx/sGoWroweySELz1T991Ow00L40BUVLYOUY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tLXM/2EjNB5IQ6nw+3sNmf0GYUSh5RdHRk9eLqyYIaHSODTHIJfNyQYU8CfRpxD4C
-         duLKiHniluYiFn8R/Yqe8ODv0fUADou+QHn42FiuOGNNbuKxarY8TATduygffOrLa+
-         4P15orxl27KYlObAZAKmPMABnqlHe8Ib0drC5liY=
+        b=g9DM7mDLl1cSUgNVgQMgo+od79KLuQfVdjNzgLmyH6pljingi5u3sYYRgtDZyXTWs
+         KzYpP1n3pdEirjhgLIu68vwp7Za9pyWha/NQH+jVdJE9VGuWCwvh6SPwE85XNxMGa/
+         iwu123Tj1ohxrqn2h8iBXWXXkxCud2zLoICA2xG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Radim Hrazdil <rhrazdil@redhat.com>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 119/167] netfilter: br_netfilter: do not skip all hooks with 0 priority
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH 4.14 40/43] tty: serial: samsung_tty: set dma burst_size to 1
 Date:   Tue, 19 Jul 2022 13:54:11 +0200
-Message-Id: <20220719114708.085973251@linuxfoundation.org>
+Message-Id: <20220719114525.359838402@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
+References: <20220719114521.868169025@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,104 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Chanho Park <chanho61.park@samsung.com>
 
-[ Upstream commit c2577862eeb0be94f151f2f1fff662b028061b00 ]
+commit f7e35e4bf1e8dc2c8cbd5e0955dc1bd58558dae0 upstream.
 
-When br_netfilter module is loaded, skbs may be diverted to the
-ipv4/ipv6 hooks, just like as if we were routing.
+The src_maxburst and dst_maxburst have been changed to 1 but the settings
+of the UCON register aren't changed yet. They should be changed as well
+according to the dmaengine slave config.
 
-Unfortunately, bridge filter hooks with priority 0 may be skipped
-in this case.
-
-Example:
-1. an nftables bridge ruleset is loaded, with a prerouting
-   hook that has priority 0.
-2. interface is added to the bridge.
-3. no tcp packet is ever seen by the bridge prerouting hook.
-4. flush the ruleset
-5. load the bridge ruleset again.
-6. tcp packets are processed as expected.
-
-After 1) the only registered hook is the bridge prerouting hook, but its
-not called yet because the bridge hasn't been brought up yet.
-
-After 2), hook order is:
-   0 br_nf_pre_routing // br_netfilter internal hook
-   0 chain bridge f prerouting // nftables bridge ruleset
-
-The packet is diverted to br_nf_pre_routing.
-If call-iptables is off, the nftables bridge ruleset is called as expected.
-
-But if its enabled, br_nf_hook_thresh() will skip it because it assumes
-that all 0-priority hooks had been called previously in bridge context.
-
-To avoid this, check for the br_nf_pre_routing hook itself, we need to
-resume directly after it, even if this hook has a priority of 0.
-
-Unfortunately, this still results in different packet flow.
-With this fix, the eval order after in 3) is:
-1. br_nf_pre_routing
-2. ip(6)tables (if enabled)
-3. nftables bridge
-
-but after 5 its the much saner:
-1. nftables bridge
-2. br_nf_pre_routing
-3. ip(6)tables (if enabled)
-
-Unfortunately I don't see a solution here:
-It would be possible to move br_nf_pre_routing to a higher priority
-so that it will be called later in the pipeline, but this also impacts
-ebtables evaluation order, and would still result in this very ordering
-problem for all nftables-bridge hooks with the same priority as the
-br_nf_pre_routing one.
-
-Searching back through the git history I don't think this has
-ever behaved in any other way, hence, no fixes-tag.
-
-Reported-by: Radim Hrazdil <rhrazdil@redhat.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: aa2f80e752c7 ("serial: samsung: fix maxburst parameter for DMA transactions")
+Cc: stable <stable@kernel.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Chanho Park <chanho61.park@samsung.com>
+Link: https://lore.kernel.org/r/20220627065113.139520-1-chanho61.park@samsung.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bridge/br_netfilter_hooks.c | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ drivers/tty/serial/samsung.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/net/bridge/br_netfilter_hooks.c b/net/bridge/br_netfilter_hooks.c
-index 68c0d0f92890..10a2c7bca719 100644
---- a/net/bridge/br_netfilter_hooks.c
-+++ b/net/bridge/br_netfilter_hooks.c
-@@ -1012,9 +1012,24 @@ int br_nf_hook_thresh(unsigned int hook, struct net *net,
- 		return okfn(net, sk, skb);
+--- a/drivers/tty/serial/samsung.c
++++ b/drivers/tty/serial/samsung.c
+@@ -241,8 +241,7 @@ static void enable_tx_dma(struct s3c24xx
+ 	/* Enable tx dma mode */
+ 	ucon = rd_regl(port, S3C2410_UCON);
+ 	ucon &= ~(S3C64XX_UCON_TXBURST_MASK | S3C64XX_UCON_TXMODE_MASK);
+-	ucon |= (dma_get_cache_alignment() >= 16) ?
+-		S3C64XX_UCON_TXBURST_16 : S3C64XX_UCON_TXBURST_1;
++	ucon |= S3C64XX_UCON_TXBURST_1;
+ 	ucon |= S3C64XX_UCON_TXMODE_DMA;
+ 	wr_regl(port,  S3C2410_UCON, ucon);
  
- 	ops = nf_hook_entries_get_hook_ops(e);
--	for (i = 0; i < e->num_hook_entries &&
--	      ops[i]->priority <= NF_BR_PRI_BRNF; i++)
--		;
-+	for (i = 0; i < e->num_hook_entries; i++) {
-+		/* These hooks have already been called */
-+		if (ops[i]->priority < NF_BR_PRI_BRNF)
-+			continue;
-+
-+		/* These hooks have not been called yet, run them. */
-+		if (ops[i]->priority > NF_BR_PRI_BRNF)
-+			break;
-+
-+		/* take a closer look at NF_BR_PRI_BRNF. */
-+		if (ops[i]->hook == br_nf_pre_routing) {
-+			/* This hook diverted the skb to this function,
-+			 * hooks after this have not been run yet.
-+			 */
-+			i++;
-+			break;
-+		}
-+	}
- 
- 	nf_hook_state_init(&state, hook, NFPROTO_BRIDGE, indev, outdev,
- 			   sk, net, okfn);
--- 
-2.35.1
-
+@@ -515,7 +514,7 @@ static void enable_rx_dma(struct s3c24xx
+ 			S3C64XX_UCON_DMASUS_EN |
+ 			S3C64XX_UCON_TIMEOUT_EN |
+ 			S3C64XX_UCON_RXMODE_MASK);
+-	ucon |= S3C64XX_UCON_RXBURST_16 |
++	ucon |= S3C64XX_UCON_RXBURST_1 |
+ 			0xf << S3C64XX_UCON_TIMEOUT_SHIFT |
+ 			S3C64XX_UCON_EMPTYINT_EN |
+ 			S3C64XX_UCON_TIMEOUT_EN |
 
 

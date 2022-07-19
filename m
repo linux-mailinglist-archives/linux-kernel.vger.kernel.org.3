@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C11579301
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A22F0579304
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 08:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237004AbiGSGKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 02:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
+        id S237010AbiGSGMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 02:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236994AbiGSGK3 (ORCPT
+        with ESMTP id S234588AbiGSGMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 02:10:29 -0400
-Received: from mailrelay3-1.pub.mailoutpod1-cph3.one.com (mailrelay3-1.pub.mailoutpod1-cph3.one.com [46.30.210.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A561823BCA
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 23:10:23 -0700 (PDT)
+        Tue, 19 Jul 2022 02:12:35 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA41A237DD;
+        Mon, 18 Jul 2022 23:12:34 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id n185so8339363wmn.4;
+        Mon, 18 Jul 2022 23:12:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=jp83ii8nZk7L/6Omf0n4BRcep5/FTl5AylCpqXcA8og=;
-        b=WnjNN/cAU+L0AjpbfV8SjfuiKoLjdeDZqGz+PxitCRZ1XVRYf08GY9tcYp6pcSMwWOz01FOUu2N6h
-         b96epudXPxMrdn3oOuZvULn5w08GnIHia3PNr3J0iMnYnP+DGObCDAEZ+yUhMNw73DwXj8t5l2NbzX
-         TNCOBIOBDjvDlzv2OaRWj7D/zReTsza3mksZ226C2QrIu7B80YE9RTBMO1G0YSzRnWu9EdbRG2qVej
-         m5LWI96tW5sMTAzvA1QrVBwfqeqIntlgtCkw1KcgGLxl4JWNustLmc549k/6Y56Qru6Zvd+P+j8ucQ
-         aGezmh3MifN9kjtJ4V+o9fGwSFDN//Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=jp83ii8nZk7L/6Omf0n4BRcep5/FTl5AylCpqXcA8og=;
-        b=bbfXWbrl67vsOQUfGcA821e626nY1xPLige86Rb5YRxklcAmCxPAEeNf+NykN7CJ+C2b6Hl2uiMa6
-         HtfSmzkDQ==
-X-HalOne-Cookie: b83d0abb0da0665d4cfe7193d5f7c0eba89b2d78
-X-HalOne-ID: 77b15885-0729-11ed-be7f-d0431ea8bb03
-Received: from mailproxy2.cst.dirpod3-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 77b15885-0729-11ed-be7f-d0431ea8bb03;
-        Tue, 19 Jul 2022 06:10:20 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 08:10:18 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Caleb Connolly <caleb@connolly.tech>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH 3/4] dt-bindings: panel: Add LG SW43408 MIPI-DSI panel
-Message-ID: <YtZKylMu4jEa/oDp@ravnborg.org>
-References: <20220718213051.1475108-1-caleb@connolly.tech>
- <20220718213051.1475108-4-caleb@connolly.tech>
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0wMA9jMAuILoYnO43zm+jDHZKH9iuy2nJN0S0krKGAc=;
+        b=hEVimiHqOYBGhb+W9twulYdCq25kgNVSk673Tk+0SYxPu2VVVxpjPHUCM2OZ1j2lOw
+         UL2BGHaO4SlAecu0sHrNSaact+s/b1/BmY1WA0hOYUXsi3+X3W8TiqMj1gYzLQhBpoEG
+         WqZ71BtlWL2/6ipdDUmHAU0GCn7vdtEL+/MGdANAhM6YWq+Poel6DPafJJhnCEsdVvTZ
+         hSbQ64gSeH9tMbZl1u22U/PsJH/vVztoX5T+kphz0EuMSiIU7eQZPGo3WFpF0Xidzdp2
+         3dMBpuw0E8pZdmwe7MUz/J2NNGrKGdvY3j5jS1j4zHFHdrnpP9US0SQ3gsq+GrWVckBN
+         iGWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0wMA9jMAuILoYnO43zm+jDHZKH9iuy2nJN0S0krKGAc=;
+        b=sHaivfu7Y72/4v8RWvp/mskTJEuWpHOVArlvtOzIY6uR+dcjoSGgeoIFXBAq5XiE54
+         o3xL0LlRg4yAgEcz8xwrJa2MY/gJ5d9zcnYkV8l4PiDd1MmFQ92oc1qL7/XNG1euiADh
+         xOW0KEZYm2NTmGGxWAfmTJvW0J6+lIb25+UitwQS0+UFIS74RMxd0xPnT9caaEgDIBYK
+         VYiGra0XHH4spytJV3QFyu/IMBln/nK8YJFG0QmMD3GZmIdC8a86WOlWxsXajoy4h10g
+         pGV7U6WfeWicdUByfml+sfG8QNntvEAbhq8mDOVsqFvlhAsEazx+EC1FFlGCm0AfBoWL
+         j5MQ==
+X-Gm-Message-State: AJIora/eVE890fagmos8Y0ePaWOuir/00r2nOF95W6v7UTw2zcvYpr/8
+        T9sJfll3MRm/LEs0lPqKAcSO2XG1DQotAf+sFwk=
+X-Google-Smtp-Source: AGRyM1upsSKJtr+QvGYlMKxDP610N/WNZrsp03+aWUM5IFs5OahQz7kmvSZGbsUSUBYi4e7uffy4OOyxzU5UI1DtzQs=
+X-Received: by 2002:a7b:c4c8:0:b0:3a3:1b77:61bf with SMTP id
+ g8-20020a7bc4c8000000b003a31b7761bfmr7241829wmk.92.1658211153288; Mon, 18 Jul
+ 2022 23:12:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718213051.1475108-4-caleb@connolly.tech>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+References: <1658123163-10039-1-git-send-email-u0084500@gmail.com>
+ <1658123163-10039-4-git-send-email-u0084500@gmail.com> <20220718180441.1363d2a6@jic23-huawei>
+In-Reply-To: <20220718180441.1363d2a6@jic23-huawei>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Tue, 19 Jul 2022 14:12:21 +0800
+Message-ID: <CADiBU3_Nb4Rio3Z7L-907TB1Gvq6d5_GSP6Av5ZjHzhoDtcEZA@mail.gmail.com>
+Subject: Re: [PATCH v7 3/3] Documentation: ABI: testing: rtq6056: Update ABI docs
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        cy_huang <cy_huang@richtek.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,87 +74,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Caleb,
+Jonathan Cameron <jic23@kernel.org> =E6=96=BC 2022=E5=B9=B47=E6=9C=8819=E6=
+=97=A5 =E9=80=B1=E4=BA=8C =E5=87=8C=E6=99=A812:54=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On Mon, 18 Jul 2022 13:46:03 +0800
+> cy_huang <u0084500@gmail.com> wrote:
+>
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add documentation for the usage of voltage channel integration time.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> >  Documentation/ABI/testing/sysfs-bus-iio | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/AB=
+I/testing/sysfs-bus-iio
+> > index d4ccc68..1f7d327 100644
+> > --- a/Documentation/ABI/testing/sysfs-bus-iio
+> > +++ b/Documentation/ABI/testing/sysfs-bus-iio
+> > @@ -2030,3 +2030,13 @@ Description:
+> >               Available range for the forced calibration value, express=
+ed as:
+> >
+> >               - a range specified as "[min step max]"
+> > +
+> > +What:                /sys/bus/iio/devices/iio:deviceX/in_voltageY_inte=
+gration_time
+> > +KernelVersion:       5.20
+> > +Contact:     linux-iio@vger.kernel.org
+> > +Description:
+> > +             For voltage sensing hardware, there may be different time=
+ between
+> > +             channel conversion and sample update. 'Integration time' =
+is used to
+> > +             specify the channel internal conversion time. And sample =
+update
+> > +             interval is equal to average sample count multiple integr=
+ation time.
+> > +             Unit as microsecond.
+>
+> Whilst I did suggest moving this to this file, I also suggested that it w=
+as the
+> wrong interface to use.  For similar cases we've used in_voltageY_samplin=
+g_frequency
+> in the past because this isn't really an integration time, but rather a r=
+eflection of
+> a bunch of other stuff that makes up the conversion time.  In IIO we chos=
+e a long
+> time ago to use 1/conversion_time as the exposed interface =3D=3D samplin=
+g_frequency
+>
+> So, unless there is a strong reason to do otherwise, drop the overall sam=
+pling_frequency
+> attribute and use per channel ones instead.  Then update the main documen=
+tation
+> to make this usecase clear. Something in the block
+> https://elixir.bootlin.com/linux/latest/source/Documentation/ABI/testing/=
+sysfs-bus-iio#L89
+> like adding the in_voltageY_sampling_frequency entry to the What: list an=
+d a
+> sentence at the end that says something like:
+>
+> "Some devices have separate controls of sampling frequency for individual=
+ channels.
+> If multiple channels are enabled in a scan, then the sampling_frequency o=
+f the the
+> scan may be computed from the per channel sampling_frequencies."
+>
+From my case, I need to specify
+in_voltageX_sampling_frequency/in_powerY_sampling_frequency/
+in_currentZ_sampling_frequency.
 
-On Mon, Jul 18, 2022 at 10:30:50PM +0100, Caleb Connolly wrote:
-> From: Sumit Semwal <sumit.semwal@linaro.org>
-> 
-> LG SW43408 is 1080x2160, 4-lane MIPI-DSI panel.
-A few things to improve to this binding.
+And describe all in the same sentence.
+Can I directly copy the sentence that you described above?
+I read the comment. The sentence that you wrote seems more generic.
 
-	Sam
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> Signed-off-by: Sumit Semwal <sumit.semwal@linaro.org>
-> [caleb: convert to yaml]
-> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
-> ---
->  .../bindings/display/panel/lg,43408.yaml      | 41 +++++++++++++++++++
->  .../display/panel/panel-simple-dsi.yaml       |  2 +
->  2 files changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/panel/lg,43408.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/lg,43408.yaml b/Documentation/devicetree/bindings/display/panel/lg,43408.yaml
-> new file mode 100644
-> index 000000000000..0529a3aa2692
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/lg,43408.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/panel/panel-lvds.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: LG SW43408 1080x2160 DSI panel
-> +
-> +maintainers:
-> +  - Caleb Connolly <caleb@connolly.tech>
-> +
-> +description: |
-> +  This panel is used on the Pixel 3, it is a 60hz OLED panel which
-> +  required DSC (Display Stream Compression) and has rounded corners.
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: lg,sw43408
-> +
-> +  vddi-supply: true
-> +  vpnl-supply: true
-> +  reset-gpios: true
-> +
-> +  backlight: false
-> +  power-supply: false
-No need to say anything is false, this is covered by the statement below.
-Also, the driver uses backlight, so it should be true?
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - data-mapping
-> +  - width-mm
-> +  - height-mm
-> +  - panel-timing
-> +  - port
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple-dsi.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple-dsi.yaml
-> index 2c00813f5d20..4498078cb1ee 100644
-> --- a/Documentation/devicetree/bindings/display/panel/panel-simple-dsi.yaml
-> +++ b/Documentation/devicetree/bindings/display/panel/panel-simple-dsi.yaml
-> @@ -45,6 +45,8 @@ properties:
->        - lg,acx467akm-7
->          # LG Corporation 7" WXGA TFT LCD panel
->        - lg,ld070wx3-sl01
-> +        # LG Corporation sw43408 1080x2160 OLED
-> +      - lg,sw43408
-The panel uses three power-supplies, so it is not a "panel-simple"
-binding. And we cannot have the same compatible twice, so this must be
-dropped.
-
-	Sam
+If any misunderstanding, please correct me.
+> Not something to put in the documentation, but for devices which do simul=
+taneous sampling
+> it is very unlikely we'll have per channel sampling frequencies so there =
+isn't an
+> ambiguity. The alternative we 'could' consider is to allow both overall s=
+ampling_frequency
+> and per channel in_voltageY_sampling_frequency but that is a bad idea bec=
+ause the
+> ABI (and most userspace software) assumes that more specific attributes o=
+verride the
+> values of more generic ones (rather than them having different meanings a=
+s would be
+> the case here).
+>
+> Jonathan

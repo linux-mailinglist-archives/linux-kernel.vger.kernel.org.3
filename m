@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22885792B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 07:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656255792C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 07:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236970AbiGSFt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 01:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        id S230298AbiGSFwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 01:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236951AbiGSFtt (ORCPT
+        with ESMTP id S229618AbiGSFv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 01:49:49 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E173120B
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 22:49:47 -0700 (PDT)
-Received: from fsav117.sakura.ne.jp (fsav117.sakura.ne.jp [27.133.134.244])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 26J5nfBB028033;
-        Tue, 19 Jul 2022 14:49:41 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav117.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp);
- Tue, 19 Jul 2022 14:49:41 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 26J5neQA028024
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 19 Jul 2022 14:49:41 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <4ef053cf-e796-fb5e-58b7-3ae58242a4ad@I-love.SAKURA.ne.jp>
-Date:   Tue, 19 Jul 2022 14:49:39 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: [PATCH] tty: vt: initialize unicode screen buffer
-Content-Language: en-US
+        Tue, 19 Jul 2022 01:51:58 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848513340E
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 22:51:57 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id p8so1246516plq.13
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 22:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UGreb3otYXicSc9AyATwfdoBfIrCHzGc1xh2ozqtBEs=;
+        b=OYOtd68a+OLe314P9GifUJZ4m5i3HRORK2DfvIerbUosILabyXspkzeS5vIBIQ/jrS
+         oc+68fW3haoF+noCVEKxfrQah/IRqa25Db3KLUH/emzoGOXrD0QeqQIfxECtcGeLdmZy
+         rRUHe8JfuFS6HO3DzmsbPX0wme1xbPcSqO31gbBoanjWiOAp0YNcCgO9wuL2rk37hY6z
+         0QmsZy6GRnkyOXNVfFNwGsf+fnqmwt7N/iwEXOPDt94a7QTd3C9uWlFTCDtZLAiSy7SW
+         pRP5qX1sDDYxNb687kR0UccQEfflolGuhkAfr12k441kpCaS1umwfOUk9zBrHn9CR9TA
+         KASw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UGreb3otYXicSc9AyATwfdoBfIrCHzGc1xh2ozqtBEs=;
+        b=5LTNa+mHoAKEZoLuvNPhtXpv5VxlC4oQ3HwL06DEX8AVOM9A915KsjsblDG4tbjRDx
+         d87q3eQkPZiUzmCjyvpaXbe/u2bzY0UEtFeB1aVRlTVLfwPEsPGGYQnODBTFeN7dB4yF
+         CXkY4VV25eDHRFOhA5HgPPYChJ6DwO1l5mbMkSKc/QL9b+81r293ZXW7k1Ei9nl0G456
+         0MS3Lhx6og0Lzcqgh4dsC6ePvXkLLVB+3MeL9IwKIrRHaGAGT3sU9FGxUtyIOOnX1J4f
+         k2kupRnZiQlkOwu+zRWl4VpVYmVl68D0InvKcnr+AEHeXga5b4uHSK+kpI/blAWhtgSH
+         lDvg==
+X-Gm-Message-State: AJIora9mrFgZtSQ3XyH8VHmSFgSxJ3W+oCKCseFPh6ltJcVOvO3ZEN8+
+        IDfkjVOy2IBLSioHAcJMPKE=
+X-Google-Smtp-Source: AGRyM1sX9nh7byGS6CEA4k7+qgl41c1iGJZdTnsJrRtnXvbhEqxKSuT1A3hHcenz54XRD4jULoHh1w==
+X-Received: by 2002:a17:90a:bc8c:b0:1ef:91ca:1c24 with SMTP id x12-20020a17090abc8c00b001ef91ca1c24mr42539239pjr.81.1658209916771;
+        Mon, 18 Jul 2022 22:51:56 -0700 (PDT)
+Received: from tong-desktop.local ([2600:1700:3ec7:421f:33db:e37c:7ee3:662b])
+        by smtp.googlemail.com with ESMTPSA id a16-20020a170902ecd000b0016c20d40ee7sm10709338plh.174.2022.07.18.22.51.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 22:51:56 -0700 (PDT)
+From:   Tong Zhang <ztong0001@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-References: <000000000000eca3eb0598e26a3d@google.com>
- <0000000000000bd4d405ae9d32a4@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <0000000000000bd4d405ae9d32a4@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tong Zhang <ztong0001@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Colin Ian King <colin.king@intel.com>,
+        Saurav Girepunje <saurav.girepunje@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Cc:     dan.carpenter@oracle.com, Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH v2 0/3] staging: rtl8192u: fix rmmod warn when wlan0 is renamed
+Date:   Mon, 18 Jul 2022 22:50:35 -0700
+Message-Id: <20220719055047.322355-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220718120149.GD2338@kadam>
+References: <20220718120149.GD2338@kadam>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot reports kernel infoleak at vcs_read() [1], for buffer can be read
-immediately after resize operation. Initialize buffer using kzalloc().
+There are 4 debug files created under /proc/net/[Devname]. Devname could
+be wlan0 initially, however it could be renamed later to e.g. enx00e04c000002.
+This will cause problem during debug file teardown since it uses
+netdev->name which is no longer wlan0. To solve this problem, add a
+notifier to handle device renaming.
 
-  ----------
-  #include <fcntl.h>
-  #include <unistd.h>
-  #include <sys/ioctl.h>
-  #include <linux/fb.h>
+Also, due to this is purely for debuging as files are created read only,
+move this to debugfs like other NIC drivers do instead of using procfs.
 
-  int main(int argc, char *argv[])
-  {
-    struct fb_var_screeninfo var = { };
-    const int fb_fd = open("/dev/fb0", 3);
-    ioctl(fb_fd, FBIOGET_VSCREENINFO, &var);
-    var.yres = 0x21;
-    ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var);
-    return read(open("/dev/vcsu", O_RDONLY), &var, sizeof(var)) == -1;
-  }
-  ----------
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
 
-Link: https://syzkaller.appspot.com/bug?extid=31a641689d43387f05d3 [1]
-Reported-by: syzbot <syzbot+31a641689d43387f05d3@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
- drivers/tty/vt/vt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: break down patch and fix pointer check
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index f8c87c4d7399..6968517d6f8b 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -344,7 +344,7 @@ static struct uni_screen *vc_uniscr_alloc(unsigned int cols, unsigned int rows)
- 	/* allocate everything in one go */
- 	memsize = cols * rows * sizeof(char32_t);
- 	memsize += rows * sizeof(char32_t *);
--	p = vmalloc(memsize);
-+	p = vzalloc(memsize);
- 	if (!p)
- 		return NULL;
- 
+Tong Zhang (3):
+  staging: rtl8192u: move debug stuff to its own file
+  staging: rtl8192u: move debug files to debugfs
+  staging: rtl8192u: fix rmmod warn when wlan0 is renamed
+
+ drivers/staging/rtl8192u/Makefile         |   1 +
+ drivers/staging/rtl8192u/r8192U.h         |   6 +
+ drivers/staging/rtl8192u/r8192U_core.c    | 223 ++++------------------
+ drivers/staging/rtl8192u/r8192U_debugfs.c | 188 ++++++++++++++++++
+ 4 files changed, 235 insertions(+), 183 deletions(-)
+ create mode 100644 drivers/staging/rtl8192u/r8192U_debugfs.c
+
 -- 
-2.34.1
-
+2.25.1
 

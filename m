@@ -2,133 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0662B5791B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 06:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2D15791B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 06:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236821AbiGSEOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 00:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
+        id S236838AbiGSEPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 00:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiGSEOw (ORCPT
+        with ESMTP id S233294AbiGSEPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 00:14:52 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22A63ED5E
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 21:14:51 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso20125089pjc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 21:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PcoM/2VxSazYw3xrD2Doehr//Sh1eaqhYJJVE4GDy34=;
-        b=Opm4hi3omHyUJfxTX7A6AUKYKxH6SF2hvwXsFMaHw5vuVLEi1Nibi2mNaMXkfehTBR
-         WVtr/AdJ9d9ciIxMs8K6zTCGUiceENfLjIBKKjJBNhpV9xjHmfP/s5rg3Im4Hnsoax89
-         0DjC9YfKQuIUbrKs8sATbBnBaK0I2zihi67vJUSaWj/BtmCF1XuFyqwqOC4sT44FUNtX
-         iCYoNaY9rmSjFz/oKpdDoeq3OY6TnwglIlZYosgKCuKpvaUg3igxTi50q2nro5h515Z4
-         hL01oin4i/6j3NXa86htkVgHjC8ZcAP/WGYQrP/IRj5pFl62xB4GEmtBo3fTsBJPZth+
-         RJFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PcoM/2VxSazYw3xrD2Doehr//Sh1eaqhYJJVE4GDy34=;
-        b=HkdWC5pAoiS8ahG/QXCJdLOQBSWLIMVtjUqVl+wZNc9bC75t09nsusPFHtEMQjaqIe
-         isElS0oOphbPpdpj3vM797RoJ83FiZK0KZSl9O5ivnhytCoX0A9H8rl5ml/ckafs4Ht2
-         fMoHEagANGrx/fXzkuMaBejmG+Gk5RypI9qrBt3NyrpLhw8V9ac4FlV0L6l29yrj3mKN
-         i3YwqpkpAb7hOeA3BKOCYbbx66pcC7AnDF4doNko9q1e399yK73kcT+9IJwZ+EJaQogn
-         v6mUwyppDfKvKfW3MCpo3r6C4ClTqBltVVG4Ueap/0+2VU7dj43fvo4MxjjLCwHv8iHL
-         wp5Q==
-X-Gm-Message-State: AJIora/j/DpsqM7NOO9604ucCp6LPnAshC9Nljp69amN0lyOqY9MgaNC
-        V5xy+9d/oQyDxz5Ty9Rf05gdDQ==
-X-Google-Smtp-Source: AGRyM1tI6zyRWQfdZYvlnOak1NVPcELyI5ONB78Ywca0UFqiJ9+fItFi1nzNJgxXXUHg2SLi20/X1Q==
-X-Received: by 2002:a17:90b:3a88:b0:1f0:56d5:460e with SMTP id om8-20020a17090b3a8800b001f056d5460emr41219754pjb.208.1658204091145;
-        Mon, 18 Jul 2022 21:14:51 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id b32-20020a631b60000000b0040d48cf046csm8935574pgm.55.2022.07.18.21.14.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 21:14:50 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 09:44:48 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Di Shen <di.shen@unisoc.com>
-Cc:     lukasz.luba@arm.com, amitk@kernel.org, rui.zhang@intel.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
-        xuewen.yan94@gmail.com
-Subject: Re: [PATCH] thermal: cpufreq_cooling: Avoid all cluster using global
- cooling_ops
-Message-ID: <20220719041448.iyavinsv3jzs3au4@vireshk-i7>
-References: <20220718122419.9409-1-di.shen@unisoc.com>
+        Tue, 19 Jul 2022 00:15:45 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2075.outbound.protection.outlook.com [40.107.101.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC77F5FA6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 21:15:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QWHvUJ52KDOOr4JPTWZqEaFE4we9XbDW6sOT6c4g9xG/xTFeFziR2dh9PmmwI8mE+ZVqIg16Xo+OAFEAkeshOzckokxysWSKNp9blND1rIgf6ucT+EqUacYkkxgkdlHaSaDoMGuvxw/Ars/TYjQ0uxhJpD0exIRPiehjTPP1UICAKLOPaKQPFkN5J2bnBFvW1B59B/XB8F6uU5x7rXQbRB9Oz6ibaWEnPFXanLhtvHDrba0pG2OSVHSqDZMYy+LbafDcpZah7HuWOSMcpDodNjJKAIEIRDNcXDww+prITJ+JEp5mDDFyIPXOLEWWWnaAZDIF7E0dirgaYlM3VTnvTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1s4WiG8zS1U6Xgq00fjDfMhow8GdlRvfGJcxvPRjykg=;
+ b=dETQXCtTmq/dkUWpbyN8eXl1co5yUTW8p+IY7FXm32K89+JG1cFdm6mkl9+1wzegU6rzB0mRUGBqYiMdYeKwEUAPIzMqTQ0OuRtSJLqYhb8y5zHMM71Mol7j6JtTuj7MmqXdu3bwsIRIh1fAB8VPSlt0wgS6CvQ2HDt5x+cYJ14rgjMRcIagJkmP1GGZqgpSGWxE9R1xZDG+zGdHJjWqSqS8b8iWZLLoVjf0gg3nRnWtYbAZn3JAVpBH2pcxNZrWWdBeGrp/TocCi/JHkbHO8xNZnXOTTGpPPL9AH6YoOLwjOGv/4PT5zNXM7tD2pvUv2o1L1gJgpWhFXlqVY6ogYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1s4WiG8zS1U6Xgq00fjDfMhow8GdlRvfGJcxvPRjykg=;
+ b=gKiCi5OhctciUXa7JoNjxG5SFqGBYcWZ1uuAVLHhyu1CE7wHGCizG0Y4qcNwafI03e5Rv7TmXnuWAMuffJTpIf44z3Pe+VrQK2AW39h7LQpIjz9YdOyRzmo1szC0Fh5eqO0ARwRFEYQv9IoFInO+Ymudh3el5aFu/4miViBCEcw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com (2603:10b6:208:3ae::10)
+ by BYAPR12MB3032.namprd12.prod.outlook.com (2603:10b6:a03:dd::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.15; Tue, 19 Jul
+ 2022 04:15:41 +0000
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::9dfc:d340:841f:a6fb]) by IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::9dfc:d340:841f:a6fb%5]) with mapi id 15.20.5417.023; Tue, 19 Jul 2022
+ 04:15:41 +0000
+Message-ID: <24ccd22f-6708-3265-4012-66f01108ff22@amd.com>
+Date:   Tue, 19 Jul 2022 09:45:31 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC FIX PATCH] x86/e820: Stop kernel boot when RAM resource
+ reservation fails
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        x86@kernel.org, dave.hansen@linux.intel.com, nikunj@amd.com,
+        hpa@zytor.com, Abraham.Shaju@amd.com
+References: <20220718085815.1943-1-bharata@amd.com>
+ <E7A3FF43-C49F-415E-81C6-CD14F4107349@alien8.de>
+ <be498c32-bed6-d31a-ae94-6006dd59ea1e@amd.com> <YtV3Ipvt96X/iO2J@zn.tnic>
+From:   Bharata B Rao <bharata@amd.com>
+In-Reply-To: <YtV3Ipvt96X/iO2J@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0110.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:96::7) To IA1PR12MB6434.namprd12.prod.outlook.com
+ (2603:10b6:208:3ae::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718122419.9409-1-di.shen@unisoc.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 410a5a1c-b355-430e-909f-08da693d576e
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3032:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wP09MyNg3OLW39P6FMhbKenCmNXJyggTVP3CtgavvpFNmQFuBT6I8HmCC/1ok5YvwljZo4M3IzB2l+86OkL1oCmeR5axBknU/K3TXRmPflyi3Mk9aKg6zF4fx3e6l/S8AtIk6JRdHi/PYv2RzHtAUvHcepvbu8vX9ojZbWezHeae59uCjGd3r3X9FwH96HWLcCKeSEoJIa8bO/z8Tj1ZQr6x0flvowv3BbZGs3vvs9L0l3LOMKx8Pu8i2+DqyAI50wwbsMBchjreAwdj9NOqit+jyc3ZzFAz5hkoGDj4JaMzQubZL+doaBmo3frJoslPcTxxM06RZJbitz2TX/z1jpfwFizlya5Q+AF9MwDJ7xXz0z18wzJttJQyrqr1HEVO7d3o+YPy7OtD9hCmCxwt+6uGg6k3dI4EyQ8KhU4MUrlq5aWbwrIlCMkKwzMqjhegTkkY/gew4r6QVYcPxc7SqpaBfgOR0VcFnGm5FgWHJJXnendwz5arbqFj315Z9TcJmHfyD2+noPjIvIW8pqRk01HzKzLxu0FN5win+FW+BK4RpvBZA2rmHA/rdjPBBEWBTqeHW+3lfMkm4YIh3MdGG8k5NmHUUCpgKrWaHIaxuyu8YGMJ9JDDLFT9snvWKAgijqmgA8P99Ruezg2OXbtEBP2I8RlLstrSSOtqpVpug9M3D8Fq2hXYmQqgPyFfe3YV1GG4m5MtLCOgBceYn7/GGlmWkkNxmqR6lomlUt5WD/jX0P77iLQ6i5C0w/EsiqZygPKS+udKoN+i2J7jMADelRpdwsAymksLI9pesOBMLkDVcBEV2jqz+qUmpAQ2v5VS2AQBOxil6iZecq2822edzw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6434.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(136003)(366004)(346002)(396003)(6486002)(86362001)(478600001)(31686004)(186003)(6666004)(6512007)(6506007)(2616005)(316002)(31696002)(6916009)(41300700001)(53546011)(26005)(66556008)(8676002)(66476007)(8936002)(4744005)(5660300002)(66946007)(4326008)(2906002)(36756003)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MlhjMkdJa3NIZ08rQ3d4ZmhISTh2bEhkYjFRVEtRdzJUWEp1ZXNoaU5Hclpo?=
+ =?utf-8?B?V3VuR1kvelJBN1didmhrQ2tVcVNQUDhvcHNzL2tCa0VKSGNDSkZTSVpBdFp5?=
+ =?utf-8?B?SDBzck9zT3YyUjhTSnBsNyswWENEQ3RvdTQ3YU05bjNxSjNTeDhDd1E3ejhW?=
+ =?utf-8?B?OXY0WEYyeERYaklnOUVrZzRxaGxiS2g2d1dQYkZ4Q3pGMnBLRGxrTVQxc003?=
+ =?utf-8?B?SUllRDJEUTNSVDlXbWx2NzgrTkRtd2VwS21zSGlZZXFzNy9CbnExQks5ZXpU?=
+ =?utf-8?B?bzNaYWNVZ0pLQitJWEVFbzRlVElkclZsanRGdmJ4SFJhamttV1pXVnlXWlBm?=
+ =?utf-8?B?RFZod0RhSDI2dUVCMnVmYW4vVWswbVBwYmpLVzdqdFhzZExhb1pQckRoKzVp?=
+ =?utf-8?B?TWVSVlVFK0dsNGFQYXdzWWdaMm9QbmJ0WkxqOG1kWGhIVGNSUDBYSXI4NkVJ?=
+ =?utf-8?B?eEhhaDNMRXJ5UVRBcFZpUEtFMXlQQUJrRWR5QUt4ODUxbmpoSk5aUUdXaHJu?=
+ =?utf-8?B?RVdLdmNjQ0FIMUd5YTFSTUsrOHBYQ014aU10cUJwSUJTNzlZMSt4UEJwaW9r?=
+ =?utf-8?B?aWpFb3J2dGkweGNZeU92UVlESFFEMzRROUo3S1hmTUFaUlBCMk5aNWlEWDNl?=
+ =?utf-8?B?TFdmUUNNSzROckp1RmpsN0hDbnYzMXFINTljSmFaLzJDNnRDaVd0WHZDeEJ1?=
+ =?utf-8?B?ZmxNWGFDdUYvM2U3bjVWZ3EyeDhzTWZod1RwUG9uMVYySWlBRW92WmE0LzBJ?=
+ =?utf-8?B?RDNHTkc4ZlMwdzVWSHdpYWhYT2E0R3RsOXNRQUFjNUIzaHphLzJCYVA3MTIx?=
+ =?utf-8?B?dTMvNDB6eDRvVS9ZNGhKemRTendkMHJOa0o1WUE0L000MksrcGkxcEZob3Ri?=
+ =?utf-8?B?UkdhaTJEYjY5a1BrdWUzUDlXQkhKbWtlS1BVNGVjOFdNbnZtdlpqcVNocFJn?=
+ =?utf-8?B?TC9vVzZHZzZ0QU1JbE1zbEF2T1Bxd0ttOG14THJ0MHBZYWw1dU5qRnhvYTRJ?=
+ =?utf-8?B?d21idzVWRVR1SVRHUjhiSXArY1YzbENFZFhvbUwzZ0g5ZVBjNVdkcml4NXhk?=
+ =?utf-8?B?Mk44NitQNFlLb3dPYkhjK2tqZGttWDFETjRsUG1KdVRWcGw2ZHdaWWxWT2lP?=
+ =?utf-8?B?ZnZ6WU5rZHVsaU1JRVdxMDhwakhiZk9XT3NtYnBtdGk1RHRNbHNvdllFWXpV?=
+ =?utf-8?B?ZXJJZzZlVFIrd1N1YTZObWZyaHgyM3BxbFR4NHR3M1NqMlhOK3dYVXo0akFC?=
+ =?utf-8?B?ekdJd24wWkEySVBFeVNtc1NrYjllUWQrdUlDLzVXTFRadVVzeEorS3drOEFK?=
+ =?utf-8?B?YzE1R1NSM0ZvZ01pWkVvYWhxMWpDZTZ0RnNFOUJ5NFg1bUZsUEJUTWVQRHdk?=
+ =?utf-8?B?VmNwZzVtVHZyMnRnZ1hzOVRJVzNRVG5PWk9TSldZcmZmTEFLREdjdXY0bTVP?=
+ =?utf-8?B?L21MUGtmd25zbC9vMWZkRWtrMHd3V29ZQW5SUm12UWg5aHhSSW9XZGNRRHVi?=
+ =?utf-8?B?WlhpTEZ0OXZjci9WYnp1UG92QXJCYUlTTHhGQmtvajJLUC9aNWZuLzlrVnk2?=
+ =?utf-8?B?Smd6aG9JU0pRdmVCcEVSbXZ2MW5rSEJqNW5GRHlhK0N5MGxxYUUrOUl0K3Vn?=
+ =?utf-8?B?QWZpTWZCY1lGbm93TFIyZnIwMXBTK1Zjd0oxZ1p2RE0wb2IvR2FtSEVxWHVw?=
+ =?utf-8?B?cjlZRk9Wc2VXdUlxUkRhSlB5ZkZLV1g5SEQ1dXhuTTM0aUxPV0N3QVEyWTZG?=
+ =?utf-8?B?ZnVWdzdya0JBV2ovR0JYekUxUWVsbEMrMmR5M3FHa0RmVnRmV1NXRTJDSmt5?=
+ =?utf-8?B?bnp4cmZ2eTBYYzBrOSt0V1ByZVduWlN5c3FmUGpSV1huTkdpamUyOXM5NmFm?=
+ =?utf-8?B?UkFtQVU5V29RWU50ck5nVE51dWJ4TlFOTzN3VHE2bHFSQmVkV09jKzV1cTkx?=
+ =?utf-8?B?MS9mYmx3Rmk0Q3o0MFRjT29nOW5IRmcyTzh1SGxUVkljZTVacVpmY1BId1Qz?=
+ =?utf-8?B?Y1JKZWZZMWNtR3paWlJjUlowZEhqaXlRSlAxRGRWbEsrcFdWaGtyc3hCb0l0?=
+ =?utf-8?B?bm5pSlBScVYyaUxmdWRIa3lBUDl0aTJjcm9FVXBUVG8ySXNJU0lpNEJCK1Ra?=
+ =?utf-8?Q?QUhasAb1dUZUNuJOT3Hl5aOU9?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 410a5a1c-b355-430e-909f-08da693d576e
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6434.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 04:15:41.0569
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JUMuHATLIaJxX2t8MqVQEMfKTmlyzSXRRtsPDR879E1ZW9IsvSejV4tm0XZRFOeuZJoMjfk3tEgOeItCJxS6dw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3032
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-07-22, 20:24, Di Shen wrote:
-> Now, all the cooling device use the globle cpufreq_cooling_ops. When the
-> CONFIG_THERMAL_GOV_POWER_ALLOCATOR is enabled, once one cluster init the
-> cpufreq_cooling_ops, it would make all cooling device use the power allocator's
-> ops. If one's em is error because of the "em_is_sane", it would cause the
-> em NULL, but the cooling device's ops is exist, as a result, it would cause
-> panic because of the em.
+On 7/18/2022 8:37 PM, Borislav Petkov wrote:
 > 
-> Add cpufreq_power_cooling_ops to avoid this case.
+> I betcha you can generate a lot of "kernel bugs" with weird qemu
+> options. If it is not a real use case, nobody cares.
+
+I see that we will hit this problem by default when starting
+a guest with 1T or more memory using QEMU.
+
 > 
-> Signed-off-by: Di Shen <di.shen@unisoc.com>
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> ---
->  drivers/thermal/cpufreq_cooling.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index b8151d95a806..af5cfb458370 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -493,6 +493,17 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
->  	.set_cur_state		= cpufreq_set_cur_state,
->  };
->  
-> +#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
-> +static struct thermal_cooling_device_ops cpufreq_power_cooling_ops = {
-> +	.get_max_state		= cpufreq_get_max_state,
-> +	.get_cur_state		= cpufreq_get_cur_state,
-> +	.set_cur_state		= cpufreq_set_cur_state,
-> +	.get_requested_power	= cpufreq_get_requested_power,
-> +	.state2power		= cpufreq_state2power,
-> +	.power2state		= cpufreq_power2state,
-> +};
-> +#endif
-> +
->  /**
->   * __cpufreq_cooling_register - helper function to create cpufreq cooling device
->   * @np: a valid struct device_node to the cooling device device tree node
-> @@ -559,9 +570,7 @@ __cpufreq_cooling_register(struct device_node *np,
->  #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
->  	if (em_is_sane(cpufreq_cdev, em)) {
->  		cpufreq_cdev->em = em;
-> -		cooling_ops->get_requested_power = cpufreq_get_requested_power;
-> -		cooling_ops->state2power = cpufreq_state2power;
-> -		cooling_ops->power2state = cpufreq_power2state;
-> +		cooling_ops = &cpufreq_power_cooling_ops;
->  	} else
->  #endif
->  	if (policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED) {
+> And even if it were a real use case, panicking the machine is not the
+> right fix.
 
-Please have a look at this patch in linux-next.
+I couldn't see a clean exit/recovery option in setup_arch()->e820__reserve_resources()
+where this happens. Any suggestions?
 
-commit 6ee324afdf30 ("drivers/thermal/cpufreq_cooling: Use private callback ops for each cooling device")
-
-This already fixes the problem, right ?
-
--- 
-viresh
+Regards,
+Bharata.

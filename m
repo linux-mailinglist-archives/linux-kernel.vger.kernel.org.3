@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A463F5799B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 793B4579EAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238198AbiGSMFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S242907AbiGSND6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238252AbiGSMEP (ORCPT
+        with ESMTP id S242779AbiGSM7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:04:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8B0CE1;
-        Tue, 19 Jul 2022 05:00:09 -0700 (PDT)
+        Tue, 19 Jul 2022 08:59:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC632623;
+        Tue, 19 Jul 2022 05:25:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6721DB81A8F;
-        Tue, 19 Jul 2022 12:00:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B248DC341C6;
-        Tue, 19 Jul 2022 12:00:06 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 24549CE1BCF;
+        Tue, 19 Jul 2022 12:25:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25814C341D1;
+        Tue, 19 Jul 2022 12:25:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232007;
-        bh=7ZYWiRyY+pdBvXiE3F4IZL5+o6eMslmSkCprIoHSkHs=;
+        s=korg; t=1658233503;
+        bh=w88KjV2nHe48toTaqFwb8rbs7fnFyPWkrIu4x3ktmtI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cd9O+r+KmVP9sG74bBPx0ZWWMFlCAZcjsYoPflAI9kAXk2Ys6yxNmI+dxN8sFNttf
-         1WCOhRLq5nwf78xNjl+TjMzYwAnX+6utivm7SiNoLrUL4HGH6T2Kpg9e+k223Ofpet
-         tTcof6ejArYG2nGxkRaJCt87jp5q1cIZUsxwBKsc=
+        b=EGoGvaTkCyToWCaH/WfiVlNTz1ERcVBYYVxxqE+H2iRj4IUq7la1gOLzh3AOUffe2
+         byi14/CnVpzNdeiAJvPvJGHbzR/6Tit6tpK9GlLLwNPE6bZQoFoSKT09N7WGdeRd+5
+         5VEf25j5d4k8ukb4ukK4ifDbNlaEu+jxnHbeKF6s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        Tommy Pettersson <ptp@lysator.liu.se>,
-        Ciprian Craciun <ciprian.craciun@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.19 10/48] nilfs2: fix incorrect masking of permission flags for symlinks
-Date:   Tue, 19 Jul 2022 13:53:47 +0200
-Message-Id: <20220719114520.841055062@linuxfoundation.org>
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 143/231] net/tls: Check for errors in tls_device_init
+Date:   Tue, 19 Jul 2022 13:53:48 +0200
+Message-Id: <20220719114726.401044856@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
-References: <20220719114518.915546280@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +55,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+From: Tariq Toukan <tariqt@nvidia.com>
 
-commit 5924e6ec1585445f251ea92713eb15beb732622a upstream.
+[ Upstream commit 3d8c51b25a235e283e37750943bbf356ef187230 ]
 
-The permission flags of newly created symlinks are wrongly dropped on
-nilfs2 with the current umask value even though symlinks should have 777
-(rwxrwxrwx) permissions:
+Add missing error checks in tls_device_init.
 
- $ umask
- 0022
- $ touch file && ln -s file symlink; ls -l file symlink
- -rw-r--r--. 1 root root 0 Jun 23 16:29 file
- lrwxr-xr-x. 1 root root 4 Jun 23 16:29 symlink -> file
-
-This fixes the bug by inserting a missing check that excludes
-symlinks.
-
-Link: https://lkml.kernel.org/r/1655974441-5612-1-git-send-email-konishi.ryusuke@gmail.com
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Reported-by: Tommy Pettersson <ptp@lysator.liu.se>
-Reported-by: Ciprian Craciun <ciprian.craciun@gmail.com>
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+Link: https://lore.kernel.org/r/20220714070754.1428-1-tariqt@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nilfs2/nilfs.h |    3 +++
- 1 file changed, 3 insertions(+)
+ include/net/tls.h    | 4 ++--
+ net/tls/tls_device.c | 4 ++--
+ net/tls/tls_main.c   | 7 ++++++-
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
---- a/fs/nilfs2/nilfs.h
-+++ b/fs/nilfs2/nilfs.h
-@@ -198,6 +198,9 @@ static inline int nilfs_acl_chmod(struct
+diff --git a/include/net/tls.h b/include/net/tls.h
+index b6968a5b5538..e8764d3da41a 100644
+--- a/include/net/tls.h
++++ b/include/net/tls.h
+@@ -708,7 +708,7 @@ int tls_sw_fallback_init(struct sock *sk,
+ 			 struct tls_crypto_info *crypto_info);
  
- static inline int nilfs_init_acl(struct inode *inode, struct inode *dir)
- {
-+	if (S_ISLNK(inode->i_mode))
-+		return 0;
-+
- 	inode->i_mode &= ~current_umask();
- 	return 0;
+ #ifdef CONFIG_TLS_DEVICE
+-void tls_device_init(void);
++int tls_device_init(void);
+ void tls_device_cleanup(void);
+ void tls_device_sk_destruct(struct sock *sk);
+ int tls_set_device_offload(struct sock *sk, struct tls_context *ctx);
+@@ -728,7 +728,7 @@ static inline bool tls_is_sk_rx_device_offloaded(struct sock *sk)
+ 	return tls_get_ctx(sk)->rx_conf == TLS_HW;
  }
+ #else
+-static inline void tls_device_init(void) {}
++static inline int tls_device_init(void) { return 0; }
+ static inline void tls_device_cleanup(void) {}
+ 
+ static inline int
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index 3919fe2c58c5..3a61bb594544 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -1394,9 +1394,9 @@ static struct notifier_block tls_dev_notifier = {
+ 	.notifier_call	= tls_dev_event,
+ };
+ 
+-void __init tls_device_init(void)
++int __init tls_device_init(void)
+ {
+-	register_netdevice_notifier(&tls_dev_notifier);
++	return register_netdevice_notifier(&tls_dev_notifier);
+ }
+ 
+ void __exit tls_device_cleanup(void)
+diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+index 5c9697840ef7..13058b0ee4cd 100644
+--- a/net/tls/tls_main.c
++++ b/net/tls/tls_main.c
+@@ -993,7 +993,12 @@ static int __init tls_register(void)
+ 	if (err)
+ 		return err;
+ 
+-	tls_device_init();
++	err = tls_device_init();
++	if (err) {
++		unregister_pernet_subsys(&tls_proc_ops);
++		return err;
++	}
++
+ 	tcp_register_ulp(&tcp_tls_ulp_ops);
+ 
+ 	return 0;
+-- 
+2.35.1
+
 
 

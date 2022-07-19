@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD850579C23
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20630579ACC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240609AbiGSMgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S239465AbiGSMTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240305AbiGSMfN (ORCPT
+        with ESMTP id S238655AbiGSMRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:35:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCDD7AB11;
-        Tue, 19 Jul 2022 05:14:01 -0700 (PDT)
+        Tue, 19 Jul 2022 08:17:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08C9564E8;
+        Tue, 19 Jul 2022 05:06:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70CC3B81B32;
-        Tue, 19 Jul 2022 12:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF17DC341C6;
-        Tue, 19 Jul 2022 12:13:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC3FA61764;
+        Tue, 19 Jul 2022 12:06:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA9EFC341CA;
+        Tue, 19 Jul 2022 12:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232834;
-        bh=PH0I0FrJz8Iu1ZppSIcZbT/GPSH/t/4UMdyeC++/lI0=;
+        s=korg; t=1658232392;
+        bh=hqZHr9AFycMkemc5LZ4XJPWtp9VZEGQgL46fSDiJWYU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uOqY+hTCPcb6HijPlHfB8Kyyzzu5ONRhA68ctXJiHrG83iVG06TiMbcVLxGfMFLDz
-         F57PEERp5B3RPwipsO1Mkp0X4EIwBrjFEy7+ezuwMbFbApI0rprRgy2rco9yXwOvIC
-         Zrgs1lvtqGqtCdHtYAcRa8K/A3XeWaUbNw7Txpyo=
+        b=Gl6RKx86NEWwpYatVjm7nV+WrLMO89wOje3DWdynUZbAybRVGX2pastTb2wBWy25B
+         dH9WzgyEYGRLx91LjFAfzWttIDs1ximdnZnKusP7pdDCa49a4Wb9J/bpzoqYJofP+V
+         X3+63XwG3IsQGTTflqhruTrbkMvkpXR2bBpKMzBo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 082/167] sysctl: Fix data-races in proc_dou8vec_minmax().
+Subject: [PATCH 5.10 041/112] net: stmmac: dwc-qos: Disable split header for Tegra194
 Date:   Tue, 19 Jul 2022 13:53:34 +0200
-Message-Id: <20220719114704.502067143@linuxfoundation.org>
+Message-Id: <20220719114630.320761159@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Jon Hunter <jonathanh@nvidia.com>
 
-[ Upstream commit 7dee5d7747a69aa2be41f04c6a7ecfe3ac8cdf18 ]
+[ Upstream commit 029c1c2059e9c4b38f97a06204cdecd10cfbeb8a ]
 
-A sysctl variable is accessed concurrently, and there is always a chance
-of data-race.  So, all readers and writers need some basic protection to
-avoid load/store-tearing.
+There is a long-standing issue with the Synopsys DWC Ethernet driver
+for Tegra194 where random system crashes have been observed [0]. The
+problem occurs when the split header feature is enabled in the stmmac
+driver. In the bad case, a larger than expected buffer length is
+received and causes the calculation of the total buffer length to
+overflow. This results in a very large buffer length that causes the
+kernel to crash. Why this larger buffer length is received is not clear,
+however, the feedback from the NVIDIA design team is that the split
+header feature is not supported for Tegra194. Therefore, disable split
+header support for Tegra194 to prevent these random crashes from
+occurring.
 
-This patch changes proc_dou8vec_minmax() to use READ_ONCE() and
-WRITE_ONCE() internally to fix data-races on the sysctl side.  For now,
-proc_dou8vec_minmax() itself is tolerant to a data-race, but we still
-need to add annotations on the other subsystem's side.
+[0] https://lore.kernel.org/linux-tegra/b0b17697-f23e-8fa5-3757-604a86f3a095@nvidia.com/
 
-Fixes: cb9444130662 ("sysctl: add proc_dou8vec_minmax()")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 67afd6d1cfdf ("net: stmmac: Add Split Header support and enable it in XGMAC cores")
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+Link: https://lore.kernel.org/r/20220706083913.13750-1-jonathanh@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sysctl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 5be8108a9a45..357900d0cef9 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1138,13 +1138,13 @@ int proc_dou8vec_minmax(struct ctl_table *table, int write,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c
+index 2342d497348e..fd1b0cc6b5fa 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.c
+@@ -363,6 +363,7 @@ static void *tegra_eqos_probe(struct platform_device *pdev,
+ 	data->fix_mac_speed = tegra_eqos_fix_speed;
+ 	data->init = tegra_eqos_init;
+ 	data->bsp_priv = eqos;
++	data->sph_disable = 1;
  
- 	tmp.maxlen = sizeof(val);
- 	tmp.data = &val;
--	val = *data;
-+	val = READ_ONCE(*data);
- 	res = do_proc_douintvec(&tmp, write, buffer, lenp, ppos,
- 				do_proc_douintvec_minmax_conv, &param);
- 	if (res)
- 		return res;
- 	if (write)
--		*data = val;
-+		WRITE_ONCE(*data, val);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(proc_dou8vec_minmax);
+ 	err = tegra_eqos_init(pdev, eqos);
+ 	if (err < 0)
 -- 
 2.35.1
 

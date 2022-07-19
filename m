@@ -2,183 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0318157966D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422FD579671
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbiGSJfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 05:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
+        id S237242AbiGSJgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 05:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiGSJfl (ORCPT
+        with ESMTP id S236843AbiGSJge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:35:41 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B320E63E4;
-        Tue, 19 Jul 2022 02:35:40 -0700 (PDT)
+        Tue, 19 Jul 2022 05:36:34 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38981116C
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:36:32 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id i206so25477927ybc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:36:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658223340; x=1689759340;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=m1aVrfCIWkTRj/Ot+sphRkOtJc8r8sLqis6cCuF1D/8=;
-  b=S9xfD9Re4JL6hYGtgXIL9Rg7u4Ai57SFKb8MdDzL070wTJVDyhzxxq7v
-   KZoBk9VU3iXIT8x+mc1pjpSfFmU3+5xNzLLy6XYlPPxkkAvXYi1OH2Vub
-   XJ3OI/3iG6bimk70Fe1enE2q7CNfN6stizlLEPCsrsRH+4QnDdwScmJet
-   g=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 19 Jul 2022 02:35:40 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 02:35:40 -0700
-Received: from [10.50.41.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 19 Jul
- 2022 02:35:37 -0700
-Message-ID: <576e86fa-5a9a-29bb-0d80-eb3202a808b6@quicinc.com>
-Date:   Tue, 19 Jul 2022 15:05:34 +0530
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kcODNYrp+VKkOtbBUD23HLsfyp2gv6gQrx0DgI07j10=;
+        b=Zw7PrFKfP+/4qoL4plmuh+Ti44dlIeOdjEROXu/pO4UbBi70en+R4pYSONQpWhE03u
+         Sc0Y2E2GEq1P7l8zJvfNyHS7ZJtjSnLByG43SbwQZ3pNzBF/ROWZvz0hrYlgdgD8Cl2Y
+         Ez29bVQSZyegjrIAsyoqicMAHSsclmeETDayc1WJZvXFZAp1CQ9Zbg8X0FE35WgF9Xc2
+         qfGcmLC9kRCbBjNulWYzZkwDfTHvi61NkFLLR1pUlPEe+Lyw8I7J3BnQBj7iOUOtIK91
+         CZsLyScvAuoBurN7GSExxuRy77xhAvnRVusD1Byw3M3f0niKxQEHzdNTLEIqn02VrPI6
+         26wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kcODNYrp+VKkOtbBUD23HLsfyp2gv6gQrx0DgI07j10=;
+        b=EEt3aDtQcAEgh3aYFCmIiMinPwqzuhBCCgVcX3QUnAYvg1McHpD10QBFKHBhOvZ+RY
+         sryQAvW+kTmihi2oqG7IroRVmowuR+ink4IfvToTiWV5ytqmBdZMFdpcsLHarfcE50er
+         KgJOFk2fzbYCLbLB1ir6Rl5rO+Bcp2AULutvtRYZe9ZaknOG/cJLFutsQPAXP6EpxkS/
+         hwiPT6SsSCa4Z6amJDfJs+n/PIhPJrL0xHmxN6khvn9+JR/Twg0PQV/WyOB2bSGXvi2A
+         iQvndMWU0L7rDfMgS/2ZaaMeKHzliVukPHckIq2H7Tfe9q9d0YCy5GzPN2y9fbgcpLFg
+         sliw==
+X-Gm-Message-State: AJIora/WUvtqYrNNnv/KOAM9cAU6fCndbjMxX1ZT2MVtQ+mGj3IrCVNy
+        MK1EBGVikyYr6RIIxJunezJGY1nrt+uzoz55/+DU0g==
+X-Google-Smtp-Source: AGRyM1si3SKO3wIMa+R+kcy/+WJDzrsNzoE8pPQ+7zS9An7yZtN8WYu8iaNk1Ei/jx7GFw7xmt79YbWY5UV/CF7/LPs=
+X-Received: by 2002:a05:6902:120c:b0:66e:fbad:39de with SMTP id
+ s12-20020a056902120c00b0066efbad39demr30443605ybu.388.1658223392022; Tue, 19
+ Jul 2022 02:36:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH rcu 6/7] rcu/nocb: Add option to opt rcuo kthreads out of
- RT priority
-Content-Language: en-US
-To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
-        <rostedt@goodmis.org>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-References: <20220620224455.GA3840881@paulmck-ThinkPad-P17-Gen-1>
- <20220620224503.3841196-6-paulmck@kernel.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <20220620224503.3841196-6-paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1657643355.git.asml.silence@gmail.com> <0eb1cb5746e9ac938a7ba7848b33ccf680d30030.1657643355.git.asml.silence@gmail.com>
+ <20220718185413.0f393c91@kernel.org>
+In-Reply-To: <20220718185413.0f393c91@kernel.org>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Tue, 19 Jul 2022 11:35:54 +0200
+Message-ID: <CA+FuTSf0+cJ9_N_xrHmCGX_KoVCWcE0YQBdtgEkzGvcLMSv7Qw@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 01/27] ipv4: avoid partial copy for zc
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
+        kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jul 19, 2022 at 3:54 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 12 Jul 2022 21:52:25 +0100 Pavel Begunkov wrote:
+> > Even when zerocopy transmission is requested and possible,
+> > __ip_append_data() will still copy a small chunk of data just because it
+> > allocated some extra linear space (e.g. 148 bytes). It wastes CPU cycles
+> > on copy and iter manipulations and also misalignes potentially aligned
+> > data. Avoid such coies. And as a bonus we can allocate smaller skb.
+>
+> s/coies/copies/ can fix when applying
+>
+> >
+> > Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> > ---
+> >  net/ipv4/ip_output.c | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
+> > index 00b4bf26fd93..581d1e233260 100644
+> > --- a/net/ipv4/ip_output.c
+> > +++ b/net/ipv4/ip_output.c
+> > @@ -969,7 +969,6 @@ static int __ip_append_data(struct sock *sk,
+> >       struct inet_sock *inet = inet_sk(sk);
+> >       struct ubuf_info *uarg = NULL;
+> >       struct sk_buff *skb;
+> > -
+> >       struct ip_options *opt = cork->opt;
+> >       int hh_len;
+> >       int exthdrlen;
+> > @@ -977,6 +976,7 @@ static int __ip_append_data(struct sock *sk,
+> >       int copy;
+> >       int err;
+> >       int offset = 0;
+> > +     bool zc = false;
+> >       unsigned int maxfraglen, fragheaderlen, maxnonfragsize;
+> >       int csummode = CHECKSUM_NONE;
+> >       struct rtable *rt = (struct rtable *)cork->dst;
+> > @@ -1025,6 +1025,7 @@ static int __ip_append_data(struct sock *sk,
+> >               if (rt->dst.dev->features & NETIF_F_SG &&
+> >                   csummode == CHECKSUM_PARTIAL) {
+> >                       paged = true;
+> > +                     zc = true;
+> >               } else {
+> >                       uarg->zerocopy = 0;
+> >                       skb_zcopy_set(skb, uarg, &extra_uref);
+> > @@ -1091,9 +1092,12 @@ static int __ip_append_data(struct sock *sk,
+> >                                (fraglen + alloc_extra < SKB_MAX_ALLOC ||
+> >                                 !(rt->dst.dev->features & NETIF_F_SG)))
+> >                               alloclen = fraglen;
+> > -                     else {
+> > +                     else if (!zc) {
+> >                               alloclen = min_t(int, fraglen, MAX_HEADER);
+>
+> Willem, I think this came in with your GSO work, is there a reason we
+> use MAX_HEADER here? I thought MAX_HEADER is for headers (i.e. more or
+> less to be reserved) not for the min amount of data to be included.
+>
+> I wanna make sure we're not missing something about GSO here.
+>
+> Otherwise I don't think we need the extra branch but that can
+> be a follow up.
+
+The change was introduced for UDP GSO, to avoid copying most payload
+on software segmentation:
+
+"
+commit 15e36f5b8e982debe43e425d2e12d34e022d51e9
+Author: Willem de Bruijn <willemb@google.com>
+Date:   Thu Apr 26 13:42:19 2018 -0400
+
+    udp: paged allocation with gso
+
+    When sending large datagrams that are later segmented, store data in
+    page frags to avoid copying from linear in skb_segment.
+"
+
+and in code
+
+-                       else
+-                               alloclen = datalen + fragheaderlen;
++                       else if (!paged)
++                               alloclen = fraglen;
++                       else {
++                               alloclen = min_t(int, fraglen, MAX_HEADER);
++                               pagedlen = fraglen - alloclen;
++                       }
 
 
-On 6/21/2022 4:15 AM, Paul E. McKenney wrote:
-> From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-> 
-> This commit introduces a RCU_NOCB_CPU_CB_BOOST Kconfig option that
-> prevents rcuo kthreads from running at real-time priority, even in
-> kernels built with RCU_BOOST.  This capability is important to devices
-> needing low-latency (as in a few milliseconds) response from expedited
-> RCU grace periods, but which are not running a classic real-time workload.
-> On such devices, permitting the rcuo kthreads to run at real-time priority
-> results in unacceptable latencies imposed on the application tasks,
-> which run as SCHED_OTHER.
-> 
-> See for example the following trace output:
-> 
-> <snip>
-> <...>-60 [006] d..1 2979.028717: rcu_batch_start: rcu_preempt CBs=34619 bl=270
-> <snip>
-> 
-> If that rcuop kthread were permitted to run at real-time SCHED_FIFO
-> priority, it would monopolize its CPU for hundreds of milliseconds
-> while invoking those 34619 RCU callback functions, which would cause an
-> unacceptably long latency spike for many application stacks on Android
-> platforms.
-> 
-> However, some existing real-time workloads require that callback
-> invocation run at SCHED_FIFO priority, for example, those running on
-> systems with heavy SCHED_OTHER background loads.  (It is the real-time
-> system's administrator's responsibility to make sure that important
-> real-time tasks run at a higher priority than do RCU's kthreads.)
-> 
-> Therefore, this new RCU_NOCB_CPU_CB_BOOST Kconfig option defaults to
-> "y" on kernels built with PREEMPT_RT and defaults to "n" otherwise.
-> The effect is to preserve current behavior for real-time systems, but for
-> other systems to allow expedited RCU grace periods to run with real-time
-> priority while continuing to invoke RCU callbacks as SCHED_OTHER.
-> 
-> As you would expect, this RCU_NOCB_CPU_CB_BOOST Kconfig option has no
-> effect except on CPUs with offloaded RCU callbacks.
-> 
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
+MAX_HEADER was a short-hand for the exact header length. "alloclen =
+fragheaderlen + transhdrlen;" is probably a better choice indeed.
 
+Whether with branch or without, the same change needs to be made to
+__ip6_append_data, just as in the referenced commit. Let's keep the
+stacks in sync.
 
-Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-
-
-Thanks
-Neeraj
-
->   kernel/rcu/Kconfig     | 16 ++++++++++++++++
->   kernel/rcu/tree.c      |  6 +++++-
->   kernel/rcu/tree_nocb.h |  3 ++-
->   3 files changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> index 27aab870ae4cf..c05ca52cdf64d 100644
-> --- a/kernel/rcu/Kconfig
-> +++ b/kernel/rcu/Kconfig
-> @@ -275,6 +275,22 @@ config RCU_NOCB_CPU_DEFAULT_ALL
->   	  Say Y here if you want offload all CPUs by default on boot.
->   	  Say N here if you are unsure.
->   
-> +config RCU_NOCB_CPU_CB_BOOST
-> +	bool "Offload RCU callback from real-time kthread"
-> +	depends on RCU_NOCB_CPU && RCU_BOOST
-> +	default y if PREEMPT_RT
-> +	help
-> +	  Use this option to invoke offloaded callbacks as SCHED_FIFO
-> +	  to avoid starvation by heavy SCHED_OTHER background load.
-> +	  Of course, running as SCHED_FIFO during callback floods will
-> +	  cause the rcuo[ps] kthreads to monopolize the CPU for hundreds
-> +	  of milliseconds or more.  Therefore, when enabling this option,
-> +	  it is your responsibility to ensure that latency-sensitive
-> +	  tasks either run with higher priority or run on some other CPU.
-> +
-> +	  Say Y here if you want to set RT priority for offloading kthreads.
-> +	  Say N here if you are building a !PREEMPT_RT kernel and are unsure.
-> +
->   config TASKS_TRACE_RCU_READ_MB
->   	bool "Tasks Trace RCU readers use memory barriers in user and idle"
->   	depends on RCU_EXPERT && TASKS_TRACE_RCU
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 74455671e6cf2..3b9f45ebb4999 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -154,7 +154,11 @@ static void sync_sched_exp_online_cleanup(int cpu);
->   static void check_cb_ovld_locked(struct rcu_data *rdp, struct rcu_node *rnp);
->   static bool rcu_rdp_is_offloaded(struct rcu_data *rdp);
->   
-> -/* rcuc/rcub/rcuop kthread realtime priority */
-> +/*
-> + * rcuc/rcub/rcuop kthread realtime priority. The "rcuop"
-> + * real-time priority(enabling/disabling) is controlled by
-> + * the extra CONFIG_RCU_NOCB_CPU_CB_BOOST configuration.
-> + */
->   static int kthread_prio = IS_ENABLED(CONFIG_RCU_BOOST) ? 1 : 0;
->   module_param(kthread_prio, int, 0444);
->   
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index 60cc92cc66552..fa8e4f82e60c0 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -1315,8 +1315,9 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
->   	if (WARN_ONCE(IS_ERR(t), "%s: Could not start rcuo CB kthread, OOM is now expected behavior\n", __func__))
->   		goto end;
->   
-> -	if (kthread_prio)
-> +	if (IS_ENABLED(CONFIG_RCU_NOCB_CPU_CB_BOOST) && kthread_prio)
->   		sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-> +
->   	WRITE_ONCE(rdp->nocb_cb_kthread, t);
->   	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
->   	return;
+This is tricky code. If in doubt, run the msg_zerocopy and udp_gso
+tests from tools/testing/selftests/net, ideally with KASAN.

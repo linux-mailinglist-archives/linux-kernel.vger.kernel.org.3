@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCF3579541
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7E2579546
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235897AbiGSIcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 04:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
+        id S236778AbiGSIdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 04:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiGSIch (ORCPT
+        with ESMTP id S229647AbiGSIdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:32:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D882C220D1;
-        Tue, 19 Jul 2022 01:32:36 -0700 (PDT)
+        Tue, 19 Jul 2022 04:33:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649AF3246F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 01:33:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91E3DB81893;
-        Tue, 19 Jul 2022 08:32:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0F3C341C6;
-        Tue, 19 Jul 2022 08:32:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F174D6177D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE4CC341C6;
+        Tue, 19 Jul 2022 08:33:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658219554;
-        bh=pplzxYz6sIF7Mjy2044C1CiT3gW+EWOdS76ev7aFkFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FwKxrFSVQL3hlswBw4lRRBHWH90KbD1z2uO1coRHKpavqBkt+9nh3n0GtVERzfPc6
-         2orAVr7dY8eJGmGWVSVuCLTk6Ot/5ycingm10rYQGCNOgGe7Wpv9VH8fBDB+l+jG+p
-         evypO8rjE60vG4OhVd9PuZOD1lpv5dT2Q9YeCVwLkEOfgfN1/objmmgwMMxJHifuOc
-         cBNIs743ctJu0UmjVd8O1EnHTemThPNu6vD6imLNjUdzY0AZdlAVMJDyx9rpMtzsGl
-         aQQhwgSRaFCIdUVpipsARyiuYboLM1lfvOZG0up8ex3fHmgEDquXiHFdMgzKbFqhp7
-         W2NK4/VcUFMNQ==
-Date:   Tue, 19 Jul 2022 10:32:29 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] ksefltest: pidfd: Fix wait_states: Test terminated by
- timeout
-Message-ID: <20220719083229.b2yn2msrklmo2nb5@wittgenstein>
-References: <20220718025826.29148-1-lizhijian@fujitsu.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220718025826.29148-1-lizhijian@fujitsu.com>
+        s=k20201202; t=1658219616;
+        bh=bTJlSNPu/OVu5OQPTRDZbaMP5OPr04EDRmJVIpEFVLk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Mkt7fI80F4wjLh8VzZncJL7LYhrjyqVt2CmIC844bgqRBHtXgo7Xlmc04RhQ8U7ov
+         8ueG7AvyV/nsz6xgnLT2S6ulQTxhkUOI4xBoeugudIKbQerwqkXaI5/37V1n7b3fXk
+         Ljr33t56FtEUUbaO9eS8wCQBuerGCmaRHMEj0YaRHWFN5nyq7MsrGLl2F8uogo7l6a
+         YY2BtmSuxoRwN5VnWXPLUTReN91D6U/EvNSwVodK3h3uYejYz/mDOkHN3Vhmq8/mGp
+         /wxh+9P3wWUYYy4Bwj4/SAdglUEGSeSZXvF04BCnMbhyKkLYrSIvsSY7+Iuhwt6y8f
+         FHWYpEuCZChyw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDife-008QV9-1C;
+        Tue, 19 Jul 2022 09:33:34 +0100
+Date:   Tue, 19 Jul 2022 09:33:33 +0100
+Message-ID: <87mtd5zele.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     wangwudi <wangwudi@hisilicon.com>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, <lizixian@hisilicon.com>
+Subject: Re: [PATCH] drivers: irqchip: Allocate alignment addr by ITS_BASER.Page_size
+In-Reply-To: <945e4200-9555-b6a4-5588-0d1c1b0be152@hisilicon.com>
+References: <1657955136-6622-1-git-send-email-wangwudi@hisilicon.com>
+        <87tu7h4d78.wl-maz@kernel.org>
+        <945e4200-9555-b6a4-5588-0d1c1b0be152@hisilicon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: wangwudi@hisilicon.com, linux-kernel@vger.kernel.org, tglx@linutronix.de, lizixian@hisilicon.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,40 +68,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 02:58:39AM +0000, lizhijian@fujitsu.com wrote:
-> 0Day/LKP observed that the kselftest blocks forever since one of the
-> pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
-> the source, we found that it blocks at:
-> ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
-> 
-> wait_states has below testing flow:
->   CHILD                 PARENT
->   ---------------+--------------
-> 1 STOP itself
-> 2                   WAIT for CHILD STOPPED
-> 3                   SIGNAL CHILD to CONT
-> 4 CONT
-> 5 STOP itself
-> 5'                  WAIT for CHILD CONT
-> 6                   WAIT for CHILD STOPPED
-> 
-> The problem is that the kernel cannot ensure the order of 5 and 5', once
-> 5's goes first, the test will fail.
-> 
-> we can reproduce it by:
-> $ while true; do make run_tests -C pidfd; done
-> 
-> Introduce a blocking read in child process to make sure the parent can
-> check its WCONTINUED.
-> 
-> CC: Philip Li <philip.li@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
-> I have almost forgotten this patch since the former version post over 6 months
-> ago. This time I just do a rebase and update the comments.
-> V2: rewrite with pipe to avoid usleep
-> ---
+On Mon, 18 Jul 2022 08:35:47 +0100,
+wangwudi <wangwudi@hisilicon.com> wrote:
+>=20
+> Hi Marc,
+>=20
+> =E5=9C=A8 2022/7/16 17:30, Marc Zyngier =E5=86=99=E9=81=93:
+> > On Sat, 16 Jul 2022 08:05:36 +0100,
+> > wangwudi <wangwudi@hisilicon.com> wrote:
+> >>
+> >> The description of the ITS_BASER.Physical_Address field in the ARM GIC=
+ spec is as=20
+> >> follows:
+> >> "The address must be aligned to the size specified in the Page Size fi=
+eld."
+> >> The Page_Size field in ITS_BASER might be RO.
+> >>
+> >> Currently, the address is aligned based on the system page_size, not t=
+he HW=20
+> >> Page_Size field. In some case, this is in contradiction with the spec.
+> >>
+> >> For example:
+> >> ITS_BASER.Page_Size indicate 16K, and kernel page size is 4K.
+> >> If HW need 4K-size memory, the driver may alloc a 4K aligned address.
+> >> This has been proven in hardware.
+> >=20
+> > Ah, interesting bug. Thanks for bringing this up. Can you describe how
+> > this occurs? I suspect you are using indirect tables.
+> >=20
+>=20
+> Sure. In the system, kernel page size is 4K, and ITS_BASER.Page_Size is 1=
+6K.
+>=20
+> As you suspected, HW used indirect VPE table and indication supports a sm=
+all
+> number of vpeids, like 2-bits vpeid. So that HW requires only less than 4=
+K-
+> size memory, and 16K aligned base address. But driver alloctes 4K aligend=
+ base
+> address.
 
-Thanks for sticking with this!
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Well, that I dispute, see below.
+
+>=20
+> >>
+> >> Cc: Thomas Gleixner <tglx@linutronix.de>
+> >> Cc: Marc Zyngier <maz@kernel.org>
+> >> Signed-off-by: wangwudi <wangwudi@hisilicon.com>
+> >> ---
+> >>  drivers/irqchip/irq-gic-v3-its.c | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gi=
+c-v3-its.c
+> >> index 5ff09de6c48f..0e25e887d45c 100644
+> >> --- a/drivers/irqchip/irq-gic-v3-its.c
+> >> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> >> @@ -2310,6 +2310,9 @@ static int its_setup_baser(struct its_node *its,=
+ struct its_baser *baser,
+> >>  		order =3D get_order(GITS_BASER_PAGES_MAX * psz);
+> >>  	}
+> >> =20
+> >> +	if ((psz > PAGE_SIZE) && (PAGE_ORDER_TO_SIZE(order) < psz)) {
+> >> +		order =3D get_order(psz);
+> >> +	}
+> >>  	page =3D alloc_pages_node(its->numa_node, GFP_KERNEL | __GFP_ZERO, o=
+rder);
+> >>  	if (!page)
+> >>  		return -ENOMEM;
+> >=20
+> > However, I don't see how you end-up with the incorrect value here.
+> >=20
+> > * No indirect table:
+> > 	alloc_its_tables():
+> > 		order =3D get_order(baser->psz);
+> >=20
+> > * Indirect tables:
+> > 	alloc_its_tables():
+> > 		order =3D get_order(baser->psz);
+> > 	its_parse_indirect_baser():
+> > 		new_order =3D *order;
+> > 		new_order =3D max_t(u32, get_order(esz << ids), new_order);
+> >=20
+> > So in both cases, we should end-up with order >=3D get_order(psz).
+> Yes, totally agree.
+
+OK. So what does your patch actually fixes?
+
+>=20
+> >=20
+> > Clearly, I'm missing a path, but your commit message doesn't make it
+> > obvious. Can you please enlighten me?
+> >=20
+> My commit is based on the premise:
+> "alloc_pages_node gives a size-aligend address".
+> For example, if HW apply for 4K-size memory, then allocated address is 4K
+> aligned.
+
+Right. And if baser->psz is 16K, the memory returned will be 16K
+aligned.
+
+The only thing I can imagine is that there is a code path that doesn't
+use baser->psz as the minimum value when allocating memory programmed
+into a ITS_BASER register. But I can't see that path. Can you?
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

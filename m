@@ -2,125 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A88578EAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19194578E53
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 01:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236032AbiGSABD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 20:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
+        id S234417AbiGRXgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 19:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234895AbiGSABA (ORCPT
+        with ESMTP id S230297AbiGRXgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 20:01:00 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78039E48
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:00:59 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10d4691a687so12879090fac.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1FnYzVMiek+SlAzgVB4w6TNdP3JBRcRzdvMKcgUPF7Y=;
-        b=CYO0h1QjLiXX58sLhGBr/WMWfMcMp7XUUC3E71/2erVeeB3PEq7HzlgPmXcaqDqqB9
-         27ouDs23+xD+E8CseNTLTteZtqNesuoef3yokyaex7SFQUy/+Dii5yvhMciK+YE+k8Pr
-         zbD9yvwhtXUhPUHRUBQCpHSAXaRUDOaDjnwwrckZGwt6sZZaKeFkQd2vJErDX737FA7l
-         0W6zLgGJIGAAdqG8ifYHsCFwNoxM9nCb6+q+R5L2yfGMeaysgoWQrHRfe2v2Di6beOwO
-         Ga1tP6bc+mipfETjtiJ9SffLSCQVuXYfWfa5ya0QhVjyifEt/e1o+GaZW5Ih7haT2P/U
-         Ve3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1FnYzVMiek+SlAzgVB4w6TNdP3JBRcRzdvMKcgUPF7Y=;
-        b=isUteoZB5TbEqHbSR6npdpbGVIvc0qXUvXD44y8Ix3ZKDOXxdj4L4oB9DWGoFHlBwj
-         luWrH3of2Ba5+sQjclkn8WovDKr83tkpArWCurnuOxcDZJtOK6J1iFp4NCquRZq1Sx5g
-         MlzydHl4lkEzIdcyYg5wLbHFetkuStYwGzMEO5mLlLCZCVdI3FclZN1heUcfRQi8GtHO
-         Yw7Ua21pwg4tyCdOjmT2OHHNJlFHF2eexKkigVrHQ55I9yfugCSviRX/dK5EjrcuaOSi
-         iknzCOfQ6X1104yZh+x9ZySIhWCtWUDK3lJlbrGlXc+HFvRsJFd3jaueY7zOMRp+XQKW
-         6T7w==
-X-Gm-Message-State: AJIora8AZtbXFg8ZaIGTTbRT//Xh3scLZ7DspiG3wLhP236mNxo4NIuo
-        NWYffbC1NfVcdI6TPudwtzIHng==
-X-Google-Smtp-Source: AGRyM1s8zLIArx9kCVPBZrk37/t/2i6H01CV57jyxV4+CuXkMf6keiVbJTEX2CdHL/jrA5GmrZa2IQ==
-X-Received: by 2002:a05:6808:d4f:b0:339:afb0:ccce with SMTP id w15-20020a0568080d4f00b00339afb0cccemr14400991oik.53.1658188858777;
-        Mon, 18 Jul 2022 17:00:58 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056808064f00b0033a422b39b4sm4480419oih.49.2022.07.18.17.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 17:00:58 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 19:00:56 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        dianders@chromium.org, vkoul@kernel.org, agross@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, quic_mkrishn@quicinc.com,
-        quic_kalyant@quicinc.coml, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dta: qcom: sc7280: delete vdda-1p2 and
- vdda-0p9 from both dp and edp
-Message-ID: <YtX0OP2EprFRJ/wx@builder.lan>
-References: <1657556603-15024-1-git-send-email-quic_khsieh@quicinc.com>
+        Mon, 18 Jul 2022 19:36:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 667F02CC94
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 16:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658187401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ySr8hj/EGMal5qilyWO6bDnZTTU7RUMAMj596WRLWVE=;
+        b=IVrqWuBUFHaAMABxAzRyWePh3M3Bo4a2sPx+7A9G+Hvl46ubB3CSiITYdgHCZzU2JAazDF
+        8hv7NHL0Au72vgisnT2NOUhEgyoP2w6zJPtFgXZ/AgrZGTXscXh6OI3ZfnZMxEyUpXtVGu
+        AdWBgIow1Ay+6dgzmw+weyBW6fQir5Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-1Y1_456WPV-DPT80BDCaTA-1; Mon, 18 Jul 2022 19:36:35 -0400
+X-MC-Unique: 1Y1_456WPV-DPT80BDCaTA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 15CB0801585;
+        Mon, 18 Jul 2022 23:36:35 +0000 (UTC)
+Received: from gshan.redhat.com (vpn2-54-37.bne.redhat.com [10.64.54.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6C08718EB7;
+        Mon, 18 Jul 2022 23:36:31 +0000 (UTC)
+From:   Gavin Shan <gshan@redhat.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        oliver.upton@linux.dev, seanjc@google.com, shuah@kernel.org,
+        maz@kernel.org, pbonzini@redhat.com, shan.gavin@gmail.com
+Subject: [PATCH v3] KVM: selftests: Fix target thread to be migrated in rseq_test
+Date:   Tue, 19 Jul 2022 09:35:40 +0800
+Message-Id: <20220719013540.3477946-1-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1657556603-15024-1-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 11 Jul 11:23 CDT 2022, Kuogee Hsieh wrote:
+In rseq_test, there are two threads, which are vCPU thread and migration
+worker separately. Unfortunately, the test has the wrong PID passed to
+sched_setaffinity() in the migration worker. It forces migration on the
+migration worker because zeroed PID represents the calling thread, which
+is the migration worker itself. It means the vCPU thread is never enforced
+to migration and it can migrate at any time, which eventually leads to
+failure as the following logs show.
 
-Please double check that the subject prefix matches existing changes
-next time.
+  host# uname -r
+  5.19.0-rc6-gavin+
+  host# # cat /proc/cpuinfo | grep processor | tail -n 1
+  processor    : 223
+  host# pwd
+  /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
+  host# for i in `seq 1 100`; do \
+        echo "--------> $i"; ./rseq_test; done
+  --------> 1
+  --------> 2
+  --------> 3
+  --------> 4
+  --------> 5
+  --------> 6
+  ==== Test Assertion Failure ====
+    rseq_test.c:265: rseq_cpu == cpu
+    pid=3925 tid=3925 errno=4 - Interrupted system call
+       1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
+       2  0x0000ffffb044affb: ?? ??:0
+       3  0x0000ffffb044b0c7: ?? ??:0
+       4  0x0000000000401a6f: _start at ??:?
+    rseq CPU = 4, sched CPU = 27
 
-Thanks,
-Bjorn
+Fix the issue by passing correct parameter, TID of the vCPU thread, to
+sched_setaffinity() in the migration worker.
 
-> Both vdda-1p2-supply and vdda-0p9-supply regulators are controlled
-> by dp combo phy. Therefore remove them from dp controller.
-> 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 2 --
->  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi     | 3 ---
->  2 files changed, 5 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> index ed800817..3f8996c 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> @@ -435,8 +435,6 @@ ap_i2c_tpm: &i2c14 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&dp_hot_plug_det>;
->  	data-lanes = <0 1>;
-> -	vdda-1p2-supply = <&vdd_a_usbssdp_0_1p2>;
-> -	vdda-0p9-supply = <&vdd_a_usbssdp_0_core>;
->  };
->  
->  &mdss_mdp {
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-> index 4c25ffc..7adf31b 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-> @@ -311,9 +311,6 @@
->  
->  /* NOTE: Not all Qcards have eDP connector stuffed */
->  &mdss_edp {
-> -	vdda-0p9-supply = <&vdd_a_edp_0_0p9>;
-> -	vdda-1p2-supply = <&vdd_a_edp_0_1p2>;
-> -
->  	aux-bus {
->  		edp_panel: panel {
->  			compatible = "edp-panel";
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
+Signed-off-by: Gavin Shan <gshan@redhat.com>
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
+---
+v3: Improved changelog (Oliver Upon)
+---
+ tools/testing/selftests/kvm/rseq_test.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+index 4158da0da2bb..c83ac7b467f8 100644
+--- a/tools/testing/selftests/kvm/rseq_test.c
++++ b/tools/testing/selftests/kvm/rseq_test.c
+@@ -38,6 +38,7 @@ static __thread volatile struct rseq __rseq = {
+  */
+ #define NR_TASK_MIGRATIONS 100000
+ 
++static pid_t rseq_tid;
+ static pthread_t migration_thread;
+ static cpu_set_t possible_mask;
+ static int min_cpu, max_cpu;
+@@ -106,7 +107,8 @@ static void *migration_worker(void *ign)
+ 		 * stable, i.e. while changing affinity is in-progress.
+ 		 */
+ 		smp_wmb();
+-		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
++		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask),
++				      &allowed_mask);
+ 		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
+ 			    errno, strerror(errno));
+ 		smp_wmb();
+@@ -231,6 +233,7 @@ int main(int argc, char *argv[])
+ 	vm = vm_create_default(VCPU_ID, 0, guest_code);
+ 	ucall_init(vm, NULL);
+ 
++	rseq_tid = gettid();
+ 	pthread_create(&migration_thread, NULL, migration_worker, 0);
+ 
+ 	for (i = 0; !done; i++) {
+-- 
+2.23.0
+

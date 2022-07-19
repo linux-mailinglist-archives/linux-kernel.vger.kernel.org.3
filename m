@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4215457A291
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B66457A296
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235476AbiGSPCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
+        id S238473AbiGSPEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235188AbiGSPCe (ORCPT
+        with ESMTP id S237702AbiGSPDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:02:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F5CA4D15D
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:02:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7409D13D5;
-        Tue, 19 Jul 2022 08:02:33 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B14283F70D;
-        Tue, 19 Jul 2022 08:02:31 -0700 (PDT)
-Message-ID: <17c9af40-bf53-be3c-c678-159a8ab8964a@arm.com>
-Date:   Tue, 19 Jul 2022 17:02:22 +0200
+        Tue, 19 Jul 2022 11:03:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 122FD4D167
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658243031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hO0GcOh2yvTNG+WhHrYEQsIpzVdakt9pGpX73qoC2no=;
+        b=G+jsYVwEJD8QF8HrAzwfKYNMmnoWQP6ixSvRTp1Tf+4x6kRt7z0WXX7pzlV3IRs3vkUACi
+        mLDf1WHxDU5p1H6Yo4tHggP3+tdBCO/G8ExbiJOUwourCn62NfF2CDMBNi/OCi3w51Gh+L
+        i6WeC6Xop/yJ9irRC5AUTRi7MfxrWWY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-aILb4swFM5i5n6AjkanRlg-1; Tue, 19 Jul 2022 11:03:41 -0400
+X-MC-Unique: aILb4swFM5i5n6AjkanRlg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3D59E882345;
+        Tue, 19 Jul 2022 15:03:12 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.17.107])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0417C40E80E0;
+        Tue, 19 Jul 2022 15:03:11 +0000 (UTC)
+Date:   Tue, 19 Jul 2022 11:03:10 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v3 1/2] cpuhp: make target_store() a nop when target ==
+ state
+Message-ID: <YtbHrmDem1v++dBL@lorien.usersys.redhat.com>
+References: <20220711211619.112854-1-pauld@redhat.com>
+ <20220711211619.112854-2-pauld@redhat.com>
+ <xhsmhk0896ujo.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [External] Re: [PATCH v2 07/10] sched/fair: use update_load_avg()
- to attach/detach entity load_avg
-Content-Language: en-US
-To:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20220713040430.25778-1-zhouchengming@bytedance.com>
- <20220713040430.25778-8-zhouchengming@bytedance.com>
- <e838ac28-f68e-2282-94d5-616ea3bdf8d0@arm.com>
- <88062fb6-e2fe-cf4e-10b5-7694c4d30941@bytedance.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <88062fb6-e2fe-cf4e-10b5-7694c4d30941@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmhk0896ujo.mognet@vschneid.remote.csb>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/07/2022 18:21, Chengming Zhou wrote:
-> On 2022/7/15 19:18, Dietmar Eggemann wrote:
->> On 13/07/2022 06:04, Chengming Zhou wrote:
->>> Since update_load_avg() support DO_ATTACH and DO_DETACH now, we can
->>> use update_load_avg() to implement attach/detach entity load_avg.
->>>
->>> Another advantage of using update_load_avg() is that it will check
->>> last_update_time before attach or detach, instead of unconditional
->>> attach/detach in the current code.
->>>
->>> This way can avoid some corner problematic cases of load tracking,
->>> like twice attach problem, detach unattached NEW task problem.
->>
->> This explanation is somewhat hard to follow for me. Since both issues
->> have been fixed already (you mention this further below) you're saying
->> that with you change you don't reintroduce them?
+On Tue, Jul 19, 2022 at 03:34:03PM +0100 Valentin Schneider wrote:
+> On 11/07/22 17:16, Phil Auld wrote:
+> > writing the current state back in hotplug/target calls cpu_down()
+> > which will set cpu dying even when it isn't and then nothing will
+> > ever clear it. A stress test that reads values and writes them back
+> > for all cpu device files in sysfs will trigger the BUG() in
+> > select_fallback_rq once all cpus are marked as dying.
+> >
+> > kernel/cpu.c::target_store()
+> >       ...
+> >         if (st->state < target)
+> >                 ret = cpu_up(dev->id, target);
+> >         else
+> >                 ret = cpu_down(dev->id, target);
+> >
+> > cpu_down() -> cpu_set_state()
+> >        bool bringup = st->state < target;
+> >        ...
+> >        if (cpu_dying(cpu) != !bringup)
+> >               set_cpu_dying(cpu, !bringup);
+> >
+> > Fix this by letting state==target fall through in the target_store()
+> > conditional. Also make sure st->target == target in that case.
+> >
+> > Signed-off-by: Phil Auld <pauld@redhat.com>
 > 
-> Sorry for this not very clear explanation.
+> One nit below, otherwise:
+> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+>
+
+Thanks!
+
+> > ---
+> >  kernel/cpu.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/cpu.c b/kernel/cpu.c
+> > index bbad5e375d3b..305694a2ca26 100644
+> > --- a/kernel/cpu.c
+> > +++ b/kernel/cpu.c
+> > @@ -2326,8 +2326,10 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
+> >
+> >       if (st->state < target)
+> >               ret = cpu_up(dev->id, target);
+> > -	else
+> > +	else if (st->state > target)
+> >               ret = cpu_down(dev->id, target);
+> > +	else if (st->target != target)
 > 
-> Yes, both issues have been fixed already, what I want to say is that bugfix
-> brings its own problem and limitation mentioned below.
+> Should we make this:
 > 
-> So I want to use another way to solve these problems better.
+>         else if (WARN(st->target != target))
+>
 
-[...]
+If you think that's important I can make it a WARN, sure.
 
->>> These problems have been fixed in commit 7dc603c9028e
->>> ("sched/fair: Fix PELT integrity for new tasks"), which also
->>> bring its own problems.
->>>
->>> First, it add a new task state TASK_NEW and an unnessary limitation
->>> that we would fail when change the cgroup of TASK_NEW tasks.
+I'll try to remember to keep your Reviewed-bys this time if that's okay.
+
+
+
+Cheers,
+Phil
+
+> > +		st->target = target;
+> >  out:
+> >       unlock_device_hotplug();
+> >       return ret ? ret : count;
+> > --
+> > 2.31.1
 > 
-> This is the limitation that bugfix has brought.
-> 
-> We can't change cgroup or switch to fair for task with last_update_time=0
-> if we don't have conditional detach/attach.
-> 
-> So we have to:
-> 
-> 1. !fair task also need to set last_update_time.
-> 2. cpu_cgroup_can_attach() have to wait for TASK_NEW to fully attached.
 
-I see.
+-- 
 
-`cgroup_migrate_execute() -> cpu_cgroup_[can|]_attach()` has to wait for
-`wake_up_new_task() -> WRITE_ONCE(p->__state, TASK_RUNNING)`.
-
-Just to understand this change better: IMHO, this is still the case for
-fair tasks, right?
-
-`wake_up_new_task() -> post_init_entity_util_avg() ->
-attach_entity_cfs_rq()` has to happen before the fair task can move
-between taskgroups in `cgroup_migrate_execute() -> cpu_cgroup_attach()
--> sched_move_task() -> sched_change_group() -> task_change_group_fair()`.
-
-[...]

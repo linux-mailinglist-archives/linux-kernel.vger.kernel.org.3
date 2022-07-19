@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445C857A962
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1516B57A965
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240611AbiGSVun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
+        id S240551AbiGSVvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240590AbiGSVua (ORCPT
+        with ESMTP id S240662AbiGSVut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:50:30 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4A0509DC;
-        Tue, 19 Jul 2022 14:50:28 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id h14so1203997ilq.12;
-        Tue, 19 Jul 2022 14:50:28 -0700 (PDT)
+        Tue, 19 Jul 2022 17:50:49 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E83563919;
+        Tue, 19 Jul 2022 14:50:48 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id n7so12938338ioo.7;
+        Tue, 19 Jul 2022 14:50:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=b/6qqdLKDCz4qVVwN3wNPEiNzz8gdLtHmJ/VBRGVsnU=;
-        b=GRLCb92FFCExl0Fj7kLdThjyIS/ctQgF4JKd4rwRBV+JAPP4efO53jtUp+obPNkFZi
-         ltFIXft5QcuvD+avbx6KjBc7gV2p2wyClEHZMD4K7SE4K/Eac5d7Z5oppL3/hQHjtgxS
-         0Lz6nsv/7VMOx35tT30KKsviSDQedjnFPeuO/paTmPJn5nnvTz5oDlOpsi/i5fCRiNXP
-         0SWw9Zimm3G9ZYFvp/TAIMDjN4m8zquY4NPNpKrkz/viqGN44WVOeNoQ5QNKH+UBn0Kf
-         aMRGEo/fjqDI8xNuPm5+cVc9Q4hVi02KncIHIIWl77+QtKoePVXp9lau8nDNR+2TJza0
-         3cwQ==
-X-Gm-Message-State: AJIora/pwCutN8kFrK61sDrMTERn1ntczLNJIeCSvXV2fgk1IwE0mT8g
-        GIEmXhK9epI9aRMhLdq7A275tZw2aw==
-X-Google-Smtp-Source: AGRyM1vFktTAsRljdCUDCqELagF4GuBcs9YxBJi7gM9cENE2swk4+neu0JxbxDI+jMfJxzqUTNFNDg==
-X-Received: by 2002:a05:6e02:178e:b0:2dc:8f6a:8c41 with SMTP id y14-20020a056e02178e00b002dc8f6a8c41mr18015349ilu.202.1658267427997;
-        Tue, 19 Jul 2022 14:50:27 -0700 (PDT)
+        bh=gc70hJeeC4K1a4Pl7tIbgu2cZMCaW6mozT61jHtq/W8=;
+        b=7Im3jhV2tH4MYapGfPVGZODmOzxVikifAShqy99obO/+slqQPQa8fmeSzqsiQS7Me3
+         F8n5xAKfVll0u2JPAcdoyx+8OV48Ia1itgF3wi4NecslASUhu3hb3ZXA1YVJMz6Z1vPB
+         aoRoMoWn5eooCYHVNLWwfk6OHMOBxmhjlpbPvzSsJg4S7TjCoT8oq9Z1bnIOj+cO0fsa
+         yZaN4BepPap039NhL9e2LSQBZsE2WHeI1YwZhrGmdwfznVFYjkipMyDLrOPyipfK3LnE
+         tNh8QHXYbR3wA8PkG249P3isei6y40O64FRuORjEp2CkiZKgiFifSR+6ZWrhmk8gk4ZW
+         MZ3A==
+X-Gm-Message-State: AJIora+leEC8zN3FvUJ7LFN3YkAocV/EtnkU3ZOiwT+MVPe52IpHo4fj
+        8wflDxfzqS+aNyCcaw7xIg==
+X-Google-Smtp-Source: AGRyM1vB1qedxrzyJ7eOI2IVp8x9uka7FzHJ8J9G8xA9jnI0//tRCURnZwNNgNmHczWifPRkOylYZg==
+X-Received: by 2002:a05:6638:16d4:b0:341:44c4:8191 with SMTP id g20-20020a05663816d400b0034144c48191mr14543773jat.32.1658267446843;
+        Tue, 19 Jul 2022 14:50:46 -0700 (PDT)
 Received: from xps15.herring.priv ([64.188.179.248])
-        by smtp.googlemail.com with ESMTPSA id i27-20020a056638051b00b0033158c4a312sm7073921jar.55.2022.07.19.14.50.27
+        by smtp.googlemail.com with ESMTPSA id n3-20020a056638110300b0033efc8857c0sm7087676jal.50.2022.07.19.14.50.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 14:50:27 -0700 (PDT)
+        Tue, 19 Jul 2022 14:50:46 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: power: supply: charger-manager: Add missing type for 'cm-battery-stat'
-Date:   Tue, 19 Jul 2022 15:50:16 -0600
-Message-Id: <20220719215017.1875530-1-robh@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: PCI: fsl,imx6q-pcie: Add missing type for 'reset-gpio-active-high'
+Date:   Tue, 19 Jul 2022 15:50:31 -0600
+Message-Id: <20220719215031.1875860-1-robh@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,26 +65,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'cm-battery-stat' is missing a type definition and is not a common
+'reset-gpio-active-high' is missing a type definition and is not a common
 property. The type is boolean.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/power/supply/charger-manager.yaml        | 1 +
+ Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/charger-manager.yaml b/Documentation/devicetree/bindings/power/supply/charger-manager.yaml
-index fbb2204769aa..5af1e0beaf29 100644
---- a/Documentation/devicetree/bindings/power/supply/charger-manager.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/charger-manager.yaml
-@@ -50,6 +50,7 @@ properties:
+diff --git a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+index 252e5b72aee0..376e739bcad4 100644
+--- a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+@@ -144,6 +144,7 @@ properties:
+     description: If present then the reset sequence using the GPIO
+       specified in the "reset-gpio" property is reversed (H=reset state,
+       L=operation state) (optional required).
++    type: boolean
  
-   cm-battery-stat:
-     description: battery status
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     enum:
-       - 0 # battery always present
-       - 1 # no battery
+   vpcie-supply:
+     description: Should specify the regulator in charge of PCIe port power.
 -- 
 2.34.1
 

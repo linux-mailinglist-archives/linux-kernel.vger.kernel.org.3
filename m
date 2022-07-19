@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00956579EFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F7B579D1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243074AbiGSNIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
+        id S239084AbiGSMrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243055AbiGSNIa (ORCPT
+        with ESMTP id S242013AbiGSMo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:08:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F29ABB8C7;
-        Tue, 19 Jul 2022 05:27:57 -0700 (PDT)
+        Tue, 19 Jul 2022 08:44:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C6A87C1A;
+        Tue, 19 Jul 2022 05:17:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9251360693;
-        Tue, 19 Jul 2022 12:27:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74AC4C341C6;
-        Tue, 19 Jul 2022 12:27:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 035F7B81B82;
+        Tue, 19 Jul 2022 12:17:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EFBEC341C6;
+        Tue, 19 Jul 2022 12:17:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233676;
-        bh=pOS5a7puDGZ/iWqaJdM1223AaUj8iUfebzf3eXEB9Z8=;
+        s=korg; t=1658233050;
+        bh=fHBYmqcIiLMomw61JKDjJgzcDQQWoa5ofC83PhIIq4k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2k6Y92IPJBt/pJplCtMjv+iVf55V8YgEYd3A0epv6wMbp82zadCxe13/FDQlucdZC
-         2SjY6HyfvqABI6Sv+BEFsE41pGI0YwG/dCLLniePOAsUxGmzBy6Rxq/F3sJkPSMiRc
-         j6cV4bPe1bmi9rv262FVIPzTisltDrnvl03PLVeI=
+        b=ZSIJTHUCpEMqPKTBqDs+lTiNSLEr9NnLVcSVNrlQg9n/0ONjaY85IEB6efW79witK
+         ydzsUblNxHFAfG0LS3JmJGB8HbCgtCKmcZe4JjgeurdWpGYSQZ8whDTVuKUS1VmxV6
+         BmVAwPDGupboOO3/H+/vw9muAIk3/CLvzRsnItnA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 203/231] ASoC: cs35l41: Add ASP TX3/4 source to register patch
-Date:   Tue, 19 Jul 2022 13:54:48 +0200
-Message-Id: <20220719114731.066776089@linuxfoundation.org>
+Subject: [PATCH 5.15 157/167] signal handling: dont use BUG_ON() for debugging
+Date:   Tue, 19 Jul 2022 13:54:49 +0200
+Message-Id: <20220719114711.690583853@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 46b0d050c8c7df6dfb2c376aaa149bf2cfc5ca3e ]
+[ Upstream commit a382f8fee42ca10c9bfce0d2352d4153f931f5dc ]
 
-The mixer controls for ASP TX3/4 are set to values that are not included
-in their enumeration control. This will cause spurious event
-notifications when the controls are first changed, as the register value
-changes whilst the actual visible enumeration value does not. Use the
-register patch to set them to a known value, zero, which equates to zero
-fill, thereby avoiding the spurious notifications.
+These are indeed "should not happen" situations, but it turns out recent
+changes made the 'task_is_stopped_or_trace()' case trigger (fix for that
+exists, is pending more testing), and the BUG_ON() makes it
+unnecessarily hard to actually debug for no good reason.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220623105120.1981154-2-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+It's been that way for a long time, but let's make it clear: BUG_ON() is
+not good for debugging, and should never be used in situations where you
+could just say "this shouldn't happen, but we can continue".
+
+Use WARN_ON_ONCE() instead to make sure it gets logged, and then just
+continue running.  Instead of making the system basically unusuable
+because you crashed the machine while potentially holding some very core
+locks (eg this function is commonly called while holding 'tasklist_lock'
+for writing).
+
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/cs35l41-lib.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ kernel/signal.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/codecs/cs35l41-lib.c b/sound/soc/codecs/cs35l41-lib.c
-index 17cf782f39af..538b5c4d3abf 100644
---- a/sound/soc/codecs/cs35l41-lib.c
-+++ b/sound/soc/codecs/cs35l41-lib.c
-@@ -36,8 +36,8 @@ static const struct reg_default cs35l41_reg[] = {
- 	{ CS35L41_DAC_PCM1_SRC,			0x00000008 },
- 	{ CS35L41_ASP_TX1_SRC,			0x00000018 },
- 	{ CS35L41_ASP_TX2_SRC,			0x00000019 },
--	{ CS35L41_ASP_TX3_SRC,			0x00000020 },
--	{ CS35L41_ASP_TX4_SRC,			0x00000021 },
-+	{ CS35L41_ASP_TX3_SRC,			0x00000000 },
-+	{ CS35L41_ASP_TX4_SRC,			0x00000000 },
- 	{ CS35L41_DSP1_RX1_SRC,			0x00000008 },
- 	{ CS35L41_DSP1_RX2_SRC,			0x00000009 },
- 	{ CS35L41_DSP1_RX3_SRC,			0x00000018 },
-@@ -643,6 +643,8 @@ static const struct reg_sequence cs35l41_reva0_errata_patch[] = {
- 	{ CS35L41_DSP1_XM_ACCEL_PL0_PRI, 0x00000000 },
- 	{ CS35L41_PWR_CTRL2,		 0x00000000 },
- 	{ CS35L41_AMP_GAIN_CTRL,	 0x00000000 },
-+	{ CS35L41_ASP_TX3_SRC,		 0x00000000 },
-+	{ CS35L41_ASP_TX4_SRC,		 0x00000000 },
- };
+diff --git a/kernel/signal.c b/kernel/signal.c
+index d831f0aec56e..c7dbb19219b9 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -2027,12 +2027,12 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
+ 	bool autoreap = false;
+ 	u64 utime, stime;
  
- static const struct reg_sequence cs35l41_revb0_errata_patch[] = {
-@@ -654,6 +656,8 @@ static const struct reg_sequence cs35l41_revb0_errata_patch[] = {
- 	{ CS35L41_DSP1_XM_ACCEL_PL0_PRI, 0x00000000 },
- 	{ CS35L41_PWR_CTRL2,		 0x00000000 },
- 	{ CS35L41_AMP_GAIN_CTRL,	 0x00000000 },
-+	{ CS35L41_ASP_TX3_SRC,		 0x00000000 },
-+	{ CS35L41_ASP_TX4_SRC,		 0x00000000 },
- };
+-	BUG_ON(sig == -1);
++	WARN_ON_ONCE(sig == -1);
  
- static const struct reg_sequence cs35l41_revb2_errata_patch[] = {
-@@ -665,6 +669,8 @@ static const struct reg_sequence cs35l41_revb2_errata_patch[] = {
- 	{ CS35L41_DSP1_XM_ACCEL_PL0_PRI, 0x00000000 },
- 	{ CS35L41_PWR_CTRL2,		 0x00000000 },
- 	{ CS35L41_AMP_GAIN_CTRL,	 0x00000000 },
-+	{ CS35L41_ASP_TX3_SRC,		 0x00000000 },
-+	{ CS35L41_ASP_TX4_SRC,		 0x00000000 },
- };
+- 	/* do_notify_parent_cldstop should have been called instead.  */
+- 	BUG_ON(task_is_stopped_or_traced(tsk));
++	/* do_notify_parent_cldstop should have been called instead.  */
++	WARN_ON_ONCE(task_is_stopped_or_traced(tsk));
  
- static const struct cs35l41_otp_map_element_t cs35l41_otp_map_map[] = {
+-	BUG_ON(!tsk->ptrace &&
++	WARN_ON_ONCE(!tsk->ptrace &&
+ 	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
+ 
+ 	/* Wake up all pidfd waiters */
 -- 
 2.35.1
 

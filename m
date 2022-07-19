@@ -2,88 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD6057A4AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EE057A4AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237509AbiGSRL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S238296AbiGSRML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiGSRL4 (ORCPT
+        with ESMTP id S237546AbiGSRMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:11:56 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F72C115F
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:11:56 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id f73so27463110yba.10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:11:56 -0700 (PDT)
+        Tue, 19 Jul 2022 13:12:03 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E413D5B2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:12:02 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so12426885wme.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:12:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=i9cWtsNaADxiOtp8Z1ab41SdVNMY6iARUMpAO2YuQ4k=;
-        b=cBltdFKR+a7IgWbfDJv5a54sSqg6m4h1Kf2ud6yMVxz4DVOaj6eYpthSHG9DRhlUq7
-         vfRtob1hbfI7lO9ukY1xMfkDiz6iVId0vVx1DrGSHM5bE4pT/FL7t4W0/TUH9dJep5Wk
-         20+MSvYt3J+v9ahRa33lmZSWMPXB0EZT+h6YU=
+        bh=+iAMKSPyDppnW2drRMfC/DPQpbs37SaFNxH0H50ARZI=;
+        b=O4NZkZYPqKMHT4nkgfKSUBmSRXIHX7Xjwz9LKUGh/yri9UiZab70JDTT2lnPU0ifjW
+         1ygD5BQogbi6L/wnERj2t3rJ5JSbFWL5rDHKQqBPVThyrDAYX96sulwjrLwIWFwHOg1u
+         pHwSnoF3JuH/x/+9T5ImiOHCy7LF/41/RkzmYG1GETdJkp8MHUMyVG/OABGriwDV8Xte
+         VGByh68mkeH3usd3nsyx9xEHVcVUMIZ1rapz0kznz/fThMO7VjVj9e+LZ9OeMRmL/EMy
+         h5qSsDGG51BUntktLnJ9rGdi2Atg0gbNZP/u/rq8NvWQX2pORSF+RhkfKtKrYLa1BSHG
+         tlbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=i9cWtsNaADxiOtp8Z1ab41SdVNMY6iARUMpAO2YuQ4k=;
-        b=wutaoy6T9zZi51J0ChK3yUDl8y38PR+IAtmbVQEShBBP7zMkxyc1VANfn7Bu7Z1hdF
-         4QeQF+XKp+Y9v8bbL9xGR0LyeDeB2cZamz7hb2MfpwilhQuUw0OU+N7/FProilKifcr4
-         J/N5dmv38uMsJpOdrqIyRWsknmI2UH2zK5+fBnaql+L67kHER5yxjgeZ5CLrI5o8y9KX
-         hnxpTt9ZcU9wXkGlHXRwEw1msIUl/LQvRXNJ/hkRqJsx2gJKV221+gJl+s8Bzd+Ge5Kz
-         Cc9VXHBWX7y4kc5aAp4xIfWpVTXgPvLtSQ+JBg7Pm3UT07LwRfKuyDMFW5OjfrQvOgrc
-         Cu5Q==
-X-Gm-Message-State: AJIora9dxz2oSx5dfGK/PW7h5ZLxhtKkAaqwDAbWxtI3rS0Ci1mEIQDH
-        sYyIwNjgP4Ra9TsMSK3I9QyMdq/G78RdlnxAEB/8Jg==
-X-Google-Smtp-Source: AGRyM1tV4H0pvx6jCGVXpjfX3HEHe69QXE28jHkC4yOWHBxMtM3zcR6FWLJn4RF4eAipbUchHcN9zF67OpwINJ2IazI=
-X-Received: by 2002:a25:3184:0:b0:670:8123:c0ef with SMTP id
- x126-20020a253184000000b006708123c0efmr3904842ybx.240.1658250715432; Tue, 19
- Jul 2022 10:11:55 -0700 (PDT)
+        bh=+iAMKSPyDppnW2drRMfC/DPQpbs37SaFNxH0H50ARZI=;
+        b=X2+Ul2nKXpQ8mchFP9QLl9vJjo7MbRvw4gKk+BHRBjo0i0LaZ8Ekr/CsWpsMpxXSyH
+         AXJVuiD8sT+43zBPNzNEIf3JpYQj3flu6dth1b9Bp2kQZCmETrpK3wN0AlV+oKvzts0w
+         FVVyJEbm6n/fojW8WgLL9ZhQzV+FkPeXbrR4ioeP1gbajnLAtkXNsPF/LqQ5tU7I+eRm
+         XmHpxSzlBghhM+WnYsx0wL2ryXr1fv7KQxg4KvoWycfo6gXF+VGw+aQNl9gavbT70iQ8
+         8npet/zu7gSbvJ4GysWPltkeFlOdBqMoOoTslQb9cLyWTBUferaVwOW6G0qihp1AGywF
+         AL3Q==
+X-Gm-Message-State: AJIora9m1Wl5yzBAs7wfQRUdIlH/YiSiwJggLFHumU0P3P22zKGInPb2
+        ITRAm96nB29SSZgI1DhQWG4/x6ADMkYMytWkjGXOXw==
+X-Google-Smtp-Source: AGRyM1tSnTrIGMlPQIc7VTFsvWbxlskp6X+tgzxneY4fax0JYBtF4IpoL7Y1h3CUtrD+EWH9+RyBdQCDNqpZLHZ8vMY=
+X-Received: by 2002:a05:600c:4e8f:b0:3a1:8b21:ebbc with SMTP id
+ f15-20020a05600c4e8f00b003a18b21ebbcmr266369wmq.149.1658250721039; Tue, 19
+ Jul 2022 10:12:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220718163158.42176b4e@canb.auug.org.au> <YtXF8TUZHNRUUyJh@kroah.com>
- <CACeCKafbgLmhLoYQiTTDkeeJ26HqFYBHXtcpwQkzOyO9LESEFw@mail.gmail.com>
- <YtZUJr4oIIALgdO+@kroah.com> <YtadE201j+dt5jJx@kroah.com>
-In-Reply-To: <YtadE201j+dt5jJx@kroah.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 19 Jul 2022 10:11:44 -0700
-Message-ID: <CACeCKae5aeK4wU_=+EXFnEHKsFbRnvxo14KtZgMAYw+zNpnKBg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the usb tree
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-8-adrian.hunter@intel.com>
+In-Reply-To: <20220711093218.10967-8-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 19 Jul 2022 10:11:49 -0700
+Message-ID: <CAP-5=fXtV=p_N=hQPUXzw6TV4st=qpEp7U8H-eDZJgr2BoiVeQ@mail.gmail.com>
+Subject: Re: [PATCH 07/35] perf script: Add --dump-unsorted-raw-trace option
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 5:30 AM Greg KH <greg@kroah.com> wrote:
-> > > 3. Revert the entire cros-typec-switch (patches 3-9) series from
-> > > usb-next and wait till after the merge window to apply it to
-> > > chrome-platform directly.
-> >
-> > I think I'll just do #3 to resolve the issue.  I'll do it in a few
-> > hours.
+On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> Now all reverted from my tree.  Please send these changs through the
-> platform tree after the next -rc1 is released so that you don't end up
-> with build problems again.
+> When reviewing the results of perf inject, it is useful to be able to see
+> the events in the order they appear in the file.
+>
+> So add --dump-unsorted-raw-trace option to do an unsorted dump.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Will do. Thank you for catching this and reverting the patches. Sorry
-for the trouble.
+Acked-by: Ian Rogers <irogers@google.com>
 
-BR,
+Thanks,
+Ian
 
--Prashant
+> ---
+>  tools/perf/Documentation/perf-script.txt | 3 +++
+>  tools/perf/builtin-script.c              | 8 ++++++++
+>  2 files changed, 11 insertions(+)
+>
+> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
+> index 1a557ff8f210..e250ff5566cf 100644
+> --- a/tools/perf/Documentation/perf-script.txt
+> +++ b/tools/perf/Documentation/perf-script.txt
+> @@ -79,6 +79,9 @@ OPTIONS
+>  --dump-raw-trace=::
+>          Display verbose dump of the trace data.
+>
+> +--dump-unsorted-raw-trace=::
+> +        Same as --dump-raw-trace but not sorted in time order.
+> +
+>  -L::
+>  --Latency=::
+>          Show latency attributes (irqs/preemption disabled, etc).
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index 7cf21ab16f4f..4b00a50faf00 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -3746,6 +3746,7 @@ int cmd_script(int argc, const char **argv)
+>         bool header = false;
+>         bool header_only = false;
+>         bool script_started = false;
+> +       bool unsorted_dump = false;
+>         char *rec_script_path = NULL;
+>         char *rep_script_path = NULL;
+>         struct perf_session *session;
+> @@ -3794,6 +3795,8 @@ int cmd_script(int argc, const char **argv)
+>         const struct option options[] = {
+>         OPT_BOOLEAN('D', "dump-raw-trace", &dump_trace,
+>                     "dump raw trace in ASCII"),
+> +       OPT_BOOLEAN(0, "dump-unsorted-raw-trace", &unsorted_dump,
+> +                   "dump unsorted raw trace in ASCII"),
+>         OPT_INCR('v', "verbose", &verbose,
+>                  "be more verbose (show symbol address, etc)"),
+>         OPT_BOOLEAN('L', "Latency", &latency_format,
+> @@ -3956,6 +3959,11 @@ int cmd_script(int argc, const char **argv)
+>         data.path  = input_name;
+>         data.force = symbol_conf.force;
+>
+> +       if (unsorted_dump) {
+> +               dump_trace = true;
+> +               script.tool.ordered_events = false;
+> +       }
+> +
+>         if (symbol__validate_sym_arguments())
+>                 return -1;
+>
+> --
+> 2.25.1
+>

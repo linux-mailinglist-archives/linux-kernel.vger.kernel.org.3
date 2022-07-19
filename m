@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF486579EA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474DF579C47
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242891AbiGSNDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S240986AbiGSMiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242677AbiGSM7Z (ORCPT
+        with ESMTP id S238389AbiGSMhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:59:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696EC4F673;
-        Tue, 19 Jul 2022 05:24:25 -0700 (PDT)
+        Tue, 19 Jul 2022 08:37:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EE07B371;
+        Tue, 19 Jul 2022 05:14:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09146B81B38;
-        Tue, 19 Jul 2022 12:24:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172DAC385A2;
-        Tue, 19 Jul 2022 12:24:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FB5E617B2;
+        Tue, 19 Jul 2022 12:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD07C341C6;
+        Tue, 19 Jul 2022 12:14:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233462;
-        bh=gPzFQAuMIDgC5aBGExLik2rUKlCn5pdg2+zrDFcH3ec=;
+        s=korg; t=1658232845;
+        bh=7M6lv56eSXqjUd7Uyxbls7iULV5IVYc4PzsEmltCBpg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IVb1Qh1fo6i90cDATKqjcfI0ORQ+0DP4WG3D0kCV/JjGJ1pVvMwfL3txl23hYEie4
-         4AwR9NUP/cINkJ+RdPRJiCLHYfB0t+4c2ia3EMXeD5ZhrurBBuZ0cb7ZczKlBty8OJ
-         EsVw4RRbEkRZ7ZFkk1gFJMJ3A+Avt3hiKS1RjQH0=
+        b=PuJLjMYsVu48M7rHfSVUWX2xM06XF/aJ2wIRa34RhbZb2fm9NkLm1ze4C7QywOxFX
+         ANoWmSEnSy+VWVKHRXFa8ci4+6GK35/7EE+NyfsrIX+2iX3mdhThJEyB9IVC2cadB9
+         A9yymvFpPF1KRaG2AhrjeUpPgnTXn7A3nGXrFOlc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Yefim Barashkin <mr.b34r@kolabnow.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 131/231] drm/amd/pm: Prevent divide by zero
-Date:   Tue, 19 Jul 2022 13:53:36 +0200
-Message-Id: <20220719114725.466922271@linuxfoundation.org>
+Subject: [PATCH 5.15 085/167] icmp: Fix a data-race around sysctl_icmp_ignore_bogus_error_responses.
+Date:   Tue, 19 Jul 2022 13:53:37 +0200
+Message-Id: <20220719114704.803039438@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yefim Barashkin <mr.b34r@kolabnow.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 0638c98c17aa12fe914459c82cd178247e21fb2b ]
+[ Upstream commit b04f9b7e85c7d7aecbada620e8759a662af068d3 ]
 
-divide error: 0000 [#1] SMP PTI
-CPU: 3 PID: 78925 Comm: tee Not tainted 5.15.50-1-lts #1
-Hardware name: MSI MS-7A59/Z270 SLI PLUS (MS-7A59), BIOS 1.90 01/30/2018
-RIP: 0010:smu_v11_0_set_fan_speed_rpm+0x11/0x110 [amdgpu]
+While reading sysctl_icmp_ignore_bogus_error_responses, it can be changed
+concurrently.  Thus, we need to add READ_ONCE() to its reader.
 
-Speed is user-configurable through a file.
-I accidentally set it to zero, and the driver crashed.
-
-Reviewed-by: Evan Quan <evan.quan@amd.com>
-Reviewed-by: André Almeida <andrealmeid@igalia.com>
-Signed-off-by: Yefim Barashkin <mr.b34r@kolabnow.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/ipv4/icmp.c            | 2 +-
+ net/ipv4/sysctl_net_ipv4.c | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-index 5f8809f6990d..2fbd2926a531 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-@@ -1228,6 +1228,8 @@ int smu_v11_0_set_fan_speed_rpm(struct smu_context *smu,
- 	uint32_t crystal_clock_freq = 2500;
- 	uint32_t tach_period;
+diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
+index 91be44180dd5..6f444b2b7d1a 100644
+--- a/net/ipv4/icmp.c
++++ b/net/ipv4/icmp.c
+@@ -939,7 +939,7 @@ static bool icmp_unreach(struct sk_buff *skb)
+ 	 *	get the other vendor to fix their kit.
+ 	 */
  
-+	if (speed == 0)
-+		return -EINVAL;
- 	/*
- 	 * To prevent from possible overheat, some ASICs may have requirement
- 	 * for minimum fan speed:
+-	if (!net->ipv4.sysctl_icmp_ignore_bogus_error_responses &&
++	if (!READ_ONCE(net->ipv4.sysctl_icmp_ignore_bogus_error_responses) &&
+ 	    inet_addr_type_dev_table(net, skb->dev, iph->daddr) == RTN_BROADCAST) {
+ 		net_warn_ratelimited("%pI4 sent an invalid ICMP type %u, code %u error to a broadcast: %pI4 on %s\n",
+ 				     &ip_hdr(skb)->saddr,
+diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+index 6f1e64d49232..51863031b178 100644
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@ -639,6 +639,8 @@ static struct ctl_table ipv4_net_table[] = {
+ 		.maxlen		= sizeof(u8),
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dou8vec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE
+ 	},
+ 	{
+ 		.procname	= "icmp_errors_use_inbound_ifaddr",
 -- 
 2.35.1
 

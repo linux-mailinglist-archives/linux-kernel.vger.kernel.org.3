@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6644579292
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 07:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E71579272
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 07:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235376AbiGSFmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 01:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S229916AbiGSF1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 01:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbiGSFmE (ORCPT
+        with ESMTP id S235983AbiGSF0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 01:42:04 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5290C2C11B;
-        Mon, 18 Jul 2022 22:42:01 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 03F3B1A08A2;
-        Tue, 19 Jul 2022 07:42:00 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B0CB31A08B6;
-        Tue, 19 Jul 2022 07:41:59 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 3C3C3181D0CA;
-        Tue, 19 Jul 2022 13:41:57 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        daniel.baluta@nxp.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org
-Cc:     shengjiu.wang@gmail.com, linux-kernel@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/2] dt-bindings: dsp: fsl: Add SOF compatile string for i.MX8ULP
-Date:   Tue, 19 Jul 2022 13:26:07 +0800
-Message-Id: <1658208367-24376-2-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1658208367-24376-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1658208367-24376-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Tue, 19 Jul 2022 01:26:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB1324BF1;
+        Mon, 18 Jul 2022 22:26:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C092661591;
+        Tue, 19 Jul 2022 05:26:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 772D4C341C6;
+        Tue, 19 Jul 2022 05:26:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658208404;
+        bh=bkOVs9bpZgSJNv5tbjkfFp659Okff01K/tFuY0jID1o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nIYNUuc/R/Z+xsQEKAo39MfAzQ6+WyipoaD8wCW7zOgWZF1Ljh6IiOs5VtjKMeHUT
+         ci1yg205y+mZIOK2phhu6a4T+5xtCWNb4pAQkJQNQhIT6cQxYXa3pzOxlk6kLbejYC
+         o9DPyPc2htsQ5x6EPep0OLJWgcNfKYBk1pYvgAi4MJvEBmMqQ41zHciqd5KSJKCnQy
+         rNH/6RRMJGxM1TgcTKN4JfUkKYhssnSszIuhkNaUlPikDyQZiwALSOKLhE3NmohQQT
+         OYQuGHyyncAGHQV+2eIn7r01M8aMTifIq90B1RYzyRRJyr4ROr+VKTjyH8kwCShZfw
+         CqVIslXwZt7Jg==
+Date:   Tue, 19 Jul 2022 08:26:39 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Cc:     Jianglei Nie <niejianglei2021@163.com>, jgg@ziepe.ca,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RDMA/hfi1: fix potential memory leak in setup_base_ctxt()
+Message-ID: <YtZAjwpqc0VjzlPw@unreal>
+References: <20220711070718.2318320-1-niejianglei2021@163.com>
+ <1038e814-5f0d-17a3-1331-8ed24a64d597@cornelisnetworks.com>
+ <YtU4eXQCVEPGnh9b@unreal>
+ <be437471-0080-8e9c-978a-6029c7826335@cornelisnetworks.com>
+ <YtVSc7aazgxVFHRa@unreal>
+ <62c8d684-6587-e560-6029-18fbe76ad8c4@cornelisnetworks.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62c8d684-6587-e560-6029-18fbe76ad8c4@cornelisnetworks.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,26 +58,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SOF compatile string "fsl,imx8ulp-dsp" for supporting DSP
-device on i.MX8ULP platform.
+On Mon, Jul 18, 2022 at 09:56:48AM -0400, Dennis Dalessandro wrote:
+> On 7/18/22 8:30 AM, Leon Romanovsky wrote:
+> > On Mon, Jul 18, 2022 at 08:11:59AM -0400, Dennis Dalessandro wrote:
+> >> On 7/18/22 6:39 AM, Leon Romanovsky wrote:
+> >>> On Mon, Jul 11, 2022 at 07:52:25AM -0400, Dennis Dalessandro wrote:
+> >>>> On 7/11/22 3:07 AM, Jianglei Nie wrote:
+> >>>>> setup_base_ctxt() allocates a memory chunk for uctxt->groups with
+> >>>>> hfi1_alloc_ctxt_rcv_groups(). When init_user_ctxt() fails, uctxt->groups
+> >>>>> is not released, which will lead to a memory leak.
+> >>>>>
+> >>>>> We should release the uctxt->groups with hfi1_free_ctxt_rcv_groups()
+> >>>>> when init_user_ctxt() fails.
+> >>>>>
+> >>>>> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> >>>>> ---
+> >>>>>  drivers/infiniband/hw/hfi1/file_ops.c | 4 +++-
+> >>>>>  1 file changed, 3 insertions(+), 1 deletion(-)
+> >>>>>
+> >>>>> diff --git a/drivers/infiniband/hw/hfi1/file_ops.c b/drivers/infiniband/hw/hfi1/file_ops.c
+> >>>>> index 2e4cf2b11653..629beff053ad 100644
+> >>>>> --- a/drivers/infiniband/hw/hfi1/file_ops.c
+> >>>>> +++ b/drivers/infiniband/hw/hfi1/file_ops.c
+> >>>>> @@ -1179,8 +1179,10 @@ static int setup_base_ctxt(struct hfi1_filedata *fd,
+> >>>>>  		goto done;
+> >>>>>  
+> >>>>>  	ret = init_user_ctxt(fd, uctxt);
+> >>>>> -	if (ret)
+> >>>>> +	if (ret) {
+> >>>>> +		hfi1_free_ctxt_rcv_groups(uctxt);
+> >>>>>  		goto done;
+> >>>>> +	}
+> >>>>>  
+> >>>>>  	user_init(uctxt);
+> >>>>>  
+> >>>>
+> >>>> Doesn't seem like this patch is correct. The free is done when the file is
+> >>>> closed, along with other clean up stuff. See hfi1_file_close().
+> >>>
+> >>> Can setup_base_ctxt() be called twice for same uctxt?
+> >>> You are allocating rcd->groups and not releasing.
+> >>
+> >> The first thing assign_ctxt() does is a check of the fd->uctxt and it bails with
+> >> -EINVAL. So effectively only once.
+> > 
+> > I'm slightly confused. How will you release rcd->groups?
+> > 
+> > assign_ctxt()
+> >  -> setup_base_ctxt()
+> >    -> hfi1_alloc_ctxt_rcv_groups()
+> >       ,,,
+> >       rcd->groups = kzalloc...
+> >       ...
+> >    -> init_user_ctxt() <-- fails and leaves fd->uctx == NULL
+> > 
+> > 
+> > ...
+> > hfi1_file_close()
+> >   struct hfi1_ctxtdata *uctxt = fdata->uctxt;
+> >   ...
+> >   if (!uctxt)             <-- This is our case
+> >      goto done; 
+> >   ...
+> > 
+> > done:
+> >   if (refcount_dec_and_test(&dd->user_refcount))
+> >      complete(&dd->user_comp);
+> > 
+> >   cleanup_srcu_struct(&fdata->pq_srcu);
+> >   kfree(fdata);
+> >   return 0;
+> > 
+> 
+> Looks like this may have been broken with:
+> 
+> e87473bc1b6c ("IB/hfi1: Only set fd pointer when base context is completely
+> initialized")
+> 
+> The question is does it make more sense to just move the fd->uctxt assignment
+> up, or call the free directly. I think that might be opening a bigger can of
+> worms though, as this was part of a larger patch set. Maybe it is best after all
+> to go with this patch.
+> 
+> Let's add the above as a fixes line and tack on:
+> 
+> Acked-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+> 
+> It's been like this since 4.14, so no rush to get it in for the ultra late RC.
+> I'll get it tested as part of the next cycle.
+> 
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- Documentation/devicetree/bindings/dsp/fsl,dsp.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml b/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml
-index e66ef2da7879..9af40da5688e 100644
---- a/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml
-+++ b/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml
-@@ -20,6 +20,7 @@ properties:
-       - fsl,imx8qxp-dsp
-       - fsl,imx8qm-dsp
-       - fsl,imx8mp-dsp
-+      - fsl,imx8ulp-dsp
-       - fsl,imx8qxp-hifi4
-       - fsl,imx8qm-hifi4
-       - fsl,imx8mp-hifi4
--- 
-2.34.1
-
+Thanks, applied.

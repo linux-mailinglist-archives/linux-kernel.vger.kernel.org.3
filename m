@@ -2,193 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57499579C67
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E26579C95
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241181AbiGSMjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
+        id S241292AbiGSMkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240996AbiGSMiY (ORCPT
+        with ESMTP id S241083AbiGSMin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:38:24 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C319A52E66
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:15:00 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bf9so24384231lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=34WEw9awHu7gIj88S8fD4edkfHyl6opCxCuZk5MV1WY=;
-        b=AsAWj/AoIqTCw/y/vRqi6d8PBRZR41f9vcEoK7NedJ6XFDli5M0KyZDzdKjJWDJoWG
-         LDjCB7vRB7MYilrC0pCactxmsHmQkI6bUavPH+Lv7JtztyqDLzwlbI5Q8FEZAn9I1QkZ
-         WdrxeJjZ+YZ3BrKlgAxyiCtVQHLCRIDPd27xFEANiIu/7EQlkYZq3Faxfw4xJiCE1aKQ
-         +Rcnxihrxu/rYwRLNsH0R7EJUTM/W1i78x/z2r7Bo8ePRTSjYonHaZOdZMglfR7jvGEJ
-         xmaBVkCPXGLEXflU1IEFmQdYpwpeEa7ftbgXZCQpGS494JPwzLt0W5gg0d1S8PxgHBF7
-         pW0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=34WEw9awHu7gIj88S8fD4edkfHyl6opCxCuZk5MV1WY=;
-        b=swBuj9unujzmwfjvRHg+3OfF3a1LMtkmynN9tk8nmtsqlDc71mnJ+J4J/x59K2ejaA
-         24E4/GoTyBBSlEJcBNNHljqWcMkgMbzdoCgjNZk45w/kGNV8ZDVUR7PIt9VdApkSMEjR
-         4vTGWdU5Wrnyqrf2wZPcgY3SFtgPtUYG3i+xpjsxp/6b2pH/Jmes7WXkpbHOgJkWPUSm
-         4zowCjW2opK8IpBioTOfZhKndWKqoPoAfc0YDiR6B5RdIT2+oEKIFXkly8wYyVFWAfVQ
-         eBdoFiR6NJ7BsPVS2VuIELQaZd05RQ57Czza2aaS+hbWQir+fkzwEdPwHiyd/dtYCJpU
-         HYDQ==
-X-Gm-Message-State: AJIora+QIxYek6KB6kGLC17i2zuevTp4+YDwf13QOTUvQFOS1BncToh5
-        0ukbEyjFDW4OLylanjKj6Oy+Thzsk+NgyPNc
-X-Google-Smtp-Source: AGRyM1vwNaBHrVb4CXTu+XUlQy3SHZi0HMjGdsNr6AqpyVAKYAfPFMrJ1wVoHuOPNgq3wvLyxpSTZQ==
-X-Received: by 2002:a05:6512:344e:b0:489:f4ad:88d8 with SMTP id j14-20020a056512344e00b00489f4ad88d8mr19034026lfr.297.1658232899046;
-        Tue, 19 Jul 2022 05:14:59 -0700 (PDT)
-Received: from krzk-bin.. (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id p4-20020a2ea4c4000000b0025d6c8cfafcsm2645676ljm.93.2022.07.19.05.14.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 05:14:58 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH] regmap: support regmap_field_write() on non-readable fields
-Date:   Tue, 19 Jul 2022 14:14:46 +0200
-Message-Id: <20220719121446.375095-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 19 Jul 2022 08:38:43 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205DA10568;
+        Tue, 19 Jul 2022 05:15:19 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LnHkB2HXzzVgX6;
+        Tue, 19 Jul 2022 20:11:30 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Jul 2022 20:15:13 +0800
+Message-ID: <ffb13c36-521e-0e06-8fd6-30b0fec727da@huawei.com>
+Date:   Tue, 19 Jul 2022 20:15:13 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 4.19] ext4: fix race condition between ext4_ioctl_setflags
+ and ext4_fiemap
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
+        <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <lczerner@redhat.com>,
+        <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yebin10@huawei.com>, <yukuai3@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>
+References: <20220715023928.2701166-1-libaokun1@huawei.com>
+ <YtF1XygwvIo2Dwae@kroah.com>
+ <425ab528-7d9a-975a-7f4c-5f903cedd8bc@huawei.com>
+ <YtaVAWMlxrQNcS34@kroah.com>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <YtaVAWMlxrQNcS34@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current implementation of regmap_field_write() performs an update of
-register (read+write), therefore it ignores regmap read-restrictions and
-is not suitable for write-only registers (e.g. interrupt clearing).
+在 2022/7/19 19:26, Greg KH 写道:
+> On Sat, Jul 16, 2022 at 10:33:30AM +0800, Baokun Li wrote:
+>> 在 2022/7/15 22:10, Greg KH 写道:
+>>> On Fri, Jul 15, 2022 at 10:39:28AM +0800, Baokun Li wrote:
+>>>> This patch and problem analysis is based on v4.19 LTS.
+>>>> The d3b6f23f7167("ext4: move ext4_fiemap to use iomap framework") patch
+>>>> is incorporated in v5.7-rc1. This patch avoids this problem by switching
+>>>> to iomap in ext4_fiemap.
+>>>>
+>>>> Hulk Robot reported a BUG on stable 4.19.252:
+>>>> ==================================================================
+>>>> kernel BUG at fs/ext4/extents_status.c:762!
+>>>> invalid opcode: 0000 [#1] SMP KASAN PTI
+>>>> CPU: 7 PID: 2845 Comm: syz-executor Not tainted 4.19.252 #46
+>>>> RIP: 0010:ext4_es_cache_extent+0x30e/0x370
+>>>> [...]
+>>>> Call Trace:
+>>>>    ext4_cache_extents+0x238/0x2f0
+>>>>    ext4_find_extent+0x785/0xa40
+>>>>    ext4_fiemap+0x36d/0xe90
+>>>>    do_vfs_ioctl+0x6af/0x1200
+>>>> [...]
+>>>> ==================================================================
+>>>>
+>>>> Above issue may happen as follows:
+>>>> -------------------------------------
+>>>>              cpu1		    cpu2
+>>>> _____________________|_____________________
+>>>> do_vfs_ioctl
+>>>>    ext4_ioctl
+>>>>     ext4_ioctl_setflags
+>>>>      ext4_ind_migrate
+>>>>                           do_vfs_ioctl
+>>>>                            ioctl_fiemap
+>>>>                             ext4_fiemap
+>>>>                              ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)
+>>>>                              ext4_fill_fiemap_extents
+>>>>       down_write(&EXT4_I(inode)->i_data_sem);
+>>>>       ext4_ext_check_inode
+>>>>       ext4_clear_inode_flag(inode, EXT4_INODE_EXTENTS)
+>>>>       memset(ei->i_data, 0, sizeof(ei->i_data))
+>>>>       up_write(&EXT4_I(inode)->i_data_sem);
+>>>>                               down_read(&EXT4_I(inode)->i_data_sem);
+>>>>                               ext4_find_extent
+>>>>                                ext4_cache_extents
+>>>>                                 ext4_es_cache_extent
+>>>>                                  BUG_ON(end < lblk)
+>>>>
+>>>> We can easily reproduce this problem with the syzkaller testcase:
+>>>> ```
+>>>> 02:37:07 executing program 3:
+>>>> r0 = openat(0xffffffffffffff9c, &(0x7f0000000040)='./file0\x00', 0x26e1, 0x0)
+>>>> ioctl$FS_IOC_FSSETXATTR(r0, 0x40086602, &(0x7f0000000080)={0x17e})
+>>>> mkdirat(0xffffffffffffff9c, &(0x7f00000000c0)='./file1\x00', 0x1ff)
+>>>> r1 = openat(0xffffffffffffff9c, &(0x7f0000000100)='./file1\x00', 0x0, 0x0)
+>>>> ioctl$FS_IOC_FIEMAP(r1, 0xc020660b, &(0x7f0000000180)={0x0, 0x1, 0x0, 0xef3, 0x6, []}) (async, rerun: 32)
+>>>> ioctl$FS_IOC_FSSETXATTR(r1, 0x40086602, &(0x7f0000000140)={0x17e}) (rerun: 32)
+>>>> ```
+>>>>
+>>>> To solve this issue, we use __generic_block_fiemap() instead of
+>>>> generic_block_fiemap() and add inode_lock_shared to avoid race condition.
+>>>>
+>>>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>>>> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+>>>> ---
+>>>>    fs/ext4/extents.c | 15 +++++++++++----
+>>>>    1 file changed, 11 insertions(+), 4 deletions(-)
+>>> What is the git commit id of this change in Linus's tree?
+>>>
+>>> If it is not in Linus's tree, why not?
+>>>
+>>> confused,
+>>>
+>>> greg k-h
+>>> .
+>> This patch does not exist in the Linus' tree.
+>>
+>> This problem persists until the patch d3b6f23f7167("ext4: move ext4_fiemap
+>> to use iomap framework") is incorporated in v5.7-rc1.
+> Then why not ask for that change to be added instead?
+>
+> thanks,
+>
+> greg k-h
+> .
 
-Extend regmap_field_write() and regmap_field_force_write() to check if
-register is readable and only then perform an update.  In the other
-case, it is expected that mask of field covers entire register thus a
-full write is allowed.
+If we want to switch to the iomap framework, we need to analyze and 
+integrate about 60 patches.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The workload may be greater than that of solving this problem alone.
 
----
+Thank you!
 
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/base/regmap/regmap.c | 50 ++++++++++++++++++++++++++++++++++++
- include/linux/regmap.h       | 15 ++---------
- 2 files changed, 52 insertions(+), 13 deletions(-)
+Thanks a lot!
 
-diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index 0caa5690c560..4d18a34f7b2c 100644
---- a/drivers/base/regmap/regmap.c
-+++ b/drivers/base/regmap/regmap.c
-@@ -2192,6 +2192,56 @@ int regmap_noinc_write(struct regmap *map, unsigned int reg,
- }
- EXPORT_SYMBOL_GPL(regmap_noinc_write);
- 
-+static int _regmap_field_write_or_update(struct regmap_field *field,
-+					 unsigned int val, bool *change,
-+					 bool async, bool force)
-+{
-+	unsigned int mask = (~0 << field->shift) & field->mask;
-+	unsigned int map_val_mask, map_val_mask_h;
-+	int ret;
-+
-+	if (regmap_readable(field->regmap, field->reg))
-+		return regmap_update_bits_base(field->regmap, field->reg,
-+					       mask, val << field->shift,
-+					       change, async, force);
-+
-+	map_val_mask_h = field->regmap->format.val_bytes * 8 - 1;
-+	map_val_mask = GENMASK(map_val_mask_h, 0);
-+
-+	/* Writes of parts of register are not allowed for sanity */
-+	if (field->shift)
-+		return -EINVAL;
-+
-+	/* Mask of field must cover entire register */
-+	if (field->mask != map_val_mask)
-+		return -EINVAL;
-+
-+	if (change)
-+		*change = false;
-+
-+	if (async)
-+		ret = regmap_write(field->regmap, field->reg, val);
-+	else
-+		ret = regmap_write_async(field->regmap, field->reg, val);
-+
-+	if (ret == 0 && change)
-+		*change = true;
-+
-+	return ret;
-+}
-+
-+int regmap_field_write(struct regmap_field *field, unsigned int val)
-+{
-+	return _regmap_field_write_or_update(field, val, NULL, false, false);
-+}
-+EXPORT_SYMBOL_GPL(regmap_field_write);
-+
-+int regmap_field_force_write(struct regmap_field *field,  unsigned int val)
-+{
-+	return _regmap_field_write_or_update(field, val, NULL, false, true);
-+}
-+EXPORT_SYMBOL_GPL(regmap_field_force_write);
-+
- /**
-  * regmap_field_update_bits_base() - Perform a read/modify/write cycle a
-  *                                   register field.
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index 7cf2157134ac..08507e764dfa 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -1307,6 +1307,8 @@ void devm_regmap_field_bulk_free(struct device *dev,
- 				 struct regmap_field *field);
- 
- int regmap_field_read(struct regmap_field *field, unsigned int *val);
-+int regmap_field_write(struct regmap_field *field, unsigned int val);
-+int regmap_field_force_write(struct regmap_field *field,  unsigned int val);
- int regmap_field_update_bits_base(struct regmap_field *field,
- 				  unsigned int mask, unsigned int val,
- 				  bool *change, bool async, bool force);
-@@ -1316,19 +1318,6 @@ int regmap_fields_update_bits_base(struct regmap_field *field,  unsigned int id,
- 				   unsigned int mask, unsigned int val,
- 				   bool *change, bool async, bool force);
- 
--static inline int regmap_field_write(struct regmap_field *field,
--				     unsigned int val)
--{
--	return regmap_field_update_bits_base(field, ~0, val,
--					     NULL, false, false);
--}
--
--static inline int regmap_field_force_write(struct regmap_field *field,
--					   unsigned int val)
--{
--	return regmap_field_update_bits_base(field, ~0, val, NULL, false, true);
--}
--
- static inline int regmap_field_update_bits(struct regmap_field *field,
- 					   unsigned int mask, unsigned int val)
- {
 -- 
-2.34.1
+With Best Regards,
+Baokun Li
+
+
+-- 
+With Best Regards,
+Baokun Li
 

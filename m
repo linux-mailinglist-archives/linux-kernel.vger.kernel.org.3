@@ -2,116 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B821F57A8EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DAD57A8EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238343AbiGSVXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
+        id S238113AbiGSVXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237544AbiGSVXj (ORCPT
+        with ESMTP id S236955AbiGSVXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:23:39 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AF396170C;
-        Tue, 19 Jul 2022 14:23:34 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297609329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7609:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 19 Jul 2022 17:23:38 -0400
+X-Greylist: delayed 260 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Jul 2022 14:23:33 PDT
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57C56053A;
+        Tue, 19 Jul 2022 14:23:32 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E629F1EC0644;
-        Tue, 19 Jul 2022 23:23:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658265808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=9enq0fgxD5G4aG3v4Ve8uLcTEh3C8HVLu42xXwSENQs=;
-        b=Nepl+HfvfnIeaiJV3nAMnxEVX+rd09745zFNBMV7IvHW/EAVv0blS62razb3b9KTO9qOoA
-        S28eL2neJFYrwuoZl4vDQ+2PrCE5Ie0OcYUc+Ru6rBXZFKh1iPj+qp5/MuPLDQJf/1U2Me
-        Lr2aHQ7qIx0xQpAbilMYQxlmcvQYAPk=
-Date:   Tue, 19 Jul 2022 23:23:19 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
- memory
-Message-ID: <YtcgxxMyFTReuuRw@zn.tnic>
-References: <CAMkAt6oJJaRM_dy=y2BP99VziPriVuA4jAmMc=G7njwJYKFgyg@mail.gmail.com>
- <CAMj1kXHpS2B9Q7AaQ1euGidZUEyR6gfi=e+t1J_Cr8bmK_9mTw@mail.gmail.com>
- <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
- <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
- <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
- <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
- <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
- <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
- <YtcCWfCQuEsVhH6W@zn.tnic>
- <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0D24520076;
+        Tue, 19 Jul 2022 23:23:31 +0200 (CEST)
+Date:   Tue, 19 Jul 2022 23:23:29 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     phone-devel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] dt-bindings: leds: qcom-lpg: Add compatible for
+ PM660L LPG block
+Message-ID: <20220719212329.7yuky2jofpn7uaq7@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        phone-devel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
+        Rob Herring <robh@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220511190718.764445-1-marijn.suijten@somainline.org>
+ <056cc963-4cf4-8588-f75c-e4530aeb6220@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <056cc963-4cf4-8588-f75c-e4530aeb6220@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 10:45:06PM +0200, Ard Biesheuvel wrote:
-> So let's define a way for the EFI stub to signal to the firmware
-> (before EBS()) that it will take control of accepting memory. The
-> 'bootloader that calls EBS()' case can invent something along the
-> lines of what has been proposed in this thread to infer the
-> capabilities of the kernel (and decide what to signal to the
-> firmware). But we have no need for this additional complexity on
-> Linux.
+On 2022-07-19 02:35:50, Bhupesh Sharma wrote:
+> 
+> On 5/12/22 12:37 AM, Marijn Suijten wrote:
+> > Document the availability of an LPG configuration for the PM660L PMIC in
+> > the Qualcomm Light Pulse Generator driver.
+> >
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > Acked-by: Rob Herring <robh@kernel.org>
+> > ---
+> >   Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml | 1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> > index 409a4c7298e1..cd02811583ec 100644
+> > --- a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> > +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> > @@ -17,6 +17,7 @@ description: >
+> >   properties:
+> >     compatible:
+> >       enum:
+> > +      - qcom,pm660l-lpg
+> >         - qcom,pm8150b-lpg
+> >         - qcom,pm8150l-lpg
+> >         - qcom,pm8350c-pwm
+> 
+> 
+> This patch seems to have slipped through the cracks, as running a
+> 
+> 'make dtbs_check' currently on linux-next tip causes the following issue:
+> 
+> arch/arm64/boot/dts/qcom/sdm630-sony-xperia-ganges-kirin.dtb:0:0: 
+> /soc/spmi@800f000/pmic@3/lpg@b100:
+>    failed to match any schema with compatible: ['qcom,pm660l-lpg']
+> 
+> If it helps:
+> 
+> Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
-To tell you the truth, I've been perusing this thread from the sidelines
-and am wondering why does this need this special dance at all?
+Thanks.  It is not only this patch but also the accompanying driver
+change; both have to go through the leds tree.  Bjorn already picked the
+DTS patches as they have to go through the Qcom DTS tree.
 
-If EFI takes control of accepting memory, then when the guest kernel
-boots, it'll find all memory accepted and not do anything.
+I've resent a rebased v4, solving some context markers jumping to
+different lines and dropping applied patches to hopefully make it clear
+that only these are outstanding.  Feel free to submit your Reviewed-by:
+to the driver patch as well in hopes of making it in with the DTS
+changes for 5.20:
 
-If EFI doesn't accept memory, then the guest kernel will boot and do the
-accepting itself.
+https://lore.kernel.org/linux-arm-msm/20220719211848.1653920-1-marijn.suijten@somainline.org/T/#t
 
-So either I'm missing something or we're overengineering this for no
-good reason...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks!
+- Marijn

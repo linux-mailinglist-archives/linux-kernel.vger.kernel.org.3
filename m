@@ -2,55 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8ED57929D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 07:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73CF57929E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 07:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235619AbiGSFnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 01:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S235667AbiGSFrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 01:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiGSFnl (ORCPT
+        with ESMTP id S230447AbiGSFrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 01:43:41 -0400
+        Tue, 19 Jul 2022 01:47:06 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E709D286EB
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 22:43:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421E225596
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 22:47:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658209420; x=1689745420;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fi0bRXbCmAFjjR3nuv6uOQZ/xW9CcI8T7lvTZRyZEDY=;
-  b=SDDwQoQOBeLHdc2V/gFNk5z8yQhHdwnldkz8/7lndxAD2O3XHZaoAhD+
-   fdt4lNfEBOqe8slmMrQorqBwES13x06LEoLnie+O3CxCICxsYUylfFc8I
-   Vq37hMAPc0uQ7l1cXaeb9ROWuNeR8U5tWGNZefUJlp5tjlbMU1qa5LMYA
-   XQ2gRHTMa9Ty+zoOjtNd++Q52pWr+GXYT2gOFT/sqUL/1+yjRMFD2JmyW
-   au0K619ZxtOthCahgAgKXWJi4pfPJj7QmXwpzFMWzngR0BUi3mnmJsAlq
-   seXeGrN2u/5JNAK7GYKmpqh7tjfkAkKa4WtHJBHIBWsqdODtNAsQDu5pA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="285154166"
+  t=1658209623; x=1689745623;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=jmjeSdIDmrExnySMY5k5cqgszPtMtpWqsk3OgxRtt0A=;
+  b=Y/VdrRki2kEdloeujS+kqnMjbYcfvrFnxqI7j9IeDgYYULdIW5feT0TH
+   mWoSoLYLI1MBbQ+fZvNwzxjb2W8GxUpGmjgAOW//ldL/o+m+d6E/P04Xi
+   cZa38iH6aQcegy+6m0c4Xuc4CCHIH8mXxXR9Poc9vwkR6lgkESEwq20D2
+   5UADd3bS3cBDThm5n2StZjfXcPBtvlg7lSnP4auIwl9NXTexPsdEq1ycJ
+   HvZmbtYnYE5obwHCnTxTo3I+HyhC8Inhjrn2iD71DEdqVMWwj4ktJZwHe
+   AYgPp6M6J79RsHBDK58ZpxLe4YZq0gk7Iwfvtwsue1NAPgGBDhw32zcGZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="285154842"
 X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="285154166"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 22:43:38 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="285154842"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 22:47:03 -0700
 X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="597528503"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 18 Jul 2022 22:43:36 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDg19-0005KI-OS;
-        Tue, 19 Jul 2022 05:43:35 +0000
-Date:   Tue, 19 Jul 2022 13:43:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: gpio-mockup-cdev.c:24:37: warning: unused variable 'req'
-Message-ID: <202207191305.jL0JzHsp-lkp@intel.com>
+   d="scan'208";a="665293232"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 22:46:59 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Steven Price <steven.price@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        =?utf-8?B?6YOt5YGl?= <guojian@oppo.com>,
+        hanchuanhua <hanchuanhua@oppo.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        =?utf-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>
+Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
+References: <20220718090050.2261-1-21cnbao@gmail.com>
+        <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
+        <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com>
+        <87zgh5232o.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <416a06f6-ca7d-d4a9-2cda-af0ad6e28261@arm.com>
+        <CAGsJ_4y7GyL5qtrBbhz_8bLuAGGHy7Ju0ucPjHp-ZeDHjQcTcw@mail.gmail.com>
+        <CAGsJ_4z3wXK8WqubkFdPT6ObBVtvzAjbS1=r9PDCCDvwDVf3rw@mail.gmail.com>
+Date:   Tue, 19 Jul 2022 13:46:24 +0800
+In-Reply-To: <CAGsJ_4z3wXK8WqubkFdPT6ObBVtvzAjbS1=r9PDCCDvwDVf3rw@mail.gmail.com>
+        (Barry Song's message of "Tue, 19 Jul 2022 16:03:10 +1200")
+Message-ID: <87o7xl1wpb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=ascii
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -60,86 +82,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca85855bdcae8f84f1512e88b4c75009ea17ea2f
-commit: 4f4d0af7b2d997635b08fabd748673eff1bb12d6 selftests: gpio: restore CFLAGS options
-date:   8 months ago
-reproduce: make O=/tmp/kselftest -C tools/testing/selftests
+Barry Song <21cnbao@gmail.com> writes:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> On Tue, Jul 19, 2022 at 3:59 PM Barry Song <21cnbao@gmail.com> wrote:
+>>
+>> On Tue, Jul 19, 2022 at 3:35 PM Anshuman Khandual
+>> <anshuman.khandual@arm.com> wrote:
+>> >
+>> >
+>> >
+>> > On 7/19/22 08:58, Huang, Ying wrote:
+>> > > Anshuman Khandual <anshuman.khandual@arm.com> writes:
+>> > >
+>> > >> On 7/19/22 06:53, Barry Song wrote:
+>> > >>> On Tue, Jul 19, 2022 at 12:44 PM Huang, Ying <ying.huang@intel.com> wrote:
+>> > >>>>
+>> > >>>> Barry Song <21cnbao@gmail.com> writes:
+>> > >>>>
+>> > >>>>> From: Barry Song <v-songbaohua@oppo.com>
+>> > >>>>>
+>> > >>>>> THP_SWAP has been proven to improve the swap throughput significantly
+>> > >>>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
+>> > >>>>> splitting THP after swapped out").
+>> > >>>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
+>> > >>>>> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
+>> > >>>>> enabling it on arm64 will benefit arm64 as well.
+>> > >>>>> A corner case is that MTE has an assumption that only base pages
+>> > >>>>> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
+>> > >>>>> MTE support until MTE is reworked to coexist with THP_SWAP.
+>> > >>>>>
+>> > >>>>> A micro-benchmark is written to measure thp swapout throughput as
+>> > >>>>> below,
+>> > >>>>>
+>> > >>>>>  unsigned long long tv_to_ms(struct timeval tv)
+>> > >>>>>  {
+>> > >>>>>       return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+>> > >>>>>  }
+>> > >>>>>
+>> > >>>>>  main()
+>> > >>>>>  {
+>> > >>>>>       struct timeval tv_b, tv_e;;
+>> > >>>>>  #define SIZE 400*1024*1024
+>> > >>>>>       volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+>> > >>>>>                               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>> > >>>>>       if (!p) {
+>> > >>>>>               perror("fail to get memory");
+>> > >>>>>               exit(-1);
+>> > >>>>>       }
+>> > >>>>>
+>> > >>>>>       madvise(p, SIZE, MADV_HUGEPAGE);
+>> > >>>>>       memset(p, 0x11, SIZE); /* write to get mem */
+>> > >>>>>
+>> > >>>>>       gettimeofday(&tv_b, NULL);
+>> > >>>>>       madvise(p, SIZE, MADV_PAGEOUT);
+>> > >>>>>       gettimeofday(&tv_e, NULL);
+>> > >>>>>
+>> > >>>>>       printf("swp out bandwidth: %ld bytes/ms\n",
+>> > >>>>>                       SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
+>> > >>>>>  }
+>> > >>>>>
+>> > >>>>> Testing is done on rk3568 64bit quad core processor Quad Core
+>> > >>>>> Cortex-A55 platform - ROCK 3A.
+>> > >>>>> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
+>> > >>>>> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
+>> > >>>>>
+>> > >>>>> Cc: "Huang, Ying" <ying.huang@intel.com>
+>> > >>>>> Cc: Minchan Kim <minchan@kernel.org>
+>> > >>>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
+>> > >>>>> Cc: Hugh Dickins <hughd@google.com>
+>> > >>>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+>> > >>>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+>> > >>>>> Cc: Steven Price <steven.price@arm.com>
+>> > >>>>> Cc: Yang Shi <shy828301@gmail.com>
+>> > >>>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+>> > >>>>> ---
+>> > >>>>>  -v3:
+>> > >>>>>  * refine the commit log;
+>> > >>>>>  * add a benchmark result;
+>> > >>>>>  * refine the macro of arch_thp_swp_supported
+>> > >>>>>  Thanks to the comments of Anshuman, Andrew, Steven
+>> > >>>>>
+>> > >>>>>  arch/arm64/Kconfig               |  1 +
+>> > >>>>>  arch/arm64/include/asm/pgtable.h |  6 ++++++
+>> > >>>>>  include/linux/huge_mm.h          | 12 ++++++++++++
+>> > >>>>>  mm/swap_slots.c                  |  2 +-
+>> > >>>>>  4 files changed, 20 insertions(+), 1 deletion(-)
+>> > >>>>>
+>> > >>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> > >>>>> index 1652a9800ebe..e1c540e80eec 100644
+>> > >>>>> --- a/arch/arm64/Kconfig
+>> > >>>>> +++ b/arch/arm64/Kconfig
+>> > >>>>> @@ -101,6 +101,7 @@ config ARM64
+>> > >>>>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>> > >>>>>       select ARCH_WANT_LD_ORPHAN_WARN
+>> > >>>>>       select ARCH_WANTS_NO_INSTR
+>> > >>>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+>> > >>>>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
+>> > >>>>>       select ARM_AMBA
+>> > >>>>>       select ARM_ARCH_TIMER
+>> > >>>>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+>> > >>>>> index 0b6632f18364..78d6f6014bfb 100644
+>> > >>>>> --- a/arch/arm64/include/asm/pgtable.h
+>> > >>>>> +++ b/arch/arm64/include/asm/pgtable.h
+>> > >>>>> @@ -45,6 +45,12 @@
+>> > >>>>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
+>> > >>>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>> > >>>>>
+>> > >>>>> +static inline bool arch_thp_swp_supported(void)
+>> > >>>>> +{
+>> > >>>>> +     return !system_supports_mte();
+>> > >>>>> +}
+>> > >>>>> +#define arch_thp_swp_supported arch_thp_swp_supported
+>> > >>>>> +
+>> > >>>>>  /*
+>> > >>>>>   * Outside of a few very special situations (e.g. hibernation), we always
+>> > >>>>>   * use broadcast TLB invalidation instructions, therefore a spurious page
+>> > >>>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+>> > >>>>> index de29821231c9..4ddaf6ad73ef 100644
+>> > >>>>> --- a/include/linux/huge_mm.h
+>> > >>>>> +++ b/include/linux/huge_mm.h
+>> > >>>>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
+>> > >>>>>       return split_huge_page_to_list(&folio->page, list);
+>> > >>>>>  }
+>> > >>>>>
+>> > >>>>> +/*
+>> > >>>>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
+>> > >>>>> + * limitations in the implementation like arm64 MTE can override this to
+>> > >>>>> + * false
+>> > >>>>> + */
+>> > >>>>> +#ifndef arch_thp_swp_supported
+>> > >>>>> +static inline bool arch_thp_swp_supported(void)
+>> > >>>>> +{
+>> > >>>>> +     return true;
+>> > >>>>> +}
+>> > >>>>
+>> > >>>> How about the following?
+>> > >>>>
+>> > >>>> static inline bool arch_wants_thp_swap(void)
+>> > >>>> {
+>> > >>>>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
+>> > >>>> }
+>> > >>>
+>> > >>> This looks good. then i'll need to change arm64 to
+>> > >>>
+>> > >>>  +static inline bool arch_thp_swp_supported(void)
+>> > >>>  +{
+>> > >>>  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
+>> > >>>  +}
+>> > >>
+>> > >> Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
+>> > >> IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
+>> > >> is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
+>> > >> either in the generic fallback stub, or in arm64 platform override. Because
+>> > >> without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
+>> > >> be called in the first place.
+>> > >
+>> > > For the only caller now, the checking looks redundant.  But the original
+>> > > proposed implementation as follows,
+>> > >
+>> > > static inline bool arch_thp_swp_supported(void)
+>> > > {
+>> > >      return true;
+>> > > }
+>> > >
+>> > > will return true even on architectures that don't support/want THP swap.
+>> >
+>> > But the function will never be called on for those platforms.
+>> >
+>> > > That will confuse people too.
+>> >
+>> > I dont see how.
+>> >
+>> > >
+>> > > And the "redundant" checking has no run time overhead, because compiler
+>> > > will do the trick.
+>> > I understand that, but dont think this indirection is necessary.
+>>
+>> Hi Anshuman, Hi Ying,
+>> Thanks for the comments of both of you. Does the below look ok?
+>>
+>> generic,
+>>
+>>  static inline bool arch_wants_thp_swap(void)
+>>   {
+>>       return IS_ENABLED(CONFIG_THP_SWAP);
+>>  }
+>>
+>
+> sorry, i actually meant arch_thp_swp_supported() but not
+> arch_wants_thp_swap() in generic code,
+>
+>  static inline bool arch_thp_swp_supported(void)
+>  {
+>       return IS_ENABLED(CONFIG_THP_SWAP);
+>  }
 
-All warnings (new ones prefixed by >>):
+IS_ENABLED(CONFIG_THP_SWAP) doesn't match the name too.  It's an option
+selected by users.  arch_thp_swp_supported() is to report the
+capability.
 
-   gpio-mockup-cdev.c: In function 'request_line_v2':
-   gpio-mockup-cdev.c:24:37: error: storage size of 'req' isn't known
-      24 |         struct gpio_v2_line_request req;
-         |                                     ^~~
-   gpio-mockup-cdev.c:32:21: error: 'GPIO_V2_LINE_FLAG_OUTPUT' undeclared (first use in this function); did you mean 'GPIOLINE_FLAG_IS_OUT'?
-      32 |         if (flags & GPIO_V2_LINE_FLAG_OUTPUT) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~
-         |                     GPIOLINE_FLAG_IS_OUT
-   gpio-mockup-cdev.c:32:21: note: each undeclared identifier is reported only once for each function it appears in
-   gpio-mockup-cdev.c:35:47: error: 'GPIO_V2_LINE_ATTR_ID_OUTPUT_VALUES' undeclared (first use in this function)
-      35 |                 req.config.attrs[0].attr.id = GPIO_V2_LINE_ATTR_ID_OUTPUT_VALUES;
-         |                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   gpio-mockup-cdev.c:39:26: error: 'GPIO_V2_GET_LINE_IOCTL' undeclared (first use in this function); did you mean 'GPIO_GET_LINEINFO_IOCTL'?
-      39 |         ret = ioctl(cfd, GPIO_V2_GET_LINE_IOCTL, &req);
-         |                          ^~~~~~~~~~~~~~~~~~~~~~
-         |                          GPIO_GET_LINEINFO_IOCTL
->> gpio-mockup-cdev.c:24:37: warning: unused variable 'req' [-Wunused-variable]
-      24 |         struct gpio_v2_line_request req;
-         |                                     ^~~
-   gpio-mockup-cdev.c: In function 'get_value_v2':
-   gpio-mockup-cdev.c:48:36: error: storage size of 'vals' isn't known
-      48 |         struct gpio_v2_line_values vals;
-         |                                    ^~~~
-   gpio-mockup-cdev.c:53:26: error: 'GPIO_V2_LINE_GET_VALUES_IOCTL' undeclared (first use in this function); did you mean 'GPIOHANDLE_GET_LINE_VALUES_IOCTL'?
-      53 |         ret = ioctl(lfd, GPIO_V2_LINE_GET_VALUES_IOCTL, &vals);
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                          GPIOHANDLE_GET_LINE_VALUES_IOCTL
->> gpio-mockup-cdev.c:48:36: warning: unused variable 'vals' [-Wunused-variable]
-      48 |         struct gpio_v2_line_values vals;
-         |                                    ^~~~
-   gpio-mockup-cdev.c: In function 'main':
-   gpio-mockup-cdev.c:127:20: error: 'GPIO_V2_LINE_FLAG_INPUT' undeclared (first use in this function); did you mean 'GPIOLINE_FLAG_IS_OUT'?
-     127 |         flags_v2 = GPIO_V2_LINE_FLAG_INPUT;
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~
-         |                    GPIOLINE_FLAG_IS_OUT
-   gpio-mockup-cdev.c:133:37: error: 'GPIO_V2_LINE_FLAG_ACTIVE_LOW' undeclared (first use in this function); did you mean 'GPIOLINE_FLAG_ACTIVE_LOW'?
-     133 |                         flags_v2 |= GPIO_V2_LINE_FLAG_ACTIVE_LOW;
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                     GPIOLINE_FLAG_ACTIVE_LOW
-   gpio-mockup-cdev.c:137:45: error: 'GPIOHANDLE_REQUEST_BIAS_PULL_UP' undeclared (first use in this function); did you mean 'GPIOHANDLE_REQUEST_INPUT'?
-     137 |                                 flags_v1 |= GPIOHANDLE_REQUEST_BIAS_PULL_UP;
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                             GPIOHANDLE_REQUEST_INPUT
-   gpio-mockup-cdev.c:138:45: error: 'GPIO_V2_LINE_FLAG_BIAS_PULL_UP' undeclared (first use in this function)
-     138 |                                 flags_v2 |= GPIO_V2_LINE_FLAG_BIAS_PULL_UP;
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   gpio-mockup-cdev.c:140:45: error: 'GPIOHANDLE_REQUEST_BIAS_PULL_DOWN' undeclared (first use in this function); did you mean 'GPIOHANDLE_REQUEST_ACTIVE_LOW'?
-     140 |                                 flags_v1 |= GPIOHANDLE_REQUEST_BIAS_PULL_DOWN;
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                             GPIOHANDLE_REQUEST_ACTIVE_LOW
-   gpio-mockup-cdev.c:141:45: error: 'GPIO_V2_LINE_FLAG_BIAS_PULL_DOWN' undeclared (first use in this function)
-     141 |                                 flags_v2 |= GPIO_V2_LINE_FLAG_BIAS_PULL_DOWN;
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   gpio-mockup-cdev.c:143:45: error: 'GPIOHANDLE_REQUEST_BIAS_DISABLE' undeclared (first use in this function); did you mean 'GPIOHANDLE_REQUEST_OPEN_DRAIN'?
-     143 |                                 flags_v1 |= GPIOHANDLE_REQUEST_BIAS_DISABLE;
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                             GPIOHANDLE_REQUEST_OPEN_DRAIN
-   gpio-mockup-cdev.c:144:45: error: 'GPIO_V2_LINE_FLAG_BIAS_DISABLED' undeclared (first use in this function)
-     144 |                                 flags_v2 |= GPIO_V2_LINE_FLAG_BIAS_DISABLED;
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   gpio-mockup-cdev.c:152:37: error: 'GPIO_V2_LINE_FLAG_OUTPUT' undeclared (first use in this function); did you mean 'GPIOLINE_FLAG_IS_OUT'?
-     152 |                         flags_v2 |= GPIO_V2_LINE_FLAG_OUTPUT;
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~
-         |                                     GPIOLINE_FLAG_IS_OUT
-   gpio-mockup-cdev.c: In function 'request_line_v2':
->> gpio-mockup-cdev.c:43:1: warning: control reaches end of non-void function [-Wreturn-type]
-      43 | }
-         | ^
+Best Regards,
+Huang, Ying
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>> arm64,
+>>
+>> static inline bool arch_thp_swp_supported(void)
+>> {
+>>      return IS_ENABLED(CONFIG_THP_SWAP) &&  !system_supports_mte();
+>> }
+>>
+>> caller,
+>>
+>> folio_alloc_swap(struct folio *folio)
+>> {
+>>
+>>   if (folio_test_large(folio)) {
+>>    - if (IS_ENABLED(CONFIG_THP_SWAP))
+>>   + if (arch_thp_swp_supported())
+>>         get_swap_pages(1, &entry, folio_nr_pages(folio));
+>>        goto out;
+>>   }
+>>
+>> Thanks
+>> Barry

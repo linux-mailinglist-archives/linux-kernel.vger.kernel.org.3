@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F72757A5AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B47157A5AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235932AbiGSRpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S236633AbiGSRqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234171AbiGSRpw (ORCPT
+        with ESMTP id S235972AbiGSRqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:45:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249095F4F;
-        Tue, 19 Jul 2022 10:45:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3F68B81CAD;
-        Tue, 19 Jul 2022 17:45:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EFADC341CE;
-        Tue, 19 Jul 2022 17:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658252748;
-        bh=Iu6171Ov6tYWeYfqKo856Ob0jccBWrdUq3RrbhohZE8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZQrQAXo9l6LBE4PHnnev44PDyHcEAHqL3E87JR/Qm3FBDvy3nb0b9JK+R27gPnZR+
-         zU/Yyt8+jd2SG9TrND6bXGTI2Jz/XjWJVdQzTGjNikmWQxD0QAteh0GL3DRd662arZ
-         WzhAbOU5co0FxDUQYs3XT4e57G54v+EERL/MI43YksefjDxgFNSdp+FR6TlP4Wy1a1
-         1t0R6iUoEHxmDA3zudqPbNOeL9sPwoSR+PYeUCtbo/VftPBFuq4isrxBOwl7BVro0m
-         Ueunjy3A8XKm23dLShoVZWf1GIxoivzQlUdQwW2skenuKRReYGr4jD4umrUdIu6ugE
-         aStqsi5oH69UQ==
-Received: by mail-vs1-f51.google.com with SMTP id l190so14152131vsc.0;
-        Tue, 19 Jul 2022 10:45:48 -0700 (PDT)
-X-Gm-Message-State: AJIora+SHcdg9XwNjWMODMjHYC934SOBM7ATgI7su8EG9JPTFXI5n+Yi
-        zUVuvVibm1qqDlLqAuv0yfOjUuNGxtEUWC7C0w==
-X-Google-Smtp-Source: AGRyM1smPKbVUPDamU+9pu2gLgpmWL2emgLBBBluGP/BWT6sdCHvb0oahmRWmRUrwpPCbIKgh7HQr37S9uuYKLLAUFQ=
-X-Received: by 2002:a67:c088:0:b0:358:bb1:fdf7 with SMTP id
- x8-20020a67c088000000b003580bb1fdf7mr1192720vsi.85.1658252747373; Tue, 19 Jul
- 2022 10:45:47 -0700 (PDT)
+        Tue, 19 Jul 2022 13:46:12 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D25175B0;
+        Tue, 19 Jul 2022 10:46:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658252771; x=1689788771;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=V10jcj6SoywL+fIcMwLbV2Ry4uZy7FI8pB1QjNM89Sg=;
+  b=HlbnTXK4+S7URe9obWyaah6BwmMQa9iQEsfFFCAQjapeGf6eUi4+5YId
+   xwd2n2pMJQZFjbqiA1Jnd/pIR+/p6tdi3Qxfj85amnGUPKajrBDr1RgNr
+   tu0fNxbQSg0bPKxulPMQOPssQoEbvWh9XcpZuQykFCGUnma5s5SRD3B5W
+   iV7MzeGKdMYGPV0EqnYJsRItedjt8sxhpu20PZ/pf747sVuW2N0OD1jhq
+   qd+qBdqknJJ3QKTKXv0InOm/clSeyFvwz1Ho9RS5yPM/uoT2e8zUhalIm
+   qyrQ7tn+ildqebwLlpfAdhT3MITiw2Ie226XRamn6RT2tQGeX5SPZDE6t
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="312244422"
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="312244422"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 10:46:11 -0700
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="687197069"
+Received: from twliston-mobl1.amr.corp.intel.com (HELO [10.212.132.190]) ([10.212.132.190])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 10:46:09 -0700
+Message-ID: <baaae4b3-7f7d-b193-3546-70170b8b460d@intel.com>
+Date:   Tue, 19 Jul 2022 10:46:09 -0700
 MIME-Version: 1.0
-References: <20220609052355.1300162-1-irogers@google.com> <20220609052355.1300162-3-irogers@google.com>
-In-Reply-To: <20220609052355.1300162-3-irogers@google.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 19 Jul 2022 11:45:35 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+RSv2_VLdH2bum31cwM3pJuySi4_FhqB4=2vDOHqCdMA@mail.gmail.com>
-Message-ID: <CAL_Jsq+RSv2_VLdH2bum31cwM3pJuySi4_FhqB4=2vDOHqCdMA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] perf: Align user space counter reading with code
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 02/22] cc_platform: Add new attribute to prevent ACPI
+ CPU hotplug
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-acpi@vger.kernel.org, seanjc@google.com, pbonzini@redhat.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com, rdunlap@infradead.org, Jason@zx2c4.com,
+        juri.lelli@redhat.com, mark.rutland@arm.com, frederic@kernel.org,
+        yuehaibing@huawei.com, dongli.zhang@oracle.com
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <f4bff93d83814ea1f54494f51ce3e5d954cf0f5b.1655894131.git.kai.huang@intel.com>
+ <43a67bfe-9707-33e0-2574-1e6eca6aa24b@intel.com>
+ <5ebd7c3cfb3ab9d77a2577c4864befcffe5359d4.camel@intel.com>
+ <173b20166a77012669fdc2c600556fca0623d0b1.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <173b20166a77012669fdc2c600556fca0623d0b1.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 11:24 PM Ian Rogers <irogers@google.com> wrote:
->
-> Align the user space counter reading documentation with the code in
-> perf_mmap__read_self. Previously the documentation was based on the perf
-> rdpmc test, but now general purpose code is provided by libperf.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  include/uapi/linux/perf_event.h       | 32 ++++++++++++++++-----------
->  tools/include/uapi/linux/perf_event.h | 32 ++++++++++++++++-----------
->  2 files changed, 38 insertions(+), 26 deletions(-)
->
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index d37629dbad72..3b84e0ad0723 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -538,9 +538,13 @@ struct perf_event_mmap_page {
->          *
->          *     if (pc->cap_usr_time && enabled != running) {
->          *       cyc = rdtsc();
-> -        *       time_offset = pc->time_offset;
->          *       time_mult   = pc->time_mult;
->          *       time_shift  = pc->time_shift;
-> +        *       time_offset = pc->time_offset;
-> +        *       if (pc->cap_user_time_short) {
-> +        *         time_cycles = pc->time_cycles;
-> +        *         time_mask = pc->time_mask;
-> +        *       }
->          *     }
->          *
->          *     index = pc->index;
-> @@ -548,6 +552,9 @@ struct perf_event_mmap_page {
->          *     if (pc->cap_user_rdpmc && index) {
->          *       width = pc->pmc_width;
->          *       pmc = rdpmc(index - 1);
-> +        *       pmc <<= 64 - width;
-> +        *       pmc >>= 64 - width;
-> +        *       count += pmc;
->          *     }
->          *
->          *     barrier();
-> @@ -590,25 +597,24 @@ struct perf_event_mmap_page {
->          * If cap_usr_time the below fields can be used to compute the time
->          * delta since time_enabled (in ns) using rdtsc or similar.
->          *
-> -        *   u64 quot, rem;
-> -        *   u64 delta;
-> -        *
-> -        *   quot = (cyc >> time_shift);
-> -        *   rem = cyc & (((u64)1 << time_shift) - 1);
-> -        *   delta = time_offset + quot * time_mult +
-> -        *              ((rem * time_mult) >> time_shift);
-> +        *   cyc = time_cycles + ((cyc - time_cycles) & time_mask);
-> +        *   delta = time_offset + mul_u64_u32_shr(cyc, time_mult, time_shift);
+On 7/13/22 04:09, Kai Huang wrote:
+...
+> "TDX doesn’t support adding or removing CPUs from TDX security perimeter. The
+> BIOS should prevent CPUs from being hot-added or hot-removed after platform
+> boots."
 
-I still think this chunk should stay as-is because mul_u64_u32_shr
-isn't defined here. At least a comment as to what the C version does:
+That's a start.  It also probably needs to say that the security
+perimeter includes all logical CPUs, though.
 
-/* time_offset + (u64)(((unsigned __int128)cyc * time_mult) >> time_shift) */
+>  static int acpi_map_cpu2node(acpi_handle handle, int cpu, int physid)
+>  {
+> @@ -819,6 +820,12 @@ int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid,
+> u32 acpi_id,
+>  {
+>         int cpu;
+>  
+> +       if (platform_tdx_enabled()) {
+> +               pr_err("BIOS bug: CPU (physid %u) hot-added on TDX enabled
+> platform. Reject it.\n",
+> +                               physid);
+> +               return -EINVAL;
+> +       }
 
->          *
->          * Where time_offset,time_mult,time_shift and cyc are read in the
->          * seqcount loop described above. This delta can then be added to
-> -        * enabled and possible running (if index), improving the scaling:
-> +        * enabled and possible running (if index) to improve the scaling. Due
-> +        * to event multiplexing, running maybe zero and so care is needed to
+Is this the right place?  There are other sanity checks in
+acpi_processor_hotadd_init() and it seems like a better spot.
 
-s/maybe/may be/
+>         cpu = acpi_register_lapic(physid, acpi_id, ACPI_MADT_ENABLED);
+>         if (cpu < 0) {
+>                 pr_info("Unable to map lapic to logical cpu number\n");
+> @@ -835,6 +842,10 @@ EXPORT_SYMBOL(acpi_map_cpu);
+>  
+>  int acpi_unmap_cpu(int cpu)
+>  {
+> +       if (platform_tdx_enabled())
+> +               pr_err("BIOS bug: CPU %d hot-removed on TDX enabled platform.
+> TDX is broken. Please reboot the machine.\n",
+> +                               cpu);
+> +
+>  #ifdef CONFIG_ACPI_NUMA
+>         set_apicid_to_node(per_cpu(x86_cpu_to_apicid, cpu), NUMA_NO_NODE);
+>  #endif
 
-> +        * avoid division by zero.
->          *
->          *   enabled += delta;
-> -        *   if (index)
-> +        *   if (idx)
-
-This should remain 'index'.
-
->          *     running += delta;
->          *
-> -        *   quot = count / running;
-> -        *   rem  = count % running;
-> -        *   count = quot * enabled + (rem * enabled) / running;
-> +        *   if (running != 0) {
-> +        *     quot = count / running;
-> +        *     rem  = count % running;
-> +        *     count = quot * enabled + (rem * enabled) / running;
-> +        *   }
->          */
->         __u16   time_shift;
->         __u32   time_mult;

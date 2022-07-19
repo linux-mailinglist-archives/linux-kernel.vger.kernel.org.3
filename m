@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA53157A3B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EBF57A3B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238961AbiGSPwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        id S239032AbiGSPx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239326AbiGSPwB (ORCPT
+        with ESMTP id S238976AbiGSPxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:52:01 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D470B5F50
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+h0WoIM0GD65cK906eJ1giltlZaSU/VsCeCwldoHsOg=; b=qAXQMW8EOeD/uqldsIJVJlIcGm
-        t626hE0k0nFaCJq44GByF/8jtj/QxuoThGeKDA00ZfPpRpUPTphNj0G2Vp06ec0ahVSOd1z68DEsY
-        Ww22F3HI+MtlLAQ/LLXocnSWCs0iHEVtLvPhHfSDeFSnqyRPZj1pm+sRIbii6MMs1DTZ+ftc8tDbo
-        4FzvuMdXqcbL/Qi7/bcB5p125RMJh7huddmA0BtgRMyggCpybRyGScoxeqzeC7Har7ENHFfiENIdh
-        3/2WZPGxysuW7KHpSGeNjDHKkkoM6lyMWBD53lCSapWhedYLFIwyBIiWBHdxjdyyqmclH4btl/VCG
-        ilB6t61w==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDpVq-00AGSF-Od; Tue, 19 Jul 2022 15:51:54 +0000
-Date:   Tue, 19 Jul 2022 08:51:54 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Keir Fraser <keirf@google.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, kernel-team@android.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio: Force DMA restricted devices through DMA API
-Message-ID: <YtbTGjRw65QEKkQA@infradead.org>
-References: <20220719100256.419780-1-keirf@google.com>
- <YtbMcBw4l0LAFn9+@infradead.org>
- <YtbRwO40CmIRWOUR@google.com>
+        Tue, 19 Jul 2022 11:53:24 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDDB20180
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:53:20 -0700 (PDT)
+Received: from localhost.localdomain (unknown [83.149.199.65])
+        by mail.ispras.ru (Postfix) with ESMTPS id 5CEC44076251;
+        Tue, 19 Jul 2022 15:53:14 +0000 (UTC)
+From:   Andrey Strachuk <strochuk@ispras.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrey Strachuk <strochuk@ispras.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: [PATCH] staging: rtl8723bs: remove useless comparison in _rtw_reg_apply_flags()
+Date:   Tue, 19 Jul 2022 18:53:09 +0300
+Message-Id: <20220719155309.463286-1-strochuk@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtbRwO40CmIRWOUR@google.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:46:08PM +0000, Keir Fraser wrote:
-> However, if the general idea at least is acceptable, would the
-> implementation be acceptable if I add an explicit API for this to the
-> DMA subsystem, and hide the detail there?
+Local variable 'ch' is initialized by an address
+of field of ieee80211_supported_band structure, so it does
+not make sense to compare 'ch' with NULL.
 
-I don't think so.  The right thing to key off is
-VIRTIO_F_ACCESS_PLATFORM, which really should be set in any modern
-virtio device after all the problems we had with the lack of it.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> Or a completely different approach would be to revert the patch
-> e41b1355508d which clears VIRTIO_F_ACCESS_PLATFORM in the balloon
-> driver. MST: That's back in your court, as it's your patch!
+Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
+Fixes: 554c0a3abf21 ("staging: Add rtl8723bs sdio wifi driver")
+---
+ drivers/staging/rtl8723bs/os_dep/wifi_regd.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Which also means this needs to be addresses, but I don't think a
-simple revert is enough.
+diff --git a/drivers/staging/rtl8723bs/os_dep/wifi_regd.c b/drivers/staging/rtl8723bs/os_dep/wifi_regd.c
+index 5eef1d68c6f0..62fbf9e1b849 100644
+--- a/drivers/staging/rtl8723bs/os_dep/wifi_regd.c
++++ b/drivers/staging/rtl8723bs/os_dep/wifi_regd.c
+@@ -74,8 +74,7 @@ static void _rtw_reg_apply_flags(struct wiphy *wiphy)
+ 			for (j = 0; j < sband->n_channels; j++) {
+ 				ch = &sband->channels[j];
+ 
+-				if (ch)
+-					ch->flags = IEEE80211_CHAN_DISABLED;
++				ch->flags = IEEE80211_CHAN_DISABLED;
+ 			}
+ 		}
+ 	}
+-- 
+2.25.1
+

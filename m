@@ -2,118 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2330757A2E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C70557A2E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239301AbiGSPYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233726AbiGSPYr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S239277AbiGSPYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 19 Jul 2022 11:24:47 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D7656B80
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230285AbiGSPYq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 19 Jul 2022 11:24:46 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED96564E7
         for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:24:45 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id l3so9262378qkl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:24:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HV4Wgjz/TAUUMEiA/dyksbNxySCx+zbsJF2fZfi2554=;
-        b=gmf4YGqjemuHOT8ZL/Bp1Mg52WRVpVhGxdGFTRmncYgDpwg1aHZU3ugM3y3Lb/I6Vk
-         02ggbPvAwlXO/4+fuHOrDGrbFipslgUYPeLUxEZVE9ww5tiF9BeEUVRPb1wlbYuAf5Lq
-         +Y5IK1PcsmXOWzQWjPqmoAIB+JXmPdZT/op/JNEKn2kR8yEsmLlSXfAw6BihZI8wp3PO
-         ps9FVe//nMJQ6EOSih7QXXxEyhezudOQl7OI4uwEqKudNAp+Yp+Lbgg8LlkehSWY7HS9
-         K7sSyVaQps4KchtmUD4xvl19f9clvnbHg7Mu3zx0dWRvXeSlyUIiXNFXsX/xkHpu/kiq
-         cKdg==
-X-Gm-Message-State: AJIora8RAwHii3t4iXVZJTSc9OGsddqxaCM+N3FAdaHWlifTD1VHLJAf
-        oYOihMTN/b4Z4enLYe5IuAGdsFSE6gYBhg==
-X-Google-Smtp-Source: AGRyM1uuj7r8N19QcmfVLpX4dGqjJCxyrLOAQq6h6onh9qNjcxEBdNKxtx0+0APmom2Jwp+2rwVTKg==
-X-Received: by 2002:a05:620a:4452:b0:6b2:4f49:d053 with SMTP id w18-20020a05620a445200b006b24f49d053mr19981340qkp.685.1658244284652;
-        Tue, 19 Jul 2022 08:24:44 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id l5-20020a37f905000000b006b56a4400f6sm13535861qkj.16.2022.07.19.08.24.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 08:24:44 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id c131so26364739ybf.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:24:44 -0700 (PDT)
-X-Received: by 2002:a25:bc8e:0:b0:66e:fe43:645c with SMTP id
- e14-20020a25bc8e000000b0066efe43645cmr32967226ybk.202.1658244283883; Tue, 19
- Jul 2022 08:24:43 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LnMvw26byz6842y;
+        Tue, 19 Jul 2022 23:20:12 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Jul 2022 17:24:44 +0200
+Received: from [10.126.173.247] (10.126.173.247) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Jul 2022 16:24:43 +0100
+Message-ID: <64da0019-4816-a409-be93-b1cf7021c584@huawei.com>
+Date:   Tue, 19 Jul 2022 16:24:42 +0100
 MIME-Version: 1.0
-References: <20220715102609.2160689-1-sudeep.holla@arm.com> <20220715102609.2160689-2-sudeep.holla@arm.com>
-In-Reply-To: <20220715102609.2160689-2-sudeep.holla@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 19 Jul 2022 17:24:32 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVfr3kzdacSJkPaOZ56x+7tJ1MjrUz+VG+Y+8aL+XW+jg@mail.gmail.com>
-Message-ID: <CAMuHMdVfr3kzdacSJkPaOZ56x+7tJ1MjrUz+VG+Y+8aL+XW+jg@mail.gmail.com>
-Subject: Re: [PATCH -next v2 2/2] arch_topology: Fix cache attributes
- detection in the CPU hotplug path
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: faddr2line issue
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+CC:     <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <09df26a9-27af-1276-34c6-820bf7e27da8@huawei.com>
+ <3492d341-a681-f344-f5cd-5b1ea3725f31@huawei.com>
+ <20220714164136.n2ycc5axt7vtctgs@treble>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220714164136.n2ycc5axt7vtctgs@treble>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.173.247]
+X-ClientProxiedBy: lhreml716-chm.china.huawei.com (10.201.108.67) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
+On 14/07/2022 17:41, Josh Poimboeuf wrote:
+> On Thu, Jul 14, 2022 at 10:57:51AM +0100, John Garry wrote:
+>> On 08/07/2022 15:47, John Garry wrote:
+>>
+>> +
+>>
+>> JFYI, This issue is caused by CONFIG_DEBUG_INFO now being default off in my
+>> .config from commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable
+>> from a choice").
+>>
+>> By enabling that config faddr2line now looks ok again.
+>>
+>> BTW, Could we add a check for any kernel dependency in this tool?
+> Hi John,
+> 
+> The script doesn't know how to reliably find the .config file, but it
+> should be able to check for missing DWARF in the binary itself.
 
-On Fri, Jul 15, 2022 at 12:28 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> init_cpu_topology() is called only once at the boot and all the cache
-> attributes are detected early for all the possible CPUs. However when
-> the CPUs are hotplugged out, the cacheinfo gets removed. While the
-> attributes are added back when the CPUs are hotplugged back in as part
-> of CPU hotplug state machine, it ends up called quite late after the
-> update_siblings_masks() are called in the secondary_start_kernel()
-> resulting in wrong llc_sibling_masks.
->
-> Move the call to detect_cache_attributes() inside update_siblings_masks()
-> to ensure the cacheinfo is updated before the LLC sibling masks are
-> updated. This will fix the incorrect LLC sibling masks generated when
-> the CPUs are hotplugged out and hotplugged back in again.
->
-> Reported-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  drivers/base/arch_topology.c | 16 ++++++----------
->  1 file changed, 6 insertions(+), 10 deletions(-)
->
-> v1->v2:
->         - No change in this patch, but 1/2 was added to fix possible
->           bug "sleeping in the atomic context" with this patch.
->         - Added all the received tags
+Hi Josh,
 
-Thank you, the "Early cacheinfo failed, ret = -12" is gone.
+So adding config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT to v5.19-rc2 got it 
+working again for me on arm64. However commit dcea997beed6 ("faddr2line: 
+Fix overlapping text section failures, the sequel") seems to be broken 
+for me, below - this first appeared in rc3. Any idea what the issue 
+could be?
 
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+$./faddr.sh hisi_sas_sata_done+0x8/0x38
+hisi_sas_sata_done+0x8/0x38:
+fs mm ??:0
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+John

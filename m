@@ -2,266 +2,435 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF2C579151
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 05:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32EFF579155
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 05:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbiGSD3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 23:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S236194AbiGSDbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 23:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236479AbiGSD3H (ORCPT
+        with ESMTP id S234554AbiGSDbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 23:29:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0823326F8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 20:29:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658201345; x=1689737345;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=I6PNjtwz4C8YbgD77JXK8Oyh20yQ9FK+TnLlULfuJ7M=;
-  b=TB8NfhzLhxwFjQloNOGLpyoxlTPlceAuU7qzhkFKcPmjoOoKBmq/xUcb
-   AyYszRx4RP5qsDQxxcGX1ULZHrnroyv7g4p2Rw1A243hH/6WkFt96mosW
-   Fb5rgAIvGATXHVx2yB5JklHo2zTTFD1rgvLohVVOZRpI29GGQ2H7say3v
-   M/iyChAkIVfa099ZOr+melRXQYvtk97UbWLB6fCWuaqHG/6+C/Ed56nQf
-   iPQK36mZZeu92bbM8V+R5xGRh8AN6BBi/g1GMhvuxzER8or92SNl8ICuX
-   4td9qgOwWUQ7h6FwZrR0cb0c8J5NgCGCWz/8Zcd/mVaTLZLT2wLm7YNhf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="312061554"
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="312061554"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 20:29:05 -0700
-X-IronPort-AV: E=Sophos;i="5.92,282,1650956400"; 
-   d="scan'208";a="686961933"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 20:29:02 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Barry Song <21cnbao@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Steven Price <steven.price@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        =?utf-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        =?utf-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>
-Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
-References: <20220718090050.2261-1-21cnbao@gmail.com>
-        <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
-        <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com>
-Date:   Tue, 19 Jul 2022 11:28:47 +0800
-In-Reply-To: <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com> (Anshuman
-        Khandual's message of "Tue, 19 Jul 2022 08:38:10 +0530")
-Message-ID: <87zgh5232o.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 18 Jul 2022 23:31:01 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2803D26AFD
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 20:31:00 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-10c0119dd16so29035880fac.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 20:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P5is4NjKHM1UFSqVwB+YvCigKvkW6SGK2TZ159/AxVw=;
+        b=JwL5YJcoAWAVxlIxY7sFl8YahyiEilwnZB+s/vNaLZLAGy+c/XA00uSwes87Sg6dp/
+         ItRnCNDRSIbtYYuJhkucQiHjXXHHJ847gFDSskloRbsbP0JJfBHi02A+Sd2siUZXrISb
+         1Hks/8bFTk6pMM0t/r61ukJa/n5LJbeDcJPqsSCP4Np5FxHQmuxvgasRmqxrRlZsaqcF
+         6MymeDyxntlu0NJGwHeY7F7Ko47VXOJi5Vsqwc0pfxLemXDab149Km/QaK+AAliiJLzn
+         nvF5fpbRrCLL1D2pqJl2h8gRrlYFazWoo0iog7kLbcHBHPHR1QqPEFC/2v9jiu7p285x
+         q41A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P5is4NjKHM1UFSqVwB+YvCigKvkW6SGK2TZ159/AxVw=;
+        b=b0ZWMjoOZ8qxgxs26gM+Y4OW7NvVfFxlam586VKq/8ebVuNu0yHNVUlorOZnYnD/ik
+         8TEfNsGS1lO4CQPbjtDtlXKPCTa7fIBao4wOS9viyqEfTCQjnNzrgstOsSsst5X+TqAp
+         +lJXBg7zXfAyai7tgz+Xox8e3XAT6Ufi/xUrYfZxR9izW3G8A++T1AZj9NhMEcSysBBP
+         T47gGB4WwPG6BEM/1krOJq23XzC8nFfFz3PMk91oRDRux/A36xyrU1RvV+m1wN6abEBN
+         LeuQp6N6p7UdGeDcAob/UklO+BDHix3BOpNAy+Iui0tt5qwMU2m+dtddXjN3kawcbfCr
+         MNew==
+X-Gm-Message-State: AJIora/LG0clRSJkfA9efcKMV0/NHmRMhyuGL+n+oM+9gmxgp2oMHVXX
+        KdcVOAGDaNthZBCDtOL69M0yTg==
+X-Google-Smtp-Source: AGRyM1tbm/DUEQTI1PIWe0TNvopZaXQtiRMQYYbq22SgocmhssYli7zFFB4yf1eX1RzaoD8HzMBRWA==
+X-Received: by 2002:a05:6808:e8a:b0:32e:493b:1d8 with SMTP id k10-20020a0568080e8a00b0032e493b01d8mr18031586oil.124.1658201459418;
+        Mon, 18 Jul 2022 20:30:59 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id q133-20020acaf28b000000b0032e548d96e0sm4910973oih.23.2022.07.18.20.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Jul 2022 20:30:58 -0700 (PDT)
+Date:   Mon, 18 Jul 2022 22:30:56 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 3/3] thermal: qcom: tsens: Implement re-initialization
+ workaround quirk
+Message-ID: <YtYlcEBszITSZ5on@builder.lan>
+References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
+ <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Anshuman Khandual <anshuman.khandual@arm.com> writes:
+On Fri 01 Jul 09:58 CDT 2022, Bhupesh Sharma wrote:
 
-> On 7/19/22 06:53, Barry Song wrote:
->> On Tue, Jul 19, 2022 at 12:44 PM Huang, Ying <ying.huang@intel.com> wrote:
->>>
->>> Barry Song <21cnbao@gmail.com> writes:
->>>
->>>> From: Barry Song <v-songbaohua@oppo.com>
->>>>
->>>> THP_SWAP has been proven to improve the swap throughput significantly
->>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
->>>> splitting THP after swapped out").
->>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
->>>> by having 2MB PMD THP. THP_SWAP is architecture-independent, thus,
->>>> enabling it on arm64 will benefit arm64 as well.
->>>> A corner case is that MTE has an assumption that only base pages
->>>> can be swapped. We won't enable THP_SWAP for ARM64 hardware with
->>>> MTE support until MTE is reworked to coexist with THP_SWAP.
->>>>
->>>> A micro-benchmark is written to measure thp swapout throughput as
->>>> below,
->>>>
->>>>  unsigned long long tv_to_ms(struct timeval tv)
->>>>  {
->>>>       return tv.tv_sec * 1000 + tv.tv_usec / 1000;
->>>>  }
->>>>
->>>>  main()
->>>>  {
->>>>       struct timeval tv_b, tv_e;;
->>>>  #define SIZE 400*1024*1024
->>>>       volatile void *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
->>>>                               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->>>>       if (!p) {
->>>>               perror("fail to get memory");
->>>>               exit(-1);
->>>>       }
->>>>
->>>>       madvise(p, SIZE, MADV_HUGEPAGE);
->>>>       memset(p, 0x11, SIZE); /* write to get mem */
->>>>
->>>>       gettimeofday(&tv_b, NULL);
->>>>       madvise(p, SIZE, MADV_PAGEOUT);
->>>>       gettimeofday(&tv_e, NULL);
->>>>
->>>>       printf("swp out bandwidth: %ld bytes/ms\n",
->>>>                       SIZE/(tv_to_ms(tv_e) - tv_to_ms(tv_b)));
->>>>  }
->>>>
->>>> Testing is done on rk3568 64bit quad core processor Quad Core
->>>> Cortex-A55 platform - ROCK 3A.
->>>> thp swp throughput w/o patch: 2734bytes/ms (mean of 10 tests)
->>>> thp swp throughput w/  patch: 3331bytes/ms (mean of 10 tests)
->>>>
->>>> Cc: "Huang, Ying" <ying.huang@intel.com>
->>>> Cc: Minchan Kim <minchan@kernel.org>
->>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
->>>> Cc: Hugh Dickins <hughd@google.com>
->>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
->>>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
->>>> Cc: Steven Price <steven.price@arm.com>
->>>> Cc: Yang Shi <shy828301@gmail.com>
->>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
->>>> ---
->>>>  -v3:
->>>>  * refine the commit log;
->>>>  * add a benchmark result;
->>>>  * refine the macro of arch_thp_swp_supported
->>>>  Thanks to the comments of Anshuman, Andrew, Steven
->>>>
->>>>  arch/arm64/Kconfig               |  1 +
->>>>  arch/arm64/include/asm/pgtable.h |  6 ++++++
->>>>  include/linux/huge_mm.h          | 12 ++++++++++++
->>>>  mm/swap_slots.c                  |  2 +-
->>>>  4 files changed, 20 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->>>> index 1652a9800ebe..e1c540e80eec 100644
->>>> --- a/arch/arm64/Kconfig
->>>> +++ b/arch/arm64/Kconfig
->>>> @@ -101,6 +101,7 @@ config ARM64
->>>>       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->>>>       select ARCH_WANT_LD_ORPHAN_WARN
->>>>       select ARCH_WANTS_NO_INSTR
->>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
->>>>       select ARCH_HAS_UBSAN_SANITIZE_ALL
->>>>       select ARM_AMBA
->>>>       select ARM_ARCH_TIMER
->>>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->>>> index 0b6632f18364..78d6f6014bfb 100644
->>>> --- a/arch/arm64/include/asm/pgtable.h
->>>> +++ b/arch/arm64/include/asm/pgtable.h
->>>> @@ -45,6 +45,12 @@
->>>>       __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
->>>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->>>>
->>>> +static inline bool arch_thp_swp_supported(void)
->>>> +{
->>>> +     return !system_supports_mte();
->>>> +}
->>>> +#define arch_thp_swp_supported arch_thp_swp_supported
->>>> +
->>>>  /*
->>>>   * Outside of a few very special situations (e.g. hibernation), we always
->>>>   * use broadcast TLB invalidation instructions, therefore a spurious page
->>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
->>>> index de29821231c9..4ddaf6ad73ef 100644
->>>> --- a/include/linux/huge_mm.h
->>>> +++ b/include/linux/huge_mm.h
->>>> @@ -461,4 +461,16 @@ static inline int split_folio_to_list(struct folio *folio,
->>>>       return split_huge_page_to_list(&folio->page, list);
->>>>  }
->>>>
->>>> +/*
->>>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
->>>> + * limitations in the implementation like arm64 MTE can override this to
->>>> + * false
->>>> + */
->>>> +#ifndef arch_thp_swp_supported
->>>> +static inline bool arch_thp_swp_supported(void)
->>>> +{
->>>> +     return true;
->>>> +}
->>>
->>> How about the following?
->>>
->>> static inline bool arch_wants_thp_swap(void)
->>> {
->>>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
->>> }
->> 
->> This looks good. then i'll need to change arm64 to
->> 
->>  +static inline bool arch_thp_swp_supported(void)
->>  +{
->>  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
->>  +}
->
-> Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
-> IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
-> is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
-> either in the generic fallback stub, or in arm64 platform override. Because
-> without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
-> be called in the first place.
+> Since for some QCoM tsens controllers, its suggested to
+> monitor the controller health periodically and in case an
+> issue is detected, to re-initialize the tsens controller
+> via trustzone, add the support for the same in the
+> qcom tsens driver.
+> 
+> Note that Once the tsens controller is reset using scm call,
+> all SROT and TM region registers will enter the reset mode.
+> 
+> While all the SROT registers will be re-programmed and
+> re-enabled in trustzone prior to the scm call exit, the TM
+> region registers will not re-initialized in trustzone and thus
+> need to be handled by the tsens driver.
+> 
+> Cc: Amit Kucheria <amitk@kernel.org>
+> Cc: Thara Gopinath <thara.gopinath@gmail.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-arm-msm@vger.kernel.org
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  drivers/thermal/qcom/tsens-v2.c |   3 +
+>  drivers/thermal/qcom/tsens.c    | 237 +++++++++++++++++++++++++++++++-
+>  drivers/thermal/qcom/tsens.h    |   6 +
+>  3 files changed, 239 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+> index 61d38a56d29a..9bb542f16482 100644
+> --- a/drivers/thermal/qcom/tsens-v2.c
+> +++ b/drivers/thermal/qcom/tsens-v2.c
+> @@ -88,6 +88,9 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+>  
+>  	/* TRDY: 1=ready, 0=in progress */
+>  	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
+> +
+> +	/* FIRST_ROUND_COMPLETE: 1=complete, 0=not complete */
+> +	[FIRST_ROUND_COMPLETE] = REG_FIELD(TM_TRDY_OFF, 3, 3),
+>  };
+>  
+>  static const struct tsens_ops ops_generic_v2 = {
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 97f4d4454f20..28d42ae0eb47 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/debugfs.h>
+>  #include <linux/err.h>
+>  #include <linux/io.h>
+> +#include <linux/qcom_scm.h>
+>  #include <linux/module.h>
+>  #include <linux/nvmem-consumer.h>
+>  #include <linux/of.h>
+> @@ -21,6 +22,8 @@
+>  #include "../thermal_hwmon.h"
+>  #include "tsens.h"
+>  
+> +LIST_HEAD(tsens_device_list);
+> +
+>  /**
+>   * struct tsens_irq_data - IRQ status and temperature violations
+>   * @up_viol:        upper threshold violated
+> @@ -594,19 +597,159 @@ static void tsens_disable_irq(struct tsens_priv *priv)
+>  	regmap_field_write(priv->rf[INT_EN], 0);
+>  }
+>  
+> +static int tsens_reenable_hw_after_scm(struct tsens_priv *priv)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&priv->ul_lock, flags);
+> +
+> +	/* Re-enable watchdog, unmask the bark and
+> +	 * disable cycle completion monitoring.
+> +	 */
+> +	regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 1);
+> +	regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 0);
+> +	regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
+> +	regmap_field_write(priv->rf[CC_MON_MASK], 1);
+> +
+> +	/* Re-enable interrupts */
+> +	tsens_enable_irq(priv);
+> +
+> +	spin_unlock_irqrestore(&priv->ul_lock, flags);
+> +
+> +	return 0;
+> +}
+> +
+>  int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
+>  {
+> -	struct tsens_priv *priv = s->priv;
+> +	struct tsens_priv *priv = s->priv, *priv_reinit;
+>  	int hw_id = s->hw_id;
+>  	u32 temp_idx = LAST_TEMP_0 + hw_id;
+>  	u32 valid_idx = VALID_0 + hw_id;
+>  	u32 valid;
+> -	int ret;
+> +	int ret, trdy, first_round, tsens_ret, sw_reg;
+> +	unsigned long timeout;
+> +	static atomic_t in_tsens_reinit;
 
-For the only caller now, the checking looks redundant.  But the original
-proposed implementation as follows,
+This is a global state, I suggest you move it to the top of the file to
+make that obvious.
 
-static inline bool arch_thp_swp_supported(void)
-{
-     return true;
-}
+>  
+>  	/* VER_0 doesn't have VALID bit */
+>  	if (tsens_version(priv) == VER_0)
+>  		goto get_temp;
+>  
+> +	/* For some tsens controllers, its suggested to
+> +	 * monitor the controller health periodically
+> +	 * and in case an issue is detected to reinit
+> +	 * tsens controller via trustzone.
+> +	 */
+> +	if (priv->needs_reinit_wa) {
 
-will return true even on architectures that don't support/want THP swap.
-That will confuse people too.
+I would suggest that you move all this entire block to a separate
+function, maybe something:
 
-And the "redundant" checking has no run time overhead, because compiler
-will do the trick.
+int tsens_health_check_and_reinit()
 
-Best Regards,
-Huang, Ying
+> +		/* First check if TRDY is SET */
+> +		timeout = jiffies + usecs_to_jiffies(TIMEOUT_US);
+> +		do {
+> +			ret = regmap_field_read(priv->rf[TRDY], &trdy);
+> +			if (ret)
+> +				goto err;
+> +			if (!trdy)
+> +				continue;
+> +		} while (time_before(jiffies, timeout));
 
->>>
->>> Best Regards,
->>> Huang, Ying
->>>
->>>> +#endif
->>>> +
->>>>  #endif /* _LINUX_HUGE_MM_H */
->>>> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
->>>> index 2a65a89b5b4d..10b94d64cc25 100644
->>>> --- a/mm/swap_slots.c
->>>> +++ b/mm/swap_slots.c
->>>> @@ -307,7 +307,7 @@ swp_entry_t folio_alloc_swap(struct folio *folio)
->>>>       entry.val = 0;
->>>>
->>>>       if (folio_test_large(folio)) {
->>>> -             if (IS_ENABLED(CONFIG_THP_SWAP))
->>>> +             if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
->>>>                       get_swap_pages(1, &entry, folio_nr_pages(folio));
->>>>               goto out;
->>>>       }
->> 
->> Thanks
->> Barry
->> 
+This looks like a regmap_field_read()
+
+> +
+> +		if (!trdy) {
+> +			ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
+> +			if (ret)
+> +				goto err;
+> +
+> +			if (!first_round) {
+> +				if (atomic_read(&in_tsens_reinit)) {
+> +					dev_dbg(priv->dev, "tsens re-init is in progress\n");
+> +					ret = -EAGAIN;
+
+Is it preferred to return -EAGAIN here, over just serializing this whole
+thing using a mutex?
+
+> +					goto err;
+> +				}
+> +
+> +				/* Wait for 2 ms for tsens controller to recover */
+> +				timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
+> +				do {
+> +					ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE],
+> +								&first_round);
+> +					if (ret)
+> +						goto err;
+> +
+> +					if (first_round) {
+> +						dev_dbg(priv->dev, "tsens controller recovered\n");
+> +						goto sensor_read;
+> +					}
+> +				} while (time_before(jiffies, timeout));
+> +
+> +				/*
+> +				 * tsens controller did not recover,
+> +				 * proceed with SCM call to re-init it
+> +				 */
+> +				if (atomic_read(&in_tsens_reinit)) {
+> +					dev_dbg(priv->dev, "tsens re-init is in progress\n");
+> +					ret = -EAGAIN;
+> +					goto err;
+> +				}
+> +
+> +				atomic_set(&in_tsens_reinit, 1);
+
+Afaict nothing prevents two different processes to run the remainder of
+the recovery in parallel. I think you need some locking here.
+
+> +
+> +				/*
+> +				 * Invoke scm call only if SW register write is
+> +				 * reflecting in controller. Try it for 2 ms.
+> +				 */
+> +				timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
+> +				do {
+> +					ret = regmap_field_write(priv->rf[INT_EN], BIT(2));
+
+Do we know what BIT(2) is and would we be allowed to give it a define?
+
+> +					if (ret)
+> +						goto err_unset;
+> +
+> +					ret = regmap_field_read(priv->rf[INT_EN], &sw_reg);
+> +					if (ret)
+> +						goto err_unset;
+> +
+> +					if (!(sw_reg & BIT(2)))
+> +						continue;
+
+Why not:
+
+} while (sw_reg & BIT(2) && time_before(jiffies, timeout));
+
+> +				} while (time_before(jiffies, timeout));
+> +
+> +				if (!(sw_reg & BIT(2))) {
+> +					ret = -ENOTRECOVERABLE;
+> +					goto err_unset;
+> +				}
+> +
+> +				ret = qcom_scm_tsens_reinit(&tsens_ret);
+> +				if (ret || tsens_ret) {
+> +					dev_err(priv->dev, "tsens reinit scm call failed (%d : %d)\n",
+> +							ret, tsens_ret);
+> +					if (tsens_ret)
+> +						ret = -ENOTRECOVERABLE;
+
+If that's the api for the SCM, feel free to move the -ENOTRECOVERABLE to
+the scm function.
+
+> +
+> +					goto err_unset;
+> +				}
+> +
+> +				/* After the SCM call, we need to re-enable
+> +				 * the interrupts and also set active threshold
+> +				 * for each sensor.
+> +				 */
+> +				list_for_each_entry(priv_reinit,
+> +						&tsens_device_list, list) {
+> +					ret = tsens_reenable_hw_after_scm(priv_reinit);
+> +					if (ret) {
+> +						dev_err(priv->dev,
+> +							"tsens re-enable after scm call failed (%d)\n",
+> +							ret);
+> +						ret = -ENOTRECOVERABLE;
+> +						goto err_unset;
+> +					}
+> +				}
+> +
+> +				atomic_set(&in_tsens_reinit, 0);
+> +
+> +				/* Notify reinit wa worker */
+> +				list_for_each_entry(priv_reinit,
+
+Do you need to loop twice over the tsens instances?
+
+> +						&tsens_device_list, list) {
+> +					queue_work(priv_reinit->reinit_wa_worker,
+> +							&priv_reinit->reinit_wa_notify);
+> +				}
+> +			}
+> +		}
+> +	}
+> +
+> +sensor_read:
+>  	/* Valid bit is 0 for 6 AHB clock cycles.
+>  	 * At 19.2MHz, 1 AHB clock is ~60ns.
+>  	 * We should enter this loop very, very rarely.
+> @@ -623,6 +766,12 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
+>  	*temp = tsens_hw_to_mC(s, temp_idx);
+>  
+>  	return 0;
+> +
+> +err_unset:
+> +	atomic_set(&in_tsens_reinit, 0);
+> +
+> +err:
+> +	return ret;
+>  }
+>  
+>  int get_temp_common(const struct tsens_sensor *s, int *temp)
+> @@ -860,6 +1009,14 @@ int __init init_common(struct tsens_priv *priv)
+>  		goto err_put_device;
+>  	}
+>  
+> +	priv->rf[FIRST_ROUND_COMPLETE] = devm_regmap_field_alloc(dev,
+> +								priv->tm_map,
+> +								priv->fields[FIRST_ROUND_COMPLETE]);
+> +	if (IS_ERR(priv->rf[FIRST_ROUND_COMPLETE])) {
+> +		ret = PTR_ERR(priv->rf[FIRST_ROUND_COMPLETE]);
+> +		goto err_put_device;
+> +	}
+> +
+>  	/* This loop might need changes if enum regfield_ids is reordered */
+>  	for (j = LAST_TEMP_0; j <= UP_THRESH_15; j += 16) {
+>  		for (i = 0; i < priv->feat->max_sensors; i++) {
+> @@ -1097,6 +1254,43 @@ static int tsens_register(struct tsens_priv *priv)
+>  	return ret;
+>  }
+>  
+> +static void tsens_reinit_worker_notify(struct work_struct *work)
+> +{
+> +	int i, ret, temp;
+
+priv->num_sensors is unsigned, so i could be too.
+
+> +	struct tsens_irq_data d;
+> +	struct tsens_priv *priv = container_of(work, struct tsens_priv,
+> +					       reinit_wa_notify);
+> +
+> +	for (i = 0; i < priv->num_sensors; i++) {
+> +		const struct tsens_sensor *s = &priv->sensor[i];
+> +		u32 hw_id = s->hw_id;
+> +
+> +		if (!s->tzd)
+> +			continue;
+> +		if (!tsens_threshold_violated(priv, hw_id, &d))
+> +			continue;
+> +
+> +		ret = get_temp_tsens_valid(s, &temp);
+> +		if (ret) {
+> +			dev_err(priv->dev, "[%u] %s: error reading sensor\n",
+> +				hw_id, __func__);
+
+Please express yourself in the message, instead of using __func__.
+
+> +			continue;
+> +		}
+> +
+> +		tsens_read_irq_state(priv, hw_id, s, &d);
+> +
+> +		if ((d.up_thresh < temp) || (d.low_thresh > temp)) {
+> +			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> +				hw_id, __func__, temp);
+> +			thermal_zone_device_update(s->tzd,
+> +						   THERMAL_EVENT_UNSPECIFIED);
+
+This is just 86 chars long, no need to wrap the line.
+
+> +		} else {
+> +			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+
+Double space after ':'
+
+> +				hw_id, __func__, temp);
+> +		}
+> +	}
+> +}
+> +
+>  static int tsens_probe(struct platform_device *pdev)
+>  {
+>  	int ret, i;
+> @@ -1139,6 +1333,19 @@ static int tsens_probe(struct platform_device *pdev)
+>  	priv->dev = dev;
+>  	priv->num_sensors = num_sensors;
+>  	priv->needs_reinit_wa = data->needs_reinit_wa;
+> +
+> +	if (priv->needs_reinit_wa && !qcom_scm_is_available())
+> +		return -EPROBE_DEFER;
+> +
+> +	if (priv->needs_reinit_wa) {
+> +		priv->reinit_wa_worker = alloc_workqueue("tsens_reinit_work",
+> +							 WQ_HIGHPRI, 0);
+
+Do you really need your own work queue for this, how about just
+scheduling the work on system_highpri_wq?
+
+Regards,
+Bjorn

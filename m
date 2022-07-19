@@ -2,123 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C63757A41B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0F357A41C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238009AbiGSQUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 12:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S238308AbiGSQUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 12:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237966AbiGSQTx (ORCPT
+        with ESMTP id S238271AbiGSQUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 12:19:53 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840914F6B9;
-        Tue, 19 Jul 2022 09:19:47 -0700 (PDT)
-X-UUID: 9293cba5641a4cc38f72583de904db07-20220720
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:f9d2eda1-1208-4a91-91c9-625effff585d,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:cbcde9d7-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 9293cba5641a4cc38f72583de904db07-20220720
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 975616273; Wed, 20 Jul 2022 00:19:43 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 20 Jul 2022 00:19:42 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 20 Jul 2022 00:19:42 +0800
-Message-ID: <9686bb9f16cf2a5f236b98b2467345465097cede.camel@mediatek.com>
-Subject: Re: [PATCH v2] USB: mtu3: tracing: Use the new __vstring() helper
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Wed, 20 Jul 2022 00:19:42 +0800
-In-Reply-To: <20220719112719.17e796c6@gandalf.local.home>
-References: <20220719112719.17e796c6@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 19 Jul 2022 12:20:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3291B11C23
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:20:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04991B81BD0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:20:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAFAC341CA;
+        Tue, 19 Jul 2022 16:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658247606;
+        bh=+bR78aF429H1hmw0bA0ANi4dgyVHv+HSsYm48n9qNNg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HQyebdNjXTBgd68v4dheHL8TIDaZI1tFIofu9qyrhxGWFMK50FMZWi+uT287i7rC4
+         GtRwVBy3TumBsLpA8WvXfrha5+0xHn+0GWkLqvZfiZKBMKt6Gs9vlS09hdQr7CWd56
+         xHrRREEZwoHQr17yG2kBMdMn9FJewaG08BbaHstgwtlM+HtRhPchwbdR80RlgKrytA
+         CZytj/K4A2gLI9fYfB+EKYaGXflMGMBvWsUBnptu9AnqUZN8jcxnyX8PyNTfJOBxe5
+         jUnNwooxlMXW/HPmjrSSlvbwZLQXIjBuu0yDP6cJ2BRS7QitI1oxXze2L+Zbu+AoCa
+         G7hJKOieiY7qQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oDpx6-008Zbs-6i;
+        Tue, 19 Jul 2022 17:20:04 +0100
+Date:   Tue, 19 Jul 2022 17:20:03 +0100
+Message-ID: <87bktlyszw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 3/7] genirq: Add mechanism to multiplex a single HW IPI
+In-Reply-To: <20220418105305.1196665-4-apatel@ventanamicro.com>
+References: <20220418105305.1196665-1-apatel@ventanamicro.com>
+        <20220418105305.1196665-4-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-19 at 11:27 -0400, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Mon, 18 Apr 2022 11:53:01 +0100,
+Anup Patel <apatel@ventanamicro.com> wrote:
 > 
-> Instead of open coding a __dynamic_array() with a fixed length (which
-> defeats the purpose of the dynamic array in the first place). Use the
-> new
-> __vstring() helper that will use a va_list and only write enough of
-> the
-> string into the ring buffer that is needed.
+> All RISC-V platforms have a single HW IPI provided by the INTC local
+> interrupt controller. The HW method to trigger INTC IPI can be through
+> external irqchip (e.g. RISC-V AIA), through platform specific device
+> (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
 > 
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
+> mechanism which help us create multiple virtual IPIs using a single
+> HW IPI. This generic IPI multiplexing is shared among various RISC-V
+> irqchip drivers.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
-> Changes since v1: 
-> https://urldefense.com/v3/__https://lkml.kernel.org/r/20220705224750.354926535@goodmis.org__;!!CTRNKA9wMg0ARbw!w4K66JYkRKSGW-em5q2L6FJ6YI_Z81PAnnTJrBJayW6pf_-JVd5-B5daGto_frdtBJcz$
->  
+>  include/linux/irq.h  |  11 +++
+>  kernel/irq/Kconfig   |   4 +
+>  kernel/irq/Makefile  |   1 +
+>  kernel/irq/ipi-mux.c | 197 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 213 insertions(+)
+>  create mode 100644 kernel/irq/ipi-mux.c
 > 
->  - Removed MTU3_MSG_MAX define. (Chunfeng Yun)
-> 
->  drivers/usb/mtu3/mtu3_trace.h | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_trace.h
-> b/drivers/usb/mtu3/mtu3_trace.h
-> index 1b897636daf2..a98fa012b729 100644
-> --- a/drivers/usb/mtu3/mtu3_trace.h
-> +++ b/drivers/usb/mtu3/mtu3_trace.h
-> @@ -18,18 +18,16 @@
+> diff --git a/include/linux/irq.h b/include/linux/irq.h
+> index f92788ccdba2..5bb4e2db63d7 100644
+> --- a/include/linux/irq.h
+> +++ b/include/linux/irq.h
+> @@ -1247,6 +1247,17 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+>  int ipi_send_single(unsigned int virq, unsigned int cpu);
+>  int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
 >  
->  #include "mtu3.h"
->  
-> -#define MTU3_MSG_MAX	256
-> -
->  TRACE_EVENT(mtu3_log,
->  	TP_PROTO(struct device *dev, struct va_format *vaf),
->  	TP_ARGS(dev, vaf),
->  	TP_STRUCT__entry(
->  		__string(name, dev_name(dev))
-> -		__dynamic_array(char, msg, MTU3_MSG_MAX)
-> +		__vstring(msg, vaf->fmt, vaf->va)
->  	),
->  	TP_fast_assign(
->  		__assign_str(name, dev_name(dev));
-> -		vsnprintf(__get_str(msg), MTU3_MSG_MAX, vaf->fmt, *vaf-
-> >va);
-> +		__assign_vstr(msg, vaf->fmt, vaf->va);
->  	),
->  	TP_printk("%s: %s", __get_str(name), __get_str(msg))
->  );
-Tested-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> +#define IPI_MUX_NR_IRQS		BITS_PER_LONG
+> +
+> +struct ipi_mux_ops {
+> +	void (*ipi_mux_clear)(unsigned int parent_virq);
+> +	void (*ipi_mux_send)(unsigned int parent_virq,
+> +			     const struct cpumask *mask);
 
-Thanks a lot
+You really cannot just dump this like this. This requires
+documentation so that architecture maintainers can move over to this.
+I appreciate that this area is pretty poorly documented, but we need
+to start somewhere.
 
+> +};
+> +
+> +void ipi_mux_process(void);
+> +int ipi_mux_create(unsigned int parent_virq, const struct ipi_mux_ops *ops);
+> +
+>  #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+>  /*
+>   * Registers a generic IRQ handling function as the top-level IRQ handler in
+> diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+> index 10929eda9825..2388e7d40ed3 100644
+> --- a/kernel/irq/Kconfig
+> +++ b/kernel/irq/Kconfig
+> @@ -84,6 +84,10 @@ config GENERIC_IRQ_IPI
+>  	bool
+>  	select IRQ_DOMAIN_HIERARCHY
+>  
+> +# Generic IRQ IPI Mux support
+> +config GENERIC_IRQ_IPI_MUX
+> +	bool
+> +
+>  # Generic MSI interrupt support
+>  config GENERIC_MSI_IRQ
+>  	bool
+> diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+> index b4f53717d143..f19d3080bf11 100644
+> --- a/kernel/irq/Makefile
+> +++ b/kernel/irq/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+>  obj-$(CONFIG_PM_SLEEP) += pm.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+>  obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
+> +obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+>  obj-$(CONFIG_SMP) += affinity.o
+>  obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+>  obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+> diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+> new file mode 100644
+> index 000000000000..1a1fcfe3ac54
+> --- /dev/null
+> +++ b/kernel/irq/ipi-mux.c
+> @@ -0,0 +1,197 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Multiplex several virtual IPIs over a single HW IPI.
+> + *
+> + * Copyright (c) 2022 Ventana Micro Systems Inc.
+> + */
+> +
+> +#define pr_fmt(fmt) "ipi-mux: " fmt
+> +#include <linux/cpu.h>
+> +#include <linux/init.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/smp.h>
+> +
+> +static unsigned int ipi_mux_parent_virq;
+> +static struct irq_domain *ipi_mux_domain;
+> +static const struct  ipi_mux_ops *ipi_mux_ops;
+> +static DEFINE_PER_CPU(unsigned long, ipi_mux_bits);
+> +
+> +static void ipi_mux_dummy(struct irq_data *d)
+> +{
+> +}
+> +
+> +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> +{
+> +	int cpu;
+> +
+> +	/* Barrier before doing atomic bit update to IPI bits */
+> +	smp_mb__before_atomic();
+> +
+> +	for_each_cpu(cpu, mask)
+> +		set_bit(d->hwirq, per_cpu_ptr(&ipi_mux_bits, cpu));
+> +
+> +	/* Barrier after doing atomic bit update to IPI bits */
+> +	smp_mb__after_atomic();
+> +
+> +	/* Trigger the parent IPI */
+> +	ipi_mux_ops->ipi_mux_send(ipi_mux_parent_virq, mask);
+> +}
+> +
+> +static struct irq_chip ipi_mux_chip = {
+
+const, please.
+
+> +	.name		= "IPI Mux",
+> +	.irq_mask	= ipi_mux_dummy,
+> +	.irq_unmask	= ipi_mux_dummy,
+
+Maybe we should consider a flow that does not require this dummy
+callbacks.
+
+> +	.ipi_send_mask	= ipi_mux_send_mask,
+> +};
+> +
+> +static int ipi_mux_domain_map(struct irq_domain *d, unsigned int irq,
+> +			      irq_hw_number_t hwirq)
+> +{
+> +	irq_set_percpu_devid(irq);
+> +	irq_domain_set_info(d, irq, hwirq, &ipi_mux_chip, d->host_data,
+> +			    handle_percpu_devid_irq, NULL, NULL);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
+> +				unsigned int nr_irqs, void *arg)
+> +{
+> +	unsigned int type = IRQ_TYPE_NONE;
+
+Really, this should be EDGE.
+
+> +	struct irq_fwspec *fwspec = arg;
+> +	irq_hw_number_t hwirq;
+> +	int i, ret;
+> +
+> +	ret = irq_domain_translate_onecell(d, fwspec, &hwirq, &type);
+> +	if (ret)
+> +		return ret;
+> +
+> +	for (i = 0; i < nr_irqs; i++) {
+> +		ret = ipi_mux_domain_map(d, virq + i, hwirq + i);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops ipi_mux_domain_ops = {
+> +	.translate	= irq_domain_translate_onecell,
+
+What is the purpose of this callback? Firmware shouldn't be involved
+in IPIs at all, and since you only have one cell, you can use the
+default path. This is also a dependency on CONFIG_IRQ_DOMAIN_HIERARCHY.
+
+> +	.alloc		= ipi_mux_domain_alloc,
+> +	.free		= irq_domain_free_irqs_top,
+> +};
+> +
+> +/**
+> + * ipi_mux_process - Process multiplexed virtual IPIs
+> + */
+> +void ipi_mux_process(void)
+> +{
+> +	unsigned long irqs, *bits = this_cpu_ptr(&ipi_mux_bits);
+> +	irq_hw_number_t hwirq;
+> +	int err;
+> +
+> +	/* Clear the parent IPI */
+> +	if (ipi_mux_ops->ipi_mux_clear)
+> +		ipi_mux_ops->ipi_mux_clear(ipi_mux_parent_virq);
+> +
+> +	/*
+> +	 * Barrier for IPI bits paired with smp_mb__xyz_atomic()
+
+xyz???
+
+> +	 * in ipi_mux_send_mask()
+> +	 */
+> +	smp_mb();
+> +
+> +	irqs = xchg(bits, 0);
+> +	if (!irqs)
+> +		return;
+> +
+> +	for_each_set_bit(hwirq, &irqs, IPI_MUX_NR_IRQS) {
+> +		err = generic_handle_domain_irq(ipi_mux_domain,
+> +						hwirq);
+> +		if (unlikely(err))
+> +			pr_warn_ratelimited(
+> +				"can't find mapping for hwirq %lu\n",
+> +				hwirq);
+> +	}
+> +}
+> +
+> +static void ipi_mux_handler(struct irq_desc *desc)
+> +{
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +
+> +	chained_irq_enter(chip, desc);
+> +	ipi_mux_process();
+> +	chained_irq_exit(chip, desc);
+> +}
+> +
+> +static int ipi_mux_dying_cpu(unsigned int cpu)
+> +{
+> +	disable_percpu_irq(ipi_mux_parent_virq);
+> +	return 0;
+> +}
+> +
+> +static int ipi_mux_starting_cpu(unsigned int cpu)
+> +{
+> +	enable_percpu_irq(ipi_mux_parent_virq,
+> +			  irq_get_trigger_type(ipi_mux_parent_virq));
+> +	return 0;
+> +}
+> +
+> +/**
+> + * ipi_mux_create - Create virtual IPIs (total IPI_MUX_NR_IRQS) multiplexed
+> + * on top of a single parent IPI.
+> + * @parent_virq:	virq of the parent IPI
+> + * @ops:		multiplexing operations for the parent IPI
+> + *
+> + * If the parent IPI > 0 then ipi_mux_process() will be automatically
+> + * called via chained handler.
+> + *
+> + * If the parent IPI <= 0 then it is responsiblity of irqchip drivers
+> + * to explicitly call ipi_mux_process() for processing muxed IPIs.
+> + *
+> + * Returns first virq of the newly created virutal IPIs upon success
+> + * or <=0 upon failure
+> + */
+> +int ipi_mux_create(unsigned int parent_virq, const struct ipi_mux_ops *ops)
+> +{
+
+Why should be parent_virq be unique? I also see nothing that checks
+that this is a per-CPU interrupt. If anything, this needs documenting.
+
+> +	struct irq_domain *domain;
+> +	struct irq_fwspec ipi;
+> +	int virq;
+> +
+> +	if (ipi_mux_domain || !ops || !ops->ipi_mux_send)
+> +		return 0;
+> +
+> +	domain = irq_domain_add_linear(NULL, IPI_MUX_NR_IRQS,
+
+Urgh. For a start, please use the irq_domain_create_* version, as this
+shouldn't be DT specific. Then, don't use a NULL fwnode, as this
+results in a "default domain", which nobody sane should ever use
+anymore. Also, defaulting to BITS_PER_LONG is a lot of interrupts for
+not much (most archs use only a handful). You may want to consider
+this being a parameter, and cap it at BITS_PER_LONG.
+
+> +				       &ipi_mux_domain_ops, NULL);
+> +	if (!domain) {
+> +		pr_err("unable to add IPI Mux domain\n");
+> +		return 0;
+> +	}
+> +
+> +	ipi.fwnode = domain->fwnode;
+
+Which is NULL (see above).
+
+> +	ipi.param_count = 1;
+> +	ipi.param[0] = 0;
+> +	virq = __irq_domain_alloc_irqs(domain, -1, IPI_MUX_NR_IRQS,
+> +				       NUMA_NO_NODE, &ipi, false, NULL);
+> +	if (virq <= 0) {
+> +		pr_err("unable to alloc IRQs from IPI Mux domain\n");
+> +		irq_domain_remove(domain);
+> +		return virq;
+> +	}
+> +
+> +	ipi_mux_domain = domain;
+> +	ipi_mux_parent_virq = parent_virq;
+> +	ipi_mux_ops = ops;
+> +
+> +	if (parent_virq > 0) {
+> +		irq_set_chained_handler(parent_virq, ipi_mux_handler);
+> +
+> +		cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> +				  "irqchip/ipi-mux:starting",
+> +				  ipi_mux_starting_cpu, ipi_mux_dying_cpu);
+> +	}
+> +
+> +	return virq;
+> +}
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

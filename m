@@ -2,132 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC8957A129
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F242557A12A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238284AbiGSOTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        id S238477AbiGSOTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239280AbiGSOTJ (ORCPT
+        with ESMTP id S239531AbiGSOTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:19:09 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A82167CB;
-        Tue, 19 Jul 2022 06:56:24 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id p8so2252900plq.13;
-        Tue, 19 Jul 2022 06:56:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PfgQUmHXfEsVlt7EAdQAep/0k+r0QZc8dV885v2KGqk=;
-        b=oSFTG21y1pXhyCeqwKlLlq3unncBMp95IC3TGLCmO1z42grixpBG8U96oGTKV7Xe1d
-         lRs4m2FetXtN4JPCyEpKdZ2pBaTNo7SVrBQizmYX6MwkS4XUbwv+KG1HuZKgN7x0lcPK
-         3iRkO2cfxHlRpRv5V9q71amM1qrojleD4W/4svWWHA8pmBI7MbHg4ikgsWqUeIizxmlM
-         QPL8RXBCGJVU4Lkgu43XdBNY4kkexqVHaLn9EiEJHSgDhCnJIanihqbd3L+IEtizN95s
-         dzYjGxwtininmup825hjdosdpjKg94hiatXmimrPvCzm2bh8HY3x5pkWtCqWd+MJks5E
-         YDog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PfgQUmHXfEsVlt7EAdQAep/0k+r0QZc8dV885v2KGqk=;
-        b=lYihxBzbAMPizpjw3BYLHIMcvDtXQhaGdt03Hn73aHhiZ6KKtbzHcuo9k4VbN1Gkwz
-         jiOtMgJBbXxpE4U/YrwJCiegFIfhDmFPP2pW8+9keD6YkLkiK4GYZZGWtw7iK2HCgMNJ
-         DNKROJJBN7+ndrXmX3Ecbo60hihYaxHoPVvfRsSRz9gu4HTv4Qb5tVUjdfDhv9wT7yG4
-         x/ThMvAPo1/dRW3iH1XwfsQ9nzhHeauaCwaMmMdTfyd8p5nkcAxcOfV6F2TRqmpvr71i
-         rlwoISbX+0n/wuuyEgflzWgdtyNQoCcOAQaCd5k4FZIC4cTScD0lLwJM8Kdhe7TKGvuk
-         WjGQ==
-X-Gm-Message-State: AJIora+6YlfGyNIQXjlxjIZm6fMsrJxmARaNg7F9otM22JMXU05CFjQk
-        4ukqObNvA+ViWaBZVmX7meg=
-X-Google-Smtp-Source: AGRyM1u02n8sve9ba2gLev+p5N2PAurYO8H0ftACBkugnGykUFfhZ88nVh46EMaFvnkjq3mxTADYbw==
-X-Received: by 2002:a17:90b:3c0c:b0:1ef:e647:ff48 with SMTP id pb12-20020a17090b3c0c00b001efe647ff48mr44369290pjb.173.1658238983691;
-        Tue, 19 Jul 2022 06:56:23 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b0016bdee4f24asm1684907pli.48.2022.07.19.06.56.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 06:56:23 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 06:56:20 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Divya Koppera <Divya.Koppera@microchip.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Madhuri.Sripada@microchip.com
-Subject: Re: [PATCH v2 net] net: phy: micrel: Fix warn: passing zero to
- PTR_ERR
-Message-ID: <Yta4BFfr+OkUmOhl@hoboy.vegasvil.org>
-References: <20220719120052.26681-1-Divya.Koppera@microchip.com>
+        Tue, 19 Jul 2022 10:19:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49E884ED3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:57:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20022B81B96
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:57:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC3FC341C6;
+        Tue, 19 Jul 2022 13:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658239032;
+        bh=vG/PYJWjOA0dZGLVlpwRmukXsss533fpnWPhCGstMFY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y31IhWhFXz4i3HfFYedO+G6cphZbYh1i8gtglLwLeNeMHm1SN2dr/FC97N56mQlAN
+         UMSk+LDkjHVMWnao8mMxVwQSyqIG5p5ook2g6dcoLcudq24cyv95MA6wPUISS/0lQw
+         RKjsdkFBmTtWPF+3q73/uO06pb3fO1+v9BsFMLoAPfIN2GYE5yKj2BVHFD3++DLgId
+         6LdrldS7KR6XraSxjmNIr9ea+2bo+/afCylqDYIZnb3niMpE1g9f1PcLKu0qS6nNsO
+         9huZdk6IQN9OPhri/kPaNa5I0tL1/41oyk5884PyYGhbBeXHCSVL/qmnNlFU1gDn4d
+         Y6qp6o5oHE33w==
+Date:   Tue, 19 Jul 2022 14:57:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Christian Kohlschuetter <christian@kohlschuetter.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] regulator: core: Fix off-on-delay-us for
+ always-on/boot-on regulators
+Message-ID: <Yta4NGGYyZ6Doglr@sirena.org.uk>
+References: <E25D6465-6475-42B4-90EB-3D2C3CAF3B20@kohlschuetter.com>
+ <YtVTyzLREdkzYiKS@sirena.org.uk>
+ <3270C618-E361-4BC1-B63A-917AE09DA60E@kohlschuetter.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="J6pgg35jo6kjN59l"
 Content-Disposition: inline
-In-Reply-To: <20220719120052.26681-1-Divya.Koppera@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <3270C618-E361-4BC1-B63A-917AE09DA60E@kohlschuetter.com>
+X-Cookie: APL hackers do it in the quad.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 05:30:52PM +0530, Divya Koppera wrote:
-> Handle the NULL pointer case
-> 
-> Fixes New smatch warnings:
-> drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing zero to 'PTR_ERR'
-> 
-> vim +/PTR_ERR +2613 drivers/net/phy/micrel.c
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
-> Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
-> ---
-> v1 -> v2:
-> - Handled NULL pointer case
-> - Changed subject line with net-next to net
 
-This is not a genuine bug fix, and so it should target next-next.
+--J6pgg35jo6kjN59l
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/net/phy/micrel.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-> index e78d0bf69bc3..6be6ee156f40 100644
-> --- a/drivers/net/phy/micrel.c
-> +++ b/drivers/net/phy/micrel.c
-> @@ -2812,12 +2812,16 @@ static int lan8814_ptp_probe_once(struct phy_device *phydev)
->  
->  	shared->ptp_clock = ptp_clock_register(&shared->ptp_clock_info,
->  					       &phydev->mdio.dev);
-> -	if (IS_ERR_OR_NULL(shared->ptp_clock)) {
-> +	if (IS_ERR(shared->ptp_clock)) {
->  		phydev_err(phydev, "ptp_clock_register failed %lu\n",
->  			   PTR_ERR(shared->ptp_clock));
->  		return -EINVAL;
->  	}
->  
-> +	/* Check if PHC support is missing at the configuration level */
-> +	if (!shared->ptp_clock)
-> +		return 0;
+On Mon, Jul 18, 2022 at 07:24:37PM +0200, Christian Kohlschuetter wrote:
 
-This is cause a NULL pointer de-reference in lan8814_ts_info()
-when it calls 
+> Signed-off-by: Christian Kohlsch=FCtter <christian@kohlschutter.com>
 
-	info->phc_index = ptp_clock_index(shared->ptp_clock);
+You have an umlaut in your signoff here but not in your e-mail address
+which causes tooling to complain that there's a missing signoff - you
+might get some complaints about this.
 
-> +
->  	phydev_dbg(phydev, "successfully registered ptp clock\n");
->  
->  	shared->phydev = phydev;
-> -- 
-> 2.17.1
-> 
+--J6pgg35jo6kjN59l
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Richard
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLWuDMACgkQJNaLcl1U
+h9BqWAf+JeBnbNBC+OScexa6uJnV1+M7M7K9uor4vjdCfRrByQMmdqHVys4hGatW
+8ZjR/05Ac4PpufJJ3FZDlr7I4i3kcWpvR/B1hv5BM4yNPXGo8ZWz42Beut/iuI2Q
+T+AqBN/kciBzHQNb2PGHqMtGQQmw34zJjuNntJkP33sxtoO4487ZiH5oUTuvSGKG
+Wmvhd2gEE4AnXI5ZgJMEK8jijqMh/7YewXLtKP9NBQlDnvfkr2Z8McabgYaAWcnU
+6UBaoL2OUD4vzwHeC/qBf6YLUKouSLDPxiCH/LbJquT+kDhGvOGS5ijUczs2FOkB
+BiEY7NJUHOR41V6/4AuutfJOMm6fNw==
+=qtmQ
+-----END PGP SIGNATURE-----
+
+--J6pgg35jo6kjN59l--

@@ -2,241 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832F8579645
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBB657964D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237186AbiGSJ01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 05:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S237082AbiGSJ2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 05:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237022AbiGSJ0X (ORCPT
+        with ESMTP id S237228AbiGSJ1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:26:23 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797B31FCD5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 02:26:21 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by albert.telenet-ops.be with bizsmtp
-        id wxSG2700S4C55Sk06xSGow; Tue, 19 Jul 2022 11:26:18 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oDjUZ-004Dzd-3y; Tue, 19 Jul 2022 11:26:11 +0200
-Date:   Tue, 19 Jul 2022 11:26:06 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     Bart Van Assche <bvanassche@acm.org>
-cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
-        jason600.groome@gmail.com, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
-In-Reply-To: <20220630195703.10155-3-bvanassche@acm.org>
-Message-ID: <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
-References: <20220630195703.10155-1-bvanassche@acm.org> <20220630195703.10155-3-bvanassche@acm.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 19 Jul 2022 05:27:38 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EB31FCD5;
+        Tue, 19 Jul 2022 02:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658222857; x=1689758857;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vCPazcnl2jVJ0/p5/xqdcmwXy4nSK1RQIZb1JKumCQk=;
+  b=UMC7Jbg8QU8Tx25mDlRdbHideyJ5bD3YDxY7QLjzaBONE3ppxNKo4rbC
+   in2wlIC2xQyw8i8CtTlK2cWuyRs/xcdQOZG7+nnmz/BNqOSgIwzGqMU5r
+   KV/2JTtQB2n501KNO75Ij67x7uDcdTKhPxTQwNLT/Tmj5dDjNA0TjHK04
+   c=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 19 Jul 2022 02:27:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 02:27:37 -0700
+Received: from [10.50.41.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 19 Jul
+ 2022 02:27:33 -0700
+Message-ID: <44b3a9df-c2fa-1e51-ca6b-f9c083d6578c@quicinc.com>
+Date:   Tue, 19 Jul 2022 14:57:30 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH rcu 1/7] rcu/nocb: Add/del rdp to iterate from rcuog
+ itself
+Content-Language: en-US
+To:     "Paul E. McKenney" <paulmck@kernel.org>, <rcu@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        <rostedt@goodmis.org>, Frederic Weisbecker <frederic@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Zqiang <qiang1.zhang@intel.com>
+References: <20220620224455.GA3840881@paulmck-ThinkPad-P17-Gen-1>
+ <20220620224503.3841196-1-paulmck@kernel.org>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <20220620224503.3841196-1-paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- 	Hoi Bart,
 
-On Thu, 30 Jun 2022, Bart Van Assche wrote:
-> For some technologies, e.g. an ATA bus, resuming can take multiple
-> seconds. Waiting for resume to finish can cause a very noticeable delay.
-> Hence this patch that restores the behavior from before patch "scsi:
-> core: pm: Rely on the device driver core for async power management" for
-> most SCSI devices.
->
-> This patch introduces a behavior change: if the START command fails, do
-> not consider this as a SCSI disk resume failure.
->
-> Cc: Ming Lei <ming.lei@redhat.com>
-> Cc: Hannes Reinecke <hare@suse.de>
-> Cc: John Garry <john.garry@huawei.com>
-> Cc: ericspero@icloud.com
-> Cc: jason600.groome@gmail.com
-> Tested-by: jason600.groome@gmail.com
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215880
-> Fixes: a19a93e4c6a9 ("scsi: core: pm: Rely on the device driver core for async power management")
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-Thanks for your patch, which is now commit 88f1669019bd62b3 ("scsi: sd:
-Rework asynchronous resume support") in scsi/for-next.
-
-On the Salvator-XS development board[1] with a SATA hard drive
-connected, accessing the hard drive after resume from s2idle hangs.
-I have bisected this to the aformentioned commit, and reverting this
-commit fixes the issue.
-
-[1] arch/arm64/boot/dts/renesas/r8a77951-salvator-xs.dts
-
+On 6/21/2022 4:14 AM, Paul E. McKenney wrote:
+> From: Frederic Weisbecker <frederic@kernel.org>
+> 
+> NOCB rdp's are part of a group whose list is iterated by the
+> corresponding rdp leader.
+> 
+> This list is RCU traversed because an rdp can be either added or
+> deleted concurrently. Upon addition, a new iteration to the list after
+> a synchronization point (a pair of LOCK/UNLOCK ->nocb_gp_lock) is forced
+> to make sure:
+> 
+> 1) we didn't miss a new element added in the middle of an iteration
+> 2) we didn't ignore a whole subset of the list due to an element being
+>     quickly deleted and then re-added.
+> 3) we prevent from probably other surprises...
+> 
+> Although this layout is expected to be safe, it doesn't help anybody
+> to sleep well.
+> 
+> Simplify instead the nocb state toggling with moving the list
+> modification from the nocb (de-)offloading workqueue to the rcuog
+> kthreads instead.
+> 
+> Whenever the rdp leader is expected to (re-)set the SEGCBLIST_KTHREAD_GP
+> flag of a target rdp, the latter is queued so that the leader handles
+> the flag flip along with adding or deleting the target rdp to the list
+> to iterate. This way the list modification and iteration happen from the
+> same kthread and those operations can't race altogether.
+> 
+> As a bonus, the flags for each rdp don't need to be checked locklessly
+> before each iteration, which is one less opportunity to produce
+> nightmares.
+> 
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: Zqiang <qiang1.zhang@intel.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 > ---
-> drivers/scsi/sd.c | 84 +++++++++++++++++++++++++++++++++++++----------
-> drivers/scsi/sd.h |  5 +++
-> 2 files changed, 71 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-> index 895b56c8f25e..84696b3652ee 100644
-> --- a/drivers/scsi/sd.c
-> +++ b/drivers/scsi/sd.c
-> @@ -103,6 +103,7 @@ static void sd_config_discard(struct scsi_disk *, unsigned int);
-> static void sd_config_write_same(struct scsi_disk *);
-> static int  sd_revalidate_disk(struct gendisk *);
-> static void sd_unlock_native_capacity(struct gendisk *disk);
-> +static void sd_start_done_work(struct work_struct *work);
-> static int  sd_probe(struct device *);
-> static int  sd_remove(struct device *);
-> static void sd_shutdown(struct device *);
-> @@ -3463,6 +3464,7 @@ static int sd_probe(struct device *dev)
-> 	sdkp->max_retries = SD_MAX_RETRIES;
-> 	atomic_set(&sdkp->openers, 0);
-> 	atomic_set(&sdkp->device->ioerr_cnt, 0);
-> +	INIT_WORK(&sdkp->start_done_work, sd_start_done_work);
->
-> 	if (!sdp->request_queue->rq_timeout) {
-> 		if (sdp->type != TYPE_MOD)
-> @@ -3585,12 +3587,69 @@ static void scsi_disk_release(struct device *dev)
-> 	kfree(sdkp);
-> }
->
-> +/* Process sense data after a START command finished. */
-> +static void sd_start_done_work(struct work_struct *work)
-> +{
-> +	struct scsi_disk *sdkp = container_of(work, typeof(*sdkp),
-> +					      start_done_work);
-> +	struct scsi_sense_hdr sshdr;
-> +	int res = sdkp->start_result;
-> +
-> +	if (res == 0)
-> +		return;
-> +
-> +	sd_print_result(sdkp, "Start/Stop Unit failed", res);
-> +
-> +	if (res < 0)
-> +		return;
-> +
-> +	if (scsi_normalize_sense(sdkp->start_sense_buffer,
-> +				 sdkp->start_sense_len, &sshdr))
-> +		sd_print_sense_hdr(sdkp, &sshdr);
-> +}
-> +
-> +/* A START command finished. May be called from interrupt context. */
-> +static void sd_start_done(struct request *req, blk_status_t status)
-> +{
-> +	const struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(req);
-> +	struct scsi_disk *sdkp = scsi_disk(req->q->disk);
-> +
-> +	sdkp->start_result = scmd->result;
-> +	WARN_ON_ONCE(scmd->sense_len > SCSI_SENSE_BUFFERSIZE);
-> +	sdkp->start_sense_len = scmd->sense_len;
-> +	memcpy(sdkp->start_sense_buffer, scmd->sense_buffer,
-> +	       ARRAY_SIZE(sdkp->start_sense_buffer));
-> +	WARN_ON_ONCE(!schedule_work(&sdkp->start_done_work));
-> +}
-> +
-> +/* Submit a START command asynchronously. */
-> +static int sd_submit_start(struct scsi_disk *sdkp, u8 cmd[], u8 cmd_len)
-> +{
-> +	struct scsi_device *sdev = sdkp->device;
-> +	struct request_queue *q = sdev->request_queue;
-> +	struct request *req;
-> +	struct scsi_cmnd *scmd;
-> +
-> +	req = scsi_alloc_request(q, REQ_OP_DRV_IN, BLK_MQ_REQ_PM);
-> +	if (IS_ERR(req))
-> +		return PTR_ERR(req);
-> +
-> +	scmd = blk_mq_rq_to_pdu(req);
-> +	scmd->cmd_len = cmd_len;
-> +	memcpy(scmd->cmnd, cmd, cmd_len);
-> +	scmd->allowed = sdkp->max_retries;
-> +	req->timeout = SD_TIMEOUT;
-> +	req->rq_flags |= RQF_PM | RQF_QUIET;
-> +	req->end_io = sd_start_done;
-> +	blk_execute_rq_nowait(req, /*at_head=*/true);
-> +
-> +	return 0;
-> +}
-> +
-> static int sd_start_stop_device(struct scsi_disk *sdkp, int start)
-> {
-> 	unsigned char cmd[6] = { START_STOP };	/* START_VALID */
-> -	struct scsi_sense_hdr sshdr;
-> 	struct scsi_device *sdp = sdkp->device;
-> -	int res;
->
-> 	if (start)
-> 		cmd[4] |= 1;	/* START */
-> @@ -3601,23 +3660,10 @@ static int sd_start_stop_device(struct scsi_disk *sdkp, int start)
-> 	if (!scsi_device_online(sdp))
-> 		return -ENODEV;
->
-> -	res = scsi_execute(sdp, cmd, DMA_NONE, NULL, 0, NULL, &sshdr,
-> -			SD_TIMEOUT, sdkp->max_retries, 0, RQF_PM, NULL);
-> -	if (res) {
-> -		sd_print_result(sdkp, "Start/Stop Unit failed", res);
-> -		if (res > 0 && scsi_sense_valid(&sshdr)) {
-> -			sd_print_sense_hdr(sdkp, &sshdr);
-> -			/* 0x3a is medium not present */
-> -			if (sshdr.asc == 0x3a)
-> -				res = 0;
-> -		}
-> -	}
-> +	/* Wait until processing of sense data has finished. */
-> +	flush_work(&sdkp->start_done_work);
->
-> -	/* SCSI error codes must not go to the generic layer */
-> -	if (res)
-> -		return -EIO;
+
+Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+
+
+Thanks
+Neeraj
+
+>   kernel/rcu/tree.h      |   1 +
+>   kernel/rcu/tree_nocb.h | 138 +++++++++++++++++++++--------------------
+>   2 files changed, 71 insertions(+), 68 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index 2ccf5845957df..4f8532c33558f 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -235,6 +235,7 @@ struct rcu_data {
+>   					 * if rdp_gp.
+>   					 */
+>   	struct list_head nocb_entry_rdp; /* rcu_data node in wakeup chain. */
+> +	struct rcu_data *nocb_toggling_rdp; /* rdp queued for (de-)offloading */
+>   
+>   	/* The following fields are used by CB kthread, hence new cacheline. */
+>   	struct rcu_data *nocb_gp_rdp ____cacheline_internodealigned_in_smp;
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index 46694e13398a3..dac74952e1d1b 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -546,52 +546,43 @@ static void __call_rcu_nocb_wake(struct rcu_data *rdp, bool was_alldone,
+>   	}
+>   }
+>   
+> -/*
+> - * Check if we ignore this rdp.
+> - *
+> - * We check that without holding the nocb lock but
+> - * we make sure not to miss a freshly offloaded rdp
+> - * with the current ordering:
+> - *
+> - *  rdp_offload_toggle()        nocb_gp_enabled_cb()
+> - * -------------------------   ----------------------------
+> - *    WRITE flags                 LOCK nocb_gp_lock
+> - *    LOCK nocb_gp_lock           READ/WRITE nocb_gp_sleep
+> - *    READ/WRITE nocb_gp_sleep    UNLOCK nocb_gp_lock
+> - *    UNLOCK nocb_gp_lock         READ flags
+> - */
+> -static inline bool nocb_gp_enabled_cb(struct rcu_data *rdp)
+> -{
+> -	u8 flags = SEGCBLIST_OFFLOADED | SEGCBLIST_KTHREAD_GP;
 > -
-> -	return 0;
-> +	return sd_submit_start(sdkp, cmd, sizeof(cmd));
-> }
->
-> /*
-> @@ -3644,6 +3690,8 @@ static void sd_shutdown(struct device *dev)
-> 		sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
-> 		sd_start_stop_device(sdkp, 0);
-> 	}
+> -	return rcu_segcblist_test_flags(&rdp->cblist, flags);
+> -}
+> -
+> -static inline bool nocb_gp_update_state_deoffloading(struct rcu_data *rdp,
+> -						     bool *needwake_state)
+> +static int nocb_gp_toggle_rdp(struct rcu_data *rdp,
+> +			       bool *wake_state)
+>   {
+>   	struct rcu_segcblist *cblist = &rdp->cblist;
+> +	unsigned long flags;
+> +	int ret;
+>   
+> -	if (rcu_segcblist_test_flags(cblist, SEGCBLIST_OFFLOADED)) {
+> -		if (!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP)) {
+> -			rcu_segcblist_set_flags(cblist, SEGCBLIST_KTHREAD_GP);
+> -			if (rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB))
+> -				*needwake_state = true;
+> -		}
+> -		return false;
+> +	rcu_nocb_lock_irqsave(rdp, flags);
+> +	if (rcu_segcblist_test_flags(cblist, SEGCBLIST_OFFLOADED) &&
+> +	    !rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP)) {
+> +		/*
+> +		 * Offloading. Set our flag and notify the offload worker.
+> +		 * We will handle this rdp until it ever gets de-offloaded.
+> +		 */
+> +		rcu_segcblist_set_flags(cblist, SEGCBLIST_KTHREAD_GP);
+> +		if (rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB))
+> +			*wake_state = true;
+> +		ret = 1;
+> +	} else if (!rcu_segcblist_test_flags(cblist, SEGCBLIST_OFFLOADED) &&
+> +		   rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP)) {
+> +		/*
+> +		 * De-offloading. Clear our flag and notify the de-offload worker.
+> +		 * We will ignore this rdp until it ever gets re-offloaded.
+> +		 */
+> +		rcu_segcblist_clear_flags(cblist, SEGCBLIST_KTHREAD_GP);
+> +		if (!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB))
+> +			*wake_state = true;
+> +		ret = 0;
+> +	} else {
+> +		WARN_ON_ONCE(1);
+> +		ret = -1;
+>   	}
+>   
+> -	/*
+> -	 * De-offloading. Clear our flag and notify the de-offload worker.
+> -	 * We will ignore this rdp until it ever gets re-offloaded.
+> -	 */
+> -	WARN_ON_ONCE(!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP));
+> -	rcu_segcblist_clear_flags(cblist, SEGCBLIST_KTHREAD_GP);
+> -	if (!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB))
+> -		*needwake_state = true;
+> -	return true;
+> -}
+> +	rcu_nocb_unlock_irqrestore(rdp, flags);
+>   
+> +	return ret;
+> +}
+>   
+>   /*
+>    * No-CBs GP kthreads come here to wait for additional callbacks to show up
+> @@ -609,7 +600,7 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>   	bool needwait_gp = false; // This prevents actual uninitialized use.
+>   	bool needwake;
+>   	bool needwake_gp;
+> -	struct rcu_data *rdp;
+> +	struct rcu_data *rdp, *rdp_toggling = NULL;
+>   	struct rcu_node *rnp;
+>   	unsigned long wait_gp_seq = 0; // Suppress "use uninitialized" warning.
+>   	bool wasempty = false;
+> @@ -634,19 +625,10 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>   	 * is added to the list, so the skipped-over rcu_data structures
+>   	 * won't be ignored for long.
+>   	 */
+> -	list_for_each_entry_rcu(rdp, &my_rdp->nocb_head_rdp, nocb_entry_rdp, 1) {
+> -		bool needwake_state = false;
+> -
+> -		if (!nocb_gp_enabled_cb(rdp))
+> -			continue;
+> +	list_for_each_entry(rdp, &my_rdp->nocb_head_rdp, nocb_entry_rdp) {
+>   		trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("Check"));
+>   		rcu_nocb_lock_irqsave(rdp, flags);
+> -		if (nocb_gp_update_state_deoffloading(rdp, &needwake_state)) {
+> -			rcu_nocb_unlock_irqrestore(rdp, flags);
+> -			if (needwake_state)
+> -				swake_up_one(&rdp->nocb_state_wq);
+> -			continue;
+> -		}
+> +		lockdep_assert_held(&rdp->nocb_lock);
+>   		bypass_ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
+>   		if (bypass_ncbs &&
+>   		    (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + 1) ||
+> @@ -656,8 +638,6 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>   			bypass_ncbs = rcu_cblist_n_cbs(&rdp->nocb_bypass);
+>   		} else if (!bypass_ncbs && rcu_segcblist_empty(&rdp->cblist)) {
+>   			rcu_nocb_unlock_irqrestore(rdp, flags);
+> -			if (needwake_state)
+> -				swake_up_one(&rdp->nocb_state_wq);
+>   			continue; /* No callbacks here, try next. */
+>   		}
+>   		if (bypass_ncbs) {
+> @@ -705,8 +685,6 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>   		}
+>   		if (needwake_gp)
+>   			rcu_gp_kthread_wake();
+> -		if (needwake_state)
+> -			swake_up_one(&rdp->nocb_state_wq);
+>   	}
+>   
+>   	my_rdp->nocb_gp_bypass = bypass;
+> @@ -739,15 +717,49 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>   			!READ_ONCE(my_rdp->nocb_gp_sleep));
+>   		trace_rcu_this_gp(rnp, my_rdp, wait_gp_seq, TPS("EndWait"));
+>   	}
 > +
-> +	flush_work(&sdkp->start_done_work);
-> }
->
-> static int sd_suspend_common(struct device *dev, bool ignore_stop_errors)
-> diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
-> index 5eea762f84d1..b89187761d61 100644
-> --- a/drivers/scsi/sd.h
-> +++ b/drivers/scsi/sd.h
-> @@ -150,6 +150,11 @@ struct scsi_disk {
-> 	unsigned	urswrz : 1;
-> 	unsigned	security : 1;
-> 	unsigned	ignore_medium_access_errors : 1;
+>   	if (!rcu_nocb_poll) {
+>   		raw_spin_lock_irqsave(&my_rdp->nocb_gp_lock, flags);
+> +		// (De-)queue an rdp to/from the group if its nocb state is changing
+> +		rdp_toggling = my_rdp->nocb_toggling_rdp;
+> +		if (rdp_toggling)
+> +			my_rdp->nocb_toggling_rdp = NULL;
 > +
-> +	int		start_result;
-> +	u32		start_sense_len;
-> +	u8		start_sense_buffer[SCSI_SENSE_BUFFERSIZE];
-> +	struct work_struct start_done_work;
-> };
-> #define to_scsi_disk(obj) container_of(obj, struct scsi_disk, disk_dev)
->
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+>   		if (my_rdp->nocb_defer_wakeup > RCU_NOCB_WAKE_NOT) {
+>   			WRITE_ONCE(my_rdp->nocb_defer_wakeup, RCU_NOCB_WAKE_NOT);
+>   			del_timer(&my_rdp->nocb_timer);
+>   		}
+>   		WRITE_ONCE(my_rdp->nocb_gp_sleep, true);
+>   		raw_spin_unlock_irqrestore(&my_rdp->nocb_gp_lock, flags);
+> +	} else {
+> +		rdp_toggling = READ_ONCE(my_rdp->nocb_toggling_rdp);
+> +		if (rdp_toggling) {
+> +			/*
+> +			 * Paranoid locking to make sure nocb_toggling_rdp is well
+> +			 * reset *before* we (re)set SEGCBLIST_KTHREAD_GP or we could
+> +			 * race with another round of nocb toggling for this rdp.
+> +			 * Nocb locking should prevent from that already but we stick
+> +			 * to paranoia, especially in rare path.
+> +			 */
+> +			raw_spin_lock_irqsave(&my_rdp->nocb_gp_lock, flags);
+> +			my_rdp->nocb_toggling_rdp = NULL;
+> +			raw_spin_unlock_irqrestore(&my_rdp->nocb_gp_lock, flags);
+> +		}
+> +	}
+> +
+> +	if (rdp_toggling) {
+> +		bool wake_state = false;
+> +		int ret;
+> +
+> +		ret = nocb_gp_toggle_rdp(rdp_toggling, &wake_state);
+> +		if (ret == 1)
+> +			list_add_tail(&rdp_toggling->nocb_entry_rdp, &my_rdp->nocb_head_rdp);
+> +		else if (ret == 0)
+> +			list_del(&rdp_toggling->nocb_entry_rdp);
+> +		if (wake_state)
+> +			swake_up_one(&rdp_toggling->nocb_state_wq);
+>   	}
+> +
+>   	my_rdp->nocb_gp_seq = -1;
+>   	WARN_ON(signal_pending(current));
+>   }
+> @@ -966,6 +978,8 @@ static int rdp_offload_toggle(struct rcu_data *rdp,
+>   	swake_up_one(&rdp->nocb_cb_wq);
+>   
+>   	raw_spin_lock_irqsave(&rdp_gp->nocb_gp_lock, flags);
+> +	// Queue this rdp for add/del to/from the list to iterate on rcuog
+> +	WRITE_ONCE(rdp_gp->nocb_toggling_rdp, rdp);
+>   	if (rdp_gp->nocb_gp_sleep) {
+>   		rdp_gp->nocb_gp_sleep = false;
+>   		wake_gp = true;
+> @@ -1013,8 +1027,6 @@ static long rcu_nocb_rdp_deoffload(void *arg)
+>   	swait_event_exclusive(rdp->nocb_state_wq,
+>   			      !rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB |
+>   							SEGCBLIST_KTHREAD_GP));
+> -	/* Stop nocb_gp_wait() from iterating over this structure. */
+> -	list_del_rcu(&rdp->nocb_entry_rdp);
+>   	/*
+>   	 * Lock one last time to acquire latest callback updates from kthreads
+>   	 * so we can later handle callbacks locally without locking.
+> @@ -1079,16 +1091,6 @@ static long rcu_nocb_rdp_offload(void *arg)
+>   
+>   	pr_info("Offloading %d\n", rdp->cpu);
+>   
+> -	/*
+> -	 * Cause future nocb_gp_wait() invocations to iterate over
+> -	 * structure, resetting ->nocb_gp_sleep and waking up the related
+> -	 * "rcuog".  Since nocb_gp_wait() in turn locks ->nocb_gp_lock
+> -	 * before setting ->nocb_gp_sleep again, we are guaranteed to
+> -	 * iterate this newly added structure before "rcuog" goes to
+> -	 * sleep again.
+> -	 */
+> -	list_add_tail_rcu(&rdp->nocb_entry_rdp, &rdp->nocb_gp_rdp->nocb_head_rdp);
+> -
+>   	/*
+>   	 * Can't use rcu_nocb_lock_irqsave() before SEGCBLIST_LOCKING
+>   	 * is set.

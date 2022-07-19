@@ -2,126 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB0657A881
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E102357A88A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240288AbiGSUth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 16:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
+        id S240325AbiGSUv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 16:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240174AbiGSUtf (ORCPT
+        with ESMTP id S239707AbiGSUvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 16:49:35 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73805A164
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658263773; x=1689799773;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1FETl9/GOw92C0K59SvpN3kdI7uId9kecaBzsARiyjw=;
-  b=DaD7IfKwm782eDW2vef8IJexaFRPXyMnRsjgsR2iU9KTO0M/2F713dzO
-   fEOChmxMOrYrTO0sGQi+X6XaeDBaOqg+VEc2VQetbBHk7rBgDjZy4m4K4
-   zsUNMnseZ9trmWm778nRIzxfMZPFA500/0TTpFWg48MHj9EfxjXawcglB
-   3E9zf9fw+YyXjZn0DE81v2nh+hz1V13BzFce65mjZ4daSJQXu9dqwQgIo
-   L4WUmjUxN82RJd9xdzOxvzXEOoVRzfwDHbmLg1aw6V66MOgMZjm8NnYwE
-   wQHYWo+fStAW/3tiSJbeny4XzAV0FsbMJ4QGAJwqTSkCqeTdXR3MeSirj
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="350579517"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="350579517"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 13:49:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="625349135"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jul 2022 13:49:31 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oDu9r-00062d-1P;
-        Tue, 19 Jul 2022 20:49:31 +0000
-Date:   Wed, 20 Jul 2022 04:49:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Tue, 19 Jul 2022 16:51:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BD7545F4B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658263865;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KLYjLPmh6TJHSo85bLGpDWqvGEwFmv1ujqnWhvAf7WE=;
+        b=H5Wz1lFiCC+iNWtJf7F2qTpjfc5uICi5TZLoenNke975hXrAWEz28mTVlQSmWYCmv5i8VI
+        mvEKsaEMo1ENEyAVvqAJiL24qFZ9lBR6bBQEkytrw1MZN5gHbYlVweSvkZLfiJSsMseggl
+        719hsofTOb56pjB59Mf7zs3SS1fY8qU=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-390-anIru0bLMB-uMd2lvILhHg-1; Tue, 19 Jul 2022 16:50:58 -0400
+X-MC-Unique: anIru0bLMB-uMd2lvILhHg-1
+Received: by mail-qv1-f69.google.com with SMTP id nn4-20020a056214358400b00474025b619eso476720qvb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:50:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KLYjLPmh6TJHSo85bLGpDWqvGEwFmv1ujqnWhvAf7WE=;
+        b=E4KA1UV69MYUAiRCbYasPDXal5dhJN/CZldZIRglVpYrvz2M8TuK27cEqUR0ssCw66
+         kCsgv/Q2vJfFe/rTVVR8ybdD5fCaWMvrZ81dq1MimFs6mbAcZwgsn6yUxMMGWiJPwxIS
+         DqdOKRgsMlTLI/uDe+xHTXrkTZ5+bY7xHDG8BCjs7j1TnRTaNGmPkxGnn/IVsdcTvjaN
+         BDelLuVb7GRS0uz2ik7Dp7XJvSWPo+UA0LOjo79fFiQlxP5n9ytJtd/1VvLAgzFF1iSO
+         euSQLfvgcXhMZPU0oag5AvFSjbseOexYjD2qZyPDQf2+iMr1Dm7mFHLevFpxWhrKvc9T
+         MY8A==
+X-Gm-Message-State: AJIora97YHc3XfIPHE7V4d39boCHOFThf5Wvb7jm1FMnG/17U9Dqxfvv
+        j3GHuQXTwt1O3COFZojkLbDZhPOyuxuTgwpgUx0nqUWaAdlF+pGOSvwpby5IaWDkL9jflpDEf03
+        bRuNo1hX3hZn3LAHdUCyg8YLs
+X-Received: by 2002:ac8:7dcc:0:b0:31e:f21c:45b9 with SMTP id c12-20020ac87dcc000000b0031ef21c45b9mr8052148qte.133.1658263857736;
+        Tue, 19 Jul 2022 13:50:57 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tzoXesGuCrLRPfo4M//fgvXvF5fsn1Z0nYeFj7o2Nf6Zzm1jCriA5qoxx+oHAtNlsi4JFPgw==
+X-Received: by 2002:ac8:7dcc:0:b0:31e:f21c:45b9 with SMTP id c12-20020ac87dcc000000b0031ef21c45b9mr8052128qte.133.1658263857483;
+        Tue, 19 Jul 2022 13:50:57 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::2e])
+        by smtp.gmail.com with ESMTPSA id h11-20020a05620a400b00b006b60c965024sm303742qko.113.2022.07.19.13.50.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 13:50:57 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 15:50:54 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-versatile/versatile.c:56:14: warning: no previous
- prototype for function 'mmc_status'
-Message-ID: <202207200433.KqmAK60e-lkp@intel.com>
+Subject: Re: [PATCH 2/3] i2c: qcom-geni: Propagate GENI_ABORT_DONE to
+ geni_i2c_abort_xfer()
+Message-ID: <20220719205054.rdhinuwxgabbsiht@halaneylaptop>
+References: <20220717035027.2135106-1-bjorn.andersson@linaro.org>
+ <20220717035027.2135106-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220717035027.2135106-3-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Sat, Jul 16, 2022 at 08:50:26PM -0700, Bjorn Andersson wrote:
+> Waiting for M_CMD_ABORT_EN in geni_i2c_abort_xfer() races with the
+> interrupt handler which will read and clear the abort bit, the result is
+> that every abort attempt takes 1 second and is followed by a message
+> about the abort having times out.
+> 
+> Introduce a new state variable to carry the abort_done state from the
+> interrupt handler back to geni_i2c_abort_xfer().
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/i2c/busses/i2c-qcom-geni.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+> index 3bec7c782824..e212e7ae7ad2 100644
+> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+> @@ -97,6 +97,7 @@ struct geni_i2c_dev {
+>  	struct dma_chan *tx_c;
+>  	struct dma_chan *rx_c;
+>  	bool gpi_mode;
+> +	bool abort_done;
+>  };
+>  
+>  struct geni_i2c_err_log {
+> @@ -203,9 +204,14 @@ static void geni_i2c_err(struct geni_i2c_dev *gi2c, int err)
+>  		dev_dbg(gi2c->se.dev, "len:%d, slv-addr:0x%x, RD/WR:%d\n",
+>  			gi2c->cur->len, gi2c->cur->addr, gi2c->cur->flags);
+>  
+> -	if (err != NACK && err != GENI_ABORT_DONE) {
+> +	switch (err) {
+> +	case GENI_ABORT_DONE:
+> +		gi2c->abort_done = true;
+> +		break;
+> +	default:
+>  		dev_err(gi2c->se.dev, "%s\n", gi2c_log[err].msg);
+>  		geni_i2c_err_misc(gi2c);
+> +		break;
+>  	}
+>  }
+>  
 
-First bad commit (maybe != root cause):
+If I'm reading this right this changes the behavior on a NACK error now,
+right? Was that intentional?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ca85855bdcae8f84f1512e88b4c75009ea17ea2f
-commit: d7445676e86900f8dc363825033ff62416c216e0 ARM: versatile: move integrator/realview/vexpress to versatile
-date:   4 months ago
-config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20220720/202207200433.KqmAK60e-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7445676e86900f8dc363825033ff62416c216e0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d7445676e86900f8dc363825033ff62416c216e0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Otherwise looks good to me.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> @@ -311,21 +317,21 @@ static irqreturn_t geni_i2c_irq(int irq, void *dev)
+>  
+>  static void geni_i2c_abort_xfer(struct geni_i2c_dev *gi2c)
+>  {
+> -	u32 val;
+>  	unsigned long time_left = ABORT_TIMEOUT;
+>  	unsigned long flags;
+>  
+>  	spin_lock_irqsave(&gi2c->lock, flags);
+>  	geni_i2c_err(gi2c, GENI_TIMEOUT);
+>  	gi2c->cur = NULL;
+> +	gi2c->abort_done = false;
+>  	geni_se_abort_m_cmd(&gi2c->se);
+>  	spin_unlock_irqrestore(&gi2c->lock, flags);
+> +
+>  	do {
+>  		time_left = wait_for_completion_timeout(&gi2c->done, time_left);
+> -		val = readl_relaxed(gi2c->se.base + SE_GENI_M_IRQ_STATUS);
+> -	} while (!(val & M_CMD_ABORT_EN) && time_left);
+> +	} while (!gi2c->abort_done && time_left);
+>  
+> -	if (!(val & M_CMD_ABORT_EN))
+> +	if (!time_left)
+>  		dev_err(gi2c->se.dev, "Timeout abort_m_cmd\n");
+>  }
+>  
+> -- 
+> 2.35.1
+> 
 
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-versatile/versatile.c:56:14: warning: no previous prototype for function 'mmc_status' [-Wmissing-prototypes]
-   unsigned int mmc_status(struct device *dev)
-                ^
-   arch/arm/mach-versatile/versatile.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned int mmc_status(struct device *dev)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/mmc_status +56 arch/arm/mach-versatile/versatile.c
-
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  55  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08 @56  unsigned int mmc_status(struct device *dev)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  57  {
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  58  	struct amba_device *adev = container_of(dev, struct amba_device, dev);
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  59  	u32 mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  60  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  61  	if (adev->res.start == VERSATILE_MMCI0_BASE)
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  62  		mask = 1;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  63  	else
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  64  		mask = 2;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  65  
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  66  	return readl(versatile_sys_base + VERSATILE_SYS_MCI_OFFSET) & mask;
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  67  }
-a7096789211193 arch/arm/mach-versatile/versatile_dt.c Rob Herring 2015-12-08  68  
-
-:::::: The code at line 56 was first introduced by commit
-:::::: a70967892111934e292485ce84f1bab38cc55380 ARM: versatile: merge mach code into a single file
-
-:::::: TO: Rob Herring <robh@kernel.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

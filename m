@@ -2,174 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A876457958A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 10:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8697A5795BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 11:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237108AbiGSIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 04:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S234636AbiGSJCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 05:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235378AbiGSIuL (ORCPT
+        with ESMTP id S229478AbiGSJCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:50:11 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C32B101D;
-        Tue, 19 Jul 2022 01:50:07 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LnC9P4XPTzVgHp;
-        Tue, 19 Jul 2022 16:46:17 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Jul 2022 16:49:45 +0800
-Received: from localhost.localdomain (10.175.112.70) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Jul 2022 16:49:45 +0800
-From:   Xu Jia <xujia39@huawei.com>
-To:     <sdf@google.com>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andrii@kernel.org>, <xujia39@huawei.com>
-Subject: [PATCH bpf-next] bpf: fix bpf compile error caused by CONFIG_CGROUP_BPF
-Date:   Tue, 19 Jul 2022 17:01:45 +0800
-Message-ID: <1658221305-35718-1-git-send-email-xujia39@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Tue, 19 Jul 2022 05:02:19 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6119D11834;
+        Tue, 19 Jul 2022 02:02:18 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id by8so12995340ljb.13;
+        Tue, 19 Jul 2022 02:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=p0E0Be3SRX+B6mBT6tjTQekPG7Azaelaf+cATs6Lt78=;
+        b=VVxqLw1tjJ7lPfAnKCisYxU17cXqNVbli66rHN/ODqG4ndZNHyVjlrEUUoO5Mj//XC
+         bmWerZaH8C+VVY8BJBsZybvBhVnkvzOTAgVlehrup0TQS0TsgXdNB/uYF6C5gg0clPoQ
+         smZWNlP5fKgf/LYQNoutEFf8G9rpyZumKwG7OnOK0R/5UiHg86mNEg7uqmRnHt6GfiAz
+         uXpfsVM/eYyrrp90TMHXZREhNZgCdvYwk+KY0QFH3rqnG2BHtH0Y+RYR2HDL6C3M935s
+         23W8qmbpxzpkMnBDp7098mh0Hq52+iCjWRrGmKwbnSH6iI2DQkR2Da1J7wo657cnJlnN
+         WFqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=p0E0Be3SRX+B6mBT6tjTQekPG7Azaelaf+cATs6Lt78=;
+        b=Cmec76GyaZo8vfEvgTiSPsms4Wm58nFrbPeYjzEILwIaWgBHcdzOgu6ij8VUy8Wpro
+         V9pNDEne2lH0/ICV9eff2jYYcP0wfN7WZBVr9PBkGjK2GV41mJvcyvghJIHrh+1Ivzhp
+         mnLuFWdryitFk94iDtt4nAN158qZHmdWjctrxd+FWOMwrlK6iRFJ+IQXl4MI5bUfbqEl
+         jbiRXkJ6jNJm2id5JUNfLDXlNZQLmQ/Qd/zhsimBbfYe14t68KwH2zYlAd3i8+ES8FaA
+         an2PrpnVVb9eWFXxRuiBQ1UPJiuS50DOGe3qziABqaAHutwRLvuNTd3CP/w3QRV4ocIe
+         SJ3g==
+X-Gm-Message-State: AJIora9k5x/brEEFnzEALxOMdM4P6MFAC0k9t6OlrfqKPRXFlzjf1uso
+        8LnXRmbPEHawl9vYiRedRmZHyYl9OV8=
+X-Google-Smtp-Source: AGRyM1veFmVZByMri4R3nt9nhYkOmvwTAW8R1MT9BZa8BpAwtKBu0M6OcVOYLLzX9nx4we9I+TWtcQ==
+X-Received: by 2002:a2e:92c6:0:b0:255:84cb:4eea with SMTP id k6-20020a2e92c6000000b0025584cb4eeamr14157626ljh.204.1658221336305;
+        Tue, 19 Jul 2022 02:02:16 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.75.224])
+        by smtp.gmail.com with ESMTPSA id o22-20020ac25e36000000b00482f206b087sm3123353lfg.39.2022.07.19.02.02.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 02:02:15 -0700 (PDT)
+Subject: Re: [PATCH v2 03/25] usb: gadget: f_tcm: Increase stream count
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+References: <cover.1658192351.git.Thinh.Nguyen@synopsys.com>
+ <79dbca4db65f676df37462b7a008198c81a3297e.1658192351.git.Thinh.Nguyen@synopsys.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <c54b0d7a-eb97-2ffe-7169-51151707d4ce@gmail.com>
+Date:   Tue, 19 Jul 2022 12:02:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <79dbca4db65f676df37462b7a008198c81a3297e.1658192351.git.Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We failed to compile when CONFIG_BPF_LSM is enabled but CONFIG_CGROUP_BPF
-is not set. The failings are shown as below:
+Hello!
 
-kernel/bpf/trampoline.o: in function `bpf_trampoline_link_cgroup_shim'
-trampoline.c: undefined reference to `bpf_cgroup_atype_get'
-kernel/bpf/bpf_lsm.o: In function `bpf_lsm_find_cgroup_shim':
-bpf_lsm.c: undefined reference to `__cgroup_bpf_run_lsm_current'
-bpf_lsm.c: undefined reference to `__cgroup_bpf_run_lsm_sock'
-bpf_lsm.c: undefined reference to `__cgroup_bpf_run_lsm_socket'
+On 7/19/22 4:26 AM, Thinh Nguyen wrote:
 
-Fix them by protecting these functions with CONFIG_CGROUP_BPF.
+> Some old builds of Microsoft Windows 10 UASP class driver reject USAP
 
-Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
-Signed-off-by: Xu Jia <xujia39@huawei.com>
----
- include/linux/bpf.h     | 12 +++++++++---
- include/linux/bpf_lsm.h | 10 ++++++----
- kernel/bpf/bpf_lsm.c    |  2 ++
- kernel/bpf/trampoline.c |  2 ++
- 4 files changed, 19 insertions(+), 7 deletions(-)
+   UASP?
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2b21f2a3452f..add8895c02cc 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1255,9 +1255,7 @@ struct bpf_dummy_ops {
- int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
- 			    union bpf_attr __user *uattr);
- #endif
--int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
--				    int cgroup_atype);
--void bpf_trampoline_unlink_cgroup_shim(struct bpf_prog *prog);
-+
- #else
- static inline const struct bpf_struct_ops *bpf_struct_ops_find(u32 type_id)
- {
-@@ -1281,6 +1279,14 @@ static inline int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map *map,
- {
- 	return -EINVAL;
- }
-+#endif
-+
-+#if defined(CONFIG_BPF_JIT) && defined(CONFIG_BPF_SYSCALL) && \
-+    defined(CONFIG_CGROUP_BPF)
-+int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
-+				    int cgroup_atype);
-+void bpf_trampoline_unlink_cgroup_shim(struct bpf_prog *prog);
-+#else
- static inline int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
- 						  int cgroup_atype)
- {
-diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-index 4bcf76a9bb06..bed45a0c8a9c 100644
---- a/include/linux/bpf_lsm.h
-+++ b/include/linux/bpf_lsm.h
-@@ -42,8 +42,6 @@ extern const struct bpf_func_proto bpf_inode_storage_get_proto;
- extern const struct bpf_func_proto bpf_inode_storage_delete_proto;
- void bpf_inode_storage_free(struct inode *inode);
- 
--void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func);
--
- #else /* !CONFIG_BPF_LSM */
- 
- static inline bool bpf_lsm_is_sleepable_hook(u32 btf_id)
-@@ -67,11 +65,15 @@ static inline void bpf_inode_storage_free(struct inode *inode)
- {
- }
- 
-+#endif /* CONFIG_BPF_LSM */
-+
-+#if defined(CONFIG_BPF_LSM) && defined(CONFIG_BPF_CGROUP)
-+void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func);
-+#else
- static inline void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
- 					   bpf_func_t *bpf_func)
- {
- }
--
--#endif /* CONFIG_BPF_LSM */
-+#endif
- 
- #endif /* _LINUX_BPF_LSM_H */
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index d469b7f3deef..29527828b38b 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -63,6 +63,7 @@ BTF_ID(func, bpf_lsm_socket_post_create)
- BTF_ID(func, bpf_lsm_socket_socketpair)
- BTF_SET_END(bpf_lsm_unlocked_sockopt_hooks)
- 
-+#ifdef CONFIG_BPF_CGROUP
- void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
- 			     bpf_func_t *bpf_func)
- {
-@@ -86,6 +87,7 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
- #endif
- 		*bpf_func = __cgroup_bpf_run_lsm_current;
- }
-+#endif /* CONFIG_BPF_CGROUP */
- 
- int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
- 			const struct bpf_prog *prog)
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 6cd226584c33..127924711935 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -525,6 +525,7 @@ static const struct bpf_link_ops bpf_shim_tramp_link_lops = {
- 	.dealloc = bpf_shim_tramp_link_dealloc,
- };
- 
-+#ifdef CONFIG_CGROUP_BPF
- static struct bpf_shim_tramp_link *cgroup_shim_alloc(const struct bpf_prog *prog,
- 						     bpf_func_t bpf_func,
- 						     int cgroup_atype)
-@@ -668,6 +669,7 @@ void bpf_trampoline_unlink_cgroup_shim(struct bpf_prog *prog)
- 
- 	bpf_trampoline_put(tr); /* bpf_trampoline_lookup above */
- }
-+#endif /* CONFIG_CGROUP_BPF */
- #endif
- 
- struct bpf_trampoline *bpf_trampoline_get(u64 key,
--- 
-2.25.1
+> device with stream count of 2^4. To keep compatibility with both Linux
+> and Windows, let's increase the stream count to 2^5. Also, internal
+> tests show that stream count of 2^5 increases performance slightly.
+> 
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+[...]
 
+MBR, Sergey

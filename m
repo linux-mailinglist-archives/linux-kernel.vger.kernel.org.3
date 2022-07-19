@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CF2579C13
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C8B579E2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240663AbiGSMf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S242426AbiGSM6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241081AbiGSMep (ORCPT
+        with ESMTP id S235856AbiGSM6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:34:45 -0400
+        Tue, 19 Jul 2022 08:58:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045B578DC2;
-        Tue, 19 Jul 2022 05:13:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4285D596;
+        Tue, 19 Jul 2022 05:23:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E785E61790;
-        Tue, 19 Jul 2022 12:12:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4E56C341C6;
-        Tue, 19 Jul 2022 12:12:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86BB0618C1;
+        Tue, 19 Jul 2022 12:23:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F36C341C6;
+        Tue, 19 Jul 2022 12:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232774;
-        bh=JMzByYwmqt8aRAvGvxSwJj3owa5cmGDyxPmX35MHwYs=;
+        s=korg; t=1658233399;
+        bh=XECchj46DqH3hUhk2VLoi/eh4vI39pKf+B4T1uialzI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fyjutX8H+joDAuQu/+6W59cKKS8Een6MwoxaI1cSR202W4h01+z8cqySyD01HBbvm
-         apL2uBexH3lE5AceCpGi5yd1pgDOandZ6I6lDfAL8xFGZ8cIcLHGJXjOiQTF92QP2c
-         WeGBiHVSYnkoqcNQDENRGc9ziZI6cPgXdAr5qn9M=
+        b=idz6KXx1WsT8V1z7oAlpo3HGG92f7YCpt1INlLY3VSqq7a/0VGswBg27UnMeABFU7
+         mkrobYMSRcOIuomxEm+RCPHI5PGEAv9TWXlYsRyONOClL8j/JIBMDzi+wJdVqa0w5h
+         Jxmd0lX0l90Qf2biSkI3P6EbWLKTwbPl6/Ol3RZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 061/167] icmp: Fix data-races around sysctl.
-Date:   Tue, 19 Jul 2022 13:53:13 +0200
-Message-Id: <20220719114702.459194709@linuxfoundation.org>
+Subject: [PATCH 5.18 109/231] sysctl: Fix data-races in proc_dou8vec_minmax().
+Date:   Tue, 19 Jul 2022 13:53:14 +0200
+Message-Id: <20220719114723.766278861@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+References: <20220719114714.247441733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +56,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 48d7ee321ea5182c6a70782aa186422a70e67e22 ]
+[ Upstream commit 7dee5d7747a69aa2be41f04c6a7ecfe3ac8cdf18 ]
 
-While reading icmp sysctl variables, they can be changed concurrently.
-So, we need to add READ_ONCE() to avoid data-races.
+A sysctl variable is accessed concurrently, and there is always a chance
+of data-race.  So, all readers and writers need some basic protection to
+avoid load/store-tearing.
 
-Fixes: 4cdf507d5452 ("icmp: add a global rate limitation")
+This patch changes proc_dou8vec_minmax() to use READ_ONCE() and
+WRITE_ONCE() internally to fix data-races on the sysctl side.  For now,
+proc_dou8vec_minmax() itself is tolerant to a data-race, but we still
+need to add annotations on the other subsystem's side.
+
+Fixes: cb9444130662 ("sysctl: add proc_dou8vec_minmax()")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/icmp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/sysctl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
-index b7e277d8a84d..b5766b62ca97 100644
---- a/net/ipv4/icmp.c
-+++ b/net/ipv4/icmp.c
-@@ -261,11 +261,12 @@ bool icmp_global_allow(void)
- 	spin_lock(&icmp_global.lock);
- 	delta = min_t(u32, now - icmp_global.stamp, HZ);
- 	if (delta >= HZ / 50) {
--		incr = sysctl_icmp_msgs_per_sec * delta / HZ ;
-+		incr = READ_ONCE(sysctl_icmp_msgs_per_sec) * delta / HZ;
- 		if (incr)
- 			WRITE_ONCE(icmp_global.stamp, now);
- 	}
--	credit = min_t(u32, icmp_global.credit + incr, sysctl_icmp_msgs_burst);
-+	credit = min_t(u32, icmp_global.credit + incr,
-+		       READ_ONCE(sysctl_icmp_msgs_burst));
- 	if (credit) {
- 		/* We want to use a credit of one in average, but need to randomize
- 		 * it for security reasons.
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 878b1122cb89..54ec36e69907 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1079,13 +1079,13 @@ int proc_dou8vec_minmax(struct ctl_table *table, int write,
+ 
+ 	tmp.maxlen = sizeof(val);
+ 	tmp.data = &val;
+-	val = *data;
++	val = READ_ONCE(*data);
+ 	res = do_proc_douintvec(&tmp, write, buffer, lenp, ppos,
+ 				do_proc_douintvec_minmax_conv, &param);
+ 	if (res)
+ 		return res;
+ 	if (write)
+-		*data = val;
++		WRITE_ONCE(*data, val);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(proc_dou8vec_minmax);
 -- 
 2.35.1
 

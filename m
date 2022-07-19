@@ -2,60 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0760F57A6DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 20:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4750E57A6DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238088AbiGSS6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 14:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
+        id S236884AbiGSTBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 15:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiGSS6B (ORCPT
+        with ESMTP id S234344AbiGSTBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 14:58:01 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F5F371A7;
-        Tue, 19 Jul 2022 11:57:58 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26JIvIO3024559
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Jul 2022 14:57:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1658257041; bh=BIjtyFIgMPnChoE7vwY9XWlVWzUjFB9JtmI293znBvw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=E4xS15bHFDIay7XDBxKgPt+kzSB6T2hLWBbV8afitS4YkEkBwTWZM/wvXJ05JPEal
-         AKRPosIRGIcP7M4GY4jHxEmF8OIcUmFhQWPrk2bM740qic4yxE3Gdj9rCrCSrriRE5
-         xTVLL4VSZGJ5RzEHxkDFwj4PiEiVw168lRaHjmRyOu3TriXFe+UC8XyW7dJIYVcjnG
-         wSO1H3JvTH6eKZnd3mRQa0iK6X4GzbkHWLzsTYOtYgVwBIOOlU+nCEdItmbA/UQUhS
-         uWTnXK7UNs+I9G5aa6Mvu9Yxe8MKNJP7qxkBnHD9vfvDnc93E62JdFXmW9NH3IvnsC
-         s1yvW5za9VSvg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id A79AE15C00E4; Tue, 19 Jul 2022 14:57:18 -0400 (EDT)
-Date:   Tue, 19 Jul 2022 14:57:18 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Baokun Li <libaokun1@huawei.com>, stable@vger.kernel.org,
-        linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca, jack@suse.cz,
-        ritesh.list@gmail.com, lczerner@redhat.com, enwlinux@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yebin10@huawei.com, yukuai3@huawei.com,
-        Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH 4.19] ext4: fix race condition between
- ext4_ioctl_setflags and ext4_fiemap
-Message-ID: <Ytb+ji56S/de/5Rm@mit.edu>
-References: <20220715023928.2701166-1-libaokun1@huawei.com>
- <YtF1XygwvIo2Dwae@kroah.com>
- <425ab528-7d9a-975a-7f4c-5f903cedd8bc@huawei.com>
- <YtaVAWMlxrQNcS34@kroah.com>
- <ffb13c36-521e-0e06-8fd6-30b0fec727da@huawei.com>
- <YtairkXvrX6IZfrR@kroah.com>
+        Tue, 19 Jul 2022 15:01:47 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE45509E0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:01:46 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id w185so14458812pfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:01:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=84fQRcLEum7lr3C0S+MQVM+LkmGA7Kz9oOG7rPtZmnU=;
+        b=K90YAZNBHhdAnD+6bQCcIgFHrLzFJ9lhISsj+1pbQKv61VT+Gj8auYkXMWVjxo0HWn
+         KE6VKEvGlMpLl/6nORc+1A+OoKXfAyNXxUVWUf/PbIMRhDeT6emmyK/HeKIjejDB/ye5
+         ReWHZOVdxLzS/IVkNp9746N2808Ff6cwDR06BX/3C3exi4dvAVGP3W+DorQnDJtth3Ck
+         z6NKHfv4+JY6s/NEN5ZhC9xYAm0+2Y1RJ9Q76JLlYMdBCQKR4+q3L0y/7vHozs7fWGZn
+         kuXDfkIXv8VNwtJvd9B4HCW7mZ8s5ADkMxPV7FqUDHa5S11tDErtDCMO/GZ4eUTOAL2u
+         QVhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=84fQRcLEum7lr3C0S+MQVM+LkmGA7Kz9oOG7rPtZmnU=;
+        b=QMqJxF1xsn6C6pDEnIjxn+wMQc+EhtagpkK3DMgYvSB7k5SZwm0hfP1xsB8zST0Umv
+         05zISIxOBaHJdWje+MtWTKlkm6Mk2dZ/yYaos3aNHxQG9r5YMfYMFSF68gPw8/qFgoRC
+         8AB6DYWkVgcfjwRd/0JXzApjWcPkSDZLP0Zf9Rfu0sQ7zuwQJa7u93uaiF6erZT8WIt4
+         4Us085QU/F21kMElPOPhkv3VxmAMPsr0z4H/7KEjR/B2bnj/qXjvCFOvK3K9Yy8HbgyD
+         Qbno7T7gixN1TBGlucZB8U1xsrFgocIECbEk1Et55GVVUu2r2Fa2/mzr1sVvnIrweKn7
+         4bgQ==
+X-Gm-Message-State: AJIora9SiV+/G67Y8AHgecAYYKVBTvAbIJ9Vf+iRPwIJ+wEjmPkEarwb
+        zMr+9ZBg42RVWw5NPg/Vk/mdeg==
+X-Google-Smtp-Source: AGRyM1uQeFTRjAK5aiqH0ucgUG+WJv1wP0VVilxGBCHQZWOTCBJXavprlX28/5q8Z2sjIaN/W7IyRA==
+X-Received: by 2002:a63:d94a:0:b0:412:6986:326e with SMTP id e10-20020a63d94a000000b004126986326emr30936585pgj.56.1658257305747;
+        Tue, 19 Jul 2022 12:01:45 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id u23-20020a1709026e1700b0016d01c133e1sm2390230plk.248.2022.07.19.12.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 12:01:45 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 19:01:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhang <yu.c.zhang@linux.intel.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
+        joro@8bytes.org, wanpengli@tencent.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: X86: Explicitly set the 'fault.async_page_fault'
+ value in kvm_fixup_and_inject_pf_error().
+Message-ID: <Ytb/le8ymDSyx8oJ@google.com>
+References: <20220718074756.53788-1-yu.c.zhang@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtairkXvrX6IZfrR@kroah.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20220718074756.53788-1-yu.c.zhang@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,42 +73,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 02:25:18PM +0200, Greg KH wrote:
+On Mon, Jul 18, 2022, Yu Zhang wrote:
+> kvm_fixup_and_inject_pf_error() was introduced to fixup the error code(
+> e.g., to add RSVD flag) and inject the #PF to the guest, when guest
+> MAXPHYADDR is smaller than the host one.
 > 
-> 95% of the time we take a patch that is not in Linus's tree, it is buggy
-> and causes problems in the long run.
+> When it comes to nested, L0 is expected to intercept and fix up the #PF
+> and then inject to L2 directly if
+> - L2.MAXPHYADDR < L0.MAXPHYADDR and
+> - L1 has no intention to intercept L2's #PF (e.g., L2 and L1 have the
+>   same MAXPHYADDR value && L1 is using EPT for L2),
+> instead of constructing a #PF VM Exit to L1. Currently, with PFEC_MASK
+> and PFEC_MATCH both set to 0 in vmcs02, the interception and injection
+> may happen on all L2 #PFs.
+> 
+> However, failing to initialize 'fault' in kvm_fixup_and_inject_pf_error()
+> may cause the fault.async_page_fault being NOT zeroed, and later the #PF
+> being treated as a nested async page fault, and then being injected to L1.
+> Instead of zeroing 'fault' at the beginning of this function, we mannually
+> set the value of 'fault.async_page_fault', because false is the value we
+> really expect.
+> 
+> Fixes: 897861479c064 ("KVM: x86: Add helper functions for illegal GPA checking and page fault injection")
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216178
+> Reported-by: Yang Lixiao <lixiao.yang@intel.com>
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-So if we really want a 4.19 LTS specific patch, I'd be OK with signing
-off on it from an ext4 perspective.... IF AND ONLY IF someone is
-willing to tell me that they ran "kvm-xfstests -c ext4/all -g auto" or
-the equivalent before and after applying the patch, and is willing to
-certify that there are no test regressions.
+No need for my SoB, I was just providing feedback.  Other than that, 
 
-Helpful links:
-
-  * https://thunk.org/gce-xfstests
-  * https://thunk.org/android-xfstests
-  * Documentation links from https://github.com/tytso/xfstests-bld
-      * https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
-      * https://github.com/tytso/xfstests-bld/blob/master/Documentation/gce-xfstests.md
-
-(Note that running "-c ext4/all -g auto" will take some 12+ hours if
-the tests are run serially, which is why using gce-xfstests's
-lightweight test manager to run the file system test configurations in
-parallel is a big win.)
-
-> Or better yet, take the effort here and move off of 4.19 to a newer
-> kernel without this problem in it.  What is preventing you from doing
-> that today?  4.19 is not going to be around for forever, and will
-> probably not even be getting fixes for stuff like RETBLEED, so are you
-> _SURE_ you want to keep using it?
-
-Or yeah, maybe it's better/cheaper/time for you to move off of 4.19.  :-)
-
-   	       	    	    	       - Ted
-
-P.S.  If we go down this path, Greg K-H may also insist on getting the
-bug fix to the 5.4 LTS kernel, so that a bug isn't just fixed in 4.19
-LTS but not 5.4 LTS.  In which case, the same requirement of running
-"-c ext4/all -g auto" and showing that there are no test regressions
-is going to be a requirement for 5.4 LTS as well.
+Reviewed-by: Sean Christopherson <seanjc@google.com>

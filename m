@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93556579977
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049C4579B26
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237894AbiGSMDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S239643AbiGSMZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238021AbiGSMCd (ORCPT
+        with ESMTP id S239728AbiGSMYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:02:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CED64B0F8;
-        Tue, 19 Jul 2022 04:59:05 -0700 (PDT)
+        Tue, 19 Jul 2022 08:24:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B226112F;
+        Tue, 19 Jul 2022 05:09:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0456661647;
-        Tue, 19 Jul 2022 11:59:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C516FC341C6;
-        Tue, 19 Jul 2022 11:59:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A35DD61790;
+        Tue, 19 Jul 2022 12:08:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 991E9C341C6;
+        Tue, 19 Jul 2022 12:08:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231944;
-        bh=UcDZ58eCiejyh3LpsXs/Q/VB86xvoENvhAWfgMJHGLc=;
+        s=korg; t=1658232508;
+        bh=h1wfxGz2vBToOZrZjVl2LDtbJkmq2Kug3U3SqP0uKRM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TiFbUVY6gOc+UxsaF5gJiZwOFL/phgnpSav2iDVZugfDBOI+O/bF5XigyMQM48Ch0
-         tTZFdU51FwqRr8gBR5s9tUF7Kz6wP2+nU83sQRXBFB6ozlyFq8AkpswkOEJdCxeH7V
-         SyqVjpOoFskCnHaPcQ5BDnx0k9aIHlMPlhV02/Ks=
+        b=C4NW9cXBTRyCZTelml1NUM3uxlKclogcogfRah+K5XxfyYWvM2ODIAVd8x+BMIVCi
+         oPSHd+gCII/N8dZdslRfN2e9X6+DWKpSGnktgugUxp+FmAPsqtDu2DdxD7duelHqtO
+         WYe4mmH58h+Xp8pJwvA9W/vO2XZovzH5K/JUQMBE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 4.14 43/43] can: m_can: m_can_tx_handler(): fix use after free of skb
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 081/112] cpufreq: pmac32-cpufreq: Fix refcount leak bug
 Date:   Tue, 19 Jul 2022 13:54:14 +0200
-Message-Id: <20220719114525.587310460@linuxfoundation.org>
+Message-Id: <20220719114634.414028874@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
-References: <20220719114521.868169025@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Liang He <windhl@126.com>
 
-commit 2e8e79c416aae1de224c0f1860f2e3350fa171f8 upstream.
+[ Upstream commit ccd7567d4b6cf187fdfa55f003a9e461ee629e36 ]
 
-can_put_echo_skb() will clone skb then free the skb. Move the
-can_put_echo_skb() for the m_can version 3.0.x directly before the
-start of the xmit in hardware, similar to the 3.1.x branch.
+In pmac_cpufreq_init_MacRISC3(), we need to add corresponding
+of_node_put() for the three node pointers whose refcount have
+been incremented by of_find_node_by_name().
 
-Fixes: 80646733f11c ("can: m_can: update to support CAN FD features")
-Link: https://lore.kernel.org/all/20220317081305.739554-1-mkl@pengutronix.de
-Cc: stable@vger.kernel.org
-Reported-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-[sudip: adjust context]
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/m_can/m_can.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/cpufreq/pmac32-cpufreq.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1420,8 +1420,6 @@ static netdev_tx_t m_can_start_xmit(stru
- 					 M_CAN_FIFO_DATA(i / 4),
- 					 *(u32 *)(cf->data + i));
+diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
+index 73621bc11976..3704476bb83a 100644
+--- a/drivers/cpufreq/pmac32-cpufreq.c
++++ b/drivers/cpufreq/pmac32-cpufreq.c
+@@ -471,6 +471,10 @@ static int pmac_cpufreq_init_MacRISC3(struct device_node *cpunode)
+ 	if (slew_done_gpio_np)
+ 		slew_done_gpio = read_gpio(slew_done_gpio_np);
  
--		can_put_echo_skb(skb, dev, 0);
--
- 		if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
- 			cccr = m_can_read(priv, M_CAN_CCCR);
- 			cccr &= ~(CCCR_CMR_MASK << CCCR_CMR_SHIFT);
-@@ -1438,6 +1436,9 @@ static netdev_tx_t m_can_start_xmit(stru
- 			m_can_write(priv, M_CAN_CCCR, cccr);
- 		}
- 		m_can_write(priv, M_CAN_TXBTIE, 0x1);
++	of_node_put(volt_gpio_np);
++	of_node_put(freq_gpio_np);
++	of_node_put(slew_done_gpio_np);
 +
-+		can_put_echo_skb(skb, dev, 0);
-+
- 		m_can_write(priv, M_CAN_TXBAR, 0x1);
- 		/* End of xmit function for version 3.0.x */
- 	} else {
+ 	/* If we use the frequency GPIOs, calculate the min/max speeds based
+ 	 * on the bus frequencies
+ 	 */
+-- 
+2.35.1
+
 
 

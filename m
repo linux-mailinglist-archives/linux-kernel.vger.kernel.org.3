@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F045A579EAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3DD57997A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239502AbiGSNDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        id S237999AbiGSMDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242700AbiGSM71 (ORCPT
+        with ESMTP id S237832AbiGSMCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:59:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CF44F680;
-        Tue, 19 Jul 2022 05:24:31 -0700 (PDT)
+        Tue, 19 Jul 2022 08:02:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357274B4B2;
+        Tue, 19 Jul 2022 04:59:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D64BB81B29;
-        Tue, 19 Jul 2022 12:24:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B714C341E1;
-        Tue, 19 Jul 2022 12:24:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4AB061614;
+        Tue, 19 Jul 2022 11:59:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85365C341C6;
+        Tue, 19 Jul 2022 11:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233468;
-        bh=jD3s+6w84cU2Oi8eJMG5lj6xF1TAOiBOrVNqWZW59DI=;
+        s=korg; t=1658231949;
+        bh=/ipGYTVwk1OzimX0UrqPplK1MkgzjYeMLu3WOu1KFfA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w74KDlVI18PGN0iVT9uTpT3ceT9Kl3LJ5b5RSm3GhDceoOaY/KRoqWQM4epUpD1cc
-         pEN2gt2PFCFa94eNGxTueglGh77eoAJHbyUuLpku4KTy+ZrCV541zqWbJV8shC5QAH
-         DL8+2FTxppMeDVB/BteYiHEZTv3Hp2EIx/mfGOwA=
+        b=IzVsEAMeQnohoer+Oflba2yo0Mw9UUOD5nhz5agYNFeNPi3FBsUJOpsnbMWQf65Vb
+         Oca10Uyik3oKkocHZ3Dlu/Uc4ZodprEq+z7mdxQkSVjueUhrlM+bqZ4wKa+ZWDoB/d
+         HjUOg9CFEDocofkxMuimQHoXBTbS34xXlbcXQt3w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Julian Sikorski <belegdol@gmail.com>,
-        Julian Sikorski <belegdol+github@gmail.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 133/231] smb3: workaround negprot bug in some Samba servers
+        stable@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 01/48] ALSA: hda - Add fixup for Dell Latitidue E5430
 Date:   Tue, 19 Jul 2022 13:53:38 +0200
-Message-Id: <20220719114725.618451555@linuxfoundation.org>
+Message-Id: <20220719114520.110422511@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,63 +55,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+From: Meng Tang <tangmeng@uniontech.com>
 
-[ Upstream commit 32f319183c439b239294cb2d70ada3564c4c7c39 ]
+commit 841bdf85c226803a78a9319af9b2caa9bf3e2eda upstream.
 
-Mount can now fail to older Samba servers due to a server
-bug handling padding at the end of the last negotiate
-context (negotiate contexts typically are rounded up to 8
-bytes by adding padding if needed). This server bug can
-be avoided by switching the order of negotiate contexts,
-placing a negotiate context at the end that does not
-require padding (prior to the recent netname context fix
-this was the case on the client).
+Another Dell model, another fixup entry: Latitude E5430 needs the same
+fixup as other Latitude E series as workaround for noise problems.
 
-Fixes: 73130a7b1ac9 ("smb3: fix empty netname context on secondary channels")
-Reported-by: Julian Sikorski <belegdol@gmail.com>
-Tested-by: Julian Sikorski <belegdol+github@gmail.com>
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220712060005.20176-1-tangmeng@uniontech.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/smb2pdu.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 6a8a00f28b19..2e6c0f4d8449 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -571,10 +571,6 @@ assemble_neg_contexts(struct smb2_negotiate_req *req,
- 	*total_len += ctxt_len;
- 	pneg_ctxt += ctxt_len;
- 
--	build_posix_ctxt((struct smb2_posix_neg_context *)pneg_ctxt);
--	*total_len += sizeof(struct smb2_posix_neg_context);
--	pneg_ctxt += sizeof(struct smb2_posix_neg_context);
--
- 	/*
- 	 * secondary channels don't have the hostname field populated
- 	 * use the hostname field in the primary channel instead
-@@ -586,9 +582,14 @@ assemble_neg_contexts(struct smb2_negotiate_req *req,
- 					      hostname);
- 		*total_len += ctxt_len;
- 		pneg_ctxt += ctxt_len;
--		neg_context_count = 4;
--	} else /* second channels do not have a hostname */
- 		neg_context_count = 3;
-+	} else
-+		neg_context_count = 2;
-+
-+	build_posix_ctxt((struct smb2_posix_neg_context *)pneg_ctxt);
-+	*total_len += sizeof(struct smb2_posix_neg_context);
-+	pneg_ctxt += sizeof(struct smb2_posix_neg_context);
-+	neg_context_count++;
- 
- 	if (server->compress_algorithm) {
- 		build_compression_ctxt((struct smb2_compression_capabilities_context *)
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -7029,6 +7029,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1025, 0x132a, "Acer TravelMate B114-21", ALC233_FIXUP_ACER_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1025, 0x1330, "Acer TravelMate X514-51T", ALC255_FIXUP_ACER_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1028, 0x0470, "Dell M101z", ALC269_FIXUP_DELL_M101Z),
++	SND_PCI_QUIRK(0x1028, 0x053c, "Dell Latitude E5430", ALC292_FIXUP_DELL_E7X),
+ 	SND_PCI_QUIRK(0x1028, 0x054b, "Dell XPS one 2710", ALC275_FIXUP_DELL_XPS),
+ 	SND_PCI_QUIRK(0x1028, 0x05bd, "Dell Latitude E6440", ALC292_FIXUP_DELL_E7X),
+ 	SND_PCI_QUIRK(0x1028, 0x05be, "Dell Latitude E6540", ALC292_FIXUP_DELL_E7X),
 
 

@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B15579B6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3759579A69
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240099AbiGSM1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
+        id S238880AbiGSMQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239761AbiGSMZf (ORCPT
+        with ESMTP id S239227AbiGSMOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:25:35 -0400
+        Tue, 19 Jul 2022 08:14:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8834509F6;
-        Tue, 19 Jul 2022 05:09:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB601481F9;
+        Tue, 19 Jul 2022 05:05:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66083B81B2E;
-        Tue, 19 Jul 2022 12:09:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7F3FC341C6;
-        Tue, 19 Jul 2022 12:09:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1944B81B1A;
+        Tue, 19 Jul 2022 12:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362D1C341C6;
+        Tue, 19 Jul 2022 12:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232596;
-        bh=qkcI0ibRvlGXIrDjkDBd+8nMkl5CVlAV+udAK+KaoWo=;
+        s=korg; t=1658232250;
+        bh=hKniMCAGGVt1Lk/HRYcqC1wlpnwP6AjVwBFjxct8eeM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iQGIXaCx/jrYi65MGaILnCsz0tCvFpldAPFUR/gL9E0wlCrD2GdYBCkXkjWJBdWhj
-         +pgIsYcPUf/P63A3iYBDab1NrG4YMh5JRu5f5TgyLrKz80idxz7NzzbDb/T3MfZxao
-         SCqP4WrakFZJp9u+3vaT9Ayuvzv5xoUuzXcK3DD0=
+        b=kL3aeSJ0uaUPhC5b9sXXmIafgQNBVkj3QoEJPohf7wwcUvShLdtbdYSwtaYf6mC7P
+         ZTWfXxSS48FmJYWVDzHG0RJkb1LvSTewHUKCUs6VjAFlBNajFYZoET7ouFgezkEkth
+         WWtrdMf5CK+b15UsCNbF22WzkfcgWll/3g71Exes=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 094/112] ASoC: madera: Fix event generation for OUT1 demux
-Date:   Tue, 19 Jul 2022 13:54:27 +0200
-Message-Id: <20220719114635.881124227@linuxfoundation.org>
+        stable@vger.kernel.org, Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH 5.4 65/71] usb: typec: add missing uevent when partner support PD
+Date:   Tue, 19 Jul 2022 13:54:28 +0200
+Message-Id: <20220719114558.810310604@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +52,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Linyu Yuan <quic_linyyuan@quicinc.com>
 
-[ Upstream commit e3cabbef3db8269207a6b8808f510137669f8deb ]
+commit 6fb9e1d94789e8ee5a258a23bc588693f743fd6c upstream.
 
-madera_out1_demux_put returns the value of
-snd_soc_dapm_mux_update_power, which returns a 1 if a path was found for
-the kcontrol. This is obviously different to the expected return a 1 if
-the control was updated value. This results in spurious notifications to
-user-space. Update the handling to only return a 1 when the value is
-changed.
+System like Android allow user control power role from UI, it is possible
+to implement application base on typec uevent to refresh UI, but found
+there is chance that UI show different state from typec attribute file.
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220623105120.1981154-4-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+In typec_set_pwr_opmode(), when partner support PD, there is no uevent
+send to user space which cause the problem.
+
+Fix it by sending uevent notification when change power mode to PD.
+
+Fixes: bdecb33af34f ("usb: typec: API for controlling USB Type-C Multiplexers")
+Cc: stable@vger.kernel.org
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+Link: https://lore.kernel.org/r/1656662934-10226-1-git-send-email-quic_linyyuan@quicinc.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/madera.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/usb/typec/class.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/madera.c b/sound/soc/codecs/madera.c
-index 680f31a6493a..a74c9b28368b 100644
---- a/sound/soc/codecs/madera.c
-+++ b/sound/soc/codecs/madera.c
-@@ -618,7 +618,13 @@ int madera_out1_demux_put(struct snd_kcontrol *kcontrol,
- end:
- 	snd_soc_dapm_mutex_unlock(dapm);
- 
--	return snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
-+	ret = snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
-+	if (ret < 0) {
-+		dev_err(madera->dev, "Failed to update demux power state: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return change;
- }
- EXPORT_SYMBOL_GPL(madera_out1_demux_put);
- 
--- 
-2.35.1
-
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -1383,6 +1383,7 @@ void typec_set_pwr_opmode(struct typec_p
+ 			partner->usb_pd = 1;
+ 			sysfs_notify(&partner_dev->kobj, NULL,
+ 				     "supports_usb_power_delivery");
++			kobject_uevent(&partner_dev->kobj, KOBJ_CHANGE);
+ 		}
+ 		put_device(partner_dev);
+ 	}
 
 

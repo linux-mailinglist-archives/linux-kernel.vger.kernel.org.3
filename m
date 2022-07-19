@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98AAC579E41
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C34F579E94
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242600AbiGSM7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S239181AbiGSNCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242238AbiGSM6c (ORCPT
+        with ESMTP id S243066AbiGSNAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:58:32 -0400
+        Tue, 19 Jul 2022 09:00:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2555E32F;
-        Tue, 19 Jul 2022 05:23:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F785071A;
+        Tue, 19 Jul 2022 05:25:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C780A618F1;
-        Tue, 19 Jul 2022 12:23:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7952C341C6;
-        Tue, 19 Jul 2022 12:23:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F060661912;
+        Tue, 19 Jul 2022 12:25:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD55C36AE2;
+        Tue, 19 Jul 2022 12:25:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233417;
-        bh=6IOMZz7gILfFZJHf3t+fgNOMfg8Rc7QlheseHOz1F5c=;
+        s=korg; t=1658233530;
+        bh=sLR9GzEa95OpEvmC8G+YIBsFoFoidxpreXI4ynraqzk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t2ZpCfvh2WGzP4U/VpdTRjlu4+NziJlsIIVsS61PQW+chCdeb5yfe1M9PHFE9PFjx
-         SVn83Y4RFb40Pq9ouLOlbX35e84gkyzj38uMGZxP2GToIINBML4gCjNkixL4mDaWsA
-         mOqdUjKrL+oFT/invJpSULkXZ59aa/lphU1k9aE0=
+        b=18GJi4a1B3SaBEarBbpHnmv4yK65vGE0m6/sMmMG4tTaGXoAFKN0G/VzLrisbR7fz
+         5K+Wi+o9XuWpr65ockucQ3/E6WnJfhQNVlADR3KMh2pUb3inFpjOUOdFoWUL/uh+sp
+         IsWrZKd1dIFCDfuaZ6HKTiOKrty6f9lUiON4o6Dc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 115/231] icmp: Fix a data-race around sysctl_icmp_ignore_bogus_error_responses.
-Date:   Tue, 19 Jul 2022 13:53:20 +0200
-Message-Id: <20220719114724.188064907@linuxfoundation.org>
+Subject: [PATCH 5.18 116/231] icmp: Fix a data-race around sysctl_icmp_errors_use_inbound_ifaddr.
+Date:   Tue, 19 Jul 2022 13:53:21 +0200
+Message-Id: <20220719114724.257227943@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
 References: <20220719114714.247441733@linuxfoundation.org>
@@ -56,12 +56,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit b04f9b7e85c7d7aecbada620e8759a662af068d3 ]
+[ Upstream commit d2efabce81db7eed1c98fa1a3f203f0edd738ac3 ]
 
-While reading sysctl_icmp_ignore_bogus_error_responses, it can be changed
+While reading sysctl_icmp_errors_use_inbound_ifaddr, it can be changed
 concurrently.  Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Fixes: 1c2fb7f93cb2 ("[IPV4]: Sysctl configurable icmp error source address.")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
@@ -71,23 +71,23 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
-index 2c402b4671a1..1a061d10949f 100644
+index 1a061d10949f..37ba5f042908 100644
 --- a/net/ipv4/icmp.c
 +++ b/net/ipv4/icmp.c
-@@ -930,7 +930,7 @@ static bool icmp_unreach(struct sk_buff *skb)
- 	 *	get the other vendor to fix their kit.
- 	 */
+@@ -693,7 +693,7 @@ void __icmp_send(struct sk_buff *skb_in, int type, int code, __be32 info,
  
--	if (!net->ipv4.sysctl_icmp_ignore_bogus_error_responses &&
-+	if (!READ_ONCE(net->ipv4.sysctl_icmp_ignore_bogus_error_responses) &&
- 	    inet_addr_type_dev_table(net, skb->dev, iph->daddr) == RTN_BROADCAST) {
- 		net_warn_ratelimited("%pI4 sent an invalid ICMP type %u, code %u error to a broadcast: %pI4 on %s\n",
- 				     &ip_hdr(skb)->saddr,
+ 		rcu_read_lock();
+ 		if (rt_is_input_route(rt) &&
+-		    net->ipv4.sysctl_icmp_errors_use_inbound_ifaddr)
++		    READ_ONCE(net->ipv4.sysctl_icmp_errors_use_inbound_ifaddr))
+ 			dev = dev_get_by_index_rcu(net, inet_iif(skb_in));
+ 
+ 		if (dev)
 diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index 6613351094ce..4cf2a6f560d4 100644
+index 4cf2a6f560d4..33e65e79e46e 100644
 --- a/net/ipv4/sysctl_net_ipv4.c
 +++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -630,6 +630,8 @@ static struct ctl_table ipv4_net_table[] = {
+@@ -639,6 +639,8 @@ static struct ctl_table ipv4_net_table[] = {
  		.maxlen		= sizeof(u8),
  		.mode		= 0644,
  		.proc_handler	= proc_dou8vec_minmax,
@@ -95,7 +95,7 @@ index 6613351094ce..4cf2a6f560d4 100644
 +		.extra2		= SYSCTL_ONE
  	},
  	{
- 		.procname	= "icmp_errors_use_inbound_ifaddr",
+ 		.procname	= "icmp_ratelimit",
 -- 
 2.35.1
 

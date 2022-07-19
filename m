@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DCF579935
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BE45798EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237795AbiGSMAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S236993AbiGSL41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237794AbiGSL7y (ORCPT
+        with ESMTP id S234301AbiGSL4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:59:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04C62F672;
-        Tue, 19 Jul 2022 04:57:49 -0700 (PDT)
+        Tue, 19 Jul 2022 07:56:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461BF41D25;
+        Tue, 19 Jul 2022 04:56:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE7FEB81B2E;
-        Tue, 19 Jul 2022 11:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C70C341C6;
-        Tue, 19 Jul 2022 11:57:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76A04615AC;
+        Tue, 19 Jul 2022 11:56:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 586B7C341C6;
+        Tue, 19 Jul 2022 11:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231866;
-        bh=jF5alRkszrWGyOrFSlTJbFMU72SJN99KjO7GoaANxsI=;
+        s=korg; t=1658231762;
+        bh=6qEqTDdxCBOBr/Uziw+QTc5odxpJHTiRQcib2au0pzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AfmM66IdX0M9fgQZrE9nesIS5PCNRuHTmESY1b/gBWAy9BCXkgHf4A13z+kG0tqJp
-         qxj1aNEgOPzRLVx/3D+cKFRRysM7rqp0tS6+tv4P2SB3qXQ7eTRFKbs84gO4RqzOh5
-         Qe7JktMwfASHv5xNRJ4LAnkDwp9fPeA6YAhipfXU=
+        b=qfGgOqttCYQS9MfPINgf2RyPwh0YevYHsxe8MZnhCEAGk8jewELkAwaYHwmG7QFXA
+         I//jf+aAyfnPd8gYFNZWavbwVazTslNHNNDsBsy2mwdf3QOdGUGcM81r6AFerB1leI
+         wlHNlGc+g9UsymV9sM8LbT4UlhmkykEAlz62PY84=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ma Yuying <yuma@redhat.com>,
-        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 24/43] sfc: fix kernel panic when creating VF
-Date:   Tue, 19 Jul 2022 13:53:55 +0200
-Message-Id: <20220719114524.102627942@linuxfoundation.org>
+Subject: [PATCH 4.9 18/28] NFC: nxp-nci: dont print header length mismatch on i2c error
+Date:   Tue, 19 Jul 2022 13:53:56 +0200
+Message-Id: <20220719114457.923484108@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
-References: <20220719114521.868169025@linuxfoundation.org>
+In-Reply-To: <20220719114455.701304968@linuxfoundation.org>
+References: <20220719114455.701304968@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Íñigo Huguet <ihuguet@redhat.com>
+From: Michael Walle <michael@walle.cc>
 
-[ Upstream commit ada74c5539eba06cf8b47d068f92e0b3963a9a6e ]
+[ Upstream commit 9577fc5fdc8b07b891709af6453545db405e24ad ]
 
-When creating VFs a kernel panic can happen when calling to
-efx_ef10_try_update_nic_stats_vf.
+Don't print a misleading header length mismatch error if the i2c call
+returns an error. Instead just return the error code without any error
+message.
 
-When releasing a DMA coherent buffer, sometimes, I don't know in what
-specific circumstances, it has to unmap memory with vunmap. It is
-disallowed to do that in IRQ context or with BH disabled. Otherwise, we
-hit this line in vunmap, causing the crash:
-  BUG_ON(in_interrupt());
-
-This patch reenables BH to release the buffer.
-
-Log messages when the bug is hit:
- kernel BUG at mm/vmalloc.c:2727!
- invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
- CPU: 6 PID: 1462 Comm: NetworkManager Kdump: loaded Tainted: G          I      --------- ---  5.14.0-119.el9.x86_64 #1
- Hardware name: Dell Inc. PowerEdge R740/06WXJT, BIOS 2.8.2 08/27/2020
- RIP: 0010:vunmap+0x2e/0x30
- ...skip...
- Call Trace:
-  __iommu_dma_free+0x96/0x100
-  efx_nic_free_buffer+0x2b/0x40 [sfc]
-  efx_ef10_try_update_nic_stats_vf+0x14a/0x1c0 [sfc]
-  efx_ef10_update_stats_vf+0x18/0x40 [sfc]
-  efx_start_all+0x15e/0x1d0 [sfc]
-  efx_net_open+0x5a/0xe0 [sfc]
-  __dev_open+0xe7/0x1a0
-  __dev_change_flags+0x1d7/0x240
-  dev_change_flags+0x21/0x60
-  ...skip...
-
-Fixes: d778819609a2 ("sfc: DMA the VF stats only when requested")
-Reported-by: Ma Yuying <yuma@redhat.com>
-Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
-Acked-by: Edward Cree <ecree.xilinx@gmail.com>
-Link: https://lore.kernel.org/r/20220713092116.21238-1-ihuguet@redhat.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/ef10.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/nfc/nxp-nci/i2c.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
-index 4f0da3963b01..1dfb14a035f9 100644
---- a/drivers/net/ethernet/sfc/ef10.c
-+++ b/drivers/net/ethernet/sfc/ef10.c
-@@ -1896,7 +1896,10 @@ static int efx_ef10_try_update_nic_stats_vf(struct efx_nic *efx)
+diff --git a/drivers/nfc/nxp-nci/i2c.c b/drivers/nfc/nxp-nci/i2c.c
+index a4f1a981e2dd..a9c8bfb62ebe 100644
+--- a/drivers/nfc/nxp-nci/i2c.c
++++ b/drivers/nfc/nxp-nci/i2c.c
+@@ -139,7 +139,9 @@ static int nxp_nci_i2c_fw_read(struct nxp_nci_i2c_phy *phy,
+ 	memcpy(skb_put(*skb, NXP_NCI_FW_HDR_LEN), &header, NXP_NCI_FW_HDR_LEN);
  
- 	efx_update_sw_stats(efx, stats);
- out:
-+	/* releasing a DMA coherent buffer with BH disabled can panic */
-+	spin_unlock_bh(&efx->stats_lock);
- 	efx_nic_free_buffer(efx, &stats_buf);
-+	spin_lock_bh(&efx->stats_lock);
- 	return rc;
- }
+ 	r = i2c_master_recv(client, skb_put(*skb, frame_len), frame_len);
+-	if (r != frame_len) {
++	if (r < 0) {
++		goto fw_read_exit_free_skb;
++	} else if (r != frame_len) {
+ 		nfc_err(&client->dev,
+ 			"Invalid frame length: %u (expected %zu)\n",
+ 			r, frame_len);
+@@ -184,7 +186,9 @@ static int nxp_nci_i2c_nci_read(struct nxp_nci_i2c_phy *phy,
+ 		return 0;
  
+ 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
+-	if (r != header.plen) {
++	if (r < 0) {
++		goto nci_read_exit_free_skb;
++	} else if (r != header.plen) {
+ 		nfc_err(&client->dev,
+ 			"Invalid frame payload length: %u (expected %u)\n",
+ 			r, header.plen);
 -- 
 2.35.1
 

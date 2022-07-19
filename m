@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C42579B16
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5BB579CF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239490AbiGSMZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        id S241544AbiGSMqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238949AbiGSMXr (ORCPT
+        with ESMTP id S241483AbiGSMn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:23:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5482A606A5;
-        Tue, 19 Jul 2022 05:08:49 -0700 (PDT)
+        Tue, 19 Jul 2022 08:43:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA8682466;
+        Tue, 19 Jul 2022 05:17:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42708B81B1C;
-        Tue, 19 Jul 2022 12:08:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 928D2C341C6;
-        Tue, 19 Jul 2022 12:08:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35C1DB81B2E;
+        Tue, 19 Jul 2022 12:16:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93CF0C341C6;
+        Tue, 19 Jul 2022 12:16:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232488;
-        bh=Y+lUVQDFCey4mekk/3U0yLuh7J5RkZEDaFJu9ImxkHg=;
+        s=korg; t=1658233005;
+        bh=XuABzMacapUPj02uf/mQtFYuIsg4w+Lm1rTeYvXdPwA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=delM+iJ4SwWYuvwSdHwDvkXunYujVINQog5XRCKkby2M86LzK0MGg2A6gxk/mNoYb
-         Gplg3/FpMg4L4QFxa4PR635fE/G3zT2gn0tAz9FzY+GCIVq0vd2MVEClJRnf19lHNO
-         YFNs4LBRMb9X7jsSQ6J+VAY6tJlnlh+RBuQwyf/k=
+        b=vhtqLyq/EphofoZ6U8GZ9LD8rl5o1JWAom4KBDBYJlDTlvg4EZFyzisHR2431wr1l
+         xro89JyS7BZtKqCLDdw/V8lze3ukOd4uw5iFC/R4X+6WqMK/DYdPSJYfvFCRdhmoRz
+         BO1uEsCOSqVu5DAVEEx30BMU7tPHoZ1IyTkNiIOM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
+        stable@vger.kernel.org, Parav Pandit <parav@nvidia.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Jason Wang <jasowang@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 075/112] net/tls: Check for errors in tls_device_init
+Subject: [PATCH 5.15 116/167] vduse: Tie vduse mgmtdev and its device
 Date:   Tue, 19 Jul 2022 13:54:08 +0200
-Message-Id: <20220719114633.755436171@linuxfoundation.org>
+Message-Id: <20220719114707.784885019@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +56,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tariq Toukan <tariqt@nvidia.com>
+From: Parav Pandit <parav@nvidia.com>
 
-[ Upstream commit 3d8c51b25a235e283e37750943bbf356ef187230 ]
+[ Upstream commit 0e0348ac3f0a6e6606f1aa5acb1803ada913aa3d ]
 
-Add missing error checks in tls_device_init.
+vduse devices are not backed by any real devices such as PCI. Hence it
+doesn't have any parent device linked to it.
 
-Fixes: e8f69799810c ("net/tls: Add generic NIC offload infrastructure")
-Reported-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-Link: https://lore.kernel.org/r/20220714070754.1428-1-tariqt@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Kernel driver model in [1] suggests to avoid an empty device
+release callback.
+
+Hence tie the mgmtdevice object's life cycle to an allocate dummy struct
+device instead of static one.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/core-api/kobject.rst?h=v5.18-rc7#n284
+
+Signed-off-by: Parav Pandit <parav@nvidia.com>
+Message-Id: <20220613195223.473966-1-parav@nvidia.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Reviewed-by: Xie Yongji <xieyongji@bytedance.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/tls.h    | 4 ++--
- net/tls/tls_device.c | 4 ++--
- net/tls/tls_main.c   | 7 ++++++-
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ drivers/vdpa/vdpa_user/vduse_dev.c | 60 ++++++++++++++++++------------
+ 1 file changed, 37 insertions(+), 23 deletions(-)
 
-diff --git a/include/net/tls.h b/include/net/tls.h
-index 745b3bc6ce91..d9cb597cab46 100644
---- a/include/net/tls.h
-+++ b/include/net/tls.h
-@@ -707,7 +707,7 @@ int tls_sw_fallback_init(struct sock *sk,
- 			 struct tls_crypto_info *crypto_info);
- 
- #ifdef CONFIG_TLS_DEVICE
--void tls_device_init(void);
-+int tls_device_init(void);
- void tls_device_cleanup(void);
- void tls_device_sk_destruct(struct sock *sk);
- int tls_set_device_offload(struct sock *sk, struct tls_context *ctx);
-@@ -727,7 +727,7 @@ static inline bool tls_is_sk_rx_device_offloaded(struct sock *sk)
- 	return tls_get_ctx(sk)->rx_conf == TLS_HW;
+diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+index 9270398caf15..73e67fa88972 100644
+--- a/drivers/vdpa/vdpa_user/vduse_dev.c
++++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+@@ -1466,16 +1466,12 @@ static char *vduse_devnode(struct device *dev, umode_t *mode)
+ 	return kasprintf(GFP_KERNEL, "vduse/%s", dev_name(dev));
  }
- #else
--static inline void tls_device_init(void) {}
-+static inline int tls_device_init(void) { return 0; }
- static inline void tls_device_cleanup(void) {}
  
- static inline int
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index 3c82286e5bcc..6ae2ce411b4b 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -1390,9 +1390,9 @@ static struct notifier_block tls_dev_notifier = {
- 	.notifier_call	= tls_dev_event,
+-static void vduse_mgmtdev_release(struct device *dev)
+-{
+-}
+-
+-static struct device vduse_mgmtdev = {
+-	.init_name = "vduse",
+-	.release = vduse_mgmtdev_release,
++struct vduse_mgmt_dev {
++	struct vdpa_mgmt_dev mgmt_dev;
++	struct device dev;
  };
  
--void __init tls_device_init(void)
-+int __init tls_device_init(void)
+-static struct vdpa_mgmt_dev mgmt_dev;
++static struct vduse_mgmt_dev *vduse_mgmt;
+ 
+ static int vduse_dev_init_vdpa(struct vduse_dev *dev, const char *name)
  {
--	register_netdevice_notifier(&tls_dev_notifier);
-+	return register_netdevice_notifier(&tls_dev_notifier);
- }
- 
- void __exit tls_device_cleanup(void)
-diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index 58d22d6b86ae..e537085b184f 100644
---- a/net/tls/tls_main.c
-+++ b/net/tls/tls_main.c
-@@ -905,7 +905,12 @@ static int __init tls_register(void)
- 	if (err)
- 		return err;
- 
--	tls_device_init();
-+	err = tls_device_init();
-+	if (err) {
-+		unregister_pernet_subsys(&tls_proc_ops);
-+		return err;
-+	}
-+
- 	tcp_register_ulp(&tcp_tls_ulp_ops);
+@@ -1500,7 +1496,7 @@ static int vduse_dev_init_vdpa(struct vduse_dev *dev, const char *name)
+ 	}
+ 	set_dma_ops(&vdev->vdpa.dev, &vduse_dev_dma_ops);
+ 	vdev->vdpa.dma_dev = &vdev->vdpa.dev;
+-	vdev->vdpa.mdev = &mgmt_dev;
++	vdev->vdpa.mdev = &vduse_mgmt->mgmt_dev;
  
  	return 0;
+ }
+@@ -1545,34 +1541,52 @@ static struct virtio_device_id id_table[] = {
+ 	{ 0 },
+ };
+ 
+-static struct vdpa_mgmt_dev mgmt_dev = {
+-	.device = &vduse_mgmtdev,
+-	.id_table = id_table,
+-	.ops = &vdpa_dev_mgmtdev_ops,
+-};
++static void vduse_mgmtdev_release(struct device *dev)
++{
++	struct vduse_mgmt_dev *mgmt_dev;
++
++	mgmt_dev = container_of(dev, struct vduse_mgmt_dev, dev);
++	kfree(mgmt_dev);
++}
+ 
+ static int vduse_mgmtdev_init(void)
+ {
+ 	int ret;
+ 
+-	ret = device_register(&vduse_mgmtdev);
+-	if (ret)
++	vduse_mgmt = kzalloc(sizeof(*vduse_mgmt), GFP_KERNEL);
++	if (!vduse_mgmt)
++		return -ENOMEM;
++
++	ret = dev_set_name(&vduse_mgmt->dev, "vduse");
++	if (ret) {
++		kfree(vduse_mgmt);
+ 		return ret;
++	}
+ 
+-	ret = vdpa_mgmtdev_register(&mgmt_dev);
++	vduse_mgmt->dev.release = vduse_mgmtdev_release;
++
++	ret = device_register(&vduse_mgmt->dev);
+ 	if (ret)
+-		goto err;
++		goto dev_reg_err;
+ 
+-	return 0;
+-err:
+-	device_unregister(&vduse_mgmtdev);
++	vduse_mgmt->mgmt_dev.id_table = id_table;
++	vduse_mgmt->mgmt_dev.ops = &vdpa_dev_mgmtdev_ops;
++	vduse_mgmt->mgmt_dev.device = &vduse_mgmt->dev;
++	ret = vdpa_mgmtdev_register(&vduse_mgmt->mgmt_dev);
++	if (ret)
++		device_unregister(&vduse_mgmt->dev);
++
++	return ret;
++
++dev_reg_err:
++	put_device(&vduse_mgmt->dev);
+ 	return ret;
+ }
+ 
+ static void vduse_mgmtdev_exit(void)
+ {
+-	vdpa_mgmtdev_unregister(&mgmt_dev);
+-	device_unregister(&vduse_mgmtdev);
++	vdpa_mgmtdev_unregister(&vduse_mgmt->mgmt_dev);
++	device_unregister(&vduse_mgmt->dev);
+ }
+ 
+ static int vduse_init(void)
 -- 
 2.35.1
 

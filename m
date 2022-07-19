@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692C057A8C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED8B57A8C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238781AbiGSVEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S238196AbiGSVFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbiGSVEe (ORCPT
+        with ESMTP id S230311AbiGSVFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:04:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1AC50721;
-        Tue, 19 Jul 2022 14:04:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23AD5B81D4E;
-        Tue, 19 Jul 2022 21:04:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D6D4C341C6;
-        Tue, 19 Jul 2022 21:04:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658264669;
-        bh=HKPdeEQ/6HnoatBYVcVwPMjZ1CI7YyWcl3Vrd+PB5bU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dd2VIYA8HRRe7dXnZGqbiV0DLc7+CPVQEJ8hr8C5TR5JIJVCyojrIWfXH2n/NboNq
-         Hk+GikxAl3EaaMeWRA6TR/e1FQzV3ktMcNfR8OY2CxYo41JR3So2gzOifdarYIg3ms
-         Ntgum6IXlkcQKlWAeOvMGWfdizXm1y6Yy7X7/H4wRZ+RgXHenfV5CI3plC1RYFIZ8k
-         3TQVQUNAqvPHFt5TxAMDsd4NtLby2lnMnTipU0P7Mv8rXIPtHTaIdmSdl7fpVls5U6
-         ZWH07cLrb+jLjDuxmOyWhrhm5ffBeMYC0sZkxMtaD7vidSJqbczKgC+krAd2bsfO1X
-         vcmDPa9pu0uWg==
-Date:   Tue, 19 Jul 2022 16:04:27 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>, Krzysztof@debian,
-        =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: build failure of next-20220718 due to 'imx6_pcie_host_exit'
- defined but not used
-Message-ID: <20220719210427.GA1568454@bhelgaas>
+        Tue, 19 Jul 2022 17:05:32 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CAB2E6BF;
+        Tue, 19 Jul 2022 14:05:31 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id b9so14727417pfp.10;
+        Tue, 19 Jul 2022 14:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2ZrOgFASjagYZ4odYgHkyul4cvC1DeA9O9rfOmRB2F0=;
+        b=h0uCCzo7buj+6Z9GyuEKnHMnOIBIaQxxdqKvgGdPiUbeFg1l/OOn/URJELDGJdkeEC
+         pNfqOWZYSL57CNe3UFi+SfR7au1UyDGURozuriur6ZLHR/kzZ95TTVVBbtlQZhbS3E+e
+         y/uHW/l8t1BmtkhZM7rX6e70Xp4tgBVG85VXdJ88+QGhhgiGAiKF1FqTCP75ArZgJJxC
+         j0n3VLUJND1wLKQAInGfy6Uu+fvxhBfYZv3igTDjiXALYMwjUAfqJ/yeOj/f17r6zf+O
+         4tv+8U9pHZNrBbfhcD9g8va0QrdRn1zF/JO4c5YsInwUoZk4FYm65DfuHwX6YzKJXYu3
+         sZfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2ZrOgFASjagYZ4odYgHkyul4cvC1DeA9O9rfOmRB2F0=;
+        b=bWSyYwTqV8cpH5sloA7NTxPzk3vO7xF9Xez2HSb9X1XdlvHdADUxfNhWwBwwhOp2vW
+         w81AM5CMccqmExTY3Ndc0cCfQEj00zY5kVTeDFLE32TUIcggGTT4ZOJh9b3pSqLwGBgu
+         l+2mNZKS1HV248Lj0CNoidSGdAuAm11GLmm2o17YEEFlkCZbBnxU0W2mnvqdQCpQzViI
+         f7yUwqEF1iKAa6QcjhApdz69szRlLw3D0Ow0IdAcWnjKFoJcSPDAl60Q4VPYRix9AIP9
+         xlgu3MOqRfHqJQYSVqiOaS7QyfheaIAPdddWTziqzIqnhqekE212VWwmGtCjBa+qnWEd
+         yEsA==
+X-Gm-Message-State: AJIora8WfwESs4QCl81rfh7ffAV3mjckqKDPIOoXBC4QrbRpkjJtnstF
+        ZiQmk1iuvhilemo7vchBk7M=
+X-Google-Smtp-Source: AGRyM1vLzxBtbNnhjaIMiRwxnDXP4sxra5Wn8IejeBFZ8uQ62Zshbv72qKLm14UkQZjNbN7nheeD0Q==
+X-Received: by 2002:a05:6a00:114c:b0:528:2c7a:6302 with SMTP id b12-20020a056a00114c00b005282c7a6302mr35600417pfm.37.1658264730955;
+        Tue, 19 Jul 2022 14:05:30 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id m5-20020a170902f64500b0016a3248376esm12056059plg.181.2022.07.19.14.05.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 14:05:30 -0700 (PDT)
+Message-ID: <bb0d87a4-5cff-2b30-db5c-1e5c4fd192f1@gmail.com>
+Date:   Tue, 19 Jul 2022 14:05:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtVKzW4vh1nRSqbx@debian>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220719114714.247441733@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 12:58:05PM +0100, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
+
+
+On 7/19/2022 4:51 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.13 release.
+> There are 231 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Not sure if it has been reported, builds of alpha, csky, xtensa, riscv, s390 allmodsconfig
-> have failed to build next-20220718 with the error:
+> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
+> Anything received after that time might be too late.
 > 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.13-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
 > 
-> drivers/pci/controller/dwc/pci-imx6.c:973:13: error: 'imx6_pcie_host_exit' defined but not used [-Werror=unused-function]
->   973 | static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
->       |             ^~~~~~~~~~~~~~~~~~~
-> drivers/pci/controller/dwc/pci-imx6.c:904:13: error: 'imx6_pcie_stop_link' defined but not used [-Werror=unused-function]
->   904 | static void imx6_pcie_stop_link(struct dw_pcie *pci)
->       |             ^~~~~~~~~~~~~~~~~~~
+> thanks,
+> 
+> greg k-h
 
-Thanks for the report!  I propose the following patch, which I have
-tentatively applied to my pci/ctrl/imx6 branch:
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and built tested 
+with BMIPS_GENERIC (bmips_stb_defconfig):
 
-
-commit 0e4daeaa52ca ("PCI: imx6: Convert to NOIRQ_SYSTEM_SLEEP_PM_OPS()")
-Author: Bjorn Helgaas <bhelgaas@google.com>
-Date:   Tue Jul 19 15:50:18 2022 -0500
-
-    PCI: imx6: Convert to NOIRQ_SYSTEM_SLEEP_PM_OPS()
-    
-    Replace SET_NOIRQ_SYSTEM_SLEEP_PM_OPS() with NOIRQ_SYSTEM_SLEEP_PM_OPS(),
-    which has the advantage that the compiler always sees the PM callbacks as
-    referenced, so they don't need to be wrapped with "#ifdef CONFIG_PM_SLEEP"
-    or tagged with "__maybe_unused" to avoid "defined but not used" warnings.
-    
-    See 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate old ones").
-    
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 5ea01ed4674d..6f1dfbfc4304 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -884,7 +884,6 @@ static const struct dw_pcie_ops dw_pcie_ops = {
- 	.start_link = imx6_pcie_start_link,
- };
- 
--#ifdef CONFIG_PM_SLEEP
- static void imx6_pcie_ltssm_disable(struct device *dev)
- {
- 	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev);
-@@ -1008,11 +1007,10 @@ static int imx6_pcie_resume_noirq(struct device *dev)
- 
- 	return 0;
- }
--#endif
- 
- static const struct dev_pm_ops imx6_pcie_pm_ops = {
--	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(imx6_pcie_suspend_noirq,
--				      imx6_pcie_resume_noirq)
-+	NOIRQ_SYSTEM_SLEEP_PM_OPS(imx6_pcie_suspend_noirq,
-+				  imx6_pcie_resume_noirq)
- };
- 
- static int imx6_pcie_probe(struct platform_device *pdev)
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

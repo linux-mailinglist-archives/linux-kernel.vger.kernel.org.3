@@ -2,73 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4C657A9E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AEF857A9E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbiGSWfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
+        id S238526AbiGSWiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232480AbiGSWfU (ORCPT
+        with ESMTP id S231350AbiGSWiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:35:20 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8053311828
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=InNP3Lg1mwdxJmCO/kAaT26D/Sqk+C5617X5IuFCL1c=; b=UmXrm1HrvNXQzIHQ0FMogGL+My
-        PO6nJYmUt18vtDvlFFQ92XEOaVwmRVa11izQ+k0QkaQOhSQvYbAXag4J5v+sHtDaUXGgFtdI2T7Bn
-        ltEEHITg+paK+Ch3dlXd7+Gll5cxhRvZPfoyBNZoDGXwse7pK2OgYFqTfOUz2mZ7PsH5J862ck0SG
-        JSoKDPCMD8R/qxZ79/S9YbRh2JmiYnBDayMa4Gm+OKZJApJqBTd4cpbu9utJiYi8PZ7ehUNiZXk04
-        XPWfsQUuuFk3v5K+LqHZ78F2BCn5aeeyJMgF/ItNeGRoOEV44fyqynH5if8KB/37fjF16GrO2MiMp
-        kl04xolQ==;
-Received: from [177.139.47.106] (helo=[192.168.15.109])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oDvo9-006q6o-5a; Wed, 20 Jul 2022 00:35:13 +0200
-Message-ID: <599fe506-f075-ca1a-5386-03e48563beaf@igalia.com>
-Date:   Tue, 19 Jul 2022 19:34:55 -0300
+        Tue, 19 Jul 2022 18:38:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E51F51A35;
+        Tue, 19 Jul 2022 15:38:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 886D961B5C;
+        Tue, 19 Jul 2022 22:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99823C341C6;
+        Tue, 19 Jul 2022 22:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658270295;
+        bh=obJWTUw1NA9T0L+goOsAOuGwnxuMngwTRG7icA6zQrc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Ml9Qpw4VQoX87l5mNYTggCGEDulmZxeAIK7yh+05xACyn6kgm/aaLLcmVqFbbnvLt
+         FUOF5hWDgm5q1xGTb2+TDzlnFFleJbCIiWH6YSButttJJ7YJ0Sr91M1UCOS33jq0cf
+         SusMSohFcooS/HK2/MSoPZAGLNFJ0IARe3JV6y35kCNparzuXcSUGbh/chHIGXZOaq
+         swowGfgv0P2Zl+BI5gWfrkDfdO1shasw8woFJVDyr04A9ZsPIJ41/yq433uTqzPZwB
+         vjsxsfop3arof5NZQfVZYPbFe+fxyzx2sRUkHizmxBPy+gtadNQu8sPaIpOEyE/pud
+         bJXLAiqtxVEog==
+Date:   Tue, 19 Jul 2022 17:38:14 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     kishon@ti.com, bhelgaas@google.com, robh@kernel.org,
+        lorenzo.pieralisi@arm.com, kw@linux.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Om Prakash Singh <omp@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>
+Subject: Re: [PATCH] PCI: designware-ep: Move DBI access to init_complete if
+ notifier is used
+Message-ID: <20220719223814.GA1586913@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] drm/panel-edp: Fix variable typo when saving hpd
- absent delay from DT
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        kernel@collabora.com, Sam Ravnborg <sam@ravnborg.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20220719203857.1488831-1-nfraprado@collabora.com>
- <20220719203857.1488831-4-nfraprado@collabora.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20220719203857.1488831-4-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220719034348.GA4390@thinkpad>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Às 17:38 de 19/07/22, Nícolas F. R. A. Prado escreveu:
-> The value read from the "hpd-absent-delay-ms" property in DT was being
-> saved to the wrong variable, overriding the hpd_reliable delay. Fix the
-> typo.
+On Tue, Jul 19, 2022 at 09:13:58AM +0530, Manivannan Sadhasivam wrote:
+> On Fri, Jul 15, 2022 at 04:39:58PM -0500, Bjorn Helgaas wrote:
+> > On Wed, Mar 30, 2022 at 11:35:15AM +0530, Manivannan Sadhasivam wrote:
+> > > For controllers supporting the CORE_INIT notifier, the resources are
+> > > supposed to be enabled in the init_complete function. Currently,
+> > > these controllers are enabling the resources during probe time due to
+> > > the DBI access happens in dw_pcie_ep_init().
+> > > 
+> > > This creates the dependency with the host PCIe controller since the
+> > > resource enablement like PHY depends on host PCIe to be up. For the
+> > > standalone endpoint usecase, this would never work. So let's move all DBI
+> > > access to init_complete function if CORE_INIT notifier is used. For the
+> > > controllers those doesn't support this notifier, this change is a NO-OP.
+> > > 
+> > > Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> > > Cc: Om Prakash Singh <omp@nvidia.com>
+> > > Cc: Vidya Sagar <vidyas@nvidia.com>
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > ---
+> > >  .../pci/controller/dwc/pcie-designware-ep.c   | 138 ++++++++++++------
+> > >  drivers/pci/controller/dwc/pcie-designware.h  |   1 +
+> > >  2 files changed, 94 insertions(+), 45 deletions(-)
+> > 
+> > Sorry this got missed.  Seems like there are two patches to solve the
+> > same problem:
+> > 
+> >   1) This patch, and
+> >   2) Vidya's patch (https://lore.kernel.org/linux-pci/20220622040133.31058-1-vidyas@nvidia.com/)
+> > 
+> > I don't know much about dwc or this issue, but if these patches are
+> > functionally equivalent, I think Vidya's is a little more attractive
+> > because:
+> > 
+> >   - It's smaller (49 insertions(+), 39 deletions(-)).
+> > 
+> >   - "core_init_notifier" looks like sort of a corner-case feature and
+> >     Vidya's patch doesn't depend on it so it seems more maintainable.
+> > 
+> >   - It's more straightforward to read -- it basically just moves
+> >     things from dw_pcie_ep_init() to dw_pcie_ep_init_complete(), which
+> >     is exactly the sort of thing I expect if we're doing something out
+> >     of order.
 > 
-> Fixes: 5540cf8f3e8d ("drm/panel-edp: Implement generic "edp-panel"s probed by EDID")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> I agree that Vidya's patch is simple but as per the feedback from
+> Kishon on my previous patch, I had to add some extra logic to make
+> sure the move of DBI access doesn't affect the non
+> core_init_notifier platforms.
+> 
+> So with my patch, the logic added is essentailly a NO-OP on those.
 
-Reviewed-by: André Almeida <andrealmeid@igalia.com>
+Can you include the lore URL for Kishon's feedback?  I can't find it.
+
+If we think moving the DBI access is safe on non-core_init_notifier
+platforms, I'd like to do it everywhere so they're all the same.  I
+don't want different behavior just to avoid the risk of theoretical
+problems that we think should not happen.
+
+> Thanks,
+> Mani
+> 
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > > index 0eda8236c125..fb2bf4bf5ba0 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > > @@ -636,6 +636,63 @@ static unsigned int dw_pcie_ep_find_ext_capability(struct dw_pcie *pci, int cap)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +static int dw_pcie_iatu_config(struct dw_pcie_ep *ep)
+> > > +{
+> > > +	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> > > +	struct device *dev = pci->dev;
+> > > +	void *addr;
+> > > +
+> > > +	dw_pcie_iatu_detect(pci);
+> > > +
+> > > +	ep->ib_window_map = devm_kcalloc(dev,
+> > > +					 BITS_TO_LONGS(pci->num_ib_windows),
+> > > +					 sizeof(long),
+> > > +					 GFP_KERNEL);
+> > > +	if (!ep->ib_window_map)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	ep->ob_window_map = devm_kcalloc(dev,
+> > > +					 BITS_TO_LONGS(pci->num_ob_windows),
+> > > +					 sizeof(long),
+> > > +					 GFP_KERNEL);
+> > > +	if (!ep->ob_window_map)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
+> > > +			    GFP_KERNEL);
+> > > +	if (!addr)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	ep->outbound_addr = addr;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int dw_pcie_ep_func_init(struct dw_pcie_ep *ep)
+> > > +{
+> > > +	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> > > +	struct dw_pcie_ep_func *ep_func;
+> > > +	struct pci_epc *epc = ep->epc;
+> > > +	struct device *dev = pci->dev;
+> > > +	u8 func_no;
+> > > +
+> > > +	for (func_no = 0; func_no < epc->max_functions; func_no++) {
+> > > +		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
+> > > +		if (!ep_func)
+> > > +			return -ENOMEM;
+> > > +
+> > > +		ep_func->func_no = func_no;
+> > > +		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > > +							      PCI_CAP_ID_MSI);
+> > > +		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > > +							       PCI_CAP_ID_MSIX);
+> > > +
+> > > +		list_add_tail(&ep_func->list, &ep->func_list);
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > >  int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+> > >  {
+> > >  	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> > > @@ -643,7 +700,22 @@ int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+> > >  	unsigned int nbars;
+> > >  	u8 hdr_type;
+> > >  	u32 reg;
+> > > -	int i;
+> > > +	int ret, i;
+> > > +
+> > > +	if (ep->core_init_notifier) {
+> > > +		ret = dw_pcie_iatu_config(ep);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +	}
+> > > +
+> > > +	if (ep->core_init_notifier) {
+> > > +		ret = dw_pcie_ep_func_init(ep);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +
+> > > +		if (ep->ops->ep_init)
+> > > +			ep->ops->ep_init(ep);
+> > > +	}
+> > >  
+> > >  	hdr_type = dw_pcie_readb_dbi(pci, PCI_HEADER_TYPE) &
+> > >  		   PCI_HEADER_TYPE_MASK;
+> > > @@ -677,8 +749,6 @@ EXPORT_SYMBOL_GPL(dw_pcie_ep_init_complete);
+> > >  int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> > >  {
+> > >  	int ret;
+> > > -	void *addr;
+> > > -	u8 func_no;
+> > >  	struct resource *res;
+> > >  	struct pci_epc *epc;
+> > >  	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> > > @@ -686,7 +756,12 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> > >  	struct platform_device *pdev = to_platform_device(dev);
+> > >  	struct device_node *np = dev->of_node;
+> > >  	const struct pci_epc_features *epc_features;
+> > > -	struct dw_pcie_ep_func *ep_func;
+> > > +
+> > > +	if (ep->ops->get_features) {
+> > > +		epc_features = ep->ops->get_features(ep);
+> > > +		if (epc_features->core_init_notifier)
+> > > +			ep->core_init_notifier = true;
+> > > +	}
+> > >  
+> > >  	INIT_LIST_HEAD(&ep->func_list);
+> > >  
+> > > @@ -708,7 +783,11 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> > >  		}
+> > >  	}
+> > >  
+> > > -	dw_pcie_iatu_detect(pci);
+> > > +	if (!ep->core_init_notifier) {
+> > > +		ret = dw_pcie_iatu_config(ep);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +	}
+> > >  
+> > >  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
+> > >  	if (!res)
+> > > @@ -717,26 +796,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> > >  	ep->phys_base = res->start;
+> > >  	ep->addr_size = resource_size(res);
+> > >  
+> > > -	ep->ib_window_map = devm_kcalloc(dev,
+> > > -					 BITS_TO_LONGS(pci->num_ib_windows),
+> > > -					 sizeof(long),
+> > > -					 GFP_KERNEL);
+> > > -	if (!ep->ib_window_map)
+> > > -		return -ENOMEM;
+> > > -
+> > > -	ep->ob_window_map = devm_kcalloc(dev,
+> > > -					 BITS_TO_LONGS(pci->num_ob_windows),
+> > > -					 sizeof(long),
+> > > -					 GFP_KERNEL);
+> > > -	if (!ep->ob_window_map)
+> > > -		return -ENOMEM;
+> > > -
+> > > -	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
+> > > -			    GFP_KERNEL);
+> > > -	if (!addr)
+> > > -		return -ENOMEM;
+> > > -	ep->outbound_addr = addr;
+> > > -
+> > >  	if (pci->link_gen < 1)
+> > >  		pci->link_gen = of_pci_get_max_link_speed(np);
+> > >  
+> > > @@ -753,23 +812,15 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> > >  	if (ret < 0)
+> > >  		epc->max_functions = 1;
+> > >  
+> > > -	for (func_no = 0; func_no < epc->max_functions; func_no++) {
+> > > -		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
+> > > -		if (!ep_func)
+> > > -			return -ENOMEM;
+> > > -
+> > > -		ep_func->func_no = func_no;
+> > > -		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > > -							      PCI_CAP_ID_MSI);
+> > > -		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > > -							       PCI_CAP_ID_MSIX);
+> > > +	if (!ep->core_init_notifier) {
+> > > +		ret = dw_pcie_ep_func_init(ep);
+> > > +		if (ret)
+> > > +			return ret;
+> > >  
+> > > -		list_add_tail(&ep_func->list, &ep->func_list);
+> > > +		if (ep->ops->ep_init)
+> > > +			ep->ops->ep_init(ep);
+> > >  	}
+> > >  
+> > > -	if (ep->ops->ep_init)
+> > > -		ep->ops->ep_init(ep);
+> > > -
+> > >  	ret = pci_epc_mem_init(epc, ep->phys_base, ep->addr_size,
+> > >  			       ep->page_size);
+> > >  	if (ret < 0) {
+> > > @@ -784,12 +835,9 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> > >  		return -ENOMEM;
+> > >  	}
+> > >  
+> > > -	if (ep->ops->get_features) {
+> > > -		epc_features = ep->ops->get_features(ep);
+> > > -		if (epc_features->core_init_notifier)
+> > > -			return 0;
+> > > -	}
+> > > +	if (!ep->core_init_notifier)
+> > > +		return dw_pcie_ep_init_complete(ep);
+> > >  
+> > > -	return dw_pcie_ep_init_complete(ep);
+> > > +	return 0;
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(dw_pcie_ep_init);
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> > > index 7d6e9b7576be..aadb14159df7 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware.h
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> > > @@ -242,6 +242,7 @@ struct dw_pcie_ep {
+> > >  	void __iomem		*msi_mem;
+> > >  	phys_addr_t		msi_mem_phys;
+> > >  	struct pci_epf_bar	*epf_bar[PCI_STD_NUM_BARS];
+> > > +	bool			core_init_notifier;
+> > >  };
+> > >  
+> > >  struct dw_pcie_ops {
+> > > -- 
+> > > 2.25.1
+> > > 
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்

@@ -2,61 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF7257A216
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0FC57A209
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239541AbiGSOol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        id S239614AbiGSOmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239813AbiGSOoL (ORCPT
+        with ESMTP id S239605AbiGSOme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:44:11 -0400
-X-Greylist: delayed 165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Jul 2022 07:42:38 PDT
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4BAFCB;
-        Tue, 19 Jul 2022 07:42:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2ud6nsluqSsKTO9Z0i1MLYe01IcSu66ta8TyQvTI8QI=; b=FDYK2qx4o9VfiSKX4kjtfYaK5d
-        CuD34rsqF62M3zMoNqL8juQGVRzEcrLAIraI4aeB1HMVVtlyYKga86QnXJOREm7oSq+j0WLFtD5Zs
-        L5HyL2l1RuRLjJbrhHNW3oUF8ytDTnYjhBi9Rc0DN5VoIAugUh0iSrq2O/crqeBL2OmO2s6ELWB1h
-        N9V3Gtd5kfj8uZT9etsQ6MMoAAsvk5S9KgTe3dJIFW9Mn4Aib7nsPrlfA5kzNA99tTpoiCuWOkxAm
-        afxAmnw+oCgm/4cViLsIstPfylUadQt6qYCFWW4woG80X02NwBHp15NZRPIaA/hSwMPugvNka1r+L
-        OVQXiPnA==;
-Received: from [2a01:799:961:d200:4408:c06b:bee8:b0a3] (port=52255)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oDoO6-0003Mu-Dz; Tue, 19 Jul 2022 16:39:50 +0200
-Message-ID: <59b18586-f53f-9ad3-02a7-d629e4c19b81@tronnes.org>
-Date:   Tue, 19 Jul 2022 16:39:46 +0200
+        Tue, 19 Jul 2022 10:42:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9DE617D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:40:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B03273402E;
+        Tue, 19 Jul 2022 14:39:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1658241598; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z+flDjo/PwKa8nvCg+a8a3heVJv5nekQnXcsvxTAv/Y=;
+        b=gYygtEAkX7mEJo/y/SfkBdoNggUU/AyQlNCHJc1G6ce6Qss04xJgYKlSDDttaB+UMZ6/NS
+        HBtCbv0befC0tdVo7odpoYKaatqsV/UR/cNgQ9mWntohn2Nrq0+aIDCvS7mkpiAwhHPHTq
+        l8g9WhM8BiqB+CCeggw/GVLMwZFj7wE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1658241598;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z+flDjo/PwKa8nvCg+a8a3heVJv5nekQnXcsvxTAv/Y=;
+        b=Ue9z0kiGz5E2ZptzQgiDiZDGOEFwYSzI+rlzGp5SuKvLdk+axSPm4pi7+ApGKJziw0kGHV
+        VjNF7KwML0cvRNAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8241F13488;
+        Tue, 19 Jul 2022 14:39:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OS7sHj7C1mLPewAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 19 Jul 2022 14:39:58 +0000
+Message-ID: <5ad51c9f-ce84-5d1b-309c-6e475cebca97@suse.cz>
+Date:   Tue, 19 Jul 2022 16:39:58 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] drm/gud: Fix endianness in gud_xrgb8888_to_color()
- helper
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1657300532.git.geert@linux-m68k.org>
- <b47589ed5d8ca44e0956684412e3f16f3227f887.1657300532.git.geert@linux-m68k.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <b47589ed5d8ca44e0956684412e3f16f3227f887.1657300532.git.geert@linux-m68k.org>
+Subject: Re: [PATCH v1] mm/slub: enable debugging memory wasting of kmalloc
+Content-Language: en-US
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        John Garry <john.garry@huawei.com>
+References: <20220701135954.45045-1-feng.tang@intel.com>
+ <41763154-f923-ae99-55c0-0f3717636779@suse.cz>
+ <20220713073642.GA69088@shbuild999.sh.intel.com>
+ <45906408-34ce-4b79-fbe4-768335ffbf96@suse.cz>
+ <20220715082922.GA88035@shbuild999.sh.intel.com>
+ <20220719134503.GA56558@shbuild999.sh.intel.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220719134503.GA56558@shbuild999.sh.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,77 +88,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 08.07.2022 20.21, skrev Geert Uytterhoeven:
-> DRM formats are defined to be little-endian, unless the
-> DRM_FORMAT_BIG_ENDIAN flag is set.  Hence when converting from one
-> format to another, multi-byte pixel values loaded from memory must be
-> converted from little-endian to host-endian.  Conversely, multi-byte
-> pixel values written to memory must be converted from host-endian to
-> little-endian.  Currently only drm_fb_xrgb8888_to_rgb332_line() includes
-> endianness handling.
+On 7/19/22 15:45, Feng Tang wrote:
+> Hi Vlastimil,
 > 
-> Fix gud_xrgb8888_to_color() on big-endian platforms by adding the
-> missing endianness handling.
+> On Fri, Jul 15, 2022 at 04:29:22PM +0800, Tang, Feng wrote:
+> [...]
+>> > >> - the knowledge of actual size could be used to improve poisoning checks as
+>> > >> well, detect cases when there's buffer overrun over the orig_size but not
+>> > >> cache's size. e.g. if you kmalloc(48) and overrun up to 64 we won't detect
+>> > >> it now, but with orig_size stored we could?
+>> > > 
+>> > > The above patch doesn't touch this. As I have a question, for the
+>> > > [orib_size, object_size) area, shall we fill it with POISON_XXX no matter
+>> > > REDZONE flag is set or not?
+>> > 
+>> > Ah, looks like we use redzoning, not poisoning, for padding from
+>> > s->object_size to word boundary. So it would be more consistent to use the
+>> > redzone pattern (RED_ACTIVE) and check with the dynamic orig_size. Probably
+>> > no change for RED_INACTIVE handling is needed though.
+>> 
+>> Thanks for clarifying, will go this way and do more test. Also I'd 
+>> make it a separate patch, as it is logically different from the space
+>> wastage.
 > 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-> Compile-tested only.
+> I made a draft to redzone the wasted space, which basically works (patch
+> pasted at the end of the mail) as detecting corruption of below test code:
+> 	
+> 	size = 256;
+> 	buf = kmalloc(size + 8, GFP_KERNEL);
+> 	memset(buf + size + size/2, 0xff, size/4);
+> 	print_section(KERN_ERR, "Corruptted-kmalloc-space", buf, size * 2);
+> 	kfree(buf);
 > 
-> Interestingly, drm_fb_xrgb8888_to_rgb332() was introduced for GUD,
-> and always had correct endiannes handling...
-
-RGB332 support was added later and by that time I had understood that
-the framebuffer was little endian and not host endian as I first assumed
-(there's a fixme comment in gud_pipe.c that BE is probably broken but I
-haven't got any hw to test on so I haven't tried to fix it).
-
-Thanks for fixing this, pathces 2 and 3 tested on drm/gud and applied to
-drm-misc-next.
-
-Noralf.
-
-> ---
->  drivers/gpu/drm/gud/gud_pipe.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
+> However when it is enabled globally, there are many places reporting
+> corruption. I debugged one case, and found that the network(skb_buff)
+> code already knows this "wasted" kmalloc space and utilize it which is
+> detected by my patch.
 > 
-> diff --git a/drivers/gpu/drm/gud/gud_pipe.c b/drivers/gpu/drm/gud/gud_pipe.c
-> index 4873f9799f412e04..d42592f6daab8b2a 100644
-> --- a/drivers/gpu/drm/gud/gud_pipe.c
-> +++ b/drivers/gpu/drm/gud/gud_pipe.c
-> @@ -105,7 +105,8 @@ static size_t gud_xrgb8888_to_color(u8 *dst, const struct drm_format_info *forma
->  	unsigned int bits_per_pixel = 8 / block_width;
->  	u8 r, g, b, pix, *block = dst; /* Assign to silence compiler warning */
->  	unsigned int x, y, width;
-> -	u32 *pix32;
-> +	__le32 *sbuf32;
-> +	u32 pix32;
->  	size_t len;
->  
->  	/* Start on a byte boundary */
-> @@ -114,8 +115,8 @@ static size_t gud_xrgb8888_to_color(u8 *dst, const struct drm_format_info *forma
->  	len = drm_format_info_min_pitch(format, 0, width) * drm_rect_height(rect);
->  
->  	for (y = rect->y1; y < rect->y2; y++) {
-> -		pix32 = src + (y * fb->pitches[0]);
-> -		pix32 += rect->x1;
-> +		sbuf32 = src + (y * fb->pitches[0]);
-> +		sbuf32 += rect->x1;
->  
->  		for (x = 0; x < width; x++) {
->  			unsigned int pixpos = x % block_width; /* within byte from the left */
-> @@ -126,9 +127,10 @@ static size_t gud_xrgb8888_to_color(u8 *dst, const struct drm_format_info *forma
->  				*block = 0;
->  			}
->  
-> -			r = *pix32 >> 16;
-> -			g = *pix32 >> 8;
-> -			b = *pix32++;
-> +			pix32 = le32_to_cpu(*sbuf32++);
-> +			r = pix32 >> 16;
-> +			g = pix32 >> 8;
-> +			b = pix32;
->  
->  			switch (format->format) {
->  			case GUD_DRM_FORMAT_XRGB1111:
+> The allocation stack is:
+> 
+> [    0.933675] BUG kmalloc-2k (Not tainted): kmalloc unused part overwritten
+> [    0.933675] -----------------------------------------------------------------------------
+> [    0.933675]
+> [    0.933675] 0xffff888237d026c0-0xffff888237d026e3 @offset=9920. First byte 0x0 instead of 0xcc
+> [    0.933675] Allocated in __alloc_skb+0x8e/0x1d0 age=5 cpu=0 pid=1
+> [    0.933675]  __slab_alloc.constprop.0+0x52/0x90
+> [    0.933675]  __kmalloc_node_track_caller+0x129/0x380
+> [    0.933675]  kmalloc_reserve+0x2a/0x70
+> [    0.933675]  __alloc_skb+0x8e/0x1d0
+> [    0.933675]  audit_buffer_alloc+0x3a/0xc0
+> [    0.933675]  audit_log_start.part.0+0xa3/0x300
+> [    0.933675]  audit_log+0x62/0xc0
+> [    0.933675]  audit_init+0x15c/0x16f
+> 
+> And the networking code which touches the [orig_size, object_size) area
+> is in __build_skb_around(), which put a 'struct skb_shared_info' at the
+> end of this area:
+> 
+> 	static void __build_skb_around(struct sk_buff *skb, void *data,
+> 				       unsigned int frag_size)
+> 	{
+> 		struct skb_shared_info *shinfo;
+> 		unsigned int size = frag_size ? : ksize(data);
+
+Hmm so it's a ksize() user, which should be legitimate way to use the
+"waste" data. Hopefully it should be then enough to patch __ksize() to set
+the object's tracked waste to 0 (orig_size to size) - assume that if
+somebody called ksize() they intend to use the space. That would also make
+the debugfs report more truthful.

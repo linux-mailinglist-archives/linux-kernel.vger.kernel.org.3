@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006AE579A3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA0D57996B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238863AbiGSMMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S237954AbiGSMCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237808AbiGSMKM (ORCPT
+        with ESMTP id S237683AbiGSMBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:10:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3002F4B49E;
-        Tue, 19 Jul 2022 05:03:17 -0700 (PDT)
+        Tue, 19 Jul 2022 08:01:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F001E4331C;
+        Tue, 19 Jul 2022 04:58:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B45B261632;
-        Tue, 19 Jul 2022 12:03:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C37C341C6;
-        Tue, 19 Jul 2022 12:03:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E78161654;
+        Tue, 19 Jul 2022 11:58:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ECA4C341C6;
+        Tue, 19 Jul 2022 11:58:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232196;
-        bh=BmmImCPvk6cWmiXMR/v9HN44IO8fBGNtdMKXUmqo54A=;
+        s=korg; t=1658231924;
+        bh=Bm9v9px20qjhnfPeUXRRvzIaEVzRnS3kuvbqmkLM0rU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DA8wpI1rtoVbs/hGlarf2bOcbL+terEtUNLSkqdnZxiP+DS0qVEu2dcy/4ebexwwo
-         dk0bX3je7Xs8JzlPCqj9aB9u3fjW1DgQ/yawAZHgsRSe3NgWj3O/kGNG0Y3QoCExm+
-         kTHAGua/TZ8qbxB1lHL0PzEey/fkSsfbQZrSQ8Tc=
+        b=i+5riCLc1fSo3ZSbLS1+TUrJ0Sv70VqyQf401rjOmgbjmRPHOTUajfdN4djOO4DaH
+         2fEBa4fb5mZuVgvILpRgNZD/GV6s86F+b/YrARrDLYn3mvIWz7PIfUikwyLNd3CqHJ
+         mTpUtfLc4aE3Wv1O2KoBmRExZDcICQ3fli9BsXdM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 45/71] virtio_mmio: Add missing PM calls to freeze/restore
+Subject: [PATCH 4.14 37/43] signal handling: dont use BUG_ON() for debugging
 Date:   Tue, 19 Jul 2022 13:54:08 +0200
-Message-Id: <20220719114556.685932362@linuxfoundation.org>
+Message-Id: <20220719114525.140079922@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
+References: <20220719114521.868169025@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit ed7ac37fde33ccd84e4bd2b9363c191f925364c7 ]
+[ Upstream commit a382f8fee42ca10c9bfce0d2352d4153f931f5dc ]
 
-Most virtio drivers provide freeze/restore callbacks to finish up
-device usage before suspend and to reinitialize the virtio device after
-resume. However, these callbacks are currently only called when using
-virtio_pci. virtio_mmio does not have any PM ops defined.
+These are indeed "should not happen" situations, but it turns out recent
+changes made the 'task_is_stopped_or_trace()' case trigger (fix for that
+exists, is pending more testing), and the BUG_ON() makes it
+unnecessarily hard to actually debug for no good reason.
 
-This causes problems for example after suspend to disk (hibernation),
-since the virtio devices might lose their state after the VMM is
-restarted. Calling virtio_device_freeze()/restore() ensures that
-the virtio devices are re-initialized correctly.
+It's been that way for a long time, but let's make it clear: BUG_ON() is
+not good for debugging, and should never be used in situations where you
+could just say "this shouldn't happen, but we can continue".
 
-Fix this by implementing the dev_pm_ops for virtio_mmio,
-similar to virtio_pci_common.
+Use WARN_ON_ONCE() instead to make sure it gets logged, and then just
+continue running.  Instead of making the system basically unusuable
+because you crashed the machine while potentially holding some very core
+locks (eg this function is commonly called while holding 'tasklist_lock'
+for writing).
 
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Message-Id: <20220621110621.3638025-2-stephan.gerhold@kernkonzept.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/virtio/virtio_mmio.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ kernel/signal.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-index 74547323aa83..2a2d817caeff 100644
---- a/drivers/virtio/virtio_mmio.c
-+++ b/drivers/virtio/virtio_mmio.c
-@@ -62,6 +62,7 @@
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/pm.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- #include <linux/virtio.h>
-@@ -514,6 +515,25 @@ static const struct virtio_config_ops virtio_mmio_config_ops = {
- 	.bus_name	= vm_bus_name,
- };
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 3619ab24644f..7c3fe8e0230a 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1662,12 +1662,12 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
+ 	bool autoreap = false;
+ 	u64 utime, stime;
  
-+#ifdef CONFIG_PM_SLEEP
-+static int virtio_mmio_freeze(struct device *dev)
-+{
-+	struct virtio_mmio_device *vm_dev = dev_get_drvdata(dev);
-+
-+	return virtio_device_freeze(&vm_dev->vdev);
-+}
-+
-+static int virtio_mmio_restore(struct device *dev)
-+{
-+	struct virtio_mmio_device *vm_dev = dev_get_drvdata(dev);
-+
-+	return virtio_device_restore(&vm_dev->vdev);
-+}
-+
-+static const struct dev_pm_ops virtio_mmio_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(virtio_mmio_freeze, virtio_mmio_restore)
-+};
-+#endif
+-	BUG_ON(sig == -1);
++	WARN_ON_ONCE(sig == -1);
  
- static void virtio_mmio_release_dev(struct device *_d)
- {
-@@ -767,6 +787,9 @@ static struct platform_driver virtio_mmio_driver = {
- 		.name	= "virtio-mmio",
- 		.of_match_table	= virtio_mmio_match,
- 		.acpi_match_table = ACPI_PTR(virtio_mmio_acpi_match),
-+#ifdef CONFIG_PM_SLEEP
-+		.pm	= &virtio_mmio_pm_ops,
-+#endif
- 	},
- };
+- 	/* do_notify_parent_cldstop should have been called instead.  */
+- 	BUG_ON(task_is_stopped_or_traced(tsk));
++	/* do_notify_parent_cldstop should have been called instead.  */
++	WARN_ON_ONCE(task_is_stopped_or_traced(tsk));
  
+-	BUG_ON(!tsk->ptrace &&
++	WARN_ON_ONCE(!tsk->ptrace &&
+ 	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
+ 
+ 	if (sig != SIGCHLD) {
 -- 
 2.35.1
 

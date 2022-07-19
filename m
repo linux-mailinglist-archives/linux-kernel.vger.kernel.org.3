@@ -2,152 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7589457A55E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1754657A565
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239495AbiGSRb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
+        id S239625AbiGSRcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239220AbiGSRbP (ORCPT
+        with ESMTP id S239611AbiGSRb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:31:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318DB52FCB;
-        Tue, 19 Jul 2022 10:31:14 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 17:31:11 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658251872;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KEy3GJY59I7CxrglpCX3bhG+3jD+S6czPtWIZFCl7Po=;
-        b=dS7UOqi7NJupKB4toSMtoWlat7AmOvP1/hXrDUtWOGSGLvAgLnhFNaZnkC2KSHEj0xBhnq
-        A1wA4m8WEp+qMwqDBvNxSnBanIUSGLvPc49RiHreDjAErP85kjEM5QipMVrigf6z4eKbc7
-        +G28TMFnZmcO3oR9Zh0abGWHhfjGhT88vGolbGdPwFuA8wzqd3hl2Lu8wri6Xm1dNhGiYe
-        yIgfO6VXQTV+K+plevYsLJ8EVdJpOX+VqzIt0HkMarRz1zc5nTir2dOamopUWslX7L8KN/
-        YC/SMDQKsubMjlQXCxxnOm06CH6ULVGwbf3ursWrkXNRAj6j8uGJDo8NZy50rw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658251872;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KEy3GJY59I7CxrglpCX3bhG+3jD+S6czPtWIZFCl7Po=;
-        b=lc6GCQMesJGkjsHc0bv0JQf3v9hbPe8SsI6/AiUO1KPhPe2uk2GJAo6qbbo62ZB1NAes7M
-        jWeco2ws+XKH8eBA==
-From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/fpu] x86/fpu: Add a helper to prepare AMX state for
- low-power CPU idle
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220608164748.11864-2-chang.seok.bae@intel.com>
-References: <20220608164748.11864-2-chang.seok.bae@intel.com>
+        Tue, 19 Jul 2022 13:31:58 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8A45A885
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:31:57 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id z25so26072448lfr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dv1bYnIgCFQyqgMxHk73wKzGxehcFImay3A0aOyYKIk=;
+        b=i37X1J/iwWK1Lbon97TdOmcmYm9uKeU4xfyYFfTrkHrx2EbRHcNt2H3w1+g6GMYV9O
+         GoE+oHCWYFgLOji0arAmJ03o6uWpqTbQx2QXttsYfkPD2Ywy03Kwq0hq+tg2MgWTaT9j
+         TNOGYxub3NLsHi0gJGTfdtjQUQIM733/QZql/JGOLeNxytYBXj7mJEVBbOtoQXtZqssg
+         piKQIGNfWkVn7hY+yDkT8Vut/KFT1ueQybSaSX6Ykn+ibZl6Rx1xj2rIVZFcgqqQFNgz
+         Zqq46E/99ATJwztPON4/xffrdHnuMoPql1e8kOrIAt2abvRnmbd8qdGdrDs3POqtIGnM
+         TMBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dv1bYnIgCFQyqgMxHk73wKzGxehcFImay3A0aOyYKIk=;
+        b=m3CyXcoxX1Ur9aq1yqO2Mt+7lT/LsxZtPUDUaiHR9P3KvNTrB9tBGj3CG9El+brngK
+         0ydyOZ52TlLjzR3bmDFxfViOlp7BNLvxOY7FZiTVASmdFCZrgJwGQuN5AfakbyMlRoS9
+         pimPECfQlh4AQowTYNZccahsjCZ89hHER35n33pJMhNgeFHEQaVyEVv03Uint5pL4Tl0
+         4kYEcRgt9sDKc4pJoY95eKQexvxsHfI1qy6VzvNn2bOuPOk+eDaPWxCJuDpuie7r5wVP
+         gN3bajjbdlvqRJCWp56s8UYHpF1yTIKUUCx1dsbDe/cncBBpHExLxYlhDOrfipAsgz/B
+         s8mg==
+X-Gm-Message-State: AJIora8zAIBzxILrxtPuLP2pc9WQASXSmFLNy8ipNNFud1Q8xVGlzb3D
+        8yBWuOxBQojJVEQcdaPvIyh4i4OvO4WK5lpuceMOZ1JCBcc=
+X-Google-Smtp-Source: AGRyM1tYCnJ7XVHFH8hAdLWTBZqk8UDwo091pxn45tcb+6X7elltQFIN+TQYiivxgb9kZSDk3vsezq3CeiMut5fETyE=
+X-Received: by 2002:a05:6512:e9a:b0:489:c681:da2b with SMTP id
+ bi26-20020a0565120e9a00b00489c681da2bmr17282193lfb.626.1658251915687; Tue, 19
+ Jul 2022 10:31:55 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <165825187133.15455.7594593311230934911.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAKwvOdnN67xFL22oWfqrKjvES4vjSB3KNhm401LtoC7igO+4Vg@mail.gmail.com>
+ <20220718230626.1029318-1-justinstitt@google.com>
+In-Reply-To: <20220718230626.1029318-1-justinstitt@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 19 Jul 2022 10:31:44 -0700
+Message-ID: <CAKwvOdmbAn3cbzr9PJNCbO0oF=gLmiFBCjZRgx5eF5QjQywCmQ@mail.gmail.com>
+Subject: Re: [PATCH v4] lib/test_printf.c: fix clang -Wformat warnings
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     andriy.shevchenko@linux.intel.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, pmladek@suse.com,
+        rostedt@goodmis.org, senozhatsky@chromium.org, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/fpu branch of tip:
+On Mon, Jul 18, 2022 at 4:06 PM Justin Stitt <justinstitt@google.com> wrote=
+:
+>
+> see warnings:
+> | lib/test_printf.c:157:52: error: format specifies type 'unsigned char'
+> | but the argument has type 'int' [-Werror,-Wformat]
+> test("0|1|1|128|255",
+> | "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+> -
+> | lib/test_printf.c:158:55: error: format specifies type 'char' but the
+> | argument has type 'int' [-Werror,-Wformat] test("0|1|1|-128|-1",
+> | "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+> -
+> | lib/test_printf.c:159:41: error: format specifies type 'unsigned
+> short'
+> | but the argument has type 'int' [-Werror,-Wformat]
+> | test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+>
+> There's an ongoing movement to eventually enable the -Wformat flag for
+> clang. Previous patches have targeted incorrect usage of
+> format specifiers. In this case, however, the "incorrect" format
+> specifiers are intrinsically part of the test cases. Hence, fixing them
+> would be misaligned with their intended purpose. My proposed fix is to
+> simply disable the warnings so that one day a clean build of the kernel
+> with clang (and -Wformat enabled) would be possible. It would also keep
+> us in the green for alot of the CI bots.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
 
-Commit-ID:     f17b168734c0fe47343a7502d012266a051f9942
-Gitweb:        https://git.kernel.org/tip/f17b168734c0fe47343a7502d012266a051f9942
-Author:        Chang S. Bae <chang.seok.bae@intel.com>
-AuthorDate:    Wed, 08 Jun 2022 09:47:47 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 19 Jul 2022 18:46:15 +02:00
+Thanks for humoring all of our requests. I'm happy with the result.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-x86/fpu: Add a helper to prepare AMX state for low-power CPU idle
+> ---
+> changes from v1 -> v2:
+> * moved NOWARN macro definition to a more appropriate location
+> * using __diag_ignore_all (thanks Nathan)
+> * using local scoping for code blocks instead of __VA_ARGS__ (thanks
+> * Nick)
+> * indented affected test cases (thanks Andy)
+>
+> changes from v2 -> v3:
+> * reinserted commit message
+> * remove Andy's Suggested-by tag
+> * add issue tracker link
+>
+> changes from v3 -> v4:
+> * better macro indentation and usage string (thanks Nick)
+>
+>  lib/test_printf.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+>
+> diff --git a/lib/test_printf.c b/lib/test_printf.c
+> index 07309c45f327..f78044c1efaa 100644
+> --- a/lib/test_printf.c
+> +++ b/lib/test_printf.c
+> @@ -30,6 +30,12 @@
+>  #define PAD_SIZE 16
+>  #define FILL_CHAR '$'
+>
+> +#define NOWARN(option, comment, block) \
+> +       __diag_push(); \
+> +       __diag_ignore_all(#option, comment); \
+> +       block \
+> +       __diag_pop();
+> +
+>  KSTM_MODULE_GLOBALS();
+>
+>  static char *test_buffer __initdata;
+> @@ -154,9 +160,11 @@ test_number(void)
+>         test("0x1234abcd  ", "%#-12x", 0x1234abcd);
+>         test("  0x1234abcd", "%#12x", 0x1234abcd);
+>         test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|=
+% d", 0, 1, 12, 123, 1234, -123, -1234);
+> -       test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128,=
+ -1);
+> -       test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128,=
+ -1);
+> -       test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+> +       NOWARN(-Wformat, "Intentionally test narrowing conversion specifi=
+ers.", {
+> +               test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 2=
+57, 128, -1);
+> +               test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 2=
+57, 128, -1);
+> +               test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627=
+);
+> +       })
+>         /*
+>          * POSIX/C99: =C2=BBThe result of converting zero with an explici=
+t
+>          * precision of zero shall be no characters.=C2=AB Hence the outp=
+ut
+> --
+> 2.37.0.170.g444d1eabd0-goog
+>
+>
 
-When a CPU enters an idle state, a non-initialized AMX register state may
-be the cause of preventing a deeper low-power state. Other extended
-register states whether initialized or not do not impact the CPU idle
-state.
 
-The new helper can ensure the AMX state is initialized before the CPU is
-idle, and it will be used by the intel idle driver.
-
-Check the AMX_TILE feature bit before using XGETBV1 as a chain of
-dependencies was established via cpuid_deps[]: AMX->XFD->XGETBV1.
-
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20220608164748.11864-2-chang.seok.bae@intel.com
----
- arch/x86/include/asm/fpu/api.h       |  2 ++
- arch/x86/include/asm/special_insns.h |  9 +++++++++
- arch/x86/kernel/fpu/core.c           | 14 ++++++++++++++
- 3 files changed, 25 insertions(+)
-
-diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
-index 6b0f31f..503a577 100644
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -164,4 +164,6 @@ static inline bool fpstate_is_confidential(struct fpu_guest *gfpu)
- /* prctl */
- extern long fpu_xstate_prctl(int option, unsigned long arg2);
- 
-+extern void fpu_idle_fpregs(void);
-+
- #endif /* _ASM_X86_FPU_API_H */
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index 45b18eb..35f709f 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -295,6 +295,15 @@ static inline int enqcmds(void __iomem *dst, const void *src)
- 	return 0;
- }
- 
-+static inline void tile_release(void)
-+{
-+	/*
-+	 * Instruction opcode for TILERELEASE; supported in binutils
-+	 * version >= 2.36.
-+	 */
-+	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0");
-+}
-+
- #endif /* __KERNEL__ */
- 
- #endif /* _ASM_X86_SPECIAL_INSNS_H */
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index 0531d6a..3b28c5b 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -851,3 +851,17 @@ int fpu__exception_code(struct fpu *fpu, int trap_nr)
- 	 */
- 	return 0;
- }
-+
-+/*
-+ * Initialize register state that may prevent from entering low-power idle.
-+ * This function will be invoked from the cpuidle driver only when needed.
-+ */
-+void fpu_idle_fpregs(void)
-+{
-+	/* Note: AMX_TILE being enabled implies XGETBV1 support */
-+	if (cpu_feature_enabled(X86_FEATURE_AMX_TILE) &&
-+	    (xfeatures_in_use() & XFEATURE_MASK_XTILE)) {
-+		tile_release();
-+		fpregs_deactivate(&current->thread.fpu);
-+	}
-+}
+--=20
+Thanks,
+~Nick Desaulniers

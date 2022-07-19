@@ -2,297 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8392357A309
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26CA57A315
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbiGSPaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
+        id S236893AbiGSPbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237757AbiGSPaU (ORCPT
+        with ESMTP id S233950AbiGSPbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:30:20 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02A856B91
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:30:18 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id oy13so27813631ejb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YRQHtUHyqeXE02w1f9vvRW9skOCcxr7rzUXjEanoAUc=;
-        b=YDK2QMqxLv2QZXONAHgOeupH7Ksarix8SwreCul6pebptcfGWBzdNiY3hHZAnhCMcP
-         Ue84tv0gJa9DHeqsQ5W/M9GUh1thSCcFF9nXTghsKPhuPLG7Bn0+2XFoicpnfN99pqry
-         FNHIB0BSreUQQY8rSPUTZtayiR52aaRV8nxE0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YRQHtUHyqeXE02w1f9vvRW9skOCcxr7rzUXjEanoAUc=;
-        b=EJPBIMrsP+C8LFNmSlB4eFJcIzTENpCBq7vLrSRMvA5RdQ7IzweYkQx4oxFGtYaRCA
-         dahl3S05SSgIUxqc8AOAXcpcY8dUQfVqu5M3LnXKrW9DXfVBHWLUDAYedMcB5+9Vgf7d
-         NmtJbScoFOknxdbeJ/MMPb2Nh/2W4O0yUEvl1iJLnQsspjya/uckS5vR5OSRSaeEUlL6
-         PohXhtnHtppAchio13WLjDYkH7O8HCnE9UnE8p4AYQMhKx0OGq1NXjRGwwkJFU3H0PbQ
-         jYBX7NI5T61c1j/FN5Z/maz3IqLm/faJHUVe6ngIe806f8vcBVd+q264bi4LKrLjyZHi
-         ChoA==
-X-Gm-Message-State: AJIora/tf3R8CQ3+bgrVgkE1g1HwJ26Ild4Q6DPaIrzLRj9TOX0bqpN9
-        ko+zI6POOZVEd+bNFapb55wMkQ4kEee+YZrW
-X-Google-Smtp-Source: AGRyM1utobY7s1g8EYxIvOx8h2Y+8xjFiBnJJkcOgc1lgo5Tq7ZfmceDY6Ga678rARstZ8X0zX4nRg==
-X-Received: by 2002:a17:907:7d91:b0:72b:4d74:f4f6 with SMTP id oz17-20020a1709077d9100b0072b4d74f4f6mr30253302ejc.314.1658244617172;
-        Tue, 19 Jul 2022 08:30:17 -0700 (PDT)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id m21-20020aa7d355000000b0043a7de4e526sm10665991edr.44.2022.07.19.08.30.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 08:30:15 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id d8so2235375wrp.6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:30:15 -0700 (PDT)
-X-Received: by 2002:adf:ead2:0:b0:21d:8b49:6138 with SMTP id
- o18-20020adfead2000000b0021d8b496138mr27793173wrn.138.1658244614658; Tue, 19
- Jul 2022 08:30:14 -0700 (PDT)
+        Tue, 19 Jul 2022 11:31:12 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7809E5885F;
+        Tue, 19 Jul 2022 08:31:11 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JFS1Ep030938;
+        Tue, 19 Jul 2022 17:30:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=StPFKjyHQ6JloIb+PfGZXvKA/3ATMA/f8rEmiAG937w=;
+ b=fl6q9Zf+v/AGGlfuFTPXasDWrUhSoE+j6VgYcJmn8GCP3tz/2iou1Mw3mKkIa6Kl1VxS
+ WeWnvZGlik7J44IVqyNa9PHq8EV7bkWVH5twzT40Y5Rp4Umi5NBx0IYfrzLS0gX67RK/
+ pqVlJz41MvN+PceULVZUX/XjEw7zQkjzw+KwYnmhYV4iVTkoUpLPWbZ3WkchwCbxBno/
+ mPg/1jSvG9W0kQ87qzMdevuAoiCu/6EmLnXXrTmvTng5EO0FglMqVZ51T15ShWsNK70a
+ Zt/Tk91EGKuJPPiWwBlAbx/1ZWETI9PgkgFuIIDK5oF3SOCMWEqzZFUGfv+56ukcx+zl 5w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hbnhy0kkf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Jul 2022 17:30:55 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 655F510002A;
+        Tue, 19 Jul 2022 17:30:54 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 45BDD22AFE7;
+        Tue, 19 Jul 2022 17:30:54 +0200 (CEST)
+Received: from [10.201.20.208] (10.75.127.45) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 19 Jul
+ 2022 17:30:50 +0200
+Message-ID: <d46e5eee-c8ae-545f-e69e-1dd2f2e71323@foss.st.com>
+Date:   Tue, 19 Jul 2022 17:30:49 +0200
 MIME-Version: 1.0
-References: <20211116012912.723980-1-longman@redhat.com> <CAD=FV=URCo5xv3k3jWbxV1uRkUU5k6bcnuB1puZhxayEyVc6-A@mail.gmail.com>
- <20220719104104.1634-1-hdanton@sina.com>
-In-Reply-To: <20220719104104.1634-1-hdanton@sina.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 19 Jul 2022 08:30:02 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xng_Mcd-9SaK29XSbsthDWLTR6sz53VEktAQFng6a27A@mail.gmail.com>
-Message-ID: <CAD=FV=Xng_Mcd-9SaK29XSbsthDWLTR6sz53VEktAQFng6a27A@mail.gmail.com>
-Subject: Re: [PATCH v5] locking/rwsem: Make handoff bit handling more consistent
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 3/4] dmaengine: stm32-dma: add support to trigger STM32
+ MDMA
+Content-Language: en-US
+To:     Marek Vasut <marex@denx.de>, Jonathan Corbet <corbet@lwn.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-doc@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220713142148.239253-1-amelie.delaunay@foss.st.com>
+ <20220713142148.239253-4-amelie.delaunay@foss.st.com>
+ <e1fbf7cf-1bb7-6583-3713-7dbd58a4898e@denx.de>
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+In-Reply-To: <e1fbf7cf-1bb7-6583-3713-7dbd58a4898e@denx.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-19_04,2022-07-19_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Marek,
 
-On Tue, Jul 19, 2022 at 3:41 AM Hillf Danton <hdanton@sina.com> wrote:
->
-> On Mon, 18 Jul 2022 17:27:28 -0700 Doug Anderson <dianders@chromium.org> wrote:
-> >
-> > I've been tracking down an occasional hang at reboot on my system and
-> > I've ended up at this as the first bad commit. I will not pretend to
-> > understand the intricacies of the rwsem implementation, but I can
-> > describe what I saw. I have also produced a fairly small test case
-> > that reproduces the problem rather quickly.
-> >
-> > First, what I saw:
-> >
-> > My system failed to fully boot up and eventually the "hung task"
-> > detection kicked in. Many tasks in my system were hung all waiting on
-> > the "kernfs_rwsem". No tasks actually had the semaphore--it only had
-> > tasks waiting.
-> >
-> > Of the tasks waiting, 3 of them were doing a down_write(). The rest
-> > were all waiting on down_read().
-> >
-> > 2 of the tasks waiting on the down_write() were locked to CPU0. One of
-> > these tasks was a bound kworker. Another of these tasks was a threaded
-> > IRQ handler. The threaded IRQ handler was set to "real time" priority
-> > because in setup_irq_thread() you can see the call to
-> > sched_set_fifo().
-> >
-> > At the time the hung task detector kicked in, the real time task was
-> > actually active on a CPU. Specifically it was running in the for (;;)
-> > loop in rwsem_down_write_slowpath(). rwsem_try_write_lock() had
-> > clearly just returned false which meant we didn't get the lock.
-> > Everything else was sitting in schedule().
-> >
-> > I managed to get the real time task into kgdb and I could analyze its
-> > state as well as the state of "sem". The real time task was _not_ the
-> > first waiter. The kworker was the first waiter. The
-> > "waiter.handoff_set" was set to "true" for the real time task. The
-> > rwsem owner was OWNER_NULL.
-> >
-> > Looking through the code and watching what was happening.
-> >
-> > 1. The function rwsem_try_write_lock() was instantly returning false
-> > since `handoff` is set and we're not first.
-> > 2. After we get back into rwsem_down_write_slowpath() we'll see the
-> > handoff set and we'll try to spin on the owner. There is no owner, so
-> > this is a noop.
-> > 3. Since there's no owner, we'll go right back to the start of the loop.
-> >
-> > So basically the real time thread (the threaded IRQ handler) was
-> > locked to CPU0 and spinning as fast as possible. The "first waiter"
-> > for the semaphore was blocked from running because it could only run
-> > on CPU0 but was _not_ real time priority.
-> >
-> > -
-> >
-> > So all the analysis above was done on the Chrome OS 5.15 kernel
-> > branch, which has ${SUBJECT} patch from the stable tree. The code
-> > looks reasonably the same on mainline.
-> >
-> > ...and also, I coded up a test case that can reproduce this on
-> > mainline. It's ugly/hacky but it gets the job done. This reproduces
-> > the problem at the top of mainline as of commit 80e19f34c288 ("Merge
-> > tag 'hte/for-5.19' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux").
-> >
-> > For me, I was only able to reproduce this without "lockdep" enabled.
-> > My lockdep configs were:
-> >
-> > CONFIG_DEBUG_RT_MUTEXES=y
-> > CONFIG_DEBUG_SPINLOCK=y
-> > CONFIG_DEBUG_MUTEXES=y
-> > CONFIG_PROVE_RCU=y
-> > CONFIG_PROVE_LOCKING=y
-> > CONFIG_DEBUG_ATOMIC_SLEEP=y
-> >
-> > I don't know for sure if lockdep is actually required to reproduce.
-> >
-> > -
-> >
-> > OK, so here's my hacky test case. In my case, I put a call to this
-> > test function in a convenient debugfs "show" function to make it easy
-> > to trigger. You can put it wherever.
-> >
-> > struct test_data {
-> >         struct rw_semaphore *rwsem;
-> >         int i;
-> >         bool should_sleep;
-> > };
-> >
-> > static int test_thread_fn(void *data)
-> > {
-> >         struct test_data *test_data = data;
-> >         struct rw_semaphore *rwsem = test_data->rwsem;
-> >         ktime_t start;
-> >
-> >         trace_printk("Starting\n");
-> >         start = ktime_get();
-> >         while (ktime_to_ms(ktime_sub(ktime_get(), start)) < 60000) {
-> >                 trace_printk("About to grab\n");
-> >                 down_write(rwsem);
-> >                 trace_printk("Grabbed write %d\n", test_data->i);
-> >                 schedule();
-> >                 up_write(rwsem);
-> >                 trace_printk("Released write %d\n", test_data->i);
-> >                 if (test_data->should_sleep)
-> >                         msleep(1);
-> >         }
-> >         trace_printk("Done\n");
-> >
-> >         return 0;
-> > }
-> >
-> > static void test(void)
-> > {
-> >         static struct task_struct *t[10];
-> >         static struct test_data test_data[10];
-> >         static DECLARE_RWSEM(rwsem);
-> >         int i;
-> >
-> >         trace_printk("About to create threads\n");
-> >
-> >         for (i = 0; i < ARRAY_SIZE(t); i++) {
-> >                 test_data[i].rwsem = &rwsem;
-> >                 test_data[i].i = i;
-> >
-> >                 if (i == ARRAY_SIZE(t) - 1) {
-> >                         /*
-> >                          * Last thread will be bound to CPU0 and realtime.
-> >                          * Have it sleep to give other threads a chance to
-> >                          * run and contend.
-> >                          */
-> >                         test_data[i].should_sleep = true;
-> >                         t[i] = kthread_create_on_cpu(test_thread_fn,
-> >                                                      &test_data[i], 0,
-> >                                                      "test0 FIFO-%u");
-> >                         sched_set_fifo(t[i]);
-> >                 } else if (i == ARRAY_SIZE(t) - 2) {
-> >                         /* 2nd to last thread will be bound to CPU0 */
-> >                         t[i] = kthread_create_on_cpu(test_thread_fn,
-> >                                                      &test_data[i], 0,
-> >                                                      "test0-%u");
-> >                 } else {
-> >                         /* All other threads are just normal */
-> >                         t[i] = kthread_create(test_thread_fn,
-> >                                               &test_data[i], "test");
-> >                 }
-> >                 wake_up_process(t[i]);
-> >                 msleep(10);
-> >         }
-> > }
-> >
-> > -
-> >
-> > With the reproducer above, I was able to:
-> >
-> > 1. Validate that on chromeos-5.15 I could revert ${SUBJECT} patch and
-> > the problem went away.
-> >
-> > 2. I could go to mainline at exactly the commit hash of ${SUBJECT}
-> > patch, see the problem, then revert ${SUBJECT} patch and see the
-> > problem go away.
-> >
-> > Thus I'm fairly confident that the problem is related to ${SUBJECT} patch.
-> >
-> > -
-> >
-> > I'm hoping that someone on this thread can propose a fix. I'm happy to
-> > test, but I was hoping not to have to become an expert on the rwsem
-> > implementation to try to figure out the proper fix.
-> >
->
-> See if it makes sense to only allow the first waiter to spin on owner.
->
-> Hillf
->
-> --- mainline/kernel/locking/rwsem.c
-> +++ b/kernel/locking/rwsem.c
-> @@ -337,7 +337,7 @@ struct rwsem_waiter {
->         unsigned long timeout;
->
->         /* Writer only, not initialized in reader */
-> -       bool handoff_set;
-> +       bool handoff_set, first;
->  };
->  #define rwsem_first_waiter(sem) \
->         list_first_entry(&sem->wait_list, struct rwsem_waiter, list)
-> @@ -604,6 +604,7 @@ static inline bool rwsem_try_write_lock(
->
->         lockdep_assert_held(&sem->wait_lock);
->
-> +       waiter->first = first;
->         count = atomic_long_read(&sem->count);
->         do {
->                 bool has_handoff = !!(count & RWSEM_FLAG_HANDOFF);
-> @@ -1114,6 +1115,7 @@ rwsem_down_write_slowpath(struct rw_sema
->         waiter.type = RWSEM_WAITING_FOR_WRITE;
->         waiter.timeout = jiffies + RWSEM_WAIT_TIMEOUT;
->         waiter.handoff_set = false;
-> +       waiter.first = false;
->
->         raw_spin_lock_irq(&sem->wait_lock);
->         rwsem_add_waiter(sem, &waiter);
-> @@ -1158,7 +1160,7 @@ rwsem_down_write_slowpath(struct rw_sema
->                  * In this case, we attempt to acquire the lock again
->                  * without sleeping.
->                  */
-> -               if (waiter.handoff_set) {
-> +               if (waiter.handoff_set && waiter.first) {
+Thanks for reviewing.
 
-Your patch does fix my test case, so FWIW:
+On 7/14/22 21:02, Marek Vasut wrote:
+> On 7/13/22 16:21, Amelie Delaunay wrote:
+> 
+> [...]
+> 
+>> diff --git a/drivers/dma/stm32-dma.c b/drivers/dma/stm32-dma.c
+>> index adb25a11c70f..3916295fe154 100644
+>> --- a/drivers/dma/stm32-dma.c
+>> +++ b/drivers/dma/stm32-dma.c
+>> @@ -142,6 +142,8 @@
+>>   #define STM32_DMA_DIRECT_MODE_GET(n)    (((n) & 
+>> STM32_DMA_DIRECT_MODE_MASK) >> 2)
+>>   #define STM32_DMA_ALT_ACK_MODE_MASK    BIT(4)
+>>   #define STM32_DMA_ALT_ACK_MODE_GET(n)    (((n) & 
+>> STM32_DMA_ALT_ACK_MODE_MASK) >> 4)
+>> +#define STM32_DMA_MDMA_STREAM_ID_MASK    GENMASK(19, 16)
+>> +#define STM32_DMA_MDMA_STREAM_ID_GET(n) (((n) & 
+>> STM32_DMA_MDMA_STREAM_ID_MASK) >> 16)
+> 
+> Try FIELD_GET() from include/linux/bitfield.h
+> 
+> [...]
+> 
 
-Tested-by: Douglas Anderson <dianders@chromium.org>
+Yes, but not only on this new line. I'll add a prior patch to the 
+patchset to use FIELD_{GET,PREP}() helpers every where custom macros are 
+used.
 
-I haven't done any stress testing other than my test case, though, so
-I can't speak to whether there might be any other unintended issues.
+>> @@ -1630,6 +1670,20 @@ static int stm32_dma_probe(struct 
+>> platform_device *pdev)
+>>           chan->id = i;
+>>           chan->vchan.desc_free = stm32_dma_desc_free;
+>>           vchan_init(&chan->vchan, dd);
+>> +
+>> +        chan->mdma_config.ifcr = res->start;
+>> +        chan->mdma_config.ifcr += (chan->id & 4) ? STM32_DMA_HIFCR : 
+>> STM32_DMA_LIFCR;
+>> +
+>> +        chan->mdma_config.tcf = STM32_DMA_TCI;
+>> +        /*
+>> +         * bit0 of chan->id represents the need to left shift by 6
+>> +         * bit1 of chan->id represents the need to extra left shift 
+>> by 16
+>> +         * TCIF0, chan->id = b0000; TCIF4, chan->id = b0100: left 
+>> shift by 0*6 + 0*16
+>> +         * TCIF1, chan->id = b0001; TCIF5, chan->id = b0101: left 
+>> shift by 1*6 + 0*16
+>> +         * TCIF2, chan->id = b0010; TCIF6, chan->id = b0110: left 
+>> shift by 0*6 + 1*16
+>> +         * TCIF3, chan->id = b0011; TCIF7, chan->id = b0111: left 
+>> shift by 1*6 + 1*16
+>> +         */
+>> +        chan->mdma_config.tcf <<= (6 * (chan->id & 0x1) + 16 * 
+>> ((chan->id & 0x2) >> 1));
+> 
+> Some sort of symbolic macros instead of open-coded constants could help 
+> readability here.
+> 
 
+I agree. As the same kind of computation is done in 
+stm32_dma_irq_status() and stm32_dma_irq_clear(), I'll add another prior 
+patch to the patchset to introduce new macro helpers to get ISR/IFCR 
+offset depending on channel id, and to get channel flags mask depending 
+on channel id.
 
--Doug
+> [...]
+
+Regards,
+Amelie

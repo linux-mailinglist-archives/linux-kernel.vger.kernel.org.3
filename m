@@ -2,74 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F9A578F2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DC6578F2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 02:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236758AbiGSATf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 20:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
+        id S236759AbiGSATr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 20:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236493AbiGSATd (ORCPT
+        with ESMTP id S235594AbiGSATp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 20:19:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2BD357E2;
-        Mon, 18 Jul 2022 17:19:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 515DAB817CE;
-        Tue, 19 Jul 2022 00:19:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 18C62C341C0;
-        Tue, 19 Jul 2022 00:19:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658189970;
-        bh=/c6fW97FOQ82tTE2f64MRuaAsrzxWpSYevu3hAWQn24=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=QGxKRIWzfRtC5IE8m4VoeMwHN2aE4VRDznlbjJ3Uie/BdlpYeTXbYGXLt1nCmVb09
-         /6dH+pwSO5i56xcwk6iMFsJaK4GErYwJ7WblAZKIdYBXHwAU4XB0DTFvO5huQb1azd
-         9novKoaPt5g2L60MOL63kA9nAkPOEHyFKxIAsOF5RzEa6NflzBuEx5OTznlnadmgMU
-         P2wrL/tLXxdK+I6ekk3yhGIR4+QMiyKNIyzXJ+/GM1a0J9TFxs7YJTEm02IunG33R5
-         2emQTlGFfETgJNmNqcUNeG+8F4Is3dED7DjKbb3WWz1uof593UxfkhegD69/bLrnj9
-         Dwf25eQ1jkLXA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02A1EE451AD;
-        Tue, 19 Jul 2022 00:19:30 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220718231210.GA143116@nvidia.com>
-References: <20220718231210.GA143116@nvidia.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220718231210.GA143116@nvidia.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
-X-PR-Tracked-Commit-Id: cc0315564d6eec91c716d314b743321be24c70b3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ca85855bdcae8f84f1512e88b4c75009ea17ea2f
-Message-Id: <165818996999.1199.13923570850825484889.pr-tracker-bot@kernel.org>
-Date:   Tue, 19 Jul 2022 00:19:29 +0000
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leonro@nvidia.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 20:19:45 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5F133437
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:19:43 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id a5so19307762wrx.12
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 17:19:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A/tfmTl8rXDFpYRGXN4+L+UsANM+7IsYT4VqGSMDHfM=;
+        b=YsSa6GugGINKY6fPTPL9pliswrcB1UYTnSQSyvHufKXAKsnNqjgbZf/MrzBAVFkpkV
+         3efUWwnPZNgyam4zbFiZvkF6DwmWKFdS4gCpQebSh57I/6VOBjSSfsjowVXVPiw71gNH
+         de+i+jDRoJXPnuWcTFjPOCu7w5EYVFWAUjK8xRxu3vg0KbHaPYzSIuS0CLG8vyC+lneJ
+         h4Ng6A/IL8PySfzmZtqDJZ+vkSLiZB+gEobBhwgUXPRZxEZxNCQ3mkTA+krKy7w5UpLY
+         vLso/ZSSkedxwIUPkoCsvkpFvozIoqB8yMpsstKN1pibqE18Si1uau6Mu0kK3kRsror3
+         2GFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A/tfmTl8rXDFpYRGXN4+L+UsANM+7IsYT4VqGSMDHfM=;
+        b=H90OZSuN9ALc23f2jkVi5KnMgEU2zwwAT9XFt5j3SJOx6AMnqcHCR+Pb9AtfMTj6JP
+         nZBlaN5BsG/TnuPUm9Mia2Yj3dOZeHtcDxgpx+wagsOYkARpIk8tuXFOGE+kaEc87m4s
+         /zsfAPm90mieEapkwAJvR/BkyINRCu8Wtt8FiGgWSugmt6sya6L5NICfaY7SLTCnjkWS
+         M4jEgDDzSeQi7CjMhQTu3NXpKT3ERrYQGsPtUXIQ9+R/URpcn4gHwjAJaw3i9SzM/FGU
+         ZPIS9x29V7QXk76hQhgFCwtIBa/AAbRg8Ej8YlLDUGiJLEPBKVwxv838GlwvJ3tkBdhY
+         PD+A==
+X-Gm-Message-State: AJIora+5usuw7Z4thk9k/zRiQ35SZl99oFhulQ+mV9DpBEvxm90SkglP
+        060otMkMyj9ZuDYO2HljcYpc86+QjmKPCi1FUSe3Eg==
+X-Google-Smtp-Source: AGRyM1u7d1r2Bbb6nhCQBRvfKeZJGVEGRNOp/QpyZlEJg/hAAoSmdJGRxsGTEeAkJzI4ZjA4LDyHE6jEsWuJDXBvTtM=
+X-Received: by 2002:a5d:64a3:0:b0:21d:adaa:ce4c with SMTP id
+ m3-20020a5d64a3000000b0021dadaace4cmr24585254wrp.161.1658189982235; Mon, 18
+ Jul 2022 17:19:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220709000439.243271-1-yosryahmed@google.com>
+ <20220709000439.243271-9-yosryahmed@google.com> <b4936952-2fe7-656c-2d0d-69044265392a@fb.com>
+ <9c6a0ba3-2730-eb56-0f96-e5d236e46660@fb.com> <CAJD7tkZUfNqD8z6Cv7vi1TxpwKTXhDn_yweDHnRr++9iJs+=ew@mail.gmail.com>
+ <CAJD7tkb8-scb1sstre0LRhY3dgfUJhGvSR=DgEqfwcVtBwb+5w@mail.gmail.com>
+In-Reply-To: <CAJD7tkb8-scb1sstre0LRhY3dgfUJhGvSR=DgEqfwcVtBwb+5w@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 18 Jul 2022 17:19:30 -0700
+Message-ID: <CA+khW7i_SCDoMgtVWw=E5RkJBmSvqo+KFjVp3_X+LZ9wyfqO7g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 8/8] bpf: add a selftest for cgroup
+ hierarchical stats collection
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 18 Jul 2022 20:12:10 -0300:
+On Mon, Jul 18, 2022 at 12:34 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+[...]
+>
+> I think I figured this one out (the CI failure). I set max_entries for
+> the maps in the test to 10, because I have 1 entry per-cgroup, and I
+> have less than 10 cgroups. When I run the test with other tests I
+> *think* there are other cgroups that are being created, so the number
+> exceeds 10, and some of the entries for the test cgroups cannot be
+> created.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+Using hashmap to store per-cgroup data is only a short-term solution.
+We should work on extending cgroup-local storage to tracing programs.
+Maybe as a follow-up change once cgroup_iter is merged.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ca85855bdcae8f84f1512e88b4c75009ea17ea2f
+> in the bpf trace produced by my test, and the error turned out to be
+> -E2BIG. I increased max_entries to 100 and it seems to be consistently
+> passing when run with all the other tests, using both test_progs and
+> test_progs-no_alu32.
+>
+> Please find a diff attached fixing this problem and a few other nits:
+> - Return meaningful exit codes from the reclaimer() child process and
+> check them in induce_vmscan().
+> - Make buf and path variables static in get_cgroup_vmscan_delay()
+> - Print error code in bpf trace when we fail to create a bpf map entry.
+> - Print 0 instead of -1 when we can't find a map entry, to avoid
+> underflowing the unsigned counters in the test.
+>
+> Let me know if this diff works or not, and if I need to send a new
+> version with the diff or not. Also let me know if this fixes the
+> failures that you have been seeing locally (which looked different
+> from the CI failures).
+>
 
-Thank you!
+Yosry, I also need to address Yonghong's comments in the cgroup_iter
+patch, so we need to send v4 anyway.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Hao
+
+> Thanks!
+>
+[...]

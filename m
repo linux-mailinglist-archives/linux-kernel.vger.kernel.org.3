@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF4457A9E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E971D57A9EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238303AbiGSWj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S238898AbiGSWkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbiGSWjy (ORCPT
+        with ESMTP id S231350AbiGSWj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:39:54 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8623451A35
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:39:53 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id v1-20020a259d81000000b0066ec7dff8feso11966820ybp.18
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:39:53 -0700 (PDT)
+        Tue, 19 Jul 2022 18:39:57 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375D85F103
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:39:56 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31e62f7b377so14813617b3.17
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:39:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=grEWX5Q2Gi+Bk5fMy2TN3qnUnm6uP4D8TaJUZqeNrFQ=;
-        b=EUlx+ufDH2jvryOa7Veq4vfgW4aSe+2UET+OUVmBGmVBrYLKe4ZfEJmHscCRh2wBuf
-         EpjZgrDm1rHE0cr7+mda7ozXidNTzHcJi2Oo7z4/C4pk4qnBuoo9dJjKD49NIkRFl40p
-         I7vqPansDwjFznG3+Mu1WRRcQr+cRPUQEN9G9f1uZHGGi1qyBfHovFQKUdW3HEmacdTP
-         tZNI9leU4b1pxRYSMP/twcRCFArwLBuzKvmUCFipZo0Vn44vlibv0Yw0UQ6kNwfybEdK
-         TvSCvnjjTYbAjgGflv0aRDM6h1q3F4SfYe7eIofzKfddpQf6UeZUiIcAwt2f/oBQ0R5R
-         DlRA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=l87gG1WyC4n1XKCTQzQ6qazcqKsuewxndKvm1gZMqNQ=;
+        b=GTxObVcma+OcUlt/RnVXBWHWI4KnrfiNrO5lDyplvM6yo7182eICqUB6x2Wl+NbEer
+         M54pE1TuHvRTApLXtPeGwM5mpKetvKOXdWsMkq26IfDWWVzmpFooeBaY3cOUTimWCuTd
+         M3/1azLothgNl6qSa+GrXNMdQEbROeVbsE+4r19QHWHYM3yJqg2Vae3L46SFFdc0x7I0
+         Xx9jzeBCNgBobbaltASj+3pvzt2xDcNX+P3M/ZCl3pe3kgkUavXfmrPnKlD6tsw3JS+2
+         IctNJddyGi7PfCvwcEa1mb0M3uy5zeibKR6Ci9+we7xQnS28r5fbELtewJ1Cgj94H2UI
+         s4oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=grEWX5Q2Gi+Bk5fMy2TN3qnUnm6uP4D8TaJUZqeNrFQ=;
-        b=M/kp+CqD95Rjq1sBdsK85STwFRcCsO60kiS4YRFktK4kXIqaYuKmvOnqcT6T7xLh04
-         Njo12uXHRJykhqqpv8dAKn5P4tfj3sK2a6SgsL4z4IXLkG92T3p3wiCtrjWO1VwVMlqg
-         BLR+UAZBsgIpyE1UWKFpkK41FDeN6SC5vZ+LhMdbt6Uf/pM6lu60IYXQCGyn5wfTumah
-         kC4E/I9fDVQ1Ciar+n6p7f/B+7mf8qx+LhgnkubD3m1eBH2u9N0wH7P5eFl1LwC/TLpD
-         7Zd+KIL1UTxd9aw3TuIdqWve69TpOJAoPg0JPtujvvbfbDU4MCSoXzppWrJFjdbWM9/K
-         GJLg==
-X-Gm-Message-State: AJIora/JpKltc2OODzWV5+UsnLgMzRaMOUNDwj95kJLSW6kkRc3PiKrC
-        zjC+uMQUu0i33RbGop76IedBHldNvDws
-X-Google-Smtp-Source: AGRyM1v5hWbGrE9A/W3lUU8LrmC5W59eMln76SyMiJEeUjGlgbIafLsRRWfPei/GeaQiTVaFTAPc265unHUg
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=l87gG1WyC4n1XKCTQzQ6qazcqKsuewxndKvm1gZMqNQ=;
+        b=SM17Bb4/4LuSBSfLUov/y2kZFIWRFrg3nh125ySMedP9+rA93/ZnpSKXv3ennujiz5
+         7vUzdV92oEjAnLzad06qgIYNrOIhrOCbxiIz5gTs8kSTjE1CP6311SUZDIWlRnUPuckM
+         r/+qzFJcyCtrymZnKS+8L/3OwOYRm8cDxcsjLxbvPpHSZRKQ98MtE7MqPH9PAPeY/+I3
+         Fm6s3IfPpWJFsI3GfPxclb/xqnj2ug/8Eu1WRENji+tm54JHNdznu0O6s80IrBhs6qPI
+         Jcouvsb2KAYXIUV0p9NeV25KgGNYD8Yh8WZmcTBk251fpbpEfCYoM/M4d8bLtfBDSFeI
+         9yqg==
+X-Gm-Message-State: AJIora8hRNaul8qrl7vE5YhLK/6HD8Y4mAIKWCZ84vJgStLse3n3DyeO
+        7wyOKCN+ujjOxAs4cKmZE9/KihXXE0US
+X-Google-Smtp-Source: AGRyM1sdo635dOXyXBIo0JfgAEuPZQ6T6iA4rAc3JR3JXFDiiyUG5qbf5vTPHLLd3x4XmowuZLmFd2ee+J+p
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:1251:e27b:f589:696c])
- (user=irogers job=sendgmr) by 2002:a25:94a:0:b0:668:df94:fdf4 with SMTP id
- u10-20020a25094a000000b00668df94fdf4mr32364368ybm.425.1658270392810; Tue, 19
- Jul 2022 15:39:52 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 15:39:43 -0700
-Message-Id: <20220719223946.176299-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a81:e44:0:b0:31e:6077:45c0 with SMTP id
+ 65-20020a810e44000000b0031e607745c0mr4575757ywo.490.1658270395365; Tue, 19
+ Jul 2022 15:39:55 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 15:39:44 -0700
+In-Reply-To: <20220719223946.176299-1-irogers@google.com>
+Message-Id: <20220719223946.176299-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20220719223946.176299-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v3 0/3] Tidy user rdpmc documentation and testing
+Subject: [PATCH v3 1/3] perf: Align user space counter reading with code
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -68,7 +72,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,37 +80,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-libperf's perf_mmap__read_self and the addition of arm64 support mean
-that the perf_event.h and the rdpmc perf test have become
-stale. Refresh the documentation in perf_event.h, remove the x86 rdpmc
-test and port the libperf test as a non-architecture specific test.
+Align the user space counter reading documentation with the code in
+perf_mmap__read_self. Previously the documentation was based on the perf
+rdpmc test, but now general purpose code is provided by libperf.
 
-A comment is added to perf_event.h to avoid a divide by zero when
-scaling counts if the running time is 0. This was previously discussed
-in this thread:
-https://lore.kernel.org/lkml/CAP-5=fVRdqvswtyQMg5cB+ntTGda+SAYskjTQednEH-AeZo13g@mail.gmail.com/
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ include/uapi/linux/perf_event.h       | 35 +++++++++++++++++----------
+ tools/include/uapi/linux/perf_event.h | 35 +++++++++++++++++----------
+ 2 files changed, 44 insertions(+), 26 deletions(-)
 
-v3. Incorporates fixes from Rob Herring <robh@kernel.org> to make the
-    perf_event.h comments better. It drops the already merged sanitizer fix.
-v2. Alters the skip in test_stat_user_read for open to always be a
-    skip as perf_event_open may fail with EACCES (permissions), ENOSYS
-    (not supported) and ENOENT (hypervisor). Adds Rob Herring's
-    acked-by on patch 3.
-
-Ian Rogers (3):
-  perf: Align user space counter reading with code
-  perf test: Remove x86 rdpmc test
-  perf test: Add user space counter reading tests
-
- include/uapi/linux/perf_event.h        |  35 +++--
- tools/include/uapi/linux/perf_event.h  |  35 +++--
- tools/perf/arch/x86/tests/Build        |   1 -
- tools/perf/arch/x86/tests/arch-tests.c |   2 -
- tools/perf/arch/x86/tests/rdpmc.c      | 182 -------------------------
- tools/perf/tests/mmap-basic.c          | 127 ++++++++++++++++-
- 6 files changed, 170 insertions(+), 212 deletions(-)
- delete mode 100644 tools/perf/arch/x86/tests/rdpmc.c
-
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index d37629dbad72..6826dabb7e03 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -538,9 +538,13 @@ struct perf_event_mmap_page {
+ 	 *
+ 	 *     if (pc->cap_usr_time && enabled != running) {
+ 	 *       cyc = rdtsc();
+-	 *       time_offset = pc->time_offset;
+ 	 *       time_mult   = pc->time_mult;
+ 	 *       time_shift  = pc->time_shift;
++	 *       time_offset = pc->time_offset;
++	 *       if (pc->cap_user_time_short) {
++	 *         time_cycles = pc->time_cycles;
++	 *         time_mask = pc->time_mask;
++	 *       }
+ 	 *     }
+ 	 *
+ 	 *     index = pc->index;
+@@ -548,6 +552,9 @@ struct perf_event_mmap_page {
+ 	 *     if (pc->cap_user_rdpmc && index) {
+ 	 *       width = pc->pmc_width;
+ 	 *       pmc = rdpmc(index - 1);
++	 *       pmc <<= 64 - width;
++	 *       pmc >>= 64 - width;
++	 *       count += pmc;
+ 	 *     }
+ 	 *
+ 	 *     barrier();
+@@ -590,25 +597,27 @@ struct perf_event_mmap_page {
+ 	 * If cap_usr_time the below fields can be used to compute the time
+ 	 * delta since time_enabled (in ns) using rdtsc or similar.
+ 	 *
+-	 *   u64 quot, rem;
+-	 *   u64 delta;
+-	 *
+-	 *   quot = (cyc >> time_shift);
+-	 *   rem = cyc & (((u64)1 << time_shift) - 1);
+-	 *   delta = time_offset + quot * time_mult +
+-	 *              ((rem * time_mult) >> time_shift);
++	 *   cyc = time_cycles + ((cyc - time_cycles) & time_mask);
++	 *   delta = time_offset + mul_u64_u32_shr(cyc, time_mult, time_shift);
+ 	 *
+ 	 * Where time_offset,time_mult,time_shift and cyc are read in the
+-	 * seqcount loop described above. This delta can then be added to
+-	 * enabled and possible running (if index), improving the scaling:
++	 * seqcount loop described above. mul_u64_u32_shr will compute:
++	 *
++	 *   (u64)(((unsigned __int128)cyc * time_mult) >> time_shift)
++	 *
++	 * This delta can then be added to enabled and possible running (if
++	 * index) to improve the scaling. Due to event multiplexing, running
++	 * may be zero and so care is needed to avoid division by zero.
+ 	 *
+ 	 *   enabled += delta;
+ 	 *   if (index)
+ 	 *     running += delta;
+ 	 *
+-	 *   quot = count / running;
+-	 *   rem  = count % running;
+-	 *   count = quot * enabled + (rem * enabled) / running;
++	 *   if (running != 0) {
++	 *     quot = count / running;
++	 *     rem  = count % running;
++	 *     count = quot * enabled + (rem * enabled) / running;
++	 *   }
+ 	 */
+ 	__u16	time_shift;
+ 	__u32	time_mult;
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index d37629dbad72..6826dabb7e03 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -538,9 +538,13 @@ struct perf_event_mmap_page {
+ 	 *
+ 	 *     if (pc->cap_usr_time && enabled != running) {
+ 	 *       cyc = rdtsc();
+-	 *       time_offset = pc->time_offset;
+ 	 *       time_mult   = pc->time_mult;
+ 	 *       time_shift  = pc->time_shift;
++	 *       time_offset = pc->time_offset;
++	 *       if (pc->cap_user_time_short) {
++	 *         time_cycles = pc->time_cycles;
++	 *         time_mask = pc->time_mask;
++	 *       }
+ 	 *     }
+ 	 *
+ 	 *     index = pc->index;
+@@ -548,6 +552,9 @@ struct perf_event_mmap_page {
+ 	 *     if (pc->cap_user_rdpmc && index) {
+ 	 *       width = pc->pmc_width;
+ 	 *       pmc = rdpmc(index - 1);
++	 *       pmc <<= 64 - width;
++	 *       pmc >>= 64 - width;
++	 *       count += pmc;
+ 	 *     }
+ 	 *
+ 	 *     barrier();
+@@ -590,25 +597,27 @@ struct perf_event_mmap_page {
+ 	 * If cap_usr_time the below fields can be used to compute the time
+ 	 * delta since time_enabled (in ns) using rdtsc or similar.
+ 	 *
+-	 *   u64 quot, rem;
+-	 *   u64 delta;
+-	 *
+-	 *   quot = (cyc >> time_shift);
+-	 *   rem = cyc & (((u64)1 << time_shift) - 1);
+-	 *   delta = time_offset + quot * time_mult +
+-	 *              ((rem * time_mult) >> time_shift);
++	 *   cyc = time_cycles + ((cyc - time_cycles) & time_mask);
++	 *   delta = time_offset + mul_u64_u32_shr(cyc, time_mult, time_shift);
+ 	 *
+ 	 * Where time_offset,time_mult,time_shift and cyc are read in the
+-	 * seqcount loop described above. This delta can then be added to
+-	 * enabled and possible running (if index), improving the scaling:
++	 * seqcount loop described above. mul_u64_u32_shr will compute:
++	 *
++	 *   (u64)(((unsigned __int128)cyc * time_mult) >> time_shift)
++	 *
++	 * This delta can then be added to enabled and possible running (if
++	 * index) to improve the scaling. Due to event multiplexing, running
++	 * may be zero and so care is needed to avoid division by zero.
+ 	 *
+ 	 *   enabled += delta;
+ 	 *   if (index)
+ 	 *     running += delta;
+ 	 *
+-	 *   quot = count / running;
+-	 *   rem  = count % running;
+-	 *   count = quot * enabled + (rem * enabled) / running;
++	 *   if (running != 0) {
++	 *     quot = count / running;
++	 *     rem  = count % running;
++	 *     count = quot * enabled + (rem * enabled) / running;
++	 *   }
+ 	 */
+ 	__u16	time_shift;
+ 	__u32	time_mult;
 -- 
 2.37.0.170.g444d1eabd0-goog
 

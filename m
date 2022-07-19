@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55155798DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12265798D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236910AbiGSLzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S236098AbiGSLzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236115AbiGSLzq (ORCPT
+        with ESMTP id S230384AbiGSLzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:55:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18E0237F0;
-        Tue, 19 Jul 2022 04:55:43 -0700 (PDT)
+        Tue, 19 Jul 2022 07:55:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DFBDEFF;
+        Tue, 19 Jul 2022 04:55:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 587AB615C9;
-        Tue, 19 Jul 2022 11:55:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF145C341C6;
-        Tue, 19 Jul 2022 11:55:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 886FB615C9;
+        Tue, 19 Jul 2022 11:55:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EEA5C341C6;
+        Tue, 19 Jul 2022 11:55:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658231742;
-        bh=P7uujoagZVXY2+acqi8cFz5hWUXidjPWFFNbDMUaMHw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DSJ+GPkurSgI7EuVIJN9g+hOb1SwWxLk7JmdjgCsv3mcq/1+nbiuI0MfwEwNaP4y8
-         uNiigBDHFQ1rou0DZ5TT5wannsiwbNG/Ey5+hyjfXrJPRNNaXBrTGQgGSG6Ad+x98Q
-         /QTm06barjDofLCxBY6AxTOAu/PKOAwrVWx5EMvo=
+        s=korg; t=1658231736;
+        bh=GQa+Ku1CeHENhMHosCghZ0yfKqd5BdcVUhg/DT+AMH0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fK3g4+xvn4DMXF4gUj96cka4X2Gnrx+SILld+2yB2cKjkO1AXfULTgdG87GRpxz3y
+         S8lkFQ8amobGV9NbjpaUIslbv/1SnCA6WHdy+TWrg228IcrSawCgaDsMbN319Oxlzu
+         dqbVVJWEZpx0puxMxjCJNyEiIf+GRDDYTbGCc7Qg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.9 00/28] 4.9.324-rc1 review
-Date:   Tue, 19 Jul 2022 13:53:38 +0200
-Message-Id: <20220719114455.701304968@linuxfoundation.org>
+        stable@vger.kernel.org, Sumit Gupta <sumitg@nvidia.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH 4.9 01/28] arm64: entry: Restore tramp_map_kernel ISB
+Date:   Tue, 19 Jul 2022 13:53:39 +0200
+Message-Id: <20220719114456.729095916@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-MIME-Version: 1.0
+In-Reply-To: <20220719114455.701304968@linuxfoundation.org>
+References: <20220719114455.701304968@linuxfoundation.org>
 User-Agent: quilt/0.66
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.324-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.9.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.9.324-rc1
-X-KernelTest-Deadline: 2022-07-21T11:44+00:00
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,148 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.9.324 release.
-There are 28 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: James Morse <james.morse@arm.com>
 
-Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
-Anything received after that time might be too late.
+Summit reports that the BHB backports for v4.9 prevent vulnerable
+platforms from booting when CONFIG_RANDOMIZE_BASE is enabled.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.324-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-and the diffstat can be found below.
+This is because the trampoline code takes a translation fault when
+accessing the data page, because the TTBR write hasn't been completed
+by an ISB before the access is made.
 
-thanks,
+Upstream has a complex erratum workaround for QCOM_FALKOR_E1003 in
+this area, which removes the ISB when the workaround has been applied.
+v4.9 lacks this workaround, but should still have the ISB.
 
-greg k-h
+Restore the barrier.
 
--------------
-Pseudo-Shortlog of commits:
+Fixes: aee10c2dd013 ("arm64: entry: Add macro for reading symbol addresses from the trampoline")
+Reported-by: Sumit Gupta <sumitg@nvidia.com>
+Tested-by: Sumit Gupta <sumitg@nvidia.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: James Morse <james.morse@arm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/arm64/kernel/entry.S |    1 +
+ 1 file changed, 1 insertion(+)
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.9.324-rc1
-
-Marc Kleine-Budde <mkl@pengutronix.de>
-    can: m_can: m_can_tx_handler(): fix use after free of skb
-
-Rik van Riel <riel@surriel.com>
-    mm: invalidate hwpoison page cache page in fault path
-
-Yi Yang <yiyang13@huawei.com>
-    serial: 8250: fix return error code in serial8250_request_std_resource()
-
-Chanho Park <chanho61.park@samsung.com>
-    tty: serial: samsung_tty: set dma burst_size to 1
-
-Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-    usb: dwc3: gadget: Fix event pending check
-
-Lucien Buchmann <lucien.buchmann@gmx.net>
-    USB: serial: ftdi_sio: add Belimo device ids
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    signal handling: don't use BUG_ON() for debugging
-
-Juergen Gross <jgross@suse.com>
-    x86: Clear .brk area at early boot
-
-Charles Keepax <ckeepax@opensource.cirrus.com>
-    ASoC: wm5110: Fix DRE control
-
-Mark Brown <broonie@kernel.org>
-    ASoC: ops: Fix off by one in range control validation
-
-Michael Walle <michael@walle.cc>
-    NFC: nxp-nci: don't print header length mismatch on i2c error
-
-Hangyu Hua <hbh25y@gmail.com>
-    net: tipc: fix possible refcount leak in tipc_sk_create()
-
-Liang He <windhl@126.com>
-    cpufreq: pmac32-cpufreq: Fix refcount leak bug
-
-Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-    virtio_mmio: Restore guest page size on resume
-
-Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-    virtio_mmio: Add missing PM calls to freeze/restore
-
-Íñigo Huguet <ihuguet@redhat.com>
-    sfc: fix kernel panic when creating VF
-
-Íñigo Huguet <ihuguet@redhat.com>
-    sfc: fix use after free when disabling sriov
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    ipv4: Fix data-races around sysctl_ip_dynaddr.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    icmp: Fix data-races around sysctl.
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    cipso: Fix data-races around sysctl.
-
-Ard Biesheuvel <ardb@kernel.org>
-    ARM: 9209/1: Spectre-BHB: avoid pr_info() every time a CPU comes out of idle
-
-Doug Berger <opendmb@gmail.com>
-    net: dsa: bcm_sf2: force pause link settings
-
-Ryusuke Konishi <konishi.ryusuke@gmail.com>
-    nilfs2: fix incorrect masking of permission flags for symlinks
-
-Dmitry Osipenko <dmitry.osipenko@collabora.com>
-    ARM: 9213/1: Print message about disabled Spectre workarounds only once
-
-Steven Rostedt (Google) <rostedt@goodmis.org>
-    net: sock: tracing: Fix sock_exceed_buf_limit not to dereference stale pointer
-
-Juergen Gross <jgross@suse.com>
-    xen/netback: avoid entering xenvif_rx_next_skb() with an empty rx queue
-
-Meng Tang <tangmeng@uniontech.com>
-    ALSA: hda - Add fixup for Dell Latitidue E5430
-
-James Morse <james.morse@arm.com>
-    arm64: entry: Restore tramp_map_kernel ISB
-
-
--------------
-
-Diffstat:
-
- Documentation/networking/ip-sysctl.txt |  4 ++--
- Makefile                               |  4 ++--
- arch/arm/mm/proc-v7-bugs.c             |  9 ++++-----
- arch/arm64/kernel/entry.S              |  1 +
- arch/x86/kernel/head64.c               |  2 ++
- drivers/cpufreq/pmac32-cpufreq.c       |  4 ++++
- drivers/net/can/m_can/m_can.c          |  5 +++--
- drivers/net/dsa/bcm_sf2.c              | 19 +++++++++++++++++++
- drivers/net/ethernet/sfc/ef10.c        |  3 +++
- drivers/net/ethernet/sfc/ef10_sriov.c  | 10 +++++++---
- drivers/net/xen-netback/rx.c           |  1 +
- drivers/nfc/nxp-nci/i2c.c              |  8 ++++++--
- drivers/tty/serial/8250/8250_port.c    |  4 +++-
- drivers/tty/serial/samsung.c           |  5 ++---
- drivers/usb/dwc3/gadget.c              |  4 +++-
- drivers/usb/serial/ftdi_sio.c          |  3 +++
- drivers/usb/serial/ftdi_sio_ids.h      |  6 ++++++
- drivers/virtio/virtio_mmio.c           | 26 ++++++++++++++++++++++++++
- fs/nilfs2/nilfs.h                      |  3 +++
- include/trace/events/sock.h            |  6 ++++--
- kernel/signal.c                        |  8 ++++----
- mm/memory.c                            |  9 +++++++--
- net/ipv4/af_inet.c                     |  4 ++--
- net/ipv4/cipso_ipv4.c                  | 12 +++++++-----
- net/ipv4/icmp.c                        |  5 +++--
- net/tipc/socket.c                      |  1 +
- sound/pci/hda/patch_realtek.c          |  1 +
- sound/soc/codecs/wm5110.c              |  8 ++++++--
- sound/soc/soc-ops.c                    |  4 ++--
- 29 files changed, 137 insertions(+), 42 deletions(-)
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -964,6 +964,7 @@ __ni_sys_trace:
+ 	b	.
+ 2:
+ 	tramp_map_kernel	x30
++	isb
+ 	tramp_data_read_var	x30, vectors
+ 	prfm	plil1strm, [x30, #(1b - \vector_start)]
+ 	msr	vbar_el1, x30
 
 

@@ -2,90 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42D757A133
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2026E57A151
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 16:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238508AbiGSOU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 10:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S238842AbiGSOXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 10:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237992AbiGSOUd (ORCPT
+        with ESMTP id S237847AbiGSOXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 10:20:33 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA950DF42
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:02:42 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id l23so27378526ejr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 07:02:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschuetter-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=3xwuq8Pneb87cu0HIZ51LWMdCp9Wx/NZy613KhcwAGc=;
-        b=OXo3fPsqfwTwlsjfr7CxRemIhEaTYBBssFzAZx5c+jE/84/splHTnq6Wldghao/4f5
-         nI9vNLpIquUM8ARoB5ejuGuN7Z70ZWSXzAIc/BkgkvrupXtNOw9IXUZPiY+z/4e9yyzd
-         Q3BKOx4n8s9PFBrDGR613qFkrz7J4ubb6/Il4GvlpG8Vet/ecLX4g/yq3L49TL2hQ63/
-         5WoZBU8Xnfl4G9LJXBbZpFJsVTWASf6Z6tysJONLtG/A+icHwMElMcXjzk+JcZHGpirm
-         9t8P0yyOcSgbYMqiCQTHi9bhueP4Lib2YzkjOVkYzeZezeJLLEEnGezMybw0JgORVBPM
-         2jTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=3xwuq8Pneb87cu0HIZ51LWMdCp9Wx/NZy613KhcwAGc=;
-        b=gqtLBO7iPNDdcngu3IYUHbDLpd7BGgGpjCBET/UeeG+VZ26Ha2RWWZwPZAtEoS/dTt
-         E+7KpVEgXHbd92vkFZ8Z61rj68fTo218+RezYDMItMIS5rEOPd5YxrvyEVO9m0zwjBp5
-         fz2S7AfuEos1jAArhWN69DLR84s5h+68EcxGlII9UcDD7natkvFPFmms8iHB9DpCnK72
-         2jWHnAeqkZwWHh0zUU4KSmgnVzuGd8AMJNLdh8Ak3t1pnM/CqlMTddqlNbha29CIooa+
-         epgfUDQDbn9zOGVzZTaLt4g0mjZc6YEnys0dh42nNB5RKc3jEjHKZCKcXa/QC67gVBzq
-         ejGg==
-X-Gm-Message-State: AJIora9krOuZlo2HTuIAWA07EzNlsVIXrL+5hdXZZ6pZ0uXdJeouNcBY
-        o8Q+U5wOw1wM2adr4eSNLM5GSOx9OoXAeTiT
-X-Google-Smtp-Source: AGRyM1v9DWQixLRI1UkJzmYuo2VcxXbf8p5Qs0TByTRv9xTcx3bMOl0sXNYt2OWueRJ1Z5jLPHk4Pg==
-X-Received: by 2002:a17:906:7308:b0:72f:3294:8002 with SMTP id di8-20020a170906730800b0072f32948002mr9533462ejc.311.1658239361389;
-        Tue, 19 Jul 2022 07:02:41 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id t18-20020a1709067c1200b006febce7081bsm6715986ejo.163.2022.07.19.07.02.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 Jul 2022 07:02:40 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] regulator: core: Fix off-on-delay-us for
- always-on/boot-on regulators
-From:   Christian Kohlschuetter <christian@kohlschuetter.com>
-In-Reply-To: <Yta4NGGYyZ6Doglr@sirena.org.uk>
-Date:   Tue, 19 Jul 2022 16:02:40 +0200
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <11E7A207-E920-4334-8F13-8DA95244D5A7@kohlschuetter.com>
-References: <E25D6465-6475-42B4-90EB-3D2C3CAF3B20@kohlschuetter.com>
- <YtVTyzLREdkzYiKS@sirena.org.uk>
- <3270C618-E361-4BC1-B63A-917AE09DA60E@kohlschuetter.com>
- <Yta4NGGYyZ6Doglr@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 19 Jul 2022 10:23:35 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B884A827;
+        Tue, 19 Jul 2022 07:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658239668; x=1689775668;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=s/ctDqIUvL1W3W833+ijczZqODZpeij+xtTHe7CbsGA=;
+  b=Qpc41EnI47Md+JYEFKBoFHgDbLChp4ozVQ+o3b28x/R7LRwMvjwsTDgZ
+   o74z8HXPr2/s27TivsTDCcekUZeFDotpNsrCovlkjf/OJGBCRBMj/d/J3
+   JIa1O3jl7FPctWGdzzLAS4M0QgxqmUdseESaRadp3vXN+1WWxu39wpD7O
+   Z6Gn4Okss77FqJXdggECtt68zCek1+BB+eB1G4/XkKswq1KDI+5aNUiY0
+   Tmi0pPwomgOcV8c2Ns3+b0QMukQOLUWaigT8p4BQimYEWlZvPYwGLmlSa
+   r35SH76eDgxkmPPliVOPQeYInyziY35rNKAYCiX1ACCpgTF7PgWssIGbH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="372801075"
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="372801075"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 07:07:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="655774698"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Jul 2022 07:07:38 -0700
+Date:   Tue, 19 Jul 2022 22:02:48 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 07/14] KVM: Use gfn instead of hva for
+ mmu_notifier_retry
+Message-ID: <20220719140248.GA84005@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-8-chao.p.peng@linux.intel.com>
+ <d480a850-601b-cda2-b671-04d839c98429@amd.com>
+ <20220718132950.GA38104@chaop.bj.intel.com>
+ <YtV7qpYZoT6jIKHQ@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtV7qpYZoT6jIKHQ@google.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Am 19.07.2022 um 15:57 schrieb Mark Brown <broonie@kernel.org>:
->=20
-> On Mon, Jul 18, 2022 at 07:24:37PM +0200, Christian Kohlschuetter =
-wrote:
->=20
->> Signed-off-by: Christian Kohlsch=C3=BCtter =
-<christian@kohlschutter.com>
->=20
-> You have an umlaut in your signoff here but not in your e-mail address
-> which causes tooling to complain that there's a missing signoff - you
-> might get some complaints about this.
+On Mon, Jul 18, 2022 at 03:26:34PM +0000, Sean Christopherson wrote:
+> On Mon, Jul 18, 2022, Chao Peng wrote:
+> > On Fri, Jul 15, 2022 at 01:36:15PM +0200, Gupta, Pankaj wrote:
+> > > > Currently in mmu_notifier validate path, hva range is recorded and then
+> > > > checked in the mmu_notifier_retry_hva() from page fault path. However
+> > > > for the to be introduced private memory, a page fault may not have a hva
+> > > 
+> > > As this patch appeared in v7, just wondering did you see an actual bug
+> > > because of it? And not having corresponding 'hva' occurs only with private
+> > > memory because its not mapped to host userspace?
+> > 
+> > The addressed problem is not new in this version, previous versions I
+> > also had code to handle it (just in different way). But the problem is:
+> > mmu_notifier/memfile_notifier may be in the progress of invalidating a
+> > pfn that obtained earlier in the page fault handler, when happens, we
+> > should retry the fault. In v6 I used global mmu_notifier_retry() for
+> > memfile_notifier but that can block unrelated mmu_notifer invalidation
+> > which has hva range specified.
+> > 
+> > Sean gave a comment at https://lkml.org/lkml/2022/6/17/1001 to separate
+> > memfile_notifier from mmu_notifier but during the implementation I
+> > realized we actually can reuse the same code for shared and private
+> > memory if both using gpa range and that can simplify the code handling
+> > in kvm_zap_gfn_range and some other code (e.g. we don't need two
+> > versions for memfile_notifier/mmu_notifier).
+> 
+> This should work, though I'm undecided as to whether or not it's a good idea.  KVM
+> allows aliasing multiple gfns to a single hva, and so using the gfn could result
+> in a much larger range being rejected given the simplistic algorithm for handling
+> multiple ranges in kvm_inc_notifier_count().  But I assume such aliasing is uncommon,
+> so I'm not sure it's worth optimizing for.
 
-dang! Thanks for noticing. I've just sent a "rebased" patch.
+That can be a real problem for current v7 code, __kvm_handle_hva_range()
+loops all possible gfn_range for a given hva_range but the
+on_lock/on_unlock is invoked only once, this should work for hva_range,
+but not gfn_range since we can have multiple of them.
 
+> 
+> > Adding gpa range for private memory invalidation also relieves the
+> > above blocking issue between private memory page fault and mmu_notifier.

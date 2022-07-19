@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7938A57AA08
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D44557AA0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240424AbiGSWtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
+        id S237322AbiGSWtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237322AbiGSWtp (ORCPT
+        with ESMTP id S237685AbiGSWtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:49:45 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B9560532
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:49:43 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id k30so21556369edk.8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:49:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7PK6D+h+8OxcoWXpNYlUYth9TT/PlFLZBalPC3jKAK8=;
-        b=EHnKpW8uMagKdXxRMch4+SfbCXYeOqLlfUQ+anvZ2PvnHM8fiRWUFq5iPyxi9IJKiD
-         77b7i9+MJjJ7vLhXCmbjGaD98rqpdTmcS2w6p0mubl9uVAc2ifyn2SPc5z1cEP0D5S75
-         pUqCQLKhrJ3SeMLUWYEPqxUKjsMtBBkPB6494=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7PK6D+h+8OxcoWXpNYlUYth9TT/PlFLZBalPC3jKAK8=;
-        b=i8bY3KwKawD7hYVERDU7dBbVErT8NMdJTyTjzC8cF2q8sRoT+f/1r4ke5hz/Na7qst
-         qOsRs/w4/mkA84x1cNsCaKfZcpHYkLT4xHVcrsFky7DQh5g0s/6Rw3x6ouOs5hnOTBm9
-         KsScznkPqRMrM4qsKSbPj2cewX1mAdHVKEGhISW9LewKzgrSG9cQOMB0pEp3NqHK0TK4
-         5g5H8Us7cgLX1UEdFHQwYIKGKnE/hcGnzo5kgIrPI8Z5LKz649lB67p64Lw2jDssiahR
-         4QE6UuWrWQ6K6MBa4tpBN54wpGHLD4HO769yUduk0v+WeefczmmxaSb1MgJL5pqyNYZ/
-         WHhA==
-X-Gm-Message-State: AJIora8R5RbQrfmL/dvhLlqcU32Gpq+hMMJouFUTvHe3bBwVMzprHiHk
-        UFiGG0g2CpJ/6DBD5RXbg6V+gMKujGu3ycWXDrk=
-X-Google-Smtp-Source: AGRyM1vJvtaMCdrAohRdkjqBBWTcnHKjViey3zFzEpRt5YTPTsE7peck6pf/yyrhOdVQpOqS0yCR3Q==
-X-Received: by 2002:a05:6402:11c9:b0:43a:b054:52ba with SMTP id j9-20020a05640211c900b0043ab05452bamr47688418edw.344.1658270982430;
-        Tue, 19 Jul 2022 15:49:42 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id dx24-20020a170906a85800b006fed93bf71fsm7313423ejb.18.2022.07.19.15.49.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 15:49:39 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so233519wmo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:49:38 -0700 (PDT)
-X-Received: by 2002:a05:600c:4e8d:b0:3a1:2e4d:1dd2 with SMTP id
- f13-20020a05600c4e8d00b003a12e4d1dd2mr1180998wmq.85.1658270978565; Tue, 19
- Jul 2022 15:49:38 -0700 (PDT)
+        Tue, 19 Jul 2022 18:49:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EAD61B16;
+        Tue, 19 Jul 2022 15:49:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8EAC6020F;
+        Tue, 19 Jul 2022 22:49:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1329BC341C6;
+        Tue, 19 Jul 2022 22:49:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658270988;
+        bh=g7tHhhCGFQKtBamHEenWZQdpIWCLwKEB++xyV2Ss3I0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=BEt8sPHXYv0FldoVLn8MfcWUnYZuMQv3g04kOtNdqIxDVmms9cUbRZOX6ahhxhyxD
+         mkYP/7R5wA+OHiWZr07Asuxz8mVXH8VdZkJBnL0IwxuIqwhy5mJKBkXRAzzuR5nLuX
+         4tHr6oWy+Fo48G913vaThk2irCbRgxGQYQKsyJQU0mmc3M1jh0l0NAJQr+uVQilpEW
+         zmIzmr7qc+0Bj5CES9qA/kHxpkOdbZRm5Qw6d/vcV+8MzE0M2IT6rOQA0uZHd9FR+H
+         Sx3qnN2F38sn6wfO9ylIbll0qCf05OenVImK3llYbgOng9Ank0ENIzp7Z7IarJJe3o
+         qZ1WmgZZ5SLFQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9DCDF5C042E; Tue, 19 Jul 2022 15:49:47 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 15:49:47 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Pranith Kumar <bobby.prani@gmail.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/17] nolibc: add preliminary self tests
+Message-ID: <20220719224947.GX1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220719214449.2520-1-w@1wt.eu>
 MIME-Version: 1.0
-References: <20220719203857.1488831-1-nfraprado@collabora.com>
- <20220719203857.1488831-4-nfraprado@collabora.com> <CAD=FV=X0End8u3nNNXSMVhuJo0KWmJYRNg3yeC9yQ+5bLKTmYg@mail.gmail.com>
-In-Reply-To: <CAD=FV=X0End8u3nNNXSMVhuJo0KWmJYRNg3yeC9yQ+5bLKTmYg@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 19 Jul 2022 15:49:26 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VtfnrqUOACfnVfkZE20O4diPQpHYYC5p1iX3vt9ESPYg@mail.gmail.com>
-Message-ID: <CAD=FV=VtfnrqUOACfnVfkZE20O4diPQpHYYC5p1iX3vt9ESPYg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] drm/panel-edp: Fix variable typo when saving hpd
- absent delay from DT
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719214449.2520-1-w@1wt.eu>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,51 +62,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jul 19, 2022 at 11:44:31PM +0200, Willy Tarreau wrote:
+> Hi Paul,
+> 
+> as previously promised, here comes the nolibc update which introduces the
+> minimal self-test infrastructure that aims at being reasonably easy to
+> expand further.
+> 
+> It's based on your branch "dev.2022.06.30b" that contains the previous
+> minor fixes that aimed at addressing Linus' concerns about the build
+> process inconsistencies.
+> 
+> The way it works tries to mimmick as much as possible the regular build
+> process, so that it reuses the same ARCH, CC, CROSS_COMPILE to build the
+> test program, that will be embedded into an initramfs and the kernel is
+> (re)built with that initramfs. Then you can decide to run that kernel
+> under QEMU for the supported archs, and the output of the tests appears
+> in an output text file in a format that's easily greppable and diffable.
+> A single target "run" does everything.
+> 
+> By default it will reuse your existing .config (so that developers
+> continue to use their regular config handling), though it can also
+> create a known-to-work defconfig for each arch. The reason behind this
+> is that it took me a moment to figure certain defconfig + machine name
+> combinations and I found it better to put them there once for all.
+> 
+> I've successfully tested it on arm, arm64, i386, x86_64. riscv64 works
+> except two syscalls which return unexpected errors, and mips segfaults
+> in sbrk(). I don't know why yet, but this proves that it's worth having
+> such a test.
 
-On Tue, Jul 19, 2022 at 3:45 PM Doug Anderson <dianders@chromium.org> wrote=
-:
->
-> Hi,
->
-> On Tue, Jul 19, 2022 at 1:39 PM N=C3=ADcolas F. R. A. Prado
-> <nfraprado@collabora.com> wrote:
-> >
-> > The value read from the "hpd-absent-delay-ms" property in DT was being
-> > saved to the wrong variable, overriding the hpd_reliable delay. Fix the
-> > typo.
-> >
-> > Fixes: 5540cf8f3e8d ("drm/panel-edp: Implement generic "edp-panel"s pro=
-bed by EDID")
-> > Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> > ---
-> >
-> >  drivers/gpu/drm/panel/panel-edp.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/=
-panel-edp.c
-> > index 152e00eb846f..b3536d8600f4 100644
-> > --- a/drivers/gpu/drm/panel/panel-edp.c
-> > +++ b/drivers/gpu/drm/panel/panel-edp.c
-> > @@ -738,7 +738,7 @@ static int generic_edp_panel_probe(struct device *d=
-ev, struct panel_edp *panel)
-> >         of_property_read_u32(dev->of_node, "hpd-reliable-delay-ms", &re=
-liable_ms);
-> >         desc->delay.hpd_reliable =3D reliable_ms;
-> >         of_property_read_u32(dev->of_node, "hpd-absent-delay-ms", &abse=
-nt_ms);
-> > -       desc->delay.hpd_reliable =3D absent_ms;
-> > +       desc->delay.hpd_absent =3D absent_ms;
->
-> Well that's embarrassing. In the end I never used any of these
-> properties for anything shipping since HPD was always hooked up on
-> later boards and the only board that needed "hpd_reliable" never ended
-> up switching to the generic "edp-panel".
->
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->
-> I'll apply this right away to drm-misc-fixes.
+Excellent, thank you!!!
 
-ef2084a8388b drm/panel-edp: Fix variable typo when saving hpd absent
-delay from DT
+As we often said during my misspent youth, "If it ain't tested, it
+don't work."
+
+But I do get "71 test(s) passed." when running on x86.  I will let you
+decide whether that constitutes all being well or indicates a bug in
+the tests.   ;-)
+
+> There are not that many tests yet (71), those that have to run can be
+> filtered either from the program's command line or from a NOLIBC_TEST
+> environment variable so that it's possible to skip broken ones or to
+> focus on a few ranges only.
+> 
+> Tests are numerically numbered, and are conveniently handled in a
+> switch/case statement so that a relative line number assigns the number
+> to the test. That's convenient because the vast majority of syscall tests
+> are one-liners. This sometimes slightly upsets check-patch when lines get
+> moderately long but that significantly improves legibility.
+> 
+> There are expectation for both successes and failures (e.g. -1 ENOTDIR).
+> I'm sure this can be improved later (and that's the goal). Right now it
+> covers two test families:
+>   - syscalls
+>   - stdlib    (str* functions mostly)
+> 
+> I suspect that over time we might want to split syscalls into different
+> parts (e.g. core, fs, etc maybe) but I could be wrong.
+
+This is a good start, and we can let experience drive any additional
+changes that might be required.
+
+> The program can automatically modulate QEMU's return value on x86 when
+> QEMU is run with the appropriate options, but for now I'm not using it
+> as I felt like it didn't bring much value, and the output is more useful.
+> That's debatable, and maybe some might want to use it in bisect scripts
+> for example. It's too early to say IMHO.
+
+For the moment, grepping the output works.  And perhaps indefinitely.
+
+> Oh, I also arranged the code so that the test also builds with glibc. I
+> noticed that when adding a new test that fails, sometimes it's convenient
+> to see if it's the nolibc part that's broken or the test. I don't find
+> this critical but the required includes and ifdefs are there so that it
+> should be easy to maintain over time as well.
+
+If nothing else, the ability to run against glibc is a good way to test
+the test.
+
+> I'm obviously interested in comments, but really, I don't want to
+> overdesign something for a first step, it remains a very modest test
+> program and I'd like that it remains easy to hack on it and to contribute
+> new tests that are deemed useful.
+
+I am good with a simple starting point.
+
+> I'm CCing the few who already contributed some patches and/or expressed
+> interest, as well as Linus who had a first bad experience when trying to
+> test it, hoping this one will be better. I'm pasting below [1] a copy of
+> a test on x86_64 below, that's summed up as "71 test(s) passed" at the
+> end of the "run" target.
+> 
+> If there's no objection, it would be nice to have this with your current
+> series, as it definitely helps spot and fix the bugs. In parallel I'll see
+> if I can figure the problems with the two tests that fail each on a
+> specific arch and I might possibly have a few extra fixes for the current
+> nolibc.
+
+This series is now on the -rcu tree's "dev" branch.  I got two almost
+identical copies of patch 7, so I took the later of the two.  Please let
+me know if I guessed wrong.
+
+							Thanx, Paul
+
+> Thank you!
+> Willy
+> 
+> [1] example output
+> ----8<----
+> Running test 'syscall'
+> 0 getpid = 1                             [OK]
+> 1 getppid = 0                            [OK]
+> 5 getpgid_self = 0                       [OK]
+> 6 getpgid_bad = -1 ESRCH                 [OK]
+> 7 kill_0 = 0                             [OK]
+> 8 kill_CONT = 0                          [OK]
+> 9 kill_BADPID = -1 ESRCH                 [OK]
+> 10 sbrk = 0                              [OK]
+> 11 brk = 0                               [OK]
+> 12 chdir_root = 0                        [OK]
+> 13 chdir_dot = 0                         [OK]
+> 14 chdir_blah = -1 ENOENT                [OK]
+> 15 chmod_net = 0                         [OK]
+> 16 chmod_self = -1 EPERM                 [OK]
+> 17 chown_self = -1 EPERM                 [OK]
+> 18 chroot_root = 0                       [OK]
+> 19 chroot_blah = -1 ENOENT               [OK]
+> 20 chroot_exe = -1 ENOTDIR               [OK]
+> 21 close_m1 = -1 EBADF                   [OK]
+> 22 close_dup = 0                         [OK]
+> 23 dup_0 = 3                             [OK]
+> 24 dup_m1 = -1 EBADF                     [OK]
+> 25 dup2_0 = 100                          [OK]
+> 26 dup2_m1 = -1 EBADF                    [OK]
+> 27 dup3_0 = 100                          [OK]
+> 28 dup3_m1 = -1 EBADF                    [OK]
+> 29 execve_root = -1 EACCES               [OK]
+> 30 getdents64_root = 120                 [OK]
+> 31 getdents64_null = -1 ENOTDIR          [OK]
+> 32 gettimeofday_null = 0                 [OK]
+> 38 ioctl_tiocinq = 0                     [OK]
+> 39 ioctl_tiocinq = 0                     [OK]
+> 40 link_root1 = -1 EEXIST                [OK]
+> 41 link_blah = -1 ENOENT                 [OK]
+> 42 link_dir = -1 EPERM                   [OK]
+> 43 link_cross = -1 EXDEV                 [OK]
+> 44 lseek_m1 = -1 EBADF                   [OK]
+> 45 lseek_0 = -1 ESPIPE                   [OK]
+> 46 mkdir_root = -1 EEXIST                [OK]
+> 47 open_tty = 3                          [OK]
+> 48 open_blah = -1 ENOENT                 [OK]
+> 49 poll_null = 0                         [OK]
+> 50 poll_stdout = 1                       [OK]
+> 51 poll_fault = -1 EFAULT                [OK]
+> 52 read_badf = -1 EBADF                  [OK]
+> 53 sched_yield = 0                       [OK]
+> 54 select_null = 0                       [OK]
+> 55 select_stdout = 1                     [OK]
+> 56 select_fault = -1 EFAULT              [OK]
+> 57 stat_blah = -1 ENOENT                 [OK]
+> 58 stat_fault = -1 EFAULT                [OK]
+> 59 symlink_root = -1 EEXIST              [OK]
+> 60 unlink_root = -1 EISDIR               [OK]
+> 61 unlink_blah = -1 ENOENT               [OK]
+> 62 wait_child = -1 ECHILD                [OK]
+> 63 waitpid_min = -1 ESRCH                [OK]
+> 64 waitpid_child = -1 ECHILD             [OK]
+> 65 write_badf = -1 EBADF                 [OK]
+> 66 write_zero = 0                        [OK]
+> Errors during this test: 0
+> 
+> Running test 'stdlib'
+> 0 getenv_TERM = <linux>                  [OK]
+> 1 getenv_blah = <(null)>                 [OK]
+> 2 setcmp_blah_blah = 0                   [OK]
+> 3 setcmp_blah_blah2 = -50                [OK]
+> 4 setncmp_blah_blah = 0                  [OK]
+> 5 setncmp_blah_blah4 = 0                 [OK]
+> 6 setncmp_blah_blah5 = -53               [OK]
+> 7 setncmp_blah_blah6 = -54               [OK]
+> 8 strchr_foobar_o = <oobar>              [OK]
+> 9 strchr_foobar_z = <(null)>             [OK]
+> 10 strrchr_foobar_o = <obar>             [OK]
+> 11 strrchr_foobar_z = <(null)>           [OK]
+> Errors during this test: 0
+> 
+> Total number of errors: 0
+> ---->8----
+> 
+> 
+> --
+> 
+> Willy Tarreau (17):
+>   tools/nolibc: make argc 32-bit in riscv startup code
+>   tools/nolibc: fix build warning in sys_mmap() when my_syscall6 is not
+>     defined
+>   tools/nolibc: make sys_mmap() automatically use the right __NR_mmap
+>     definition
+>   selftests/nolibc: add basic infrastructure to ease creation of nolibc
+>     tests
+>   selftests/nolibc: support a test definition format
+>   selftests/nolibc: implement a few tests for various syscalls
+>   selftests/nolibc: add a few tests for some stdlib functions
+>   selftests/nolibc: exit with poweroff on success when getpid() == 1
+>   selftests/nolibc: on x86, support exiting with isa-debug-exit
+>   selftests/nolibc: recreate and populate /dev and /proc if missing
+>   selftests/nolibc: condition some tests on /proc existence
+>   selftests/nolibc: support glibc as well
+>   selftests/nolibc: add a "kernel" target to build the kernel with the
+>     initramfs
+>   selftests/nolibc: add a "defconfig" target
+>   selftests/nolibc: add a "run" target to start the kernel in QEMU
+>   selftests/nolibc: "sysroot" target installs a local copy of the
+>     sysroot
+>   selftests/nolibc: add a "help" target
+> 
+>  MAINTAINERS                                  |   1 +
+>  tools/include/nolibc/arch-riscv.h            |   2 +-
+>  tools/include/nolibc/sys.h                   |   4 +-
+>  tools/testing/selftests/nolibc/Makefile      | 135 ++++
+>  tools/testing/selftests/nolibc/nolibc-test.c | 757 +++++++++++++++++++
+>  5 files changed, 896 insertions(+), 3 deletions(-)
+>  create mode 100644 tools/testing/selftests/nolibc/Makefile
+>  create mode 100644 tools/testing/selftests/nolibc/nolibc-test.c
+> 
+> -- 
+> 2.17.5
+> 

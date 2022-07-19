@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E4D579ECE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282B4579B5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243051AbiGSNGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S239795AbiGSM0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243231AbiGSNEx (ORCPT
+        with ESMTP id S239748AbiGSMYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:04:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9D29F040;
-        Tue, 19 Jul 2022 05:26:45 -0700 (PDT)
+        Tue, 19 Jul 2022 08:24:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31A149B78;
+        Tue, 19 Jul 2022 05:09:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D94BB81B36;
-        Tue, 19 Jul 2022 12:26:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AB9C341C6;
-        Tue, 19 Jul 2022 12:26:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3AA0B817AF;
+        Tue, 19 Jul 2022 12:08:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43AE5C341C6;
+        Tue, 19 Jul 2022 12:08:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233584;
-        bh=2tvJ+fipO4VZmFYhZ9As3c1NcfOg4s2bZwVEwvLpA6Y=;
+        s=korg; t=1658232513;
+        bh=bAIRwr6BEm+EAGgJYiIeXfINsAsI8XaB6jUr0p/oxfg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w0xm1JlZDNgNKXCG9qJw7yeQHXkN+Uga/WLNZ9zPhxlb/FxAZciyYcicrRoFTmqrm
-         ws17UzFHn4DmKUOyNpfRst9YfOXQQFv6paPigLa1+ht7SSQoMW3wgDNzZfGHSXjeZG
-         sJU/YpG5lSNHUVbK3mDC7OFrqy6BAjMN2F4v81+w=
+        b=SSRclJx4hMyyuq0Xmg+Sn3uW/YXiuB1l/W1GHz4JHyrjICokEEZI5EU2HO0J4Lu04
+         +0Ovp8GT3hb67K/+67t5lYBDGDhXBAqucmefLDbs6JNmiyWto0szkvIbApPmD3EN/S
+         2ZUQ384et0GpEm7b1+VKGIB0kPE7iGRcv9EFpqUY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Tung Nguyen <tung.q.nguyen@dektech.com.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 171/231] cpufreq: pmac32-cpufreq: Fix refcount leak bug
+Subject: [PATCH 5.10 083/112] net: tipc: fix possible refcount leak in tipc_sk_create()
 Date:   Tue, 19 Jul 2022 13:54:16 +0200
-Message-Id: <20220719114728.539031722@linuxfoundation.org>
+Message-Id: <20220719114634.643674414@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-[ Upstream commit ccd7567d4b6cf187fdfa55f003a9e461ee629e36 ]
+[ Upstream commit 00aff3590fc0a73bddd3b743863c14e76fd35c0c ]
 
-In pmac_cpufreq_init_MacRISC3(), we need to add corresponding
-of_node_put() for the three node pointers whose refcount have
-been incremented by of_find_node_by_name().
+Free sk in case tipc_sk_insert() fails.
 
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Tung Nguyen <tung.q.nguyen@dektech.com.au>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/pmac32-cpufreq.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ net/tipc/socket.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
-index 4f20c6a9108d..8e41fe9ee870 100644
---- a/drivers/cpufreq/pmac32-cpufreq.c
-+++ b/drivers/cpufreq/pmac32-cpufreq.c
-@@ -470,6 +470,10 @@ static int pmac_cpufreq_init_MacRISC3(struct device_node *cpunode)
- 	if (slew_done_gpio_np)
- 		slew_done_gpio = read_gpio(slew_done_gpio_np);
- 
-+	of_node_put(volt_gpio_np);
-+	of_node_put(freq_gpio_np);
-+	of_node_put(slew_done_gpio_np);
-+
- 	/* If we use the frequency GPIOs, calculate the min/max speeds based
- 	 * on the bus frequencies
- 	 */
+diff --git a/net/tipc/socket.c b/net/tipc/socket.c
+index 42283dc6c5b7..38256aabf4f1 100644
+--- a/net/tipc/socket.c
++++ b/net/tipc/socket.c
+@@ -489,6 +489,7 @@ static int tipc_sk_create(struct net *net, struct socket *sock,
+ 	sock_init_data(sock, sk);
+ 	tipc_set_sk_state(sk, TIPC_OPEN);
+ 	if (tipc_sk_insert(tsk)) {
++		sk_free(sk);
+ 		pr_warn("Socket create failed; port number exhausted\n");
+ 		return -EINVAL;
+ 	}
 -- 
 2.35.1
 

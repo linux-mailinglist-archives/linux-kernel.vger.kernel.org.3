@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07406579CDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DD5579B3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241472AbiGSMnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S239106AbiGSMZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241504AbiGSMnU (ORCPT
+        with ESMTP id S239979AbiGSMY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:43:20 -0400
+        Tue, 19 Jul 2022 08:24:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BE3820CF;
-        Tue, 19 Jul 2022 05:16:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DE249B7B;
+        Tue, 19 Jul 2022 05:09:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 723AD6177F;
-        Tue, 19 Jul 2022 12:16:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506F8C341C6;
-        Tue, 19 Jul 2022 12:16:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AC126175D;
+        Tue, 19 Jul 2022 12:08:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19DA4C341C6;
+        Tue, 19 Jul 2022 12:08:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233010;
-        bh=aArpVS4VNheVFDiOhTep3qwKK7+LFJJviBSs/dkrB5s=;
+        s=korg; t=1658232499;
+        bh=mC7wYh07JK50tJslQVx5F4oC6FD+eTXlRQ0ZX62rplc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kQOfxJwcgOAOn4mLWU0nI4RYf8ShUIZd51CEg536nriggji2cJQcUYgPa+CxSroxw
-         4iojT38HxInoTbDMjAIyGY4wKWIUrDJ0Gc2/15nNibXpftrzWDpzSzautqC/kRyeaz
-         S+nZc0SSAgrgyEjRXMRqMGDjDnS/4mkcF578jRx0=
+        b=k1q7PSjhxJE6v7SbQ/KE0M8GGMbVSU2MZNgCgMgUEoGdjrSpHkfyaR2gqQTxo63ot
+         HLjnefoNmQ/PU+JketEWMiIqiRoSs3jaFD6frr6+lCVTVdFHPnlQGtDA00kTF6gCtn
+         PYu19w1Jb70sb6xEo2Ergp3x+ERLDNBF3nvaIQAA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 118/167] virtio_mmio: Restore guest page size on resume
-Date:   Tue, 19 Jul 2022 13:54:10 +0200
-Message-Id: <20220719114707.992732444@linuxfoundation.org>
+Subject: [PATCH 5.10 078/112] virtio_mmio: Restore guest page size on resume
+Date:   Tue, 19 Jul 2022 13:54:11 +0200
+Message-Id: <20220719114634.058925206@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -78,7 +78,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-index 7522832529dd..fe696aafaed8 100644
+index 7dec1418bf7c..e8ef0c66e558 100644
 --- a/drivers/virtio/virtio_mmio.c
 +++ b/drivers/virtio/virtio_mmio.c
 @@ -556,6 +556,9 @@ static int virtio_mmio_restore(struct device *dev)

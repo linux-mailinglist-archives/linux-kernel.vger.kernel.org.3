@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9B657A82A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE45657A82E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234878AbiGSUYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 16:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
+        id S238495AbiGSU05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 16:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiGSUYI (ORCPT
+        with ESMTP id S234186AbiGSU0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 16:24:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C8E3FA19;
-        Tue, 19 Jul 2022 13:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=u8oopSHac3jAE+8NMeybfxni/MQzhvEmpTnO4gjiYYg=; b=NQucyI/8BzDtUqhyMIkdmfE21C
-        PBg5VrarOl8oiCeI5Es7bC64lW0ilVfPE3YYXVLvZHU2vRp1GfpeknIsmz04zH3JoG/Hfo4tI+vW5
-        5pkbFoMPWkGnhdaqNAyruHWOQDtSUCadJ0ptMXnOhNyEAAAEpFUAkqpzhdCGuJx92pE13xDLtnXuD
-        JWzYj/RAPN4PabCQ+/dkvH0pIoITdrKcR41UyWV08Y2lpwgh+1nkw+oXGDYiJLm9d+DOlmTUPQmlv
-        NGNigKgxL+DD7AALhEFUNj0JulS0WcB0AQQuNH0/J5Kvq0ssyONEN7mip0bP5weE93jpfbPmbNaDu
-        hh/e6Brw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oDtkz-00Drg7-Ms; Tue, 19 Jul 2022 20:23:49 +0000
-Date:   Tue, 19 Jul 2022 21:23:49 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Song Liu <song@kernel.org>, Takashi Iwai <tiwai@suse.de>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: Replace kmap() with kmap_local_page()
-Message-ID: <YtcS1QNcIrTt0DN1@casper.infradead.org>
-References: <20220718002645.28817-1-fmdefrancesco@gmail.com>
- <YtXchtEwetMvKrKY@bombadil.infradead.org>
- <5303077.Sb9uPGUboI@opensuse>
+        Tue, 19 Jul 2022 16:26:55 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DE7474CB
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:26:54 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id u13so26835815lfn.5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=W/0pyW4vGZUBJNu0LDTVCRn88+Qyo3BDzqzfQ8YIAo5WlDXNNMWgRWOEsulijqHl8c
+         F3/nKLCQ2gWmMRWdLEc3YrE74wn5AzsTtsRgIIq9H53Jl3KwYCCpA/iKSV49HAxljuWp
+         rc0x6bBPlB4wSZ3X9Th+RcLSsA2uoMq3pLHTeMiJl8vAQWT/kzrajYJm+GdjBmJrQiPn
+         YAcHqvTAoGQDc1krkfY7h1xVCfI/77PDgBqlLthU1xLqVaK5zCzLraFx+kE92X/tVZZ0
+         JoKI3AhufXO6Oz+riEfBfgk9QXMCgGz9mh1A0R5sChcL0TaLNIsz3W+E2yk2ttJqI06a
+         oViw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
+        b=CtNn6vPspOoewaN3AjyAJrhrmAGTVUdNaa64I7oYCzu1IHeQc1BGmbIeTAUKB/DK4d
+         G/bwUFKPiIrNY316i5JElcn1Scl3VE1EV7vS8L0/Fyodqc/GVBK3gHKqs1AR5qRyF6Ia
+         R4qVJiZwj+gGcmohgn7GdmiV+Qm+F8zEJbpS6QiQSFrFpiovLNNay/MYxAKbqmBsxTXv
+         dX8ssdbJ7auNVbH4kCv1aYesTHVL3wXwTVe8oLMBmxca8jtFx9Ox+HeK+6XWW/XlY75F
+         7TXGc/nUxLoAfmV8xptBTpM5V0vPV/9E2xAZXWG1PterXVi5Slerl81vLqMXGu8f0BrX
+         Ymzg==
+X-Gm-Message-State: AJIora/YwyxHQZVm+IuIKEMDqP4lma05MvMpTKINmSVweG8L2Ke8rN6+
+        CyWey1k19IaxKwZqE3ezVbYq8DS+38wVBqbbS6Q=
+X-Google-Smtp-Source: AGRyM1vfwQA7YtBvbZ/b0S3D/draqSG9aDi64edANVdZvy5z7OVqQSAcXHdd76rscxYSlXvndRQHWmD3+hYBwcoo8uI=
+X-Received: by 2002:a05:6512:1152:b0:489:fda1:1507 with SMTP id
+ m18-20020a056512115200b00489fda11507mr18076544lfg.206.1658262412923; Tue, 19
+ Jul 2022 13:26:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5303077.Sb9uPGUboI@opensuse>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6520:2f49:b0:1f8:2994:4bab with HTTP; Tue, 19 Jul 2022
+ 13:26:52 -0700 (PDT)
+Reply-To: mailfunds48@gmail.com
+From:   Tom Christ <yahayabuhari92@gmail.com>
+Date:   Tue, 19 Jul 2022 21:26:52 +0100
+Message-ID: <CADbC8Auski5VreZF74DxwqFFZV2veAeu2NNrRhRkPc6eDfr2yw@mail.gmail.com>
+Subject: DARLEHENSANGEBOT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:12d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mailfunds48[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [yahayabuhari92[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [yahayabuhari92[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 11:19:24AM +0200, Fabio M. De Francesco wrote:
-> On martedì 19 luglio 2022 00:19:50 CEST Luis Chamberlain wrote:
-> > > Therefore, replace kmap() with kmap_local_page().
-> > 
-> > While this churn is going on everywhere I was wondering why not
-> > go ahead and adopt kmap_local_folio() instead?
-> 
-> I'm sorry but, due to my lack of knowledge and experience, I'm not sure to 
-> understand how kmap_local_folio() could help here. My fault. I'm going to 
-> make some research and ask for help from more experienced developers. 
+--=20
+Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
+rt?
+Wenn ja, kontaktieren Sie uns
 
-I haven't made this suggestion to Fabio before for a few reasons.
-
-First, it makes his work harder.  He not only has to understand the
-implications of the kmap semantic changes but also the implications of
-the folio change.
-
-Then, I'm not sure that I necessarily have enough infrastructure in place
-for doing a folio conversion everywhere that he's doing a kmap/kmap_atomic
-to kmap_local_page conversion.
-
-What makes it particularly tricky is that you can only kmap a single
-page out of a folio at a time; there's no ability to kmap the entire
-folio, no matter how large it is.  I've looked at doing the conversion
-for ext2 directories, and it's _tricky_.  There's only one 'checked'
-flag for the entire folio, but ext2_check_page() needs to take a mapped
-page.  So now we have to make a judgement call about whether to support
-caching ext2 directories with large folios or whether to restrict them
-to single-page folios.
-
-So yes, there's probably a second patch coming for maintainers to look
-at that will convert the kmap_local_page() to kmap_local_folio().
-However, I think it's actually less of a burden for maintainers if
-these two different conversions happen separately because there are very
-different considerations to review.  Also, there's no equivalent to kmap()
-or kmap_atomic() for folios (deliberately), so the more conversions to
-kmap_local_page() Fabio gets done, the easier it will be for a later
-folio conversion.
+*Vollst=C3=A4ndiger Name:
+* Ben=C3=B6tigte Menge:
+*Leihdauer:
+*Mobiltelefon:
+*Land:

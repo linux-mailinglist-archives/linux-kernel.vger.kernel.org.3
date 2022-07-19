@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E10A579E61
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89D7579A6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243318AbiGSNA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
+        id S238935AbiGSMQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242584AbiGSM7A (ORCPT
+        with ESMTP id S239285AbiGSMO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:59:00 -0400
+        Tue, 19 Jul 2022 08:14:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445E95FAE8;
-        Tue, 19 Jul 2022 05:23:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9EF4BD0A;
+        Tue, 19 Jul 2022 05:05:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA150B81B1A;
-        Tue, 19 Jul 2022 12:23:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F22C341CA;
-        Tue, 19 Jul 2022 12:23:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 805B7B81B25;
+        Tue, 19 Jul 2022 12:05:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8C8C341C6;
+        Tue, 19 Jul 2022 12:05:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233431;
-        bh=JriZhhJjPKNaYLWd2CCG/ku0GwfO97kleLtUwigctRE=;
+        s=korg; t=1658232328;
+        bh=T96mdRrNFY0MtDeHNtpKjbzhtLr41WCppSXKwVTd/WE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=beY15vkbd5OfAWPNV7Its60GzyAe/Hj4a7nY9FQnDkKkNooMGSFzSMOoVmpm1vmbW
-         UOlFhdIJn4aQN05OWauopy9aqs/u/dukqIZ0fisS8HdRkBsKoMufZ2dJxAKClOcUIg
-         Pu/H/Lo2DR/MyZNbXwUkBAHMbtqsxUBPfwBhHuJw=
+        b=bF1hLfjbsiBZ0ANkbmPHwuKaQdwsZVGxH+SyflMqdlWC3E5WqWCHYnu9FLiIfzTkV
+         9iiKAdyFiNj8WNFB/rTS4yJK/1TkjgcYTsRzNsuQR89ojtJivrVJ6Mb4T21oj8K0Tr
+         yOM5KNAM1TSDubYUmuvX0NNUoQjp7iyZAPiroeHc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "J. Bruce Fields" <bfields@fieldses.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 094/231] lockd: set fl_owner when unlocking files
+        stable@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 006/112] ALSA: hda/realtek - Enable the headset-mic on a Xiaomis laptop
 Date:   Tue, 19 Jul 2022 13:52:59 +0200
-Message-Id: <20220719114722.693455918@linuxfoundation.org>
+Message-Id: <20220719114626.643686843@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Layton <jlayton@kernel.org>
+From: Meng Tang <tangmeng@uniontech.com>
 
-[ Upstream commit aec158242b87a43d83322e99bc71ab4428e5ab79 ]
+commit 9b043a8f386485c74c0f8eea2c287d5bdbdf3279 upstream.
 
-Unlocking a POSIX lock on an inode with vfs_lock_file only works if
-the owner matches. Ensure we set it in the request.
+The headset on this machine is not defined, after applying the quirk
+ALC256_FIXUP_ASUS_HEADSET_MIC, the headset-mic works well
 
-Cc: J. Bruce Fields <bfields@fieldses.org>
-Fixes: 7f024fcd5c97 ("Keep read and write fds with each nlm_file")
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220713094133.9894-1-tangmeng@uniontech.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/lockd/svcsubs.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/lockd/svcsubs.c b/fs/lockd/svcsubs.c
-index 0a22a2faf552..b2f277727469 100644
---- a/fs/lockd/svcsubs.c
-+++ b/fs/lockd/svcsubs.c
-@@ -176,7 +176,7 @@ nlm_delete_file(struct nlm_file *file)
- 	}
- }
- 
--static int nlm_unlock_files(struct nlm_file *file)
-+static int nlm_unlock_files(struct nlm_file *file, fl_owner_t owner)
- {
- 	struct file_lock lock;
- 
-@@ -184,6 +184,7 @@ static int nlm_unlock_files(struct nlm_file *file)
- 	lock.fl_type  = F_UNLCK;
- 	lock.fl_start = 0;
- 	lock.fl_end   = OFFSET_MAX;
-+	lock.fl_owner = owner;
- 	if (file->f_file[O_RDONLY] &&
- 	    vfs_lock_file(file->f_file[O_RDONLY], F_SETLK, &lock, NULL))
- 		goto out_err;
-@@ -225,7 +226,7 @@ nlm_traverse_locks(struct nlm_host *host, struct nlm_file *file,
- 		if (match(lockhost, host)) {
- 
- 			spin_unlock(&flctx->flc_lock);
--			if (nlm_unlock_files(file))
-+			if (nlm_unlock_files(file, fl->fl_owner))
- 				return 1;
- 			goto again;
- 		}
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9087,6 +9087,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x1d72, 0x1602, "RedmiBook", ALC255_FIXUP_XIAOMI_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1d72, 0x1701, "XiaomiNotebook Pro", ALC298_FIXUP_DELL1_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1d72, 0x1901, "RedmiBook 14", ALC256_FIXUP_ASUS_HEADSET_MIC),
++	SND_PCI_QUIRK(0x1d72, 0x1945, "Redmi G", ALC256_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1d72, 0x1947, "RedmiBook Air", ALC255_FIXUP_XIAOMI_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x8086, 0x2074, "Intel NUC 8", ALC233_FIXUP_INTEL_NUC8_DMIC),
+ 	SND_PCI_QUIRK(0x8086, 0x2080, "Intel NUC 8 Rugged", ALC256_FIXUP_INTEL_NUC8_RUGGED),
 
 

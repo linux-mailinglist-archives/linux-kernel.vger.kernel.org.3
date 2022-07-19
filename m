@@ -2,122 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A2957A386
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A0657A3A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238889AbiGSPs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S239332AbiGSPtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238804AbiGSPsW (ORCPT
+        with ESMTP id S239143AbiGSPtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:48:22 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE7B599C7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:48:21 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id e15so16979221wro.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JYB6QNZOPSX+BCoF/WDF8u48DHqjX/vkFUV+00Cp3lQ=;
-        b=IquTmVAY/oKDJ0jAjzUbv7JwNe0SeR6hefUC/z4kFvqR6h+dN8AXUSwz6UOcpLt4NM
-         Kbkaagejub8rjKCcgXG8XN9XZdtcDNeKLLL0JBPqeiSkah1n9jzXYPXtuRUFPE6x8hqC
-         LtT5w6t1uVKEruQ2LMowPiS2OCpt+PIbwdD/CRAXTU7+p/UKFI2xlIeyjgNAGxY7Boc/
-         S8ZRHmfPDGVKP8fI/aBLrvOi28sCgcW5k4WnH8a18hHPgwh4gYfoJqvIpOxQx7SfhtnC
-         Bea+C++myHF6mxbBfeyP35rAwRducHGbDLibdEVowgoZt+TmjbZMV974ezZxYGzvVz+2
-         oXXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JYB6QNZOPSX+BCoF/WDF8u48DHqjX/vkFUV+00Cp3lQ=;
-        b=2d0Cz0VOpDByN3A86nnwHcLHHCrOGFrH7D4NLbrc2MvYYHPW7+pZdmGv332LZV6RYX
-         rpzML31yv3dRkoHJuu50IBt3Pn8sORfN8c/Lmd763BMbEMbcd7lTQVRdm6wUnURgN4qD
-         j2fqoUQKWemJnJ+BQuQDKT7CBaanKcBzgVF5EtGWLZj5mlvsCM31r0p4I6GbSXA+10PF
-         jrQtmywbkIab/AIkK3QQIFXeUkmijfyKXLL4I2bmk0A3x/7zerDitDfqv2df5bwiJuTl
-         XJ47vv5Zc8t5sCDzSh5yP5dMn6lPNkawOFhl/7lhlMEyVy0EnT92sWPEfwyDOFe7iA9f
-         BAaQ==
-X-Gm-Message-State: AJIora/njlYJkp6Bhq3PCReTXaT+DXzu2PS7qlgg5ElAYPjcpvtoKE91
-        7kA/nJVTiJnvMix+75sCzm60UUutaQOjug==
-X-Google-Smtp-Source: AGRyM1u4SdLjWm6hUNRujxunjEdvlUs29vSp0aEPZ1nMaS2sctEJjWfnqPXwDBsOKFNNI/MzaD/WOQ==
-X-Received: by 2002:a5d:5a9d:0:b0:21b:8247:7ec4 with SMTP id bp29-20020a5d5a9d000000b0021b82477ec4mr27067960wrb.561.1658245699622;
-        Tue, 19 Jul 2022 08:48:19 -0700 (PDT)
-Received: from google.com (109.36.187.35.bc.googleusercontent.com. [35.187.36.109])
-        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b003a31b79dc0esm5044883wmb.1.2022.07.19.08.48.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 08:48:19 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 16:48:15 +0100
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     peterz@infradead.org, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, regressions@leemhuis.info,
-        kernel-team@android.com, Derek Dolney <z23@posteo.net>
-Subject: Re: [PATCH v4] cpu/hotplug: Do not bail-out in DYING/STARTING
- sections
-Message-ID: <YtbSP21k1hTKGlqv@google.com>
-References: <20220704131346.2650163-1-vdonnefort@google.com>
- <xhsmhfsix6ssc.mognet@vschneid.remote.csb>
+        Tue, 19 Jul 2022 11:49:21 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D837A599DA;
+        Tue, 19 Jul 2022 08:49:19 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JF18n2006836;
+        Tue, 19 Jul 2022 17:49:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=xNJ4ErN3u9jkwMCarC2DByfr3qT4TwK9Imt9o2bL5z0=;
+ b=GBgzepkdJdsFAckF9I/WRy8sXMFk7VCCjo7Y7HRdF1F76W5b6gsikNP3c+7PLlUGZoQP
+ DgKLybIfd/dd/XzIrk7sodntJHPa/do2UvuMDiPJHd/9cI4cUdBQIMYAqv1i+sQE0rSM
+ 3ViMAILa5kcIyZmUn6VvAB2B0EzexNri17aJD3gV0DtHvylzakv8JM92s1oXpCSr8aS9
+ EAcEtUe5fybPg1YAt6w/dO1PR9nT/rC3OQUoLIlKBhJoa6LatC/j341H4yooZDIksZTz
+ 72/e/3Qoq0bcwb8kne9yJdBvA/dj3BJa9ovKz/CWwa4zepmuyuSK3Ikh5/T38E++IslD 9w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hbnp60r8v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 19 Jul 2022 17:49:08 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 09E6610002A;
+        Tue, 19 Jul 2022 17:49:08 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0502522D17D;
+        Tue, 19 Jul 2022 17:49:08 +0200 (CEST)
+Received: from [10.201.20.208] (10.75.127.44) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 19 Jul
+ 2022 17:49:04 +0200
+Message-ID: <011c1254-f3e9-f363-52a5-c71f7b5a2805@foss.st.com>
+Date:   Tue, 19 Jul 2022 17:49:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhfsix6ssc.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 0/6] STM32 DMA-MDMA chaining feature
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-doc@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>
+References: <20220719153122.620730-1-amelie.delaunay@foss.st.com>
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+In-Reply-To: <20220719153122.620730-1-amelie.delaunay@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-19_04,2022-07-19_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 04:12:03PM +0100, Valentin Schneider wrote:
-> On 04/07/22 14:13, Vincent Donnefort wrote:
-> > +static int _cpuhp_invoke_callback_range(bool bringup,
-> > +					unsigned int cpu,
-> > +					struct cpuhp_cpu_state *st,
-> > +					enum cpuhp_state target,
-> > +					bool nofail)
-> [...]
-> > +		if (nofail) {
-> > +			pr_warn("CPU %u %s state %s (%d) failed (%d)\n",
-> > +				cpu, bringup ? "UP" : "DOWN",
-> > +				cpuhp_get_step(st->state)->name,
-> > +				st->state, err);
-> > +			ret = -1;
-> 
-> On a single failure we'll get two warns (WARN_ON_ONCE() + pr_warn(), and
-> then subsequently just the pr_warn()), is that intended?
+Please drop this malformed patchset, I'll send a new one.
 
-It does, this is to keep the backtrace that used to be here... but now, giving
-a second thought, we can probably get rid of it and just keep the pr_warn()?
-
+On 7/19/22 17:31, Amelie Delaunay wrote:
+> This patchset (re)introduces STM32 DMA-MDMA chaining feature.
 > 
-> Also, why not have ret = err here?
-
-If two states fail, the ret wouldn't mean much, hence a default "-1" just for
-the WARN_ONCE. But if we drop the latter, that would simplify the problem of
-knowing which error code to return.
-
+> As the DMA is not able to generate convenient burst transfer on the DDR,
+> it penalises the AXI bus when accessing the DDR. While it accesses
+> optimally the SRAM. The DMA-MDMA chaining then consists in having an SRAM
+> buffer between DMA and MDMA, so the DMA deals with peripheral and SRAM,
+> and the MDMA with SRAM and DDR.
 > 
-> > +		} else {
-> > +			ret = err;
-> >                       break;
-> > +		}
-> >       }
-> >
-> > -	return err;
-> > +	return ret;
+> The feature relies on the fact that DMA channel Transfer Complete signal
+> can trigger a MDMA channel transfer and MDMA can clear the DMA request by
+> writing to DMA Interrupt Clear register.
 > 
-> > +static inline void cpuhp_invoke_callback_range_nofail(bool bringup,
-> > +						      unsigned int cpu,
-> > +						      struct cpuhp_cpu_state *st,
-> > +						      enum cpuhp_state target)
-> > +{
-> > +	WARN_ON_ONCE(_cpuhp_invoke_callback_range(bringup, cpu, st, target, true));
-> >  }
-> >
+> A deeper introduction can be found in patch 1.
+> 
+> Previous implementation [1] has been dropped as nacked.
+> Unlike this previous implementation (where all the stuff was embedded in
+> stm32-dma driver), the user (in peripheral drivers using dma) has now to
+> configure the MDMA channel.
+> 
+> [1] https://lore.kernel.org/lkml/1538139715-24406-1-git-send-email-pierre-yves.mordret@st.com/
+> 
+> Changes in v3:
+> - introduce two prior patches to help readibility
+> - fix stm32-dma struct stm32_dma_mdma_config documentation
+> 
+> Changes in v2:
+> - wrap to 80-column limit for documentation
+> - add an entry for this documentation in index.rst
+> - use simple table instead of csv-table in documentation
+> 
+> 
+> Amelie Delaunay (6):
+>    dmaengine: stm32-dma: introduce 3 helpers to address channel flags
+>    dmaengine: stm32-dma: use bitfield helpers
+>    docs: arm: stm32: introduce STM32 DMA-MDMA chaining feature
+>    dmaengine: stm32-dmamux: set dmamux channel id in dma features
+>      bitfield
+>    dmaengine: stm32-dma: add support to trigger STM32 MDMA
+>    dmaengine: stm32-mdma: add support to be triggered by STM32 DMA
+> 
+>   Documentation/arm/index.rst                   |   1 +
+>   .../arm/stm32/stm32-dma-mdma-chaining.rst     | 415 ++++++++++++++++++
+>   drivers/dma/stm32-dma.c                       | 136 +++---
+>   drivers/dma/stm32-dmamux.c                    |   2 +-
+>   drivers/dma/stm32-mdma.c                      |  70 ++-
+>   5 files changed, 569 insertions(+), 55 deletions(-)
+>   create mode 100644 Documentation/arm/stm32/stm32-dma-mdma-chaining.rst
 > 

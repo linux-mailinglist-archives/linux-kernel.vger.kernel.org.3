@@ -2,167 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF6357A57B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CE357A582
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239719AbiGSRg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S238862AbiGSRh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239716AbiGSRgW (ORCPT
+        with ESMTP id S235492AbiGSRh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:36:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA8B2564D2;
-        Tue, 19 Jul 2022 10:36:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF6E91596;
-        Tue, 19 Jul 2022 10:36:21 -0700 (PDT)
-Received: from [10.57.42.173] (unknown [10.57.42.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0D243F766;
-        Tue, 19 Jul 2022 10:36:19 -0700 (PDT)
-Message-ID: <1019b931-4d0d-ecea-c170-29e3899acd9b@arm.com>
-Date:   Tue, 19 Jul 2022 18:36:18 +0100
+        Tue, 19 Jul 2022 13:37:56 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B945A2FF;
+        Tue, 19 Jul 2022 10:37:54 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297609329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7609:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 530761EC0138;
+        Tue, 19 Jul 2022 19:37:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658252267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=y5ZMCnUTWGMS2A57L3TimBKZx2dG3nsMUVXGZqiweuI=;
+        b=DV+KzSpsmUJXA4gV2e71Kx9Wuq+g9wu2jW9T+QmkWpKnTcgcguGh61gc0eOtjBphP7fEX+
+        7uOhwtmI+/jz7Mqjln4xuwG+oFy3ZSbWyI37nJRNMyYtnqSIpiFk4NMfM6ecjSA971IfQQ
+        hatuNYgEJOwJ5jRpEwoyTWtfDr8Wt4c=
+Date:   Tue, 19 Jul 2022 19:37:43 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+Subject: Re: [PATCH] efi/x86: use naked RET on mixed mode call wrapper
+Message-ID: <Ytbr52VKK6aQT259@zn.tnic>
+References: <20220715194550.793957-1-cascardo@canonical.com>
+ <YtVG8VBmFikS6GMn@worktop.programming.kicks-ass.net>
+ <YtWKK2ZLib1R7itI@zn.tnic>
+ <CAHk-=wiWQOsxqE+tvZi_MjzGaqfG6Xo5AhbYXtiLWcKVVvbycQ@mail.gmail.com>
+ <YtWqit2B3UYIWht1@zn.tnic>
+ <CAMj1kXE128e76KWgRgHLM+WWHOzx_BJsWMw_2QgzbYTm3p9d-A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 02/13] coresight: trace-id: update CoreSight core to
- use Trace ID API
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, quic_jinlmao@quicinc.com
-References: <20220704081149.16797-1-mike.leach@linaro.org>
- <20220704081149.16797-3-mike.leach@linaro.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220704081149.16797-3-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXE128e76KWgRgHLM+WWHOzx_BJsWMw_2QgzbYTm3p9d-A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike
-
-On 04/07/2022 09:11, Mike Leach wrote:
-> Initialises the default trace ID map.
+On Tue, Jul 19, 2022 at 05:22:28PM +0200, Ard Biesheuvel wrote:
+> The code in question is a little trampoline that executes from the EFI
+> mixed mode 1:1 mapping of the kernel text, and never via the kernel
+> mapping, so we should just move it into .rodata instead (and fix up
+> the mixed mode virtual address map logic accordingly). I don't think
+> mapping the kernel text and rodata into the 1;1 EFI map is needed at
+> all, tbh, and the only thing we ever access via that mapping is that
+> little trampoline.
 > 
-> This will be used by all source drivers to be allocated their trace IDs.
+> Something like
 
-As per previous patch, we may not need an explicit call from here.
+I'm obviously always for simplifications like that. I'm guessing this
+should be tested for a full next release before it goes to Linus?
 
-> 
-> The checks for sources to have unique IDs has been removed - this is now
-> guaranteed by the ID allocation mechanisms, and inappropriate where
-> multiple ID maps are in use in larger systems
-> 
+Thx.
 
-And this looks like a candidate for a separate patch, as the sources do
-not use the new API yet ? Once they do, in the following patches, we
-could remove this code.
+-- 
+Regards/Gruss,
+    Boris.
 
-
-All said, this patch could be renamed and moved to the bottom of the 
-series, with :
-
-  "coresight: Remove obsolete trace-id uniqueness checks"
-
-Otherwise, looks good to me.
-
-
-
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->   drivers/hwtracing/coresight/coresight-core.c | 49 ++------------------
->   1 file changed, 4 insertions(+), 45 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index 1edfec1e9d18..be69e05fde1f 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -22,6 +22,7 @@
->   #include "coresight-etm-perf.h"
->   #include "coresight-priv.h"
->   #include "coresight-syscfg.h"
-> +#include "coresight-trace-id.h"
->   
->   static DEFINE_MUTEX(coresight_mutex);
->   static DEFINE_PER_CPU(struct coresight_device *, csdev_sink);
-> @@ -84,45 +85,6 @@ struct coresight_device *coresight_get_percpu_sink(int cpu)
->   }
->   EXPORT_SYMBOL_GPL(coresight_get_percpu_sink);
->   
-> -static int coresight_id_match(struct device *dev, void *data)
-> -{
-> -	int trace_id, i_trace_id;
-> -	struct coresight_device *csdev, *i_csdev;
-> -
-> -	csdev = data;
-> -	i_csdev = to_coresight_device(dev);
-> -
-> -	/*
-> -	 * No need to care about oneself and components that are not
-> -	 * sources or not enabled
-> -	 */
-> -	if (i_csdev == csdev || !i_csdev->enable ||
-> -	    i_csdev->type != CORESIGHT_DEV_TYPE_SOURCE)
-> -		return 0;
-> -
-> -	/* Get the source ID for both components */
-> -	trace_id = source_ops(csdev)->trace_id(csdev);
-> -	i_trace_id = source_ops(i_csdev)->trace_id(i_csdev);
-> -
-> -	/* All you need is one */
-> -	if (trace_id == i_trace_id)
-> -		return 1;
-> -
-> -	return 0;
-> -}
-> -
-> -static int coresight_source_is_unique(struct coresight_device *csdev)
-> -{
-> -	int trace_id = source_ops(csdev)->trace_id(csdev);
-> -
-> -	/* this shouldn't happen */
-> -	if (trace_id < 0)
-> -		return 0;
-> -
-> -	return !bus_for_each_dev(&coresight_bustype, NULL,
-> -				 csdev, coresight_id_match);
-> -}
-> -
->   static int coresight_find_link_inport(struct coresight_device *csdev,
->   				      struct coresight_device *parent)
->   {
-> @@ -431,12 +393,6 @@ static int coresight_enable_source(struct coresight_device *csdev, u32 mode)
->   {
->   	int ret;
->   
-> -	if (!coresight_source_is_unique(csdev)) {
-> -		dev_warn(&csdev->dev, "traceID %d not unique\n",
-> -			 source_ops(csdev)->trace_id(csdev));
-> -		return -EINVAL;
-> -	}
-> -
->   	if (!csdev->enable) {
->   		if (source_ops(csdev)->enable) {
->   			ret = coresight_control_assoc_ectdev(csdev, true);
-> @@ -1775,6 +1731,9 @@ static int __init coresight_init(void)
->   	if (ret)
->   		goto exit_bus_unregister;
->   
-> +	/* initialise the default trace ID map */
-> +	coresight_trace_id_init_default_map();
-> +
->   	/* initialise the coresight syscfg API */
->   	ret = cscfg_init();
->   	if (!ret)
-
-
-Suzuki
+https://people.kernel.org/tglx/notes-about-netiquette

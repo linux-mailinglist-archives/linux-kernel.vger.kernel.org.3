@@ -2,140 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EE057A4AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8F457A4B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238296AbiGSRML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S237731AbiGSRME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237546AbiGSRMD (ORCPT
+        with ESMTP id S237528AbiGSRMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:12:03 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E413D5B2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:12:02 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so12426885wme.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+iAMKSPyDppnW2drRMfC/DPQpbs37SaFNxH0H50ARZI=;
-        b=O4NZkZYPqKMHT4nkgfKSUBmSRXIHX7Xjwz9LKUGh/yri9UiZab70JDTT2lnPU0ifjW
-         1ygD5BQogbi6L/wnERj2t3rJ5JSbFWL5rDHKQqBPVThyrDAYX96sulwjrLwIWFwHOg1u
-         pHwSnoF3JuH/x/+9T5ImiOHCy7LF/41/RkzmYG1GETdJkp8MHUMyVG/OABGriwDV8Xte
-         VGByh68mkeH3usd3nsyx9xEHVcVUMIZ1rapz0kznz/fThMO7VjVj9e+LZ9OeMRmL/EMy
-         h5qSsDGG51BUntktLnJ9rGdi2Atg0gbNZP/u/rq8NvWQX2pORSF+RhkfKtKrYLa1BSHG
-         tlbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+iAMKSPyDppnW2drRMfC/DPQpbs37SaFNxH0H50ARZI=;
-        b=X2+Ul2nKXpQ8mchFP9QLl9vJjo7MbRvw4gKk+BHRBjo0i0LaZ8Ekr/CsWpsMpxXSyH
-         AXJVuiD8sT+43zBPNzNEIf3JpYQj3flu6dth1b9Bp2kQZCmETrpK3wN0AlV+oKvzts0w
-         FVVyJEbm6n/fojW8WgLL9ZhQzV+FkPeXbrR4ioeP1gbajnLAtkXNsPF/LqQ5tU7I+eRm
-         XmHpxSzlBghhM+WnYsx0wL2ryXr1fv7KQxg4KvoWycfo6gXF+VGw+aQNl9gavbT70iQ8
-         8npet/zu7gSbvJ4GysWPltkeFlOdBqMoOoTslQb9cLyWTBUferaVwOW6G0qihp1AGywF
-         AL3Q==
-X-Gm-Message-State: AJIora9m1Wl5yzBAs7wfQRUdIlH/YiSiwJggLFHumU0P3P22zKGInPb2
-        ITRAm96nB29SSZgI1DhQWG4/x6ADMkYMytWkjGXOXw==
-X-Google-Smtp-Source: AGRyM1tSnTrIGMlPQIc7VTFsvWbxlskp6X+tgzxneY4fax0JYBtF4IpoL7Y1h3CUtrD+EWH9+RyBdQCDNqpZLHZ8vMY=
-X-Received: by 2002:a05:600c:4e8f:b0:3a1:8b21:ebbc with SMTP id
- f15-20020a05600c4e8f00b003a18b21ebbcmr266369wmq.149.1658250721039; Tue, 19
- Jul 2022 10:12:01 -0700 (PDT)
+        Tue, 19 Jul 2022 13:12:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F90115F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:11:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2841A60FE8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:11:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55A60C341C6;
+        Tue, 19 Jul 2022 17:11:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658250716;
+        bh=5iVcq8tomxnH4tiYclWNXIGQuQpwgkJRPWeb2ZiE01A=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=MPAvBpo64jh3a8A+OlzLppzXqbuzrZVCnoPU4KDrhloSbf/6Km0YyCiSAWBiRIg3M
+         u2qCSlFjitInByiBd3M995qJwwwmhs3U87n6sYevpxiSS+h1cTG9AvErk0sMDDSef5
+         H3H6a6TRK4NHeQwPQIQmw9+ZqE5vh+SFrcwmw2HMV0kLJ00uMthx6pTWS44IrBYNAU
+         TmJo+OptvGHwU5dEkUg0HXD704s3xOCicw2v9laJkMFAWU9MLUpUKbSHlxvYlkUZLg
+         OMtgUqXC1ouFZMciTmSCLNxUypYqJEgAe75Q15aRh8zuUg2EmYdijad3A9ldApJl4h
+         Nh6qj9UY9o9jw==
+From:   Mark Brown <broonie@kernel.org>
+To:     lgirdwood@gmail.com, tiwai@suse.com, jiwang_wang@mentor.com,
+        perex@perex.cz,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     Dean_Jenkins@mentor.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, jiada_wang@mentor.com,
+        erosca@de.adit-jv.com
+In-Reply-To: <20220718110404.1529085-1-jiwang_wang@mentor.com>
+References: <20220718110404.1529085-1-jiwang_wang@mentor.com>
+Subject: Re: [PATCH v1 1/1] rsnd: ssiu: add missing .quit callback for gen2
+Message-Id: <165825071404.372578.3185771887733235033.b4-ty@kernel.org>
+Date:   Tue, 19 Jul 2022 18:11:54 +0100
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-8-adrian.hunter@intel.com>
-In-Reply-To: <20220711093218.10967-8-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 10:11:49 -0700
-Message-ID: <CAP-5=fXtV=p_N=hQPUXzw6TV4st=qpEp7U8H-eDZJgr2BoiVeQ@mail.gmail.com>
-Subject: Re: [PATCH 07/35] perf script: Add --dump-unsorted-raw-trace option
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> When reviewing the results of perf inject, it is useful to be able to see
-> the events in the order they appear in the file.
->
-> So add --dump-unsorted-raw-trace option to do an unsorted dump.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+On Mon, 18 Jul 2022 20:04:04 +0900, Jiada Wang wrote:
+> From: Wang Jiada <jiada_wang@mentor.com>
+> 
+> commit 83b220cf8eb2a ("ASoC: rsnd: implement BUSIF related
+> code in ssiu.c") moved BUSIF related code in ssiu.c
+> which added .quit callback in ssiu.c to disable error irq
+> when ssiu quits.
+> 
+> [...]
 
-Acked-by: Ian Rogers <irogers@google.com>
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] rsnd: ssiu: add missing .quit callback for gen2
+      commit: 11e9318ff7486f375cf246c172c3206a731a2254
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Ian
-
-> ---
->  tools/perf/Documentation/perf-script.txt | 3 +++
->  tools/perf/builtin-script.c              | 8 ++++++++
->  2 files changed, 11 insertions(+)
->
-> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
-> index 1a557ff8f210..e250ff5566cf 100644
-> --- a/tools/perf/Documentation/perf-script.txt
-> +++ b/tools/perf/Documentation/perf-script.txt
-> @@ -79,6 +79,9 @@ OPTIONS
->  --dump-raw-trace=::
->          Display verbose dump of the trace data.
->
-> +--dump-unsorted-raw-trace=::
-> +        Same as --dump-raw-trace but not sorted in time order.
-> +
->  -L::
->  --Latency=::
->          Show latency attributes (irqs/preemption disabled, etc).
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index 7cf21ab16f4f..4b00a50faf00 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -3746,6 +3746,7 @@ int cmd_script(int argc, const char **argv)
->         bool header = false;
->         bool header_only = false;
->         bool script_started = false;
-> +       bool unsorted_dump = false;
->         char *rec_script_path = NULL;
->         char *rep_script_path = NULL;
->         struct perf_session *session;
-> @@ -3794,6 +3795,8 @@ int cmd_script(int argc, const char **argv)
->         const struct option options[] = {
->         OPT_BOOLEAN('D', "dump-raw-trace", &dump_trace,
->                     "dump raw trace in ASCII"),
-> +       OPT_BOOLEAN(0, "dump-unsorted-raw-trace", &unsorted_dump,
-> +                   "dump unsorted raw trace in ASCII"),
->         OPT_INCR('v', "verbose", &verbose,
->                  "be more verbose (show symbol address, etc)"),
->         OPT_BOOLEAN('L', "Latency", &latency_format,
-> @@ -3956,6 +3959,11 @@ int cmd_script(int argc, const char **argv)
->         data.path  = input_name;
->         data.force = symbol_conf.force;
->
-> +       if (unsorted_dump) {
-> +               dump_trace = true;
-> +               script.tool.ordered_events = false;
-> +       }
-> +
->         if (symbol__validate_sym_arguments())
->                 return -1;
->
-> --
-> 2.25.1
->
+Mark

@@ -2,132 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C845A57A2AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C0557A2AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238233AbiGSPIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
+        id S237919AbiGSPJu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 19 Jul 2022 11:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237534AbiGSPIh (ORCPT
+        with ESMTP id S237387AbiGSPJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:08:37 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5311D50180
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:08:35 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id c17so6791866ilq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+5rv7jjhl+k6S7NYw+9gcQK9B0BL7n+vBwFwuGdweMU=;
-        b=g3jn0nTQ2IWCL0Lkg3wzBn2hv1rsD2ZNHxKbm3oRKdWtboUkr3nPOnL6krXVwbBGEi
-         OoLGySxfvjlsMF7axkP7zZoLAu37CRpueZNfpp3FPo4J2Y4dUAnvifraOjL8FKIWnK9M
-         //2aX9kT3E9/sbYJ+8DIIMSLUoa/YxWqi5M0lwArBeD1fy+kl+Ti+gdkF///qTe62Mhp
-         CGqPNKwx66ZNpz5xRxyBd3VLoyk3MSV5JWYd1PSxCplMBFENUUHersUn3kSeQHnva+Ke
-         +KVMMzf/2K6nIqf7CT3cpvPDD/SZQ3yoBfysuqIOuCjf4zUC1u+fzvJTqt6HagrjPDGc
-         /THw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+5rv7jjhl+k6S7NYw+9gcQK9B0BL7n+vBwFwuGdweMU=;
-        b=N5ZiQFCW0SWiBcGXBpcQO8RHWN0ZiRfrE/3uoY5Ce9n/FMPtmQ3NniqHBxFz7Mtvjl
-         ec8WyDPobJtkMFsRxh2mzhi4ssR+AZZspotIosaEYGJtTbrl0IMeA2DOztNJmkEGOfPA
-         vqlykmDmQX4vXFHiYFqs++Qo9qnXLRRPALRmHp8aSTHyWFd2q+EgmSoiBo3mDDpS8g6w
-         gHr9cXX6bSxHGovtJgcres+vyLkMCkbQprcDwUNozpr9cutXCVnOaNQI5xpYvb8Urc2M
-         uhFd2N7jVgvwfjpWkZnX7oNA1+XjB1bBluJK7c0W3NIWn8CYygM4o3Ixwd6QTfCi1VrW
-         ZE/g==
-X-Gm-Message-State: AJIora+CRBvIfZYVwb+Bg7pZec7qghE0/u1KrVb927SpsEe01+p7Ys0e
-        bG1ztCJrxPIUBAvpjU2J1dOfUg==
-X-Google-Smtp-Source: AGRyM1txepzshbSvujIEFhPrHDzMJVugQoXexwl6GFOEuCZgSy4u2kn6BBfSgAT6n403N5cy8SuDZg==
-X-Received: by 2002:a05:6e02:1ba4:b0:2dc:2b41:4052 with SMTP id n4-20020a056e021ba400b002dc2b414052mr16619717ili.200.1658243314590;
-        Tue, 19 Jul 2022 08:08:34 -0700 (PDT)
-Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id f6-20020a056e020b4600b002dae42fa5f2sm5944899ilu.56.2022.07.19.08.08.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 08:08:34 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/2] net: ipa: move configuration data files into a subdirectory
-Date:   Tue, 19 Jul 2022 10:08:27 -0500
-Message-Id: <20220719150827.295248-3-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220719150827.295248-1-elder@linaro.org>
-References: <20220719150827.295248-1-elder@linaro.org>
+        Tue, 19 Jul 2022 11:09:41 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 600265070E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:09:39 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-183-zqQ9LstYPPWsc5DQ7f8mTg-1; Tue, 19 Jul 2022 16:09:36 +0100
+X-MC-Unique: zqQ9LstYPPWsc5DQ7f8mTg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Tue, 19 Jul 2022 16:09:35 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Tue, 19 Jul 2022 16:09:35 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Stafford Horne' <shorne@gmail.com>, Arnd Bergmann <arnd@arndb.de>
+CC:     Christoph Hellwig <hch@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: RE: [PATCH v2 2/2] asm-generic: Add new pci.h and use it
+Thread-Topic: [PATCH v2 2/2] asm-generic: Add new pci.h and use it
+Thread-Index: AQHYm2+TjSo9GtSn30WwmySb6t2iTK2Fy5bA
+Date:   Tue, 19 Jul 2022 15:09:35 +0000
+Message-ID: <874af766883a4c0da6759eff433ec6d6@AcuMS.aculab.com>
+References: <20220717033453.2896843-1-shorne@gmail.com>
+ <20220717033453.2896843-3-shorne@gmail.com> <YtTjeEnKr8f8z4JS@infradead.org>
+ <CAK8P3a1KJe4K5g1z-Faoxc9NhXqjCUWxnvk2HPxsj2wzG_iDbg@mail.gmail.com>
+ <CAAfxs740yz1vJmtFHOPTXT6fqi0+37SR_OhoGsONe4mx_21+_g@mail.gmail.com>
+ <CAK8P3a1Mo9+-t21rkP8SDnPrmbj3-uuVPtmHbeUerAevxN3TNw@mail.gmail.com>
+ <YtaNvpE7AA/4eV1I@antec>
+ <CAK8P3a2UTND+F83k2uQ+f=o1GWV=oa5coshy8Hy+cKHUGuNzEg@mail.gmail.com>
+ <YtaiSEAnMhVqR4HS@antec>
+In-Reply-To: <YtaiSEAnMhVqR4HS@antec>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reduce the clutter in the main IPA source directory by creating a
-new "data" subdirectory, and locating all of the configuration data
-files in there.
+From: Stafford Horne
+> Sent: 19 July 2022 13:24
+> 
+> On Tue, Jul 19, 2022 at 01:55:03PM +0200, Arnd Bergmann wrote:
+> > On Tue, Jul 19, 2022 at 12:55 PM Stafford Horne <shorne@gmail.com> wrote:
+> >
+> > > diff --git a/drivers/comedi/drivers/comedi_isadma.c b/drivers/comedi/drivers/comedi_isadma.c
+> > > index 700982464c53..508421809128 100644
+> > > --- a/drivers/comedi/drivers/comedi_isadma.c
+> > > +++ b/drivers/comedi/drivers/comedi_isadma.c
+> > > @@ -104,8 +104,10 @@ unsigned int comedi_isadma_poll(struct comedi_isadma *dma)
+> > >
+> > >         flags = claim_dma_lock();
+> > >         clear_dma_ff(desc->chan);
+> > > +#ifdef CONFIG_X86_32
+> > >         if (!isa_dma_bridge_buggy)
+> > >                 disable_dma(desc->chan);
+> > > +#endif
+> >
+> > There is a logic mistake here: if we are on something other than x86-32,
+> > this always needs to call the disable_dma()/enable_dma().
+> 
+> Oops, thats right.  Sorry, I should have noticed that.
+> 
+> > Not sure how to best express this in a readable way, something like this
+> > would work:
+> 
+> Option 1:
+> 
+> > #ifdef CONFIG_X86_32
+> >         if (!isa_dma_bridge_buggy)
+> > #endif
+> >                disable_dma(desc->chan);
+> >
+> >
+> > or possibly at the start of this file, a
+> 
+> Option 2:
+> 
+> > #ifndef CONFIG_X86_32
+> > #define isa_dma_bridge_buggy 0
+> > #endif
+> 
+> Option 3:
+> 
+> > Or we could try to keep the generic definition in a global header
+> > like linux/isa-dma.h.
+> 
+> Perhaps option 3 makes the whole patch the most clean.
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/Makefile                     | 2 +-
- drivers/net/ipa/{ => data}/ipa_data-v3.1.c   | 0
- drivers/net/ipa/{ => data}/ipa_data-v3.5.1.c | 0
- drivers/net/ipa/{ => data}/ipa_data-v4.11.c  | 0
- drivers/net/ipa/{ => data}/ipa_data-v4.2.c   | 0
- drivers/net/ipa/{ => data}/ipa_data-v4.5.c   | 0
- drivers/net/ipa/{ => data}/ipa_data-v4.9.c   | 0
- 7 files changed, 1 insertion(+), 1 deletion(-)
- rename drivers/net/ipa/{ => data}/ipa_data-v3.1.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v3.5.1.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v4.11.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v4.2.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v4.5.c (100%)
- rename drivers/net/ipa/{ => data}/ipa_data-v4.9.c (100%)
+Isn't there a define that can be used inside an if?
+So you could do:
+		if (!IS_CONFIG_X86_32 || !isa_dma_bridge_buggy)
+			disable_dma();
+(but I can't remember the name!)
 
-diff --git a/drivers/net/ipa/Makefile b/drivers/net/ipa/Makefile
-index 14b313fefa3a3..8b2220eb6b92d 100644
---- a/drivers/net/ipa/Makefile
-+++ b/drivers/net/ipa/Makefile
-@@ -13,4 +13,4 @@ ipa-y			:=	ipa_main.o ipa_power.o ipa_reg.o ipa_mem.o \
- 				ipa_resource.o ipa_qmi.o ipa_qmi_msg.o \
- 				ipa_sysfs.o
- 
--ipa-y			+=	$(IPA_VERSIONS:%=ipa_data-v%.o)
-+ipa-y			+=	$(IPA_VERSIONS:%=data/ipa_data-v%.o)
-diff --git a/drivers/net/ipa/ipa_data-v3.1.c b/drivers/net/ipa/data/ipa_data-v3.1.c
-similarity index 100%
-rename from drivers/net/ipa/ipa_data-v3.1.c
-rename to drivers/net/ipa/data/ipa_data-v3.1.c
-diff --git a/drivers/net/ipa/ipa_data-v3.5.1.c b/drivers/net/ipa/data/ipa_data-v3.5.1.c
-similarity index 100%
-rename from drivers/net/ipa/ipa_data-v3.5.1.c
-rename to drivers/net/ipa/data/ipa_data-v3.5.1.c
-diff --git a/drivers/net/ipa/ipa_data-v4.11.c b/drivers/net/ipa/data/ipa_data-v4.11.c
-similarity index 100%
-rename from drivers/net/ipa/ipa_data-v4.11.c
-rename to drivers/net/ipa/data/ipa_data-v4.11.c
-diff --git a/drivers/net/ipa/ipa_data-v4.2.c b/drivers/net/ipa/data/ipa_data-v4.2.c
-similarity index 100%
-rename from drivers/net/ipa/ipa_data-v4.2.c
-rename to drivers/net/ipa/data/ipa_data-v4.2.c
-diff --git a/drivers/net/ipa/ipa_data-v4.5.c b/drivers/net/ipa/data/ipa_data-v4.5.c
-similarity index 100%
-rename from drivers/net/ipa/ipa_data-v4.5.c
-rename to drivers/net/ipa/data/ipa_data-v4.5.c
-diff --git a/drivers/net/ipa/ipa_data-v4.9.c b/drivers/net/ipa/data/ipa_data-v4.9.c
-similarity index 100%
-rename from drivers/net/ipa/ipa_data-v4.9.c
-rename to drivers/net/ipa/data/ipa_data-v4.9.c
--- 
-2.34.1
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

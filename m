@@ -2,171 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5885557A802
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A8257A80F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240001AbiGSUIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 16:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
+        id S240071AbiGSUJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 16:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiGSUIF (ORCPT
+        with ESMTP id S238664AbiGSUJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 16:08:05 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F01D25E83
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:08:04 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id bf13so14459659pgb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=j8fpaezXRFwn4+Ho957RhCHI/1ApPqF3nvBcj0KrerQ=;
-        b=mXe2UetShJT3mLzz/cur2NABcA9POjjC3PHbHtwqtzKNj0GDrdKlgyB97jfGh39iRH
-         6fCgoLa0B3Jvn/8SpvXwTuxxvxjioNzdZZV5TYfVMMRh1YlQy6JZO6F+2So6YgVk79UX
-         d0fjFavqFpt/MU5LVoTk2b9HAIWdpCv2ewrJaeC6uCycYpqwk/BDFK9UKWf92VI4IOBc
-         ilA5sW/1Q/l4MiPFMUGJyLwQjQTXrH776VBkdu7l6vDD1hE28Eh8CGZcH4iMCXHrzDQe
-         /UOosUdMpuh9TEvYBq+3SKHfECZXipfJF2GVDUTNLQ41+bxJ7gjPn8DekHN+QzfTj5Cw
-         pPYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j8fpaezXRFwn4+Ho957RhCHI/1ApPqF3nvBcj0KrerQ=;
-        b=P/1wy1P8I+kmFpNkWXxXSFP3ADSZGeXJ3VEYBVUWlwchypc5mBrUS8C7tZbqklzHKB
-         pYbBoLt/UIZCFHTuGhIE9Aivz8OgEp7iyYpdJpt3Xf4i5apN8xgDynMJrt1WBcEsutLj
-         EmWv3igfj2gQub1a/4YgZOQ79qg0FsY2ZyhGBwWArWS6AHkpWeUHCFYhmxuIgnHPiyDu
-         Zz96GvspclICYkYA7yUVzxl6K6hdmC7F1YUbyL7xCYkLG3Y7kpfQO32BlCg/c7GGXYV/
-         y5JL4FNOrsTW9srzFCrCnvIq1jGbi6LWdHbSoBvpl1AqigAfMvQbGTy09MYfte3x5NG6
-         v3Aw==
-X-Gm-Message-State: AJIora+s5L3SlwSaJmAaDgbt26WXN+tP6ucQ0XPqpq4PhlEb7eBz+0KK
-        7shnSoicSWyQVBde4tqN98MH9BJ+91bcow==
-X-Google-Smtp-Source: AGRyM1tBBarePTaGuFBhqfkJWfot4ndavhAoqRJuXtfQV0dICOwiYsgUa1RnmwN/v5Vnr3ZzpSmCOg==
-X-Received: by 2002:a63:5b45:0:b0:416:7867:4298 with SMTP id l5-20020a635b45000000b0041678674298mr31589221pgm.58.1658261283495;
-        Tue, 19 Jul 2022 13:08:03 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id j31-20020a63fc1f000000b00419ab8f8d2csm10360858pgi.20.2022.07.19.13.08.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 13:08:02 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 20:07:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Subject: Re: [PATCH 06/12] KVM: X86/MMU: Rename mmu_unsync_walk() to
- mmu_unsync_walk_and_clear()
-Message-ID: <YtcPHx3TYVJzdiN3@google.com>
-References: <20220605064342.309219-1-jiangshanlai@gmail.com>
- <20220605064342.309219-7-jiangshanlai@gmail.com>
+        Tue, 19 Jul 2022 16:09:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29412E9E9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658261371; x=1689797371;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HU+JaDG5/QEwe2CMf+ijpKvUkQBooyLHvKXiT4tuquc=;
+  b=NQsBLEH2FujDDhzvAwemaQ8K9O7nIpcLseExNJhWZA8X/IWu6N5QWScz
+   l9lzTAdHwGq8D9QErQoyQ4asJmkoZGOgX4BcbydB7z2PAcN7KwUtJIcrB
+   9p4VtfyXiNulXIJoQ+tcrQ557Nm/81z1fMNcORYzY/SlaJnrXyuSQ2ZpB
+   gd18fvmsOsrxSJFS8aTuw/IjyhcnC/ZmD42Cp8TR3hfiCFXBt8bPoG0ny
+   cAFTLDujVh/hOIVZi1J0daY4SiaX3uH93FN0C1a95RLbVl09F6M/1T8Cu
+   fpKQjPTd8om04oulhRD7+59TkKqy0Tsf74dWbmwhBd1+N6r9okP8jOJXW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="273423251"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="273423251"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 13:09:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="572997162"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 19 Jul 2022 13:09:30 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDtX7-0005zy-GD;
+        Tue, 19 Jul 2022 20:09:29 +0000
+Date:   Wed, 20 Jul 2022 04:08:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [kbusch:dma-register 4/4] drivers/nvme/host/pci.c:1812:7: warning:
+ variable 'pages_per' set but not used
+Message-ID: <202207200447.tQ5AF3SH-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220605064342.309219-7-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> 
-> mmu_unsync_walk() and __mmu_unsync_walk() requires the caller to clear
-> unsync for the shadow pages in the resulted pvec by synching them or
-> zapping them.
-> 
-> All callers does so.
-> 
-> Otherwise mmu_unsync_walk() and __mmu_unsync_walk() can't work because
-> they always walk from the beginning.
-> 
-> And mmu_unsync_walk() and __mmu_unsync_walk() directly clear unsync bits
-> now, rename it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-register
+head:   9de6909fed20955193275bbf9c75ccc85553b7d8
+commit: 9de6909fed20955193275bbf9c75ccc85553b7d8 [4/4] dma-prereg: add memory cleanup
+config: arm-randconfig-r013-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200447.tQ5AF3SH-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=9de6909fed20955193275bbf9c75ccc85553b7d8
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch dma-register
+        git checkout 9de6909fed20955193275bbf9c75ccc85553b7d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/nvme/host/
 
-What about mmu_gather_unsync_shadow_pages()?  I agree that "walk" isn't a great
-name, but IMO that's true regardless of when it updates the unsync bitmap.  And
-similar to a previous complaint about "clear" being ambiguous, I don't think it's
-realistic that we'll be able to come up with a name the precisely and unambiguously
-describes what exactly is being cleared.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Instead, regardless of what name we settle on, add a function comment.  Probably
-in the patch that changes the clear_unsync_child_bit behavior.  That's a better
-place to document the implementation detail.
+All warnings (new ones prefixed by >>):
 
-> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 2446ede0b7b9..a56d328365e4 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1773,7 +1773,7 @@ static inline void clear_unsync_child_bit(struct kvm_mmu_page *sp, int idx)
->  	__clear_bit(idx, sp->unsync_child_bitmap);
->  }
->  
-> -static int __mmu_unsync_walk(struct kvm_mmu_page *sp,
-> +static int __mmu_unsync_walk_and_clear(struct kvm_mmu_page *sp,
->  			   struct kvm_mmu_pages *pvec)
->  {
->  	int i, ret, nr_unsync_leaf = 0;
-> @@ -1793,7 +1793,7 @@ static int __mmu_unsync_walk(struct kvm_mmu_page *sp,
->  			if (mmu_pages_add(pvec, child, i))
->  				return -ENOSPC;
->  
-> -			ret = __mmu_unsync_walk(child, pvec);
-> +			ret = __mmu_unsync_walk_and_clear(child, pvec);
->  			if (ret < 0)
->  				return ret;
->  			nr_unsync_leaf += ret;
-> @@ -1818,7 +1818,7 @@ static int __mmu_unsync_walk(struct kvm_mmu_page *sp,
->  
->  #define INVALID_INDEX (-1)
->  
-> -static int mmu_unsync_walk(struct kvm_mmu_page *sp,
-> +static int mmu_unsync_walk_and_clear(struct kvm_mmu_page *sp,
->  			   struct kvm_mmu_pages *pvec)
+>> drivers/nvme/host/pci.c:1812:7: warning: variable 'pages_per' set but not used [-Wunused-but-set-variable]
+                   int pages_per = nvme_pages;
+                       ^
+   1 warning generated.
 
-Please align indentation.
 
->  {
->  	pvec->nr = 0;
-> @@ -1826,7 +1826,7 @@ static int mmu_unsync_walk(struct kvm_mmu_page *sp,
->  		return 0;
->  
->  	mmu_pages_add(pvec, sp, INVALID_INDEX);
-> -	return __mmu_unsync_walk(sp, pvec);
-> +	return __mmu_unsync_walk_and_clear(sp, pvec);
->  }
->  
->  static void kvm_mmu_page_clear_unsync(struct kvm *kvm, struct kvm_mmu_page *sp)
-> @@ -1962,7 +1962,7 @@ static int mmu_sync_children(struct kvm_vcpu *vcpu,
->  	LIST_HEAD(invalid_list);
->  	bool flush = false;
->  
-> -	while (mmu_unsync_walk(parent, &pages)) {
-> +	while (mmu_unsync_walk_and_clear(parent, &pages)) {
->  		bool protected = false;
->  
->  		for_each_sp(pages, sp, parents, i)
-> @@ -2279,7 +2279,7 @@ static int mmu_zap_unsync_children(struct kvm *kvm,
->  	if (parent->role.level == PG_LEVEL_4K)
->  		return 0;
->  
-> -	while (mmu_unsync_walk(parent, &pages)) {
-> +	while (mmu_unsync_walk_and_clear(parent, &pages)) {
->  		struct kvm_mmu_page *sp;
->  
->  		for_each_sp(pages, sp, parents, i) {
-> -- 
-> 2.19.1.6.gb485710b
-> 
+vim +/pages_per +1812 drivers/nvme/host/pci.c
+
+  1782	
+  1783	#ifdef CONFIG_HAS_DMA
+  1784	/*
+  1785	 * Important: bvec must be describing a virtually contiguous buffer.
+  1786	 */
+  1787	static void *nvme_pci_dma_map(struct request_queue *q,
+  1788				       struct bio_vec *bvec, int nr_vecs)
+  1789	{
+  1790		const int nvme_pages = 1 << (PAGE_SIZE - NVME_CTRL_PAGE_SIZE);
+  1791		struct nvme_ns *ns = q->queuedata;
+  1792		struct nvme_dev *dev = to_nvme_dev(ns->ctrl);
+  1793		struct nvme_dma_mapping *mapping;
+  1794		int i, j, k, size, ret = -ENOMEM;
+  1795	
+  1796		if (!nr_vecs)
+  1797			return ERR_PTR(-EINVAL);
+  1798	
+  1799		mapping = kzalloc(sizeof(*mapping), GFP_KERNEL);
+  1800		if (!mapping)
+  1801			return ERR_PTR(-ENOMEM);
+  1802	
+  1803		mapping->nr_pages = nr_vecs * nvme_pages;
+  1804		size = sizeof(*mapping->prps) * mapping->nr_pages;
+  1805		mapping->prps = dma_alloc_coherent(dev->dev, size,
+  1806					&mapping->prp_dma_addr, GFP_KERNEL);
+  1807		if (!mapping->prps)
+  1808			goto free_mapping;
+  1809	
+  1810		for (i = 0, k = 0; i < nr_vecs; i++) {
+  1811			struct bio_vec *bv = bvec + i;
+> 1812			int pages_per = nvme_pages;
+  1813			dma_addr_t dma_addr;
+  1814	
+  1815			if (i == 0) {
+  1816				mapping->offset = bv->bv_offset;
+  1817				pages_per -= mapping->offset >> NVME_CTRL_PAGE_SHIFT;
+  1818			} else if (bv->bv_offset) {
+  1819				ret = -EINVAL;
+  1820				goto err;
+  1821			}
+  1822	
+  1823			dma_addr = dma_map_bvec(dev->dev, bv, 0, 0);
+  1824			if (dma_mapping_error(dev->dev, dma_addr)) {
+  1825				ret = -EIO;
+  1826				goto err;
+  1827			}
+  1828	
+  1829			for (j = 0; j < nvme_pages; j++)
+  1830				mapping->prps[k++] = cpu_to_le64(dma_addr +
+  1831							j * NVME_CTRL_PAGE_SIZE);
+  1832		}
+  1833	
+  1834		get_device(dev->dev);
+  1835		return mapping;
+  1836	
+  1837	err:
+  1838		while (--i > 0) {
+  1839			__u64 dma_addr = le64_to_cpu(mapping->prps[i]);
+  1840	
+  1841			dma_unmap_page(dev->dev, dma_addr,
+  1842				       PAGE_SIZE - offset_in_page(dma_addr), 0);
+  1843		}
+  1844	
+  1845		dma_free_coherent(dev->dev, size, (void *)mapping->prps,
+  1846				  mapping->prp_dma_addr);
+  1847	free_mapping:
+  1848		kfree(mapping);
+  1849		return ERR_PTR(ret);
+  1850	}
+  1851	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

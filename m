@@ -2,247 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440B457AAB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D48757AAB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 01:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238934AbiGSXwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 19:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S240011AbiGSXxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 19:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238688AbiGSXvp (ORCPT
+        with ESMTP id S237147AbiGSXxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 19:51:45 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2078.outbound.protection.outlook.com [40.107.20.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507F365593;
-        Tue, 19 Jul 2022 16:51:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YBIp0DlM7ckQDXgnakGSe/qYQ2iV6Tiit8xsWHcUlZ/D/i7LSTKEm66iJ//lvh1QX9DsqQ+XoHlYwdsz91XEJnV+2nhcxpmah83AE4y7v5rvTlOz6diOUNSTcBOda44ZYDZfB0zse+cL78nk5VkKdat0qG4bdf1doLRZtuWCGEOReQTKZDVNrGZx9/vMQOXYnz8WFtJbhBUUXgmm356DT0MJ49DXp0Bijlv63SmiyA3x/ESRQuxos0wyOu9BlyVp7ipOfAs+8UAWM4HMpbOVoPPQiILA/ALnhOwQ81yK3Rsd/n7hE6GJ8GgSrD2OcHzToqM+ZRxTo6H1OA5lqA8zEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CwqgF/VSthAT9ESWw2ffD+n6n8x4GWkSvUBruY6zJ8A=;
- b=X7d8V7vpY6lYQkgY0D9Do4b9YzdQ+hUHB0URTco8l8iFJD7m0JkwGzPdQec0gdlIQSVwJcOc6DnTI5X5EkHC2FjxR0a+SUhjLqPMtATW2Z/G6fUEk+2vvmXHGe1gcmSJNCq/1MFDpT7mrGUCwgO6bJmUkYFtjiFJS40vIXoHbTQsPHuJm+BpQls6ObOWDdssKVmLenQdBwkRJTCNwmjc+oSXEIQf1aE2TBjRapCRyGeOKhz6A11Pc2OzEdERXu7V4txP37rSTNiLJIRGjl6RjQZ9iJ4qllCWSHX0/5205lhgDOWARgufOzYdtsVQHoQm8fLO+b5fJI8B4RGnU0fe9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CwqgF/VSthAT9ESWw2ffD+n6n8x4GWkSvUBruY6zJ8A=;
- b=PbXBfyK0+y43glmBc9UVC5zs2rNtDKfNEeWkt0maRIqaGQqqCkTiWAQQ0WiYknb+b4JrxfCF3R3vOlce5Sja/onA0iXMGaRSZg7Y59u6CQSXzJQI9wND/03fkbQO10kZq8RjL4BZNmAxulHSZF7XD3wC/t4Q6IBkvvd1Wm1xwoHHjtrQP2FHSzBRWMc5xIEbIbURkSmAmV0JK940Wxk/ziTEag7pRxaPrAKXyfEUrdHGZC9aw9fiiaur3Xrnak6AR5fmhUw1ij+QXPd79e5XhBu/N5BWlcC/Ko7/uv6UeXz41Ey8GBaJ/xLv9t+oG7NJFL8/wZlCpzHY0Hj8PUqqgg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by DB7PR03MB4811.eurprd03.prod.outlook.com (2603:10a6:10:30::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Tue, 19 Jul
- 2022 23:50:40 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::757e:b75f:3449:45b1%6]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
- 23:50:40 +0000
-From:   Sean Anderson <sean.anderson@seco.com>
-To:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH v2 11/11] net: phy: aquantia: Add support for rate adaptation
-Date:   Tue, 19 Jul 2022 19:50:01 -0400
-Message-Id: <20220719235002.1944800-12-sean.anderson@seco.com>
-X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
-In-Reply-To: <20220719235002.1944800-1-sean.anderson@seco.com>
-References: <20220719235002.1944800-1-sean.anderson@seco.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL1PR13CA0227.namprd13.prod.outlook.com
- (2603:10b6:208:2bf::22) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Tue, 19 Jul 2022 19:53:20 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA537655A1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 16:52:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658274760; x=1689810760;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LNFqTL21noiFw2bcA4+rORkL83ZvBl+GzZ0QBGjrmXE=;
+  b=SghPm2Pzpygu2HYoiFJ2rGHq3VjNVdRK9OOZ8II/akLl2DUZzhNWJwyC
+   HweMnpTtEGuiryD9VA6SJ10so+gi5wCX6Gy0FWTMkJHLpLN/CfGuFBYbe
+   YPfIEKdWhNMDhpT8bN9xZlCdyRNOIOtueKo7Gi3y9j/wlhFBe6pHPRN0Z
+   UtuYUG91vLr1XAuaxqiJTmFXDPeqrIyXOGmdkZAxQFE/Y5Ip0g8QQbtc1
+   0zVSxbLjfty26H3JEjCPMu/O4ubdglwNcmY7UpMwQdzlpB5GSWO2ySpX/
+   LdxLi11k9ydYMqotyCtnmJckKjirPatrkKY655NbvOP4rKXaQaeGnJLUA
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="286646188"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="286646188"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 16:52:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="656006569"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Jul 2022 16:52:38 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDx14-0006Eu-7m;
+        Tue, 19 Jul 2022 23:52:38 +0000
+Date:   Wed, 20 Jul 2022 07:52:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kbusch:dma-register 4/4] io_uring/rsrc.c:1242:12: error: 'struct
+ io_mapped_ubuf' has no member named 'dma_tag'
+Message-ID: <202207200735.6oYEZqYq-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 360f166e-64ac-4dc5-38e8-08da69e17c2e
-X-MS-TrafficTypeDiagnostic: DB7PR03MB4811:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8JhJZuoRw0c9OPjWzD0wQaAJ7k8H2hJ2GsrXbBSKDh5mdyvJjpb5qUSUoIbkIo60nTEU9/WY10R4N2+Nf1bJ5DIFeYVIlOLe1aIz5W+5M8hHhFCDQrmGw1RjXdS8A01pDgwd2WiEvOx56wgPZK5sdYsiargIukZu3rC0gi4yjpsusZUIan7ghJKB4uDuW188OCbwxdC2sS4N6P0xxKCkOXnekPi+rzNt1BpGqxZAMeYtgg/AUPSoaawkWUIkyXpG95yKHVSq3NpHucVAIBFsrJO5MZYD8AI380ABYLcPnglC9ttCaFKP+7Q+2UQC54xehMFZEcyIo3HxjVfVZrdt4YpQkH5Pqqoq+Mt6WN/hV7e4kMgf4NWWNLrRJkVehy6SaW40oapgYfP17lMijSh9Tg2huw9TyLgPN884f6h/exia1RLzHgDmir3XxRgQlppysqMuoJaZPFdOkHSJElNrS78SfuR+ff6usUs4qwV/WwJbmQFjirUk0Qf1agd+u6qxMNQccPIq0vK+c64vlAazo6RPCrJmuztgqZ3qr2q0/kVHj7ylRghrrCC5PcFPyJc0wXZb/Wdqr5jqjvq/rgeajManJbwUFrZi+Q9hzK4hmdkAo/kgaO0gTAsAgVMKcztM1rBobOtNR09QWojy97HOlkpanpZ3XBxafMSJj8WzpuD6rGmLwViwjCyiF2C+6opUIW2ffvO4uUJzVj8f+2GURGWvLjRRitv3N0TcuVGqBFFx4JdpRweHZIE9pXa3yWtC7K7cAnu7/+nQmfqzNlx7x+gC8R2pNRujlwiEJ5s3gt0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(39850400004)(396003)(376002)(346002)(54906003)(2906002)(1076003)(83380400001)(186003)(66476007)(66946007)(8676002)(6666004)(4326008)(110136005)(36756003)(66556008)(52116002)(26005)(6512007)(6506007)(2616005)(107886003)(38350700002)(478600001)(86362001)(41300700001)(44832011)(5660300002)(316002)(7416002)(8936002)(38100700002)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xX5Np3fXK1NgogAnI79r2anrZYCERhHqmtA0yaqFTTK5NLImhga7Tz2bdJKa?=
- =?us-ascii?Q?ehhNqb+hF/KW7oKJENyeZp7+YPNCqkAEiyHlA69VW0HxtUU+qF+NsU7CzdHj?=
- =?us-ascii?Q?XmdcsgJmtmVl3FBhymEo/VFQsgdwhFlG7pqAwofhUKTGAYkjobkb2dGWcV9W?=
- =?us-ascii?Q?OuXpSwBwwEUDPFAMXWs4qh8LwAD40SY5h6YSxwui6nlgQlBpRX9jDFnxK1an?=
- =?us-ascii?Q?3qBoYBTdtKkmI+PmPz4zDtLPkm4OS8SzKEm3dbbo8JyWbh4WD3DkqeBCiYJA?=
- =?us-ascii?Q?MfhrfHlyWusGpzTDZSeMbKwq+pp/RuXP4NzwfWH9r0TiZjam6MZwfwwfXFMK?=
- =?us-ascii?Q?xmGz165zV7rF0z9R+LGdDfkWjzfFWEOMZXLWtmRVijouKg+nFtPcJwlavSZK?=
- =?us-ascii?Q?DD+Z6mShoup4zS+WMjAckQI6qBWqVAe7Kf7lBTBNkSBvzaby5tnM+wvDmg2Q?=
- =?us-ascii?Q?+z6/2mqEpyhezl+TB/s86BDwcwRwdXFwsYbjQHeqc+OlEvuci+TnYi6Jt+LP?=
- =?us-ascii?Q?C5+psLY1hF11dQ34/fxe76Ux0gAr9nXxlq4VsQsG6qxigtQtTyQ+vZtV5FlQ?=
- =?us-ascii?Q?UByHYj5Oj8QBO2iL2cnW2tlS7aEwYsgxCGrXMFJWbIhDpx2S5yFbA3U8xVdU?=
- =?us-ascii?Q?jzGQ8J77nnM8NoVjrXo3ZDKb8WkLgfC5YsVt+xUx1sKLruD+H4SEJH0xUvev?=
- =?us-ascii?Q?XdcZbepMwQtREJaLnu1thfMCFDl6yqpNEfDYhgJ4LSZGGGGAl56QnKLHoTy9?=
- =?us-ascii?Q?tOD6jYEV0caWDomeSJPbWKqGvjqG1MilQtDf2Viz2sW9TSqwpy8VZPTNBosn?=
- =?us-ascii?Q?GzS8RXlVkl/G4u8H/KRqznOucjHFktxb0/dzu0fgEBE1FfUcNeYmVvQ7JwXC?=
- =?us-ascii?Q?wfQAjNloUGV8xRghLdM3HiFygzquXtx8CzBfHgzCE7Yozo+3E+k7euwy2eUT?=
- =?us-ascii?Q?CVNMvlowKwWts3SknDkNGhmPPqS0SNQ8Jk7heYN8MiR1GffxieM9E9+u0U75?=
- =?us-ascii?Q?k2ieUDpP5GciCcdMcHs6zw0RQu5s/jWp6qtb3YUSVE9Gt7qzfO2E0oxB5573?=
- =?us-ascii?Q?nFyZLzlyiBxcutXwahrKvdovy23+ngRZpOGrfCqXlwCrXoCg/3sm5gD8V5gw?=
- =?us-ascii?Q?JYPP/xfAUO0laAjCLveTWa6MS1fOg4ekGw8ta9QvFoO2+4CO0cUQ6lkTCm9L?=
- =?us-ascii?Q?89z8JOFGoow6LB+QsOTS0teY2gs/RzJ74nH4J0e3SNk/xmgaGEXzEp17kzsg?=
- =?us-ascii?Q?TKnmEBPqRqzK2WzUDkwTar9h2LYqZ2HB1txRD/dQ2s5bUDCQnm64v2SIwXrs?=
- =?us-ascii?Q?SsPJQSrC8VqH0mfC+Jv/hTqZoywJUbbuaq4FdRb8d57nhEjciDFKP3RIk6Fm?=
- =?us-ascii?Q?fjqT4JrHfAYT/Z3en4QsS6CNlIyU78Pk1ZT2M0N4SinPqTrqgtRryLT9T1qJ?=
- =?us-ascii?Q?kmHikaZBvwObZwGbc1KEHqFSAtoerXF+NNWUlSkqgBCrY9xo0DTLH9GdC5b5?=
- =?us-ascii?Q?48JCHHU+0iCu8OkntdenwmQFQe5FukCzI4Ny0/pev/C7dcpEytwgwqZR5RHH?=
- =?us-ascii?Q?LtxidPTx0pt4LsQ04Tqv710Tn4pagJaNc6UX2g31nuPa5KQc0WNPThfhWAfi?=
- =?us-ascii?Q?2g=3D=3D?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 360f166e-64ac-4dc5-38e8-08da69e17c2e
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 23:50:39.9870
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OEDnxC0yIy5GnnGkUEnyv/c0K1Ep/xbiDGkTdYr4iCsxDxoMXp23YlPDAqyVQUKu8DHDizaLYQRc/6m7c1QMYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR03MB4811
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for rate adaptation for phys similar to the AQR107. We
-assume that all phys using aqr107_read_status support rate adaptation.
-However, it could be possible to determine support based on the firmware
-revision if there are phys discovered which do not support rate adaptation.
-However, as rate adaptation is advertised in the datasheets for these phys,
-I suspect it is supported most boards.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-register
+head:   9de6909fed20955193275bbf9c75ccc85553b7d8
+commit: 9de6909fed20955193275bbf9c75ccc85553b7d8 [4/4] dma-prereg: add memory cleanup
+config: ia64-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200735.6oYEZqYq-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=9de6909fed20955193275bbf9c75ccc85553b7d8
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch dma-register
+        git checkout 9de6909fed20955193275bbf9c75ccc85553b7d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash
 
-Despite the name, the "config" registers are updated with the current rate
-adaptation method (if any). Because they appear to be updated
-automatically, I don't know if these registers can be used to disable rate
-adaptation.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Sean Anderson <sean.anderson@seco.com>
----
+All errors (new ones prefixed by >>):
 
-Changes in v2:
-- Add comments clarifying the register defines
-- Reorder variables in aqr107_read_rate
+   In file included from arch/ia64/include/asm/pgtable.h:153,
+                    from include/linux/pgtable.h:6,
+                    from arch/ia64/include/asm/uaccess.h:40,
+                    from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from io_uring/rsrc.c:4:
+   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
+   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
+     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+         |                                                ^~~~~~~
+   io_uring/rsrc.c: In function 'io_sqe_buffer_register':
+>> io_uring/rsrc.c:1242:12: error: 'struct io_mapped_ubuf' has no member named 'dma_tag'
+    1242 |         imu->dma_tag = 0;
+         |            ^~
+   io_uring/rsrc.c: In function 'io_import_fixed':
+   io_uring/rsrc.c:1337:16: error: 'struct io_mapped_ubuf' has no member named 'dma_tag'
+    1337 |         if (imu->dma_tag) {
+         |                ^~
+   io_uring/rsrc.c:1340:49: error: 'struct io_mapped_ubuf' has no member named 'dma_tag'
+    1340 |                 iov_iter_dma_tag(iter, ddir, imu->dma_tag, offset, nr_segs, len);
+         |                                                 ^~
 
- drivers/net/phy/aquantia_main.c | 37 +++++++++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/phy/aquantia_main.c b/drivers/net/phy/aquantia_main.c
-index 1e7036945a4e..dd73891cf68a 100644
---- a/drivers/net/phy/aquantia_main.c
-+++ b/drivers/net/phy/aquantia_main.c
-@@ -358,34 +358,50 @@ static int aqr107_read_rate(struct phy_device *phydev)
- 	if (val < 0)
- 		return val;
- 
-+	if (val & MDIO_AN_TX_VEND_STATUS1_FULL_DUPLEX)
-+		phydev->duplex = DUPLEX_FULL;
-+	else
-+		phydev->duplex = DUPLEX_HALF;
-+
- 	switch (FIELD_GET(MDIO_AN_TX_VEND_STATUS1_RATE_MASK, val)) {
- 	case MDIO_AN_TX_VEND_STATUS1_10BASET:
- 		phydev->speed = SPEED_10;
-+		config_reg = VEND1_GLOBAL_CFG_10M;
- 		break;
- 	case MDIO_AN_TX_VEND_STATUS1_100BASETX:
- 		phydev->speed = SPEED_100;
-+		config_reg = VEND1_GLOBAL_CFG_100M;
- 		break;
- 	case MDIO_AN_TX_VEND_STATUS1_1000BASET:
- 		phydev->speed = SPEED_1000;
-+		config_reg = VEND1_GLOBAL_CFG_1G;
- 		break;
- 	case MDIO_AN_TX_VEND_STATUS1_2500BASET:
- 		phydev->speed = SPEED_2500;
-+		config_reg = VEND1_GLOBAL_CFG_2_5G;
- 		break;
- 	case MDIO_AN_TX_VEND_STATUS1_5000BASET:
- 		phydev->speed = SPEED_5000;
-+		config_reg = VEND1_GLOBAL_CFG_5G;
- 		break;
- 	case MDIO_AN_TX_VEND_STATUS1_10GBASET:
- 		phydev->speed = SPEED_10000;
-+		config_reg = VEND1_GLOBAL_CFG_10G;
- 		break;
- 	default:
- 		phydev->speed = SPEED_UNKNOWN;
--		break;
-+		return 0;
- 	}
- 
--	if (val & MDIO_AN_TX_VEND_STATUS1_FULL_DUPLEX)
--		phydev->duplex = DUPLEX_FULL;
-+	val = phy_read_mmd(phydev, MDIO_MMD_VEND1, config_reg);
-+	if (val < 0)
-+		return val;
-+
-+	if (FIELD_GET(VEND1_GLOBAL_CFG_RATE_ADAPT, val) ==
-+	    VEND1_GLOBAL_CFG_RATE_ADAPT_PAUSE)
-+		phydev->rate_adaptation = RATE_ADAPT_PAUSE;
- 	else
--		phydev->duplex = DUPLEX_HALF;
-+		phydev->rate_adaptation = RATE_ADAPT_NONE;
- 
- 	return 0;
- }
-@@ -626,6 +642,16 @@ static void aqr107_link_change_notify(struct phy_device *phydev)
- 		phydev_info(phydev, "Aquantia 1000Base-T2 mode active\n");
- }
- 
-+static int aqr107_get_rate_adaptation(struct phy_device *phydev,
-+				      phy_interface_t iface)
-+{
-+	if (iface == PHY_INTERFACE_MODE_10GBASER ||
-+	    iface == PHY_INTERFACE_MODE_2500BASEX ||
-+	    iface == PHY_INTERFACE_MODE_NA)
-+		return RATE_ADAPT_PAUSE;
-+	return RATE_ADAPT_NONE;
-+}
-+
- static int aqr107_suspend(struct phy_device *phydev)
- {
- 	return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, MDIO_CTRL1,
-@@ -687,6 +713,7 @@ static struct phy_driver aqr_driver[] = {
- 	PHY_ID_MATCH_MODEL(PHY_ID_AQR107),
- 	.name		= "Aquantia AQR107",
- 	.probe		= aqr107_probe,
-+	.get_rate_adaptation = aqr107_get_rate_adaptation,
- 	.config_init	= aqr107_config_init,
- 	.config_aneg    = aqr_config_aneg,
- 	.config_intr	= aqr_config_intr,
-@@ -705,6 +732,7 @@ static struct phy_driver aqr_driver[] = {
- 	PHY_ID_MATCH_MODEL(PHY_ID_AQCS109),
- 	.name		= "Aquantia AQCS109",
- 	.probe		= aqr107_probe,
-+	.get_rate_adaptation = aqr107_get_rate_adaptation,
- 	.config_init	= aqcs109_config_init,
- 	.config_aneg    = aqr_config_aneg,
- 	.config_intr	= aqr_config_intr,
-@@ -731,6 +759,7 @@ static struct phy_driver aqr_driver[] = {
- 	PHY_ID_MATCH_MODEL(PHY_ID_AQR113C),
- 	.name           = "Aquantia AQR113C",
- 	.probe          = aqr107_probe,
-+	.get_rate_adaptation = aqr107_get_rate_adaptation,
- 	.config_init    = aqr107_config_init,
- 	.config_aneg    = aqr_config_aneg,
- 	.config_intr    = aqr_config_intr,
+vim +1242 io_uring/rsrc.c
+
+129ce6a148558b Jens Axboe     2022-06-13  1192  
+129ce6a148558b Jens Axboe     2022-06-13  1193  static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+129ce6a148558b Jens Axboe     2022-06-13  1194  				  struct io_mapped_ubuf **pimu,
+129ce6a148558b Jens Axboe     2022-06-13  1195  				  struct page **last_hpage)
+129ce6a148558b Jens Axboe     2022-06-13  1196  {
+129ce6a148558b Jens Axboe     2022-06-13  1197  	struct io_mapped_ubuf *imu = NULL;
+129ce6a148558b Jens Axboe     2022-06-13  1198  	struct page **pages = NULL;
+129ce6a148558b Jens Axboe     2022-06-13  1199  	unsigned long off;
+129ce6a148558b Jens Axboe     2022-06-13  1200  	size_t size;
+129ce6a148558b Jens Axboe     2022-06-13  1201  	int ret, nr_pages, i;
+129ce6a148558b Jens Axboe     2022-06-13  1202  
+129ce6a148558b Jens Axboe     2022-06-13  1203  	*pimu = ctx->dummy_ubuf;
+faee7b38d3c3e4 Pavel Begunkov 2022-06-15  1204  	if (!iov->iov_base)
+129ce6a148558b Jens Axboe     2022-06-13  1205  		return 0;
+129ce6a148558b Jens Axboe     2022-06-13  1206  
+129ce6a148558b Jens Axboe     2022-06-13  1207  	ret = -ENOMEM;
+129ce6a148558b Jens Axboe     2022-06-13  1208  	pages = io_pin_pages((unsigned long) iov->iov_base, iov->iov_len,
+129ce6a148558b Jens Axboe     2022-06-13  1209  				&nr_pages);
+129ce6a148558b Jens Axboe     2022-06-13  1210  	if (IS_ERR(pages)) {
+129ce6a148558b Jens Axboe     2022-06-13  1211  		ret = PTR_ERR(pages);
+129ce6a148558b Jens Axboe     2022-06-13  1212  		pages = NULL;
+129ce6a148558b Jens Axboe     2022-06-13  1213  		goto done;
+129ce6a148558b Jens Axboe     2022-06-13  1214  	}
+129ce6a148558b Jens Axboe     2022-06-13  1215  
+129ce6a148558b Jens Axboe     2022-06-13  1216  	imu = kvmalloc(struct_size(imu, bvec, nr_pages), GFP_KERNEL);
+129ce6a148558b Jens Axboe     2022-06-13  1217  	if (!imu)
+129ce6a148558b Jens Axboe     2022-06-13  1218  		goto done;
+129ce6a148558b Jens Axboe     2022-06-13  1219  
+129ce6a148558b Jens Axboe     2022-06-13  1220  	ret = io_buffer_account_pin(ctx, pages, nr_pages, imu, last_hpage);
+129ce6a148558b Jens Axboe     2022-06-13  1221  	if (ret) {
+129ce6a148558b Jens Axboe     2022-06-13  1222  		unpin_user_pages(pages, nr_pages);
+129ce6a148558b Jens Axboe     2022-06-13  1223  		goto done;
+129ce6a148558b Jens Axboe     2022-06-13  1224  	}
+129ce6a148558b Jens Axboe     2022-06-13  1225  
+129ce6a148558b Jens Axboe     2022-06-13  1226  	off = (unsigned long) iov->iov_base & ~PAGE_MASK;
+129ce6a148558b Jens Axboe     2022-06-13  1227  	size = iov->iov_len;
+129ce6a148558b Jens Axboe     2022-06-13  1228  	for (i = 0; i < nr_pages; i++) {
+129ce6a148558b Jens Axboe     2022-06-13  1229  		size_t vec_len;
+129ce6a148558b Jens Axboe     2022-06-13  1230  
+129ce6a148558b Jens Axboe     2022-06-13  1231  		vec_len = min_t(size_t, size, PAGE_SIZE - off);
+129ce6a148558b Jens Axboe     2022-06-13  1232  		imu->bvec[i].bv_page = pages[i];
+129ce6a148558b Jens Axboe     2022-06-13  1233  		imu->bvec[i].bv_len = vec_len;
+129ce6a148558b Jens Axboe     2022-06-13  1234  		imu->bvec[i].bv_offset = off;
+129ce6a148558b Jens Axboe     2022-06-13  1235  		off = 0;
+129ce6a148558b Jens Axboe     2022-06-13  1236  		size -= vec_len;
+129ce6a148558b Jens Axboe     2022-06-13  1237  	}
+129ce6a148558b Jens Axboe     2022-06-13  1238  	/* store original address for later verification */
+129ce6a148558b Jens Axboe     2022-06-13  1239  	imu->ubuf = (unsigned long) iov->iov_base;
+129ce6a148558b Jens Axboe     2022-06-13  1240  	imu->ubuf_end = imu->ubuf + iov->iov_len;
+129ce6a148558b Jens Axboe     2022-06-13  1241  	imu->nr_bvecs = nr_pages;
+8c38d1fa715ef4 Keith Busch    2022-07-18 @1242  	imu->dma_tag = 0;
+129ce6a148558b Jens Axboe     2022-06-13  1243  	*pimu = imu;
+129ce6a148558b Jens Axboe     2022-06-13  1244  	ret = 0;
+129ce6a148558b Jens Axboe     2022-06-13  1245  done:
+129ce6a148558b Jens Axboe     2022-06-13  1246  	if (ret)
+129ce6a148558b Jens Axboe     2022-06-13  1247  		kvfree(imu);
+129ce6a148558b Jens Axboe     2022-06-13  1248  	kvfree(pages);
+129ce6a148558b Jens Axboe     2022-06-13  1249  	return ret;
+129ce6a148558b Jens Axboe     2022-06-13  1250  }
+129ce6a148558b Jens Axboe     2022-06-13  1251  
+
+:::::: The code at line 1242 was first introduced by commit
+:::::: 8c38d1fa715ef4cd8c42a27cd252e66f99a440a3 iouring/block/nvme: preregister dma mapped buffers
+
+:::::: TO: Keith Busch <kbusch@kernel.org>
+:::::: CC: Keith Busch <kbusch@kernel.org>
+
 -- 
-2.35.1.1320.gc452695387.dirty
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

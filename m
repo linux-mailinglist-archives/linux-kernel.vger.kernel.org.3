@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774F1579F22
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73554579CCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236793AbiGSNK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S241187AbiGSMnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243464AbiGSNJ3 (ORCPT
+        with ESMTP id S241437AbiGSMm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:09:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B758D64E2C;
-        Tue, 19 Jul 2022 05:28:41 -0700 (PDT)
+        Tue, 19 Jul 2022 08:42:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315A3804AC;
+        Tue, 19 Jul 2022 05:16:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5ED360908;
-        Tue, 19 Jul 2022 12:28:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C485DC341CA;
-        Tue, 19 Jul 2022 12:28:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40F7C617B2;
+        Tue, 19 Jul 2022 12:16:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32102C341C6;
+        Tue, 19 Jul 2022 12:16:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233697;
-        bh=evHbPrbLErwFnenjaPOjmPLeCXe9hedm/8y5RIUGgxs=;
+        s=korg; t=1658232990;
+        bh=MThhBE+OgevlSZDjVIJEd6z5DpIYHMc9RCE/7PEP6cQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0K7D+CEo/MJqo6YyynWw+omvcGNIKdC1hA8My/rgAeUm7F+V+gUw5btSwLH/plsB3
-         4lKucXOEp+Awwo0yCYorQLoq/vmD+8wXizvZwAI/++FVO7gmcIXj/wCvnb8gH3uvQ1
-         yGqYSTzQeQ0ivVy90j7jkJWPlcY48JZNZSTqgudI=
+        b=geVeeJNLspaEuvImreTmiQbqCJj3OsPoC3vo9bkrElBCd+hX186LQlvQVV5uxlj95
+         46CN70uaOf19TH3LKAeS9mXRa5TcdTLMxGdF9B4V1FKYjUF2KlLbSQLKPcIas0PYy4
+         GnoN6q+53jiFwwJuYgrOeKU/SnERuG/ACnTqWl4o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ruozhu Li <liruozhu@huawei.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 181/231] nvme: fix regression when disconnect a recovering ctrl
-Date:   Tue, 19 Jul 2022 13:54:26 +0200
-Message-Id: <20220719114729.438020723@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 135/167] ASoC: Intel: sof_sdw: handle errors on card registration
+Date:   Tue, 19 Jul 2022 13:54:27 +0200
+Message-Id: <20220719114709.604033699@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,141 +57,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ruozhu Li <liruozhu@huawei.com>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit f7f70f4aa09dc43d7455c060143e86a017c30548 ]
+[ Upstream commit fe154c4ff376bc31041c6441958a08243df09c99 ]
 
-We encountered a problem that the disconnect command hangs.
-After analyzing the log and stack, we found that the triggering
-process is as follows:
-CPU0                          CPU1
-                                nvme_rdma_error_recovery_work
-                                  nvme_rdma_teardown_io_queues
-nvme_do_delete_ctrl                 nvme_stop_queues
-  nvme_remove_namespaces
-  --clear ctrl->namespaces
-                                    nvme_start_queues
-                                    --no ns in ctrl->namespaces
-    nvme_ns_remove                  return(because ctrl is deleting)
-      blk_freeze_queue
-        blk_mq_freeze_queue_wait
-        --wait for ns to unquiesce to clean infligt IO, hang forever
+If the card registration fails, typically because of deferred probes,
+the device properties added for headset codecs are not removed, which
+leads to kernel oopses in driver bind/unbind tests.
 
-This problem was not found in older kernels because we will flush
-err work in nvme_stop_ctrl before nvme_remove_namespaces.It does not
-seem to be modified for functional reasons, the patch can be revert
-to solve the problem.
+We already clean-up the device properties when the card is removed,
+this code can be moved as a helper and called upon card registration
+errors.
 
-Revert commit 794a4cb3d2f7 ("nvme: remove the .stop_ctrl callout")
-
-Signed-off-by: Ruozhu Li <liruozhu@huawei.com>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Link: https://lore.kernel.org/r/20220606203752.144159-4-pierre-louis.bossart@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/core.c |  2 ++
- drivers/nvme/host/nvme.h |  1 +
- drivers/nvme/host/rdma.c | 12 +++++++++---
- drivers/nvme/host/tcp.c  | 10 +++++++---
- 4 files changed, 19 insertions(+), 6 deletions(-)
+ sound/soc/intel/boards/sof_sdw.c | 51 ++++++++++++++++++--------------
+ 1 file changed, 29 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 0fef31c935de..c9831daafbc6 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -4519,6 +4519,8 @@ void nvme_stop_ctrl(struct nvme_ctrl *ctrl)
- 	nvme_stop_failfast_work(ctrl);
- 	flush_work(&ctrl->async_event_work);
- 	cancel_work_sync(&ctrl->fw_act_work);
-+	if (ctrl->ops->stop_ctrl)
-+		ctrl->ops->stop_ctrl(ctrl);
- }
- EXPORT_SYMBOL_GPL(nvme_stop_ctrl);
- 
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index a2b53ca63335..337ae1e3ad25 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -501,6 +501,7 @@ struct nvme_ctrl_ops {
- 	void (*free_ctrl)(struct nvme_ctrl *ctrl);
- 	void (*submit_async_event)(struct nvme_ctrl *ctrl);
- 	void (*delete_ctrl)(struct nvme_ctrl *ctrl);
-+	void (*stop_ctrl)(struct nvme_ctrl *ctrl);
- 	int (*get_address)(struct nvme_ctrl *ctrl, char *buf, int size);
+diff --git a/sound/soc/intel/boards/sof_sdw.c b/sound/soc/intel/boards/sof_sdw.c
+index 0bf3e56e1d58..abe39a0ef14b 100644
+--- a/sound/soc/intel/boards/sof_sdw.c
++++ b/sound/soc/intel/boards/sof_sdw.c
+@@ -1323,6 +1323,33 @@ static struct snd_soc_card card_sof_sdw = {
+ 	.late_probe = sof_sdw_card_late_probe,
  };
  
-diff --git a/drivers/nvme/host/rdma.c b/drivers/nvme/host/rdma.c
-index d9f19d901313..5aef2b81dbec 100644
---- a/drivers/nvme/host/rdma.c
-+++ b/drivers/nvme/host/rdma.c
-@@ -1048,6 +1048,14 @@ static void nvme_rdma_teardown_io_queues(struct nvme_rdma_ctrl *ctrl,
++static void mc_dailink_exit_loop(struct snd_soc_card *card)
++{
++	struct snd_soc_dai_link *link;
++	int ret;
++	int i, j;
++
++	for (i = 0; i < ARRAY_SIZE(codec_info_list); i++) {
++		if (!codec_info_list[i].exit)
++			continue;
++		/*
++		 * We don't need to call .exit function if there is no matched
++		 * dai link found.
++		 */
++		for_each_card_prelinks(card, j, link) {
++			if (!strcmp(link->codecs[0].dai_name,
++				    codec_info_list[i].dai_name)) {
++				ret = codec_info_list[i].exit(card, link);
++				if (ret)
++					dev_warn(card->dev,
++						 "codec exit failed %d\n",
++						 ret);
++				break;
++			}
++		}
++	}
++}
++
+ static int mc_probe(struct platform_device *pdev)
+ {
+ 	struct snd_soc_card *card = &card_sof_sdw;
+@@ -1387,6 +1414,7 @@ static int mc_probe(struct platform_device *pdev)
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 	if (ret) {
+ 		dev_err(card->dev, "snd_soc_register_card failed %d\n", ret);
++		mc_dailink_exit_loop(card);
+ 		return ret;
  	}
+ 
+@@ -1398,29 +1426,8 @@ static int mc_probe(struct platform_device *pdev)
+ static int mc_remove(struct platform_device *pdev)
+ {
+ 	struct snd_soc_card *card = platform_get_drvdata(pdev);
+-	struct snd_soc_dai_link *link;
+-	int ret;
+-	int i, j;
+ 
+-	for (i = 0; i < ARRAY_SIZE(codec_info_list); i++) {
+-		if (!codec_info_list[i].exit)
+-			continue;
+-		/*
+-		 * We don't need to call .exit function if there is no matched
+-		 * dai link found.
+-		 */
+-		for_each_card_prelinks(card, j, link) {
+-			if (!strcmp(link->codecs[0].dai_name,
+-				    codec_info_list[i].dai_name)) {
+-				ret = codec_info_list[i].exit(card, link);
+-				if (ret)
+-					dev_warn(&pdev->dev,
+-						 "codec exit failed %d\n",
+-						 ret);
+-				break;
+-			}
+-		}
+-	}
++	mc_dailink_exit_loop(card);
+ 
+ 	return 0;
  }
- 
-+static void nvme_rdma_stop_ctrl(struct nvme_ctrl *nctrl)
-+{
-+	struct nvme_rdma_ctrl *ctrl = to_rdma_ctrl(nctrl);
-+
-+	cancel_work_sync(&ctrl->err_work);
-+	cancel_delayed_work_sync(&ctrl->reconnect_work);
-+}
-+
- static void nvme_rdma_free_ctrl(struct nvme_ctrl *nctrl)
- {
- 	struct nvme_rdma_ctrl *ctrl = to_rdma_ctrl(nctrl);
-@@ -2255,9 +2263,6 @@ static const struct blk_mq_ops nvme_rdma_admin_mq_ops = {
- 
- static void nvme_rdma_shutdown_ctrl(struct nvme_rdma_ctrl *ctrl, bool shutdown)
- {
--	cancel_work_sync(&ctrl->err_work);
--	cancel_delayed_work_sync(&ctrl->reconnect_work);
--
- 	nvme_rdma_teardown_io_queues(ctrl, shutdown);
- 	nvme_stop_admin_queue(&ctrl->ctrl);
- 	if (shutdown)
-@@ -2307,6 +2312,7 @@ static const struct nvme_ctrl_ops nvme_rdma_ctrl_ops = {
- 	.submit_async_event	= nvme_rdma_submit_async_event,
- 	.delete_ctrl		= nvme_rdma_delete_ctrl,
- 	.get_address		= nvmf_get_address,
-+	.stop_ctrl		= nvme_rdma_stop_ctrl,
- };
- 
- /*
-diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
-index e44d0570e694..1fb4f9b1621e 100644
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -2193,9 +2193,6 @@ static void nvme_tcp_error_recovery_work(struct work_struct *work)
- 
- static void nvme_tcp_teardown_ctrl(struct nvme_ctrl *ctrl, bool shutdown)
- {
--	cancel_work_sync(&to_tcp_ctrl(ctrl)->err_work);
--	cancel_delayed_work_sync(&to_tcp_ctrl(ctrl)->connect_work);
--
- 	nvme_tcp_teardown_io_queues(ctrl, shutdown);
- 	nvme_stop_admin_queue(ctrl);
- 	if (shutdown)
-@@ -2235,6 +2232,12 @@ static void nvme_reset_ctrl_work(struct work_struct *work)
- 	nvme_tcp_reconnect_or_remove(ctrl);
- }
- 
-+static void nvme_tcp_stop_ctrl(struct nvme_ctrl *ctrl)
-+{
-+	cancel_work_sync(&to_tcp_ctrl(ctrl)->err_work);
-+	cancel_delayed_work_sync(&to_tcp_ctrl(ctrl)->connect_work);
-+}
-+
- static void nvme_tcp_free_ctrl(struct nvme_ctrl *nctrl)
- {
- 	struct nvme_tcp_ctrl *ctrl = to_tcp_ctrl(nctrl);
-@@ -2559,6 +2562,7 @@ static const struct nvme_ctrl_ops nvme_tcp_ctrl_ops = {
- 	.submit_async_event	= nvme_tcp_submit_async_event,
- 	.delete_ctrl		= nvme_tcp_delete_ctrl,
- 	.get_address		= nvmf_get_address,
-+	.stop_ctrl		= nvme_tcp_stop_ctrl,
- };
- 
- static bool
 -- 
 2.35.1
 

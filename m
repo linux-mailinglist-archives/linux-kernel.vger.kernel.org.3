@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D424579EEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE5F579A7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243092AbiGSNII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
+        id S239303AbiGSMQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243002AbiGSNHi (ORCPT
+        with ESMTP id S239006AbiGSMNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:07:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B17E1408D;
-        Tue, 19 Jul 2022 05:27:34 -0700 (PDT)
+        Tue, 19 Jul 2022 08:13:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF6915A03;
+        Tue, 19 Jul 2022 05:04:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1015FCE1BE1;
-        Tue, 19 Jul 2022 12:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0799CC341C6;
-        Tue, 19 Jul 2022 12:27:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FA29B81B2C;
+        Tue, 19 Jul 2022 12:04:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D53C341C6;
+        Tue, 19 Jul 2022 12:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233627;
-        bh=RSnp9C2IndBNx40Bwal1Q5B/rLmbGmA+LVLBOoQj7bo=;
+        s=korg; t=1658232262;
+        bh=zjM5uGp2WvyhbyguXiRP4U+eFsN5c6pbeoztRa9fAj0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kJnCEEB/NtalAfwQq5kwbRcm9Ms5lEmTN/seQCr9rMfQjVkgX01rLVSCW4twv4JkD
-         fi0BCUhGl+bFh+5RzECa08ID4SLrDavI8plDsGfWSjQCjXOXSAaN0+u2NEQGSFslq3
-         pv0ZQzyj+kdd8cLnN3bCWf4wawQft9eMt7XDlAH8=
+        b=XvI1b1Z+Ct9dwZJnUKYTRU8htsw7B6TiuvJV69l5zs2nubMLytmTsrX1tdrvhRa+H
+         YLLXYKC3eHYaobMzyldJCxkhB9OHWGu121PQAixq/V/s4DJqznnoq6Uld32vTm7bIS
+         QwRZ1ToC/5kteScPVsFDY+NMEmi49EY1bOzDaf5o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 187/231] ASoC: Intel: sof_sdw: handle errors on card registration
+        stable@vger.kernel.org, stable <stable@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5.4 69/71] serial: stm32: Clear prev values before setting RTS delays
 Date:   Tue, 19 Jul 2022 13:54:32 +0200
-Message-Id: <20220719114729.927181646@linuxfoundation.org>
+Message-Id: <20220719114559.346970211@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,107 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit fe154c4ff376bc31041c6441958a08243df09c99 ]
+commit 5c5f44e36217de5ead789ff25da71c31c2331c96 upstream.
 
-If the card registration fails, typically because of deferred probes,
-the device properties added for headset codecs are not removed, which
-leads to kernel oopses in driver bind/unbind tests.
+The code lacks clearing of previous DEAT/DEDT values. Thus, changing
+values on the fly results in garbage delays tending towards the maximum
+value as more and more bits are ORed together. (Leaving RS485 mode
+would have cleared the old values though).
 
-We already clean-up the device properties when the card is removed,
-this code can be moved as a helper and called upon card registration
-errors.
-
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Link: https://lore.kernel.org/r/20220606203752.144159-4-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 1bcda09d2910 ("serial: stm32: add support for RS485 hardware control mode")
+Cc: stable <stable@kernel.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220627150753.34510-1-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/intel/boards/sof_sdw.c | 51 ++++++++++++++++++--------------
- 1 file changed, 29 insertions(+), 22 deletions(-)
+ drivers/tty/serial/stm32-usart.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/intel/boards/sof_sdw.c b/sound/soc/intel/boards/sof_sdw.c
-index 1f00679b4240..ad826ad82d51 100644
---- a/sound/soc/intel/boards/sof_sdw.c
-+++ b/sound/soc/intel/boards/sof_sdw.c
-@@ -1398,6 +1398,33 @@ static struct snd_soc_card card_sof_sdw = {
- 	.late_probe = sof_sdw_card_late_probe,
- };
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -73,6 +73,8 @@ static void stm32_config_reg_rs485(u32 *
+ 	*cr3 |= USART_CR3_DEM;
+ 	over8 = *cr1 & USART_CR1_OVER8;
  
-+static void mc_dailink_exit_loop(struct snd_soc_card *card)
-+{
-+	struct snd_soc_dai_link *link;
-+	int ret;
-+	int i, j;
++	*cr1 &= ~(USART_CR1_DEDT_MASK | USART_CR1_DEAT_MASK);
 +
-+	for (i = 0; i < ARRAY_SIZE(codec_info_list); i++) {
-+		if (!codec_info_list[i].exit)
-+			continue;
-+		/*
-+		 * We don't need to call .exit function if there is no matched
-+		 * dai link found.
-+		 */
-+		for_each_card_prelinks(card, j, link) {
-+			if (!strcmp(link->codecs[0].dai_name,
-+				    codec_info_list[i].dai_name)) {
-+				ret = codec_info_list[i].exit(card, link);
-+				if (ret)
-+					dev_warn(card->dev,
-+						 "codec exit failed %d\n",
-+						 ret);
-+				break;
-+			}
-+		}
-+	}
-+}
-+
- static int mc_probe(struct platform_device *pdev)
- {
- 	struct snd_soc_card *card = &card_sof_sdw;
-@@ -1462,6 +1489,7 @@ static int mc_probe(struct platform_device *pdev)
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
- 	if (ret) {
- 		dev_err(card->dev, "snd_soc_register_card failed %d\n", ret);
-+		mc_dailink_exit_loop(card);
- 		return ret;
- 	}
- 
-@@ -1473,29 +1501,8 @@ static int mc_probe(struct platform_device *pdev)
- static int mc_remove(struct platform_device *pdev)
- {
- 	struct snd_soc_card *card = platform_get_drvdata(pdev);
--	struct snd_soc_dai_link *link;
--	int ret;
--	int i, j;
- 
--	for (i = 0; i < ARRAY_SIZE(codec_info_list); i++) {
--		if (!codec_info_list[i].exit)
--			continue;
--		/*
--		 * We don't need to call .exit function if there is no matched
--		 * dai link found.
--		 */
--		for_each_card_prelinks(card, j, link) {
--			if (!strcmp(link->codecs[0].dai_name,
--				    codec_info_list[i].dai_name)) {
--				ret = codec_info_list[i].exit(card, link);
--				if (ret)
--					dev_warn(&pdev->dev,
--						 "codec exit failed %d\n",
--						 ret);
--				break;
--			}
--		}
--	}
-+	mc_dailink_exit_loop(card);
- 
- 	return 0;
- }
--- 
-2.35.1
-
+ 	if (over8)
+ 		rs485_deat_dedt = delay_ADE * baud * 8;
+ 	else
 
 

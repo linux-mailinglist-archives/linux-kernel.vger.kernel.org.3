@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0465457A46D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0313357A46E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 18:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236297AbiGSQ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 12:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        id S237180AbiGSQ5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 12:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236150AbiGSQ5A (ORCPT
+        with ESMTP id S236150AbiGSQ5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 12:57:00 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9534F657
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:56:59 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id a5so22488901wrx.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:56:59 -0700 (PDT)
+        Tue, 19 Jul 2022 12:57:45 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2983BC98
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:57:44 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id h62so27461142ybb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 09:57:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HjzI8Y5AFZSjQh4cY4GKqmaCg1K0UQucOPz5+/QiYwM=;
-        b=dokUPJWuCe4HUQ2XEI1u/VZC8wAmp4o+IFhtkaeR4iasVCBEWU08xfzK1uv9p5HlPk
-         nien7tPJ4L39gthmcuC5oQpFnzwWHeDrGHVC0WQre3cPAv+ZY0fmOH9yZfJTdNYuODv1
-         NpL6R8tIlLZ7CY590YIrWi77dKa+Vx0xzaoU4JfYODCon96dB35xbmY5OvRspEaTJVHL
-         4mBJnwyNWpwWzGNYi+/7aYINsCK1S0NDyGAeVjxGn6Jlb51FY0tYwW/Mv7rDb+KQaeNO
-         m8tnKGu2G7qgdXUp7EVOQGZDiiCQJ5uw5tkFQYkGZNaVA5lTsAcnJvRSf2g/OxzmCd+h
-         23oQ==
+        bh=o7+Ubqiy2+BoQin6yNXc+QNXIGV5Q3/BvbuwbIYCyGg=;
+        b=jDXkeIvMaaX/KM8OK3qGh4cqNKE0y+laqha/4pyxS+Wu9fXAg9Yhh3QLTiOjlM+J0e
+         RL5pWZx9ylPGVE7YBV/3GXFLSWkxjJbAHdmuCyVjVW7S5t1xm+aXQ++ITQecPxuB2ZSQ
+         21xbWTeoYIC4juF68O4CBY8fnBwZavDWa5ayCvkrEOfrRg2+pZr+QPXACyeO8vBeHAr+
+         gt4/y8eqNnY0vkljn4Ttjd+xoeqYvTAPjQIRJGL/6ywbqmF/B5dHciDR0dPO3F2g3CsE
+         7faKUhRiBzgTCSXoUl1h8+rUqa6NvV0nUiMvTb2b70yJMCBiZJQlHvW1JcqxV8YcqksZ
+         yyYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HjzI8Y5AFZSjQh4cY4GKqmaCg1K0UQucOPz5+/QiYwM=;
-        b=J/5VOOGQF5fK+tvo6w4s4g24krfftzWXtUX2hrdMLG22Wf0MdxkURAMpELwl0Jrkf1
-         5OgBz3frzVzrrIfuaNZphoR5sgGwkA0c7MAjAskTOq/50cqN1mqA9E5d+LZA/NtpoFKx
-         q+6KnLeAhy3DH1lfZnMAWm/2VrncxzlJ7vPMF9wuznadFD1knnrw0EjQveRVQIFPwk7C
-         1n4GbH5dDh2X8nFz5VP71ryf+IQ6iPkUAjFEJParxcsFaqiiLN9HmX0GHdDfcvQJ0qj3
-         RXXwrx00LnsqMj0p+T+LGWTICpy25ditF42tJDPxyXl5pk1bfgcChATZeqLsAFFgWP40
-         d3lA==
-X-Gm-Message-State: AJIora8tt6tYB0hXmuk/0H936nvfR7uho2mSFpDfqqgRP5gsDu5g6/Lj
-        utL8oU55johOPmRQl1isMqMbZwEZU9yv6oS7jZolatB1LNcYGB9E
-X-Google-Smtp-Source: AGRyM1txVzkio7oKFun4OwE14uQx7ilwn6eAe1/lyvt+pd0N/bzekFoP9cEO6aXKtzhzHB/IAdMFOcmIZVQK6Yj/bbI=
-X-Received: by 2002:a05:6000:8e:b0:21d:7e97:67ed with SMTP id
- m14-20020a056000008e00b0021d7e9767edmr26650190wrx.343.1658249817686; Tue, 19
- Jul 2022 09:56:57 -0700 (PDT)
+        bh=o7+Ubqiy2+BoQin6yNXc+QNXIGV5Q3/BvbuwbIYCyGg=;
+        b=eeCcDZ9YK+hVAhA5PWnl615LxkxgES1ABuy5oYJCxeDFcdJK7gCv6XnBCMaG2l+nIS
+         8KxBV4hvaMrlSYqQZNyJ8vnGMRCfDd6Ne60YokDYwvguvv/JJlnjr0WyfGTajnu0BrxK
+         ZE27gcDNxsFMxQBCgrvbfGwoN3d18NVLMbj0C3jwpjAhOegmk+j/gjq/vXbwx3ZWWoog
+         cik0292mi5rgdaouG2cUfBuN4OWqoC1SCgaDEYJpumhEEQlSRE1nS2aOvRh5dS/Gzj2o
+         GFOmFruFjISlipsX6krkxi6c2hxb3xRyBbVNYzzZy4W6EPtYRLZEqeDBLzdXTrg4oahf
+         +BvA==
+X-Gm-Message-State: AJIora9eMHcx2WWtOrzIIcKjnyF6DODaqPooMZR6LnWcRih6naARlLz2
+        pvYTtrURax9Z64J9xYlT9hkYOlBWM+l10PJ869sn7w==
+X-Google-Smtp-Source: AGRyM1vhzpnhocRnv6ire6qDfWb/9m1NX4vbI7Nl70MF+plSrK87qGhyAJ+RRq3GP3Hg5/lTTEQbR1GKREJvb41sZFE=
+X-Received: by 2002:a25:9b88:0:b0:66d:b166:a430 with SMTP id
+ v8-20020a259b88000000b0066db166a430mr33323156ybo.80.1658249863775; Tue, 19
+ Jul 2022 09:57:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-4-adrian.hunter@intel.com>
-In-Reply-To: <20220711093218.10967-4-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 09:56:45 -0700
-Message-ID: <CAP-5=fUHG=-QdsP5dGxZ444DUfgaYLGhXevQuUH3dmcQnyexYg@mail.gmail.com>
-Subject: Re: [PATCH 03/35] perf ordered_events: Add ordered_events__last_flush_time()
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
+References: <CGME20220705083944eucas1p23419f52b9529c79c03c8cc23e2aaf4c5@eucas1p2.samsung.com>
+ <20220705083934.3974140-1-saravanak@google.com> <7482d3af-4b02-4c1d-0386-b0a4ddf529da@samsung.com>
+ <8a04332e-e7b1-8bc3-d569-5052427bcb13@samsung.com> <CAGETcx93rWqt-Cyz_8JZ4mxcLpJruzSM1QOAgpkPSM-G1sBXWg@mail.gmail.com>
+ <20220713145827.yxeoqj6vmkzhrrpv@bogus> <CAGETcx_V9qxeO+vks8kwpwWZth+fys_TTt=JwV2JkvUNHvTtvA@mail.gmail.com>
+ <20220719133931.7dkcejvc6s4a7y4z@bogus>
+In-Reply-To: <20220719133931.7dkcejvc6s4a7y4z@bogus>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 19 Jul 2022 09:57:07 -0700
+Message-ID: <CAGETcx-YSVunJv+xpHd3PD4O8m=C5JjBh5b+h+6WnEcUAr=5_g@mail.gmail.com>
+Subject: Re: [PATCH v4] amba: Remove deferred device addition
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -70,41 +80,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 2:32 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Tue, Jul 19, 2022 at 6:39 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
-> Allow callers to get the ordered_events last flush timestamp.
+> On Mon, Jul 18, 2022 at 06:55:23PM -0700, Saravana Kannan wrote:
+> > On Wed, Jul 13, 2022 at 7:58 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > >
+> > > On Tue, Jul 12, 2022 at 12:38:33PM -0700, Saravana Kannan wrote:
+> > > > Sudeep,
+> > > >
+> > > > This makes me think the issue you are seeing is related to your
+> > > > hardware drivers. Can you look into those please? I'm leaning towards
+> > > > merging this amba clean up and adding delays (say 1ms) to your
+> > > > clock/power domain drivers to avoid the crash you are seeing. And then
+> > > > you can figure out the actual delays needed and update it.
+> > >
+> > > I haven't got a chance to debug the issue on Juno much further. One thing
+> > > about the platform is that we can't turn off the debug power domain that
+> > > most of the coresight devices share.
+> > >
+> > > One thing I also observed with -next+this patch is that with a little log
+> > > it can access the registers while adding first few devices and then crash
+> > > which doesn't align with platform behaviour as we can't turn off the domain
+> > > though we attached and turn on in amba_read_periphid and then turn off and
+> > > detach the power domain. Ideally if first device amba_read_periphid was
+> > > successful, it must be the case for all, but I see different behaviour.
+> > >
+> > > I need to check again to confirm if it is issue with platform power domain
+> > > driver. It is based on SCMI so there is some role played by the f/w as well.
+> >
+> > Yeah, this log timing based behavior is what makes me suspect it's not
+> > a problem with this patch itself.
+> >
+> > However, just to rule it out, can you try making this change on top of
+> > v4 and give it a shot? This is related to the issue Marek reported,
+> > but those are more about permanent probe failures. Not a crash.
+> >
 >
-> This is needed in perf inject to obey finished-round ordering when
-> injecting additional events (e.g. from a guest perf.data file) with
-> timestamps. Any additional events that have timestamps before the last
-> flush time must be injected before the corresponding FINISHED_ROUND event.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> This patch(version v4, fails to apply on -next but the conflict is trivial
+> and in the deleted code so I just retained your copy of all the functions)
+> plus the below change fixes the issue I reported on Juno.
 
-Acked-by: Ian Rogers <irogers@google.com>
+What the heck? I didn't expect it to fix the issue at all. Without the
+fix some amba devices could end up not getting probed. But that
+shouldn't have caused crashes. So that still indicates some issue in
+your driver you might want to look into.
 
-Thanks,
-Ian
+With that said, I'll just roll this fix into a v5 and send it out.
+While the revert would fix it, I don't want this to be blocked on that
+or be fragile enough to be broken in the future.
 
-> ---
->  tools/perf/util/ordered-events.h | 6 ++++++
->  1 file changed, 6 insertions(+)
+-Saravana
+
 >
-> diff --git a/tools/perf/util/ordered-events.h b/tools/perf/util/ordered-events.h
-> index 0b05c3c0aeaa..8febbd7c98ca 100644
-> --- a/tools/perf/util/ordered-events.h
-> +++ b/tools/perf/util/ordered-events.h
-> @@ -75,4 +75,10 @@ void ordered_events__set_copy_on_queue(struct ordered_events *oe, bool copy)
->  {
->         oe->copy_on_queue = copy;
->  }
-> +
-> +static inline u64 ordered_events__last_flush_time(struct ordered_events *oe)
-> +{
-> +       return oe->last_flush;
-> +}
-> +
->  #endif /* __ORDERED_EVENTS_H */
+> I won't give you tested-by yet as you have plans to revert some things
+> and I resolved the conflict here though trivial, I prefer to apply the
+> patch as is with all associated changes and test once more.
+>
+> Thanks for digging this and fixing it.
+>
 > --
-> 2.25.1
->
+> Regards,
+> Sudeep

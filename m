@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CE0579AE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA9B579968
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237932AbiGSMVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S237930AbiGSMCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239513AbiGSMTZ (ORCPT
+        with ESMTP id S237920AbiGSMBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:19:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F50B57E38;
-        Tue, 19 Jul 2022 05:06:56 -0700 (PDT)
+        Tue, 19 Jul 2022 08:01:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494064331A;
+        Tue, 19 Jul 2022 04:58:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C76CC61772;
-        Tue, 19 Jul 2022 12:06:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 991EFC341C6;
-        Tue, 19 Jul 2022 12:06:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEDAA61640;
+        Tue, 19 Jul 2022 11:58:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DC96C341CA;
+        Tue, 19 Jul 2022 11:58:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232415;
-        bh=CuwSAwhyIVsP82SzYIX9jVQdRILewFnfVRxFuBiysAA=;
+        s=korg; t=1658231918;
+        bh=yO7cXLAxMONxPcse2MF3SOWUyJi9k0jjmONBy+J6g8w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a665dgPsAqQ4Mq1/CjTWWVzTDXvDcU+HdlpfrTe5TYNDLO9SgeYs5FEP3tS8H8nlu
-         a/hIbsao5U+YKqqlYnCt6T9YyIbGbb4T4j9HeR0iXIQAEtDJZZ3ItxCBfRrQr58Yhl
-         M99MHjE8jPv7qUAzD/9pI/yzsU44/L9MaOoDiTM4=
+        b=f9sH05ZnIcALOeZpweIeq3wBfQH677LvddXuvqx+ZhubMVQVfnEYcGTgvqj2aJycJ
+         rxAnS7mjtNvEmlAB3gE4r5vWQCGDlz0RzsFshrjyCUvoRvk/OzwFAQAna9ueC6qXWt
+         RuWS3XYvpuD30lUxkXaKSLvmkW3B6lH4oKX47/wc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 048/112] tcp: Fix a data-race around sysctl_tcp_max_orphans.
+        stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 4.14 10/43] xhci: bail out early if driver cant accress host in resume
 Date:   Tue, 19 Jul 2022 13:53:41 +0200
-Message-Id: <20220719114631.137612075@linuxfoundation.org>
+Message-Id: <20220719114522.949172508@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
+References: <20220719114521.868169025@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit 47e6ab24e8c6e3ca10ceb5835413f401f90de4bf ]
+commit 72ae194704da212e2ec312ab182a96799d070755 upstream.
 
-While reading sysctl_tcp_max_orphans, it can be changed concurrently.
-So, we need to add READ_ONCE() to avoid a data-race.
+Bail out early if the xHC host needs to be reset at resume
+but driver can't access xHC PCI registers.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+If xhci driver already fails to reset the controller then there
+is no point in attempting to free, re-initialize, re-allocate and
+re-start the host. If failure to access the host is detected later,
+failing the resume, xhci interrupts will be double freed
+when remove is called.
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20200312144517.1593-2-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[sudip: adjust context]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index a3ec2a08027b..19c13ad5c121 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -2490,7 +2490,8 @@ static void tcp_orphan_update(struct timer_list *unused)
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1111,8 +1111,10 @@ int xhci_resume(struct xhci_hcd *xhci, b
  
- static bool tcp_too_many_orphans(int shift)
- {
--	return READ_ONCE(tcp_orphan_cache) << shift > sysctl_tcp_max_orphans;
-+	return READ_ONCE(tcp_orphan_cache) << shift >
-+		READ_ONCE(sysctl_tcp_max_orphans);
- }
+ 		xhci_dbg(xhci, "Stop HCD\n");
+ 		xhci_halt(xhci);
+-		xhci_reset(xhci);
++		retval = xhci_reset(xhci);
+ 		spin_unlock_irq(&xhci->lock);
++		if (retval)
++			return retval;
+ 		xhci_cleanup_msix(xhci);
  
- bool tcp_check_oom(struct sock *sk, int shift)
--- 
-2.35.1
-
+ 		xhci_dbg(xhci, "// Disabling event ring interrupts\n");
 
 

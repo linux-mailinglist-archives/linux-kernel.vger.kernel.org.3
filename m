@@ -2,67 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6AD57A030
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F1B57A031
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236105AbiGSN4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S237849AbiGSN4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 09:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237189AbiGSNzo (ORCPT
+        with ESMTP id S237779AbiGSN4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:55:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32149BA4EB
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:08:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9536A6199B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28DEEC341C6;
-        Tue, 19 Jul 2022 13:06:55 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 09:06:53 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>
-Subject: Re: [patch 36/38] x86/ftrace: Make it call depth tracking aware
-Message-ID: <20220719090653.702ce6a2@gandalf.local.home>
-In-Reply-To: <YtZveA3tTi902Dbv@worktop.programming.kicks-ass.net>
-References: <20220716230344.239749011@linutronix.de>
-        <20220716230954.835254576@linutronix.de>
-        <20220718170123.4d4bae4a@gandalf.local.home>
-        <YtZveA3tTi902Dbv@worktop.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 19 Jul 2022 09:56:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFF62BB20F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658236070;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z97Q++kaRsbHjLNBJx5eb9ljkY//zciSeUOYhhgbfqc=;
+        b=SyDWbG16UD+sG7TTd1YVFuD2PGKedKAnxRj/wrW7wxTsIq5BwhESXg12hoC2q1648sHoCg
+        UZJPAhfRsHFQNf7APnI6LWhV8X2pe5haaMOjUgA7/81h7W4/oBy4YVmNUBMdzIueOOltqT
+        tQRDcUfoISXWIJ3QrRh0BwA65HGZvtU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-591-WU0sIOv4OH6gD7jGNmJUFw-1; Tue, 19 Jul 2022 09:07:49 -0400
+X-MC-Unique: WU0sIOv4OH6gD7jGNmJUFw-1
+Received: by mail-ed1-f72.google.com with SMTP id w13-20020a05640234cd00b0043a991fb3f3so9856204edc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 06:07:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z97Q++kaRsbHjLNBJx5eb9ljkY//zciSeUOYhhgbfqc=;
+        b=fvDPNRAF0OCXj3JPDxryCIGhx0JHGYGKFN91Jo4u7EOEkKBTqf27gOULuDr4sJulZk
+         KREtXg9ux27mNQ0CQYumzHjSuCtSGU4id746kq65pPs3nevBDshQZzqziuaduTuRn577
+         LpoPs5WZCiAKd12wg1YlYPIqZfLtyxVAsmk3qRfsEU6NZ1db8AMj7eJ0Xq5dXO25zJYX
+         OLSIKX//c0ptZgXwAiiVP6uGgvkryJl/tmhuaBlOgxzHoI9mFbGQwp7vLCsTpdkqqr/V
+         LqaRbnUuM0oz7jILWYl5ZJlUxa8XhoNTaTxS/v4bzGTMRVOrURiQZI9tLV6Zo8V2iP2o
+         Cdeg==
+X-Gm-Message-State: AJIora+wT0/i6zX4J00Dmre7UIQo4PwG9gv4kj/bs9IZ8DxpZv4YBN5I
+        aqCvHvNzBnUwACXbH64YtyiyRv/ka5peB8XIz2PqBxD5by/tBDIZ/bny7S85DEL5LZz10QDUcj9
+        OICdnNCrKbXwvhhKsHwA2KV5O
+X-Received: by 2002:a17:907:a052:b0:72b:1d92:2aaf with SMTP id gz18-20020a170907a05200b0072b1d922aafmr31030394ejc.197.1658236067467;
+        Tue, 19 Jul 2022 06:07:47 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u4bRTo9FudCZwnFs2bagJhSPaSV4i16G8eV/Ij+Fb14agX9CsIU3a7besYY/y6hucZDiGSZQ==
+X-Received: by 2002:a17:907:a052:b0:72b:1d92:2aaf with SMTP id gz18-20020a170907a05200b0072b1d922aafmr31030380ejc.197.1658236067249;
+        Tue, 19 Jul 2022 06:07:47 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id fg14-20020a056402548e00b0043a45dc7158sm10410243edb.72.2022.07.19.06.07.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 06:07:46 -0700 (PDT)
+Message-ID: <78ba738c-cdf4-350f-119f-298081f215d6@redhat.com>
+Date:   Tue, 19 Jul 2022 15:07:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] KVM: nSVM: Pull CS.Base from actual VMCB12 for soft
+ int/ex re-injection
+Content-Language: en-US
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <4caa0f67589ae3c22c311ee0e6139496902f2edc.1658159083.git.maciej.szmigiero@oracle.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <4caa0f67589ae3c22c311ee0e6139496902f2edc.1658159083.git.maciej.szmigiero@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 10:46:48 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+On 7/18/22 17:47, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> 
+> enter_svm_guest_mode() first calls nested_vmcb02_prepare_control() to copy
+> control fields from VMCB12 to the current VMCB, then
+> nested_vmcb02_prepare_save() to perform a similar copy of the save area.
+> 
+> This means that nested_vmcb02_prepare_control() still runs with the
+> previous save area values in the current VMCB so it shouldn't take the L2
+> guest CS.Base from this area.
+> 
+> Explicitly pull CS.Base from the actual VMCB12 instead in
+> enter_svm_guest_mode().
+> 
+> Granted, having a non-zero CS.Base is a very rare thing (and even
+> impossible in 64-bit mode), having it change between nested VMRUNs is
+> probably even rarer, but if it happens it would create a really subtle bug
+> so it's better to fix it upfront.
+> 
+> Fixes: 6ef88d6e36c2 ("KVM: SVM: Re-inject INT3/INTO instead of retrying the instruction")
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> ---
+>   arch/x86/kvm/svm/nested.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
 
-> Only the RET should do I think; you definitely don't need an ENDBR here
-> nor do you need to override the unwind hint. Lemme try..
+Queued, thanks.
 
-I'll replace with the RET and resend v2.
+Paolo
 
--- Steve
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index adf4120b05d90..23252ab821941 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -639,7 +639,8 @@ static bool is_evtinj_nmi(u32 evtinj)
+>   }
+>   
+>   static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+> -					  unsigned long vmcb12_rip)
+> +					  unsigned long vmcb12_rip,
+> +					  unsigned long vmcb12_csbase)
+>   {
+>   	u32 int_ctl_vmcb01_bits = V_INTR_MASKING_MASK;
+>   	u32 int_ctl_vmcb12_bits = V_TPR_MASK | V_IRQ_INJECTION_BITS_MASK;
+> @@ -711,7 +712,7 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+>   	svm->nmi_l1_to_l2 = is_evtinj_nmi(vmcb02->control.event_inj);
+>   	if (is_evtinj_soft(vmcb02->control.event_inj)) {
+>   		svm->soft_int_injected = true;
+> -		svm->soft_int_csbase = svm->vmcb->save.cs.base;
+> +		svm->soft_int_csbase = vmcb12_csbase;
+>   		svm->soft_int_old_rip = vmcb12_rip;
+>   		if (svm->nrips_enabled)
+>   			svm->soft_int_next_rip = svm->nested.ctl.next_rip;
+> @@ -800,7 +801,7 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
+>   	nested_svm_copy_common_state(svm->vmcb01.ptr, svm->nested.vmcb02.ptr);
+>   
+>   	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+> -	nested_vmcb02_prepare_control(svm, vmcb12->save.rip);
+> +	nested_vmcb02_prepare_control(svm, vmcb12->save.rip, vmcb12->save.cs.base);
+>   	nested_vmcb02_prepare_save(svm, vmcb12);
+>   
+>   	ret = nested_svm_load_cr3(&svm->vcpu, svm->nested.save.cr3,
+> @@ -1663,7 +1664,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+>   	nested_copy_vmcb_control_to_cache(svm, ctl);
+>   
+>   	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+> -	nested_vmcb02_prepare_control(svm, svm->vmcb->save.rip);
+> +	nested_vmcb02_prepare_control(svm, svm->vmcb->save.rip, svm->vmcb->save.cs.base);
+>   
+>   	/*
+>   	 * While the nested guest CR3 is already checked and set by
+> 
+

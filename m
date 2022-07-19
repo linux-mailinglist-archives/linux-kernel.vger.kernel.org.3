@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8131579B63
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF00F579D0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240052AbiGSM1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S241588AbiGSMp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240366AbiGSMYy (ORCPT
+        with ESMTP id S241572AbiGSMoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:24:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA0250719;
-        Tue, 19 Jul 2022 05:09:45 -0700 (PDT)
+        Tue, 19 Jul 2022 08:44:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086E383F08;
+        Tue, 19 Jul 2022 05:17:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C9CC616DB;
-        Tue, 19 Jul 2022 12:09:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCC1C341C6;
-        Tue, 19 Jul 2022 12:09:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CC39B81B37;
+        Tue, 19 Jul 2022 12:17:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3DCC36AE5;
+        Tue, 19 Jul 2022 12:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232584;
-        bh=7deDS6NCBIIKmRfnBPGe+kGE6hQ5eD5poALJ+U+mWdI=;
+        s=korg; t=1658233031;
+        bh=V8Bnn0Qdmea87DKi19dp6Ps/3Mkn7B5N1/5lffCMd6U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I+oZi5N2xu9T6X3e6xqvyWc0M4sG705vjNDmZA9P/G5L/ZQvytDEv6gepCWj4aEZH
-         Iju7NrZHxpjR7gPV06ycCDow5USsnfAi3zPlFaoymT/bp1MbkUbZjaAa8ueFPcqVOH
-         iRX+ub7B486+AkGsVABFYgWxqdVwnb6h66dn3vmM=
+        b=lGy3EjwPWLuH2L9p7LuvZiVZzL+FdeNv8eXLq6pHeBF+zYR5AfZl/BUX04hEYygp2
+         g1wOMrTmWdEaVcsxnub/a4PRmkpYxkBse8hiIreE0GC9oJdDPDi+RhvmfPIgbrUTaA
+         QQxz3S8WNhn32iRgAcV6qPGRmSG1uLXm86P95G/A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yi Yang <yiyang13@huawei.com>,
-        stable <stable@kernel.org>
-Subject: [PATCH 5.10 108/112] serial: 8250: fix return error code in serial8250_request_std_resource()
-Date:   Tue, 19 Jul 2022 13:54:41 +0200
-Message-Id: <20220719114637.619381330@linuxfoundation.org>
+        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 150/167] soc: ixp4xx/npe: Fix unused match warning
+Date:   Tue, 19 Jul 2022 13:54:42 +0200
+Message-Id: <20220719114710.954356208@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,39 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yi Yang <yiyang13@huawei.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-commit 6e690d54cfa802f939cefbd2fa2c91bd0b8bd1b6 upstream.
+[ Upstream commit 620f83b8326ce9706b1118334f0257ae028ce045 ]
 
-If port->mapbase = NULL in serial8250_request_std_resource() , it need
-return a error code instead of 0. If uart_set_info() fail to request new
-regions by serial8250_request_std_resource() but the return value of
-serial8250_request_std_resource() is 0, The system incorrectly considers
-that the resource application is successful and does not attempt to
-restore the old setting. A null pointer reference is triggered when the
-port resource is later invoked.
+The kernel test robot found this inconsistency:
 
-Signed-off-by: Yi Yang <yiyang13@huawei.com>
-Cc: stable <stable@kernel.org>
-Link: https://lore.kernel.org/r/20220628083515.64138-1-yiyang13@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  drivers/soc/ixp4xx/ixp4xx-npe.c:737:34: warning:
+  'ixp4xx_npe_of_match' defined but not used [-Wunused-const-variable=]
+     737 | static const struct of_device_id ixp4xx_npe_of_match[] = {
+
+This is because the match is enclosed in the of_match_ptr()
+which compiles into NULL when OF is disabled and this
+is unnecessary.
+
+Fix it by dropping of_match_ptr() around the match.
+
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220626074315.61209-1-linus.walleij@linaro.org'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_port.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/soc/ixp4xx/ixp4xx-npe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2953,8 +2953,10 @@ static int serial8250_request_std_resour
- 	case UPIO_MEM32BE:
- 	case UPIO_MEM16:
- 	case UPIO_MEM:
--		if (!port->mapbase)
-+		if (!port->mapbase) {
-+			ret = -EINVAL;
- 			break;
-+		}
- 
- 		if (!request_mem_region(port->mapbase, size, "serial")) {
- 			ret = -EBUSY;
+diff --git a/drivers/soc/ixp4xx/ixp4xx-npe.c b/drivers/soc/ixp4xx/ixp4xx-npe.c
+index f490c4ca51f5..a0159805d061 100644
+--- a/drivers/soc/ixp4xx/ixp4xx-npe.c
++++ b/drivers/soc/ixp4xx/ixp4xx-npe.c
+@@ -743,7 +743,7 @@ static const struct of_device_id ixp4xx_npe_of_match[] = {
+ static struct platform_driver ixp4xx_npe_driver = {
+ 	.driver = {
+ 		.name           = "ixp4xx-npe",
+-		.of_match_table = of_match_ptr(ixp4xx_npe_of_match),
++		.of_match_table = ixp4xx_npe_of_match,
+ 	},
+ 	.probe = ixp4xx_npe_probe,
+ 	.remove = ixp4xx_npe_remove,
+-- 
+2.35.1
+
 
 

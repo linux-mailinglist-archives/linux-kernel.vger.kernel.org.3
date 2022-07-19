@@ -2,202 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8005D57A731
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F26C57A73D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237975AbiGSTYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 15:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
+        id S239157AbiGSTbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 15:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238260AbiGSTYK (ORCPT
+        with ESMTP id S232193AbiGSTbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 15:24:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E37D54AEF
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:24:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E42ED61841
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:24:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40741C341C6;
-        Tue, 19 Jul 2022 19:24:07 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 15:24:05 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH v3] ftrace/x86: Remove jumps to ftrace_epilogue and simplify
- trampolines
-Message-ID: <20220719152353.4c25e2eb@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 19 Jul 2022 15:31:44 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5677354049
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:31:43 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id h132so14376700pgc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oTAUXijPpZLmZDkalJsrF+sDrQfgugPCAER8aC0JvOk=;
+        b=opHaPbqKXxnQuVm1cVE4jCC+Jprt87heRiVrdSgXRgXAQ9pLs/9ACi/sjJMFH0fNkd
+         vIQdJWzcBichE0QYGyibpcs+SH4N4b2JIPbSpCaIP/082BfN+arTcZ0jHyWotFVEtseP
+         gY4kTzd6ihD2Di72/EJt20dxdUvLZ6T8Jso3EpzEMPCsG5ATZN8kZXgnGiYpFmm1U9zc
+         r1hZhtRpHTke3C1y8ghuc/0yMFAhMevtvrRexoG0ZpOtkb6gG04ZiJdglfKn7bbXJxoV
+         fjqdpa2fDHvZq9Am2eBfgQ51wL8nxUDyrGNjn+wDVJ/NYfnhylcCR7h3KcYJVSJH8yde
+         w7oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oTAUXijPpZLmZDkalJsrF+sDrQfgugPCAER8aC0JvOk=;
+        b=eIPFpnS4Nz+FoPIsnWzWS6+QPDJwok8DbYHqIJfBMUtfcqoZ6BbsQvnL1tyBNAid3g
+         hPTtiYNs4CEg1WzwY8wdj0MENYNRCmREZ6IcWHINrRPk48YgnWhL9lnWowDfKWvUKWdm
+         8RoK9KPjMX/PqrzsNlVN9yGVQqjCpMKMHySocXIfbiqCjFK5njMON3WG5MGRL1c4+Uv4
+         WFsQnHDEZf5UfNGH0xOGyO2RRyjwA4Az8cmIV4WouU2ryqgUd+sWH7x6m3VRD56RB6p9
+         q+VQvrfsI8GzvxumGMrSw816XTGy3uKOXUNnFBbabGRJHPNk983mn1+PIuxg19+2jaM0
+         W79Q==
+X-Gm-Message-State: AJIora+lYd8o/EKrbFYnzGlKuXFNW71ddGt4+SYrZbiLAq8lBzZj8+bj
+        JcD8Wu6LqEAXFVhHop0SjUybsg==
+X-Google-Smtp-Source: AGRyM1ve/niHAaVq3Yd+4lfeMUAfS29AsNpxqy93U2w5fKjqApTP2AARU6wW38D9Ua1XFtd5qMQJzA==
+X-Received: by 2002:a05:6a00:1a46:b0:525:82e2:a0d3 with SMTP id h6-20020a056a001a4600b0052582e2a0d3mr34657269pfv.48.1658259102693;
+        Tue, 19 Jul 2022 12:31:42 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id m1-20020a62a201000000b0052ab3039c4esm11980461pff.8.2022.07.19.12.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 12:31:42 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 19:31:37 +0000
+From:   Joe Burton <jevburton@google.com>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Joe Burton <jevburton.kernel@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [PATCH bpf-next] libbpf: Add bpf_obj_get_opts()
+Message-ID: <YtcGmfjizpfyBSjz@google.com>
+References: <20220718214633.3951533-1-jevburton.kernel@gmail.com>
+ <CAKH8qBuAR2A4wyL7Xe_OY-pq_VaRRrP_e-P5py=rwf22mfr1VA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKH8qBuAR2A4wyL7Xe_OY-pq_VaRRrP_e-P5py=rwf22mfr1VA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Mon, Jul 18, 2022 at 02:50:26PM -0700, Stanislav Fomichev wrote:
 
-The jumps to ftrace_epilogue were done as a way to make sure all the
-function tracing trampolines ended at the function graph trampoline, as
-the ftrace_epilogue was the location that would handle that.
+> Needs a libbpf.map change as well?
 
-With the advent of function graph tracer now being just one of the
-callbacks of the function tracer there is no more requirement that all
-trampolines go to a single location.
-
-Remove the jumps to the ftrace_epilogue and replace them with return
-statements.
-
-This also means that the return statements can now be part of the
-trampoline that gets copied into the dynamically created trampolines. This
-simplifies the code to do the copies as it no longer needs to add the
-returns to those created trampolines.
-
-Note, the ftrace_epilogue can probably be renamed to ftrace_stub and the
-weak logic for that could probably be removed. But lets leave that as a
-separate change.
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v2: https://lkml.kernel.org/r/20220719103201.38cb994c@gandalf.local.home
-
-   - Rebase on top of 5.19-rc7 with retbleed updates
-
- arch/x86/kernel/ftrace.c    | 21 ++++++---------------
- arch/x86/kernel/ftrace_64.S | 15 +++------------
- 2 files changed, 9 insertions(+), 27 deletions(-)
-
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 24b9fa89aa27..7225ccca94b9 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -301,8 +301,6 @@ union ftrace_op_code_union {
- 	} __attribute__((packed));
- };
- 
--#define RET_SIZE		(IS_ENABLED(CONFIG_RETPOLINE) ? 5 : 1 + IS_ENABLED(CONFIG_SLS))
--
- static unsigned long
- create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- {
-@@ -319,7 +317,6 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	void *ip;
- 	/* 48 8b 15 <offset> is movq <offset>(%rip), %rdx */
- 	unsigned const char op_ref[] = { 0x48, 0x8b, 0x15 };
--	unsigned const char retq[] = { RET_INSN_OPCODE, INT3_INSN_OPCODE };
- 	union ftrace_op_code_union op_ptr;
- 	int ret;
- 
-@@ -341,14 +338,14 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 
- 	/*
- 	 * Allocate enough size to store the ftrace_caller code,
--	 * the iret , as well as the address of the ftrace_ops this
--	 * trampoline is used for.
-+	 * as well as the address of the ftrace_ops this trampoline
-+	 * is used for.
- 	 */
--	trampoline = alloc_tramp(size + RET_SIZE + sizeof(void *));
-+	trampoline = alloc_tramp(size + sizeof(void *));
- 	if (!trampoline)
- 		return 0;
- 
--	*tramp_size = size + RET_SIZE + sizeof(void *);
-+	*tramp_size = size + sizeof(void *);
- 	npages = DIV_ROUND_UP(*tramp_size, PAGE_SIZE);
- 
- 	/* Copy ftrace_caller onto the trampoline memory */
-@@ -356,12 +353,6 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	if (WARN_ON(ret < 0))
- 		goto fail;
- 
--	ip = trampoline + size;
--	if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
--		__text_gen_insn(ip, JMP32_INSN_OPCODE, ip, &__x86_return_thunk, JMP32_INSN_SIZE);
--	else
--		memcpy(ip, retq, sizeof(retq));
--
- 	/* No need to test direct calls on created trampolines */
- 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
- 		/* NOP the jnz 1f; but make sure it's a 2 byte jnz */
-@@ -381,7 +372,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	 * the global function_trace_op variable.
- 	 */
- 
--	ptr = (unsigned long *)(trampoline + size + RET_SIZE);
-+	ptr = (unsigned long *)(trampoline + size);
- 	*ptr = (unsigned long)ops;
- 
- 	op_offset -= start_offset;
-@@ -443,7 +434,7 @@ void set_ftrace_ops_ro(void)
- 			end_offset = (unsigned long)ftrace_caller_end;
- 		}
- 		size = end_offset - start_offset;
--		size = size + RET_SIZE + sizeof(void *);
-+		size = size + sizeof(void *);
- 		npages = DIV_ROUND_UP(size, PAGE_SIZE);
- 		set_memory_ro((unsigned long)ops->trampoline, npages);
- 	} while_for_each_ftrace_op(ops);
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index dfeb227de561..6294c14c51c9 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -164,7 +164,7 @@ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
- 	movq %rax, MCOUNT_REG_SIZE(%rsp)
- 
- 	restore_mcount_regs
--
-+	RET
- 	/*
- 	 * The code up to this label is copied into trampolines so
- 	 * think twice before adding any new code or changing the
-@@ -172,8 +172,6 @@ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
- 	 */
- SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
- 	ANNOTATE_NOENDBR
--
--	jmp ftrace_epilogue
- SYM_FUNC_END(ftrace_caller);
- STACK_FRAME_NON_STANDARD_FP(ftrace_caller)
- 
-@@ -260,16 +258,9 @@ SYM_INNER_LABEL(ftrace_regs_caller_jmp, SYM_L_GLOBAL)
- 	restore_mcount_regs
- 	/* Restore flags */
- 	popfq
--
--	/*
--	 * As this jmp to ftrace_epilogue can be a short jump
--	 * it must not be copied into the trampoline.
--	 * The trampoline will add the code to jump
--	 * to the return.
--	 */
-+	RET
- SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
- 	ANNOTATE_NOENDBR
--	jmp ftrace_epilogue
- 
- 	/* Swap the flags with orig_rax */
- 1:	movq MCOUNT_REG_SIZE(%rsp), %rdi
-@@ -280,7 +271,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
- 	/* Restore flags */
- 	popfq
- 	UNWIND_HINT_FUNC
--	jmp	ftrace_epilogue
-+	RET
- 
- SYM_FUNC_END(ftrace_regs_caller)
- STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
--- 
-2.35.1
-
+Good catch. Done in v2. Sending the patch out in a moment.

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C8B579E2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50683579AEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242426AbiGSM6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
+        id S239525AbiGSMVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235856AbiGSM6J (ORCPT
+        with ESMTP id S239899AbiGSMUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:58:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4285D596;
-        Tue, 19 Jul 2022 05:23:20 -0700 (PDT)
+        Tue, 19 Jul 2022 08:20:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C744D82A;
+        Tue, 19 Jul 2022 05:07:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86BB0618C1;
-        Tue, 19 Jul 2022 12:23:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F36C341C6;
-        Tue, 19 Jul 2022 12:23:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EC626173C;
+        Tue, 19 Jul 2022 12:07:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D52C341C6;
+        Tue, 19 Jul 2022 12:07:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233399;
-        bh=XECchj46DqH3hUhk2VLoi/eh4vI39pKf+B4T1uialzI=;
+        s=korg; t=1658232440;
+        bh=7ZYWiRyY+pdBvXiE3F4IZL5+o6eMslmSkCprIoHSkHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=idz6KXx1WsT8V1z7oAlpo3HGG92f7YCpt1INlLY3VSqq7a/0VGswBg27UnMeABFU7
-         mkrobYMSRcOIuomxEm+RCPHI5PGEAv9TWXlYsRyONOClL8j/JIBMDzi+wJdVqa0w5h
-         Jxmd0lX0l90Qf2biSkI3P6EbWLKTwbPl6/Ol3RZs=
+        b=WEbVf5tA+4KY0Z7NwuH6VO/QuVw8rt2EwtpZjNeSTdF+Vlt88s2k99YUlInr198Qo
+         7E05XmCaCWUfu+oDpyPVo0TDCBCS61ro3nsJKRUhtDaQFKV4nmxEFlY7pY9W7POMoz
+         D8AWoZh/dbv/9XiTAg2xNcmMtsAf6PcAFY5oyX00=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 109/231] sysctl: Fix data-races in proc_dou8vec_minmax().
+        stable@vger.kernel.org,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        Tommy Pettersson <ptp@lysator.liu.se>,
+        Ciprian Craciun <ciprian.craciun@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.10 021/112] nilfs2: fix incorrect masking of permission flags for symlinks
 Date:   Tue, 19 Jul 2022 13:53:14 +0200
-Message-Id: <20220719114723.766278861@linuxfoundation.org>
+Message-Id: <20220719114628.043894903@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
+References: <20220719114626.156073229@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-[ Upstream commit 7dee5d7747a69aa2be41f04c6a7ecfe3ac8cdf18 ]
+commit 5924e6ec1585445f251ea92713eb15beb732622a upstream.
 
-A sysctl variable is accessed concurrently, and there is always a chance
-of data-race.  So, all readers and writers need some basic protection to
-avoid load/store-tearing.
+The permission flags of newly created symlinks are wrongly dropped on
+nilfs2 with the current umask value even though symlinks should have 777
+(rwxrwxrwx) permissions:
 
-This patch changes proc_dou8vec_minmax() to use READ_ONCE() and
-WRITE_ONCE() internally to fix data-races on the sysctl side.  For now,
-proc_dou8vec_minmax() itself is tolerant to a data-race, but we still
-need to add annotations on the other subsystem's side.
+ $ umask
+ 0022
+ $ touch file && ln -s file symlink; ls -l file symlink
+ -rw-r--r--. 1 root root 0 Jun 23 16:29 file
+ lrwxr-xr-x. 1 root root 4 Jun 23 16:29 symlink -> file
 
-Fixes: cb9444130662 ("sysctl: add proc_dou8vec_minmax()")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This fixes the bug by inserting a missing check that excludes
+symlinks.
+
+Link: https://lkml.kernel.org/r/1655974441-5612-1-git-send-email-konishi.ryusuke@gmail.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: Tommy Pettersson <ptp@lysator.liu.se>
+Reported-by: Ciprian Craciun <ciprian.craciun@gmail.com>
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/sysctl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/nilfs2/nilfs.h |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 878b1122cb89..54ec36e69907 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1079,13 +1079,13 @@ int proc_dou8vec_minmax(struct ctl_table *table, int write,
+--- a/fs/nilfs2/nilfs.h
++++ b/fs/nilfs2/nilfs.h
+@@ -198,6 +198,9 @@ static inline int nilfs_acl_chmod(struct
  
- 	tmp.maxlen = sizeof(val);
- 	tmp.data = &val;
--	val = *data;
-+	val = READ_ONCE(*data);
- 	res = do_proc_douintvec(&tmp, write, buffer, lenp, ppos,
- 				do_proc_douintvec_minmax_conv, &param);
- 	if (res)
- 		return res;
- 	if (write)
--		*data = val;
-+		WRITE_ONCE(*data, val);
+ static inline int nilfs_init_acl(struct inode *inode, struct inode *dir)
+ {
++	if (S_ISLNK(inode->i_mode))
++		return 0;
++
+ 	inode->i_mode &= ~current_umask();
  	return 0;
  }
- EXPORT_SYMBOL_GPL(proc_dou8vec_minmax);
--- 
-2.35.1
-
 
 

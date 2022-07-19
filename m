@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B3C579C33
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89F1579C35
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240608AbiGSMhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S240921AbiGSMhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240768AbiGSMgX (ORCPT
+        with ESMTP id S240774AbiGSMgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:36:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F9626104;
-        Tue, 19 Jul 2022 05:14:13 -0700 (PDT)
+        Tue, 19 Jul 2022 08:36:24 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357CB24944;
+        Tue, 19 Jul 2022 05:14:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACFC4B81B21;
-        Tue, 19 Jul 2022 12:13:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE48C341C6;
-        Tue, 19 Jul 2022 12:13:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 850AECE1BE5;
+        Tue, 19 Jul 2022 12:14:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2A1C341C6;
+        Tue, 19 Jul 2022 12:14:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232811;
-        bh=uinYfMvxMPlZBnKki7jUgXVpXy55MFvui2maCfMC+nk=;
+        s=korg; t=1658232842;
+        bh=Y5ulbQkpBh1mvGqG++QTnnact+0szAuiE1B9TbrCcZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R6Bu21ZpnK/ubCGV46g2V9LsXBeoURjzyg+cUD0a8CMMKcxS1xfXivjFqTUovaCVy
-         6bjTuMT6Z9aavGN3HQ4BE+ZJNYSBmPzQ8xX+g0rl40GgsG7bQdw2kODUhEVHDAo5kz
-         S4lEO2jiW/168EFPjO0ojAhmhF4DWKyk11GP73pw=
+        b=SO8MlbvvCIYG5mAB/6/mnwab+OXZt0ykPdjID+Yx1LHIQju1wthnXCbmyraPku6Iy
+         9vJ4AhnJk5WYt34VEoxA1Wi+HTCFQcbqRZw9YdgMl8OVyJTD0pK6YlmZ0lIuhi7zNt
+         RjcTyUOPyy83tLapUYHAEz5NHN04DeWB8gLHWJYQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, William Zhang <william.zhang@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Tom Yan <tom.ty89@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 066/167] arm64: dts: broadcom: bcm4908: Fix cpu node for smp boot
-Date:   Tue, 19 Jul 2022 13:53:18 +0200
-Message-Id: <20220719114702.911394756@linuxfoundation.org>
+Subject: [PATCH 5.15 067/167] netfilter: nf_log: incorrect offset to network header
+Date:   Tue, 19 Jul 2022 13:53:19 +0200
+Message-Id: <20220719114703.008907738@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
 References: <20220719114656.750574879@linuxfoundation.org>
@@ -54,36 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Zhang <william.zhang@broadcom.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 8bd582ae9a71d7f14c4e0c735b2eacaf7516d626 ]
+[ Upstream commit 7a847c00eeba9744353ecdfad253143b9115678a ]
 
-Add spin-table enable-method and cpu-release-addr properties for
-cpu0 node. This is required by all ARMv8 SoC. Otherwise some
-bootloader like u-boot can not update cpu-release-addr and linux
-fails to start up secondary cpus.
+NFPROTO_ARP is expecting to find the ARP header at the network offset.
 
-Fixes: 2961f69f151c ("arm64: dts: broadcom: add BCM4908 and Asus GT-AC5300 early DTS files")
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+In the particular case of ARP, HTYPE= field shows the initial bytes of
+the ethernet header destination MAC address.
+
+ netdev out: IN= OUT=bridge0 MACSRC=c2:76:e5:71:e1:de MACDST=36:b0:4a:e2:72:ea MACPROTO=0806 ARP HTYPE=14000 PTYPE=0x4ae2 OPCODE=49782
+
+NFPROTO_NETDEV egress hook is also expecting to find the IP headers at
+the network offset.
+
+Fixes: 35b9395104d5 ("netfilter: add generic ARP packet logger")
+Reported-by: Tom Yan <tom.ty89@gmail.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ net/netfilter/nf_log_syslog.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
-index e8907d3fe2d1..e510a6961cf9 100644
---- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
-+++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
-@@ -29,6 +29,8 @@ cpu0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "brcm,brahma-b53";
- 			reg = <0x0>;
-+			enable-method = "spin-table";
-+			cpu-release-addr = <0x0 0xfff8>;
- 			next-level-cache = <&l2>;
- 		};
+diff --git a/net/netfilter/nf_log_syslog.c b/net/netfilter/nf_log_syslog.c
+index 13234641cdb3..7000e069bc07 100644
+--- a/net/netfilter/nf_log_syslog.c
++++ b/net/netfilter/nf_log_syslog.c
+@@ -61,7 +61,7 @@ dump_arp_packet(struct nf_log_buf *m,
+ 	unsigned int logflags;
+ 	struct arphdr _arph;
  
+-	ah = skb_header_pointer(skb, 0, sizeof(_arph), &_arph);
++	ah = skb_header_pointer(skb, nhoff, sizeof(_arph), &_arph);
+ 	if (!ah) {
+ 		nf_log_buf_add(m, "TRUNCATED");
+ 		return;
+@@ -90,7 +90,7 @@ dump_arp_packet(struct nf_log_buf *m,
+ 	    ah->ar_pln != sizeof(__be32))
+ 		return;
+ 
+-	ap = skb_header_pointer(skb, sizeof(_arph), sizeof(_arpp), &_arpp);
++	ap = skb_header_pointer(skb, nhoff + sizeof(_arph), sizeof(_arpp), &_arpp);
+ 	if (!ap) {
+ 		nf_log_buf_add(m, " INCOMPLETE [%zu bytes]",
+ 			       skb->len - sizeof(_arph));
+@@ -144,7 +144,7 @@ static void nf_log_arp_packet(struct net *net, u_int8_t pf,
+ 
+ 	nf_log_dump_packet_common(m, pf, hooknum, skb, in, out, loginfo,
+ 				  prefix);
+-	dump_arp_packet(m, loginfo, skb, 0);
++	dump_arp_packet(m, loginfo, skb, skb_network_offset(skb));
+ 
+ 	nf_log_buf_close(m);
+ }
+@@ -829,7 +829,7 @@ static void nf_log_ip_packet(struct net *net, u_int8_t pf,
+ 	if (in)
+ 		dump_ipv4_mac_header(m, loginfo, skb);
+ 
+-	dump_ipv4_packet(net, m, loginfo, skb, 0);
++	dump_ipv4_packet(net, m, loginfo, skb, skb_network_offset(skb));
+ 
+ 	nf_log_buf_close(m);
+ }
 -- 
 2.35.1
 

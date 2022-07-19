@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651CA579E9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B62F579A3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242851AbiGSNDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S237578AbiGSMMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243242AbiGSNAn (ORCPT
+        with ESMTP id S239052AbiGSMKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:00:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4978C154;
-        Tue, 19 Jul 2022 05:25:54 -0700 (PDT)
+        Tue, 19 Jul 2022 08:10:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F8551A2C;
+        Tue, 19 Jul 2022 05:03:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCA9861924;
-        Tue, 19 Jul 2022 12:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 998F5C341C6;
-        Tue, 19 Jul 2022 12:25:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AEC52B81B1A;
+        Tue, 19 Jul 2022 12:03:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C740C341C6;
+        Tue, 19 Jul 2022 12:03:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233553;
-        bh=W6YdQucwnWPTC/znTUpqgn+m+9J1rxn04314aFykl0I=;
+        s=korg; t=1658232187;
+        bh=dxcYY6PzJtZchRYFd/NiidbWmy64FP9EmgHUlkLJH3o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mPctHZSTgKE5K/PY9mhDV1VJL//l/KktZrZbYcUPcqm5hseGrriUbjRWgKcQQubA3
-         wvztT7zFZDniom8HFRyL6JAFpC8whhi3q4wb/n6wYv6XBm1XBCSIJfW5JafDxIiSly
-         tW3HbMdnTeGm9Xs/CixDz7yqBr1if7/EbCi7ollg=
+        b=ZO3blR+GmwzychIC4akTthJx39NaaMpOO9epEKkVEKIcqlmpV7EqSSRr87lCZqS2I
+         97YZA2E5TNbK4XVY71nIzpJshPXZrKQuCem3du27CyZK+cdTPCrXboBG2LXugvUg98
+         AX/aVVntA2KYd6G/yqj4e0hplnbI3cXHtAm7HmxM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Namjae Jeon <linkinjeon@kerne.org>,
-        Hyunchul Lee <hyc.lee@gmail.com>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org, Ma Yuying <yuma@redhat.com>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 161/231] ksmbd: use SOCK_NONBLOCK type for kernel_accept()
+Subject: [PATCH 5.4 43/71] sfc: fix kernel panic when creating VF
 Date:   Tue, 19 Jul 2022 13:54:06 +0200
-Message-Id: <20220719114727.763325492@linuxfoundation.org>
+Message-Id: <20220719114556.469734480@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Íñigo Huguet <ihuguet@redhat.com>
 
-[ Upstream commit fe0fde09e1cb83effcf8fafa372533f438d93a1a ]
+[ Upstream commit ada74c5539eba06cf8b47d068f92e0b3963a9a6e ]
 
-I found that normally it is O_NONBLOCK but there are different value
-for some arch.
+When creating VFs a kernel panic can happen when calling to
+efx_ef10_try_update_nic_stats_vf.
 
-/include/linux/net.h:
-#ifndef SOCK_NONBLOCK
-#define SOCK_NONBLOCK   O_NONBLOCK
-#endif
+When releasing a DMA coherent buffer, sometimes, I don't know in what
+specific circumstances, it has to unmap memory with vunmap. It is
+disallowed to do that in IRQ context or with BH disabled. Otherwise, we
+hit this line in vunmap, causing the crash:
+  BUG_ON(in_interrupt());
 
-/arch/alpha/include/asm/socket.h:
-#define SOCK_NONBLOCK   0x40000000
+This patch reenables BH to release the buffer.
 
-Use SOCK_NONBLOCK instead of O_NONBLOCK for kernel_accept().
+Log messages when the bug is hit:
+ kernel BUG at mm/vmalloc.c:2727!
+ invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 6 PID: 1462 Comm: NetworkManager Kdump: loaded Tainted: G          I      --------- ---  5.14.0-119.el9.x86_64 #1
+ Hardware name: Dell Inc. PowerEdge R740/06WXJT, BIOS 2.8.2 08/27/2020
+ RIP: 0010:vunmap+0x2e/0x30
+ ...skip...
+ Call Trace:
+  __iommu_dma_free+0x96/0x100
+  efx_nic_free_buffer+0x2b/0x40 [sfc]
+  efx_ef10_try_update_nic_stats_vf+0x14a/0x1c0 [sfc]
+  efx_ef10_update_stats_vf+0x18/0x40 [sfc]
+  efx_start_all+0x15e/0x1d0 [sfc]
+  efx_net_open+0x5a/0xe0 [sfc]
+  __dev_open+0xe7/0x1a0
+  __dev_change_flags+0x1d7/0x240
+  dev_change_flags+0x21/0x60
+  ...skip...
 
-Suggested-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kerne.org>
-Reviewed-by: Hyunchul Lee <hyc.lee@gmail.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Fixes: d778819609a2 ("sfc: DMA the VF stats only when requested")
+Reported-by: Ma Yuying <yuma@redhat.com>
+Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+Acked-by: Edward Cree <ecree.xilinx@gmail.com>
+Link: https://lore.kernel.org/r/20220713092116.21238-1-ihuguet@redhat.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ksmbd/transport_tcp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/sfc/ef10.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/ksmbd/transport_tcp.c b/fs/ksmbd/transport_tcp.c
-index 8fef9de787d3..143bba4e4db8 100644
---- a/fs/ksmbd/transport_tcp.c
-+++ b/fs/ksmbd/transport_tcp.c
-@@ -230,7 +230,7 @@ static int ksmbd_kthread_fn(void *p)
- 			break;
- 		}
- 		ret = kernel_accept(iface->ksmbd_socket, &client_sk,
--				    O_NONBLOCK);
-+				    SOCK_NONBLOCK);
- 		mutex_unlock(&iface->sock_release_lock);
- 		if (ret) {
- 			if (ret == -EAGAIN)
+diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
+index 936e64dd81b5..b23741d3c9be 100644
+--- a/drivers/net/ethernet/sfc/ef10.c
++++ b/drivers/net/ethernet/sfc/ef10.c
+@@ -2056,7 +2056,10 @@ static int efx_ef10_try_update_nic_stats_vf(struct efx_nic *efx)
+ 
+ 	efx_update_sw_stats(efx, stats);
+ out:
++	/* releasing a DMA coherent buffer with BH disabled can panic */
++	spin_unlock_bh(&efx->stats_lock);
+ 	efx_nic_free_buffer(efx, &stats_buf);
++	spin_lock_bh(&efx->stats_lock);
+ 	return rc;
+ }
+ 
 -- 
 2.35.1
 

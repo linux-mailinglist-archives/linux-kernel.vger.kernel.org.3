@@ -2,97 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A0957A9BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D1C57A9C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 00:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238187AbiGSWVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 18:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
+        id S238865AbiGSWVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 18:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiGSWVQ (ORCPT
+        with ESMTP id S231495AbiGSWVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 18:21:16 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDC35407E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:21:15 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:45240)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oDvab-009vV1-TK; Tue, 19 Jul 2022 16:21:13 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:34048 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oDvaa-0069CZ-DW; Tue, 19 Jul 2022 16:21:13 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        longman@redhat.com, roman.gushchin@linux.dev, legion@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220715062301.19311-1-hbh25y@gmail.com> (Hangyu Hua's message
-        of "Fri, 15 Jul 2022 14:23:01 +0800")
-References: <20220715062301.19311-1-hbh25y@gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Tue, 19 Jul 2022 17:21:02 -0500
-Message-ID: <87lesosq0h.fsf@email.froward.int.ebiederm.org>
+        Tue, 19 Jul 2022 18:21:43 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83BF57214
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:21:42 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id c3so13980265pfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 15:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jwz2xPBcsSUvi6UQz2aVRRre7pThVfHLQu+ABQPNNpM=;
+        b=bvlVC+TDi6T2/b4/pLOrdrFYGLJavot6uN0VC38WaAa3VaW3zaRwWf0gdFGQMpJbak
+         96TWnRjxQnbhbdZlSvBUqo1Byt+wnG1f6xVDoOZ5jTxnFgGC7/goofWz7QxxpE9MrUUu
+         3MAD4vePMasYcKhPf5CPGxQPtS1ADhXACzf7vdnce4deuyM0ovvPojN5om6EIQiwq8FM
+         TR/MkL13E92UYGG6nzxdVQjK7E6SC7efPQhO+iuziOnyMscb7rDTFklxqekPF3oq8pqA
+         TocrVBZ8BAH2zcKnPrAWu4zilccRa0VfLpgkpuu8lVGwSTv7DDaJ+Pli6amJ5E+71iXP
+         N8Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jwz2xPBcsSUvi6UQz2aVRRre7pThVfHLQu+ABQPNNpM=;
+        b=6RA5sZ1pFzXbR4O8pBF8IBIF5SX93TFZDKPxx7kN8lxSSMOuuItIFa+yh4+nyMIDto
+         QEsx3Bwmjx0/0UpkG0PyK5iMGvAau82hny5BDHusujl7viFMybZ0k/34Hcu4PD6Cy7R8
+         qU4imDeTcMtSkT+2fKlVf6XcEvhRxbHcS8m0IQq3oLm6Dz7jmIiSMc4bpwsrzcZfWSvm
+         yK8tvk3DvV9dYdOw9zWQTyxJl84cbBObnfpBwdBsNlE8sN4ISHpnnoPF8zFKLBSdTRy7
+         GznIrbc1MqqzcprHFyAAnZMn/f1QL5DIlAQxYf25a8BGrx+U1wHl6IUMoLmAv0RfquWB
+         yXJQ==
+X-Gm-Message-State: AJIora/5CEyejed6KO5Yor9oK/rVSinivusOrEYL73rxD6DqNM+xf4kS
+        RZwvOxj9eZ65i+83rG2OC8VWRjUD7xutrg==
+X-Google-Smtp-Source: AGRyM1s+hXqcq2Xyg6cYhNLKRigngS/2t05qB058vSHVJl/t1uUVlg5ZrhARR2xmzNBdZRH402kWTw==
+X-Received: by 2002:a05:6a00:e8f:b0:528:a1c7:3d00 with SMTP id bo15-20020a056a000e8f00b00528a1c73d00mr34920341pfb.25.1658269302103;
+        Tue, 19 Jul 2022 15:21:42 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id f15-20020aa7968f000000b00528c22fbb45sm12215669pfk.141.2022.07.19.15.21.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 15:21:41 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 22:21:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH V3 05/12] KVM: X86/MMU: Link PAE root pagetable with its
+ children
+Message-ID: <YtcucpRhgVuucaaP@google.com>
+References: <20220521131700.3661-1-jiangshanlai@gmail.com>
+ <20220521131700.3661-6-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oDvaa-0069CZ-DW;;;mid=<87lesosq0h.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18rTReGCVKTGPlhUXT061i0UO41VfUIWDs=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521131700.3661-6-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Hangyu Hua <hbh25y@gmail.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 854 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 11 (1.3%), b_tie_ro: 9 (1.1%), parse: 1.07 (0.1%),
-         extract_message_metadata: 3.3 (0.4%), get_uri_detail_list: 0.86
-        (0.1%), tests_pri_-1000: 4.0 (0.5%), tests_pri_-950: 1.60 (0.2%),
-        tests_pri_-900: 1.17 (0.1%), tests_pri_-90: 150 (17.6%), check_bayes:
-        148 (17.4%), b_tokenize: 6 (0.6%), b_tok_get_all: 6 (0.7%),
-        b_comp_prob: 1.96 (0.2%), b_tok_touch_all: 131 (15.4%), b_finish: 1.16
-        (0.1%), tests_pri_0: 661 (77.4%), check_dkim_signature: 0.61 (0.1%),
-        check_dkim_adsp: 3.0 (0.3%), poll_dns_idle: 0.62 (0.1%), tests_pri_10:
-        2.3 (0.3%), tests_pri_500: 9 (1.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] ipc: mqueue: fix possible memory leak in init_mqueue_fs()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hangyu Hua <hbh25y@gmail.com> writes:
+The shortlog is very misleading.  This patch doesn't "Link PAE root pagetable with
+its children", it adds support for creating PAE PDPTEs in order to link them into
+shadow pages, but it doesn't do the actual linking.
 
-> commit db7cfc380900 ("ipc: Free mq_sysctls if ipc namespace creation
-> failed")
->
-> Here's a similar memory leak to the one fixed by the patch above.
-> retire_mq_sysctls need to be called when init_mqueue_fs fails after
-> setup_mq_sysctls.
+  KVM: x86/mmu: Add support for linking PAE PDPTE shadow pages
 
-Applied.  Thank you.
+On Sat, May 21, 2022, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> When local shadow pages are activated, link_shadow_page() might link
+> a local shadow pages which is the PAE root for PAE paging with its
+> children.
+> 
+> Add make_pae_pdpte() to handle it.
+> 
+> The code is not activated since local shadow pages are not activated
+> yet.
 
->
-> Fixes: dc55e35f9e81 ("ipc: Store mqueue sysctls in the ipc namespace")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+And though it's redudnant with other context, IMO it's helpful to again reiterate
+why this will be used for per-vCPU (local) shadow pages, i.e. why it's _not_ used
+right now.
+
+  Add support for installing PDPTEs via link_shadow_page(), PDPTEs have
+  different layouts than every other entry type and so need a dedicated
+  helper to make them.
+
+  This code will become active when a future patch activates per-vCPU
+  shadow pages and stops using so called "special" roots (which are
+  installed at root allocation, not via link_shadow_page()).
+
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 > ---
->  ipc/mqueue.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-> index 12ad7860bb88..83370fef8879 100644
-> --- a/ipc/mqueue.c
-> +++ b/ipc/mqueue.c
-> @@ -1746,6 +1746,7 @@ static int __init init_mqueue_fs(void)
->  	unregister_filesystem(&mqueue_fs_type);
->  out_sysctl:
->  	kmem_cache_destroy(mqueue_inode_cachep);
-> +	retire_mq_sysctls(&init_ipc_ns);
->  	return error;
+>  arch/x86/kvm/mmu/mmu.c  | 6 +++++-
+>  arch/x86/kvm/mmu/spte.c | 7 +++++++
+>  arch/x86/kvm/mmu/spte.h | 1 +
+>  3 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index c941a5931bc3..e1a059dd9621 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2340,7 +2340,11 @@ static void link_shadow_page(struct kvm_vcpu *vcpu, u64 *sptep,
+>  
+>  	BUILD_BUG_ON(VMX_EPT_WRITABLE_MASK != PT_WRITABLE_MASK);
+>  
+> -	spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
+> +	if (unlikely(sp->role.level == PT32_ROOT_LEVEL &&
+> +		     vcpu->arch.mmu->root_role.level == PT32E_ROOT_LEVEL))
+> +		spte = make_pae_pdpte(sp->spt);
+> +	else
+> +		spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
+>  
+>  	mmu_spte_set(sptep, spte);
+>  
+> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+> index b5960bbde7f7..5c31fa1d2b61 100644
+> --- a/arch/x86/kvm/mmu/spte.c
+> +++ b/arch/x86/kvm/mmu/spte.c
+> @@ -279,6 +279,13 @@ u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
+>  	return child_spte;
 >  }
+>  
+> +u64 make_pae_pdpte(u64 *child_pt)
+> +{
+> +	/* The only ignore bits in PDPTE are 11:9. */
+
+s/ignore/ignored, though it might be worth calling out that unlike 64-bit paging,
+the upper bits bits are reserved (I always forget this).
+
+	/*
+	 * Only PDPTE bits 11:9 are ignored by hardware.  Unlike 64-bit paging,
+	 * bits above the PA bits are reserved.
+	 */
+
+> +	BUILD_BUG_ON(!(GENMASK(11,9) & SPTE_MMU_PRESENT_MASK));
+> +	return __pa(child_pt) | PT_PRESENT_MASK | SPTE_MMU_PRESENT_MASK |
+> +		shadow_me_value;
+> +}
+>  
+>  u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled)
+>  {
+> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> index 0127bb6e3c7d..2408ba1361d5 100644
+> --- a/arch/x86/kvm/mmu/spte.h
+> +++ b/arch/x86/kvm/mmu/spte.h
+> @@ -426,6 +426,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  	       u64 old_spte, bool prefetch, bool can_unsync,
+>  	       bool host_writable, u64 *new_spte);
+>  u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index);
+> +u64 make_pae_pdpte(u64 *child_pt);
+>  u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled);
+>  u64 make_mmio_spte(struct kvm_vcpu *vcpu, u64 gfn, unsigned int access);
+>  u64 mark_spte_for_access_track(u64 spte);
+> -- 
+> 2.19.1.6.gb485710b
+> 

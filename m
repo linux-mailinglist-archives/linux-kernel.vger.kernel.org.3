@@ -2,169 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EB857927E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 07:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F351B579284
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 07:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236365AbiGSFbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 01:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
+        id S236391AbiGSFeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 01:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233249AbiGSFbH (ORCPT
+        with ESMTP id S233873AbiGSFea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 01:31:07 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5411EADA;
-        Mon, 18 Jul 2022 22:31:04 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id E4D375C0153;
-        Tue, 19 Jul 2022 01:31:03 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 19 Jul 2022 01:31:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1658208663; x=
-        1658295063; bh=1sjBbxFgBPTiDVOSKWdlcO9spNR6ZcXpMfJWWKpeatA=; b=g
-        9i2q1lSSTwEH7YK2NPleq3VoDczMDZrUpX2AavXw54ijBz6VHsshViBQTGxZ8j2z
-        8DxQIEYq5iumemoELwgQXrKkU5PYnauKtjMeUSkhBvUbUQ9nLhTSfhTd1Ybl+oOQ
-        +yQP8UDa8SltBDWYpV9vr0pQpzbSJy4FbmpQGPSNUxwVYPtZLIylCMUis7ql3DsU
-        oh0G7rpALhz8kpJCm8DNvYW0dKzurjDXsr46Ks8uiVrVdk8hUT1Sws+ste6ZMiBn
-        1vM9xroVjLO625QCmFxdibGunCTdaLZ0RIAYwzhjWy1qHV/faL29uWwzT6Vr1/qK
-        kfCUQcL0b6ormB08TPopQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658208663; x=
-        1658295063; bh=1sjBbxFgBPTiDVOSKWdlcO9spNR6ZcXpMfJWWKpeatA=; b=s
-        MhPHtulg1BV/bGQd9QPM7If+m/igHOm9IWhg8wgXaUTctZ7EGxXGUtqxCrFMcjTi
-        tyeP20kLp6tIsGLqVMIVI2UsJG/vbLyr6avTavTeTxVBkbLnerjlxPHLuFmxthLE
-        tRfAMNfvUY2qPidy9pmyKWwDyrDe54YW5C4BeVfPf47AN291lzY0ep2SrdGSsh2T
-        iBywv6fl7fn9KKBIe/zYtG59ezV8wvOYoPTXmq2gKWS1MLkU+i82+uDV5gc0yONw
-        iWSE+T1x8s2tNotXj2iiI6URKJsVxZ3iG6wJEmDdv8rdYC21a9o8qHiyskoMV2nW
-        lIlE6LZIIhIfOZpgQBe0A==
-X-ME-Sender: <xms:lkHWYi6bJysiROujFRA1_gnzxX7FyqtQHAuLOx-UDd7QCIo_mPyDtw>
-    <xme:lkHWYr6Cpi-J2nyRpIfz6pGGnmeOAgmDrcICjne7RfcExhouYEu6aYLULzWaLVVKO
-    gStgxj3m-sL>
-X-ME-Received: <xmr:lkHWYhe35CVw08yBJRSBcG179fDZUsVLh9wKw-TL5fhUobuLZ61KCTWqEvMaax0Vh5kDUq2Xl6b_k2tlqyRMyR_M_6P0CtluJOZU_xMgLeGx4A4CnjU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekledgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpefkrghn
-    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
-    ephfdtfeeggeeuhfdthfelhfehgeevueeluedtveehhfehudehveehuefggefggfehnecu
-    ffhomhgrihhnpehgihhthhhusgdrtghomhdpkhgvrhhnvghlrdhorhhgnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhgrvhgvnhesthhhvghm
-    rgifrdhnvght
-X-ME-Proxy: <xmx:lkHWYvIK-J7nROEtnWWV6eQH8Ige26z6vhlabxj4qR3R12MnqluGgA>
-    <xmx:lkHWYmLZzbgjxxnBX1wT63DWtr-y0TbmAuWFIlbYS3In2mgZaXNhhg>
-    <xmx:lkHWYgw3MoQycjvIzNRM4lXXG9a8OXWVr_OfkwJDrVyraf25kJi__A>
-    <xmx:l0HWYl-TmzYjFLcro4GHpWoDP1n62XVH3G4iWDWEwO3oAXYXlX1r5A>
-Feedback-ID: i31e841b0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 19 Jul 2022 01:30:58 -0400 (EDT)
-Message-ID: <d93e3eb6-38b9-6a70-af3d-ab10fa646c96@themaw.net>
-Date:   Tue, 19 Jul 2022 13:30:53 +0800
+        Tue, 19 Jul 2022 01:34:30 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA661EADA
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 22:34:28 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id r14so19991733wrg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Jul 2022 22:34:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HZpvt/nDVkZNx/by2rqCcokxCcDrSaABgHJjiKPWe04=;
+        b=UKIDUZ8n3SlCbEXFhHRnFzGE7USwYMpo7BRL8fDU2+hoEDWRWNU8BBm3h4WIdy7MNm
+         knvxTFg/tVPi4D+dWPEctfKilEeI9bql6bmv+D46GWTl1cOX9y/TCiH81p8zHUgpn1ta
+         BwfH7pfqqIfYFR9vgvokguR/zXt4UheVi64Qn4IjeycigbJYuNf3vwI/5yIyT7djxRP1
+         oKcCED/Eidjnqds6P871ma8ccP0rMwH0oryYiIixhYOHreB3o5caRci8qDybQ5jX03FN
+         TIFeXI/8BcwX9PelCOlM1I54jLq18ZDqhhdUUEtnmZaqEt7uSYSIppWX4ce/FCRX0+zV
+         zg6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HZpvt/nDVkZNx/by2rqCcokxCcDrSaABgHJjiKPWe04=;
+        b=wZpuiIr9GXbsxXawnzpTMVdw2YqbQKHFREDGLAgjsAD8J5XkuYgnO8y4aPEeSjNa3r
+         ZtHXjEIpXLB024T+q85K+APtwoWS5aE1+YNwvjIQVJ2C3Tl9b43VBnli0ZL5i9GWr5bH
+         HrCJKZNr0O69Q3cqEEYkIbPYd9034nf5T6jhHzdd9QsqgsJ8O9XLuu6Y/uf99NpgQtYG
+         dW2zgCQ7v4LWiTnkBpNboGXsBNrqgqrPEJu8XLJcQl0Q6TblVZ/vqdRSFcBcSg2pgYKc
+         lEz3XTceIlGFHWyVs4uJuyFAbAHagvzlS9h0sup70kIxb4sfssI6pncG3mPLxFdTDQDT
+         if7g==
+X-Gm-Message-State: AJIora/4a6jMMZmQR1Fic4reys8Xlhe6JFbmtmjJ0K1uOyjhraDkAkMy
+        MqhFyA7RH+oUKo4qBE5YLN7V5wTNj39HN+tjTzEbyjV+AqhzTw==
+X-Google-Smtp-Source: AGRyM1sGYqcJjifeqZclEnEFGEOeCtPHs5KpfV6He2nsjr2qXhCXqSil0twnsrVPSqh+YPAnDH49ZQO8wlw6XLGEo8Y=
+X-Received: by 2002:a05:6000:1a8e:b0:21d:a7a8:54f4 with SMTP id
+ f14-20020a0560001a8e00b0021da7a854f4mr25981039wry.654.1658208866803; Mon, 18
+ Jul 2022 22:34:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [vfs] f756fe900f: canonical_address#:#[##]
-Content-Language: en-US
-To:     kernel test robot <oliver.sang@intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Carlos Maiolino <cmaiolino@redhat.com>
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, lkp@lists.01.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        David Howells <dhowells@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-References: <YtVvs06ZoG3BtMyf@xsang-OptiPlex-9020>
-From:   Ian Kent <raven@themaw.net>
-In-Reply-To: <YtVvs06ZoG3BtMyf@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYsd0DaBtWk5cFxPhfM_cZRMQk3MbaxMRN3WJ-yNjAkp7Q@mail.gmail.com>
+In-Reply-To: <CA+G9fYsd0DaBtWk5cFxPhfM_cZRMQk3MbaxMRN3WJ-yNjAkp7Q@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 18 Jul 2022 22:34:13 -0700
+Message-ID: <CAP-5=fU+58WdCpAT5nc138AdQ31Pm=iuWt9Wh+WLmPk-kb+=Dg@mail.gmail.com>
+Subject: Re: perf: util/annotate.c:1752:9: error: too few arguments to
+ function 'init_disassemble_info'
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        perf-users <perf-users@linaro.org>, bpf <bpf@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kubakici@wp.pl,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/7/22 22:35, kernel test robot wrote:
+On Mon, Jul 18, 2022 at 10:45 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
 >
-> Greeting,
+> with reference to other email thread on perf build failure on Linus mainline
+> https://lore.kernel.org/bpf/20220715191641.go6xbmhic3kafcsc@awork3.anarazel.de/T/
 >
-> FYI, we noticed the following commit (built with gcc-11):
+> I see perf build failures on stable-rc 5.18 .. 5.4 with this error [1]
+> and also noticed on today's linus mainline tree.
 >
-> commit: f756fe900f17af85c3f4bafc9b9e996bcc0fbeb1 ("[REPOST PATCH v2] vfs: parse: deal with zero length string value")
-> url: https://github.com/intel-lab-lkp/linux/commits/Ian-Kent/vfs-parse-deal-with-zero-length-string-value/20220708-094030
-> base: https://git.kernel.org/cgit/linux/kernel/git/viro/vfs.git for-next
-> patch link: https://lore.kernel.org/linux-fsdevel/165724435867.30814.6980005089665688371.stgit@donald.themaw.net
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 >
-> in testcase: xfstests
-> version: xfstests-x86_64-c1144bf-1_20220711
-> with following parameters:
+> steps to reproduce:
+> --------------------
 >
-> 	disk: 4HDD
-> 	fs: ext2
-> 	test: ext4-group-02
-> 	ucode: 0xec
+> tuxmake --runtime podman \
+>         --target-arch x86_64 \
+>         --toolchain gcc-11 \
+>         --kconfig
+> https://builds.tuxbuild.com/2C7oWWWYOYGFtqq4SWX1yG4a2Ne/config \
+>         debugkernel headers kernel modules perf
 >
-> test-description: xfstests is a regression test suite for xfs and other files ystems.
-> test-url: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+> Error log:
+> -----------
+>   CC       event-parse-api.o
+>   CC       staticobjs/btf_dump.o
+> find: 'x86_64-linux-gnu-gcc/arch': No such file or directory
+> error: Found argument '-I' which wasn't expected, or isn't valid in this context
 >
+> USAGE:
+>     sccache [FLAGS] [OPTIONS] [cmd]...
 >
-> on test machine: 4 threads Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz with 32G memory
+> For more information try --help
 >
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> and
 >
->
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
->
->
-> [  380.748272][ T5965] EXT4-fs (sda4): mounting ext3 file system using the ext4 subsystem
-> [  380.856453][ T5993] EXT4-fs: journaled quota format not specified
-> [  380.879248][ T5997] EXT4-fs (sda4): mounting ext3 file system using the ext4 subsystem
-> [  380.911204][ T6003] EXT4-fs: journaled quota format not specified
-> [  380.924796][ T6007] EXT4-fs: journaled quota format not specified
-> [  380.964372][ T6012] general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN PTI
-> [  380.975568][ T6012] KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> [  380.983810][ T6012] CPU: 1 PID: 6012 Comm: mount Tainted: G S        I       5.19.0-rc2-00001-gf756fe900f17 #1
-> [  380.993786][ T6012] Hardware name: Dell Inc. OptiPlex 7040/0Y7WYT, BIOS 1.1.1 10/07/2015
-> [ 381.001854][ T6012] RIP: 0010:ext4_parse_param (kbuild/src/consumer/fs/ext4/super.c:2109)
+>   CC       util/annotate.o
+>   MKDIR    util/
+>   CC       util/block-range.o
+>   MKDIR    bench/
+>   CC       bench/sched-pipe.o
+> util/annotate.c: In function 'symbol__disassemble_bpf':
+> util/annotate.c:1752:9: error: too few arguments to function
+> 'init_disassemble_info'
+>  1752 |         init_disassemble_info(&info, s,
+>       |         ^~~~~~~~~~~~~~~~~~~~~
+> In file included from util/annotate.c:1709:
+> /usr/include/dis-asm.h:472:13: note: declared here
+>   472 | extern void init_disassemble_info (struct disassemble_info
+> *dinfo, void *stream,
+>       |             ^~~~~~~~~~~~~~~~~~~~~
 
-It has to be this:
+This include is guarded by:
+#if defined(HAVE_LIBBFD_SUPPORT) && defined(HAVE_LIBBPF_SUPPORT)
 
-@@ -2110,12 +2110,12 @@ static int ext4_parse_param(struct fs_context 
-*fc, struct fs_parameter *param)
-         switch (token) {
-  #ifdef CONFIG_QUOTA
-         case Opt_usrjquota:
--               if (!*param->string)
-+               if (!param->string || !*param->string)
-                         return unnote_qf_name(fc, USRQUOTA);
-                 else
-                         return note_qf_name(fc, USRQUOTA, param);
-         case Opt_grpjquota:
--               if (!*param->string)
-+               if (!param->string || !*param->string)
-                         return unnote_qf_name(fc, GRPQUOTA);
-                 else
-                         return note_qf_name(fc, GRPQUOTA, param);
+and from the header path in the failure you are getting an installed
+version of libbfd from /usr/include. Using libbfd (GPLv3) with perf
+(GPLv2) is becoming an under tested combination due to:
+https://www.gnu.org/licenses/gpl-faq.en.html#v2v3Compatibility
+Add the make flag NO_LIBBFD=1 to test without libbfd, which will most
+accurately match what distributions build.
 
-IMHO it's fragile without the additional check since the file system
+Testing on my own machine with libbfd version 2.38 didn't show any failures.
 
-has no control over how parameters come to it both in the old and new
-
-systems.
-
-
+Thanks,
 Ian
 
+> [1] https://builds.tuxbuild.com/2C7oWWWYOYGFtqq4SWX1yG4a2Ne/
+>
+> Best regards
+> Naresh Kamboju
+>
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org

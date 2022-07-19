@@ -2,127 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E8D57A2C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E7A57A2C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239455AbiGSPPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
+        id S238512AbiGSPPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239100AbiGSPPa (ORCPT
+        with ESMTP id S239321AbiGSPPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:15:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0200254AE7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:15:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658243710;
+        Tue, 19 Jul 2022 11:15:34 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E57550C3;
+        Tue, 19 Jul 2022 08:15:24 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297609329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7609:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A7AEA1EC050F;
+        Tue, 19 Jul 2022 17:15:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658243715;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DZfape1HvRcQDBJMjqCK8x7O2btj6Zg9uPaKpCKPLz4=;
-        b=OL33YoEyNreN9j043Q3qoxAW+Sf0D2EP+/TkO1ryIzp5Jdlk35C0/AecyBIcK7Me3KDOm+
-        DODGR8gzEI9u3y3f/g2H9qRkVQ1ZfkQo5sqldOux9Z409233XxUyAa0WiuoBplz8+sgFpe
-        9z1oKeT4xBS2LVG4ujljxaAOPVPJpfQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-r7lCQn3nMO-qsrtrMoEokQ-1; Tue, 19 Jul 2022 11:15:06 -0400
-X-MC-Unique: r7lCQn3nMO-qsrtrMoEokQ-1
-Received: by mail-wm1-f70.google.com with SMTP id bh18-20020a05600c3d1200b003a32044cc9fso1882010wmb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:15:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=DZfape1HvRcQDBJMjqCK8x7O2btj6Zg9uPaKpCKPLz4=;
-        b=RJyVAswlHw3NKGi0OADX7VUnZbKNRFY16lsnqiajC+6Li6QoX1LiFfb/BzyqJBaC9d
-         1jZ7/B1Uok8fAUnbcROmWzNBEDmHmGRcmpWj7jtx9kzHyV5o2+ZIhqB6Nqz0GC7tjNMp
-         fPhZ9i16cMP6lIK6I0YKb/rbjwTVWDjbjXBRviQcOTzh6oypY6t4XWt5Dkwv6EH6Ff/1
-         47yBrrB9MTxXtlESlVjFgay7HuazHY9uQz/NtbjxlqGK2W6IhjMo8y+yWEOWRzem69Al
-         b5mv7n6hqFggt1iVtbOYVJqgJ+8BMzXZtYgmcPuNFM6o/XbJQg9Yth0kSExB5sRBvkBg
-         3D5A==
-X-Gm-Message-State: AJIora9cXWEpM5C1zy147JrJ52vXZmY16VolGLAHUFfRXGRv0NYBZLb4
-        AncvD9CIxcsSXjtm+gz4xI+OznXlYPTabSQnLzE2lTX7r6oWVaOBZ73m4MGHoqZlAmPh9Gfo+/9
-        ALPqEn9ek++HSs5WhPYHP4YQb
-X-Received: by 2002:a1c:2b05:0:b0:3a0:2ae2:5277 with SMTP id r5-20020a1c2b05000000b003a02ae25277mr32016341wmr.30.1658243704620;
-        Tue, 19 Jul 2022 08:15:04 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ufZw67mDO/HMSiR5dpo2mMh5Dr7OZ3O/vXfLgflU9RixvUu7uhgILPHQ/3jGFAFcB3ZuKGow==
-X-Received: by 2002:a1c:2b05:0:b0:3a0:2ae2:5277 with SMTP id r5-20020a1c2b05000000b003a02ae25277mr32016321wmr.30.1658243704438;
-        Tue, 19 Jul 2022 08:15:04 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id bg10-20020a05600c3c8a00b003a0323463absm23061621wmb.45.2022.07.19.08.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 08:15:03 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Gregory Erwin <gregerwin256@gmail.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgense?= =?utf-8?Q?n?= 
-        <toke@redhat.com>, Rui Salvaterra <rsalvaterra@gmail.com>,
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=19tyF3hcmEXgvgnp46r5wyMNhL+B65efr3ypQp+I6Lc=;
+        b=bgi94v/2BF7PUNqG8xmemrFZBnufFiYdPdUaAnPFw21wpY2AenhYjpMtVIXjal1w+mzOf/
+        /mJpaBLsrk1CG9OmmXyV1Mk42F2fLkopvrYioaM30O2wLjdfezvPIdmQCQWST61U2bwz0K
+        8qYCxwZHFYMHLQZMFQVOq4Y1vdDkO/E=
+Date:   Tue, 19 Jul 2022 17:15:11 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, brchuckz@netscape.net,
+        jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v8] ath9k: let sleep be interrupted when unregistering
- hwrng
-In-Reply-To: <CAHmME9q8-1vpV9zFsKkawk+XFm96S6fmug7v-NPJNpQmRoe6-Q@mail.gmail.com>
-References: <Yrw5f8GN2fh2orid@zx2c4.com>
- <20220629114240.946411-1-Jason@zx2c4.com> <87v8s8ubws.fsf@kernel.org>
- <xhsmho7xv512f.mognet@vschneid.remote.csb>
- <CAHmME9q8-1vpV9zFsKkawk+XFm96S6fmug7v-NPJNpQmRoe6-Q@mail.gmail.com>
-Date:   Tue, 19 Jul 2022 16:15:02 +0100
-Message-ID: <xhsmhcze16snd.mognet@vschneid.remote.csb>
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 3/3] x86: decouple pat and mtrr handling
+Message-ID: <YtbKf51S4lTaziKm@zn.tnic>
+References: <20220715142549.25223-1-jgross@suse.com>
+ <20220715142549.25223-4-jgross@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220715142549.25223-4-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/07/22 13:53, Jason A. Donenfeld wrote:
-> Hi Valentin,
->
-> On 7/11/22, Valentin Schneider <vschneid@redhat.com> wrote:
->> Thanks for the Cc.
->>
->> I'm not hot on the export of wake_up_state(), IMO any wakeup with
->> !(state & TASK_NORMAL) should be reserved to kernel internals. Now, here
->> IIUC the problem is that the patch uses an inline invoking
->>
->>   wake_up_state(p, TASK_INTERRUPTIBLE)
->>
->> so this isn't playing with any 'exotic' task state, thus it shouldn't
->> actually need the export.
->>
->> I've been trying to figure out if this could work with just a
->> wake_up_process(), but the sleeping pattern here is not very conforming
->> (cf. 'wait loop' pattern in sched/core.c), AFAICT the signal is used to
->> circumvent that :/
->
-> I don't intend to work on this patch more. If you'd like to ack the
-> trivial scheduler change (adding EXPORT_SYMBOL), that'd help, and then
-> this can move forward as planned. Otherwise, if you have particular
-> opinions about this patch that you want to happen, feel free to pick
-> up the patch and send your own revisions (though I don't intend to do
-> further review). Alternatively, I'll just send a patch to remove the
-> driver entirely. Hopefully you do find this ack-able, though.
->
+On Fri, Jul 15, 2022 at 04:25:49PM +0200, Juergen Gross wrote:
+> Today PAT is usable only with MTRR being active, with some nasty tweaks
+> to make PAT usable when running as Xen PV guest, which doesn't support
+> MTRR.
+> 
+> The reason for this coupling is, that both, PAT MSR changes and MTRR
+> changes, require a similar sequence and so full PAT support was added
+> using the already available MTRR handling.
+> 
+> Xen PV PAT handling can work without MTRR, as it just needs to consume
+> the PAT MSR setting done by the hypervisor without the ability and need
+> to change it. This in turn has resulted in a convoluted initialization
+> sequence and wrong decisions regarding cache mode availability due to
+> misguiding PAT availability flags.
+> 
+> Fix all of that by allowing to use PAT without MTRR and by adding an
+> environment dependent PAT init function.
 
-I'm not for a blanket wake_up_state() export, however if we *really* need
-it then I suppose we could have a wake_up_process_interruptible() exported
-and used by __set_notify_signal().
+Aha, there's the explanation I was looking for.
 
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 0a1bd14f7966..3edfb779dab5 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -2408,8 +2408,8 @@ void __init cache_bp_init(void)
+>  {
+>  	if (IS_ENABLED(CONFIG_MTRR))
+>  		mtrr_bp_init();
+> -	else
+> -		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
+> +
+> +	pat_cpu_init();
+>  }
+>  
+>  void cache_ap_init(void)
+> @@ -2417,7 +2417,8 @@ void cache_ap_init(void)
+>  	if (cache_aps_delayed_init)
+>  		return;
+>  
+> -	mtrr_ap_init();
+> +	if (!mtrr_ap_init())
+> +		pat_ap_init_nomtrr();
+>  }
+
+So I'm reading this as: if it couldn't init AP's MTRRs, init its PAT.
+
+But currently, the code sets the MTRRs for the delayed case or when the
+CPU is not online by doing ->set_all and in there it sets first MTRRs
+and then PAT.
+
+I think the code above should simply try the two things, one after the
+other, independently from one another.
+
+And I see you've added another stomp machine call for PAT only.
+
+Now, what I think the design of all this should be, is:
+
+you have a bunch of things you need to do at each point:
+
+* cache_ap_init
+
+* cache_aps_init
+
+* ...
+
+Now, in each those, you look at whether PAT or MTRR is supported and you
+do only those which are supported.
+
+Also, the rendezvous handler should do:
+
+	if MTRR:
+		do MTRR specific stuff
+
+	if PAT:
+		do PAT specific stuff
+
+This way you have clean definitions of what needs to happen when and you
+also do *only* the things that the platform supports, by keeping the
+proper order of operations - I believe MTRRs first and then PAT.
+
+This way we'll get rid of that crazy maze of who calls what and when.
+
+But first we need to define those points where stuff needs to happen and
+then for each point define what stuff needs to happen.
+
+How does that sound?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

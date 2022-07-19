@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AFD579C8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 266AF5799B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241255AbiGSMk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
+        id S238152AbiGSMF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240983AbiGSMih (ORCPT
+        with ESMTP id S238160AbiGSMEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:38:37 -0400
+        Tue, 19 Jul 2022 08:04:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD1765CF;
-        Tue, 19 Jul 2022 05:15:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D0A45075;
+        Tue, 19 Jul 2022 04:59:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA50AB81B08;
-        Tue, 19 Jul 2022 12:15:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B7B0C341C6;
-        Tue, 19 Jul 2022 12:15:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F130B81B2A;
+        Tue, 19 Jul 2022 11:59:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75231C341C6;
+        Tue, 19 Jul 2022 11:59:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232913;
-        bh=cYAwYbrCovmlUOXI8ZeD6uGS35GcV0fsOYWzd1PqXrE=;
+        s=korg; t=1658231992;
+        bh=FW+wkwAP1yoydPb5SuQr7Hc5acBNohEvdSAzABYv3pU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hs8gj/bg4xeTQMPwfGRRUaQoVX5ZZbviu1KRVM5L1Z9rJXYMFlDgNUbV8UOXLCDwT
-         QuUbHjhZILZaDyVezu1V0K7tOxvyuks3mO4jMIFkignUkVDhUnGV8DmvowL+TSJcgC
-         Pe1Bzfldb0e14P/Opw3gtR6TrUHVIEMC/Z3XV7Aw=
+        b=sR6rbyqDwiv2c4eW5C4Ay4JtiN7EOXf6aj+H1dLxIj4wijZZ22miaGfCZo2EhNh16
+         v4BoIj3EZ5+xDzQss0yC47Zy5Yi6p8OW9cxCJLVBQMNoBZm5wWqpi84/FQirWS5OxZ
+         pEwEsQqVznAFJLQndc4qillbfC+uWxaa6OOm95RI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Ben Greening <bgreening@gmail.com>
-Subject: [PATCH 5.15 109/167] ACPI: video: Fix acpi_video_handles_brightness_key_presses()
+        stable@vger.kernel.org, Andrea Mayer <andrea.mayer@uniroma2.it>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 24/48] seg6: fix skb checksum in SRv6 End.B6 and End.B6.Encaps behaviors
 Date:   Tue, 19 Jul 2022 13:54:01 +0200
-Message-Id: <20220719114706.998852816@linuxfoundation.org>
+Message-Id: <20220719114522.039706892@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,97 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
 
-[ Upstream commit 5ad26161a371e4aa2d2553286f0cac580987a493 ]
+[ Upstream commit f048880fc77058d864aff5c674af7918b30f312a ]
 
-Commit 3a0cf7ab8df3 ("ACPI: video: Change how we determine if brightness
-key-presses are handled") made acpi_video_handles_brightness_key_presses()
-report false when none of the ACPI Video Devices support backlight control.
+The SRv6 End.B6 and End.B6.Encaps behaviors rely on functions
+seg6_do_srh_{encap,inline}() to, respectively: i) encapsulate the
+packet within an outer IPv6 header with the specified Segment Routing
+Header (SRH); ii) insert the specified SRH directly after the IPv6
+header of the packet.
 
-But it turns out that at least on a Dell Inspiron N4010 there is no ACPI
-backlight control, yet brightness hotkeys are still reported through
-the ACPI Video Bus; and since acpi_video_handles_brightness_key_presses()
-now returns false, brightness keypresses are now reported twice.
+This patch removes the initialization of the IPv6 header payload length
+from the input_action_end_b6{_encap}() functions, as it is now handled
+properly by seg6_do_srh_{encap,inline}() to avoid corruption of the skb
+checksum.
 
-To fix this rename the has_backlight flag to may_report_brightness_keys and
-also set it the first time a brightness key press event is received.
-
-Depending on the delivery of the other ACPI (WMI) event vs the ACPI Video
-Bus event this means that the first brightness key press might still get
-reported twice, but all further keypresses will be filtered as before.
-
-Note that this relies on other drivers reporting brightness key events
-calling acpi_video_handles_brightness_key_presses() when delivering
-the events (rather then once during driver probe). This is already
-required and documented in include/acpi/video.h:
-
-/*
- * Note: The value returned by acpi_video_handles_brightness_key_presses()
- * may change over time and should not be cached.
- */
-
-Fixes: 3a0cf7ab8df3 ("ACPI: video: Change how we determine if brightness key-presses are handled")
-Link: https://lore.kernel.org/regressions/CALF=6jEe5G8+r1Wo0vvz4GjNQQhdkLT5p8uCHn6ZXhg4nsOWow@mail.gmail.com/
-Reported-and-tested-by: Ben Greening <bgreening@gmail.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Link: https://lore.kernel.org/r/20220713211101.85547-2-hdegoede@redhat.com
+Fixes: 140f04c33bbc ("ipv6: sr: implement several seg6local actions")
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpi_video.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ net/ipv6/seg6_local.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/acpi/acpi_video.c b/drivers/acpi/acpi_video.c
-index 007deb3a8ea3..390af28f6faf 100644
---- a/drivers/acpi/acpi_video.c
-+++ b/drivers/acpi/acpi_video.c
-@@ -73,7 +73,7 @@ module_param(device_id_scheme, bool, 0444);
- static int only_lcd = -1;
- module_param(only_lcd, int, 0444);
+diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+index 607709a8847c..18970f6a68c6 100644
+--- a/net/ipv6/seg6_local.c
++++ b/net/ipv6/seg6_local.c
+@@ -415,7 +415,6 @@ static int input_action_end_b6(struct sk_buff *skb, struct seg6_local_lwt *slwt)
+ 	if (err)
+ 		goto drop;
  
--static bool has_backlight;
-+static bool may_report_brightness_keys;
- static int register_count;
- static DEFINE_MUTEX(register_count_mutex);
- static DEFINE_MUTEX(video_list_lock);
-@@ -1224,7 +1224,7 @@ acpi_video_bus_get_one_device(struct acpi_device *device,
- 	acpi_video_device_find_cap(data);
+-	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
+ 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
  
- 	if (data->cap._BCM && data->cap._BCL)
--		has_backlight = true;
-+		may_report_brightness_keys = true;
+ 	seg6_lookup_nexthop(skb, NULL, 0);
+@@ -447,7 +446,6 @@ static int input_action_end_b6_encap(struct sk_buff *skb,
+ 	if (err)
+ 		goto drop;
  
- 	mutex_lock(&video->device_list_lock);
- 	list_add_tail(&data->entry, &video->video_device_list);
-@@ -1693,6 +1693,9 @@ static void acpi_video_device_notify(acpi_handle handle, u32 event, void *data)
- 		break;
- 	}
+-	ipv6_hdr(skb)->payload_len = htons(skb->len - sizeof(struct ipv6hdr));
+ 	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
  
-+	if (keycode)
-+		may_report_brightness_keys = true;
-+
- 	acpi_notifier_call_chain(device, event, 0);
- 
- 	if (keycode && (report_key_events & REPORT_BRIGHTNESS_KEY_EVENTS)) {
-@@ -2255,7 +2258,7 @@ void acpi_video_unregister(void)
- 	if (register_count) {
- 		acpi_bus_unregister_driver(&acpi_video_bus);
- 		register_count = 0;
--		has_backlight = false;
-+		may_report_brightness_keys = false;
- 	}
- 	mutex_unlock(&register_count_mutex);
- }
-@@ -2277,7 +2280,7 @@ void acpi_video_unregister_backlight(void)
- 
- bool acpi_video_handles_brightness_key_presses(void)
- {
--	return has_backlight &&
-+	return may_report_brightness_keys &&
- 	       (report_key_events & REPORT_BRIGHTNESS_KEY_EVENTS);
- }
- EXPORT_SYMBOL(acpi_video_handles_brightness_key_presses);
+ 	seg6_lookup_nexthop(skb, NULL, 0);
 -- 
 2.35.1
 

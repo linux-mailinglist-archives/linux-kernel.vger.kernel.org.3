@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC68E579E8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A463F5799B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242790AbiGSNCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
+        id S238198AbiGSMFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242758AbiGSM7d (ORCPT
+        with ESMTP id S238252AbiGSMEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:59:33 -0400
+        Tue, 19 Jul 2022 08:04:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523A82DE;
-        Tue, 19 Jul 2022 05:25:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8B0CE1;
+        Tue, 19 Jul 2022 05:00:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BED09B81B21;
-        Tue, 19 Jul 2022 12:25:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD42C341D2;
-        Tue, 19 Jul 2022 12:24:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6721DB81A8F;
+        Tue, 19 Jul 2022 12:00:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B248DC341C6;
+        Tue, 19 Jul 2022 12:00:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233500;
-        bh=hPR7UGZlHNNh7LAv9IQnEh4LNU8ATrKxT5SNnVoxbcw=;
+        s=korg; t=1658232007;
+        bh=7ZYWiRyY+pdBvXiE3F4IZL5+o6eMslmSkCprIoHSkHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=spMu4X+jNqHAbB2n7mvCkQSAR0Y58c4crZeao7bb3uSpfX5E5Eb6UquMLbC1GX9KR
-         BFQgQFzUricQ2xa/h95cZMZBlCI2yAsYJXgQG30+rzZIe6Tghmg8tdVYkhH0yCIwbo
-         6WriXQwR86rEkJUGzt+TJkQ/Dplubfi1co3KCDms=
+        b=cd9O+r+KmVP9sG74bBPx0ZWWMFlCAZcjsYoPflAI9kAXk2Ys6yxNmI+dxN8sFNttf
+         1WCOhRLq5nwf78xNjl+TjMzYwAnX+6utivm7SiNoLrUL4HGH6T2Kpg9e+k223Ofpet
+         tTcof6ejArYG2nGxkRaJCt87jp5q1cIZUsxwBKsc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+d6caa905917d353f0d07@syzkaller.appspotmail.com,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 142/231] KVM: x86: Fully initialize struct kvm_lapic_irq in kvm_pv_kick_cpu_op()
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        Tommy Pettersson <ptp@lysator.liu.se>,
+        Ciprian Craciun <ciprian.craciun@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.19 10/48] nilfs2: fix incorrect masking of permission flags for symlinks
 Date:   Tue, 19 Jul 2022 13:53:47 +0200
-Message-Id: <20220719114726.323272746@linuxfoundation.org>
+Message-Id: <20220719114520.841055062@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,59 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-[ Upstream commit 8a414f943f8b5f94bbaafdec863d6f3dbef33f8a ]
+commit 5924e6ec1585445f251ea92713eb15beb732622a upstream.
 
-'vector' and 'trig_mode' fields of 'struct kvm_lapic_irq' are left
-uninitialized in kvm_pv_kick_cpu_op(). While these fields are normally
-not needed for APIC_DM_REMRD, they're still referenced by
-__apic_accept_irq() for trace_kvm_apic_accept_irq(). Fully initialize
-the structure to avoid consuming random stack memory.
+The permission flags of newly created symlinks are wrongly dropped on
+nilfs2 with the current umask value even though symlinks should have 777
+(rwxrwxrwx) permissions:
 
-Fixes: a183b638b61c ("KVM: x86: make apic_accept_irq tracepoint more generic")
-Reported-by: syzbot+d6caa905917d353f0d07@syzkaller.appspotmail.com
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220708125147.593975-1-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ $ umask
+ 0022
+ $ touch file && ln -s file symlink; ls -l file symlink
+ -rw-r--r--. 1 root root 0 Jun 23 16:29 file
+ lrwxr-xr-x. 1 root root 4 Jun 23 16:29 symlink -> file
+
+This fixes the bug by inserting a missing check that excludes
+symlinks.
+
+Link: https://lkml.kernel.org/r/1655974441-5612-1-git-send-email-konishi.ryusuke@gmail.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: Tommy Pettersson <ptp@lysator.liu.se>
+Reported-by: Ciprian Craciun <ciprian.craciun@gmail.com>
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/x86.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ fs/nilfs2/nilfs.h |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 558d1f2ab5b4..828f5cf1af45 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9074,15 +9074,17 @@ static int kvm_pv_clock_pairing(struct kvm_vcpu *vcpu, gpa_t paddr,
-  */
- static void kvm_pv_kick_cpu_op(struct kvm *kvm, int apicid)
+--- a/fs/nilfs2/nilfs.h
++++ b/fs/nilfs2/nilfs.h
+@@ -198,6 +198,9 @@ static inline int nilfs_acl_chmod(struct
+ 
+ static inline int nilfs_init_acl(struct inode *inode, struct inode *dir)
  {
--	struct kvm_lapic_irq lapic_irq;
--
--	lapic_irq.shorthand = APIC_DEST_NOSHORT;
--	lapic_irq.dest_mode = APIC_DEST_PHYSICAL;
--	lapic_irq.level = 0;
--	lapic_irq.dest_id = apicid;
--	lapic_irq.msi_redir_hint = false;
-+	/*
-+	 * All other fields are unused for APIC_DM_REMRD, but may be consumed by
-+	 * common code, e.g. for tracing. Defer initialization to the compiler.
-+	 */
-+	struct kvm_lapic_irq lapic_irq = {
-+		.delivery_mode = APIC_DM_REMRD,
-+		.dest_mode = APIC_DEST_PHYSICAL,
-+		.shorthand = APIC_DEST_NOSHORT,
-+		.dest_id = apicid,
-+	};
- 
--	lapic_irq.delivery_mode = APIC_DM_REMRD;
- 	kvm_irq_delivery_to_apic(kvm, NULL, &lapic_irq, NULL);
++	if (S_ISLNK(inode->i_mode))
++		return 0;
++
+ 	inode->i_mode &= ~current_umask();
+ 	return 0;
  }
- 
--- 
-2.35.1
-
 
 

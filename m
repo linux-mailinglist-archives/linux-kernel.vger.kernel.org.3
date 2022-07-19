@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955C0579E0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4236B579E10
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242440AbiGSM5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S242450AbiGSM5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242150AbiGSM4k (ORCPT
+        with ESMTP id S242173AbiGSM4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:56:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913399A6AA;
-        Tue, 19 Jul 2022 05:22:44 -0700 (PDT)
+        Tue, 19 Jul 2022 08:56:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037089A6B4;
+        Tue, 19 Jul 2022 05:22:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CB79B81A7F;
-        Tue, 19 Jul 2022 12:22:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A6BC341C6;
-        Tue, 19 Jul 2022 12:22:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91E6361632;
+        Tue, 19 Jul 2022 12:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F8CCC341C6;
+        Tue, 19 Jul 2022 12:22:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233362;
-        bh=RNgEKpLAZW9CrGtWagK/54Wuvr9HSc17s7AkNEZdXzA=;
+        s=korg; t=1658233364;
+        bh=921mvB/gIVMmZca84WRSiz80R1gD2ZDb922HQgrDXGM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aSTpyEyczu5MF7JRYia4F08qu3JpjcQlGdDt25BfjTt5ypmNyITT06/NOb6q5gKa9
-         M0nfCLvUt4FArbju4IxRLL+nXG7DOOSyKXNTaTIpEtnXO0sO8od+6MmSW9Em9OAUs0
-         TzSV/uBKA6nafeyrvBKfmWHbfbj/bFu1rdjUgKLA=
+        b=WYqmuqYnktmxrYhdHgNMefnnrGbdQWTw+gIkHkzQid04/RP+Cibk0hYmXVOcHUljJ
+         lYvAGBq9Xa4SOTMl3oIPpjyYHgQB02PqtVxpa6NE2Oycxdgw4L949a+esijULWqGO0
+         LhzVrmvb5H0SpomWGRxBjt28kCnjeWgek6tQUJU4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>,
         Gurucharan <gurucharanx.g@intel.com>
-Subject: [PATCH 5.18 097/231] ice: handle E822 generic device ID in PLDM header
-Date:   Tue, 19 Jul 2022 13:53:02 +0200
-Message-Id: <20220719114722.891365903@linuxfoundation.org>
+Subject: [PATCH 5.18 098/231] ice: change devlink code to read NVM in blocks
+Date:   Tue, 19 Jul 2022 13:53:03 +0200
+Message-Id: <20220719114722.961831691@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
 References: <20220719114714.247441733@linuxfoundation.org>
@@ -58,171 +58,118 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Paul M Stillwell Jr <paul.m.stillwell.jr@intel.com>
 
-[ Upstream commit f52d166819a4d8e0d5cca07d8a8dd6397c96dcf1 ]
+[ Upstream commit 7b6f9462a3234c35cf808453d39a074a04e71de1 ]
 
-The driver currently presumes that the record data in the PLDM header
-of the firmware image will match the device ID of the running device.
-This is true for E810 devices. It appears that for E822 devices that
-this is not guaranteed to be true.
+When creating a snapshot of the NVM the driver needs to read the entire
+contents from the NVM and store it. The NVM reads are protected by a lock
+that is shared between the driver and the firmware.
 
-Fix this by adding a check for the generic E822 device.
+If the driver takes too long to read the entire NVM (which can happen on
+some systems) then the firmware could reclaim the lock and cause subsequent
+reads from the driver to fail.
 
-Fixes: d69ea414c9b4 ("ice: implement device flash update via devlink")
+We could fix this by increasing the timeout that we pass to the firmware,
+but we could end up in the same situation again if the system is slow.
+Instead have the driver break the reading of the NVM into blocks that are
+small enough that we have confidence that the read will complete within the
+timeout time, but large enough not to cause significant AQ overhead.
+
+Fixes: dce730f17825 ("ice: add a devlink region for dumping NVM contents")
 Signed-off-by: Paul M Stillwell Jr <paul.m.stillwell.jr@intel.com>
 Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_devids.h   |  1 +
- .../net/ethernet/intel/ice/ice_fw_update.c    | 96 ++++++++++++++++++-
- drivers/net/ethernet/intel/ice/ice_main.c     |  1 +
- 3 files changed, 96 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_devlink.c | 59 +++++++++++++-------
+ 1 file changed, 40 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_devids.h b/drivers/net/ethernet/intel/ice/ice_devids.h
-index 61dd2f18dee8..b41bc3dc1745 100644
---- a/drivers/net/ethernet/intel/ice/ice_devids.h
-+++ b/drivers/net/ethernet/intel/ice/ice_devids.h
-@@ -5,6 +5,7 @@
- #define _ICE_DEVIDS_H_
- 
- /* Device IDs */
-+#define ICE_DEV_ID_E822_SI_DFLT         0x1888
- /* Intel(R) Ethernet Connection E823-L for backplane */
- #define ICE_DEV_ID_E823L_BACKPLANE	0x124C
- /* Intel(R) Ethernet Connection E823-L for SFP */
-diff --git a/drivers/net/ethernet/intel/ice/ice_fw_update.c b/drivers/net/ethernet/intel/ice/ice_fw_update.c
-index 665a344fb9c0..3dc5662d62a6 100644
---- a/drivers/net/ethernet/intel/ice/ice_fw_update.c
-+++ b/drivers/net/ethernet/intel/ice/ice_fw_update.c
-@@ -736,7 +736,87 @@ static int ice_finalize_update(struct pldmfw *context)
- 	return 0;
+diff --git a/drivers/net/ethernet/intel/ice/ice_devlink.c b/drivers/net/ethernet/intel/ice/ice_devlink.c
+index 4a9de59121d8..31836bbdf813 100644
+--- a/drivers/net/ethernet/intel/ice/ice_devlink.c
++++ b/drivers/net/ethernet/intel/ice/ice_devlink.c
+@@ -792,6 +792,8 @@ void ice_devlink_destroy_vf_port(struct ice_vf *vf)
+ 	devlink_port_unregister(devlink_port);
  }
  
--static const struct pldmfw_ops ice_fwu_ops = {
-+struct ice_pldm_pci_record_id {
-+	u32 vendor;
-+	u32 device;
-+	u32 subsystem_vendor;
-+	u32 subsystem_device;
-+};
-+
-+/**
-+ * ice_op_pci_match_record - Check if a PCI device matches the record
-+ * @context: PLDM fw update structure
-+ * @record: list of records extracted from the PLDM image
-+ *
-+ * Determine if the PCI device associated with this device matches the record
-+ * data provided.
-+ *
-+ * Searches the descriptor TLVs and extracts the relevant descriptor data into
-+ * a pldm_pci_record_id. This is then compared against the PCI device ID
-+ * information.
-+ *
-+ * Returns: true if the device matches the record, false otherwise.
-+ */
-+static bool
-+ice_op_pci_match_record(struct pldmfw *context, struct pldmfw_record *record)
-+{
-+	struct pci_dev *pdev = to_pci_dev(context->dev);
-+	struct ice_pldm_pci_record_id id = {
-+		.vendor = PCI_ANY_ID,
-+		.device = PCI_ANY_ID,
-+		.subsystem_vendor = PCI_ANY_ID,
-+		.subsystem_device = PCI_ANY_ID,
-+	};
-+	struct pldmfw_desc_tlv *desc;
-+
-+	list_for_each_entry(desc, &record->descs, entry) {
-+		u16 value;
-+		int *ptr;
-+
-+		switch (desc->type) {
-+		case PLDM_DESC_ID_PCI_VENDOR_ID:
-+			ptr = &id.vendor;
-+			break;
-+		case PLDM_DESC_ID_PCI_DEVICE_ID:
-+			ptr = &id.device;
-+			break;
-+		case PLDM_DESC_ID_PCI_SUBVENDOR_ID:
-+			ptr = &id.subsystem_vendor;
-+			break;
-+		case PLDM_DESC_ID_PCI_SUBDEV_ID:
-+			ptr = &id.subsystem_device;
-+			break;
-+		default:
-+			/* Skip unrelated TLVs */
-+			continue;
-+		}
-+
-+		value = get_unaligned_le16(desc->data);
-+		/* A value of zero for one of the descriptors is sometimes
-+		 * used when the record should ignore this field when matching
-+		 * device. For example if the record applies to any subsystem
-+		 * device or vendor.
-+		 */
-+		if (value)
-+			*ptr = value;
-+		else
-+			*ptr = PCI_ANY_ID;
-+	}
-+
-+	/* the E822 device can have a generic device ID so check for that */
-+	if ((id.vendor == PCI_ANY_ID || id.vendor == pdev->vendor) &&
-+	    (id.device == PCI_ANY_ID || id.device == pdev->device ||
-+	    id.device == ICE_DEV_ID_E822_SI_DFLT) &&
-+	    (id.subsystem_vendor == PCI_ANY_ID ||
-+	    id.subsystem_vendor == pdev->subsystem_vendor) &&
-+	    (id.subsystem_device == PCI_ANY_ID ||
-+	    id.subsystem_device == pdev->subsystem_device))
-+		return true;
-+
-+	return false;
-+}
-+
-+static const struct pldmfw_ops ice_fwu_ops_e810 = {
- 	.match_record = &pldmfw_op_pci_match_record,
- 	.send_package_data = &ice_send_package_data,
- 	.send_component_table = &ice_send_component_table,
-@@ -744,6 +824,14 @@ static const struct pldmfw_ops ice_fwu_ops = {
- 	.finalize_update = &ice_finalize_update,
- };
- 
-+static const struct pldmfw_ops ice_fwu_ops_e822 = {
-+	.match_record = &ice_op_pci_match_record,
-+	.send_package_data = &ice_send_package_data,
-+	.send_component_table = &ice_send_component_table,
-+	.flash_component = &ice_flash_component,
-+	.finalize_update = &ice_finalize_update,
-+};
++#define ICE_DEVLINK_READ_BLK_SIZE (1024 * 1024)
 +
  /**
-  * ice_get_pending_updates - Check if the component has a pending update
-  * @pf: the PF driver structure
-@@ -921,7 +1009,11 @@ int ice_devlink_flash_update(struct devlink *devlink,
+  * ice_devlink_nvm_snapshot - Capture a snapshot of the NVM flash contents
+  * @devlink: the devlink instance
+@@ -818,8 +820,9 @@ static int ice_devlink_nvm_snapshot(struct devlink *devlink,
+ 	struct ice_pf *pf = devlink_priv(devlink);
+ 	struct device *dev = ice_pf_to_dev(pf);
+ 	struct ice_hw *hw = &pf->hw;
+-	void *nvm_data;
+-	u32 nvm_size;
++	u8 *nvm_data, *tmp, i;
++	u32 nvm_size, left;
++	s8 num_blks;
+ 	int status;
  
- 	memset(&priv, 0, sizeof(priv));
+ 	nvm_size = hw->flash.flash_size;
+@@ -827,26 +830,44 @@ static int ice_devlink_nvm_snapshot(struct devlink *devlink,
+ 	if (!nvm_data)
+ 		return -ENOMEM;
  
--	priv.context.ops = &ice_fwu_ops;
-+	/* the E822 device needs a slightly different ops */
-+	if (hw->mac_type == ICE_MAC_GENERIC)
-+		priv.context.ops = &ice_fwu_ops_e822;
-+	else
-+		priv.context.ops = &ice_fwu_ops_e810;
- 	priv.context.dev = dev;
- 	priv.extack = extack;
- 	priv.pf = pf;
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index d069b19f9bf7..efb076f71e38 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -5397,6 +5397,7 @@ static const struct pci_device_id ice_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, ICE_DEV_ID_E823L_10G_BASE_T), 0 },
- 	{ PCI_VDEVICE(INTEL, ICE_DEV_ID_E823L_1GBE), 0 },
- 	{ PCI_VDEVICE(INTEL, ICE_DEV_ID_E823L_QSFP), 0 },
-+	{ PCI_VDEVICE(INTEL, ICE_DEV_ID_E822_SI_DFLT), 0 },
- 	/* required last entry */
- 	{ 0, }
- };
+-	status = ice_acquire_nvm(hw, ICE_RES_READ);
+-	if (status) {
+-		dev_dbg(dev, "ice_acquire_nvm failed, err %d aq_err %d\n",
+-			status, hw->adminq.sq_last_status);
+-		NL_SET_ERR_MSG_MOD(extack, "Failed to acquire NVM semaphore");
+-		vfree(nvm_data);
+-		return status;
+-	}
+ 
+-	status = ice_read_flat_nvm(hw, 0, &nvm_size, nvm_data, false);
+-	if (status) {
+-		dev_dbg(dev, "ice_read_flat_nvm failed after reading %u bytes, err %d aq_err %d\n",
+-			nvm_size, status, hw->adminq.sq_last_status);
+-		NL_SET_ERR_MSG_MOD(extack, "Failed to read NVM contents");
++	num_blks = DIV_ROUND_UP(nvm_size, ICE_DEVLINK_READ_BLK_SIZE);
++	tmp = nvm_data;
++	left = nvm_size;
++
++	/* Some systems take longer to read the NVM than others which causes the
++	 * FW to reclaim the NVM lock before the entire NVM has been read. Fix
++	 * this by breaking the reads of the NVM into smaller chunks that will
++	 * probably not take as long. This has some overhead since we are
++	 * increasing the number of AQ commands, but it should always work
++	 */
++	for (i = 0; i < num_blks; i++) {
++		u32 read_sz = min_t(u32, ICE_DEVLINK_READ_BLK_SIZE, left);
++
++		status = ice_acquire_nvm(hw, ICE_RES_READ);
++		if (status) {
++			dev_dbg(dev, "ice_acquire_nvm failed, err %d aq_err %d\n",
++				status, hw->adminq.sq_last_status);
++			NL_SET_ERR_MSG_MOD(extack, "Failed to acquire NVM semaphore");
++			vfree(nvm_data);
++			return -EIO;
++		}
++
++		status = ice_read_flat_nvm(hw, i * ICE_DEVLINK_READ_BLK_SIZE,
++					   &read_sz, tmp, false);
++		if (status) {
++			dev_dbg(dev, "ice_read_flat_nvm failed after reading %u bytes, err %d aq_err %d\n",
++				read_sz, status, hw->adminq.sq_last_status);
++			NL_SET_ERR_MSG_MOD(extack, "Failed to read NVM contents");
++			ice_release_nvm(hw);
++			vfree(nvm_data);
++			return -EIO;
++		}
+ 		ice_release_nvm(hw);
+-		vfree(nvm_data);
+-		return status;
+-	}
+ 
+-	ice_release_nvm(hw);
++		tmp += read_sz;
++		left -= read_sz;
++	}
+ 
+ 	*data = nvm_data;
+ 
 -- 
 2.35.1
 

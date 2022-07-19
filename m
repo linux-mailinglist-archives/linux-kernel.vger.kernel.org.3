@@ -2,142 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DC3579771
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4950F57976D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 12:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbiGSKRA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 19 Jul 2022 06:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
+        id S234016AbiGSKQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 06:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbiGSKQ5 (ORCPT
+        with ESMTP id S233616AbiGSKQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 06:16:57 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDA51EED1;
-        Tue, 19 Jul 2022 03:16:55 -0700 (PDT)
-Received: from mail-yb1-f175.google.com ([209.85.219.175]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M1YxX-1oFgMQ1lcZ-0031vq; Tue, 19 Jul 2022 12:16:53 +0200
-Received: by mail-yb1-f175.google.com with SMTP id i206so25632606ybc.5;
-        Tue, 19 Jul 2022 03:16:53 -0700 (PDT)
-X-Gm-Message-State: AJIora/Wzy4xy30TVZ+Wg9ZzRmOwDd/Jy+GdBmrF0JXNmqOZyufBobrX
-        qaGzbOuKlAnpXNXPfS3LTbwsx79t4G3uQwr6oXY=
-X-Google-Smtp-Source: AGRyM1ubUAN76zpgIRG/xXMeM9/Iaf5rCoaQuQqgmDkgW3aRsOAONqEMP0JapwejADTBc5iRrEQHpIlhTT6j48C15IQ=
-X-Received: by 2002:a25:808c:0:b0:670:7d94:f2a with SMTP id
- n12-20020a25808c000000b006707d940f2amr3683944ybk.452.1658225812009; Tue, 19
- Jul 2022 03:16:52 -0700 (PDT)
+        Tue, 19 Jul 2022 06:16:51 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB911A3A6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 03:16:49 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id e28so23906661lfj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 03:16:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LW9NCKO2QYnmA54Na2mGEFFYmsEB487StfUpSsbPyvQ=;
+        b=WIL+Zq4W91rUT+WDhQbGYjI0iyNQfcNCaHTNDAUuYos8t117vwGE/jMCG2TUWhvuUH
+         Mx3JzolW1dINYBDQpo0MFZFMT7P9mgXkj4rBQXd/oOXQ1OwnS358LCrYaFm/q9jeg+W/
+         pcJYPflB4QGSJxXB1to3h0wjtiExYoAh1MWvAhcbsfTX3AxPYv9JX/LvkUQTt1wdfYMl
+         nKhznAz2B846RBF/2B4OX3+OFNyrU/i12jSrDUSx4EqJHC6rcFiu81jjx3YwkjwrpE+H
+         3U6YYRaVajnhlac7H6M7Uwz3oBOBbHmXm5vR+b3SpAp3sqbDtaJkAuw2IAT0d2HHNJfp
+         8pNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LW9NCKO2QYnmA54Na2mGEFFYmsEB487StfUpSsbPyvQ=;
+        b=3CZMzQ9AHSYduxq8UUwuwpNlxu0gG7/U66eiDcMBvBynm9TwybWR25clZvwILSuI9s
+         oIt0+MXcYpr47jH9hhxCjqQJu5zWlf6giCuFbcKSZmBa7XYquIi4XLL1PgiPMmXgv7jp
+         LvlKb4cVoqQ8jp8gimr0CJJwry0B3u9PvFYZ4wyxrOT5z6CB8119n4x/SzwGde5/A4NE
+         SHzVxtduaikdR+DLIbSZNhfeRAjk/T4xDJ9w/d/yDeVL9FSu8l2D1RctrKTf1VAyg8O/
+         sRS4wo2poq6QvpwydKSshWm3m3tB1iT4wJZ7Vv6RInrImmJHq5Om+9/JdN9b5hP9s6nK
+         hYIQ==
+X-Gm-Message-State: AJIora+RdR+MCgPsNbchYVj64yDHK9Xpag6aq/wwEI0cvEsp1UEhAXC8
+        uHBjG4/Nk77EYKpBWmBrYENScg==
+X-Google-Smtp-Source: AGRyM1vU9LJ6G8ivP4wDHbLuhVisV/7UBTFM9nIXb3Gso6xsV6QpqbYZ767YcfmCZ7wRhMl4muJP7g==
+X-Received: by 2002:a05:6512:3d92:b0:487:5cea:a68b with SMTP id k18-20020a0565123d9200b004875ceaa68bmr16183559lfv.21.1658225807944;
+        Tue, 19 Jul 2022 03:16:47 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id z5-20020a19f705000000b0048646c0af5csm3104545lfe.263.2022.07.19.03.16.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 03:16:47 -0700 (PDT)
+Message-ID: <78230095-6b45-4536-f41d-12bb23308d34@linaro.org>
+Date:   Tue, 19 Jul 2022 12:16:46 +0200
 MIME-Version: 1.0
-References: <20220718202843.6766-1-maukka@ext.kapsi.fi> <20220718202843.6766-4-maukka@ext.kapsi.fi>
- <CAK8P3a042yoLR0eqt4Bm0KH4X9SJhUsjKDh1S9M+MF6mU1mPNw@mail.gmail.com> <20220719094649.pzyrqdvm3fm5fqh2@pali>
-In-Reply-To: <20220719094649.pzyrqdvm3fm5fqh2@pali>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 19 Jul 2022 12:16:34 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1RpMQ5zdiH_jkydxDOCm6WyD7qqdN+5T+503tN4SnOqw@mail.gmail.com>
-Message-ID: <CAK8P3a1RpMQ5zdiH_jkydxDOCm6WyD7qqdN+5T+503tN4SnOqw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PCI: mvebu: add support for orion5x
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Mauri Sandberg <maukka@ext.kapsi.fi>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] ARM: dts: qcom: ipq8064: reorganize node order and
+ sort them
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:jIxbetmla4q4Itug1nQpXGCdgfiBnGKqj5IWNlD8ZHEwNg1gm7J
- xzHMemTB9zJeZn89YejyrMAvVQQKp9OfP6nkoXTND5X1X1eoUAdtS1z8CJABovlA11Xf/ia
- ahA3iy40oIeueB67eR3PAMdA4+7dh5k88PAOp6V1ociWfDPr20r/iKGCTfuRNFR7mwJH0SC
- I9d4PDMsnQFLO/StNIkaA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1d8yY9ZiAco=:5qdDRYATVGnReQc41jKSmM
- TLYnc1czNFG/hwKNsPa2KnkuUh5h1bLHJX1t3Ah2aoN3cPlwRtSh+nrnFwEsR2Uze1KfBJ2kS
- bDOguiiEgvi9z6wCFeoThosMgA/klfVzkYtkeFrJ+3wsUnDsBrJ9kPjFa4DqaFA72M5x1uoSo
- ss993GSTdKzS2WbkxpZ7ulh62QLSLSz2Tihi+c/ttFtR+X1ZGXBFebXuq5y4hsoq7pNd8sR3w
- pbZzf8/G5GwzDsJDg5OC6v5h/o+WILICoOuIc1DHcxnEsIj21UjITfN1OakShD6xMmhxczBcB
- YJiKeZmXQbz7xNz21YA9KnsfUvGBlSXeRoaT7L8hxP2h0CDgnflarfoj3tH/LNvt7M8vYRPeR
- y3ZH7/kZ5b7RHBQlQzcKs8Ey3fdlcS59DCejLrmPNGG4cWsQp+W6hboJDrvLKyXS/FZxqrAVC
- lHM2gd8GQOl5irxaO/DNM9k+woqrhKnayrL2QQe3DtnuUPNIMl/+tg9XqXGMYMH2uxVkVpYDk
- FpOkvQJJZWbnLtVoWshUx73LSRaddSkR1jw7KGlbFWtfzqvhJF+ohsN269QxgZGt7OBhiisz5
- 9FI8oKvZDXTQ/KnQ71Gm92JHGOkjB/o7xpq7Yt9uQU5F7UPe09BoANPxaoLW0x/82lRhp52po
- dxjeWnq4ORq0V6RFPZpufGFSAAeS8xL6DmdiDKeahoGa+JnT8Qu1d5x43cJHlOM6JXenTgzjQ
- PjfejlWmf0of3q/wsTRIqK+5ffnR2dC+IkZbuN22xNYlVgubMVH4RqJxCAu+IdrJTucdy0Hay
- 0cop7nFLK/ZAnYn8LNhZgd/wiKhvqS3qQBq8Hpu+qJpHlmGe8UFwl7VOL7AwD/Q02koE/Afq3
- PqW8ieCUjuW+gjfHYXQQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220718153815.29414-1-ansuelsmth@gmail.com>
+ <7f2a4f21-5e07-9320-8f7b-573ccc562f43@linaro.org>
+ <CAA8EJppCxrcQOtCDZvUX-CThGV7aZXYv__gz3KRBf28TCRTBEg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAA8EJppCxrcQOtCDZvUX-CThGV7aZXYv__gz3KRBf28TCRTBEg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 11:46 AM Pali Rohár <pali@kernel.org> wrote:
-> On Tuesday 19 July 2022 10:05:28 Arnd Bergmann wrote:
-> > > +/* Relevant only for Orion-1/Orion-NAS */
-> > > +#define ORION5X_PCIE_WA_PHYS_BASE      0xf0000000
-> > > +#define ORION5X_PCIE_WA_VIRT_BASE      IOMEM(0xfd000000)
-> >
-> > You should not need to hardcode these here. The ORION5X_PCIE_WA_PHYS_BASE
-> > should already be part of the DT binding.
->
-> Of course! But the issue is that we do not know how to do this DT
-> binding. I have already wrote email with asking for help in which
-> property and which format should be this config range defined, but no
-> answer yet: https://lore.kernel.org/linux-pci/20220710225108.bgedria6igtqpz5l@pali/
+On 19/07/2022 11:59, Dmitry Baryshkov wrote:
+> On Tue, 19 Jul 2022 at 12:56, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 18/07/2022 17:38, Christian Marangi wrote:
+>>> Reorganize node order and sort them by address.
+>>>
+>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+>>> ---
+>>>
+>>> This was picked from for-next qcom branch [1]. Reorganize dtsi as requested.
+>>>
+>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/?h=for-next
+>>
+>> If this is picked by qcom branch, no need to resend it.
+>>
+>> I don't see value in such reshuffle. Reviewing is not possible and you
+>> did not mention tests (results should be equal).
+> 
+> The value is usual for all the cleanups: make it follow the
+> established practice.
 
-Ah, I had not seen that email. Quoting from there:
+Are you sure this is established practice? New DTSI files (see SC8280XP,
+sm8450 although sc7280 looked ordered) do not always follow it, so why
+imposing it for existing code? Such reshuffle can cause conflicts thus
+stops parallel development. Review is close to impossible...
 
-> So my question is: How to properly define config space range in device
-> tree file? In which device tree property and in which format? Please
-> note that this memory range of config space is PCIe root port specific
-> and it requires its own MBUS_ID() like memory range of PCIe MEM and PCIe
-> IO mapping. Please look e.g. at armada-385.dtsi how are MBUS_ID() used:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/armada-385.dtsi
-
-This is probably a question for Rob as the mvebu driver is a rather special
-case. Normally this would just be a 'reg' property of the host bridge,
-but I think
-in your case the root device is imaginary, and the ports under it are the
-actual hardware devices, so you'll probably have to do the same thing as
-the armada-385, translating the mbus ranges for the config space in the
-"ranges" property of the parent, and then referring to them by PCI
-MMIO addresses using the assigned-addresses property to pass the
-config-space registers as a second set of registers in addition to the
-first set.
-
-> > There is little practical difference
-> > here, but I see no value in taking the shortcut here either.
-> >
-> > For the ORION5X_PCIE_WA_VIRT_BASE, you rely on this to match the
-> > definition in arch/arm/mach-orion5x/common.c, and this is rather fragile.
-> >
-> > Instead, please use ioremap() to create a mapping at runtime. The ioremap()
-> > implementation on ARM is smart enough to reuse the address from the static
-> > mapping in common.c, but will also keep working if that should go away.
->
-> I'm planning to work with Mauri on this, but current blocker is DT.
-
-Ok. It should not be hard to do this first, as you just need to pass the
-same physical address that you pass in the mbus setup, but I agree
-it's easier to do this afterwards to avoid having to rewrite it again.
-
-> > This is probably good enough here, though I think you could also use
-> > the trick from drivers/pci/ecam.c and map each bus at a time.
-> >
-> Yes, there are also helper functions like map bus and etc. which could
-> simplify this code. I'm planning to do cleanups once we have fully
-> working driver for Orion.
-
-Ok. This is probably not worth the effort if the old driver doesn't already
-do provide access to the high registers.
-
-      Arnd
+Best regards,
+Krzysztof

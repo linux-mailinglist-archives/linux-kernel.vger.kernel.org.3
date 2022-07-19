@@ -2,175 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1754657A565
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EE057A563
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239625AbiGSRcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S239549AbiGSRbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239611AbiGSRb6 (ORCPT
+        with ESMTP id S239577AbiGSRbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:31:58 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8A45A885
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:31:57 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id z25so26072448lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=dv1bYnIgCFQyqgMxHk73wKzGxehcFImay3A0aOyYKIk=;
-        b=i37X1J/iwWK1Lbon97TdOmcmYm9uKeU4xfyYFfTrkHrx2EbRHcNt2H3w1+g6GMYV9O
-         GoE+oHCWYFgLOji0arAmJ03o6uWpqTbQx2QXttsYfkPD2Ywy03Kwq0hq+tg2MgWTaT9j
-         TNOGYxub3NLsHi0gJGTfdtjQUQIM733/QZql/JGOLeNxytYBXj7mJEVBbOtoQXtZqssg
-         piKQIGNfWkVn7hY+yDkT8Vut/KFT1ueQybSaSX6Ykn+ibZl6Rx1xj2rIVZFcgqqQFNgz
-         Zqq46E/99ATJwztPON4/xffrdHnuMoPql1e8kOrIAt2abvRnmbd8qdGdrDs3POqtIGnM
-         TMBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dv1bYnIgCFQyqgMxHk73wKzGxehcFImay3A0aOyYKIk=;
-        b=m3CyXcoxX1Ur9aq1yqO2Mt+7lT/LsxZtPUDUaiHR9P3KvNTrB9tBGj3CG9El+brngK
-         0ydyOZ52TlLjzR3bmDFxfViOlp7BNLvxOY7FZiTVASmdFCZrgJwGQuN5AfakbyMlRoS9
-         pimPECfQlh4AQowTYNZccahsjCZ89hHER35n33pJMhNgeFHEQaVyEVv03Uint5pL4Tl0
-         4kYEcRgt9sDKc4pJoY95eKQexvxsHfI1qy6VzvNn2bOuPOk+eDaPWxCJuDpuie7r5wVP
-         gN3bajjbdlvqRJCWp56s8UYHpF1yTIKUUCx1dsbDe/cncBBpHExLxYlhDOrfipAsgz/B
-         s8mg==
-X-Gm-Message-State: AJIora8zAIBzxILrxtPuLP2pc9WQASXSmFLNy8ipNNFud1Q8xVGlzb3D
-        8yBWuOxBQojJVEQcdaPvIyh4i4OvO4WK5lpuceMOZ1JCBcc=
-X-Google-Smtp-Source: AGRyM1tYCnJ7XVHFH8hAdLWTBZqk8UDwo091pxn45tcb+6X7elltQFIN+TQYiivxgb9kZSDk3vsezq3CeiMut5fETyE=
-X-Received: by 2002:a05:6512:e9a:b0:489:c681:da2b with SMTP id
- bi26-20020a0565120e9a00b00489c681da2bmr17282193lfb.626.1658251915687; Tue, 19
- Jul 2022 10:31:55 -0700 (PDT)
+        Tue, 19 Jul 2022 13:31:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984DA5A885;
+        Tue, 19 Jul 2022 10:31:49 -0700 (PDT)
+Received: from [192.168.1.72] (136.203.115.78.rev.sfr.net [78.115.203.136])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 329456601955;
+        Tue, 19 Jul 2022 18:31:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658251907;
+        bh=jIA5oD7gpTgXWAfR2Mm2w19/e/vskjL1LF249/HQPKo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XMqXepdPgkUEe+ogPiW5sOOGjTJFuh6/M+BipmxwVp3FCwN7dpsUWnWnAUEhR18Pr
+         IEJGPkx05XNPQW+iy+mj455M9z2dBSwFX7gb7RdXIoMZFq4I5/GF4iOpO+NA/pTRvg
+         dTgUg+EpRKJVBVj2vfB1PsUzsaIWrAXOvvNx4yFCwnks9erHHkRtGjXCl+RZHcNRE2
+         3wZcbfqg4rK1pm26yBuaXP5Mvb4HNbHc1R2xR5n/RHUFUXh8NxRj87oCpkfHf8Kum+
+         YCTY/Imwu0T0nLGfwQpxznP8WyhtB1glBCo6LeW3/vkRDwUGYjH2JQPxhWfV3kTrH5
+         RBZhOR6FRgaNg==
+Message-ID: <81241d70-7952-2f55-9181-d18679068998@collabora.com>
+Date:   Tue, 19 Jul 2022 19:31:46 +0200
 MIME-Version: 1.0
-References: <CAKwvOdnN67xFL22oWfqrKjvES4vjSB3KNhm401LtoC7igO+4Vg@mail.gmail.com>
- <20220718230626.1029318-1-justinstitt@google.com>
-In-Reply-To: <20220718230626.1029318-1-justinstitt@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 19 Jul 2022 10:31:44 -0700
-Message-ID: <CAKwvOdmbAn3cbzr9PJNCbO0oF=gLmiFBCjZRgx5eF5QjQywCmQ@mail.gmail.com>
-Subject: Re: [PATCH v4] lib/test_printf.c: fix clang -Wformat warnings
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     andriy.shevchenko@linux.intel.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, pmladek@suse.com,
-        rostedt@goodmis.org, senozhatsky@chromium.org, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] Makefile: replace headers_install with headers for
+ kselftest
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Tim Bird <Tim.Bird@sony.com>, kernel@collabora.com,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <a7af58feaa6ae6d3b0c8c55972a470cec62341e5.1657693952.git.guillaume.tucker@collabora.com>
+ <f35a71d6-bd96-7aa9-c143-39ae88bc85d5@linuxfoundation.org>
+ <8fc9d169-78ff-0fe4-67c0-784097861f12@collabora.com>
+ <CAK7LNAQ4iMBwu4bOmmOrMudNH49ruz-7AK_H3-ceTixd=G+brQ@mail.gmail.com>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <CAK7LNAQ4iMBwu4bOmmOrMudNH49ruz-7AK_H3-ceTixd=G+brQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 4:06 PM Justin Stitt <justinstitt@google.com> wrote=
-:
->
-> see warnings:
-> | lib/test_printf.c:157:52: error: format specifies type 'unsigned char'
-> | but the argument has type 'int' [-Werror,-Wformat]
-> test("0|1|1|128|255",
-> | "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
-> -
-> | lib/test_printf.c:158:55: error: format specifies type 'char' but the
-> | argument has type 'int' [-Werror,-Wformat] test("0|1|1|-128|-1",
-> | "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
-> -
-> | lib/test_printf.c:159:41: error: format specifies type 'unsigned
-> short'
-> | but the argument has type 'int' [-Werror,-Wformat]
-> | test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
->
-> There's an ongoing movement to eventually enable the -Wformat flag for
-> clang. Previous patches have targeted incorrect usage of
-> format specifiers. In this case, however, the "incorrect" format
-> specifiers are intrinsically part of the test cases. Hence, fixing them
-> would be misaligned with their intended purpose. My proposed fix is to
-> simply disable the warnings so that one day a clean build of the kernel
-> with clang (and -Wformat enabled) would be possible. It would also keep
-> us in the green for alot of the CI bots.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+On 19/07/2022 17:06, Masahiro Yamada wrote:
+> On Tue, Jul 19, 2022 at 9:37 PM Guillaume Tucker
+> <guillaume.tucker@collabora.com> wrote:
+>>
+>> On 14/07/2022 22:45, Shuah Khan wrote:
+>>> On 7/13/22 12:33 AM, Guillaume Tucker wrote:
+>>>> Replace headers_install with headers as kselftest uses the header
+>>>> files from within the kernel tree rather than from a system-wide
+>>>> installation.
+>>>>
+>>>> We can still run this directly:
+>>>>
+>>>>    $ make O=build kselftest-all
+>>>>
+>>>> and when building from the selftests directory:
+>>>>
+>>>>    $ make O=build headers
+>>>>    $ make O=build -C tools/testing/selftests all
+>>>>
+>>>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+>>>> Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+>>>> ---
+>>>>   Makefile | 4 ++--
+>>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/Makefile b/Makefile
+>>>> index fb2f3bb53a6b..5c934d16664c 100644
+>>>> --- a/Makefile
+>>>> +++ b/Makefile
+>>>> @@ -1347,10 +1347,10 @@ tools/%: FORCE
+>>>>   # Kernel selftest
+>>>>     PHONY += kselftest
+>>>> -kselftest: headers_install
+>>>> +kselftest: headers
+>>>>       $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+>>>>   -kselftest-%: headers_install FORCE
+>>>> +kselftest-%: headers FORCE
+>>>>       $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
+>>>>     PHONY += kselftest-merge
+>>>>
+>>>
+>>> Thank you for taking care of this. This will go through kbuild?
+>>
+>> You're welcome.
+>>
+>> Masahiro-san,
+>>
+>> A you OK with applying this in the kbuild tree ahead of the
+>> upcoming merge window?
+> 
+> 
+> No.
+> 
+> This is a fix-up patch on top of the previous one [1],
+> which  was applied to the kselftest tree.
+> 
+> This cannot apply to the kbuild tree.
 
-Thanks for humoring all of our requests. I'm happy with the result.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+OK thank you for confirming.
 
-> ---
-> changes from v1 -> v2:
-> * moved NOWARN macro definition to a more appropriate location
-> * using __diag_ignore_all (thanks Nathan)
-> * using local scoping for code blocks instead of __VA_ARGS__ (thanks
-> * Nick)
-> * indented affected test cases (thanks Andy)
->
-> changes from v2 -> v3:
-> * reinserted commit message
-> * remove Andy's Suggested-by tag
-> * add issue tracker link
->
-> changes from v3 -> v4:
-> * better macro indentation and usage string (thanks Nick)
->
->  lib/test_printf.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/lib/test_printf.c b/lib/test_printf.c
-> index 07309c45f327..f78044c1efaa 100644
-> --- a/lib/test_printf.c
-> +++ b/lib/test_printf.c
-> @@ -30,6 +30,12 @@
->  #define PAD_SIZE 16
->  #define FILL_CHAR '$'
->
-> +#define NOWARN(option, comment, block) \
-> +       __diag_push(); \
-> +       __diag_ignore_all(#option, comment); \
-> +       block \
-> +       __diag_pop();
-> +
->  KSTM_MODULE_GLOBALS();
->
->  static char *test_buffer __initdata;
-> @@ -154,9 +160,11 @@ test_number(void)
->         test("0x1234abcd  ", "%#-12x", 0x1234abcd);
->         test("  0x1234abcd", "%#12x", 0x1234abcd);
->         test("0|001| 12|+123| 1234|-123|-1234", "%d|%03d|%3d|%+d|% d|%+d|=
-% d", 0, 1, 12, 123, 1234, -123, -1234);
-> -       test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128,=
- -1);
-> -       test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128,=
- -1);
-> -       test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
-> +       NOWARN(-Wformat, "Intentionally test narrowing conversion specifi=
-ers.", {
-> +               test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 2=
-57, 128, -1);
-> +               test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 2=
-57, 128, -1);
-> +               test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627=
-);
-> +       })
->         /*
->          * POSIX/C99: =C2=BBThe result of converting zero with an explici=
-t
->          * precision of zero shall be no characters.=C2=AB Hence the outp=
-ut
-> --
-> 2.37.0.170.g444d1eabd0-goog
->
->
+Shuah, I guess you're happy to apply it to the kselftest tree
+instead then?
 
+Guillaume
 
---=20
-Thanks,
-~Nick Desaulniers
+> [1]: https://lore.kernel.org/linux-kbuild/168ede35-12e0-c535-9d94-23b65a1beb28@collabora.com/T/#mb8ec7004f7c9b89fbb50c19022760e19701af7f6
+> 
+> 
+> 
+> 
+> 
+> 
+>> Best wishes,
+>> Guillaume
+>>
+>>> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+>>>
+>>> thanks,
+>>> -- Shuah
+>>>
+> 
+> 
+> 
+

@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA0157A95F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954E957A95E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 23:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240525AbiGSVu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 17:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
+        id S240133AbiGSVuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 17:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240383AbiGSVuS (ORCPT
+        with ESMTP id S240500AbiGSVuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:50:18 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C70121272;
-        Tue, 19 Jul 2022 14:50:16 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id x64so4591129iof.1;
-        Tue, 19 Jul 2022 14:50:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gK0kv8pzfi7sBWv/sRFwiBZu8X91coIITSZKvB6RExY=;
-        b=BIJ4JJ1Rv9DJUQ1tTgVtEDg8l6dyq8t86XClcH4rnqhwO7T0k+MX9zoGvjEkU/1phY
-         sRo0+4eDzXAZ27l2tmLIG9fAqnbLh662hMiiyqMnJ3SgauscVjsnC7pKDa5IKu7oCvOQ
-         1gcpn+b4h2V3DZod5jL6szOdr3HyG1rNphtYQGbA9H46JMmRJO1jaEnVDE1Kga6+6YGb
-         jyZ1VX+a3qqKJZB+sVmjlD9q/FhrERXJJ9nnBSj474Cd37WkQSXfxfs1wPGcdRwqL2m8
-         CyCCbgWF3hZzSZHGMGnToMDteUZQ5oWCryUfX2r00qOl9tQz2oQjxBmUw08DebzTLwMx
-         d9Dw==
-X-Gm-Message-State: AJIora8pCZS9GrkRcymvhDAf+2EjgXMEjRpBIcJMMrT0aNYhGWGwCjMa
-        w1/roMzSMjNCNb5yWZheKw==
-X-Google-Smtp-Source: AGRyM1v5qelrR/U10kjLdrLXUQpTQ0//gcja8OXPSL+u6Un5VXnugNdh62IsZdi/+Y/01zw+rO7vZw==
-X-Received: by 2002:a05:6602:168d:b0:67c:44c3:9ba5 with SMTP id s13-20020a056602168d00b0067c44c39ba5mr39474iow.190.1658267415685;
-        Tue, 19 Jul 2022 14:50:15 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.248])
-        by smtp.googlemail.com with ESMTPSA id y17-20020a92d811000000b002dd0875c67asm364937ilm.69.2022.07.19.14.50.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 14:50:15 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: regulator: Add missing type for 'regulator-microvolt-offset'
-Date:   Tue, 19 Jul 2022 15:50:09 -0600
-Message-Id: <20220719215010.1875363-1-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 19 Jul 2022 17:50:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1893C35
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 14:50:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7739361AC8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D4F18C341CB;
+        Tue, 19 Jul 2022 21:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658267412;
+        bh=9N/uw2FfZ/j6JoZ6/VgZzlAlsjt+LvpaNu+me+/t1ms=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Va6L/2VxHObhlw8fSfLZMdpkQkfXJ4ZpZtrWwznNCRfeZfRfCqqFcM+PorCAP4Pk7
+         JuzzeDhyjNoqLM4NyduidCNj+FO1V1YKuY/ENS2upGwF3MiSugTNWDcqo+qhSwY36P
+         Pwxx53mb5OVjNQ65MzHbdk2jZYq2QDp65zGaa+9I/khEZIEd6nuTY705CBNIluodjU
+         v2JXRnp2Kv+w5rxdeGTYSAr1zo3vPK7f8qAn1j5G8R+18AnHRoSXylDiwmTEVKA6aj
+         7mESHTnPO/1W6q9YMpMRan7yfABJbZX7iUhBZmArBmFcg27GfUNC6guOR0p/3nB+B/
+         U01aarFJU2CHQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BABE2E451B3;
+        Tue, 19 Jul 2022 21:50:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/2] platform/chrome: cros_ec_typec: Rename port altmode array
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <165826741276.12799.8151541966918774688.git-patchwork-notify@kernel.org>
+Date:   Tue, 19 Jul 2022 21:50:12 +0000
+References: <20220712210318.2671292-1-pmalani@chromium.org>
+In-Reply-To: <20220712210318.2671292-1-pmalani@chromium.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        groeck@chromium.org
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'regulator-microvolt-offset' is missing a type definition. The type should
-be 'uint32'.
+Hello:
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/regulator/regulator.yaml | 1 +
- 1 file changed, 1 insertion(+)
+This series was applied to chrome-platform/linux.git (for-next)
+by Prashant Malani <pmalani@chromium.org>:
 
-diff --git a/Documentation/devicetree/bindings/regulator/regulator.yaml b/Documentation/devicetree/bindings/regulator/regulator.yaml
-index a9b66ececccf..6e8aa9eed3aa 100644
---- a/Documentation/devicetree/bindings/regulator/regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/regulator.yaml
-@@ -23,6 +23,7 @@ properties:
- 
-   regulator-microvolt-offset:
-     description: Offset applied to voltages to compensate for voltage drops
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
- 
-   regulator-min-microamp:
-     description: smallest current consumers may set
+On Tue, 12 Jul 2022 21:03:17 +0000 you wrote:
+> Rename "p_altmode" to "port_altmode" which is a less ambiguous name for
+> the port_altmode struct array.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+
+Here is the summary with links:
+  - [1/2] platform/chrome: cros_ec_typec: Rename port altmode array
+    https://git.kernel.org/chrome-platform/c/a47bc5a0c4c0
+  - [2/2] platform/chrome: cros_ec_typec: Register port altmodes
+    https://git.kernel.org/chrome-platform/c/1ff5d97f070c
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

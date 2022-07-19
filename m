@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64E1579A61
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22746579C69
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239019AbiGSMOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S241147AbiGSMjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238921AbiGSMNX (ORCPT
+        with ESMTP id S240735AbiGSMiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:13:23 -0400
+        Tue, 19 Jul 2022 08:38:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696D7F1C;
-        Tue, 19 Jul 2022 05:04:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EF64BD39;
+        Tue, 19 Jul 2022 05:14:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47580B81A8F;
-        Tue, 19 Jul 2022 12:04:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B61FC341C6;
-        Tue, 19 Jul 2022 12:04:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2CA2B81B29;
+        Tue, 19 Jul 2022 12:14:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D1FFC341C6;
+        Tue, 19 Jul 2022 12:14:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232242;
-        bh=lIGn+EkYk/KbpFsuPs7gjDgknOujUHPpafCF3+1seNY=;
+        s=korg; t=1658232896;
+        bh=kfnaK3eA1fRrAQFih72sAk5S126R3DRIMX3bDdMoZiE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wU2gUDZnAHG2ZI32THaKxodgMG3X0B3b9wGpWHSbVvS6dgPg0EEDV0ShbgJXLhE++
-         1haEmqGRvaNOocbnZLWw8OUO5c/JLR/eukZsaGuBP3fxb2kiXVJ3lO4Omd557kACX2
-         fgscFGzFZU4gsCh6OBc4lKJe2RhFcyrkVMFhme6o=
+        b=MBRNPCk1L1Igygp05lWIlHgsZ0fLJRYsij18MGzrMSQ14s1ziYEyKRBz6sgKp3Pvh
+         G0MrH58ia1gnV6hKVXb3AEZjDY4WMn0MiuXbD4YIf0q/SETi4kJFCdhemiNHl2d0gs
+         ZdAC4QWFxusj/pkrcjpSB8vxvfY0ug960T6BCkOI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        stable@vger.kernel.org, Ma Yuying <yuma@redhat.com>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 33/71] drm/i915/gt: Serialize TLB invalidates with GT resets
+Subject: [PATCH 5.15 104/167] sfc: fix kernel panic when creating VF
 Date:   Tue, 19 Jul 2022 13:53:56 +0200
-Message-Id: <20220719114555.489104924@linuxfoundation.org>
+Message-Id: <20220719114706.509608754@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+References: <20220719114656.750574879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,71 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris.p.wilson@intel.com>
+From: Íñigo Huguet <ihuguet@redhat.com>
 
-[ Upstream commit a1c5a7bf79c1faa5633b918b5c0666545e84c4d1 ]
+[ Upstream commit ada74c5539eba06cf8b47d068f92e0b3963a9a6e ]
 
-Avoid trying to invalidate the TLB in the middle of performing an
-engine reset, as this may result in the reset timing out. Currently,
-the TLB invalidate is only serialised by its own mutex, forgoing the
-uncore lock, but we can take the uncore->lock as well to serialise
-the mmio access, thereby serialising with the GDRST.
+When creating VFs a kernel panic can happen when calling to
+efx_ef10_try_update_nic_stats_vf.
 
-Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
-i915 selftest/hangcheck.
+When releasing a DMA coherent buffer, sometimes, I don't know in what
+specific circumstances, it has to unmap memory with vunmap. It is
+disallowed to do that in IRQ context or with BH disabled. Otherwise, we
+hit this line in vunmap, causing the crash:
+  BUG_ON(in_interrupt());
 
-Cc: stable@vger.kernel.org  # v4.4 and upper
-Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
-Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/1e59a7c45dd919a530256b9ac721ac6ea86c0677.1657639152.git.mchehab@kernel.org
-(cherry picked from commit 33da97894758737895e90c909f16786052680ef4)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+This patch reenables BH to release the buffer.
+
+Log messages when the bug is hit:
+ kernel BUG at mm/vmalloc.c:2727!
+ invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 6 PID: 1462 Comm: NetworkManager Kdump: loaded Tainted: G          I      --------- ---  5.14.0-119.el9.x86_64 #1
+ Hardware name: Dell Inc. PowerEdge R740/06WXJT, BIOS 2.8.2 08/27/2020
+ RIP: 0010:vunmap+0x2e/0x30
+ ...skip...
+ Call Trace:
+  __iommu_dma_free+0x96/0x100
+  efx_nic_free_buffer+0x2b/0x40 [sfc]
+  efx_ef10_try_update_nic_stats_vf+0x14a/0x1c0 [sfc]
+  efx_ef10_update_stats_vf+0x18/0x40 [sfc]
+  efx_start_all+0x15e/0x1d0 [sfc]
+  efx_net_open+0x5a/0xe0 [sfc]
+  __dev_open+0xe7/0x1a0
+  __dev_change_flags+0x1d7/0x240
+  dev_change_flags+0x21/0x60
+  ...skip...
+
+Fixes: d778819609a2 ("sfc: DMA the VF stats only when requested")
+Reported-by: Ma Yuying <yuma@redhat.com>
+Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+Acked-by: Edward Cree <ecree.xilinx@gmail.com>
+Link: https://lore.kernel.org/r/20220713092116.21238-1-ihuguet@redhat.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/gt/intel_gt.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/sfc/ef10.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
-index c8c070375d29..f6d7f5d307d7 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt.c
-+++ b/drivers/gpu/drm/i915/gt/intel_gt.c
-@@ -339,6 +339,20 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
- 	mutex_lock(&gt->tlb_invalidate_lock);
- 	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
+diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
+index c1cd1c97f09d..056c24ec1249 100644
+--- a/drivers/net/ethernet/sfc/ef10.c
++++ b/drivers/net/ethernet/sfc/ef10.c
+@@ -1932,7 +1932,10 @@ static int efx_ef10_try_update_nic_stats_vf(struct efx_nic *efx)
  
-+	spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
-+
-+	for_each_engine(engine, gt, id) {
-+		struct reg_and_bit rb;
-+
-+		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
-+		if (!i915_mmio_reg_offset(rb.reg))
-+			continue;
-+
-+		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
-+	}
-+
-+	spin_unlock_irq(&uncore->lock);
-+
- 	for_each_engine(engine, gt, id) {
- 		/*
- 		 * HW architecture suggest typical invalidation time at 40us,
-@@ -353,7 +367,6 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
- 		if (!i915_mmio_reg_offset(rb.reg))
- 			continue;
+ 	efx_update_sw_stats(efx, stats);
+ out:
++	/* releasing a DMA coherent buffer with BH disabled can panic */
++	spin_unlock_bh(&efx->stats_lock);
+ 	efx_nic_free_buffer(efx, &stats_buf);
++	spin_lock_bh(&efx->stats_lock);
+ 	return rc;
+ }
  
--		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
- 		if (__intel_wait_for_register_fw(uncore,
- 						 rb.reg, rb.bit, 0,
- 						 timeout_us, timeout_ms,
 -- 
 2.35.1
 

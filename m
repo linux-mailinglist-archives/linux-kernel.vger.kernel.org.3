@@ -2,95 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C9F57A513
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCD257A518
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 19:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237828AbiGSRV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 13:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
+        id S238096AbiGSRVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 13:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiGSRVZ (ORCPT
+        with ESMTP id S238936AbiGSRVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 13:21:25 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AABBC0A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:21:25 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id q13-20020a17090a304d00b001f1af9a18a2so7983321pjl.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 10:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nxSzpV0hO6sx7HedazM5gIz+cjDlm1nQzCRG9Z5vJw4=;
-        b=BvN5J3EWujanwvsvnFMaJpYUNwsY0yMPJOkLcDYs+UuUnVtGxRlLIoDV9g5GkzPwxq
-         52X/hPLRXtmdyJHUHmMvZMLYu3HUkVqakqaN++qrSTm9B+5rUxZdugqqQ9z3AlEQkFc+
-         MjgDVZOxGa+nSVJVJkzbiSDCYia0bk21XO392ruFTyfoAToTRG3k8hXR+uLWNwlcPRc+
-         5IA1YZJWJZrtH7d50JnJ2fyfFoOvqfPTmYGwYjwmNfp0dR612sedDaEaLtRxb9NVgDUL
-         G/IHVXn17unEbPu/dWVsUDz0lcpWLFjzsW3YYKdtuWYLt5FPqq6GxVkDSNTDGGYNFXcF
-         dn3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nxSzpV0hO6sx7HedazM5gIz+cjDlm1nQzCRG9Z5vJw4=;
-        b=VGpBkat5qTwnk19EySyCvzPXHeN+ah1TEGUTrmnRxNmfGMr5+QqxE4Ihcp12H+DjUz
-         MgUI9LniQhblN0B8ZS9mu9Ir6isCjsqmOK04qkLZa+44B6WFEEH5mX/oaETUnzq+VvTV
-         uKnL24Gs+q6DqknJO9SxhckWCoeCxm6AShi5/yGvNoTECDjYA9xxc+6un7hvNEb759Ht
-         tDHnkVSCkeYG4H9WN8IxHtwrrw0dtAdmJ6aI49DzYtn3YcwBe+HNx14toQLJTcYCxsi1
-         gnUlBTKQ+5rb1TAIeXWipvG94JavJakr7m2TSuhU7fWxIVuaW2zFPchRUt98ORfzZEnr
-         yKmw==
-X-Gm-Message-State: AJIora86uf90RrmyMVhpPWnbAK4MXJM1PMVwu5x8EsACV7Vi0xCsONFQ
-        dt4TzqYJOJnqn+cYMns9Ne4Rtw==
-X-Google-Smtp-Source: AGRyM1s0ubt5Hqvnyaii7gg47VKz8saqIw2k4jCYRZag+tqtdg8ytpav2sKq+W+fctch1DenBTiarw==
-X-Received: by 2002:a17:902:efc6:b0:16b:dd12:4d30 with SMTP id ja6-20020a170902efc600b0016bdd124d30mr33929304plb.29.1658251284626;
-        Tue, 19 Jul 2022 10:21:24 -0700 (PDT)
-Received: from google.com ([2620:15c:201:2:893a:f024:99b0:7299])
-        by smtp.gmail.com with ESMTPSA id z20-20020aa79f94000000b00528d11c26f2sm11815447pfr.1.2022.07.19.10.21.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 10:21:24 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 10:21:17 -0700
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Joao Moreira <joao@overdrivepizza.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Tue, 19 Jul 2022 13:21:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D817E46D8E;
+        Tue, 19 Jul 2022 10:21:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90B67B81C76;
+        Tue, 19 Jul 2022 17:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4080CC341C6;
+        Tue, 19 Jul 2022 17:21:31 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cK15E3aO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1658251289;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+DdIaGBIWAy9ehfPzceJ7R4AOuJB01GP/jeXzjkuNW0=;
+        b=cK15E3aOfaYau/qzxYk1kkloBH9BwEizkRXRjeOPTGsrd1mKfY82Kg1qZdllepCJQ2YA2k
+        fzNWjrS/HIE5R7Py/BIl5qdxvxCsI+Ux9KlI6kAV+efUUjUTirU5j++IWs+BmBjsFNOVnJ
+        v2OhDxkIxgbw1o/2PcJl+mMgqee/XUI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 27e8b8f4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 19 Jul 2022 17:21:29 +0000 (UTC)
+Date:   Tue, 19 Jul 2022 19:21:24 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Gregory Erwin <gregerwin256@gmail.com>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Rui Salvaterra <rsalvaterra@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-Message-ID: <YtboDUndGtMVGRCU@google.com>
-References: <87o7xmup5t.ffs@tglx>
- <YtXOMPpmx8TcFtOX@worktop.programming.kicks-ass.net>
- <87lesqukm5.ffs@tglx>
- <2f7f899cb75b79b08b0662ff4d2cb877@overdrivepizza.com>
- <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
- <87fsiyuhyz.ffs@tglx>
- <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
- <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
- <CAHk-=wiYHXeWnF8Ea5xb735ehJ8FbjTT6UCvHYjX=Ooc7Z5sOw@mail.gmail.com>
- <a6d75b81cdba4a244b142e2f8bb65d71@overdrivepizza.com>
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v8] ath9k: let sleep be interrupted when unregistering
+ hwrng
+Message-ID: <YtboFNL+YsHxTHrN@zx2c4.com>
+References: <Yrw5f8GN2fh2orid@zx2c4.com>
+ <20220629114240.946411-1-Jason@zx2c4.com>
+ <87v8s8ubws.fsf@kernel.org>
+ <xhsmho7xv512f.mognet@vschneid.remote.csb>
+ <CAHmME9q8-1vpV9zFsKkawk+XFm96S6fmug7v-NPJNpQmRoe6-Q@mail.gmail.com>
+ <xhsmhcze16snd.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a6d75b81cdba4a244b142e2f8bb65d71@overdrivepizza.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <xhsmhcze16snd.mognet@vschneid.remote.csb>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,15 +77,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 05:19:13PM -0700, Joao Moreira wrote:
-> > The extra instruction is likely less of a problem than the extra
-> > register used.
-> > 
-> FWIIW, per-ABI, R11 is a scratch-reg and should be usable without hard
-> consequences in this scenario.
+Hi Valentin,
 
-Clang always uses r11 for the indirect call with retpolines, so we'd
-need to use another register. Nevertheless, splitting the constant into
-two instructions would solve the call target gadget issue.
+On Tue, Jul 19, 2022 at 04:15:02PM +0100, Valentin Schneider wrote:
+> On 11/07/22 13:53, Jason A. Donenfeld wrote:
+> > Hi Valentin,
+> >
+> > On 7/11/22, Valentin Schneider <vschneid@redhat.com> wrote:
+> >> Thanks for the Cc.
+> >>
+> >> I'm not hot on the export of wake_up_state(), IMO any wakeup with
+> >> !(state & TASK_NORMAL) should be reserved to kernel internals. Now, here
+> >> IIUC the problem is that the patch uses an inline invoking
+> >>
+> >>   wake_up_state(p, TASK_INTERRUPTIBLE)
+> >>
+> >> so this isn't playing with any 'exotic' task state, thus it shouldn't
+> >> actually need the export.
+> >>
+> >> I've been trying to figure out if this could work with just a
+> >> wake_up_process(), but the sleeping pattern here is not very conforming
+> >> (cf. 'wait loop' pattern in sched/core.c), AFAICT the signal is used to
+> >> circumvent that :/
+> >
+> > I don't intend to work on this patch more. If you'd like to ack the
+> > trivial scheduler change (adding EXPORT_SYMBOL), that'd help, and then
+> > this can move forward as planned. Otherwise, if you have particular
+> > opinions about this patch that you want to happen, feel free to pick
+> > up the patch and send your own revisions (though I don't intend to do
+> > further review). Alternatively, I'll just send a patch to remove the
+> > driver entirely. Hopefully you do find this ack-able, though.
+> >
+> 
+> I'm not for a blanket wake_up_state() export, however if we *really* need
+> it then I suppose we could have a wake_up_process_interruptible() exported
+> and used by __set_notify_signal().
+> 
+Thanks for keeping this thread alive. I'll do what you suggest and send
+a v+1. I think I understand the idea. Let's see how it goes.
 
-Sami
+Jason

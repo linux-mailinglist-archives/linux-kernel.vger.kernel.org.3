@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB18579D93
+	by mail.lfdr.de (Postfix) with ESMTP id C570D579D95
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241608AbiGSMwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
+        id S242067AbiGSMwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241827AbiGSMvb (ORCPT
+        with ESMTP id S241964AbiGSMvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:51:31 -0400
+        Tue, 19 Jul 2022 08:51:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAD5528A8;
-        Tue, 19 Jul 2022 05:20:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8F852E5B;
+        Tue, 19 Jul 2022 05:20:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3FDD6177D;
-        Tue, 19 Jul 2022 12:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40B58C341C6;
-        Tue, 19 Jul 2022 12:20:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C563618C1;
+        Tue, 19 Jul 2022 12:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C368C341C6;
+        Tue, 19 Jul 2022 12:20:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233222;
-        bh=cey1oaBxcEhch8J5lfJN4U0SmBTjN4OUZg8Q9ANH8E0=;
+        s=korg; t=1658233225;
+        bh=AwrNUyJ+gTyGLLuHMZvIklSgNiAJstrEsmVJBq3MzzE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yZBhXkTVkkOq4eW6ka6HUuGjmU69QxdUTAH5yH/zmz8UPCtwt76SIL5/z9ZL2c/kV
-         2APih/5Jq9kHyTMy5138p1pugk8MimA+bY+cS6wXsKjdyLr9eby8fpiFjcO+X7rpA9
-         U0tPemeokOXSjrkqJpiOlJOHUlK4GcEN2fuqstbs=
+        b=hpNLE3rzcYajz/8Rj+/OXJ2IQO9NOm+B4XyB9+6BDnt0LMGv9HPR6PQE7RqwwoEV/
+         4xuS0pFtTXn8MvcPaxF6E81IMDQaghcFmFHF5YYXDY5cduXInD9SJXUUVAuK4SuwDb
+         UTTNtKlK90+62boFhj3SZH9P0ffnpOItLSRZVwfI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 048/231] drm/amdgpu: keep fbdev buffers pinned during suspend
-Date:   Tue, 19 Jul 2022 13:52:13 +0200
-Message-Id: <20220719114718.322469240@linuxfoundation.org>
+Subject: [PATCH 5.18 049/231] drm/amdgpu/display: disable prefer_shadow for generic fb helpers
+Date:   Tue, 19 Jul 2022 13:52:14 +0200
+Message-Id: <20220719114718.397171732@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
 References: <20220719114714.247441733@linuxfoundation.org>
@@ -56,61 +56,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit f9a89117fbdc63c0d4ab63a8f3596a72c245bcfe ]
+[ Upstream commit 3a4b1cc28fbdc2325b3e3ed7d8024995a75f9216 ]
 
-Was dropped when we converted to the generic helpers.
+Seems to break hibernation.  Disable for now until we can root
+cause it.
 
 Fixes: 087451f372bf ("drm/amdgpu: use generic fb helpers instead of setting up AMD own's.")
+Bug: https://bugzilla.kernel.org/show_bug.cgi?id=216119
 Acked-by: Evan Quan <evan.quan@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_display.c | 25 +++++++++++++++++----
- 1 file changed, 21 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c          | 3 ++-
+ drivers/gpu/drm/amd/amdgpu/dce_v10_0.c            | 3 ++-
+ drivers/gpu/drm/amd/amdgpu/dce_v11_0.c            | 3 ++-
+ drivers/gpu/drm/amd/amdgpu/dce_v6_0.c             | 3 ++-
+ drivers/gpu/drm/amd/amdgpu/dce_v8_0.c             | 3 ++-
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 ++-
+ 6 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-index fae5c1debfad..ffb3702745a5 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-@@ -1547,6 +1547,21 @@ bool amdgpu_crtc_get_scanout_position(struct drm_crtc *crtc,
- 						  stime, etime, mode);
- }
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
+index 5224d9a39737..842670d4a12e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
+@@ -494,7 +494,8 @@ static int amdgpu_vkms_sw_init(void *handle)
+ 	adev_to_drm(adev)->mode_config.max_height = YRES_MAX;
  
-+static bool
-+amdgpu_display_robj_is_fb(struct amdgpu_device *adev, struct amdgpu_bo *robj)
-+{
-+	struct drm_device *dev = adev_to_drm(adev);
-+	struct drm_fb_helper *fb_helper = dev->fb_helper;
-+
-+	if (!fb_helper || !fb_helper->buffer)
-+		return false;
-+
-+	if (gem_to_amdgpu_bo(fb_helper->buffer->gem) != robj)
-+		return false;
-+
-+	return true;
-+}
-+
- int amdgpu_display_suspend_helper(struct amdgpu_device *adev)
- {
- 	struct drm_device *dev = adev_to_drm(adev);
-@@ -1582,10 +1597,12 @@ int amdgpu_display_suspend_helper(struct amdgpu_device *adev)
- 			continue;
- 		}
- 		robj = gem_to_amdgpu_bo(fb->obj[0]);
--		r = amdgpu_bo_reserve(robj, true);
--		if (r == 0) {
--			amdgpu_bo_unpin(robj);
--			amdgpu_bo_unreserve(robj);
-+		if (!amdgpu_display_robj_is_fb(adev, robj)) {
-+			r = amdgpu_bo_reserve(robj, true);
-+			if (r == 0) {
-+				amdgpu_bo_unpin(robj);
-+				amdgpu_bo_unreserve(robj);
-+			}
- 		}
- 	}
- 	return 0;
+ 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
+-	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
++	/* disable prefer shadow for now due to hibernation issues */
++	adev_to_drm(adev)->mode_config.prefer_shadow = 0;
+ 
+ 	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
+index 288fce7dc0ed..9c964cd3b5d4 100644
+--- a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
+@@ -2796,7 +2796,8 @@ static int dce_v10_0_sw_init(void *handle)
+ 	adev_to_drm(adev)->mode_config.max_height = 16384;
+ 
+ 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
+-	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
++	/* disable prefer shadow for now due to hibernation issues */
++	adev_to_drm(adev)->mode_config.prefer_shadow = 0;
+ 
+ 	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
+index cbe5250b31cb..e0ad9f27dc3f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
+@@ -2914,7 +2914,8 @@ static int dce_v11_0_sw_init(void *handle)
+ 	adev_to_drm(adev)->mode_config.max_height = 16384;
+ 
+ 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
+-	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
++	/* disable prefer shadow for now due to hibernation issues */
++	adev_to_drm(adev)->mode_config.prefer_shadow = 0;
+ 
+ 	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
+index 982855e6cf52..3caf6f386042 100644
+--- a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
+@@ -2673,7 +2673,8 @@ static int dce_v6_0_sw_init(void *handle)
+ 	adev_to_drm(adev)->mode_config.max_width = 16384;
+ 	adev_to_drm(adev)->mode_config.max_height = 16384;
+ 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
+-	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
++	/* disable prefer shadow for now due to hibernation issues */
++	adev_to_drm(adev)->mode_config.prefer_shadow = 0;
+ 	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
+ 	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
+index 84440741c60b..7c75df5bffed 100644
+--- a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
+@@ -2693,7 +2693,8 @@ static int dce_v8_0_sw_init(void *handle)
+ 	adev_to_drm(adev)->mode_config.max_height = 16384;
+ 
+ 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
+-	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
++	/* disable prefer shadow for now due to hibernation issues */
++	adev_to_drm(adev)->mode_config.prefer_shadow = 0;
+ 
+ 	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
+ 
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 6dc9808760fc..b55a433e829e 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -3847,7 +3847,8 @@ static int amdgpu_dm_mode_config_init(struct amdgpu_device *adev)
+ 	adev_to_drm(adev)->mode_config.max_height = 16384;
+ 
+ 	adev_to_drm(adev)->mode_config.preferred_depth = 24;
+-	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
++	/* disable prefer shadow for now due to hibernation issues */
++	adev_to_drm(adev)->mode_config.prefer_shadow = 0;
+ 	/* indicates support for immediate flip */
+ 	adev_to_drm(adev)->mode_config.async_page_flip = true;
+ 
 -- 
 2.35.1
 

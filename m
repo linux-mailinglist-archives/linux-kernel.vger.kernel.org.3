@@ -2,86 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235DD5790E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48365790E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 04:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234537AbiGSCh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Jul 2022 22:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        id S234439AbiGSCgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Jul 2022 22:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiGSCh6 (ORCPT
+        with ESMTP id S229585AbiGSCgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Jul 2022 22:37:58 -0400
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128A322BDA;
-        Mon, 18 Jul 2022 19:37:56 -0700 (PDT)
-Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 26J2bJ4H004522;
-        Tue, 19 Jul 2022 11:37:19 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 26J2bJ4H004522
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1658198239;
-        bh=HQK6QEDJxQcORRIWR/HJ2dPOwcOH2XLZjLHhiFJZjLc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=136eVUOFw7hnvltqX0qb8mAv8hsb5qD3E5F5G99GR4eflY3VlUd6kIAU0PRMVrnMW
-         6biWEwuhmOWrkUJ0s1FGlsmq7ueWmaWZnvHY4TmEwoZHBTT9uUhS8mIH7OVW0BfsAy
-         EZV0eiazj1AjM8X29LjcSy8jo9/NE2+vKKzedFuwabxHy3zFh7powUjwo+9hqNEahE
-         C0B6S15AYGF3qNkW3chx+rmvbnceYg2f7R2JU7MKK0qDLHaXUYRQUPArdkX2BxiTbT
-         N0RMxmgGcjq68wW+T5HUQSyD5GSkuYDCu4iqR6mZLbbTY4GR7kNCcRlHolV3S43GKv
-         STyuVN8/cOp6Q==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kconfig: shorten the temporary directory name for cc-option
-Date:   Tue, 19 Jul 2022 11:35:39 +0900
-Message-Id: <20220719023539.2199045-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 18 Jul 2022 22:36:11 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E3B1D0C8;
+        Mon, 18 Jul 2022 19:36:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ln2yJ1dRRz4xXD;
+        Tue, 19 Jul 2022 12:36:08 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658198168;
+        bh=qQmhpa9HzmEVe/Xt2MkQgH+IGQHrUPwe4dG561pSqVg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gp5bPKA0AJp2p5/m3iGIfEaLSdprf2XbbxRJRx9Y0hsN5BKKyK7CgIWeWsrYIEUmI
+         RLbTqeLUyrUTM4/sWH+TvAd4gsWZJRLjp/SQ8q9di5Yw8J9lA+S4UItSHKXlptTGor
+         VQbnLUJ4GohueCU2QvWGm2cZUlVgAgm6rI/mfLXahfPHnvfY36OykILbZgPjwrbvtJ
+         mA5+Px6/FHC/hCfqpQTL0l0na32PG7tQJrgUXH9hghrJ0DfYesKXkmx+WOiuAXbk6j
+         xTlZ4OZyGVJK6XnnI5wm7SOyy37Rxz7qLLEbkz5wL3eCLXbAj977cguHFFgcywrgSi
+         mj/xk5WBG9N7Q==
+Date:   Tue, 19 Jul 2022 12:36:07 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220719123607.63cbb3c5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/WKYGmpRW/SW7MMy8Lngx+cx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cc-option macro creates the temporary directory, .tmp_$$$$, which
-is expanded into .tmp_<PID><PID>, but the second <PID> is redundant.
-(<PID> is the process ID of the sub-shell)
+--Sig_/WKYGmpRW/SW7MMy8Lngx+cx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If it were the Makefile code, .tmp_$$$$ would be the correct code.
-(see the TMPOUT macro in scripts/Malefile.compiler)
+Hi all,
 
-In Makefile, '$$' is an escape sequence of '$'. Make expands '$$$$'
-into '$$', then shell expands it into the process ID.
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-This does not apply to Kconfig because Kconfig requires variable
-references to be enclosed by curly braces, like ${variable}.
-The '$' that is not followed by '{' loses its special function.
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: I=
+n function 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerf=
+ormanceCalculation':
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:16=
+59:1: error: the frame size of 2144 bytes is larger than 2048 bytes [-Werro=
+r=3Dframe-larger-than=3D]
+ 1659 | }
+      | ^
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: I=
+n function 'dml32_ModeSupportAndSystemConfigurationFull':
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:37=
+99:1: error: the frame size of 2464 bytes is larger than 2048 bytes [-Werro=
+r=3Dframe-larger-than=3D]
+ 3799 | } // ModeSupportAndSystemConfigurationFull
+      | ^
+cc1: all warnings being treated as errors
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+I can't see anything obvious that caused this.  The second one was
+previously fixed by commit
 
- scripts/Kconfig.include | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  01cf387b1c7f ("drm/amdgpu/display: reduce stack size in dml32_ModeSupport=
+AndSystemConfigurationFull()")
 
-diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
-index 0496efd6e117..c1f4222d223d 100644
---- a/scripts/Kconfig.include
-+++ b/scripts/Kconfig.include
-@@ -25,7 +25,7 @@ failure = $(if-success,$(1),n,y)
- 
- # $(cc-option,<flag>)
- # Return y if the compiler supports <flag>, n otherwise
--cc-option = $(success,mkdir .tmp_$$$$; trap "rm -rf .tmp_$$$$" EXIT; $(CC) -Werror $(CLANG_FLAGS) $(1) -c -x c /dev/null -o .tmp_$$$$/tmp.o)
-+cc-option = $(success,mkdir .tmp_$$; trap "rm -rf .tmp_$$" EXIT; $(CC) -Werror $(CLANG_FLAGS) $(1) -c -x c /dev/null -o .tmp_$$/tmp.o)
- 
- # $(ld-option,<flag>)
- # Return y if the linker supports <flag>, n otherwise
--- 
-2.34.1
+Usinf the amdgpu tree from next-20220718 fixes the problem, so I have
+done that for today.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/WKYGmpRW/SW7MMy8Lngx+cx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLWGJcACgkQAVBC80lX
+0Gyr/Qf/eU9PrxA94bNj/snSE455OvBxQWstXaznX5Dgu+hRAqDqQdkux6EZShsy
+8r2LcId5P0dcIfg16aOeOhI5oGfvRADycJ5n3gUxS0m25fT7CSXQxFcyUQq1b6YZ
+VNtPeRVgB79Mot8s82vGqyfC/S6IeNKaNGsRZw6URWJy6/Jl4Bw2ml2pND5y4Uaj
+4GpB0LtKch2M6cmVnNhJLNs+YCWR2Pempi4tfVvBxmQo3KJWILF6FUaz+vh6AJIh
+yYzI0Uv327PUhgE8egHc3s+32hrHtrsUH8OFEPUxftiA9tlTgIGtls8moWxsW/mu
+qrfcTZI2FASqNOFHdZsfqJiYSfx10A==
+=5XEZ
+-----END PGP SIGNATURE-----
+
+--Sig_/WKYGmpRW/SW7MMy8Lngx+cx--

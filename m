@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B66457A296
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D538157A294
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238473AbiGSPEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
+        id S237720AbiGSPDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237702AbiGSPDw (ORCPT
+        with ESMTP id S233150AbiGSPDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:03:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 122FD4D167
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658243031;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hO0GcOh2yvTNG+WhHrYEQsIpzVdakt9pGpX73qoC2no=;
-        b=G+jsYVwEJD8QF8HrAzwfKYNMmnoWQP6ixSvRTp1Tf+4x6kRt7z0WXX7pzlV3IRs3vkUACi
-        mLDf1WHxDU5p1H6Yo4tHggP3+tdBCO/G8ExbiJOUwourCn62NfF2CDMBNi/OCi3w51Gh+L
-        i6WeC6Xop/yJ9irRC5AUTRi7MfxrWWY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-aILb4swFM5i5n6AjkanRlg-1; Tue, 19 Jul 2022 11:03:41 -0400
-X-MC-Unique: aILb4swFM5i5n6AjkanRlg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3D59E882345;
-        Tue, 19 Jul 2022 15:03:12 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.17.107])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0417C40E80E0;
-        Tue, 19 Jul 2022 15:03:11 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 11:03:10 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v3 1/2] cpuhp: make target_store() a nop when target ==
- state
-Message-ID: <YtbHrmDem1v++dBL@lorien.usersys.redhat.com>
-References: <20220711211619.112854-1-pauld@redhat.com>
- <20220711211619.112854-2-pauld@redhat.com>
- <xhsmhk0896ujo.mognet@vschneid.remote.csb>
+        Tue, 19 Jul 2022 11:03:19 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36714D4C7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:03:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658242999; x=1689778999;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+pNuvj59Pj8ObVhOokpmEpjaj9BqgjjBBTE9CWA97oY=;
+  b=D3nDejhudVLDzwbuHgMEe5pwjUvxwp9XQYHM49SceVfH2LpDZpfdV0bo
+   5qVZqgVxplf+LWwQlnmTH+zWs5Q3YieEXg/nFpZp6NyBSIFxnyEunoeEs
+   LyZPkNBAY0SQvMHZ7/GGDX+hFvCBF9P9WJgxrCRhHej4NBWfnGpCL6Frd
+   tgpwpcpVuCYoieirjZplLltC9bjVCRVhgzhmBCQ+oGbezNFpmhvDnUl0I
+   KWZA79pE136/YhaP7V0CbVg0d4X5xFw6GD81iaVw0WAL+Th98JlhWTLqX
+   qclMOTXchv1Lkpc5donaUZVzLjVkyEhhU7kaLe6cG9axS16JTNyUiiwzD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372814799"
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="372814799"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 08:03:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,284,1650956400"; 
+   d="scan'208";a="739892680"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by fmsmga001.fm.intel.com with ESMTP; 19 Jul 2022 08:03:10 -0700
+Date:   Tue, 19 Jul 2022 23:03:15 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH v1] mm/slub: enable debugging memory wasting of kmalloc
+Message-ID: <20220719150315.GB56558@shbuild999.sh.intel.com>
+References: <20220701135954.45045-1-feng.tang@intel.com>
+ <41763154-f923-ae99-55c0-0f3717636779@suse.cz>
+ <20220713073642.GA69088@shbuild999.sh.intel.com>
+ <45906408-34ce-4b79-fbe4-768335ffbf96@suse.cz>
+ <20220715082922.GA88035@shbuild999.sh.intel.com>
+ <20220719134503.GA56558@shbuild999.sh.intel.com>
+ <5ad51c9f-ce84-5d1b-309c-6e475cebca97@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <xhsmhk0896ujo.mognet@vschneid.remote.csb>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <5ad51c9f-ce84-5d1b-309c-6e475cebca97@suse.cz>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,76 +75,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:34:03PM +0100 Valentin Schneider wrote:
-> On 11/07/22 17:16, Phil Auld wrote:
-> > writing the current state back in hotplug/target calls cpu_down()
-> > which will set cpu dying even when it isn't and then nothing will
-> > ever clear it. A stress test that reads values and writes them back
-> > for all cpu device files in sysfs will trigger the BUG() in
-> > select_fallback_rq once all cpus are marked as dying.
-> >
-> > kernel/cpu.c::target_store()
-> >       ...
-> >         if (st->state < target)
-> >                 ret = cpu_up(dev->id, target);
-> >         else
-> >                 ret = cpu_down(dev->id, target);
-> >
-> > cpu_down() -> cpu_set_state()
-> >        bool bringup = st->state < target;
-> >        ...
-> >        if (cpu_dying(cpu) != !bringup)
-> >               set_cpu_dying(cpu, !bringup);
-> >
-> > Fix this by letting state==target fall through in the target_store()
-> > conditional. Also make sure st->target == target in that case.
-> >
-> > Signed-off-by: Phil Auld <pauld@redhat.com>
+On Tue, Jul 19, 2022 at 04:39:58PM +0200, Vlastimil Babka wrote:
+> On 7/19/22 15:45, Feng Tang wrote:
+> > Hi Vlastimil,
+> > 
+> > On Fri, Jul 15, 2022 at 04:29:22PM +0800, Tang, Feng wrote:
+> > [...]
+> >> > >> - the knowledge of actual size could be used to improve poisoning checks as
+> >> > >> well, detect cases when there's buffer overrun over the orig_size but not
+> >> > >> cache's size. e.g. if you kmalloc(48) and overrun up to 64 we won't detect
+> >> > >> it now, but with orig_size stored we could?
+> >> > > 
+> >> > > The above patch doesn't touch this. As I have a question, for the
+> >> > > [orib_size, object_size) area, shall we fill it with POISON_XXX no matter
+> >> > > REDZONE flag is set or not?
+> >> > 
+> >> > Ah, looks like we use redzoning, not poisoning, for padding from
+> >> > s->object_size to word boundary. So it would be more consistent to use the
+> >> > redzone pattern (RED_ACTIVE) and check with the dynamic orig_size. Probably
+> >> > no change for RED_INACTIVE handling is needed though.
+> >> 
+> >> Thanks for clarifying, will go this way and do more test. Also I'd 
+> >> make it a separate patch, as it is logically different from the space
+> >> wastage.
+> > 
+> > I made a draft to redzone the wasted space, which basically works (patch
+> > pasted at the end of the mail) as detecting corruption of below test code:
+> > 	
+> > 	size = 256;
+> > 	buf = kmalloc(size + 8, GFP_KERNEL);
+> > 	memset(buf + size + size/2, 0xff, size/4);
+> > 	print_section(KERN_ERR, "Corruptted-kmalloc-space", buf, size * 2);
+> > 	kfree(buf);
+> > 
+> > However when it is enabled globally, there are many places reporting
+> > corruption. I debugged one case, and found that the network(skb_buff)
+> > code already knows this "wasted" kmalloc space and utilize it which is
+> > detected by my patch.
+> > 
+> > The allocation stack is:
+> > 
+> > [    0.933675] BUG kmalloc-2k (Not tainted): kmalloc unused part overwritten
+> > [    0.933675] -----------------------------------------------------------------------------
+> > [    0.933675]
+> > [    0.933675] 0xffff888237d026c0-0xffff888237d026e3 @offset=9920. First byte 0x0 instead of 0xcc
+> > [    0.933675] Allocated in __alloc_skb+0x8e/0x1d0 age=5 cpu=0 pid=1
+> > [    0.933675]  __slab_alloc.constprop.0+0x52/0x90
+> > [    0.933675]  __kmalloc_node_track_caller+0x129/0x380
+> > [    0.933675]  kmalloc_reserve+0x2a/0x70
+> > [    0.933675]  __alloc_skb+0x8e/0x1d0
+> > [    0.933675]  audit_buffer_alloc+0x3a/0xc0
+> > [    0.933675]  audit_log_start.part.0+0xa3/0x300
+> > [    0.933675]  audit_log+0x62/0xc0
+> > [    0.933675]  audit_init+0x15c/0x16f
+> > 
+> > And the networking code which touches the [orig_size, object_size) area
+> > is in __build_skb_around(), which put a 'struct skb_shared_info' at the
+> > end of this area:
+> > 
+> > 	static void __build_skb_around(struct sk_buff *skb, void *data,
+> > 				       unsigned int frag_size)
+> > 	{
+> > 		struct skb_shared_info *shinfo;
+> > 		unsigned int size = frag_size ? : ksize(data);
 > 
-> One nit below, otherwise:
-> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
->
+> Hmm so it's a ksize() user, which should be legitimate way to use the
+> "waste" data. Hopefully it should be then enough to patch __ksize() to set
+> the object's tracked waste to 0 (orig_size to size) - assume that if
+> somebody called ksize() they intend to use the space. That would also make
+> the debugfs report more truthful.
 
-Thanks!
+Yep, it sounds good to me. Will chase other corrupted places, hope
+they are legitimate users too :)
 
-> > ---
-> >  kernel/cpu.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/cpu.c b/kernel/cpu.c
-> > index bbad5e375d3b..305694a2ca26 100644
-> > --- a/kernel/cpu.c
-> > +++ b/kernel/cpu.c
-> > @@ -2326,8 +2326,10 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
-> >
-> >       if (st->state < target)
-> >               ret = cpu_up(dev->id, target);
-> > -	else
-> > +	else if (st->state > target)
-> >               ret = cpu_down(dev->id, target);
-> > +	else if (st->target != target)
-> 
-> Should we make this:
-> 
->         else if (WARN(st->target != target))
->
-
-If you think that's important I can make it a WARN, sure.
-
-I'll try to remember to keep your Reviewed-bys this time if that's okay.
+Thanks,
+Feng
 
 
-
-Cheers,
-Phil
-
-> > +		st->target = target;
-> >  out:
-> >       unlock_device_hotplug();
-> >       return ret ? ret : count;
-> > --
-> > 2.31.1
-> 
-
--- 
 

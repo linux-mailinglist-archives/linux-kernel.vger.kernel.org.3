@@ -2,403 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA4257A363
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C401557A365
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 17:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238241AbiGSPnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 11:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
+        id S238334AbiGSPny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 11:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbiGSPnf (ORCPT
+        with ESMTP id S238235AbiGSPnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 11:43:35 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F81952E55;
-        Tue, 19 Jul 2022 08:43:33 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 17:43:30 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1658245411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aixhlxYT3orn2MXTU63iHe8x+ZHM9wRNDwoFa6FYs14=;
-        b=KJuQbkNFQs6fA8WXciImuAT3bBIUGSSpcsvizHKU/L6bIgOdBeDMTv3cj6ZCU9NB8rP35O
-        jbBuKI83Kx816oQys5NGeq3mRA66/hlKEx3KVMu9XCOcBz9/gg0C2Yt4NIIEGFdazqVE3/
-        X9wtseP1mbxgmuWeKz6OKgpPKSfaZ24=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Andrew Jones <andrew.jones@linux.dev>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        marcorr@google.com, seanjc@google.com, michael.roth@amd.com,
-        thomas.lendacky@amd.com, joro@8bytes.org, mizhang@google.com,
-        pbonzini@redhat.com
-Subject: Re: [RFC V1 08/10] KVM: selftests: Make ucall work with encrypted
- guests
-Message-ID: <20220719154330.wnwnu23gagcya3o7@kamzik>
-References: <20220715192956.1873315-1-pgonda@google.com>
- <20220715192956.1873315-10-pgonda@google.com>
+        Tue, 19 Jul 2022 11:43:52 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE335887C
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:43:50 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id r2so21190425wrs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 08:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=NmXXZtQUscROskShGi5ApQFRMHLTFbjS4HwuHMm/I84=;
+        b=pvlVbngw6KM3g6upOOZBcEY149F2PuDNOaFSzXUboE6byqwEefNRQAIGWTtSayWmw2
+         bl7nn0yfmvFF1YYdAmR2zXDMpXPuDsp/fEYxVbuUPBe07DsGLdJFo1NkQbJ5NftynTl9
+         MmpSOoqmb6+trpjJJdUSjDTjA3ACTzJP+bH7XdGZkE3xRsCm3SK0684JrxbiVFqgUwsQ
+         1Wj7bYjYRieoASOpK48o327G2B1FgkSxpUdxlob2HGS38S5rhxUhcNV8YaG8pRkHS2MK
+         T77j91Q1HXiiHNZXUoCUtm3UD6kLGRXMOKqbTn4y9pdEDFN5Ai+YE9nJtuOFADuw2kK2
+         N0zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=NmXXZtQUscROskShGi5ApQFRMHLTFbjS4HwuHMm/I84=;
+        b=UXl6FaFHoLpyacsqwvUSTV4fQi3ONuR8Cf3eIx8GEFXlYVf65LYFUHb5BIwsyLOi6g
+         REmE1Rkjj0env+V2hrFkU08ssw4sm2hO5KMhXysY6h6guPfRC6DDbMi2XFv7tniwHshd
+         WUdKzwB0AgbMaI9L1Qa7DbwC5wboN2sBP5lTGl/xf+9S36B2LypEpPHazoYfDkpySoCL
+         bt1zV0hRdGpw4BB6OYgc7IfQ4sMHanqknaALXG2qBGRaBv7dctjsdrYgM6JNuI9eH+3d
+         ndhQSeXC8hOM3nUrs+FWOd8uIHU7iGUalsBacz5Sj3B/hbIBt1dm1rl+rsFRCS0br3QP
+         j7fA==
+X-Gm-Message-State: AJIora/Cg8ryA4QzYQSjLiOlSwGpDGtGO4iLAqW9dOHsQ3GU7OpJdHMv
+        L7CCegDBSRXlAKS0SQp9G4h32xbJR0eiWw==
+X-Google-Smtp-Source: AGRyM1uzotpcXAdt14sD1BYa+k/svbItICtU/qB9rEDhsWagU8ivEogigo5szlDrZY/oUXRcykTFzA==
+X-Received: by 2002:a5d:6c62:0:b0:21d:c697:87f2 with SMTP id r2-20020a5d6c62000000b0021dc69787f2mr20419150wrz.283.1658245428578;
+        Tue, 19 Jul 2022 08:43:48 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f7-20020a7bcd07000000b003a02cbf862esm19122568wmj.13.2022.07.19.08.43.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 08:43:48 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 16:43:45 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH 1/1] HID: steam: Prevent NULL pointer dereference in
+ steam_{recv,send}_report
+Message-ID: <YtbRMUSa8KyOtd1x@google.com>
+References: <20220708074009.621113-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220715192956.1873315-10-pgonda@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220708074009.621113-1-lee.jones@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 12:29:54PM -0700, Peter Gonda wrote:
-> Add support for encrypted, SEV, guests in the ucall framework. If
-> encryption is enabled set up a pool of ucall structs in the guests'
-> shared memory region. This was suggested in the thread on "[RFC PATCH
-> 00/10] KVM: selftests: Add support for test-selectable ucall
-> implementations". Using a listed as suggested there doesn't work well
+On Fri, 08 Jul 2022, Lee Jones wrote:
 
-list
-
-> because the list is setup using HVAs not GVAs so use a bitmap + array
-> solution instead to get the same pool result.
+> It is possible for a malicious device to forgo submitting a Feature
+> Report.  The HID Steam driver presently makes no prevision for this
+> and de-references the 'struct hid_report' pointer obtained from the
+> HID devices without first checking its validity.  Let's change that.
 > 
-> Suggested-by:Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Peter Gonda <pgonda@google.com>
-> 
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Cc: linux-input@vger.kernel.org
+> Fixes: c164d6abf3841 ("HID: add driver for Valve Steam Controller")
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../selftests/kvm/include/kvm_util_base.h     |  30 +++--
->  .../selftests/kvm/include/ucall_common.h      |  14 +--
->  .../testing/selftests/kvm/lib/ucall_common.c  | 115 ++++++++++++++++--
->  .../testing/selftests/kvm/lib/x86_64/ucall.c  |   2 +-
->  5 files changed, 134 insertions(+), 28 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 61e85892dd9b..3d9f2a017389 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -47,6 +47,7 @@ LIBKVM += lib/rbtree.c
->  LIBKVM += lib/sparsebit.c
->  LIBKVM += lib/test_util.c
->  LIBKVM += lib/ucall_common.c
-> +LIBKVM += $(top_srcdir)/tools/lib/find_bit.c
+>  drivers/hid/hid-steam.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-Why is this file being added?
+Did anyone get a chance to look at this?
 
->  
->  LIBKVM_x86_64 += lib/x86_64/apic.c
->  LIBKVM_x86_64 += lib/x86_64/handlers.S
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 60b604ac9fa9..77aff2356d64 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -65,6 +65,7 @@ struct userspace_mem_regions {
->  /* Memory encryption policy/configuration. */
->  struct vm_memcrypt {
->  	bool enabled;
-> +	bool encrypted;
->  	int8_t enc_by_default;
->  	bool has_enc_bit;
->  	int8_t enc_bit;
-> @@ -99,6 +100,8 @@ struct kvm_vm {
->  	int stats_fd;
->  	struct kvm_stats_header stats_header;
->  	struct kvm_stats_desc *stats_desc;
-> +
-> +	struct list_head ucall_list;
->  };
->  
->  
-> @@ -141,21 +144,21 @@ enum vm_guest_mode {
->  
->  extern enum vm_guest_mode vm_mode_default;
->  
-> -#define VM_MODE_DEFAULT			vm_mode_default
-> -#define MIN_PAGE_SHIFT			12U
-> -#define ptes_per_page(page_size)	((page_size) / 8)
-> +#define VM_MODE_DEFAULT            vm_mode_default
-> +#define MIN_PAGE_SHIFT            12U
-> +#define ptes_per_page(page_size)    ((page_size) / 8)
->  
->  #elif defined(__x86_64__)
->  
-> -#define VM_MODE_DEFAULT			VM_MODE_PXXV48_4K
-> -#define MIN_PAGE_SHIFT			12U
-> -#define ptes_per_page(page_size)	((page_size) / 8)
-> +#define VM_MODE_DEFAULT            VM_MODE_PXXV48_4K
-> +#define MIN_PAGE_SHIFT            12U
-> +#define ptes_per_page(page_size)    ((page_size) / 8)
->  
->  #elif defined(__s390x__)
->  
-> -#define VM_MODE_DEFAULT			VM_MODE_P44V64_4K
-> -#define MIN_PAGE_SHIFT			12U
-> -#define ptes_per_page(page_size)	((page_size) / 16)
-> +#define VM_MODE_DEFAULT            VM_MODE_P44V64_4K
-> +#define MIN_PAGE_SHIFT            12U
-> +#define ptes_per_page(page_size)    ((page_size) / 16)
->  
->  #elif defined(__riscv)
->  
-> @@ -163,9 +166,9 @@ extern enum vm_guest_mode vm_mode_default;
->  #error "RISC-V 32-bit kvm selftests not supported"
->  #endif
->  
-> -#define VM_MODE_DEFAULT			VM_MODE_P40V48_4K
-> -#define MIN_PAGE_SHIFT			12U
-> -#define ptes_per_page(page_size)	((page_size) / 8)
-> +#define VM_MODE_DEFAULT            VM_MODE_P40V48_4K
-> +#define MIN_PAGE_SHIFT            12U
-> +#define ptes_per_page(page_size)    ((page_size) / 8)
+Would you like me to submit a [RESEND]?
 
-Looks like your editor decided to change all the above defines to use
-spaces instead of tabs. You might want to double check the other
-patches as well to ensure lines added use tabs vs. spaces and that
-there are no other random whitespace changes.
-
+> diff --git a/drivers/hid/hid-steam.c b/drivers/hid/hid-steam.c
+> index a3b151b29bd71..fc616db4231bb 100644
+> --- a/drivers/hid/hid-steam.c
+> +++ b/drivers/hid/hid-steam.c
+> @@ -134,6 +134,11 @@ static int steam_recv_report(struct steam_device *steam,
+>  	int ret;
 >  
->  #endif
->  
-> @@ -802,6 +805,9 @@ vm_paddr_t addr_arch_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva);
->  
->  static inline vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
->  {
-> +	TEST_ASSERT(
-> +		!vm->memcrypt.encrypted,
-> +		"Encrypted guests have their page tables encrypted so gva2* conversions are not possible.");
->  	return addr_arch_gva2gpa(vm, gva);
->  }
->  
-> diff --git a/tools/testing/selftests/kvm/include/ucall_common.h b/tools/testing/selftests/kvm/include/ucall_common.h
-> index cb9b37282701..d8ac16a68c0a 100644
-> --- a/tools/testing/selftests/kvm/include/ucall_common.h
-> +++ b/tools/testing/selftests/kvm/include/ucall_common.h
-> @@ -21,6 +21,10 @@ enum {
->  struct ucall {
->  	uint64_t cmd;
->  	uint64_t args[UCALL_MAX_ARGS];
-> +
-> +	/* For encrypted guests. */
-> +	uint64_t idx;
-> +	struct ucall *hva;
->  };
->  
->  void ucall_arch_init(struct kvm_vm *vm, void *arg);
-> @@ -31,15 +35,9 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu);
->  void ucall(uint64_t cmd, int nargs, ...);
->  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc);
->  
-> -static inline void ucall_init(struct kvm_vm *vm, void *arg)
-> -{
-> -	ucall_arch_init(vm, arg);
-> -}
-> +void ucall_init(struct kvm_vm *vm, void *arg);
->  
-> -static inline void ucall_uninit(struct kvm_vm *vm)
-> -{
-> -	ucall_arch_uninit(vm);
-> -}
-> +void ucall_uninit(struct kvm_vm *vm);
->  
->  #define GUEST_SYNC_ARGS(stage, arg1, arg2, arg3, arg4)	\
->  				ucall(UCALL_SYNC, 6, "hello", stage, arg1, arg2, arg3, arg4)
-> diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-> index c488ed23d0dd..8e660b10f9b2 100644
-> --- a/tools/testing/selftests/kvm/lib/ucall_common.c
-> +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-> @@ -1,22 +1,123 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  #include "kvm_util.h"
-> +#include "linux/types.h"
-> +#include "linux/bitmap.h"
-> +#include "linux/bitops.h"
-> +#include "linux/atomic.h"
-
-Do we really need bitmap.h, bitops.h, and atomic.h? I see we use
-clear_bit(), which I think is from atomic.h, and
-atomic_test_and_set_bit(), which I have no idea where it comes from...
-
-> +
-> +struct ucall_header {
-> +	DECLARE_BITMAP(in_use, KVM_MAX_VCPUS);
-> +	struct ucall ucalls[KVM_MAX_VCPUS];
-> +};
-> +
-> +static bool encrypted_guest;
-> +static struct ucall_header *ucall_hdr;
-> +
-> +void ucall_init(struct kvm_vm *vm, void *arg)
-> +{
-> +	struct ucall *uc;
-> +	struct ucall_header *hdr;
-> +	vm_vaddr_t vaddr;
-> +	int i;
-> +
-> +	encrypted_guest = vm->memcrypt.enabled;
-> +	sync_global_to_guest(vm, encrypted_guest);
-> +	if (!encrypted_guest)
-> +		goto out;
-> +
-> +	TEST_ASSERT(!ucall_hdr,
-> +		    "Only a single encrypted guest at a time for ucalls.");
-> +	vaddr = vm_vaddr_alloc_shared(vm, sizeof(*hdr), vm->page_size);
-> +	hdr = (struct ucall_header *)addr_gva2hva(vm, vaddr);
-> +	memset(hdr, 0, sizeof(*hdr));
-> +
-> +	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
-> +		uc = &hdr->ucalls[i];
-> +		uc->hva = uc;
-> +		uc->idx = i;
+>  	r = steam->hdev->report_enum[HID_FEATURE_REPORT].report_id_hash[0];
+> +	if (!r) {
+> +		hid_err(steam->hdev, "No HID_FEATURE_REPORT submitted -  nothing to read\n");
+> +		return -EINVAL;
 > +	}
 > +
-> +	ucall_hdr = (struct ucall_header *)vaddr;
-> +	sync_global_to_guest(vm, ucall_hdr);
-> +
-> +out:
-> +	ucall_arch_init(vm, arg);
-> +}
-> +
-> +void ucall_uninit(struct kvm_vm *vm)
-> +{
-> +	encrypted_guest = false;
-> +	ucall_hdr = NULL;
-> +
-> +	ucall_arch_uninit(vm);
-> +}
-> +
-> +static struct ucall *ucall_alloc(void)
-> +{
-> +	struct ucall *uc = NULL;
-> +	int i;
-> +
-> +	if (!encrypted_guest)
-> +		goto out;
-> +
-> +	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
-> +		if (atomic_test_and_set_bit(i, ucall_hdr->in_use))
-> +			continue;
-> +
-> +		uc = &ucall_hdr->ucalls[i];
-
-Doesn't this just mark all buffers as in-use and return the last one?
-I think we want
-
-	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
-		if (!atomic_test_and_set_bit(i, ucall_hdr->in_use)) {
-			uc = &ucall_hdr->ucalls[i];
-			break;
-		}
-	}
-
+>  	if (hid_report_len(r) < 64)
+>  		return -EINVAL;
+>  
+> @@ -165,6 +170,11 @@ static int steam_send_report(struct steam_device *steam,
+>  	int ret;
+>  
+>  	r = steam->hdev->report_enum[HID_FEATURE_REPORT].report_id_hash[0];
+> +	if (!r) {
+> +		hid_err(steam->hdev, "No HID_FEATURE_REPORT submitted -  nothing to read\n");
+> +		return -EINVAL;
 > +	}
 > +
-> +out:
-> +	return uc;
-> +}
-> +
-> +static void ucall_free(struct ucall *uc)
-> +{
-> +	if (!encrypted_guest)
-> +		return;
-> +
-> +	clear_bit(uc->idx, ucall_hdr->in_use);
-> +}
-> +
-> +static vm_vaddr_t get_ucall_addr(struct ucall *uc)
-> +{
-> +	if (encrypted_guest)
-> +		return (vm_vaddr_t)uc->hva;
-> +
-> +	return (vm_vaddr_t)uc;
-> +}
+>  	if (hid_report_len(r) < 64)
+>  		return -EINVAL;
 >  
->  void ucall(uint64_t cmd, int nargs, ...)
->  {
-> -	struct ucall uc = {
-> -		.cmd = cmd,
-> -	};
-> +	struct ucall *uc;
-> +	struct ucall tmp;
->  	va_list va;
->  	int i;
->  
-> +	uc = ucall_alloc();
-> +	if (!uc)
-> +		uc = &tmp;
-> +
-> +	uc->cmd = cmd;
-> +
->  	nargs = min(nargs, UCALL_MAX_ARGS);
->  
->  	va_start(va, nargs);
->  	for (i = 0; i < nargs; ++i)
-> -		uc.args[i] = va_arg(va, uint64_t);
-> +		uc->args[i] = va_arg(va, uint64_t);
->  	va_end(va);
->  
-> -	ucall_arch_do_ucall((vm_vaddr_t)&uc);
-> +	ucall_arch_do_ucall(get_ucall_addr(uc));
-> +
-> +	ucall_free(uc);
-> +}
-> +
-> +void *get_ucall_hva(struct kvm_vm *vm, void *uc)
-> +{
-> +	if (encrypted_guest)
-> +		return uc;
-> +
-> +	return addr_gva2hva(vm, (vm_vaddr_t)uc);
->  }
->  
->  uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
-> @@ -27,9 +128,9 @@ uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
->  	if (!uc)
->  		uc = &ucall;
->  
-> -	addr = ucall_arch_get_ucall(vcpu);
-> +	addr = get_ucall_hva(vcpu->vm, ucall_arch_get_ucall(vcpu));
 
-Hmm... so now it's expected that ucall_arch_get_ucall() returns a gva...
-
->  	if (addr) {
-> -		memcpy(uc, addr, sizeof(*uc));
-> +		memcpy(uc, addr, sizeof(struct ucall));
-
-Why make this change?
-
->  		vcpu_run_complete_io(vcpu);
->  	} else {
->  		memset(uc, 0, sizeof(*uc));
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/ucall.c b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> index ec53a406f689..ea6b2e3a8e39 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/ucall.c
-> @@ -30,7 +30,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
->  		struct kvm_regs regs;
->  
->  		vcpu_regs_get(vcpu, &regs);
-> -		return addr_gva2hva(vcpu->vm, (vm_vaddr_t)regs.rdi);
-> +		return (void *)regs.rdi;
-
-...we're only updating x86's ucall_arch_get_ucall() to return gvas.
-What about the other architectures? Anyway, I'd rather we don't
-change ucall_arch_get_ucall() to return gvas. They should continue
-returning hvas and any trickery needed to translate a pool uc to
-an hva should be put inside ucall_arch_get_ucall().
-
->  	}
->  	return NULL;
->  }
-> -- 
-> 2.37.0.170.g444d1eabd0-goog
-> 
-
-I'm not a big fan of mixing the concept of encrypted guests into ucalls. I
-think we should have two types of ucalls, those have a uc pool in memory
-shared with the host and those that don't. Encrypted guests pick the pool
-version.
-
-Thanks,
-drew
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

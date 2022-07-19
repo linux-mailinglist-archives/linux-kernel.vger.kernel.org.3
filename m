@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469EA579ED3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64E1579A61
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242989AbiGSNGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S239019AbiGSMOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242638AbiGSNFH (ORCPT
+        with ESMTP id S238921AbiGSMNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:05:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE28B9FE0F;
-        Tue, 19 Jul 2022 05:26:55 -0700 (PDT)
+        Tue, 19 Jul 2022 08:13:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696D7F1C;
+        Tue, 19 Jul 2022 05:04:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6FEB61950;
-        Tue, 19 Jul 2022 12:26:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A19C341C6;
-        Tue, 19 Jul 2022 12:26:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47580B81A8F;
+        Tue, 19 Jul 2022 12:04:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B61FC341C6;
+        Tue, 19 Jul 2022 12:04:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233607;
-        bh=FgL13pl/eneYH4Rd2n+iUoyOvOde9tKcG2PnuEGsLkc=;
+        s=korg; t=1658232242;
+        bh=lIGn+EkYk/KbpFsuPs7gjDgknOujUHPpafCF3+1seNY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rz3zBe3qbRzYqKI+M9hwbuZtjav7fewjrYS8HExk4s2wzazuD2XJgEQCwk9Zqm468
-         YSW6StEh2yloyDweEJ8bP5H5JMWS8wGjsFRVJx+tYzH9DwTTUBObFRsUtJVWR67TIC
-         1jD9lr76/eMSAAc3zy28iiadSnlX4yd0BQ6M9SCQ=
+        b=wU2gUDZnAHG2ZI32THaKxodgMG3X0B3b9wGpWHSbVvS6dgPg0EEDV0ShbgJXLhE++
+         1haEmqGRvaNOocbnZLWw8OUO5c/JLR/eukZsaGuBP3fxb2kiXVJ3lO4Omd557kACX2
+         fgscFGzFZU4gsCh6OBc4lKJe2RhFcyrkVMFhme6o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
+        stable@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 150/231] x86/cpu/amd: Add Spectral Chicken
-Date:   Tue, 19 Jul 2022 13:53:55 +0200
-Message-Id: <20220719114726.953787423@linuxfoundation.org>
+Subject: [PATCH 5.4 33/71] drm/i915/gt: Serialize TLB invalidates with GT resets
+Date:   Tue, 19 Jul 2022 13:53:56 +0200
+Message-Id: <20220719114555.489104924@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,115 +59,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Chris Wilson <chris.p.wilson@intel.com>
 
-[ Upstream commit d7caac991feeef1b871ee6988fd2c9725df09039 ]
+[ Upstream commit a1c5a7bf79c1faa5633b918b5c0666545e84c4d1 ]
 
-Zen2 uarchs have an undocumented, unnamed, MSR that contains a chicken
-bit for some speculation behaviour. It needs setting.
+Avoid trying to invalidate the TLB in the middle of performing an
+engine reset, as this may result in the reset timing out. Currently,
+the TLB invalidate is only serialised by its own mutex, forgoing the
+uncore lock, but we can take the uncore->lock as well to serialise
+the mmio access, thereby serialising with the GDRST.
 
-Note: very belatedly AMD released naming; it's now officially called
-      MSR_AMD64_DE_CFG2 and MSR_AMD64_DE_CFG2_SUPPRESS_NOBR_PRED_BIT
-      but shall remain the SPECTRAL CHICKEN.
+Tested on a NUC5i7RYB, BIOS RYBDWi35.86A.0380.2019.0517.1530 with
+i915 selftest/hangcheck.
 
-Suggested-by: Andrew Cooper <Andrew.Cooper3@citrix.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: stable@vger.kernel.org  # v4.4 and upper
+Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/1e59a7c45dd919a530256b9ac721ac6ea86c0677.1657639152.git.mchehab@kernel.org
+(cherry picked from commit 33da97894758737895e90c909f16786052680ef4)
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/msr-index.h |  3 +++
- arch/x86/kernel/cpu/amd.c        | 23 ++++++++++++++++++++++-
- arch/x86/kernel/cpu/cpu.h        |  2 ++
- arch/x86/kernel/cpu/hygon.c      |  6 ++++++
- 4 files changed, 33 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gt/intel_gt.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 4425d6773183..d15d0ef6b357 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -552,6 +552,9 @@
- /* Fam 17h MSRs */
- #define MSR_F17H_IRPERF			0xc00000e9
+diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
+index c8c070375d29..f6d7f5d307d7 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gt.c
++++ b/drivers/gpu/drm/i915/gt/intel_gt.c
+@@ -339,6 +339,20 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+ 	mutex_lock(&gt->tlb_invalidate_lock);
+ 	intel_uncore_forcewake_get(uncore, FORCEWAKE_ALL);
  
-+#define MSR_ZEN2_SPECTRAL_CHICKEN	0xc00110e3
-+#define MSR_ZEN2_SPECTRAL_CHICKEN_BIT	BIT_ULL(1)
++	spin_lock_irq(&uncore->lock); /* serialise invalidate with GT reset */
 +
- /* Fam 16h MSRs */
- #define MSR_F16H_L2I_PERF_CTL		0xc0010230
- #define MSR_F16H_L2I_PERF_CTR		0xc0010231
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index 0c0b09796ced..8cf0659c0521 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -862,6 +862,26 @@ static void init_amd_bd(struct cpuinfo_x86 *c)
- 	clear_rdrand_cpuid_bit(c);
- }
- 
-+void init_spectral_chicken(struct cpuinfo_x86 *c)
-+{
-+	u64 value;
++	for_each_engine(engine, gt, id) {
++		struct reg_and_bit rb;
 +
-+	/*
-+	 * On Zen2 we offer this chicken (bit) on the altar of Speculation.
-+	 *
-+	 * This suppresses speculation from the middle of a basic block, i.e. it
-+	 * suppresses non-branch predictions.
-+	 *
-+	 * We use STIBP as a heuristic to filter out Zen2 from the rest of F17H
-+	 */
-+	if (!cpu_has(c, X86_FEATURE_HYPERVISOR) && cpu_has(c, X86_FEATURE_AMD_STIBP)) {
-+		if (!rdmsrl_safe(MSR_ZEN2_SPECTRAL_CHICKEN, &value)) {
-+			value |= MSR_ZEN2_SPECTRAL_CHICKEN_BIT;
-+			wrmsrl_safe(MSR_ZEN2_SPECTRAL_CHICKEN, value);
-+		}
++		rb = get_reg_and_bit(engine, regs == gen8_regs, regs, num);
++		if (!i915_mmio_reg_offset(rb.reg))
++			continue;
++
++		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
 +	}
-+}
 +
- static void init_amd_zn(struct cpuinfo_x86 *c)
- {
- 	set_cpu_cap(c, X86_FEATURE_ZEN);
-@@ -907,7 +927,8 @@ static void init_amd(struct cpuinfo_x86 *c)
- 	case 0x12: init_amd_ln(c); break;
- 	case 0x15: init_amd_bd(c); break;
- 	case 0x16: init_amd_jg(c); break;
--	case 0x17: fallthrough;
-+	case 0x17: init_spectral_chicken(c);
-+		   fallthrough;
- 	case 0x19: init_amd_zn(c); break;
- 	}
- 
-diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-index 2a8e584fc991..7c9b5893c30a 100644
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -61,6 +61,8 @@ static inline void tsx_init(void) { }
- static inline void tsx_ap_init(void) { }
- #endif /* CONFIG_CPU_SUP_INTEL */
- 
-+extern void init_spectral_chicken(struct cpuinfo_x86 *c);
++	spin_unlock_irq(&uncore->lock);
 +
- extern void get_cpu_cap(struct cpuinfo_x86 *c);
- extern void get_cpu_address_sizes(struct cpuinfo_x86 *c);
- extern void cpu_detect_cache_sizes(struct cpuinfo_x86 *c);
-diff --git a/arch/x86/kernel/cpu/hygon.c b/arch/x86/kernel/cpu/hygon.c
-index 3fcdda4c1e11..21fd425088fe 100644
---- a/arch/x86/kernel/cpu/hygon.c
-+++ b/arch/x86/kernel/cpu/hygon.c
-@@ -302,6 +302,12 @@ static void init_hygon(struct cpuinfo_x86 *c)
- 	/* get apicid instead of initial apic id from cpuid */
- 	c->apicid = hard_smp_processor_id();
+ 	for_each_engine(engine, gt, id) {
+ 		/*
+ 		 * HW architecture suggest typical invalidation time at 40us,
+@@ -353,7 +367,6 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+ 		if (!i915_mmio_reg_offset(rb.reg))
+ 			continue;
  
-+	/*
-+	 * XXX someone from Hygon needs to confirm this DTRT
-+	 *
-+	init_spectral_chicken(c);
-+	 */
-+
- 	set_cpu_cap(c, X86_FEATURE_ZEN);
- 	set_cpu_cap(c, X86_FEATURE_CPB);
- 
+-		intel_uncore_write_fw(uncore, rb.reg, rb.bit);
+ 		if (__intel_wait_for_register_fw(uncore,
+ 						 rb.reg, rb.bit, 0,
+ 						 timeout_us, timeout_ms,
 -- 
 2.35.1
 

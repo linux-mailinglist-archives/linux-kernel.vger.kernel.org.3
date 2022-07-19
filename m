@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDE257A83E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B8A57A845
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239275AbiGSUdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 16:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
+        id S239334AbiGSUeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 16:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233670AbiGSUdR (ORCPT
+        with ESMTP id S239310AbiGSUeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 16:33:17 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A884506B;
-        Tue, 19 Jul 2022 13:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658262796; x=1689798796;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=20RPDLm8Al5aPVJySa70I/GMs19LDvZGqa/P5oQG5pU=;
-  b=ZjdXZBMFkHzsyEHX0nm7bK965LXL7jOWVgETuC6M6IY3CDdLEzeVu+pZ
-   5LFsyznpsCPvBt/o1b8NS5EZe2XS4rmHEtfCGiTAnJ22pCRlMQPAmaqPH
-   QlIjJlXvDsIzHRbpf4XsNoanO63Ts8ZwJkRpWhdE5dLU1LeB5x7ChPS+T
-   PBJinHesu0xJ15WWslWOtvUV/vRylzTQXboBDSjoJdD5ty6nFvSu14Y9T
-   9bS92dPXQDSqHxFYysC7tCKZdL4kYOxdLbY6ROl58287PebOwRJgFWrBa
-   bot6/te/qc86zdEs8JLRE09wm+O1DJLiLLxInPNHqcjNsh3rMY+XXUg1X
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="348287280"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="348287280"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 13:33:16 -0700
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="843784574"
-Received: from avandeve-mobl.amr.corp.intel.com (HELO [10.209.102.45]) ([10.209.102.45])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 13:33:13 -0700
-Message-ID: <e292e128-d732-e770-67d7-b6ed947cec7b@linux.intel.com>
-Date:   Tue, 19 Jul 2022 13:33:13 -0700
+        Tue, 19 Jul 2022 16:34:23 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A1D51400
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:34:19 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 70so14683702pfx.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CVFqoqPpzMTSfS6z/ObK/GxCE/nyCodSdH1HcTh0N8g=;
+        b=OOysKaA6L5Ut9deA7TsRQ5tzw4WGESf2NyAsiWkyN7Zw72FO/JT56iBLiALVizvXV8
+         XyT43pICpvNYur1KzT172sZxrXSWiev8gScdS4RMLOsA5BtTgTKhDuYQackUtaya/2Lu
+         ROAKrw1vghS0XRYrgNh5QUWZDSctJopHmvMhT3IexRWdMyMa9OSPS1Y0+gm6jbqFmIBW
+         UABMm+XZV79q+aYSZ9CypMytvzCO7uWAoxYVzB0Bazn8whydRq40pxyfe6ik+39q8eA8
+         /zuHeZVsY2bWDt7cI/dc3emEOzdvZg1/ee2ZEIH0Whk7qXFGTkCmoxZFX745xVx4Sxqb
+         tohQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CVFqoqPpzMTSfS6z/ObK/GxCE/nyCodSdH1HcTh0N8g=;
+        b=xWqpX0ecWQhaV+eeWEm8TAxD6Bcv8D0OyxsAO0vBGHaSkOCSz0DtvN6C/R5DzQiJaL
+         p4B9ykO7fAWqHRt5lNDDHJe9p0wEUd2LSGzR06Ob277G2n8mmG/HoIqP5rdNLD7dzyYz
+         DKjVTOEJrzNub3+NZYZQaD+cKIgNSRkh3Dn8WEmEOnjXDepEsdKOWDKKuHLfJi1HDGuU
+         t4zVyu6blqzFESlYwLZ3Q6AjHQ8+PnwPLWS8M7q1ThgghayRf0Q+JQ1LTkCKBUfAoorY
+         u5824uZgDhoXQ6NHEW3xjLPY9iRcHw0MCzqqddtxLIDEi7KyRYWemBX5e4XNMx+coEIo
+         RkBQ==
+X-Gm-Message-State: AJIora+dHdx+6rDp/+/5hDrGw/aDzek/eF1qVzU7SUQKP8fNZ6ubngtZ
+        9iiN9o80aFzSEduE3sm+UoJjfA==
+X-Google-Smtp-Source: AGRyM1uGBJ417ylz9TMhQEvOD+j8lKiUWlaChAIsUiWHwqCgozfNEwxEssDNUnfwYwsJpGBx0BIAeg==
+X-Received: by 2002:a63:4c1:0:b0:41a:5a80:50ff with SMTP id 184-20020a6304c1000000b0041a5a8050ffmr1771803pge.409.1658262858638;
+        Tue, 19 Jul 2022 13:34:18 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id q10-20020aa7842a000000b0050dc762816asm11850269pfn.68.2022.07.19.13.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 13:34:18 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 20:34:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH 10/12] KVM: X86/MMU: Don't add parents to struct
+ kvm_mmu_pages
+Message-ID: <YtcVRnCshyb03Wv8@google.com>
+References: <20220605064342.309219-1-jiangshanlai@gmail.com>
+ <20220605064342.309219-11-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 09/13] notifier: Show function names on notifier
- routines if DEBUG_NOTIFIERS is set
-Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Xiaoming Ni <nixiaoming@huawei.com>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-10-gpiccoli@igalia.com>
-From:   Arjan van de Ven <arjan@linux.intel.com>
-In-Reply-To: <20220719195325.402745-10-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220605064342.309219-11-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/2022 12:53 PM, Guilherme G. Piccoli wrote:
-> Currently we have a debug infrastructure in the notifiers file, but
-> it's very simple/limited. Extend it by:
+On Sun, Jun 05, 2022, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 > 
-> (a) Showing all registered/unregistered notifiers' callback names;
+> Parents added into the struct kvm_mmu_pages are never used.
 
-
-I'm not yet convinced that this is the right direction.
-The original intent for this "debug" feature was to be lightweight enough that it could run in production, since at the time, rootkits
-liked to clobber/hijack notifiers and there were also some other signs of corruption at the time.
-
-By making something print (even at pr_info) for what are probably frequent non-error operations, you turn something that is light
-into something that's a lot more heavy and generally that's not a great idea... it'll be a performance surprise.
-
-
+s/never/no longer, and if possible, exapnd on why they are no longer used.  Most
+of that can be gleaned from prior patches, but capturing the high level historical
+details isn't that onerous.

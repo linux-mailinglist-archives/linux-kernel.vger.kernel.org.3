@@ -2,142 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6682157A760
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8250957A76A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239644AbiGSTpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 15:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
+        id S239631AbiGSTuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 15:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGSTpx (ORCPT
+        with ESMTP id S229379AbiGSTus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 15:45:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EA410561;
-        Tue, 19 Jul 2022 12:45:52 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 19:45:49 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658259950;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v86lNOMXT+qnBXt4ajD1CLg52zHOaF9md9zyGeIe9XM=;
-        b=VsMhWq3Ps6EBfbjPi/II8R9e70pXWfVMZDHcjsI32G2MbTaN7acmkvWPqu/jOKNyqiu2e5
-        ovqLIDYq2JuLZfLB0GPKgoZUGzc16CYiJ7cSl+grbQmEcMkZ32Q7lnagdvhwmQ0Aa5G3lO
-        gNGX+yviHXtvPokaGE9UZjpWXuGU6Npf/60ZI/2whHvHCXmcFcql6b04GQXlWPldN/YFAA
-        g2k9dfrrsteLAKqAkb04IX9aB+uFYOLJcW5PQJ7K+ulrHWa/JdaCq5iq2qQFkfqMVRFgDW
-        +W1oP+D3dTUxYLcnV5EJ5aKvgOkOnDAAdXTaJKayaYZGHqXvXLC/ogxfptjUhg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658259950;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v86lNOMXT+qnBXt4ajD1CLg52zHOaF9md9zyGeIe9XM=;
-        b=v6bdQY1mm8uzs2KNegYj1FGnR86ogeR6F1rmqQQY8awU6p5tK8/StgwVCcfgcpV/0zBhzF
-        U5M3g2HTU+yxKkCg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/amd: Use IBPB for firmware calls
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220715194550.793957-1-cascardo@canonical.com>
-References: <20220715194550.793957-1-cascardo@canonical.com>
+        Tue, 19 Jul 2022 15:50:48 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBDE52443
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:50:47 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id ez10so29149834ejc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:50:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MP2mNoHV5UbwTy8FhxrYTOnqC74G4vp1u8y7Ih8i6Gk=;
+        b=HXOii4OqRMngJ85erwxpuDjSbMYDxJE4qXyd0P9MRABSLjttvKm45KAun5SY4VCsS9
+         K6C42blnp93B2q6MMIefScXhep5eIC8mYUjr74y6OqyIbz9jpyrahwzV9pQKGpDl5ZXI
+         LF21HIlI+tl05fwyzoavG+zd5I4vZCiVi97GTM/8zqbX8PVtQN9o21tshr4q1XUk0itr
+         AI1Fn7jaeYQTngHANbBxE+ByFuVmTXgKT25Me4aYipyD0AeDcr5yo2p5V0qcCcMWtsxw
+         jUeGzE9acPC8dcwn5DxwBBIj+DcFc6jt0uW4FOqbflK/luDSDKdNf80NOlIn3vCEla7C
+         ADbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MP2mNoHV5UbwTy8FhxrYTOnqC74G4vp1u8y7Ih8i6Gk=;
+        b=euBE2TEhQ+RdIB3zj2T9/NdU1uaa7czncwfBgcxjUpgb7/MLpXxUodb7vA9rZWW2Dc
+         SL/7qhtsklu9smldOJG1bR9OO6OFhDy7mpLTn1Y/iOW5sQ9QaOZLfY27lv34V3cziX6s
+         q3zV4P7y2wk2MXOcqRvWqbACv6aqRCK10LPO+hS/J9MOMBtgSE51gXTW2MwGbZugWaYB
+         Ee505J/L1TZ/Tmi1FLhIPPH6mFRvtmG+3hevV9k7E18/UF/nBAMS52rveR19rJ42UkUr
+         UoE/CmpfaGQyA45BaR7c+KTG/P5KI6sgUKGiRkMAxlc7iWfxQ1mvzUpl+uuSEBVuQQrZ
+         OzyQ==
+X-Gm-Message-State: AJIora+hXAPXSbgZ0FYf00BlSKLztzCEdlepQPy4PObqhDurt1e2ozVt
+        Nago+AyL9zOYiBp1CofkGo0sXitarHeXSzAqm3Y=
+X-Google-Smtp-Source: AGRyM1u6s0KwsJBJwcN1pS55Zw9h79wwsGyapUUrqQkHflO0aWasIqdqMC6rDczKC50rhDnaYsEeROk2BJOIpddn6Oc=
+X-Received: by 2002:a17:907:1623:b0:72b:64e3:878a with SMTP id
+ hb35-20020a170907162300b0072b64e3878amr33075752ejc.185.1658260246316; Tue, 19
+ Jul 2022 12:50:46 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <165825994959.15455.8862315853452355619.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220716035732.30449-1-wangborong@cdjrlc.com> <ada7fc21-17e3-d3e0-5316-55ee6669ccd3@amd.com>
+In-Reply-To: <ada7fc21-17e3-d3e0-5316-55ee6669ccd3@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 19 Jul 2022 15:50:34 -0400
+Message-ID: <CADnq5_PtDTX0WBxW9e4SbzLnm15XTsir++26tp0YLnknAdNdYg@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon: Fix comment typo
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Jason Wang <wangborong@cdjrlc.com>, daniel@ffwll.ch,
+        airlied@linux.ie, Xinhui.Pan@amd.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        alexander.deucher@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Applied.  Thanks!
 
-Commit-ID:     28a99e95f55c61855983d36a88c05c178d966bb7
-Gitweb:        https://git.kernel.org/tip/28a99e95f55c61855983d36a88c05c178d966bb7
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 18 Jul 2022 13:41:37 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 18 Jul 2022 15:38:09 +02:00
-
-x86/amd: Use IBPB for firmware calls
-
-On AMD IBRS does not prevent Retbleed; as such use IBPB before a
-firmware call to flush the branch history state.
-
-And because in order to do an EFI call, the kernel maps a whole lot of
-the kernel page table into the EFI page table, do an IBPB just in case
-in order to prevent the scenario of poisoning the BTB and causing an EFI
-call using the unprotected RET there.
-
-  [ bp: Massage. ]
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220715194550.793957-1-cascardo@canonical.com
----
- arch/x86/include/asm/cpufeatures.h   |  1 +
- arch/x86/include/asm/nospec-branch.h |  2 ++
- arch/x86/kernel/cpu/bugs.c           | 11 ++++++++++-
- 3 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 00f5227..a77b915 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -302,6 +302,7 @@
- #define X86_FEATURE_RETPOLINE_LFENCE	(11*32+13) /* "" Use LFENCE for Spectre variant 2 */
- #define X86_FEATURE_RETHUNK		(11*32+14) /* "" Use REturn THUNK */
- #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
-+#define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index 10a3bfc..38a3e86 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -297,6 +297,8 @@ do {									\
- 	alternative_msr_write(MSR_IA32_SPEC_CTRL,			\
- 			      spec_ctrl_current() | SPEC_CTRL_IBRS,	\
- 			      X86_FEATURE_USE_IBRS_FW);			\
-+	alternative_msr_write(MSR_IA32_PRED_CMD, PRED_CMD_IBPB,		\
-+			      X86_FEATURE_USE_IBPB_FW);			\
- } while (0)
- 
- #define firmware_restrict_branch_speculation_end()			\
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index aa34f90..78c9082 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -1516,7 +1516,16 @@ static void __init spectre_v2_select_mitigation(void)
- 	 * the CPU supports Enhanced IBRS, kernel might un-intentionally not
- 	 * enable IBRS around firmware calls.
- 	 */
--	if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) {
-+	if (boot_cpu_has_bug(X86_BUG_RETBLEED) &&
-+	    (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
-+	     boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)) {
-+
-+		if (retbleed_cmd != RETBLEED_CMD_IBPB) {
-+			setup_force_cpu_cap(X86_FEATURE_USE_IBPB_FW);
-+			pr_info("Enabling Speculation Barrier for firmware calls\n");
-+		}
-+
-+	} else if (boot_cpu_has(X86_FEATURE_IBRS) && !spectre_v2_in_ibrs_mode(mode)) {
- 		setup_force_cpu_cap(X86_FEATURE_USE_IBRS_FW);
- 		pr_info("Enabling Restricted Speculation for firmware calls\n");
- 	}
+On Tue, Jul 19, 2022 at 8:33 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 16.07.22 um 05:57 schrieb Jason Wang:
+> > The double `have' is duplicated in line 696, remove one.
+> >
+> > Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+>
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> > ---
+> >   drivers/gpu/drm/radeon/radeon_gem.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/rade=
+on/radeon_gem.c
+> > index 84843b3b3aef..261fcbae88d7 100644
+> > --- a/drivers/gpu/drm/radeon/radeon_gem.c
+> > +++ b/drivers/gpu/drm/radeon/radeon_gem.c
+> > @@ -693,7 +693,7 @@ int radeon_gem_va_ioctl(struct drm_device *dev, voi=
+d *data,
+> >       }
+> >
+> >       /* !! DONT REMOVE !!
+> > -      * We don't support vm_id yet, to be sure we don't have have brok=
+en
+> > +      * We don't support vm_id yet, to be sure we don't have broken
+> >        * userspace, reject anyone trying to use non 0 value thus moving
+> >        * forward we can use those fields without breaking existant user=
+space
+> >        */
+>

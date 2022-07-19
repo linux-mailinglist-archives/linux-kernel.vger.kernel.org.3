@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED56F579A55
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C615799BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238869AbiGSMNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
+        id S238248AbiGSMGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238919AbiGSMMh (ORCPT
+        with ESMTP id S238345AbiGSMEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:12:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F1952DF7;
-        Tue, 19 Jul 2022 05:03:51 -0700 (PDT)
+        Tue, 19 Jul 2022 08:04:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE237481C3;
+        Tue, 19 Jul 2022 05:00:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B2306171F;
-        Tue, 19 Jul 2022 12:03:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F3EFC341C6;
-        Tue, 19 Jul 2022 12:03:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF99E61614;
+        Tue, 19 Jul 2022 12:00:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4DB9C341C6;
+        Tue, 19 Jul 2022 12:00:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232230;
-        bh=uVoT/5u5HAXi7mBTKdcbZJAAIrh99J+aHCAY23AI2eA=;
+        s=korg; t=1658232021;
+        bh=bJBnjAVwj8iajVZYIkDU6xVk+TEZszY3WfxBZ4JXnz4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wRNkK1zp0buizbjk/OiyfCU8uaWZhSSbcm+VIm3Kid8z5n75rxSiL9EwK4QNx54s6
-         etDAF8bwEuU1D4EyTcOpzmK40QNchwxnM/FQsBvekWiH+7VIfTlyNAFj0zv1LI5Nh9
-         KOaESD9eT/Vxh8+tgUjM4tKeN/LOvUOQLncjeG1U=
+        b=Aa/J/G/r9EIbFnfSAxClA4GRcj8u1ibCtyzQBOaUvQnMZuYha6k9vfnepyb25UTyu
+         ph7KbCBtnmaBnyvXOi44V+090Yiu+zv8DQs14Mb7F6i7luUFd4wpCJWBEHroocmqzo
+         jZc7RpNtXOFsQtlh/P16bSFVh0ZwQfWfqGQRQbAw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 29/71] icmp: Fix data-races around sysctl.
+Subject: [PATCH 4.19 15/48] net: Fix data-races around sysctl_mem.
 Date:   Tue, 19 Jul 2022 13:53:52 +0200
-Message-Id: <20220719114555.163037962@linuxfoundation.org>
+Message-Id: <20220719114521.187114313@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
-References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+References: <20220719114518.915546280@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +56,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit 48d7ee321ea5182c6a70782aa186422a70e67e22 ]
+[ Upstream commit 310731e2f1611d1d13aae237abcf8e66d33345d5 ]
 
-While reading icmp sysctl variables, they can be changed concurrently.
+While reading .sysctl_mem, it can be changed concurrently.
 So, we need to add READ_ONCE() to avoid data-races.
 
-Fixes: 4cdf507d5452 ("icmp: add a global rate limitation")
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/icmp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/net/sock.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
-index f86f948a4b4c..a590ff81e5f8 100644
---- a/net/ipv4/icmp.c
-+++ b/net/ipv4/icmp.c
-@@ -261,11 +261,12 @@ bool icmp_global_allow(void)
- 	spin_lock(&icmp_global.lock);
- 	delta = min_t(u32, now - icmp_global.stamp, HZ);
- 	if (delta >= HZ / 50) {
--		incr = sysctl_icmp_msgs_per_sec * delta / HZ ;
-+		incr = READ_ONCE(sysctl_icmp_msgs_per_sec) * delta / HZ;
- 		if (incr)
- 			WRITE_ONCE(icmp_global.stamp, now);
- 	}
--	credit = min_t(u32, icmp_global.credit + incr, sysctl_icmp_msgs_burst);
-+	credit = min_t(u32, icmp_global.credit + incr,
-+		       READ_ONCE(sysctl_icmp_msgs_burst));
- 	if (credit) {
- 		/* We want to use a credit of one in average, but need to randomize
- 		 * it for security reasons.
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 7d3a4c2eea95..98946f90781d 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1381,7 +1381,7 @@ void __sk_mem_reclaim(struct sock *sk, int amount);
+ /* sysctl_mem values are in pages, we convert them in SK_MEM_QUANTUM units */
+ static inline long sk_prot_mem_limits(const struct sock *sk, int index)
+ {
+-	long val = sk->sk_prot->sysctl_mem[index];
++	long val = READ_ONCE(sk->sk_prot->sysctl_mem[index]);
+ 
+ #if PAGE_SIZE > SK_MEM_QUANTUM
+ 	val <<= PAGE_SHIFT - SK_MEM_QUANTUM_SHIFT;
 -- 
 2.35.1
 

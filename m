@@ -2,129 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C50E579858
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9A1579859
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 13:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235828AbiGSLYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 07:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S236495AbiGSLYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 07:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234587AbiGSLYY (ORCPT
+        with ESMTP id S235462AbiGSLY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 07:24:24 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37E422BD9;
-        Tue, 19 Jul 2022 04:24:23 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id AD9505C00DA;
-        Tue, 19 Jul 2022 07:24:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 19 Jul 2022 07:24:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1658229860; x=
-        1658316260; bh=YPg2p7ZkJ19niAOLzOQ3N7cpJngdqDGzBZd0ivZIw/Q=; b=P
-        Ob6SkSVtdd4l7FeK45g4x8xul5U9/5ZE4xZp45yEvjWvCwnoOkS++8GkHgkYF8aI
-        bmR5OPtzLUWh2hcq51yQpIKkpbJWy+8C8OxosLvGkGav+Dhb+zE4VYWSk0jhcC6/
-        Cjs7fOD50lLw02HP+eSRQQYOnkrz9HdOfa1QQ2+06jyRAHSB5dzWUSMCiVlyRrUF
-        PZHajCLQqtYwU8/FDoaNxagXaUMHy4X0b3QyNZeZuXbfZb3KYUsdO7QkGOuQaILo
-        LF/40WtuxqJNkgbwxszu1X9VGSFTsw5K32m2R7vauZdcOKxrNDIdcr+RUCd93Bs/
-        ueKT3Qzm9IAKiKlPFKyNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658229860; x=
-        1658316260; bh=YPg2p7ZkJ19niAOLzOQ3N7cpJngdqDGzBZd0ivZIw/Q=; b=o
-        DdkFYjfQqwU/flglwh7Eyru0SpGUjAKEnysIlLN61htJdG76t2vUFer7cuVZskSk
-        c/NPSZVqM4+rL+rV1y9yk0GUc4xAykO2aJ1XMIAYhdsZH09+b3xR0HWMlPU6SwgN
-        wAK+BDELmX9mCDq0oJJLnrkdh4CZT6oPF/qY05oy8rsmOxs+CvufhU34oAUWZESp
-        l2OjhGDSOJS6cwbRrOMh9as5SsrCCvtVIL8uhxG6WchIdnCd8T/RAV6vy0yWnHne
-        C4nWfPezVrxUkL9JLXiz/IuxtCeLy2gomAWnBVfsNrtuJD22yGfGgD3UGn5uIjmz
-        esHrxzEhAjJDGQhttITbg==
-X-ME-Sender: <xms:ZJTWYj9CoUVzwX-nFSJky_YP7DaMVJU1UvMcJGNh14qiHJC9JMj16Q>
-    <xme:ZJTWYvvqN4PiKrp959earfJ4GWx8A6VF6HZ0VS0lYW1OV6K4RCFOxQ5nX9iCESsI1
-    kJu4XTrnBm2mQ>
-X-ME-Received: <xmr:ZJTWYhDnsFxgwWMyfHRKKR4LjyWp2RQm1Pv1q0zeDSorNRvJBziakVAbhnB3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeltddgfeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefgke
-    ffieefieevkeelteejvdetvddtledugfdvhfetjeejieduledtfefffedvieenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:ZJTWYvctjo7lLFj5gU0qQyimXstOsSUZtWu4iRx3K-XUXv_RTz-yrQ>
-    <xmx:ZJTWYoNAzT2bd12Eu6ai3qQ-ouOQGgEvJanhYv7GD6Itm5Mldrxamg>
-    <xmx:ZJTWYhnGBEzbkAxmfHY0ACMPs5NBLnnf_yF5GdHCEwzV3iDhtEMaog>
-    <xmx:ZJTWYkC1b0B-Y6Xe2lsszRD05TqyOe7An4zyzk_oDwdR8re7xf4viA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 19 Jul 2022 07:24:19 -0400 (EDT)
-Date:   Tue, 19 Jul 2022 13:24:18 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the usb tree
-Message-ID: <YtaUYmzTfKmx0Ek0@kroah.com>
-References: <20220719194337.64c490e0@canb.auug.org.au>
- <20220719132559.3348c163@reki>
+        Tue, 19 Jul 2022 07:24:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F6FC402E8
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 04:24:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A4A81424;
+        Tue, 19 Jul 2022 04:24:28 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.86.74])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC1483F766;
+        Tue, 19 Jul 2022 04:24:26 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 12:24:20 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Qi Zheng <zhengqi.arch@bytedance.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 2/2] arm64: support HAVE_IRQ_EXIT_ON_IRQ_STACK
+Message-ID: <YtaUZCabQw7nrv4A@FVFF77S0Q05N>
+References: <20220708094950.41944-1-zhengqi.arch@bytedance.com>
+ <20220708094950.41944-3-zhengqi.arch@bytedance.com>
+ <CAK8P3a3rp6R1kWNHBxgDf5xrECj-F5AVn++qR9_Y7GiRrDBpDw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220719132559.3348c163@reki>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAK8P3a3rp6R1kWNHBxgDf5xrECj-F5AVn++qR9_Y7GiRrDBpDw@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 01:25:59PM +0300, Maxim Devaev wrote:
-> В Tue, 19 Jul 2022 19:43:37 +1000
-> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Thu, Jul 14, 2022 at 01:37:31PM +0200, Arnd Bergmann wrote:
+> On Fri, Jul 8, 2022 at 11:49 AM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+> >
+> > Since softirqs are handled on the per-CPU IRQ stack,
+> > let's support HAVE_IRQ_EXIT_ON_IRQ_STACK which causes
+> > the core code to invoke __do_softirq() directly without
+> > going through do_softirq_own_stack().
+> >
+> > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 > 
-> > Hi all,
-> > 
-> > After merging the usb tree, today's linux-next build (htmldocs) produced
-> > this warning:
-> > 
-> > Documentation/ABI/testing/configfs-usb-gadget-mass-storage:17: WARNING: Malformed table.
-> > Text in column margin in table line 14.
-> > 
-> > ===========     ==============================================
-> > file            The path to the backing file for the LUN.
-> >                 Required if LUN is not marked as removable.
-> > ro              Flag specifying access to the LUN shall be
-> >                 read-only. This is implied if CD-ROM emulation
-> >                 is enabled as well as when it was impossible
-> >                 to open "filename" in R/W mode.
-> > removable       Flag specifying that LUN shall be indicated as
-> >                 being removable.
-> > cdrom           Flag specifying that LUN shall be reported as
-> >                 being a CD-ROM.
-> > nofua           Flag specifying that FUA flag
-> >                 in SCSI WRITE(10,12)
-> > forced_eject    This write-only file is useful only when
-> >                 the function is active. It causes the backing
-> >                 file to be forcibly detached from the LUN,
-> >                 regardless of whether the host has allowed it.
-> >                 Any non-zero number of bytes written will
-> >                 result in ejection.
-> > ===========     ==============================================
-> > 
-> > Introduced by commit
-> > 
-> >   421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
-> > 
+> Adding Mark Rutland to Cc, he's the one that worked on this area the most in the
+> past and should probably review your patch. I still feel like there
+> should be a way
+> to improve readability of the IRQ entry path rather than just adding another
+> level of indirection, but the ideas I had so far have not led to
+> anything useful.
 > 
-> Sorry. Should I send a patch?
+> Overall I suppose your version is an improvement over the extra double stack
+> switch when entering softirq.
 
-Yes please.
+The cost of the switch is fairly trivial, so performance-wise I would expect
+that to fall within the noise. So if this is just about avoiding the extra
+switch, I'd prefer to leave this as-is.
+
+If we want to move more work after the stack switch, I think we'd want a more
+in depth rethink of the structure of this code (since e.g. we could make the
+common case have almost everything on the IRQ stack, at the cost of making
+preemption require more work).
+
+Thanks,
+Mark.
+
+> 
+>         Arnd
+> 
+> > ---
+> >  arch/arm64/Kconfig                 |  1 +
+> >  arch/arm64/include/asm/exception.h |  4 +++-
+> >  arch/arm64/kernel/entry-common.c   | 30 ++++++++++++++++++++----------
+> >  arch/arm64/kernel/entry.S          |  6 ++++--
+> >  arch/arm64/kernel/irq.c            |  5 +++--
+> >  5 files changed, 31 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > index be0a9f0052ee..d2cc7daecce3 100644
+> > --- a/arch/arm64/Kconfig
+> > +++ b/arch/arm64/Kconfig
+> > @@ -231,6 +231,7 @@ config ARM64
+> >         select TRACE_IRQFLAGS_SUPPORT
+> >         select TRACE_IRQFLAGS_NMI_SUPPORT
+> >         select HAVE_SOFTIRQ_ON_OWN_STACK
+> > +       select HAVE_IRQ_EXIT_ON_IRQ_STACK
+> >         help
+> >           ARM 64-bit (AArch64) Linux support.
+> >
+> > diff --git a/arch/arm64/include/asm/exception.h b/arch/arm64/include/asm/exception.h
+> > index d94aecff9690..8bff0aa7ab50 100644
+> > --- a/arch/arm64/include/asm/exception.h
+> > +++ b/arch/arm64/include/asm/exception.h
+> > @@ -54,7 +54,9 @@ asmlinkage void el0t_32_fiq_handler(struct pt_regs *regs);
+> >  asmlinkage void el0t_32_error_handler(struct pt_regs *regs);
+> >
+> >  asmlinkage void call_on_irq_stack(struct pt_regs *regs,
+> > -                                 void (*func)(struct pt_regs *));
+> > +                                 void (*func)(struct pt_regs *),
+> > +                                 void (*do_func)(struct pt_regs *,
+> > +                                                 void (*)(struct pt_regs *)));
+> >  asmlinkage void asm_exit_to_user_mode(struct pt_regs *regs);
+> >
+> >  void do_mem_abort(unsigned long far, unsigned long esr, struct pt_regs *regs);
+> > diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+> > index c75ca36b4a49..935d1ab150b5 100644
+> > --- a/arch/arm64/kernel/entry-common.c
+> > +++ b/arch/arm64/kernel/entry-common.c
+> > @@ -266,14 +266,16 @@ static void __sched arm64_preempt_schedule_irq(void)
+> >  }
+> >
+> >  static void do_interrupt_handler(struct pt_regs *regs,
+> > -                                void (*handler)(struct pt_regs *))
+> > +                                void (*handler)(struct pt_regs *),
+> > +                                void (*do_handler)(struct pt_regs *,
+> > +                                                   void (*)(struct pt_regs *)))
+> >  {
+> >         struct pt_regs *old_regs = set_irq_regs(regs);
+> >
+> >         if (on_thread_stack())
+> > -               call_on_irq_stack(regs, handler);
+> > +               call_on_irq_stack(regs, handler, do_handler);
+> >         else
+> > -               handler(regs);
+> > +               do_handler(regs, handler);
+> >
+> >         set_irq_regs(old_regs);
+> >  }
+> > @@ -441,22 +443,32 @@ asmlinkage void noinstr el1h_64_sync_handler(struct pt_regs *regs)
+> >         }
+> >  }
+> >
+> > +static void nmi_handler(struct pt_regs *regs, void (*handler)(struct pt_regs *))
+> > +{
+> > +       handler(regs);
+> > +}
+> > +
+> >  static __always_inline void __el1_pnmi(struct pt_regs *regs,
+> >                                        void (*handler)(struct pt_regs *))
+> >  {
+> >         arm64_enter_nmi(regs);
+> > -       do_interrupt_handler(regs, handler);
+> > +       do_interrupt_handler(regs, handler, nmi_handler);
+> >         arm64_exit_nmi(regs);
+> >  }
+> >
+> > +static void irq_handler(struct pt_regs *regs, void (*handler)(struct pt_regs *))
+> > +{
+> > +       irq_enter_rcu();
+> > +       handler(regs);
+> > +       irq_exit_rcu();
+> > +}
+> > +
+> >  static __always_inline void __el1_irq(struct pt_regs *regs,
+> >                                       void (*handler)(struct pt_regs *))
+> >  {
+> >         enter_from_kernel_mode(regs);
+> >
+> > -       irq_enter_rcu();
+> > -       do_interrupt_handler(regs, handler);
+> > -       irq_exit_rcu();
+> > +       do_interrupt_handler(regs, handler, irq_handler);
+> >
+> >         arm64_preempt_schedule_irq();
+> >
+> > @@ -699,9 +711,7 @@ static void noinstr el0_interrupt(struct pt_regs *regs,
+> >         if (regs->pc & BIT(55))
+> >                 arm64_apply_bp_hardening();
+> >
+> > -       irq_enter_rcu();
+> > -       do_interrupt_handler(regs, handler);
+> > -       irq_exit_rcu();
+> > +       do_interrupt_handler(regs, handler, irq_handler);
+> >
+> >         exit_to_user_mode(regs);
+> >  }
+> > diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+> > index 254fe31c03a0..1c351391f6bd 100644
+> > --- a/arch/arm64/kernel/entry.S
+> > +++ b/arch/arm64/kernel/entry.S
+> > @@ -867,7 +867,9 @@ NOKPROBE(ret_from_fork)
+> >
+> >  /*
+> >   * void call_on_irq_stack(struct pt_regs *regs,
+> > - *                       void (*func)(struct pt_regs *));
+> > + *                       void (*func)(struct pt_regs *)
+> > + *                       void (*do_func)(struct pt_regs *,
+> > + *                                       void (*)(struct pt_regs *)));
+> >   *
+> >   * Calls func(regs) using this CPU's irq stack and shadow irq stack.
+> >   */
+> > @@ -886,7 +888,7 @@ SYM_FUNC_START(call_on_irq_stack)
+> >
+> >         /* Move to the new stack and call the function there */
+> >         mov     sp, x16
+> > -       blr     x1
+> > +       blr     x2
+> >
+> >         /*
+> >          * Restore the SP from the FP, and restore the FP and LR from the frame
+> > diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
+> > index c36ad20a52f3..003db605bc4f 100644
+> > --- a/arch/arm64/kernel/irq.c
+> > +++ b/arch/arm64/kernel/irq.c
+> > @@ -73,14 +73,15 @@ static void init_irq_stacks(void)
+> >  #endif
+> >
+> >  #ifndef CONFIG_PREEMPT_RT
+> > -static void ____do_softirq(struct pt_regs *regs)
+> > +static void ____do_softirq(struct pt_regs *regs,
+> > +                          void (*handler)(struct pt_regs *))
+> >  {
+> >         __do_softirq();
+> >  }
+> >
+> >  void do_softirq_own_stack(void)
+> >  {
+> > -       call_on_irq_stack(NULL, ____do_softirq);
+> > +       call_on_irq_stack(NULL, NULL, ____do_softirq);
+> >  }
+> >  #endif
+> >
+> > --
+> > 2.20.1
+> >

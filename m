@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64AC57A864
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D7657A867
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 22:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240155AbiGSUkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 16:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S240178AbiGSUks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 16:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239975AbiGSUkQ (ORCPT
+        with ESMTP id S239975AbiGSUkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 16:40:16 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE0DDED5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:40:14 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id q43-20020a17090a17ae00b001f1f67e053cso104971pja.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:40:14 -0700 (PDT)
+        Tue, 19 Jul 2022 16:40:46 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85C5286EE
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:40:45 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id o18so1692584pjs.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 13:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OC6NSncubbo54zJwS4jqbRy+27bSdBUqKTObeoC6G/s=;
-        b=f5Rnr19BgdjeCuPPX5SztiBl+D20YhCj8LLpNJhGusCW1CsxlAbgOeeY5ILg4cCN0d
-         wbcIONy5qm95eyXkg6CezAgmXLtpMkSHRDnC3KYse9lW+aomXBePTd46+xmh+AB8HWE8
-         mXE/Me1v9/AAxfJLIfwUTqHHC3SxctKcLA3YWdGWvUh3KIJtNu6grhYdhnoFciLd/X7Q
-         9UYQD4XYzRkwFHHXh1EF8//r1JwSYNmQH4rCTvmE0sJ1IRRm47mj1zERkl4L6wMhKW/h
-         KTbydvaduodEYSgCmA9G8AWv8/p0o1M3uoieULcgl2Xu/h0ewCsrfOaC5E7eT0KmJNq7
-         I3Sw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y5fwh5XQ1eQ19E2Z8DxxEP57ot41iP+HZxIKEkeAu7k=;
+        b=Gg1iGwaFzeNXWLYH3o7HDYdbOCx4YcdI19btWPVG9za5H/8vIXfD59H2snLGuj7tBm
+         X8zOltVQGm+kXZztqubzj8hap2L1wiCMWZb8ON1NV34KFIUtowCVaQNU4YjYJmEqoxIc
+         GwluNfF4a73tE0YFGBqyP6CGaP/l8PH30NjqTNTcixgexwrhhC4RYmnUWUvabYZsnimL
+         5nTjBYctDEN1kG7Dk9FF+zi+0g0XgXzqJCYwfXLuktyljPrNOXldpD4XrI7skoZGpbHq
+         WthL/PFwmSwXuilw7qb16uw6vKakYq578EXI4hl36UikZVmL4lrLLSYHntEt0fAoI01A
+         tv/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OC6NSncubbo54zJwS4jqbRy+27bSdBUqKTObeoC6G/s=;
-        b=kIzcB4b5mch4SQL0A5wx6fcrGHXvIh8YBvttn3NRbq1DHsFP+J6xXworrA0tNTkzyj
-         iehu32ewflPPPQXaNbR0u5mrguPdLoXn2oSYu844Y0/K1SYmHgJhFwrr5z+YMYWZFYZv
-         hlfcCvorj/uO0T9jCP+DPijfEMINSyCsbnZF6U1msmd9yYKyq9dIX+ieckuffT/td55l
-         uL2Igni5pcaLYuePm5hfawS5IIsJaE5gyFidy8hn0pSIlAStcZtG1O2mAXCv7svFYgfY
-         61EsgNQyxDOL7+/FJUPxH5Znenx3V2iCh+77jGELldb015vfpJTrIZ1teAQeQdwY2wvv
-         uanQ==
-X-Gm-Message-State: AJIora+a4/XrwaxaD2c7ANu116y/kIR11JEkOIxP9gj7jS3Lq77cTf4l
-        ZdkjFAB9z/fmgRmmLjm1QFelayGr3rfmdX/qW7nwdw==
-X-Google-Smtp-Source: AGRyM1uLtQY2Guu1CcxG7wrE2WtJcC+VP2deAiAOkkuOHmJ30YHQnxMCaYLdUf+McUMo6Mz6HOmTEE/R5opYBHFl0Tw=
-X-Received: by 2002:a17:903:244d:b0:16c:5bfe:2e87 with SMTP id
- l13-20020a170903244d00b0016c5bfe2e87mr34944034pls.148.1658263213708; Tue, 19
- Jul 2022 13:40:13 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y5fwh5XQ1eQ19E2Z8DxxEP57ot41iP+HZxIKEkeAu7k=;
+        b=gPCwzk79A2fOvt1WktQD09g/0qoZMmplUiyc9phjpo3Flzse2/JmDL9ubjfscLq+2c
+         5ShSaX6aSj4rSwigP3RYqtH0gyaS67FWgt6Wi1paR/0d4fEHY+nJeofbJPpP11zYKyur
+         ER8WRdq2OgmsngsidLX0KDszwAjFzNjWlMIAVZWdTYD5fqtQk3J8mBbxic0Tka38crjc
+         ZIzxXlrVQYBHbtNJd9g/9CO/0qkLfdwdOsgWmIc4o8rLzQ3OCjRrSHzQ8ucjgdg6Ci2u
+         Ce3cw2be+XMYzLP2+gRwH8nRZv3H+ivg1m8lYqofgqs4e2KCgrfzW7NFTk7Jpeb4tKYA
+         jViA==
+X-Gm-Message-State: AJIora+66wPnor0tvVCSWiORRQcdgGrsShvoRlrWAlbJuLFv17JroBKs
+        HurP+Z+V0QltWlfdatVKPsPE8GK62SX31A==
+X-Google-Smtp-Source: AGRyM1vf3dbslbsbY2ic8F1U4mypBluA6i60ryQkUBk7ewKA1RFGBbhLGjzJ59JOrn6udnWcR3irSQ==
+X-Received: by 2002:a17:90a:7409:b0:1ef:8e95:c861 with SMTP id a9-20020a17090a740900b001ef8e95c861mr1323452pjg.115.1658263244890;
+        Tue, 19 Jul 2022 13:40:44 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id u1-20020a634701000000b004168945bdf4sm10156947pga.66.2022.07.19.13.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 13:40:44 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 20:40:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: Re: [PATCH 11/12] KVM: X86/MMU: Remove mmu_pages_first() and
+ mmu_pages_next()
+Message-ID: <YtcWyEdSnMN5M9vn@google.com>
+References: <20220605064342.309219-1-jiangshanlai@gmail.com>
+ <20220605064342.309219-12-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
-In-Reply-To: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Tue, 19 Jul 2022 13:40:02 -0700
-Message-ID: <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-To:     Joe Burton <jevburton.kernel@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Joe Burton <jevburton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220605064342.309219-12-jiangshanlai@gmail.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -74,92 +76,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 12:40 PM Joe Burton <jevburton.kernel@gmail.com> wrote:
->
-> From: Joe Burton <jevburton@google.com>
->
-> Add an extensible variant of bpf_obj_get() capable of setting the
-> `file_flags` parameter.
->
-> This parameter is needed to enable unprivileged access to BPF maps.
-> Without a method like this, users must manually make the syscall.
->
-> Signed-off-by: Joe Burton <jevburton@google.com>
+On Sun, Jun 05, 2022, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> Use i = 0 andd i++ instead.
 
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
+s/andd/and, but even better would be to write a full changelog.
 
-For context:
-We've found this out while we were trying to add support for unpriv
-processes to open pinned r-x maps.
-Maybe this deserves a test as well? Not sure.
-
-> ---
->  tools/lib/bpf/bpf.c      | 10 ++++++++++
->  tools/lib/bpf/bpf.h      |  9 +++++++++
->  tools/lib/bpf/libbpf.map |  1 +
->  3 files changed, 20 insertions(+)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 5eb0df90eb2b..5acb0e8bd13c 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char *pathname)
->  }
->
->  int bpf_obj_get(const char *pathname)
-> +{
-> +       LIBBPF_OPTS(bpf_obj_get_opts, opts);
-> +       return bpf_obj_get_opts(pathname, &opts);
-> +}
-> +
-> +int bpf_obj_get_opts(const char *pathname, const struct bpf_obj_get_opts *opts)
->  {
->         union bpf_attr attr;
->         int fd;
->
-> +       if (!OPTS_VALID(opts, bpf_obj_get_opts))
-> +               return libbpf_err(-EINVAL);
-> +
->         memset(&attr, 0, sizeof(attr));
->         attr.pathname = ptr_to_u64((void *)pathname);
-> +       attr.file_flags = OPTS_GET(opts, file_flags, 0);
->
->         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
->         return libbpf_err_errno(fd);
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 88a7cc4bd76f..f31b493b5f9a 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -270,8 +270,17 @@ LIBBPF_API int bpf_map_update_batch(int fd, const void *keys, const void *values
->                                     __u32 *count,
->                                     const struct bpf_map_batch_opts *opts);
->
-> +struct bpf_obj_get_opts {
-> +       size_t sz; /* size of this struct for forward/backward compatibility */
-> +
-> +       __u32 file_flags;
-> +};
-> +#define bpf_obj_get_opts__last_field file_flags
-> +
->  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
->  LIBBPF_API int bpf_obj_get(const char *pathname);
-> +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
-> +                               const struct bpf_obj_get_opts *opts);
->
->  struct bpf_prog_attach_opts {
->         size_t sz; /* size of this struct for forward/backward compatibility */
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 0625adb9e888..119e6e1ea7f1 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
->
->  LIBBPF_1.0.0 {
->         global:
-> +               bpf_obj_get_opts;
->                 bpf_prog_query_opts;
->                 bpf_program__attach_ksyscall;
->                 btf__add_enum64;
-> --
-> 2.37.0.170.g444d1eabd0-goog
->
+  Drop mmu_pages_{next,first}() and open code their now trivial
+  implementations in for_each_sp(), the sole caller.

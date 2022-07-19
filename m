@@ -2,114 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC597579F47
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 15:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B543F5799CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243374AbiGSNMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 09:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
+        id S238139AbiGSMGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243400AbiGSNLp (ORCPT
+        with ESMTP id S238589AbiGSMEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 09:11:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C7C67150;
-        Tue, 19 Jul 2022 05:29:23 -0700 (PDT)
+        Tue, 19 Jul 2022 08:04:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5893248EA5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 05:00:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3D43B81B21;
-        Tue, 19 Jul 2022 12:29:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433F8C341C6;
-        Tue, 19 Jul 2022 12:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658233760;
-        bh=Fm0XoAuR/C5k+pGRAD6n+2LWPADIxJcnFfg1OhMEkMI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q5BY67Eme6ztho3/FDCXv0SS4R4raHi4uvQ4sdpASZ12A1Xj4jkQxdHNtwaCsSICO
-         qg4YnoaUB689/xjUsYOamI0tztOUBoSfHsSFl12gN7WL61bn4j/LmCR9P+LH85cxWH
-         d4IHw3yiC5M1fE68/V34ygt6rgA8nvigK4vGNwNo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 5.18 231/231] x86/pat: Fix x86_has_pat_wp()
-Date:   Tue, 19 Jul 2022 13:55:16 +0200
-Message-Id: <20220719114733.038516713@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
-References: <20220719114714.247441733@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D33A761697
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:00:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD9BC341CA;
+        Tue, 19 Jul 2022 12:00:48 +0000 (UTC)
+Date:   Tue, 19 Jul 2022 13:00:44 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Conor.Dooley@microchip.com
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com, palmer@rivosinc.com,
+        aou@eecs.berkeley.edu, sudeep.holla@arm.com, will@kernel.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        Daire.McNamara@microchip.com, niklas.cassel@wdc.com,
+        damien.lemoal@opensource.wdc.com, geert@linux-m68k.org,
+        zong.li@sifive.com, kernel@esmil.dk, hahnjo@hahnjo.de,
+        guoren@kernel.org, anup@brainfault.org, atishp@atishpatra.org,
+        heiko@sntech.de, philipp.tomsich@vrull.eu, robh@kernel.org,
+        maz@kernel.org, viresh.kumar@linaro.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Brice.Goglin@inria.fr
+Subject: Re: [PATCH v4 1/2] arm64: topology: move store_cpu_topology() to
+ shared code
+Message-ID: <Ytac7G1zlq6WW4jt@arm.com>
+References: <20220715175155.3567243-1-mail@conchuod.ie>
+ <20220715175155.3567243-2-mail@conchuod.ie>
+ <YtaYTgFDpGSsG+H0@arm.com>
+ <198b0486-29e7-9729-d137-0470e93038fa@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <198b0486-29e7-9729-d137-0470e93038fa@microchip.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+On Tue, Jul 19, 2022 at 11:51:04AM +0000, Conor.Dooley@microchip.com wrote:
+> On 19/07/2022 12:41, Catalin Marinas wrote:
+> > On Fri, Jul 15, 2022 at 06:51:55PM +0100, Conor Dooley wrote:
+> >> From: Conor Dooley <conor.dooley@microchip.com>
+> >>
+> >> arm64's method of defining a default cpu topology requires only minimal
+> >> changes to apply to RISC-V also. The current arm64 implementation exits
+> >> early in a uniprocessor configuration by reading MPIDR & claiming that
+> >> uniprocessor can rely on the default values.
+> >>
+> >> This is appears to be a hangover from prior to '3102bc0e6ac7 ("arm64:
+> >> topology: Stop using MPIDR for topology information")', because the
+> >> current code just assigns default values for multiprocessor systems.
+> >>
+> >> With the MPIDR references removed, store_cpu_topolgy() can be moved to
+> >> the common arch_topology code.
+> >>
+> >> CC: stable@vger.kernel.org
+> > 
+> > I'd quantify how far back you want this to go. IIUC based on the Fixes
+> > tag in the other patch, it should stop at 5.4. If you send a pull
+> > request instead and have a fixed commit id, you could add it as a
+> > prerequisite on the following patch without a cc stable here.
+> 
+> I guess a PR might be the easiest way for it anyway, so that both
+> yourself and Palmer could merge it?
 
-commit 230ec83d4299b30c51a1c133b4f2a669972cc08a upstream.
+I guess so, a stable branch would do. Note that Will is handling the
+upcoming merging window.
 
-x86_has_pat_wp() is using a wrong test, as it relies on the normal
-PAT configuration used by the kernel. In case the PAT MSR has been
-setup by another entity (e.g. Xen hypervisor) it might return false
-even if the PAT configuration is allowing WP mappings. This due to the
-fact that when running as Xen PV guest the PAT MSR is setup by the
-hypervisor and cannot be changed by the guest. This results in the WP
-related entry to be at a different position when running as Xen PV
-guest compared to the bare metal or fully virtualized case.
-
-The correct way to test for WP support is:
-
-1. Get the PTE protection bits needed to select WP mode by reading
-   __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP] (depending on the PAT MSR
-   setting this might return protection bits for a stronger mode, e.g.
-   UC-)
-2. Translate those bits back into the real cache mode selected by those
-   PTE bits by reading __pte2cachemode_tbl[__pte2cm_idx(prot)]
-3. Test for the cache mode to be _PAGE_CACHE_MODE_WP
-
-Fixes: f88a68facd9a ("x86/mm: Extend early_memremap() support with additional attrs")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org> # 4.14
-Link: https://lore.kernel.org/r/20220503132207.17234-1-jgross@suse.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/x86/mm/init.c |   14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -77,10 +77,20 @@ static uint8_t __pte2cachemode_tbl[8] =
- 	[__pte2cm_idx(_PAGE_PWT | _PAGE_PCD | _PAGE_PAT)] = _PAGE_CACHE_MODE_UC,
- };
- 
--/* Check that the write-protect PAT entry is set for write-protect */
-+/*
-+ * Check that the write-protect PAT entry is set for write-protect.
-+ * To do this without making assumptions how PAT has been set up (Xen has
-+ * another layout than the kernel), translate the _PAGE_CACHE_MODE_WP cache
-+ * mode via the __cachemode2pte_tbl[] into protection bits (those protection
-+ * bits will select a cache mode of WP or better), and then translate the
-+ * protection bits back into the cache mode using __pte2cm_idx() and the
-+ * __pte2cachemode_tbl[] array. This will return the really used cache mode.
-+ */
- bool x86_has_pat_wp(void)
- {
--	return __pte2cachemode_tbl[_PAGE_CACHE_MODE_WP] == _PAGE_CACHE_MODE_WP;
-+	uint16_t prot = __cachemode2pte_tbl[_PAGE_CACHE_MODE_WP];
-+
-+	return __pte2cachemode_tbl[__pte2cm_idx(prot)] == _PAGE_CACHE_MODE_WP;
- }
- 
- enum page_cache_mode pgprot2cachemode(pgprot_t pgprot)
-
-
+-- 
+Catalin

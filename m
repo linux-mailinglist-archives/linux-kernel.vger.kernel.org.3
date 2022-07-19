@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4750E57A6DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93E757A6E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 21:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236884AbiGSTBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 15:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        id S235944AbiGSTFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 15:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234344AbiGSTBr (ORCPT
+        with ESMTP id S231549AbiGSTFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 15:01:47 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE45509E0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:01:46 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id w185so14458812pfb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 12:01:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=84fQRcLEum7lr3C0S+MQVM+LkmGA7Kz9oOG7rPtZmnU=;
-        b=K90YAZNBHhdAnD+6bQCcIgFHrLzFJ9lhISsj+1pbQKv61VT+Gj8auYkXMWVjxo0HWn
-         KE6VKEvGlMpLl/6nORc+1A+OoKXfAyNXxUVWUf/PbIMRhDeT6emmyK/HeKIjejDB/ye5
-         ReWHZOVdxLzS/IVkNp9746N2808Ff6cwDR06BX/3C3exi4dvAVGP3W+DorQnDJtth3Ck
-         z6NKHfv4+JY6s/NEN5ZhC9xYAm0+2Y1RJ9Q76JLlYMdBCQKR4+q3L0y/7vHozs7fWGZn
-         kuXDfkIXv8VNwtJvd9B4HCW7mZ8s5ADkMxPV7FqUDHa5S11tDErtDCMO/GZ4eUTOAL2u
-         QVhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=84fQRcLEum7lr3C0S+MQVM+LkmGA7Kz9oOG7rPtZmnU=;
-        b=QMqJxF1xsn6C6pDEnIjxn+wMQc+EhtagpkK3DMgYvSB7k5SZwm0hfP1xsB8zST0Umv
-         05zISIxOBaHJdWje+MtWTKlkm6Mk2dZ/yYaos3aNHxQG9r5YMfYMFSF68gPw8/qFgoRC
-         8AB6DYWkVgcfjwRd/0JXzApjWcPkSDZLP0Zf9Rfu0sQ7zuwQJa7u93uaiF6erZT8WIt4
-         4Us085QU/F21kMElPOPhkv3VxmAMPsr0z4H/7KEjR/B2bnj/qXjvCFOvK3K9Yy8HbgyD
-         Qbno7T7gixN1TBGlucZB8U1xsrFgocIECbEk1Et55GVVUu2r2Fa2/mzr1sVvnIrweKn7
-         4bgQ==
-X-Gm-Message-State: AJIora9SiV+/G67Y8AHgecAYYKVBTvAbIJ9Vf+iRPwIJ+wEjmPkEarwb
-        zMr+9ZBg42RVWw5NPg/Vk/mdeg==
-X-Google-Smtp-Source: AGRyM1uQeFTRjAK5aiqH0ucgUG+WJv1wP0VVilxGBCHQZWOTCBJXavprlX28/5q8Z2sjIaN/W7IyRA==
-X-Received: by 2002:a63:d94a:0:b0:412:6986:326e with SMTP id e10-20020a63d94a000000b004126986326emr30936585pgj.56.1658257305747;
-        Tue, 19 Jul 2022 12:01:45 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id u23-20020a1709026e1700b0016d01c133e1sm2390230plk.248.2022.07.19.12.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 12:01:45 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 19:01:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, jmattson@google.com,
-        joro@8bytes.org, wanpengli@tencent.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: X86: Explicitly set the 'fault.async_page_fault'
- value in kvm_fixup_and_inject_pf_error().
-Message-ID: <Ytb/le8ymDSyx8oJ@google.com>
-References: <20220718074756.53788-1-yu.c.zhang@linux.intel.com>
+        Tue, 19 Jul 2022 15:05:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0152C105;
+        Tue, 19 Jul 2022 12:05:20 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 19:05:16 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658257518;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ur+bosjTdvrAmhdhVF8+GUTIU+bcYGG9cbu/MPrynHM=;
+        b=2Z9BS3jGsAJffUxlpwc0qXZZ/acGveFsHjgCpnFezQD0QQ7mGwpmPQ1k4ZU7LP2KY7Z/xw
+        GLwdSVBzSNq0B/gOZe3/FYJT+zHQd8xZcnQHdafmZONEV8GSti9YprUI+wgaa7n9NZcwVf
+        8Ozs2ks7EI4yD/P2MPkJT/N3VQO74tyxurbH26doOB2c7pDQtGvDXuzaIeG1MsJWwNL6Uy
+        n0BRP1K7zZ2eTgV9ZkSTn4T4N+BRn6DkSTpfyWftHK6OklbDH3Fthx0gQVzWtCwMRACRe4
+        Y2WxSpHlVrxxKKq536xKZquXV+9mCS2FIvYAB1xkjyC4Y3m41cHxh20xiElUbw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658257518;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ur+bosjTdvrAmhdhVF8+GUTIU+bcYGG9cbu/MPrynHM=;
+        b=1/6hfCzq//LpESTB5RzwemFKhADx7+VRmzJkXcjais0rwN8kTiHsY0wslifYHHeW54ET5g
+        WwTmvK16WYkAl8Dw==
+From:   "tip-bot2 for Paolo Bonzini" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/cpu: Use MSR_IA32_MISC_ENABLE constants
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Borislav Petkov <bp@suse.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220719174714.2410374-1-pbonzini@redhat.com>
+References: <20220719174714.2410374-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718074756.53788-1-yu.c.zhang@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <165825751659.15455.988965721431093614.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022, Yu Zhang wrote:
-> kvm_fixup_and_inject_pf_error() was introduced to fixup the error code(
-> e.g., to add RSVD flag) and inject the #PF to the guest, when guest
-> MAXPHYADDR is smaller than the host one.
-> 
-> When it comes to nested, L0 is expected to intercept and fix up the #PF
-> and then inject to L2 directly if
-> - L2.MAXPHYADDR < L0.MAXPHYADDR and
-> - L1 has no intention to intercept L2's #PF (e.g., L2 and L1 have the
->   same MAXPHYADDR value && L1 is using EPT for L2),
-> instead of constructing a #PF VM Exit to L1. Currently, with PFEC_MASK
-> and PFEC_MATCH both set to 0 in vmcs02, the interception and injection
-> may happen on all L2 #PFs.
-> 
-> However, failing to initialize 'fault' in kvm_fixup_and_inject_pf_error()
-> may cause the fault.async_page_fault being NOT zeroed, and later the #PF
-> being treated as a nested async page fault, and then being injected to L1.
-> Instead of zeroing 'fault' at the beginning of this function, we mannually
-> set the value of 'fault.async_page_fault', because false is the value we
-> really expect.
-> 
-> Fixes: 897861479c064 ("KVM: x86: Add helper functions for illegal GPA checking and page fault injection")
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216178
-> Reported-by: Yang Lixiao <lixiao.yang@intel.com>
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+The following commit has been merged into the x86/cpu branch of tip:
 
-No need for my SoB, I was just providing feedback.  Other than that, 
+Commit-ID:     3f2adf00f52b5f2e9e9f23bb5c77608fc9ee297c
+Gitweb:        https://git.kernel.org/tip/3f2adf00f52b5f2e9e9f23bb5c77608fc9ee297c
+Author:        Paolo Bonzini <pbonzini@redhat.com>
+AuthorDate:    Tue, 19 Jul 2022 13:47:14 -04:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 19 Jul 2022 20:53:10 +02:00
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+x86/cpu: Use MSR_IA32_MISC_ENABLE constants
+
+Instead of the magic numbers 1<<11 and 1<<12 use the constants
+from msr-index.h.  This makes it obvious where those bits
+of MSR_IA32_MISC_ENABLE are consumed (and in fact that Linux
+consumes them at all) to simple minds that grep for
+MSR_IA32_MISC_ENABLE_.*_UNAVAIL.
+
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220719174714.2410374-1-pbonzini@redhat.com
+---
+ arch/x86/kernel/cpu/intel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 8321c43..a00dd3e 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -647,9 +647,9 @@ static void init_intel(struct cpuinfo_x86 *c)
+ 		unsigned int l1, l2;
+ 
+ 		rdmsr(MSR_IA32_MISC_ENABLE, l1, l2);
+-		if (!(l1 & (1<<11)))
++		if (!(l1 & MSR_IA32_MISC_ENABLE_BTS_UNAVAIL))
+ 			set_cpu_cap(c, X86_FEATURE_BTS);
+-		if (!(l1 & (1<<12)))
++		if (!(l1 & MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL))
+ 			set_cpu_cap(c, X86_FEATURE_PEBS);
+ 	}
+ 

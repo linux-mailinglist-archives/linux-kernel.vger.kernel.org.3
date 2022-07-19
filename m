@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2835D579B50
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1D3579A2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Jul 2022 14:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234527AbiGSM0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 08:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        id S238759AbiGSMLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 08:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240207AbiGSMYp (ORCPT
+        with ESMTP id S238899AbiGSMJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 08:24:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2924A81A;
-        Tue, 19 Jul 2022 05:09:32 -0700 (PDT)
+        Tue, 19 Jul 2022 08:09:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D564C51410;
+        Tue, 19 Jul 2022 05:02:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08CEC6177F;
-        Tue, 19 Jul 2022 12:09:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7192C341D3;
-        Tue, 19 Jul 2022 12:09:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D232AB81A8F;
+        Tue, 19 Jul 2022 12:02:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF45CC341C6;
+        Tue, 19 Jul 2022 12:02:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658232557;
-        bh=vjxibplRmYoM5AjjTBzU2tI1aoEEjXJTn1NajLk+/d8=;
+        s=korg; t=1658232164;
+        bh=YNQLgH3BCiMdN9Q4ce3u/5iMyew0BSySDJ03KIC7vqI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J2sNmNEL6miIgnVyy1aMirhGIXsiWpMMpuY+2CSDQzB4eTOu4b5a3YP2TQT/fdVAa
-         TaMBpDXxBEoytt9ooNVScNnUCxxVH7jWQy8ZZh6kf0XMVR9IDjfdRF36DVOB6Dt+nY
-         Zm2WkaOK3LchVsD4/KgykkcFx5MgT0EQGxo85sbM=
+        b=Bamh0tTzmNF/tdH+7GMrLLlFcvuDv0ON2sWwtiwaKcAmc4GfYusYITownOlCjZlrD
+         pyRKL7pbYiNTQVZEjpD76O6wtzjp9fk42xio53raeABcxq2lPyXbLFEJpddu702HcV
+         5zkMrIn4S2RTTYiX/bz/r0zBEnoDA4KmnsqsAbTI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Coiby Xu <coxu@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 065/112] ima: force signature verification when CONFIG_KEXEC_SIG is configured
+Subject: [PATCH 5.4 35/71] icmp: Fix a data-race around sysctl_icmp_ratemask.
 Date:   Tue, 19 Jul 2022 13:53:58 +0200
-Message-Id: <20220719114632.773018707@linuxfoundation.org>
+Message-Id: <20220719114555.684310243@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220719114626.156073229@linuxfoundation.org>
-References: <20220719114626.156073229@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+References: <20220719114552.477018590@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,85 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Coiby Xu <coxu@redhat.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit af16df54b89dee72df253abc5e7b5e8a6d16c11c ]
+[ Upstream commit 1ebcb25ad6fc3d50fca87350acf451b9a66dd31e ]
 
-Currently, an unsigned kernel could be kexec'ed when IMA arch specific
-policy is configured unless lockdown is enabled. Enforce kernel
-signature verification check in the kexec_file_load syscall when IMA
-arch specific policy is configured.
+While reading sysctl_icmp_ratemask, it can be changed concurrently.
+Thus, we need to add READ_ONCE() to its reader.
 
-Fixes: 99d5cadfde2b ("kexec_file: split KEXEC_VERIFY_SIG into KEXEC_SIG and KEXEC_SIG_FORCE")
-Reported-and-suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-Signed-off-by: Coiby Xu <coxu@redhat.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/ima_arch.c |  2 ++
- include/linux/kexec.h      |  6 ++++++
- kernel/kexec_file.c        | 11 ++++++++++-
- 3 files changed, 18 insertions(+), 1 deletion(-)
+ net/ipv4/icmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/ima_arch.c b/arch/x86/kernel/ima_arch.c
-index 7dfb1e808928..bd218470d145 100644
---- a/arch/x86/kernel/ima_arch.c
-+++ b/arch/x86/kernel/ima_arch.c
-@@ -88,6 +88,8 @@ const char * const *arch_get_ima_policy(void)
- 	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_ima_get_secureboot()) {
- 		if (IS_ENABLED(CONFIG_MODULE_SIG))
- 			set_module_sig_enforced();
-+		if (IS_ENABLED(CONFIG_KEXEC_SIG))
-+			set_kexec_sig_enforced();
- 		return sb_arch_rules;
- 	}
- 	return NULL;
-diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-index 037192c3a46f..a1f12e959bba 100644
---- a/include/linux/kexec.h
-+++ b/include/linux/kexec.h
-@@ -442,6 +442,12 @@ static inline int kexec_crash_loaded(void) { return 0; }
- #define kexec_in_progress false
- #endif /* CONFIG_KEXEC_CORE */
+diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
+index e05e972445fe..9bc01411be4c 100644
+--- a/net/ipv4/icmp.c
++++ b/net/ipv4/icmp.c
+@@ -290,7 +290,7 @@ static bool icmpv4_mask_allow(struct net *net, int type, int code)
+ 		return true;
  
-+#ifdef CONFIG_KEXEC_SIG
-+void set_kexec_sig_enforced(void);
-+#else
-+static inline void set_kexec_sig_enforced(void) {}
-+#endif
-+
- #endif /* !defined(__ASSEBMLY__) */
+ 	/* Limit if icmp type is enabled in ratemask. */
+-	if (!((1 << type) & net->ipv4.sysctl_icmp_ratemask))
++	if (!((1 << type) & READ_ONCE(net->ipv4.sysctl_icmp_ratemask)))
+ 		return true;
  
- #endif /* LINUX_KEXEC_H */
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 2e0f0b3fb9ab..fff11916aba3 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -29,6 +29,15 @@
- #include <linux/vmalloc.h>
- #include "kexec_internal.h"
- 
-+#ifdef CONFIG_KEXEC_SIG
-+static bool sig_enforce = IS_ENABLED(CONFIG_KEXEC_SIG_FORCE);
-+
-+void set_kexec_sig_enforced(void)
-+{
-+	sig_enforce = true;
-+}
-+#endif
-+
- static int kexec_calculate_store_digests(struct kimage *image);
- 
- /*
-@@ -159,7 +168,7 @@ kimage_validate_signature(struct kimage *image)
- 					   image->kernel_buf_len);
- 	if (ret) {
- 
--		if (IS_ENABLED(CONFIG_KEXEC_SIG_FORCE)) {
-+		if (sig_enforce) {
- 			pr_notice("Enforced kernel signature verification failed (%d).\n", ret);
- 			return ret;
- 		}
+ 	return false;
 -- 
 2.35.1
 

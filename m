@@ -2,134 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2454E57B151
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F41157B153
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiGTHAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S230375AbiGTHCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiGTHAD (ORCPT
+        with ESMTP id S229484AbiGTHCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:00:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19B1665545
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658300401;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HRLM3otrmE4GIymRIerp3u+bT993AETRwpgpngLar7s=;
-        b=fxle8lvpPav2Vv2Fv+DrR8bVnike3jdYFqk7Wv35caDV1jg1FvzHGur27mUQDLt6ZoWjmB
-        xtNYWeK2ktQFiz6URetQGDeWmLdYbtR/kK8IthQg0hrgfoO+y7crbj7SRZIxjGlRCt4idl
-        QnKDWlGjTO6Vb3tzgQVONfr4JPlsV+Y=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-74-EWcvP5ByO6OlsjgLrrBsLw-1; Wed, 20 Jul 2022 02:59:59 -0400
-X-MC-Unique: EWcvP5ByO6OlsjgLrrBsLw-1
-Received: by mail-wm1-f71.google.com with SMTP id bh18-20020a05600c3d1200b003a32044cc9fso2922495wmb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:59:59 -0700 (PDT)
+        Wed, 20 Jul 2022 03:02:03 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE56BE05;
+        Wed, 20 Jul 2022 00:01:59 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id d7-20020a17090a564700b001f209736b89so1200182pji.0;
+        Wed, 20 Jul 2022 00:01:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Lujkhd3wY54wcb90SIT8uAOyFvI2Fm968wecBcqgYO4=;
+        b=O8m4GMS4UK9s9FeDbNMv5PS6p/Ss837cA1pqIsg6ExRq1N/qT/KEfcWnN0mhha+CnJ
+         aNmEGe0yMPtWDFCCOZXNCIGa3knFUPK57+NhK5KnDIsz6KrqQ9HRu54T0GxVqMji7CYy
+         utscfe0VBdQu/yr+vNhy1YmBwvlPutdJsRI2v8YhdPKu/Xp9MP1BRVeF4ZgjONqxDv4J
+         C5Qg+Eyu2kYIYjL2Ws18BssbL8E+YJ16AH87x12/KKLk7TaONBkIGP01ICOgJrd9yHue
+         VE9O+7dePHqamAsuP9TqbLg649OcK3u8D/VrDtwYo801RrxKhkRbNyBSkHKlM7ESE9Qu
+         1V+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
          :mime-version:content-disposition:in-reply-to;
-        bh=HRLM3otrmE4GIymRIerp3u+bT993AETRwpgpngLar7s=;
-        b=PWpldfJUEDUSEvvsZePX65LLdnM3vnaUnXvSsNLo1TlPXdKHmnHKbbgWHVf716/8i8
-         DNPdoHx/aKe279P6pxZe0PDes9zFO2jAt8sYgxtsftAgljNlFNt8snzu+IZX1uVzuccc
-         KxMaa4puaOun1S1cnWNX0cnknDteHJeQf1hxiQPAfcosPbneeMPFc3ggD9GkgL0cMvcL
-         9TaTTZc6pImBUU9lcEZXsU0W3vXKP7UmVZrv85hP2GqZ4BTEg19aWROlspvPpX/iJ4KB
-         K2vfQRg1UNbaN9yXSX/bR2+SKsz/uJRHnCjo1NpHCpozpAy4VJQ8dhfc1mQQ8DR6unaU
-         5Wsw==
-X-Gm-Message-State: AJIora9AgJyN0d672Aq7xgo8eLbDvB/hOGVPTL1YFtDfAE+PO3dgn0b6
-        6p5CG8GVfer6khjCF4FJoIkITNuE7I3S0wkkmxuCQ/lfd5WnzAbxgdmTbjJq2YXdxw3E0A6o90e
-        PrJA7KqVbW4ywb8+g72pd+niP
-X-Received: by 2002:a5d:6d8b:0:b0:21d:a6ac:b34b with SMTP id l11-20020a5d6d8b000000b0021da6acb34bmr29835067wrs.35.1658300397994;
-        Tue, 19 Jul 2022 23:59:57 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t58h1XiqLZzpVmt8FSkHa/kkkDQfr5n1b3uEEv7XFX0KTmylaQzbuExz7aQ6ttvtdtJ0w0kg==
-X-Received: by 2002:a5d:6d8b:0:b0:21d:a6ac:b34b with SMTP id l11-20020a5d6d8b000000b0021da6acb34bmr29835052wrs.35.1658300397740;
-        Tue, 19 Jul 2022 23:59:57 -0700 (PDT)
-Received: from redhat.com ([2.55.47.4])
-        by smtp.gmail.com with ESMTPSA id bw3-20020a0560001f8300b0021d70a871cbsm14632970wrb.32.2022.07.19.23.59.55
+        bh=Lujkhd3wY54wcb90SIT8uAOyFvI2Fm968wecBcqgYO4=;
+        b=cP8izjZvNmgegiT4Uq1/8AKLsdAUEjMRRR0523mG8j/kykp4vbLVAgRpNDPSUDmkLu
+         tvWqRmQTcqEzq5qyyQ6sfMbDKV0VWwlEjbKpRPaUA/iI/3qY+irlBUOExbTJExSumpxg
+         CO9YyXZeLYZotbjHsvqMXe+TLuMJXqSmgpUrcZk2MEactwDTQF87aRZfEcQznAsGCQ02
+         hAljwYrj3tPIKxPvNVDg6UwmoOHqMvm/KKzbtPRrRoZv980gCEMe+FXLIYYExcWxfofo
+         7vfAd444nMvF0b2yWFKQ8+LUJ3k4OxhSR0Fxj5rTL7m/nle0fBKry/3msSNPAXz+I/KQ
+         Q7Cw==
+X-Gm-Message-State: AJIora80avfcjfkjY365Z1YO1tVjoDV2T9ceLKEslkWygGgb/g43YBhk
+        xIx8NnZVniMpSQA+DgLTAVg=
+X-Google-Smtp-Source: AGRyM1sVVTbH4ksSo3N4xkGw2M2P6n7iDsshnn0P6s/BAqZ6bIG4+PkpfkMBQM8CZgfWDojYn7MCqw==
+X-Received: by 2002:a17:90b:38c1:b0:1f1:f1c1:469c with SMTP id nn1-20020a17090b38c100b001f1f1c1469cmr3748928pjb.106.1658300518545;
+        Wed, 20 Jul 2022 00:01:58 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id ij20-20020a170902ab5400b0016d02b0fa25sm761179plb.164.2022.07.20.00.01.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 23:59:57 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 02:59:53 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Keir Fraser <keirf@google.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jason Wang <jasowang@redhat.com>, kernel-team@android.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio: Force DMA restricted devices through DMA API
-Message-ID: <20220720024756-mutt-send-email-mst@kernel.org>
-References: <20220719100256.419780-1-keirf@google.com>
- <YtbMcBw4l0LAFn9+@infradead.org>
- <YtbRwO40CmIRWOUR@google.com>
- <YtbTGjRw65QEKkQA@infradead.org>
- <YtbXxl8STUtQkacb@google.com>
+        Wed, 20 Jul 2022 00:01:57 -0700 (PDT)
+Message-ID: <62d7a865.1c69fb81.76782.1476@mx.google.com>
+X-Google-Original-Message-ID: <20220720070156.GA1497135@cgel.zte@gmail.com>
+Date:   Wed, 20 Jul 2022 07:01:56 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, viro@zeniv.linux.org.uk,
+        hughd@google.com, akpm@linux-foundation.org,
+        hsiangkao@linux.alibaba.com, yang.yang29@zte.com.cn,
+        axboe@kernel.dk, yangerkun@huawei.com, johannes.thumshirn@wdc.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] fs: drop_caches: skip dropping pagecache which is always
+ dirty
+References: <20220720022118.1495752-1-yang.yang29@zte.com.cn>
+ <YtdwULpWfSR3JI/u@casper.infradead.org>
+ <62d79a79.1c69fb81.e4cba.37f5@mx.google.com>
+ <Ytea9M3D/CuzQ1se@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtbXxl8STUtQkacb@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ytea9M3D/CuzQ1se@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 04:11:50PM +0000, Keir Fraser wrote:
-> On Tue, Jul 19, 2022 at 08:51:54AM -0700, Christoph Hellwig wrote:
-> > On Tue, Jul 19, 2022 at 03:46:08PM +0000, Keir Fraser wrote:
-> > > However, if the general idea at least is acceptable, would the
-> > > implementation be acceptable if I add an explicit API for this to the
-> > > DMA subsystem, and hide the detail there?
-> > 
-> > I don't think so.  The right thing to key off is
-> > VIRTIO_F_ACCESS_PLATFORM, which really should be set in any modern
-> > virtio device after all the problems we had with the lack of it.
+On Tue, Jul 19, 2022 at 11:04:36PM -0700, Christoph Hellwig wrote:
+> On Wed, Jul 20, 2022 at 06:02:32AM +0000, CGEL wrote:
+> > For example, some systems will create a lot of pagecache when boot up
+> > while reading bzImage, ramdisk, docker images etc. Most of this pagecache
+> > is useless after boot up. It may has a longterm negative effects for the
+> > workload when trigger page reclaim. It is especially harmful when trigger
+> > direct_reclaim or we need allocate pages in atomic context. So users may
+> > chose to drop_caches after boot up.
 > 
-> Ok. Certainly the flag description in virtio spec fits the bill.
+> It is purely a debug interface.  If you want to drop specific page cache
+> that needs to be done through madvise.
 
-Maybe. But balloon really isn't a normal device. Yes the rings kind of
-operate more or less normally. However consider for example free page
-hinting. We stick a page address in ring for purposes of telling host it
-can blow it away at any later time unless we write something into the
-page.  Free page reporting is similar.
-Sending gigabytes of memory through swiotlb is at minimum not
-a good idea.
-
-Conversely, is it even okay security wise that host can blow away any
-guest page?  Because with balloon GFNs do not go through bounce
-buffering.
-
-
-
-> > > Or a completely different approach would be to revert the patch
-> > > e41b1355508d which clears VIRTIO_F_ACCESS_PLATFORM in the balloon
-> > > driver. MST: That's back in your court, as it's your patch!
-> > 
-> > Which also means this needs to be addresses, but I don't think a
-> > simple revert is enough.
-> 
-> Well here are two possible approaches:
-> 
-> 1. Revert e41b1355508d outright. I'm not even sure what it would mean
-> for reported pages to go through IOMMU. And VIRTIO_F_ACCESS_PLATFORM
-> is no longer IOMMU-specific anyway.
-> 
-> 2. Continue to clear the flag during virtio_balloon negotiation, but
-> remember that it was offered, and test for that in vring_use_dma_api()
-> as well as, or instead of, virtio_has_dma_quirk().
-> 
-> Do either of those appeal?
-
-I think the use case needs to be documented better.
-
-
--- 
-MST
-
+It's not easy for users to use madvise in complex system, it takes cost.
+Since drop_caches is not forbidden, and users may want simply use it in
+the scene above mail described.

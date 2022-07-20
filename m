@@ -2,68 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435C957B6F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3273157B6FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236897AbiGTNCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 09:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
+        id S239858AbiGTNGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 09:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232958AbiGTNCi (ORCPT
+        with ESMTP id S232897AbiGTNGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 09:02:38 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029F451A18
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:02:38 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id x125so16174503vsb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x1ADlbcOE17NYUMjiVagDfq4PUxtl1uXmumEQgrN0ns=;
-        b=jvD6x40J3yho1JCQqEblcfudZ/i3pFzH6EP0raY01ry+4aGebg1QdnwCVsATMnrGyJ
-         NrQyyemO5XLsKz3yCkJXo/jXEvrgVEyiSjrqK07Wv9mqS1zAajXiw203GIHggPqZEXKm
-         iQyRezph1eQMpSTOu85fh1VHUZh2R/WKMgzx08STdgwYelol59Xuq/C3qjyxIak8Ypam
-         Q/pd3+tvuLpov1NiSb1MZVfrhkNyI93Bal3j+nJdaCSFh1DS2YnDAYpe6WsIAXsHb1B3
-         OyEkUJ1zn87tzp6BBE0Cyjm9XnkHKonjOuogXGDt+2sKSpRdpJ18yZSVaJBRQ78rp3Ka
-         CP1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x1ADlbcOE17NYUMjiVagDfq4PUxtl1uXmumEQgrN0ns=;
-        b=gySwHqn5gqLhzY2nhOiHGUA65+HLb5gSYqgWEVQY48V7k+S9+saVwUK0+rAhrNFyRt
-         PsOG2G2AoZXtH03Fhd60YDYS7WpPZXMBampSfwiyyeDT1mb5K3jTJq1kxYQcyLQV/kKL
-         InAa6bgRD3czTbGNS4QSJep2ZVv/18ZDqfD+Gyd13oRHawYV0HRap5DNc1XzCEnHQiL7
-         Ny0XmFukXLMreXlNaizG69WsQHhAV72gcWAtJXVmHYQ50nDk+X9GdBKEGS+TwJfozqQj
-         goMPJzS75qN1CcJLXeLb5uThVSQ75dh6w89+K7a6GkG6sO4d0Jo/O51OLK46Ywwwmp1e
-         h9vA==
-X-Gm-Message-State: AJIora+2lmGX/nOi8wC6Tujh06nju3ij6sBuoE5/B3D3+rNpmd6Kgsw5
-        N8cJSoZUUJuIyuQm6jaa8gcVtU9URYcEQDOpUxDJdA==
-X-Google-Smtp-Source: AGRyM1utT93d5kWPKobsQR1mFixnWNiywLDzDUUYqbQcLQ2ntUnx4AgebIkC27zZLeUIViUiVAOPEgijG2dG4dOw66w=
-X-Received: by 2002:a05:6102:34d1:b0:357:ee01:3e64 with SMTP id
- a17-20020a05610234d100b00357ee013e64mr4095477vst.70.1658322157067; Wed, 20
- Jul 2022 06:02:37 -0700 (PDT)
+        Wed, 20 Jul 2022 09:06:13 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A6F50077;
+        Wed, 20 Jul 2022 06:06:12 -0700 (PDT)
+X-UUID: cc56f60da8ba406ab2400838786f2108-20220720
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:92f8ea2a-fa2d-4cc8-8e3f-4e94db6cd655,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:8d9000d8-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: cc56f60da8ba406ab2400838786f2108-20220720
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1522913062; Wed, 20 Jul 2022 21:06:06 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 20 Jul 2022 21:06:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Wed, 20 Jul 2022 21:06:05 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
+CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <hsinyi@chromium.org>,
+        <fparent@baylibre.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v2 0/1] dt-bindings: display: mediatek: dpi: add power-domains
+Date:   Wed, 20 Jul 2022 21:06:03 +0800
+Message-ID: <20220720130604.14113-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220720044754.4026295-1-tzungbi@kernel.org> <20220720044754.4026295-3-tzungbi@kernel.org>
-In-Reply-To: <20220720044754.4026295-3-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 20 Jul 2022 06:02:26 -0700
-Message-ID: <CABXOdTeC5hNuP_k8Gj-0-2_vCECNJYVkt2qfy23P7tPKfWp3zg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] platform/chrome: cros_kunit_util: add default value
- for `msg->result`
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,64 +63,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 9:48 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> Add default value for `msg->result` so that it won't be garbage bytes
-> when the mock list is empty.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Based on tag: next-20220719, linux-next/master
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+changes since v1:
+ - add a Fixes tag
+ - add RoB tag
 
-> ---
->  drivers/platform/chrome/cros_kunit_util.c | 6 +++++-
->  drivers/platform/chrome/cros_kunit_util.h | 1 +
->  2 files changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/platform/chrome/cros_kunit_util.c b/drivers/platform/chrome/cros_kunit_util.c
-> index 090927d43035..f0fda96b11bd 100644
-> --- a/drivers/platform/chrome/cros_kunit_util.c
-> +++ b/drivers/platform/chrome/cros_kunit_util.c
-> @@ -13,6 +13,7 @@
->  #include "cros_ec.h"
->  #include "cros_kunit_util.h"
->
-> +int cros_kunit_ec_xfer_mock_default_result;
->  int cros_kunit_ec_xfer_mock_default_ret;
->  int cros_kunit_ec_cmd_xfer_mock_called;
->  int cros_kunit_ec_pkt_xfer_mock_called;
-> @@ -25,8 +26,10 @@ int cros_kunit_ec_xfer_mock(struct cros_ec_device *ec_dev, struct cros_ec_comman
->         struct ec_xfer_mock *mock;
->
->         mock = list_first_entry_or_null(&cros_kunit_ec_xfer_mock_in, struct ec_xfer_mock, list);
-> -       if (!mock)
-> +       if (!mock) {
-> +               msg->result = cros_kunit_ec_xfer_mock_default_result;
->                 return cros_kunit_ec_xfer_mock_default_ret;
-> +       }
->
->         list_del(&mock->list);
->
-> @@ -112,6 +115,7 @@ int cros_kunit_readmem_mock(struct cros_ec_device *ec_dev, unsigned int offset,
->
->  void cros_kunit_mock_reset(void)
->  {
-> +       cros_kunit_ec_xfer_mock_default_result = 0;
->         cros_kunit_ec_xfer_mock_default_ret = 0;
->         cros_kunit_ec_cmd_xfer_mock_called = 0;
->         cros_kunit_ec_pkt_xfer_mock_called = 0;
-> diff --git a/drivers/platform/chrome/cros_kunit_util.h b/drivers/platform/chrome/cros_kunit_util.h
-> index 88134c9f1acf..414002271c9c 100644
-> --- a/drivers/platform/chrome/cros_kunit_util.h
-> +++ b/drivers/platform/chrome/cros_kunit_util.h
-> @@ -23,6 +23,7 @@ struct ec_xfer_mock {
->         u32 o_data_len;
->  };
->
-> +extern int cros_kunit_ec_xfer_mock_default_result;
->  extern int cros_kunit_ec_xfer_mock_default_ret;
->  extern int cros_kunit_ec_cmd_xfer_mock_called;
->  extern int cros_kunit_ec_pkt_xfer_mock_called;
-> --
-> 2.37.0.170.g444d1eabd0-goog
->
+Allen-KH Cheng (1):
+  dt-bindings: display: mediatek: dpi: add power-domains property
+
+ .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml   | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+-- 
+2.18.0
+

@@ -2,95 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883E957B1DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D6457B1E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240025AbiGTHi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
+        id S240089AbiGTHjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237710AbiGTHiZ (ORCPT
+        with ESMTP id S235565AbiGTHjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:38:25 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9127762484
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:38:24 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id o12so15810368pfp.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ecs-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Xc6fgEvmDOLfBjoXIj0m1oyh4sYver0cQuxKyhaoxJM=;
-        b=EM3raoSZqNAjsRgHvZ0SU1ze7cgNCDQhvSAlUHFHiki6V7TymxfB2xJX21OA1+Dx/N
-         TK5N2I5Qg8gPZcRkasQk66SAnwHpOGwa5ZOEijnsNUM69PHPe0mmIwScg2W4w+1L3zT8
-         pGLqqxZAKYEMtdtSFE1A90nk+eGvlfx7TMV/ruIq4581zOjb8n0+oZjQ1XZwoq5mcRRm
-         Ke1OU9leiWGyo5ndLh7Nooco2Uu1nNxK+K+YmsWgRRWmDLPi4rwSAj0TrsJibxYwulRi
-         vbeI/8O10trz90ZnzunPmJ5UNasNuScp+N9rbKI3IiorRjLpHNymd3x61gThDUGqpgYH
-         WnzA==
+        Wed, 20 Jul 2022 03:39:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 751E767C89
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658302769;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JRD5gze5iCgumqb7DRzeC17ppeyLAWxOOTxgcR3iPKc=;
+        b=VhYGVJwCvqFptKJJ2roDyh6qwx9yCXmKsXJmSQuSkuTLjhPfpRr1L/2JMX/J0k0EAgsZZA
+        E5EMPV4ZmCZX0Fga6cBBWS71NPpEcbceoQWLkwP+xsw0esvHy0MCSlYfp9cMVQtn+g6pqA
+        rChWMlN8b9u7bGLirKJTB6lUlOBHTeA=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-636-FCe16L--PtaFm1MPCTj6kQ-1; Wed, 20 Jul 2022 03:38:43 -0400
+X-MC-Unique: FCe16L--PtaFm1MPCTj6kQ-1
+Received: by mail-wr1-f72.google.com with SMTP id q9-20020adfb189000000b0021e3e7d3242so731302wra.19
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:38:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Xc6fgEvmDOLfBjoXIj0m1oyh4sYver0cQuxKyhaoxJM=;
-        b=pNz8dFZCdUEGkH1HtKckncnZLHpxBcwLn0ng18cNM+raftzNJ1Kqjpr0OnNmyXYXke
-         te9Ca7TXkZ4WePdzeukshBl5cvsSs2qx6zidQyOP2vW19Q2cQd3y82erAC7ZBGVnrcPd
-         +ljP5yBU+KMCM9QQmAU+zLGIOkmzB2csyl+DFBtAueQm4kjSKxf+mTf/umjlDKM4VXPe
-         hKV6Ki2yMCNB7OREzrfqS9L4zsIKDJ2pe+Hjh6cHs1h7Jv59py2Rb2e+hyluXzu2kjsZ
-         jJQ329y3mYqtZPNqkkwIBzAzjB+cjHaaA3C4rYGUFbJaCZvpRqDlzZxn4jEP+Q/sCkmO
-         tpwg==
-X-Gm-Message-State: AJIora9Iw/I6iuOR2g1Y0Iq9m+o0ieGg2dB50q7bMRhcL3Qe7V/vW5av
-        mpTz5+VnFRxb/P1dROx4FFCG/qPcUajy2SbM
-X-Google-Smtp-Source: AGRyM1uit8I0cHYFIviOVNQ8VWwD3Ep/WPdp05cI6kC1jOq2rPP7+nZ99LB3y8C760QG7rY0ucwQEw==
-X-Received: by 2002:a05:6a00:1745:b0:52a:f0d3:ae7 with SMTP id j5-20020a056a00174500b0052af0d30ae7mr38283892pfc.72.1658302703844;
-        Wed, 20 Jul 2022 00:38:23 -0700 (PDT)
-Received: from localhost.localdomain ([103.104.171.43])
-        by smtp.gmail.com with ESMTPSA id u5-20020a655c05000000b0041296135280sm11216243pgr.88.2022.07.20.00.38.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 00:38:23 -0700 (PDT)
-From:   Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Henry Sun <henrysun@google.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bob Moragues <moragues@chromium.org>,
-        Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH] dt-bindings: arm: qcom: Document additional sku6 for sc7180 pazquel
-Date:   Wed, 20 Jul 2022 07:38:16 +0000
-Message-Id: <20220720073755.1.Ifab936517646b3876dd31b6e9b1b58a858529e57@changeid>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=JRD5gze5iCgumqb7DRzeC17ppeyLAWxOOTxgcR3iPKc=;
+        b=J546P3bVDjeVlNdIrWVLUN/eMG0qa2Tg+wtN+UG2nu4U6DF4Hu3fCx3z06hUCfaQ8b
+         ZFpL92et2JMkNiQtLyyzAK4FuVFHjmDj/S5AZ0JRVp7IvbJ9WNU9TiMV48ujC0LnreC0
+         mQt8ckXpEzbb41eMqjngSGdbVvgjKx3G5hXgU9BFPaM9/wHxIsYhCnmWvhXaJNYri/bD
+         VLb2Qa6BrRRhHd33EE9XMw1GYMpLLcLTLBHQcu/5Tlcu7JmQcarwiXS1jMB7bwRI6trs
+         OQxif7g6bdPBO3HvD7UhS7XlGL3sFxnJJ8PMUsh+f+VjU+gNbivRN8XjaBr/F77Y/bbi
+         Nz+Q==
+X-Gm-Message-State: AJIora8yy6Nk88rqiv/cbROw+iG8Gk9dWGCwWW/N992AyeheO5R31oZ+
+        fxEatkAc7J99UUB9vvDmw1v3AI4LDouq/nbo03QOlIHvDy/l5wSF6Sh4gKOXo6qO9s7jLHm1Bx/
+        BdqXeB5isObiXPuJpLMAwgTfI
+X-Received: by 2002:adf:fb86:0:b0:21e:3cc8:a917 with SMTP id a6-20020adffb86000000b0021e3cc8a917mr5058444wrr.538.1658302717046;
+        Wed, 20 Jul 2022 00:38:37 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sIHxRRulozed77eh09MMR3TpyPXp6QvGSSUylqHFikk73Szma/PVU/ZZnOsW9vrL/e0eKrOA==
+X-Received: by 2002:adf:fb86:0:b0:21e:3cc8:a917 with SMTP id a6-20020adffb86000000b0021e3cc8a917mr5058437wrr.538.1658302716785;
+        Wed, 20 Jul 2022 00:38:36 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:e00:8d96:5dba:6bc4:6e89? (p200300cbc7060e008d965dba6bc46e89.dip0.t-ipconnect.de. [2003:cb:c706:e00:8d96:5dba:6bc4:6e89])
+        by smtp.gmail.com with ESMTPSA id co18-20020a0560000a1200b0021b5861eaf7sm14998954wrb.3.2022.07.20.00.38.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 00:38:36 -0700 (PDT)
+Message-ID: <2551d5bf-63f1-f3f3-0971-930923c4c087@redhat.com>
+Date:   Wed, 20 Jul 2022 09:38:35 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] memblock tests: change build options to run-time options
+Content-Language: en-US
+To:     Rebecca Mckeever <remckee0@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220714031717.12258-1-remckee0@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220714031717.12258-1-remckee0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The difference between sku6 and sku4 is that there is no esim
+On 14.07.22 05:17, Rebecca Mckeever wrote:
+> Change verbose and movable node build options to run-time options.
+> 
+> Movable node usage:
+>     $ ./main -m
+> 
+>     Or:
+>     $ ./main --movable-node
+> 
+> Verbose usage:
+>     $ ./main -v
+> 
+>     Or:
+>     $ ./main --verbose
+> 
+> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 
-Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
----
+LGTM, thanks!
 
- Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-index 4dd18fbf20b6..aebeefdab27f 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -410,6 +410,7 @@ properties:
-       - description: Google Pazquel with LTE and Parade (newest rev)
-         items:
-           - const: google,pazquel-sku4
-+          - const: google,pazquel-sku6
-           - const: qcom,sc7180
- 
-       - description: Google Pazquel with LTE and TI (newest rev)
+
 -- 
-2.17.1
+Thanks,
+
+David / dhildenb
 

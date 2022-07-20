@@ -2,58 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D148357B07E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 07:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED85357B07C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 07:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbiGTFpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 01:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
+        id S232690AbiGTFoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 01:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232971AbiGTFpO (ORCPT
+        with ESMTP id S229578AbiGTFom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 01:45:14 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D0A111E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 22:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658295911; x=1689831911;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QFFyxwKJEVLgLwJNrBwaH2ZIKsyvFq4g+zsg7SwcDhQ=;
-  b=kBTNcyPHX0SzEyr5ucMoN1yaAyiqHCXEnPH00BfUkVGB/PSB1SEt+Gyd
-   rp0kEatePoS60ANlcQgu4Ye4jQS6I6LQl8mzudGHmFUZeczINBroduMjV
-   rujWxiOMrba+6kJR3C2YQx77v/f+tj7AHkP3bVcu39LUkG6nuTgwA4urM
-   /fNb8CSZERf24v6Er1MxF29T4ONVvY0gKCxJ4Tc72dXum5SnMp4iBa3Nl
-   zNRtUqFt7lLIJii93EQJ/9qeR3Hepx3HIs9h5QP3TXxuO/LSVJXBlPz6Y
-   dtnP5ibrAcPK5N5Lee6YXHUhWDRdaQ62AGQIXxzVKZPaG+wROc+i9N8x1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="273521245"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="273521245"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 22:45:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="925089745"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Jul 2022 22:45:09 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oE2WC-00004D-EU;
-        Wed, 20 Jul 2022 05:45:08 +0000
-Date:   Wed, 20 Jul 2022 13:44:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [rt-devel:linux-5.19.y-rt-rebase 9/51] kernel/sched/core.c:3058:1:
- warning: '__sched_setaffinity' used but never defined
-Message-ID: <202207201330.PNv5wnSX-lkp@intel.com>
+        Wed, 20 Jul 2022 01:44:42 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8D068DF2;
+        Tue, 19 Jul 2022 22:44:41 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297623329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7623:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 58EB21EC0441;
+        Wed, 20 Jul 2022 07:44:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658295875;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=KnJwTmrzbZQLag/zXC8r1DfsvGYW7gz9MNnMX3SapF8=;
+        b=ZfYqD87cUp3d3RCVgQSTgRjJ+N08DElz++nUMe5bD+K3/fLnKnr7qdkX1tkfAs3ADQ8kl2
+        Nvg6g871wMLcTqfLbq9aGOJdqYcWvyfu5fdRsYFnnQPy1aeAfIyXEVcDWZ8aRHlRtrOjcQ
+        IVzPH0ngUJQG0jEPQX7MEf/VuGaNFLE=
+Date:   Wed, 20 Jul 2022 07:44:30 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Marc Orr <marcorr@google.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Gonda <pgonda@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Yao, Jiewen" <jiewen.yao@intel.com>
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
+ memory
+Message-ID: <YteWPj7HytPrcplB@zn.tnic>
+References: <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
+ <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
+ <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
+ <YtcCWfCQuEsVhH6W@zn.tnic>
+ <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
+ <YtcgxxMyFTReuuRw@zn.tnic>
+ <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
+ <YtcnQbiRgZPtR+rQ@zn.tnic>
+ <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
+ <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,112 +90,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.19.y-rt-rebase
-head:   398bbc77845fdc2ffca4a523eeadd5707338b0d3
-commit: 088b0c2db600fb1a2b5687a9a4d1a069a624eee7 [9/51] sched: Consider task_struct::saved_state in wait_task_inactive().
-config: s390-randconfig-r044-20220718 (https://download.01.org/0day-ci/archive/20220720/202207201330.PNv5wnSX-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=088b0c2db600fb1a2b5687a9a4d1a069a624eee7
-        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
-        git fetch --no-tags rt-devel linux-5.19.y-rt-rebase
-        git checkout 088b0c2db600fb1a2b5687a9a4d1a069a624eee7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/sched/
+On Tue, Jul 19, 2022 at 05:26:21PM -0700, Marc Orr wrote:
+> These feature tags are a mess to keep track of.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Well, looking at those tags, it doesn't look like you'll stop using them
+anytime soon.
 
-All warnings (new ones prefixed by >>):
+And once all the required SNP/TDX features are part of the guest image,
+- including unaccepted memory - if anything, you'll have less tags.
 
-   kernel/sched/core.c: In function 'wait_task_inactive':
-   kernel/sched/core.c:11195:2: error: unterminated argument list invoking macro "if"
-   11195 | }
-         |  ^
-   kernel/sched/core.c:11196: error: expected '(' at end of input
-   kernel/sched/core.c:3310:33: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
-    3310 |                                 if (READ_ONCE(p->__state != match_state)
-         |                                 ^~
-   kernel/sched/core.c:3310:33: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
-   kernel/sched/core.c:3310:33: error: expected declaration or statement at end of input
-   kernel/sched/core.c:3308:38: warning: unused variable 'mismatch' [-Wunused-variable]
-    3308 |                                 bool mismatch = false;
-         |                                      ^~~~~~~~
-   kernel/sched/core.c:3310:33: error: expected declaration or statement at end of input
-    3310 |                                 if (READ_ONCE(p->__state != match_state)
-         |                                 ^~
-   kernel/sched/core.c:3310:33: error: expected declaration or statement at end of input
-   kernel/sched/core.c:3310:33: error: expected declaration or statement at end of input
-   kernel/sched/core.c:3283:14: warning: unused variable 'update_ncsw' [-Wunused-variable]
-    3283 |         bool update_ncsw;
-         |              ^~~~~~~~~~~
-   kernel/sched/core.c:3282:14: warning: unused variable 'saved_state_match' [-Wunused-variable]
-    3282 |         bool saved_state_match;
-         |              ^~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:3280:23: warning: unused variable 'ncsw' [-Wunused-variable]
-    3280 |         unsigned long ncsw;
-         |                       ^~~~
-   kernel/sched/core.c:3279:25: warning: unused variable 'rf' [-Wunused-variable]
-    3279 |         struct rq_flags rf;
-         |                         ^~
-   kernel/sched/core.c:3278:22: warning: unused variable 'queued' [-Wunused-variable]
-    3278 |         int running, queued;
-         |                      ^~~~~~
-   kernel/sched/core.c:3278:13: warning: unused variable 'running' [-Wunused-variable]
-    3278 |         int running, queued;
-         |             ^~~~~~~
-   kernel/sched/core.c: At top level:
->> kernel/sched/core.c:3058:1: warning: '__sched_setaffinity' used but never defined
-    3058 | __sched_setaffinity(struct task_struct *p, const struct cpumask *mask);
-         | ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:2210:13: warning: 'migrate_disable_switch' defined but not used [-Wunused-function]
-    2210 | static void migrate_disable_switch(struct rq *rq, struct task_struct *p)
-         |             ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:2142:12: warning: 'effective_prio' defined but not used [-Wunused-function]
-    2142 | static int effective_prio(struct task_struct *p)
-         |            ^~~~~~~~~~~~~~
-   kernel/sched/core.c:2030:13: warning: '__setscheduler_uclamp' defined but not used [-Wunused-function]
-    2030 | static void __setscheduler_uclamp(struct task_struct *p,
-         |             ^~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:1272:13: warning: 'set_load_weight' defined but not used [-Wunused-function]
-    1272 | static void set_load_weight(struct task_struct *p, bool update_load)
-         |             ^~~~~~~~~~~~~~~
-   kernel/sched/core.c:1165:13: warning: 'nohz_csd_func' defined but not used [-Wunused-function]
-    1165 | static void nohz_csd_func(void *info)
-         |             ^~~~~~~~~~~~~
-   kernel/sched/core.c:931:13: warning: 'set_nr_if_polling' defined but not used [-Wunused-function]
-     931 | static bool set_nr_if_polling(struct task_struct *p)
-         |             ^~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:851:13: warning: 'hrtick_rq_init' defined but not used [-Wunused-function]
-     851 | static void hrtick_rq_init(struct rq *rq)
-         |             ^~~~~~~~~~~~~~
-   kernel/sched/core.c:761:13: warning: 'hrtick_clear' defined but not used [-Wunused-function]
-     761 | static void hrtick_clear(struct rq *rq)
-         |             ^~~~~~~~~~~~
-   kernel/sched/core.c:282:28: warning: 'sched_core_next' defined but not used [-Wunused-function]
-     282 | static struct task_struct *sched_core_next(struct task_struct *p, unsigned long cookie)
-         |                            ^~~~~~~~~~~~~~~
-   kernel/sched/core.c:268:28: warning: 'sched_core_find' defined but not used [-Wunused-function]
-     268 | static struct task_struct *sched_core_find(struct rq *rq, unsigned long cookie)
-         |                            ^~~~~~~~~~~~~~~
+:-)
 
+> - Do we anticipate (many) more features for confidential compute in
+> the future that require code in both the guest FW and guest kernel? If
+> yes, then designing a FW-kernel feature negotiation could be useful
+> beyond this situation.
 
-vim +/__sched_setaffinity +3058 kernel/sched/core.c
+Good question.
 
-07ec77a1d4e825 Will Deacon 2021-07-30  3056  
-07ec77a1d4e825 Will Deacon 2021-07-30  3057  static int
-07ec77a1d4e825 Will Deacon 2021-07-30 @3058  __sched_setaffinity(struct task_struct *p, const struct cpumask *mask);
-07ec77a1d4e825 Will Deacon 2021-07-30  3059  
+> - Dave's suggestion to "2. Boot some intermediate thing like a
+> bootloader that does acceptance ..." is pretty clever! So if upstream
+> thinks this FW-kernel negotiation is not a good direction, maybe we
+> (Google) can pursue this idea to avoid introducing yet another tag on
+> our images.
 
-:::::: The code at line 3058 was first introduced by commit
-:::::: 07ec77a1d4e82526e1588979fff2f024f8e96df2 sched: Allow task CPU affinity to be restricted on asymmetric systems
+Are those tags really that nasty so that you guys are looking at
+upstream changes just to avoid them?
 
-:::::: TO: Will Deacon <will@kernel.org>
-:::::: CC: Peter Zijlstra <peterz@infradead.org>
+Thx.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

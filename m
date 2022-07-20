@@ -2,155 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0A257B1E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF0457B1F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240120AbiGTHkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        id S240132AbiGTHm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiGTHkd (ORCPT
+        with ESMTP id S230330AbiGTHmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:40:33 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5CD45070
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:40:31 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b9so15804658pfp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:40:31 -0700 (PDT)
+        Wed, 20 Jul 2022 03:42:25 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1CF45070
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:42:23 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id e15so19642432wro.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/uorVJjayDp26n5/7TH/fkLv17qD1Lr/KLk9s+h90+0=;
-        b=Ts9NhKBm4+5EfTgPBR18LYv9VuF55ILpwh49nw9HQrOBr34uZshzvvZ09DZRgHF7pr
-         UK8hDTPPsZBQlvW5tyjwWzEOesHwGW8DXBJYB+xZVg+5xjD2y+GSFdyvDbovpThr7fWV
-         2NeQhF6bUmc5bWXrx1XVZk9i2JDlmGo3ui6C52gUpdfCzY0b19lGr8QxmK6RUbTsd55x
-         h8ZCvSBXZ53e2daxdHA4s4mnyaWfZWgcnk9Um8olBTBLkEheFyIKKP4O0yJCVCBR7Ufg
-         5KdDDHd+okbiPyWcBXvLqLfXLXhRMV937LpSiTc3G4ihdJzY/F6pOKKkXME/fhRjTyWY
-         BOkw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lDZzM1t54VNurRKj+YYBbjB4GjQogIg6mrgcbsyoAHw=;
+        b=TOdezB5uNboagAAvlsRAopTGO1b+/S1v9urfOIWAO0mwOdHqdORWvp//7ibkY6UpoK
+         3uKBKZ9C9R52Sxl/vg0xHUQ+2XpleyIpFN8wnigKiWHSfKdpDGVb1krBT6cv4B8L9oHl
+         rbPmKfHL6HFAZvi6nnC9joDvxCiWrWNcA/3vZGN3pI3iICKe6qyDznoaw6yvyxGvLUXZ
+         eeT5OpH5ARd8AJ9X3iSCX6oxESX63rjxbwt5XcLaQ5466XBMYAGGMZ++sFXPKT2N6zKW
+         8cDMYNRSGstrpjxkYZG7KD7P+YHpmS9oAIaCkIZeOTpXkD5xaZ2R/qd2mwkEaYf9yaO4
+         P7Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/uorVJjayDp26n5/7TH/fkLv17qD1Lr/KLk9s+h90+0=;
-        b=kyuh8ddUB+B10khO8EJ9k9UOH9ENxYzwpzyzbMMVyUpGZ6t4vnrHizFzs47TiOn7tY
-         uUgAouT4NdpQQBIQBqECEFO6wb5BAx3by7zL+p3jtfOmJH14YKtXaIpMx4+W+RmoyWoB
-         x4cd9rt5cuABLmU8PwCXPqKfun2Dbipe2uR06qg8EAYgy6helsz0aq2XgelclB4NrvOm
-         GcvTsxoakl0SD98drWQpr6wPBG403WqpzETxmBuW/ZX4w6qbitoM5bSkjTSmh0mQi2mQ
-         blsA101zQx1JZFNQVBi028Nt/IZnD3zA03I1lklBBshwo6LsAFsHmtD6XYR+xKRAYxXS
-         PYww==
-X-Gm-Message-State: AJIora8bflggGpqYQRifAkU2MkXsX/Qy3tZ4jXMdyC0u5nUnK9CKp/hs
-        F9s7pKIBNOEkQNgGjz9IdIWxvW4auL7KDg==
-X-Google-Smtp-Source: AGRyM1uvWY8UYC1O0aM9uxm8tQ5KpzBVbvqjfd4qOjmrkdR6XIfTKDcLYwkiSoACsGbb1gRJ6BosjQ==
-X-Received: by 2002:a63:4a12:0:b0:419:9ede:b7a0 with SMTP id x18-20020a634a12000000b004199edeb7a0mr30064067pga.167.1658302830924;
-        Wed, 20 Jul 2022 00:40:30 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3b:709e:6fec:df37:6562:5a80? ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
-        by smtp.gmail.com with ESMTPSA id y20-20020aa79434000000b005289f594326sm6408369pfo.69.2022.07.20.00.40.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 00:40:30 -0700 (PDT)
-Message-ID: <edb7bb13-0e34-dab2-d3a4-51bd73e38174@linaro.org>
-Date:   Wed, 20 Jul 2022 13:10:26 +0530
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lDZzM1t54VNurRKj+YYBbjB4GjQogIg6mrgcbsyoAHw=;
+        b=wxyqFgYeapNkaNpZ1akYND/Yrtq+J3MdEXqTGgse7OePIxV98GyiMg+RKIznjhswh1
+         rm2bR+ice5YQUM0t0aQl/xJCPCiKPAsFXkCHs2ycGV2k3QDI2Gvng3y43paVt6qbxbG5
+         FBBX4EnDYLMRseRsZzS7QKe4/+m1FxOgCabB2p6J5+L7kqA7iHBkbrLi9YBOugcQTTJx
+         m2EqWw6GFdwJc7K0+Ax86aFYIVn6vxshf8Va1Rfdvik1BycOFBa8u1Sr9gOH1EDffs2h
+         SpEl2MIlAK3IiSy+CXPfv0MaCdT2rJLPSkg/Cz8Fg4+V2x0NoHlc/D/Xsqln4LuTKv/x
+         MBkQ==
+X-Gm-Message-State: AJIora9oz3FClMCpNNBOo2yKluGkY3QsrvWKAkIxWLqFN9Bu52zvpSAE
+        DklWn27S3wUbp9WSW+I2z/WDEa0T1x8mX7KaZkj3vSw7RUE=
+X-Google-Smtp-Source: AGRyM1vRgR19NCJfJTThyBy72KUy+2l2jUQiKnrXY0BDlmBYKXGX0VUzC3S3g8p+1nnVo40mGHoKiAF4mm2lH8D/lfI=
+X-Received: by 2002:adf:fd4a:0:b0:21d:8b59:dcb1 with SMTP id
+ h10-20020adffd4a000000b0021d8b59dcb1mr29801603wrs.622.1658302942294; Wed, 20
+ Jul 2022 00:42:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 6/6] arm64: dts: qcom: ipq8074: Fix 'max-frequency'
- value for sdhci node
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh@kernel.org
-References: <20220514215424.1007718-1-bhupesh.sharma@linaro.org>
- <20220514215424.1007718-7-bhupesh.sharma@linaro.org>
- <Yr4psYiCCbi15RMe@builder.lan>
- <772dc5d2-c3b2-685b-3a38-b86e8877424a@linaro.org>
- <CAPDyKFpUpvHWMZmU0RxLAoFQG7RzOnqvTQPQBOm0s5MkkMHChw@mail.gmail.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <CAPDyKFpUpvHWMZmU0RxLAoFQG7RzOnqvTQPQBOm0s5MkkMHChw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220719092214.995965-1-sadiyakazi@google.com>
+In-Reply-To: <20220719092214.995965-1-sadiyakazi@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 20 Jul 2022 15:42:11 +0800
+Message-ID: <CABVgOSk2PYruRHnU=VnkNo71J_s+0eysNszkFuLY3VD2DpKXGQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: Add CLI args for kunit_tool
+To:     Sadiya Kazi <sadiyakazi@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000d2c8d305e437bd8b"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ulf,
+--000000000000d2c8d305e437bd8b
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jul 19, 2022 at 5:22 PM Sadiya Kazi <sadiyakazi@google.com> wrote:
+>
+> Run_wrapper.rst was missing some command line arguments. Added
+> additional args in the file. Included all initial review comments.
+>
+> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+> ---
+
+This looks pretty good, save for some minor nitpicks below. I also
+echo Ma=C3=ADra's comments, though I'm not _too_ worried about having a
+little bit of duplication if it means we get a complete (or
+nearly-complete) list of arguments here, but still have them described
+in the appropriate part of the rest of the documentation.
+
+Cheers,
+-- David
+
+>  Documentation/dev-tools/kunit/run_wrapper.rst | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>
+> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentatio=
+n/dev-tools/kunit/run_wrapper.rst
+> index 5e560f2c5fca..91f5dda36e83 100644
+> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
+> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+> @@ -257,3 +257,51 @@ command line arguments:
+>              added or modified. Instead, enable all tests
+>              which have satisfied dependencies by adding
+>              ``CONFIG_KUNIT_ALL_TESTS=3Dy`` to your ``.kunitconfig``.
+> +- ``--kunitconfig``: Specifies the path to the ``.kunitconfig`` file.
+> +  This Kconfig fragment enables KUnit tests. The "/.kunitconfig" gets
+> +  appended to the path specified. For example, If a directory path "lib/=
+kunit"
+> +  is given, the complete path will be "lib/kunit/.kunitconfig".
+
+This is definitely a bit confusing: it seems to describe "how it
+works" more than "what is it, and when do you use it". Perhaps
+something more like:
+
+"Specifies a .kunitconfig file to use to build and run with a
+predefined set of tests and their dependencies. (e.g., to run tests
+for a given subsystem). This can be the path to a file, or to a
+directory (in which case a file named ".kunitconfig" in said directory
+will be used.)"
+
+> +
+> +- ``--kconfig_add``: Specifies additional configuration options to be
+> +  appended to the ``.kunitconfig`` file. For example, ``CONFIG_KASAN=3Dy=
+``.
+> +
+> +- ``--arch``: Runs tests with the specified architecture. The architectu=
+re
+> +  specified must match the string passed to the ARCH make parameter.
+> +  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on =
+QEMU.
+> +  Default to 'um'.
+> +
+> +- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
+> +  same argument as passed to the ``CROSS_COMPILE`` variable used by
+> +  Kbuild. This will be the prefix for the toolchain
+> +  binaries such as GCC. For example:
+> +
+> +  - ``sparc64-linux-gnu`` if we have the sparc toolchain installed on
+> +    our system.
+
+This example should be ``sparc64-linux-gnu-`` (with the extra
+hyphen-minus at the end). It's concatenated to produce, e.g.,
+sparc64-linux-gnu-gcc.
+
+> +
+> +  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/=
+microblaze-linux``
+> +    if we have downloaded the microblaze toolchain from the 0-day
+> +    website to a specified path in our home directory called toolchains.
+> +
+> +- ``--qemu_config``: Specifies the path to the file containing a
+> +  custom qemu architecture definition. This should be a python file
+> +  containing a QemuArchParams object.
+> +
+> +- ``--qemu_args``: Specifies additional QEMU arguments, for example, "-s=
+mp 8".
+> +
+> +- ``--jobs``: Specifies the number of jobs (commands) to run simultaneou=
+sly.
+> +  By default, this is set to the number of cores on your system.
+> +
+> +- ``--timeout``: Specifies the maximum number of seconds allowed for all=
+ tests to run.
+> +  This does not include the time taken to build the tests.
+> +
+> +- ``--kernel_args``: Specifies the kernel command-line arguments. Might =
+be repeated.
+
+Nit: maybe "Specifies _additional_ kernel command-line arguments".
+kunit_tool already sets some.
+
+> +
+> +- ``--run_isolated``: If set, boots the kernel for each individual suite=
+/test.
+> +  This is useful for debugging a non-hermetic test, one that
+> +  might pass/fail based on what ran before it.
 
 
-On 7/18/22 6:21 PM, Ulf Hansson wrote:
-> On Mon, 18 Jul 2022 at 10:47, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
->>
->> On 7/1/22 4:24 AM, Bjorn Andersson wrote:
->>> On Sat 14 May 16:54 CDT 2022, Bhupesh Sharma wrote:
->>>
->>>> Since the Qualcomm sdhci-msm device-tree binding has been converted
->>>> to yaml format, 'make dtbs_check' reports issues with
->>>> 'max-frequency' value for ipq8074 sdhci node:
->>>>
->>>>    arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb: mmc@7824900:
->>>>     max-frequency:0:0: 384000000 is greater than the maximum of 200000000
->>>>
->>>> Fix the same.
->>>>
->>>> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
->>>> Cc: Rob Herring <robh@kernel.org>
->>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>>> ---
->>>>    arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
->>>> index ab2a1e7955b5..b2d71af9b419 100644
->>>> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
->>>> @@ -388,7 +388,7 @@ sdhc_1: mmc@7824900 {
->>>>                                <&gcc GCC_SDCC1_APPS_CLK>,
->>>>                                <&xo>;
->>>>                       clock-names = "iface", "core", "xo";
->>>> -                    max-frequency = <384000000>;
->>>> +                    max-frequency = <200000000>;
->>> This might match the binding, but someone put 384000000 there for a
->>> reason. Perhaps the binding needs to be updated instead?
->>
->> I was waiting for getting access to ipq8074 reference manual / documentation.
->> I double-checked and it seems SDCC1 on this SoC does support a max frequency
->> of 384 MHz which is strange as the SDCC2 supports 200 MHz as max frequency
->> instead.
-> 
-> I guess it depends on what the property is being used for from the mmc
-> host driver perspective. So, to answer the question, we probably need
-> to look at the code in the host driver to best understand what to do
-> here.
-> 
->>
->> Also the eMMC and MMC controllers on other SoCs (i.MX etx( usually support only
->> a max frequency of 200 MHz, so may be we need an exceptional addition to the
->> binding documentation here.
->>
->> @Ulf - what's your view on updating the binding documentation here? I can
->> send a v3 accordingly.
-> 
-> The point with the property is to let host controllers specify whether
-> there is an upper limit of the frequency that it can support. No
-> matter what, the mmc core will not use a frequency greater than stated
-> by the eMMC/SD/SDIO specs.
-> 
-> For eMMC, 200MHz is the maximum frequency.
-> 
-> For SD/SDIO cards, the SDR104 mode has 208MHz. So it seems like we
-> need an update to the binding, no matter what. :-)
-> 
-> I have no strong opinions around this, but perhaps just raising the
-> limit of the binding to cover the qcom case makes best sense.
 
-Thanks for your inputs. I will send a v3 version with the udpated
-binding soon.
+> +
+> +- ``--raw_output``: If set, generates unformatted output from kernel.
+> +  If set to ``--raw_output=3Dkunit``, filters to just KUnit output.
 
-Regards,
-Bhupesh
+--raw_output=3Dkunit is the default if just --raw_output is set. You
+need to specify --raw_output=3Dall for the full kernel output.
+
+> +
+> +- ``--json``: If set, it stores the test results in a JSON format and pr=
+ints to stdout or
+> +  saves to a file if a filename is specified.
+
+Nit: let's remove the first 'it' to be consistent with the previous
+entries. i.e., "If set, stores..."
+
+> --
+> 2.37.0.170.g444d1eabd0-goog
+>
+
+--000000000000d2c8d305e437bd8b
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
+bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
+TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
+TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
+CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
+El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
+A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
+MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
+MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
+MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
+BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
+Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
+l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
+pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
+6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
++w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
+BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
+S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
+bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
+ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
+q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
+hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAGH0uAg+eV8wUdHQOJ7
+yfswDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
+c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjA2MjAw
+MjAzNTNaFw0yMjEyMTcwMjAzNTNaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
+b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv9aO5pJtu5ZPHSb99iASzp2mcnJtk
+JIh8xsJ+fNj9OOm0B7Rbg2l0+F4c19b1DyIzz/DHXIX9Gc55kfd4TBzhITOJmB+WdbaWS8Lnr9gu
+SVO8OISymO6uVA0Lmkfne3zV0TwRtFkEeff0+P+MqdaLutOmOcLQRp8eAzb/TNKToSROBYmBRcuA
+hDOMCVZZozIJ7T4nHBjfOrR+nJ4mjBIDRnDucs4dazypyiYiHYLfedCxp8vldywHMsTxl59Ue9Yk
+RVewDw3HWvWUIMbc+Y636UXdUn4axP1TXN0khUpexMoc5qCHxpBIE/AyeS4WPASlE8uVY9Qg8dT6
+kJmeOT+ZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
+DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFDyAvtuc
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCK
+fw6QY6Kbpl+Cx8AvAu8sJw4Y0IIUN2am4pNi4k3wYDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjAwNzQyMjJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAEPPwSKQVi/rgYulroxdd
+XW+ennLNOfkbkQG+cUbYoX90edp1zcpJZFKu7xVEC58t9vCHQsY1wPqlEYMrM1JLnlJ1xkDBiT3Z
+LWCbxHFLvTNWTgvqm6rLNOGnZ9xdBkDBL3gmz4++XMS6FibOJ1PNb8MLyiayaQk3Dx8tbqoDTPZk
+PAYuvTIlOTEKJKuW/iO9rO7BWQRtZhcSzFbLx07RLBXFlsC+ZJAWUfz2gTKsbvkJ2pL1wvrx6bxm
+1FGLlp2lKvH5zcCSIkrp5zfTRU1lduxCuX2KqAUghGHpl54hcg2NIH1jkofAMWM4Nvo1GPynw3aU
+O8mK37V9NbZPaLBOFw==
+--000000000000d2c8d305e437bd8b--

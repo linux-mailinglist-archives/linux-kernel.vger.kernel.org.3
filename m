@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9E357BEB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD2157BEB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232594AbiGTTi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 15:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44632 "EHLO
+        id S233237AbiGTTkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 15:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiGTTi5 (ORCPT
+        with ESMTP id S229570AbiGTTkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 15:38:57 -0400
+        Wed, 20 Jul 2022 15:40:08 -0400
 Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44823624A1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:38:52 -0700 (PDT)
-X-QQ-mid: bizesmtp91t1658345814tdzmi03q
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD1565D4A;
+        Wed, 20 Jul 2022 12:40:02 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1658345995to035zp2
 Received: from harry-jrlc.. ( [125.70.163.183])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 21 Jul 2022 03:36:45 +0800 (CST)
+        id ; Thu, 21 Jul 2022 03:39:43 +0800 (CST)
 X-QQ-SSF: 0100000000200030C000C00A0000020
-X-QQ-FEAT: r/cTxDoDoiH/pTL4nTBpUt0R87I470dGH2+XdWmc445JnQmOS3uO11QkskkhJ
-        8UjrsAYIGVRgHy9Y+uNQN3QS4pJ8/0fljZSP9Vv1CHlfmPjfpv0rpfb9Mj/eovsxP0uJia7
-        Aqo3tTG7fStGZ3gFD2qaKq4X32u8OgW0f3cAAPg4ZfRCGuEGDh0fYjiyA9s1+IlrtM9viet
-        G7uTnQucIN/py+0pDSu/yZvJ+c5yzAzy6p4xztZ22rRchjQxHaPowonmtuco5CEAwqyHwOd
-        NYQzSy4LkVlqH9TjcWhibIHJB3yVfaRgN8fifrH2+FNzeTS3b5gLM3IpXYHVphOS7bB6Ieb
-        jpqK6ZQFsOKxIHAiL2mIXqFgBLCRSQHQJnsKqb27eAnc+UzFlxuUxEtBtfIXA==
+X-QQ-FEAT: +bXiSo2NuBeKioPucw27azFzSN7FKN7KqmpjEqbFFM0StNhYLSCZB7gZB64hp
+        Mrbc+QPsqLWG1ZxJmJ0GmLM6JOHIdY7zPZsRak1+247BDVvvyXgKZu84vZqYxmzE1KMmlwP
+        ITwh7ZFK/zDWEKxC4S4bxEvmYJ6FwnATDKXTp3vf32SzVqfmm11SiGnj5acrIs9PlOJXLOa
+        +ooV4XJrMIOEke6MaMHLs+Eu6UAi9S74yDs8kAlsvBLph8MVvmSW4vQYMTPfI+f+1E34N3n
+        CcYrYKXJRVshGzLvu+A7PDGEr43d+hSX0CNUtAqpZwelYmldqckvKQ1DUJnp7rPyNqBFypW
+        r6gyyLxTCTeGtwaKc/QIKLH2xLMR9CKjrJ6c/toUexu00hw1VCaooFi2rzr6w==
 X-QQ-GoodBg: 0
 From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     richard@nod.at, anton.ivanov@cambridgegreys.com,
-        johannes@sipsolutions.net
-Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+To:     James.Bottomley@HansenPartnership.com, deller@gmx.de
+Cc:     linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] um:do not initialise statics to 0.
-Date:   Thu, 21 Jul 2022 03:36:43 +0800
-Message-Id: <20220720193643.8081-1-gaoxin@cdjrlc.com>
+Subject: [PATCH] dma-mapping:do not initialise statics to 0.
+Date:   Thu, 21 Jul 2022 03:39:41 +0800
+Message-Id: <20220720193941.8261-1-gaoxin@cdjrlc.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,22 +52,25 @@ do not initialise statics to 0.
 
 Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
 ---
- arch/um/drivers/stdio_console.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/parisc/kernel/pci-dma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/um/drivers/stdio_console.c b/arch/um/drivers/stdio_console.c
-index e8b762f4d8c2..e0f7543ef499 100644
---- a/arch/um/drivers/stdio_console.c
-+++ b/arch/um/drivers/stdio_console.c
-@@ -90,7 +90,7 @@ static int con_remove(int n, char **error_out)
- }
+diff --git a/arch/parisc/kernel/pci-dma.c b/arch/parisc/kernel/pci-dma.c
+index 160996f2198e..ba87f791323b 100644
+--- a/arch/parisc/kernel/pci-dma.c
++++ b/arch/parisc/kernel/pci-dma.c
+@@ -36,8 +36,8 @@
+ #include <asm/tlbflush.h>	/* for purge_tlb_*() macros */
  
- /* Set in an initcall, checked in an exitcall */
--static int con_init_done = 0;
-+static int con_init_done;
+ static struct proc_dir_entry * proc_gsc_root __read_mostly = NULL;
+-static unsigned long pcxl_used_bytes __read_mostly = 0;
+-static unsigned long pcxl_used_pages __read_mostly = 0;
++static unsigned long pcxl_used_bytes __read_mostly;
++static unsigned long pcxl_used_pages __read_mostly;
  
- static int con_install(struct tty_driver *driver, struct tty_struct *tty)
- {
+ extern unsigned long pcxl_dma_start; /* Start of pcxl dma mapping area */
+ static DEFINE_SPINLOCK(pcxl_res_lock);
 -- 
 2.30.2
+
 

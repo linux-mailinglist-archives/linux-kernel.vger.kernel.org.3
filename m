@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB1157B3DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B0D57B3E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238691AbiGTJai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
+        id S231919AbiGTJbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235990AbiGTJaY (ORCPT
+        with ESMTP id S231678AbiGTJbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:30:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2A120BE0;
-        Wed, 20 Jul 2022 02:30:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D93E561B3C;
-        Wed, 20 Jul 2022 09:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 382EBC341C7;
-        Wed, 20 Jul 2022 09:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658309421;
-        bh=uW2wvPc0MTR/lHlk/Kks289UXX6rNoiNDOfbuCbBjzU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LBJXFffvroA3BkliuipUs4oPthXLPyuaZRwE1sUrF/iOvRJh1q3u+qChQ+hmRd59s
-         hywUeZfir53UYuWbFzVIkGj334+mSK84y4fmU7Qfxuu1Lj6DmbS2c9WhY1FZpK3OrW
-         aQzJDDm2YYif0Kx157PbKVOdZyKGp+QaHz1AQ9dhRuRsDwAzdbHKkd6m0y9MyDzE3a
-         goYXkjh/oOzk24eP/Si2hd4gB+tXhRNvK5vC1bjqgdzxKcsfZv+ebY+UALhEig6sjA
-         MSqOhIqH39ddcEOxrQ5eH3Ubj6MGFoBjd7tc5yM7Ws9BuZu4Ffpf2wtV92gKIl3JyE
-         3oX319q8Row4w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 18B77E451AD;
-        Wed, 20 Jul 2022 09:30:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 20 Jul 2022 05:31:15 -0400
+Received: from smtpproxy21.qq.com (smtpbg703.qq.com [203.205.195.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEE754CBE
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:31:10 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1658309464t5kcqyci
+Received: from eureka.localdomain ( [123.124.208.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 20 Jul 2022 17:30:51 +0800 (CST)
+X-QQ-SSF: 01400000002000B0D000000A0000020
+X-QQ-FEAT: hoArX50alxG/Em5tr+cjD56eDWqOPkiKaRqdDQ9vGGbrlnaAHGGwmB+D0Nsox
+        OI9UqoySXCx41SDJA5Ofz1EJIBoDdK4d9gmoSc4YUoQeQG2/xjIr04w+qutBGoM92YUDf3y
+        1+3pN3kuapLW2zbJs/aAkxNnelPShvLMVAhbcmX19iHrrJ5Zy9giqyCWt8bMYjP7hv2wjaC
+        y1ACKxCStoTnT5iObt5JMD9LeUqtSV8LUJpmVBDI1529XhbwpXVXSLOQ9i3xL13KXuEdFN4
+        TeT/QrKz8Ka6awfkWTB1d0yzJdE7y0f1R2+S/yuiBeOkXQdeatuLCZawllNd+TNDr269SjE
+        FIP3ms0L+W2e4EH+/t77SpAeaS7uj63EZ5d1hLGHBSrnEWLXcdhM+yIkWkEU7sNahAkS2/u
+        RWXZ5L+pVv4=
+X-QQ-GoodBg: 1
+From:   Wang You <wangyoua@uniontech.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hch@lst.de, jaegeuk@kernel.org, fio@vger.kernel.org,
+        ming.lei@redhat.com, wangyoua@uniontech.com,
+        wangxiaohua@uniontech.com
+Subject: [PATCH 0/2] Improve mq-deadline performance in HDD
+Date:   Wed, 20 Jul 2022 17:30:46 +0800
+Message-Id: <20220720093048.225944-1-wangyoua@uniontech.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V5 net-next] net: marvell: prestera: add phylink support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165830942109.20880.12654941413277044286.git-patchwork-notify@kernel.org>
-Date:   Wed, 20 Jul 2022 09:30:21 +0000
-References: <20220719105716.19692-1-oleksandr.mazur@plvision.eu>
-In-Reply-To: <20220719105716.19692-1-oleksandr.mazur@plvision.eu>
-To:     Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, yevhen.orlov@plvision.eu,
-        taras.chornyi@plvision.eu, linux@armlinux.org.uk, andrew@lunn.ch
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign4
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi jens,
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+We already know that batching requests can increase the storage
+performance of some devices, but after testing, I found that it
+will reduce the performance of some low and medium speed devices
+when using the scheduler (especially mq-deadline), such as
+rotational disks connected to a raid.
 
-On Tue, 19 Jul 2022 13:57:16 +0300 you wrote:
-> For SFP port prestera driver will use kernel
-> phylink infrastucture to configure port mode based on
-> the module that has beed inserted
-> 
-> Co-developed-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
-> Signed-off-by: Yevhen Orlov <yevhen.orlov@plvision.eu>
-> Co-developed-by: Taras Chornyi <taras.chornyi@plvision.eu>
-> Signed-off-by: Taras Chornyi <taras.chornyi@plvision.eu>
-> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-> 
-> [...]
+In order to balance the performance difference between different
+devices, a more sophisticated mechanism may be needed to control
+the number of batching (such as sometimes 1 is better),
+but obviously this is not easy.
 
-Here is the summary with links:
-  - [V5,net-next] net: marvell: prestera: add phylink support
-    https://git.kernel.org/netdev/net-next/c/52323ef75414
+At the same time I noticed that when the mq-deadline scheduler select
+a request for a higher sector outside the batch, deadline_fifo_request
+is used to select the request within the fifo and restart the batch.
+Selecting a request from a fifo tends to satisfy the request's timeline,
+but it is not always very urgent.
 
-You are awesome, thank you!
+So in the case of no expire, can the selection strategy of the first
+request in the batch be changed? Because in devices with rotation
+characteristics, proper sector access order is beneficial to performance.
+
+This patch series includes the following two parts:
+
+- Added a temporary sys interface nr_sched_batch to control the number
+  of batching requests.
+
+- Added a deadline_head_request function to select the request from the
+  first of the red-black tree instead of the fifo when appropriate.
+
+Thanks,
+
+Wang.
+
+Wang You (2):
+  block: Introduce nr_sched_batch sys interface
+  block/mq-deadline: Prioritize first request
+
+ block/blk-mq-sched.c   |  4 +++-
+ block/blk-sysfs.c      | 34 ++++++++++++++++++++++++++++++++++
+ block/mq-deadline.c    | 42 +++++++++++++++++++++++++++++++++++++++---
+ include/linux/blkdev.h |  1 +
+ 4 files changed, 77 insertions(+), 4 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.27.0
+
+
 
 

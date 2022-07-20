@@ -2,191 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7E257AD4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AFE57AD54
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242352AbiGTBm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 21:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S240705AbiGTBoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 21:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241906AbiGTBmj (ORCPT
+        with ESMTP id S240053AbiGTBoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 21:42:39 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD19465D5E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:41:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VJueMTw_1658281264;
-Received: from 30.240.121.248(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VJueMTw_1658281264)
-          by smtp.aliyun-inc.com;
-          Wed, 20 Jul 2022 09:41:05 +0800
-Message-ID: <e8431f61-99f5-3547-b0a3-bd5b3750508b@linux.alibaba.com>
-Date:   Wed, 20 Jul 2022 09:41:03 +0800
+        Tue, 19 Jul 2022 21:44:12 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Jul 2022 18:44:09 PDT
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270F6F45
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:44:08 -0700 (PDT)
+X-KPN-MessageId: 48b152f4-07cd-11ed-92d5-005056abbe64
+Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 48b152f4-07cd-11ed-92d5-005056abbe64;
+        Wed, 20 Jul 2022 03:42:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:mime-version:message-id:subject:to:from:date;
+        bh=rJFJglb4/UlXPUAHi1JzAHBD/M9s09bPsFmPwi9LOVE=;
+        b=K+cK7q+3qNmRzBhVqnrb6dcvzHwTNPb0eIHNfYy+/w9+5NhJGbV4DGkcBa1KUI0oE0OnCKtb5VKsW
+         LBKidygns/An+tmmTcJlAhuoay2aJjeeiCNVbTnTJzIAWDDdO8D1ZIK0F2S6YnaJRALGwkDW5hyNiw
+         FVnqretpsqOtryhtSVt95SRQwlK+f4XfUyyZwt9HFoV8bZ0RziblHCGN29eCMfURmr8ud2muyNUPpY
+         zzTh3AZb/rYAvinh6li1lZLbR/g/ewjqq/uMdSHwFDqXM4EHdlWg1OqUy84NWH+GUIfHEXnjlsdDM6
+         3lIuKGlcofXTuBTPowWEM6pmbH5ny1w==
+X-KPN-MID: 33|X/FwXldpKQeT69J14RQrO3wWCDlNHTXiDFH+z4/5b410baHBlVm0Lo5m+k0owV3
+ TzWwt78voBp9KvHnL1iswi5re4OiCxH/fUHIxGdjKB4U=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|kw9TlpbAUpy2EFas4/riRupArFIg6BG1fOWsU6N4exHkaFUlNJ5+lQgOtSkXTgm
+ dJHzaYn3cIm9roNAMOgcphw==
+X-Originating-IP: 86.86.234.244
+Received: from wim.jer (86-86-234-244.fixed.kpn.net [86.86.234.244])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 4a3e2c51-07cd-11ed-b8b0-005056ab7447;
+        Wed, 20 Jul 2022 03:43:02 +0200 (CEST)
+Date:   Wed, 20 Jul 2022 03:43:00 +0200
+From:   Jeroen Roovers <jer@xs4all.nl>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, linux-parisc@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH v2 07/13] parisc: Replace regular spinlock with
+ spin_trylock on panic path
+Message-ID: <20220720034300.6d2905b8@wim.jer>
+In-Reply-To: <20220719195325.402745-8-gpiccoli@igalia.com>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+        <20220719195325.402745-8-gpiccoli@igalia.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH v2 1/3] docs: perf: Add description for Alibaba's
- T-Head PMU driver
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, mark.rutland@arm.com,
-        baolin.wang@linux.alibaba.com, yaohongbo@linux.alibaba.com,
-        nengchen@linux.alibaba.com, zhuo.song@linux.alibaba.com
-References: <20220617111825.92911-1-xueshuai@linux.alibaba.com>
- <20220715151310.90091-2-xueshuai@linux.alibaba.com>
- <20220719133509.00006ee9@Huawei.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20220719133509.00006ee9@Huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+     Hi Guilherme,
 
-在 2022/7/19 PM8:35, Jonathan Cameron 写道:
-> On Fri, 15 Jul 2022 23:13:08 +0800
-> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+On Tue, 19 Jul 2022 16:53:20 -0300
+"Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
+
+> The panic notifiers' callbacks execute in an atomic context, with
+> interrupts/preemption disabled, and all CPUs not running the panic
+> function are off, so it's very dangerous to wait on a regular
+> spinlock, there's a risk of deadlock.
 > 
->> Alibaba's T-Head SoC implements uncore PMU for performance and functional
->> debugging to facilitate system maintenance. Document it to provide guidance
->> on how to use it.
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> I'm far from an expert on this, but looks good to me.
+> Refactor the panic notifier of parisc/power driver to make use
+> of spin_trylock - for that, we've added a second version of the
+> soft-power function. Also, some comments were reorganized and
+> trailing white spaces, useless header inclusion and blank lines
+> were removed.
 > 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Acked-by: Helge Deller <deller@gmx.de> # parisc
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> 
+> ---
+> 
+> V2:
+> - Added Helge's ACK - thanks!
+> 
+>  arch/parisc/include/asm/pdc.h |  1 +
+>  arch/parisc/kernel/firmware.c | 27 +++++++++++++++++++++++----
+>  drivers/parisc/power.c        | 17 ++++++++++-------
+>  3 files changed, 34 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/parisc/include/asm/pdc.h
+> b/arch/parisc/include/asm/pdc.h index b643092d4b98..7a106008e258
+> 100644 --- a/arch/parisc/include/asm/pdc.h
+> +++ b/arch/parisc/include/asm/pdc.h
+> @@ -83,6 +83,7 @@ int pdc_do_firm_test_reset(unsigned long
+> ftc_bitmap); int pdc_do_reset(void);
+>  int pdc_soft_power_info(unsigned long *power_reg);
+>  int pdc_soft_power_button(int sw_control);
+> +int pdc_soft_power_button_panic(int sw_control);
+>  void pdc_io_reset(void);
+>  void pdc_io_reset_devices(void);
+>  int pdc_iodc_getc(void);
+> diff --git a/arch/parisc/kernel/firmware.c
+> b/arch/parisc/kernel/firmware.c index 6a7e315bcc2e..0e2f70b592f4
+> 100644 --- a/arch/parisc/kernel/firmware.c
+> +++ b/arch/parisc/kernel/firmware.c
+> @@ -1232,15 +1232,18 @@ int __init pdc_soft_power_info(unsigned long
+> *power_reg) }
+>  
+>  /*
+> - * pdc_soft_power_button - Control the soft power button behaviour
+> - * @sw_control: 0 for hardware control, 1 for software control 
+> + * pdc_soft_power_button{_panic} - Control the soft power button
+> behaviour
+> + * @sw_control: 0 for hardware control, 1 for software control
+>   *
+>   *
+>   * This PDC function places the soft power button under software or
+>   * hardware control.
+> - * Under software control the OS may control to when to allow to
+> shut 
+> - * down the system. Under hardware control pressing the power button 
+> + * Under software control the OS may control to when to allow to shut
+> + * down the system. Under hardware control pressing the power button
+>   * powers off the system immediately.
+> + *
+> + * The _panic version relies in spin_trylock to prevent deadlock
+> + * on panic path.
 
-Thanks for the review.
+in => on
 
-Cheers,
-Shuai
+>   */
+>  int pdc_soft_power_button(int sw_control)
+>  {
+> @@ -1254,6 +1257,22 @@ int pdc_soft_power_button(int sw_control)
+>  	return retval;
+>  }
+>  
+> +int pdc_soft_power_button_panic(int sw_control)
+> +{
+> +	int retval;
+> +	unsigned long flags;
+> +
+> +	if (!spin_trylock_irqsave(&pdc_lock, flags)) {
+> +		pr_emerg("Couldn't enable soft power button\n");
+> +		return -EBUSY; /* ignored by the panic notifier */
+> +	}
+> +
+> +	retval = mem_pdc_call(PDC_SOFT_POWER, PDC_SOFT_POWER_ENABLE,
+> __pa(pdc_result), sw_control);
+> +	spin_unlock_irqrestore(&pdc_lock, flags);
+> +
+> +	return retval;
+> +}
+> +
+>  /*
+>   * pdc_io_reset - Hack to avoid overlapping range registers of
+> Bridges devices.
+>   * Primarily a problem on T600 (which parisc-linux doesn't support)
+> but diff --git a/drivers/parisc/power.c b/drivers/parisc/power.c
+> index 456776bd8ee6..8512884de2cf 100644
+> --- a/drivers/parisc/power.c
+> +++ b/drivers/parisc/power.c
+> @@ -37,7 +37,6 @@
+>  #include <linux/module.h>
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+> -#include <linux/notifier.h>
+>  #include <linux/panic_notifier.h>
+>  #include <linux/reboot.h>
+>  #include <linux/sched/signal.h>
+> @@ -175,16 +174,21 @@ static void powerfail_interrupt(int code, void
+> *x) 
+>  
+>  
+> -/* parisc_panic_event() is called by the panic handler.
+> - * As soon as a panic occurs, our tasklets above will not be
+> - * executed any longer. This function then re-enables the 
+> - * soft-power switch and allows the user to switch off the system
+> +/*
+> + * parisc_panic_event() is called by the panic handler.
+> + *
+> + * As soon as a panic occurs, our tasklets above will not
+> + * be executed any longer. This function then re-enables
+> + * the soft-power switch and allows the user to switch off
+> + * the system. We rely in pdc_soft_power_button_panic()
+> + * since this version spin_trylocks (instead of regular
+> + * spinlock), preventing deadlocks on panic path.
+>   */
+>  static int parisc_panic_event(struct notifier_block *this,
+>  		unsigned long event, void *ptr)
+>  {
+>  	/* re-enable the soft-power switch */
+> -	pdc_soft_power_button(0);
+> +	pdc_soft_power_button_panic(0);
+>  	return NOTIFY_DONE;
+>  }
+>  
+> @@ -193,7 +197,6 @@ static struct notifier_block parisc_panic_block =
+> { .priority	= INT_MAX,
+>  };
+>  
+> -
+>  static int __init power_init(void)
+>  {
+>  	unsigned long ret;
 
 
->> ---
->>  .../admin-guide/perf/alibaba_pmu.rst          | 100 ++++++++++++++++++
->>  Documentation/admin-guide/perf/index.rst      |   1 +
->>  2 files changed, 101 insertions(+)
->>  create mode 100644 Documentation/admin-guide/perf/alibaba_pmu.rst
->>
->> diff --git a/Documentation/admin-guide/perf/alibaba_pmu.rst b/Documentation/admin-guide/perf/alibaba_pmu.rst
->> new file mode 100644
->> index 000000000000..11de998bb480
->> --- /dev/null
->> +++ b/Documentation/admin-guide/perf/alibaba_pmu.rst
->> @@ -0,0 +1,100 @@
->> +=============================================================
->> +Alibaba's T-Head SoC Uncore Performance Monitoring Unit (PMU)
->> +=============================================================
->> +
->> +The Yitian 710, custom-built by Alibaba Group's chip development business,
->> +T-Head, implements uncore PMU for performance and functional debugging to
->> +facilitate system maintenance.
->> +
->> +DDR Sub-System Driveway (DRW) PMU Driver
->> +=========================================
->> +
->> +Yitian 710 employs eight DDR5/4 channels, four on each die. Each DDR5 channel
->> +is independent of others to service system memory requests. And one DDR5
->> +channel is split into two independent sub-channels. The DDR Sub-System Driveway
->> +implements separate PMUs for each sub-channel to monitor various performance
->> +metrics.
->> +
->> +The Driveway PMU devices are named as ali_drw_<sys_base_addr> with perf.
->> +For example, ali_drw_21000 and ali_drw_21080 are two PMU devices for two
->> +sub-channels of the same channel in die 0. And the PMU device of die 1 is
->> +prefixed with ali_drw_400XXXXX, e.g. ali_drw_40021000.
->> +
->> +Each sub-channel has 36 PMU counters in total, which is classified into
->> +four groups:
->> +
->> +- Group 0: PMU Cycle Counter. This group has one pair of counters
->> +  pmu_cycle_cnt_low and pmu_cycle_cnt_high, that is used as the cycle count
->> +  based on DDRC core clock.
->> +
->> +- Group 1: PMU Bandwidth Counters. This group has 8 counters that are used
->> +  to count the total access number of either the eight bank groups in a
->> +  selected rank, or four ranks separately in the first 4 counters. The base
->> +  transfer unit is 64B.
->> +
->> +- Group 2: PMU Retry Counters. This group has 10 counters, that intend to
->> +  count the total retry number of each type of uncorrectable error.
->> +
->> +- Group 3: PMU Common Counters. This group has 16 counters, that are used
->> +  to count the common events.
->> +
->> +For now, the Driveway PMU driver only uses counters in group 0 and group 3.
->> +
->> +The DDR Controller (DDRCTL) and DDR PHY combine to create a complete solution
->> +for connecting an SoC application bus to DDR memory devices. The DDRCTL
->> +receives transactions Host Interface (HIF) which is custom-defined by Synopsys.
->> +These transactions are queued internally and scheduled for access while
->> +satisfying the SDRAM protocol timing requirements, transaction priorities, and
->> +dependencies between the transactions. The DDRCTL in turn issues commands on
->> +the DDR PHY Interface (DFI) to the PHY module, which launches and captures data
->> +to and from the SDRAM. The driveway PMUs have hardware logic to gather
->> +statistics and performance logging signals on HIF, DFI, etc.
->> +
->> +By counting the READ, WRITE and RMW commands sent to the DDRC through the HIF
->> +interface, we could calculate the bandwidth. Example usage of counting memory
->> +data bandwidth::
->> +
->> +  perf stat \
->> +    -e ali_drw_21000/hif_wr/ \
->> +    -e ali_drw_21000/hif_rd/ \
->> +    -e ali_drw_21000/hif_rmw/ \
->> +    -e ali_drw_21000/cycle/ \
->> +    -e ali_drw_21080/hif_wr/ \
->> +    -e ali_drw_21080/hif_rd/ \
->> +    -e ali_drw_21080/hif_rmw/ \
->> +    -e ali_drw_21080/cycle/ \
->> +    -e ali_drw_23000/hif_wr/ \
->> +    -e ali_drw_23000/hif_rd/ \
->> +    -e ali_drw_23000/hif_rmw/ \
->> +    -e ali_drw_23000/cycle/ \
->> +    -e ali_drw_23080/hif_wr/ \
->> +    -e ali_drw_23080/hif_rd/ \
->> +    -e ali_drw_23080/hif_rmw/ \
->> +    -e ali_drw_23080/cycle/ \
->> +    -e ali_drw_25000/hif_wr/ \
->> +    -e ali_drw_25000/hif_rd/ \
->> +    -e ali_drw_25000/hif_rmw/ \
->> +    -e ali_drw_25000/cycle/ \
->> +    -e ali_drw_25080/hif_wr/ \
->> +    -e ali_drw_25080/hif_rd/ \
->> +    -e ali_drw_25080/hif_rmw/ \
->> +    -e ali_drw_25080/cycle/ \
->> +    -e ali_drw_27000/hif_wr/ \
->> +    -e ali_drw_27000/hif_rd/ \
->> +    -e ali_drw_27000/hif_rmw/ \
->> +    -e ali_drw_27000/cycle/ \
->> +    -e ali_drw_27080/hif_wr/ \
->> +    -e ali_drw_27080/hif_rd/ \
->> +    -e ali_drw_27080/hif_rmw/ \
->> +    -e ali_drw_27080/cycle/ -- sleep 10
->> +
->> +The average DRAM bandwidth can be calculated as follows:
->> +
->> +- Read Bandwidth =  perf_hif_rd * DDRC_WIDTH * DDRC_Freq / DDRC_Cycle
->> +- Write Bandwidth = (perf_hif_wr + perf_hif_rmw) * DDRC_WIDTH * DDRC_Freq / DDRC_Cycle
->> +
->> +Here, DDRC_WIDTH = 64 bytes.
->> +
->> +The current driver does not support sampling. So "perf record" is
->> +unsupported.  Also attach to a task is unsupported as the events are all
->> +uncore.
->> diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
->> index 69b23f087c05..823db08863db 100644
->> --- a/Documentation/admin-guide/perf/index.rst
->> +++ b/Documentation/admin-guide/perf/index.rst
->> @@ -17,3 +17,4 @@ Performance monitor support
->>     xgene-pmu
->>     arm_dsu_pmu
->>     thunderx2-pmu
->> +   alibaba_pmu
+Kind regards,
+     jer

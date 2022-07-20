@@ -2,104 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D5957AF9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 05:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7992957AFA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 05:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbiGTDvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 23:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S238155AbiGTDxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 23:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbiGTDvL (ORCPT
+        with ESMTP id S234519AbiGTDxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 23:51:11 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202E56D547
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 20:51:09 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=kanie@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VJv7hAH_1658289066;
-Received: from 30.178.82.186(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0VJv7hAH_1658289066)
-          by smtp.aliyun-inc.com;
-          Wed, 20 Jul 2022 11:51:07 +0800
-Message-ID: <9122f83f-902b-3738-3b0e-f806df999c3f@linux.alibaba.com>
-Date:   Wed, 20 Jul 2022 11:51:01 +0800
+        Tue, 19 Jul 2022 23:53:04 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5486D548
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 20:53:03 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d7so1982945plr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 20:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y9DpWvCVDJd6A56HD1n6KoSQsmY3hGAJ1AiVFQE9fVY=;
+        b=DhtvpLqeqFwbxgAIOlZXE81TxUYZwlPQBuSg2dwhkrch5LY1xVdruf4BeaREQ4ck6R
+         SY7uMediWrlQxpPrS/F5BmswEGLwzNsdcOWUYud1H8s7qe3ofYuMpmsg7pspXUnlvWPn
+         wlORUrl5Ktd//orD47Ic9z5T9rYzTf86xwUSc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y9DpWvCVDJd6A56HD1n6KoSQsmY3hGAJ1AiVFQE9fVY=;
+        b=ZYWFushUMhZVf/B8dEc9UTxfRbHG2TRSL+TkmcV/GpPux0OghrJfqmooWmKkElk7+6
+         WQ85ELUufmt9RL6Ed0ietfGgOJKmtGmpFGaznOzBmdWY1VhRxhU1wYmh3ivHtwuD/XO4
+         86SE8HtWQiSfGq1My5l1DBS6S4+F1gjKwLps4/mg0yvP85PFpy07c2tYVLDoEHvP7ngL
+         m1RCDXGIXpSFDrogB1RmIrAnWrvjDVUir+HQj34RxTLgK6OreFI3eB1F5hff2x96Cmfl
+         dtsVtFC7do5lqxKdttrKPZ+pN5fYWmhcOQQsV58Q4idj5LWJmfAjUKZXKCHcwZ1pjgfr
+         SThA==
+X-Gm-Message-State: AJIora8nYVeD6M107wklKER0320bOouG7xp69sYcEUenNmPUM8Rztb5N
+        WjUi1yP5nOr24sIK/d0R4p1oVA==
+X-Google-Smtp-Source: AGRyM1seKYtGcJoMu0mo4YwrBiYolZ8G+Sm5dVXymDL7WJKurHjFH6MmazmKkIKY73m4wjlsnDgG4w==
+X-Received: by 2002:a17:902:b28a:b0:16d:1c68:2e2 with SMTP id u10-20020a170902b28a00b0016d1c6802e2mr2595346plr.26.1658289182621;
+        Tue, 19 Jul 2022 20:53:02 -0700 (PDT)
+Received: from judyhsiao0523.c.googlers.com.com (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
+        by smtp.gmail.com with ESMTPSA id t11-20020a170902d14b00b0016648412514sm12378346plt.188.2022.07.19.20.52.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 20:53:02 -0700 (PDT)
+From:   Judy Hsiao <judyhsiao@chromium.org>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
+        judyhsiao@google.com, swboyd@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Judy Hsiao <judyhsiao@chromium.org>
+Subject: [PATCH v2 0/3] Add dtsi for sc7280 herobrine boards that using
+Date:   Wed, 20 Jul 2022 03:52:51 +0000
+Message-Id: <20220720035254.1411959-1-judyhsiao@chromium.org>
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH] nvme: Define compat_ioctl again to unbreak 32-bit
- userspace.
-To:     Nick Bowler <nbowler@draconx.ca>, linux-nvme@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>
-References: <20220720015538.15838-1-nbowler@draconx.ca>
-From:   Guixin Liu <kanie@linux.alibaba.com>
-In-Reply-To: <20220720015538.15838-1-nbowler@draconx.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
+Put sound node and lpass_cpu node settings for boards that use rt5682
+codec in the sc7280-herobrine-audio-rt5682.dtsi as there are different
+choices of headset codec for herobrine projects. Common audio setting
+for the internal speaker is in sc7280-herobrine.dtsi.
 
-Should this in the brace of "#ifdef CONFIG_COMPAT" and "#endif"?
+Changes Since V2:
+- Fix sc7280-herobrine-audio-rt5682.dtsi syntax.
 
-best regards,
+Changes Since V1:
+- Not to include the herobrine-villager-r0.dts changes in this patch
+  series to avoid conflict.
 
-Guixin Liu
+Judy Hsiao (3):
+  arm64: dts: qcom: sc7280: herobrine: Add pinconf settings for mi2s1
+  arm64: dts: qcom: sc7280: Add sc7280-herobrine-audio-rt5682.dtsi
+  arm64: dts: qcom: sc7280: include sc7280-herobrine-audio-rt5682.dtsi
+    in herobrine-r1
 
-在 2022/7/20 09:55, Nick Bowler 写道:
-> Commit 89b3d6e60550 ("nvme: simplify the compat ioctl handling") removed
-> the initialization of compat_ioctl from the nvme block_device_operations
-> structures.
->
-> Presumably the expectation was that 32-bit ioctls would be directed
-> through the regular handler but this is not the case: failing to assign
-> .compat_ioctl actually means that the compat case is disabled entirely,
-> and any attempt to submit nvme ioctls from 32-bit userspace fails
-> outright with -ENOTTY.
->
-> For example:
->
->    % smartctl -x /dev/nvme0n1
->    [...]
->    Read NVMe Identify Controller failed: NVME_IOCTL_ADMIN_CMD: Inappropriate ioctl for device
->
-> Direct .compat_ioctl to the main ioctl handlers in order to make things
-> work again.
->
-> Fixes: 89b3d6e60550 ("nvme: simplify the compat ioctl handling")
-> Signed-off-by: Nick Bowler <nbowler@draconx.ca>
-> ---
->   drivers/nvme/host/core.c      | 1 +
->   drivers/nvme/host/multipath.c | 1 +
->   2 files changed, 2 insertions(+)
->
-> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-> index a2862a56fadc..30e105dbc178 100644
-> --- a/drivers/nvme/host/core.c
-> +++ b/drivers/nvme/host/core.c
-> @@ -2093,6 +2093,7 @@ static int nvme_report_zones(struct gendisk *disk, sector_t sector,
->   static const struct block_device_operations nvme_bdev_ops = {
->   	.owner		= THIS_MODULE,
->   	.ioctl		= nvme_ioctl,
-> +	.compat_ioctl	= nvme_ioctl,
->   	.open		= nvme_open,
->   	.release	= nvme_release,
->   	.getgeo		= nvme_getgeo,
-> diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
-> index d464fdf978fb..0f38a5feec22 100644
-> --- a/drivers/nvme/host/multipath.c
-> +++ b/drivers/nvme/host/multipath.c
-> @@ -408,6 +408,7 @@ const struct block_device_operations nvme_ns_head_ops = {
->   	.open		= nvme_ns_head_open,
->   	.release	= nvme_ns_head_release,
->   	.ioctl		= nvme_ns_head_ioctl,
-> +	.compat_ioctl	= nvme_ns_head_ioctl,
->   	.getgeo		= nvme_getgeo,
->   	.report_zones	= nvme_ns_head_report_zones,
->   	.pr_ops		= &nvme_pr_ops,
+ .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 122 ++++++++++++++++++
+ .../qcom/sc7280-herobrine-herobrine-r1.dts    |   1 +
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  15 +++
+ 3 files changed, 138 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+
+-- 
+2.37.0.170.g444d1eabd0-goog
+

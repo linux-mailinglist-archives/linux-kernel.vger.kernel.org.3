@@ -2,159 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F8D57B4D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBDD57B4DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbiGTKwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 06:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33990 "EHLO
+        id S240643AbiGTKxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 06:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239476AbiGTKvs (ORCPT
+        with ESMTP id S232606AbiGTKx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 06:51:48 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEA696D541
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:51:47 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH9E13tdiwnUqAA--.39621S15;
-        Wed, 20 Jul 2022 18:51:40 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V18 13/13] irqchip / ACPI: Introduce ACPI_IRQ_MODEL_LPIC for LoongArch
-Date:   Wed, 20 Jul 2022 18:51:32 +0800
-Message-Id: <1658314292-35346-14-git-send-email-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1658314292-35346-1-git-send-email-lvjianmin@loongson.cn>
-References: <1658314292-35346-1-git-send-email-lvjianmin@loongson.cn>
-X-CM-TRANSID: AQAAf9DxH9E13tdiwnUqAA--.39621S15
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF1rZryUXr13Kw17Jw1fJFb_yoW5Aw4DpF
-        WjgF15Ar4xKay7W3sxCa1Dury3uFyrCFW2qayfG347Cw4kGFykWFykZa42vFZ8A3yUWa17
-        uF1DXFs8W3WUZwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
-        6r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF
-        04k20xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-        Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UZa9-UUUUU=
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 06:53:26 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCFC7173A;
+        Wed, 20 Jul 2022 03:52:56 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id C851A5FD2F;
+        Wed, 20 Jul 2022 13:52:41 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1658314361;
+        bh=Reu0fuSf+RtOwElI8k8f5OiCjMhFmisHomzOclTNIRc=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=N3gwopGugWOONNgObmfj2QjNpW+/oJAJV9LTye8vjSxMraUowYebGdh1Wz0wFGbsb
+         33flSeW587hQ/ouMb0rkf2DQQr1OTm0h+Ap+sWSPk4nWxnCrhgsjOKJJzaaBilDU+A
+         RFufZyaWZFg2TeJxa0CY+K9AKGZOaCBnrgSvjazVD3ynqGETzUI2ecOPYSeLhznm1r
+         ZYSx5whjO16VPBcLY448f2qWEW+s4psKD5/OG5NEjFEuDP4ZWINifEjW1OofeyWnzU
+         gBqw4pogXwV366eG/inIA0IrMt5SrJBdeLbyi9aQZ0CCkBauw5dwVEKIzBnG6hQOL/
+         VrISluw0z7WkQ==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 20 Jul 2022 13:52:37 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 0/3] virtio/vsock: use SO_RCVLOWAT to set
+ POLLIN/POLLRDNORM
+Thread-Topic: [RFC PATCH v1 0/3] virtio/vsock: use SO_RCVLOWAT to set
+ POLLIN/POLLRDNORM
+Thread-Index: AQHYmn4tqUccpAClwkSIQKaYrjmRMa2Fd1UAgAEfggCAADh4gIAAFxCA
+Date:   Wed, 20 Jul 2022 10:52:25 +0000
+Message-ID: <3e954621-4496-17be-4b73-d0971372b8c5@sberdevices.ru>
+References: <c8de13b1-cbd8-e3e0-5728-f3c3648c69f7@sberdevices.ru>
+ <20220719125856.a6bfwrvy66gxxzqe@sgarzare-redhat>
+ <ac05e1ee-23b3-75e0-f9a4-1056a68934d8@sberdevices.ru>
+ <20220720093005.2unej4jnnvrn55f2@sgarzare-redhat>
+In-Reply-To: <20220720093005.2unej4jnnvrn55f2@sgarzare-redhat>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E7D43A9AB1AF3341827A5BC6EA70248A@sberdevices.ru>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/20 09:26:00 #19927092
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For LoongArch, ACPI_IRQ_MODEL_LPIC is introduced, and then the
-callback acpi_get_gsi_domain_id and acpi_gsi_to_irq_fallback are
-implemented.
-
-The acpi_get_gsi_domain_id callback returns related fwnode handle
-of irqdomain for different GSI range.
-
-The acpi_gsi_to_irq_fallback will create new mapping for gsi when
-the mapping of it is not found.
-
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
----
- drivers/acpi/bus.c                  |  3 +++
- drivers/irqchip/irq-loongarch-cpu.c | 37 +++++++++++++++++++++++++++++++++++++
- include/linux/acpi.h                |  1 +
- 3 files changed, 41 insertions(+)
-
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 86fa61a..63fbf00 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -1145,6 +1145,9 @@ static int __init acpi_bus_init_irq(void)
- 	case ACPI_IRQ_MODEL_PLATFORM:
- 		message = "platform specific model";
- 		break;
-+	case ACPI_IRQ_MODEL_LPIC:
-+		message = "LPIC";
-+		break;
- 	default:
- 		pr_info("Unknown interrupt routing model\n");
- 		return -ENODEV;
-diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
-index 28ddc60..327f3ab 100644
---- a/drivers/irqchip/irq-loongarch-cpu.c
-+++ b/drivers/irqchip/irq-loongarch-cpu.c
-@@ -16,6 +16,41 @@
- static struct irq_domain *irq_domain;
- struct fwnode_handle *cpuintc_handle;
- 
-+static u32 lpic_gsi_to_irq(u32 gsi)
-+{
-+	/* Only pch irqdomain transferring is required for LoongArch. */
-+	if (gsi >= GSI_MIN_PCH_IRQ && gsi <= GSI_MAX_PCH_IRQ)
-+		return acpi_register_gsi(NULL, gsi, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_HIGH);
-+
-+	return 0;
-+}
-+
-+static struct fwnode_handle *lpic_get_gsi_domain_id(u32 gsi)
-+{
-+	int id;
-+	struct fwnode_handle *domain_handle = NULL;
-+
-+	switch (gsi) {
-+	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
-+		if (liointc_handle)
-+			domain_handle = liointc_handle;
-+		break;
-+
-+	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
-+		if (pch_lpc_handle)
-+			domain_handle = pch_lpc_handle;
-+		break;
-+
-+	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
-+		id = find_pch_pic(gsi);
-+		if (id >= 0 && pch_pic_handle[id])
-+			domain_handle = pch_pic_handle[id];
-+		break;
-+	}
-+
-+	return domain_handle;
-+}
-+
- static void mask_loongarch_irq(struct irq_data *d)
- {
- 	clear_csr_ecfg(ECFGF(d->hwirq));
-@@ -102,6 +137,8 @@ static int __init cpuintc_acpi_init(union acpi_subtable_headers *header,
- 		panic("Failed to add irqdomain for LoongArch CPU");
- 
- 	set_handle_irq(&handle_cpu_irq);
-+	acpi_set_irq_model(ACPI_IRQ_MODEL_LPIC, lpic_get_gsi_domain_id);
-+	acpi_set_gsi_to_irq_fallback(lpic_gsi_to_irq);
- 	acpi_cascade_irqdomain_init();
- 
- 	return 0;
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index e2b60d5..76520f3 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -105,6 +105,7 @@ enum acpi_irq_model_id {
- 	ACPI_IRQ_MODEL_IOSAPIC,
- 	ACPI_IRQ_MODEL_PLATFORM,
- 	ACPI_IRQ_MODEL_GIC,
-+	ACPI_IRQ_MODEL_LPIC,
- 	ACPI_IRQ_MODEL_COUNT
- };
- 
--- 
-1.8.3.1
-
+T24gMjAuMDcuMjAyMiAxMjozMCwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBXZWQs
+IEp1bCAyMCwgMjAyMiBhdCAwNjowNzo0N0FNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
+DQo+PiBPbiAxOS4wNy4yMDIyIDE1OjU4LCBTdGVmYW5vIEdhcnphcmVsbGEgd3JvdGU6DQo+Pj4g
+T24gTW9uLCBKdWwgMTgsIDIwMjIgYXQgMDg6MTI6NTJBTSArMDAwMCwgQXJzZW5peSBLcmFzbm92
+IHdyb3RlOg0KPj4+PiBIZWxsbywNCj4+Pj4NCj4+Pj4gZHVyaW5nIG15IGV4cGVyaW1lbnRzIHdp
+dGggemVyb2NvcHkgcmVjZWl2ZSwgaSBmb3VuZCwgdGhhdCBpbiBzb21lDQo+Pj4+IGNhc2VzLCBw
+b2xsKCkgaW1wbGVtZW50YXRpb24gdmlvbGF0ZXMgUE9TSVg6IHdoZW4gc29ja2V0IGhhcyBub24t
+DQo+Pj4+IGRlZmF1bHQgU09fUkNWTE9XQVQoZS5nLiBub3QgMSksIHBvbGwoKSB3aWxsIGFsd2F5
+cyBzZXQgUE9MTElOIGFuZA0KPj4+PiBQT0xMUkROT1JNIGJpdHMgaW4gJ3JldmVudHMnIGV2ZW4g
+bnVtYmVyIG9mIGJ5dGVzIGF2YWlsYWJsZSB0byByZWFkDQo+Pj4+IG9uIHNvY2tldCBpcyBzbWFs
+bGVyIHRoYW4gU09fUkNWTE9XQVQgdmFsdWUuIEluIHRoaXMgY2FzZSx1c2VyIHNlZXMNCj4+Pj4g
+UE9MTElOIGZsYWcgYW5kIHRoZW4gdHJpZXMgdG8gcmVhZCBkYXRhKGZvciBleGFtcGxlIHVzaW5n
+wqAgJ3JlYWQoKScNCj4+Pj4gY2FsbCksIGJ1dCByZWFkIGNhbGwgd2lsbCBiZSBibG9ja2VkLCBi
+ZWNhdXNlwqAgU09fUkNWTE9XQVQgbG9naWMgaXMNCj4+Pj4gc3VwcG9ydGVkIGluIGRlcXVldWUg
+bG9vcCBpbiBhZl92c29jay5jLiBCdXQgdGhlIHNhbWUgdGltZSzCoCBQT1NJWA0KPj4+PiByZXF1
+aXJlcyB0aGF0Og0KPj4+Pg0KPj4+PiAiUE9MTElOwqDCoMKgwqAgRGF0YSBvdGhlciB0aGFuIGhp
+Z2gtcHJpb3JpdHkgZGF0YSBtYXkgYmUgcmVhZCB3aXRob3V0DQo+Pj4+IMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGJsb2NraW5nLg0KPj4+PiBQT0xMUkROT1JNIE5vcm1hbCBkYXRhIG1heSBiZSByZWFk
+IHdpdGhvdXQgYmxvY2tpbmcuIg0KPj4+Pg0KPj4+PiBTZWUgaHR0cHM6Ly93d3cub3Blbi1zdGQu
+b3JnL2p0YzEvc2MyMi9vcGVuL240MjE3LnBkZiwgcGFnZSAyOTMuDQo+Pj4+DQo+Pj4+IFNvLCB3
+ZSBoYXZlLCB0aGF0IHBvbGwoKSBzeXNjYWxsIHJldHVybnMgUE9MTElOLCBidXQgcmVhZCBjYWxs
+IHdpbGwNCj4+Pj4gYmUgYmxvY2tlZC4NCj4+Pj4NCj4+Pj4gQWxzbyBpbiBtYW4gcGFnZSBzb2Nr
+ZXQoNykgaSBmb3VuZCB0aGF0Og0KPj4+Pg0KPj4+PiAiU2luY2UgTGludXggMi42LjI4LCBzZWxl
+Y3QoMiksIHBvbGwoMiksIGFuZCBlcG9sbCg3KSBpbmRpY2F0ZSBhDQo+Pj4+IHNvY2tldCBhcyBy
+ZWFkYWJsZSBvbmx5IGlmIGF0IGxlYXN0IFNPX1JDVkxPV0FUIGJ5dGVzIGFyZSBhdmFpbGFibGUu
+Ig0KPj4+Pg0KPj4+PiBJIGNoZWNrZWQgVENQIGNhbGxiYWNrIGZvciBwb2xsKCkobmV0L2lwdjQv
+dGNwLmMsIHRjcF9wb2xsKCkpLCBpdA0KPj4+PiB1c2VzIFNPX1JDVkxPV0FUIHZhbHVlIHRvIHNl
+dCBQT0xMSU4gYml0LCBhbHNvIGkndmUgdGVzdGVkIFRDUCB3aXRoDQo+Pj4+IHRoaXMgY2FzZSBm
+b3IgVENQIHNvY2tldCwgaXQgd29ya3MgYXMgUE9TSVggcmVxdWlyZWQuDQo+Pj4NCj4+PiBJIHRy
+aWVkIHRvIGxvb2sgYXQgdGhlIGNvZGUgYW5kIGl0IHNlZW1zIHRoYXQgb25seSBUQ1AgY29tcGxp
+ZXMgd2l0aCBpdCBvciBhbSBJIHdyb25nPw0KPj4gWWVzLCBpIGNoZWNrZWQgQUZfVU5JWCwgaXQg
+YWxzbyBkb24ndCBjYXJlIGFib3V0IHRoYXQuIEl0IGNhbGxzIHNrYl9xdWV1ZV9lbXB0eSgpIHRo
+YXQgb2YNCj4+IGNvdXJzZSBpZ25vcmVzIFNPX1JDVkxPV0FULg0KPj4+DQo+Pj4+DQo+Pj4+IEkn
+dmUgYWRkZWQgc29tZSBmaXhlcyB0byBhZl92c29jay5jIGFuZCB2aXJ0aW9fdHJhbnNwb3J0X2Nv
+bW1vbi5jLA0KPj4+PiB0ZXN0IGlzIGFsc28gaW1wbGVtZW50ZWQuDQo+Pj4+DQo+Pj4+IFdoYXQg
+ZG8gWW91IHRoaW5rIGd1eXM/DQo+Pj4NCj4+PiBOaWNlLCB0aGFua3MgZm9yIGZpeGluZyB0aGlz
+IGFuZCBmb3IgdGhlIHRlc3QhDQo+Pj4NCj4+PiBJIGxlZnQgc29tZSBjb21tZW50cywgYnV0IEkg
+dGhpbmsgdGhlIHNlcmllcyBpcyBmaW5lIGlmIHdlIHdpbGwgc3VwcG9ydCBpdCBpbiBhbGwgdHJh
+bnNwb3J0cy4NCj4+IEFjaw0KPj4+DQo+Pj4gSSdkIGp1c3QgbGlrZSB0byB1bmRlcnN0YW5kIGlm
+IGl0J3MganVzdCBUQ1AgY29tcGx5aW5nIHdpdGggaXQgb3IgSSdtIG1pc3Npbmcgc29tZSBjaGVj
+ayBpbmNsdWRlZCBpbiB0aGUgc29ja2V0IGxheWVyIHRoYXQgd2UgY291bGQgcmV1c2UuDQo+PiBT
+ZWVtcyBzb2NrX3BvbGwoKSB3aGljaCBpcyBzb2NrZXQgbGF5ZXIgZW50cnkgcG9pbnQgZm9yIHBv
+bGwoKSBkb2Vzbid0IGNvbnRhaW4gYW55IHN1Y2ggY2hlY2tzDQo+Pj4NCj4+PiBARGF2aWQsIEBK
+YWt1YiwgQFBhb2xvLCBhbnkgYWR2aWNlPw0KPj4+DQo+Pj4gVGhhbmtzLA0KPj4+IFN0ZWZhbm8N
+Cj4+Pg0KPj4NCj4+IFBTOiBtb3Jlb3ZlciwgaSBmb3VuZCBvbmUgbW9yZSBpbnRlcmVzdGluZyB0
+aGluZyB3aXRoIFRDUCBhbmQgcG9sbDogVENQIHJlY2VpdmUgbG9naWMgd2FrZXMgdXAgcG9sbCB3
+YWl0ZXINCj4+IG9ubHkgd2hlbiBudW1iZXIgb2YgYXZhaWxhYmxlIGJ5dGVzID4gU09fUkNWTE9X
+QVQuIEUuZy4gaXQgcHJldmVudHMgInNwdXJpb3VzIiB3YWtlIHVwcywgd2hlbiBwb2xsIHdpbGwg
+YmUNCj4+IHdva2VuIHVwIGJlY2F1c2UgbmV3IGRhdGEgYXJyaXZlZCwgYnV0IFBPTExJTiB0byBh
+bGxvdyB1c2VyIGRlcXVldWUgdGhpcyBkYXRhIHdvbid0IGJlIHNldChhcyBhbW91bnQgb2YgZGF0
+YQ0KPj4gaXMgdG9vIHNtYWxsKS4NCj4+IFNlZSB0Y3BfZGF0YV9yZWFkeSgpIGluIG5ldC9pcHY0
+L3RjcF9pbnB1dC5jDQo+IA0KPiBEbyB5b3UgbWVhbiB0aGF0IHdlIHNob3VsZCBjYWxsIHNrLT5z
+a19kYXRhX3JlYWR5KHNrKSBjaGVja2luZyBTT19SQ1ZMT1dBVD8NClllcywgbGlrZSB0Y3BfZGF0
+YV9yZWFkKCkuDQo+IA0KPiBJdCBzZWVtcyBmaW5lLCBtYXliZSB3ZSBjYW4gYWRkIHZzb2NrX2Rh
+dGFfcmVhZHkoKSBpbiBhZl92c29jay5jIHRoYXQgdHJhbnNwb3J0cyBzaG91bGQgY2FsbCBpbnN0
+ZWFkIG9mIGNhbGxpbmcgc2stPnNrX2RhdGFfcmVhZHkoc2spIGRpcmVjdGx5Lg0KWWVzLCB0aGlz
+IHdpbGwgYWxzbyB1cGRhdGUgbG9naWMgaW4gdm1jaSBhbmQgaHlwZXJ2IHRyYW5zcG9ydHMNCj4g
+DQo+IFRoZW4gd2UgY2FuIHNvbWV0aGluZyBzaW1pbGFyIHRvIHRjcF9kYXRhX3JlYWR5KCkuDQo+
+IA0KPiBUaGFua3MsDQo+IFN0ZWZhbm8NCj4gDQoNCg==

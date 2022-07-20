@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E1E57C067
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAE357C06B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbiGTXCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S231325AbiGTXDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGTXCo (ORCPT
+        with ESMTP id S229686AbiGTXDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:02:44 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4FEEE1C;
-        Wed, 20 Jul 2022 16:02:43 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LpB522P87z684wN;
-        Thu, 21 Jul 2022 07:00:54 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Jul 2022 01:02:40 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 21 Jul 2022 01:02:40 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Stanislav Fomichev <sdf@google.com>
-CC:     Joe Burton <jevburton.kernel@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joe Burton <jevburton@google.com>
-Subject: RE: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-Thread-Topic: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-Thread-Index: AQHYm6d/RXaIdRF8qEmfFsB1DNrrP62GBpoAgADe8JCAAGROAIAAjdQg///iSICAACHbgP//4O0AgAAkrmA=
-Date:   Wed, 20 Jul 2022 23:02:40 +0000
-Message-ID: <c9c203821a854e33970fd10e01632cb7@huawei.com>
-References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
- <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com>
- <179cfb89be0e4f928a55d049fe62aa9e@huawei.com>
- <CAKH8qBt0yR+mtCjAp=8jQL4M6apWQk0wH7Zf4tPDCf3=m+gAKA@mail.gmail.com>
- <31473ddf364f4f16becfd5cd4b9cd7d2@huawei.com>
- <CAKH8qBsFg5gQ0bqpVtYhiQx=TqJG31c8kfsbCG4X57QGLOhXvw@mail.gmail.com>
- <0c284e09817e4e699aa448aa25af5d79@huawei.com>
- <CAKH8qBvwzVPY1yJM_FjdH5QptVkZz=j9Ph7pTPCbTLdY1orKJg@mail.gmail.com>
-In-Reply-To: <CAKH8qBvwzVPY1yJM_FjdH5QptVkZz=j9Ph7pTPCbTLdY1orKJg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.81.208.238]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 20 Jul 2022 19:03:42 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954314599F
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:03:41 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 72so45604pge.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dXDHjlYv2P+rZw8dJnZ/BzSjeOwzCCjrzMhE7/OThFw=;
+        b=rYbMcMN4GxRngMr73pFMq9w2cLruGGCZMOxtyWcDR6IFL1b1clSZp3YeIADkyiP2at
+         HGYOMPRu/ypbUFHoUxPIxVQhbPYX9FsH6i1y58BlKeOE6Se2gR5Vi95X0uvgXKjk1Idq
+         sZLZw5SmrNCC0gVhye5Rs/nUzixZj+/34reu5GcXeTKeQTqaHXo2xemw80eUfQ4VXeS0
+         7+FBfmaNR3u9MAolZZwxbANDg7VHxfx3o28hWX1vcMbnoJXyTTupiVp7aQHiyBrhlWYc
+         YZtvqhH7adS1zIk4EvP0Ope09OqWV/PRNcEpboXNThw+lW0ihreSiHptTxFtGg4q+0Pe
+         uVww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dXDHjlYv2P+rZw8dJnZ/BzSjeOwzCCjrzMhE7/OThFw=;
+        b=Exf4BLjHUpH6T3vvwqhZ6pGy7hFAJyNXheNq7Yn3apzAAaTJ7LMyJqJb34gU5GlIbD
+         0FEDcu1uoHJBVB6BOh7/ISzRt0aconvQq4BqlmFpie8qIpjVIzHa/e16YCqOyKWQTzr3
+         0rw0Qu6CWpXqVWeKyvgmdTuCwXkC6r6iTFTokbPlSYIisfDAg5HEefEGe36/R+2oRqhj
+         7doYT6fdkehA4eWxkLyENt3tGo6FjAIxtanCwq49OglhzY7t3K8hnptjB9/xeFYJ4Bh3
+         1mNzeyLTmHJeiDpKLKYD5MOkqwyMDR7N+gMXCC94jK8mZ1ipndxXrxFMqpvEIfmvp/lU
+         T4pg==
+X-Gm-Message-State: AJIora+8iR8MbLnFD3yYTHOzEHGFgsLCuU17+K82JfIOHKWHkLjaGrGC
+        A+tb4Nrs6xTvQRp4AQBt/KC6UA==
+X-Google-Smtp-Source: AGRyM1vzDre0jSqvUh3PVIENhxd4bnCR9CL4k62Zn7ugGSHVme6qlUccYjFAr+3hBU9AL4iQwiI6cg==
+X-Received: by 2002:a63:307:0:b0:412:9a58:e187 with SMTP id 7-20020a630307000000b004129a58e187mr35899805pgd.70.1658358220850;
+        Wed, 20 Jul 2022 16:03:40 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902714a00b0016c3f7b5b48sm80806plm.256.2022.07.20.16.03.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 16:03:39 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 23:03:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shauh@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com
+Subject: Re: [RFC V2 PATCH 2/8] selftests: kvm: Add a basic selftest to test
+ private memory
+Message-ID: <YtiJx11AZHslcGnN@google.com>
+References: <20220511000811.384766-1-vannapurve@google.com>
+ <20220511000811.384766-3-vannapurve@google.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511000811.384766-3-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,135 +87,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBTdGFuaXNsYXYgRm9taWNoZXYgW21haWx0bzpzZGZAZ29vZ2xlLmNvbV0NCj4gU2Vu
-dDogVGh1cnNkYXksIEp1bHkgMjEsIDIwMjIgMTI6NDggQU0NCj4gT24gV2VkLCBKdWwgMjAsIDIw
-MjIgYXQgMzo0NCBQTSBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+DQo+
-IHdyb3RlOg0KPiA+DQo+ID4gPiBGcm9tOiBTdGFuaXNsYXYgRm9taWNoZXYgW21haWx0bzpzZGZA
-Z29vZ2xlLmNvbV0NCj4gPiA+IFNlbnQ6IFRodXJzZGF5LCBKdWx5IDIxLCAyMDIyIDEyOjM4IEFN
-DQo+ID4gPiBPbiBXZWQsIEp1bCAyMCwgMjAyMiBhdCAzOjMwIFBNIFJvYmVydG8gU2Fzc3UNCj4g
-PHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT4NCj4gPiA+IHdyb3RlOg0KPiA+ID4gPg0KPiA+ID4g
-PiA+IEZyb206IFN0YW5pc2xhdiBGb21pY2hldiBbbWFpbHRvOnNkZkBnb29nbGUuY29tXQ0KPiA+
-ID4gPiA+IFNlbnQ6IFdlZG5lc2RheSwgSnVseSAyMCwgMjAyMiA1OjU3IFBNDQo+ID4gPiA+ID4g
-T24gV2VkLCBKdWwgMjAsIDIwMjIgYXQgMTowMiBBTSBSb2JlcnRvIFNhc3N1DQo+ID4gPiA8cm9i
-ZXJ0by5zYXNzdUBodWF3ZWkuY29tPg0KPiA+ID4gPiA+IHdyb3RlOg0KPiA+ID4gPiA+ID4NCj4g
-PiA+ID4gPiA+ID4gRnJvbTogU3RhbmlzbGF2IEZvbWljaGV2IFttYWlsdG86c2RmQGdvb2dsZS5j
-b21dDQo+ID4gPiA+ID4gPiA+IFNlbnQ6IFR1ZXNkYXksIEp1bHkgMTksIDIwMjIgMTA6NDAgUE0N
-Cj4gPiA+ID4gPiA+ID4gT24gVHVlLCBKdWwgMTksIDIwMjIgYXQgMTI6NDAgUE0gSm9lIEJ1cnRv
-bg0KPiA+ID4gPGpldmJ1cnRvbi5rZXJuZWxAZ21haWwuY29tPg0KPiA+ID4gPiA+ID4gPiB3cm90
-ZToNCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+IEZyb206IEpvZSBCdXJ0b24gPGpl
-dmJ1cnRvbkBnb29nbGUuY29tPg0KPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gQWRk
-IGFuIGV4dGVuc2libGUgdmFyaWFudCBvZiBicGZfb2JqX2dldCgpIGNhcGFibGUgb2Ygc2V0dGlu
-ZyB0aGUNCj4gPiA+ID4gPiA+ID4gPiBgZmlsZV9mbGFnc2AgcGFyYW1ldGVyLg0KPiA+ID4gPiA+
-ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gVGhpcyBwYXJhbWV0ZXIgaXMgbmVlZGVkIHRvIGVuYWJs
-ZSB1bnByaXZpbGVnZWQgYWNjZXNzIHRvIEJQRg0KPiBtYXBzLg0KPiA+ID4gPiA+ID4gPiA+IFdp
-dGhvdXQgYSBtZXRob2QgbGlrZSB0aGlzLCB1c2VycyBtdXN0IG1hbnVhbGx5IG1ha2UgdGhlIHN5
-c2NhbGwuDQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBK
-b2UgQnVydG9uIDxqZXZidXJ0b25AZ29vZ2xlLmNvbT4NCj4gPiA+ID4gPiA+ID4NCj4gPiA+ID4g
-PiA+ID4gUmV2aWV3ZWQtYnk6IFN0YW5pc2xhdiBGb21pY2hldiA8c2RmQGdvb2dsZS5jb20+DQo+
-ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+IEZvciBjb250ZXh0Og0KPiA+ID4gPiA+ID4gPiBX
-ZSd2ZSBmb3VuZCB0aGlzIG91dCB3aGlsZSB3ZSB3ZXJlIHRyeWluZyB0byBhZGQgc3VwcG9ydCBm
-b3IgdW5wcml2DQo+ID4gPiA+ID4gPiA+IHByb2Nlc3NlcyB0byBvcGVuIHBpbm5lZCByLXggbWFw
-cy4NCj4gPiA+ID4gPiA+ID4gTWF5YmUgdGhpcyBkZXNlcnZlcyBhIHRlc3QgYXMgd2VsbD8gTm90
-IHN1cmUuDQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gSGkgU3RhbmlzbGF2LCBKb2UNCj4gPiA+
-ID4gPiA+DQo+ID4gPiA+ID4gPiBJIG5vdGljZWQgbm93IHRoaXMgcGF0Y2guIEknbSBkb2luZyBh
-IGJyb2FkZXIgd29yayB0byBhZGQgb3B0cw0KPiA+ID4gPiA+ID4gdG8gYnBmXypfZ2V0X2ZkX2J5
-X2lkKCkuIEkgYWxzbyBhZGp1c3RlZCBwZXJtaXNzaW9ucyBvZiBicGZ0b29sDQo+ID4gPiA+ID4g
-PiBkZXBlbmRpbmcgb24gdGhlIG9wZXJhdGlvbiB0eXBlIChlLmcuIHNob3csIGR1bXA6IEJQRl9G
-X1JET05MWSkuDQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gV2lsbCBzZW5kIGl0IHNvb24gKEkn
-bSB0cnlpbmcgdG8gc29sdmUgYW4gaXNzdWUgd2l0aCB0aGUgQ0ksIHdoZXJlDQo+ID4gPiA+ID4g
-PiBsaWJiZmQgaXMgbm90IGF2YWlsYWJsZSBpbiB0aGUgVk0gZG9pbmcgYWN0dWFsIHRlc3RzKS4N
-Cj4gPiA+ID4gPg0KPiA+ID4gPiA+IElzIHNvbWV0aGluZyBsaWtlIHRoaXMgcGF0Y2ggaW5jbHVk
-ZWQgaW4geW91ciBzZXJpZXMgYXMgd2VsbD8gQ2FuIHlvdQ0KPiA+ID4gPiA+IHVzZSB0aGlzIG5l
-dyBpbnRlcmZhY2Ugb3IgZG8geW91IG5lZWQgc29tZXRoaW5nIGRpZmZlcmVudD8NCj4gPiA+ID4N
-Cj4gPiA+ID4gSXQgaXMgdmVyeSBzaW1pbGFyLiBFeGNlcHQgdGhhdCBJIGNhbGxlZCBpdCBicGZf
-Z2V0X2ZkX29wdHMsIGFzIGl0DQo+ID4gPiA+IGlzIHNoYXJlZCB3aXRoIHRoZSBicGZfKl9nZXRf
-ZmRfYnlfaWQoKSBmdW5jdGlvbnMuIFRoZSBtZW1iZXINCj4gPiA+ID4gbmFtZSBpcyBqdXN0IGZs
-YWdzLCBwbHVzIGFuIGV4dHJhIHUzMiBmb3IgYWxpZ25tZW50Lg0KPiA+ID4NCj4gPiA+IFdlIGNh
-biBiaWtlc2hlZCB0aGUgbmFtaW5nLCBidXQgd2UndmUgYmVlbiB1c2luZyBleGlzdGluZyBjb252
-ZW50aW9ucw0KPiA+ID4gd2hlcmUgb3B0cyBmaWVsZHMgbWF0Y2ggc3lzY2FsbCBmaWVsZHMsIHRo
-YXQgc2VlbXMgbGlrZSBhIHNlbnNpYmxlDQo+ID4gPiB0aGluZyB0byBkbz8NCj4gPg0KPiA+IFRo
-ZSBvbmx5IHByb2JsZW0gaXMgdGhhdCBicGZfKl9nZXRfZmRfYnlfaWQoKSBmdW5jdGlvbnMgd291
-bGQNCj4gPiBzZXQgdGhlIG9wZW5fZmxhZ3MgbWVtYmVyIG9mIGJwZl9hdHRyLg0KPiA+DQo+ID4g
-RmxhZ3Mgd291bGQgYmUgZ29vZCBmb3IgYm90aCwgZXZlbiBpZiBub3QgZXhhY3QuIEJlbGlldmUg
-bWUsDQo+ID4gZHVwbGljYXRpbmcgdGhlIG9wdHMgd291bGQganVzdCBjcmVhdGUgbW9yZSBjb25m
-dXNpb24uDQo+IA0KPiBXYWl0LCB0aGF0J3MgY29tcGxldGVseSBkaWZmZXJlbnQsIHJpZ2h0PyBX
-ZSBhcmUgdGFsa2luZyBoZXJlIGFib3V0DQo+IEJQRl9PQkpfR0VUICh3aGljaCBoYXMgcmVsYXRl
-ZCBCUEZfT0JKX1BJTikuDQo+IFlvdXIgR0VUX1hYWF9CWV9JRCBhcmUgZGlmZmVyZW50IHNvIHlv
-dSdsbCBzdGlsbCBoYXZlIHRvIGhhdmUgYW5vdGhlcg0KPiB3cmFwcGVyIHdpdGggb3B0cz8NCg0K
-WWVzLCB0aGV5IGhhdmUgZGlmZmVyZW50IHdyYXBwZXJzLCBqdXN0IGFjY2VwdCB0aGUgc2FtZSBv
-cHRzIGFzDQpvYmpfZ2V0KCkuIEZyb20gYnBmdG9vbCBzdWJjb21tYW5kcyB5b3Ugd2FudCB0byBz
-ZXQgdGhlIGNvcnJlY3QNCnBlcm1pc3Npb24sIGFuZCBwcm9wYWdhdGUgaXQgdW5pZm9ybWx5IHRv
-IGJwZl8qX2dldF9mZF9ieV9pZCgpDQpvciBvYmpfZ2V0KCkuIFNlZSBtYXBfcGFyc2VfZmRzKCku
-DQoNClJvYmVydG8NCg0KPiA+ID4gPiBJdCBuZWVkcyB0byBiZSBzaGFyZWQsIGFzIHRoZXJlIGFy
-ZSBmdW5jdGlvbnMgaW4gYnBmdG9vbCBjYWxsaW5nDQo+ID4gPiA+IGJvdGguIFNpbmNlIHRoZSBt
-ZWFuaW5nIG9mIGZsYWdzIGlzIHRoZSBzYW1lLCBzZWVtcyBvayBzaGFyaW5nLg0KPiA+ID4NCj4g
-PiA+IFNvIEkgZ3Vlc3MgdGhlcmUgYXJlIG5vIG9iamVjdGlvbnMgdG8gdGhlIGN1cnJlbnQgcGF0
-Y2g/IElmIGl0IGdldHMNCj4gPiA+IGFjY2VwdGVkLCB5b3Ugc2hvdWxkIGJlIGFibGUgdG8gZHJv
-cCBzb21lIG9mIHlvdXIgY29kZSBhbmQgdXNlIHRoaXMNCj4gPiA+IG5ldyBicGZfb2JqX2dldF9v
-cHRzLi4NCj4gPg0KPiA+IElmIHlvdSB1c2UgYSBuYW1lIGdvb2QgYWxzbyBmb3IgYnBmXypfZ2V0
-X2ZkX2J5X2lkKCkgYW5kIGZsYWdzDQo+ID4gYXMgc3RydWN0dXJlIG1lbWJlciBuYW1lLCB0aGF0
-IHdvdWxkIGJlIG9rLg0KPiA+DQo+ID4gUm9iZXJ0bw0KPiA+DQo+ID4gPiA+IFJvYmVydG8NCj4g
-PiA+ID4NCj4gPiA+ID4gPiA+IFJvYmVydG8NCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4g
-LS0tDQo+ID4gPiA+ID4gPiA+ID4gIHRvb2xzL2xpYi9icGYvYnBmLmMgICAgICB8IDEwICsrKysr
-KysrKysNCj4gPiA+ID4gPiA+ID4gPiAgdG9vbHMvbGliL2JwZi9icGYuaCAgICAgIHwgIDkgKysr
-KysrKysrDQo+ID4gPiA+ID4gPiA+ID4gIHRvb2xzL2xpYi9icGYvbGliYnBmLm1hcCB8ICAxICsN
-Cj4gPiA+ID4gPiA+ID4gPiAgMyBmaWxlcyBjaGFuZ2VkLCAyMCBpbnNlcnRpb25zKCspDQo+ID4g
-PiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvbGliL2JwZi9i
-cGYuYyBiL3Rvb2xzL2xpYi9icGYvYnBmLmMNCj4gPiA+ID4gPiA+ID4gPiBpbmRleCA1ZWIwZGY5
-MGViMmIuLjVhY2IwZThiZDEzYyAxMDA2NDQNCj4gPiA+ID4gPiA+ID4gPiAtLS0gYS90b29scy9s
-aWIvYnBmL2JwZi5jDQo+ID4gPiA+ID4gPiA+ID4gKysrIGIvdG9vbHMvbGliL2JwZi9icGYuYw0K
-PiA+ID4gPiA+ID4gPiA+IEBAIC01NzgsMTIgKzU3OCwyMiBAQCBpbnQgYnBmX29ial9waW4oaW50
-IGZkLCBjb25zdCBjaGFyDQo+ID4gPiAqcGF0aG5hbWUpDQo+ID4gPiA+ID4gPiA+ID4gIH0NCj4g
-PiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ICBpbnQgYnBmX29ial9nZXQoY29uc3QgY2hh
-ciAqcGF0aG5hbWUpDQo+ID4gPiA+ID4gPiA+ID4gK3sNCj4gPiA+ID4gPiA+ID4gPiArICAgICAg
-IExJQkJQRl9PUFRTKGJwZl9vYmpfZ2V0X29wdHMsIG9wdHMpOw0KPiA+ID4gPiA+ID4gPiA+ICsg
-ICAgICAgcmV0dXJuIGJwZl9vYmpfZ2V0X29wdHMocGF0aG5hbWUsICZvcHRzKTsNCj4gPiA+ID4g
-PiA+ID4gPiArfQ0KPiA+ID4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ID4gPiAraW50IGJwZl9v
-YmpfZ2V0X29wdHMoY29uc3QgY2hhciAqcGF0aG5hbWUsIGNvbnN0IHN0cnVjdA0KPiA+ID4gPiA+
-IGJwZl9vYmpfZ2V0X29wdHMNCj4gPiA+ID4gPiA+ID4gKm9wdHMpDQo+ID4gPiA+ID4gPiA+ID4g
-IHsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIHVuaW9uIGJwZl9hdHRyIGF0dHI7DQo+ID4gPiA+
-ID4gPiA+ID4gICAgICAgICBpbnQgZmQ7DQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4g
-PiArICAgICAgIGlmICghT1BUU19WQUxJRChvcHRzLCBicGZfb2JqX2dldF9vcHRzKSkNCj4gPiA+
-ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgcmV0dXJuIGxpYmJwZl9lcnIoLUVJTlZBTCk7DQo+
-ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgbWVtc2V0KCZhdHRyLCAw
-LCBzaXplb2YoYXR0cikpOw0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgYXR0ci5wYXRobmFtZSA9
-IHB0cl90b191NjQoKHZvaWQgKilwYXRobmFtZSk7DQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICBh
-dHRyLmZpbGVfZmxhZ3MgPSBPUFRTX0dFVChvcHRzLCBmaWxlX2ZsYWdzLCAwKTsNCj4gPiA+ID4g
-PiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgZmQgPSBzeXNfYnBmX2ZkKEJQRl9PQkpf
-R0VULCAmYXR0ciwgc2l6ZW9mKGF0dHIpKTsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIHJldHVy
-biBsaWJicGZfZXJyX2Vycm5vKGZkKTsNCj4gPiA+ID4gPiA+ID4gPiBkaWZmIC0tZ2l0IGEvdG9v
-bHMvbGliL2JwZi9icGYuaCBiL3Rvb2xzL2xpYi9icGYvYnBmLmgNCj4gPiA+ID4gPiA+ID4gPiBp
-bmRleCA4OGE3Y2M0YmQ3NmYuLmYzMWI0OTNiNWY5YSAxMDA2NDQNCj4gPiA+ID4gPiA+ID4gPiAt
-LS0gYS90b29scy9saWIvYnBmL2JwZi5oDQo+ID4gPiA+ID4gPiA+ID4gKysrIGIvdG9vbHMvbGli
-L2JwZi9icGYuaA0KPiA+ID4gPiA+ID4gPiA+IEBAIC0yNzAsOCArMjcwLDE3IEBAIExJQkJQRl9B
-UEkgaW50IGJwZl9tYXBfdXBkYXRlX2JhdGNoKGludA0KPiBmZCwNCj4gPiA+ID4gPiBjb25zdA0K
-PiA+ID4gPiA+ID4gPiB2b2lkICprZXlzLCBjb25zdCB2b2lkICp2YWx1ZXMNCj4gPiA+ID4gPiA+
-ID4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBfX3UzMiAqY291bnQsDQo+
-ID4gPiA+ID4gPiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qg
-c3RydWN0IGJwZl9tYXBfYmF0Y2hfb3B0cyAqb3B0cyk7DQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+
-ID4gPiA+ID4gPiArc3RydWN0IGJwZl9vYmpfZ2V0X29wdHMgew0KPiA+ID4gPiA+ID4gPiA+ICsg
-ICAgICAgc2l6ZV90IHN6OyAvKiBzaXplIG9mIHRoaXMgc3RydWN0IGZvciBmb3J3YXJkL2JhY2t3
-YXJkDQo+IGNvbXBhdGliaWxpdHkNCj4gPiA+ICovDQo+ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4g
-PiA+ID4gPiA+ICsgICAgICAgX191MzIgZmlsZV9mbGFnczsNCj4gPiA+ID4gPiA+ID4gPiArfTsN
-Cj4gPiA+ID4gPiA+ID4gPiArI2RlZmluZSBicGZfb2JqX2dldF9vcHRzX19sYXN0X2ZpZWxkIGZp
-bGVfZmxhZ3MNCj4gPiA+ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4gPiA+ID4gIExJQkJQRl9BUEkg
-aW50IGJwZl9vYmpfcGluKGludCBmZCwgY29uc3QgY2hhciAqcGF0aG5hbWUpOw0KPiA+ID4gPiA+
-ID4gPiA+ICBMSUJCUEZfQVBJIGludCBicGZfb2JqX2dldChjb25zdCBjaGFyICpwYXRobmFtZSk7
-DQo+ID4gPiA+ID4gPiA+ID4gK0xJQkJQRl9BUEkgaW50IGJwZl9vYmpfZ2V0X29wdHMoY29uc3Qg
-Y2hhciAqcGF0aG5hbWUsDQo+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBjb25zdCBzdHJ1Y3QgYnBmX29ial9nZXRfb3B0cyAqb3B0cyk7DQo+ID4gPiA+ID4g
-PiA+ID4NCj4gPiA+ID4gPiA+ID4gPiAgc3RydWN0IGJwZl9wcm9nX2F0dGFjaF9vcHRzIHsNCj4g
-PiA+ID4gPiA+ID4gPiAgICAgICAgIHNpemVfdCBzejsgLyogc2l6ZSBvZiB0aGlzIHN0cnVjdCBm
-b3IgZm9yd2FyZC9iYWNrd2FyZA0KPiBjb21wYXRpYmlsaXR5DQo+ID4gPiAqLw0KPiA+ID4gPiA+
-ID4gPiA+IGRpZmYgLS1naXQgYS90b29scy9saWIvYnBmL2xpYmJwZi5tYXAgYi90b29scy9saWIv
-YnBmL2xpYmJwZi5tYXANCj4gPiA+ID4gPiA+ID4gPiBpbmRleCAwNjI1YWRiOWU4ODguLjExOWU2
-ZTFlYTdmMSAxMDA2NDQNCj4gPiA+ID4gPiA+ID4gPiAtLS0gYS90b29scy9saWIvYnBmL2xpYmJw
-Zi5tYXANCj4gPiA+ID4gPiA+ID4gPiArKysgYi90b29scy9saWIvYnBmL2xpYmJwZi5tYXANCj4g
-PiA+ID4gPiA+ID4gPiBAQCAtMzU1LDYgKzM1NSw3IEBAIExJQkJQRl8wLjguMCB7DQo+ID4gPiA+
-ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiAgTElCQlBGXzEuMC4wIHsNCj4gPiA+ID4gPiA+ID4g
-PiAgICAgICAgIGdsb2JhbDoNCj4gPiA+ID4gPiA+ID4gPiArICAgICAgICAgICAgICAgYnBmX29i
-al9nZXRfb3B0czsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgICAgICAgICAgYnBmX3Byb2dfcXVl
-cnlfb3B0czsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgICAgICAgICAgYnBmX3Byb2dyYW1fX2F0
-dGFjaF9rc3lzY2FsbDsNCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgICAgICAgICAgYnRmX19hZGRf
-ZW51bTY0Ow0KPiA+ID4gPiA+ID4gPiA+IC0tDQo+ID4gPiA+ID4gPiA+ID4gMi4zNy4wLjE3MC5n
-NDQ0ZDFlYWJkMC1nb29nDQo+ID4gPiA+ID4gPiA+ID4NCg==
+On Wed, May 11, 2022, Vishal Annapurve wrote:
+> Add KVM selftest to access private memory privately
+> from the guest to test that memory updates from guest
+> and userspace vmm don't affect each other.
+> 
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile          |   1 +
+>  tools/testing/selftests/kvm/priv_memfd_test.c | 283 ++++++++++++++++++
+
+If this name stays around in any form, just spell out "private".  The file system
+can handle three more characters.
+
+>  2 files changed, 284 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/priv_memfd_test.c
+> +/* Guest code in selftests is loaded to guest memory using kvm_vm_elf_load
+
+Kernel style (except for net/ apparently?) for multi-line comments is to have a
+"blank" first line:
+
+	/*
+	 * blahal;sdkfjas;flkjasd;flkj;aslkfjdsa;lkfjsa;lkfjsa;dlkfjas;dlkfj
+	 * as;dflkjasdf;lkasjdf;lkasdjf;lkasdjf;lkjsad;flkjasd;flkjas;dflkj
+	 */
+
+And if you haven't already read through Documentation/process/coding-style.rst,
+though I thikn this and indentation are the only glaring issues.
+
+> + * which doesn't handle global offset table updates. Calling standard libc
+> + * functions would normally result in referring to the global offset table.
+> + * Adding O1 here seems to prohibit compiler from replacing the memory
+> + * operations with standard libc functions such as memset.
+> + */
+
+Eww.  We should either fix kvm_vm_elf_load() or override the problematic libc
+variants.  Playing games with per-function attributes is not maintainable.
+
+> +static bool __attribute__((optimize("O1"))) do_mem_op(enum mem_op op,
+> +		void *mem, uint64_t pat, uint32_t size)
+
+Oof.  Don't be so agressive in shortening names, _especially_ when there's no
+established/universal abbreviation.  It took me forever to figure out that "pat"
+is "pattern".  And for x86, "pat" is especially confusing because it already
+a very well-established name that just so happens to be relevant to memory types,
+just a different kind of a memory type...
+
+> +{
+> +	uint64_t *buf = (uint64_t *)mem;
+> +	uint32_t chunk_size = sizeof(pat);
+> +	uint64_t mem_addr = (uint64_t)mem;
+> +
+> +	if (((mem_addr % chunk_size) != 0) || ((size % chunk_size) != 0))
+
+All the patterns are a repeating byte, why restrict this to 8-byte chunks?  Then
+this confusing assert-but-not-an-assert goes away.
+
+> +		return false;
+> +
+> +	for (uint32_t i = 0; i < (size / chunk_size); i++) {
+> +		if (op == SET_PAT)
+> +			buf[i] = pat;
+> +		if (op == VERIFY_PAT) {
+> +			if (buf[i] != pat)
+> +				return false;
+
+If overriding memset() and memcmp() doesn't work for whatever reason, add proper
+helpers instead of a do_stuff() wrapper. 
+
+> +		}
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +/* Test to verify guest private accesses on private memory with following steps:
+> + * 1) Upon entry, guest signals VMM that it has started.
+> + * 2) VMM populates the shared memory with known pattern and continues guest
+> + *    execution.
+> + * 3) Guest writes a different pattern on the private memory and signals VMM
+> + *      that it has updated private memory.
+> + * 4) VMM verifies its shared memory contents to be same as the data populated
+> + *      in step 2 and continues guest execution.
+> + * 5) Guest verifies its private memory contents to be same as the data
+> + *      populated in step 3 and marks the end of the guest execution.
+> + */
+> +#define PMPAT_ID				0
+> +#define PMPAT_DESC				"PrivateMemoryPrivateAccessTest"
+> +
+> +/* Guest code execution stages for private mem access test */
+> +#define PMPAT_GUEST_STARTED			0ULL
+> +#define PMPAT_GUEST_PRIV_MEM_UPDATED		1ULL
+> +
+> +static bool pmpat_handle_vm_stage(struct kvm_vm *vm,
+> +			void *test_info,
+> +			uint64_t stage)
+
+
+Align parameters, both in prototypes and in invocations.  And don't wrap unnecessarily.
+
+static bool pmpat_handle_vm_stage(struct kvm_vm *vm, void *test_info,
+				  uint64_t stage)
+
+
+Or even let that poke out (probably not in this case, but do keep in mind that the
+80 char "limit" is a soft limit that can be broken if doing so yields more readable
+code).
+
+static bool pmpat_handle_vm_stage(struct kvm_vm *vm, void *test_info, uint64_t stage)
+
+> +{
+> +	void *shared_mem = ((struct test_run_helper *)test_info)->shared_mem;
+> +
+> +	switch (stage) {
+> +	case PMPAT_GUEST_STARTED: {
+> +		/* Initialize the contents of shared memory */
+> +		TEST_ASSERT(do_mem_op(SET_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT1, TEST_MEM_SIZE),
+> +			"Shared memory update failure");
+
+Align indentation (here and many other places).
+
+> +		VM_STAGE_PROCESSED(PMPAT_GUEST_STARTED);
+> +		break;
+> +	}
+> +	case PMPAT_GUEST_PRIV_MEM_UPDATED: {
+> +		/* verify host updated data is still intact */
+> +		TEST_ASSERT(do_mem_op(VERIFY_PAT, shared_mem,
+> +			TEST_MEM_DATA_PAT1, TEST_MEM_SIZE),
+> +			"Shared memory view mismatch");
+> +		VM_STAGE_PROCESSED(PMPAT_GUEST_PRIV_MEM_UPDATED);
+> +		break;
+> +	}
+> +	default:
+> +		printf("Unhandled VM stage %ld\n", stage);
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static void pmpat_guest_code(void)
+> +{
+> +	void *priv_mem = (void *)TEST_MEM_GPA;
+> +	int ret;
+> +
+> +	GUEST_SYNC(PMPAT_GUEST_STARTED);
+> +
+> +	/* Mark the GPA range to be treated as always accessed privately */
+> +	ret = kvm_hypercall(KVM_HC_MAP_GPA_RANGE, TEST_MEM_GPA,
+> +		TEST_MEM_SIZE >> MIN_PAGE_SHIFT,
+> +		KVM_MARK_GPA_RANGE_ENC_ACCESS, 0);
+> +	GUEST_ASSERT_1(ret == 0, ret);
+
+"!ret" instead of "ret == 0"
+
+> +
+> +	GUEST_ASSERT(do_mem_op(SET_PAT, priv_mem, TEST_MEM_DATA_PAT2,
+> +			TEST_MEM_SIZE));
+> +	GUEST_SYNC(PMPAT_GUEST_PRIV_MEM_UPDATED);
+> +
+> +	GUEST_ASSERT(do_mem_op(VERIFY_PAT, priv_mem,
+> +			TEST_MEM_DATA_PAT2, TEST_MEM_SIZE));
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +static struct test_run_helper priv_memfd_testsuite[] = {
+> +	[PMPAT_ID] = {
+> +		.test_desc = PMPAT_DESC,
+> +		.vmst_handler = pmpat_handle_vm_stage,
+> +		.guest_fn = pmpat_guest_code,
+> +	},
+> +};
+
+...
+
+> +/* Do private access to the guest's private memory */
+> +static void setup_and_execute_test(uint32_t test_id)
+
+This helper appears to be the bulk of the shared code between tests.  This can
+and should be a helper to create a VM with private memory.  Not sure what to call
+such a helper, maybe vm_create_with_private_memory()?  A little verbose, but
+literal isn't always bad.
+
+> +{
+> +	struct kvm_vm *vm;
+> +	int priv_memfd;
+> +	int ret;
+> +	void *shared_mem;
+> +	struct kvm_enable_cap cap;
+> +
+> +	vm = vm_create_default(VCPU_ID, 0,
+> +				priv_memfd_testsuite[test_id].guest_fn);
+> +
+> +	/* Allocate shared memory */
+> +	shared_mem = mmap(NULL, TEST_MEM_SIZE,
+> +			PROT_READ | PROT_WRITE,
+> +			MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
+> +	TEST_ASSERT(shared_mem != MAP_FAILED, "Failed to mmap() host");
+> +
+> +	/* Allocate private memory */
+> +	priv_memfd = memfd_create("vm_private_mem", MFD_INACCESSIBLE);
+> +	TEST_ASSERT(priv_memfd != -1, "Failed to create priv_memfd");
+> +	ret = fallocate(priv_memfd, 0, 0, TEST_MEM_SIZE);
+> +	TEST_ASSERT(ret != -1, "fallocate failed");
+> +
+> +	priv_memory_region_add(vm, shared_mem,
+> +				TEST_MEM_SLOT, TEST_MEM_SIZE,
+> +				TEST_MEM_GPA, priv_memfd, 0);
+> +
+> +	pr_info("Mapping test memory pages 0x%x page_size 0x%x\n",
+> +					TEST_MEM_SIZE/vm_get_page_size(vm),
+> +					vm_get_page_size(vm));
+> +	virt_map(vm, TEST_MEM_GPA, TEST_MEM_GPA,
+> +					(TEST_MEM_SIZE/vm_get_page_size(vm)));
+> +
+> +	/* Enable exit on KVM_HC_MAP_GPA_RANGE */
+> +	pr_info("Enabling exit on map_gpa_range hypercall\n");
+> +	ret = ioctl(vm_get_fd(vm), KVM_CHECK_EXTENSION, KVM_CAP_EXIT_HYPERCALL);
+> +	TEST_ASSERT(ret & (1 << KVM_HC_MAP_GPA_RANGE),
+> +				"VM exit on MAP_GPA_RANGE HC not supported");
+
+Impressively bizarre indentation :-)
+
+> +	cap.cap = KVM_CAP_EXIT_HYPERCALL;
+> +	cap.flags = 0;
+> +	cap.args[0] = (1 << KVM_HC_MAP_GPA_RANGE);
+> +	ret = ioctl(vm_get_fd(vm), KVM_ENABLE_CAP, &cap);
+> +	TEST_ASSERT(ret == 0,
+> +		"Failed to enable exit on MAP_GPA_RANGE hypercall\n");
+> +
+> +	priv_memfd_testsuite[test_id].shared_mem = shared_mem;
+> +	priv_memfd_testsuite[test_id].priv_memfd = priv_memfd;
+> +	vcpu_work(vm, test_id);
+> +
+> +	munmap(shared_mem, TEST_MEM_SIZE);
+> +	priv_memfd_testsuite[test_id].shared_mem = NULL;
+> +	close(priv_memfd);
+> +	priv_memfd_testsuite[test_id].priv_memfd = -1;
+> +	kvm_vm_free(vm);
+> +}

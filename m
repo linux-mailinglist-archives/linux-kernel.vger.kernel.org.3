@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FD057BB47
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0777257BB4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240537AbiGTQU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
+        id S240692AbiGTQVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239560AbiGTQUW (ORCPT
+        with ESMTP id S235366AbiGTQUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:20:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF510F9;
-        Wed, 20 Jul 2022 09:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BDE7B81FF0;
-        Wed, 20 Jul 2022 16:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 46480C341CB;
-        Wed, 20 Jul 2022 16:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658334017;
-        bh=02mfOT/LNfo1htT3gJX5Keg7sCR5gHvTONV+tS55ZaI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kKMVE/G8mhQXxQB2v9O0HtfO2d+P4niXl7ZwIjSce5yLuwgFH5p8BgGj9uNXAveDF
-         kOI9JX9b5U5dDUUdGA31OfRGXSjG+pXhSBLsSNeLKlOTDrxrTFFpizM35ouV6pgZqo
-         rpE529faYr97oLdFMLzdUG6WE5QVT4Tii6hjPLijR786GpsfcZf+jpfJxLcT086yWG
-         kpnMMiJ5AaWqsvxjl+ohV5qovXA+AOMuY3/MvNcVDWue381ZrS9wNSQ0EWJFd34sUp
-         2Ucpc7NlZDTcbue7eYctDlcCnAijEh7nNqOjcoYx1l5LPDW6s3rLhTYvzVDjvxoEQE
-         FnmYUgoEGRc4Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2DC37E451BA;
-        Wed, 20 Jul 2022 16:20:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 20 Jul 2022 12:20:47 -0400
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3031845050;
+        Wed, 20 Jul 2022 09:20:46 -0700 (PDT)
+Received: by mail-pj1-f47.google.com with SMTP id s18-20020a17090aa11200b001f1e9e2438cso2561314pjp.2;
+        Wed, 20 Jul 2022 09:20:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EtY/SeORzLrSCr1jdA4Qjx8UUc6ri7seQlaa4SBenzg=;
+        b=SJ9ADJYohcx8f3T1z2IBbwrkkE3K5hXg6tsSiA+RweNl7q3wA67GwE4/0pqbCxT1O0
+         sSUlA3SAzH8MpU5F+v7xGQrAhx1svURrx1phy9vG9DyhQVHiSbvxxkBARIZCu5iAL/T8
+         idLeFk2FgXKOpuW8oySrA4nq7jfmCRaxcsTv+ir3ntV4sOZ0lEqwDRYgIQzgCHd185FR
+         lz9Kj3dODd5NHuy86cDN2WDjgs/w73S+CsQarugd4C8cjFYSOLBBRFyB6xsE912ZNdMN
+         7k3DRYQkL9XG+6fgqbKuuQjRHPRUWH0TpLPSuqQC248cO2szAlKb8AYNwjwEWyaHp6Xx
+         31Sg==
+X-Gm-Message-State: AJIora/ZdWKaUaFtYZSZlYXYoZXeZbwLN9TN5C95YFwOB/cSNZM0dZN1
+        22X8q05+FiaoMcJeEyGbuEw=
+X-Google-Smtp-Source: AGRyM1tO6LqwlGx+Ff4fF8RhH1idbq59pDQaFMUGQaaFg4pls5nHFvUtysp2E3y/dodMidWO7zTV+Q==
+X-Received: by 2002:a17:903:244d:b0:16c:52f1:d12 with SMTP id l13-20020a170903244d00b0016c52f10d12mr40268309pls.44.1658334045300;
+        Wed, 20 Jul 2022 09:20:45 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:a7e0:78fc:9269:215b? ([2620:15c:211:201:a7e0:78fc:9269:215b])
+        by smtp.gmail.com with ESMTPSA id u16-20020a170903125000b001690d398401sm14465600plh.88.2022.07.20.09.20.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 09:20:44 -0700 (PDT)
+Message-ID: <21e7c959-6365-8029-d26d-985ff888333e@acm.org>
+Date:   Wed, 20 Jul 2022 09:20:42 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/5] Bluetooth: btusb: Add support IDs for Realtek RTL8852C
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <165833401718.6265.12264941461051970407.git-patchwork-notify@kernel.org>
-Date:   Wed, 20 Jul 2022 16:20:17 +0000
-References: <20220714112523.13242-1-hildawu@realtek.com>
-In-Reply-To: <20220714112523.13242-1-hildawu@realtek.com>
-To:     Hilda Wu <hildawu@realtek.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        max.chou@realtek.com, alex_lu@realsil.com.cn, kidman@realtek.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] block: Introduce nr_sched_batch sys interface
+Content-Language: en-US
+To:     Wang You <wangyoua@uniontech.com>, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hch@lst.de, jaegeuk@kernel.org, fio@vger.kernel.org,
+        ming.lei@redhat.com, wangxiaohua@uniontech.com
+References: <20220720093048.225944-1-wangyoua@uniontech.com>
+ <20220720093048.225944-2-wangyoua@uniontech.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220720093048.225944-2-wangyoua@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 7/20/22 02:30, Wang You wrote:
+> The function of this patch is to add an nr_sched_batch interface under
+> /sys/block/sdx/queue/, which can be used to set the number of batching
+> requests. Of course, the default value is nr_requests and will follow
+> nr_request when it has not been changed.
 
-This series was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+How can reducing the number of batched requests increase performance?
 
-On Thu, 14 Jul 2022 19:25:18 +0800 you wrote:
-> From: Hilda Wu <hildawu@realtek.com>
-> 
-> Add support IDs to usb_device_id table for Realtek RTL8852C.
-> Support VID, PID as below
-> 0x04CA, 0x4007
-> 0x04c5, 0x1675
-> 0x0CB8, 0xC558
-> 0x13D3, 0x3587
-> 0x13D3, 0x3586
-> 
-> [...]
+Please provide performance numbers.
 
-Here is the summary with links:
-  - [v2,1/5] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x04CA:0x4007
-    https://git.kernel.org/bluetooth/bluetooth-next/c/5ce548c49ce0
-  - [v2,2/5] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x04C5:0x1675
-    https://git.kernel.org/bluetooth/bluetooth-next/c/35de797dc6c7
-  - [v2,3/5] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x0CB8:0xC558
-    https://git.kernel.org/bluetooth/bluetooth-next/c/aec73886e6b5
-  - [v2,4/5] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x13D3:0x3587
-    https://git.kernel.org/bluetooth/bluetooth-next/c/f0dc2393fbbf
-  - [v2,5/5] Bluetooth: btusb: Add Realtek RTL8852C support ID 0x13D3:0x3586
-    https://git.kernel.org/bluetooth/bluetooth-next/c/8dd512ca4609
+Thanks,
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Bart.

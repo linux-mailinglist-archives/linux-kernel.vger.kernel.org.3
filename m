@@ -2,187 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2527F57BB68
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F39757BB6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239346AbiGTQ1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
+        id S233196AbiGTQ35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiGTQ1s (ORCPT
+        with ESMTP id S230203AbiGTQ3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:27:48 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A1D22523
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:27:46 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id s206so16857550pgs.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:27:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ooE778IFSi1IkfbGtX6hl4iB0LXZvmvtcSrtXeDxX3U=;
-        b=OWpXoesW5LvPcXIlkw5a795g84zjw8sLeaSN+xY1ZpjUZBVg13s22EVvSUI5m8E1ST
-         3Tl6UlFkxjwPU+PIU9ObEvACUGAZqM9sgz3CAXqTuB12RCMRdvbTljQiKPXal2BfZUV/
-         eQwwbljSdYJXRc41H9MQSxqzylR0ANWSPZHCu/pUK9cox2uaAm0ew0GfEi4PLdBocvGW
-         BtIK+7ZsVpSkJyj9D1OEN0OLaBjQYpv+8PX8zn1NmzQtSUQdCH2li+sbob/i2TtY3voq
-         jiIr0iGIcgjCVQkw6jky7is5jN+RjnWb4WGyS007OcaRXv+UIM29QAt790PcD6lqayYd
-         hEfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ooE778IFSi1IkfbGtX6hl4iB0LXZvmvtcSrtXeDxX3U=;
-        b=ymSMhPYd/zySQNJjYaKLTEyVe+Wr2UqAtK9Gl/w3IN0YuR3WXW9TSN4FhlhFqOJ5Ly
-         MPCu7BtYYJwQs4zwr+lE2MQXHhnQzGUtiLnBBVAPtv0VSnzsrqS5l2l7m9xUjHdk7BkU
-         hjw2CHEh/Jbmb401twR1tNqGlXc3pa7by9E2ARUZmFnXSCuiSfgcg7l1KV5DBhNrJYId
-         ZFJDSZQy/1aLSWUP1q/yqwOljQ2zapxDhZwX29UkwXAkBrmFi4W//8mOD0KDfJVX0sf1
-         +4Qpa6+JcLrQ01Q8Cltc3VATKQiPuO3Fg/Xf1nddVkcWytrpuvdYDi0xUMveT8YOoNM5
-         e8ww==
-X-Gm-Message-State: AJIora9CPPU84EtfxVXN6q4g1R4a9bsMIiVypBMQGlbCQujVU8vGOjpG
-        kgSU4I3izuD/xyXN54giLYzmktYT+v6M
-X-Google-Smtp-Source: AGRyM1vbubtETE/LAPmuKg0clgnIhra3b0byhzrWUlYjyCLZxmJNG3CoYv2F7HpVOIsP4cIfcut2tw==
-X-Received: by 2002:aa7:8887:0:b0:52b:17e8:fc7 with SMTP id z7-20020aa78887000000b0052b17e80fc7mr35966355pfe.35.1658334465763;
-        Wed, 20 Jul 2022 09:27:45 -0700 (PDT)
-Received: from workstation ([117.217.186.84])
-        by smtp.gmail.com with ESMTPSA id mp16-20020a17090b191000b001ef863193f4sm1890608pjb.33.2022.07.20.09.27.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 Jul 2022 09:27:45 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 21:57:38 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: qcom: Add support for modular builds
-Message-ID: <20220720162738.GA6035@workstation>
-References: <20220519094646.23009-1-johan+linaro@kernel.org>
+        Wed, 20 Jul 2022 12:29:54 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB5A643DB
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:29:52 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 09:29:45 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1658334590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oIF8C4tLXhUvOb04ANxj7OtA+px5pKcxAabhLuX/vYg=;
+        b=QLCe9BJ5Pv8NRxMO6iDcnY/G8grMnld0cTNXt8qdYp12/Np3SLU1HlzYx9cpcTQVm3si+x
+        23W378OyWAPo+t7o8b+azii7ZV+csFMQba6JxDqkW80jxln7BEhqhZeSMbOoWwVtC98LAG
+        BI6NzSwdTZgSWEmTPEpeOQ3c6w5RGA0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: shrinkers: fix double kfree on shrinker name
+Message-ID: <YtgteTnQTgyuKUSY@castle>
+References: <ffa62ece-6a42-2644-16cf-0d33ef32c676@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519094646.23009-1-johan+linaro@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ffa62ece-6a42-2644-16cf-0d33ef32c676@I-love.SAKURA.ne.jp>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:46:46AM +0200, Johan Hovold wrote:
-> Allow the Qualcomm PCIe controller driver to be built as a module, which
-> is useful for multi-platform kernels as well as during development.
+On Wed, Jul 20, 2022 at 11:47:55PM +0900, Tetsuo Handa wrote:
+> syzbot is reporting double kfree() at free_prealloced_shrinker() [1], for
+> destroy_unused_super() calls free_prealloced_shrinker() even if
+> prealloc_shrinker() returned an error. Explicitly clear shrinker name
+> when prealloc_shrinker() called kfree().
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Link: https://syzkaller.appspot.com/bug?extid=8b481578352d4637f510 [1]
+> Reported-by: syzbot <syzbot+8b481578352d4637f510@syzkaller.appspotmail.com>
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Fixes: e33c267ab70de424 ("mm: shrinkers: provide shrinkers with names")
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Hi Tetsuo!
 
-Thanks,
-Mani
+Thank you for the fix! It looks good to me, however I think we should go a bit
+further and and zero shrinker->name in all 4 cases where shrinker->name is
+freed (an example code below).
 
-> ---
->  drivers/pci/controller/dwc/Kconfig     |  2 +-
->  drivers/pci/controller/dwc/pcie-qcom.c | 36 +++++++++++++++++++++++---
->  2 files changed, 34 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-> index 62ce3abf0f19..230f56d1a268 100644
-> --- a/drivers/pci/controller/dwc/Kconfig
-> +++ b/drivers/pci/controller/dwc/Kconfig
-> @@ -168,7 +168,7 @@ config PCI_HISI
->  	  Hip05 and Hip06 SoCs
->  
->  config PCIE_QCOM
-> -	bool "Qualcomm PCIe controller"
-> +	tristate "Qualcomm PCIe controller"
->  	depends on OF && (ARCH_QCOM || COMPILE_TEST)
->  	depends on PCI_MSI_IRQ_DOMAIN
->  	select PCIE_DW_HOST
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 8523b5ef9d16..e25d5c09657c 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -16,7 +16,7 @@
->  #include <linux/io.h>
->  #include <linux/iopoll.h>
->  #include <linux/kernel.h>
-> -#include <linux/init.h>
-> +#include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/of_gpio.h>
->  #include <linux/pci.h>
-> @@ -1425,6 +1425,15 @@ static int qcom_pcie_host_init(struct pcie_port *pp)
->  	return ret;
->  }
->  
-> +static void qcom_pcie_host_deinit(struct qcom_pcie *pcie)
-> +{
-> +	qcom_ep_reset_assert(pcie);
-> +	if (pcie->cfg->ops->post_deinit)
-> +		pcie->cfg->ops->post_deinit(pcie);
-> +	phy_power_off(pcie->phy);
-> +	pcie->cfg->ops->deinit(pcie);
-> +}
-> +
->  static const struct dw_pcie_host_ops qcom_pcie_dw_ops = {
->  	.host_init = qcom_pcie_host_init,
->  };
-> @@ -1651,6 +1660,22 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> +static int qcom_pcie_remove(struct platform_device *pdev)
-> +{
-> +	struct qcom_pcie *pcie = platform_get_drvdata(pdev);
-> +	struct device *dev = &pdev->dev;
-> +
-> +	dw_pcie_host_deinit(&pcie->pci->pp);
-> +	qcom_pcie_host_deinit(pcie);
-> +
-> +	phy_exit(pcie->phy);
-> +
-> +	pm_runtime_put_sync(dev);
-> +	pm_runtime_disable(dev);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct of_device_id qcom_pcie_match[] = {
->  	{ .compatible = "qcom,pcie-apq8084", .data = &apq8084_cfg },
->  	{ .compatible = "qcom,pcie-ipq8064", .data = &ipq8064_cfg },
-> @@ -1669,6 +1694,7 @@ static const struct of_device_id qcom_pcie_match[] = {
->  	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
->  	{ }
->  };
-> +MODULE_DEVICE_TABLE(of, qcom_pcie_match);
->  
->  static void qcom_fixup_class(struct pci_dev *dev)
->  {
-> @@ -1684,10 +1710,14 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
->  
->  static struct platform_driver qcom_pcie_driver = {
->  	.probe = qcom_pcie_probe,
-> +	.remove = qcom_pcie_remove,
->  	.driver = {
->  		.name = "qcom-pcie",
-> -		.suppress_bind_attrs = true,
->  		.of_match_table = qcom_pcie_match,
->  	},
->  };
-> -builtin_platform_driver(qcom_pcie_driver);
-> +module_platform_driver(qcom_pcie_driver);
-> +
-> +MODULE_AUTHOR("Stanimir Varbanov <svarbanov@mm-sol.com>");
-> +MODULE_DESCRIPTION("Qualcomm PCIe root complex driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.35.1
-> 
+Please, feel free to add my ack:
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+
+Thanks!
+
+---
+ mm/shrinker_debug.c | 1 +
+ mm/vmscan.c         | 9 +++++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
+index e5b40c43221d..b05295bab322 100644
+--- a/mm/shrinker_debug.c
++++ b/mm/shrinker_debug.c
+@@ -251,6 +251,7 @@ void shrinker_debugfs_remove(struct shrinker *shrinker)
+ 	lockdep_assert_held(&shrinker_rwsem);
+ 
+ 	kfree_const(shrinker->name);
++	shrinker->name = NULL;
+ 
+ 	if (!shrinker->debugfs_entry)
+ 		return;
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 8fa03fb5c5c1..9e7d8db42918 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -647,8 +647,10 @@ int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...)
+ 		return -ENOMEM;
+ 
+ 	err = __prealloc_shrinker(shrinker);
+-	if (err)
++	if (err) {
+ 		kfree_const(shrinker->name);
++		shrinker->name = NULL;
++	}
+ 
+ 	return err;
+ }
+@@ -663,6 +665,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
+ {
+ #ifdef CONFIG_SHRINKER_DEBUG
+ 	kfree_const(shrinker->name);
++	shrinker->name = NULL;
+ #endif
+ 	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
+ 		down_write(&shrinker_rwsem);
+@@ -707,8 +710,10 @@ int register_shrinker(struct shrinker *shrinker, const char *fmt, ...)
+ 		return -ENOMEM;
+ 
+ 	err = __register_shrinker(shrinker);
+-	if (err)
++	if (err) {
+ 		kfree_const(shrinker->name);
++		shrinker->name = NULL;
++	}
+ 	return err;
+ }
+ #else
+-- 
+2.36.1
+

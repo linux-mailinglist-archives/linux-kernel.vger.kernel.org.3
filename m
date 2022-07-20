@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B36357B52D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C0E57B52B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbiGTLPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S236483AbiGTLPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbiGTLPi (ORCPT
+        with ESMTP id S229552AbiGTLPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:15:38 -0400
+        Wed, 20 Jul 2022 07:15:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E387C1D32A
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:15:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A202928729
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:15:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 836A461CC7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:15:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A0AC341C7;
-        Wed, 20 Jul 2022 11:15:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C76E61CCD
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:15:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF68C3411E;
+        Wed, 20 Jul 2022 11:15:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658315735;
-        bh=LSpm+8rd/nK3fM0rM+69gstqhzzZ+9ZDExHP/9e7ANA=;
+        s=k20201202; t=1658315737;
+        bh=79Q0Xh7Yht9YMz1vJqOVE/JW4zcpekOC9wgrcZXMqmY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uw4y13jOLXs8g/aLOyUKgHtrEQEm2e1muSDEDKk19PS3TMu/8t4QJwJMxYYujfObv
-         fi1vCaYhbM63tj+5H+qpfRJbgXl/d7ZBEbsaXnRlbePGNgVsw/8OAmfBZtwItm2HUi
-         yvq719ZSfEhN3IFf9F13F9vJUMqoL0UMwAfeoOOaqtYaL9tvo6Rlawmj77gtxGksBO
-         DmHerXXd9X57Vyn9GUPv4f6zC2SGLJdd/zvOAHWHldWmKUH0115eCe7BQo+uVCKJM/
-         O7pJvqc1IoKP9vuwaa00T43klg//M3MADzkF7VQgwoqSNwSX6yg5oBivg46i41wshL
-         nG+fHennYMwxw==
+        b=OgcXoZVd8QykfnTyN8efytgLYgA1J8P9WgZIAv7lnocZRFepgEPsK0HkcW8AT4IDe
+         1/3OkFiCJQzqwKV4GdICkdgQ1RakbNHAGkaRxTK4/BixHW94gKfRu4sZXtYxQDFCd1
+         2R7Cj9B852sSjq81FHsDmOHse6fTitAoMLUMd5jFvbX6CCnpvFZu5C+2idPt7POW+P
+         Z5OoYNFAzZ4lT/lCniB7o8aMhmiGvFbwkwiIaKAYBFGaIw2Sk5j4M5TZVUQitRqGnX
+         qvMOHDaXz8Z9+KHNU/7odjEOnQsxSdeKls9TseeJGiPUJLNmMh/Amv5SkMVyWLXBPM
+         /uXpaEMOmghdQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 6/9] habanalabs/gaudi2: remove old interrupt mappings
-Date:   Wed, 20 Jul 2022 14:15:20 +0300
-Message-Id: <20220720111523.4069830-6-ogabbay@kernel.org>
+Cc:     Bharat Jauhari <bjauhari@habana.ai>
+Subject: [PATCH 7/9] habanalabs: fix spelling mistakes
+Date:   Wed, 20 Jul 2022 14:15:21 +0300
+Message-Id: <20220720111523.4069830-7-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220720111523.4069830-1-ogabbay@kernel.org>
 References: <20220720111523.4069830-1-ogabbay@kernel.org>
@@ -52,104 +52,278 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+From: Bharat Jauhari <bjauhari@habana.ai>
 
-Interrupt enumration has changed some time ago but the old mapping
-was accidentally left in the driver.
+Cosmetic commit, no logical changes. It just fixes the spelling
+mistakes.
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Signed-off-by: Bharat Jauhari <bjauhari@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi2/gaudi2P.h      |  3 -
- .../include/gaudi2/gaudi2_async_virt_events.h | 57 -------------------
- 2 files changed, 60 deletions(-)
- delete mode 100644 drivers/misc/habanalabs/include/gaudi2/gaudi2_async_virt_events.h
+ drivers/misc/habanalabs/common/firmware_if.c |  8 +++---
+ drivers/misc/habanalabs/common/habanalabs.h  | 27 ++++++++++----------
+ drivers/misc/habanalabs/common/memory_mgr.c  | 10 ++++----
+ include/uapi/misc/habanalabs.h               | 10 ++++----
+ 4 files changed, 27 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2P.h b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-index e4bc4009f05b..5110574a650e 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2P.h
-@@ -15,7 +15,6 @@
- #include "../include/gaudi2/gaudi2_packets.h"
- #include "../include/gaudi2/gaudi2_fw_if.h"
- #include "../include/gaudi2/gaudi2_async_events.h"
--#include "../include/gaudi2/gaudi2_async_virt_events.h"
+diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/misc/habanalabs/common/firmware_if.c
+index 608ca67527a5..58c1eff16df6 100644
+--- a/drivers/misc/habanalabs/common/firmware_if.c
++++ b/drivers/misc/habanalabs/common/firmware_if.c
+@@ -1514,7 +1514,7 @@ int hl_fw_read_preboot_status(struct hl_device *hdev)
+ 	hdev->asic_funcs->init_firmware_preload_params(hdev);
  
- #define GAUDI2_LINUX_FW_FILE	"habanalabs/gaudi2/gaudi2-fit.itb"
- #define GAUDI2_BOOT_FIT_FILE	"habanalabs/gaudi2/gaudi2-boot-fit.itb"
-@@ -511,8 +510,6 @@ struct dup_block_ctx {
-  * @hbm_cfg: HBM subsystem settings
-  * @hw_queues_lock_mutex: used by simulator instead of hw_queues_lock.
-  * @kdma_lock_mutex: used by simulator instead of kdma_lock.
-- * @use_deprecated_event_mappings: use old event mappings which are about to be
-- *                                 deprecated
+ 	/*
+-	 * In order to determine boot method (static VS dymanic) we need to
++	 * In order to determine boot method (static VS dynamic) we need to
+ 	 * read the boot caps register
+ 	 */
+ 	rc = hl_fw_read_preboot_caps(hdev);
+@@ -1781,7 +1781,7 @@ int hl_fw_dynamic_send_protocol_cmd(struct hl_device *hdev,
+  *
+  * @return the CRC32 result
+  *
+- * NOTE: kernel's CRC32 differ's from standard CRC32 calculation.
++ * NOTE: kernel's CRC32 differs from standard CRC32 calculation.
+  *       in order to be aligned we need to flip the bits of both the input
+  *       initial CRC and kernel's CRC32 result.
+  *       in addition both sides use initial CRC of 0,
+@@ -1798,7 +1798,7 @@ static u32 hl_fw_compat_crc32(u8 *data, size_t size)
+  *
+  * @hdev: pointer to the habanalabs device structure
+  * @addr: device address of memory transfer
+- * @size: memory transter size
++ * @size: memory transfer size
+  * @region: PCI memory region
+  *
+  * @return 0 on success, otherwise non-zero error code
+@@ -2547,7 +2547,7 @@ static int hl_fw_dynamic_init_cpu(struct hl_device *hdev,
+ 	/*
+ 	 * when testing FW load (without Linux) on PLDM we don't want to
+ 	 * wait until boot fit is active as it may take several hours.
+-	 * instead, we load the bootfit and let it do all initializations in
++	 * instead, we load the bootfit and let it do all initialization in
+ 	 * the background.
+ 	 */
+ 	if (hdev->pldm && !(hdev->fw_components & FW_TYPE_LINUX))
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 8c2c94fb1322..350bc5b9f174 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -94,7 +94,7 @@ struct hl_fpriv;
+ #define MMU_HASH_TABLE_BITS		7 /* 1 << 7 buckets */
+ 
+ /**
+- * enum hl_mmu_page_table_locaion - mmu page table location
++ * enum hl_mmu_page_table_location - mmu page table location
+  * @MMU_DR_PGT: page-table is located on device DRAM.
+  * @MMU_HR_PGT: page-table is located on host memory.
+  * @MMU_NUM_PGT_LOCATIONS: number of page-table locations currently supported.
+@@ -800,7 +800,7 @@ struct hl_fence {
+  * @lock: spinlock to protect fence.
+  * @hdev: habanalabs device structure.
+  * @hw_sob: the H/W SOB used in this signal/wait CS.
+- * @encaps_sig_hdl: encaps signals hanlder.
++ * @encaps_sig_hdl: encaps signals handler.
+  * @cs_seq: command submission sequence number.
+  * @type: type of the CS - signal/wait.
+  * @sob_val: the SOB value that is used in this signal/wait CS.
+@@ -908,7 +908,7 @@ struct hl_mmap_mem_buf {
+  * @size: holds the CB's size.
+  * @cs_cnt: holds number of CS that this CB participates in.
+  * @is_pool: true if CB was acquired from the pool, false otherwise.
+- * @is_internal: internaly allocated
++ * @is_internal: internally allocated
+  * @is_mmu_mapped: true if the CB is mapped to the device's MMU.
   */
- struct gaudi2_device {
- 	int (*cpucp_info_get)(struct hl_device *hdev);
-diff --git a/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_virt_events.h b/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_virt_events.h
-deleted file mode 100644
-index 6d6ed7838a64..000000000000
---- a/drivers/misc/habanalabs/include/gaudi2/gaudi2_async_virt_events.h
-+++ /dev/null
-@@ -1,57 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0
-- *
-- * Copyright 2022 HabanaLabs, Ltd.
-- * All Rights Reserved.
-- *
-- */
+ struct hl_cb {
+@@ -1116,7 +1116,7 @@ struct timestamp_reg_info {
+  * @fence: hl fence object for interrupt completion
+  * @cq_target_value: CQ target value
+  * @cq_kernel_addr: CQ kernel address, to be used in the cq interrupt
+- *                  handler for taget value comparison
++ *                  handler for target value comparison
+  */
+ struct hl_user_pending_interrupt {
+ 	struct timestamp_reg_info	ts_reg_info;
+@@ -1742,10 +1742,10 @@ struct hl_cs_outcome {
+ 
+ /**
+  * struct hl_cs_outcome_store - represents a limited store of completed CS outcomes
+- * @outcome_map: index of completed CS searcheable by sequence number
++ * @outcome_map: index of completed CS searchable by sequence number
+  * @used_list: list of outcome objects currently in use
+  * @free_list: list of outcome objects currently not in use
+- * @nodes_pool: a static pool of preallocated outcome objects
++ * @nodes_pool: a static pool of pre-allocated outcome objects
+  * @db_lock: any operation on the store must take this lock
+  */
+ struct hl_cs_outcome_store {
+@@ -1769,7 +1769,7 @@ struct hl_cs_outcome_store {
+  * @refcount: reference counter for the context. Context is released only when
+  *		this hits 0l. It is incremented on CS and CS_WAIT.
+  * @cs_pending: array of hl fence objects representing pending CS.
+- * @outcome_store: storage data structure used to remember ouitcomes of completed
++ * @outcome_store: storage data structure used to remember outcomes of completed
+  *                 command submissions for a long time after CS id wraparound.
+  * @va_range: holds available virtual addresses for host and dram mappings.
+  * @mem_hash_lock: protects the mem_hash.
+@@ -1838,7 +1838,6 @@ struct hl_ctx_mgr {
+ };
+ 
+ 
 -
--#ifndef __GAUDI2_ASYNC_VIRT_EVENTS_H_
--#define __GAUDI2_ASYNC_VIRT_EVENTS_H_
--
--enum gaudi2_async_virt_event_id {
--	GAUDI2_EVENT_NIC3_QM1_OLD = 1206,
--	GAUDI2_EVENT_NIC4_QM0_OLD = 1207,
--	GAUDI2_EVENT_NIC4_QM1_OLD = 1208,
--	GAUDI2_EVENT_NIC5_QM0_OLD = 1209,
--	GAUDI2_EVENT_NIC5_QM1_OLD = 1210,
--	GAUDI2_EVENT_NIC6_QM0_OLD = 1211,
--	GAUDI2_EVENT_NIC6_QM1_OLD = 1212,
--	GAUDI2_EVENT_NIC7_QM0_OLD = 1213,
--	GAUDI2_EVENT_NIC7_QM1_OLD = 1214,
--	GAUDI2_EVENT_NIC8_QM0_OLD = 1215,
--	GAUDI2_EVENT_NIC8_QM1_OLD = 1216,
--	GAUDI2_EVENT_NIC9_QM0_OLD = 1217,
--	GAUDI2_EVENT_NIC9_QM1_OLD = 1218,
--	GAUDI2_EVENT_NIC10_QM0_OLD = 1219,
--	GAUDI2_EVENT_NIC10_QM1_OLD = 1220,
--	GAUDI2_EVENT_NIC11_QM0_OLD = 1221,
--	GAUDI2_EVENT_NIC11_QM1_OLD = 1222,
--	GAUDI2_EVENT_CPU_PKT_SANITY_FAILED_OLD = 1223,
--	GAUDI2_EVENT_CPU0_STATUS_NIC0_ENG0_OLD = 1224,
--	GAUDI2_EVENT_CPU0_STATUS_NIC0_ENG1_OLD = 1225,
--	GAUDI2_EVENT_CPU1_STATUS_NIC1_ENG0_OLD = 1226,
--	GAUDI2_EVENT_CPU1_STATUS_NIC1_ENG1_OLD = 1227,
--	GAUDI2_EVENT_CPU2_STATUS_NIC2_ENG0_OLD = 1228,
--	GAUDI2_EVENT_CPU2_STATUS_NIC2_ENG1_OLD = 1229,
--	GAUDI2_EVENT_CPU3_STATUS_NIC3_ENG0_OLD = 1230,
--	GAUDI2_EVENT_CPU3_STATUS_NIC3_ENG1_OLD = 1231,
--	GAUDI2_EVENT_CPU4_STATUS_NIC4_ENG0_OLD = 1232,
--	GAUDI2_EVENT_CPU4_STATUS_NIC4_ENG1_OLD = 1233,
--	GAUDI2_EVENT_CPU5_STATUS_NIC5_ENG0_OLD = 1234,
--	GAUDI2_EVENT_CPU5_STATUS_NIC5_ENG1_OLD = 1235,
--	GAUDI2_EVENT_CPU6_STATUS_NIC6_ENG0_OLD = 1236,
--	GAUDI2_EVENT_CPU6_STATUS_NIC6_ENG1_OLD = 1237,
--	GAUDI2_EVENT_CPU7_STATUS_NIC7_ENG0_OLD = 1238,
--	GAUDI2_EVENT_CPU7_STATUS_NIC7_ENG1_OLD = 1239,
--	GAUDI2_EVENT_CPU8_STATUS_NIC8_ENG0_OLD = 1240,
--	GAUDI2_EVENT_CPU8_STATUS_NIC8_ENG1_OLD = 1241,
--	GAUDI2_EVENT_CPU9_STATUS_NIC9_ENG0_OLD = 1242,
--	GAUDI2_EVENT_CPU9_STATUS_NIC9_ENG1_OLD = 1243,
--	GAUDI2_EVENT_CPU10_STATUS_NIC10_ENG0_OLD = 1244,
--	GAUDI2_EVENT_CPU10_STATUS_NIC10_ENG1_OLD = 1245,
--	GAUDI2_EVENT_CPU11_STATUS_NIC11_ENG0_OLD = 1246,
--	GAUDI2_EVENT_CPU11_STATUS_NIC11_ENG1_OLD = 1247,
--	GAUDI2_EVENT_ARC_DCCM_FULL_OLD = 1248,
--};
--
--#endif /* __GAUDI2_ASYNC_VIRT_EVENTS_H_ */
+ /*
+  * COMMAND SUBMISSIONS
+  */
+@@ -1904,7 +1903,7 @@ struct hl_userptr {
+  * @tdr_active: true if TDR was activated for this CS (to prevent
+  *		double TDR activation).
+  * @aborted: true if CS was aborted due to some device error.
+- * @timestamp: true if a timestmap must be captured upon completion.
++ * @timestamp: true if a timestamp must be captured upon completion.
+  * @staged_last: true if this is the last staged CS and needs completion.
+  * @staged_first: true if this is the first staged CS and we need to receive
+  *                timeout for this CS.
+@@ -2229,7 +2228,7 @@ struct hl_info_list {
+ 
+ /**
+  * struct hl_debugfs_entry - debugfs dentry wrapper.
+- * @info_ent: dentry realted ops.
++ * @info_ent: dentry related ops.
+  * @dev_entry: ASIC specific debugfs manager.
+  */
+ struct hl_debugfs_entry {
+@@ -2934,7 +2933,7 @@ struct razwi_info {
+  * struct undefined_opcode_info - info about last undefined opcode error
+  * @timestamp: timestamp of the undefined opcode error
+  * @cb_addr_streams: CB addresses (per stream) that are currently exists in the PQ
+- *                   entiers. In case all streams array entries are
++ *                   entries. In case all streams array entries are
+  *                   filled with values, it means the execution was in Lower-CP.
+  * @cq_addr: the address of the current handled command buffer
+  * @cq_size: the size of the current handled command buffer
+@@ -2975,7 +2974,7 @@ struct last_error_session_info {
+ /**
+  * struct hl_reset_info - holds current device reset information.
+  * @lock: lock to protect critical reset flows.
+- * @compute_reset_cnt: number of compte resets since the driver was loaded.
++ * @compute_reset_cnt: number of compute resets since the driver was loaded.
+  * @hard_reset_cnt: number of hard resets since the driver was loaded.
+  * @hard_reset_schedule_flags: hard reset is scheduled to after current compute reset,
+  *                             here we hold the hard reset flags.
+@@ -2986,7 +2985,7 @@ struct last_error_session_info {
+  * @hard_reset_pending: is there a hard reset work pending.
+  * @curr_reset_cause: saves an enumerated reset cause when a hard reset is
+  *                    triggered, and cleared after it is shared with preboot.
+- * @prev_reset_trigger: saves the previous trigger which caused a reset, overidden
++ * @prev_reset_trigger: saves the previous trigger which caused a reset, overridden
+  *                      with a new value on next reset
+  * @reset_trigger_repeated: set if device reset is triggered more than once with
+  *                          same cause.
+@@ -3064,7 +3063,7 @@ struct hl_reset_info {
+  * @hl_chip_info: ASIC's sensors information.
+  * @device_status_description: device status description.
+  * @hl_debugfs: device's debugfs manager.
+- * @cb_pool: list of preallocated CBs.
++ * @cb_pool: list of pre allocated CBs.
+  * @cb_pool_lock: protects the CB pool.
+  * @internal_cb_pool_virt_addr: internal command buffer pool virtual address.
+  * @internal_cb_pool_dma_addr: internal command buffer pool dma address.
+diff --git a/drivers/misc/habanalabs/common/memory_mgr.c b/drivers/misc/habanalabs/common/memory_mgr.c
+index 56df962d2f3c..1936d653699e 100644
+--- a/drivers/misc/habanalabs/common/memory_mgr.c
++++ b/drivers/misc/habanalabs/common/memory_mgr.c
+@@ -11,7 +11,7 @@
+  * hl_mmap_mem_buf_get - increase the buffer refcount and return a pointer to
+  *                        the buffer descriptor.
+  *
+- * @mmg: parent unifed memory manager
++ * @mmg: parent unified memory manager
+  * @handle: requested buffer handle
+  *
+  * Find the buffer in the store and return a pointer to its descriptor.
+@@ -104,7 +104,7 @@ int hl_mmap_mem_buf_put(struct hl_mmap_mem_buf *buf)
+  * hl_mmap_mem_buf_put_handle - decrease the reference to the buffer with the
+  *                              given handle.
+  *
+- * @mmg: parent unifed memory manager
++ * @mmg: parent unified memory manager
+  * @handle: requested buffer handle
+  *
+  * Decrease the reference to the buffer, and release it if it was the last one.
+@@ -137,7 +137,7 @@ int hl_mmap_mem_buf_put_handle(struct hl_mem_mgr *mmg, u64 handle)
+ /**
+  * hl_mmap_mem_buf_alloc - allocate a new mappable buffer
+  *
+- * @mmg: parent unifed memory manager
++ * @mmg: parent unified memory manager
+  * @behavior: behavior object describing this buffer polymorphic behavior
+  * @gfp: gfp flags to use for the memory allocations
+  * @args: additional args passed to behavior->alloc
+@@ -222,7 +222,7 @@ static const struct vm_operations_struct hl_mmap_mem_buf_vm_ops = {
+ /**
+  * hl_mem_mgr_mmap - map the given buffer to the user
+  *
+- * @mmg: unifed memory manager
++ * @mmg: unified memory manager
+  * @vma: the vma object for which mmap was closed.
+  * @args: additional args passed to behavior->mmap
+  *
+@@ -322,7 +322,7 @@ void hl_mem_mgr_init(struct device *dev, struct hl_mem_mgr *mmg)
+ /**
+  * hl_mem_mgr_fini - release unified memory manager
+  *
+- * @mmg: parent unifed memory manager
++ * @mmg: parent unified memory manager
+  *
+  * Release the unified memory manager. Shall be called from an interrupt context.
+  */
+diff --git a/include/uapi/misc/habanalabs.h b/include/uapi/misc/habanalabs.h
+index 5d06d5c74dd1..be06b1307c44 100644
+--- a/include/uapi/misc/habanalabs.h
++++ b/include/uapi/misc/habanalabs.h
+@@ -876,13 +876,13 @@ struct hl_info_hw_idle {
+ 	__u32 is_idle;
+ 	/*
+ 	 * Bitmask of busy engines.
+-	 * Bits definition is according to `enum <chip>_enging_id'.
++	 * Bits definition is according to `enum <chip>_engine_id'.
+ 	 */
+ 	__u32 busy_engines_mask;
+ 
+ 	/*
+ 	 * Extended Bitmask of busy engines.
+-	 * Bits definition is according to `enum <chip>_enging_id'.
++	 * Bits definition is according to `enum <chip>_engine_id'.
+ 	 */
+ 	__u64 busy_engines_mask_ext[HL_BUSY_ENGINES_MASK_EXT_SIZE];
+ };
+@@ -1078,12 +1078,12 @@ struct hl_info_razwi_event {
+  * struct hl_info_undefined_opcode_event - info about last undefined opcode error
+  * @timestamp: timestamp of the undefined opcode error
+  * @cb_addr_streams: CB addresses (per stream) that are currently exists in the PQ
+- *                   entiers. In case all streams array entries are
++ *                   entries. In case all streams array entries are
+  *                   filled with values, it means the execution was in Lower-CP.
+  * @cq_addr: the address of the current handled command buffer
+  * @cq_size: the size of the current handled command buffer
+  * @cb_addr_streams_len: num of streams - actual len of cb_addr_streams array.
+- *                       should be equal to 1 incase of undefined opcode
++ *                       should be equal to 1 in case of undefined opcode
+  *                       in Upper-CP (specific stream) and equal to 4 incase
+  *                       of undefined opcode in Lower-CP.
+  * @engine_id: engine-id that the error occurred on
+@@ -1412,7 +1412,7 @@ struct hl_cs_out {
+ 
+ 		/* Valid only when HL_CS_FLAGS_RESERVE_SIGNALS_ONLY is set */
+ 		struct {
+-			/* This is the resereved signal handle id */
++			/* This is the reserved signal handle id */
+ 			__u32 handle_id;
+ 
+ 			/* This is the signals count */
 -- 
 2.25.1
 

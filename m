@@ -2,164 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4599657AB39
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC1B57AB3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238358AbiGTA4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 20:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S238688AbiGTA5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 20:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiGTA4J (ORCPT
+        with ESMTP id S229556AbiGTA5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:56:09 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D60D422D3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:56:06 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id z13so4401025wro.13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ibqk5fisgJ/ziZRD3smb5yzx395lJhCMKBmOKX4NldQ=;
-        b=CNA/W/uTIUbWX/lOwQw/p6BLCNyrFKSMaE4xaXDyd2kK3EDB7lSYdoWcqB4vJX2Lyv
-         9wMOa3UOFVd7t2+JLomPWtwhkJqp8HyG/di+yjjJegDIvBFzD1sDg0z8u2zupohNdge4
-         Ia/UxzH/8tqF9pEEwd42G5kzZ0KduPQOfrknHk8TnKQrxn0JEaE3xTlZl5OYnH81QO9C
-         T7UKQGb1anI5rRRvtH1REJoJxzMQPt1pwBSj+7w1NUpeIHACPZmQplD4mXTaXakTQ1ls
-         C7vMcJ05maM6Ipo83zmuToSSx5C2fF9gT37a89zcNSEYLp79tcAc/+l1YskqF3lApe1l
-         ZfEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ibqk5fisgJ/ziZRD3smb5yzx395lJhCMKBmOKX4NldQ=;
-        b=q1WNpQBKDJxPqgKot0CXzQZNOZ6mW4u6pjvy0iuOoCz5TNwCgBNkjJSl2DGVTEBLOL
-         8r2re88cKchlZcI837vGqGcpXdGO0FGtcG7iHdQtuMWjZfRr8yFG4Jw9EZcCXOFupPP4
-         U8uuIO2XknHbWQOwEOLYCEsTY0PhBveXX5xb5yzB8Eb1IVNsgr8Y+MUCIfED+Mim4QGN
-         S3a7vvpI73g0uzeBuV1HjuEqlpbnLd0Ju6FGL3zGLiSviwlK+JbcuWt06UdkXyMrsnPe
-         k4YellB06QqRpDtDfgcTGkSQMdB4yS/CqKqlHZtBHti6WZR+ffWf2Eg3omaMS8c4NhdV
-         20Jw==
-X-Gm-Message-State: AJIora+39RlyIXt+5jT7TRe2vAKUrtCPclZ3y0u9C6rWtujmdcqnLrFI
-        uiU/hgFcziNx+k+vIvvKi3nvZoQdWaxuMJla8jLkBl5sZTOUYQ==
-X-Google-Smtp-Source: AGRyM1sWB+7bN6Q+hdPG/nbCGFYDQBcv40nJ++FCTuumemqbD4hnoAb8q3fE0XNlrJXRmT+Hcl2vH2Z8kwDF4bQCGis=
-X-Received: by 2002:a5d:6a4c:0:b0:21e:46d4:6eec with SMTP id
- t12-20020a5d6a4c000000b0021e46d46eecmr1655649wrw.375.1658278564481; Tue, 19
- Jul 2022 17:56:04 -0700 (PDT)
+        Tue, 19 Jul 2022 20:57:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DB3422D1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:57:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658278641; x=1689814641;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=F7g3ynXWOMTKVN0gg82mLeRiQZLN1+/2VVU531tlYIM=;
+  b=jVOlBdqXDOeQmtA9NZf1wtq7FLyRvZmDpmd1IhohXQH6K1TVUE1Q+VoK
+   Rue6Kfaae0FZlqjssg32JgXq5XAEaZbpg5PcQ2L4csSJnBJgtOd71gnUE
+   9YQdjJJGoohVa+Z98FN9BU6Ho9g2MbG7IAlqjyXR0Ba70zq3kiEcMlirE
+   NeEk+9z5yqQ0ECttHNumJSBIrr4UIrzCLbByKj/Ax7/JDZpw/i4lPZoaA
+   0fUNyTdbKCo5Ys0lpLRLtKEIT/f/+WJJRiCWObdsKP3xfArqt31i6BtEh
+   zfx2BHGt5/mbEEmGxEHoiRoTpQFl3b6gSfQEIqNVXPwvOVRa9PkkcxIxr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372948301"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="372948301"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 17:57:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="724466919"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 19 Jul 2022 17:57:16 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 16292136; Wed, 20 Jul 2022 03:57:24 +0300 (EEST)
+Date:   Wed, 20 Jul 2022 03:57:24 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv5 06/13] x86/mm: Provide ARCH_GET_UNTAG_MASK and
+ ARCH_ENABLE_TAGGED_ADDR
+Message-ID: <20220720005724.mwodxwm5r5gayqrm@black.fi.intel.com>
+References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
+ <20220712231328.5294-7-kirill.shutemov@linux.intel.com>
+ <CAG_fn=W-pTCxJ6vEa6aSuAiQDxj0n0_8VgpUhp+TxYDrF8AReg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-24-adrian.hunter@intel.com>
-In-Reply-To: <20220711093218.10967-24-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 17:55:52 -0700
-Message-ID: <CAP-5=fWOcK75gc6VicZUu_KPJHVteHES4+rjFMJWyuT09AC56g@mail.gmail.com>
-Subject: Re: [PATCH 23/35] perf tools: Add reallocarray_as_needed()
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG_fn=W-pTCxJ6vEa6aSuAiQDxj0n0_8VgpUhp+TxYDrF8AReg@mail.gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Add helper reallocarray_as_needed() to reallocate an array to a larger
-> size and initialize the extra entries to an arbitrary value.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  tools/perf/util/util.c | 33 +++++++++++++++++++++++++++++++++
->  tools/perf/util/util.h | 15 +++++++++++++++
->  2 files changed, 48 insertions(+)
->
-> diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
-> index 9b02edf9311d..391c1e928bd7 100644
-> --- a/tools/perf/util/util.c
-> +++ b/tools/perf/util/util.c
-> @@ -18,6 +18,7 @@
->  #include <linux/kernel.h>
->  #include <linux/log2.h>
->  #include <linux/time64.h>
-> +#include <linux/overflow.h>
->  #include <unistd.h>
->  #include "cap.h"
->  #include "strlist.h"
-> @@ -500,3 +501,35 @@ char *filename_with_chroot(int pid, const char *filename)
->
->         return new_name;
->  }
-> +
-> +/*
-> + * Reallocate an array *arr of size *arr_sz so that it is big enough to contain
-> + * x elements of size msz, initializing new entries to *init_val or zero if
-> + * init_val is NULL
-> + */
-> +int do_realloc_array_as_needed(void **arr, size_t *arr_sz, size_t x, size_t msz, const void *init_val)
+On Mon, Jul 18, 2022 at 07:47:44PM +0200, Alexander Potapenko wrote:
+> On Wed, Jul 13, 2022 at 1:13 AM Kirill A. Shutemov
+> <kirill.shutemov@linux.intel.com> wrote:
+> >
+> > Add a couple of arch_prctl() handles:
+> >
+> >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
+> >    of tag bits. It is rounded up to the nearest LAM mode that can
+> >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
+> >
+> >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+> >    bits located in the address.
+> >
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > ---
+> >  arch/x86/include/uapi/asm/prctl.h |  3 ++
+> >  arch/x86/kernel/process_64.c      | 60 ++++++++++++++++++++++++++++++-
+> >  2 files changed, 62 insertions(+), 1 deletion(-)
+> 
+> 
+> > +
+> > +static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
+> > +{
+> > +       int ret = 0;
+> > +
+> > +       if (!cpu_feature_enabled(X86_FEATURE_LAM))
+> > +               return -ENODEV;
+> 
+> Hm, I used to think ENODEV is specific to devices, and -EINVAL is more
+> appropriate here.
+> On the other hand, e.g. prctl(PR_SET_SPECULATION_CTRL) can also return ENODEV...
 
-This feels a little like a 1-dimensional xyarray, could we make a
-similar abstraction to avoid passing all these values around?
+I'm fine either way. Although there are way too many -EINVALs around, so
+it does not communicate much to user.
 
-Thanks,
-Ian
+> >  long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+> >  {
+> >         int ret = 0;
+> > @@ -829,7 +883,11 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+> >         case ARCH_MAP_VDSO_64:
+> >                 return prctl_map_vdso(&vdso_image_64, arg2);
+> >  #endif
+> > -
+> > +       case ARCH_GET_UNTAG_MASK:
+> > +               return put_user(task->mm->context.untag_mask,
+> > +                               (unsigned long __user *)arg2);
+> 
+> Can we have ARCH_GET_UNTAG_MASK return the same error value (ENODEV or
+> EINVAL) as ARCH_ENABLE_TAGGED_ADDR in the case the host doesn't
+> support LAM?
+> After all, the mask does not make much sense in this case.
 
-> +{
-> +       size_t new_sz = *arr_sz;
-> +       void *new_arr;
-> +       size_t i;
-> +
-> +       if (!new_sz)
-> +               new_sz = msz >= 64 ? 1 : roundup(64, msz); /* Start with at least 64 bytes */
-> +       while (x >= new_sz) {
-> +               if (check_mul_overflow(new_sz, (size_t)2, &new_sz))
-> +                       return -ENOMEM;
-> +       }
-> +       if (new_sz == *arr_sz)
-> +               return 0;
-> +       new_arr = calloc(new_sz, msz);
-> +       if (!new_arr)
-> +               return -ENOMEM;
-> +       memcpy(new_arr, *arr, *arr_sz * msz);
-> +       if (init_val) {
-> +               for (i = *arr_sz; i < new_sz; i++)
-> +                       memcpy(new_arr + (i * msz), init_val, msz);
-> +       }
-> +       *arr = new_arr;
-> +       *arr_sz = new_sz;
-> +       return 0;
-> +}
-> diff --git a/tools/perf/util/util.h b/tools/perf/util/util.h
-> index 0f78f1e7782d..c1f2d423a9ec 100644
-> --- a/tools/perf/util/util.h
-> +++ b/tools/perf/util/util.h
-> @@ -79,4 +79,19 @@ struct perf_debuginfod {
->  void perf_debuginfod_setup(struct perf_debuginfod *di);
->
->  char *filename_with_chroot(int pid, const char *filename);
-> +
-> +int do_realloc_array_as_needed(void **arr, size_t *arr_sz, size_t x,
-> +                              size_t msz, const void *init_val);
-> +
-> +#define realloc_array_as_needed(a, n, x, v) ({                 \
-> +       typeof(x) __x = (x);                                    \
-> +       __x >= (n) ?                                            \
-> +               do_realloc_array_as_needed((void **)&(a),       \
-> +                                          &(n),                \
-> +                                          __x,                 \
-> +                                          sizeof(*(a)),        \
-> +                                          (const void *)(v)) : \
-> +               0;                                              \
-> +       })
-> +
->  #endif /* GIT_COMPAT_UTIL_H */
-> --
-> 2.25.1
->
+I'm not sure about this.
+
+As it is ARCH_GET_UNTAG_MASK returns -1UL mask if LAM is not present or
+not enabled. Applying this mask will give correct result for both.
+
+Why is -ENODEV better here? Looks like just more work for userspace.
+
+> 
+> > +       case ARCH_ENABLE_TAGGED_ADDR:
+> > +               return prctl_enable_tagged_addr(task->mm, arg2);
+> >         default:
+> >                 ret = -EINVAL;
+> >                 break;
+> > --
+> > 2.35.1
+> >
+> 
+> 
+> -- 
+> Alexander Potapenko
+> Software Engineer
+> 
+> Google Germany GmbH
+> Erika-Mann-Straße, 33
+> 80636 München
+> 
+> Geschäftsführer: Paul Manicle, Liana Sebastian
+> Registergericht und -nummer: Hamburg, HRB 86891
+> Sitz der Gesellschaft: Hamburg
+
+-- 
+ Kirill A. Shutemov

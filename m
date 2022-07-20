@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC19B57BD42
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBEE57BD46
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237128AbiGTRyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        id S238140AbiGTRzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiGTRyu (ORCPT
+        with ESMTP id S237644AbiGTRzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:54:50 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF985D0F3;
-        Wed, 20 Jul 2022 10:54:49 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id r1-20020a05600c35c100b003a326685e7cso2259238wmq.1;
-        Wed, 20 Jul 2022 10:54:49 -0700 (PDT)
+        Wed, 20 Jul 2022 13:55:13 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524816375
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:55:12 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id t1so31434340lft.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=nvBmcuzvSurejSZdYSe5kOht66040DYtWGbKekxuKaE=;
-        b=CCgD980K35ClV34zACGAPCEkcZPbx6s5IHZQMEp9ADUJFFsaIunseILJhZ8XUuYX3c
-         uspOQMinN1OaJdSRO7BrYBM64BWh6HvX6lMlB5fBmiQvfd9ZD2BGXSipgcx8b8qpy+dF
-         DltEfqGBx2e17cPKObE/1TXjxsh54yN++MFVx9DM1HWeNJ63Obl9raHNyVt2Ry9wFMSv
-         udSYaYePpBv7RE8grtk8D2ENRQVYb4bt3xaZ6ItaQU5aREyqUBhu3BWAq56OWMZjCsOo
-         k3XqgBgLnP0Q7b9kxBqTFL+wrcBmfr0pe1V2DevfwLX191Xg3awsW/utcCS8YQRnU6xC
-         u5aA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SbRJ4Pjfsm8LrOT/Xil2d+bMfNBGw/19k+yDI8UKBW8=;
+        b=ZWqCQRfGBGBMunlhZpNm78e1j4poAYODmP81Ui+BrWqtTK///sr+A2CZUjpK0jMGV5
+         PVM8su0HHmqBpGFmFcNVYqwQRtSm5Mqemx5b7wbiLiephByfm+Fq/2QpCxFmE4vgXsLO
+         qHdQLsVfeZjnqKxT9X8+vmQ4iVKlRichL5JUB45JvpLeREN3+WADwM4n2yNHMwHboJwB
+         gUXy36s/Yd+suWnu6EgBKzjuiUydIBdYDhouvJ6GFo5OYSm1a1ticXhvAABSAn1FOKGm
+         7plPFpamXLstJabNU02Sx86oFlPcRQ5digRrN/sNJBBkcMuTWuhOY0t3uJ0iqF1mKO0x
+         1Xkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nvBmcuzvSurejSZdYSe5kOht66040DYtWGbKekxuKaE=;
-        b=qCZucCPFnwBhmeZDAiqhZldjmBX+4RWs3pArWbkTnDGpChcNvVzMSdVuNGpWGDU2nu
-         XFc7EwN5DzbDmmDO6WfCBD74D4fWhmOUdheuH26Yii/piZ6unj+JFHXqnRwCfFYQHfci
-         JpEITfxOQSe+M4Tw0P/0x5nyORQtnFOUOS7VtsEqUDingI8x48FVVCx+QXLQ0907AccT
-         xVG8zodCACvAFnfX1TwLA5L7/W7bw2IHwO6ToI9fyJFj4VgtpKdAv8VQjQOIHAIWO/8v
-         1VbVKEx+9oDbwAXQnolN41+9OhxmzXZ4oKh/CYDgGxA/adK6S2gYCXIFohN7gatePeck
-         XzAw==
-X-Gm-Message-State: AJIora/7ayTpc+Xeu8I3nm/vQ4/vwhpry09kb5/3ZymILx1FBQ0A6/hZ
-        V77Y1MdDVGLlQnpviPScPGY=
-X-Google-Smtp-Source: AGRyM1u8T+zYmxSaSUGuaHlC+Yw3jW3KePCz4cspfcEmn36fKvTaoLWxmhFqjCU1othrnDDK5c1V9Q==
-X-Received: by 2002:a05:600c:3b24:b0:3a3:1fa6:77d with SMTP id m36-20020a05600c3b2400b003a31fa6077dmr4869273wms.3.1658339687195;
-        Wed, 20 Jul 2022 10:54:47 -0700 (PDT)
-Received: from elementary ([94.73.36.185])
-        by smtp.gmail.com with ESMTPSA id q19-20020a7bce93000000b003a31ca9dfb6sm3935248wmj.32.2022.07.20.10.54.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 10:54:46 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 19:54:44 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Nikolai Kondrashov <spbnick@gmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC] UCLogic: Filtering unsupported HUION tablets
-Message-ID: <20220720175444.GA10744@elementary>
-References: <20220718172953.6817-1-jose.exposito89@gmail.com>
- <5d4ef0df-083f-a00e-fb41-1ce1df6e9473@gmail.com>
- <20220720173656.GA3725@elementary>
- <47970684-1158-cee8-9ff5-d7dca70a54ae@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SbRJ4Pjfsm8LrOT/Xil2d+bMfNBGw/19k+yDI8UKBW8=;
+        b=oMHcL+AwJrLd1+AleLWNRuK7YsumyJqjXIygXh28i1eLE6Y0sBic+OlC8IV+0qonf0
+         KmVab5ORMxXWbhh1r5QzvmyZ94UVc4kuavF/32lrH+bInGbVB/BuPj2k7dq6LxgxSphp
+         n3nScYVQw7tA7TtNgHb5ulOZiOwmzjTUNR6y4KPD7MsODiuLwSOh4AmyJ/V5QW7NrD2C
+         sy1fyT6z4nbG4swV0nehQjCxnKnG4l+IpLmtFKF5he6jz2aQaUnEok8ymeBwI4NIJCkQ
+         ZXQv6Xh51dA+zLz+SZUhGa/WBXRgW/GTXVwQbc+Nha2ggWd36Xx4rdUFqtrqhhH9QthH
+         5sGQ==
+X-Gm-Message-State: AJIora9liUV2pWz4u1kUMahyEUQcy5SGDX6ZzpIbHcD3qJQCOk4T/pyk
+        qMJKp+sxXNvqvcLqlKoWbuiNAQ==
+X-Google-Smtp-Source: AGRyM1sBHotd8BveUpOcwz+eBVh5w31a9LXZrwZ/UtTwD42US9+BLaYtcY9jEyZ6OFeBV4Kc7+PHew==
+X-Received: by 2002:ac2:4a86:0:b0:489:c5eb:3403 with SMTP id l6-20020ac24a86000000b00489c5eb3403mr19763715lfp.603.1658339710742;
+        Wed, 20 Jul 2022 10:55:10 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id g5-20020a2ea4a5000000b0025a885a135csm3341410ljm.119.2022.07.20.10.55.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 10:55:10 -0700 (PDT)
+Message-ID: <acecf7a8-7bf1-718f-d990-54a10e92ba1f@linaro.org>
+Date:   Wed, 20 Jul 2022 19:55:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <47970684-1158-cee8-9ff5-d7dca70a54ae@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] arm64: dts: qcom: Add SKU6 for
+ sc7180-trogdor-pazquel-lte-parade
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20220720025058.1.I5bfba8857ea0d43c747ecdc3a950875abd56927f@changeid>
+ <7a04c9af-0ccb-7711-249f-73908fe7ec36@linaro.org>
+ <CAD=FV=V1MqQzNxq_L8sGtu2JwAAL_FWKXkw9bhCHcD0DycFMUw@mail.gmail.com>
+ <bcbca05e-2b75-a405-b1ea-21b276931a90@linaro.org>
+ <CAD=FV=UEt4fcVaFvS8nr7Z0GNYM1T=mz7iUhwg+bBkWtbO4c1g@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=UEt4fcVaFvS8nr7Z0GNYM1T=mz7iUhwg+bBkWtbO4c1g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-On Wed, Jul 20, 2022 at 08:45:55PM +0300, Nikolai Kondrashov wrote:
-> On 7/20/22 20:36, José Expósito wrote:
-> > I don't know about any broken device handled by the driver, so there is
-> > no need to add new code yet :)
-> > I'll try to keep an eye on DIGImend's issue tracker now that the code
-> > present in the upstream kernel is being released by many distros.
+On 20/07/2022 19:53, Doug Anderson wrote:
 > 
-> If you have the time, backporting your changes to digimend-kernel-drivers
-> would get you feedback much faster :)
+> Yeah. I guess it makes more sense with the background knowledge that
+> the different SKUs are:
 > 
-> I can do a release once we get the code in.
+> LTE with physical SIM _and_ eSIM
+> LTE with only a physical SIM
+> WiFi only
+> 
+> ...so both sku4 and sku6 are LTE SKUs. One has the eSIM stuffed and
+> one doesn't. There is a single shared device tree for the two.
 
-I already opened a PR a few months ago:
-https://github.com/DIGImend/digimend-kernel-drivers/pull/598
+Above in commit msg would solve all my questions, I guess. :)
 
-But more code has been merged since then. I'll try to backport the
-latest changes this weekend and ping you on GitHub once it is
-ready for review again.
 
-Best wishes,
-Jose
+Best regards,
+Krzysztof

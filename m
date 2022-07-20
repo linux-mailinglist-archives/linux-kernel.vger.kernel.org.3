@@ -2,56 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E2E57BC4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C05457BC4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237864AbiGTRGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S232528AbiGTRGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237765AbiGTRGd (ORCPT
+        with ESMTP id S237864AbiGTRG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:06:33 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3476B253;
-        Wed, 20 Jul 2022 10:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QwPkRp//zT0UHUMFiPU7pgoKTbxcvEzlNYpUIO/C0YM=; b=WCHwPNLU1PBrUY32o2OFLClqfb
-        d4zaISm63LnVx+Nulbh6GG4I3kfLeHKzMUfL8smEUB6i+CTceghPKPPf51h9g9C9QqJn4pYOz0s+v
-        VASB9+m8e6DbzX4rHOLfCuLda+4QE1NyQXnDrVpahEObHdSMv+lyxlmaK0zCKTOiN6WLLbBSsJoTS
-        Toho6dkQsE/qhN9cSk8uJUBmALTspeAd0xPmgai2V+qUoZcoLqlg4YU4eD5qEO233MyZ+/l8rZ2+3
-        lxDswIVYBDna4mtMO+WC+wxai6uSqpMaSdQ6HOeQBCtZgL90TvCixWq1VR37DWfc1JWi1ymcvkTUF
-        u1509Otg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oED9M-00EANu-4N;
-        Wed, 20 Jul 2022 17:06:16 +0000
-Date:   Wed, 20 Jul 2022 18:06:16 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: WARNING: CPU: 1 PID: 14735 at fs/dcache.c:365
- dentry_free+0x100/0x128
-Message-ID: <Ytg2CDLzLo+FKbTZ@ZenIV>
-References: <20220709090756.2384-1-hdanton@sina.com>
- <20220715133300.1297-1-hdanton@sina.com>
- <cff76e00-3561-4069-f5c7-26d3de4da3c4@gmx.de>
- <Ytd2g72cj0Aq1MBG@ZenIV>
- <860792bb-1fd6-66c6-ef31-4edd181e2954@gmx.de>
- <YtepmwLj//zrD3V3@ZenIV>
- <20220720110032.1787-1-hdanton@sina.com>
+        Wed, 20 Jul 2022 13:06:27 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E3A6BC1A;
+        Wed, 20 Jul 2022 10:06:26 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id g1so13343452qki.7;
+        Wed, 20 Jul 2022 10:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=c5dtfvo8X5iwM555XYGNyX8BDWpR76NHDGfyCA16UfI=;
+        b=gXnjZIAPvttLh4w+Ab05XIAYC8D5DFsAcn3ijUuLc+GSaiv8d+uPgFpGnvwgzTS/B3
+         rk2QbOkRfYBeLjblewcyl0Vb+S5PgQDkx3FIdSvkuq9BA0tsTAZGZM4defJCc6/5eI0l
+         G4ECM2998z3lFf5BU+LDBrtFc51bW3sjaGP+oqBRHoO7lFKGHq4j80vF9X43peS43iqa
+         FUBHW0bYtFMPCIRWJIpJpLIpWdOTHNEIfAA+fQwwUnPPqzuuIvUxzM0I9vzqRRgF3ei0
+         vzhw+Xp5jt42ygTQE7MFdspXgtuGzh2oSrTfPAI37A0raDJWGQsjyDo2k1a1jM9Hbw2h
+         Sdgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=c5dtfvo8X5iwM555XYGNyX8BDWpR76NHDGfyCA16UfI=;
+        b=oqBqUzsJbfKuSC1mXeMnrd0EIQWe3vX8NLWYNDPFPL6pzv7iiBB2G2p6hBg0elyG80
+         enw1Lna4Adg27Jnm5zi8sRdwlSYSXD/gGIhBqTuMkygOTSkgK+wbpAvsaQlYQZ8AXkC9
+         ztrf1rjtnFGc0bZetuVZWjRiVP4SyEJZpwL3HSok91Sb3L8sW/4/Ue1sw7pOcsx0R8KB
+         jKCznIYPjPBwbOwBvjFir4a5aRcmclLTu+iMRhS1S7u+WmsWqLeRBCm4wJj41Suvh95v
+         259BEZpMNtbvwaeJGPk73f2wScZXi/FFozghYb1cGSXv1kOVMXuSpp3++gLgeOiQh0jA
+         Hxfg==
+X-Gm-Message-State: AJIora+VhkK8tzENF4lcsZkY8tMPxwRC5tUuGDx4CDN3rMq5kCgrnLKh
+        7W4VdEvyIWT1K/WwIWx/x+U=
+X-Google-Smtp-Source: AGRyM1uF7lm4SkCoCmiO9CDgTxUf5JkUnMZTBFaY3XD4jl+P4Tu0b4B+1O9aO2TfDEiT41gMmb4a7A==
+X-Received: by 2002:a37:b802:0:b0:6b5:8330:55a with SMTP id i2-20020a37b802000000b006b58330055amr25801868qkf.778.1658336785340;
+        Wed, 20 Jul 2022 10:06:25 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:8a38:8fe4:50f8:8b83])
+        by smtp.gmail.com with ESMTPSA id u11-20020a05620a0c4b00b006b4689e3425sm16467626qki.129.2022.07.20.10.06.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 10:06:25 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 10:06:24 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Mel Gorman <mgorman@suse.de>, Miroslav Benes <mbenes@suse.cz>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Song Liu <songliubraving@fb.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
+        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 08/16] smp: optimize smp_call_function_many_cond() for
+ more
+Message-ID: <Ytg2EA+2XtzPiyBE@yury-laptop>
+References: <20220718192844.1805158-1-yury.norov@gmail.com>
+ <20220718192844.1805158-9-yury.norov@gmail.com>
+ <YtXQom+a5C+iXSvm@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220720110032.1787-1-hdanton@sina.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <YtXQom+a5C+iXSvm@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,52 +111,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 07:00:32PM +0800, Hillf Danton wrote:
-
-> To help debug it, de-union d_in_lookup_hash with d_alias and add debug
-> info after dentry is killed. If any warning hits, we know where to add
-> something like
+On Mon, Jul 18, 2022 at 11:29:06PM +0200, Peter Zijlstra wrote:
+> On Mon, Jul 18, 2022 at 12:28:36PM -0700, Yury Norov wrote:
 > 
-> 	WARN_ON(dentry->d_flags & DCACHE_DENTRY_KILLED);
+> > ---
+> >  kernel/smp.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/smp.c b/kernel/smp.c
+> > index 7ed2b9b12f74..f96fdf944b4a 100644
+> > --- a/kernel/smp.c
+> > +++ b/kernel/smp.c
+> > @@ -942,7 +942,11 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+> >  
+> >  	if (run_remote) {
+> >  		cfd = this_cpu_ptr(&cfd_data);
+> > -		cpumask_and(cfd->cpumask, mask, cpu_online_mask);
+> > +		if (mask == cpu_online_mask)
+> > +			cpumask_copy(cfd->cpumask, cpu_online_mask);
+> > +		else
+> > +			cpumask_and(cfd->cpumask, mask, cpu_online_mask);
+> > +
 > 
-> before hlist_bl_add or hlist_add.
+> Or... you could optimize cpumask_and() to detect the src1p == src2p case?
 
-IDGI.  That clearly has nothing to do with in-lookup stuff - no
-DCACHE_PAR_LOOKUP in reported flags, so it either never had it set,
-or it went through __d_lookup_done() already.
+This is not what I would consider as optimization. For vast majority
+of users this check is useless because they know for sure that
+cpumasks are different.
 
-If anything, it might have already been through d_free(), with
-d_rcu being confused for d_alias.
+For this case I can invent something like cpumask_and_check_eq(), so
+that there'll be minimal impact on user code. (Suggestions for a better
+name are very welcome.)
 
-I'd do something like
-	WARN_ON(dentry->d_flags & (1U<<31));
-	dentry->d_flags |= 1U << 31;
-in the begining of d_free() (possibly with dumping dentry state if we
-hit that, not that there would be much to report; d_name.name might
-be informative, though).
-
-Again, in-lookup looks like a red herring - DCACHE_PAR_LOOKUP is set
-only in d_alloc_parallel(), right next to the insertion into the list
-and removed only in __d_lookup_free(), right next to the removal from
-the same.  No DCACHE_PAR_LOOKUP in ->d_flags (it's 0x8008 in reported
-cases, i.e. DCACHE_OP_REVALIDATE | DCACHE_DENTRY_KILLED).
-
-What's more, take a look at retain_dentry(); WARN_ON(d_in_lookup(dentry))
-right at the top and it had not triggered in any of the reports I've
-seen in that thread.  Granted, it's not called on each path to
-__dentry_kill(), but it is on the call chains I've seen reported...
-
-Another thing that might be interesting to know is ->d_sb, along with
-->d_sb->s_type->name and ->d_sb->s_id.  That should tell which fs it's
-on...
-
-I wonder if anyone had seen anything similar outside of parisc...
-I don't know if I have any chance to reproduce it here - the only
-parisc box I've got is a 715/100 (assuming the disk is still alive)
-and it's 32bit, unlike the reported setups and, er, not fast.
-qemu seems to have some parisc support, but it's 32bit-only at the
-moment...
-
-PS: please, Cc fsdevel on anything VFS-related.  Very few people are
-still subscribed to l-k these days - I am, but it's impossible to read
-through and postings can easily get missed.
+Thanks,
+Yury

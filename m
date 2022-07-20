@@ -2,71 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C8757BDAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEED57BDAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240282AbiGTSWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S240478AbiGTSWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiGTSWO (ORCPT
+        with ESMTP id S229940AbiGTSWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:22:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B39A6C122
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:22:13 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658341330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AdffNCX4JTcdua+0fjZnrWwVTWjQKhfHJO6PUSI+DgU=;
-        b=J0SMIJFNkEYo6mfRH4TulE7MyhIyHJEMIRMahOVUo+s69R/zPMb7aeNH3q4ypLOBhx8HvN
-        SKLe1b0dbyx+6hVzy9NBA2/37K1IzLe9XIBp3f5t+1j/GHvSst/lM48RvGv8MOl3X2UH6T
-        8U9PW1oJ8bUp1fD88GbNjXR2k9m5nfkJSfzZe5v5CTMNa33XlMRXsXISJXDzvCOD6GRYqe
-        nR6zJ+8j3oX2KBZR72MPJbhUzrgqkRVMODDkudKSUu/pqACGjQ/j8KPYiDymr3eWBsV+Yk
-        r6yYNpR86wlCubIr91fasXC13DDvH/wxULYhRqDN5bESkzc244uEE4HoVizwJA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658341330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AdffNCX4JTcdua+0fjZnrWwVTWjQKhfHJO6PUSI+DgU=;
-        b=erEno3PMWXKwmHUKutiC9TA9iFmlV70/cL8dBpUDa5CWOc0Jhkl6BzYny7PUq3/opfBt9v
-        /GnJEYghzcZCQ7AQ==
-To:     Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: [PATCH v3 0/2] printk: console: Per-console loglevels
-In-Reply-To: <cover.1658339046.git.chris@chrisdown.name>
-References: <cover.1658339046.git.chris@chrisdown.name>
-Date:   Wed, 20 Jul 2022 20:28:09 +0206
-Message-ID: <87edyfmypa.fsf@jogness.linutronix.de>
+        Wed, 20 Jul 2022 14:22:47 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D996BC27
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:22:45 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4Lp3w45zGtzDsMC;
+        Wed, 20 Jul 2022 18:22:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1658341365; bh=ied7/wQBWyRAGNRM3YJQ9nmwASEEztOFVReHeNDPqs4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oEfW3Pz4FH/A5B6gpsmrU591Ac2WjFTISQziC/IGxejB7MS6n6HdTbhtBdUHYGyFH
+         yTxapnlZPVnjQTT3OF1pOhq0bJloGu7LuEwa3bPqvCduEI/I7bMzUrTLg1mARImqOs
+         EO+0QGV2wzOJuu+nJoiEB85Sz2zdorAaMn+VUgYQ=
+X-Riseup-User-ID: 451CCE85EB5720A15480BDBEF7F469054F1D571208F3070AF89924686D908B01
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4Lp3vy0krlz5vgM;
+        Wed, 20 Jul 2022 18:22:37 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        mwen@igalia.com, andrealmeid@riseup.net,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+Subject: [PATCH 1/4] drm/amd/display: Drop dm_sw_gfx7_2d_thin_l_vp and dm_sw_gfx7_2d_thin_gl
+Date:   Wed, 20 Jul 2022 15:22:25 -0300
+Message-Id: <20220720182228.259119-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-20, Chris Down <chris@chrisdown.name> wrote:
-> v3:
->
-> - Update to work with John's kthread patches
+As the enum dm_sw_gfx7_2d_thin_gl and dm_sw_gfx7_2d_thin_l_vp are not
+used on the codebase, this commit drops those entries from enum
+dm_swizzle_mode.
 
-This will get a bit tricky, since I am also preparing a new kthread
-series. But for now it is helpful to base your work on the previous
-kthread work.
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+---
+ .../dc/dml/dcn20/display_mode_vba_20.c        | 26 +++++-------------
+ .../dc/dml/dcn20/display_mode_vba_20v2.c      | 26 +++++-------------
+ .../dc/dml/dcn21/display_mode_vba_21.c        | 27 +++++--------------
+ .../amd/display/dc/dml/display_mode_enums.h   |  2 --
+ .../display/dc/dml/dml_wrapper_translation.c  |  9 -------
+ 5 files changed, 19 insertions(+), 71 deletions(-)
 
-Thanks for your efforts on this!
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+index d3b5b6fedf04..4e4cb0927057 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
+@@ -938,7 +938,7 @@ static unsigned int CalculateVMAndRowBytes(
+ 		*MetaRowByte = 0;
+ 	}
+ 
+-	if (SurfaceTiling == dm_sw_linear || SurfaceTiling == dm_sw_gfx7_2d_thin_gl || SurfaceTiling == dm_sw_gfx7_2d_thin_l_vp) {
++	if (SurfaceTiling == dm_sw_linear) {
+ 		MacroTileSizeBytes = 256;
+ 		MacroTileHeight = BlockHeight256Bytes;
+ 	} else if (SurfaceTiling == dm_sw_4kb_s || SurfaceTiling == dm_sw_4kb_s_x
+@@ -3347,26 +3347,12 @@ void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 										== dm_420_8
+ 								|| mode_lib->vba.SourcePixelFormat[k]
+ 										== dm_420_10))
+-				|| (((mode_lib->vba.SurfaceTiling[k] == dm_sw_gfx7_2d_thin_gl
+-						|| mode_lib->vba.SurfaceTiling[k]
+-								== dm_sw_gfx7_2d_thin_l_vp)
+-						&& !((mode_lib->vba.SourcePixelFormat[k]
+-								== dm_444_64
++				|| (mode_lib->vba.DCCEnable[k] == true
++						&& (mode_lib->vba.SurfaceTiling[k] == dm_sw_linear
+ 								|| mode_lib->vba.SourcePixelFormat[k]
+-										== dm_444_32)
+-								&& mode_lib->vba.SourceScan[k]
+-										== dm_horz
+-								&& mode_lib->vba.SupportGFX7CompatibleTilingIn32bppAnd64bpp
+-										== true
+-								&& mode_lib->vba.DCCEnable[k]
+-										== false))
+-						|| (mode_lib->vba.DCCEnable[k] == true
+-								&& (mode_lib->vba.SurfaceTiling[k]
+-										== dm_sw_linear
+-										|| mode_lib->vba.SourcePixelFormat[k]
+-												== dm_420_8
+-										|| mode_lib->vba.SourcePixelFormat[k]
+-												== dm_420_10)))) {
++										== dm_420_8
++								|| mode_lib->vba.SourcePixelFormat[k]
++										== dm_420_10))) {
+ 			mode_lib->vba.SourceFormatPixelAndScanSupport = false;
+ 		}
+ 	}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+index 63bbdf8b8678..eaa0cdb599ba 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
+@@ -998,7 +998,7 @@ static unsigned int CalculateVMAndRowBytes(
+ 		*MetaRowByte = 0;
+ 	}
+ 
+-	if (SurfaceTiling == dm_sw_linear || SurfaceTiling == dm_sw_gfx7_2d_thin_gl || SurfaceTiling == dm_sw_gfx7_2d_thin_l_vp) {
++	if (SurfaceTiling == dm_sw_linear) {
+ 		MacroTileSizeBytes = 256;
+ 		MacroTileHeight = BlockHeight256Bytes;
+ 	} else if (SurfaceTiling == dm_sw_4kb_s || SurfaceTiling == dm_sw_4kb_s_x
+@@ -3454,26 +3454,12 @@ void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode
+ 										== dm_420_8
+ 								|| mode_lib->vba.SourcePixelFormat[k]
+ 										== dm_420_10))
+-				|| (((mode_lib->vba.SurfaceTiling[k] == dm_sw_gfx7_2d_thin_gl
+-						|| mode_lib->vba.SurfaceTiling[k]
+-								== dm_sw_gfx7_2d_thin_l_vp)
+-						&& !((mode_lib->vba.SourcePixelFormat[k]
+-								== dm_444_64
++				|| (mode_lib->vba.DCCEnable[k] == true
++						&& (mode_lib->vba.SurfaceTiling[k] == dm_sw_linear
+ 								|| mode_lib->vba.SourcePixelFormat[k]
+-										== dm_444_32)
+-								&& mode_lib->vba.SourceScan[k]
+-										== dm_horz
+-								&& mode_lib->vba.SupportGFX7CompatibleTilingIn32bppAnd64bpp
+-										== true
+-								&& mode_lib->vba.DCCEnable[k]
+-										== false))
+-						|| (mode_lib->vba.DCCEnable[k] == true
+-								&& (mode_lib->vba.SurfaceTiling[k]
+-										== dm_sw_linear
+-										|| mode_lib->vba.SourcePixelFormat[k]
+-												== dm_420_8
+-										|| mode_lib->vba.SourcePixelFormat[k]
+-												== dm_420_10)))) {
++										== dm_420_8
++								|| mode_lib->vba.SourcePixelFormat[k]
++										== dm_420_10))) {
+ 			mode_lib->vba.SourceFormatPixelAndScanSupport = false;
+ 		}
+ 	}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+index 8a7485e21d53..198d81861ac5 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
+@@ -1342,7 +1342,7 @@ static unsigned int CalculateVMAndRowBytes(
+ 		*MetaRowByte = 0;
+ 	}
+ 
+-	if (SurfaceTiling == dm_sw_linear || SurfaceTiling == dm_sw_gfx7_2d_thin_gl || SurfaceTiling == dm_sw_gfx7_2d_thin_l_vp) {
++	if (SurfaceTiling == dm_sw_linear) {
+ 		MacroTileSizeBytes = 256;
+ 		MacroTileHeight = BlockHeight256Bytes;
+ 	} else if (SurfaceTiling == dm_sw_4kb_s || SurfaceTiling == dm_sw_4kb_s_x
+@@ -3579,26 +3579,13 @@ void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 										== dm_420_8
+ 								|| mode_lib->vba.SourcePixelFormat[k]
+ 										== dm_420_10))
+-				|| (((mode_lib->vba.SurfaceTiling[k] == dm_sw_gfx7_2d_thin_gl
+-						|| mode_lib->vba.SurfaceTiling[k]
+-								== dm_sw_gfx7_2d_thin_l_vp)
+-						&& !((mode_lib->vba.SourcePixelFormat[k]
+-								== dm_444_64
++				|| (mode_lib->vba.DCCEnable[k] == true
++						&& (mode_lib->vba.SurfaceTiling[k]
++								== dm_sw_linear
+ 								|| mode_lib->vba.SourcePixelFormat[k]
+-										== dm_444_32)
+-								&& mode_lib->vba.SourceScan[k]
+-										== dm_horz
+-								&& mode_lib->vba.SupportGFX7CompatibleTilingIn32bppAnd64bpp
+-										== true
+-								&& mode_lib->vba.DCCEnable[k]
+-										== false))
+-						|| (mode_lib->vba.DCCEnable[k] == true
+-								&& (mode_lib->vba.SurfaceTiling[k]
+-										== dm_sw_linear
+-										|| mode_lib->vba.SourcePixelFormat[k]
+-												== dm_420_8
+-										|| mode_lib->vba.SourcePixelFormat[k]
+-												== dm_420_10)))) {
++										== dm_420_8
++								|| mode_lib->vba.SourcePixelFormat[k]
++										== dm_420_10))) {
+ 			mode_lib->vba.SourceFormatPixelAndScanSupport = false;
+ 		}
+ 	}
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h b/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h
+index f394b3f3922a..0e06727d40b3 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h
++++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h
+@@ -89,8 +89,6 @@ enum dm_swizzle_mode {
+ 	dm_sw_var_s_x = 29,
+ 	dm_sw_var_d_x = 30,
+ 	dm_sw_var_r_x = 31,
+-	dm_sw_gfx7_2d_thin_l_vp,
+-	dm_sw_gfx7_2d_thin_gl,
+ };
+ enum lb_depth {
+ 	dm_lb_10 = 0, dm_lb_8 = 1, dm_lb_6 = 2, dm_lb_12 = 3, dm_lb_16 = 4,
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c b/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c
+index 4ec5310a2962..9edcb6fc83c1 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c
+@@ -35,15 +35,6 @@ static void gfx10array_mode_to_dml_params(
+ 	case DC_ARRAY_LINEAR_GENERAL:
+ 		*sw_mode = dm_sw_linear;
+ 		break;
+-	case DC_ARRAY_2D_TILED_THIN1:
+-// DC_LEGACY_TILING_ADDR_GEN_ZERO - undefined as per current code hence removed
+-#if 0
+-		if (compat_level == DC_LEGACY_TILING_ADDR_GEN_ZERO)
+-			*sw_mode = dm_sw_gfx7_2d_thin_l_vp;
+-		else
+-			*sw_mode = dm_sw_gfx7_2d_thin_gl;
+-#endif
+-		break;
+ 	default:
+ 		ASSERT(0); /* Not supported */
+ 		break;
+-- 
+2.36.1
 
-John

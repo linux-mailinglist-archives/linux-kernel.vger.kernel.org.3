@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B182257B994
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EADC657B996
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234317AbiGTP1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S233730AbiGTP23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiGTP1o (ORCPT
+        with ESMTP id S230348AbiGTP21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:27:44 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234EE564F3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:27:43 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id f3so1578017uaq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:27:43 -0700 (PDT)
+        Wed, 20 Jul 2022 11:28:27 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3024E5C94E;
+        Wed, 20 Jul 2022 08:28:27 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so1516141wmo.0;
+        Wed, 20 Jul 2022 08:28:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=egHHWRfHLuooJteJL4UiMdp23DTR6GCs9T7w8M7ONxk=;
-        b=a5gM9FUXPFg1YIYEYkdVjOlOfrMB5V9IQM51MmXsv7qTxyIQN4epyZwS+814Z+LNFD
-         MBf0zlLzCNbFW++F76USeIzhCSD711UtDJwtUSRMzaZh4kOz7X14lxDcyLMtmD50eDwZ
-         TmJPv9zHlCDIFDvALblgmiGMAv+KDOQkDn+kF9Br4QQXILbJmGV0hfEuB5G9kCmzF0Fd
-         Q6vwIyr1A6MtCaJ0HsP9kPV3dNpWXLBnw00bwnhPb6NG+DpjdHfu45+YTEzBBv9ekKwT
-         mQ5OBILlM50gbNuB2pUoSmdhXJGOjCcBFfvAb5hak3FJFWhVo6jWPtWBGRtG5Zxe8uCI
-         HzoA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=cGWm2LaSnYYJYm1MyhKCb/tBTbA1ULL7NivMKT7vo5g=;
+        b=JZki4U99MR4jnDGu3WD9VYGLq8lc6T41LsDK8HK9WqQMI2JLJGx7bhWduPxuAXfJxj
+         bRL00sAeFABhzZ8aL3l3dVvgI9Hee/VRzZxMA9I/5IqzXad/uShfOkoqRQx+40XGb3bA
+         n+hBkR/YV5dKfQb+OcCKxSJiRAy4QheRSEnJ0hgEM65xgLps8Kq9GZpVDxR3/c2A3iAF
+         OvrBoVllqAe+zGeRUtUhnU5o5oyQ3YbNJQwUE71WW+0XqrGxRFdBXhSElf+F290x+67m
+         T/1iURw41J4gjyQE2JjlrYNzzuVC+gEclTtjQpSq+cI7fqYJeixgsjfWCJZ9O5IWaX9j
+         nBaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=egHHWRfHLuooJteJL4UiMdp23DTR6GCs9T7w8M7ONxk=;
-        b=C6QOVSzJpFxjmmP3zHAKckNGsw6PqOKDXpy+V0SCj5kItDsYYuMw/tB4dUsYdtlo+2
-         kY6oyuJ+Sg83I1OB8WshRKDRgplcB8S+8DiU0gM6JUna9XtfmdCAcAvVDwdCGrvZKAIT
-         GKQGULEcw//U/WjiqduyAmqGIUBtE74Ju6XK5oT+pgxY/zk7OYqOBmSkapuOjA+yGXjl
-         YpGa7rv/Vu41JmJmD+omIxkyOIFtYwkBKtDyji5jYsWpyyRoHddXUeOla8VVNjVEGXVQ
-         rqKig1rQu0WEZFQVOcp0MXQNRnL7oJpmwj1+4u2MLcEwsejw0UxuzHNyVHYz7ZxqG8X3
-         Wd+Q==
-X-Gm-Message-State: AJIora/6pHs1yZnq2AEo76cYJA2esXPua6DkltODAGoWt0tJSDxPvuHe
-        W1bxUi3NvXhzpgxlGpjpNftkNw8X1Y8vW2p0PBouVg==
-X-Google-Smtp-Source: AGRyM1sNXQwOb3Brl8C/bMjD7EfM+swjnfT23/2dt+E5y4c9XEV29McpkbOSCpW6amVuMdbGC0XA0l/+fyPouS/y3L8=
-X-Received: by 2002:ab0:6512:0:b0:383:4aa:b452 with SMTP id
- w18-20020ab06512000000b0038304aab452mr13957811uam.55.1658330862179; Wed, 20
- Jul 2022 08:27:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=cGWm2LaSnYYJYm1MyhKCb/tBTbA1ULL7NivMKT7vo5g=;
+        b=XoueTRn5OKvFPyxe6f3fYmzcyDi8Q8GQjRrMgGfHtPmsIHNo696orTatEo7dIW1Unb
+         qEvBhgADeigwO8k2yixIphpsNuJ3zcnm5U/iKiwwWRnwZWWUAxE8WftT5GvB7XFdjIkD
+         RmM8igGFVxXNlKAPViI4quSkzmXy8LsMGL0QPp7FDITaN98JQUeFb+dVFa6NyR6ouBZt
+         jKThByG9mmvYh5wAIH6pOv27GdAU2+u/p7tuDO2XG/glvbAk6g28aOt2WbvdB7LBlQcB
+         idPq0onXLDjnn/Tbe77HToGfX2GOu4lMKkoSjCJgBKgfiRX9LRp12iGoCBj3pFTQZHhF
+         b/qg==
+X-Gm-Message-State: AJIora9rZhNFN9UvGUamA6HQLY1BejGWodRHHv+mM0luoOolbxPLmoYd
+        LgTuW9QVrxau7xNwlhrVtsM02gTM/0Q=
+X-Google-Smtp-Source: AGRyM1s4NEvUke5pHso9W2i1NlbHT8rWEL4fwU490EIWEWwy02wvzU8hyVhKfr0Wg8PkPqlM14ljHw==
+X-Received: by 2002:a05:600c:4f83:b0:3a1:9c7c:9ea3 with SMTP id n3-20020a05600c4f8300b003a19c7c9ea3mr4461800wmq.39.1658330905759;
+        Wed, 20 Jul 2022 08:28:25 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c3b8900b003a2d47d3051sm3753599wms.41.2022.07.20.08.28.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 08:28:25 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 16:28:23 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: build failure of next-20220720 due to undefined calls in modpost
+Message-ID: <YtgfF/jyk6WyVLZn@debian>
 MIME-Version: 1.0
-References: <20220720054225.1623875-1-shraash@google.com>
-In-Reply-To: <20220720054225.1623875-1-shraash@google.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 20 Jul 2022 08:27:31 -0700
-Message-ID: <CABXOdTf5kJa5n2D8f6+LkpHTrhbn2u+Svg9B2AjKWRhbh473Vg@mail.gmail.com>
-Subject: Re: [PATCH] HID: nintendo: Fix unused-const-variable compiler warning
-To:     Aashish Sharma <shraash@google.com>
-Cc:     "Daniel J . Ogorchock" <djogorchock@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,47 +67,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 10:43 PM Aashish Sharma <shraash@google.com> wrote:
->
-> The following compiler warning is produced when CONFIG_NINTENDO_FF
-> is not set:
->
-> >> drivers/hid/hid-nintendo.c:405:29: warning: 'JC_RUMBLE_ZERO_AMP_PKT_CNT'
->    defined but not used [-Wunused-const-variable=]
->
-> To fix this, move the variable 'JC_RUMBLE_ZERO_AMP_PKT_CNT' under the
-> CONFIG_NINTENDO_FF's conditional compilation block.
->
-> Signed-off-by: Aashish Sharma <shraash@google.com>
+Hi All,
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Not sure if it has been reported, builds of arm64 allmodconfig
+have failed to build next-20220720 with the error:
 
-> ---
->  drivers/hid/hid-nintendo.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
-> index 2204de889739..69de7504bdbc 100644
-> --- a/drivers/hid/hid-nintendo.c
-> +++ b/drivers/hid/hid-nintendo.c
-> @@ -402,8 +402,6 @@ struct joycon_input_report {
->  #define JC_RUMBLE_DATA_SIZE    8
->  #define JC_RUMBLE_QUEUE_SIZE   8
->
-> -static const unsigned short JC_RUMBLE_ZERO_AMP_PKT_CNT = 5;
-> -
->  static const char * const joycon_player_led_names[] = {
->         LED_FUNCTION_PLAYER1,
->         LED_FUNCTION_PLAYER2,
-> @@ -1512,6 +1510,8 @@ static void joycon_clamp_rumble_freqs(struct joycon_ctlr *ctlr)
->         spin_unlock_irqrestore(&ctlr->lock, flags);
->  }
->
-> +static const unsigned short JC_RUMBLE_ZERO_AMP_PKT_CNT = 5;
-> +
->  static int joycon_set_rumble(struct joycon_ctlr *ctlr, u16 amp_r, u16 amp_l,
->                              bool schedule_now)
->  {
-> --
-> 2.37.0.170.g444d1eabd0-goog
->
+ERROR: modpost: "free_nmi" [drivers/soc/fujitsu/a64fx-diag.ko] undefined!
+ERROR: modpost: "request_nmi" [drivers/soc/fujitsu/a64fx-diag.ko] undefined!
+ERROR: modpost: "enable_nmi" [drivers/soc/fujitsu/a64fx-diag.ko] undefined!
+
+
+--
+Regards
+Sudip

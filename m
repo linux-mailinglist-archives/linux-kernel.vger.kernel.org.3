@@ -2,98 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFFE57AB80
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D5757AC61
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240760AbiGTBMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 21:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S241715AbiGTBX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 21:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240688AbiGTBM1 (ORCPT
+        with ESMTP id S240830AbiGTBNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 21:12:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263C865548
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:12:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C389B81DE3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:12:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E463DC341CA;
-        Wed, 20 Jul 2022 01:11:58 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 21:11:56 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com,
-        enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
-        willy@infradead.org
-Subject: Re: [PATCH v4 00/34] Printbufs - new data structure for building
- strings
-Message-ID: <20220719211156.75ea9255@rorschach.local.home>
-In-Reply-To: <a674920f-68b0-0b72-5375-da7c062543cc@gmail.com>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
-        <20220719191522.4002a5fb@gandalf.local.home>
-        <7462e934-f746-eef7-ff92-0eeb8cc08b82@gmail.com>
-        <20220719200507.361b06ee@rorschach.local.home>
-        <a674920f-68b0-0b72-5375-da7c062543cc@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 19 Jul 2022 21:13:35 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864D562499
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:12:41 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bv24so133435wrb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YJ/hv9oFQdyrfMvyWlCvTg8vw9f09FlcR0Vgk9LoZxo=;
+        b=JULpCrAWak1LTBxbGvklS89lndPzgktVTEUnD7/WZjFzTs41iXHReCXZCLaB2QhzYp
+         0beqig81wAPq2GQUlhGiDcpdTtLPZCYtHkF9CsTOcDJwc+MkLLSFpZ6dI/az4mVnowsv
+         tw5xBo6m0t7zb2HV0c8pIPlRweuLcw4AZyubEU5lGcvb/vSUMmAAEWXB1fS7MCfLNm70
+         PW3jH8aGI41ulcGu7sYubWWBXuLov6+ZFbMDP6/vXjM4L2alTy/vgHlN8H3DZ7OxHO1x
+         GMoBiEfTIUFts7ydlSg1H0Y9lyVHL+z0LUo3Ou9ay4qaS9kNv4SbPlXX2q/gp27lWAK8
+         HmHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YJ/hv9oFQdyrfMvyWlCvTg8vw9f09FlcR0Vgk9LoZxo=;
+        b=Kr4XB3LLA8S7VRLB+MGEJP2VFp1sQth6Z7bzrH3wJuRW4G4CEYZDZUclXVINMWVPAs
+         Qo/l79VZXpXJlAAjxvG+wND3UJZ+HAYggHpg3K4+R2dbf/zTGRzTl6M9Pt6B0O6yVI0C
+         g6ygSnvIIcgalbF3I7z6lNsAcJTWfoZRaa0yVNnCIVK2S/34d2U313i5AKWu44QEgjh9
+         2dPi+DYKFmEvqzu9rx6ibP70Tv2HChlmMEnZoaarz0jhe0B602+cJnWMEa9HqGzhRwdp
+         uRloD7MosC+wO4Quo064tQgNaFBNvrNjTrYWyWSDOTTtPPPxbTZW+fNtYJYk6sT3m6uC
+         Np8g==
+X-Gm-Message-State: AJIora8F//HiuhbhEWS7iTG/lbE8fnmPW5hNTDXtvxOI2p48h/go/K6p
+        a99kE3hO/yiivRJ46fXkWDLnVaAhpPqe+HL8jbhG1g==
+X-Google-Smtp-Source: AGRyM1uVc6rYR9COQQY33A27DWZCJe13M7qEZKdHtIxtNh2LMjsWDV4v8n2RM4gtfNdwaKWhNvdDz7/jaY4lEIMmEAk=
+X-Received: by 2002:a5d:4d8e:0:b0:21d:68d4:56eb with SMTP id
+ b14-20020a5d4d8e000000b0021d68d456ebmr27806490wru.40.1658279559990; Tue, 19
+ Jul 2022 18:12:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-29-adrian.hunter@intel.com>
+In-Reply-To: <20220711093218.10967-29-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 19 Jul 2022 18:12:28 -0700
+Message-ID: <CAP-5=fUokEHjrCkJMTMJHKmLeWWV4Ntcy2HzhLKAKLDgrqW0Pg@mail.gmail.com>
+Subject: Re: [PATCH 28/35] perf intel-pt: Remove guest_machine_pid
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 20:17:45 -0400
-Kent Overstreet <kent.overstreet@gmail.com> wrote:
+On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> Remove guest_machine_pid because it is not needed.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
-> > More specific please.  
-> 
-> Steve, look at the man page for snprintf if you don't see what I mean. 
-> This discussion has become entirely too tedious, and your _only_ 
-> contribution to the discussion on pretty-printers has been "why isn't 
-> this using this thing I made?".
+Acked-by: Ian Rogers <irogers@google.com>
 
-No, my response is, why should we replace something that is working
-just fine?
+Thanks,
+Ian
 
-The burden is on you. For this to get accepted you have to show why a
-risk of regression in the Linux kernel is worth the update. We don't
-just say "hey this is better, take it!". That's not how this works.
-There needs to be real needs to be met.
-
-> 
-> You haven't been contributing to the discussion, you haven't been 
-> helping figure out what the APIs, helpers, data structures should look 
-> like, IOW _actually_ building something that could serve as a low level 
-> string formatting library.
-
-What exactly is it that is better. In stead of yelling about what I
-haven't done, tell me what you plan on doing that will make *our* lives
-better. Code is "pulled" not "pushed". If all you can do is push, then
-you are going to end up being quite disappointed.
-
-What exactly is the use case here?
-
-> 
-> I get that you're busy - but look, we all are, and this patch series has 
-> already been set back what, a month and a half while I was waiting on you.
-
-Sorry, but I did warn you. I did start a new job and then I had several
-conferences that I was writing code to present. That is, the things I
-was talking about wasn't even finished yet. So those were very *hard*
-deadlines (on top of my day job). I told you upfront that it may be
-months before I can look at it. I was fully transparent.
-
-> 
-> I've got the tests now, I'll CC you when v5 is posted.
-
-And I expect you to have an explanation on why this is worth the effort.
-
--- Steve
+> ---
+>  tools/perf/util/intel-pt.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
+> index 62b2f375a94d..014f9f73cc49 100644
+> --- a/tools/perf/util/intel-pt.c
+> +++ b/tools/perf/util/intel-pt.c
+> @@ -194,7 +194,6 @@ struct intel_pt_queue {
+>         struct machine *guest_machine;
+>         struct thread *guest_thread;
+>         struct thread *unknown_guest_thread;
+> -       pid_t guest_machine_pid;
+>         bool exclude_kernel;
+>         bool have_sample;
+>         u64 time;
+> @@ -685,7 +684,7 @@ static int intel_pt_get_guest(struct intel_pt_queue *ptq)
+>         struct machine *machine;
+>         pid_t pid = ptq->pid <= 0 ? DEFAULT_GUEST_KERNEL_ID : ptq->pid;
+>
+> -       if (ptq->guest_machine && pid == ptq->guest_machine_pid)
+> +       if (ptq->guest_machine && pid == ptq->guest_machine->pid)
+>                 return 0;
+>
+>         ptq->guest_machine = NULL;
+> @@ -705,7 +704,6 @@ static int intel_pt_get_guest(struct intel_pt_queue *ptq)
+>                 return -1;
+>
+>         ptq->guest_machine = machine;
+> -       ptq->guest_machine_pid = pid;
+>
+>         return 0;
+>  }
+> --
+> 2.25.1
+>

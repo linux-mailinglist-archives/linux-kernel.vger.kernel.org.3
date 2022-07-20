@@ -2,150 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E832C57B0F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0EB57B0F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239587AbiGTGSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S239546AbiGTGS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239436AbiGTGS1 (ORCPT
+        with ESMTP id S239553AbiGTGSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:18:27 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7C263928
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:18:23 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220720061821epoutp0267a08149e4642e2afb4a0e71c9d9482b~DdSfA8PNp0975509755epoutp02s
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:18:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220720061821epoutp0267a08149e4642e2afb4a0e71c9d9482b~DdSfA8PNp0975509755epoutp02s
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1658297901;
-        bh=3r2pbWvirGByjB+v0MQEPuj3WAwHhq1rsruPh5OW+3I=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=tRScmwnc3RsmnI9WiqsCNaML+bzCREY00i9aJP81URn5xQweklWuryzGnv6HYPIiM
-         D8LjouROTQJh2yQX390el9rTIrQgl2pp3WH21LAqpWic6c3/7U3wiutn84iefKtHGx
-         2iOkJEZfdHyAUCHkjDnaoTAJ6y6EVCXigXv0lJlA=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220720061820epcas2p25cfc6bf201ff238eda734135791994be~DdSdvZjyH2579125791epcas2p25;
-        Wed, 20 Jul 2022 06:18:20 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.68]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LnlrC3Qm4z4x9Q9; Wed, 20 Jul
-        2022 06:18:19 +0000 (GMT)
-X-AuditID: b6c32a47-5f7ff700000025aa-ba-62d79e2b3363
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        63.9E.09642.B2E97D26; Wed, 20 Jul 2022 15:18:19 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v4 5/5] MAINTAINERS: Add Axis ARTPEC-8 PCIe PHY maintainers
-Reply-To: wangseok.lee@samsung.com
-Sender: Wangseok Lee <wangseok.lee@samsung.com>
-From:   Wangseok Lee <wangseok.lee@samsung.com>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>
-CC:     Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>,
-        Yeeun Kim <yeeun119.kim@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p5>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220720061818epcms2p55e9dc4d71232cc37bef0fd1ff525ded5@epcms2p5>
-Date:   Wed, 20 Jul 2022 15:18:18 +0900
-X-CMS-MailID: 20220720061818epcms2p55e9dc4d71232cc37bef0fd1ff525ded5
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAJsWRmVeSWpSXmKPExsWy7bCmma72vOtJBp3nxS2WNGVYvDykaTH/
-        yDlWi90zljNZzJx6htni+aFZzBafWlQtLjztYbN4Oesem0VDz29WiyNvPjJb7D++ksni8q45
-        bBZn5x1ns5iw6huLxZvfL9gtzi3OtGjde4TdYuedE8wWv7b+YXIQ8Vgzbw2jx/V1AR4LNpV6
-        bFrVyebx5Mp0Jo/NS+o9+rasYvQ4fmM7k8fnTXIBnFHZNhmpiSmpRQqpecn5KZl56bZK3sHx
-        zvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlATykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otL
-        bJVSC1JyCswL9IoTc4tL89L18lJLrAwNDIxMgQoTsjNWzDvBUtDDVfH78S+2BsZ7HF2MHBwS
-        AiYSdzaFdjFycggJ7GCU+LbWGyTMKyAo8XeHMEhYWMBb4tPlZnaIEiWJHWvmMUPE9SWur+hm
-        BbHZBHQl/i1+yQZiiwh8ZpW4vkewi5GLg1lgAaPE/t/7GEESEgK8EjPan7JA2NIS25dvZQTZ
-        xSngJ/G2zQEirCHxY1kvM4QtKnFz9Vt2GPv9sflQY0QkWu+dhaoRlHjwczdUXEpiwZNDrBB2
-        tcT+v7+ZIOwGRon++6kQ3+pL7LhuDBLmFfCVuDLzJNgYFgFViRk3lkCNcZG4vf4d2BhmAXmJ
-        7W/nMIO0MgtoSqzfpQ8xRVniyC0WmJ8aNv5mR2czC/BJdBz+CxffMe8J1DFqEvNW7mSewKg8
-        CxHMs5DsmoWwawEj8ypGsdSC4tz01GKjAmN4vCbn525iBCdtLfcdjDPeftA7xMjEwXiIUYKD
-        WUmE92nh9SQh3pTEyqrUovz4otKc1OJDjKZAX05klhJNzgfmjbySeEMTSwMTMzNDcyNTA3Ml
-        cV6vlA2JQgLpiSWp2ampBalFMH1MHJxSDUy+fuvKt95YuPDQ98kW27e/kxR4mGUZ3yod9+xw
-        PffR6JiQiEXK+9OjWq5bi3ec1xV5N22BekrW2ieO7b3PHm3aU+TMIvWa6fe6vDfl1Uc2qoR5
-        H3mivj9YYGpiUVCYxy8jQ4ZjC1JqbaMLp0r39y93753wlT9J5ne5gGrEy82XLu7jXW3714WL
-        I99Lea9F+vOD+/baGhmePPi/+OHP4gkre/vs71dl9b0SKrM8uC1xmcjPZEeVoiePsueaXYt+
-        ZqNryy5Z83/OzL9sM44tzJn0NGSPj9YWjx7PvGjRnonu65vvqCQyCF9cznXDYdOtIqYv7tY7
-        kjy6lF9nFxRNDTWNspl55d6VzG6p2zptIUosxRmJhlrMRcWJADNwa7JjBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800
-References: <20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p5>
-        <CGME20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p5>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 20 Jul 2022 02:18:48 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4B262A5B;
+        Tue, 19 Jul 2022 23:18:48 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id o12so15668023pfp.5;
+        Tue, 19 Jul 2022 23:18:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3EzP2A0r8ZZK6aHTYoO1TLT9+zGPnVJFxqVatBauUy4=;
+        b=cDa/PGe49dvQiWflMd5B4X7KfjSPl37NOd70p95FPkyoHKgBGq75wL08FwwwgD5P4g
+         9UaeQ6Gl0u1Y/kHNP2ErMmobwoPofvz3t3lNmpmXNRzsa1NyZXc0jP4cqTL5LvQ/Qo5W
+         dOmMF2Wm6HwjY4gWyG2TRqHmO0L4nxBocZw17iyDL2XCRScEvH/gTrCXcRZC1CRjkWmN
+         +jTRO6Wsm2X/U/xA0Stm5v3NYMJdFa++G+cABF9T3utwtG72k8svKVbCyZu07E4JaRxI
+         7VC2fosrsTtiXBYeKWFNUZUH4VUjItaLfXGjSYvLI5qwTiG1RFAuQSD3d2m+H/TBJ1qc
+         wQBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=3EzP2A0r8ZZK6aHTYoO1TLT9+zGPnVJFxqVatBauUy4=;
+        b=ReCFpLPvbOUyfyTtzXpxqqf7r+v9WOhExJaKUrmPeR45LZPqGAnoepfpyiQdMMItS5
+         sPSgawKF1IX68iufh+VjXgamjSdPTfprMu695rtzkWjnuZ6C1fjJFgtYZBmlM5oFjdfA
+         NXNyk1WFnR9C+L8ZjF1pr50iz2v7fReIgz47nfbGpwHzU7i9Gkj2ju6faN1DLFpS1Cvk
+         e3lGADelH2r4N+rQZtLm4TfIG20A8vXkp8keJZUq0ZUuMt95AGfM1x7oH4Sc3oHJo0Yj
+         dr3rKj7lgevF7BskIzH33uRdTeMNbVichkRbihNxD7dM30Ubzj0ALsUfFKCJ1rqfnGiD
+         Zyuw==
+X-Gm-Message-State: AJIora+EseAjSbn36YYnhBl7m4hfsJGlNMzJFGODpI8ztomTppQNkzOU
+        EGqJqulZ4DWUygO+CWmJ0g3PDnPZ17OKcw==
+X-Google-Smtp-Source: AGRyM1vn40CWa9oKpIE73riVnPhJw5DISU6mrQTKTOrxgMO5oLTvhZiWRY4dIqa72Q96WHRUel5u1g==
+X-Received: by 2002:a63:8743:0:b0:41a:6f6b:db7b with SMTP id i64-20020a638743000000b0041a6f6bdb7bmr85042pge.594.1658297927516;
+        Tue, 19 Jul 2022 23:18:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d3-20020a17090a6a4300b001e31fea8c85sm664117pjm.14.2022.07.19.23.18.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 23:18:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 19 Jul 2022 23:18:40 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.4 00/71] 5.4.207-rc1 review
+Message-ID: <20220720061840.GD4107175@roeck-us.net>
+References: <20220719114552.477018590@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add maintainer for Axis ARTPEC-8 PCIe PHY. Add Jesper Nilsson
-<jesper.nilsson@axis.com> and Lars Persson <lars.persson@axis.com>
-as maintainer for these files. ARTPEC-8 is the SoC platform of Axis
-Communications and PCIe PHY is designed based on Samsung PHY.
+On Tue, Jul 19, 2022 at 01:53:23PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.207 release.
+> There are 71 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
+> Anything received after that time might be too late.
+> 
 
-Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
----
-v3->v4 :
--Add axis,artpec8-pcie.yaml and axis,artpec8-pcie-ep.yaml
--Change file path to axis from artpec
----
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
+Build results:
+	total: 161 pass: 161 fail: 0
+Qemu test results:
+	total: 449 pass: 449 fail: 0
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 264e7a7..e4a0635 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1897,12 +1897,16 @@ M:	Jesper Nilsson <jesper.nilsson@axis.com>
- M:	Lars Persson <lars.persson@axis.com>
- L:	linux-arm-kernel@axis.com
- S:	Maintained
-+F:	Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
-+F:	Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
-+F:	Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
- F:	Documentation/devicetree/bindings/pinctrl/axis,artpec6-pinctrl.txt
- F:	arch/arm/boot/dts/artpec6*
- F:	arch/arm/mach-artpec
- F:	drivers/clk/axis
- F:	drivers/crypto/axis
- F:	drivers/mmc/host/usdhi6rol0.c
-+F:	drivers/phy/axis/phy-artpec*
- F:	drivers/pinctrl/pinctrl-artpec*
- 
- ARM/ASPEED I2C DRIVER
--- 
-2.9.5
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter

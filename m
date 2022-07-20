@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1238757B858
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8C857B89D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbiGTOYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
+        id S234533AbiGTO32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGTOYr (ORCPT
+        with ESMTP id S235043AbiGTO3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:24:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7B22718;
-        Wed, 20 Jul 2022 07:24:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3065FB81E8B;
-        Wed, 20 Jul 2022 14:24:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86ADCC3411E;
-        Wed, 20 Jul 2022 14:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658327084;
-        bh=uZmlk4L16kHiiiMJsIDyQCxOHqW3mlXAesVQgZ/Qo9s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mNFK6baGAMSJglZ5hOlc2nOiYM3sOufjgKNYZ/yCmEuhqGGO7635dl7vFpiXkQIfQ
-         DKlB1yaaDxxq1nlTY/AcuUheq8yvt4xsoVj8QSKNiWLCNAL4oOfcRzxvHVYFcHYYN/
-         FghNi1GU6PxXJpIxBq5FMxE33bkNZESbGtcEOwRI=
-Date:   Wed, 20 Jul 2022 16:24:40 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        matthewgarrett@google.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] lockdown: Fix kexec lockdown bypass with ima policy
-Message-ID: <YtgQKHwPAVBSHjcY@kroah.com>
-References: <20220719171647.3574253-1-eric.snowberg@oracle.com>
+        Wed, 20 Jul 2022 10:29:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B01018B16
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:29:17 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 14:29:13 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658327355;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R8jls1N+igWJfRYQwQXaFcDfQ2vZJjHco4lHw1U8CQk=;
+        b=nsoxc9JUEfPXSheA6vJAH5M0pZcvzSV6zBFGnTbuq44TOqeqvJM69ZmNywuy59kBzFtyjO
+        b3HValtwJmxLgHvXO+W+gcjoFyRNU62mOaWWsbWw9cfFDk8zKEbn7/Vs01xwcXhInMZ66T
+        40i58+oFe9bKD8qrlta+zhkeKPCPX0smcpvMHnbjBbF/zLLpVs9CF1LltC727JaAShOird
+        mQlyyW5nL4sg9kgyhnL2G4o6D2xqPsghHElt6E8UzBZq4Z6xiYGAn+HkcHlu2O0jA+8uXV
+        0YPu7pnq5hitfNk2d5vJhvt08K3FNKg+wHvFFWcbJb3BJichxgEcoPFnX/VhlQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658327355;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R8jls1N+igWJfRYQwQXaFcDfQ2vZJjHco4lHw1U8CQk=;
+        b=RbSY242HA5VDjLgcy5UwmHVdgxvYgCXUdIPNZvDiyNOaSPeljtnQ1JYfIP9PeAEg8RwF6X
+        VThvPNIAVDIcYfDw==
+From:   "irqchip-bot for Paran Lee" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] genirq: Use for_each_action_of_desc in
+ actions_show()
+Cc:     Paran Lee <p4ranlee@gmail.com>, Marc Zyngier <maz@kernel.org>,
+        tglx@linutronix.de
+In-Reply-To: <20220710112614.19410-1-p4ranlee@gmail.com>
+References: <20220710112614.19410-1-p4ranlee@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719171647.3574253-1-eric.snowberg@oracle.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165832735386.15455.15368506218361253920.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 01:16:47PM -0400, Eric Snowberg wrote:
-> The lockdown LSM is primarily used in conjunction with UEFI Secure Boot.
-> This LSM may also be used on machines without UEFI.  It can also be enabled
-> when UEFI Secure Boot is disabled. One of lockdown's features is to prevent
-> kexec from loading untrusted kernels. Lockdown can be enabled through a
-> bootparam or after the kernel has booted through securityfs.
-> 
-> If IMA appraisal is used with the "ima_appraise=log" boot param,
-> lockdown can be defeated with kexec on any machine when Secure Boot is
-> disabled or unavailable. IMA prevents setting "ima_appraise=log"
-> from the boot param when Secure Boot is enabled, but this does not cover
-> cases where lockdown is used without Secure Boot.
-> 
-> To defeat lockdown, boot without Secure Boot and add ima_appraise=log
-> to the kernel command line; then:
-> 
-> $ echo "integrity" > /sys/kernel/security/lockdown
-> $ echo "appraise func=KEXEC_KERNEL_CHECK appraise_type=imasig" > \
->   /sys/kernel/security/ima/policy
-> $ kexec -ls unsigned-kernel
-> 
-> Add a call to verify ima appraisal is set to "enforce" whenever lockdown
-> is enabled. This fixes CVE-2022-21505.
-> 
-> Fixes: 29d3c1c8dfe7 ("kexec: Allow kexec_file() with appropriate IMA policy when locked down")
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  security/integrity/ima/ima_policy.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-> index 73917413365b..a8802b8da946 100644
-> --- a/security/integrity/ima/ima_policy.c
-> +++ b/security/integrity/ima/ima_policy.c
-> @@ -2247,6 +2247,10 @@ bool ima_appraise_signature(enum kernel_read_file_id id)
->  	if (id >= READING_MAX_ID)
->  		return false;
->  
-> +	if (id == READING_KEXEC_IMAGE && !(ima_appraise & IMA_APPRAISE_ENFORCE)
-> +	    && security_locked_down(LOCKDOWN_KEXEC))
-> +		return false;
-> +
->  	func = read_idmap[id] ?: FILE_CHECK;
->  
->  	rcu_read_lock();
-> -- 
-> 2.27.0
-> 
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-<formletter>
+Commit-ID:     c904cda04482d5ab545e5a82cee6084078ef9543
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/c904cda04482d5ab545e5a82cee6084078ef9543
+Author:        Paran Lee <p4ranlee@gmail.com>
+AuthorDate:    Sun, 10 Jul 2022 20:26:14 +09:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Wed, 20 Jul 2022 15:21:32 +01:00
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+genirq: Use for_each_action_of_desc in actions_show()
 
-</formletter>
+Refactor action_show() to use for_each_action_of_desc instead
+of a similar open-coded loop.
+
+Signed-off-by: Paran Lee <p4ranlee@gmail.com>
+[maz: reword commit message]
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220710112614.19410-1-p4ranlee@gmail.com
+---
+ kernel/irq/irqdesc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index d323b18..5db0230 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -251,7 +251,7 @@ static ssize_t actions_show(struct kobject *kobj,
+ 	char *p = "";
+ 
+ 	raw_spin_lock_irq(&desc->lock);
+-	for (action = desc->action; action != NULL; action = action->next) {
++	for_each_action_of_desc(desc, action) {
+ 		ret += scnprintf(buf + ret, PAGE_SIZE - ret, "%s%s",
+ 				 p, action->name);
+ 		p = ",";

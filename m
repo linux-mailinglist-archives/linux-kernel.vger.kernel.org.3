@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EF857B8ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9449557B8F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240800AbiGTOwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
+        id S240899AbiGTOxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239908AbiGTOwh (ORCPT
+        with ESMTP id S239908AbiGTOxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:52:37 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F2A17A8A
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:52:35 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id b26so26494109wrc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:52:35 -0700 (PDT)
+        Wed, 20 Jul 2022 10:53:15 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2D0DF11;
+        Wed, 20 Jul 2022 07:53:14 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id a11so4885467wmq.3;
+        Wed, 20 Jul 2022 07:53:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PUMNzOcke9F/E6l0+nSlaEl2q/BLzsi49G5O8oR/nQk=;
-        b=05e5XLBmfccOHOTn5Xi23vWg8lqNJPD/R1R0dBx9OAM6rEtAjGyDb7fFMs3y3i/7oD
-         /Ok5WoBVNnLuPSv+vaxNoWo7ozHczx628+bmwDooSBy4Ell7vhkiyYtko7XwBb+kbr/R
-         BAjORV2J0Is7Zf5la7TDJ8tdimEtSTjqnhLmTWTo+VkhDV2SDH+8N+fLRE2KY7wZfezY
-         T+8JyFzZ6P9hW/0ZmdZZ/B/Uv/FqGJI9SKb0Tf0iLP0d+exKHiujMl9frRdeNNWZHTAH
-         i9rgvXBSrNV3XeYyu2mF/sA2JpA/OlBjHP/f6HQ3JwqaawYdWHZ7Uly6ofxMlSylDhlx
-         Vy5Q==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Y0wRoxXm0lXLU9vHgb65mx+sz5ayh2XUgm6rcM2W0Os=;
+        b=DCcOQ/6pIyGvxCWOmJS1gJrYpFkWZT89oAWW0Ux6OQizF5MPa99CCwIX4LOJsPsX9B
+         MIKDMfkNt7ahoBFEKs3Cca9tYTgh0BpStVWPIVr6tOfeV3GfP1kpCzT0RRsJrHIJUp0r
+         sRoX0fzGoazOGVCzJrnwjsVm4Via8f/Wr3+oWYaKBgzplZRoO71GGex4cHaaTh3xaVw/
+         LgAW498v1nQwVPf6cQNcoN6cFKGNKFh8JQX09MJLKHIIKIT4+d4/qLRHmYRL7gSUHNqi
+         jsQb2kEubx44zU0PxxCYt8SXu6RRT4jRT3mGdWW8qIHIPprKiUnwt2ZlN0uxCqY1gRvq
+         8YJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PUMNzOcke9F/E6l0+nSlaEl2q/BLzsi49G5O8oR/nQk=;
-        b=EUE5RSljzcXQFaKafBliAVOAi5Ox3Ohx3jyfi663Lqdfl/CXINpU4LDs4N1n1Pd6rl
-         /ATxUQbdmUezkEIupn6HZ4yofe6Uie/Poe1unRgFjMHctBHtDXTslhO4av7v142gm3IN
-         iFXN/oFWp7ay0zLWUDqtiB4cUwGKyeCClFmiURj31jBQ3s3hfjMsDggaqQjZ6n0VXnCt
-         YIy4jV5BYsoZUUyWi/vFm2+HpJ9VgrV8SejuYoZ5ioQ/1t9anDasblrOi4L8bXPTKxvi
-         e3G4ED9s2HfDLoMSe4fNhg+VnEbnlBtrQV+SCaDQ3xZMdSwmfzF4atg/GYQGy4hwT2bj
-         OfEA==
-X-Gm-Message-State: AJIora+yNuFTILroynVruX5wfHjX++OBwRbF2+ABagv/75y0Km0TR5+v
-        E6d67cA/aiy5B7fY19QNuZ/9kCDWJexc2JwpNwgO
-X-Google-Smtp-Source: AGRyM1vRgjFuWdos6HfR4YAkcb84ehTx76Uq4a7TaHyarDjXm0pNXoiIf0CYV/zUZqhGSCYFaueGHUufPPeJ3RbZVR0=
-X-Received: by 2002:a5d:4f8f:0:b0:21e:4f09:9e15 with SMTP id
- d15-20020a5d4f8f000000b0021e4f099e15mr1313451wru.55.1658328754216; Wed, 20
- Jul 2022 07:52:34 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Y0wRoxXm0lXLU9vHgb65mx+sz5ayh2XUgm6rcM2W0Os=;
+        b=IGCyHFOpL/7MoMI+2cGiCQx6rXDzuAja2q3Yr0WiJ4oFbi4/RMRFeP4q8xCVPdcN2x
+         R3AZ9GKOtdAOWzYpVOXHY7NDE9kX+SFoOm54/jJklYjEBRJowc7k4DtEICEE7+k1Uiee
+         Aq58/J3MwKKmfXf2xPutH/jaKTQj6rbibKltE8l9PiNO8cztmhR2ClLKvWDlRMH4NSjh
+         TlUhmcPhwIdOVY8KhpyygxXtUBiPCwdll1RSoke5cDRGbzpyyUJMyEGmR35j6UwcUDpP
+         4UBhUROTGlb81Bll/MAexGoNWWf5GKXzUvmUFjII27d+sOJnOYcJ2Ejf/HE05eRFQKMB
+         NnCg==
+X-Gm-Message-State: AJIora/O9St4duBM5cXB3e999a9yCR5IwpSTko235MhYehsnwgAUbf6z
+        WT2PqdOHyc+P+jxzl3gWqOI=
+X-Google-Smtp-Source: AGRyM1uWeUcffW8kDxoO+pUpEnNIyYERqP2oY3ASBFUAIzEgdBIasCmxz4OGqCxwoBCLupGt21noHw==
+X-Received: by 2002:a05:600c:3553:b0:3a3:2b65:299e with SMTP id i19-20020a05600c355300b003a32b65299emr2373091wmq.145.1658328792662;
+        Wed, 20 Jul 2022 07:53:12 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b003a31b79dc0esm11233827wmb.1.2022.07.20.07.53.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 07:53:11 -0700 (PDT)
+Message-ID: <43acea66-78e1-b7da-8d1c-3a60a5ddf4b6@gmail.com>
+Date:   Wed, 20 Jul 2022 16:53:10 +0200
 MIME-Version: 1.0
-References: <20220707223228.1940249-1-fred@cloudflare.com> <20220707223228.1940249-5-fred@cloudflare.com>
- <CA+EEuAhfMrg=goGhWxVW2=i4Z7mVN4GvfzettvX8T+tFcOPKCw@mail.gmail.com>
-In-Reply-To: <CA+EEuAhfMrg=goGhWxVW2=i4Z7mVN4GvfzettvX8T+tFcOPKCw@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 20 Jul 2022 10:52:23 -0400
-Message-ID: <CAHC9VhSbKct_hY4UNS0oyqsov9ELxXeQc4rqpRO7AuLKfWrGDA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] selinux: Implement create_user_ns hook
-To:     Karl MacMillan <karl@bigbadwolfsecurity.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, andrii@kernel.org,
-        ast@kernel.org, bpf@vger.kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, daniel@iogearbox.net,
-        ebiederm@xmission.com, eparis@parisplace.org,
-        jackmanb@chromium.org, jmorris@namei.org, john.fastabend@gmail.com,
-        kafai@fb.com, kernel-team@cloudflare.com, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        revest@chromium.org, selinux@vger.kernel.org, serge@hallyn.com,
-        shuah@kernel.org, songliubraving@fb.com,
-        stephen.smalley.work@gmail.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 4/6] Input: mt6779-keypad - support double keys matrix
+Content-Language: en-US
+To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
+ <20220720-mt8183-keypad-v1-4-ef9fc29dbff4@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220720-mt8183-keypad-v1-4-ef9fc29dbff4@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,31 +81,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 10:42 PM Karl MacMillan
-<karl@bigbadwolfsecurity.com> wrote:
-> On Thu, Jul 7, 2022 at 6:34 PM Frederick Lawler <fred@cloudflare.com> wro=
-te:
->>
->> Unprivileged user namespace creation is an intended feature to enable
->> sandboxing, however this feature is often used to as an initial step to
->> perform a privilege escalation attack.
->>
->> This patch implements a new namespace { userns_create } access control
->> permission to restrict which domains allow or deny user namespace
->> creation. This is necessary for system administrators to quickly protect
->> their systems while waiting for vulnerability patches to be applied.
->>
->> This permission can be used in the following way:
->>
->>         allow domA_t domB_t : namespace { userns_create };
->
->
-> Isn=E2=80=99t this actually domA_t domA_t : namespace . . .
->
-> I got confused reading this initially trying to figure out what the secon=
-d domain type would be, but looking at the code cleared that up.
 
-Ah, good catch, thanks Karl!
 
---=20
-paul-moore.com
+On 20/07/2022 16:48, Mattijs Korpershoek wrote:
+> MediaTek keypad has 2 modes of detecting key events:
+> - single key: each (row, column) can detect one key
+> - double key: each (row, column) is a group of 2 keys
+> 
+> Double key support exists to minimize cost, since it reduces the number
+> of pins required for physical keys.
+> 
+> Double key is configured by setting BIT(0) of the KP_SEL register.
+> 
+> Enable double key matrix support based on the mediatek,double-keys
+> device tree property.
+> 
+> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> 
+> diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
+> index bf447bf598fb..9a5dbd415dac 100644
+> --- a/drivers/input/keyboard/mt6779-keypad.c
+> +++ b/drivers/input/keyboard/mt6779-keypad.c
+> @@ -18,6 +18,7 @@
+>   #define MTK_KPD_DEBOUNCE_MASK	GENMASK(13, 0)
+>   #define MTK_KPD_DEBOUNCE_MAX_MS	256
+>   #define MTK_KPD_SEL		0x0020
+> +#define MTK_KPD_SEL_DOUBLE_KP_MODE	BIT(0)
+>   #define MTK_KPD_SEL_COL	GENMASK(15, 10)
+>   #define MTK_KPD_SEL_ROW	GENMASK(9, 4)
+>   #define MTK_KPD_SEL_COLMASK(c)	GENMASK((c) + 9, 10)
+> @@ -31,6 +32,7 @@ struct mt6779_keypad {
+>   	struct clk *clk;
+>   	u32 n_rows;
+>   	u32 n_cols;
+> +	bool double_keys;
+>   	DECLARE_BITMAP(keymap_state, MTK_KPD_NUM_BITS);
+>   };
+>   
+> @@ -67,8 +69,13 @@ static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
+>   			continue;
+>   
+>   		key = bit_nr / 32 * 16 + bit_nr % 32;
+> -		row = key / 9;
+> -		col = key % 9;
+> +		if (keypad->double_keys) {
+> +			row = key / 13;
+> +			col = (key % 13) / 2;
+> +		} else {
+> +			row = key / 9;
+> +			col = key % 9;
+> +		}
+>   
+>   		scancode = MATRIX_SCAN_CODE(row, col, row_shift);
+>   		/* 1: not pressed, 0: pressed */
+> @@ -150,6 +157,8 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
+>   
+>   	wakeup = device_property_read_bool(&pdev->dev, "wakeup-source");
+>   
+> +	keypad->double_keys = device_property_read_bool(&pdev->dev, "mediatek,double-keys");
+> +
+>   	dev_dbg(&pdev->dev, "n_row=%d n_col=%d debounce=%d\n",
+>   		keypad->n_rows, keypad->n_cols, debounce);
+>   
+> @@ -166,6 +175,10 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
+>   	regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
+>   		     (debounce * (1 << 5)) & MTK_KPD_DEBOUNCE_MASK);
+>   
+> +	if (keypad->double_keys)
+> +		regmap_update_bits(keypad->regmap, MTK_KPD_SEL,
+> +				   MTK_KPD_SEL_DOUBLE_KP_MODE, MTK_KPD_SEL_DOUBLE_KP_MODE);
+> +
+>   	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_ROW,
+>   			   MTK_KPD_SEL_ROWMASK(keypad->n_rows));
+>   	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_COL,
+> 

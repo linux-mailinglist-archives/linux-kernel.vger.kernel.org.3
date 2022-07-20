@@ -2,90 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE7457BDC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE1057BDD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiGTS30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S240925AbiGTSbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241030AbiGTS3Y (ORCPT
+        with ESMTP id S230251AbiGTSbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:29:24 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839242D1CA
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:29:23 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id sz17so34563922ejc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GHqH2gRrV/2rxKtA8XWYjPMg6Oti9PuMW2VK8iNu510=;
-        b=iIFMWd57K6F8Ajkt/8N+ejZVpLGcvgCDYhigVjRaLZLE56u1Irb6VENXs+jjDpW57S
-         gjH+Ufkzl95t3zGda578UKosQKe5DnAIs6f2FhDr8Algd7D3XstYz0VEuElYe8KrSknv
-         ixOwLjA/zLxFurnkUVm38Hcp7UGf1rJEdsV70=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GHqH2gRrV/2rxKtA8XWYjPMg6Oti9PuMW2VK8iNu510=;
-        b=MRcBiO9tLdiGk6GBzkD34arJ7U2SAlhtbDN5ldf73Hf5uuIZQtrKWmS/KJyoTzbVDd
-         48VbQxbUt9WZFFTUjpsy3GeqXreyuZhLDn3CpTZyRITHJEIcjAG1h1b0Ro7nUTgLp+qi
-         dKnaOOcrvctOsOyF8k95SZ1AH8hytwa7Qm2+9dNVE8nHVgq/CIkCViaIPpZNYZtgjxtJ
-         t4sTvQTu3X1hrZLiaH9N7KHQG8lshJNIsa5sQq+KT3OhQG0YGaEXCjVDEC4yXnUZPgHe
-         UlzxE/b4wf4Gz9iVhF/0I3rw2S+pbGQ3lUPgKZHxjulePTIjr2F/E0Zx4obObpd95SPm
-         AlVw==
-X-Gm-Message-State: AJIora8nIgHJn4rLE6AcW4aUeMNpyW/D9RFj5qmdY5cQdDmrLQaqVHyt
-        YscJ/dAqdFAbKzQAJTv9HBFW71ilN4Kb3A==
-X-Google-Smtp-Source: AGRyM1vSFfNvRCAS+LNYuPUOmsNWVDJVJ3mc3clgh8W0mkfpMdbKp/pCrIvG4SEbRwPt9uTVDoXpmg==
-X-Received: by 2002:a17:907:6d8b:b0:72b:5f51:a9e7 with SMTP id sb11-20020a1709076d8b00b0072b5f51a9e7mr37176431ejc.628.1658341761990;
-        Wed, 20 Jul 2022 11:29:21 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:400::5:d58e])
-        by smtp.gmail.com with ESMTPSA id gt2-20020a170906f20200b0072b342ad997sm8074418ejb.199.2022.07.20.11.29.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 11:29:21 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 19:29:20 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: [PATCH v3 0/2] printk: console: Per-console loglevels
-Message-ID: <YthJgH5sIct8LeXw@chrisdown.name>
-References: <cover.1658339046.git.chris@chrisdown.name>
- <87edyfmypa.fsf@jogness.linutronix.de>
+        Wed, 20 Jul 2022 14:31:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52A16FA02
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:31:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4292D6193C
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 18:31:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B46EC341CA;
+        Wed, 20 Jul 2022 18:31:48 +0000 (UTC)
+Date:   Wed, 20 Jul 2022 14:31:47 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+Message-ID: <20220720143147.4d8a2f8d@gandalf.local.home>
+In-Reply-To: <CAHk-=wjdQbdQGKkQxxEcWoUp4SRmBWm=3bS20SbaVe8cLgKLgg@mail.gmail.com>
+References: <20220716230344.239749011@linutronix.de>
+        <20220720125736.48164a14@gandalf.local.home>
+        <CAHk-=wh=Yjy=DmGzzGj-ivyx_w45AHh35eDkpGtajaiO+TX38A@mail.gmail.com>
+        <Ytg6UD+0F6zv981o@worktop.programming.kicks-ass.net>
+        <20220720135016.3178ffc6@gandalf.local.home>
+        <CAHk-=wjdQbdQGKkQxxEcWoUp4SRmBWm=3bS20SbaVe8cLgKLgg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <87edyfmypa.fsf@jogness.linutronix.de>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-John Ogness writes:
->On 2022-07-20, Chris Down <chris@chrisdown.name> wrote:
->> v3:
->>
->> - Update to work with John's kthread patches
->
->This will get a bit tricky, since I am also preparing a new kthread
->series. But for now it is helpful to base your work on the previous
->kthread work.
+On Wed, 20 Jul 2022 11:07:26 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-No worries -- I don't think it should get too bad. If I recall correctly, the 
-only real changes were around handling suppress_message_printing in the new 
-model, and they were fairly minor.
+> On Wed, Jul 20, 2022 at 10:50 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > [    2.464117] missing return thunk: lkdtm_rodata_do_nothing+0x0/0x8-lkdtm_rodata_do_nothing+0x5/0x8: e9 00 00 00 00  
+> 
+> Well, that looks like a "jmp" instruction that has never been relocated.
+> 
+> The 'e9' is 'jmp', the four zeros after it are either "I'm jumping to
+> the next instruction" or "I haven't been filled in".
+> 
+> I'm assuming it's the second case.
+> 
+> That lkdtm_rodata_do_nothing thing is odd, and does
+> 
+>     OBJCOPYFLAGS_rodata_objcopy.o   := \
+>                             --rename-section
+> .noinstr.text=.rodata,alloc,readonly,load,contents
+> 
+> to put the code in an odd section. I'm assuming this hackery is
+> related to it then not getting relocated.
+> 
 
->Thanks for your efforts on this!
+Right, because this looks to be some magic being done for testing purposes:
 
-Likewise on the kthread work! Just let me know if/when you want me to rebase. 
-:-)
+static void lkdtm_EXEC_RODATA(void)
+{
+        execute_location(dereference_function_descriptor(lkdtm_rodata_do_nothing),
+                         CODE_AS_IS);
+}
+
+static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
+{
+        if (!have_function_descriptors())
+                return dst;
+
+        memcpy(fdesc, do_nothing, sizeof(*fdesc));
+        fdesc->addr = (unsigned long)dst;
+        barrier();
+
+        return fdesc;
+}
+
+static noinline void execute_location(void *dst, bool write)
+{
+        void (*func)(void);
+        func_desc_t fdesc;
+        void *do_nothing_text = dereference_function_descriptor(do_nothing);
+
+        pr_info("attempting ok execution at %px\n", do_nothing_text);
+        do_nothing();
+
+        if (write == CODE_WRITE) {
+                memcpy(dst, do_nothing_text, EXEC_SIZE);
+                flush_icache_range((unsigned long)dst,
+                                   (unsigned long)dst + EXEC_SIZE);
+        }
+        pr_info("attempting bad execution at %px\n", dst);
+        func = setup_function_descriptor(&fdesc, dst);
+        func();
+        pr_err("FAIL: func returned\n");
+}
+
+And that appears that it wants to crash, as the code is located in readonly
+data.
+
+OBJCOPYFLAGS_rodata_objcopy.o   := \
+                        --rename-section .noinstr.text=.rodata,alloc,readonly,load,contents
+
+And because the alternatives fixup tries to write to it, and fails due to
+it being readonly, I'm guessing we get this warning.
+
+Thus, is there a way to keep this file from being entered into the
+return_sites section?
+
+-- Steve

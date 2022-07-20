@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5E957AD86
+	by mail.lfdr.de (Postfix) with ESMTP id 3078757AD85
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242423AbiGTCCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
+        id S242198AbiGTCBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241824AbiGTCBV (ORCPT
+        with ESMTP id S236412AbiGTCBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:01:21 -0400
+        Tue, 19 Jul 2022 22:01:18 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C3B354649
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:01:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9FAC4D156
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:01:16 -0700 (PDT)
 Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9DeYddirMYpAA--.14711S5;
-        Wed, 20 Jul 2022 10:01:06 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9DeYddirMYpAA--.14711S8;
+        Wed, 20 Jul 2022 10:01:07 +0800 (CST)
 From:   Jianmin Lv <lvjianmin@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
@@ -25,17 +25,17 @@ Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V17 03/13] ACPI: irq: Allow acpi_gsi_to_irq() to have an arch-specific fallback
-Date:   Wed, 20 Jul 2022 10:00:51 +0800
-Message-Id: <1658282461-35489-4-git-send-email-lvjianmin@loongson.cn>
+Subject: [PATCH V17 06/13] LoongArch: Prepare to support multiple pch-pic and pch-msi irqdomain
+Date:   Wed, 20 Jul 2022 10:00:54 +0800
+Message-Id: <1658282461-35489-7-git-send-email-lvjianmin@loongson.cn>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1658282461-35489-1-git-send-email-lvjianmin@loongson.cn>
 References: <1658282461-35489-1-git-send-email-lvjianmin@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxn9DeYddirMYpAA--.14711S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw1DKF18Jr43Xw4xAr4ruFg_yoW5WF4kpF
-        Wxuw1xJrWIqr17ZrZ7C3yfuF13W3Z5JFWxXrW2k347CayDKF1agrnFgry2gryDAF4fCFWj
-        v3ZIkFW8GF1DCa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+X-CM-TRANSID: AQAAf9Dxn9DeYddirMYpAA--.14711S8
+X-Coremail-Antispam: 1UD129KBjvJXoWxJw4Duw18AF4fXr4rGw13CFg_yoW5ur43pF
+        y3u3Z8tr45Gr1xWryfta15Wr4rGas2ka12qa13ua43Kr1xWryvqF1vyr9F9F15ta18Ca4I
+        va13tFW5ur4DA37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
         w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
         IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
         z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcx
@@ -44,10 +44,10 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxZw1DKF18Jr43Xw4xAr4ruFg_yoW5WF4kpF
         Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF04k20xvY0x0EwIxG
         rwCF04k20xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
         02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UdHUDUUUUU=
+        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUoOJ5UUUUU
 X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,86 +57,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+For systems with two chipsets, there are two related pch-pic and
+pch-msi irqdomains, each of which has the same node id as its
+parent irqdomain. So we use a structure to mantain the relation
+of node and it's parent irqdomain as pch irqdomin, the 'pci_segment'
+field is only used to match the pci segment of a pci device when
+setting msi irqdomain for the device.
 
-It appears that the generic version of acpi_gsi_to_irq() doesn't
-fallback to establishing a mapping if there is no pre-existing
-one while the x86 version does.
+struct acpi_vector_group {
+        int node;
+        int pci_segment;
+        struct irq_domain *parent;
+};
 
-While arm64 seems unaffected by it, LoongArch is relying on the x86
-behaviour. In an effort to prevent new architectures from reinventing
-the proverbial wheel, provide an optional callback that the arch code
-can set to restore the x86 behaviour.
+The field 'pci_segment' and 'node' are initialized from MCFG, and
+the parent irqdomain driver will set field 'parent' by matching same
+'node'.
 
-Hopefully we can eventually get rid of this in the future once
-the expected behaviour has been clarified.
-
-Reported-by: Jianmin Lv <lvjianmin@loongson.cn>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-Tested-by: Hanjun Guo <guohanjun@huawei.com>
-Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
 ---
- drivers/acpi/irq.c   | 18 ++++++++++++++++--
- include/linux/acpi.h |  1 +
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ arch/loongarch/include/asm/irq.h |  8 ++++++++
+ arch/loongarch/kernel/irq.c      | 38 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
 
-diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
-index f0de768..dabe45e 100644
---- a/drivers/acpi/irq.c
-+++ b/drivers/acpi/irq.c
-@@ -13,6 +13,7 @@
- enum acpi_irq_model_id acpi_irq_model;
+diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
+index ace3ea6..a2540d7 100644
+--- a/arch/loongarch/include/asm/irq.h
++++ b/arch/loongarch/include/asm/irq.h
+@@ -48,6 +48,14 @@ static inline bool on_irq_stack(int cpu, unsigned long sp)
+ #define MAX_IO_PICS 2
+ #define NR_IRQS	(64 + (256 * MAX_IO_PICS))
  
- static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
-+static u32 (*acpi_gsi_to_irq_fallback)(u32 gsi);
- 
- /**
-  * acpi_gsi_to_irq() - Retrieve the linux irq number for a given GSI
-@@ -32,9 +33,12 @@ int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
- 					DOMAIN_BUS_ANY);
- 	*irq = irq_find_mapping(d, gsi);
- 	/*
--	 * *irq == 0 means no mapping, that should
--	 * be reported as a failure
-+	 * *irq == 0 means no mapping, that should be reported as a
-+	 * failure, unless there is an arch-specific fallback handler.
- 	 */
-+	if (!*irq && acpi_gsi_to_irq_fallback)
-+		*irq = acpi_gsi_to_irq_fallback(gsi);
++struct acpi_vector_group {
++	int node;
++	int pci_segment;
++	struct irq_domain *parent;
++};
++extern struct acpi_vector_group pch_group[MAX_IO_PICS];
++extern struct acpi_vector_group msi_group[MAX_IO_PICS];
 +
- 	return (*irq > 0) ? 0 : -EINVAL;
- }
- EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
-@@ -302,6 +306,16 @@ void __init acpi_set_irq_model(enum acpi_irq_model_id model,
+ #define CORES_PER_EIO_NODE	4
+ 
+ #define LOONGSON_CPU_UART0_VEC		10 /* CPU UART0 */
+diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
+index b34b8d7..37dd2dc 100644
+--- a/arch/loongarch/kernel/irq.c
++++ b/arch/loongarch/kernel/irq.c
+@@ -31,6 +31,8 @@
+ struct irq_domain *pch_msi_domain[MAX_IO_PICS];
+ struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+ 
++struct acpi_vector_group pch_group[MAX_IO_PICS];
++struct acpi_vector_group msi_group[MAX_IO_PICS];
+ /*
+  * 'what should we do if we get a hw irq event on an illegal vector'.
+  * each architecture has to answer this themselves.
+@@ -56,6 +58,41 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+ 	return 0;
  }
  
- /**
-+ * acpi_set_gsi_to_irq_fallback - Register a GSI transfer
-+ * callback to fallback to arch specified implementation.
-+ * @fn: arch-specific fallback handler
-+ */
-+void __init acpi_set_gsi_to_irq_fallback(u32 (*fn)(u32))
++static int __init early_pci_mcfg_parse(struct acpi_table_header *header)
 +{
-+	acpi_gsi_to_irq_fallback = fn;
++	struct acpi_table_mcfg *mcfg;
++	struct acpi_mcfg_allocation *mptr;
++	int i, n;
++
++	if (header->length < sizeof(struct acpi_table_mcfg))
++		return -EINVAL;
++
++	n = (header->length - sizeof(struct acpi_table_mcfg)) /
++					sizeof(struct acpi_mcfg_allocation);
++	mcfg = (struct acpi_table_mcfg *)header;
++	mptr = (struct acpi_mcfg_allocation *) &mcfg[1];
++
++	for (i = 0; i < n; i++, mptr++) {
++		msi_group[i].pci_segment = mptr->pci_segment;
++		pch_group[i].node = msi_group[i].node = (mptr->address >> 44) & 0xf;
++	}
++
++	return 0;
 +}
 +
-+/**
-  * acpi_irq_create_hierarchy - Create a hierarchical IRQ domain with the default
-  *                             GSI domain as its parent.
-  * @flags:      Irq domain flags associated with the domain
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 957e23f..e2b60d5 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -357,6 +357,7 @@ static inline bool acpi_sci_irq_valid(void)
++static void __init init_vec_parent_group(void)
++{
++	int i;
++
++	for (i = 0; i < MAX_IO_PICS; i++) {
++		msi_group[i].pci_segment = -1;
++		msi_group[i].node = -1;
++		pch_group[i].node = -1;
++	}
++
++	acpi_table_parse(ACPI_SIG_MCFG, early_pci_mcfg_parse);
++}
++
+ void __init init_IRQ(void)
+ {
+ 	int i;
+@@ -69,6 +106,7 @@ void __init init_IRQ(void)
+ 	clear_csr_ecfg(ECFG0_IM);
+ 	clear_csr_estat(ESTATF_IP);
  
- void acpi_set_irq_model(enum acpi_irq_model_id model,
- 			struct fwnode_handle *(*)(u32));
-+void acpi_set_gsi_to_irq_fallback(u32 (*)(u32));
- 
- struct irq_domain *acpi_irq_create_hierarchy(unsigned int flags,
- 					     unsigned int size,
++	init_vec_parent_group();
+ 	irqchip_init();
+ #ifdef CONFIG_SMP
+ 	ipi_irq = EXCCODE_IPI - EXCCODE_INT_START;
 -- 
 1.8.3.1
 

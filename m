@@ -2,265 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0652057BEF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A1C57BEF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiGTUGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 16:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S229733AbiGTUIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 16:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGTUGM (ORCPT
+        with ESMTP id S229492AbiGTUIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:06:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13729422F1;
-        Wed, 20 Jul 2022 13:06:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A383261C19;
-        Wed, 20 Jul 2022 20:06:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2D6C3411E;
-        Wed, 20 Jul 2022 20:06:07 +0000 (UTC)
-Date:   Wed, 20 Jul 2022 16:06:06 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V6 04/16] rv/include: Add deterministic automata monitor
- definition via C macros
-Message-ID: <20220720160606.3e672b55@gandalf.local.home>
-In-Reply-To: <9ffc05b67fff087413143a420373731e0e34eef4.1658244826.git.bristot@kernel.org>
-References: <cover.1658244826.git.bristot@kernel.org>
-        <9ffc05b67fff087413143a420373731e0e34eef4.1658244826.git.bristot@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 20 Jul 2022 16:08:06 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F3442AE8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 13:08:05 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id i7so3630126qvr.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 13:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bBt2aXduXrk3yTFTMljU9bjqy/gjhF70VjHkOj8ezJQ=;
+        b=fpOe6RRt86snubDzij/nij4d7nEXqB7gZ5vUfuXDSb4mEXI7wFsTEUnHWkadGGT+SV
+         qS+CfCoE5Ak9EtNzmTrS+G1bH3Ag74/yRC8BQjNdDixQOlm9cufa8URUF5fsbgKUUeKo
+         WDJw+qHQONYANM93QWG1sw9uf+4Rdn1X+Kjg0VMn+KupawJfnkDA0o8lSk+xWs5+PzUm
+         JwcBAeybMS+er8/b3SvFrgoCVIBIw0mlK80q/LlmAd0ULWTRwDSOkKNN0tqZZdGiGt68
+         Ord3doXJBGbROeZfkwFVjDZhAwsM/enKr7kzThzTHfLsghQ96ifMMzWPIuSxxRMq/kFa
+         DHYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bBt2aXduXrk3yTFTMljU9bjqy/gjhF70VjHkOj8ezJQ=;
+        b=hGmQHGY+T8cX7ypisFgEhH+NtLs43vxPGPYQrQb35jW0a+hxbH/iZSJhUiNdY7XUWE
+         UqvF38eJu+4Cgc6deAF3Pavextw/9ftjfV6I4HqYYyRgAKrXFqcZn1vgFOxsSXf4zMJ8
+         ncVKJHDB2mz6Nmdhuao/br0FUiv0ucE4Yq72LI5zRj37PKqkt/cNQnCqmYrCTeGWnpSU
+         k+ygOKzu8MFHpI90QX0r7eBDwi4MQv6y1yLpAEH9ok78nXOc5YbtJfVNF3B60Y1p1Sbj
+         zHg24KrgIRGS0HTudvRkz4JLSg0U2pjw5f6d1LTdj/0YTBSCtgrQiJQIacbLidzmfTyA
+         G+eg==
+X-Gm-Message-State: AJIora8XKDYkaPZ9blmV3yyewW7MeJrR/c3MalvSfgikfcifK8hx6sDZ
+        OJzNyfCcoPqVPB1q5OvZtXcJUzXc8OFg+cRGd4n/3w==
+X-Google-Smtp-Source: AGRyM1vyf1j8XqVCErCglA0UEjOSGZrnbuaSbmW1xdUCg7HF23L5loulxZKywUcdPsvfRbBWorrP7qBY6KYLgxte8fk=
+X-Received: by 2002:a05:6214:761:b0:470:8558:d1c3 with SMTP id
+ f1-20020a056214076100b004708558d1c3mr31210261qvz.107.1658347684520; Wed, 20
+ Jul 2022 13:08:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220719170555.2576993-1-roberto.sassu@huawei.com> <20220719170555.2576993-2-roberto.sassu@huawei.com>
+In-Reply-To: <20220719170555.2576993-2-roberto.sassu@huawei.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+Date:   Wed, 20 Jul 2022 21:07:53 +0100
+Message-ID: <CACdoK4LMvLyV2z5quN1BE4VrxGJK-f1YfuHWoQrJaH_eKyHZog@mail.gmail.com>
+Subject: Re: [PATCH 2/4] bpftool: Complete libbfd feature detection
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        terrelln@fb.com, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        llvm@lists.linux.dev, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 19:27:09 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+On Tue, 19 Jul 2022 at 18:06, Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> Commit 6e8ccb4f624a7 ("tools/bpf: properly account for libbfd variations")
+> sets the linking flags depending on which flavor of the libbfd feature was
+> detected.
+>
+> However, the flavors except libbfd cannot be detected, as they are not in
+> the feature list.
+>
+> Complete the list of features to detect by adding libbfd-liberty and
+> libbfd-liberty-z.
+>
+> Fixes: 6e8ccb4f624a7 ("tools/bpf: properly account for libbfd variations")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  tools/bpf/bpftool/Makefile | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index 6b5b3a99f79d..4b09a5c3b9f1 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -93,8 +93,10 @@ INSTALL ?= install
+>  RM ?= rm -f
+>
+>  FEATURE_USER = .bpftool
+> -FEATURE_TESTS = libbfd disassembler-four-args libcap clang-bpf-co-re
+> -FEATURE_DISPLAY = libbfd disassembler-four-args libcap clang-bpf-co-re
+> +FEATURE_TESTS = libbfd libbfd-liberty libbfd-liberty-z \
+> +               disassembler-four-args libcap clang-bpf-co-re
+> +FEATURE_DISPLAY = libbfd libbfd-liberty libbfd-liberty-z \
+> +                 disassembler-four-args libcap clang-bpf-co-re
 
-> diff --git a/include/linux/rv.h b/include/linux/rv.h
-> index 4f5b70eee557..31d8b2614eae 100644
-> --- a/include/linux/rv.h
-> +++ b/include/linux/rv.h
-> @@ -7,6 +7,8 @@
->  #ifndef _LINUX_RV_H
->  #define _LINUX_RV_H
->  
-> +#define MAX_DA_NAME_LEN         24
-> +
->  struct rv_reactor {
->  	char			*name;
->  	char			*description;
-> diff --git a/include/rv/da_monitor.h b/include/rv/da_monitor.h
-> new file mode 100644
-> index 000000000000..ef7ee3ffcad6
-> --- /dev/null
-> +++ b/include/rv/da_monitor.h
-> @@ -0,0 +1,507 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2019-2022 Red Hat, Inc. Daniel Bristot de Oliveira <bristot@kernel.org>
-> + *
-> + * Deterministic automata (DA) monitor functions, to be used together
-> + * with automata models in C generated by the dot2k tool.
-> + *
-> + * The dot2k tool is available at tools/verification/dot2k/
-> + */
-> +
-> +#include <rv/automata.h>
-> +#include <linux/rv.h>
-> +#include <linux/bug.h>
-> +
-> +/*
-> + * Generic helpers for all types of deterministic automata monitors.
-> + */
-> +#define DECLARE_DA_MON_GENERIC_HELPERS(name, type)						\
-> +												\
-> +static char REACT_MSG[1024];									\
-> +												\
-> +static inline char *format_react_msg(type curr_state, type event)				\
-
-You probably want to call this format_react_msg_##name() too.
-
-> +{												\
-> +	snprintf(REACT_MSG, 1024,								\
-> +		 "rv: monitor %s does not allow event %s on state %s\n",			\
-> +		 #name,										\
-> +		 model_get_event_name_##name(event),						\
-> +		 model_get_state_name_##name(curr_state));					\
-> +	return REACT_MSG;									\
-> +}												\
-> +												\
-> +static void cond_react(char *msg)								\
-
-And this cond_react_##name() as well. Otherwise you can have issues with
-the same function being used by multiple monitors. What if two are declared
-in the same file? This will fail to build.
-
-> +{												\
-> +	if (rv_##name.react)									\
-> +		rv_##name.react(msg);								\
-> +}												\
-> +												\
-> +/*												\
-> + * da_monitor_reset_##name - reset a monitor and setting it to init state			\
-> + */												\
-> +static inline void da_monitor_reset_##name(struct da_monitor *da_mon)				\
-> +{												\
-> +	da_mon->monitoring = 0;									\
-> +	da_mon->curr_state = model_get_initial_state_##name();					\
-> +}												\
-> +												\
-> +/*												\
-> + * da_monitor_curr_state_##name - return the current state					\
-> + */												\
-> +static inline type da_monitor_curr_state_##name(struct da_monitor *da_mon)			\
-> +{												\
-> +	return da_mon->curr_state;								\
-> +}												\
-> +												\
-> +/*												\
-> + * da_monitor_set_state_##name - set the new current state					\
-> + */												\
-> +static inline void										\
-> +da_monitor_set_state_##name(struct da_monitor *da_mon, enum states_##name state)		\
-> +{												\
-> +	da_mon->curr_state = state;								\
-> +}												\
-> +												\
-> +/*												\
-> + * da_monitor_start_##name - start monitoring							\
-> + *												\
-> + * The monitor will ignore all events until monitoring is set to true. This			\
-> + * function needs to be called to tell the monitor to start monitoring.				\
-> + */												\
-> +static inline void da_monitor_start_##name(struct da_monitor *da_mon)				\
-> +{												\
-> +	da_mon->monitoring = 1;									\
-> +}												\
-> +												\
-> +/*												\
-> + * da_monitoring_##name - returns true if the monitor is processing events			\
-> + */												\
-> +static inline bool da_monitoring_##name(struct da_monitor *da_mon)				\
-> +{												\
-> +	return da_mon->monitoring;								\
-> +}												\
-> +												\
-> +/*												\
-> + * da_monitor_enabled_##name - checks if the monitor is enabled					\
-> + */												\
-> +static inline bool da_monitor_enabled_##name(void)						\
-> +{												\
-
-Should we add a:
-
-	smp_rmb();
-
-here? And then a smp_wmb() where these switches get updated?
-
-I guess how critical is it that these turn off immediately after the switch
-is flipped?
-
-> +	/* global switch */									\
-> +	if (unlikely(!rv_monitoring_on()))							\
-> +		return 0;									\
-> +												\
-> +	/* monitor enabled */									\
-> +	if (unlikely(!rv_##name.enabled))							\
-> +		return 0;									\
-> +												\
-> +	return 1;										\
-> +}												\
-> +												\
-> +/*												\
-> + * da_monitor_handling_event_##name - checks if the monitor is ready to handle events		\
-> + */												\
-> +static inline bool da_monitor_handling_event_##name(struct da_monitor *da_mon)			\
-> +{												\
-> +												\
-> +	if (!da_monitor_enabled_##name())							\
-> +		return 0;									\
-> +												\
-> +	/* monitor is actually monitoring */							\
-> +	if (unlikely(!da_monitoring_##name(da_mon)))						\
-> +		return 0;									\
-> +												\
-> +	return 1;										\
-> +}
-
-
-> diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
-> index 3eb5d48ab4f6..0123bdf7052a 100644
-> --- a/kernel/trace/rv/Kconfig
-> +++ b/kernel/trace/rv/Kconfig
-> @@ -1,5 +1,19 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  #
-> +config DA_MON_EVENTS
-> +	default n
-> +	bool
-> +
-> +config DA_MON_EVENTS_IMPLICIT
-> +	select DA_MON_EVENTS
-> +	default n
-> +	bool
-> +
-> +config DA_MON_EVENTS_ID
-> +	select DA_MON_EVENTS
-> +	default n
-> +	bool
-
-The "default n" are not needed. The default is 'n' without it.
-
--- Steve
-
-> +
->  menuconfig RV
->  	bool "Runtime Verification"
->  	depends on TRACING
-> diff --git a/kernel/trace/rv/rv.c b/kernel/trace/rv/rv.c
-> index eb835777a59b..00183e056dfd 100644
-> --- a/kernel/trace/rv/rv.c
-> +++ b/kernel/trace/rv/rv.c
-> @@ -141,6 +141,11 @@
->  #include <linux/slab.h>
->  #include <rv/rv.h>
->  
-> +#ifdef CONFIG_DA_MON_EVENTS
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/rv.h>
-> +#endif
-> +
->  #include "rv.h"
->  
->  DEFINE_MUTEX(rv_interface_lock);
-
+Do you know if there is a way to fold the different feature-libbfd-*
+features into a single one for FEATURE_DISPLAY? Or should the various
+features be all moved under feature-libbfd with multiple attempts,
+like you did for disassembler-four-args in patch 1? My concern is that
+users may think some features could be missing when they compile and
+see that detection fails for some items.

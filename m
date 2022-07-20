@@ -2,199 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C07857BAA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC0057BAAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241269AbiGTPlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        id S241386AbiGTPm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234311AbiGTPll (ORCPT
+        with ESMTP id S232710AbiGTPmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:41:41 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97112165AD;
-        Wed, 20 Jul 2022 08:41:40 -0700 (PDT)
-Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KF4OXo008063;
-        Wed, 20 Jul 2022 15:41:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=VcCBoLvlXzRMllZBW5nO3joVac7sRSk6OKXFlpYBpaQ=;
- b=IEBkH9uv2g6tDgqBIezJ7Ow8v9+XdTVsSVeKB+X7CvpwQeO21vxlCb9aKcvXsBijK0Yy
- axCdCLzQP60CyTtfd+87Rkdh52+gIXFx1+iMHWLMeA5d75CEtyvNjs6wtvRBdkUw32eE
- qYzoOfLBDJhbKEznskstsPcOWl4aVva0oLE6Pwn1D7FbiRi92Zy9sSicdk1uU28lnMVZ
- 0TEH9D3GMtiObpLrh9dX0Q1B0L73KrEn2PBcJ7mSpCutsCIPFXWmOJWGJsw12ROCzWvG
- TtCca7vs1f+/1ok1QCL6iJ86E6UxOV7E9vmAjleGZsVCM4ya1YYujmI82iJ613HM8BnD Pg== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3hem188c44-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 15:41:23 +0000
-Received: from p1wg14925.americas.hpqcorp.net (unknown [10.119.18.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 99A6E800196;
-        Wed, 20 Jul 2022 15:41:22 +0000 (UTC)
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14925.americas.hpqcorp.net (10.119.18.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 20 Jul 2022 03:41:22 -1200
-Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Wed, 20 Jul 2022 03:41:22 -1200
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 20 Jul 2022 15:41:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OZmrPugO+UC9bbo5UqYhEeyN+vYTXkJ+csoeXvc4Ov0qK2juIoVEqSsdm5PkaUdO0TZGswrueqtrtR/iH+DUoR2oIbyYYof9ebeO4xiB5zQptsLNDAjDeN9XqlCZT1+HrDENv4B7nclHwaTkmGP7WurrGEUcMt2MEXNp0OpScXR6H04FHTp2MuKqThUEYjm5Hn+tAxE1++J39UVTuT9rocgYASMqkipVBknt9r0arfIxbA8NxVXIFUxdbDwub/2QOFPvPuWlp+H5tsm4wNj9i4nvG6/2M9iEBmPWXKYuNbip5TibWbwFgRWckU+eis7MAbDmrKykLsMvYKjB+iPUhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VcCBoLvlXzRMllZBW5nO3joVac7sRSk6OKXFlpYBpaQ=;
- b=jeA/GvO6kC6BQvGwjl0gTQL7H2i12gpu1VfhLZt7dzFAA50dkZMXHWic/+CcFyPLjnpmN7ZPuK+9gPFsLsNBqYtvI5voo49T9y6a7xFKfqpsbRjc/lFkRVdbRVfqKsbAWxX2Vhb/zn0wGWabRbaJ75KEJL4QOUsqmOGrUXVqE18SIm++dxyd1JZqaC3qhhjZERXOwk7WeC2jW4H+MfvXzE6by15hCtEgqgSF/hAnGUiad05q3qOOvTzhp4YHAXfsPFNvpGqCHP312txSiczp1nqHY7I4lXRNDYoNhlKe7/rJxC6PhaLcCpzdxmEV/ZnKlcZ4DXVTiTUAr1r2O8WgJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:154::8)
- by PH7PR84MB1886.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:155::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Wed, 20 Jul
- 2022 15:41:21 +0000
-Received: from PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::c165:fcd6:a6e7:3f06]) by PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::c165:fcd6:a6e7:3f06%7]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
- 15:41:21 +0000
-From:   "Kani, Toshi" <toshi.kani@hpe.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "rrichter@marvell.com" <rrichter@marvell.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Borislav Petkov" <bp@suse.de>
-Subject: RE: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
-Thread-Topic: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
-Thread-Index: AQHYm7smwrVZqUGvIkiseTl/uQAs+q2HJpiAgAA/+tA=
-Date:   Wed, 20 Jul 2022 15:41:20 +0000
-Message-ID: <PH7PR84MB1838CC03943D28806F7DCD8F828E9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20220719220124.760359-1-toshi.kani@hpe.com>
- <YtfsOcWbWREu1NnK@zn.tnic>
-In-Reply-To: <YtfsOcWbWREu1NnK@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 59d82c21-3865-4dd8-6009-08da6a664b57
-x-ms-traffictypediagnostic: PH7PR84MB1886:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: P9ssgy4j4+CEKyV0wXSJAsrYJzzgeyYnWml2eer8SVU7JZaXifiHCkZuXNc9l1PQkSPRVsH4VIA9PtB56XN/JHWR3v6HWpjVFcfcCWDy7N0Kxv2dH3T/1rUt7B1+wXNpAxPzMrb0geEpj9eHnqVvxYgOwgCot4HW5b9ke9T8HAOSuGoUEmMzQ/ykBxFsx9Bma27TWnTh8flJk7HevmMj2Z1sbDvSfyPSWctYj6r4hu+qsZMfvVM5Uu83dYU9Beita3NUie7adugc07P/SeAdrp/VLs8gs6jthdVZEjMzy3WGFZwDJef15i0rn7ahpTsaNmiaX7lXLvlK30rA/K+B6uZH8n0SP2cnSwqEZOXvMLvZCYxt3ArPYYtHYL+D7B+1xrBVv45Dtia/KGZI+M2BTpQScCCXL5Vab+cFI+1OBiAxoEsqrlDCA498GoX3HorP9YwQymz0ZLV4LB6UC9RAi20/OYhi4zBZGkwhcd+CxMe5kwmUGNsHz36TmPUCLi6FPNvieVQBaadGPgs6VNcPcMErDaMJlhJ8b4rXVxSoqbx1KyWAWCDVHsCuemr8mMjI3v1wjKR89N3d2VqJE/7DCLBHKFQDZM/yzbuw/mWD64lLnp45+09r7nRJL4A0um9M07MKaSHFtqTS0vs9mfCzVRb8JsQ49puw58ZihBL3UTtQxcn2XigmBZQrCmkcB1cWF9RacDYA44DM4KBnx8UGLDNsS5gOtKVlBw+YvKx1YxPSuq4ZAUE9AXxsmEQTy0DaiAHhCiJcWb9i6KvlkSHEeTWzT6PTaOC9dDBI4JF0515iTT8auwS4W5H4pnidRtemrE4tcLxYqKz2g3lqrPOk0A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(136003)(376002)(396003)(39860400002)(346002)(366004)(82960400001)(6916009)(38070700005)(316002)(122000001)(6506007)(7696005)(83380400001)(54906003)(4326008)(71200400001)(66476007)(66946007)(76116006)(66556008)(66446008)(38100700002)(8676002)(64756008)(5660300002)(55016003)(8936002)(26005)(9686003)(52536014)(478600001)(41300700001)(33656002)(186003)(2906002)(86362001)(505234007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SEZWUVUxdEtkVkVOcmxVV1pzdTJlYmtCSjZzbTVNK3JORG92MlJYWWY5MTdW?=
- =?utf-8?B?ZDJTM0huV01NbUMxbEpBME9SNm12NHpJbVprcCtFVjNVNkRkWkpDQksvTit1?=
- =?utf-8?B?TFlCTk9lZFJJL3FTS3RGV2FwVytGa2hrQitBdWFDR21FbXAzVWQ4a2E5bm43?=
- =?utf-8?B?RUl6MVp5cTlSK0N1bWdnTW1SRC9EUHViSzNpaGphalpRS040YTV4UGdabmJP?=
- =?utf-8?B?SFdwZ0lsbXd4bkFkV1E3V2VobklvaHVaU3hJenBpaW1wd2RaSWZaR0QzWUY2?=
- =?utf-8?B?MlQzdkQyTjJpUzNKWVNwVUVndjA3YmN3SlZvUlV4em1ZZUVyaG93QkliemNq?=
- =?utf-8?B?ZTR1Y1hwcHJnNk1tQW4vc2dZUFRGZzE0SnRLMVZZWDUzTlRKWElGOU9KK09L?=
- =?utf-8?B?VlBIbWFIRm5XWENaSi9MRzFxZVpQUWpNRU9WWU5jTVYxdExXSHNFWHFId0JY?=
- =?utf-8?B?TndwelA4OHZxc0NvdVdBZ0k5U3k0U05tSUVZbDFGY1VVaTNRVFp6a21sOFNP?=
- =?utf-8?B?dEJOWlhrOWpMb0YvUUFJbVJGWEdWQjBrNkZYOFM1cVBGd3h0VS9odlMvRUw0?=
- =?utf-8?B?SSt0ZmZoM0FZMjV3T0FSMS9GZ1pIUUtkeTYzeUJVUk42TTJHcnFDNnl2ZDlS?=
- =?utf-8?B?bVJaY3ZROERBRmdyWXlUL25HWnN6VG5RVy9RcGtRMXF3cnpMcjQ0Q3BhSFN2?=
- =?utf-8?B?UmhpOUpCbTFzekNGK2NFbWxab2NnQUJvZkNsd3MrQXFBZjZ3U244NUNvKzBa?=
- =?utf-8?B?cFhveldLYkV3V3hkL2VidHBEQVYvbG02QUpISVZQYTIrNVliZUI5YkpNdFpv?=
- =?utf-8?B?YzIvRW9ZOWxCQ3dsY0I0Q25yYXE0OGpmKzlWSlB4RTQyODBtbk9GMDZrZk9F?=
- =?utf-8?B?K1J5UWdKUXZlemx3MHhXMXE1WUg3V3ljaE0xNmhhUXkyVTVGRmdDWXF5TVpr?=
- =?utf-8?B?YUV1VXJNTVBsYUZKVTJIRFRsRzh5b2R6dGdDSEJuZ253cHFJK3RicFBpTnN2?=
- =?utf-8?B?bDhYNGxLOG5EWC9nVDA0ZWsyNllScVlhcHFMQTM1VTBWZ1VINGZXSVBWcXRp?=
- =?utf-8?B?YXZOUmhDYVYwbHhsQzV0QXBjTGVUOEV3RGZnTXhjT0svUDlYUzBrT0JTNWJy?=
- =?utf-8?B?NHp5Qk45cGkrTFR0OEQvY0lxMU5kQklPMFFZdVozaEkvRnVLWEpWRXZKd24z?=
- =?utf-8?B?NG9BTVNrL3F2V3V0WTNRQ3l6RFVwT1BEUklhbFhDSHFlMFVsZ3dzZzl4RW14?=
- =?utf-8?B?VlFTVEUxWTFIM0doN0oyaGtkaFZsNUYwL2Q1L0VBakdtcFlodG0rS3d0YzNa?=
- =?utf-8?B?TVc3djZ3anEzaDR5ckhTOTRyYnZmUzdMQkMzMzI5QTVLRFRaWmRaeEN0NEx5?=
- =?utf-8?B?WWJrVFR5UFlWcHZKYjhGNG9oUWgvYXRURmtmbjhBeE9aZi9OLzVYWlg0K2VV?=
- =?utf-8?B?a2hYVlNuSDE5RDQwRmJDeTZOTG52cjZUVExaZEN1SS9Wd0ZZQy9JYUNOUW5q?=
- =?utf-8?B?QnR1aVk3Sjc3Y1UrK25xY0s4emxDN1ZrRWJSTmowbDdCalg5VUtuQlluNFNT?=
- =?utf-8?B?K2xyL2kvSDdmSWN0K3dIa2pyNGg0dzd6UHVhenBkL1l4bjd4THA0eFp2dW5J?=
- =?utf-8?B?MUhyNVA2T2ZlbittRisydmlZejc3cTdsRHo3Z2lkMGxRd2pBK0s3VVQ4SnRZ?=
- =?utf-8?B?ZjVibU1aTlhuV1dDWWh5WHlNQytBWi92UkZPYWRQM3R6ZEhGK2hNOHYvSEpo?=
- =?utf-8?B?ckFuVlM2M3VTNzdHTThzVlpacTN1cUoxYkhVdkZuMzBoQkRKTmxaNHF4TjVO?=
- =?utf-8?B?Q0NSMmx2ZUw4WCtIUWJMakJHdHA5dkZ6bWg3bG1VYkxZWGJSdXNqb2xKM2hr?=
- =?utf-8?B?dGRSYkt5VlVwWVMxRjM5eG1NNllldlQzRGpHNDZEclFGYi92VkFlUlRQQVl3?=
- =?utf-8?B?N3lianBzNXFLVThUZ0hRaTRYUmRhNTlqRC82LzgzZGMxQXJWeUpDRWZ3OCtk?=
- =?utf-8?B?Wno2ZlA1N1RVOHEvL21Ia05jRHN2SEl6a0lmeDdTNGg5VVpnOVlDU3Q4U3NL?=
- =?utf-8?B?K1c0M3VVdzZwY0x4UHZEZmxXbmRQZXVOajdpL2Qzdkw2dXJibGl0LzlhcFIz?=
- =?utf-8?Q?xKJhZ+8KBWrm/LH5sbxBeEqat?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 20 Jul 2022 11:42:54 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE8D61727
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:42:53 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so1544369wmo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iA6H9FbTpi/aYLA06konbtgAlr2/KT50OkDviEcMLbs=;
+        b=iXpffLiJVtdCttiGIiGR476FbgEvncJynZYRRFaKtNnC14Ee9o1jfns2LKphXmangZ
+         EWnyeyPG/xn69I0jb4fcDYQ6YQvz4wlMQ4CzzCaEJdcvlwz6pi2mc6h81eG90tgr88lz
+         /oPzNIOkMX0oapWfl9thXpEQWQRklgF9vE94O74BEc4lqET8GwMOe5xIspX/SG1G81f/
+         7XfOoCBv/Rvt6NXKRXaTE97WV7eUjlcGKl4Nu7YBbXjeSGJaay5eSqAeGCbTSeW5x7YL
+         3Gv7tYShmCX8xv9E6zpZgj/gN9gyStIsWLrBGWi1UigHS002MJ7/oglO2c7XTMT4Ur5M
+         /s1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iA6H9FbTpi/aYLA06konbtgAlr2/KT50OkDviEcMLbs=;
+        b=GPUNLJvfgQFCo0axw/2FZPk9ckCoNKZBTBprZsQ4U/uqaB99lbiymu/g3SU/AkKqjd
+         BzRA4eG8fW1yTp9ANcJKimXYsvbwnGVsGwBzU6h5Cc/EX+TDL1IR98AaMpKFPyd6BfAz
+         UQbILJOvUy1r+wmCEbhla8riz+uJGaGcKkfFoyRhoqZMX8H0ri/uK+J6wHajV9yit3uI
+         5qIxRjN9Fi+sYbbbuYPYzDXJq2A5xlZ+ZNmCLuTo5sKL0i4Gif0J707oaPxnUlCLf6XW
+         Gq4YGqkUrH3QxqA4iO0Z/Ro6B9HVerUbOl9rybNBJ9AztZd5GLZJbJaNQqmhSZUwM9hg
+         kdWw==
+X-Gm-Message-State: AJIora+c/Do6smvLphUlvpFN1D6dcRRZbkSgBcExNu2zxPYf5OVdDvJe
+        spP5V+l4EN56XH3fbedUMsuQis24EccDiJvsXg2/1g==
+X-Google-Smtp-Source: AGRyM1tC/2QEwTNFQazHf5jpM6MANjmu2PBS3k8EZUWqAOG0aiuCYQuwyfqeLE68lKXUayZ2hy32LTejKodIDCILDK0=
+X-Received: by 2002:a7b:c8d3:0:b0:3a2:fe0d:ba2e with SMTP id
+ f19-20020a7bc8d3000000b003a2fe0dba2emr4552680wml.115.1658331771692; Wed, 20
+ Jul 2022 08:42:51 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59d82c21-3865-4dd8-6009-08da6a664b57
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 15:41:20.8947
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ATAekl8Xwk9u62b7Y/3wC4/p5qYN3JBFA9hY2YRRXM7cRbIUxVYN8TE7eqO9kbJPregWGMBemAfw3o2acimrow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR84MB1886
-X-OriginatorOrg: hpe.com
-X-Proofpoint-ORIG-GUID: OhrxsrLIPWATsfw8EFPUeZP-CoSVYH2j
-X-Proofpoint-GUID: OhrxsrLIPWATsfw8EFPUeZP-CoSVYH2j
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_09,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- bulkscore=0 impostorscore=0 priorityscore=1501 lowpriorityscore=0
- mlxlogscore=555 malwarescore=0 clxscore=1015 spamscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207200064
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-14-elver@google.com>
+In-Reply-To: <20220704150514.48816-14-elver@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 20 Jul 2022 08:42:39 -0700
+Message-ID: <CAP-5=fX3Ba8pOrnyehzJPfDBMEb-qf0ybj40na0nb4k_KyzeQA@mail.gmail.com>
+Subject: Re: [PATCH v3 13/14] perf/hw_breakpoint: Optimize max_bp_pinned_slots()
+ for CPU-independent task targets
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qm9yaXNsYXYgUGV0a292IHdyb3RlOg0KPiBPbiBUdWUsIEp1bCAxOSwgMjAyMiBhdCAwNDowMToy
-NFBNIC0wNjAwLCBUb3NoaSBLYW5pIHdyb3RlOg0KPiA+IFRoZSBmb2xsb3dpbmcgYnVmZmVyIG92
-ZXJmbG93IEJVRyB3YXMgb2JzZXJ2ZWQgb24gYW4gSFBFIHN5c3RlbS4NCj4gPiBnaGVzX2VkYWNf
-cmVnaXN0ZXIoKSBjYWxsZWQgc3RybGVuKCkgb24gYW4gdW5pbml0aWFsaXplZCBsYWJlbCwgd2hp
-Y2ggDQo+ID4gaGFkIG5vbi16ZXJvIHZhbHVlcyBmcm9tIGtyZWFsbG9jX2FycmF5KCkuDQo+ID4g
-Q2hhbmdlIGRpbW1fc2V0dXBfbGFiZWwoKSB0byBhbHdheXMgaW5pdGlhbGl6ZSB0aGUgbGFiZWwu
-DQo+DQo+IERvIHdlIGFsc28ga25vdyB3aHkgZG1pX21lbWRldl9uYW1lKCkgZG9lc24ndCBnaXZl
-IGJhbmsgYW5kL29yIGRldmljZT8NCg0KWWVzLg0KDQo+IFNNQklPUyBoYW5kbGUgd3Jvbmc/DQoN
-ClNNQklPUyBoYW5kbGUgaXMgY29ycmVjdC4NCg0KSW4gZGltbV9zZXR1cF9sYWJlbCgpLCAqZGV2
-aWNlIGlzIHNldCBidXQgKmJhbmsgaXMgbnVsbCAoZG1pX2VtcHR5X3N0cmluZykuDQoqYmFuayBp
-cyBzZXQgZnJvbSBTTUJJT1MgdHlwZSAxNyBCYW5rIExvY2F0b3IsIG9mZnNldCAxMWguICBUaGlz
-IHZhbHVlIGlzDQpzZXQgdG8gMHgwIChudWxsIHN0cmluZykgb24gdGhpcyBzeXN0ZW0sIGFzIHNo
-b3duIGJlbG93Lg0KDQpIYW5kbGUgMHgwMDIwLCBETUkgdHlwZSAxNywgODQgYnl0ZXMNCk1lbW9y
-eSBEZXZpY2UNCiAgICAgICAgQXJyYXkgSGFuZGxlOiAweDAwMTMNCiAgICAgICAgRXJyb3IgSW5m
-b3JtYXRpb24gSGFuZGxlOiBOb3QgUHJvdmlkZWQNCiAgICAgICAgVG90YWwgV2lkdGg6IDcyIGJp
-dHMNCiAgICAgICAgRGF0YSBXaWR0aDogNjQgYml0cw0KICAgICAgICBTaXplOiAzMiBHQg0KICAg
-ICAgICBGb3JtIEZhY3RvcjogRElNTQ0KICAgICAgICBTZXQ6IE5vbmUNCiAgICAgICAgTG9jYXRv
-cjogUFJPQyAxIERJTU0gMSAgICAgICAgPD09PT09IGRldmljZQ0KICAgICAgICBCYW5rIExvY2F0
-b3I6IE5vdCBTcGVjaWZpZWQgICA8PT09PT0gYmFuaw0KICAgICAgICAuLi4uDQoNCkhhbmRsZSAw
-eDAwMjAsIERNSSB0eXBlIDE3LCA4NCBieXRlcw0KICAgICAgICBIZWFkZXIgYW5kIERhdGE6DQog
-ICAgICAgICAgICAgICAgMTEgNTQgMjAgMDAgMTMgMDAgRkUgRkYgNDggMDAgNDAgMDAgRkYgN0Yg
-MDkgMDANCiAgICAgICAgICAgICAgICAwMSAwMCAxQSA4MCAyMCA3NSAwQiAwMiAwMCAwMCAwMyAw
-MiAwMCA4MCAwMCAwMA0KICAgICAgICAgICAgICAgICAgIF5eDQogICAgICAgICAgICAgICAgNzUg
-MEIgQjAgMDQgQjAgMDQgQjAgMDQgMDMgMDggMDAgMDAgODkgODMgMDAgMDANCiAgICAgICAgICAg
-ICAgICAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMA0KICAg
-ICAgICAgICAgICAgIDA4IDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAw
-IDAwDQogICAgICAgICAgICAgICAgMDAgMDAgMDAgMDANCiAgICAgICAgU3RyaW5nczoNCiAgICAg
-ICAgICAgICAgICA1MCA1MiA0RiA0MyAyMCAzMSAyMCA0NCA0OSA0RCA0RCAyMCAzMSAwMA0KICAg
-ICAgICAgICAgICAgIFBST0MgMSBESU1NIDENCiAgICAgICAgICAgICAgICA1NSA0RSA0QiA0RSA0
-RiA1NyA0RSAwMA0KICAgICAgICAgICAgICAgIFVOS05PV04NCiAgICAgICAgICAgICAgICA0RSA0
-RiA1NCAyMCA0MSA1NiA0MSA0OSA0QyA0MSA0MiA0QyA0NSAwMA0KICAgICAgICAgICAgICAgIE5P
-VCBBVkFJTEFCTEUNCg0KVGhhbmtzLA0KVG9zaGkNCg==
+On Mon, Jul 4, 2022 at 8:07 AM Marco Elver <elver@google.com> wrote:
+>
+> Running the perf benchmark with (note: more aggressive parameters vs.
+> preceding changes, but same 256 CPUs host):
+>
+>  | $> perf bench -r 100 breakpoint thread -b 4 -p 128 -t 512
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 100 threads with 4 breakpoints and 128 parallelism
+>  |      Total time: 1.989 [sec]
+>  |
+>  |       38.854160 usecs/op
+>  |     4973.332500 usecs/op/cpu
+>
+>     20.43%  [kernel]       [k] queued_spin_lock_slowpath
+>     18.75%  [kernel]       [k] osq_lock
+>     16.98%  [kernel]       [k] rhashtable_jhash2
+>      8.34%  [kernel]       [k] task_bp_pinned
+>      4.23%  [kernel]       [k] smp_cfm_core_cond
+>      3.65%  [kernel]       [k] bcmp
+>      2.83%  [kernel]       [k] toggle_bp_slot
+>      1.87%  [kernel]       [k] find_next_bit
+>      1.49%  [kernel]       [k] __reserve_bp_slot
+>
+> We can see that a majority of the time is now spent hashing task
+> pointers to index into task_bps_ht in task_bp_pinned().
+>
+> Obtaining the max_bp_pinned_slots() for CPU-independent task targets
+> currently is O(#cpus), and calls task_bp_pinned() for each CPU, even if
+> the result of task_bp_pinned() is CPU-independent.
+>
+> The loop in max_bp_pinned_slots() wants to compute the maximum slots
+> across all CPUs. If task_bp_pinned() is CPU-independent, we can do so by
+> obtaining the max slots across all CPUs and adding task_bp_pinned().
+>
+> To do so in O(1), use a bp_slots_histogram for CPU-pinned slots.
+>
+> After this optimization:
+>
+>  | $> perf bench -r 100 breakpoint thread -b 4 -p 128 -t 512
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 100 threads with 4 breakpoints and 128 parallelism
+>  |      Total time: 1.930 [sec]
+>  |
+>  |       37.697832 usecs/op
+>  |     4825.322500 usecs/op/cpu
+>
+>     19.13%  [kernel]       [k] queued_spin_lock_slowpath
+>     18.21%  [kernel]       [k] rhashtable_jhash2
+>     15.46%  [kernel]       [k] osq_lock
+>      6.27%  [kernel]       [k] toggle_bp_slot
+>      5.91%  [kernel]       [k] task_bp_pinned
+>      5.05%  [kernel]       [k] smp_cfm_core_cond
+>      1.78%  [kernel]       [k] update_sg_lb_stats
+>      1.36%  [kernel]       [k] llist_reverse_order
+>      1.34%  [kernel]       [k] find_next_bit
+>      1.19%  [kernel]       [k] bcmp
+>
+> Suggesting that time spent in task_bp_pinned() has been reduced.
+> However, we're still hashing too much, which will be addressed in the
+> subsequent change.
+>
+> Signed-off-by: Marco Elver <elver@google.com>
+> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+
+Acked-by: Ian Rogers <irogers@google.com>
+
+Thanks,
+Ian
+
+> ---
+> v3:
+> * Update hw_breakpoint_is_used() to include global cpu_pinned.
+>
+> v2:
+> * New patch.
+> ---
+>  kernel/events/hw_breakpoint.c | 57 ++++++++++++++++++++++++++++++++---
+>  1 file changed, 53 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+> index 03ebecf048c0..a489f31fe147 100644
+> --- a/kernel/events/hw_breakpoint.c
+> +++ b/kernel/events/hw_breakpoint.c
+> @@ -64,6 +64,9 @@ static struct bp_cpuinfo *get_bp_info(int cpu, enum bp_type_idx type)
+>         return per_cpu_ptr(bp_cpuinfo + type, cpu);
+>  }
+>
+> +/* Number of pinned CPU breakpoints globally. */
+> +static struct bp_slots_histogram cpu_pinned[TYPE_MAX];
+> +
+>  /* Keep track of the breakpoints attached to tasks */
+>  static struct rhltable task_bps_ht;
+>  static const struct rhashtable_params task_bps_ht_params = {
+> @@ -194,6 +197,10 @@ static __init int init_breakpoint_slots(void)
+>                                 goto err;
+>                 }
+>         }
+> +       for (i = 0; i < TYPE_MAX; i++) {
+> +               if (!bp_slots_histogram_alloc(&cpu_pinned[i], i))
+> +                       goto err;
+> +       }
+>
+>         return 0;
+>  err:
+> @@ -203,6 +210,8 @@ static __init int init_breakpoint_slots(void)
+>                 if (err_cpu == cpu)
+>                         break;
+>         }
+> +       for (i = 0; i < TYPE_MAX; i++)
+> +               bp_slots_histogram_free(&cpu_pinned[i]);
+>
+>         return -ENOMEM;
+>  }
+> @@ -270,6 +279,9 @@ static unsigned int max_task_bp_pinned(int cpu, enum bp_type_idx type)
+>  /*
+>   * Count the number of breakpoints of the same type and same task.
+>   * The given event must be not on the list.
+> + *
+> + * If @cpu is -1, but the result of task_bp_pinned() is not CPU-independent,
+> + * returns a negative value.
+>   */
+>  static int task_bp_pinned(int cpu, struct perf_event *bp, enum bp_type_idx type)
+>  {
+> @@ -288,9 +300,18 @@ static int task_bp_pinned(int cpu, struct perf_event *bp, enum bp_type_idx type)
+>                 goto out;
+>
+>         rhl_for_each_entry_rcu(iter, pos, head, hw.bp_list) {
+> -               if (find_slot_idx(iter->attr.bp_type) == type &&
+> -                   (iter->cpu < 0 || cpu == iter->cpu))
+> -                       count += hw_breakpoint_weight(iter);
+> +               if (find_slot_idx(iter->attr.bp_type) != type)
+> +                       continue;
+> +
+> +               if (iter->cpu >= 0) {
+> +                       if (cpu == -1) {
+> +                               count = -1;
+> +                               goto out;
+> +                       } else if (cpu != iter->cpu)
+> +                               continue;
+> +               }
+> +
+> +               count += hw_breakpoint_weight(iter);
+>         }
+>
+>  out:
+> @@ -316,6 +337,19 @@ max_bp_pinned_slots(struct perf_event *bp, enum bp_type_idx type)
+>         int pinned_slots = 0;
+>         int cpu;
+>
+> +       if (bp->hw.target && bp->cpu < 0) {
+> +               int max_pinned = task_bp_pinned(-1, bp, type);
+> +
+> +               if (max_pinned >= 0) {
+> +                       /*
+> +                        * Fast path: task_bp_pinned() is CPU-independent and
+> +                        * returns the same value for any CPU.
+> +                        */
+> +                       max_pinned += bp_slots_histogram_max(&cpu_pinned[type], type);
+> +                       return max_pinned;
+> +               }
+> +       }
+> +
+>         for_each_cpu(cpu, cpumask) {
+>                 struct bp_cpuinfo *info = get_bp_info(cpu, type);
+>                 int nr;
+> @@ -366,8 +400,11 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+>
+>         /* Pinned counter cpu profiling */
+>         if (!bp->hw.target) {
+> +               struct bp_cpuinfo *info = get_bp_info(bp->cpu, type);
+> +
+>                 lockdep_assert_held_write(&bp_cpuinfo_sem);
+> -               get_bp_info(bp->cpu, type)->cpu_pinned += weight;
+> +               bp_slots_histogram_add(&cpu_pinned[type], info->cpu_pinned, weight);
+> +               info->cpu_pinned += weight;
+>                 return 0;
+>         }
+>
+> @@ -804,6 +841,18 @@ bool hw_breakpoint_is_used(void)
+>                 }
+>         }
+>
+> +       for (int type = 0; type < TYPE_MAX; ++type) {
+> +               for (int slot = 0; slot < hw_breakpoint_slots_cached(type); ++slot) {
+> +                       /*
+> +                        * Warn, because if there are CPU pinned counters,
+> +                        * should never get here; bp_cpuinfo::cpu_pinned should
+> +                        * be consistent with the global cpu_pinned histogram.
+> +                        */
+> +                       if (WARN_ON(atomic_read(&cpu_pinned[type].count[slot])))
+> +                               return true;
+> +               }
+> +       }
+> +
+>         return false;
+>  }
+>
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>

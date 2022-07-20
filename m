@@ -2,199 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E7257B114
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F46357B117
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239849AbiGTG1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
+        id S239914AbiGTG2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239826AbiGTG1a (ORCPT
+        with ESMTP id S239826AbiGTG2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:27:30 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E66E459B2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:27:28 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id w2so19958277ljj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2RWe/5etiM/Atur64WJRybmJIj56BMtUZj35fRxxeJU=;
-        b=hC0C815XFlatblvHaHA3D/3JwyDCc0lWVZUUvkD1fi4EARD8mXH7BX7uQtEVI5qriz
-         6CgE98OSwz6vx0Zgg18GIU7wJ6MEWxBtXI0z/JJfQIYK0M4GK019WwEJ2NoFmpCVvRV0
-         EKcdO7I3zU2/DbAl0CIgYeDLdiduo0N5BAHne3fxltLKypi8pmTJRWaMbFV/nPVU+k7b
-         E8RT1MoLn6eV0WAEUvpnA/ecF0HsD6uIdSaTkwsj9PP8g4hUxhCP12ivCFFfLxPBAfF4
-         w0r9DCDMszTHWdGc5Bj+Rull8zb/LAwN0wp47OVURvr7j/PQafq+nlXPzQVcYWJidwU0
-         ZSMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2RWe/5etiM/Atur64WJRybmJIj56BMtUZj35fRxxeJU=;
-        b=3xUqVF+necQc4jEjpvLuDBlgMQhVaNTseFZKUyc2qEpG8fRTD0DubRX6gWO4ayIVKa
-         oBhFRu0W1dUv7mMjbXptX8lLA+Dm0JHKDBCSqltqERF9H4Cb4Ta5zZZBPiPPs8VlWf9X
-         jKmO8djjwxv1GXWE9mxgEcgxg7sEjq9u+2d+/BY1UIcqHaS4sGyinQ4DPCH48QWC4HeN
-         3iRzbmStmMqIxg8Ojmqj0FN7OzKpL69la2SJT5+lYiD2MzXSQtacWtWzimN6DKAnTmci
-         uXszNCaKHagWxr8HGahslbdk+yRylP2fDC41HDnekfxfrdwdjy3KIMOtPlMBB5g6JAhp
-         gvdQ==
-X-Gm-Message-State: AJIora8/Tpgl+25GWBrIoOew2xZ48sqSn5/nNpkVH/t7aauyx6R9d+i7
-        WprpxiZcB+u/o48kiSZ4q45I/A==
-X-Google-Smtp-Source: AGRyM1tsEpxIQZ9kT4ftSsfNFNs1JlZSItCy24gOE7mBFnUqo/n9Mj/HB/KCURSz4serspeZznlkGg==
-X-Received: by 2002:a2e:2d09:0:b0:25a:816a:2e62 with SMTP id t9-20020a2e2d09000000b0025a816a2e62mr15449635ljt.147.1658298446484;
-        Tue, 19 Jul 2022 23:27:26 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id p18-20020ac24ed2000000b0047255d210d6sm3617731lfr.5.2022.07.19.23.27.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 23:27:26 -0700 (PDT)
-Message-ID: <11cc46d8-ae01-f3d2-b9c6-c366c6e4afc9@linaro.org>
-Date:   Wed, 20 Jul 2022 08:27:24 +0200
+        Wed, 20 Jul 2022 02:28:08 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F9845F7A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O2xn20AWXrH9ETRak62cLh35uHtCl+LQSmMFOJyOMHHUIvP7160xVYAbZBRIv76RZNreeCzt4BvHgyVQLv87FEJtC1tWuPFs7/NHU1P0OSkhJfXDVL1FrnG6yWj/Gw0qAEfLlQoBhk7ldWN/t2KPGkg4dm6PMPvQFu10FxVLQqj12aL/m5ns45lYFFy6MfAY//6DYVX4VPGGx9nTg1SOCXy5tj01Q7bhbAd7CmyEnZ+LY2C7jzjrQvOtJ91ifbFZDBQvaYfw2+3pkh/pql3VOE9lvqQKK+mQMR/7hw5QyKvf7G97NLZKto9CaUbjU1z2qzWKcTEKqpHW5/duMIfQnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h1LmgiealGYwNmxDY0ba9KJZOV7BhQ7yJvUDAgepQog=;
+ b=HNmCIGNz1K2N7NN6kyyTt66ZzMHcwKbj+XyMiIOZh8DlZQocsu0kxrXOB4Hvntf801qCv8YgvuholmQwvmNoSfraftuOxBe54wB0S5/JResRkeyPYFP4mcU6GLXs0FpLuAlF1ASxxDFojDRz1HOczEggti8smUuQ4ImiZP+TV0HaOWVtahpb07xcv0IO2pScloP2e0nrqxTm9NJ1jXlFWh+zFUqyUGtKBJ0H0ANKz0VerVNyjJN20+R7m/cBUQj/lbp/2rk7W/g9FbAWQbKa0l2EpSGREV1ARnRNo3zwzlYZPrclLZUY16pGnMNBuNOaqGJdNdcqrupCD7YiOFHKcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h1LmgiealGYwNmxDY0ba9KJZOV7BhQ7yJvUDAgepQog=;
+ b=JnHgspnto8brEU5d194Bkz9ANSi1tYajMLBtD5TVmUksVXcJWxOj0hlwpVuPS7z0q9ePrvYwVUg0Ip5HWakDJyytnpEFxE9Yg8zlr1h2kB81ItlVqcVdoniBKEdJOrlOtjo24aYv3zqA/YzmR9PwQsPP180XAC0fac52cnrS/Zj3uuryMwO/PfxG6YNw/dCS/ORed5a9O2ReQlYBW84flod4L1/wybDSbEAPrvTIf5ETATPKkJKqUuXLZTZ+n/OEerFpm/CySv70XaoG8knlSQHRm7yI+ZYEU5sBn4xTrxpRQOWDnvmLgVIcdvBbyAmEKLoA2rTmcaFVIa6vQX/Ttw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by BL0PR12MB4753.namprd12.prod.outlook.com (2603:10b6:208:89::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.13; Wed, 20 Jul
+ 2022 06:28:04 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
+ 06:28:04 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     bskeggs@redhat.com, rcampbell@nvidia.com
+Cc:     kherbst@redhat.com, lyude@redhat.com, airlied@linux.ie,
+        daniel@ffwll.ch, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        jhubbard@nvidia.com, Alistair Popple <apopple@nvidia.com>
+Subject: [PATCH] nouveau/svm: Fix to migrate all requested pages
+Date:   Wed, 20 Jul 2022 16:27:45 +1000
+Message-Id: <20220720062745.960701-1-apopple@nvidia.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0171.namprd05.prod.outlook.com
+ (2603:10b6:a03:339::26) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: clock: add SM6375 QCOM global clock
- bindings
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220719115756.32231-1-konrad.dybcio@somainline.org>
- <20220719115756.32231-2-konrad.dybcio@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220719115756.32231-2-konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 56d01757-4cae-4745-ef24-08da6a1900a8
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4753:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VfBJLKzg9jIYhZwkZeQHh5I3ET0R0uXDGrxZchFKfaDEDdgQGV/oYVWjT7+P3hBuNh6o2Kp+6WY3MQ9Bj29ZLsWBNzVevnSjR/4HTDNTnHqeSzwDNMwsVayZK/gGGQd/WLlhMGDe0xj8/GTIR2xFGBmvRhChXdwahyJDEs0108neHocEPdCXi+5OtXqv8FCSMcKbGq/bVjUfclzLET+SgUOxqzNPe5Jv6Blq0KHFvayMXLvBxQOC0BPTviw3JYUT22vmbXFUq+eh2T9fRJG287KVdms9PeA8GptVCdBh8F+zGqbUePyU++rFfSBUtXgGAC9BKXcyB7R5jBgzgwGdZlA683q3Haj0FAzKM+DviEtbrwcbT1grEnLDkyOTzvAdpSaZzcZaknUBWkkdiKkWPLh8DW4CpRH5ZXAbffyrnp0oFlocZfGVmqIByy73wjLeL/ukqeQufct8mvkB14jR0aQfhnBAg45cKN+R0iWNZLYOBGSbFuH/p0DaZnV4N0ijHrxV1Z5Kd1r1lwO8+R40JPMWUYwEYBfdUyZdRNkKj9xPxIuNqzeHdUUiwChMlPbNq0FLZQ/WiR7JsYDZvWGwH9d438+NzPszyg7kLlNjHRiY2jb8dJkxg9NiNVqJVDbEfJdCaj9RKo8qnomR5hRaz1rrbxfg8gEQwJBzWts7Bpgf+95bDCr7450TcRmx0wjnY3jfxD5VNWeFHl/1F5EJReG/pYY8HjNlhrkHYG6/YlWf7R1h3IbOiqMI6bJPIbBp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(186003)(6512007)(6636002)(66556008)(316002)(86362001)(2616005)(107886003)(1076003)(66946007)(66476007)(4326008)(478600001)(38100700002)(8676002)(6486002)(83380400001)(26005)(6666004)(6506007)(41300700001)(5660300002)(8936002)(36756003)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8fSAOjDnphMfm2W/I0mF3qKzpuO6e07McDCeMpYXDwFctRJPFzfXZqCyiTdE?=
+ =?us-ascii?Q?4oL+XSLyH0ceZRgArTLOMf+hXN7oTT+Rd5+jvOZMTLQbhU4HuViOAmpPRl3c?=
+ =?us-ascii?Q?8SpoiJX3ax+Y7MVBR27p56jgHSPECphDLwG0HL6yQ5Ex6hHVaxV0k7i6zRja?=
+ =?us-ascii?Q?oqVF4CtcuxWVyaC9uXHgdgENpcBBviP6dIqcI+fDDepEQn3MxHggcqtiUSWS?=
+ =?us-ascii?Q?ir1MqYOs5zbEHiIUTu5/iYiTtBlSiOg0YBsot3KIBmC8R1Zpwb7hIYhTuMqc?=
+ =?us-ascii?Q?yLkmh3Kj/WEPGBWw16w2Fk784Xz9UJVWLR7p5J4aWrNdBVzj9bgIfjnwwYMh?=
+ =?us-ascii?Q?PyPHPFZET1uXBTR1bCB1YwPfIIY5k1dnpd//R7qx02zZHuM9E0arxckptgjO?=
+ =?us-ascii?Q?/OlleyFZ/Lu/ecJUFrR45pX775H6NGFrl6D7QIaDp01laHy0ElVj7uOvn0Go?=
+ =?us-ascii?Q?DOif5UCxHkOmRJWx6mM6vWyaRo2c0WU016VIa4CJQNjfKQXZfoGYreTpYCkF?=
+ =?us-ascii?Q?lvbX2tEqcJIw1PNUhKpHe8+AgxRx+Qd3IFP3HNuSA13IYJxeoOi+Dhb7Llu5?=
+ =?us-ascii?Q?zEzDDIkBp8vTkFyQbxGlqUXsh0dpX+zOA68llgJAcYXwyfDHAwLE3kseF4l0?=
+ =?us-ascii?Q?/DFmcK7ili5+WacHPkwY/2toNHxWSJr+aQ7UMfxJHpvdVLqQcfFe9oiDqWlc?=
+ =?us-ascii?Q?kdp54lQW5829YeJ8yN0XMR5yJedCWj83E0Fi8EfVMYXT05mxY8gOPZ+xGvV1?=
+ =?us-ascii?Q?YUHuwm0BcqQDATkLsSgaAPWSXlkMKYG7cuT7WHe0ale8+eAh4heVyrwz2pMw?=
+ =?us-ascii?Q?6gtSsrx7QknHKNOt0O3bv52OyAf5qaCwBhiCPCX4QBXb+nK/J7Xdp4RFx3Vk?=
+ =?us-ascii?Q?kY2RJY22dhXeAMKEqRrzuupfOo9O+hrSqzF+sFHE3mCbmdSytKonWkP1qtGT?=
+ =?us-ascii?Q?CLQnxJD9lo5iGF4mdJh1WOG8V4r7rtQQmJN4USoy8I2xMy/4GFJ7oB8UEfPx?=
+ =?us-ascii?Q?BXNJw5FQLifHh2ySGOJsGZpm0rOaEFwAOBA22cmxDA7M75VcmEODdI+YViWp?=
+ =?us-ascii?Q?C3yvSp7ILKv1Kjuu3aztdwioGiijn0k7C+um9WIw2VrtZJwRAAdKtPE1f4gq?=
+ =?us-ascii?Q?ZHvKkLYaiLWm4JdWflC6LYjRNpiOb/c6s3dGKVRYrEKKedIdpLs7y534vkzr?=
+ =?us-ascii?Q?33D14PIzDf+32U6xX45hQATHs7gOFJhZzW1GP6ZIeCUE9P6M4Wtb6rTQp0fW?=
+ =?us-ascii?Q?Qp+4WeaWMlAxkIAmM2KVGWVRoTMqWzcjMIJRS+hEVVoXkc7pjaFktYmxyPoA?=
+ =?us-ascii?Q?aPix/LnHe1Bl4ElZbSLMekMTgNQzppHs7gT+H0Z3UwJl4aN9k5BOWaCD0OVW?=
+ =?us-ascii?Q?k58TkpW2Ku8RRgMgp+qAt6jtjk8YTvVtqzrVeB3OEmYDTFvC2FCmw/24Yyud?=
+ =?us-ascii?Q?C1/SlM5u9YOKkWuFGxnfTWi9ABMeEDmlKyICO9KgfYB6WMuoFGxwAQZLe05v?=
+ =?us-ascii?Q?I9pQ/o1UGKmJUtuQAF7IBTQsUotQLAUFbGFJkiZr+nZUpCEt+sNV/foIL9WU?=
+ =?us-ascii?Q?EXV3NM6FW6/DXv7lXxP6CAlE06/qLUuxw60HFvxx?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56d01757-4cae-4745-ef24-08da6a1900a8
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 06:28:04.5081
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l+LRQweV1wN+X5L3BJPbxZmmpngMaDtECHkXXyanXVLf3erN370CV2tWuYW9A8SObeMFjVKUoEiYY56DdGpJBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4753
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/07/2022 13:57, Konrad Dybcio wrote:
-> Add device tree bindings for global clock controller for SM6375 SoCs.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
-> Changes since v1:
-> - dropped clock-names (switched to .index)
-> 
->  .../bindings/clock/qcom,sm6375-gcc.yaml       |  65 +++++
->  include/dt-bindings/clock/qcom,sm6375-gcc.h   | 234 ++++++++++++++++++
->  2 files changed, 299 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm6375-gcc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
-> new file mode 100644
-> index 000000000000..2e43cd75d3d4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
-> @@ -0,0 +1,65 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,sm6375-gcc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Global Clock & Reset Controller Binding for SM6375
-> +
-> +maintainers:
-> +  - Konrad Dybcio <konrad.dybcio@somainline.org>
-> +
-> +description: |
-> +  Qualcomm global clock control module which supports the clocks, resets and
-> +  power domains on SM6375
-> +
-> +  See also:
-> +  - dt-bindings/clock/qcom,sm6375-gcc.h
-> +
+Users may request that pages from an OpenCL SVM allocation be migrated
+to the GPU with clEnqueueSVMMigrateMem(). In Nouveau this will call into
+nouveau_dmem_migrate_vma() to do the migration. If the total range to be
+migrated exceeds SG_MAX_SINGLE_ALLOC the pages will be migrated in
+chunks of size SG_MAX_SINGLE_ALLOC. However a typo in updating the
+starting address means that only the first chunk will get migrated.
 
-Why you are not referencing qcom,gcc.yaml?
+Fix the calculation so that the entire range will get migrated if
+possible.
 
-> +properties:
-> +  compatible:
-> +    const: qcom,sm6375-gcc
-> +
-> +  clocks:
-> +    items:
-> +      - description: Board XO source
-> +      - description: Board XO Active-Only source
-> +      - description: Sleep clock source
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#reset-cells':
-> +    const: 1
-> +
-> +  '#power-domain-cells':
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - '#clock-cells'
-> +  - '#reset-cells'
-> +  - '#power-domain-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,rpmcc.h>
-> +    clock-controller@1400000 {
-> +      compatible = "qcom,sm6375-gcc";
-> +      reg = <0x01400000 0x1f0000>;
-> +      clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
-> +               <&rpmcc RPM_SMD_XO_A_CLK_SRC>,
-> +               <&sleep_clk>;
-> +      #clock-cells = <1>;
-> +      #reset-cells = <1>;
-> +      #power-domain-cells = <1>;
-> +    };
-> +
-> +...
-> diff --git a/include/dt-bindings/clock/qcom,sm6375-gcc.h b/include/dt-bindings/clock/qcom,sm6375-gcc.h
-> new file mode 100644
-> index 000000000000..1e9801e1cedf
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/qcom,sm6375-gcc.h
-> @@ -0,0 +1,234 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
+Signed-off-by: Alistair Popple <apopple@nvidia.com>
+Fixes: e3d8b0890469 ("drm/nouveau/svm: map pages after migration")
+---
+ drivers/gpu/drm/nouveau/nouveau_dmem.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Hm, Qualcomm gave permission to relicense bindings to dual-license,
-although I am not sure how this works with files where copyrights were
-transferred to Linux Foundation...
+diff --git a/drivers/gpu/drm/nouveau/nouveau_dmem.c b/drivers/gpu/drm/nouveau/nouveau_dmem.c
+index 7ba66ad68a8a..16356611b5b9 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_dmem.c
++++ b/drivers/gpu/drm/nouveau/nouveau_dmem.c
+@@ -680,7 +680,11 @@ nouveau_dmem_migrate_vma(struct nouveau_drm *drm,
+ 		goto out_free_dma;
+ 
+ 	for (i = 0; i < npages; i += max) {
+-		args.end = start + (max << PAGE_SHIFT);
++		if (args.start + (max << PAGE_SHIFT) > end)
++			args.end = end;
++		else
++			args.end = args.start + (max << PAGE_SHIFT);
++
+ 		ret = migrate_vma_setup(&args);
+ 		if (ret)
+ 			goto out_free_pfns;
+-- 
+2.35.1
 
-> +/*
-> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2022, Konrad Dybcio <konrad.dybcio@somainline.org>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLK_QCOM_GCC_SM6375_H
-> +#define _DT_BINDINGS_CLK_QCOM_GCC_SM6375_H
-> +
-
-
-Best regards,
-Krzysztof

@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A025C57BB7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFEB257BB7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbiGTQh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
+        id S231625AbiGTQhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiGTQhS (ORCPT
+        with ESMTP id S231571AbiGTQhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:37:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0C65720A;
-        Wed, 20 Jul 2022 09:37:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3D1E61DA7;
-        Wed, 20 Jul 2022 16:37:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADDEC3411E;
-        Wed, 20 Jul 2022 16:37:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658335036;
-        bh=KIWbVa61dC4UF7msJMfbTUOsdRHrVPkRTNJ/r3E4JrM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=offZjZBa0fwZcjORH0XRmhfYLQiFj4ZH5pOkRXcA4yMrKx3eFE9PyeyGfaVAeffLy
-         h5dAyxf2LGZf7uAOTzRIkoerDVRnfgN9QD9CMYp1ryNuAFqNSDaZqspCA4PxuW/BAy
-         PJ6NQvCPcH7McDy21/kGPb/vi+US7fZ44JF4YAYEHEks6jq5MInzs4FUPpHZ1Zw8RE
-         +WP4usycK8xlf+6YQFfuQr485h6YuqfFDuoWAH6DoyZYWawaFxEGIDJXBGP9tx4ZPe
-         S7Jkjm7UqadbfVue4tRgXDGzEX9aqm6HP7HTvX5z5Ime11B9xswRvFA16KQQly/LfT
-         B1ecssyOjZAPQ==
-Date:   Wed, 20 Jul 2022 12:37:14 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Alexandre Chartre <alexandre.chartre@oracle.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, pbonzini@redhat.com, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, jing2.liu@intel.com, sandipan.das@amd.com,
-        sblbir@amazon.com, keescook@chromium.org, tony.luck@intel.com,
-        jane.malalane@citrix.com, bigeasy@linutronix.de
-Subject: Re: [PATCH AUTOSEL 5.10 05/25] x86/bugs: Report AMD retbleed
- vulnerability
-Message-ID: <YtgvOvOdl8shwAlw@sashalap>
-References: <20220720011616.1024753-1-sashal@kernel.org>
- <20220720011616.1024753-5-sashal@kernel.org>
- <YtezSJQfqZNQtmRa@kroah.com>
+        Wed, 20 Jul 2022 12:37:36 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692395B07B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:37:32 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id e28so31116600lfj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kp8iCiN1Lxt5s2kzJFzxbS/dwJfrlU9B2NVr6P7nJY4=;
+        b=cw76WH5XkBndt8XkuIVyL5Z10zdQ9KgHP3PcvXoTiEC3ELZK8dHW/cgRWjpusfaNAP
+         yr2HqqYHUgj1WnflMsZa+nxp5qe8ACM2Ao4tsH4SS8NpGRvCJmD3c3XMcSmZoa5gTRV6
+         FjF9mG5o4Yui7CqgkyMTD88qrKxhaqwDCbQZrcR/4+kCVj+G3EJ/CfYeiLW2aBFlyVbU
+         ffFnGFK9K9hfUS60ffYlTfbs/LSvvZrYWtYzeatqJO3tTxCdQWV4ozrBljSo+pgfrddy
+         lKyaQA4mxWe/AYbAYWemtU8efbW921gTgT1oKA/kcWdf0HkrNTVkUmxsDnvXfA7DGrHR
+         oZbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kp8iCiN1Lxt5s2kzJFzxbS/dwJfrlU9B2NVr6P7nJY4=;
+        b=b4sDRqujaj3GGCglVj07cctN+GEv8vrgT64JBlrpqNBTE3xve/l7RpUMaezKIvFqPp
+         bvcqXEPccbF91I1PAkGsUsM6LG3qmMTarCUWLulL1iY3DuWHblZ8HhfvJC+DG5L6RBwd
+         s7jgFdVdPwMWMGKYoPEVbjzWmVN7vL1nlcd7pWDgwjWqmMkjm3vpCh93DniwCENuyfBV
+         nZnVsUjAGhpPey2fRSDBKGWvo0y5PJVCxKppcuLhrn6x3H+9xKyR1zKBLgdewr8gIc5v
+         j2wzEoXP/REFbG4fCq//ozOVqkHQPH7B3LbuvFJ02Z+NN1rCLe6gLILb4msrVCaNQCzh
+         wldg==
+X-Gm-Message-State: AJIora/0kLFUYU/hMfTDT31dlVct7pF53mP7Jgu1IFFqNmjhh/wUVnuP
+        E9jgmRUcD35WkxtVjK5ubetTMA==
+X-Google-Smtp-Source: AGRyM1u7LbBSTLIdP8XMWj8CWDvGif493sK4UA0Un1erHq3+g9Xxi6JABJUt6y0RHWcWjfA3cBeN+w==
+X-Received: by 2002:a19:dc06:0:b0:48a:103a:82ee with SMTP id t6-20020a19dc06000000b0048a103a82eemr19275725lfg.87.1658335050731;
+        Wed, 20 Jul 2022 09:37:30 -0700 (PDT)
+Received: from krzk-bin.. (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id 27-20020ac25f5b000000b0047255d210e4sm3913409lfz.19.2022.07.20.09.37.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 09:37:30 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kiran Gunda <kgunda@codeaurora.org>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH RESEND] dt-bindings: leds: qcom-wled: fix number of addresses
+Date:   Wed, 20 Jul 2022 18:37:20 +0200
+Message-Id: <20220720163720.7099-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YtezSJQfqZNQtmRa@kroah.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 09:48:24AM +0200, Greg KH wrote:
->On Tue, Jul 19, 2022 at 09:15:56PM -0400, Sasha Levin wrote:
->> From: Alexandre Chartre <alexandre.chartre@oracle.com>
->>
->> [ Upstream commit 6b80b59b3555706508008f1f127b5412c89c7fd8 ]
->>
->> Report that AMD x86 CPUs are vulnerable to the RETBleed (Arbitrary
->> Speculative Code Execution with Return Instructions) attack.
->>
->>   [peterz: add hygon]
->>   [kim: invert parity; fam15h]
->>
->> Co-developed-by: Kim Phillips <kim.phillips@amd.com>
->> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
->> Signed-off-by: Alexandre Chartre <alexandre.chartre@oracle.com>
->> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Signed-off-by: Borislav Petkov <bp@suse.de>
->> Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
->> Signed-off-by: Borislav Petkov <bp@suse.de>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  arch/x86/include/asm/cpufeatures.h |  1 +
->>  arch/x86/kernel/cpu/bugs.c         | 13 +++++++++++++
->>  arch/x86/kernel/cpu/common.c       | 19 +++++++++++++++++++
->>  drivers/base/cpu.c                 |  8 ++++++++
->>  include/linux/cpu.h                |  2 ++
->>  5 files changed, 43 insertions(+)
->
->This part of the larger retbleed series already queued up, so no need to
->add it again.
+On PM660L, PMI8994 and PMI8998, the WLED has two address spaces.  This
+also fixes dtbs_check warnings like:
 
-All of these weren't part of anything that was queued up. I've actually
-ended up queueing this one up since it was a dependency for a patch with
-a Fixes tag, but all of this AUTOSEL batch wasn't part of the retbleed
-series you've queued up a week ago.
+  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dtb: leds@d800: reg: [[55296], [55552]] is too long
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/leds/backlight/qcom-wled.yaml    | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
+index 5d66c3e4def5..4c15693f7a01 100644
+--- a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
++++ b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
+@@ -26,7 +26,8 @@ properties:
+       - qcom,pm8150l-wled
+ 
+   reg:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
+ 
+   default-brightness:
+     description: |
+@@ -171,6 +172,9 @@ allOf:
+ 
+     then:
+       properties:
++        reg:
++          maxItems: 1
++
+         qcom,current-boost-limit:
+           enum: [ 105, 385, 525, 805, 980, 1260, 1400, 1680 ]
+           default: 805
+@@ -189,6 +193,9 @@ allOf:
+ 
+     else:
+       properties:
++        reg:
++          minItems: 2
++
+         qcom,current-boost-limit:
+           enum: [ 105, 280, 450, 620, 970, 1150, 1300, 1500 ]
+           default: 970
 -- 
-Thanks,
-Sasha
+2.34.1
+

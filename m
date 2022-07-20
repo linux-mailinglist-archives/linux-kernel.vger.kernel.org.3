@@ -2,147 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9837457B384
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C125A57B386
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235692AbiGTJK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S235908AbiGTJK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiGTJKY (ORCPT
+        with ESMTP id S234921AbiGTJKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:10:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0783762FE
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:10:22 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9C73A37585;
-        Wed, 20 Jul 2022 09:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658308221; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CAdq3+Dl59dOrtqGUadXbH90BiOSvY1QRdbnjHxitEY=;
-        b=koq0O3YT0a8AFx9ViFLP55NVJSwPRrVN9orjcew1VcG7KtPIbpJQaHt331bBg7aQuI76bU
-        cfezxUbxmK01wnYRU+2iJefDIrsaAMCCQoCtkhlPxPnz98nWB8RMki78YicWB9pg+DDG9w
-        D9i8k5rGU7iX0TWgEj5v+2tYuYfUsSY=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B92EB2C141;
-        Wed, 20 Jul 2022 09:10:17 +0000 (UTC)
-Date:   Wed, 20 Jul 2022 11:10:17 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Charan Teja Kalla <quic_charante@quicinc.com>,
-        akpm@linux-foundation.org, pasha.tatashin@soleen.com,
-        sjpark@amazon.de, sieberf@amazon.com, shakeelb@google.com,
-        dhowells@redhat.com, willy@infradead.org, vbabka@suse.cz,
-        david@redhat.com, minchan@kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>
-Subject: Re: [PATCH] mm: fix use-after free of page_ext after race with
- memory-offline
-Message-ID: <YtfGeUUoi9cq3g0A@dhcp22.suse.cz>
-References: <1657810063-28938-1-git-send-email-quic_charante@quicinc.com>
- <YtVJBQ/ZOt22o8+B@dhcp22.suse.cz>
- <fca23df7-37b0-f32d-ece3-58317dfad210@quicinc.com>
- <YtV0PSMAGG46Pq0K@dhcp22.suse.cz>
- <aaeec83d-bdf8-280c-b943-ad510f1d8db2@quicinc.com>
- <20220720082112.GA14437@hu-pkondeti-hyd.qualcomm.com>
+        Wed, 20 Jul 2022 05:10:25 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740BF26D2;
+        Wed, 20 Jul 2022 02:10:24 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id j1-20020a17090aeb0100b001ef777a7befso3301022pjz.0;
+        Wed, 20 Jul 2022 02:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sTsDNsbNdeSVMtD8eRDDUkMIBEhKPE+q81EkScKHRlc=;
+        b=EmX0SzEhIZgptWCwjF/HTCsuWvI8AgLdla3TA+sTwcDwhGPgp5FoRjP6IkCMtpWMHv
+         q8n0hp8fTwL5NBaMzX/QTZ2BHNAOW3EI42hrxDMN73nBAIx2hx6XIV/eyEhJoyZ4HC25
+         OROlbAFkUwc7H32U/p3ZayTUN0gl3nkWiXQjGusRPfX7ej+iMjXSziVZ0wQdMEp/W9FL
+         jSJIAdiNtXMESlKF5hicOKMVyD2Tqq7mzEITnleYNHSuJq+MhbnOeX63UNvqVp/nSYxk
+         3jiSK5Z9HVfPCgX17rxpnHtdGOSbZzNgD25e/HCOzDHF4r/7T1Z/JfreAEzi3Y9P6Dke
+         XqeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sTsDNsbNdeSVMtD8eRDDUkMIBEhKPE+q81EkScKHRlc=;
+        b=UNkt0ivVIK7U8gssDV5V6/Y7GJqZvW8ArjQVu07QmzZRQHdKIh6YhFIGgoGMBR0Fnf
+         MWA3gU6XukcdVBuocZQ1WAnoVn2N30+Cl1jaAcFh15fXCLsn4PDwgg1Q5jtr7Tx3JlPJ
+         eR4FuuL9fI65AsxrBcqQx+0sPw4TgMs2kjh6+Mf9zy1zJ+TCXbLwcfE1KEOXIkNdaUHP
+         oHDLJYfSzJfs8LNhIXVBkTIyTlmtvI51hGO/9oSS6IO4+42fW/+VAjGsfqeGRnEopW4i
+         7YlTnQv0IhckGMvDyInwpZwVwhTXlP0oDzdsISE17cgY0U/Kiovf0D/c4RLo+wwl6uAN
+         Ta6Q==
+X-Gm-Message-State: AJIora8LboAOvNeYg7aEYmkqdK33q5cncMPSdgpQ2wFgyNu5BKtj6LH6
+        IwJFPqYfxtZ13zx31FpQZCc=
+X-Google-Smtp-Source: AGRyM1vtEINJKfO5EMi3ll29u6Mudn8Yi2awZ7v2pLtcVBEzKK2hUJmWOV7xNuluCHe58YWxpdv98w==
+X-Received: by 2002:a17:902:ebcb:b0:168:e3ba:4b5a with SMTP id p11-20020a170902ebcb00b00168e3ba4b5amr37591122plg.11.1658308223917;
+        Wed, 20 Jul 2022 02:10:23 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-73.three.co.id. [180.214.232.73])
+        by smtp.gmail.com with ESMTPSA id p14-20020a17090a74ce00b001ef8ac4c681sm1102786pjl.0.2022.07.20.02.10.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 02:10:23 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 2D090103B12; Wed, 20 Jul 2022 16:10:21 +0700 (WIB)
+Date:   Wed, 20 Jul 2022 16:10:21 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
+Message-ID: <YtfGfcyjKaNHPndU@debian.me>
+References: <20220719114714.247441733@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220720082112.GA14437@hu-pkondeti-hyd.qualcomm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220719114714.247441733@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 20-07-22 13:51:12, Pavan Kondeti wrote:
-> Hi Charan,
+On Tue, Jul 19, 2022 at 01:51:25PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.13 release.
+> There are 231 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On Tue, Jul 19, 2022 at 08:42:42PM +0530, Charan Teja Kalla wrote:
-> > Thanks Michal!!
-> > 
-> > On 7/18/2022 8:24 PM, Michal Hocko wrote:
-> > >>>> The above mentioned race is just one example __but the problem persists
-> > >>>> in the other paths too involving page_ext->flags access(eg:
-> > >>>> page_is_idle())__. Since offline waits till the last reference on the
-> > >>>> page goes down i.e. any path that took the refcount on the page can make
-> > >>>> the memory offline operation to wait. Eg: In the migrate_pages()
-> > >>>> operation, we do take the extra refcount on the pages that are under
-> > >>>> migration and then we do copy page_owner by accessing page_ext. For
-> > >>>>
-> > >>>> Fix those paths where offline races with page_ext access by maintaining
-> > >>>> synchronization with rcu lock.
-> > >>> Please be much more specific about the synchronization. How does RCU
-> > >>> actually synchronize the offlining and access? Higher level description
-> > >>> of all the actors would be very helpful not only for the review but also
-> > >>> for future readers.
-> > >> I will improve the commit message about this synchronization change
-> > >> using RCU's.
-> > > Thanks! The most imporant part is how the exclusion is actual achieved
-> > > because that is not really clear at first sight
-> > > 
-> > > CPU1					CPU2
-> > > lookup_page_ext(PageA)			offlining
-> > > 					  offline_page_ext
-> > > 					    __free_page_ext(addrA)
-> > > 					      get_entry(addrA)
-> > > 					      ms->page_ext = NULL
-> > > 					      synchronize_rcu()
-> > > 					      free_page_ext
-> > > 					        free_pages_exact (now addrA is unusable)
-> > > 					
-> > >   rcu_read_lock()
-> > >   entryA = get_entry(addrA)
-> > >     base + page_ext_size * index # an address not invalidated by the freeing path
-> > >   do_something(entryA)
-> > >   rcu_read_unlock()
-> > > 
-> > > CPU1 never checks ms->page_ext so it cannot bail out early when the
-> > > thing is torn down. Or maybe I am missing something. I am not familiar
-> > > with page_ext much.
-> > 
-> > 
-> > Thanks a lot for catching this Michal. You are correct that the proposed
-> > code from me is still racy. I Will correct this along with the proper
-> > commit message in the next version of this patch.
-> > 
-> 
-> Trying to understand your discussion with Michal. What part is still racy? We
-> do check for mem_section::page_ext and bail out early from lookup_page_ext(),
-> no?
-> 
-> Also to make this scheme explicit, we can annotate page_ext member with __rcu
-> and use rcu_assign_pointer() on the writer side.
-> 
-> struct page_ext *lookup_page_ext(const struct page *page)
-> {
->         unsigned long pfn = page_to_pfn(page);
->         struct mem_section *section = __pfn_to_section(pfn);
->         /*
->          * The sanity checks the page allocator does upon freeing a
->          * page can reach here before the page_ext arrays are
->          * allocated when feeding a range of pages to the allocator
->          * for the first time during bootup or memory hotplug.
->          */
->         if (!section->page_ext)
->                 return NULL;
->         return get_entry(section->page_ext, pfn);
-> }
 
-You are right. I was looking at the wrong implementation and misread
-ifdef vs. ifndef CONFIG_SPARSEMEM. My bad.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
+and powerpc (ps3_defconfig, GCC 12.1.0).
 
-Memory hotplug is not supported outside of CONFIG_SPARSEMEM so the
-scheme should really work. I would use READ_ONCE for ms->page_ext and
-WRITE_ONCE on the initialization side.
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
 -- 
-Michal Hocko
-SUSE Labs
+An old man doll... just what I always wanted! - Clara

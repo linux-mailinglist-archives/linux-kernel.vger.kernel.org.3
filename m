@@ -2,115 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4FF57B01A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 06:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2EC57B018
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 06:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238536AbiGTErC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 00:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        id S238757AbiGTEsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 00:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiGTErA (ORCPT
+        with ESMTP id S232103AbiGTEsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 00:47:00 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672BD5B066
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:46:58 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id c3so14601029pfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VtF9+07gASHhrIu6wD3FN1xOsSjHByW20JZ9pcO8ds0=;
-        b=fjQHDQLqh1A1CvsX2jafefzTGE36QKfdh3Qilgur+BwmX5uXp/iLBU4QybnFkKJVmG
-         pNABvDJrsAlwuXpzvTuIT5usg1eR++fZZZDamrFa8h3thcwUlBZnsOBf1ZmrICn3YSTj
-         T0Kcbxh3rIDHWJhYw3iXXLT9ja0KNaFgSGnuvEtGxH4R/1Yh/BHxeozZpnxsnFbA1soR
-         CDjSmGCruHE6nPmvn3/nPRAo6knbDZsoTXhw1FiwBGAm7jrQynzd6Eef+IE5+7qEdZPq
-         F9/35voq1+L1YkK0ibuaWgdnaDue1kGCBYqcebE+hQUo1D55mIvHYG0osACVHYXl0rGL
-         uCag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=VtF9+07gASHhrIu6wD3FN1xOsSjHByW20JZ9pcO8ds0=;
-        b=2SJgSPsBNwxpuUBdOWBUS3O9AArPL+9jh+5JStkAJZpess/Lk8EGlECOmihUGaTZYO
-         x7P/9AjT3Qdp+CpZDVsNE3/HDbI12HgKmd5BQJX/u/OCYIlwJgev/r2WgTgVaOPkaNi6
-         TFZ47SY0JlUWPDdSAjUIcemxOBx+6NcMNBwTm2MGhb4gy9DYlj7xEmhVIsT+b065lrnF
-         wzyiPhlDrMFl1rKYu9cEWHTkfWT0C82cjNB0kXrUpbOZ1/wKpj54H2bmfKD0IF5GvBHr
-         kfNmbc/xkKik3brc3NHEVUBgNOWJIeeSUoQTc9+B+Oh6W91pFnm4WfW7MxTgU6ul7yq9
-         Xbiw==
-X-Gm-Message-State: AJIora8bo65cvgZjUtT4YWNj5eo/oahqjynJNWIgnrhdQHfzdMIO2EJO
-        IN7dLL5Z+qBAK+s3CDA8jn/bzw==
-X-Google-Smtp-Source: AGRyM1vlzCdD69HQD5gb1Q92kSqgBlWCPv0ppUY5psQ46BDf24I6J7L22UUFB0Qj3qfpd4QsIhj9Eg==
-X-Received: by 2002:a05:6a00:134e:b0:52a:d5b4:19bb with SMTP id k14-20020a056a00134e00b0052ad5b419bbmr37009701pfu.45.1658292417692;
-        Tue, 19 Jul 2022 21:46:57 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id i5-20020a17090a4b8500b001f0097c2fb2sm481628pjh.28.2022.07.19.21.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 21:46:56 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 21:46:56 -0700 (PDT)
-X-Google-Original-Date: Tue, 19 Jul 2022 21:16:19 PDT (-0700)
-Subject:     Re: [PATCH V3 0/5] Support for 64bit hartid on RV64 platforms
-In-Reply-To: <20220527051743.2829940-1-sunilvl@ventanamicro.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, ardb@kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        heinrich.schuchardt@canonical.com, apatel@ventanamicro.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, sunil.vl@gmail.com,
-        sunilvl@ventanamicro.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     sunilvl@ventanamicro.com
-Message-ID: <mhng-4c49edf1-6367-4dd0-bec7-c6719745ecb5@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Wed, 20 Jul 2022 00:48:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95DB5C355
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:48:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B0AFB81D5C
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:48:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43737C3411E;
+        Wed, 20 Jul 2022 04:48:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658292499;
+        bh=wOjYPC4r5oDa/JEWI74VO/GxlXIOAT2r+9/9E5jV7Q4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=G0KDCYmEZsAwTBwEuDCOjfSaCT24ZfVV7BdZveWwYOJsayHe1ACX5qXxe5483ALnm
+         B3IbcepLkujvX2DY5v7LgAaFyA80HC2e9bomQ/K/HoqgVzOjVcMusRRmvAD6wdV3yd
+         +q398r0uHcF9Ak2u0rYRzPhf1UI/b1PmW5+oHAEqneZF1Km8oS9RMTzABF3/Ar1i/T
+         QnsPahplGOqHn9nqCJKQ8WSoCoKwILynGfv0F0Lt5F11bFridPsHRjqNdS+51ArkJz
+         JxSynGmzpP8xVylKIfeQZvqXfv00aifMj2nVDWQSHgFLOq+lDT5ENoAbOiTBiHvkwh
+         VXt89R7BtIZyQ==
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     bleung@chromium.org, groeck@chromium.org
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        tzungbi@kernel.org
+Subject: [PATCH 0/2] platform/chrome: avoid garbage bytes in `msg->result`
+Date:   Wed, 20 Jul 2022 04:47:52 +0000
+Message-Id: <20220720044754.4026295-1-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 May 2022 22:17:38 PDT (-0700), sunilvl@ventanamicro.com wrote:
-> The hartid can be a 64bit value on RV64 platforms. This series updates
-> the code so that 64bit hartid can be supported on RV64 platforms.
->
-> The series has been tested on both RV32 and RV64 qemu platforms.
->
-> Changes since V2:
-> 	1) Modified commit messages to mention RV64 and add RB tags.
->
-> Changes since V1:
-> 	1) Updated RB tag for PATCH 1 and PATCH3
-> 	2) Type Casting NR_CPUS before comparing with hartid in PATCH 2
-> 	3) Changed commit message of PATCH 2 to provide details about
-> 	   the bug it is fixing.
-> 	4) Updated PATCH 5 for unaligned 64bit read
->
->
-> Sunil V L (5):
->   riscv: cpu_ops_sbi: Add 64bit hartid support on RV64
->   riscv: spinwait: Fix hartid variable type
->   riscv: smp: Add 64bit hartid support on RV64
->   riscv: cpu: Add 64bit hartid support on RV64
->   riscv/efi_stub: Add 64bit boot-hartid support on RV64
->
->  arch/riscv/include/asm/processor.h        |  4 ++--
->  arch/riscv/include/asm/smp.h              |  4 ++--
->  arch/riscv/kernel/cpu.c                   | 26 +++++++++++++----------
->  arch/riscv/kernel/cpu_ops_sbi.c           |  4 ++--
->  arch/riscv/kernel/cpu_ops_spinwait.c      |  4 ++--
->  arch/riscv/kernel/cpufeature.c            |  6 ++++--
->  arch/riscv/kernel/smp.c                   |  4 ++--
->  arch/riscv/kernel/smpboot.c               |  9 ++++----
->  drivers/clocksource/timer-riscv.c         | 15 +++++++------
->  drivers/firmware/efi/libstub/riscv-stub.c | 13 +++++++++---
->  drivers/irqchip/irq-riscv-intc.c          |  7 +++---
->  drivers/irqchip/irq-sifive-plic.c         |  7 +++---
->  12 files changed, 60 insertions(+), 43 deletions(-)
+The 1st patch merges Kunit utils and test cases.  The idea is basically from
+the review comment in [1].
 
-Thanks, this is on for-next.
+The 2nd patch fixes that `msg->result` would be garbage bytes if the mock list
+is empty.  This is separated from previous series [2].
+
+[1]: https://patchwork.kernel.org/project/chrome-platform/patch/20220718050914.2267370-2-tzungbi@kernel.org/#24944149
+[2]: https://patchwork.kernel.org/project/chrome-platform/patch/20220718050914.2267370-2-tzungbi@kernel.org/
+
+Tzung-Bi Shih (2):
+  platform/chrome: merge Kunit utils and test cases
+  platform/chrome: cros_kunit_util: add default value for `msg->result`
+
+ drivers/platform/chrome/Kconfig           | 10 ++--------
+ drivers/platform/chrome/Makefile          |  5 +++--
+ drivers/platform/chrome/cros_kunit_util.c | 20 +++++---------------
+ drivers/platform/chrome/cros_kunit_util.h |  1 +
+ 4 files changed, 11 insertions(+), 25 deletions(-)
+
+-- 
+2.37.0.170.g444d1eabd0-goog
+

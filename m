@@ -2,149 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEA757B33A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3C157B36C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbiGTIu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        id S230416AbiGTI7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiGTIuY (ORCPT
+        with ESMTP id S232319AbiGTI7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:50:24 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AEF21801
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:50:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658307021; x=1689843021;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yR2qNe3Ce+3Dk3Fg2E30JpDDQ8bOKzo2Aext0N1ZWwE=;
-  b=lhEdITUOmcA/rsl6OXWJmijPh26FFrrUBoRbRjFbbMk0S8CRRsJswejF
-   a9hgbDCODpi5mDYVxa0x8ISmHYZBtnZaoyAgWlWzfvyzQkqMxA0xAPMgo
-   hXV924f+fceYNKFWPamtSCJOq8MUiHuzURbp3WlVB5U3mAhGYL8IqLT4T
-   tCzI+gBuHF9VSr0DXYyRUayRRYum66HQWKzhl8sI47tMvzRlt2sb03upo
-   +njK19BeMVlEAgarJ9YLjwPblWCETgXS0yDyUtlheUz3mXISFDelEoYMr
-   WwHHuWJ1a9/24xt8KX8Zju4oUWU43+gBSsjrO4l/bh5BqY7oPGZrLl+1i
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="266496649"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="266496649"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 01:50:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="740211890"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Jul 2022 01:50:20 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oE5PP-0000Iz-CS;
-        Wed, 20 Jul 2022 08:50:19 +0000
-Date:   Wed, 20 Jul 2022 16:49:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 96ff3a14815bb66a2c29cf473c345f73bbc071d8
-Message-ID: <62d7c194.ZBn8Yc2qmC8BiQRu%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 20 Jul 2022 04:59:24 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D0D6F7D8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:58:56 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id e15so19910855wro.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UXCi2krvz5iV3RG6Br/eDWamgQsHstCKOav7b8DNz3k=;
+        b=Lqqzbdkwfyi+vtGc9522INJrc1XedLAUHcf868Tzcx5CjEZZg0Zk7Fxxu3MTfxmGdo
+         8roZB/SVYpiaTfAu2U5Vzcjn/+ZiNTRi5RznX0BRN8JfaeIg/tFvEIcQKfL92nLUmVpv
+         q03r5K3015d578CfB1iKuU6mx4F8DAlPrNwlYbeh+kcIauy64sDXfEcdsKJEkgfoCxaK
+         7zlWgmh7/lkUl40pHVULUbgPE3SMN19ylEbFw6i8g8HK9HEupedtKVy13/x6rdrny0u4
+         9pqbRsPjDGSUoOIydm/FspUh6NFGVybxlKJ6jQkYH1u5Jx2QNnEBO7lqnD8swkX1lolz
+         VRHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UXCi2krvz5iV3RG6Br/eDWamgQsHstCKOav7b8DNz3k=;
+        b=6J3USwkFAhbDLGUszq0+JoM9rDHbKmqrokCZhXRzBhQJTvVQ/gtBh44DqO4osXzCj6
+         oPYmarjQxNGsHaW5OSDCxOxl51rMWERd3OQZANMdUx75t2is0pcXGFPGRGWxOCQZqZYF
+         kwglvOKu8mhAez6h7dGe0dy7YBlXJTUZzBqicKvOWBK9hZaJqdj/B2vvSmtAXznKLJFI
+         ZQBDD2Red4KwOT7chRWJRk2goQpqlfV3uDcLmPIo6661HbXpKAB6+9LbHcCFdVIpS05b
+         6Bd4ZG2aU4xPxwTfi1UwBklmmmo27m2Z1j5BxxSBhh+v5YOYJNdG60AKFPmoJLxtKw0F
+         Dj8Q==
+X-Gm-Message-State: AJIora/ANIPAOYvU2xC37fbTOqKU1qjjmDsFVjctMFYSBl+kjTj7D/BN
+        2wnWakCVMOR19jlpt2NJVkF1hg==
+X-Google-Smtp-Source: AGRyM1tpaC1pFfFaqkpKdkHi8zMKoU/eQiYQk69VtUESjQWualgkCNfDkjo/qmF4kT3kLruIfHYiBQ==
+X-Received: by 2002:adf:e283:0:b0:21e:26fe:14f3 with SMTP id v3-20020adfe283000000b0021e26fe14f3mr8874954wri.98.1658307535476;
+        Wed, 20 Jul 2022 01:58:55 -0700 (PDT)
+Received: from amjad-ThinkPad-T490.home (2a01cb040613180084408ac44a1fa242.ipv6.abo.wanadoo.fr. [2a01:cb04:613:1800:8440:8ac4:4a1f:a242])
+        by smtp.googlemail.com with ESMTPSA id f4-20020a5d58e4000000b0021d6dad334bsm340571wrd.4.2022.07.20.01.58.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 01:58:55 -0700 (PDT)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     fparent@baylibre.com
+Cc:     iommu@lists.linux-foundation.org, joro@8bytes.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        will@kernel.org, yong.wu@mediatek.com,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Subject: Re: [PATCH 3/3] iommu: mtk_iommu: add support for MT8365 SoC
+Date:   Wed, 20 Jul 2022 10:52:13 +0200
+Message-Id: <20220720085213.3803-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220530180328.845692-3-fparent@baylibre.com>
+References: <20220530180328.845692-3-fparent@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 96ff3a14815bb66a2c29cf473c345f73bbc071d8  Merge x86/urgent into tip/master
+Hi Fabien,
 
-elapsed time: 725m
+Thank you for the fix.
 
-configs tested: 68
-configs skipped: 2
+The kernel would panic if you boot with this patchset because
+bank_nr and bank_enable are not set in mt8365_data.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Please add this change:
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-powerpc                      ep88xc_defconfig
-arm                      footbridge_defconfig
-x86_64                              defconfig
-sh                        sh7757lcr_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-ia64                             allmodconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64               randconfig-a014-20220718
-x86_64               randconfig-a016-20220718
-x86_64               randconfig-a012-20220718
-x86_64               randconfig-a013-20220718
-x86_64               randconfig-a015-20220718
-x86_64               randconfig-a011-20220718
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                 randconfig-a011-20220718
-i386                 randconfig-a013-20220718
-i386                 randconfig-a012-20220718
-i386                 randconfig-a015-20220718
-i386                 randconfig-a014-20220718
-i386                 randconfig-a016-20220718
-s390                 randconfig-r044-20220718
-riscv                randconfig-r042-20220718
-arc                  randconfig-r043-20220718
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -1538,6 +1538,8 @@ static const struct mtk_iommu_plat_data mt8365_data = {
+ 	.m4u_plat     = M4U_MT8365,
+ 	.flags	      = RESET_AXI,
+ 	.inv_sel_reg  = REG_MMU_INV_SEL_GEN1,
++	.banks_num    = 1,
++	.banks_enable = {true},
+ 	.iova_region  = single_domain,
+ 	.iova_region_nr = ARRAY_SIZE(single_domain),
+ 	.larbid_remap = {{0}, {1}, {2}, {3}, {4}, {5}}, /* Linear mapping. */
 
-clang tested configs:
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                 randconfig-a003-20220718
-i386                 randconfig-a001-20220718
-i386                 randconfig-a002-20220718
-i386                 randconfig-a004-20220718
-i386                 randconfig-a005-20220718
-i386                 randconfig-a006-20220718
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220718
-hexagon              randconfig-r045-20220718
+With this change, please add my:
+Reviewed-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Tested-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Amjad

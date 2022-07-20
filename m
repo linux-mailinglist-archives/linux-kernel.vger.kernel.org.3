@@ -2,155 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E14057B6B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD4257B6BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237979AbiGTMro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S241044AbiGTMtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235145AbiGTMrl (ORCPT
+        with ESMTP id S240987AbiGTMtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:47:41 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE83E20F7B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658321259; x=1689857259;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YfJNf2xYuj2xjx3ZO/qD+opLPrqxhG9thyqGVqUoNA0=;
-  b=QPJrz6wzY5mHnp8Rx4PNx8p/50d+na9oX+k+4mMo4uOQxH4Km4HN5YMC
-   vb4HkQMEyAfpN2dgfws9/Sc9jJzCuf7Mo4fbqtSEgntKvTNhRF5tyvF16
-   ssRoXtKk2TDhTR8lLu8YI62d1vlJKc3PZvzpytoadLBM8Zd4i99c2RDi3
-   n0kcGPK6J0JYgDNm5Q8XxC+ANDOjFhrEpzKYMjK2xaUyN+ltJ2Rej/yYD
-   dHX5ZLE8tjq6N7foAv6WdixOAKWtfXDcn1dLvHjVVtAUkrBrOfG4Cvp7k
-   MKcmsOMEeSpm37rzNtmFJld7xXTW/7w+DkDAQEGlzvKy/7Dfqx1IiLer4
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="267167182"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="267167182"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 05:47:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="700862742"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Jul 2022 05:47:35 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id EA207199; Wed, 20 Jul 2022 15:47:44 +0300 (EEST)
-Date:   Wed, 20 Jul 2022 15:47:44 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv5 06/13] x86/mm: Provide ARCH_GET_UNTAG_MASK and
- ARCH_ENABLE_TAGGED_ADDR
-Message-ID: <20220720124744.rpvns3nda7jfljgn@black.fi.intel.com>
-References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
- <20220712231328.5294-7-kirill.shutemov@linux.intel.com>
- <CAG_fn=W-pTCxJ6vEa6aSuAiQDxj0n0_8VgpUhp+TxYDrF8AReg@mail.gmail.com>
- <20220720005724.mwodxwm5r5gayqrm@black.fi.intel.com>
- <CAG_fn=X=yQrWOX43PbLR=VGRVvMgj0_e2x5Mwf0bSZ0DhTQDAQ@mail.gmail.com>
+        Wed, 20 Jul 2022 08:49:09 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7093ED74
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:49:08 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id n66so1243777vsc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:49:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eV3//eRqac2wAOEj5SLbmZLJEZAGjhuPzKep8VqbrF4=;
+        b=sudcFy/I8elWAZwcRFg9JPKh7KVDxwcGnwMq50Uk0FaiivXlfpxo+VgwvAKZDM2YwQ
+         vFygix0BUH9+rJrfZm+v+5FrHBGHWgFN7w2m83EGFEH7yX7TBpOSCT15pGY8po+nf5sg
+         maO56HJB+IBXh+ith0PK2D5eIfvOkOb6YypAJDs7cxYdr9/oygzFOi3KlwKntczptLd1
+         qRdCnUFDwpwznhCVQThpMSPlTLYGsh7O+x1wuiG7utCAgdJ196ShLgqGeB4WdDzz+TkW
+         oFEw27Crw+Av2K9NT02ocx6STw/l5/oU6AxWREmM5BwctCQyOG+ss1dNqmCYYMlhlha1
+         rOZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eV3//eRqac2wAOEj5SLbmZLJEZAGjhuPzKep8VqbrF4=;
+        b=RnEa2Fn7a8V60IRUUpovYxj7pTfoD4RTxFPKYVJHJfnq6lCJW584lfqlW2ZmRpVeHP
+         D/kfYr0K5VG7IQOOo/hpiL+T0lhOfA/DIIjAo70mXwcctZFboRa3XTzQi0Zm+qd7p8Ml
+         ltgMFbaVXmWRMV1jJfOrA/WmwF//QHDVFNbMPYXnXRHNfZlmYhxXf9Kv3jzdPf0eygeD
+         oAoo+l2f38k9fxIXaniqPYAnuIh96sJzpagTiPOUMZg4kMp8eifwCjD2gPFYZCAoaMoO
+         DwFNgIK3143S0EKdzhuLzVJTSYSNk6tT3fU0NxJGwipC6JX9kEQhCQrwkDbgXFnStVW1
+         Y9nQ==
+X-Gm-Message-State: AJIora+fzT2+stL3jPXrbrkViDfAlHqAC/3MHDnN6WfR6E/y6LMoS97n
+        66mlXUyx5F5t8SVrS30YWp41hWdjkNQh2CK4qA9+xQ==
+X-Google-Smtp-Source: AGRyM1v+tQ/2kmC75volL9wZOhVPrSEMjcY++VCEHuVmk9HhnDdHTLNbGwDIUONgCNPN3ttZcMoStOsx+WJgqPNsT6o=
+X-Received: by 2002:a67:1083:0:b0:34c:61ad:d3e3 with SMTP id
+ 125-20020a671083000000b0034c61add3e3mr13601631vsq.12.1658321347383; Wed, 20
+ Jul 2022 05:49:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=X=yQrWOX43PbLR=VGRVvMgj0_e2x5Mwf0bSZ0DhTQDAQ@mail.gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CABPqkBRVF9qmxKFgmjZpzN3tx=U+_8udECMLHs7BrtzfPwmuhQ@mail.gmail.com>
+ <YqyVFsbviKjVGGZ9@worktop.programming.kicks-ass.net> <CABPqkBRRFhPcYL25TX6H7vWN=VKNR2+8e2_sO01Pka_R625Lqw@mail.gmail.com>
+In-Reply-To: <CABPqkBRRFhPcYL25TX6H7vWN=VKNR2+8e2_sO01Pka_R625Lqw@mail.gmail.com>
+From:   Stephane Eranian <eranian@google.com>
+Date:   Wed, 20 Jul 2022 15:48:56 +0300
+Message-ID: <CABPqkBSsTEGdBEqDgBXYAKWh1UpvUDYSXRpDD1KSm+JWV2eAUw@mail.gmail.com>
+Subject: Re: [RFC] pr_warn_once() issue in x86 MSR extable code
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>, jpoimboe@redhat.com,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 10:19:36AM +0200, Alexander Potapenko wrote:
-> > > >  long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
-> > > >  {
-> > > >         int ret = 0;
-> > > > @@ -829,7 +883,11 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
-> > > >         case ARCH_MAP_VDSO_64:
-> > > >                 return prctl_map_vdso(&vdso_image_64, arg2);
-> > > >  #endif
-> > > > -
-> > > > +       case ARCH_GET_UNTAG_MASK:
-> > > > +               return put_user(task->mm->context.untag_mask,
-> > > > +                               (unsigned long __user *)arg2);
+On Wed, Jun 22, 2022 at 8:51 PM Stephane Eranian <eranian@google.com> wrote:
+>
+> Hi Peter,
+>
+> Thanks for taking a quick look at this.
+> I am currently OOO and I cannot test this proposed patch.
+> I am okay with your suggestion.
+>
+> Thanks.
+>
+> On Fri, Jun 17, 2022 at 4:52 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Fri, Jun 17, 2022 at 02:08:52PM +0300, Stephane Eranian wrote:
+> > > Hi,
 > > >
-> > > Can we have ARCH_GET_UNTAG_MASK return the same error value (ENODEV or
-> > > EINVAL) as ARCH_ENABLE_TAGGED_ADDR in the case the host doesn't
-> > > support LAM?
-> > > After all, the mask does not make much sense in this case.
+> > > Some changes to the way invalid MSR accesses are reported by the kernel is
+> > > causing some problems with messages printed on the console.
+> > >
+> > > We have seen several cases of ex_handler_msr() printing invalid MSR
+> > > accesses once but
+> > > the callstack multiple times causing confusion on the console.
+> > >
+> > > The last time the exception MSR code was modified (5.16) by PeterZ was:
+> > >
+> > >   d52a7344bdfa x86/msr: Remove .fixup usage:
+> > >
+> > >   if (!safe && wrmsr &&  pr_warn_once("unchecked MSR access error: ..."))
+> > >                show_stack_regs(regs);
+> > >
+> > > Note that this code pattern was also present, though in a different
+> > > form, before this commit.
+> > >
+> > > The problem here is that another earlier commit (5.13):
+> > >
+> > > a358f40600b3 once: implement DO_ONCE_LITE for non-fast-path "do once"
+> > > functionality
+> > >
+> > > Modifies all the pr_*_once() calls to always return true claiming that
+> > > no caller is ever
+> > > checking the return value of the functions.
+> > >
+> > > This is why we are seeing the callstack printed without the associated
+> > > printk() msg.
+> > >
+> > > I believe that having the pr_*_once() functions return true the first
+> > > time they are called
+> > > is useful especially when extra information, such as callstack, must
+> > > be printed to help
+> > > track the origin of the problem.
+> > >
+> > > The exception handling code seems to be the only place where the
+> > > return value is checked
+> > > for pr_warn_once(). A minimal change would be to create another
+> > > version of that function
+> > > that calls DO_ONCE() instead of DO_ONCE_LITE(), e.g., pr_warn_once_return().
+> > >
+> > > I can post a patch to that effect if we all agree on the approach.
+> > >
+> > > Thanks.
 > >
-> > I'm not sure about this.
+> > How about something like this?
 > >
-> > As it is ARCH_GET_UNTAG_MASK returns -1UL mask if LAM is not present or
-> > not enabled. Applying this mask will give correct result for both.
-> 
-> Is anyone going to use this mask if tagging is unsupported?
-> Tools like HWASan won't even try to proceed in that case.
+> > diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+> > index dba2197c05c3..331310c29349 100644
+> > --- a/arch/x86/mm/extable.c
+> > +++ b/arch/x86/mm/extable.c
+> > @@ -94,16 +94,18 @@ static bool ex_handler_copy(const struct exception_table_entry *fixup,
+> >  static bool ex_handler_msr(const struct exception_table_entry *fixup,
+> >                            struct pt_regs *regs, bool wrmsr, bool safe, int reg)
+> >  {
+> > -       if (!safe && wrmsr &&
+> > -           pr_warn_once("unchecked MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
+> > -                        (unsigned int)regs->cx, (unsigned int)regs->dx,
+> > -                        (unsigned int)regs->ax,  regs->ip, (void *)regs->ip))
+> > +       if (__ONCE_LITE_IF(!safe && wrmsr)) {
+> > +               pr_warn("unchecked MSR access error: WRMSR to 0x%x (tried to write 0x%08x%08x) at rIP: 0x%lx (%pS)\n",
+> > +                       (unsigned int)regs->cx, (unsigned int)regs->dx,
+> > +                       (unsigned int)regs->ax,  regs->ip, (void *)regs->ip);
+> >                 show_stack_regs(regs);
+> > +       }
+> >
+> > -       if (!safe && !wrmsr &&
+> > -           pr_warn_once("unchecked MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
+> > -                        (unsigned int)regs->cx, regs->ip, (void *)regs->ip))
+> > +       if (__ONCE_LITE_IF(!safe && !wrmsr)) {
+> > +               pr_warn("unchecked MSR access error: RDMSR from 0x%x at rIP: 0x%lx (%pS)\n",
+> > +                       (unsigned int)regs->cx, regs->ip, (void *)regs->ip);
+> >                 show_stack_regs(regs);
+> > +       }
+> >
+> >         if (!wrmsr) {
+> >                 /* Pretend that the read succeeded and returned 0. */
+> > diff --git a/include/linux/once_lite.h b/include/linux/once_lite.h
+> > index 861e606b820f..63c3bbcef694 100644
+> > --- a/include/linux/once_lite.h
+> > +++ b/include/linux/once_lite.h
+> > @@ -9,15 +9,27 @@
+> >   */
+> >  #define DO_ONCE_LITE(func, ...)                                                \
+> >         DO_ONCE_LITE_IF(true, func, ##__VA_ARGS__)
+> > -#define DO_ONCE_LITE_IF(condition, func, ...)                          \
+> > +
+> > +#define __ONCE_LITE_IF(condition)                                      \
+> >         ({                                                              \
+> >                 static bool __section(".data.once") __already_done;     \
+> > -               bool __ret_do_once = !!(condition);                     \
+> > +               bool __ret_cond = !!(condition);                        \
+> > +               bool __ret_once = false;                                \
+> >                                                                         \
+> >                 if (unlikely(__ret_do_once && !__already_done)) {       \
 
-I can imagine the code that tries to be indifferent to whether a pointer
-has tags. It gets mask from ARCH_GET_UNTAG_MASK and applies it to the
-pointer without any conditions.
+You need to replace __ret_do_once with __ret_cond above and then it
+compiles and works.
+I have tested with a kernel module that reads and writes to an illegal MSR:
 
-> > Why is -ENODEV better here? Looks like just more work for userspace.
-> 
-> This boils down to the question of detecting LAM support I raised previously.
-> It's nice to have a syscall without side effects to check whether LAM
-> can be enabled at all (e.g. one can do the check in the parent process
-> and conditionally enable LAM in certain, but not all, child processes)
-> CPUID won't help here, because the presence of the LAM bit in CPUID
-> doesn't guarantee its support in the kernel, and every other solution
-> is more complicated than just issuing a system call.
-> 
-> Note that TBI has PR_GET_TAGGED_ADDR_CTRL, which can be used to detect
-> the presence of memory tagging support.
+unchecked MSR access error: RDMSR from 0x1234567 at rIP:
+0xffffffffc00ec138 (rdpmc_intel+0x28/0x21d0 [rdpmc_test])
+Call Trace:
+<TASK>
+  rdpmc_bench_store+0x53/0x80 [rdpmc_test]
+  kobj_attr_store+0xf/0x20
+  sysfs_kf_write+0x34/0x50
+  kernfs_fop_write_iter+0xfa/0x180
+  vfs_write+0x334/0x3d0
+  ksys_write+0x71/0xe0
+  __x64_sys_write+0x1b/0x20
+  do_syscall_64+0x44/0xa0
+  ? exc_page_fault+0x6e/0x110
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-I would rather make enumeration explicit:
 
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 38164a05c23c..a31e27b95b19 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -22,5 +22,6 @@
+Tested-by: Stephane Eranian <eranian@google.com>
 
- #define ARCH_GET_UNTAG_MASK		0x4001
- #define ARCH_ENABLE_TAGGED_ADDR		0x4002
-+#define ARCH_GET_MAX_TAG_BITS		0x4003
-
- #endif /* _ASM_X86_PRCTL_H */
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index cfa2e42a135a..2e4df63b775f 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -911,6 +911,13 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 				(unsigned long __user *)arg2);
- 	case ARCH_ENABLE_TAGGED_ADDR:
- 		return prctl_enable_tagged_addr(task->mm, arg2);
-+	case ARCH_GET_MAX_TAG_BITS:
-+		if (!cpu_feature_enabled(X86_FEATURE_LAM))
-+			return put_user(0, (unsigned long __user *)arg2);
-+		else if (lam_u48_allowed())
-+			return put_user(15, (unsigned long __user *)arg2);
-+		else
-+			return put_user(6, (unsigned long __user *)arg2);
- 	default:
- 		ret = -EINVAL;
- 		break;
--- 
- Kirill A. Shutemov
+>
+> >                         __already_done = true;                          \
+> > -                       func(__VA_ARGS__);                              \
+> > +                       __ret_once = true;                              \
+> >                 }                                                       \
+> > +               unlikely(__ret_once);                                   \
+> > +       })
+> > +
+> > +#define DO_ONCE_LITE_IF(condition, func, ...)                          \
+> > +       ({                                                              \
+> > +               bool __ret_do_once = !!(condition);                     \
+> > +                                                                       \
+> > +               if (__ONCE_LITE_IF(__ret_do_once))                      \
+> > +                       func(__VA_ARGS__);                              \
+> > +                                                                       \
+> >                 unlikely(__ret_do_once);                                \
+> >         })
+> >

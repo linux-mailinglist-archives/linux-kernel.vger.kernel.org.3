@@ -2,194 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8640257BB25
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272CC57BB28
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236317AbiGTQMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S236564AbiGTQNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234514AbiGTQMs (ORCPT
+        with ESMTP id S229663AbiGTQNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:12:48 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13A952FCF
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:12:47 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id r24so4273287plg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:12:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=DRE9tbmP3JT+VO00c5LqRuL3XTuHktkL5BXjhBJ5Txc=;
-        b=dDMvy/9LtQ1sp/2X8r5JqKsb2gFFQ3biW6Y9qbkD+djPogR60pWz5r/v40DoIlzyp4
-         zCT9Vtt8c7uH3T4fQQ0r/+1luQIb62pTD4z2WQABqDEJmdqgil27f9HDkwPdwMsrlidk
-         9lFe6dnWZM6pb+tOFWMqmzfiFv+17NoZe3hsM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=DRE9tbmP3JT+VO00c5LqRuL3XTuHktkL5BXjhBJ5Txc=;
-        b=KHpC7J2AGZrYY/2wZYpa0Au2Rpjw6/RRNvaaSpV9rr0G5rOHO8RSNeTunDnYQ8bt7H
-         8c3BIri35APHirxF6SGUOiSL/drkEATRMKl7/e2ygGRGrDGD0DZHpXu9N+0gGloo7Qh+
-         HC1rrtQc8h3aCZPVS2nbI3wMnYqTMPifEs60EpAC801wvVt+ca+SQz0d0EVZ77ZYJgyj
-         070JWg3Uq561uj+foiZORv6VvSnRqJLj4O1MQ0qXzny3WYcSu/Zk4CxxIKWlTR8r3lJT
-         4KcaOG0Kuxd8P7VW80dOp0/OW464hLOj+YINfYiou1Tr9BTv2lq57ZrFZ1p4B2cS8l9D
-         AnJw==
-X-Gm-Message-State: AJIora8pNuRapdtmMzxJDaeHQvdYOiPR9JTeFHHR5tfrGEjdL8L7VxM5
-        SiFQw5opga6UIPfcQIF0FqipJQ==
-X-Google-Smtp-Source: AGRyM1vFg4KPuRTU9OaCkVz6yDu5Rbticf3882IbUnCTFl17+lRUusyJGKYZ+LUjPGR4Th7hc8urDQ==
-X-Received: by 2002:a17:902:f691:b0:16c:4fb6:e08b with SMTP id l17-20020a170902f69100b0016c4fb6e08bmr39945525plg.174.1658333567331;
-        Wed, 20 Jul 2022 09:12:47 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.161.248])
-        by smtp.gmail.com with ESMTPSA id f1-20020a170902684100b0016ccbc9db0fsm6873138pln.5.2022.07.20.09.12.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 09:12:46 -0700 (PDT)
-Message-ID: <e416c587-d3cc-947a-7336-2c1954e2e432@broadcom.com>
-Date:   Wed, 20 Jul 2022 09:12:44 -0700
+        Wed, 20 Jul 2022 12:13:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8A952FCF;
+        Wed, 20 Jul 2022 09:13:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05C1161D3F;
+        Wed, 20 Jul 2022 16:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1155AC3411E;
+        Wed, 20 Jul 2022 16:13:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658333599;
+        bh=azV4rh1tEUOtwWZ2k2aBfyGO80U70CDuAQhKmnY7ZKk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EeYPcSugudjlBWfAxIxhS/y+sDO1CCygJN/OTX4NYpdkO48bFcLdvojgNscHQtdmO
+         KIGkv7FqwfAXkiElizH3BulePE15ai1LQkaJ57QKace1gYbv3URSk4hXk5mQpP5xuA
+         NyW50165+EVAxLaMbxviS7xK6t23lI17H2vGPHV0h5w3omqUPqsl6mWWd4i+bMKxjh
+         Lvfl2QitS6R6rVZFkC5KjyqUOgeukl15ePHNOaKUbpQmOjEWZ/7byJkg5AnkZ1K6+8
+         M3DDpv38cQiqO+h1kdj3sGhphMwlWpPemE83Y3oFVZ7oFXVhTtxozaHUyyMj7Gq0jJ
+         Fsp2oyO1xweXA==
+Received: by pali.im (Postfix)
+        id E1729797; Wed, 20 Jul 2022 18:13:15 +0200 (CEST)
+Date:   Wed, 20 Jul 2022 18:13:15 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Mauri Sandberg <maukka@ext.kapsi.fi>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/2] PCI: mvebu: add support for orion5x
+Message-ID: <20220720161315.rr4ujakl7akm7pur@pali>
+References: <20220718202843.6766-1-maukka@ext.kapsi.fi>
+ <20220718202843.6766-4-maukka@ext.kapsi.fi>
+ <CAK8P3a042yoLR0eqt4Bm0KH4X9SJhUsjKDh1S9M+MF6mU1mPNw@mail.gmail.com>
+ <20220719094649.pzyrqdvm3fm5fqh2@pali>
+ <CAK8P3a1RpMQ5zdiH_jkydxDOCm6WyD7qqdN+5T+503tN4SnOqw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] misc: bcm-vk: Specify the minimum number of IRQ vecs
-To:     Breno Leitao <leitao@leitao.org>,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org,
-        Breno Leitao <leitao@debian.org>
-References: <20220719122313.500924-1-leitao@leitao.org>
-From:   Scott Branden <scott.branden@broadcom.com>
-In-Reply-To: <20220719122313.500924-1-leitao@leitao.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000039b47705e43edf72"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8P3a1RpMQ5zdiH_jkydxDOCm6WyD7qqdN+5T+503tN4SnOqw@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000039b47705e43edf72
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Tuesday 19 July 2022 12:16:34 Arnd Bergmann wrote:
+> On Tue, Jul 19, 2022 at 11:46 AM Pali Rohár <pali@kernel.org> wrote:
+> > On Tuesday 19 July 2022 10:05:28 Arnd Bergmann wrote:
+> > > > +/* Relevant only for Orion-1/Orion-NAS */
+> > > > +#define ORION5X_PCIE_WA_PHYS_BASE      0xf0000000
+> > > > +#define ORION5X_PCIE_WA_VIRT_BASE      IOMEM(0xfd000000)
+> > >
+> > > You should not need to hardcode these here. The ORION5X_PCIE_WA_PHYS_BASE
+> > > should already be part of the DT binding.
+> >
+> > Of course! But the issue is that we do not know how to do this DT
+> > binding. I have already wrote email with asking for help in which
+> > property and which format should be this config range defined, but no
+> > answer yet: https://lore.kernel.org/linux-pci/20220710225108.bgedria6igtqpz5l@pali/
+> 
+> Ah, I had not seen that email. Quoting from there:
+> 
+> > So my question is: How to properly define config space range in device
+> > tree file? In which device tree property and in which format? Please
+> > note that this memory range of config space is PCIe root port specific
+> > and it requires its own MBUS_ID() like memory range of PCIe MEM and PCIe
+> > IO mapping. Please look e.g. at armada-385.dtsi how are MBUS_ID() used:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/armada-385.dtsi
+> 
+> This is probably a question for Rob as the mvebu driver is a rather special
+> case. Normally this would just be a 'reg' property of the host bridge,
+> but I think
+> in your case the root device is imaginary, and the ports under it are the
+> actual hardware devices
 
-Hi Breno,
+yes
 
-On 2022-07-19 05:23, Breno Leitao wrote:
-> From: Breno Leitao <leitao@debian.org>
-> 
-> During bcm_vk_probe(), pci_alloc_irq_vectors() is called passing the
-> number of IRQ vectors as 1, but, later, check how many IRQ vectors it
-> got, and fails if it is smaller than VK_MSIX_IRQ_MIN_REQ.
-> 
-> The most appropriated way to do it is setting the 'min_vecs' param as
-> VK_MSIX_IRQ_MIN_REQ, instead of one. pci_alloc_irq_vectors() should
-> know the requirements when called.
-Yes, the end result is no operational change before or after this commit.
-> 
-> The test was done by just loading this module on a machine with a
-> Valkyrie offload engine
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-Acked-by: Scott Branden <scott.branden@broadcom.com>
-> ---
->   drivers/misc/bcm-vk/bcm_vk_dev.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
-> index a16b99bdaa13..bedab17884b8 100644
-> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
-> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
-> @@ -1339,7 +1339,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->   	pci_set_drvdata(pdev, vk);
->   
->   	irq = pci_alloc_irq_vectors(pdev,
-> -				    1,
-> +				    VK_MSIX_IRQ_MIN_REQ,
->   				    VK_MSIX_IRQ_MAX,
->   				    PCI_IRQ_MSI | PCI_IRQ_MSIX);
->   
+> so you'll probably have to do the same thing as
+> the armada-385, translating the mbus ranges for the config space in the
+> "ranges" property of the parent
 
---00000000000039b47705e43edf72
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Problem is that "ranges" in PCIe are used for specifying MEM and IO
+mappings and kernel PCI code does not allow any other type.
 
-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
-cRe0CRXA7ypOJSgxO/nOOyQoaJxT7CGg1npOeSpPjEuc3fE4xum3l0nvU85hj6MlKZu43hokdBh0
-D0nLyyhEwlR3AC/msdff/UGbM/JR9vk812RP4m/aNWZFJwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRpzY290dC5icmFuZGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUOhjEpl04Sz9dh5MI82E1
-V39lM/owDQYJKoZIhvcNAQELBQADggEBAA7Rlypx/esz/iq1yA4+KW7uwV/aBY344BWcXt6I+SNK
-VwFBgFWfLj5vaEud9TVv2fPSiaHJo0umemOJk+43QD+bsoqmgcFXd21PrOt7Jjs+jjVED9VC5kJq
-S4NNKUkS+BqijJwSegtVygrc/atrIlJbjI21q4qpemUo5fgwqCNm++BmBGTI8yA09vtGSNDRN42k
-lLX9hl3iEj5SBgkQqCbbnoE+ZjjKfqt7ED166WhgyQWNrl39yLcvLj+JRUB3RuvXKZjH0NQEEBII
-wZBDSkyneykLt3CBNIhSCTxKM6OWxVp936ALSa5K9FNy00TeWSpokR6NmzaW8VD/EjTgvqAxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgx9oXSJpKniO4dS
-Gk8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJWNZ+yzES7oXZ7nSENN/zmp3Tlr
-m4/ipUSwX/nb53YiMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcyMDE2MTI0N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBs4IOGiDTJXyMjDPF7zOrtIikMUG1czmdRMBdORcoB6mUW
-KgjhDHHscBizochxE6cvFFSl28T+88l9fzCp/SLHc+WVMNELCbuz+UrBcXKgFnEOmvYsxPynKqwS
-S7j6ZKr48RFqFZphVNGjIYgtUeTJMo4T/Ym7GgP+Yn2RsrxtVP3TIb2dNcwWnL0qTRCw7sTyMsy+
-vlBMdLvdZaes86DsqpUsB38hWwPdkA5oQxPy1wPF7e3YSRVlVlFEZYVLtSaFYQR+qCVKshm3SxnR
-jOQKoSSX9iEbfi+4m5I9NoOs7rU5XbfgX2MDasZhkzAhNNk0xBJkGRtwb9yqiYzH1FcI
---00000000000039b47705e43edf72--
+> and then referring to them by PCI
+> MMIO addresses using the assigned-addresses property to pass the
+> config-space registers as a second set of registers in addition to the
+> first set.
+
+It is more complicated. PCIe MEM and IO memory ranges are defined in
+"soc" node in "pcie-mem-aperture" and "pcie-io-aperture" properties.
+These ranges are shared across all PCIe controllers and assigning slices
+of these ranges to specific devices is done later by dynamic allocation.
+"soc" node is bind to mbus driver (which parse these properties) and
+provides API for other kernel drivers for dynamic allocation of memory
+from pcie aperture. In pcie node is just indirect reference to PCIe MEM
+and IO via MBUS_ID() macro and it is pci-mvebu.c driver who ask mbus
+driver for PCIe MEM and IO dynamic allocation.
+
+So because PCIe config space is not of type PCIe MEM nor PCIe IO
+(obviously) it cannot use "ranges" property. Because DT pcie nodes use
+"reg" property for specifying BDF address, we cannot use neither "reg"
+property for specifying memory range of PCIe config space.
+
+And here I'm lost.
+
+My guess is that proper way is to define "pcie-cfg-aperture" in "soc"
+node where would be defined physical address range without any binding
+to controller, then extend mbus driver to export API also for PCIe CFG
+and add code which dynamically assign slice of this range to some
+controller. And then use this new API by pci-mvebu.c to access config
+space. But pci-mvebu.c needs to know MBUS_ID() attributes which needs to
+be defined somewhere in pcie DT node...
+
+> > > There is little practical difference
+> > > here, but I see no value in taking the shortcut here either.
+> > >
+> > > For the ORION5X_PCIE_WA_VIRT_BASE, you rely on this to match the
+> > > definition in arch/arm/mach-orion5x/common.c, and this is rather fragile.
+> > >
+> > > Instead, please use ioremap() to create a mapping at runtime. The ioremap()
+> > > implementation on ARM is smart enough to reuse the address from the static
+> > > mapping in common.c, but will also keep working if that should go away.
+> >
+> > I'm planning to work with Mauri on this, but current blocker is DT.
+> 
+> Ok. It should not be hard to do this first, as you just need to pass the
+> same physical address that you pass in the mbus setup, but I agree
+> it's easier to do this afterwards to avoid having to rewrite it again.
+> 
+> > > This is probably good enough here, though I think you could also use
+> > > the trick from drivers/pci/ecam.c and map each bus at a time.
+> > >
+> > Yes, there are also helper functions like map bus and etc. which could
+> > simplify this code. I'm planning to do cleanups once we have fully
+> > working driver for Orion.
+> 
+> Ok. This is probably not worth the effort if the old driver doesn't already
+> do provide access to the high registers.
+> 
+>       Arnd
+
+If we have free 256MB in physical address space, then we can implement
+it easily. It is just changing _size_ argument. I'm not sure how much
+DDR RAM has Orion, but if only 2GB then we should be fine (remaining 2GB
+should be enough for all peripherals + 256MB for PCIe config space).
+
+Main issue is that there is no Orion documentation which would describe
+how direct mapping of PCIe config space is working.
+(see also https://lore.kernel.org/linux-doc/20220719080807.16729-1-pali@kernel.org/)
+
+So we can only set "size" of the physical config space mapping and if we
+choose smaller size then we cannot access upper registers. I do not see
+any option how to specify "offset" for physical config space to allow
+mapping just one PCI bus.
+
+What we have under full control is virtual address space mapping, so we
+can just map only one PCI bus to virtual address space from large 256MB
+physical config address space.

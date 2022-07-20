@@ -2,100 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3C157B36C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB42A57B33C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiGTI7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
+        id S230177AbiGTIxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbiGTI7Y (ORCPT
+        with ESMTP id S229539AbiGTIw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:59:24 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D0D6F7D8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:58:56 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id e15so19910855wro.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:58:56 -0700 (PDT)
+        Wed, 20 Jul 2022 04:52:58 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2116.outbound.protection.outlook.com [40.107.94.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F641EEE7;
+        Wed, 20 Jul 2022 01:52:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ttas4Vea5hOE+JQ4u29xglfSiSGYv6XH4cmE/+CRlSrV66dcqRhoKBN3R2sSOXPG9+k3488HqB06o5cn9fF//ioXFD2AxOdcvkO+x94QYYDYb3mJ+7UcofroAG/RD9XtROYFVTIYK5IfxU0AZdX3YuX20u6holLDzeWMemxQ4e+M4yjVpjSYWKjZPMye8NxUz/CyNMwar1epwIRMamyVLpyQA2k2HzFOGq8HoN2t6YM9g0N34OSUptliif7dLp7Ik/7vwnbxkxV0cN7DPZYcn4A2fx7+NNrhDV7kw/ngZ9mBCW7jEnb6/z3tNObBu62MS5X4+3lLdsivOA3Mpbq3vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=To1G1FEBPYFr58GlU/ov47m3x9qZj+aQh5Sv+w5JJFQ=;
+ b=fHaqwAd6qOcZWKWzL8bEYEsvhkMP5im7z5nU5ExL+DzF/OHX3UlSqYY4cdH4xCchvr6Y4hxiOxeHrfGEQ0SfNabUr64pGLQbmgtjKEl6+gVS3UsuWllqEult5TClbYe7CEDALlvapl2fd5+N2tHvdOq2hc+UtWd0w4UHX53JiIyvidr0FmGXmCN7PNzjAwddWjdaOgADoiwCa2p7486AtLn5WZupegObo/cQfKT4JDLZ1Yqa8GmH699WwHNFdz9wio7NA1ZYwfmrTXkWSaPplqCXipJnX+xFuq8HVgnTUWA03MzPhS5v0QDLBgfKe/+2iIhVxMiFzCFmND8cMKfb6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UXCi2krvz5iV3RG6Br/eDWamgQsHstCKOav7b8DNz3k=;
-        b=Lqqzbdkwfyi+vtGc9522INJrc1XedLAUHcf868Tzcx5CjEZZg0Zk7Fxxu3MTfxmGdo
-         8roZB/SVYpiaTfAu2U5Vzcjn/+ZiNTRi5RznX0BRN8JfaeIg/tFvEIcQKfL92nLUmVpv
-         q03r5K3015d578CfB1iKuU6mx4F8DAlPrNwlYbeh+kcIauy64sDXfEcdsKJEkgfoCxaK
-         7zlWgmh7/lkUl40pHVULUbgPE3SMN19ylEbFw6i8g8HK9HEupedtKVy13/x6rdrny0u4
-         9pqbRsPjDGSUoOIydm/FspUh6NFGVybxlKJ6jQkYH1u5Jx2QNnEBO7lqnD8swkX1lolz
-         VRHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UXCi2krvz5iV3RG6Br/eDWamgQsHstCKOav7b8DNz3k=;
-        b=6J3USwkFAhbDLGUszq0+JoM9rDHbKmqrokCZhXRzBhQJTvVQ/gtBh44DqO4osXzCj6
-         oPYmarjQxNGsHaW5OSDCxOxl51rMWERd3OQZANMdUx75t2is0pcXGFPGRGWxOCQZqZYF
-         kwglvOKu8mhAez6h7dGe0dy7YBlXJTUZzBqicKvOWBK9hZaJqdj/B2vvSmtAXznKLJFI
-         ZQBDD2Red4KwOT7chRWJRk2goQpqlfV3uDcLmPIo6661HbXpKAB6+9LbHcCFdVIpS05b
-         6Bd4ZG2aU4xPxwTfi1UwBklmmmo27m2Z1j5BxxSBhh+v5YOYJNdG60AKFPmoJLxtKw0F
-         Dj8Q==
-X-Gm-Message-State: AJIora/ANIPAOYvU2xC37fbTOqKU1qjjmDsFVjctMFYSBl+kjTj7D/BN
-        2wnWakCVMOR19jlpt2NJVkF1hg==
-X-Google-Smtp-Source: AGRyM1tpaC1pFfFaqkpKdkHi8zMKoU/eQiYQk69VtUESjQWualgkCNfDkjo/qmF4kT3kLruIfHYiBQ==
-X-Received: by 2002:adf:e283:0:b0:21e:26fe:14f3 with SMTP id v3-20020adfe283000000b0021e26fe14f3mr8874954wri.98.1658307535476;
-        Wed, 20 Jul 2022 01:58:55 -0700 (PDT)
-Received: from amjad-ThinkPad-T490.home (2a01cb040613180084408ac44a1fa242.ipv6.abo.wanadoo.fr. [2a01:cb04:613:1800:8440:8ac4:4a1f:a242])
-        by smtp.googlemail.com with ESMTPSA id f4-20020a5d58e4000000b0021d6dad334bsm340571wrd.4.2022.07.20.01.58.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 01:58:55 -0700 (PDT)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     fparent@baylibre.com
-Cc:     iommu@lists.linux-foundation.org, joro@8bytes.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        will@kernel.org, yong.wu@mediatek.com,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Subject: Re: [PATCH 3/3] iommu: mtk_iommu: add support for MT8365 SoC
-Date:   Wed, 20 Jul 2022 10:52:13 +0200
-Message-Id: <20220720085213.3803-1-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220530180328.845692-3-fparent@baylibre.com>
-References: <20220530180328.845692-3-fparent@baylibre.com>
-MIME-Version: 1.0
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=To1G1FEBPYFr58GlU/ov47m3x9qZj+aQh5Sv+w5JJFQ=;
+ b=vM5tFHX58b6MjMHQDFD5WZ1MM+yvVEes+IP4aFbE/QECq0tNY74u9+q8lt8BVVzvmaB7IsZlbRG2D1vIpn9SRs51VuCG9o7iRU+Q6hT9TT0uSGmih78a+o4pcfvPZitdNrrCZF0Yw/CgFivhCTNX1yZyi3drDBXmtwHrqGwfM6E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ DM6PR01MB5289.prod.exchangelabs.com (2603:10b6:5:63::16) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5438.17; Wed, 20 Jul 2022 08:52:55 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7535:773:f979:893e]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7535:773:f979:893e%9]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
+ 08:52:55 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        openbmc@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>
+Cc:     Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com
+Subject: [PATCH v2 0/2] Add device tree for Ampere's Mt. Mitchell BMC
+Date:   Wed, 20 Jul 2022 15:52:28 +0700
+Message-Id: <20220720085230.3801945-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0158.apcprd04.prod.outlook.com (2603:1096:4::20)
+ To SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c8e5bc83-cb6d-4ea8-c082-08da6a2d3c5d
+X-MS-TrafficTypeDiagnostic: DM6PR01MB5289:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TUJYVH3I6lzBVGlsTr6koP60f9DP/OCDjzuMmiAWKE2NAxeIDOtp+oeW3jkb48OpR8r0IyTdO4KlcH6rJNm10sZph/li4kO3hoJGBdIHTwaUFdyQ7J9Zlscr+Mv1/4z3CnlbHEsr6WDV7F5rSW3mlFmWW41ju7aoOfketbY4Ei7tTrtmmfmsrM8Hwr+Delll4rsjPh75PmCpLRV8UdWFoOW9ZhBc22/9rLPWh5JZlwUIqcUuy+PcI0pDY+magzoZ/0kGHZVqSJHLdZVi8CaJ0SLWJ0griZVRLWKXQaAqd6B5oDdHs4ikc7Ns8y3IHnhKrjbXehnmgl3Rf/J1DpzF8e8ZV8T8L0oRxn9wFbPhe/Gi93HBf/bEYRKnylAE/CUNlCbLcsH2AQI1J4RxlDONMwklrV6+i4WQ211Z201is+SJnQ+0Ze6dkI/mxe2kvAZIed9TRRhBFDe8Hldwfjo8ULGGS/8MdKTwnqFXp0JsCZFTchRftm6JVgUS8E2NEh1U6IksZ/9wLclxV3HwuV3c7IsKtvn+/55wsam4q8F6kFnRNlNofFAEtOlw1cA//YXDYl3yRbKpKOEmD7X/YVsUUoz0vhT13jGXLiXGiXysi5LQZNwnTwko15WQ7ACy8JU2oex4/pAUmp4q1WHMU3MQg8KxYr8oIvnFREvRA5Kbpct5er38Ixfe8fV71RMZeROjTlHzX+2RNNjwDS1Ira7/O64Fi7P5gnAW6vSQ4k9ew1cLXSOKGeIGk/C/QGoeIJszovb+JkA2CncEqHvdr7tXx1zSdzQyRDQlYSNRch63klSg7eTpSUrgCch+7k+GWfgA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(366004)(376002)(346002)(136003)(396003)(7416002)(110136005)(38350700002)(6506007)(41300700001)(5660300002)(38100700002)(316002)(921005)(66946007)(66574015)(66476007)(8676002)(66556008)(4326008)(2616005)(186003)(52116002)(6486002)(478600001)(86362001)(6666004)(1076003)(8936002)(4744005)(2906002)(26005)(107886003)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r031WIgWA36ROm1myubz11Bxtc4fCd5H7BUQYpBAT6Zf1yk/yp8zgnIyyARK?=
+ =?us-ascii?Q?MF54ldWaknJj/PAAEMGT9iUhsyBJJ1C1YD/EDSKKHwyjW6GuLu+kQunC9sdM?=
+ =?us-ascii?Q?jKHQlDZIfEzY+fTPhSK77c34QEGLHIaekxubMYawUlJjo2ePpHsF+w80SQpy?=
+ =?us-ascii?Q?uigcAnm5zwNTg/yQGXE+MGsbbUy1CLsE6SX3xCX66hCbkx9nmVFA52UnVEkV?=
+ =?us-ascii?Q?7U8+BkrJRHwAqyMok5rmpE2qqPKEfw22fWl2Uw77QjlsXuHlsHyjXEYMZI/P?=
+ =?us-ascii?Q?HCktO8UgpQlLIWHIHWVVTxfGOdJl+GA2csnFRE6y+/N6yHLMx4a+yi3FQCci?=
+ =?us-ascii?Q?d3nnZngjhraFvKS8iOnEvgKoWoW+WR0FqR/ThXft4DeBONBVhw2xCWnyYvkN?=
+ =?us-ascii?Q?RQOadGahi0AUaqPvRncS/YzHYFhhpQDD07qGJGZKVZ9nd4xQB/SwpJ8P6ymr?=
+ =?us-ascii?Q?ATBaxTAtj6rxCQqo+QeKIDYhUqBf2afb1oAJQ5a6JDqHrpeHRJb60y/0OM8S?=
+ =?us-ascii?Q?K7Owh+nmxh/ditJ0MRFGTlbMmddCyTZhU2tBr+7obP3XrPO9B6Q0ELpA3eSm?=
+ =?us-ascii?Q?7lZ4IJzOd63j3Ak+2Kwz1y89pasOeXqvZIw9nMcqeZtD+4ClfX4AbYlIsi4E?=
+ =?us-ascii?Q?osoKbqTEcLqTGUxApWHjN3jp935rvHCUJPwo1AWFgIgpQV9Mfrh4JL+UIvoL?=
+ =?us-ascii?Q?9acuVmSVDC6vMbWush9r6wFNqxo1MbPUjIkaAaaVJ9z8f5kzvRibWNg2RIxV?=
+ =?us-ascii?Q?Qdvl32f+N7WXBFwt5jZiCn2SqQcCTL4QNuT1/Np54/dPpqaHd6a0qgLO1kM3?=
+ =?us-ascii?Q?oP669wX5jystJeUVVZz4HDzMajjuDjeJ+bwPPS/QobekmTkjvWVQ9OfAQ2th?=
+ =?us-ascii?Q?Nc2xoDumwSwuCh6mz3vevc4vW55dUMWANOaGL5jGoUnoMn22SCV4yE0p+PsJ?=
+ =?us-ascii?Q?tfJQgthELD76BZgicHiZnapuEE+c2cRpsoaU40NY2RZPF4191Py56umZAEnQ?=
+ =?us-ascii?Q?Bl3d9kFnkMq8NfM6xCXEGrHAotJfa3vAKgPpTVhBNS3lsIPCHqcYk0YCY4Ay?=
+ =?us-ascii?Q?6tabvvDzbwXmnWx9cjFE7OdwXWEgxUQ4YCQkdkGqzFhCftGDuODjlskF8Nys?=
+ =?us-ascii?Q?rYjGaDQuLcCJbOPhiE/J9Nl9S7arKplcVu3/U5GzHstK21RhdVv2cBnui1L3?=
+ =?us-ascii?Q?FGxZFmhbnyqGwL0467xci5Inr2BUOL0CVHvplLmqZ7JpTmotJgCzNpYuFEYQ?=
+ =?us-ascii?Q?TBjsi3v2JOlho4QI4KvXeZkdd1xNqdfNvW0RsQL2UFJA8PX+2mfySE1luszL?=
+ =?us-ascii?Q?0INnD8ni6iOYmwrgZGNO16IAgYi1jujKMm/c6kCeeCX2iXDDRMSJpHU4M0e7?=
+ =?us-ascii?Q?+nwYilaHNLq6RJKBIPBs8xel/BoWJyNZtmIzLWL7yxk19c7Tcd48V4bgsMy4?=
+ =?us-ascii?Q?rwnWJMMc6Ftee7vIfy8k1cRQDyxbpMB1mM/Uiywo6PGceFCQflX7OKYo9Dai?=
+ =?us-ascii?Q?yAbXwOltMVh/3AXdes/ZZsHH/yqUrEq4+NI6amZRO8F5IB41KwI9XrMoI6py?=
+ =?us-ascii?Q?zynSSYES7hugYSMv07bDpUy9uWYKaxUiFbhE/GSQoqe1S9leAbuV/nSbxCYg?=
+ =?us-ascii?Q?tMuFYps3mtLm7lhrsGxrUf4=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8e5bc83-cb6d-4ea8-c082-08da6a2d3c5d
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 08:52:55.0507
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DwtpoDcb1IruIjGrg6xNwbZBZFlUEgQx3qVLpJmngwfbGIB4N8vJTMwwlH47E1n5o64dKyJBLmXkFvTTsZLy9lbWwogt5xI84vor6yUCh5c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB5289
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabien,
+The Mt. Mitchell BMC is an ASPEED AST2600-based BMC for the Mt. Mitchell
+hardware reference platform with AmpereOne(TM) processor.
 
-Thank you for the fix.
+v2 :
+  + Add Ampere Mt. Mitchell BMC compatible                [Krzysztof]
+  + Remove bootargs                                       [Krzysztof]
+  + Fix gpio-keys nodes name to conform with device tree binding
+  documents                                               [Krzysztof]
+  + Fix some nodes to use generic name                    [Krzysztof]
+  + Remove unnecessary blank line                         [Krzysztof]
+  + Fix typo "LTC" to "LLC" in license info and corrected license
+  info to GPL-2.0-only
 
-The kernel would panic if you boot with this patchset because
-bank_nr and bank_enable are not set in mt8365_data.
+Quan Nguyen (2):
+  dt-bindings: arm: aspeed: document Ampere Mt.Mitchell BMC compatibles
+  ARM: dts: aspeed: Add device tree for Ampere's Mt. Mitchell BMC
 
-Please add this change:
+ .../bindings/arm/aspeed/aspeed.yaml           |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 577 ++++++++++++++++++
+ 3 files changed, 579 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
 
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -1538,6 +1538,8 @@ static const struct mtk_iommu_plat_data mt8365_data = {
- 	.m4u_plat     = M4U_MT8365,
- 	.flags	      = RESET_AXI,
- 	.inv_sel_reg  = REG_MMU_INV_SEL_GEN1,
-+	.banks_num    = 1,
-+	.banks_enable = {true},
- 	.iova_region  = single_domain,
- 	.iova_region_nr = ARRAY_SIZE(single_domain),
- 	.larbid_remap = {{0}, {1}, {2}, {3}, {4}, {5}}, /* Linear mapping. */
+-- 
+2.35.1
 
-With this change, please add my:
-Reviewed-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Tested-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-
-Regards,
-Amjad

@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E587357C0D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6305D57C0D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiGTXXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S230103AbiGTXXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiGTXXq (ORCPT
+        with ESMTP id S229595AbiGTXXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:23:46 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC5A4F6A4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:23:46 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id b9so135252pfp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:23:46 -0700 (PDT)
+        Wed, 20 Jul 2022 19:23:43 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8273B96B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:23:41 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31cbe6ad44fso838047b3.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:23:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qfR3nLVFTpPA1Jo8g/Je7VqV/ARVjZfsoCJM7fq7n1Q=;
-        b=fk92LRXo71Y0CPzDYBJaWRSrrPIdnW2K0E7OcNS0kun4eWarkJNZenVXQg6rq1fHNo
-         rXGY5vBM5HgEQnOnqGH+H/PisEoSVo1xQetvC8EgO+Ks2tsk1EmNGROqQqXzmCu1CoeA
-         HbIHShxSzNA4Mdgl4hihAREh+wfQ2RyBs94JY=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=R+/1pbXuzmkVkOVy5qVFEBVHEW28THt6o2fZNxe3Mxk=;
+        b=PdnjK40uqE0rlZAfyoGITLGrx0eRz5JxZ7VRQIerUO+mUtU6DdggO5Ajy3NGMqmKow
+         IeTieM6BTy5sLQqE8tqL1gpZrGtnd8WELTcYjwIotVkVpwAmvUXJSnkmcFGeAh4xIinb
+         7RBd2n0ycGcN6sTR2j6mt5AOt68f/L+sYICQWEAnAyOAx2po/n6Ub2jx+vDZ3Ys7cOR/
+         cLNwNFxXPYWtryBkP+jxU/WJARD+Up+a9L3wTOxEIWs6amWDeG9gjWhf2pMlFsiXhGCB
+         qqDicb5nVMv2sAlb/DqGazIarpYZDaOi91FxuwIMwuUd+WPztxwagBMiWLBinCi1D6Sw
+         34MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qfR3nLVFTpPA1Jo8g/Je7VqV/ARVjZfsoCJM7fq7n1Q=;
-        b=qjFgOf036ShzCQL88/RSzd4rRYoFQXFSBGKfCYhuvaH7NnON0A8jhPobecIC0fUpdB
-         h0V8spXtkxje+AELZraKUZmatsNDWiOhOcZKYGr4iD8ac4Zodr/XlkWdDuMyhGwtzgvz
-         du5LhnZZ/jvbbalYRAUHPypvfMrcyAXhs5/ueIcPSXGbQ7h7gWRxGLKeeQ9hkaZnXmTV
-         uIbJNtJiMHEgkcVdk8U15u5PcVZ0usKIvmqE9Q5ocNZCCv7xMXInIkDOvWDbvZsTEwNy
-         zZ2zURqs9eeC9qlHzMFbe/qEPH0sc+04APb/YjFH76af1Pl5lzfz249FgntwJXZ+fFWA
-         xZ8A==
-X-Gm-Message-State: AJIora85lWfUCBj1EeY53bGloMFhz/lqZjV2ZgY6KYZBkUg/9zgn6nkA
-        dt70G8tZjpaL5KgQxSZz6KhmPSTxRwuW7BPq
-X-Google-Smtp-Source: AGRyM1v2SZ2co4GgiSaGYwPciyT9GbzocP88EbzijPvszQAqdL25QsyvCrJhVJCFgHLbj0XBJQM2kg==
-X-Received: by 2002:a63:2a95:0:b0:41a:27e5:1996 with SMTP id q143-20020a632a95000000b0041a27e51996mr15706166pgq.447.1658359425843;
-        Wed, 20 Jul 2022 16:23:45 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:fdb4:f565:8767:5019])
-        by smtp.gmail.com with ESMTPSA id z3-20020a623303000000b0052895642037sm175853pfz.139.2022.07.20.16.23.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 16:23:45 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/panel-edp: Fix typo in kerneldoc comment (appers=>appears)
-Date:   Wed, 20 Jul 2022 16:23:21 -0700
-Message-Id: <20220720162314.1.Ieef5bc3848df40b71605b70bb571d6429e8978de@changeid>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=R+/1pbXuzmkVkOVy5qVFEBVHEW28THt6o2fZNxe3Mxk=;
+        b=eTVNwYM0pGqMM47D32LT/sMYgx612EHANOPRzWoYkmVbMBhs/LHaeSJ3kYTxEFNhKX
+         LILEP7viEm7MFNxEdFzoWqpN+FEP8vacObdfjBvRa2jDi1tetiEx2DjwmIZ9xAnHiZT/
+         jADBSsWb7D/QGUBGuefezaq3jXO4LcfWhnFAlJ3UJEJQ4cCxHSGi8hy708vSADrH2g7F
+         9eNFgDEV03j1JNuu5JTQsCIu9SiQA7+Iao68YQe0n/tWk418bM6Y2RlMGZC3FmjbFuuQ
+         7oD222NzmgA9D6H0MyoiM3yTOpoxGDlKBOP2Qn1ClqBMNRiDV+nvM6oFiPZYLtjm6Rzo
+         LSmQ==
+X-Gm-Message-State: AJIora8eEC3VZs9+AKpgxUUnqC9KC/k9E2iUQ9V4epTvFzymh6TD9UQ1
+        gBClzLkjr6pTGJLOl+xjw/Kdbh0qaoqhLq+olQ==
+X-Google-Smtp-Source: AGRyM1s5yy+h6QaK+AjrtLq6y3FlnydodI5uH79guzSZhcFTGxDYwsSbdfDP6/AXl1R0X9J2R2ETP9lL6nC7QgPDCw==
+X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:c00d:c17d:52be:ff65])
+ (user=justinstitt job=sendgmr) by 2002:a05:6902:102f:b0:66f:1145:af6e with
+ SMTP id x15-20020a056902102f00b0066f1145af6emr38142323ybt.509.1658359420516;
+ Wed, 20 Jul 2022 16:23:40 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 16:23:32 -0700
+Message-Id: <20220720232332.2720091-1-justinstitt@google.com>
+Mime-Version: 1.0
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Subject: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
+From:   Justin Stitt <justinstitt@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ever since I got the spell-check working in my editor this one has
-been bugging me. Fix it.
+There's been an ongoing mission to re-enable the -Wformat warning for
+Clang. A previous attempt at enabling the warning showed that there were
+many instances of this warning throughout the codebase. The sheer amount
+of these warnings really polluted builds and thus -Wno-format was added
+to _temporarily_ toggle them off.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
+After many patches the warning has largely been eradicated for x86,
+x86_64, arm, and arm64 on a variety of configs. The time to enable the
+warning has never been better as it seems for the first time we are
+ahead of them and can now solve them as they appear rather than tackling
+from a backlog.
+
+As to the root cause of this large backlog of warnings, Clang seems to
+pickup on some more nuanced cases of format warnings caused by implicit
+integer conversion as well as default argument promotions from
+printf-like functions.
+
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/378
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Justin Stitt <justinstitt@google.com>
 ---
+Previous attempt: (https://patchwork.kernel.org/project/linux-kbuild/patch/20190201210853.244043-1-jflat@chromium.org/)
 
- drivers/gpu/drm/panel/panel-edp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Note:
+For this patch to land on its feet, the plethora of supporting patches that
+fixed various -Wformat warnings need to be picked up. Thanfully, a lot
+of them have!
 
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index e6645d6e9b59..07a383dff548 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -53,7 +53,7 @@ struct panel_delay {
- 	 * before the HPD signal is reliable. Ideally this is 0 but some panels,
- 	 * board designs, or bad pulldown configs can cause a glitch here.
- 	 *
--	 * NOTE: on some old panel data this number appers to be much too big.
-+	 * NOTE: on some old panel data this number appears to be much too big.
- 	 * Presumably some old panels simply didn't have HPD hooked up and put
- 	 * the hpd_absent here because this field predates the
- 	 * hpd_absent. While that works, it's non-ideal.
+Here are the patches still waiting to be picked up:
+* https://lore.kernel.org/all/20220718230626.1029318-1-justinstitt@google.com/
+* https://lore.kernel.org/all/20220711222919.2043613-1-justinstitt@google.com/
+
+ scripts/Makefile.extrawarn | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index f5f0d6f09053..9bbaf7112a9b 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -47,7 +47,6 @@ else
+ 
+ ifdef CONFIG_CC_IS_CLANG
+ KBUILD_CFLAGS += -Wno-initializer-overrides
+-KBUILD_CFLAGS += -Wno-format
+ KBUILD_CFLAGS += -Wno-sign-compare
+ KBUILD_CFLAGS += -Wno-format-zero-length
+ KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
 -- 
 2.37.0.170.g444d1eabd0-goog
 

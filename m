@@ -2,107 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9AD57C0F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B200557C100
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiGTXjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        id S231231AbiGTXmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiGTXjK (ORCPT
+        with ESMTP id S229508AbiGTXmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:39:10 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C000649B42;
-        Wed, 20 Jul 2022 16:39:09 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id 125so148879iou.6;
-        Wed, 20 Jul 2022 16:39:09 -0700 (PDT)
+        Wed, 20 Jul 2022 19:42:12 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C1B474CF
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:42:11 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id b25so170366qka.11
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:42:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W0m+zaV/t9IfMCsWddU/BD/INu7/IDz+95VLsqfyLlk=;
+        b=U3yy46ize2deAZrpfJnMv8YMz8IGVBTnhJcNPjIo6TTb4pcJ+2Rf0HGhY3BbVcCoWV
+         Fr6INq63FCKPdfGdT5sCcLQZ66CU1vzCoHoPBI0mRx57jWPTUrS0g23L/KjiSFAwgK+H
+         GO1ZJiWGPLaOR8bFzBjThFgxzhauTq5H8Ad5+6uwjMjSl/nfzhtcdI3wIRqNptpEJG+U
+         jwSMlDrGPttQJtFu4an9vV+ShopsjhzcaZ5xQTRm0xyxBBGA30nLu3urNMzTKaoyWP2f
+         UTSIu+6q3QG1VRi/P/fHe3ypCskf/KZ6FoqFqMNWVUl/YO7cyrklzl1QWXowrdWg5hgg
+         DvIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Lb6X3LLhxQpqyGQLth/kNVm94pHi43Px3THDwjaav0k=;
-        b=O8FdA995V3ik0y5Zs0qK5r2J32dgC+1UhCnxzhhkaGS0+GijAaH8Vx9VkuqnXVdah7
-         Cn6GCJqV1lXRek9JfM6pSSJPrExAMBWAfwpzbYl52CajT9G3IphyPO3O2SUMKYrLpD0o
-         DGkOjTO0gCS7OnhOgF1HffZifDg++22h/iYkoHZUDVp3cb/V6q0aSiUpkJPBxCF+ijH5
-         L34a9ZHjz4zRea9ynjhNB/LoqXr25Z3S4wmS3qVshpaZnqVfFVdiy+uRi/cbcY+sZty5
-         +ZZfvpaPZ0sUqdOqIhjgyaUMWaarjxqk/lQe1QcdWURKjiQbQbDwWWUBSoJnZ865ygfN
-         Ozmg==
-X-Gm-Message-State: AJIora/FKSW/QszzztY+5Fz+7PygwrDC8zmAZw1+1L3t9wMknZyaSgG8
-        QcszQDL3YRGSaILuo1WEAgk9FYseeg==
-X-Google-Smtp-Source: AGRyM1vQa0Gvbtc/zVLTBqAc6iU4EThzGOxFo0GOODM1j7h0Qj40cOQ5/VRTBDR5CkDGrIOuQHayPw==
-X-Received: by 2002:a05:6602:2ccf:b0:67b:e772:a7a2 with SMTP id j15-20020a0566022ccf00b0067be772a7a2mr12704835iow.109.1658360349008;
-        Wed, 20 Jul 2022 16:39:09 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id r27-20020a02b11b000000b0033e9c4c6a9esm112748jah.82.2022.07.20.16.39.07
+        bh=W0m+zaV/t9IfMCsWddU/BD/INu7/IDz+95VLsqfyLlk=;
+        b=fnAXVXlI0W/6zNav0GqFD8sPzzqkKl9jx/Pzy3OmyQueLzs5K4pVqWrky0E3z+ICCD
+         lTyC3qWeUC0Beys3PutI1D+0CJQvRwQvrLlr0YVqRWufFR46QVwn5f0oS/UKTcqP7U00
+         TmawPKdRQGT69w4kJ3M/kXkaQwQydwPDGP7AClLI+5jsO/mNliKLCTlwuGq1YH/jt1iY
+         QFFPI66tHSzJ+hnUJTRCWnr/HTGtbXykkDyGPGrnohkKiIVS4eLCFJebO3H4TQb8yY/F
+         kr05O3seGpfXKiTXgOGc+ebtnSaQ5KjyMJNBjNbr7Jv3E41D55PjS4BK8AyhXdmImfF9
+         KWQg==
+X-Gm-Message-State: AJIora8/1NQ9h31uYhwD2LdgwyywvxkoDCbgMNCe8J2jJxJ/uT707KzD
+        7xerMLc8+LkjBKyNfaxaX+5mQA==
+X-Google-Smtp-Source: AGRyM1sNUsHEctZwjSnaPLK4IglthMasJNe6r6fUvGUFoDocPR+S9bJKHQmOgtSIqhnD9Bw+dxK6qg==
+X-Received: by 2002:a37:555:0:b0:6b5:dace:f589 with SMTP id 82-20020a370555000000b006b5dacef589mr15076898qkf.444.1658360530482;
+        Wed, 20 Jul 2022 16:42:10 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id z8-20020ac84308000000b0031ee1f0c420sm379908qtm.10.2022.07.20.16.42.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 16:39:08 -0700 (PDT)
-Received: (nullmailer pid 1321 invoked by uid 1000);
-        Wed, 20 Jul 2022 23:39:06 -0000
-Date:   Wed, 20 Jul 2022 17:39:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jerome Neanne <jneanne@baylibre.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, nm@ti.com,
-        kristo@kernel.org, khilman@baylibre.com, narmstrong@baylibre.com,
-        msp@baylibre.com, j-keerthy@ti.c, lee.jones@linaro.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 04/14] regulator: dt-bindings: tps65219: Add
- power-button property
-Message-ID: <20220720233906.GB4187584-robh@kernel.org>
-References: <20220719091742.3221-1-jneanne@baylibre.com>
- <20220719091742.3221-5-jneanne@baylibre.com>
+        Wed, 20 Jul 2022 16:42:09 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oEJKT-001hih-C9; Wed, 20 Jul 2022 20:42:09 -0300
+Date:   Wed, 20 Jul 2022 20:42:09 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Long Li <longli@microsoft.com>
+Cc:     Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: Re: [Patch v4 03/12] net: mana: Handle vport sharing between devices
+Message-ID: <20220720234209.GP5049@ziepe.ca>
+References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
+ <1655345240-26411-4-git-send-email-longli@linuxonhyperv.com>
+ <SN6PR2101MB13272044B91D6E37F7F5124FBF879@SN6PR2101MB1327.namprd21.prod.outlook.com>
+ <PH7PR21MB3263F08C111C5D06C99CC32ACE869@PH7PR21MB3263.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220719091742.3221-5-jneanne@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <PH7PR21MB3263F08C111C5D06C99CC32ACE869@PH7PR21MB3263.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 11:17:32AM +0200, Jerome Neanne wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Tue, Jul 12, 2022 at 06:48:09PM +0000, Long Li wrote:
+> > > @@ -563,9 +581,19 @@ static int mana_cfg_vport(struct
+> > > mana_port_context *apc, u32 protection_dom_id,
+> > >
+> > >  	apc->tx_shortform_allowed = resp.short_form_allowed;
+> > >  	apc->tx_vp_offset = resp.tx_vport_offset;
+> > > +
+> > > +	netdev_info(apc->ndev, "Configured vPort %llu PD %u DB %u\n",
+> > > +		    apc->port_handle, protection_dom_id, doorbell_pg_id);
+> > Should this be netdev_dbg()?
+> > The log buffer can be flooded if there are many vPorts per VF PCI device and
+> > there are a lot of VFs.
 > 
-> Add a power-button property to configure the EN/PB/VSENSE pin as a
-> powerbutton.
+> The reason netdev_info () is used is that this message is important
+> for troubleshooting initial setup issues with Ethernet driver. We
+> rely on user to get this configured right to share the same hardware
+> port between Ethernet and RDMA driver. As far as I know, there is no
+> easy way for a driver to "take over" an exclusive hardware resource
+> from another driver.
 
-Belongs in the first binding patch.
+This seems like a really strange statement.
 
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-> ---
->  Documentation/devicetree/bindings/regulator/ti,tps65219.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml b/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
-> index 6a60e62a313c..3f7f4c0280c3 100644
-> --- a/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
-> +++ b/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
-> @@ -36,6 +36,11 @@ properties:
->        include/dt-bindings/interrupt-controller/irq.h
->      const: 1
->  
-> +  power-button:
+Exactly how does all of this work?
 
-ti,power-button
-
-Though doesn't 'system-power-controller' imply this?
-
-> +    type: boolean
-> +    description: Optional property that sets the EN/PB/VSENSE pin to be a
-> +      power-button.
-> +
->  patternProperties:
->    "^buck[1-3]-supply$":
->      description: Input supply phandle of one regulator.
-> -- 
-> 2.17.1
-> 
-> 
+Jason

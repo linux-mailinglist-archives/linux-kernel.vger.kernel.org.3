@@ -2,285 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A65F57B8F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2459257B8FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241001AbiGTOxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
+        id S240972AbiGTOyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240938AbiGTOxj (ORCPT
+        with ESMTP id S240821AbiGTOyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:53:39 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22DE28E2B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:53:37 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id bp15so33545845ejb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:53:37 -0700 (PDT)
+        Wed, 20 Jul 2022 10:54:33 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43ED1F2D1;
+        Wed, 20 Jul 2022 07:54:32 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id n12so13638418wrc.8;
+        Wed, 20 Jul 2022 07:54:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EHnL8tPbxNN29oOhwMl2f2FEODtAZh9gu6a10PJE6TA=;
-        b=Jz+zPAGQY81xbmnf6S2EXoOmMRnw0oHwMZwfMaNbLBq1FWu/5brYbnwErMWE0SVaDB
-         8nkjl+DfBuHkiVtSf2RuNH7v3rp1ZLEzNbfW9a58aLFN54B3WumMv9nWuoIzo2VPmjf3
-         D2zIucq4Vm6EpRU9wEdnuBDxL4hLsNmJ8cX1s=
+         :cc:content-transfer-encoding;
+        bh=yt+ngO8tmWj/KwQcOUTeK5RaJ2ek4CEzrTIRXEZHAOs=;
+        b=RWgbiuU/cvPX+h0opH2QrKUcF1f35fLSeVIBPTODegHvcQF1C1Gac5Xj4lEiH7z+aw
+         aqixvLfNXF0egWiZWeklp84n8XhYxK3u1bUG47zEDPz7woIa6PkxxGm7VEN9iz2JcIea
+         uCHaWLZSI2FPoIHZtT7gnAoomuie9FmTCrnDitK86iEBau1xL2dG8bQ2HdPMuptOn7PG
+         wFJ3oUw0i05d2GQV5Q75ZZxX93wN7rxvn2K0V2KN/COcaPilsQmyUPhAuvJywOBD+wk5
+         +twk6DST3iNAOVBzNkfGYFO+uabyqoqzSK9j7Fd4eyCy4mkKmgxcEg0foxtN4bI5hBzm
+         CKgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EHnL8tPbxNN29oOhwMl2f2FEODtAZh9gu6a10PJE6TA=;
-        b=CV/Nhi64wOFwOxgT8brr+uK9aNRKwgkf7plaj1DHOpofbMJzgbM1ewOeqNJVcvmuIn
-         XucJ3yO3uzE9TXrj9dc0W3ZIyqpOLJ4ja/KRU3Jcrsi8X5tm1+occZnHCLZKLC3A5lkC
-         dc2tRwNPuhOn5/xn9IIB5f6h0EU8F4Vtz2SKlQFWDYO6sQ+bM/KKzJ8uCeaLBXxBRcGn
-         46U4XGmHerpT7wihth2VRUVv8YDVYYrZBZ2XngNLKvaL9msxxXqcdx+EHKSBtMOEX4GW
-         JEde5rrwHU59oYYi+6maRf3Z4bEVoQADrBQz95CIGIYlBQe5FJrRRZVD9qoaAsSU1nbF
-         wkWQ==
-X-Gm-Message-State: AJIora9O2Mg/58BJ0nhhj90P6DBImJ+uhax+hdMXp6Rmoxmjgcn0gMI9
-        p9ESQtt8FRroimjRmzo6USDxAhSXOLpAPRJYTH09Og==
-X-Google-Smtp-Source: AGRyM1v2EC+Hjyqpka6aujTvod1B12SacJ7kuImQZqTfcejALD61e1pE1oksddVH3Kq/9ma+7pvcG7cRkA/DerUFT8Q=
-X-Received: by 2002:a17:907:2bf4:b0:72b:3336:ca9e with SMTP id
- gv52-20020a1709072bf400b0072b3336ca9emr35721318ejc.341.1658328816117; Wed, 20
- Jul 2022 07:53:36 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yt+ngO8tmWj/KwQcOUTeK5RaJ2ek4CEzrTIRXEZHAOs=;
+        b=tsQ8tYTjrXYtoaWrO7rkyGkAJOJw+wZEqYB1rNGb2h8pt69Og/lIVbsz3Vm8u1riym
+         u9Y1KmJoK3+U1nVHBR5YANh0eiT5MWMJylBhT/JO2VtcPcjIJs48UnAub5R68WOxH+N5
+         bxeSykIBAl/+Q7uuW/uNSiZ5HJaLhSwMvHoAKr84Ws6T49qUHRrPfm77YpwfwUg0lZ5w
+         kaJuNiXNQXAB4uwp3QR2XDmbTXavqh3Sr7k0g+V5o/9AaZ4UQAKQIGAoyUiNdaz2b0M4
+         p1vF0JOx9aIkUuUfPWLVCc76LnPOmTYU/cIfS19c/cWCUL+BEZWvYQu3l++/0iIAGNQm
+         cqug==
+X-Gm-Message-State: AJIora+JFsxC5xWaNMeJ8zFZO0IQLTQcvDLNPoyVfdEI5dd+9YvMYkg6
+        qiYY/kMqwsFcSUIs2Rue66U4dRfsf+ek2D37DvE=
+X-Google-Smtp-Source: AGRyM1u2P5XbvgKRTsW66zBf0bTO0ggXnr+RwjXdB2tcSNL9DspNLx9EDuFXv7g/hzXtCaAHKIODXoPbI4So8lly2TY=
+X-Received: by 2002:a5d:5f05:0:b0:21d:9ad7:f281 with SMTP id
+ cl5-20020a5d5f05000000b0021d9ad7f281mr32547285wrb.4.1658328871258; Wed, 20
+ Jul 2022 07:54:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+-6iNz8DTjAMXnWuOd=0W=qa6J4uD03oH3RJezEk1WxaUN1NA@mail.gmail.com>
- <20220719200332.GA1552587@bhelgaas>
-In-Reply-To: <20220719200332.GA1552587@bhelgaas>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Wed, 20 Jul 2022 10:53:24 -0400
-Message-ID: <CA+-6iNzn=JsG=xU2BxagyfeUMZ13p9yg=y+_wVcsAaZ0NgEvKg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two funcs
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000006064305e43dc482"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715125013.247085-1-mlombard@redhat.com> <5a469c5a.8b85.1821171d9de.Coremail.chen45464546@163.com>
+ <CAFL455nnc04q8TohH+Qbv36Bo3=KKxMWr=diK_F5Ds5K-h5etw@mail.gmail.com>
+ <22bf39a6.8f5e.18211c0898a.Coremail.chen45464546@163.com> <CAFL455mXFY5AFOoXxhpUY6EkPzc1677cRPQ8UX-RSykhm_52Nw@mail.gmail.com>
+ <CAKgT0Uejy66aFAdD+vMPYFtSu2BWRgTxBG0mO+BLayk3nNuQMw@mail.gmail.com> <8a7e9cf.1b9.18218925734.Coremail.chen45464546@163.com>
+In-Reply-To: <8a7e9cf.1b9.18218925734.Coremail.chen45464546@163.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Wed, 20 Jul 2022 07:54:18 -0700
+Message-ID: <CAKgT0Ueq=9XGW4uySmDj1sa9MYosaF4S6Na_jcVyiofW_TqgwA@mail.gmail.com>
+Subject: Re: Re: Re: [PATCH V3] mm: prevent page_frag_alloc() from corrupting
+ the memory
+To:     Chen Lin <chen45464546@163.com>
+Cc:     Maurizio Lombardi <mlombard@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000006064305e43dc482
-Content-Type: text/plain; charset="UTF-8"
-
-On Tue, Jul 19, 2022 at 4:03 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+On Tue, Jul 19, 2022 at 3:27 PM Chen Lin <chen45464546@163.com> wrote:
 >
-> On Tue, Jul 19, 2022 at 09:08:48AM -0400, Jim Quinlan wrote:
-> > On Mon, Jul 18, 2022 at 6:40 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Mon, Jul 18, 2022 at 02:56:03PM -0400, Jim Quinlan wrote:
-> > > > On Mon, Jul 18, 2022 at 2:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > On Sat, Jul 16, 2022 at 06:24:49PM -0400, Jim Quinlan wrote:
-> > > > > > Currently, the function does the setup for establishing PCIe link-up
-> > > > > > with the downstream device, and it does the actual link-up as well.
-> > > > > > The calling sequence is (roughly) the following in the probe:
-> > > > > >
-> > > > > > -> brcm_pcie_probe()
-> > > > > >     -> brcm_pcie_setup();                       /* Set-up and link-up */
-> > > > > >     -> pci_host_probe(bridge);
-> > > > > >
-> > > > > > This commit splits the setup function in two: brcm_pcie_setup(), which only
-> > > > > > does the set-up, and brcm_pcie_start_link(), which only does the link-up.
-> > > > > > The reason why we are doing this is to lay a foundation for subsequent
-> > > > > > commits so that we can turn on any power regulators, as described in the
-> > > > > > root port's DT node, prior to doing link-up.
-> > > > >
-> > > > > All drivers that care about power regulators turn them on before
-> > > > > link-up, but typically those regulators are described directly under
-> > > > > the host bridge itself.
-> > > >
-> > > > Actually, what you describe is what I proposed with my v1 back in Nov 2020.
-> > > > The binding commit message said,
-> > > >
-> > > >     "Quite similar to the regulator bindings found in
-> > > >     "rockchip-pcie-host.txt", this allows optional regulators to be
-> > > >     attached and controlled by the PCIe RC driver."
-> > > >
-> > > > > IIUC the difference here is that you have regulators described under
-> > > > > Root Ports (not the host bridge/Root Complex itself), so you don't
-> > > > > know about them until you've enumerated the Root Ports.
-> > > > > brcm_pcie_probe() can't turn them on directly because it doesn't know
-> > > > > what Root Ports are present and doesn't know about regulators below
-> > > > > them.
-> > > >
-> > > > The reviewer's requested me to move the regulator node(s)
-> > > > elsewhere, and at some point later it was requested to be placed
-> > > > under the Root Port driver.  I would love to return them under the
-> > > > host bridge, just say the word!
-> > >
-> > > Actually, I think my understanding is wrong.  Even though the PCI core
-> > > hasn't enumerated the Root Port as a pci_dev, brcm_pcie_setup() knows
-> > > about it and should be able to look up the regulators and turn them
-> > > on.
+> At 2022-07-18 23:33:42, "Alexander Duyck" <alexander.duyck@gmail.com> wro=
+te:
+> >On Mon, Jul 18, 2022 at 8:25 AM Maurizio Lombardi <mlombard@redhat.com> =
+wrote:
+> >>
+> >> po 18. 7. 2022 v 16:40 odes=C3=ADlatel Chen Lin <chen45464546@163.com>=
+ napsal:
+> >> >
+> >> > But the original intention of page frag interface is indeed to alloc=
+ate memory
+> >> > less than one page. It's not a good idea to  complicate the definiti=
+on of
+> >> > "page fragment".
+> >>
+> >> I see your point, I just don't think it makes much sense to break
+> >> drivers here and there
+> >> when a practically identical 2-lines patch can fix the memory corrupti=
+on bug
+> >> without changing a single line of code in the drivers.
+> >>
+> >> By the way, I will wait for the maintainers to decide on the matter.
+> >>
+> >> Maurizio
 > >
-> > One can do this with
-> >         regulator_bulk_get(NULL, ...);
+> >I'm good with this smaller approach. If it fails only under memory
+> >pressure I am good with that. The issue with the stricter checking is
+> >that it will add additional overhead that doesn't add much value to
+> >the code.
 > >
-> > However, MarkB did not like the idea of a driver getting the
-> > regulator from the global DT namespace [1].
+> >Thanks,
 > >
-> > For the RC driver, one  cannot invoke  regulator_bulk_get(dev, ...)
-> > if there is not a direct child regulator node.  One needs to use the
-> > Port driver device.  The Port driver device does not exist at this
-> > point unless one tries to prematurely create it; I tried this and it
-> > was a mess to say the least.
-> >
-> > > Can you dig up the previous discussion about why the regulators need
-> > > to be under the Root Port and why they can't be turned on before
-> > > calling pci_host_probe()?
-> >
-> > RobH did not want the regulators to be under the RC as he said their
-> > DT location should resemble the HW [2].  The consensus evolved to
-> > place it under the port driver, which can provide a general
-> > mechanism for turning on regulators anywhere in the PCIe tree.
 >
-> I don't want to redesign this whole thing.  I just want a crisp
-> rationale for the commit log.
+> >- Alex
 >
-> All other drivers (exynos, imx6, rw-rockchip, histb, qcom, tegra194,
-> tegra, rockchip-host) have regulators for downstream PCIe power
-> directly under the RC.  If putting the regulators under an RP instead
-> is the direction of the future, I guess that might be OK, and I guess
-> the reasons are:
+> One additional question=EF=BC=9A
+> I don't understand too much about  why point >=EF=BC=A1<  have more overh=
+ead than point >B<.
+> It all looks the same, except for jumping to the refill process, and the =
+refill is a very long process.
+> Could you please give more explain=EF=BC=9F
 >
->   1) Slot or device power regulators that are logically below the RP
->      should be described that way in the DT.
+>         if (unlikely(offset < 0)) {
+>                  -------------->=EF=BC=A1<------------
+
+In order to verify if the fragsz is larger than a page we would have
+to add a comparison between two values that aren't necessarily related
+to anything else in this block of code.
+
+Adding a comparison at this point should end up adding instructions
+along the lines of
+        cmp $0x1000,%[some register]
+        jg <return NULL block>
+
+These two lines would end up applying to everything that takes this
+path so every time we hit the end of a page we would encounter it, and
+in almost all cases it shouldn't apply so it is extra instructions. In
+addition they would be serialized with the earlier subtraction since
+we can't process it until after the first comparison which is actually
+using the flags to perform the check since it is checking if offset is
+signed.
+
+>                 page =3D virt_to_page(nc->va);
 >
->   2) Associating regulators with a RP allows the possibility of
->      selectively controlling power to slots/devices below the RP,
->      e.g., to power down devices below RP A when suspending while
->      leaving wakeup devices below RP B powered up.
+>                 if (!page_ref_sub_and_test(page, nc->pagecnt_bias))
+>                         goto refill;
 >
-> I think in your case the motivating reason is 2).
+>                 if (unlikely(nc->pfmemalloc)) {
+>                         free_the_page(page, compound_order(page));
+>                         goto refill;
+>                 }
 >
-> Your commit log for "Add mechanism to turn on subdev regulators"
-> suggests that you want some user control of endpoint power, e.g., via
-> sysfs, but I don't see that implemented yet except possibly via a
-> "remove" file that would unbind the driver and remove the entire
-> device.
-Hi Bjorn,
-
-Initially we wanted to (a) turn on any regulator found under the RC
-node and (b) allow the possibility of the regulator to control the
-EP's power. From the feedback, we realized early on that neither of
-these were going to fly, so we conceded both requests and just wanted
-to turn on standard PCIe regulators.  Upon reading the aforementioned
-commit message I realize that there are a couple of leftover sentences
-from these early days that must be removed.
-
-I think when I submitted v1 of the original series that only the
-rockchip driver had regulators under the RC.   And my recollection was
-that this was accepted but there was apprehension of this turning into
-the "standard" way of turning on such regulators,  as the location of
-the regulator nodes was in question.
-
-In short, I would be quite content  to follow the existing examples.
-
-Regards,
-Jim Quinlan
-Broadcom STB
-
+> #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
+>                 /* if size can vary use size else just use PAGE_SIZE */
+>                 size =3D nc->size;
+> #endif
+>                 /* OK, page count is 0, we can safely set it */
+>                 set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
 >
-> > [1] https://lore.kernel.org/linux-pci/20210329162539.GG5166@sirena.org.uk/
-> > [2] https://lore.kernel.org/linux-pci/CAL_JsqKPKk3cPO8DG3FQVSHrKnO+Zed1R=PV7n7iAC+qJKgHcw@mail.gmail.com/
+>                 /* reset page count bias and offset to start of new frag =
+*/
+>                 nc->pagecnt_bias =3D PAGE_FRAG_CACHE_MAX_SIZE + 1;
+>                 offset =3D size - fragsz;
+>                  -------------->B<------------
 
---00000000000006064305e43dc482
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+At this point we have already excluded the shared and pfmemalloc
+pages. Here we don't have to add a comparison. The comparison is
+already handled via the size - fragsz, we just need to make use of the
+flags following the operation by checking to see if offset is signed.
 
-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
-LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
-DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
-BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
-VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
-DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
-qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
-YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
-S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
-8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
-AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
-AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
-MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCjNddhdlQM3zuW9Zd4GGZxwviIa9GU
-dl202BaJrEneWjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
-MjAxNDUzMzZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
-hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
-AgEwDQYJKoZIhvcNAQEBBQAEggEAYEMuM9ri/PnCbYZccHQMUZbXcttIxHy7VcBP47ME+VkdKfrF
-La3taH6K7zPukv2ncLrg82nzprzOJPYBYTiH56tR1Up3F3j1ASlnQC/7iuM17Xo7vBvDoQTCK7p5
-DAPwBseHPUiQLFEvXULxbsaS0wGVWFcMbBwG2p7CyevOJwAyfpYy+pEboBZBX9Xw//Dkpqvvz5wO
-D5PDcJzpR6GCkBtkyYVgRrCPstMPdQBXolDsinabF1fmhAFW6DnpS93ZL6cXWiEtlKqZxuIkNTIw
-X7S2OJ9Q3MI4U/CKMWq4/JP66V0o8/InTGBkPqdkzsrSC7Mm7x5jtYJ/OyVNvpTuLQ==
---00000000000006064305e43dc482--
+So the added assembler would be something to the effect of:
+        js <return NULL block>
+
+In addition the assignment operations there should have no effect on
+the flags so the js can be added to the end of the block without
+having to do much in terms of forcing any reordering of the
+instructions.

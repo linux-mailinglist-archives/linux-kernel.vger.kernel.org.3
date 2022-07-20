@@ -2,81 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A198857B3B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A7757B3C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237115AbiGTJXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        id S238335AbiGTJYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiGTJX1 (ORCPT
+        with ESMTP id S238778AbiGTJYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:23:27 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FBF474DA;
-        Wed, 20 Jul 2022 02:23:27 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K9Jj9c007765;
-        Wed, 20 Jul 2022 09:23:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=D3AIu2wl/MlREtD6aQ7XR1OUkrCUtTWQM8wu2Sd1rpw=;
- b=HZUmBvC9gaV/DVNfbiJIj7AiWa/kkCzNkMq+cTlWadthuCydzKzTcJcxGIMMzXHpmWbO
- m676EL6bbCdQqfhBZIXIU1eeTtwyQZplQY4TzVAlWPncpugkgJhagvvoFXUq8WA10XIK
- 8Z1R/b7CMfyFbZjQJOeOIlF2zH5njEQw8D9wiDyDky6RtLXHiMjmtSiY/UHiWclHy3Cs
- TIIlEYckKLfu7nQ55ue9LUlb5v7byIYwab7TUxKh+AAX1jUVV5CmoD/5lqUAEAd95+lo
- LxTe8+TSWuKEGFzPcegud8Z2Ec438xxrGwA2j8ZDgBshP7MtXYWJTodQQx7TkzT9qGwm CA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3heeyq82mp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 09:23:22 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26K9NKwT002161;
-        Wed, 20 Jul 2022 09:23:20 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3hbmy8wcrs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 09:23:20 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26K9LVRv23855394
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Jul 2022 09:21:31 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A746AE056;
-        Wed, 20 Jul 2022 09:23:17 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE7C4AE051;
-        Wed, 20 Jul 2022 09:23:16 +0000 (GMT)
-Received: from osiris (unknown [9.145.148.254])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 20 Jul 2022 09:23:16 +0000 (GMT)
-Date:   Wed, 20 Jul 2022 11:23:15 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Jason Wang <wangborong@cdjrlc.com>, svens@linux.ibm.com,
-        gor@linux.ibm.com, borntraeger@linux.ibm.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] s390/delay: Fix comment typo
-Message-ID: <YtfJgyVQzgkzSouS@osiris>
-References: <20220715043610.17229-1-wangborong@cdjrlc.com>
- <Ytb2V3ay5qMY3yt+@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        Wed, 20 Jul 2022 05:24:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ED44B48A;
+        Wed, 20 Jul 2022 02:24:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2014720720;
+        Wed, 20 Jul 2022 09:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658309051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Su3HLAuy7lHq0rdQpeNwNVroUq7F2bc2C0CpI11UKgk=;
+        b=IPBQ63dpffvjumpNL7egBgA3pT4P2hB9jwBDQAA7O/J1ymTnxLQyb8tCHIn6jUxaFK/lJ3
+        LPFdMoZicNGvesr364u2snSh9MsfW0jm4pGacRFCIbfvfHvGfwObCpq7qIXdV1gTh322FP
+        1kmnMo1qYUR23pCiqDF4i+hlT8BaKDg=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8EC382C141;
+        Wed, 20 Jul 2022 09:24:10 +0000 (UTC)
+Date:   Wed, 20 Jul 2022 11:24:10 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4] mm: vmpressure: don't count proactive reclaim in
+ vmpressure
+Message-ID: <YtfJug77XJ9BPA8L@dhcp22.suse.cz>
+References: <20220714064918.2576464-1-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ytb2V3ay5qMY3yt+@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GzKpET1ml1XKzbCOIH0EMSP9T9i4gzax
-X-Proofpoint-ORIG-GUID: GzKpET1ml1XKzbCOIH0EMSP9T9i4gzax
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_04,2022-07-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1011 adultscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
- spamscore=0 suspectscore=0 mlxscore=0 mlxlogscore=667 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207200037
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20220714064918.2576464-1-yosryahmed@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,40 +64,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 08:22:15PM +0200, Alexander Gordeev wrote:
-> On Fri, Jul 15, 2022 at 12:36:10PM +0800, Jason Wang wrote:
-> > The double `that' is duplicated in line 19, remove one.
-> > 
-> > Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
-> > ---
-> >  arch/s390/lib/delay.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/s390/lib/delay.c b/arch/s390/lib/delay.c
-> > index f7f5adea8940..c32bc8f7c1fd 100644
-> > --- a/arch/s390/lib/delay.c
-> > +++ b/arch/s390/lib/delay.c
-> > @@ -16,7 +16,7 @@ void __delay(unsigned long loops)
-> >          /*
-> >           * To end the bloody studid and useless discussion about the
-> >           * BogoMips number I took the liberty to define the __delay
-> > -         * function in a way that that resulting BogoMips number will
-> > +         * function in a way that resulting BogoMips number will
-> >           * yield the megahertz number of the cpu. The important function
-> >           * is udelay and that is done using the tod clock. -- martin.
-> >           */
+On Thu 14-07-22 06:49:18, Yosry Ahmed wrote:
+> vmpressure is used in cgroup v1 to notify userspace of reclaim
+> efficiency events, and is also used in both cgroup v1 and v2 as a signal
+> for memory pressure for networking, see
+> mem_cgroup_under_socket_pressure().
 > 
-> Applied, thanks!
+> Proactive reclaim intends to probe memcgs for cold memory, without
+> affecting their performance. Hence, reclaim caused by writing to
+> memory.reclaim should not trigger vmpressure.
 
-Ahem :) That should have been actually "fixed" to "that the", instead
-of removing the double "that". And by the way, just two lines above is
-another obvious typo...
+I am not against the change but this is rather vague statement. Please
+be more specific. You are not really explaining what kind of side effect
+this does and why that is really desirable. Sure pro-active reclaim can
+be used to probe for a cold memory but it can also be used to balance
+the memory consumption or other potential usecases.
 
-But seriously, the whole comment is entirely outdated and simply
-wrong.  We don't use __delay() to calculate the BogoMips number, nor
-does the function return a value that correlates with the megahertz
-number of the cpu nowadays. It just loops a random time (where the cpu
-is free to detect the pointless loop and optimize it away anyway).
+I think what we are missing here is
+- explain that this doesn't have any effect on existing users of
+  vmpressure user interface because that is cgroup v1 and memory.reclaim
+  is v2 feature. This is a trivial statement but quite useful for future
+  readers of this commit
+- explain the effect on the networking layer and typical usecases
+  memory.reclaim is used for currently and ideally document that.
+- how are we going to deal with users who would really want to use
+  memory.reclaim interface as a replacement for existing hard/high
+  memory reclaim? Is that even something that the interface is intended
+  for?
 
-So the right thing to do would be to remove the complete comment, and
-maybe add a new comment - but please don't apply this patch.
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
+
+The patch itself looks good to me.
+
+> ---
+> Changes in v4:
+> - Removed unneeded reclaim_options local variables (Andrew).
+> 
+> Changes in v3:
+> - Limited the vmpressure change to memory.reclaim, dropped psi changes,
+>   updated changelog to reflect new behavior (Michal, Shakeel)
+> 
+> Changes in v2:
+> - Removed unnecessary initializations to zero (Andrew).
+> - Separate declarations and initializations when it causes line wrapping
+>   (Andrew).
+> 
+> ---
+>  include/linux/swap.h |  5 ++++-
+>  mm/memcontrol.c      | 24 ++++++++++++++----------
+>  mm/vmscan.c          | 27 +++++++++++++++++----------
+>  3 files changed, 35 insertions(+), 21 deletions(-)
+> 
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index 0c0fed1b348f..f6e9eaa2339f 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -411,10 +411,13 @@ extern void lru_cache_add_inactive_or_unevictable(struct page *page,
+>  extern unsigned long zone_reclaimable_pages(struct zone *zone);
+>  extern unsigned long try_to_free_pages(struct zonelist *zonelist, int order,
+>  					gfp_t gfp_mask, nodemask_t *mask);
+> +
+> +#define MEMCG_RECLAIM_MAY_SWAP (1 << 1)
+> +#define MEMCG_RECLAIM_PROACTIVE (1 << 2)
+>  extern unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+>  						  unsigned long nr_pages,
+>  						  gfp_t gfp_mask,
+> -						  bool may_swap);
+> +						  unsigned int reclaim_options);
+>  extern unsigned long mem_cgroup_shrink_node(struct mem_cgroup *mem,
+>  						gfp_t gfp_mask, bool noswap,
+>  						pg_data_t *pgdat,
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index a550042d88c3..b668224142c7 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -2331,7 +2331,8 @@ static unsigned long reclaim_high(struct mem_cgroup *memcg,
+>  
+>  		psi_memstall_enter(&pflags);
+>  		nr_reclaimed += try_to_free_mem_cgroup_pages(memcg, nr_pages,
+> -							     gfp_mask, true);
+> +							gfp_mask,
+> +							MEMCG_RECLAIM_MAY_SWAP);
+>  		psi_memstall_leave(&pflags);
+>  	} while ((memcg = parent_mem_cgroup(memcg)) &&
+>  		 !mem_cgroup_is_root(memcg));
+> @@ -2576,7 +2577,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  	struct page_counter *counter;
+>  	unsigned long nr_reclaimed;
+>  	bool passed_oom = false;
+> -	bool may_swap = true;
+> +	unsigned int reclaim_options = MEMCG_RECLAIM_MAY_SWAP;
+>  	bool drained = false;
+>  	unsigned long pflags;
+>  
+> @@ -2593,7 +2594,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  		mem_over_limit = mem_cgroup_from_counter(counter, memory);
+>  	} else {
+>  		mem_over_limit = mem_cgroup_from_counter(counter, memsw);
+> -		may_swap = false;
+> +		reclaim_options &= ~MEMCG_RECLAIM_MAY_SWAP;
+>  	}
+>  
+>  	if (batch > nr_pages) {
+> @@ -2620,7 +2621,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  
+>  	psi_memstall_enter(&pflags);
+>  	nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
+> -						    gfp_mask, may_swap);
+> +						    gfp_mask, reclaim_options);
+>  	psi_memstall_leave(&pflags);
+>  
+>  	if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
+> @@ -3402,8 +3403,8 @@ static int mem_cgroup_resize_max(struct mem_cgroup *memcg,
+>  			continue;
+>  		}
+>  
+> -		if (!try_to_free_mem_cgroup_pages(memcg, 1,
+> -					GFP_KERNEL, !memsw)) {
+> +		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
+> +					memsw ? 0 : MEMCG_RECLAIM_MAY_SWAP)) {
+>  			ret = -EBUSY;
+>  			break;
+>  		}
+> @@ -3513,7 +3514,8 @@ static int mem_cgroup_force_empty(struct mem_cgroup *memcg)
+>  		if (signal_pending(current))
+>  			return -EINTR;
+>  
+> -		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL, true))
+> +		if (!try_to_free_mem_cgroup_pages(memcg, 1, GFP_KERNEL,
+> +						  MEMCG_RECLAIM_MAY_SWAP))
+>  			nr_retries--;
+>  	}
+>  
+> @@ -6248,7 +6250,7 @@ static ssize_t memory_high_write(struct kernfs_open_file *of,
+>  		}
+>  
+>  		reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages - high,
+> -							 GFP_KERNEL, true);
+> +					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP);
+>  
+>  		if (!reclaimed && !nr_retries--)
+>  			break;
+> @@ -6297,7 +6299,7 @@ static ssize_t memory_max_write(struct kernfs_open_file *of,
+>  
+>  		if (nr_reclaims) {
+>  			if (!try_to_free_mem_cgroup_pages(memcg, nr_pages - max,
+> -							  GFP_KERNEL, true))
+> +					GFP_KERNEL, MEMCG_RECLAIM_MAY_SWAP))
+>  				nr_reclaims--;
+>  			continue;
+>  		}
+> @@ -6426,6 +6428,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+>  	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
+>  	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
+>  	unsigned long nr_to_reclaim, nr_reclaimed = 0;
+> +	unsigned int reclaim_options;
+>  	int err;
+>  
+>  	buf = strstrip(buf);
+> @@ -6433,6 +6436,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+>  	if (err)
+>  		return err;
+>  
+> +	reclaim_options	= MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE;
+>  	while (nr_reclaimed < nr_to_reclaim) {
+>  		unsigned long reclaimed;
+>  
+> @@ -6449,7 +6453,7 @@ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+>  
+>  		reclaimed = try_to_free_mem_cgroup_pages(memcg,
+>  						nr_to_reclaim - nr_reclaimed,
+> -						GFP_KERNEL, true);
+> +						GFP_KERNEL, reclaim_options);
+>  
+>  		if (!reclaimed && !nr_retries--)
+>  			return -EAGAIN;
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index f7d9a683e3a7..0969e6408a53 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -102,6 +102,9 @@ struct scan_control {
+>  	/* Can pages be swapped as part of reclaim? */
+>  	unsigned int may_swap:1;
+>  
+> +	/* Proactive reclaim invoked by userspace through memory.reclaim */
+> +	unsigned int proactive:1;
+> +
+>  	/*
+>  	 * Cgroup memory below memory.low is protected as long as we
+>  	 * don't threaten to OOM. If any cgroup is reclaimed at
+> @@ -3125,9 +3128,10 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
+>  			    sc->priority);
+>  
+>  		/* Record the group's reclaim efficiency */
+> -		vmpressure(sc->gfp_mask, memcg, false,
+> -			   sc->nr_scanned - scanned,
+> -			   sc->nr_reclaimed - reclaimed);
+> +		if (!sc->proactive)
+> +			vmpressure(sc->gfp_mask, memcg, false,
+> +				   sc->nr_scanned - scanned,
+> +				   sc->nr_reclaimed - reclaimed);
+>  
+>  	} while ((memcg = mem_cgroup_iter(target_memcg, memcg, NULL)));
+>  }
+> @@ -3250,9 +3254,10 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+>  	}
+>  
+>  	/* Record the subtree's reclaim efficiency */
+> -	vmpressure(sc->gfp_mask, sc->target_mem_cgroup, true,
+> -		   sc->nr_scanned - nr_scanned,
+> -		   sc->nr_reclaimed - nr_reclaimed);
+> +	if (!sc->proactive)
+> +		vmpressure(sc->gfp_mask, sc->target_mem_cgroup, true,
+> +			   sc->nr_scanned - nr_scanned,
+> +			   sc->nr_reclaimed - nr_reclaimed);
+>  
+>  	if (sc->nr_reclaimed - nr_reclaimed)
+>  		reclaimable = true;
+> @@ -3534,8 +3539,9 @@ static unsigned long do_try_to_free_pages(struct zonelist *zonelist,
+>  		__count_zid_vm_events(ALLOCSTALL, sc->reclaim_idx, 1);
+>  
+>  	do {
+> -		vmpressure_prio(sc->gfp_mask, sc->target_mem_cgroup,
+> -				sc->priority);
+> +		if (!sc->proactive)
+> +			vmpressure_prio(sc->gfp_mask, sc->target_mem_cgroup,
+> +					sc->priority);
+>  		sc->nr_scanned = 0;
+>  		shrink_zones(zonelist, sc);
+>  
+> @@ -3825,7 +3831,7 @@ unsigned long mem_cgroup_shrink_node(struct mem_cgroup *memcg,
+>  unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+>  					   unsigned long nr_pages,
+>  					   gfp_t gfp_mask,
+> -					   bool may_swap)
+> +					   unsigned int reclaim_options)
+>  {
+>  	unsigned long nr_reclaimed;
+>  	unsigned int noreclaim_flag;
+> @@ -3838,7 +3844,8 @@ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+>  		.priority = DEF_PRIORITY,
+>  		.may_writepage = !laptop_mode,
+>  		.may_unmap = 1,
+> -		.may_swap = may_swap,
+> +		.may_swap = !!(reclaim_options & MEMCG_RECLAIM_MAY_SWAP),
+> +		.proactive = !!(reclaim_options & MEMCG_RECLAIM_PROACTIVE),
+>  	};
+>  	/*
+>  	 * Traverse the ZONELIST_FALLBACK zonelist of the current node to put
+> -- 
+> 2.37.0.144.g8ac04bfd2-goog
+
+-- 
+Michal Hocko
+SUSE Labs

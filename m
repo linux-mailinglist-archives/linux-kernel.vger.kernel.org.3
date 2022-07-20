@@ -2,249 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2889057B13C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D61D57B13E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbiGTGu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        id S231715AbiGTGwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiGTGu5 (ORCPT
+        with ESMTP id S229553AbiGTGwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:50:57 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87D32FFD9;
-        Tue, 19 Jul 2022 23:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=VmYhcl1kntwfBMI/6ezqKks85/4FsO2GpWpJV2EwAT8=; b=yaQZ8TwPitY9oIUmm+HyAGnuFi
-        oT0oGMUzC7U/TuzGEZPxeaq57DmFPKj50vwCF1NF0HrKxq5O2lMDydn5X+WXaf+JuzsA/dI08Rxen
-        /XWmFc7e7HT8mX4rOeCfIAlyJLcPDajkaXWdrCn/UvhFkaFKgI853fCGqdR7YD/RxRHCaQIGshNji
-        WxpwEAkX7UhYLuo+qj9Jo9fnkVBfgKMhEpPGjLOJEhGEfvGpA3Yvl24QPIvtI3bBtnct0ywmHJUiB
-        8qU7PmMWh0i1OT0I2QYpytwajQYdLZAnmUBM2wPNMAI+Zl2Wuh8xeICrD2/0E2brba9s5Olyynst3
-        4VqY+BLA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33456)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oE3Xp-0003nG-Hk; Wed, 20 Jul 2022 07:50:53 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oE3Xo-0003gO-C6; Wed, 20 Jul 2022 07:50:52 +0100
-Date:   Wed, 20 Jul 2022 07:50:52 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH v2 07/11] net: phylink: Adjust link settings based on
- rate adaptation
-Message-ID: <YtelzB1uO0zACa42@shell.armlinux.org.uk>
-References: <20220719235002.1944800-1-sean.anderson@seco.com>
- <20220719235002.1944800-8-sean.anderson@seco.com>
+        Wed, 20 Jul 2022 02:52:09 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFF830F5F;
+        Tue, 19 Jul 2022 23:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658299928; x=1689835928;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=zZPuA8KQqK0L9Z0IU6BHamnYUt2mkeaaGxchXeNh+Hw=;
+  b=a4osJnx8ARBZuO/CjaxQfw4khdBhfbKsku6QYzVIhHzMckySEGsnBDPJ
+   heE1YjBOIH64vRPxXHxotyG6WcwaNtySvQZX9It7sZ2K/Q+E9P7NNgOYi
+   424EvSIff0KuMx/nWM1RegtNMadQma5KIyEke+9ovpmgJIjDBDJNrTLzZ
+   68bwSGUY6f1H+p3mEmJCV1xbUv2rxpL76VSO6iFnyPxrIqAXQAO0fL7FG
+   mo73s7w6yZovnXVtNjBuatq3LVtaS/P45DV7NJ8U6/2Xcfki5Dg6ZxkdP
+   zH33YIsWC3EkG3Q/435LQ1KHHFemvH0QKsZsk8WxL+hy3nupDNvS1aGo8
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="105285048"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jul 2022 23:52:07 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 19 Jul 2022 23:52:06 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Tue, 19 Jul 2022 23:52:05 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MCWduldcO3f4vQd3k4OX4tP37gqSRIQtuI/yxtp2QNpCI1NDA/25GY2/7BOhaFi2D30xE2bp03DLbBNsz6RiZRQ1G17Pth+Q50QnWZ4WHZfOugr/bD9EDBpXoYVIHDQ4ToEIQAfgWRzixLwgPZHOBFTyCjObA3CUdRS0Ixd6DazQIJ2D5USN3DGx9BsRyM5Jj4mVNM9GmrbVA5u6dhvFRM0PH9XWMDirbIG7RC2O7E3Cu00SEN07t6SOYkJIZvDGzYjajlxLFV9roOaRny5h1Z47dMoqaQSzrttXtXpzRXha4BAbTCk9PQcw7VZVoFFXYrHjwFgGmEVQark2KrEJJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zZPuA8KQqK0L9Z0IU6BHamnYUt2mkeaaGxchXeNh+Hw=;
+ b=jcq3WWPovFvHu34IF9q1oeFCYgo1K0d8wOv9B/6jIhu5pef2DpPXFI6aaq/EYiLs6tFR1HCuTaG8hrVICY3oyB0+/L/CMOkE71uXH/BWCYHM7v7pvABML/lgoFr+F+hO/u0b1lZTOi95eXbN3BT8cchDcKyTdXsgrTvkjfQgX6slMmoguU9NBeJrki+1OBNICKUZNzoGOujHtXn9dlttuAEevmSAvzvJjg90bUR8r9fbrvMHZNxubOg43bNEpPzePsfDEpnRyWSkitorz9gjAPywJaU/p0rhq/BncjM75L4H3/3AmR4fFrr+saiNpygfs2DafjWCj8ZX4vrY6NnE7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zZPuA8KQqK0L9Z0IU6BHamnYUt2mkeaaGxchXeNh+Hw=;
+ b=cwADIRIFRdsQJRriBDUDUL6QBqPKUWWmA4Fap/MOX039VfE84CIZxbDiihkc6TqDFNRFNiv89cdVXtlHWmWvEcIZdkvpLqXYbPkDPaV4BF7KoB9gYpABQOE7VP3grPpE1bJU2/B6zCytjDrfnXb0Cc/FATos4OfaFw4xHivmI5I=
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
+ by PH8PR11MB6684.namprd11.prod.outlook.com (2603:10b6:510:1c7::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.15; Wed, 20 Jul
+ 2022 06:52:04 +0000
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::5c8c:c31f:454d:824c]) by BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::5c8c:c31f:454d:824c%8]) with mapi id 15.20.5458.018; Wed, 20 Jul 2022
+ 06:52:04 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <michael@walle.cc>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] ARM: dts: lan966x: add clock gating register
+Thread-Topic: [PATCH v2 1/2] ARM: dts: lan966x: add clock gating register
+Thread-Index: AQHYlPX1nrnmxLeOAUSFrDL+ar5dnQ==
+Date:   Wed, 20 Jul 2022 06:52:04 +0000
+Message-ID: <3bca9670-4aeb-9171-6ac5-5c0508448840@microchip.com>
+References: <20220707132500.1708020-1-michael@walle.cc>
+ <7ee463db-3cb5-c340-ac1d-1dfcd2b87dcd@microchip.com>
+ <07af76d1-3aa8-3067-f92d-120ad385b698@microchip.com>
+ <9a3a5d9633cd8397f98cf2c4056e9864@walle.cc>
+In-Reply-To: <9a3a5d9633cd8397f98cf2c4056e9864@walle.cc>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 329d7a58-1f41-4d8e-5702-08da6a1c5ae5
+x-ms-traffictypediagnostic: PH8PR11MB6684:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zTzVZ6OoDRr2F2WIOwpmgIF5y6cAZw5cspH2xAhOOi20wRwAaghgFsTGureVcyZT4WcTCoidQQESBamACuQ/G23a6M/PlJrfd/nt2c6jbI1Oxcg3g8O0N9VmwqGCa9BUIDENMqYoRh4mkEDO/a3HjHQPXrI3/GpbUiJF1Qi2uQPQa6suxREEFlbVo5HRlW/RZtreWH1q/uTKkxlwuU016GSZ3Ybf0sr1dYMhz1f6tfZC/IoAuE9aLF/Fcn1YN+UNtmVvxk8Bbh0xfmPkYL15Jj+GQEhjDpVouU+KboBNr7+l3OQ9mmAVEPtgA3G8G6diPExifMFs8sYU1kg0Uv0HmEQgAJT/AJjhw5zgbaFmLU9c+wj4tgBK+L+D2rzk58diKBqsTrvPa2JscZBvmFgMNhTOmNQA2bfXNTHhljEBLshv7S4iUiSJ+rqmq7ZyIns5A96pBV9d8igl87T/RqEKEiUDysvncJ3AXufrqGJEfqgPtf7y3gN/QkmxpbEFyL1uHKtNqXzAINOfQPpuTtaTdk72AyB1tYhHgvrnVUHVDNaylg9YBdOjPgMHUHISBX2jTP3TBdiuU8suIY8qFzQh+Vn/JkdX1Ta90G7uCvtNdGpOEfJWUBoECIQbfrxKtt6WNC+QTOqfJz7/nL+KDltQY7EdHNjJcQnnpzBT8lPyvYqwqsS8BE9TxWd38ztErFBNdDHYVqRMq8bOs57DOezhSU5oO1EMQqhbuPJDxtx9jXyE0p/U68gnjlDZOEGWgcXg7uJmGzgRjDfqwOlIIYsHC5IGWJovNnJ9bLhG/q1uvNk6+o0A/dIWTnqyWvHcf/QWI+U3YNMzqw8rRRmUvNgO75TjtvPgEz2Li2TuEwyN8RAGlxbNs4H5RHaf7ccpV3EE
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(396003)(346002)(39860400002)(376002)(316002)(76116006)(6486002)(66946007)(71200400001)(478600001)(41300700001)(53546011)(38070700005)(31686004)(2616005)(36756003)(186003)(6916009)(6506007)(54906003)(66556008)(6512007)(66476007)(4744005)(66446008)(2906002)(8676002)(83380400001)(86362001)(31696002)(122000001)(91956017)(26005)(8936002)(64756008)(4326008)(5660300002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V0RzM09vUVhFalR4T0w5TjhiUVd6ZnJsQ3RUY1FWOVcwVTY2dElFb3lOWHpT?=
+ =?utf-8?B?WnVQMmdJV0FvTWhVVU5WOWo2OWFyZGFsTTZYZElIdjRNa1FMRU11REtTdGxJ?=
+ =?utf-8?B?djRET3NCK1BXV0ZYWFU5NU5IaGlpMVVFVTNJeWJJVVdnR0trWkZNZzZpMk9Q?=
+ =?utf-8?B?cVIrREZBSks3YXY3dFhaYWIwZWlVZURrOTJmZlhLWGRrOVZDRFI3UTdhKzJZ?=
+ =?utf-8?B?c25vREZRRENqQWRZRG5VdW9NMVdpV3FmempXQXAvZENTb1dyNTdtbXZjTmZP?=
+ =?utf-8?B?cSsydXZrUWs5dWkyWWU0YllKMVJnUUNTNm13bkFIQWMvQTJiK0wyclpoY2Rp?=
+ =?utf-8?B?SzJUSFUxQTBMV3RGVVpBdUw1THk3bml2MkJIRGpLRWtUZ0lpZU5DbVI5aHdp?=
+ =?utf-8?B?ODRpL3NrTENDNXM0a0hxaVpSNThPcUYxYTRIZTgrU1NpL2IxQUR2UjVWV1VE?=
+ =?utf-8?B?ZXZBbEJKYkhrSEduY2ZXMFhhOEoySTBZOXk3S0ZRRFBFUWErS1N1dWYyczli?=
+ =?utf-8?B?UU9McUJqOHFXMHVKVUVHS3dVRTcyVVJCM2xDMC9UdXQyQk9oMWxES3lNNWxF?=
+ =?utf-8?B?U2U3cE5ZQnVKOXBIRVdtaHVEWUlobGhMQlB2dENiVlA2ZDFxWnpCdk9Wd255?=
+ =?utf-8?B?RmJUTnh4ZlRUd094SVJ0RXMvRVZsd05mU2xvMnVoNmZaT09EenlTRnh3QlhR?=
+ =?utf-8?B?WnNVQ25mdUVQd1RlMFdJeDBITElQOVUwdXMzeWJ6eUlYd0hOSFNuNFNRSEVm?=
+ =?utf-8?B?VVFudnpWWG56aEUxanFobFBZV3RKZ0dEdXYvL1BqR0swQk43MXJSVThwTVFL?=
+ =?utf-8?B?a3piRk96UE9PaVgvS3ZaN0M2K05Wbi9hRDlwQkUzUmRyVFI2MVFFSU41V09m?=
+ =?utf-8?B?REl0eC9DcEZkS1BDemtsNnVxWjhEeVluRERaQ2hhLzB3OXB0R2NQaTZBdWdT?=
+ =?utf-8?B?R2JjYUZEd2toR3VBVktkNDZ3ZCszSkJucFJCTk9yQm5kNUx3cWRjalVENGtW?=
+ =?utf-8?B?Qi9oS0lsQkxpZnNNVmN0UWdpcHhBbVB3WXdkVkphTktXV0hVczZaZ0llc0U2?=
+ =?utf-8?B?OWNDLzFwTHRNVTl4VmpUcDlzb29DUjdxV29XcVFNVnFsaGNpMjBoVk5iYVR6?=
+ =?utf-8?B?TDFFdHk5cGdEVFJNUitza1k4YmxHeFUydG9PZ3poQW95TUEyeXlJMGF2d2VP?=
+ =?utf-8?B?T241dnBaYy9NOUNrRTBOM1NGbFRtUytuTUNBTDViZm9VWGVwMEdvNEFyZXpC?=
+ =?utf-8?B?bGNYTjlFYTdYcXovR003Z1NteWNlOE9NK1JiNlJIcVFHWlJ2NXVJNGl0Yk50?=
+ =?utf-8?B?eXMyak5lZVd3bUtaUkc5bnhKVnFEcGEwb2RNK1V3WFBYVXl1VzlFRm00bm9l?=
+ =?utf-8?B?cGJvOGdEZmc3a1IxK0JCM2tOUXdzQTVQZktyaTVaKy9IbEdDMXpkOXhISitt?=
+ =?utf-8?B?R3EwUUtoR0YzUzV5L3kwaVhKWE5qVXBHWkZFYUIrb2VGd3hEaDY4Mm1PVUNL?=
+ =?utf-8?B?bngvWDI2TUsvL3NsckpHajd4MncvLzh4TG9OQ3FKWFkxSlJTZGN1VDRvWFVJ?=
+ =?utf-8?B?MC9KbHNFMElHdy85N2JKNWNnMjd6bk1kYWkxSEMwT1g1bXk1c1VNR01oQnN2?=
+ =?utf-8?B?RllKRitBcXpPbzk3cVprQitSZ29GSFhTMHZTQnJsSjkrSE5yVkRRSEorU0Fz?=
+ =?utf-8?B?M0FlQ1RuSmR2WnBKOHBTR1FCUUd3UGlVSllOZDlSb2xjNEZtbU9HNnV0M0sx?=
+ =?utf-8?B?dUZXek9GbzgxOFI3MEFRMUpCL2JpQ0hXbUhYUjg0OWd2NlNNcUF5QmlucWsz?=
+ =?utf-8?B?c2pTc21pUDZtd2VHYkRLNWJSemJhbTNyTmRHZkJVNU1BL2MvQUJVbWhrQWor?=
+ =?utf-8?B?QUM5bTBMTXdMSDlYMXV1QUR3NkxaQ0xvUVByMVFVTEh0MlhRVFhBR0tYSnJq?=
+ =?utf-8?B?Y0pXMDU1NEdXU282WkRCNjVBYlkvWG5oY3ZzaStKVGJWalBza1RGai8zcUdz?=
+ =?utf-8?B?S2YvbTdhWS9rZ21kTzVhR3VERVIrNTloT29RVXFpVDNWSmw3RDBXKzNURnNt?=
+ =?utf-8?B?Tkh3a2xPWVovakJycFplSS9DQzd4UVdqa0JoODduR2F6akpRa3ErQkhKSyth?=
+ =?utf-8?B?KzV5SlBHRXdmTGxvZDU3MnpyakFwTVRNdExuR0FqZlR3QkExMmQxWEIrcG9N?=
+ =?utf-8?B?cGc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <71B8306541210246BF52EFF92E738B88@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719235002.1944800-8-sean.anderson@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 329d7a58-1f41-4d8e-5702-08da6a1c5ae5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 06:52:04.2798
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kPP9wgS/hHT8KFVCE4O22kk9t3g+Nd64FiQLNFLiJXd3jC70p7rgqq4sy5lzugDhsfVj1znBeeFmlYmzYm6Wsr/GHM04dkR/4FMIr6J0fMA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6684
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 07:49:57PM -0400, Sean Anderson wrote:
-> If the phy is configured to use pause-based rate adaptation, ensure that
-> the link is full duplex with pause frame reception enabled. As
-> suggested, if pause-based rate adaptation is enabled by the phy, then
-> pause reception is unconditionally enabled.
-> 
-> The interface duplex is determined based on the rate adaptation type.
-> When rate adaptation is enabled, so is the speed. We assume the maximum
-> interface speed is used. This is only relevant for MLO_AN_PHY. For
-> MLO_AN_INBAND, the MAC/PCS's view of the interface speed will be used.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> ---
-> 
-> Changes in v2:
-> - Use the phy's rate adaptation setting to determine whether to use its
->   link speed/duplex or the MAC's speed/duplex with MLO_AN_INBAND.
-> - Always use the rate adaptation setting to determine the interface
->   speed/duplex (instead of sometimes using the interface mode).
-> 
->  drivers/net/phy/phylink.c | 126 ++++++++++++++++++++++++++++++++++----
->  include/linux/phylink.h   |   1 +
->  2 files changed, 114 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> index da0623d94a64..619ef553476f 100644
-> --- a/drivers/net/phy/phylink.c
-> +++ b/drivers/net/phy/phylink.c
-> @@ -160,16 +160,93 @@ static const char *phylink_an_mode_str(unsigned int mode)
->   * @state: A link state
->   *
->   * Update the .speed and .duplex members of @state. We can determine them based
-> - * on the .link_speed and .link_duplex. This function should be called whenever
-> - * .link_speed and .link_duplex are updated.  For example, userspace deals with
-> - * link speed and duplex, and not the interface speed and duplex. Similarly,
-> - * phys deal with link speed and duplex and only implicitly the interface speed
-> - * and duplex.
-> + * on the .link_speed, .link_duplex, .interface, and .rate_adaptation. This
-> + * function should be called whenever .link_speed and .link_duplex are updated.
-> + * For example, userspace deals with link speed and duplex, and not the
-> + * interface speed and duplex. Similarly, phys deal with link speed and duplex
-> + * and only implicitly the interface speed and duplex.
->   */
->  static void phylink_state_fill_speed_duplex(struct phylink_link_state *state)
->  {
-> -	state->speed = state->link_speed;
-> -	state->duplex = state->link_duplex;
-> +	switch (state->rate_adaptation) {
-> +	case RATE_ADAPT_NONE:
-> +		state->speed = state->link_speed;
-> +		state->duplex = state->link_duplex;
-> +		return;
-> +	case RATE_ADAPT_PAUSE:
-> +		state->duplex = DUPLEX_FULL;
-> +		break;
-> +	case RATE_ADAPT_CRS:
-> +		state->duplex = DUPLEX_HALF;
-> +		break;
-> +	case RATE_ADAPT_OPEN_LOOP:
-> +		state->duplex = state->link_duplex;
-> +		break;
-> +	}
-> +
-> +	/* Use the max speed of the interface */
-> +	switch (state->interface) {
-> +	case PHY_INTERFACE_MODE_100BASEX:
-> +	case PHY_INTERFACE_MODE_REVRMII:
-> +	case PHY_INTERFACE_MODE_RMII:
-> +	case PHY_INTERFACE_MODE_SMII:
-> +	case PHY_INTERFACE_MODE_REVMII:
-> +	case PHY_INTERFACE_MODE_MII:
-> +		state->speed = SPEED_100;
-> +		return;
-> +
-> +	case PHY_INTERFACE_MODE_TBI:
-> +	case PHY_INTERFACE_MODE_MOCA:
-> +	case PHY_INTERFACE_MODE_RTBI:
-> +	case PHY_INTERFACE_MODE_1000BASEX:
-> +	case PHY_INTERFACE_MODE_1000BASEKX:
-> +	case PHY_INTERFACE_MODE_TRGMII:
-> +	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +	case PHY_INTERFACE_MODE_RGMII_RXID:
-> +	case PHY_INTERFACE_MODE_RGMII_ID:
-> +	case PHY_INTERFACE_MODE_RGMII:
-> +	case PHY_INTERFACE_MODE_QSGMII:
-> +	case PHY_INTERFACE_MODE_SGMII:
-> +	case PHY_INTERFACE_MODE_GMII:
-> +		state->speed = SPEED_1000;
-> +		return;
-> +
-> +	case PHY_INTERFACE_MODE_2500BASEX:
-> +		state->speed = SPEED_2500;
-> +		return;
-> +
-> +	case PHY_INTERFACE_MODE_5GBASER:
-> +		state->speed = SPEED_5000;
-> +		return;
-> +
-> +	case PHY_INTERFACE_MODE_XGMII:
-> +	case PHY_INTERFACE_MODE_RXAUI:
-> +	case PHY_INTERFACE_MODE_XAUI:
-> +	case PHY_INTERFACE_MODE_10GBASER:
-> +	case PHY_INTERFACE_MODE_10GKR:
-> +	case PHY_INTERFACE_MODE_USXGMII:
-> +		state->speed = SPEED_10000;
-> +		return;
-> +
-> +	case PHY_INTERFACE_MODE_25GBASER:
-> +		state->speed = SPEED_25000;
-> +		return;
-> +
-> +	case PHY_INTERFACE_MODE_XLGMII:
-> +		state->speed = SPEED_40000;
-> +		return;
-> +
-> +	case PHY_INTERFACE_MODE_INTERNAL:
-> +		state->speed = state->link_speed;
-> +		return;
-> +
-> +	case PHY_INTERFACE_MODE_NA:
-> +	case PHY_INTERFACE_MODE_MAX:
-> +		state->speed = SPEED_UNKNOWN;
-> +		return;
-> +	}
-> +
-> +	WARN_ON(1);
->  }
->  
->  /**
-> @@ -803,11 +880,12 @@ static void phylink_mac_config(struct phylink *pl,
->  			       const struct phylink_link_state *state)
->  {
->  	phylink_dbg(pl,
-> -		    "%s: mode=%s/%s/%s/%s adv=%*pb pause=%02x link=%u an=%u\n",
-> +		    "%s: mode=%s/%s/%s/%s/%s adv=%*pb pause=%02x link=%u an=%u\n",
->  		    __func__, phylink_an_mode_str(pl->cur_link_an_mode),
->  		    phy_modes(state->interface),
->  		    phy_speed_to_str(state->speed),
->  		    phy_duplex_to_str(state->duplex),
-> +		    phy_rate_adaptation_to_str(state->rate_adaptation),
->  		    __ETHTOOL_LINK_MODE_MASK_NBITS, state->advertising,
->  		    state->pause, state->link, state->an_enabled);
->  
-> @@ -944,6 +1022,7 @@ static void phylink_mac_pcs_get_state(struct phylink *pl,
->  	linkmode_zero(state->lp_advertising);
->  	state->interface = pl->link_config.interface;
->  	state->an_enabled = pl->link_config.an_enabled;
-> +	state->rate_adaptation = pl->link_config.rate_adaptation;
->  	if (state->an_enabled) {
->  		state->link_speed = SPEED_UNKNOWN;
->  		state->link_duplex = DUPLEX_UNKNOWN;
-> @@ -968,8 +1047,10 @@ static void phylink_mac_pcs_get_state(struct phylink *pl,
->  	else
->  		state->link = 0;
->  
-> -	state->link_speed = state->speed;
-> -	state->link_duplex = state->duplex;
-> +	if (state->rate_adaptation == RATE_ADAPT_NONE) {
-> +		state->link_speed = state->speed;
-> +		state->link_duplex = state->duplex;
-> +	}
-
-So we need to have every PCS driver be udpated to fill in link_speed
-and link_duplex if rate_adaption != none.
-
-There's got to be a better way - maybe what I suggested in the last
-round of only doing the rate adaption thing in the link_up() functions,
-since that seems to be the only real difference.
-
-I'm not even sure we need to do that - in the "open loop" case, we
-need to be passing the media speed to the MAC driver with the knowledge
-that it should be increasing the IPG.
-
-So, I'm thinking we don't want any of these changes, what we instead
-should be doing is passing the media speed/duplex and the interface
-speed/duplex to the PCS and MAC.
-
-We can do that by storing the PHY rate adaption state, and processing
-that in phylink_link_up().
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+T24gMTkuMDcuMjAyMiAxNjoyNCwgTWljaGFlbCBXYWxsZSB3cm90ZToNCj4gRVhURVJOQUwgRU1B
+SUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25v
+dyB0aGUNCj4gY29udGVudCBpcyBzYWZlDQo+IA0KPiBIaSBDbGF1ZGl1LA0KPiANCj4gQW0gMjAy
+Mi0wNy0xMiAwOToyMiwgc2NocmllYiBDbGF1ZGl1LkJlem5lYUBtaWNyb2NoaXAuY29tOg0KPj4g
+T24gMTEuMDcuMjAyMiAxMDoxNSwgQ2xhdWRpdSBCZXpuZWEgLSBNMTgwNjMgd3JvdGU6DQo+Pj4g
+T24gMDcuMDcuMjAyMiAxNjoyNCwgTWljaGFlbCBXYWxsZSB3cm90ZToNCj4+Pj4gRVhURVJOQUwg
+RU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UN
+Cj4+Pj4ga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+Pj4+DQo+Pj4+IFRoZSBjbG9jayBjb250
+cm9sbGVyIHN1cHBvcnRzIGFuIG9wdGlvbmFsIGNsb2NrIGdhdGluZyByZWdpc3Rlci4gVGhpcw0K
+Pj4+PiBpcw0KPj4+PiBuZWNlc3NhcnkgdG8gZXhwb3NlIHRoZSBVU0IgZGV2aWNlIGNsb2NrLCBm
+b3IgZXhhbXBsZS4gQWRkIGl0Lg0KPj4+Pg0KPj4+PiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIFdh
+bGxlIDxtaWNoYWVsQHdhbGxlLmNjPg0KPj4+DQo+Pj4gQXBwbGllZCB0byBhdDkxLWR0LCB0aGFu
+a3MhDQo+Pg0KPj4gQWN0dWFsbHksIEkgd2lsbCBwb3N0cG9uZSB0aGlzIHVudGlsIFsxXSBpcyBh
+Y2NlcHRlZCBhcyBjdXJyZW50IGRyaXZlcg0KPj4gbWF5DQo+PiBmYWlsIGlmIHRoaXMgcGF0Y2gg
+aXMgYXBwbGllZC4NCj4gDQo+IFdoaWNoIHdhcyBwaWNrZWQgdG9kYXkgOikNCg0KWWVzLiBJdCdz
+IG9uIGF0OTEtZHQgYWdhaW4sIHRoYW5rcyENCg0KPiANCj4gLW1pY2hhZWwNCg0K

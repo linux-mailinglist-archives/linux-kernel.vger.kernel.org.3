@@ -2,95 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC27657C0A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836AC57C0A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiGTXJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S231530AbiGTXJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbiGTXIv (ORCPT
+        with ESMTP id S231604AbiGTXJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:08:51 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B35C7390E
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:08:22 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id q16so8111pgq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:08:22 -0700 (PDT)
+        Wed, 20 Jul 2022 19:09:08 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66DF74CE4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:08:49 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id b10so8163706pjq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:08:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Nszl3bsf2mnME2IbrRKNWdpEyNRDpL7edLFc4oh5rQk=;
-        b=FwlOpTY1Xy5ZtTxSMQshR8kwWNBaEnIm9ywPyxdMxe3T/XxFEM/rXOZ8shtzx6jRRS
-         91M8w+897Sjn6+U9yhdoQBbOHvUIZbnudqyVKqIbiFL3KIAItk6n7+SblQBLvdTN309V
-         3g30TPedV8pjIQUF/c55Q9haSHOBERI23VMmBXMMfrJh6ECBxww0/hu+TOsLKCzYQ+gw
-         GdGAnrtzEzMI3WfqML65BzsZafuMe/PQ0gjEW6sraCLwWPSVKqu83KinR/xUkg5DZP6e
-         1lFSj7wj5ru0N/Lu8b5OfGt3wIdl4NxJaMaNB7fu16Hj/vtrqiGttQ3ijzZC5VLTZ10Y
-         P4jA==
+        bh=XgnSugJEh7C6XXwqZ4wIBmPJHYzKnOKzgRIn7S1cS3w=;
+        b=WYxBRjE6s+/27Lhor31jsyuEv3FPzvGoTRFC5TX3MwQ/khyzG/tDJXbHcyOuUK1WTZ
+         XnAuYzwzmv5slhxU1dr2Cz101e9L6vdl7BYv7LIKVEHRt9YAsucj+XkFMZH7XIF6X+6M
+         58bQmBtsha1nVoveCu9mZRAA6M4WEFB8H1hUrC9jROMepZleckbgaSae3x0wzNbgfO3Z
+         V9+LAwlbZGo+6hBtIpxwiTmdl4/9EayNXXp3E+LN6n7gjgtZE8ZHig4pQLCHHzXVM9mB
+         E17ve/XWg6YCjHjgyyOOWWi7LkQE54Aus+JzqGBBcZ6JT5jkkxg2REwKWTQutvS5bNTf
+         1nHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Nszl3bsf2mnME2IbrRKNWdpEyNRDpL7edLFc4oh5rQk=;
-        b=zTWdGULtPL9nqj8VJpwiHP6iZtSllVGxTnm3Pm5Yl+c5TmQzDibkH96qlziZlqVJXg
-         xFPToYw9C2FrBIboUvs/Nw9WiE+69ocKl7QdQB+rAM+c7e4exBlvIxiOFlpMO1yZSlpW
-         fw7NmJVhAl10WiKviFF4nDa9bzx6uYaSZCEuxaEHkhjGjfPWQTsvMQ+r9j3giYc3bIEV
-         63vLHBWoJ2KPHqfUwqeuEoNZ+TgdDp+VgvR7+k0qorI3JysKxh4Ik1xCBsu3PSF6cMls
-         xb26peMx3FHx3+pWcoIz4AENxafbHljz3JC27zSakBBbDqjQyHx9ZCuFhqSLU3H0BjY8
-         YL3A==
-X-Gm-Message-State: AJIora+/XUxuP4Q3b4Xd+XmY/w7qi+vbv4OK0B0KGT/hqykJ8xEPp6M3
-        4KwbRGqBV/hGIoSyTegwjwrhtyTJ1gELDX35hVmuFA==
-X-Google-Smtp-Source: AGRyM1sVSu2sWaA6KhwjXATdLIcan8zoTwRzYetVEkO/NR0+movB4Kj6gdLqTbANspAPpdn1ss3XaAW1x7VvJRw8slU=
-X-Received: by 2002:a62:1a8b:0:b0:528:d505:1a06 with SMTP id
- a133-20020a621a8b000000b00528d5051a06mr41267868pfa.78.1658358501699; Wed, 20
- Jul 2022 16:08:21 -0700 (PDT)
+        bh=XgnSugJEh7C6XXwqZ4wIBmPJHYzKnOKzgRIn7S1cS3w=;
+        b=Hgn1jLGHETCYOLZ6sPKaDgII5YzmmTEsHIeBfqgJ/hpnvJ5Uoo3TZvV7dQlZLP6oRs
+         Hty2P1sgUIf8GzdRPAYaQTEveARrx8iNApb9XzzWcE/fQvbX1fAOgc7tytQIRph4/Vbu
+         z6csXjqUM5BfL/VYY+lgGWAS9KzffWaRBhJvcpV8iDvf1hubyP1Tw8Xame+BavmNNJts
+         4QfyXugN0ciTjD5FScqJFZiXOntqG6xqqtAQyfG30cke9jnhmtcq6xoJ1d73ujVhuKR0
+         w4IA5iyZ+itTWKjQt300/7BC4G+rcDYjlP7K19niZH8BMjn8UKukRnKfgNZBwIH0prC1
+         eJ/Q==
+X-Gm-Message-State: AJIora+VHc8B0aHYPpp7aPdgi+Ia4zbqfMlCPQr0q4H+jUDoOwqAM/ZM
+        gfYrpazH6CHSudhTcTyIY8abXVJsVLH6zjk3n3V1mw==
+X-Google-Smtp-Source: AGRyM1vYQPiPUtXNwodE0NwosgaCHcoolY10ujtJ2fw3ndyw9Qcy0C33jsjtIzn5YP//R8ohYjc8K31lY2d4FjAlufM=
+X-Received: by 2002:a17:903:1111:b0:16a:acf4:e951 with SMTP id
+ n17-20020a170903111100b0016aacf4e951mr40849774plh.72.1658358529143; Wed, 20
+ Jul 2022 16:08:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-7-chao.p.peng@linux.intel.com> <b3ce0855-0e4b-782a-599c-26590df948dd@amd.com>
- <20220624090246.GA2181919@chaop.bj.intel.com> <CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com>
- <20220630222140.of4md7bufd5jv5bh@amd.com> <4fe3b47d-e94a-890a-5b87-6dfb7763bc7e@intel.com>
- <Ysc9JDcVAnlVrGC8@google.com> <5d0b9341-78b5-0959-2517-0fb1fe83a205@intel.com>
-In-Reply-To: <5d0b9341-78b5-0959-2517-0fb1fe83a205@intel.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Wed, 20 Jul 2022 16:08:10 -0700
-Message-ID: <CAGtprH9knCr++C7jgXYCi1zfYcreip1uun-d+eucjEQy9xymNg@mail.gmail.com>
-Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        "Nikunj A. Dadhania" <nikunj@amd.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, mhocko@suse.com
+References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
+ <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com>
+ <179cfb89be0e4f928a55d049fe62aa9e@huawei.com> <CAKH8qBt0yR+mtCjAp=8jQL4M6apWQk0wH7Zf4tPDCf3=m+gAKA@mail.gmail.com>
+ <31473ddf364f4f16becfd5cd4b9cd7d2@huawei.com> <CAKH8qBsFg5gQ0bqpVtYhiQx=TqJG31c8kfsbCG4X57QGLOhXvw@mail.gmail.com>
+ <0c284e09817e4e699aa448aa25af5d79@huawei.com> <CAKH8qBvwzVPY1yJM_FjdH5QptVkZz=j9Ph7pTPCbTLdY1orKJg@mail.gmail.com>
+ <c9c203821a854e33970fd10e01632cb7@huawei.com>
+In-Reply-To: <c9c203821a854e33970fd10e01632cb7@huawei.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 20 Jul 2022 16:08:37 -0700
+Message-ID: <CAKH8qBuazK5PwDYAG2bPGfyASAMQAd4_dpFjcW0KYz4ON+kj3g@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Joe Burton <jevburton.kernel@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Joe Burton <jevburton@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -103,28 +82,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Hmm, so a new slot->arch.page_attr array shouldn't be necessary, KVM can instead
-> > update slot->arch.lpage_info on shared<->private conversions.  Detecting whether
-> > a given range is partially mapped could get nasty if KVM defers tracking to the
-> > backing store, but if KVM itself does the tracking as was previously suggested[*],
-> > then updating lpage_info should be relatively straightfoward, e.g. use
-> > xa_for_each_range() to see if a given 2mb/1gb range is completely covered (fully
-> > shared) or not covered at all (fully private).
+On Wed, Jul 20, 2022 at 4:02 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> > From: Stanislav Fomichev [mailto:sdf@google.com]
+> > Sent: Thursday, July 21, 2022 12:48 AM
+> > On Wed, Jul 20, 2022 at 3:44 PM Roberto Sassu <roberto.sassu@huawei.com>
+> > wrote:
+> > >
+> > > > From: Stanislav Fomichev [mailto:sdf@google.com]
+> > > > Sent: Thursday, July 21, 2022 12:38 AM
+> > > > On Wed, Jul 20, 2022 at 3:30 PM Roberto Sassu
+> > <roberto.sassu@huawei.com>
+> > > > wrote:
+> > > > >
+> > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
+> > > > > > Sent: Wednesday, July 20, 2022 5:57 PM
+> > > > > > On Wed, Jul 20, 2022 at 1:02 AM Roberto Sassu
+> > > > <roberto.sassu@huawei.com>
+> > > > > > wrote:
+> > > > > > >
+> > > > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
+> > > > > > > > Sent: Tuesday, July 19, 2022 10:40 PM
+> > > > > > > > On Tue, Jul 19, 2022 at 12:40 PM Joe Burton
+> > > > <jevburton.kernel@gmail.com>
+> > > > > > > > wrote:
+> > > > > > > > >
+> > > > > > > > > From: Joe Burton <jevburton@google.com>
+> > > > > > > > >
+> > > > > > > > > Add an extensible variant of bpf_obj_get() capable of setting the
+> > > > > > > > > `file_flags` parameter.
+> > > > > > > > >
+> > > > > > > > > This parameter is needed to enable unprivileged access to BPF
+> > maps.
+> > > > > > > > > Without a method like this, users must manually make the syscall.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Joe Burton <jevburton@google.com>
+> > > > > > > >
+> > > > > > > > Reviewed-by: Stanislav Fomichev <sdf@google.com>
+> > > > > > > >
+> > > > > > > > For context:
+> > > > > > > > We've found this out while we were trying to add support for unpriv
+> > > > > > > > processes to open pinned r-x maps.
+> > > > > > > > Maybe this deserves a test as well? Not sure.
+> > > > > > >
+> > > > > > > Hi Stanislav, Joe
+> > > > > > >
+> > > > > > > I noticed now this patch. I'm doing a broader work to add opts
+> > > > > > > to bpf_*_get_fd_by_id(). I also adjusted permissions of bpftool
+> > > > > > > depending on the operation type (e.g. show, dump: BPF_F_RDONLY).
+> > > > > > >
+> > > > > > > Will send it soon (I'm trying to solve an issue with the CI, where
+> > > > > > > libbfd is not available in the VM doing actual tests).
+> > > > > >
+> > > > > > Is something like this patch included in your series as well? Can you
+> > > > > > use this new interface or do you need something different?
+> > > > >
+> > > > > It is very similar. Except that I called it bpf_get_fd_opts, as it
+> > > > > is shared with the bpf_*_get_fd_by_id() functions. The member
+> > > > > name is just flags, plus an extra u32 for alignment.
+> > > >
+> > > > We can bikeshed the naming, but we've been using existing conventions
+> > > > where opts fields match syscall fields, that seems like a sensible
+> > > > thing to do?
+> > >
+> > > The only problem is that bpf_*_get_fd_by_id() functions would
+> > > set the open_flags member of bpf_attr.
+> > >
+> > > Flags would be good for both, even if not exact. Believe me,
+> > > duplicating the opts would just create more confusion.
 > >
-> > [*] https://lore.kernel.org/all/YofeZps9YXgtP3f1@google.com
+> > Wait, that's completely different, right? We are talking here about
+> > BPF_OBJ_GET (which has related BPF_OBJ_PIN).
+> > Your GET_XXX_BY_ID are different so you'll still have to have another
+> > wrapper with opts?
 >
-> Yes, slot->arch.page_attr was introduced to help identify whether a page
-> is completely shared/private at given level. It seems XARRAY can serve
-> the same purpose, though I know nothing about it. Looking forward to
-> seeing the patch of using XARRAY.
+> Yes, they have different wrappers, just accept the same opts as
+> obj_get(). From bpftool subcommands you want to set the correct
+> permission, and propagate it uniformly to bpf_*_get_fd_by_id()
+> or obj_get(). See map_parse_fds().
+
+I don't think they are accepting the same opts.
+
+For our case, we care about:
+
+        struct { /* anonymous struct used by BPF_OBJ_* commands */
+                __aligned_u64   pathname;
+                __u32           bpf_fd;
+                __u32           file_flags;
+        };
+
+For your case, you care about:
+
+        struct { /* anonymous struct used by BPF_*_GET_*_ID */
+                union {
+                        __u32           start_id;
+                        __u32           prog_id;
+                        __u32           map_id;
+                        __u32           btf_id;
+                        __u32           link_id;
+                };
+                __u32           next_id;
+                __u32           open_flags;
+        };
+
+So your new _opts libbpf routine should be independent of what Joe is
+doing here.
+
+> Roberto
 >
-> yes, update slot->arch.lpage_info is good to utilize the existing logic
-> and Isaku has applied it to slot->arch.lpage_info for 2MB support patches.
-
-Chao, are you planning to implement these changes to ensure proper
-handling of hugepages partially mapped as private/shared in subsequent
-versions of this series?
-Or is this something left to be handled by the architecture specific code?
-
-Regards,
-Vishal
+> > > > > It needs to be shared, as there are functions in bpftool calling
+> > > > > both. Since the meaning of flags is the same, seems ok sharing.
+> > > >
+> > > > So I guess there are no objections to the current patch? If it gets
+> > > > accepted, you should be able to drop some of your code and use this
+> > > > new bpf_obj_get_opts..
+> > >
+> > > If you use a name good also for bpf_*_get_fd_by_id() and flags
+> > > as structure member name, that would be ok.
+> > >
+> > > Roberto
+> > >
+> > > > > Roberto
+> > > > >
+> > > > > > > Roberto
+> > > > > > >
+> > > > > > > > > ---
+> > > > > > > > >  tools/lib/bpf/bpf.c      | 10 ++++++++++
+> > > > > > > > >  tools/lib/bpf/bpf.h      |  9 +++++++++
+> > > > > > > > >  tools/lib/bpf/libbpf.map |  1 +
+> > > > > > > > >  3 files changed, 20 insertions(+)
+> > > > > > > > >
+> > > > > > > > > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> > > > > > > > > index 5eb0df90eb2b..5acb0e8bd13c 100644
+> > > > > > > > > --- a/tools/lib/bpf/bpf.c
+> > > > > > > > > +++ b/tools/lib/bpf/bpf.c
+> > > > > > > > > @@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char
+> > > > *pathname)
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > >  int bpf_obj_get(const char *pathname)
+> > > > > > > > > +{
+> > > > > > > > > +       LIBBPF_OPTS(bpf_obj_get_opts, opts);
+> > > > > > > > > +       return bpf_obj_get_opts(pathname, &opts);
+> > > > > > > > > +}
+> > > > > > > > > +
+> > > > > > > > > +int bpf_obj_get_opts(const char *pathname, const struct
+> > > > > > bpf_obj_get_opts
+> > > > > > > > *opts)
+> > > > > > > > >  {
+> > > > > > > > >         union bpf_attr attr;
+> > > > > > > > >         int fd;
+> > > > > > > > >
+> > > > > > > > > +       if (!OPTS_VALID(opts, bpf_obj_get_opts))
+> > > > > > > > > +               return libbpf_err(-EINVAL);
+> > > > > > > > > +
+> > > > > > > > >         memset(&attr, 0, sizeof(attr));
+> > > > > > > > >         attr.pathname = ptr_to_u64((void *)pathname);
+> > > > > > > > > +       attr.file_flags = OPTS_GET(opts, file_flags, 0);
+> > > > > > > > >
+> > > > > > > > >         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
+> > > > > > > > >         return libbpf_err_errno(fd);
+> > > > > > > > > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> > > > > > > > > index 88a7cc4bd76f..f31b493b5f9a 100644
+> > > > > > > > > --- a/tools/lib/bpf/bpf.h
+> > > > > > > > > +++ b/tools/lib/bpf/bpf.h
+> > > > > > > > > @@ -270,8 +270,17 @@ LIBBPF_API int bpf_map_update_batch(int
+> > fd,
+> > > > > > const
+> > > > > > > > void *keys, const void *values
+> > > > > > > > >                                     __u32 *count,
+> > > > > > > > >                                     const struct bpf_map_batch_opts *opts);
+> > > > > > > > >
+> > > > > > > > > +struct bpf_obj_get_opts {
+> > > > > > > > > +       size_t sz; /* size of this struct for forward/backward
+> > compatibility
+> > > > */
+> > > > > > > > > +
+> > > > > > > > > +       __u32 file_flags;
+> > > > > > > > > +};
+> > > > > > > > > +#define bpf_obj_get_opts__last_field file_flags
+> > > > > > > > > +
+> > > > > > > > >  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
+> > > > > > > > >  LIBBPF_API int bpf_obj_get(const char *pathname);
+> > > > > > > > > +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
+> > > > > > > > > +                               const struct bpf_obj_get_opts *opts);
+> > > > > > > > >
+> > > > > > > > >  struct bpf_prog_attach_opts {
+> > > > > > > > >         size_t sz; /* size of this struct for forward/backward
+> > compatibility
+> > > > */
+> > > > > > > > > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> > > > > > > > > index 0625adb9e888..119e6e1ea7f1 100644
+> > > > > > > > > --- a/tools/lib/bpf/libbpf.map
+> > > > > > > > > +++ b/tools/lib/bpf/libbpf.map
+> > > > > > > > > @@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
+> > > > > > > > >
+> > > > > > > > >  LIBBPF_1.0.0 {
+> > > > > > > > >         global:
+> > > > > > > > > +               bpf_obj_get_opts;
+> > > > > > > > >                 bpf_prog_query_opts;
+> > > > > > > > >                 bpf_program__attach_ksyscall;
+> > > > > > > > >                 btf__add_enum64;
+> > > > > > > > > --
+> > > > > > > > > 2.37.0.170.g444d1eabd0-goog
+> > > > > > > > >

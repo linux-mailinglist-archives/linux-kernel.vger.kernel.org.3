@@ -2,73 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51DEE57B371
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4331057B37A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbiGTJFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
+        id S233034AbiGTJIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbiGTJFI (ORCPT
+        with ESMTP id S231806AbiGTJIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:05:08 -0400
-Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3700A245
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=GDF/E
-        7WqRUk5DIFmfUxr9+y55qjYw3uJMgUd25WZZDc=; b=RWvBcqn9EFvsfY0yw5E7M
-        UqK3YlkiZtLrlt8F5bnD8Q4Jky8mArLyTP8iZPfrWpiUv5OzH8cemoQFJrNAThAi
-        YFh6Hd4Uo5PiMsDOAW9ayMjyi1JqOXvyEqbUmeb8uWPhb0krlFPpBN0pSd/Uq/An
-        mgX2p9/4alXK042UQAyAPA=
-Received: from localhost.localdomain (unknown [223.104.68.229])
-        by smtp11 (Coremail) with SMTP id D8CowABHhV_mxNdiybcTAA--.26S2;
-        Wed, 20 Jul 2022 17:03:39 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     richard@nod.at, miquel.raynal@bootlin.com, vigneshr@ti.com
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] ubi: block: Fix typo
-Date:   Wed, 20 Jul 2022 17:03:31 +0800
-Message-Id: <20220720090331.13691-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 20 Jul 2022 05:08:32 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7800C48C8C;
+        Wed, 20 Jul 2022 02:08:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658308111; x=1689844111;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y8/mcRCZPyCGIyoGEwHXJ1tzZEoycqJ4yx/t97a/K2g=;
+  b=I5X43HhemifFggfrOvKbq4E+WM8IpAisFqmsCMenMMoHf5LC/r2H1anr
+   mY9rZ93KGzwblH06jMGWLsJcshYRoE+MAGbebI4FwH5gfGD68Z2SefgE6
+   o9zXpJ2r+mzaLlpe92xBl+LNQKA6pNJHScad63hX7737Qd3BdqoPf6peC
+   TRjKQzEWeLxc1w6tTtQTCaHW+0xvxtB0OerXQk+fBHlfg8ZV1s7Y14C5b
+   y6yftIimNnn1nFQ0X8Aasa6zsqyHcJsmUYYGCqDi3XWh/ii8RGQpaRuTD
+   kmSCsz8nZNvT2cx7uq65OpdVe0g9ECEVTiLsXqbTpEo52JST+757ClDrF
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="286733897"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="286733897"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 02:08:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="724588959"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 20 Jul 2022 02:08:20 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oE5gp-0000Jp-RI;
+        Wed, 20 Jul 2022 09:08:19 +0000
+Date:   Wed, 20 Jul 2022 17:08:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sean Anderson <sean.anderson@seco.com>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Alexandru Marginean <alexandru.marginean@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: Re: [PATCH v2 07/11] net: phylink: Adjust link settings based on
+ rate adaptation
+Message-ID: <202207201640.6pB23GJN-lkp@intel.com>
+References: <20220719235002.1944800-8-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: D8CowABHhV_mxNdiybcTAA--.26S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjfUjPfQUUUUU
-X-Originating-IP: [223.104.68.229]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJQtEZGAJpI5YlQAAsA
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719235002.1944800-8-sean.anderson@seco.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove typo.
+Hi Sean,
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/mtd/ubi/block.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I love your patch! Yet something to improve:
 
-diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
-index 4cf67a2a0d04..4fc7e756d885 100644
---- a/drivers/mtd/ubi/block.c
-+++ b/drivers/mtd/ubi/block.c
-@@ -409,7 +409,7 @@ int ubiblock_create(struct ubi_volume_info *vi)
- 	ret = blk_mq_alloc_tag_set(&dev->tag_set);
- 	if (ret) {
- 		dev_err(disk_to_dev(dev->gd), "blk_mq_alloc_tag_set failed");
--		goto out_free_dev;;
-+		goto out_free_dev;
- 	}
- 
- 
+[auto build test ERROR on net-next/master]
+[also build test ERROR on net/master horms-ipvs/master linus/master v5.19-rc7 next-20220719]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-phy-Add-support-for-rate-adaptation/20220720-075438
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 1f17708b47a99ca5bcad594a6f8d14cb016edfd2
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220720/202207201640.6pB23GJN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dd5635541cd7bbd62cd59b6694dfb759b6e9a0d8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a17fd2b01914c1c5779a76167def6910a6dd1185
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sean-Anderson/net-phy-Add-support-for-rate-adaptation/20220720-075438
+        git checkout a17fd2b01914c1c5779a76167def6910a6dd1185
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "phy_rate_adaptation_to_str" [drivers/net/phy/phylink.ko] undefined!
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

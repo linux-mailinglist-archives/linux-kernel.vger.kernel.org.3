@@ -2,193 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55B857B29D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104D757B29C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239960AbiGTIOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S240370AbiGTINn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240579AbiGTIOL (ORCPT
+        with ESMTP id S240349AbiGTINb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:14:11 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C0B6C121
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:13:29 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LnpKw07sdzjXGM;
-        Wed, 20 Jul 2022 16:10:44 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 20 Jul 2022 16:13:27 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <yangyicong@hisilicon.com>,
-        <jonathan.cameron@huawei.com>, <ego@linux.vnet.ibm.com>,
-        <srikar@linux.vnet.ibm.com>, <linuxarm@huawei.com>,
-        <21cnbao@gmail.com>, <guodong.xu@linaro.org>,
-        <hesham.almatary@huawei.com>, <john.garry@huawei.com>,
-        <shenyang39@huawei.com>, <kprateek.nayak@amd.com>,
-        <yu.c.chen@intel.com>, <wuyun.abel@bytedance.com>
-Subject: [RESEND PATCH v5 2/2] sched/fair: Scan cluster before scanning LLC in wake-up path
-Date:   Wed, 20 Jul 2022 16:11:50 +0800
-Message-ID: <20220720081150.22167-3-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220720081150.22167-1-yangyicong@hisilicon.com>
-References: <20220720081150.22167-1-yangyicong@hisilicon.com>
+        Wed, 20 Jul 2022 04:13:31 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C6D6E8BA
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:12:26 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id 17so5524436pfy.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=U7IBtEsWEANNBn2uVDz/KgXAATJ+X6e2srPCnq8910M=;
+        b=GWU2+SXjA8jIcaelEQcEAI3kCwuQSxb3Bt9GwiX1G/TAtoBjFhIx9gIfYdDAJJohMx
+         yKQEaqSCH8Sfix99LDDP6Dp/cLKlgKzZETMilycZf4X23ttr+pWai9uHAMYC8olm8Crr
+         zNYcfR9Ta6UK5Kz95c2g7GCAdllNp5RRCTyT1eW1mMScZsAWpj/E8tbMeOhiDG9V1/5v
+         2UyWYHlxgOMGU1iGuAQv1d/4JLwtV41rEnt8JWmjrCSr2vKOTrNeXUAU0eAmArByapHX
+         eUqDi/LCAKRMDNIz/aHbliKaj8dibsHVs8kGSgsOH/jSyyrIEjwD5pqyoT/0yMj0b7gk
+         N5zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=U7IBtEsWEANNBn2uVDz/KgXAATJ+X6e2srPCnq8910M=;
+        b=yCEPZNFADBH9axk7sxKRWJchQwxjAY2X9P+eIlvscW2VexR9cRVRPEXEfu0exixCyV
+         jUVVRxDHPUf3NcIpJHw3YmV7vVLyg2R2PaWJ9dHK5ZGMS2Mo8WH36nkn/EoC6TqTz795
+         ITAkFBflykVWmmfHRRU6thZNqPx+7q9tV97y/WMdfWvgd43KUPShG0YjfBlB88KlK5bn
+         uvtAZKd62OO9o9nTCtIcfm5bSdDU+iW4JOWPGyDAT7ckiX0QAgv0YqfW8GTzemyYg+Md
+         iLfSLiTIvqSOaYmpJscdGm9TztooRcwKmPpVkj9CJK41HAs/VNf/8IdnE/XjKZCk7JBm
+         u6XA==
+X-Gm-Message-State: AJIora+KZ12hiWHyVWuI0TKo8C5VUqipkVRRFSQ8qJbiB4OAANWIm0j7
+        Qw99w0QDUemlaslsi5sgllgtnQ==
+X-Google-Smtp-Source: AGRyM1thDBY42HWj78s+WNa+OGNoXxQajpgRcWha8Mo87hwgmKpx0L81LChYX/PwmYJQ+aX1PZwm+w==
+X-Received: by 2002:a62:140e:0:b0:52b:780d:fb9d with SMTP id 14-20020a62140e000000b0052b780dfb9dmr12604772pfu.65.1658304745247;
+        Wed, 20 Jul 2022 01:12:25 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1f3b:709e:6fec:df37:6562:5a80? ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
+        by smtp.gmail.com with ESMTPSA id u13-20020a17090341cd00b00163e06e1a99sm13313172ple.120.2022.07.20.01.12.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 01:12:24 -0700 (PDT)
+Message-ID: <2cc90e5a-172f-3c94-0e57-79c725d45819@linaro.org>
+Date:   Wed, 20 Jul 2022 13:42:21 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] firmware: qcom_scm: Add support for tsens reinit
+ workaround
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
+ <20220701145815.2037993-2-bhupesh.sharma@linaro.org>
+ <YtYdxlbLvgimN2MQ@builder.lan>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <YtYdxlbLvgimN2MQ@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Barry Song <song.bao.hua@hisilicon.com>
+Hi Bjorn,
 
-For platforms having clusters like Kunpeng920, CPUs within the same cluster
-have lower latency when synchronizing and accessing shared resources like
-cache. Thus, this patch tries to find an idle cpu within the cluster of the
-target CPU before scanning the whole LLC to gain lower latency.
+Thanks for your review.
 
-Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this patch
-doesn't consider SMT for this moment.
+On 7/19/22 8:28 AM, Bjorn Andersson wrote:
+> On Fri 01 Jul 09:58 CDT 2022, Bhupesh Sharma wrote:
+> 
+> Please update $subject to match the most uses prefix for the qcom_scm
+> driver.
+> 
+>> Some versions of QCoM tsens controller might enter a
+> 
+> s/QCoM/Qualcomm/ please.
 
-Testing has been done on Kunpeng920 by pinning tasks to one numa and two
-numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
+Ok.
 
-With this patch, We noticed enhancement on tbench within one numa or cross
-two numa.
+>> 'bad state' while running stability tests causing sensor
+>> temperatures/interrupts status to be in an 'invalid' state.
+>>
+>> It is recommended to re-initialize the tsens controller
+>> via trustzone (secure registers) using scm call(s) when that
+>> happens.
+>>
+>> Add support for the same in the qcom_scm driver.
+>>
+>> Cc: Amit Kucheria <amitk@kernel.org>
+>> Cc: Thara Gopinath <thara.gopinath@gmail.com>
+>> Cc: linux-pm@vger.kernel.org
+>> Cc: linux-arm-msm@vger.kernel.org
+>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>> ---
+>>   drivers/firmware/qcom_scm.c | 17 +++++++++++++++++
+>>   drivers/firmware/qcom_scm.h |  4 ++++
+>>   include/linux/qcom_scm.h    |  2 ++
+>>   3 files changed, 23 insertions(+)
+>>
+>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+>> index 3163660fa8e2..0bc7cc466218 100644
+>> --- a/drivers/firmware/qcom_scm.c
+>> +++ b/drivers/firmware/qcom_scm.c
+>> @@ -796,6 +796,23 @@ int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
+>>   }
+>>   EXPORT_SYMBOL(qcom_scm_mem_protect_video_var);
+>>   
+>> +int qcom_scm_tsens_reinit(int *tsens_ret)
+>> +{
+>> +	unsigned int ret;
+> 
+> qcom_scm_call() returns negative numbers on error, so this should be
+> signed.
 
-On numa 0:
-                           tip/core                 patched
-Hmean     1        345.89 (   0.00%)      393.96 *  13.90%*
-Hmean     2        697.77 (   0.00%)      786.04 *  12.65%*
-Hmean     4       1392.51 (   0.00%)     1570.26 *  12.76%*
-Hmean     8       2800.61 (   0.00%)     3083.98 *  10.12%*
-Hmean     16      5514.27 (   0.00%)     6116.00 *  10.91%*
-Hmean     32     10869.81 (   0.00%)    10782.98 *  -0.80%*
-Hmean     64      8315.22 (   0.00%)     8519.84 *   2.46%*
-Hmean     128     6324.47 (   0.00%)     7159.35 *  13.20%*
+Ok.
 
-On numa 0-1:
-                           tip/core                 patched
-Hmean     1        348.68 (   0.00%)      387.91 *  11.25%*
-Hmean     2        693.57 (   0.00%)      774.91 *  11.73%*
-Hmean     4       1369.26 (   0.00%)     1475.48 *   7.76%*
-Hmean     8       2772.99 (   0.00%)     2984.61 *   7.63%*
-Hmean     16      4825.83 (   0.00%)     5873.13 *  21.70%*
-Hmean     32     10250.32 (   0.00%)    11688.06 *  14.03%*
-Hmean     64     16309.51 (   0.00%)    19889.48 *  21.95%*
-Hmean     128    13022.32 (   0.00%)    16005.64 *  22.91%*
-Hmean     256    11335.79 (   0.00%)    13821.74 *  21.93%*
+>> +	struct qcom_scm_desc desc = {
+> 
+> const?
 
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
----
- kernel/sched/fair.c | 44 +++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 41 insertions(+), 3 deletions(-)
+Sure.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 914096c5b1ae..25d2900ae221 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6377,6 +6377,40 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
- 
- #endif /* CONFIG_SCHED_SMT */
- 
-+#ifdef CONFIG_SCHED_CLUSTER
-+/*
-+ * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
-+ */
-+static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
-+			       int target, int *nr)
-+{
-+	struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
-+	int cpu, idle_cpu;
-+
-+	/* TODO: Support SMT system with cluster topology */
-+	if (!sched_smt_active() && sd) {
-+		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
-+			if (!--*nr)
-+				return -1;
-+
-+			idle_cpu = __select_idle_cpu(cpu, p);
-+			if ((unsigned int)idle_cpu < nr_cpumask_bits)
-+				return idle_cpu;
-+		}
-+
-+		cpumask_andnot(cpus, cpus, sched_domain_span(sd));
-+	}
-+
-+	return -1;
-+}
-+#else
-+static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
-+			       int target, int *nr)
-+{
-+	return -1;
-+}
-+#endif
-+
- /*
-  * Scan the LLC domain for idle CPUs; this is dynamically regulated by
-  * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
-@@ -6437,6 +6471,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
- 		}
- 	}
- 
-+	idle_cpu = scan_cluster(p, cpus, target, &nr);
-+	if ((unsigned int)idle_cpu < nr_cpumask_bits)
-+		return idle_cpu;
-+
- 	for_each_cpu_wrap(cpu, cpus, target + 1) {
- 		if (has_idle_core) {
- 			i = select_idle_core(p, cpu, cpus, &idle_cpu);
-@@ -6444,7 +6482,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
- 				return i;
- 
- 		} else {
--			if (!--nr)
-+			if (--nr <= 0)
- 				return -1;
- 			idle_cpu = __select_idle_cpu(cpu, p);
- 			if ((unsigned int)idle_cpu < nr_cpumask_bits)
-@@ -6543,7 +6581,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	/*
- 	 * If the previous CPU is cache affine and idle, don't be stupid:
- 	 */
--	if (prev != target && cpus_share_cache(prev, target) &&
-+	if (prev != target && cpus_share_lowest_cache(prev, target) &&
- 	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
- 	    asym_fits_capacity(task_util, prev))
- 		return prev;
-@@ -6569,7 +6607,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	p->recent_used_cpu = prev;
- 	if (recent_used_cpu != prev &&
- 	    recent_used_cpu != target &&
--	    cpus_share_cache(recent_used_cpu, target) &&
-+	    cpus_share_lowest_cache(recent_used_cpu, target) &&
- 	    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
- 	    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
- 	    asym_fits_capacity(task_util, recent_used_cpu)) {
--- 
-2.24.0
+>> +		.svc = QCOM_SCM_SVC_TSENS,
+>> +		.cmd = QCOM_SCM_TSENS_INIT_ID,
+>> +	};
+>> +	struct qcom_scm_res res;
+>> +
+>> +	ret = qcom_scm_call(__scm->dev, &desc, &res);
+>> +	if (tsens_ret)
+>> +		*tsens_ret = res.result[0];
+> 
+> Most similar qcom_scm functions use negative return value for errors and
+> positive (including 0) values for the returned data.
+> 
+> Looking at patch 3, the only thing you seem to care about is tsens_ret
+> being 0 or not, so I do think you would be fine returning both using the
+> return value.
 
+Ok, let me double check the same and fix the same in v2.
+
+Regards,
+Bhupesh
+
+
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL(qcom_scm_tsens_reinit);
+>> +
+>>   static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
+>>   				 size_t mem_sz, phys_addr_t src, size_t src_sz,
+>>   				 phys_addr_t dest, size_t dest_sz)
+>> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+>> index 0d51eef2472f..495fa00230c7 100644
+>> --- a/drivers/firmware/qcom_scm.h
+>> +++ b/drivers/firmware/qcom_scm.h
+>> @@ -94,6 +94,10 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+>>   #define QCOM_SCM_PIL_PAS_IS_SUPPORTED	0x07
+>>   #define QCOM_SCM_PIL_PAS_MSS_RESET	0x0a
+>>   
+>> +/* TSENS Services and Function IDs */
+>> +#define QCOM_SCM_SVC_TSENS		0x1E
+>> +#define QCOM_SCM_TSENS_INIT_ID		0x5
+>> +
+>>   #define QCOM_SCM_SVC_IO			0x05
+>>   #define QCOM_SCM_IO_READ		0x01
+>>   #define QCOM_SCM_IO_WRITE		0x02
+>> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+>> index f8335644a01a..f8c9eb739df1 100644
+>> --- a/include/linux/qcom_scm.h
+>> +++ b/include/linux/qcom_scm.h
+>> @@ -124,4 +124,6 @@ extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+>>   extern int qcom_scm_lmh_profile_change(u32 profile_id);
+>>   extern bool qcom_scm_lmh_dcvsh_available(void);
+>>   
+>> +extern int qcom_scm_tsens_reinit(int *tsens_ret);
+>> +
+>>   #endif
+>> -- 
+>> 2.35.3
+>>

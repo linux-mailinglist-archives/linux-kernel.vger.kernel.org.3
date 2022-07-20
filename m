@@ -2,141 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0238E57B1E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0A257B1E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240116AbiGTHji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S240120AbiGTHkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235565AbiGTHje (ORCPT
+        with ESMTP id S231790AbiGTHkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:39:34 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D90B68732
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:39:33 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id v15so16405934ljc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:39:33 -0700 (PDT)
+        Wed, 20 Jul 2022 03:40:33 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5CD45070
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:40:31 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id b9so15804658pfp.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j0ANUNTkZ26RWQnY3pfsOcSO7yiU6627Cy5vXCioKjM=;
-        b=e3ipkMk6gbei7k0d57pbubdR2vAQBIeY1vd8JcfVskwhrXvyIktfprcrNkHZ8/r4B4
-         FmvmCfAuH+/wHOVJNAyo38eBG4ndNTXicZ6lq+owQqKnw0c1F3l2Df/UBO0Q9HSpQdJE
-         KCloIr/YcaJLqYtSYZtwbJ/o2ygTRmHvBODGIbAL3uZ88Ay1rM/5yi7cXSjc9zxWn4dc
-         pYMIXCojfYA0o69nAt0jvMQFvE6S3mGl38qon6btGG8PY2EMEBqUGVPvoGjv2gebDAau
-         VSUtt7UBtO5nQkx+mjS7xe2a0AgmQuAirUGuXEraeeUfVCZ6wV7dpdKr5Wexv60nVGWA
-         FzUg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/uorVJjayDp26n5/7TH/fkLv17qD1Lr/KLk9s+h90+0=;
+        b=Ts9NhKBm4+5EfTgPBR18LYv9VuF55ILpwh49nw9HQrOBr34uZshzvvZ09DZRgHF7pr
+         UK8hDTPPsZBQlvW5tyjwWzEOesHwGW8DXBJYB+xZVg+5xjD2y+GSFdyvDbovpThr7fWV
+         2NeQhF6bUmc5bWXrx1XVZk9i2JDlmGo3ui6C52gUpdfCzY0b19lGr8QxmK6RUbTsd55x
+         h8ZCvSBXZ53e2daxdHA4s4mnyaWfZWgcnk9Um8olBTBLkEheFyIKKP4O0yJCVCBR7Ufg
+         5KdDDHd+okbiPyWcBXvLqLfXLXhRMV937LpSiTc3G4ihdJzY/F6pOKKkXME/fhRjTyWY
+         BOkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j0ANUNTkZ26RWQnY3pfsOcSO7yiU6627Cy5vXCioKjM=;
-        b=Gc7z/ya4WvmmJPwsq0cXA+sOHaxhoAbeHHoBHGDSE1s9AEXyscxYtgsxpKPNQ/J3tH
-         uF4J23xqC/Q7qRuDxb5WnW9k/0rw6OXmNVgLtj6RnC7fGh7U6nzmlrUEuCzXO6TB0Hla
-         5pUrmGLoqi17cSK+/sHONnjYUOay5mP6MpJK+GZ0Ft+xldGpadXNIKLfEOF9jpiPboyx
-         8I6lAtvyZtq0za7fD6yWrlbxawqIg8eLALi3sHCvt3ZtciKhVgi04y+JvJyJXdU5vZ/M
-         9XIbkzdRw/u8xETSgpzIX6sipjA8R4LEdGf8HCucBa8fFTbU2xc9z4IcsBYptbyW1S0c
-         NVMg==
-X-Gm-Message-State: AJIora/+TLne+2czWy2ZU4vJVvf8WasM9UIHA5/o0pXq4YJuWCNoiMuz
-        BAva9saGGa98IdmQxH/7d5Lip7kqxz3gnH/1yD0=
-X-Google-Smtp-Source: AGRyM1towGeJkXn/nsplStsr2X3bSKxpaLxD52Bok2fNLaYIrNgB1JzBfS7VDIDSp2P/bzPZ62HinJaBN+pLftXYZn4=
-X-Received: by 2002:a2e:a595:0:b0:25d:a8c6:21cc with SMTP id
- m21-20020a2ea595000000b0025da8c621ccmr9575819ljp.416.1658302772009; Wed, 20
- Jul 2022 00:39:32 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/uorVJjayDp26n5/7TH/fkLv17qD1Lr/KLk9s+h90+0=;
+        b=kyuh8ddUB+B10khO8EJ9k9UOH9ENxYzwpzyzbMMVyUpGZ6t4vnrHizFzs47TiOn7tY
+         uUgAouT4NdpQQBIQBqECEFO6wb5BAx3by7zL+p3jtfOmJH14YKtXaIpMx4+W+RmoyWoB
+         x4cd9rt5cuABLmU8PwCXPqKfun2Dbipe2uR06qg8EAYgy6helsz0aq2XgelclB4NrvOm
+         GcvTsxoakl0SD98drWQpr6wPBG403WqpzETxmBuW/ZX4w6qbitoM5bSkjTSmh0mQi2mQ
+         blsA101zQx1JZFNQVBi028Nt/IZnD3zA03I1lklBBshwo6LsAFsHmtD6XYR+xKRAYxXS
+         PYww==
+X-Gm-Message-State: AJIora8bflggGpqYQRifAkU2MkXsX/Qy3tZ4jXMdyC0u5nUnK9CKp/hs
+        F9s7pKIBNOEkQNgGjz9IdIWxvW4auL7KDg==
+X-Google-Smtp-Source: AGRyM1uvWY8UYC1O0aM9uxm8tQ5KpzBVbvqjfd4qOjmrkdR6XIfTKDcLYwkiSoACsGbb1gRJ6BosjQ==
+X-Received: by 2002:a63:4a12:0:b0:419:9ede:b7a0 with SMTP id x18-20020a634a12000000b004199edeb7a0mr30064067pga.167.1658302830924;
+        Wed, 20 Jul 2022 00:40:30 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1f3b:709e:6fec:df37:6562:5a80? ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
+        by smtp.gmail.com with ESMTPSA id y20-20020aa79434000000b005289f594326sm6408369pfo.69.2022.07.20.00.40.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 00:40:30 -0700 (PDT)
+Message-ID: <edb7bb13-0e34-dab2-d3a4-51bd73e38174@linaro.org>
+Date:   Wed, 20 Jul 2022 13:10:26 +0530
 MIME-Version: 1.0
-References: <20220629194632.1117723-1-qais.yousef@arm.com> <20220629194632.1117723-8-qais.yousef@arm.com>
-In-Reply-To: <20220629194632.1117723-8-qais.yousef@arm.com>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Wed, 20 Jul 2022 15:39:20 +0800
-Message-ID: <CAB8ipk9=EEfArTTQ_w10+Df0WqMinFvjbmfFEBLg1zUYcHkOPw@mail.gmail.com>
-Subject: Re: [PATCH 7/7] sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s
- early exit condition
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 6/6] arm64: dts: qcom: ipq8074: Fix 'max-frequency'
+ value for sdhci node
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh@kernel.org
+References: <20220514215424.1007718-1-bhupesh.sharma@linaro.org>
+ <20220514215424.1007718-7-bhupesh.sharma@linaro.org>
+ <Yr4psYiCCbi15RMe@builder.lan>
+ <772dc5d2-c3b2-685b-3a38-b86e8877424a@linaro.org>
+ <CAPDyKFpUpvHWMZmU0RxLAoFQG7RzOnqvTQPQBOm0s5MkkMHChw@mail.gmail.com>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <CAPDyKFpUpvHWMZmU0RxLAoFQG7RzOnqvTQPQBOm0s5MkkMHChw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qais
+Hi Ulf,
 
-On Thu, Jun 30, 2022 at 3:48 AM Qais Yousef <qais.yousef@arm.com> wrote:
->
-> If the utilization of the woken up task is 0, we skip the energy
-> calculation because it has no impact.
->
-> But if the task is boosted (uclamp_min != 0) will have an impact on task
-> placement and frequency selection. Only skip if the util is truly
-> 0 after applying uclamp values.
->
-> Change uclamp_task_cpu() signature to avoid unnecessary additional calls
-> to uclamp_eff_get(). feec() is the only user now.
->
-> Fixes: 732cd75b8c920 ("sched/fair: Select an energy-efficient CPU on task wake-up")
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> ---
->  kernel/sched/fair.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 499ef7a7288c..a112ca45864c 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4057,14 +4057,16 @@ static inline unsigned long task_util_est(struct task_struct *p)
->  }
->
->  #ifdef CONFIG_UCLAMP_TASK
-> -static inline unsigned long uclamp_task_util(struct task_struct *p)
-> +static inline unsigned long uclamp_task_util(struct task_struct *p,
-> +                                            unsigned long uclamp_min,
-> +                                            unsigned long uclamp_max)
->  {
-> -       return clamp(task_util_est(p),
-> -                    uclamp_eff_value(p, UCLAMP_MIN),
-> -                    uclamp_eff_value(p, UCLAMP_MAX));
-> +       return clamp(task_util_est(p), uclamp_min, uclamp_max);
->  }
->  #else
-> -static inline unsigned long uclamp_task_util(struct task_struct *p)
-> +static inline unsigned long uclamp_task_util(struct task_struct *p,
-> +                                            unsigned long uclamp_min,
-> +                                            unsigned long uclamp_max)
->  {
->         return task_util_est(p);
->  }
-> @@ -6913,7 +6915,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->         target = prev_cpu;
->
->         sync_entity_load_avg(&p->se);
-> -       if (!task_util_est(p))
-> +       if (!uclamp_task_util(p, p_util_min, p_util_max))
 
-Is it not enough to just replace the task_util_est with the
-uclamp_task_util? If change the definition of uclamp_task_util,
-that means it have to get task's uclamp first if user want to call the
-function, may increase the code complex farther more?
+On 7/18/22 6:21 PM, Ulf Hansson wrote:
+> On Mon, 18 Jul 2022 at 10:47, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+>>
+>> On 7/1/22 4:24 AM, Bjorn Andersson wrote:
+>>> On Sat 14 May 16:54 CDT 2022, Bhupesh Sharma wrote:
+>>>
+>>>> Since the Qualcomm sdhci-msm device-tree binding has been converted
+>>>> to yaml format, 'make dtbs_check' reports issues with
+>>>> 'max-frequency' value for ipq8074 sdhci node:
+>>>>
+>>>>    arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb: mmc@7824900:
+>>>>     max-frequency:0:0: 384000000 is greater than the maximum of 200000000
+>>>>
+>>>> Fix the same.
+>>>>
+>>>> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>>> Cc: Rob Herring <robh@kernel.org>
+>>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>>>> ---
+>>>>    arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+>>>> index ab2a1e7955b5..b2d71af9b419 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+>>>> @@ -388,7 +388,7 @@ sdhc_1: mmc@7824900 {
+>>>>                                <&gcc GCC_SDCC1_APPS_CLK>,
+>>>>                                <&xo>;
+>>>>                       clock-names = "iface", "core", "xo";
+>>>> -                    max-frequency = <384000000>;
+>>>> +                    max-frequency = <200000000>;
+>>> This might match the binding, but someone put 384000000 there for a
+>>> reason. Perhaps the binding needs to be updated instead?
+>>
+>> I was waiting for getting access to ipq8074 reference manual / documentation.
+>> I double-checked and it seems SDCC1 on this SoC does support a max frequency
+>> of 384 MHz which is strange as the SDCC2 supports 200 MHz as max frequency
+>> instead.
+> 
+> I guess it depends on what the property is being used for from the mmc
+> host driver perspective. So, to answer the question, we probably need
+> to look at the code in the host driver to best understand what to do
+> here.
+> 
+>>
+>> Also the eMMC and MMC controllers on other SoCs (i.MX etx( usually support only
+>> a max frequency of 200 MHz, so may be we need an exceptional addition to the
+>> binding documentation here.
+>>
+>> @Ulf - what's your view on updating the binding documentation here? I can
+>> send a v3 accordingly.
+> 
+> The point with the property is to let host controllers specify whether
+> there is an upper limit of the frequency that it can support. No
+> matter what, the mmc core will not use a frequency greater than stated
+> by the eMMC/SD/SDIO specs.
+> 
+> For eMMC, 200MHz is the maximum frequency.
+> 
+> For SD/SDIO cards, the SDR104 mode has 208MHz. So it seems like we
+> need an update to the binding, no matter what. :-)
+> 
+> I have no strong opinions around this, but perhaps just raising the
+> limit of the binding to cover the qcom case makes best sense.
 
->                 goto unlock;
->
->         for (; pd; pd = pd->next) {
-> --
-> 2.25.1
->
+Thanks for your inputs. I will send a v3 version with the udpated
+binding soon.
 
-BR
----
-xuewen.yan
+Regards,
+Bhupesh

@@ -2,439 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8061457B096
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 07:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4949957B0A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 07:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiGTFyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 01:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
+        id S237581AbiGTF6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 01:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiGTFyl (ORCPT
+        with ESMTP id S236834AbiGTF6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 01:54:41 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F5C49B68
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 22:54:39 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220720055438epoutp0436ea1ec79d551ad1948f360f09c7bc28~Dc9xsztGD3229532295epoutp04j
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:54:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220720055438epoutp0436ea1ec79d551ad1948f360f09c7bc28~Dc9xsztGD3229532295epoutp04j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1658296478;
-        bh=DMK8IgTtZbHF6hI7hCGciRf8wUaVR1Ad9VNtzlXOziE=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=LlaiAQ8w54lSde459i/hirpm9PQpceKB3h3b5wTjC31pkYwW/gRh+dFWJ+ydJIk+d
-         THNunWieSixaFDJECnZRjepR0ud7vHJ+7G/pLIsnSyoeAX7sbquNhKuM4p2mBBgU1i
-         UBag+N74hLaIgvvvrEIzzKw9B0gO3PGfi5bKIisQ=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220720055437epcas2p34da9921fabb951376fd1c7a2611e4704~Dc9xGq7du1267612676epcas2p3z;
-        Wed, 20 Jul 2022 05:54:37 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.98]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LnlJs0nVdz4x9Q1; Wed, 20 Jul
-        2022 05:54:37 +0000 (GMT)
-X-AuditID: b6c32a46-0a3ff700000025b2-60-62d7989c37e5
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2F.84.09650.C9897D26; Wed, 20 Jul 2022 14:54:37 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v4 1/5] dt-bindings: pci: Add ARTPEC-8 PCIe controller
-Reply-To: wangseok.lee@samsung.com
-Sender: Wangseok Lee <wangseok.lee@samsung.com>
-From:   Wangseok Lee <wangseok.lee@samsung.com>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>
-CC:     Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>,
-        Yeeun Kim <yeeun119.kim@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p5>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220720055436epcms2p63896ebe4e2131e3844044d0112288570@epcms2p6>
-Date:   Wed, 20 Jul 2022 14:54:36 +0900
-X-CMS-MailID: 20220720055436epcms2p63896ebe4e2131e3844044d0112288570
+        Wed, 20 Jul 2022 01:58:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D9F5508D;
+        Tue, 19 Jul 2022 22:58:10 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K5mcFZ029228;
+        Wed, 20 Jul 2022 05:57:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=uJiofIb2YfK+NiHiju7AHQCKT2vbWMAgX669Dw+AL3c=;
+ b=ZX2Uhq8RO2bM6uVn7ZqnttoPvHSZdLMhY16i4yy5ju8/1DhkGbK9V30lGIZ/S4U/tQPj
+ l3zMnsXVF7GK/3yuie/hvKjH4TQIktvaYtWkTj6kMm4Q/5qdSZbulMMjU5KY8oVmFvB+
+ xdcR8YnLw6x/u5EI82ANfb954I1IzCWesZRNFhs2czi0/YWG3aGhXCBRLNf42pa4MgJS
+ /MxAeSYSvFS7c2GA7C7lxyhOXim4Hjbh7Gq2qWQunEUxGl29A5NLpqMMehsC5YB43Sd/
+ HK+XOMXRcN84OTIzubo+sm2yK9mDpmLSB/KoYp41l59qiP1RmzcjJoLZ40VkDoZR1wzU Lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hebvv85cn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 05:57:19 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26K5tAYj025516;
+        Wed, 20 Jul 2022 05:57:18 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hebvv85bn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 05:57:18 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26K5oliM030103;
+        Wed, 20 Jul 2022 05:57:16 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3hbmkj56ad-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 05:57:15 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26K5vDfh23200066
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jul 2022 05:57:13 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E5FC4203F;
+        Wed, 20 Jul 2022 05:57:13 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 24B7E42042;
+        Wed, 20 Jul 2022 05:57:05 +0000 (GMT)
+Received: from [9.43.48.169] (unknown [9.43.48.169])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 20 Jul 2022 05:57:04 +0000 (GMT)
+Message-ID: <1c3fc908-860b-0274-832a-dd7d091c5463@linux.ibm.com>
+Date:   Wed, 20 Jul 2022 11:27:03 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 0/4] Rewrite jevents program in python
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
+        Like Xu <likexu@tencent.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Nick Forrington <nick.forrington@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com, sandipan.das@amd.com,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220629182505.406269-1-irogers@google.com>
+From:   kajoljain <kjain@linux.ibm.com>
+In-Reply-To: <20220629182505.406269-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: moM3zxcNU6cOv-1ZyXdZWpwMuZGNLp34
+X-Proofpoint-ORIG-GUID: WJEYRKqAdONssmTYwiuyTWFQo4w-YAeN
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIJsWRmVeSWpSXmKPExsWy7bCmme7cGdeTDKYeYbJY0pRh8fKQpsX8
-        I+dYLXbPWM5kMXPqGWaL54dmMVt8alG1uPC0h83i5ax7bBYNPb9ZLY68+chssf/4SiaLy7vm
-        sFmcnXeczWLCqm8sFm9+v2C3OLc406J17xF2i513TjBb/Nr6h8lBxGPNvDWMHtfXBXgs2FTq
-        sWlVJ5vHkyvTmTw2L6n36NuyitHj+I3tTB6fN8kFcEZl22SkJqakFimk5iXnp2TmpdsqeQfH
-        O8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAPaWkUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8u
-        sVVKLUjJKTAv0CtOzC0uzUvXy0stsTI0MDAyBSpMyM74taeTueCbT8WvnrksDYxzLLoYOTkk
-        BEwkZq1YzdTFyMUhJLCDUeLJg9fMXYwcHLwCghJ/dwiD1AgLuEl0bTvMCGILCShJ7Fgzjxki
-        ri9xfUU3K4jNJqAr8W/xSzYQW0TgM6vE9T2CIDOZBRYwSuz/vY8RYhmvxIz2pywQtrTE9uVb
-        GUF2cQr4Sbxtc4AIa0j8WNbLDGGLStxc/ZYdxn5/bD7UGBGJ1ntnoWoEJR783A0Vl5JY8OQQ
-        K4RdLbH/728mCLuBUaL/firIKgmgm3dcNwYJ8wr4SlxacpUFJMwioCox/WkxRLWLxLcdN8Cm
-        MAvIS2x/OwccIMwCmhLrd+lDDFGWOHKLBealho2/2dHZzAJ8Eh2H/8LFd8x7AnWLmsS8lTuZ
-        JzAqz0KE8iwku2Yh7FrAyLyKUSy1oDg3PbXYqMAIHrHJ+bmbGMFpW8ttB+OUtx/0DjEycTAe
-        YpTgYFYS4X1aeD1JiDclsbIqtSg/vqg0J7X4EKMp0JMTmaVEk/OBmSOvJN7QxNLAxMzM0NzI
-        1MBcSZzXK2VDopBAemJJanZqakFqEUwfEwenVAOTrujXbQc+csvu5+bK2irz7ejX9AczeER8
-        rlyaUrjqbaLCM+b4bwLHKtO4HUIcZYymtZZnsokxNMce25ZdKVjINelOggOn5I3WSgVh/yPc
-        FzTkN35VyZW+5mXc9srZr+ztn7KOO81O83VMf7x8er/h0GVPp6XrIhte1JQy8Msb/eXn3CxU
-        s1a54W/2Zt+AeubJ953s65XjA9cK1V5eO13yotmEJ1a6Twp8BL/43OX87S5x2CbgVajgUoPd
-        R7Szbm34dt6r1W2TuMJrr5NtPx601Tf9T35tZCAXmiy3Zk7V85UipcVuUh955oU6+Qut1mry
-        cXF6vi/NcHpS7HQjyetLHGLdp5S9n2x9me22gxJLcUaioRZzUXEiAKGkd4JkBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800
-References: <20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p5>
-        <CGME20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p6>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_02,2022-07-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ suspectscore=0 clxscore=1011 malwarescore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207200023
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add description to support Axis, ARTPEC-8 SoC. ARTPEC-8 is the SoC platform
-of Axis Communications and PCIe controller is designed based on Design-Ware
-PCIe controller.
 
-Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
----
-v3->v4 :
--Add missing properties
 
-v2->v3 :
--Modify version history to fit the linux commit rule
--Remove 'Device Tree Bindings' on title
--Remove clock-names entries
--Change node name to soc from artpec8 on excamples
+On 6/29/22 23:55, Ian Rogers wrote:
+> New architectures bring new complexity, such as Intel's hybrid
+> models. jevents provides an alternative to specifying events in the
+> kernel and exposing them through sysfs, however, it is difficult to
+> work with. For example, an error in the json input would yield an
+> error message but no json file or location. It is also a challenge to
+> update jsmn.c given its forked nature.
+> 
+> The changes here switch from jevents.c to a rewrite in python called
+> jevents.py. This means there is a build time dependency on python, but
+> such a dependency already exists for asciidoc (used to generate perf's
+> man pages). If the build detects that python isn't present or is older
+> than version 3.6 (released Dec. 2016) then an empty file is
+> substituted for the generated one.
+> 
+> A challenge with this code is in avoiding regressions. For this reason
+> the jevents.py produces identical output to jevents.c, validated with a
+> test script and build target.
+> 
 
-v1->v2 :
--'make dt_binding_check' result improvement
--Add the missing property list
--Align the indentation of continued lines/entries
----
- .../bindings/pci/axis,artpec8-pcie-ep.yaml         | 138 +++++++++++++++++++
- .../devicetree/bindings/pci/axis,artpec8-pcie.yaml | 148 +++++++++++++++++++++
- 2 files changed, 286 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
- create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
+Patchset looks good to me.
 
-diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
-new file mode 100644
-index 0000000..435e86f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
-@@ -0,0 +1,138 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie-ep.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ARTPEC-8 SoC PCIe Controller
-+
-+maintainers:
-+  - Jesper Nilsson <jesper.nilsson@axis.com>
-+
-+description: |+
-+  This PCIe end-point controller is based on the Synopsys DesignWare PCIe IP
-+  and thus inherits all the common properties defined in snps,dw-pcie-ep.yaml.
-+
-+allOf:
-+  - $ref: /schemas/pci/snps,dw-pcie-ep.yaml#
-+
-+properties:
-+  compatible:
-+    const: axis,artpec8-pcie-ep
-+
-+  reg:
-+    items:
-+      - description: Data Bus Interface (DBI) registers.
-+      - description: Data Bus Interface (DBI2) registers.
-+      - description: PCIe address space region.
-+
-+  reg-names:
-+    items:
-+      - const: dbi
-+      - const: dbi2
-+      - const: addr_space
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: PIPE clock, used by the controller to clock the PIPE
-+      - description: PCIe dbi clock, ungated version
-+      - description: PCIe master clock, ungated version
-+      - description: PCIe slave clock, ungated version
-+
-+  clock-names:
-+    items:
-+      - const: pipe
-+      - const: dbi
-+      - const: mstr
-+      - const: slv
-+
-+  samsung,fsys-sysreg:
-+    description:
-+      Phandle to system register of fsys block.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  samsung,syscon-phandle:
-+    description:
-+      Phandle to the PMU system controller node.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  samsung,fsys-bus-s:
-+    description:
-+      Phandle to bus-s of fsys block, this register
-+      is additional control sysreg in fsys block and
-+      this is used for pcie slave control setting.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  samsung,fsys-bus-p:
-+    description:
-+      Phandle to bus-p of fsys block, this register
-+      is additional control sysreg in fsys block and
-+      this is used for pcie dbi control setting.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  phys:
-+    maxItems: 1
-+
-+  phy-names:
-+    items:
-+      - const: pcie_phy
-+
-+  num-lanes:
-+    const: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clock-names
-+  - samsung,fsys-sysreg
-+  - samsung,syscon-phandle
-+  - samsung,syscon-bus-s-fsys
-+  - samsung,syscon-bus-p-fsys
-+  - phys
-+  - phy-names
-+  - num-lanes
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        pcie_ep: pcie-ep@17200000 {
-+            compatible = "axis,artpec8-pcie-ep";
-+            reg = <0x0 0x17200000 0x0 0x1000>,
-+                  <0x0 0x17201000 0x0 0x1000>,
-+                  <0x2 0x00000000 0x6 0x00000000>;
-+            reg-names = "dbi", "dbi2", "addr_space";
-+            #interrupt-cells = <1>;
-+            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-+            interrupt-names = "intr";
-+            clocks = <&clock_cmu_fsys 39>,
-+                     <&clock_cmu_fsys 38>,
-+                     <&clock_cmu_fsys 37>,
-+                     <&clock_cmu_fsys 36>;
-+            clock-names = "pipe", "dbi", "mstr", "slv";
-+            samsung,fsys-sysreg = <&syscon_fsys>;
-+            samsung,syscon-phandle = <&pmu_system_controller>;
-+            samsung,syscon-bus-s-fsys = <&syscon_bus_s_fsys>;
-+            samsung,syscon-bus-p-fsys = <&syscon_bus_p_fsys>;
-+            phys = <&pcie_phy>;
-+            phy-names = "pcie_phy";
-+            num-lanes = <2>;
-+            bus-range = <0x00 0xff>;
-+            num-ib-windows = <16>;
-+            num-ob-windows = <16>;
-+        };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
-new file mode 100644
-index 0000000..b7cff4f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
-@@ -0,0 +1,148 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Artpec-8 SoC PCIe Controller
-+
-+maintainers:
-+  - Jesper Nilsson <jesper.nilsson@axis.com>
-+
-+description: |+
-+  This PCIe host controller is based on the Synopsys DesignWare PCIe IP
-+  and thus inherits all the common properties defined in snps,dw-pcie.yaml.
-+
-+allOf:
-+  - $ref: /schemas/pci/snps,dw-pcie.yaml#
-+
-+properties:
-+  compatible:
-+    const: axis,artpec8-pcie
-+
-+  reg:
-+    items:
-+      - description: Data Bus Interface (DBI) registers.
-+      - description: External Local Bus interface (ELBI) registers.
-+      - description: PCIe configuration space region.
-+
-+  reg-names:
-+    items:
-+      - const: dbi
-+      - const: elbi
-+      - const: config
-+
-+  ranges:
-+    maxItems: 2
-+
-+  num-lanes:
-+    const: 2
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: PIPE clock, used by the controller to clock the PIPE
-+      - description: PCIe dbi clock, ungated version
-+      - description: PCIe master clock,  ungated version
-+      - description: PCIe slave clock, ungated version
-+
-+  clock-names:
-+    items:
-+      - const: pipe
-+      - const: dbi
-+      - const: mstr
-+      - const: slv
-+
-+  samsung,fsys-sysreg:
-+    description:
-+      Phandle to system register of fsys block.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  samsung,syscon-phandle:
-+    description:
-+      Phandle to the PMU system controller node.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  samsung,fsys-bus-s:
-+    description:
-+      Phandle to bus-s of fsys block, this register
-+      is additional control sysreg in fsys block and
-+      this is used for pcie slave control setting.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  samsung,fsys-bus-p:
-+    description:
-+      Phandle to bus-p of fsys block, this register
-+      is additional control sysreg in fsys block and
-+      this is used for pcie dbi control setting.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  phys:
-+    maxItems: 1
-+
-+  phy-names:
-+    items:
-+      - const: pcie_phy
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - device_type
-+  - ranges
-+  - num-lanes
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clock-names
-+  - samsung,fsys-sysreg
-+  - samsung,syscon-phandle
-+  - samsung,syscon-bus-s-fsys
-+  - samsung,syscon-bus-p-fsys
-+  - phys
-+  - phy-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        pcie: pcie@17200000 {
-+            compatible = "axis,artpec8-pcie";
-+            reg = <0x0 0x17200000 0x0 0x1000>,
-+                  <0x0 0x16ca0000 0x0 0x2000>,
-+                  <0x7 0x0001e000 0x0 0x2000>;
-+            reg-names = "dbi", "elbi", "config";
-+            #address-cells = <3>;
-+            #size-cells = <2>;
-+            device_type = "pci";
-+            ranges = </* non-prefetchable memory */
-+                      0x83000000 0x0 0x0000000 0x2 0x00000000 0x5 0x00000000
-+                      /* downstream I/O */
-+                      0x81000000 0x0 0x0000000 0x7 0x00000000 0x0 0x00010000>;
-+            num-lanes = <2>;
-+            bus-range = <0x00 0xff>;
-+            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-+            interrupt-names = "intr";
-+            #interrupt-cells = <1>;
-+            clocks = <&cmu_fsys 39>,
-+                     <&cmu_fsys 38>,
-+                     <&cmu_fsys 37>,
-+                     <&cmu_fsys 36>;
-+            clock-names = "pipe", "dbi", "mstr", "slv";
-+            samsung,fsys-sysreg = <&syscon_fsys>;
-+            samsung,syscon-phandle = <&pmu_system_controller>;
-+            samsung,syscon-bus-s-fsys = <&syscon_bus_s_fsys>;
-+            samsung,syscon-bus-p-fsys = <&syscon_bus_p_fsys>;
-+            phys = <&pcie_phy>;
-+            phy-names = "pcie_phy";
-+        };
-+    };
-+...
--- 
-2.9.5
+Reviewed-by: Kajol Jain <kjain@linux.ibm.com>
+Tested-by: Kajol Jain <kjain@linux.ibm.com>
+
+Thanks,
+Kajol Jain
+
+> v7. Adds Tested-by from John Garry <john.garry@huawei.com>.
+> v6. Adds Tested-by from Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>     and Thomas Richter <tmricht@linux.ibm.com>. Fixes issues spotted
+>     by Jiri Olsa <jolsa@kernel.org>, jsmn.c wasn't deleted and the
+>     empty pmu-events.c didn't pass the pmu-events test. It also adds a
+>     missing mkdir which is necessary before creating pmu-events.c and
+>     tweaks the quiet display code in the empty case to display a gen.
+> v5. Adds a 2>/dev/null as suggested by David Laight
+>     <David.Laight@aculab.com>.
+> v4. Fixes the build for systems with python2 installed by adding a
+>     patch that makes python3 the preferred python (Reported-by: John
+>     Garry <john.garry@huawei.com>). It also fixes a bash-ism in the
+>     jevents-test.sh and fixes the handling of an empty string for a
+>     metric BriefDescription as one was added for sapphirerapids in the
+>     metric Execute.
+> v3. Updates the patches for merged changes (on
+>     acme/tmp.perf/core). Re-runs all comparisons to make sure the
+>     generated pmu-events.c isn't altered at all by this change. Adds
+>     the jevents.c ExtSel fix in:
+>     https://lore.kernel.org/lkml/20220525140410.1706851-1-zhengjun.xing@linux.intel.com/
+>     Bumps the python version from 3.5 to 3.6, as f-strings weren't
+>     introduced until 3.6.
+> v2. Fixes the build for architectures that don't have pmu-events json
+>     (Suggested-by: John Garry <john.garry@huawei.com>) and fixes the
+>     build for python not being present or too old (Suggested-by: Peter
+>     Zijlstra <peterz@infradead.org>/John Garry <john.garry@huawei.com>).
+> 
+> Ian Rogers (4):
+>   perf python: Prefer python3
+>   perf jevents: Add python converter script
+>   perf jevents: Switch build to use jevents.py
+>   perf jevents: Remove jevents.c
+> 
+>  tools/perf/Makefile.config               |   27 +-
+>  tools/perf/Makefile.perf                 |   16 +-
+>  tools/perf/pmu-events/Build              |   17 +-
+>  tools/perf/pmu-events/empty-pmu-events.c |  158 +++
+>  tools/perf/pmu-events/jevents.c          | 1342 ----------------------
+>  tools/perf/pmu-events/jevents.py         |  409 +++++++
+>  tools/perf/pmu-events/jsmn.c             |  352 ------
+>  tools/perf/pmu-events/jsmn.h             |   68 --
+>  tools/perf/pmu-events/json.c             |  162 ---
+>  tools/perf/pmu-events/json.h             |   39 -
+>  10 files changed, 604 insertions(+), 1986 deletions(-)
+>  create mode 100644 tools/perf/pmu-events/empty-pmu-events.c
+>  delete mode 100644 tools/perf/pmu-events/jevents.c
+>  create mode 100755 tools/perf/pmu-events/jevents.py
+>  delete mode 100644 tools/perf/pmu-events/jsmn.c
+>  delete mode 100644 tools/perf/pmu-events/jsmn.h
+>  delete mode 100644 tools/perf/pmu-events/json.c
+>  delete mode 100644 tools/perf/pmu-events/json.h
+> 

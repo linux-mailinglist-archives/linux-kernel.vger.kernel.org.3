@@ -2,63 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C36357B18E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C814857B196
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbiGTHSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S236084AbiGTHTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiGTHSN (ORCPT
+        with ESMTP id S229636AbiGTHTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:18:13 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2157C42AF8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:18:11 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R351e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=2;SR=0;TI=SMTPD_---0VJvqFXH_1658301489;
-Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VJvqFXH_1658301489)
-          by smtp.aliyun-inc.com;
-          Wed, 20 Jul 2022 15:18:09 +0800
-Message-ID: <ec3ba2bb-b863-a875-f3d3-1f2c9d4419a8@linux.alibaba.com>
-Date:   Wed, 20 Jul 2022 15:18:11 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mailmap: update Baolin Wang's email
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <1658300638-109504-1-git-send-email-baolin.wang@linux.alibaba.com>
- <CAK8P3a399139Huy3GRO8n=w0AVb6Xh3CkE749J=BgoFOtb1ZXQ@mail.gmail.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <CAK8P3a399139Huy3GRO8n=w0AVb6Xh3CkE749J=BgoFOtb1ZXQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 03:19:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047F667149;
+        Wed, 20 Jul 2022 00:19:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EEF7618F3;
+        Wed, 20 Jul 2022 07:19:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7A0C3411E;
+        Wed, 20 Jul 2022 07:19:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658301575;
+        bh=V1NbvFzLlzExU4YZRl5lHdz61pGcNaE0GTIqY4M7dL8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hZeD8MveCXG20IL/+EPCfavIscQcIcY0trj9N5KQmpAtwpju3vbbHduHllXYwwV/y
+         nXFHsMJZoyppGB7no6jH9THruV4hWMJjUkP+fPPsoiOvp5BOlMyUhfk+mtqnwE/SjI
+         GATMKchnvV2MgJ+ln4etS/REB3QKoBz/builobbDmeomul1bp9Jle7yV0//M98DCko
+         93OoczrfVYfoZUzXNjVPRIZYs89JdK319O+RJCj9gw1u/VF1+jPfGBrJA+C8Ozk0RZ
+         RJXAHgxHt4apWNZi6JLQDovpf3oL6BsDMWr9CkFrgeFC1lKPYZpr4Mo/Gkh+5TE4DC
+         YX6ToNjbhM4cg==
+Received: from ip-185-104-136-31.ptr.icomera.net ([185.104.136.31] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oE3zY-008iPV-CI;
+        Wed, 20 Jul 2022 08:19:32 +0100
+Date:   Wed, 20 Jul 2022 08:19:11 +0100
+Message-ID: <875yjs45g0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     paulmck@kernel.org
+Cc:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, frederic@kernel.org,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+        zhangfei.gao@foxmail.com, boqun.feng@gmail.com, urezki@gmail.com,
+        shameerali.kolothum.thodi@huawei.com, pbonzini@redhat.com,
+        mtosatti@redhat.com, eric.auger@redhat.com,
+        chenxiang66@hisilicon.com, zhangfei.gao@linaro.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH v3] srcu: Reduce blocking agressiveness of expedited grace periods further
+In-Reply-To: <20220719171547.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+References: <20220701031545.9868-1-quic_neeraju@quicinc.com>
+        <87o7xlzey3.wl-maz@kernel.org>
+        <20220719171547.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.31
+X-SA-Exim-Rcpt-To: paulmck@kernel.org, quic_neeraju@quicinc.com, frederic@kernel.org, josh@joshtriplett.org, rostedt@goodmis.org, mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com, joel@joelfernandes.org, linux-kernel@vger.kernel.org, zhangfei.gao@foxmail.com, boqun.feng@gmail.com, urezki@gmail.com, shameerali.kolothum.thodi@huawei.com, pbonzini@redhat.com, mtosatti@redhat.com, eric.auger@redhat.com, chenxiang66@hisilicon.com, zhangfei.gao@linaro.org, rcu@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Paul,
 
-
-On 7/20/2022 3:13 PM, Arnd Bergmann wrote:
-> On Wed, Jul 20, 2022 at 9:03 AM Baolin Wang
-> <baolin.wang@linux.alibaba.com> wrote:
->>
->> I recently switched to my Alibaba email address. So add aliases for my
->> previous email addresses.
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->> Hi Arnd, could you help to take this patch of updating my email address
->> into your ARM SoC tree? Thanks.
+On Tue, 19 Jul 2022 18:15:47 +0100,
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 > 
-> Sure, applied to my arm/fixes branch now. I don't have any other contents
-> at the moment, and wouldn't send a fixes pull request just for this, but
-> it will be either in the next set of fixes for 5.19 or in the next merge window.
+> On Tue, Jul 19, 2022 at 09:25:56AM +0100, Marc Zyngier wrote:
+> >
+> > Is there any chance for this fix to make it into 5.19? The regression
+> > is significant enough on low-end systems, and I'd rather see it
+> > addressed.
+> 
+> I wasn't planning on it, based on my (possibly quite flawed) assumption
+> that it affected only embedded systems running in a virtual environment.
 
-OK, sounds good. Thanks for your help again :)
+Not quite. This affects any system running virtual machines based on
+KVM and using QEMU as the VMM (the machines I run this on don't quite
+qualify as "embedded").
+
+> My plan was to send it in my pull request for the next merge window
+> next week.  My pull request is next week, yes, the merge window opens
+> the following Sunday.  ;-)
+> 
+> It has a Fixes tag, so it will be backported.
+> 
+> But if it is important to get it into v5.19 rather than v5.19.x for small
+> "x", please let me know and I will see what Linus does with the resulting
+> v5.19-rc7 pull request.
+
+I think that the sooner we address this in an upstream kernel, the
+better, and I'd definitely support you sending this to Linus for -rc7!
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

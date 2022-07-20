@@ -2,189 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C399457BAF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD1F57BAF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234725AbiGTP5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
+        id S235037AbiGTP6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGTP5K (ORCPT
+        with ESMTP id S229379AbiGTP6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:57:10 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9154AD76
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:57:09 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id g4so16792089pgc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ce/0l8zZFSWxrvXqTD1rFm6VFoYD2QFsbPDkuHHkwaY=;
-        b=RoKxGblmnegdrP1c0em3AoK5G4jeKtLnt4i2jnxOgsuI+WbC12ClEOCv9Ip327DSg7
-         u7OnrzBCQmTAwD+iIRo4E0bBUAtsQwk/sSFIcHyfCPfi4m6TuSAM0WjJ+8aBs9oEx8DK
-         DD3Cu1D+VkUuCfBitqFMXA33WbLqlm+RNcifcOjjqb4S6n9UvPsvHWxolZCqjcMHq3KW
-         4x3ZPxHAb5LAAy7nyabAsOBA78W5D+RxyePrw8YyXj9FhxpOkkpCWKP26QFKzl4f7bYl
-         /oxLuZtpYcd4TB0ACz9ww0YZgW93ZjrcR4e4Imq/iHY5wC+wQ+Hbckqw7+BV/+LCQ5jV
-         /3kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ce/0l8zZFSWxrvXqTD1rFm6VFoYD2QFsbPDkuHHkwaY=;
-        b=dni3OoINUUpBiY1C2glNkCQyyJmalFfMTgth6ATCThhXmFdStnEFeRufUdi2SiSt6G
-         k4j/Y03c9mNO/KSKN47cauCgYW4gW92557Y3O9/BYN0tQw74WhoL5+11V7YeRakNBIUp
-         YByZPP7mR3ZAH13M69AquqQgLIMRYBGJtbS10B+g9a/V+uZgAMGZKeHiljDCaUjG7c9m
-         Myvn9r5TYRCQ6tyhSx8UmKty8Ebtv9nnyVY3qIl39L+t7Nswk6grjgFywoGv9pipkckF
-         8mXtTE4wDKkN4doYHUMFfxWFIoKMtf8sf+QzmRj5Hk2g32H6xfz0B+eB7T1hcQHILcGY
-         9T3w==
-X-Gm-Message-State: AJIora/vc28xcCjkqqzMyl/l69w5AH+1AkGE2/l3ULue1QmCp0iN5mHM
-        hb9FCYNI0sqgOdtKu3SrzJsl/S6YTBRvXCjtJGnsfg==
-X-Google-Smtp-Source: AGRyM1tINSVkMuM4eb4gm1xru+KFwEKZU3QyNxXe0sGn0kBmUMtttpngaMrGv+eJAVxEtd7/6O0iezB0rkrAM1sODLE=
-X-Received: by 2002:a65:4c0b:0:b0:415:d3a4:44d1 with SMTP id
- u11-20020a654c0b000000b00415d3a444d1mr34871068pgq.191.1658332629110; Wed, 20
- Jul 2022 08:57:09 -0700 (PDT)
+        Wed, 20 Jul 2022 11:58:03 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750D84B0E3;
+        Wed, 20 Jul 2022 08:58:01 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297623329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7623:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CDF2F1EC04C2;
+        Wed, 20 Jul 2022 17:57:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658332675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=9FGXIDVQys+1yUZO4AwCM1llCdChh/h0Uv7yIHs9V0E=;
+        b=FDLo7jCiVmuQaPxUn9tfOtacPGYhMWG2KWMc5u9/JYJhhI3mLd+sKGwT8Puew7JVN02eUG
+        gYS/bMUncYOG2Op/tP3OLmbrpCcMOIRjAH9lry5yNaruz39qT35XVeeZtcQh4/QnPXGtJf
+        cADT+Rz/etgAm6q8n+So0Q4qC0W0xWo=
+Date:   Wed, 20 Jul 2022 17:57:52 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kani, Toshi" <toshi.kani@hpe.com>
+Cc:     "rrichter@marvell.com" <rrichter@marvell.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
+Message-ID: <YtgmALzpaR9IHR/F@zn.tnic>
+References: <20220719220124.760359-1-toshi.kani@hpe.com>
+ <YtfsOcWbWREu1NnK@zn.tnic>
+ <PH7PR84MB1838CC03943D28806F7DCD8F828E9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
- <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com> <179cfb89be0e4f928a55d049fe62aa9e@huawei.com>
-In-Reply-To: <179cfb89be0e4f928a55d049fe62aa9e@huawei.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 20 Jul 2022 08:56:58 -0700
-Message-ID: <CAKH8qBt0yR+mtCjAp=8jQL4M6apWQk0wH7Zf4tPDCf3=m+gAKA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Joe Burton <jevburton.kernel@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joe Burton <jevburton@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <PH7PR84MB1838CC03943D28806F7DCD8F828E9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 1:02 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > Sent: Tuesday, July 19, 2022 10:40 PM
-> > On Tue, Jul 19, 2022 at 12:40 PM Joe Burton <jevburton.kernel@gmail.com>
-> > wrote:
-> > >
-> > > From: Joe Burton <jevburton@google.com>
-> > >
-> > > Add an extensible variant of bpf_obj_get() capable of setting the
-> > > `file_flags` parameter.
-> > >
-> > > This parameter is needed to enable unprivileged access to BPF maps.
-> > > Without a method like this, users must manually make the syscall.
-> > >
-> > > Signed-off-by: Joe Burton <jevburton@google.com>
-> >
-> > Reviewed-by: Stanislav Fomichev <sdf@google.com>
-> >
-> > For context:
-> > We've found this out while we were trying to add support for unpriv
-> > processes to open pinned r-x maps.
-> > Maybe this deserves a test as well? Not sure.
->
-> Hi Stanislav, Joe
->
-> I noticed now this patch. I'm doing a broader work to add opts
-> to bpf_*_get_fd_by_id(). I also adjusted permissions of bpftool
-> depending on the operation type (e.g. show, dump: BPF_F_RDONLY).
->
-> Will send it soon (I'm trying to solve an issue with the CI, where
-> libbfd is not available in the VM doing actual tests).
+On Wed, Jul 20, 2022 at 03:41:20PM +0000, Kani, Toshi wrote:
+> SMBIOS handle is correct.
+> 
+> In dimm_setup_label(), *device is set but *bank is null (dmi_empty_string).
+> *bank is set from SMBIOS type 17 Bank Locator, offset 11h.  This value is
+> set to 0x0 (null string) on this system, as shown below.
+> 
+> Handle 0x0020, DMI type 17, 84 bytes
+> Memory Device
+>         Array Handle: 0x0013
+>         Error Information Handle: Not Provided
+>         Total Width: 72 bits
+>         Data Width: 64 bits
+>         Size: 32 GB
+>         Form Factor: DIMM
+>         Set: None
+>         Locator: PROC 1 DIMM 1        <===== device
+>         Bank Locator: Not Specified   <===== bank
 
-Is something like this patch included in your series as well? Can you
-use this new interface or do you need something different?
+I think it'll be more user-friendly to put
 
-> Roberto
->
-> > > ---
-> > >  tools/lib/bpf/bpf.c      | 10 ++++++++++
-> > >  tools/lib/bpf/bpf.h      |  9 +++++++++
-> > >  tools/lib/bpf/libbpf.map |  1 +
-> > >  3 files changed, 20 insertions(+)
-> > >
-> > > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> > > index 5eb0df90eb2b..5acb0e8bd13c 100644
-> > > --- a/tools/lib/bpf/bpf.c
-> > > +++ b/tools/lib/bpf/bpf.c
-> > > @@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char *pathname)
-> > >  }
-> > >
-> > >  int bpf_obj_get(const char *pathname)
-> > > +{
-> > > +       LIBBPF_OPTS(bpf_obj_get_opts, opts);
-> > > +       return bpf_obj_get_opts(pathname, &opts);
-> > > +}
-> > > +
-> > > +int bpf_obj_get_opts(const char *pathname, const struct bpf_obj_get_opts
-> > *opts)
-> > >  {
-> > >         union bpf_attr attr;
-> > >         int fd;
-> > >
-> > > +       if (!OPTS_VALID(opts, bpf_obj_get_opts))
-> > > +               return libbpf_err(-EINVAL);
-> > > +
-> > >         memset(&attr, 0, sizeof(attr));
-> > >         attr.pathname = ptr_to_u64((void *)pathname);
-> > > +       attr.file_flags = OPTS_GET(opts, file_flags, 0);
-> > >
-> > >         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
-> > >         return libbpf_err_errno(fd);
-> > > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> > > index 88a7cc4bd76f..f31b493b5f9a 100644
-> > > --- a/tools/lib/bpf/bpf.h
-> > > +++ b/tools/lib/bpf/bpf.h
-> > > @@ -270,8 +270,17 @@ LIBBPF_API int bpf_map_update_batch(int fd, const
-> > void *keys, const void *values
-> > >                                     __u32 *count,
-> > >                                     const struct bpf_map_batch_opts *opts);
-> > >
-> > > +struct bpf_obj_get_opts {
-> > > +       size_t sz; /* size of this struct for forward/backward compatibility */
-> > > +
-> > > +       __u32 file_flags;
-> > > +};
-> > > +#define bpf_obj_get_opts__last_field file_flags
-> > > +
-> > >  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
-> > >  LIBBPF_API int bpf_obj_get(const char *pathname);
-> > > +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
-> > > +                               const struct bpf_obj_get_opts *opts);
-> > >
-> > >  struct bpf_prog_attach_opts {
-> > >         size_t sz; /* size of this struct for forward/backward compatibility */
-> > > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> > > index 0625adb9e888..119e6e1ea7f1 100644
-> > > --- a/tools/lib/bpf/libbpf.map
-> > > +++ b/tools/lib/bpf/libbpf.map
-> > > @@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
-> > >
-> > >  LIBBPF_1.0.0 {
-> > >         global:
-> > > +               bpf_obj_get_opts;
-> > >                 bpf_prog_query_opts;
-> > >                 bpf_program__attach_ksyscall;
-> > >                 btf__add_enum64;
-> > > --
-> > > 2.37.0.170.g444d1eabd0-goog
-> > >
+"PROC 1 DIMM 1" for device
+
+and
+
+"NA" or so for bank
+
+instead of setting the label to the NULL string.
+
+I.e., relax that
+
+	if (bank && *bank && device && *device)
+
+check there.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

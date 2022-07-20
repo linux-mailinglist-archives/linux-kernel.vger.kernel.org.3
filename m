@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0828357B3ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D482257B3F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiGTJcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S230354AbiGTJes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiGTJci (ORCPT
+        with ESMTP id S229712AbiGTJeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:32:38 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942F75B05D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:32:36 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so988581wme.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:32:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Yemjvi8Mn3v2zxxubE2NuopY8B4GsuQVGItSeuw5nuU=;
-        b=khu10QErxmYPGvUXO/Kkw+BShMLBd0upkByks8qI238yQgkLEl6YaHIXP+jkMQ00Gi
-         SllOdrFE1NdR/eQ0VgFS69zhxmRUbFl9TI31i5YYjTUTqQr4WDwKz/uZji4WdTe4g5W/
-         N7P1E0Jky4m9Y045XEbtr6LuLkOanCglDa6ednqTaOUAAoLVAL1kUDpQMmNNQZ5Jj94T
-         HU15Nr/CoEZcbZdvZeVOcQhKhx+TeKDemjE7PoBhVVovBx20weta8z79O9kq+aWOjFDX
-         A/yYxO95ywTcDma+7mF0hz1fpu1uHsYMUKL1fE1MdyfntHBPooWQbdlE/4YQuRy2Su5A
-         Hxvg==
+        Wed, 20 Jul 2022 05:34:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D94E5E323
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658309684;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dZJQXt6doKuqhqmCeIdZMEV0KmUXZoYN8P0BVRcFtdM=;
+        b=UJTlWW1wXFjspHs3DAtPLwQB/mCEFIZ+AH1q1i66e7tYbp2IsVuCMPLfaIJQDPzfFwwZgE
+        fYH5gkno+B2CQ5/9Oe/k+51zDC8rHtUD/7/GRLZwlwfWea/7iMWfdB1wvgRabndT920vbT
+        Q2d5O6LzuOCet+Of60jnBy51crNvS0M=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-oktWdLQHME6xgZoBbav73g-1; Wed, 20 Jul 2022 05:34:43 -0400
+X-MC-Unique: oktWdLQHME6xgZoBbav73g-1
+Received: by mail-wr1-f70.google.com with SMTP id q17-20020adfab11000000b0021e4c9ca970so141185wrc.20
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:34:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yemjvi8Mn3v2zxxubE2NuopY8B4GsuQVGItSeuw5nuU=;
-        b=lsteE2h6zdOyU9K7V6Ytder6rHsZZuX2Dd+WTpGrvZBXChtEvgdxcygn2b//knXxPU
-         +thAhPn17uImKhM98BlJhtluIw2vDTR1SI0kbDpBpLqZLu9X5154oDqZG1bsaQI7ZbcU
-         aAL1Yx62m9zj+2c19q0WNiCDMACKIXbc/i6HsGoQAnXJfB6Wvzjq9hToEAsW2iaOj3DV
-         afyfdyik1+vNK0OIqvMG50OTeq20YNnWZjp0mD9rOLCESDP9RSJ0gWAsS0lLapmyhsvs
-         8+Eh1X63mW82qCFH70+OFh46D1Ta2/ZDwy8dpO5RpSJLVR7cOwyONEgCCx6EByHqVYiC
-         HqzQ==
-X-Gm-Message-State: AJIora9WP6hl5I3OBBhWkAy619GQGpxnP4eM7E4ERMbdbE6MYJNxKTDA
-        Q1QEpTEMo7MhVWQuh3NxAavJEsNkoIw2sM7gnzcg1A==
-X-Google-Smtp-Source: AGRyM1vDMif7d2tIFvV4zCU/lON860YmX8asq31iwtRwC1y4FfhOdoAuEMs/wnsqwBdPw2jfQft6F+0dOarmOwHRmpU=
-X-Received: by 2002:a05:600c:4fcd:b0:3a3:1be9:965c with SMTP id
- o13-20020a05600c4fcd00b003a31be9965cmr2931884wmq.60.1658309555110; Wed, 20
- Jul 2022 02:32:35 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=dZJQXt6doKuqhqmCeIdZMEV0KmUXZoYN8P0BVRcFtdM=;
+        b=r9stHjQdaxotMBS63TDFMjzCnfDq33Aae3InQ4c0awgDiYrbs5VnPB/qk+MdFGK9V8
+         ako4BjwCNt2v5fEHGVO1XdfptJtPNJ+gchsTh4xOn60ZbgpEkQ3ky6rQPr0QewLh/rGl
+         4HzyyyHtF5gHNNRNfEXNXT5K8VriKVZNBk5q9lTpdVBnJm2ZSx0W4KtL1k5fj/eTu2yb
+         sMc/OWYKPqNns73Upfr6c5POQGpVPKNO3lYMU1Hs0WCV2ISzRuf93IvWleNmoTRswW/x
+         dpUQd2s6TWrzjbXC8hco7VilgGwyX9LNxmli7XrvSVpWRlyFwP9KHhWIfLTG9TtPq5uT
+         1SSA==
+X-Gm-Message-State: AJIora/JEWGREqj39vPxWL9NLAl2eoI3k7cY5X7uE5ZXBkVlYzT0XwfD
+        ZxoSWehLdcqfssAbz86wWQ5kQ423gBUEuQotj4QbBle6HxH7C/j1GYZP9wEXnBzXfK8ADgIkwcH
+        L+t5oikW1lpgAWHrwvBceJoqB
+X-Received: by 2002:adf:e889:0:b0:21d:6510:b750 with SMTP id d9-20020adfe889000000b0021d6510b750mr31445079wrm.498.1658309681810;
+        Wed, 20 Jul 2022 02:34:41 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ulf8qkNkDcp6dk1vwhLiwrg1+3SyvqKhWJWE97+JCOnPrgU25PgHyyorDQgXr5DMo4WjCfFQ==
+X-Received: by 2002:adf:e889:0:b0:21d:6510:b750 with SMTP id d9-20020adfe889000000b0021d6510b750mr31445053wrm.498.1658309681533;
+        Wed, 20 Jul 2022 02:34:41 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:e00:8d96:5dba:6bc4:6e89? (p200300cbc7060e008d965dba6bc46e89.dip0.t-ipconnect.de. [2003:cb:c706:e00:8d96:5dba:6bc4:6e89])
+        by smtp.gmail.com with ESMTPSA id n21-20020a05600c4f9500b003a2f2bb72d5sm2347014wmq.45.2022.07.20.02.34.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 02:34:41 -0700 (PDT)
+Message-ID: <4216f48f-fdf1-ec1e-b963-6f7fe6ba0f63@redhat.com>
+Date:   Wed, 20 Jul 2022 11:34:37 +0200
 MIME-Version: 1.0
-References: <20220713005221.1926290-1-davidgow@google.com> <YtbwixbViJr9zkv8@bombadil.infradead.org>
-In-Reply-To: <YtbwixbViJr9zkv8@bombadil.infradead.org>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 20 Jul 2022 17:32:23 +0800
-Message-ID: <CABVgOSm4=Zz3ypK7uPh3phE9NqOc9mP50Di5pGAdwh2cs538jQ@mail.gmail.com>
-Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-modules@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f9442f05e4394761"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise
+ vmemmap_populate_hugepages()
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@kernel.org>, Will Deacon <will@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-4-chenhuacai@loongson.cn>
+ <20220705092937.GA552@willie-the-truck>
+ <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com>
+ <20220706161736.GC3204@willie-the-truck>
+ <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
+ <CAAhV-H6EziBQ=3SveRvaPxHfbsGpmYrhVHfuBkpLJXn-t-uTZA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAAhV-H6EziBQ=3SveRvaPxHfbsGpmYrhVHfuBkpLJXn-t-uTZA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,125 +106,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000f9442f05e4394761
-Content-Type: text/plain; charset="UTF-8"
+On 14.07.22 14:34, Huacai Chen wrote:
+> Oh, Sudarshan Rajagopalan's Email has changed, Let's update.
+> 
+> Huacai
+> 
+> On Fri, Jul 8, 2022 at 5:47 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+>>
+>> +Dan Williams
+>> +Sudarshan Rajagopalan
+>>
+>> On Thu, Jul 7, 2022 at 12:17 AM Will Deacon <will@kernel.org> wrote:
+>>>
+>>> On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
+>>>> On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
+>>>>> On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
+>>>>>> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+>>>>>> index 33e2a1ceee72..6f2e40bb695d 100644
+>>>>>> --- a/mm/sparse-vmemmap.c
+>>>>>> +++ b/mm/sparse-vmemmap.c
+>>>>>> @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
+>>>>>>       return vmemmap_populate_range(start, end, node, altmap, NULL);
+>>>>>>  }
+>>>>>>
+>>>>>> +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+>>>>>> +                                   unsigned long addr, unsigned long next)
+>>>>>> +{
+>>>>>> +}
+>>>>>> +
+>>>>>> +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+>>>>>> +                                    unsigned long next)
+>>>>>> +{
+>>>>>> +     return 0;
+>>>>>> +}
+>>>>>> +
+>>>>>> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+>>>>>> +                                      int node, struct vmem_altmap *altmap)
+>>>>>> +{
+>>>>>> +     unsigned long addr;
+>>>>>> +     unsigned long next;
+>>>>>> +     pgd_t *pgd;
+>>>>>> +     p4d_t *p4d;
+>>>>>> +     pud_t *pud;
+>>>>>> +     pmd_t *pmd;
+>>>>>> +
+>>>>>> +     for (addr = start; addr < end; addr = next) {
+>>>>>> +             next = pmd_addr_end(addr, end);
+>>>>>> +
+>>>>>> +             pgd = vmemmap_pgd_populate(addr, node);
+>>>>>> +             if (!pgd)
+>>>>>> +                     return -ENOMEM;
+>>>>>> +
+>>>>>> +             p4d = vmemmap_p4d_populate(pgd, addr, node);
+>>>>>> +             if (!p4d)
+>>>>>> +                     return -ENOMEM;
+>>>>>> +
+>>>>>> +             pud = vmemmap_pud_populate(p4d, addr, node);
+>>>>>> +             if (!pud)
+>>>>>> +                     return -ENOMEM;
+>>>>>> +
+>>>>>> +             pmd = pmd_offset(pud, addr);
+>>>>>> +             if (pmd_none(READ_ONCE(*pmd))) {
+>>>>>> +                     void *p;
+>>>>>> +
+>>>>>> +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+>>>>>> +                     if (p) {
+>>>>>> +                             vmemmap_set_pmd(pmd, p, node, addr, next);
+>>>>>> +                             continue;
+>>>>>> +                     } else if (altmap)
+>>>>>> +                             return -ENOMEM; /* no fallback */
+>>>>>
+>>>>> Why do you return -ENOMEM if 'altmap' here? That seems to be different to
+>>>>> what we currently have on arm64 and it's not clear to me why we're happy
+>>>>> with an altmap for the pmd case, but not for the pte case.
+>>>> The generic version is the same as X86. It seems that ARM64 always
+>>>> fallback whether there is an altmap, but X86 only fallback in the no
+>>>> altmap case. I don't know the reason of X86, can Dan Williams give
+>>>> some explaination?
+>>>
+>>> Right, I think we need to understand the new behaviour here before we adopt
+>>> it on arm64.
+>> Hi, Dan,
+>> Could you please tell us the reason? Thanks.
+>>
+>> And Sudarshan,
+>> You are the author of adding a fallback mechanism to ARM64,  do you
+>> know why ARM64 is different from X86 (only fallback in no altmap
+>> case)?
 
-On Wed, Jul 20, 2022 at 1:57 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Wed, Jul 13, 2022 at 08:52:20AM +0800, David Gow wrote:
-> > The new KUnit module handling has KUnit test suites listed in a
-> > .kunit_test_suites section of each module. This should be loaded when
-> > the module is, but at the moment this only happens if KUnit is built-in.
-> >
->
-> This commit log does not describe what functionality is broken exactly
-> without this commit. What functionality from kunit is provided when
-> .kunit_test_suites is available?
->
+I think that's a purely theoretical issue: I assume that in any case we
+care about, the altmap should be reasonably sized and aligned such that
+this will always succeed.
 
-Sorry: the explanation is a bit obtuse, I admit.
+To me it even sounds like the best idea to *consistently* fail if there
+is no more space in the altmap, even if we'd have to fallback to PTE
+(again, highly unlikely that this is relevant in practice). Could
+indicate an altmap-size configuration issue.
 
-Basically, when kunit itself is built as a module, no tests run. This
-is because the code to load the .kunit_test_suites section is compiled
-out if kunit is not built-in, but it should be present even if kunit
-is built as a module.
+-- 
+Thanks,
 
-> > Also load this when KUnit is enabled as a module: it'll not be usable
-> > unless KUnit is loaded,
->
-> What benefit is there to load a kunit module without kunit?
->
+David / dhildenb
 
-None whatsoever, and it should be impossible. This was just rationale
-for the overhead of loading the section being likely insignificant,
-but it's worded pretty poorly.
-
-> > but such modules are likely to depend on KUnit
-> > anyway, so it's unlikely to ever be loaded needlessly.
-> >
-> > Fixes: 3d6e44623841 ("kunit: unify module and builtin suite definitions")
-> > Signed-off-by: David Gow <davidgow@google.com>
-
-I'll update the commit message when I send a new version of this out.
-
-Cheers,
--- David
-
---000000000000f9442f05e4394761
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA0
-kprqb70GhqJ+/ovkrTxBisrd22RaxKnFUDeCUxXIiTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjAwOTMyMzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAcG63GNO+rH8c8WU+oIeF
-JuS9DflsZN5bDTjxcsHAG3gv9eFcfy3VLWpFvzdam3rpee6LBw3nb/aI/W3QtxmSHOet5YaDBgZh
-QmgdWAPP9oUskwg7Du/NwaeCKtXnShMwTIyTrTzyYrFmKfphKLXwoWH3z6r4VCig6c7MWSnuQBpc
-nLCYLzpyxbomF3sGTSNGLfIPbjRuFlgu0RUart76apnUsJKvjs9lBsrquzwIdZv+SWlfpIB4Rc9k
-OCjlOGb4yu/c6LxWHEJonWSWiqHmg1oYkKHa/xO3Hg7f3FSYr/g9gI84TQ7k6fvosnznGZIGMYp9
-2jE63hemtur43JpN5A==
---000000000000f9442f05e4394761--

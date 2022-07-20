@@ -2,150 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115DD57B2C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471A757B2C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239378AbiGTIV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        id S239758AbiGTIWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiGTIVY (ORCPT
+        with ESMTP id S237440AbiGTIWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:21:24 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613CADFA9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658305283; x=1689841283;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DyE1S6/M8cxx8TUOX92GSOdQu0Ro177cj6dL0LTcF6U=;
-  b=EzLT/G5s6g+tXOdyPGMxoZOeDnlDbU/80bGw79tchS7t1rZevNXTTmkC
-   gMTdFpGmt8MkRPAHRaUUrNAIvjhss8hYJTuaBGOduAHB4OBwv002D73DW
-   34yPfSODvbhtHmwr/LWINCpobpgg8EcYAR8nb2+REK6HxEK1grYe8Po3i
-   M=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jul 2022 01:21:23 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 01:21:22 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Jul 2022 01:21:21 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Jul 2022 01:21:16 -0700
-Date:   Wed, 20 Jul 2022 13:51:12 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-CC:     Michal Hocko <mhocko@suse.com>, <akpm@linux-foundation.org>,
-        <pasha.tatashin@soleen.com>, <sjpark@amazon.de>,
-        <sieberf@amazon.com>, <shakeelb@google.com>, <dhowells@redhat.com>,
-        <willy@infradead.org>, <vbabka@suse.cz>, <david@redhat.com>,
-        <minchan@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>
-Subject: Re: [PATCH] mm: fix use-after free of page_ext after race with
- memory-offline
-Message-ID: <20220720082112.GA14437@hu-pkondeti-hyd.qualcomm.com>
-References: <1657810063-28938-1-git-send-email-quic_charante@quicinc.com>
- <YtVJBQ/ZOt22o8+B@dhcp22.suse.cz>
- <fca23df7-37b0-f32d-ece3-58317dfad210@quicinc.com>
- <YtV0PSMAGG46Pq0K@dhcp22.suse.cz>
- <aaeec83d-bdf8-280c-b943-ad510f1d8db2@quicinc.com>
+        Wed, 20 Jul 2022 04:22:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430AF6B772
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:21:59 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oE4xj-0003c1-JD; Wed, 20 Jul 2022 10:21:43 +0200
+Message-ID: <5b4019dc8f3f797941037ebbbafb30b8541b2b4b.camel@pengutronix.de>
+Subject: Re: [PATCH v4 3/3] soc: imx: gpcv2: fix suspend/resume by setting
+ GENPD_FLAG_IRQ_ON
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>, rafael@kernel.org,
+        khilman@kernel.org, ulf.hansson@linaro.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz
+Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        aford173@gmail.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 20 Jul 2022 10:21:42 +0200
+In-Reply-To: <5a6bfd6827f8ad838bdab8dfb208753ad258b1ec.camel@puri.sm>
+References: <20220720043444.1289952-1-martin.kepplinger@puri.sm>
+         <20220720043444.1289952-4-martin.kepplinger@puri.sm>
+         <a7d51c154693881523e5d96c443a7dc9b3cc216d.camel@pengutronix.de>
+         <5a6bfd6827f8ad838bdab8dfb208753ad258b1ec.camel@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <aaeec83d-bdf8-280c-b943-ad510f1d8db2@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Charan,
-
-On Tue, Jul 19, 2022 at 08:42:42PM +0530, Charan Teja Kalla wrote:
-> Thanks Michal!!
+Am Mittwoch, dem 20.07.2022 um 10:05 +0200 schrieb Martin Kepplinger:
+> Am Mittwoch, dem 20.07.2022 um 09:53 +0200 schrieb Lucas Stach:
+> > Am Mittwoch, dem 20.07.2022 um 06:34 +0200 schrieb Martin Kepplinger:
+> > > For boards that use power-domains' power-supplies that need
+> > > interrupts
+> > > to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
+> > > This will tell genpd to adjust accordingly. Currently it "only"
+> > > sets the
+> > > correct suspend/resume callbacks.
+> > > 
+> > > This fixes suspend/resume on imx8mq-librem5 boards (tested) and
+> > > imx8mq-evk (by looking at dts) and possibly more.
+> > > 
+> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > > ---
+> > >  drivers/soc/imx/gpcv2.c | 9 +++++++++
+> > >  1 file changed, 9 insertions(+)
+> > > 
+> > > diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+> > > index 85aa86e1338a..46d2ead2352b 100644
+> > > --- a/drivers/soc/imx/gpcv2.c
+> > > +++ b/drivers/soc/imx/gpcv2.c
+> > > @@ -1303,6 +1303,7 @@ static const struct imx_pgc_domain_data
+> > > imx8mn_pgc_domain_data = {
+> > >  static int imx_pgc_domain_probe(struct platform_device *pdev)
+> > >  {
+> > >         struct imx_pgc_domain *domain = pdev->dev.platform_data;
+> > > +       struct device_node *dn;
+> > >         int ret;
+> > >  
+> > >         domain->dev = &pdev->dev;
+> > > @@ -1333,6 +1334,14 @@ static int imx_pgc_domain_probe(struct
+> > > platform_device *pdev)
+> > >                 regmap_update_bits(domain->regmap, domain->regs-
+> > > > map,
+> > >                                    domain->bits.map, domain-
+> > > > bits.map);
+> > >  
+> > > +       dn = of_parse_phandle(domain->dev->of_node, "power-supply",
+> > > 0);
+> > > +       if (dn) {
+> > > +               while ((dn = of_get_next_parent(dn))) {
+> > > +                       if (of_get_property(dn, "interrupts",
+> > > NULL))
+> > > +                               domain->genpd.flags |=
+> > > GENPD_FLAG_IRQ_ON;
+> > > +               }
+> > > +       }
+> > > +
+> > While I understand the intention, I think the DT walking is overkill.
+> > I
+> > believe that there are no cases where we have a external regulator
+> > attached to the PD and the devices in the domain needing noirq
+> > support.
+> > I think it's sufficient to simply set the IRQ_ON flag based on
+> > presence
+> > of the power-supply property on the domain DT node.
 > 
-> On 7/18/2022 8:24 PM, Michal Hocko wrote:
-> >>>> The above mentioned race is just one example __but the problem persists
-> >>>> in the other paths too involving page_ext->flags access(eg:
-> >>>> page_is_idle())__. Since offline waits till the last reference on the
-> >>>> page goes down i.e. any path that took the refcount on the page can make
-> >>>> the memory offline operation to wait. Eg: In the migrate_pages()
-> >>>> operation, we do take the extra refcount on the pages that are under
-> >>>> migration and then we do copy page_owner by accessing page_ext. For
-> >>>>
-> >>>> Fix those paths where offline races with page_ext access by maintaining
-> >>>> synchronization with rcu lock.
-> >>> Please be much more specific about the synchronization. How does RCU
-> >>> actually synchronize the offlining and access? Higher level description
-> >>> of all the actors would be very helpful not only for the review but also
-> >>> for future readers.
-> >> I will improve the commit message about this synchronization change
-> >> using RCU's.
-> > Thanks! The most imporant part is how the exclusion is actual achieved
-> > because that is not really clear at first sight
+> Are you sure? Can't boards just *describe* a power-supply that doesn't
+> really do much, where noirq would work? looking for "interrupts" in any
+> parent feels very stable and makes sure we only change behaviour when
+> really needed. But for the boards I'm looking at, I have to admit it
+> wouldn't change anything afaik. So if you insist, I'll happily remove
+> that.
+> 
+I'm pretty sure that this holds for all boards. Yes, it might introduce
+some more runtime changes than your option, but it will be more
+consistent.
+
+One could possibly have a simple GPIO regulator, which could work in
+noirq if the GPIO is internal MMIO, but it already breaks when the GPIO
+is from an i2c attached GPIO expander. This might even be a good
+example where your DT parsing breaks: a GPIO regulator is not
+necessarily a child device of the i2c GPIO expander, so the DT walking
+will miss that IRQs need to be functional in order to toggle the GPIO.
+
+Just keying the IRQ_ON flag on the presence of the power-supply
+property will have less surprises, I think.
+
+> 
+> 
+> Also, I forgot to say earlier: We could even add "if not regulator-
+> always-on" to the DT parsing above, because in that case noirq is fine
+> even for external regulators. Should I add that? I'd like as little
+> runtime change as possible so I would add that (and keep the
+> "interrupts" search above for the same reason). 
+> 
+Yea, one could make this even more complex to preserve the current
+behavior as much as possible, but I just don't think that the current
+behavior is relevant enough to warrant the complexity and possible
+inconsistent behavior on different systems.
+
+Thanks for working on this!
+
+Regards,
+Lucas
+
+> thanks for looking at this,
+> 
+>                              martin
+> 
+> 
 > > 
-> > CPU1					CPU2
-> > lookup_page_ext(PageA)			offlining
-> > 					  offline_page_ext
-> > 					    __free_page_ext(addrA)
-> > 					      get_entry(addrA)
-> > 					      ms->page_ext = NULL
-> > 					      synchronize_rcu()
-> > 					      free_page_ext
-> > 					        free_pages_exact (now addrA is unusable)
-> > 					
-> >   rcu_read_lock()
-> >   entryA = get_entry(addrA)
-> >     base + page_ext_size * index # an address not invalidated by the freeing path
-> >   do_something(entryA)
-> >   rcu_read_unlock()
+> > Regards,
+> > Lucas
 > > 
-> > CPU1 never checks ms->page_ext so it cannot bail out early when the
-> > thing is torn down. Or maybe I am missing something. I am not familiar
-> > with page_ext much.
+> > >         ret = pm_genpd_init(&domain->genpd, NULL, true);
+> > >         if (ret) {
+> > >                 dev_err(domain->dev, "Failed to init power
+> > > domain\n");
+> > 
+> > 
 > 
 > 
-> Thanks a lot for catching this Michal. You are correct that the proposed
-> code from me is still racy. I Will correct this along with the proper
-> commit message in the next version of this patch.
-> 
 
-Trying to understand your discussion with Michal. What part is still racy? We
-do check for mem_section::page_ext and bail out early from lookup_page_ext(),
-no?
 
-Also to make this scheme explicit, we can annotate page_ext member with __rcu
-and use rcu_assign_pointer() on the writer side.
-
-struct page_ext *lookup_page_ext(const struct page *page)
-{
-        unsigned long pfn = page_to_pfn(page);
-        struct mem_section *section = __pfn_to_section(pfn);
-        /*
-         * The sanity checks the page allocator does upon freeing a
-         * page can reach here before the page_ext arrays are
-         * allocated when feeding a range of pages to the allocator
-         * for the first time during bootup or memory hotplug.
-         */
-        if (!section->page_ext)
-                return NULL;
-        return get_entry(section->page_ext, pfn);
-}
-
-Thanks,
-Pavan

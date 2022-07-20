@@ -2,166 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BDFA57BC6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C67157BC6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238243AbiGTRNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
+        id S236867AbiGTRNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiGTRNc (ORCPT
+        with ESMTP id S230003AbiGTRNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:13:32 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4456E2D5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:13:28 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-10d6e8990b9so8843128fac.7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:13:28 -0700 (PDT)
+        Wed, 20 Jul 2022 13:13:49 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C13E6E89E
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:13:47 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id 17so6692627pfy.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:13:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=HoP+LDu/HU1wF9IJGHDMn+kWOAJedFh1FJBO+Y+m9wI=;
-        b=mogf7qsz00X1dIofsTzhlhaPLNxuzV7xf5lmsre8ViU0i14/IFMwJON2x3AZlcT1Au
-         o6zaNwrOtvUSqHpzvxHEtcEhQaosccc1HW4J+orBHHbHQXVGc1pSS04IoBfLs3lwYUDU
-         sjzdr+wnIOF8jWNcxL21HMLCo3iT8rxTnsKi1sX+RQ8+1LzKPwOflVqFNRpP8+n0vPO6
-         4PpGJz/xmINnvdF4VD7L4b+eB1zQJNT4jT4FFQbhzbXxaWW2QFAJ2uoRYlaxegEwhQOa
-         2XFlyOh5tEPw8cuJjuCUbrf/siSDhYUrRmu8KNAvaTWUjNueicTdFdmUUL5zFFrvQ71J
-         P2Ig==
+        bh=2iDISCtMujoYb4pXrtkdCn8rbdQJ82HuBDJ0+/zcH90=;
+        b=FH+PekUtFfV6pCGLo8uxIDW9LlIKE8Oj1r0NOE0z9UjfPdJ6jNT52Sw/k7AsmP9Syd
+         c+Nf2wjxnJodwudEymZdXsJGWMO6ZhKl+NFWUK6gugXNnKi806TXU3PO/+0QOMVviOzX
+         NMkCcOkk57XTehSLbxDd6wmgYI9ZH0E3Sqc0BU/3EJk4AHfiNsIUua4pOgZjdiUAgp2o
+         4UkaLNfp9uWOPEUTOulda8K7Yrn1l/Ij3uwNt4/3El0vpK+19DYn+xo/Le6ddGizayDA
+         y9eZbH14mzK8vrr1Q1Qhc7RFniEVi/CYnspteYo6Q7BJou9yyyg0RUewg2Yks91NNxUI
+         +dcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=HoP+LDu/HU1wF9IJGHDMn+kWOAJedFh1FJBO+Y+m9wI=;
-        b=o4PRSV5e9q60Oo8knWDyLmZ040PU8LZj8FU/KQHRXN/31caoE5Cun1SyK3/UE2gDr0
-         vYttD2RC1lOGGSQ6iVHnw7al0M4j4ZOQxcvPzR6KRUPVQi0tJPURcR5k2/jXAcKrW7g/
-         uNE1+QRUyr0I5u5TPiKcVrRCrTzTZ+rqjWemit4cQVbVsP9+cnRzSYEF7bhY3aBX7Kci
-         XNOjkERCz+HcEHP+2VgLhBWT7UllRjOpWvBN3VfuAnDCmy2QkNa4lrj2wJMmc2l4jo9/
-         tQ14qgtqfcVhVH4zGxurTrZRpfT/TZIRuPHCA9tM1ywwh+YUPtvAfPMr8zLoicKaBEqO
-         2twg==
-X-Gm-Message-State: AJIora9rH/3DEzxPn/I7jp4RXoQ64EMKvdjTKzVJpoe7mMJzN1kcO4sb
-        JtO76S+EnkMCjxP9E7uH0ZiK8Q==
-X-Google-Smtp-Source: AGRyM1tnBFgAG96T7IMdNWYNomxwnFUGQntX/YkIBjaKisDyxSyyf069GIvfZFr1FyzvGFm1JGOfLw==
-X-Received: by 2002:a05:6870:d5a3:b0:f2:c923:682f with SMTP id u35-20020a056870d5a300b000f2c923682fmr3081371oao.120.1658337208046;
-        Wed, 20 Jul 2022 10:13:28 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 189-20020aca07c6000000b00334c2e81dfbsm6831525oih.0.2022.07.20.10.13.27
+        bh=2iDISCtMujoYb4pXrtkdCn8rbdQJ82HuBDJ0+/zcH90=;
+        b=f1Ofkg78AF7NydVzVSyG67APG+6/1NlZfH0dytG++MqL7W5UuCpntGkBsQTk0x9s5R
+         R6ekYDXze01bspYPi2/cuCmz47BCJJ7uVr2X/IYs41exuw4CjJ9KSibO0mJquz4uWFno
+         i1BKQtEXpCzqSTTcdi70v2EpXIQx2hsxJeWlUdYSoqto5i9AIEClReKQaklkHAwQNd5K
+         zmTHxAXhFupzjBoVLmbUXuAvkQ7pYAc7n7Rvq1iD5Z1lwt+gkmg0j6XioHybgZTwWL8I
+         BCFVhrvfJzS2CwzTbF6ERPcvJfSKmOG4+sGthESeRhzciduOGbnXSCtxmQYnoQs71lcf
+         /DBg==
+X-Gm-Message-State: AJIora+wsym9tFdbiGUSloNgFLbPNsp+VN159XiZUqLr/fJatxj+cS5/
+        0PiWQALOPZoEG6GOq74PO+u1ZQ==
+X-Google-Smtp-Source: AGRyM1ukaae49eieQG9eqzW9jOyZthb7CjGb22iyaiJSCFelzdR6Ij6IZfypk2lJdDbeFNT43k1yrQ==
+X-Received: by 2002:aa7:870b:0:b0:522:c223:5c5e with SMTP id b11-20020aa7870b000000b00522c2235c5emr40260065pfo.6.1658337226778;
+        Wed, 20 Jul 2022 10:13:46 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id h14-20020a63e14e000000b004161b3c3388sm12108750pgk.26.2022.07.20.10.13.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 10:13:27 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 12:13:24 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     bhupesh.sharma@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        robh@kernel.org, linux-leds@vger.kernel.org, pavel@ucw.cz,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] arm64: dts: qcom: Fix 'dtbs_check' errors for
- pm8350c & sc8280xp pwm nodes
-Message-ID: <Ytg3tIaL5h5b9ewH@builder.lan>
-References: <20220719205058.1004942-1-bhupesh.sharma@linaro.org>
- <Ytct7QzHOlvXH7s3@builder.lan>
- <60483c44-bc24-2b18-f93d-b67e437b5b72@linaro.org>
+        Wed, 20 Jul 2022 10:13:46 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 17:13:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kechen Lu <kechenl@nvidia.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, vkuznets@redhat.com,
+        somduttar@nvidia.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 3/7] KVM: x86: Reject disabling of MWAIT
+ interception when not allowed
+Message-ID: <Ytg3xjZ48w/3Hh6n@google.com>
+References: <20220615011622.136646-1-kechenl@nvidia.com>
+ <20220615011622.136646-4-kechenl@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <60483c44-bc24-2b18-f93d-b67e437b5b72@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220615011622.136646-4-kechenl@nvidia.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 20 Jul 02:31 CDT 2022, bhupesh.sharma@linaro.org wrote:
-
-> Hi Bjorn,
+On Tue, Jun 14, 2022, Kechen Lu wrote:
+> From: Sean Christopherson <seanjc@google.com>
 > 
-> On 7/20/22 3:49 AM, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
-> > On Tue 19 Jul 15:50 CDT 2022, Bhupesh Sharma wrote:
-> > 
-> > > make dtbs_check currently reports the following errors
-> > > with pm8350c & sc8280xp pwm nodes:
-> > >
-> > > arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dtb:
-> > >   pwm@e800: 'reg' does not match any of the regexes:
-> > >   '^led@[0-9a-f]$', 'pinctrl-[0-9]+'
-> > >
-> > > Fix the same.
-> > >
-> > > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > > ---
-> > >   arch/arm64/boot/dts/qcom/pm8350c.dtsi        | 1 -
-> > >   arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 1 -
-> > >   2 files changed, 2 deletions(-)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/pm8350c.dtsi b/arch/arm64/boot/dts/qcom/pm8350c.dtsi
-> > > index e0bbb67717fe..33f939132571 100644
-> > > --- a/arch/arm64/boot/dts/qcom/pm8350c.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/pm8350c.dtsi
-> > > @@ -32,7 +32,6 @@ pm8350c_gpios: gpio@8800 {
-> > >   >   		pm8350c_pwm: pwm@e800 {
-> > 
-> > You need to also drop the unit address.
-> > 
-> > That said, looking at the dts it's quite nice to have the address of
-> > these nodes. So perhaps we should fix up the binding and populate reg
-> > instead?
+> Reject KVM_CAP_X86_DISABLE_EXITS if userspace attempts to disable MWAIT
+> exits and KVM previously reported (via KVM_CHECK_EXTENSION) that MWAIT is
+> not allowed in guest, e.g. because it's not supported or the CPU doesn't
+> have an aways-running APIC timer.
 > 
-> Well, leaving the unit address in the node label was done to
-> preserve the address information which might be needed later
-> (for better readibility).
+> Fixes: 4d5422cea3b6 ("KVM: X86: Provide a capability to disable MWAIT intercepts")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/x86.c | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
 > 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index b419b258ed90..f31ebbb1b94f 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4199,6 +4199,17 @@ static inline bool kvm_can_mwait_in_guest(void)
+>  		boot_cpu_has(X86_FEATURE_ARAT);
+>  }
+>  
+> +static u64 kvm_get_allowed_disable_exits(void)
+> +{
+> +	u64 r = KVM_X86_DISABLE_EXITS_HLT | KVM_X86_DISABLE_EXITS_PAUSE |
+> +		KVM_X86_DISABLE_EXITS_CSTATE;
+> +
+> +	if(kvm_can_mwait_in_guest())
 
-Right, I like this part.
+Probably my fault for not fixing this during copy+paste, but add a space after the if, i.e.
 
-> However, fixing up the binding and populating reg property would
-> make more sense if the driver actually needs it. Looking at the
-> qcom led driver in its current form, it doesn't seem to require the
-> same. Please correct me if I am wrong (as I just had a quick look
-> at the same).
-> 
+	if (kvm_can_mwait_in_guest())
 
-That is correct, the current Linux implementation does not make use of
-this information.
-
-> However, if we still want to have the unit addresses and the reg
-> property for better readibility in the dts, may be we can mark reg
-> as an optional property in the binding and leave it up to the
-> driver to use it (with a future update) optionally.
-> 
-
-Requiring the property only means that the dts is required to have it
-specified, not that the driver actually needs to read and use it.
-
-So I'm in favor of amending the DT binding to have the reg specified -
-and leaving the Linux driver as is.
-
-Thanks,
-Bjorn
-
-> Please let me know your views.
-> 
-> Regards,
-> Bhupesh
-> 
-> 
-> > >   			compatible = "qcom,pm8350c-pwm";
-> > > -			reg = <0xe800>;
-> > >   			#pwm-cells = <2>;
-> > >   			status = "disabled";
-> > >   		};
-> > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-> > > index ae90b97aecb8..69f5bc8127b2 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-> > > @@ -62,7 +62,6 @@ pmc8280c_gpios: gpio@8800 {
-> > >   >   		pmc8280c_lpg: lpg@e800 {
-> > >   			compatible = "qcom,pm8350c-pwm";
-> > > -			reg = <0xe800>;
-> > >   >   			#address-cells = <1>;
-> > >   			#size-cells = <0>;
-> > > -- > 2.35.3
-> > >
-> > 
+> +		r |= KVM_X86_DISABLE_EXITS_MWAIT;
+> +
+> +	return r;
+> +}

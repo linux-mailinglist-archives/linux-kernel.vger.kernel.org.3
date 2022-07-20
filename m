@@ -2,78 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560BF57AD3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C13957AD45
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242053AbiGTBky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 21:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
+        id S242154AbiGTBlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 21:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242027AbiGTBkn (ORCPT
+        with ESMTP id S241046AbiGTBkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 21:40:43 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A4D79EF5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:31:52 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id o1so12673841qkg.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:31:52 -0700 (PDT)
+        Tue, 19 Jul 2022 21:40:55 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E6A7AB22
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:32:28 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id h8so1322384wrw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:32:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AtMEgJwqgzRjiyHQFY73y+e82U1rR+yNa9cRQVtZqJg=;
-        b=JDL7Vm+f723/K5qgHietHufAHe6xEygeLdDSHughUfYIG3tORNp42yxMfr4LQqXjlW
-         FB3q6QZcg7HiF9sICAi3urc5asGX0vWwn67ZwsHDEjGSgyC7Y8Wy94VDnSBh+bPh1KCO
-         uWJ/xOU6p5kSsC4B4WRJXdh0j+CCA8lIO56LweBgBSIZTC83OKJr6qYlRBWErxDAwb1H
-         4k/u8lmE0/eZtEyXBw/swwhUQ6JW/lM97is0k98FK3jBy9i0u+2SsYBj0m2I3k9O7CqN
-         JNZZwdIQOeJpeDosW9vj1tkG4f+KBxa63/W+fTV6dqSFwY2D9NOf2uNuqIaDeRSZpGEg
-         lmcQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lFJ7CZhIyt7Ssrykbv8kM2S+JMXiMSgZGBb+WDmkybI=;
+        b=GQBSn18YXc5a1Vg115mj7mzNNR3H9JpDcz/bapsgiFbNzf+3zZ5JPHxQ67bvQ0C+Q6
+         39K7vJACGmZEVMV8wBg2DnXlsV2v97MwvLULYiSiFau6hIQ9Y0cjyC3TNDxlXImxA+m2
+         E3UVbO4IDqtJHKRo1WddtroXHK3Z6XFxoZXhwaMZkvdRkyUNQVo+u9Qs+8CqXituAktq
+         9GRmIFiWRRMruWoPCuFmOarxs/Tc8AzI4kPAAB/WRS0+xpkx6xAKU4CiENIt7LkpcPkd
+         Fv6PjYDHfMxzyd+/M+EO3B73gT7XcDR7/eNUuaO3Pivmgus+b9tb7L2C7x8Eh7Wbmk+t
+         V7FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AtMEgJwqgzRjiyHQFY73y+e82U1rR+yNa9cRQVtZqJg=;
-        b=Uv3UXSDp14EPPcL93+uj5xuRsf5qdijn4KG0vXc6WZQmMQXWict72RQHmh7KKp0K71
-         /hKHwZ/yyyaGDfbV990j4/0Ygaesi70IJ+XMe2VhtQMMGT3j5LC/M8lDWzLPtxcK+sSr
-         ruJH6NqTpXl9HX0NUlh7vTcQCYD4ZDTMuTi9d81ah0FdN8ZzpV+BQx3fhYkGhQYhqaHg
-         OC5X1SgcdOKgtoe3H6Qt0FMkNW9LrzD0NLKrVcgPojX7ZsrYYBks1diLov0Txo4dG8/b
-         Q5dyO4ZOCiQTRr2MXnGJblm+RIFGESyo6SGcCDy4GWwxFgIU3/qu+kTYZvbe81A1zTo/
-         frxQ==
-X-Gm-Message-State: AJIora9AeZqa9a9YlvVduDDgBfuXrUt8WCdJwrGpuqeRgb2KK+sRDsaZ
-        DZnDosZFukVA3FTP/UZoTA==
-X-Google-Smtp-Source: AGRyM1sd5ltxxF/vOEbWSEiGGV5BuvPbMEZWDWSJXKzOFuKitTHspxtawWKkiyD3FCcuily70/lVpQ==
-X-Received: by 2002:a05:620a:410c:b0:6b2:82d8:dcae with SMTP id j12-20020a05620a410c00b006b282d8dcaemr22769103qko.259.1658280711243;
-        Tue, 19 Jul 2022 18:31:51 -0700 (PDT)
-Received: from [192.168.1.161] (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id dm53-20020a05620a1d7500b006b4880b08a9sm16015951qkb.88.2022.07.19.18.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 18:31:50 -0700 (PDT)
-Message-ID: <19c1a301-13ca-d7cf-c0f6-a63f75b7f8eb@gmail.com>
-Date:   Tue, 19 Jul 2022 21:31:49 -0400
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lFJ7CZhIyt7Ssrykbv8kM2S+JMXiMSgZGBb+WDmkybI=;
+        b=B+QAqpSsB79kIJK0E4TpvXGmBk+PCRDxfEnuUzVW0fW6rEyTpYcuXkCjAaE//sqhOa
+         RdrLjk3EYbP/mjEoOUVF7S7WvRboYQ772svLbiISW59XhJ2S0L/ObAy75Hmsftei2e6a
+         hUTBQug3nsgj0hr16jpzNHrcbvaGtKTHTQWgSQ73Ka7HUJYOQVS1IlphDP+KExog60dV
+         pAEzaIXQKkjPXtLTAQZXM8p/jp3GuELvdrMIGY2nTx0Won13a0/zYfUwrSRdU2IQSpqD
+         uhXgKxrSY7dmzyGyhlW8xoAp5a9BUR+rh7UKozVjkxgkFGokTnsSoSYlXwJ4h53zN+us
+         GE1A==
+X-Gm-Message-State: AJIora9lUDhMPUZTiSsBcKoTjL0zrTubEWE66dVbJjSPJVXBQneuKOus
+        pKyR2CMxwBv9EY3Mcj+IfoidxnRmY7iy9d/f2zAk
+X-Google-Smtp-Source: AGRyM1uWDMAPpLcAcuhuXmGi220naKmTccHLcXTkaRT/NUDVG1/wgr1FCbEQ6qb3r+rzrfrLeILxcvpi7tI7/QDmcUg=
+X-Received: by 2002:a5d:64a3:0:b0:21d:adaa:ce4c with SMTP id
+ m3-20020a5d64a3000000b0021dadaace4cmr28631806wrp.161.1658280746684; Tue, 19
+ Jul 2022 18:32:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 00/34] Printbufs - new data structure for building
- strings
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com,
-        enozhatsky@chromium.org, linux@rasmusvillemoes.dk,
-        willy@infradead.org
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
- <20220719191522.4002a5fb@gandalf.local.home>
- <7462e934-f746-eef7-ff92-0eeb8cc08b82@gmail.com>
- <20220719200507.361b06ee@rorschach.local.home>
- <a674920f-68b0-0b72-5375-da7c062543cc@gmail.com>
- <20220719211156.75ea9255@rorschach.local.home>
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-In-Reply-To: <20220719211156.75ea9255@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220707223228.1940249-1-fred@cloudflare.com> <20220707223228.1940249-5-fred@cloudflare.com>
+In-Reply-To: <20220707223228.1940249-5-fred@cloudflare.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 19 Jul 2022 21:32:15 -0400
+Message-ID: <CAHC9VhTkvPvqGQjyEKbi2pkKBtRQE=Uat34aoKsxjWU0qkF6CA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] selinux: Implement create_user_ns hook
+To:     Frederick Lawler <fred@cloudflare.com>
+Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,29 +73,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 21:11, Steven Rostedt wrote:
-> On Tue, 19 Jul 2022 20:17:45 -0400
-> Kent Overstreet <kent.overstreet@gmail.com> wrote:
-> 
->>> More specific please.
->>
->> Steve, look at the man page for snprintf if you don't see what I mean.
->> This discussion has become entirely too tedious, and your _only_
->> contribution to the discussion on pretty-printers has been "why isn't
->> this using this thing I made?".
-> 
-> No, my response is, why should we replace something that is working
-> just fine?
-For you. For your code.
+On Thu, Jul 7, 2022 at 6:32 PM Frederick Lawler <fred@cloudflare.com> wrote:
+>
+> Unprivileged user namespace creation is an intended feature to enable
+> sandboxing, however this feature is often used to as an initial step to
+> perform a privilege escalation attack.
+>
+> This patch implements a new namespace { userns_create } access control
+> permission to restrict which domains allow or deny user namespace
+> creation. This is necessary for system administrators to quickly protect
+> their systems while waiting for vulnerability patches to be applied.
+>
+> This permission can be used in the following way:
+>
+>         allow domA_t domB_t : namespace { userns_create };
+>
+> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+>
+> ---
+> Changes since v1:
+> - Introduce this patch
+> ---
+>  security/selinux/hooks.c            | 9 +++++++++
+>  security/selinux/include/classmap.h | 2 ++
+>  2 files changed, 11 insertions(+)
+>
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index beceb89f68d9..73fbcb434fe0 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -4227,6 +4227,14 @@ static void selinux_task_to_inode(struct task_struct *p,
+>         spin_unlock(&isec->lock);
+>  }
+>
+> +static int selinux_userns_create(const struct cred *cred)
+> +{
+> +       u32 sid = current_sid();
+> +
+> +       return avc_has_perm(&selinux_state, sid, sid, SECCLASS_NAMESPACE,
+> +                                               NAMESPACE__USERNS_CREATE, NULL);
+> +}
 
-Look, Steve, I've tried to work with you. And I've given you reasons why 
-seq_buf doesn't work for vsprintf.c, and more general cases. You have 
-not responded _at all_ with technical reasons or discussion, all you've 
-done from the very start is lecture me on process.
+As we continue to discuss this, I'm beginning to think that having a
+dedicated object class for the userns might be a good idea.  I believe
+I was the one who gave you these code snippets, so feel free to blame
+me for the respin ;)
 
-And, to be blunt, the time to have the printbuf vs. seq_buf discussion 
-was months ago. I tried to start that discussion with you, and you 
-ghosted on IRC when I started talking about the things in seq_buf that 
-would have to change.
+This is what I'm thinking:
 
-Like I said, I'll CC you when v5 is posted.
+  static int selinux_userns_create(const struct cred *cred)
+  {
+    u32 sid = current_sid();
+
+    return avc_has_perm(&selinux_state, sid, sid,
+                        SECCLASS_USER_NAMESPACE,
+                        USER_NAMESPACE__CREATE, NULL);
+  }
+
+> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+> index ff757ae5f253..9943e85c6b3e 100644
+> --- a/security/selinux/include/classmap.h
+> +++ b/security/selinux/include/classmap.h
+> @@ -254,6 +254,8 @@ const struct security_class_mapping secclass_map[] = {
+>           { COMMON_FILE_PERMS, NULL } },
+>         { "io_uring",
+>           { "override_creds", "sqpoll", NULL } },
+> +       { "namespace",
+> +         { "userns_create", NULL } },
+
+The above would need to change to:
+
+  { "user_namespace",
+    { "create", NULL } }
+
+-- 
+paul-moore.com

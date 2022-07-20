@@ -2,242 +2,432 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4B057C042
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 00:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C3657C044
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 00:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiGTWsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 18:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S230319AbiGTWsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 18:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiGTWsX (ORCPT
+        with ESMTP id S229449AbiGTWsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 18:48:23 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBB230F55
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:48:22 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d7so131177plr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YjOKIOAe42Eku6Sc+3/5eXJR9MOwocaou5xUqsAb5iU=;
-        b=iIKPCfJ9i1WXaplnf56feWtYmg3cpfTZC/qXXRhj9fEH58gK+V11Ly6oj10mhYlV21
-         5jQFnkEORCUS0bpNFhY38o8KU8fqxsqLlXeQUJPSMgVGNiVcvdohI75L+1a9HOA9UpKm
-         BkO9G3rfg40i18YzNWuiE92Ct1DQ0zs4RHdQRqu4BInGIqOM4JL/mYzyL4MZr8xF+xvs
-         7Zdy1jJhNERtbBGF0N9bCVI83IK9+DpfxbagbnyQEMnDoFgfumBLL6DwmS/v2teVqGKa
-         gsjm8fOP23aCIPKAXQ4uCjwmfk6HIBjrA46JuXOJTYUaeR8s6InSjC90AXukfsSjjCbu
-         lZOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YjOKIOAe42Eku6Sc+3/5eXJR9MOwocaou5xUqsAb5iU=;
-        b=ImxpnO81VUD5bF/qIVOA+sLqvqCnoI/JKCaPN/YxZFqWaJ/+Y17HJgCF+wV0i8DksW
-         zh4NZY+/CVnZj0ROVAdwX/SgOi4KbWzJqSO9JKn434yBfW9V2ehGRCkr2KP+WrifLyPi
-         1VsrsTNhzbpm/otuXVpEH0slzWGrp/XWhHEu9mzBIG5iCrg34J9CYv5zoxP0hvuP04Hv
-         80JHTHq7fpaK9c0P7w+pYmfYBbu/8fDOF8D4vNfmy5qRvRjhs6379qZ0v6NJkyVqmB6K
-         MYbPwrdygSTDO8mhZjd2ldV5IHIWC/4dg/xjN+1upTKgHUIc7nZDSEDv4Huq7YCbqFIG
-         UzTQ==
-X-Gm-Message-State: AJIora9BXsn6Zu+dVTMW6RE+M7BvAOjP6dVQKRwl1kuV13C4IOHJUgIr
-        PkJeJa9k48CgmF1Ij7Lzj9Ytei5PzUtKQvOMIi2NGg==
-X-Google-Smtp-Source: AGRyM1sI5wHWETjFbcTHHpIBh+d/zGwM6pCBAuOwrfDWZDL5rXcOxoOrUM5NHrgI1k29LUe5KabQs4VszGSU8sHdvzI=
-X-Received: by 2002:a17:902:db11:b0:16c:3e90:12e5 with SMTP id
- m17-20020a170902db1100b0016c3e9012e5mr40407911plx.73.1658357301486; Wed, 20
- Jul 2022 15:48:21 -0700 (PDT)
+        Wed, 20 Jul 2022 18:48:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9045C41D23;
+        Wed, 20 Jul 2022 15:48:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 877DD61DA3;
+        Wed, 20 Jul 2022 22:48:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4661C3411E;
+        Wed, 20 Jul 2022 22:48:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658357310;
+        bh=4bLJujay7/3WZsamM4Gbm5GXikjzMsxOf+qK7Ta6Uy8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Ceg5wkzv9aD7gObQwCEvBMUyVPrMrnqw693cjycd5BioH2VlsyVk6UTHPgMssAhYq
+         B7TyMDWQHpwtceTsA4SnXPM7FiP83avrH8SBoLo2WI8c/JiG1lAOi+BaSv0op6sLX1
+         aUyja2d7yCLwu7636QriTZY6UqoZmDTSVSWhsaN9ar6oh/HazxHOhuny5Hqn2H+xTZ
+         zSQydK5yPme4eWuVZWE+kkaXqL/qkRQMIddtSVX6w1oaLTdR6w4a7X3JUPE4Fa/djy
+         ed5N6Uyf/GSDZdf+b6ZfU/fiNiiSZwCqUcClJLoRWCcC4aaObA0bqQDtSdP0zqU9tO
+         GE+j6hHTDEfVg==
+Date:   Wed, 20 Jul 2022 17:48:29 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     linux-pci@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Tom Joseph <tjoseph@cadence.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH] PCI: Convert to new *_PM_OPS macros
+Message-ID: <20220720224829.GA1667002@bhelgaas>
 MIME-Version: 1.0
-References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
- <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com>
- <179cfb89be0e4f928a55d049fe62aa9e@huawei.com> <CAKH8qBt0yR+mtCjAp=8jQL4M6apWQk0wH7Zf4tPDCf3=m+gAKA@mail.gmail.com>
- <31473ddf364f4f16becfd5cd4b9cd7d2@huawei.com> <CAKH8qBsFg5gQ0bqpVtYhiQx=TqJG31c8kfsbCG4X57QGLOhXvw@mail.gmail.com>
- <0c284e09817e4e699aa448aa25af5d79@huawei.com>
-In-Reply-To: <0c284e09817e4e699aa448aa25af5d79@huawei.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 20 Jul 2022 15:48:10 -0700
-Message-ID: <CAKH8qBvwzVPY1yJM_FjdH5QptVkZz=j9Ph7pTPCbTLdY1orKJg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Joe Burton <jevburton.kernel@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joe Burton <jevburton@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719215108.1583108-1-helgaas@kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 3:44 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > Sent: Thursday, July 21, 2022 12:38 AM
-> > On Wed, Jul 20, 2022 at 3:30 PM Roberto Sassu <roberto.sassu@huawei.com>
-> > wrote:
-> > >
-> > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > Sent: Wednesday, July 20, 2022 5:57 PM
-> > > > On Wed, Jul 20, 2022 at 1:02 AM Roberto Sassu
-> > <roberto.sassu@huawei.com>
-> > > > wrote:
-> > > > >
-> > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > > > Sent: Tuesday, July 19, 2022 10:40 PM
-> > > > > > On Tue, Jul 19, 2022 at 12:40 PM Joe Burton
-> > <jevburton.kernel@gmail.com>
-> > > > > > wrote:
-> > > > > > >
-> > > > > > > From: Joe Burton <jevburton@google.com>
-> > > > > > >
-> > > > > > > Add an extensible variant of bpf_obj_get() capable of setting the
-> > > > > > > `file_flags` parameter.
-> > > > > > >
-> > > > > > > This parameter is needed to enable unprivileged access to BPF maps.
-> > > > > > > Without a method like this, users must manually make the syscall.
-> > > > > > >
-> > > > > > > Signed-off-by: Joe Burton <jevburton@google.com>
-> > > > > >
-> > > > > > Reviewed-by: Stanislav Fomichev <sdf@google.com>
-> > > > > >
-> > > > > > For context:
-> > > > > > We've found this out while we were trying to add support for unpriv
-> > > > > > processes to open pinned r-x maps.
-> > > > > > Maybe this deserves a test as well? Not sure.
-> > > > >
-> > > > > Hi Stanislav, Joe
-> > > > >
-> > > > > I noticed now this patch. I'm doing a broader work to add opts
-> > > > > to bpf_*_get_fd_by_id(). I also adjusted permissions of bpftool
-> > > > > depending on the operation type (e.g. show, dump: BPF_F_RDONLY).
-> > > > >
-> > > > > Will send it soon (I'm trying to solve an issue with the CI, where
-> > > > > libbfd is not available in the VM doing actual tests).
-> > > >
-> > > > Is something like this patch included in your series as well? Can you
-> > > > use this new interface or do you need something different?
-> > >
-> > > It is very similar. Except that I called it bpf_get_fd_opts, as it
-> > > is shared with the bpf_*_get_fd_by_id() functions. The member
-> > > name is just flags, plus an extra u32 for alignment.
-> >
-> > We can bikeshed the naming, but we've been using existing conventions
-> > where opts fields match syscall fields, that seems like a sensible
-> > thing to do?
->
-> The only problem is that bpf_*_get_fd_by_id() functions would
-> set the open_flags member of bpf_attr.
->
-> Flags would be good for both, even if not exact. Believe me,
-> duplicating the opts would just create more confusion.
+On Tue, Jul 19, 2022 at 04:51:08PM -0500, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Replace SET_*_PM_OPS with *_PM_OPS, which which have the advantage that the
+> compiler always sees the PM callbacks as referenced, so they don't need to
+> be wrapped with "#ifdef CONFIG_PM_SLEEP" or tagged with "__maybe_unused" to
+> avoid "defined but not used" warnings.
+> 
+> See 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate old ones").
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Wait, that's completely different, right? We are talking here about
-BPF_OBJ_GET (which has related BPF_OBJ_PIN).
-Your GET_XXX_BY_ID are different so you'll still have to have another
-wrapper with opts?
+I applied this with Pali's ack to pci/ctrl/pm-ops for v5.20.
+Let me know if any of you driver maintainers object.
 
-> > > It needs to be shared, as there are functions in bpftool calling
-> > > both. Since the meaning of flags is the same, seems ok sharing.
-> >
-> > So I guess there are no objections to the current patch? If it gets
-> > accepted, you should be able to drop some of your code and use this
-> > new bpf_obj_get_opts..
->
-> If you use a name good also for bpf_*_get_fd_by_id() and flags
-> as structure member name, that would be ok.
->
-> Roberto
->
-> > > Roberto
-> > >
-> > > > > Roberto
-> > > > >
-> > > > > > > ---
-> > > > > > >  tools/lib/bpf/bpf.c      | 10 ++++++++++
-> > > > > > >  tools/lib/bpf/bpf.h      |  9 +++++++++
-> > > > > > >  tools/lib/bpf/libbpf.map |  1 +
-> > > > > > >  3 files changed, 20 insertions(+)
-> > > > > > >
-> > > > > > > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> > > > > > > index 5eb0df90eb2b..5acb0e8bd13c 100644
-> > > > > > > --- a/tools/lib/bpf/bpf.c
-> > > > > > > +++ b/tools/lib/bpf/bpf.c
-> > > > > > > @@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char
-> > *pathname)
-> > > > > > >  }
-> > > > > > >
-> > > > > > >  int bpf_obj_get(const char *pathname)
-> > > > > > > +{
-> > > > > > > +       LIBBPF_OPTS(bpf_obj_get_opts, opts);
-> > > > > > > +       return bpf_obj_get_opts(pathname, &opts);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +int bpf_obj_get_opts(const char *pathname, const struct
-> > > > bpf_obj_get_opts
-> > > > > > *opts)
-> > > > > > >  {
-> > > > > > >         union bpf_attr attr;
-> > > > > > >         int fd;
-> > > > > > >
-> > > > > > > +       if (!OPTS_VALID(opts, bpf_obj_get_opts))
-> > > > > > > +               return libbpf_err(-EINVAL);
-> > > > > > > +
-> > > > > > >         memset(&attr, 0, sizeof(attr));
-> > > > > > >         attr.pathname = ptr_to_u64((void *)pathname);
-> > > > > > > +       attr.file_flags = OPTS_GET(opts, file_flags, 0);
-> > > > > > >
-> > > > > > >         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
-> > > > > > >         return libbpf_err_errno(fd);
-> > > > > > > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> > > > > > > index 88a7cc4bd76f..f31b493b5f9a 100644
-> > > > > > > --- a/tools/lib/bpf/bpf.h
-> > > > > > > +++ b/tools/lib/bpf/bpf.h
-> > > > > > > @@ -270,8 +270,17 @@ LIBBPF_API int bpf_map_update_batch(int fd,
-> > > > const
-> > > > > > void *keys, const void *values
-> > > > > > >                                     __u32 *count,
-> > > > > > >                                     const struct bpf_map_batch_opts *opts);
-> > > > > > >
-> > > > > > > +struct bpf_obj_get_opts {
-> > > > > > > +       size_t sz; /* size of this struct for forward/backward compatibility
-> > */
-> > > > > > > +
-> > > > > > > +       __u32 file_flags;
-> > > > > > > +};
-> > > > > > > +#define bpf_obj_get_opts__last_field file_flags
-> > > > > > > +
-> > > > > > >  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
-> > > > > > >  LIBBPF_API int bpf_obj_get(const char *pathname);
-> > > > > > > +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
-> > > > > > > +                               const struct bpf_obj_get_opts *opts);
-> > > > > > >
-> > > > > > >  struct bpf_prog_attach_opts {
-> > > > > > >         size_t sz; /* size of this struct for forward/backward compatibility
-> > */
-> > > > > > > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> > > > > > > index 0625adb9e888..119e6e1ea7f1 100644
-> > > > > > > --- a/tools/lib/bpf/libbpf.map
-> > > > > > > +++ b/tools/lib/bpf/libbpf.map
-> > > > > > > @@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
-> > > > > > >
-> > > > > > >  LIBBPF_1.0.0 {
-> > > > > > >         global:
-> > > > > > > +               bpf_obj_get_opts;
-> > > > > > >                 bpf_prog_query_opts;
-> > > > > > >                 bpf_program__attach_ksyscall;
-> > > > > > >                 btf__add_enum64;
-> > > > > > > --
-> > > > > > > 2.37.0.170.g444d1eabd0-goog
-> > > > > > >
+> ---
+>  drivers/pci/controller/cadence/pcie-cadence.c |  6 ++----
+>  drivers/pci/controller/dwc/pci-dra7xx.c       |  8 +++-----
+>  drivers/pci/controller/dwc/pci-exynos.c       |  8 ++++----
+>  drivers/pci/controller/dwc/pcie-intel-gw.c    |  8 ++++----
+>  drivers/pci/controller/pci-mvebu.c            |  4 +---
+>  drivers/pci/controller/pci-tegra.c            |  9 ++++-----
+>  drivers/pci/controller/pcie-mediatek-gen3.c   | 14 +++++++-------
+>  drivers/pci/controller/pcie-mediatek.c        |  8 ++++----
+>  drivers/pci/controller/pcie-rcar-host.c       |  4 ++--
+>  drivers/pci/controller/pcie-rockchip-host.c   |  8 ++++----
+>  10 files changed, 35 insertions(+), 42 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/cadence/pcie-cadence.c b/drivers/pci/controller/cadence/pcie-cadence.c
+> index 52767f26048f..13c4032ca379 100644
+> --- a/drivers/pci/controller/cadence/pcie-cadence.c
+> +++ b/drivers/pci/controller/cadence/pcie-cadence.c
+> @@ -243,7 +243,6 @@ int cdns_pcie_init_phy(struct device *dev, struct cdns_pcie *pcie)
+>  	return ret;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int cdns_pcie_suspend_noirq(struct device *dev)
+>  {
+>  	struct cdns_pcie *pcie = dev_get_drvdata(dev);
+> @@ -266,9 +265,8 @@ static int cdns_pcie_resume_noirq(struct device *dev)
+>  
+>  	return 0;
+>  }
+> -#endif
+>  
+>  const struct dev_pm_ops cdns_pcie_pm_ops = {
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(cdns_pcie_suspend_noirq,
+> -				      cdns_pcie_resume_noirq)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(cdns_pcie_suspend_noirq,
+> +				  cdns_pcie_resume_noirq)
+>  };
+> diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
+> index dfcdeb432dc8..60e33fe1a75a 100644
+> --- a/drivers/pci/controller/dwc/pci-dra7xx.c
+> +++ b/drivers/pci/controller/dwc/pci-dra7xx.c
+> @@ -862,7 +862,6 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int dra7xx_pcie_suspend(struct device *dev)
+>  {
+>  	struct dra7xx_pcie *dra7xx = dev_get_drvdata(dev);
+> @@ -919,7 +918,6 @@ static int dra7xx_pcie_resume_noirq(struct device *dev)
+>  
+>  	return 0;
+>  }
+> -#endif
+>  
+>  static void dra7xx_pcie_shutdown(struct platform_device *pdev)
+>  {
+> @@ -940,9 +938,9 @@ static void dra7xx_pcie_shutdown(struct platform_device *pdev)
+>  }
+>  
+>  static const struct dev_pm_ops dra7xx_pcie_pm_ops = {
+> -	SET_SYSTEM_SLEEP_PM_OPS(dra7xx_pcie_suspend, dra7xx_pcie_resume)
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(dra7xx_pcie_suspend_noirq,
+> -				      dra7xx_pcie_resume_noirq)
+> +	SYSTEM_SLEEP_PM_OPS(dra7xx_pcie_suspend, dra7xx_pcie_resume)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(dra7xx_pcie_suspend_noirq,
+> +				  dra7xx_pcie_resume_noirq)
+>  };
+>  
+>  static struct platform_driver dra7xx_pcie_driver = {
+> diff --git a/drivers/pci/controller/dwc/pci-exynos.c b/drivers/pci/controller/dwc/pci-exynos.c
+> index 467c8d1cd7e4..c59923da4a67 100644
+> --- a/drivers/pci/controller/dwc/pci-exynos.c
+> +++ b/drivers/pci/controller/dwc/pci-exynos.c
+> @@ -390,7 +390,7 @@ static int __exit exynos_pcie_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused exynos_pcie_suspend_noirq(struct device *dev)
+> +static int exynos_pcie_suspend_noirq(struct device *dev)
+>  {
+>  	struct exynos_pcie *ep = dev_get_drvdata(dev);
+>  
+> @@ -402,7 +402,7 @@ static int __maybe_unused exynos_pcie_suspend_noirq(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused exynos_pcie_resume_noirq(struct device *dev)
+> +static int exynos_pcie_resume_noirq(struct device *dev)
+>  {
+>  	struct exynos_pcie *ep = dev_get_drvdata(dev);
+>  	struct dw_pcie *pci = &ep->pci;
+> @@ -421,8 +421,8 @@ static int __maybe_unused exynos_pcie_resume_noirq(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops exynos_pcie_pm_ops = {
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(exynos_pcie_suspend_noirq,
+> -				      exynos_pcie_resume_noirq)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(exynos_pcie_suspend_noirq,
+> +				  exynos_pcie_resume_noirq)
+>  };
+>  
+>  static const struct of_device_id exynos_pcie_of_match[] = {
+> diff --git a/drivers/pci/controller/dwc/pcie-intel-gw.c b/drivers/pci/controller/dwc/pcie-intel-gw.c
+> index 5ba144924ff8..415edb44b55f 100644
+> --- a/drivers/pci/controller/dwc/pcie-intel-gw.c
+> +++ b/drivers/pci/controller/dwc/pcie-intel-gw.c
+> @@ -351,7 +351,7 @@ static int intel_pcie_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused intel_pcie_suspend_noirq(struct device *dev)
+> +static int intel_pcie_suspend_noirq(struct device *dev)
+>  {
+>  	struct intel_pcie *pcie = dev_get_drvdata(dev);
+>  	int ret;
+> @@ -366,7 +366,7 @@ static int __maybe_unused intel_pcie_suspend_noirq(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int __maybe_unused intel_pcie_resume_noirq(struct device *dev)
+> +static int intel_pcie_resume_noirq(struct device *dev)
+>  {
+>  	struct intel_pcie *pcie = dev_get_drvdata(dev);
+>  
+> @@ -442,8 +442,8 @@ static int intel_pcie_probe(struct platform_device *pdev)
+>  }
+>  
+>  static const struct dev_pm_ops intel_pcie_pm_ops = {
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(intel_pcie_suspend_noirq,
+> -				      intel_pcie_resume_noirq)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(intel_pcie_suspend_noirq,
+> +				  intel_pcie_resume_noirq)
+>  };
+>  
+>  static const struct of_device_id of_intel_pcie_match[] = {
+> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> index c1ffdb06c971..af915c951f06 100644
+> --- a/drivers/pci/controller/pci-mvebu.c
+> +++ b/drivers/pci/controller/pci-mvebu.c
+> @@ -1216,7 +1216,6 @@ static int mvebu_get_tgt_attr(struct device_node *np, int devfn,
+>  	return -ENOENT;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int mvebu_pcie_suspend(struct device *dev)
+>  {
+>  	struct mvebu_pcie *pcie;
+> @@ -1249,7 +1248,6 @@ static int mvebu_pcie_resume(struct device *dev)
+>  
+>  	return 0;
+>  }
+> -#endif
+>  
+>  static void mvebu_pcie_port_clk_put(void *data)
+>  {
+> @@ -1737,7 +1735,7 @@ static const struct of_device_id mvebu_pcie_of_match_table[] = {
+>  };
+>  
+>  static const struct dev_pm_ops mvebu_pcie_pm_ops = {
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(mvebu_pcie_suspend, mvebu_pcie_resume)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(mvebu_pcie_suspend, mvebu_pcie_resume)
+>  };
+>  
+>  static struct platform_driver mvebu_pcie_driver = {
+> diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
+> index 0457ec02ab70..8e323e93be91 100644
+> --- a/drivers/pci/controller/pci-tegra.c
+> +++ b/drivers/pci/controller/pci-tegra.c
+> @@ -2707,7 +2707,7 @@ static int tegra_pcie_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused tegra_pcie_pm_suspend(struct device *dev)
+> +static int tegra_pcie_pm_suspend(struct device *dev)
+>  {
+>  	struct tegra_pcie *pcie = dev_get_drvdata(dev);
+>  	struct tegra_pcie_port *port;
+> @@ -2742,7 +2742,7 @@ static int __maybe_unused tegra_pcie_pm_suspend(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused tegra_pcie_pm_resume(struct device *dev)
+> +static int tegra_pcie_pm_resume(struct device *dev)
+>  {
+>  	struct tegra_pcie *pcie = dev_get_drvdata(dev);
+>  	int err;
+> @@ -2798,9 +2798,8 @@ static int __maybe_unused tegra_pcie_pm_resume(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops tegra_pcie_pm_ops = {
+> -	SET_RUNTIME_PM_OPS(tegra_pcie_pm_suspend, tegra_pcie_pm_resume, NULL)
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(tegra_pcie_pm_suspend,
+> -				      tegra_pcie_pm_resume)
+> +	RUNTIME_PM_OPS(tegra_pcie_pm_suspend, tegra_pcie_pm_resume, NULL)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(tegra_pcie_pm_suspend, tegra_pcie_pm_resume)
+>  };
+>  
+>  static struct platform_driver tegra_pcie_driver = {
+> diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
+> index 5d9fd36b02d1..b5c85216ec7e 100644
+> --- a/drivers/pci/controller/pcie-mediatek-gen3.c
+> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+> @@ -917,7 +917,7 @@ static int mtk_pcie_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static void __maybe_unused mtk_pcie_irq_save(struct mtk_gen3_pcie *pcie)
+> +static void mtk_pcie_irq_save(struct mtk_gen3_pcie *pcie)
+>  {
+>  	int i;
+>  
+> @@ -935,7 +935,7 @@ static void __maybe_unused mtk_pcie_irq_save(struct mtk_gen3_pcie *pcie)
+>  	raw_spin_unlock(&pcie->irq_lock);
+>  }
+>  
+> -static void __maybe_unused mtk_pcie_irq_restore(struct mtk_gen3_pcie *pcie)
+> +static void mtk_pcie_irq_restore(struct mtk_gen3_pcie *pcie)
+>  {
+>  	int i;
+>  
+> @@ -953,7 +953,7 @@ static void __maybe_unused mtk_pcie_irq_restore(struct mtk_gen3_pcie *pcie)
+>  	raw_spin_unlock(&pcie->irq_lock);
+>  }
+>  
+> -static int __maybe_unused mtk_pcie_turn_off_link(struct mtk_gen3_pcie *pcie)
+> +static int mtk_pcie_turn_off_link(struct mtk_gen3_pcie *pcie)
+>  {
+>  	u32 val;
+>  
+> @@ -968,7 +968,7 @@ static int __maybe_unused mtk_pcie_turn_off_link(struct mtk_gen3_pcie *pcie)
+>  				   50 * USEC_PER_MSEC);
+>  }
+>  
+> -static int __maybe_unused mtk_pcie_suspend_noirq(struct device *dev)
+> +static int mtk_pcie_suspend_noirq(struct device *dev)
+>  {
+>  	struct mtk_gen3_pcie *pcie = dev_get_drvdata(dev);
+>  	int err;
+> @@ -994,7 +994,7 @@ static int __maybe_unused mtk_pcie_suspend_noirq(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused mtk_pcie_resume_noirq(struct device *dev)
+> +static int mtk_pcie_resume_noirq(struct device *dev)
+>  {
+>  	struct mtk_gen3_pcie *pcie = dev_get_drvdata(dev);
+>  	int err;
+> @@ -1015,8 +1015,8 @@ static int __maybe_unused mtk_pcie_resume_noirq(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops mtk_pcie_pm_ops = {
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(mtk_pcie_suspend_noirq,
+> -				      mtk_pcie_resume_noirq)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(mtk_pcie_suspend_noirq,
+> +				  mtk_pcie_resume_noirq)
+>  };
+>  
+>  static const struct of_device_id mtk_pcie_of_match[] = {
+> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+> index be8bd919cb88..ae5ad05ddc1d 100644
+> --- a/drivers/pci/controller/pcie-mediatek.c
+> +++ b/drivers/pci/controller/pcie-mediatek.c
+> @@ -1150,7 +1150,7 @@ static int mtk_pcie_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused mtk_pcie_suspend_noirq(struct device *dev)
+> +static int mtk_pcie_suspend_noirq(struct device *dev)
+>  {
+>  	struct mtk_pcie *pcie = dev_get_drvdata(dev);
+>  	struct mtk_pcie_port *port;
+> @@ -1174,7 +1174,7 @@ static int __maybe_unused mtk_pcie_suspend_noirq(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused mtk_pcie_resume_noirq(struct device *dev)
+> +static int mtk_pcie_resume_noirq(struct device *dev)
+>  {
+>  	struct mtk_pcie *pcie = dev_get_drvdata(dev);
+>  	struct mtk_pcie_port *port, *tmp;
+> @@ -1195,8 +1195,8 @@ static int __maybe_unused mtk_pcie_resume_noirq(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops mtk_pcie_pm_ops = {
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(mtk_pcie_suspend_noirq,
+> -				      mtk_pcie_resume_noirq)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(mtk_pcie_suspend_noirq,
+> +				  mtk_pcie_resume_noirq)
+>  };
+>  
+>  static const struct mtk_pcie_soc mtk_pcie_soc_v1 = {
+> diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
+> index 997c4df6a1e7..e4faf90feaf5 100644
+> --- a/drivers/pci/controller/pcie-rcar-host.c
+> +++ b/drivers/pci/controller/pcie-rcar-host.c
+> @@ -1072,7 +1072,7 @@ static int rcar_pcie_probe(struct platform_device *pdev)
+>  	return err;
+>  }
+>  
+> -static int __maybe_unused rcar_pcie_resume(struct device *dev)
+> +static int rcar_pcie_resume(struct device *dev)
+>  {
+>  	struct rcar_pcie_host *host = dev_get_drvdata(dev);
+>  	struct rcar_pcie *pcie = &host->pcie;
+> @@ -1127,7 +1127,7 @@ static int rcar_pcie_resume_noirq(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops rcar_pcie_pm_ops = {
+> -	SET_SYSTEM_SLEEP_PM_OPS(NULL, rcar_pcie_resume)
+> +	SYSTEM_SLEEP_PM_OPS(NULL, rcar_pcie_resume)
+>  	.resume_noirq = rcar_pcie_resume_noirq,
+>  };
+>  
+> diff --git a/drivers/pci/controller/pcie-rockchip-host.c b/drivers/pci/controller/pcie-rockchip-host.c
+> index 7f56f99b4116..7352b5ff8d35 100644
+> --- a/drivers/pci/controller/pcie-rockchip-host.c
+> +++ b/drivers/pci/controller/pcie-rockchip-host.c
+> @@ -864,7 +864,7 @@ static int rockchip_pcie_wait_l2(struct rockchip_pcie *rockchip)
+>  	return 0;
+>  }
+>  
+> -static int __maybe_unused rockchip_pcie_suspend_noirq(struct device *dev)
+> +static int rockchip_pcie_suspend_noirq(struct device *dev)
+>  {
+>  	struct rockchip_pcie *rockchip = dev_get_drvdata(dev);
+>  	int ret;
+> @@ -889,7 +889,7 @@ static int __maybe_unused rockchip_pcie_suspend_noirq(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int __maybe_unused rockchip_pcie_resume_noirq(struct device *dev)
+> +static int rockchip_pcie_resume_noirq(struct device *dev)
+>  {
+>  	struct rockchip_pcie *rockchip = dev_get_drvdata(dev);
+>  	int err;
+> @@ -1035,8 +1035,8 @@ static int rockchip_pcie_remove(struct platform_device *pdev)
+>  }
+>  
+>  static const struct dev_pm_ops rockchip_pcie_pm_ops = {
+> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(rockchip_pcie_suspend_noirq,
+> -				      rockchip_pcie_resume_noirq)
+> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(rockchip_pcie_suspend_noirq,
+> +				  rockchip_pcie_resume_noirq)
+>  };
+>  
+>  static const struct of_device_id rockchip_pcie_of_match[] = {
+> -- 
+> 2.25.1
+> 

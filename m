@@ -2,170 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D40C57B5BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B13757B5BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234115AbiGTLon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S234468AbiGTLpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiGTLom (ORCPT
+        with ESMTP id S232403AbiGTLpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:44:42 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA51459B1;
-        Wed, 20 Jul 2022 04:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1658317473; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gfVrDHEaoRWXZN/HPQzTExDiPVvqkM20tNaJY4XTG7k=;
-        b=pmPNW73SsabPhfkXe2GuaO61RJcyuQJkm6+2r6XRpoftHet7iBhMA/kK6MoZm71fxlgAqU
-        GtJSNQlvwU5zitRxPk770YVdDWy26wAit7edFN6EJ6fQhXOtoXPD/pxCN9T9+D+VzSatGd
-        rMYf2pWJsnKmQbjXbACt4m9i6azetrM=
-Date:   Wed, 20 Jul 2022 12:44:18 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 01/11] ASoC: jz4740-i2s: Handle independent FIFO flush
- bits
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <UXHBFR.6W2XPUNX040K1@crapouillou.net>
-In-Reply-To: <20220708160244.21933-2-aidanmacdonald.0x0@gmail.com>
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
-        <20220708160244.21933-2-aidanmacdonald.0x0@gmail.com>
+        Wed, 20 Jul 2022 07:45:16 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5A92AF3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:45:15 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id o7so29794796lfq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:45:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZDb/On6XpUXGe/BJm5NfUcWD+cnAuZMq9dvjIa0120Q=;
+        b=mEZPxA1vR+xPG2zKAqSjMAl+Xfst+1s20IXxFWtE0YwU8WFkqkEXqZxhMzqIbE50sJ
+         2HB8Guraupn6VExjrv4po+z9HItiF5Bhynj5e6fO/cMlM/mkW1T4MiWv1aM6hfiwIZCh
+         A8SQUlwfZCOsZB0QpYHn60AolriwbJ2muruEyjpwNp7JeitooPKqfCrkLqfDs7Irfu/j
+         230TztwbI4Gz7PGtNCUsH8Xi/SgF67hLw7oqwJnTzS0VNw3n98dgs3+LD1n7a0V+yLCa
+         p5zBdwLcD0BZEckkBF6235jro3HnTCyLl5PrIo46bjUzDDM1tZ6YQIRaduGJMwEIF/ZP
+         xlTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZDb/On6XpUXGe/BJm5NfUcWD+cnAuZMq9dvjIa0120Q=;
+        b=anJcLCYPEK+ErBxzo4JIuSFY+6bknuAn32JZvqcl6NM8cFwJkFnBAoxVDBkTKqdOVo
+         6krnKx1WbLfPjV/Ooo/uhm1FAiNETDkcQTAGVM1MVWJ7dj2zEG+8s2QRh/1ubAhmgLrj
+         KdhA0PAhueXY2cElJw4TVI3wUP/+QTtGB1a5KtdB2J2CfRyTpN8ihnCtWjSnwKkAD4cb
+         NGKH0+MUUK9Ucd3TqX6P/ZvkIteuWW/5IrdP2pJVldzApEg/kknt/xSAk64pOZftk7TL
+         FRPfFY8veLZhrL1oidWdVQv1EMsuKQJeBwdmbfGd7eJl3epedH/AjfOGXka9GfboiYKI
+         ZU7g==
+X-Gm-Message-State: AJIora++f2cjxKrCL7wnTVGXvlNbqDpNb9nl4QEVmiDz8KEzdtwkfm6H
+        aVTqIlE7Sz7khRagFo2nByamCQ==
+X-Google-Smtp-Source: AGRyM1soy5TCPoLRJYPdeSShcI/P9RSINYXDcAFMHV4+0MdfdZkNBveORV3fCWEyMFwt9APprxQurQ==
+X-Received: by 2002:a05:6512:33c4:b0:489:da1c:76cc with SMTP id d4-20020a05651233c400b00489da1c76ccmr21016882lfg.237.1658317514235;
+        Wed, 20 Jul 2022 04:45:14 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id t13-20020a056512208d00b00482bdd14fdfsm3800568lfr.32.2022.07.20.04.45.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 04:45:13 -0700 (PDT)
+Message-ID: <6ab25b0a-8c34-696e-5d10-1ffb335d850b@linaro.org>
+Date:   Wed, 20 Jul 2022 13:44:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-bindings: fpga: Fix typo in comment
+Content-Language: en-US
+To:     Slark Xiao <slark_xiao@163.com>, mdf@kernel.org, hao.wu@intel.com,
+        yilun.xu@intel.com, trix@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220720113704.18185-1-slark_xiao@163.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220720113704.18185-1-slark_xiao@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
-
-Le ven., juil. 8 2022 at 17:02:34 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> On the JZ4740, there is a single bit that flushes (empties) both
-> the transmit and receive FIFO. Later SoCs have independent flush
-> bits for each FIFO, which allows us to flush the right FIFO when
-> starting up a stream.
->=20
-> This also fixes a bug: since we were only setting the JZ4740's
-> flush bit, which corresponds to the TX FIFO flush bit on other
-> SoCs, other SoCs were not having their RX FIFO flushed at all.
->=20
-> Fixes: 967beb2e8777 ("ASoC: jz4740: Add jz4780 support")
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+On 20/07/2022 13:37, Slark Xiao wrote:
+> Fix typo in the comment
+> 
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 > ---
->  sound/soc/jz4740/jz4740-i2s.c | 33 ++++++++++++++++++++++++++++++---
->  1 file changed, 30 insertions(+), 3 deletions(-)
->=20
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index ecd8df70d39c..576f31f9d734 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -64,6 +64,9 @@
->  #define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
->  #define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
->=20
-> +#define JZ4760_AIC_CTRL_TFLUSH BIT(8)
-> +#define JZ4760_AIC_CTRL_RFLUSH BIT(7)
+>  Documentation/devicetree/bindings/fpga/fpga-region.txt | 2 +-
 
-Just rename JZ_AIC_CTRL_FLUSH to JZ_AIC_CTRL_TFLUSH and introduce=20
-JZ_AIC_CTRL_RLUSH.
+Did you receive my feedback or something got lost on the way?
 
-> +
->  #define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
->  #define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
->=20
-> @@ -90,6 +93,8 @@ enum jz47xx_i2s_version {
->  struct i2s_soc_info {
->  	enum jz47xx_i2s_version version;
->  	struct snd_soc_dai_driver *dai;
-> +
-> +	bool shared_fifo_flush;
->  };
->=20
->  struct jz4740_i2s {
-> @@ -124,12 +129,33 @@ static int jz4740_i2s_startup(struct=20
-> snd_pcm_substream *substream,
->  	uint32_t conf, ctrl;
->  	int ret;
->=20
-> +	/*
-> +	 * When we can flush FIFOs independently, only flush the
-> +	 * FIFO that is starting up.
-> +	 */
-> +	if (!i2s->soc_info->shared_fifo_flush) {
-> +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> +
-> +		if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
-> +			ctrl |=3D JZ4760_AIC_CTRL_TFLUSH;
-> +		else
-> +			ctrl |=3D JZ4760_AIC_CTRL_RFLUSH;
-> +
-> +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> +	}
-
-Wouldn't it be simpler to do one single if/else? And hy is one checked=20
-before the (snd_soc_dai_active(dai)) check, and the other is checked=20
-after?
-
-You could do something like this:
-
-ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-
-if (i2s->soc_info->shared_fifo_flush ||
-    substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK) {
-    ctrl |=3D JZ_AIC_CTRL_TFLUSH;
-} else {
-    ctrl |=3D JZ_AIC_CTRL_RFLUSH;
-}
-
-jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-
-Cheers,
--Paul
-
-> +
->  	if (snd_soc_dai_active(dai))
->  		return 0;
->=20
-> -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> -	ctrl |=3D JZ_AIC_CTRL_FLUSH;
-> -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> +	/*
-> +	 * When there is a shared flush bit for both FIFOs we can
-> +	 * only flush the FIFOs if no other stream has started.
-> +	 */
-> +	if (i2s->soc_info->shared_fifo_flush) {
-> +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
-> +		ctrl |=3D JZ_AIC_CTRL_FLUSH;
-> +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
-> +	}
->=20
->  	ret =3D clk_prepare_enable(i2s->clk_i2s);
->  	if (ret)
-> @@ -444,6 +470,7 @@ static struct snd_soc_dai_driver jz4740_i2s_dai =3D=20
-> {
->  static const struct i2s_soc_info jz4740_i2s_soc_info =3D {
->  	.version =3D JZ_I2S_JZ4740,
->  	.dai =3D &jz4740_i2s_dai,
-> +	.shared_fifo_flush =3D true,
->  };
->=20
->  static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
-> --
-> 2.35.1
->=20
-
-
+Best regards,
+Krzysztof

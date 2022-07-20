@@ -2,151 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F46357B117
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AAB57B119
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239914AbiGTG2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
+        id S240014AbiGTG2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239826AbiGTG2I (ORCPT
+        with ESMTP id S239933AbiGTG23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:28:08 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F9845F7A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O2xn20AWXrH9ETRak62cLh35uHtCl+LQSmMFOJyOMHHUIvP7160xVYAbZBRIv76RZNreeCzt4BvHgyVQLv87FEJtC1tWuPFs7/NHU1P0OSkhJfXDVL1FrnG6yWj/Gw0qAEfLlQoBhk7ldWN/t2KPGkg4dm6PMPvQFu10FxVLQqj12aL/m5ns45lYFFy6MfAY//6DYVX4VPGGx9nTg1SOCXy5tj01Q7bhbAd7CmyEnZ+LY2C7jzjrQvOtJ91ifbFZDBQvaYfw2+3pkh/pql3VOE9lvqQKK+mQMR/7hw5QyKvf7G97NLZKto9CaUbjU1z2qzWKcTEKqpHW5/duMIfQnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h1LmgiealGYwNmxDY0ba9KJZOV7BhQ7yJvUDAgepQog=;
- b=HNmCIGNz1K2N7NN6kyyTt66ZzMHcwKbj+XyMiIOZh8DlZQocsu0kxrXOB4Hvntf801qCv8YgvuholmQwvmNoSfraftuOxBe54wB0S5/JResRkeyPYFP4mcU6GLXs0FpLuAlF1ASxxDFojDRz1HOczEggti8smUuQ4ImiZP+TV0HaOWVtahpb07xcv0IO2pScloP2e0nrqxTm9NJ1jXlFWh+zFUqyUGtKBJ0H0ANKz0VerVNyjJN20+R7m/cBUQj/lbp/2rk7W/g9FbAWQbKa0l2EpSGREV1ARnRNo3zwzlYZPrclLZUY16pGnMNBuNOaqGJdNdcqrupCD7YiOFHKcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h1LmgiealGYwNmxDY0ba9KJZOV7BhQ7yJvUDAgepQog=;
- b=JnHgspnto8brEU5d194Bkz9ANSi1tYajMLBtD5TVmUksVXcJWxOj0hlwpVuPS7z0q9ePrvYwVUg0Ip5HWakDJyytnpEFxE9Yg8zlr1h2kB81ItlVqcVdoniBKEdJOrlOtjo24aYv3zqA/YzmR9PwQsPP180XAC0fac52cnrS/Zj3uuryMwO/PfxG6YNw/dCS/ORed5a9O2ReQlYBW84flod4L1/wybDSbEAPrvTIf5ETATPKkJKqUuXLZTZ+n/OEerFpm/CySv70XaoG8knlSQHRm7yI+ZYEU5sBn4xTrxpRQOWDnvmLgVIcdvBbyAmEKLoA2rTmcaFVIa6vQX/Ttw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by BL0PR12MB4753.namprd12.prod.outlook.com (2603:10b6:208:89::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.13; Wed, 20 Jul
- 2022 06:28:04 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
- 06:28:04 +0000
-From:   Alistair Popple <apopple@nvidia.com>
-To:     bskeggs@redhat.com, rcampbell@nvidia.com
-Cc:     kherbst@redhat.com, lyude@redhat.com, airlied@linux.ie,
-        daniel@ffwll.ch, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        jhubbard@nvidia.com, Alistair Popple <apopple@nvidia.com>
-Subject: [PATCH] nouveau/svm: Fix to migrate all requested pages
-Date:   Wed, 20 Jul 2022 16:27:45 +1000
-Message-Id: <20220720062745.960701-1-apopple@nvidia.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0171.namprd05.prod.outlook.com
- (2603:10b6:a03:339::26) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Wed, 20 Jul 2022 02:28:29 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E310449B78
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:27 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id w2so19960503ljj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iGIlqhxSlWfDFHRJ6mC4b3eFYcIQYybstvvJnU9esOQ=;
+        b=UhRYFA7/LdF7XYBnvxrhbtAKNgFbmStp01s9LorBnZT9P/gNWlUpzMtDsJ7V13Hj94
+         2KBIksodqZwwgXfk90DaKlYpfP/fkforCFjRfcCGg1PzzBuHUbe4UC8KjHDw7pc7Fdvq
+         AHaRWe4HyuvuPcviYulWebVolSWtE73diELmsBeyJ/dM0Kz2uKD4ETpcA4/tcPaaIKJV
+         VVrhWEbLg5rhyZ1yL2KXRNcwL1TtB9XOnWKktJMRsMcOxJs6leb8iSwnfDGFiuTuqMii
+         Q8ejJfNCFQtwUyMlokGb7Q+4yH18Dx/RpNeRrhS6lMOBU+rBxDf6r7FNeZhRAWqoI4RG
+         oTEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iGIlqhxSlWfDFHRJ6mC4b3eFYcIQYybstvvJnU9esOQ=;
+        b=FdZR+dPW9NZz4egyrUgcDq59KpOjeri0u4tzqbh/FpRVkw3CXRvYzTU9TL+sDbLemH
+         VKKo7Lu5w80NUr9QDtMWPKiyRf8bm1Dc6/3wWzgosLsVWDYHEEnybzoTJHLXranHpIab
+         H9WjQnMTyex0zNIvnMPyiXVdHOFBr/blhpJay9AHeXmf68HIu5zu2U0dtSijQZ8BPjn4
+         tzDSF0tluDsJ6EiYsSwlvo0s4waJiTMvTZxbxbMaQQ4O8r3QqZPKAcPedU9w7zySVv5L
+         TkWcdV5t73AIfmogstCgzm51jBkAY9wP7GAot2KmxS2U+xWr39CDgSEwkFsuT15ve0zC
+         BiCQ==
+X-Gm-Message-State: AJIora9Jegym/3eCnGVhouFoGqRJm/yfzsrZrjvn72dnK/5CsEublzX/
+        eJt8/eUZpg9ubUkPYCQbp0Oxqw==
+X-Google-Smtp-Source: AGRyM1siG1a6lGXNfYqKnVxqm2uEHALLXWVQNvG6wDpmJgK0FropWIFYWjsRsqncZiQDfr78WgDjoQ==
+X-Received: by 2002:a05:651c:4c9:b0:25d:8599:5637 with SMTP id e9-20020a05651c04c900b0025d85995637mr16842827lji.163.1658298506308;
+        Tue, 19 Jul 2022 23:28:26 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id j28-20020ac2551c000000b0048329aa6c92sm3607514lfk.139.2022.07.19.23.28.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Jul 2022 23:28:25 -0700 (PDT)
+Message-ID: <2a19c8ec-ee4e-5a6d-b2ac-a25ef080cd09@linaro.org>
+Date:   Wed, 20 Jul 2022 08:28:24 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 56d01757-4cae-4745-ef24-08da6a1900a8
-X-MS-TrafficTypeDiagnostic: BL0PR12MB4753:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VfBJLKzg9jIYhZwkZeQHh5I3ET0R0uXDGrxZchFKfaDEDdgQGV/oYVWjT7+P3hBuNh6o2Kp+6WY3MQ9Bj29ZLsWBNzVevnSjR/4HTDNTnHqeSzwDNMwsVayZK/gGGQd/WLlhMGDe0xj8/GTIR2xFGBmvRhChXdwahyJDEs0108neHocEPdCXi+5OtXqv8FCSMcKbGq/bVjUfclzLET+SgUOxqzNPe5Jv6Blq0KHFvayMXLvBxQOC0BPTviw3JYUT22vmbXFUq+eh2T9fRJG287KVdms9PeA8GptVCdBh8F+zGqbUePyU++rFfSBUtXgGAC9BKXcyB7R5jBgzgwGdZlA683q3Haj0FAzKM+DviEtbrwcbT1grEnLDkyOTzvAdpSaZzcZaknUBWkkdiKkWPLh8DW4CpRH5ZXAbffyrnp0oFlocZfGVmqIByy73wjLeL/ukqeQufct8mvkB14jR0aQfhnBAg45cKN+R0iWNZLYOBGSbFuH/p0DaZnV4N0ijHrxV1Z5Kd1r1lwO8+R40JPMWUYwEYBfdUyZdRNkKj9xPxIuNqzeHdUUiwChMlPbNq0FLZQ/WiR7JsYDZvWGwH9d438+NzPszyg7kLlNjHRiY2jb8dJkxg9NiNVqJVDbEfJdCaj9RKo8qnomR5hRaz1rrbxfg8gEQwJBzWts7Bpgf+95bDCr7450TcRmx0wjnY3jfxD5VNWeFHl/1F5EJReG/pYY8HjNlhrkHYG6/YlWf7R1h3IbOiqMI6bJPIbBp
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(186003)(6512007)(6636002)(66556008)(316002)(86362001)(2616005)(107886003)(1076003)(66946007)(66476007)(4326008)(478600001)(38100700002)(8676002)(6486002)(83380400001)(26005)(6666004)(6506007)(41300700001)(5660300002)(8936002)(36756003)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8fSAOjDnphMfm2W/I0mF3qKzpuO6e07McDCeMpYXDwFctRJPFzfXZqCyiTdE?=
- =?us-ascii?Q?4oL+XSLyH0ceZRgArTLOMf+hXN7oTT+Rd5+jvOZMTLQbhU4HuViOAmpPRl3c?=
- =?us-ascii?Q?8SpoiJX3ax+Y7MVBR27p56jgHSPECphDLwG0HL6yQ5Ex6hHVaxV0k7i6zRja?=
- =?us-ascii?Q?oqVF4CtcuxWVyaC9uXHgdgENpcBBviP6dIqcI+fDDepEQn3MxHggcqtiUSWS?=
- =?us-ascii?Q?ir1MqYOs5zbEHiIUTu5/iYiTtBlSiOg0YBsot3KIBmC8R1Zpwb7hIYhTuMqc?=
- =?us-ascii?Q?yLkmh3Kj/WEPGBWw16w2Fk784Xz9UJVWLR7p5J4aWrNdBVzj9bgIfjnwwYMh?=
- =?us-ascii?Q?PyPHPFZET1uXBTR1bCB1YwPfIIY5k1dnpd//R7qx02zZHuM9E0arxckptgjO?=
- =?us-ascii?Q?/OlleyFZ/Lu/ecJUFrR45pX775H6NGFrl6D7QIaDp01laHy0ElVj7uOvn0Go?=
- =?us-ascii?Q?DOif5UCxHkOmRJWx6mM6vWyaRo2c0WU016VIa4CJQNjfKQXZfoGYreTpYCkF?=
- =?us-ascii?Q?lvbX2tEqcJIw1PNUhKpHe8+AgxRx+Qd3IFP3HNuSA13IYJxeoOi+Dhb7Llu5?=
- =?us-ascii?Q?zEzDDIkBp8vTkFyQbxGlqUXsh0dpX+zOA68llgJAcYXwyfDHAwLE3kseF4l0?=
- =?us-ascii?Q?/DFmcK7ili5+WacHPkwY/2toNHxWSJr+aQ7UMfxJHpvdVLqQcfFe9oiDqWlc?=
- =?us-ascii?Q?kdp54lQW5829YeJ8yN0XMR5yJedCWj83E0Fi8EfVMYXT05mxY8gOPZ+xGvV1?=
- =?us-ascii?Q?YUHuwm0BcqQDATkLsSgaAPWSXlkMKYG7cuT7WHe0ale8+eAh4heVyrwz2pMw?=
- =?us-ascii?Q?6gtSsrx7QknHKNOt0O3bv52OyAf5qaCwBhiCPCX4QBXb+nK/J7Xdp4RFx3Vk?=
- =?us-ascii?Q?kY2RJY22dhXeAMKEqRrzuupfOo9O+hrSqzF+sFHE3mCbmdSytKonWkP1qtGT?=
- =?us-ascii?Q?CLQnxJD9lo5iGF4mdJh1WOG8V4r7rtQQmJN4USoy8I2xMy/4GFJ7oB8UEfPx?=
- =?us-ascii?Q?BXNJw5FQLifHh2ySGOJsGZpm0rOaEFwAOBA22cmxDA7M75VcmEODdI+YViWp?=
- =?us-ascii?Q?C3yvSp7ILKv1Kjuu3aztdwioGiijn0k7C+um9WIw2VrtZJwRAAdKtPE1f4gq?=
- =?us-ascii?Q?ZHvKkLYaiLWm4JdWflC6LYjRNpiOb/c6s3dGKVRYrEKKedIdpLs7y534vkzr?=
- =?us-ascii?Q?33D14PIzDf+32U6xX45hQATHs7gOFJhZzW1GP6ZIeCUE9P6M4Wtb6rTQp0fW?=
- =?us-ascii?Q?Qp+4WeaWMlAxkIAmM2KVGWVRoTMqWzcjMIJRS+hEVVoXkc7pjaFktYmxyPoA?=
- =?us-ascii?Q?aPix/LnHe1Bl4ElZbSLMekMTgNQzppHs7gT+H0Z3UwJl4aN9k5BOWaCD0OVW?=
- =?us-ascii?Q?k58TkpW2Ku8RRgMgp+qAt6jtjk8YTvVtqzrVeB3OEmYDTFvC2FCmw/24Yyud?=
- =?us-ascii?Q?C1/SlM5u9YOKkWuFGxnfTWi9ABMeEDmlKyICO9KgfYB6WMuoFGxwAQZLe05v?=
- =?us-ascii?Q?I9pQ/o1UGKmJUtuQAF7IBTQsUotQLAUFbGFJkiZr+nZUpCEt+sNV/foIL9WU?=
- =?us-ascii?Q?EXV3NM6FW6/DXv7lXxP6CAlE06/qLUuxw60HFvxx?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56d01757-4cae-4745-ef24-08da6a1900a8
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 06:28:04.5081
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l+LRQweV1wN+X5L3BJPbxZmmpngMaDtECHkXXyanXVLf3erN370CV2tWuYW9A8SObeMFjVKUoEiYY56DdGpJBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4753
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: media: mediatek-jpeg-decoder: Add MT8188
+ compatible string
+Content-Language: en-US
+To:     Jianhua Lin <jianhua.lin@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220719100214.2096-1-jianhua.lin@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220719100214.2096-1-jianhua.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Users may request that pages from an OpenCL SVM allocation be migrated
-to the GPU with clEnqueueSVMMigrateMem(). In Nouveau this will call into
-nouveau_dmem_migrate_vma() to do the migration. If the total range to be
-migrated exceeds SG_MAX_SINGLE_ALLOC the pages will be migrated in
-chunks of size SG_MAX_SINGLE_ALLOC. However a typo in updating the
-starting address means that only the first chunk will get migrated.
+On 19/07/2022 12:02, Jianhua Lin wrote:
+> Add compatible for MT8188 jpeg decoder.
+> 
+> Signed-off-by: Jianhua Lin <jianhua.lin@mediatek.com>
+> ---
+>  .../devicetree/bindings/media/mediatek-jpeg-decoder.yaml         | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Fix the calculation so that the entire range will get migrated if
-possible.
 
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Fixes: e3d8b0890469 ("drm/nouveau/svm: map pages after migration")
----
- drivers/gpu/drm/nouveau/nouveau_dmem.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_dmem.c b/drivers/gpu/drm/nouveau/nouveau_dmem.c
-index 7ba66ad68a8a..16356611b5b9 100644
---- a/drivers/gpu/drm/nouveau/nouveau_dmem.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_dmem.c
-@@ -680,7 +680,11 @@ nouveau_dmem_migrate_vma(struct nouveau_drm *drm,
- 		goto out_free_dma;
- 
- 	for (i = 0; i < npages; i += max) {
--		args.end = start + (max << PAGE_SHIFT);
-+		if (args.start + (max << PAGE_SHIFT) > end)
-+			args.end = end;
-+		else
-+			args.end = args.start + (max << PAGE_SHIFT);
-+
- 		ret = migrate_vma_setup(&args);
- 		if (ret)
- 			goto out_free_pfns;
--- 
-2.35.1
 
+Best regards,
+Krzysztof

@@ -2,131 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A906B57BC56
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8640257BC58
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiGTRJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
+        id S230478AbiGTRKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiGTRJd (ORCPT
+        with ESMTP id S233471AbiGTRJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:09:33 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522566D2F6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:09:32 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id l17-20020a056e02067100b002dc8a10b55eso11574256ilt.1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:09:32 -0700 (PDT)
+        Wed, 20 Jul 2022 13:09:58 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619DD6D9E2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:09:57 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id e15so24606347edj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uWV4kGPSgS3dgACnghLX442NCtxuMfI2XNxn+GBngHU=;
+        b=WKE25XPtm+e6+es+UEIO8WGaaINb5wjmiqjVoghjfCBwnQZp1p88+2FRRcnlQgu3LR
+         NvV9d+HsdGiHdcyZ+kJJ0QJM+zqH+cpaLaQpzn+ichRCIjFvfdcBEZUB2ZrH1j89VeyU
+         Tkh0dbrGWYlVlSc3KYUyQYmWIFY5ccockBWd0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=cmzFT4h31a1T2jFibLO3TAgARdQJGAATchWIxh6fpuQ=;
-        b=oOXgDzpB1JP2idE5wuwLge0+BkDwD5xEjICj2BT2VFsDomJOl6xLn4OlWrPLYX7zS9
-         O2Z3Y8+FaKwb1sFal2h38oFTex6kuBHbuyeWT2uVLfZVaKxqslFqub/KW4p6Di/FhURK
-         TIUgublabWWCbzzVlOLvdm1H+KrrWXAWFqWSG/OiBNZFCrw8CtC5Fk9sHdO3gI9pBCXN
-         vPBS5B0VrUJOUF3OQgkP7yrddVlMBQzcsESGV6rqTUlcKj98CpyJ8ACUf2XEB6Nsi7yN
-         8HNEjjcZRqqjS3+wIehUUhqpb4nxHL5YURwk3HXtL6YCSJJ968jAJXTy9CBWjtVyqHLP
-         iIqw==
-X-Gm-Message-State: AJIora9FK4psupMUP37FxB2X2E2CgWi3oZfLfpzODXHGWj7o9t0RHtnZ
-        svADavehmx7ZaftrE4JLZNjVm0SFkUP/sloAYZmytW0pOOtt
-X-Google-Smtp-Source: AGRyM1s/3CQQWjJCZ/ZWEkjKS1d8JEADjyq3XmeNtHUoON5cuL3ztpqDKmrqHL3AdOpDjoIMvmSDZTyy0o5cfWceheOjk4VZ3hG2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uWV4kGPSgS3dgACnghLX442NCtxuMfI2XNxn+GBngHU=;
+        b=S+9BNvNmjMAZ17z6r61kxXFUoTJmI21I7RsdfZapqJnTS9HvRwFBbDtRl7hkh/NM97
+         WY9j3Ktr3UIgfF2eUKOhA/3u51NSRUgj2AINIzG3AmrjrX12k/W+wqhhxkaBjLeBEDIh
+         wo2O+upVkwTup/BYwprXNVnwVqNsaSb5XcCZY5T4/P1g1hTc++iz86980Lv6lWHc0ZAr
+         rGDxKZr3NPXNMQL0FLmZZiCERCP1hZQDMqj+Tp5zM9gmSPTntKGfSI6wlsyWOdIw4s2V
+         XVIGODzLCzuzCUF+oQmsQhPskT9S2DpfoXV+xOOWpaEJ/YRs4lr7dPdbgF3g4KYcQIUB
+         qDww==
+X-Gm-Message-State: AJIora/PTLG2Fro2L2Lo/U8KLsLb91lBGMdUk8H706FwtB3afSZRmGl7
+        uuatkmUMTd2qctqrvra7rCYXfXfsFHba/aBIV7E=
+X-Google-Smtp-Source: AGRyM1uc20W7gRKIYcORbqs2qSzC5uvdvlJ0b4k2SPLLgET5wA/uaRyhX8yhuPyiwyih7MXsTKhH5A==
+X-Received: by 2002:a05:6402:430a:b0:43a:9ece:d6f8 with SMTP id m10-20020a056402430a00b0043a9eced6f8mr52419165edc.361.1658336995718;
+        Wed, 20 Jul 2022 10:09:55 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id k16-20020a17090632d000b0072b6d91b056sm8250618ejk.142.2022.07.20.10.09.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 10:09:54 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id bu1so27025773wrb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:09:54 -0700 (PDT)
+X-Received: by 2002:a5d:5e85:0:b0:21e:45e3:f23b with SMTP id
+ ck5-20020a5d5e85000000b0021e45e3f23bmr4961690wrb.274.1658336993654; Wed, 20
+ Jul 2022 10:09:53 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4511:b0:33f:4ccb:3139 with SMTP id
- bs17-20020a056638451100b0033f4ccb3139mr20195589jab.20.1658336971661; Wed, 20
- Jul 2022 10:09:31 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 10:09:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001d2a9405e43faa78@google.com>
-Subject: [syzbot] WARNING: still has locks held in tls_rx_reader_lock
-From:   syzbot <syzbot+16e72110feb2b653ef27@syzkaller.appspotmail.com>
-To:     borisp@nvidia.com, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, john.fastabend@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+References: <20220716230344.239749011@linutronix.de> <20220720125736.48164a14@gandalf.local.home>
+In-Reply-To: <20220720125736.48164a14@gandalf.local.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 20 Jul 2022 10:09:37 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh=Yjy=DmGzzGj-ivyx_w45AHh35eDkpGtajaiO+TX38A@mail.gmail.com>
+Message-ID: <CAHk-=wh=Yjy=DmGzzGj-ivyx_w45AHh35eDkpGtajaiO+TX38A@mail.gmail.com>
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Jul 20, 2022 at 9:57 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> [    2.488712] WARNING: CPU: 0 PID: 0 at arch/x86/kernel/alternative.c:558 apply_returns+0xa3/0x1ec
 
-syzbot found the following issue on:
+That warning is kind of annoying, in how it doesn't actually give any
+information about where the problem is.
 
-HEAD commit:    e22c88799f26 Merge branch '100GbE' of git://git.kernel.org..
-git tree:       net-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=159aa626080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3c46ba1483fd8356
-dashboard link: https://syzkaller.appspot.com/bug?extid=16e72110feb2b653ef27
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11d11d78080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=147797ac080000
+I do note that we only fix up JMP32_INSN_OPCODE, and I wonder if we
+have a "jmp __x86_return_thunk" that is close enough to the return
+thunk that it actually uses a byte offset?
 
-The issue was bisected to:
+But that WARN_ON_ONCE() should probably be changed to actually give
+some information about where the problem is.
 
-commit 4cbc325ed6b4dce4910be06d9d6940a8b919c59b
-Author: Jakub Kicinski <kuba@kernel.org>
-Date:   Fri Jul 15 05:22:25 2022 +0000
+The silly thing is, there's even debug output in that function that
+you could enable, but it will enable output for the *normal* case, not
+for the WARN_ON_ONCE() case or the "we didn't do anything" case. That
+seems a bit backwards.
 
-    tls: rx: allow only one reader at a time
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16966bac080000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=15966bac080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=11966bac080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+16e72110feb2b653ef27@syzkaller.appspotmail.com
-Fixes: 4cbc325ed6b4 ("tls: rx: allow only one reader at a time")
-
-====================================
-WARNING: syz-executor279/3626 still has locks held!
-5.19.0-rc6-syzkaller-01454-ge22c88799f26 #0 Not tainted
-------------------------------------
-1 lock held by syz-executor279/3626:
- #0: ffff888026449ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1659 [inline]
- #0: ffff888026449ab0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: tls_rx_reader_lock+0x2da/0x4e0 net/tls/tls_sw.c:1817
-
-stack backtrace:
-CPU: 0 PID: 3626 Comm: syz-executor279 Not tainted 5.19.0-rc6-syzkaller-01454-ge22c88799f26 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- try_to_freeze include/linux/freezer.h:66 [inline]
- get_signal+0x1424/0x2600 kernel/signal.c:2647
- arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
- exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f66234ef999
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f66234802f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: fffffffffffffe00 RBX: 00007f66235773f0 RCX: 00007f66234ef999
-RDX: 00000000000000c1 RSI: 0000000020000080 RDI: 0000000000000003
-RBP: 00007f6623545064 R08: 00007f6623480700 R09: 0000000000000000
-R10: 00007f6623480700 R11: 0000000000000246 R12: 0100000000000000
-R13: e8fece2d4e6d48fb R14: 0cb28def7c465af4 R15: 00007f66235773f8
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+               Linus

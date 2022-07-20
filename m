@@ -2,127 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785C357BFC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E113E57BFC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiGTVlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 17:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
+        id S231256AbiGTVmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 17:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiGTVlU (ORCPT
+        with ESMTP id S230041AbiGTVmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 17:41:20 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E3D3FA24
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:41:19 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id go3so792794pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sNJo6iXQuvV8cglo7IL0/pP2Vv/TLnGTbGzY9DjcgW8=;
-        b=LtV52w47Sj6ashVK3TG7rUxvgE0jXHmvOyYCMTzkvG4WFCyoABbaM+vArMrB5ccNeL
-         Zfu7OG5b08KPiD5XHHe4BBkBk1ZM/CsUbvx0ozWJPcU8/kbhfdgmiBNuLTsa4bZF7beI
-         +s9x6/EQ5shOxLWq1s4jfb0CvvmMeD+O2IVTBVAHTQS26pBs8c1okrodw40FGPf4i60Z
-         G245DKapJ5zOQAadVaoUPiedhW/AA9+DPab1Orwksn+YAWMMlebcmLk8CReFG4f59gzO
-         UvDNKF9ImNRom0wC+a3RatHMN+ZkOHKAcxBOHTT7Tti4RqWd8SDGYHUH8MDPJOTQ6164
-         LKMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sNJo6iXQuvV8cglo7IL0/pP2Vv/TLnGTbGzY9DjcgW8=;
-        b=JU3Nxmr8Ldjt5G21yYR+fZG60BsPRTv3THxVxt5KSpTsS52m4VlvmZJ8kY3Q22U/XT
-         5jFLnE8KLvaGa7TRwXpiNMxc69mQwPszPQGMFSsRH3ZAzPxmi+7o/UXgBVLiASWTduHn
-         TIGLfbNRUitKvEdrvcYGDqrMfeAK/XAdtPtyYzyjtP40vUSwhwFixaq2UELVL/SCIqTJ
-         H3hifGOi7GRRgHyS/3to9P6CAd0MDcMbgPPhfXtotDY0YemGn17kxwymI686nDT3I0v2
-         vk9BKJEcCyMWze2ipjmo5YN15woDOckVi/MucbbgCu7V55b8gs1o2i0gb0YjvX5miFSO
-         RHRw==
-X-Gm-Message-State: AJIora8BT2ekr48KLEJOp4nhs/gfoKyFNCjK1nPNhryf8EA41vkmSOch
-        IlC4+myj3BC/MHL8YKS9fkQYSQ==
-X-Google-Smtp-Source: AGRyM1sdtU+WLCcFlFhUJcQlfCE3g8fyBgFIVy7DQUiNpRLNPmw05EZNEbmUk+FWd2bO7vV40Byfjw==
-X-Received: by 2002:a17:902:aa98:b0:16c:d74d:fe6c with SMTP id d24-20020a170902aa9800b0016cd74dfe6cmr26831677plr.134.1658353278744;
-        Wed, 20 Jul 2022 14:41:18 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id k15-20020a170902d58f00b0016ce9b735dcsm48248plh.40.2022.07.20.14.41.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 14:41:18 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 21:41:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 5/7] KVM: SVM: Add VNMI support in inject_nmi
-Message-ID: <Yth2eik6usFvC4vW@google.com>
-References: <20220709134230.2397-1-santosh.shukla@amd.com>
- <20220709134230.2397-6-santosh.shukla@amd.com>
+        Wed, 20 Jul 2022 17:42:20 -0400
+Received: from sonic304-28.consmr.mail.ne1.yahoo.com (sonic304-28.consmr.mail.ne1.yahoo.com [66.163.191.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417DF42AD6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:42:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1658353338; bh=024Za88HO+9X5Rrkmz+l65LYdp4ARNuEcFMmXa44Nvc=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=rPnIw53cgHymRSqYc47n0VX8Iy6rXPSqim2Z/Z1+Isirkw04IyQ6CHGiaDhtrZi9hlsZPz7yevrEoRGdtx+v5f+1Y67q/gbnxTdK6D58aRpIPIWvHpMjtsFeBDaX9sJUb8Ji88FiFeAHo4o7bzzTLbapx9ehPZES3XicxooOie5Uy0/fLuGp2RQ05XSOzXrCYrWgHdh/cvuDhnlR3Ef6bvaph7aqv0knDvDv8y7CALxY0W4ROL7Jn9FfNPUN81KLVGMUU6purJb5ACXBGcDJi97sk12iUjiJJxwV22VQ/PNCmP2TmU6qOpds1KXM52O/3TeKYoXYT8R8vwGj6RJRow==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1658353338; bh=PliYMJuTipfZXacnZ3n2Q/EQrXc4+8YW+Y2cjiQgK7N=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=YwEb+s1QHE2QAZjhG/3WqxxejdGOsHGKoAODUws1VU8zJ60S7hcmpn8iV5mqJkqaOWp9bwGQQSjm2dZQzmJKJWOigx6P40gCxlOI58qamtZv+hg2zmFHUjh+uYX8UPkmI/NqdTO4U937QDErh1MH91S9e/evnq818JddYf7W7QdpZZW1biMuJCTvRES3Fwq1EfrBTEcwZEJflIsI1gTMm8RTTvFTrOdNEiEFFwB2j/QrMlYZ4gM9gdrEXZ+rfxbuPi0zo3bPi0IsZjwBLk/yxQgw8MbweyiQN9SWaykZnOR/dm1eP/hPv7V42nbBN2ELruUiEbHPTdBLBixkXWkGzA==
+X-YMail-OSG: 4iE9000VM1mvGFKgiz8JI0BR2S4bwwaLHLFFg3MI.zCYp7TcDpKM9bdkPEeLv.m
+ U1_lLO4rd4HLDDFBnVkLMN46qNhIxjbCQVBrZ_PFS41l.80PFPJm8GVlDjMOTor6.pELnFRjt_t9
+ x0iaRzAsFPcBYVPdo3O6qsVUiWW4A_kCTVtBEBT2IugV9JsFt_ts24Dttn.M5nnRmaiKz97cLNB3
+ 8nuy1U.FJ3Vtn2ITJYTdB.JV_TwFAK8bJ.335q7ILA9wdLinHo4KUD3nC8XCRqPdWJtlVMVQaQWY
+ fSvz4vpHHj2sKkqIqVLzLAcEr976SV4cmO6hiIJm2RKkl0Q324haKPUxgj_rffn5w3_4b2ZB_Akb
+ 4KgOFvdJEsn_JQ6xCHaNZEPr7.rvRxW4UDZG2IH5YatG8NAYG_Iub3jK1SaD72MOyp.BqqIbjGu1
+ hvVhVkETt3JEkFLRzY8K2c9AHucKD14ZeyUbNYzURtwHeKz1U0XtDxXc3P3iWOOh7bcS3XTL2WCI
+ cfHfXhdd5qy8c6U_clNcx7VOyeoFMdtbcxDI7FOTaK.Jt6b1TQ794YhQ4HO.rBRQ5BKKIYWRJtbs
+ lGoGbtEDoJWnGMJYx_xLQzyFEK4hW86xUaaNJ.U3gZtHHhbtw2kZr8dBU349umDS6OF616e1yNAO
+ d72c1Lmitns_mQm_iIdpjfmILskcjGaMzvqpEgo9ToqYSpCJsr16mgKmKqvhVtaQBqJRhrV2H2Ib
+ Q36lh7udgEFeTuQn1kHnGyXPXjn8ooYmJJnFvSnfcFHO19lIiI.bVhKZqTErp5uvJGbmIlzsApIV
+ D2ubl0rkXDXAitfQkv2Fq3AOybcDpEgfbrlJYuHIAECktscaJHhCg9KzQE.jcAxg_wNmRGLoNn.F
+ 33XDqUDDjqtD1YGov4TF9MzOWlDmg_lRT4F5uIErR_hLUsAcL7yTVvP2EDbFw4swNK1pWdHj9ag.
+ 58KWnuSmKWvgg_vItGzamkAkR7vRSt02ttxHrRX_y5LiYvfcZ86hG.Cxx7JuYbf4JqeLzEJG4HR0
+ dbf7PGloC3j4opghP37xhlE1t17gUjV7ToH0DuuV9lL30HLpm.rrUFZnDc4n0yAsN3siO1PevLJR
+ _Sa4J9sg9muptgcaPEP1hhKoTWtJAoQ8f80E19Yecjek1KUqVdyNUXByXblRR1w7ekG3wPJ6rYkI
+ 9LVotjE9o6QlZCF390qz8t3psZd074cPGZgTPpufPR6KpQIFbfIBkp1NhCJXQ3wWAGb3jo7HCn_q
+ STBcbCeGHI9lVS2kKdmHbymlnnFJCL4mjRUyQPFUFzOGQBrlwy7wiIa4EseRNhl4eio_RR2hZmMw
+ XeVMujh4a6xZTVNnqeSlaoML5X7hS8oHQuMhu3v7gADZCVqsd52.3i63V9eTfZ3.tCigYLUo46i0
+ frIiHNXL1bFhKQOMQEJiHpeWWHlTRtDld6Q59pxVBn_GTDMj6MV7sv6wQjmUYGUsy0WNt2qzIi2g
+ rNIXwvWzklwDWXXzDKGL4gRcBPHDcZSHBAL.gvu4iROnSuNHE7yo.VFBUHNHk2vBD9Mqkj.ZPS7S
+ O4JVJFsyCoebiGr3gSdSOMZzewUoR1MYry7FRTkbDCuWujgpMSkbkrohWkKJ5yQH0GtnklwaR1a8
+ PFjpJ6h_enssf_giRX3wBGKxIN5HkAUqXZfSfw1H2CydKfhicREdoTTbrTO0h0U1T1pk_4sOGjfu
+ ZtdmSzaoFLfomLXK9BuXxucS1HZU01deqkSdl41dEsHHwLCXTir.kpCt7GQWl8AcctFejGQy.p_U
+ YPUif.ACQ4QB3DIE8Q.75i8gGJQwG_a.5v2RKbMPL2awZ6Zqt.MVm.UYK3L_FcwJxTpvt8nS107g
+ tyX_cC0F6MdYwc9Uc_rBtyv0vVht6Kit8lvZMTnZQjEesNycBVoFdFHYeXewu5F6VHhf_KqmZZf3
+ bClLhac36gOzhnCjBtqIO.HkL3mBisTAtZzZAKywVQ._pvX.Mg9tMh1xjUObqPlAk8pbI1am8rBY
+ P51UjvJYunDa9zZlkrLdCokgAXJvSBZX7EmzKgyUho9YdcocwDmvjjT594.zfwN5Ru62AjOV8Kj1
+ 08oZ4yHAlFINtcelSg2rv9EFQ1Ov.Yzni0nbpp58nsrVyPFX7KZFdh5.NPTK6AcPfdWYTTJU27hG
+ uReasEqDKD9CXTYGoeKcamlPwtZciUfITP6Nx_c_eIF8Ip8lY2zpGDD9hl_JlkHcsZxewtRNryjk
+ q9StXkopiSU1E8jBYk2wRbSBdQPPl_YSPr2MWdik-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Wed, 20 Jul 2022 21:42:18 +0000
+Received: by hermes--production-gq1-56bb98dbc7-hx587 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 926c34200fa537ef42813b3d43720d1f;
+          Wed, 20 Jul 2022 21:42:13 +0000 (UTC)
+Message-ID: <f1f8b350-4dc5-b975-3854-ecbf9f4e54ba@schaufler-ca.com>
+Date:   Wed, 20 Jul 2022 14:42:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220709134230.2397-6-santosh.shukla@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 0/4] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>,
+        =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
+        KP Singh <kpsingh@kernel.org>, revest@chromium.org,
+        jackmanb@chromium.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, shuah@kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        casey@schaufler-ca.com
+References: <20220707223228.1940249-1-fred@cloudflare.com>
+ <CAJ2a_DezgSpc28jvJuU_stT7V7et-gD7qjy409oy=ZFaUxJneg@mail.gmail.com>
+ <3dbd5b30-f869-b284-1383-309ca6994557@cloudflare.com>
+ <84fbd508-65da-1930-9ed3-f53f16679043@schaufler-ca.com>
+ <CAHC9VhQ-mBYH-GwSULDyyQ6mNC6K8GNB4fra0pJ+s0ZnEpCgcg@mail.gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAHC9VhQ-mBYH-GwSULDyyQ6mNC6K8GNB4fra0pJ+s0ZnEpCgcg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.20447 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 09, 2022, Santosh Shukla wrote:
-> Inject the NMI by setting V_NMI in the VMCB interrupt control. processor
-> will clear V_NMI to acknowledge processing has started and will keep the
-> V_NMI_MASK set until the processor is done with processing the NMI event.
-> 
-> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
-> ---
-> v2:
-> - Added WARN_ON check for vnmi pending.
-> - use `get_vnmi_vmcb` to get correct vmcb so to inject vnmi.
-> 
->  arch/x86/kvm/svm/svm.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 44c1f2317b45..c73a1809a7c7 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3375,12 +3375,20 @@ static void pre_svm_run(struct kvm_vcpu *vcpu)
->  static void svm_inject_nmi(struct kvm_vcpu *vcpu)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
-> +	struct vmcb *vmcb = NULL;
-> +
-> +	++vcpu->stat.nmi_injections;
-> +	if (is_vnmi_enabled(svm)) {
-> +		vmcb = get_vnmi_vmcb(svm);
-> +		WARN_ON(vmcb->control.int_ctl & V_NMI_PENDING);
+On 7/19/2022 6:32 PM, Paul Moore wrote:
+> On Fri, Jul 8, 2022 at 12:11 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> On 7/8/2022 7:01 AM, Frederick Lawler wrote:
+>>> On 7/8/22 7:10 AM, Christian Göttsche wrote:
+>>>> ,On Fri, 8 Jul 2022 at 00:32, Frederick Lawler <fred@cloudflare.com>
+>>>> wrote:
+> ..
+>
+>>>> Also I think the naming scheme is <object>_<verb>.
+>>> That's a good call out. I was originally hoping to keep the
+>>> security_*() match with the hook name matched with the caller function
+>>> to keep things all aligned. If no one objects to renaming the hook, I
+>>> can rename the hook for v3.
+> No objection from me.
+>
+> [Sorry for the delay, the last week or two has been pretty busy.]
+>
+>>>> III.
+>>>>
+>>>> Maybe even attach a security context to namespaces so they can be
+>>>> further governed?
+>> That would likely add confusion to the existing security module namespace
+>> efforts. SELinux, Smack and AppArmor have all developed namespace models.
+> I'm not sure I fully understand what Casey is saying here as SELinux
+> does not yet have an established namespace model to the best of my
+> understanding, but perhaps we are talking about different concepts for
+> the word "namespace"?
 
-Haven't read the spec, but based on the changelog I assume the flag doesn't get
-cleared until the NMI is fully delivered.  That means this WARN will fire if a
-VM-Exit occurs during delivery as KVM will re-inject the event, e.g. if KVM is
-using shadow paging and a #PF handle by KVM occurs during delivery.
+Stephen Smalley proposed a SELinux namespace model, with patches,
+some time back. It hasn't been adopted, but I've seen at least one
+attempt to revive it. You're right that there isn't an established
+model. The model proposed for Smack wasn't adopted either. My point
+is that models have been developed and refinements and/or alternatives
+are likely to be suggested.
 
-> +		vmcb->control.int_ctl |= V_NMI_PENDING;
-> +		return;
-> +	}
->  
->  	svm->vmcb->control.event_inj = SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_NMI;
->  	vcpu->arch.hflags |= HF_NMI_MASK;
->  	if (!sev_es_guest(vcpu->kvm))
->  		svm_set_intercept(svm, INTERCEPT_IRET);
-> -	++vcpu->stat.nmi_injections;
->  }
->  
->  static void svm_inject_irq(struct kvm_vcpu *vcpu)
-> -- 
-> 2.25.1
-> 
+>
+> >From a SELinux perspective, if we are going to control access to a
+> namespace beyond simple creation, we would need to assign the
+> namespace a label (inherited from the creating process).  Although
+> that would need some discussion among the SELinux folks as this would
+> mean treating a userns as a proper system entity from a policy
+> perspective which is ... interesting.
+>
+>> That, or it could replace the various independent efforts with a single,
+>> unified security module namespace effort.
+> We've talked about this before and I just don't see how that could
+> ever work, the LSM implementations are just too different to do
+> namespacing at the LSM layer.
+
+It's possible that fresh eyes might see options that those who have
+been staring at the current state and historical proposals may have
+missed.
+
+>   If a LSM is going to namespace
+> themselves, they need the ability to define what that means without
+> having to worry about what other LSMs want to do.
+
+Possibly. On the other hand, if someone came up with a rational scheme
+for general xattr namespacing I don't see that anyone would pass it up.
+
+

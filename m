@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB9257BC8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D6857BC93
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234716AbiGTRZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S240227AbiGTRZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240269AbiGTRZF (ORCPT
+        with ESMTP id S240195AbiGTRZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:25:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3442C1B6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:25:03 -0700 (PDT)
+        Wed, 20 Jul 2022 13:25:18 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0958388D;
+        Wed, 20 Jul 2022 10:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pFpGMzqUPjI7i/5145DxoFt8ywldYy6rEYyRWkNVjSw=; b=sPdlSECo2Nma2PNnHKBWFsvRoi
-        KAKFuRYu7lg/BYRKHWqIjYxc+0hG4rkKxEEDjWGqBr0AXGjbbDSzAy0+NYFOexlTK7kbeOstAdqok
-        K56euDgkYbWWkx2gbkeyYw/wa+oqh4dQbQXvxxVze1QyRCaVastTZR8gGCZXgSuMdf/VM3O+8x/AE
-        RlNR48hOfhS1/DDSHtb36lgkxCvlaitroFENrZQDjcIt41Qy00LNoMdVhlX4CGgb96nsixAHC5xZ6
-        kTYL3Q14aUCcsh9myMZETXnC+H604S3nGv/X3Uwm7uNLCj1Zcpt0sHVAl7Fe6VznYsS8kLJM5wyc0
-        lfPsEdNg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEDR4-00Ee8I-E3; Wed, 20 Jul 2022 17:24:34 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8298A980BBE; Wed, 20 Jul 2022 19:24:32 +0200 (CEST)
-Date:   Wed, 20 Jul 2022 19:24:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-Message-ID: <Ytg6UD+0F6zv981o@worktop.programming.kicks-ass.net>
-References: <20220716230344.239749011@linutronix.de>
- <20220720125736.48164a14@gandalf.local.home>
- <CAHk-=wh=Yjy=DmGzzGj-ivyx_w45AHh35eDkpGtajaiO+TX38A@mail.gmail.com>
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=SVv1mJFZgdLvqAT/dc54K/PPq+LfXgZ/F5lxQKzL04s=; b=yzstOkdryQRuZvjnG4hYCZYTbr
+        AidRt3Quccsh2KnHEvYwSz0JLj/7MHhcRtbWkzXv8quL3Iv1XhAJ4bLHTPj5Umrd1cTe6jfSc5djn
+        Qcn3WcYPSXvrxX8QoBC6iCXBV7yVpS1rPwl1fbgcF+iaVysmgyFtvU7FIZEZL61q9cKDGPSvXv93K
+        yH2MmH7z3UvdYmD1O0Ia3rSf0JxIszxWtUAA7+C8EwA+Vjr9FYDGDgHwhLdFXrbb6naictjKBWtpU
+        snxIyS6VR1byqiFM5to8WgMbxDOM+lmznClaVpsE9wzCyGWpYz02On65VrluwdTpXIxa9V2of8aBZ
+        +9H7pUYg==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEDRk-008azp-Uy; Wed, 20 Jul 2022 17:25:17 +0000
+Message-ID: <f6966a4f-7010-6dd1-cf6d-6f42fa393607@infradead.org>
+Date:   Wed, 20 Jul 2022 10:25:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh=Yjy=DmGzzGj-ivyx_w45AHh35eDkpGtajaiO+TX38A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: linux-next: Tree for Jul 20 (I2C_I801)
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+References: <20220720225211.20f9fa80@canb.auug.org.au>
+ <a4ed17de-de0e-8267-851e-51a762223cc5@infradead.org>
+In-Reply-To: <a4ed17de-de0e-8267-851e-51a762223cc5@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 10:09:37AM -0700, Linus Torvalds wrote:
-> On Wed, Jul 20, 2022 at 9:57 AM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > [    2.488712] WARNING: CPU: 0 PID: 0 at arch/x86/kernel/alternative.c:558 apply_returns+0xa3/0x1ec
-> 
-> That warning is kind of annoying, in how it doesn't actually give any
-> information about where the problem is.
-> 
-> I do note that we only fix up JMP32_INSN_OPCODE, and I wonder if we
-> have a "jmp __x86_return_thunk" that is close enough to the return
-> thunk that it actually uses a byte offset?
-> 
-> But that WARN_ON_ONCE() should probably be changed to actually give
-> some information about where the problem is.
 
-There's a patch for that:
 
-  https://lkml.kernel.org/r/20220713213819.460771-1-keescook@chromium.org
+On 7/20/22 10:02, Randy Dunlap wrote:
+> 
+> 
+> On 7/20/22 05:52, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20220719:
+>>
+> 
+> on i386 or x86_64:
+> when X86_PLATFORM_DEVICES is not set:
+> 
+> WARNING: unmet direct dependencies detected for P2SB
+>   Depends on [n]: X86_PLATFORM_DEVICES [=n] && PCI [=y]
+>   Selected by [m]:
+>   - I2C_I801 [=m] && I2C [=m] && HAS_IOMEM [=y] && PCI [=y] && X86 [=y]
+> 
+> 
+> Full randconfig file is attached.
+> 
 
-it seems to have gotten lost, let me go queue that.
+Sorry, I just noticed in another randconfig build a similar issue
+with LPC_ICH:
+
+WARNING: unmet direct dependencies detected for P2SB
+  Depends on [n]: X86_PLATFORM_DEVICES [=n] && PCI [=y]
+  Selected by [m]:
+  - LPC_ICH [=m] && HAS_IOMEM [=y] && PCI [=y] && X86 [=y]
+
+
+-- 
+~Randy

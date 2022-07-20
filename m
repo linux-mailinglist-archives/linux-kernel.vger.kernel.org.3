@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B2657B142
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D241457B14B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbiGTGyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S229676AbiGTG6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiGTGyM (ORCPT
+        with ESMTP id S233698AbiGTG6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:54:12 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1D4313B8;
-        Tue, 19 Jul 2022 23:54:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1658300040;
-        bh=jL0qhy7UaXVfEn5N7vL9Q+NNCqml/OPeBCP0K856yLM=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=cbqD/2JqCqD1dzSRBX4gdIAS25JRzVjkZtljIX3ch1pBJpEExoYtXYVfErpJBJnCZ
-         qRq22nuFB/lM/fpjJ+/17+6m8Yb9grvGJtX3fYkp7T/NTHkfx1rk2ysLVEzpvZGaYL
-         IPE+rfwQ3FphS4ITVfqTfGxcy6/vJWyc04ZiqcOg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.166.214]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M6UZl-1oBbov23s9-006zod; Wed, 20
- Jul 2022 08:54:00 +0200
-Message-ID: <860792bb-1fd6-66c6-ef31-4edd181e2954@gmx.de>
-Date:   Wed, 20 Jul 2022 08:53:53 +0200
+        Wed, 20 Jul 2022 02:58:22 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA6054ACE
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:58:20 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id f65so15566148pgc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AF+KtcQcuFeKsfB6J6qxSptBOPPY8MNLklD1mjEET1o=;
+        b=VRCq53cYNSDyBLSgveHJIkDyFrcNcVtzhsy5iMjhubVqaq4jcpMqJ9oYTP+MzSbY82
+         UAbEyfZ4oPvv4q1iADvhggNOfrn1oSl4zSZYn1/+cfBl27yU4jZcpC9AZHk4Kh3ulHzv
+         iJGqmnB4CG/wFSwt09/Vtf/b8l3p0/9JDcH5b+aM4EwjMIh4XfBqeaxBVlll4t/El0x6
+         WS0RtSy5CAZ/WFSCD247Lfog/EShj7J3FlBVY22x03rrq25NRE7CPdpp59ih6+NIHhup
+         q/b5BewK7+XUA4ltxxWf0kUy4AlUcjp/71y3CG2lxQtsUYOb+9HKFagxu6s+mp+DPC78
+         4Vcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AF+KtcQcuFeKsfB6J6qxSptBOPPY8MNLklD1mjEET1o=;
+        b=j6qRU1dP5X3OLFQ6ijiKVEYRfQVGLL37TEkDa8sfkJw1xa1j+6+KxWOsYoNI4mTtUa
+         +iH0A7evN5GnMINcI9dQtv93AR01cdbTikh8YnRwC79AgM4wrXduRvlPhDtzTl7vShhs
+         uhJyh3L15rzDwicT+0k5eTbeH9rH3x5isWnAPe3vbtlSaFVcwIuVYT4OHgzENYDkTx3a
+         OR25tQEIoqMGMQ4rWpmr2oXDAaHsAYtnKkGCkVW7BliBGtZOvKitEac8pcAGrSVhNbsW
+         GtdehupRvg8KH1cjGVoukL5jQpOYRKzd5wEwTEgrHf+UwPBGZFPC5nTKytxHZtvsWeVH
+         B4Xg==
+X-Gm-Message-State: AJIora9PbWK/OxvDj1fI2M7mXTRHHZuo16x8ZnXIZRSX3gazwctCYCuH
+        NU+ho4lrU6JbGMgl857B4yE=
+X-Google-Smtp-Source: AGRyM1ttMlhZniegm1mHRwgoJ8M+tVlGTnaE3XuxDhaTCJ3hXSgnasW42hbWPv7tAuZTaVQQPmdYbQ==
+X-Received: by 2002:a05:6a00:793:b0:52a:b261:f8e7 with SMTP id g19-20020a056a00079300b0052ab261f8e7mr37269509pfu.20.1658300300172;
+        Tue, 19 Jul 2022 23:58:20 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id c6-20020a63d146000000b0040d75537824sm11201782pgj.86.2022.07.19.23.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 23:58:19 -0700 (PDT)
+From:   zengjx95@gmail.com
+To:     vitaly.wool@konsulko.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Zeng Jingxiang <linuszeng@tencent.com>
+Subject: [PATCH] mm/z3fold: do not unlock in z3fold_page_putback()
+Date:   Wed, 20 Jul 2022 14:57:44 +0800
+Message-Id: <20220720065744.1006305-1-zengjx95@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: WARNING: CPU: 1 PID: 14735 at fs/dcache.c:365
- dentry_free+0x100/0x128
-Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Hillf Danton <hdanton@sina.com>, linux-kernel@vger.kernel.org,
-        linux-parisc@vger.kernel.org
-References: <20220709090756.2384-1-hdanton@sina.com>
- <20220715133300.1297-1-hdanton@sina.com>
- <cff76e00-3561-4069-f5c7-26d3de4da3c4@gmx.de> <Ytd2g72cj0Aq1MBG@ZenIV>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <Ytd2g72cj0Aq1MBG@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:A+Jl1Eoj4mUmFbeHDf48LmNFwgwxjO4nSeLqyxJ1ylHwAcysdAO
- qT19i6GNnmljANR4MoumJN4QwrgM+UserjL8xUrRcDnRopKUi9X1qJg0uJU9obykK5i+G+W
- T8uNEWrj8JBC6xwqwV2n2QG9sQo1QBPVMLfKUIBDmM4LGFWEaoJtvyJ2yMFwy8LlUvrYnSB
- H5HH7tPAFKKi4ZKJfW3TA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:atGPOWriFzc=:b9JUuqfNJa5JcB8s5LRyRa
- WHTxvVHH3c9wsMQs/0aylw3js3N0R3QRzyX8ZHs7ZP8ZcPkZTzy+AlqWsD55iidbZGOVvRgvg
- ONKQhqGpRT8BB6eUvYt4ohz4WlxFOEeRN5dF2nei4R7CRUPiJZyJyTIGz67QtnA2SrfARlQpl
- i978mF9fLz3x13JmXOPmrRhZF6dWHjoARLcBy6EusPiln0DMPeN0RbpS4fxBwFUVCgP/EgkdO
- NMRG1vrwPrCvutwiRWMPCB521mozWC5sMP/fzeOEJNuunoTn8XeyTRp6+TMs21C/Hb4S1N6TZ
- btAdhWcpxc+owBvVhglDK+3jN1eTmg3pnji8JI84LOK80JhjDrGMiYMH5x0CXx34/aTBYCyMU
- pgoBZl9Y6NW5EbX+QAKbZ0f31s10hkx/tQ1Gdg0CisLa99TgMjy+C2+ZVgA5HRec7M/MLtTlX
- xAojsgRFf4cu2nu07pSbyCOx0YMvVzTv62n9G10SpYSWsWqGWEmTCidxjKbqJLUhDTzXDqXnn
- F1M0k/0/HQGFI2lcWG6L1wITpGA5y1TTxtTzXpVYc1j+YUAVodulpGnhra+CFGrw1d/09FkL6
- PqC3XEP9q9g1SKEznQtyrsyaKFBwmX1HIcPfbjb/5ys8c2K6AuHb6hoYR3vPLCaVGsZMplxfa
- W2Q+1oIDEVjSAG4C+nGGI7+tH+XlH5ZyjmkvrLAwNhIBBvDzsiJl0JkPqWG2zSoWNfdcUUph1
- AhGTr2BNdk5pdpd7JpwN3rmA9aWnTfYK/k/IjgDdMTIly+/+ighNHW5ZgNw8oF2EFKwSYMIvU
- wfHdzWwLydNiagE7YQCxiKdWuaLXzRwHpfj+kRJ3e40OVvcwouJhan0s43ds0q/cC6jHBBsMf
- xeS5cZORCEO9MZCBI7CkjffejWFyps8ENn64YUDRMk2QJJlUZQ9+uWghvTvrqvlyYfaY22Q8E
- N/ttVnLSzgPtaJjHh9LNDvOqMFjqFyoVHBKht5CjKaX+wI2iaMsDqqA6FY2O4BwCgBFuGSH7k
- nKWwPXaw7EmhOX40avnrNYsacumfa/dOs7RYkswG7Ag2ezUvr2M7XbGNmxKhjiVZYRQV2yRdH
- bDdVvMjyFGjIlizxdQEGy5AfyIktDF+VhjdbIkLbOOKcaQ+vq+TNSs8fw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,19 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 05:29, Al Viro wrote:
-> On Sat, Jul 16, 2022 at 07:27:30AM +0200, Helge Deller wrote:
->> On 7/15/22 15:33, Hillf Danton wrote:
->
->> [108565.341434] dentry->d_u.d_rcu =3D 0x416be770
->
-> Incidentally, does that match the address of __d_free() on your build,
-> or is it something different?
+From: Zeng Jingxiang <linuszeng@tencent.com>
 
-I don't think it's __d_free().
-The source is:
-	pr_err("dentry->d_u.d_rcu =3D %pS\n", dentry->d_u.d_rcu.func);
-so the "%pS" would probably have resolved the pointer to string "__d_free"=
- (or something else).
+z3fold_page_lock() will lock zhdr->page_lock
+1630	z3fold_page_lock(zhdr);
 
-Helge
+return without unlocking zhdr->page_lock
+1634	if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+1635		return;
+
+Signed-off-by: Zeng Jingxiang <linuszeng@tencent.com>
+---
+ mm/z3fold.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/mm/z3fold.c b/mm/z3fold.c
+index f41f8b0d9e9a..03785832ad47 100644
+--- a/mm/z3fold.c
++++ b/mm/z3fold.c
+@@ -1632,13 +1632,14 @@ static void z3fold_page_putback(struct page *page)
+ 		list_del_init(&zhdr->buddy);
+ 	INIT_LIST_HEAD(&page->lru);
+ 	if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+-		return;
++		goto ret;
+ 	spin_lock(&pool->lock);
+ 	list_add(&page->lru, &pool->lru);
+ 	spin_unlock(&pool->lock);
+ 	if (list_empty(&zhdr->buddy))
+ 		add_to_unbuddied(pool, zhdr);
+ 	clear_bit(PAGE_CLAIMED, &page->private);
++ret:
+ 	z3fold_page_unlock(zhdr);
+ }
+ 
+-- 
+2.27.0
+

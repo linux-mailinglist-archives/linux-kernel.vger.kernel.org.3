@@ -2,202 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D13357B646
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008D457B644
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbiGTMXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S232694AbiGTMXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiGTMXv (ORCPT
+        with ESMTP id S229554AbiGTMX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:23:51 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845252C12A
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:23:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658319830; x=1689855830;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h36jPW6E6Mie2geDwKHg1YrEJh8MgOU21Q9+IAqZbB8=;
-  b=dMTfp4/fZTj6cYLbXU4HVzGBqN09ffRC3r7PMRUn1aECbV3UPZk9bmgt
-   SIFS1OGvGbVUoUQnBiSQUCojJ+Z7UEVPZJvOipNL0zS2wPaHGJruA2CmR
-   uxvKlD6hkxU9M1S0gfOKzmmMKFGBO9DAX5qyDV5/1A2UBCQtCAE7faQ8O
-   THBHZh5xKeCCp+47cuqJcclMmH+wch6TaFV1n2Pinmb2zdHj0Gqd23SYL
-   Pm07pg06eUjET7KZJG2vUvyQwXG9SxHnbUe5IzP1Jbrc50aYfOxn4mRZn
-   9KCBp8y4wC0uPcO+bZqQuHkx6wkgA9HBNStkt6Sd5pS27/KFLv7r0+fQw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="287921503"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="287921503"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 05:23:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="625644575"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jul 2022 05:23:36 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oE8jn-0000Tt-Uz;
-        Wed, 20 Jul 2022 12:23:35 +0000
-Date:   Wed, 20 Jul 2022 20:23:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ckkim <changkon12@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dongjin Kim <tobetter@gmail.com>
-Subject: drivers/power/reset/odroid-reboot.c:141:17: error: 'arm_pm_restart'
- undeclared; did you mean 'alarm_restart'?
-Message-ID: <202207202023.WNeIJuRZ-lkp@intel.com>
+        Wed, 20 Jul 2022 08:23:29 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525D62C12A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:23:28 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id f24-20020a1cc918000000b003a30178c022so1230777wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:23:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=JLxF/0Kiw2UkgVRNOHRym3MLoLLSmnWlmSV1izRp4x0=;
+        b=LpC7monAfz692y2h4Q2KLn/5jyoYADgALsIzCxPloN+WT7zwLJWOnyHHwc8uOmCu78
+         mPuk41vMa/I+ZLSVv/N2CVs+i48jq+Kf6MGGZtYU+bGxBPU/dxAMrAGMaJiw2efc7+qN
+         VeQ0tO/BcE4W0/jVCUXQaDrjcFJ92XKNaDqggtn6FrZCY57T80TiD943XtDGNwVcPc56
+         ONk/6pk2GihhpkyOVczATL+AvX3Kea16cESIQwy42DPC0jOpVsH0mkcxbkYSmL1DYnzI
+         +g0mR7vU60ElxQhqzmWTgVw8OIUCQk3FIBZnETq4oJUd9wcu+sq5sVL7hvKa2YzzpFV8
+         BD4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=JLxF/0Kiw2UkgVRNOHRym3MLoLLSmnWlmSV1izRp4x0=;
+        b=w9olz48ZeHKhJPZvMSQn5jWzba8VF5aHyBgTDABatByw9nFMnpy+WzqZkQpebcjlTb
+         2AmzUiD5eQdTR72Fenhk/ilzEgCyAl/JOQlazvk/JuoQfPKQBxJwR8aq0fgcPLhF9E3p
+         XdEwm8Dl4QA8n9CDxMnZJfUrnjdwo1XqP9pKNuVVDw1eLeaH3l5vsHpP5vngvmCV/riZ
+         M8n4DgvlUI+Ia6ktN6V3AY6INQ0eaLOIA73EE/1Kkc+/4sg7II6iZWbBcCsmjyC9+w5b
+         Lr0iYLgaRLg75bgzXXFKQ92pIorJd54xcKHX+hy+uiYrOjh6agIWrOqCRD6iEYKxNGBl
+         Qecw==
+X-Gm-Message-State: AJIora+pWaVOL/NL6qmgUkteGyObIkPR3NV08EIcAKl4A7G0U47TcJ8h
+        UULzFI6qLHbGLhYbvsn4CZ4kxA==
+X-Google-Smtp-Source: AGRyM1tFA28srnKBwK4QTFEPCVfHQm4IXMaMq0ccjYMM7Im2eU+1ihq5aMslmYBnlNE9UR8jA/5Ghg==
+X-Received: by 2002:a05:600c:3ba3:b0:3a3:5dd:f10f with SMTP id n35-20020a05600c3ba300b003a305ddf10fmr3571064wms.185.1658319806815;
+        Wed, 20 Jul 2022 05:23:26 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id f8-20020a05600c154800b00397402ae674sm2636506wmg.11.2022.07.20.05.23.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 05:23:26 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 13:23:24 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     =?utf-8?B?aGFpYmluemhhbmco5byg5rW35paMKQ==?= 
+        <haibinzhang@tencent.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@arm.com>,
+        Martin Ma <Martin.Ma@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hewenliang4@huawei.com" <hewenliang4@huawei.com>
+Subject: Re: [PATCH V2] arm64: fix oops in concurrently setting
+ insn_emulation sysctls
+Message-ID: <YtfzvK0T8pJacsDm@google.com>
+References: <9A004C03-250B-46C5-BF39-782D7551B00E@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9A004C03-250B-46C5-BF39-782D7551B00E@tencent.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/tobetter/linux odroid-5.19.y
-head:   0569e1291a824471ea27c9e90132881c0232a3a0
-commit: 9aa3f0db97ed4d976f3640f69d177bf27e78099d ODROID-COMMON: power:reset: Add odroid support
-date:   9 days ago
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220720/202207202023.WNeIJuRZ-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/tobetter/linux/commit/9aa3f0db97ed4d976f3640f69d177bf27e78099d
-        git remote add tobetter https://github.com/tobetter/linux
-        git fetch --no-tags tobetter odroid-5.19.y
-        git checkout 9aa3f0db97ed4d976f3640f69d177bf27e78099d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Sat, 02 Jul 2022, haibinzhang(张海斌) wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> How to reproduce:
+>     launch two shell executions:
+>        #!/bin/bash
+>        while [ 1 ];
+>        do
+>            echo 1 > /proc/sys/abi/swp
+>        done
+> 
+> Oops info:
+>     Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+>     Internal error: Oops: 96000006 [#1] SMP
+>     Call trace:
+>     update_insn_emulation_mode+0xc0/0x148
+>     emulation_proc_handler+0x64/0xb8
+>     proc_sys_call_handler+0x9c/0xf8
+>     proc_sys_write+0x18/0x20
+>     __vfs_write+0x20/0x48
+>     vfs_write+0xe4/0x1d0
+>     ksys_write+0x70/0xf8
+>     __arm64_sys_write+0x20/0x28
+>     el0_svc_common.constprop.0+0x7c/0x1c0
+>     el0_svc_handler+0x2c/0xa0
+>     el0_svc+0x8/0x200
+> 
+> emulation_proc_handler changes table->data for proc_dointvec_minmax
+> and so it isn't allowed to reenter before restoring table->data,
+> which isn't right now.
+> To fix this issue, keep the table->data as &insn->current_mode and
+> use container_of() to retrieve the insn pointer. Another mutex is
+> used to protect against the current_mode update but not for retrieving
+> insn_emulation as table->data is no longer changing.
 
-All errors (new ones prefixed by >>):
+Looks as though this lost its Fixes tag during the rework.
 
-   drivers/power/reset/odroid-reboot.c:63:6: warning: no previous prototype for 'odroid_card_reset' [-Wmissing-prototypes]
-      63 | void odroid_card_reset(void)
-         |      ^~~~~~~~~~~~~~~~~
-   drivers/power/reset/odroid-reboot.c: In function 'odroid_restart_probe':
->> drivers/power/reset/odroid-reboot.c:141:17: error: 'arm_pm_restart' undeclared (first use in this function); did you mean 'alarm_restart'?
-     141 |                 arm_pm_restart = do_odroid_restart;
-         |                 ^~~~~~~~~~~~~~
-         |                 alarm_restart
-   drivers/power/reset/odroid-reboot.c:141:17: note: each undeclared identifier is reported only once for each function it appears in
+  Fixes: 587064b610c7 ("arm64: Add framework for legacy instruction emulation")
 
+Will, are you able to add this retroactively?
 
-vim +141 drivers/power/reset/odroid-reboot.c
-
-    62	
-  > 63	void odroid_card_reset(void)
-    64	{
-    65		int ret = 0;
-    66	
-    67		if ((sd_vqsw == 0) && (sd_vmmc == 0))
-    68			return;
-    69	
-    70		if (sd_vqen == 0) {
-    71			gpio_free(sd_vqsw);
-    72			gpio_free(sd_vmmc);
-    73			ret = gpio_request_one(sd_vqsw,
-    74					GPIOF_OUT_INIT_LOW, "REBOOT");
-    75			CHECK_RET(ret);
-    76			mdelay(10);
-    77			ret = gpio_direction_output(sd_vqsw, 1);
-    78			CHECK_RET(ret);
-    79			ret = gpio_request_one(sd_vmmc,
-    80					GPIOF_OUT_INIT_LOW, "REBOOT");
-    81			CHECK_RET(ret);
-    82			mdelay(10);
-    83			ret = gpio_direction_output(sd_vqsw, 0);
-    84			CHECK_RET(ret);
-    85			ret = gpio_direction_output(sd_vmmc, 1);
-    86			CHECK_RET(ret);
-    87			mdelay(5);
-    88			gpio_free(sd_vqsw);
-    89			gpio_free(sd_vmmc);
-    90		} else {
-    91			gpio_free(sd_vqsw);
-    92			gpio_free(sd_vqen);
-    93			gpio_free(sd_vmmc);
-    94	
-    95			ret = gpio_request_one(sd_vqsw,
-    96					GPIOF_OUT_INIT_LOW, "REBOOT");
-    97			CHECK_RET(ret);
-    98			ret = gpio_request_one(sd_vqen,
-    99					GPIOF_OUT_INIT_LOW, "REBOOT");
-   100			CHECK_RET(ret);
-   101			ret = gpio_request_one(sd_vmmc,
-   102					GPIOF_OUT_INIT_LOW, "REBOOT");
-   103			CHECK_RET(ret);
-   104			mdelay(100);
-   105			ret = gpio_direction_input(sd_vqen);
-   106			CHECK_RET(ret);
-   107			ret = gpio_direction_input(sd_vmmc);
-   108			CHECK_RET(ret);
-   109			ret = gpio_direction_input(sd_vqsw);
-   110			CHECK_RET(ret);
-   111			mdelay(5);
-   112			gpio_free(sd_vqen);
-   113			gpio_free(sd_vmmc);
-   114			gpio_free(sd_vqsw);
-   115		}
-   116	}
-   117	
-   118	static void do_odroid_restart(enum reboot_mode reboot_mode, const char *cmd)
-   119	{
-   120		odroid_card_reset();
-   121		__invoke_psci_fn_smc(psci_function_id_restart,
-   122					0, 0, 0);
-   123	}
-   124	
-   125	static void do_odroid_poweroff(void)
-   126	{
-   127		odroid_card_reset();
-   128	
-   129		__invoke_psci_fn_smc(0x82000042, 1, 0, 0);
-   130		__invoke_psci_fn_smc(psci_function_id_poweroff,
-   131					0, 0, 0);
-   132	}
-   133	
-   134	static int odroid_restart_probe(struct platform_device *pdev)
-   135	{
-   136		struct device_node *of_node;
-   137		u32 id;
-   138	
-   139		if (!of_property_read_u32(pdev->dev.of_node, "sys_reset", &id)) {
-   140			psci_function_id_restart = id;
- > 141			arm_pm_restart = do_odroid_restart;
-   142		}
-   143	
-   144		if (!of_property_read_u32(pdev->dev.of_node, "sys_poweroff", &id)) {
-   145			psci_function_id_poweroff = id;
-   146			pm_power_off = do_odroid_poweroff;
-   147		}
-   148	
-   149		of_node = pdev->dev.of_node;
-   150	
-   151		sd_vqsw = of_get_named_gpio(of_node, "sd-vqsw", 0);
-   152		if (!gpio_is_valid(sd_vqsw)) sd_vqsw = 0;
-   153	
-   154		sd_vmmc = of_get_named_gpio(of_node, "sd-vmmc", 0);
-   155		if (!gpio_is_valid(sd_vmmc)) sd_vmmc = 0;
-   156	
-   157		sd_vqen = of_get_named_gpio(of_node, "sd-vqen", 0);
-   158		if (!gpio_is_valid(sd_vqen)) sd_vqen = 0;
-   159	
-   160		return 0;
-   161	}
-   162	
+> Signed-off-by: hewenliang <hewenliang4@huawei.com>
+> Signed-off-by: Haibin Zhang <haibinzhang@tencent.com>
+> ---
+>  arch/arm64/kernel/armv8_deprecated.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
+> index 6875a16b09d2..fb0e7c7b2e20 100644
+> --- a/arch/arm64/kernel/armv8_deprecated.c
+> +++ b/arch/arm64/kernel/armv8_deprecated.c
+> @@ -59,6 +59,7 @@ struct insn_emulation {
+>  static LIST_HEAD(insn_emulation);
+>  static int nr_insn_emulated __initdata;
+>  static DEFINE_RAW_SPINLOCK(insn_emulation_lock);
+> +static DEFINE_MUTEX(insn_emulation_mutex);
+>  
+>  static void register_emulation_hooks(struct insn_emulation_ops *ops)
+>  {
+> @@ -207,10 +208,10 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
+>  				  loff_t *ppos)
+>  {
+>  	int ret = 0;
+> -	struct insn_emulation *insn = (struct insn_emulation *) table->data;
+> +	struct insn_emulation *insn = container_of(table->data, struct insn_emulation, current_mode);
+>  	enum insn_emulation_mode prev_mode = insn->current_mode;
+>  
+> -	table->data = &insn->current_mode;
+> +	mutex_lock(&insn_emulation_mutex);
+>  	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+>  
+>  	if (ret || !write || prev_mode == insn->current_mode)
+> @@ -223,7 +224,7 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
+>  		update_insn_emulation_mode(insn, INSN_UNDEF);
+>  	}
+>  ret:
+> -	table->data = insn;
+> +	mutex_unlock(&insn_emulation_mutex);
+>  	return ret;
+>  }
+>  
+> @@ -247,7 +248,7 @@ static void __init register_insn_emulation_sysctl(void)
+>  		sysctl->maxlen = sizeof(int);
+>  
+>  		sysctl->procname = insn->ops->name;
+> -		sysctl->data = insn;
+> +		sysctl->data = &insn->current_mode;
+>  		sysctl->extra1 = &insn->min;
+>  		sysctl->extra2 = &insn->max;
+>  		sysctl->proc_handler = emulation_proc_handler;
+> -- 
+> 2.34.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

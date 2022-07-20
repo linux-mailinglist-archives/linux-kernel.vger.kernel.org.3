@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D8C57BCA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A04457BCA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbiGTR2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S232224AbiGTR27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiGTR2x (ORCPT
+        with ESMTP id S229625AbiGTR24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:28:53 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840106EEAC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:28:52 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id y4so24644087edc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:28:52 -0700 (PDT)
+        Wed, 20 Jul 2022 13:28:56 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B61D6F7E9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:28:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hf3nTZmXeWdoyiRltIOuXwx+NH7arTVEFrHTLIBm+H4=;
-        b=RCORaxRT8Qbxt+h1vN8t853zf6aPCejPZUoLnkN5m/BzoeZVgt1Vw/WupksgA7STM7
-         oGR46c9BsbGGL0WTrL8PgR2EmbGZk7MvtTlbDyUTlUM5vM0ZdOqVv84ZhgRSfN2G6W/F
-         lAIn1Top+nWb6Xif/LbzB7kYZDYcCRTbYLcRs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hf3nTZmXeWdoyiRltIOuXwx+NH7arTVEFrHTLIBm+H4=;
-        b=QTKX+ozbSHgZkmCoNImTot/tQ3/ar1bZcM0wM4ngFdFrGqxFVvVRt6m5dfNs4uqWI/
-         gMQdmSVvQ5uz8gyEfakZwaYTcCMrQfSdVYvHQ5krts1H5LFMxq8s+SRx+yV5GyOkMMvE
-         StgFwTRylOREQYlP9Qgrjy4NLsVB40qvaiay4r1iCQLJhV2bsI+Q0pf/1bLFYXDr132b
-         kWSVb3kge47TWChhTsGpIgGZq/nIGBJb33ZceqOBQbhhcTiHl+XMd6RVDnFNrF65hvPs
-         HdX4saua0+XB2G3aGfhGVwBTHRRxjedBrEvE4Ov+Hz8MbLPGaYFTvBbQPNGIU1nVOIUY
-         yyEg==
-X-Gm-Message-State: AJIora+sjCmU5SvOn1P6tKO1raAZU3bvK8eMTSEOOjqVlssY8ENt/q6o
-        iLaGNkm4Es5M1LfD624ABpmGMJWm677mU7DGcuc=
-X-Google-Smtp-Source: AGRyM1vZE1inmBEVaZFTE0UwNleAC3o+fDVtvF3GH18aZDQL4loc/pW2dSkVigBlaiibY7zTF3aX7A==
-X-Received: by 2002:a05:6402:190e:b0:43a:e914:8c11 with SMTP id e14-20020a056402190e00b0043ae9148c11mr50971188edz.281.1658338130794;
-        Wed, 20 Jul 2022 10:28:50 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id d27-20020a056402401b00b0043a8f5ad272sm12761290eda.49.2022.07.20.10.28.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 10:28:50 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id z13so7538748wro.13
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:28:49 -0700 (PDT)
-X-Received: by 2002:a05:6000:180f:b0:21d:68f8:c4ac with SMTP id
- m15-20020a056000180f00b0021d68f8c4acmr32009004wrh.193.1658338129463; Wed, 20
- Jul 2022 10:28:49 -0700 (PDT)
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=BdJWXweqyGQCfeqjgnpozbgFrJmoxkwreT6XvGPN9cU=;
+        b=TPW5xqoQKc9bBVSk7wAQi68wlUj2/qo7KL5bIP6XvWSMptbqaa0t3LwFKdw0KIouFKJelqGmkV6hN
+         p4Jq75Dz00Lvz7yPLYNvWFgn4OkYRcP06rQVBugi/DsTbE6VvL+CFZUA5oi5sjfCkgL1prCGRp/zs4
+         5tS5R7I6NrP44EIq3c96wANrQSFMsUi5wZehdHAJxQyu1NMrLqATTShMEAbaKpFqFMouqnGdWNjXkd
+         iOnviH1g6lKRnDp8heD+G4bFXIA2i1JV0oVrtOUVX0edQB4d3xF4eBRQOZ/dp1dPRtxhh2JiOgL7IK
+         7zJcr81oUyp0qbX1QIan8jXTMTJ/7Og==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=BdJWXweqyGQCfeqjgnpozbgFrJmoxkwreT6XvGPN9cU=;
+        b=9/77iI4g8nLFFpDP3kcwwe2k8lEWk0/rWegn9g5uN/ccefisW4YicrTn3v29GrqyemjbNf6EUnTFj
+         Yh+rDeoBQ==
+X-HalOne-Cookie: 2fd1a0ace96f55cc674a3b3f8564ed9a1b8f418a
+X-HalOne-ID: 6cf369b5-0851-11ed-823f-d0431ea8bb10
+Received: from mailproxy1.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 6cf369b5-0851-11ed-823f-d0431ea8bb10;
+        Wed, 20 Jul 2022 17:28:53 +0000 (UTC)
+Date:   Wed, 20 Jul 2022 19:28:51 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     daniel@ffwll.ch, laurent.pinchart@ideasonboard.com,
+        airlied@linux.ie, tzimmermann@suse.de, mripard@kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH drm-misc-next v5 3/4] drm/gem: rename struct
+ drm_gem_dma_object.{paddr => dma_addr}
+Message-ID: <Ytg7U/+SX0LSAmku@ravnborg.org>
+References: <20220720153128.526876-1-dakr@redhat.com>
+ <20220720153532.527458-1-dakr@redhat.com>
 MIME-Version: 1.0
-References: <20220719114714.247441733@linuxfoundation.org> <CA+G9fYsCL48P5zFMKUxoJ-1vwUJSWhcn17rUx=1rxOdzdw_Mmg@mail.gmail.com>
- <CAHk-=wjo-u8=yJQJQnaP41FkQw7we9A-zJH3UELx5x_1ynPDfw@mail.gmail.com> <YtgvLUMuz+1zpQHR@fedora64.linuxtx.org>
-In-Reply-To: <YtgvLUMuz+1zpQHR@fedora64.linuxtx.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 20 Jul 2022 10:28:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
-Message-ID: <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
-Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
-To:     Justin Forbes <jforbes@fedoraproject.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Slaby <jslaby@suse.cz>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Tejas Upadhyay <tejas.upadhyay@intel.com>,
-        Anusha Srivatsa <anusha.srivatsa@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,PDS_BTC_ID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720153532.527458-1-dakr@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Adding PeterZ and Jiri to the participants. ]
-
-Looks like 5.18.13 added that commit 9bb2ec608a20 ("objtool: Update
-Retpoline validation") but I don't see 3131ef39fb03 ("x86/asm/32: Fix
-ANNOTATE_UNRET_SAFE use on 32-bit") in that list.
-
-That said, 3131ef39fb03 should have fixed a completely different issue
-on 32-bit, not the "naked ret" thing.
-
-PeterZ, Jiri, any ideas? Limited quoting below, see thread at
-
-  https://lore.kernel.org/all/CA+G9fYsJBBbEXowA-3kxDNqcfbtcqmxBrEnJSkCnLUsMzNfJZw@mail.gmail.com/
-
-for more details.
-
-              Linus
-
-On Wed, Jul 20, 2022 at 9:37 AM Justin Forbes <jforbes@fedoraproject.org> wrote:
->
-> On Tue, Jul 19, 2022 at 12:32:48PM -0700, Linus Torvalds wrote:
-> > On Tue, Jul 19, 2022 at 10:57 AM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote:
-> > >
-> > >
-> > > 2. Large number of build warnings on x86 with gcc-11,
-> > > I do not see these build warnings on mainline,
-> > ..
-> > > 'naked' return found in RETPOLINE build
-> >
-> > Hmm. Does your cross-compiler support '-mfunction-return=thunk-extern'?
-> >
-> > Your build does magic things with 'scripts/kconfig/merge_config.sh',
-> > and I'm wondering if you perhaps end up enabling CONFIG_RETHUNK with a
-> > compiler that doesn't actually support it, or something like that?
->
-> I am seeing these 'naked' return found in RETPOLINE build on the
-> standard fedora 36 toolchain as well. No cross compiling, nothing fancy.
-> These were not seen with mainline, or with the 5.18.12-rc1 retbleed
-> patches.
->
-> Justin
+On Wed, Jul 20, 2022 at 05:35:31PM +0200, Danilo Krummrich wrote:
+> The field paddr of struct drm_gem_dma_object holds a DMA address, which
+> might actually be a physical address. However, depending on the platform,
+> it can also be a bus address or a virtual address managed by an IOMMU.
+> 
+> Hence, rename the field to dma_addr, which is more applicable.
+> 
+> In order to do this renaming the following coccinelle script was used:
+> 
+> ```
+> 	@@
+> 	struct drm_gem_dma_object *gem;
+> 	@@
+> 
+> 	- gem->paddr
+> 	+ gem->dma_addr
+> 
+> 	@@
+> 	struct drm_gem_dma_object gem;
+> 	@@
+> 
+> 	- gem.paddr
+> 	+ gem.dma_addr
+> 
+> 	@exists@
+> 	typedef dma_addr_t;
+> 	symbol paddr;
+> 	@@
+> 
+> 	dma_addr_t paddr;
+> 	<...
+> 	- paddr
+> 	+ dma_addr
+> 	...>
+> 
+> 	@@
+> 	symbol paddr;
+> 	@@
+> 	dma_addr_t
+> 	- paddr
+> 	+ dma_addr
+> 	;
+> 
+> ```
+> 
+> This patch is compile-time tested with:
+> 
+> ```
+> 	make ARCH={x86_64,arm,arm64} allyesconfig
+> 	make ARCH={x86_64,arm,arm64} drivers/gpu/drm`
+> ```
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>

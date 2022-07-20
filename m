@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D54A57B6B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1328C57B6B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240826AbiGTMqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
+        id S240421AbiGTMrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240953AbiGTMqu (ORCPT
+        with ESMTP id S235145AbiGTMre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:46:50 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6492A96B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:46:48 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id q16so13188442pgq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=sEGQ7L1KrUZZSjc5lTCBdg4P620qJO0ftLSgZHwILC8=;
-        b=rwUDwbnnw3bPn47kNfg7ezqzV/LZChu0a3v2CN0AynDdb4B+/tvtYW8/uAOhGtObcZ
-         jdMz1+jCJ13tg2VyNFIzZPhKJMc7Ob2J0tf6XGCs9xkgJA/nrmYYJUXRUHBi0tUDuQmj
-         v79GFiy1F8xNZ7qkRqvQzBaOyUzpSCbt2HEHzsViyqik+g6/sisTG7KHot3xgK9bWkbA
-         SJQ83R0YkKJ6jYgdD1HuOk/8/NmH1MmCioP9T8sQD3DJRieSUOW7MGmgP6Ej+rLEdg//
-         DEOGINokGsTjCA7yDSww75D/W4A1AhfCxEmU4SbMXhlSs0PN5n/iF3nOL2lr+c/vdHve
-         w/oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=sEGQ7L1KrUZZSjc5lTCBdg4P620qJO0ftLSgZHwILC8=;
-        b=Yfnw9wwMY7m43TCqx4x3WnLOGO6TIufgX7XI8Mn1s33G2IKUUTUGFU9xlfaP3klK78
-         50BaGfWpt9+GIHtfcCgy8k357pg7cHKaAyTtvJLYYHBno4yXkiil5d0GnC6SHkqlIc1F
-         sKClk3yYpx2DbsjEp7E2vJx2qv070uDid4Ne57Pp4fej0HVbt9g7LqPCOUbaDTmbQpnZ
-         Qqrw8ZhNY7/cX0sSGjEXaLCoPBzJsf2j7uQRMcpbkECIWPPPKURRsOo4JPwtbZoHQR2C
-         iMTgae71/laRuhQmQoyn2DMldZiKd7j2qlWAOEXcVe1c60AJLo4Y+evlLeESMpsAluAu
-         jepA==
-X-Gm-Message-State: AJIora9j7EZ1d+V8j7sSf7W+KThgNHGsAsPvo7CdePIbPjxGz6BoQBKK
-        XJXS/j2ZXCavpsceUdBzdYirmg==
-X-Google-Smtp-Source: AGRyM1t7wriEhr2mqYC6echsB2BY8+c43mOtwnGP0h8SWWvTQ+c/TMAVrHpPIfdz3GHa7zH8ZeSiww==
-X-Received: by 2002:a65:6d98:0:b0:41a:6331:cffe with SMTP id bc24-20020a656d98000000b0041a6331cffemr3365206pgb.297.1658321207565;
-        Wed, 20 Jul 2022 05:46:47 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id ru7-20020a17090b2bc700b001f219ace0acsm1544392pjb.16.2022.07.20.05.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 05:46:47 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tj@kernel.org, hanjinke.666@bytedance.com
-Cc:     linux-block@vger.kernel.org, songmuchun@bytedance.com,
-        cgroups@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220720093616.70584-1-hanjinke.666@bytedance.com>
-References: <20220719165313.51887-1-hanjinke.666@bytedance.com> <20220720093616.70584-1-hanjinke.666@bytedance.com>
-Subject: Re: [PATCH v4] block: don't allow the same type rq_qos add more than once
-Message-Id: <165832120656.248441.6551351074316660910.b4-ty@kernel.dk>
-Date:   Wed, 20 Jul 2022 06:46:46 -0600
+        Wed, 20 Jul 2022 08:47:34 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9851B7AD
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:47:33 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 217432FDF2F;
+        Wed, 20 Jul 2022 14:47:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1658321250;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pAYsArRBBzVehk6i1de1HOPaI+3iM8rWMPZa69TRJyE=;
+        b=tW0Bli4pdbfLpsA1kLIiFRlnJiVJAxIC+ST2pzND+hgOg3fZzYw9BK732p7IMYByLyRCAa
+        TbSYiG0TdWURfNbU5wGRdt9t3wrlv84YyYhFXXtJR3tdtcydGfwqfu5l4czVp1Y8Wmf7yD
+        mGh1pVoZlwIcNatYKDvI8IXUCKTrvOawe/ZsrgMFszByiF8Kax5ZK7WIt2rZO36ZI9StEI
+        1hh0xY/JRzOGDHieqWEawSg8qYLUhdZhVxDts3Vv+neJaUJdQQq4ILk252uPNLuZtaknVG
+        6U2XUHuFIWKorlL9bL/FdWGYK4D0n6MwPLJvWj0hsGBheBFGlU5c84aUmM171g==
+Message-ID: <38c839001bbd10f58d12c64d78b5f310ee55f9aa.camel@svanheule.net>
+Subject: Re: [PATCH v4 3/5] lib/test: Introduce cpumask KUnit test suite
+From:   Sander Vanheule <sander@svanheule.net>
+To:     =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        akpm@linux-foundation.org
+Cc:     andriy.shevchenko@linux.intel.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, elver@google.com,
+        gregkh@linuxfoundation.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, tglx@linutronix.de, vschneid@redhat.com,
+        x86@kernel.org, yury.norov@gmail.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>
+Date:   Wed, 20 Jul 2022 14:47:28 +0200
+In-Reply-To: <346cb279-8e75-24b0-7d12-9803f2b41c73@riseup.net>
+References: <c96980ec35c3bd23f17c3374bf42c22971545e85.1656777646.git.sander@svanheule.net>
+         <346cb279-8e75-24b0-7d12-9803f2b41c73@riseup.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Jul 2022 17:36:16 +0800, Jinke Han wrote:
-> From: Jinke Han <hanjinke.666@bytedance.com>
-> 
-> In our test of iocost, we encountered some list add/del corruptions of
-> inner_walk list in ioc_timer_fn.
-> 
-> The reason can be described as follow:
-> cpu 0						cpu 1
-> ioc_qos_write					ioc_qos_write
-> 
-> [...]
+Hi,
 
-Applied, thanks!
+On Tue, 2022-07-19 at 18:31 -0300, Ma=C3=ADra Canal wrote:
+> > Add a basic suite of tests for cpumask, providing some tests for empty
+> > and completely filled cpumasks.
+> >=20
+> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>=20
+> The tests test_cpumask_weight and test_cpumask_last are failing on all
+> architectures, as can be seen on [1]. Also this test doesn't follow the
+> standard style for KUnit tests [2].
+>=20
+> [1]
+> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220718/=
+testrun/10865066/suite/kunit/tests/
+> [2] https://docs.kernel.org/dev-tools/kunit/style.html
 
-[1/1] block: don't allow the same type rq_qos add more than once
-      commit: 14a6e2eb7df5c7897c15b109cba29ab0c4a791b6
+Thanks for the feedback, I wasn't aware of the style guidelines. See my rep=
+ly to
+David's message for the issues with the cpu_possible_mask tests.
 
-Best regards,
--- 
-Jens Axboe
+Andrew, would you like me to resubmit the entire series, or can I just send=
+ a
+new version of this patch?
+
+Best,
+Sander
 
 

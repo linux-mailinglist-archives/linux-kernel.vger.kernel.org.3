@@ -2,136 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FA957BD54
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A118557BD53
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234818AbiGTSDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
+        id S233712AbiGTSD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiGTSDf (ORCPT
+        with ESMTP id S230292AbiGTSD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:03:35 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885545D0F3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:03:34 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id z12so27242118wrq.7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2YSXf98rTw+aM6nqedJXsMdekQD67mGphdqXFvr1fbM=;
-        b=dnV0YHWvnhuMUuSd57347+DOzR3AxQcrR7zzAGoWSmv8OwPuA4SNbmOO5Dz88dFjqy
-         kls9OTarVd8bmE/zaV7DVW5OrVc2W6xDg9rvm85GE0fVrn+2S8m/4yEbf3pPxfB1qZKb
-         v3sjYgyUFN3/vHk3+826GcexfrrE6GCpCZu4Q6Bn1efuiZU9eBg1uXRDZTJRXJx3UKbN
-         2zfN3FZLP1hZvN7KZrO1h+8oAIhvt5/VumAis5ShZIb7OCuHVOo5kkDLK+zwYpcXRfgC
-         lQX0lzUNZpJW6zkqJ6iPyGtc7lQuGW3RZ6Ssly/XvZ0alzMjN4C6DqQBTB3InJ3Gmly1
-         XlvA==
+        Wed, 20 Jul 2022 14:03:26 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F06E5C94E
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:03:25 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id g18-20020a056602249200b0067c0f24207cso4483010ioe.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:03:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2YSXf98rTw+aM6nqedJXsMdekQD67mGphdqXFvr1fbM=;
-        b=eyatIYC9q5OcYdM03vaulVIb6MksOGfvJYBRoHKr5x2Ne4cQxg26TXH9gjzSxA94Kt
-         v6JXZZuiQhXPVUnYsszA3G9B1vnjoip32Xv2+FH1gGMJhJm8sjNh09CRbx1NLFC72Omu
-         msV9saoExdJ1hatDL6uinPSTB+Jqdgz26sFl5wXdG4FcBCTp3+PN2xoRIDdq+x6dmkHy
-         VWgDtnfISm7QK/LRzu2eevO+wbXObKOt73UwoXO+QCTxz5J8iku8h/kcDhVtgIjpD+vW
-         4ARk4ypYao+Lgu9+gCKHjTPmy0T3Z2qn18enpeKpIPauQw5Dx4zQ+Fb3cYrgxsCnbgAp
-         LzMQ==
-X-Gm-Message-State: AJIora88OdCx0y8M38s0keIF/vuOr8TlHDUwmIDcZQ9uQ3kWRmPbiOWy
-        +knGrmHpSv6NanykDLMcD89lTssQ2A6RiBDxjsbUYQ==
-X-Google-Smtp-Source: AGRyM1uFir/eG19aQ9wS4vWbQl35bcqmiCabGhXOvV9aIJvJ6VfH+DygWDgwwsRIhPPMb59vxOQgcxQvjcRrm1wgk54=
-X-Received: by 2002:a5d:5a82:0:b0:21e:2899:60bd with SMTP id
- bp2-20020a5d5a82000000b0021e289960bdmr9534113wrb.80.1658340212940; Wed, 20
- Jul 2022 11:03:32 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=EgUE/ZM417/eZS59wvjd78PWK1HGVNu8GsGgWgCAUvc=;
+        b=TuwGP45OxycqFt6SwseMDAuovjz3M1w+WKm3ygPCnRmg6m5rJsVRSq5veV1qpXYvzE
+         cmhUutHoqUN3FPZmmdXEy2MOtBMjwegLJ4auQjqQM87tUapdK0oAlYYRCzTGgZGQebrp
+         rudLEl7/bkciahAZuvso6kTiTHns0IiCXlDqvFNhgLw2Ri8vA/oNxjGtEB9BhyKPynLe
+         SxIE68sQLN1r47JEq39plwM4/Sg0w924Jp+f1pecMENDZ83LVedsWhiiArm5czpkev58
+         YV00lYcTRPMg3n627Cmf6p1Wi8biXtcHTWFnBGleKvdqxvVzoYzqYDfc7RWif6nMMxXj
+         M3xA==
+X-Gm-Message-State: AJIora8UN3ZnE+taSUbOqDAKO05DvoWq8Y94jnaLrbZZDYgHiv8E3p3f
+        omrbilZNg3Ii8ejLby8ExtH52PVKKqOa5XDgCTa96DRjlcu+
+X-Google-Smtp-Source: AGRyM1vsqPTO8TsP/li1GZ2NB2PYNbUv5FKQFS4ihQy6bst1fLuafrqdmsgWQk/d6SxFOrOUFEee1ovGJ+jiVHgpbQ2kaCXXEWd4
 MIME-Version: 1.0
-References: <20220714064918.2576464-1-yosryahmed@google.com>
- <YtfJug77XJ9BPA8L@dhcp22.suse.cz> <CALvZod7X3PsM2+ZrWXwb75FNBBjaBGJpjd+WVmzr5hStROvW+g@mail.gmail.com>
-In-Reply-To: <CALvZod7X3PsM2+ZrWXwb75FNBBjaBGJpjd+WVmzr5hStROvW+g@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 20 Jul 2022 11:02:56 -0700
-Message-ID: <CAJD7tkYBm+L_-GTLDux0ZsJ6=kw-zzHjs6vgKUtmeZhcxLwqiw@mail.gmail.com>
-Subject: Re: [PATCH v4] mm: vmpressure: don't count proactive reclaim in vmpressure
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>
+X-Received: by 2002:a05:6e02:1a0c:b0:2dc:8921:a8d9 with SMTP id
+ s12-20020a056e021a0c00b002dc8921a8d9mr20568296ild.145.1658340204832; Wed, 20
+ Jul 2022 11:03:24 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 11:03:24 -0700
+In-Reply-To: <0000000000004de90405a719c951@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d36e8705e4406a16@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in usb_udc_uevent
+From:   syzbot <syzbot+b0de012ceb1e2a97891b@syzkaller.appspotmail.com>
+To:     andriy.shevchenko@linux.intel.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rogerq@ti.com,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        zhengdejin5@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 10:50 AM Shakeel Butt <shakeelb@google.com> wrote:
->
-> On Wed, Jul 20, 2022 at 2:24 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> [...]
-> >
-> > I think what we are missing here is
-> > - explain that this doesn't have any effect on existing users of
-> >   vmpressure user interface because that is cgroup v1 and memory.reclaim
-> >   is v2 feature. This is a trivial statement but quite useful for future
-> >   readers of this commit
-> > - explain the effect on the networking layer and typical usecases
-> >   memory.reclaim is used for currently and ideally document that.
->
-> I agree with the above two points (Yosry, please address those) but
-> the following third point is orthogonal and we don't really need to
-> have an answer for this patch to be accepted.
->
+syzbot has found a reproducer for the following issue on:
 
-That's great feedback, thanks Michal and Shakeel!
+HEAD commit:    cb71b93c2dc3 Add linux-next specific files for 20220628
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=172591aa080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
+dashboard link: https://syzkaller.appspot.com/bug?extid=b0de012ceb1e2a97891b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ab4d62080000
 
-How do you feel about the following commit message instead? Does it
-address your concerns?:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b0de012ceb1e2a97891b@syzkaller.appspotmail.com
 
-memory.reclaim is a cgroup v2 interface that allows users to
-proactively reclaim memory from a memcg, without real memory pressure.
-Reclaim operations invoke vmpressure, which is used in cgroup v1 to
-notify userspace of reclaim efficiency, and used in both v1 and v2 as
-a signal for a memcg being under memory pressure for networking (see
-mem_cgroup_under_socket_pressure()). For the former, vmpressure
-notifications in v1 are not affected by this change since
-memory.reclaim is a v2 feature.
+==================================================================
+BUG: KASAN: use-after-free in usb_udc_uevent+0x11f/0x130 drivers/usb/gadget/udc/core.c:1732
+Read of size 8 at addr ffff888078ce2050 by task udevd/2968
 
-For the latter, the effects of the vmpressure signal (according to
-Shakeel [1]) are as follows:
-1. Reducing send and receive buffers of the current socket.
-2. May drop packets on the rx path.
-3. May throttle current thread on the tx path.
+CPU: 1 PID: 2968 Comm: udevd Not tainted 5.19.0-rc4-next-20220628-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
+ usb_udc_uevent+0x11f/0x130 drivers/usb/gadget/udc/core.c:1732
+ dev_uevent+0x290/0x770 drivers/base/core.c:2424
+ uevent_show+0x1b8/0x380 drivers/base/core.c:2480
+ dev_attr_show+0x4b/0x90 drivers/base/core.c:2183
+ sysfs_kf_seq_show+0x219/0x3d0 fs/sysfs/file.c:59
+ seq_read_iter+0x4f5/0x1280 fs/seq_file.c:230
+ kernfs_fop_read_iter+0x506/0x6e0 fs/kernfs/file.c:235
+ call_read_iter include/linux/fs.h:2182 [inline]
+ new_sync_read+0x314/0x560 fs/read_write.c:401
+ vfs_read+0x492/0x5d0 fs/read_write.c:482
+ ksys_read+0x127/0x250 fs/read_write.c:620
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f996d1258fe
+Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+RSP: 002b:00007ffcfcbe6368 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 000055ca13b297a0 RCX: 00007f996d1258fe
+RDX: 0000000000001000 RSI: 000055ca13b5a4e0 RDI: 000000000000000c
+RBP: 00007f996d1f2380 R08: 000000000000000c R09: 00007f996d1f5a60
+R10: 0000000000000800 R11: 0000000000000246 R12: 000055ca13b297a0
+R13: 0000000000000d68 R14: 00007f996d1f1780 R15: 0000000000000d68
+ </TASK>
 
-Since proactive reclaim is invoked directly by userspace, not by
-memory pressure, it makes sense not to throttle networking. Hence,
-this change makes sure that proactive reclaim caused by memory.reclaim
-does not trigger vmpressure.
+Allocated by task 4797:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ dev_new drivers/usb/gadget/legacy/raw_gadget.c:191 [inline]
+ raw_open+0x87/0x500 drivers/usb/gadget/legacy/raw_gadget.c:385
+ misc_open+0x376/0x4a0 drivers/char/misc.c:143
+ chrdev_open+0x266/0x770 fs/char_dev.c:414
+ do_dentry_open+0x4a1/0x11f0 fs/open.c:878
+ do_open fs/namei.c:3520 [inline]
+ path_openat+0x1c71/0x2930 fs/namei.c:3653
+ do_filp_open+0x1aa/0x400 fs/namei.c:3680
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1308
+ do_sys_open fs/open.c:1324 [inline]
+ __do_sys_openat fs/open.c:1340 [inline]
+ __se_sys_openat fs/open.c:1335 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1335
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-[1] https://lore.kernel.org/lkml/CALvZod68WdrXEmBpOkadhB5GPYmCXaDZzXH=yyGOCAjFRn4NDQ@mail.gmail.com/
+Freed by task 4797:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x166/0x1c0 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1754 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1780
+ slab_free mm/slub.c:3534 [inline]
+ kfree+0xe2/0x4d0 mm/slub.c:4562
+ kref_put include/linux/kref.h:65 [inline]
+ raw_release+0x219/0x290 drivers/usb/gadget/legacy/raw_gadget.c:424
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xaf1/0x29f0 kernel/exit.c:795
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ get_signal+0x2542/0x2600 kernel/signal.c:2857
+ arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-> > - how are we going to deal with users who would really want to use
-> >   memory.reclaim interface as a replacement for existing hard/high
-> >   memory reclaim? Is that even something that the interface is intended
-> >   for?
->
-> I do agree that this question is important. Nowadays I am looking at
-> this from a different perspective and use-case. More concretely how
-> (and why) to replace vmpressure based network throttling for cgroup
-> v2. I will start a separate thread for that discussion.
+The buggy address belongs to the object at ffff888078ce2000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 80 bytes inside of
+ 4096-byte region [ffff888078ce2000, ffff888078ce3000)
+
+The buggy address belongs to the physical page:
+page:ffffea0001e33800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x78ce0
+head:ffffea0001e33800 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 0000000000000000 dead000000000001 ffff888011842140
+raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3618, tgid 3618 (syz-executor.2), ts 66675676094, free_ts 28120915618
+ prep_new_page mm/page_alloc.c:2535 [inline]
+ get_page_from_freelist+0x210d/0x3a30 mm/page_alloc.c:4282
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5506
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2280
+ alloc_slab_page mm/slub.c:1824 [inline]
+ allocate_slab+0x27e/0x3d0 mm/slub.c:1969
+ new_slab mm/slub.c:2029 [inline]
+ ___slab_alloc+0x89d/0xef0 mm/slub.c:3031
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
+ slab_alloc_node mm/slub.c:3209 [inline]
+ slab_alloc mm/slub.c:3251 [inline]
+ kmem_cache_alloc_trace+0x323/0x3e0 mm/slub.c:3282
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ kobject_uevent_env+0x230/0x1640 lib/kobject_uevent.c:524
+ netdev_queue_add_kobject net/core/net-sysfs.c:1677 [inline]
+ netdev_queue_update_kobjects+0x3d1/0x4e0 net/core/net-sysfs.c:1718
+ register_queue_kobjects net/core/net-sysfs.c:1779 [inline]
+ netdev_register_kobject+0x330/0x400 net/core/net-sysfs.c:2019
+ register_netdevice+0xd9d/0x15e0 net/core/dev.c:10065
+ bond_newlink drivers/net/bonding/bond_netlink.c:560 [inline]
+ bond_newlink+0x47/0xa0 drivers/net/bonding/bond_netlink.c:550
+ rtnl_newlink_create net/core/rtnetlink.c:3363 [inline]
+ __rtnl_newlink+0x1087/0x17e0 net/core/rtnetlink.c:3580
+ rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3593
+ rtnetlink_rcv_msg+0x43a/0xc90 net/core/rtnetlink.c:6089
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1453 [inline]
+ free_pcp_prepare+0x5e4/0xd20 mm/page_alloc.c:1503
+ free_unref_page_prepare mm/page_alloc.c:3383 [inline]
+ free_unref_page+0x19/0x4d0 mm/page_alloc.c:3479
+ __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2548
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:446
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:736 [inline]
+ kmem_cache_alloc_bulk+0x383/0x730 mm/slub.c:3735
+ mt_alloc_bulk lib/maple_tree.c:151 [inline]
+ mas_alloc_nodes+0x2b0/0x6b0 lib/maple_tree.c:1244
+ mas_preallocate+0xff/0x2d0 lib/maple_tree.c:5662
+ __vma_adjust+0x226/0x1900 mm/mmap.c:765
+ vma_adjust include/linux/mm.h:2678 [inline]
+ __split_vma+0x295/0x530 mm/mmap.c:2305
+ split_vma+0x9f/0xe0 mm/mmap.c:2335
+ mprotect_fixup+0x746/0x960 mm/mprotect.c:613
+ do_mprotect_pkey+0x70f/0xa80 mm/mprotect.c:781
+ __do_sys_mprotect mm/mprotect.c:808 [inline]
+ __se_sys_mprotect mm/mprotect.c:805 [inline]
+ __x64_sys_mprotect+0x74/0xb0 mm/mprotect.c:805
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+
+Memory state around the buggy address:
+ ffff888078ce1f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888078ce1f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff888078ce2000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                 ^
+ ffff888078ce2080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888078ce2100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+

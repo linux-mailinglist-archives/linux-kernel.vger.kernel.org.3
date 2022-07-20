@@ -2,167 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A211657B3D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732BE57B3DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232719AbiGTJa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
+        id S238630AbiGTJaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbiGTJaT (ORCPT
+        with ESMTP id S234060AbiGTJaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:30:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 876DAE092
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658309414;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GDJ3pDuliBBFCjPRQRCyBqUtEOUMI1zRI5vOv79h/yg=;
-        b=LwGze48SNqad5Ms13X7vUnJh7LGSOPOm69OqO3sfSTgL71BujVqTP/9cgqtrSCCFJnAFFZ
-        hFf8ovKz+Ob2yrxpunBvXletrdJ4e3TOOSdXXYnUVqTFBc1dq370i9rC+m3Svozde8cWbD
-        GEEXD7VrRpb+KTYrjbZWyXQ/KWvUqJ0=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-369-8L8-jAuQMnel4A1O4nJaqg-1; Wed, 20 Jul 2022 05:30:13 -0400
-X-MC-Unique: 8L8-jAuQMnel4A1O4nJaqg-1
-Received: by mail-qt1-f199.google.com with SMTP id f1-20020ac84641000000b0031ecb35e4d1so11723955qto.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:30:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GDJ3pDuliBBFCjPRQRCyBqUtEOUMI1zRI5vOv79h/yg=;
-        b=E7j+qn74Gn3jEzB/tgD2xE6SjDCUbd0zmFwws7C/2syagTTyxZoUnNw1YhZwohFFu3
-         tuvi8F+z37cuZkLEC9oNMOJAsjDyABHd3pTJGQXhgxz81CqYH7Ixpk29U4w20QIJTS3I
-         hxNr5Yv/j1SgnHLDI8GCHR5iGTQz3It1Jo84QtPf7hl1pmw4dIavBtI/UQniuxt2xSbT
-         Z+MhurwNZSZqW63HrgB/WCAtzI6iN163UUq2jYK9wr5d/g4mavgYSCtjv/tL90cEtD3Y
-         5AMcAHtiXHgoYxTH/+b4+uRcsGvsoy7SQgrSNifTQaVZGrTBnHWTbuRdIOwGtKUI1EZ/
-         9B0w==
-X-Gm-Message-State: AJIora+dGj0tCFVDU3hgKb2vDKbqltRP+OvxexRJIP1OEwGxniDybaZ6
-        yOPwxgbSvQoYv4chKYCiCCvxDK7lE3UpmErHfR0FAE7ioUV8v5fet7MsIFLNrk+6oEzORwBQ3wv
-        VHbeIQaSLQRIRf2zqRe9TMxjb
-X-Received: by 2002:ac8:59c7:0:b0:31e:ede9:971b with SMTP id f7-20020ac859c7000000b0031eede9971bmr10707669qtf.208.1658309413093;
-        Wed, 20 Jul 2022 02:30:13 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1s6mJMvfgOsm/KeVUVbnelP8FW2qMJbR3hxdq7pZeKI4iupDApN2I1fzLeoIKhfg5s7AfAEcg==
-X-Received: by 2002:ac8:59c7:0:b0:31e:ede9:971b with SMTP id f7-20020ac859c7000000b0031eede9971bmr10707652qtf.208.1658309412863;
-        Wed, 20 Jul 2022 02:30:12 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05620a0c4c00b006a6ebde4799sm17257649qki.90.2022.07.20.02.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 02:30:12 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 11:30:05 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 0/3] virtio/vsock: use SO_RCVLOWAT to set
- POLLIN/POLLRDNORM
-Message-ID: <20220720093005.2unej4jnnvrn55f2@sgarzare-redhat>
-References: <c8de13b1-cbd8-e3e0-5728-f3c3648c69f7@sberdevices.ru>
- <20220719125856.a6bfwrvy66gxxzqe@sgarzare-redhat>
- <ac05e1ee-23b3-75e0-f9a4-1056a68934d8@sberdevices.ru>
+        Wed, 20 Jul 2022 05:30:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B283912D0F;
+        Wed, 20 Jul 2022 02:30:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 334571576;
+        Wed, 20 Jul 2022 02:30:18 -0700 (PDT)
+Received: from [10.57.41.17] (unknown [10.57.41.17])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F3F913F73D;
+        Wed, 20 Jul 2022 02:30:15 -0700 (PDT)
+Message-ID: <312bce37-8201-e0a7-0122-77ec1ebef556@arm.com>
+Date:   Wed, 20 Jul 2022 10:30:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ac05e1ee-23b3-75e0-f9a4-1056a68934d8@sberdevices.ru>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v2 12/13] coresight: events: PERF_RECORD_AUX_OUTPUT_HW_ID
+ used for Trace ID
+To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, linux-perf-users@vger.kernel.org,
+        leo.yan@linaro.org, quic_jinlmao@quicinc.com
+References: <20220704081149.16797-1-mike.leach@linaro.org>
+ <20220704081149.16797-13-mike.leach@linaro.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220704081149.16797-13-mike.leach@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 06:07:47AM +0000, Arseniy Krasnov wrote:
->On 19.07.2022 15:58, Stefano Garzarella wrote:
->> On Mon, Jul 18, 2022 at 08:12:52AM +0000, Arseniy Krasnov wrote:
->>> Hello,
->>>
->>> during my experiments with zerocopy receive, i found, that in some
->>> cases, poll() implementation violates POSIX: when socket has non-
->>> default SO_RCVLOWAT(e.g. not 1), poll() will always set POLLIN and
->>> POLLRDNORM bits in 'revents' even number of bytes available to read
->>> on socket is smaller than SO_RCVLOWAT value. In this case,user sees
->>> POLLIN flag and then tries to read data(for example using  'read()'
->>> call), but read call will be blocked, because  SO_RCVLOWAT logic is
->>> supported in dequeue loop in af_vsock.c. But the same time,  POSIX
->>> requires that:
->>>
->>> "POLLIN     Data other than high-priority data may be read without
->>>            blocking.
->>> POLLRDNORM Normal data may be read without blocking."
->>>
->>> See https://www.open-std.org/jtc1/sc22/open/n4217.pdf, page 293.
->>>
->>> So, we have, that poll() syscall returns POLLIN, but read call will
->>> be blocked.
->>>
->>> Also in man page socket(7) i found that:
->>>
->>> "Since Linux 2.6.28, select(2), poll(2), and epoll(7) indicate a
->>> socket as readable only if at least SO_RCVLOWAT bytes are available."
->>>
->>> I checked TCP callback for poll()(net/ipv4/tcp.c, tcp_poll()), it
->>> uses SO_RCVLOWAT value to set POLLIN bit, also i've tested TCP with
->>> this case for TCP socket, it works as POSIX required.
->>
->> I tried to look at the code and it seems that only TCP complies with it or am I wrong?
->Yes, i checked AF_UNIX, it also don't care about that. It calls skb_queue_empty() that of
->course ignores SO_RCVLOWAT.
->>
->>>
->>> I've added some fixes to af_vsock.c and virtio_transport_common.c,
->>> test is also implemented.
->>>
->>> What do You think guys?
->>
->> Nice, thanks for fixing this and for the test!
->>
->> I left some comments, but I think the series is fine if we will support it in all transports.
->Ack
->>
->> I'd just like to understand if it's just TCP complying with it or I'm missing some check included in the socket layer that we could reuse.
->Seems sock_poll() which is socket layer entry point for poll() doesn't contain any such checks
->>
->> @David, @Jakub, @Paolo, any advice?
->>
->> Thanks,
->> Stefano
->>
->
->PS: moreover, i found one more interesting thing with TCP and poll: TCP receive logic wakes up poll waiter
->only when number of available bytes > SO_RCVLOWAT. E.g. it prevents "spurious" wake ups, when poll will be
->woken up because new data arrived, but POLLIN to allow user dequeue this data won't be set(as amount of data
->is too small).
->See tcp_data_ready() in net/ipv4/tcp_input.c
+On 04/07/2022 09:11, Mike Leach wrote:
+> Use the perf_report_aux_output_id() call to output the CoreSight trace ID
+> and associated CPU as a PERF_RECORD_AUX_OUTPUT_HW_ID record in the
+> perf.data file.
+> 
+> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> ---
+>   drivers/hwtracing/coresight/coresight-etm-perf.c | 10 ++++++++++
+>   include/linux/coresight-pmu.h                    | 14 ++++++++++++++
+>   2 files changed, 24 insertions(+)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-etm-perf.c b/drivers/hwtracing/coresight/coresight-etm-perf.c
+> index ad3fdc07c60b..531f5d42272b 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm-perf.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm-perf.c
+> @@ -4,6 +4,7 @@
+>    * Author: Mathieu Poirier <mathieu.poirier@linaro.org>
+>    */
+>   
+> +#include <linux/bitfield.h>
+>   #include <linux/coresight.h>
+>   #include <linux/coresight-pmu.h>
+>   #include <linux/cpumask.h>
+> @@ -437,6 +438,7 @@ static void etm_event_start(struct perf_event *event, int flags)
+>   	struct perf_output_handle *handle = &ctxt->handle;
+>   	struct coresight_device *sink, *csdev = per_cpu(csdev_src, cpu);
+>   	struct list_head *path;
+> +	u64 hw_id;
+>   
+>   	if (!csdev)
+>   		goto fail;
+> @@ -482,6 +484,11 @@ static void etm_event_start(struct perf_event *event, int flags)
+>   	if (source_ops(csdev)->enable(csdev, event, CS_MODE_PERF))
+>   		goto fail_disable_path;
+>   
+> +	/* output cpu / trace ID in perf record */
+> +	hw_id = FIELD_PREP(CS_AUX_HW_ID_VERSION_MASK, CS_AUX_HW_ID_CURR_VERSION) |
+> +		FIELD_PREP(CS_AUX_HW_ID_TRACE_ID_MASK, coresight_trace_id_get_cpu_id(cpu));
+> +	perf_report_aux_output_id(event, hw_id);
+> +
+>   out:
+>   	/* Tell the perf core the event is alive */
+>   	event->hw.state = 0;
+> @@ -600,6 +607,9 @@ static void etm_event_stop(struct perf_event *event, int mode)
+>   
+>   	/* Disabling the path make its elements available to other sessions */
+>   	coresight_disable_path(path);
+> +
+> +	/* release the trace ID we read on event start */
+> +	coresight_trace_id_put_cpu_id(cpu);
+>   }
+>   
+>   static int etm_event_add(struct perf_event *event, int mode)
+> diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
+> index 9f7ee380266b..5572d0e10822 100644
+> --- a/include/linux/coresight-pmu.h
+> +++ b/include/linux/coresight-pmu.h
+> @@ -7,6 +7,8 @@
+>   #ifndef _LINUX_CORESIGHT_PMU_H
+>   #define _LINUX_CORESIGHT_PMU_H
+>   
+> +#include <linux/bits.h>
+> +
+>   #define CORESIGHT_ETM_PMU_NAME "cs_etm"
+>   
+>   /*
+> @@ -38,4 +40,16 @@
+>   #define ETM4_CFG_BIT_RETSTK	12
+>   #define ETM4_CFG_BIT_VMID_OPT	15
+>   
+> +/*
+> + * Interpretation of the PERF_RECORD_AUX_OUTPUT_HW_ID payload.
+> + * Used to associate a CPU with the CoreSight Trace ID.
+> + * [63:16] - unused SBZ
+> + * [15:08] - Trace ID
+> + * [07:00] - Version
 
-Do you mean that we should call sk->sk_data_ready(sk) checking 
-SO_RCVLOWAT?
+Could we please re-arrange the fields, such that it is easier to
+comprehend the TraceID looking at the raw trace dump ? Also to
+accommodate the future changes.
 
-It seems fine, maybe we can add vsock_data_ready() in af_vsock.c that 
-transports should call instead of calling sk->sk_data_ready(sk) 
-directly.
+e.g,
+       [15:00] - Trace ID	 /* For future expansion, if at all */
+       [59:16] - RES0
+       [63:60] - Trace_ID_Version
 
-Then we can something similar to tcp_data_ready().
+I think we *might* (not sure yet) end up adding "sinkid" when we have
+sink specific allocation, so that we can associate the HW_ID of an event
+to the "AUXTRACE" record (i.e., trace buffer).
 
-Thanks,
-Stefano
+So if we need to do that we could:
+
+       [15:00] - Trace ID	 /* For future expansion, if at all */
+       [47:16] - Trace Pool ID( == 0 if global, == sink_id if sink based)
+       [59:48] - RES0
+       [63:60] - Trace_ID_Version == 1
+
+Or we could adopt the above straight away.
+
+Thoughts ?
+
+Suzuki
+
+> + */
+> +#define CS_AUX_HW_ID_VERSION_MASK	GENMASK_ULL(7, 0)
+> +#define CS_AUX_HW_ID_TRACE_ID_MASK	GENMASK_ULL(15, 8)
+> +
+> +#define CS_AUX_HW_ID_CURR_VERSION 0
+
+
+> +
+>   #endif
 

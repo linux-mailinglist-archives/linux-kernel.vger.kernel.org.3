@@ -2,81 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807CF57B179
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59E357B184
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237821AbiGTHNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S231592AbiGTHQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiGTHNe (ORCPT
+        with ESMTP id S230268AbiGTHQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:13:34 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325425FAE3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:13:31 -0700 (PDT)
-Received: from mail-yw1-f178.google.com ([209.85.128.178]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MN5S1-1nvA0F1bNd-00J3cL for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022
- 09:13:30 +0200
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31e623a4ff4so31858217b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:13:30 -0700 (PDT)
-X-Gm-Message-State: AJIora8GxSQjFLNn3tjbJ5INzIjWNCgjbkb+oIRnMqwicdu3sbDp5OVJ
-        /5aknK9Bt34Hr7ZJ1aAkEmZJ+OyrhbVmRqkcpuM=
-X-Google-Smtp-Source: AGRyM1vCOO8CMlgGpl+gnU8Ye5Ab/iDzI9z9oSjZL3+YQh7hVwwoHb5LQ1wZpC18bcmkM0CRtFVJnY21IFoU27m478g=
-X-Received: by 2002:a05:690c:708:b0:31e:5ba7:9e38 with SMTP id
- bs8-20020a05690c070800b0031e5ba79e38mr7049562ywb.320.1658301209194; Wed, 20
- Jul 2022 00:13:29 -0700 (PDT)
+        Wed, 20 Jul 2022 03:16:17 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB54B64E0A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658301376; x=1689837376;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/8L3obda0Lda9rzpfD1VtSX9r9oE8lnyQvWrd3c3dDQ=;
+  b=ikfUTCHvPBs+QV3OfXDDPHh7st5wBLHfIaKP07m7bq07CWV5VCMsMiac
+   lgHPfGS3PF6ijB0deRg6D2fukSmKanP7zBfQ6QDdC5+xcq1HiePvkGQqu
+   LKW1p9VfMuszupLnxsxqPWpbYl2MZ3zAv0Vl9Qx0RktYeZHK+vna0duPe
+   7ASlrEEGVz6VJkXuB0DnAAK5lIzDgggYahuTqAPvq0AoM9WLDcKJWKdpF
+   IaeLZElDOks921WkWtyi9pdLuzwg/8c5d6isjpuRf4t2zMZTXx4z6tXqW
+   koeXHGXLSsuHVElB/uAq2ERs4ZEXGbPz91pOkWN3+CaeTTE3RFMMmczTQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="286710502"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="286710502"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 00:16:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="573185107"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 20 Jul 2022 00:16:14 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oE3wM-0000Af-96;
+        Wed, 20 Jul 2022 07:16:14 +0000
+Date:   Wed, 20 Jul 2022 15:15:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cpu] BUILD SUCCESS
+ 3f2adf00f52b5f2e9e9f23bb5c77608fc9ee297c
+Message-ID: <62d7ab90.cCNoyWgUN7+A93cx%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <1658300638-109504-1-git-send-email-baolin.wang@linux.alibaba.com>
-In-Reply-To: <1658300638-109504-1-git-send-email-baolin.wang@linux.alibaba.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 20 Jul 2022 09:13:12 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a399139Huy3GRO8n=w0AVb6Xh3CkE749J=BgoFOtb1ZXQ@mail.gmail.com>
-Message-ID: <CAK8P3a399139Huy3GRO8n=w0AVb6Xh3CkE749J=BgoFOtb1ZXQ@mail.gmail.com>
-Subject: Re: [PATCH] mailmap: update Baolin Wang's email
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:TL5bTCdz4KeZqbbvwhxaGhVUHBVSkgeGStDjDang6evLGwpkTqz
- q+m1Nb7Icn7TIl+cfLUzG5Z4TJO/T7p0QeFXQ9X7pJFy6ZSG72FuMDPmo/Q5p6yVgGd36RW
- 7GxCpi0hfrfCSZHkb6wHzm2AWWcLrD28CR+XYbuHZ99MsI0bU5ajIsRiMmHUqIf77fWeJCf
- jsnWGnOn/ahmPqHAhojTw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dql6CW6MuXg=:emuZm5+/G7ImrBaejIE7d8
- WJYRGZqn8KcsD5WOma/r3JVq7485JvVOMVSjTU3tSHYRmw1C2EUbJ+3hwTzwyzKR+XpE4DnFi
- NNCso5hWiM754S/ksh6dLlZIqLBez9zJfTGRHwCYh0cLT/RQnfkLN/9N0DjndjTME+n7jzNgv
- OA4PDNwA2IOzSp8bv6ICzQp/A1KY5AJWSHoIQ6u+Usafd4JBgqfDZGUlYVLf/64UhWmDHE+iE
- zi9HzX2Jv9+rVaUuMCuHREpkA9CkEjXL7S7RtijlPwQyRczwzTVI0mCHfEeadMpjJ+DG40uhm
- baObyAbM6gLS53ZHpu8OpHegfIoKdSiqcuIpnojxQvuUcC+cvFMjHETcXZgJQ+q6/UbJiO5u/
- n0b2SBKa4Thd1i6MWPMOu8n9OOYNFDWu95aV8r7fr/COQCWQ3xBEdXBFdsaMKGsbCyUlUT52+
- lecZ/G++dR8UadavYECkTHn4j8tGRKcU9DUrQw3DaPk0iIilTtV2a55XIiYLjoumO1zzPNHYb
- RVKSv+coFWqZl6D6Gmhyhxw8GUBPzmGFGPM/MPvC0jRMtr0Dkx/KqAGB50S9QURwCRULY1aTY
- wN23a6iH1nvE0WldWu7SV2CgXlGl58rBuAvfDlpGM2sQAErFQvBvap9H8kicx2JhQPpc0qi9Q
- pgFLIEAB6M0yVyUJYnRHtycnjBjzhS1ouqaRik/OZ7TmiDHMYXMja9cnXx+h9R3clgJRE0+GB
- RabAzQh4F/dG7dNBXLB3cn7tkPgi6QLeImZ6sw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 9:03 AM Baolin Wang
-<baolin.wang@linux.alibaba.com> wrote:
->
-> I recently switched to my Alibaba email address. So add aliases for my
-> previous email addresses.
->
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
-> Hi Arnd, could you help to take this patch of updating my email address
-> into your ARM SoC tree? Thanks.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
+branch HEAD: 3f2adf00f52b5f2e9e9f23bb5c77608fc9ee297c  x86/cpu: Use MSR_IA32_MISC_ENABLE constants
 
-Sure, applied to my arm/fixes branch now. I don't have any other contents
-at the moment, and wouldn't send a fixes pull request just for this, but
-it will be either in the next set of fixes for 5.19 or in the next merge window.
+elapsed time: 720m
 
-        Arnd
+configs tested: 100
+configs skipped: 74
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20220718
+arm                          pxa3xx_defconfig
+arm                        realview_defconfig
+powerpc                       maple_defconfig
+m68k                        m5307c3_defconfig
+m68k                             alldefconfig
+arc                     haps_hs_smp_defconfig
+powerpc                     pq2fads_defconfig
+sh                         microdev_defconfig
+arc                     nsimosci_hs_defconfig
+sh                        dreamcast_defconfig
+arm                            xcep_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                      ep88xc_defconfig
+arm                      footbridge_defconfig
+powerpc                     ep8248e_defconfig
+arc                        nsimosci_defconfig
+sh                             shx3_defconfig
+mips                      loongson3_defconfig
+xtensa                       common_defconfig
+mips                            gpr_defconfig
+sh                          lboxre2_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64               randconfig-a014-20220718
+x86_64               randconfig-a016-20220718
+x86_64               randconfig-a012-20220718
+x86_64               randconfig-a013-20220718
+x86_64               randconfig-a015-20220718
+x86_64               randconfig-a011-20220718
+i386                 randconfig-a015-20220718
+i386                 randconfig-a011-20220718
+i386                 randconfig-a012-20220718
+i386                 randconfig-a014-20220718
+i386                 randconfig-a016-20220718
+i386                 randconfig-a013-20220718
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+s390                 randconfig-r044-20220718
+riscv                randconfig-r042-20220718
+arc                  randconfig-r043-20220718
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+arm                     am200epdkit_defconfig
+riscv                            alldefconfig
+arm                        magician_defconfig
+powerpc                 mpc832x_rdb_defconfig
+arm                          pcm027_defconfig
+mips                          malta_defconfig
+hexagon                          alldefconfig
+powerpc                    gamecube_defconfig
+mips                      maltaaprp_defconfig
+mips                        maltaup_defconfig
+powerpc                     mpc5200_defconfig
+mips                          ath25_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                 randconfig-a004-20220718
+i386                 randconfig-a001-20220718
+i386                 randconfig-a005-20220718
+i386                 randconfig-a006-20220718
+i386                 randconfig-a002-20220718
+i386                 randconfig-a003-20220718
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

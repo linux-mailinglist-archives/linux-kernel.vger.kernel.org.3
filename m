@@ -2,84 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A4257B59B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E57A57B598
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237132AbiGTLfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S234929AbiGTLf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237865AbiGTLff (ORCPT
+        with ESMTP id S231281AbiGTLf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:35:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C82C27165;
-        Wed, 20 Jul 2022 04:35:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 344AE60ADD;
-        Wed, 20 Jul 2022 11:35:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD28C341CA;
-        Wed, 20 Jul 2022 11:35:31 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ib6MxC3F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1658316930;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=maGCRrxRpHrSk2PNn1nY2bqa8mZP2c6t0ndugNv6oL0=;
-        b=ib6MxC3FnDNkqhSrIqYaGOWQROdPk+nPkpxkg4BbjAxQySIRfiimy+giX5fmszMJboop79
-        xt7lA4e6IuWpfqmy675b7ayCBHBPip3dOy7I2MQ7ExizwOPd/Zew2+x4ujNmFujsklGlZf
-        DTf5VETcRG0vIzf5/suKivVrynSi/yE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f8dec305 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 20 Jul 2022 11:35:30 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Simon Sapin <simon.sapin@exyr.org>,
-        Gabriel Somlo <somlo@cmu.edu>, Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH] docs: ABI: correct QEMU fw_cfg spec path
-Date:   Wed, 20 Jul 2022 13:35:18 +0200
-Message-Id: <20220720113518.317032-1-Jason@zx2c4.com>
+        Wed, 20 Jul 2022 07:35:26 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A05D1838B;
+        Wed, 20 Jul 2022 04:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=hoc3SZ+a6cRMEV4dB3AWnbJTTC3nfLgS/xRzs04z7hg=; b=W3bqgC4atmjinJIsHmrzqz0PRG
+        VdQarQ+8WG5T7XWBl5k/gL4YP+gOSjn0Vuidw1joFx6mX3gatujP8OabM9KsFfCZ223wTVwLM9QCp
+        16DkFRkXeAj4sU/QaaAq9S2pYTgRu9VO80LTELaQum+YJJGuoGg7fQc7zFrq1256eXhbZ5iPOdVol
+        DCQS9Mp7tc8+tsMYQMmiiTrQwQbx6x3wgbSFxtTFucTZkCalFScuqERAA8zi7duCrtgVoP2po7Vy2
+        sm/iZtNbj1NJsTA5p94NeKmcKuBcuEAvW/u7YnQ58QmnYK7WvTnx+UNFsHD7RI78DP8dBJdaybtGo
+        B39z/dhQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33460)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oE7z7-00042D-I7; Wed, 20 Jul 2022 12:35:21 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oE7z5-0003ro-9G; Wed, 20 Jul 2022 12:35:19 +0100
+Date:   Wed, 20 Jul 2022 12:35:19 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Alexandru Marginean <alexandru.marginean@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH v2 10/11] net: phy: aquantia: Add some additional phy
+ interfaces
+Message-ID: <YtfodwyLc5pMw4Gb@shell.armlinux.org.uk>
+References: <20220719235002.1944800-1-sean.anderson@seco.com>
+ <20220719235002.1944800-11-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719235002.1944800-11-sean.anderson@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A few weeks ago, QEMU switched docs/specs/fw_cfg.txt to be
-docs/specs/fw_cfg.rst, so update the reference in the kernel docs to
-reflect this.
+On Tue, Jul 19, 2022 at 07:50:00PM -0400, Sean Anderson wrote:
+> +/* The following registers all have similar layouts; first the registers... */
+> +#define VEND1_GLOBAL_CFG_10M			0x0310
+> +#define VEND1_GLOBAL_CFG_100M			0x031b
+> +#define VEND1_GLOBAL_CFG_1G			0x031c
+> +#define VEND1_GLOBAL_CFG_2_5G			0x031d
+> +#define VEND1_GLOBAL_CFG_5G			0x031e
+> +#define VEND1_GLOBAL_CFG_10G			0x031f
+> +/* ...and now the fields */
+> +#define VEND1_GLOBAL_CFG_RATE_ADAPT		GENMASK(8, 7)
+> +#define VEND1_GLOBAL_CFG_RATE_ADAPT_NONE	0
+> +#define VEND1_GLOBAL_CFG_RATE_ADAPT_USX		1
+> +#define VEND1_GLOBAL_CFG_RATE_ADAPT_PAUSE	2
+> +
 
-Cc: Simon Sapin <simon.sapin@exyr.org>
-Cc: Gabriel Somlo <somlo@cmu.edu>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- Documentation/ABI/testing/sysfs-firmware-qemu_fw_cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Shouldn't these definitions be in patch 11? They don't appear to be used
+in this patch.
 
-diff --git a/Documentation/ABI/testing/sysfs-firmware-qemu_fw_cfg b/Documentation/ABI/testing/sysfs-firmware-qemu_fw_cfg
-index ee0d6dbc810e..7cbce4af6346 100644
---- a/Documentation/ABI/testing/sysfs-firmware-qemu_fw_cfg
-+++ b/Documentation/ABI/testing/sysfs-firmware-qemu_fw_cfg
-@@ -12,7 +12,7 @@ Description:
- 		configuration data to the guest userspace.
- 
- 		The authoritative guest-side hardware interface documentation
--		to the fw_cfg device can be found in "docs/specs/fw_cfg.txt"
-+		to the fw_cfg device can be found in "docs/specs/fw_cfg.rst"
- 		in the QEMU source tree.
- 
- 		**SysFS fw_cfg Interface**
+Thanks.
+
 -- 
-2.35.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

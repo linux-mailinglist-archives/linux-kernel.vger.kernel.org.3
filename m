@@ -2,173 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E070457B616
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9525657B61A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235039AbiGTMER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
+        id S237769AbiGTMFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbiGTMEP (ORCPT
+        with ESMTP id S229554AbiGTMFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:04:15 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793456B241;
-        Wed, 20 Jul 2022 05:04:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1658318652; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RnfcxwjD5VEqdAApN8ZMGAAkgvJHjWCm9p0n29wZyrM=;
-        b=BfHJXcPl0gTqQpDrY09cVTdgChK8nlMPusOWuVwRkxOdgl3gPDJiEk39+/L/vctWhsB/9g
-        aCx/QmdduNUuDfR6YmIXqok2/foWS6RpP88WwvPja6pTjk/qeP4blL2pCLloi6H9ucXxpt
-        9oBSxvVdZRNcM+pCfFT2pnJbNPrS3/o=
-Date:   Wed, 20 Jul 2022 13:04:00 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 11/11] ASoC: jz4740-i2s: Refactor DAI probe/remove ops
- as component ops
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <OUIBFR.VWH85QRTE1NF3@crapouillou.net>
-In-Reply-To: <20220708160244.21933-12-aidanmacdonald.0x0@gmail.com>
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
-        <20220708160244.21933-12-aidanmacdonald.0x0@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+        Wed, 20 Jul 2022 08:05:02 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D4D6B74E;
+        Wed, 20 Jul 2022 05:05:00 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id a5so25787402wrx.12;
+        Wed, 20 Jul 2022 05:05:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=wpY8Fn5dD5ki3izlk7rpyV14VYuNyQSG8TlGbXhx8No=;
+        b=E1yjOeYEWLfJi/4H5c4TezE+AA1j/db/ERei6jUfneCjFxtZ5eq/tgZqAsg6lyTHy9
+         NWKwPHBrkVSB/ow8jBMNCTJbW56JYv4iDWxyQJzkdZewQmKa+LJaeqIRydoy7CMll2A8
+         +HfyVR+DmLsWNOXxst+zhPjZFg4/Tm2YBMxUtFHxmxn337we06kWQGhS6thzNCUs5Kgh
+         tdqpRW2bLvRkO/kd8S4s4e60x2NFQ31n3XgjA1DAIPtas1GPAKRFZq7UfOQ1Eng0VDxf
+         wmPGp/uRWx/s27Lib1fQb3mFlD00vprSrj2+JW0BjdJefZUlm0gXdONB1Xcu3hHqjFFa
+         0pUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=wpY8Fn5dD5ki3izlk7rpyV14VYuNyQSG8TlGbXhx8No=;
+        b=zJveaJOawcwgCBvQr7JHsof6n2uXgp2IKxQF5pWOpjo3qAcO6LgiKEM+Y1sitOH8mh
+         fAZ9TFDXjfS/NIR5ERE4VBWXZzN/EkbXui4PYXkyZfjr9s7cEbfhvJaikWrvq+ZVz/xY
+         cm/FpDzX5xtb8wmOFjuNrR1Xl/9skQP2MDw6p54aBZbr9J+VCLabYd5tkXfZhm/zEXn9
+         CewKGfBLhu3sjWjoANziyvRQO15Zuh4bfTXTHyUVAbXmEYc9C70f7MkN/9NTkFFBJWtC
+         mjCin1oS63a6SmKXwsX+gEvPR1z/fjn8CPULZkMyYsYA2AKceuqr1Hpig8jNjEso470N
+         6qzw==
+X-Gm-Message-State: AJIora/Q9/YvKqwypntVHQ3ozYhM3Pao5c53aQKV38e8/bsyXKZviL49
+        cVjZ9eEJSwKz9QgsxYP7iYyGKSBrjuI=
+X-Google-Smtp-Source: AGRyM1sWSLteQUScsqfZ5Bz9P7W9wCqZ6Bc9liATh6PJxssCgIl6il4d8JhIZC8unswcIy7qtIR40Q==
+X-Received: by 2002:adf:fcca:0:b0:21d:68ff:2e5a with SMTP id f10-20020adffcca000000b0021d68ff2e5amr31936301wrs.453.1658318699075;
+        Wed, 20 Jul 2022 05:04:59 -0700 (PDT)
+Received: from felia.fritz.box (200116b826a11f008020c2fc6e115b3e.dip.versatel-1u1.de. [2001:16b8:26a1:1f00:8020:c2fc:6e11:5b3e])
+        by smtp.gmail.com with ESMTPSA id n5-20020a1c2705000000b003a1980d55c4sm2177090wmn.47.2022.07.20.05.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 05:04:58 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] apparmor: correct config reference to intended one
+Date:   Wed, 20 Jul 2022 14:04:43 +0200
+Message-Id: <20220720120443.16518-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
+Commit 5bfcbd22ee4e ("apparmor: Enable tuning of policy paranoid load for
+embedded systems") introduces the config SECURITY_APPARMOR_PARANOID_LOAD,
+but then refers in the code to SECURITY_PARANOID_LOAD; note the missing
+APPARMOR in the middle.
 
-Le ven., juil. 8 2022 at 17:02:44 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Move most of the DAI probe/remove logic into component ops.
-> This makes things more consistent because the AIC clock is
-> now managed solely from the component side. And it makes it
-> easier to add codec switching support later on.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Correct this to the introduced and intended config option.
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ security/apparmor/lsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
--Paul
-
-> ---
->  sound/soc/jz4740/jz4740-i2s.c | 54=20
-> +++++++++++++++++++----------------
->  1 file changed, 30 insertions(+), 24 deletions(-)
->=20
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index 5db73f12efcf..d99a19bc5166 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -306,32 +306,10 @@ static int jz4740_i2s_set_sysclk(struct=20
-> snd_soc_dai *dai, int clk_id,
->  static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
->  {
->  	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -	int ret;
-> -
-> -	ret =3D clk_prepare_enable(i2s->clk_aic);
-> -	if (ret)
-> -		return ret;
->=20
->  	snd_soc_dai_init_dma_data(dai, &i2s->playback_dma_data,
->  		&i2s->capture_dma_data);
->=20
-> -	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
-> -
-> -	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
-> -		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
-> -		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
-> -
-> -	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
-> -	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
-> -
-> -	return 0;
-> -}
-> -
-> -static int jz4740_i2s_dai_remove(struct snd_soc_dai *dai)
-> -{
-> -	struct jz4740_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
-> -
-> -	clk_disable_unprepare(i2s->clk_aic);
->  	return 0;
->  }
->=20
-> @@ -351,7 +329,6 @@ static const struct snd_soc_dai_ops=20
-> jz4740_i2s_dai_ops =3D {
->=20
->  static struct snd_soc_dai_driver jz4740_i2s_dai =3D {
->  	.probe =3D jz4740_i2s_dai_probe,
-> -	.remove =3D jz4740_i2s_dai_remove,
->  	.playback =3D {
->  		.channels_min =3D 1,
->  		.channels_max =3D 2,
-> @@ -389,7 +366,6 @@ static const struct i2s_soc_info=20
-> jz4760_i2s_soc_info =3D {
->=20
->  static struct snd_soc_dai_driver jz4770_i2s_dai =3D {
->  	.probe =3D jz4740_i2s_dai_probe,
-> -	.remove =3D jz4740_i2s_dai_remove,
->  	.playback =3D {
->  		.channels_min =3D 1,
->  		.channels_max =3D 2,
-> @@ -459,8 +435,38 @@ static int jz4740_i2s_resume(struct=20
-> snd_soc_component *component)
->  	return 0;
->  }
->=20
-> +static int jz4740_i2s_probe(struct snd_soc_component *component)
-> +{
-> +	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
-> +	int ret;
-> +
-> +	ret =3D clk_prepare_enable(i2s->clk_aic);
-> +	if (ret)
-> +		return ret;
-> +
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CONF, JZ_AIC_CONF_RESET);
-> +
-> +	regmap_write(i2s->regmap, JZ_REG_AIC_CONF,
-> +		     JZ_AIC_CONF_OVERFLOW_PLAY_LAST |
-> +		     JZ_AIC_CONF_I2S | JZ_AIC_CONF_INTERNAL_CODEC);
-> +
-> +	regmap_field_write(i2s->field_rx_fifo_thresh, 7);
-> +	regmap_field_write(i2s->field_tx_fifo_thresh, 8);
-> +
-> +	return 0;
-> +}
-> +
-> +static void jz4740_i2s_remove(struct snd_soc_component *component)
-> +{
-> +	struct jz4740_i2s *i2s =3D snd_soc_component_get_drvdata(component);
-> +
-> +	clk_disable_unprepare(i2s->clk_aic);
-> +}
-> +
->  static const struct snd_soc_component_driver jz4740_i2s_component =3D {
->  	.name			=3D "jz4740-i2s",
-> +	.probe			=3D jz4740_i2s_probe,
-> +	.remove			=3D jz4740_i2s_remove,
->  	.suspend		=3D jz4740_i2s_suspend,
->  	.resume			=3D jz4740_i2s_resume,
->  	.legacy_dai_naming	=3D 1,
-> --
-> 2.35.1
->=20
-
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index 090a20805664..e29cade7b662 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -1402,7 +1402,7 @@ module_param_named(path_max, aa_g_path_max, aauint, S_IRUSR);
+  * DEPRECATED: read only as strict checking of load is always done now
+  * that none root users (user namespaces) can load policy.
+  */
+-bool aa_g_paranoid_load = IS_ENABLED(CONFIG_SECURITY_PARANOID_LOAD);
++bool aa_g_paranoid_load = IS_ENABLED(CONFIG_SECURITY_APPARMOR_PARANOID_LOAD);
+ module_param_named(paranoid_load, aa_g_paranoid_load, aabool, S_IRUGO);
+ 
+ static int param_get_aaintbool(char *buffer, const struct kernel_param *kp);
+-- 
+2.17.1
 

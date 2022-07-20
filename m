@@ -2,159 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C969657AD82
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18CAF57AD9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241962AbiGTCBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
+        id S240455AbiGTCID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241080AbiGTCBR (ORCPT
+        with ESMTP id S240848AbiGTCH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:01:17 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E786545D6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:01:15 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9DeYddirMYpAA--.14711S15;
-        Wed, 20 Jul 2022 10:01:10 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V17 13/13] irqchip / ACPI: Introduce ACPI_IRQ_MODEL_LPIC for LoongArch
-Date:   Wed, 20 Jul 2022 10:01:01 +0800
-Message-Id: <1658282461-35489-14-git-send-email-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1658282461-35489-1-git-send-email-lvjianmin@loongson.cn>
-References: <1658282461-35489-1-git-send-email-lvjianmin@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxn9DeYddirMYpAA--.14711S15
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF1rZryUXr13Kw17Jw1fJFb_yoW5Aw4DpF
-        WjgF45Ar4xKay7W3s3Ca1Dury3uFyrCFW2qayfG347Cw4kGFykWFykZa42vFZ8A3y5Wa17
-        uF1DXFs8W3WUZwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcx
-        kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v2
-        6r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2
-        Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF04k20xvY0x0EwIxG
-        rwCF04k20xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
-        wI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 19 Jul 2022 22:07:59 -0400
+X-Greylist: delayed 556 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Jul 2022 19:07:56 PDT
+Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [148.163.129.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A385C371;
+        Tue, 19 Jul 2022 19:07:56 -0700 (PDT)
+Received: from dispatch1-us1.ppe-hosted.com (localhost.localdomain [127.0.0.1])
+        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 6D3C530919;
+        Wed, 20 Jul 2022 01:58:41 +0000 (UTC)
+X-Virus-Scanned: Proofpoint Essentials engine
+Received: from mx1-us1.ppe-hosted.com (unknown [10.7.66.134])
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 85A471C0063;
+        Wed, 20 Jul 2022 01:58:38 +0000 (UTC)
+Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 626E168007D;
+        Wed, 20 Jul 2022 01:58:37 +0000 (UTC)
+Received: from [192.168.1.115] (unknown [98.97.34.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail3.candelatech.com (Postfix) with ESMTPSA id 8091A13C2B0;
+        Tue, 19 Jul 2022 18:58:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com 8091A13C2B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
+        s=default; t=1658282316;
+        bh=Kts07RRMr5BVF7N98vAikq2EyUJOp6RVGah6b3RtQyo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=eHnn+UmYFGz3Nv2yDKpbRlJjYqurpHmkJhlioi5u9GAOt2+h+CaKhYIoxFZneGo/K
+         V0tZiULLHYQKDRYw20otUh5R1S/bbXVtYuvqo2oiYhAc12fHBoOyQDrrMV5D0Hey0C
+         ER5/4Ou6llXqxdMKD0Xq+7WUfQquSAQmpsYZxQAU=
+Subject: Re: [PATCH AUTOSEL 5.4 06/16] wifi: mac80211: do not wake queues on a
+ vif that is being stopped
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Felix Fietkau <nbd@nbd.name>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+References: <20220720011730.1025099-1-sashal@kernel.org>
+ <20220720011730.1025099-6-sashal@kernel.org>
+From:   Ben Greear <greearb@candelatech.com>
+Organization: Candela Technologies
+Message-ID: <b43cfde3-7f33-9153-42ca-9e1ecf409d2a@candelatech.com>
+Date:   Tue, 19 Jul 2022 18:58:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20220720011730.1025099-6-sashal@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-MW
+Content-Transfer-Encoding: 8bit
+X-MDID: 1658282319-8yJg6szINy6k
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For LoongArch, ACPI_IRQ_MODEL_LPIC is introduced, and then the
-callback acpi_get_gsi_domain_id and acpi_gsi_to_irq_fallback are
-implemented.
+I think this one had a regression and needs another init-lock-early patch to keep from causing
+problems?
 
-The acpi_get_gsi_domain_id callback returns related fwnode handle
-of irqdomain for different GSI range.
+It certainly broke my 5.17-ish kernel...
 
-The acpi_gsi_to_irq_fallback will create new mapping for gsi when
-the mapping of it is not found.
+Thanks,
+Ben
 
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
----
- drivers/acpi/bus.c                  |  3 +++
- drivers/irqchip/irq-loongarch-cpu.c | 37 +++++++++++++++++++++++++++++++++++++
- include/linux/acpi.h                |  1 +
- 3 files changed, 41 insertions(+)
+On 7/19/22 6:17 PM, Sasha Levin wrote:
+> From: Felix Fietkau <nbd@nbd.name>
+> 
+> [ Upstream commit f856373e2f31ffd340e47e2b00027bd4070f74b3 ]
+> 
+> When a vif is being removed and sdata->bss is cleared, __ieee80211_wake_txqs
+> can still be called on it, which crashes as soon as sdata->bss is being
+> dereferenced.
+> To fix this properly, check for SDATA_STATE_RUNNING before waking queues,
+> and take the fq lock when setting it (to ensure that __ieee80211_wake_txqs
+> observes the change when running on a different CPU)
+> 
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> Acked-by: Toke Høiland-Jørgensen <toke@kernel.org>
+> Link: https://lore.kernel.org/r/20220531190824.60019-1-nbd@nbd.name
+> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   net/mac80211/iface.c | 2 ++
+>   net/mac80211/util.c  | 3 +++
+>   2 files changed, 5 insertions(+)
+> 
+> diff --git a/net/mac80211/iface.c b/net/mac80211/iface.c
+> index ddc001ad9055..48bda8aaa90a 100644
+> --- a/net/mac80211/iface.c
+> +++ b/net/mac80211/iface.c
+> @@ -803,7 +803,9 @@ static void ieee80211_do_stop(struct ieee80211_sub_if_data *sdata,
+>   	bool cancel_scan;
+>   	struct cfg80211_nan_func *func;
+>   
+> +	spin_lock_bh(&local->fq.lock);
+>   	clear_bit(SDATA_STATE_RUNNING, &sdata->state);
+> +	spin_unlock_bh(&local->fq.lock);
+>   
+>   	cancel_scan = rcu_access_pointer(local->scan_sdata) == sdata;
+>   	if (cancel_scan)
+> diff --git a/net/mac80211/util.c b/net/mac80211/util.c
+> index c1c117fdf318..8ae0186091b6 100644
+> --- a/net/mac80211/util.c
+> +++ b/net/mac80211/util.c
+> @@ -250,6 +250,9 @@ static void __ieee80211_wake_txqs(struct ieee80211_sub_if_data *sdata, int ac)
+>   	local_bh_disable();
+>   	spin_lock(&fq->lock);
+>   
+> +	if (!test_bit(SDATA_STATE_RUNNING, &sdata->state))
+> +		goto out;
+> +
+>   	if (sdata->vif.type == NL80211_IFTYPE_AP)
+>   		ps = &sdata->bss->ps;
+>   
+> 
 
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 86fa61a..63fbf00 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -1145,6 +1145,9 @@ static int __init acpi_bus_init_irq(void)
- 	case ACPI_IRQ_MODEL_PLATFORM:
- 		message = "platform specific model";
- 		break;
-+	case ACPI_IRQ_MODEL_LPIC:
-+		message = "LPIC";
-+		break;
- 	default:
- 		pr_info("Unknown interrupt routing model\n");
- 		return -ENODEV;
-diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
-index 27e6809..dd018c4 100644
---- a/drivers/irqchip/irq-loongarch-cpu.c
-+++ b/drivers/irqchip/irq-loongarch-cpu.c
-@@ -16,6 +16,41 @@
- static struct irq_domain *irq_domain;
- struct fwnode_handle *cpuintc_handle;
- 
-+static u32 lpic_gsi_to_irq(u32 gsi)
-+{
-+	/* Only pch irqdomain transferring is required for LoongArch. */
-+	if (gsi >= GSI_MIN_PCH_IRQ && gsi <= GSI_MAX_PCH_IRQ)
-+		return acpi_register_gsi(NULL, gsi, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_HIGH);
-+
-+	return 0;
-+}
-+
-+static struct fwnode_handle *lpic_get_gsi_domain_id(u32 gsi)
-+{
-+	int id;
-+	struct fwnode_handle *domain_handle = NULL;
-+
-+	switch (gsi) {
-+	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
-+		if (liointc_handle)
-+			domain_handle = liointc_handle;
-+		break;
-+
-+	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
-+		if (pch_lpc_handle)
-+			domain_handle = pch_lpc_handle;
-+		break;
-+
-+	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
-+		id = find_pch_pic(gsi);
-+		if (id >= 0 && pch_pic_handle[id])
-+			domain_handle = pch_pic_handle[id];
-+		break;
-+	}
-+
-+	return domain_handle;
-+}
-+
- static void mask_loongarch_irq(struct irq_data *d)
- {
- 	clear_csr_ecfg(ECFGF(d->hwirq));
-@@ -102,6 +137,8 @@ static int __init cpuintc_acpi_init(union acpi_subtable_headers *header,
- 		panic("Failed to add irqdomain for LoongArch CPU");
- 
- 	set_handle_irq(&handle_cpu_irq);
-+	acpi_set_irq_model(ACPI_IRQ_MODEL_LPIC, lpic_get_gsi_domain_id);
-+	acpi_set_gsi_to_irq_fallback(lpic_gsi_to_irq);
- 	acpi_cascade_irqdomain_init();
- 
- 	return 0;
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index e2b60d5..76520f3 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -105,6 +105,7 @@ enum acpi_irq_model_id {
- 	ACPI_IRQ_MODEL_IOSAPIC,
- 	ACPI_IRQ_MODEL_PLATFORM,
- 	ACPI_IRQ_MODEL_GIC,
-+	ACPI_IRQ_MODEL_LPIC,
- 	ACPI_IRQ_MODEL_COUNT
- };
- 
+
 -- 
-1.8.3.1
-
+Ben Greear <greearb@candelatech.com>
+Candela Technologies Inc  http://www.candelatech.com

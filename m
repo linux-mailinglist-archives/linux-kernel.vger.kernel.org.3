@@ -2,170 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8BD57BCD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EC257BCDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232409AbiGTRij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S233373AbiGTRjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241396AbiGTRib (ORCPT
+        with ESMTP id S229716AbiGTRjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:38:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDA670E6C;
-        Wed, 20 Jul 2022 10:38:30 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KHQu6x016806;
-        Wed, 20 Jul 2022 17:38:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=oRYSDww+xT2kBVZi4n+vXxIVbL6AE6OfPZiR44/2RWo=;
- b=QR4J3FXggDWq+Gc+6Zoe/aYKzTjkebIINEBfoBjM/DcM6DkvECM7oWfqa2ZAbo2Udvjl
- ZSQk6Bm8K0NUohAW5YyFW7NQ7JhLKRpcbX8mce8qqkXSq7pSa1m1lZxlDEFh/GbJU7WY
- LjU8X87UtELFFJOXErQYlz3h+SVbnqz215M103lSekbdYPsTTthavmLlwI5hpBaZCcri
- exzAqJ+GdaAn/5VXZ4qivDi5uq/yyrTQkZRHW6oJXUR8w6dk6RkR9GLOx6kekio4eHil
- j9fHLUxmA1ECYnPv7uN0P6AF/E1rp22nQzHC6wHXjnM4h/oalD+LGOPqZPEG0IUw/yPP 9A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hen382yx4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 17:38:24 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26KGnasC035260;
-        Wed, 20 Jul 2022 17:38:24 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hen382ywg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 17:38:24 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26KHNT6o002129;
-        Wed, 20 Jul 2022 17:38:23 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma03dal.us.ibm.com with ESMTP id 3hbmy9hp5h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 17:38:23 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26KHcMgq3080866
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Jul 2022 17:38:22 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9A7FFB2067;
-        Wed, 20 Jul 2022 17:38:22 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C372B2064;
-        Wed, 20 Jul 2022 17:38:20 +0000 (GMT)
-Received: from [9.211.34.199] (unknown [9.211.34.199])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 20 Jul 2022 17:38:20 +0000 (GMT)
-Message-ID: <016ae05e-6d8c-2c95-ffcf-239230597def@linux.ibm.com>
-Date:   Wed, 20 Jul 2022 19:38:19 +0200
+        Wed, 20 Jul 2022 13:39:03 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98896FA3F
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:39:02 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 17so6751845pfy.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gKIOhejkrq+Q8uuRF6iQnfl7G8p3hbpVdHm8R8aIKko=;
+        b=ajAxf9e0OHyYwpsX9evWazSHyzfB73W7maKkyeCSnXzXmlH15O4GzRs+O0rqWHboM2
+         xaSFxnpeCt7qFTqMMS9oN6DJX38iQ3RLx0mOmFcZ6U9W7O/mWx8AyfjwXOHOQvL7H0Rz
+         egvk5cESz+hck09fG4WZ1dlpsfjehnzKSqVdX1/DJb5U02Olw7UGzpads16T6KPILxGO
+         CenaOBjFSIR0cZpUdrW+EGMT9UCBoCiLO4KSxZblrHalXsskYd6YWpP7LnebWdv9t/iX
+         xhRAwAd2Rq5rT3mdzf/OSWlc6+6KWG9i+QTp4TaDwBUmH5pha1uY+kjF/vHKb+XNvPMj
+         RA6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gKIOhejkrq+Q8uuRF6iQnfl7G8p3hbpVdHm8R8aIKko=;
+        b=KUDyqZK60PLYN4ZA1q2jAzZ9qK1RoMORMpQoGby3x1wWRwoqxbiCXghL4jI1mopF9o
+         50FdxopNUWlx+4oHfB8jGwZW64xIUYIx2Ac+TJ/jZ31S/K4BjdeaOvDkhYd80D7AzmsO
+         niSwyE+E0I1PNsV8ziDYF75XZxCyVd8KCJR0IlElSgw2Xa+V2FHK5NoLWqFLPe9HVjlc
+         4dWecjNRe+EocM7IKX59EZAubcr8WCfPGDP9CwMb90QhSbB1II3Y8PqgDE6kZrZ3odfz
+         +0EuKc+PVzxrj3wF2wqkSfWwZ+FZ+GnJRNxfmR0mR/VCDYZRDjfmZWtllZ6W7t8eRPux
+         SoYA==
+X-Gm-Message-State: AJIora/CTXIiGHxEtCCNmvv7cvuMyUjh3dX0H+/jZKTCcO3WS/BjCy7x
+        VXkg0TNEXb9aoeJFwyrunTmh0Q==
+X-Google-Smtp-Source: AGRyM1soWPcGGf8fAYVmZHjvcI2IFRbHXUOG1yZwYb5ZKKIs1YZVEFCQitJrLQtIHkL7ysf7SiTTNg==
+X-Received: by 2002:a05:6a00:2481:b0:52a:d50e:e75e with SMTP id c1-20020a056a00248100b0052ad50ee75emr40449773pfv.43.1658338742013;
+        Wed, 20 Jul 2022 10:39:02 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id l7-20020a170903120700b0016cd74e5f87sm10433764plh.240.2022.07.20.10.39.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 10:39:01 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 17:38:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Kechen Lu <kechenl@nvidia.com>, kvm@vger.kernel.org,
+        pbonzini@redhat.com, vkuznets@redhat.com, somduttar@nvidia.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 5/7] KVM: x86: add vCPU scoped toggling for
+ disabled exits
+Message-ID: <Ytg9shoNq9XfTiHS@google.com>
+References: <20220615011622.136646-1-kechenl@nvidia.com>
+ <20220615011622.136646-6-kechenl@nvidia.com>
+ <20220615024311.GA7808@gao-cwp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH net-next v2 0/6] net/smc: Introduce virtually contiguous
- buffers for SMC-R
-To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1657791845-1060-1-git-send-email-guwen@linux.alibaba.com>
-From:   Wenjia Zhang <wenjia@linux.ibm.com>
-In-Reply-To: <1657791845-1060-1-git-send-email-guwen@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: t4wdqEfuOEECHH7y4DP_PucxfT6lBMWz
-X-Proofpoint-GUID: cUwd6s4raPyTqXGcA1qpEnLNEbltzJ5k
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_10,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 adultscore=0 bulkscore=0 priorityscore=1501 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207200071
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615024311.GA7808@gao-cwp>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 15, 2022, Chao Gao wrote:
+> >@@ -5980,6 +5987,8 @@ int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irq_event,
+> > int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+> > 			    struct kvm_enable_cap *cap)
+> > {
+> >+	struct kvm_vcpu *vcpu;
+> >+	unsigned long i;
+> > 	int r;
+> > 
+> > 	if (cap->flags)
+> >@@ -6036,14 +6045,17 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+> > 			break;
+> > 
+> > 		mutex_lock(&kvm->lock);
+> >-		if (kvm->created_vcpus)
+> >-			goto disable_exits_unlock;
+> >+		if (kvm->created_vcpus) {
+> >+			kvm_for_each_vcpu(i, vcpu, kvm) {
+> >+				kvm_ioctl_disable_exits(vcpu->arch, cap->args[0]);
+> >+				static_call(kvm_x86_update_disabled_exits)(vcpu);
+> 
+> IMO, this won't work on Intel platforms.
 
+It's not safe on AMD either because at best the behavior is non-deterministic if
+the vCPU is already running in the guest, and at worst could cause explosions,
+e.g. if hardware doesn't like software modifying in-use VMCB state.
 
-On 14.07.22 11:43, Wen Gu wrote:
-> On long-running enterprise production servers, high-order contiguous
-> memory pages are usually very rare and in most cases we can only get
-> fragmented pages.
-> 
-> When replacing TCP with SMC-R in such production scenarios, attempting
-> to allocate high-order physically contiguous sndbufs and RMBs may result
-> in frequent memory compaction, which will cause unexpected hung issue
-> and further stability risks.
-> 
-> So this patch set is aimed to allow SMC-R link group to use virtually
-> contiguous sndbufs and RMBs to avoid potential issues mentioned above.
-> Whether to use physically or virtually contiguous buffers can be set
-> by sysctl smcr_buf_type.
-> 
-> Note that using virtually contiguous buffers will bring an acceptable
-> performance regression, which can be mainly divided into two parts:
-> 
-> 1) regression in data path, which is brought by additional address
->     translation of sndbuf by RNIC in Tx. But in general, translating
->     address through MTT is fast. According to qperf test, this part
->     regression is basically less than 10% in latency and bandwidth.
->     (see patch 5/6 for details)
-> 
-> 2) regression in buffer initialization and destruction path, which is
->     brought by additional MR operations of sndbufs. But thanks to link
->     group buffer reuse mechanism, the impact of this kind of regression
->     decreases as times of buffer reuse increases.
-> 
-> Patch set overview:
-> - Patch 1/6 and 2/6 mainly about simplifying and optimizing DMA sync
->    operation, which will reduce overhead on the data path, especially
->    when using virtually contiguous buffers;
-> - Patch 3/6 and 4/6 introduce a sysctl smcr_buf_type to set the type
->    of buffers in new created link group;
-> - Patch 5/6 allows SMC-R to use virtually contiguous sndbufs and RMBs,
->    including buffer creation, destruction, MR operation and access;
-> - patch 6/6 extends netlink attribute for buffer type of SMC-R link group;
-> 
-> v1->v2:
-> - Patch 5/6 fixes build issue on 32bit;
-> - Patch 3/6 adds description of new sysctl in smc-sysctl.rst;
-> 
-> Guangguan Wang (2):
->    net/smc: remove redundant dma sync ops
->    net/smc: optimize for smc_sndbuf_sync_sg_for_device and
->      smc_rmb_sync_sg_for_cpu
-> 
-> Wen Gu (4):
->    net/smc: Introduce a sysctl for setting SMC-R buffer type
->    net/smc: Use sysctl-specified types of buffers in new link group
->    net/smc: Allow virtually contiguous sndbufs or RMBs for SMC-R
->    net/smc: Extend SMC-R link group netlink attribute
-> 
->   Documentation/networking/smc-sysctl.rst |  13 ++
->   include/net/netns/smc.h                 |   1 +
->   include/uapi/linux/smc.h                |   1 +
->   net/smc/af_smc.c                        |  68 +++++++--
->   net/smc/smc_clc.c                       |   8 +-
->   net/smc/smc_clc.h                       |   2 +-
->   net/smc/smc_core.c                      | 246 +++++++++++++++++++++-----------
->   net/smc/smc_core.h                      |  20 ++-
->   net/smc/smc_ib.c                        |  44 +++++-
->   net/smc/smc_ib.h                        |   2 +
->   net/smc/smc_llc.c                       |  33 +++--
->   net/smc/smc_rx.c                        |  92 +++++++++---
->   net/smc/smc_sysctl.c                    |  11 ++
->   net/smc/smc_tx.c                        |  10 +-
->   14 files changed, 404 insertions(+), 147 deletions(-)
-> 
-It looks good for us. Thank you!
-Acked-by: Wenjia Zhang <wenjia@linux.ibm.com>
+> Because, to manipulate a vCPU's VMCS, vcpu_load() should be invoked in
+> advance to load the VMCS.  Alternatively, you can add a request KVM_REQ_XXX
+> and defer updating VMCS to the next vCPU entry.
+
+Definitely use a request, doing vcpu_load() from a KVM-scoped ioctl() would be
+a mess as KVM would need to acquire the per-vCPU lock for every vCPU.

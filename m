@@ -2,210 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFE857B1C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DFD57B1C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiGTH3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S231159AbiGTHbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239946AbiGTH3Z (ORCPT
+        with ESMTP id S229984AbiGTHbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:29:25 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2C668737
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:29:24 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2ef5380669cso164505867b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:29:24 -0700 (PDT)
+        Wed, 20 Jul 2022 03:31:12 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00ED930F61
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:31:10 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id d12so28799213lfq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:31:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/Sy7JcJ1dmobVnb3fQg/V13Gnh8APPk7f+7TIQt7T80=;
-        b=N3lCQPt05eW47IhJBlOTcVTBPiOcsMzmhd7AzrhGIpzdqzKrIUE/HseZH4RJiZcL82
-         GxJOWXQPorx0i7n/7wcvS+gOOioZrJR2nfeAAfCjSf83Lk2R4PCx/lYMTSi1zeElhFPE
-         8ITp4KbS13x5T2SNEkWZqcouztbA0LBtgI3AtT3B1Mh+hpikCe7K/8DpOqKdO1EoggkM
-         WFMfa5xMTphUVTyAmrzQQNVtz6Xu15uod/4Jm2R9v7NjE/f9rikNczfBlRoIsDrjBnqD
-         nTBR8kpeosAA01zIS0wac86lDN5aa3qk0a3I0nnWEMGc1MsNsHVKoQORamQ+qM2np+nz
-         whww==
+        bh=qVD438c/qMHcP3YF4mUF+BEHLUy6O2VfnSTLupfA3+E=;
+        b=pGKoI6tXDBkbLmwOLHwjv+gLgujzWTnrmOUSwtVzJbbx2M1chmhV8u9MQDFW3sPdRk
+         Unu7+z50KTXfG11j0PG1eTCtlMmPRTjk8v+1lvr0u/m/S7U/Y8Qz/CwAsCciTY8HrL/Z
+         6TVCFZ0E+05yyStITE/1r4DOYqN7FZa8wFUE4BRGr+Ih4yFDc6MSEXQLPIlaSYBKM0Y1
+         lpePupv84Atn0yTFo9A8+WY5lAY7JtKFuzKpTH5COvewQXcNzcYTH+oC9yZuDOQq33rm
+         JVCiXciEzVwZfGp5K4YZuoduA/6z3ZJ5G+FoIteEDM0EMdjFb3NVuRcZCW7NNTbNP/in
+         6/oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/Sy7JcJ1dmobVnb3fQg/V13Gnh8APPk7f+7TIQt7T80=;
-        b=r3yg4dDZk7nwcd5IsUXjfdQVLl/7fYJq5LdW+15D7PSlVDCsxCDYoWAVr6Dm4AD9wA
-         5sbJPBNC6OzKDOAAecwhGndRPHwYjDw4KmBVmmY1EIEqmZdtrjoaN9aULMQ0imp0RMAu
-         2dAOb5DyphGEfcSIINGsUg4vRf9Vs1gXidxy3JrZoinyvJrLLtrlGu7bAFpapa6CLNES
-         Pi2HIEf0JUnmjTWkq7mA2BbOz70a5t0GIlTjN3aYu9dJajoYFo++fCbgeR2/yaxtMjI0
-         se3vHxFsirVl2rXJWXi5Gh25GbiWH4F/i9EV8qFixWmkO1WsMxQtgqv8JtYIoYDGFrMn
-         xSyw==
-X-Gm-Message-State: AJIora9gwuB2KMqAhlh+UGGVaLHnnERIAITAP0eg8qcUA+xoJ9hMgAz/
-        LyrXvnjtL5UA2sikH0bO1kNzMJGALqvDSXWXWz/Bag==
-X-Google-Smtp-Source: AGRyM1usZYv56m5DYBnRYBweO1cWhaqczqt5hdd1A0xfQSE/DSkRa3At5i7NNaLWOErdCdHzhEV6wwIR7B5+6fn1zzQ=
-X-Received: by 2002:a81:ad0d:0:b0:31e:61a5:3b49 with SMTP id
- l13-20020a81ad0d000000b0031e61a53b49mr5845411ywh.67.1658302163481; Wed, 20
- Jul 2022 00:29:23 -0700 (PDT)
+        bh=qVD438c/qMHcP3YF4mUF+BEHLUy6O2VfnSTLupfA3+E=;
+        b=nIfe+FCBjH8hZ3vhTS4ZiCGyFbnRrEOkLDfBp73SUXlrrSpqW/BHCFymbWIcbwLa6M
+         jef3OsaBE+kQT0AQ60t18DfSdSpQ4ZC+wP5q2bamSQWMI/Aqzxzavjre95QlI8QNlOeK
+         wSzD4iWax69wJmhedfRenlgYGwkHStzuVdmBYcxEkyzSHvxrfd7swN1HsDeHDdd6IkYc
+         3VUOFPtRODv2mlYOlMo3HXADRYp5UwtWVvlYa/Z2LE6rL/49w/n+B2rt18xLu8/3njUE
+         7/uHEWaEKdjvIdYj+JFWUGGkV+GcYU/m9550KzAU4ztT7kSrUocAjZvtZ1dqDd6Rv13S
+         GzrA==
+X-Gm-Message-State: AJIora9Ord9GkenSD3iYqGzXS05Hczwmb2Pi7p5njCyOrkZYXtzGliHD
+        v+5TuPBn2QERIs91TZw1TLsgGNmjWni+Yys5o4Y=
+X-Google-Smtp-Source: AGRyM1utIKsIBlnakln99Sy6uVVmG9Nw4lb9JMhTKT2habayuzoTEwBZjeADArwlEGBqBlYfWZzF1niaQR1minCZoTU=
+X-Received: by 2002:a05:6512:3c95:b0:48a:3d1:9df with SMTP id
+ h21-20020a0565123c9500b0048a03d109dfmr20385097lfv.641.1658302269234; Wed, 20
+ Jul 2022 00:31:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220629194632.1117723-1-qais.yousef@arm.com> <20220629194632.1117723-2-qais.yousef@arm.com>
- <CAKfTPtBAOLzYocTEg3KErACSyrAWDU94NdR7EAOnW0gti2GiDQ@mail.gmail.com>
- <20220712102334.6nwkbkilmmup4h4u@wubuntu> <CAKfTPtDweeQDRcZb+_ANO6rzZd11vbiatoVxDNwsWPtoCTG+AQ@mail.gmail.com>
- <20220712142013.j6fy77yejupvllah@wubuntu> <CAKfTPtB3pjoFWFP9E6RnH87nshEqJxPdFzX495R_Xju9rCPvEw@mail.gmail.com>
- <20220715103738.ufqv2nhkivlhzy7v@wubuntu>
-In-Reply-To: <20220715103738.ufqv2nhkivlhzy7v@wubuntu>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 20 Jul 2022 09:29:12 +0200
-Message-ID: <CAKfTPtAXvP-v+A+PgzMAMqqaffxFp+sUuA4NnMDuF91XCSTrVQ@mail.gmail.com>
-Subject: Re: [PATCH 1/7] sched/uclamp: Fix relationship between uclamp and
- migration margin
+References: <20220629194632.1117723-1-qais.yousef@arm.com> <20220629194632.1117723-4-qais.yousef@arm.com>
+In-Reply-To: <20220629194632.1117723-4-qais.yousef@arm.com>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Wed, 20 Jul 2022 15:30:58 +0800
+Message-ID: <CAB8ipk_mjv6RGAL+2ZY2AKoRrf6LR-d5yJ=4Fz-+DW=aHDOpYQ@mail.gmail.com>
+Subject: Re: [PATCH 3/7] sched/uclamp: Fix fits_capacity() check in feec()
 To:     Qais Yousef <qais.yousef@arm.com>
 Cc:     Ingo Molnar <mingo@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Wei Wang <wvw@google.com>,
+        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
         Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>, Lukasz Luba <lukasz.luba@arm.com>
+        Hank <han.lin@mediatek.com>, Yun Hsiang <hsiang023167@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Jul 2022 at 12:37, Qais Yousef <qais.yousef@arm.com> wrote:
->
-> On 07/13/22 14:39, Vincent Guittot wrote:
->
-> [...]
->
-> > > > That's why I have mentioned that I have thermal pressure and irq in
-> > > > mind. I'm speaking about performance level but not about bandwidth and
-> > > > time sharing.
-> > >
-> > > irq pressure has no impact on the cpu's ability to get any OPP, no? It purely
-> > > reduces the bandwidth availability for CFS tasks AFAIU. So the task's ability
-> > > to achieve a performance level has no correlation with irq pressure IMO. Unless
-> > > I missed something.
-> >
-> > The way irq is accounted in pelt might impact the result. TBH, i
-> > haven't looked in details what would be the impact
->
-> I can't see how irq can impact what performance level we can achieve on any
-> CPU. It should just impact bandwidth?
+Hi Qais
 
-It impacts the cpu and task utilization as your task utilization is
-expressed in the range of the time not used by IRQ so could be lower
-than what you think when you compare with uclamp and decide what to do
+On Thu, Jun 30, 2022 at 3:48 AM Qais Yousef <qais.yousef@arm.com> wrote:
+>
+> As reported by Yun Hsiang [1], if a task has its uclamp_min >= 0.8 * 1024,
+> it'll always pick the previous CPU because fits_capacity() will always
+> return false in this case.
+>
+> The new util_fits_cpu() logic should handle this correctly for us beside
+> more corner cases where similar failures could occur, like when using
+> UCLAMP_MAX.
+>
+> We open code uclamp_rq_util_with() except for the clamp() part,
+> util_fits_cpu() needs the 'raw' values to be passed to it.
+>
+> Also introduce uclamp_rq_{set, get}() shorthand accessors to get uclamp
+> value for the rq. Makes the code more readable and ensures the right
+> rules (use READ_ONCE/WRITE_ONCE) are respected transparently.
+>
+> [1] https://lists.linaro.org/pipermail/eas-dev/2020-July/001488.html
+>
+> Fixes: 1d42509e475c ("sched/fair: Make EAS wakeup placement consider uclamp restrictions")
+> Reported-by: Yun Hsiang <hsiang023167@gmail.com>
+> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> ---
+>  kernel/sched/core.c  | 10 +++++-----
+>  kernel/sched/fair.c  | 26 ++++++++++++++++++++++++--
+>  kernel/sched/sched.h | 40 ++++++++++++++++++++++++++++++++++++++--
+>  3 files changed, 67 insertions(+), 9 deletions(-)
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index d3e2c5a7c1b7..f5dac570d6c5 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -1404,7 +1404,7 @@ static inline void uclamp_idle_reset(struct rq *rq, enum uclamp_id clamp_id,
+>         if (!(rq->uclamp_flags & UCLAMP_FLAG_IDLE))
+>                 return;
+>
+> -       WRITE_ONCE(rq->uclamp[clamp_id].value, clamp_value);
+> +       uclamp_rq_set(rq, clamp_id, clamp_value);
+>  }
+>
+>  static inline
+> @@ -1555,8 +1555,8 @@ static inline void uclamp_rq_inc_id(struct rq *rq, struct task_struct *p,
+>         if (bucket->tasks == 1 || uc_se->value > bucket->value)
+>                 bucket->value = uc_se->value;
+>
+> -       if (uc_se->value > READ_ONCE(uc_rq->value))
+> -               WRITE_ONCE(uc_rq->value, uc_se->value);
+> +       if (uc_se->value > uclamp_rq_get(rq, clamp_id))
+> +               uclamp_rq_set(rq, clamp_id, uc_se->value);
+>  }
+>
+>  /*
+> @@ -1622,7 +1622,7 @@ static inline void uclamp_rq_dec_id(struct rq *rq, struct task_struct *p,
+>         if (likely(bucket->tasks))
+>                 return;
+>
+> -       rq_clamp = READ_ONCE(uc_rq->value);
+> +       rq_clamp = uclamp_rq_get(rq, clamp_id);
+>         /*
+>          * Defensive programming: this should never happen. If it happens,
+>          * e.g. due to future modification, warn and fixup the expected value.
+> @@ -1630,7 +1630,7 @@ static inline void uclamp_rq_dec_id(struct rq *rq, struct task_struct *p,
+>         SCHED_WARN_ON(bucket->value > rq_clamp);
+>         if (bucket->value >= rq_clamp) {
+>                 bkt_clamp = uclamp_rq_max_value(rq, clamp_id, uc_se->value);
+> -               WRITE_ONCE(uc_rq->value, bkt_clamp);
+> +               uclamp_rq_set(rq, clamp_id, bkt_clamp);
+>         }
+>  }
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 313437bea5a2..c80c676ab1bc 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6878,6 +6878,8 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+>  static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  {
+>         unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
+> +       unsigned long p_util_min = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MIN) : 0;
+> +       unsigned long p_util_max = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MAX) : 1024;
+>         struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
+>         int cpu, best_energy_cpu = prev_cpu, target = -1;
+>         unsigned long cpu_cap, util, base_energy = 0;
+> @@ -6907,6 +6909,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>
+>         for (; pd; pd = pd->next) {
+>                 unsigned long cur_delta, spare_cap, max_spare_cap = 0;
+> +               unsigned long rq_util_min, rq_util_max;
+> +               unsigned long util_min, util_max;
+>                 bool compute_prev_delta = false;
+>                 unsigned long base_energy_pd;
+>                 int max_spare_cap_cpu = -1;
+> @@ -6927,8 +6931,26 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>                          * much capacity we can get out of the CPU; this is
+>                          * aligned with sched_cpu_util().
+>                          */
+> -                       util = uclamp_rq_util_with(cpu_rq(cpu), util, p);
+> -                       if (!fits_capacity(util, cpu_cap))
+> +                       if (uclamp_is_used()) {
+> +                               if (uclamp_rq_is_idle(cpu_rq(cpu))) {
+> +                                       util_min = p_util_min;
+> +                                       util_max = p_util_max;
+> +                               } else {
+> +                                       /*
+> +                                        * Open code uclamp_rq_util_with() except for
+> +                                        * the clamp() part. Ie: apply max aggregation
+> +                                        * only. util_fits_cpu() logic requires to
+> +                                        * operate on non clamped util but must use the
+> +                                        * max-aggregated uclamp_{min, max}.
+> +                                        */
+> +                                       rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+> +                                       rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+> +
+> +                                       util_min = max(rq_util_min, p_util_min);
+> +                                       util_max = max(rq_util_max, p_util_max);
+> +                               }
+> +                       }
+> +                       if (!util_fits_cpu(util, util_min, util_max, cpu))
+>                                 continue;
+>
+>                         if (cpu == prev_cpu) {
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 9599d2eea3e7..69c4d35988b9 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -2907,6 +2907,23 @@ static inline unsigned long cpu_util_rt(struct rq *rq)
+>  #ifdef CONFIG_UCLAMP_TASK
+>  unsigned long uclamp_eff_value(struct task_struct *p, enum uclamp_id clamp_id);
+>
+> +static inline unsigned long uclamp_rq_get(struct rq *rq,
+> +                                         enum uclamp_id clamp_id)
+> +{
+> +       return READ_ONCE(rq->uclamp[clamp_id].value);
+> +}
+> +
+> +static inline void uclamp_rq_set(struct rq *rq, enum uclamp_id clamp_id,
+> +                                unsigned int value)
+> +{
+> +       WRITE_ONCE(rq->uclamp[clamp_id].value, value);
+> +}
+> +
+> +static inline bool uclamp_rq_is_idle(struct rq *rq)
+> +{
+> +       return rq->uclamp_flags & UCLAMP_FLAG_IDLE;
+> +}
 
->
-> [...]
->
-> > > > more concerned by the thermal pressure as I mentioned previously. As
-> > > > an example the thermal pressure reflects the impact on the performance
-> > > > while task is running.
-> > >
-> > > Like we discussed on that RT email thread. If you have a 1024 task, tiny
-> > > thermal pressure will make it look like it won't fit anywhere.
-> >
-> > maybe another big core without pressure. Otherwise if the task can
->
-> Isn't thermal pressure per perf domain?
+Can you replace the idle judgment in the uclamp_rq_util_with()
+function by the way?
 
-From a scheduler PoV, we don't have any rule on this
-
+> +
+>  /**
+>   * uclamp_rq_util_with - clamp @util with @rq and @p effective uclamp values.
+>   * @rq:                The rq to clamp against. Must not be NULL.
+> @@ -2946,8 +2963,8 @@ unsigned long uclamp_rq_util_with(struct rq *rq, unsigned long util,
+>                         goto out;
+>         }
 >
-> > accept a lower compute capacity why not setting uclamp_min to a lower
-> > value like 900
+> -       min_util = max_t(unsigned long, min_util, READ_ONCE(rq->uclamp[UCLAMP_MIN].value));
+> -       max_util = max_t(unsigned long, max_util, READ_ONCE(rq->uclamp[UCLAMP_MAX].value));
+> +       min_util = max_t(unsigned long, min_util, uclamp_rq_get(rq, UCLAMP_MIN));
+> +       max_util = max_t(unsigned long, max_util, uclamp_rq_get(rq, UCLAMP_MAX));
+>  out:
+>         /*
+>          * Since CPU's {min,max}_util clamps are MAX aggregated considering
+> @@ -3010,6 +3027,25 @@ static inline bool uclamp_is_used(void)
+>  {
+>         return false;
+>  }
+> +
+> +static inline unsigned long uclamp_rq_get(struct rq *rq,
+> +                                         enum uclamp_id clamp_id)
+> +{
+> +       if (clamp_id == UCLAMP_MIN)
+> +               return 0;
+> +
+> +       return SCHED_CAPACITY_SCALE;
+> +}
+> +
+> +static inline void uclamp_rq_set(struct rq *rq, enum uclamp_id clamp_id,
+> +                                unsigned int value)
+> +{
+> +}
+> +
+> +static inline bool uclamp_rq_is_idle(struct rq *rq)
+> +{
+> +       return false;
+> +}
+>  #endif /* CONFIG_UCLAMP_TASK */
 >
-> Well if the system has lost its top 10% and you're still running as fast as
-> the system can possibly do, what better can you do?
->
-> I can't see how comparing uclamp with thermal pressure will help.
->
-> In feec() we pick the highest spare capacity CPU. So if the bigs were split
-> into 1 per perf domain and truly one of them can become severely throttled
-> while the other isn't as you're trying to say, then this distribution will pick
-> the highest spare capacity one.
-
-The cpu with highest spare capacity might not be the one with highest
-performance
-
->
-> fits_capacity() just says this CPU is a candidate that we can consider.
->
-> [...]
->
-> > > > TaskA usually runs 4 ms every 8ms but wants to ensure a running time
-> > > > around 5ms. Task A asks for a uclamp_min of 768.
-> > > > medium cpu capacity_orig is 800 but runs at half its max freq because
-> > > > of thermal mitigation then your task will runs more than 8ms
-> > >
-> > > If thermal pressure is 50%, then capacity_of() is 400. A 50% task will have
-> > > util_avg of 512, which is much larger than 0.8 * 400. So this is dealt with
-> > > already in this code, no?
-> >
-> > May be my example is not perfect but apply a mitigation of 20% and you
-> > fall in the case
->
->         capacity_orig_of(medium) = 800
->         capacity_of(medium) = 800 * 0.8 - sum_of_(irq, rt) pressure :: <= 640
->
->         migration_margin * capacity_of(medium) = 0.8 * 640 = 512 === p->util_avg
->
-> So this task will struggle still to run on the medium even under 20% pressure.
-
-you are nitpicking. 19.75% should be ok
-
->
-> I can see your point for sure that we could have scenarios where we should pick
-> a bigger CPU. But my counter point is that if there's a meaningful thermal
-> pressure we are screwed already and uclamp can't save the day.
-
-uclamp can save it by triggering the search of another cpu with lower pressure
-
->
-> I'll repeat my question, how would you encode the relationship?
->
-> Consider these scenarios:
->
->
->         capaity_orig_of(little) = 400
->         capaity_orig_of(medium) = 800
->         capaity_orig_of(big) = 1024
->
->         p0->util_avg = 300
->         p0->uclamp_min = 800
->
->         p1->util_avg = 300
->         p1->uclamp_min = 1024
->
->
-> When there's 10% thermal pressure on all CPUs.
->
-> Does p1 fit on big still? Fit here means the  big is a viable candidate from
-> uclamp point of view.
-
-I agree that this one is tricky because if all cpus are throttled,
-there is no cpu but it's worth looking for the big cpu with lowest
-throttling otherwise
-
->
-> How would you define the relationship so that p0 will not fit the medium, but
-> p1 still fits the big.
-
-I would compare uclamp_min with capacity_orig() - thermal pressure to
-decide if we should look for another cpu
-
->
-> What happens when thermal pressure is 1%? Should p0 still fit on the medium
-> then? As Lukasz highlighted in other email threads, the decay of thermal
-> pressure signal has a very long tail.
->
->
-> Thanks!
->
+>  #ifdef CONFIG_HAVE_SCHED_AVG_IRQ
 > --
-> Qais Yousef
+> 2.25.1
+>
+
+Thanks!
+BR
+----
+xuewen.yan

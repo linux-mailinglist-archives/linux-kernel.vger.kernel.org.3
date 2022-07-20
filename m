@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB7557B21E
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EC257B221
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiGTHxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
+        id S231355AbiGTHxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGTHw6 (ORCPT
+        with ESMTP id S230095AbiGTHxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:52:58 -0400
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE08048E96
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:52:54 -0700 (PDT)
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 7C44BA003F;
-        Wed, 20 Jul 2022 09:52:52 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 7C44BA003F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-        t=1658303572; bh=QBCCW4Q0CQG3BJ2QHP8R81ix3DWBDeELsQW0yXxSMLk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hEzRLP92NLkiIRWQ5pUOaA6UneSn05B6NU//P0qsi4D8xm3ocMRnpChcWzcaEdxu1
-         kEgigc45qBN1PR1QJCAel2DEEd0LvrLCwFuqQZ3jCiL17NTjxshyjOOw5bFL07FuEl
-         tSuKIq/pQsugV65FCaOONXwdvBn9NVb+wwHpt92M=
-Received: from [192.168.88.20] (unknown [95.168.116.25])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: perex)
-        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-        Wed, 20 Jul 2022 09:52:42 +0200 (CEST)
-Message-ID: <34bddb2f-dc57-c08c-358e-26cf7824c203@perex.cz>
-Date:   Wed, 20 Jul 2022 09:52:37 +0200
+        Wed, 20 Jul 2022 03:53:45 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5D75F987
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:53:43 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by albert.telenet-ops.be with bizsmtp
+        id xKtg270094C55Sk06KtgKp; Wed, 20 Jul 2022 09:53:40 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oE4WZ-004RV9-TU; Wed, 20 Jul 2022 09:53:39 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oE4WZ-00Es0W-9t; Wed, 20 Jul 2022 09:53:39 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] dt-bindings: timer: renesas,cmt: Fix R-Car Gen4 fall-out
+Date:   Wed, 20 Jul 2022 09:53:34 +0200
+Message-Id: <2e3863ae32e17d49f41111580f195dd34e2b769d.1658303544.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ALSA: hda: Skip creating captures in SOF context
-Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     tiwai@suse.com, Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20220719144753.252231-1-kai.heng.feng@canonical.com>
- <bd59b06a-de49-2a1a-d2a2-351957fec6d0@perex.cz>
- <CAAd53p6ru7CJ=pJ2knCL5pgU_Y+nA=yTPscKk225zTD-fv4qQg@mail.gmail.com>
-From:   Jaroslav Kysela <perex@perex.cz>
-In-Reply-To: <CAAd53p6ru7CJ=pJ2knCL5pgU_Y+nA=yTPscKk225zTD-fv4qQg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne 20. 07. 22 v 3:45 Kai-Heng Feng napsal(a):
-> On Tue, Jul 19, 2022 at 11:41 PM Jaroslav Kysela <perex@perex.cz> wrote:
->>
->> Dne 19. 07. 22 v 16:47 Kai-Heng Feng napsal(a):
->>> On HP laptops that use SOF driver for DMIC, the micmute LED doesn't
->>> light up when mic is muted after commit 9b014266ef8a ("ASoC: SOF:
->>> topology: use new sound control LED layer").
->>>
->>> The micmute LED itself is still working via sysfs, but it doesn't follow
->>> mute anymore. That's because unlike vendors like Dell and Lenovo, HP
->>> laptops use HDA codec to control mute LEDs instead of ACPI. So on HP
->>> laptops, both SOF and HDA create captures with
->>> SNDRV_CTL_ELEM_ACCESS_MIC_LED access, snd_ctl_led_set_state() considers
->>> there are two different kcontrols and one of them is not muted.
->>
->> It does not mean that it's a wrong behavior. When both controls are muted, the
->> LED should be turned on. It just requires that all inputs are off (and it may
->> be the default - probably we can set in UCM or so). If you turn the "Capture
->> Switch" off in amixer / alsamixer, do things work as expected ?
-> 
-> Yes. When all captures are muted the micmute LED is on.
-> 
->>
->>> So skip creating captures for HDA when it's called from SOF, the
->>> captures are already handled by SOF.
->>
->> The capture controls are for other inputs like external analog microphone. If
->> it is required to suppress the MIC LED for some hardware, just skip the
->> "spec->mic_mute_led = 1" assignment in hda_generic.c . Also, the check
->> "codec->core.type != HDA_DEV_ASOC" is not sufficient, because you don't know,
->> if the topology really sets the MIC LED flag.
-> 
-> AFAIK the external analog microphone on DMIC laptop is driven by SOF driver too.
-> If those capture controls are indeed needed for external analog mics,
-> use UCM to mute them by default won't work either.
+Restore sort order (by family, followed by type).
+Update the conditional sections specifying the number of interrupts.
 
-Could you describe this ? I though that only DMIC is handled by SOF when HDA
-codec is in the system. There is a separate analog codec for external analog
-microphone or the HDA codec is somehow connected to SOF/DSP ? If so, how ?
+Fixes: 525b296185b4b0ab ("dt-bindings: timer: renesas,cmt: Add r8a779f0 and generic Gen4 CMT support")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ .../devicetree/bindings/timer/renesas,cmt.yaml     | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-					Jaroslav
-
+diff --git a/Documentation/devicetree/bindings/timer/renesas,cmt.yaml b/Documentation/devicetree/bindings/timer/renesas,cmt.yaml
+index 433ddb49620ca518..bde6c9b66bf42689 100644
+--- a/Documentation/devicetree/bindings/timer/renesas,cmt.yaml
++++ b/Documentation/devicetree/bindings/timer/renesas,cmt.yaml
+@@ -82,12 +82,6 @@ properties:
+               - renesas,r8a77995-cmt0     # 32-bit CMT0 on R-Car D3
+           - const: renesas,rcar-gen3-cmt0 # 32-bit CMT0 on R-Car Gen3 and RZ/G2
+ 
+-      - items:
+-          - enum:
+-              - renesas,r8a779a0-cmt0     # 32-bit CMT0 on R-Car V3U
+-              - renesas,r8a779f0-cmt0     # 32-bit CMT0 on R-Car S4-8
+-          - const: renesas,rcar-gen4-cmt0 # 32-bit CMT0 on R-Car Gen4
+-
+       - items:
+           - enum:
+               - renesas,r8a774a1-cmt1     # 48-bit CMT on RZ/G2M
+@@ -104,6 +98,12 @@ properties:
+               - renesas,r8a77995-cmt1     # 48-bit CMT on R-Car D3
+           - const: renesas,rcar-gen3-cmt1 # 48-bit CMT on R-Car Gen3 and RZ/G2
+ 
++      - items:
++          - enum:
++              - renesas,r8a779a0-cmt0     # 32-bit CMT0 on R-Car V3U
++              - renesas,r8a779f0-cmt0     # 32-bit CMT0 on R-Car S4-8
++          - const: renesas,rcar-gen4-cmt0 # 32-bit CMT0 on R-Car Gen4
++
+       - items:
+           - enum:
+               - renesas,r8a779a0-cmt1     # 48-bit CMT on R-Car V3U
+@@ -145,6 +145,7 @@ allOf:
+             enum:
+               - renesas,rcar-gen2-cmt0
+               - renesas,rcar-gen3-cmt0
++              - renesas,rcar-gen4-cmt0
+     then:
+       properties:
+         interrupts:
+@@ -158,6 +159,7 @@ allOf:
+             enum:
+               - renesas,rcar-gen2-cmt1
+               - renesas,rcar-gen3-cmt1
++              - renesas,rcar-gen4-cmt1
+     then:
+       properties:
+         interrupts:
 -- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+2.25.1
+

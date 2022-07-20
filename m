@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A745357B010
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 06:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4FF57B01A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 06:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239166AbiGTEmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 00:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S238536AbiGTErC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 00:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238536AbiGTEmW (ORCPT
+        with ESMTP id S229806AbiGTErA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 00:42:22 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5964D81A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:42:22 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o18so2497052pjs.2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:42:22 -0700 (PDT)
+        Wed, 20 Jul 2022 00:47:00 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672BD5B066
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:46:58 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id c3so14601029pfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4m2weMM8YDI1AY1uHJfVhQZtY/uy0KHLS609X7iYawY=;
-        b=0L65C5AQK0NkEUvGAXW28Z/fq9HRbWlWPLagjsxFoYtj7t5bk6rkaM323htOQU4pDx
-         HgIg6Pauj8G4m+x8S7qjq8xpjpeiNqTew4+z/0bmRr58Ned7VfjJXqMH5MEEN4aUon1y
-         r+eKPsUhNjUoH8bIJksZWPVCL4C6Wbz+X9ow1k3sCyBbmelZW5GDRxl4gFLXMqQESM5H
-         uPGSjqnjpfs5JaDOZSJ0VGVARUFP/wWMUYjacEQTd/57Zxao8QnSGCrxF4uud5dSk6qV
-         V+pO1NYx+Y/aHeagPAC31hfnfVH76Jm11M+7Pfcu6Ddf8eIQNfH7R2tmG1RPqLS9HDUx
-         twig==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VtF9+07gASHhrIu6wD3FN1xOsSjHByW20JZ9pcO8ds0=;
+        b=fjQHDQLqh1A1CvsX2jafefzTGE36QKfdh3Qilgur+BwmX5uXp/iLBU4QybnFkKJVmG
+         pNABvDJrsAlwuXpzvTuIT5usg1eR++fZZZDamrFa8h3thcwUlBZnsOBf1ZmrICn3YSTj
+         T0Kcbxh3rIDHWJhYw3iXXLT9ja0KNaFgSGnuvEtGxH4R/1Yh/BHxeozZpnxsnFbA1soR
+         CDjSmGCruHE6nPmvn3/nPRAo6knbDZsoTXhw1FiwBGAm7jrQynzd6Eef+IE5+7qEdZPq
+         F9/35voq1+L1YkK0ibuaWgdnaDue1kGCBYqcebE+hQUo1D55mIvHYG0osACVHYXl0rGL
+         uCag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4m2weMM8YDI1AY1uHJfVhQZtY/uy0KHLS609X7iYawY=;
-        b=L33Eiv8o3r2ZNPWPT1sYogcInkxj500r7AIim/tWAqKgq3xnoRH5qTvsHWrrb3JygW
-         CxgO2jaxrzkcHGaUxfutQM9HRDmGb4KduHKxPio7xZg3hVpjksiRBmIhBRRRjPu8W9EE
-         Ctbx08xvFFV6Troxs/Lt2KInYg09Ss9/cmU5wG0KKYFsz2K0cjlDQ6W6uSufD/Ux/wmK
-         x6D4+d2ba9UGRkwe5dcJbURJAgdslcF7Ty2fnGO1yYmHZLvZ2PsI9l4DoNrnPzXxi6ia
-         RpG82tGpS6dLN8IVF+b2rLBYw7ucyX6IGb8UJ3tb2RMW2SUKECk7oxY0NDPNjpl6uyxM
-         HK5A==
-X-Gm-Message-State: AJIora+xqvZqlSbbDcPDPvLnz9HDVnUUvJ1R/pVa2N5mSpzzn9jHgrdY
-        3HVnbEc3Glu/EUUrNG1OUJLn
-X-Google-Smtp-Source: AGRyM1tmqPnWXZ8d2pOEhG0jDiN/4F7QPQ20CS4xB+n9O0oKl13nGyzNFHoyRSOZ9iuvKZO10vLGcA==
-X-Received: by 2002:a17:902:e80a:b0:16c:3340:aba5 with SMTP id u10-20020a170902e80a00b0016c3340aba5mr37802433plg.102.1658292141755;
-        Tue, 19 Jul 2022 21:42:21 -0700 (PDT)
-Received: from localhost ([139.177.225.253])
-        by smtp.gmail.com with ESMTPSA id j7-20020a170903024700b0016c454598b5sm12790879plh.167.2022.07.19.21.42.20
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=VtF9+07gASHhrIu6wD3FN1xOsSjHByW20JZ9pcO8ds0=;
+        b=2SJgSPsBNwxpuUBdOWBUS3O9AArPL+9jh+5JStkAJZpess/Lk8EGlECOmihUGaTZYO
+         x7P/9AjT3Qdp+CpZDVsNE3/HDbI12HgKmd5BQJX/u/OCYIlwJgev/r2WgTgVaOPkaNi6
+         TFZ47SY0JlUWPDdSAjUIcemxOBx+6NcMNBwTm2MGhb4gy9DYlj7xEmhVIsT+b065lrnF
+         wzyiPhlDrMFl1rKYu9cEWHTkfWT0C82cjNB0kXrUpbOZ1/wKpj54H2bmfKD0IF5GvBHr
+         kfNmbc/xkKik3brc3NHEVUBgNOWJIeeSUoQTc9+B+Oh6W91pFnm4WfW7MxTgU6ul7yq9
+         Xbiw==
+X-Gm-Message-State: AJIora8bo65cvgZjUtT4YWNj5eo/oahqjynJNWIgnrhdQHfzdMIO2EJO
+        IN7dLL5Z+qBAK+s3CDA8jn/bzw==
+X-Google-Smtp-Source: AGRyM1vlzCdD69HQD5gb1Q92kSqgBlWCPv0ppUY5psQ46BDf24I6J7L22UUFB0Qj3qfpd4QsIhj9Eg==
+X-Received: by 2002:a05:6a00:134e:b0:52a:d5b4:19bb with SMTP id k14-20020a056a00134e00b0052ad5b419bbmr37009701pfu.45.1658292417692;
+        Tue, 19 Jul 2022 21:46:57 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id i5-20020a17090a4b8500b001f0097c2fb2sm481628pjh.28.2022.07.19.21.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 21:42:21 -0700 (PDT)
-From:   Xie Yongji <xieyongji@bytedance.com>
-To:     mst@redhat.com, jasowang@redhat.com, xiaodong.liu@intel.com,
-        maxime.coquelin@redhat.com, stefanha@redhat.com
-Cc:     songmuchun@bytedance.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] vduse: Support querying information of IOVA regions
-Date:   Wed, 20 Jul 2022 12:41:44 +0800
-Message-Id: <20220720044144.90-6-xieyongji@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220720044144.90-1-xieyongji@bytedance.com>
-References: <20220720044144.90-1-xieyongji@bytedance.com>
-MIME-Version: 1.0
+        Tue, 19 Jul 2022 21:46:56 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 21:46:56 -0700 (PDT)
+X-Google-Original-Date: Tue, 19 Jul 2022 21:16:19 PDT (-0700)
+Subject:     Re: [PATCH V3 0/5] Support for 64bit hartid on RV64 platforms
+In-Reply-To: <20220527051743.2829940-1-sunilvl@ventanamicro.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        daniel.lezcano@linaro.org, tglx@linutronix.de, ardb@kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        heinrich.schuchardt@canonical.com, apatel@ventanamicro.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, sunil.vl@gmail.com,
+        sunilvl@ventanamicro.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     sunilvl@ventanamicro.com
+Message-ID: <mhng-4c49edf1-6367-4dd0-bec7-c6719745ecb5@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,104 +75,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This introduces a new ioctl: VDUSE_IOTLB_GET_INFO to
-support querying some information of IOVA regions.
+On Thu, 26 May 2022 22:17:38 PDT (-0700), sunilvl@ventanamicro.com wrote:
+> The hartid can be a 64bit value on RV64 platforms. This series updates
+> the code so that 64bit hartid can be supported on RV64 platforms.
+>
+> The series has been tested on both RV32 and RV64 qemu platforms.
+>
+> Changes since V2:
+> 	1) Modified commit messages to mention RV64 and add RB tags.
+>
+> Changes since V1:
+> 	1) Updated RB tag for PATCH 1 and PATCH3
+> 	2) Type Casting NR_CPUS before comparing with hartid in PATCH 2
+> 	3) Changed commit message of PATCH 2 to provide details about
+> 	   the bug it is fixing.
+> 	4) Updated PATCH 5 for unaligned 64bit read
+>
+>
+> Sunil V L (5):
+>   riscv: cpu_ops_sbi: Add 64bit hartid support on RV64
+>   riscv: spinwait: Fix hartid variable type
+>   riscv: smp: Add 64bit hartid support on RV64
+>   riscv: cpu: Add 64bit hartid support on RV64
+>   riscv/efi_stub: Add 64bit boot-hartid support on RV64
+>
+>  arch/riscv/include/asm/processor.h        |  4 ++--
+>  arch/riscv/include/asm/smp.h              |  4 ++--
+>  arch/riscv/kernel/cpu.c                   | 26 +++++++++++++----------
+>  arch/riscv/kernel/cpu_ops_sbi.c           |  4 ++--
+>  arch/riscv/kernel/cpu_ops_spinwait.c      |  4 ++--
+>  arch/riscv/kernel/cpufeature.c            |  6 ++++--
+>  arch/riscv/kernel/smp.c                   |  4 ++--
+>  arch/riscv/kernel/smpboot.c               |  9 ++++----
+>  drivers/clocksource/timer-riscv.c         | 15 +++++++------
+>  drivers/firmware/efi/libstub/riscv-stub.c | 13 +++++++++---
+>  drivers/irqchip/irq-riscv-intc.c          |  7 +++---
+>  drivers/irqchip/irq-sifive-plic.c         |  7 +++---
+>  12 files changed, 60 insertions(+), 43 deletions(-)
 
-Now it can be used to query whether the IOVA region
-supports userspace memory registration.
-
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
----
- drivers/vdpa/vdpa_user/vduse_dev.c | 39 ++++++++++++++++++++++++++++++
- include/uapi/linux/vduse.h         | 25 +++++++++++++++++++
- 2 files changed, 64 insertions(+)
-
-diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-index eedff0a3885a..cc4a9a700c24 100644
---- a/drivers/vdpa/vdpa_user/vduse_dev.c
-+++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -1228,6 +1228,45 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
- 					   umem.size);
- 		break;
- 	}
-+	case VDUSE_IOTLB_GET_INFO: {
-+		struct vduse_iova_info info;
-+		struct vhost_iotlb_map *map;
-+		struct vduse_iova_domain *domain = dev->domain;
-+
-+		ret = -EFAULT;
-+		if (copy_from_user(&info, argp, sizeof(info)))
-+			break;
-+
-+		ret = -EINVAL;
-+		if (info.start > info.last)
-+			break;
-+
-+		if (!is_mem_zero((const char *)info.reserved,
-+				 sizeof(info.reserved)))
-+			break;
-+
-+		spin_lock(&domain->iotlb_lock);
-+		map = vhost_iotlb_itree_first(domain->iotlb,
-+					      info.start, info.last);
-+		if (map) {
-+			info.start = map->start;
-+			info.last = map->last;
-+			info.capability = 0;
-+			if (domain->bounce_map && map->start >= 0 &&
-+			    map->last < domain->bounce_size)
-+				info.capability |= VDUSE_IOVA_CAP_UMEM_SUPPORT;
-+		}
-+		spin_unlock(&domain->iotlb_lock);
-+		if (!map)
-+			break;
-+
-+		ret = -EFAULT;
-+		if (copy_to_user(argp, &info, sizeof(info)))
-+			break;
-+
-+		ret = 0;
-+		break;
-+	}
- 	default:
- 		ret = -ENOIOCTLCMD;
- 		break;
-diff --git a/include/uapi/linux/vduse.h b/include/uapi/linux/vduse.h
-index 9885e0571f09..720fb0b6d8ff 100644
---- a/include/uapi/linux/vduse.h
-+++ b/include/uapi/linux/vduse.h
-@@ -233,6 +233,31 @@ struct vduse_iova_umem {
- /* De-register the userspace memory. Caller should set iova and size field. */
- #define VDUSE_IOTLB_DEREG_UMEM	_IOW(VDUSE_BASE, 0x19, struct vduse_iova_umem)
- 
-+/**
-+ * struct vduse_iova_info - information of one IOVA region
-+ * @start: start of the IOVA region
-+ * @last: last of the IOVA region
-+ * @capability: capability of the IOVA regsion
-+ * @reserved: for future use, needs to be initialized to zero
-+ *
-+ * Structure used by VDUSE_IOTLB_GET_INFO ioctl to get information of
-+ * one IOVA region.
-+ */
-+struct vduse_iova_info {
-+	__u64 start;
-+	__u64 last;
-+#define VDUSE_IOVA_CAP_UMEM_SUPPORT (1 << 0)
-+	__u64 capability;
-+	__u64 reserved[3];
-+};
-+
-+/*
-+ * Find the first IOVA region that overlaps with the range [start, last]
-+ * and return some information on it. Caller should set start and last fields.
-+ */
-+#define VDUSE_IOTLB_GET_INFO	_IOW(VDUSE_BASE, 0x1a, struct vduse_iova_info)
-+
-+
- /* The control messages definition for read(2)/write(2) on /dev/vduse/$NAME */
- 
- /**
--- 
-2.20.1
-
+Thanks, this is on for-next.

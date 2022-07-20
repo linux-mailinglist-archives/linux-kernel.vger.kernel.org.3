@@ -2,110 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632A657AE23
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8714657AE16
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240255AbiGTCro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S239675AbiGTCjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbiGTCrm (ORCPT
+        with ESMTP id S238975AbiGTCjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:47:42 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041836FA00;
-        Tue, 19 Jul 2022 19:47:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lng930zfMz4x1Y;
-        Wed, 20 Jul 2022 12:47:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658285255;
-        bh=MTCnWIpDJsB5jJPEXNHIjEL/1RoyMJ2q28jK1kla4/4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j4bVr8mxvqAvKvitFxLVg/t2n+JSMxZXaKqgW2uh6BiGpcIebdw0uI1pX7v5Vrv9T
-         QGoHsPafWB5FeSwF3kRpDp8xC7Pn1O4ypYebFFFK1aMgzlWZsy+ZnM8ZJmgZNGLfJz
-         SJkp/n386U4aboWXiNp/NBoIL0irk2xfAkbMOiTtNmDlEnygMv0AXkmZiSK9pXCJYI
-         /7+RUYOTxMo96KRO5fYLkwfbYYoLbZIpeCRLVaNQKyGrvlOvQL4DZnUu/aYopbo/rh
-         dwCCmP+SMkXFQJE9BniQ//OOkiN4/MEJkpfBJUfoXugrMSfjoXMbDoG/VydgZF4Q0/
-         RpDhfNIuFVuzg==
-Date:   Wed, 20 Jul 2022 12:47:32 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220720124732.4aeb3748@canb.auug.org.au>
-In-Reply-To: <20220719123607.63cbb3c5@canb.auug.org.au>
-References: <20220719123607.63cbb3c5@canb.auug.org.au>
+        Tue, 19 Jul 2022 22:39:14 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF6C6E893;
+        Tue, 19 Jul 2022 19:39:11 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Lnfw95TWKz1M89f;
+        Wed, 20 Jul 2022 10:36:25 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 20 Jul
+ 2022 10:39:08 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <martin.petersen@oracle.com>, <jejb@linux.vnet.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
+        Jason Yan <yanaijie@huawei.com>,
+        <syzbot+d44b35ecfb807e5af0b5@syzkaller.appspotmail.com>
+Subject: [PATCH v2] scsi: fix WARNING in scsi_alloc_sgtables
+Date:   Wed, 20 Jul 2022 10:51:20 +0800
+Message-ID: <20220720025120.3226770-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bAqkNotV=p56vHJYCfytCa7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/bAqkNotV=p56vHJYCfytCa7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+As explained in SG_IO howto[1]:
 
-Hi all,
+"If iovec_count is non-zero then 'dxfer_len' should be equal to the sum
+of iov_len lengths. If not, the minimum of the two is the transfer
+length."
 
-On Tue, 19 Jul 2022 12:36:07 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the amdgpu tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
- In function 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPe=
-rformanceCalculation':
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
-1659:1: error: the frame size of 2144 bytes is larger than 2048 bytes [-Wer=
-ror=3Dframe-larger-than=3D]
->  1659 | }
->       | ^
+When iovec_count is non-zero and dxfer_len is zero, the sg_io() just
+genarated a null bio, and finally caused a warning below. To fix it,
+skip generating a bio for this request if dxfer_len is zero.
 
-The above is fixed today.
+[1] https://tldp.org/HOWTO/SCSI-Generic-HOWTO/x198.html
 
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
- In function 'dml32_ModeSupportAndSystemConfigurationFull':
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:=
-3799:1: error: the frame size of 2464 bytes is larger than 2048 bytes [-Wer=
-ror=3Dframe-larger-than=3D]
->  3799 | } // ModeSupportAndSystemConfigurationFull
->       | ^
+WARNING: CPU: 2 PID: 3643 at drivers/scsi/scsi_lib.c:1032 scsi_alloc_sgtables+0xc7d/0xf70 drivers/scsi/scsi_lib.c:1032
+Modules linked in:
 
-This is still here, but the frame size is down to 2336.
+CPU: 2 PID: 3643 Comm: syz-executor397 Not tainted
+5.17.0-rc3-syzkaller-00316-gb81b1829e7e3 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-204/01/2014
+RIP: 0010:scsi_alloc_sgtables+0xc7d/0xf70 drivers/scsi/scsi_lib.c:1032
+Code: e7 fc 31 ff 44 89 f6 e8 c1 4e e7 fc 45 85 f6 0f 84 1a f5 ff ff e8
+93 4c e7 fc 83 c5 01 0f b7 ed e9 0f f5 ff ff e8 83 4c e7 fc <0f> 0b 41
+   bc 0a 00 00 00 e9 2b fb ff ff 41 bc 09 00 00 00 e9 20 fb
+RSP: 0018:ffffc90000d07558 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff88801bfc96a0 RCX: 0000000000000000
+RDX: ffff88801c876000 RSI: ffffffff849060bd RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff849055b9 R11: 0000000000000000 R12: ffff888012b8c000
+R13: ffff88801bfc9580 R14: 0000000000000000 R15: ffff88801432c000
+FS:  00007effdec8e700(0000) GS:ffff88802cc00000(0000)
+knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007effdec6d718 CR3: 00000000206d6000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ scsi_setup_scsi_cmnd drivers/scsi/scsi_lib.c:1219 [inline]
+ scsi_prepare_cmd drivers/scsi/scsi_lib.c:1614 [inline]
+ scsi_queue_rq+0x283e/0x3630 drivers/scsi/scsi_lib.c:1730
+ blk_mq_dispatch_rq_list+0x6ea/0x22e0 block/blk-mq.c:1851
+ __blk_mq_sched_dispatch_requests+0x20b/0x410 block/blk-mq-sched.c:299
+ blk_mq_sched_dispatch_requests+0xfb/0x180 block/blk-mq-sched.c:332
+ __blk_mq_run_hw_queue+0xf9/0x350 block/blk-mq.c:1968
+ __blk_mq_delay_run_hw_queue+0x5b6/0x6c0 block/blk-mq.c:2045
+ blk_mq_run_hw_queue+0x30f/0x480 block/blk-mq.c:2096
+ blk_mq_sched_insert_request+0x340/0x440 block/blk-mq-sched.c:451
+ blk_execute_rq+0xcc/0x340 block/blk-mq.c:1231
+ sg_io+0x67c/0x1210 drivers/scsi/scsi_ioctl.c:485
+ scsi_ioctl_sg_io drivers/scsi/scsi_ioctl.c:866 [inline]
+ scsi_ioctl+0xa66/0x1560 drivers/scsi/scsi_ioctl.c:921
+ sd_ioctl+0x199/0x2a0 drivers/scsi/sd.c:1576
+ blkdev_ioctl+0x37a/0x800 block/ioctl.c:588
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7effdecdc5d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89
+f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
+f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007effdec8e2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007effded664c0 RCX: 00007effdecdc5d9
+RDX: 0000000020002300 RSI: 0000000000002285 RDI: 0000000000000004
+RBP: 00007effded34034 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
+R13: 00007effded34054 R14: 2f30656c69662f2e R15: 00007effded664c8
 
-> Using the amdgpu tree from next-20220718 fixes the problem, so I have
-> done that for today.
+Reported-by: syzbot+d44b35ecfb807e5af0b5@syzkaller.appspotmail.com
+Fixes: 25636e282fe9 (block: fix SG_IO vector request data length handling)
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/scsi/scsi_ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/drivers/scsi/scsi_ioctl.c b/drivers/scsi/scsi_ioctl.c
+index a480c4d589f5..729e309e6034 100644
+--- a/drivers/scsi/scsi_ioctl.c
++++ b/drivers/scsi/scsi_ioctl.c
+@@ -450,7 +450,7 @@ static int sg_io(struct scsi_device *sdev, struct sg_io_hdr *hdr, fmode_t mode)
+ 		goto out_put_request;
+ 
+ 	ret = 0;
+-	if (hdr->iovec_count) {
++	if (hdr->iovec_count && hdr->dxfer_len) {
+ 		struct iov_iter i;
+ 		struct iovec *iov = NULL;
+ 
+-- 
+2.31.1
 
---Sig_/bAqkNotV=p56vHJYCfytCa7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLXbMQACgkQAVBC80lX
-0Gw68Af/fUmC0SSaPlOJ9Sjug3IL+2hL1flEUmVRMg5OgLM9EFFSSRkb9xs7riPO
-RxTBlg36lLGdOyh0m/qGCpO66uG43LgX+M6g/yZHJi8UJ40sMP3jAifhHAnB3j7r
-ldb3+0RMiwgFNLXQyrXlRPGDsQLZRBJSSuM7I1qmupnh5i7hA04nS9K3RD0IYioi
-yloiid2bZq7Z3a8qkGX2kY2BzDukqlug7eRuN1oBU3/2NOARxdJDsLeNVRK88HgY
-kNOG38yI8ghHVn+ybubpfKJv0AzCscbWCkjrxV59X8HIf09p5RocdNi7Sj5bC4bZ
-mIullasXmnSOyuHKkTG/30DVJFWDQg==
-=AUtf
------END PGP SIGNATURE-----
-
---Sig_/bAqkNotV=p56vHJYCfytCa7--

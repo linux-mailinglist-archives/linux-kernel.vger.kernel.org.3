@@ -2,69 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303FD57BC72
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9253E57BC7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238637AbiGTROq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
+        id S235415AbiGTRS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238572AbiGTROo (ORCPT
+        with ESMTP id S235324AbiGTRSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:14:44 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 248136F7FA;
-        Wed, 20 Jul 2022 10:14:42 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 26KHEWOS004283;
-        Wed, 20 Jul 2022 19:14:32 +0200
-Date:   Wed, 20 Jul 2022 19:14:32 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Pranith Kumar <bobby.prani@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Fernanda Ma'rouf" <fernandafmr12@gnuweeb.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: Re: [PATCH 00/17] nolibc: add preliminary self tests
-Message-ID: <20220720171432.GD4159@1wt.eu>
-References: <20220719214449.2520-1-w@1wt.eu>
- <67a92005-4e13-909a-1693-dfb86d8114c0@gnuweeb.org>
- <20220720162054.GB4159@1wt.eu>
- <ee428948-eaea-49bd-d8a3-c054a57f0094@gnuweeb.org>
+        Wed, 20 Jul 2022 13:18:25 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F483AB3B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:18:24 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id p6-20020a17090a680600b001f2267a1c84so1014033pjj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0A7Vop3JLb1LjbZM57vszyAHhwMfMivUkOyzRnB3v4k=;
+        b=OMPem98GHTwpACFqIppAYiEcB9A98T6HaqNgfFg6loCE9C2If5iTTOylYF/LdCO3j7
+         wWRWVsrG1G9zL67r49dHTzEKiDpOBggC4Vq8U6GsaMa3hTOMEhXKfPUWNt9lDzmzq3dX
+         se2X1rKBZXrPcAaIRqNAdVGJS/1HEeYwDpKF0DVY7JfZHQSbNoTBy8oKCNXslNZjfFaQ
+         r7fsrHGZWmkTKOzZh1i6CSgPkrRfd1uGss9EYUoGOwndxI3YdGWbHocM3ZUNgPrraVCK
+         hT2hHCcpX7iD91UczKNWjeIirCaWA8nw0HPpkuy2fm0xJ4K00zGe/VnRSgoWzaRJDYa3
+         eKpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0A7Vop3JLb1LjbZM57vszyAHhwMfMivUkOyzRnB3v4k=;
+        b=nLBw5ABUsAQddJcRnsZD98NelK6AORyQaL4rsR5pUJl4H1SIYPbEFOafauunfpCCBA
+         x1r3q1s9sL5WyqqilH9ctrwRiJTl+bZuyVhIxs3WT3E5LqY+bdcdbhvxwBY0zbGPupB4
+         rA74BjpoeMF9USV/qBNuGBUcoFzQjcD30+zDZk5Jm6LaGh+wClVGMSGOjqVbw0BVklNn
+         jbPjSHJqOoYH4LOwwgO7caqjGUAS0AZmgGUCHnBLeoLdQbBiZQxvo1Vm4UBRDeE5naCk
+         ZUjjTPF+k/MNZn8h0DXIB7e61WsPULkngX7gNHr6LPaqq5OcQxommOCQGQd3Zit2qDPP
+         dH+Q==
+X-Gm-Message-State: AJIora8aGHA9cm53+whJaqIxstt/1/f0jMBwYN8IzwNtlpaQNU8a2nm1
+        uNnfP9B4akqSTc4EjHDe+fNC3Q==
+X-Google-Smtp-Source: AGRyM1u1q5jWE+4EwAQPjgXW1AyAFcCYEgcXf7FKYYKoaVc96AaLu+frjyDkY4pgRjfZJtH4E03J1g==
+X-Received: by 2002:a17:902:e945:b0:16a:1c41:f66 with SMTP id b5-20020a170902e94500b0016a1c410f66mr39507484pll.129.1658337503742;
+        Wed, 20 Jul 2022 10:18:23 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id f15-20020aa7968f000000b00528c22fbb45sm14095091pfk.141.2022.07.20.10.18.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 10:18:23 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 17:18:19 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Kechen Lu <kechenl@nvidia.com>, kvm@vger.kernel.org,
+        pbonzini@redhat.com, vkuznets@redhat.com, somduttar@nvidia.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 4/7] KVM: x86: Let userspace re-enable previously
+ disabled exits
+Message-ID: <Ytg428sleo7uMRQt@google.com>
+References: <20220615011622.136646-1-kechenl@nvidia.com>
+ <20220615011622.136646-5-kechenl@nvidia.com>
+ <20220615025114.GB7808@gao-cwp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ee428948-eaea-49bd-d8a3-c054a57f0094@gnuweeb.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220615025114.GB7808@gao-cwp>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:05:14AM +0700, Ammar Faizi wrote:
-> > But again, I'm open to better proposals. I reached the limits of my
-> > imagination there, but I do value the ability to "yyp" one line, change
-> > two arguments and gain one extra test for a different combination, and
-> > I really do not want to lose that simplicity. Note that for more complex
-> > tests, it's trivial to add a dedicated function and that's what was done
-> > for getdents64() which also serves as an example.
+On Wed, Jun 15, 2022, Chao Gao wrote:
+> On Tue, Jun 14, 2022 at 06:16:19PM -0700, Kechen Lu wrote:
+> > 7.14 KVM_CAP_S390_HPAGE_1M
+> >diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> >index f31ebbb1b94f..7cc8ac550bc7 100644
+> >--- a/arch/x86/kvm/x86.c
+> >+++ b/arch/x86/kvm/x86.c
+> >@@ -4201,11 +4201,10 @@ static inline bool kvm_can_mwait_in_guest(void)
+> > 
+> > static u64 kvm_get_allowed_disable_exits(void)
+> > {
+> >-	u64 r = KVM_X86_DISABLE_EXITS_HLT | KVM_X86_DISABLE_EXITS_PAUSE |
+> >-		KVM_X86_DISABLE_EXITS_CSTATE;
+> >+	u64 r = KVM_X86_DISABLE_VALID_EXITS;
+> > 
+> >-	if(kvm_can_mwait_in_guest())
+> >-		r |= KVM_X86_DISABLE_EXITS_MWAIT;
+> >+	if (!kvm_can_mwait_in_guest())
+> >+		r &= ~KVM_X86_DISABLE_EXITS_MWAIT;
 > 
-> OK, I understand the reason behind this now. I and Fernanda will try
-> to visit this again at around 5.20-rc. *If* we can find a better
-> design that matches your requirements, we will send you an RFC to
-> improve it too.
+> This hunk looks like a fix to patch 3; it can be squashed into that patch.
 
-You would be very welcome, thank you!
+It's not a fix, just an inversion of the logic to make it easier to maintain
+going forward.  I intentionally made the change in patch 4 so that adding the
+kvm_get_allowed_disable_exits() is a more "pure" movement of code from the "check"
+path to a common helper.
 
-Willy
+I agree it's kinda odd, but I still think splitting the changes is desirable.

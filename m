@@ -2,178 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB76F57B8AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BEB557B8AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbiGTOmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        id S234050AbiGTOmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbiGTOm3 (ORCPT
+        with ESMTP id S232825AbiGTOma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:42:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E9294E606
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658328147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cvhT3S9WVM0zbX99AylzeVt8EncWc0nM5sQ4BeMLhBk=;
-        b=UzvpBvIv0zEd7m4CXN88yg4EWop+mXthhR84RibTwejlWl0LCUUUgaCYDDXiYSU+S/peyT
-        tkLhMKPfXnrCwV2tX95MP7yx8D45MZgZtvpmgxqdDAuTsVLNfUJtrhPJ4wBFaT1HQrmpcS
-        GxaaeJUq56j+WbLtKLs8gZ7We3XVMWs=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-196-RBoGz8fiMD-fcgWvxjAGvQ-1; Wed, 20 Jul 2022 10:42:26 -0400
-X-MC-Unique: RBoGz8fiMD-fcgWvxjAGvQ-1
-Received: by mail-qk1-f199.google.com with SMTP id n15-20020a05620a294f00b006b5768a0ed0so14241606qkp.7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:42:26 -0700 (PDT)
+        Wed, 20 Jul 2022 10:42:30 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F15C4D805
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:42:30 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id d8so6482215wrp.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:42:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4yQPkEDwmQ6fY2iybkkwsInOBKjeMVTN1PcfvnBQKzo=;
+        b=pRXqu2oIYMA1vWokaOPCwKcrVUSXNmwiKNKzrT/ZJhIuvfD3uCnbgNmkKar7aVuj90
+         x8E0rgiN4OFH5o56fJJ78Q4iXwNo7uB7uGeqowrDvvpeOalDH86VWUQbnDR46CN6QBW0
+         y2EhbfF1W2SzJ2GSGikx9bF+yzcwc4WAwXWyjRdjtGA4pcMAlEVu4mIh/i9M/iDN4918
+         p+/3imvrstXEpHPGXDM0uPXC3NZr/RNSNvT5Fe0uTW5lA5ECIGEOYbaGuJIxHcrbkVft
+         zVZqJLANIDOXrHMb0/G9WRK1pcFeOgalD1PUBOfbYITLvgVnN8tnYBGEgSbnXikhmPRd
+         cJbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=cvhT3S9WVM0zbX99AylzeVt8EncWc0nM5sQ4BeMLhBk=;
-        b=lVMoJjfer0FJ3IGTe1fnMDQ0rQmUoFNI6VCsm5dtsLB9M/bf8pDLLk9QUSiNdSZqLm
-         kFGBBHVps4kQ0g6vEl1Bn7etMtaoWWUWKGH0yeGqHUd7hIxCSLlziEyMDofBPnUpsacA
-         taACR5z8j6AGyR/xN99dg8LP1ANufdKnGZXwVzBiwCEmdwnkkADA62V3ZKAJIRhtQ/ng
-         LC4ko++By2nk6YSPqm6ddn5/ee7He347PMK8g40KIDEfuWEjttBc9paQiGZgCGtCKFbQ
-         lUPdSsvz5/VrK1QasCwQNXtaAolmwMRtHmCeOO1R/fhdmScarIZ16X2RzuFebIU/3z33
-         Lgrw==
-X-Gm-Message-State: AJIora+t+e2M5uyyYuf4m/vtUmzW21aPEVB7UK+F4j2ygjywvLpMql4V
-        OwshfWW/CUXar9mRvjUwPG10HBGXBPSEdDCjPo97yxMQjrCyoWxMfix7y/y1xvAAq+H7D9Nt0W2
-        /ff1isIdDyQRxVihPOGem0kXg
-X-Received: by 2002:a05:622a:1a14:b0:31e:e89f:4dda with SMTP id f20-20020a05622a1a1400b0031ee89f4ddamr15317179qtb.622.1658328145877;
-        Wed, 20 Jul 2022 07:42:25 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tGn9yFp45TY6RYzVBxsl9nb/67MqV9TQtVWfuHzl2vf0hFiw4YH/r3ee/crX2uGuJr5QQhHQ==
-X-Received: by 2002:a05:622a:1a14:b0:31e:e89f:4dda with SMTP id f20-20020a05622a1a1400b0031ee89f4ddamr15317158qtb.622.1658328145616;
-        Wed, 20 Jul 2022 07:42:25 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id y206-20020a3764d7000000b006b5652edb93sm16190459qkb.48.2022.07.20.07.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 07:42:24 -0700 (PDT)
-Message-ID: <c22a18631c2067871b9ed8a9246ad58fa1ab8947.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 04/19] KVM: x86: mmu: allow to enable write
- tracking externally
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Date:   Wed, 20 Jul 2022 17:42:17 +0300
-In-Reply-To: <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
-         <20220427200314.276673-5-mlevitsk@redhat.com> <YoZyWOh4NPA0uN5J@google.com>
-         <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4yQPkEDwmQ6fY2iybkkwsInOBKjeMVTN1PcfvnBQKzo=;
+        b=GBOVVIGTP50V3GvlLZw3LLIQ/ySGl3M97tY/iVFUXtmXVktY2WfNQDNOjQdT6rK5OJ
+         nDIQ0ta/dDfP3+0N+OAx4CDTKZ13Q9Xud/Z4ykR15T4fnlybpLrnJ1t09VqoVWyfflV4
+         CeMt6seqk31LtbpANW+Y+RsJP9YqZUDlp/0OKax0PmFkPWVji4KK/EZbDylOWtG3Mq1o
+         LKeVBIkwf1/guXFQvOOQJ1SEmaZ6eOYNz886txej8Ei1w7BUiM9Ha5uauCGKpJbd7T9p
+         p4DWHXqRU4W7jyClYQjNSiWrlY223XJwjQgJlMuT7hapbc9dYdc0IWwQGwtufgX3Z5t+
+         syfA==
+X-Gm-Message-State: AJIora9nsmpxbpYCdMiR6wUYP+ql3RXwigDKluRSnyGjJqag+PzidkjR
+        ZsxhHZ/oD6wGSA4RDahgIGkrXQ==
+X-Google-Smtp-Source: AGRyM1vSAU4Vq87yHXgIdRiCpZq90qfgO2OmqyTn7r5WFUepyZ3vi981pLtyTOD1B4FfEwsijPJQBQ==
+X-Received: by 2002:a05:6000:1548:b0:21d:acfc:29f5 with SMTP id 8-20020a056000154800b0021dacfc29f5mr29917158wry.520.1658328148617;
+        Wed, 20 Jul 2022 07:42:28 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:5c9a:ee80:52f5:6a1? ([2a05:6e02:1041:c10:5c9a:ee80:52f5:6a1])
+        by smtp.googlemail.com with ESMTPSA id l18-20020a05600c1d1200b003a04d19dab3sm8169634wms.3.2022.07.20.07.42.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 07:42:28 -0700 (PDT)
+Message-ID: <9403166d-4960-29e3-1de1-9d17c76752c6@linaro.org>
+Date:   Wed, 20 Jul 2022 16:42:26 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/1] clocksource/drivers/sun4i: remove unnecessary (void*)
+ conversions
+Content-Language: en-US
+To:     XU pengfei <xupengfei@nfschina.com>, tglx@linutronix.de,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+References: <20220720020735.3771-1-xupengfei@nfschina.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220720020735.3771-1-xupengfei@nfschina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-05-22 at 13:22 +0300, Maxim Levitsky wrote:
-> On Thu, 2022-05-19 at 16:37 +0000, Sean Christopherson wrote:
-> > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> > > @@ -5753,6 +5752,10 @@ int kvm_mmu_init_vm(struct kvm *kvm)
-> > >         node->track_write = kvm_mmu_pte_write;
-> > >         node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
-> > >         kvm_page_track_register_notifier(kvm, node);
-> > 
-> > Can you add a patch to move this call to kvm_page_track_register_notifier() into
-> > mmu_enable_write_tracking(), and simultaneously add a WARN in the register path
-> > that page tracking is enabled?
-> > 
-> > Oh, actually, a better idea. Add an inner __kvm_page_track_register_notifier()
-> > that is not exported and thus used only by KVM, invoke mmu_enable_write_tracking()
-> > from the exported kvm_page_track_register_notifier(), and then do the above.
-> > That will require modifying KVMGT and KVM in a single patch, but that's ok.
-> > 
-> > That will avoid any possibility of an external user failing to enabling tracking
-> > before registering its notifier, and also avoids bikeshedding over what to do with
-> > the one-line wrapper to enable tracking.
-> > 
+On 20/07/2022 04:07, XU pengfei wrote:
+> remove unnecessary void* type casting.
 > 
-> This is a good idea as well, especially looking at kvmgt and seeing that
-> it registers the page track notifier, when the vGPU is opened.
-> 
-> I'll do this in the next series.
-> 
-> Thanks for the review!
+> Signed-off-by: XU pengfei <xupengfei@nfschina.com>
+> ---
 
-After putting some thought into this, I am not 100% sure anymore I want to do it this way.
- 
-Let me explain the current state of things:
-
-For mmu: 
-- write tracking notifier is registered on VM initialization (that is pretty much always),
-and if it is called because write tracking was enabled due to some other reason
-(currently only KVMGT), it checks the number of shadow mmu pages and if zero, bails out.
- 
-- write tracking enabled when shadow root is allocated.
- 
-This can be kept as is by using the __kvm_page_track_register_notifier as you suggested.
- 
-For KVMGT:
-- both write tracking and notifier are enabled when an vgpu mdev device is first opened.
-That 'works' only because KVMGT doesn't allow to assign more that one mdev to same VM,
-thus a per VM notifier and the write tracking for that VM are enabled at the same time
- 
- 
-Now for nested AVIC, this is what I would like to do:
- 
-- just like mmu, I prefer to register the write tracking notifier, when the VM is created.
-- just like mmu, write tracking should only be enabled when nested AVIC is actually used
-  first time, so that write tracking is not always enabled when you just boot a VM with nested avic supported,
-  since the VM might not use nested at all.
- 
-Thus I either need to use the __kvm_page_track_register_notifier too for AVIC (and thus need to export it)
-or I need to have a boolean (nested_avic_was_used_once) and register the write tracking
-notifier only when false and do it not on VM creation but on first attempt to use nested AVIC.
- 
-Do you think this is worth it? I mean there is some value of registering the notifier only when needed
-(this way it is not called for nothing) but it does complicate things a bit.
- 
-I can also stash this boolean (like 'bool registered;') into the 'struct kvm_page_track_notifier_node', 
-and thus allow the kvm_page_track_register_notifier to be called more that once - 
-then I can also get rid of __kvm_page_track_register_notifier. 
-
-What do you think about this?
- 
-Best regards,
-	Maxim Levitsky
+Applied, thanks
 
 
-> 
-> Best regards,
->         Maxim Levitsky
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

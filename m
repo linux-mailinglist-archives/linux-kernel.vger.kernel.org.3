@@ -2,88 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1133957B5C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AFB57B5C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238719AbiGTLp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
+        id S234568AbiGTLpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiGTLp4 (ORCPT
+        with ESMTP id S232403AbiGTLph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:45:56 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9577CBC22
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:45:52 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id k19so2702018lji.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eZ2kEpkAO/dETR4Wy7CCjrZXNARvjTeBgYU6liP6gG0=;
-        b=jvt7cSzP6DrqTcuMjUJ8hdYrwfyoClybuQCzTe1vo1J9FO+ePAc07+aMzsid+k42Km
-         oNF+jf/MXQaLMxQt3ZvD6jfgldLkWTOIwSLG4VJmC+Q25M/UGplFPgiyJ7ALJxU1n//4
-         D4OAkA0Qvt8t+h8BV8QZ7n9DYtPkvx1pvUguZ7wLVJA45Pdqx/HTw+z2hKoIW+W8sFf0
-         BdA9lZgIPUj8c4dsjWU57z/pgHO/Pw8WAGMpHEU4R23bXk/dIeEgBAT5XQU8uzZFxuOe
-         RX69qQv1vw85qsegqQ77I63qg+g3llA6ra7V4UR3VWe2U18WE6Nnoqi8ETcd/A3OjGxA
-         jjPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eZ2kEpkAO/dETR4Wy7CCjrZXNARvjTeBgYU6liP6gG0=;
-        b=6x/OtTaFmgcPNx8TaIcQXXOcPvOIKQr/77pLLR9xeR/yczjdgKZkNgaHoG6j6vHpTv
-         8RwZJ4zUDsrGxUDVCf0McGpmfxTNt8LAQi4pDshz3rqWItewhz5Jnkt7yVogh0cgEMxl
-         jKV/7FiK3dyLP7u8V8xo5CNzs31CgXC5q9sxa+CkpntWSzQ9BwG6wOr3pPCW8q+8TUoR
-         HMX8Q1XyrGlQUB0L8uZ8tEeb3FXd1IBydqGk9CFcnqapy3jo4ZapqV53H29YylBHxcHq
-         BUzY7pg/Vxht3tH0+LrMNeP9jUh/LudRvwWikl0ittklbpCiyj7fKf3Z3MQB507NkYP3
-         tTjQ==
-X-Gm-Message-State: AJIora/Aiq1nlb9WErktu7iS8Mo1/Ej+G2F1UunqmRRvux2wzDxnksO2
-        W+TNzSpDWHs2CUN0Ta2A2t4MeHPkDgOTlfNB
-X-Google-Smtp-Source: AGRyM1vbCziSqVuzLbAke27w5ETvWlWJ8TsLgRuSfdYTX4aObXcSBf8ZFeKAA8eFHMRexvgstVSqCQ==
-X-Received: by 2002:a2e:b74e:0:b0:25d:d62a:9033 with SMTP id k14-20020a2eb74e000000b0025dd62a9033mr1269948ljo.105.1658317551036;
-        Wed, 20 Jul 2022 04:45:51 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id e4-20020a05651c038400b0025d33e9353esm3151405ljp.129.2022.07.20.04.45.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 04:45:50 -0700 (PDT)
-Message-ID: <823ae0f4-b7c5-a301-0f2d-66f0e0a36aba@linaro.org>
-Date:   Wed, 20 Jul 2022 13:45:27 +0200
+        Wed, 20 Jul 2022 07:45:37 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06ECD95B6;
+        Wed, 20 Jul 2022 04:45:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Lnv4X4kRZz6PZVH;
+        Wed, 20 Jul 2022 19:44:28 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgAXFWjb6tdiEYbsAw--.60219S3;
+        Wed, 20 Jul 2022 19:45:33 +0800 (CST)
+Subject: Re: [PATCH RESEND v6 0/8] bugfix and cleanup for blk-throttle
+To:     Yu Kuai <yukuai1@huaweicloud.com>, tj@kernel.org, mkoutny@suse.com,
+        axboe@kernel.dk, ming.lei@redhat.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+References: <20220701093441.885741-1-yukuai1@huaweicloud.com>
+ <e1d6b26d-2eae-7b78-277a-0bb737dc9c4b@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <b0dbbdbd-d8cb-babe-5013-208dcb451646@huaweicloud.com>
+Date:   Wed, 20 Jul 2022 19:45:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: net: cdns,macb: Add versal compatible
- string
-Content-Language: en-US
-To:     "Katakam, Harini" <harini.katakam@amd.com>,
-        Harini Katakam <harini.katakam@xilinx.com>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "claudiu.beznea@microchip.com" <claudiu.beznea@microchip.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "harinikatakamlinux@gmail.com" <harinikatakamlinux@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "radhey.shyam.pandey@xilinx.com" <radhey.shyam.pandey@xilinx.com>
-References: <20220720112924.1096-1-harini.katakam@xilinx.com>
- <20220720112924.1096-2-harini.katakam@xilinx.com>
- <d836f94c-4e87-31f6-5c3a-341e802a23a6@linaro.org>
- <BYAPR12MB477363E846E5EB15D7AA2ABF9E8E9@BYAPR12MB4773.namprd12.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <BYAPR12MB477363E846E5EB15D7AA2ABF9E8E9@BYAPR12MB4773.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <e1d6b26d-2eae-7b78-277a-0bb737dc9c4b@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgAXFWjb6tdiEYbsAw--.60219S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFykGFyrZrWkAr1xtr48Xrb_yoW5Wr48pF
+        WaqrW5CrWUCrn2kw43Gw43ZFy5Kw4ktwn8J3sxJ34rCF4qvr9rtr4093WruFyIvFZ2gw4I
+        9r17tr92yry8Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
+        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1a9aP
+        UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,24 +64,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 13:36, Katakam, Harini wrote:
->>> diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml
->> b/Documentation/devicetree/bindings/net/cdns,macb.yaml
->>> index 9c92156869b2..1e9f49bb8249 100644
->>> --- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
->>> +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
->>> @@ -22,6 +22,7 @@ properties:
->>>            - enum:
->>>                - cdns,zynq-gem         # Xilinx Zynq-7xxx SoC
->>>                - cdns,zynqmp-gem       # Xilinx Zynq Ultrascale+ MPSoC
->>> +              - cdns,versal-gem       # Xilinx Versal
->>
->> Not really ordered by name. Why adding to the end?
+在 2022/07/10 10:40, Yu Kuai 写道:
+> Hi!
 > 
-> Thanks for the review. It is just based on the order in which device
-> families from Xilinx were released. I can alphabetize if that's preferred.
+> 在 2022/07/01 17:34, Yu Kuai 写道:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Resend v5 by a new mail address(huaweicloud.com) because old
+>> address(huawei.com)has some problem that emails can end up in spam.
+>> Please let me know if anyone still see this patchset end up in spam.
+>>
+>> Changes in v6:
+>>   - rename parameter in patch 3
+>>   - add comments and reviewed tag for patch 4
+>> Changes in v5:
+>>   - add comments in patch 4
+>>   - clear bytes/io_skipped in throtl_start_new_slice_with_credit() in
+>>   patch 4
+>>   - and cleanup patches 5-8
+>> Changes in v4:
+>>   - add reviewed-by tag for patch 1
+>>   - add patch 2,3
+>>   - use a different way to fix io hung in patch 4
+>> Changes in v3:
+>>   - fix a check in patch 1
+>>   - fix link err in patch 2 on 32-bit platform
+>>   - handle overflow in patch 2
+>> Changes in v2:
+>>   - use a new solution suggested by Ming
+>>   - change the title of patch 1
+>>   - add patch 2
+>>
+>> Patch 1 fix that blk-throttle can't work if multiple bios are throttle,
+>> Patch 2 fix overflow while calculating wait time
+>> Patch 3,4 fix io hung due to configuration updates.
+>> Patch 5-8 are cleanup patches, there are no functional changes, just
+>> some places that I think can be optimized during code review.
+>>
+> Jens and Michal,
+> 
+> Can you receive this patchset normally(not end up in spam)?
+> 
+> If so, Tejun, can you take a look? This patchset do fix some problems in
+> blk-throttle.
 
-Yes, it's the easiest way to avoid conflicts.
+friendly ping ...
+> 
+> BTW, Michal and Ming, it'll be great if you can take a look at other
+> patches as well.
+> 
+> Thansk,
+> Kuai
+>> Previous version:
+>> v1: 
+>> https://lore.kernel.org/all/20220517134909.2910251-1-yukuai3@huawei.com/
+>> v2: 
+>> https://lore.kernel.org/all/20220518072751.1188163-1-yukuai3@huawei.com/
+>> v3: 
+>> https://lore.kernel.org/all/20220519085811.879097-1-yukuai3@huawei.com/
+>> v4: 
+>> https://lore.kernel.org/all/20220523082633.2324980-1-yukuai3@huawei.com/
+>> v5: 
+>> https://lore.kernel.org/all/20220528064330.3471000-1-yukuai3@huawei.com/
+>>
+>> Yu Kuai (8):
+>>    blk-throttle: fix that io throttle can only work for single bio
+>>    blk-throttle: prevent overflow while calculating wait time
+>>    blk-throttle: factor out code to calculate ios/bytes_allowed
+>>    blk-throttle: fix io hung due to config updates
+>>    blk-throttle: use 'READ/WRITE' instead of '0/1'
+>>    blk-throttle: calling throtl_dequeue/enqueue_tg in pairs
+>>    blk-throttle: cleanup tg_update_disptime()
+>>    blk-throttle: clean up flag 'THROTL_TG_PENDING'
+>>
+>>   block/blk-throttle.c | 168 +++++++++++++++++++++++++++++--------------
+>>   block/blk-throttle.h |  16 +++--
+>>   2 files changed, 128 insertions(+), 56 deletions(-)
+>>
+> 
+> .
+> 
 
-Best regards,
-Krzysztof

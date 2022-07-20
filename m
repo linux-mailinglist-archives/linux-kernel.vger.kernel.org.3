@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3983457B509
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB9757B511
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240654AbiGTLE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S240707AbiGTLEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237760AbiGTLEZ (ORCPT
+        with ESMTP id S240724AbiGTLEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:04:25 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951B86E2FD;
-        Wed, 20 Jul 2022 04:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658315064; x=1689851064;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=kAjjWLiiEM0pdfTrehQE5WDcpM33oDPnXSZyjJF9leQ=;
-  b=vDXp+Io4YLZLydQwQ7wIf5sfiuNw1F+RhENNyseqJqkQ2K26iXT7zDCH
-   Kjqpkxy2UYjOUp0/+CoSBAwX6Uuf7w5Hnzt6GKYM0QFqSdpoklp9dT9FY
-   k9IlbiLcStjoJD0X+lC6D8sMIUsj/Ij9cB873x8X3eYp4SsEwsxQV3c1g
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jul 2022 04:04:24 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 04:04:24 -0700
+        Wed, 20 Jul 2022 07:04:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AD16EE8E;
+        Wed, 20 Jul 2022 04:04:38 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KApG3B029103;
+        Wed, 20 Jul 2022 11:04:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=+yiE28S9GiMB31UZiLDpjme+Oy8oLHGUb3KhTYXEAi8=;
+ b=K7koWS9pQRG1Vt5LIQjMqVgcfAg1DyNbAusSH0byaMFmpWkqsRqvVG+iAEUYOWZ7kwb+
+ FvuuiRrD/nHYdtvexw8gdJRb4LLS2RayCqsCw0bVlrfIPnSRDsn/RH0a95IK9VGJ78Fn
+ KR8Hjac9OOqnrXYlMABNgIvikbcz2YsKG65E8kOgz8NkPFlz3i6L+MLqRURVn/dEeJZA
+ 7yN5giH91LpBjJJjukjwnfLQrlqKtOhgpSlzFXzVtl2jPEY+n+wHuCCQ6QV8CvPouERR
+ ijXNFdwUN+EZf/KZgbN9xvNJUr6bY6D6gZ0ceaV2lWW+MBmoxs1OZ8GPLQBGKxkLPHlb Mw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3he3ua9pm6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 11:04:29 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26KB4SHa003277
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 11:04:28 GMT
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Jul 2022 04:04:23 -0700
+ 15.2.986.22; Wed, 20 Jul 2022 04:04:27 -0700
 Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Jul 2022 04:04:19 -0700
+ 15.2.986.22; Wed, 20 Jul 2022 04:04:23 -0700
 From:   Satya Priya <quic_c_skakit@quicinc.com>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -47,9 +52,9 @@ CC:     <linux-arm-msm@vger.kernel.org>, <linux-soc@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <robh@kernel.org>,
         <robh+dt@kernel.org>, <quic_tdas@quicinc.com>,
         <quic_c_skakit@quicinc.com>
-Subject: [PATCH V6 3/5] dt-bindings: clock: Add resets for LPASS audio clock controller for SC7280
-Date:   Wed, 20 Jul 2022 16:33:41 +0530
-Message-ID: <1658315023-3336-4-git-send-email-quic_c_skakit@quicinc.com>
+Subject: [PATCH V6 4/5] dt-bindings: clock: Add support for external MCLKs for LPASS on SC7280
+Date:   Wed, 20 Jul 2022 16:33:42 +0530
+Message-ID: <1658315023-3336-5-git-send-email-quic_c_skakit@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1658315023-3336-1-git-send-email-quic_c_skakit@quicinc.com>
 References: <1658315023-3336-1-git-send-email-quic_c_skakit@quicinc.com>
@@ -58,9 +63,21 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: LXT85g_qT8VnjlAeF3vrKPRiGwTyOYJI
+X-Proofpoint-ORIG-GUID: LXT85g_qT8VnjlAeF3vrKPRiGwTyOYJI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_05,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ mlxscore=0 bulkscore=0 malwarescore=0 spamscore=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207200046
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,104 +86,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Taniya Das <quic_tdas@quicinc.com>
 
-Add support for LPASS audio clock gating for RX/TX/SWA core bus clocks
-for SC7280. Update reg property min/max items in YAML schema.
+Support external mclk to interface external MI2S clocks for SC7280.
 
 Fixes: 4185b27b3bef ("dt-bindings: clock: Add YAML schemas for LPASS clocks on SC7280").
 Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 ---
- .../bindings/clock/qcom,sc7280-lpasscorecc.yaml       | 19 ++++++++++++++++---
- include/dt-bindings/clock/qcom,lpassaudiocc-sc7280.h  |  5 +++++
- 2 files changed, 21 insertions(+), 3 deletions(-)
+ include/dt-bindings/clock/qcom,lpasscorecc-sc7280.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml
-index 5ccfb24..f50e284 100644
---- a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml
-@@ -22,6 +22,8 @@ properties:
+diff --git a/include/dt-bindings/clock/qcom,lpasscorecc-sc7280.h b/include/dt-bindings/clock/qcom,lpasscorecc-sc7280.h
+index 28ed2a0..0324c69 100644
+--- a/include/dt-bindings/clock/qcom,lpasscorecc-sc7280.h
++++ b/include/dt-bindings/clock/qcom,lpasscorecc-sc7280.h
+@@ -19,6 +19,8 @@
+ #define LPASS_CORE_CC_LPM_CORE_CLK			9
+ #define LPASS_CORE_CC_LPM_MEM0_CORE_CLK			10
+ #define LPASS_CORE_CC_SYSNOC_MPORT_CORE_CLK		11
++#define LPASS_CORE_CC_EXT_MCLK0_CLK			12
++#define LPASS_CORE_CC_EXT_MCLK0_CLK_SRC			13
  
-   clock-names: true
- 
-+  reg: true
-+
-   compatible:
-     enum:
-       - qcom,sc7280-lpassaoncc
-@@ -38,8 +40,8 @@ properties:
-   '#power-domain-cells':
-     const: 1
- 
--  reg:
--    maxItems: 1
-+  '#reset-cells':
-+    const: 1
- 
-   qcom,adsp-pil-mode:
-     description:
-@@ -75,6 +77,11 @@ allOf:
-           items:
-             - const: bi_tcxo
-             - const: lpass_aon_cc_main_rcg_clk_src
-+
-+        reg:
-+          items:
-+            - description: lpass core cc register
-+            - description: lpass audio csr register
-   - if:
-       properties:
-         compatible:
-@@ -96,6 +103,8 @@ allOf:
-             - const: bi_tcxo_ao
-             - const: iface
- 
-+        reg:
-+          maxItems: 1
-   - if:
-       properties:
-         compatible:
-@@ -114,6 +123,8 @@ allOf:
-           items:
-             - const: bi_tcxo
- 
-+        reg:
-+          maxItems: 1
- examples:
-   - |
-     #include <dt-bindings/clock/qcom,rpmh.h>
-@@ -122,13 +133,15 @@ examples:
-     #include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
-     lpass_audiocc: clock-controller@3300000 {
-       compatible = "qcom,sc7280-lpassaudiocc";
--      reg = <0x3300000 0x30000>;
-+      reg = <0x3300000 0x30000>,
-+            <0x32a9000 0x1000>;
-       clocks = <&rpmhcc RPMH_CXO_CLK>,
-                <&lpass_aon LPASS_AON_CC_MAIN_RCG_CLK_SRC>;
-       clock-names = "bi_tcxo", "lpass_aon_cc_main_rcg_clk_src";
-       power-domains = <&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
-       #clock-cells = <1>;
-       #power-domain-cells = <1>;
-+      #reset-cells = <1>;
-     };
- 
-   - |
-diff --git a/include/dt-bindings/clock/qcom,lpassaudiocc-sc7280.h b/include/dt-bindings/clock/qcom,lpassaudiocc-sc7280.h
-index 20ef2ea..22dcd47 100644
---- a/include/dt-bindings/clock/qcom,lpassaudiocc-sc7280.h
-+++ b/include/dt-bindings/clock/qcom,lpassaudiocc-sc7280.h
-@@ -24,6 +24,11 @@
- #define LPASS_AUDIO_CC_RX_MCLK_CLK			14
- #define LPASS_AUDIO_CC_RX_MCLK_CLK_SRC			15
- 
-+/* LPASS AUDIO CC CSR */
-+#define LPASS_AUDIO_SWR_RX_CGCR				0
-+#define LPASS_AUDIO_SWR_TX_CGCR				1
-+#define LPASS_AUDIO_SWR_WSA_CGCR			2
-+
- /* LPASS_AON_CC clocks */
- #define LPASS_AON_CC_PLL				0
- #define LPASS_AON_CC_PLL_OUT_EVEN			1
+ /* LPASS_CORE_CC power domains */
+ #define LPASS_CORE_CC_LPASS_CORE_HM_GDSC		0
 -- 
 2.7.4
 

@@ -2,124 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0909D57B3F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A6557B3FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbiGTJfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S238649AbiGTJgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiGTJfR (ORCPT
+        with ESMTP id S232078AbiGTJgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:35:17 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0AF1114
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:35:13 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id p6so20449057ljc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:35:13 -0700 (PDT)
+        Wed, 20 Jul 2022 05:36:44 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CE0655BD
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:36:35 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id bk6-20020a17090b080600b001f2138a2a7bso1938025pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NACJil9UlKguZHtyroyXmUl9NgrDukgC0WHDPhOResw=;
-        b=SM+GM6u9YJ9v0kFj0Xv3j5YMyjCQ2yXS8IRm/2iyBj2e5Kk2DMZe8SyB/GIXUXsPZC
-         6LaJniy4VRPs06Edvr2RXGMZ8NJotZZBMkMzK5EpkujY7ishGPmAyeTs06+VsuYGMUln
-         KX4gELH6LgIXFQb09kFP0ssSpfEMeblLXAKZAQhfEA4qveknBr3LNwHoWZOURDHf3bmQ
-         93/tlBqKjQEASmQbTWKis4Ko97lxx/E1QZO4F00Ua8i7/BuBiv/AigBQMWJrx1z9vJm6
-         dMvHgiQWVUT8ivjwhbt35h8WzEc3o7iSWigQIOEFMHthiDiEKc3s5NTO/8n1uutEp0S4
-         mYDA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oXKrqXNoQbGqXRKsJ331SBJ7YG/0WKRR7aaK+WgaUgE=;
+        b=joNrTJHxlVPnJRGb4f5KBM5NAjHQOSGvKdfYEBNnHb8bcv1/Cdl6rj5AtCz2mXeGsc
+         +zeKQDsw5+SGysz+Zn8WbGnYPEOF9wEd8xMZr60qGCNCFk7lUkxLi7bF7xKlvFVr6lam
+         3TXrUBnFuLI3eDmOUseVnQV+2f8rBmyqjlHAN1ZLBPXNqC0UPGcEyqSjDfQRad2lcj70
+         31HL/lKNDBycUOE5opjsi7vGRYVlh6XQHrM52h6Pnn0TGM9joWEB2HY/it4SzmjknpuI
+         xKjTJE8SF8n4ik1FteRU7FclP6t3uzinZkzJsc2YGJs1pqgMLWtGZ/U03nKtca6ZhOFm
+         SLQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NACJil9UlKguZHtyroyXmUl9NgrDukgC0WHDPhOResw=;
-        b=k7KqkDuDgz8TjuZCkC+HwublLcrIHRSfc6GeH4W4lg5PA4aZ0zbhCVIExnzdFVRxZy
-         iiSE3kt6X3rigkHqR7hO4opl6pSDi3qnwXgS7vD6IuL6+Ni895zxp3tQwkDqrTDhap3d
-         DJd0cP+Y9JtNL3dIffhN96scJDVR2I04+pKT8DyHEZr5xP/2Br8x+AvydAauprkK+cFY
-         zWLcLeFfxTLqGfGQy6XK6Oa/OfNGIqvifWarsf7RYpBWqVpm5yZBHBwxUV6v2lyA1wvI
-         h+/eCHgyOaqdBGZRjsdhE3pdmMbl9JJEWbi9mToqjWp7Davx367ENIdAdbMIysOl+KJZ
-         GonA==
-X-Gm-Message-State: AJIora9PcuLQFNM/1tQMCAzDK01Dds02m4JihmBtmSGs0Ki5tgiAHB5G
-        vGzZP/QhkIVn07NCoaD/ixtyEQ==
-X-Google-Smtp-Source: AGRyM1vX6yDC10HC1LaQDvYd4QG7y0MZ4kcDXW2RtYD5CaLhPw3VCWvVH17wXXB8ScPl0Ba/qstALQ==
-X-Received: by 2002:a2e:2e0d:0:b0:25d:48a6:827d with SMTP id u13-20020a2e2e0d000000b0025d48a6827dmr17183931lju.323.1658309711633;
-        Wed, 20 Jul 2022 02:35:11 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id k10-20020a2ea26a000000b0025d55600855sm3110038ljm.25.2022.07.20.02.35.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 02:35:10 -0700 (PDT)
-Message-ID: <bc99e06b-1aa5-441e-c86f-0fbfb0945d0c@linaro.org>
-Date:   Wed, 20 Jul 2022 11:35:09 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oXKrqXNoQbGqXRKsJ331SBJ7YG/0WKRR7aaK+WgaUgE=;
+        b=HPJzeO+WzS6lfYYBPnigPYZzae0XWd0lIdiLmYLQdbL0SLn9hD+BD4bH4TYCtTcdCK
+         WB3To1h3E4eX8f857PY8lRsDbAT02A60eH4Z/CJ7h5+DRgnUbgBN3HT9DM2a4qsT5cjT
+         82H3OTrdg+LvjJnkD6fseGwZMAWNxhvRHMLtOz17W2MEcGJky3ucYZh0kbSDLWiILeOd
+         CosxptHhPhqJpUvukUJ0YHKs2HpiJWi3iEhAJnEuL00sMPkFFFMng7iMzaPad2cfGeV8
+         5mgCF1QCNy8aB6W3lnCpCVtcARF+WQDtAfi9KJUz7e94dSWTPJB0EnSjIa0X88EaGtPQ
+         Ie/A==
+X-Gm-Message-State: AJIora8e/cCvL1Dqo89VyTsd8kSxkXqeBi/EOb3LHl2mLhmcmw5sTivK
+        dmjM6G0ov9SvXo3wEVN8t1HVTA==
+X-Google-Smtp-Source: AGRyM1vJd0HvTrmLBpXtrQNAYeXvkixWEGjOk8pk9/gZVY4S2kx0V2mdBKCX5F7RInlezFy6V4SvJg==
+X-Received: by 2002:a17:90b:3ec2:b0:1f0:3e9e:4f1d with SMTP id rm2-20020a17090b3ec200b001f03e9e4f1dmr4476777pjb.172.1658309794699;
+        Wed, 20 Jul 2022 02:36:34 -0700 (PDT)
+Received: from C02GD5ZHMD6R.bytedance.net ([61.120.150.77])
+        by smtp.gmail.com with ESMTPSA id w15-20020a63c10f000000b004114cc062f0sm11355811pgf.65.2022.07.20.02.36.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 02:36:34 -0700 (PDT)
+From:   Jinke Han <hanjinke.666@bytedance.com>
+X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
+To:     axboe@kernel.dk, tj@kernel.org
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, Jinke Han <hanjinke.666@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>, stable@vger.kernel.org
+Subject: [PATCH v4] block: don't allow the same type rq_qos add more than once
+Date:   Wed, 20 Jul 2022 17:36:16 +0800
+Message-Id: <20220720093616.70584-1-hanjinke.666@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+In-Reply-To: <20220719165313.51887-1-hanjinke.666@bytedance.com>
+References: <20220719165313.51887-1-hanjinke.666@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 3/4] dt-bindings: misc: tmr-inject: Add device-tree
- binding for TMR Inject
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>,
-        Appana Durga Kedareswara rao 
-        <appana.durga.kedareswara.rao@amd.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, michal.simek@xilinx.com,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org
-Cc:     appanad@amd.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        git@amd.com, git@xilinx.com,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-References: <20220720060016.1646317-1-appana.durga.kedareswara.rao@amd.com>
- <20220720060016.1646317-4-appana.durga.kedareswara.rao@amd.com>
- <77e8433f-6cb8-eb32-63d5-414a92d3b874@linaro.org>
- <f45fccec-4496-19af-0e14-bd626e14c7bd@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f45fccec-4496-19af-0e14-bd626e14c7bd@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 10:26, Michal Simek wrote:
-> 
-> 
-> On 7/20/22 08:15, Krzysztof Kozlowski wrote:
->> On 20/07/2022 08:00, Appana Durga Kedareswara rao wrote:
->>> From: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
->>>
->>> The Triple Modular Redundancy(TMR) Inject core provides functional fault
->>> injection by changing selected MicroBlaze instructions, which provides the
->>> possibility to verify that the TMR subsystem error detection and fault
->>> recovery logic is working properly.
->>>
->>> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.kedareswara.rao@amd.com>
->>> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
->>
->> Keep only one SoB.
-> 
-> nit: First of all it is from xilinx.com that's why xilinx.com should be the first.
-> 
-> Just for my understanding about guidance here.
-> Code was developed by Xilinx before acquisition with AMD. And because it was 
-> picked from vendor tree origin xilinx.com was there to keep origin author there. 
-> And upstreaming is done by new company. I can't see nothing wrong on keeping 
-> both emails there but that's why my opinion. Definitely not a problem to remove 
-> one of them but wanted to make sure that we do it properly for all our submissions.
+From: Jinke Han <hanjinke.666@bytedance.com>
 
-It's the same person. No need for two SoBs from the same person. Since
-AMD acquired Xilinx, it holds all copyrights thus @amd.com person does
-not have to include previous SoB. He/She/They has the permission from
-employer to submit it. The second SoB is just redundant - brings no
-actual information. Otherwise please tell me which piece of DCO the
-additional SoB adds/solves (comparing to single SoB - @amd.com)?
+In our test of iocost, we encountered some list add/del corruptions of
+inner_walk list in ioc_timer_fn.
 
-Similarly when you change jobs while resending your patch - you do not
-add new SoB but just keep SoB from @previous-company.com.
+The reason can be described as follow:
+cpu 0						cpu 1
+ioc_qos_write					ioc_qos_write
 
+ioc = q_to_ioc(bdev_get_queue(bdev));
+if (!ioc) {
+        ioc = kzalloc();			ioc = q_to_ioc(bdev_get_queue(bdev));
+						if (!ioc) {
+							ioc = kzalloc();
+							...
+							rq_qos_add(q, rqos);
+						}
+        ...
+        rq_qos_add(q, rqos);
+        ...
+}
 
-Best regards,
-Krzysztof
+When the io.cost.qos file is written by two cpus concurrently, rq_qos may
+be added to one disk twice. In that case, there will be two iocs enabled
+and running on one disk. They own different iocgs on their active list.
+In the ioc_timer_fn function, because of the iocgs from two iocs have the
+same root iocg, the root iocg's walk_list may be overwritten by each
+other and this leads to list add/del corruptions in building or destroying
+the inner_walk list.
+
+And so far, the blk-rq-qos framework works in case that one instance for
+one type rq_qos per queue by default. This patch make this explicit and
+also fix the crash above.
+
+Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Acked-by: Tejun Heo <tj@kernel.org>
+Cc: <stable@vger.kernel.org>
+---
+Changes in v2
+-use goto pattern in iocost and rename the ebusy label
+Changes in v3
+-use goto in all places
+Changes in v4
+-correct some spell errors and resolve conflict with next kernel
+
+ block/blk-iocost.c    | 20 +++++++++++++-------
+ block/blk-iolatency.c | 18 +++++++++++-------
+ block/blk-rq-qos.h    | 11 ++++++++++-
+ block/blk-wbt.c       | 12 +++++++++++-
+ 4 files changed, 45 insertions(+), 16 deletions(-)
+
+diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+index b7082f2aed9c..7936e5f5821c 100644
+--- a/block/blk-iocost.c
++++ b/block/blk-iocost.c
+@@ -2886,15 +2886,21 @@ static int blk_iocost_init(struct request_queue *q)
+ 	 * called before policy activation completion, can't assume that the
+ 	 * target bio has an iocg associated and need to test for NULL iocg.
+ 	 */
+-	rq_qos_add(q, rqos);
++	ret = rq_qos_add(q, rqos);
++	if (ret)
++		goto err_free_ioc;
++
+ 	ret = blkcg_activate_policy(q, &blkcg_policy_iocost);
+-	if (ret) {
+-		rq_qos_del(q, rqos);
+-		free_percpu(ioc->pcpu_stat);
+-		kfree(ioc);
+-		return ret;
+-	}
++	if (ret)
++		goto err_del_qos;
+ 	return 0;
++
++err_del_qos:
++	rq_qos_del(q, rqos);
++err_free_ioc:
++	free_percpu(ioc->pcpu_stat);
++	kfree(ioc);
++	return ret;
+ }
+ 
+ static struct blkcg_policy_data *ioc_cpd_alloc(gfp_t gfp)
+diff --git a/block/blk-iolatency.c b/block/blk-iolatency.c
+index 79745c6d8e15..e285152345a2 100644
+--- a/block/blk-iolatency.c
++++ b/block/blk-iolatency.c
+@@ -771,19 +771,23 @@ int blk_iolatency_init(struct request_queue *q)
+ 	rqos->ops = &blkcg_iolatency_ops;
+ 	rqos->q = q;
+ 
+-	rq_qos_add(q, rqos);
+-
++	ret = rq_qos_add(q, rqos);
++	if (ret)
++		goto err_free;
+ 	ret = blkcg_activate_policy(q, &blkcg_policy_iolatency);
+-	if (ret) {
+-		rq_qos_del(q, rqos);
+-		kfree(blkiolat);
+-		return ret;
+-	}
++	if (ret)
++		goto err_qos_del;
+ 
+ 	timer_setup(&blkiolat->timer, blkiolatency_timer_fn, 0);
+ 	INIT_WORK(&blkiolat->enable_work, blkiolatency_enable_work_fn);
+ 
+ 	return 0;
++
++err_qos_del:
++	rq_qos_del(q, rqos);
++err_free:
++	kfree(blkiolat);
++	return ret;
+ }
+ 
+ static void iolatency_set_min_lat_nsec(struct blkcg_gq *blkg, u64 val)
+diff --git a/block/blk-rq-qos.h b/block/blk-rq-qos.h
+index 0e46052b018a..08b856570ad1 100644
+--- a/block/blk-rq-qos.h
++++ b/block/blk-rq-qos.h
+@@ -86,7 +86,7 @@ static inline void rq_wait_init(struct rq_wait *rq_wait)
+ 	init_waitqueue_head(&rq_wait->wait);
+ }
+ 
+-static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
++static inline int rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
+ {
+ 	/*
+ 	 * No IO can be in-flight when adding rqos, so freeze queue, which
+@@ -98,6 +98,8 @@ static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
+ 	blk_mq_freeze_queue(q);
+ 
+ 	spin_lock_irq(&q->queue_lock);
++	if (rq_qos_id(q, rqos->id))
++		goto ebusy;
+ 	rqos->next = q->rq_qos;
+ 	q->rq_qos = rqos;
+ 	spin_unlock_irq(&q->queue_lock);
+@@ -109,6 +111,13 @@ static inline void rq_qos_add(struct request_queue *q, struct rq_qos *rqos)
+ 		blk_mq_debugfs_register_rqos(rqos);
+ 		mutex_unlock(&q->debugfs_mutex);
+ 	}
++
++	return 0;
++ebusy:
++	spin_unlock_irq(&q->queue_lock);
++	blk_mq_unfreeze_queue(q);
++	return -EBUSY;
++
+ }
+ 
+ static inline void rq_qos_del(struct request_queue *q, struct rq_qos *rqos)
+diff --git a/block/blk-wbt.c b/block/blk-wbt.c
+index f2e4bf1dca47..a9982000b667 100644
+--- a/block/blk-wbt.c
++++ b/block/blk-wbt.c
+@@ -820,6 +820,7 @@ int wbt_init(struct request_queue *q)
+ {
+ 	struct rq_wb *rwb;
+ 	int i;
++	int ret;
+ 
+ 	rwb = kzalloc(sizeof(*rwb), GFP_KERNEL);
+ 	if (!rwb)
+@@ -846,7 +847,10 @@ int wbt_init(struct request_queue *q)
+ 	/*
+ 	 * Assign rwb and add the stats callback.
+ 	 */
+-	rq_qos_add(q, &rwb->rqos);
++	ret = rq_qos_add(q, &rwb->rqos);
++	if (ret)
++		goto err_free;
++
+ 	blk_stat_add_callback(q, rwb->cb);
+ 
+ 	rwb->min_lat_nsec = wbt_default_latency_nsec(q);
+@@ -855,4 +859,10 @@ int wbt_init(struct request_queue *q)
+ 	wbt_set_write_cache(q, test_bit(QUEUE_FLAG_WC, &q->queue_flags));
+ 
+ 	return 0;
++
++err_free:
++	blk_stat_free_callback(rwb->cb);
++	kfree(rwb);
++	return ret;
++
+ }
+-- 
+2.20.1
+

@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6518F57B43A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3DF57B43C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbiGTJ6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S233325AbiGTJ7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGTJ6s (ORCPT
+        with ESMTP id S229492AbiGTJ7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:58:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A455F12A84
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658311126;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YmCCESdad99/+y0cHmD+1TOj7rDSnAAqAqJlZPlUJxI=;
-        b=g6PLTbDlZ9aGr7PBnETtnpINTJcbP1IYZodiRW2UlKyCYM+Mjg34oq3W47h37A+krnfAs4
-        jGYnJvkrT3gEkCvE5bH3ofYt8tDwEIyJtvhvxkXBUHZhSIMaPaUCtEPwRBGvVV43R95OuZ
-        AUzIoMHZEiW9Lb2zCtISKdVBs0RxsfY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-0wO56rhQM4OXIHQW7LIBGw-1; Wed, 20 Jul 2022 05:58:33 -0400
-X-MC-Unique: 0wO56rhQM4OXIHQW7LIBGw-1
-Received: by mail-wm1-f72.google.com with SMTP id h189-20020a1c21c6000000b003a2fdf9bd2aso8148794wmh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:58:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YmCCESdad99/+y0cHmD+1TOj7rDSnAAqAqJlZPlUJxI=;
-        b=c6OmToBMKVP3r19RO4qQrTvFA7DJaiW+oKvaRBQwCN3GfFbIkPaKt5Z574CKsCFNWF
-         oA2LtGemXP8TpJf0ffZUNHxU4qkVH6JDZP/EBDPwcKjq20t8QqQL6KTFLOUsNoveCycK
-         mOd/0T1UGY67Q9jaKXRUasIHtjL6TcFt/3EBNJEZOSk2t9LfqJjXZIUjhsdsQXQCywkp
-         On3eRlEAp8XUgvkP0PjU/OeR70YLpwtIDM+FyQ2CHLuNwsbcJ3mJMJtuagPVOyDT6lx5
-         J5+TtkgyVUUBAyP1jP7CGwga5eWA/wSipdMgzeFZ+ymUI5/DmBTLhlKMcT5q5Pjp1UE2
-         Bpqw==
-X-Gm-Message-State: AJIora/yAZOkLbtdW0gonkJdT8nEsMrunTH1VUdaNTLs/Rk8vjA0pP5n
-        mpudJ8KLOFrAPNTNOOuIC1s5tbuU5YuBsn0ALMIEqcTk1ShVL1Kp9TS5xlWrMSVYRVndseeXSkk
-        hKJZ8crzVqg+vfRZYNvC9ibNI
-X-Received: by 2002:a05:6000:15ce:b0:21d:b177:a8f0 with SMTP id y14-20020a05600015ce00b0021db177a8f0mr30432543wry.370.1658311112291;
-        Wed, 20 Jul 2022 02:58:32 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ti/BUqcp+kLfup+ElF6yhzCdwtC3kW8c5fi1qMgoV6FNkQmQ/O1A1ozfiQp9mHTFELrJu6EQ==
-X-Received: by 2002:a05:6000:15ce:b0:21d:b177:a8f0 with SMTP id y14-20020a05600015ce00b0021db177a8f0mr30432527wry.370.1658311112035;
-        Wed, 20 Jul 2022 02:58:32 -0700 (PDT)
-Received: from redhat.com ([2.55.25.63])
-        by smtp.gmail.com with ESMTPSA id w5-20020a05600c038500b003a31b00c216sm1893727wmd.0.2022.07.20.02.58.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 02:58:31 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 05:58:28 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Keir Fraser <keirf@google.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jason Wang <jasowang@redhat.com>, kernel-team@android.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio: Force DMA restricted devices through DMA API
-Message-ID: <20220720051351-mutt-send-email-mst@kernel.org>
-References: <20220719100256.419780-1-keirf@google.com>
- <YtbMcBw4l0LAFn9+@infradead.org>
- <YtbRwO40CmIRWOUR@google.com>
- <YtbTGjRw65QEKkQA@infradead.org>
- <YtbXxl8STUtQkacb@google.com>
- <20220720024756-mutt-send-email-mst@kernel.org>
- <Yte8h0wtBZqiBky8@google.com>
+        Wed, 20 Jul 2022 05:59:30 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B92412A84;
+        Wed, 20 Jul 2022 02:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658311169; x=1689847169;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SOFujLqVQ8IM/zPTiPh1M18yqXiEmqEQFOTKQq34x6g=;
+  b=WQQWZDgNC/FEb4yK0CwPjjx2V6w2cokOp1YOqvrLdGuLKTln9FP1uuw9
+   qs1DYQVrLTQvjyph+HVVGVAoxwF0t1c/pRib27gH5d/64YxabZV2Snb3D
+   74ZAeG1UWpwBQzwyI5TmehwsQIm81kyuvPWEkNG0wW/rUfRztgyJHt7NK
+   RA/V2BsuQoFoF31RgWJ/R6bGLhzJIA7ThP8Rz7ToK/zcOu6Hdqxpt37Eh
+   L5cv7TOImxXlerO+tePFEHDPdQCVVbXwDSQY+MyfxnyvVxLEb763f8yR1
+   pdCLzjxpdd2FlziY0owTgav6h/jtFdLtGMKKhdK9fkMcJtVQ+tJ3O6zqr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="285498281"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="285498281"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 02:59:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="740228895"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Jul 2022 02:59:24 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oE6UF-0000MV-Nz;
+        Wed, 20 Jul 2022 09:59:23 +0000
+Date:   Wed, 20 Jul 2022 17:58:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, l.stach@pengutronix.de
+Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, laurent.pinchart@ideasonboard.com,
+        marex@denx.de, paul.elder@ideasonboard.com, aford173@gmail.com,
+        Markus.Niebel@ew.tq-group.com, alexander.stein@ew.tq-group.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V3 5/7] soc: imx: imx8m-blk-ctrl: add i.MX8MP VPU blk ctrl
+Message-ID: <202207201734.DwWC33xs-lkp@intel.com>
+References: <20220719055054.3855979-6-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yte8h0wtBZqiBky8@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220719055054.3855979-6-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,108 +70,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 08:27:51AM +0000, Keir Fraser wrote:
-> On Wed, Jul 20, 2022 at 02:59:53AM -0400, Michael S. Tsirkin wrote:
-> > On Tue, Jul 19, 2022 at 04:11:50PM +0000, Keir Fraser wrote:
-> > > On Tue, Jul 19, 2022 at 08:51:54AM -0700, Christoph Hellwig wrote:
-> > > > On Tue, Jul 19, 2022 at 03:46:08PM +0000, Keir Fraser wrote:
-> > > > > However, if the general idea at least is acceptable, would the
-> > > > > implementation be acceptable if I add an explicit API for this to the
-> > > > > DMA subsystem, and hide the detail there?
-> > > > 
-> > > > I don't think so.  The right thing to key off is
-> > > > VIRTIO_F_ACCESS_PLATFORM, which really should be set in any modern
-> > > > virtio device after all the problems we had with the lack of it.
-> > > 
-> > > Ok. Certainly the flag description in virtio spec fits the bill.
-> > 
-> > Maybe. But balloon really isn't a normal device. Yes the rings kind of
-> > operate more or less normally. However consider for example free page
-> > hinting. We stick a page address in ring for purposes of telling host it
-> > can blow it away at any later time unless we write something into the
-> > page.  Free page reporting is similar.
-> > Sending gigabytes of memory through swiotlb is at minimum not
-> > a good idea.
-> 
-> I don't think any balloon use case needs the page's guest data to be
-> made available to the host device. What the device side does with
-> reported guest-physical page addresses is somewhat VMM/Hyp specific,
-> but I think it's fair to say it will know how to reclaim or track
-> pages by guest PA, and bouncing reported/hinted page addresses through
-> a SWIOTLB or IOMMU would not be of any use to any use case I can think
-> of.
-> 
-> As far as I can see, the only translation that makes sense at all for
-> virtio balloon is in ring management.
-> 
-> > Conversely, is it even okay security wise that host can blow away any
-> > guest page?  Because with balloon GFNs do not go through bounce
-> > buffering.
-> 
-> Ok, I think this is fair and I can address that by describing the use
-> case more broadly.
-> 
-> The short answer is that there will be more patches forthcoming,
-> because the balloon driver will need to tell the hypervisor (EL2 Hyp
-> in the ARM PKVM case) that is is willingly relinquishing memory
-> pages. So, there will be a patch to add a new HVC to PKVM Hyp, and a
-> patch to detect and use the new HVC via a new API that hooks into
-> Linux's balloon infrastructure.
-> 
-> So the use case is that virtio_balloon needs to set up its rings and
-> descriptors in a shared memory region, as requested via
-> dma-restricted-pool and the VIRTIO_F_PALTFORM_ACCESS flag. This is
-> required because the host device has no access to regular guest
-> memory.
-> 
-> However, in PKVM, page notifications will notify both the (trusted)
-> Hypervisor, via hypercall, and the (untrusted) VMM, via virtio. Guest
-> physical addresses are fine here. The VMM understands guest PAs
-> perfectly well, it's just not normally allowed to access their
-> contents or otherwise map or use those pages itself.
+Hi "Peng,
 
-OK ... and I wonder whether this extends the balloon device
-in some way? Is there or can there be a new feature bit for this
-functionality?
+Thank you for the patch! Perhaps something to improve:
 
+[auto build test WARNING on shawnguo/for-next]
+[also build test WARNING on linus/master v5.19-rc7 next-20220719]
+[cannot apply to robh/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > 
-> > > > > Or a completely different approach would be to revert the patch
-> > > > > e41b1355508d which clears VIRTIO_F_ACCESS_PLATFORM in the balloon
-> > > > > driver. MST: That's back in your court, as it's your patch!
-> > > > 
-> > > > Which also means this needs to be addresses, but I don't think a
-> > > > simple revert is enough.
-> > > 
-> > > Well here are two possible approaches:
-> > > 
-> > > 1. Revert e41b1355508d outright. I'm not even sure what it would mean
-> > > for reported pages to go through IOMMU. And VIRTIO_F_ACCESS_PLATFORM
-> > > is no longer IOMMU-specific anyway.
-> > > 
-> > > 2. Continue to clear the flag during virtio_balloon negotiation, but
-> > > remember that it was offered, and test for that in vring_use_dma_api()
-> > > as well as, or instead of, virtio_has_dma_quirk().
-> > > 
-> > > Do either of those appeal?
-> > 
-> > I think the use case needs to be documented better.
-> 
-> I hope the above is helpful in giving some more context.
-> 
-> Perhaps it would make more sense to re-submit this patch as part of
-> a larger series that includes the rest of the mechanism needed to
-> support virtio_balloon on PKVM?
-> 
-> Thanks,
-> Keir
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220719-135352
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+config: microblaze-allmodconfig (https://download.01.org/0day-ci/archive/20220720/202207201734.DwWC33xs-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/73728b6c4380e24d833b690b7ead261e1fcdcbc2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220719-135352
+        git checkout 73728b6c4380e24d833b690b7ead261e1fcdcbc2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/soc/imx/ sound/soc/sof/imx/
 
-I suspect so, yes.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/soc/imx/imx8m-blk-ctrl.c:466:18: error: 'const struct imx8m_blk_ctrl_domain_data' has no member named 'path_names'
+     466 |                 .path_names = (const char *[]){"g1"},
+         |                  ^~~~~~~~~~
+>> drivers/soc/imx/imx8m-blk-ctrl.c:466:31: warning: initialization of 'unsigned int' from 'const char **' makes integer from pointer without a cast [-Wint-conversion]
+     466 |                 .path_names = (const char *[]){"g1"},
+         |                               ^
+   drivers/soc/imx/imx8m-blk-ctrl.c:466:31: note: (near initialization for 'imx8mp_vpu_blk_ctl_domain_data[0].mipi_phy_rst_mask')
+   drivers/soc/imx/imx8m-blk-ctrl.c:467:18: error: 'const struct imx8m_blk_ctrl_domain_data' has no member named 'num_paths'
+     467 |                 .num_paths = 1,
+         |                  ^~~~~~~~~
+>> drivers/soc/imx/imx8m-blk-ctrl.c:467:30: warning: excess elements in struct initializer
+     467 |                 .num_paths = 1,
+         |                              ^
+   drivers/soc/imx/imx8m-blk-ctrl.c:467:30: note: (near initialization for 'imx8mp_vpu_blk_ctl_domain_data[0]')
+   drivers/soc/imx/imx8m-blk-ctrl.c:476:18: error: 'const struct imx8m_blk_ctrl_domain_data' has no member named 'path_names'
+     476 |                 .path_names = (const char *[]){"g2"},
+         |                  ^~~~~~~~~~
+   drivers/soc/imx/imx8m-blk-ctrl.c:476:31: warning: initialization of 'unsigned int' from 'const char **' makes integer from pointer without a cast [-Wint-conversion]
+     476 |                 .path_names = (const char *[]){"g2"},
+         |                               ^
+   drivers/soc/imx/imx8m-blk-ctrl.c:476:31: note: (near initialization for 'imx8mp_vpu_blk_ctl_domain_data[1].mipi_phy_rst_mask')
+   drivers/soc/imx/imx8m-blk-ctrl.c:477:18: error: 'const struct imx8m_blk_ctrl_domain_data' has no member named 'num_paths'
+     477 |                 .num_paths = 1,
+         |                  ^~~~~~~~~
+   drivers/soc/imx/imx8m-blk-ctrl.c:477:30: warning: excess elements in struct initializer
+     477 |                 .num_paths = 1,
+         |                              ^
+   drivers/soc/imx/imx8m-blk-ctrl.c:477:30: note: (near initialization for 'imx8mp_vpu_blk_ctl_domain_data[1]')
+   drivers/soc/imx/imx8m-blk-ctrl.c:486:18: error: 'const struct imx8m_blk_ctrl_domain_data' has no member named 'path_names'
+     486 |                 .path_names = (const char *[]){"vc8000e"},
+         |                  ^~~~~~~~~~
+   drivers/soc/imx/imx8m-blk-ctrl.c:486:31: warning: initialization of 'unsigned int' from 'const char **' makes integer from pointer without a cast [-Wint-conversion]
+     486 |                 .path_names = (const char *[]){"vc8000e"},
+         |                               ^
+   drivers/soc/imx/imx8m-blk-ctrl.c:486:31: note: (near initialization for 'imx8mp_vpu_blk_ctl_domain_data[2].mipi_phy_rst_mask')
+   drivers/soc/imx/imx8m-blk-ctrl.c:487:18: error: 'const struct imx8m_blk_ctrl_domain_data' has no member named 'num_paths'
+     487 |                 .num_paths = 1,
+         |                  ^~~~~~~~~
+   drivers/soc/imx/imx8m-blk-ctrl.c:487:30: warning: excess elements in struct initializer
+     487 |                 .num_paths = 1,
+         |                              ^
+   drivers/soc/imx/imx8m-blk-ctrl.c:487:30: note: (near initialization for 'imx8mp_vpu_blk_ctl_domain_data[2]')
 
 
-> > 
-> > -- 
-> > MST
-> > 
-> > 
+vim +466 drivers/soc/imx/imx8m-blk-ctrl.c
 
+   457	
+   458	static const struct imx8m_blk_ctrl_domain_data imx8mp_vpu_blk_ctl_domain_data[] = {
+   459		[IMX8MP_VPUBLK_PD_G1] = {
+   460			.name = "vpublk-g1",
+   461			.clk_names = (const char *[]){ "g1", },
+   462			.num_clks = 1,
+   463			.gpc_name = "g1",
+   464			.rst_mask = BIT(1),
+   465			.clk_mask = BIT(1),
+ > 466			.path_names = (const char *[]){"g1"},
+ > 467			.num_paths = 1,
+   468		},
+   469		[IMX8MP_VPUBLK_PD_G2] = {
+   470			.name = "vpublk-g2",
+   471			.clk_names = (const char *[]){ "g2", },
+   472			.num_clks = 1,
+   473			.gpc_name = "g2",
+   474			.rst_mask = BIT(0),
+   475			.clk_mask = BIT(0),
+   476			.path_names = (const char *[]){"g2"},
+   477			.num_paths = 1,
+   478		},
+   479		[IMX8MP_VPUBLK_PD_VC8000E] = {
+   480			.name = "vpublk-vc8000e",
+   481			.clk_names = (const char *[]){ "vc8000e", },
+   482			.num_clks = 1,
+   483			.gpc_name = "vc8000e",
+   484			.rst_mask = BIT(2),
+   485			.clk_mask = BIT(2),
+   486			.path_names = (const char *[]){"vc8000e"},
+   487			.num_paths = 1,
+   488		},
+   489	};
+   490	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

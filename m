@@ -2,96 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9096457BFCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7699557BFD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiGTVr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 17:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S230033AbiGTVx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 17:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiGTVr0 (ORCPT
+        with ESMTP id S229504AbiGTVx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 17:47:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BEE3AE4A;
-        Wed, 20 Jul 2022 14:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+Ay+S7xOHyowQsA3HpHkXeX/xEj090g28cZhD6zCnnU=; b=hy/x6fMwZRDmXXIJgI0QPZubvl
-        2CW3Fp0044+2v+TBNwrFMP+ncj5+3jnBjwQW673H/TuUESm4NXRf6AD3T+WRf+DGMMZttYXE68qLo
-        Rd8vFWMivwETAJfQ9fC2w9SRfCTKI1nqdQWBExcp8FL8oWvlz3oBLbDdI96zUhZVwQNsIT7Ol9XUz
-        laYl4UznLxDoYsUPauqgc37vn1JP31UhW3m8t0ZCUSb3C0hHBi/kBoLqQ20GAXdxdE5RHT2P8ywgV
-        s5ZaFGvBp+IqD1F4wxyfEpimRu0tZqqNza366F9AZzFMpTa1C5eyfMtFGvS/+WuyWvorm0SMgqPXS
-        4VnNCpUw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEHX5-00Ep8Z-CG; Wed, 20 Jul 2022 21:47:03 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AC809980BBE; Wed, 20 Jul 2022 23:47:02 +0200 (CEST)
-Date:   Wed, 20 Jul 2022 23:47:02 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Justin Forbes <jforbes@fedoraproject.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Tejas Upadhyay <tejas.upadhyay@intel.com>,
-        Anusha Srivatsa <anusha.srivatsa@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
-Message-ID: <Yth31qsO1nDN4WLB@worktop.programming.kicks-ass.net>
-References: <20220719114714.247441733@linuxfoundation.org>
- <CA+G9fYsCL48P5zFMKUxoJ-1vwUJSWhcn17rUx=1rxOdzdw_Mmg@mail.gmail.com>
- <CAHk-=wjo-u8=yJQJQnaP41FkQw7we9A-zJH3UELx5x_1ynPDfw@mail.gmail.com>
- <YtgvLUMuz+1zpQHR@fedora64.linuxtx.org>
- <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
- <YthCBl4SORA2BfDv@fedora64.linuxtx.org>
+        Wed, 20 Jul 2022 17:53:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64EF348C8D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:53:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658354004;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=i3Va9g3YkA6BXU/AcK1jCkeA4AOd/o3VNIc0Hlti7UU=;
+        b=giJSHWA9Cb826tHQVAd7AC+Gi1N0VlO3nhoBOqH5KGSTvNiWuUp6F2kLFrbkqMcycJPb/M
+        rh4kXBj2af7c+z4O1v7A5iIigMZO8WdjrMsBssFiJup1qbotaje2NHbkuvHHFkCHpa8c5+
+        PPgqqktdKbunl85zF8yYKtdBI0T5buQ=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-110-KLb92zRNO6mJUKgOj59_NQ-1; Wed, 20 Jul 2022 17:53:22 -0400
+X-MC-Unique: KLb92zRNO6mJUKgOj59_NQ-1
+Received: by mail-qt1-f197.google.com with SMTP id i8-20020ac871c8000000b0031ed35facf3so58113qtp.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:53:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i3Va9g3YkA6BXU/AcK1jCkeA4AOd/o3VNIc0Hlti7UU=;
+        b=A1N7MIaja2ZKoqVtJccz8ZlNyM+N9s4lujbGWpno9G9xA2KROaWZhYtO2qoDDEwPlE
+         1mQA8RtqnsLUXmZqYb6ICUqKqhBLitq4o8uphmNp+KhdMqKgEtsZ69ih1xIpGmKpsHHZ
+         cRRVl43RyC3MTXBrKtAIz5uQho5CV3M0pJkePIiPw/9StYvIdWv15bwKcdRlenD+GOB9
+         IgXQG71EV9my/HBQIdT+FYv3COJVEg1e/oB6iJRpGaBf1On0iJ+J1U0dGIhySPkTzBoF
+         9Iqqb2rqCkgLRXPPdRwxmD94c19SHXUHMf49Qs0nDSJz3l502d1wRHe5I/JyrItUmnsl
+         tcWQ==
+X-Gm-Message-State: AJIora8bb7Zu3j0Srog7NoMYQzBoLJbOw6VEQmMnYpYDgrPDrx0e2y6o
+        S7R7q5lURiVZSjtR7yGQB+v1rrviEt8krZv7gwMaMMci0d2xDrx0glio/cKK72UZyKL6AMkh+5q
+        KwSMOIMNVvIARe2gv17I28mWz
+X-Received: by 2002:a05:6214:5292:b0:473:3f82:f947 with SMTP id kj18-20020a056214529200b004733f82f947mr31973960qvb.72.1658354002190;
+        Wed, 20 Jul 2022 14:53:22 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v3iNU023iwalNqWReGAA6yDZlG8JijiYsICQZScSUsRWUvYcY4qSe5hJAq2luceAqy0IeOMA==
+X-Received: by 2002:a05:6214:5292:b0:473:3f82:f947 with SMTP id kj18-20020a056214529200b004733f82f947mr31973941qvb.72.1658354001933;
+        Wed, 20 Jul 2022 14:53:21 -0700 (PDT)
+Received: from localhost.localdomain (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
+        by smtp.gmail.com with ESMTPSA id x27-20020a05620a0b5b00b006b5e43466ebsm199642qkg.59.2022.07.20.14.53.20
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 20 Jul 2022 14:53:21 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     peterx@redhat.com, David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] mm/mprotect: Fix soft-dirty check in can_change_pte_writable()
+Date:   Wed, 20 Jul 2022 17:53:19 -0400
+Message-Id: <20220720215319.87839-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YthCBl4SORA2BfDv@fedora64.linuxtx.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 12:57:26PM -0500, Justin Forbes wrote:
-> On Wed, Jul 20, 2022 at 10:28:33AM -0700, Linus Torvalds wrote:
-> > [ Adding PeterZ and Jiri to the participants. ]
-> > 
-> > Looks like 5.18.13 added that commit 9bb2ec608a20 ("objtool: Update
-> > Retpoline validation") but I don't see 3131ef39fb03 ("x86/asm/32: Fix
-> > ANNOTATE_UNRET_SAFE use on 32-bit") in that list.
-> 
-> It should be noted that the build doesn't fail, it just warns.
-> I am guessing the 32bit failure is what promoted someone to look at
-> the logs to begin with and notice the warn initially. I just verified
-> that it exists in our builds of 5.18.13-rc1, but not on mainline builds.
-> I am gueesing it is because commit 9bb2ec608a20 ("objtool: Update Retpoline
-> validation") should be followed up with at least commit f43b9876e857c
-> ("x86/retbleed: Add fine grained Kconfig knobs")
+The check wanted to make sure when soft-dirty tracking is enabled we won't
+grant write bit by accident, as a page fault is needed for dirty tracking.
+The intention is correct but we didn't check it right because VM_SOFTDIRTY
+set actually means soft-dirty tracking disabled.  Fix it.
 
-Still updateing the stable repro to see what the actual code looks like,
-but that warning seems to suggest the -mfunction-return=thunk-extern
-compiler argument went missing.
+It wasn't a bug for a long time because we used to only optimize the write
+bit settings in change_pte_range() for page caches, and since we've got a
+higher level check in vma_wants_writenotify(), we will never set the bit
+MM_CP_TRY_CHANGE_WRITABLE for soft-dirty enabled page caches, hence even if
+we checked with the wrong value of VM_SOFTDIRTY in change_pte_range() it'll
+just be an no-op.  Functionally it was still correct, even if cpu cycles
+wasted.
 
-For all the files objtool complains about, does the V=1 build output
-show that option?
+However after the recent work of anonymous page optimization on exclusive
+pages we'll start to make it wrong because anonymous page does not require
+the check in vma_wants_writenotify() hence it'll suffer from the wrong
+check here in can_change_pte_writable().
+
+We can easily verify this with any exclusive anonymous page, like program
+below:
+
+=======8<======
+
+unsigned int psize;
+char *page;
+
+uint64_t pagemap_read_vaddr(int fd, void *vaddr)
+{
+    uint64_t value;
+    int ret;
+
+    ret = pread(fd, &value, sizeof(uint64_t),
+                ((uint64_t)vaddr >> 12) * sizeof(uint64_t));
+    assert(ret == sizeof(uint64_t));
+
+    return value;
+}
+
+void clear_refs_write(void)
+{
+    int fd = open("/proc/self/clear_refs", O_RDWR);
+
+    assert(fd >= 0);
+    write(fd, "4", 2);
+    close(fd);
+}
+
+        bool dirty = pagemap_read_vaddr(fd, page) & PM_SOFT_DIRTY;      \
+        if (dirty != expect) {                                          \
+            printf("ERROR: %s, soft-dirty=%d (expect: %d)\n", str, dirty, expect); \
+            exit(-1);                                                   \
+        }                                                               \
+} while (0)
+
+int main(void)
+{
+    int fd = open("/proc/self/pagemap", O_RDONLY);
+
+    assert(fd >= 0);
+    psize = getpagesize();
+    page = mmap(NULL, psize, PROT_READ|PROT_WRITE,
+                MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+    assert(page != MAP_FAILED);
+
+    *page = 1;
+    check_soft_dirty("Just faulted in page", 1);
+    clear_refs_write();
+    check_soft_dirty("Clear_refs written", 0);
+    mprotect(page, psize, PROT_READ);
+    check_soft_dirty("Marked RO", 0);
+    mprotect(page, psize, PROT_READ|PROT_WRITE);
+    check_soft_dirty("Marked RW", 0);
+    *page = 2;
+    check_soft_dirty("Wrote page again", 1);
+
+    munmap(page, psize);
+    close(fd);
+    printf("Test passed.\n");
+
+    return 0;
+}
+=======8<======
+
+So even if commit 64fe24a3e05e kept the old behavior and didn't attempt to
+change the behavior here, the bug will only be able to be triggered after
+commit 64fe24a3e05e because only anonymous page will suffer from it.
+
+Fixes: 64fe24a3e05e ("mm/mprotect: try avoiding write faults for exclusive anonymous pages when changing protection")
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/mprotect.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 0420c3ed936c..804807ab14e6 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -48,8 +48,11 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
+ 	if (pte_protnone(pte) || !pte_dirty(pte))
+ 		return false;
+ 
+-	/* Do we need write faults for softdirty tracking? */
+-	if ((vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
++	/*
++	 * Do we need write faults for softdirty tracking?  Note,
++	 * soft-dirty is enabled when !VM_SOFTDIRTY.
++	 */
++	if (!(vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
+ 		return false;
+ 
+ 	/* Do we need write faults for uffd-wp tracking? */
+-- 
+2.32.0
+

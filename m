@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B64A57B8D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FD457B8D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237023AbiGTOs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S240667AbiGTOtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235887AbiGTOst (ORCPT
+        with ESMTP id S237447AbiGTOsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:48:49 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086D15247E
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:48:42 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id h9so1389772wrm.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:48:42 -0700 (PDT)
+        Wed, 20 Jul 2022 10:48:51 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB3E52894
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:48:44 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id e15so21219415wro.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:48:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:date:subject:mime-version:content-transfer-encoding:message-id
          :references:in-reply-to:to:cc;
-        bh=EOTw2SZsHwugM+Ez0nEALoToqSbMZWPKVYP438H1mxU=;
-        b=oMm7LoJwBASOpcAnoe5ZW0VcoBtpNp4qdQXkxDMqfsYACtq2XOkYP+zDZPKLL4wMBw
-         YgIqj4c9bDXecsVxFerVyCof9sXAssTSpDgeyJzMUqvcp5rJryAbqDSHlATe3jt96iHG
-         WDtXCJY7Y6NcZXZsGo3/Pww8583CYWbnViwflztE1ocPMbOBgWan5EX/aj1cCeoZuy9i
-         9faahOs5YUZNPf85kg/MwQEMmex/wyjlyUCRmxo4MPNf1qV7Ep+U/pgIAQiOYRiTGjQC
-         ZBxpaNtME1cHVV7UMwlhbx1u60srMx9Fp1zRqRjrcLpKx1kk1sNzoYkkn7iaHCbpVNRl
-         3ihA==
+        bh=gQDJGZNgsqUtHpgMiFLZZA7/paFhPF+yVUYXcvVHSs4=;
+        b=jWvb+ECCiickXJZCiLpfv+eAtXoL6RKmAzIinxV0NAV2ZFpFUzjSQMTGWH/ioJk54c
+         WM+yJ0qYotLbZ7Ab3S4p4q5VPrOKdDw0IPyh6RKGkePFugxfcSfoLCKKVrhhZdLIbHYA
+         YuKYzPBjY3Mo/28Q0U8+5FNBFkMy9YFyHVaDl+wjUAR267zKJlGW7I0dpgzcvYvvaQz6
+         hKNBJz+CjbSJIp08nXtstVcxHE9BbQoA0WHlxZ9RWMEnCJlNY1tEMvAlfQIIJs31Khos
+         witQDQ4775d0nxnh1BEviyI9PFhUz0t+fYPBaaO8a3avTfMXnpfMB0fvNGG5w2/id6yg
+         JkMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:date:subject:mime-version
          :content-transfer-encoding:message-id:references:in-reply-to:to:cc;
-        bh=EOTw2SZsHwugM+Ez0nEALoToqSbMZWPKVYP438H1mxU=;
-        b=eIhd6Mo0nAFRVfG9BslfShY0T9+3detYZh4Br2iaqX+R6yVnn7mUmCvjarhpIjxCuU
-         aqZwsgvo5FibNymjqCvwct6j6lQOrKHuEcecSPibw/3EqNXKV8RvzJJflN8gVg4RkTrS
-         Scss842a9E19n195S9bSxHJkBXBc47+8wuh1kU8MeNE51CC5CIkoqGadvsrYATDK/YU5
-         eghDQV0SnEMn2p1mLj/tyeFVpL+0607lpmer13oPl0XGErgmIfo/n0wkJ93TGrKHhTrB
-         d0FC+iSeRPbc6cZXlJTriZj4rNxwsOdR5HkSTpUsA5i8Cl8KmQmVCUWh2QW+w0VWIxH3
-         yWJg==
-X-Gm-Message-State: AJIora8xqZyUOiqTTwEF1BmieQV4MVmRbX8CXWH1qqXQXBSZx3w9YU6N
-        Y6XRCa792LRJlDSRP2+lV/oN317Vum/CCQ==
-X-Google-Smtp-Source: AGRyM1vk48vhBISpLi0CcOr9kKDWKs0EqlrNQDdVJdrT6hsTP+HmSTbFh6RCGQZsl1ZBg+vkqVqr/A==
-X-Received: by 2002:a05:6000:1789:b0:21d:7279:f455 with SMTP id e9-20020a056000178900b0021d7279f455mr30432550wrg.542.1658328521299;
-        Wed, 20 Jul 2022 07:48:41 -0700 (PDT)
+        bh=gQDJGZNgsqUtHpgMiFLZZA7/paFhPF+yVUYXcvVHSs4=;
+        b=tO7mpvnHggEshM17QqfmsqzHSo937hTjyvBP/EF0C4Fyt1LMZzs8tPbq5x5+D7R2Wy
+         upazmQhWm8EVEabrZHPiykkHuCmBO8L2cYFZrK3Sptz5xvteo/PVnvnO9ecOubJjx4wb
+         EDmmeVCG9dfXVWx/20sgAgyrL8cP5HKjpo4VzvyEsFGeBaQDwrSTVe2j32/ejG7L82Yv
+         QxepP6pgI6zbH/JvIdae7rv3KbTL29Q2LOew6zbd5B40Nx2g+wrwajHtcAt1Pj9lhhRV
+         Ti6p6gpVgfyyyMfSmFOnQ9uF4p/uMPB06WbfEWdsLfGfskib+h+inp8kKXEv/JEYz1Ub
+         aZxg==
+X-Gm-Message-State: AJIora98OoEHy8nc8KR4x2u17KhGD3HWgASJnEaRqwIMlsNPOT5/nqtM
+        6ldZvVx0YODtp4z9tz+aSPuEph1NqLQVcg==
+X-Google-Smtp-Source: AGRyM1vhz6wly+GUBEO58Zqu+ASDQ0cB1MEncpppa77b4G7K6pbiuEC/CLbU03zVZ2Y8w2dFJns6HA==
+X-Received: by 2002:a5d:64e2:0:b0:21d:38e8:2497 with SMTP id g2-20020a5d64e2000000b0021d38e82497mr29420012wri.142.1658328522069;
+        Wed, 20 Jul 2022 07:48:42 -0700 (PDT)
 Received: from [127.0.1.1] ([2a01:cb19:85e6:1900:c639:22f8:bed9:44dd])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b003a31673515bsm3321121wmq.7.2022.07.20.07.48.40
+        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b003a31673515bsm3321121wmq.7.2022.07.20.07.48.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 20 Jul 2022 07:48:41 -0700 (PDT)
 From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Date:   Wed, 20 Jul 2022 16:48:39 +0200
-Subject: [PATCH v1 3/6] dt-bindings: mediatek,mt6779-keypad: add mediatek,double-keys
+Date:   Wed, 20 Jul 2022 16:48:40 +0200
+Subject: [PATCH v1 4/6] Input: mt6779-keypad - support double keys matrix
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220720-mt8183-keypad-v1-3-ef9fc29dbff4@baylibre.com>
+Message-Id: <20220720-mt8183-keypad-v1-4-ef9fc29dbff4@baylibre.com>
 References: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
 In-Reply-To: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -81,32 +81,72 @@ MediaTek keypad has 2 modes of detecting key events:
 - single key: each (row, column) can detect one key
 - double key: each (row, column) is a group of 2 keys
 
-Currently, only single key detection is supported (by default)
-Add an optional property, mediatek,double-keys to support double
-key detection.
-
 Double key support exists to minimize cost, since it reduces the number
 of pins required for physical keys.
 
+Double key is configured by setting BIT(0) of the KP_SEL register.
+
+Enable double key matrix support based on the mediatek,double-keys
+device tree property.
+
 Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-diff --git a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-index ca8ae40a73f7..03c9555849e5 100644
---- a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-+++ b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-@@ -49,6 +49,12 @@ properties:
-     maximum: 256
-     default: 16
+diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
+index bf447bf598fb..9a5dbd415dac 100644
+--- a/drivers/input/keyboard/mt6779-keypad.c
++++ b/drivers/input/keyboard/mt6779-keypad.c
+@@ -18,6 +18,7 @@
+ #define MTK_KPD_DEBOUNCE_MASK	GENMASK(13, 0)
+ #define MTK_KPD_DEBOUNCE_MAX_MS	256
+ #define MTK_KPD_SEL		0x0020
++#define MTK_KPD_SEL_DOUBLE_KP_MODE	BIT(0)
+ #define MTK_KPD_SEL_COL	GENMASK(15, 10)
+ #define MTK_KPD_SEL_ROW	GENMASK(9, 4)
+ #define MTK_KPD_SEL_COLMASK(c)	GENMASK((c) + 9, 10)
+@@ -31,6 +32,7 @@ struct mt6779_keypad {
+ 	struct clk *clk;
+ 	u32 n_rows;
+ 	u32 n_cols;
++	bool double_keys;
+ 	DECLARE_BITMAP(keymap_state, MTK_KPD_NUM_BITS);
+ };
  
-+  mediatek,double-keys:
-+    description: |
-+      use double key matrix instead of single key
-+      when set, each (row,column) is a group that can detect 2 keys
-+    type: boolean
+@@ -67,8 +69,13 @@ static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
+ 			continue;
+ 
+ 		key = bit_nr / 32 * 16 + bit_nr % 32;
+-		row = key / 9;
+-		col = key % 9;
++		if (keypad->double_keys) {
++			row = key / 13;
++			col = (key % 13) / 2;
++		} else {
++			row = key / 9;
++			col = key % 9;
++		}
+ 
+ 		scancode = MATRIX_SCAN_CODE(row, col, row_shift);
+ 		/* 1: not pressed, 0: pressed */
+@@ -150,6 +157,8 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
+ 
+ 	wakeup = device_property_read_bool(&pdev->dev, "wakeup-source");
+ 
++	keypad->double_keys = device_property_read_bool(&pdev->dev, "mediatek,double-keys");
 +
- required:
-   - compatible
-   - reg
+ 	dev_dbg(&pdev->dev, "n_row=%d n_col=%d debounce=%d\n",
+ 		keypad->n_rows, keypad->n_cols, debounce);
+ 
+@@ -166,6 +175,10 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
+ 	regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
+ 		     (debounce * (1 << 5)) & MTK_KPD_DEBOUNCE_MASK);
+ 
++	if (keypad->double_keys)
++		regmap_update_bits(keypad->regmap, MTK_KPD_SEL,
++				   MTK_KPD_SEL_DOUBLE_KP_MODE, MTK_KPD_SEL_DOUBLE_KP_MODE);
++
+ 	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_ROW,
+ 			   MTK_KPD_SEL_ROWMASK(keypad->n_rows));
+ 	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_COL,
 
 -- 
 b4 0.10.0-dev-54fef

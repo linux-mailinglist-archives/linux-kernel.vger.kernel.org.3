@@ -2,110 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C5157B5B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F2957B5B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240693AbiGTLje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        id S240724AbiGTLmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239720AbiGTLjc (ORCPT
+        with ESMTP id S231649AbiGTLmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:39:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D8A71BDC;
-        Wed, 20 Jul 2022 04:39:31 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 61E2B33F64;
-        Wed, 20 Jul 2022 11:39:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658317170; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RCe2TPU9LUFhoFV6W5YhCg+pI/RXtQ+1Mlh93H/op3s=;
-        b=brz1gVTaifMcXXbNkLEyUhtoworyKdlkxCk2J9bDnyHgsrlnQRAX6qMehh4oS21IA9BPt1
-        7AnuyP5IqAY7CZi1tNvBKY0l+aJ/pPXU5DTyfj92P3d8Toj6Ge7ADpYVrL/R/8DJfQfk1N
-        p4pi1sdI4Swt7rZb50MYSOr4u4arGEQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658317170;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RCe2TPU9LUFhoFV6W5YhCg+pI/RXtQ+1Mlh93H/op3s=;
-        b=BAGq1G93Yesa+YgZdJgR9n8g2e1baneV3S2NlLLA/5rfKCuI+8eD4PVYJ7QByimRJCoF5Z
-        5YsgawL3J9A9IyDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4318C13AA1;
-        Wed, 20 Jul 2022 11:39:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id s0W1D3Lp12K4SwAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 20 Jul 2022 11:39:30 +0000
-Message-ID: <1f8867c6-1bdf-0614-aeed-d39e328fda82@suse.de>
-Date:   Wed, 20 Jul 2022 13:39:29 +0200
+        Wed, 20 Jul 2022 07:42:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809C3459B1;
+        Wed, 20 Jul 2022 04:42:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658317361; x=1689853361;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kan8sLYiHB+1kxmOtgHMUGFkI4Py16KnYnn3nVJ2gy0=;
+  b=Q3eNQNVRDJvjL+ozNU5R3AMV0B8IM9u78DVxEyvpEOqfjrrHeXmMFj2o
+   OY4nx67PciguCFEiQFRXb0gAYSxtUQJ8t5zoI+YgbaNDqsp0UMjqGMvzd
+   57gw/R1UVL/Vy6MPngp1BQEkCo9bBoSptINt/TiC4kEsUOVwFhwHnhUDg
+   LiFRAFYLySYHEkNquoX4lcWscx98gYmoV7qYJRkpMTHd443uYNUlYr4zV
+   PS+Mc1lTZ6njfKnW/tH2V6nSQ0GwBcW9ST3m13grEHa++nZ5c0jQQvcmL
+   8+FkvnphDJJ5WtPbfQ/EumZkNE468uJvXt0mXP7fX+CL9BsqKt179K65U
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="285520509"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="285520509"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 04:42:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="595210140"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 20 Jul 2022 04:42:36 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oE867-0000Sl-DA;
+        Wed, 20 Jul 2022 11:42:35 +0000
+Date:   Wed, 20 Jul 2022 19:41:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Can Guo <quic_cang@quicinc.com>, bvanassche@acm.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, beanhuo@micron.com,
+        quic_asutoshd@quicinc.com, quic_nguyenb@quicinc.com,
+        quic_ziqichen@quicinc.com, linux-scsi@vger.kernel.org,
+        kernel-team@android.com
+Cc:     kbuild-all@lists.01.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
+Message-ID: <202207201927.zCPpAzRa-lkp@intel.com>
+References: <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] nvmet-auth: select the intended CRYPTO_DH_RFC7919_GROUPS
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220720113717.31854-1-lukas.bulwahn@gmail.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20220720113717.31854-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 13:37, Lukas Bulwahn wrote:
-> Commit 71ebe3842ebe ("nvmet-auth: Diffie-Hellman key exchange support")
-> intends to select 'Support for RFC 7919 FFDHE group parameters' for using
-> FFDHE groups for NVMe In-Band Authentication.
-> 
-> It however selects CRYPTO_DH_GROUPS_RFC7919, instead of the intended
-> CRYPTO_DH_RFC7919_GROUPS; notice the swapping of words here.
-> 
-> Correct the select to the intended config option.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->   drivers/nvme/target/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/nvme/target/Kconfig b/drivers/nvme/target/Kconfig
-> index f0c91f7686a3..79fc64035ee3 100644
-> --- a/drivers/nvme/target/Kconfig
-> +++ b/drivers/nvme/target/Kconfig
-> @@ -93,7 +93,7 @@ config NVME_TARGET_AUTH
->   	select CRYPTO_SHA256
->   	select CRYPTO_SHA512
->   	select CRYPTO_DH
-> -	select CRYPTO_DH_GROUPS_RFC7919
-> +	select CRYPTO_DH_RFC7919_GROUPS
->   	help
->   	  This enables support for NVMe over Fabrics In-band Authentication
->   
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Hi Can,
 
-Cheers,
+I love your patch! Yet something to improve:
 
-Hannes
+[auto build test ERROR on jejb-scsi/for-next]
+[also build test ERROR on mkp-scsi/for-next next-20220719]
+[cannot apply to linus/master v5.19-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Can-Guo/UFS-Multi-Circular-Queue-MCQ/20220719-150436
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220720/202207201927.zCPpAzRa-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/2b7356bcd24efd2d6b69f04dd9fd010c4256cc7e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Can-Guo/UFS-Multi-Circular-Queue-MCQ/20220719-150436
+        git checkout 2b7356bcd24efd2d6b69f04dd9fd010c4256cc7e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ufs/core/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/ufs/core/ufs-mcq.c: In function 'ufshcd_mcq_release_resource':
+>> drivers/ufs/core/ufs-mcq.c:275:25: error: implicit declaration of function 'devm_iounmap'; did you mean 'pci_iounmap'? [-Werror=implicit-function-declaration]
+     275 |                         devm_iounmap(hba->dev, res->base);
+         |                         ^~~~~~~~~~~~
+         |                         pci_iounmap
+   cc1: some warnings being treated as errors
+
+
+vim +275 drivers/ufs/core/ufs-mcq.c
+
+   265	
+   266	static void ufshcd_mcq_release_resource(struct ufs_hba *hba)
+   267	{
+   268		struct ufshcd_res_info_t *res;
+   269		int i;
+   270	
+   271		for (i = RES_MCQ; i < RES_MAX; i++) {
+   272			res = &hba->res[i];
+   273	
+   274			if(res->base) {
+ > 275				devm_iounmap(hba->dev, res->base);
+   276				res->base = NULL;
+   277			}
+   278	
+   279			if (res->is_alloc)
+   280				devm_kfree(hba->dev, res->resource);
+   281		}
+   282	}
+   283	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

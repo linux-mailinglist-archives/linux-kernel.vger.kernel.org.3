@@ -2,328 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAA757B37C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D6457B381
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbiGTJIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S234846AbiGTJJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233131AbiGTJIn (ORCPT
+        with ESMTP id S231868AbiGTJJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:08:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B00E65006F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658308121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7oILNlTSBMlh/gH2dKDrMjz2QtOfJWLTXJW3TwWpCbw=;
-        b=CbtFgKlXd2f9KkmkL77rWpb03pMgCi6kSP4r9R0sBQWLyUouLEL6zN+kcdZXt29Nm1kCqu
-        4+gi03xnP1W1DA5zfZpbXuuBgB2p6HbPLxxoHNUPOFNXjQyeu4PTAV+z/3NjtbYIY7XbgD
-        KOkuf7+I0esC0iAp1S0P7PX1TL1rC3k=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-573-jGnqSQQBMzGXZwJ4v8LmXg-1; Wed, 20 Jul 2022 05:08:40 -0400
-X-MC-Unique: jGnqSQQBMzGXZwJ4v8LmXg-1
-Received: by mail-lf1-f70.google.com with SMTP id d41-20020a0565123d2900b00489ed34ed26so6549916lfv.15
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:08:39 -0700 (PDT)
+        Wed, 20 Jul 2022 05:09:44 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE3B4C60C;
+        Wed, 20 Jul 2022 02:09:43 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id q41-20020a17090a1b2c00b001f2043c727aso1557256pjq.1;
+        Wed, 20 Jul 2022 02:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qN4tE7QTzfrPXoxH5P2c1WhvXRBfHKET+E8uhAqveWY=;
+        b=SENmYs2q0MTMRtBAB4+FKUW3DeUGBQjEl9MMYOAP6ahQgsDxDixpqgdVfH/KEgztfI
+         PdwPGzFTujACvnNnhOXO7l2O5nt80grM+3jUQsUzaCqa1AyrykyuhKLjNdE8I0d1KPuV
+         y0KCUB1W8KwvC+Z4wAK+LHXckmZnHZMO6LbwLIKTeiq8IMWDlS+r2vfFXkdxVd10LaVp
+         wdq9MH+G4Ff5VdEPvOd6GHtKmH8XOBPXswNcqeuW/ac/qvRMj/E6PnheZhv1wopqxobI
+         vKkT/eJ6MtoEeuyv5e7OImbmb774HxoddLfGDAbLh7Qpg3qcd8WYfnF2+18OWoXepffr
+         XhTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7oILNlTSBMlh/gH2dKDrMjz2QtOfJWLTXJW3TwWpCbw=;
-        b=ECKGn7V8q2AmYcr2RmuTWNLHM8I6ttzxKZ51spnUhUAWEbud90xhqmQLjCluKnHAi3
-         vV4B0csfR7GLsOGrdn3/2uQ1gUkACVGhDmaD+YLw+dWv1Lm0wcvzXEXebnDZVBEr9PUF
-         ZZd4DrWseYfiCv/kO0ArqXiOtk9dYddsA+Nvsb2icJxrxycI6NEvKTkxvD0WFdp6NO2W
-         0Ojk09NAsjIJYkfaF7bPIXDjwahnYjnmKEjSTTnDvuLrj/JY5ucRJ3lKsT2XOjmgDuGI
-         dUKEYO/R5gktmaEQuD5+Gv2mFhgfu2K1KEx0AabFdVLYxo2uozEO4cyA5C5bTIJ8fIW/
-         ddDw==
-X-Gm-Message-State: AJIora/n+dHjzMU1ABtsXj7kTHKZoUGwhc20Yufill0yqPUpsaMiaaEk
-        oSdenGm7vnxJpZRw/u4NSiINYQlHtkekzDqsmLk9d6pgIqZz/U7kOpT4RXkUVQrxoyEQ+ZWy4Ze
-        I9RMs6kifp2jidDbRqZGCHEhVWk5XygfQ0kLjBwYd
-X-Received: by 2002:a05:6512:313a:b0:489:caea:7e27 with SMTP id p26-20020a056512313a00b00489caea7e27mr20155949lfd.397.1658308117693;
-        Wed, 20 Jul 2022 02:08:37 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uP3MgRzr0/5nsB7PzeZw8pmmLpL+0+4spvO27QV/6r7awqw7CmPbBMPu0/5OuF28xrhOC8dh3GqGc9SvWIDHs=
-X-Received: by 2002:a05:6512:313a:b0:489:caea:7e27 with SMTP id
- p26-20020a056512313a00b00489caea7e27mr20155939lfd.397.1658308117377; Wed, 20
- Jul 2022 02:08:37 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qN4tE7QTzfrPXoxH5P2c1WhvXRBfHKET+E8uhAqveWY=;
+        b=cmNQsuMQD2w4HNDEdeQs7T9Cdy0haHpCICKyZTJMzeAsGyf1CfPvRG+mGFXzh5Nu79
+         Tl58TW6aNNJ7vS5BpyL08Qlk1J2Ptt80+4mlJnNE+8VCYszwExoeHXC0nMMgsfRb/N1F
+         tDegpv9vvtlgio+uOhxXuzjylZHHbDutyI8OpN0JlYa7xKSQGKP/2cZIcM+twZeiYZ45
+         hn7vRukdP9f+T7ofUJV2ImnbY4FTVdAAbVj7ASAZRdIvN8iQTL+Cxp3vhwbY9Fornx/4
+         4YHVAHhVG8/qh8pYkDz/DhDJAO1BDhELqoR/B9X7IhdsSdEmdSmHi/QwFlqfPChooCA5
+         PpXQ==
+X-Gm-Message-State: AJIora/wPIeUihWqtZQjlxe14lpgr0aSwOpaBJYdNzaO3+OM9krKM8WX
+        0pLPLoGfaaJBt8x5FK/xup4=
+X-Google-Smtp-Source: AGRyM1slhJoQagciG1MhdK0FKcQPdwkhZYYiwoZF0ulRnQ1ztbel48Ifa+lO2VBOlIFQSoKDjGks/A==
+X-Received: by 2002:a17:90b:4c10:b0:1ef:eb4a:fbb with SMTP id na16-20020a17090b4c1000b001efeb4a0fbbmr4144438pjb.121.1658308182683;
+        Wed, 20 Jul 2022 02:09:42 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-73.three.co.id. [180.214.232.73])
+        by smtp.gmail.com with ESMTPSA id y5-20020aa793c5000000b0052ab7144de8sm13483171pff.10.2022.07.20.02.09.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 02:09:42 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 141F0103AE9; Wed, 20 Jul 2022 16:09:38 +0700 (WIB)
+Date:   Wed, 20 Jul 2022 16:09:38 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/167] 5.15.56-rc1 review
+Message-ID: <YtfGUj5D34KHdv2f@debian.me>
+References: <20220719114656.750574879@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220720044144.90-1-xieyongji@bytedance.com> <20220720044144.90-5-xieyongji@bytedance.com>
-In-Reply-To: <20220720044144.90-5-xieyongji@bytedance.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 20 Jul 2022 17:08:26 +0800
-Message-ID: <CACGkMEvTw966i2cB4u9_-SfrWG2yj7VqTXHak8YmOqpjcGfSDw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] vduse: Support registering userspace memory for
- IOVA regions
-To:     Xie Yongji <xieyongji@bytedance.com>
-Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
-        Maxime Coquelin <maxime.coquelin@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        songmuchun@bytedance.com,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 12:42 PM Xie Yongji <xieyongji@bytedance.com> wrote:
->
-> Introduce two ioctls: VDUSE_IOTLB_REG_UMEM and
-> VDUSE_IOTLB_DEREG_UMEM to support registering
-> and de-registering userspace memory for IOVA
-> regions.
->
-> Now it only supports registering userspace memory
-> for bounce buffer region in virtio-vdpa case.
->
-> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+On Tue, Jul 19, 2022 at 01:52:12PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.56 release.
+> There are 167 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
+and powerpc (ps3_defconfig, GCC 12.1.0).
 
-> ---
->  drivers/vdpa/vdpa_user/vduse_dev.c | 141 +++++++++++++++++++++++++++++
->  include/uapi/linux/vduse.h         |  23 +++++
->  2 files changed, 164 insertions(+)
->
-> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-> index 3bc27de58f46..eedff0a3885a 100644
-> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
-> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> @@ -21,6 +21,8 @@
->  #include <linux/uio.h>
->  #include <linux/vdpa.h>
->  #include <linux/nospec.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/sched/mm.h>
->  #include <uapi/linux/vduse.h>
->  #include <uapi/linux/vdpa.h>
->  #include <uapi/linux/virtio_config.h>
-> @@ -64,6 +66,13 @@ struct vduse_vdpa {
->         struct vduse_dev *dev;
->  };
->
-> +struct vduse_umem {
-> +       unsigned long iova;
-> +       unsigned long npages;
-> +       struct page **pages;
-> +       struct mm_struct *mm;
-> +};
-> +
->  struct vduse_dev {
->         struct vduse_vdpa *vdev;
->         struct device *dev;
-> @@ -95,6 +104,8 @@ struct vduse_dev {
->         u8 status;
->         u32 vq_num;
->         u32 vq_align;
-> +       struct vduse_umem *umem;
-> +       struct mutex mem_lock;
->  };
->
->  struct vduse_dev_msg {
-> @@ -917,6 +928,102 @@ static int vduse_dev_queue_irq_work(struct vduse_dev *dev,
->         return ret;
->  }
->
-> +static int vduse_dev_dereg_umem(struct vduse_dev *dev,
-> +                               u64 iova, u64 size)
-> +{
-> +       int ret;
-> +
-> +       mutex_lock(&dev->mem_lock);
-> +       ret = -ENOENT;
-> +       if (!dev->umem)
-> +               goto unlock;
-> +
-> +       ret = -EINVAL;
-> +       if (dev->umem->iova != iova || size != dev->domain->bounce_size)
-> +               goto unlock;
-> +
-> +       vduse_domain_remove_user_bounce_pages(dev->domain);
-> +       unpin_user_pages_dirty_lock(dev->umem->pages,
-> +                                   dev->umem->npages, true);
-> +       atomic64_sub(dev->umem->npages, &dev->umem->mm->pinned_vm);
-> +       mmdrop(dev->umem->mm);
-> +       vfree(dev->umem->pages);
-> +       kfree(dev->umem);
-> +       dev->umem = NULL;
-> +       ret = 0;
-> +unlock:
-> +       mutex_unlock(&dev->mem_lock);
-> +       return ret;
-> +}
-> +
-> +static int vduse_dev_reg_umem(struct vduse_dev *dev,
-> +                             u64 iova, u64 uaddr, u64 size)
-> +{
-> +       struct page **page_list = NULL;
-> +       struct vduse_umem *umem = NULL;
-> +       long pinned = 0;
-> +       unsigned long npages, lock_limit;
-> +       int ret;
-> +
-> +       if (!dev->domain->bounce_map ||
-> +           size != dev->domain->bounce_size ||
-> +           iova != 0 || uaddr & ~PAGE_MASK)
-> +               return -EINVAL;
-> +
-> +       mutex_lock(&dev->mem_lock);
-> +       ret = -EEXIST;
-> +       if (dev->umem)
-> +               goto unlock;
-> +
-> +       ret = -ENOMEM;
-> +       npages = size >> PAGE_SHIFT;
-> +       page_list = __vmalloc(array_size(npages, sizeof(struct page *)),
-> +                             GFP_KERNEL_ACCOUNT);
-> +       umem = kzalloc(sizeof(*umem), GFP_KERNEL);
-> +       if (!page_list || !umem)
-> +               goto unlock;
-> +
-> +       mmap_read_lock(current->mm);
-> +
-> +       lock_limit = PFN_DOWN(rlimit(RLIMIT_MEMLOCK));
-> +       if (npages + atomic64_read(&current->mm->pinned_vm) > lock_limit)
-> +               goto out;
-> +
-> +       pinned = pin_user_pages(uaddr, npages, FOLL_LONGTERM | FOLL_WRITE,
-> +                               page_list, NULL);
-> +       if (pinned != npages) {
-> +               ret = pinned < 0 ? pinned : -ENOMEM;
-> +               goto out;
-> +       }
-> +
-> +       ret = vduse_domain_add_user_bounce_pages(dev->domain,
-> +                                                page_list, pinned);
-> +       if (ret)
-> +               goto out;
-> +
-> +       atomic64_add(npages, &current->mm->pinned_vm);
-> +
-> +       umem->pages = page_list;
-> +       umem->npages = pinned;
-> +       umem->iova = iova;
-> +       umem->mm = current->mm;
-> +       mmgrab(current->mm);
-> +
-> +       dev->umem = umem;
-> +out:
-> +       if (ret && pinned > 0)
-> +               unpin_user_pages(page_list, pinned);
-> +
-> +       mmap_read_unlock(current->mm);
-> +unlock:
-> +       if (ret) {
-> +               vfree(page_list);
-> +               kfree(umem);
-> +       }
-> +       mutex_unlock(&dev->mem_lock);
-> +       return ret;
-> +}
-> +
->  static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
->                             unsigned long arg)
->  {
-> @@ -1089,6 +1196,38 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
->                 ret = vduse_dev_queue_irq_work(dev, &dev->vqs[index].inject);
->                 break;
->         }
-> +       case VDUSE_IOTLB_REG_UMEM: {
-> +               struct vduse_iova_umem umem;
-> +
-> +               ret = -EFAULT;
-> +               if (copy_from_user(&umem, argp, sizeof(umem)))
-> +                       break;
-> +
-> +               ret = -EINVAL;
-> +               if (!is_mem_zero((const char *)umem.reserved,
-> +                                sizeof(umem.reserved)))
-> +                       break;
-> +
-> +               ret = vduse_dev_reg_umem(dev, umem.iova,
-> +                                        umem.uaddr, umem.size);
-> +               break;
-> +       }
-> +       case VDUSE_IOTLB_DEREG_UMEM: {
-> +               struct vduse_iova_umem umem;
-> +
-> +               ret = -EFAULT;
-> +               if (copy_from_user(&umem, argp, sizeof(umem)))
-> +                       break;
-> +
-> +               ret = -EINVAL;
-> +               if (!is_mem_zero((const char *)umem.reserved,
-> +                                sizeof(umem.reserved)))
-> +                       break;
-> +
-> +               ret = vduse_dev_dereg_umem(dev, umem.iova,
-> +                                          umem.size);
-> +               break;
-> +       }
->         default:
->                 ret = -ENOIOCTLCMD;
->                 break;
-> @@ -1101,6 +1240,7 @@ static int vduse_dev_release(struct inode *inode, struct file *file)
->  {
->         struct vduse_dev *dev = file->private_data;
->
-> +       vduse_dev_dereg_umem(dev, 0, dev->domain->bounce_size);
->         spin_lock(&dev->msg_lock);
->         /* Make sure the inflight messages can processed after reconncection */
->         list_splice_init(&dev->recv_list, &dev->send_list);
-> @@ -1163,6 +1303,7 @@ static struct vduse_dev *vduse_dev_create(void)
->                 return NULL;
->
->         mutex_init(&dev->lock);
-> +       mutex_init(&dev->mem_lock);
->         spin_lock_init(&dev->msg_lock);
->         INIT_LIST_HEAD(&dev->send_list);
->         INIT_LIST_HEAD(&dev->recv_list);
-> diff --git a/include/uapi/linux/vduse.h b/include/uapi/linux/vduse.h
-> index 7cfe1c1280c0..9885e0571f09 100644
-> --- a/include/uapi/linux/vduse.h
-> +++ b/include/uapi/linux/vduse.h
-> @@ -210,6 +210,29 @@ struct vduse_vq_eventfd {
->   */
->  #define VDUSE_VQ_INJECT_IRQ    _IOW(VDUSE_BASE, 0x17, __u32)
->
-> +/**
-> + * struct vduse_iova_umem - userspace memory configuration for one IOVA region
-> + * @uaddr: start address of userspace memory, it must be aligned to page size
-> + * @iova: start of the IOVA region
-> + * @size: size of the IOVA region
-> + * @reserved: for future use, needs to be initialized to zero
-> + *
-> + * Structure used by VDUSE_IOTLB_REG_UMEM and VDUSE_IOTLB_DEREG_UMEM
-> + * ioctls to register/de-register userspace memory for IOVA regions
-> + */
-> +struct vduse_iova_umem {
-> +       __u64 uaddr;
-> +       __u64 iova;
-> +       __u64 size;
-> +       __u64 reserved[3];
-> +};
-> +
-> +/* Register userspace memory for IOVA regions */
-> +#define VDUSE_IOTLB_REG_UMEM   _IOW(VDUSE_BASE, 0x18, struct vduse_iova_umem)
-> +
-> +/* De-register the userspace memory. Caller should set iova and size field. */
-> +#define VDUSE_IOTLB_DEREG_UMEM _IOW(VDUSE_BASE, 0x19, struct vduse_iova_umem)
-> +
->  /* The control messages definition for read(2)/write(2) on /dev/vduse/$NAME */
->
->  /**
-> --
-> 2.20.1
->
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
+-- 
+An old man doll... just what I always wanted! - Clara

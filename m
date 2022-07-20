@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288E257AAEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDF957AAED
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbiGTAVy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 19 Jul 2022 20:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S237198AbiGTAV5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 19 Jul 2022 20:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235812AbiGTAVv (ORCPT
+        with ESMTP id S236380AbiGTAVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:21:51 -0400
+        Tue, 19 Jul 2022 20:21:53 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28B155082
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:21:50 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JI5DRD031376
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:21:50 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4582A5406D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:21:52 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JI4ukQ018806
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:21:52 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hdyj6b7s6-7
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hdvdrvq5j-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:21:50 -0700
-Received: from twshared34609.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:21:51 -0700
+Received: from twshared14818.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 19 Jul 2022 17:21:45 -0700
+ 15.1.2375.28; Tue, 19 Jul 2022 17:21:49 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 53FF5A6298E1; Tue, 19 Jul 2022 17:21:39 -0700 (PDT)
+        id 94D2DA6298EF; Tue, 19 Jul 2022 17:21:40 -0700 (PDT)
 From:   Song Liu <song@kernel.org>
 To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <live-patching@vger.kernel.org>
 CC:     <daniel@iogearbox.net>, <kernel-team@fb.com>, <jolsa@kernel.org>,
         <rostedt@goodmis.org>, Song Liu <song@kernel.org>
-Subject: [PATCH v5 bpf-next 0/4] ftrace: host klp and bpf trampoline together
-Date:   Tue, 19 Jul 2022 17:21:22 -0700
-Message-ID: <20220720002126.803253-1-song@kernel.org>
+Subject: [PATCH v5 bpf-next 1/4] ftrace: Add modify_ftrace_direct_multi_nolock
+Date:   Tue, 19 Jul 2022 17:21:23 -0700
+Message-ID: <20220720002126.803253-2-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220720002126.803253-1-song@kernel.org>
+References: <20220720002126.803253-1-song@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: VUxLFHca05Nt_q768b51xJnLdn-nNvza
-X-Proofpoint-ORIG-GUID: VUxLFHca05Nt_q768b51xJnLdn-nNvza
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: _g55ipk1gtaHuDp0YvqtJJvwvm7RBtGK
+X-Proofpoint-ORIG-GUID: _g55ipk1gtaHuDp0YvqtJJvwvm7RBtGK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-19_10,2022-07-19_01,2022-06-22_01
@@ -57,55 +58,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes v4 => v5:
-1. Cleanup direct_mutex handling in register_ftrace_function.
-   (Steven Rostedt, Petr Mladek).
-2. Various smallish fixes. (Steven Rostedt, Petr Mladek).
+This is similar to modify_ftrace_direct_multi, but does not acquire
+direct_mutex. This is useful when direct_mutex is already locked by the
+user.
 
-Changes v3 => v4:
-1. Fix build errors for different config. (kernel test robot)
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ include/linux/ftrace.h |  5 +++
+ kernel/trace/ftrace.c  | 86 ++++++++++++++++++++++++++++++------------
+ 2 files changed, 67 insertions(+), 24 deletions(-)
 
-Changes v2 => v3:
-1. Major rewrite after discussions with Steven Rostedt. [1]
-2. Remove SHARE_IPMODIFY flag from ftrace code. Instead use the callback
-   function to communicate this information. (Steven)
-3. Add cleanup_direct_functions_after_ipmodify() to clear SHARE_IPMODIFY
-   on the DIRECT ops when the IPMODIFY ops is removed.
-
-Changes v1 => v2:
-1. Fix build errors for different config. (kernel test robot)
-
-Kernel Live Patch (livepatch, or klp) and bpf trampoline are important
-features for modern systems. This set allows the two to work on the same
-kernel function as the same time.
-
-live patch uses ftrace with IPMODIFY, while bpf trampoline use direct
-ftrace. Existing policy does not allow the two to attach to the same kernel
-function. This is changed by fine tuning ftrace IPMODIFY policy, and allows
-one IPMODIFY ftrace_ops and one DIRECT ftrace_ops on the same kernel
-function at the same time. Please see patch 2 and 4 for more details.
-
-Note that, one of the constraint here is to let bpf trampoline use direct
-call when it is not working on the same function as live patch. This is
-achieved by allowing ftrace code to ask bpf trampoline to make changes.
-
-[1] https://lore.kernel.org/all/20220602193706.2607681-2-song@kernel.org/
-
-Jiri Olsa (1):
-  bpf, x64: Allow to use caller address from stack
-
-Song Liu (3):
-  ftrace: Add modify_ftrace_direct_multi_nolock
-  ftrace: Allow IPMODIFY and DIRECT ops on the same function
-  bpf: Support bpf_trampoline on functions with IPMODIFY (e.g.
-    livepatch)
-
- arch/x86/net/bpf_jit_comp.c |  13 +-
- include/linux/bpf.h         |  13 ++
- include/linux/ftrace.h      |  43 +++++
- kernel/bpf/trampoline.c     | 158 +++++++++++++++--
- kernel/trace/ftrace.c       | 328 ++++++++++++++++++++++++++++++------
- 5 files changed, 484 insertions(+), 71 deletions(-)
-
---
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 979f6bfa2c25..acb35243ce5d 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -340,6 +340,7 @@ unsigned long ftrace_find_rec_direct(unsigned long ip);
+ int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
+ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
+ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
++int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr);
+ 
+ #else
+ struct ftrace_ops;
+@@ -384,6 +385,10 @@ static inline int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned lo
+ {
+ 	return -ENODEV;
+ }
++static inline int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
++{
++	return -ENODEV;
++}
+ #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
+ 
+ #ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 601ccf1b2f09..5d67dc12231d 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -5691,22 +5691,8 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+ }
+ EXPORT_SYMBOL_GPL(unregister_ftrace_direct_multi);
+ 
+-/**
+- * modify_ftrace_direct_multi - Modify an existing direct 'multi' call
+- * to call something else
+- * @ops: The address of the struct ftrace_ops object
+- * @addr: The address of the new trampoline to call at @ops functions
+- *
+- * This is used to unregister currently registered direct caller and
+- * register new one @addr on functions registered in @ops object.
+- *
+- * Note there's window between ftrace_shutdown and ftrace_startup calls
+- * where there will be no callbacks called.
+- *
+- * Returns: zero on success. Non zero on error, which includes:
+- *  -EINVAL - The @ops object was not properly registered.
+- */
+-int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
++static int
++__modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+ {
+ 	struct ftrace_hash *hash;
+ 	struct ftrace_func_entry *entry, *iter;
+@@ -5717,12 +5703,7 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+ 	int i, size;
+ 	int err;
+ 
+-	if (check_direct_multi(ops))
+-		return -EINVAL;
+-	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+-		return -EINVAL;
+-
+-	mutex_lock(&direct_mutex);
++	lockdep_assert_held_once(&direct_mutex);
+ 
+ 	/* Enable the tmp_ops to have the same functions as the direct ops */
+ 	ftrace_ops_init(&tmp_ops);
+@@ -5730,7 +5711,7 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+ 
+ 	err = register_ftrace_function(&tmp_ops);
+ 	if (err)
+-		goto out_direct;
++		return err;
+ 
+ 	/*
+ 	 * Now the ftrace_ops_list_func() is called to do the direct callers.
+@@ -5754,7 +5735,64 @@ int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+ 	/* Removing the tmp_ops will add the updated direct callers to the functions */
+ 	unregister_ftrace_function(&tmp_ops);
+ 
+- out_direct:
++	return err;
++}
++
++/**
++ * modify_ftrace_direct_multi_nolock - Modify an existing direct 'multi' call
++ * to call something else
++ * @ops: The address of the struct ftrace_ops object
++ * @addr: The address of the new trampoline to call at @ops functions
++ *
++ * This is used to unregister currently registered direct caller and
++ * register new one @addr on functions registered in @ops object.
++ *
++ * Note there's window between ftrace_shutdown and ftrace_startup calls
++ * where there will be no callbacks called.
++ *
++ * Caller should already have direct_mutex locked, so we don't lock
++ * direct_mutex here.
++ *
++ * Returns: zero on success. Non zero on error, which includes:
++ *  -EINVAL - The @ops object was not properly registered.
++ */
++int modify_ftrace_direct_multi_nolock(struct ftrace_ops *ops, unsigned long addr)
++{
++	if (check_direct_multi(ops))
++		return -EINVAL;
++	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
++		return -EINVAL;
++
++	return __modify_ftrace_direct_multi(ops, addr);
++}
++EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi_nolock);
++
++/**
++ * modify_ftrace_direct_multi - Modify an existing direct 'multi' call
++ * to call something else
++ * @ops: The address of the struct ftrace_ops object
++ * @addr: The address of the new trampoline to call at @ops functions
++ *
++ * This is used to unregister currently registered direct caller and
++ * register new one @addr on functions registered in @ops object.
++ *
++ * Note there's window between ftrace_shutdown and ftrace_startup calls
++ * where there will be no callbacks called.
++ *
++ * Returns: zero on success. Non zero on error, which includes:
++ *  -EINVAL - The @ops object was not properly registered.
++ */
++int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
++{
++	int err;
++
++	if (check_direct_multi(ops))
++		return -EINVAL;
++	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
++		return -EINVAL;
++
++	mutex_lock(&direct_mutex);
++	err = __modify_ftrace_direct_multi(ops, addr);
+ 	mutex_unlock(&direct_mutex);
+ 	return err;
+ }
+-- 
 2.30.2
+

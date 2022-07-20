@@ -2,137 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CAF57AD9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5E957AD86
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240455AbiGTCID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S242423AbiGTCCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240848AbiGTCH7 (ORCPT
+        with ESMTP id S241824AbiGTCBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:07:59 -0400
-X-Greylist: delayed 556 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Jul 2022 19:07:56 PDT
-Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [148.163.129.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A385C371;
-        Tue, 19 Jul 2022 19:07:56 -0700 (PDT)
-Received: from dispatch1-us1.ppe-hosted.com (localhost.localdomain [127.0.0.1])
-        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 6D3C530919;
-        Wed, 20 Jul 2022 01:58:41 +0000 (UTC)
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from mx1-us1.ppe-hosted.com (unknown [10.7.66.134])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 85A471C0063;
-        Wed, 20 Jul 2022 01:58:38 +0000 (UTC)
-Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 626E168007D;
-        Wed, 20 Jul 2022 01:58:37 +0000 (UTC)
-Received: from [192.168.1.115] (unknown [98.97.34.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail3.candelatech.com (Postfix) with ESMTPSA id 8091A13C2B0;
-        Tue, 19 Jul 2022 18:58:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com 8091A13C2B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
-        s=default; t=1658282316;
-        bh=Kts07RRMr5BVF7N98vAikq2EyUJOp6RVGah6b3RtQyo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=eHnn+UmYFGz3Nv2yDKpbRlJjYqurpHmkJhlioi5u9GAOt2+h+CaKhYIoxFZneGo/K
-         V0tZiULLHYQKDRYw20otUh5R1S/bbXVtYuvqo2oiYhAc12fHBoOyQDrrMV5D0Hey0C
-         ER5/4Ou6llXqxdMKD0Xq+7WUfQquSAQmpsYZxQAU=
-Subject: Re: [PATCH AUTOSEL 5.4 06/16] wifi: mac80211: do not wake queues on a
- vif that is being stopped
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Felix Fietkau <nbd@nbd.name>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        johannes@sipsolutions.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-References: <20220720011730.1025099-1-sashal@kernel.org>
- <20220720011730.1025099-6-sashal@kernel.org>
-From:   Ben Greear <greearb@candelatech.com>
-Organization: Candela Technologies
-Message-ID: <b43cfde3-7f33-9153-42ca-9e1ecf409d2a@candelatech.com>
-Date:   Tue, 19 Jul 2022 18:58:34 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <20220720011730.1025099-6-sashal@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-MW
-Content-Transfer-Encoding: 8bit
-X-MDID: 1658282319-8yJg6szINy6k
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 19 Jul 2022 22:01:21 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C3B354649
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:01:20 -0700 (PDT)
+Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9DeYddirMYpAA--.14711S5;
+        Wed, 20 Jul 2022 10:01:06 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V17 03/13] ACPI: irq: Allow acpi_gsi_to_irq() to have an arch-specific fallback
+Date:   Wed, 20 Jul 2022 10:00:51 +0800
+Message-Id: <1658282461-35489-4-git-send-email-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1658282461-35489-1-git-send-email-lvjianmin@loongson.cn>
+References: <1658282461-35489-1-git-send-email-lvjianmin@loongson.cn>
+X-CM-TRANSID: AQAAf9Dxn9DeYddirMYpAA--.14711S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw1DKF18Jr43Xw4xAr4ruFg_yoW5WF4kpF
+        Wxuw1xJrWIqr17ZrZ7C3yfuF13W3Z5JFWxXrW2k347CayDKF1agrnFgry2gryDAF4fCFWj
+        v3ZIkFW8GF1DCa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcx
+        kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v2
+        6r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2
+        Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF04k20xvY0x0EwIxG
+        rwCF04k20xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
+        UdHUDUUUUU=
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think this one had a regression and needs another init-lock-early patch to keep from causing
-problems?
+From: Marc Zyngier <maz@kernel.org>
 
-It certainly broke my 5.17-ish kernel...
+It appears that the generic version of acpi_gsi_to_irq() doesn't
+fallback to establishing a mapping if there is no pre-existing
+one while the x86 version does.
 
-Thanks,
-Ben
+While arm64 seems unaffected by it, LoongArch is relying on the x86
+behaviour. In an effort to prevent new architectures from reinventing
+the proverbial wheel, provide an optional callback that the arch code
+can set to restore the x86 behaviour.
 
-On 7/19/22 6:17 PM, Sasha Levin wrote:
-> From: Felix Fietkau <nbd@nbd.name>
-> 
-> [ Upstream commit f856373e2f31ffd340e47e2b00027bd4070f74b3 ]
-> 
-> When a vif is being removed and sdata->bss is cleared, __ieee80211_wake_txqs
-> can still be called on it, which crashes as soon as sdata->bss is being
-> dereferenced.
-> To fix this properly, check for SDATA_STATE_RUNNING before waking queues,
-> and take the fq lock when setting it (to ensure that __ieee80211_wake_txqs
-> observes the change when running on a different CPU)
-> 
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> Acked-by: Toke Høiland-Jørgensen <toke@kernel.org>
-> Link: https://lore.kernel.org/r/20220531190824.60019-1-nbd@nbd.name
-> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   net/mac80211/iface.c | 2 ++
->   net/mac80211/util.c  | 3 +++
->   2 files changed, 5 insertions(+)
-> 
-> diff --git a/net/mac80211/iface.c b/net/mac80211/iface.c
-> index ddc001ad9055..48bda8aaa90a 100644
-> --- a/net/mac80211/iface.c
-> +++ b/net/mac80211/iface.c
-> @@ -803,7 +803,9 @@ static void ieee80211_do_stop(struct ieee80211_sub_if_data *sdata,
->   	bool cancel_scan;
->   	struct cfg80211_nan_func *func;
->   
-> +	spin_lock_bh(&local->fq.lock);
->   	clear_bit(SDATA_STATE_RUNNING, &sdata->state);
-> +	spin_unlock_bh(&local->fq.lock);
->   
->   	cancel_scan = rcu_access_pointer(local->scan_sdata) == sdata;
->   	if (cancel_scan)
-> diff --git a/net/mac80211/util.c b/net/mac80211/util.c
-> index c1c117fdf318..8ae0186091b6 100644
-> --- a/net/mac80211/util.c
-> +++ b/net/mac80211/util.c
-> @@ -250,6 +250,9 @@ static void __ieee80211_wake_txqs(struct ieee80211_sub_if_data *sdata, int ac)
->   	local_bh_disable();
->   	spin_lock(&fq->lock);
->   
-> +	if (!test_bit(SDATA_STATE_RUNNING, &sdata->state))
-> +		goto out;
-> +
->   	if (sdata->vif.type == NL80211_IFTYPE_AP)
->   		ps = &sdata->bss->ps;
->   
-> 
+Hopefully we can eventually get rid of this in the future once
+the expected behaviour has been clarified.
 
+Reported-by: Jianmin Lv <lvjianmin@loongson.cn>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+Tested-by: Hanjun Guo <guohanjun@huawei.com>
+Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
+---
+ drivers/acpi/irq.c   | 18 ++++++++++++++++--
+ include/linux/acpi.h |  1 +
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
+index f0de768..dabe45e 100644
+--- a/drivers/acpi/irq.c
++++ b/drivers/acpi/irq.c
+@@ -13,6 +13,7 @@
+ enum acpi_irq_model_id acpi_irq_model;
+ 
+ static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
++static u32 (*acpi_gsi_to_irq_fallback)(u32 gsi);
+ 
+ /**
+  * acpi_gsi_to_irq() - Retrieve the linux irq number for a given GSI
+@@ -32,9 +33,12 @@ int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
+ 					DOMAIN_BUS_ANY);
+ 	*irq = irq_find_mapping(d, gsi);
+ 	/*
+-	 * *irq == 0 means no mapping, that should
+-	 * be reported as a failure
++	 * *irq == 0 means no mapping, that should be reported as a
++	 * failure, unless there is an arch-specific fallback handler.
+ 	 */
++	if (!*irq && acpi_gsi_to_irq_fallback)
++		*irq = acpi_gsi_to_irq_fallback(gsi);
++
+ 	return (*irq > 0) ? 0 : -EINVAL;
+ }
+ EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
+@@ -302,6 +306,16 @@ void __init acpi_set_irq_model(enum acpi_irq_model_id model,
+ }
+ 
+ /**
++ * acpi_set_gsi_to_irq_fallback - Register a GSI transfer
++ * callback to fallback to arch specified implementation.
++ * @fn: arch-specific fallback handler
++ */
++void __init acpi_set_gsi_to_irq_fallback(u32 (*fn)(u32))
++{
++	acpi_gsi_to_irq_fallback = fn;
++}
++
++/**
+  * acpi_irq_create_hierarchy - Create a hierarchical IRQ domain with the default
+  *                             GSI domain as its parent.
+  * @flags:      Irq domain flags associated with the domain
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 957e23f..e2b60d5 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -357,6 +357,7 @@ static inline bool acpi_sci_irq_valid(void)
+ 
+ void acpi_set_irq_model(enum acpi_irq_model_id model,
+ 			struct fwnode_handle *(*)(u32));
++void acpi_set_gsi_to_irq_fallback(u32 (*)(u32));
+ 
+ struct irq_domain *acpi_irq_create_hierarchy(unsigned int flags,
+ 					     unsigned int size,
 -- 
-Ben Greear <greearb@candelatech.com>
-Candela Technologies Inc  http://www.candelatech.com
+1.8.3.1
+

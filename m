@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F35F57BFDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 00:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED0757BFE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 00:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiGTWAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 18:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
+        id S229845AbiGTWDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 18:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiGTWAc (ORCPT
+        with ESMTP id S229496AbiGTWDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 18:00:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3722B18E12;
-        Wed, 20 Jul 2022 15:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FiZLfbIHMEm5bs2l9a0O1tE0/R/MU//G5wqi4u7xynA=; b=UEqYJftgqJBF0z+MKxvXZRo8NX
-        ppYxh/pP5a/Tn6On9z3mIURCgdZa6jsVZcbyRqYabMmvuMST3uOmKGrtJk0G3LSgwbEBGs0o42E77
-        +rBWTcE31Gy2gJ6oiJoCsWHY/TM5LTHL+IB51mwLYjtV9lVYpTC0RyhxctZSbQlEAfH0txtJKy9Zm
-        EgWnt6BbhzmHBB4Z09/CF6W0s7huui2t+RF6rBeS7UxTHpu3XBpO1aOplKWVcW9l2zKV2zo23/U23
-        C6MG9NYo+4wSteHYbhzzleXizWeohaCLVfQtlDgBDX+Cs4+3/E77fiTfy9KZjIMRTfsZS0lgiinUs
-        KYaUsO1Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEHjp-00Epie-SM; Wed, 20 Jul 2022 22:00:14 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 76B29980BBE; Thu, 21 Jul 2022 00:00:13 +0200 (CEST)
-Date:   Thu, 21 Jul 2022 00:00:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Justin Forbes <jforbes@fedoraproject.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Tejas Upadhyay <tejas.upadhyay@intel.com>,
-        Anusha Srivatsa <anusha.srivatsa@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
-Message-ID: <Yth67Ubo7PatL0AR@worktop.programming.kicks-ass.net>
-References: <20220719114714.247441733@linuxfoundation.org>
- <CA+G9fYsCL48P5zFMKUxoJ-1vwUJSWhcn17rUx=1rxOdzdw_Mmg@mail.gmail.com>
- <CAHk-=wjo-u8=yJQJQnaP41FkQw7we9A-zJH3UELx5x_1ynPDfw@mail.gmail.com>
- <YtgvLUMuz+1zpQHR@fedora64.linuxtx.org>
- <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
- <YthCBl4SORA2BfDv@fedora64.linuxtx.org>
- <Yth31qsO1nDN4WLB@worktop.programming.kicks-ass.net>
+        Wed, 20 Jul 2022 18:03:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E33004E848
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658354579;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c6jnvbTZSWYjkjxxL2h3wZQ+s22j9f6nKt+O/48X9rA=;
+        b=V55EVow13i2nSvlHfncBsJL3KBJQCD2lxetMUd4XyO8BduW06GyqiYAaihjsK4wVxr2Xhv
+        3BDqxo5wfGpkY4s2apNS8/SbBqfYa0tZOjUxSfeqZz2dWrKBLvZp12UUY7xWCSEKr8oqeI
+        XLl662wWL2mD4I+1dqXWm/ZW0v6ARt4=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-IG-tR0DtOHWGfvLAOeBqzQ-1; Wed, 20 Jul 2022 18:02:58 -0400
+X-MC-Unique: IG-tR0DtOHWGfvLAOeBqzQ-1
+Received: by mail-qv1-f69.google.com with SMTP id k7-20020a056214102700b004740a13b3bcso971049qvr.4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:02:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=c6jnvbTZSWYjkjxxL2h3wZQ+s22j9f6nKt+O/48X9rA=;
+        b=4B4pZw5nVfyqPK2CxkxH3fPfNbDKjG2/rNwflTB8dEkgqVH5pJ28fbYUrAdI0tQpYT
+         +hfFL3m/oXYfLSuWsqrMYbaaaTxsLcOYB0ZijoY1GRo82v1n63Qm/lWWcnzJNJPv1FXW
+         OFJRPi7G/zaxNdG8hTsarxN3OfSdQYLwNFnfHho0TnYWD2X9EojFAPd+Sakmmkf5zatT
+         h5fwOJv3i8oAkDF79IxfNiSBY9tEW3Tb+m75G+zpsWXPZ8T1p9oJF/nMKKtHGe60pvWj
+         eXTaqrvSzA4qmPry0lt0Ac70D+kOqhTFlqtmzaMSsigVMhaS07Jhzw4ECDSmMJAwy03X
+         q1aA==
+X-Gm-Message-State: AJIora+OzirJFOijvmbyKCrMjKVZaEp2HEPlunTkRcvlii2/4qjYjys/
+        IcgLX8Ycn7XwlAplefq7PYShqZqoEMtHt6G8Er/GY8bYMI5C7AolV3sqIvp7VjQwNkvnGJToYdE
+        NOZHwpZ3XsFIauYvmkbJvmaAV
+X-Received: by 2002:a37:614:0:b0:6b5:cda7:694b with SMTP id 20-20020a370614000000b006b5cda7694bmr18598711qkg.532.1658354578233;
+        Wed, 20 Jul 2022 15:02:58 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vKjiIammcHHHBmJOZwtJ7s3x+QWPbbcaO+hZViEQVzR62uQ1jjVGoKVLSrMmHy4Q1LBCm1vA==
+X-Received: by 2002:a37:614:0:b0:6b5:cda7:694b with SMTP id 20-20020a370614000000b006b5cda7694bmr18598687qkg.532.1658354577916;
+        Wed, 20 Jul 2022 15:02:57 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
+        by smtp.gmail.com with ESMTPSA id de39-20020a05620a372700b006b568bdd7d5sm214499qkb.71.2022.07.20.15.02.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 15:02:57 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 18:02:56 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] mm/mprotect: Fix soft-dirty check in
+ can_change_pte_writable()
+Message-ID: <Yth7kPbqiJcIy5Rs@xz-m1.local>
+References: <20220720215319.87839-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yth31qsO1nDN4WLB@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220720215319.87839-1-peterx@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 11:47:02PM +0200, Peter Zijlstra wrote:
-> On Wed, Jul 20, 2022 at 12:57:26PM -0500, Justin Forbes wrote:
-> > On Wed, Jul 20, 2022 at 10:28:33AM -0700, Linus Torvalds wrote:
-> > > [ Adding PeterZ and Jiri to the participants. ]
-> > > 
-> > > Looks like 5.18.13 added that commit 9bb2ec608a20 ("objtool: Update
-> > > Retpoline validation") but I don't see 3131ef39fb03 ("x86/asm/32: Fix
-> > > ANNOTATE_UNRET_SAFE use on 32-bit") in that list.
-> > 
-> > It should be noted that the build doesn't fail, it just warns.
-> > I am guessing the 32bit failure is what promoted someone to look at
-> > the logs to begin with and notice the warn initially. I just verified
-> > that it exists in our builds of 5.18.13-rc1, but not on mainline builds.
-> > I am gueesing it is because commit 9bb2ec608a20 ("objtool: Update Retpoline
-> > validation") should be followed up with at least commit f43b9876e857c
-> > ("x86/retbleed: Add fine grained Kconfig knobs")
+On Wed, Jul 20, 2022 at 05:53:19PM -0400, Peter Xu wrote:
+> void clear_refs_write(void)
+> {
+>     int fd = open("/proc/self/clear_refs", O_RDWR);
 > 
-> Still updateing the stable repro to see what the actual code looks like,
-> but that warning seems to suggest the -mfunction-return=thunk-extern
-> compiler argument went missing.
+>     assert(fd >= 0);
+>     write(fd, "4", 2);
+>     close(fd);
+> }
 > 
-> For all the files objtool complains about, does the V=1 build output
-> show that option?
 
-Ok, I'm now looking at stable-rc/linux-5.18.y which reports itself as:
+Oops, git dropped some of the lines starting with "#"..  Let me retry, sorry.
 
-VERSION = 5
-PATCHLEVEL = 18
-SUBLEVEL = 13
-EXTRAVERSION = -rc1
+>         bool dirty = pagemap_read_vaddr(fd, page) & PM_SOFT_DIRTY;      \
+>         if (dirty != expect) {                                          \
+>             printf("ERROR: %s, soft-dirty=%d (expect: %d)\n", str, dirty, expect); \
+>             exit(-1);                                                   \
+>         }                                                               \
+> } while (0)
 
-and I'm most terribly confused... it has the objtool patch to validate
-return thunks, *however*, I'm not seeing any actual retbleed mitigations
-*anywhere*.
+-- 
+Peter Xu
 
-How, what, why!?

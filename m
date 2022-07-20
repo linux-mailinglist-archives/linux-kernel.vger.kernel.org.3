@@ -2,67 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3482357AAF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 317EF57AAFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235107AbiGTAYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 20:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
+        id S236012AbiGTA0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 20:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbiGTAYC (ORCPT
+        with ESMTP id S231709AbiGTA0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:24:02 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AC85E801
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:24:01 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bv24so32535wrb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:24:01 -0700 (PDT)
+        Tue, 19 Jul 2022 20:26:34 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7E237FBA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:26:33 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31caffa4a45so157941207b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:26:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DH6ylYmRIRurAAknH36JS8D3Dyn+hEB1ror1vSU92OE=;
-        b=RQoQnuQq82XCYWimGQJZgNE5suclIhz3u6jIP+21QRS1gQDC3EAHHMCTJghOz1L6YT
-         8aKgCt5Y5SSW5Oq0YWeyqTg8DbUnpjmS0wr+u6zx3nvIihpeANoJuUOSNzyh1H+6ALyn
-         5Eg0X60Q8eRfqObTdXt9byGE7zi1XGczQ+qyuKV73exvvXczuYp77dv01YjYRThDsyIZ
-         SMJIt80B8VfZhbpueaFw1IrKSZYGr4nE/zKfBdmHHehACE90CXtOcVEt5VtZgg7VKJ6s
-         jJJOq1BthbReu/apbac36kCUCSLKnfT3JPzbko6IZUiPE5dr5KTh6MllOO3Khj54OO5T
-         wWPw==
+        bh=AXFCfDqvLrq9o9WRcAb2bry5GNfeEVn8GlJpnRDObuY=;
+        b=hpR/vH1V8plhuaqeiB0LitY272ggX3bQv0nXd6Y1BK7Bwal8MhI8mqq1jAQjbvj/Wo
+         O+/3MIyG9XbRVzS8JgrWNKl87KDU6Eq1+d1hFiW/qgjlFVU/J2bUcja0vmliWIdV5cuy
+         GLJRr5o1CbYd4rnWtvQyI+ssrUm7QlB+1im8tGLur7pQHEb16hOL5YLtLdcWkvaBrqGN
+         ruD1N7GI152c4a0egyQ0lm3qMW8V5wX3VU1CVrCka/cNse9swyafctm8jQaUghqoZjUS
+         ijtU/SJd0WILD2FWaGsfSjESFK4FhyzJ4ayaWMpNsX4UC6eKmD70XnRuMyaoaZu5tHTK
+         29UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DH6ylYmRIRurAAknH36JS8D3Dyn+hEB1ror1vSU92OE=;
-        b=zcZtim0qCFSV9JtivDlFqaClFqLSYdKEntUVNpOzlY0/71Us/sEppl5251ywCQvTLg
-         vm3ENLqT+w0uBI65bvsto82IJaEWJDNnkbVy8Qp4XNESumHFtqg+PlmlM1iSjIvbQdjm
-         /TCaXkizSq4j8CCvl/5cWOe4AC8DPfA3q1NowEQ+1pWnRARwef0wCsylgd/sHcDyTnoL
-         rZdiJOucqTgF4o6/9xw41RCs+whal7vIi0hGyE1k1dyv0NIQS6sXbdCHYX//lNhP3aRt
-         hIlRzE4N3g+IB6xk720Jtj4ZpdA/7/kBAywKC3ypDwx/DuSKRCIcC6LlC2I986GMp7bx
-         8XZw==
-X-Gm-Message-State: AJIora9Y7GjYmGzppwj0XCJXWU+n/sz1aeRuHPuu+a8J2IkOSgaLAtQJ
-        5dBDyCijCnMCM+qov9vKBh5A2YRhcCUKJaS7yss3Xw==
-X-Google-Smtp-Source: AGRyM1tlK1ygCVCbUo6SA22TPENkA2dWMfAg7vYjC8Lf5nfhGckv/no0VYXj+k+lYqXF8+IRdeA8jO8GV0Qd+/id77Q=
-X-Received: by 2002:a05:6000:8e:b0:21d:7e97:67ed with SMTP id
- m14-20020a056000008e00b0021d7e9767edmr27600763wrx.343.1658276639650; Tue, 19
- Jul 2022 17:23:59 -0700 (PDT)
+        bh=AXFCfDqvLrq9o9WRcAb2bry5GNfeEVn8GlJpnRDObuY=;
+        b=jAfy0zVEa/U8W/xMEa2NeATKrSkQ5Gg3M9ns9WH/V5lJ4zW14+aS0X7xbcYotFOoRD
+         Yb1AeiO0JTpyetYwbXRQUqTyWhrNOPwaxUHnuJkK5UT0hbPLsuYVY1lqMhi6ZyOthx4d
+         ztyWsE/kWhiPaKYPSlBfPpnW1weG31q7YlYm8WhlpmB52hHLm7RYEMx/c8ywzskdieVT
+         YzmehgFpIN/0wpghZftertVkAGwp/5Awqv6vMSQZcjReYhfMtkQwwiBQlb/ibWCZMaT8
+         4mxgd0s1eWNfskxxJTB9owsfnKVSw0teQqOpbf8MIGuqZEOyMaKCHk6416P1I5Fcjvor
+         JrCQ==
+X-Gm-Message-State: AJIora9NVZIFQvixkZn/NwYZqUvYv8N3gfw7tbDZl8pZ9dIgiKRb/ZtT
+        PNGypkmzGsXn7pma7Pn+b124qO8A309ZRsWv/AuRog==
+X-Google-Smtp-Source: AGRyM1ucYfvEDqy8c2bJqjvjQcMSu4rDtbwnmg0DLGP5d4Yvdv55/Fz6kUTxYLVBWG5VR5+ybBgntVeWxP1KiCKRMVk=
+X-Received: by 2002:a81:49c6:0:b0:31c:7f19:a5f0 with SMTP id
+ w189-20020a8149c6000000b0031c7f19a5f0mr38675292ywa.385.1658276792919; Tue, 19
+ Jul 2022 17:26:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-13-adrian.hunter@intel.com>
-In-Reply-To: <20220711093218.10967-13-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 17:23:47 -0700
-Message-ID: <CAP-5=fU5CHoxybx7U9zjz0S2vZ=vsR6ZmUoaD0ne9YCBQEvF_A@mail.gmail.com>
-Subject: Re: [PATCH 12/35] perf tools: Add guest_cpu to hypervisor threads
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
+References: <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
+ <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
+ <20220718172159.4vwjzrfthelovcty@black.fi.intel.com> <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
+ <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
+ <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
+ <YtcCWfCQuEsVhH6W@zn.tnic> <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
+ <YtcgxxMyFTReuuRw@zn.tnic> <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
+ <YtcnQbiRgZPtR+rQ@zn.tnic> <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
+In-Reply-To: <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Tue, 19 Jul 2022 17:26:21 -0700
+Message-ID: <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com>
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Ard Biesheuvel <ardb@kernel.org>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Gonda <pgonda@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Yao, Jiewen" <jiewen.yao@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,99 +103,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Tue, Jul 19, 2022 at 3:02 PM Dave Hansen <dave.hansen@intel.com> wrote:
 >
-> It is possible to know which guest machine was running at a point in time
-> based on the PID of the currently running host thread. That is, perf
-> identifies guest machines by the PID of the hypervisor.
+> On 7/19/22 14:50, Borislav Petkov wrote:
+> > On Tue, Jul 19, 2022 at 02:35:45PM -0700, Dave Hansen wrote:
+> >> They're trying to design something that can (forever) handle guests that
+> >> might not be able to accept memory.
+> > Wait, what?
+> >
+> > If you can't modify those guests to teach them to accept memory, how do
+> > you add TDX or SNP guest support to them?
 >
-> To determine the guest CPU, put it on the hypervisor (QEMU) thread for
-> that VCPU.
->
-> This is done when processing the id_index which provides the necessary
-> information.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  tools/perf/util/session.c | 18 ++++++++++++++++++
->  tools/perf/util/thread.c  |  1 +
->  tools/perf/util/thread.h  |  1 +
->  3 files changed, 20 insertions(+)
->
-> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-> index 1af981d5ad3c..91a091c35945 100644
-> --- a/tools/perf/util/session.c
-> +++ b/tools/perf/util/session.c
-> @@ -2769,6 +2769,20 @@ static int perf_session__register_guest(struct perf_session *session, pid_t mach
->         return 0;
->  }
->
-> +static int perf_session__set_guest_cpu(struct perf_session *session, pid_t pid,
-> +                                      pid_t tid, int guest_cpu)
-> +{
-> +       struct machine *machine = &session->machines.host;
-> +       struct thread *thread = machine__findnew_thread(machine, pid, tid);
-> +
-> +       if (!thread)
-> +               return -ENOMEM;
-> +       thread->guest_cpu = guest_cpu;
-> +       thread__put(thread);
-> +
-> +       return 0;
-> +}
-> +
->  int perf_event__process_id_index(struct perf_session *session,
->                                  union perf_event *event)
->  {
-> @@ -2845,6 +2859,10 @@ int perf_event__process_id_index(struct perf_session *session,
->                         last_pid = sid->machine_pid;
->                         perf_guest = true;
->                 }
-> +
-> +               ret = perf_session__set_guest_cpu(session, sid->machine_pid, e->tid, e2->vcpu);
-> +               if (ret)
-> +                       return ret;
->         }
->         return 0;
->  }
-> diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
-> index 665e5c0618ed..e3e5427e1c3c 100644
-> --- a/tools/perf/util/thread.c
-> +++ b/tools/perf/util/thread.c
-> @@ -47,6 +47,7 @@ struct thread *thread__new(pid_t pid, pid_t tid)
->                 thread->tid = tid;
->                 thread->ppid = -1;
->                 thread->cpu = -1;
-> +               thread->guest_cpu = -1;
->                 thread->lbr_stitch_enable = false;
->                 INIT_LIST_HEAD(&thread->namespaces_list);
->                 INIT_LIST_HEAD(&thread->comm_list);
-> diff --git a/tools/perf/util/thread.h b/tools/perf/util/thread.h
-> index b066fb30d203..241f300d7d6e 100644
-> --- a/tools/perf/util/thread.h
-> +++ b/tools/perf/util/thread.h
-> @@ -39,6 +39,7 @@ struct thread {
->         pid_t                   tid;
->         pid_t                   ppid;
->         int                     cpu;
-> +       int                     guest_cpu; /* For QEMU thread */
+> Mainline today, for instance, doesn't have unaccepted memory support for
+> TDX or SEV-SNP guests.  But, they both still boot fine because folks
+> either configure it on the host side not to *have* any unaccepted
+> memory.  Or, they just live with the small (4GB??) amount of
+> pre-accepted memory, which is fine for testing things.
 
-Could we tweak the comments here to be something like:
+For us (Google cloud), "1. Deal with that at the host level
+configuration" looks like:
+https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features
 
-int cpu;  /* The CPU the thread is currently running on or the CPU of
-the hypervisor thread. */
-int guest_cpu; /* The CPU within a guest (QEMU) that's running. */
+In other words, we have to tag images with "feature tags" to
+distinguish which images have kernels that support which features.
 
-Does -1 convey meaning beyond uninitialized, like with the 'any' CPU
-perf_event_open argument?
+Part of the reason we need to do it this way is that we use a single
+guest firmware (i.e., guest UEFI) that lives outside of the image.
+
+These feature tags are a mess to keep track of.
+
+All that being said, I can totally see the upstream perspective being
+"not our problem". It's hard to argue with that :-).
+
+A few more thoughts:
+
+- If the guest-side patches weren't upstream before this patch set to
+handle unaccepted memory, you're all definitely right, that this isn't
+a real issue. (Maybe it still isn't...)
+- Do we anticipate (many) more features for confidential compute in
+the future that require code in both the guest FW and guest kernel? If
+yes, then designing a FW-kernel feature negotiation could be useful
+beyond this situation.
+- Dave's suggestion to "2. Boot some intermediate thing like a
+bootloader that does acceptance ..." is pretty clever! So if upstream
+thinks this FW-kernel negotiation is not a good direction, maybe we
+(Google) can pursue this idea to avoid introducing yet another tag on
+our images.
+
+Thank you all for this discussion.
 
 Thanks,
-Ian
-
-
->         refcount_t              refcnt;
->         bool                    comm_set;
->         int                     comm_len;
-> --
-> 2.25.1
->
+Marc

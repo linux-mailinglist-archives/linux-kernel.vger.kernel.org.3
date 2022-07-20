@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AAB57B119
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BD057B11D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240014AbiGTG2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S240023AbiGTG2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239933AbiGTG23 (ORCPT
+        with ESMTP id S240037AbiGTG2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:28:29 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E310449B78
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:27 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id w2so19960503ljj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:27 -0700 (PDT)
+        Wed, 20 Jul 2022 02:28:37 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDCD4F69B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:33 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id u19so19799599lfs.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iGIlqhxSlWfDFHRJ6mC4b3eFYcIQYybstvvJnU9esOQ=;
-        b=UhRYFA7/LdF7XYBnvxrhbtAKNgFbmStp01s9LorBnZT9P/gNWlUpzMtDsJ7V13Hj94
-         2KBIksodqZwwgXfk90DaKlYpfP/fkforCFjRfcCGg1PzzBuHUbe4UC8KjHDw7pc7Fdvq
-         AHaRWe4HyuvuPcviYulWebVolSWtE73diELmsBeyJ/dM0Kz2uKD4ETpcA4/tcPaaIKJV
-         VVrhWEbLg5rhyZ1yL2KXRNcwL1TtB9XOnWKktJMRsMcOxJs6leb8iSwnfDGFiuTuqMii
-         Q8ejJfNCFQtwUyMlokGb7Q+4yH18Dx/RpNeRrhS6lMOBU+rBxDf6r7FNeZhRAWqoI4RG
-         oTEg==
+        bh=ZvCLm5C4QwrCvu37BPIif9T1t6U/v2ik0pFn7OOeGZc=;
+        b=EDcfoiOEv5QDtsjnmB+++fYI+PYvq75KR2vME7ZodpkSxQyxdgKu5xeKDYtiB+BBnl
+         I8WRvH+SfCLC6PwLlYlptY/tcl9taDXlyncqeTDLoK2P+1XZIvUJV2LUgusNHDpEDggf
+         SGt7Co6UnZ5Lq80j1ZC4MVG31B3eO394wWqFRKreaipg+Nnkt1xsowSg70s2ETyFxjzi
+         zkLxIZlFburRLBAh7eM5UbrYuCwIiC+n3A3TnTnvAV40xQB+yleW8tObS64Q+crcntZa
+         /mTE0MGAqlWL/EY4kCOSFPHxTxj6N6/AoP/2mmwHO0zlD4E+niQ4ht5AedKGDeO01s7F
+         IlIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=iGIlqhxSlWfDFHRJ6mC4b3eFYcIQYybstvvJnU9esOQ=;
-        b=FdZR+dPW9NZz4egyrUgcDq59KpOjeri0u4tzqbh/FpRVkw3CXRvYzTU9TL+sDbLemH
-         VKKo7Lu5w80NUr9QDtMWPKiyRf8bm1Dc6/3wWzgosLsVWDYHEEnybzoTJHLXranHpIab
-         H9WjQnMTyex0zNIvnMPyiXVdHOFBr/blhpJay9AHeXmf68HIu5zu2U0dtSijQZ8BPjn4
-         tzDSF0tluDsJ6EiYsSwlvo0s4waJiTMvTZxbxbMaQQ4O8r3QqZPKAcPedU9w7zySVv5L
-         TkWcdV5t73AIfmogstCgzm51jBkAY9wP7GAot2KmxS2U+xWr39CDgSEwkFsuT15ve0zC
-         BiCQ==
-X-Gm-Message-State: AJIora9Jegym/3eCnGVhouFoGqRJm/yfzsrZrjvn72dnK/5CsEublzX/
-        eJt8/eUZpg9ubUkPYCQbp0Oxqw==
-X-Google-Smtp-Source: AGRyM1siG1a6lGXNfYqKnVxqm2uEHALLXWVQNvG6wDpmJgK0FropWIFYWjsRsqncZiQDfr78WgDjoQ==
-X-Received: by 2002:a05:651c:4c9:b0:25d:8599:5637 with SMTP id e9-20020a05651c04c900b0025d85995637mr16842827lji.163.1658298506308;
-        Tue, 19 Jul 2022 23:28:26 -0700 (PDT)
+        bh=ZvCLm5C4QwrCvu37BPIif9T1t6U/v2ik0pFn7OOeGZc=;
+        b=TIkWOuZu1wGyilhRzYfoqveKCeR5me2qb1ojMiJjqVs+baFnNHqM46W4FjKFSTaOHL
+         YUjietpDtbe0ZrknwNMSTZZAHHRuMcdKPyc5BzKarpw/6SNJXFDtslglTrihAd6o++vH
+         6ZH4262wU1OI3NX+BBRH9Z9uESceoAN421i8mRACgwaVQ8rRgmzyQAqcwi1DO4QeAw17
+         Nt4SWpWoDf5ebof8dTYFM3bvGkSg5ORQtqdbk6PtF4aUa5RTg+VHZDRf5YY/QhUjlVa1
+         33QqF1j3YR1UCnPnnZLiTOrcJvQif9oIDu+jHvMC4oVEdmVY3EXhka1nv/tB2B3tcWzc
+         7Bng==
+X-Gm-Message-State: AJIora/djDlwE7o9Mcj4g+zULgboT/FbCvxJBdeT+XQAAjPuid0HDzOu
+        puWL6bBNLJ6DQxbLY3aPnVOJ7A==
+X-Google-Smtp-Source: AGRyM1u+UekMgIs8vfRrABHoyjMOU+hs7YnksYxtseaC7qX43voYEegkZQl8Z5I17mIeh0wH55NsCg==
+X-Received: by 2002:ac2:5972:0:b0:489:cb5d:9c4b with SMTP id h18-20020ac25972000000b00489cb5d9c4bmr18270243lfp.45.1658298511658;
+        Tue, 19 Jul 2022 23:28:31 -0700 (PDT)
 Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id j28-20020ac2551c000000b0048329aa6c92sm3607514lfk.139.2022.07.19.23.28.25
+        by smtp.gmail.com with ESMTPSA id 11-20020ac25f0b000000b0047fb3ea0659sm3604186lfq.292.2022.07.19.23.28.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 23:28:25 -0700 (PDT)
-Message-ID: <2a19c8ec-ee4e-5a6d-b2ac-a25ef080cd09@linaro.org>
-Date:   Wed, 20 Jul 2022 08:28:24 +0200
+        Tue, 19 Jul 2022 23:28:31 -0700 (PDT)
+Message-ID: <d506a523-6638-78f3-6a7d-2d9312302403@linaro.org>
+Date:   Wed, 20 Jul 2022 08:28:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: media: mediatek-jpeg-decoder: Add MT8188
+Subject: Re: [PATCH 2/2] dt-bindings: media: mediatek-jpeg-encoder: Add MT8188
  compatible string
 Content-Language: en-US
 To:     Jianhua Lin <jianhua.lin@mediatek.com>,
@@ -67,8 +67,9 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220719100214.2096-1-jianhua.lin@mediatek.com>
+ <20220719100214.2096-2-jianhua.lin@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220719100214.2096-1-jianhua.lin@mediatek.com>
+In-Reply-To: <20220719100214.2096-2-jianhua.lin@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,11 +83,11 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 19/07/2022 12:02, Jianhua Lin wrote:
-> Add compatible for MT8188 jpeg decoder.
+> Add compatible for MT8188 jpeg encoder.
 > 
 > Signed-off-by: Jianhua Lin <jianhua.lin@mediatek.com>
 > ---
->  .../devicetree/bindings/media/mediatek-jpeg-decoder.yaml         | 1 +
+>  .../devicetree/bindings/media/mediatek-jpeg-encoder.yaml         | 1 +
 >  1 file changed, 1 insertion(+)
 > 
 

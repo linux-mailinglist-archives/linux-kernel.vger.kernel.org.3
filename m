@@ -2,138 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FEE57C0E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB90357C0E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbiGTXcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S229626AbiGTXcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiGTXcj (ORCPT
+        with ESMTP id S231607AbiGTXcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:32:39 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2BA42AF4;
-        Wed, 20 Jul 2022 16:32:39 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id n138so145770iod.4;
-        Wed, 20 Jul 2022 16:32:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uTw5TM8NIkj7Y2Npa+S/jOHSj+YeoroLMLD1j/HNVQw=;
-        b=PI4WccehixOnYESOB01nuhZUIpyLiNfwd0IZu6dRV7PC4p6Kkn1gBYbQDVO0uKlt7C
-         vRyDsLZhsrwWbN9+HR8peXkZhgGQSLQJpSddmW51SybtZFI1ZiENXnNUQEdMZMWKZCoE
-         2ASjMes3qUash/vXpJOjmHNjGidXilvQX834BRGxIHxr3kT8driLF+xDxNFrCa+UJjNC
-         QRgOPwa5OEyiJZyo2oxC90S5XZOkEKIsPmhLdopptz7VkdQhTEORNA36nBw4X9LqEkYK
-         KI2zYvHFa0wkWAezKf+FeSnQB/2tLbx69pQWKpLjJa1lqPurptTRHNoz6z5K+LsI4a1e
-         mP2Q==
-X-Gm-Message-State: AJIora8+8GCvY4YxTCZgE2p/Wz6pG3jM8aqEeWFg9Tsns2j0XzkJRffg
-        NR2JBU3fOTAGRwbTp6ieXQ==
-X-Google-Smtp-Source: AGRyM1ufbECga9pyQXyTVMLdTt5n/U5W3j3M1T/W2MXkulykIVZgEBZMlc66M25vXLcty1OcHT8LiA==
-X-Received: by 2002:a05:6602:2b8a:b0:67b:c57f:b4bc with SMTP id r10-20020a0566022b8a00b0067bc57fb4bcmr17058794iov.55.1658359958428;
-        Wed, 20 Jul 2022 16:32:38 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id f19-20020a022413000000b0033efe711a37sm117507jaa.35.2022.07.20.16.32.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 16:32:37 -0700 (PDT)
-Received: (nullmailer pid 4185445 invoked by uid 1000);
-        Wed, 20 Jul 2022 23:32:35 -0000
-Date:   Wed, 20 Jul 2022 17:32:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Aradhya Bhatia <a-bhatia1@ti.com>
-Cc:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Darren Etheridge <detheridge@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Krunal Bhargav <k-bhargav@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/8] dt-bindings: display: ti,am65x-dss: Add IO CTRL
- property for AM625 OLDI
-Message-ID: <20220720233235.GA4180021-robh@kernel.org>
-References: <20220719080845.22122-1-a-bhatia1@ti.com>
- <20220719080845.22122-3-a-bhatia1@ti.com>
+        Wed, 20 Jul 2022 19:32:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7286B247
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:32:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88C55B82237
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:32:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02FD4C341C7;
+        Wed, 20 Jul 2022 23:32:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658359965;
+        bh=eg3Si/uRSB1XNZ7q5athr0sUXt8awv2QjY8nOnATEvQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UoWgP4DI30cDMfzXJsnQJCeP2ZjRURbQJVfwKzGClFMbTFVyHx+nYE+8tHvFDMnw/
+         cOJ9IgJPngwsBjIdEVMAJI6uxBspFaRCDyaxJBFKL+iDES6KI91kwqvMIsvRtaXYv7
+         l8RmI6lYZY9Py6RNm4KpybkB5nsbSbARKvC9d3+DfJGZ4d9iqiTAZhglLSmSw+8qIA
+         MTRzbQlUXPCA1LgeJVvkh6QRp2hN81L9jbBtGi4OpaIA0wU5dWJHyxOyHRi1lvaQ+8
+         g5OfCp/mZ4IimvO1kmDe0EjVItQLzRlvevQgrmJ5s7OnlmBraVcd5NW8AGCG8ONvGB
+         HcRwYT0+iJX9Q==
+Date:   Wed, 20 Jul 2022 16:32:43 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     keescook@chromium.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: faddr2line issue
+Message-ID: <20220720233243.lyjrhi43bwaxecm3@treble>
+References: <09df26a9-27af-1276-34c6-820bf7e27da8@huawei.com>
+ <3492d341-a681-f344-f5cd-5b1ea3725f31@huawei.com>
+ <20220714164136.n2ycc5axt7vtctgs@treble>
+ <64da0019-4816-a409-be93-b1cf7021c584@huawei.com>
+ <20220720000654.yospyvbrfliy3lrn@treble>
+ <3bd9817d-1959-c081-e5d0-8b0e70b3f41e@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220719080845.22122-3-a-bhatia1@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <3bd9817d-1959-c081-e5d0-8b0e70b3f41e@huawei.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 01:38:39PM +0530, Aradhya Bhatia wrote:
-> Add am625-io-ctrl dt property to provide access to the control MMR
-> registers for the OLDI TXes.
+On Wed, Jul 20, 2022 at 09:39:42AM +0100, John Garry wrote:
+> On 20/07/2022 01:06, Josh Poimboeuf wrote:
+> > > So adding config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT to v5.19-rc2 got it
+> > > working again for me on arm64. However commit dcea997beed6 ("faddr2line: Fix
+> > > overlapping text section failures, the sequel") seems to be broken for me,
+> > > below - this first appeared in rc3. Any idea what the issue could be?
+> > > 
+> > > $./faddr.sh hisi_sas_sata_done+0x8/0x38
+> > > hisi_sas_sata_done+0x8/0x38:
+> > > fs mm ??:0
+> > Hm, what does faddr.sh do?
 > 
-> These registers are used to control the power input to the OLDI TXes as
-> well as to configure them in the Loopback test mode.
+> ah, it's just a wrapper to call scripts/faddr2line with vmlinux and $1
+> (being hisi_sas_sata_done+0x8/0x38, above) args
 > 
-> The MMR IO controller device has been updated since the AM65x SoC and
-> hence a newer property is needed to describe the one in AM625 SoC.
+> > Does addr2line also fail?
 > 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> ---
->  .../bindings/display/ti/ti,am65x-dss.yaml     | 21 +++++++++++++++++++
->  1 file changed, 21 insertions(+)
+> faddr2line fails, as below.
 > 
-> diff --git a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> index 11d9b3821409..672765ad1f30 100644
-> --- a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> +++ b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> @@ -118,12 +118,33 @@ properties:
->        and OLDI_CLK_IO_CTRL registers. This property is needed for OLDI
->        interface to work.
->  
-> +  ti,am625-oldi-io-ctrl:
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    description:
-> +      phandle to syscon device node mapping OLDI IO_CTRL registers, for
-> +      AM625 SoC. The mapped range should point to OLDI0_DAT0_IO_CTRL,
-> +      and map the registers up till OLDI_LB_CTRL. This property allows
-> +      the driver to control the power delivery to the OLDI TXes and
-> +      their loopback control as well.
+> > 
+> > Can you run
+> > 
+> >    bash -x scripts/faddr2line <vmlinux or .ko file> hisi_sas_sata_done+0x8/0x38
+> > 
+> > and share the output?
+> 
+> on rc3 we get:
+> 
+> https://raw.githubusercontent.com/hisilicon/kernel-dev/private-topic-sas-5.19-faddr2line-linux-rc3/before2
 
-What's wrong with the existing ti,am65x-oldi-io-ctrl other than the less 
-than ideal naming? And you just continued with the same issue so the 
-next part will need yet another property. Sorry, no. Just use the 
-existing property.
+Does this fix it?
 
-> +
->    max-memory-bandwidth:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description:
->        Input memory (from main memory to dispc) bandwidth limit in
->        bytes per second
->  
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: ti,am65x-dss
-> +then:
-> +  properties:
-> +    ti,am625-oldi-io-ctrl: false
-> +else:
-> +  properties:
-> +    ti,am65x-oldi-io-ctrl: false
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.37.0
-> 
-> 
+diff --git a/scripts/faddr2line b/scripts/faddr2line
+index 94ed98dd899f..57099687e5e1 100755
+--- a/scripts/faddr2line
++++ b/scripts/faddr2line
+@@ -112,7 +112,9 @@ __faddr2line() {
+ 	# section offsets.
+ 	local file_type=$(${READELF} --file-header $objfile |
+ 		${AWK} '$1 == "Type:" { print $2; exit }')
+-	[[ $file_type = "EXEC" ]] && is_vmlinux=1
++	if [[ $file_type = "EXEC" ]] || [[ $file_type == "DYN" ]]; then
++		is_vmlinux=1
++	fi
+ 
+ 	# Go through each of the object's symbols which match the func name.
+ 	# In rare cases there might be duplicates, in which case we print all

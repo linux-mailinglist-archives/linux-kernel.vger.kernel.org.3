@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE32957C0DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FEE57C0E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbiGTX2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
+        id S231519AbiGTXcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiGTX2t (ORCPT
+        with ESMTP id S230138AbiGTXcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:28:49 -0400
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F963DBFE;
-        Wed, 20 Jul 2022 16:28:48 -0700 (PDT)
-Received: by mail-il1-f176.google.com with SMTP id v1so6515915ilg.4;
-        Wed, 20 Jul 2022 16:28:48 -0700 (PDT)
+        Wed, 20 Jul 2022 19:32:39 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2BA42AF4;
+        Wed, 20 Jul 2022 16:32:39 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id n138so145770iod.4;
+        Wed, 20 Jul 2022 16:32:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=lj7ZdYTFFmCvkqUW4bAz3eNYzxAsTwlFDtn0plbsmo0=;
-        b=DJXkppJdKOPyCg2Z0RN6txhAFLuws5ec8BVKTs6m2AMq7pF7/bB3RxVwkKNmKJkjnD
-         XzCB3MFX/OEgg9J+aiUrOALdzjoUF1Q0/EuOYusFK8Bqsf3uJYmHgaeMI8ldvRSaiFw+
-         UqaAMJDXpw/tSWCnWB20/d1GXQuEgCU5lDFLsbaORoFL7haXiobOQMSlVi/KbIs5WuR5
-         FDttw6QnfJi+dMsu+244QNCY4na22W6Jaw0I+gGl3BtUANCrBMU2Uf0oAbXWfW70WuhB
-         PghNvx1RHatceaWNWXF0FKBBimaSQrL+94jMVexORjY6OOjITx7hc5FqQe5JRA3csQsk
-         7OgA==
-X-Gm-Message-State: AJIora9btXD94l1S98vzucwRs6Tmzr25+eKZJ99cXXGKPa9ywSuMIOss
-        gvCY25wcnCncQ56CbPXieATc9FFuiQ==
-X-Google-Smtp-Source: AGRyM1vSrC7x8Cv1BL5qsGSLx/0xJk23RB7zjk5vAxLrkaX7Jwt32B8ZciEUdlhXO22D9AlabLTxpg==
-X-Received: by 2002:a92:d64a:0:b0:2dc:fa9f:7b27 with SMTP id x10-20020a92d64a000000b002dcfa9f7b27mr6200033ilp.173.1658359727764;
-        Wed, 20 Jul 2022 16:28:47 -0700 (PDT)
+        bh=uTw5TM8NIkj7Y2Npa+S/jOHSj+YeoroLMLD1j/HNVQw=;
+        b=PI4WccehixOnYESOB01nuhZUIpyLiNfwd0IZu6dRV7PC4p6Kkn1gBYbQDVO0uKlt7C
+         vRyDsLZhsrwWbN9+HR8peXkZhgGQSLQJpSddmW51SybtZFI1ZiENXnNUQEdMZMWKZCoE
+         2ASjMes3qUash/vXpJOjmHNjGidXilvQX834BRGxIHxr3kT8driLF+xDxNFrCa+UJjNC
+         QRgOPwa5OEyiJZyo2oxC90S5XZOkEKIsPmhLdopptz7VkdQhTEORNA36nBw4X9LqEkYK
+         KI2zYvHFa0wkWAezKf+FeSnQB/2tLbx69pQWKpLjJa1lqPurptTRHNoz6z5K+LsI4a1e
+         mP2Q==
+X-Gm-Message-State: AJIora8+8GCvY4YxTCZgE2p/Wz6pG3jM8aqEeWFg9Tsns2j0XzkJRffg
+        NR2JBU3fOTAGRwbTp6ieXQ==
+X-Google-Smtp-Source: AGRyM1ufbECga9pyQXyTVMLdTt5n/U5W3j3M1T/W2MXkulykIVZgEBZMlc66M25vXLcty1OcHT8LiA==
+X-Received: by 2002:a05:6602:2b8a:b0:67b:c57f:b4bc with SMTP id r10-20020a0566022b8a00b0067bc57fb4bcmr17058794iov.55.1658359958428;
+        Wed, 20 Jul 2022 16:32:38 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id s12-20020a92d90c000000b002dc1f1a7cc2sm147953iln.31.2022.07.20.16.28.46
+        by smtp.gmail.com with ESMTPSA id f19-20020a022413000000b0033efe711a37sm117507jaa.35.2022.07.20.16.32.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 16:28:47 -0700 (PDT)
-Received: (nullmailer pid 4179862 invoked by uid 1000);
-        Wed, 20 Jul 2022 23:28:45 -0000
-Date:   Wed, 20 Jul 2022 17:28:45 -0600
+        Wed, 20 Jul 2022 16:32:37 -0700 (PDT)
+Received: (nullmailer pid 4185445 invoked by uid 1000);
+        Wed, 20 Jul 2022 23:32:35 -0000
+Date:   Wed, 20 Jul 2022 17:32:35 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Aradhya Bhatia <a-bhatia1@ti.com>
 Cc:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
@@ -55,15 +55,15 @@ Cc:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
         DRI Development List <dri-devel@lists.freedesktop.org>,
         Devicetree List <devicetree@vger.kernel.org>,
         Linux Kernel List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/8] dt-bindings: display: ti,am65x-dss: Add port
- properties for DSS
-Message-ID: <20220720232845.GA4164694-robh@kernel.org>
+Subject: Re: [PATCH 2/8] dt-bindings: display: ti,am65x-dss: Add IO CTRL
+ property for AM625 OLDI
+Message-ID: <20220720233235.GA4180021-robh@kernel.org>
 References: <20220719080845.22122-1-a-bhatia1@ti.com>
- <20220719080845.22122-2-a-bhatia1@ti.com>
+ <20220719080845.22122-3-a-bhatia1@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220719080845.22122-2-a-bhatia1@ti.com>
+In-Reply-To: <20220719080845.22122-3-a-bhatia1@ti.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -74,103 +74,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 01:38:38PM +0530, Aradhya Bhatia wrote:
-> Add "ti,oldi-mode" property to indicate the tidss driver the OLDI output
-> mode. The 2 OLDI TXes on am625-dss allow a 3 different types of panel
-> connections with the board.
+On Tue, Jul 19, 2022 at 01:38:39PM +0530, Aradhya Bhatia wrote:
+> Add am625-io-ctrl dt property to provide access to the control MMR
+> registers for the OLDI TXes.
 > 
-> 1. Single Link / Single Mode on OLDI TX 0 OR 1.
-> 2. Single Link / Duplicate Mode on OLDI TX 0 and 1.
-> 3. Dual Link / Single Mode on OLDI TX 0 and 1.
+> These registers are used to control the power input to the OLDI TXes as
+> well as to configure them in the Loopback test mode.
 > 
-> Add "ti,rgb565-to-888" property to override 16bit output from a videoport
-> for a bridge that only accepts 24bit RGB888 DPI input.
-> 
-> On some boards the HDMI bridge takes a 24bit DPI input, but only 16 data
-> pins are actually enabled from the SoC.  This new property forces the
-> output to be RGB565 on a specific video port if the bridge requests a
-> 24bit RGB color space.
-> 
-> This assumes that the video port is connected like so:
-> 
-> SoC : Bridge
-> R0 ->   R3
-> R1 ->   R4
-> R2 ->   R5
-> R3 ->   R6
-> R4 ->   R7
-> G0 ->   G2
-> G1 ->   G3
-> G2 ->   G4
-> G3 ->   G5
-> G4 ->   G6
-> G5 ->   G7
-> B0 ->   B3
-> B1 ->   B4
-> B2 ->   B5
-> B3 ->   B6
-> B4 ->   B7
-> 
-> On the bridge side R0->R2, G0->G1, B0->B2 would be tied to ground.
-> The bridge sees 24bits of data,  but the lsb's are always zero.
-
-Unless the bridge ignores the LSBs, that's not the right way to do 16 to 
-24 bit. The LSBs should be connected to the MSB of the color component 
-to get full color range.
-
+> The MMR IO controller device has been updated since the AM65x SoC and
+> hence a newer property is needed to describe the one in AM625 SoC.
 > 
 > Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
 > ---
->  .../bindings/display/ti/ti,am65x-dss.yaml     | 25 +++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
+>  .../bindings/display/ti/ti,am65x-dss.yaml     | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> index 6bbce921479d..11d9b3821409 100644
+> index 11d9b3821409..672765ad1f30 100644
 > --- a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
 > +++ b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> @@ -80,15 +80,35 @@ properties:
+> @@ -118,12 +118,33 @@ properties:
+>        and OLDI_CLK_IO_CTRL registers. This property is needed for OLDI
+>        interface to work.
 >  
->      properties:
->        port@0:
-> -        $ref: /schemas/graph.yaml#/properties/port
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
->          description:
->            The DSS OLDI output port node form video port 1
->  
-> +        properties:
-> +          ti,oldi-mode:
-> +            description: TI specific property to indicate the mode the OLDI TXes
-> +              and the display panel are connected in.
-> +              0 -> OLDI TXes OFF (driver default for am625-dss)
-> +              1 -> Single link, Single Mode (OLDI0) (driver default for am65x-dss)
-> +              2 -> Single link, Single Mode (OLDI1)
-> +              3 -> Single link, Duplicate Mode
-> +              4 -> Dual link (Only Single Mode)
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            enum: [0, 1, 2, 3, 4]
+> +  ti,am625-oldi-io-ctrl:
+> +    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    description:
+> +      phandle to syscon device node mapping OLDI IO_CTRL registers, for
+> +      AM625 SoC. The mapped range should point to OLDI0_DAT0_IO_CTRL,
+> +      and map the registers up till OLDI_LB_CTRL. This property allows
+> +      the driver to control the power delivery to the OLDI TXes and
+> +      their loopback control as well.
 
-Wouldn't 'data-lanes' property work for this purpose.
-
-Generally, we don't put properties in port nodes.
+What's wrong with the existing ti,am65x-oldi-io-ctrl other than the less 
+than ideal naming? And you just continued with the same issue so the 
+next part will need yet another property. Sorry, no. Just use the 
+existing property.
 
 > +
->        port@1:
-> -        $ref: /schemas/graph.yaml#/properties/port
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
-> +        unevaluatedProperties: false
->          description:
->            The DSS DPI output port node from video port 2
+>    max-memory-bandwidth:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description:
+>        Input memory (from main memory to dispc) bandwidth limit in
+>        bytes per second
 >  
-> +        properties:
-> +          ti,rgb565-to-888:
-> +            description:
-> +              property to override DPI output to 16bit for 24bit bridge
-> +            type: boolean
-
-There's work underway for standard way to handle interface formats[1]. 
-Please help/comment on that to make sure it works for you. 
-
-Rob
-
-[1] https://lore.kernel.org/all/20220628181838.2031-3-max.oss.09@gmail.com/
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: ti,am65x-dss
+> +then:
+> +  properties:
+> +    ti,am625-oldi-io-ctrl: false
+> +else:
+> +  properties:
+> +    ti,am65x-oldi-io-ctrl: false
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.37.0
+> 
+> 

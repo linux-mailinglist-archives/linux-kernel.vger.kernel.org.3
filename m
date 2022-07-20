@@ -2,209 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D18C57B7DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA85E57B7DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240413AbiGTNtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 09:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S240384AbiGTNtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 09:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238126AbiGTNtE (ORCPT
+        with ESMTP id S229704AbiGTNtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 09:49:04 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DED961D6C;
-        Wed, 20 Jul 2022 06:48:55 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KDgYXr029636;
-        Wed, 20 Jul 2022 13:48:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=iMNCl8tI4R9LrehDyoyIwsqdo8TUaItYszjVruZ8wDo=;
- b=QsR3tguSBedp7JG/cp0Ix/JozEK6zEn1YvXZrbecpVWyiWX6SeICXUU1iZ4YFUUnngR4
- O1hicDnjeeg/7LusqedB4AZHWp/8Li/PPsZXG86vkGy/kgS/Io82FT2C6ZanUnMjN45h
- Yb0TL+wepUDt8IGrQ/sZCkLuR+pGUtcwQat+8rbMpFc1Oo3PuxtzRB+3jVp1CKSlpQCR
- LiouV7wlRX55z4suIOq4Kt+Y0GioVO+1QIUo0qnPZZLG5IfRu4txZpuvke5wXtydbqb/
- n5pbXrSYsELspdSgzq3L/Tqf4/pnZCsgrt4L0QnDKv8qvjLe6fMr/Fcwy9lZm0WF4M/N WA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hejddh4wa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 13:48:43 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26KDh4sr002537;
-        Wed, 20 Jul 2022 13:48:42 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hejddh4vp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 13:48:42 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ixWE9kAtyjVxrio5kmr78+hAAMEFw+FRjsY0VEYarwpZsT1DXtuaY/lOlMT1yIu+gUdfGCFIg/H0WMHDeyXl2fo2CCCRDnFZgec2G/jKmQQ63RmSvmDNfAI8gkwxu6/NRo5PAFOl5hR6gSmN+dX2StdL4r4lqIX/i9ZAuCxlXppnNCyoO5uwfaL7E7RW0PAy9L844t3LI6t4Laj+kBZU5bG7gJ/Zqd04QqGJR42PlS6urOZ4hLXqIxVEb4AbpwC6SXmvIVecVq+5U5LbCL/GUUQt8CXLijZlpl1GL04rgNgkVCf028+XeQ7KQdhgnra6k/cttzYZPupt9xxaeQ5qdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iMNCl8tI4R9LrehDyoyIwsqdo8TUaItYszjVruZ8wDo=;
- b=dCIKluYY0b6paDPIEd09ApIRl9bHTtDsrS3yefhcnPIwiLRhbr/ZAf7SxabC2ssyO503vCm3nN0wEOEj63RPF1QWl3JxhIAKeGP9TvMy93o5YDiSMSAmojfKAoS8JJnWH8RNB2NAEFN5ToRwa/YervuVMcqVatVs9iX6Wn6qKzBScMmLi/pTTjLumnVrtxQ6aH5v+0AV74rqBcDHPeZgYL9UIk3rM6xKxP6/7Y16cR67bcqwTTNV0gKIcUpE4A55yJsf0kX2vy1HiyukrzbvUN7toWFKyNHd37e8ySlNOVH74agrI1EeXbTBUaTfR+9/cXFi+WjnJHnaaYyJvdMSQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in.ibm.com; dmarc=pass action=none header.from=in.ibm.com;
- dkim=pass header.d=in.ibm.com; arc=none
-Received: from MWHPR15MB1150.namprd15.prod.outlook.com (2603:10b6:320:2f::8)
- by BYAPR15MB3175.namprd15.prod.outlook.com (2603:10b6:a03:105::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Wed, 20 Jul
- 2022 13:48:40 +0000
-Received: from MWHPR15MB1150.namprd15.prod.outlook.com
- ([fe80::1024:8a31:a334:d02f]) by MWHPR15MB1150.namprd15.prod.outlook.com
- ([fe80::1024:8a31:a334:d02f%5]) with mapi id 15.20.5458.018; Wed, 20 Jul 2022
- 13:48:40 +0000
-From:   Nageswara R Sastry <nasastry@in.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Eric Biederman <ebiederm@xmission.com>
-Subject: Re: [PATCH v6 6/6] tpm/kexec: Duplicate TPM measurement log in
- of-tree for kexec
-Thread-Topic: [PATCH v6 6/6] tpm/kexec: Duplicate TPM measurement log in
- of-tree for kexec
-Thread-Index: AQHYkiXlRvOcnWW5WkS9TZ+L+lm4362HWhzc
-Date:   Wed, 20 Jul 2022 13:48:40 +0000
-Message-ID: <MWHPR15MB11506932B2AD3EDD6B439E13EB8E9@MWHPR15MB1150.namprd15.prod.outlook.com>
-References: <20220707172026.831614-1-stefanb@linux.ibm.com>
- <20220707172026.831614-7-stefanb@linux.ibm.com>
-In-Reply-To: <20220707172026.831614-7-stefanb@linux.ibm.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8015f5de-a6fe-48e8-7358-08da6a568dd5
-x-ms-traffictypediagnostic: BYAPR15MB3175:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: waxd6cJgAdporI3Ckimw5566rmJy84y1P+9UTPDuC4mvxlBhpI1nfdhyZq8gRFddszYWtSG0xRGAPAtRu6HhhRGQs9aMqmlrdcljTmE/lueTFhTrU7r9zQo29QeUH/6uxqjOr60yOODnsHnuWzFoyVIbVIprOUIODD2QatLICemFTb1MSz80R5RAAsJnvPsI67rxFxhfb+TqaE1dL9W+fzQpnH2PUpA9qQEg7jvHGWNREV8maFvVofRPmnGAWn7GJupWUOgpseXSSln+92cPr1gTDzQKdLbhuqtb5MxUqyrJxbJKLvOHyyAFGNWTl7T9zS1EKNN7iFlRw2zG0SZHEW8A9Dmb/XSQpJ+sgQPqvbLE75oN+wQq80Lht8c+Oh8KRKhKJ814ZYCV7o04wLG853op1y2ux0SoOcuZ3fx0u560j9vgLVCenVyZMnn+9NFQJ55BXnvwVrXjiWStt/8nHeG+2FyxLkZZ4ipt6y/mWMLAGJZULrQZqCbpJFzXVCHmMOWfXxbpNrZaM8fO3dEec/qTQO34ahKHaU0i9uir+IPHPOB9OvhnTMC1LsaKy526wdevDY11LOanN2NcmHDVhzzU0Bm7qhiBb+zM+yh8ItuLkh38bfIYWsuuXKlzBrfVOpzfjW9KBwdIxF8YL/28Cnne6LHK0MULCaZjR5R6zdbUvcZ/Bw1J7zcYqKX/R08N09g9DiQxxGFqdwTsenZZlEjV+2zT36P1xQOs5lqpFAwYRgT4l0AhDHNhTbtqFbvi6Th/G2Ie+wITfLFigq/hH86IN4Zd/y5hnQwPn/oNrc1f9Y6WbW9kFCg1qdlSFOX9
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR15MB1150.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(136003)(366004)(396003)(346002)(316002)(54906003)(33656002)(186003)(110136005)(91956017)(83380400001)(6506007)(8676002)(66446008)(76116006)(66556008)(4326008)(64756008)(66476007)(9686003)(7696005)(55016003)(66946007)(26005)(53546011)(55236004)(478600001)(38070700005)(2906002)(71200400001)(41300700001)(52536014)(86362001)(122000001)(38100700002)(8936002)(7416002)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?x7TzdpP7JZqW4p4+gzWa9+WdILYcVHy6H8/6AhfUh1khW71OvmQi0TAqOC?=
- =?iso-8859-1?Q?0kAiVWCRb3FSAnBBhyI2ZGhH69dCMP1IZw9xNE+iGypZdy6gFX3fSi1KE9?=
- =?iso-8859-1?Q?sSwHJPrvUgALAu6ejnqyqResea/lZKnHvDNT94vI7AtIEiqdYQymFhvvpL?=
- =?iso-8859-1?Q?agxJwVLD9YPn1wZZgDdL/SC7u4D14JqOutuE4g59wHprp7p5vEF5fWKvOs?=
- =?iso-8859-1?Q?EfBcgI1FLkI94clGxv/fPVjqWzsoujeT5BrxISFn6atbae7FQZnjvNC3Xc?=
- =?iso-8859-1?Q?MrLCdxeFAWX/rBnspm13eT3Citbdvy3YDq/d569pmV4KkJPe/ji3J+0xA8?=
- =?iso-8859-1?Q?BR9L85UcNTb84frp+TOdim18pfxzgIr9UYGqJWU2oRrX1i+np4TsTFdx5K?=
- =?iso-8859-1?Q?SRDKbwH5uAVi3uPaApVqx6N8w+wFn/09FNY1LOH+v8CwDfvYwIgHad7tg5?=
- =?iso-8859-1?Q?ldL4yLLdlUi5CxdbklxXrXUq/bi9O+024JtGs3PUhlsvyttO/S9PeBFgPZ?=
- =?iso-8859-1?Q?mmTyvK1vxNhGUtrWKb55YLIz5+7xd4kaYSRtLhXeSwxYKhyyiMf/E//c37?=
- =?iso-8859-1?Q?Kc+xBMsE9zGX4YUj0hbGAGQ7FrjR91ehsinTuWeRZRTI25DP4N1M1WWPZU?=
- =?iso-8859-1?Q?0gN87NZ3DpdCUuWNTlcJ38+iuwR2ndeX9UiTPZCljDR1HQX58XJIKuTzl/?=
- =?iso-8859-1?Q?0OjDlWCowUXNkOeNIAYUYcc9inbXbzOqq9lI6tgYNKBekdIO3ttvvTH3Nz?=
- =?iso-8859-1?Q?VoZcMzs6PhHrmNfazp+KGajBNqu6DTpOGwBGb23igCqakewtcDmrjpq/wU?=
- =?iso-8859-1?Q?f4ZvekxBc/prUkE1oZLB8Oh62H9VcRkvQR7cJeirbObxv0Fc3yCvvos9Fr?=
- =?iso-8859-1?Q?xzzGmsz7g+BgQcuYJVxNouo5voJlyByrzPl50+hLR+JPIzJ9iIoExNByN+?=
- =?iso-8859-1?Q?rgKpmToKtZXALhsCGQg0yRVY+Tjp93BRILw5mgBm2PSJBj8c4WDJyRK9ZW?=
- =?iso-8859-1?Q?for7NV+aayj6oisAmbKnil3NNJe20YWGxqeXBkpkv833/Ab0ZLbpyyY8XE?=
- =?iso-8859-1?Q?38Da6SmD7rz2tdXWldJYlsIpzkI5KzgEHKtzS4Z96wgIeoBugaFHgDEWq3?=
- =?iso-8859-1?Q?MmaCGd4KHWwFR7ADRYFonxXH+N2rVKDMysxOKV7ewsaOVn/a1tsHiL0gLj?=
- =?iso-8859-1?Q?32TePGhLcf/B+t55zZZaXsQ3Ou6hsZ1Eur8xJtmmMkl6DKkxDy7gfyE3Hz?=
- =?iso-8859-1?Q?2jeIjBqTBVF++fZeZ+hqejS1E1BTIYc0Hwbcl/gNGiMnDO0/kuWGk+AIs0?=
- =?iso-8859-1?Q?+AfBNh7VL3jQzFu6L6winCMULLURM0NKUqAwb9DpwLBaUN2b0jGpf1sAJS?=
- =?iso-8859-1?Q?JYT+7xXrlb3epRyBjr9p/K+8pZK1B8TDY++aRggnsYF4HhVOjvw5L112yK?=
- =?iso-8859-1?Q?y7DaIsYDhyCFR2iKIusCGJkcWjJCqCCpRVjeDJ6Dsr6//8mSUD0ObiKRg3?=
- =?iso-8859-1?Q?PjPe2W3AUObzb1a/IjJ9PuF0ZBEbsocWQfXy0W+JvZkJ7ZglQ8GqZVLBIt?=
- =?iso-8859-1?Q?yKbGN042EDjmawM7Szgau16sneWEUMH/uihpFTH6nRFaRD751lfuPhFAXQ?=
- =?iso-8859-1?Q?KcqUf6FpTRcGRb4cEeOkUTPdrSEyhzTRpu?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 20 Jul 2022 09:49:03 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA19A61D8D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:48:51 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5FC752223E;
+        Wed, 20 Jul 2022 15:48:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1658324928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5SDELbFZivHkdGyHGF1nop4U3jMBC/a0ONji2ciT+Qc=;
+        b=FcfZdyDefl/Euo7ImCUcqieYhONzoiD2qLyGJh5kPiPNtfzkEB03vTNFgxrGMtsRIwWbuH
+        JraLrzdm1V6pCcJSrb5biunhS+MokJDcTYNYiTDcvt7oKVyo6RHhO69AX8Nb0saEk5LT65
+        T853AvIgyG+uP0L8HfSeQD6QsLiAStQ=
 MIME-Version: 1.0
-X-OriginatorOrg: in.ibm.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR15MB1150.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8015f5de-a6fe-48e8-7358-08da6a568dd5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 13:48:40.5185
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: fcf67057-50c9-4ad4-98f3-ffca64add9e9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8tfUm7oDujcnRw2B1CymmHErekaee+moY62dCmv1C+e5A+D1ONm4vev++XmjLIg9wgTdQ1oL7jg8pgVadSAO6A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3175
-X-Proofpoint-GUID: VklpyML0gldp2kJw4JTgT1BxG5B0_i8q
-X-Proofpoint-ORIG-GUID: ERed2pv4qmLnWUP5Ee47tUXBVPfjyrAu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_07,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- impostorscore=0 phishscore=0 mlxscore=0 adultscore=0 priorityscore=1501
- mlxlogscore=999 clxscore=1011 malwarescore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207200056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 20 Jul 2022 15:48:41 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor.Ambarus@microchip.com
+Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, heiko.thiery@gmail.com
+Subject: Re: [PATCH v1] mtd: spi-nor: unset quad_enable if SFDP doesn't
+ specify it
+In-Reply-To: <43041ef1-2b1b-5729-9611-00964d617f63@microchip.com>
+References: <20220304185137.3376011-1-michael@walle.cc>
+ <43041ef1-2b1b-5729-9611-00964d617f63@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <f86d847fe61bbcd832c64ce1d636774e@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=0A=
-=0A=
-________________________________________=0A=
-> From: Stefan Berger <stefanb@linux.ibm.com>=0A=
-> Sent: 07 July 2022 10:50 PM=0A=
-> To: kexec@lists.infradead.org; devicetree@vger.kernel.org; linux-integrit=
-y@vger.kernel.org; linux-kernel@vger.kernel.org; linuxppc-dev@lists.ozlabs.=
-org=0A=
-> Cc: nayna@linux.ibm.com; Nageswara R Sastry; mpe@ellerman.id.au; Stefan B=
-erger; Rob Herring; Frank Rowand; Eric Biederman=0A=
-> Subject: [PATCH v6 6/6] tpm/kexec: Duplicate TPM measurement log in of-tr=
-ee for kexec=0A=
-=0A=
-> The memory area of the TPM measurement log is currently not properly=0A=
-> duplicated for carrying it across kexec when an Open Firmware=0A=
-> Devicetree is used. Therefore, the contents of the log get corrupted.=0A=
-> Fix this for the kexec_file_load() syscall by allocating a buffer and=0A=
-> copying the contents of the existing log into it. The new buffer is=0A=
-> preserved across the kexec and a pointer to it is available when the new=
-=0A=
-> kernel is started. To achieve this, store the allocated buffer's address=
-=0A=
-> in the flattened device tree (fdt) under the name linux,tpm-kexec-buffer=
-=0A=
-> and search for this entry early in the kernel startup before the TPM=0A=
-> subsystem starts up. Adjust the pointer in the of-tree stored under=0A=
-> linux,sml-base to point to this buffer holding the preserved log. The TPM=
-=0A=
-> driver can then read the base address from this entry when making the log=
-=0A=
-> available. Invalidate the log by removing 'linux,sml-base' from the=0A=
-> devicetree if anything goes wrong with updating the buffer.=0A=
-=0A=
-> Use subsys_initcall() to call the function to restore the buffer even if=
-=0A=
-> the TPM subsystem or driver are not used. This allows the buffer to be=0A=
-> carried across the next kexec without involvement of the TPM subsystem=0A=
-> and ensures a valid buffer pointed to by the of-tree.=0A=
-=0A=
-> Use the subsys_initcall(), rather than an ealier initcall, since=0A=
-> page_is_ram() in get_kexec_buffer() only starts working at this stage.=0A=
-=0A=
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>=0A=
-> Cc: Rob Herring <robh+dt@kernel.org>=0A=
-> Cc: Frank Rowand <frowand.list@gmail.com>=0A=
-> Cc: Eric Biederman <ebiederm@xmission.com>=0A=
-=0A=
-> ---=0A=
-> v6:=0A=
-> - Define prototype for tpm_add_kexec_buffer under same config options=0A=
->  as drivers/of/kexec.c is compiled, provide inline function otherwise.=0A=
->   (kernel test robot)=0A=
-=0A=
-Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>=
+Am 2022-07-19 06:57, schrieb Tudor.Ambarus@microchip.com:
+> On 3/4/22 20:51, Michael Walle wrote:
+> 
+> Hi!
+> 
+>> While the first version of JESD216 specify the opcode for 4 bit I/O
+>> accesses, it lacks information on how to actually enable this mode.
+>> 
+>> For now, the one set in spi_nor_init_default_params() will be used.
+>> But this one is likely wrong for some flashes, in particular the
+>> Macronix MX25L12835F. Thus we need to clear the enable method when
+>> parsing the SFDP. Flashes with such an SFDP revision will have to use 
+>> a
+>> flash (and SFDP revision) specific fixup.
+> 
+> This is equivalent to clearing the default QE method for all those 
+> flashes
+> that support SFDP, with implications for those that support SFDP Rev A.
+> If I continue the logic, I could remove the default QE method from
+> spi_nor_init_default_params(), but I don't think I would like that.
+> You could use a post_bfpt hook without explicitly clearing it here.
+> 
+> Would you please explain more why is clearing the default method better
+> than using a wrong default one, and why you chose to do this just for
+> the Rev A SFDP flashes and you didn't include the no-SFDP flashes as 
+> well?
+
+Honestly, I don't care too much about this flash. I can't remember
+any details from this 4 months old thread. Sorry. I guess it is
+fine to drop this patch. If someone cares, she or he can
+resurrect this one.
+
+-michael

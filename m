@@ -2,206 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A910557BE1C
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0D257BE1B
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiGTSwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
+        id S229935AbiGTSws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGTSwc (ORCPT
+        with ESMTP id S229490AbiGTSwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:52:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C466548C8F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:52:31 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 20 Jul 2022 14:52:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C02948C8F
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:52:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 907116601795;
-        Wed, 20 Jul 2022 19:52:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658343150;
-        bh=va90EplYMG3DyUMu78yTVvvF39C/aIb5s4BDbKlppvI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FMS43N7XhHXUoBywTxfxyiQJENXZ/Thn7exStAh2dPf99x3n/vHJ1z6c90otMiUMn
-         qulrSJ2f5pi+RPSvtwXe/MgAREjeKPe1qbqE5KQCllVy7WOEcG2mxwFCXz8SLTsp6z
-         a3zRRwi5ApZK1wr8uMvmM6KU8AePS6JLBl3zRYVl3b9lyWgKWXAOiLYca/LIqzojkP
-         Hq4twZq6zdw1UH5LN/Pcjtk1nvtoW/3GAF6Kk1oaBcQDyZ9h8nt4k8b5h+T3xbpWyB
-         4IFH0ZQOaPqIYba6V0cCnxtOC6Tzi0/po4kqtjjNRa/IOZgI0A2zkJncCzaINfe70j
-         IClrvjUS3Re3A==
-Date:   Wed, 20 Jul 2022 14:52:26 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Doug Anderson <dianders@chromium.org>, kernel@collabora.com,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] drm/panel-edp: Add panel entry for R140NWF5 RH
-Message-ID: <20220720185226.tf4y2ofmuz3ifejr@notapiano>
-References: <20220719203857.1488831-1-nfraprado@collabora.com>
- <20220719203857.1488831-2-nfraprado@collabora.com>
- <CAD=FV=XgWAMXGAfBw9dBoKB6Y6_AAT6ccAtLg=jy3qLa2HOxBA@mail.gmail.com>
- <194631de-2e3f-6e1f-65f6-76dbef04483e@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB3426199D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 18:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E43C3411E;
+        Wed, 20 Jul 2022 18:52:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658343160;
+        bh=GCDUfLB7H+z3SYkt1egzk1J5ZvWGPLsC7cxT/eSNkNk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fYS0qQr8pQDEM7YmELk7Pwi49Oc5RmKt/wQVx4ema8Qh4kM19y5SV6b9rLDgTHB7e
+         zz4ohCy8OGMDr1Z2PXyjzjXVV6pnggMtEM/D895O6IAqEPYaHFf+/0iMrJ0MkxqobI
+         HpvCYb1kqEyce29M+KMk+9ugzfK96CgxTD27j0Nk8OHVJJTjlsKd36HYYl4DvbeG1f
+         1sG+qvZsCRCHT8vSs/vsaWdELt0DuLr4SCwQ5Qr3XCCnQxUJ9uMnDRA3gcdQOr2NgX
+         jlTqTHyw8BOQqNw84BwG4T5Xx78xKxS8fmkdMKiorZAS72McZeiY945myd/zfuVIGM
+         Qg1sEfJGIh6Uw==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] ASoC: Intel: avs: Mark avs_path_module_type_create() as noinline
+Date:   Wed, 20 Jul 2022 11:52:28 -0700
+Message-Id: <20220720185228.3182663-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <194631de-2e3f-6e1f-65f6-76dbef04483e@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 09:49:35AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 20/07/22 00:40, Doug Anderson ha scritto:
-> > Hi,
-> > 
-> > On Tue, Jul 19, 2022 at 1:39 PM Nícolas F. R. A. Prado
-> > <nfraprado@collabora.com> wrote:
-> > > 
-> > > Add panel identification entry for the IVO R140NWF5 RH (product ID:
-> > > 0x057d) panel.
-> > > 
-> > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > > 
-> > > ---
-> > > The comments on the driver indicate that the T3 timing should be set on
-> > > hpd_absent, while hpd_reliable would have a shorter time just while the
-> > > HPD line stabilizes on low after power is supplied.
-> > 
-> > Right. Ideally hpd_reliable is 0 unless you've got a badly-designed panel.
-> > 
-> > 
-> > > But can we really assume that the HPD line will be reliable at all
-> > > before the DDIC is done booting up, at which point the HPD line is
-> > > brought up? IOW, shouldn't we always delay T3 (by setting hpd_reliable =
-> > > T3), since only then we're really sure that the DDIC is done setting up
-> > > and the HPD line is reliable?
-> > 
-> > If the panel is hooked up properly, then the HPD pin should be pulled
-> > low at the start and then should only go high after the panel is ready
-> > for us to talk to it, right? So it's not like the DDIC has to boot up
-> > and actively init the state. I would assume that the initial state of
-> > the "HPD output" from the panel's IC would be one of the following:
-> > * A floating input.
-> > * A pulled down input.
-> > * An output driven low.
-> > 
-> > In any of those cases just adding a pull down on the line would be
-> > enough to ensure that the HPD line is reliable until the panel comes
-> > around and actively drives the line high.
-> > 
-> > Remember, this is eDP and it's not something that's hot-plugged, so
-> > there's no debouncing involved and in a properly designed system there
-> > should be no time needed for the signal to stabilize. I would also
-> > point out that on the oficial eDP docs the eDP timing diagram doesn't
-> > show the initial state of "HPD" as "unknown". It shows it as low.
-> > 
-> > Now, that all being said, I have seen at least one panel that glitched
-> > itself at bootup. After you powered it on it would blip its HPD line
-> > high before it had actually finished booting. Then the HPD would go
-> > low again before finally going high after the panel finished booting.
-> > This is the reason for "hpd_reliable".
-> > 
-> > If you've got a board with a well-designed panel but the hookup
-> > between the panel and the board is wrong (maybe the board is missing a
-> > pulldown on the HPD line?) then you can just set the "no-hpd" property
-> > for your board. That will tell the kernel to just always delay the
-> > "hpd-absent" delay.
-> > 
+When building ARCH=arm64 allmodconfig with clang, there is a warning
+about high stack usage in avs_path_create(), which breaks the build due
+to CONFIG_WERROR=y:
 
-Thank you for the detailed explanation, this does clear all doubts from what me
-and Angelo were discussing.
+  sound/soc/intel/avs/path.c:815:18: error: stack frame size (2176) exceeds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
+  struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
+                   ^
+  1 error generated.
 
-> 
-> We were concerned exactly about glitchy HPD during DDIC init, as I didn't
-> want to trust it because the only testing we could do was on just two units...
-> 
-> ...but if you're sure that I was too much paranoid about that, that's good,
-> as it means I will be a bit more "relaxed" on this topic next time :-)
-> 
-> > > I've set the T3 delay to hpd_absent in this series, following what's
-> > > instructed in the comments, but I'd like to discuss whether we shouldn't
-> > > be setting T3 on hpd_reliable instead, for all panels, to be on the
-> > > safer side.
-> > 
-> > The way it's specified right now is more flexible, though, isn't it?
-> > This way if you're on a board where the HPD truly _isn't_ stable then
-> > you can just set the "no-hpd" and it will automatically use the
-> > "hpd_absent" delay, right?
-> > 
+This warning is also visible with allmodconfig on other architectures.
+The minimum set of configs that triggers this on top of ARCH=arm64
+allnoconfig:
 
-Yes, indeed. I just wasn't sure that flexibility brought us anything, but after
-your explanation above it makes much more sense now, thanks!
+  CONFIG_COMPILE_TEST=y
+  CONFIG_FORTIFY_SOURCE=y
+  CONFIG_KASAN=y
+  CONFIG_PCI=y
+  CONFIG_SOUND=y
+  CONFIG_SND=y
+  CONFIG_SND_SOC=y
+  CONFIG_SND_SOC_INTEL_AVS=y
 
-> 
-> For Chromebooks, that's totally doable, thanks to the bootloader seeking for
-> proper machine compatibles, so yes I agree with that.
-> 
-> > 
-> > >   drivers/gpu/drm/panel/panel-edp.c | 8 ++++++++
-> > >   1 file changed, 8 insertions(+)
-> > > 
-> > > diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-> > > index 3626469c4cc2..675d793d925e 100644
-> > > --- a/drivers/gpu/drm/panel/panel-edp.c
-> > > +++ b/drivers/gpu/drm/panel/panel-edp.c
-> > > @@ -1854,6 +1854,12 @@ static const struct panel_delay delay_100_500_e200 = {
-> > >          .enable = 200,
-> > >   };
-> > > 
-> > > +static const struct panel_delay delay_200_500_e200 = {
-> > > +       .hpd_absent = 200,
-> > > +       .unprepare = 500,
-> > > +       .enable = 200,
-> > > +};
-> > > +
-> > >   #define EDP_PANEL_ENTRY(vend_chr_0, vend_chr_1, vend_chr_2, product_id, _delay, _name) \
-> > >   { \
-> > >          .name = _name, \
-> > > @@ -1882,6 +1888,8 @@ static const struct edp_panel_entry edp_panels[] = {
-> > > 
-> > >          EDP_PANEL_ENTRY('C', 'M', 'N', 0x114c, &innolux_n116bca_ea1.delay, "N116BCA-EA1"),
-> > > 
-> > > +       EDP_PANEL_ENTRY('I', 'V', 'O', 0x057d, &delay_200_500_e200, "R140NWF5 RH"),
-> > > +
-> > 
-> > This looks fine to me:
-> > 
-> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> > 
-> > I'm happy to apply this in a day or two assuming you're OK with my
-> > explanation above.
-> 
-> Thank you for the long mail, your explanation was truly helpful!
-> (especially for me being paranoid :-P)
-> 
-> So, I agree to go with that one, for which:
-> 
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-> Nic, green light?
+When CONFIG_FORTIFY_SOURCE is enabled, memcmp() (called from
+guid_equal()) becomes a wrapper to do compile time checking, which
+interacts poorly with inlining plus CONFIG_KASAN=y.
 
-Yep.
+With ARCH=arm64 allmodconfig + CONFIG_KASAN=n + CONFIG_FRAME_WARN=128,
+the stack usage is much better:
 
-I haven't seen any issues with keeping the hpd_reliable as 0 in the machine I
-have access to, and Douglas' explanation cleared up all the doubts of how this
-all works, so, Douglas, please feel free to merge this as is.
+  sound/soc/intel/avs/path.c:815:18: warning: stack frame size (624) exceeds limit (128) in 'avs_path_create' [-Wframe-larger-than]
+  struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
+                   ^
+  sound/soc/intel/avs/path.c:873:5: warning: stack frame size (144) exceeds limit (128) in 'avs_path_bind' [-Wframe-larger-than]
+  int avs_path_bind(struct avs_path *path)
+      ^
+  2 warnings generated.
 
-In that case, since patch 3 was also merged already I'll send a v2 just for
-patch 2 separately.
+To avoid this warning, mark avs_path_module_type_create() as
+noinline_for_stack, which redistributes the stack usage across multiple
+functions, regardless of CONFIG_KASAN.
 
-Thanks,
-Nícolas
+With ARCH=arm64 allmodconfig + CONFIG_FRAME_WARN=128, the warnings show:
+
+  avs_path_create():             192
+  avs_path_bind():               272
+  avs_path_module_type_create(): 416
+  avs_mux_create():              160
+  avs_updown_mix_create():       160
+  avs_aec_create():              176
+  avs_asrc_create():             144
+
+With ARCH=arm64 allmodconfig + CONFIG_FRAME_WARN=128 + CONFIG_KASAN=n,
+the warnings show:
+
+  avs_path_create():             192
+  avs_path_bind():               144
+  avs_path_module_type_create(): 416
+  avs_mux_create():              176
+  avs_updown_mix_create():       176
+  avs_src_create():              144
+  avs_aec_create():              192
+  avs_asrc_create():             144
+  avs_wov_create():              144
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1642
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ sound/soc/intel/avs/path.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
+index 3d46dd5e5bc4..ec2aa0001f91 100644
+--- a/sound/soc/intel/avs/path.c
++++ b/sound/soc/intel/avs/path.c
+@@ -449,7 +449,8 @@ static int avs_modext_create(struct avs_dev *adev, struct avs_path_module *mod)
+ 	return ret;
+ }
+ 
+-static int avs_path_module_type_create(struct avs_dev *adev, struct avs_path_module *mod)
++static noinline_for_stack int avs_path_module_type_create(struct avs_dev *adev,
++							  struct avs_path_module *mod)
+ {
+ 	const guid_t *type = &mod->template->cfg_ext->type;
+ 
+
+base-commit: ff6992735ade75aae3e35d16b17da1008d753d28
+-- 
+2.37.1
+

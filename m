@@ -2,145 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9455857BBBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDBB57BBC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234372AbiGTQqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S234483AbiGTQsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbiGTQqe (ORCPT
+        with ESMTP id S231560AbiGTQsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:46:34 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F19254050
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:46:33 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id o12so21807266ljc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:46:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eW32Y7kHOoyCzchouD8dBLTcqgbgXS4BmFC/O4Lg30M=;
-        b=nyqku3a3HLHK+70E+Y8GEosypIROvWnmFa/2I+30KlBVuuce+jbXYBdjw1HU1XIQYo
-         IASGUJ/GmK9MfrIUqi2Oh5EQ/YEDzyYpX908dTmykKAamIkU3klTz2s2TFVdqR2IT3YN
-         /KJzjooCKdFzBCrI8VTgCbCnkHc1VRMVVG75oZbZnR5scYqfChufd0b2rdf+wlEVUZFK
-         JhjQVarnP0hpatl07I5UhhBwKnn7bI69wb+IzXsdaE9M1Nz5gtKhHBlK9XShN9r/ofrj
-         YnppJW+jXsoT58Jw1VLWlxyIfbVQ64Wfvo8ik+zs6lX86yaaUpwltp5KtzpHaD6hmMas
-         EdJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eW32Y7kHOoyCzchouD8dBLTcqgbgXS4BmFC/O4Lg30M=;
-        b=SsVcD5AJGfSqmOHZBgQ5aYf5wPEYtewyyTFu1nKH0dHAyjajHUYkkFSbDDw4YcDtxH
-         D9FfRdofH58zYaIs2rmzbqI2l7yXVeNW9X3EmNzJ9Gaj/pv/D2i/ZF90g/UXnN3gEqA2
-         Qtaxh4TXAbX1n+97rhRBRvNlr4tU8/8BId+fbOpz9jmstsXJs6gU9aRekMTCqwmB+3TZ
-         6B9w1hxYkPfHZbUXWAihDBa9KD7uQKJ+ieih3DXfISP9NvtE7NBYXAtVXwu0Hdk6euB7
-         lC/QWcZuxrdo9f1uIRVgTu6g9WKMqVNNNZsCgi+D4Ld2vWkLWJ7IK+gRSHmVqEIs4Oxm
-         fWEg==
-X-Gm-Message-State: AJIora+TGQHlpxrfxem2WaNsw4S/IPenwiLJmyHPFBaXW96O7VChpO2d
-        W9SO/Hk4f2w+lQqyKMtiq2LC+w==
-X-Google-Smtp-Source: AGRyM1urk9m4eQiadowgrMKnFWZPaGdClLxR5kV7tNRV7fT6yqR9omQX/92QK4itmaBnZ/RRFFCbKQ==
-X-Received: by 2002:a05:651c:1207:b0:25d:4eba:e247 with SMTP id i7-20020a05651c120700b0025d4ebae247mr16601237lja.100.1658335591868;
-        Wed, 20 Jul 2022 09:46:31 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id h28-20020a0565123c9c00b00489da512f5asm3915996lfv.86.2022.07.20.09.46.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 09:46:31 -0700 (PDT)
-Message-ID: <e0f6eede-9f6d-48d2-3a0a-e294cbe55eca@linaro.org>
-Date:   Wed, 20 Jul 2022 18:46:30 +0200
+        Wed, 20 Jul 2022 12:48:06 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4123B979;
+        Wed, 20 Jul 2022 09:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658335685; x=1689871685;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=omc5oS98vhIDr7XiFeSScYRFbJm8zfX3R/MQhi89FHU=;
+  b=Uvq0XsbQbFQTH5a0Bogbv7l7RXch9NBP0p8u4ue9r+63vdsA+Orc0QJ7
+   V73+syx4nc5Y6Pqs7TC3e2vHCxhlTsH6AI/L2uqIrKZT5dryweEdnsx5p
+   rwGPJ/WSabkjAhR3rXpSPRY8OIYWXH+aZUbgQxcT0zs86vY491x+OXW2l
+   tOBczwMpCqcsyTdzzL1aaRux2rGOxUJh3XJUw6q00yNRnALB6wMnSTvc8
+   1YAJVQQJPCypmnIRlB4M4Eu6q8eNUzjd7H2dDvLAvifXv2awckpzeqr9T
+   ndheAFb6XGQhBKDAz+NOswF3zAdOjR6OnVmJbPVX0erzxBK+BtOzZBd0M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="267228988"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="267228988"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 09:48:03 -0700
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="573379999"
+Received: from dgovor-mobl1.amr.corp.intel.com (HELO [10.209.89.58]) ([10.209.89.58])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 09:48:02 -0700
+Message-ID: <978c3d37-97c9-79b9-426a-2c27db34c38a@intel.com>
+Date:   Wed, 20 Jul 2022 09:48:02 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: arm: qcom: Document additional sku6 for
- sc7180 pazquel
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 07/22] x86/virt/tdx: Implement SEAMCALL function
 Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Henry Sun <henrysun@google.com>,
-        Bob Moragues <moragues@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <20220720073755.1.Ifab936517646b3876dd31b6e9b1b58a858529e57@changeid>
- <4cc6a276-4cbe-506a-6425-677c56469645@linaro.org>
- <CAD=FV=WP22g2ZhyeGeYJcGtQTBeKjinxQRCXicHxeVh-ziC8iA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=WP22g2ZhyeGeYJcGtQTBeKjinxQRCXicHxeVh-ziC8iA@mail.gmail.com>
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <095e6bbc57b4470e1e9a9104059a5238c9775f00.1655894131.git.kai.huang@intel.com>
+ <069a062e-a4a6-09af-7b74-7f4929f2ec0b@intel.com>
+ <5ce7ebfe54160ea35e432bf50207ebed32db31fc.camel@intel.com>
+ <84e93539-a2f9-f68e-416a-ea3d8fc725af@intel.com>
+ <6bef368ccc68676e4acaecc4b6dc52f598ea7f2f.camel@intel.com>
+ <ea03e55499f556388c0a5f9ed565e72e213c276f.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ea03e55499f556388c0a5f9ed565e72e213c276f.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 17:07, Doug Anderson wrote:
-> Hi,
+On 7/20/22 03:18, Kai Huang wrote:
+> Try to close on how to handle memory hotplug.  After discussion, below will be
+> architectural behaviour of TDX in terms of ACPI memory hotplug:
 > 
-> On Wed, Jul 20, 2022 at 12:46 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 20/07/2022 09:38, Yunlong Jia wrote:
->>> The difference between sku6 and sku4 is that there is no esim
->>>
->>> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
->>> ---
->>>
->>>  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
->>> index 4dd18fbf20b6..aebeefdab27f 100644
->>> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
->>> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
->>> @@ -410,6 +410,7 @@ properties:
->>>        - description: Google Pazquel with LTE and Parade (newest rev)
->>>          items:
->>>            - const: google,pazquel-sku4
->>> +          - const: google,pazquel-sku6
->>
->> This looks wrong, did you test it?
+> 1) During platform boot, CMRs must be physically present. MCHECK verifies all
+> CMRs are physically present and are actually TDX convertible memory.
+
+I doubt this is strictly true.  This makes it sound like MCHECK is doing
+*ACTUAL* verification that the memory is, in practice, convertible.
+That would mean actually writing to it, which would take a long time for
+a large system.
+
+Does it *ACTUALLY* verify this?
+
+Also, it's very odd to say that "CMRs must be physically present".  A
+CMR itself is a logical construct.  The physical memory *backing* a CMR
+is, something else entirely.
+
+> 2) CMRs are static after platform boots and don't change at runtime.  TDX
+> architecture doesn't support hot-add or hot-removal of CMR memory.
+> 3) TDX architecture doesn't forbid non-CMR memory hotplug.
 > 
-> Why do you think it's wrong? This patch is adding a second compatible
-> string to an existing dts. 
-
-Because it was sent after a patch adding sku6+sku4+sc7180, but the order
-here is different.
-
-However for some reason it was not part of a patchset which makes it
-total mess and even less possible to understand.
-
-> The only difference between SKU4 and SKU6
-> is that one of them has the eSIM component stuffed and the other one
-> doesn't. This need not be represented in the dts since the eSIM is
-> automatically detected, but it was still stuffed as a SKU strapping so
-> the factory could tell whether the missing eSIM was an error or
-> intentional.
+> Also, although TDX doesn't trust BIOS in terms of security, a non-buggy BIOS
+> should prevent CMR memory from being hot-removed.  If kernel ever receives such
+> event, it's a BIOS bug, or even worse, the BIOS is compromised and under attack.
 > 
-> This is just like the SKU0 vs. SKU2 difference.
+> As a result, the kernel should also never receive event of hot-add CMR memory. 
+> It is very much likely TDX is under attack (physical attack) in such case, i.e.
+> someone is trying to physically replace any CMR memory.
 > 
-> Other than the fact that this should be together in one series with
-> the dts patch:
+> In terms of how to handle ACPI memory hotplug, my thinking is -- ideally, if the
+> kernel can get the CMRs during kernel boot when detecting whether TDX is enabled
+> by BIOS, we can do below:
 > 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> - For memory hot-removal, if the removed memory falls into any CMR, then kernel
+> can speak loudly it is a BIOS bug.  But when this happens, the hot-removal has
+> been handled by BIOS thus kernel cannot actually prevent, so kernel can either
+> BUG(), or just print error message.  If the removed memory doesn't fall into
+> CMR, we do nothing.
 
-I don't agree. With last DTS patch this is a wrong binding (or wrong
-DTS) therefore I must NAK it.
+Hold on a sec.  Hot-removal is a two-step process.  The kernel *MUST*
+know in advance that the removal is going to occur.  It follows that up
+with evacuating the memory, giving the "all clear", then the actual
+physical removal can occur.
 
-Please do not upstream stuff in some different way, like sending
-bindings and DTS separate.
+I'm not sure what you're getting at with the "kernel cannot actually
+prevent" bit.  No sane system actively destroys perfect good memory
+content and tells the kernel about it after the fact.
 
-Best regards,
-Krzysztof
+> - For memory hot-add, if the new memory falls into any CMR, then kernel should
+> speak loudly it is a BIOS bug, or even say "TDX is under attack" as this is only
+> possible when CMR memory has been previously hot-removed.
+
+I don't think this is strictly true.  It's totally possible to get a
+hot-add *event* for memory which is in a CMR.  It would be another BIOS
+bug, of course, but hot-remove is not a prerequisite purely for an event.
+
+> And kernel should
+> reject the new memory for security reason.  If the new memory doesn't fall into
+> any CMR, then we (also) just reject the new memory, as we want to guarantee all
+> memory in page allocator are TDX pages.  But this is basically due to kernel
+> policy but not due to TDX architecture.
+
+Agreed.
+
+> BUT, since as the first step, we cannot get the CMR during kernel boot (as it
+> requires additional code to put CPU into VMX operation), I think for now we can
+> handle ACPI memory hotplug in below way:
+> 
+> - For memory hot-removal, we do nothing.
+
+This doesn't seem right to me.  *If* we get a known-bogus hot-remove
+event, we need to reject it.  Remember, removal is a two-step process.
+
+> - For memory hot-add, we simply reject the new memory when TDX is enabled by
+> BIOS.  This not only prevents the potential "physical attack of replacing any
+> CMR memory",
+
+I don't think there's *any* meaningful attack mitigation here.  Even if
+someone managed to replace the physical address space that backed some
+private memory, the integrity checksums won't match.  Memory integrity
+mitigates physical replacement, not software.
+
+> but also makes sure no non-CMR memory will be added to page
+> allocator during runtime via ACPI memory hot-add.
+
+Agreed.  This one _is_ important and since it supports an existing
+policy, it makes sense to enforce this in the kernel.
+
+> We can improve this in next stage when we can get CMRs during kernel boot.
+> 
+> For the concern that on a TDX BIOS enabled system, people may not want to use
+> TDX at all but just use it as normal system, as I replied to Dan regarding to
+> the driver-managed memory hotplug, we can provide a kernel commandline, i.e.
+> use_tdx={on|off}, to allow user to *choose* between TDX and memory hotplug. 
+> When use_tdx=off, we continue to allow memory hotplug and driver-managed hotplug
+> as normal but refuse to initialize TDX module.
+
+That doesn't sound like a good resolution to me.
+
+It conflates pure "software" hotplug operations like transitioning
+memory ownership from the core mm to a driver (like device DAX).
+
+TDX should not have *ANY* impact on purely software operations.  Period.

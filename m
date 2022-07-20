@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D0B57AE0D
+	by mail.lfdr.de (Postfix) with ESMTP id 7630F57AE0C
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239945AbiGTCbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
+        id S234944AbiGTCbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiGTCa6 (ORCPT
+        with ESMTP id S234448AbiGTCbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:30:58 -0400
+        Tue, 19 Jul 2022 22:31:00 -0400
 Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB27B6E890;
-        Tue, 19 Jul 2022 19:28:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594FC47B9B;
+        Tue, 19 Jul 2022 19:29:12 -0700 (PDT)
 Received: from [192.168.192.83] (unknown [50.126.114.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 133093F3B9;
-        Wed, 20 Jul 2022 02:28:28 +0000 (UTC)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 2D5763F3B9;
+        Wed, 20 Jul 2022 02:29:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658284110;
-        bh=4Gy97tee+Piny7xG0AvgFw4ZwDYOWjS6fnh/UnSKTkM=;
+        s=20210705; t=1658284150;
+        bh=9j/ZqHLMNdT5QMf1JvgP7iBoNYWJdux7J9tU03wREIM=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=FIDgjMwWggLf9HaPWWjtqnFSgbaX+ul5LuJmUqDHQnRRLv9guggUo8qStLCbf2J8g
-         iE3eAV1UuqqODL5Lj3GBRGhBKYGOBgLvzj9b1UGUWAVqz2nJC1ySgqrh91cYuDao6D
-         PZec74E6Iq2fl9FN6KPxoMZGTumbtWpRa6NMXchk9Q7YkK+IKN7Nl2QAMw96CHmDtP
-         KoBIBYC65wrTR7nkkb4B2ObNEjYyeVaCSLhyzXqkpbqVBV5vXmRLvkZa88p1UwhbMK
-         2eUC1I06spL1qrupm6EN61GHxjdbZOlykwd1bA7UPjz2nUGM/65Se0sGVH0SiilB1g
-         OaL2NWgp9OhpQ==
-Message-ID: <6aca407d-9c81-b460-f03e-cea0369a6185@canonical.com>
-Date:   Tue, 19 Jul 2022 19:28:26 -0700
+        b=rDojAGkctKN4FpCk51sLeFbhP9LNM4q0qtwFwbV9eMs2c61IFkE5c/xXsVBnmepjM
+         SN5k5docgU8Xo6hw5MInmVYAUk0bU6strqyRLN65/t9q2NWd2E0GFm6KKGuDo4yUXC
+         8Y3i8NNLA6eM24Tnh6FiOK0ZAko7pcq+VVhXWo6JS88T47M6B7xFbOcCXF7PxseSZt
+         Npr5sU9j8ZVfUt4YReZP6NdwWHULL9cAGaJGw1wqqm1wbwiLWOb1IwdIH50RVdFOWB
+         IF8Ijsrqcu0jeOkOJ3QUQKGensqtNbWg+2P6lITj7F7TgYF28EDWvbXnVJ9rS+bFJv
+         1onzKBGzmICZg==
+Message-ID: <110d78bc-d1f4-0b69-9562-c6758b39279d@canonical.com>
+Date:   Tue, 19 Jul 2022 19:29:07 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH -next] apparmor: Fix some kernel-doc comments
+Subject: Re: [PATCH] apparmor: Mark alloc_unconfined() as static
 Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220718063022.129998-1-yang.lee@linux.alibaba.com>
+To:     Souptick Joarder <jrdr.linux@gmail.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20220719021218.6807-1-jrdr.linux@gmail.com>
 From:   John Johansen <john.johansen@canonical.com>
 Organization: Canonical
-In-Reply-To: <20220718063022.129998-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20220719021218.6807-1-jrdr.linux@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,63 +59,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/17/22 23:30, Yang Li wrote:
-> Remove warnings found by running scripts/kernel-doc, which is caused by
-> using 'make W=1'.
-> security/apparmor/policy_ns.c:65: warning: Function parameter or member 'curr' not described in 'aa_ns_name'
-> security/apparmor/policy_ns.c:65: warning: Function parameter or member 'view' not described in 'aa_ns_name'
-> security/apparmor/policy_ns.c:65: warning: Function parameter or member 'subns' not described in 'aa_ns_name'
-> security/apparmor/policy_ns.c:65: warning: expecting prototype for aa_na_name(). Prototype was for aa_ns_name() instead
-> security/apparmor/policy_ns.c:214: warning: Function parameter or member 'view' not described in '__aa_lookupn_ns'
-> security/apparmor/policy_ns.c:214: warning: Excess function parameter 'base' description in '__aa_lookupn_ns'
-> security/apparmor/policy_ns.c:297: warning: expecting prototype for aa_create_ns(). Prototype was for __aa_find_or_create_ns() instead
+On 7/18/22 19:12, Souptick Joarder wrote:
+> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Kernel test robot throws below warning ->
+> security/apparmor/policy_ns.c:83:20: warning: no previous prototype
+> for function 'alloc_unconfined' [-Wmissing-prototypes]
+> 
+> Mark it as static.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
 
-thanks I have pulled this into apparmor-next
+Thanks, I have pulled this into apparmor-next
 
 Acked-by: John Johansen <john.johansen@canonical.com>
 
+
 > ---
->   security/apparmor/policy_ns.c | 12 ++++++------
->   1 file changed, 6 insertions(+), 6 deletions(-)
+>   security/apparmor/policy_ns.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/security/apparmor/policy_ns.c b/security/apparmor/policy_ns.c
-> index 300953a02a24..0ef268d6554d 100644
+> index 300953a02a24..4f6e9b3c24e6 100644
 > --- a/security/apparmor/policy_ns.c
 > +++ b/security/apparmor/policy_ns.c
-> @@ -54,10 +54,10 @@ bool aa_ns_visible(struct aa_ns *curr, struct aa_ns *view, bool subns)
+> @@ -80,7 +80,7 @@ const char *aa_ns_name(struct aa_ns *curr, struct aa_ns *view, bool subns)
+>   	return aa_hidden_ns_name;
 >   }
 >   
->   /**
-> - * aa_na_name - Find the ns name to display for @view from @curr
-> - * @curr - current namespace (NOT NULL)
-> - * @view - namespace attempting to view (NOT NULL)
-> - * @subns - are subns visible
-> + * aa_ns_name - Find the ns name to display for @view from @curr
-> + * @curr: current namespace (NOT NULL)
-> + * @view: namespace attempting to view (NOT NULL)
-> + * @subns: are subns visible
->    *
->    * Returns: name of @view visible from @curr
->    */
-> @@ -200,7 +200,7 @@ struct aa_ns *aa_find_ns(struct aa_ns *root, const char *name)
+> -struct aa_profile *alloc_unconfined(const char *name)
+> +static struct aa_profile *alloc_unconfined(const char *name)
+>   {
+>   	struct aa_profile *profile;
 >   
->   /**
->    * __aa_lookupn_ns - lookup the namespace matching @hname
-> - * @base: base list to start looking up profile name from  (NOT NULL)
-> + * @view: namespace to search in  (NOT NULL)
->    * @hname: hierarchical ns name  (NOT NULL)
->    * @n: length of @hname
->    *
-> @@ -285,7 +285,7 @@ static struct aa_ns *__aa_create_ns(struct aa_ns *parent, const char *name,
->   }
->   
->   /**
-> - * aa_create_ns - create an ns, fail if it already exists
-> + * __aa_find_or_create_ns - create an ns, fail if it already exists
->    * @parent: the parent of the namespace being created
->    * @name: the name of the namespace
->    * @dir: if not null the dir to put the ns entries in
 

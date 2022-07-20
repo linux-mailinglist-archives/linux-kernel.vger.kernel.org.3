@@ -2,180 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C417157B49A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC5257B49D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237728AbiGTKh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 06:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
+        id S238610AbiGTKke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 06:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiGTKh0 (ORCPT
+        with ESMTP id S238378AbiGTKk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 06:37:26 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723164B0F8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:37:24 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id oy13so32199773ejb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IQlS7BDnACDaCsMqM0o6ivue0vmf2zRpA7COhg03lwo=;
-        b=JcBt/J1OouW1e2R9hMEn6injX76fjudE4aba4Z7ouSzPSHkB2cHlRYXC02AeUA2Syq
-         smS3tqHA9TK/0E1xezqkq4a+N1EM/eo3qzgOt5TSvAhT1w5lGynWOP90/+LH3b8QstHS
-         HPYglMvNFGn9/FLXXvrR4PqsDTqUdt55V+dyu/cvN3e4q3HU1+fQgXpzvzkrsc1v4TYi
-         fFf1bfWJXNht6dBn9pKfd2f8N7A3cib1j4mvCENJQbDyYVYt/zBH2BP0H1YuSuvovuDO
-         RWJLqdpQr+FcWuD5F99tgvOTc0qFd9YNnP5fp1eF7AqZ7F4FAD5EKSfOoWoVdP7BXgCV
-         ywCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IQlS7BDnACDaCsMqM0o6ivue0vmf2zRpA7COhg03lwo=;
-        b=W70PMXd6n58cIhcttF6UD7X7UQFtOJIq5LYuVR8L6EPJ+wv4MXwJEZRBpva7wax6eA
-         2fbCc6cbX8dtcSET3vSrpXaSO0bRhqoDpFdnjnt9JURe4kLNebyEWriOuMhrjB4s4VdG
-         WSEwPG6pnh7aiFMNWVfd+H76n25KiXHiNvqlT3U/GvvksUOaz+NUv4BijCfWLdj37ZOt
-         Wwd9doeNlJI4tMH4FHHXUNlF8DZHd9S/glqZEveQsQcudv6/voqXQDBFHn/6FFLvQhZx
-         R2BLPPMQ5ru4t7ChAovy8Hc5VU4g4Hedpt9qSChOzI3v0YOodeTJXnyRZHZKdoy1iN3A
-         RVSA==
-X-Gm-Message-State: AJIora/KJJx2LG/H+M66u4GS7FHRSYl1CJ1bBT1nHI4KhW5o9HH5Ub5W
-        y1zBR7mfscqjAv9pC30z4JtfzZjeaEQBgAmx/lco0w==
-X-Google-Smtp-Source: AGRyM1tX7i9qvwRtaWPlkB1jU+Ujio9VTofp9GoBleumYJMZajM8x6Z77tLffLe5uj3zQ0r1d7iOtk39WF8f+ycpKQE=
-X-Received: by 2002:a17:906:106:b0:722:e997:a365 with SMTP id
- 6-20020a170906010600b00722e997a365mr34590466eje.169.1658313442848; Wed, 20
- Jul 2022 03:37:22 -0700 (PDT)
+        Wed, 20 Jul 2022 06:40:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CDF2A72D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658313628; x=1689849628;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2Be84nfHoamYk4O88e44NC5hzJgWZE5PhyB/bLBJjlk=;
+  b=RyD31ClmJRN+JaDGGgvBDBGxa0ZEgPtBhCHH8X22B1Yn4eVOgJ+TT/Q0
+   jDBKGJog54dwEnNeO/FUaSrw9FIqUy08ZzORIn7cmrbyCrUz1vG+IKMcT
+   vW9SkjwGd8o5bVFyP2rK5zO4G/PIcdqyJQDUhN0dRBdH2figvdAzHboVy
+   GXdyENRoSJUC5PUlym9bbObfbDMKQqpxt9zigDdFC4BZ6DcgDfiE/ggBq
+   MVG6O3PJVDqzZwg/3uPAUwhygNuWXbpMtoNCKNj2t9qwOrIQefcTlRGOk
+   tT8zuzoTh4mju5ovk2ZpR5v7g64JOM055O2nLimnBi2fEef4hMKHKejRV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="312435317"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="312435317"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 03:40:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="665811561"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Jul 2022 03:40:26 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oE77x-0000Ol-DM;
+        Wed, 20 Jul 2022 10:40:25 +0000
+Date:   Wed, 20 Jul 2022 18:39:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jpoimboe:lkdtm 3/3] <instantiation>:2:2: error: invalid instruction
+ mnemonic 'annotate_unret_end'
+Message-ID: <202207201802.x51rFnWQ-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220719114521.868169025@linuxfoundation.org>
-In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 20 Jul 2022 16:07:11 +0530
-Message-ID: <CA+G9fYvckf9isc0eL7DfphD5tuV2jVSobmh9_acK4DZ26iLQcQ@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/43] 4.14.289-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 at 17:27, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.289 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.289-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git lkdtm
+head:   52f6baa0ba22720e50aae086637b5b032fdea58a
+commit: 52f6baa0ba22720e50aae086637b5b032fdea58a [3/3] objtool: move retpoline and unret annotations to objtool.h
+config: i386-buildonly-randconfig-r004-20220718 (https://download.01.org/0day-ci/archive/20220720/202207201802.x51rFnWQ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=52f6baa0ba22720e50aae086637b5b032fdea58a
+        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
+        git fetch --no-tags jpoimboe lkdtm
+        git checkout 52f6baa0ba22720e50aae086637b5b032fdea58a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+All errors (new ones prefixed by >>):
 
-## Build
-* kernel: 4.14.289-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: 5bd8b9267a7f243cbf509ea77626c97103c56fc3
-* git describe: v4.14.288-44-g5bd8b9267a7f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.288-44-g5bd8b9267a7f
+>> <instantiation>:2:2: error: invalid instruction mnemonic 'annotate_unret_end'
+    ANNOTATE_UNRET_END
+    ^~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/svm/vmenter.S:120:2: note: while in macro instantiation
+    UNTRAIN_RET
+    ^
+>> <instantiation>:2:2: error: invalid instruction mnemonic 'annotate_unret_end'
+    ANNOTATE_UNRET_END
+    ^~~~~~~~~~~~~~~~~~
+   arch/x86/kvm/svm/vmenter.S:209:2: note: while in macro instantiation
+    UNTRAIN_RET
+    ^
 
-## Test Regressions (compared to v4.14.288)
-No test regressions found.
-
-## Metric Regressions (compared to v4.14.288)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.288)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.288)
-No metric fixes found.
-
-## Test result summary
-total: 111096, pass: 98012, fail: 211, skip: 11584, xfail: 1289
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 286 total, 281 passed, 5 failed
-* arm64: 50 total, 47 passed, 3 failed
-* i386: 26 total, 25 passed, 1 failed
-* mips: 30 total, 30 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 16 total, 16 passed, 0 failed
-* s390: 12 total, 9 passed, 3 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 48 total, 47 passed, 1 failed
-
-## Test suites summary
-* fwts
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

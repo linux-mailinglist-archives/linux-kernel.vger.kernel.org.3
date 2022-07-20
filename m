@@ -2,59 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900F457B03A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 07:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF3057B03C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 07:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235442AbiGTFJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 01:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S237512AbiGTFNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 01:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiGTFJd (ORCPT
+        with ESMTP id S229441AbiGTFNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 01:09:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285426A9E9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 22:09:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEEBBB81E11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:09:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FA0C3411E;
-        Wed, 20 Jul 2022 05:09:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1658293769;
-        bh=kHEQ6rWqVQlLVoUqDBOXtFkYFKIbonQwo664UOVxj64=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=z6QvdWH4483hsHCjyvFgGpQVDXcX5JtPWU/R3X5Yq57ul2AEL7fAy/VVDdXPIcTyj
-         BhPR37Xy6T7/0orl/fyh1iTsAy4USJsa9M/LmwBxo7/WtcEBMDRFzL6lPVoWLq34sd
-         EgkjmwaLeqfWsacHNj+VBtTBZ0Fe0mBt7B6kmp0U=
-Date:   Tue, 19 Jul 2022 22:09:28 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v12 00/69] Introducing the Maple Tree
-Message-Id: <20220719220928.4388fccdd59a175b0834d108@linux-foundation.org>
-In-Reply-To: <20220720021727.17018-1-Liam.Howlett@oracle.com>
-References: <20220720021727.17018-1-Liam.Howlett@oracle.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 01:13:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACA84AD65;
+        Tue, 19 Jul 2022 22:13:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658293992; x=1689829992;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=eAtnJumVQAm0T+41TDojL5uPrcX3NmL0wuZdQlTLyz8=;
+  b=b8ZRICjPnugnfmEVD32w6lEyxeR0K6PulyzIK41x4RoGrQIHYMHh+Q69
+   LYdlOj65ba9ux6nTYTkBmdIxC0PsxXaRAYwH3xrIIzIpJjX6f0vHv+shW
+   F8m4RN4l1GeRAud2+ToSpHFFN1HTt3Zh3xXC3x1xV5jmTjn1BrXWY+lYU
+   1jkRcLsWDjPkxwtV14MXd55JO1XtH09kreOVDRSMtKHWjrWI+hvwegl4c
+   UXa04A/clR5c5JAugApBCqyu0iN/vQ0Loytd8go90AvynZZo3ChDrOuEW
+   JhYIHRcBJQV/v2wUR+bPcpPe0vnEXN2pcdYE0zziiOesrqnZHO08efUIH
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="348375437"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="348375437"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 22:13:12 -0700
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="601837332"
+Received: from ecurtis-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.162.137])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 22:13:10 -0700
+Message-ID: <9945dbf586d8738b7cf0af53bfb760da9eb9e882.camel@intel.com>
+Subject: Re: [PATCH v7 041/102] KVM: VMX: Introduce test mode related to EPT
+ violation VE
+From:   Kai Huang <kai.huang@intel.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Date:   Wed, 20 Jul 2022 17:13:08 +1200
+In-Reply-To: <20220719144936.GX1379820@ls.amr.corp.intel.com>
+References: <cover.1656366337.git.isaku.yamahata@intel.com>
+         <cadf3221e3f7b911c810f15cfe300dd5337a966d.1656366338.git.isaku.yamahata@intel.com>
+         <52915310c9118a124da2380daf3d753a818de05e.camel@intel.com>
+         <20220719144936.GX1379820@ls.amr.corp.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Jul 2022 02:17:37 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+On Tue, 2022-07-19 at 07:49 -0700, Isaku Yamahata wrote:
+> On Fri, Jul 08, 2022 at 02:23:43PM +1200,
+> Kai Huang <kai.huang@intel.com> wrote:
+>=20
+> > On Mon, 2022-06-27 at 14:53 -0700, isaku.yamahata@intel.com wrote:
+> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > >=20
+> > > To support TDX, KVM is enhanced to operate with #VE.  For TDX, KVM pr=
+ograms
+> > > to inject #VE conditionally and set #VE suppress bit in EPT entry.  F=
+or VMX
+> > > case, #VE isn't used.  If #VE happens for VMX, it's a bug.  To be
+> > > defensive (test that VMX case isn't broken), introduce option
+> > > ept_violation_ve_test and when it's set, set error.
+> >=20
+> > I don't see why we need this patch.  It may be helpful during your test=
+, but why
+> > do we need this patch for formal submission?
+> >=20
+> > And for a normal guest, what prevents one vcpu from sending #VE IPI to =
+another
+> > vcpu?
+>=20
+> Paolo suggested it as follows.  Maybe it should be kernel config.
+> (I forgot to add suggested-by. I'll add it)
+>=20
+> https://lore.kernel.org/lkml/84d56339-4a8a-6ddb-17cb-12074588ba9c@redhat.=
+com/
+>=20
+> >=20
 
-> This is the v11 + fixes.
+OK.  But can we assume a normal guest won't sending #VE IPI?
 
-Merge into mm-unstable and pushed out, thanks.

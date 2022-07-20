@@ -2,133 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F32757B5EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6458257B5F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237547AbiGTLwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        id S239223AbiGTLxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGTLwq (ORCPT
+        with ESMTP id S229490AbiGTLxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:52:46 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB5257E20;
-        Wed, 20 Jul 2022 04:52:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1658317963; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RquTbtLtwFfQ9inCLk4Ulpomsb9JpjXW2cXEGm/uxE4=;
-        b=wsNEIB169o1MRcAZxhjwv8ptH4fid4sU4el1kqmI0/g3slTw2idUGaNG7VYj6nhO+hqvvy
-        Nd6FWw3fGS4z+2+MiZBhQ+A6I/etNY2Kkc614HPoIi/zxiurGsQmnVJrYvXpkrr/9oyUWy
-        uPU7gx+RvNRaThAkPx9Pj3h4asQa+jE=
-Date:   Wed, 20 Jul 2022 12:52:34 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 05/11] ASoC: jz4740-i2s: Use FIELD_PREP() macros in
- hw_params callback
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <MBIBFR.N54ZBFKURY0T2@crapouillou.net>
-In-Reply-To: <20220708160244.21933-6-aidanmacdonald.0x0@gmail.com>
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
-        <20220708160244.21933-6-aidanmacdonald.0x0@gmail.com>
+        Wed, 20 Jul 2022 07:53:01 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1882171706
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:53:00 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id r1-20020a05600c35c100b003a326685e7cso1800741wmq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:52:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=o/9FYDVOj8aBxuVSKmyhf3uzb4f3pNgZKLHtlhhRQ3E=;
+        b=xvcJAu+Qskv+1eNh9ZMVuC/HmoybiaZQ6g0E9qPMKM7uDNNcUdMhFZ6gl3tr6/TyVU
+         5wX6w8hWiR/+X+IH5FX1lMNDrE/PyOkbDgefKVbez3GN19My+meGSSkibMckI3MUznCb
+         TY9/uCEkFBxhVKjw73voua+wljf5P2Ht9L1Dt8gtqRhT9my0w0sA8D9UyAFQB1/X9QuK
+         ct2tBvHp7QpBuFjmB26K4XKN9WIa7c995DVVzeBS2ofdcaL8oTjkd0YKUTD/VAwffSnB
+         zjmkPWlIlx31YJDhVuhn4NwpG/zNzL5U7NosTwuwkyaczaqGV4j+j5oNtOrUKQVpKfIa
+         AvSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=o/9FYDVOj8aBxuVSKmyhf3uzb4f3pNgZKLHtlhhRQ3E=;
+        b=gmM6E8oIlYGNvAuyemeigil1UdGGu3g2Z5EFXcWIg/ce/PA6hjeZAwyltbxSZRXEKB
+         zsWHOdkOJAMZqUwZAXsVtIJATVkf4+3YEKti2vG/5lqscHYQIZpGExhLArJxRaI1quRm
+         FYd9PgRIHIsgq0RHhqLOeIg7ozUCWopSSseHmlMcYSo8XMaB+G3loSD9kvGfpQGiF6fB
+         /ZoR5We6YlDthP1+A/F55M4AZ4xJ6/uTjY9thme2r767+UsrX/a+hpwjKI9+Lj5+zEf9
+         ihI7CSg+qjsL6imBFlRfV5zM+gPMFB7s0GYbM7lbDVhzu3n7a9knd/PteYzAVDQv+H5O
+         3mAA==
+X-Gm-Message-State: AJIora9AOMdhYx8Wp4c2wMtBOSd78Si3QeInXNyiV8kOLL9XSDYDILrC
+        yu3Pdo7VOdZSpiU+fA/F92UF9g==
+X-Google-Smtp-Source: AGRyM1uWD+31hUS6VrnlMJFxU/T3UP2geBMzbKElXXstS2rdYsWKqiJhQy5epa1UpJ4GxR9/ARly6A==
+X-Received: by 2002:a1c:e902:0:b0:3a0:2d95:49d4 with SMTP id q2-20020a1ce902000000b003a02d9549d4mr3574000wmc.189.1658317978548;
+        Wed, 20 Jul 2022 04:52:58 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id x16-20020adfec10000000b0021e4edba1e5sm622156wrn.111.2022.07.20.04.52.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 04:52:58 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 12:52:56 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, stable@kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [RESEND 1/1] Bluetooth: Use chan_list_lock to protect the whole
+ put/destroy invokation
+Message-ID: <YtfsmHt4R/WxJOTV@google.com>
+References: <20220622082716.478486-1-lee.jones@linaro.org>
+ <CANn89iK-uFP6Swgc0ZeEC38UsuywJ3wbybSNouH202Wa7X7Tzg@mail.gmail.com>
+ <CABBYNZ+C=MQ7577Fr5_W8tQ4iWRSDBSiC4fkRBY3x=9ph+YAzA@mail.gmail.com>
+ <CABBYNZLysdh3NFK+G8=NUQ=G=hvS8X0PdMp=bVqiwPDPCAokmg@mail.gmail.com>
+ <YrxvgIiWuFVlXBaQ@google.com>
+ <CABBYNZJFSxk9=3Gj7jOj__s=iJGmhrZ=CA7Mb74_-Y0sg+N40g@mail.gmail.com>
+ <YsVptCjpzHjR8Scv@google.com>
+ <CABBYNZKvVKRRdWnX3uFWdTXJ_S+oAj6z72zgyV148VmFtUnPpA@mail.gmail.com>
+ <CABBYNZLTzW3afEPVfg=uS=xsPP-JpW6UBp6W=Urhhab+ai+dcA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABBYNZLTzW3afEPVfg=uS=xsPP-JpW6UBp6W=Urhhab+ai+dcA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
+On Wed, 06 Jul 2022, Luiz Augusto von Dentz wrote:
+> > > > > > Perhaps something like this:
+> > > > >
+> > > > > I'm struggling to apply this for test:
+> > > > >
+> > > > >   "error: corrupt patch at line 6"
+> > > >
+> > > > Check with the attached patch.
+> > >
+> > > With the patch applied:
+> > >
+> > > [  188.825418][   T75] refcount_t: addition on 0; use-after-free.
+> > > [  188.825418][   T75] refcount_t: addition on 0; use-after-free.
+> >
+> > Looks like the changes just make the issue more visible since we are
+> > trying to add a refcount when it is already 0 so this proves the
+> > design is not quite right since it is removing the object from the
+> > list only when destroying it while we probably need to do it before.
+> >
+> > How about we use kref_get_unless_zero as it appears it was introduced
+> > exactly for such cases (patch attached.)
+> 
+> Looks like I missed a few places like l2cap_global_chan_by_psm so here
+> is another version.
 
-Le ven., juil. 8 2022 at 17:02:38 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> Get rid of a couple of macros and improve readability by using
-> FIELD_PREP() and GENMASK() for the sample size setting.
->=20
-> Acked-by: Paul Cercueil <paul@crapouillou.net>
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Okay, with the patch below the kernel doesn't produce a back-trace.
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Only this, which I assume is expected?
 
-Cheers,
--Paul
+[  535.398255][  T495] Bluetooth: hci0: unexpected cc 0x0c03 length: 249 > 1                                                          
+[  535.398255][  T495] Bluetooth: hci0: unexpected cc 0x0c03 length: 249 > 1                                                          
+[  535.417007][  T495] Bluetooth: hci0: unexpected cc 0x1003 length: 249 > 9                                                          
+[  535.417007][  T495] Bluetooth: hci0: unexpected cc 0x1003 length: 249 > 9                                                          
+[  535.434810][  T495] Bluetooth: hci0: unexpected cc 0x1001 length: 249 > 9                                                          
+[  535.434810][  T495] Bluetooth: hci0: unexpected cc 0x1001 length: 249 > 9                                                          
+[  535.452886][  T495] Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > 4                                                          
+[  535.452886][  T495] Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > 4                                                          
+[  535.470574][  T495] Bluetooth: hci0: unexpected cc 0x0c25 length: 249 > 3                                                          
+[  535.470574][  T495] Bluetooth: hci0: unexpected cc 0x0c25 length: 249 > 3                                                          
+[  535.488009][  T495] Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > 2                                                          
+[  535.488009][  T495] Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > 2                                                          
+[  537.551677][   T74] Bluetooth: hci0: command 0x0409 tx timeout                                                                     
+[  537.551677][   T74] Bluetooth: hci0: command 0x0409 tx timeout                                                                     
+[  539.641362][  T373] Bluetooth: hci0: command 0x041b tx timeout                                                                     
+[  539.641362][  T373] Bluetooth: hci0: command 0x041b tx timeout                                                                     
+[  541.711056][  T274] Bluetooth: hci0: command 0x040f tx timeout                                                                     
+[  541.711056][  T274] Bluetooth: hci0: command 0x040f tx timeout                                                                     
+[  543.790939][   T66] Bluetooth: hci0: command 0x0419 tx timeout                                                                     
+[  543.790939][   T66] Bluetooth: hci0: command 0x0419 tx timeout
 
+> From 235937ac7a39d16e5dabbfca0ac1d58e4cc814d9 Mon Sep 17 00:00:00 2001
+> From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+> Date: Tue, 28 Jun 2022 15:46:04 -0700
+> Subject: [PATCH] Bluetooth: L2CAP: WIP
+> 
+> Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 > ---
->  sound/soc/jz4740/jz4740-i2s.c | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
->=20
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index 043f100a9cfa..d0791dfa9c7b 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -3,6 +3,7 @@
->   *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
+>  include/net/bluetooth/l2cap.h |  1 +
+>  net/bluetooth/l2cap_core.c    | 58 +++++++++++++++++++++++++++--------
+>  2 files changed, 46 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/net/bluetooth/l2cap.h b/include/net/bluetooth/l2cap.h
+> index 3c4f550e5a8b..2f766e3437ce 100644
+> --- a/include/net/bluetooth/l2cap.h
+> +++ b/include/net/bluetooth/l2cap.h
+> @@ -847,6 +847,7 @@ enum {
+>  };
+>  
+>  void l2cap_chan_hold(struct l2cap_chan *c);
+> +struct l2cap_chan *l2cap_chan_hold_unless_zero(struct l2cap_chan *c);
+>  void l2cap_chan_put(struct l2cap_chan *c);
+>  
+>  static inline void l2cap_chan_lock(struct l2cap_chan *chan)
+> diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+> index 09ecaf556de5..3e5d81e971cc 100644
+> --- a/net/bluetooth/l2cap_core.c
+> +++ b/net/bluetooth/l2cap_core.c
+> @@ -111,7 +111,8 @@ static struct l2cap_chan *__l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+>  }
+>  
+>  /* Find channel with given SCID.
+> - * Returns locked channel. */
+> + * Returns a reference locked channel.
+> + */
+>  static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+>  						 u16 cid)
+>  {
+> @@ -119,15 +120,19 @@ static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+>  
+>  	mutex_lock(&conn->chan_lock);
+>  	c = __l2cap_get_chan_by_scid(conn, cid);
+> -	if (c)
+> -		l2cap_chan_lock(c);
+> +	if (c) {
+> +		/* Only lock if chan reference is not 0 */
+> +		c = l2cap_chan_hold_unless_zero(c);
+> +		if (c)
+> +			l2cap_chan_lock(c);
+> +	}
+>  	mutex_unlock(&conn->chan_lock);
+>  
+>  	return c;
+>  }
+>  
+>  /* Find channel with given DCID.
+> - * Returns locked channel.
+> + * Returns a reference locked channel.
 >   */
->=20
-> +#include <linux/bitfield.h>
->  #include <linux/init.h>
->  #include <linux/io.h>
->  #include <linux/kernel.h>
-> @@ -42,8 +43,8 @@
->  #define JZ_AIC_CONF_SYNC_CLK_MASTER BIT(1)
->  #define JZ_AIC_CONF_ENABLE BIT(0)
->=20
-> -#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK (0x7 << 19)
-> -#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK (0x7 << 16)
-> +#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE GENMASK(21, 19)
-> +#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE GENMASK(18, 16)
->  #define JZ_AIC_CTRL_ENABLE_RX_DMA BIT(15)
->  #define JZ_AIC_CTRL_ENABLE_TX_DMA BIT(14)
->  #define JZ_AIC_CTRL_MONO_TO_STEREO BIT(11)
-> @@ -61,9 +62,6 @@
->  #define JZ4760_AIC_CTRL_TFLUSH BIT(8)
->  #define JZ4760_AIC_CTRL_RFLUSH BIT(7)
->=20
-> -#define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
-> -#define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
-> -
->  #define JZ_AIC_I2S_FMT_DISABLE_BIT_CLK BIT(12)
->  #define JZ_AIC_I2S_FMT_DISABLE_BIT_ICLK BIT(13)
->  #define JZ_AIC_I2S_FMT_ENABLE_SYS_CLK BIT(4)
-> @@ -248,8 +246,9 @@ static int jz4740_i2s_hw_params(struct=20
-> snd_pcm_substream *substream,
->  	}
->=20
->  	if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK) {
-> -		ctrl &=3D ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_MASK;
-> -		ctrl |=3D sample_size << JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET;
-> +		ctrl &=3D ~JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE;
-> +		ctrl |=3D FIELD_PREP(JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE, sample_size);
+>  static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
+>  						 u16 cid)
+> @@ -136,8 +141,12 @@ static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
+>  
+>  	mutex_lock(&conn->chan_lock);
+>  	c = __l2cap_get_chan_by_dcid(conn, cid);
+> -	if (c)
+> -		l2cap_chan_lock(c);
+> +	if (c) {
+> +		/* Only lock if chan reference is not 0 */
+> +		c = l2cap_chan_hold_unless_zero(c);
+> +		if (c)
+> +			l2cap_chan_lock(c);
+> +	}
+>  	mutex_unlock(&conn->chan_lock);
+>  
+>  	return c;
+> @@ -162,8 +171,12 @@ static struct l2cap_chan *l2cap_get_chan_by_ident(struct l2cap_conn *conn,
+>  
+>  	mutex_lock(&conn->chan_lock);
+>  	c = __l2cap_get_chan_by_ident(conn, ident);
+> -	if (c)
+> -		l2cap_chan_lock(c);
+> +	if (c) {
+> +		/* Only lock if chan reference is not 0 */
+> +		c = l2cap_chan_hold_unless_zero(c);
+> +		if (c)
+> +			l2cap_chan_lock(c);
+> +	}
+>  	mutex_unlock(&conn->chan_lock);
+>  
+>  	return c;
+> @@ -497,6 +510,16 @@ void l2cap_chan_hold(struct l2cap_chan *c)
+>  	kref_get(&c->kref);
+>  }
+>  
+> +struct l2cap_chan *l2cap_chan_hold_unless_zero(struct l2cap_chan *c)
+> +{
+> +	BT_DBG("chan %p orig refcnt %u", c, kref_read(&c->kref));
 > +
->  		if (params_channels(params) =3D=3D 1)
->  			ctrl |=3D JZ_AIC_CTRL_MONO_TO_STEREO;
->  		else
-> @@ -257,8 +256,8 @@ static int jz4740_i2s_hw_params(struct=20
-> snd_pcm_substream *substream,
->=20
->  		div_field =3D i2s->field_i2sdiv_playback;
->  	} else {
-> -		ctrl &=3D ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_MASK;
-> -		ctrl |=3D sample_size << JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET;
-> +		ctrl &=3D ~JZ_AIC_CTRL_INPUT_SAMPLE_SIZE;
-> +		ctrl |=3D FIELD_PREP(JZ_AIC_CTRL_INPUT_SAMPLE_SIZE, sample_size);
->=20
->  		div_field =3D i2s->field_i2sdiv_capture;
+> +	if (!kref_get_unless_zero(&c->kref))
+> +		return NULL;
+> +
+> +	return c;
+> +}
+> +
+>  void l2cap_chan_put(struct l2cap_chan *c)
+>  {
+>  	BT_DBG("chan %p orig refcnt %u", c, kref_read(&c->kref));
+> @@ -1969,7 +1992,7 @@ static struct l2cap_chan *l2cap_global_chan_by_psm(int state, __le16 psm,
+>  			src_match = !bacmp(&c->src, src);
+>  			dst_match = !bacmp(&c->dst, dst);
+>  			if (src_match && dst_match) {
+> -				l2cap_chan_hold(c);
+> +				c = l2cap_chan_hold_unless_zero(c);
+>  				read_unlock(&chan_list_lock);
+>  				return c;
+>  			}
+> @@ -1984,7 +2007,7 @@ static struct l2cap_chan *l2cap_global_chan_by_psm(int state, __le16 psm,
 >  	}
-> --
-> 2.35.1
->=20
+>  
+>  	if (c1)
+> -		l2cap_chan_hold(c1);
+> +		c1 = l2cap_chan_hold_unless_zero(c1);
+>  
+>  	read_unlock(&chan_list_lock);
+>  
+> @@ -4464,6 +4487,7 @@ static inline int l2cap_config_req(struct l2cap_conn *conn,
+>  
+>  unlock:
+>  	l2cap_chan_unlock(chan);
+> +	l2cap_chan_put(chan);
+>  	return err;
+>  }
+>  
+> @@ -4578,6 +4602,7 @@ static inline int l2cap_config_rsp(struct l2cap_conn *conn,
+>  
+>  done:
+>  	l2cap_chan_unlock(chan);
+> +	l2cap_chan_put(chan);
+>  	return err;
+>  }
+>  
+> @@ -5305,6 +5330,7 @@ static inline int l2cap_move_channel_req(struct l2cap_conn *conn,
+>  	l2cap_send_move_chan_rsp(chan, result);
+>  
+>  	l2cap_chan_unlock(chan);
+> +	l2cap_chan_put(chan);
+>  
+>  	return 0;
+>  }
+> @@ -5397,6 +5423,7 @@ static void l2cap_move_continue(struct l2cap_conn *conn, u16 icid, u16 result)
+>  	}
+>  
+>  	l2cap_chan_unlock(chan);
+> +	l2cap_chan_put(chan);
+>  }
+>  
+>  static void l2cap_move_fail(struct l2cap_conn *conn, u8 ident, u16 icid,
+> @@ -5426,6 +5453,7 @@ static void l2cap_move_fail(struct l2cap_conn *conn, u8 ident, u16 icid,
+>  	l2cap_send_move_chan_cfm(chan, L2CAP_MC_UNCONFIRMED);
+>  
+>  	l2cap_chan_unlock(chan);
+> +	l2cap_chan_put(chan);
+>  }
+>  
+>  static int l2cap_move_channel_rsp(struct l2cap_conn *conn,
+> @@ -5489,6 +5517,7 @@ static int l2cap_move_channel_confirm(struct l2cap_conn *conn,
+>  	l2cap_send_move_chan_cfm_rsp(conn, cmd->ident, icid);
+>  
+>  	l2cap_chan_unlock(chan);
+> +	l2cap_chan_put(chan);
+>  
+>  	return 0;
+>  }
+> @@ -5524,6 +5553,7 @@ static inline int l2cap_move_channel_confirm_rsp(struct l2cap_conn *conn,
+>  	}
+>  
+>  	l2cap_chan_unlock(chan);
+> +	l2cap_chan_put(chan);
+>  
+>  	return 0;
+>  }
+> @@ -5896,12 +5926,11 @@ static inline int l2cap_le_credits(struct l2cap_conn *conn,
+>  	if (credits > max_credits) {
+>  		BT_ERR("LE credits overflow");
+>  		l2cap_send_disconn_req(chan, ECONNRESET);
+> -		l2cap_chan_unlock(chan);
+>  
+>  		/* Return 0 so that we don't trigger an unnecessary
+>  		 * command reject packet.
+>  		 */
+> -		return 0;
+> +		goto unlock;
+>  	}
+>  
+>  	chan->tx_credits += credits;
+> @@ -5912,7 +5941,9 @@ static inline int l2cap_le_credits(struct l2cap_conn *conn,
+>  	if (chan->tx_credits)
+>  		chan->ops->resume(chan);
+>  
+> +unlock:
+>  	l2cap_chan_unlock(chan);
+> +	l2cap_chan_put(chan);
+>  
+>  	return 0;
+>  }
+> @@ -7598,6 +7629,7 @@ static void l2cap_data_channel(struct l2cap_conn *conn, u16 cid,
+>  
+>  done:
+>  	l2cap_chan_unlock(chan);
+> +	l2cap_chan_put(chan);
+>  }
+>  
+>  static void l2cap_conless_channel(struct l2cap_conn *conn, __le16 psm,
+> @@ -8086,7 +8118,7 @@ static struct l2cap_chan *l2cap_global_fixed_chan(struct l2cap_chan *c,
+>  		if (src_type != c->src_type)
+>  			continue;
+>  
+> -		l2cap_chan_hold(c);
+> +		c = l2cap_chan_hold_unless_zero(c);
+>  		read_unlock(&chan_list_lock);
+>  		return c;
+>  	}
 
 
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

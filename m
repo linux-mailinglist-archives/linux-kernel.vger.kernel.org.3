@@ -2,200 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAF257B8A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB76F57B8AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiGTOlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S233179AbiGTOmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiGTOlo (ORCPT
+        with ESMTP id S231239AbiGTOm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:41:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B63A24D4F7;
-        Wed, 20 Jul 2022 07:41:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC46E1570;
-        Wed, 20 Jul 2022 07:41:41 -0700 (PDT)
-Received: from [10.32.33.51] (e121896.warwick.arm.com [10.32.33.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DC5583F70D;
-        Wed, 20 Jul 2022 07:41:39 -0700 (PDT)
-Message-ID: <5e8981b1-1c32-7ef0-0ef9-93799a8c968b@arm.com>
-Date:   Wed, 20 Jul 2022 15:41:38 +0100
+        Wed, 20 Jul 2022 10:42:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E9294E606
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658328147;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cvhT3S9WVM0zbX99AylzeVt8EncWc0nM5sQ4BeMLhBk=;
+        b=UzvpBvIv0zEd7m4CXN88yg4EWop+mXthhR84RibTwejlWl0LCUUUgaCYDDXiYSU+S/peyT
+        tkLhMKPfXnrCwV2tX95MP7yx8D45MZgZtvpmgxqdDAuTsVLNfUJtrhPJ4wBFaT1HQrmpcS
+        GxaaeJUq56j+WbLtKLs8gZ7We3XVMWs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-196-RBoGz8fiMD-fcgWvxjAGvQ-1; Wed, 20 Jul 2022 10:42:26 -0400
+X-MC-Unique: RBoGz8fiMD-fcgWvxjAGvQ-1
+Received: by mail-qk1-f199.google.com with SMTP id n15-20020a05620a294f00b006b5768a0ed0so14241606qkp.7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:42:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=cvhT3S9WVM0zbX99AylzeVt8EncWc0nM5sQ4BeMLhBk=;
+        b=lVMoJjfer0FJ3IGTe1fnMDQ0rQmUoFNI6VCsm5dtsLB9M/bf8pDLLk9QUSiNdSZqLm
+         kFGBBHVps4kQ0g6vEl1Bn7etMtaoWWUWKGH0yeGqHUd7hIxCSLlziEyMDofBPnUpsacA
+         taACR5z8j6AGyR/xN99dg8LP1ANufdKnGZXwVzBiwCEmdwnkkADA62V3ZKAJIRhtQ/ng
+         LC4ko++By2nk6YSPqm6ddn5/ee7He347PMK8g40KIDEfuWEjttBc9paQiGZgCGtCKFbQ
+         lUPdSsvz5/VrK1QasCwQNXtaAolmwMRtHmCeOO1R/fhdmScarIZ16X2RzuFebIU/3z33
+         Lgrw==
+X-Gm-Message-State: AJIora+t+e2M5uyyYuf4m/vtUmzW21aPEVB7UK+F4j2ygjywvLpMql4V
+        OwshfWW/CUXar9mRvjUwPG10HBGXBPSEdDCjPo97yxMQjrCyoWxMfix7y/y1xvAAq+H7D9Nt0W2
+        /ff1isIdDyQRxVihPOGem0kXg
+X-Received: by 2002:a05:622a:1a14:b0:31e:e89f:4dda with SMTP id f20-20020a05622a1a1400b0031ee89f4ddamr15317179qtb.622.1658328145877;
+        Wed, 20 Jul 2022 07:42:25 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tGn9yFp45TY6RYzVBxsl9nb/67MqV9TQtVWfuHzl2vf0hFiw4YH/r3ee/crX2uGuJr5QQhHQ==
+X-Received: by 2002:a05:622a:1a14:b0:31e:e89f:4dda with SMTP id f20-20020a05622a1a1400b0031ee89f4ddamr15317158qtb.622.1658328145616;
+        Wed, 20 Jul 2022 07:42:25 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id y206-20020a3764d7000000b006b5652edb93sm16190459qkb.48.2022.07.20.07.42.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 07:42:24 -0700 (PDT)
+Message-ID: <c22a18631c2067871b9ed8a9246ad58fa1ab8947.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 04/19] KVM: x86: mmu: allow to enable write
+ tracking externally
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Date:   Wed, 20 Jul 2022 17:42:17 +0300
+In-Reply-To: <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+         <20220427200314.276673-5-mlevitsk@redhat.com> <YoZyWOh4NPA0uN5J@google.com>
+         <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 09/13] perf: cs-etm: Update record event to use new
- Trace ID protocol
-Content-Language: en-US
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        quic_jinlmao@quicinc.com, suzuki.poulose@arm.com,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220704081149.16797-1-mike.leach@linaro.org>
- <20220704081149.16797-10-mike.leach@linaro.org>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220704081149.16797-10-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 04/07/2022 09:11, Mike Leach wrote:
-> Trace IDs are now dynamically allocated.
+On Sun, 2022-05-22 at 13:22 +0300, Maxim Levitsky wrote:
+> On Thu, 2022-05-19 at 16:37 +0000, Sean Christopherson wrote:
+> > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> > > @@ -5753,6 +5752,10 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+> > >         node->track_write = kvm_mmu_pte_write;
+> > >         node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
+> > >         kvm_page_track_register_notifier(kvm, node);
+> > 
+> > Can you add a patch to move this call to kvm_page_track_register_notifier() into
+> > mmu_enable_write_tracking(), and simultaneously add a WARN in the register path
+> > that page tracking is enabled?
+> > 
+> > Oh, actually, a better idea. Add an inner __kvm_page_track_register_notifier()
+> > that is not exported and thus used only by KVM, invoke mmu_enable_write_tracking()
+> > from the exported kvm_page_track_register_notifier(), and then do the above.
+> > That will require modifying KVMGT and KVM in a single patch, but that's ok.
+> > 
+> > That will avoid any possibility of an external user failing to enabling tracking
+> > before registering its notifier, and also avoids bikeshedding over what to do with
+> > the one-line wrapper to enable tracking.
+> > 
 > 
-> Previously used the static association algorithm that is no longer
-> used. The 'cpu * 2 + seed' was outdated and broken for systems with high
-> core counts (>46). as it did not scale and was broken for larger
-> core counts.
+> This is a good idea as well, especially looking at kvmgt and seeing that
+> it registers the page track notifier, when the vGPU is opened.
 > 
-> Trace ID is  as unknown in AUXINFO record, and the ID / CPU association
-> will now be sent in PERF_RECORD_AUX_OUTPUT_HW_ID record.
+> I'll do this in the next series.
 > 
-> Remove legacy Trace ID allocation algorithm.
+> Thanks for the review!
+
+After putting some thought into this, I am not 100% sure anymore I want to do it this way.
+ 
+Let me explain the current state of things:
+
+For mmu: 
+- write tracking notifier is registered on VM initialization (that is pretty much always),
+and if it is called because write tracking was enabled due to some other reason
+(currently only KVMGT), it checks the number of shadow mmu pages and if zero, bails out.
+ 
+- write tracking enabled when shadow root is allocated.
+ 
+This can be kept as is by using the __kvm_page_track_register_notifier as you suggested.
+ 
+For KVMGT:
+- both write tracking and notifier are enabled when an vgpu mdev device is first opened.
+That 'works' only because KVMGT doesn't allow to assign more that one mdev to same VM,
+thus a per VM notifier and the write tracking for that VM are enabled at the same time
+ 
+ 
+Now for nested AVIC, this is what I would like to do:
+ 
+- just like mmu, I prefer to register the write tracking notifier, when the VM is created.
+- just like mmu, write tracking should only be enabled when nested AVIC is actually used
+  first time, so that write tracking is not always enabled when you just boot a VM with nested avic supported,
+  since the VM might not use nested at all.
+ 
+Thus I either need to use the __kvm_page_track_register_notifier too for AVIC (and thus need to export it)
+or I need to have a boolean (nested_avic_was_used_once) and register the write tracking
+notifier only when false and do it not on VM creation but on first attempt to use nested AVIC.
+ 
+Do you think this is worth it? I mean there is some value of registering the notifier only when needed
+(this way it is not called for nothing) but it does complicate things a bit.
+ 
+I can also stash this boolean (like 'bool registered;') into the 'struct kvm_page_track_notifier_node', 
+and thus allow the kvm_page_track_register_notifier to be called more that once - 
+then I can also get rid of __kvm_page_track_register_notifier. 
+
+What do you think about this?
+ 
+Best regards,
+	Maxim Levitsky
+
+
 > 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->  include/linux/coresight-pmu.h       | 19 +++++++------------
->  tools/include/linux/coresight-pmu.h | 19 +++++++------------
+> Best regards,
+>         Maxim Levitsky
 
-I usually see mentions that these header updates need to be separate commits
-because they are merged through different trees.
 
->  tools/perf/arch/arm/util/cs-etm.c   | 21 ++++++++++++---------
->  3 files changed, 26 insertions(+), 33 deletions(-)
-> 
-> diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
-> index 4ac5c081af93..9f7ee380266b 100644
-> --- a/include/linux/coresight-pmu.h
-> +++ b/include/linux/coresight-pmu.h
-> @@ -8,7 +8,13 @@
->  #define _LINUX_CORESIGHT_PMU_H
->  
->  #define CORESIGHT_ETM_PMU_NAME "cs_etm"
-> -#define CORESIGHT_ETM_PMU_SEED  0x10
-> +
-> +/*
-> + * Metadata now contains an unused trace ID - IDs are transmitted using a
-> + * PERF_RECORD_AUX_OUTPUT_HW_ID record.
-> + * Value architecturally defined as reserved in CoreSight.
-> + */
-> +#define CS_UNUSED_TRACE_ID 0x7F
->  
->  /*
->   * Below are the definition of bit offsets for perf option, and works as
-> @@ -32,15 +38,4 @@
->  #define ETM4_CFG_BIT_RETSTK	12
->  #define ETM4_CFG_BIT_VMID_OPT	15
->  
-> -static inline int coresight_get_trace_id(int cpu)
-> -{
-> -	/*
-> -	 * A trace ID of value 0 is invalid, so let's start at some
-> -	 * random value that fits in 7 bits and go from there.  Since
-> -	 * the common convention is to have data trace IDs be I(N) + 1,
-> -	 * set instruction trace IDs as a function of the CPU number.
-> -	 */
-> -	return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
-> -}
-> -
->  #endif
-> diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
-> index 6c2fd6cc5a98..31d007fab3a6 100644
-> --- a/tools/include/linux/coresight-pmu.h
-> +++ b/tools/include/linux/coresight-pmu.h
-> @@ -8,7 +8,13 @@
->  #define _LINUX_CORESIGHT_PMU_H
->  
->  #define CORESIGHT_ETM_PMU_NAME "cs_etm"
-> -#define CORESIGHT_ETM_PMU_SEED  0x10
-> +
-> +/*
-> + * Metadata now contains an unused trace ID - IDs are transmitted using a
-> + * PERF_RECORD_AUX_OUTPUT_HW_ID record.
-> + * Value architecturally defined as reserved in CoreSight.
-> + */
-> +#define CS_UNUSED_TRACE_ID 0x7F
->  
-
-minor nit: this isn't used in the kernel so only needs to be defined on the
-tools side.
-
->  /*
->   * Below are the definition of bit offsets for perf option, and works as
-> @@ -34,15 +40,4 @@
->  #define ETM4_CFG_BIT_RETSTK	12
->  #define ETM4_CFG_BIT_VMID_OPT	15
->  
-> -static inline int coresight_get_trace_id(int cpu)
-> -{
-> -	/*
-> -	 * A trace ID of value 0 is invalid, so let's start at some
-> -	 * random value that fits in 7 bits and go from there.  Since
-> -	 * the common convention is to have data trace IDs be I(N) + 1,
-> -	 * set instruction trace IDs as a function of the CPU number.
-> -	 */
-> -	return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
-> -}
-> -
->  #endif
-> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
-> index 1b54638d53b0..2d68e6a722ed 100644
-> --- a/tools/perf/arch/arm/util/cs-etm.c
-> +++ b/tools/perf/arch/arm/util/cs-etm.c
-> @@ -421,13 +421,16 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
->  	evlist__to_front(evlist, cs_etm_evsel);
->  
->  	/*
-> -	 * In the case of per-cpu mmaps, we need the CPU on the
-> -	 * AUX event.  We also need the contextID in order to be notified
-> +	 * get the CPU on the sample - need it to associate trace ID in the
-> +	 * AUX_OUTPUT_HW_ID event, and the AUX event for per-cpu mmaps.
-> +	 */
-> +	evsel__set_sample_bit(cs_etm_evsel, CPU);
-> +
-> +	/*
-> +	 * Also the case of per-cpu mmaps, need the contextID in order to be notified
->  	 * when a context switch happened.
->  	 */
->  	if (!perf_cpu_map__empty(cpus)) {
-> -		evsel__set_sample_bit(cs_etm_evsel, CPU);
-> -
->  		err = cs_etm_set_option(itr, cs_etm_evsel,
->  					BIT(ETM_OPT_CTXTID) | BIT(ETM_OPT_TS));
->  		if (err)
-> @@ -633,8 +636,9 @@ static void cs_etm_save_etmv4_header(__u64 data[], struct auxtrace_record *itr,
->  
->  	/* Get trace configuration register */
->  	data[CS_ETMV4_TRCCONFIGR] = cs_etmv4_get_config(itr);
-> -	/* Get traceID from the framework */
-> -	data[CS_ETMV4_TRCTRACEIDR] = coresight_get_trace_id(cpu);
-> +	/* traceID set to unused */
-> +	data[CS_ETMV4_TRCTRACEIDR] = CS_UNUSED_TRACE_ID;
-> +
->  	/* Get read-only information from sysFS */
->  	data[CS_ETMV4_TRCIDR0] = cs_etm_get_ro(cs_etm_pmu, cpu,
->  					       metadata_etmv4_ro[CS_ETMV4_TRCIDR0]);
-> @@ -681,9 +685,8 @@ static void cs_etm_get_metadata(int cpu, u32 *offset,
->  		magic = __perf_cs_etmv3_magic;
->  		/* Get configuration register */
->  		info->priv[*offset + CS_ETM_ETMCR] = cs_etm_get_config(itr);
-> -		/* Get traceID from the framework */
-> -		info->priv[*offset + CS_ETM_ETMTRACEIDR] =
-> -						coresight_get_trace_id(cpu);
-> +		/* traceID set to unused */
-> +		info->priv[*offset + CS_ETM_ETMTRACEIDR] = CS_UNUSED_TRACE_ID;
->  		/* Get read-only information from sysFS */
->  		info->priv[*offset + CS_ETM_ETMCCER] =
->  			cs_etm_get_ro(cs_etm_pmu, cpu,

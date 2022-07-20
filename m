@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE8457B8C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1674757B8C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiGTOsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
+        id S235643AbiGTOsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235022AbiGTOsS (ORCPT
+        with ESMTP id S235089AbiGTOsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:48:18 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FED51410;
-        Wed, 20 Jul 2022 07:48:17 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id n12so13613423wrc.8;
-        Wed, 20 Jul 2022 07:48:17 -0700 (PDT)
+        Wed, 20 Jul 2022 10:48:42 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8A952442
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:48:40 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id f24-20020a1cc918000000b003a30178c022so1502015wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2HCmRDULNNOk3LrcIoxYSs/mdDkOe4DtzslLYnc6NdE=;
-        b=Smvlm7x16XYbh8AtqkmjI0A83dAYB9mzKiHzU/yaeSeYZXS6G6yIkWbM2PqXpR7geg
-         mZkgBRH5Cw+1u2NaH8LCT7OhMNFgobwxm2mLzUf6z+uPvQLvpbT7gAF91ShZKEAAV1wn
-         60VAvGQFvoeG92jR/aEz4etJ5FQ/ICARTKmkhTbi/0eWYmbvvrx8VQgFajA1bC4pJj6o
-         TdMR81z6wAA8aYlKdZg8lbeFz25WXjDDB7VJanrtFIfJIhcjgytyKWVszTyj8Q8rGqV4
-         fbZ3umnFDWLl2+0Eol/6EewhLTjMs6xzuousHd+JsPkvWNyXIBR2aXkFfGI3pUw334Ku
-         kNNw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:mime-version:content-transfer-encoding:from:date:message-id
+         :to:cc;
+        bh=y0nOdBdH/FiY2jfQvMH95VKpuAO3BFQhEGGb8OIH85M=;
+        b=yI2UwrXOi3+iAjbP6Ub6fisppNUVUrxVmdsq3fNJv+N1wsO60lcIG0WM+ItxOyv4Rp
+         J0pUF3pyFpUzkdwL8Q0jOkNMphJOCg4N/hrIQy5AjQ37nU3pVu6iemD41WcW+fRHW+/s
+         jaPCYzpz13OTcIxMzKeVd/YZ5rDKvd7lmW3y8O1oZP/SPBqo8z51egLC6Dnr0TQSsGGe
+         liZNw/xHmAIH6C2eGologqz4OCE5zYmpsvArnvvfcrI1OuHxNqPkSPrL5KPsWRaGMvnk
+         PQ6MCEAP3UGVGSIDP+NM9cKT1dXQPid6xBLrqZPa2VtgMYUXDNdLTEkvRiwZXpRNI66V
+         uUyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2HCmRDULNNOk3LrcIoxYSs/mdDkOe4DtzslLYnc6NdE=;
-        b=00MGGIgAnOyyG5oOiA/6lcua5zJ9IO24TWD7tZoejETB8DYgpfdv2Kf/+C12Y8mnk5
-         +CQ/ZAzTe6V86AlFo4JoToMpWWDM27CvLSOXyCYryanwNeGccwtAhdcGIdk5hzXmMDZX
-         ej9nFBiJ6bX9W10EPFZZtomJKtzE5KzQBnpm86Ak0UAr++2wMW11mZuOtsDhV2c6QBGi
-         yZ/h31OscOwyZulqmd8QPT032Bug9Pk+xcBpaUuegpRHNSbN+UsgRuOumSOoTdavGG6Y
-         AJK1wWIPa2Vre5fVCDtsnAqUrY4aVk2Jn7V9iQ7MidBX4DpBCod5ZkmgoGf2Eg58vIW4
-         YcSQ==
-X-Gm-Message-State: AJIora8w0NKOmIG6AjncgKWO/OZkCV3ljKApi7plFqB9AdAQ0F8hP+UM
-        He0uX2IZx7PSLJ61YiwwcwA=
-X-Google-Smtp-Source: AGRyM1sU4coKz5eJp1od9QIXLB1n1uGRdbenHdC6dzF+5/lYxTYrK4tYOVXN4nROdynVAf6uLHKZpg==
-X-Received: by 2002:a5d:45c5:0:b0:21d:978e:f93 with SMTP id b5-20020a5d45c5000000b0021d978e0f93mr31445782wrs.134.1658328496270;
-        Wed, 20 Jul 2022 07:48:16 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id n21-20020a05600c4f9500b003a2f2bb72d5sm3964492wmq.45.2022.07.20.07.48.15
+        h=x-gm-message-state:subject:mime-version:content-transfer-encoding
+         :from:date:message-id:to:cc;
+        bh=y0nOdBdH/FiY2jfQvMH95VKpuAO3BFQhEGGb8OIH85M=;
+        b=ewfmQ7YnKV/isoQzIMg4zCIm6MrZVKVsigk7Ek8rCs89Nnx2T5J2gDCQ0lMatUjMJS
+         K4QNXO92SkJUMjv+jOCqEG5j+DwNThKKUhTf4rNVKuVipnYpnTMOQH+Ttd29gQM/UHwG
+         IIjJR3tfVtvzJQqjYTBKlDI4uyK3mnrxTTTnCLKscOodGnoVmIP+1Vj5HT8s5/0gGmfg
+         08ZC7szmg7alIf8LJEINIrKDorRqHsfGzqf1gQavW2pkGaKyZkPA01Q+FmqTyD22fDXZ
+         Z9nULUlqu+lD8fkY/13/gidzL7GPBs3EMItGrG1XhmVTzxNFT5jJhqDhzWUm25jP2/8w
+         0DvQ==
+X-Gm-Message-State: AJIora9KWc2o5DxLO4Z0EXb2XyCsLu+PDTvtp+0qYyBgxtDUJkR2xcpv
+        w19I4Aa8R/b7bud8fA1qaOlhSgfaBYckGQ==
+X-Google-Smtp-Source: AGRyM1ublPYAEei2qfPJouysredFf/CYLPH5v96mYBkQf2Q+0TkflmcBuDnsIT97NTApdhrn+fK1vw==
+X-Received: by 2002:a05:600c:34d0:b0:3a1:a05c:b523 with SMTP id d16-20020a05600c34d000b003a1a05cb523mr4189886wmq.94.1658328518916;
+        Wed, 20 Jul 2022 07:48:38 -0700 (PDT)
+Received: from [127.0.1.1] ([2a01:cb19:85e6:1900:c639:22f8:bed9:44dd])
+        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b003a31673515bsm3321121wmq.7.2022.07.20.07.48.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 07:48:15 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 15:48:14 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/167] 5.15.56-rc1 review
-Message-ID: <YtgVrtcpJoLIfIub@debian>
-References: <20220719114656.750574879@linuxfoundation.org>
+        Wed, 20 Jul 2022 07:48:38 -0700 (PDT)
+Subject: [PATCH v1 0/6] Input: mt6779-keypad - double keys support
+X-b4-tracking: eyJzZXJpZXMiOiB7InJldmlzaW9uIjogMSwgImNoYW5nZS1pZCI6ICIyMDIyMDcyMC1tdDgxODMta2
+ V5cGFkLTIwYWE3NzEwNmZmMCIsICJoaXN0b3J5IjogeyJ2MSI6IFsiMjAyMjA3MjAtbXQ4MTgzLWtl
+ eXBhZC12MS0wLTY4YzE5N2MxOWYyY0BiYXlsaWJyZS5jb20iLCAiMjAyMjA3MjAtbXQ4MTgzLWtleX
+ BhZC12MS0wLWUyYmI0MjcwMTI3MUBiYXlsaWJyZS5jb20iLCAiMjAyMjA3MjAtbXQ4MTgzLWtleXBh
+ ZC12MS0wLTc2OTM5ZmM0MTRhZkBiYXlsaWJyZS5jb20iXX19fQ==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Date:   Wed, 20 Jul 2022 16:48:36 +0200
+Message-Id: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org
+X-Mailer: b4 0.10.0-dev-54fef
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,41 +80,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+The MediaTek keypad controller has multiple operating modes:
+* single key detection (currently implemented)
+* double key detection
 
-On Tue, Jul 19, 2022 at 01:52:12PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.56 release.
-> There are 167 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
-> Anything received after that time might be too late.
+With double key detection, each (row,column) is a group that can detect
+two keys in the key matrix.
+This minimizes the overall pin counts for cost reduction.
+However, pressing multiple keys in the same group will not be
+detected properly.
 
-Build test (gcc version 11.3.1 20220706):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+On some boards, like mt8183-pumpkin, double key detection is used.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1528
-[2]. https://openqa.qa.codethink.co.uk/tests/1531
-[3]. https://openqa.qa.codethink.co.uk/tests/1533
+---
+Fabien Parent (2):
+      arm64: dts: mediatek: mt8183: add keyboard node
+      arm64: dts: mediatek: mt8183-pumpkin: add keypad support
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Mattijs Korpershoek (4):
+      MAINTAINERS: input: add mattijs for mt6779-keypad
+      dt-bindings: mediatek,mt6779-keypad: use unevaluatedProperties
+      dt-bindings: mediatek,mt6779-keypad: add mediatek,double-keys
+      Input: mt6779-keypad - support double keys matrix
 
---
-Regards
-Sudip
+ .../bindings/input/mediatek,mt6779-keypad.yaml      |  8 +++++++-
+ MAINTAINERS                                         |  6 ++++++
+ arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts     | 21 +++++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi            |  9 +++++++++
+ drivers/input/keyboard/mt6779-keypad.c              | 17 +++++++++++++++--
+ 5 files changed, 58 insertions(+), 3 deletions(-)
+---
+base-commit: 3b87ed7ea4d598c81a03317a92dfbd59102224fd
+change-id: 20220720-mt8183-keypad-20aa77106ff0
+
+Best regards,
+-- 
+Mattijs Korpershoek <mkorpershoek@baylibre.com>

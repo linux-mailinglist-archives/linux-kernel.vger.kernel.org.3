@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9253E57BC7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682F657BC83
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235415AbiGTRS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
+        id S239329AbiGTRWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235324AbiGTRSZ (ORCPT
+        with ESMTP id S229677AbiGTRWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:18:25 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F483AB3B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:18:24 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id p6-20020a17090a680600b001f2267a1c84so1014033pjj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0A7Vop3JLb1LjbZM57vszyAHhwMfMivUkOyzRnB3v4k=;
-        b=OMPem98GHTwpACFqIppAYiEcB9A98T6HaqNgfFg6loCE9C2If5iTTOylYF/LdCO3j7
-         wWRWVsrG1G9zL67r49dHTzEKiDpOBggC4Vq8U6GsaMa3hTOMEhXKfPUWNt9lDzmzq3dX
-         se2X1rKBZXrPcAaIRqNAdVGJS/1HEeYwDpKF0DVY7JfZHQSbNoTBy8oKCNXslNZjfFaQ
-         r7fsrHGZWmkTKOzZh1i6CSgPkrRfd1uGss9EYUoGOwndxI3YdGWbHocM3ZUNgPrraVCK
-         hT2hHCcpX7iD91UczKNWjeIirCaWA8nw0HPpkuy2fm0xJ4K00zGe/VnRSgoWzaRJDYa3
-         eKpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0A7Vop3JLb1LjbZM57vszyAHhwMfMivUkOyzRnB3v4k=;
-        b=nLBw5ABUsAQddJcRnsZD98NelK6AORyQaL4rsR5pUJl4H1SIYPbEFOafauunfpCCBA
-         x1r3q1s9sL5WyqqilH9ctrwRiJTl+bZuyVhIxs3WT3E5LqY+bdcdbhvxwBY0zbGPupB4
-         rA74BjpoeMF9USV/qBNuGBUcoFzQjcD30+zDZk5Jm6LaGh+wClVGMSGOjqVbw0BVklNn
-         jbPjSHJqOoYH4LOwwgO7caqjGUAS0AZmgGUCHnBLeoLdQbBiZQxvo1Vm4UBRDeE5naCk
-         ZUjjTPF+k/MNZn8h0DXIB7e61WsPULkngX7gNHr6LPaqq5OcQxommOCQGQd3Zit2qDPP
-         dH+Q==
-X-Gm-Message-State: AJIora8aGHA9cm53+whJaqIxstt/1/f0jMBwYN8IzwNtlpaQNU8a2nm1
-        uNnfP9B4akqSTc4EjHDe+fNC3Q==
-X-Google-Smtp-Source: AGRyM1u1q5jWE+4EwAQPjgXW1AyAFcCYEgcXf7FKYYKoaVc96AaLu+frjyDkY4pgRjfZJtH4E03J1g==
-X-Received: by 2002:a17:902:e945:b0:16a:1c41:f66 with SMTP id b5-20020a170902e94500b0016a1c410f66mr39507484pll.129.1658337503742;
-        Wed, 20 Jul 2022 10:18:23 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id f15-20020aa7968f000000b00528c22fbb45sm14095091pfk.141.2022.07.20.10.18.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 10:18:23 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 17:18:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Kechen Lu <kechenl@nvidia.com>, kvm@vger.kernel.org,
-        pbonzini@redhat.com, vkuznets@redhat.com, somduttar@nvidia.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 4/7] KVM: x86: Let userspace re-enable previously
- disabled exits
-Message-ID: <Ytg428sleo7uMRQt@google.com>
-References: <20220615011622.136646-1-kechenl@nvidia.com>
- <20220615011622.136646-5-kechenl@nvidia.com>
- <20220615025114.GB7808@gao-cwp>
+        Wed, 20 Jul 2022 13:22:49 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50B13F332;
+        Wed, 20 Jul 2022 10:22:48 -0700 (PDT)
+Received: from pyrite.rasen.tech (softbank036240121080.bbtec.net [36.240.121.80])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B38AC6DB;
+        Wed, 20 Jul 2022 19:22:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1658337766;
+        bh=cdhTFwAUWu0BfU4pY0Qx+ICqevNTT6nB/e0kgl797cc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TEXeCjaR2aW8XsTlPI5AgJxKkEneJwOgJEzZGHwHRc13Rp1YG3xJGwiCDtL/IMsrb
+         lz88eHiL+fzSblDMj2gTWiuY1hEcNNYd1kVqXw8bqz/y64+DmIMkXevKdRkxN8kZ0C
+         yLmHbsIYYLkfynThQ/rnXeZGAEXNdBLxLsXvnMWo=
+From:   Paul Elder <paul.elder@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Paul Elder <paul.elder@ideasonboard.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        laurent.pinchart@ideasonboard.com
+Subject: [PATCH] media: rkisp1: Implement ENUM_FRAMESIZES
+Date:   Thu, 21 Jul 2022 02:22:31 +0900
+Message-Id: <20220720172231.4019063-1-paul.elder@ideasonboard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615025114.GB7808@gao-cwp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022, Chao Gao wrote:
-> On Tue, Jun 14, 2022 at 06:16:19PM -0700, Kechen Lu wrote:
-> > 7.14 KVM_CAP_S390_HPAGE_1M
-> >diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> >index f31ebbb1b94f..7cc8ac550bc7 100644
-> >--- a/arch/x86/kvm/x86.c
-> >+++ b/arch/x86/kvm/x86.c
-> >@@ -4201,11 +4201,10 @@ static inline bool kvm_can_mwait_in_guest(void)
-> > 
-> > static u64 kvm_get_allowed_disable_exits(void)
-> > {
-> >-	u64 r = KVM_X86_DISABLE_EXITS_HLT | KVM_X86_DISABLE_EXITS_PAUSE |
-> >-		KVM_X86_DISABLE_EXITS_CSTATE;
-> >+	u64 r = KVM_X86_DISABLE_VALID_EXITS;
-> > 
-> >-	if(kvm_can_mwait_in_guest())
-> >-		r |= KVM_X86_DISABLE_EXITS_MWAIT;
-> >+	if (!kvm_can_mwait_in_guest())
-> >+		r &= ~KVM_X86_DISABLE_EXITS_MWAIT;
-> 
-> This hunk looks like a fix to patch 3; it can be squashed into that patch.
+Implement VIDIOC_ENUM_FRAMESIZES for the rkisp1 capture devices.
 
-It's not a fix, just an inversion of the logic to make it easier to maintain
-going forward.  I intentionally made the change in patch 4 so that adding the
-kvm_get_allowed_disable_exits() is a more "pure" movement of code from the "check"
-path to a common helper.
+Signed-off-by: Paul Elder <paul.elder@ideasonboard.com>
+---
+ .../platform/rockchip/rkisp1/rkisp1-capture.c | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-I agree it's kinda odd, but I still think splitting the changes is desirable.
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+index c494afbc21b4..74106a01ded7 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-capture.c
+@@ -1245,6 +1245,31 @@ static int rkisp1_enum_fmt_vid_cap_mplane(struct file *file, void *priv,
+ 	return -EINVAL;
+ }
+ 
++static int rkisp1_enum_framesizes(struct file *file, void *fh,
++				  struct v4l2_frmsizeenum *fsize)
++{
++	struct rkisp1_capture *cap = video_drvdata(file);
++	const unsigned int max_widths[] = { RKISP1_RSZ_MP_SRC_MAX_WIDTH,
++					    RKISP1_RSZ_SP_SRC_MAX_WIDTH };
++	const unsigned int max_heights[] = { RKISP1_RSZ_MP_SRC_MAX_HEIGHT,
++					     RKISP1_RSZ_SP_SRC_MAX_HEIGHT};
++
++	if (fsize->index != 0)
++		return -EINVAL;
++
++	fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
++
++	fsize->stepwise.min_width = RKISP1_RSZ_SRC_MIN_WIDTH;
++	fsize->stepwise.max_width = max_widths[cap->id];
++	fsize->stepwise.step_width = 2;
++
++	fsize->stepwise.min_height = RKISP1_RSZ_SRC_MIN_HEIGHT;
++	fsize->stepwise.max_height = max_heights[cap->id];
++	fsize->stepwise.step_height = 2;
++
++	return 0;
++}
++
+ static int rkisp1_s_fmt_vid_cap_mplane(struct file *file,
+ 				       void *priv, struct v4l2_format *f)
+ {
+@@ -1294,6 +1319,7 @@ static const struct v4l2_ioctl_ops rkisp1_v4l2_ioctl_ops = {
+ 	.vidioc_s_fmt_vid_cap_mplane = rkisp1_s_fmt_vid_cap_mplane,
+ 	.vidioc_g_fmt_vid_cap_mplane = rkisp1_g_fmt_vid_cap_mplane,
+ 	.vidioc_enum_fmt_vid_cap = rkisp1_enum_fmt_vid_cap_mplane,
++	.vidioc_enum_framesizes = rkisp1_enum_framesizes,
+ 	.vidioc_querycap = rkisp1_querycap,
+ 	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
+ 	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
+-- 
+2.30.2
+

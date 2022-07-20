@@ -2,155 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBFC57BB3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE57757BB3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238509AbiGTQTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S238669AbiGTQTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiGTQTe (ORCPT
+        with ESMTP id S232026AbiGTQTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:19:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC9F4506D;
-        Wed, 20 Jul 2022 09:19:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5028261D6A;
-        Wed, 20 Jul 2022 16:19:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D32C341CA;
-        Wed, 20 Jul 2022 16:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658333972;
-        bh=hm+C30N+p4hS8b32Z2BKAjSUjZL+YBbDCozWqx7d3N8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RKxSyw+3EKZrvjmoEi4/1S4LOaeSX5rm5F17z20WO1wSH0X2ZcucSFohJTzA6Rdgr
-         t/xgMXNfjoR7rAoqMCt7gTXE+UjUqvbPEFkeRlP6ZofBwvoJo7uijvAtzEvAELCcdk
-         7CN2FW9IR7XWZB6OtmDClIGY3n2wWy3O69iOxxGe8vXieGSMCVzblOMXfNo9M7IK1D
-         nBZ7f4BRaOcoJRM1Ko0cEDrj0wBq36ZwgmmSOWsC+5m9ihOIh67n7ASO+r4qHmF7eh
-         p/nslKeH/HETClFbMZIFxUC5MDFACHyv8aE4KQglpYkD7ujo5ueXGGkbi0nB0wNAq8
-         5+lfIz200SIkQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1A6DF40374; Wed, 20 Jul 2022 13:19:30 -0300 (-03)
-Date:   Wed, 20 Jul 2022 13:19:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     James Clark <james.clark@arm.com>, suzuki.poulose@arm.com,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
-        peterz@infradead.org, mingo@redhat.com,
-        linux-perf-users@vger.kernel.org, quic_jinlmao@quicinc.com
-Subject: Re: [PATCH v2 08/13] perf: cs-etm: Move mapping of Trace ID and cpu
- into helper function
-Message-ID: <YtgrEoXRblaj0tVy@kernel.org>
-References: <20220704081149.16797-1-mike.leach@linaro.org>
- <20220704081149.16797-9-mike.leach@linaro.org>
- <ceed3c67-c9e6-787f-f668-26b57904136e@arm.com>
- <CAJ9a7VgNO43EhzC-cmxwjEVcN+CKnqoBxiwWJSS3TPC2cEd6aQ@mail.gmail.com>
+        Wed, 20 Jul 2022 12:19:39 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D0156BBE;
+        Wed, 20 Jul 2022 09:19:38 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id n12so13988260wrc.8;
+        Wed, 20 Jul 2022 09:19:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EjQ9X1UjGVK0ekLcqOx1pwSEWHylQ1/QnduEAyjuRmc=;
+        b=TByb/N/DHTn7/Z8JvsFqoLDpF8Ud+M5a3LoilYUmA/eyfKEx42r81eG6MYdOEfgT1b
+         CyOLK1u3RyiMHhsl5/6FO7PYqJKe6sxhKsAM8Uld9SbQQI36YnFbtxuVWIuq/SxEl0Rr
+         L9AmlXzOhJ9xDl7t2/vsIaL6hr6McskDftxnSeG6mW4hFGjj4+IRjwn6WzrN32tHV3hw
+         lECz+WC6NQloeLCM0lHGCHaloIDT2og3ckuOwG+1g8OdLGB/ShhY+CK+WuBU+HaGG4Hi
+         1d2gd0DC/4WBF/iXZFvoN8P6zsVLKSL23TDicgJ7Lm1HqGw5mfTo5G4Fv1vias2Z8R7g
+         Cxdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EjQ9X1UjGVK0ekLcqOx1pwSEWHylQ1/QnduEAyjuRmc=;
+        b=MVc0fFv5fX8AkKnelFO5TBSZVkvVf9xS4z1Coox7urWEYp2/fL/7Km33kneBA7yaC/
+         S/s2nY5V51swPLELDiWWUv1524s4WwE89I7reRO0sPOtNcixL1GcGGJsKaLi7sH7yC06
+         f4qtRr/V9EOtBW2GKEDREK3HhQKBW2vW00Jda5du6hjePuO25fCSyQcS2SugzHdjLAp0
+         R5T3602FPRWtlBt35mmxnrq2UVu1BY7W4CXTS3a/Byewt3fOsyQYxzI47q7Hwspcuwc2
+         sCady3YgeSv+RSOQf+BQZBfCW/leiEClKgvtpWz2krOlv3yCiKY5Uc3iXi3UYl4KnCSn
+         NsVw==
+X-Gm-Message-State: AJIora+tAcKaChBR8HygejJtTN/Y3tU0OG30SVFfaE4CRq98iC50mGoT
+        VPO9iqHpbaP6MEcagVB+nAc=
+X-Google-Smtp-Source: AGRyM1u918blttAuw2LS6/j/k2GCPiyM7r0oBnDfCG5hlleh0SVlyUss6NQBeh38HtvQduCNetF+vQ==
+X-Received: by 2002:adf:d1e8:0:b0:21d:ac9c:983d with SMTP id g8-20020adfd1e8000000b0021dac9c983dmr31067113wrd.629.1658333977372;
+        Wed, 20 Jul 2022 09:19:37 -0700 (PDT)
+Received: from localhost.localdomain (host-95-235-102-55.retail.telecomitalia.it. [95.235.102.55])
+        by smtp.gmail.com with ESMTPSA id p20-20020a1c5454000000b003a30c3d0c9csm3044513wmi.8.2022.07.20.09.19.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 09:19:36 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ira Weiny <ira.weiny@intel.com>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>,
+        Takashi Iwai <tiwai@suse.de>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Matthew Wilcox <willy@infradead.com>
+Subject: [PATCH v2] module: Replace kmap() with kmap_local_page()
+Date:   Wed, 20 Jul 2022 18:19:32 +0200
+Message-Id: <20220720161932.9567-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ9a7VgNO43EhzC-cmxwjEVcN+CKnqoBxiwWJSS3TPC2cEd6aQ@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Jul 20, 2022 at 11:22:37AM +0100, Mike Leach escreveu:
-> On Tue, 19 Jul 2022 at 15:54, James Clark <james.clark@arm.com> wrote:
-> > I'm starting to look at this set now.
+kmap() is being deprecated in favor of kmap_local_page().
 
-> > Am I right in thinking that this hard coded value means that new versions
-> > of Perf won't work with older drivers? Does this need to be highlighted
-> > somewhere in a warning that it's not the Perf version that's the issue but
-> > both the Perf and driver version together?
+Two main problems with kmap(): (1) It comes with an overhead as mapping
+space is restricted and protected by a global lock for synchronization and
+(2) it also requires global TLB invalidation when the kmap’s pool wraps
+and it might block when the mapping space is fully utilized until a slot
+becomes available.
+
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+Tasks can be preempted and, when scheduled to run again, the kernel
+virtual addresses are restored and still valid.
+
+kmap_local_page() is faster than kmap() in kernels with HIGHMEM enabled.
+
+Since the use of kmap_local_page() in module_gzip_decompress() and in
+module_xz_decompress() is safe (i.e., it does not break the strict rules
+of use), it should be preferred over kmap().
+
+Therefore, replace kmap() with kmap_local_page().
+
+Tested on a QEMU/KVM x86_32 VM with 4GB RAM, booting kernels with
+HIGHMEM64GB enabled. Modules compressed with XZ or GZIP decompress
+properly.
+
+Cc: Matthew Wilcox <willy@infradead.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+
+v1->v2: Add information which says that the pointers returned by
+kmap_local_page() are still valid if tasks are preempted and then
+rescheduled to run again (thanks to Luis Chamberlain).
+
+ kernel/module/decompress.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index 2fc7081dd7c1..4d0bcb3d9e44 100644
+--- a/kernel/module/decompress.c
++++ b/kernel/module/decompress.c
+@@ -119,10 +119,10 @@ static ssize_t module_gzip_decompress(struct load_info *info,
+ 			goto out_inflate_end;
+ 		}
  
-> Need to differentiate here between perf record, and perf report.
+-		s.next_out = kmap(page);
++		s.next_out = kmap_local_page(page);
+ 		s.avail_out = PAGE_SIZE;
+ 		rc = zlib_inflate(&s, 0);
+-		kunmap(page);
++		kunmap_local(s.next_out);
  
-> My understanding is that perf record must always match the version of
-> your kernel. If you use an old version of perf record on a newer
-
-No, that is not what is intended, one should be able to use whatever
-perf (record or otherwise) with whatever kernel version.
-
-perf tries to cope with, and if it is not possible to record the way the
-user asks to then it should emit a helpful error message stating why it
-is not possible, see:
-
-  evsel__disable_missing_features()
-  evsel__detect_missing_features()
-
-Used during a evsel__open()
-
-- Arnaldo
-
-> kernel then you are asking for trouble.
-> Indeed, if I run perf on my x86 dev machine at the moment it whinges:
-> WARNING: perf not found for kernel 5.4.0-122
-> because the last version of perf I have is for 5.4.0-120.
-> 
-> The new perf report will differentiate between the new and old
-> versions of the perf.data file and act accordingly. For version 1 it
-> will take the IDs from the metadata, for version 2 it will search for
-> the IDs in the packet data.
-> An older perf report will not be able to decode the newer files -
-> though that has always been the case.
-> 
-> Were we to permit and old version of perf report to be used to
-> generate a file using the new drivers, and then attempt to process
-> that file with and older perf report, it would fail miserably.
-> 
-> Regards
-> 
-> Mike
-> 
-> 
-> > I thought the idea was to search through the file to look for
-> > PERF_RECORD_AUX_OUTPUT_HW_ID records (or lack of) and then choose the appropriate
-> > decode method. But maybe that's too complicated and there is no requirement
-> > for backwards compatibility?
-> >
-> > From experience it can be inconvenient when you can't just throw
-> > any build of Perf on a system and it supports everything that it knows
-> > about. Now we will have Perf builds that know about Coresight but don't
-> > work with older drivers.
-> >
-> > But then as you say the ID allocation is already broken for some people.
-> > It's hard to decide.
-> >
-> > James
-> >
-> > >
-> > >  /* Beginning of header common to both ETMv3 and V4 */
-> > >  enum {
-> > > @@ -85,6 +89,12 @@ enum {
-> > >       CS_ETE_PRIV_MAX
-> > >  };
-> > >
-> > > +/*
-> > > + * Check for valid CoreSight trace ID. If an invalid value is present in the metadata,
-> > > + * then IDs are present in the hardware ID packet in the data file.
-> > > + */
-> > > +#define CS_IS_VALID_TRACE_ID(id) ((id > 0) && (id < 0x70))
-> > > +
-> > >  /*
-> > >   * ETMv3 exception encoding number:
-> > >   * See Embedded Trace Macrocell specification (ARM IHI 0014Q)
-> 
-> 
-> 
-> -- 
-> Mike Leach
-> Principal Engineer, ARM Ltd.
-> Manchester Design Centre. UK
-
+ 		new_size += PAGE_SIZE - s.avail_out;
+ 	} while (rc == Z_OK);
+@@ -178,11 +178,11 @@ static ssize_t module_xz_decompress(struct load_info *info,
+ 			goto out;
+ 		}
+ 
+-		xz_buf.out = kmap(page);
++		xz_buf.out = kmap_local_page(page);
+ 		xz_buf.out_pos = 0;
+ 		xz_buf.out_size = PAGE_SIZE;
+ 		xz_ret = xz_dec_run(xz_dec, &xz_buf);
+-		kunmap(page);
++		kunmap_local(xz_buf.out);
+ 
+ 		new_size += xz_buf.out_pos;
+ 	} while (xz_buf.out_pos == PAGE_SIZE && xz_ret == XZ_OK);
 -- 
+2.37.1
 
-- Arnaldo

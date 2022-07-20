@@ -2,133 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7988557B46C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3876E57B46F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbiGTKX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 06:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
+        id S232709AbiGTKYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 06:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGTKX2 (ORCPT
+        with ESMTP id S229618AbiGTKYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 06:23:28 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C87C2E6B8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:23:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658312607; x=1689848607;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qUbM6HtqEnWH0VGiKmRSiX36G8BMe/qNghtHDpjJJhI=;
-  b=NPSaFmqmafPHYvB5Xuk9YbQMrxToVpGBxlaV7L2Im5TjHRdadWZpBY+k
-   Otudri+2AjALRicyAmLOSYDfFVKTP3+YDK/KHhq6pQ+fJKJdxa/Avsemj
-   Fwu1mVrG8yWa1562AG2+BksmstchczMUX2r0YEysNcZa7Gd2dzqC1VDNJ
-   nYKLYgPGNoqAP/H+ReRqBSQd3PV5+B/FMh5DDsrrelYyAOxjY0uLiGreV
-   XsoQny9agtLRu4qufZyd74G4/bGk7dNUFBrhQQsoCWFHcx7unpnmR1E+h
-   CUOwPhppG4wrTCTrV75riCX+IdZAlVfV8ZqZTMdzEkJ8kTYLS64e+Ml5r
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="285503377"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="285503377"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 03:23:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="573246430"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Jul 2022 03:23:25 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oE6rU-0000Nh-Od;
-        Wed, 20 Jul 2022 10:23:24 +0000
-Date:   Wed, 20 Jul 2022 18:22:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- f8466c532f55bcda4aa7db2d3ed9e6b3d7975998
-Message-ID: <62d7d775.AHtW5aO9omqnPVP8%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 20 Jul 2022 06:24:34 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CD72E6B8;
+        Wed, 20 Jul 2022 03:24:32 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id f73so31100736yba.10;
+        Wed, 20 Jul 2022 03:24:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pmZJUUSv06iSFaoqgQbNFrLQMcY9cXPC++//tPskyCc=;
+        b=aWKW018NnOG5uQJjPqudraPpJ7Q2b+++hqUF3mvMCaC6Kbkg2/DYP7DW35Q0VSw4M/
+         3FsPN0JHi8SCwbnBs5aEL2ONsVHRpUL+TWl9Xju/aPZrbMfuPwxIhsQDfWA84Uxv55wT
+         /TAP9XBKHSRi840jzV6SRT95KOB3aX6j8z42gmedwR9/rchG9NG88AKrxsVPS+ztHfd5
+         vxr139p9V7lwJNH4eJjTY7lTpe/SQC8LykijM/jXRMo0gHFseTyAXpW6QmiNYOY6ko/w
+         Bf8b3tq4eHJzZA4D+V9b7XrxQkCbXs99MQJ6oPTBmvnuzle9hs1gpEjHX6Bz1txOjk2l
+         IiSg==
+X-Gm-Message-State: AJIora+dV2TGvmacweh2QA1V52iU9oWlAruArA7GmgSfJq4nBeZ+Hpsk
+        p6RbWzZ3yUMPib6uFkk4YG53a26VGJ5hKAkA97W4tNeJ
+X-Google-Smtp-Source: AGRyM1tzI547gyHnjhqOynV2vuxO4TggTKKuQCyTk+sVmRGIS4zRS1p4Gschk7tmsQt4hTHFeGE0OieGFw9aGKNuy84=
+X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
+ z15-20020a25664f000000b0066cd0f436ccmr34552255ybm.482.1658312672231; Wed, 20
+ Jul 2022 03:24:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220713082426.850911-1-dapeng1.mi@intel.com> <CAJZ5v0gsHPav5Ax6+9OMmeApqn7qdJPQmo5MMh=ba6Rtj5NnQA@mail.gmail.com>
+ <PH0PR11MB4824DAE06FE50711C3252D93CD889@PH0PR11MB4824.namprd11.prod.outlook.com>
+ <PH0PR11MB482497A0CC93F430DA208EDDCD8E9@PH0PR11MB4824.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB482497A0CC93F430DA208EDDCD8E9@PH0PR11MB4824.namprd11.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 20 Jul 2022 12:24:21 +0200
+Message-ID: <CAJZ5v0j57iCNcz8i2P6JtkbiCHB1QS8M6QTngKoiJrm0pnkgUg@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before acpi driver
+ in Makefile
+To:     "Mi, Dapeng1" <dapeng1.mi@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: f8466c532f55bcda4aa7db2d3ed9e6b3d7975998  rcu-tasks: Ensure RCU Tasks Trace loops have quiescent states
+On Wed, Jul 20, 2022 at 5:00 AM Mi, Dapeng1 <dapeng1.mi@intel.com> wrote:
+>
+> > > From: Rafael J. Wysocki <rafael@kernel.org>
+> > > Sent: Thursday, July 14, 2022 1:53 AM
+> > > To: Mi, Dapeng1 <dapeng1.mi@intel.com>
+> > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Michael S. Tsirkin
+> > > <mst@redhat.com>; Arnd Bergmann <arnd@arndb.de>; Bart Van Assche
+> > > <bvanassche@acm.org>; Linux Kernel Mailing List <linux-
+> > > kernel@vger.kernel.org>; Linux PM <linux-pm@vger.kernel.org>
+> > > Subject: Re: [PATCH] cpuidle: Move cpuidle driver forward before acpi
+> > > driver in Makefile
+> > >
+> > > On Wed, Jul 13, 2022 at 10:21 AM Dapeng Mi <dapeng1.mi@intel.com>
+> > wrote:
+> > > >
+> > > > As long as Kconfig ACPI_PROCESSOR is enabled, ACPI_PROCESSOR would
+> > > > select ACPI_PROCESSOR_IDLE and acpi_idle driver is enabled. But in
+> > > > current driver loading order acpi_idle driver is always loaded
+> > > > before cpuidle_haltpoll driver. This leads to cpuidle_hatpoll driver
+> > > > has no chance to be loaded when it's enabled.
+> > > >
+> > > > Thus, move cpuidle driver forward before acpi driver and make
+> > > > cpuidle-hatpoll driver has a chance to be run when it's enabled.
+> > > >
+> > > > Signed-off-by: Dapeng Mi <dapeng1.mi@intel.com>
+> > > > ---
+> > > >  drivers/Makefile | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/Makefile b/drivers/Makefile index
+> > > > 9a30842b22c5..921ed481b520 100644
+> > > > --- a/drivers/Makefile
+> > > > +++ b/drivers/Makefile
+> > > > @@ -26,6 +26,7 @@ obj-y                         += idle/
+> > > >  # IPMI must come before ACPI in order to provide IPMI opregion
+> > support
+> > > >  obj-y                          += char/ipmi/
+> > > >
+> > > > +obj-$(CONFIG_CPU_IDLE)         += cpuidle/
+> > > >  obj-$(CONFIG_ACPI)             += acpi/
+> > > >
+> > > >  # PnP must come after ACPI since it will eventually need to check if acpi
+> > > > @@ -126,7 +127,6 @@ obj-$(CONFIG_EDAC)          += edac/
+> > > >  obj-$(CONFIG_EISA)             += eisa/
+> > > >  obj-$(CONFIG_PM_OPP)           += opp/
+> > > >  obj-$(CONFIG_CPU_FREQ)         += cpufreq/
+> > > > -obj-$(CONFIG_CPU_IDLE)         += cpuidle/
+> > > >  obj-y                          += mmc/
+> > > >  obj-y                          += ufs/
+> > > >  obj-$(CONFIG_MEMSTICK)         += memstick/
+> > > > --
+> > >
+> > > Well, this change doesn't guarantee loading haltpoll before ACPI idle.
+> > >
+> > > Also what if haltpoll is enabled, but the user wants ACPI idle?
+> >
+> > Thanks Rafael for reviewing this patch.
+> >
+> > acpi_idle driver and cpuidle_haltpoll driver have same initialization level and
+> > both are initialized on the level device_initcall. So the building order would
+> > decide the loading sequence. Just like the intel_idle driver which also has
+> > same initialization level (device_initcall), but as it's built before acpi_idle
+> > driver, it would be loaded first before acpi_driver if intel_idle driver is
+> > enabled.
+> >
+> > There is another method to make cpuidle_haltpoll driver loaded first before
+> > acpi_driver, it's change the initialization level to postcore_initcall. I'm not sure
+> > which one is better, but it seems current patch is more reasonable.
+> >
+> > There is an parameter "force" to manage the haltpoll enabling. If user want
+> > to use ACPI idle, it can change this parameter to disable haltpolll driver.
 
-elapsed time: 879m
+That would require things to be appended to the kernel command line in
+cases where that's not necessary today and that's not acceptable.
 
-configs tested: 52
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64               randconfig-a013-20220718
-x86_64               randconfig-a012-20220718
-x86_64               randconfig-a014-20220718
-x86_64               randconfig-a011-20220718
-x86_64               randconfig-a015-20220718
-x86_64               randconfig-a016-20220718
-i386                 randconfig-a014-20220718
-i386                 randconfig-a011-20220718
-i386                 randconfig-a013-20220718
-i386                 randconfig-a012-20220718
-i386                 randconfig-a015-20220718
-i386                 randconfig-a016-20220718
-riscv                randconfig-r042-20220718
-arc                  randconfig-r043-20220718
-s390                 randconfig-r044-20220718
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                 randconfig-a003-20220718
-i386                 randconfig-a001-20220718
-i386                 randconfig-a002-20220718
-i386                 randconfig-a006-20220718
-i386                 randconfig-a004-20220718
-i386                 randconfig-a005-20220718
-hexagon              randconfig-r041-20220718
-hexagon              randconfig-r045-20220718
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+What you really seem to be wanting to do is to use haltpoll instead of
+ACPI idle.  Is that correct?

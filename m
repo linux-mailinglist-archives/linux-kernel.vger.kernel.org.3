@@ -2,50 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CE657BF6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8462157BF70
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiGTVHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 17:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S230242AbiGTVHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 17:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiGTVHY (ORCPT
+        with ESMTP id S230233AbiGTVHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 17:07:24 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCC41A07C;
-        Wed, 20 Jul 2022 14:07:23 -0700 (PDT)
+        Wed, 20 Jul 2022 17:07:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97224F19A;
+        Wed, 20 Jul 2022 14:07:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0455BCE22D7;
-        Wed, 20 Jul 2022 21:07:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CF4C3411E;
-        Wed, 20 Jul 2022 21:07:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DE69B8220E;
+        Wed, 20 Jul 2022 21:07:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A98C3411E;
+        Wed, 20 Jul 2022 21:07:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658351240;
-        bh=KT0MDTe4I14XJ9G4qNy1ibxlgS5Etqvlq1vDOT8v2A8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=QVyfAmegKg5T13oaAgr7O4f1JgcvZEA/5kXb9bsiUJb9gZvXeYWq9E7Nu97KbRNg2
-         C5TKVcDQmkiVshPsnmn5Ecd97Lnq+frt4+11SMn6p7+G2KzSg75JOzc8u9SylZ4SuL
-         hnF/wlSoNiGQQz1cR7bGwwzGnHIUFHL4wOtHGujcNMUX+TuhDcx8y2dXNmENo1PHsL
-         utQje8b0QNAVjiB8Dw2atXzFPBQ1KP8NtyvBlVQTUGMuAHTd4jCr+l+XPRZpFaSPw7
-         IUB1OteLYL8+3+TzM5G/USrli5RixEkf2FjZ3knqnKepx5bkbeXCObbXDuuLZwCjiT
-         1cFkf+58VuzzQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     amit.kumar-mahapatra@xilinx.com
-Cc:     git@amd.com, linux-spi@vger.kernel.org,
-        lakshmi.sai.krishna.potthuri@xilinx.com,
-        linux-kernel@vger.kernel.org, amit.kumar-mahapatra@amd.com,
-        sai.krishna.potthuri@amd.com
-In-Reply-To: <20220713164529.28444-1-amit.kumar-mahapatra@xilinx.com>
-References: <20220713164529.28444-1-amit.kumar-mahapatra@xilinx.com>
-Subject: Re: [PATCH] spi: spi-cadence: Fix SPI NO Slave Select macro definition
-Message-Id: <165835123856.909862.1674350119538638.b4-ty@kernel.org>
-Date:   Wed, 20 Jul 2022 22:07:18 +0100
+        s=k20201202; t=1658351253;
+        bh=1Ld4FvfjIhGCC9DAILNlZfNuF8HT5i1wxQaeRVUbfMo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YvbWZdQJXXfi+kz4PP7VNfP/Lt3RfB/QdW2APqnK3nR0oBW0+dANP1X0CgPOUUFe6
+         FttzxgsV+e0eqZyzMrSt1rfzsejYVtyh9GkzcWeh6mGJl3bc1nTYqP0OCnlRPSPpCu
+         PCFTf/r1PWwEZD8SWKNB2Q3aC87VZtVpABHwLR3lVS+XJe4UgSgwZVRk+3480klkwl
+         WON4x3e+oYZzkn5EwDZ7rgCRT+eg+3K3ILPYEaT8k38eXeLmxeZF+L3HDL6gNuZGMt
+         KcW5+BtLrO25bO971OEaCcz7YxGco9FiLWob3G7gffa1LQOgQnTqovNErrBtmDtwpt
+         ygvexKjEkj3eA==
+Date:   Wed, 20 Jul 2022 16:07:31 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: PCI: fsl,imx6q-pcie: Add missing type for
+ 'reset-gpio-active-high'
+Message-ID: <20220720210731.GA1657725@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719215031.1875860-1-robh@kernel.org>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,38 +62,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Jul 2022 22:15:29 +0530, Amit Kumar Mahapatra wrote:
-> From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+On Tue, Jul 19, 2022 at 03:50:31PM -0600, Rob Herring wrote:
+> 'reset-gpio-active-high' is missing a type definition and is not a common
+> property. The type is boolean.
 > 
-> Fix SPI NO Slave Select macro definition, when all the SPI CS bits
-> are high which means no slave is selected.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+You've merged previous updates, Rob, so I assume you'll do the same
+with this.
+
+> ---
+>  Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+> index 252e5b72aee0..376e739bcad4 100644
+> --- a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+> @@ -144,6 +144,7 @@ properties:
+>      description: If present then the reset sequence using the GPIO
+>        specified in the "reset-gpio" property is reversed (H=reset state,
+>        L=operation state) (optional required).
+> +    type: boolean
+>  
+>    vpcie-supply:
+>      description: Should specify the regulator in charge of PCIe port power.
+> -- 
+> 2.34.1
 > 
 > 
-
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: spi-cadence: Fix SPI NO Slave Select macro definition
-      commit: e1502ba41699736c578ba9d61ae6285d49f6921b
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

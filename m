@@ -2,102 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2560157BCDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDDB57BCE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235327AbiGTRja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S239180AbiGTRke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiGTRj2 (ORCPT
+        with ESMTP id S232685AbiGTRka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:39:28 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD337098F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:39:26 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y11so31465065lfs.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:39:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aeyafCkyinZJZTTcPy1wEfXMzXWZcIm0MV4FRs14iJQ=;
-        b=zreXvg79hkBxKuShfS2H1ZVu3CjpX0spc5x+RYWSF3KMxuyjz5fLD7BBgfbuNGIvaN
-         a2Wol5GaBcqFJs24Or/Cx8yVs8kKCzk2Q2Q+Kbw4VACBuD0IgavdZPfksPMWyjvHRkA3
-         Xtom3dAIkGJ5NScEK9Dlt+XbFEMBKHcftw6XKQlhV5SMy5nxSAzs47rcxyG3JKnh9vEl
-         /OKrKhIMKbRVpK72I4APWWgYq4traCLcCWzFv5auA0G14VIFu2oCCHlZ6ikxN3c33nsV
-         XkKmrckQcwEb+7CWFRCHpGWzPJugLd1eKmVhWrUCUnW87mf1rv/60AlQED8RF/yHnS9t
-         ELtw==
+        Wed, 20 Jul 2022 13:40:30 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BF92A241;
+        Wed, 20 Jul 2022 10:40:29 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id u12so1649231qtk.0;
+        Wed, 20 Jul 2022 10:40:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aeyafCkyinZJZTTcPy1wEfXMzXWZcIm0MV4FRs14iJQ=;
-        b=nQT4MQIE0ih6dZdF4BTg0KyTKD3xXB5G1ouscnzjA+VRhw8s3NJPW+egyWo/KLKXaU
-         qLuFPzAqlYEdTWiNFYj7hbE483kdv5V6PXYXxO8E20ODMoPGT1E13oU/mHyHB/HbS77u
-         JW21HkRSl/rBXUBvCFLJsIC7JrYhnikd0KqtSI+ohX352DlvzV69Ov7vjSzQzbTVQ8dp
-         7lv1CIByzQ2aIh3fAs+OnCT1zUNfvwarkXp2FL7sCsfwELzepK5bl+dfLz+1w97sBils
-         UsPx+qVPOwOioWJXjWmFs174YGzYaQom8AUsF5GrMtTj11qLzWPbmIuqtoxQZIsTjmys
-         NO+w==
-X-Gm-Message-State: AJIora+Xyh9huMwvUSvWSgSuGU648X0xVBiD3eBUKafR42st7k7Rm2hw
-        Akrpy6UmMYMBtjn720drHoeWRA==
-X-Google-Smtp-Source: AGRyM1tlok4eLvijqT1LvZXgtABKbS0mRRyNVkb8xzG9GzfNEkfDR+8raI0dXp18XCp0w8HM7jBCAA==
-X-Received: by 2002:a05:6512:410:b0:489:d17a:b2c0 with SMTP id u16-20020a056512041000b00489d17ab2c0mr21052431lfk.493.1658338765232;
-        Wed, 20 Jul 2022 10:39:25 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id z13-20020a19504d000000b00489e64dcf75sm3940177lfj.204.2022.07.20.10.39.23
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PmcZJKXW5L1h76Y7jDvbkfD3n85Nfb/cTZUz3jaZfpo=;
+        b=IPjEJxNrYKP/bAlPgxKrn9FRbVKtzEunsywWgj6Ah5b2RkACwEAkC9UR3zFDDBuGCf
+         DmR2Tria1RLN9CtkfNsyxYmmIVc7LqeCC0PPw1ie4atvpQKIws0vBKhVN2NoXwCo6Iu3
+         6pi3IWLHoNY++xp3S8EJdXkRSrg6SCZne70H354F+qWvVyz12PztKFB0AJuVKzwXQC6z
+         W+9/NatlcBA6ngOBQsGZU905K0CGJEHQbKn+mm7DAuE38BJhiKHkfqulCvF7CfYYoscW
+         zDt6uR/kHv/q8ff5orI6JiHpXMzqXg6L6dPJvNNSMLU/ozAufiz2HcHBxZ3e11S4Uilw
+         xljA==
+X-Gm-Message-State: AJIora/NodvMzBgl4OHy4tqkS3vMy+2Yvabf/5xoRajZ1W9oiDUaFc08
+        ZKDwIcI85P7lvk6Xz5nMMjd4wW++ToamFa1M
+X-Google-Smtp-Source: AGRyM1s9l8OS7ZCQgfbMTab10+PGIrLc1fxawXk5LNRiK0T4+LYGriYHhmB3sDRnu/Jk9uLMG6tKGA==
+X-Received: by 2002:ac8:5a41:0:b0:31f:280:b7ca with SMTP id o1-20020ac85a41000000b0031f0280b7camr6179579qta.518.1658338828709;
+        Wed, 20 Jul 2022 10:40:28 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id bq7-20020a05620a468700b006b578ff5dfasm5045912qkb.41.2022.07.20.10.40.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 10:39:24 -0700 (PDT)
-Message-ID: <085a003e-576d-b39a-60ce-ca8f53c89d43@linaro.org>
-Date:   Wed, 20 Jul 2022 19:39:23 +0200
+        Wed, 20 Jul 2022 10:40:28 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id 75so33323451ybf.4;
+        Wed, 20 Jul 2022 10:40:28 -0700 (PDT)
+X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
+ r1-20020a5b06c1000000b00669a7c34c33mr36151263ybq.543.1658338827759; Wed, 20
+ Jul 2022 10:40:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 08/21] arm64: dts: mediatek: Update mt81xx scpsys node
- to align with dt-bindings
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>
-Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220720123023.13500-1-tinghan.shen@mediatek.com>
- <20220720123023.13500-9-tinghan.shen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220720123023.13500-9-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220720131934.373932-1-shorne@gmail.com> <20220720131934.373932-3-shorne@gmail.com>
+In-Reply-To: <20220720131934.373932-3-shorne@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 20 Jul 2022 19:40:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX7_CSQd14tGPfL7R7V0h6AwNi7bVDCWhcdNoZV_md4bw@mail.gmail.com>
+Message-ID: <CAMuHMdX7_CSQd14tGPfL7R7V0h6AwNi7bVDCWhcdNoZV_md4bw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] PCI: Move isa_dma_bridge_buggy out of dma.h
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 14:30, Tinghan Shen wrote:
-> Update scpsys nodes using simple-mfd in mt81xx SoC devicetree
-> to align with the bindings.
+On Wed, Jul 20, 2022 at 3:20 PM Stafford Horne <shorne@gmail.com> wrote:
+> During recent PCI cleanups we noticed that the isa_dma_bridge_buggy
+> symbol supported by all architectures is actually only used for x86_32.
+>
+> This patch moves the symbol out of all architectures limiting usage to
+> only x86_32.  This is possible because only x86_32 platforms or quirks
+> existing in PCI devices supported on x86_32 ever set this.  A new global
+> header linux/isa-dma.h is added to provide a common place to maintain
+> the definition.
+>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Suggested-by: Christoph Hellwig <hch@infradead.org>
+> Signed-off-by: Stafford Horne <shorne@gmail.com>
+> ---
+> Since v3:
+>  - New patch.
 
-"Update" is not accurate enough description. The same in commit title.
-It answers "why" you are doing it, but does not answer what exactly you
-are changing here and what is the effect. IOW, you need to explain the
-true logic behind it - 10006000 is not power domain provider etc.
+>  arch/m68k/include/asm/dma.h            |  6 ------
 
-> 
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Best regards,
-Krzysztof
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

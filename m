@@ -2,305 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340CF57C0B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFE357C0BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiGTXPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
+        id S231757AbiGTXP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbiGTXPL (ORCPT
+        with ESMTP id S231676AbiGTXPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:15:11 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F252DC9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:15:10 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 17so176487pfy.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:15:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QK88BVgJlmAz1EW2ZNSUHSTLu9SQM8onquvpl9HH+wY=;
-        b=AxK8APEdrJ445WLTV47CbDB2Lj+CyXjlSVZ8bxpnaGF+FSZeibiuGt5iRqW2FO1ucm
-         MBb7XKq2VapoCg2cjQFXa6cblm5ayNBUhiZO04XGg79fWULvYzm8MDtt/WrrwhZZU+D4
-         UVLxbe9W5YMR9/20sqEsRbxYlG3YGxRJEAt1rwkznN/p1qSC4GRVUBCdoEM9OuYhwapE
-         xIEEMcfDQv1RGa4l200xH2/gTpr35bqAlBxdVb2A+txnJjpcUCj+J3eAm1Rq6YhbNlb8
-         pDbkPT80CJHeyf7E8/cQjc578F9cdyzr/IpOSU/O84Pdr7uYATDQHjHvg9bmX21EfOJO
-         WeQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QK88BVgJlmAz1EW2ZNSUHSTLu9SQM8onquvpl9HH+wY=;
-        b=Fhh0wY8m25xOUnAcIcVPNWnh3wh8Aa6ob7mGv+UmQGfx5akK87Y6O5vaOsQEoErd6Z
-         l0V6n+SNQE7FyJ/xZG+UThDB9IQ8xT5i3wrNpl6rK4CnTOMJ27JRETjMxFcfhmYAXHIV
-         jYdS0AmPgajSfXGWWz6jDClA1dxwImw+G8zjfp3wBidwSYeVmuCck/eaVVaq8VMo2vDB
-         j6fXOKvJQ5HOL7ToxBfd8T/H81SVLNfXxc2xGVi+acGLXpiwU55J3WZBRP5j5zMD9/Y+
-         KE89TL0t4NrvpeCQXAfvj+se+xPbv5OS8u1UYM7DjtAL/nrowUuk8WVAxFiLYBvUDoor
-         03RQ==
-X-Gm-Message-State: AJIora/O3pTxS4oyqcJM4UW15qAhnJwDpEEcP8oDGeWsLyf9Cz+iazV+
-        t/HgTzaY6Jm1BYxapdqBGBBnMhOX748MChiRKMwl2w==
-X-Google-Smtp-Source: AGRyM1tpBgFKPXIrRQ2Nuay2e3tm4i6DmYA9x1YOjhO9tEUHV4z0qJlPrRHaot14IkK2woHdeCSoCK+nPTQ57HLkIB0=
-X-Received: by 2002:a05:6a00:428e:b0:52b:7e40:56cf with SMTP id
- bx14-20020a056a00428e00b0052b7e4056cfmr14535895pfb.72.1658358909163; Wed, 20
- Jul 2022 16:15:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
- <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com>
- <179cfb89be0e4f928a55d049fe62aa9e@huawei.com> <CAKH8qBt0yR+mtCjAp=8jQL4M6apWQk0wH7Zf4tPDCf3=m+gAKA@mail.gmail.com>
- <31473ddf364f4f16becfd5cd4b9cd7d2@huawei.com> <CAKH8qBsFg5gQ0bqpVtYhiQx=TqJG31c8kfsbCG4X57QGLOhXvw@mail.gmail.com>
- <0c284e09817e4e699aa448aa25af5d79@huawei.com> <CAKH8qBvwzVPY1yJM_FjdH5QptVkZz=j9Ph7pTPCbTLdY1orKJg@mail.gmail.com>
- <c9c203821a854e33970fd10e01632cb7@huawei.com> <CAKH8qBuazK5PwDYAG2bPGfyASAMQAd4_dpFjcW0KYz4ON+kj3g@mail.gmail.com>
- <bf326b7c927a475cae33b89416c1b082@huawei.com>
-In-Reply-To: <bf326b7c927a475cae33b89416c1b082@huawei.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 20 Jul 2022 16:14:58 -0700
-Message-ID: <CAKH8qBtgHK4dpoJzkq2q7rj37Ep9peEPE-3GBu=QqxUU8YVrPQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Joe Burton <jevburton.kernel@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joe Burton <jevburton@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 19:15:53 -0400
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E122B66AFF;
+        Wed, 20 Jul 2022 16:15:50 -0700 (PDT)
+Content-Type: multipart/signed;
+        boundary="Apple-Mail=_1A5477F2-D165-412B-B925-92359613B8D1";
+        protocol="application/pgp-signature";
+        micalg=pgp-sha512
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: WARNING: CPU: 1 PID: 14735 at fs/dcache.c:365
+ dentry_free+0x100/0x128
+From:   Sam James <sam@gentoo.org>
+In-Reply-To: <Ytg2CDLzLo+FKbTZ@ZenIV>
+Date:   Thu, 21 Jul 2022 00:15:43 +0100
+Cc:     Hillf Danton <hdanton@sina.com>, Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Message-Id: <9B4CB715-FEA1-4991-ABA1-23B2DF203258@gentoo.org>
+References: <20220709090756.2384-1-hdanton@sina.com>
+ <20220715133300.1297-1-hdanton@sina.com>
+ <cff76e00-3561-4069-f5c7-26d3de4da3c4@gmx.de> <Ytd2g72cj0Aq1MBG@ZenIV>
+ <860792bb-1fd6-66c6-ef31-4edd181e2954@gmx.de> <YtepmwLj//zrD3V3@ZenIV>
+ <20220720110032.1787-1-hdanton@sina.com> <Ytg2CDLzLo+FKbTZ@ZenIV>
+To:     Al Viro <viro@zeniv.linux.org.uk>, Helge Deller <deller@gmx.de>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 4:12 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > Sent: Thursday, July 21, 2022 1:09 AM
-> > On Wed, Jul 20, 2022 at 4:02 PM Roberto Sassu <roberto.sassu@huawei.com>
-> > wrote:
-> > >
-> > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > Sent: Thursday, July 21, 2022 12:48 AM
-> > > > On Wed, Jul 20, 2022 at 3:44 PM Roberto Sassu
-> > <roberto.sassu@huawei.com>
-> > > > wrote:
-> > > > >
-> > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > > > Sent: Thursday, July 21, 2022 12:38 AM
-> > > > > > On Wed, Jul 20, 2022 at 3:30 PM Roberto Sassu
-> > > > <roberto.sassu@huawei.com>
-> > > > > > wrote:
-> > > > > > >
-> > > > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > > > > > Sent: Wednesday, July 20, 2022 5:57 PM
-> > > > > > > > On Wed, Jul 20, 2022 at 1:02 AM Roberto Sassu
-> > > > > > <roberto.sassu@huawei.com>
-> > > > > > > > wrote:
-> > > > > > > > >
-> > > > > > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > > > > > > > Sent: Tuesday, July 19, 2022 10:40 PM
-> > > > > > > > > > On Tue, Jul 19, 2022 at 12:40 PM Joe Burton
-> > > > > > <jevburton.kernel@gmail.com>
-> > > > > > > > > > wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > From: Joe Burton <jevburton@google.com>
-> > > > > > > > > > >
-> > > > > > > > > > > Add an extensible variant of bpf_obj_get() capable of setting the
-> > > > > > > > > > > `file_flags` parameter.
-> > > > > > > > > > >
-> > > > > > > > > > > This parameter is needed to enable unprivileged access to BPF
-> > > > maps.
-> > > > > > > > > > > Without a method like this, users must manually make the
-> > syscall.
-> > > > > > > > > > >
-> > > > > > > > > > > Signed-off-by: Joe Burton <jevburton@google.com>
-> > > > > > > > > >
-> > > > > > > > > > Reviewed-by: Stanislav Fomichev <sdf@google.com>
-> > > > > > > > > >
-> > > > > > > > > > For context:
-> > > > > > > > > > We've found this out while we were trying to add support for
-> > unpriv
-> > > > > > > > > > processes to open pinned r-x maps.
-> > > > > > > > > > Maybe this deserves a test as well? Not sure.
-> > > > > > > > >
-> > > > > > > > > Hi Stanislav, Joe
-> > > > > > > > >
-> > > > > > > > > I noticed now this patch. I'm doing a broader work to add opts
-> > > > > > > > > to bpf_*_get_fd_by_id(). I also adjusted permissions of bpftool
-> > > > > > > > > depending on the operation type (e.g. show, dump:
-> > BPF_F_RDONLY).
-> > > > > > > > >
-> > > > > > > > > Will send it soon (I'm trying to solve an issue with the CI, where
-> > > > > > > > > libbfd is not available in the VM doing actual tests).
-> > > > > > > >
-> > > > > > > > Is something like this patch included in your series as well? Can you
-> > > > > > > > use this new interface or do you need something different?
-> > > > > > >
-> > > > > > > It is very similar. Except that I called it bpf_get_fd_opts, as it
-> > > > > > > is shared with the bpf_*_get_fd_by_id() functions. The member
-> > > > > > > name is just flags, plus an extra u32 for alignment.
-> > > > > >
-> > > > > > We can bikeshed the naming, but we've been using existing conventions
-> > > > > > where opts fields match syscall fields, that seems like a sensible
-> > > > > > thing to do?
-> > > > >
-> > > > > The only problem is that bpf_*_get_fd_by_id() functions would
-> > > > > set the open_flags member of bpf_attr.
-> > > > >
-> > > > > Flags would be good for both, even if not exact. Believe me,
-> > > > > duplicating the opts would just create more confusion.
-> > > >
-> > > > Wait, that's completely different, right? We are talking here about
-> > > > BPF_OBJ_GET (which has related BPF_OBJ_PIN).
-> > > > Your GET_XXX_BY_ID are different so you'll still have to have another
-> > > > wrapper with opts?
-> > >
-> > > Yes, they have different wrappers, just accept the same opts as
-> > > obj_get(). From bpftool subcommands you want to set the correct
-> > > permission, and propagate it uniformly to bpf_*_get_fd_by_id()
-> > > or obj_get(). See map_parse_fds().
-> >
-> > I don't think they are accepting the same opts.
-> >
-> > For our case, we care about:
-> >
-> >         struct { /* anonymous struct used by BPF_OBJ_* commands */
-> >                 __aligned_u64   pathname;
-> >                 __u32           bpf_fd;
-> >                 __u32           file_flags;
-> >         };
-> >
-> > For your case, you care about:
-> >
-> >         struct { /* anonymous struct used by BPF_*_GET_*_ID */
-> >                 union {
-> >                         __u32           start_id;
-> >                         __u32           prog_id;
-> >                         __u32           map_id;
-> >                         __u32           btf_id;
-> >                         __u32           link_id;
-> >                 };
-> >                 __u32           next_id;
-> >                 __u32           open_flags;
-> >         };
-> >
-> > So your new _opts libbpf routine should be independent of what Joe is
-> > doing here.
->
-> It is. Just I use the same opts to set file_flags or open_flags.
 
-That seems confusing. Let's have separate calls for separate syscall
-commands as we do already?
+--Apple-Mail=_1A5477F2-D165-412B-B925-92359613B8D1
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+	charset=us-ascii
 
-> Roberto
->
-> > > Roberto
-> > >
-> > > > > > > It needs to be shared, as there are functions in bpftool calling
-> > > > > > > both. Since the meaning of flags is the same, seems ok sharing.
-> > > > > >
-> > > > > > So I guess there are no objections to the current patch? If it gets
-> > > > > > accepted, you should be able to drop some of your code and use this
-> > > > > > new bpf_obj_get_opts..
-> > > > >
-> > > > > If you use a name good also for bpf_*_get_fd_by_id() and flags
-> > > > > as structure member name, that would be ok.
-> > > > >
-> > > > > Roberto
-> > > > >
-> > > > > > > Roberto
-> > > > > > >
-> > > > > > > > > Roberto
-> > > > > > > > >
-> > > > > > > > > > > ---
-> > > > > > > > > > >  tools/lib/bpf/bpf.c      | 10 ++++++++++
-> > > > > > > > > > >  tools/lib/bpf/bpf.h      |  9 +++++++++
-> > > > > > > > > > >  tools/lib/bpf/libbpf.map |  1 +
-> > > > > > > > > > >  3 files changed, 20 insertions(+)
-> > > > > > > > > > >
-> > > > > > > > > > > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> > > > > > > > > > > index 5eb0df90eb2b..5acb0e8bd13c 100644
-> > > > > > > > > > > --- a/tools/lib/bpf/bpf.c
-> > > > > > > > > > > +++ b/tools/lib/bpf/bpf.c
-> > > > > > > > > > > @@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char
-> > > > > > *pathname)
-> > > > > > > > > > >  }
-> > > > > > > > > > >
-> > > > > > > > > > >  int bpf_obj_get(const char *pathname)
-> > > > > > > > > > > +{
-> > > > > > > > > > > +       LIBBPF_OPTS(bpf_obj_get_opts, opts);
-> > > > > > > > > > > +       return bpf_obj_get_opts(pathname, &opts);
-> > > > > > > > > > > +}
-> > > > > > > > > > > +
-> > > > > > > > > > > +int bpf_obj_get_opts(const char *pathname, const struct
-> > > > > > > > bpf_obj_get_opts
-> > > > > > > > > > *opts)
-> > > > > > > > > > >  {
-> > > > > > > > > > >         union bpf_attr attr;
-> > > > > > > > > > >         int fd;
-> > > > > > > > > > >
-> > > > > > > > > > > +       if (!OPTS_VALID(opts, bpf_obj_get_opts))
-> > > > > > > > > > > +               return libbpf_err(-EINVAL);
-> > > > > > > > > > > +
-> > > > > > > > > > >         memset(&attr, 0, sizeof(attr));
-> > > > > > > > > > >         attr.pathname = ptr_to_u64((void *)pathname);
-> > > > > > > > > > > +       attr.file_flags = OPTS_GET(opts, file_flags, 0);
-> > > > > > > > > > >
-> > > > > > > > > > >         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
-> > > > > > > > > > >         return libbpf_err_errno(fd);
-> > > > > > > > > > > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> > > > > > > > > > > index 88a7cc4bd76f..f31b493b5f9a 100644
-> > > > > > > > > > > --- a/tools/lib/bpf/bpf.h
-> > > > > > > > > > > +++ b/tools/lib/bpf/bpf.h
-> > > > > > > > > > > @@ -270,8 +270,17 @@ LIBBPF_API int
-> > bpf_map_update_batch(int
-> > > > fd,
-> > > > > > > > const
-> > > > > > > > > > void *keys, const void *values
-> > > > > > > > > > >                                     __u32 *count,
-> > > > > > > > > > >                                     const struct bpf_map_batch_opts *opts);
-> > > > > > > > > > >
-> > > > > > > > > > > +struct bpf_obj_get_opts {
-> > > > > > > > > > > +       size_t sz; /* size of this struct for forward/backward
-> > > > compatibility
-> > > > > > */
-> > > > > > > > > > > +
-> > > > > > > > > > > +       __u32 file_flags;
-> > > > > > > > > > > +};
-> > > > > > > > > > > +#define bpf_obj_get_opts__last_field file_flags
-> > > > > > > > > > > +
-> > > > > > > > > > >  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
-> > > > > > > > > > >  LIBBPF_API int bpf_obj_get(const char *pathname);
-> > > > > > > > > > > +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
-> > > > > > > > > > > +                               const struct bpf_obj_get_opts *opts);
-> > > > > > > > > > >
-> > > > > > > > > > >  struct bpf_prog_attach_opts {
-> > > > > > > > > > >         size_t sz; /* size of this struct for forward/backward
-> > > > compatibility
-> > > > > > */
-> > > > > > > > > > > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> > > > > > > > > > > index 0625adb9e888..119e6e1ea7f1 100644
-> > > > > > > > > > > --- a/tools/lib/bpf/libbpf.map
-> > > > > > > > > > > +++ b/tools/lib/bpf/libbpf.map
-> > > > > > > > > > > @@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
-> > > > > > > > > > >
-> > > > > > > > > > >  LIBBPF_1.0.0 {
-> > > > > > > > > > >         global:
-> > > > > > > > > > > +               bpf_obj_get_opts;
-> > > > > > > > > > >                 bpf_prog_query_opts;
-> > > > > > > > > > >                 bpf_program__attach_ksyscall;
-> > > > > > > > > > >                 btf__add_enum64;
-> > > > > > > > > > > --
-> > > > > > > > > > > 2.37.0.170.g444d1eabd0-goog
-> > > > > > > > > > >
+
+
+> On 20 Jul 2022, at 18:06, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> 
+> On Wed, Jul 20, 2022 at 07:00:32PM +0800, Hillf Danton wrote:
+> 
+>> To help debug it, de-union d_in_lookup_hash with d_alias and add debug
+>> info after dentry is killed. If any warning hits, we know where to add
+>> something like
+>> 
+>> 	WARN_ON(dentry->d_flags & DCACHE_DENTRY_KILLED);
+>> 
+>> before hlist_bl_add or hlist_add.
+
+> [snip]
+> I wonder if anyone had seen anything similar outside of parisc...
+> I don't know if I have any chance to reproduce it here - the only
+> parisc box I've got is a 715/100 (assuming the disk is still alive)
+> and it's 32bit, unlike the reported setups and, er, not fast.
+> qemu seems to have some parisc support, but it's 32bit-only at the
+> moment...
+
+I don't think I've seen this on parisc either, but I don't think
+I've used tmpfs that heavily. I'll try it in case it's somehow more
+likely to trigger it.
+
+Helge, were there any particular steps to reproduce this? Or just
+start doing your normal Debian builds on a tmpfs and it happens
+soon enough?
+
+
+--Apple-Mail=_1A5477F2-D165-412B-B925-92359613B8D1
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
+
+-----BEGIN PGP SIGNATURE-----
+
+iNUEARYKAH0WIQQlpruI3Zt2TGtVQcJzhAn1IN+RkAUCYtiMn18UgAAAAAAuAChp
+c3N1ZXItZnByQG5vdGF0aW9ucy5vcGVucGdwLmZpZnRoaG9yc2VtYW4ubmV0MjVB
+NkJCODhERDlCNzY0QzZCNTU0MUMyNzM4NDA5RjUyMERGOTE5MAAKCRBzhAn1IN+R
+kC/ZAP41H2nChPS5kcT3/RPjAriOl8IqbRAX0xhphni9gDrL0wEA5pTvzToiSULd
+MSJA6dtocW+ZwQjPiokSt8vHK6HKCgI=
+=tB0a
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_1A5477F2-D165-412B-B925-92359613B8D1--

@@ -2,204 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BAC57BE38
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1334257BE32
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbiGTTCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 15:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S230023AbiGTTBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 15:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232335AbiGTTCI (ORCPT
+        with ESMTP id S231805AbiGTTBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 15:02:08 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED29F7391F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:02:06 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 75so33720024ybf.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:02:06 -0700 (PDT)
+        Wed, 20 Jul 2022 15:01:39 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E0452E74;
+        Wed, 20 Jul 2022 12:01:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZrLA67cwNZVETS1ZHuCD/RT+6Ux5ZfCBf4rowrb0zk0=;
-        b=YT3DmTiyfkNmNptMHmutH4aCptYOfYRcFG5iGz+vPj1xh91hftwgRZVbF/wRHhgFCW
-         1yP86FQRWdyvxo3CPjgvnAYFhKYsg4xRdhZAvb8fEmhoefgT03SVJLFYubN1htgW4In8
-         t6tNVr6ozTt06SPfaEt4t0hjTV1L36J3WR01kFU5ZNbxj6GCZ743km1XpjzuQHn+RR1i
-         jytsYhkdsZViX0r1R/6noErQEJfi5bpHwxr3gD8SgyAPCv7vWZfI56uCK7HWM7r7/PFy
-         SmvPNalQP0Ie215MNTJOK1vcSRgDWta0erJ4se7iwmpkVwf7aKNEFOMppZgPMGsnyAwV
-         GblA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZrLA67cwNZVETS1ZHuCD/RT+6Ux5ZfCBf4rowrb0zk0=;
-        b=v+GzaAlXcQ4b3J54qlZyI1RksBeaQCD5zH1/VjA9aMP3UmbIUxwrYoYjpjwxdRq19M
-         hg5q183FkIb3jczGKLfqQsZfpq9C29Xh4qyuKhKlickzq7P7L1qng+1glls54edQ97sq
-         LrPi0ROzbHqIP4b+oEcbDQn8HVJXzSreQ1qnl52J2AdKkjY4hcutnjKhAF1yBmfpCof0
-         mcIHLh6qfpbk2uxaGHAsA7euVzOPnfD23VmlCrTnBX9Rxa0c2Jnj0wBf+3jlKp+zNNAD
-         bjYOCsQy6/GHUMtE7cmXO1lhCQSgKpTSZZentbwedEUP8HXGJVxLfvXmadb7Ebv2rUaL
-         7FDA==
-X-Gm-Message-State: AJIora/s/TwRJJTfqngH1vI3x7l7R1B6zWf3wPWq68F4vgv6C9MA7uk5
-        EFZEKxPt8TPI50tWeSiVNMfNSivZgZdEmXSqLzNDPA==
-X-Google-Smtp-Source: AGRyM1uk+awIxg+8Ie0mI4x1EeK/QSvobPmBqLZR8RQ7K+Gyc23VhWoJ9xFtopJENev37KrbfMD18GZF9BwnX6/O8DQ=
-X-Received: by 2002:a25:aaa9:0:b0:66e:c6ba:15dd with SMTP id
- t38-20020a25aaa9000000b0066ec6ba15ddmr37815606ybi.242.1658343726294; Wed, 20
- Jul 2022 12:02:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <20220601070707.3946847-7-saravanak@google.com> <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
-In-Reply-To: <CAMuHMdVVgB7KZq7-u-pAC-cZvVLWkv5wM4HC_jW7WK_tz52+cg@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658343697; x=1689879697;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=TOzvRVPqNoT1OqYi1zjIrLa3zYswQtJ3Ow/4dkchUlE=;
+  b=PZEhYzB9p43f4TRxtvNvOU64PDBiFzChrPQKPNcC9Z4qnPSM3e/KCQUP
+   IDYD7Eal3yfkOo5dMnLFiUhUzAsM1XmR7qkBdQyXAGK2Tiy2FnC5kxvDK
+   BK010gKgI2mawJXdtBO4EWCc+hHuPYqC+sQWjbCASHdbhGxAzv9kufZat
+   4=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jul 2022 12:01:36 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 12:01:36 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Jul 2022 12:01:36 -0700
+Received: from [10.38.240.17] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 20 Jul
+ 2022 12:01:32 -0700
+Message-ID: <2a33f6a4-2b23-5709-4b8a-6e4699989b85@quicinc.com>
 Date:   Wed, 20 Jul 2022 12:01:30 -0700
-Message-ID: <CAGETcx-5-241=CxaPsGTTHhCSAZuGb742J9Xrhbj56+2yG6OhQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] Revert "driver core: Set default
- deferred_probe_timeout back to 0."
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v4] drm/msm/dp: make eDP panel as the first connected
+ connector
+Content-Language: en-US
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_aravindh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1657135928-31195-1-git-send-email-quic_khsieh@quicinc.com>
+ <22d4abbf-db93-82e1-ecf1-e7804e72c21b@quicinc.com>
+In-Reply-To: <22d4abbf-db93-82e1-ecf1-e7804e72c21b@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 10:31 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Saravana,
->
-> On Wed, Jun 1, 2022 at 9:45 AM Saravana Kannan <saravanak@google.com> wrote:
-> > This reverts commit 11f7e7ef553b6b93ac1aa74a3c2011b9cc8aeb61.
-> >
-> > Let's take another shot at getting deferred_probe_timeout=10 to work.
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
->
-> Thanks for your patch, which is now commit f516d01b9df2782b
-> ("Revert "driver core: Set default deferred_probe_timeout
-> back to 0."") in driver-core/driver-core-next.
->
-> Wolfram found an issue on a Renesas board where disabling the IOMMU
-> driver (CONFIG_IPMMU_VMSA=n) causes the system to fail to boot,
-> and bisected this to a merge of driver-core/driver-core-next.
-> After some trials, I managed to reproduce the issue, and bisected it
-> further to commit f516d01b9df2782b.
->
-> The affected config has:
->     CONFIG_MODULES=y
->     CONFIG_RCAR_DMAC=y
->     CONFIG_IPMMU_VMSA=n
->
-> In arch/arm64/boot/dts/renesas/r8a77951-salvator-xs.dtb,
-> e6e88000.serial links to a dmac, and the dmac links to an iommu,
-> for which no driver is available.
 
-Thanks for digging into this and giving more details.
 
-Is e6e88000.serial being blocked the reason for the boot failure?
+On 7/20/2022 11:47 AM, Abhinav Kumar wrote:
+> 
+> 
+> On 7/6/2022 12:32 PM, Kuogee Hsieh wrote:
+>> Some userspace presumes that the first connected connector is the main
+>> display, where it's supposed to display e.g. the login screen. For
+>> laptops, this should be the main panel.
+>>
+>> This patch call drm_helper_move_panel_connectors_to_head() after
+>> drm_bridge_connector_init() to make sure eDP stay at head of
+>> connected connector list. This fixes unexpected corruption happen
+>> at eDP panel if eDP is not placed at head of connected connector
+>> list.
+>>
+>> Changes in v2:
+>> -- move drm_helper_move_panel_connectors_to_head() to
+>>         dpu_kms_drm_obj_init()
+>>
+>> Changes in v4:
+>> -- move drm_helper_move_panel_connectors_to_head() to msm_drm_init()
+>>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Fixes: c8afe684c95c ("drm/msm: basic KMS driver for snapdragon")
 
-If so, can you give this a shot?
-https://lore.kernel.org/lkml/20220701012647.2007122-1-saravanak@google.com/
+Lets drop the previous fixes tag and use this one as its more recent and 
+appropriate as it added eDP support for sc7280.
 
-> Playing with deferred_probe_timeout values doesn't help.
+Fixes: ef7837ff091c ("drm/msm/dp: Add DP controllers for sc7280")
 
-This part is strange though. If you set deferred_probe_timeout=1,
-fw_devlink will stop blocking all probes 1 second after
-late_initcall()s finish. So, similar to the ip autoconfig issue, is
-the issue caused by something that needs to be finished before we hit
-late_initcall() but is getting blocked?
-
-> However, the above options do not seem to be sufficient to trigger
-> the issue, as I had other configs with those three options that do
-> boot fine.
->
-> After bisecting configs, I found the culprit: CONFIG_IP_PNP.
-> As Wolfram was using an initramfs, CONFIG_IP_PNP was not needed.
-> If CONFIG_IP_PNP=n, booting fails.
-> If CONFIG_IP_PNP=y, booting succeeds.
-> In fact, just disabling late_initcall(ip_auto_config) makes it fail,
-> too.
-> Reducing ip_auto_config(), it turns out the call to
-> wait_for_init_devices_probe() is what is needed to unblock booting.
->
-> So I guess wait_for_init_devices_probe() needs to be called (where?)
-> if CONFIG_IP_PNP=n, too?
-
-That function just unblocks all devices and allows them to try and
-probe and then waits for all possible probes to finish before
-returning. They problem with call it randomly/every time is that it
-breaks functionality where an optional supplier will probe after a few
-modules are loaded in the future.
-
-I guess one possible issue with the timeout not helping is that once
-the timeout expires, things are still being probed and nothing is
-being blocked till they finish probing.
-
-I'm trying to have the default config (in terms of fw_devlink,
-deferred probe behavior, timeouts, etc) be the same between a fully
-static kernel (but CONFIG_MODULES still enabled) and a fully modular
-kernel (like GKI). But it might end up being an untenable problem.
-
-I'll wait to see what specifically is the issue in this case and then
-I'll go from there.
-
--Saravana
-
-> > --- a/drivers/base/dd.c
-> > +++ b/drivers/base/dd.c
-> > @@ -256,7 +256,12 @@ static int deferred_devs_show(struct seq_file *s, void *data)
-> >  }
-> >  DEFINE_SHOW_ATTRIBUTE(deferred_devs);
-> >
-> > +#ifdef CONFIG_MODULES
-> > +int driver_deferred_probe_timeout = 10;
-> > +#else
-> >  int driver_deferred_probe_timeout;
-> > +#endif
-> > +
-> >  EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
-> >
-> >  static int __init deferred_probe_timeout_setup(char *str)
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+>> ---
+>>   drivers/gpu/drm/msm/msm_drv.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/msm/msm_drv.c 
+>> b/drivers/gpu/drm/msm/msm_drv.c
+>> index 4a3dda2..4d518c2 100644
+>> --- a/drivers/gpu/drm/msm/msm_drv.c
+>> +++ b/drivers/gpu/drm/msm/msm_drv.c
+>> @@ -419,6 +419,8 @@ static int msm_drm_init(struct device *dev, const 
+>> struct drm_driver *drv)
+>>           }
+>>       }
+>> +    drm_helper_move_panel_connectors_to_head(ddev);
+>> +
+>>       ddev->mode_config.funcs = &mode_config_funcs;
+>>       ddev->mode_config.helper_private = &mode_config_helper_funcs;

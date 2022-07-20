@@ -2,115 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826BD57BEEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0652057BEF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiGTUCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 16:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
+        id S229752AbiGTUGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 16:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGTUCN (ORCPT
+        with ESMTP id S229490AbiGTUGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:02:13 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83D0419A0;
-        Wed, 20 Jul 2022 13:02:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658347332; x=1689883332;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dHZEgzph0FJ1oHjaT4tPvKxwZIKWqbLw2YLcAk4HGGo=;
-  b=ZyhyvwPXUH/cmyyTjGvRxe/S+CJITwfMQeeWpAN2R8wPcX+Ouix+d8G5
-   htbN+dRUUCwuvXRz6XDdeT9F7biRM/NZ7VxDJuQ5QrKlg31KP7qBaxDV3
-   ELGP6alMzmCJJYucTxdEAKtBLKFd9Pd/kIxQErRP2kMnewtt64iTzw9pd
-   ZUONgt+V+GBW8FIhOJ29nWw6pioVtabAwgZDA7KOKAooAk/23SvxnRzDO
-   N64pPbx9PZM1fxY6XLaWFzSM2KIGgS0RZOTIQUsVZEWTUCgfV/B3Lu37J
-   5VTmRf8nz1zGb7s7KQPdhC4l9VuaZLd5ysbR+gSnrCx19qiUkpbVHGTpG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="273714247"
-X-IronPort-AV: E=Sophos;i="5.92,287,1650956400"; 
-   d="scan'208";a="273714247"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 13:02:12 -0700
-X-IronPort-AV: E=Sophos;i="5.92,287,1650956400"; 
-   d="scan'208";a="573448514"
-Received: from dgovor-mobl1.amr.corp.intel.com (HELO [10.209.89.58]) ([10.209.89.58])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 13:02:11 -0700
-Message-ID: <00b07459-5512-b00b-636b-f35845ec369f@intel.com>
-Date:   Wed, 20 Jul 2022 13:02:11 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     dave@sr71.net, Jarkko Sakkinen <jarkko@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
+        Wed, 20 Jul 2022 16:06:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13729422F1;
+        Wed, 20 Jul 2022 13:06:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A383261C19;
+        Wed, 20 Jul 2022 20:06:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF2D6C3411E;
+        Wed, 20 Jul 2022 20:06:07 +0000 (UTC)
+Date:   Wed, 20 Jul 2022 16:06:06 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Kai Huang <kai.huang@intel.com>,
-        Haitao Huang <haitao.huang@linux.intel.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
- <YthcXSTfjoM+jjvN@google.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YthcXSTfjoM+jjvN@google.com>
-Content-Type: text/plain; charset=UTF-8
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Tao Zhou <tao.zhou@linux.dev>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org
+Subject: Re: [PATCH V6 04/16] rv/include: Add deterministic automata monitor
+ definition via C macros
+Message-ID: <20220720160606.3e672b55@gandalf.local.home>
+In-Reply-To: <9ffc05b67fff087413143a420373731e0e34eef4.1658244826.git.bristot@kernel.org>
+References: <cover.1658244826.git.bristot@kernel.org>
+        <9ffc05b67fff087413143a420373731e0e34eef4.1658244826.git.bristot@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 12:49, Sean Christopherson wrote:
-> On Wed, Jul 20, 2022, Dave Hansen wrote:
->> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->> index 0c1ba6aa0765..96a73b5b4369 100644
->> --- a/arch/x86/kvm/cpuid.c
->> +++ b/arch/x86/kvm/cpuid.c
->> @@ -1022,9 +1022,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>  		 * userspace.  ATTRIBUTES.XFRM is not adjusted as userspace is
->>  		 * expected to derive it from supported XCR0.
->>  		 */
->> -		entry->eax &= SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT |
->> -			      SGX_ATTR_PROVISIONKEY | SGX_ATTR_EINITTOKENKEY |
->> -			      SGX_ATTR_KSS;
->> +		entry->eax &= SGX_ATTR_PRIV_MASK | SGX_ATTR_UNPRIV_MASK;
-> 
-> It may seem like a maintenance burdern, and it is to some extent, but I think it's
-> better for KVM to have to explicitly "enable" each flag.  There is no guarantee
-> that a new feature will not require additional KVM enabling, i.e. we want the pain
-> of having to manually update KVM so that we get "feature X isn't virtualized"
-> complaints and not "I upgraded my kernel and my enclaves broke" bug reports.
-> 
-> I don't think it's likely that attribute-based features will require additional
-> enabling since there aren't any virtualization controls for the ENCLU side of
-> things (ENCLU is effectively disabled by blocking ENCLS[ECREATE]), but updating
-> KVM isn't particularly difficult so I'd rather be paranoid.
+On Tue, 19 Jul 2022 19:27:09 +0200
+Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 
-How about something where KVM gets to keep a discrete mask, but where
-it's at least defined next to the attributes, something like:
+> diff --git a/include/linux/rv.h b/include/linux/rv.h
+> index 4f5b70eee557..31d8b2614eae 100644
+> --- a/include/linux/rv.h
+> +++ b/include/linux/rv.h
+> @@ -7,6 +7,8 @@
+>  #ifndef _LINUX_RV_H
+>  #define _LINUX_RV_H
+>  
+> +#define MAX_DA_NAME_LEN         24
+> +
+>  struct rv_reactor {
+>  	char			*name;
+>  	char			*description;
+> diff --git a/include/rv/da_monitor.h b/include/rv/da_monitor.h
+> new file mode 100644
+> index 000000000000..ef7ee3ffcad6
+> --- /dev/null
+> +++ b/include/rv/da_monitor.h
+> @@ -0,0 +1,507 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2019-2022 Red Hat, Inc. Daniel Bristot de Oliveira <bristot@kernel.org>
+> + *
+> + * Deterministic automata (DA) monitor functions, to be used together
+> + * with automata models in C generated by the dot2k tool.
+> + *
+> + * The dot2k tool is available at tools/verification/dot2k/
+> + */
+> +
+> +#include <rv/automata.h>
+> +#include <linux/rv.h>
+> +#include <linux/bug.h>
+> +
+> +/*
+> + * Generic helpers for all types of deterministic automata monitors.
+> + */
+> +#define DECLARE_DA_MON_GENERIC_HELPERS(name, type)						\
+> +												\
+> +static char REACT_MSG[1024];									\
+> +												\
+> +static inline char *format_react_msg(type curr_state, type event)				\
 
-/*
- * These attributes will be advertised to KVM guests as being
- * available.  This includes privileged attributes.  Only add
- * to this list when host-side KVM does not require additional
- * enabling for the attribute.
- */
-#define SGX_ATTR_KVM_MASK       (SGX_ATTR_DEBUG         | \
-                                 SGX_ATTR_MODE64BIT     | \
-                                 SGX_ATTR_PROVISIONKEY  | \
-                                 SGX_ATTR_EINITTOKENKEY | \
-                                 SGX_ATTR_KSS           | \
-                                 SGX_ATTR_ASYNC_EXIT_NOTIFY)
+You probably want to call this format_react_msg_##name() too.
 
-That at least has a *chance* of someone seeing it who goes to add a new
-attribute.
+> +{												\
+> +	snprintf(REACT_MSG, 1024,								\
+> +		 "rv: monitor %s does not allow event %s on state %s\n",			\
+> +		 #name,										\
+> +		 model_get_event_name_##name(event),						\
+> +		 model_get_state_name_##name(curr_state));					\
+> +	return REACT_MSG;									\
+> +}												\
+> +												\
+> +static void cond_react(char *msg)								\
+
+And this cond_react_##name() as well. Otherwise you can have issues with
+the same function being used by multiple monitors. What if two are declared
+in the same file? This will fail to build.
+
+> +{												\
+> +	if (rv_##name.react)									\
+> +		rv_##name.react(msg);								\
+> +}												\
+> +												\
+> +/*												\
+> + * da_monitor_reset_##name - reset a monitor and setting it to init state			\
+> + */												\
+> +static inline void da_monitor_reset_##name(struct da_monitor *da_mon)				\
+> +{												\
+> +	da_mon->monitoring = 0;									\
+> +	da_mon->curr_state = model_get_initial_state_##name();					\
+> +}												\
+> +												\
+> +/*												\
+> + * da_monitor_curr_state_##name - return the current state					\
+> + */												\
+> +static inline type da_monitor_curr_state_##name(struct da_monitor *da_mon)			\
+> +{												\
+> +	return da_mon->curr_state;								\
+> +}												\
+> +												\
+> +/*												\
+> + * da_monitor_set_state_##name - set the new current state					\
+> + */												\
+> +static inline void										\
+> +da_monitor_set_state_##name(struct da_monitor *da_mon, enum states_##name state)		\
+> +{												\
+> +	da_mon->curr_state = state;								\
+> +}												\
+> +												\
+> +/*												\
+> + * da_monitor_start_##name - start monitoring							\
+> + *												\
+> + * The monitor will ignore all events until monitoring is set to true. This			\
+> + * function needs to be called to tell the monitor to start monitoring.				\
+> + */												\
+> +static inline void da_monitor_start_##name(struct da_monitor *da_mon)				\
+> +{												\
+> +	da_mon->monitoring = 1;									\
+> +}												\
+> +												\
+> +/*												\
+> + * da_monitoring_##name - returns true if the monitor is processing events			\
+> + */												\
+> +static inline bool da_monitoring_##name(struct da_monitor *da_mon)				\
+> +{												\
+> +	return da_mon->monitoring;								\
+> +}												\
+> +												\
+> +/*												\
+> + * da_monitor_enabled_##name - checks if the monitor is enabled					\
+> + */												\
+> +static inline bool da_monitor_enabled_##name(void)						\
+> +{												\
+
+Should we add a:
+
+	smp_rmb();
+
+here? And then a smp_wmb() where these switches get updated?
+
+I guess how critical is it that these turn off immediately after the switch
+is flipped?
+
+> +	/* global switch */									\
+> +	if (unlikely(!rv_monitoring_on()))							\
+> +		return 0;									\
+> +												\
+> +	/* monitor enabled */									\
+> +	if (unlikely(!rv_##name.enabled))							\
+> +		return 0;									\
+> +												\
+> +	return 1;										\
+> +}												\
+> +												\
+> +/*												\
+> + * da_monitor_handling_event_##name - checks if the monitor is ready to handle events		\
+> + */												\
+> +static inline bool da_monitor_handling_event_##name(struct da_monitor *da_mon)			\
+> +{												\
+> +												\
+> +	if (!da_monitor_enabled_##name())							\
+> +		return 0;									\
+> +												\
+> +	/* monitor is actually monitoring */							\
+> +	if (unlikely(!da_monitoring_##name(da_mon)))						\
+> +		return 0;									\
+> +												\
+> +	return 1;										\
+> +}
+
+
+> diff --git a/kernel/trace/rv/Kconfig b/kernel/trace/rv/Kconfig
+> index 3eb5d48ab4f6..0123bdf7052a 100644
+> --- a/kernel/trace/rv/Kconfig
+> +++ b/kernel/trace/rv/Kconfig
+> @@ -1,5 +1,19 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  #
+> +config DA_MON_EVENTS
+> +	default n
+> +	bool
+> +
+> +config DA_MON_EVENTS_IMPLICIT
+> +	select DA_MON_EVENTS
+> +	default n
+> +	bool
+> +
+> +config DA_MON_EVENTS_ID
+> +	select DA_MON_EVENTS
+> +	default n
+> +	bool
+
+The "default n" are not needed. The default is 'n' without it.
+
+-- Steve
+
+> +
+>  menuconfig RV
+>  	bool "Runtime Verification"
+>  	depends on TRACING
+> diff --git a/kernel/trace/rv/rv.c b/kernel/trace/rv/rv.c
+> index eb835777a59b..00183e056dfd 100644
+> --- a/kernel/trace/rv/rv.c
+> +++ b/kernel/trace/rv/rv.c
+> @@ -141,6 +141,11 @@
+>  #include <linux/slab.h>
+>  #include <rv/rv.h>
+>  
+> +#ifdef CONFIG_DA_MON_EVENTS
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/rv.h>
+> +#endif
+> +
+>  #include "rv.h"
+>  
+>  DEFINE_MUTEX(rv_interface_lock);
+

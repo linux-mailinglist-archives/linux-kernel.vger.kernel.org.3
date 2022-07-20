@@ -2,469 +2,427 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AED57AE06
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B5E57ADA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238792AbiGTCc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        id S241222AbiGTCSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237926AbiGTCcx (ORCPT
+        with ESMTP id S231403AbiGTCRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:32:53 -0400
-X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Jul 2022 19:32:46 PDT
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82F4655AF
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:32:46 -0700 (PDT)
-X-UUID: 4b2493d0abb1454f94b27e49650f6071-20220720
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11109
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HNeS6uumcgOimgeWuoeaguA==
-X-Content-Feature: ica/max.line-size 113
-        audit/email.address 1
-        dict/adv 2
-        dict/notice 1
-        dict/software 1
-        dict/transaction 1
-        meta/cnt.alert 1
-X-CPASD-INFO: b0381e85685c4e40b44fa25d7b01848e@q4BtWF6XZmViWHevg6h_aoJlZJaRXlW
-        zeZxQYWZkZIWVgnxsTWBoXVeFhGxQYV9dYFF5d2pZYmBgY1B9i4Jyj1RgXmCCVHSTgKRqU2hflQ==
-X-CLOUD-ID: b0381e85685c4e40b44fa25d7b01848e
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:196.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:408.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4352.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:0,DUF:1635,ACD:23,DCD:23,SL:0,EISP:0,AG:0,CFC:0.593,CFSR:0.024,UAT:0,RA
-        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
-        AF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 4b2493d0abb1454f94b27e49650f6071-20220720
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 4b2493d0abb1454f94b27e49650f6071-20220720
-X-User: lizhenneng@kylinos.cn
-Received: from localhost.localdomain [(111.48.58.12)] by mailgw
-        (envelope-from <lizhenneng@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1275142349; Wed, 20 Jul 2022 10:17:46 +0800
-From:   Zhenneng Li <lizhenneng@kylinos.cn>
-To:     Alex Deucher <alexander.deucher@amd.com>
-Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Zhenneng Li <lizhenneng@kylinos.cn>
-Subject: [PATCH] drm/amdgpu: use native mode for dp aux transfer
-Date:   Wed, 20 Jul 2022 10:16:39 +0800
-Message-Id: <20220720021639.58406-1-lizhenneng@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 19 Jul 2022 22:17:53 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E7147BB2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:17:52 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K0tcCK031787;
+        Wed, 20 Jul 2022 02:17:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=corp-2022-7-12;
+ bh=+0b1buKPxx6VE+xS0ILIUi4REqrW+FO3AQ1K10fXSH8=;
+ b=wO41Lp14qc73uaJeu7w4ev68xvcgI05xJ0nILBk4Qw3nWeS4gQeVrpbjPKW4Zqn+BxkO
+ v/2A7dvnbchVB9EdwqLMHzKPJloT01gHGE5Pfh0TlspnvoPD2TnsHqr1U3Q40kElCmSF
+ LofjBmUQerjNtEwfSOWvGZ0ygVCLsdzmpVNpVEw7PCezVlokqapTg8Js2DUUX+1BoRdk
+ hYoqPdM349Gab20BH+HcQbtBbJtlbEBQal8TlthVq/ate7NxC8HbHuDDVfsaWxTcgu1p
+ YvZ3zkaebFunmeShLNNlFxlRgtJvxKPyBpmga1mDsdfyqZTkts0TeTdEEQYOJ38k0lx3 uQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbnvtg6a6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jul 2022 02:17:41 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26JMwV09039184;
+        Wed, 20 Jul 2022 02:17:40 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1k592px-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jul 2022 02:17:40 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eePY93obnD6HW3vB4muYH1PZC6QEEg2n+8lXXQslvn2ERAGTv2AGznMeEbsO5ALSiVZIDTrOFvl8wDlfCGfRIgsPm8twYrL8RcmlG7BmgPjd20GwC72Sc1brPgRZTd/B4UmLLqu7z3/LzvLGgNlM8Q9dvB+6zLTmHJJfczxX6F5weGplxMCBTQAZI0DwP7HhgW3DdTASd+2EGTKZ2CtWtUT762M6aFdy6Pb/wO989mR36SldO/Z89DiVkICIF/f8X6b1vrSbRJ+NCjxJTG3lOcP3GrltPD4MzNnxmEmHjwwF/yDt0Q3RPtRVsskiQvdeOrd9qp0h1bq2ZUu8G0CQ0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+0b1buKPxx6VE+xS0ILIUi4REqrW+FO3AQ1K10fXSH8=;
+ b=S6alqOivrHzZ587Y/v47EgMxSAkzP0ouiRV0KEFIrLsPgKBNlX6ZrD5HohbTMgD4z2HuNlG6hv7+uhRMS2/T2qwVbdESCOEbCTXeavmuNvFbFdFFfHTbf8dlBb0oAhUhbFP6ZFzi7Ohw0ODA+FcIo7UUdlteFx1BGxGnmS477vLRNaDIo+HjTZSBMxDOlfQIbHTQTpG6l2H8PDFrOdD+F3vVO2eDmTJ3Q3COU4nWuvoKDj3wnqZBMEYcu/O4LjwyU0Nh3yQ1TcRZlAYVtCDP90h4gXwiARBwQeVpj6OtyCSWslNx2Hz2vxJtJPjRgIrq4kCEHtSOM1dSD4EbbVV3qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+0b1buKPxx6VE+xS0ILIUi4REqrW+FO3AQ1K10fXSH8=;
+ b=v9XkMF3UHr5WL9SDPgNYEAzL+4nTAUdy/brvyegwR5HPDnwMuJbjtm/jtCz3e93K9k79YRtRsmE2FiaTPKazKjvXV09jD3ENugY56Ev36+npGvufddjfUqZS75JYiLocrNIExOGScFxC8ECquKLeQhk8kaOp7zSgBYukDPDv+tg=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by DM6PR10MB2889.namprd10.prod.outlook.com (2603:10b6:5:64::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.17; Wed, 20 Jul
+ 2022 02:17:37 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::c4d1:edc3:7d21:7c68]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::c4d1:edc3:7d21:7c68%6]) with mapi id 15.20.5438.024; Wed, 20 Jul 2022
+ 02:17:37 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>
+CC:     Yu Zhao <yuzhao@google.com>
+Subject: [PATCH v12 00/69] Introducing the Maple Tree
+Thread-Topic: [PATCH v12 00/69] Introducing the Maple Tree
+Thread-Index: AQHYm97htRCukodqLkqezfCsabKJPQ==
+Date:   Wed, 20 Jul 2022 02:17:37 +0000
+Message-ID: <20220720021727.17018-1-Liam.Howlett@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 897d0b65-1a8f-4847-6956-08da69f6041f
+x-ms-traffictypediagnostic: DM6PR10MB2889:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JFhEwCH5Nh9AWX7YrPfkUyc9H8hQu4aBreSIKdd7bHwpqD/ebgN1tfZ92fSbE3z+BEwDIeoqyg9ASQXJloXqnn3624pIlDQYqKI6/C1B3U8v8RTiEWwZ5XJNoU2tUyFvCDvUuPtfqb7AwKnSUX9ma98BV5dGncY1Au/xXygfmcuz38Cou5UdvKT3NZLqY2P+42OpYsVeu3LtTuLgiW/qB6O1koMY2WIzz+BvGLSB96N3nM0+2j7M9G+w96u/Qw98fhE1VvHTCF2IsbxT7WNP89HFrdAEamNuWWP3ek4ROiqjHmFiiisWL89yLUMKzO7X4YMdkGLVh0syvFVyX43pF/ordLraiiYnIe7cXBMZ242DW0BgX6ULpDdXffhbtzx+nm9fEKV5OJSCMREI3pWUBUKSqPxiTKuN3vVVFBj19QQlwdaWwg3K8CV7EJWj8fIMhbC4Uy28Cau6YVX8TeVuZe4YukGHNKQa7XdEhx5OOxzX1IWYtPMhN8Bye1l4u9keWMV1aCFdqfwaT0TzKoh+eQ51YYcsvkhUu6fqPE5m4yUJJcoTkDc512Qw5I7INmFM8E6OAqesEjgMy8ztpe5DfbLyFkpFn7ZxqOZCQ4GMIDbQQRgVIQ/VgvW4j2iFxlZGAEY9GS4sINsBZWDs6yhtk44q1pA5N1I6lu65A9YI0d/3xXoISe3FsCmcjrTfeBsEv0giFM/u8BWcvHAd3daprQ9xmckWugHJhnSy7Ih3yTYuw+dWGapXcRj2LOXD+F/eUOHZ/cZNZkV1sGGzgDjo+RfHvWQv2y8C2LjNoEGOCxo1EQ5XOm91/9JI9NJh5HLsLiX4BCEvkChmL0JYW1jUaducQzXVvvuO3lPTnEIhkcfDXkEzJ5N+5W/8wqLdcgOS
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(346002)(376002)(396003)(366004)(39860400002)(8936002)(5660300002)(76116006)(44832011)(30864003)(64756008)(66476007)(66446008)(66946007)(66556008)(8676002)(4326008)(2906002)(91956017)(122000001)(38100700002)(86362001)(38070700005)(6486002)(966005)(36756003)(71200400001)(478600001)(41300700001)(83380400001)(316002)(110136005)(186003)(6512007)(26005)(6506007)(2616005)(1076003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?trwA1++XFdG0qAhns0C/aMDOrUUwgdEQWK7Ona4HrsftsoeJICRC1R/9cw?=
+ =?iso-8859-1?Q?Zpfti8ElD82FSh4g94jVa5tjwxlcm+dnqDzLVCdnjGHWsU3bT8boyVRsF0?=
+ =?iso-8859-1?Q?JzlypFTEPke/niSr71u9gLum0aruI2SNQbVzlGlQ8SIGt58gjqBkB9uoty?=
+ =?iso-8859-1?Q?t5V8JLQ1q1xKtEN7S+B9b2oOHkNbJ28UaZ68uLcBSrI35zvCZ74mpUdw5a?=
+ =?iso-8859-1?Q?tdYh1wRv2UwyG6o36eNaqHIn0Ueyc6AnHKqaIkqlCf2qiGcmiwz7uyFILU?=
+ =?iso-8859-1?Q?DwMJYToEAytpFcuC2kFux0YQVwrWTchogdUGMOwD4pvwJLpNGpbzdGAdeT?=
+ =?iso-8859-1?Q?8CagaLdEi8cSc3TRDOLbLxSYUzP4AnYQ3nLLBidI7wnJ0QQ4yb5iWTR7Eu?=
+ =?iso-8859-1?Q?p7awVR2koe1IXZEM3M5hQ6APbN9inKbfDPmzOHeC3JQvFKSUlT5wa5Npso?=
+ =?iso-8859-1?Q?hxc9PCEo8eYmuU65CpwcW3AVTH03ofvGxQagT+1NrYWNJ9DfLq65e/+33e?=
+ =?iso-8859-1?Q?bkDLCeETevVT1Sa2XR/B7IyYuHVD5/naBtq0XtjJDpt8J7VXzOnMAYjdWt?=
+ =?iso-8859-1?Q?ywvN0I/K1FK/cXPb3ouqXIGok+uGEmQw2fpwrYoJwVnof8ozC2uIRlzpyI?=
+ =?iso-8859-1?Q?8ektMo5E4WJSeWHmwJJmpaAozG6eFUTkmd4b3N+m5LA9tomfCENocXpxZd?=
+ =?iso-8859-1?Q?+9W74RlIIBfUpBXO8gGyxQmwIagovBZpTZobXhLiD6FqDxaJ+yvvtaAo8r?=
+ =?iso-8859-1?Q?3YsT4bs3kKs2hXV6W5niieM7CDJ3pN7e66mVoMDiGe9lnInQ8hwywa1uE5?=
+ =?iso-8859-1?Q?NH/YT09l8gawRV9fwhAy1ETozBL5gZbULiOfUHcylziTQUIeOVgkTPpf0P?=
+ =?iso-8859-1?Q?YZ/sFMrRJ67SRXJ33VndJYpkTcfbhPldKbbVZ0feojLOGR1q3BnEiVedJi?=
+ =?iso-8859-1?Q?/uEEpCz3GL+G3O0+hjNbxzaDnUKvY01Z3QWHo4YIM6s1q6Yg1TkUIY2OFo?=
+ =?iso-8859-1?Q?0zW8Ru1e0p8aDzcD8302nz4koPoqN/VFxajZQ1KCTVCbsJciKeYVxGUJGi?=
+ =?iso-8859-1?Q?pv88xIg6d7NCPE0+2XawWJACtadz56Zc8xAeDh1DSMOzftJ4tSsPhLb1fg?=
+ =?iso-8859-1?Q?ZyrMEh6Rp8DjjfIlnOTQJ8QSyykGLNC/U5uF8kmmss2JUB6XpOCQhAiMn0?=
+ =?iso-8859-1?Q?+ocD8KdEiC8wQGePh2u0Acncm7VcuKhN+k81ovRDnvW7IkOkgUdvhUK5sq?=
+ =?iso-8859-1?Q?bMHZhJwfGldB7DdCWm7TAPUAKxorCXA35e9i/iVrPL/jRCb6NUkn17DdMN?=
+ =?iso-8859-1?Q?S6QquLUdQ6o/dGxT2imPnOjk4MXZrT+4aCAkClxqFeLSZ27GOj/sVF2pmf?=
+ =?iso-8859-1?Q?St5aCio4D5sM+rCggqmc822+9OJH6NPDUyuGNoiT208fVf5UoV3MVL864j?=
+ =?iso-8859-1?Q?Hd9gFLBe98ajZs/aKcgbbYxpV6PxREw8b6AThCmcIlYia+DJcTKKMu8x7r?=
+ =?iso-8859-1?Q?7xA+1vlrKJRzQGCqAJ9CnzuMYg2VUZ9i8Har9nkqDBw4GHPzzrms+0EoUF?=
+ =?iso-8859-1?Q?9o+bDRr8WT4r5UNgkPyxlZcG2wcFuNYNdvPUUjW+U8lti1M8f6/XW5djc0?=
+ =?iso-8859-1?Q?/GcbHYx1N5hgvKJ08g0/FVgN4SDFChI9jJGKiRZaeygbX+hKSaSufbNw?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 897d0b65-1a8f-4847-6956-08da69f6041f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 02:17:37.7760
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zJEeg9jsYgfVJQyRVzVMr1kXS/LdvmaGOeQwu/3vfbcbkny/Q/QUeDytBkf8MI6o4QgQjhiz07CkOyjcPh7hSw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2889
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-19_10,2022-07-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 mlxscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207200008
+X-Proofpoint-GUID: dBb3CH4dZTx4QuOCn_-IdroZT7jQkykm
+X-Proofpoint-ORIG-GUID: dBb3CH4dZTx4QuOCn_-IdroZT7jQkykm
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using amdgpu for e8860, the monitor sometimes haven't any signal,
-and the kernel reports some errors:
-[   17.317302][ 2] [ T1045] [drm:amdgpu_atombios_dp_link_train [amdgpu]] *ERROR* channel eq failed: 5 tries
-[   17.326963][ 2] [ T1045] [drm:amdgpu_atombios_dp_link_train [amdgpu]] *ERROR* channel eq failed
-But if I use radeon for e8860, everything are always normal, the reason is
-that radeon use native mode and amdgpu use atombios mode
-when init dp aux, so when I use native mode for amdgpu, everything
-are always normal.
+Hello,
 
-Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
-Change-Id: Ia9a2be3ab03e56b1c8337fdbf713461196fbc58f
----
- drivers/gpu/drm/amd/amdgpu/Makefile          |   2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu.h          |   2 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c |   5 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c | 273 +++++++++++++++++++
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c      |   4 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h     |   2 +
- drivers/gpu/drm/amd/amdgpu/atombios_dp.c     |   5 +-
- 7 files changed, 290 insertions(+), 3 deletions(-)
- create mode 100644 drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c
+This is the v11 + fixes.  I used the mm-unstable branch and patched in
+place.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd/amdgpu/Makefile
-index 3e0e2eb7e235..2913cf46f848 100644
---- a/drivers/gpu/drm/amd/amdgpu/Makefile
-+++ b/drivers/gpu/drm/amd/amdgpu/Makefile
-@@ -58,7 +58,7 @@ amdgpu-y += amdgpu_device.o amdgpu_kms.o \
- 	amdgpu_vm_sdma.o amdgpu_discovery.o amdgpu_ras_eeprom.o amdgpu_nbio.o \
- 	amdgpu_umc.o smu_v11_0_i2c.o amdgpu_fru_eeprom.o amdgpu_rap.o \
- 	amdgpu_fw_attestation.o amdgpu_securedisplay.o \
--	amdgpu_eeprom.o amdgpu_mca.o amdgpu_psp_ta.o amdgpu_lsdma.o
-+	amdgpu_eeprom.o amdgpu_mca.o amdgpu_psp_ta.o amdgpu_lsdma.o amdgpu_dp_auxch.o
- 
- amdgpu-$(CONFIG_PROC_FS) += amdgpu_fdinfo.o
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-index 30ce6bb6fa77..15e0288b1997 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-@@ -238,6 +238,8 @@ extern int amdgpu_num_kcq;
- #define AMDGPU_VCNFW_LOG_SIZE (32 * 1024)
- extern int amdgpu_vcnfw_log;
- 
-+extern int amdgpu_auxch;
-+
- #define AMDGPU_VM_MAX_NUM_CTX			4096
- #define AMDGPU_SG_THRESHOLD			(256*1024*1024)
- #define AMDGPU_DEFAULT_GTT_SIZE_MB		3072ULL /* 3GB by default */
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c
-index 9ba4817a9148..68c8d79e2937 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c
-@@ -49,7 +49,10 @@ static struct amdgpu_i2c_bus_rec amdgpu_atombios_get_bus_rec_for_i2c_gpio(ATOM_G
- 
- 	memset(&i2c, 0, sizeof(struct amdgpu_i2c_bus_rec));
- 
--	i2c.mask_clk_reg = le16_to_cpu(gpio->usClkMaskRegisterIndex);
-+	if (amdgpu_auxch)
-+		i2c.mask_clk_reg = le16_to_cpu(gpio->usClkMaskRegisterIndex) * 4;
-+	else
-+		i2c.mask_clk_reg = le16_to_cpu(gpio->usClkMaskRegisterIndex);
- 	i2c.mask_data_reg = le16_to_cpu(gpio->usDataMaskRegisterIndex);
- 	i2c.en_clk_reg = le16_to_cpu(gpio->usClkEnRegisterIndex);
- 	i2c.en_data_reg = le16_to_cpu(gpio->usDataEnRegisterIndex);
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c
-new file mode 100644
-index 000000000000..22078f1ca936
---- /dev/null
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c
-@@ -0,0 +1,273 @@
-+/*
-+ * Copyright 2015 Red Hat Inc.
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a
-+ * copy of this software and associated documentation files (the "Software"),
-+ * to deal in the Software without restriction, including without limitation
-+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-+ * and/or sell copies of the Software, and to permit persons to whom the
-+ * Software is furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-+ * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
-+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ * OTHER DEALINGS IN THE SOFTWARE.
-+ *
-+ * Authors: Dave Airlie
-+ */
-+
-+#include "amdgpu.h"
-+
-+#define 	AUX_SW_RX_OVERFLOW			(1 << 8)
-+#define 	AUX_SW_RX_HPD_DISCON			(1 << 9)
-+#define 	AUX_SW_RX_PARTIAL_BYTE			(1 << 10)
-+#define 	AUX_SW_NON_AUX_MODE			(1 << 11)
-+#define 	AUX_SW_RX_SYNC_INVALID_L		(1 << 17)
-+#define 	AUX_SW_RX_SYNC_INVALID_H		(1 << 18)
-+#define 	AUX_SW_RX_INVALID_START			(1 << 19)
-+#define 	AUX_SW_RX_RECV_NO_DET			(1 << 20)
-+#define 	AUX_SW_RX_RECV_INVALID_H		(1 << 22)
-+#define 	AUX_SW_RX_RECV_INVALID_V		(1 << 23)
-+#define		AUX_CONTROL				0x6200
-+#define 	AUX_HPD_SEL(x)				(((x) & 0x7) << 20)
-+#define 	AUX_EN					(1 << 0)
-+#define 	AUX_LS_READ_EN				(1 << 8)
-+#define		AUX_SW_CONTROL				0x6204
-+#define 	AUX_SW_WR_BYTES(x)			(((x) & 0x1f) << 16)
-+#define AUX_SW_DATA					0x6218
-+#define AUX_SW_DATA_RW					(1 << 0)
-+#define AUX_SW_AUTOINCREMENT_DISABLE			(1 << 31)
-+#define AUX_SW_INTERRUPT_CONTROL			0x620c
-+#define 	AUX_SW_DONE_ACK				(1 << 1)
-+#define 	AUX_SW_GO				(1 << 0)
-+#define AUX_SW_STATUS					0x6210
-+#define 	AUX_SW_DONE				(1 << 0)
-+#define 	AUX_SW_RX_TIMEOUT			(1 << 7)
-+#define AUX_SW_DATA_RW					(1 << 0)
-+#define AUX_SW_DATA_MASK(x)				(((x) & 0xff) << 8)
-+
-+#define AUX_RX_ERROR_FLAGS (AUX_SW_RX_OVERFLOW |	     \
-+			    AUX_SW_RX_HPD_DISCON |	     \
-+			    AUX_SW_RX_PARTIAL_BYTE |	     \
-+			    AUX_SW_NON_AUX_MODE |	     \
-+			    AUX_SW_RX_SYNC_INVALID_L |	     \
-+			    AUX_SW_RX_SYNC_INVALID_H |	     \
-+			    AUX_SW_RX_INVALID_START |	     \
-+			    AUX_SW_RX_RECV_NO_DET |	     \
-+			    AUX_SW_RX_RECV_INVALID_H |	     \
-+			    AUX_SW_RX_RECV_INVALID_V)
-+
-+#define AUX_SW_REPLY_GET_BYTE_COUNT(x) (((x) >> 24) & 0x1f)
-+
-+#define BARE_ADDRESS_SIZE 3
-+
-+#define R100_MM_INDEX                   0x0000
-+#define R100_MM_DATA                      0x0004
-+#define AMDGPU_MIN_MMIO_SIZE 0x10000
-+uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
-+{
-+        unsigned long flags;
-+        uint32_t ret;
-+
-+        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
-+        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
-+        ret = readl(((void __iomem *)adev->rmmio) + R100_MM_DATA);
-+        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
-+        return ret;
-+}
-+void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
-+{
-+        unsigned long flags;
-+
-+        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
-+        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
-+        writel(v, ((void __iomem *)adev->rmmio) + R100_MM_DATA);
-+        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
-+}
-+static inline uint32_t venus_mm_rreg(struct amdgpu_device *adev, uint32_t reg,
-+                                    bool always_indirect)
-+{
-+        /* The mmio size is 64kb at minimum. Allows the if to be optimized out. */
-+        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
-+                return readl(((void __iomem *)adev->rmmio) + reg);
-+        else
-+                return venus_mm_rreg_slow(adev, reg);
-+}
-+static inline void venus_mm_wreg(struct amdgpu_device *adev, uint32_t reg, uint32_t v,
-+                                bool always_indirect)
-+{
-+        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
-+                writel(v, ((void __iomem *)adev->rmmio) + reg);
-+        else
-+                venus_mm_wreg_slow(adev, reg, v);
-+}
-+
-+#define RREG32_VENUS(reg) venus_mm_rreg(adev, (reg), false)
-+#define WREG32_VENUS(reg, v) venus_mm_wreg(adev, (reg), (v), false)
-+
-+static const u32 aux_offset[] =
-+{
-+	0x6200 - 0x6200,
-+	0x6250 - 0x6200,
-+	0x62a0 - 0x6200,
-+	0x6300 - 0x6200,
-+	0x6350 - 0x6200,
-+	0x63a0 - 0x6200,
-+};
-+
-+ssize_t
-+amdgpu_dp_aux_transfer_native(struct drm_dp_aux *aux, struct drm_dp_aux_msg *msg)
-+{
-+	struct amdgpu_i2c_chan *chan =
-+		container_of(aux, struct amdgpu_i2c_chan, aux);
-+	struct drm_device *dev = chan->dev;
-+	struct amdgpu_device *adev = dev->dev_private;
-+	int ret = 0, i;
-+	uint32_t tmp, ack = 0;
-+	int instance = chan->rec.i2c_id & 0xf;
-+	u8 byte;
-+	u8 *buf = msg->buffer;
-+	int retry_count = 0;
-+	int bytes;
-+	int msize;
-+	bool is_write = false;
-+
-+	if (WARN_ON(msg->size > 16))
-+		return -E2BIG;
-+
-+	switch (msg->request & ~DP_AUX_I2C_MOT) {
-+	case DP_AUX_NATIVE_WRITE:
-+	case DP_AUX_I2C_WRITE:
-+		is_write = true;
-+		break;
-+	case DP_AUX_NATIVE_READ:
-+	case DP_AUX_I2C_READ:
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	/* work out two sizes required */
-+	msize = 0;
-+	bytes = BARE_ADDRESS_SIZE;
-+	if (msg->size) {
-+		msize = msg->size - 1;
-+		bytes++;
-+		if (is_write)
-+			bytes += msg->size;
-+	}
-+
-+	mutex_lock(&chan->mutex);
-+
-+	/* switch the pad to aux mode */
-+	tmp = RREG32_VENUS(chan->rec.mask_clk_reg);
-+	tmp |= (1 << 16);
-+	WREG32_VENUS(chan->rec.mask_clk_reg, tmp);
-+
-+	/* setup AUX control register with correct HPD pin */
-+	tmp = RREG32_VENUS(AUX_CONTROL + aux_offset[instance]);
-+	tmp &= AUX_HPD_SEL(0x7);
-+	tmp |= AUX_HPD_SEL(chan->rec.hpd);
-+	tmp |= AUX_EN | AUX_LS_READ_EN;
-+
-+	WREG32_VENUS(AUX_CONTROL + aux_offset[instance], tmp);
-+
-+	/* atombios appears to write this twice lets copy it */
-+	WREG32_VENUS(AUX_SW_CONTROL + aux_offset[instance],
-+	       AUX_SW_WR_BYTES(bytes));
-+	WREG32_VENUS(AUX_SW_CONTROL + aux_offset[instance],
-+	       AUX_SW_WR_BYTES(bytes));
-+
-+	/* write the data header into the registers */
-+	/* request, address, msg size */
-+	byte = (msg->request << 4) | ((msg->address >> 16) & 0xf);
-+	WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
-+	       AUX_SW_DATA_MASK(byte) | AUX_SW_AUTOINCREMENT_DISABLE);
-+
-+	byte = (msg->address >> 8) & 0xff;
-+	WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
-+	       AUX_SW_DATA_MASK(byte));
-+
-+	byte = msg->address & 0xff;
-+	WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
-+	       AUX_SW_DATA_MASK(byte));
-+
-+	byte = msize;
-+	WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
-+	       AUX_SW_DATA_MASK(byte));
-+
-+	/* if we are writing - write the msg buffer */
-+	if (is_write) {
-+		for (i = 0; i < msg->size; i++) {
-+			WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
-+			       AUX_SW_DATA_MASK(buf[i]));
-+		}
-+	}
-+
-+	/* clear the ACK */
-+	WREG32_VENUS(AUX_SW_INTERRUPT_CONTROL + aux_offset[instance], AUX_SW_DONE_ACK);
-+
-+	/* write the size and GO bits */
-+	WREG32_VENUS(AUX_SW_CONTROL + aux_offset[instance],
-+	       AUX_SW_WR_BYTES(bytes) | AUX_SW_GO);
-+
-+	/* poll the status registers - TODO irq support */
-+	do {
-+		tmp = RREG32_VENUS(AUX_SW_STATUS + aux_offset[instance]);
-+		if (tmp & AUX_SW_DONE) {
-+			break;
-+		}
-+		usleep_range(100, 200);
-+	} while (retry_count++ < 1000);
-+
-+	if (retry_count >= 1000) {
-+		DRM_ERROR("auxch hw never signalled completion, error %08x\n", tmp);
-+		ret = -EIO;
-+		goto done;
-+	}
-+
-+	if (tmp & AUX_SW_RX_TIMEOUT) {
-+		ret = -ETIMEDOUT;
-+		goto done;
-+	}
-+	if (tmp & AUX_RX_ERROR_FLAGS) {
-+		DRM_DEBUG_KMS_RATELIMITED("dp_aux_ch flags not zero: %08x\n",
-+					  tmp);
-+		ret = -EIO;
-+		goto done;
-+	}
-+
-+	bytes = AUX_SW_REPLY_GET_BYTE_COUNT(tmp);
-+	if (bytes) {
-+		WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
-+		       AUX_SW_DATA_RW | AUX_SW_AUTOINCREMENT_DISABLE);
-+
-+		tmp = RREG32_VENUS(AUX_SW_DATA + aux_offset[instance]);
-+		ack = (tmp >> 8) & 0xff;
-+
-+		for (i = 0; i < bytes - 1; i++) {
-+			tmp = RREG32_VENUS(AUX_SW_DATA + aux_offset[instance]);
-+			if (buf)
-+				buf[i] = (tmp >> 8) & 0xff;
-+		}
-+		if (buf)
-+			ret = bytes - 1;
-+	}
-+
-+	WREG32_VENUS(AUX_SW_INTERRUPT_CONTROL + aux_offset[instance], AUX_SW_DONE_ACK);
-+
-+	if (is_write)
-+		ret = msg->size;
-+done:
-+	mutex_unlock(&chan->mutex);
-+
-+	if (ret >= 0)
-+		msg->reply = ack >> 4;
-+	return ret;
-+}
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index 8890300766a5..2ac7636ddafb 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -180,6 +180,7 @@ int amdgpu_num_kcq = -1;
- int amdgpu_smartshift_bias;
- int amdgpu_use_xgmi_p2p = 1;
- int amdgpu_vcnfw_log;
-+int amdgpu_auxch = 0;
- 
- static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work);
- 
-@@ -882,6 +883,9 @@ MODULE_PARM_DESC(smu_pptable_id,
- 	"specify pptable id to be used (-1 = auto(default) value, 0 = use pptable from vbios, > 0 = soft pptable id)");
- module_param_named(smu_pptable_id, amdgpu_smu_pptable_id, int, 0444);
- 
-+MODULE_PARM_DESC(auxch, "Use native auxch experimental support (1 = enable, 0 = disable, -1 = auto)");
-+module_param_named(auxch, amdgpu_auxch, int, 0444);
-+
- /* These devices are not supported by amdgpu.
-  * They are supported by the mach64, r128, radeon drivers
-  */
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-index f80b4838cea1..95fffc110c75 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-@@ -619,5 +619,7 @@ int amdgpu_display_crtc_page_flip_target(struct drm_crtc *crtc,
- 				uint32_t page_flip_flags, uint32_t target,
- 				struct drm_modeset_acquire_ctx *ctx);
- extern const struct drm_mode_config_funcs amdgpu_mode_funcs;
-+extern ssize_t
-+amdgpu_dp_aux_transfer_native(struct drm_dp_aux *aux, struct drm_dp_aux_msg *msg);
- 
- #endif
-diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_dp.c b/drivers/gpu/drm/amd/amdgpu/atombios_dp.c
-index 87c41e0e9b7c..846ecc315665 100644
---- a/drivers/gpu/drm/amd/amdgpu/atombios_dp.c
-+++ b/drivers/gpu/drm/amd/amdgpu/atombios_dp.c
-@@ -188,7 +188,10 @@ amdgpu_atombios_dp_aux_transfer(struct drm_dp_aux *aux, struct drm_dp_aux_msg *m
- void amdgpu_atombios_dp_aux_init(struct amdgpu_connector *amdgpu_connector)
- {
- 	amdgpu_connector->ddc_bus->rec.hpd = amdgpu_connector->hpd.hpd;
--	amdgpu_connector->ddc_bus->aux.transfer = amdgpu_atombios_dp_aux_transfer;
-+	if (amdgpu_auxch)
-+		amdgpu_connector->ddc_bus->aux.transfer = amdgpu_dp_aux_transfer_native;
-+	else
-+		amdgpu_connector->ddc_bus->aux.transfer = amdgpu_atombios_dp_aux_transfer;
- 	amdgpu_connector->ddc_bus->aux.drm_dev = amdgpu_connector->base.dev;
- 
- 	drm_dp_aux_init(&amdgpu_connector->ddc_bus->aux);
--- 
-2.25.1
+git: https://github.com/oracle/linux-uek/tree/howlett/maple/20220719
 
+Patch series "Introducing the Maple Tree".
+
+The maple tree is an RCU-safe range based B-tree designed to use modern
+processor cache efficiently.  There are a number of places in the kernel
+that a non-overlapping range-based tree would be beneficial, especially
+one with a simple interface.  If you use an rbtree with other data
+structures to improve performance or an interval tree to track
+non-overlapping ranges, then this is for you.
+
+The tree has a branching factor of 10 for non-leaf nodes and 16 for leaf
+nodes.  With the increased branching factor, it is significantly shorter
+than the rbtree so it has fewer cache misses.  The removal of the linked
+list between subsequent entries also reduces the cache misses and the need
+to pull in the previous and next VMA during many tree alterations.
+
+The first user that is covered in this patch set is the vm_area_struct,
+where three data structures are replaced by the maple tree: the augmented
+rbtree, the vma cache, and the linked list of VMAs in the mm_struct.  The
+long term goal is to reduce or remove the mmap_lock contention.
+
+The plan is to get to the point where we use the maple tree in RCU mode.
+Readers will not block for writers.  A single write operation will be
+allowed at a time.  A reader re-walks if stale data is encountered.  VMAs
+would be RCU enabled and this mode would be entered once multiple tasks
+are using the mm_struct.
+
+Davidlor said
+
+: Yes I like the maple tree, and at this stage I don't think we can ask for
+: more from this series wrt the MM - albeit there seems to still be some
+: folks reporting breakage.  Fundamentally I see Liam's work to (re)move
+: complexity out of the MM (not to say that the actual maple tree is not
+: complex) by consolidating the three complimentary data structures very
+: much worth it considering performance does not take a hit.  This was very
+: much a turn off with the range locking approach, which worst case scenari=
+o
+: incurred in prohibitive overhead.  Also as Liam and Matthew have
+: mentioned, RCU opens up a lot of nice performance opportunities, and in
+: addition academia[1] has shown outstanding scalability of address spaces
+: with the foundation of replacing the locked rbtree with RCU aware trees.
+
+A similar work has been discovered in the academic press
+
+	https://pdos.csail.mit.edu/papers/rcuvm:asplos12.pdf
+
+Sheer coincidence.  We designed our tree with the intention of solving the
+hardest problem first.  Upon settling on a b-tree variant and a rough
+outline, we researched ranged based b-trees and RCU b-trees and did find
+that article.  So it was nice to find reassurances that we were on the
+right path, but our design choice of using ranges made that paper unusable
+for us.
+
+Changes:
+ - maple_tree: Fix bitwise for logical operator in mas_validate_limits()
+   - Thanks Dan Carpenter
+ - maple_tree: Drop typedef from header - Thanks Matthew Wilcox and Li
+   Hongyu
+ - maple_tree: Fix mas_empty_area() wrapping - Thanks Sven Schnelle
+ - mm/mmap: Drop VM_BUG_ON() until better tested - Thanks Yu Zhao
+ - mmap: Fix hugetlb accounting error in __split_vma()
+ - mmap: remove unroll from vma_expand() - Thanks Hugh Dickins
+ - mmap: remove unroll from __vma_adjust() - Thanks Hugh Dickins
+ - mmap: remove do_brk_munmap() optimization - Thanks Hugh Dickins
+
+v11: https://lore.kernel.org/linux-mm/20220717024615.2106835-1-Liam.Howlett=
+@oracle.com/
+v10: https://lore.kernel.org/linux-mm/20220621204632.3370049-1-Liam.Howlett=
+@oracle.com/
+v9: https://lore.kernel.org/lkml/20220504010716.661115-1-Liam.Howlett@oracl=
+e.com/
+...and
+https://lore.kernel.org/lkml/20220504011215.661968-1-Liam.Howlett@oracle.co=
+m/
+
+v8: https://lore.kernel.org/lkml/20220426150616.3937571-1-Liam.Howlett@orac=
+le.com/
+v7: https://lore.kernel.org/linux-mm/20220404143501.2016403-8-Liam.Howlett@=
+oracle.com/
+v6: https://lore.kernel.org/linux-mm/20220215143728.3810954-1-Liam.Howlett@=
+oracle.com/
+v5: https://lore.kernel.org/linux-mm/20220202024137.2516438-1-Liam.Howlett@=
+oracle.com/
+v4: https://lore.kernel.org/linux-mm/20211201142918.921493-1-Liam.Howlett@o=
+racle.com/
+v3: https://lore.kernel.org/linux-mm/20211005012959.1110504-1-Liam.Howlett@=
+oracle.com/
+v2: https://lore.kernel.org/linux-mm/20210817154651.1570984-1-Liam.Howlett@=
+oracle.com/
+v1: https://lore.kernel.org/linux-mm/20210428153542.2814175-1-Liam.Howlett@=
+Oracle.com/
+
+Liam R. Howlett (44):
+  Maple Tree: add new data structure
+  radix tree test suite: add pr_err define
+  radix tree test suite: add kmem_cache_set_non_kernel()
+  radix tree test suite: add allocation counts and size to kmem_cache
+  radix tree test suite: add support for slab bulk APIs
+  radix tree test suite: add lockdep_is_held to header
+  lib/test_maple_tree: add testing for maple tree
+  mm: start tracking VMAs with maple tree
+  mm/mmap: use the maple tree in find_vma() instead of the rbtree.
+  mm/mmap: use the maple tree for find_vma_prev() instead of the rbtree
+  mm/mmap: use maple tree for unmapped_area{_topdown}
+  kernel/fork: use maple tree for dup_mmap() during forking
+  damon: convert __damon_va_three_regions to use the VMA iterator
+  mm: remove rb tree.
+  mmap: change zeroing of maple tree in __vma_adjust()
+  xen: use vma_lookup() in privcmd_ioctl_mmap()
+  mm: optimize find_exact_vma() to use vma_lookup()
+  mm/khugepaged: optimize collapse_pte_mapped_thp() by using
+    vma_lookup()
+  mm/mmap: change do_brk_flags() to expand existing VMA and add
+    do_brk_munmap()
+  mm: use maple tree operations for find_vma_intersection()
+  mm/mmap: use advanced maple tree API for mmap_region()
+  mm: remove vmacache
+  mm: convert vma_lookup() to use mtree_load()
+  mm/mmap: move mmap_region() below do_munmap()
+  mm/mmap: reorganize munmap to use maple states
+  mm/mmap: change do_brk_munmap() to use do_mas_align_munmap()
+  arm64: Change elfcore for_each_mte_vma() to use VMA iterator
+  fs/proc/base: use maple tree iterators in place of linked list
+  userfaultfd: use maple tree iterator to iterate VMAs
+  ipc/shm: use VMA iterator instead of linked list
+  bpf: remove VMA linked list
+  mm/gup: use maple tree navigation instead of linked list
+  mm/madvise: use vma_find() instead of vma linked list
+  mm/memcontrol: stop using mm->highest_vm_end
+  mm/mempolicy: use vma iterator & maple state instead of vma linked
+    list
+  mm/mprotect: use maple tree navigation instead of vma linked list
+  mm/mremap: use vma_find_intersection() instead of vma linked list
+  mm/msync: use vma_find() instead of vma linked list
+  mm/oom_kill: use maple tree iterators instead of vma linked list
+  mm/swapfile: use vma iterator instead of vma linked list
+  riscv: use vma iterator for vdso
+  mm: remove the vma linked list
+  mm/mmap: drop range_has_overlap() function
+  mm/mmap.c: pass in mapping to __vma_link_file()
+
+Matthew Wilcox (Oracle) (25):
+  mm: add VMA iterator
+  mmap: use the VMA iterator in count_vma_pages_range()
+  proc: remove VMA rbtree use from nommu
+  arm64: remove mmap linked list from vdso
+  parisc: remove mmap linked list from cache handling
+  powerpc: remove mmap linked list walks
+  s390: remove vma linked list walks
+  x86: remove vma linked list walks
+  xtensa: remove vma linked list walks
+  cxl: remove vma linked list walk
+  optee: remove vma linked list walk
+  um: remove vma linked list walk
+  coredump: remove vma linked list walk
+  exec: use VMA iterator instead of linked list
+  fs/proc/task_mmu: stop using linked list and highest_vm_end
+  acct: use VMA iterator instead of linked list
+  perf: use VMA iterator
+  sched: use maple tree iterator to walk VMAs
+  fork: use VMA iterator
+  mm/khugepaged: stop using vma linked list
+  mm/ksm: use vma iterators instead of vma linked list
+  mm/mlock: use vma iterator and maple state instead of vma linked list
+  mm/pagewalk: use vma_find() instead of vma linked list
+  i915: use the VMA iterator
+  nommu: remove uses of VMA linked list
+
+ Documentation/core-api/index.rst              |     1 +
+ Documentation/core-api/maple_tree.rst         |   217 +
+ MAINTAINERS                                   |    12 +
+ arch/arm64/kernel/elfcore.c                   |    16 +-
+ arch/arm64/kernel/vdso.c                      |     3 +-
+ arch/parisc/kernel/cache.c                    |     9 +-
+ arch/powerpc/kernel/vdso.c                    |     6 +-
+ arch/powerpc/mm/book3s32/tlb.c                |    11 +-
+ arch/powerpc/mm/book3s64/subpage_prot.c       |    13 +-
+ arch/riscv/kernel/vdso.c                      |     3 +-
+ arch/s390/kernel/vdso.c                       |     3 +-
+ arch/s390/mm/gmap.c                           |     6 +-
+ arch/um/kernel/tlb.c                          |    14 +-
+ arch/x86/entry/vdso/vma.c                     |     9 +-
+ arch/x86/kernel/tboot.c                       |     2 +-
+ arch/xtensa/kernel/syscall.c                  |    18 +-
+ drivers/firmware/efi/efi.c                    |     2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c   |    14 +-
+ drivers/misc/cxl/fault.c                      |    45 +-
+ drivers/tee/optee/call.c                      |    18 +-
+ drivers/xen/privcmd.c                         |     2 +-
+ fs/coredump.c                                 |    34 +-
+ fs/exec.c                                     |    12 +-
+ fs/proc/base.c                                |     5 +-
+ fs/proc/internal.h                            |     2 +-
+ fs/proc/task_mmu.c                            |    74 +-
+ fs/proc/task_nommu.c                          |    45 +-
+ fs/userfaultfd.c                              |    62 +-
+ include/linux/maple_tree.h                    |   684 +
+ include/linux/mm.h                            |    78 +-
+ include/linux/mm_types.h                      |    43 +-
+ include/linux/mm_types_task.h                 |    12 -
+ include/linux/sched.h                         |     1 -
+ include/linux/userfaultfd_k.h                 |     7 +-
+ include/linux/vm_event_item.h                 |     4 -
+ include/linux/vmacache.h                      |    28 -
+ include/linux/vmstat.h                        |     6 -
+ include/trace/events/maple_tree.h             |   123 +
+ include/trace/events/mmap.h                   |    73 +
+ init/main.c                                   |     2 +
+ ipc/shm.c                                     |    21 +-
+ kernel/acct.c                                 |    11 +-
+ kernel/bpf/task_iter.c                        |    10 +-
+ kernel/debug/debug_core.c                     |    12 -
+ kernel/events/core.c                          |     3 +-
+ kernel/events/uprobes.c                       |     9 +-
+ kernel/fork.c                                 |    57 +-
+ kernel/sched/fair.c                           |    10 +-
+ lib/Kconfig.debug                             |    17 +-
+ lib/Makefile                                  |     3 +-
+ lib/maple_tree.c                              |  7102 +++
+ lib/test_maple_tree.c                         | 38206 ++++++++++++++++
+ mm/Makefile                                   |     2 +-
+ mm/damon/vaddr-test.h                         |    36 +-
+ mm/damon/vaddr.c                              |    53 +-
+ mm/debug.c                                    |    14 +-
+ mm/gup.c                                      |     7 +-
+ mm/huge_memory.c                              |     4 +-
+ mm/init-mm.c                                  |     4 +-
+ mm/internal.h                                 |     8 +-
+ mm/khugepaged.c                               |    13 +-
+ mm/ksm.c                                      |    18 +-
+ mm/madvise.c                                  |     2 +-
+ mm/memcontrol.c                               |     6 +-
+ mm/memory.c                                   |    33 +-
+ mm/mempolicy.c                                |    56 +-
+ mm/mlock.c                                    |    35 +-
+ mm/mmap.c                                     |  2156 +-
+ mm/mprotect.c                                 |     7 +-
+ mm/mremap.c                                   |    22 +-
+ mm/msync.c                                    |     2 +-
+ mm/nommu.c                                    |   249 +-
+ mm/oom_kill.c                                 |     3 +-
+ mm/pagewalk.c                                 |     2 +-
+ mm/swapfile.c                                 |     4 +-
+ mm/util.c                                     |    32 -
+ mm/vmacache.c                                 |   117 -
+ mm/vmstat.c                                   |     4 -
+ tools/include/linux/slab.h                    |     4 +
+ tools/testing/radix-tree/.gitignore           |     2 +
+ tools/testing/radix-tree/Makefile             |     9 +-
+ tools/testing/radix-tree/generated/autoconf.h |     1 +
+ tools/testing/radix-tree/linux.c              |   160 +-
+ tools/testing/radix-tree/linux/kernel.h       |     1 +
+ tools/testing/radix-tree/linux/lockdep.h      |     2 +
+ tools/testing/radix-tree/linux/maple_tree.h   |     7 +
+ tools/testing/radix-tree/maple.c              |    59 +
+ .../radix-tree/trace/events/maple_tree.h      |     5 +
+ 88 files changed, 48439 insertions(+), 1880 deletions(-)
+ create mode 100644 Documentation/core-api/maple_tree.rst
+ create mode 100644 include/linux/maple_tree.h
+ delete mode 100644 include/linux/vmacache.h
+ create mode 100644 include/trace/events/maple_tree.h
+ create mode 100644 lib/maple_tree.c
+ create mode 100644 lib/test_maple_tree.c
+ delete mode 100644 mm/vmacache.c
+ create mode 100644 tools/testing/radix-tree/linux/maple_tree.h
+ create mode 100644 tools/testing/radix-tree/maple.c
+ create mode 100644 tools/testing/radix-tree/trace/events/maple_tree.h
+
+--=20
+2.35.1

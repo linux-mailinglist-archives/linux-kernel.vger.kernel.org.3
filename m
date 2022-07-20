@@ -2,150 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6330257ABF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6644857ABFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241031AbiGTBPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 21:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S240980AbiGTBRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 21:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240993AbiGTBPT (ORCPT
+        with ESMTP id S240929AbiGTBQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 21:15:19 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0433F691E7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:13:24 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id bu1so23996293wrb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FH/KgreGevFMzjScUNpVyMkOXY2ypEXuM+aIA1gugyc=;
-        b=INkgZiK4DUYnl4oocrc5S+A359fzZcaHQbqimbRv1p88ZDzjZK/DEOd0JgDhgL1OTW
-         pih0OJiaercJ7M3P5AgDLuWV9LGA4OOIJq315kpcl0Cb9sBoQy7JfPH4bQdeTbhvQUJN
-         2I+1A3RBNFfmtHxztBx6Ml/YyFUs3HEi6oPGAAjcAwmQd41EEyDiYASzlhrXR95wq0QD
-         KuVk8XKhi8wedl2vim10eNA89bdDY+Y/b0sPblFmpaQIVkDcowoaJmyeqGFE+1yntz1f
-         L0du4NhlWrlCFRNaEBR37AXQxW67AFshNCYq3F0jqrpXBzQtzATaz2ujXlExyh5fpPtb
-         sEjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FH/KgreGevFMzjScUNpVyMkOXY2ypEXuM+aIA1gugyc=;
-        b=CnI/ncdiOGdwU9m7LQs3ArCgtUqpnXfieRkJDELvu+ZGfj8+o5sjLBUSEC5nRTzges
-         4f6TsymFBi9eKF2O68166LXJDbozrg1dhYEBbtXRBSXpkB114wCToRiTsVTaLrUSUxzP
-         r2Jd2XcO+c6W6QvbalBzeNUBX8SFpAJJL3M/T7wG7Ap9MbK1+nRJK0vFObTLXP3zg5vP
-         eW8l/gUPCSDNLxXtd1mDMmU5bKrPGE9dQ9UHZOo1zVJVetoyWsLaBnFcgLNF16YuYfvS
-         hoQ+F3OdX5QK9szLjSQi9S/oR3LHipV3eWUT4vGuQTIm2JPeAD8dn8MtRtI0W+sEy6k5
-         VUlQ==
-X-Gm-Message-State: AJIora9cFgFFL37jlYMo7h715OjklxrT1yaMT/UnNuZkOb/A4o9ZzrKm
-        KOBQMSWCddXWJiDBuejRSDzNQRDAswuZZYcAgRieng==
-X-Google-Smtp-Source: AGRyM1uAaV5GBBL2uD9Yvx8MxNCl9fCmaAVGTa0IJxUkRstdkHGMEWdof5PJ4rQgQxWv9KMWEcVTiX3sAYE66d+R7Uw=
-X-Received: by 2002:a05:6000:1a8e:b0:21d:a7a8:54f4 with SMTP id
- f14-20020a0560001a8e00b0021da7a854f4mr29416111wry.654.1658279602311; Tue, 19
- Jul 2022 18:13:22 -0700 (PDT)
+        Tue, 19 Jul 2022 21:16:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982DC67164;
+        Tue, 19 Jul 2022 18:13:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 473BFB81DE8;
+        Wed, 20 Jul 2022 01:13:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208A0C341D2;
+        Wed, 20 Jul 2022 01:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658279635;
+        bh=ZtW/0VVuXnVd4D9WDVweixR/stTys6Z95/e5OU0s8nk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CFs9HMpMMDPrxgviPiwnERzphmqIpLz4B1O+MKqdUa8faPDLFGhLBCSK60ou43lPh
+         S6GYSd00Sfm6emfQoqxOjMJYWES2IIqXGNpmv+IHwGsA2czTX/Ng7hEKBxaCwlErQC
+         G3iIex7j7SRHm24kxApP9hDFj4FsLUJoiD/5Uvtl2/wOoJQSXydEUSzH7MallMdWvm
+         qcSSjBoEHlDaRx5Nu/Lk8h+Y1oCx122N0Or/epffNlH2uOWQ+NANb+qvDER5+ZbSZp
+         R6UC3F3w06cvtKAmbstF/ONAoUdd21ado2ydMuSFmzckAociNNrKqw72pTl1TFyoa/
+         wGYRZaYTubB3g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Liang He <windhl@126.com>, Heiko Stuebner <heiko@sntech.de>,
+        Sasha Levin <sashal@kernel.org>, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.15 02/42] ARM: rockchip: Add missing of_node_put() in rockchip_suspend_init()
+Date:   Tue, 19 Jul 2022 21:13:10 -0400
+Message-Id: <20220720011350.1024134-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220720011350.1024134-1-sashal@kernel.org>
+References: <20220720011350.1024134-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-30-adrian.hunter@intel.com>
-In-Reply-To: <20220711093218.10967-30-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 18:13:10 -0700
-Message-ID: <CAP-5=fXA56PMT7X4GprdM49L26XD+LP97QOiiQOHpFCL-He+1w@mail.gmail.com>
-Subject: Re: [PATCH 29/35] perf intel-pt: Add some more logging to intel_pt_walk_next_insn()
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> To aid debugging, add some more logging to intel_pt_walk_next_insn().
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+From: Liang He <windhl@126.com>
 
-Acked-by: Ian Rogers <irogers@google.com>
+[ Upstream commit f4470dbfb5ff92804650bc71d115c3f150d430f6 ]
 
-Thanks,
-Ian
+In rockchip_suspend_init(), of_find_matching_node_and_match() will
+return a node pointer with refcount incremented. We should use
+of_node_put() in fail path or when it is not used anymore.
 
-> ---
->  tools/perf/util/intel-pt.c | 25 ++++++++++++++++++++-----
->  1 file changed, 20 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
-> index 014f9f73cc49..a8798b5bb311 100644
-> --- a/tools/perf/util/intel-pt.c
-> +++ b/tools/perf/util/intel-pt.c
-> @@ -758,27 +758,38 @@ static int intel_pt_walk_next_insn(struct intel_pt_insn *intel_pt_insn,
->
->         if (nr) {
->                 if ((!symbol_conf.guest_code && cpumode != PERF_RECORD_MISC_GUEST_KERNEL) ||
-> -                   intel_pt_get_guest(ptq))
-> +                   intel_pt_get_guest(ptq)) {
-> +                       intel_pt_log("ERROR: no guest machine\n");
->                         return -EINVAL;
-> +               }
->                 machine = ptq->guest_machine;
->                 thread = ptq->guest_thread;
->                 if (!thread) {
-> -                       if (cpumode != PERF_RECORD_MISC_GUEST_KERNEL)
-> +                       if (cpumode != PERF_RECORD_MISC_GUEST_KERNEL) {
-> +                               intel_pt_log("ERROR: no guest thread\n");
->                                 return -EINVAL;
-> +                       }
->                         thread = ptq->unknown_guest_thread;
->                 }
->         } else {
->                 thread = ptq->thread;
->                 if (!thread) {
-> -                       if (cpumode != PERF_RECORD_MISC_KERNEL)
-> +                       if (cpumode != PERF_RECORD_MISC_KERNEL) {
-> +                               intel_pt_log("ERROR: no thread\n");
->                                 return -EINVAL;
-> +                       }
->                         thread = ptq->pt->unknown_thread;
->                 }
->         }
->
->         while (1) {
-> -               if (!thread__find_map(thread, cpumode, *ip, &al) || !al.map->dso)
-> +               if (!thread__find_map(thread, cpumode, *ip, &al) || !al.map->dso) {
-> +                       if (al.map)
-> +                               intel_pt_log("ERROR: thread has no dso for %#" PRIx64 "\n", *ip);
-> +                       else
-> +                               intel_pt_log("ERROR: thread has no map for %#" PRIx64 "\n", *ip);
->                         return -EINVAL;
-> +               }
->
->                 if (al.map->dso->data.status == DSO_DATA_STATUS_ERROR &&
->                     dso__data_status_seen(al.map->dso,
-> @@ -819,8 +830,12 @@ static int intel_pt_walk_next_insn(struct intel_pt_insn *intel_pt_insn,
->                         len = dso__data_read_offset(al.map->dso, machine,
->                                                     offset, buf,
->                                                     INTEL_PT_INSN_BUF_SZ);
-> -                       if (len <= 0)
-> +                       if (len <= 0) {
-> +                               intel_pt_log("ERROR: failed to read at %" PRIu64 " ", offset);
-> +                               if (intel_pt_enable_logging)
-> +                                       dso__fprintf(al.map->dso, intel_pt_log_fp());
->                                 return -EINVAL;
-> +                       }
->
->                         if (intel_pt_get_insn(buf, len, x86_64, intel_pt_insn))
->                                 return -EINVAL;
-> --
-> 2.25.1
->
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220616021713.3973472-1-windhl@126.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/arm/mach-rockchip/pm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/mach-rockchip/pm.c b/arch/arm/mach-rockchip/pm.c
+index 87389d9456b9..30d781d80fe0 100644
+--- a/arch/arm/mach-rockchip/pm.c
++++ b/arch/arm/mach-rockchip/pm.c
+@@ -311,7 +311,7 @@ void __init rockchip_suspend_init(void)
+ 					     &match);
+ 	if (!match) {
+ 		pr_err("Failed to find PMU node\n");
+-		return;
++		goto out_put;
+ 	}
+ 	pm_data = (struct rockchip_pm_data *) match->data;
+ 
+@@ -320,9 +320,12 @@ void __init rockchip_suspend_init(void)
+ 
+ 		if (ret) {
+ 			pr_err("%s: matches init error %d\n", __func__, ret);
+-			return;
++			goto out_put;
+ 		}
+ 	}
+ 
+ 	suspend_set_ops(pm_data->ops);
++
++out_put:
++	of_node_put(np);
+ }
+-- 
+2.35.1
+

@@ -2,180 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BAED57BC3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1879757BC40
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236711AbiGTRD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
+        id S236905AbiGTREk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235006AbiGTRDy (ORCPT
+        with ESMTP id S229725AbiGTREi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:03:54 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6026B75B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:03:52 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id l11so33102616ybu.13
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YOA19tVTAiTzTuOKYOjsbz3H5LWG3tc39ee1PdsInaY=;
-        b=eH8DfSUXfgZbV4o8x2tqd+uHCK00gNxyeV23UnRyl2NEqFrrv5LwU2PG2xBhksRNcP
-         qS7iLrMIZpsxtaEQ/qBskkcrdLuCYYgMzLi+TtbuSs4f5MgiwniXAlxCsETB6+1IRAmE
-         rMTt6csKOwhCtw0ESoG2dWiOJS/Ce4cmZCfR74QtEUlVZTimDvnzoGl7jkYN6DsnUUf1
-         /W3fid4i309QeRCWguiNIhdqU9ADeJR3BpajeUJx5/Y+QufmNFVk+GCEY16adfuvEO3h
-         Fv3C1jB+2yMiBwC5Lr1BTkWHTDH4MrmxTcKUycRCIE8UUlUCcTG8SNOuGKPBPBgFHuRX
-         TTZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YOA19tVTAiTzTuOKYOjsbz3H5LWG3tc39ee1PdsInaY=;
-        b=EcKiKKfs02moybGNTHdKvIQCbscuV8CyRn7oK9f2f+l6Y/OADkR5lvlN7uNTsFA0jW
-         6nkzc49RRgHdjv9+r3/2O2JUTWR36MGylc8LbxpkHfJtZssczqCAdmE/kNOkRrP0oz/N
-         nUPFbT7Ce8b7xBOGgKVDNZKMzWjluqYyKvfQjZEUG9C5u1VccWom6r/UdFVW/PLybOv7
-         uc6EgVD22VryV18incJnOgJnMnxj3h86OadWWzneS/huY+T88eGAHGnLoDLGbPqaFOIL
-         SD3ZxdZIUv9MZq/qScgZraZrIyHKB8y9tNicXNPVzKS/QFfsUz+LSNt+gLPzPxnyNkpM
-         lYpg==
-X-Gm-Message-State: AJIora+zJ2vGhc5n/wS4vMUaGBsLwSSDC2NpzN1J7kyJ4BW1Ng55yKI7
-        HyWduc4QyHWgP4iuaF64uMiH0QLNrNHLn6SvlHqTdw==
-X-Google-Smtp-Source: AGRyM1uXDNpNChJqMpeAj68PB9QtQc3sH/drFsMIMDp7snrUyeSTOG30AnpLZhkLxTTfI4lMQ6NISaGgHQQJP5Q7AZQ=
-X-Received: by 2002:a05:6902:1082:b0:670:9307:b0eb with SMTP id
- v2-20020a056902108200b006709307b0ebmr5042788ybu.335.1658336631697; Wed, 20
- Jul 2022 10:03:51 -0700 (PDT)
+        Wed, 20 Jul 2022 13:04:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0B06BC0B;
+        Wed, 20 Jul 2022 10:04:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 070D261DEC;
+        Wed, 20 Jul 2022 17:04:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B66C3411E;
+        Wed, 20 Jul 2022 17:04:35 +0000 (UTC)
+Date:   Wed, 20 Jul 2022 13:04:33 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>, live-patching@vger.kernel.org
+Subject: Re: ftrace_kill() leads to kmalloc-512 UAF
+Message-ID: <20220720130433.5f9b1ebb@gandalf.local.home>
+In-Reply-To: <YtgxSs79D0r5s4Ch@localhost.localdomain>
+References: <YtgdsW8UBSwCKtQW@localhost.localdomain>
+        <20220720121102.6cac8f1d@gandalf.local.home>
+        <YtgxSs79D0r5s4Ch@localhost.localdomain>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
- <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
- <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
- <YtcCWfCQuEsVhH6W@zn.tnic> <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
- <YtcgxxMyFTReuuRw@zn.tnic> <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
- <YtcnQbiRgZPtR+rQ@zn.tnic> <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
- <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com> <YteWPj7HytPrcplB@zn.tnic>
-In-Reply-To: <YteWPj7HytPrcplB@zn.tnic>
-From:   Marc Orr <marcorr@google.com>
-Date:   Wed, 20 Jul 2022 10:03:40 -0700
-Message-ID: <CAA03e5H8-n23eZ5sMWLQADpJ+AQCrhMoDng_aiw3-C5cPHEwnA@mail.gmail.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 10:44 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Jul 19, 2022 at 05:26:21PM -0700, Marc Orr wrote:
-> > These feature tags are a mess to keep track of.
->
-> Well, looking at those tags, it doesn't look like you'll stop using them
-> anytime soon.
->
-> And once all the required SNP/TDX features are part of the guest image,
-> - including unaccepted memory - if anything, you'll have less tags.
->
-> :-)
+On Wed, 20 Jul 2022 19:46:02 +0300
+Alexey Dobriyan <adobriyan@gmail.com> wrote:
 
-Yeah, once all of the features are a part of the guest image AND any
-older images with SNP/TDX minus the features are deprecated. I agree.
+> On Wed, Jul 20, 2022 at 12:11:02PM -0400, Steven Rostedt wrote:
+> > 
+> > [ Adding live kernel patching folks ]
+> > 
+> > On Wed, 20 Jul 2022 18:22:25 +0300
+> > Alexey Dobriyan <adobriyan@gmail.com> wrote:
+> >   
+> > > I'm debugging crash of our product which does live kernel patching together
+> > > with ISV security scanner which uses ftrace kprobes to do whatever it does.
+> > > 
+> > > What happens is that is ftrace ever detects .text change, refuses to patch
+> > > and prints a warning with FTRACE_WARN_ON_ONCE() then there is reliable way
+> > > to cause UAF on kmalloc-512 cache by trying to register kprobe with
+> > > perf_event_open() and then unregistering it by exiting the process.
+> > > 
+> > > 1) live kernel patching happens, first instruction of some function changes  
+> > 
+> > But live kernel patching uses ftrace to do this, so the question remains,
+> > why doesn't ftrace know about this change?  
+> 
+> That a line from our product which changes first instruction of the function.
+> 
 
-> > - Do we anticipate (many) more features for confidential compute in
-> > the future that require code in both the guest FW and guest kernel? If
-> > yes, then designing a FW-kernel feature negotiation could be useful
-> > beyond this situation.
->
-> Good question.
->
-> > - Dave's suggestion to "2. Boot some intermediate thing like a
-> > bootloader that does acceptance ..." is pretty clever! So if upstream
-> > thinks this FW-kernel negotiation is not a good direction, maybe we
-> > (Google) can pursue this idea to avoid introducing yet another tag on
-> > our images.
->
-> Are those tags really that nasty so that you guys are looking at
-> upstream changes just to avoid them?
+So this is an out-of-tree change?
 
-Generally, no. But the problem with tags is that distros tag their
-images wrong sometimes. And that leads to problems. For example, I
-just got a bug assigned to me yesterday about some ARM image tagged as
-SEV_CAPABLE. Oops. Lol :-). (Though, I'm pretty sure we won't try to
-boot an ARM image on a non-ARM host anyway; but it's still wrong...)
+> > > 2) kprobe on that function is registered with perf_event_open()
+> > > 
+> > > 	WARNING: CPU: 5 PID: 2109 at kernel/trace/ftrace.c:1853 ftrace_bug+0x25d/0x270
+> > > 	 [<ffffffff811638ed>] ftrace_bug+0x25d/0x270
+> > > 	 [<ffffffff81065571>] ftrace_replace_code+0x2b1/0x420
+> > > 	 [<ffffffff81163f9a>] ftrace_modify_all_code+0x6a/0xb0
+> > > 	 [<ffffffff810656f0>] arch_ftrace_update_code+0x10/0x20
+> > > 	 [<ffffffff81164077>] ftrace_run_update_code+0x17/0x70
+> > > 	 [<ffffffff81165512>] ftrace_set_hash+0x1c2/0x1f0
+> > > 	 [<ffffffff8126fee0>] ? SyS_dup2+0x60/0x60
+> > > 	 [<ffffffff8126fee0>] ? SyS_dup2+0x60/0x60
+> > > 	 [<ffffffff811655a0>] ftrace_set_filter_ip+0x60/0x70
+> > > 	 [<ffffffff8179624c>] arm_kprobe+0x9c/0x140
+> > > 	 [<ffffffff81796368>] enable_kprobe+0x78/0xa0
+> > > 	 [<ffffffff81187bab>] enable_trace_kprobe+0x7b/0x120
+> > > 	 [<ffffffff81797e5f>] kprobe_register+0x2f/0x60
+> > > 	 [<ffffffff8118348a>] perf_trace_event_init+0x1aa/0x230
+> > > 	 [<ffffffff811836b7>] perf_kprobe_init+0xa7/0xf0
+> > > 	 [<ffffffff811a8919>] perf_kprobe_event_init+0x49/0x70
+> > > 	 [<ffffffff811aa569>] perf_try_init_event+0x99/0xc0
+> > > 	 [<ffffffff811b29f2>] perf_init_event+0x92/0x150
+> > > 	 [<ffffffff811b2fa1>] perf_event_alloc+0x4f1/0x910
+> > > 	 [<ffffffff811b3789>] SYSC_perf_event_open+0x3c9/0xe50
+> > > 	 [<ffffffff811b4679>] SyS_perf_event_open+0x9/0x10
+> > > 	 [<ffffffff81799f92>] system_call_fastpath+0x25/0x2a
+> > > 	ftrace failed to modify [<ffffffff8126fee0>] SyS_dup+0x0/0x120
+> > > 	 actual: e9:4b:50:2e:3f
+> > >   
+> > 
+> > Again, why did the above happen. This is a kernel bug that needs to be
+> > fixed. Everything else after this is unimportant, because it's just fall
+> > out to the above bug.  
+> 
+> I'll double check what we (not KLP) do and maybe even what KLP does!
 
-That being said, this lazy accept problem is sort of a special case,
-since it requires deploying code to the guest FW and the guest kernel.
-I'm still relatively new at all of this, but other than the
-SNP/TDX-enlightenment patches themselves,  I haven't really seen any
-other examples of this. So that goes back to my previous question. Is
-this going to happen a lot more? If not, I can definitely see value in
-the argument to skip the complexity of the FW/kernel feature
-negotiation.
+I would guess the fix is to have your stuff not monkey around with ftrace
+locations or to modify your own kernel to have ftrace know about this.
 
-Another thing I thought of since my last reply, that's mostly an
-internal solution to this problem on our side: Going back to Dave's
-10k-foot view of the different angles of how to solve this. For "1.
-Deal with that at the host level configuration", I'm thinking we could
-tag the images with their internal guest kernel version. For example,
-if an image has a 5.15 kernel, then we could have a `KERNEL_5_15` tag.
-This would then allow us to have logic in the guest FW like:
-
-if (guest_kernel_is_at_least(/*major=*/5, /*minor=*/15)
-     enable_lazy_accept = true;
-
-One detail I actually missed in all of this, is how the guest image
-tag gets propagated into the guest FW in this approach. (Apologies for
-this, as that's a pretty big oversight on my part.) Dionna: Have you
-thought about this? Presumably this requires some sort of paravirt for
-the guest to ask the host. And for any paravirt interface, now we need
-to think about if it degrades the security of the confidential VMs.
-Though, using it to get the kernel version to decide whether or not to
-accept the memory within the guest UEFI or mark it as unaccepted seems
-fine from a security angle to me.
-
-Also, tagging images with their underlying kernel versions still seems
-susceptible to mis-labeling. But this seems like it can be mostly
-"fixed" via automation (e.g., write a tool to boot the guest and ask
-it what it's kernel version is and use the result to attach the tag).
-Also, tagging the images with their kernel version seems like a much
-more general solution to these sorts of issues.
-
-Thoughts?
+-- Steve

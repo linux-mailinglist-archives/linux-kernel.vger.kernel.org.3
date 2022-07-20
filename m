@@ -2,172 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B89F57BDA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C8757BDAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239995AbiGTSVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
+        id S240282AbiGTSWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234284AbiGTSVo (ORCPT
+        with ESMTP id S229940AbiGTSWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:21:44 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C532A45056;
-        Wed, 20 Jul 2022 11:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658341301; x=1689877301;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=u56DnQ3gyU8pGO//wLELFocqwEDuWZY33quZjb9uohM=;
-  b=Ot6ZdGm1m80cMO6POaFeg/jzwHktav6zb6iqMaykl28ESjK7DKvRY5SQ
-   34Vi4WZAjteaKVjacTGJC1Peu6Toj9kWwHGlBJXP/gRzVP4xGkzv9AYP0
-   4SWBUWpVxvClBQDM274E9RAbQlkfyHY6v1w1AEc7Pm4JvzF4RDkMK8T0y
-   tXJ6kkfy0iSgTkETca3CQoM8S6b7QttDHGUk0KM/cy78+HUSey2nC2HeE
-   96ZUd2lxVA4+AHPWgtVM7mxhiC61v9X8vizhcY/HYKD1VbRJUUPVJAFl6
-   beO2DVarJZNHv/3uIMWVYh8zCeCgoCGd2d73NkZ1JByHrS1j7pvBzXznz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="285617945"
-X-IronPort-AV: E=Sophos;i="5.92,287,1650956400"; 
-   d="scan'208";a="285617945"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 11:21:41 -0700
-X-IronPort-AV: E=Sophos;i="5.92,287,1650956400"; 
-   d="scan'208";a="656384909"
-Received: from mmeszaro-mobl1.amr.corp.intel.com (HELO kcaccard-desk.amr.corp.intel.com) ([10.209.70.215])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 11:21:39 -0700
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        linux-sgx@vger.kernel.org
-Subject: [PATCH] x86/sgx: Improve comments for sgx_encl_lookup/alloc_backing()
-Date:   Wed, 20 Jul 2022 11:21:19 -0700
-Message-Id: <20220720182120.1160956-1-kristen@linux.intel.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 20 Jul 2022 14:22:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B39A6C122
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:22:13 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658341330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AdffNCX4JTcdua+0fjZnrWwVTWjQKhfHJO6PUSI+DgU=;
+        b=J0SMIJFNkEYo6mfRH4TulE7MyhIyHJEMIRMahOVUo+s69R/zPMb7aeNH3q4ypLOBhx8HvN
+        SKLe1b0dbyx+6hVzy9NBA2/37K1IzLe9XIBp3f5t+1j/GHvSst/lM48RvGv8MOl3X2UH6T
+        8U9PW1oJ8bUp1fD88GbNjXR2k9m5nfkJSfzZe5v5CTMNa33XlMRXsXISJXDzvCOD6GRYqe
+        nR6zJ+8j3oX2KBZR72MPJbhUzrgqkRVMODDkudKSUu/pqACGjQ/j8KPYiDymr3eWBsV+Yk
+        r6yYNpR86wlCubIr91fasXC13DDvH/wxULYhRqDN5bESkzc244uEE4HoVizwJA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658341330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AdffNCX4JTcdua+0fjZnrWwVTWjQKhfHJO6PUSI+DgU=;
+        b=erEno3PMWXKwmHUKutiC9TA9iFmlV70/cL8dBpUDa5CWOc0Jhkl6BzYny7PUq3/opfBt9v
+        /GnJEYghzcZCQ7AQ==
+To:     Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
+Subject: Re: [PATCH v3 0/2] printk: console: Per-console loglevels
+In-Reply-To: <cover.1658339046.git.chris@chrisdown.name>
+References: <cover.1658339046.git.chris@chrisdown.name>
+Date:   Wed, 20 Jul 2022 20:28:09 +0206
+Message-ID: <87edyfmypa.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modify the comments for sgx_encl_lookup_backing() and for
-sgx_encl_alloc_backing() to indicate that they take a reference
-which must be dropped with a call to sgx_encl_put_backing().
-Make sgx_encl_lookup_backing() static for now, and change the
-name of sgx_encl_get_backing() to __sgx_encl_get_backing() to
-make it more clear that sgx_encl_get_backing() is an internal
-function.
+On 2022-07-20, Chris Down <chris@chrisdown.name> wrote:
+> v3:
+>
+> - Update to work with John's kthread patches
 
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
----
- arch/x86/kernel/cpu/sgx/encl.c | 21 ++++++++++++++-------
- arch/x86/kernel/cpu/sgx/encl.h |  2 --
- 2 files changed, 14 insertions(+), 9 deletions(-)
+This will get a bit tricky, since I am also preparing a new kthread
+series. But for now it is helpful to base your work on the previous
+kthread work.
 
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 19876ebfb504..325c2d59e6b4 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -12,6 +12,9 @@
- #include "encls.h"
- #include "sgx.h"
- 
-+static int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
-+			    struct sgx_backing *backing);
-+
- #define PCMDS_PER_PAGE (PAGE_SIZE / sizeof(struct sgx_pcmd))
- /*
-  * 32 PCMD entries share a PCMD page. PCMD_FIRST_MASK is used to
-@@ -706,7 +709,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
- }
- 
- /**
-- * sgx_encl_get_backing() - Pin the backing storage
-+ * __sgx_encl_get_backing() - Pin the backing storage
-  * @encl:	an enclave pointer
-  * @page_index:	enclave page index
-  * @backing:	data for accessing backing storage for the page
-@@ -718,7 +721,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
-  *   0 on success,
-  *   -errno otherwise.
-  */
--static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
-+static int __sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
- 			 struct sgx_backing *backing)
- {
- 	pgoff_t page_pcmd_off = sgx_encl_get_backing_page_pcmd_offset(encl, page_index);
-@@ -794,7 +797,7 @@ static struct mem_cgroup *sgx_encl_get_mem_cgroup(struct sgx_encl *encl)
- }
- 
- /**
-- * sgx_encl_alloc_backing() - allocate a new backing storage page
-+ * sgx_encl_alloc_backing() - create a new backing storage page
-  * @encl:	an enclave pointer
-  * @page_index:	enclave page index
-  * @backing:	data for accessing backing storage for the page
-@@ -802,7 +805,9 @@ static struct mem_cgroup *sgx_encl_get_mem_cgroup(struct sgx_encl *encl)
-  * When called from ksgxd, sets the active memcg from one of the
-  * mms in the enclave's mm_list prior to any backing page allocation,
-  * in order to ensure that shmem page allocations are charged to the
-- * enclave.
-+ * enclave.  Create a backing page for loading data back into an EPC page with
-+ * ELDU.  This function takes a reference on a new backing page which
-+ * must be dropped with a corresponding call to sgx_encl_put_backing().
-  *
-  * Return:
-  *   0 on success,
-@@ -815,7 +820,7 @@ int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
- 	struct mem_cgroup *memcg = set_active_memcg(encl_memcg);
- 	int ret;
- 
--	ret = sgx_encl_get_backing(encl, page_index, backing);
-+	ret = __sgx_encl_get_backing(encl, page_index, backing);
- 
- 	set_active_memcg(memcg);
- 	mem_cgroup_put(encl_memcg);
-@@ -833,15 +838,17 @@ int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
-  * It is the caller's responsibility to ensure that it is appropriate to use
-  * sgx_encl_lookup_backing() rather than sgx_encl_alloc_backing(). If lookup is
-  * not used correctly, this will cause an allocation which is not accounted for.
-+ * This function takes a reference on an existing backing page which must be
-+ * dropped with a corresponding call to sgx_encl_put_backing().
-  *
-  * Return:
-  *   0 on success,
-  *   -errno otherwise.
-  */
--int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
-+static int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
- 			   struct sgx_backing *backing)
- {
--	return sgx_encl_get_backing(encl, page_index, backing);
-+	return __sgx_encl_get_backing(encl, page_index, backing);
- }
- 
- /**
-diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
-index 332ef3568267..d731ef53f815 100644
---- a/arch/x86/kernel/cpu/sgx/encl.h
-+++ b/arch/x86/kernel/cpu/sgx/encl.h
-@@ -106,8 +106,6 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
- bool current_is_ksgxd(void);
- void sgx_encl_release(struct kref *ref);
- int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
--int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
--			    struct sgx_backing *backing);
- int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
- 			   struct sgx_backing *backing);
- void sgx_encl_put_backing(struct sgx_backing *backing);
--- 
-2.36.1
+Thanks for your efforts on this!
 
+John

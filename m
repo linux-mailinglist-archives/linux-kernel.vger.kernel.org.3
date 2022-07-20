@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEED57BDAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6355057BDB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240478AbiGTSWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
+        id S240683AbiGTSW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiGTSWr (ORCPT
+        with ESMTP id S229940AbiGTSWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:22:47 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D996BC27
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:22:45 -0700 (PDT)
+        Wed, 20 Jul 2022 14:22:55 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B2D6F7E2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:22:54 -0700 (PDT)
 Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
          client-signature RSA-PSS (2048 bits) client-digest SHA256)
         (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4Lp3w45zGtzDsMC;
-        Wed, 20 Jul 2022 18:22:44 +0000 (UTC)
+        by mx0.riseup.net (Postfix) with ESMTPS id 4Lp3wF3tVjz9rwv;
+        Wed, 20 Jul 2022 18:22:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1658341365; bh=ied7/wQBWyRAGNRM3YJQ9nmwASEEztOFVReHeNDPqs4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oEfW3Pz4FH/A5B6gpsmrU591Ac2WjFTISQziC/IGxejB7MS6n6HdTbhtBdUHYGyFH
-         yTxapnlZPVnjQTT3OF1pOhq0bJloGu7LuEwa3bPqvCduEI/I7bMzUrTLg1mARImqOs
-         EO+0QGV2wzOJuu+nJoiEB85Sz2zdorAaMn+VUgYQ=
-X-Riseup-User-ID: 451CCE85EB5720A15480BDBEF7F469054F1D571208F3070AF89924686D908B01
+        t=1658341373; bh=KyvEUNNOt89c5DCs1ya6/ygI3KKmDEEOIgjcfrJtoRY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QbxVeQ/MTkZwMHReGtpVA+zUjmfI94JwG34+puuu2OyGneKMob3JbpswzcQV+FmP5
+         y8qqBcwybxLv594ZzxwRY1Hstz2bDoPtu+6XKU0mzu6Qn3y+8hbEY57L5bkJrM603h
+         BvDpyXxOguW2/wjgk875P2I9M56bubu1vnho36pI=
+X-Riseup-User-ID: 02B76E23F10FA68EAAD4F7A650D4B00921C5E78D8B3D7B748AEFDF6ADBD40AAB
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4Lp3vy0krlz5vgM;
-        Wed, 20 Jul 2022 18:22:37 +0000 (UTC)
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4Lp3w73lt6z5vgM;
+        Wed, 20 Jul 2022 18:22:47 +0000 (UTC)
 From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
 To:     Harry Wentland <harry.wentland@amd.com>,
         Leo Li <sunpeng.li@amd.com>,
@@ -48,204 +48,104 @@ Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         tales.aparecida@gmail.com,
         =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH 1/4] drm/amd/display: Drop dm_sw_gfx7_2d_thin_l_vp and dm_sw_gfx7_2d_thin_gl
-Date:   Wed, 20 Jul 2022 15:22:25 -0300
-Message-Id: <20220720182228.259119-1-mairacanal@riseup.net>
+Subject: [PATCH 2/4] drm/amd/display: Remove duplicated CalculateWriteBackDISPCLK
+Date:   Wed, 20 Jul 2022 15:22:26 -0300
+Message-Id: <20220720182228.259119-2-mairacanal@riseup.net>
+In-Reply-To: <20220720182228.259119-1-mairacanal@riseup.net>
+References: <20220720182228.259119-1-mairacanal@riseup.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the enum dm_sw_gfx7_2d_thin_gl and dm_sw_gfx7_2d_thin_l_vp are not
-used on the codebase, this commit drops those entries from enum
-dm_swizzle_mode.
+The functions dml30_CalculateWriteBackDISPCLK and
+dml31_CalculateWriteBackDISPCLK are identical. Therefor, to avoid
+code duplication, dml31_CalculateWriteBackDISPCLK is removed and
+replaced by dml30_CalculateWriteBackDISPCLK.
 
 Signed-off-by: Maíra Canal <mairacanal@riseup.net>
 ---
- .../dc/dml/dcn20/display_mode_vba_20.c        | 26 +++++-------------
- .../dc/dml/dcn20/display_mode_vba_20v2.c      | 26 +++++-------------
- .../dc/dml/dcn21/display_mode_vba_21.c        | 27 +++++--------------
- .../amd/display/dc/dml/display_mode_enums.h   |  2 --
- .../display/dc/dml/dml_wrapper_translation.c  |  9 -------
- 5 files changed, 19 insertions(+), 71 deletions(-)
+ .../dc/dml/dcn31/display_mode_vba_31.c        | 24 ++-----------------
+ .../dc/dml/dcn31/display_mode_vba_31.h        | 11 ---------
+ 2 files changed, 2 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-index d3b5b6fedf04..4e4cb0927057 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-@@ -938,7 +938,7 @@ static unsigned int CalculateVMAndRowBytes(
- 		*MetaRowByte = 0;
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+index 3fab19134480..3bc529f0b0fc 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.c
+@@ -2085,7 +2085,7 @@ static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerforman
+ 		if (v->WritebackEnable[k]) {
+ 			v->WritebackDISPCLK = dml_max(
+ 					v->WritebackDISPCLK,
+-					dml31_CalculateWriteBackDISPCLK(
++					dml30_CalculateWriteBackDISPCLK(
+ 							v->WritebackPixelFormat[k],
+ 							v->PixelClock[k],
+ 							v->WritebackHRatio[k],
+@@ -3470,26 +3470,6 @@ static double CalculateTWait(unsigned int PrefetchMode, double DRAMClockChangeLa
  	}
+ }
  
--	if (SurfaceTiling == dm_sw_linear || SurfaceTiling == dm_sw_gfx7_2d_thin_gl || SurfaceTiling == dm_sw_gfx7_2d_thin_l_vp) {
-+	if (SurfaceTiling == dm_sw_linear) {
- 		MacroTileSizeBytes = 256;
- 		MacroTileHeight = BlockHeight256Bytes;
- 	} else if (SurfaceTiling == dm_sw_4kb_s || SurfaceTiling == dm_sw_4kb_s_x
-@@ -3347,26 +3347,12 @@ void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
- 										== dm_420_8
- 								|| mode_lib->vba.SourcePixelFormat[k]
- 										== dm_420_10))
--				|| (((mode_lib->vba.SurfaceTiling[k] == dm_sw_gfx7_2d_thin_gl
--						|| mode_lib->vba.SurfaceTiling[k]
--								== dm_sw_gfx7_2d_thin_l_vp)
--						&& !((mode_lib->vba.SourcePixelFormat[k]
--								== dm_444_64
-+				|| (mode_lib->vba.DCCEnable[k] == true
-+						&& (mode_lib->vba.SurfaceTiling[k] == dm_sw_linear
- 								|| mode_lib->vba.SourcePixelFormat[k]
--										== dm_444_32)
--								&& mode_lib->vba.SourceScan[k]
--										== dm_horz
--								&& mode_lib->vba.SupportGFX7CompatibleTilingIn32bppAnd64bpp
--										== true
--								&& mode_lib->vba.DCCEnable[k]
--										== false))
--						|| (mode_lib->vba.DCCEnable[k] == true
--								&& (mode_lib->vba.SurfaceTiling[k]
--										== dm_sw_linear
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_8
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_10)))) {
-+										== dm_420_8
-+								|| mode_lib->vba.SourcePixelFormat[k]
-+										== dm_420_10))) {
- 			mode_lib->vba.SourceFormatPixelAndScanSupport = false;
- 		}
- 	}
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-index 63bbdf8b8678..eaa0cdb599ba 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-@@ -998,7 +998,7 @@ static unsigned int CalculateVMAndRowBytes(
- 		*MetaRowByte = 0;
- 	}
+-double dml31_CalculateWriteBackDISPCLK(
+-		enum source_format_class WritebackPixelFormat,
+-		double PixelClock,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackHTaps,
+-		unsigned int WritebackVTaps,
+-		long WritebackSourceWidth,
+-		long WritebackDestinationWidth,
+-		unsigned int HTotal,
+-		unsigned int WritebackLineBufferSize)
+-{
+-	double DISPCLK_H, DISPCLK_V, DISPCLK_HB;
+-
+-	DISPCLK_H = PixelClock * dml_ceil(WritebackHTaps / 8.0, 1) / WritebackHRatio;
+-	DISPCLK_V = PixelClock * (WritebackVTaps * dml_ceil(WritebackDestinationWidth / 6.0, 1) + 8.0) / HTotal;
+-	DISPCLK_HB = PixelClock * WritebackVTaps * (WritebackDestinationWidth * WritebackVTaps - WritebackLineBufferSize / 57.0) / 6.0 / WritebackSourceWidth;
+-	return dml_max3(DISPCLK_H, DISPCLK_V, DISPCLK_HB);
+-}
+-
+ static double CalculateWriteBackDelay(
+ 		enum source_format_class WritebackPixelFormat,
+ 		double WritebackHRatio,
+@@ -4055,7 +4035,7 @@ void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+ 		if (v->WritebackEnable[k] == true) {
+ 			v->WritebackRequiredDISPCLK = dml_max(
+ 					v->WritebackRequiredDISPCLK,
+-					dml31_CalculateWriteBackDISPCLK(
++					dml30_CalculateWriteBackDISPCLK(
+ 							v->WritebackPixelFormat[k],
+ 							v->PixelClock[k],
+ 							v->WritebackHRatio[k],
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.h b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.h
+index 90be612f26b2..654362adcaa9 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.h
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/display_mode_vba_31.h
+@@ -28,16 +28,5 @@
  
--	if (SurfaceTiling == dm_sw_linear || SurfaceTiling == dm_sw_gfx7_2d_thin_gl || SurfaceTiling == dm_sw_gfx7_2d_thin_l_vp) {
-+	if (SurfaceTiling == dm_sw_linear) {
- 		MacroTileSizeBytes = 256;
- 		MacroTileHeight = BlockHeight256Bytes;
- 	} else if (SurfaceTiling == dm_sw_4kb_s || SurfaceTiling == dm_sw_4kb_s_x
-@@ -3454,26 +3454,12 @@ void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode
- 										== dm_420_8
- 								|| mode_lib->vba.SourcePixelFormat[k]
- 										== dm_420_10))
--				|| (((mode_lib->vba.SurfaceTiling[k] == dm_sw_gfx7_2d_thin_gl
--						|| mode_lib->vba.SurfaceTiling[k]
--								== dm_sw_gfx7_2d_thin_l_vp)
--						&& !((mode_lib->vba.SourcePixelFormat[k]
--								== dm_444_64
-+				|| (mode_lib->vba.DCCEnable[k] == true
-+						&& (mode_lib->vba.SurfaceTiling[k] == dm_sw_linear
- 								|| mode_lib->vba.SourcePixelFormat[k]
--										== dm_444_32)
--								&& mode_lib->vba.SourceScan[k]
--										== dm_horz
--								&& mode_lib->vba.SupportGFX7CompatibleTilingIn32bppAnd64bpp
--										== true
--								&& mode_lib->vba.DCCEnable[k]
--										== false))
--						|| (mode_lib->vba.DCCEnable[k] == true
--								&& (mode_lib->vba.SurfaceTiling[k]
--										== dm_sw_linear
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_8
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_10)))) {
-+										== dm_420_8
-+								|| mode_lib->vba.SourcePixelFormat[k]
-+										== dm_420_10))) {
- 			mode_lib->vba.SourceFormatPixelAndScanSupport = false;
- 		}
- 	}
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-index 8a7485e21d53..198d81861ac5 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-@@ -1342,7 +1342,7 @@ static unsigned int CalculateVMAndRowBytes(
- 		*MetaRowByte = 0;
- 	}
+ void dml31_recalculate(struct display_mode_lib *mode_lib);
+ void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib);
+-double dml31_CalculateWriteBackDISPCLK(
+-		enum source_format_class WritebackPixelFormat,
+-		double PixelClock,
+-		double WritebackHRatio,
+-		double WritebackVRatio,
+-		unsigned int WritebackHTaps,
+-		unsigned int WritebackVTaps,
+-		long   WritebackSourceWidth,
+-		long   WritebackDestinationWidth,
+-		unsigned int HTotal,
+-		unsigned int WritebackLineBufferSize);
  
--	if (SurfaceTiling == dm_sw_linear || SurfaceTiling == dm_sw_gfx7_2d_thin_gl || SurfaceTiling == dm_sw_gfx7_2d_thin_l_vp) {
-+	if (SurfaceTiling == dm_sw_linear) {
- 		MacroTileSizeBytes = 256;
- 		MacroTileHeight = BlockHeight256Bytes;
- 	} else if (SurfaceTiling == dm_sw_4kb_s || SurfaceTiling == dm_sw_4kb_s_x
-@@ -3579,26 +3579,13 @@ void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
- 										== dm_420_8
- 								|| mode_lib->vba.SourcePixelFormat[k]
- 										== dm_420_10))
--				|| (((mode_lib->vba.SurfaceTiling[k] == dm_sw_gfx7_2d_thin_gl
--						|| mode_lib->vba.SurfaceTiling[k]
--								== dm_sw_gfx7_2d_thin_l_vp)
--						&& !((mode_lib->vba.SourcePixelFormat[k]
--								== dm_444_64
-+				|| (mode_lib->vba.DCCEnable[k] == true
-+						&& (mode_lib->vba.SurfaceTiling[k]
-+								== dm_sw_linear
- 								|| mode_lib->vba.SourcePixelFormat[k]
--										== dm_444_32)
--								&& mode_lib->vba.SourceScan[k]
--										== dm_horz
--								&& mode_lib->vba.SupportGFX7CompatibleTilingIn32bppAnd64bpp
--										== true
--								&& mode_lib->vba.DCCEnable[k]
--										== false))
--						|| (mode_lib->vba.DCCEnable[k] == true
--								&& (mode_lib->vba.SurfaceTiling[k]
--										== dm_sw_linear
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_8
--										|| mode_lib->vba.SourcePixelFormat[k]
--												== dm_420_10)))) {
-+										== dm_420_8
-+								|| mode_lib->vba.SourcePixelFormat[k]
-+										== dm_420_10))) {
- 			mode_lib->vba.SourceFormatPixelAndScanSupport = false;
- 		}
- 	}
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h b/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h
-index f394b3f3922a..0e06727d40b3 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/display_mode_enums.h
-@@ -89,8 +89,6 @@ enum dm_swizzle_mode {
- 	dm_sw_var_s_x = 29,
- 	dm_sw_var_d_x = 30,
- 	dm_sw_var_r_x = 31,
--	dm_sw_gfx7_2d_thin_l_vp,
--	dm_sw_gfx7_2d_thin_gl,
- };
- enum lb_depth {
- 	dm_lb_10 = 0, dm_lb_8 = 1, dm_lb_6 = 2, dm_lb_12 = 3, dm_lb_16 = 4,
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c b/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c
-index 4ec5310a2962..9edcb6fc83c1 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dml_wrapper_translation.c
-@@ -35,15 +35,6 @@ static void gfx10array_mode_to_dml_params(
- 	case DC_ARRAY_LINEAR_GENERAL:
- 		*sw_mode = dm_sw_linear;
- 		break;
--	case DC_ARRAY_2D_TILED_THIN1:
--// DC_LEGACY_TILING_ADDR_GEN_ZERO - undefined as per current code hence removed
--#if 0
--		if (compat_level == DC_LEGACY_TILING_ADDR_GEN_ZERO)
--			*sw_mode = dm_sw_gfx7_2d_thin_l_vp;
--		else
--			*sw_mode = dm_sw_gfx7_2d_thin_gl;
--#endif
--		break;
- 	default:
- 		ASSERT(0); /* Not supported */
- 		break;
+ #endif /* __DML31_DISPLAY_MODE_VBA_H__ */
 -- 
 2.36.1
 

@@ -2,116 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0D357B44C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F207457B444
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiGTKL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 06:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S230265AbiGTKF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 06:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiGTKL1 (ORCPT
+        with ESMTP id S229379AbiGTKFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 06:11:27 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434AF545E8;
-        Wed, 20 Jul 2022 03:11:27 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K9ZqdV001592;
-        Wed, 20 Jul 2022 10:11:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=inuNwO9IAY/YiQFJpWcW6TKvVQbP3ppg5xl2X/Ep4L0=;
- b=j1shwSoGZEIUPnG7y8RA5bBtboeup4zu2s1a0av3uZ7gO6Yc4ZnY2n2kfsC+QkL23A/d
- CK1F1FbTapqWWHx9S8JIQUTvS3DMULnZv2cxUTYrLNxPM/ZUIjTEW/Mm5PEXAg67AUv1
- 38Bd93y9KXnBb5JnFmG2R+4gEd2psd3ooxtTx7seh1POECDH1ljdE10sJtPdf5ecuy7T
- Tap0Rgc+vF6IGRIaRTbthA/4qq6jGKQcWS4AT3u5M1yTVZ1PhehYV7rkB7FExuYw985A
- 2CXJnDkrGjy7o3R4MWjKNBzkYJ8VdF/YQvMgZI+3Nnj3E2/XtVattLS5nW8XgKw6uJJG gQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hef6sr4rj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 10:11:12 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26KA6Brq005422
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 10:06:11 GMT
-Received: from cbsp-sh-gv.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Jul 2022 03:06:09 -0700
-From:   Qiang Yu <quic_qianyu@quicinc.com>
-To:     <mani@kernel.org>, <quic_hemantk@quicinc.com>,
-        <loic.poulain@linaro.org>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>,
-        Qiang Yu <quic_qianyu@quicinc.com>
-Subject: [PATCH v1 1/1] bus: mhi: host: Fix up null pointer access in mhi_irq_handler
-Date:   Wed, 20 Jul 2022 18:04:14 +0800
-Message-ID: <1658311454-4707-1-git-send-email-quic_qianyu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 20 Jul 2022 06:05:55 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CD75C9E8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:05:50 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id c6so14524082pla.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C6Z6JqwqSHD1Pxl7j+M9Xv/wk5TAAqbSiRlE2ihHvyk=;
+        b=U93OjkVXci1r2RHwNOXChSOl29W1H4Aw9ze6/rLApkBNlMNjYWwh/uGvi0LxozP6D1
+         buw7A48b80d75D7Zgy19O3zcN2oJHahtSiCUFvUwcvnYa4f1OmFdEKHPk+Tw++fHpHkO
+         nJcwYvw5klU2ua/Fg/KSvx6R4oIGFl8JrMpq1QE1JU+tjnbuSqLcAXWEGlgkJbcJI2wa
+         QT65DgTUFGOZ6iNbWIzr2cEEtZZ91eZzp7ZlqiItTguX0MP3qxrDuxX7bct5SPyavvoI
+         WdBHfuJQUxq4TbLdmbklReu3rgMbjcfQpQygdILmoCpgUifHRsTbcVeroULUrVqksci+
+         h/dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C6Z6JqwqSHD1Pxl7j+M9Xv/wk5TAAqbSiRlE2ihHvyk=;
+        b=NV2T4pepyF26eBTb4wBO5yCBiIGoPMs/OdFkWpNTaJXQy+HWer3STb4pagEXnqVCIQ
+         WMyi7mwOLb/wSwPFebNorYCQkD3WER+pStVyetMEHk1f09v8+Lsm6OdXfDx7/Ie8TqHP
+         T5LVzF8Gp4Sc2vMT7dongECqQseqVfYvdfeDJ9G12ygCbqOO7DU2/tLhGsM/YEPxwddd
+         hsu3pdWvWYrAgD7kWkHEcG+4oMCAtNfl6V5UKQUfJHTWI17DWhw6TlNsgmYUpsrl2363
+         h6dilnp2dx0ZxTnla+3e3pjx1k99gP7ETDcJU0fOh0dnjhY8eX3swd2YR601IOxi7J/m
+         1A4Q==
+X-Gm-Message-State: AJIora+y0UbJBkim3NSA0UJK6+OBokH2buWCq/OaWxEOhQxXmMLiFUXT
+        7hyKjFOznscA9Cwb66i/s3E=
+X-Google-Smtp-Source: AGRyM1s3ABuJ5Rs4YNmUtYSHTpyCuFYVnS+sK83V2uuFqCcwAy9zWvOS/H0Vol7ECwJ7WWBHG751kw==
+X-Received: by 2002:a17:90b:1c09:b0:1ef:f82c:174b with SMTP id oc9-20020a17090b1c0900b001eff82c174bmr4411389pjb.88.1658311549965;
+        Wed, 20 Jul 2022 03:05:49 -0700 (PDT)
+Received: from ip-172-31-24-42.ap-northeast-1.compute.internal (ec2-35-78-228-6.ap-northeast-1.compute.amazonaws.com. [35.78.228.6])
+        by smtp.gmail.com with ESMTPSA id r5-20020aa79885000000b00525442ac579sm13137201pfl.212.2022.07.20.03.05.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 03:05:49 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 10:05:44 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Christoph Lameter <cl@gentwo.de>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joe Perches <joe@perches.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Matthew WilCox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 16/16] mm/sl[au]b: check if large object is valid in
+ __ksize()
+Message-ID: <YtfTeJrnViCejwC4@ip-172-31-24-42.ap-northeast-1.compute.internal>
+References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
+ <20220712133946.307181-17-42.hyeyoo@gmail.com>
+ <alpine.DEB.2.22.394.2207121701070.57893@gentwo.de>
+ <Ys6Pp6ZPwJTdJvpk@ip-172-31-24-42.ap-northeast-1.compute.internal>
+ <alpine.DEB.2.22.394.2207131205590.112646@gentwo.de>
+ <CANpmjNPbbugrbCFADy1C7PgaU-4PMd9UK90QiHKS-Md0ocqa3w@mail.gmail.com>
+ <alpine.DEB.2.22.394.2207141115050.184626@gentwo.de>
+ <CANpmjNPGsqV4FYNq9Q-rUKCEZ3wOJbk3xfcfBks0O-bhFDmYcw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: MaXNWA5xlqv5daTUFl-XB6iVKZMYOumi
-X-Proofpoint-GUID: MaXNWA5xlqv5daTUFl-XB6iVKZMYOumi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_05,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 malwarescore=0 spamscore=0 clxscore=1011
- adultscore=0 impostorscore=0 mlxlogscore=939 suspectscore=0 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207200042
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNPGsqV4FYNq9Q-rUKCEZ3wOJbk3xfcfBks0O-bhFDmYcw@mail.gmail.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The irq handler for a shared IRQ ought to be prepared for running
-even now it's being freed. So let's check the pointer used by
-mhi_irq_handler to avoid null pointer access since it is probably
-released before freeing IRQ.
+On Thu, Jul 14, 2022 at 12:30:09PM +0200, Marco Elver wrote:
+> On Thu, 14 Jul 2022 at 11:16, Christoph Lameter <cl@gentwo.de> wrote:
+> >
+> > On Wed, 13 Jul 2022, Marco Elver wrote:
+> >
+> > > We shouldn't crash, so it should be WARN(), but also returning
+> > > PAGE_SIZE is bad. The intuition behind returning 0 is to try and make
+> > > the buggy code cause less harm to the rest of the kernel.
+> > >
+> > > >From [1]:
+> > >
+> > > > Similarly, if you are able to tell if the passed pointer is not a
+> > > > valid object some other way, you can do something better - namely,
+> > > > return 0. The intuition here is that the caller has a pointer to an
+> > > > invalid object, and wants to use ksize() to determine its size, and
+> > > > most likely access all those bytes. Arguably, at that point the kernel
+> > > > is already in a degrading state. But we can try to not let things get
+> > > > worse by having ksize() return 0, in the hopes that it will stop
+> > > > corrupting more memory. It won't work in all cases, but should avoid
+> > > > things like "s = ksize(obj); touch_all_bytes(obj, s)" where the size
+> > > > bounds the memory accessed corrupting random memory.
+> >
+> > "in the hopes that it will stop corrupting memory"!!!???
+> >
+> > Do a BUG() then and definitely stop all chances of memory corruption.
+> 
+> Fair enough.
+> 
+> Well, I'd also prefer to just kill the kernel. But some people don't
+> like that and want the option to continue running. So a WARN() gives
+> that option, and just have to boot the kernel with panic_on_warn to
+> kill it. There are other warnings in the kernel where we'd better kill
+> the kernel as the chances of corrupting memory are pretty damn high if
+> we hit them. And I still don't quite see why the case here is any more
+> or less special.
+> 
+> If the situation here is exceedingly rare, let's try BUG() and see what breaks?
 
-Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
----
- drivers/bus/mhi/host/main.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+Let's try BUG() for both conditions and replace it with WARN() later
+if kernel hit those often.
 
-diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
-index f3aef77a..7959457 100644
---- a/drivers/bus/mhi/host/main.c
-+++ b/drivers/bus/mhi/host/main.c
-@@ -430,12 +430,20 @@ irqreturn_t mhi_irq_handler(int irq_number, void *dev)
- {
- 	struct mhi_event *mhi_event = dev;
- 	struct mhi_controller *mhi_cntrl = mhi_event->mhi_cntrl;
--	struct mhi_event_ctxt *er_ctxt =
--		&mhi_cntrl->mhi_ctxt->er_ctxt[mhi_event->er_index];
-+	struct mhi_event_ctxt *er_ctxt;
- 	struct mhi_ring *ev_ring = &mhi_event->ring;
--	dma_addr_t ptr = le64_to_cpu(er_ctxt->rp);
-+	dma_addr_t ptr;
- 	void *dev_rp;
- 
-+	if (!mhi_cntrl->mhi_ctxt) {
-+		dev_err(&mhi_cntrl->mhi_dev->dev,
-+			"mhi_ctxt has been freed\n");
-+		return IRQ_HANDLED;
-+	}
-+
-+	er_ctxt = &mhi_cntrl->mhi_ctxt->er_ctxt[mhi_event->er_index];
-+	ptr = le64_to_cpu(er_ctxt->rp);
-+
- 	if (!is_valid_ring_ptr(ev_ring, ptr)) {
- 		dev_err(&mhi_cntrl->mhi_dev->dev,
- 			"Event ring rp points outside of the event ring\n");
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+I'll update this patch in next version.
 
+And I have no strong opinion on returning 0, but if kernel hits it a
+lot, I think returning 0 would be more safe as you said.
+
+Thanks,
+Hyeonggon

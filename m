@@ -2,840 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD2857B1B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C3557B1B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239284AbiGTH0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S239408AbiGTH0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiGTH0D (ORCPT
+        with ESMTP id S239315AbiGTH0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:26:03 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BA510FC5;
-        Wed, 20 Jul 2022 00:26:01 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id u20so13669057iob.8;
-        Wed, 20 Jul 2022 00:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UnBdPRUh7djZC7Qw84qgD2HzLnpAORAEXhzxx/+zyLg=;
-        b=qGZy2ZHe99n4ZSHn3c+pvu1QoxUpTp2PENt058J2ENCAvggLSCjduO4NQd6fzPRQzp
-         IiE3Ly6V22dYZelTh8jbinZ+yeSl30x1GhNKIsgR6Ar0BUo5DYgN9YzJUzh+RSojSG3V
-         3rYLYK8XGd4di04a738ol/7HqSRH5CvUHVCZx3Kk3M4403T/eSsyKF2utWpNLcdz+GIh
-         jl/beNhgaeRIXTJ1o1NHpFCeIEp3CEYSODO/EY0G8kMUKcI7pn7a9/9gl7KwgOERmwao
-         MVJzBFbqyPeSIwLYutIcNw+28/bxyJHDHUfyczf8t9pg/bFdsIb5CsR1HZUCg9FlC/WR
-         BN3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UnBdPRUh7djZC7Qw84qgD2HzLnpAORAEXhzxx/+zyLg=;
-        b=uzPQk5vI4aogpwDqSkWPQMkPqnvThnFwcL1cOe3f/OX0y3RHJb62meeOEyUevVV4XP
-         U+DNf4uYcYSBRuDipSTeARu+7K2iX/Rz8hPzEXU4af3I7JxSsPIhXDlheHdMgLEylZLo
-         X/rwVBsY3u7ZpHI/9MfLsYwVHdOnYLu4eyhm3FeOMKmYnpHA4scte+9CrjILBYwJA1Ol
-         94+HMw6tnpK84o6fN4Y7gSxHdt52vSQaM3jWZl39aTXBbKLpkphgrvbsTg1V00h29dWu
-         0/83qdtObxH8UyDc3aMCX3eHT/kpG4InXqt+VYVCv8F0Lj4OH8yl5PA8WWWcT8I/uv9N
-         tjew==
-X-Gm-Message-State: AJIora+5p8k/pNNlKNC4Cac6FqJRDp74a8duBNwO0yygMj1LqckNnafa
-        r8W18t7Ctdz5E/VMfuEdHwKe+u0DQRT2BFpsMuy6VOtb
-X-Google-Smtp-Source: AGRyM1u9xrMw7O0eeYaZF+PJu4a7fOrlyFMflF4b5zAmbuMXu/Fh0+hXcS8KHxcBRCvlVY4Fs51vbHgMpr4WJf+XNM8=
-X-Received: by 2002:a05:6602:2d4f:b0:67b:f7c9:a3e with SMTP id
- d15-20020a0566022d4f00b0067bf7c90a3emr8283992iow.77.1658301960432; Wed, 20
- Jul 2022 00:26:00 -0700 (PDT)
+        Wed, 20 Jul 2022 03:26:08 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0871066BB9;
+        Wed, 20 Jul 2022 00:26:07 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5A0FC5C0092;
+        Wed, 20 Jul 2022 03:26:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 20 Jul 2022 03:26:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1658301966; x=
+        1658388366; bh=B6+uixznWpHdEohDGmP3+AKeQCMmWG+4Se9ltdNTC+0=; b=q
+        PxdJoOtwYAmSWLBVjADUHo11NvfgJAoVdwhP4k4qHQ03pF/ncVj72Uta1SMPdV4k
+        HWIpTdLC/dRN83UKPvkC3bqVcxrMMHrggoQ4/+rt90ENs4TXtPxsaYyYAKCoUwhf
+        fA0sLJpipofKNTl8SWEipLSxI6GehAzlXIfzFljzscep4XqXQpuLfPTyj00Qzkv7
+        3Ngy3gjDaq05iMhtfFHFV3EIdow17QLy3OUdCMkuCEoouQJ6gy8vDAfWza4MZ+kh
+        oxcCwRfPy/0WIUzmHrl/HHnTWH3VBM5m7xvbQ1id0aJcDYqR6Q1iXiIx3LCBs/dO
+        S49cnRoZjLJxW52G1ilFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658301966; x=
+        1658388366; bh=B6+uixznWpHdEohDGmP3+AKeQCMmWG+4Se9ltdNTC+0=; b=Q
+        3KCCSD5K6qofjj7HX1k47BJlWSR/f7wz8RtTKPV4zoh8icI4uBnx65qiczI+3Avc
+        Y1FIbsB8/rmam6a3dLETs10VL2XYdFPDndYJaN6qht4Ooc2zsrXowlf3GHdYa754
+        4wRP5Ur82L6KORTm90LxeMs8Y8b8iB0ICm6dmN20FsGPLF2t/cRXHW/1ptQb1Iao
+        R+Mm3lGLVlZ20Pe3lDAVWW5C/Gb/gOcNR+9rCXDqA14PpMSh+DFRKoMkoEiHubp7
+        WCpa8FJqV6O/d42baMKtADg1kWCNKmufUABGZW2QrLI38sDV++5rSXBCA5/StKw7
+        /sTgs1TxpBCOH0HV5umHg==
+X-ME-Sender: <xms:Da7XYr8ByNQMzC8qvnXqF3RkKteCS33M-leYTnGE94eH6VjMmxsmrg>
+    <xme:Da7XYnt0xNCPuBxU1d2WsXw7mqhj9rQ4hZ_WoSvDR8qpAe1oXjisc0tGscFhs_Xg1
+    vLpxhrpZe_e>
+X-ME-Received: <xmr:Da7XYpByEGcrst0MAGcI6BOwOQaX_X2mBwudM-1Ga6pHyL-NwEbcJp-WW-7z-oW_VwYowrKweYOgcPw3RMSuWi_8DphZgCFJOmP40_zdgk-xAe8Qy5I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeluddguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkffggfgfuhffvvehfjggtgfesthekredttdefjeenucfhrhhomhepkfgr
+    nhcumfgvnhhtuceorhgrvhgvnhesthhhvghmrgifrdhnvghtqeenucggtffrrghtthgvrh
+    hnpeeiveelkefgtdegudefudeftdelteejtedvheeuleevvdeluefhuddtieegveelkeen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehrrghvvg
+    hnsehthhgvmhgrfidrnhgvth
+X-ME-Proxy: <xmx:Dq7XYneTkWp2oUzAah9nZgVrVgzJ3fXACD42q3HtPTcuOokWHRRBfg>
+    <xmx:Dq7XYgN4cIqtg5DM_RmeZ5THQpD8T1tsUX5VB_8ZNtlSSs8bjTBCfg>
+    <xmx:Dq7XYplnYLuKi5MPIYxFm4p-mR1SAZONuSDdYiNJWy4O_HcvGJQVIA>
+    <xmx:Dq7XYlrHiu22e9e0sDvI5r2qCrl7qwhm-e_8Rd02biSa7a_3Ji3WsQ>
+Feedback-ID: i31e841b0:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 20 Jul 2022 03:26:03 -0400 (EDT)
+Message-ID: <afc1cca0-1a23-65d0-6fcb-dcbb7c336669@themaw.net>
+Date:   Wed, 20 Jul 2022 15:26:01 +0800
 MIME-Version: 1.0
-References: <20220719085546.104442-1-eugene.shalygin@gmail.com> <20220719172041.GA2224858@roeck-us.net>
-In-Reply-To: <20220719172041.GA2224858@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Wed, 20 Jul 2022 09:25:47 +0200
-Message-ID: <CAB95QARF=5QtWcrcL21Jr=LwPMxxTsU8NU+8AV2hO9Dp0B2hog@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: remove deprecated asus_wmi_ec_sensors driver
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] vfs: track count of child mounts
+Content-Language: en-US
+From:   Ian Kent <raven@themaw.net>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <165751053430.210556.5634228273667507299.stgit@donald.themaw.net>
+ <165751066075.210556.17270883735094115327.stgit@donald.themaw.net>
+ <YtdfUlO1puevbtfi@ZenIV> <6c072650-aed4-3ea5-0b8b-8e52655a222d@themaw.net>
+In-Reply-To: <6c072650-aed4-3ea5-0b8b-8e52655a222d@themaw.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I tried to fix the commit message in v2 by taking other driver
-deleting commits in hwmon as examples.Hope that helped.
+On 20/7/22 10:17, Ian Kent wrote:
+>
+> On 20/7/22 09:50, Al Viro wrote:
+>> On Mon, Jul 11, 2022 at 11:37:40AM +0800, Ian Kent wrote:
+>>> While the total reference count of a mount is mostly all that's needed
+>>> the reference count corresponding to the mounts only is occassionally
+>>> also needed (for example, autofs checking if a tree of mounts can be
+>>> expired).
+>>>
+>>> To make this reference count avaialble with minimal changes add a
+>>> counter to track the number of child mounts under a given mount. This
+>>> count can then be used to calculate the mounts only reference count.
+>> No.  This is a wrong approach - instead of keeping track of number of
+>> children, we should just stop having them contribute to refcount of
+>> the parent.  Here's what I've got in my local tree; life gets simpler
+>> that way.
+>
+> Right, I'll grab this and run some tests.
+>
+>
+> Ian
+>
+>>
+>> commit e99f1f9cc864103f326a5352e6ce1e377613437f
+>> Author: Al Viro <viro@zeniv.linux.org.uk>
+>> Date:   Sat Jul 9 14:45:39 2022 -0400
+>>
+>>      namespace: don't keep ->mnt_parent pinned
+>>           makes refcounting more consistent
+>>           Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+>>
+>> diff --git a/fs/namespace.c b/fs/namespace.c
+>> index 68789f896f08..53c29110a0cd 100644
+>> --- a/fs/namespace.c
+>> +++ b/fs/namespace.c
+>> @@ -906,7 +906,6 @@ void mnt_set_mountpoint(struct mount *mnt,
+>>               struct mount *child_mnt)
+>>   {
+>>       mp->m_count++;
+>> -    mnt_add_count(mnt, 1);    /* essentially, that's mntget */
+>>       child_mnt->mnt_mountpoint = mp->m_dentry;
+>>       child_mnt->mnt_parent = mnt;
+>>       child_mnt->mnt_mp = mp;
+>> @@ -1429,22 +1428,18 @@ void mnt_cursor_del(struct mnt_namespace *ns, 
+>> struct mount *cursor)
+>>   int may_umount_tree(struct vfsmount *m)
+>>   {
+>>       struct mount *mnt = real_mount(m);
+>> -    int actual_refs = 0;
+>> -    int minimum_refs = 0;
+>> -    struct mount *p;
+>>       BUG_ON(!m);
+>>         /* write lock needed for mnt_get_count */
+>>       lock_mount_hash();
+>> -    for (p = mnt; p; p = next_mnt(p, mnt)) {
+>> -        actual_refs += mnt_get_count(p);
+>> -        minimum_refs += 2;
+>> +    for (struct mount *p = mnt; p; p = next_mnt(p, mnt)) {
+>> +        int allowed = p == mnt ? 2 : 1;
+>> +        if (mnt_get_count(p) > allowed) {
+>> +            unlock_mount_hash();
+>> +            return 0;
+>> +        }
+>>       }
 
-Eugene
+One part of the problem I'm trying to fix is when some other
 
-On Tue, 19 Jul 2022 at 19:20, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Tue, Jul 19, 2022 at 10:55:45AM +0200, Eugene Shalygin wrote:
-> > Please use the asus_ec_sensors driver, which supports more boards, more
-> > sensors, and is faster.
->
-> This isn't really an appropriate commit description, and the
-> Signed-off-by: tag is missing. Other than that, I am open to
-> applying this patch after the next commit window.
->
-> Guenter
->
-> > ---
-> >  Documentation/hwmon/asus_wmi_ec_sensors.rst |  38 --
-> >  Documentation/hwmon/index.rst               |   1 -
-> >  MAINTAINERS                                 |   7 -
-> >  drivers/hwmon/Kconfig                       |  15 -
-> >  drivers/hwmon/Makefile                      |   1 -
-> >  drivers/hwmon/asus_wmi_ec_sensors.c         | 622 --------------------
-> >  6 files changed, 684 deletions(-)
-> >  delete mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
-> >  delete mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
-> >
-> > diff --git a/Documentation/hwmon/asus_wmi_ec_sensors.rst b/Documentation/hwmon/asus_wmi_ec_sensors.rst
-> > deleted file mode 100644
-> > index 1b287f229e86..000000000000
-> > --- a/Documentation/hwmon/asus_wmi_ec_sensors.rst
-> > +++ /dev/null
-> > @@ -1,38 +0,0 @@
-> > -.. SPDX-License-Identifier: GPL-2.0-or-later
-> > -
-> > -Kernel driver asus_wmi_ec_sensors
-> > -=================================
-> > -
-> > -Supported boards:
-> > - * PRIME X570-PRO,
-> > - * Pro WS X570-ACE,
-> > - * ROG CROSSHAIR VIII DARK HERO,
-> > - * ROG CROSSHAIR VIII FORMULA,
-> > - * ROG CROSSHAIR VIII HERO,
-> > - * ROG STRIX B550-E GAMING,
-> > - * ROG STRIX B550-I GAMING,
-> > - * ROG STRIX X570-E GAMING.
-> > -
-> > -Authors:
-> > -    - Eugene Shalygin <eugene.shalygin@gmail.com>
-> > -
-> > -Description:
-> > -------------
-> > -ASUS mainboards publish hardware monitoring information via Super I/O
-> > -chip and the ACPI embedded controller (EC) registers. Some of the sensors
-> > -are only available via the EC.
-> > -
-> > -ASUS WMI interface provides a method (BREC) to read data from EC registers,
-> > -which is utilized by this driver to publish those sensor readings to the
-> > -HWMON system. The driver is aware of and reads the following sensors:
-> > -
-> > -1. Chipset (PCH) temperature
-> > -2. CPU package temperature
-> > -3. Motherboard temperature
-> > -4. Readings from the T_Sensor header
-> > -5. VRM temperature
-> > -6. CPU_Opt fan RPM
-> > -7. Chipset fan RPM
-> > -8. Readings from the "Water flow meter" header (RPM)
-> > -9. Readings from the "Water In" and "Water Out" temperature headers
-> > -10. CPU current
-> > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> > index f7113b0f8b2a..98fa687b361e 100644
-> > --- a/Documentation/hwmon/index.rst
-> > +++ b/Documentation/hwmon/index.rst
-> > @@ -44,7 +44,6 @@ Hardware Monitoring Kernel Drivers
-> >     asc7621
-> >     aspeed-pwm-tacho
-> >     asus_ec_sensors
-> > -   asus_wmi_ec_sensors
-> >     asus_wmi_sensors
-> >     bcm54140
-> >     bel-pfe
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 66bffb24a348..71272cbc7c99 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -3162,13 +3162,6 @@ L:     linux-hwmon@vger.kernel.org
-> >  S:   Maintained
-> >  F:   drivers/hwmon/asus_wmi_sensors.c
-> >
-> > -ASUS WMI EC HARDWARE MONITOR DRIVER
-> > -M:   Eugene Shalygin <eugene.shalygin@gmail.com>
-> > -M:   Denis Pauk <pauk.denis@gmail.com>
-> > -L:   linux-hwmon@vger.kernel.org
-> > -S:   Maintained
-> > -F:   drivers/hwmon/asus_wmi_ec_sensors.c
-> > -
-> >  ASUS EC HARDWARE MONITOR DRIVER
-> >  M:   Eugene Shalygin <eugene.shalygin@gmail.com>
-> >  L:   linux-hwmon@vger.kernel.org
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index fd2446cf343b..7b26baa9146f 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -2341,21 +2341,6 @@ config SENSORS_ASUS_WMI
-> >         This driver can also be built as a module. If so, the module
-> >         will be called asus_wmi_sensors.
-> >
-> > -config SENSORS_ASUS_WMI_EC
-> > -     tristate "ASUS WMI B550/X570"
-> > -     depends on ACPI_WMI && SENSORS_ASUS_EC=n
-> > -     help
-> > -       If you say yes here you get support for the ACPI embedded controller
-> > -       hardware monitoring interface found in B550/X570 ASUS motherboards.
-> > -       This driver will provide readings of fans, voltages and temperatures
-> > -       through the system firmware.
-> > -
-> > -       This driver is deprecated in favor of the ASUS EC Sensors driver
-> > -       which provides fully compatible output.
-> > -
-> > -       This driver can also be built as a module. If so, the module
-> > -       will be called asus_wmi_sensors_ec.
-> > -
-> >  config SENSORS_ASUS_EC
-> >       tristate "ASUS EC Sensors"
-> >       depends on X86
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> > index 007e829d1d0d..f62c5c36b276 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -11,7 +11,6 @@ obj-$(CONFIG_SENSORS_ACPI_POWER) += acpi_power_meter.o
-> >  obj-$(CONFIG_SENSORS_ATK0110)        += asus_atk0110.o
-> >  obj-$(CONFIG_SENSORS_ASUS_EC)        += asus-ec-sensors.o
-> >  obj-$(CONFIG_SENSORS_ASUS_WMI)       += asus_wmi_sensors.o
-> > -obj-$(CONFIG_SENSORS_ASUS_WMI_EC)    += asus_wmi_ec_sensors.o
-> >
-> >  # Native drivers
-> >  # asb100, then w83781d go first, as they can override other drivers' addresses.
-> > diff --git a/drivers/hwmon/asus_wmi_ec_sensors.c b/drivers/hwmon/asus_wmi_ec_sensors.c
-> > deleted file mode 100644
-> > index a3a2f014dec0..000000000000
-> > --- a/drivers/hwmon/asus_wmi_ec_sensors.c
-> > +++ /dev/null
-> > @@ -1,622 +0,0 @@
-> > -// SPDX-License-Identifier: GPL-2.0-or-later
-> > -/*
-> > - * HWMON driver for ASUS B550/X570 motherboards that publish sensor
-> > - * values via the embedded controller registers.
-> > - *
-> > - * Copyright (C) 2021 Eugene Shalygin <eugene.shalygin@gmail.com>
-> > - * Copyright (C) 2018-2019 Ed Brindley <kernel@maidavale.org>
-> > - *
-> > - * EC provides:
-> > - * - Chipset temperature
-> > - * - CPU temperature
-> > - * - Motherboard temperature
-> > - * - T_Sensor temperature
-> > - * - VRM temperature
-> > - * - Water In temperature
-> > - * - Water Out temperature
-> > - * - CPU Optional Fan RPM
-> > - * - Chipset Fan RPM
-> > - * - Water Flow Fan RPM
-> > - * - CPU current
-> > - */
-> > -
-> > -#include <linux/acpi.h>
-> > -#include <linux/dmi.h>
-> > -#include <linux/hwmon.h>
-> > -#include <linux/init.h>
-> > -#include <linux/jiffies.h>
-> > -#include <linux/kernel.h>
-> > -#include <linux/module.h>
-> > -#include <linux/mutex.h>
-> > -#include <linux/nls.h>
-> > -#include <linux/units.h>
-> > -#include <linux/wmi.h>
-> > -
-> > -#include <asm/unaligned.h>
-> > -
-> > -#define ASUSWMI_MONITORING_GUID              "466747A0-70EC-11DE-8A39-0800200C9A66"
-> > -#define ASUSWMI_METHODID_BLOCK_READ_EC       0x42524543 /* BREC */
-> > -/* From the ASUS DSDT source */
-> > -#define ASUSWMI_BREC_REGISTERS_MAX   16
-> > -#define ASUSWMI_MAX_BUF_LEN          128
-> > -#define SENSOR_LABEL_LEN             16
-> > -
-> > -static u32 hwmon_attributes[hwmon_max] = {
-> > -     [hwmon_chip]    = HWMON_C_REGISTER_TZ,
-> > -     [hwmon_temp]    = HWMON_T_INPUT | HWMON_T_LABEL,
-> > -     [hwmon_in]      = HWMON_I_INPUT | HWMON_I_LABEL,
-> > -     [hwmon_curr]    = HWMON_C_INPUT | HWMON_C_LABEL,
-> > -     [hwmon_fan]     = HWMON_F_INPUT | HWMON_F_LABEL,
-> > -};
-> > -
-> > -struct asus_wmi_ec_sensor_address {
-> > -     u8 index;
-> > -     u8 bank;
-> > -     u8 size;
-> > -};
-> > -
-> > -#define MAKE_SENSOR_ADDRESS(size_i, bank_i, index_i) {       \
-> > -     .size = size_i,                                 \
-> > -     .bank = bank_i,                                 \
-> > -     .index = index_i,                               \
-> > -}
-> > -
-> > -struct ec_sensor_info {
-> > -     struct asus_wmi_ec_sensor_address addr;
-> > -     char label[SENSOR_LABEL_LEN];
-> > -     enum hwmon_sensor_types type;
-> > -};
-> > -
-> > -#define EC_SENSOR(sensor_label, sensor_type, size, bank, index) {    \
-> > -     .addr = MAKE_SENSOR_ADDRESS(size, bank, index),                 \
-> > -     .label = sensor_label,                                          \
-> > -     .type = sensor_type,                                            \
-> > -}
-> > -
-> > -enum known_ec_sensor {
-> > -     SENSOR_TEMP_CHIPSET,
-> > -     SENSOR_TEMP_CPU,
-> > -     SENSOR_TEMP_MB,
-> > -     SENSOR_TEMP_T_SENSOR,
-> > -     SENSOR_TEMP_VRM,
-> > -     SENSOR_FAN_CPU_OPT,
-> > -     SENSOR_FAN_CHIPSET,
-> > -     SENSOR_FAN_VRM_HS,
-> > -     SENSOR_FAN_WATER_FLOW,
-> > -     SENSOR_CURR_CPU,
-> > -     SENSOR_TEMP_WATER_IN,
-> > -     SENSOR_TEMP_WATER_OUT,
-> > -     SENSOR_MAX
-> > -};
-> > -
-> > -/* All known sensors for ASUS EC controllers */
-> > -static const struct ec_sensor_info known_ec_sensors[] = {
-> > -     [SENSOR_TEMP_CHIPSET]   = EC_SENSOR("Chipset", hwmon_temp, 1, 0x00, 0x3a),
-> > -     [SENSOR_TEMP_CPU]       = EC_SENSOR("CPU", hwmon_temp, 1, 0x00, 0x3b),
-> > -     [SENSOR_TEMP_MB]        = EC_SENSOR("Motherboard", hwmon_temp, 1, 0x00, 0x3c),
-> > -     [SENSOR_TEMP_T_SENSOR]  = EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
-> > -     [SENSOR_TEMP_VRM]       = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
-> > -     [SENSOR_FAN_CPU_OPT]    = EC_SENSOR("CPU_Opt", hwmon_fan, 2, 0x00, 0xb0),
-> > -     [SENSOR_FAN_VRM_HS]     = EC_SENSOR("VRM HS", hwmon_fan, 2, 0x00, 0xb2),
-> > -     [SENSOR_FAN_CHIPSET]    = EC_SENSOR("Chipset", hwmon_fan, 2, 0x00, 0xb4),
-> > -     [SENSOR_FAN_WATER_FLOW] = EC_SENSOR("Water_Flow", hwmon_fan, 2, 0x00, 0xbc),
-> > -     [SENSOR_CURR_CPU]       = EC_SENSOR("CPU", hwmon_curr, 1, 0x00, 0xf4),
-> > -     [SENSOR_TEMP_WATER_IN]  = EC_SENSOR("Water_In", hwmon_temp, 1, 0x01, 0x00),
-> > -     [SENSOR_TEMP_WATER_OUT] = EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
-> > -};
-> > -
-> > -struct asus_wmi_data {
-> > -     const enum known_ec_sensor known_board_sensors[SENSOR_MAX + 1];
-> > -};
-> > -
-> > -/* boards with EC support */
-> > -static struct asus_wmi_data sensors_board_PW_X570_P = {
-> > -     .known_board_sensors = {
-> > -             SENSOR_TEMP_CHIPSET, SENSOR_TEMP_CPU, SENSOR_TEMP_MB,
-> > -             SENSOR_TEMP_T_SENSOR, SENSOR_TEMP_VRM,
-> > -             SENSOR_FAN_CHIPSET,
-> > -             SENSOR_MAX
-> > -     },
-> > -};
-> > -
-> > -static struct asus_wmi_data sensors_board_PW_X570_A = {
-> > -     .known_board_sensors = {
-> > -             SENSOR_TEMP_CHIPSET, SENSOR_TEMP_CPU, SENSOR_TEMP_MB, SENSOR_TEMP_VRM,
-> > -             SENSOR_FAN_CHIPSET,
-> > -             SENSOR_CURR_CPU,
-> > -             SENSOR_MAX
-> > -     },
-> > -};
-> > -
-> > -static struct asus_wmi_data sensors_board_R_C8H = {
-> > -     .known_board_sensors = {
-> > -             SENSOR_TEMP_CHIPSET, SENSOR_TEMP_CPU, SENSOR_TEMP_MB,
-> > -             SENSOR_TEMP_T_SENSOR, SENSOR_TEMP_VRM,
-> > -             SENSOR_TEMP_WATER_IN, SENSOR_TEMP_WATER_OUT,
-> > -             SENSOR_FAN_CPU_OPT, SENSOR_FAN_CHIPSET, SENSOR_FAN_WATER_FLOW,
-> > -             SENSOR_CURR_CPU,
-> > -             SENSOR_MAX
-> > -     },
-> > -};
-> > -
-> > -/* Same as Hero but without chipset fan */
-> > -static struct asus_wmi_data sensors_board_R_C8DH = {
-> > -     .known_board_sensors = {
-> > -             SENSOR_TEMP_CHIPSET, SENSOR_TEMP_CPU, SENSOR_TEMP_MB,
-> > -             SENSOR_TEMP_T_SENSOR, SENSOR_TEMP_VRM,
-> > -             SENSOR_TEMP_WATER_IN, SENSOR_TEMP_WATER_OUT,
-> > -             SENSOR_FAN_CPU_OPT, SENSOR_FAN_WATER_FLOW,
-> > -             SENSOR_CURR_CPU,
-> > -             SENSOR_MAX
-> > -     },
-> > -};
-> > -
-> > -/* Same as Hero but without water */
-> > -static struct asus_wmi_data sensors_board_R_C8F = {
-> > -     .known_board_sensors = {
-> > -             SENSOR_TEMP_CHIPSET, SENSOR_TEMP_CPU, SENSOR_TEMP_MB,
-> > -             SENSOR_TEMP_T_SENSOR, SENSOR_TEMP_VRM,
-> > -             SENSOR_FAN_CPU_OPT, SENSOR_FAN_CHIPSET,
-> > -             SENSOR_CURR_CPU,
-> > -             SENSOR_MAX
-> > -     },
-> > -};
-> > -
-> > -static struct asus_wmi_data sensors_board_RS_B550_E_G = {
-> > -     .known_board_sensors = {
-> > -             SENSOR_TEMP_CHIPSET, SENSOR_TEMP_CPU, SENSOR_TEMP_MB,
-> > -             SENSOR_TEMP_T_SENSOR, SENSOR_TEMP_VRM,
-> > -             SENSOR_FAN_CPU_OPT,
-> > -             SENSOR_MAX
-> > -     },
-> > -};
-> > -
-> > -static struct asus_wmi_data sensors_board_RS_B550_I_G = {
-> > -     .known_board_sensors = {
-> > -             SENSOR_TEMP_CHIPSET, SENSOR_TEMP_CPU, SENSOR_TEMP_MB,
-> > -             SENSOR_TEMP_T_SENSOR, SENSOR_TEMP_VRM,
-> > -             SENSOR_FAN_VRM_HS,
-> > -             SENSOR_CURR_CPU,
-> > -             SENSOR_MAX
-> > -     },
-> > -};
-> > -
-> > -static struct asus_wmi_data sensors_board_RS_X570_E_G = {
-> > -     .known_board_sensors = {
-> > -             SENSOR_TEMP_CHIPSET, SENSOR_TEMP_CPU, SENSOR_TEMP_MB,
-> > -             SENSOR_TEMP_T_SENSOR, SENSOR_TEMP_VRM,
-> > -             SENSOR_FAN_CHIPSET,
-> > -             SENSOR_CURR_CPU,
-> > -             SENSOR_MAX
-> > -     },
-> > -};
-> > -
-> > -#define DMI_EXACT_MATCH_ASUS_BOARD_NAME(name, sensors) {                     \
-> > -     .matches = {                                                            \
-> > -             DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC."),     \
-> > -             DMI_EXACT_MATCH(DMI_BOARD_NAME, name),                          \
-> > -     },                                                                      \
-> > -     .driver_data = sensors,                                                 \
-> > -}
-> > -
-> > -static const struct dmi_system_id asus_wmi_ec_dmi_table[] = {
-> > -     DMI_EXACT_MATCH_ASUS_BOARD_NAME("PRIME X570-PRO", &sensors_board_PW_X570_P),
-> > -     DMI_EXACT_MATCH_ASUS_BOARD_NAME("Pro WS X570-ACE", &sensors_board_PW_X570_A),
-> > -     DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII DARK HERO", &sensors_board_R_C8DH),
-> > -     DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII FORMULA", &sensors_board_R_C8F),
-> > -     DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG CROSSHAIR VIII HERO", &sensors_board_R_C8H),
-> > -     DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-E GAMING", &sensors_board_RS_B550_E_G),
-> > -     DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX B550-I GAMING", &sensors_board_RS_B550_I_G),
-> > -     DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-E GAMING", &sensors_board_RS_X570_E_G),
-> > -     {}
-> > -};
-> > -MODULE_DEVICE_TABLE(dmi, asus_wmi_ec_dmi_table);
-> > -
-> > -struct ec_sensor {
-> > -     enum known_ec_sensor info_index;
-> > -     long cached_value;
-> > -};
-> > -
-> > -/**
-> > - * struct asus_wmi_ec_info - sensor info.
-> > - * @sensors: list of sensors.
-> > - * @read_arg: UTF-16LE string to pass to BRxx() WMI function.
-> > - * @read_buffer: decoded output from WMI result.
-> > - * @nr_sensors: number of board EC sensors.
-> > - * @nr_registers: number of EC registers to read (sensor might span more than 1 register).
-> > - * @last_updated: in jiffies.
-> > - */
-> > -struct asus_wmi_ec_info {
-> > -     struct ec_sensor sensors[SENSOR_MAX];
-> > -     char read_arg[(ASUSWMI_BREC_REGISTERS_MAX * 4 + 1) * 2];
-> > -     u8 read_buffer[ASUSWMI_BREC_REGISTERS_MAX];
-> > -     unsigned int nr_sensors;
-> > -     unsigned int nr_registers;
-> > -     unsigned long last_updated;
-> > -};
-> > -
-> > -struct asus_wmi_sensors {
-> > -     struct asus_wmi_ec_info ec;
-> > -     /* lock access to internal cache */
-> > -     struct mutex lock;
-> > -};
-> > -
-> > -static int asus_wmi_ec_fill_board_sensors(struct asus_wmi_ec_info *ec,
-> > -                                       const enum known_ec_sensor *bsi)
-> > -{
-> > -     struct ec_sensor *s = ec->sensors;
-> > -     int i;
-> > -
-> > -     ec->nr_sensors = 0;
-> > -     ec->nr_registers = 0;
-> > -
-> > -     for (i = 0; bsi[i] != SENSOR_MAX; i++) {
-> > -             s[i].info_index = bsi[i];
-> > -             ec->nr_sensors++;
-> > -             ec->nr_registers += known_ec_sensors[bsi[i]].addr.size;
-> > -     }
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -/*
-> > - * The next four functions convert to or from BRxx string argument format.
-> > - * The format of the string is as follows:
-> > - * - The string consists of two-byte UTF-16LE characters.
-> > - * - The value of the very first byte in the string is equal to the total
-> > - *   length of the next string in bytes, thus excluding the first two-byte
-> > - *   character.
-> > - * - The rest of the string encodes the pairs of (bank, index) pairs, where
-> > - *   both values are byte-long (0x00 to 0xFF).
-> > - * - Numbers are encoded as UTF-16LE hex values.
-> > - */
-> > -static int asus_wmi_ec_decode_reply_buffer(const u8 *in, u32 length, u8 *out)
-> > -{
-> > -     char buffer[ASUSWMI_MAX_BUF_LEN * 2];
-> > -     u32 len = min_t(u32, get_unaligned_le16(in), length - 2);
-> > -
-> > -     utf16s_to_utf8s((wchar_t *)(in + 2), len / 2, UTF16_LITTLE_ENDIAN, buffer, sizeof(buffer));
-> > -
-> > -     return hex2bin(out, buffer, len / 4);
-> > -}
-> > -
-> > -static void asus_wmi_ec_encode_registers(const u8 *in, u32 len, char *out)
-> > -{
-> > -     char buffer[ASUSWMI_MAX_BUF_LEN * 2];
-> > -
-> > -     bin2hex(buffer, in, len);
-> > -
-> > -     utf8s_to_utf16s(buffer, len * 2, UTF16_LITTLE_ENDIAN, (wchar_t *)(out + 2), len * 2);
-> > -
-> > -     put_unaligned_le16(len * 4, out);
-> > -}
-> > -
-> > -static void asus_wmi_ec_make_block_read_query(struct asus_wmi_ec_info *ec)
-> > -{
-> > -     u8 registers[ASUSWMI_BREC_REGISTERS_MAX * 2];
-> > -     const struct ec_sensor_info *si;
-> > -     int i, j, offset;
-> > -
-> > -     offset = 0;
-> > -     for (i = 0; i < ec->nr_sensors; i++) {
-> > -             si = &known_ec_sensors[ec->sensors[i].info_index];
-> > -             for (j = 0; j < si->addr.size; j++) {
-> > -                     registers[offset++] = si->addr.bank;
-> > -                     registers[offset++] = si->addr.index + j;
-> > -             }
-> > -     }
-> > -
-> > -     asus_wmi_ec_encode_registers(registers, offset, ec->read_arg);
-> > -}
-> > -
-> > -static int asus_wmi_ec_block_read(u32 method_id, char *query, u8 *out)
-> > -{
-> > -     struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
-> > -     struct acpi_buffer input;
-> > -     union acpi_object *obj;
-> > -     acpi_status status;
-> > -     int ret;
-> > -
-> > -     /* The first byte of the BRxx() argument string has to be the string size. */
-> > -     input.length = query[0] + 2;
-> > -     input.pointer = query;
-> > -     status = wmi_evaluate_method(ASUSWMI_MONITORING_GUID, 0, method_id, &input, &output);
-> > -     if (ACPI_FAILURE(status))
-> > -             return -EIO;
-> > -
-> > -     obj = output.pointer;
-> > -     if (!obj)
-> > -             return -EIO;
-> > -
-> > -     if (obj->type != ACPI_TYPE_BUFFER || obj->buffer.length < 2) {
-> > -             ret = -EIO;
-> > -             goto out_free_obj;
-> > -     }
-> > -
-> > -     ret = asus_wmi_ec_decode_reply_buffer(obj->buffer.pointer, obj->buffer.length, out);
-> > -
-> > -out_free_obj:
-> > -     ACPI_FREE(obj);
-> > -     return ret;
-> > -}
-> > -
-> > -static inline long get_sensor_value(const struct ec_sensor_info *si, u8 *data)
-> > -{
-> > -     switch (si->addr.size) {
-> > -     case 1:
-> > -             return *data;
-> > -     case 2:
-> > -             return get_unaligned_be16(data);
-> > -     case 4:
-> > -             return get_unaligned_be32(data);
-> > -     default:
-> > -             return 0;
-> > -     }
-> > -}
-> > -
-> > -static void asus_wmi_ec_update_ec_sensors(struct asus_wmi_ec_info *ec)
-> > -{
-> > -     const struct ec_sensor_info *si;
-> > -     struct ec_sensor *s;
-> > -     u8 i_sensor;
-> > -     u8 *data;
-> > -
-> > -     data = ec->read_buffer;
-> > -     for (i_sensor = 0; i_sensor < ec->nr_sensors; i_sensor++) {
-> > -             s = &ec->sensors[i_sensor];
-> > -             si = &known_ec_sensors[s->info_index];
-> > -             s->cached_value = get_sensor_value(si, data);
-> > -             data += si->addr.size;
-> > -     }
-> > -}
-> > -
-> > -static long asus_wmi_ec_scale_sensor_value(long value, int data_type)
-> > -{
-> > -     switch (data_type) {
-> > -     case hwmon_curr:
-> > -     case hwmon_temp:
-> > -     case hwmon_in:
-> > -             return value * MILLI;
-> > -     default:
-> > -             return value;
-> > -     }
-> > -}
-> > -
-> > -static int asus_wmi_ec_find_sensor_index(const struct asus_wmi_ec_info *ec,
-> > -                                      enum hwmon_sensor_types type, int channel)
-> > -{
-> > -     int i;
-> > -
-> > -     for (i = 0; i < ec->nr_sensors; i++) {
-> > -             if (known_ec_sensors[ec->sensors[i].info_index].type == type) {
-> > -                     if (channel == 0)
-> > -                             return i;
-> > -
-> > -                     channel--;
-> > -             }
-> > -     }
-> > -     return -EINVAL;
-> > -}
-> > -
-> > -static int asus_wmi_ec_get_cached_value_or_update(struct asus_wmi_sensors *sensor_data,
-> > -                                               int sensor_index,
-> > -                                               long *value)
-> > -{
-> > -     struct asus_wmi_ec_info *ec = &sensor_data->ec;
-> > -     int ret = 0;
-> > -
-> > -     mutex_lock(&sensor_data->lock);
-> > -
-> > -     if (time_after(jiffies, ec->last_updated + HZ)) {
-> > -             ret = asus_wmi_ec_block_read(ASUSWMI_METHODID_BLOCK_READ_EC,
-> > -                                          ec->read_arg, ec->read_buffer);
-> > -             if (ret)
-> > -                     goto unlock;
-> > -
-> > -             asus_wmi_ec_update_ec_sensors(ec);
-> > -             ec->last_updated = jiffies;
-> > -     }
-> > -
-> > -     *value = ec->sensors[sensor_index].cached_value;
-> > -
-> > -unlock:
-> > -     mutex_unlock(&sensor_data->lock);
-> > -
-> > -     return ret;
-> > -}
-> > -
-> > -/* Now follow the functions that implement the hwmon interface */
-> > -
-> > -static int asus_wmi_ec_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> > -                               u32 attr, int channel, long *val)
-> > -{
-> > -     struct asus_wmi_sensors *sensor_data = dev_get_drvdata(dev);
-> > -     struct asus_wmi_ec_info *ec = &sensor_data->ec;
-> > -     int ret, sidx, info_index;
-> > -     long value = 0;
-> > -
-> > -     sidx = asus_wmi_ec_find_sensor_index(ec, type, channel);
-> > -     if (sidx < 0)
-> > -             return sidx;
-> > -
-> > -     ret = asus_wmi_ec_get_cached_value_or_update(sensor_data, sidx, &value);
-> > -     if (ret)
-> > -             return ret;
-> > -
-> > -     info_index = ec->sensors[sidx].info_index;
-> > -     *val = asus_wmi_ec_scale_sensor_value(value, known_ec_sensors[info_index].type);
-> > -
-> > -     return ret;
-> > -}
-> > -
-> > -static int asus_wmi_ec_hwmon_read_string(struct device *dev,
-> > -                                      enum hwmon_sensor_types type, u32 attr,
-> > -                                      int channel, const char **str)
-> > -{
-> > -     struct asus_wmi_sensors *sensor_data = dev_get_drvdata(dev);
-> > -     struct asus_wmi_ec_info *ec = &sensor_data->ec;
-> > -     int sensor_index;
-> > -
-> > -     sensor_index = asus_wmi_ec_find_sensor_index(ec, type, channel);
-> > -     *str = known_ec_sensors[ec->sensors[sensor_index].info_index].label;
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -static umode_t asus_wmi_ec_hwmon_is_visible(const void *drvdata,
-> > -                                         enum hwmon_sensor_types type, u32 attr,
-> > -                                         int channel)
-> > -{
-> > -     const struct asus_wmi_sensors *sensor_data = drvdata;
-> > -     const struct asus_wmi_ec_info *ec = &sensor_data->ec;
-> > -     int index;
-> > -
-> > -     index = asus_wmi_ec_find_sensor_index(ec, type, channel);
-> > -
-> > -     return index < 0 ? 0 : 0444;
-> > -}
-> > -
-> > -static int asus_wmi_hwmon_add_chan_info(struct hwmon_channel_info *asus_wmi_hwmon_chan,
-> > -                                     struct device *dev, int num,
-> > -                                     enum hwmon_sensor_types type, u32 config)
-> > -{
-> > -     u32 *cfg;
-> > -
-> > -     cfg = devm_kcalloc(dev, num + 1, sizeof(*cfg), GFP_KERNEL);
-> > -     if (!cfg)
-> > -             return -ENOMEM;
-> > -
-> > -     asus_wmi_hwmon_chan->type = type;
-> > -     asus_wmi_hwmon_chan->config = cfg;
-> > -     memset32(cfg, config, num);
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -static const struct hwmon_ops asus_wmi_ec_hwmon_ops = {
-> > -     .is_visible = asus_wmi_ec_hwmon_is_visible,
-> > -     .read = asus_wmi_ec_hwmon_read,
-> > -     .read_string = asus_wmi_ec_hwmon_read_string,
-> > -};
-> > -
-> > -static struct hwmon_chip_info asus_wmi_ec_chip_info = {
-> > -     .ops = &asus_wmi_ec_hwmon_ops,
-> > -};
-> > -
-> > -static int asus_wmi_ec_configure_sensor_setup(struct device *dev,
-> > -                                           const enum known_ec_sensor *bsi)
-> > -{
-> > -     struct asus_wmi_sensors *sensor_data = dev_get_drvdata(dev);
-> > -     struct asus_wmi_ec_info *ec = &sensor_data->ec;
-> > -     struct hwmon_channel_info *asus_wmi_hwmon_chan;
-> > -     const struct hwmon_channel_info **asus_wmi_ci;
-> > -     int nr_count[hwmon_max] = {}, nr_types = 0;
-> > -     const struct hwmon_chip_info *chip_info;
-> > -     const struct ec_sensor_info *si;
-> > -     enum hwmon_sensor_types type;
-> > -     struct device *hwdev;
-> > -     int i, ret;
-> > -
-> > -     ret = asus_wmi_ec_fill_board_sensors(ec, bsi);
-> > -     if (ret)
-> > -             return ret;
-> > -
-> > -     if (!sensor_data->ec.nr_sensors)
-> > -             return -ENODEV;
-> > -
-> > -     for (i = 0; i < ec->nr_sensors; i++) {
-> > -             si = &known_ec_sensors[ec->sensors[i].info_index];
-> > -             if (!nr_count[si->type])
-> > -                     nr_types++;
-> > -             nr_count[si->type]++;
-> > -     }
-> > -
-> > -     if (nr_count[hwmon_temp]) {
-> > -             nr_count[hwmon_chip]++;
-> > -             nr_types++;
-> > -     }
-> > -
-> > -     /*
-> > -      * If we can get values for all the registers in a single query,
-> > -      * the query will not change from call to call.
-> > -      */
-> > -     asus_wmi_ec_make_block_read_query(ec);
-> > -
-> > -     asus_wmi_hwmon_chan = devm_kcalloc(dev, nr_types, sizeof(*asus_wmi_hwmon_chan),
-> > -                                        GFP_KERNEL);
-> > -     if (!asus_wmi_hwmon_chan)
-> > -             return -ENOMEM;
-> > -
-> > -     asus_wmi_ci = devm_kcalloc(dev, nr_types + 1, sizeof(*asus_wmi_ci), GFP_KERNEL);
-> > -     if (!asus_wmi_ci)
-> > -             return -ENOMEM;
-> > -
-> > -     asus_wmi_ec_chip_info.info = asus_wmi_ci;
-> > -     chip_info = &asus_wmi_ec_chip_info;
-> > -
-> > -     for (type = 0; type < hwmon_max; type++) {
-> > -             if (!nr_count[type])
-> > -                     continue;
-> > -
-> > -             ret = asus_wmi_hwmon_add_chan_info(asus_wmi_hwmon_chan, dev,
-> > -                                                nr_count[type], type,
-> > -                                                hwmon_attributes[type]);
-> > -             if (ret)
-> > -                     return ret;
-> > -
-> > -             *asus_wmi_ci++ = asus_wmi_hwmon_chan++;
-> > -     }
-> > -
-> > -     dev_dbg(dev, "board has %d EC sensors that span %d registers",
-> > -             ec->nr_sensors, ec->nr_registers);
-> > -
-> > -     hwdev = devm_hwmon_device_register_with_info(dev, "asus_wmi_ec_sensors",
-> > -                                                  sensor_data, chip_info, NULL);
-> > -
-> > -     return PTR_ERR_OR_ZERO(hwdev);
-> > -}
-> > -
-> > -static int asus_wmi_probe(struct wmi_device *wdev, const void *context)
-> > -{
-> > -     struct asus_wmi_sensors *sensor_data;
-> > -     struct asus_wmi_data *board_sensors;
-> > -     const struct dmi_system_id *dmi_id;
-> > -     const enum known_ec_sensor *bsi;
-> > -     struct device *dev = &wdev->dev;
-> > -
-> > -     dmi_id = dmi_first_match(asus_wmi_ec_dmi_table);
-> > -     if (!dmi_id)
-> > -             return -ENODEV;
-> > -
-> > -     board_sensors = dmi_id->driver_data;
-> > -     bsi = board_sensors->known_board_sensors;
-> > -
-> > -     sensor_data = devm_kzalloc(dev, sizeof(*sensor_data), GFP_KERNEL);
-> > -     if (!sensor_data)
-> > -             return -ENOMEM;
-> > -
-> > -     mutex_init(&sensor_data->lock);
-> > -
-> > -     dev_set_drvdata(dev, sensor_data);
-> > -
-> > -     return asus_wmi_ec_configure_sensor_setup(dev, bsi);
-> > -}
-> > -
-> > -static const struct wmi_device_id asus_ec_wmi_id_table[] = {
-> > -     { ASUSWMI_MONITORING_GUID, NULL },
-> > -     { }
-> > -};
-> > -
-> > -static struct wmi_driver asus_sensors_wmi_driver = {
-> > -     .driver = {
-> > -             .name = "asus_wmi_ec_sensors",
-> > -     },
-> > -     .id_table = asus_ec_wmi_id_table,
-> > -     .probe = asus_wmi_probe,
-> > -};
-> > -module_wmi_driver(asus_sensors_wmi_driver);
-> > -
-> > -MODULE_AUTHOR("Ed Brindley <kernel@maidavale.org>");
-> > -MODULE_AUTHOR("Eugene Shalygin <eugene.shalygin@gmail.com>");
-> > -MODULE_DESCRIPTION("Asus WMI Sensors Driver");
-> > -MODULE_LICENSE("GPL");
-> > --
-> > 2.35.1
-> >
+process has created a mount namespace (say with unshare(1))
+
+on an auto-mounted path and holds the mount in use in some way.
+
+This leads to an attempted umount in the automount daemon which
+
+fails because a propagation of the mount is in use.
+
+
+Given the way may_umount() behaves I thought it sensible that
+
+may_umount_tree() behave that way too, but the above doesn't
+
+check propagated mounts.
+
+
+I'll see if I can come up with something on that ... unless
+
+I'm missing something and you have different thoughts how
+
+this should be done ...
+
+
+Ian
+
+>>       unlock_mount_hash();
+>> -
+>> -    if (actual_refs > minimum_refs)
+>> -        return 0;
+>> -
+>>       return 1;
+>>   }
+>>   @@ -1586,7 +1581,6 @@ static void umount_tree(struct mount *mnt, 
+>> enum umount_tree_flags how)
+>>             disconnect = disconnect_mount(p, how);
+>>           if (mnt_has_parent(p)) {
+>> -            mnt_add_count(p->mnt_parent, -1);
+>>               if (!disconnect) {
+>>                   /* Don't forget about p */
+>>                   list_add_tail(&p->mnt_child, 
+>> &p->mnt_parent->mnt_mounts);
+>> @@ -2892,12 +2886,8 @@ static int do_move_mount(struct path 
+>> *old_path, struct path *new_path)
+>>           put_mountpoint(old_mp);
+>>   out:
+>>       unlock_mount(mp);
+>> -    if (!err) {
+>> -        if (attached)
+>> -            mntput_no_expire(parent);
+>> -        else
+>> -            free_mnt_ns(ns);
+>> -    }
+>> +    if (!err && !attached)
+>> +        free_mnt_ns(ns);
+>>       return err;
+>>   }
+>>   @@ -3869,7 +3859,7 @@ SYSCALL_DEFINE2(pivot_root, const char __user 
+>> *, new_root,
+>>           const char __user *, put_old)
+>>   {
+>>       struct path new, old, root;
+>> -    struct mount *new_mnt, *root_mnt, *old_mnt, *root_parent, 
+>> *ex_parent;
+>> +    struct mount *new_mnt, *root_mnt, *old_mnt, *root_parent;
+>>       struct mountpoint *old_mp, *root_mp;
+>>       int error;
+>>   @@ -3900,10 +3890,9 @@ SYSCALL_DEFINE2(pivot_root, const char 
+>> __user *, new_root,
+>>       new_mnt = real_mount(new.mnt);
+>>       root_mnt = real_mount(root.mnt);
+>>       old_mnt = real_mount(old.mnt);
+>> -    ex_parent = new_mnt->mnt_parent;
+>>       root_parent = root_mnt->mnt_parent;
+>>       if (IS_MNT_SHARED(old_mnt) ||
+>> -        IS_MNT_SHARED(ex_parent) ||
+>> +        IS_MNT_SHARED(new_mnt->mnt_parent) ||
+>>           IS_MNT_SHARED(root_parent))
+>>           goto out4;
+>>       if (!check_mnt(root_mnt) || !check_mnt(new_mnt))
+>> @@ -3942,7 +3931,6 @@ SYSCALL_DEFINE2(pivot_root, const char __user 
+>> *, new_root,
+>>       attach_mnt(root_mnt, old_mnt, old_mp);
+>>       /* mount new_root on / */
+>>       attach_mnt(new_mnt, root_parent, root_mp);
+>> -    mnt_add_count(root_parent, -1);
+>>       touch_mnt_namespace(current->nsproxy->mnt_ns);
+>>       /* A moved mount should not expire automatically */
+>>       list_del_init(&new_mnt->mnt_expire);
+>> @@ -3952,8 +3940,6 @@ SYSCALL_DEFINE2(pivot_root, const char __user 
+>> *, new_root,
+>>       error = 0;
+>>   out4:
+>>       unlock_mount(old_mp);
+>> -    if (!error)
+>> -        mntput_no_expire(ex_parent);
+>>   out3:
+>>       path_put(&root);
+>>   out2:
+>> diff --git a/fs/pnode.c b/fs/pnode.c
+>> index 1106137c747a..e2c8a4b18857 100644
+>> --- a/fs/pnode.c
+>> +++ b/fs/pnode.c
+>> @@ -368,7 +368,7 @@ static inline int do_refcount_check(struct mount 
+>> *mnt, int count)
+>>    */
+>>   int propagate_mount_busy(struct mount *mnt, int refcnt)
+>>   {
+>> -    struct mount *m, *child, *topper;
+>> +    struct mount *m, *child;
+>>       struct mount *parent = mnt->mnt_parent;
+>>         if (mnt == parent)
+>> @@ -384,7 +384,6 @@ int propagate_mount_busy(struct mount *mnt, int 
+>> refcnt)
+>>         for (m = propagation_next(parent, parent); m;
+>>                    m = propagation_next(m, parent)) {
+>> -        int count = 1;
+>>           child = __lookup_mnt(&m->mnt, mnt->mnt_mountpoint);
+>>           if (!child)
+>>               continue;
+>> @@ -392,13 +391,10 @@ int propagate_mount_busy(struct mount *mnt, int 
+>> refcnt)
+>>           /* Is there exactly one mount on the child that covers
+>>            * it completely whose reference should be ignored?
+>>            */
+>> -        topper = find_topper(child);
+>> -        if (topper)
+>> -            count += 1;
+>> -        else if (!list_empty(&child->mnt_mounts))
+>> +        if (!find_topper(child) && !list_empty(&child->mnt_mounts))
+>>               continue;
+>>   -        if (do_refcount_check(child, count))
+>> +        if (do_refcount_check(child, 1))
+>>               return 1;
+>>       }
+>>       return 0;

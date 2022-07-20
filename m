@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C5257BB18
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8372757BB4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiGTQIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S241151AbiGTQUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGTQIb (ORCPT
+        with ESMTP id S232828AbiGTQUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:08:31 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191F33FA28;
-        Wed, 20 Jul 2022 09:08:26 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1oECEy-0003q2-KT; Wed, 20 Jul 2022 18:08:00 +0200
-Message-ID: <d311c92a-d753-3584-d662-7d82b2fc1e50@maciej.szmigiero.name>
-Date:   Wed, 20 Jul 2022 18:07:52 +0200
+        Wed, 20 Jul 2022 12:20:33 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Jul 2022 09:20:31 PDT
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBCF4504C;
+        Wed, 20 Jul 2022 09:20:31 -0700 (PDT)
+Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1oECHI-0005l4-So;
+        Wed, 20 Jul 2022 12:10:24 -0400
+Date:   Wed, 20 Jul 2022 12:10:23 -0400
+From:   Rik van Riel <riel@surriel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     live-patching@vger.kernel.org, kernel-team@fb.com,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Breno Leitao <leitao@debian.org>
+Subject: [PATCH,RFC] livepatch: fix race between fork and
+ klp_reverse_transition
+Message-ID: <20220720121023.043738bb@imladris.surriel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <4caa0f67589ae3c22c311ee0e6139496902f2edc.1658159083.git.maciej.szmigiero@oracle.com>
- <7458497a8694ba0fbabee28eabf557e6e4406fbe.camel@redhat.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH] KVM: nSVM: Pull CS.Base from actual VMCB12 for soft
- int/ex re-injection
-In-Reply-To: <7458497a8694ba0fbabee28eabf557e6e4406fbe.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.07.2022 10:43, Maxim Levitsky wrote:
-> On Mon, 2022-07-18 at 17:47 +0200, Maciej S. Szmigiero wrote:
->> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
->>
->> enter_svm_guest_mode() first calls nested_vmcb02_prepare_control() to copy
->> control fields from VMCB12 to the current VMCB, then
->> nested_vmcb02_prepare_save() to perform a similar copy of the save area.
->>
->> This means that nested_vmcb02_prepare_control() still runs with the
->> previous save area values in the current VMCB so it shouldn't take the L2
->> guest CS.Base from this area.
->>
->> Explicitly pull CS.Base from the actual VMCB12 instead in
->> enter_svm_guest_mode().
->>
->> Granted, having a non-zero CS.Base is a very rare thing (and even
->> impossible in 64-bit mode), having it change between nested VMRUNs is
->> probably even rarer, but if it happens it would create a really subtle bug
->> so it's better to fix it upfront.
->>
->> Fixes: 6ef88d6e36c2 ("KVM: SVM: Re-inject INT3/INTO instead of retrying the instruction")
->> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
->> ---
->>   arch/x86/kvm/svm/nested.c | 9 +++++----
->>   1 file changed, 5 insertions(+), 4 deletions(-)
->>
->> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
->> index adf4120b05d90..23252ab821941 100644
->> --- a/arch/x86/kvm/svm/nested.c
->> +++ b/arch/x86/kvm/svm/nested.c
->> @@ -639,7 +639,8 @@ static bool is_evtinj_nmi(u32 evtinj)
->>   }
->>   
->>   static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
->> -                                         unsigned long vmcb12_rip)
->> +                                         unsigned long vmcb12_rip,
->> +                                         unsigned long vmcb12_csbase)
-> 
-> Honestly I don't like that nested_vmcb02_prepare_control starts to grow its parameter list,
-> because it kind of defeats the purpose of vmcb12 cache we added back then.
-> 
-> I think that it is better to add csbase/rip to vmcb_save_area_cached,
-> but I am not 100% sure. What do you think?
+When a KLP fails to apply, klp_reverse_transition will clear the
+TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
+which are not on the task list yet.
 
-This function has only 3 parameters now, so they fit well into registers
-without taking any extra memory (even assuming it won't get inlined).
+Meanwhile, fork will copy over the TIF_PATCH_PENDING flag from the
+parent to the child early on, in dup_task_struct -> setup_thread_stack.
 
-If in the future more parameters need to be added to this function
-(which may or may not happen) then they all can be moved to, for example,
-vmcb_ctrl_area_cached.
+Much later, klp_copy_process will set child->patch_state to match
+that of the parent.
 
-> Best regards,
-> 	Maxim Levitsky
-> 
-> 
+However, the parent's patch_state may have been changed by KLP loading
+or unloading since it was initially copied over into the child.
 
-Thanks,
-Maciej
+This results in the KLP code occasionally hitting this warning in
+klp_complete_transition:
+
+        for_each_process_thread(g, task) {
+                WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
+                task->patch_state = KLP_UNDEFINED;
+        }
+
+This patch will set, or clear, the TIF_PATCH_PENDING flag in the child
+process depending on whether or not it is needed at the time
+klp_copy_process is called, at a point in copy_process where the
+tasklist_lock is held exclusively, preventing races with the KLP
+code.
+
+This should prevent this warning from triggering again in the
+future.
+
+I have not yet figured out whether this would also help with races in
+the other direction, where the child process fails to have TIF_PATCH_PENDING
+set and somehow misses a transition, or whether the retries in
+klp_try_complete_transition would catch that task and help it transition
+later.
+
+Signed-off-by: Rik van Riel <riel@surriel.com>
+Reported-by: Breno Leitao <leitao@debian.org>
+---
+ kernel/livepatch/transition.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index 5d03a2ad1066..7a90ad5e9224 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -612,7 +612,15 @@ void klp_copy_process(struct task_struct *child)
+ {
+ 	child->patch_state = current->patch_state;
+ 
+-	/* TIF_PATCH_PENDING gets copied in setup_thread_stack() */
++	/*
++	 * The parent process may have gone through a KLP transition since
++	 * the thread flag was copied in setup_thread_stack earlier. Set
++	 * the flag according to whether this task needs a KLP transition.
++	 */
++	if (child->patch_state != klp_target_state)
++		set_tsk_thread_flag(child, TIF_PATCH_PENDING);
++	else
++		clear_tsk_thread_flag(child, TIF_PATCH_PENDING);
+ }
+ 
+ /*
+-- 
+2.35.1
+

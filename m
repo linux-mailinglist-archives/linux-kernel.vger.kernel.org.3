@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0563057B2CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F22257B2D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239974AbiGTIWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S240112AbiGTIX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239877AbiGTIWn (ORCPT
+        with ESMTP id S239724AbiGTIXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:22:43 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049EE6BC28
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:22:41 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id bk26so25023246wrb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=zNztUh6p8QlexvR3ymKoFnbrTntENcC8FNn5qsdnr04=;
-        b=jpxh+1Joi2LXODFXFO27Ji9zy+L9BrEv9z2MH4aI8OofyOaJ8DBWYfNVqLAfsDy9wF
-         VhNKlohUWkkIiDi6LXlOUf4IvQuAXix13q8FoJJiu4OD+5gp8o2qOMQ7cFykGEdv8Xmo
-         794t9IcX/cC08ErPDP9G1+sfMvxq6pNuvESQ2jCKZMPA0S3PShrEnp7wjUpR+P7hZR6h
-         sdkxeKJS0WW2bMH0SEEabzTrCTSj0L4wZ3gIOoV7C5VsjOnBt0GIFJqV1LoYVG5dlWwm
-         McUDUmyJ4+3RuGNEler94/CLHXcZcRVk5CuW8Y7X+klqjrXseBZSrDOHn87ttqNJ51l+
-         tioQ==
+        Wed, 20 Jul 2022 04:23:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A65136C103
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658305400;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WqWXkpMYDjGMkR6N048q9/Kkfh0q8LEuKcrhvdxBx9U=;
+        b=hM4sCBCDK1fzZ3MJUCTImXsawh/y66NWsCaiLq//l/e3rNHatkBmu/TMaZIgKTJNerAAxI
+        8fgGRAj7nw0lof+2j+kh5t6icz+WahgfpL+xd3U+kzFqvHtkDin/wFdVMaAIstLF6o4vCH
+        wX/PG6iDZEpOqwayaYw1c9zOk3FxXlQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-500-j90_OfA2OPWADZmWx_GyTA-1; Wed, 20 Jul 2022 04:23:13 -0400
+X-MC-Unique: j90_OfA2OPWADZmWx_GyTA-1
+Received: by mail-wm1-f72.google.com with SMTP id h65-20020a1c2144000000b003a30cae106cso872589wmh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:23:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=zNztUh6p8QlexvR3ymKoFnbrTntENcC8FNn5qsdnr04=;
-        b=8PCXdl8m8kGERUCTemTyN5Ymoqxmejp9WVLH/NMcnFlVErTXDEO1fP5Bk0S8vjyEy+
-         2pXN5c8soQ/Nq2ffth7kFTUnyOMiXXp8naB6typPnbDSK2LC15zDVKSg+hlYhy7AB/To
-         rghZ2ZgwfWl3DyeoxaRWIirCz1sQ0M+nLbCA8ZMnDm/xJeLcgAK5eFYmivjrJ/mfEnOA
-         BzR9J9EMKZ/BVci68IQICdvEtJg7NEe0mt9jE5Ka/XoI+d+w7vCG90VDqxgEMSBnufLl
-         CA59CsepGmjFyakINLuSBquJWlehGXkvtbTMGP/W0JOOTsF4sHWUFuxTg6sttuuklQO+
-         WAqg==
-X-Gm-Message-State: AJIora8vCPaBCHKZXx9BvfVHZgyozI04V4BxRrASHysdULuyrs/qYTGC
-        Bqw6BHhvTZHyeDJ5M5QsRBUPwg==
-X-Google-Smtp-Source: AGRyM1vVWdYXwzYj15yVGb0oLrG8ROtJxu5aOUmyxArxI+j1STpgDzT2Rlfx3Hd11V92QdZNicdH7g==
-X-Received: by 2002:a5d:58ef:0:b0:21d:9fc8:302e with SMTP id f15-20020a5d58ef000000b0021d9fc8302emr28758844wrd.22.1658305360419;
-        Wed, 20 Jul 2022 01:22:40 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id z12-20020adfdf8c000000b0021e4cf58155sm410748wrl.17.2022.07.20.01.22.39
+        bh=WqWXkpMYDjGMkR6N048q9/Kkfh0q8LEuKcrhvdxBx9U=;
+        b=XR3I8tU3Cll4FbDPYAa1t65RXObhzuHufqLkFMLE+iWsK/33rT03jSsi0ixquwwLJ1
+         xe6KCm87Mf6OmI798FL5gJ/qibe04rDGI+Ug8in9p+bRmHJac/3xF1oUpLTTEJuxqJtO
+         ehY4bWyvj4/u1qCTUu2q28ymqIRJKY0OvifFkKSfT8GaOIe6xhcvlvIqgsyzMgm+hUhy
+         iZJEZ2QJoGWW/PKyFpJCNOSomJ6jaOqGdNURZ4O+iwNTFRKJp4M5eIKxp5YXO7zTd+2j
+         XorFpmMEwZcfmTweO+WQTMSeimJsqU7ToHXIQ0dpGu23yCoPzQpSnl8KYldcBJr0H8Kd
+         6EVQ==
+X-Gm-Message-State: AJIora+0DuWXUQcm4o6WGTIRZd0d6XjDAfvMv7Uqqa7SzXaB2nlSpx2V
+        ct+VvNPEBuN8eTKWBJmaDbAbNV6bhh9p6NRmZIRZSQH1RVzTsAPjruZl4RHysih+bu09Q6UINak
+        yZQ9LE1PddjPTN3Ze5BQbKWLY
+X-Received: by 2002:a05:600c:3227:b0:3a3:be7:2917 with SMTP id r39-20020a05600c322700b003a30be72917mr2760525wmp.83.1658305392299;
+        Wed, 20 Jul 2022 01:23:12 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sk2lxdgaBkVc5Kem0cnAq2mfCBRvNA74098gzKOVACYFwhUlWyh6yfDCAwDcJmLBObthn+bA==
+X-Received: by 2002:a05:600c:3227:b0:3a3:be7:2917 with SMTP id r39-20020a05600c322700b003a30be72917mr2760502wmp.83.1658305392025;
+        Wed, 20 Jul 2022 01:23:12 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
+        by smtp.gmail.com with ESMTPSA id g8-20020a05600c4ec800b003a317ee3036sm1887541wmq.2.2022.07.20.01.23.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 01:22:39 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 09:22:38 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 4/5] mfd: sm5703: Add support for SM5703 MFD
-Message-ID: <Yte7Tgq3w8fowTYA@google.com>
-References: <20220423085319.483524-1-markuss.broks@gmail.com>
- <20220423085319.483524-5-markuss.broks@gmail.com>
- <Yqj+aUNLC00Tcu49@google.com>
- <5498bf71-66a5-957e-ed3d-13e68b982562@gmail.com>
- <YtUXFTx1+vSrXx70@google.com>
- <295e1809-f6f2-ca31-5c36-be133ffdc93b@gmail.com>
+        Wed, 20 Jul 2022 01:23:11 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 10:23:07 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Dexuan Cui <decui@microsoft.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 2/3] virtio/vsock: use 'target' in notify_poll_in,
+ callback.
+Message-ID: <20220720082307.djbf7qgnlsjmrxcf@sgarzare-redhat>
+References: <c8de13b1-cbd8-e3e0-5728-f3c3648c69f7@sberdevices.ru>
+ <358f8d52-fd88-ad2e-87e2-c64bfa516a58@sberdevices.ru>
+ <20220719124857.akv25sgp6np3pdaw@sgarzare-redhat>
+ <15f38fcf-f1ff-3aad-4c30-4436bb8c4c44@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <295e1809-f6f2-ca31-5c36-be133ffdc93b@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <15f38fcf-f1ff-3aad-4c30-4436bb8c4c44@sberdevices.ru>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,155 +95,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022, Markuss Broks wrote:
+On Wed, Jul 20, 2022 at 05:38:03AM +0000, Arseniy Krasnov wrote:
+>On 19.07.2022 15:48, Stefano Garzarella wrote:
+>> On Mon, Jul 18, 2022 at 08:17:31AM +0000, Arseniy Krasnov wrote:
+>>> This callback controls setting of POLLIN,POLLRDNORM output bits
+>>> of poll() syscall,but in some cases,it is incorrectly to set it,
+>>> when socket has at least 1 bytes of available data. Use 'target'
+>>> which is already exists and equal to sk_rcvlowat in this case.
+>>>
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> ---
+>>> net/vmw_vsock/virtio_transport_common.c | 2 +-
+>>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>>> index ec2c2afbf0d0..591908740992 100644
+>>> --- a/net/vmw_vsock/virtio_transport_common.c
+>>> +++ b/net/vmw_vsock/virtio_transport_common.c
+>>> @@ -634,7 +634,7 @@ virtio_transport_notify_poll_in(struct vsock_sock *vsk,
+>>> ††††††††††††††† size_t target,
+>>> ††††††††††††††† bool *data_ready_now)
+>>> {
+>>> -††† if (vsock_stream_has_data(vsk))
+>>> +††† if (vsock_stream_has_data(vsk) >= target)
+>>> ††††††† *data_ready_now = true;
+>>> ††††else
+>>> ††††††† *data_ready_now = false;
+>>
+>> Perhaps we can take the opportunity to clean up the code in this way:
+>>
+>> ††††*data_ready_now = vsock_stream_has_data(vsk) >= target;
+>Ack
+>>
+>> Anyway, I think we also need to fix the other transports (vmci and hyperv), what do you think?
+>For vmci it is look clear to fix it. For hyperv i need to check it more, because it already
+>uses some internal target value.
 
-> Hi Lee,
-> 
-> On 7/18/22 11:17, Lee Jones wrote:
-> > On Fri, 15 Jul 2022, Markuss Broks wrote:
-> > 
-> > > Hi Lee,
-> > > 
-> > > Sorry to bother you again, but I've got additional questions while I was
-> > > preparing the next version of the series:
-> > > 
-> > > On 6/15/22 00:32, Lee Jones wrote:
-> > > > On Sat, 23 Apr 2022, Markuss Broks wrote:
-> > > > 
-> > > > > Silicon Mitus SM5703 is a multi-function device, meant to be
-> > > > Please avoid using the term MFD.
-> > > > 
-> > > > How is the device described in the data-sheet?
-> > > > 
-> > > > What do you mean by "meant to be"?
-> > > > 
-> > > > > used in mobile devices. It has several modules: LDO, BUCK regulators,
-> > > > Modules or functions?
-> > > > 
-> > > > > charger circuit, flash LED driver, a fuel gauge for monitoring the battery
-> > > > > and a MUIC USB switcher. The MUIC and fuel gauge parts are separate in that
-> > > > > they use separate i2c lines to communicate with the device, while charger
-> > > > "I2C"
-> > > > 
-> > > > > circuit, LED driver and regulators are on the main i2c line the device is
-> > > > > controlled with.
-> > > > > 
-> > > > > Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> > > > > ---
-> > > > >    MAINTAINERS                |   8 +++
-> > > > >    drivers/mfd/Kconfig        |  13 +++++
-> > > > >    drivers/mfd/Makefile       |   1 +
-> > > > >    drivers/mfd/sm5703.c       |  78 +++++++++++++++++++++++++++
-> > > > >    include/linux/mfd/sm5703.h | 105 +++++++++++++++++++++++++++++++++++++
-> > > > >    5 files changed, 205 insertions(+)
-> > > > >    create mode 100644 drivers/mfd/sm5703.c
-> > > > >    create mode 100644 include/linux/mfd/sm5703.h
-> > > > > 
-> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > > index 6157e706ed02..6125ed1a3be4 100644
-> > > > > --- a/MAINTAINERS
-> > > > > +++ b/MAINTAINERS
-> > > > > @@ -18172,6 +18172,14 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
-> > > > >    F:	include/linux/srcu*.h
-> > > > >    F:	kernel/rcu/srcu*.c
-> > > > > +SM5703 MFD DRIVER
-> > > > > +M:	Markuss Broks <markuss.broks@gmail.com>
-> > > > > +S:	Maintained
-> > > > > +F:	Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-> > > > > +F:	Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
-> > > > > +F:	drivers/mfd/sm5703.c
-> > > > > +F:	drivers/regulator/sm5703-regulator.c
-> > > > > +
-> > > > >    SMACK SECURITY MODULE
-> > > > >    M:	Casey Schaufler <casey@schaufler-ca.com>
-> > > > >    L:	linux-security-module@vger.kernel.org
-> > > > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > > > index 3b59456f5545..c13a99ceae99 100644
-> > > > > --- a/drivers/mfd/Kconfig
-> > > > > +++ b/drivers/mfd/Kconfig
-> > > > > @@ -1237,6 +1237,19 @@ config MFD_SM501
-> > > > >    	  interface. The device may be connected by PCI or local bus with
-> > > > >    	  varying functions enabled.
-> > > > > +config MFD_SM5703
-> > > > > +	tristate "Silicon Mitus SM5703 MFD"
-> > > > > +	depends on I2C
-> > > > > +	depends on OF
-> > > > > +	select MFD_CORE
-> > > > > +	select REGMAP_I2C
-> > > > > +	help
-> > > > > +	  This is the core driver for the Silicon Mitus SM5703 multi-function
-> > > > Please drop the MFD term, as above.
-> > > > 
-> > > > > +	  device. This device is meant to be used in phones and it has numerous
-> > > > "meant to be"?
-> > > > 
-> > > > > +	  modules, including LED controller, regulators, fuel gauge, MUIC and
-> > > > Either "an LED controller" or "LED controllers"
-> > > > 
-> > > > Same with "charger circuit" below.
-> > > > 
-> > > > > +	  charger circuit. It also support muxing a serial interface over USB
-> > > > "supports"
-> > > > 
-> > > > What kind of serial?
-> > > > 
-> > > > > +	  data lines.
-> > > > > +
-> > > > >    config MFD_SM501_GPIO
-> > > > >    	bool "Export GPIO via GPIO layer"
-> > > > >    	depends on MFD_SM501 && GPIOLIB
-> > > > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > > > > index 858cacf659d6..ca8b86736a36 100644
-> > > > > --- a/drivers/mfd/Makefile
-> > > > > +++ b/drivers/mfd/Makefile
-> > > > > @@ -275,3 +275,4 @@ rsmu-i2c-objs			:= rsmu_core.o rsmu_i2c.o
-> > > > >    rsmu-spi-objs			:= rsmu_core.o rsmu_spi.o
-> > > > >    obj-$(CONFIG_MFD_RSMU_I2C)	+= rsmu-i2c.o
-> > > > >    obj-$(CONFIG_MFD_RSMU_SPI)	+= rsmu-spi.o
-> > > > > +obj-$(CONFIG_MFD_SM5703)	+= sm5703.o
-> > > > > diff --git a/drivers/mfd/sm5703.c b/drivers/mfd/sm5703.c
-> > > > > new file mode 100644
-> > > > > index 000000000000..7f9838149051
-> > > > > --- /dev/null
-> > > > > +++ b/drivers/mfd/sm5703.c
-> > > > > @@ -0,0 +1,78 @@
-> > > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > > +
-> > > > > +#include <linux/err.h>
-> > > > > +#include <linux/delay.h>
-> > > > > +#include <linux/gpio/consumer.h>
-> > > > > +#include <linux/i2c.h>
-> > > > > +#include <linux/mfd/core.h>
-> > > > > +#include <linux/mfd/sm5703.h>
-> > > > > +#include <linux/module.h>
-> > > > > +#include <linux/of_device.h>
-> > > > > +#include <linux/regmap.h>
-> > > > > +
-> > > > > +static const struct mfd_cell sm5703_devs[] = {
-> > > > > +	{ .name = "sm5703-regulator", },
-> > > > > +};
-> > > > Where are the rest of the child drivers?
-> > > Should those devices still be present even though there's no driver for them
-> > > (yet) ? I have a WIP version of driver for almost every function, but I
-> > > currently lack time to get them done.
-> > Without them the driver-set is useless, no?
-> > 
-> > We try to refrain from applying dead code.
-> > 
-> > A lot of it has a tendency to stay that way.
-> Well, in my opinion, having just the regulator driver is already useful
-> enough: my board (Samsung Galaxy J5 (2015) ) uses one of LDO outputs for
-> powering the touchscreen. Touchscreen is kind of vital functionality for a
-> phone so I decided to upstream parts that are necessary for it first and
-> finish up other stuff later. It's not the only board that uses SM5703's
-> regulators for supplying all different kinds of hardware, either.
+Yep, I see. Maybe you can pass `target` to hvs_channel_readable() and 
+use it as parameter of HVS_PKT_LEN().
 
-Upstreaming functionality which is useful on its own is fine, but that 
-doesn't tick all of the boxes to justify an MFD.  This is a lot of
-code which is hard to justify if it only registers a Regulator driver.
+@Dexuan what do you think?
 
--- 
-Lee Jones [ÊùéÁêºÊñØ]
-Principal Technical Lead - Developer Services
-Linaro.org ‚îÇ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks,
+Stefano
+

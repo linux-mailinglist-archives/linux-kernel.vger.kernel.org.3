@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18CC57B98C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C3257B991
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240748AbiGTPYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S241365AbiGTPY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241365AbiGTPYl (ORCPT
+        with ESMTP id S241387AbiGTPYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:24:41 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6254D6068D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:24:39 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id a15so18099688pjs.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:24:39 -0700 (PDT)
+        Wed, 20 Jul 2022 11:24:44 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F7A5F9B1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:24:43 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so2587866pjl.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:24:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=a86La/z65eoYGLOuAeyDZfx/shNDg4oyMrIIgKsNgOg=;
-        b=F3FVmp5Ic3wVxBB1IJE+jMJdcOktTOhujzd4t6N4eqrULuKFjbdIVeJCggPAbeNBMk
-         jb1/1Vi9KtUqXmjJnM7oDI8uLG8Okq7HKIEAeIkaqOpuk51s333SvcSwuxTNH83KtdbU
-         fDQyCrpWvdtB2eeIuUjNiYDex90P6DmcihmLrJuBj2XeCn2fS9LoJznu7DmUiiuKopc9
-         9WtuaitxOUuEi4V1FEbY8yLiWpLRqfN8xhDY9xbc/iRZUga+Nxsay4qA5Gc7Jq/L+imB
-         xlXcSurRQIO+iPqWkSyRk44B+AJEnR/Ldy7haMyKvFStZV1/iV8YeyrtI/LX66o2MBIO
-         5rLg==
+        bh=+gCL8vpkJbMH1zCQTfU568m0Qd8HeqUY1yacjYAcBHY=;
+        b=X8TiORhLv6PwQsozH3XMukbzGmm2vwQrlM4EifR2sfp15mScEYgjqTQRppLOH3ZsC6
+         QAxDDw/OKkUpPzWjpGDtzVT4tHM8L2Jc0Y4+Uceu0KCcbRQ+1jAyZRJLf12YeGVIeU8i
+         G6cl8Dny6jK2xFnoyghm967Mr92Pde2Yad3cN9JIz2ll95lP/PjLMq/6RlCHTA4eSGcH
+         jFOqIVhkxwhU0i62Qu6EIAqnJswj7SVbTM+JzcEzi0ZtUEOChWksZ+xe2qDH1fhwKQms
+         6/nmSI+6lCxwBnUCIDov36aMiGHpbYro6oJ3EmkI1tSXgOkRhqsHNs/IdhnzeVSRfit+
+         iHNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=a86La/z65eoYGLOuAeyDZfx/shNDg4oyMrIIgKsNgOg=;
-        b=5vGQlISOJ8biqMI7+P7lAFGmoPT6rh+ch6KvsBCVxe23qUwib5InQxKO7WkZp4enO+
-         ZHdbme4YDsOvdBd2oDsIJRWjCjAIb9QqpIA1JbxwM2EIkSJQj5wpMwStEz8GuZIPDxeR
-         h9KwpVnhJLOHHVFs194sCsVvYqUExHCsBYQk2IkN0NR5i2KCNW7adbjAEfrvRlegZsRm
-         IFP9lhSNUDMS4/nejjnU0OX2vA77VWlHEeK6lhK5XJ7xYooEj5mcp+o37nRak5NnJfHv
-         T0pTZZNxhtz/VjEyRucPeeSscpwS3rkZ3CIjClTXufoQKGQVq3bSdZrUsb+kkSYWF2fi
-         GcAw==
-X-Gm-Message-State: AJIora9vWsHHnJHf0dxQORf21DNKHw7F6lXh8cu3hSd4t8/L2CV3Go8Q
-        xez8lFgekLNyFAzNu4tqfnvsG/QnYt4sYw==
-X-Google-Smtp-Source: AGRyM1samxIChCXUDKrkrLe48TeISYPSD2yIhDUVSeJ4FqiJ7fa/wir91URiHqLtpzZQ+GklS54Qfg==
-X-Received: by 2002:a17:903:2284:b0:16c:500f:b791 with SMTP id b4-20020a170903228400b0016c500fb791mr38451768plh.78.1658330678846;
-        Wed, 20 Jul 2022 08:24:38 -0700 (PDT)
+        bh=+gCL8vpkJbMH1zCQTfU568m0Qd8HeqUY1yacjYAcBHY=;
+        b=HHwfOtJ6AwU4Fhdp+0haavk103K+1lWM+TOYRUXqZx3A43vt3k9KoFwrCvjXKlTaIN
+         Iaibt9iPflgJhJ9qxxgOClG557qXKpYba/3vv2WZHdlPi9b5FEfjeQMcI0gxLEXL+Eq8
+         ZyF+TPHO3lYP4CloxRyMCJGxQHR++scCjG3QmgFjkrRTSOaqHtKeN5ZO8At38dAlOv4B
+         9N6qyb12FjOy6pXM/pk/AHgmXKYCiNi1dMWpf8M4HOYwgh0CMicsKvnvDv1tOJUZK/hj
+         /qxzOHgtw1jFjr13C6qWaPZxvq0GfiZf6bVQKOwMBVeqjtrYM9bb4KXTMx8/Yi92qU5m
+         3gkw==
+X-Gm-Message-State: AJIora+Km76mODHY6hmZrsxz411GaVc2h1zfBn8bFNWVTAthqi5AjsR+
+        76JWzCflYZ6v7YZ7TNBoVLc87A==
+X-Google-Smtp-Source: AGRyM1vNCIefghATWrh2c+eN2722FUXmTj/HYQM7BJj7GSnaWk7QvPgGc48SocyX0/qvS60iheL9Eg==
+X-Received: by 2002:a17:902:b28a:b0:16d:1c68:2e2 with SMTP id u10-20020a170902b28a00b0016d1c6802e2mr5029303plr.26.1658330682703;
+        Wed, 20 Jul 2022 08:24:42 -0700 (PDT)
 Received: from anup-ubuntu64-vm.. ([122.179.42.230])
-        by smtp.gmail.com with ESMTPSA id w15-20020a1709026f0f00b0016cf8f0bdd5sm6013031plk.108.2022.07.20.08.24.35
+        by smtp.gmail.com with ESMTPSA id w15-20020a1709026f0f00b0016cf8f0bdd5sm6013031plk.108.2022.07.20.08.24.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 08:24:38 -0700 (PDT)
+        Wed, 20 Jul 2022 08:24:42 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -59,9 +59,9 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         Anup Patel <anup@brainfault.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v7 4/7] RISC-V: Treat IPIs as normal Linux IRQs
-Date:   Wed, 20 Jul 2022 20:53:45 +0530
-Message-Id: <20220720152348.2889109-5-apatel@ventanamicro.com>
+Subject: [PATCH v7 5/7] RISC-V: Allow marking IPIs as suitable for remote FENCEs
+Date:   Wed, 20 Jul 2022 20:53:46 +0530
+Message-Id: <20220720152348.2889109-6-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220720152348.2889109-1-apatel@ventanamicro.com>
 References: <20220720152348.2889109-1-apatel@ventanamicro.com>
@@ -76,733 +76,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the RISC-V kernel provides arch specific hooks (i.e.
-struct riscv_ipi_ops) to register IPI handling methods. The stats
-gathering of IPIs is also arch specific in the RISC-V kernel.
+To do remote FENCEs (i.e. remote TLB flushes) using IPI calls on the
+RISC-V kernel, we need hardware mechanism to directly inject IPI from
+the supervisor mode (i.e. RISC-V kernel) instead of using SBI calls.
 
-Other architectures (such as ARM, ARM64, and MIPS) have moved away
-from custom arch specific IPI handling methods. Currently, these
-architectures have Linux irqchip drivers providing a range of Linux
-IRQ numbers to be used as IPIs and IPI triggering is done using
-generic IPI APIs. This approach allows architectures to treat IPIs
-as normal Linux IRQs and IPI stats gathering is done by the generic
-Linux IRQ subsystem.
-
-We extend the RISC-V IPI handling as-per above approach so that arch
-specific IPI handling methods (struct riscv_ipi_ops) can be removed
-and the IPI handling is done through the Linux IRQ subsystem.
+The upcoming AIA IMSIC devices allow direct IPI injection from the
+supervisor mode (i.e. RISC-V kernel). To support this, we extend the
+riscv_ipi_set_virq_range() function so that IPI provider (i.e. irqchip
+drivers can mark IPIs as suitable for remote FENCEs.
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- arch/riscv/Kconfig                |   2 +
- arch/riscv/include/asm/sbi.h      |   2 +
- arch/riscv/include/asm/smp.h      |  36 ++++---
- arch/riscv/kernel/Makefile        |   1 +
- arch/riscv/kernel/cpu-hotplug.c   |   3 +-
- arch/riscv/kernel/irq.c           |   3 +-
- arch/riscv/kernel/sbi-ipi.c       |  60 ++++++++++++
- arch/riscv/kernel/sbi.c           |  17 ----
- arch/riscv/kernel/smp.c           | 155 +++++++++++++++---------------
- arch/riscv/kernel/smpboot.c       |   5 +-
- drivers/clocksource/timer-clint.c |  41 +++++---
- drivers/irqchip/irq-riscv-intc.c  |  55 +++++------
- 12 files changed, 225 insertions(+), 155 deletions(-)
- create mode 100644 arch/riscv/kernel/sbi-ipi.c
+ arch/riscv/include/asm/smp.h      | 19 +++++++++++++++++--
+ arch/riscv/kernel/sbi-ipi.c       |  2 +-
+ arch/riscv/kernel/smp.c           | 12 +++++++++++-
+ drivers/clocksource/timer-clint.c |  2 +-
+ 4 files changed, 30 insertions(+), 5 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index ad73d2b70324..41dc3857d509 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -59,6 +59,8 @@ config RISCV
- 	select GENERIC_GETTIMEOFDAY if HAVE_GENERIC_VDSO
- 	select GENERIC_IDLE_POLL_SETUP
- 	select GENERIC_IOREMAP if MMU
-+	select GENERIC_IRQ_IPI
-+	select GENERIC_IRQ_IPI_MUX
- 	select GENERIC_IRQ_MULTI_HANDLER
- 	select GENERIC_IRQ_SHOW
- 	select GENERIC_IRQ_SHOW_LEVEL
-diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index 9e3c2cf1edaf..72a5426364ab 100644
---- a/arch/riscv/include/asm/sbi.h
-+++ b/arch/riscv/include/asm/sbi.h
-@@ -228,6 +228,7 @@ struct sbiret {
- };
- 
- void sbi_init(void);
-+void sbi_ipi_init(void);
- struct sbiret sbi_ecall(int ext, int fid, unsigned long arg0,
- 			unsigned long arg1, unsigned long arg2,
- 			unsigned long arg3, unsigned long arg4,
-@@ -297,6 +298,7 @@ static inline unsigned long sbi_mk_version(unsigned long major,
- int sbi_err_map_linux_errno(int err);
- #else /* CONFIG_RISCV_SBI */
- static inline int sbi_remote_fence_i(const struct cpumask *cpu_mask) { return -1; }
-+static inline void sbi_ipi_init(void) { }
- static inline void sbi_init(void) {}
- #endif /* CONFIG_RISCV_SBI */
- #endif /* _ASM_RISCV_SBI_H */
 diff --git a/arch/riscv/include/asm/smp.h b/arch/riscv/include/asm/smp.h
-index 23170c933d73..7da034e2f231 100644
+index 7da034e2f231..f69fb9ac1756 100644
 --- a/arch/riscv/include/asm/smp.h
 +++ b/arch/riscv/include/asm/smp.h
-@@ -15,11 +15,6 @@
- struct seq_file;
+@@ -16,6 +16,9 @@ struct seq_file;
  extern unsigned long boot_cpu_hartid;
  
--struct riscv_ipi_ops {
--	void (*ipi_inject)(const struct cpumask *target);
--	void (*ipi_clear)(void);
--};
--
  #ifdef CONFIG_SMP
++
++#include <linux/jump_label.h>
++
  /*
   * Mapping between linux logical cpu index and hartid.
-@@ -33,9 +28,6 @@ void show_ipi_stats(struct seq_file *p, int prec);
- /* SMP initialization hook for setup_arch */
- void __init setup_smp(void);
+  */
+@@ -46,7 +49,13 @@ void riscv_ipi_disable(void);
+ bool riscv_ipi_have_virq_range(void);
  
--/* Called from C code, this handles an IPI. */
--void handle_IPI(struct pt_regs *regs);
--
- /* Hook for the generic smp_call_function_many() routine. */
- void arch_send_call_function_ipi_mask(struct cpumask *mask);
- 
-@@ -44,11 +36,17 @@ void arch_send_call_function_single_ipi(int cpu);
- 
- int riscv_hartid_to_cpuid(int hartid);
- 
--/* Set custom IPI operations */
--void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops);
-+/* Enable IPI for CPU hotplug */
-+void riscv_ipi_enable(void);
+ /* Set the IPI interrupt numbers for arch (called by irqchip drivers) */
+-void riscv_ipi_set_virq_range(int virq, int nr_irqs, bool percpu_enable);
++void riscv_ipi_set_virq_range(int virq, int nr_irqs, bool percpu_enable,
++			      bool use_for_rfence);
 +
-+/* Disable IPI for CPU hotplug */
-+void riscv_ipi_disable(void);
- 
--/* Clear IPI for current CPU */
--void riscv_clear_ipi(void);
-+/* Check if IPI interrupt numbers are available */
-+bool riscv_ipi_have_virq_range(void);
-+
-+/* Set the IPI interrupt numbers for arch (called by irqchip drivers) */
-+void riscv_ipi_set_virq_range(int virq, int nr_irqs, bool percpu_enable);
++/* Check if we can use IPIs for remote FENCEs */
++DECLARE_STATIC_KEY_FALSE(riscv_ipi_for_rfence);
++#define riscv_use_ipi_for_rfence() \
++	static_branch_unlikely(&riscv_ipi_for_rfence)
  
  /* Secondary hart entry */
  asmlinkage void smp_callin(void);
-@@ -82,11 +80,21 @@ static inline unsigned long cpuid_to_hartid_map(int cpu)
- 	return boot_cpu_hartid;
+@@ -94,10 +103,16 @@ static inline bool riscv_ipi_have_virq_range(void)
  }
  
--static inline void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops)
-+static inline void riscv_ipi_enable(void)
+ static inline void riscv_ipi_set_virq_range(int virq, int nr,
+-					    bool percpu_enable)
++					    bool percpu_enable,
++					    bool use_for_rfence)
  {
  }
  
--static inline void riscv_clear_ipi(void)
-+static inline void riscv_ipi_disable(void)
-+{
-+}
-+
-+static inline bool riscv_ipi_have_virq_range(void)
++static inline bool riscv_use_ipi_for_rfence(void)
 +{
 +	return false;
 +}
 +
-+static inline void riscv_ipi_set_virq_range(int virq, int nr,
-+					    bool percpu_enable)
- {
- }
+ #endif /* CONFIG_SMP */
  
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index c71d6591d539..dba90d0e069c 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -73,6 +73,7 @@ obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
- obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
- obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
- obj-$(CONFIG_RISCV_SBI)		+= sbi.o
-+obj-$(CONFIG_RISCV_SBI)		+= sbi-ipi.o
- ifeq ($(CONFIG_RISCV_SBI), y)
- obj-$(CONFIG_SMP) += cpu_ops_sbi.o
- endif
-diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
-index f7a832e3a1d1..39235cf50652 100644
---- a/arch/riscv/kernel/cpu-hotplug.c
-+++ b/arch/riscv/kernel/cpu-hotplug.c
-@@ -13,7 +13,7 @@
- #include <asm/irq.h>
- #include <asm/cpu_ops.h>
- #include <asm/numa.h>
--#include <asm/sbi.h>
-+#include <asm/smp.h>
- 
- bool cpu_has_hotplug(unsigned int cpu)
- {
-@@ -43,6 +43,7 @@ int __cpu_disable(void)
- 	remove_cpu_topology(cpu);
- 	numa_remove_cpu(cpu);
- 	set_cpu_online(cpu, false);
-+	riscv_ipi_disable();
- 	irq_migrate_all_off_this_cpu();
- 
- 	return ret;
-diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-index 96d3171f0ca1..eb9a68a539e6 100644
---- a/arch/riscv/kernel/irq.c
-+++ b/arch/riscv/kernel/irq.c
-@@ -10,7 +10,7 @@
- #include <linux/irqdomain.h>
- #include <linux/module.h>
- #include <linux/seq_file.h>
--#include <asm/smp.h>
-+#include <asm/sbi.h>
- 
- static struct fwnode_handle *(*__get_intc_node)(void);
- 
-@@ -39,4 +39,5 @@ void __init init_IRQ(void)
- 	irqchip_init();
- 	if (!handle_arch_irq)
- 		panic("No interrupt controller found.");
-+	sbi_ipi_init();
- }
+ #if defined(CONFIG_HOTPLUG_CPU) && (CONFIG_SMP)
 diff --git a/arch/riscv/kernel/sbi-ipi.c b/arch/riscv/kernel/sbi-ipi.c
-new file mode 100644
-index 000000000000..5be545f6914c
---- /dev/null
+index 5be545f6914c..e45a7d9a16c2 100644
+--- a/arch/riscv/kernel/sbi-ipi.c
 +++ b/arch/riscv/kernel/sbi-ipi.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Multiplex several IPIs over a single HW IPI.
-+ *
-+ * Copyright (c) 2022 Ventana Micro Systems Inc.
-+ */
-+
-+#define pr_fmt(fmt) "riscv: " fmt
-+#include <linux/init.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
-+#include <asm/sbi.h>
-+
-+static void sbi_send_cpumask_ipi(unsigned int parent_virq,
-+				 const struct cpumask *target)
-+{
-+	sbi_send_ipi(target);
-+}
-+
-+static void sbi_ipi_clear(unsigned int parent_virq)
-+{
-+	csr_clear(CSR_IP, IE_SIE);
-+}
-+
-+static struct ipi_mux_ops sbi_ipi_ops = {
-+	.ipi_mux_clear = sbi_ipi_clear,
-+	.ipi_mux_send = sbi_send_cpumask_ipi,
-+};
-+
-+void __init sbi_ipi_init(void)
-+{
-+	int virq, parent_virq;
-+	struct irq_domain *domain;
-+
-+	if (riscv_ipi_have_virq_range())
-+		return;
-+
-+	domain = irq_find_matching_fwnode(riscv_get_intc_hwnode(),
-+					  DOMAIN_BUS_ANY);
-+	if (!domain) {
-+		pr_err("unable to find INTC IRQ domain\n");
-+		return;
-+	}
-+
-+	parent_virq = irq_create_mapping(domain, RV_IRQ_SOFT);
-+	if (!parent_virq) {
-+		pr_err("unable to create INTC IRQ mapping\n");
-+		return;
-+	}
-+
-+	virq = ipi_mux_create(parent_virq, BITS_PER_LONG, &sbi_ipi_ops);
-+	if (virq <= 0) {
-+		pr_err("unable to create muxed IPIs\n");
-+		irq_dispose_mapping(parent_virq);
-+		return;
-+	}
-+
-+	riscv_ipi_set_virq_range(virq, BITS_PER_LONG, false);
-+	pr_info("providing IPIs using SBI IPI extension\n");
-+}
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index fc614650a2e3..e9f04eba0e09 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -638,21 +638,6 @@ long sbi_get_mimpid(void)
- 	return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
- }
- 
--static void sbi_send_cpumask_ipi(const struct cpumask *target)
--{
--	sbi_send_ipi(target);
--}
--
--static void sbi_ipi_clear(void)
--{
--	csr_clear(CSR_IP, IE_SIE);
--}
--
--static const struct riscv_ipi_ops sbi_ipi_ops = {
--	.ipi_inject = sbi_send_cpumask_ipi,
--	.ipi_clear = sbi_ipi_clear
--};
--
- void __init sbi_init(void)
- {
- 	int ret;
-@@ -699,6 +684,4 @@ void __init sbi_init(void)
- 		__sbi_send_ipi	= __sbi_send_ipi_v01;
- 		__sbi_rfence	= __sbi_rfence_v01;
+@@ -55,6 +55,6 @@ void __init sbi_ipi_init(void)
+ 		return;
  	}
--
--	riscv_set_ipi_ops(&sbi_ipi_ops);
+ 
+-	riscv_ipi_set_virq_range(virq, BITS_PER_LONG, false);
++	riscv_ipi_set_virq_range(virq, BITS_PER_LONG, false, false);
+ 	pr_info("providing IPIs using SBI IPI extension\n");
  }
 diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-index 6fd8b3cbec1b..07f1ff652362 100644
+index 07f1ff652362..80ab8359ad48 100644
 --- a/arch/riscv/kernel/smp.c
 +++ b/arch/riscv/kernel/smp.c
-@@ -17,9 +17,9 @@
- #include <linux/sched.h>
- #include <linux/seq_file.h>
- #include <linux/delay.h>
-+#include <linux/irq.h>
- #include <linux/irq_work.h>
- 
--#include <asm/sbi.h>
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
- 
-@@ -41,11 +41,10 @@ void __init smp_setup_processor_id(void)
- 	cpuid_to_hartid_map(0) = boot_cpu_hartid;
+@@ -150,7 +150,11 @@ bool riscv_ipi_have_virq_range(void)
+ 	return (ipi_virq_base) ? true : false;
  }
  
--/* A collection of single bit ipi messages.  */
--static struct {
--	unsigned long stats[IPI_MAX] ____cacheline_aligned;
--	unsigned long bits ____cacheline_aligned;
--} ipi_data[NR_CPUS] __cacheline_aligned;
-+static int ipi_virq_base __ro_after_init;
-+static int nr_ipi __ro_after_init = IPI_MAX;
-+static bool ipi_percpu_enable __ro_after_init;
-+static struct irq_desc *ipi_desc[IPI_MAX] __read_mostly;
- 
- int riscv_hartid_to_cpuid(int hartid)
+-void riscv_ipi_set_virq_range(int virq, int nr, bool percpu_enable)
++DEFINE_STATIC_KEY_FALSE(riscv_ipi_for_rfence);
++EXPORT_SYMBOL_GPL(riscv_ipi_for_rfence);
++
++void riscv_ipi_set_virq_range(int virq, int nr, bool percpu_enable,
++			      bool use_for_rfence)
  {
-@@ -77,46 +76,14 @@ static void ipi_stop(void)
- 		wait_for_interrupt();
- }
+ 	int i, err;
  
--static const struct riscv_ipi_ops *ipi_ops __ro_after_init;
--
--void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops)
--{
--	ipi_ops = ops;
--}
--EXPORT_SYMBOL_GPL(riscv_set_ipi_ops);
--
--void riscv_clear_ipi(void)
--{
--	if (ipi_ops && ipi_ops->ipi_clear)
--		ipi_ops->ipi_clear();
--}
--EXPORT_SYMBOL_GPL(riscv_clear_ipi);
--
- static void send_ipi_mask(const struct cpumask *mask, enum ipi_message_type op)
- {
--	int cpu;
--
--	smp_mb__before_atomic();
--	for_each_cpu(cpu, mask)
--		set_bit(op, &ipi_data[cpu].bits);
--	smp_mb__after_atomic();
--
--	if (ipi_ops && ipi_ops->ipi_inject)
--		ipi_ops->ipi_inject(mask);
--	else
--		pr_warn("SMP: IPI inject method not available\n");
-+	__ipi_send_mask(ipi_desc[op], mask);
- }
+@@ -174,6 +178,12 @@ void riscv_ipi_set_virq_range(int virq, int nr, bool percpu_enable)
  
- static void send_ipi_single(int cpu, enum ipi_message_type op)
- {
--	smp_mb__before_atomic();
--	set_bit(op, &ipi_data[cpu].bits);
--	smp_mb__after_atomic();
--
--	if (ipi_ops && ipi_ops->ipi_inject)
--		ipi_ops->ipi_inject(cpumask_of(cpu));
--	else
--		pr_warn("SMP: IPI inject method not available\n");
-+	__ipi_send_mask(ipi_desc[op], cpumask_of(cpu));
- }
- 
- #ifdef CONFIG_IRQ_WORK
-@@ -126,55 +93,89 @@ void arch_irq_work_raise(void)
- }
- #endif
- 
--void handle_IPI(struct pt_regs *regs)
-+static irqreturn_t handle_IPI(int irq, void *data)
-+{
-+	int ipi = irq - ipi_virq_base;
+ 	/* Enabled IPIs for boot CPU immediately */
+ 	riscv_ipi_enable();
 +
-+	switch (ipi) {
-+	case IPI_RESCHEDULE:
-+		scheduler_ipi();
-+		break;
-+	case IPI_CALL_FUNC:
-+		generic_smp_call_function_interrupt();
-+		break;
-+	case IPI_CPU_STOP:
-+		ipi_stop();
-+		break;
-+	case IPI_IRQ_WORK:
-+		irq_work_run();
-+		break;
-+#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
-+	case IPI_TIMER:
-+		tick_receive_broadcast();
-+		break;
-+#endif
-+	default:
-+		pr_warn("CPU%d: unhandled IPI%d\n", smp_processor_id(), ipi);
-+		break;
-+	};
-+
-+	return IRQ_HANDLED;
-+}
-+
-+void riscv_ipi_enable(void)
- {
--	unsigned long *pending_ipis = &ipi_data[smp_processor_id()].bits;
--	unsigned long *stats = ipi_data[smp_processor_id()].stats;
-+	int i;
- 
--	riscv_clear_ipi();
-+	if (WARN_ON_ONCE(!ipi_virq_base))
-+		return;
- 
--	while (true) {
--		unsigned long ops;
-+	for (i = 0; i < nr_ipi && ipi_percpu_enable; i++)
-+		enable_percpu_irq(ipi_virq_base + i, 0);
-+}
- 
--		/* Order bit clearing and data access. */
--		mb();
-+void riscv_ipi_disable(void)
-+{
-+	int i;
- 
--		ops = xchg(pending_ipis, 0);
--		if (ops == 0)
--			return;
-+	if (WARN_ON_ONCE(!ipi_virq_base))
-+		return;
- 
--		if (ops & (1 << IPI_RESCHEDULE)) {
--			stats[IPI_RESCHEDULE]++;
--			scheduler_ipi();
--		}
-+	for (i = 0; i < nr_ipi && ipi_percpu_enable; i++)
-+		disable_percpu_irq(ipi_virq_base + i);
-+}
- 
--		if (ops & (1 << IPI_CALL_FUNC)) {
--			stats[IPI_CALL_FUNC]++;
--			generic_smp_call_function_interrupt();
--		}
-+bool riscv_ipi_have_virq_range(void)
-+{
-+	return (ipi_virq_base) ? true : false;
-+}
- 
--		if (ops & (1 << IPI_CPU_STOP)) {
--			stats[IPI_CPU_STOP]++;
--			ipi_stop();
--		}
-+void riscv_ipi_set_virq_range(int virq, int nr, bool percpu_enable)
-+{
-+	int i, err;
- 
--		if (ops & (1 << IPI_IRQ_WORK)) {
--			stats[IPI_IRQ_WORK]++;
--			irq_work_run();
--		}
-+	if (WARN_ON(ipi_virq_base))
-+		return;
- 
--#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
--		if (ops & (1 << IPI_TIMER)) {
--			stats[IPI_TIMER]++;
--			tick_receive_broadcast();
--		}
--#endif
--		BUG_ON((ops >> IPI_MAX) != 0);
-+	WARN_ON(nr < IPI_MAX);
-+	nr_ipi = min(nr, IPI_MAX);
-+	ipi_virq_base = virq;
-+	ipi_percpu_enable = percpu_enable;
-+
-+	/* Request IPIs */
-+	for (i = 0; i < nr_ipi; i++) {
-+		err = request_percpu_irq(ipi_virq_base + i, handle_IPI,
-+					 "IPI", &ipi_virq_base);
-+		WARN_ON(err);
- 
--		/* Order data access and bit testing. */
--		mb();
-+		ipi_desc[i] = irq_to_desc(ipi_virq_base + i);
-+		irq_set_status_flags(ipi_virq_base + i, IRQ_HIDDEN);
- 	}
-+
-+	/* Enabled IPIs for boot CPU immediately */
-+	riscv_ipi_enable();
++	/* Update RFENCE static key */
++	if (use_for_rfence)
++		static_branch_enable(&riscv_ipi_for_rfence);
++	else
++		static_branch_disable(&riscv_ipi_for_rfence);
  }
-+EXPORT_SYMBOL_GPL(riscv_ipi_set_virq_range);
+ EXPORT_SYMBOL_GPL(riscv_ipi_set_virq_range);
  
- static const char * const ipi_names[] = {
- 	[IPI_RESCHEDULE]	= "Rescheduling interrupts",
-@@ -192,7 +193,7 @@ void show_ipi_stats(struct seq_file *p, int prec)
- 		seq_printf(p, "%*s%u:%s", prec - 1, "IPI", i,
- 			   prec >= 4 ? " " : "");
- 		for_each_online_cpu(cpu)
--			seq_printf(p, "%10lu ", ipi_data[cpu].stats[i]);
-+			seq_printf(p, "%10u ", irq_desc_kstat_cpu(ipi_desc[i], cpu));
- 		seq_printf(p, " %s\n", ipi_names[i]);
- 	}
- }
-diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-index f1e4948a4b52..e7a96300107d 100644
---- a/arch/riscv/kernel/smpboot.c
-+++ b/arch/riscv/kernel/smpboot.c
-@@ -30,7 +30,6 @@
- #include <asm/numa.h>
- #include <asm/tlbflush.h>
- #include <asm/sections.h>
--#include <asm/sbi.h>
- #include <asm/smp.h>
- 
- #include "head.h"
-@@ -155,12 +154,12 @@ asmlinkage __visible void smp_callin(void)
- 	struct mm_struct *mm = &init_mm;
- 	unsigned int curr_cpuid = smp_processor_id();
- 
--	riscv_clear_ipi();
--
- 	/* All kernel threads share the same mm context.  */
- 	mmgrab(mm);
- 	current->active_mm = mm;
- 
-+	riscv_ipi_enable();
-+
- 	notify_cpu_starting(curr_cpuid);
- 	numa_add_cpu(curr_cpuid);
- 	update_siblings_masks(curr_cpuid);
 diff --git a/drivers/clocksource/timer-clint.c b/drivers/clocksource/timer-clint.c
-index 6cfe2ab73eb0..69f8d2ac1916 100644
+index 69f8d2ac1916..3a90b6b3ca48 100644
 --- a/drivers/clocksource/timer-clint.c
 +++ b/drivers/clocksource/timer-clint.c
-@@ -17,6 +17,8 @@
- #include <linux/sched_clock.h>
- #include <linux/io-64-nonatomic-lo-hi.h>
- #include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
- #include <linux/of_irq.h>
- #include <linux/smp.h>
- #include <linux/timex.h>
-@@ -31,6 +33,7 @@
- 
- /* CLINT manages IPI and Timer for RISC-V M-mode  */
- static u32 __iomem *clint_ipi_base;
-+static unsigned int clint_ipi_irq;
- static u64 __iomem *clint_timer_cmp;
- static u64 __iomem *clint_timer_val;
- static unsigned long clint_timer_freq;
-@@ -41,7 +44,8 @@ u64 __iomem *clint_time_val;
- EXPORT_SYMBOL(clint_time_val);
- #endif
- 
--static void clint_send_ipi(const struct cpumask *target)
-+static void clint_send_ipi(unsigned int parent_virq,
-+			   const struct cpumask *target)
- {
- 	unsigned int cpu;
- 
-@@ -49,14 +53,14 @@ static void clint_send_ipi(const struct cpumask *target)
- 		writel(1, clint_ipi_base + cpuid_to_hartid_map(cpu));
- }
- 
--static void clint_clear_ipi(void)
-+static void clint_clear_ipi(unsigned int parent_virq)
- {
- 	writel(0, clint_ipi_base + cpuid_to_hartid_map(smp_processor_id()));
- }
- 
--static struct riscv_ipi_ops clint_ipi_ops = {
--	.ipi_inject = clint_send_ipi,
--	.ipi_clear = clint_clear_ipi,
-+static struct ipi_mux_ops clint_ipi_ops = {
-+	.ipi_mux_clear = clint_clear_ipi,
-+	.ipi_mux_send = clint_send_ipi,
- };
- 
- #ifdef CONFIG_64BIT
-@@ -146,7 +150,7 @@ static irqreturn_t clint_timer_interrupt(int irq, void *dev_id)
- 
- static int __init clint_timer_init_dt(struct device_node *np)
- {
--	int rc;
-+	int rc, virq;
- 	u32 i, nr_irqs;
- 	void __iomem *base;
- 	struct of_phandle_args oirq;
-@@ -170,6 +174,12 @@ static int __init clint_timer_init_dt(struct device_node *np)
- 			return -ENODEV;
- 		}
- 
-+		/* Find parent irq domain and map ipi irq */
-+		if (!clint_ipi_irq &&
-+		    oirq.args[0] == RV_IRQ_SOFT &&
-+		    irq_find_host(oirq.np))
-+			clint_ipi_irq = irq_of_parse_and_map(np, i);
-+
- 		/* Find parent irq domain and map timer irq */
- 		if (!clint_timer_irq &&
- 		    oirq.args[0] == RV_IRQ_TIMER &&
-@@ -177,9 +187,9 @@ static int __init clint_timer_init_dt(struct device_node *np)
- 			clint_timer_irq = irq_of_parse_and_map(np, i);
+@@ -245,7 +245,7 @@ static int __init clint_timer_init_dt(struct device_node *np)
+ 		goto fail_remove_cpuhp;
  	}
  
--	/* If CLINT timer irq not found then fail */
--	if (!clint_timer_irq) {
--		pr_err("%pOFP: timer irq not found\n", np);
-+	/* If CLINT ipi or timer irq not found then fail */
-+	if (!clint_ipi_irq || !clint_timer_irq) {
-+		pr_err("%pOFP: ipi/timer irq not found\n", np);
- 		return -ENODEV;
- 	}
- 
-@@ -228,11 +238,20 @@ static int __init clint_timer_init_dt(struct device_node *np)
- 		goto fail_free_irq;
- 	}
- 
--	riscv_set_ipi_ops(&clint_ipi_ops);
--	clint_clear_ipi();
-+	virq = ipi_mux_create(clint_ipi_irq, BITS_PER_LONG, &clint_ipi_ops);
-+	if (virq <= 0) {
-+		pr_err("unable to create muxed IPIs\n");
-+		rc = (virq < 0) ? virq : -ENODEV;
-+		goto fail_remove_cpuhp;
-+	}
-+
-+	riscv_ipi_set_virq_range(virq, BITS_PER_LONG, false);
-+	clint_clear_ipi(clint_ipi_irq);
- 
- 	return 0;
- 
-+fail_remove_cpuhp:
-+	cpuhp_remove_state(CPUHP_AP_CLINT_TIMER_STARTING);
- fail_free_irq:
- 	free_irq(clint_timer_irq, &clint_clock_event);
- fail_iounmap:
-diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
-index 084793a57af8..6ab688e54bc1 100644
---- a/drivers/irqchip/irq-riscv-intc.c
-+++ b/drivers/irqchip/irq-riscv-intc.c
-@@ -26,20 +26,7 @@ static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
- 	if (unlikely(cause >= BITS_PER_LONG))
- 		panic("unexpected interrupt cause");
- 
--	switch (cause) {
--#ifdef CONFIG_SMP
--	case RV_IRQ_SOFT:
--		/*
--		 * We only use software interrupts to pass IPIs, so if a
--		 * non-SMP system gets one, then we don't know what to do.
--		 */
--		handle_IPI(regs);
--		break;
--#endif
--	default:
--		generic_handle_domain_irq(intc_domain, cause);
--		break;
--	}
-+	generic_handle_domain_irq(intc_domain, cause);
- }
- 
- /*
-@@ -59,18 +46,6 @@ static void riscv_intc_irq_unmask(struct irq_data *d)
- 	csr_set(CSR_IE, BIT(d->hwirq));
- }
- 
--static int riscv_intc_cpu_starting(unsigned int cpu)
--{
--	csr_set(CSR_IE, BIT(RV_IRQ_SOFT));
--	return 0;
--}
--
--static int riscv_intc_cpu_dying(unsigned int cpu)
--{
--	csr_clear(CSR_IE, BIT(RV_IRQ_SOFT));
--	return 0;
--}
--
- static struct irq_chip riscv_intc_chip = {
- 	.name = "RISC-V INTC",
- 	.irq_mask = riscv_intc_irq_mask,
-@@ -87,9 +62,32 @@ static int riscv_intc_domain_map(struct irq_domain *d, unsigned int irq,
- 	return 0;
- }
- 
-+static int riscv_intc_domain_alloc(struct irq_domain *domain,
-+				   unsigned int virq, unsigned int nr_irqs,
-+				   void *arg)
-+{
-+	int i, ret;
-+	irq_hw_number_t hwirq;
-+	unsigned int type = IRQ_TYPE_NONE;
-+	struct irq_fwspec *fwspec = arg;
-+
-+	ret = irq_domain_translate_onecell(domain, fwspec, &hwirq, &type);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < nr_irqs; i++) {
-+		ret = riscv_intc_domain_map(domain, virq + i, hwirq + i);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct irq_domain_ops riscv_intc_domain_ops = {
- 	.map	= riscv_intc_domain_map,
- 	.xlate	= irq_domain_xlate_onecell,
-+	.alloc	= riscv_intc_domain_alloc
- };
- 
- static struct fwnode_handle *riscv_intc_hwnode(void)
-@@ -132,11 +130,6 @@ static int __init riscv_intc_init(struct device_node *node,
- 
- 	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
- 
--	cpuhp_setup_state(CPUHP_AP_IRQ_RISCV_STARTING,
--			  "irqchip/riscv/intc:starting",
--			  riscv_intc_cpu_starting,
--			  riscv_intc_cpu_dying);
--
- 	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
+-	riscv_ipi_set_virq_range(virq, BITS_PER_LONG, false);
++	riscv_ipi_set_virq_range(virq, BITS_PER_LONG, false, true);
+ 	clint_clear_ipi(clint_ipi_irq);
  
  	return 0;
 -- 

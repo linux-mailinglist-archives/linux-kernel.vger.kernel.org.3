@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5802057AFB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 06:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9B857AFCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 06:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233593AbiGTEFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 00:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
+        id S236195AbiGTEOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 00:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbiGTEFR (ORCPT
+        with ESMTP id S229618AbiGTEOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 00:05:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780346254
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:05:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09E406140D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:05:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6449AC341CB
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658289912;
-        bh=CzFHa1T2nBUH30PXVGgIPY9OIkGOqT8aynKW1aD7qLc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HI87q3/M4gCZ9jBIvGGhF1Cc19IjYDyq2bfCREVi51oKn1oN7vub71W6kyRIn8jS7
-         xg+tQODt+cRX12s+n9iPyLZW9RcSQTRzWVAay9Ub8FacYMElthv4PZTT0n7nldy00i
-         ARi/NMnHONmHPBqa9fWH8pAIh+5cZNmVETSrk+OYtR0J3+IeLI34kFkyTlpW2arb5s
-         D+/8dzJ8D9s2OISmaUBgrGVoksdsZ0SdJ1Z9L+u53/euGdCyZf2GuSlQosIK5V607r
-         83PO5h4XN0zTcVsFu7Q/TSexSWPzApMRwFsSg3eEJsOwAOBsj+W7ErviLWI/YTGaQP
-         HSaNglD7b2RBQ==
-Received: by mail-lf1-f53.google.com with SMTP id d12so28196687lfq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 21:05:12 -0700 (PDT)
-X-Gm-Message-State: AJIora+V8jghUMLQTgpcN3+iSgYFS1uKEIPD5b+HKdSrWwC0VHMV2i1F
-        NOFua3RbAMCj5xZsVLpOqruJWlR3XaBTH+2r2+c=
-X-Google-Smtp-Source: AGRyM1uLXnx3xaLP+f7GMaqugMVNJKZubvmvNn+ehrZ8uHGY/mZSRSbOBGmfq7suVUtc1uF41pvQvBjUHj6+nKWIsdc=
-X-Received: by 2002:a05:6512:1394:b0:489:6a91:272a with SMTP id
- p20-20020a056512139400b004896a91272amr18121223lfa.424.1658289910426; Tue, 19
- Jul 2022 21:05:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220709014929.14221-1-rdunlap@infradead.org>
-In-Reply-To: <20220709014929.14221-1-rdunlap@infradead.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 20 Jul 2022 12:04:58 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR27PLRoZGdy_D1YvgCdWdKFo_QVNymML5794mzZ7Ub9Q@mail.gmail.com>
-Message-ID: <CAJF2gTR27PLRoZGdy_D1YvgCdWdKFo_QVNymML5794mzZ7Ub9Q@mail.gmail.com>
-Subject: Re: [PATCH] riscv: fix RISCV_ISA_SVPBMT kconfig dependency warning
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Fu <wefu@redhat.com>,
-        Liu Shaohua <liush@allwinnertech.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 00:14:00 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB35323BC5;
+        Tue, 19 Jul 2022 21:13:54 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id ez10so30810951ejc.13;
+        Tue, 19 Jul 2022 21:13:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=zjj7340ZvsschDyfoJLUbFZMbu4BAOYat1cxfePijEg=;
+        b=mQzbPiSOn4z58rBd4iunQ4pHfOBgbFud76V/FZjolse7vmiCbS0jULAMwmHC33mixe
+         YGcRZT3XJIFTFhYpX8blWAm4fb8ThYSIC2bG1X8p19XcjbI4KZHIBg0C/2qVdwkSt0ry
+         b3OGLIIw/iQ/I4R0WBniCNq0OlS+H5iz3zBuiiEjMQpBRBJLyFRVQspCK7robc8OQvbD
+         9IN+fd3fY1qIEzRQAZ4bc7cG24M6LJfum1jY/ts9p0P2b9w5NzN8f/sr9AvUfeLKSHVk
+         Nj8CuYLnrjfNfZnDE4Svj715ihq+EDK7UotXPPr6TKV02hagOXc9JVVH27pB1zcgcdsf
+         8lkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=zjj7340ZvsschDyfoJLUbFZMbu4BAOYat1cxfePijEg=;
+        b=xt4jy7RfcZ9XroXnow4OQgn1c0yE/C6dy5jyHxz7FISu2XlCcUbhDYlyYNsgK99t/n
+         ccVUwitQ4QWe1GpqKBkyRgs3zswq+2IL7NhqSmez+9rK0p29fApaJCtyeKaPBsPI71Co
+         Zu3kDMTLFJvpZVtUzQaa7CRrdUU7brFqQagZPTMPHMmvU8eWFsizGzNmAtJEoqFwqxlL
+         fdesH3KCwhvmLYRNWb9LtOiyjUwPZgD8e8sV/trMggu7iSecSz1yqS90CAanjd/wjnPh
+         28fteQ3fbLz+wF2XJ/IgXKIzoD4ZF5wv73jLVkegYh5yIapXc3TOKnjX+Fae28/0n44U
+         BQxw==
+X-Gm-Message-State: AJIora98sSOVROIRto0zq7zfO5wyXQLFCT+BINjgIB6OTLa+s1ZhuAYj
+        obj7hbRapCkxOanbzCZa5NE=
+X-Google-Smtp-Source: AGRyM1tLigBTex3IdwZFfDm0mmXnGVu8g6w23H3ZESI1HiYHdZZoqLiEV0xYH1J5Jy34IHhz1kHs5Q==
+X-Received: by 2002:a17:906:844b:b0:72b:54b9:b97d with SMTP id e11-20020a170906844b00b0072b54b9b97dmr34645973ejy.229.1658290433275;
+        Tue, 19 Jul 2022 21:13:53 -0700 (PDT)
+Received: from felia.fritz.box (200116b826a11f008020c2fc6e115b3e.dip.versatel-1u1.de. [2001:16b8:26a1:1f00:8020:c2fc:6e11:5b3e])
+        by smtp.gmail.com with ESMTPSA id t6-20020aa7d706000000b0043a85d7d15esm11512978edq.12.2022.07.19.21.13.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 21:13:52 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-doc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [RFC PATCH 0/2] Rework the kernel's README.rst
+Date:   Wed, 20 Jul 2022 06:13:23 +0200
+Message-Id: <20220720041325.15693-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
-
-On Sat, Jul 9, 2022 at 9:49 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> RISCV_ISA_SVPBMT selects RISCV_ALTERNATIVE which depends on !XIP_KERNEL.
-> Therefore RISCV_ISA_SVPBMT should also depend on !XIP_KERNEL so
-> quieten this kconfig warning:
->
-> WARNING: unmet direct dependencies detected for RISCV_ALTERNATIVE
->   Depends on [n]: !XIP_KERNEL [=y]
->   Selected by [y]:
->   - RISCV_ISA_SVPBMT [=y] && 64BIT [=y] && MMU [=y]
->
-> Fixes: ff689fd21cb1 ("riscv: add RISC-V Svpbmt extension support")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Wei Fu <wefu@redhat.com>
-> Cc: Liu Shaohua <liush@allwinnertech.com>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: Heiko Stuebner <heiko@sntech.de>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: linux-riscv@lists.infradead.org
-> ---
->  arch/riscv/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
->
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -362,6 +362,7 @@ config RISCV_ISA_C
->  config RISCV_ISA_SVPBMT
->         bool "SVPBMT extension support"
->         depends on 64BIT && MMU
-> +       depends on !XIP_KERNEL
->         select RISCV_ALTERNATIVE
->         default y
->         help
+Dear Jonathan, dear Thorsten, dear Linus,
 
 
+As far as I see, the README.rst file in Documentation/admin-guide/ covers
+three rather outdated (or subsumed) aspects:
+
+  1. mentioning that it is possible to "run a.out user programs with this kernel"
+
+  2. how to report a kernel bug
+
+  3. the explanations around the use of LILO as a boot loader
+
+This patch series addressed the first two aspects; the third one simply
+first needs some more experimenting/experience on my side to update
+the description of the setup with a GRUB boot loader.
+
+I am happy if anyone else contributes or helps with this rework task on
+the third aspect.
+
+I am also adding Linus as recipient, as he seems to be the original author,
+i.e., in the text, 'me' refers to Linus.
+
+Please let me know if you are generally fine with this approach, and
+if there is something on the other documentation to be done to get this
+patch accepted.
+
+
+Best regards,
+
+Lukas
+
+Lukas Bulwahn (2):
+  docs: admin-guide: do not mention the 'run a.out user programs'
+    feature
+  docs: admin-guide: for kernel bugs refer to other kernel documentation
+
+ Documentation/admin-guide/README.rst | 91 +++-------------------------
+ 1 file changed, 7 insertions(+), 84 deletions(-)
 
 -- 
-Best Regards
- Guo Ren
+2.17.1
+

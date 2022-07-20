@@ -2,162 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC1B57AB3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F313057AB3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238688AbiGTA5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 20:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S237309AbiGTA71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 20:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiGTA5W (ORCPT
+        with ESMTP id S239136AbiGTA7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:57:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DB3422D1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658278641; x=1689814641;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=F7g3ynXWOMTKVN0gg82mLeRiQZLN1+/2VVU531tlYIM=;
-  b=jVOlBdqXDOeQmtA9NZf1wtq7FLyRvZmDpmd1IhohXQH6K1TVUE1Q+VoK
-   Rue6Kfaae0FZlqjssg32JgXq5XAEaZbpg5PcQ2L4csSJnBJgtOd71gnUE
-   9YQdjJJGoohVa+Z98FN9BU6Ho9g2MbG7IAlqjyXR0Ba70zq3kiEcMlirE
-   NeEk+9z5yqQ0ECttHNumJSBIrr4UIrzCLbByKj/Ax7/JDZpw/i4lPZoaA
-   0fUNyTdbKCo5Ys0lpLRLtKEIT/f/+WJJRiCWObdsKP3xfArqt31i6BtEh
-   zfx2BHGt5/mbEEmGxEHoiRoTpQFl3b6gSfQEIqNVXPwvOVRa9PkkcxIxr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="372948301"
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="372948301"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 17:57:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
-   d="scan'208";a="724466919"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 19 Jul 2022 17:57:16 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 16292136; Wed, 20 Jul 2022 03:57:24 +0300 (EEST)
-Date:   Wed, 20 Jul 2022 03:57:24 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv5 06/13] x86/mm: Provide ARCH_GET_UNTAG_MASK and
- ARCH_ENABLE_TAGGED_ADDR
-Message-ID: <20220720005724.mwodxwm5r5gayqrm@black.fi.intel.com>
-References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
- <20220712231328.5294-7-kirill.shutemov@linux.intel.com>
- <CAG_fn=W-pTCxJ6vEa6aSuAiQDxj0n0_8VgpUhp+TxYDrF8AReg@mail.gmail.com>
+        Tue, 19 Jul 2022 20:59:20 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0DD422D1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:59:19 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id l14-20020a17090a72ce00b001f20ed3c55dso622982pjk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:59:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MMqpq+6+yoPLVRxuqGlUD9PzJdpOdFM4+KM/Do+P/P4=;
+        b=zXISU7imtSyM8keXKHfu+RbyJ1d2MZ5O6ob4x2/Fa+/4IfT8j3orPgO+bJrF8Ovg6N
+         RaJljrcCqrngnnj/2niRvPDEIdujQeCpyIKx1Deh2cj6q0IVASBpagRmaOQyWwWQ0Zso
+         KZ/CCx0NVAcTRGPWpnN+C/0LIgfWLyUe3JV07xD4WTkktb8EnVO92bDmvwqT9IiDDqxD
+         HMPkRm7uOoKdQ0v2yaBKjtXoTCrX9wIINAMpz851fVUg5hNLM1QLP7ck1tc/FpBOmi2L
+         YvJB/STir26x4yvyZB5POdAzWYkmE8iQ+fDdYyua0WQ5rS4CNRuVwGb9U2RfDqLRFcgz
+         jP0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MMqpq+6+yoPLVRxuqGlUD9PzJdpOdFM4+KM/Do+P/P4=;
+        b=ujXHqdWXTn047I12EFPNvKWxiI4g/Vcj31tBlmwzxVtQuKBPTBaGV3hSYyclFu28EO
+         +cycbSK0a4RACy8saFf+PS+cLP2XwKDvkDVJa6Ysg3mEA4YImcOiOXUvPQgkZQIyv7K2
+         0bYvf88E9H+5OQVZrypR5areNdIh+lZ/AfBzky/9+kwvtQK9VKTMh/Kt1EKSjcxgsS/f
+         QSzjFRjrgctZAeqY5PBc9sCovRcxwolpdbrr34UsSYDZukfWDlkFTVeIf3AeTE6qacTt
+         jMWzwLJEHb0ZjVC+CYjeDZOFTm71gfEAdkbMw+q325bPVIrBy0IShNZegCuZ0LEFodVb
+         DJBw==
+X-Gm-Message-State: AJIora9kUWe25PM+ZDVq1rOQjNfXNrgDz4IEUD7bvQO5IbkcCedLHdx7
+        /lxZrqK1OpKslcTkIa4gkKxVWG2PHaZAYvhnMZOidw==
+X-Google-Smtp-Source: AGRyM1tqE0o6Xmvg+LICCVUDMbQDW1UImgVhQXsbysUQxDJu6Z6mJ5BwwppnF55vHTiTzl9zv6CM/ORA/UZoQemK/yQ=
+X-Received: by 2002:a17:90b:4f82:b0:1f0:95d:c029 with SMTP id
+ qe2-20020a17090b4f8200b001f0095dc029mr2480358pjb.66.1658278758841; Tue, 19
+ Jul 2022 17:59:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG_fn=W-pTCxJ6vEa6aSuAiQDxj0n0_8VgpUhp+TxYDrF8AReg@mail.gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <1652866528-13220-1-git-send-email-hongxing.zhu@nxp.com> <1652866528-13220-2-git-send-email-hongxing.zhu@nxp.com>
+In-Reply-To: <1652866528-13220-2-git-send-email-hongxing.zhu@nxp.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Tue, 19 Jul 2022 17:59:07 -0700
+Message-ID: <CAJ+vNU0FM_zs9nQ6rX=xNJzsgaH=5WOeNDNCS9rs5VF2Av5eRQ@mail.gmail.com>
+Subject: Re: [RFC 2/2] PCI: imx6: Support more than Gen2 speed link mode
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Fabio Estevam <festevam@gmail.com>, linux-pci@vger.kernel.org,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 07:47:44PM +0200, Alexander Potapenko wrote:
-> On Wed, Jul 13, 2022 at 1:13 AM Kirill A. Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
-> >
-> > Add a couple of arch_prctl() handles:
-> >
-> >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
-> >    of tag bits. It is rounded up to the nearest LAM mode that can
-> >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
-> >
-> >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
-> >    bits located in the address.
-> >
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > ---
-> >  arch/x86/include/uapi/asm/prctl.h |  3 ++
-> >  arch/x86/kernel/process_64.c      | 60 ++++++++++++++++++++++++++++++-
-> >  2 files changed, 62 insertions(+), 1 deletion(-)
-> 
-> 
-> > +
-> > +static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
-> > +{
-> > +       int ret = 0;
-> > +
-> > +       if (!cpu_feature_enabled(X86_FEATURE_LAM))
-> > +               return -ENODEV;
-> 
-> Hm, I used to think ENODEV is specific to devices, and -EINVAL is more
-> appropriate here.
-> On the other hand, e.g. prctl(PR_SET_SPECULATION_CTRL) can also return ENODEV...
+On Wed, May 18, 2022 at 2:49 AM Richard Zhu <hongxing.zhu@nxp.com> wrote:
+>
+> Support more than Gen2 speed link mode, since i.MX8MP PCIe supports up
+> to Gen3 link speed.
+>
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 30641d2dda14..37012f9a33a0 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -809,8 +809,8 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
+>
+>         dw_pcie_wait_for_link(pci);
+>
+> -       if (pci->link_gen == 2) {
+> -               /* Allow Gen2 mode after the link is up. */
+> +       if (pci->link_gen > 1) {
+> +               /* Allow faster modes after the link is up. */
+>                 dw_pcie_dbi_ro_wr_en(pci);
+>                 tmp = dw_pcie_readl_dbi(pci, offset + PCI_EXP_LNKCAP);
+>                 tmp &= ~PCI_EXP_LNKCAP_SLS;
+> --
 
-I'm fine either way. Although there are way too many -EINVALs around, so
-it does not communicate much to user.
+Richard,
 
-> >  long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
-> >  {
-> >         int ret = 0;
-> > @@ -829,7 +883,11 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
-> >         case ARCH_MAP_VDSO_64:
-> >                 return prctl_map_vdso(&vdso_image_64, arg2);
-> >  #endif
-> > -
-> > +       case ARCH_GET_UNTAG_MASK:
-> > +               return put_user(task->mm->context.untag_mask,
-> > +                               (unsigned long __user *)arg2);
-> 
-> Can we have ARCH_GET_UNTAG_MASK return the same error value (ENODEV or
-> EINVAL) as ARCH_ENABLE_TAGGED_ADDR in the case the host doesn't
-> support LAM?
-> After all, the mask does not make much sense in this case.
+I noticed that your imx8mp pcie series [1] will force the imx8mp to
+link only at gen1 speeds unless support like the above is added. I
+believe you would also need the following:
+-               tmp |= PCI_EXP_LNKCAP_SLS_5_0GB;
++               tmp |= pci->link_gen;
 
-I'm not sure about this.
+When I used this along with your imx8mp series however I only get a gen1 link.
 
-As it is ARCH_GET_UNTAG_MASK returns -1UL mask if LAM is not present or
-not enabled. Applying this mask will give correct result for both.
+Have you made any progress on a v3 of your imx8mp series?
 
-Why is -ENODEV better here? Looks like just more work for userspace.
+Do you know if the downstream NXP vendor kernel [2] supports imx8mp Gen3 links?
 
-> 
-> > +       case ARCH_ENABLE_TAGGED_ADDR:
-> > +               return prctl_enable_tagged_addr(task->mm, arg2);
-> >         default:
-> >                 ret = -EINVAL;
-> >                 break;
-> > --
-> > 2.35.1
-> >
-> 
-> 
-> -- 
-> Alexander Potapenko
-> Software Engineer
-> 
-> Google Germany GmbH
-> Erika-Mann-Straße, 33
-> 80636 München
-> 
-> Geschäftsführer: Paul Manicle, Liana Sebastian
-> Registergericht und -nummer: Hamburg, HRB 86891
-> Sitz der Gesellschaft: Hamburg
+Best Regards,
 
--- 
- Kirill A. Shutemov
+Tim
+[1] https://patchwork.kernel.org/project/linux-pci/list/?series=620887&state=*
+[2] https://source.codeaurora.org/external/imx/linux-imx/

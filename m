@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEDE57BEA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F270D57BEA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235607AbiGTTdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 15:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
+        id S235887AbiGTTdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 15:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235302AbiGTTdd (ORCPT
+        with ESMTP id S235302AbiGTTdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 15:33:33 -0400
+        Wed, 20 Jul 2022 15:33:40 -0400
 Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5321B5A151
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:33:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2541F6110C
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
         s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=+zAselzUek/K5cBlr0SOChugmwMu2bXnQnwWfImxHrg=; b=gtWHPUz0fRIPbi85RgRm0Agr80
-        OQBh19nWQJZ2/xNOYHmDQoqJ9T7D58ipsD5GyNSTNvqEQXID6aePpWlM5t3ZqmF7B4aHhCqc+utRL
-        YcJioF0sUJ8ZPsrCchPCcYijWMOPEuscK7wNXaGFRsROe1rmMBIr829E9lvIlFOwzYhtn4TSARRDX
-        4XV9LgnLS8wxBi7Ph+8pgpRGKZYbQv8TgttLXndEb57Me4lXUse32IWxvhFqgYXveBZK2VzScWCb2
-        ZVxoO706OYUpWmVXY2J8YJm0yeGRvJnsFGoB+eaxlSIiLCH8/Bj0hZHzoKsWmTWbcOejVqJGrzVVJ
-        vINlyslw==;
+        bh=5aiCLfUd4x+v/sPSorz6ahzPNB6QcnOd1IfKWjk97/c=; b=l5eKnxWPlOlJRB7KS2HXmOR5Hj
+        H2Swc7rNHWmydQw92/1KqS56XPKyhHHOs1Ui40H9DHJbyXr+s2xM8ff/+Bsee1b9/FHw/5SEljfo2
+        fBanWhcBesO41+sTYNJ8QC8L2Its38GJtXYGcP0zZuPWOmgZMX233r/K2V5NVQgF1Bxk+Rn18AzBO
+        WVSH2t59WcFuM6KN7aLhLXUqjT6d55uxgF1IdWeTCXLU3T83X0LiREmhDvbcLL8i21hA0/wlTXZac
+        tlFlmlAoRja0NzMqjAP4U3+hmPruEM6OBwhcx2ye5TrdScw+19EvsugxXn9FaKy/4xnqCAcd7OCPJ
+        3bf4KZDg==;
 Received: from [165.90.126.25] (helo=killbill.home)
         by fanzine2.igalia.com with esmtpsa 
         (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oEFRd-000fxI-HF; Wed, 20 Jul 2022 21:33:17 +0200
+        id 1oEFRh-000fxI-Oj; Wed, 20 Jul 2022 21:33:21 +0200
 From:   Melissa Wen <mwen@igalia.com>
 To:     harry.wentland@amd.com, sunpeng.li@amd.com,
         Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
@@ -41,9 +41,9 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         kernel-dev@igalia.com, Melissa Wen <mwen@igalia.com>,
         amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] drm/amd/display: move FPU code from dcn30 clk mgr to DML folder
-Date:   Wed, 20 Jul 2022 18:32:07 -0100
-Message-Id: <20220720193208.1131493-5-mwen@igalia.com>
+Subject: [PATCH 5/5] drm/amd/display: move FPU code from dcn301 clk mgr to DML folder
+Date:   Wed, 20 Jul 2022 18:32:08 -0100
+Message-Id: <20220720193208.1131493-6-mwen@igalia.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220720193208.1131493-1-mwen@igalia.com>
 References: <20220720193208.1131493-1-mwen@igalia.com>
@@ -58,216 +58,254 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The -mno-gnu-attribute option in clk mgr makefile for dcn30 hides a soft
-vs hard fp error for powerpc. After removing this flag, we can see some
-FPU code remains there:
+The -mno-gnu-attribute option in dcn301 clk mgr makefile hides a soft vs
+hard fp error for powerpc. After removing this flag, we can see some FPU
+code remains there:
 
 gcc-11.3.0-nolibc/powerpc64-linux/bin/powerpc64-linux-ld:
 drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o uses
 hard float,
-drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn30/dcn30_clk_mgr.o
+drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn301/vg_clk_mgr.o
 uses soft float
 
-Therefore, remove the -mno-gnu-attribute flag for dcn30/powerpc and move
-FPU-associated code to DML folder.
+Therefore, remove the -mno-gnu-attribute flag for dcn301/powerpc and
+move FPU-associated code to DML folder.
 
 Signed-off-by: Melissa Wen <mwen@igalia.com>
 ---
  .../gpu/drm/amd/display/dc/clk_mgr/Makefile   |  6 --
- .../display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c  | 63 ++-----------------
- .../drm/amd/display/dc/dml/dcn30/dcn30_fpu.c  | 63 ++++++++++++++++++-
- .../drm/amd/display/dc/dml/dcn30/dcn30_fpu.h  |  1 +
- 4 files changed, 68 insertions(+), 65 deletions(-)
+ .../display/dc/clk_mgr/dcn301/vg_clk_mgr.c    | 86 ++-----------------
+ .../display/dc/clk_mgr/dcn301/vg_clk_mgr.h    |  3 +
+ .../amd/display/dc/dml/dcn301/dcn301_fpu.c    | 74 ++++++++++++++++
+ 4 files changed, 84 insertions(+), 85 deletions(-)
 
 diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile b/drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile
-index 66dc02c426e9..15b660a951a5 100644
+index 15b660a951a5..271d8e573181 100644
 --- a/drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile
 +++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile
-@@ -115,12 +115,6 @@ AMD_DISPLAY_FILES += $(AMD_DAL_CLK_MGR_DCN21)
+@@ -123,12 +123,6 @@ AMD_DISPLAY_FILES += $(AMD_DAL_CLK_MGR_DCN30)
  ###############################################################################
- CLK_MGR_DCN30 = dcn30_clk_mgr.o dcn30_clk_mgr_smu_msg.o
+ CLK_MGR_DCN301 = vg_clk_mgr.o dcn301_smu.o
  
 -# prevent build errors regarding soft-float vs hard-float FP ABI tags
 -# this code is currently unused on ppc64, as it applies to VanGogh APUs only
 -ifdef CONFIG_PPC64
--CFLAGS_$(AMDDALPATH)/dc/clk_mgr/dcn30/dcn30_clk_mgr.o := $(call cc-option,-mno-gnu-attribute)
+-CFLAGS_$(AMDDALPATH)/dc/clk_mgr/dcn301/vg_clk_mgr.o := $(call cc-option,-mno-gnu-attribute)
 -endif
 -
- AMD_DAL_CLK_MGR_DCN30 = $(addprefix $(AMDDALPATH)/dc/clk_mgr/dcn30/,$(CLK_MGR_DCN30))
+ AMD_DAL_CLK_MGR_DCN301 = $(addprefix $(AMDDALPATH)/dc/clk_mgr/dcn301/,$(CLK_MGR_DCN301))
  
- AMD_DISPLAY_FILES += $(AMD_DAL_CLK_MGR_DCN30)
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-index 914708cefc79..3ce0ee0d012f 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-@@ -29,6 +29,7 @@
+ AMD_DISPLAY_FILES += $(AMD_DAL_CLK_MGR_DCN301)
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.c
+index f310b0d25a07..65f224af03c0 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.c
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.c
+@@ -32,6 +32,10 @@
+ // For dcn20_update_clocks_update_dpp_dto
  #include "dcn20/dcn20_clk_mgr.h"
- #include "dce100/dce_clk_mgr.h"
- #include "dcn30/dcn30_clk_mgr.h"
-+#include "dml/dcn30/dcn30_fpu.h"
+ 
++// For DML FPU code
++#include "dml/dcn20/dcn20_fpu.h"
++#include "dml/dcn301/dcn301_fpu.h"
++
+ #include "vg_clk_mgr.h"
+ #include "dcn301_smu.h"
  #include "reg_helper.h"
- #include "core_types.h"
- #include "dm_helpers.h"
-@@ -97,65 +98,11 @@ static void dcn3_init_single_clock(struct clk_mgr_internal *clk_mgr, uint32_t cl
- 	}
- }
+@@ -526,81 +530,6 @@ static struct clk_bw_params vg_bw_params = {
  
--static noinline void dcn3_build_wm_range_table(struct clk_mgr_internal *clk_mgr)
-+static void dcn3_build_wm_range_table(struct clk_mgr_internal *clk_mgr)
+ };
+ 
+-static struct wm_table ddr4_wm_table = {
+-	.entries = {
+-		{
+-			.wm_inst = WM_A,
+-			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 11.72,
+-			.sr_exit_time_us = 6.09,
+-			.sr_enter_plus_exit_time_us = 7.14,
+-			.valid = true,
+-		},
+-		{
+-			.wm_inst = WM_B,
+-			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 11.72,
+-			.sr_exit_time_us = 10.12,
+-			.sr_enter_plus_exit_time_us = 11.48,
+-			.valid = true,
+-		},
+-		{
+-			.wm_inst = WM_C,
+-			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 11.72,
+-			.sr_exit_time_us = 10.12,
+-			.sr_enter_plus_exit_time_us = 11.48,
+-			.valid = true,
+-		},
+-		{
+-			.wm_inst = WM_D,
+-			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 11.72,
+-			.sr_exit_time_us = 10.12,
+-			.sr_enter_plus_exit_time_us = 11.48,
+-			.valid = true,
+-		},
+-	}
+-};
+-
+-static struct wm_table lpddr5_wm_table = {
+-	.entries = {
+-		{
+-			.wm_inst = WM_A,
+-			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 11.65333,
+-			.sr_exit_time_us = 13.5,
+-			.sr_enter_plus_exit_time_us = 16.5,
+-			.valid = true,
+-		},
+-		{
+-			.wm_inst = WM_B,
+-			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 11.65333,
+-			.sr_exit_time_us = 13.5,
+-			.sr_enter_plus_exit_time_us = 16.5,
+-			.valid = true,
+-		},
+-		{
+-			.wm_inst = WM_C,
+-			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 11.65333,
+-			.sr_exit_time_us = 13.5,
+-			.sr_enter_plus_exit_time_us = 16.5,
+-			.valid = true,
+-		},
+-		{
+-			.wm_inst = WM_D,
+-			.wm_type = WM_TYPE_PSTATE_CHG,
+-			.pstate_latency_us = 11.65333,
+-			.sr_exit_time_us = 13.5,
+-			.sr_enter_plus_exit_time_us = 16.5,
+-			.valid = true,
+-		},
+-	}
+-};
+-
+-
+ static unsigned int find_dcfclk_for_voltage(const struct vg_dpm_clocks *clock_table,
+ 		unsigned int voltage)
  {
--	/* defaults */
--	double pstate_latency_us = clk_mgr->base.ctx->dc->dml.soc.dram_clock_change_latency_us;
--	double sr_exit_time_us = clk_mgr->base.ctx->dc->dml.soc.sr_exit_time_us;
--	double sr_enter_plus_exit_time_us = clk_mgr->base.ctx->dc->dml.soc.sr_enter_plus_exit_time_us;
--	uint16_t min_uclk_mhz = clk_mgr->base.bw_params->clk_table.entries[0].memclk_mhz;
--
--	/* Set A - Normal - default values*/
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_A].valid = true;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_A].dml_input.pstate_latency_us = pstate_latency_us;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_A].dml_input.sr_exit_time_us = sr_exit_time_us;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_A].dml_input.sr_enter_plus_exit_time_us = sr_enter_plus_exit_time_us;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.wm_type = WATERMARKS_CLOCK_RANGE;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.min_dcfclk = 0;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.max_dcfclk = 0xFFFF;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.min_uclk = min_uclk_mhz;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.max_uclk = 0xFFFF;
--
--	/* Set B - Performance - higher minimum clocks */
--//	clk_mgr->base.bw_params->wm_table.nv_entries[WM_B].valid = true;
--//	clk_mgr->base.bw_params->wm_table.nv_entries[WM_B].dml_input.pstate_latency_us = pstate_latency_us;
--//	clk_mgr->base.bw_params->wm_table.nv_entries[WM_B].dml_input.sr_exit_time_us = sr_exit_time_us;
--//	clk_mgr->base.bw_params->wm_table.nv_entries[WM_B].dml_input.sr_enter_plus_exit_time_us = sr_enter_plus_exit_time_us;
--//	clk_mgr->base.bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.wm_type = WATERMARKS_CLOCK_RANGE;
--//	clk_mgr->base.bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.min_dcfclk = TUNED VALUE;
--//	clk_mgr->base.bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.max_dcfclk = 0xFFFF;
--//	clk_mgr->base.bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.min_uclk = TUNED VALUE;
--//	clk_mgr->base.bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.max_uclk = 0xFFFF;
--
--	/* Set C - Dummy P-State - P-State latency set to "dummy p-state" value */
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_C].valid = true;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_C].dml_input.pstate_latency_us = 0;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_C].dml_input.sr_exit_time_us = sr_exit_time_us;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_C].dml_input.sr_enter_plus_exit_time_us = sr_enter_plus_exit_time_us;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.wm_type = WATERMARKS_DUMMY_PSTATE;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.min_dcfclk = 0;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.max_dcfclk = 0xFFFF;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.min_uclk = min_uclk_mhz;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.max_uclk = 0xFFFF;
--	clk_mgr->base.bw_params->dummy_pstate_table[0].dram_speed_mts = 1600;
--	clk_mgr->base.bw_params->dummy_pstate_table[0].dummy_pstate_latency_us = 38;
--	clk_mgr->base.bw_params->dummy_pstate_table[1].dram_speed_mts = 8000;
--	clk_mgr->base.bw_params->dummy_pstate_table[1].dummy_pstate_latency_us = 9;
--	clk_mgr->base.bw_params->dummy_pstate_table[2].dram_speed_mts = 10000;
--	clk_mgr->base.bw_params->dummy_pstate_table[2].dummy_pstate_latency_us = 8;
--	clk_mgr->base.bw_params->dummy_pstate_table[3].dram_speed_mts = 16000;
--	clk_mgr->base.bw_params->dummy_pstate_table[3].dummy_pstate_latency_us = 5;
--
--	/* Set D - MALL - SR enter and exit times adjusted for MALL */
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_D].valid = true;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_D].dml_input.pstate_latency_us = pstate_latency_us;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_D].dml_input.sr_exit_time_us = 2;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_D].dml_input.sr_enter_plus_exit_time_us = 4;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.wm_type = WATERMARKS_MALL;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.min_dcfclk = 0;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.max_dcfclk = 0xFFFF;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.min_uclk = min_uclk_mhz;
--	clk_mgr->base.bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.max_uclk = 0xFFFF;
-+	DC_FP_START();
-+	dcn3_fpu_build_wm_range_table(&clk_mgr->base);
-+	DC_FP_END();
- }
- 
- void dcn3_init_clocks(struct clk_mgr *clk_mgr_base)
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/dcn30_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/dcn30_fpu.c
-index a8db1306750e..c00f759fdded 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/dcn30_fpu.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/dcn30_fpu.c
-@@ -29,7 +29,7 @@
- #include "dcn20/dcn20_resource.h"
- #include "dcn30/dcn30_resource.h"
- 
--
-+#include "clk_mgr/dcn30/dcn30_smu11_driver_if.h"
- #include "display_mode_vba_30.h"
- #include "dcn30_fpu.h"
- 
-@@ -616,4 +616,65 @@ void dcn30_fpu_update_bw_bounding_box(struct dc *dc,
+@@ -670,10 +599,9 @@ static void vg_clk_mgr_helper_populate_bw_params(
+ 		/*
+ 		 * WM set D will be re-purposed for memory retraining
+ 		 */
+-		bw_params->wm_table.entries[WM_D].pstate_latency_us = LPDDR_MEM_RETRAIN_LATENCY;
+-		bw_params->wm_table.entries[WM_D].wm_inst = WM_D;
+-		bw_params->wm_table.entries[WM_D].wm_type = WM_TYPE_RETRAINING;
+-		bw_params->wm_table.entries[WM_D].valid = true;
++		DC_FP_START();
++		dcn21_clk_mgr_set_bw_params_wm_table(bw_params);
++		DC_FP_END();
+ 	}
  
  }
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.h b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.h
+index 7255477307f1..75884f572989 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.h
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.h
+@@ -29,6 +29,9 @@
  
-+void dcn3_fpu_build_wm_range_table(struct clk_mgr *base)
-+{
-+	/* defaults */
-+	double pstate_latency_us = base->ctx->dc->dml.soc.dram_clock_change_latency_us;
-+	double sr_exit_time_us = base->ctx->dc->dml.soc.sr_exit_time_us;
-+	double sr_enter_plus_exit_time_us = base->ctx->dc->dml.soc.sr_enter_plus_exit_time_us;
-+	uint16_t min_uclk_mhz = base->bw_params->clk_table.entries[0].memclk_mhz;
+ struct watermarks;
  
-+	dc_assert_fp_enabled();
++extern struct wm_table ddr4_wm_table;
++extern struct wm_table lpddr5_wm_table;
 +
-+	/* Set A - Normal - default values*/
-+	base->bw_params->wm_table.nv_entries[WM_A].valid = true;
-+	base->bw_params->wm_table.nv_entries[WM_A].dml_input.pstate_latency_us = pstate_latency_us;
-+	base->bw_params->wm_table.nv_entries[WM_A].dml_input.sr_exit_time_us = sr_exit_time_us;
-+	base->bw_params->wm_table.nv_entries[WM_A].dml_input.sr_enter_plus_exit_time_us = sr_enter_plus_exit_time_us;
-+	base->bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.wm_type = WATERMARKS_CLOCK_RANGE;
-+	base->bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.min_dcfclk = 0;
-+	base->bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.max_dcfclk = 0xFFFF;
-+	base->bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.min_uclk = min_uclk_mhz;
-+	base->bw_params->wm_table.nv_entries[WM_A].pmfw_breakdown.max_uclk = 0xFFFF;
-+
-+	/* Set B - Performance - higher minimum clocks */
-+//	base->bw_params->wm_table.nv_entries[WM_B].valid = true;
-+//	base->bw_params->wm_table.nv_entries[WM_B].dml_input.pstate_latency_us = pstate_latency_us;
-+//	base->bw_params->wm_table.nv_entries[WM_B].dml_input.sr_exit_time_us = sr_exit_time_us;
-+//	base->bw_params->wm_table.nv_entries[WM_B].dml_input.sr_enter_plus_exit_time_us = sr_enter_plus_exit_time_us;
-+//	base->bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.wm_type = WATERMARKS_CLOCK_RANGE;
-+//	base->bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.min_dcfclk = TUNED VALUE;
-+//	base->bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.max_dcfclk = 0xFFFF;
-+//	base->bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.min_uclk = TUNED VALUE;
-+//	base->bw_params->wm_table.nv_entries[WM_B].pmfw_breakdown.max_uclk = 0xFFFF;
-+
-+	/* Set C - Dummy P-State - P-State latency set to "dummy p-state" value */
-+	base->bw_params->wm_table.nv_entries[WM_C].valid = true;
-+	base->bw_params->wm_table.nv_entries[WM_C].dml_input.pstate_latency_us = 0;
-+	base->bw_params->wm_table.nv_entries[WM_C].dml_input.sr_exit_time_us = sr_exit_time_us;
-+	base->bw_params->wm_table.nv_entries[WM_C].dml_input.sr_enter_plus_exit_time_us = sr_enter_plus_exit_time_us;
-+	base->bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.wm_type = WATERMARKS_DUMMY_PSTATE;
-+	base->bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.min_dcfclk = 0;
-+	base->bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.max_dcfclk = 0xFFFF;
-+	base->bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.min_uclk = min_uclk_mhz;
-+	base->bw_params->wm_table.nv_entries[WM_C].pmfw_breakdown.max_uclk = 0xFFFF;
-+	base->bw_params->dummy_pstate_table[0].dram_speed_mts = 1600;
-+	base->bw_params->dummy_pstate_table[0].dummy_pstate_latency_us = 38;
-+	base->bw_params->dummy_pstate_table[1].dram_speed_mts = 8000;
-+	base->bw_params->dummy_pstate_table[1].dummy_pstate_latency_us = 9;
-+	base->bw_params->dummy_pstate_table[2].dram_speed_mts = 10000;
-+	base->bw_params->dummy_pstate_table[2].dummy_pstate_latency_us = 8;
-+	base->bw_params->dummy_pstate_table[3].dram_speed_mts = 16000;
-+	base->bw_params->dummy_pstate_table[3].dummy_pstate_latency_us = 5;
-+
-+	/* Set D - MALL - SR enter and exit times adjusted for MALL */
-+	base->bw_params->wm_table.nv_entries[WM_D].valid = true;
-+	base->bw_params->wm_table.nv_entries[WM_D].dml_input.pstate_latency_us = pstate_latency_us;
-+	base->bw_params->wm_table.nv_entries[WM_D].dml_input.sr_exit_time_us = 2;
-+	base->bw_params->wm_table.nv_entries[WM_D].dml_input.sr_enter_plus_exit_time_us = 4;
-+	base->bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.wm_type = WATERMARKS_MALL;
-+	base->bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.min_dcfclk = 0;
-+	base->bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.max_dcfclk = 0xFFFF;
-+	base->bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.min_uclk = min_uclk_mhz;
-+	base->bw_params->wm_table.nv_entries[WM_D].pmfw_breakdown.max_uclk = 0xFFFF;
-+}
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/dcn30_fpu.h b/drivers/gpu/drm/amd/display/dc/dml/dcn30/dcn30_fpu.h
-index dedfe7b5f173..c2024052a497 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/dcn30_fpu.h
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/dcn30_fpu.h
-@@ -63,5 +63,6 @@ void dcn30_fpu_update_bw_bounding_box(struct dc *dc,
- 	unsigned int *dcfclk_mhz,
- 	unsigned int *dram_speed_mts);
+ struct smu_watermark_set {
+ 	struct watermarks *wm_set;
+ 	union large_integer mc_address;
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
+index e4863f0bf0f6..7ef66e511ec8 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
+@@ -214,6 +214,80 @@ struct _vcs_dpi_soc_bounding_box_st dcn3_01_soc = {
+ 	.urgent_latency_adjustment_fabric_clock_reference_mhz = 0,
+ };
  
-+void dcn3_fpu_build_wm_range_table(struct clk_mgr *base);
- 
- #endif /* __DCN30_FPU_H__*/
++struct wm_table ddr4_wm_table = {
++	.entries = {
++		{
++			.wm_inst = WM_A,
++			.wm_type = WM_TYPE_PSTATE_CHG,
++			.pstate_latency_us = 11.72,
++			.sr_exit_time_us = 6.09,
++			.sr_enter_plus_exit_time_us = 7.14,
++			.valid = true,
++		},
++		{
++			.wm_inst = WM_B,
++			.wm_type = WM_TYPE_PSTATE_CHG,
++			.pstate_latency_us = 11.72,
++			.sr_exit_time_us = 10.12,
++			.sr_enter_plus_exit_time_us = 11.48,
++			.valid = true,
++		},
++		{
++			.wm_inst = WM_C,
++			.wm_type = WM_TYPE_PSTATE_CHG,
++			.pstate_latency_us = 11.72,
++			.sr_exit_time_us = 10.12,
++			.sr_enter_plus_exit_time_us = 11.48,
++			.valid = true,
++		},
++		{
++			.wm_inst = WM_D,
++			.wm_type = WM_TYPE_PSTATE_CHG,
++			.pstate_latency_us = 11.72,
++			.sr_exit_time_us = 10.12,
++			.sr_enter_plus_exit_time_us = 11.48,
++			.valid = true,
++		},
++	}
++};
++
++struct wm_table lpddr5_wm_table = {
++	.entries = {
++		{
++			.wm_inst = WM_A,
++			.wm_type = WM_TYPE_PSTATE_CHG,
++			.pstate_latency_us = 11.65333,
++			.sr_exit_time_us = 13.5,
++			.sr_enter_plus_exit_time_us = 16.5,
++			.valid = true,
++		},
++		{
++			.wm_inst = WM_B,
++			.wm_type = WM_TYPE_PSTATE_CHG,
++			.pstate_latency_us = 11.65333,
++			.sr_exit_time_us = 13.5,
++			.sr_enter_plus_exit_time_us = 16.5,
++			.valid = true,
++		},
++		{
++			.wm_inst = WM_C,
++			.wm_type = WM_TYPE_PSTATE_CHG,
++			.pstate_latency_us = 11.65333,
++			.sr_exit_time_us = 13.5,
++			.sr_enter_plus_exit_time_us = 16.5,
++			.valid = true,
++		},
++		{
++			.wm_inst = WM_D,
++			.wm_type = WM_TYPE_PSTATE_CHG,
++			.pstate_latency_us = 11.65333,
++			.sr_exit_time_us = 13.5,
++			.sr_enter_plus_exit_time_us = 16.5,
++			.valid = true,
++		},
++	}
++};
++
+ static void calculate_wm_set_for_vlevel(int vlevel,
+ 		struct wm_range_table_entry *table_entry,
+ 		struct dcn_watermarks *wm_set,
 -- 
 2.35.1
 

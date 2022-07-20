@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B200557C100
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A167A57C105
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiGTXmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S231469AbiGTXmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiGTXmM (ORCPT
+        with ESMTP id S231414AbiGTXmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:42:12 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C1B474CF
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:42:11 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id b25so170366qka.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:42:11 -0700 (PDT)
+        Wed, 20 Jul 2022 19:42:44 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5616B247
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:42:43 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id x11so159538qts.13
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:42:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=W0m+zaV/t9IfMCsWddU/BD/INu7/IDz+95VLsqfyLlk=;
-        b=U3yy46ize2deAZrpfJnMv8YMz8IGVBTnhJcNPjIo6TTb4pcJ+2Rf0HGhY3BbVcCoWV
-         Fr6INq63FCKPdfGdT5sCcLQZ66CU1vzCoHoPBI0mRx57jWPTUrS0g23L/KjiSFAwgK+H
-         GO1ZJiWGPLaOR8bFzBjThFgxzhauTq5H8Ad5+6uwjMjSl/nfzhtcdI3wIRqNptpEJG+U
-         jwSMlDrGPttQJtFu4an9vV+ShopsjhzcaZ5xQTRm0xyxBBGA30nLu3urNMzTKaoyWP2f
-         UTSIu+6q3QG1VRi/P/fHe3ypCskf/KZ6FoqFqMNWVUl/YO7cyrklzl1QWXowrdWg5hgg
-         DvIA==
+        bh=JTN7ZVeOnWslme/nIGUbcXBER65BIf1xxrYu80x7ubE=;
+        b=Yfh0pa/N7ehhSiwja7yJnnJMyukG0R/vB6XStRTqHrVpbF+3YITqkrmgNGVAeyIMGe
+         ECCKcMWPzGH94J46v4Zv5zmkDtzgkxPqtcbtauAt8m2HhBsbPVVOQ9PWhC8SiUCiEygV
+         CjeJgfsLTnQvyntGlsqBwFQm3dt+A06+rvTlsVzv81Fwc8emJK+8O1ztUbcR4Wyloga3
+         nlXWCqeSPqW9DCEgBgJe4uRHr5uIqf2tB4Nnqsaw1w6DrEWgQ265/dLzKj3VFHvCVZ6o
+         lYijgD1NFWnkBE4CFyOajvvykfqM8JGHkLP0lkqm67EduJV3QxXnvW8R4EHFWwNZ30gx
+         6GGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=W0m+zaV/t9IfMCsWddU/BD/INu7/IDz+95VLsqfyLlk=;
-        b=fnAXVXlI0W/6zNav0GqFD8sPzzqkKl9jx/Pzy3OmyQueLzs5K4pVqWrky0E3z+ICCD
-         lTyC3qWeUC0Beys3PutI1D+0CJQvRwQvrLlr0YVqRWufFR46QVwn5f0oS/UKTcqP7U00
-         TmawPKdRQGT69w4kJ3M/kXkaQwQydwPDGP7AClLI+5jsO/mNliKLCTlwuGq1YH/jt1iY
-         QFFPI66tHSzJ+hnUJTRCWnr/HTGtbXykkDyGPGrnohkKiIVS4eLCFJebO3H4TQb8yY/F
-         kr05O3seGpfXKiTXgOGc+ebtnSaQ5KjyMJNBjNbr7Jv3E41D55PjS4BK8AyhXdmImfF9
-         KWQg==
-X-Gm-Message-State: AJIora8/1NQ9h31uYhwD2LdgwyywvxkoDCbgMNCe8J2jJxJ/uT707KzD
-        7xerMLc8+LkjBKyNfaxaX+5mQA==
-X-Google-Smtp-Source: AGRyM1sNUsHEctZwjSnaPLK4IglthMasJNe6r6fUvGUFoDocPR+S9bJKHQmOgtSIqhnD9Bw+dxK6qg==
-X-Received: by 2002:a37:555:0:b0:6b5:dace:f589 with SMTP id 82-20020a370555000000b006b5dacef589mr15076898qkf.444.1658360530482;
-        Wed, 20 Jul 2022 16:42:10 -0700 (PDT)
+        bh=JTN7ZVeOnWslme/nIGUbcXBER65BIf1xxrYu80x7ubE=;
+        b=WqmrLnLQ/rDIiXHO3J3vvEWKx2WRv93HlSrqesJE86JwkMbGBb4jy2z1IrEU4eAPEP
+         fWm5iy2suBXNKjlBfY210KodnBa+Zcw4kK8NAN/FsAFyQxBhZVJ2LmoakmW2IpHkRd56
+         D9ZiAH1uIqzqmO0ZxFLZJSngo55v3/oAN3PpPl/VybLZHvrnQi6K/FUPheyeHGlmFAyE
+         MEx08RVBSAWW//ICnfkKZuZXyjy0Dz5d9KkFw9IrKNbQpBFLtXPZH8JL64MhNaksSQn7
+         gxpiHhIYmtVVEwD/2awggLvGEj97SvRAc796nA1i6ocsQgbypygHH32emixBM6wCcenS
+         yqNQ==
+X-Gm-Message-State: AJIora+q69nV1Vsu1msqDW+ebgFWoMtj05YefJrnyZnN2RvMA98eIljt
+        KW5zwfuxJMXmt/PIUXmu1U84Hg==
+X-Google-Smtp-Source: AGRyM1vtp/fQoKLD3PgZV9bGCP5LOjKOGCqxWeGYBEQtEMgSHxp9RaFbqImuOdRl8cdkXl+HjV+lKw==
+X-Received: by 2002:a05:622a:d5:b0:31e:eb65:e832 with SMTP id p21-20020a05622a00d500b0031eeb65e832mr15441277qtw.92.1658360562890;
+        Wed, 20 Jul 2022 16:42:42 -0700 (PDT)
 Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id z8-20020ac84308000000b0031ee1f0c420sm379908qtm.10.2022.07.20.16.42.09
+        by smtp.gmail.com with ESMTPSA id f5-20020ac859c5000000b0031eef540614sm354168qtf.51.2022.07.20.16.42.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 16:42:09 -0700 (PDT)
+        Wed, 20 Jul 2022 16:42:42 -0700 (PDT)
 Received: from jgg by mlx with local (Exim 4.94)
         (envelope-from <jgg@ziepe.ca>)
-        id 1oEJKT-001hih-C9; Wed, 20 Jul 2022 20:42:09 -0300
-Date:   Wed, 20 Jul 2022 20:42:09 -0300
+        id 1oEJKz-001hjm-Q7; Wed, 20 Jul 2022 20:42:41 -0300
+Date:   Wed, 20 Jul 2022 20:42:41 -0300
 From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Long Li <longli@microsoft.com>
-Cc:     Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Long Li <longli@microsoft.com>, KY Srinivasan <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
         Wei Liu <wei.liu@kernel.org>,
@@ -70,47 +69,38 @@ Cc:     Dexuan Cui <decui@microsoft.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: [Patch v4 03/12] net: mana: Handle vport sharing between devices
-Message-ID: <20220720234209.GP5049@ziepe.ca>
+Subject: Re: [Patch v4 04/12] net: mana: Add functions for allocating
+ doorbell page from GDMA
+Message-ID: <20220720234241.GQ5049@ziepe.ca>
 References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
- <1655345240-26411-4-git-send-email-longli@linuxonhyperv.com>
- <SN6PR2101MB13272044B91D6E37F7F5124FBF879@SN6PR2101MB1327.namprd21.prod.outlook.com>
- <PH7PR21MB3263F08C111C5D06C99CC32ACE869@PH7PR21MB3263.namprd21.prod.outlook.com>
+ <1655345240-26411-5-git-send-email-longli@linuxonhyperv.com>
+ <SN6PR2101MB13270BC0DF7A9FA17582822FBF879@SN6PR2101MB1327.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR21MB3263F08C111C5D06C99CC32ACE869@PH7PR21MB3263.namprd21.prod.outlook.com>
+In-Reply-To: <SN6PR2101MB13270BC0DF7A9FA17582822FBF879@SN6PR2101MB1327.namprd21.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 06:48:09PM +0000, Long Li wrote:
-> > > @@ -563,9 +581,19 @@ static int mana_cfg_vport(struct
-> > > mana_port_context *apc, u32 protection_dom_id,
-> > >
-> > >  	apc->tx_shortform_allowed = resp.short_form_allowed;
-> > >  	apc->tx_vp_offset = resp.tx_vport_offset;
-> > > +
-> > > +	netdev_info(apc->ndev, "Configured vPort %llu PD %u DB %u\n",
-> > > +		    apc->port_handle, protection_dom_id, doorbell_pg_id);
-> > Should this be netdev_dbg()?
-> > The log buffer can be flooded if there are many vPorts per VF PCI device and
-> > there are a lot of VFs.
+On Mon, Jul 11, 2022 at 01:13:50AM +0000, Dexuan Cui wrote:
+> > From: longli@linuxonhyperv.com <longli@linuxonhyperv.com>
+> > Sent: Wednesday, June 15, 2022 7:07 PM
+> > ...
+> > +EXPORT_SYMBOL(mana_gd_destroy_doorbell_page);
+> Can this be EXPORT_SYMBOL_GPL?
 > 
-> The reason netdev_info () is used is that this message is important
-> for troubleshooting initial setup issues with Ethernet driver. We
-> rely on user to get this configured right to share the same hardware
-> port between Ethernet and RDMA driver. As far as I know, there is no
-> easy way for a driver to "take over" an exclusive hardware resource
-> from another driver.
+> > +EXPORT_SYMBOL(mana_gd_allocate_doorbell_page);
+> EXPORT_SYMBOL_GPL?
 
-This seems like a really strange statement.
+Can you think about using the symbol namespaces here?
 
-Exactly how does all of this work?
+Nobody else has done it yet, but I think we should be...
 
 Jason

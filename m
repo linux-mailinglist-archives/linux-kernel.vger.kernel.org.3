@@ -2,173 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5926D57BF22
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DE357BF28
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiGTUWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 16:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
+        id S230320AbiGTUXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 16:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGTUWU (ORCPT
+        with ESMTP id S229469AbiGTUXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:22:20 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A5A2D1E8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 13:22:18 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id s18-20020a17090aa11200b001f1e9e2438cso3165112pjp.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 13:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=DHXC5nqXXeAHRQ2EELeV2u1wYvoNpIJGu0NbYI1JGbY=;
-        b=lyGREuuhbOTh+OMQIPD88iy01t69N8RI/ajGSoWG3Hywiym24ujD3zlZ/s0K860/+h
-         xnXLzxjYfSLoqFd66Vi75Dn/03IA9s+cp30A6QAktmqt92IZ9XRkWyXQLnpvqnxLfr0X
-         x+Fzi1MfqhRe4QMQ0WyZjcIm70R4RoTPsw5n4sWmIPTITGvicgOubsUvnutyD4FOPrga
-         0luDL0/dSos/iuIg7KtprCAFgyaa6Ca5C3b064sOoQ3mHvQm2cjuRN5K8D2PNNEUsyx/
-         8kcuTp6gtfKnxZcL9F1mF5iTI09CEEZBOo3mdqBXroTcikRIIRZZtoVerg/0RcegZz7V
-         QAAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=DHXC5nqXXeAHRQ2EELeV2u1wYvoNpIJGu0NbYI1JGbY=;
-        b=xFBGGOSmRFv3rlgkSCJMIFUVJiiqpd3e5Ft4dSlC1Qa/XcFsloWxj5oYix7EZj57e7
-         I5KHj+ZbCVlGLeuIlDGvGe5E8RAMZ6puPuoWc8fftKuIs+MsZD8Ab00heeuf3apnntDT
-         +prJyFyP97m1RXBma539BbYvbzd7dLTa1HyYiOwgS++wtJ8kc4nO9wPH9qbUxNA8ztO4
-         srcRNDO+7arDzNYN8BAw1KIKX4c3HscipIdVLKIjMuZqlukMvi9aIOaotcYDN6+iuvhL
-         mr1u+cpWPmTwvJ4broxVtxCGCh+kqiICBqB5EDO2yrx6bsiKqtGlnN4mPRUsyARKLqWo
-         wYcg==
-X-Gm-Message-State: AJIora/KNf0kudJhyfTfGXVf6VV96hnrioTRMhkxcQIltPHWx6LJSN6i
-        PBHnC0R4oK0kF/eNBaVoLFU=
-X-Google-Smtp-Source: AGRyM1smWNZVA6D3HKFBJbvrCnr2a8Mjx7pjyxZXp/gQMNGJPdv5AWEOl/zfxKF856Rf5Evl7HCHMA==
-X-Received: by 2002:a17:902:7c04:b0:16c:2e00:395a with SMTP id x4-20020a1709027c0400b0016c2e00395amr40844416pll.123.1658348537951;
-        Wed, 20 Jul 2022 13:22:17 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.113])
-        by smtp.gmail.com with ESMTPSA id x194-20020a6286cb000000b0052ad49292f0sm50416pfd.48.2022.07.20.13.22.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Jul 2022 13:22:17 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [RFC PATCH 01/14] userfaultfd: set dirty and young on
- writeprotect
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <4ad140b5-1d5b-2486-0893-7886a9cdfd76@redhat.com>
-Date:   Wed, 20 Jul 2022 13:22:15 -0700
-Cc:     Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Nick Piggin <npiggin@gmail.com>
+        Wed, 20 Jul 2022 16:23:54 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2063.outbound.protection.outlook.com [40.107.94.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3054A820;
+        Wed, 20 Jul 2022 13:23:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VlGpnM0So1sbS9lPWlc8EIgLdZYTQlOtYqcsjXEhAGeQOkwUxhje9afJfkeostneG9hg1fnP0u54h1O2TjhnP+VM7isB724MzqTS11tJea5KHhDSZkTc8sq4WraABc/yAN6HaO3LBO2ghF0t2+mXp+M45RHwJDLyPcvekgG3Q/Avbr1hziDlSfeQaj6pdiGJr4TEWUuHws4uiwKBIpwe5JHAdMEQIhdoICx4owFykmwnThC5erQl2f28czecAo2VndNnLbNup3alR7iShMT8hgFCGce0Ipm4pDwlw4j4LnwJNx6TZAQPzEhrVU7IIj6ln4bS0ppcpDQW6Uc9WUO+3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TWYR5/glfKXFY5yO87u+ZdvkUB6LbJJqwhaS/jE1Hv0=;
+ b=LoNF57rodrso8jyNYVmoafIxETVO14+5ULlcwrpTfz6XrhZYyl+Eual3TNKS19qdZHK98HOVNgZ86OFDE4GrWLntSoOH0FrESn5oQTrH46aEV2xPFfDqXr79txmtgS6ii/iiSNb2M7GWIsnRlpsAh42+mNLVe8UZ9oY0X3piBaTHwOLiL/imstbzr4+7sERrVjtqqkD5lM2rs8BFuzEp3Lgqs8qZnu/p8cc0k0MVsP6BF7kFZX19euFTF8hmYnJAB2rcc+UOwnJUXvjtBKSTJY9QF3MKQ9ROz2JN85ka7j5IcbjZ5R9mimFFRhtV1YqTI75tZAG9/7QBuErsRkcqog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TWYR5/glfKXFY5yO87u+ZdvkUB6LbJJqwhaS/jE1Hv0=;
+ b=C7B6Nf1hoV+/fheRAQckj6UdMQMAwJeiBcsyHipDTbis90G/2m1g8WtdQX4wRxpeh2a1HfVN9ZwpShAlHBKuzzh//flUvlpYYL89fvuccuvpLZZjayxDnaQzjvo64mQ55yzZUTUBGB8pFNpSbDOlx1k1czhPJKwbIoLrWpoHou0gOxkTCXw6dC86iPztKQvs6+u9qxQwyEJvRLuMgXQzqNNGP1VGEP10Ec1mZuO9/PIR2MadOcmjsvQhtPhUqkSeoFKSXog562ETZimS+r5Mgo+6e+VsSu8Rd678mtmTYSWs4KrOGBzZhr7V/VXDZcWQCw6XHwtWDrr7P56qOecbTg==
+Received: from DM6PR12MB3500.namprd12.prod.outlook.com (2603:10b6:5:11d::16)
+ by MN0PR12MB6102.namprd12.prod.outlook.com (2603:10b6:208:3ca::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Wed, 20 Jul
+ 2022 20:23:51 +0000
+Received: from DM6PR12MB3500.namprd12.prod.outlook.com
+ ([fe80::9479:3bdd:517e:1d54]) by DM6PR12MB3500.namprd12.prod.outlook.com
+ ([fe80::9479:3bdd:517e:1d54%5]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
+ 20:23:51 +0000
+From:   Kechen Lu <kechenl@nvidia.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "chao.gao@intel.com" <chao.gao@intel.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        Somdutta Roy <somduttar@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH v4 5/7] KVM: x86: add vCPU scoped toggling for
+ disabled exits
+Thread-Topic: [RFC PATCH v4 5/7] KVM: x86: add vCPU scoped toggling for
+ disabled exits
+Thread-Index: AQHYhdK9C+0dszRonECIz3pzVsNAb62HxQ8AgAADOICAAAplgIAADVMg
+Date:   Wed, 20 Jul 2022 20:23:50 +0000
+Message-ID: <DM6PR12MB3500F50D7004191902CAF8B4CA8E9@DM6PR12MB3500.namprd12.prod.outlook.com>
+References: <20220622004924.155191-1-kechenl@nvidia.com>
+ <20220622004924.155191-6-kechenl@nvidia.com> <YthMZvWpZ+3gNUhM@google.com>
+ <DM6PR12MB35008628D97A59AA302E772FCA8E9@DM6PR12MB3500.namprd12.prod.outlook.com>
+ <YthX0brdWCZVFB3n@google.com>
+In-Reply-To: <YthX0brdWCZVFB3n@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4951aa32-5706-4326-e4f7-08da6a8dc25a
+x-ms-traffictypediagnostic: MN0PR12MB6102:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: a+AP7Qlkc5a/hECpi9sM1RwsEVcGh4dCZczXkL5bRDJC6ttuuBf6C6yNqxkfkh0Nvk/9ZD4v1EAFPeDJSM5NoU818NBUAY3RdI7B2WgC4XMrL4rJdEXrHAJzM7PE9QCxKCebKL1GOeee7xkvb89kFd+Y4rPC4uJm2YY6IiKlCL79NZp5QZfg8YUcf+7XYGnE4Nga73pGuab9+QAzdaUNJa5gytNJkTYPVuaPFP+eOVS3CTGC48JwNvrBTF/QQTf2FYHh7o2Lxjn6PjRcvIo6GaeItBMPznQsQXuAJJM6QRGFRvdxbscWkGrUtjzH5OnComkpZvQdLDTX5yAFw5TDzLB6aepNmcIpviNnjZQ/C9zM8e25HqB+8c+MAVIaxYU7yrxEUk5+I+0bhJjASqXwIamAG6YeDQ8mDvUBo51IWfvinZBFup3mFttpft/TpiYuVY/kf3fRFmEYE/EikgC6bxtuKXI1E4SFJAQHZmnUH39VTOhzH7XWFCdCdC3ujR/aM00MdU6KAZry/6qxpdFtpL+niXRFtCO+Y/Oym76AGO/SO74tBgwdnsDZRXxxrpxT5DpHFjw2y6EyZ4Cp67rb6aPpIVMuJ1w33EcvO0SYLUd2eUKud9jTl6zfvbhqdn0jSfpn5mcq2XSm0n9uLRK9Bj9bax6dAkjoT/SvUmzJLNvh1kyy12Wp9XEy/SMPNld6eu3ygEkkLj084wlvl02iGfpMxD4abGMmF48c0etbBkdQDMqK3qXGk5cph79ZZ+BQWsYi3FPmBAtFbR6w3E6NEP9jCftRvJ7V64KSek/K2HKadnrgSPuqVNo1kxHrrjo4PnMtgxcdOlPEy7JiOEz8qA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3500.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(376002)(346002)(396003)(39860400002)(38100700002)(8676002)(66446008)(122000001)(186003)(33656002)(83380400001)(86362001)(71200400001)(52536014)(2906002)(41300700001)(26005)(7696005)(6916009)(9686003)(53546011)(6506007)(38070700005)(4326008)(76116006)(316002)(8936002)(478600001)(66946007)(54906003)(66476007)(55016003)(66556008)(5660300002)(64756008)(21314003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?x5v68i/ynoDIGhDGJcwSY8y1LcnhPpXPSA+0i5dVD/DgxJ+zwiHMaLkqCDKb?=
+ =?us-ascii?Q?9rKcuepAvddFvk0DQmGvJaQDzvQMWyIsWOo7n/5dA2g4XAfSqA6xoLwQhwYu?=
+ =?us-ascii?Q?8NTY9Djc3jC0pUX79DcU6l2XdUM6a4uM/Y9k2vTC1Acf2HHxzDqwpc3+MNmK?=
+ =?us-ascii?Q?3ZRDX/uOe9g46chdZfed5uFRNNFVoYsrIwdL0YmNJTLNzt0AI6qLJ4q0MHCJ?=
+ =?us-ascii?Q?MPBr0aTWrh9WD4+Lt3No9+nhwV+5eWP9oVUzcrIZ8bGjFL1NTPbbxuXPtLme?=
+ =?us-ascii?Q?DcAPMte7rkorwEykneNgaIddMpDiARg0KtmgJ3lgnsJVjM/RfKqBWAVZSU9e?=
+ =?us-ascii?Q?rfDmTC/zOuLI+3nLdIT3F9wvHJlj2uYUtUcZpYGPKavz6XAAujTZOIqlTs/L?=
+ =?us-ascii?Q?0n55YN9Na8hCOV70gDr/rLg6ddenU4DkV7NoEk9HCH/+4zjGFj+n07aXgZPe?=
+ =?us-ascii?Q?xvr1L/e2DmVP/Mw4EctpYnp1PY4NYM3ss5clLRGXX203cW/cd2/+TwUn+y7b?=
+ =?us-ascii?Q?PUY5SN+E98WDafle9Z33cb/MOymZYlAJj5amNyofZ9uH/21jwy8mXvCD4RLv?=
+ =?us-ascii?Q?0PSCwgDmCRhhZTX01hpDIEHAe3qYRezRrzrR0mH3nUdKoXHohnD2wsd971Si?=
+ =?us-ascii?Q?yIBgxPVeNc3KrWV1fjJlRHMA6fu+ucC6/hpszxvXRcXT0BKNMWkIvoAogWgJ?=
+ =?us-ascii?Q?nMbtHj6T4T4R+bcUKurr24J8puj0rX3LdH9XFOnqrKBhkCC0Zfh8cqLoGC63?=
+ =?us-ascii?Q?CdjSKqJS+HOcDEV6V4g5HClok9i3f/s7OveRW3wAq6DLNNrDVzmqGGYrIWgX?=
+ =?us-ascii?Q?eHHv1dIawSuxAdebY9C84K4pJ6B3xNbPEYtHaKhXBoU1GUOP2yKXiCnwNjKq?=
+ =?us-ascii?Q?0nJbW3ujA7QCHSVhWm69Mmp5NGGVW7k32F8s2WNx+ZQsiYz/AQfHrpPdtiCq?=
+ =?us-ascii?Q?Opgh8S/zQ44fUU6i0WylXlq3XPAZ2DlUirbx+zXJdpXzNaeXF7Msoc/qnKFb?=
+ =?us-ascii?Q?u9xPOSEG8LUwEC3QO+3EcS96LMNwyxpv3aAg0tI8UUb+dzPCcRwbvOzRzD7Q?=
+ =?us-ascii?Q?Hg6KWPCTVppoHX3rTcFUAsX9kQffqkwP6DN2Q+8baG7AgDq+SGAAW/VeBdPt?=
+ =?us-ascii?Q?dVHQMDe7MqpoNlrirLmHiuKybdJpGiw94H2uNpwtcsP8dA4U9RyWs2ugS30G?=
+ =?us-ascii?Q?Db7II2AhzlkaylYoSFiRVS0Y2JZVUj8DsmnZIxr51nxplWDlV3w8J24fanjb?=
+ =?us-ascii?Q?gRntObgIPv1ckJAasSonKJeO34HzuJnn9uyVWylRNUsQl43rom69sjnoKau0?=
+ =?us-ascii?Q?MYOKH+5Uidt9EdBfGLLLlH+qpNvvaSqy6gIy1ODfAkGFiMmOMBGlerg5ZPtM?=
+ =?us-ascii?Q?wgfna78KY2/qZqA5O+QjcBMn7S2pvs3bT5xdcDZhDrC1hLda/S69YWbPa3Aw?=
+ =?us-ascii?Q?0k9W/pfSMFNbEsKNMHxmi6LJGUdpbQP5BfeK+pz7OSdCTfmlrbIKfW5dwtYb?=
+ =?us-ascii?Q?pRk8CZt3NmTpUUQZptJdZoz7P7HBSnf6MAZWB/kEzLRz2Ub/+ztWpwEiGp3O?=
+ =?us-ascii?Q?g6HNIDGaujYsUTgaBHSgO9V+KDmfdxPZRwtAIHzU?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <95320077-52CF-4CB0-92F9-523E1AE74A3D@gmail.com>
-References: <20220718120212.3180-1-namit@vmware.com>
- <20220718120212.3180-2-namit@vmware.com> <YtcYVMoSRVxRH70Z@xz-m1.local>
- <017facf0-7ef8-3faf-138d-3013a20b37db@redhat.com>
- <Ytf+zIxVPTVXTZdp@xz-m1.local>
- <2b4393ce-95c9-dd3e-8495-058a139e771e@redhat.com>
- <YthUYF3invrjlzUc@xz-m1.local>
- <69022bad-d6f1-d830-224d-eb8e5c90d5c7@redhat.com>
- <YthcC78q1hdd7mNT@xz-m1.local>
- <4ad140b5-1d5b-2486-0893-7886a9cdfd76@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3500.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4951aa32-5706-4326-e4f7-08da6a8dc25a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 20:23:50.9860
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xD528RIQ7WSVy5KSKJOouKtQ1UzFVb5dFG0eIIzAvfuc6VPcozrnN+fTApu+wb1EmyOyoPwQ9lBNJnQng7pL0Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6102
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jul 20, 2022, at 12:55 PM, David Hildenbrand <david@redhat.com> =
-wrote:
 
-> On 20.07.22 21:48, Peter Xu wrote:
->> On Wed, Jul 20, 2022 at 09:33:35PM +0200, David Hildenbrand wrote:
->>> On 20.07.22 21:15, Peter Xu wrote:
->>>> On Wed, Jul 20, 2022 at 05:10:37PM +0200, David Hildenbrand wrote:
->>>>> For pagecache pages it may as well be *plain wrong* to bypass the =
-write
->>>>> fault handler and simply mark pages dirty+map them writable.
->>>>=20
->>>> Could you elaborate?
->>>=20
->>> Write-fault handling for some filesystems (that even require this
->>> "slow path") is a bit special.
->>>=20
->>> For example, do_shared_fault() might have to call page_mkwrite().
->>>=20
->>> AFAIK file systems use that for lazy allocation of disk blocks.
->>> If you simply go ahead and map a !dirty pagecache page writable
->>> and mark it dirty, it will not trigger page_mkwrite() and you might
->>> end up corrupting data.
->>>=20
->>> That's why we the old change_pte_range() code never touched
->>> anything if the pte wasn't already dirty.
->>=20
->> I don't think that pte_dirty() check was for the pagecache code. For =
-any fs
->> that has page_mkwrite() defined, it'll already have =
-vma_wants_writenotify()
->> return 1, so we'll never try to add write bit, hence we'll never even =
-try
->> to check pte_dirty().
->=20
-> I might be too tired, but the whole reason we had this magic before my
-> commit in place was only for the pagecache.
->=20
-> With vma_wants_writenotify()=3D0 you can directly map the pages =
-writable
-> and don't have to do these advanced checks here. In a writable
-> MAP_SHARED VMA you'll already have pte_write().
->=20
-> We only get !pte_write() in case we have vma_wants_writenotify()=3D1 =
-...
->=20
->  try_change_writable =3D vma_wants_writenotify(vma, =
-vma->vm_page_prot);
->=20
-> and that's the code that checked the dirty bit after all to decide --
-> amongst other things -- if we can simply map it writable without going
-> via the write fault handler and triggering do_shared_fault() .
->=20
-> See crazy/ugly FOLL_FORCE code in GUP that similarly checks the dirty =
-bit.
 
-I thought you want to get rid of it at least for anonymous pages. No?
-
+> -----Original Message-----
+> From: Sean Christopherson <seanjc@google.com>
+> Sent: Wednesday, July 20, 2022 12:30 PM
+> To: Kechen Lu <kechenl@nvidia.com>
+> Cc: kvm@vger.kernel.org; pbonzini@redhat.com; chao.gao@intel.com;
+> vkuznets@redhat.com; Somdutta Roy <somduttar@nvidia.com>; linux-
+> kernel@vger.kernel.org
+> Subject: Re: [RFC PATCH v4 5/7] KVM: x86: add vCPU scoped toggling for
+> disabled exits
 >=20
-> But yeah, it's all confusing so I might just be wrong regarding
-> pagecache pages.
+> External email: Use caution opening links or attachments
+>=20
+>=20
+> On Wed, Jul 20, 2022, Kechen Lu wrote:
+> > > > @@ -6036,14 +6045,17 @@ int kvm_vm_ioctl_enable_cap(struct kvm
+> kvm,
+> > > >                       break;
+> > > >
+> > > >               mutex_lock(&kvm->lock);
+> > > > -             if (kvm->created_vcpus)
+> > > > -                     goto disable_exits_unlock;
+> > > > +             if (kvm->created_vcpus) {
+> > >
+> > > I retract my comment about using a request, I got ahead of myself.
+> > >
+> > > Don't update vCPUs, the whole point of adding the
+> > > !kvm->created_vcpus check was to avoid having to update vCPUs when
+> > > the per-VM behavior changed.
+> > >
+> > > In other words, keep the restriction and drop the request.
+> > >
+> >
+> > I see. If we keep the restriction here and not updating vCPUs when
+> > kvm->created_vcpus is true, the per-VM and per-vCPU assumption would
+> > kvm->be
+> > different here? Not sure if I understand right:
+> > For per-VM, we assume the per-VM cap enabling is only before vcpus
+> creation.
+> > For per-vCPU cap enabling, we are able to toggle the disabled exits run=
+time.
+>=20
+> Yep.  The main reason being that there's no use case for changing per-VM
+> settings after vCPUs are created.  I.e. we could lift the restriction in =
+the future
+> if a use case pops up, but until then, keep things simple.
+>=20
+> > If I understand correctly, this also makes sense though.
+>=20
+> Paging this all back in...
+>=20
+> There are two (sane) options for defining KVM's ABI:
+>=20
+>   1) KVM combines the per-VM and per-vCPU settings
+>   2) The per-vCPU settings override the per-VM settings
+>=20
+> This series implements (2).
+>=20
+> For (1), KVM would need to recheck the per-VM state during the per-vCPU
+> update, e.g. instead of simply modifying the per-vCPU flags, the vCPU-sco=
+ped
+> handler for KVM_CAP_X86_DISABLE_EXITS would need to merge the
+> incoming settings with the existing kvm->arch.xxx_in_guest flags.
+>=20
+> I like (2) because it's simpler to implement and document (merging state =
+is
+> always
+> messy) and is more flexible.  E.g. with (1), the only way to have per-vCP=
+U
+> settings is for userspace to NOT set the per-VM disables and then set
+> disables on a per-vCPU basis.  Whereas with (2), userspace can set (or no=
+t)
+> the per-VM disables and then override as needed.
 
-Just to note: I am not very courageous and I did not intend to change
-condition for when non-anonymous pages are set as writable. That=E2=80=99s=
- the
-reason I did not change the dirty for non-writable non-anonymous entries =
-(as
-Peter said). And that=E2=80=99s the reason that setting the dirty bit =
-(at least as I
-should have done it) is only performed after we made the decision on the
-write-bit.
+Gotcha. Makes sense to me. Thanks for the elaboration!
 
-IOW, after you made your decision about the write-bit, then and only =
-then
-you may be able to set the dirty bit for writable entries. Since the =
-entry
-is already writeable (i.e., can be written without a fault later =
-directly
-from userspace), there should be no concern of correctness when you set =
-it.
-
+BR,
+Kechen

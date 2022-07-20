@@ -2,71 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDBB57BBC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EE857BBD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234483AbiGTQsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S234713AbiGTQtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiGTQsG (ORCPT
+        with ESMTP id S231560AbiGTQtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:48:06 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4123B979;
-        Wed, 20 Jul 2022 09:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658335685; x=1689871685;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=omc5oS98vhIDr7XiFeSScYRFbJm8zfX3R/MQhi89FHU=;
-  b=Uvq0XsbQbFQTH5a0Bogbv7l7RXch9NBP0p8u4ue9r+63vdsA+Orc0QJ7
-   V73+syx4nc5Y6Pqs7TC3e2vHCxhlTsH6AI/L2uqIrKZT5dryweEdnsx5p
-   rwGPJ/WSabkjAhR3rXpSPRY8OIYWXH+aZUbgQxcT0zs86vY491x+OXW2l
-   tOBczwMpCqcsyTdzzL1aaRux2rGOxUJh3XJUw6q00yNRnALB6wMnSTvc8
-   1YAJVQQJPCypmnIRlB4M4Eu6q8eNUzjd7H2dDvLAvifXv2awckpzeqr9T
-   ndheAFb6XGQhBKDAz+NOswF3zAdOjR6OnVmJbPVX0erzxBK+BtOzZBd0M
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="267228988"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="267228988"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 09:48:03 -0700
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="573379999"
-Received: from dgovor-mobl1.amr.corp.intel.com (HELO [10.209.89.58]) ([10.209.89.58])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 09:48:02 -0700
-Message-ID: <978c3d37-97c9-79b9-426a-2c27db34c38a@intel.com>
-Date:   Wed, 20 Jul 2022 09:48:02 -0700
+        Wed, 20 Jul 2022 12:49:32 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8156043E6B;
+        Wed, 20 Jul 2022 09:49:31 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id v28so12530753qkg.13;
+        Wed, 20 Jul 2022 09:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IdX8x8KuGDrmo8OdGWM+s2IhO+yiRKLdL7Zo2PMSFN4=;
+        b=fA5ACjYebGmyEbnpk02ZADGgZyXfWD24l6R1c/JewiQtUFSI+d/VO9w9T9n2DLJCQL
+         uDHO6rwgTDLos9QvjWc6uIFsSu2vb5u2IkHWlFs8aJhQFN905lEkcykvEsUEg7CFx1la
+         paGTn68cRr5oM9979v5iJMWGeYVFK48gHFQYJgGqX34fdeYgMtseWc3hbipbm46vtoyf
+         t/nVdVBlhdE/sYfEJWwn21va2JYE9h3LwLkJQv+s9PszAUimQvBLaAOikOs6KkgnyGnm
+         4Rdc8QIncAZkw37fTFY3vGGoGGWsjBHbV4NlO7IcfMAMJVRtdkE8lvHUm65n7q5zkobl
+         slhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IdX8x8KuGDrmo8OdGWM+s2IhO+yiRKLdL7Zo2PMSFN4=;
+        b=1ti+/FNnJgNZHSQuUhDcsqIc1XOlitvkuDRIGFewGkT6a//GeuV6ZNPWbljQ8yzYf8
+         H32PPNcnVlMlZ7mU/yOrIHc5+3yzlcY/jWux28C3UXx2NW6r0W9KfRZjxuj7JLUz7w7x
+         rDsLfWIi/NtFQlPkbiXPL42XXVlIz7OQL86eitfJHiNx3RjAu4Pqi1c6iOFUV1hgA6oC
+         TUw0zsXwVUSP0mBYz9uZv4zv5g7/byZXPDXB26jAlX4te/rR0U1t5fy+b9GAS1ctho7Z
+         aNEn1DxHtKKjBMe3Zjn6A1xgOXwvSx0L2bnPZkOEVjO0ZFjLkHM2QqkPg1/3KKjTFS5l
+         efsQ==
+X-Gm-Message-State: AJIora9wkarYGq5phZjvTB/gRWGzlTBvX/d75x+3GVsAW0mQoD29iilM
+        27VVyu+ug7zCgpg1FQA3KKg=
+X-Google-Smtp-Source: AGRyM1vCLnpaxRkOkmGAaj5Gy/KHt7mi0Q8MAJNokH4bRQpyU8kddgCKya3XL7eTcmHXXFWfReqHnA==
+X-Received: by 2002:a05:620a:4090:b0:6b6:14ec:b6c6 with SMTP id f16-20020a05620a409000b006b614ecb6c6mr1897228qko.733.1658335770556;
+        Wed, 20 Jul 2022 09:49:30 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:8a38:8fe4:50f8:8b83])
+        by smtp.gmail.com with ESMTPSA id r11-20020ac8794b000000b0031ee918e9f9sm7579839qtt.39.2022.07.20.09.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 09:49:30 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 09:49:30 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Mel Gorman <mgorman@suse.de>, Miroslav Benes <mbenes@suse.cz>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Song Liu <songliubraving@fb.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Yonghong Song <yhs@fb.com>,
+        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 16/16] lib: create CONFIG_DEBUG_BITMAP parameter
+Message-ID: <YtgyGvlhHsVMyXcv@yury-laptop>
+References: <20220718192844.1805158-1-yury.norov@gmail.com>
+ <20220718192844.1805158-17-yury.norov@gmail.com>
+ <YtXS9hySEY+BokvI@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 07/22] x86/virt/tdx: Implement SEAMCALL function
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1655894131.git.kai.huang@intel.com>
- <095e6bbc57b4470e1e9a9104059a5238c9775f00.1655894131.git.kai.huang@intel.com>
- <069a062e-a4a6-09af-7b74-7f4929f2ec0b@intel.com>
- <5ce7ebfe54160ea35e432bf50207ebed32db31fc.camel@intel.com>
- <84e93539-a2f9-f68e-416a-ea3d8fc725af@intel.com>
- <6bef368ccc68676e4acaecc4b6dc52f598ea7f2f.camel@intel.com>
- <ea03e55499f556388c0a5f9ed565e72e213c276f.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <ea03e55499f556388c0a5f9ed565e72e213c276f.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtXS9hySEY+BokvI@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,107 +110,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 03:18, Kai Huang wrote:
-> Try to close on how to handle memory hotplug.  After discussion, below will be
-> architectural behaviour of TDX in terms of ACPI memory hotplug:
+On Tue, Jul 19, 2022 at 12:39:02AM +0300, Andy Shevchenko wrote:
+> On Mon, Jul 18, 2022 at 12:28:44PM -0700, Yury Norov wrote:
+> > Create CONFIG_DEBUG_BITMAP parameter to let people use
+> > new option. Default is N.
 > 
-> 1) During platform boot, CMRs must be physically present. MCHECK verifies all
-> CMRs are physically present and are actually TDX convertible memory.
+> Even if a separate, it should follow immediately the implementation.
 
-I doubt this is strictly true.  This makes it sound like MCHECK is doing
-*ACTUAL* verification that the memory is, in practice, convertible.
-That would mean actually writing to it, which would take a long time for
-a large system.
+If it follows the 1st patch immediately, and becomes enabled, it will
+generate a lot of noise for those who bisect and occasionally jumps
+into a mid of the series.
 
-Does it *ACTUALLY* verify this?
-
-Also, it's very odd to say that "CMRs must be physically present".  A
-CMR itself is a logical construct.  The physical memory *backing* a CMR
-is, something else entirely.
-
-> 2) CMRs are static after platform boots and don't change at runtime.  TDX
-> architecture doesn't support hot-add or hot-removal of CMR memory.
-> 3) TDX architecture doesn't forbid non-CMR memory hotplug.
-> 
-> Also, although TDX doesn't trust BIOS in terms of security, a non-buggy BIOS
-> should prevent CMR memory from being hot-removed.  If kernel ever receives such
-> event, it's a BIOS bug, or even worse, the BIOS is compromised and under attack.
-> 
-> As a result, the kernel should also never receive event of hot-add CMR memory. 
-> It is very much likely TDX is under attack (physical attack) in such case, i.e.
-> someone is trying to physically replace any CMR memory.
-> 
-> In terms of how to handle ACPI memory hotplug, my thinking is -- ideally, if the
-> kernel can get the CMRs during kernel boot when detecting whether TDX is enabled
-> by BIOS, we can do below:
-> 
-> - For memory hot-removal, if the removed memory falls into any CMR, then kernel
-> can speak loudly it is a BIOS bug.  But when this happens, the hot-removal has
-> been handled by BIOS thus kernel cannot actually prevent, so kernel can either
-> BUG(), or just print error message.  If the removed memory doesn't fall into
-> CMR, we do nothing.
-
-Hold on a sec.  Hot-removal is a two-step process.  The kernel *MUST*
-know in advance that the removal is going to occur.  It follows that up
-with evacuating the memory, giving the "all clear", then the actual
-physical removal can occur.
-
-I'm not sure what you're getting at with the "kernel cannot actually
-prevent" bit.  No sane system actively destroys perfect good memory
-content and tells the kernel about it after the fact.
-
-> - For memory hot-add, if the new memory falls into any CMR, then kernel should
-> speak loudly it is a BIOS bug, or even say "TDX is under attack" as this is only
-> possible when CMR memory has been previously hot-removed.
-
-I don't think this is strictly true.  It's totally possible to get a
-hot-add *event* for memory which is in a CMR.  It would be another BIOS
-bug, of course, but hot-remove is not a prerequisite purely for an event.
-
-> And kernel should
-> reject the new memory for security reason.  If the new memory doesn't fall into
-> any CMR, then we (also) just reject the new memory, as we want to guarantee all
-> memory in page allocator are TDX pages.  But this is basically due to kernel
-> policy but not due to TDX architecture.
-
-Agreed.
-
-> BUT, since as the first step, we cannot get the CMR during kernel boot (as it
-> requires additional code to put CPU into VMX operation), I think for now we can
-> handle ACPI memory hotplug in below way:
-> 
-> - For memory hot-removal, we do nothing.
-
-This doesn't seem right to me.  *If* we get a known-bogus hot-remove
-event, we need to reject it.  Remember, removal is a two-step process.
-
-> - For memory hot-add, we simply reject the new memory when TDX is enabled by
-> BIOS.  This not only prevents the potential "physical attack of replacing any
-> CMR memory",
-
-I don't think there's *any* meaningful attack mitigation here.  Even if
-someone managed to replace the physical address space that backed some
-private memory, the integrity checksums won't match.  Memory integrity
-mitigates physical replacement, not software.
-
-> but also makes sure no non-CMR memory will be added to page
-> allocator during runtime via ACPI memory hot-add.
-
-Agreed.  This one _is_ important and since it supports an existing
-policy, it makes sense to enforce this in the kernel.
-
-> We can improve this in next stage when we can get CMRs during kernel boot.
-> 
-> For the concern that on a TDX BIOS enabled system, people may not want to use
-> TDX at all but just use it as normal system, as I replied to Dan regarding to
-> the driver-managed memory hotplug, we can provide a kernel commandline, i.e.
-> use_tdx={on|off}, to allow user to *choose* between TDX and memory hotplug. 
-> When use_tdx=off, we continue to allow memory hotplug and driver-managed hotplug
-> as normal but refuse to initialize TDX module.
-
-That doesn't sound like a good resolution to me.
-
-It conflates pure "software" hotplug operations like transitioning
-memory ownership from the core mm to a driver (like device DAX).
-
-TDX should not have *ANY* impact on purely software operations.  Period.
+There are quite a lot of patchsets that create a feature in many
+patches, and explicitly enable it in the very last patch.

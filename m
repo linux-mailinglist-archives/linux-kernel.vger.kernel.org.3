@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4240057BCC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECC457BCCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241244AbiGTRhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S239402AbiGTRhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241318AbiGTRhS (ORCPT
+        with ESMTP id S241378AbiGTRhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:37:18 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0274A6FA0A
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:37:15 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bf9so31375210lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:37:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7p5oDc+MTWM6fmNdT6fee7WsO1neY6yG3oroC+2SKog=;
-        b=uBBjW1voxPKnjiUwz44hW4y0OUzcyPskpYpLmma9r982TTBOidFXfWEVU/AY1oGo/r
-         BsSVH+28HZVm32tdTVBKorY9Xws+xoppKV8+DAEf2CF+HAWKQpNa+GST9Fj2MhscSFfB
-         8IxE+rxjV/kcsEx7dsy1pSqzPDlRQTK0W425ZB2gM+fpTrZKtlJ3PU+1ep9pa3/JbJ9R
-         QZYNPPMzEmWE6OkbS8MzRVsrJb9rD72jjGe9stQu0AAvWsB8BQ+XJyKjhBCuDiEjNt9W
-         8KkmsZZVaqswHQJOg/lSN3BuT1XY8E69JTp33XS7s3m897Uv20neR+x+UnCch2PwB2hD
-         /qYg==
+        Wed, 20 Jul 2022 13:37:43 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8748F6FA35
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:37:42 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id l3so12035014qkl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:37:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7p5oDc+MTWM6fmNdT6fee7WsO1neY6yG3oroC+2SKog=;
-        b=vJKZ8V5cU/IMyZMF84eBdYgwPAWZUR/0BbBRZpuR++hwz+0bAOZ6prXk8ZkHi3sBNe
-         DF4SmSsOKQlqxCxxMLLimsqW1I2OFnepnkQ4YzF54LwWDU2gC/HxVD780DOb8Pl4J5G1
-         ltF9KvFufkPCVEkIsI1nx8M1UNnEu41iR1YxtrpzZYN1fHdipr8mXkkwyUn5n8XMtAR9
-         ERKBjIvLIgYuHxfHR0ZkocmyFpcideyAseFfUj87qeetA1StMacjh06YJoypnuYAO0a6
-         EMchIsYELQLs+zrGtFE/2qnVY2BSZM1+ZHRDFqe4jX0GG59oRwUmWeR0TywmpLhwkrYt
-         lJdw==
-X-Gm-Message-State: AJIora8A/hZaqc3+6uvwZsujlCGwyJlWU7U1JdRipcSijUMiLAhjlfwT
-        UgGye6mG/qluG+F6ifjaCWlhjQ==
-X-Google-Smtp-Source: AGRyM1v2HimajV1UlLGM1askxczmPNc2mGqOexFrLo7JMSfp0SaXQyHids9tDu8eFzlC2wiwqbwLCw==
-X-Received: by 2002:a05:6512:b2a:b0:48a:2aaf:2ad3 with SMTP id w42-20020a0565120b2a00b0048a2aaf2ad3mr13421059lfu.552.1658338633301;
-        Wed, 20 Jul 2022 10:37:13 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id f14-20020ac2498e000000b00488d1acb7b0sm3910823lfl.130.2022.07.20.10.37.11
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kh7V8uHzXmxI+aoBRvnV2n6tht0bog5cLScTJnWXPGY=;
+        b=EbwbmSgXMPhWVv0B+pEvm7GgrNUcU4xGk8xcLnZa/Z0Sb1907PR0Z6C5p7ZPgbhL0h
+         BRfEQjUoksAfSyRGER2QbhF5sloOCX+OuyTdSHkiiLfq4tOdbM+xqvpeEOh4EdlqD0kE
+         c0jgwA1Z+seyiaK5edp2gk3rf0vwqb5DKXV9fre+vpMuBZ2CCQk/3JxJ+4xHA8f1ZX9m
+         jBIQMIXzZZxWndH1qOnotckc9U92Ry3XNQ+d3hnmMy6ZzufM7MD5/GOjKmqzP3BrNPmR
+         vUq7NnWuMYPh2XRl8f2xzzOiLUTE/1bE3ZyF/9v4EuCgMSE286EWtgqv32uBAZhrS5zP
+         lLVg==
+X-Gm-Message-State: AJIora9KPvzc1cRYUEVW0HLD3gur77I7NjQMJWaSzUgZ7D60vyCkWXxz
+        F81nI2dGk1gd4l81eazduKvJgbj166TLSomD
+X-Google-Smtp-Source: AGRyM1tq0iYqcldGHo7XFfOgIyHTjqi44mpcM32if3vE2wxzhH/4tjjyRWC3CSl6fqQSy/kcc2ou4w==
+X-Received: by 2002:a37:9703:0:b0:6b5:c0ed:8110 with SMTP id z3-20020a379703000000b006b5c0ed8110mr21412208qkd.120.1658338661573;
+        Wed, 20 Jul 2022 10:37:41 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id cn11-20020a05622a248b00b0031f05408e47sm1875348qtb.95.2022.07.20.10.37.40
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 10:37:12 -0700 (PDT)
-Message-ID: <68a30bbd-5f9d-17d2-59fa-7b0da06ee877@linaro.org>
-Date:   Wed, 20 Jul 2022 19:37:11 +0200
+        Wed, 20 Jul 2022 10:37:41 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31e1ecea074so105156877b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:37:40 -0700 (PDT)
+X-Received: by 2002:a0d:c787:0:b0:31b:a963:e1de with SMTP id
+ j129-20020a0dc787000000b0031ba963e1demr41498691ywd.283.1658338660732; Wed, 20
+ Jul 2022 10:37:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 06/21] dt-bindings: power: mediatek: Add bindings for
- MediaTek SCPSYS
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>, iommu@lists.linux.dev,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220720123023.13500-1-tinghan.shen@mediatek.com>
- <20220720123023.13500-7-tinghan.shen@mediatek.com>
- <YtgDu70Lpl/uPOkf@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YtgDu70Lpl/uPOkf@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220720105309.3090-1-gaoxin@cdjrlc.com>
+In-Reply-To: <20220720105309.3090-1-gaoxin@cdjrlc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 20 Jul 2022 19:37:29 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVf7EOrXkUpa1E1Qx1w0Tvrt1nwRHM6B8rsGPOh=WsnyA@mail.gmail.com>
+Message-ID: <CAMuHMdVf7EOrXkUpa1E1Qx1w0Tvrt1nwRHM6B8rsGPOh=WsnyA@mail.gmail.com>
+Subject: Re: [PATCH] m68k/mac: Fixed duplicate "in" in comments.
+To:     Xin Gao <gaoxin@cdjrlc.com>
+Cc:     Joshua Thompson <funaho@jurai.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 15:31, Lee Jones wrote:
-> On Wed, 20 Jul 2022, Tinghan Shen wrote:
-> 
->> The System Control Processor System (SCPSYS) has several power
->> management related tasks in the system. Add the bindings for it.
->>
->> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> 
-> Why have you ignored my review comments from v2?
+Hi Xin,
 
-If you refer whether the binding is needed at all, then the answer is
-yes, because this is not simple syscons but a device with children,
-which we want to parse/match.
+On Wed, Jul 20, 2022 at 12:55 PM Xin Gao <gaoxin@cdjrlc.com> wrote:
+> Fixed duplicate "in" in comments.
+>
+> Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
 
-Anyway Tinghan should respond to you about way how he proceeds...
+Thanks for your patch!
 
-Best regards,
-Krzysztof
+> --- a/arch/m68k/mac/misc.c
+> +++ b/arch/m68k/mac/misc.c
+> @@ -126,7 +126,7 @@ static void via_rtc_send(__u8 data)
+>
+>         reg = via1[vBufB] & ~(VIA1B_vRTCClk | VIA1B_vRTCData);
+>
+> -       /* The bits of the byte go in in MSB order */
+> +       /* The bits of the byte go in MSB order */
+
+The original was correct.
+Ask yourself the question: "How should the bits go in?"
+"In MSB order".
+
+>
+>         for (i = 0 ; i < 8 ; i++) {
+>                 bit = data & 0x80? 1 : 0;
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

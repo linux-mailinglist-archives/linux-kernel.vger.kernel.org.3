@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68F757B771
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B855657B77F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236542AbiGTN2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 09:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
+        id S232260AbiGTN3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 09:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234317AbiGTN2l (ORCPT
+        with ESMTP id S234796AbiGTN2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 09:28:41 -0400
+        Wed, 20 Jul 2022 09:28:42 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC9B728E15
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:28:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81E152AE3A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1658323720;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gkqfIGU1jFp3Ya/5fwJtXiMW+j3VZbkqa61u3PfPfGg=;
-        b=CjTX6GS8ElfhlcT/eXry7AJKvvQZQC+AGduQFFnkH41Kcl4oDz1g+qgI7E2zztOmJiq+cg
-        lBHbjUVsjH37Y9ELv/RTlBg5ZHkcHSusCU0LgJdeb3Akaxh+ainfCeLBC7Aax6ED6LwzQo
-        rfEFtUYgKoXKjo9VNrHWcvh1I3D33dk=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=D5ddLIULHU4lCGQd0NSPYCIu5p1tGKAtdnoOfURMriM=;
+        b=c1M2DmaX8lEV+hHA8wtN1LbIcfg+/d7vKSkD3MG6z60ety/dMe3CQipmSd/6jjs+IgtAuf
+        FEZeQ1ZeiuZLTlZndgA9Gz7XE5DQwGf9D6Bfcff5MGUmQrUhEy8IjTqJV3UxyrqdIc6vgY
+        tVb8/V0pUitNh94xDo5f4OmIxPSLanU=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-224-dq3FwDOnOMGwIzj1bqoOIw-1; Wed, 20 Jul 2022 09:28:38 -0400
-X-MC-Unique: dq3FwDOnOMGwIzj1bqoOIw-1
-Received: by mail-ed1-f70.google.com with SMTP id g7-20020a056402424700b0043ac55ccf15so11978857edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:28:38 -0700 (PDT)
+ us-mta-348-tTskUb4WNSa5aFySkUELQQ-1; Wed, 20 Jul 2022 09:28:39 -0400
+X-MC-Unique: tTskUb4WNSa5aFySkUELQQ-1
+Received: by mail-ej1-f70.google.com with SMTP id hb41-20020a170907162900b0072f044ca263so2931032ejc.15
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:28:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gkqfIGU1jFp3Ya/5fwJtXiMW+j3VZbkqa61u3PfPfGg=;
-        b=AMnECoLgAUqM6Is2rBRg8FkFCWt74V1dAoNlZCiStlRhSSY8S7Q99t4nRb5NM9qUQt
-         Mau33hPdnXLRihTnVYw4K/BsEHLvnRb1PSmi04ljcNM8pnOh71l7p8VYttBurq+ZgB10
-         E3VrPnkVlKSPglHBbNhEWEhTbp9KxyRew67PVZzmkaiksk5OPZA7j4HuxzwR9685meUg
-         bVWguFM86qe0X+EK34zeOVdiiokuSl7fy/UV+7R6iiWSMpuF+2Xm0k0q7oT7b+CYY175
-         rUaPaoAGzx86IUiOJRwKKz8hm8jMaURoS/hFSix6CS4C7VrOm/AwD+nxnJcuemWM7MNw
-         /fiQ==
-X-Gm-Message-State: AJIora/Li7wIFsZId1qV5SSuovRNyrGHwMZpHIPZXQDr1MxY93GSGnzZ
-        z9MXFkPzKsiidEOyhaP5ViNfsuNDAhHHkFm7orVXOibDMKuTdrzcqOgnfJ1PpHBDMLyc772GYNW
-        E4Khflm7SOBIZ4yUJXGcq5J5J
-X-Received: by 2002:a05:6402:378f:b0:43a:d3f5:79f2 with SMTP id et15-20020a056402378f00b0043ad3f579f2mr51775759edb.338.1658323717205;
-        Wed, 20 Jul 2022 06:28:37 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t3fSyGyUhItvWNAfzBrVUs5sXM+vSZQoJwXk+V++H1tUF1Sa+Sg+abJ9GPTpm2/Ve6F4StiQ==
-X-Received: by 2002:a05:6402:378f:b0:43a:d3f5:79f2 with SMTP id et15-20020a056402378f00b0043ad3f579f2mr51775750edb.338.1658323717069;
-        Wed, 20 Jul 2022 06:28:37 -0700 (PDT)
+        bh=D5ddLIULHU4lCGQd0NSPYCIu5p1tGKAtdnoOfURMriM=;
+        b=mdieMLV+KSaZrcXNmHbRVA0lFeQKrMJKtceNCY3Fda5hPdQN1K+KQeEX8xwyp/v3CT
+         FSyYypmUiW8BkIhJq4TSFZh8oz6pR+2WCFsAg8p9+m26zaAwAOhm1EThJaTzujLfWPVt
+         eq+yS2gBoBwVYehHMexU/oxbm7Cl1ZElpBlfJGQXAVJ2Hw40F0F3HFUM+bU6AFwWaVoc
+         sW8AgDeP9r3XbtDWqmRP6tYZnv1zvt44DTu53X8JaxP2B7vwX0ZJsQdxP+CupP9XC039
+         lwiUK64PbFpjfYVWlylKU5JoEVoP5+xBSf0KmSOVgFGf2zzDugcCXy+b3oDcVtf6dhuw
+         zDGg==
+X-Gm-Message-State: AJIora9ekdGn/4DvJp1OeUFz5Bx0reHX1azjnlNf023eSKa+oz3iiVt+
+        A0XFafEdkoETrOiQV7iFi3YDaAV2tFqFcXYXlX+fRSYKNEfM3Iwii8mItNSxNsd8u4q/BnO9xXq
+        R7OmaLKCQgk2c9yyMd135OkQ1
+X-Received: by 2002:a17:906:844d:b0:72b:307d:fb52 with SMTP id e13-20020a170906844d00b0072b307dfb52mr36174059ejy.182.1658323718290;
+        Wed, 20 Jul 2022 06:28:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sY/1Zm6BfoPARI1YbiV4ibajD1bahl1m6CRJ1x477gp7Vj0dinJMpAeZDF8tcyy5jgf5+z8Q==
+X-Received: by 2002:a17:906:844d:b0:72b:307d:fb52 with SMTP id e13-20020a170906844d00b0072b307dfb52mr36174049ejy.182.1658323718132;
+        Wed, 20 Jul 2022 06:28:38 -0700 (PDT)
 Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id x7-20020a05640225c700b0043ac761db43sm12220687edb.55.2022.07.20.06.28.36
+        by smtp.gmail.com with ESMTPSA id x7-20020a05640225c700b0043ac761db43sm12220687edb.55.2022.07.20.06.28.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 06:28:36 -0700 (PDT)
+        Wed, 20 Jul 2022 06:28:37 -0700 (PDT)
 From:   Danilo Krummrich <dakr@redhat.com>
 To:     airlied@linux.ie, daniel@ffwll.ch, mripard@kernel.org,
         christian.koenig@amd.com, emma@anholt.net
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH RESEND 03/10] drm: use idr_init_base() to initialize master->magic_map
-Date:   Wed, 20 Jul 2022 15:28:23 +0200
-Message-Id: <20220720132830.193747-4-dakr@redhat.com>
+Subject: [PATCH RESEND 04/10] drm: use idr_init_base() to initialize master->lessee_idr
+Date:   Wed, 20 Jul 2022 15:28:24 +0200
+Message-Id: <20220720132830.193747-5-dakr@redhat.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220720132830.193747-1-dakr@redhat.com>
 References: <20220720132830.193747-1-dakr@redhat.com>
@@ -92,18 +92,18 @@ Acked-by: Christian König <christian.koenig@amd.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/drm_auth.c b/drivers/gpu/drm/drm_auth.c
-index 6e433d465f41..63395bebaa6b 100644
+index 63395bebaa6b..cf92a9ae8034 100644
 --- a/drivers/gpu/drm/drm_auth.c
 +++ b/drivers/gpu/drm/drm_auth.c
-@@ -140,7 +140,7 @@ struct drm_master *drm_master_create(struct drm_device *dev)
+@@ -147,7 +147,7 @@ struct drm_master *drm_master_create(struct drm_device *dev)
+ 	INIT_LIST_HEAD(&master->lessees);
+ 	INIT_LIST_HEAD(&master->lessee_list);
+ 	idr_init(&master->leases);
+-	idr_init(&master->lessee_idr);
++	idr_init_base(&master->lessee_idr, 1);
  
- 	kref_init(&master->refcount);
- 	drm_master_legacy_init(master);
--	idr_init(&master->magic_map);
-+	idr_init_base(&master->magic_map, 1);
- 	master->dev = dev;
- 
- 	/* initialize the tree of output resource lessees */
+ 	return master;
+ }
 -- 
 2.36.1
 

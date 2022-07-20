@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52BF57B526
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B2057B528
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiGTLPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        id S232664AbiGTLPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiGTLPd (ORCPT
+        with ESMTP id S229552AbiGTLPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:15:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7568F1BE8D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:15:31 -0700 (PDT)
+        Wed, 20 Jul 2022 07:15:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1655D1D32A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:15:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14C87B81E20
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8287C3411E;
-        Wed, 20 Jul 2022 11:15:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 41EADCE1ECE
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:15:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C2C3C341CB;
+        Wed, 20 Jul 2022 11:15:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658315728;
-        bh=/MCf6e/7v3s2HuIMTzbjKryVY3ul+vEF18tRV5+EWR0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=n9Gn5WJxcopa8MRhnChIH3XEMk1JQ6zgp5DiAglMrWXz7tiikFldWSDIQ5ZJF3bUP
-         hxqrSeYhozcQcDnFqYI3KHX5ctiHl8xvhYc4dp/xE3Ieg0hlSD0FGoERYTiruJFb45
-         Dv3n7Qma6iYaN5okWrHKr391mY4JTO/uEXjT8ub8VcYgwy4xb4pt96fYx5I8L8/IMS
-         QpbCgUz8xm7nla+BgP6eNOybf0XJayjEcp1IUXQ0br9FPMw0rBgTtDqOIQmyv3P/EI
-         E058o+K7fLbG+EbXUSLI3fltxIqFLhXsBcAEtthzStV2VpgZ2NpaSDdpbf3GhajgJL
-         eU3HjCysh+5FQ==
+        s=k20201202; t=1658315730;
+        bh=BsNjCaeTJqLQGUGZM209BMxUAA7r6qlSKV6Yyr3KTsE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=R5mMwdbkSzZSpAZNauUsMwN7Lop5yS4VWdrfIH3jvEO4spLTs3yO6ENcLOTj+xENM
+         M6bxUNLF0i8D1Rht7eX94GyBr2lUt90EWYomsPkD7CLxcgWZb4GxxZj3RkDWuV7LCS
+         xruZGT0yqgMkypJzI0Pz6Ox7C9STUvuWV+Co2uz/62VKDJn+EM4gzBSle23pW3OVgu
+         p13ND+j/1MiaN2PR4fDdUeEF82nZJ2OdEVVXkjoY3kPOJiao0+KmCEpLFFJq2OPD0O
+         vDvl4+bL5KVbBt2oLS2wN20pcHni/bUKVXrl4x126tr8QBVjZhazbJ3MwFGIWvUhUj
+         hpvyTFmSrzl6w==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 1/9] habanalabs: rename non_hard_reset to compute_reset
-Date:   Wed, 20 Jul 2022 14:15:15 +0300
-Message-Id: <20220720111523.4069830-1-ogabbay@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 2/9] habanalabs/gaudi2: enable all MMU SPI/SEI interrupts
+Date:   Wed, 20 Jul 2022 14:15:16 +0300
+Message-Id: <20220720111523.4069830-2-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220720111523.4069830-1-ogabbay@kernel.org>
+References: <20220720111523.4069830-1-ogabbay@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -50,124 +52,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+From: Tomer Tayar <ttayar@habana.ai>
 
-In order to be more explicit we should use the term compute_reset
-for describing the reset in which only the compute engines gets
-reset.
+Currently only part of the MMU SPI/SEI interrupts are enabled, although
+there is no real reason to not enable all.
+The only exception is "burst_fifo_full" which is expected for PMMU
+because it has a 2 entries FIFO, and thus is it not enabled for it.
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/device.c     | 2 +-
- drivers/misc/habanalabs/common/habanalabs.h | 4 ++--
- drivers/misc/habanalabs/gaudi/gaudi.c       | 4 ++--
- drivers/misc/habanalabs/gaudi2/gaudi2.c     | 4 ++--
- drivers/misc/habanalabs/goya/goya.c         | 4 ++--
- 5 files changed, 9 insertions(+), 9 deletions(-)
+ drivers/misc/habanalabs/gaudi2/gaudi2.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
-index b30aeb1c657f..90e346727a7c 100644
---- a/drivers/misc/habanalabs/common/device.c
-+++ b/drivers/misc/habanalabs/common/device.c
-@@ -1556,7 +1556,7 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
- 		if (!hdev->asic_prop.fw_security_enabled)
- 			hl_fw_set_max_power(hdev);
- 	} else {
--		rc = hdev->asic_funcs->non_hard_reset_late_init(hdev);
-+		rc = hdev->asic_funcs->compute_reset_late_init(hdev);
- 		if (rc) {
- 			if (reset_upon_device_release)
- 				dev_err(hdev->dev,
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index 4d6b31ea1efb..1e1f2c494423 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -1446,7 +1446,7 @@ struct engines_data {
-  * @send_heartbeat: send is-alive packet to CPU-CP and verify response.
-  * @debug_coresight: perform certain actions on Coresight for debugging.
-  * @is_device_idle: return true if device is idle, false otherwise.
-- * @non_hard_reset_late_init: perform certain actions needed after a reset which is not hard-reset
-+ * @compute_reset_late_init: perform certain actions needed after a compute reset
-  * @hw_queues_lock: acquire H/W queues lock.
-  * @hw_queues_unlock: release H/W queues lock.
-  * @kdma_lock: acquire H/W queues lock. Relevant from GRECO ASIC
-@@ -1584,7 +1584,7 @@ struct hl_asic_funcs {
- 	int (*debug_coresight)(struct hl_device *hdev, struct hl_ctx *ctx, void *data);
- 	bool (*is_device_idle)(struct hl_device *hdev, u64 *mask_arr, u8 mask_len,
- 				struct engines_data *e);
--	int (*non_hard_reset_late_init)(struct hl_device *hdev);
-+	int (*compute_reset_late_init)(struct hl_device *hdev);
- 	void (*hw_queues_lock)(struct hl_device *hdev);
- 	void (*hw_queues_unlock)(struct hl_device *hdev);
- 	void (*kdma_lock)(struct hl_device *hdev, int dcore_id);
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index a7923960fce1..20f62730be02 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -7427,7 +7427,7 @@ static void gaudi_print_nic_axi_irq_info(struct hl_device *hdev, u16 event_type,
- 		event_type, desc);
- }
- 
--static int gaudi_non_hard_reset_late_init(struct hl_device *hdev)
-+static int gaudi_compute_reset_late_init(struct hl_device *hdev)
- {
- 	/* GAUDI doesn't support any reset except hard-reset */
- 	return -EPERM;
-@@ -9193,7 +9193,7 @@ static const struct hl_asic_funcs gaudi_funcs = {
- 	.send_heartbeat = gaudi_send_heartbeat,
- 	.debug_coresight = gaudi_debug_coresight,
- 	.is_device_idle = gaudi_is_device_idle,
--	.non_hard_reset_late_init = gaudi_non_hard_reset_late_init,
-+	.compute_reset_late_init = gaudi_compute_reset_late_init,
- 	.hw_queues_lock = gaudi_hw_queues_lock,
- 	.hw_queues_unlock = gaudi_hw_queues_unlock,
- 	.kdma_lock = NULL,
 diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index fd917e837075..ab6ad06cec03 100644
+index ab6ad06cec03..465d9c319c3c 100644
 --- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
 +++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -6129,7 +6129,7 @@ static int gaudi2_test_queues(struct hl_device *hdev)
- 	return ret_val;
+@@ -117,6 +117,12 @@
+ #define MMU_RANGE_INV_ASID_EN_SHIFT		1
+ #define MMU_RANGE_INV_ASID_SHIFT		2
+ 
++/* The last SPI_SEI cause bit, "burst_fifo_full", is expected to be triggered in PMMU because it has
++ * a 2 entries FIFO, and hence it is not enabled for it.
++ */
++#define GAUDI2_PMMU_SPI_SEI_ENABLE_MASK		GENMASK(GAUDI2_NUM_OF_MMU_SPI_SEI_CAUSE - 2, 0)
++#define GAUDI2_HMMU_SPI_SEI_ENABLE_MASK		GENMASK(GAUDI2_NUM_OF_MMU_SPI_SEI_CAUSE - 1, 0)
++
+ #define GAUDI2_MAX_STRING_LEN			64
+ 
+ #define GAUDI2_VDEC_MSIX_ENTRIES		(GAUDI2_IRQ_NUM_SHARED_DEC1_ABNRM - \
+@@ -4956,8 +4962,7 @@ static int gaudi2_mmu_update_hop0_addr(struct hl_device *hdev, u32 stlb_base)
+ 	return 0;
  }
  
--static int gaudi2_non_hard_reset_late_init(struct hl_device *hdev)
-+static int gaudi2_compute_reset_late_init(struct hl_device *hdev)
+-static int gaudi2_mmu_init_common(struct hl_device *hdev, u32 mmu_base,
+-					u32 stlb_base)
++static int gaudi2_mmu_init_common(struct hl_device *hdev, u32 mmu_base, u32 stlb_base)
  {
- 	struct gaudi2_device *gaudi2 = hdev->asic_specific;
- 	size_t irq_arr_size;
-@@ -9930,7 +9930,7 @@ static const struct hl_asic_funcs gaudi2_funcs = {
- 	.send_heartbeat = gaudi2_send_heartbeat,
- 	.debug_coresight = gaudi2_debug_coresight,
- 	.is_device_idle = gaudi2_is_device_idle,
--	.non_hard_reset_late_init = gaudi2_non_hard_reset_late_init,
-+	.compute_reset_late_init = gaudi2_compute_reset_late_init,
- 	.hw_queues_lock = gaudi2_hw_queues_lock,
- 	.hw_queues_unlock = gaudi2_hw_queues_unlock,
- 	.kdma_lock = gaudi2_kdma_lock,
-diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
-index 7b9f7f8b51f4..d4459c290ea8 100644
---- a/drivers/misc/habanalabs/goya/goya.c
-+++ b/drivers/misc/habanalabs/goya/goya.c
-@@ -4559,7 +4559,7 @@ static int goya_unmask_irq_arr(struct hl_device *hdev, u32 *irq_arr,
- 	return rc;
- }
+ 	u32 status, timeout_usec;
+ 	int rc;
+@@ -4985,7 +4990,6 @@ static int gaudi2_mmu_init_common(struct hl_device *hdev, u32 mmu_base,
+ 		return rc;
  
--static int goya_non_hard_reset_late_init(struct hl_device *hdev)
-+static int goya_compute_reset_late_init(struct hl_device *hdev)
- {
- 	/*
- 	 * Unmask all IRQs since some could have been received
-@@ -5478,7 +5478,7 @@ static const struct hl_asic_funcs goya_funcs = {
- 	.send_heartbeat = goya_send_heartbeat,
- 	.debug_coresight = goya_debug_coresight,
- 	.is_device_idle = goya_is_device_idle,
--	.non_hard_reset_late_init = goya_non_hard_reset_late_init,
-+	.compute_reset_late_init = goya_compute_reset_late_init,
- 	.hw_queues_lock = goya_hw_queues_lock,
- 	.hw_queues_unlock = goya_hw_queues_unlock,
- 	.kdma_lock = NULL,
+ 	WREG32(mmu_base + MMU_BYPASS_OFFSET, 0);
+-	WREG32(mmu_base + MMU_SPI_SEI_MASK_OFFSET, 0xF);
+ 
+ 	rc = hl_poll_timeout(
+ 		hdev,
+@@ -5042,6 +5046,8 @@ static int gaudi2_pci_mmu_init(struct hl_device *hdev)
+ 			DCORE0_HMMU0_MMU_STATIC_MULTI_PAGE_SIZE_CFG_8_BITS_HOP_MODE_EN_MASK);
+ 	}
+ 
++	WREG32(mmu_base + MMU_SPI_SEI_MASK_OFFSET, GAUDI2_PMMU_SPI_SEI_ENABLE_MASK);
++
+ 	rc = gaudi2_mmu_init_common(hdev, mmu_base, stlb_base);
+ 	if (rc)
+ 		return rc;
+@@ -5092,6 +5098,8 @@ static int gaudi2_dcore_hmmu_init(struct hl_device *hdev, int dcore_id,
+ 	RMWREG32(stlb_base + STLB_HOP_CONFIGURATION_OFFSET, 1,
+ 			STLB_HOP_CONFIGURATION_ONLY_LARGE_PAGE_MASK);
+ 
++	WREG32(mmu_base + MMU_SPI_SEI_MASK_OFFSET, GAUDI2_HMMU_SPI_SEI_ENABLE_MASK);
++
+ 	rc = gaudi2_mmu_init_common(hdev, mmu_base, stlb_base);
+ 	if (rc)
+ 		return rc;
 -- 
 2.25.1
 

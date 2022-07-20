@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDF457ADFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEEC357AE07
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238203AbiGTCco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
+        id S238957AbiGTCdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237456AbiGTCck (ORCPT
+        with ESMTP id S235203AbiGTCdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:32:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C945481E3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:32:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658284356;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3uZbjgFMHeKFjmyd0QEm1xCO2NChsIABolYNiKdJ7Gg=;
-        b=Lz3rNC3gm2RxiSMnzRywtItuGcEy7lBka8MLsVW9d2c7D7eXvO/cjcMVdJVdjtKwpr6xyS
-        ioXinnEcA7gZ4oZfYW8xA0DAxo7vfr14QcTXV0Jt3B5HYyPQjRIrEEsX9ZTLXElRH6n7gu
-        xOZDfXKHaBjTtawbw9ZRL9zflFLnsTg=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-AbPxVteUPYSJKRXWsoKmsA-1; Tue, 19 Jul 2022 22:32:35 -0400
-X-MC-Unique: AbPxVteUPYSJKRXWsoKmsA-1
-Received: by mail-qk1-f198.google.com with SMTP id t203-20020a3746d4000000b006af1d3e8068so13185834qka.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:32:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3uZbjgFMHeKFjmyd0QEm1xCO2NChsIABolYNiKdJ7Gg=;
-        b=Xc0zCYvXozlYURHiG2VJl3ir4OPFSBHkriFkQSct/0kJHaZG/l1qdEsUrO9P0rJ3Uy
-         JBnEiVkU4yfjM4/ClwOEfzC9ecswIK/qZfkVoVsOGHbnpKwP3iMuCUf3gX4AK8jNEGFN
-         1esNXz7K0lr6a9og29pa7HJuiU9J7c4/3pODNNq1M6+XwjpdwYKF8Zuhn0MKEVdZinZN
-         cxPNC/PoJGlW4QSPinrfBMTK/D5TzaszVdob0vESAiI9VAgAnwffowKVTeLh1pNsrfzm
-         kO3oQKgjdxmgdEzHMvU2nTacjJqtMk1z0dBLm2dH4DSF+qItsrQcq8iuQVgZ8gsD4KjA
-         euNA==
-X-Gm-Message-State: AJIora9j5YTC+w55tj+CGKpK4DClri2mdTvzA4xU19guC3p/smRxL7Ia
-        WsnZGmil/U4VOpUq8aktUpJE4WiOfeglhMCkx8TGSFEFRRW01TzhO4a+vGQaTGqCp78cgmKVRor
-        GQU/ekEmXZ2ehbBh6h9j1DaUA
-X-Received: by 2002:a05:6214:e41:b0:473:915c:3efe with SMTP id o1-20020a0562140e4100b00473915c3efemr27335403qvc.10.1658284355255;
-        Tue, 19 Jul 2022 19:32:35 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sqsBhXFhvJemKV/jwgAt84OQwS2X59Z2eXZUwYSIfKumUaM4t252ZCPnvZ1VuTZhBaV0SNdQ==
-X-Received: by 2002:a05:6214:e41:b0:473:915c:3efe with SMTP id o1-20020a0562140e4100b00473915c3efemr27335384qvc.10.1658284354992;
-        Tue, 19 Jul 2022 19:32:34 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05620a0bcb00b006b5c5987ff2sm14701779qki.96.2022.07.19.19.32.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 19:32:34 -0700 (PDT)
-Date:   Tue, 19 Jul 2022 22:32:32 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 2/5] userfaultfd: add /dev/userfaultfd for fine
- grained access control
-Message-ID: <YtdpQBrAGJwMnssj@xz-m1.local>
-References: <20220719195628.3415852-1-axelrasmussen@google.com>
- <20220719195628.3415852-3-axelrasmussen@google.com>
- <D43534E1-7982-45EE-8B16-2C4687F49E77@vmware.com>
- <CAJHvVcigVqAibm0JODkiR=Pcd3E14xp0NB6acw2q2enwnrnLSA@mail.gmail.com>
- <D8D7C973-1480-4166-86AF-AD179873B2A4@vmware.com>
+        Tue, 19 Jul 2022 22:33:38 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1239D42AE3;
+        Tue, 19 Jul 2022 19:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zaALNxq5RVE2wjPOSeDTpB0sKVHkbLNiPRaByZS/1GI=; b=IHKUeO3sXdxDSJ+BN+U2VtaQBu
+        cVrF1C2jiLA4xaefnjOPhHGiLPJdFhg3CAr4thqWfrwxaJufD3kjI1FxgsD4hMXnS72YaR5UXvFMH
+        zzshbqJLKcTfXwvKX19vpPCR3gV9ZFjU8UVlkPdkmIbtcEpKY1Cc401W6mMvK2OOVDv7ZE3nlfLaE
+        Q6nbYdTO920jdD7fVyISr6eGzFnZMWmq9OXs2xX+JEtFur0wvRorsXePBWOShcc4Ew8KnIsmvue8r
+        /yiDgu31dr6yoZlsNJEDyNrmu2yHBjLACubuADcSI5EK9AGARf9jIABOZqLiTPxldnkUCljLYwsTR
+        xbbfuiIQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oDzWk-00DxLn-KV;
+        Wed, 20 Jul 2022 02:33:30 +0000
+Date:   Wed, 20 Jul 2022 03:33:30 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Hillf Danton <hdanton@sina.com>, linux-kernel@vger.kernel.org,
+        linux-parisc@vger.kernel.org
+Subject: Re: WARNING: CPU: 1 PID: 14735 at fs/dcache.c:365
+ dentry_free+0x100/0x128
+Message-ID: <YtdpegRORT8TMYD8@ZenIV>
+References: <20220709090756.2384-1-hdanton@sina.com>
+ <20220715133300.1297-1-hdanton@sina.com>
+ <cff76e00-3561-4069-f5c7-26d3de4da3c4@gmx.de>
+ <Ytdo7pNf5W4VMr2H@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D8D7C973-1480-4166-86AF-AD179873B2A4@vmware.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ytdo7pNf5W4VMr2H@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 11:55:21PM +0000, Nadav Amit wrote:
-> Anyhow, I do want to clarify a bit about the “cross-process support”
-> userfaultfd situation. Basically, you can already get cross-process support
-> today, by using calling userfaultfd() on the controlled process and calling
-> pidfd_open() from another process. It does work and I do not remember any
-> issues that it introduced (in contrast, for instance, to io-uring, that
-> would break if you use userfaultfd+iouring+fork today).
+On Wed, Jul 20, 2022 at 03:31:10AM +0100, Al Viro wrote:
+> On Sat, Jul 16, 2022 at 07:27:30AM +0200, Helge Deller wrote:
+> > [108564.845444] dentry = 000000031624e6c0
+> 
+> *blink*
+> Is that really a plausible address of a kernel object on
+> parisc?  Or is that "mangle pointers for security fetish^W
+> purposes, lest somebody manages to get a useful information
+> out of dmesg" in action?
+> 
+> > [108564.889437] spin_is_locked(&dentry->d_lock) = 0
+> > [108564.945436] dname_external(dentry) = 0
+> > [108564.993436] dentry->d_flags & DCACHE_NORCU = 0
+> > [108565.045446] dentry->d_name.len = 3
+> > [108565.089435] dentry->d_name.hash = 89116695
+> > [108565.137435] dentry->d_lockref.count = -128
+> > [108565.189434] dentry->d_flags = 32776
+> 
+> 0x8008, i.e. DCACHE_OP_DELETE | DCACHE_DENTRY_KILLED.  No
+> DCACHE_PAR_LOOKUP in sight...
+> 
+> > [108569.801407] dentry = 000000016d7d0000
+> > [108569.845407] spin_is_locked(&dentry->d_lock) = 0
+> > [108569.901422] dname_external(dentry) = 0
+> > [108569.949405] dentry->d_flags & DCACHE_NORCU = 0
+> > [108570.001405] dentry->d_name.len = 10
+> > [108570.045421] dentry->d_name.hash = e6582e53
+> > [108570.093476] dentry->d_lockref.count = -128
+> > [108570.145404] dentry->d_flags = 32776
+> > [108570.189420] dentry->d_inode = 0000000000000000
+> > [108570.241404] dentry->d_parent = 00000002332c2780
+> > [108570.297403] dentry->d_u.d_rcu = 0x416be770
+> 
+> Ditto.  Pointers look really weird...
 
-Do you mean to base it on pidof_getfd()?
-
-Just want to mention that this will still need collaboration of the target
-process as userfaultfd needs to be created explicitly there.  From that POV
-it's still more similar to general SCM_RIGHTS trick to pass over the fd but
-just to pass it in a different way.
-
-IMHO the core change about having /proc/pid/userfaultfd is skipping that
-only last step to create the handle.
-
--- 
-Peter Xu
-
+PS: I think I've caught what could be found on l-k; could you
+please forward the rest (parisc list? private thread?) to
+fsdevel or directly my way.

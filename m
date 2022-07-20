@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F4A57BD29
+	by mail.lfdr.de (Postfix) with ESMTP id CC78F57BD2A
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbiGTRsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S234094AbiGTRsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiGTRsP (ORCPT
+        with ESMTP id S233300AbiGTRsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:48:15 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA9852DF8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:48:14 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id x91so24754668ede.1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:48:14 -0700 (PDT)
+        Wed, 20 Jul 2022 13:48:22 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABB44AD57
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:48:19 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id v12so24713137edc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:48:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chrisdown.name; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=SZl3qX0LM9cd6eczZTP4tcvjVJ6Givuz0Tqtszlu9H0=;
-        b=U13Jza77l6NjL8EvG5WCVxr3nyVQcvJyxXj8Z4nVZMj09m2X/+ACIxCRdKj4DW12uR
-         UGubrBdXaBqXs1FkU7FGZJvt4qrqDXFCBgHEF/GQpJZ3MZ2yqZnt/mw7twUCVF7hBb9K
-         iYzxl7FKWOVd9VdAgTXT39tVVyfN045T6UdO8=
+        bh=SmD6fCbmRuibNhEykSlCDtfTMtqd6x2bk3EAGXCB7us=;
+        b=f1yz3hf5iXq+ECGBz79cew6TFPhbYYrB1IjF21ZfEN+ZJCuAqt3PlA4l2sd8ro2PBE
+         oOF/2QjEZJqDRPX3ESPbEvX18wl3J+sSowBL9ARofn2lWFd9f8KDh9O8UMrW7Gb40+59
+         5wRDJSa1elEVMZT7BG5hGUXe83fnHHf7Dr5oo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SZl3qX0LM9cd6eczZTP4tcvjVJ6Givuz0Tqtszlu9H0=;
-        b=NyBP8nyXy1va4eVtqmH8R9Hq86PHdCQU7sPxHslfaKFbN+ow3QLeDL3jYNIkm8GUNB
-         NQS3T7ihQ+zJLqjbnXdNKBi2e4V54wEeY3w92XebIgjLQhOmD/M3/Sqc/LxOjgN+1vov
-         IPTtG4lb8RVA1LigMW8LB2tTEUOPlTBnxT0qGrO3jXI2Oh31Tue75w2abWJC6WSzloBc
-         mUHOkb4kydzPuMyQbOv3n5xfL4/GGEOWcLQYGG+MxsKtfUWlpnpz+7WT5dfaHyDRY4Wk
-         f3SjftyAWPH1x76dkd9mVHu4/e5g4trzm+vX/61vHidlxhk8tCTOSZsjdsRbj+/E1spZ
-         iF3Q==
-X-Gm-Message-State: AJIora+brR+eTOZsDHXdVDxJGx1hFIFxBNwXVbi7Tmx7TKtVs7aqZgfq
-        y+qHwdV56cKfKjL8AhJuP5Ijt/yBg+rpQQ==
-X-Google-Smtp-Source: AGRyM1tB9bsQQyqjf8NKoKr2D5bj1ypFQHJvRSBpdPoNp913zxjGBj1fm/UQnXJDZSQiD0TDhMDR1w==
-X-Received: by 2002:a05:6402:354c:b0:43a:dc59:657 with SMTP id f12-20020a056402354c00b0043adc590657mr51070822edd.405.1658339292807;
-        Wed, 20 Jul 2022 10:48:12 -0700 (PDT)
+        bh=SmD6fCbmRuibNhEykSlCDtfTMtqd6x2bk3EAGXCB7us=;
+        b=DQAU7f3Fys/+LuNdEgvIBVumxA6d7GeJ+fXtIyOYKwYEzmzVmk+8dFf66FBmMNCe73
+         FtZAaE49zaoPotDES6b43MAx6FTd4l4y8jajB9rTZxMQwf/AyLCkV9Tt0XUX95tlAvov
+         oUNcyLmQ2wFx/7TokbUMPq6mGk3+8zZ5Pq8eXeDQbWfdDDCK9kUik0VcfMggTB0sCeJd
+         aUpKW958QlI1SSMLzeQhm1EKCqcKYKVc4PXWv/52+c4Ea6okMPiQFL+ARpdDquZt7War
+         vM4I0X/WN58MKWnoMTM3jTEzzlIDc9b3nCF3v7S9lq5dzRrnrBeQKt9L0gfOkFFMvDcR
+         ewiw==
+X-Gm-Message-State: AJIora81obFlzTnql0yprPkavkYK6kaid+a1RWAC6xjGNeu2tq9BKwit
+        8IaRR8FIUtKcqTAuBZLSBLwHRnjNRP9+BA==
+X-Google-Smtp-Source: AGRyM1u3AN8Mr7zxrehIPxR4NYjm9FvD5RJp094MvjVX8qbycCc/DczwF9eTQZ849OxPelBBVPDYAg==
+X-Received: by 2002:a05:6402:1389:b0:43a:ceea:93fd with SMTP id b9-20020a056402138900b0043aceea93fdmr52540241edv.64.1658339297541;
+        Wed, 20 Jul 2022 10:48:17 -0700 (PDT)
 Received: from localhost ([2620:10d:c092:400::5:d58e])
-        by smtp.gmail.com with ESMTPSA id lx23-20020a170906af1700b0072b11cb485asm8036351ejb.208.2022.07.20.10.48.12
+        by smtp.gmail.com with ESMTPSA id gb3-20020a170907960300b006fef557bb7asm8148089ejc.80.2022.07.20.10.48.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 10:48:12 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 18:48:11 +0100
+        Wed, 20 Jul 2022 10:48:17 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 18:48:16 +0100
 From:   Chris Down <chris@chrisdown.name>
 To:     linux-kernel@vger.kernel.org
 Cc:     Petr Mladek <pmladek@suse.com>,
@@ -54,9 +54,8 @@ Cc:     Petr Mladek <pmladek@suse.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         John Ogness <john.ogness@linutronix.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: [PATCH v3 1/2] printk: console: Create console= parser that supports
- named options
-Message-ID: <732ee897b2bd49ada3f7dee396475c5a2195071b.1658339046.git.chris@chrisdown.name>
+Subject: [PATCH v3 2/2] printk: console: Support console-specific loglevels
+Message-ID: <b9fa85cfed3a97ab4292daca51476e4e23da2f9a.1658339046.git.chris@chrisdown.name>
 References: <cover.1658339046.git.chris@chrisdown.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -72,62 +71,990 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This will be used in the next patch, and for future changes like the
-proposed sync/nothread named options. This avoids having to use sigils
-like "/" to get different semantic meaning for different parts of the
-option string, and helps to make things more human readable and
-easily extensible.
+Consoles can have vastly different latencies and throughputs. For
+example, writing a message to the serial console can take on the order
+of tens of milliseconds to get the UART to successfully write a message.
+While this might be fine for a single, one-off message, this can cause
+significant application-level stalls in situations where the kernel
+writes large amounts of information to the console.
 
-There are no functional changes for existing console= users.
+This means that while you might want to send at least INFO level
+messages to (for example) netconsole, which is relatively fast, you may
+only want to send at least WARN level messages to the serial console.
+Such an implementation would permit debugging using the serial console
+in cases that netconsole doesn't receive messages during particularly
+bad system issues, while still keeping the noise low enough to avoid
+inducing latency in userspace applications. This patch adds such an
+interface, extending the existing console loglevel controls to allow
+each console to have its own loglevel.
+
+One can't just disable the serial console, because one may actually need
+it in situations where the machine is in a bad enough state that nothing
+is received on netconsole. One also can't just bump the loglevel at
+runtime after the issue, because usually the machine is already so
+wedged by this point that it isn't responsive to such requests.
+
+In terms of technical implementation, this patch embeds a device pointer
+in the console struct, and registers each console using it so we can
+expose attributes in sysfs. We currently expose the following
+attributes:
+
+    % ls -l /sys/class/console/ttyS/
+    total 0
+    lrwxrwxrwx 1 root root    0 Jul 20 17:37 subsystem -> ../../../../class/console/
+    -r--r--r-- 1 root root 4096 Jul 20 17:38 effective_loglevel
+    -r--r--r-- 1 root root 4096 Jul 20 17:38 effective_loglevel_source
+    -r--r--r-- 1 root root 4096 Jul 20 17:38 enabled
+    -rw-r--r-- 1 root root 4096 Jul 20 17:38 loglevel
+    -rw-r--r-- 1 root root 4096 Jul 20 17:37 uevent
+
+The lifecycle of this classdev looks like this on registration:
+
+    register_console(con)/printk_late_init()
+      console_register_device(con)
+        device_initialize(con->classdev) # refcount++
+        device_add(con->classdev)        # refcount++
+
+At stable state, the refcount is two.
+
+Console unregistration looks like this:
+
+    [con->classdev refcount drops to 0]
+        console_classdev_release(con->classdev)
+            kfree(con->classdev)
+
+    unregister_console(con)
+        device_unregister(con->classdev)
+            device_del(con->classdev) # refcount--
+                device_remove_class_symlinks()
+                    kernfs_remove_by_name_ns()
+                        kernfs_drain()
+                            kernfs_drain_open_files() # wait for close()
+            put_device(con->classdev) # refcount--
+
+We also deprecate the kernel.printk sysctl as it doesn't know about
+per-console loglevels, and is generally pretty confusing.
+
+For information on the precedence and application of the new controls,
+see Documentation/ABI/testing/sysfs-class-console and
+Documentation/admin-guide/per-console-loglevel.rst.
 
 Signed-off-by: Chris Down <chris@chrisdown.name>
 ---
- kernel/printk/printk.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ Documentation/ABI/testing/sysfs-class-console |  43 +++
+ .../admin-guide/kernel-parameters.txt         |  28 +-
+ .../admin-guide/per-console-loglevel.rst      |  92 ++++++
+ Documentation/admin-guide/serial-console.rst  |  17 +-
+ Documentation/core-api/printk-basics.rst      |  35 +--
+ Documentation/networking/netconsole.rst       |  17 ++
+ MAINTAINERS                                   |   3 +
+ include/linux/console.h                       |  24 ++
+ kernel/printk/console_cmdline.h               |   2 +
+ kernel/printk/printk.c                        | 285 +++++++++++++++++-
+ kernel/printk/sysctl.c                        |  64 +++-
+ 11 files changed, 574 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-console
+ create mode 100644 Documentation/admin-guide/per-console-loglevel.rst
 
+diff --git a/Documentation/ABI/testing/sysfs-class-console b/Documentation/ABI/testing/sysfs-class-console
+new file mode 100644
+index 000000000000..4abbde9b57e0
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-class-console
+@@ -0,0 +1,43 @@
++What:		/sys/class/console/
++Date:		May 2022
++Contact:	Chris Down <chris@chrisdown.name>
++Description:	Interface for viewing and setting per-console attributes, like
++		the per-console loglevel. For a high-level document describing
++		the motivations for this interface and related non-sysfs
++		controls, see
++		Documentation/admin-guide/per-console-loglevel.rst.
++
++What:		/sys/class/console/<C>/effective_loglevel
++Date:		May 2022
++Contact:	Chris Down <chris@chrisdown.name>
++Description:	Read only. The currently effective loglevel for this console.
++		All messages emitted with a loglevel below the effective value
++		will be emitted to the console.
++
++What:		/sys/class/console/<C>/effective_loglevel_source
++Date:		May 2022
++Contact:	Chris Down <chris@chrisdown.name>
++Description:	Read only. The currently effective loglevel source for this
++		console -- for example, whether it was set globally, or whether
++		it was set locally for this console. Possible values are:
++
++		local: The loglevel comes from the per-console loglevel.
++		global: The loglevel comes from the global loglevel.
++		ignore_loglevel: Both the per-console loglevel and global
++				 loglevels are ignored as ignore_loglevel is
++				 present on the kernel command line.
++
++What:		/sys/class/console/<C>/enabled
++Date:		May 2022
++Contact:	Chris Down <chris@chrisdown.name>
++Description:	Read only. "1" if the console is enabled, "0" otherwise.
++
++What:		/sys/class/console/<C>/loglevel
++Date:		May 2022
++Contact:	Chris Down <chris@chrisdown.name>
++Description:	Read write. The current per-console loglevel, which will take
++		effect if not overridden by other non-sysfs controls (see
++		Documentation/admin-guide/per-console-loglevel.rst). Bounds are
++		0 (LOGLEVEL_EMERG) to 8 (LOGLEVEL_DEBUG + 1) inclusive. Also
++		takes the special value "unset" to indicate that no per-console
++		loglevel is set, and we should defer to the global controls.
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 2522b11e593f..a8ef6d0b7c1d 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -702,13 +702,18 @@
+ 		ttyS<n>[,options]
+ 		ttyUSB0[,options]
+ 			Use the specified serial port.  The options are of
+-			the form "bbbbpnf", where "bbbb" is the baud rate,
+-			"p" is parity ("n", "o", or "e"), "n" is number of
+-			bits, and "f" is flow control ("r" for RTS or
+-			omit it).  Default is "9600n8".
++			the form "bbbbpnf,extra", where "bbbb" is the baud
++			rate, "p" is parity ("n", "o", or "e"), "n" is
++			number of bits, and "f" is flow control ("r" for RTS
++			or omit it). Default is "9600n8".
+ 
+-			See Documentation/admin-guide/serial-console.rst for more
+-			information.  See
++			At present the only extra option is "loglevel" to
++			set the per-console loglevel. For example:
++
++				console=ttyS0,9600n8,loglevel:3
++
++			See Documentation/admin-guide/serial-console.rst for
++			more information.  See
+ 			Documentation/networking/netconsole.rst for an
+ 			alternative.
+ 
+@@ -2806,10 +2811,13 @@
+ 	logibm.irq=	[HW,MOUSE] Logitech Bus Mouse Driver
+ 			Format: <irq>
+ 
+-	loglevel=	All Kernel Messages with a loglevel smaller than the
+-			console loglevel will be printed to the console. It can
+-			also be changed with klogd or other programs. The
+-			loglevels are defined as follows:
++	loglevel=	Sets the global loglevel. All messages with a loglevel
++			smaller than the console loglevel will be printed to
++			the console. Note that this can be overridden
++			per-console, see
++			Documentation/admin-guide/per-console-loglevel.rst.
++
++			The loglevels are defined as follows:
+ 
+ 			0 (KERN_EMERG)		system is unusable
+ 			1 (KERN_ALERT)		action must be taken immediately
+diff --git a/Documentation/admin-guide/per-console-loglevel.rst b/Documentation/admin-guide/per-console-loglevel.rst
+new file mode 100644
+index 000000000000..11ffdc53c8e8
+--- /dev/null
++++ b/Documentation/admin-guide/per-console-loglevel.rst
+@@ -0,0 +1,92 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. _per_console_loglevel:
++
++Per-console loglevel support
++============================
++
++Motivation
++----------
++
++Consoles can have vastly different latencies and throughputs. For example,
++writing a message to the serial console can take on the order of tens of
++milliseconds to get the UART to successfully write a message. While this might
++be fine for a single, one-off message, this can cause significant
++application-level stalls in situations where the kernel writes large amounts of
++information to the console.
++
++This means that while you might want to send at least INFO level messages to
++(for example) netconsole, which is relatively fast, you may only want to send
++at least WARN level messages to the serial console. This permits debugging
++using the serial console in cases that netconsole doesn't receive messages
++during particularly bad system issues, while still keeping the noise low enough
++to avoid inducing latency in userspace applications.
++
++Tunables
++--------
++
++In order to allow tuning this, the following controls exist:
++
++Global
++~~~~~~
++
++The global loglevel is set by the ``kernel.console_loglevel`` sysctl, which can
++also be set as ``loglevel=`` on the kernel command line.
++
++The printk module also takes two parameters which modify this behaviour
++further:
++
++* ``ignore_loglevel`` on the kernel command line or set in printk parameters:
++  Emit all messages. All other controls are ignored if this is present.
++* ``ignore_per_console_loglevel`` on the kernel command line or set in printk
++  parameters: Ignore all per-console loglevels and use the global loglevel.
++
++The default value for ``kernel.console_loglevel`` comes from
++``CONFIG_CONSOLE_LOGLEVEL_DEFAULT``, or ``CONFIG_CONSOLE_LOGLEVEL_QUIET`` if
++``quiet`` is passed on the kernel command line.
++
++Console attributes
++~~~~~~~~~~~~~~~~~~
++
++Registered consoles are exposed at ``/sys/class/console``. For example, if you
++are using ``ttyS0``, the console backing it can be viewed at
++``/sys/class/console/ttyS/``. The following files are available:
++
++* ``effective_loglevel`` (r): The effective loglevel after considering all
++  loglevel authorities. For example, if the console-specific loglevel is 3, but
++  the global minimum console loglevel[*]_ is 5, then the value will be 5.
++* ``effective_loglevel_source`` (r): The loglevel authority which resulted in
++  the effective loglevel being set. The following values can be present:
++
++    * ``local``: The console-specific loglevel is in effect.
++    * ``global``: The global loglevel (``kernel.console_loglevel``) is in
++      effect. Set a console-specific loglevel to override it.
++    * ``ignore_loglevel``: ``ignore_loglevel`` was specified on the kernel
++      command line or at ``/sys/module/printk/parameters/ignore_loglevel``.
++      Disable it to use level controls.
++    * ``ignore_per_console_loglevel``: ``ignore_per_console_loglevel`` was
++      specified on the kernel command line or at
++      ``/sys/module/printk/parameters/ignore_per_console_loglevel``. Disable it
++      to use per-console level controls.
++
++* ``enabled`` (r): Whether the console is enabled.
++* ``loglevel`` (rw): The local, console-specific loglevel for this console.
++  This will be in effect if no other global control overrides it. Look at
++  ``effective_loglevel`` and ``effective_loglevel_source`` to verify that.
++
++.. [*] The existence of a minimum console loglevel is generally considered to
++   be a confusing and rarely used interface, and as such is not exposed through
++   the modern printk sysctl APIs that obsoleted ``kernel.printk``. Use the
++   legacy ``kernel.printk`` sysctl to control it if you have a rare use case
++   that requires changing it. The default value is ``CONSOLE_LOGLEVEL_MIN``.
++
++Deprecated
++~~~~~~~~~~
++
++* ``kernel.printk`` sysctl: this takes four values, setting
++  ``kernel.console_loglevel``, ``kernel.default_message_loglevel``, the minimum
++  console loglevel, and a fourth unused value. The interface is generally
++  considered to quite confusing, doesn't perform checks on the values given,
++  and is unaware of per-console loglevel semantics.
++
++Chris Down <chris@chrisdown.name>, 17-May-2022
+diff --git a/Documentation/admin-guide/serial-console.rst b/Documentation/admin-guide/serial-console.rst
+index 58b32832e50a..794c1a51497b 100644
+--- a/Documentation/admin-guide/serial-console.rst
++++ b/Documentation/admin-guide/serial-console.rst
+@@ -32,15 +32,25 @@ The format of this option is::
+ 			and F is flow control ('r' for RTS). Default is
+ 			9600n8. The maximum baudrate is 115200.
+ 
++			One can also specify the per-console loglevel for this
++			console by providing a loglevel parameter, for example
++			"loglevel:4" to set this console's loglevel to 4. The
++			value provided can be from 0 (LOGLEVEL_EMERG) to 8
++			(LOGLEVEL_DEBUG + 1), and messages below that will be
++			emitted onto the console as they become available.
++
+ You can specify multiple console= options on the kernel command line.
+ Output will appear on all of them. The last device will be used when
+ you open ``/dev/console``. So, for example::
+ 
+-	console=ttyS1,9600 console=tty0
++	console=ttyS1,9600,loglevel:5 console=tty0
+ 
+ defines that opening ``/dev/console`` will get you the current foreground
+-virtual console, and kernel messages will appear on both the VGA
+-console and the 2nd serial port (ttyS1 or COM2) at 9600 baud.
++virtual console, and kernel messages will appear on both the VGA console and
++the 2nd serial port (ttyS1 or COM2) at 9600 baud. The optional loglevel "5"
++indicates that this console will emit messages more serious than
++LOGLEVEL_NOTICE (that is, LOGLEVEL_WARNING and below, since more serious
++messages have lower ordering).
+ 
+ Note that you can only define one console per device type (serial, video).
+ 
+@@ -113,3 +123,4 @@ Replace the sample values as needed.
+    the integration of these patches into m68k, ppc and alpha.
+ 
+ Miquel van Smoorenburg <miquels@cistron.nl>, 11-Jun-2000
++Chris Down <chris@chrisdown.name>, 17-May-2022
+diff --git a/Documentation/core-api/printk-basics.rst b/Documentation/core-api/printk-basics.rst
+index 2dde24ca7d9f..44a4e62558b8 100644
+--- a/Documentation/core-api/printk-basics.rst
++++ b/Documentation/core-api/printk-basics.rst
+@@ -54,32 +54,33 @@ string, the log level is not a separate argument). The available log levels are:
+ 
+ The log level specifies the importance of a message. The kernel decides whether
+ to show the message immediately (printing it to the current console) depending
+-on its log level and the current *console_loglevel* (a kernel variable). If the
+-message priority is higher (lower log level value) than the *console_loglevel*
+-the message will be printed to the console.
++on its log level and the current global *console_loglevel* or local per-console
++loglevel (kernel variables). If the message priority is higher (lower log level
++value) than the effective loglevel the message will be printed to the console.
+ 
+ If the log level is omitted, the message is printed with ``KERN_DEFAULT``
+ level.
+ 
+-You can check the current *console_loglevel* with::
++You can check the current console's loglevel -- for example if you want to
++check the loglevel for serial consoles:
+ 
+-  $ cat /proc/sys/kernel/printk
+-  4        4        1        7
++  $ cat /sys/class/console/ttyS/effective_loglevel
++  6
++  $ cat /sys/class/console/ttyS/effective_loglevel_source
++  local
+ 
+-The result shows the *current*, *default*, *minimum* and *boot-time-default* log
+-levels.
++To change the default loglevel for all consoles, simply write the desired level
++to ``/proc/sys/kernel/console_loglevel``. For example::
+ 
+-To change the current console_loglevel simply write the desired level to
+-``/proc/sys/kernel/printk``. For example, to print all messages to the console::
++  # echo 5 > /proc/sys/kernel/console_loglevel
+ 
+-  # echo 8 > /proc/sys/kernel/printk
++This sets the console_loglevel to print KERN_WARNING (4) or more severe
++messages to console. Consoles with a per-console loglevel set will ignore it
++unless ``ignore_per_console_loglevel`` is set on the kernel command line or at
++``/sys/module/printk/parameters/ignore_per_console_loglevel``.
+ 
+-Another way, using ``dmesg``::
+-
+-  # dmesg -n 5
+-
+-sets the console_loglevel to print KERN_WARNING (4) or more severe messages to
+-console. See ``dmesg(1)`` for more information.
++For more information on per-console loglevels, see
++Documentation/admin-guide/per-console-loglevel.rst.
+ 
+ As an alternative to printk() you can use the ``pr_*()`` aliases for
+ logging. This family of macros embed the log level in the macro names. For
+diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
+index 1f5c4a04027c..fd566840b429 100644
+--- a/Documentation/networking/netconsole.rst
++++ b/Documentation/networking/netconsole.rst
+@@ -67,6 +67,23 @@ Built-in netconsole starts immediately after the TCP stack is
+ initialized and attempts to bring up the supplied dev at the supplied
+ address.
+ 
++You can also set a loglevel at boot time on the kernel command line::
++
++  console=netcon0,loglevel:2
++
++This can also be changed at runtime::
++
++  $ ls -l /sys/class/console/netcon/
++  total 0
++  lrwxrwxrwx 1 root root    0 May 18 13:28 subsystem -> ../../../../class/console/
++  -r--r--r-- 1 root root 4096 May 18 13:28 effective_loglevel
++  -r--r--r-- 1 root root 4096 May 18 13:28 effective_loglevel_source
++  -r--r--r-- 1 root root 4096 May 18 13:28 enabled
++  -rw-r--r-- 1 root root 4096 May 18 13:28 loglevel
++  -rw-r--r-- 1 root root 4096 May 18 13:28 uevent
++
++See Documentation/admin-guide/per-console-loglevel.rst for more information.
++
+ The remote host has several options to receive the kernel messages,
+ for example:
+ 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6cc825857722..e51e25ec3cdf 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16044,6 +16044,9 @@ R:	Steven Rostedt <rostedt@goodmis.org>
+ R:	John Ogness <john.ogness@linutronix.de>
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git
++F:	Documentation/ABI/testing/sysfs-class-console
++F:	Documentation/admin-guide/per-console-loglevel.rst
++F:	Documentation/core-api/printk-basics.rst
+ F:	include/linux/printk.h
+ F:	kernel/printk/
+ 
+diff --git a/include/linux/console.h b/include/linux/console.h
+index 8c1686e2c233..4ed9bde63139 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -15,6 +15,7 @@
+ #define _LINUX_CONSOLE_H_ 1
+ 
+ #include <linux/atomic.h>
++#include <linux/device.h>
+ #include <linux/types.h>
+ 
+ struct vc_data;
+@@ -137,6 +138,22 @@ static inline int con_debug_leave(void)
+ #define CON_BRL		(32) /* Used for a braille device */
+ #define CON_EXTENDED	(64) /* Use the extended output format a la /dev/kmsg */
+ 
++/*
++ * The loglevel for a console can be set in many places:
++ *
++ * 1. It can be forced to emit everything (ignore_loglevel);
++ * 2. It can be set globally (sysctls kernel.printk (deprecated),
++ *    kernel.console_loglevel, magic sysrq, loglevel= on kernel command line);
++ * 3. It can be locally set for this specific console (console=...,loglevel:N on
++ *    kernel command line, /sys/class/console/.../loglevel);
++ * 4. It can be set by a compile-time default
++ *    (CONFIG_CONSOLE_LOGLEVEL_{DEFAULT,QUIET})
++ *
++ * If case 3 happens, even if another global value in effect, CON_LOGLEVEL will
++ * be set.
++ */
++#define CON_LOGLEVEL	(128) /* Level set locally for this console */
++
+ struct console {
+ 	char	name[16];
+ 	void	(*write)(struct console *, const char *, unsigned);
+@@ -155,8 +172,15 @@ struct console {
+ 	unsigned long dropped;
+ 	void	*data;
+ 	struct	 console *next;
++	int	level;
++	struct	device *classdev;
+ };
+ 
++static inline struct console *classdev_to_console(struct device *dev)
++{
++	return dev_get_drvdata(dev);
++}
++
+ /*
+  * for_each_console() allows you to iterate on each console
+  */
+diff --git a/kernel/printk/console_cmdline.h b/kernel/printk/console_cmdline.h
+index 3ca74ad391d6..40f1a1ff0965 100644
+--- a/kernel/printk/console_cmdline.h
++++ b/kernel/printk/console_cmdline.h
+@@ -6,6 +6,8 @@ struct console_cmdline
+ {
+ 	char	name[16];			/* Name of the driver	    */
+ 	int	index;				/* Minor dev. to use	    */
++	int	level;				/* Log level to use */
++	short	flags;				/* Initial flags */
+ 	bool	user_specified;			/* Specified by command line vs. platform */
+ 	char	*options;			/* Options for the driver   */
+ #ifdef CONFIG_A11Y_BRAILLE_CONSOLE
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index b49c6ff6dca0..6094f773ad4a 100644
+index 6094f773ad4a..6f5e29b60875 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -2368,6 +2368,30 @@ static void set_user_specified(struct console_cmdline *c, bool user_specified)
- 	console_set_on_cmdline = 1;
+@@ -44,6 +44,7 @@
+ #include <linux/irq_work.h>
+ #include <linux/ctype.h>
+ #include <linux/uio.h>
++#include <linux/device.h>
+ #include <linux/sched/clock.h>
+ #include <linux/sched/debug.h>
+ #include <linux/sched/task_stack.h>
+@@ -385,6 +386,20 @@ static struct latched_seq clear_seq = {
+ 	.val[1]		= 0,
+ };
+ 
++static struct class *console_class;
++
++enum loglevel_source {
++	LLS_GLOBAL,
++	LLS_LOCAL,
++	LLS_IGNORE_LOGLEVEL,
++};
++
++static const char *const loglevel_source_names[] = {
++	[LLS_GLOBAL] = "global",
++	[LLS_LOCAL] = "local",
++	[LLS_IGNORE_LOGLEVEL] = "ignore_loglevel",
++};
++
+ #ifdef CONFIG_PRINTK_CALLER
+ #define PREFIX_MAX		48
+ #else
+@@ -1202,9 +1217,72 @@ module_param(ignore_loglevel, bool, S_IRUGO | S_IWUSR);
+ MODULE_PARM_DESC(ignore_loglevel,
+ 		 "ignore loglevel setting (prints all kernel messages to the console)");
+ 
+-static bool suppress_message_printing(int level)
++static bool __read_mostly ignore_per_console_loglevel;
++
++static int __init ignore_per_console_loglevel_setup(char *str)
++{
++	ignore_per_console_loglevel = true;
++	return 0;
++}
++
++early_param("ignore_per_console_loglevel", ignore_per_console_loglevel_setup);
++module_param(ignore_per_console_loglevel, bool, 0644);
++MODULE_PARM_DESC(ignore_per_console_loglevel,
++		 "ignore per-console loglevel setting (only respect global console loglevel)");
++
++/*
++ * Hierarchy of loglevel authority:
++ *
++ * 1. con->level. The locally set, console-specific loglevel. Optional, only
++ *    valid if the CON_LOGLEVEL flag is set.
++ * 2. console_loglevel. The default global console loglevel, always present.
++ *
++ * The behaviour can be further changed by the following printk module
++ * parameters:
++ *
++ * 1. ignore_loglevel. Can be set at boot or at runtime with
++ *    /sys/module/printk/parameters/ignore_loglevel. Overrides absolutely
++ *    everything since it's used to debug.
++ * 2. ignore_per_console_loglevel. Existing per-console loglevel values are left
++ *    intact, but are ignored in favour of console_loglevel as long as this is
++ *    true.
++ *
++ * Callers typically only need the level _or_ the source, but they're both
++ * emitted from this function so that the effective loglevel logic can be
++ * kept in one place.
++ */
++static int console_effective_loglevel(const struct console *con,
++				      enum loglevel_source *source)
++{
++	enum loglevel_source lsource;
++	int level;
++
++	if (ignore_loglevel) {
++		lsource = LLS_IGNORE_LOGLEVEL;
++		level = CONSOLE_LOGLEVEL_MOTORMOUTH;
++		goto out;
++	}
++
++	if (!ignore_per_console_loglevel &&
++	    (con && (con->flags & CON_LOGLEVEL))) {
++		lsource = LLS_LOCAL;
++		level = con->level;
++		goto out;
++	}
++
++	lsource = LLS_GLOBAL;
++	level = console_loglevel;
++
++out:
++	*source = lsource;
++	return level;
++}
++
++static bool suppress_message_printing(int level, struct console *con)
+ {
+-	return (level >= console_loglevel && !ignore_loglevel);
++	enum loglevel_source source;
++
++	return level >= console_effective_loglevel(con, &source);
  }
  
-+static void parse_console_cmdline_options(struct console_cmdline *c,
-+					  char *options)
+ #ifdef CONFIG_BOOT_PRINTK_DELAY
+@@ -1236,7 +1314,7 @@ static void boot_delay_msec(int level)
+ 	unsigned long timeout;
+ 
+ 	if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
+-		|| suppress_message_printing(level)) {
++		|| suppress_message_printing(level, NULL)) {
+ 		return;
+ 	}
+ 
+@@ -1656,6 +1734,33 @@ static void syslog_clear(void)
+ 	mutex_unlock(&syslog_lock);
+ }
+ 
++/*
++ * Using the global klogctl/syslog API is unlikely to do what you want if you
++ * also have console specific loglevels. Warn about it.
++ */
++static void warn_on_local_loglevel(void)
 +{
-+	bool seen_serial_opts = false;
-+	char *key;
++	static bool warned;
++	struct console *con;
 +
-+	while ((key = strsep(&options, ",")) != NULL) {
-+		char *value;
++	if (warned)
++		return;
 +
-+		value = strchr(key, ':');
-+		if (value)
-+			*(value++) = '\0';
++	if (ignore_per_console_loglevel)
++		return;
 +
-+		if (!seen_serial_opts && isdigit(key[0]) && !value) {
-+			seen_serial_opts = true;
-+			c->options = key;
++	console_lock();
++	for_each_console(con) {
++		if (con->flags & CON_LOGLEVEL) {
++			warned = true;
++			pr_warn("%s (%d) used syslog(SYSLOG_ACTION_CONSOLE_*) with per-console loglevels set. Consoles with per-console loglevels will ignore the updated value.\n",
++				current->comm, current->pid);
++			break;
++		}
++	}
++	console_unlock();
++}
++
+ int do_syslog(int type, char __user *buf, int len, int source)
+ {
+ 	struct printk_info info;
+@@ -1701,12 +1806,14 @@ int do_syslog(int type, char __user *buf, int len, int source)
+ 		break;
+ 	/* Disable logging to console */
+ 	case SYSLOG_ACTION_CONSOLE_OFF:
++		warn_on_local_loglevel();
+ 		if (saved_console_loglevel == LOGLEVEL_DEFAULT)
+ 			saved_console_loglevel = console_loglevel;
+ 		console_loglevel = minimum_console_loglevel;
+ 		break;
+ 	/* Enable logging to console */
+ 	case SYSLOG_ACTION_CONSOLE_ON:
++		warn_on_local_loglevel();
+ 		if (saved_console_loglevel != LOGLEVEL_DEFAULT) {
+ 			console_loglevel = saved_console_loglevel;
+ 			saved_console_loglevel = LOGLEVEL_DEFAULT;
+@@ -1714,6 +1821,7 @@ int do_syslog(int type, char __user *buf, int len, int source)
+ 		break;
+ 	/* Set level of messages printed to console */
+ 	case SYSLOG_ACTION_CONSOLE_LEVEL:
++		warn_on_local_loglevel();
+ 		if (len < 1 || len > 8)
+ 			return -EINVAL;
+ 		if (len < minimum_console_loglevel)
+@@ -2329,7 +2437,10 @@ static void call_console_driver(struct console *con, const char *text, size_t le
+ 				char *dropped_text)
+ {
+ }
+-static bool suppress_message_printing(int level) { return false; }
++static bool suppress_message_printing(int level, struct console *con)
++{
++	return false;
++}
+ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progress) { return true; }
+ 
+ #endif /* CONFIG_PRINTK */
+@@ -2381,6 +2492,14 @@ static void parse_console_cmdline_options(struct console_cmdline *c,
+ 		if (value)
+ 			*(value++) = '\0';
+ 
++		if (strcmp(key, "loglevel") == 0 && value &&
++		    isdigit(value[0]) && strlen(value) == 1) {
++			c->level = clamp(value[0] - '0', LOGLEVEL_EMERG,
++					 LOGLEVEL_DEBUG + 1);
++			c->flags |= CON_LOGLEVEL;
 +			continue;
 +		}
 +
-+		pr_err("ignoring invalid console option: '%s%s%s'\n", key,
-+		       value ? ":" : "", value ?: "");
-+	}
+ 		if (!seen_serial_opts && isdigit(key[0]) && !value) {
+ 			seen_serial_opts = true;
+ 			c->options = key;
+@@ -2724,7 +2843,7 @@ static bool console_emit_next_record(struct console *con, char *text, char *ext_
+ 	}
+ 
+ 	/* Skip record that has level above the console loglevel. */
+-	if (suppress_message_printing(r.info->level)) {
++	if (suppress_message_printing(r.info->level, con)) {
+ 		con->seq++;
+ 		goto skip;
+ 	}
+@@ -3030,6 +3149,145 @@ static int __init keep_bootcon_setup(char *str)
+ 
+ early_param("keep_bootcon", keep_bootcon_setup);
+ 
++#ifdef CONFIG_PRINTK
++static ssize_t loglevel_show(struct device *dev, struct device_attribute *attr,
++			     char *buf)
++{
++	struct console *con = classdev_to_console(dev);
++
++	if (con->flags & CON_LOGLEVEL)
++		return sysfs_emit(buf, "%d\n", con->level);
++	else
++		return sysfs_emit(buf, "unset\n");
 +}
 +
- static int __add_preferred_console(char *name, int idx, char *options,
- 				   char *brl_options, bool user_specified)
++static ssize_t loglevel_store(struct device *dev, struct device_attribute *attr,
++			      const char *buf, size_t size)
++{
++	struct console *con = classdev_to_console(dev);
++	ssize_t ret;
++	int tmp;
++
++	if (!strcmp(buf, "unset") || !strcmp(buf, "unset\n")) {
++		con->flags &= ~CON_LOGLEVEL;
++		return size;
++	}
++
++	ret = kstrtoint(buf, 10, &tmp);
++	if (ret < 0)
++		return ret;
++
++	if (tmp < LOGLEVEL_EMERG || tmp > LOGLEVEL_DEBUG + 1)
++		return -ERANGE;
++
++	if (tmp < minimum_console_loglevel)
++		return -EINVAL;
++
++	con->level = tmp;
++	con->flags |= CON_LOGLEVEL;
++
++	return size;
++}
++
++static DEVICE_ATTR_RW(loglevel);
++
++static ssize_t effective_loglevel_source_show(struct device *dev,
++					      struct device_attribute *attr,
++					      char *buf)
++{
++	struct console *con = classdev_to_console(dev);
++	enum loglevel_source source;
++
++	console_effective_loglevel(con, &source);
++	return sysfs_emit(buf, "%s\n", loglevel_source_names[source]);
++}
++
++static DEVICE_ATTR_RO(effective_loglevel_source);
++
++static ssize_t effective_loglevel_show(struct device *dev,
++				       struct device_attribute *attr,
++				       char *buf)
++{
++	struct console *con = classdev_to_console(dev);
++	enum loglevel_source source;
++
++	return sysfs_emit(buf, "%d\n",
++			  console_effective_loglevel(con, &source));
++}
++
++static DEVICE_ATTR_RO(effective_loglevel);
++
++static ssize_t enabled_show(struct device *dev, struct device_attribute *attr,
++			    char *buf)
++{
++	struct console *con = classdev_to_console(dev);
++
++	return sysfs_emit(buf, "%d\n", !!(con->flags & CON_ENABLED));
++}
++
++static DEVICE_ATTR_RO(enabled);
++
++static struct attribute *console_sysfs_attrs[] = {
++	&dev_attr_loglevel.attr,
++	&dev_attr_effective_loglevel_source.attr,
++	&dev_attr_effective_loglevel.attr,
++	&dev_attr_enabled.attr,
++	NULL,
++};
++
++ATTRIBUTE_GROUPS(console_sysfs);
++
++static void console_classdev_release(struct device *dev)
++{
++	kfree(dev);
++}
++
++static void console_register_device(struct console *new)
++{
++	/*
++	 * We might be called from register_console() before the class is
++	 * registered. If that happens, we'll take care of it in
++	 * printk_late_init.
++	 */
++	if (IS_ERR_OR_NULL(console_class))
++		return;
++
++	new->classdev = kzalloc(sizeof(struct device), GFP_KERNEL);
++	if (!new->classdev)
++		return;
++
++	device_initialize(new->classdev);
++	dev_set_name(new->classdev, "%s", new->name);
++	dev_set_drvdata(new->classdev, new);
++	new->classdev->release = console_classdev_release;
++	new->classdev->class = console_class;
++	if (device_add(new->classdev))
++		put_device(new->classdev);
++}
++
++static void console_setup_class(void)
++{
++	struct console *con;
++
++	/*
++	 * printk exists for the lifetime of the kernel, it cannot be unloaded,
++	 * so we should never end up back in here.
++	 */
++	if (WARN_ON(console_class))
++		return;
++
++	console_class = class_create(THIS_MODULE, "console");
++	if (!IS_ERR(console_class))
++		console_class->dev_groups = console_sysfs_groups;
++
++	for_each_console(con)
++		console_register_device(con);
++}
++#else /* CONFIG_PRINTK */
++static void console_register_device(struct console *new) {}
++static void console_setup_class(void) {}
++#endif
++
+ /*
+  * This is called by register_console() to try to match
+  * the newly registered console with any of the ones selected
+@@ -3062,6 +3320,11 @@ static int try_enable_preferred_console(struct console *newcon,
+ 			if (newcon->index < 0)
+ 				newcon->index = c->index;
+ 
++			if (c->flags & CON_LOGLEVEL)
++				newcon->level = c->level;
++			newcon->flags |= c->flags;
++			newcon->classdev = NULL;
++
+ 			if (_braille_register_console(newcon, c))
+ 				return 0;
+ 
+@@ -3223,6 +3486,7 @@ void register_console(struct console *newcon)
+ 		/* Begin with next message. */
+ 		newcon->seq = prb_next_seq(prb);
+ 	}
++	console_register_device(newcon);
+ 	console_unlock();
+ 	console_sysfs_notify();
+ 
+@@ -3289,6 +3553,10 @@ int unregister_console(struct console *console)
+ 		console_drivers->flags |= CON_CONSDEV;
+ 
+ 	console->flags &= ~CON_ENABLED;
++
++	if (console->classdev)
++		device_unregister(console->classdev);
++
+ 	console_unlock();
+ 	console_sysfs_notify();
+ 
+@@ -3348,6 +3616,10 @@ void __init console_init(void)
+  * To mitigate this problem somewhat, only unregister consoles whose memory
+  * intersects with the init section. Note that all other boot consoles will
+  * get unregistered when the real preferred console is registered.
++ *
++ * Early consoles will also have been registered before we had the
++ * infrastructure to put them into /sys/class/console, so make sure they get
++ * set up now that we're ready.
+  */
+ static int __init printk_late_init(void)
  {
-@@ -2393,7 +2417,7 @@ static int __add_preferred_console(char *name, int idx, char *options,
- 	if (!brl_options)
- 		preferred_console = i;
- 	strlcpy(c->name, name, sizeof(c->name));
--	c->options = options;
-+	parse_console_cmdline_options(c, options);
- 	set_user_specified(c, user_specified);
- 	braille_set_options(c, brl_options);
+@@ -3381,6 +3653,9 @@ static int __init printk_late_init(void)
+ 					console_cpu_notify, NULL);
+ 	WARN_ON(ret < 0);
+ 	printk_sysctl_init();
++
++	console_setup_class();
++
+ 	return 0;
+ }
+ late_initcall(printk_late_init);
+diff --git a/kernel/printk/sysctl.c b/kernel/printk/sysctl.c
+index c228343eeb97..97689d728d3e 100644
+--- a/kernel/printk/sysctl.c
++++ b/kernel/printk/sysctl.c
+@@ -7,10 +7,14 @@
+ #include <linux/printk.h>
+ #include <linux/capability.h>
+ #include <linux/ratelimit.h>
++#include <linux/console.h>
+ #include "internal.h"
+ 
+ static const int ten_thousand = 10000;
+ 
++static int min_loglevel = LOGLEVEL_EMERG;
++static int max_loglevel = LOGLEVEL_DEBUG + 1;
++
+ static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
+ 				void *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -20,13 +24,55 @@ static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
+ 	return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ }
+ 
++static int printk_sysctl_deprecated(struct ctl_table *table, int write,
++				    void __user *buffer, size_t *lenp,
++				    loff_t *ppos)
++{
++	int res = proc_dointvec(table, write, buffer, lenp, ppos);
++
++	if (write)
++		pr_warn_once(
++			"printk: The kernel.printk sysctl is deprecated. Consider using kernel.console_loglevel or kernel.default_message_loglevel instead.\n"
++		);
++
++	return res;
++}
++
++static int printk_console_loglevel(struct ctl_table *table, int write,
++				   void __user *buffer, size_t *lenp,
++				   loff_t *ppos)
++{
++
++	struct ctl_table ltable = *table;
++	int ret, value;
++
++	if (!write)
++		return proc_dointvec(table, write, buffer, lenp, ppos);
++
++	ltable.data = &value;
++
++	ret = proc_dointvec(&ltable, write, buffer, lenp, ppos);
++	if (ret)
++		return ret;
++
++	if (value < min_loglevel || value > max_loglevel)
++		return -ERANGE;
++
++	if (value < minimum_console_loglevel)
++		return -EINVAL;
++
++	console_loglevel = value;
++
++	return 0;
++}
++
+ static struct ctl_table printk_sysctls[] = {
+ 	{
+ 		.procname	= "printk",
+ 		.data		= &console_loglevel,
+ 		.maxlen		= 4*sizeof(int),
+ 		.mode		= 0644,
+-		.proc_handler	= proc_dointvec,
++		.proc_handler	= printk_sysctl_deprecated,
+ 	},
+ 	{
+ 		.procname	= "printk_ratelimit",
+@@ -76,6 +122,22 @@ static struct ctl_table printk_sysctls[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_TWO,
+ 	},
++	{
++		.procname	= "console_loglevel",
++		.data		= &console_loglevel,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= printk_console_loglevel,
++	},
++	{
++		.procname	= "default_message_loglevel",
++		.data		= &default_message_loglevel,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= &min_loglevel,
++		.extra2		= &max_loglevel,
++	},
+ 	{}
+ };
  
 -- 
 2.37.1

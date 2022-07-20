@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F313057AB3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8943557AB3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237309AbiGTA71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 20:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S238870AbiGTA7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 20:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239136AbiGTA7U (ORCPT
+        with ESMTP id S237582AbiGTA7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:59:20 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0DD422D1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:59:19 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l14-20020a17090a72ce00b001f20ed3c55dso622982pjk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:59:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MMqpq+6+yoPLVRxuqGlUD9PzJdpOdFM4+KM/Do+P/P4=;
-        b=zXISU7imtSyM8keXKHfu+RbyJ1d2MZ5O6ob4x2/Fa+/4IfT8j3orPgO+bJrF8Ovg6N
-         RaJljrcCqrngnnj/2niRvPDEIdujQeCpyIKx1Deh2cj6q0IVASBpagRmaOQyWwWQ0Zso
-         KZ/CCx0NVAcTRGPWpnN+C/0LIgfWLyUe3JV07xD4WTkktb8EnVO92bDmvwqT9IiDDqxD
-         HMPkRm7uOoKdQ0v2yaBKjtXoTCrX9wIINAMpz851fVUg5hNLM1QLP7ck1tc/FpBOmi2L
-         YvJB/STir26x4yvyZB5POdAzWYkmE8iQ+fDdYyua0WQ5rS4CNRuVwGb9U2RfDqLRFcgz
-         jP0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MMqpq+6+yoPLVRxuqGlUD9PzJdpOdFM4+KM/Do+P/P4=;
-        b=ujXHqdWXTn047I12EFPNvKWxiI4g/Vcj31tBlmwzxVtQuKBPTBaGV3hSYyclFu28EO
-         +cycbSK0a4RACy8saFf+PS+cLP2XwKDvkDVJa6Ysg3mEA4YImcOiOXUvPQgkZQIyv7K2
-         0bYvf88E9H+5OQVZrypR5areNdIh+lZ/AfBzky/9+kwvtQK9VKTMh/Kt1EKSjcxgsS/f
-         QSzjFRjrgctZAeqY5PBc9sCovRcxwolpdbrr34UsSYDZukfWDlkFTVeIf3AeTE6qacTt
-         jMWzwLJEHb0ZjVC+CYjeDZOFTm71gfEAdkbMw+q325bPVIrBy0IShNZegCuZ0LEFodVb
-         DJBw==
-X-Gm-Message-State: AJIora9kUWe25PM+ZDVq1rOQjNfXNrgDz4IEUD7bvQO5IbkcCedLHdx7
-        /lxZrqK1OpKslcTkIa4gkKxVWG2PHaZAYvhnMZOidw==
-X-Google-Smtp-Source: AGRyM1tqE0o6Xmvg+LICCVUDMbQDW1UImgVhQXsbysUQxDJu6Z6mJ5BwwppnF55vHTiTzl9zv6CM/ORA/UZoQemK/yQ=
-X-Received: by 2002:a17:90b:4f82:b0:1f0:95d:c029 with SMTP id
- qe2-20020a17090b4f8200b001f0095dc029mr2480358pjb.66.1658278758841; Tue, 19
- Jul 2022 17:59:18 -0700 (PDT)
+        Tue, 19 Jul 2022 20:59:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F97B4AD7C
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658278788; x=1689814788;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nuzHil18hQah8mRqKkYQFzAMHFmMEuGVD8GiUEVxl4A=;
+  b=TlAnzINUafLtO5BrdEktdQ0F5TYxqSDu1WWbrjd3Me2pWaxmqEPblHKY
+   4E7Smv6eBVGlvuKQDvwwLANSSjFjfLD9i3Zk1C15C+AYrlN/p8xD55kiI
+   /FPM5UL0y11sjtUjRsolrPbB8cS8JKCmqPNoWvcqLmgSHfh9nk6pBpfje
+   lxzBx6ftb4xlZL+ObbgUQJBazgMuvfoK2WTD1EaMGRKq+3/8zwjnmgvsd
+   Cs/RztAIib5C2W2ffGpN6YGrs7As5/hULWgSmpSKdOZxyZmOk4tQAlQ/1
+   7K1MTZkmuJinKwXVI81e4Ui0BhyRtMjDu7Y0lEEJ4e3zL6OP3tihjZrrb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="269673652"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="269673652"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 17:59:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="687325851"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 Jul 2022 17:59:42 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id C14F9136; Wed, 20 Jul 2022 03:59:50 +0300 (EEST)
+Date:   Wed, 20 Jul 2022 03:59:50 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Alexander Potapenko <glider@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv5 00/13] Linear Address Masking enabling
+Message-ID: <20220720005950.fonulr4kkwbh6kbz@black.fi.intel.com>
+References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
+ <CAG_fn=WR3s3UMh76+bibN0nUpZk9AS_M18=oxP+pc_vtqKt34A@mail.gmail.com>
 MIME-Version: 1.0
-References: <1652866528-13220-1-git-send-email-hongxing.zhu@nxp.com> <1652866528-13220-2-git-send-email-hongxing.zhu@nxp.com>
-In-Reply-To: <1652866528-13220-2-git-send-email-hongxing.zhu@nxp.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Tue, 19 Jul 2022 17:59:07 -0700
-Message-ID: <CAJ+vNU0FM_zs9nQ6rX=xNJzsgaH=5WOeNDNCS9rs5VF2Av5eRQ@mail.gmail.com>
-Subject: Re: [RFC 2/2] PCI: imx6: Support more than Gen2 speed link mode
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Fabio Estevam <festevam@gmail.com>, linux-pci@vger.kernel.org,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=WR3s3UMh76+bibN0nUpZk9AS_M18=oxP+pc_vtqKt34A@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 2:49 AM Richard Zhu <hongxing.zhu@nxp.com> wrote:
->
-> Support more than Gen2 speed link mode, since i.MX8MP PCIe supports up
-> to Gen3 link speed.
->
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 30641d2dda14..37012f9a33a0 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -809,8 +809,8 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->
->         dw_pcie_wait_for_link(pci);
->
-> -       if (pci->link_gen == 2) {
-> -               /* Allow Gen2 mode after the link is up. */
-> +       if (pci->link_gen > 1) {
-> +               /* Allow faster modes after the link is up. */
->                 dw_pcie_dbi_ro_wr_en(pci);
->                 tmp = dw_pcie_readl_dbi(pci, offset + PCI_EXP_LNKCAP);
->                 tmp &= ~PCI_EXP_LNKCAP_SLS;
-> --
+On Mon, Jul 18, 2022 at 07:39:22PM +0200, Alexander Potapenko wrote:
+> On Wed, Jul 13, 2022 at 1:13 AM Kirill A. Shutemov
+> <kirill.shutemov@linux.intel.com> wrote:
+> >
+> > Linear Address Masking[1] (LAM) modifies the checking that is applied to
+> > 64-bit linear addresses, allowing software to use of the untranslated
+> > address bits for metadata.
+> >
+> > The patchset brings support for LAM for userspace addresses.
+> >
+> > LAM_U48 enabling is controversial since it competes for bits with
+> > 5-level paging. Its enabling isolated into an optional last patch that
+> > can be applied at maintainer's discretion.
+> 
+> I believe having optional patches will put unnecessary burden on
+> distro maintainers.
+> Soon after landing U48 support other changes will start piling on top
+> of it, and it will be impossible to maintain a kernel with this patch
+> removed.
+> It also won't make any difference for the upstream, where this patch
+> will be always present.
+> 
+> We'd better decide now whether we need U48 or not, and either keep it
+> or delete it.
 
-Richard,
+Dave, Andy, any position on this?
 
-I noticed that your imx8mp pcie series [1] will force the imx8mp to
-link only at gen1 speeds unless support like the above is added. I
-believe you would also need the following:
--               tmp |= PCI_EXP_LNKCAP_SLS_5_0GB;
-+               tmp |= pci->link_gen;
+I wrote LAM_U48 support to prove that interface is flexible enough, but I
+see why it can be a problem if a distro will pick them up ahead of
+upstream.
 
-When I used this along with your imx8mp series however I only get a gen1 link.
-
-Have you made any progress on a v3 of your imx8mp series?
-
-Do you know if the downstream NXP vendor kernel [2] supports imx8mp Gen3 links?
-
-Best Regards,
-
-Tim
-[1] https://patchwork.kernel.org/project/linux-pci/list/?series=620887&state=*
-[2] https://source.codeaurora.org/external/imx/linux-imx/
+-- 
+ Kirill A. Shutemov

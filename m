@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B63E57B1D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883E957B1DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235276AbiGTHhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
+        id S240025AbiGTHi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239942AbiGTHhK (ORCPT
+        with ESMTP id S237710AbiGTHiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:37:10 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA35851A03
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:37:08 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id q13-20020a17090a304d00b001f1af9a18a2so1212211pjl.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:37:08 -0700 (PDT)
+        Wed, 20 Jul 2022 03:38:25 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9127762484
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:38:24 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id o12so15810368pfp.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:38:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ecs-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id;
-        bh=3Wj9GT1NdFqQ2oHNWAiuoS6nkINcnSck7GS6eVjAGfI=;
-        b=mBMyPU/vqy55XL0Y2xA2hfo6WZDL605Hyj30QJqvh2C6iLY7UuxuT15c2zcoThoqiq
-         qxAlvDwK6xKKmEh4MjPJqX3G9K7/iFFph9UdsQY+p2DjnKZ9I09yKhfiB4i03Kwg3I7g
-         0rDEMPekkptPA2BevSfliJwThlDsqrlYqaAhPtWsQI41Wf7kh71xdEeBN/OCZMxsw28K
-         mVs8tNo0fNvpL+Zp3hj3SvcK7BoqWMhBitlnONJbSsJRvQPxWJsTvRHdS9V5k12c/w9e
-         wiWV1gptbrhRP5T+43DOqd4TtieVopZpwAtKB8tn9DVj+NXiLuIXFn+93a9NTll08s2D
-         M2Wg==
+        bh=Xc6fgEvmDOLfBjoXIj0m1oyh4sYver0cQuxKyhaoxJM=;
+        b=EM3raoSZqNAjsRgHvZ0SU1ze7cgNCDQhvSAlUHFHiki6V7TymxfB2xJX21OA1+Dx/N
+         TK5N2I5Qg8gPZcRkasQk66SAnwHpOGwa5ZOEijnsNUM69PHPe0mmIwScg2W4w+1L3zT8
+         pGLqqxZAKYEMtdtSFE1A90nk+eGvlfx7TMV/ruIq4581zOjb8n0+oZjQ1XZwoq5mcRRm
+         Ke1OU9leiWGyo5ndLh7Nooco2Uu1nNxK+K+YmsWgRRWmDLPi4rwSAj0TrsJibxYwulRi
+         vbeI/8O10trz90ZnzunPmJ5UNasNuScp+N9rbKI3IiorRjLpHNymd3x61gThDUGqpgYH
+         WnzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=3Wj9GT1NdFqQ2oHNWAiuoS6nkINcnSck7GS6eVjAGfI=;
-        b=BJzhAvUKwJ7/Osm1mQ+NyGLhh5yebHr6sjE5NWJYOtBjgYpzIEnxSm2zOiQEsA+F4Y
-         nceUa6zdhop221D+3CX2VDIo/7T3NsXs4OsWSitfE2gzFxtGqPqNJMaO8uLgvuvDzflE
-         fARJbfawCiSzem5uwWatuaFm1Fn34tO4hGiyPBK+jnRT2w/1Wzp6DCk/rfvrkc6opbvN
-         aX0hmirbm1fSvj1sKJBXiSCiXQoHa6cw67ibLwCVPZJjGF9PD8PLQtC2gUScm8/dvXMc
-         D9LKPjOKZc8aPiC1G1ZdI+GmbMtRxEpBESBPxeHtv/zatdK4e6CKxJQlL+UqM3caFFlZ
-         E3QQ==
-X-Gm-Message-State: AJIora8bFwT8NF0k2sOiaSS/vufvlUAqor3zg0P8egp7gsNa+aXQYRyJ
-        rIPUlnW8RAekndgAWQXP+1bizD3yZbOcCGWG
-X-Google-Smtp-Source: AGRyM1tvTO8b4fdoW6z++qQVp4cwEdSv1juNrFsh8iGREXYRTyg52uv5tQrn7+ojavdl2vNb2zlmCg==
-X-Received: by 2002:a17:90b:4a83:b0:1ef:de4c:660f with SMTP id lp3-20020a17090b4a8300b001efde4c660fmr3745862pjb.213.1658302627968;
-        Wed, 20 Jul 2022 00:37:07 -0700 (PDT)
+        bh=Xc6fgEvmDOLfBjoXIj0m1oyh4sYver0cQuxKyhaoxJM=;
+        b=pNz8dFZCdUEGkH1HtKckncnZLHpxBcwLn0ng18cNM+raftzNJ1Kqjpr0OnNmyXYXke
+         te9Ca7TXkZ4WePdzeukshBl5cvsSs2qx6zidQyOP2vW19Q2cQd3y82erAC7ZBGVnrcPd
+         +ljP5yBU+KMCM9QQmAU+zLGIOkmzB2csyl+DFBtAueQm4kjSKxf+mTf/umjlDKM4VXPe
+         hKV6Ki2yMCNB7OREzrfqS9L4zsIKDJ2pe+Hjh6cHs1h7Jv59py2Rb2e+hyluXzu2kjsZ
+         jJQ329y3mYqtZPNqkkwIBzAzjB+cjHaaA3C4rYGUFbJaCZvpRqDlzZxn4jEP+Q/sCkmO
+         tpwg==
+X-Gm-Message-State: AJIora9Iw/I6iuOR2g1Y0Iq9m+o0ieGg2dB50q7bMRhcL3Qe7V/vW5av
+        mpTz5+VnFRxb/P1dROx4FFCG/qPcUajy2SbM
+X-Google-Smtp-Source: AGRyM1uit8I0cHYFIviOVNQ8VWwD3Ep/WPdp05cI6kC1jOq2rPP7+nZ99LB3y8C760QG7rY0ucwQEw==
+X-Received: by 2002:a05:6a00:1745:b0:52a:f0d3:ae7 with SMTP id j5-20020a056a00174500b0052af0d30ae7mr38283892pfc.72.1658302703844;
+        Wed, 20 Jul 2022 00:38:23 -0700 (PDT)
 Received: from localhost.localdomain ([103.104.171.43])
-        by smtp.gmail.com with ESMTPSA id s15-20020a170902ea0f00b0016bf803341asm10997748plg.146.2022.07.20.00.37.04
+        by smtp.gmail.com with ESMTPSA id u5-20020a655c05000000b0041296135280sm11216243pgr.88.2022.07.20.00.38.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 00:37:07 -0700 (PDT)
+        Wed, 20 Jul 2022 00:38:23 -0700 (PDT)
 From:   Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Henry Sun <henrysun@google.com>,
+Cc:     Henry Sun <henrysun@google.com>,
+        Douglas Anderson <dianders@chromium.org>,
         Bob Moragues <moragues@chromium.org>,
         Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
         Andy Gross <agross@kernel.org>,
@@ -58,9 +58,9 @@ Cc:     Douglas Anderson <dianders@chromium.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: Add SKU6 for sc7180-trogdor-pazquel-lte-parade
-Date:   Wed, 20 Jul 2022 07:37:00 +0000
-Message-Id: <20220720073604.1.I249596c011ff05da5a95d72fc321e115ef859803@changeid>
+Subject: [PATCH] dt-bindings: arm: qcom: Document additional sku6 for sc7180 pazquel
+Date:   Wed, 20 Jul 2022 07:38:16 +0000
+Message-Id: <20220720073755.1.Ifab936517646b3876dd31b6e9b1b58a858529e57@changeid>
 X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
@@ -71,27 +71,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SKU6 is LTE(w/o eSIM)+WIFI+Parade
+The difference between sku6 and sku4 is that there is no esim
 
 Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
 ---
 
- arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
-index 764c451c1a857..767cb7450c0d8 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
-@@ -14,7 +14,7 @@
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 4dd18fbf20b6..aebeefdab27f 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -410,6 +410,7 @@ properties:
+       - description: Google Pazquel with LTE and Parade (newest rev)
+         items:
+           - const: google,pazquel-sku4
++          - const: google,pazquel-sku6
+           - const: qcom,sc7180
  
- / {
- 	model = "Google Pazquel (Parade,LTE)";
--	compatible = "google,pazquel-sku4", "qcom,sc7180";
-+	compatible = "google,pazquel-sku6", "google,pazquel-sku4", "qcom,sc7180";
- };
- 
- &ap_sar_sensor_i2c {
+       - description: Google Pazquel with LTE and TI (newest rev)
 -- 
 2.17.1
 

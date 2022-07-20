@@ -2,175 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6949957B69A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD3E57B69E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236412AbiGTMl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        id S239670AbiGTMmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbiGTMl4 (ORCPT
+        with ESMTP id S232178AbiGTMm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:41:56 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E2968712
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:41:54 -0700 (PDT)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 89E523F0D7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658320913;
-        bh=Y+9o9GFX1ufwCQQNftB4eyTX1KW13yoadiZ61emz3PM=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=DmmpmhK9mHCgzut1Q3CpCUg3JwPAb5xI9a9qLKrPxfFJPiKnhScQYlTZCX8IcRntE
-         Kj9Wa4Pw8j40i7Ur/otUL5p10RNgVDqFREbDatSa/WlvLy1B4bRUHbEjQstgq7Nju9
-         mxCjBVayVbdPABqNcEpiciwZeni8dfP9XuMqayRC+jKijbc9tzH2g6QKtusu6IEEsm
-         NRZrkQewidd7/3GHAQdf+XL+HuBafpYckGZdtrJjXD9a+M4y9aCEbYFn3vRZzIbdlY
-         hHt0o1PzuII6s3+3udGLor0hS+kn9RRmEm5UTs7dTfrxHH1YG2mE2YlXDzqriSnAbL
-         EAuBCRlycixdA==
-Received: by mail-wm1-f70.google.com with SMTP id r82-20020a1c4455000000b003a300020352so7742740wma.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:41:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y+9o9GFX1ufwCQQNftB4eyTX1KW13yoadiZ61emz3PM=;
-        b=ODq0FKx5GQjooFNl5tJ8kZ/Fp2rOddaGCSsH1QXStoXAiQHI7wV0Q/h0owBDDY8bsG
-         3Ob9BoKS4ImeLi1RF5Lks+nnVfcdv7tlMMb9b70buBS8oeGT7wC7bcXY2eG34mYWgj7E
-         SzCcJgYmriDhVbbplhzsD+uFmZtxRkzEZrKH6AX0WmOQx6Oc9Z/xNomXDpJV5F3uFmCa
-         pKjUR0+7RN93u7y6Lv+IAxDu6rtwM0b0tUV192+bPJgbze88/IJM0JeauZqVmV3h41/T
-         TRYMbgJH/GbYbAU7JG9jgpbAX3AVA2rHhqjLWonAjaulxE2E66RI/Y7nEwfCe1pKCY5R
-         7Cdw==
-X-Gm-Message-State: AJIora+Ad4jVKnkvFa2Eydv0m9EFLXs6hDMYNFqFNEvPEnCFGks+5gpq
-        QGulFnu8ixSYUAmiSkiT3m9GVWBAUG7DG6REMJ18bqPCzjxLHnTrAswAfuOXpaRn2sbr8C55DlQ
-        E6ULhrRtoYeAzbOyMTbrEL83aQcNWaFPoKbp1kXxLcA==
-X-Received: by 2002:a05:600c:3512:b0:3a3:f39:5735 with SMTP id h18-20020a05600c351200b003a30f395735mr3843861wmq.165.1658320911263;
-        Wed, 20 Jul 2022 05:41:51 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sD3mkpRaKL6ug0/dKvmXLr/1spERmTEgL9iklugP9KjoO+uOlNO/PcjbC7UDTHmV3y4cSdow==
-X-Received: by 2002:a05:600c:3512:b0:3a3:f39:5735 with SMTP id h18-20020a05600c351200b003a30f395735mr3843839wmq.165.1658320911002;
-        Wed, 20 Jul 2022 05:41:51 -0700 (PDT)
-Received: from localhost ([2a01:4b00:85fd:d700:e4f3:532d:c9d0:df5d])
-        by smtp.gmail.com with ESMTPSA id m39-20020a05600c3b2700b003a2e1883a27sm3349079wms.18.2022.07.20.05.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 05:41:50 -0700 (PDT)
-From:   Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-To:     masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nathan@kernel.org, trix@redhat.com
-Subject: [PATCH] kbuild: introduce $(GCC) variable for path-prefix or version-suffix
-Date:   Wed, 20 Jul 2022 13:41:37 +0100
-Message-Id: <20220720124137.151714-1-dimitri.ledkov@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 20 Jul 2022 08:42:28 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20620.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::620])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C166A9EC;
+        Wed, 20 Jul 2022 05:42:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UQsXOiNqx2JdBr1Nfif0sv4RQEPU0Moo35zqZm6q3GHFY9hEL+XMlXaERefmq5R+WcIdRFDpNzc9K2Kdz5v63eJnxPzW9uOlH9QOJWE7GBhp8ljT6ZmpiGUtEfv2IWvkntIJ5IgfyZFd26xK/n4KDnrViSOp0wPVVTlzMsD/uO6GK0ExBW/ErEOhoYe/CWOYHukosz06gHCYXty/9358uw3AZ3st4sEDLonYdWFxMgpP59L/LR5oqnkYKbMKLSOtzVI025sxvCuyK9NDrGn/UIsTtpZ8gQK5oJqTIE0gEED1agZVmUpzCFJNq8jnBGlStEUkpUgmiTf5ZvE6ABKwNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tzXbu0RxavaQeiCi7WRCpTH4fptBFZ2M4m3FpWg3Xbk=;
+ b=gS+eRhjnYQzrG4gObmZmPy7derlEYelKTw5BkcErBBUOeQLSj1uInf5qhyhDxb314HSAV18WiHyvRr8ge+P5btcAZ3asSqt5CLFxsXLEaJCU176Flpn/v28XD/c3jks3zbsVj2TF9C+JQKCo+iCveORM+YOPFzJfm9MYBSsS0UcwpsB2JJq/ksn5oyGLCSwUZKkzAWcUaUDTBQW22mPdIVcJzl3LRGyjDipq7ES559QtSBxPWUNWLC05lOI7CyKiBmNFVWlue+c3/eWHaDNHXB8oQwmbLQ0B2JADDwIQ0//jZFkba6fYNDrgqG4H8u5R5CSsC3ia77GNHzqPQJWJ6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tzXbu0RxavaQeiCi7WRCpTH4fptBFZ2M4m3FpWg3Xbk=;
+ b=Og8GWbX6U5BXVL1CyYKI03FUR/d+BNEKIfrhABU82NaVVHkpqDjyouEFWIJo/kvlJC3eZzrO1gQyI4PquNlXQrP5cGSg5qHgjT59jdqulrLzurUPZ4Jfm9dLSfAjqRLOPjAAkk0rt1BD0U2YJ76mI5pZhZ+eUi9wq5D9xrXRZ4am5QG13XbR8WhI9W4lc1SNeFdlwXOfjRVzYE48EtUWhx5iuhiaZzh/AtqB3nB5zalCXw8wtsutnfF1xPF59x6YLLUdlFRQJsb7A0kUtomtweCBOoi7C+TW32lgjklqw2zCs9BScTdrgomNL2ezgkLfItYYp7yuVISyAYh1+8VRtA==
+Received: from DS7PR05CA0025.namprd05.prod.outlook.com (2603:10b6:5:3b9::30)
+ by DM4PR12MB6277.namprd12.prod.outlook.com (2603:10b6:8:a5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Wed, 20 Jul
+ 2022 12:42:25 +0000
+Received: from DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b9:cafe::d2) by DS7PR05CA0025.outlook.office365.com
+ (2603:10b6:5:3b9::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18 via Frontend
+ Transport; Wed, 20 Jul 2022 12:42:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.234) by
+ DM6NAM11FT040.mail.protection.outlook.com (10.13.173.133) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5458.17 via Frontend Transport; Wed, 20 Jul 2022 12:42:24 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 20 Jul
+ 2022 12:42:24 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 20 Jul
+ 2022 05:42:23 -0700
+Received: from BUILDSERVER-IO-L4T.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.26 via Frontend
+ Transport; Wed, 20 Jul 2022 05:42:20 -0700
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <christian.koenig@amd.com>, <digetx@gmail.com>,
+        <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <sumit.semwal@linaro.org>,
+        <thierry.reding@gmail.com>, <wsa@kernel.org>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH 0/2] Add GPCDMA support to Tegra234 I2C
+Date:   Wed, 20 Jul 2022 18:11:46 +0530
+Message-ID: <20220720124148.7969-1-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1eba44ce-2bfb-4a6f-9eba-08da6a4d4c2f
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6277:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: R+h2j9Y7/KhT/4WA3kMCcLlyBO0l3fTpB/6zD+qRg0EE1L8qrYpGeq5Xdu6pwpL+E9eYuKan+EB+4sbgWslic/2N4gf2BiSq4MT3xIU0xoBXbRupsy2cRZkhNpvsXY2ibZw0tLVg5vQmlIgPebcsATT6hzOzENgKSIFO/0yYwax9oSr6QGx/TdfYc5tptnAZoGonqGIHVwwYA7G3aWfUokDjd8DclE49uNVltLFGm6DRYt84dA0wP9qpBLuT7pMyjKpSbI61oAr694Hbj6leNdVwkRWEjjvZ4fCiRoHsnJcXfcmXWZN7yKVIXE7eWBw93Nqs5FsVXrOqp7Ow0QSpV/RHL2gk30DKY9qtVZmOSu/Uig3Ru32CVbvinBl0537AUbgfpnZu3ZWh8s2GNJOMowXlv4RuRv3ZrdGo6uU8nvEAadUFvmBYQKNzjIHOAoVyO/ijTEbzRyM48Qu6mUbhzj2AX/NRBY6bpSSZ+Xm9ZOhcX30z4luETTaMolAI9do0js+sFq4OCdQpjm6TBCcScbfIJrPr3DVuRvxKmfMEk4LwQ6XCMF6XIiLJZ6yQze4mtuy0mSmiMrd/SHXo7oZr3Uw229COQqVMoNZp2BdkCJWxrOGxL6gP0QD59kxaipvhhxNAjoJbvMTH2eZYC//Hqx9Xuo5bPBF9aWteAekBvFpIC3QU2uUyoy7j2ssGfwu6ZEFRx0HhtZ2gH5KzfDU8aSzqutG1sAjkQkyp8eqd0lZLRswJShalaJc3wMMSVUWsObX4ghtA61zEOvt598jtACyvz1gT9fIcVGUHvFnAbkzlTCAIeZZxb5xDKnBzpNIVhifXwz7ogcbQIpFxkb97/1BGeLiQasfvvAv/jVVdhIAnL45Co3tfFB7BmgzoVb+J2K7uyMF8aIu3Zqic0NF2Fg==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(136003)(39860400002)(396003)(40470700004)(46966006)(36840700001)(81166007)(4744005)(36860700001)(83380400001)(186003)(336012)(356005)(2616005)(26005)(86362001)(47076005)(921005)(1076003)(426003)(107886003)(82740400003)(41300700001)(478600001)(5660300002)(7416002)(110136005)(36756003)(316002)(70586007)(70206006)(8676002)(40480700001)(40460700003)(2906002)(8936002)(4326008)(7696005)(82310400005)(6666004)(36900700001)(83996005)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 12:42:24.8311
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1eba44ce-2bfb-4a6f-9eba-08da6a4d4c2f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6277
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce $(GCC) variable with similar semantics to $(LLVM) for
-setting path-prefix or version-suffix.
+Updates in Tegra I2C driver and device tree to support GPCDMA in
+Tegra234
 
-Currently to correctly and consistently use gcc-10 on Ubuntu 20.04
-LTS, to cross compile a kernel one has to do:
+Akhil R (2):
+  i2c: tegra: Add GPCDMA support
+  arm64: tegra: Add GPCDMA support for Tegra234 I2C
 
-$ make ... CROSS_COMPILE=riscv64-linux-gnu- \
-           CC=riscv64-linux-gnu-gcc-10 \
-           HOSTCC=gcc-10 \
-           HOSTCXX=g++-10
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi | 32 +++++++++++++++++++
+ drivers/i2c/busses/i2c-tegra.c           | 39 +++++++++++-------------
+ 2 files changed, 50 insertions(+), 21 deletions(-)
 
-With this change
-
-$ make ... CROSS_COMPILE=riscv64-linux-gnu- GCC=-10
-
-is sufficient to correctly select a consistent CC/HOSTCC/HOSTCXX set.
-
-Similarly GCC=/path/to/unpacked/toolchains/ can be used to select
-toolchain outside of PATH.
-
-Update documentation for LLVM variable, and mention that GCC variable
-can be used in a similar fashion to set path-prefix, or
-version-suffix.
-
-Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
----
- Documentation/kbuild/kbuild.rst | 12 ++++++++++--
- Makefile                        | 12 +++++++++---
- tools/testing/selftests/lib.mk  |  2 +-
- 3 files changed, 20 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-index ef19b9c13523..6382b082018e 100644
---- a/Documentation/kbuild/kbuild.rst
-+++ b/Documentation/kbuild/kbuild.rst
-@@ -276,5 +276,13 @@ whoami and host, respectively.
- 
- LLVM
- ----
--If this variable is set to 1, Kbuild will use Clang and LLVM utilities instead
--of GCC and GNU binutils to build the kernel.
-+If this variable is set to 1, Kbuild will use Clang and LLVM utilities
-+instead of GCC and GNU binutils to build the kernel. It can also be
-+used to set a path prefix, or a version suffix, see "Building
-+Linux with Clang/LLVM".
-+
-+GCC
-+---
-+This variable can be used similar to LLVM variable above to set a path
-+prefix, or a version suffix for GNU Toolchain binaries. See examples
-+in "Building Linux with Clang/LLVM".
-diff --git a/Makefile b/Makefile
-index 00fd80c5dd6e..e7bd0b572b14 100644
---- a/Makefile
-+++ b/Makefile
-@@ -433,8 +433,14 @@ endif
- HOSTCC	= $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
- HOSTCXX	= $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
- else
--HOSTCC	= gcc
--HOSTCXX	= g++
-+ifneq ($(filter %/,$(GCC)),)
-+GCC_PREFIX := $(GCC)
-+else ifneq ($(filter -%,$(GCC)),)
-+GCC_SUFFIX := $(GCC)
-+endif
-+
-+HOSTCC	= $(GCC_PREFIX)gcc$(GCC_SUFFIX)
-+HOSTCXX	= $(GCC_PREFIX)g++$(GCC_SUFFIX)
- endif
- HOSTPKG_CONFIG	= pkg-config
- 
-@@ -461,7 +467,7 @@ OBJDUMP		= $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
- READELF		= $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
- STRIP		= $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
- else
--CC		= $(CROSS_COMPILE)gcc
-+CC		= $(GCC_PREFIX)$(CROSS_COMPILE)gcc$(GCC_SUFFIX)
- LD		= $(CROSS_COMPILE)ld
- AR		= $(CROSS_COMPILE)ar
- NM		= $(CROSS_COMPILE)nm
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 1a5cc3cd97ec..777757d54f42 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -30,7 +30,7 @@ endif # CROSS_COMPILE
- 
- CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
- else
--CC := $(CROSS_COMPILE)gcc
-+CC := $(GCC_PREFIX)$(CROSS_COMPILE)gcc$(GCC_SUFFIX)
- endif # LLVM
- 
- ifeq (0,$(MAKELEVEL))
 -- 
-2.34.1
+2.17.1
 

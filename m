@@ -2,52 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679F657B1D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B63E57B1D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239887AbiGTHg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
+        id S235276AbiGTHhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239858AbiGTHg0 (ORCPT
+        with ESMTP id S239942AbiGTHhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:36:26 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3E3491FD
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:36:25 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id E4FpoOQ7fAZYmE4FpoFLhi; Wed, 20 Jul 2022 09:36:23 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 20 Jul 2022 09:36:23 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <772469b0-c279-6762-091d-821c58717941@wanadoo.fr>
-Date:   Wed, 20 Jul 2022 09:36:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 3/3] media: i2c: ak7375: Add regulator management
-Content-Language: fr
-To:     Jacopo Mondi <jacopo@jmondi.org>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 20 Jul 2022 03:37:10 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA35851A03
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:37:08 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id q13-20020a17090a304d00b001f1af9a18a2so1212211pjl.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:37:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ecs-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=3Wj9GT1NdFqQ2oHNWAiuoS6nkINcnSck7GS6eVjAGfI=;
+        b=mBMyPU/vqy55XL0Y2xA2hfo6WZDL605Hyj30QJqvh2C6iLY7UuxuT15c2zcoThoqiq
+         qxAlvDwK6xKKmEh4MjPJqX3G9K7/iFFph9UdsQY+p2DjnKZ9I09yKhfiB4i03Kwg3I7g
+         0rDEMPekkptPA2BevSfliJwThlDsqrlYqaAhPtWsQI41Wf7kh71xdEeBN/OCZMxsw28K
+         mVs8tNo0fNvpL+Zp3hj3SvcK7BoqWMhBitlnONJbSsJRvQPxWJsTvRHdS9V5k12c/w9e
+         wiWV1gptbrhRP5T+43DOqd4TtieVopZpwAtKB8tn9DVj+NXiLuIXFn+93a9NTll08s2D
+         M2Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3Wj9GT1NdFqQ2oHNWAiuoS6nkINcnSck7GS6eVjAGfI=;
+        b=BJzhAvUKwJ7/Osm1mQ+NyGLhh5yebHr6sjE5NWJYOtBjgYpzIEnxSm2zOiQEsA+F4Y
+         nceUa6zdhop221D+3CX2VDIo/7T3NsXs4OsWSitfE2gzFxtGqPqNJMaO8uLgvuvDzflE
+         fARJbfawCiSzem5uwWatuaFm1Fn34tO4hGiyPBK+jnRT2w/1Wzp6DCk/rfvrkc6opbvN
+         aX0hmirbm1fSvj1sKJBXiSCiXQoHa6cw67ibLwCVPZJjGF9PD8PLQtC2gUScm8/dvXMc
+         D9LKPjOKZc8aPiC1G1ZdI+GmbMtRxEpBESBPxeHtv/zatdK4e6CKxJQlL+UqM3caFFlZ
+         E3QQ==
+X-Gm-Message-State: AJIora8bFwT8NF0k2sOiaSS/vufvlUAqor3zg0P8egp7gsNa+aXQYRyJ
+        rIPUlnW8RAekndgAWQXP+1bizD3yZbOcCGWG
+X-Google-Smtp-Source: AGRyM1tvTO8b4fdoW6z++qQVp4cwEdSv1juNrFsh8iGREXYRTyg52uv5tQrn7+ojavdl2vNb2zlmCg==
+X-Received: by 2002:a17:90b:4a83:b0:1ef:de4c:660f with SMTP id lp3-20020a17090b4a8300b001efde4c660fmr3745862pjb.213.1658302627968;
+        Wed, 20 Jul 2022 00:37:07 -0700 (PDT)
+Received: from localhost.localdomain ([103.104.171.43])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170902ea0f00b0016bf803341asm10997748plg.146.2022.07.20.00.37.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 00:37:07 -0700 (PDT)
+From:   Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220711144039.232196-1-y.oudjana@protonmail.com>
- <20220711144039.232196-4-y.oudjana@protonmail.com>
- <20220711173123.55abjsli3tmqgegj@uno.localdomain>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220711173123.55abjsli3tmqgegj@uno.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: Add SKU6 for sc7180-trogdor-pazquel-lte-parade
+Date:   Wed, 20 Jul 2022 07:37:00 +0000
+Message-Id: <20220720073604.1.I249596c011ff05da5a95d72fc321e115ef859803@changeid>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,142 +71,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 11/07/2022 à 19:31, Jacopo Mondi a écrit :
-> Hi Yassine,
-> 
-> On Mon, Jul 11, 2022 at 06:40:39PM +0400, Yassine Oudjana wrote:
->> From: Yassine Oudjana <y.oudjana@protonmail.com>
->>
->> Make the driver get needed regulators on probe and enable/disable
->> them on runtime PM callbacks.
->>
->> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
->> ---
->> Changes since v1:
->>    - Reorganize variable declaration
->>    - Change the power-on delay range to 3000-3500 microseconds.
->>
->>   drivers/media/i2c/ak7375.c | 39 ++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 39 insertions(+)
->>
->> diff --git a/drivers/media/i2c/ak7375.c b/drivers/media/i2c/ak7375.c
->> index 40b1a4aa846c..c2b2542a0056 100644
->> --- a/drivers/media/i2c/ak7375.c
->> +++ b/drivers/media/i2c/ak7375.c
->> @@ -6,6 +6,7 @@
->>   #include <linux/i2c.h>
->>   #include <linux/module.h>
->>   #include <linux/pm_runtime.h>
->> +#include <linux/regulator/consumer.h>
->>   #include <media/v4l2-ctrls.h>
->>   #include <media/v4l2-device.h>
->>
->> @@ -23,17 +24,32 @@
->>    */
->>   #define AK7375_CTRL_STEPS	64
->>   #define AK7375_CTRL_DELAY_US	1000
->> +/*
->> + * The vcm takes around 3 ms to power on and start taking
->> + * I2C messages. This value was found experimentally due to
->> + * lack of documentation.
->> + */
->> +#define AK7375_POWER_DELAY_US	3000
->>
->>   #define AK7375_REG_POSITION	0x0
->>   #define AK7375_REG_CONT		0x2
->>   #define AK7375_MODE_ACTIVE	0x0
->>   #define AK7375_MODE_STANDBY	0x40
->>
->> +static const char * const ak7375_supply_names[] = {
->> +	"vdd",
->> +	"vio",
->> +};
->> +
->> +#define AK7375_NUM_SUPPLIES ARRAY_SIZE(ak7375_supply_names)
->> +
->>   /* ak7375 device structure */
->>   struct ak7375_device {
->>   	struct v4l2_ctrl_handler ctrls_vcm;
->>   	struct v4l2_subdev sd;
->>   	struct v4l2_ctrl *focus;
->> +	struct regulator_bulk_data supplies[AK7375_NUM_SUPPLIES];
->> +
->>   	/* active or standby mode */
->>   	bool active;
->>   };
->> @@ -133,12 +149,24 @@ static int ak7375_probe(struct i2c_client *client)
->>   {
->>   	struct ak7375_device *ak7375_dev;
->>   	int ret;
->> +	int i;
->>
->>   	ak7375_dev = devm_kzalloc(&client->dev, sizeof(*ak7375_dev),
->>   				  GFP_KERNEL);
->>   	if (!ak7375_dev)
->>   		return -ENOMEM;
->>
->> +	for (i = 0; i < AK7375_NUM_SUPPLIES; i++)
->> +		ak7375_dev->supplies[i].supply = ak7375_supply_names[i];
->> +
->> +	ret = devm_regulator_bulk_get(&client->dev, AK7375_NUM_SUPPLIES,
->> +				      ak7375_dev->supplies);
->> +	if (ret) {
->> +		dev_err(&client->dev, "Failed to get regulators: %pe",
->> +			ERR_PTR(ret));
-> 
-> Why are you using %pe here ? Your return value is not a pointer
-> (Also, missing \n at the end of the string)
-> 
->  From Documentation/core-api/printk-formats.rst:
-> 	%pe	-ENOSPC
-> 
-> For printing error pointers (i.e. a pointer for which IS_ERR() is true)
-> as a symbolic error name. Error values for which no symbolic name is
-> known are printed in decimal, while a non-ERR_PTR passed as the
-> argument to %pe gets treated as ordinary %p.
-> 
+SKU6 is LTE(w/o eSIM)+WIFI+Parade
 
-Nit: using:
-+		return dev_err_probe(&client->dev, ret, "Failed to get regulators);
+Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
+---
 
-would be even simpler.
+ arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-CJ
-
-
->> +		return ret;
->> +	}
->> +
->>   	v4l2_i2c_subdev_init(&ak7375_dev->sd, client, &ak7375_ops);
->>   	ak7375_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
->>   	ak7375_dev->sd.internal_ops = &ak7375_int_ops;
->> @@ -210,6 +238,10 @@ static int __maybe_unused ak7375_vcm_suspend(struct device *dev)
->>   	if (ret)
->>   		dev_err(dev, "%s I2C failure: %d\n", __func__, ret);
->>
->> +	ret = regulator_bulk_disable(AK7375_NUM_SUPPLIES, ak7375_dev->supplies);
->> +	if (ret)
->> +		return ret;
->> +
->>   	ak7375_dev->active = false;
->>
->>   	return 0;
->> @@ -230,6 +262,13 @@ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
->>   	if (ak7375_dev->active)
->>   		return 0;
->>
->> +	ret = regulator_bulk_enable(AK7375_NUM_SUPPLIES, ak7375_dev->supplies);
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* Wait for vcm to become ready */
->> +	usleep_range(AK7375_POWER_DELAY_US, AK7375_POWER_DELAY_US + 500);
->> +
->>   	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
->>   		AK7375_MODE_ACTIVE, 1);
->>   	if (ret) {
->> --
->> 2.37.0
->>
-> 
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
+index 764c451c1a857..767cb7450c0d8 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
+@@ -14,7 +14,7 @@
+ 
+ / {
+ 	model = "Google Pazquel (Parade,LTE)";
+-	compatible = "google,pazquel-sku4", "qcom,sc7180";
++	compatible = "google,pazquel-sku6", "google,pazquel-sku4", "qcom,sc7180";
+ };
+ 
+ &ap_sar_sensor_i2c {
+-- 
+2.17.1
 

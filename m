@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380D757C03F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 00:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4B057C042
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 00:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiGTWq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 18:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
+        id S230091AbiGTWsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 18:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiGTWqz (ORCPT
+        with ESMTP id S229449AbiGTWsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 18:46:55 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE37255A3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:46:54 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso9134093otb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:46:54 -0700 (PDT)
+        Wed, 20 Jul 2022 18:48:23 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBB230F55
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:48:22 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d7so131177plr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:48:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=L6ONf5ncBROvqp8ldt4WaxSQOKhi80VGBXn7MyeukQM=;
-        b=OF2F9CSZB9dqPMw9JeJAkZYBC49PxC8TCHuYSx0KzkiBwalvgpJt7XRlNs8Ce1K2lA
-         brLh8Td3sWspE0ZXoaE/QAZ/dL96Bnm7Yw5hlK8PXufEhP57CWgFR0J4QQDFTIv4MChO
-         JInIWUSV8uOGbxolJ/RtdequmVH84QVO66o4TDiRg/yw80ezxcdEwyrdHa6JPkJzfkzg
-         EHAfQmenRDQqrPaEPwHoDGSb7inZTZLD99d04aivMxQq/AqHAYh7B5N0TkCNiXEtdKaY
-         TxGhclRVTWvnJMe6N4jTEUV46ZFA2G9muTf8FH0YhZgt0W2LwRvNwxAtDv/DNiEdQsP8
-         MW5g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YjOKIOAe42Eku6Sc+3/5eXJR9MOwocaou5xUqsAb5iU=;
+        b=iIKPCfJ9i1WXaplnf56feWtYmg3cpfTZC/qXXRhj9fEH58gK+V11Ly6oj10mhYlV21
+         5jQFnkEORCUS0bpNFhY38o8KU8fqxsqLlXeQUJPSMgVGNiVcvdohI75L+1a9HOA9UpKm
+         BkO9G3rfg40i18YzNWuiE92Ct1DQ0zs4RHdQRqu4BInGIqOM4JL/mYzyL4MZr8xF+xvs
+         7Zdy1jJhNERtbBGF0N9bCVI83IK9+DpfxbagbnyQEMnDoFgfumBLL6DwmS/v2teVqGKa
+         gsjm8fOP23aCIPKAXQ4uCjwmfk6HIBjrA46JuXOJTYUaeR8s6InSjC90AXukfsSjjCbu
+         lZOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=L6ONf5ncBROvqp8ldt4WaxSQOKhi80VGBXn7MyeukQM=;
-        b=GIUTXlHOCLf65aFmNh/6hlboIIyIhooQ8J7bNIjFd54XC/9bGb83siSnr5PpH0KZ1a
-         WR0xGh2ZMmGRGChI2MKb8b9Vzr6arub+VpcU+9Ks3unDtIZUschBeJdLjp2uP4T6gjtK
-         WiGN+2w/JB17Cim1ycrXGfVX/QaU8+O0z+JO4kzgb0RP2mSygJqEqfgK1+07BlRKuctr
-         nm4HilkJozSPH/oCaCqxbaV+ZsQr0c/+vopo8Meaw910Snf2ZdQG3QHSlhqLQwx26lDZ
-         BTKJedJj2e+8hGGSiIDRfc54Z0G9VkQFxRv7HQzlGP+o5Cr/TtdQ0MxbIBLQgNDov8K/
-         ydng==
-X-Gm-Message-State: AJIora/CwQugiAI36pYePziTqLEAXp53otB3Mu1KLfc7yvwUD92Ob2A1
-        zZPaUWuZ/5abTyN2nMab/SW8oKxnuv8lsU7mraHp1w==
-X-Google-Smtp-Source: AGRyM1uPF6DlqAUTYGw9rwWhLZe0IbZS8bttwlHpwkLIdngm1dXnNU/Q4NNnFl79sj+FOUsPicgVXN4MCKX0nyDM0UA=
-X-Received: by 2002:a9d:38e:0:b0:61c:7323:6202 with SMTP id
- f14-20020a9d038e000000b0061c73236202mr14777740otf.267.1658357213389; Wed, 20
- Jul 2022 15:46:53 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YjOKIOAe42Eku6Sc+3/5eXJR9MOwocaou5xUqsAb5iU=;
+        b=ImxpnO81VUD5bF/qIVOA+sLqvqCnoI/JKCaPN/YxZFqWaJ/+Y17HJgCF+wV0i8DksW
+         zh4NZY+/CVnZj0ROVAdwX/SgOi4KbWzJqSO9JKn434yBfW9V2ehGRCkr2KP+WrifLyPi
+         1VsrsTNhzbpm/otuXVpEH0slzWGrp/XWhHEu9mzBIG5iCrg34J9CYv5zoxP0hvuP04Hv
+         80JHTHq7fpaK9c0P7w+pYmfYBbu/8fDOF8D4vNfmy5qRvRjhs6379qZ0v6NJkyVqmB6K
+         MYbPwrdygSTDO8mhZjd2ldV5IHIWC/4dg/xjN+1upTKgHUIc7nZDSEDv4Huq7YCbqFIG
+         UzTQ==
+X-Gm-Message-State: AJIora9BXsn6Zu+dVTMW6RE+M7BvAOjP6dVQKRwl1kuV13C4IOHJUgIr
+        PkJeJa9k48CgmF1Ij7Lzj9Ytei5PzUtKQvOMIi2NGg==
+X-Google-Smtp-Source: AGRyM1sI5wHWETjFbcTHHpIBh+d/zGwM6pCBAuOwrfDWZDL5rXcOxoOrUM5NHrgI1k29LUe5KabQs4VszGSU8sHdvzI=
+X-Received: by 2002:a17:902:db11:b0:16c:3e90:12e5 with SMTP id
+ m17-20020a170902db1100b0016c3e9012e5mr40407911plx.73.1658357301486; Wed, 20
+ Jul 2022 15:48:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220709134230.2397-1-santosh.shukla@amd.com> <20220709134230.2397-6-santosh.shukla@amd.com>
- <Yth2eik6usFvC4vW@google.com>
-In-Reply-To: <Yth2eik6usFvC4vW@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 20 Jul 2022 15:46:42 -0700
-Message-ID: <CALMp9eQ_ygX7P-YKGQh0mZein6LcTM=gMbQpi8HNfm7XaFi36w@mail.gmail.com>
-Subject: Re: [PATCHv2 5/7] KVM: SVM: Add VNMI support in inject_nmi
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Santosh Shukla <santosh.shukla@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
+ <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com>
+ <179cfb89be0e4f928a55d049fe62aa9e@huawei.com> <CAKH8qBt0yR+mtCjAp=8jQL4M6apWQk0wH7Zf4tPDCf3=m+gAKA@mail.gmail.com>
+ <31473ddf364f4f16becfd5cd4b9cd7d2@huawei.com> <CAKH8qBsFg5gQ0bqpVtYhiQx=TqJG31c8kfsbCG4X57QGLOhXvw@mail.gmail.com>
+ <0c284e09817e4e699aa448aa25af5d79@huawei.com>
+In-Reply-To: <0c284e09817e4e699aa448aa25af5d79@huawei.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 20 Jul 2022 15:48:10 -0700
+Message-ID: <CAKH8qBvwzVPY1yJM_FjdH5QptVkZz=j9Ph7pTPCbTLdY1orKJg@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Joe Burton <jevburton.kernel@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Joe Burton <jevburton@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,38 +81,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 2:41 PM Sean Christopherson <seanjc@google.com> wrote:
+On Wed, Jul 20, 2022 at 3:44 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
 >
-> On Sat, Jul 09, 2022, Santosh Shukla wrote:
-> > Inject the NMI by setting V_NMI in the VMCB interrupt control. processor
-> > will clear V_NMI to acknowledge processing has started and will keep the
-> > V_NMI_MASK set until the processor is done with processing the NMI event.
+> > From: Stanislav Fomichev [mailto:sdf@google.com]
+> > Sent: Thursday, July 21, 2022 12:38 AM
+> > On Wed, Jul 20, 2022 at 3:30 PM Roberto Sassu <roberto.sassu@huawei.com>
+> > wrote:
+> > >
+> > > > From: Stanislav Fomichev [mailto:sdf@google.com]
+> > > > Sent: Wednesday, July 20, 2022 5:57 PM
+> > > > On Wed, Jul 20, 2022 at 1:02 AM Roberto Sassu
+> > <roberto.sassu@huawei.com>
+> > > > wrote:
+> > > > >
+> > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
+> > > > > > Sent: Tuesday, July 19, 2022 10:40 PM
+> > > > > > On Tue, Jul 19, 2022 at 12:40 PM Joe Burton
+> > <jevburton.kernel@gmail.com>
+> > > > > > wrote:
+> > > > > > >
+> > > > > > > From: Joe Burton <jevburton@google.com>
+> > > > > > >
+> > > > > > > Add an extensible variant of bpf_obj_get() capable of setting the
+> > > > > > > `file_flags` parameter.
+> > > > > > >
+> > > > > > > This parameter is needed to enable unprivileged access to BPF maps.
+> > > > > > > Without a method like this, users must manually make the syscall.
+> > > > > > >
+> > > > > > > Signed-off-by: Joe Burton <jevburton@google.com>
+> > > > > >
+> > > > > > Reviewed-by: Stanislav Fomichev <sdf@google.com>
+> > > > > >
+> > > > > > For context:
+> > > > > > We've found this out while we were trying to add support for unpriv
+> > > > > > processes to open pinned r-x maps.
+> > > > > > Maybe this deserves a test as well? Not sure.
+> > > > >
+> > > > > Hi Stanislav, Joe
+> > > > >
+> > > > > I noticed now this patch. I'm doing a broader work to add opts
+> > > > > to bpf_*_get_fd_by_id(). I also adjusted permissions of bpftool
+> > > > > depending on the operation type (e.g. show, dump: BPF_F_RDONLY).
+> > > > >
+> > > > > Will send it soon (I'm trying to solve an issue with the CI, where
+> > > > > libbfd is not available in the VM doing actual tests).
+> > > >
+> > > > Is something like this patch included in your series as well? Can you
+> > > > use this new interface or do you need something different?
+> > >
+> > > It is very similar. Except that I called it bpf_get_fd_opts, as it
+> > > is shared with the bpf_*_get_fd_by_id() functions. The member
+> > > name is just flags, plus an extra u32 for alignment.
 > >
-> > Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
-> > ---
-> > v2:
-> > - Added WARN_ON check for vnmi pending.
-> > - use `get_vnmi_vmcb` to get correct vmcb so to inject vnmi.
-> >
-> >  arch/x86/kvm/svm/svm.c | 10 +++++++++-
-> >  1 file changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index 44c1f2317b45..c73a1809a7c7 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -3375,12 +3375,20 @@ static void pre_svm_run(struct kvm_vcpu *vcpu)
-> >  static void svm_inject_nmi(struct kvm_vcpu *vcpu)
-> >  {
-> >       struct vcpu_svm *svm = to_svm(vcpu);
-> > +     struct vmcb *vmcb = NULL;
-> > +
-> > +     ++vcpu->stat.nmi_injections;
-> > +     if (is_vnmi_enabled(svm)) {
-> > +             vmcb = get_vnmi_vmcb(svm);
-> > +             WARN_ON(vmcb->control.int_ctl & V_NMI_PENDING);
+> > We can bikeshed the naming, but we've been using existing conventions
+> > where opts fields match syscall fields, that seems like a sensible
+> > thing to do?
 >
-> Haven't read the spec, but based on the changelog I assume the flag doesn't get
-> cleared until the NMI is fully delivered.
+> The only problem is that bpf_*_get_fd_by_id() functions would
+> set the open_flags member of bpf_attr.
+>
+> Flags would be good for both, even if not exact. Believe me,
+> duplicating the opts would just create more confusion.
 
-Ooh! Is there a spec to read now?!?
+Wait, that's completely different, right? We are talking here about
+BPF_OBJ_GET (which has related BPF_OBJ_PIN).
+Your GET_XXX_BY_ID are different so you'll still have to have another
+wrapper with opts?
+
+> > > It needs to be shared, as there are functions in bpftool calling
+> > > both. Since the meaning of flags is the same, seems ok sharing.
+> >
+> > So I guess there are no objections to the current patch? If it gets
+> > accepted, you should be able to drop some of your code and use this
+> > new bpf_obj_get_opts..
+>
+> If you use a name good also for bpf_*_get_fd_by_id() and flags
+> as structure member name, that would be ok.
+>
+> Roberto
+>
+> > > Roberto
+> > >
+> > > > > Roberto
+> > > > >
+> > > > > > > ---
+> > > > > > >  tools/lib/bpf/bpf.c      | 10 ++++++++++
+> > > > > > >  tools/lib/bpf/bpf.h      |  9 +++++++++
+> > > > > > >  tools/lib/bpf/libbpf.map |  1 +
+> > > > > > >  3 files changed, 20 insertions(+)
+> > > > > > >
+> > > > > > > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> > > > > > > index 5eb0df90eb2b..5acb0e8bd13c 100644
+> > > > > > > --- a/tools/lib/bpf/bpf.c
+> > > > > > > +++ b/tools/lib/bpf/bpf.c
+> > > > > > > @@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char
+> > *pathname)
+> > > > > > >  }
+> > > > > > >
+> > > > > > >  int bpf_obj_get(const char *pathname)
+> > > > > > > +{
+> > > > > > > +       LIBBPF_OPTS(bpf_obj_get_opts, opts);
+> > > > > > > +       return bpf_obj_get_opts(pathname, &opts);
+> > > > > > > +}
+> > > > > > > +
+> > > > > > > +int bpf_obj_get_opts(const char *pathname, const struct
+> > > > bpf_obj_get_opts
+> > > > > > *opts)
+> > > > > > >  {
+> > > > > > >         union bpf_attr attr;
+> > > > > > >         int fd;
+> > > > > > >
+> > > > > > > +       if (!OPTS_VALID(opts, bpf_obj_get_opts))
+> > > > > > > +               return libbpf_err(-EINVAL);
+> > > > > > > +
+> > > > > > >         memset(&attr, 0, sizeof(attr));
+> > > > > > >         attr.pathname = ptr_to_u64((void *)pathname);
+> > > > > > > +       attr.file_flags = OPTS_GET(opts, file_flags, 0);
+> > > > > > >
+> > > > > > >         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
+> > > > > > >         return libbpf_err_errno(fd);
+> > > > > > > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> > > > > > > index 88a7cc4bd76f..f31b493b5f9a 100644
+> > > > > > > --- a/tools/lib/bpf/bpf.h
+> > > > > > > +++ b/tools/lib/bpf/bpf.h
+> > > > > > > @@ -270,8 +270,17 @@ LIBBPF_API int bpf_map_update_batch(int fd,
+> > > > const
+> > > > > > void *keys, const void *values
+> > > > > > >                                     __u32 *count,
+> > > > > > >                                     const struct bpf_map_batch_opts *opts);
+> > > > > > >
+> > > > > > > +struct bpf_obj_get_opts {
+> > > > > > > +       size_t sz; /* size of this struct for forward/backward compatibility
+> > */
+> > > > > > > +
+> > > > > > > +       __u32 file_flags;
+> > > > > > > +};
+> > > > > > > +#define bpf_obj_get_opts__last_field file_flags
+> > > > > > > +
+> > > > > > >  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
+> > > > > > >  LIBBPF_API int bpf_obj_get(const char *pathname);
+> > > > > > > +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
+> > > > > > > +                               const struct bpf_obj_get_opts *opts);
+> > > > > > >
+> > > > > > >  struct bpf_prog_attach_opts {
+> > > > > > >         size_t sz; /* size of this struct for forward/backward compatibility
+> > */
+> > > > > > > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> > > > > > > index 0625adb9e888..119e6e1ea7f1 100644
+> > > > > > > --- a/tools/lib/bpf/libbpf.map
+> > > > > > > +++ b/tools/lib/bpf/libbpf.map
+> > > > > > > @@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
+> > > > > > >
+> > > > > > >  LIBBPF_1.0.0 {
+> > > > > > >         global:
+> > > > > > > +               bpf_obj_get_opts;
+> > > > > > >                 bpf_prog_query_opts;
+> > > > > > >                 bpf_program__attach_ksyscall;
+> > > > > > >                 btf__add_enum64;
+> > > > > > > --
+> > > > > > > 2.37.0.170.g444d1eabd0-goog
+> > > > > > >

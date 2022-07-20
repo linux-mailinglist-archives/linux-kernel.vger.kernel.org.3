@@ -2,134 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3B157BFD5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA5557BFDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiGTVyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 17:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
+        id S231247AbiGTVyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 17:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiGTVyU (ORCPT
+        with ESMTP id S229871AbiGTVyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 17:54:20 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A561248C8D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:54:19 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id f3-20020a17090ac28300b001f22d62bfbcso166249pjt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jK6tZAVLlpKQaYUdrFhp6jMza1P7Y68lK+h4BL/v32U=;
-        b=bb98mV59J227Gzh/7pVgul7s8I0m8osIYW3lUlal2sBMW6xjav+1p6xkJtJazn3Mok
-         J//BBdPQpXecD7+EhWvOvCltmXpnI/a/ICbDRKTuq61zuiZvri80vPGiEUUmaJqFF3Mi
-         Zi2WDSRXPk/Soa8PjpvEWT8m2FCXt05Ib1eBWCA8ivsbdCpnTy4ghKR1pDhsVln29nQk
-         tcO+yHWxsR5A34ZKgL0lPbUsfqQU08E1MULduTTsedAm7FJMOeoGj53+SQafmoeDD3r9
-         rrcdvQzIls9I15ogFqdOjwcAwOHhfa9z1J/ncy147O1ttAStxNqJUzKgiwV3icnRz0mX
-         A7WQ==
+        Wed, 20 Jul 2022 17:54:53 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931DA4BD2E;
+        Wed, 20 Jul 2022 14:54:52 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id x64so7060087iof.1;
+        Wed, 20 Jul 2022 14:54:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=jK6tZAVLlpKQaYUdrFhp6jMza1P7Y68lK+h4BL/v32U=;
-        b=68xjtrzm5rZRp51jg5ed6mIM6cWZcq5DXY9Bdfs9T0BzHfs9ltR5L6J0vtG3JTRqwq
-         v2jYrQi6WkOVGqlGbTbWFKlHN3keivAMG7RLkkCLE6D3CcThQ1LiJuU5MPdoLXvDs9C8
-         lbMc0XgdvZdZ0uCCZBC0MdTnhy6eqlEevAfEaUiHnFfcDyhuGjD/1hDXRNgFtvHt5qE5
-         lMUDtb4y+nuLNUTaLGI1j2kPJvYItTiC7fFpS7KLBdCXB9tEEb4/SL+TP5m3FeMHmZmh
-         rr3/SPYVJwnM10pb46jQ0O7hAiGUf5c5Aok505qieODJMK56uvmzGTwcftNSNxwhH7bw
-         7iZg==
-X-Gm-Message-State: AJIora9PmgPQPCX2M+WJCS7FJvqAaQB9US5hg6yQBMetjqkLqfG54Z6t
-        ZfzfR7KeR+nBh6eLz70HY97uog==
-X-Google-Smtp-Source: AGRyM1vStDlNny4fDdiDFJ8dmGdUdCUD+1Ycb4i6vQYzM6OiOymkMtuHm6tYxo3g2qaD1skEB041+Q==
-X-Received: by 2002:a17:902:e886:b0:16b:faee:ccfc with SMTP id w6-20020a170902e88600b0016bfaeeccfcmr41017840plg.114.1658354059054;
-        Wed, 20 Jul 2022 14:54:19 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id u22-20020a17090adb5600b001f1a8c24b5esm2167407pjx.6.2022.07.20.14.54.18
+        bh=9VtPYe9lxt2UYt12yH0kPTLc+/Ee0+kkWogkf/Ga1mw=;
+        b=i8rqcZV6XQkXW4YfuOGgNNIpBX9QBmwyKY6ddOmZTvpZXYukb/Wyw54uUEVbzx5cFZ
+         umfB39SzK1RIykPakiwkrMwx61224GuiiOpZTjC5aMzq8iDFg9szCiwXFEj3EX1DeU+S
+         rahT/FZCXOBsDb6JbQEY0PFIDfUvGfr+LqpZCknytTJSLtOHWTtyrVnxEAvHqQQ2QEHp
+         mexAae4nSs2CC09HpBGIpgsFQgx0lDd1GeB8SvTOJ/1t09+LHduk8brgaCe1cX12fn/x
+         q4VHpVhvBwwPpWBoRrnZD7Q+VSzjSLqzFvZPAckR8HzOJ69O5zHnn6G76S5Xp+1F8WdO
+         5s5w==
+X-Gm-Message-State: AJIora88Jy94Fvj/oFbvLut+L4bqJqVpmJscUpiTmN5/t7DfRCgFW3dQ
+        thGqEggmoQBBd7UjvJshYb2aGr/vQQ==
+X-Google-Smtp-Source: AGRyM1upcvDTAAL1zmHltREfx75k37wJhs626FQ2HRpFiNYFrVvR0kPJ3xCx+8W6U72I7S1mnTDAdg==
+X-Received: by 2002:a02:9426:0:b0:33f:14ad:6931 with SMTP id a35-20020a029426000000b0033f14ad6931mr20260682jai.62.1658354091655;
+        Wed, 20 Jul 2022 14:54:51 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id l19-20020a056e02067300b002dc616d93acsm77966ilt.28.2022.07.20.14.54.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 14:54:18 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 21:54:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        Wed, 20 Jul 2022 14:54:51 -0700 (PDT)
+Received: (nullmailer pid 4049317 invoked by uid 1000);
+        Wed, 20 Jul 2022 21:54:49 -0000
+Date:   Wed, 20 Jul 2022 15:54:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Max Buchholz <max.buchholz@gmx.de>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sameer Pujar <spujar@nvidia.com>,
+        David Heidelberg <david@ixit.cz>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 4/7] KVM: SVM: Report NMI not allowed when Guest busy
- handling VNMI
-Message-ID: <Yth5hl+RlTaa5ybj@google.com>
-References: <20220709134230.2397-1-santosh.shukla@amd.com>
- <20220709134230.2397-5-santosh.shukla@amd.com>
+Subject: Re: [PATCH v3] dt-bindings: nvidia,tegra20-kbc: Convert to
+ json-schema
+Message-ID: <20220720215449.GA4031847-robh@kernel.org>
+References: <20220715131422.51143-1-max.buchholz@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220709134230.2397-5-santosh.shukla@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220715131422.51143-1-max.buchholz@gmx.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 09, 2022, Santosh Shukla wrote:
-> In the VNMI case, Report NMI is not allowed when the processor set the
-> V_NMI_MASK to 1 which means the Guest is busy handling VNMI.
+On Fri, Jul 15, 2022 at 03:14:21PM +0200, Max Buchholz wrote:
+> From: Max Buchholz <Max.Buchholz@gmx.de>
 > 
-> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> This converts the Nvidia Tegra keyboard controller bindings to YAML
+> and fix them up a bit.
+> 
+> Reviewed-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Max Buchholz <max.buchholz@gmx.de>
 > ---
+> v3:
+>  - fixed maxItems for array properties
 > v2:
-> - Moved vnmi check after is_guest_mode() in func _nmi_blocked().
-> - Removed is_vnmi_mask_set check from _enable_nmi_window().
-> as it was a redundent check.
+>  - rework the file according to the feedback
 > 
->  arch/x86/kvm/svm/svm.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  .../bindings/input/nvidia,tegra20-kbc.txt     |  55 ---------
+>  .../bindings/input/nvidia,tegra20-kbc.yaml    | 111 ++++++++++++++++++
+>  .../bindings/power/wakeup-source.txt          |   2 +-
+>  3 files changed, 112 insertions(+), 56 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
+>  create mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
 > 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 3574e804d757..44c1f2317b45 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3480,6 +3480,9 @@ bool svm_nmi_blocked(struct kvm_vcpu *vcpu)
->  	if (is_guest_mode(vcpu) && nested_exit_on_nmi(svm))
->  		return false;
->  
-> +	if (is_vnmi_enabled(svm) && is_vnmi_mask_set(svm))
-> +		return true;
+> diff --git a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
+> deleted file mode 100644
+> index 1faa7292e21f..000000000000
+> --- a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
+> +++ /dev/null
+> @@ -1,55 +0,0 @@
+> -* Tegra keyboard controller
+> -The key controller has maximum 24 pins to make matrix keypad. Any pin
+> -can be configured as row or column. The maximum column pin can be 8
+> -and maximum row pins can be 16 for Tegra20/Tegra30.
+> -
+> -Required properties:
+> -- compatible: "nvidia,tegra20-kbc"
+> -- reg: Register base address of KBC.
+> -- interrupts: Interrupt number for the KBC.
+> -- nvidia,kbc-row-pins: The KBC pins which are configured as row. This is an
+> -  array of pin numbers which is used as rows.
+> -- nvidia,kbc-col-pins: The KBC pins which are configured as column. This is an
+> -  array of pin numbers which is used as column.
+> -- linux,keymap: The keymap for keys as described in the binding document
+> -  devicetree/bindings/input/matrix-keymap.txt.
+> -- clocks: Must contain one entry, for the module clock.
+> -  See ../clocks/clock-bindings.txt for details.
+> -- resets: Must contain an entry for each entry in reset-names.
+> -  See ../reset/reset.txt for details.
+> -- reset-names: Must include the following entries:
+> -  - kbc
+> -
+> -Optional properties, in addition to those specified by the shared
+> -matrix-keyboard bindings:
+> -
+> -- linux,fn-keymap: a second keymap, same specification as the
+> -  matrix-keyboard-controller spec but to be used when the KEY_FN modifier
+> -  key is pressed.
+> -- nvidia,debounce-delay-ms: delay in milliseconds per row scan for debouncing
+> -- nvidia,repeat-delay-ms: delay in milliseconds before repeat starts
+> -- nvidia,ghost-filter: enable ghost filtering for this device
+> -- wakeup-source: configure keyboard as a wakeup source for suspend/resume
+> -		 (Legacy property supported: "nvidia,wakeup-source")
+> -
+> -Example:
+> -
+> -keyboard: keyboard {
+> -	compatible = "nvidia,tegra20-kbc";
+> -	reg = <0x7000e200 0x100>;
+> -	interrupts = <0 85 0x04>;
+> -	clocks = <&tegra_car 36>;
+> -	resets = <&tegra_car 36>;
+> -	reset-names = "kbc";
+> -	nvidia,ghost-filter;
+> -	nvidia,debounce-delay-ms = <640>;
+> -	nvidia,kbc-row-pins = <0 1 2>;    /* pin 0, 1, 2 as rows */
+> -	nvidia,kbc-col-pins = <11 12 13>; /* pin 11, 12, 13 as columns */
+> -	linux,keymap = <0x00000074
+> -			0x00010067
+> -			0x00020066
+> -			0x01010068
+> -			0x02000069
+> -			0x02010070
+> -			0x02020071>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
+> new file mode 100644
+> index 000000000000..8e1eaad2fdc1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
+> @@ -0,0 +1,111 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/input/nvidia,tegra20-kbc.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 > +
->  	ret = (vmcb->control.int_state & SVM_INTERRUPT_SHADOW_MASK) ||
->  	      (vcpu->arch.hflags & HF_NMI_MASK);
->  
-> @@ -3609,6 +3612,9 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
->  
-> +	if (is_vnmi_enabled(svm))
-> +		return;
+> +title: Nvidia Tegra keyboard controller
+> +
+> +maintainers:
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Sameer Pujar <spujar@nvidia.com>
+> +
+> +description: The key controller has maximum 24 pins to make matrix keypad. Any pin
+> +  can be configured as row or column.
+> +
+> +allOf:
+> +  - $ref: "/schemas/input/matrix-keymap.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: nvidia,tegra30-kbc
+> +          - const: nvidia,tegra20-kbc
+> +      - items:
+> +          - const: nvidia,tegra20-kbc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  nvidia,kbc-row-pins:
+> +    minItems: 1
+> +    maxItems: 16
+> +    description: KBC pins which are configured as row
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
 
-Ugh, is there really no way to trigger an exit when NMIs become unmasked?  Because
-if there isn't, this is broken for KVM.
+items:
+  maximum: 24 (or 23?)
 
-On bare metal, if two NMIs arrive "simultaneously", so long as NMIs aren't blocked,
-the first NMI will be delivered and the second will be pended, i.e. software will
-see both NMIs.  And if that doesn't hold true, the window for a true collision is
-really, really tiny.
-
-But in KVM, because a vCPU may not be run a long duration, that window becomes
-very large.  To not drop NMIs and more faithfully emulate hardware, KVM allows two
-NMIs to be _pending_.  And when that happens, KVM needs to trigger an exit when
-NMIs become unmasked _after_ the first NMI is injected.
+Also, put 'description' either first or last, not in the middle of 
+constraints.
 
 > +
->  	if ((vcpu->arch.hflags & (HF_NMI_MASK | HF_IRET_MASK)) == HF_NMI_MASK)
->  		return; /* IRET will cause a vm exit */
->  
-> -- 
-> 2.25.1
+> +  nvidia,kbc-col-pins:
+> +    minItems: 1
+> +    maxItems: 8
+> +    description: KBC pins which are configured as column
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+
+Same here.
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    const: kbc
+> +
+> +  linux,fn-keymap:
+
+While mentioned in matrix-keymap.yaml, it is not defined as a schema 
+anywhere. It needs a type. I guess here is fine as this doesn't seem 
+to be used much.
+
+> +    description: a secondary keymap to be used when the KEY_FN modifier key is pressed
+> +
+> +  nvidia,debounce-delay-ms:
+> +    description: delay in milliseconds per row scan for debouncing
+> +
+> +  nvidia,repeat-delay-ms:
+> +    description: delay in milliseconds before repeat starts
+> +
+> +  nvidia,ghost-filter:
+> +    description: enable ghost filtering for this device
+> +    type: boolean
+> +
+> +  wakeup-source:
+> +    description: configure keyboard as a wakeup source for suspend/resume
+> +
+> +  nvidia,wakeup-source:
+> +    description: configure keyboard as a wakeup source for suspend/resume
+> +    deprecated: true
+> +    type: boolean
+
+Deprecated for 7 years. Could be dropped?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - nvidia,kbc-row-pins
+> +  - nvidia,kbc-col-pins
+> +  - linux,keymap
+> +  - clocks
+> +  - resets
+> +  - reset-names
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    kbc@7000e200 {
+
+keyboard@...
+
+> +        compatible = "nvidia,tegra20-kbc";
+> +        reg = <0x7000e200 0x100>;
+> +        interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&tegra_car 36>;
+> +        resets = <&tegra_car 36>;
+> +        reset-names = "kbc";
+> +        nvidia,ghost-filter;
+> +        nvidia,debounce-delay-ms = <640>;
+> +        nvidia,kbc-row-pins = <0 1 2>;    /* pin 0, 1, 2 as rows */
+> +        nvidia,kbc-col-pins = <11 12 13>; /* pin 11, 12, 13 as columns */
+> +        linux,keymap = <0x00000074
+> +                        0x00010067
+> +                        0x00020066
+> +                        0x01010068
+> +                        0x02000069
+> +                        0x02010070
+> +                        0x02020071>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/power/wakeup-source.txt b/Documentation/devicetree/bindings/power/wakeup-source.txt
+> index cfd74659fbed..728f88de371d 100644
+> --- a/Documentation/devicetree/bindings/power/wakeup-source.txt
+> +++ b/Documentation/devicetree/bindings/power/wakeup-source.txt
+> @@ -25,7 +25,7 @@ List of legacy properties and respective binding document
+>  				Documentation/devicetree/bindings/input/touchscreen/ads7846.txt
+>  5. "linux,keypad-wakeup"	Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
+>  6. "linux,input-wakeup"		Documentation/devicetree/bindings/input/samsung-keypad.txt
+> -7. "nvidia,wakeup-source"	Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
+> +7. "nvidia,wakeup-source"	Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
+> 
+>  Examples
+>  --------
+> --
+> 2.37.0
+> 
 > 

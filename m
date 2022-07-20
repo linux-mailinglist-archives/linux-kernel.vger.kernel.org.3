@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC3257ADBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A702C57ADE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240381AbiGTCTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
+        id S239215AbiGTCUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240767AbiGTCS4 (ORCPT
+        with ESMTP id S241099AbiGTCTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:18:56 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F20B65D60
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:18:09 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K0bCP4003860;
-        Wed, 20 Jul 2022 02:18:01 GMT
+        Tue, 19 Jul 2022 22:19:07 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8524866BA5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:18:12 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K1e26h002384;
+        Wed, 20 Jul 2022 02:18:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : references : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=SSe5yfNjiRdC8z7OFF5iT28D1z20ywX9LFQs4op4Xnk=;
- b=zUI+IfScnENjjyQVJ+mz3UBl+l5IPOCGa3FcU+HpKb9ITn+A534xPjGCpM7Wcgco3skg
- uKJaRmqVf6x+VUyHsGFy8gmy0W4mKGXNcIZfa1OuUqELQHzy57IMFZHD6s0qWRzOg16u
- /pF/6GMFl+heV9mu8q4FZ5JpF74xQQ9wVb01ZpJhdzV3f2n9+B08BlWcOz7SSAKGE/q3
- dOc/iEL+QRLmyJKrn5kOiVOKFzgph/d+oXQaIbYWTcJSl69JUHtxzT5Ce3X4d7LxcWff
- xhRy+1yIsinEi/hibEUAVbGgUOpsrYPoKEo4un6hdC7eq6H9J0et4BCtZHYTS2OFi1br 8Q== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbmxs83kd-1
+ bh=jjuC+9MW9xZpfMJwM7YXBwJkaZD3Gt/cc+ZyVcrVZMA=;
+ b=wudaBFjbnTSc+0N9vUnB9840j/Yoc0+8ch7xPp7rxj4FdgpXNl4eJBkBg00PX/CZgIjb
+ iEsi0doIUrEm5+txeowVL5NudpxaTLth0fQC3wLFQQkTakVMBN3P1NXpmUv+UXtaNMLb
+ yvS8ZmTrgJqgnVTwtJBM9UoYEOaGrtSQWpflqwXpmbQvnoRFdF/ut7tnZdiTlkrIqRGY
+ Ch1/jInC1fwL40j7rgbVA9OO8vEt9fbmVMTeeR9Kj8R2RHw97KTP0uQKxV7mjkOoXWWu
+ 6CdrQQ3sXOO/5ESD2rL8Vu/WGd5+aGOnhROU0Q0YcR80hEJqfZiCRqXb2eV47Li+4jba RQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbn7a81mb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 20 Jul 2022 02:18:00 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26JNxcPw022260;
-        Wed, 20 Jul 2022 02:18:00 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1hseaqp-1
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26K0bGDx009891;
+        Wed, 20 Jul 2022 02:17:59 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1gh14ng-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Jul 2022 02:18:00 +0000
+        Wed, 20 Jul 2022 02:17:59 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RYloFXJfAlqgs+J+fOzqZ3H6i9dL6SKwk0DMyE9b+EZ/lthdPmS6FJQeX1iac7MCL4Y6LOrUlEwZmdk5Fmnx/GlJZlu68mkEqwUd7afyS8y9QlphpNZxA0IUGsdlEIYCJUuxonnqALdfJstaPF8lbOwOl4FJLMT2hjUkALuN2fEV+TJK4s5m5DA4TJFE37oU3/o5tbt5RN20eePhMGlDsDkdpc8XACENmPWbG3oycTitETETAzkmlITYSQNgqosOckAX/W2mRXMns/eWf+rhxOoVwjeQ1oS2ghUfS0rHAhp2+/s2vyT1D2d3f9AmEIRC7/5u6SBBSA3/SEm5cfnBpg==
+ b=oHXOiecf6FBgKlpfdXqik5CWfva5Y3eRqrPJsaGh0h/pZnhBpBsL/MxmdhAP4sxeqPwiPluxGCWDPiiGrJAhNhwS6m7rWoGIcSG0UK7aUrARiHFPtpfJ8rqr1dhH2AzR1V+5Xg6l0I9Uko8SiMJBa3UcIDzBPaGoSckOQPNxoDItNIjZ+pTMotSTLwVlUQki0USuKG6z6SJiQg9YUlO7CIrdz4YU3lcupLsXouvTbRIZtDamoMyY5XJu8lh1G7Ub6HbEn4kJ74oR4BPjs43iB3X14uV3Cq1b5jbDaIlMIsLCXJAu7ZELQ4by8TpZEX0/HAdcKtxXIaTnqpfU8KjMkQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SSe5yfNjiRdC8z7OFF5iT28D1z20ywX9LFQs4op4Xnk=;
- b=jn4LlapJswx0xYtUx6emkXRb1ZDLIyO3smaA0YrsMNr12c8EOGYwY1OHmMYtIEZ0wSg4OARluZHv173KkQFj5wWVmmjck8U8wUaKeJD5o3OWsZRzi0jnICMWteiYJVVmzuFgMR69wLj+btDX6yHTEn46cmsNkX1SyEoQYSbu84WtZT4wFn3u25OP115yUPOoFca/8u+s9QPF/xc2cpbM9bBy5nETW/vOIUI/FHTs3ih7FoYcLCLq3m5V9TU1WwdCfJz88Gc7eVoJInWyk2RVujhK6LEJZ2UiiaNR+StAyAf4kiVX2h+Q88WKeqTWwPtw0CUUNA1N/xuWyfVfuurMuA==
+ bh=jjuC+9MW9xZpfMJwM7YXBwJkaZD3Gt/cc+ZyVcrVZMA=;
+ b=BvwOFJHfLBF+vdVHHs9R0fibetqoKppE8tqLWh28v/gc1XjNMIb0t4Mhximo0WnWfV+WnEgmRlOdBLnXsc9BrZaetUs1jKu+VHze56dUXGzCHSaNZtPNuG1AaXZKc45Fk30HZ8gqzATho4tgUIWsgrU75/9biBGdwijhZFvS2fSwMY8rlgMTqdCe6vQRmSmf2TsEF8hftwp/Bkv0OwooGnnhtUu/R9AY75UowCAKt1mS6Zpjp7Gr6EAxZNLkga7G/o58/1ZxqoIa9iq68PFxbxNe4Wpoxmd6JylaLEcmwGFB8WC0aEdjZZSHVOoPWsUgyBZCUE9mAK4sWkjVvM6P9g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SSe5yfNjiRdC8z7OFF5iT28D1z20ywX9LFQs4op4Xnk=;
- b=m1+uYG0cuc5MUb0wGxwIPDLjRWFbhSsL6XrGmotMeXl3ozkq7CJNbqXxN82meeJV62QFy5qSnI85Ws4sHgBVzmXwJUd5iBFmB78KmKUY+WJZ2Sl6ceAEIAsInQABAJXnwV1y8U0sTTMGLqDqKL61lPshOOIoTApK+iIRt/rWp3A=
+ bh=jjuC+9MW9xZpfMJwM7YXBwJkaZD3Gt/cc+ZyVcrVZMA=;
+ b=aZ6lrCXXyLcgg7NjNvHR91u0Hu9/UDko+8npoTA9xY2+4IwZwIrSdJrFHoz8xt9c8pyw4ir9WEg6oXUyzXGOmDeS80rJCLJ5XQheNhZa8Inn9hM/jErzThpUkc4yR0GOzrbxJegCN1zrdtdlLTOUwHm2OsXLXo3mSpz4u1sxotc=
 Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by IA1PR10MB6243.namprd10.prod.outlook.com (2603:10b6:208:3a1::15) with
+ by PH8PR10MB6316.namprd10.prod.outlook.com (2603:10b6:510:1cf::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.26; Wed, 20 Jul
- 2022 02:17:56 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.22; Wed, 20 Jul
+ 2022 02:17:57 +0000
 Received: from SN6PR10MB3022.namprd10.prod.outlook.com
  ([fe80::c4d1:edc3:7d21:7c68]) by SN6PR10MB3022.namprd10.prod.outlook.com
  ([fe80::c4d1:edc3:7d21:7c68%6]) with mapi id 15.20.5438.024; Wed, 20 Jul 2022
- 02:17:56 +0000
+ 02:17:57 +0000
 From:   Liam Howlett <liam.howlett@oracle.com>
 To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
@@ -69,11 +69,11 @@ To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>
 CC:     Yu Zhao <yuzhao@google.com>
-Subject: [PATCH v12 25/69] mm: remove vmacache
-Thread-Topic: [PATCH v12 25/69] mm: remove vmacache
-Thread-Index: AQHYm97qQ434mzCbk0SZWDX3pH5vvw==
+Subject: [PATCH v12 27/69] mm/mmap: move mmap_region() below do_munmap()
+Thread-Topic: [PATCH v12 27/69] mm/mmap: move mmap_region() below do_munmap()
+Thread-Index: AQHYm97qmUB2urr7JUaeKA/65zT0Ng==
 Date:   Wed, 20 Jul 2022 02:17:52 +0000
-Message-ID: <20220720021727.17018-26-Liam.Howlett@oracle.com>
+Message-ID: <20220720021727.17018-28-Liam.Howlett@oracle.com>
 References: <20220720021727.17018-1-Liam.Howlett@oracle.com>
 In-Reply-To: <20220720021727.17018-1-Liam.Howlett@oracle.com>
 Accept-Language: en-US
@@ -82,42 +82,42 @@ X-MS-Has-Attach:
 X-MS-TNEF-Correlator: 
 x-mailer: git-send-email 2.35.1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9d530c72-5f1d-4c75-dc76-08da69f60f3d
-x-ms-traffictypediagnostic: IA1PR10MB6243:EE_
+x-ms-office365-filtering-correlation-id: 1ae3f75f-a123-417f-f65d-08da69f60ffe
+x-ms-traffictypediagnostic: PH8PR10MB6316:EE_
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3sJmID2fKan9M0qTfzK7G/bJOx3dvxEwapzyFJfyE6ebL/oV7wq9NFCl2kZjduISn6DYe3ijHzlvvVe25zuxCMoclSfXFFgXpcweh/9SRrJmGTWJqWtTJRW6fH1OheNY702/OF6KHDkC8GKOCMYUpnCQtGtDArCKlagdaIn59vROoCZWJWiaS/4dbFMgisgoa43VknPxtva+6L3xqAigeHY0T2zcuoxLEE+GmMLClRU84BtfUtHvNsFjEvs4FBdq2JBGm3AtoUzKMB2u4jyMliCmLHass6icDHjK4hPnDD334INj5QTg8Yby1BEAir4NPZf4aWIrx3/5evXjkDKyieaX52rJJdcs1ejqHlRFEUndMj3bDcV3PFGHB32gQgaVVUUiHXiuBTb80nIr9BksOighNGM0VI4OWKKWnJt3Z+0Eptk9v7iQmIFCb5QHbFkTG6Bs4Z5VJ0o2VQLm+tfLiu5GwbRZMsyM3Lrrw1i6whEBB97oF330eKZ/n8cAXhVoRaLifBeGDGybN6Jywufx0S6Pw5uHvFyUHt/E4aX69HOGu01Wv4DfJRsHTUGlzi0zC8FYPeSGUeXLzLdqIg8YqJPpSVQnHBMCSJX3ASbyIYUOQ7ugDc/QUXWmQbpNVIaA/RvZfjwOz7V8gAREaZWL6GVPQFD10pNiBnApUnouzm2tw0lVKmX8bPmw+Hw3PEjq5WwA4ygY/zyWmwI77vW3EAlyp/2bf5VgpFir4iN4zDpbHw8Q2Msh/atTq/EOw5r9HLtMW1That/sztyJg41FmZyPf0smfNgc8dmyO5RTUoNwgvf3H0X+APaaPr5ouQBl+AXVjlHIs5VhgfHrNQTIGAcdpebgYg6GuDT44UQRIxlN+7WMVXo7HSNsjeE0nsRz
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(39860400002)(366004)(136003)(346002)(2906002)(26005)(1076003)(6486002)(91956017)(8676002)(71200400001)(86362001)(8936002)(5660300002)(38100700002)(83380400001)(66476007)(6512007)(36756003)(122000001)(966005)(38070700005)(316002)(478600001)(44832011)(30864003)(4326008)(64756008)(66946007)(76116006)(186003)(6666004)(66556008)(110136005)(66446008)(6506007)(41300700001)(2616005)(579004);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: TJj3XPy10gdyIqLeZWH2LCXgBiO/KLYEr0sm4CvuG0BRCJ9nXVj3GeKOZn4viCY0PLJjLBpOIUEPtJVV76sZDrZEyLaq+pDpqYJa/P0QzRzhvWPEcVCncIJDjn6M5YGqeFW3zKDhBGmCB78QOAW1iF6qtuMiCYHuju0hUM8vd3CVRh0veJNLXWKBiK1PLUvCJ1UoG1bDDIjBc7SQY3LQJBXKAeVI664Bc55G9wpf7eEToeFKuC1uAGCf8Hn6KMfAkrHQd4KjrVu22j2CegBVbESgaqCYxouzC/DIXyApC7I2tIf//trqJZtuBh+J/WVzdnZHp5i+X8VYXTX2zxu+/WztxXltDzXe8/Bi7itRE74w8K0jN4EXEYBRfSGrtoSQsLFM7jbitW6p9vQEpLQG0GOxVp+fpvHho/TEGK3xyXGJKv51uZaT5siQFhzYxjaPFxePOWqhdTNskWXvgivhc8I/6ecBBbiaw9mWzluNlFSV3G5KrenVYw16irf09gC7ivE1+GDrhKa1q4Ou6KlST789VeKtUAbLhIMVIt6A2KtCOMzZ4qBrwsmCh/786hsLIXeDszV33u5AUpKwN6b9mpFaSNVk05v98x5gT1+Kcsk+of5m6TWS1atlptE3WOnb2OGcO3c0kjGZgarPuqjoeosMG0naa3/tujBH1nbUduCwdwX/v/hh6+Qh7EGdgKdy6GEHUaIh5xx/61pe92LhdoTGoY5vtlUN1WIKROUqk5AWthqC06NnSqq+imdberkMWoJv/SjrNCsETzz6ndZl8LD82APnd+BYxpG4pGjuFGHjj8/MnQkruMaqx3Wbbo+0qldEDmsAJLfgd6jPGzhEadGCuGqjp5P15CHk4LlgzOwfSYawlyz3rFbgogUx3YT0
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(396003)(39860400002)(366004)(376002)(136003)(76116006)(122000001)(44832011)(8936002)(5660300002)(186003)(1076003)(83380400001)(2616005)(4326008)(66446008)(64756008)(36756003)(66946007)(2906002)(8676002)(91956017)(66556008)(30864003)(316002)(26005)(41300700001)(966005)(66476007)(86362001)(38070700005)(478600001)(6506007)(6486002)(6666004)(71200400001)(110136005)(38100700002)(6512007);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?5+CMaaQhMG1O3xkOCMg+5WzidJbqMGf5EbLnA6Mxua6STm3VNLtC0qSkQ2?=
- =?iso-8859-1?Q?++7XGf/+u3C6jbGmMVi5mMs3i4PS5MHAoEy0dYLV0iky03ECto2KVwg+Th?=
- =?iso-8859-1?Q?ondSIH4T0SUNQQQPuYsGBwfx7af/6PGMBaJNqWEn14NNFxPna5JDs3Tv/R?=
- =?iso-8859-1?Q?hkM7Aj4+3ulJTqmrPPQIqVYAQEXulh4IgThXxxDDYsnmAv29/Ni+JyOYsN?=
- =?iso-8859-1?Q?imT4H/Ai+GBCPKhJ7pvW9jFcm1yCiWf69aVcMmfl2mrRamoK0CBRxyTiCO?=
- =?iso-8859-1?Q?4juP3V5k7HPxtFwN2cC0BMix5JKoGSjtQSWIpwRU3Uuej0Vu0siXJxOHcm?=
- =?iso-8859-1?Q?xsWW+VeDHXVGGDimC9Vm7cUqh9gg4/Ja5ELeHNPSghjnrIHnpTPu5QCaX3?=
- =?iso-8859-1?Q?Qq1QXi4MT9l6tKU3zOJGKfvvmDDW1gudLK6fUm8w+ZlkfAdJWTQZ3a+osQ?=
- =?iso-8859-1?Q?EI3dQmUhUTNtfUeXO1Z3CbOGzyyid7XtbVX2lU0RIRq+tG6LBPFzfDRB1M?=
- =?iso-8859-1?Q?ur2WWC/nFOkz06GF+GhYNf8WKFQxAqsVC/H8e2KF78xjLo1rNso/V0Hxpq?=
- =?iso-8859-1?Q?FOEexVyG1uX8ba3ERC4QvicHe6BBA95ugqza+BEKKB9/fQMPO0VMQ0s7q0?=
- =?iso-8859-1?Q?zJYklNHdgALwuUZmAySbhamNsodDVZNU2pj09IHOrqGZU3aO62QEqzAguX?=
- =?iso-8859-1?Q?JsZO1/JKrr5o2N+0+8yT5lBRJTR182s3l47MWc3N4K/vtlA7AbExtOskCA?=
- =?iso-8859-1?Q?Cfrvv3yYqJTxQxM9zCbSo0WuIuw9U9BUvP327PxzxCFOpOcIe02/GBc2ZS?=
- =?iso-8859-1?Q?EKzAX6mwGnRnkahTrlDry6QBzwatq/jfKmKevJqkNxqZrNrVTr7ya6UyAU?=
- =?iso-8859-1?Q?hASLpNSRtjlegEsqArxtEKLQWvyg6BXLva0mN0uUo+3AZe1IwUpmqkhhSq?=
- =?iso-8859-1?Q?KaG5MQfxFA7QmUtWcn7FhNZ/SsDzAYfASC5pwCPxtXGSEUPjbA8s9EhN9E?=
- =?iso-8859-1?Q?/qusH2dNbIDcD3xp+WKFgW5Tzzm88LsknA2NlUaGIjGHd15qb5HxK6o1Be?=
- =?iso-8859-1?Q?96Rn+oNdpr46ZY4UcL2FgiB++MTDa9kD7Afq+ovJQQDK4BLIYPdIeRXPV5?=
- =?iso-8859-1?Q?5ed0lQDkFgcwP3KHAEwxYNDdIUNrTDwqsd0pXTHbmskyVrVtilr9m7vAJ9?=
- =?iso-8859-1?Q?Ex86I0OdcqW1kb2ahxBDRgJTgyFrjVpoRBFjU0AGkHOGEa8Xpke7fTLYA/?=
- =?iso-8859-1?Q?R6b1UhOh/yS4oAe1y1KBHcTDvab+A1BoFqGKux6M/gRHtAqj4Z9AJkurjf?=
- =?iso-8859-1?Q?LkI7oQEhgfmp6UVamQSudCEpXyMoQX55IT0tJwRZ5xmyfnmBl4uFR4OW6S?=
- =?iso-8859-1?Q?Pvx7tMxqpLFxxSLnk0QokO56tv1B9V9R0gEx6YYOq8Az+aHESY16K/S6zo?=
- =?iso-8859-1?Q?b18egMzpiuNdlvkYhQJFiptlbvDef3zXg5Wt6jHmd6v9ctsKVv71loMTaU?=
- =?iso-8859-1?Q?TsVqi9IFsqi0GMCw9/17WZUHZhFDtNmBKSf8C6f881XXH2fbNlfeYKulh9?=
- =?iso-8859-1?Q?9nTuV5gz33uC+MWPPy8T8itZtGmXiMFgLwRv+wsnQPs1CAY05V5LpUcHY9?=
- =?iso-8859-1?Q?uuf+wuBmbOoIWk/Oqmv/oVH3u2h9+umLa3YvXylvQQA8BijJtNjMBRJA?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?COTdhFwonNyJxVZwKmaaq+i8PRlSyshTSag5FnpmwcWto8AiSMxkv0Zlk5?=
+ =?iso-8859-1?Q?ThT1+f3QnKdsDX+xfh5lAhHSywB4XkdBP5sYgt0jjdLgpJhXIihZrcCijh?=
+ =?iso-8859-1?Q?bZ+0+YBUEb6/yIwbKSdJQUsVunOI4pkMA+rRdnLyAN46bI39AxF1v5IS+P?=
+ =?iso-8859-1?Q?5dn89uRETKYkLSDaE2tO9VgAT5k9IVtaerffvCIktPK19XaAP134ENFQ1E?=
+ =?iso-8859-1?Q?4PLNNnEZsI2hl0+NdY5o/eCzXgfc7wmFZv3+NefiJ8IOOZ9+eFDsq0oJAf?=
+ =?iso-8859-1?Q?YCWhg1z2gPExH+4Mq+SgnYNH/7qZ97IH8YcACJugBmv5o0px1+XTgUSw8f?=
+ =?iso-8859-1?Q?QTLaXidhk9gdryEQDCn8B5ekgW0rQvH9dKfI3dqivhxG4/F6qJW3LV6856?=
+ =?iso-8859-1?Q?vox+5Ty+Lv/EomQ+gVvG/fjT7N8WdSH44tyRL/baPb0vB4Zr8/B84p29fA?=
+ =?iso-8859-1?Q?VAIgBJSAeIa7hlVHqRq7IlY/9wNdtncqcGnsRQC9CB5t0/yu9LdLcJXFTL?=
+ =?iso-8859-1?Q?pNqQds5FB2benLWgmxOXvzo4ErUMlrg7/fmir7ZX54Y3g+zwfSN/bUsZty?=
+ =?iso-8859-1?Q?Tuc/LdmHxQl6qcmIPozcIVEvEIQldPvP4N1xQf55ajMbwPuHKQTmDHqJta?=
+ =?iso-8859-1?Q?xgMeX0kl1OFpNq30YtuRVo/sgx1Pon2MD4VVtftQdx9tgT94SKxiCkg1CZ?=
+ =?iso-8859-1?Q?yP4o7RDCwbRNz0qtXKLzecJA/uJeP8JrcCx+NIKI3F6+A+UCw4Hqcutee5?=
+ =?iso-8859-1?Q?gkfUYBUaCpDf6js6VIwSKNZocFkTE/RyBBy7FZPW3RekLoLoHwbNI+e0+i?=
+ =?iso-8859-1?Q?deuKVfDgPc/vTG0ixt749d4ehwpFDudbZovoEe/PuARiQiJ4ZKuv60rR/W?=
+ =?iso-8859-1?Q?cHzOowkEuayQAUwrYOpkLZizwdggNPzAAXvn7f8ecMenspnf84xWcWx9YQ?=
+ =?iso-8859-1?Q?4V+epqI/L9PSqjUlmgeF6M8m0zGITV9R6M6/Xdw9s+iCzUolRiWqaVI//3?=
+ =?iso-8859-1?Q?ungVxbRB2S6eIhq5zf48NW4CMBHCtaTHCs7NEKnrWCC4G9iAbgiLBs7Sod?=
+ =?iso-8859-1?Q?A8XLjNH1IRYhBdhXviZ3U4ZduSVZ0kCcrQWkRnX725hbeHW1ibZA4aQ+5A?=
+ =?iso-8859-1?Q?M9eIs8p2WCFxUEVPr3Ot5l6pxbN6ofoJBel8tK3QZmcdAByxhaEk7iLaX8?=
+ =?iso-8859-1?Q?D+Y+krcfI8tH7PVt9XxNPtDjt3yZTHOuT2xuhe6gGx7Iv2ck9cE7fgqMlU?=
+ =?iso-8859-1?Q?XmemwPIvdbe5e/OiHSNHlt8BxfZm4pBNNy3a4+AbK2Q+NiKdlHAELa2u02?=
+ =?iso-8859-1?Q?/iZDGL8J1wLmd7UwKUAU6BfKjkNlkqVJEryBwnYoFoQ9PhVVpHQwCP0DuD?=
+ =?iso-8859-1?Q?n9A6Mp81A1I/ZCV9/crnhQ/o8vVw3w2hRJicUAg3yEzC82fDntVdVveSfH?=
+ =?iso-8859-1?Q?5pRu3DgLnFlECpwzHbdfqI87HraiJ6Dt7n2qIc5o8VF5UC/vcfODa39cqW?=
+ =?iso-8859-1?Q?XB+YEH/rNxqYY7evFYIqNajYONTzJ1/73CXSkzivI9vmJT4EGtSD0lHy4n?=
+ =?iso-8859-1?Q?bCPpb++8P5M7NthDT/vCY8B+DP0nOkcdFnFim5GpDbo6ktdOyUeBFAg70X?=
+ =?iso-8859-1?Q?D3/SQ1ms4uOElEb/tyqteny2KlhCZ6mpiC9uFwXIGmLqCjD+um49WEpA?=
  =?iso-8859-1?Q?=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -125,23 +125,23 @@ MIME-Version: 1.0
 X-OriginatorOrg: oracle.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d530c72-5f1d-4c75-dc76-08da69f60f3d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 02:17:52.2277
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ae3f75f-a123-417f-f65d-08da69f60ffe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 02:17:52.9620
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kATvRTcfkVJiO/UA9dDLGlsotC25rSHGz0+iBwpT8EkQN0BWIQgfGc6vk9xmtfxb5qSFLSroGQEvpfYPW9u/ew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6243
+X-MS-Exchange-CrossTenant-userprincipalname: ek39Ip28YAhg74CG0ptRdalvMOdQDIaX8kGK78M8Hhay7nL94Bizg2vJ05d+9R6dziMdrtBf6y/atGwq97ljSA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6316
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-19_10,2022-07-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 phishscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=919 spamscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 phishscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
  definitions=main-2207200008
-X-Proofpoint-GUID: xLrx2sdOjehgdBBrdZiy_fQJC-rMeY-N
-X-Proofpoint-ORIG-GUID: xLrx2sdOjehgdBBrdZiy_fQJC-rMeY-N
+X-Proofpoint-ORIG-GUID: iFElMpXnt3F2Eg4chxTOYJq2WuqpanSk
+X-Proofpoint-GUID: iFElMpXnt3F2Eg4chxTOYJq2WuqpanSk
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -154,628 +154,541 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 
-By using the maple tree and the maple tree state, the vmacache is no
-longer beneficial and is complicating the VMA code.  Remove the vmacache
-to reduce the work in keeping it up to date and code complexity.
+Relocation of code for the next commit.  There should be no changes here.
 
-Link: https://lkml.kernel.org/r/20220504011345.662299-10-Liam.Howlett@oracl=
+Link: https://lkml.kernel.org/r/20220504011345.662299-12-Liam.Howlett@oracl=
 e.com
-Link: https://lkml.kernel.org/r/20220621204632.3370049-26-Liam.Howlett@orac=
+Link: https://lkml.kernel.org/r/20220621204632.3370049-28-Liam.Howlett@orac=
 le.com
 Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: David Howells <dhowells@redhat.com>
 Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 Cc: SeongJae Park <sj@kernel.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
 Cc: Will Deacon <will@kernel.org>
 Cc: Davidlohr Bueso <dave@stgolabs.net>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- fs/exec.c                     |   3 -
- fs/proc/task_mmu.c            |   1 -
- include/linux/mm_types.h      |   1 -
- include/linux/mm_types_task.h |  12 ----
- include/linux/sched.h         |   1 -
- include/linux/vm_event_item.h |   4 --
- include/linux/vmacache.h      |  28 --------
- include/linux/vmstat.h        |   6 --
- kernel/debug/debug_core.c     |  12 ----
- kernel/fork.c                 |   5 --
- lib/Kconfig.debug             |   8 ---
- mm/Makefile                   |   2 +-
- mm/debug.c                    |   4 +-
- mm/mmap.c                     |  31 +--------
- mm/nommu.c                    |  37 ++---------
- mm/vmacache.c                 | 117 ----------------------------------
- mm/vmstat.c                   |   4 --
- 17 files changed, 9 insertions(+), 267 deletions(-)
- delete mode 100644 include/linux/vmacache.h
- delete mode 100644 mm/vmacache.c
+ mm/mmap.c | 492 +++++++++++++++++++++++++++---------------------------
+ 1 file changed, 246 insertions(+), 246 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 0989fb8472a1..b97afa682ffe 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -28,7 +28,6 @@
- #include <linux/file.h>
- #include <linux/fdtable.h>
- #include <linux/mm.h>
--#include <linux/vmacache.h>
- #include <linux/stat.h>
- #include <linux/fcntl.h>
- #include <linux/swap.h>
-@@ -1027,8 +1026,6 @@ static int exec_mmap(struct mm_struct *mm)
- 	activate_mm(active_mm, mm);
- 	if (IS_ENABLED(CONFIG_ARCH_WANT_IRQS_OFF_ACTIVATE_MM))
- 		local_irq_enable();
--	tsk->mm->vmacache_seqnum =3D 0;
--	vmacache_flush(tsk);
- 	task_unlock(tsk);
- 	if (old_mm) {
- 		mmap_read_unlock(old_mm);
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 2d04e3470d4c..616913bb1fa7 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1,6 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/pagewalk.h>
--#include <linux/vmacache.h>
- #include <linux/mm_inline.h>
- #include <linux/hugetlb.h>
- #include <linux/huge_mm.h>
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 8352689457a2..c7580a191449 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -470,7 +470,6 @@ struct mm_struct {
- 	struct {
- 		struct vm_area_struct *mmap;		/* list of VMAs */
- 		struct maple_tree mm_mt;
--		u64 vmacache_seqnum;                   /* per-thread vmacache */
- #ifdef CONFIG_MMU
- 		unsigned long (*get_unmapped_area) (struct file *filp,
- 				unsigned long addr, unsigned long len,
-diff --git a/include/linux/mm_types_task.h b/include/linux/mm_types_task.h
-index c1bc6731125c..0bb4b6da9993 100644
---- a/include/linux/mm_types_task.h
-+++ b/include/linux/mm_types_task.h
-@@ -24,18 +24,6 @@
- 		IS_ENABLED(CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK))
- #define ALLOC_SPLIT_PTLOCKS	(SPINLOCK_SIZE > BITS_PER_LONG/8)
-=20
--/*
-- * The per task VMA cache array:
-- */
--#define VMACACHE_BITS 2
--#define VMACACHE_SIZE (1U << VMACACHE_BITS)
--#define VMACACHE_MASK (VMACACHE_SIZE - 1)
--
--struct vmacache {
--	u64 seqnum;
--	struct vm_area_struct *vmas[VMACACHE_SIZE];
--};
--
- /*
-  * When updating this, please also update struct resident_page_types[] in
-  * kernel/fork.c
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index c46f3a63b758..dc131048d46a 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -859,7 +859,6 @@ struct task_struct {
- 	struct mm_struct		*active_mm;
-=20
- 	/* Per-thread vma caching: */
--	struct vmacache			vmacache;
-=20
- #ifdef SPLIT_RSS_COUNTING
- 	struct task_rss_stat		rss_stat;
-diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
-index 404024486fa5..1ce8fadb2b1c 100644
---- a/include/linux/vm_event_item.h
-+++ b/include/linux/vm_event_item.h
-@@ -122,10 +122,6 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
- 		NR_TLB_LOCAL_FLUSH_ALL,
- 		NR_TLB_LOCAL_FLUSH_ONE,
- #endif /* CONFIG_DEBUG_TLBFLUSH */
--#ifdef CONFIG_DEBUG_VM_VMACACHE
--		VMACACHE_FIND_CALLS,
--		VMACACHE_FIND_HITS,
--#endif
- #ifdef CONFIG_SWAP
- 		SWAP_RA,
- 		SWAP_RA_HIT,
-diff --git a/include/linux/vmacache.h b/include/linux/vmacache.h
-deleted file mode 100644
-index 6fce268a4588..000000000000
---- a/include/linux/vmacache.h
-+++ /dev/null
-@@ -1,28 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __LINUX_VMACACHE_H
--#define __LINUX_VMACACHE_H
--
--#include <linux/sched.h>
--#include <linux/mm.h>
--
--static inline void vmacache_flush(struct task_struct *tsk)
--{
--	memset(tsk->vmacache.vmas, 0, sizeof(tsk->vmacache.vmas));
--}
--
--extern void vmacache_update(unsigned long addr, struct vm_area_struct *new=
-vma);
--extern struct vm_area_struct *vmacache_find(struct mm_struct *mm,
--						    unsigned long addr);
--
--#ifndef CONFIG_MMU
--extern struct vm_area_struct *vmacache_find_exact(struct mm_struct *mm,
--						  unsigned long start,
--						  unsigned long end);
--#endif
--
--static inline void vmacache_invalidate(struct mm_struct *mm)
--{
--	mm->vmacache_seqnum++;
--}
--
--#endif /* __LINUX_VMACACHE_H */
-diff --git a/include/linux/vmstat.h b/include/linux/vmstat.h
-index bfe38869498d..19cf5b6892ce 100644
---- a/include/linux/vmstat.h
-+++ b/include/linux/vmstat.h
-@@ -125,12 +125,6 @@ static inline void vm_events_fold_cpu(int cpu)
- #define count_vm_tlb_events(x, y) do { (void)(y); } while (0)
- #endif
-=20
--#ifdef CONFIG_DEBUG_VM_VMACACHE
--#define count_vm_vmacache_event(x) count_vm_event(x)
--#else
--#define count_vm_vmacache_event(x) do {} while (0)
--#endif
--
- #define __count_zid_vm_events(item, zid, delta) \
- 	__count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-=20
-diff --git a/kernel/debug/debug_core.c b/kernel/debug/debug_core.c
-index 7beceb447211..d5e9ccde3ab8 100644
---- a/kernel/debug/debug_core.c
-+++ b/kernel/debug/debug_core.c
-@@ -50,7 +50,6 @@
- #include <linux/pid.h>
- #include <linux/smp.h>
- #include <linux/mm.h>
--#include <linux/vmacache.h>
- #include <linux/rcupdate.h>
- #include <linux/irq.h>
- #include <linux/security.h>
-@@ -283,17 +282,6 @@ static void kgdb_flush_swbreak_addr(unsigned long addr=
-)
- 	if (!CACHE_FLUSH_IS_SAFE)
- 		return;
-=20
--	if (current->mm) {
--		int i;
--
--		for (i =3D 0; i < VMACACHE_SIZE; i++) {
--			if (!current->vmacache.vmas[i])
--				continue;
--			flush_cache_range(current->vmacache.vmas[i],
--					  addr, addr + BREAK_INSTR_SIZE);
--		}
--	}
--
- 	/* Force flush instruction cache if it was outside the mm */
- 	flush_icache_range(addr, addr + BREAK_INSTR_SIZE);
- }
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 9f2802eff361..4a9fce369f30 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -43,7 +43,6 @@
- #include <linux/fs.h>
- #include <linux/mm.h>
- #include <linux/mm_inline.h>
--#include <linux/vmacache.h>
- #include <linux/nsproxy.h>
- #include <linux/capability.h>
- #include <linux/cpu.h>
-@@ -1123,7 +1122,6 @@ static struct mm_struct *mm_init(struct mm_struct *mm=
-, struct task_struct *p,
- 	mm->mmap =3D NULL;
- 	mt_init_flags(&mm->mm_mt, MM_MT_FLAGS);
- 	mt_set_external_lock(&mm->mm_mt, &mm->mmap_lock);
--	mm->vmacache_seqnum =3D 0;
- 	atomic_set(&mm->mm_users, 1);
- 	atomic_set(&mm->mm_count, 1);
- 	seqcount_init(&mm->write_protect_seq);
-@@ -1578,9 +1576,6 @@ static int copy_mm(unsigned long clone_flags, struct =
-task_struct *tsk)
- 	if (!oldmm)
- 		return 0;
-=20
--	/* initialize the new vmacache entries */
--	vmacache_flush(tsk);
--
- 	if (clone_flags & CLONE_VM) {
- 		mmget(oldmm);
- 		mm =3D oldmm;
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 05c3858cdf41..6b84d0e7c3ad 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -804,14 +804,6 @@ config DEBUG_VM
-=20
- 	  If unsure, say N.
-=20
--config DEBUG_VM_VMACACHE
--	bool "Debug VMA caching"
--	depends on DEBUG_VM
--	help
--	  Enable this to turn on VMA caching debug information. Doing so
--	  can cause significant overhead, so only enable it in non-production
--	  environments.
--
- config DEBUG_VM_MAPLE_TREE
- 	bool "Debug VM maple trees"
- 	depends on DEBUG_VM
-diff --git a/mm/Makefile b/mm/Makefile
-index 6f9ffa968a1a..298c9991ab75 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -52,7 +52,7 @@ obj-y			:=3D filemap.o mempool.o oom_kill.o fadvise.o \
- 			   readahead.o swap.o truncate.o vmscan.o shmem.o \
- 			   util.o mmzone.o vmstat.o backing-dev.o \
- 			   mm_init.o percpu.o slab_common.o \
--			   compaction.o vmacache.o \
-+			   compaction.o \
- 			   interval_tree.o list_lru.o workingset.o \
- 			   debug.o gup.o mmap_lock.o $(mmu-y)
-=20
-diff --git a/mm/debug.c b/mm/debug.c
-index bef329bf28f0..2d625ca0e326 100644
---- a/mm/debug.c
-+++ b/mm/debug.c
-@@ -155,7 +155,7 @@ EXPORT_SYMBOL(dump_vma);
-=20
- void dump_mm(const struct mm_struct *mm)
- {
--	pr_emerg("mm %px mmap %px seqnum %llu task_size %lu\n"
-+	pr_emerg("mm %px mmap %px task_size %lu\n"
- #ifdef CONFIG_MMU
- 		"get_unmapped_area %px\n"
- #endif
-@@ -183,7 +183,7 @@ void dump_mm(const struct mm_struct *mm)
- 		"tlb_flush_pending %d\n"
- 		"def_flags: %#lx(%pGv)\n",
-=20
--		mm, mm->mmap, (long long) mm->vmacache_seqnum, mm->task_size,
-+		mm, mm->mmap, mm->task_size,
- #ifdef CONFIG_MMU
- 		mm->get_unmapped_area,
- #endif
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 3b140ce313f6..26bb60318066 100644
+index 26bb60318066..0cde534a8f9f 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -14,7 +14,6 @@
- #include <linux/backing-dev.h>
- #include <linux/mm.h>
- #include <linux/mm_inline.h>
--#include <linux/vmacache.h>
- #include <linux/shm.h>
- #include <linux/mman.h>
- #include <linux/pagemap.h>
-@@ -727,9 +726,6 @@ inline int vma_expand(struct ma_state *mas, struct vm_a=
-rea_struct *vma,
- 		/* Remove from mm linked list - also updates highest_vm_end */
- 		__vma_unlink_list(mm, next);
-=20
--		/* Kill the cache */
--		vmacache_invalidate(mm);
--
- 		if (file)
- 			__remove_shared_vm_struct(next, file, mapping);
-=20
-@@ -970,8 +966,6 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned l=
-ong start,
- 		__vma_unlink_list(mm, next);
- 		if (remove_next =3D=3D 2)
- 			__vma_unlink_list(mm, next_next);
--		/* Kill the cache */
--		vmacache_invalidate(mm);
-=20
- 		if (file) {
- 			__remove_shared_vm_struct(next, file, mapping);
-@@ -2275,19 +2269,10 @@ struct vm_area_struct *find_vma_intersection(struct=
- mm_struct *mm,
- 					     unsigned long start_addr,
- 					     unsigned long end_addr)
- {
--	struct vm_area_struct *vma;
- 	unsigned long index =3D start_addr;
-=20
- 	mmap_assert_locked(mm);
--	/* Check the cache first. */
--	vma =3D vmacache_find(mm, start_addr);
--	if (likely(vma))
--		return vma;
--
--	vma =3D mt_find(&mm->mm_mt, &index, end_addr - 1);
--	if (vma)
--		vmacache_update(start_addr, vma);
--	return vma;
-+	return mt_find(&mm->mm_mt, &index, end_addr - 1);
- }
- EXPORT_SYMBOL(find_vma_intersection);
-=20
-@@ -2301,19 +2286,10 @@ EXPORT_SYMBOL(find_vma_intersection);
-  */
- struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
- {
--	struct vm_area_struct *vma;
- 	unsigned long index =3D addr;
-=20
- 	mmap_assert_locked(mm);
--	/* Check the cache first. */
--	vma =3D vmacache_find(mm, addr);
--	if (likely(vma))
--		return vma;
--
--	vma =3D mt_find(&mm->mm_mt, &index, ULONG_MAX);
--	if (vma)
--		vmacache_update(addr, vma);
--	return vma;
-+	return mt_find(&mm->mm_mt, &index, ULONG_MAX);
- }
- EXPORT_SYMBOL(find_vma);
-=20
-@@ -2703,9 +2679,6 @@ detach_vmas_to_be_unmapped(struct mm_struct *mm, stru=
-ct ma_state *mas,
- 		mm->highest_vm_end =3D prev ? vm_end_gap(prev) : 0;
- 	tail_vma->vm_next =3D NULL;
-=20
--	/* Kill the cache */
--	vmacache_invalidate(mm);
--
- 	/*
- 	 * Do not downgrade mmap_lock if we are next to VM_GROWSDOWN or
- 	 * VM_GROWSUP VMA. Such VMAs can change their size under
-diff --git a/mm/nommu.c b/mm/nommu.c
-index b098c0251137..4ae252a785dc 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -19,7 +19,6 @@
- #include <linux/export.h>
- #include <linux/mm.h>
- #include <linux/sched/mm.h>
--#include <linux/vmacache.h>
- #include <linux/mman.h>
- #include <linux/swap.h>
- #include <linux/file.h>
-@@ -598,23 +597,12 @@ static void add_vma_to_mm(struct mm_struct *mm, struc=
-t vm_area_struct *vma)
-  */
- static void delete_vma_from_mm(struct vm_area_struct *vma)
- {
--	int i;
--	struct address_space *mapping;
--	struct mm_struct *mm =3D vma->vm_mm;
--	struct task_struct *curr =3D current;
- 	MA_STATE(mas, &vma->vm_mm->mm_mt, 0, 0);
-=20
--	mm->map_count--;
--	for (i =3D 0; i < VMACACHE_SIZE; i++) {
--		/* if the vma is cached, invalidate the entire cache */
--		if (curr->vmacache.vmas[i] =3D=3D vma) {
--			vmacache_invalidate(mm);
--			break;
--		}
--	}
--
-+	vma->vm_mm->map_count--;
- 	/* remove the VMA from the mapping */
- 	if (vma->vm_file) {
-+		struct address_space *mapping;
- 		mapping =3D vma->vm_file->f_mapping;
-=20
- 		i_mmap_lock_write(mapping);
-@@ -626,7 +614,7 @@ static void delete_vma_from_mm(struct vm_area_struct *v=
-ma)
-=20
- 	/* remove from the MM's tree and list */
- 	vma_mas_remove(vma, &mas);
--	__vma_unlink_list(mm, vma);
-+	__vma_unlink_list(vma->vm_mm, vma);
+@@ -1764,252 +1764,6 @@ static inline int accountable_mapping(struct file *=
+file, vm_flags_t vm_flags)
+ 	return (vm_flags & (VM_NORESERVE | VM_SHARED | VM_WRITE)) =3D=3D VM_WRITE=
+;
  }
 =20
- /*
-@@ -659,20 +647,9 @@ EXPORT_SYMBOL(find_vma_intersection);
-  */
- struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
- {
--	struct vm_area_struct *vma;
- 	MA_STATE(mas, &mm->mm_mt, addr, addr);
-=20
--	/* check the cache first */
--	vma =3D vmacache_find(mm, addr);
--	if (likely(vma))
--		return vma;
--
--	vma =3D mas_walk(&mas);
--
--	if (vma)
--		vmacache_update(addr, vma);
--
--	return vma;
-+	return mas_walk(&mas);
- }
- EXPORT_SYMBOL(find_vma);
-=20
-@@ -706,11 +683,6 @@ static struct vm_area_struct *find_vma_exact(struct mm=
-_struct *mm,
- 	unsigned long end =3D addr + len;
- 	MA_STATE(mas, &mm->mm_mt, addr, addr);
-=20
--	/* check the cache first */
--	vma =3D vmacache_find_exact(mm, addr, end);
--	if (vma)
--		return vma;
--
- 	vma =3D mas_walk(&mas);
- 	if (!vma)
- 		return NULL;
-@@ -719,7 +691,6 @@ static struct vm_area_struct *find_vma_exact(struct mm_=
-struct *mm,
- 	if (vma->vm_end !=3D end)
- 		return NULL;
-=20
--	vmacache_update(addr, vma);
- 	return vma;
- }
-=20
-diff --git a/mm/vmacache.c b/mm/vmacache.c
-deleted file mode 100644
-index 01a6e6688ec1..000000000000
---- a/mm/vmacache.c
-+++ /dev/null
-@@ -1,117 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Copyright (C) 2014 Davidlohr Bueso.
-- */
--#include <linux/sched/signal.h>
--#include <linux/sched/task.h>
--#include <linux/mm.h>
--#include <linux/vmacache.h>
--
--/*
-- * Hash based on the pmd of addr if configured with MMU, which provides a =
-good
-- * hit rate for workloads with spatial locality.  Otherwise, use pages.
-- */
--#ifdef CONFIG_MMU
--#define VMACACHE_SHIFT	PMD_SHIFT
--#else
--#define VMACACHE_SHIFT	PAGE_SHIFT
--#endif
--#define VMACACHE_HASH(addr) ((addr >> VMACACHE_SHIFT) & VMACACHE_MASK)
--
--/*
-- * This task may be accessing a foreign mm via (for example)
-- * get_user_pages()->find_vma().  The vmacache is task-local and this
-- * task's vmacache pertains to a different mm (ie, its own).  There is
-- * nothing we can do here.
-- *
-- * Also handle the case where a kernel thread has adopted this mm via
-- * kthread_use_mm(). That kernel thread's vmacache is not applicable to th=
-is mm.
-- */
--static inline bool vmacache_valid_mm(struct mm_struct *mm)
+-unsigned long mmap_region(struct file *file, unsigned long addr,
+-		unsigned long len, vm_flags_t vm_flags, unsigned long pgoff,
+-		struct list_head *uf)
 -{
--	return current->mm =3D=3D mm && !(current->flags & PF_KTHREAD);
--}
+-	struct mm_struct *mm =3D current->mm;
+-	struct vm_area_struct *vma =3D NULL;
+-	struct vm_area_struct *next, *prev, *merge;
+-	pgoff_t pglen =3D len >> PAGE_SHIFT;
+-	unsigned long charged =3D 0;
+-	unsigned long end =3D addr + len;
+-	unsigned long merge_start =3D addr, merge_end =3D end;
+-	pgoff_t vm_pgoff;
+-	int error;
+-	MA_STATE(mas, &mm->mm_mt, addr, end - 1);
 -
--void vmacache_update(unsigned long addr, struct vm_area_struct *newvma)
--{
--	if (vmacache_valid_mm(newvma->vm_mm))
--		current->vmacache.vmas[VMACACHE_HASH(addr)] =3D newvma;
--}
+-	/* Check against address space limit. */
+-	if (!may_expand_vm(mm, vm_flags, len >> PAGE_SHIFT)) {
+-		unsigned long nr_pages;
 -
--static bool vmacache_valid(struct mm_struct *mm)
--{
--	struct task_struct *curr;
--
--	if (!vmacache_valid_mm(mm))
--		return false;
--
--	curr =3D current;
--	if (mm->vmacache_seqnum !=3D curr->vmacache.seqnum) {
 -		/*
--		 * First attempt will always be invalid, initialize
--		 * the new cache for this task here.
+-		 * MAP_FIXED may remove pages of mappings that intersects with
+-		 * requested mapping. Account for the pages it would unmap.
 -		 */
--		curr->vmacache.seqnum =3D mm->vmacache_seqnum;
--		vmacache_flush(curr);
--		return false;
+-		nr_pages =3D count_vma_pages_range(mm, addr, end);
+-
+-		if (!may_expand_vm(mm, vm_flags,
+-					(len >> PAGE_SHIFT) - nr_pages))
+-			return -ENOMEM;
 -	}
--	return true;
--}
 -
--struct vm_area_struct *vmacache_find(struct mm_struct *mm, unsigned long a=
-ddr)
--{
--	int idx =3D VMACACHE_HASH(addr);
--	int i;
+-	/* Unmap any existing mapping in the area */
+-	if (do_munmap(mm, addr, len, uf))
+-		return -ENOMEM;
 -
--	count_vm_vmacache_event(VMACACHE_FIND_CALLS);
+-	/*
+-	 * Private writable mapping: check memory availability
+-	 */
+-	if (accountable_mapping(file, vm_flags)) {
+-		charged =3D len >> PAGE_SHIFT;
+-		if (security_vm_enough_memory_mm(mm, charged))
+-			return -ENOMEM;
+-		vm_flags |=3D VM_ACCOUNT;
+-	}
 -
--	if (!vmacache_valid(mm))
--		return NULL;
+-	next =3D mas_next(&mas, ULONG_MAX);
+-	prev =3D mas_prev(&mas, 0);
+-	if (vm_flags & VM_SPECIAL)
+-		goto cannot_expand;
 -
--	for (i =3D 0; i < VMACACHE_SIZE; i++) {
--		struct vm_area_struct *vma =3D current->vmacache.vmas[idx];
+-	/* Attempt to expand an old mapping */
+-	/* Check next */
+-	if (next && next->vm_start =3D=3D end && !vma_policy(next) &&
+-	    can_vma_merge_before(next, vm_flags, NULL, file, pgoff+pglen,
+-				 NULL_VM_UFFD_CTX, NULL)) {
+-		merge_end =3D next->vm_end;
+-		vma =3D next;
+-		vm_pgoff =3D next->vm_pgoff - pglen;
+-	}
 -
--		if (vma) {
--#ifdef CONFIG_DEBUG_VM_VMACACHE
--			if (WARN_ON_ONCE(vma->vm_mm !=3D mm))
--				break;
--#endif
--			if (vma->vm_start <=3D addr && vma->vm_end > addr) {
--				count_vm_vmacache_event(VMACACHE_FIND_HITS);
--				return vma;
+-	/* Check prev */
+-	if (prev && prev->vm_end =3D=3D addr && !vma_policy(prev) &&
+-	    (vma ? can_vma_merge_after(prev, vm_flags, vma->anon_vma, file,
+-				       pgoff, vma->vm_userfaultfd_ctx, NULL) :
+-		   can_vma_merge_after(prev, vm_flags, NULL, file, pgoff,
+-				       NULL_VM_UFFD_CTX, NULL))) {
+-		merge_start =3D prev->vm_start;
+-		vma =3D prev;
+-		vm_pgoff =3D prev->vm_pgoff;
+-	}
+-
+-
+-	/* Actually expand, if possible */
+-	if (vma &&
+-	    !vma_expand(&mas, vma, merge_start, merge_end, vm_pgoff, next)) {
+-		khugepaged_enter_vma(vma, vm_flags);
+-		goto expanded;
+-	}
+-
+-	mas.index =3D addr;
+-	mas.last =3D end - 1;
+-cannot_expand:
+-	/*
+-	 * Determine the object being mapped and call the appropriate
+-	 * specific mapper. the address has already been validated, but
+-	 * not unmapped, but the maps are removed from the list.
+-	 */
+-	vma =3D vm_area_alloc(mm);
+-	if (!vma) {
+-		error =3D -ENOMEM;
+-		goto unacct_error;
+-	}
+-
+-	vma->vm_start =3D addr;
+-	vma->vm_end =3D end;
+-	vma->vm_flags =3D vm_flags;
+-	vma->vm_page_prot =3D vm_get_page_prot(vm_flags);
+-	vma->vm_pgoff =3D pgoff;
+-
+-	if (file) {
+-		if (vm_flags & VM_SHARED) {
+-			error =3D mapping_map_writable(file->f_mapping);
+-			if (error)
+-				goto free_vma;
+-		}
+-
+-		vma->vm_file =3D get_file(file);
+-		error =3D call_mmap(file, vma);
+-		if (error)
+-			goto unmap_and_free_vma;
+-
+-		/* Can addr have changed??
+-		 *
+-		 * Answer: Yes, several device drivers can do it in their
+-		 *         f_op->mmap method. -DaveM
+-		 */
+-		WARN_ON_ONCE(addr !=3D vma->vm_start);
+-
+-		addr =3D vma->vm_start;
+-		mas_reset(&mas);
+-
+-		/*
+-		 * If vm_flags changed after call_mmap(), we should try merge
+-		 * vma again as we may succeed this time.
+-		 */
+-		if (unlikely(vm_flags !=3D vma->vm_flags && prev)) {
+-			merge =3D vma_merge(mm, prev, vma->vm_start, vma->vm_end, vma->vm_flags=
+,
+-				NULL, vma->vm_file, vma->vm_pgoff, NULL, NULL_VM_UFFD_CTX, NULL);
+-			if (merge) {
+-				/*
+-				 * ->mmap() can change vma->vm_file and fput
+-				 * the original file. So fput the vma->vm_file
+-				 * here or we would add an extra fput for file
+-				 * and cause general protection fault
+-				 * ultimately.
+-				 */
+-				fput(vma->vm_file);
+-				vm_area_free(vma);
+-				vma =3D merge;
+-				/* Update vm_flags to pick up the change. */
+-				addr =3D vma->vm_start;
+-				vm_flags =3D vma->vm_flags;
+-				goto unmap_writable;
 -			}
 -		}
--		if (++idx =3D=3D VMACACHE_SIZE)
--			idx =3D 0;
+-
+-		vm_flags =3D vma->vm_flags;
+-	} else if (vm_flags & VM_SHARED) {
+-		error =3D shmem_zero_setup(vma);
+-		if (error)
+-			goto free_vma;
+-	} else {
+-		vma_set_anonymous(vma);
 -	}
 -
--	return NULL;
--}
--
--#ifndef CONFIG_MMU
--struct vm_area_struct *vmacache_find_exact(struct mm_struct *mm,
--					   unsigned long start,
--					   unsigned long end)
--{
--	int idx =3D VMACACHE_HASH(start);
--	int i;
--
--	count_vm_vmacache_event(VMACACHE_FIND_CALLS);
--
--	if (!vmacache_valid(mm))
--		return NULL;
--
--	for (i =3D 0; i < VMACACHE_SIZE; i++) {
--		struct vm_area_struct *vma =3D current->vmacache.vmas[idx];
--
--		if (vma && vma->vm_start =3D=3D start && vma->vm_end =3D=3D end) {
--			count_vm_vmacache_event(VMACACHE_FIND_HITS);
--			return vma;
--		}
--		if (++idx =3D=3D VMACACHE_SIZE)
--			idx =3D 0;
+-	/* Allow architectures to sanity-check the vm_flags */
+-	if (!arch_validate_flags(vma->vm_flags)) {
+-		error =3D -EINVAL;
+-		if (file)
+-			goto unmap_and_free_vma;
+-		else
+-			goto free_vma;
 -	}
 -
--	return NULL;
+-	if (mas_preallocate(&mas, vma, GFP_KERNEL)) {
+-		error =3D -ENOMEM;
+-		if (file)
+-			goto unmap_and_free_vma;
+-		else
+-			goto free_vma;
+-	}
+-
+-	if (vma->vm_file)
+-		i_mmap_lock_write(vma->vm_file->f_mapping);
+-
+-	vma_mas_store(vma, &mas);
+-	__vma_link_list(mm, vma, prev);
+-	mm->map_count++;
+-	if (vma->vm_file) {
+-		if (vma->vm_flags & VM_SHARED)
+-			mapping_allow_writable(vma->vm_file->f_mapping);
+-
+-		flush_dcache_mmap_lock(vma->vm_file->f_mapping);
+-		vma_interval_tree_insert(vma, &vma->vm_file->f_mapping->i_mmap);
+-		flush_dcache_mmap_unlock(vma->vm_file->f_mapping);
+-		i_mmap_unlock_write(vma->vm_file->f_mapping);
+-	}
+-
+-	/*
+-	 * vma_merge() calls khugepaged_enter_vma() either, the below
+-	 * call covers the non-merge case.
+-	 */
+-	khugepaged_enter_vma(vma, vma->vm_flags);
+-
+-	/* Once vma denies write, undo our temporary denial count */
+-unmap_writable:
+-	if (file && vm_flags & VM_SHARED)
+-		mapping_unmap_writable(file->f_mapping);
+-	file =3D vma->vm_file;
+-expanded:
+-	perf_event_mmap(vma);
+-
+-	vm_stat_account(mm, vm_flags, len >> PAGE_SHIFT);
+-	if (vm_flags & VM_LOCKED) {
+-		if ((vm_flags & VM_SPECIAL) || vma_is_dax(vma) ||
+-					is_vm_hugetlb_page(vma) ||
+-					vma =3D=3D get_gate_vma(current->mm))
+-			vma->vm_flags &=3D VM_LOCKED_CLEAR_MASK;
+-		else
+-			mm->locked_vm +=3D (len >> PAGE_SHIFT);
+-	}
+-
+-	if (file)
+-		uprobe_mmap(vma);
+-
+-	/*
+-	 * New (or expanded) vma always get soft dirty status.
+-	 * Otherwise user-space soft-dirty page tracker won't
+-	 * be able to distinguish situation when vma area unmapped,
+-	 * then new mapped in-place (which must be aimed as
+-	 * a completely new data area).
+-	 */
+-	vma->vm_flags |=3D VM_SOFTDIRTY;
+-
+-	vma_set_page_prot(vma);
+-
+-	validate_mm(mm);
+-	return addr;
+-
+-unmap_and_free_vma:
+-	fput(vma->vm_file);
+-	vma->vm_file =3D NULL;
+-
+-	/* Undo any partial mapping done by a device driver. */
+-	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
+-	charged =3D 0;
+-	if (vm_flags & VM_SHARED)
+-		mapping_unmap_writable(file->f_mapping);
+-free_vma:
+-	vm_area_free(vma);
+-unacct_error:
+-	if (charged)
+-		vm_unacct_memory(charged);
+-	validate_mm(mm);
+-	return error;
 -}
--#endif
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 373d2730fcf2..da7e389cf33c 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1382,10 +1382,6 @@ const char * const vmstat_text[] =3D {
- 	"nr_tlb_local_flush_one",
- #endif /* CONFIG_DEBUG_TLBFLUSH */
+-
+ /**
+  * unmapped_area() - Find an area between the low_limit and the high_limit=
+ with
+  * the correct alignment and offset, all from @info. Note: current->mm is =
+used
+@@ -2883,6 +2637,252 @@ int do_munmap(struct mm_struct *mm, unsigned long s=
+tart, size_t len,
+ 	return __do_munmap(mm, start, len, uf, false);
+ }
 =20
--#ifdef CONFIG_DEBUG_VM_VMACACHE
--	"vmacache_find_calls",
--	"vmacache_find_hits",
--#endif
- #ifdef CONFIG_SWAP
- 	"swap_ra",
- 	"swap_ra_hit",
++unsigned long mmap_region(struct file *file, unsigned long addr,
++		unsigned long len, vm_flags_t vm_flags, unsigned long pgoff,
++		struct list_head *uf)
++{
++	struct mm_struct *mm =3D current->mm;
++	struct vm_area_struct *vma =3D NULL;
++	struct vm_area_struct *next, *prev, *merge;
++	pgoff_t pglen =3D len >> PAGE_SHIFT;
++	unsigned long charged =3D 0;
++	unsigned long end =3D addr + len;
++	unsigned long merge_start =3D addr, merge_end =3D end;
++	pgoff_t vm_pgoff;
++	int error;
++	MA_STATE(mas, &mm->mm_mt, addr, end - 1);
++
++	/* Check against address space limit. */
++	if (!may_expand_vm(mm, vm_flags, len >> PAGE_SHIFT)) {
++		unsigned long nr_pages;
++
++		/*
++		 * MAP_FIXED may remove pages of mappings that intersects with
++		 * requested mapping. Account for the pages it would unmap.
++		 */
++		nr_pages =3D count_vma_pages_range(mm, addr, end);
++
++		if (!may_expand_vm(mm, vm_flags,
++					(len >> PAGE_SHIFT) - nr_pages))
++			return -ENOMEM;
++	}
++
++	/* Unmap any existing mapping in the area */
++	if (do_munmap(mm, addr, len, uf))
++		return -ENOMEM;
++
++	/*
++	 * Private writable mapping: check memory availability
++	 */
++	if (accountable_mapping(file, vm_flags)) {
++		charged =3D len >> PAGE_SHIFT;
++		if (security_vm_enough_memory_mm(mm, charged))
++			return -ENOMEM;
++		vm_flags |=3D VM_ACCOUNT;
++	}
++
++	next =3D mas_next(&mas, ULONG_MAX);
++	prev =3D mas_prev(&mas, 0);
++	if (vm_flags & VM_SPECIAL)
++		goto cannot_expand;
++
++	/* Attempt to expand an old mapping */
++	/* Check next */
++	if (next && next->vm_start =3D=3D end && !vma_policy(next) &&
++	    can_vma_merge_before(next, vm_flags, NULL, file, pgoff+pglen,
++				 NULL_VM_UFFD_CTX, NULL)) {
++		merge_end =3D next->vm_end;
++		vma =3D next;
++		vm_pgoff =3D next->vm_pgoff - pglen;
++	}
++
++	/* Check prev */
++	if (prev && prev->vm_end =3D=3D addr && !vma_policy(prev) &&
++	    (vma ? can_vma_merge_after(prev, vm_flags, vma->anon_vma, file,
++				       pgoff, vma->vm_userfaultfd_ctx, NULL) :
++		   can_vma_merge_after(prev, vm_flags, NULL, file, pgoff,
++				       NULL_VM_UFFD_CTX, NULL))) {
++		merge_start =3D prev->vm_start;
++		vma =3D prev;
++		vm_pgoff =3D prev->vm_pgoff;
++	}
++
++
++	/* Actually expand, if possible */
++	if (vma &&
++	    !vma_expand(&mas, vma, merge_start, merge_end, vm_pgoff, next)) {
++		khugepaged_enter_vma(vma, vm_flags);
++		goto expanded;
++	}
++
++	mas.index =3D addr;
++	mas.last =3D end - 1;
++cannot_expand:
++	/*
++	 * Determine the object being mapped and call the appropriate
++	 * specific mapper. the address has already been validated, but
++	 * not unmapped, but the maps are removed from the list.
++	 */
++	vma =3D vm_area_alloc(mm);
++	if (!vma) {
++		error =3D -ENOMEM;
++		goto unacct_error;
++	}
++
++	vma->vm_start =3D addr;
++	vma->vm_end =3D end;
++	vma->vm_flags =3D vm_flags;
++	vma->vm_page_prot =3D vm_get_page_prot(vm_flags);
++	vma->vm_pgoff =3D pgoff;
++
++	if (file) {
++		if (vm_flags & VM_SHARED) {
++			error =3D mapping_map_writable(file->f_mapping);
++			if (error)
++				goto free_vma;
++		}
++
++		vma->vm_file =3D get_file(file);
++		error =3D call_mmap(file, vma);
++		if (error)
++			goto unmap_and_free_vma;
++
++		/* Can addr have changed??
++		 *
++		 * Answer: Yes, several device drivers can do it in their
++		 *         f_op->mmap method. -DaveM
++		 */
++		WARN_ON_ONCE(addr !=3D vma->vm_start);
++
++		addr =3D vma->vm_start;
++		mas_reset(&mas);
++
++		/*
++		 * If vm_flags changed after call_mmap(), we should try merge
++		 * vma again as we may succeed this time.
++		 */
++		if (unlikely(vm_flags !=3D vma->vm_flags && prev)) {
++			merge =3D vma_merge(mm, prev, vma->vm_start, vma->vm_end, vma->vm_flags=
+,
++				NULL, vma->vm_file, vma->vm_pgoff, NULL, NULL_VM_UFFD_CTX, NULL);
++			if (merge) {
++				/*
++				 * ->mmap() can change vma->vm_file and fput
++				 * the original file. So fput the vma->vm_file
++				 * here or we would add an extra fput for file
++				 * and cause general protection fault
++				 * ultimately.
++				 */
++				fput(vma->vm_file);
++				vm_area_free(vma);
++				vma =3D merge;
++				/* Update vm_flags to pick up the change. */
++				addr =3D vma->vm_start;
++				vm_flags =3D vma->vm_flags;
++				goto unmap_writable;
++			}
++		}
++
++		vm_flags =3D vma->vm_flags;
++	} else if (vm_flags & VM_SHARED) {
++		error =3D shmem_zero_setup(vma);
++		if (error)
++			goto free_vma;
++	} else {
++		vma_set_anonymous(vma);
++	}
++
++	/* Allow architectures to sanity-check the vm_flags */
++	if (!arch_validate_flags(vma->vm_flags)) {
++		error =3D -EINVAL;
++		if (file)
++			goto unmap_and_free_vma;
++		else
++			goto free_vma;
++	}
++
++	if (mas_preallocate(&mas, vma, GFP_KERNEL)) {
++		error =3D -ENOMEM;
++		if (file)
++			goto unmap_and_free_vma;
++		else
++			goto free_vma;
++	}
++
++	if (vma->vm_file)
++		i_mmap_lock_write(vma->vm_file->f_mapping);
++
++	vma_mas_store(vma, &mas);
++	__vma_link_list(mm, vma, prev);
++	mm->map_count++;
++	if (vma->vm_file) {
++		if (vma->vm_flags & VM_SHARED)
++			mapping_allow_writable(vma->vm_file->f_mapping);
++
++		flush_dcache_mmap_lock(vma->vm_file->f_mapping);
++		vma_interval_tree_insert(vma, &vma->vm_file->f_mapping->i_mmap);
++		flush_dcache_mmap_unlock(vma->vm_file->f_mapping);
++		i_mmap_unlock_write(vma->vm_file->f_mapping);
++	}
++
++	/*
++	 * vma_merge() calls khugepaged_enter_vma() either, the below
++	 * call covers the non-merge case.
++	 */
++	khugepaged_enter_vma(vma, vma->vm_flags);
++
++	/* Once vma denies write, undo our temporary denial count */
++unmap_writable:
++	if (file && vm_flags & VM_SHARED)
++		mapping_unmap_writable(file->f_mapping);
++	file =3D vma->vm_file;
++expanded:
++	perf_event_mmap(vma);
++
++	vm_stat_account(mm, vm_flags, len >> PAGE_SHIFT);
++	if (vm_flags & VM_LOCKED) {
++		if ((vm_flags & VM_SPECIAL) || vma_is_dax(vma) ||
++					is_vm_hugetlb_page(vma) ||
++					vma =3D=3D get_gate_vma(current->mm))
++			vma->vm_flags &=3D VM_LOCKED_CLEAR_MASK;
++		else
++			mm->locked_vm +=3D (len >> PAGE_SHIFT);
++	}
++
++	if (file)
++		uprobe_mmap(vma);
++
++	/*
++	 * New (or expanded) vma always get soft dirty status.
++	 * Otherwise user-space soft-dirty page tracker won't
++	 * be able to distinguish situation when vma area unmapped,
++	 * then new mapped in-place (which must be aimed as
++	 * a completely new data area).
++	 */
++	vma->vm_flags |=3D VM_SOFTDIRTY;
++
++	vma_set_page_prot(vma);
++
++	validate_mm(mm);
++	return addr;
++
++unmap_and_free_vma:
++	fput(vma->vm_file);
++	vma->vm_file =3D NULL;
++
++	/* Undo any partial mapping done by a device driver. */
++	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
++	charged =3D 0;
++	if (vm_flags & VM_SHARED)
++		mapping_unmap_writable(file->f_mapping);
++free_vma:
++	vm_area_free(vma);
++unacct_error:
++	if (charged)
++		vm_unacct_memory(charged);
++	validate_mm(mm);
++	return error;
++}
++
+ static int __vm_munmap(unsigned long start, size_t len, bool downgrade)
+ {
+ 	int ret;
 --=20
 2.35.1

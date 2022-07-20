@@ -2,45 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED8557BF3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD7C57BF41
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiGTUe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 16:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
+        id S229882AbiGTUhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 16:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiGTUey (ORCPT
+        with ESMTP id S229441AbiGTUhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:34:54 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6B34B48A;
-        Wed, 20 Jul 2022 13:34:53 -0700 (PDT)
+        Wed, 20 Jul 2022 16:37:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B69418E1E;
+        Wed, 20 Jul 2022 13:37:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C6AE0CE22FB;
-        Wed, 20 Jul 2022 20:34:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E4C4C3411E;
-        Wed, 20 Jul 2022 20:34:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658349290;
-        bh=5amI2+X3xNxx7qzEY33FLhbsd5G4SlT8HyQquY6/rwM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bgxYG4mJ3U2dpvoxaU50ZIl6Yje+pat4OrEwXsEtuq4mXpseFGo8RtcZ+wkFJuew9
-         Ich5rjQXTtmhYEI7SHpc9hNFJl0oYzIJkyEbkUVMBbAyQyAgo1Tp5HSj2tNuI+MDDS
-         hliBTgoQWgBP5m+RNMe+UCo5ck81DxT3qemZNCKY=
-Date:   Wed, 20 Jul 2022 22:34:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xin Gao <gaoxin@cdjrlc.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB:do not initialise statics to 0.
-Message-ID: <Ythm5o1nfv0v/zY0@kroah.com>
-References: <20220720194808.8799-1-gaoxin@cdjrlc.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12ACE61CBB;
+        Wed, 20 Jul 2022 20:37:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4630DC3411E;
+        Wed, 20 Jul 2022 20:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658349427;
+        bh=7PpBRv20MvSwwE36jMplF6JP0iKXxREOK8LZEaor688=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=jMAx2T3KOeZbhoBtYHqIwmEVTobmpeXTtp999f/G+GjFUkZPwlQBR+OBog38tBgJU
+         q1LOLTUmlq6cBIZmoM7azA/nb0LXgzjM3AV/YmfrZOAZI+THEjnWIfOgAPfx7AQWXc
+         5BCjiLggpScM0Zx1Ml7T5/hCU7TTOw+U0rMkAyV2DRHHK81ZQrLninPD15othpv4HB
+         2VWsRzC11A7tk9m/n28R4+d2liQywt8OB4SvK2x4FdvRqBTAjSFCYKmCV9s/ZqOXMx
+         D1XIGIT1Ci3jMSu05hNJxs93f3TRymkZFCwpfaWboobEzGH2BpMyWUR6/wD+FGwts4
+         1FtgbYp8na7iQ==
+Date:   Wed, 20 Jul 2022 15:37:05 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two
+ funcs
+Message-ID: <20220720203705.GA1654821@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220720194808.8799-1-gaoxin@cdjrlc.com>
+In-Reply-To: <20220718224033.GA1450714@bhelgaas>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -50,11 +66,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 03:48:08AM +0800, Xin Gao wrote:
-> do not initialise statics to 0.
+On Mon, Jul 18, 2022 at 05:40:33PM -0500, Bjorn Helgaas wrote:
+> On Mon, Jul 18, 2022 at 01:14:25PM -0500, Bjorn Helgaas wrote:
+> > ...
+> 
+> > So I think brcm_pcie_setup() does initialization that doesn't depend
+> > on the link or any downstream devices, and brcm_pcie_start_link() does
+> > things that depend on the link being up.  Right?
+> > 
+> > If so, "start_link" might be a slight misnomer since AFAICT
+> > brcm_pcie_start_link() doesn't do anything to initiate link-up except
+> > maybe deasserting fundamental reset.  Some drivers start the LTSSM or
+> > explicitly enable link training, but brcm_pcie_start_link() doesn't
+> > seem to do anything like that.
+> > 
+> > brcm_pcie_start_link() still does brcm_pcie_set_outbound_win().  Does
+> > that really depend on the link being up?  If that only affects the
+> > Root Port, maybe it could be done before link-up?
+> 
+> What about the /* PCIe->SCB endian mode for BAR */ thing?  Does that
+> depend on the link being up?
+> 
+> And the "Refclk from RC should be gated with CLKREQ#" part?  Does that
+> depend on the link being up?
+> 
+> It seems obvious that brcm_pcie_set_ssc() and reading the negotiated
+> link speed and width depend on the link being up.
 
-Why not?
+Can we close on this?  Splitting into
 
-You need to be very specific in changelog texts please.
+  (a) stuff that can be initialized before the link is available and
+  (b) stuff that depends on the link
 
-greg k-h
+makes good sense, but then (b) should only contain stuff that actually
+depends on the link.
+
+The "PCIe->SCB endian mode for BAR" *sounds* like something related to
+the primary side of the RP, not the link.
+
+Not sure about "Refclk from RC".  RC would certainly be primary side,
+but ASPM has to do with secondary (link) side.
+
+Bjorn

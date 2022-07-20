@@ -2,71 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632C557ADD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6897457ADEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239534AbiGTC1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S238141AbiGTC1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238289AbiGTC11 (ORCPT
+        with ESMTP id S240293AbiGTC1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:27:27 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0967B1E6;
-        Tue, 19 Jul 2022 19:22:59 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id s21so16398943pjq.4;
-        Tue, 19 Jul 2022 19:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cO1rkdmuR7oU7bdfMTLhtMVH5g0UFDfLxXUgSSq290Q=;
-        b=Pg+23lszg/SMLvpTmuUuWn7zjrLDDUntSNiqSnY9WYIdZX/j15HznIbwfe6QbVfLfp
-         f6rctMgHQYPkaceqThkzrLIK0LgkpI/jV3EQenObsbg6f12v9mHQQetSWZGFeDCCy5Kz
-         VDC13JEj7ZqqP2hpBqBXPqj4vVLVc9WhaneWRXlCaqm5mCvMupRHQwBDhfWPir3ZIY9+
-         5cd7gNbxEZYvDd1JnQ51MS0kN0JJmvbASMGr79k6oXMya+crLOP3qS11M/l64IoFPdZS
-         7DM5ZVQvCAU5TowlrZ4RR3ajmC2pvb9t57I2+cWD7sshfFy6IFh6CkQmQq1Rfsz7IRey
-         cQmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cO1rkdmuR7oU7bdfMTLhtMVH5g0UFDfLxXUgSSq290Q=;
-        b=GmCsZ+Dy5wLCcKIm5UjibTO9vBj4Tc+3Nj7rTH6/ipiTd3Ix+UwEH5F7nbwddofbNp
-         XbJkhpa3CRSqdyd93Amen4Q0DiFQ9U10StLYL5RT4wLE1xEmxZ3L+wuR/AfCXti9JILU
-         OfLcofdDue8hPlzoQkmyK/il1oYCPa+Fpzw+83KEENgu+Qg1kBZV4NwHRN1SefNr87JL
-         3AqLVPxp/+ukyoaQU6Dv1/ciOnsSJAMBTYJqy81j4A5tWmafGrkTgODePIAliM4EebgO
-         eqmPYtbl2xoEUkDyqozFOfBo2GHUYX7GNfVgmEeaLTNch89M2YNPO1di15gtWH5vt/U6
-         2wLg==
-X-Gm-Message-State: AJIora/cplC38CQee4QE+kw6a09vvXp92Kfwa5so+d6umlkxonjznv+6
-        hxraYnBRzUHRr7nVyVJbl4g=
-X-Google-Smtp-Source: AGRyM1tHNsb+oWEVREcDzaw1lIXwkfEzP1rakZkQKX9TOABe/2TEHuqjDnSIhJIm2G8raA5nLI9n4A==
-X-Received: by 2002:a17:902:e551:b0:16c:5a22:4823 with SMTP id n17-20020a170902e55100b0016c5a224823mr35231811plf.38.1658283776923;
-        Tue, 19 Jul 2022 19:22:56 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id f129-20020a625187000000b00525b61fc3f8sm12361724pfb.40.2022.07.19.19.22.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 19:22:56 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yang.yang29@zte.com.cn
-To:     viro@zeniv.linux.org.uk, hughd@google.com,
-        akpm@linux-foundation.org, hch@infradead.org,
-        hsiangkao@linux.alibaba.com
-Cc:     yang.yang29@zte.com.cn, axboe@kernel.dk, yangerkun@huawei.com,
-        johannes.thumshirn@wdc.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] fs: drop_caches: skip dropping pagecache which is always dirty
-Date:   Wed, 20 Jul 2022 02:21:19 +0000
-Message-Id: <20220720022118.1495752-1-yang.yang29@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 19 Jul 2022 22:27:04 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A278478DF7;
+        Tue, 19 Jul 2022 19:22:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GeLms78lLUT8hpFTWlbc91pEODSOhUovsnQLyJDAT+0=; b=F2xrDxHqnWOzlhaQsrchtLzigm
+        4pfpJpmoJz7FRxEjWxr9ralmUjPdbeeaX5GZS8Xgemz2OK9yU0hUPxDrkAcYKwHZabd74PrDfevQ7
+        BMVS+fSm8SHkEh1vJyy9seEqXOtIpBxCc4u26JZYIdUvueyzRrCcl9VUPr7PQa2wCHkr2d79m6svY
+        WKWmt/ZuOdkVE9qTH6o/rI362gld0K+FY+0DoaO+coX5FcbdwsolpGHefsUV/HrzYFVsJX/xIQs9U
+        PBsxnnyAsaZY1MXG/C8TN6c04jllBWrUDML1VFBR+cTPHM6uvd9uZuXe1Xonm2pb4DXqsR2Zmws30
+        lQJDLzjg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oDzM6-00Dx69-6w;
+        Wed, 20 Jul 2022 02:22:30 +0000
+Date:   Wed, 20 Jul 2022 03:22:30 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Hillf Danton <hdanton@sina.com>, linux-kernel@vger.kernel.org,
+        linux-parisc@vger.kernel.org
+Subject: Re: WARNING: CPU: 1 PID: 14735 at fs/dcache.c:365
+ dentry_free+0x100/0x128
+Message-ID: <Ytdm5gk0zvU0pBaG@ZenIV>
+References: <20220709090756.2384-1-hdanton@sina.com>
+ <20220715133300.1297-1-hdanton@sina.com>
+ <cff76e00-3561-4069-f5c7-26d3de4da3c4@gmx.de>
+ <20220717113634.1552-1-hdanton@sina.com>
+ <0aa365ca-a9f0-8d15-b515-adb8823f5d28@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0aa365ca-a9f0-8d15-b515-adb8823f5d28@gmx.de>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,81 +55,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+On Tue, Jul 19, 2022 at 06:32:04PM +0200, Helge Deller wrote:
+> > --- a/fs/dcache.c
+> > +++ b/fs/dcache.c
+> > @@ -605,8 +605,12 @@ static void __dentry_kill(struct dentry
+> >  		spin_unlock(&parent->d_lock);
+> >  	if (dentry->d_inode)
+> >  		dentry_unlink_inode(dentry);
+> > -	else
+> > +	else {
+> > +		if (unlikely(d_in_lookup(dentry))) {
+> > +			__d_lookup_done(dentry);
+> > +		}
+> >  		spin_unlock(&dentry->d_lock);
+> > +	}
 
-Pagecache of some kind of fs has PG_dirty bit set once it was
-allocated, so it can't be dropped. These fs include ramfs and
-tmpfs. This can make drop_pagecache_sb() more efficient.
-
-Introduce a new fs flag to do this, and this new flag may be
-used in other case in future.
-
-Signed-off-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- fs/drop_caches.c   | 7 +++++++
- fs/ramfs/inode.c   | 2 +-
- include/linux/fs.h | 1 +
- mm/shmem.c         | 2 +-
- 4 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/fs/drop_caches.c b/fs/drop_caches.c
-index e619c31b6bd9..16956d5d3922 100644
---- a/fs/drop_caches.c
-+++ b/fs/drop_caches.c
-@@ -19,6 +19,13 @@ static void drop_pagecache_sb(struct super_block *sb, void *unused)
- {
- 	struct inode *inode, *toput_inode = NULL;
- 
-+	/*
-+	 * Pagecache of this kind of fs has PG_dirty bit set once it was
-+	 * allocated, so it can't be dropped.
-+	 */
-+	if (sb->s_type->fs_flags & FS_ALWAYS_DIRTY)
-+		return;
-+
- 	spin_lock(&sb->s_inode_list_lock);
- 	list_for_each_entry(inode, &sb->s_inodes, i_sb_list) {
- 		spin_lock(&inode->i_lock);
-diff --git a/fs/ramfs/inode.c b/fs/ramfs/inode.c
-index bc66d0173e33..5fb62d37618f 100644
---- a/fs/ramfs/inode.c
-+++ b/fs/ramfs/inode.c
-@@ -289,7 +289,7 @@ static struct file_system_type ramfs_fs_type = {
- 	.init_fs_context = ramfs_init_fs_context,
- 	.parameters	= ramfs_fs_parameters,
- 	.kill_sb	= ramfs_kill_sb,
--	.fs_flags	= FS_USERNS_MOUNT,
-+	.fs_flags	= FS_USERNS_MOUNT | FS_ALWAYS_DIRTY,
- };
- 
- static int __init init_ramfs_fs(void)
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index e285bd9d6188..90cdd10d683e 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2532,6 +2532,7 @@ struct file_system_type {
- #define FS_USERNS_MOUNT		8	/* Can be mounted by userns root */
- #define FS_DISALLOW_NOTIFY_PERM	16	/* Disable fanotify permission events */
- #define FS_ALLOW_IDMAP         32      /* FS has been updated to handle vfs idmappings. */
-+#define FS_ALWAYS_DIRTY		64	/* Pagecache is always dirty. */
- #define FS_RENAME_DOES_D_MOVE	32768	/* FS will handle d_move() during rename() internally. */
- 	int (*init_fs_context)(struct fs_context *);
- 	const struct fs_parameter_spec *parameters;
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 8baf26eda989..5d549f61735f 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -3974,7 +3974,7 @@ static struct file_system_type shmem_fs_type = {
- 	.parameters	= shmem_fs_parameters,
- #endif
- 	.kill_sb	= kill_litter_super,
--	.fs_flags	= FS_USERNS_MOUNT,
-+	.fs_flags	= FS_USERNS_MOUNT | FS_ALWAYS_DIRTY,
- };
- 
- void __init shmem_init(void)
--- 
-2.25.1
-
+Ugh...  If that triggers, we really have a problem.  I don't see any
+way for that to happen (well, short of generally fucked refcounting -
+stray dput() on wrong address and all bets are off)

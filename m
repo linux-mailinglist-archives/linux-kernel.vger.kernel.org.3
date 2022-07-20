@@ -2,141 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B8257B62D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACC957B63A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiGTMP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S230326AbiGTMRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiGTMPX (ORCPT
+        with ESMTP id S229686AbiGTMRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:15:23 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4C51EEDB;
-        Wed, 20 Jul 2022 05:15:22 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KCEpRf023607;
-        Wed, 20 Jul 2022 12:15:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : cc :
- subject : in-reply-to : in-reply-to : references : date : message-id :
- mime-version : content-type; s=pp1;
- bh=r/6jWPn4dlWcdAr0FThJw75qwR6TAdYize4o4pWh8RI=;
- b=LwWxJjBx86sO3BOIVWjzX78GseYRYp99HdMfUOAVgDdoFbZ6pz63T+eVzIeyE8J4HTWq
- dUH3qyjvq7UWtVpsGMDzG4juKNqmGaRpZv5dwtl87glh6CU48v9yhL7Z4/CuAolsJyKX
- 7FljbknWtNWtKat3jtLHj5+52YVleDYZvy6qAVeZe+UjTL+VQE5gw1+nx/oL3QvybYEa
- esjafb0QzFcBNmAYI9YKnRsSyAEKGeQxY+qxVeUwvhOsAbT4yl7sB2OguWn29wZoUoXd
- FVzh0UWBOQwsUHJvi/UciTRnvkBVatqLxRxHhYzCi9MnYMLnT5XuZpGqqSl8+2ugY3h/ /Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hehhr80b8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 12:15:10 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26KCEu5s023852;
-        Wed, 20 Jul 2022 12:15:10 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hehhr80a7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 12:15:10 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26KC6ggE006072;
-        Wed, 20 Jul 2022 12:15:08 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3hbmkj5kh4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 12:15:08 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26KCF56Z23462246
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Jul 2022 12:15:05 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 236D45204F;
-        Wed, 20 Jul 2022 12:15:05 +0000 (GMT)
-Received: from localhost (unknown [9.171.84.168])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 085435204E;
-        Wed, 20 Jul 2022 12:15:04 +0000 (GMT)
-From:   Alexander Egorenkov <egorenar@linux.ibm.com>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] s390/crash: support multi-segment iterators
-In-Reply-To: <cover.1658206891.git.agordeev@linux.ibm.com>
-In-Reply-To: 
-References: <cover.1658206891.git.agordeev@linux.ibm.com>
-Date:   Wed, 20 Jul 2022 14:15:04 +0200
-Message-ID: <87edygc75j.fsf@oc8242746057.ibm.com>
+        Wed, 20 Jul 2022 08:17:42 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B2F9A1BB;
+        Wed, 20 Jul 2022 05:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=yaz0Q
+        MZ0VzAVvaye8vM78CKCLfEhfSUFfaVNdAd2jMo=; b=GqsW7SqZJi3BjYVJZAbYN
+        c3ruvUlnV3GLa+0GThT8B2ilebU82K5ND2Ougto0ZuR60eiNO3SMs4sw9eE1jeo9
+        86qUXdN70CR4XBD31lK7ZF7W0LSoUm8/UUL5usD/9ZvrvksYPXp30AfELQ9PCTI3
+        p3Fq4npulitaWdx1+E2scw=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp3 (Coremail) with SMTP id G9xpCgDnlW8v8tdi0gf9QA--.447S2;
+        Wed, 20 Jul 2022 20:16:48 +0800 (CST)
+From:   williamsukatube@163.com
+To:     colyli@suse.de, kent.overstreet@gmail.com,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH -next] bcache: Fix spelling mistakes
+Date:   Wed, 20 Jul 2022 20:16:45 +0800
+Message-Id: <20220720121645.2834133-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tcWm7o53MzSNvCx0GO95P5c32qDyfoff
-X-Proofpoint-GUID: 45iSwJPklw9bzop1mxkTZFx3t6ZRJa4C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_05,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=936 clxscore=1011
- impostorscore=0 bulkscore=0 priorityscore=1501 adultscore=0 phishscore=0
- mlxscore=0 malwarescore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207200050
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgDnlW8v8tdi0gf9QA--.447S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr1DuFWkJw43Cw4fCFyxAFb_yoWruw4rpF
+        W7X34fAw1vq3y7Ar98Aa4UuFyrJa45tFW7Kas7uas5ZFy7ZF1rAFyUKayDtw1kWryfJFW2
+        qr45tw1DWF1rKaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07b1GYLUUUUU=
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbBexFEg2AZAX4gQAAAsL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Alexander,
+From: William Dean <williamsukatube@gmail.com>
 
-Alexander Gordeev <agordeev@linux.ibm.com> writes:
+Fix follow spelling misktakes:
+	automatical  ==> automatic
+	arount ==> around
+	individial  ==> around
+	embeddded  ==> embedded
+	addionally  ==> additionally
+	unncessary  ==> unnecessary
+	definitly  ==> definitely
 
-> Hi Matthew et al,
->
-> This series completes 5d8de293c224 ("vmcore: convert copy_oldmem_page()
-> to take an iov_iter") for s390.
->
-> Changes since v3:
->   - concurrent access to HSA and oldmem swap buffers protected;
->
-> Changes since v2:
->   - Matthew Wilcox suggestion is adopted, with that...
->   - copy_to_iter() is used instead of custom implementation;
->
-> Changes since v1:
->   - number of bytes left to copy on fail fixed;
->
-> Thanks!
->
->
-> Alexander Gordeev (4):
->   s390/zcore: fix race when reading from hardware system area
->   s390/crash: move copy_to_user_real() to crash_dump.c
->   s390/crash: use static swap buffer for copy_to_user_real()
->   s390/crash: support multi-segment iterators
->
->  arch/s390/include/asm/os_info.h |  17 ++++-
->  arch/s390/include/asm/sclp.h    |   4 +-
->  arch/s390/include/asm/uaccess.h |   1 -
->  arch/s390/kernel/crash_dump.c   | 114 ++++++++------------------------
->  arch/s390/mm/maccess.c          |  26 --------
->  drivers/s390/char/zcore.c       |  55 ++++++++-------
->  6 files changed, 71 insertions(+), 146 deletions(-)
->
-> -- 
-> 2.34.1
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@gmail.com>
+---
+ drivers/md/bcache/bcache.h    | 2 +-
+ drivers/md/bcache/bset.h      | 2 +-
+ drivers/md/bcache/btree.c     | 2 +-
+ drivers/md/bcache/btree.h     | 2 +-
+ drivers/md/bcache/stats.c     | 2 +-
+ drivers/md/bcache/writeback.c | 2 +-
+ drivers/md/bcache/writeback.h | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
-all our kdump + makedumpfile (with CP as core collector as well) work
-with these patches applied.
+diff --git a/drivers/md/bcache/bcache.h b/drivers/md/bcache/bcache.h
+index 2acda9cea0f9..2b35c0a14d4d 100644
+--- a/drivers/md/bcache/bcache.h
++++ b/drivers/md/bcache/bcache.h
+@@ -635,7 +635,7 @@ struct cache_set {
+ 	struct bkey		gc_done;
+ 
+ 	/*
+-	 * For automatical garbage collection after writeback completed, this
++	 * For automatic garbage collection after writeback completed, this
+ 	 * varialbe is used as bit fields,
+ 	 * - 0000 0001b (BCH_ENABLE_AUTO_GC): enable gc after writeback
+ 	 * - 0000 0010b (BCH_DO_AUTO_GC):     do gc after writeback
+diff --git a/drivers/md/bcache/bset.h b/drivers/md/bcache/bset.h
+index d795c84246b0..76f75bbcb731 100644
+--- a/drivers/md/bcache/bset.h
++++ b/drivers/md/bcache/bset.h
+@@ -45,7 +45,7 @@
+  * 4 in memory - we lazily resort as needed.
+  *
+  * We implement code here for creating and maintaining auxiliary search trees
+- * (described below) for searching an individial bset, and on top of that we
++ * (described below) for searching an individual bset, and on top of that we
+  * implement a btree iterator.
+  *
+  * BTREE ITERATOR:
+diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+index e136d6edc1ed..a26863eedc6f 100644
+--- a/drivers/md/bcache/btree.c
++++ b/drivers/md/bcache/btree.c
+@@ -154,7 +154,7 @@ void bch_btree_node_read_done(struct btree *b)
+ 	/*
+ 	 * c->fill_iter can allocate an iterator with more memory space
+ 	 * than static MAX_BSETS.
+-	 * See the comment arount cache_set->fill_iter.
++	 * See the comment around cache_set->fill_iter.
+ 	 */
+ 	iter = mempool_alloc(&b->c->fill_iter, GFP_NOIO);
+ 	iter->size = b->c->cache->sb.bucket_size / b->c->cache->sb.block_size;
+diff --git a/drivers/md/bcache/btree.h b/drivers/md/bcache/btree.h
+index 1b5fdbc0d83e..b46bf6268aca 100644
+--- a/drivers/md/bcache/btree.h
++++ b/drivers/md/bcache/btree.h
+@@ -54,7 +54,7 @@
+  * Btree nodes never have to be explicitly read in; bch_btree_node_get() handles
+  * this.
+  *
+- * For writing, we have two btree_write structs embeddded in struct btree - one
++ * For writing, we have two btree_write structs embedded in struct btree - one
+  * write in flight, and one being set up, and we toggle between them.
+  *
+  * Writing is done with a single function -  bch_btree_write() really serves two
+diff --git a/drivers/md/bcache/stats.c b/drivers/md/bcache/stats.c
+index 68b02216033d..dcd87eb6f85e 100644
+--- a/drivers/md/bcache/stats.c
++++ b/drivers/md/bcache/stats.c
+@@ -11,7 +11,7 @@
+ #include "sysfs.h"
+ 
+ /*
+- * We keep absolute totals of various statistics, and addionally a set of three
++ * We keep absolute totals of various statistics, and additionally a set of three
+  * rolling averages.
+  *
+  * Every so often, a timer goes off and rescales the rolling averages.
+diff --git a/drivers/md/bcache/writeback.c b/drivers/md/bcache/writeback.c
+index 3f0ff3aab6f2..bd83a33b8a2f 100644
+--- a/drivers/md/bcache/writeback.c
++++ b/drivers/md/bcache/writeback.c
+@@ -238,7 +238,7 @@ static void update_writeback_rate(struct work_struct *work)
+ 	/*
+ 	 * If the whole cache set is idle, set_at_max_writeback_rate()
+ 	 * will set writeback rate to a max number. Then it is
+-	 * unncessary to update writeback rate for an idle cache set
++	 * unnecessary to update writeback rate for an idle cache set
+ 	 * in maximum writeback rate number(s).
+ 	 */
+ 	if (atomic_read(&dc->has_dirty) && dc->writeback_percent &&
+diff --git a/drivers/md/bcache/writeback.h b/drivers/md/bcache/writeback.h
+index 31df716951f6..37f66bea522f 100644
+--- a/drivers/md/bcache/writeback.h
++++ b/drivers/md/bcache/writeback.h
+@@ -69,7 +69,7 @@ static inline int offset_to_stripe(struct bcache_device *d,
+ 	}
+ 
+ 	/*
+-	 * Here offset is definitly smaller than INT_MAX,
++	 * Here offset is definitely smaller than INT_MAX,
+ 	 * return it as int will never overflow.
+ 	 */
+ 	return offset;
+-- 
+2.25.1
 
-Tested on LPAR and zVM.
-With and w/o KASAN.
-
-Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-
-Regards
-Alex 

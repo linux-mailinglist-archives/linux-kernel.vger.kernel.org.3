@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5427457B3A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721C757B3A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiGTJR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
+        id S231189AbiGTJUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiGTJR1 (ORCPT
+        with ESMTP id S229682AbiGTJUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:17:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09B02A73A
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:17:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22420617EB
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE623C3411E;
-        Wed, 20 Jul 2022 09:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658308644;
-        bh=0zBO6umFFIrPrU7UNFUykMRqo+BjUg3C8nb2Lh1VYyA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S4ozL+iug/6wm07GUIQUZ4Z2Awe27I83BkiycWryzvxkLp2BTN0DMSBdRZ7EzPEZH
-         Ytt/0e4GJzdbQ2RDKIauTx+oJZrhV7vP4GCgY7aDqjCAjQmNRVPxOWWaRr0EkEBqJk
-         gCMl4zssRtQGVIzf8FLMzeaicZHmUwKENIdQ6ZEk/iS95bJDeFTOxwrmAs52+L6GjN
-         2Cc9R15r5KX07Amhh1D7KPlXEJbvVZjGEaojkIiLm9AEIA5KdrhWmKq79EpH0YPqkG
-         P8ISZpVshT8s7FoUIvPrdmCK0G0U4LJU1xDdD5zCCZjWpwLemLYzSsVbUsubkUP4jI
-         RZLGDyFjfRrjg==
-Date:   Wed, 20 Jul 2022 10:17:16 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Barry Song <21cnbao@gmail.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Steven Price <steven.price@arm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        =?utf-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        =?utf-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>
-Subject: Re: [RESEND PATCH v3] arm64: enable THP_SWAP for arm64
-Message-ID: <20220720091716.GA15752@willie-the-truck>
-References: <20220718090050.2261-1-21cnbao@gmail.com>
- <87mtd62apo.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <CAGsJ_4zsNNb0mbR7Sm-=Hd7+fW4rXbnivCY1cF-wyio2EeETvA@mail.gmail.com>
- <f2d6ef91-f447-ffb4-2a6e-bc95533e5167@arm.com>
- <87zgh5232o.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <416a06f6-ca7d-d4a9-2cda-af0ad6e28261@arm.com>
- <CAGsJ_4y7GyL5qtrBbhz_8bLuAGGHy7Ju0ucPjHp-ZeDHjQcTcw@mail.gmail.com>
- <05639c8d-73f7-7e12-9941-cae3037e44b4@arm.com>
- <CAGsJ_4wFiQe5BZeLQDjUQNUZzDsTLR5QpHA5g9ZCUVOUFrvXTA@mail.gmail.com>
- <cc22ee37-2134-0b51-5f4d-8b2cc4688f8c@arm.com>
+        Wed, 20 Jul 2022 05:20:15 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01216575
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:20:12 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id v12so22964713edc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=O2r9z+0U5AsjCxNa2HdHqFngARMmBB8Z9POgFg+P13I=;
+        b=f0UOaGtGTCkFlY/00QapnpK8E7KfxUNb8JEWYsiqJn5COOj44+DiftxxaLUtzwoIcP
+         WFtA5Scp9Yu9gD36UID3q2l/k4jsn2GxwvwzQ/yrCLNsyGFqbjWrFeqn5BdRTP+TD/u1
+         d2UuQfXsiWXwDY060ny+aI/baI2ZXw5M245BylBQQ0TyhOGGRXEJZBNNG5Zm/FLxIGfq
+         7sgESxU8Z6tFO90H4asylV4rqjDyb6inxocGXubGs6GKN2EoyDj4UweYI4nAwQrRsp4v
+         8TOb9Yh+JXlV6JbBqXVJOe2qvihenas/Dw43GNVt/8McdH8fsUB4JkpLCQHEMIcyxNt3
+         WDPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=O2r9z+0U5AsjCxNa2HdHqFngARMmBB8Z9POgFg+P13I=;
+        b=8QVic2HeDg1BVJ1b0wHovNTMgW1BRYWr2Keky1rNPCdoAEqoEPz2XdckrX+cgzWMrh
+         +cgzbDzVTZuFkEO9cWueeAPM9fUVKt+1hYNP6ADYa8ChfcEYZBededSDoi3ZIUjZ/Jal
+         ZHVcG/BWX3VGA+7ie+8s+Vnxq65Foq+9EcJLT64IJOI2GwFgcKlvRUhFSdaSZxRZTt6O
+         viCvw3nhAMbSTYiV9u99gts6wlmYBFRlHNUuvVXPMQmvb8quq0yOfY3o3giEPx/s+lgx
+         ySiYGaVypiDiUgd+Fguo9IzxzQ5mmFjz+eJWjwXux5sMT8LpMDR0XdBJP4k4t4AOYlhc
+         TSyQ==
+X-Gm-Message-State: AJIora8/3/7Q69gyCzIaGEGRfcm/pwR4n5ADOLFzS1C8rq5stDW6QWCI
+        oUNbwBp8kIv4cH449TxriQGmMV5IPZH3qrwOINcN7A==
+X-Google-Smtp-Source: AGRyM1uQ+Yzb+l1WvKL8FeRQbaeWtLAC03zjwV6uEYGBdb/fRWwzFsS/c5OxywP1OFCE1GYGRthalDiUnl40djHAkBk=
+X-Received: by 2002:aa7:d5d7:0:b0:43a:6eda:464a with SMTP id
+ d23-20020aa7d5d7000000b0043a6eda464amr49724122eds.193.1658308811167; Wed, 20
+ Jul 2022 02:20:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc22ee37-2134-0b51-5f4d-8b2cc4688f8c@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220719114656.750574879@linuxfoundation.org>
+In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 20 Jul 2022 14:49:59 +0530
+Message-ID: <CA+G9fYt0YHSETSiPCFpsjR5U_z+UH+KZXAviXSdu2Ns8C=J0+A@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/167] 5.15.56-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,97 +70,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 08:06:42AM +0530, Anshuman Khandual wrote:
-> On 7/20/22 07:16, Barry Song wrote:
-> > On Tue, Jul 19, 2022 at 4:04 PM Anshuman Khandual
-> > <anshuman.khandual@arm.com> wrote:
-> >> On 7/19/22 09:29, Barry Song wrote:
-> >>> On Tue, Jul 19, 2022 at 3:35 PM Anshuman Khandual
-> >>> <anshuman.khandual@arm.com> wrote:
-> >>>> On 7/19/22 08:58, Huang, Ying wrote:
-> >>>>> Anshuman Khandual <anshuman.khandual@arm.com> writes:
-> >>>>>>>> How about the following?
-> >>>>>>>>
-> >>>>>>>> static inline bool arch_wants_thp_swap(void)
-> >>>>>>>> {
-> >>>>>>>>      return IS_ENABLED(ARCH_WANTS_THP_SWAP);
-> >>>>>>>> }
-> >>>>>>>
-> >>>>>>> This looks good. then i'll need to change arm64 to
-> >>>>>>>
-> >>>>>>>  +static inline bool arch_thp_swp_supported(void)
-> >>>>>>>  +{
-> >>>>>>>  +     return IS_ENABLED(ARCH_WANTS_THP_SWAP) &&  !system_supports_mte();
-> >>>>>>>  +}
-> >>>>>>
-> >>>>>> Why ? CONFIG_THP_SWAP depends on ARCH_WANTS_THP_SWAP. In folio_alloc_swap(),
-> >>>>>> IS_ENABLED(CONFIG_THP_SWAP) enabled, will also imply ARCH_WANTS_THP_SWAP too
-> >>>>>> is enabled. Hence checking for ARCH_WANTS_THP_SWAP again does not make sense
-> >>>>>> either in the generic fallback stub, or in arm64 platform override. Because
-> >>>>>> without ARCH_WANTS_THP_SWAP enabled, arch_thp_swp_supported() should never
-> >>>>>> be called in the first place.
-> >>>>>
-> >>>>> For the only caller now, the checking looks redundant.  But the original
-> >>>>> proposed implementation as follows,
-> >>>>>
-> >>>>> static inline bool arch_thp_swp_supported(void)
-> >>>>> {
-> >>>>>      return true;
-> >>>>> }
-> >>>>>
-> >>>>> will return true even on architectures that don't support/want THP swap.
-> >>>>
-> >>>> But the function will never be called on for those platforms.
-> >>>>
-> >>>>> That will confuse people too.
-> >>>>
-> >>>> I dont see how.
-> >>>>
-> >>>>>
-> >>>>> And the "redundant" checking has no run time overhead, because compiler
-> >>>>> will do the trick.
-> >>>> I understand that, but dont think this indirection is necessary.
-> >>>
-> >>> Hi Anshuman, Hi Ying,
-> >>> Thanks for the comments of both of you. Does the below look ok?
-> >>>
-> >>> generic,
-> >>>
-> >>>  static inline bool arch_wants_thp_swap(void)
-> >>>   {
-> >>>       return IS_ENABLED(CONFIG_THP_SWAP);
-> >>>  }
-> >>>
-> >>> arm64,
-> >>>
-> >>> static inline bool arch_thp_swp_supported(void)
-> >>> {
-> >>>      return IS_ENABLED(CONFIG_THP_SWAP) &&  !system_supports_mte();
-> >>> }
-> >>>
-> >>> caller,
-> >>>
-> >>> folio_alloc_swap(struct folio *folio)
-> >>> {
-> >>>
-> >>>   if (folio_test_large(folio)) {
-> >>>    - if (IS_ENABLED(CONFIG_THP_SWAP))
-> >>>   + if (arch_thp_swp_supported())
-> >>>         get_swap_pages(1, &entry, folio_nr_pages(folio));
-> >>>        goto out;
-> >>>   }
-> >>
-> >> Current proposal in this patch LGTM, I dont see any reason for these changes.
-> > 
-> > OK, thanks, Anshuman. Can I collect this as a Reviewed-by?
-> 
-> Yes please.
+On Tue, 19 Jul 2022 at 17:41, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> This is the start of the stable review cycle for the 5.15.56 release.
+> There are 167 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.56-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I've lost track of exactly what the outcome here is, so Barry, please can
-you send a final version of the agreed-upon patch?
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Thanks,
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Will
+## Build
+* kernel: 5.15.56-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 91c6070d5cedab812864b5440077d94efc003953
+* git describe: v5.15.55-168-g91c6070d5ced
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.55-168-g91c6070d5ced
+
+## Test Regressions (compared to v5.15.55)
+No test regressions found.
+
+## Metric Regressions (compared to v5.15.55)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.55)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.55)
+No metric fixes found.
+
+## Test result summary
+total: 139212, pass: 125349, fail: 352, skip: 12676, xfail: 835
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 308 total, 308 passed, 0 failed
+* arm64: 62 total, 60 passed, 2 failed
+* i386: 52 total, 50 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 22 total, 22 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 54 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

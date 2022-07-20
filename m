@@ -2,96 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5CD57B8FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4965B57B905
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241068AbiGTO5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S241080AbiGTO6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbiGTO5f (ORCPT
+        with ESMTP id S240466AbiGTO6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:57:35 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC574198D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:57:34 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id m16so9570292qka.12
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:57:34 -0700 (PDT)
+        Wed, 20 Jul 2022 10:58:00 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CDA4AD55
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:57:56 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id bb16so11134950oib.11
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:57:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maine.edu; s=google;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=ZdJHosg5SmguSr4QYtxRtnSRmNzmgYCrlbvAvjhF6/8=;
-        b=hRSjO53dVDoKv6d15hfNA3BC5lcv7CxBEeYh9CIxq3gcNun87ZyiKkiWkEzUicgnUz
-         Nvnp43sKvYQKW6IRLggs4vplH/qyuwBt5crtLtbdqcs/wFExjVn6+Y5XhTIBuJdpT+2D
-         xwRlxQAp78i6v1YboKPRL3qm1bz3hn7MRYWIQ=
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XSU2WUPOvF0fUCTGSGRZkl8WCZhfSChGKTGTEOsuYNI=;
+        b=iGIpbP2d3UEwVFWw5G9dZlMqJx4o8UCPvRj6piZLN7Qixwv38zIteUBoiwtf11TzoJ
+         8pcI1FzJmEI8s8Z8r4wNd/P56A7AMD40p0ifu6Z8wqaycmhnxl9M7kNdXzB8SXogNKD/
+         YVqd80JtH2cgsBKx3SUf9wdgi1qit4j7Py/II=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=ZdJHosg5SmguSr4QYtxRtnSRmNzmgYCrlbvAvjhF6/8=;
-        b=Z7D3/xCbK0mx3s9ZXkKcjF3zK0YJuzY2otYu34Lxqxt69b19LFUTD+USpxzF6cf3s+
-         BG4Sgo3rvQxVOJR6MwH5SF8lIjwTGVMWUsrD/oPD9e2JF79nGyRf3TfgZLJu/RD6eXeW
-         SdDsBfb1BVPZZwc/kjy7JZW07g88rGDYXCeNbquYnrlEvoTWtTLK/9kc78S2BrAvsakt
-         cZcsruXdn56jcOyS94Jug/phe8ZVhasRQxKbYzUk+AodZkicvcEuPAgutBjW83s7DbBw
-         4BKvRT6dRQDfpFvexXt6yhIlqZcgokwunCJ7srwRGCIxevOJjmXbJPRXYmWNa3ySZN8P
-         +0bQ==
-X-Gm-Message-State: AJIora+4n/+zL4WEoGH4m7AUYpjmx0dHWHOeGyfMWv85pMITzvL/TYio
-        C4eSBV0rdBmjzSrORH/1KtyKKA==
-X-Google-Smtp-Source: AGRyM1vZMOndY5DuYvJ5pG59Q5tSNSJxmUr3eLkPLRc+k+VywfIspm8uleg4BanjD5/33wKSVjpSZQ==
-X-Received: by 2002:a05:620a:942:b0:6b5:c733:eeb6 with SMTP id w2-20020a05620a094200b006b5c733eeb6mr19150846qkw.473.1658329053721;
-        Wed, 20 Jul 2022 07:57:33 -0700 (PDT)
-Received: from macbook-air.local (weaver.eece.maine.edu. [130.111.218.23])
-        by smtp.gmail.com with ESMTPSA id h7-20020a05620a284700b0069fe1dfbeffsm17269404qkp.92.2022.07.20.07.57.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 07:57:33 -0700 (PDT)
-From:   Vince Weaver <vincent.weaver@maine.edu>
-X-Google-Original-From: Vince Weaver <vince@maine.edu>
-Date:   Wed, 20 Jul 2022 10:57:32 -0400 (EDT)
-To:     Ian Rogers <irogers@google.com>
-cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v3 3/3] perf test: Add user space counter reading tests
-In-Reply-To: <20220719223946.176299-4-irogers@google.com>
-Message-ID: <b17c9045-80be-f658-d362-f13040ac9484@maine.edu>
-References: <20220719223946.176299-1-irogers@google.com> <20220719223946.176299-4-irogers@google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XSU2WUPOvF0fUCTGSGRZkl8WCZhfSChGKTGTEOsuYNI=;
+        b=zi78knCJ8rFZbBer3/9t2tT75+a0m1PSeetMgp1HpRHEAEzrRV/ZOBis+L3D//PF84
+         Q9/+6U08W4u/udK3ELBK7C627/BSOJlYoY5I6IZO7nZvh8ed/nZaRKXeciEGnnpkMAW5
+         4obeP9352jup3qM7Nv4/tccJjMxgDRuwqohtVZOmZRMF0JthftBoOk8uKB0cQfzdPwST
+         V/VQwGcHfu3W39I/1cKB4T9AvjJ+EBRlTQBIJEsTyUX4yjypIm2ad6nsIF6SRpejURo+
+         2w79q+1kVeHpZAEncmQg1QPoWl8ghyg/JwKfAJfUSyGNWReBxLxV7iu7gJpX7dJoEAVI
+         DXjQ==
+X-Gm-Message-State: AJIora8Y1he0vrPbqXGDiyWieCmtqUkBcrIjVIb8B5c6NG/qmAYDk4A5
+        ytB0D2Omcn2vgMzatwV/KpKPSA==
+X-Google-Smtp-Source: AGRyM1v5UNxUPAVexBnv65PVVqbWvE8t6MWf9AqqczcauOBSa7XBiaehpgEh3k3h5n6IkYivB27NLA==
+X-Received: by 2002:a05:6808:170c:b0:335:1d14:f99d with SMTP id bc12-20020a056808170c00b003351d14f99dmr2435919oib.243.1658329076048;
+        Wed, 20 Jul 2022 07:57:56 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id z14-20020a9d62ce000000b0061c7a5691f2sm7425058otk.47.2022.07.20.07.57.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 07:57:55 -0700 (PDT)
+Message-ID: <42069251-3ea7-b0c7-4efb-e144c52ebf51@cloudflare.com>
+Date:   Wed, 20 Jul 2022 09:57:53 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 4/4] selinux: Implement create_user_ns hook
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com
+References: <20220707223228.1940249-1-fred@cloudflare.com>
+ <20220707223228.1940249-5-fred@cloudflare.com>
+ <CAHC9VhTkvPvqGQjyEKbi2pkKBtRQE=Uat34aoKsxjWU0qkF6CA@mail.gmail.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <CAHC9VhTkvPvqGQjyEKbi2pkKBtRQE=Uat34aoKsxjWU0qkF6CA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022, Ian Rogers wrote:
-
-> These tests are based on test_stat_user_read in
-> tools/lib/perf/tests/test-evsel.c. The tests are modified to skip if
-> perf_event_open fails or rdpmc isn't supported.
+On 7/19/22 8:32 PM, Paul Moore wrote:
+> On Thu, Jul 7, 2022 at 6:32 PM Frederick Lawler <fred@cloudflare.com> wrote:
+>>
+>> Unprivileged user namespace creation is an intended feature to enable
+>> sandboxing, however this feature is often used to as an initial step to
+>> perform a privilege escalation attack.
+>>
+>> This patch implements a new namespace { userns_create } access control
+>> permission to restrict which domains allow or deny user namespace
+>> creation. This is necessary for system administrators to quickly protect
+>> their systems while waiting for vulnerability patches to be applied.
+>>
+>> This permission can be used in the following way:
+>>
+>>          allow domA_t domB_t : namespace { userns_create };
+>>
+>> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+>>
+>> ---
+>> Changes since v1:
+>> - Introduce this patch
+>> ---
+>>   security/selinux/hooks.c            | 9 +++++++++
+>>   security/selinux/include/classmap.h | 2 ++
+>>   2 files changed, 11 insertions(+)
+>>
+>> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+>> index beceb89f68d9..73fbcb434fe0 100644
+>> --- a/security/selinux/hooks.c
+>> +++ b/security/selinux/hooks.c
+>> @@ -4227,6 +4227,14 @@ static void selinux_task_to_inode(struct task_struct *p,
+>>          spin_unlock(&isec->lock);
+>>   }
+>>
+>> +static int selinux_userns_create(const struct cred *cred)
+>> +{
+>> +       u32 sid = current_sid();
+>> +
+>> +       return avc_has_perm(&selinux_state, sid, sid, SECCLASS_NAMESPACE,
+>> +                                               NAMESPACE__USERNS_CREATE, NULL);
+>> +}
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> As we continue to discuss this, I'm beginning to think that having a
+> dedicated object class for the userns might be a good idea.  I believe
+> I was the one who gave you these code snippets, so feel free to blame
+> me for the respin ;)
+> 
 
-> +		.type	= PERF_TYPE_HARDWARE,
-> +		.config	= event,
-> +#ifdef __aarch64__
-> +		.config1 = 0x2,		/* Request user access */
-> +#endif
+No worries, I'll make this change for v3.
 
-should this value have a name rather than being a "magic constant"?
+> This is what I'm thinking:
+> 
+>    static int selinux_userns_create(const struct cred *cred)
+>    {
+>      u32 sid = current_sid();
+> 
+>      return avc_has_perm(&selinux_state, sid, sid,
+>                          SECCLASS_USER_NAMESPACE,
+>                          USER_NAMESPACE__CREATE, NULL);
+>    }
+> 
+>> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+>> index ff757ae5f253..9943e85c6b3e 100644
+>> --- a/security/selinux/include/classmap.h
+>> +++ b/security/selinux/include/classmap.h
+>> @@ -254,6 +254,8 @@ const struct security_class_mapping secclass_map[] = {
+>>            { COMMON_FILE_PERMS, NULL } },
+>>          { "io_uring",
+>>            { "override_creds", "sqpoll", NULL } },
+>> +       { "namespace",
+>> +         { "userns_create", NULL } },
+> 
+> The above would need to change to:
+> 
+>    { "user_namespace",
+>      { "create", NULL } }
+> 
 
-Vince

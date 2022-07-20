@@ -2,320 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5869857BB2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B0857BB37
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbiGTQQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S232437AbiGTQSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiGTQQZ (ORCPT
+        with ESMTP id S238147AbiGTQSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:16:25 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2072.outbound.protection.outlook.com [40.107.220.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C4631208
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:16:24 -0700 (PDT)
+        Wed, 20 Jul 2022 12:18:42 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B0954645;
+        Wed, 20 Jul 2022 09:18:41 -0700 (PDT)
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KEOnnj024923;
+        Wed, 20 Jul 2022 16:18:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=bYXpX/0RNuAoIKJeCGAWX1dKg6CcRfu49bkwpVLssRo=;
+ b=NV6Z4B7OE353SJwoM7fm5hxmNGfdCAhYmCLgYR4rDyVj5wzeDw/K9K4Lz+AEEGDffdjX
+ crMxp5EPhvt4sRAv72juR6VhC03i0P3opX19z7Nr1J0OvH/fkiLPjWXSoeNey4zBlei8
+ lUg5wYMmqD4yi7j4GclDt1vSs4G3l2Z3R1eMjJaAz3EDvHVbvruUT3KYFFFqymyCowB5
+ 5UsdBkJSIV9EBiJAxF8p2xkO8/iNLL14zRVej0q6rCX6GQs1dlYn49HTFCMACzZsNvOV
+ rRFJ97z+ShL2beKbP08KOSONkZTNJQ0vZ3nkN4qsU2y9rc5O9EtWjb39HO0A9QSzioWl xA== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3hekep93qb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 16:18:35 +0000
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 4B0C214796;
+        Wed, 20 Jul 2022 16:18:35 +0000 (UTC)
+Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 20 Jul 2022 04:17:54 -1200
+Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Wed, 20 Jul 2022 04:17:54 -1200
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 20 Jul 2022 04:17:52 -1200
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eBBKjqoYxTFvK7IaLLn2pjNePHfaULLjaDYV9yOOkEA+dwD89ifxZdi4Wq1VRXBUazbZunV1s36IZo7L6FGlJcohuNLi3pmunG2lmhK1UFwTleRHy56OVS2Z83nIqqoHPVDv8arSZwvBH7WsZhlsf8MmyXO2+hubta42TalbsMZD/+PUGDD4rTNkuCPqRoEWc39WdBwkX2rm1MTgWFVCVJTRMThvw/CVOjC5ClTUqFK1AnFw5VyynqT63YAZDOvGGhdJBnRPYFymLBytRQ9iY3zrhU0RXHIFtvMhoGDlST3PTzvPdqBteVReXzou8+g4mkDPFUCVQP3uQYzaQ9mHHw==
+ b=EmmAhbAEPH1a2WofCRdFwfbJjw+urz7byN1tN3hxHQGqwaQc3Z9wsf2y2CYKzq/atKKGCYAy+mTSAuwE+NPQSD2KQioRz1UstU24tS3IRcbhcKDm3dKhdDr3CtLJgGGJ6NPeRy1LorHnVcAoes4/wWotLP61IBDY6r2G3CBwiE/yRuJBAwPQWRGJAihVBINdzcK83l26gaUxlDQit/qWe8jTSE3UK3t/dI3LEWtm9V/cg+7q0dRe1k23RDGutMG4QvtgGvSUEg4pK3Y+U/BMtB9vKg94ubcUl1SYNeUmAeZ8g/fZP2mdle5oafPPoDlkVHhP74WYgUSo8bL5G8F5mQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W/oX6pZ33jkGPGBt3PmuX92XwWx3WwiKzCu35miQpcU=;
- b=CVL636PlehYTSLkKsJJUsQlXCPZxMHwsRb+zkQOB3TKaKUCS3V8B5jsydxpy+7JX67JmEml6jTG8yo5tkOlG+hv0wHu/FBLLZxZXsxfSUOe5zmABaJx1aBTAB/QFRKOPLcB7z6m4CZscCJAlisjNuJupnhkbGkm/zsjYWS7I2gj2khBJGKagCcZbenprr4F7qUUHArp4qOWPPNYYHLiPc9O6DlzX9clWE4hliE+UANwajGPiGqbDheKAhfbBiCYZvTU9SMmqyzNazG7HtRzAOv03oeqdf7agQk31I+6UeAfVIvybg81SojhP4pCRr8+w2DMq3+fTH5RWSBA9BsrzEw==
+ bh=bYXpX/0RNuAoIKJeCGAWX1dKg6CcRfu49bkwpVLssRo=;
+ b=Ccd3Slr9VcY3hGEi6Appu5iEUmynk8EiL4eTOdmL9PNrylCfBPIUSgCHnfwFPYZQ2UrfmGRVijeQ9KQ1tWVZEarlkXvNXQBn4AOA0uqHaV+8Sitqwu6SbF54wap/bwBcPW5PN+Uu4yeTZnVKxnqYolG0+2plYuym2Ue/OIcPz70cOEcPhKy5t1HiJjeGFYJbx/L6YSb/0GbfwhSGA97G6Q4z8wAAsLgmsicgozHS7KNtlPTyCzFwkUlihvhGgHSoOEbtK1wLiuy7V3SG80JuxP99C5mjFlHdlE13gTifDGSgOcQe1sqMAyKtadEoexINrh0BruHPteqDUTupMVzlWw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W/oX6pZ33jkGPGBt3PmuX92XwWx3WwiKzCu35miQpcU=;
- b=AyOWPbP/SV/fXndSmzWrQal/HQHEtKeGVgtWs7YsNJ4IZSFAKX+om7gNJq6t2tAwoxC182m08Y6y6j4RX4g0p65lZ3yhDlqiOpkQ8o+RZsYRpZzTHQ/AaIuo0/fXuqFbWHFmMjdbcgVIgcM2X7n+DXbvoSS6Ie9Qgnq0zgsmytQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
- by DM6PR12MB4468.namprd12.prod.outlook.com (2603:10b6:5:2ac::24) with
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:154::8)
+ by MN0PR84MB3046.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:208:3ce::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Wed, 20 Jul
- 2022 16:16:22 +0000
-Received: from BYAPR12MB3286.namprd12.prod.outlook.com
- ([fe80::54a6:6755:c7d4:4247]) by BYAPR12MB3286.namprd12.prod.outlook.com
- ([fe80::54a6:6755:c7d4:4247%4]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
- 16:16:22 +0000
-Date:   Wed, 20 Jul 2022 21:46:05 +0530
-From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 6/7] sched/fair: skip busy cores in SIS search
-Message-ID: <YtgqRVDIGqCNJAZ6@BLR-5CG11610CF.amd.com>
-References: <20220619120451.95251-1-wuyun.abel@bytedance.com>
- <20220619120451.95251-7-wuyun.abel@bytedance.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220619120451.95251-7-wuyun.abel@bytedance.com>
-X-ClientProxiedBy: PN3PR01CA0008.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::20) To BYAPR12MB3286.namprd12.prod.outlook.com
- (2603:10b6:a03:139::15)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Wed, 20 Jul
+ 2022 16:17:50 +0000
+Received: from PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c165:fcd6:a6e7:3f06]) by PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c165:fcd6:a6e7:3f06%7]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
+ 16:17:50 +0000
+From:   "Kani, Toshi" <toshi.kani@hpe.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "rrichter@marvell.com" <rrichter@marvell.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
+Thread-Topic: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
+Thread-Index: AQHYm7smwrVZqUGvIkiseTl/uQAs+q2HJpiAgAA/+tCAAATmAIAABWQQ
+Date:   Wed, 20 Jul 2022 16:17:50 +0000
+Message-ID: <PH7PR84MB18380BBEA0E8C1A4A3721865828E9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220719220124.760359-1-toshi.kani@hpe.com>
+ <YtfsOcWbWREu1NnK@zn.tnic>
+ <PH7PR84MB1838CC03943D28806F7DCD8F828E9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
+ <YtgmALzpaR9IHR/F@zn.tnic>
+In-Reply-To: <YtgmALzpaR9IHR/F@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2886ffbd-7f20-4748-aed2-08da6a6b648d
+x-ms-traffictypediagnostic: MN0PR84MB3046:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: E7MuYOcQtNkFVZTAle0aOMjWfJz0J97jhcix2I6qkfbpua7ZM1evgW77VFXXpVWZSGEVbK9gx6cGIfthK2LaeU9b0Hoh5c4FwmZBQzclJM8N+KKLl+zhsqlN7IsDEfj7vccAUFQ4pB+Fyy4rhzDjmPY22WC5Vxm83nN6a8NCkJ48OSId0HlyCMtPvxrH1cYZTuhGkEWfm/a3ctvJY0SYJn7rUoUmDU2FBvj91iBBb1QWTCyeONfDqjKZ3CDDiq13//AI9lx3pa9J/oaHMOLrjo16On3y1AX1jESjIXla62UeEYcnzR2QY2sbnxnCF8Dww8r47mh2Gf0hZtNFpA6RbkiNu2lUnaQ5k75ah6G6q9iTmMbqbrnMq5eQuowwtNm5n7OWKaoq0JsHRtOVg70jS1viAl6zxnrn3WGNQm478Bvy9m5NGlvaUFgqYkcpyDXhiGD0Vlah96iKzKeZGsIz+pITbk69UjDNZe3uR+a3/RYMtl5PWUIZ/T0ClEPYKcRvPMdEmoo+ghhjbD0H2n55zyTj5nRsRVYGKuzYW30/Y3XPUeAVwueTROj9JMgZAkLRF59hmYGxA3yLj8CB36bSwq7LcpuHRT22masgOpTY9PDDQ1rPQkCpw4gDSFmjVRNO8U4DzezHJkd8InlxbHcC3q4u7PRLpO8bdw1EM17q+ad5juEgGfS5E0Zl2zKtYV9m9eshapW0TsfmqxcQU4CYcfliTPSZlXVkaqZcOuvPi8stWi+inRiJK8jAlOL6dcdr1vNhtRcEEgg5B91XlPAT3q418RZmhA4cYkN4dLJCW6o=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(136003)(346002)(39860400002)(396003)(366004)(376002)(4326008)(76116006)(6916009)(26005)(54906003)(9686003)(4744005)(33656002)(478600001)(41300700001)(122000001)(186003)(71200400001)(66556008)(316002)(2906002)(8936002)(83380400001)(5660300002)(82960400001)(6506007)(38100700002)(8676002)(66446008)(64756008)(38070700005)(55016003)(66476007)(7696005)(86362001)(52536014)(66946007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WTZoU05jdWhnZDNoRUJuc1l4bGFPN0c0NGJXQ2hab2dKS0hxQ0R1V3grL3Ry?=
+ =?utf-8?B?QzV1SDdPNEszWGhxcEdCcmJUUWo0UEFWQ0lDU0FjOFlmbERIZXR4aFQrSlpQ?=
+ =?utf-8?B?TjN5NHFReGdlTE1KbnJKRndCVGZ3TU5IZGxucmQzcDJ0NGdEV0thVmQ5M1hZ?=
+ =?utf-8?B?aFV2L3d3aXI1MzNQRUEvQlZlUWdpL3ZkV21VZ2REMzBSbnlIc2hUYmZ4VEFq?=
+ =?utf-8?B?MUJKRXphaW9UM2h4TmFHMjZJZ3l1YllsZ2VhRFBIY0xBVVFFc3pmVVpsT2ts?=
+ =?utf-8?B?aE1MZ0ozWUNDRWNidzl5a1VHOVd2YitxY1pJZ2d6dElJYm1laVoxdUxDZDN4?=
+ =?utf-8?B?VVVpTTVkbGhRSzFtRWZFL3ZkNy9YeEVXbzdJSDlMN0hVRTlpR2F2NzBMeW1o?=
+ =?utf-8?B?WGJCNXg4WjJNN2pJVnZRODJkRHVpN2Y5c3drSnpiaDBBaDVaVkgwcjhtK1Ur?=
+ =?utf-8?B?Q2VrWXo2YnlzcGd6RWQyMnZmR3Q2RitFaUx6ck01SGJBSkJiTjc2bXhaVCtH?=
+ =?utf-8?B?ZmhQWWFXb1AwWHk4dFdWQVNxS25ISzRoNVFXYWdtdWd4dCt3SHhMRlY3ZmxW?=
+ =?utf-8?B?TGpwdVVDK3NTcmg1S0ZCNk1EV0tOWjhrcGlyd3BtZnZCSnJrMjBMYnNYQlRE?=
+ =?utf-8?B?dnptcksxZStGN0ZLejFmbnR2TjhHaDF4ZXFVN0xxK3hzSmtaWUM5WW90UWp5?=
+ =?utf-8?B?aWxwMXVibzFyR3dkMm5WSHBtdDBoWWFtbCt1STd3MXZuUm80NlROTUlMN3Vk?=
+ =?utf-8?B?ZFlPaFdWV1NzL0pXUHYvdHhKdkp4OHJUUGFxMi9RcXNzVHFEVXk3YTVmTFV0?=
+ =?utf-8?B?M2pibCtQZlBrUlAzMi9zYVJXNGd6V202dEZzcFdVQjZtSC8rZm9heHQreFRR?=
+ =?utf-8?B?bmZuV09OaGVacWZ3YlNTVDA1Y3M4ZGVtRkt0MHRNdGY1YklXdFhmeWs1bkVG?=
+ =?utf-8?B?aUlHMnllMVdYaTZWcHNwY2taanpEcTFFMXJURjlDZjlPN0IyM29VcmVRblJt?=
+ =?utf-8?B?OUpMSDJZMEMwamdXY2p1Y1ZNOGZCajBDMXZyRlBaTms5Rjl4dzlSMG9ldGY0?=
+ =?utf-8?B?eE1LMUpuYjZ4anFMVjFnWHFhNmFBeHZKbVlEMzIyQWdYODlDK0l6QVVWMUpx?=
+ =?utf-8?B?RzdETWwxWFdueWpaRFE3c21LK2dPOG5WRUJJTE1rZ0czZ0xrMUdZWElJMTdP?=
+ =?utf-8?B?NlhNWithWU9xZzB1cE5ZS0ozNWlwRFc0SE95L0JoTlg5QzMrejY4Zys1dVdY?=
+ =?utf-8?B?RTgyVzZiWWlTYkE4UmRhS2VidUd3amR1NFc3eGRobUdUcWRtRHVxbjk3ZFpN?=
+ =?utf-8?B?M2tWbXJiQTlEcnlpb0ZMUnRqV0pIWGk5UThNS0xMeUNsY3VaWnlsWkxSc0ZY?=
+ =?utf-8?B?dWptajB3ZXRaYThlOFZGNzlKemdWTEFyNlBFL2ZUd1NRdDI0UUlweGtaSmow?=
+ =?utf-8?B?Wk9wcHNybzdGZlhraDRhVWV5dmE0QU5DNEZvSThDSTM2aFI4N0gvZmpMcTBI?=
+ =?utf-8?B?elFOMW1aekNmRjBiU1l2eS9yZ0JGOUdCNnNYMm1odGRadXBwM3BSV2VOMitH?=
+ =?utf-8?B?NzNBbSt6YVpYMFZNM0wxSm0zcmovVVZqc1NTdGhlTXZxSUZwNFdKUmpzMyts?=
+ =?utf-8?B?VnlLbHZ5T1FmZ2RROTRNZkp4eGo5REF1QXZGcC9FWjlEbFcwVFNvMll2RXFv?=
+ =?utf-8?B?RXhUOWh5SFZuME8vcTQwRWdEYU80TUNVTzE3RVRXS2tmRDlyRFVwTExXSU42?=
+ =?utf-8?B?ZHlBYzRpaSt3YlhuYS9HOWJCZDlVSi9sZ3JLMXN2Zi83WEN2UjFxTWg2VjIr?=
+ =?utf-8?B?aUNkOVR6UnQxeUJDMGF4UkZQUzZVejFqdTZWYUZCbEtkS2QwR09vRWhaNzlo?=
+ =?utf-8?B?cnQ3Sjg1UnhTNy9zUzFnd0VzUkp5VlJxR2U1dUIxejBJOTJzZkM1Sjg5Zisx?=
+ =?utf-8?B?N2hTU2x4Mk1RMWdXU2Nlc2lDSk5hUW8zMStTTDZVck9NM3VYcnJXSSsyUmJk?=
+ =?utf-8?B?YVZUNkViMXdsTGVOSnpaT1cva1NBY2tNMWJSZWZsbEZEQ2M5MWlSMXo3R0pH?=
+ =?utf-8?B?NmlrdlU3SXhnNDY3QzJTNlBtNXZYTlpJZ2RaUG4zNDZ5SDhTaVFORTBtcGl5?=
+ =?utf-8?Q?ZaqX70MBZDLtPWlQh+FzJQWWy?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cafdb8af-912a-43b6-f252-08da6a6b2f7c
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4468:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sBWE8R+Wtd5TPCoJ+NqrefbrBm0JZK4IJhyDAHjvFWMHG+yjKd/ssLXVKFph+RCyT4ojwT43y623to7tnQ92Fb6Eaz0k2VwiZrEqMUe7aQI07ih79IrVnFLpSERrXAJilRIXpl+af5DoSRA5H8lE7GGaTudjjTcluFfSeZRTcyudp/Xh4gfmvrKvCebOKnA8HuoHPnLtzEaAyEQF3XR8npr7d0ler67x4wyDbD0jYspM8/banDklljJLKEle/5gHwHl28oiQKBYnBwf8fmA+Vnn9b1ds+l7G18vWFRDuakrrVTD9+XN+bC4OOMqNfdRSU93x5FZFarkRSkNqpFHUAARYW2hYuzEU9Rlzh/tWdMejETjiAPRnf8maQUbFB5HIe/8oB9F/DTWJnkVerALu94zjU1iu6zdLRgp+5ncJnJy510I6tVEb4MJpBz2NeFLfar1niahie7x9s2kJ2YCuOTK03LfGfgPc+21+uGXb2gESL7X1I9VMsCTuRKJFnEJm3hVQpQBLBB/bVkKL8XGu60026NtkhERGUWG88JSYJo64MaMebDTLwWNCum/agIEDM7/2R4hGkbAvPfuys30rt/uCsDAhk/YEtSNKMG7r5Mix7eAdraFyU2/EcI7rCW3zeij4WwGeqo1VEyZ274oPbmXtaD6rGA4L+wCiiH0rBLAMai/B4oSW1jSDLQ4i6E98EgIVzSnyqtx+ywSCnt7osLfYA+uwdydXgHkPVqvP2Egx0W5IIRO1umlGmoMbfb2dfzNLmR8m1/YIt9viDTBo/gOTjUwNjgYUsjo+ChgUg6w=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(366004)(376002)(346002)(41300700001)(6666004)(26005)(6512007)(6506007)(38100700002)(8936002)(5660300002)(6486002)(478600001)(186003)(83380400001)(66476007)(66946007)(316002)(66556008)(6916009)(4326008)(8676002)(54906003)(2906002)(86362001)(21314003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wz2BrSW3aeRhT9pXyIl3pRNFedpgURnfyzOD1Ly9Hp1TvxKasta30rpCUtB2?=
- =?us-ascii?Q?RebHUdO+gfZzP0dKZnKtLiR4NpFBHKc3I+h25Pr3LJmGJso0U7PX3+i8nyxw?=
- =?us-ascii?Q?lh2GQtDFr1vvjHB6sCG/ej7HFTO4esRXvPk89mcOU26gjRyTcSMCDPbNqe0a?=
- =?us-ascii?Q?ESHQnfjRM+FpIDfogjKV5alPC7DfABoBNswIz5bLS6ENZbHiTzGJRqprEpRY?=
- =?us-ascii?Q?0Jsg4jn+7wf1pYTs2D9sR/qAZKQ0LjHy3A+/HEdKb7QW7bmB39D+kZ4wT6Ig?=
- =?us-ascii?Q?qwa50NVZFW0e8DU7l3RAjs/SVqHNQJh+JSM94NCqx5UDVfGAtoux/2EiNTFe?=
- =?us-ascii?Q?MEU+rVSSQEOQjAlv4+wN8WwFmDrxSlkjYS04k+U/1aGxYeMjyVlZI4QeC6+/?=
- =?us-ascii?Q?a51zVJv0rRvD3T0fdWgg3FA7MQQgacYDEy/mWcrbhvqKpPz9CvEsYRNhwBM5?=
- =?us-ascii?Q?XFky5LZWbgrkW7l6FS1TrpszZ+dmuPD81KzJHNxuKDXyfBe9JTm/awpqxKY6?=
- =?us-ascii?Q?TJqDwsN131vCoHkNUoS5NYNlc051KcSwh3YPeRGlhR1QlhhLnlKYTYj73+3/?=
- =?us-ascii?Q?lkP+huP15ykobTh4fruFqPENXTKl7w/kVgNqpOj947b9+QbPqReKixwLHKQj?=
- =?us-ascii?Q?rfZGcmKucf8fkMKEg/9qFPqjWY2GfHgXA1yDHQdwQ72b/RktZjqzNb8JaRVV?=
- =?us-ascii?Q?afDbU06JlYf2DqCMzyyjuKgH43XTFI2s7CvR0w1mBER6nWkGp51VxAukXNVD?=
- =?us-ascii?Q?V/hwZdEU6WJ00H5DEV3csS+bPg0XeCPWOJSHiym9qwhPQfaGLpRJoj7F8FH/?=
- =?us-ascii?Q?/WJ2XwGcJdJG2G19/+19Kg/0ecKGcpE5P8klWI4nLHWFYAbrjP+uAqqP9ZeZ?=
- =?us-ascii?Q?ytB9V2xO3WFfu0BPcQiO5OmZXXAIFtbSRRgJSV6s0WNTJQxUbRDXfuOC+sVN?=
- =?us-ascii?Q?NyiFMLNQtItE2srJvlgPII+voskcWGl0NxJWadOZI2T0nkEXGxTS+ILiqzNd?=
- =?us-ascii?Q?iN9TF9AoeIsfPktVwaB3Igoh7J4hCGpiHOREy5azd96x/s/SmB38C6Q7Vz1f?=
- =?us-ascii?Q?jxuiAU2w+HfUdAw9TEDDEMh8+GBAmHdAFlx30tz4lC3DvpEW6TUCP8sx+lfp?=
- =?us-ascii?Q?YHCxalLDSEO9Uy+RFLlfxCkPGTA1zP8xy7cjPiHbvlmxbNp2jg3ZKZpHCoPZ?=
- =?us-ascii?Q?zK1TqpKJuDnPR1fYi3utf9NmmTE4A9EUoSWweBzY5EIyzCgV5EUOLaCe0bqp?=
- =?us-ascii?Q?nDqgD5dw1U5qoIYwfbCuUPExGBkyy5B5Xf35Mp36U0qJ9JUrT+we4/z0cqr3?=
- =?us-ascii?Q?orDvvFhph/+5QcadfCByedNYCSA1NCUFQbDyA48dl/j4ic8RtsZxXZGDHIuF?=
- =?us-ascii?Q?3saWlVa4G0cgwU6SKCPVkLYs0gkTvDpC+eqGm1Tb/SAPKML3c4oRCSAGV8m+?=
- =?us-ascii?Q?hHQkKThLLXJESdhN8CLga5LX0y+ywbec0tT+CG0YYUv3Gel5mN8lEALSvpDp?=
- =?us-ascii?Q?7rTFHzPzMz8OyIFAqQ/QFLmgalhU7SmPIcqFyoksazP6FR3BuVC/vXHDWmYg?=
- =?us-ascii?Q?WC532ElP6AQ+hccWM+qgYzQc/Dp8dLmgfsUpUSoS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cafdb8af-912a-43b6-f252-08da6a6b2f7c
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 16:16:22.1171
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2886ffbd-7f20-4748-aed2-08da6a6b648d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 16:17:50.7242
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TQRLjr1vEHtU3+JHL6k59lW5nkCdRnNxksSBwFptFaFbcvuGUveGqDOE+ndOtVcITXwvP0FPRnoQmCBORmgarw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4468
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cxTAeaIsce68P3C9oL59aPPnyuQtQ6lSXy6kItJ2y8/tyPjq4rr6pnJm1Aca/K16ow7B1x4QVSQJz63nRxDFZw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR84MB3046
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: P9b_lxdHl3MLJiwoGJTl0sYlF44k5-9J
+X-Proofpoint-ORIG-GUID: P9b_lxdHl3MLJiwoGJTl0sYlF44k5-9J
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_10,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ bulkscore=0 impostorscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
+ clxscore=1015 spamscore=0 adultscore=0 mlxlogscore=551 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207200067
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Abel,
-
-
-On Sun, Jun 19, 2022 at 08:04:50PM +0800, Abel Wu wrote:
-
-[..snip..]
-
->  
-> +static void sd_update_icpus(int core, int icpu)
-
-How about update_llc_icpus() ?
-
-> +{
-> +	struct sched_domain_shared *sds;
-> +	struct cpumask *icpus;
-> +
-> +	sds = rcu_dereference(per_cpu(sd_llc_shared, core));
-> +	if (!sds)
-> +		return;
-> +
-> +	icpus = sched_domain_icpus(sds);
-> +
-> +	/*
-> +	 * XXX: The update is racy between different cores.
-> +	 * The non-atomic ops here is a tradeoff of accuracy
-> +	 * for easing the cache traffic.
-> +	 */
-> +	if (icpu == -1)
-> +		cpumask_andnot(icpus, icpus, cpu_smt_mask(core));
-> +	else if (!cpumask_test_cpu(icpu, icpus))
-> +		__cpumask_set_cpu(icpu, icpus);
-> +}
-> +
->  /*
->   * Scans the local SMT mask to see if the entire core is idle, and records this
->   * information in sd_llc_shared->has_idle_cores.
-> @@ -6340,6 +6362,10 @@ static inline bool test_idle_cpus(int cpu)
->  	return true;
->  }
->  
-> +static inline void sd_update_icpus(int core, int icpu)
-> +{
-> +}
-> +
->  static inline int select_idle_core(struct task_struct *p, int core, struct cpumask *cpus, int *idle_cpu)
->  {
->  	return __select_idle_cpu(core, p);
-> @@ -6370,7 +6396,8 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->  	if (!this_sd)
->  		return -1;
->  
-> -	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
-> +	cpumask_and(cpus, has_idle_core ? sched_domain_span(sd) :
-> +		    sched_domain_icpus(sd->shared), p->cpus_ptr);
-
-With this we get an idea of the likely idle CPUs. However, we may
-still want SIS_UTIL on top of this as it determines the number of idle
-CPUs to scan based on the utilization average that will iron out any
-transient idle CPUs which may feature in
-sched_domain_icpus(sd->shared) but are not likely to remain idle. Is
-this understanding correct ?
-
-
->  
->  	if (sched_feat(SIS_PROP) && !has_idle_core) {
->  		u64 avg_cost, avg_idle, span_avg;
-> @@ -8342,6 +8369,7 @@ struct sd_lb_stats {
->  	unsigned int prefer_sibling; /* tasks should go to sibling first */
->  
->  	int sd_state;
-> +	int idle_cpu;
->  
->  	struct sg_lb_stats busiest_stat;/* Statistics of the busiest group */
->  	struct sg_lb_stats local_stat;	/* Statistics of the local group */
-> @@ -8362,6 +8390,7 @@ static inline void init_sd_lb_stats(struct sd_lb_stats *sds)
->  		.total_load = 0UL,
->  		.total_capacity = 0UL,
->  		.sd_state = sd_is_busy,
-> +		.idle_cpu = -1,
->  		.busiest_stat = {
->  			.idle_cpus = UINT_MAX,
->  			.group_type = group_has_spare,
-> @@ -8702,10 +8731,18 @@ sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs
->  	return sched_asym_prefer(env->dst_cpu, group->asym_prefer_cpu);
->  }
->  
-> -static inline void sd_classify(struct sd_lb_stats *sds, struct rq *rq)
-> +static inline void sd_classify(struct sd_lb_stats *sds, struct rq *rq, int cpu)
->  {
-> -	if (sds->sd_state != sd_has_icpus && unoccupied_rq(rq))
-> +	if (sds->sd_state != sd_has_icpus && unoccupied_rq(rq)) {
-> +		/*
-> +		 * Prefer idle cpus than unoccupied ones. This
-> +		 * is achieved by only allowing the idle ones
-> +		 * unconditionally overwrite the preious record
-                                                 ^^^^^^^^
-Nit:						 previous
-
-
-> +		 * while the occupied ones can't.
-> +		 */
-
-This if condition is only executed when we encounter the very first
-unoccupied cpu in the SMT domain. So why do we need this comment here
-about preferring idle cpus over unoccupied ones ?
-
-
-> +		sds->idle_cpu = cpu;
->  		sds->sd_state = sd_has_icpus;
-> +	}
->  }
->  
->  /**
-> @@ -8741,7 +8778,7 @@ static inline void update_sg_lb_stats(struct lb_env *env,
->  		sgs->sum_nr_running += nr_running;
->  
->  		if (update_core)
-> -			sd_classify(sds, rq);
-> +			sd_classify(sds, rq, i);
->  
->  		if (nr_running > 1)
->  			*sg_status |= SG_OVERLOAD;
-> @@ -8757,7 +8794,16 @@ static inline void update_sg_lb_stats(struct lb_env *env,
->  		 * No need to call idle_cpu() if nr_running is not 0
->  		 */
->  		if (!nr_running && idle_cpu(i)) {
-> +			/*
-> +			 * Prefer the last idle cpu by overwriting
-> +			 * preious one. The first idle cpu in this
-                           ^^^^^^^
-Nit:			   previous
-
-> +			 * domain (if any) can trigger balancing
-> +			 * and fed with tasks, so we'd better choose
-> +			 * a candidate in an opposite way.
-> +			 */
-
-This is a better place to call out the fact that an idle cpu is
-preferrable to an unoccupied cpu.
-
-> +			sds->idle_cpu = i;
->  			sgs->idle_cpus++;
-> +
->  			/* Idle cpu can't have misfit task */
->  			continue;
->  		}
-> @@ -9273,8 +9319,40 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
->  
->  static void sd_update_state(struct lb_env *env, struct sd_lb_stats *sds)
->  {
-> -	if (sds->sd_state == sd_has_icpus && !test_idle_cpus(env->dst_cpu))
-> -		set_idle_cpus(env->dst_cpu, true);
-> +	struct sched_domain_shared *sd_smt_shared = env->sd->shared;
-> +	enum sd_state new = sds->sd_state;
-> +	int this = env->dst_cpu;
-> +
-> +	/*
-> +	 * Parallel updating can hardly contribute accuracy to
-> +	 * the filter, besides it can be one of the burdens on
-> +	 * cache traffic.
-> +	 */
-> +	if (cmpxchg(&sd_smt_shared->updating, 0, 1))
-> +		return;
-> +
-> +	/*
-> +	 * There is at least one unoccupied cpu available, so
-> +	 * propagate it to the filter to avoid false negative
-> +	 * issue which could result in lost tracking of some
-> +	 * idle cpus thus throughupt downgraded.
-> +	 */
-> +	if (new != sd_is_busy) {
-> +		if (!test_idle_cpus(this))
-> +			set_idle_cpus(this, true);
-> +	} else {
-> +		/*
-> +		 * Nothing changes so nothing to update or
-> +		 * propagate.
-> +		 */
-> +		if (sd_smt_shared->state == sd_is_busy)
-> +			goto out;
-
-
-The main use of sd_smt_shared->state is to detect the transition
-between sd_has_icpu --> sd_is_busy during which sds->idle_cpu == -1
-which will ensure that sd_update_icpus() below clears this core's CPUs
-from the LLC's icpus mask. Calling this out may be a more useful
-comment instead of the comment above.
-
- 
-> +	}
-> +
-> +	sd_update_icpus(this, sds->idle_cpu);
-> +	sd_smt_shared->state = new;
-> +out:
-> +	xchg(&sd_smt_shared->updating, 0);
->  }
-
-
---
-Thanks and Regards
-gautham.
+Qm9yaXNsYXYgUGV0a292IHdyb3RlOg0KPiBJIHRoaW5rIGl0J2xsIGJlIG1vcmUgdXNlci1mcmll
+bmRseSB0byBwdXQNCj4NCj4gIlBST0MgMSBESU1NIDEiIGZvciBkZXZpY2UNCj4NCj4gYW5kDQo+
+DQo+ICJOQSIgb3Igc28gZm9yIGJhbmsNCj4NCj4gaW5zdGVhZCBvZiBzZXR0aW5nIHRoZSBsYWJl
+bCB0byB0aGUgTlVMTCBzdHJpbmcuDQo+DQo+IEkuZS4sIHJlbGF4IHRoYXQNCj4gDQo+IAlpZiAo
+YmFuayAmJiAqYmFuayAmJiBkZXZpY2UgJiYgKmRldmljZSkNCj4gDQo+IGNoZWNrIHRoZXJlLg0K
+DQpHb29kIGlkZWEuICBJIHdpbGwgc2VuZCBhIHYyIHBhdGNoIHRvIHNldCAiTkEiIGluIGNhc2Ug
+ZGV2aWNlIG9yIGJhbmsNCmlzIG51bGwuDQoNClRoYW5rcywNClRvc2hpDQo=

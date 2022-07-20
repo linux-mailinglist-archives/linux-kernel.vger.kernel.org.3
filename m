@@ -2,126 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDB357B626
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B8257B62D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234814AbiGTMKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48234 "EHLO
+        id S229983AbiGTMP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238637AbiGTMKf (ORCPT
+        with ESMTP id S229827AbiGTMPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:10:35 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C52226AD8;
-        Wed, 20 Jul 2022 05:10:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LnvfW2y2Jz4xG0;
-        Wed, 20 Jul 2022 22:10:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658319027;
-        bh=CrlbbzDClGegwMtLL/xWjFcxi7456Yb9TXrYiNSjdwk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZXv+oUBVOMfzBYfPWAzkepdJn2mrirxd9tDPPejGkm1wo8g0SEFDlCBWatjzRbjpz
-         LG7MooqQU0uY/edH/JZ2sO2H6K2u3KHkY+l0J2fX7PY8VdrkmfGzW86fOqKXQsFJE6
-         kv5ZGX0Shw+xgIpur1aUac7pn8F9iN3fFhS1NBHBW5VkVIiknwR8U9FN6iEMOnwC1i
-         wyE6tVv1d5PYLw4jeUKCPul/QZp8Hx0Mnis9h0SX3LwIA1hLcEKlyzdJ6v3oWR0oP4
-         EjIVCcUelRhVlj0WdXZ/GVGnsTzwqi/7XYLkHh3B3eYaA4U6Zshri+lMneQdabUquN
-         IFDiqUQxBlb5w==
-Date:   Wed, 20 Jul 2022 22:10:23 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the block tree
-Message-ID: <20220720221023.6ec3ef0e@canb.auug.org.au>
-In-Reply-To: <20220720133306.5f708750@canb.auug.org.au>
-References: <20220720133306.5f708750@canb.auug.org.au>
+        Wed, 20 Jul 2022 08:15:23 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4C51EEDB;
+        Wed, 20 Jul 2022 05:15:22 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KCEpRf023607;
+        Wed, 20 Jul 2022 12:15:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : cc :
+ subject : in-reply-to : in-reply-to : references : date : message-id :
+ mime-version : content-type; s=pp1;
+ bh=r/6jWPn4dlWcdAr0FThJw75qwR6TAdYize4o4pWh8RI=;
+ b=LwWxJjBx86sO3BOIVWjzX78GseYRYp99HdMfUOAVgDdoFbZ6pz63T+eVzIeyE8J4HTWq
+ dUH3qyjvq7UWtVpsGMDzG4juKNqmGaRpZv5dwtl87glh6CU48v9yhL7Z4/CuAolsJyKX
+ 7FljbknWtNWtKat3jtLHj5+52YVleDYZvy6qAVeZe+UjTL+VQE5gw1+nx/oL3QvybYEa
+ esjafb0QzFcBNmAYI9YKnRsSyAEKGeQxY+qxVeUwvhOsAbT4yl7sB2OguWn29wZoUoXd
+ FVzh0UWBOQwsUHJvi/UciTRnvkBVatqLxRxHhYzCi9MnYMLnT5XuZpGqqSl8+2ugY3h/ /Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hehhr80b8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 12:15:10 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26KCEu5s023852;
+        Wed, 20 Jul 2022 12:15:10 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hehhr80a7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 12:15:10 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26KC6ggE006072;
+        Wed, 20 Jul 2022 12:15:08 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3hbmkj5kh4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 12:15:08 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26KCF56Z23462246
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jul 2022 12:15:05 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 236D45204F;
+        Wed, 20 Jul 2022 12:15:05 +0000 (GMT)
+Received: from localhost (unknown [9.171.84.168])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 085435204E;
+        Wed, 20 Jul 2022 12:15:04 +0000 (GMT)
+From:   Alexander Egorenkov <egorenar@linux.ibm.com>
+To:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] s390/crash: support multi-segment iterators
+In-Reply-To: <cover.1658206891.git.agordeev@linux.ibm.com>
+In-Reply-To: 
+References: <cover.1658206891.git.agordeev@linux.ibm.com>
+Date:   Wed, 20 Jul 2022 14:15:04 +0200
+Message-ID: <87edygc75j.fsf@oc8242746057.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+znOTWHMLCXSuHqWVWqzFnY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: tcWm7o53MzSNvCx0GO95P5c32qDyfoff
+X-Proofpoint-GUID: 45iSwJPklw9bzop1mxkTZFx3t6ZRJa4C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_05,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=936 clxscore=1011
+ impostorscore=0 bulkscore=0 priorityscore=1501 adultscore=0 phishscore=0
+ mlxscore=0 malwarescore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207200050
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+znOTWHMLCXSuHqWVWqzFnY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+HI Alexander,
 
-Hi all,
+Alexander Gordeev <agordeev@linux.ibm.com> writes:
 
-On Wed, 20 Jul 2022 13:33:06 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+> Hi Matthew et al,
 >
-> After merging the block tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->=20
-> io_uring/net.c: In function 'io_sendzc':
-> io_uring/net.c:980:41: warning: cast from pointer to integer of different=
- size [-Wpointer-to-int-cast]
->   980 |                                         (u64)zc->buf, zc->len);
->       |                                         ^
->=20
-> Introduced by commit
->=20
->   bb4019de9ea1 ("io_uring: sendzc with fixed buffers")
+> This series completes 5d8de293c224 ("vmcore: convert copy_oldmem_page()
+> to take an iov_iter") for s390.
+>
+> Changes since v3:
+>   - concurrent access to HSA and oldmem swap buffers protected;
+>
+> Changes since v2:
+>   - Matthew Wilcox suggestion is adopted, with that...
+>   - copy_to_iter() is used instead of custom implementation;
+>
+> Changes since v1:
+>   - number of bytes left to copy on fail fixed;
+>
+> Thanks!
+>
+>
+> Alexander Gordeev (4):
+>   s390/zcore: fix race when reading from hardware system area
+>   s390/crash: move copy_to_user_real() to crash_dump.c
+>   s390/crash: use static swap buffer for copy_to_user_real()
+>   s390/crash: support multi-segment iterators
+>
+>  arch/s390/include/asm/os_info.h |  17 ++++-
+>  arch/s390/include/asm/sclp.h    |   4 +-
+>  arch/s390/include/asm/uaccess.h |   1 -
+>  arch/s390/kernel/crash_dump.c   | 114 ++++++++------------------------
+>  arch/s390/mm/maccess.c          |  26 --------
+>  drivers/s390/char/zcore.c       |  55 ++++++++-------
+>  6 files changed, 71 insertions(+), 146 deletions(-)
+>
+> -- 
+> 2.34.1
 
-This become an error in my i386 defconfig build, so I applied the
-following patch.
+all our kdump + makedumpfile (with CP as core collector as well) work
+with these patches applied.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 20 Jul 2022 21:19:15 +1000
-Subject: [PATCH] fix up for "io_uring: sendzc with fixed buffers"
+Tested on LPAR and zVM.
+With and w/o KASAN.
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- io_uring/net.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 282401255ab4..903a0de689fb 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -977,7 +977,7 @@ int io_sendzc(struct io_kiocb *req, unsigned int issue_=
-flags)
-=20
- 	if (zc->flags & IORING_RECVSEND_FIXED_BUF) {
- 		ret =3D io_import_fixed(WRITE, &msg.msg_iter, req->imu,
--					(u64)zc->buf, zc->len);
-+					(u64)(unsigned long)zc->buf, zc->len);
- 		if (unlikely(ret))
- 				return ret;
- 	} else {
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+znOTWHMLCXSuHqWVWqzFnY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLX8K8ACgkQAVBC80lX
-0GyNggf9H/Nxx6jT0i6WG06jJCU0ZsqjCx3aAzako1hJzEeENmBctQbDlKTBDBG9
-wv0QtdrGuJZMqg+ZqhM9116bFfxSS5mDG0oakcvyUzR0KpKAPl8qaOPv+QOZ6OaP
-gpiAV65xrY2osA2d1gPeEzoSMMF+JaFN9+PNUjlOLgfZEBc0IrSJ2XgrWdqHetYK
-MZhlu4yoQx6CkM+tRj7vLOvKGxmxgHodHNjRLJg+zLY+Zz0x6Qb32XTY+dQMCh/1
-paLDfTREdZd+HZ+7XUJkFghTAq+tspXAiwAeS1ZK8e7+tVKEYqX1pdcgH0xhtdf9
-5tEpw//2zmpOiVAnV8fnuXpQPJbdmQ==
-=u+Of
------END PGP SIGNATURE-----
-
---Sig_/+znOTWHMLCXSuHqWVWqzFnY--
+Regards
+Alex 

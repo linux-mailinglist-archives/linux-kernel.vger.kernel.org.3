@@ -2,132 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB2957BE16
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168EF57BE17
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbiGTSt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
+        id S230281AbiGTSvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiGTSty (ORCPT
+        with ESMTP id S229622AbiGTSvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:49:54 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C725C735BF
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:49:52 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id l3so12205501qkl.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:49:52 -0700 (PDT)
+        Wed, 20 Jul 2022 14:51:08 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A3047BA0;
+        Wed, 20 Jul 2022 11:51:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ewHdJY+0XilkP+ABNbGfVEqdZY0AHgVgsfEbax1I1nI=;
-        b=F9x0Fxkpa/jLnmDbMPmLXofXV5EW8/x22/stbIqW17hDUGzcswbmPx8laZD4o0MXEe
-         QgFAOVkYEm8Sy0tRQuY4GSDH38giuxoBxr0sfhk0FmCorNZEcYMG3CTwu15AmTtozpou
-         iNB0wrjDTkzANtZedl75sd8B6sUswAHZw7B/lmwpp0YxEHObCkPB2/tFcqtLkldT1UzG
-         vTvW7/C8LqJs5441VJ/2VGsceX+3SKG63JX62X9nMZUVW/aw/87DHTNY1SgAMtqE9pYQ
-         NFcOdWo1b95yqvZlWWswFqEiGZJsVvU9qqRgPfkRyYeTK4a0S28tbSYqlMzVLXL+vhZP
-         FlCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ewHdJY+0XilkP+ABNbGfVEqdZY0AHgVgsfEbax1I1nI=;
-        b=CC5hl0eDVOP2hMw5KDaSDYeYxMYC3h5oC31HyCB1jAuSOgKk4jIIcnnwusi1E6NN5E
-         1bJuQo/bXk4BOyXTd5OkitXIaYJG0hx0iUhIQ4TpcbamU98t80sxj2WS8Gll6+voLU58
-         9fLPpkPYMj99rKF85jSd10xlaPNLUx5lvY3LkMd9vVnw1ZpJx3NciQMQjh2gCaAaHbl8
-         4ca7OhQ3kyfMa5R13+eA3dZtVqTcrCBf4zjRSVbT2EngCi3yR3T1LQo5nmSuw2AoYSZM
-         bcNYQgz7nOaSpVg8KqKyV0Wq7mcMnR6RVYnjCmKmMPD4BwDUU3GbOLddZGaHF1gtQex+
-         Adww==
-X-Gm-Message-State: AJIora95XELtoEqEUSCMpAx9+Ra/wDh2ETD1jrQwM4I+FoJcCuCxMV9a
-        sv4DM5oefpAFcV4WkqiTAGzLj/jydH5Aq6rJiK/7XcJivW0=
-X-Google-Smtp-Source: AGRyM1sJAKstCia+5xzTTrzCiqL753GXKAp1MaPU/9DdiH52XAzDxkdYq/1j2JA9xT1YYJgwQ1P54EWO8iavi97H6Xk=
-X-Received: by 2002:a05:620a:410c:b0:6b2:82d8:dcae with SMTP id
- j12-20020a05620a410c00b006b282d8dcaemr25452157qko.259.1658342991816; Wed, 20
- Jul 2022 11:49:51 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658343067; x=1689879067;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=31aoo9bp1wIMFqWUajED9dirY3x3ItLRRWPOC75kWEc=;
+  b=XCLDFAz8WoqTmBKATRBTVV1gHWbGH2O3x/DaI55WHThdCbTumIIMDRkC
+   pWtK4mOG9JgGPo//pLVShIHvvl0TXx+e7KbeNPcLunIm6iU/8dSYj7J/E
+   HNe/qnAoxzsVQJPzSNLCrhpYwZkB0gyxipiGJBF1uhguzNYDvTg4UIZgm
+   M=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jul 2022 11:51:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 11:51:06 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Jul 2022 11:51:06 -0700
+Received: from [10.110.25.47] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 20 Jul
+ 2022 11:51:05 -0700
+Message-ID: <3e6867cc-489a-b626-ff9c-79615613b2dd@quicinc.com>
+Date:   Wed, 20 Jul 2022 11:50:58 -0700
 MIME-Version: 1.0
-References: <20220720072404.16708-1-hlm3280@163.com>
-In-Reply-To: <20220720072404.16708-1-hlm3280@163.com>
-From:   Neal Cardwell <ncardwell@google.com>
-Date:   Wed, 20 Jul 2022 14:49:35 -0400
-Message-ID: <CADVnQynXC=sEiYOcbSJBv2SML8gzooK_xitXt5uOqybTxj-VtQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] tcp: fix condition for increasing pingpong count
-To:     LemmyHuang <hlm3280@163.com>
-Cc:     edumazet@google.com, davem@davemloft.net, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wei Wang <weiwan@google.com>,
-        Yuchung Cheng <ycheng@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 3/5] usb: dwc3: gadget: Adjust IRQ management during
+ soft disconnect/connect
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
+ <20220713003523.29309-4-quic_wcheng@quicinc.com>
+ <fbfc9328-418c-4c5e-4553-993331b20cb6@synopsys.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <fbfc9328-418c-4c5e-4553-993331b20cb6@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 3:25 AM LemmyHuang <hlm3280@163.com> wrote:
->
-> When CONFIG_HZ defaults to 1000Hz and the network transmission time is
-> less than 1ms, lsndtime and lrcvtime are likely to be equal, which will
-> lead to hundreds of interactions before entering pingpong mode.
->
-> Fixes: 4a41f453bedf ("tcp: change pingpong threshold to 3")
-> Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: LemmyHuang <hlm3280@163.com>
-> ---
-> v2:
->   * Use !after() wrapping the values. (Jakub Kicinski)
->
-> v1: https://lore.kernel.org/netdev/20220719130136.11907-1-hlm3280@163.com/
-> ---
->  net/ipv4/tcp_output.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index 858a15cc2..c1c95dc40 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
-> @@ -172,7 +172,7 @@ static void tcp_event_data_sent(struct tcp_sock *tp,
->          * and it is a reply for ato after last received packet,
->          * increase pingpong count.
->          */
-> -       if (before(tp->lsndtime, icsk->icsk_ack.lrcvtime) &&
-> +       if (!after(tp->lsndtime, icsk->icsk_ack.lrcvtime) &&
->             (u32)(now - icsk->icsk_ack.lrcvtime) < icsk->icsk_ack.ato)
->                 inet_csk_inc_pingpong_cnt(sk);
->
-> --
+Hi Thinh,
 
-Thanks for pointing out this problem!
+On 7/14/2022 10:38 AM, Thinh Nguyen wrote:
+> On 7/12/2022, Wesley Cheng wrote:
+>> Local interrupts are currently being disabled as part of aquiring the
+>> spin lock before issuing the endxfer command.  Leave interrupts enabled, so
+>> that EP0 events can continue to be processed.  Also, ensure that there are
+>> no pending interrupts before attempting to handle any soft
+>> connect/disconnect.
+>>
+>> Fixes: 861c010a2ee1 ("usb: dwc3: gadget: Refactor pullup()")
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>    drivers/usb/dwc3/gadget.c | 21 ++++++++++++---------
+>>    1 file changed, 12 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index a455f8d4631d..ee85b773e3fe 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -1674,6 +1674,7 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
+>>    static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt)
+>>    {
+>>    	struct dwc3_gadget_ep_cmd_params params;
+>> +	struct dwc3 *dwc = dep->dwc;
+>>    	u32 cmd;
+>>    	int ret;
+>>    
+>> @@ -1682,7 +1683,9 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
+>>    	cmd |= interrupt ? DWC3_DEPCMD_CMDIOC : 0;
+>>    	cmd |= DWC3_DEPCMD_PARAM(dep->resource_index);
+>>    	memset(&params, 0, sizeof(params));
+>> +	spin_unlock(&dwc->lock);
+>>    	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
+>> +	spin_lock(&dwc->lock);
+>>    	WARN_ON_ONCE(ret);
+>>    	dep->resource_index = 0;
+>>    
+>> @@ -2029,12 +2032,11 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>>    	struct dwc3_ep			*dep = to_dwc3_ep(ep);
+>>    	struct dwc3			*dwc = dep->dwc;
+>>    
+>> -	unsigned long			flags;
+>>    	int				ret = 0;
+>>    
+>>    	trace_dwc3_ep_dequeue(req);
+>>    
+>> -	spin_lock_irqsave(&dwc->lock, flags);
+>> +	spin_lock(&dwc->lock);
+>>    
+>>    	list_for_each_entry(r, &dep->cancelled_list, list) {
+>>    		if (r == req)
+>> @@ -2073,7 +2075,7 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+>>    		request, ep->name);
+>>    	ret = -EINVAL;
+>>    out:
+>> -	spin_unlock_irqrestore(&dwc->lock, flags);
+>> +	spin_unlock(&dwc->lock);
+>>    
+>>    	return ret;
+>>    }
+>> @@ -2489,9 +2491,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc);
+>>    
+>>    static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+>>    {
+>> -	unsigned long flags;
+>> -
+>> -	spin_lock_irqsave(&dwc->lock, flags);
+>> +	spin_lock(&dwc->lock);
+>>    	dwc->connected = false;
+>>    
+>>    	/*
+>> @@ -2506,10 +2506,10 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+>>    
+>>    		reinit_completion(&dwc->ep0_in_setup);
+>>    
+>> -		spin_unlock_irqrestore(&dwc->lock, flags);
+>> +		spin_unlock(&dwc->lock);
+>>    		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
+>>    				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
+>> -		spin_lock_irqsave(&dwc->lock, flags);
+>> +		spin_lock(&dwc->lock);
+>>    		if (ret == 0)
+>>    			dev_warn(dwc->dev, "timed out waiting for SETUP phase\n");
+>>    	}
+>> @@ -2523,7 +2523,7 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
+>>    	 */
+>>    	dwc3_stop_active_transfers(dwc);
+>>    	__dwc3_gadget_stop(dwc);
+>> -	spin_unlock_irqrestore(&dwc->lock, flags);
+>> +	spin_unlock(&dwc->lock);
+>>    
+>>    	/*
+>>    	 * Note: if the GEVNTCOUNT indicates events in the event buffer, the
+>> @@ -2569,6 +2569,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>    		return 0;
+>>    	}
+>>    
+>> +	synchronize_irq(dwc->irq_gadget);
+>> +
+>>    	if (!is_on) {
+>>    		ret = dwc3_gadget_soft_disconnect(dwc);
+>>    	} else {
+>> @@ -3729,6 +3731,7 @@ void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+>>    	 */
+>>    
+>>    	__dwc3_stop_active_transfer(dep, force, interrupt);
+>> +
+>>    }
+>>    
+>>    static void dwc3_clear_stall_all_ep(struct dwc3 *dwc)
+> 
+> Hi Greg,
+> 
+> Please don't pick up this patch yet. We're still in discussion with
+> this. I have some concern with unlocking/locking when sending End
+> Transfer command. For example, this patch may cause issues with
+> DWC3_EP_END_TRANSFER_PENDING checks.
+> 
+> Hi Wesley,
+> 
+> Did you try out my suggestion yet?
+> 
 
-AFAICT this patch would result in incorrect behavior.
+Just providing a quick update.
 
-With this patch, we could have cases where tp->lsndtime ==
-icsk->icsk_ack.lrcvtime and (u32)(now - icsk->icsk_ack.lrcvtime) <
-icsk->icsk_ack.ato and yet we do not really have a ping-pong exchange.
+So with your suggestion, I was able to consistently reproduce the 
+controller halt issue after a day or so of testing.  However, when I 
+took a further look, I believe the problem is due to the DWC3 event handler:
 
-For example, with this patch we could have:
+static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
+		const struct dwc3_event_depevt *event)
+{
+...
+	if (!(dep->flags & DWC3_EP_ENABLED)) {
+		if (!(dep->flags & DWC3_EP_TRANSFER_STARTED))
+			return;
 
-T1: jiffies=J1; host B receives RPC request from host A
-T2: jiffies=J1; host B sends first RPC response data packet to host A;
-      -> calls inet_csk_inc_pingpong_cnt()
-T3: jiffies=J1; host B sends second RPC response data packet to host A;
-      -> calls inet_csk_inc_pingpong_cnt()
+		/* Handle only EPCMDCMPLT when EP disabled */
+		if (event->endpoint_event != DWC3_DEPEVT_EPCMDCMPLT)
+			return;
+	}
 
-In this scenario there is only one ping-pong exchange but the code
-calls inet_csk_inc_pingpong_cnt() twice.
+The soft disconnect routine reached to the run/stop polling point, and I 
+could see that DWC3_EP_DELAYED_STOP was set, and we got a xfercomplete 
+event for the STATUS phase.  However, since we exit early in the event 
+handler (due to __dwc3_gadget_stop() being called and disabling EP0), 
+the STATUS complete is never handled, and we do not issue the endxfer 
+command.
 
-So I'm hoping we can come up with a better fix.
+I don't think I saw this issue with my change, as we allowed the STATUS 
+phase handling to happen BEFORE gadget stop was called (since I released 
+the lock in the stop active transfers API).
 
-A simpler approach might be to simplify the model and go back to
-having a single ping-pong interaction cause delayed ACKs to be enabled
-on a connection endpoint. Our team has been seeing good results for a
-while with the simpler approach. What do folks think?
+However, I think even with my approach, we'd eventually run into a 
+possibility of this issue, as we aren't truly handling EP0 events while 
+polling for the halted status due to the above.  It was just reducing 
+the chances.  The scenario of this issue is coming because the host took 
+a long time to complete the STATUS phase, so we ran into a "timed out 
+waiting for SETUP phase," which allowed us to call the run/stop routine 
+while we were not yet in the SETUP phase.
 
+I'm currently running a change to add a EP num check to this IF condition:
 
-neal
+	if ((epnum > 1) && !(dep->flags & DWC3_EP_ENABLED)) {
+		if (!(dep->flags & DWC3_EP_TRANSFER_STARTED))
+			return;
+
+		/* Handle only EPCMDCMPLT when EP disabled */
+		if (event->endpoint_event != DWC3_DEPEVT_EPCMDCMPLT)
+			return;
+	}
+
+Thanks
+Wesley Cheng

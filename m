@@ -2,84 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CD357B5BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1133957B5C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbiGTLpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S238719AbiGTLp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiGTLpL (ORCPT
+        with ESMTP id S234670AbiGTLp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:45:11 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956A86159;
-        Wed, 20 Jul 2022 04:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1658317506; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5bKwE+toAiomkN28VXesGLY//goBv768kEOswtqRRQc=;
-        b=iPOLvHJP61X03hKCV3JDE9Avz79NmZ86qy+0oo4GA87LC/bMQ97tlxIfISaH7PVeiLHkdM
-        NAhXKKpypxISh8bpoREB2L4MulLLvN4jy7zFOyD1wbImWpeHwTPtrDCj5pMaeYjgAmFX8O
-        dGeON8yfLT6I3AthNIreGYPV4kq7nf8=
-Date:   Wed, 20 Jul 2022 12:44:51 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 02/11] ASoC: jz4740-i2s: Remove unused 'mem' resource
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <RYHBFR.1MXJ3WUJSHEG3@crapouillou.net>
-In-Reply-To: <20220708160244.21933-3-aidanmacdonald.0x0@gmail.com>
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
-        <20220708160244.21933-3-aidanmacdonald.0x0@gmail.com>
+        Wed, 20 Jul 2022 07:45:56 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9577CBC22
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:45:52 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id k19so2702018lji.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:45:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eZ2kEpkAO/dETR4Wy7CCjrZXNARvjTeBgYU6liP6gG0=;
+        b=jvt7cSzP6DrqTcuMjUJ8hdYrwfyoClybuQCzTe1vo1J9FO+ePAc07+aMzsid+k42Km
+         oNF+jf/MXQaLMxQt3ZvD6jfgldLkWTOIwSLG4VJmC+Q25M/UGplFPgiyJ7ALJxU1n//4
+         D4OAkA0Qvt8t+h8BV8QZ7n9DYtPkvx1pvUguZ7wLVJA45Pdqx/HTw+z2hKoIW+W8sFf0
+         BdA9lZgIPUj8c4dsjWU57z/pgHO/Pw8WAGMpHEU4R23bXk/dIeEgBAT5XQU8uzZFxuOe
+         RX69qQv1vw85qsegqQ77I63qg+g3llA6ra7V4UR3VWe2U18WE6Nnoqi8ETcd/A3OjGxA
+         jjPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eZ2kEpkAO/dETR4Wy7CCjrZXNARvjTeBgYU6liP6gG0=;
+        b=6x/OtTaFmgcPNx8TaIcQXXOcPvOIKQr/77pLLR9xeR/yczjdgKZkNgaHoG6j6vHpTv
+         8RwZJ4zUDsrGxUDVCf0McGpmfxTNt8LAQi4pDshz3rqWItewhz5Jnkt7yVogh0cgEMxl
+         jKV/7FiK3dyLP7u8V8xo5CNzs31CgXC5q9sxa+CkpntWSzQ9BwG6wOr3pPCW8q+8TUoR
+         HMX8Q1XyrGlQUB0L8uZ8tEeb3FXd1IBydqGk9CFcnqapy3jo4ZapqV53H29YylBHxcHq
+         BUzY7pg/Vxht3tH0+LrMNeP9jUh/LudRvwWikl0ittklbpCiyj7fKf3Z3MQB507NkYP3
+         tTjQ==
+X-Gm-Message-State: AJIora/Aiq1nlb9WErktu7iS8Mo1/Ej+G2F1UunqmRRvux2wzDxnksO2
+        W+TNzSpDWHs2CUN0Ta2A2t4MeHPkDgOTlfNB
+X-Google-Smtp-Source: AGRyM1vbCziSqVuzLbAke27w5ETvWlWJ8TsLgRuSfdYTX4aObXcSBf8ZFeKAA8eFHMRexvgstVSqCQ==
+X-Received: by 2002:a2e:b74e:0:b0:25d:d62a:9033 with SMTP id k14-20020a2eb74e000000b0025dd62a9033mr1269948ljo.105.1658317551036;
+        Wed, 20 Jul 2022 04:45:51 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id e4-20020a05651c038400b0025d33e9353esm3151405ljp.129.2022.07.20.04.45.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 04:45:50 -0700 (PDT)
+Message-ID: <823ae0f4-b7c5-a301-0f2d-66f0e0a36aba@linaro.org>
+Date:   Wed, 20 Jul 2022 13:45:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: net: cdns,macb: Add versal compatible
+ string
+Content-Language: en-US
+To:     "Katakam, Harini" <harini.katakam@amd.com>,
+        Harini Katakam <harini.katakam@xilinx.com>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "claudiu.beznea@microchip.com" <claudiu.beznea@microchip.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "harinikatakamlinux@gmail.com" <harinikatakamlinux@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "radhey.shyam.pandey@xilinx.com" <radhey.shyam.pandey@xilinx.com>
+References: <20220720112924.1096-1-harini.katakam@xilinx.com>
+ <20220720112924.1096-2-harini.katakam@xilinx.com>
+ <d836f94c-4e87-31f6-5c3a-341e802a23a6@linaro.org>
+ <BYAPR12MB477363E846E5EB15D7AA2ABF9E8E9@BYAPR12MB4773.namprd12.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <BYAPR12MB477363E846E5EB15D7AA2ABF9E8E9@BYAPR12MB4773.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 20/07/2022 13:36, Katakam, Harini wrote:
+>>> diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml
+>> b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+>>> index 9c92156869b2..1e9f49bb8249 100644
+>>> --- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+>>> @@ -22,6 +22,7 @@ properties:
+>>>            - enum:
+>>>                - cdns,zynq-gem         # Xilinx Zynq-7xxx SoC
+>>>                - cdns,zynqmp-gem       # Xilinx Zynq Ultrascale+ MPSoC
+>>> +              - cdns,versal-gem       # Xilinx Versal
+>>
+>> Not really ordered by name. Why adding to the end?
+> 
+> Thanks for the review. It is just based on the order in which device
+> families from Xilinx were released. I can alphabetize if that's preferred.
 
-Le ven., juil. 8 2022 at 17:02:35 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> This isn't used and doesn't need to be in the private data struct.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Yes, it's the easiest way to avoid conflicts.
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> ---
->  sound/soc/jz4740/jz4740-i2s.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index 576f31f9d734..adf896333584 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -98,7 +98,6 @@ struct i2s_soc_info {
->  };
->=20
->  struct jz4740_i2s {
-> -	struct resource *mem;
->  	void __iomem *base;
->=20
->  	struct clk *clk_aic;
-> --
-> 2.35.1
->=20
-
-
+Best regards,
+Krzysztof

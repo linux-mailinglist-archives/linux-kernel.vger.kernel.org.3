@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76C957B008
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 06:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AE057B00D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 06:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbiGTEgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 00:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S232663AbiGTEfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 00:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGTEgE (ORCPT
+        with ESMTP id S229446AbiGTEfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 00:36:04 -0400
+        Wed, 20 Jul 2022 00:35:39 -0400
 Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B5920F7B;
-        Tue, 19 Jul 2022 21:36:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E766120BF8;
+        Tue, 19 Jul 2022 21:35:38 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id A7160DF476;
-        Tue, 19 Jul 2022 21:35:33 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 7452ADF456;
+        Tue, 19 Jul 2022 21:35:38 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EsG6Ij7e3Hjh; Tue, 19 Jul 2022 21:35:32 -0700 (PDT)
+        with ESMTP id qwdJKEvluK8Y; Tue, 19 Jul 2022 21:35:37 -0700 (PDT)
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1658291732; bh=Z395XdMnc9/hxp6HWecS680NJldQ34bRG9DAfW63U9Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sizWD/b4xrs4MtrW1YRj/Mo4yhbLDlLLBhDjl14d0uv1ru2YgnUOI0vQAR9OMurqr
-         9MJN37bGSLCdNacbzfyYOZpfCOE7xlN74zP0D0hMtLTyDUGl2QliTH+u94lfqzVIBR
-         2SbtQTro1rImKW3WICY0M4fb2LcbdmVT8+SKE3OHz1VE3XlQT22vCO5aEPHyAL+x0/
-         oi/WFenzLS01SfiToNADfE0hl+HyGEaEXjX3V6pRYws1T+d+lZlBRAyb9p86HZJGbx
-         ZWM3To6DHKO9oPyJWpXNk952fiNbBNyD+hArpWPkcuRtiSq1/oEAqhg3SNe2NjeEnH
-         g5EZM0eVT6bSQ==
+        t=1658291737; bh=21EHlEvYJ6/Hi/7Okv0PsHmdiPx2MiVdNJTM4K+9T7Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qX0ldwsiE19jOVKlsa3YGJWhCA88bEzN/ErndtjGqEMjtGL2AvAASabdxLXT4Egj3
+         1vAUmo82JK6Hl8SNwrnV5wvNjo16xzw1vV8c6An/X+mDl3eQBO+6kuFZqSwy44WxM/
+         Fh+pMXhy0rhbWVU+OmrCMIw8eyAS+etgudu1nixouizB6E9P5VCPM/A/Hz+CcX7Y80
+         jSpcIrvfBcwojvF+IZhVa9Vx9ay/8HJDL4xOU3Mjd81Va2JvQNHn8sfJVevKnYhUNG
+         ycrTBAwHu6YkecSQG8bu9/vZ3A2xMsQ2Ode8GkqOg63NXaLSNyIwp89/gzhBnDNIzd
+         T8ex3n9Mv/4qg==
 To:     rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
         robh@kernel.org, krzysztof.kozlowski@linaro.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
@@ -40,9 +40,11 @@ Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v4 0/3] power: domain: handle power supplies that need interrupts
-Date:   Wed, 20 Jul 2022 06:34:41 +0200
-Message-Id: <20220720043444.1289952-1-martin.kepplinger@puri.sm>
+Subject: [PATCH v4 1/3] PM: domain: fix indentation and use BIT macro for flags
+Date:   Wed, 20 Jul 2022 06:34:42 +0200
+Message-Id: <20220720043444.1289952-2-martin.kepplinger@puri.sm>
+In-Reply-To: <20220720043444.1289952-1-martin.kepplinger@puri.sm>
+References: <20220720043444.1289952-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
@@ -54,51 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Ulf, Lucas and all interested,
+Use the BIT macro for flags and simply do 2 tags indentation.
 
-This (after a cleanup patch) makes available a new genpd flag
-GENPD_FLAG_IRQ_ON in a relatively generic way: genpd providers can set
-it when irqs are needed to manage power on/off. Since the main goal
-here has been to fix systemd suspend/resume, adjusting these callbacks
-is all that's being done when this flag gets set.
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+---
+ include/linux/pm_domain.h | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-And since I'm working on imx8mq, the 3rd patch makes gpcv2 set this new
-flag when any power-supply's parent DT node has "interrupts" described.
-For i.MX8M* platforms, this should be ok. For other platforms this might
-be useful too but needs to be tested.
-
-
-revision history
-----------------
-v4: (thank you Ulf and Lucas)
-* split up genpd core and gpcv2 changes
-* set callbacks inside of pm_genpd_init()
-* make flag name and description a bit more generic
-* print an error in __genpd_dev_pm_attach() if there a "mismatch"
-
-v3: (thank you Ulf)
-* move DT parsing to gpcv2 and create a genpd flag that gets set
-https://lore.kernel.org/linux-arm-kernel/20220718210302.674897-1-martin.kepplinger@puri.sm/
-
-v2: (thank you Krzysztof)
-* rewrite: find possible regulators' interrupts property in parents
-  instead of inventing a new property.
-https://lore.kernel.org/linux-arm-kernel/20220712121832.3659769-1-martin.kepplinger@puri.sm/
-
-v1: (initial idea)
-https://lore.kernel.org/linux-arm-kernel/20220711094549.3445566-1-martin.kepplinger@puri.sm/T/#t
-
-
-Martin Kepplinger (3):
-  PM: domain: fix indentation and use BIT macro for flags
-  power: domain: handle genpd correctly when needing interrupts
-  soc: imx: gpcv2: fix suspend/resume by setting GENPD_FLAG_IRQ_ON
-
- drivers/base/power/domain.c | 13 +++++++++++++
- drivers/soc/imx/gpcv2.c     |  9 +++++++++
- include/linux/pm_domain.h   | 20 +++++++++++++-------
- 3 files changed, 35 insertions(+), 7 deletions(-)
-
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index ebc351698090..76bc9e3ef5ff 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -8,6 +8,7 @@
+ #ifndef _LINUX_PM_DOMAIN_H
+ #define _LINUX_PM_DOMAIN_H
+ 
++#include <linux/bits.h>
+ #include <linux/device.h>
+ #include <linux/ktime.h>
+ #include <linux/mutex.h>
+@@ -61,13 +62,13 @@
+  *				components' next wakeup when determining the
+  *				optimal idle state.
+  */
+-#define GENPD_FLAG_PM_CLK	 (1U << 0)
+-#define GENPD_FLAG_IRQ_SAFE	 (1U << 1)
+-#define GENPD_FLAG_ALWAYS_ON	 (1U << 2)
+-#define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
+-#define GENPD_FLAG_CPU_DOMAIN	 (1U << 4)
+-#define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+-#define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
++#define GENPD_FLAG_PM_CLK		BIT(0)
++#define GENPD_FLAG_IRQ_SAFE		BIT(1)
++#define GENPD_FLAG_ALWAYS_ON		BIT(2)
++#define GENPD_FLAG_ACTIVE_WAKEUP	BIT(3)
++#define GENPD_FLAG_CPU_DOMAIN		BIT(4)
++#define GENPD_FLAG_RPM_ALWAYS_ON	BIT(5)
++#define GENPD_FLAG_MIN_RESIDENCY	BIT(6)
+ 
+ enum gpd_status {
+ 	GENPD_STATE_ON = 0,	/* PM domain is on */
 -- 
 2.30.2
 

@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B260257B713
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755A757B71D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240874AbiGTNMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 09:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S238843AbiGTNNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 09:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236361AbiGTNMl (ORCPT
+        with ESMTP id S240783AbiGTNND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 09:12:41 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3827C5A46E;
-        Wed, 20 Jul 2022 06:12:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lnx2F2KxSz4xG2;
-        Wed, 20 Jul 2022 23:12:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658322757;
-        bh=UgcaYd52fK9rxL9lClImIpu0JM8bSZKpwP4533wob6s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=K3efgTV4RjUXtVxV7I4HTb0JpRvWfmRWMgF0o+JnWa7WMw2vSjP93oshdj/zaRuSS
-         pFQxvNIv6nmWKR4oFOg25Obdf3v2WVVAgE2igNQVent7WiSrR4nhhQ0IZYtnBJ5ASO
-         Z5kuiKfZ/eplAUlj+1xBuxeYvS7mP76hTQdNugiJ2kPV3d9jjUS1lT0y/T8HD7p2lX
-         EPF3gHnsSDARV0qMVv3sHX3qbweVahDMiwOotUWdfoQNKhNxpz7R9xX86urhMx68ja
-         ruT4AKeCBXO6gOewUR6wIo9DeKTS8m3+U2Oj4owlD/G/i7HiOmfmuEmxrvvcma1Pt6
-         LCkF2+J/G0eSg==
-Date:   Wed, 20 Jul 2022 23:12:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the arm64 tree
-Message-ID: <20220720231234.71813cff@canb.auug.org.au>
+        Wed, 20 Jul 2022 09:13:03 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC56A5B05D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:13:00 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id a11so4703429wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9LgN/S0aDXYI9VGCuWlvvgvQnGpuTnnqHsiuzMd2wxQ=;
+        b=hZDBwVWDP5UPXoM/26p/r+j251hc2vAqDOCERxSqp1n7sS06JhTWTNUFrAn/iDVTDd
+         sk1s9gAeT8g6iMlidLoC2ByWsp6jDzKjyGiwTrHFM+kSqmhnpOGy27aGmIOCRSPQXtjU
+         iuHcWvpuEBu/GQL3HjFfyH38HWdcfRwpw/QCs8xRs37MzT7Ik+pcHBHS4PQz7Y7kmEGs
+         2zEZT/L22GV5s5xGf/GZOt2FikEOhhfo8etSuo2R+s9KR06g6oLOKoKJ9cp2Devph4aN
+         HYnuH9yadQ7mkeUaGKIxYyw+FFFXzGLODhmRa8DXLmg2/yBLqQ88/ndcWxmAnabBH3H2
+         gPtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9LgN/S0aDXYI9VGCuWlvvgvQnGpuTnnqHsiuzMd2wxQ=;
+        b=oN3Oo3JWyyLLEgGuihKe9YBd1VIAXUVSFn28qAKHw66yGSYf4TfG6wIOsiTlD0ZpDn
+         xTzb1QCyJBEKCocCqFxGiKEgiLwuXvklWHoedfmCJxR08YwaqXQZoy5ATpZ0A8sjMJNq
+         B+v5Kn+Z2oq9gVY5zj7OSpb5q/ePLe7UqWMVzGer+KzLoZOtyog2JA7GdqWdTE6nv8MQ
+         z6Vo5wpCwWkpeIBhU8OPc10uuK7p+/8wK1kUk/4B5ilCNOZMI88lrPQ6qJiF3g8yb9RL
+         s1G23v3uPnjhEuGft2J0BGETPfaOZRrINQ/TTlqNVP3UQgbtLBigzMzG5A7zXcrQSo0H
+         Z1Ng==
+X-Gm-Message-State: AJIora9jw2WWohkPcl/DT2yxBSS9t+U2smTtNhFj8s+BEVnhTVhBkdy4
+        MTchkM4AbG+FOPRFMAS+nTl4eg==
+X-Google-Smtp-Source: AGRyM1tHJE+D+NzsNowU+goDfK+LE01p5AmV4nGBMM9nPZVjT15IP9nJaaafPk1bF4qVs2pE8TNv1A==
+X-Received: by 2002:a05:600c:3b91:b0:3a3:1cbe:d531 with SMTP id n17-20020a05600c3b9100b003a31cbed531mr3812400wms.159.1658322779330;
+        Wed, 20 Jul 2022 06:12:59 -0700 (PDT)
+Received: from amjad-ThinkPad-T490.home (2a01cb040613180084408ac44a1fa242.ipv6.abo.wanadoo.fr. [2a01:cb04:613:1800:8440:8ac4:4a1f:a242])
+        by smtp.googlemail.com with ESMTPSA id y11-20020adfc7cb000000b0021d6924b777sm16853316wrg.115.2022.07.20.06.12.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 06:12:58 -0700 (PDT)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     fparent@baylibre.com
+Cc:     broonie@kernel.org, chaotian.jing@mediatek.com,
+        chunfeng.yun@mediatek.com, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, jic23@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
+        matthias.bgg@gmail.com, qii.wang@mediatek.com, robh+dt@kernel.org,
+        srinivas.kandagatla@linaro.org, ulf.hansson@linaro.org,
+        vkoul@kernel.org, wim@linux-watchdog.org
+Subject: Re: [PATCH 16/17] arm64: dts: mediatek: add mt8365 device-tree
+Date:   Wed, 20 Jul 2022 15:12:57 +0200
+Message-Id: <20220720131257.530168-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220531135026.238475-17-fparent@baylibre.com>
+References: <20220531135026.238475-17-fparent@baylibre.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ePAZfnM7yWnX5H8yTzoEVOz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ePAZfnM7yWnX5H8yTzoEVOz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Fabien,
 
-Hi all,
+> +		tzts4: tzts4-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&thermal 4>;
+> +			trips {};
+> +			cooling-maps {};
+> +		};
 
-Commit
+AFAIK mt8365 has only 3 thermal sensors, therefore tzts4 should not be
+added.
 
-  c2cbc16df707 ("arm64: fix KASAN_INLINE")
-
-is missing a Signed-off-by from its author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ePAZfnM7yWnX5H8yTzoEVOz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLX/0MACgkQAVBC80lX
-0Gw8kQf6A66uQc3ZoA6SuxypHAOXTon6FX+dozBhtqu32o3kfB9NzPJBjX4viVN8
-MuWcGEpsmwGwKXr7ETEqEf3dM0xRpDG4Xk04K0blERmRZe9xtVg5X1K9DrhwgLgC
-qCBu1TNKsbEi9wpwg86wGE+2iJylOnMTKqyGkQU/Nb0HtCbxd0geu0Q3VRZPMl+q
-DG9pwG6Wg4Ux5YHzOge6YguiwsaZ0Gauiiqj3yHROZVJiKQ4elOSnKDrhP6zGWiP
-cljWI0IlLsV+bttc0hWeyvdTrWjSTtqbdwRN6PB3gCM18p/j8slCmu//1xS0Ep3v
-sTQfgH5J/BIFlHmryEC83k+d0YML0w==
-=C0Fk
------END PGP SIGNATURE-----
-
---Sig_/ePAZfnM7yWnX5H8yTzoEVOz--
+Regards,
+Amjad

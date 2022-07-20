@@ -2,178 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA9457C119
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CBD57C11B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiGTXtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
+        id S230311AbiGTXuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiGTXt2 (ORCPT
+        with ESMTP id S229945AbiGTXuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:49:28 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2080.outbound.protection.outlook.com [40.107.243.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740081276B;
-        Wed, 20 Jul 2022 16:49:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H/INCeSEoGG6rvLUuT6hFi1pcQ6JHLQYapjaPsNefJpIzR3V2auKxO/JocDZO6K6/QHrgVjPv/w5Fd8qli5D/CIApzF4wAaJaS4wpc55dYx1e6HwnwsTJEAwdYEGQprUVj8NE0cEJguS4I3sAW1ZaATI0ev2TvLuv2a88sRv2GAWUE55W11RcDabyN2lmGTrhLEwUC5cIJFKzRjPFoz+BGAhh/a/NDjBNhd4SfDmZg7VmI2pAzEJQoDMzwq1tSxj3VfKdMP7dxp1DN+R2RNDvYGvFry5uMaPC4h1ySnEUapC7thhFBM8Ww7b1cgQE3tAxzbldPClCm55X4s5Wi7n9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Fd4N65qlJcUWKxEsF32eTl7TqIfznD6n/YhR6lwsQSE=;
- b=ZEjXpnsvyiKnHUyLzXB8I1gljgWM1cWMepwokACEqxaAW8656SjV8dPU13hTS45mKqA4YBOnRXsYCkQAmvmTFopaOqtiGekBRqS/fqjkF43w8hv2geNeUqckiDL/F7p4klyDKis+WXHhpKZ1IDfUj1cTu+uo7Z6+Mv9Ksjicb75Rg7yuadB0JxpV2M9mnnpRLyx+Q3XvTW+s4BibGck6noztetB8w8Hzb41e3j7JFY8LwHyQJSs+afmlboRBvzIex0LBKSalhnObGoYJX2LxAASRH4SKV05IzoBblCGwwj0qmuDjBSHRzAkVgVfb/jq48bmz1XF/PPPfUIPoqSi/0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Fd4N65qlJcUWKxEsF32eTl7TqIfznD6n/YhR6lwsQSE=;
- b=bsvgB7e3c5glMosh0SbJbZxAHQRHKwimACri9XGCySrLvYO7B331dZ4rDmPWtYUK6+EwfFsuHpZOxH+KqfQ75J8oCPwh3eRG2bvvyTEuvIfAftRGINgjaqE582WIATG0TKIc7m2bEXnPpdLhT0rbEO6Wz8ilxG4YDdJLCsRiL95PbpmszZL+7B6wIqvpdK/no626MeKyqJZpuLymoQQ7FqdcNOi4QK4fVR0LPz3SQX2FPYfObpB1UmR6EY46qJSXfrBW6rrhCVbAVFxZPKKzLPFuMNgg2WKivgbAd/zc1hQrWeYFsfv1bz7u9gEaBP/+BOmDsfnE5++IBMCfcC9anA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by LV2PR12MB5797.namprd12.prod.outlook.com (2603:10b6:408:17b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Wed, 20 Jul
- 2022 23:49:25 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5458.018; Wed, 20 Jul 2022
- 23:49:25 +0000
-Date:   Wed, 20 Jul 2022 20:49:24 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     longli@microsoft.com
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>, edumazet@google.com,
-        shiraz.saleem@intel.com, Ajay Sharma <sharmaajay@microsoft.com>,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [Patch v4 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
- Network Adapter
-Message-ID: <20220720234924.GA406750@nvidia.com>
-References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
- <1655345240-26411-13-git-send-email-longli@linuxonhyperv.com>
+        Wed, 20 Jul 2022 19:50:09 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB977D4D
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:50:07 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id b133so202944pfb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:50:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SDnyggnh9pThzoDcJ3VXXCME6j9cwwo6N50/QOAGYi4=;
+        b=PlQVOfMoLRbWIbLQUit4qc8Cr9e1p1I+DEw8K9HdObjZpV1NVWuTIWGnOwAR/eu+CT
+         tJbWMjF81xfy2Ihd+23mqaALZYKa97ZBOR7gwq0Ifvw2/gKM30EM5Puj0/PgTvU3Z0UN
+         LbKQbr6ZIuain8733He3iMd1TMnz2fJ1/V9vuz9d86IyXDQwswapDVpGLz2YzVdaL6rz
+         Eylh7axUrLtGiPSwVtUO4JcvhaJQDKMM5J4eEcUb8FbW2jG40PJTjZfSCn+QXuotErLM
+         1HuH8/fM948Pttrj8jzfmYtASASRdosYB2NTqPzzP3h0sXT10GkU3C6bgtsQJWLZclbt
+         sYyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SDnyggnh9pThzoDcJ3VXXCME6j9cwwo6N50/QOAGYi4=;
+        b=LTUuQjKyWNVRrCLn2jBko3NGgaMlm1jvjuVz6dk/59jjukGRm6r3d+W1Y6sQc8fCne
+         o2EpZPqF3UP1PLns13r25V/cXR3C5nZ8hk4wHK83x1EfeuFMk7ENN11Y5FVYbsYqUzfI
+         nMSaPUJCjYKjokqXTD1XkMXZ64BZ6GMoc32exv8MFK5S7NMlkzmhkHVAGFY+VWHR73E/
+         9c+uYlx9bNh08DkiPsgZ7ODg6zZCX3stfr+fgFI3V1c+YvpCLVo7Bkn+RyXS7/CcVGq7
+         6NnIhy7w2VcOS5RBCWzi2Px26suc8BaQyHLOKO0ckU0tC7cxtD0HTZO9Kb8FqPjIuh0i
+         CMcA==
+X-Gm-Message-State: AJIora8gogkRPRzKHEzX5iSd9r1GLasMJmLk/2drkG3dZcATW8TnBDrL
+        kgctfrVvA1rFJqgjws62CHCkLg==
+X-Google-Smtp-Source: AGRyM1uIj7US8Y7oIaCy/d4XVt8BGXMupWNBQUm7cMoPwn35cUNrKPQn/t+NucZZwTv0f2vXj6iJpg==
+X-Received: by 2002:a63:4f52:0:b0:41a:3744:d952 with SMTP id p18-20020a634f52000000b0041a3744d952mr12528022pgl.186.1658361007090;
+        Wed, 20 Jul 2022 16:50:07 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id z15-20020a17090abd8f00b001f21f7821e0sm68648pjr.2.2022.07.20.16.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 16:50:06 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 23:50:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v2 05/11] KVM: x86: emulator: update the emulation mode
+ after CR0 write
+Message-ID: <YtiUq7jm2Z1NTRv3@google.com>
+References: <20220621150902.46126-1-mlevitsk@redhat.com>
+ <20220621150902.46126-6-mlevitsk@redhat.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1655345240-26411-13-git-send-email-longli@linuxonhyperv.com>
-X-ClientProxiedBy: MN2PR19CA0028.namprd19.prod.outlook.com
- (2603:10b6:208:178::41) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: aad1de6b-973a-408c-a890-08da6aaa7a22
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5797:EE_
-X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jYsgd89odiyme117xEdTrCjgpAsVCju3DAwIeSMaxHJzbR9ujNvyBscsVyagDOQOzLQqa5oqxcxwUvf5bclWQqIqMAcQ3FVALzLGyn+TCS77ZvO7dRWWTzjfIpvW+kKrVTbPqKcOztIysAQ/JblItsj3k0WHqDjd1stf4X5X54eDnkHjxh3+H3VzJvkWKZerQZG8LXWS4E1lJY7jMZBpbjE1e3ZERCfF+QV0GWzSxTZv0xIyVS6XutiTbVZ9tqgP5Zu6PASB55QMg0AEHE09U5xiJMv2UrB1p3ckz62JnrGn79jO2cb/Y3hKmwY6/3FDfd7mZ6+zaule2MyxMj8FErzras3+9DvH8L7wNOKMqKyhLbgsDCDJG6PITvdEB95h9TadxtAi7zapxjN1x08IwQD1buME/eeKU0agyzicRAgbp76oTc3zenTcSkDlTQ55SQWJMr14fuoGbW59sWQ3hwwmZnbBFIrp1ihABbTF39rj5wMnjn6C1MjBnQXK0F939+XsceOQAuLOrGb6/PQZIJ2M6PiPEamD9mwu9rVcl63UbYnQeLUAUHdfOOJY7H1tShrhl+4TcvrUegHFnGPBtFnieMBrSSwi4ECld9ysBG4Ggzl8UO0ClCzZLuSy5Q+XXPBk3f8GaCUK46XWbqlQ/Wp5FMOWwsuC4pIBxALdHZaH0PfC19gCL/NmCJFj9Xmedr3hZzgxaiBbRYkVJ/KjVexKB+l8KFmPkFjLs6gIchLKwxddahczh/Dj8POBc2Dw+96PiMODswpTjeMuJSW1NjOyRKtnx8VZIZoBtNpytrg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(136003)(346002)(39860400002)(396003)(47530400004)(316002)(45080400002)(54906003)(52230400001)(6486002)(33656002)(83380400001)(478600001)(41300700001)(2616005)(36756003)(6512007)(186003)(1076003)(8676002)(6916009)(7416002)(66476007)(6506007)(66556008)(5660300002)(2906002)(4326008)(8936002)(66946007)(26005)(86362001)(38100700002)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5ZF9O2VHCeJ1bIcBFimF0nm4oA3+OjEl8u8SGHEKiWAl4rFzvYf4uYpLUFxZ?=
- =?us-ascii?Q?l9TGkmnqwHkmJL2RmfNGpN9hG3ft7Uh6G+hXnHshFmHgyQuUPf7ApDEFhHkT?=
- =?us-ascii?Q?OQ50UGN4Ezzoi+1vN+gdFKmbnipx1Iclrl8szjosrmMC1kknVz4BrAgQ1l0T?=
- =?us-ascii?Q?ktTtQjQWXXfUk3rN+Uzx+cJ5baoFUfhdmwY1KmUHTYx/gyqm9r8+iPo+Z8vW?=
- =?us-ascii?Q?07siDN8d3IJOjcT+jlCx069bN+A1mHrYSEvSWyYQUX7LBHPAyjKWafFrrHUG?=
- =?us-ascii?Q?i45TTaHG5XmAbx+l5bkwmrEVIDFhwd0U4J3Wi08sM3rOiThE933uz4H20HUq?=
- =?us-ascii?Q?MHHS5QPX6pkbYplp9aihxN4qkZgV7pnrsqOJyfSLqfF0yXaTQ0Bp5U5DUd9n?=
- =?us-ascii?Q?gB+27J4uEBnlti5zVHOOR0cjg3SA4dD2KqCHH5i+9hLJpgw6kXAFMFdoWGmu?=
- =?us-ascii?Q?O9nz0HSLhyvxYETxGuwvB+Z+OvXze+M8GpVsm7548yvHLeMevlsV4dxUS7dO?=
- =?us-ascii?Q?+x7nJ8SlfH7m0QEFZAB337g/wBksDuVVfMQFawSYdLpYOQVnJ81c1BB5T/uZ?=
- =?us-ascii?Q?pwemZNguQ4KWiNeVxBTT/rclYNtOZ38N2JdrrTT/vzQF2BxseiDpwvERAWq3?=
- =?us-ascii?Q?zNf0MTWHejeaUjY87+tCmAbBD2WbVBkv4RKi/UFa0MGQ/gBY7mIuehAHgXUN?=
- =?us-ascii?Q?QnHH2b0jUc+w7OaUK2i18qmhTuJ3wfA1bYT1OPrq3i4nEPtUm6szdB2FOssc?=
- =?us-ascii?Q?hllbv2gK5S5Ndwiie6Tpo5mw3isjrot/kY3KcBHrshat2wcdmWB6dxjZ0VZp?=
- =?us-ascii?Q?LIQ/WpyxrgosVTGuWVviShA7UeFsLFnVwFuvSoJzNavAAViAfiCmTlSNJ4SJ?=
- =?us-ascii?Q?rnRWQpMtqgEsVGsD9m8nKY59nQC37tNwECme19RRhzzCiDvYzXXGUKtzdVof?=
- =?us-ascii?Q?P1zW9aVDXKJHDmcLxiVllWZxd6ITUC9+e/FPg/Z7VkvIcfuXkaFjBPPLL7su?=
- =?us-ascii?Q?Msls0/9OnFcvbW2wvOxb+wQ6pOU+BVTARyNovSMGDdgHrA/HG5ccDSNXAPY6?=
- =?us-ascii?Q?5XQI9MXW/rvsQNmSMJ1T+RjcYl8paZzupacoJ8e7WSf2bE7SXp0Hy4u5zrLh?=
- =?us-ascii?Q?U7tg6z5e/+fAeDX18pK9zqlHZnIb+HLDha6pHLaF2aEcFivCKz763Ovbg62O?=
- =?us-ascii?Q?Bzs7ZQ2R1zUm0/CHF3pqafPTlAUJ2jnpmxlAn/tF2otYRV+I6O3YkEF1xEvi?=
- =?us-ascii?Q?nWfb4WSyBeQqpskwXmVLZhyCdLTw3+q6IVrLuqmAgFjdkIl3GLS/GKsI8sBz?=
- =?us-ascii?Q?T315JuJKwIygy3sChc+j7aJVoJNCo5OWEap5KUGzuCsjHApels9IWeGVlRBZ?=
- =?us-ascii?Q?Fbv/8u83KguF2ImjiYTi72spZ3y+CEZv4SJX7AcJvgAYXGpa19ErdOrWUHwR?=
- =?us-ascii?Q?3EpkCSWN925gfHDfGnFTZXjYwEzUKhvzQLcRxzw5874p8/oxYqi+xQ/bU2x6?=
- =?us-ascii?Q?sAmHV+to86OkckX6Gl5Z5Rrjlh4UVgjFgv0IV0VOPUmY4YLQsWZ+AesTOrgf?=
- =?us-ascii?Q?nTSKsjcACiU+n5FU7O0Ea/jj3oBvTFF/S91BcjHf?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aad1de6b-973a-408c-a890-08da6aaa7a22
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 23:49:25.7266
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pMJCAvJtqDJRw15bmwdtvSTw/nC5dEc2ls75c4ClaS2WHyNatiaCfCE/vfqHVwto
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5797
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220621150902.46126-6-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 07:07:20PM -0700, longli@linuxonhyperv.com wrote:
-
-> +static int mana_ib_alloc_pd(struct ib_pd *ibpd, struct ib_udata *udata)
-> +{
-> +	struct mana_ib_pd *pd = container_of(ibpd, struct mana_ib_pd, ibpd);
-> +	struct ib_device *ibdev = ibpd->device;
-> +	enum gdma_pd_flags flags = 0;
-> +	struct mana_ib_dev *dev;
-> +	int ret;
+On Tue, Jun 21, 2022, Maxim Levitsky wrote:
+> CR0.PE toggles real/protected mode, thus its update
+> should update the emulation mode.
+> 
+> This is likely a benign bug because there is no writeback
+> of state, other than the RIP increment, and when toggling
+> CR0.PE, the CPU has to execute code from a very low memory address.
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/kvm/emulate.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 6f4632babc4cd8..002687d17f9364 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -3659,11 +3659,22 @@ static int em_movbe(struct x86_emulate_ctxt *ctxt)
+>  
+>  static int em_cr_write(struct x86_emulate_ctxt *ctxt)
+>  {
+> -	if (ctxt->ops->set_cr(ctxt, ctxt->modrm_reg, ctxt->src.val))
+> +	int cr_num = ctxt->modrm_reg;
+> +	int r;
 > +
-> +	dev = container_of(ibdev, struct mana_ib_dev, ib_dev);
+> +	if (ctxt->ops->set_cr(ctxt, cr_num, ctxt->src.val))
+>  		return emulate_gp(ctxt, 0);
+>  
+>  	/* Disable writeback. */
+>  	ctxt->dst.type = OP_NONE;
 > +
-> +	/* Set flags if this is a kernel request */
-> +	if (!ibpd->uobject)
-> +		flags = GDMA_PD_FLAG_ALLOW_GPA_MR | GDMA_PD_FLAG_ALLOW_FMR_MR;
+> +	if (cr_num == 0) {
+> +		/* CR0 write might have updated CR0.PE */
 
-I'm confused, this driver doesn't seem to support kverbs:
+Or toggled CR0.PG.  It's probably also worth noting that ->set_cr() handles side
+effects to other registers, e.g. the lack of an EFER.LMA update makes this look
+suspicious at first glance.
 
-> +static const struct ib_device_ops mana_ib_dev_ops = {
-> +	.owner = THIS_MODULE,
-> +	.driver_id = RDMA_DRIVER_MANA,
-> +	.uverbs_abi_ver = MANA_IB_UVERBS_ABI_VERSION,
+> +		r = update_emulation_mode(ctxt);
+> +		if (r != X86EMUL_CONTINUE)
+> +			return r;
+> +	}
 > +
-> +	.alloc_pd = mana_ib_alloc_pd,
-> +	.alloc_ucontext = mana_ib_alloc_ucontext,
-> +	.create_cq = mana_ib_create_cq,
-> +	.create_qp = mana_ib_create_qp,
-> +	.create_rwq_ind_table = mana_ib_create_rwq_ind_table,
-> +	.create_wq = mana_ib_create_wq,
-> +	.dealloc_pd = mana_ib_dealloc_pd,
-> +	.dealloc_ucontext = mana_ib_dealloc_ucontext,
-> +	.dereg_mr = mana_ib_dereg_mr,
-> +	.destroy_cq = mana_ib_destroy_cq,
-> +	.destroy_qp = mana_ib_destroy_qp,
-> +	.destroy_rwq_ind_table = mana_ib_destroy_rwq_ind_table,
-> +	.destroy_wq = mana_ib_destroy_wq,
-> +	.disassociate_ucontext = mana_ib_disassociate_ucontext,
-> +	.get_port_immutable = mana_ib_get_port_immutable,
-> +	.mmap = mana_ib_mmap,
-> +	.modify_qp = mana_ib_modify_qp,
-> +	.modify_wq = mana_ib_modify_wq,
-> +	.query_device = mana_ib_query_device,
-> +	.query_gid = mana_ib_query_gid,
-> +	.query_port = mana_ib_query_port,
-> +	.reg_user_mr = mana_ib_reg_user_mr,
-
-eg there is no way to create a kernel MR..
-
-So, why do I see so many kverbs like things - and why are things like
-FMR in this driver that can never be used?
-
-Jason
+>  	return X86EMUL_CONTINUE;
+>  }
+>  
+> -- 
+> 2.26.3
+> 

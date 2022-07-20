@@ -2,173 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EE757B2B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115DD57B2C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239092AbiGTITt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S239378AbiGTIV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237547AbiGTITr (ORCPT
+        with ESMTP id S229686AbiGTIVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:19:47 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5F069F0E
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:19:45 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id z12so25032642wrq.7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:19:45 -0700 (PDT)
+        Wed, 20 Jul 2022 04:21:24 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613CADFA9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=H3cfWCLBlBYx1Erw4k3ViEzQD+OSmuEO+WWt3HWcPoA=;
-        b=rR6JZ+S7IixgYfovd+L1INMwl+54Px8Y0e+3XmVtikQZpCf5s9gkH9XepDR74CWKOZ
-         9JLTcSPGceYWc1eOO1jx2oXTj8YqOvqS+wG9p4hW9xU9asnbOrl0muhhwwYVM34sKjyS
-         rGNKO6m3k8yyWwgDgA44/wk7ypQ69ZOBiVbJOXplDd3cyZ4R2JYioguX7H/tVjlI2fGM
-         q7p8VdQq0WofPlTG8vZcUCZqagSXzBP8TgIbaBoy52M3B4BtUM57AKJhWQroXQr2u/Ik
-         Q2rYGF/IHqCPOuX/qRNGSq9ICsXBurc2g1nYPIlCV4spj2cX1em/XfRo3bW2bZ0s+rWq
-         tK5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=H3cfWCLBlBYx1Erw4k3ViEzQD+OSmuEO+WWt3HWcPoA=;
-        b=aE/I9XWIWn8KN9lfh6lbLpOTCbUYTjGuTF2oEsjGjWzShNY6wsEzW5S270TkaDOYUI
-         opzIIrJMpVKaxpUBtTAifiH7EWCEiBY9z/Na7oWzSguw4n8IeRtj9U8ou2TeG71qAm8u
-         Q1PH8B/rgnUvcnCvUQ9GUqXpFyRp2SN4USCCKYgwbyTsvVD/kr0S4GJess09JDnXLl5f
-         0icCQ07i5eQ23gjhOB46fiE4aZNb6kG/HFQDW/EDXVE5D/NPAxEITc4RWMyyyFemxpuU
-         CtHcgG+bdzcVNSrDncTFKxsPRJhWlHpbCxtHh+ygN8SP2Ofk6YE86vJ0hTlir4wD0D3R
-         V5Ew==
-X-Gm-Message-State: AJIora9wII2h6rknBsFNEksrcfQ4bYSRrAf2rwg+k/cLUX/etK3DAquf
-        kAwz+uvzsmpN1uBKhvuGkDJnWA==
-X-Google-Smtp-Source: AGRyM1tKM9yWRqu/6hb5ToXfPCjx8kO+ohEW+UULtwcZ7Bj7hyGH5XdN95owydZj/Z9UEhfe392XnQ==
-X-Received: by 2002:a5d:64c8:0:b0:21d:9873:bbf0 with SMTP id f8-20020a5d64c8000000b0021d9873bbf0mr29529081wri.150.1658305184429;
-        Wed, 20 Jul 2022 01:19:44 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b003a31b79dc0esm8936892wmb.1.2022.07.20.01.19.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 01:19:43 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 09:19:41 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        katie.morris@in-advantage.com
-Subject: Re: [PATCH v13 net-next 9/9] mfd: ocelot: add support for the
- vsc7512 chip via spi
-Message-ID: <Yte6nTJ3IMJhdLAp@google.com>
-References: <20220705204743.3224692-1-colin.foster@in-advantage.com>
- <20220705204743.3224692-10-colin.foster@in-advantage.com>
- <YtVrtOHy3lAeKCRH@google.com>
- <Ytbuj6qfUj1NOitS@euler>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658305283; x=1689841283;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DyE1S6/M8cxx8TUOX92GSOdQu0Ro177cj6dL0LTcF6U=;
+  b=EzLT/G5s6g+tXOdyPGMxoZOeDnlDbU/80bGw79tchS7t1rZevNXTTmkC
+   gMTdFpGmt8MkRPAHRaUUrNAIvjhss8hYJTuaBGOduAHB4OBwv002D73DW
+   34yPfSODvbhtHmwr/LWINCpobpgg8EcYAR8nb2+REK6HxEK1grYe8Po3i
+   M=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jul 2022 01:21:23 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 01:21:22 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Jul 2022 01:21:21 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Jul 2022 01:21:16 -0700
+Date:   Wed, 20 Jul 2022 13:51:12 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+CC:     Michal Hocko <mhocko@suse.com>, <akpm@linux-foundation.org>,
+        <pasha.tatashin@soleen.com>, <sjpark@amazon.de>,
+        <sieberf@amazon.com>, <shakeelb@google.com>, <dhowells@redhat.com>,
+        <willy@infradead.org>, <vbabka@suse.cz>, <david@redhat.com>,
+        <minchan@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+Subject: Re: [PATCH] mm: fix use-after free of page_ext after race with
+ memory-offline
+Message-ID: <20220720082112.GA14437@hu-pkondeti-hyd.qualcomm.com>
+References: <1657810063-28938-1-git-send-email-quic_charante@quicinc.com>
+ <YtVJBQ/ZOt22o8+B@dhcp22.suse.cz>
+ <fca23df7-37b0-f32d-ece3-58317dfad210@quicinc.com>
+ <YtV0PSMAGG46Pq0K@dhcp22.suse.cz>
+ <aaeec83d-bdf8-280c-b943-ad510f1d8db2@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ytbuj6qfUj1NOitS@euler>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <aaeec83d-bdf8-280c-b943-ad510f1d8db2@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022, Colin Foster wrote:
+Hi Charan,
 
-> On Mon, Jul 18, 2022 at 03:18:28PM +0100, Lee Jones wrote:
-> > On Tue, 05 Jul 2022, Colin Foster wrote:
+On Tue, Jul 19, 2022 at 08:42:42PM +0530, Charan Teja Kalla wrote:
+> Thanks Michal!!
+> 
+> On 7/18/2022 8:24 PM, Michal Hocko wrote:
+> >>>> The above mentioned race is just one example __but the problem persists
+> >>>> in the other paths too involving page_ext->flags access(eg:
+> >>>> page_is_idle())__. Since offline waits till the last reference on the
+> >>>> page goes down i.e. any path that took the refcount on the page can make
+> >>>> the memory offline operation to wait. Eg: In the migrate_pages()
+> >>>> operation, we do take the extra refcount on the pages that are under
+> >>>> migration and then we do copy page_owner by accessing page_ext. For
+> >>>>
+> >>>> Fix those paths where offline races with page_ext access by maintaining
+> >>>> synchronization with rcu lock.
+> >>> Please be much more specific about the synchronization. How does RCU
+> >>> actually synchronize the offlining and access? Higher level description
+> >>> of all the actors would be very helpful not only for the review but also
+> >>> for future readers.
+> >> I will improve the commit message about this synchronization change
+> >> using RCU's.
+> > Thanks! The most imporant part is how the exclusion is actual achieved
+> > because that is not really clear at first sight
 > > 
-> > > +MODULE_IMPORT_NS(MFD_OCELOT_SPI);
-> > > diff --git a/drivers/mfd/ocelot-spi.c b/drivers/mfd/ocelot-spi.c
-> > > new file mode 100644
-> > > index 000000000000..0c1c5215c706
-> > > --- /dev/null
-> > > +++ b/drivers/mfd/ocelot-spi.c
-> > > @@ -0,0 +1,317 @@
-> > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > > +/*
-> > > + * SPI core driver for the Ocelot chip family.
-> > > + *
-> > > + * This driver will handle everything necessary to allow for communication over
-> > > + * SPI to the VSC7511, VSC7512, VSC7513 and VSC7514 chips. The main functions
-> > > + * are to prepare the chip's SPI interface for a specific bus speed, and a host
-> > > + * processor's endianness. This will create and distribute regmaps for any
-> > > + * children.
-> > > + *
-> > > + * Copyright 2021, 2022 Innovative Advantage Inc.
-> > > + *
-> > > + * Author: Colin Foster <colin.foster@in-advantage.com>
-> > > + */
-> > > +
-> > > +#include <linux/ioport.h>
-> > > +#include <linux/kconfig.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/regmap.h>
-> > > +#include <linux/spi/spi.h>
-> > > +
-> > > +#include <asm/byteorder.h>
-> > > +
-> > > +#include "ocelot.h"
-> > > +
-> > > +#define REG_DEV_CPUORG_IF_CTRL		0x0000
-> > > +#define REG_DEV_CPUORG_IF_CFGSTAT	0x0004
-> > > +
-> > > +#define CFGSTAT_IF_NUM_VCORE		(0 << 24)
-> > > +#define CFGSTAT_IF_NUM_VRAP		(1 << 24)
-> > > +#define CFGSTAT_IF_NUM_SI		(2 << 24)
-> > > +#define CFGSTAT_IF_NUM_MIIM		(3 << 24)
-> > > +
-> > > +#define VSC7512_DEVCPU_ORG_RES_START	0x71000000
-> > > +#define VSC7512_DEVCPU_ORG_RES_SIZE	0x38
-> > > +
-> > > +#define VSC7512_CHIP_REGS_RES_START	0x71070000
-> > > +#define VSC7512_CHIP_REGS_RES_SIZE	0x14
-> > > +
-> > > +struct spi_device;
+> > CPU1					CPU2
+> > lookup_page_ext(PageA)			offlining
+> > 					  offline_page_ext
+> > 					    __free_page_ext(addrA)
+> > 					      get_entry(addrA)
+> > 					      ms->page_ext = NULL
+> > 					      synchronize_rcu()
+> > 					      free_page_ext
+> > 					        free_pages_exact (now addrA is unusable)
+> > 					
+> >   rcu_read_lock()
+> >   entryA = get_entry(addrA)
+> >     base + page_ext_size * index # an address not invalidated by the freeing path
+> >   do_something(entryA)
+> >   rcu_read_unlock()
 > > 
-> > Why not just #include?
+> > CPU1 never checks ms->page_ext so it cannot bail out early when the
+> > thing is torn down. Or maybe I am missing something. I am not familiar
+> > with page_ext much.
 > 
-> I mis-understood this to mean drivers/mfd/ocelot-spi.c when it meant
-> drivers/mfd/ocelot.h. Thanks.
 > 
-> https://patchwork.kernel.org/project/netdevbpf/patch/20220701192609.3970317-10-colin.foster@in-advantage.com/#24921057
+> Thanks a lot for catching this Michal. You are correct that the proposed
+> code from me is still racy. I Will correct this along with the proper
+> commit message in the next version of this patch.
 > 
-> """
-> You missed a lot of forward declarations that are used in this file.
-> 
-> Like
-> 
-> struct spi_device;
-> """
 
-spi_device is used in *this* file.
+Trying to understand your discussion with Michal. What part is still racy? We
+do check for mem_section::page_ext and bail out early from lookup_page_ext(),
+no?
 
-You should explicitly add the include file.
+Also to make this scheme explicit, we can annotate page_ext member with __rcu
+and use rcu_assign_pointer() on the writer side.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+struct page_ext *lookup_page_ext(const struct page *page)
+{
+        unsigned long pfn = page_to_pfn(page);
+        struct mem_section *section = __pfn_to_section(pfn);
+        /*
+         * The sanity checks the page allocator does upon freeing a
+         * page can reach here before the page_ext arrays are
+         * allocated when feeding a range of pages to the allocator
+         * for the first time during bootup or memory hotplug.
+         */
+        if (!section->page_ext)
+                return NULL;
+        return get_entry(section->page_ext, pfn);
+}
+
+Thanks,
+Pavan

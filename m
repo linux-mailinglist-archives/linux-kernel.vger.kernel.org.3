@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3810957BE6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9A157BE8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233218AbiGTT2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 15:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S233840AbiGTT2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 15:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGTT2Q (ORCPT
+        with ESMTP id S229885AbiGTT2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 20 Jul 2022 15:28:16 -0400
 Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4221EEE3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:28:14 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id d12so31906201lfq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:28:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A26F48E9B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:28:15 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id o7so31930674lfq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0GjIsq4ywCMZXZcSe/Hf1BCEstclfZZ3cilI89j5ThU=;
-        b=VUIJn85eBQCXeFv5mdrrzsLBNUAt9WG148HwPKkxPIcLV9nQdHlwKzSyZPCWNsDu0D
-         EaZkrTRZGwFT/hxSAAnrfAXenbIZ58SsfWIUeKq4izcEqyMRWcUZv3J2WclotkCp0lGv
-         7ZqMyX5kbGy7HceJWeP5YwKHaX5MDYQoY/RDOh/1q/XZN4+sYHuKKEU79nCLtstDrPd2
-         0LT+hMFVZ/AEpnOWYdRaj7RuplQVQUie04hkklYQnDwWj4ie9EYDNVKLljVIrEAc4VMK
-         1wBraaAyDep6BKeNvif0NmPXd8URKcDOwN6hf0k9BokK7W5UrPJr9RGhBXyoaACgl2a8
-         1TnA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=rSBQ7JAB+vjeRoqorLkGeTA/zEJLIaKb2x2azJOWcTw=;
+        b=gfI/K/TNFcBfDJGFoOa5ZIwPpi22P63+Yy4snJWbZUnIqcaTs7PWMYawLV0u42j1gg
+         6SAizAsdZ07oIO5WR+BjaVwcExwiIyPNjA/hwprpMgM9mds+BkSC3tDsyy//VfgxVWnQ
+         sXO/JP8fRjr9Eh1v4UDc4RIiIdUJqI1FUoVRQtnfhDBiS5kqDtmY7HRbAh65EfwAb6ms
+         pOq49Bd9jeYpEaCPU2fgkEcN7wXwOE48eQ1j6Z8SGztZPB697BnDGbTGkxv8eyPYGEuc
+         skdiQD5vFfEEDG4NeifksEDcp+3iopKyoYhWJT6MZ0ZNJHdEZtX2GBvyCLNWptIorrk2
+         hzEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0GjIsq4ywCMZXZcSe/Hf1BCEstclfZZ3cilI89j5ThU=;
-        b=2Qukcgomb7RCuOXGcl+KvvY9qSA9albO8zLdLrfXlWVY8zyD1GgE/kE6jP/+8Dh88l
-         71Piv2oH/pEoVmdWLVMbBsUfVBDEm4go9UsXnQQQdOzV9Loj03kUNUSZ/SUgoMEyWAS1
-         u+4t+YvPRi3CBa2kdj32lR8DFUMarr7nPe6ZodFf7kPoRpWxRxdcMqQc3ztmpVwq50V/
-         jXw5iIju5TmdHxezKtLIkJ85H89Pm8ETSZZgjetIXvCfJkz4KUiOPodo6CIQr+4mLBwT
-         sLzRuqb3d5q0hWH72fWXYDUBxlKFL4L6yOBkel9rvDaM7XRI4lff1JXSWIWuK2IGP74K
-         BByQ==
-X-Gm-Message-State: AJIora8JIsujA+/64MYlFZMYCkXhseOg1K8VnPHI/gJBbr6ukZIsdPmp
-        o1cKfqLqWeakXF5YTJy/oyRAVA==
-X-Google-Smtp-Source: AGRyM1vxjzudKtDoj2CRWGRK26Dg2bD6DVCG7roFoWMzGuV6/hnE3BtccVtN9boNXJVFpSnhFh5U/g==
-X-Received: by 2002:a05:6512:1054:b0:489:d273:be3a with SMTP id c20-20020a056512105400b00489d273be3amr21837278lfb.615.1658345292532;
-        Wed, 20 Jul 2022 12:28:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rSBQ7JAB+vjeRoqorLkGeTA/zEJLIaKb2x2azJOWcTw=;
+        b=1bptv6+pzRcCf1rcbHIdk/ny0wtvVBAKNP/pG5wAds/EoxJpn/zbDnsKwNp4OLOJgO
+         RtHtgdnb9CHI1BKgjgHkZqYYHg4wX1NN/G5YQJn8cnGtTsLTluDjFsv8reTgp8UGcUG6
+         oMNa0PCRKw2BVL/finCxg25jUblkRkQzrzZIX+F+8e0VQ2VI/vs4edPYg/ugPAkWZzmZ
+         MrKwq5uS+c/GTTZHOoL60vX27LbbdQjown3dveg+yxKWRElKffFz/swNOBEoPMjSb1ve
+         Z3KpVHbYBnmkezPUFiZL78hnuyRn6q1N8h0vTb4rKxjUwX5cVrGTjBxbToIPPOdV10Ly
+         4rfQ==
+X-Gm-Message-State: AJIora9z/7w7HahW/Rb5Sp6llrJyG1qE2cRZ/sq3z1Y8DAgv2CVAtqPb
+        EfR+3VfL0HYnetrLtImylefalQ==
+X-Google-Smtp-Source: AGRyM1t5JUB4BiPdMRrJAR4SN7NgCflQcP4z/9qo1349hofBeiS3KfqTb2LYhIPLfW1uoOIY6y6T1w==
+X-Received: by 2002:a05:6512:3c96:b0:489:e6c1:a5a7 with SMTP id h22-20020a0565123c9600b00489e6c1a5a7mr22357322lfv.38.1658345293788;
+        Wed, 20 Jul 2022 12:28:13 -0700 (PDT)
 Received: from krzk-bin.. (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id h32-20020a0565123ca000b0047fac0f34absm3985771lfv.196.2022.07.20.12.28.10
+        by smtp.gmail.com with ESMTPSA id h32-20020a0565123ca000b0047fac0f34absm3985771lfv.196.2022.07.20.12.28.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 12:28:11 -0700 (PDT)
+        Wed, 20 Jul 2022 12:28:13 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -58,10 +58,12 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: [PATCH 00/10] soc/arm64: qcom: Add LLCC BWMON on SDM845
-Date:   Wed, 20 Jul 2022 21:27:57 +0200
-Message-Id: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 01/10] dt-bindings: interconnect: qcom,msm8998-bwmon: add support for SDM845 LLCC BWMON
+Date:   Wed, 20 Jul 2022 21:27:58 +0200
+Message-Id: <20220720192807.130098-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,41 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Description
-===========
-BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
-interconnect links in a SoC.  It might be used to gather current bus usage and
-vote for interconnect bandwidth, thus adjusting the bus speed based on actual
-usage.
-
-Qualcomm SoCs might several BWMON instances.  Extend existing support for CPU
-BWMON (called v4) to LLCC BWMON (called v5).
+Add compatible for SDM845 Bandwidth Monitor instance measuring traffic
+between LLCC and memory.  It comes with different register layout:
+called v5.
 
 Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml     | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (10):
-  dt-bindings: interconnect: qcom,msm8998-bwmon: add support for SDM845
-    LLCC BWMON
-  soc: qcom: icc-bwmon: re-use IRQ enable/clear define
-  soc: qcom: icc-bwmon: drop unused BWMON_ZONE_COUNT
-  soc: qcom: icc-bwmon: store reference to varian data in container
-  soc: qcom: icc-bwmon: clear all registers on init
-  soc: qcom: icc-bwmon: store count unit per variant
-  soc: qcom: icc-bwmon: use regmap and prepare for BWMON v5
-  soc: qcom: icc-bwmon: add per-variant quirks
-  soc: qcom: icc-bwmon: add support for SDM845 LLCC BWMON
-  arm64: dts: qcom: sdm845: add LLCC BWMON
-
- .../interconnect/qcom,msm8998-bwmon.yaml      |   1 +
- arch/arm64/boot/dts/qcom/sdm845.dtsi          |  37 ++
- drivers/soc/qcom/icc-bwmon.c                  | 465 ++++++++++++++----
- 3 files changed, 405 insertions(+), 98 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+index c2e697f6e6cf..32e2892d736b 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+@@ -27,6 +27,7 @@ properties:
+               - qcom,sdm845-bwmon
+           - const: qcom,msm8998-bwmon
+       - const: qcom,msm8998-bwmon       # BWMON v4
++      - const: qcom,sdm845-llcc-bwmon   # BWMON v5
+ 
+   interconnects:
+     maxItems: 1
 -- 
 2.34.1
 

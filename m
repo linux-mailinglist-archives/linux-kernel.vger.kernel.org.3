@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BF257C0BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3860D57C0C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiGTXRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
+        id S231396AbiGTXVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiGTXR3 (ORCPT
+        with ESMTP id S229595AbiGTXVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:17:29 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B3666AFF;
-        Wed, 20 Jul 2022 16:17:28 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LpBN655Ssz67yKf;
-        Thu, 21 Jul 2022 07:13:58 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Jul 2022 01:17:26 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 21 Jul 2022 01:17:26 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Stanislav Fomichev <sdf@google.com>
-CC:     Joe Burton <jevburton.kernel@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joe Burton <jevburton@google.com>
-Subject: RE: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-Thread-Topic: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-Thread-Index: AQHYm6d/RXaIdRF8qEmfFsB1DNrrP62GBpoAgADe8JCAAGROAIAAjdQg///iSICAACHbgP//4O0AgAAkrmD//+EIgAAER8xw///fiAD//94OYA==
-Date:   Wed, 20 Jul 2022 23:17:26 +0000
-Message-ID: <8fe67e829d95477d884131641ca0961d@huawei.com>
-References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
- <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com>
- <179cfb89be0e4f928a55d049fe62aa9e@huawei.com>
- <CAKH8qBt0yR+mtCjAp=8jQL4M6apWQk0wH7Zf4tPDCf3=m+gAKA@mail.gmail.com>
- <31473ddf364f4f16becfd5cd4b9cd7d2@huawei.com>
- <CAKH8qBsFg5gQ0bqpVtYhiQx=TqJG31c8kfsbCG4X57QGLOhXvw@mail.gmail.com>
- <0c284e09817e4e699aa448aa25af5d79@huawei.com>
- <CAKH8qBvwzVPY1yJM_FjdH5QptVkZz=j9Ph7pTPCbTLdY1orKJg@mail.gmail.com>
- <c9c203821a854e33970fd10e01632cb7@huawei.com>
- <CAKH8qBuazK5PwDYAG2bPGfyASAMQAd4_dpFjcW0KYz4ON+kj3g@mail.gmail.com>
- <bf326b7c927a475cae33b89416c1b082@huawei.com>
- <CAKH8qBtgHK4dpoJzkq2q7rj37Ep9peEPE-3GBu=QqxUU8YVrPQ@mail.gmail.com>
-In-Reply-To: <CAKH8qBtgHK4dpoJzkq2q7rj37Ep9peEPE-3GBu=QqxUU8YVrPQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.81.208.238]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 20 Jul 2022 19:21:21 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441FE3C8F2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:21:19 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id a8-20020a25a188000000b0066839c45fe8so14016623ybi.17
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=kPv/zgdg55aBvysGG2zpclfTB4BrqustdwxHqVcSIm8=;
+        b=Ff+/pHmi2PQC+CO76Dh95oyzsjDvPxigwhwjLXvPSZVCA42OS954cWpOm8HaZVY/Lt
+         0PvwHoASyzOy4p9+qiwSzLE8kiI+21XYxSOAHK6ESKe6NgU4c4g1Ij1UsDwaEkI8jl+j
+         KHE1QpjyalKH1jXsyFkV1m0KOpeBKu2KSl/wdJDz5XZ7oAbk5WdAJ1CI0k6Yu3Xm/+8M
+         8CDtvNqzdENSKKwmR4BGioItarmSWvStuGX1IsWzxjB4lm/rUnJ/rHc6aALlxJLjs3MP
+         /qAZ470CO4vhYmvUvQ7gPmZieQCqkcPDbB/Kri9Wh4K9VrB1dHdjrnbQdrFyc4ZEFYBz
+         5tiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=kPv/zgdg55aBvysGG2zpclfTB4BrqustdwxHqVcSIm8=;
+        b=Ca1Q9roXvscqLfbFO/DD7xPJXtpJB3eil2+rEPMsY0wEIh+LL5ItBpl6p4iK92TKQz
+         w9y+GE7TUFaDZGF3RNM2Z/lopxl8NU9hIiq1UP2y9D8FkDNdq3J2n8kZcodzuqVq47KM
+         j7SwW/R9RpkHYg121YbhdRggLWfkaFyv9QXvRhAEjeA1sdVzvBJDI8cPNmRGlsrcVraJ
+         fZUkpZh9DK2hQMsxHhtX04LJslLlprawm0K239YSY9vP6+xdW/pkyiSsteS2uZ5ULppJ
+         CagX7ztaTlFiAs20MucasieILCX1eLvrn/iQ9W85GcZFXTzzAbaVF2FVzFFHyFHYr7j7
+         lGmQ==
+X-Gm-Message-State: AJIora96mQbQ+KJgZa7AAZJTJ66nYs2tFu0u99nJzpEv4AtWyX1CWe1v
+        mIaTiXp8fAiohTTdWAVU/y+rjpin14cDGA==
+X-Google-Smtp-Source: AGRyM1srMFCC5prOYvcY4WNRk/CgY6a2s9JpD1xCFeyfNpS8VOFrwjvIKyZhxUk9OQdqSZXo9gUPOqtruhaKow==
+X-Received: from mmandlik.mtv.corp.google.com ([2620:15c:202:201:2c25:d93c:6b38:6338])
+ (user=mmandlik job=sendgmr) by 2002:a05:6902:120f:b0:668:2228:9627 with SMTP
+ id s15-20020a056902120f00b0066822289627mr41174561ybu.134.1658359278528; Wed,
+ 20 Jul 2022 16:21:18 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 16:21:13 -0700
+Message-Id: <20220720162102.v2.1.If745ed1d05d98c002fc84ba60cef99eb786b7caa@changeid>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH v2 1/2] Bluetooth: hci_sync: Refactor add Adv Monitor
+From:   Manish Mandlik <mmandlik@google.com>
+To:     marcel@holtmann.org, luiz.dentz@gmail.com
+Cc:     linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        Manish Mandlik <mmandlik@google.com>,
+        Miao-chen Chou <mcchou@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,191 +72,516 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBTdGFuaXNsYXYgRm9taWNoZXYgW21haWx0bzpzZGZAZ29vZ2xlLmNvbV0NCj4gU2Vu
-dDogVGh1cnNkYXksIEp1bHkgMjEsIDIwMjIgMToxNSBBTQ0KPiBPbiBXZWQsIEp1bCAyMCwgMjAy
-MiBhdCA0OjEyIFBNIFJvYmVydG8gU2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT4NCj4g
-d3JvdGU6DQo+ID4NCj4gPiA+IEZyb206IFN0YW5pc2xhdiBGb21pY2hldiBbbWFpbHRvOnNkZkBn
-b29nbGUuY29tXQ0KPiA+ID4gU2VudDogVGh1cnNkYXksIEp1bHkgMjEsIDIwMjIgMTowOSBBTQ0K
-PiA+ID4gT24gV2VkLCBKdWwgMjAsIDIwMjIgYXQgNDowMiBQTSBSb2JlcnRvIFNhc3N1DQo+IDxy
-b2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+DQo+ID4gPiB3cm90ZToNCj4gPiA+ID4NCj4gPiA+ID4g
-PiBGcm9tOiBTdGFuaXNsYXYgRm9taWNoZXYgW21haWx0bzpzZGZAZ29vZ2xlLmNvbV0NCj4gPiA+
-ID4gPiBTZW50OiBUaHVyc2RheSwgSnVseSAyMSwgMjAyMiAxMjo0OCBBTQ0KPiA+ID4gPiA+IE9u
-IFdlZCwgSnVsIDIwLCAyMDIyIGF0IDM6NDQgUE0gUm9iZXJ0byBTYXNzdQ0KPiA+ID4gPHJvYmVy
-dG8uc2Fzc3VAaHVhd2VpLmNvbT4NCj4gPiA+ID4gPiB3cm90ZToNCj4gPiA+ID4gPiA+DQo+ID4g
-PiA+ID4gPiA+IEZyb206IFN0YW5pc2xhdiBGb21pY2hldiBbbWFpbHRvOnNkZkBnb29nbGUuY29t
-XQ0KPiA+ID4gPiA+ID4gPiBTZW50OiBUaHVyc2RheSwgSnVseSAyMSwgMjAyMiAxMjozOCBBTQ0K
-PiA+ID4gPiA+ID4gPiBPbiBXZWQsIEp1bCAyMCwgMjAyMiBhdCAzOjMwIFBNIFJvYmVydG8gU2Fz
-c3UNCj4gPiA+ID4gPiA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPg0KPiA+ID4gPiA+ID4gPiB3
-cm90ZToNCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gRnJvbTogU3RhbmlzbGF2
-IEZvbWljaGV2IFttYWlsdG86c2RmQGdvb2dsZS5jb21dDQo+ID4gPiA+ID4gPiA+ID4gPiBTZW50
-OiBXZWRuZXNkYXksIEp1bHkgMjAsIDIwMjIgNTo1NyBQTQ0KPiA+ID4gPiA+ID4gPiA+ID4gT24g
-V2VkLCBKdWwgMjAsIDIwMjIgYXQgMTowMiBBTSBSb2JlcnRvIFNhc3N1DQo+ID4gPiA+ID4gPiA+
-IDxyb2JlcnRvLnNhc3N1QGh1YXdlaS5jb20+DQo+ID4gPiA+ID4gPiA+ID4gPiB3cm90ZToNCj4g
-PiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiBGcm9tOiBTdGFuaXNsYXYg
-Rm9taWNoZXYgW21haWx0bzpzZGZAZ29vZ2xlLmNvbV0NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiBT
-ZW50OiBUdWVzZGF5LCBKdWx5IDE5LCAyMDIyIDEwOjQwIFBNDQo+ID4gPiA+ID4gPiA+ID4gPiA+
-ID4gT24gVHVlLCBKdWwgMTksIDIwMjIgYXQgMTI6NDAgUE0gSm9lIEJ1cnRvbg0KPiA+ID4gPiA+
-ID4gPiA8amV2YnVydG9uLmtlcm5lbEBnbWFpbC5jb20+DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4g
-d3JvdGU6DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4g
-RnJvbTogSm9lIEJ1cnRvbiA8amV2YnVydG9uQGdvb2dsZS5jb20+DQo+ID4gPiA+ID4gPiA+ID4g
-PiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gQWRkIGFuIGV4dGVuc2libGUgdmFyaWFu
-dCBvZiBicGZfb2JqX2dldCgpIGNhcGFibGUgb2Ygc2V0dGluZw0KPiB0aGUNCj4gPiA+ID4gPiA+
-ID4gPiA+ID4gPiA+IGBmaWxlX2ZsYWdzYCBwYXJhbWV0ZXIuDQo+ID4gPiA+ID4gPiA+ID4gPiA+
-ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gVGhpcyBwYXJhbWV0ZXIgaXMgbmVlZGVkIHRv
-IGVuYWJsZSB1bnByaXZpbGVnZWQgYWNjZXNzIHRvDQo+IEJQRg0KPiA+ID4gPiA+IG1hcHMuDQo+
-ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiBXaXRob3V0IGEgbWV0aG9kIGxpa2UgdGhpcywgdXNlcnMg
-bXVzdCBtYW51YWxseSBtYWtlIHRoZQ0KPiA+ID4gc3lzY2FsbC4NCj4gPiA+ID4gPiA+ID4gPiA+
-ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBKb2UgQnVydG9u
-IDxqZXZidXJ0b25AZ29vZ2xlLmNvbT4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+
-ID4gPiA+ID4gPiA+IFJldmlld2VkLWJ5OiBTdGFuaXNsYXYgRm9taWNoZXYgPHNkZkBnb29nbGUu
-Y29tPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gRm9yIGNv
-bnRleHQ6DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gV2UndmUgZm91bmQgdGhpcyBvdXQgd2hpbGUg
-d2Ugd2VyZSB0cnlpbmcgdG8gYWRkIHN1cHBvcnQgZm9yDQo+ID4gPiB1bnByaXYNCj4gPiA+ID4g
-PiA+ID4gPiA+ID4gPiBwcm9jZXNzZXMgdG8gb3BlbiBwaW5uZWQgci14IG1hcHMuDQo+ID4gPiA+
-ID4gPiA+ID4gPiA+ID4gTWF5YmUgdGhpcyBkZXNlcnZlcyBhIHRlc3QgYXMgd2VsbD8gTm90IHN1
-cmUuDQo+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gPiA+IEhpIFN0YW5pc2xh
-diwgSm9lDQo+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4gPiA+IEkgbm90aWNl
-ZCBub3cgdGhpcyBwYXRjaC4gSSdtIGRvaW5nIGEgYnJvYWRlciB3b3JrIHRvIGFkZCBvcHRzDQo+
-ID4gPiA+ID4gPiA+ID4gPiA+IHRvIGJwZl8qX2dldF9mZF9ieV9pZCgpLiBJIGFsc28gYWRqdXN0
-ZWQgcGVybWlzc2lvbnMgb2YgYnBmdG9vbA0KPiA+ID4gPiA+ID4gPiA+ID4gPiBkZXBlbmRpbmcg
-b24gdGhlIG9wZXJhdGlvbiB0eXBlIChlLmcuIHNob3csIGR1bXA6DQo+ID4gPiBCUEZfRl9SRE9O
-TFkpLg0KPiA+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiBXaWxsIHNlbmQg
-aXQgc29vbiAoSSdtIHRyeWluZyB0byBzb2x2ZSBhbiBpc3N1ZSB3aXRoIHRoZSBDSSwgd2hlcmUN
-Cj4gPiA+ID4gPiA+ID4gPiA+ID4gbGliYmZkIGlzIG5vdCBhdmFpbGFibGUgaW4gdGhlIFZNIGRv
-aW5nIGFjdHVhbCB0ZXN0cykuDQo+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4g
-SXMgc29tZXRoaW5nIGxpa2UgdGhpcyBwYXRjaCBpbmNsdWRlZCBpbiB5b3VyIHNlcmllcyBhcyB3
-ZWxsPyBDYW4NCj4geW91DQo+ID4gPiA+ID4gPiA+ID4gPiB1c2UgdGhpcyBuZXcgaW50ZXJmYWNl
-IG9yIGRvIHlvdSBuZWVkIHNvbWV0aGluZyBkaWZmZXJlbnQ/DQo+ID4gPiA+ID4gPiA+ID4NCj4g
-PiA+ID4gPiA+ID4gPiBJdCBpcyB2ZXJ5IHNpbWlsYXIuIEV4Y2VwdCB0aGF0IEkgY2FsbGVkIGl0
-IGJwZl9nZXRfZmRfb3B0cywgYXMgaXQNCj4gPiA+ID4gPiA+ID4gPiBpcyBzaGFyZWQgd2l0aCB0
-aGUgYnBmXypfZ2V0X2ZkX2J5X2lkKCkgZnVuY3Rpb25zLiBUaGUgbWVtYmVyDQo+ID4gPiA+ID4g
-PiA+ID4gbmFtZSBpcyBqdXN0IGZsYWdzLCBwbHVzIGFuIGV4dHJhIHUzMiBmb3IgYWxpZ25tZW50
-Lg0KPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiBXZSBjYW4gYmlrZXNoZWQgdGhlIG5hbWlu
-ZywgYnV0IHdlJ3ZlIGJlZW4gdXNpbmcgZXhpc3RpbmcNCj4gY29udmVudGlvbnMNCj4gPiA+ID4g
-PiA+ID4gd2hlcmUgb3B0cyBmaWVsZHMgbWF0Y2ggc3lzY2FsbCBmaWVsZHMsIHRoYXQgc2VlbXMg
-bGlrZSBhIHNlbnNpYmxlDQo+ID4gPiA+ID4gPiA+IHRoaW5nIHRvIGRvPw0KPiA+ID4gPiA+ID4N
-Cj4gPiA+ID4gPiA+IFRoZSBvbmx5IHByb2JsZW0gaXMgdGhhdCBicGZfKl9nZXRfZmRfYnlfaWQo
-KSBmdW5jdGlvbnMgd291bGQNCj4gPiA+ID4gPiA+IHNldCB0aGUgb3Blbl9mbGFncyBtZW1iZXIg
-b2YgYnBmX2F0dHIuDQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gRmxhZ3Mgd291bGQgYmUgZ29v
-ZCBmb3IgYm90aCwgZXZlbiBpZiBub3QgZXhhY3QuIEJlbGlldmUgbWUsDQo+ID4gPiA+ID4gPiBk
-dXBsaWNhdGluZyB0aGUgb3B0cyB3b3VsZCBqdXN0IGNyZWF0ZSBtb3JlIGNvbmZ1c2lvbi4NCj4g
-PiA+ID4gPg0KPiA+ID4gPiA+IFdhaXQsIHRoYXQncyBjb21wbGV0ZWx5IGRpZmZlcmVudCwgcmln
-aHQ/IFdlIGFyZSB0YWxraW5nIGhlcmUgYWJvdXQNCj4gPiA+ID4gPiBCUEZfT0JKX0dFVCAod2hp
-Y2ggaGFzIHJlbGF0ZWQgQlBGX09CSl9QSU4pLg0KPiA+ID4gPiA+IFlvdXIgR0VUX1hYWF9CWV9J
-RCBhcmUgZGlmZmVyZW50IHNvIHlvdSdsbCBzdGlsbCBoYXZlIHRvIGhhdmUgYW5vdGhlcg0KPiA+
-ID4gPiA+IHdyYXBwZXIgd2l0aCBvcHRzPw0KPiA+ID4gPg0KPiA+ID4gPiBZZXMsIHRoZXkgaGF2
-ZSBkaWZmZXJlbnQgd3JhcHBlcnMsIGp1c3QgYWNjZXB0IHRoZSBzYW1lIG9wdHMgYXMNCj4gPiA+
-ID4gb2JqX2dldCgpLiBGcm9tIGJwZnRvb2wgc3ViY29tbWFuZHMgeW91IHdhbnQgdG8gc2V0IHRo
-ZSBjb3JyZWN0DQo+ID4gPiA+IHBlcm1pc3Npb24sIGFuZCBwcm9wYWdhdGUgaXQgdW5pZm9ybWx5
-IHRvIGJwZl8qX2dldF9mZF9ieV9pZCgpDQo+ID4gPiA+IG9yIG9ial9nZXQoKS4gU2VlIG1hcF9w
-YXJzZV9mZHMoKS4NCj4gPiA+DQo+ID4gPiBJIGRvbid0IHRoaW5rIHRoZXkgYXJlIGFjY2VwdGlu
-ZyB0aGUgc2FtZSBvcHRzLg0KPiA+ID4NCj4gPiA+IEZvciBvdXIgY2FzZSwgd2UgY2FyZSBhYm91
-dDoNCj4gPiA+DQo+ID4gPiAgICAgICAgIHN0cnVjdCB7IC8qIGFub255bW91cyBzdHJ1Y3QgdXNl
-ZCBieSBCUEZfT0JKXyogY29tbWFuZHMgKi8NCj4gPiA+ICAgICAgICAgICAgICAgICBfX2FsaWdu
-ZWRfdTY0ICAgcGF0aG5hbWU7DQo+ID4gPiAgICAgICAgICAgICAgICAgX191MzIgICAgICAgICAg
-IGJwZl9mZDsNCj4gPiA+ICAgICAgICAgICAgICAgICBfX3UzMiAgICAgICAgICAgZmlsZV9mbGFn
-czsNCj4gPiA+ICAgICAgICAgfTsNCj4gPiA+DQo+ID4gPiBGb3IgeW91ciBjYXNlLCB5b3UgY2Fy
-ZSBhYm91dDoNCj4gPiA+DQo+ID4gPiAgICAgICAgIHN0cnVjdCB7IC8qIGFub255bW91cyBzdHJ1
-Y3QgdXNlZCBieSBCUEZfKl9HRVRfKl9JRCAqLw0KPiA+ID4gICAgICAgICAgICAgICAgIHVuaW9u
-IHsNCj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIF9fdTMyICAgICAgICAgICBzdGFydF9p
-ZDsNCj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIF9fdTMyICAgICAgICAgICBwcm9nX2lk
-Ow0KPiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAgX191MzIgICAgICAgICAgIG1hcF9pZDsN
-Cj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIF9fdTMyICAgICAgICAgICBidGZfaWQ7DQo+
-ID4gPiAgICAgICAgICAgICAgICAgICAgICAgICBfX3UzMiAgICAgICAgICAgbGlua19pZDsNCj4g
-PiA+ICAgICAgICAgICAgICAgICB9Ow0KPiA+ID4gICAgICAgICAgICAgICAgIF9fdTMyICAgICAg
-ICAgICBuZXh0X2lkOw0KPiA+ID4gICAgICAgICAgICAgICAgIF9fdTMyICAgICAgICAgICBvcGVu
-X2ZsYWdzOw0KPiA+ID4gICAgICAgICB9Ow0KPiA+ID4NCj4gPiA+IFNvIHlvdXIgbmV3IF9vcHRz
-IGxpYmJwZiByb3V0aW5lIHNob3VsZCBiZSBpbmRlcGVuZGVudCBvZiB3aGF0IEpvZSBpcw0KPiA+
-ID4gZG9pbmcgaGVyZS4NCj4gPg0KPiA+IEl0IGlzLiBKdXN0IEkgdXNlIHRoZSBzYW1lIG9wdHMg
-dG8gc2V0IGZpbGVfZmxhZ3Mgb3Igb3Blbl9mbGFncy4NCj4gDQo+IFRoYXQgc2VlbXMgY29uZnVz
-aW5nLiBMZXQncyBoYXZlIHNlcGFyYXRlIGNhbGxzIGZvciBzZXBhcmF0ZSBzeXNjYWxsDQo+IGNv
-bW1hbmRzIGFzIHdlIGRvIGFscmVhZHk/DQoNCkNhbiB5b3Ugd2FpdCBvbmUgZGF5LCBJIHNlbmQg
-d2hhdCBJIGhhdmUsIHNvIHRoYXQgd2Ugc2VlDQpldmVyeXRoaW5nIHRvZ2V0aGVyPw0KDQpUaGFu
-a3MNCg0KUm9iZXJ0bw0KDQo+ID4gUm9iZXJ0bw0KPiA+DQo+ID4gPiA+IFJvYmVydG8NCj4gPiA+
-ID4NCj4gPiA+ID4gPiA+ID4gPiBJdCBuZWVkcyB0byBiZSBzaGFyZWQsIGFzIHRoZXJlIGFyZSBm
-dW5jdGlvbnMgaW4gYnBmdG9vbCBjYWxsaW5nDQo+ID4gPiA+ID4gPiA+ID4gYm90aC4gU2luY2Ug
-dGhlIG1lYW5pbmcgb2YgZmxhZ3MgaXMgdGhlIHNhbWUsIHNlZW1zIG9rIHNoYXJpbmcuDQo+ID4g
-PiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+IFNvIEkgZ3Vlc3MgdGhlcmUgYXJlIG5vIG9iamVjdGlv
-bnMgdG8gdGhlIGN1cnJlbnQgcGF0Y2g/IElmIGl0IGdldHMNCj4gPiA+ID4gPiA+ID4gYWNjZXB0
-ZWQsIHlvdSBzaG91bGQgYmUgYWJsZSB0byBkcm9wIHNvbWUgb2YgeW91ciBjb2RlIGFuZCB1c2Ug
-dGhpcw0KPiA+ID4gPiA+ID4gPiBuZXcgYnBmX29ial9nZXRfb3B0cy4uDQo+ID4gPiA+ID4gPg0K
-PiA+ID4gPiA+ID4gSWYgeW91IHVzZSBhIG5hbWUgZ29vZCBhbHNvIGZvciBicGZfKl9nZXRfZmRf
-YnlfaWQoKSBhbmQgZmxhZ3MNCj4gPiA+ID4gPiA+IGFzIHN0cnVjdHVyZSBtZW1iZXIgbmFtZSwg
-dGhhdCB3b3VsZCBiZSBvay4NCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiBSb2JlcnRvDQo+ID4g
-PiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+IFJvYmVydG8NCj4gPiA+ID4gPiA+ID4gPg0KPiA+ID4g
-PiA+ID4gPiA+ID4gPiBSb2JlcnRvDQo+ID4gPiA+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+
-ID4gPiA+ID4gPiAtLS0NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICB0b29scy9saWIvYnBmL2Jw
-Zi5jICAgICAgfCAxMCArKysrKysrKysrDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiAgdG9vbHMv
-bGliL2JwZi9icGYuaCAgICAgIHwgIDkgKysrKysrKysrDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4g
-PiAgdG9vbHMvbGliL2JwZi9saWJicGYubWFwIHwgIDEgKw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+
-ID4gIDMgZmlsZXMgY2hhbmdlZCwgMjAgaW5zZXJ0aW9ucygrKQ0KPiA+ID4gPiA+ID4gPiA+ID4g
-PiA+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+IGRpZmYgLS1naXQgYS90b29scy9saWIvYnBm
-L2JwZi5jIGIvdG9vbHMvbGliL2JwZi9icGYuYw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gaW5k
-ZXggNWViMGRmOTBlYjJiLi41YWNiMGU4YmQxM2MgMTAwNjQ0DQo+ID4gPiA+ID4gPiA+ID4gPiA+
-ID4gPiAtLS0gYS90b29scy9saWIvYnBmL2JwZi5jDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiAr
-KysgYi90b29scy9saWIvYnBmL2JwZi5jDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiBAQCAtNTc4
-LDEyICs1NzgsMjIgQEAgaW50IGJwZl9vYmpfcGluKGludCBmZCwgY29uc3QgY2hhcg0KPiA+ID4g
-PiA+ID4gPiAqcGF0aG5hbWUpDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiAgfQ0KPiA+ID4gPiA+
-ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICBpbnQgYnBmX29ial9nZXQo
-Y29uc3QgY2hhciAqcGF0aG5hbWUpDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiArew0KPiA+ID4g
-PiA+ID4gPiA+ID4gPiA+ID4gKyAgICAgICBMSUJCUEZfT1BUUyhicGZfb2JqX2dldF9vcHRzLCBv
-cHRzKTsNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICsgICAgICAgcmV0dXJuIGJwZl9vYmpfZ2V0
-X29wdHMocGF0aG5hbWUsICZvcHRzKTsNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICt9DQo+ID4g
-PiA+ID4gPiA+ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiAraW50IGJwZl9v
-YmpfZ2V0X29wdHMoY29uc3QgY2hhciAqcGF0aG5hbWUsIGNvbnN0IHN0cnVjdA0KPiA+ID4gPiA+
-ID4gPiA+ID4gYnBmX29ial9nZXRfb3B0cw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICpvcHRzKQ0K
-PiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gIHsNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICAgICAg
-ICAgdW5pb24gYnBmX2F0dHIgYXR0cjsNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICAgICAgICAg
-aW50IGZkOw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+
-ICsgICAgICAgaWYgKCFPUFRTX1ZBTElEKG9wdHMsIGJwZl9vYmpfZ2V0X29wdHMpKQ0KPiA+ID4g
-PiA+ID4gPiA+ID4gPiA+ID4gKyAgICAgICAgICAgICAgIHJldHVybiBsaWJicGZfZXJyKC1FSU5W
-QUwpOw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4g
-ICAgICAgICBtZW1zZXQoJmF0dHIsIDAsIHNpemVvZihhdHRyKSk7DQo+ID4gPiA+ID4gPiA+ID4g
-PiA+ID4gPiAgICAgICAgIGF0dHIucGF0aG5hbWUgPSBwdHJfdG9fdTY0KCh2b2lkICopcGF0aG5h
-bWUpOw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gKyAgICAgICBhdHRyLmZpbGVfZmxhZ3MgPSBP
-UFRTX0dFVChvcHRzLCBmaWxlX2ZsYWdzLCAwKTsNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+DQo+
-ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiAgICAgICAgIGZkID0gc3lzX2JwZl9mZChCUEZfT0JKX0dF
-VCwgJmF0dHIsIHNpemVvZihhdHRyKSk7DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiAgICAgICAg
-IHJldHVybiBsaWJicGZfZXJyX2Vycm5vKGZkKTsNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+IGRp
-ZmYgLS1naXQgYS90b29scy9saWIvYnBmL2JwZi5oIGIvdG9vbHMvbGliL2JwZi9icGYuaA0KPiA+
-ID4gPiA+ID4gPiA+ID4gPiA+ID4gaW5kZXggODhhN2NjNGJkNzZmLi5mMzFiNDkzYjVmOWEgMTAw
-NjQ0DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiAtLS0gYS90b29scy9saWIvYnBmL2JwZi5oDQo+
-ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiArKysgYi90b29scy9saWIvYnBmL2JwZi5oDQo+ID4gPiA+
-ID4gPiA+ID4gPiA+ID4gPiBAQCAtMjcwLDggKzI3MCwxNyBAQCBMSUJCUEZfQVBJIGludA0KPiA+
-ID4gYnBmX21hcF91cGRhdGVfYmF0Y2goaW50DQo+ID4gPiA+ID4gZmQsDQo+ID4gPiA+ID4gPiA+
-ID4gPiBjb25zdA0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+IHZvaWQgKmtleXMsIGNvbnN0IHZvaWQg
-KnZhbHVlcw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgX191MzIgKmNvdW50LA0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qgc3RydWN0IGJwZl9tYXBfYmF0Y2hf
-b3B0cyAqb3B0cyk7DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4g
-PiA+ID4gK3N0cnVjdCBicGZfb2JqX2dldF9vcHRzIHsNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+
-ICsgICAgICAgc2l6ZV90IHN6OyAvKiBzaXplIG9mIHRoaXMgc3RydWN0IGZvciBmb3J3YXJkL2Jh
-Y2t3YXJkDQo+ID4gPiA+ID4gY29tcGF0aWJpbGl0eQ0KPiA+ID4gPiA+ID4gPiAqLw0KPiA+ID4g
-PiA+ID4gPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gKyAgICAgICBfX3Uz
-MiBmaWxlX2ZsYWdzOw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gK307DQo+ID4gPiA+ID4gPiA+
-ID4gPiA+ID4gPiArI2RlZmluZSBicGZfb2JqX2dldF9vcHRzX19sYXN0X2ZpZWxkIGZpbGVfZmxh
-Z3MNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICsNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICBM
-SUJCUEZfQVBJIGludCBicGZfb2JqX3BpbihpbnQgZmQsIGNvbnN0IGNoYXIgKnBhdGhuYW1lKTsN
-Cj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICBMSUJCUEZfQVBJIGludCBicGZfb2JqX2dldChjb25z
-dCBjaGFyICpwYXRobmFtZSk7DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiArTElCQlBGX0FQSSBp
-bnQgYnBmX29ial9nZXRfb3B0cyhjb25zdCBjaGFyICpwYXRobmFtZSwNCj4gPiA+ID4gPiA+ID4g
-PiA+ID4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qgc3RydWN0IGJw
-Zl9vYmpfZ2V0X29wdHMgKm9wdHMpOw0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4g
-PiA+ID4gPiA+ID4gPiA+ICBzdHJ1Y3QgYnBmX3Byb2dfYXR0YWNoX29wdHMgew0KPiA+ID4gPiA+
-ID4gPiA+ID4gPiA+ID4gICAgICAgICBzaXplX3Qgc3o7IC8qIHNpemUgb2YgdGhpcyBzdHJ1Y3Qg
-Zm9yIGZvcndhcmQvYmFja3dhcmQNCj4gPiA+ID4gPiBjb21wYXRpYmlsaXR5DQo+ID4gPiA+ID4g
-PiA+ICovDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvbGliL2Jw
-Zi9saWJicGYubWFwDQo+IGIvdG9vbHMvbGliL2JwZi9saWJicGYubWFwDQo+ID4gPiA+ID4gPiA+
-ID4gPiA+ID4gPiBpbmRleCAwNjI1YWRiOWU4ODguLjExOWU2ZTFlYTdmMSAxMDA2NDQNCj4gPiA+
-ID4gPiA+ID4gPiA+ID4gPiA+IC0tLSBhL3Rvb2xzL2xpYi9icGYvbGliYnBmLm1hcA0KPiA+ID4g
-PiA+ID4gPiA+ID4gPiA+ID4gKysrIGIvdG9vbHMvbGliL2JwZi9saWJicGYubWFwDQo+ID4gPiA+
-ID4gPiA+ID4gPiA+ID4gPiBAQCAtMzU1LDYgKzM1NSw3IEBAIExJQkJQRl8wLjguMCB7DQo+ID4g
-PiA+ID4gPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiA+ID4gPiA+ID4gIExJQkJQRl8xLjAu
-MCB7DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiAgICAgICAgIGdsb2JhbDoNCj4gPiA+ID4gPiA+
-ID4gPiA+ID4gPiA+ICsgICAgICAgICAgICAgICBicGZfb2JqX2dldF9vcHRzOw0KPiA+ID4gPiA+
-ID4gPiA+ID4gPiA+ID4gICAgICAgICAgICAgICAgIGJwZl9wcm9nX3F1ZXJ5X29wdHM7DQo+ID4g
-PiA+ID4gPiA+ID4gPiA+ID4gPiAgICAgICAgICAgICAgICAgYnBmX3Byb2dyYW1fX2F0dGFjaF9r
-c3lzY2FsbDsNCj4gPiA+ID4gPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgICAgICAgICBidGZfX2Fk
-ZF9lbnVtNjQ7DQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4gPiAtLQ0KPiA+ID4gPiA+ID4gPiA+ID4g
-PiA+ID4gMi4zNy4wLjE3MC5nNDQ0ZDFlYWJkMC1nb29nDQo+ID4gPiA+ID4gPiA+ID4gPiA+ID4g
-Pg0K
+Make use of hci_cmd_sync_queue for adding an advertisement monitor.
+
+Signed-off-by: Manish Mandlik <mmandlik@google.com>
+Reviewed-by: Miao-chen Chou <mcchou@google.com>
+---
+
+Changes in v2:
+- Refactored to correctly use hci_cmd_sync_queue
+
+ include/net/bluetooth/hci_core.h |   5 +-
+ net/bluetooth/hci_core.c         |  46 ++++-----
+ net/bluetooth/mgmt.c             |  52 +++-------
+ net/bluetooth/msft.c             | 171 ++++++++-----------------------
+ 4 files changed, 78 insertions(+), 196 deletions(-)
+
+diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+index 15237ee5f761..4dbdf7c468b6 100644
+--- a/include/net/bluetooth/hci_core.h
++++ b/include/net/bluetooth/hci_core.h
+@@ -1423,10 +1423,8 @@ bool hci_adv_instance_is_scannable(struct hci_dev *hdev, u8 instance);
+ 
+ void hci_adv_monitors_clear(struct hci_dev *hdev);
+ void hci_free_adv_monitor(struct hci_dev *hdev, struct adv_monitor *monitor);
+-int hci_add_adv_patterns_monitor_complete(struct hci_dev *hdev, u8 status);
+ int hci_remove_adv_monitor_complete(struct hci_dev *hdev, u8 status);
+-bool hci_add_adv_monitor(struct hci_dev *hdev, struct adv_monitor *monitor,
+-			int *err);
++int hci_add_adv_monitor(struct hci_dev *hdev, struct adv_monitor *monitor);
+ bool hci_remove_single_adv_monitor(struct hci_dev *hdev, u16 handle, int *err);
+ bool hci_remove_all_adv_monitor(struct hci_dev *hdev, int *err);
+ bool hci_is_adv_monitoring(struct hci_dev *hdev);
+@@ -1888,7 +1886,6 @@ void mgmt_advertising_removed(struct sock *sk, struct hci_dev *hdev,
+ 			      u8 instance);
+ void mgmt_adv_monitor_removed(struct hci_dev *hdev, u16 handle);
+ int mgmt_phy_configuration_changed(struct hci_dev *hdev, struct sock *skip);
+-int mgmt_add_adv_patterns_monitor_complete(struct hci_dev *hdev, u8 status);
+ int mgmt_remove_adv_monitor_complete(struct hci_dev *hdev, u8 status);
+ void mgmt_adv_monitor_device_lost(struct hci_dev *hdev, u16 handle,
+ 				  bdaddr_t *bdaddr, u8 addr_type);
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 0a51858d863a..9333e8759fab 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -1880,11 +1880,6 @@ void hci_free_adv_monitor(struct hci_dev *hdev, struct adv_monitor *monitor)
+ 	kfree(monitor);
+ }
+ 
+-int hci_add_adv_patterns_monitor_complete(struct hci_dev *hdev, u8 status)
+-{
+-	return mgmt_add_adv_patterns_monitor_complete(hdev, status);
+-}
+-
+ int hci_remove_adv_monitor_complete(struct hci_dev *hdev, u8 status)
+ {
+ 	return mgmt_remove_adv_monitor_complete(hdev, status);
+@@ -1892,49 +1887,48 @@ int hci_remove_adv_monitor_complete(struct hci_dev *hdev, u8 status)
+ 
+ /* Assigns handle to a monitor, and if offloading is supported and power is on,
+  * also attempts to forward the request to the controller.
+- * Returns true if request is forwarded (result is pending), false otherwise.
+- * This function requires the caller holds hdev->lock.
++ * This function requires the caller holds hci_req_sync_lock.
+  */
+-bool hci_add_adv_monitor(struct hci_dev *hdev, struct adv_monitor *monitor,
+-			 int *err)
++int hci_add_adv_monitor(struct hci_dev *hdev, struct adv_monitor *monitor)
+ {
+ 	int min, max, handle;
++	int status = 0;
+ 
+-	*err = 0;
++	if (!monitor)
++		return -EINVAL;
+ 
+-	if (!monitor) {
+-		*err = -EINVAL;
+-		return false;
+-	}
++	hci_dev_lock(hdev);
+ 
+ 	min = HCI_MIN_ADV_MONITOR_HANDLE;
+ 	max = HCI_MIN_ADV_MONITOR_HANDLE + HCI_MAX_ADV_MONITOR_NUM_HANDLES;
+ 	handle = idr_alloc(&hdev->adv_monitors_idr, monitor, min, max,
+ 			   GFP_KERNEL);
+-	if (handle < 0) {
+-		*err = handle;
+-		return false;
+-	}
++
++	hci_dev_unlock(hdev);
++
++	if (handle < 0)
++		return handle;
+ 
+ 	monitor->handle = handle;
+ 
+ 	if (!hdev_is_powered(hdev))
+-		return false;
++		return status;
+ 
+ 	switch (hci_get_adv_monitor_offload_ext(hdev)) {
+ 	case HCI_ADV_MONITOR_EXT_NONE:
+-		hci_update_passive_scan(hdev);
+-		bt_dev_dbg(hdev, "%s add monitor status %d", hdev->name, *err);
++		bt_dev_dbg(hdev, "%s add monitor %d status %d", hdev->name,
++			   monitor->handle, status);
+ 		/* Message was not forwarded to controller - not an error */
+-		return false;
++		break;
++
+ 	case HCI_ADV_MONITOR_EXT_MSFT:
+-		*err = msft_add_monitor_pattern(hdev, monitor);
+-		bt_dev_dbg(hdev, "%s add monitor msft status %d", hdev->name,
+-			   *err);
++		status = msft_add_monitor_pattern(hdev, monitor);
++		bt_dev_dbg(hdev, "%s add monitor %d msft status %d", hdev->name,
++			   monitor->handle, status);
+ 		break;
+ 	}
+ 
+-	return (*err == 0);
++	return status;
+ }
+ 
+ /* Attempts to tell the controller and free the monitor. If somehow the
+diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+index ef8371975c4e..fb2d0f6de4a3 100644
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+@@ -4653,23 +4653,15 @@ static int read_adv_mon_features(struct sock *sk, struct hci_dev *hdev,
+ 	return err;
+ }
+ 
+-int mgmt_add_adv_patterns_monitor_complete(struct hci_dev *hdev, u8 status)
++static void mgmt_add_adv_patterns_monitor_complete(struct hci_dev *hdev,
++						   void *data, int status)
+ {
+ 	struct mgmt_rp_add_adv_patterns_monitor rp;
+-	struct mgmt_pending_cmd *cmd;
+-	struct adv_monitor *monitor;
+-	int err = 0;
++	struct mgmt_pending_cmd *cmd = data;
++	struct adv_monitor *monitor = cmd->user_data;
+ 
+ 	hci_dev_lock(hdev);
+ 
+-	cmd = pending_find(MGMT_OP_ADD_ADV_PATTERNS_MONITOR_RSSI, hdev);
+-	if (!cmd) {
+-		cmd = pending_find(MGMT_OP_ADD_ADV_PATTERNS_MONITOR, hdev);
+-		if (!cmd)
+-			goto done;
+-	}
+-
+-	monitor = cmd->user_data;
+ 	rp.monitor_handle = cpu_to_le16(monitor->handle);
+ 
+ 	if (!status) {
+@@ -4680,26 +4672,29 @@ int mgmt_add_adv_patterns_monitor_complete(struct hci_dev *hdev, u8 status)
+ 		hci_update_passive_scan(hdev);
+ 	}
+ 
+-	err = mgmt_cmd_complete(cmd->sk, cmd->index, cmd->opcode,
+-				mgmt_status(status), &rp, sizeof(rp));
++	mgmt_cmd_complete(cmd->sk, cmd->index, cmd->opcode,
++			  mgmt_status(status), &rp, sizeof(rp));
+ 	mgmt_pending_remove(cmd);
+ 
+-done:
+ 	hci_dev_unlock(hdev);
+-	bt_dev_dbg(hdev, "add monitor %d complete, status %u",
++	bt_dev_dbg(hdev, "add monitor %d complete, status %d",
+ 		   rp.monitor_handle, status);
++}
+ 
+-	return err;
++static int mgmt_add_adv_patterns_monitor_sync(struct hci_dev *hdev, void *data)
++{
++	struct mgmt_pending_cmd *cmd = data;
++	struct adv_monitor *monitor = cmd->user_data;
++
++	return hci_add_adv_monitor(hdev, monitor);
+ }
+ 
+ static int __add_adv_patterns_monitor(struct sock *sk, struct hci_dev *hdev,
+ 				      struct adv_monitor *m, u8 status,
+ 				      void *data, u16 len, u16 op)
+ {
+-	struct mgmt_rp_add_adv_patterns_monitor rp;
+ 	struct mgmt_pending_cmd *cmd;
+ 	int err;
+-	bool pending;
+ 
+ 	hci_dev_lock(hdev);
+ 
+@@ -4721,12 +4716,11 @@ static int __add_adv_patterns_monitor(struct sock *sk, struct hci_dev *hdev,
+ 	}
+ 
+ 	cmd->user_data = m;
+-	pending = hci_add_adv_monitor(hdev, m, &err);
++	err = hci_cmd_sync_queue(hdev, mgmt_add_adv_patterns_monitor_sync, cmd,
++				 mgmt_add_adv_patterns_monitor_complete);
+ 	if (err) {
+-		if (err == -ENOSPC || err == -ENOMEM)
++		if (err == -ENOMEM)
+ 			status = MGMT_STATUS_NO_RESOURCES;
+-		else if (err == -EINVAL)
+-			status = MGMT_STATUS_INVALID_PARAMS;
+ 		else
+ 			status = MGMT_STATUS_FAILED;
+ 
+@@ -4734,18 +4728,6 @@ static int __add_adv_patterns_monitor(struct sock *sk, struct hci_dev *hdev,
+ 		goto unlock;
+ 	}
+ 
+-	if (!pending) {
+-		mgmt_pending_remove(cmd);
+-		rp.monitor_handle = cpu_to_le16(m->handle);
+-		mgmt_adv_monitor_added(sk, hdev, m->handle);
+-		m->state = ADV_MONITOR_STATE_REGISTERED;
+-		hdev->adv_monitors_cnt++;
+-
+-		hci_dev_unlock(hdev);
+-		return mgmt_cmd_complete(sk, hdev->id, op, MGMT_STATUS_SUCCESS,
+-					 &rp, sizeof(rp));
+-	}
+-
+ 	hci_dev_unlock(hdev);
+ 
+ 	return 0;
+diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+index f43994523b1f..54fbc718e893 100644
+--- a/net/bluetooth/msft.c
++++ b/net/bluetooth/msft.c
+@@ -99,15 +99,12 @@ struct msft_data {
+ 	__u8  evt_prefix_len;
+ 	__u8  *evt_prefix;
+ 	struct list_head handle_map;
+-	__u16 pending_add_handle;
+ 	__u16 pending_remove_handle;
+ 	__u8 resuming;
+ 	__u8 suspending;
+ 	__u8 filter_enabled;
+ };
+ 
+-static int __msft_add_monitor_pattern(struct hci_dev *hdev,
+-				      struct adv_monitor *monitor);
+ static int __msft_remove_monitor(struct hci_dev *hdev,
+ 				 struct adv_monitor *monitor, u16 handle);
+ 
+@@ -164,34 +161,6 @@ static bool read_supported_features(struct hci_dev *hdev,
+ 	return false;
+ }
+ 
+-static void reregister_monitor(struct hci_dev *hdev, int handle)
+-{
+-	struct adv_monitor *monitor;
+-	struct msft_data *msft = hdev->msft_data;
+-	int err;
+-
+-	while (1) {
+-		monitor = idr_get_next(&hdev->adv_monitors_idr, &handle);
+-		if (!monitor) {
+-			/* All monitors have been resumed */
+-			msft->resuming = false;
+-			hci_update_passive_scan(hdev);
+-			return;
+-		}
+-
+-		msft->pending_add_handle = (u16)handle;
+-		err = __msft_add_monitor_pattern(hdev, monitor);
+-
+-		/* If success, we return and wait for monitor added callback */
+-		if (!err)
+-			return;
+-
+-		/* Otherwise remove the monitor and keep registering */
+-		hci_free_adv_monitor(hdev, monitor);
+-		handle++;
+-	}
+-}
+-
+ /* is_mgmt = true matches the handle exposed to userspace via mgmt.
+  * is_mgmt = false matches the handle used by the msft controller.
+  * This function requires the caller holds hdev->lock
+@@ -243,34 +212,27 @@ static int msft_monitor_device_del(struct hci_dev *hdev, __u16 mgmt_handle,
+ 	return count;
+ }
+ 
+-static void msft_le_monitor_advertisement_cb(struct hci_dev *hdev,
+-					     u8 status, u16 opcode,
+-					     struct sk_buff *skb)
++static int msft_le_monitor_advertisement_cb(struct hci_dev *hdev, u16 opcode,
++					    struct adv_monitor *monitor,
++					    struct sk_buff *skb)
+ {
+ 	struct msft_rp_le_monitor_advertisement *rp;
+-	struct adv_monitor *monitor;
+ 	struct msft_monitor_advertisement_handle_data *handle_data;
+ 	struct msft_data *msft = hdev->msft_data;
++	int status = 0;
+ 
+ 	hci_dev_lock(hdev);
+ 
+-	monitor = idr_find(&hdev->adv_monitors_idr, msft->pending_add_handle);
+-	if (!monitor) {
+-		bt_dev_err(hdev, "msft add advmon: monitor %u is not found!",
+-			   msft->pending_add_handle);
++	rp = (struct msft_rp_le_monitor_advertisement *)skb->data;
++	if (skb->len < sizeof(*rp)) {
+ 		status = HCI_ERROR_UNSPECIFIED;
+ 		goto unlock;
+ 	}
+ 
++	status = rp->status;
+ 	if (status)
+ 		goto unlock;
+ 
+-	rp = (struct msft_rp_le_monitor_advertisement *)skb->data;
+-	if (skb->len < sizeof(*rp)) {
+-		status = HCI_ERROR_UNSPECIFIED;
+-		goto unlock;
+-	}
+-
+ 	handle_data = kmalloc(sizeof(*handle_data), GFP_KERNEL);
+ 	if (!handle_data) {
+ 		status = HCI_ERROR_UNSPECIFIED;
+@@ -285,13 +247,12 @@ static void msft_le_monitor_advertisement_cb(struct hci_dev *hdev,
+ 	monitor->state = ADV_MONITOR_STATE_OFFLOADED;
+ 
+ unlock:
+-	if (status && monitor)
++	if (status)
+ 		hci_free_adv_monitor(hdev, monitor);
+ 
+ 	hci_dev_unlock(hdev);
+ 
+-	if (!msft->resuming)
+-		hci_add_adv_patterns_monitor_complete(hdev, status);
++	return status;
+ }
+ 
+ static void msft_le_cancel_monitor_advertisement_cb(struct hci_dev *hdev,
+@@ -463,7 +424,6 @@ static int msft_add_monitor_sync(struct hci_dev *hdev,
+ 	ptrdiff_t offset = 0;
+ 	u8 pattern_count = 0;
+ 	struct sk_buff *skb;
+-	u8 status;
+ 
+ 	if (!msft_monitor_pattern_valid(monitor))
+ 		return -EINVAL;
+@@ -505,20 +465,40 @@ static int msft_add_monitor_sync(struct hci_dev *hdev,
+ 	if (IS_ERR(skb))
+ 		return PTR_ERR(skb);
+ 
+-	status = skb->data[0];
+-	skb_pull(skb, 1);
++	return msft_le_monitor_advertisement_cb(hdev, hdev->msft_opcode,
++						monitor, skb);
++}
+ 
+-	msft_le_monitor_advertisement_cb(hdev, status, hdev->msft_opcode, skb);
++/* This function requires the caller holds hci_req_sync_lock */
++static void reregister_monitor(struct hci_dev *hdev)
++{
++	struct adv_monitor *monitor;
++	struct msft_data *msft = hdev->msft_data;
++	int handle = 0;
+ 
+-	return status;
++	if (!msft)
++		return;
++
++	msft->resuming = true;
++
++	while (1) {
++		monitor = idr_get_next(&hdev->adv_monitors_idr, &handle);
++		if (!monitor)
++			break;
++
++		msft_add_monitor_sync(hdev, monitor);
++
++		handle++;
++	}
++
++	/* All monitors have been reregistered */
++	msft->resuming = false;
+ }
+ 
+ /* This function requires the caller holds hci_req_sync_lock */
+ int msft_resume_sync(struct hci_dev *hdev)
+ {
+ 	struct msft_data *msft = hdev->msft_data;
+-	struct adv_monitor *monitor;
+-	int handle = 0;
+ 
+ 	if (!msft || !msft_monitor_supported(hdev))
+ 		return 0;
+@@ -533,24 +513,12 @@ int msft_resume_sync(struct hci_dev *hdev)
+ 
+ 	hci_dev_unlock(hdev);
+ 
+-	msft->resuming = true;
+-
+-	while (1) {
+-		monitor = idr_get_next(&hdev->adv_monitors_idr, &handle);
+-		if (!monitor)
+-			break;
+-
+-		msft_add_monitor_sync(hdev, monitor);
+-
+-		handle++;
+-	}
+-
+-	/* All monitors have been resumed */
+-	msft->resuming = false;
++	reregister_monitor(hdev);
+ 
+ 	return 0;
+ }
+ 
++/* This function requires the caller holds hci_req_sync_lock */
+ void msft_do_open(struct hci_dev *hdev)
+ {
+ 	struct msft_data *msft = hdev->msft_data;
+@@ -583,7 +551,7 @@ void msft_do_open(struct hci_dev *hdev)
+ 		/* Monitors get removed on power off, so we need to explicitly
+ 		 * tell the controller to re-monitor.
+ 		 */
+-		reregister_monitor(hdev, 0);
++		reregister_monitor(hdev);
+ 	}
+ }
+ 
+@@ -829,66 +797,7 @@ static void msft_le_set_advertisement_filter_enable_cb(struct hci_dev *hdev,
+ 	hci_dev_unlock(hdev);
+ }
+ 
+-/* This function requires the caller holds hdev->lock */
+-static int __msft_add_monitor_pattern(struct hci_dev *hdev,
+-				      struct adv_monitor *monitor)
+-{
+-	struct msft_cp_le_monitor_advertisement *cp;
+-	struct msft_le_monitor_advertisement_pattern_data *pattern_data;
+-	struct msft_le_monitor_advertisement_pattern *pattern;
+-	struct adv_pattern *entry;
+-	struct hci_request req;
+-	struct msft_data *msft = hdev->msft_data;
+-	size_t total_size = sizeof(*cp) + sizeof(*pattern_data);
+-	ptrdiff_t offset = 0;
+-	u8 pattern_count = 0;
+-	int err = 0;
+-
+-	if (!msft_monitor_pattern_valid(monitor))
+-		return -EINVAL;
+-
+-	list_for_each_entry(entry, &monitor->patterns, list) {
+-		pattern_count++;
+-		total_size += sizeof(*pattern) + entry->length;
+-	}
+-
+-	cp = kmalloc(total_size, GFP_KERNEL);
+-	if (!cp)
+-		return -ENOMEM;
+-
+-	cp->sub_opcode = MSFT_OP_LE_MONITOR_ADVERTISEMENT;
+-	cp->rssi_high = monitor->rssi.high_threshold;
+-	cp->rssi_low = monitor->rssi.low_threshold;
+-	cp->rssi_low_interval = (u8)monitor->rssi.low_threshold_timeout;
+-	cp->rssi_sampling_period = monitor->rssi.sampling_period;
+-
+-	cp->cond_type = MSFT_MONITOR_ADVERTISEMENT_TYPE_PATTERN;
+-
+-	pattern_data = (void *)cp->data;
+-	pattern_data->count = pattern_count;
+-
+-	list_for_each_entry(entry, &monitor->patterns, list) {
+-		pattern = (void *)(pattern_data->data + offset);
+-		/* the length also includes data_type and offset */
+-		pattern->length = entry->length + 2;
+-		pattern->data_type = entry->ad_type;
+-		pattern->start_byte = entry->offset;
+-		memcpy(pattern->pattern, entry->value, entry->length);
+-		offset += sizeof(*pattern) + entry->length;
+-	}
+-
+-	hci_req_init(&req, hdev);
+-	hci_req_add(&req, hdev->msft_opcode, total_size, cp);
+-	err = hci_req_run_skb(&req, msft_le_monitor_advertisement_cb);
+-	kfree(cp);
+-
+-	if (!err)
+-		msft->pending_add_handle = monitor->handle;
+-
+-	return err;
+-}
+-
+-/* This function requires the caller holds hdev->lock */
++/* This function requires the caller holds hci_req_sync_lock */
+ int msft_add_monitor_pattern(struct hci_dev *hdev, struct adv_monitor *monitor)
+ {
+ 	struct msft_data *msft = hdev->msft_data;
+@@ -899,7 +808,7 @@ int msft_add_monitor_pattern(struct hci_dev *hdev, struct adv_monitor *monitor)
+ 	if (msft->resuming || msft->suspending)
+ 		return -EBUSY;
+ 
+-	return __msft_add_monitor_pattern(hdev, monitor);
++	return msft_add_monitor_sync(hdev, monitor);
+ }
+ 
+ /* This function requires the caller holds hdev->lock */
+-- 
+2.37.0.170.g444d1eabd0-goog
+

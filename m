@@ -2,141 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88CB57B7A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 544C157B7AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbiGTNnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 09:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S237254AbiGTNoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 09:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiGTNnJ (ORCPT
+        with ESMTP id S236854AbiGTNoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 09:43:09 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B9551A33;
-        Wed, 20 Jul 2022 06:43:08 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KDWCFF023218;
-        Wed, 20 Jul 2022 13:43:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=0Z3PgzzNKO+ECJ6LxRKdBn5sBDda1/Bdh67Az7ggE0M=;
- b=TtMaag3oKfhP77pKfpHytxQE5qlqLTge+FQXbHR/LgKacgL0ixA8CLWTY2ZlQbHbeAtB
- DM/Ssd7biLZMunddlbOdaurPyOCHjG9gpLRlxXHmaRhwUROifEeqtHNn4XL614xJqXj9
- /eTX0VRJEMRXNoCBXzC4gsZaLTry2EYwZt2DKNURm7BxqVtdLQh1JCWHB/ZIEgpDVlNK
- erS3R6nhmTQjluQIr3j09a8sZvmF6g8J0tVkaHwRssIn85hsOGu+kttu47J4poGc7zTn
- hWQbAXJuELgsA6ADxdZaFiJTmyF7PvVOTyEI4BfJdZ5UP5iNBhxJmljBkDwESy3oOj7s 6g== 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hejp30h6k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 13:42:59 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oVaaZc6vHY2iOQIGAG0Kl1Sfq84z/UFLD33xWH2oKSjd9uBWISJwA56EysIg8B8hX9UIC38AMkMzilSj6VSnq7A0N1KY43GxFWAm15Sto/ZN+0qYHar7/hZK/Dl3sijMNe2Y+qqLTiZfrEXKAE8p0e3U3NCx+XBy7Twg5/XLQ5PW2TiTd7+ayN6AvoWZ8tmj4R8kBV/+EdtO9MZlM8vRzmEqzZ2ENsLMUB5vai9dNdXbECH2ClqzwB8UBxo8f35R7zX2xsHZ5o1RBnHEsaChXuDpvB6oWePol9GS7LzmGWzcgQRVRkUt4R/CXXxluceKiPhzBdBUa1viWOnFROK8/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0Z3PgzzNKO+ECJ6LxRKdBn5sBDda1/Bdh67Az7ggE0M=;
- b=cNuYLrQ7N8Ng/X3OrcgJFWq/soQwHn86c1FRtGIusADwcjavCrJ77omaXDNHi3DeBw8fGseBphlom+3TpuM1Z596r6l/ODjU7aSTEAdyhj4qHN1gelP97N9+Q6m8zH4PyJy6O10zBKxL1ORAHit47rDzuGKoqNg0fPFxuEe8YYqWqavPcQePePH90AZxB/OW7DiU8ZCMkton9T4Tv3zf5ZCqxbi0eHTevFJxiBmDh+PIgCqbiPZd3DqXSspk2MHTUMKDlj8tjSlDAd1e6fAtWt97eY38ieS9VaJtHybTjRbxLKVJ503nTGHdJaefDW1EJcFyRbAlb7mem2lp4TEl0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in.ibm.com; dmarc=pass action=none header.from=in.ibm.com;
- dkim=pass header.d=in.ibm.com; arc=none
-Received: from MWHPR15MB1150.namprd15.prod.outlook.com (2603:10b6:320:2f::8)
- by BYAPR15MB3175.namprd15.prod.outlook.com (2603:10b6:a03:105::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Wed, 20 Jul
- 2022 13:42:56 +0000
-Received: from MWHPR15MB1150.namprd15.prod.outlook.com
- ([fe80::1024:8a31:a334:d02f]) by MWHPR15MB1150.namprd15.prod.outlook.com
- ([fe80::1024:8a31:a334:d02f%5]) with mapi id 15.20.5458.018; Wed, 20 Jul 2022
- 13:42:56 +0000
-From:   Nageswara R Sastry <nasastry@in.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Rob Herring <robh@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [PATCH v6 2/6] drivers: of: kexec ima: Support 32-bit platforms
-Thread-Topic: [PATCH v6 2/6] drivers: of: kexec ima: Support 32-bit platforms
-Thread-Index: AQHYkiXj22Dwly2W0U6QW94fZDqKFK2HWMHw
-Date:   Wed, 20 Jul 2022 13:42:55 +0000
-Message-ID: <MWHPR15MB1150F33F8C0E17420E0B18C1EB8E9@MWHPR15MB1150.namprd15.prod.outlook.com>
-References: <20220707172026.831614-1-stefanb@linux.ibm.com>
- <20220707172026.831614-3-stefanb@linux.ibm.com>
-In-Reply-To: <20220707172026.831614-3-stefanb@linux.ibm.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fa9bfcca-5f69-4a5d-a3dc-08da6a55c07b
-x-ms-traffictypediagnostic: BYAPR15MB3175:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: at65ZWWy0P1nUGGNgN/SS+OElgClNrc7jWa2AIY6h0TZCAYVqzO0GKANLbtRWn1YX2TEpgReBfmgZZ1N8Uq5YYN0UNxWh+lEMF5HiKBU2KS7lX8OfFQnPYMAXRxbOgV/4JLxIsTniD9N1T8k9H2Xr5lJ0j31+M0AEnzdcMuXI+wMd5Sn9+XfRV9w4voEfS7xIWK5RsBk5pcFp/DXwbTUawBIRCZJXsu44GcZ38iy4owJ1kgMc/z7HxGRWKmbTL25UwnsMkbCq3Qu8dMdk+Ky+t+aVppgI3/clz5o81JRbgn2zzH3jxG53r0p+1HiFCLS68Nw3M+PI7KvPYjWqarHmhj1+KuaKyAeXYKB9n6RdygXwqSbKNOJOHQHHXk8sjlDl/jvpcNeObbjLOHkHViqfOnWwbl6XRtAS+VG6YNhrqeQSXyl0xXAKhxVt/hVlqoeQtE5aTDTmEUiyI+c5r2NNBFDKnvLyf6Dc0b4S7nbkXocP6KKhAShPkxUbuIVazbSoieU+7a/ZU7aCoJW0salZASnAvclc/yX63/WsasQPm2U5tiEZbcbJVWCEwNU4ShS+cgpHvP6dozb/q/Y6g/2VLN1qtyJWSMa2CBvzi+z/QY5mfQP7dNZX251qA6RZ18H/Sp77wlN4gxSNQ/OvbhKGP01cI2+YPo8SZO4xCZgv/N9hIrSXb0wXUDgFFoNTGzDbhmsCfz0nGE4eCdDrCw/PszJKeTWiT95anWNC0BuQXYKrRYwk/Kevjnql9j1PGEDu3F5j/+zi1BQa5L3CynfysH/RNS2T/YmyUM8fAZ5a201Yq6WEhlJwIoM71UFKXx+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR15MB1150.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(346002)(376002)(136003)(39860400002)(41300700001)(71200400001)(2906002)(4744005)(86362001)(52536014)(38070700005)(478600001)(7416002)(8936002)(5660300002)(122000001)(38100700002)(186003)(33656002)(110136005)(91956017)(316002)(54906003)(26005)(53546011)(55236004)(66946007)(6506007)(8676002)(66446008)(64756008)(4326008)(66556008)(66476007)(76116006)(83380400001)(9686003)(55016003)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?j9KRlAal3UPruzg56UaraeAYSf5tSKYJ7crG0grMp0+lY1pBt/xOsoIR6S?=
- =?iso-8859-1?Q?YTE3KmQf+TOrVMwEjVGO1F4SiJ04vawy6VwRIowPCXDDsejgFzCwmZ1eyq?=
- =?iso-8859-1?Q?qgbp+qhp2anrDUmJp/KpaAZJV5txYY1o0J7DOO1IPW8RRmIsomIP0HxFQw?=
- =?iso-8859-1?Q?v1vQ6iJ7YONV+LYNRv5rAJ6/4rC+cqmlVzdSZ1bJ2jky0LlHK3f9fR5fia?=
- =?iso-8859-1?Q?tdv7NPXTIq7p81sA5QItItlurD+ZVN6ydx8yZbeywxw2Jcntf+whTcvZ2W?=
- =?iso-8859-1?Q?SHTxY/MulQbsaJTtDV1HzJizgqxf2bjn65oqOm1cML/WTjbhPeZktKBURA?=
- =?iso-8859-1?Q?qvpagtXe87Jpp54nt+O2pOV5ESclLYWbSFyCOxV534B+1/iQA9LVgKFiTE?=
- =?iso-8859-1?Q?X8TOdDYl1WdmSm5hNxgOsHYDNHkZqDghrGAamhtIcMy7y8A51KQ83Pu3no?=
- =?iso-8859-1?Q?8pgUzEYiPWkD2LVVRj157Ah+c4M4QkSnC/yjmdtGLdjlghKZ4TggnS8PR4?=
- =?iso-8859-1?Q?0Bwhy8hGf+xflzXoU7Uq7C2k+zSAaqTe8prhH7IcgPzTx/BMDzId90qrrD?=
- =?iso-8859-1?Q?PwR2WPOOEpySkrPc3kbuNFZw5Dg7gD3SQVaNUNFWv+zhfGUJxP8FIkCoHc?=
- =?iso-8859-1?Q?1ZvHlcE6qqIbkCYLDPqc3lptjMiTbrzzJ9h2Rw9TOmAJnuJq/tj1aM609Q?=
- =?iso-8859-1?Q?D887rfn/T2zPWdHPFnl7+PdjZlQHgTTRbrlejhwRUANqrF/8iKH4yXC7e+?=
- =?iso-8859-1?Q?Yfez6+YgF0u0DFAoVoLm+knQVQi6BkSjB2gjZ5p9UbSlqGMtf8kkN1ADPT?=
- =?iso-8859-1?Q?ebbvO0F2XOAMyjqxOErYW+Z5/LpWUWhrrTZzCnLcbExlMP0dLdNr5Dyklx?=
- =?iso-8859-1?Q?LQHYGgtTbjgBDkEUUikIhh+gs8GXPWHJ9b1t44UAm2YbdnzoMkLAJ6nPs3?=
- =?iso-8859-1?Q?99HFxITpsHfl5iS5NMoFS+26QVLFGn1qtm/UVchWNYDOuvVvKdpKk+m5J5?=
- =?iso-8859-1?Q?XLX75GIiULnIQeitRDw7Vhf5bMdv9VrXPGXPJxsIr3LWR1SBOykvfI/3yT?=
- =?iso-8859-1?Q?GnRtO853dctwyFs/CgIXQoLN/hWw7JuFEWt+2KHxlro0R/z6DB2bFDHxht?=
- =?iso-8859-1?Q?JX9hhI+wp/bljyOn7pk8djW22FfG3QQiBcqjRPYk+5duDQy2b/Jynx0Baw?=
- =?iso-8859-1?Q?7BIGa8m6d+mVmPJ1AKA9wEz+9Dlu3glq18qStCb24K25l5ZTg+mKDvv0/9?=
- =?iso-8859-1?Q?+/udJ6vwjRbKqX7ZP4F3XKNRQu2DqHRGbgxNqBn5+EJqEWzPqR7vKYKnJG?=
- =?iso-8859-1?Q?8R71KqQs/qwbmcZ5V4yjfylBdqGDhj4Z+Nu1WbvYts1Jqyb66aZM8o7R7I?=
- =?iso-8859-1?Q?EKWIoFxBszIFJh18caCKCFB7wzX54O6LtKFdExSkX09XBqDb0M8NzPVlK1?=
- =?iso-8859-1?Q?HOlMCJuCtwaU9ajD0pZbnnMVlpFl6SDJsGgzQMHY27z0CDwkn2M8xASSJo?=
- =?iso-8859-1?Q?p00aj64fp6O7drscp/BOEqclC+u9Vc/diM/7uFeUQMDLlTt33YGoXBxGEf?=
- =?iso-8859-1?Q?64dDy2GMpxYOSIXnfanaWmXtV1rxFACJF7y+IhwuFxboBbOcN/5c031YWK?=
- =?iso-8859-1?Q?4gaB+X3vlvA6FQ4paFZ8/nHKOZ7Qtm5Nwk?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 20 Jul 2022 09:44:07 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4A754064
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:44:06 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id n4-20020a17090a73c400b001f1e87432c2so2228229pjk.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=orSFD61kCSqrKX+ne2eEEd+QMSiGdPtiJq0hhV2qIQM=;
+        b=PR9bGri+dqR7nIgVm4Bo5fi40C7WJ5qsV/WYePf6lmpHXhKPdx1PCadPOUOX2P64J/
+         TlE/jZyFJizffx1MES6V6oYVKrBR2C7T8i4n493ld254G9BI73zImCEY7aRRoMzQnB5g
+         uhY2L8lL4fP4Lu4XUNxGynA5LFK3kJjl8LIc+jXSkj2/LYL3Fhy13VEluwmmMsREjY5E
+         57KpxJTPPVW7qcU0JJ+JxFg6cLCGAUHdGFL3zOgiG2Ksd5eYXvUobOickjPUyrBR3H4o
+         TankRICj74IRGlwllN2kb1lEk0fMJWPG/z8OlNP926Yd7uQg4CO7xrYi7xBoCWHxOkR0
+         2akw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=orSFD61kCSqrKX+ne2eEEd+QMSiGdPtiJq0hhV2qIQM=;
+        b=DHz+kcscgGzmnxCZLkFQAKXMZT0wy6yZfno27ThNVFRccCY6JPHn81sXixBnDhxkGZ
+         BHkduImvs1G1Hsv/wS3Fhl7yeAkCZj64AxH6n4q3PpEWBkQBOLP4nSpcF13u90SiwPPJ
+         LSb9WrYekktK/TMPN26iEAlo8+4deGZDN+IIAHH3GaRQXzNEeYTE25pLaCONE4+CJZ8Q
+         tA7bU3vYIffkh03/hl60RM4copeUq/IYIqen0PIG9L0pQj8EvT1xSVVm2F2BZquaVXLL
+         X6L0qMBsiOye9MfsyJsLJLWX/B6gIo4dqQ6uLUxpkWbdqUce4/DLclSOSJ3AIcksH9c6
+         dglQ==
+X-Gm-Message-State: AJIora+zdHdpgJYiwnulcC1F0+qPAt4uCMSzrOI1sxHbXvDLacls8rEB
+        xUQ1tfws5ydxMztlj9Z0Yda23A==
+X-Google-Smtp-Source: AGRyM1vpTrxNaUjas034B+wlq+kHydW7weSjsi7LRMDPNlFRzF75m0jS1AAxomT1GiEZt1T7pAsB5w==
+X-Received: by 2002:a17:90b:1917:b0:1f2:1e2e:83fb with SMTP id mp23-20020a17090b191700b001f21e2e83fbmr3405788pjb.227.1658324646087;
+        Wed, 20 Jul 2022 06:44:06 -0700 (PDT)
+Received: from [10.4.100.137] ([139.177.225.240])
+        by smtp.gmail.com with ESMTPSA id l5-20020a170903244500b0016bef6f6903sm13986043pls.72.2022.07.20.06.44.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 06:44:05 -0700 (PDT)
+Message-ID: <952fc252-30e1-3629-42c4-98a55ada12f9@bytedance.com>
+Date:   Wed, 20 Jul 2022 21:43:59 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: in.ibm.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR15MB1150.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa9bfcca-5f69-4a5d-a3dc-08da6a55c07b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 13:42:55.9970
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: fcf67057-50c9-4ad4-98f3-ffca64add9e9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IzILBG2zOHPJpjj/vxJoBtx7IOiMEc2Ok8ZK/jcRDLMKMIR9ER9sMZhoihIwQGAU1WWUxlJOgY03XJDx2B5wTw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3175
-X-Proofpoint-GUID: k92eigvukG86VXH9sPMspgT6CuFwZApl
-X-Proofpoint-ORIG-GUID: k92eigvukG86VXH9sPMspgT6CuFwZApl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_07,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 impostorscore=0 spamscore=0 mlxscore=0 malwarescore=0
- clxscore=1011 priorityscore=1501 mlxlogscore=999 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207200056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.1
+Subject: Re: [External] Re: [PATCH v2 07/10] sched/fair: use update_load_avg()
+ to attach/detach entity load_avg
+Content-Language: en-US
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, bsegall@google.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20220713040430.25778-1-zhouchengming@bytedance.com>
+ <20220713040430.25778-8-zhouchengming@bytedance.com>
+ <e838ac28-f68e-2282-94d5-616ea3bdf8d0@arm.com>
+ <88062fb6-e2fe-cf4e-10b5-7694c4d30941@bytedance.com>
+ <17c9af40-bf53-be3c-c678-159a8ab8964a@arm.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <17c9af40-bf53-be3c-c678-159a8ab8964a@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -144,28 +79,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=0A=
-=0A=
-________________________________________=0A=
-> From: Stefan Berger <stefanb@linux.ibm.com>=0A=
-> Sent: 07 July 2022 10:50 PM=0A=
-> To: kexec@lists.infradead.org; devicetree@vger.kernel.org; linux-integrit=
-y@vger.kernel.org; linux-kernel@vger.kernel.org; linuxppc-dev@lists.ozlabs.=
-org=0A=
-> Cc: nayna@linux.ibm.com; Nageswara R Sastry; mpe@ellerman.id.au; Palmer D=
-abbelt; Rob Herring; Mimi Zohar=0A=
-> Subject: [PATCH v6 2/6] drivers: of: kexec ima: Support 32-bit platforms=
-=0A=
-=0A=
-> From: Palmer Dabbelt <palmer@rivosinc.com>=0A=
-=0A=
-> RISC-V recently added kexec_file() support, which uses enables kexec=0A=
-> IMA.  We're the first 32-bit platform to support this, so we found a=0A=
-> build bug.=0A=
-=0A=
-> Acked-by: Rob Herring <robh@kernel.org>=0A=
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>=0A=
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>=0A=
-> ---=0A=
-=0A=
-Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>=
+On 2022/7/19 23:02, Dietmar Eggemann wrote:
+> On 15/07/2022 18:21, Chengming Zhou wrote:
+>> On 2022/7/15 19:18, Dietmar Eggemann wrote:
+>>> On 13/07/2022 06:04, Chengming Zhou wrote:
+>>>> Since update_load_avg() support DO_ATTACH and DO_DETACH now, we can
+>>>> use update_load_avg() to implement attach/detach entity load_avg.
+>>>>
+>>>> Another advantage of using update_load_avg() is that it will check
+>>>> last_update_time before attach or detach, instead of unconditional
+>>>> attach/detach in the current code.
+>>>>
+>>>> This way can avoid some corner problematic cases of load tracking,
+>>>> like twice attach problem, detach unattached NEW task problem.
+>>>
+>>> This explanation is somewhat hard to follow for me. Since both issues
+>>> have been fixed already (you mention this further below) you're saying
+>>> that with you change you don't reintroduce them?
+>>
+>> Sorry for this not very clear explanation.
+>>
+>> Yes, both issues have been fixed already, what I want to say is that bugfix
+>> brings its own problem and limitation mentioned below.
+>>
+>> So I want to use another way to solve these problems better.
+> 
+> [...]
+> 
+>>>> These problems have been fixed in commit 7dc603c9028e
+>>>> ("sched/fair: Fix PELT integrity for new tasks"), which also
+>>>> bring its own problems.
+>>>>
+>>>> First, it add a new task state TASK_NEW and an unnessary limitation
+>>>> that we would fail when change the cgroup of TASK_NEW tasks.
+>>
+>> This is the limitation that bugfix has brought.
+>>
+>> We can't change cgroup or switch to fair for task with last_update_time=0
+>> if we don't have conditional detach/attach.
+>>
+>> So we have to:
+>>
+>> 1. !fair task also need to set last_update_time.
+>> 2. cpu_cgroup_can_attach() have to wait for TASK_NEW to fully attached.
+> 
+> I see.
+> 
+> `cgroup_migrate_execute() -> cpu_cgroup_[can|]_attach()` has to wait for
+> `wake_up_new_task() -> WRITE_ONCE(p->__state, TASK_RUNNING)`.
+> 
+> Just to understand this change better: IMHO, this is still the case for
+> fair tasks, right?
+
+Yes, I think so. We could delete this limitation when we have conditional
+detach/attach, since nothing will be detached when last_update_time==0.
+
+Thanks!
+
+> 
+> `wake_up_new_task() -> post_init_entity_util_avg() ->
+> attach_entity_cfs_rq()` has to happen before the fair task can move
+> between taskgroups in `cgroup_migrate_execute() -> cpu_cgroup_attach()
+> -> sched_move_task() -> sched_change_group() -> task_change_group_fair()`.
+> 
+> [...]

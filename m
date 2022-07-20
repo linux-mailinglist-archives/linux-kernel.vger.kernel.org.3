@@ -2,155 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317EF57AAFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4274257AB00
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236012AbiGTA0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 20:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S236163AbiGTAdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 20:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbiGTA0e (ORCPT
+        with ESMTP id S230104AbiGTAdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:26:34 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7E237FBA
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:26:33 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31caffa4a45so157941207b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:26:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AXFCfDqvLrq9o9WRcAb2bry5GNfeEVn8GlJpnRDObuY=;
-        b=hpR/vH1V8plhuaqeiB0LitY272ggX3bQv0nXd6Y1BK7Bwal8MhI8mqq1jAQjbvj/Wo
-         O+/3MIyG9XbRVzS8JgrWNKl87KDU6Eq1+d1hFiW/qgjlFVU/J2bUcja0vmliWIdV5cuy
-         GLJRr5o1CbYd4rnWtvQyI+ssrUm7QlB+1im8tGLur7pQHEb16hOL5YLtLdcWkvaBrqGN
-         ruD1N7GI152c4a0egyQ0lm3qMW8V5wX3VU1CVrCka/cNse9swyafctm8jQaUghqoZjUS
-         ijtU/SJd0WILD2FWaGsfSjESFK4FhyzJ4ayaWMpNsX4UC6eKmD70XnRuMyaoaZu5tHTK
-         29UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AXFCfDqvLrq9o9WRcAb2bry5GNfeEVn8GlJpnRDObuY=;
-        b=jAfy0zVEa/U8W/xMEa2NeATKrSkQ5Gg3M9ns9WH/V5lJ4zW14+aS0X7xbcYotFOoRD
-         Yb1AeiO0JTpyetYwbXRQUqTyWhrNOPwaxUHnuJkK5UT0hbPLsuYVY1lqMhi6ZyOthx4d
-         ztyWsE/kWhiPaKYPSlBfPpnW1weG31q7YlYm8WhlpmB52hHLm7RYEMx/c8ywzskdieVT
-         YzmehgFpIN/0wpghZftertVkAGwp/5Awqv6vMSQZcjReYhfMtkQwwiBQlb/ibWCZMaT8
-         4mxgd0s1eWNfskxxJTB9owsfnKVSw0teQqOpbf8MIGuqZEOyMaKCHk6416P1I5Fcjvor
-         JrCQ==
-X-Gm-Message-State: AJIora9NVZIFQvixkZn/NwYZqUvYv8N3gfw7tbDZl8pZ9dIgiKRb/ZtT
-        PNGypkmzGsXn7pma7Pn+b124qO8A309ZRsWv/AuRog==
-X-Google-Smtp-Source: AGRyM1ucYfvEDqy8c2bJqjvjQcMSu4rDtbwnmg0DLGP5d4Yvdv55/Fz6kUTxYLVBWG5VR5+ybBgntVeWxP1KiCKRMVk=
-X-Received: by 2002:a81:49c6:0:b0:31c:7f19:a5f0 with SMTP id
- w189-20020a8149c6000000b0031c7f19a5f0mr38675292ywa.385.1658276792919; Tue, 19
- Jul 2022 17:26:32 -0700 (PDT)
+        Tue, 19 Jul 2022 20:33:43 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7FA45F55
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658277221; x=1689813221;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BTDvz51y7XQjvBmWKxsS4dYwYvBBvN5avdwI2oCYmH0=;
+  b=TUrZZE4xdbnuLAuc/zoTR4mfNbbtNY7qFvkbfHm9D/IdHZGSBK5LRpXE
+   QsVC9bghswZsUgjifMK7ypwvFqkwjCMSiJk7rUZ0gkhqn8MkZ9i1g4SIN
+   dAnWmH4g5U+nWU0is3lVG+YbNw6cQv34yqh7FS+zoQDVvQUWMpSkWRxFe
+   rP29ljdsAI1MjXD+KaUcNzQVNdC6H4mYIr5ti1QQEHIEOlRVtinIL7Yg2
+   eOTJMPJLKunkVt3uX5GJvJdoXCJqbB6osDZU6HWvs8hFtUsQcB+ERFxLv
+   7hGMp2AeptzJ7q+LUeqeXbQmcpkAY7SkO1ZeDeoZEF2SA8D3N3YqlOsJ3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="284205027"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="284205027"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 17:33:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="665658825"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Jul 2022 17:33:40 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oDxel-0006Gm-DC;
+        Wed, 20 Jul 2022 00:33:39 +0000
+Date:   Wed, 20 Jul 2022 08:32:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: [intel-tdx:guest-attest 5/8] arch/x86/coco/tdx/attest.c:246:6:
+ warning: no previous prototype for function 'terminate_quote_request'
+Message-ID: <202207200845.YVJavepg-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
- <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
- <20220718172159.4vwjzrfthelovcty@black.fi.intel.com> <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
- <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
- <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
- <YtcCWfCQuEsVhH6W@zn.tnic> <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
- <YtcgxxMyFTReuuRw@zn.tnic> <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
- <YtcnQbiRgZPtR+rQ@zn.tnic> <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
-In-Reply-To: <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
-From:   Marc Orr <marcorr@google.com>
-Date:   Tue, 19 Jul 2022 17:26:21 -0700
-Message-ID: <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Ard Biesheuvel <ardb@kernel.org>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 3:02 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 7/19/22 14:50, Borislav Petkov wrote:
-> > On Tue, Jul 19, 2022 at 02:35:45PM -0700, Dave Hansen wrote:
-> >> They're trying to design something that can (forever) handle guests that
-> >> might not be able to accept memory.
-> > Wait, what?
-> >
-> > If you can't modify those guests to teach them to accept memory, how do
-> > you add TDX or SNP guest support to them?
->
-> Mainline today, for instance, doesn't have unaccepted memory support for
-> TDX or SEV-SNP guests.  But, they both still boot fine because folks
-> either configure it on the host side not to *have* any unaccepted
-> memory.  Or, they just live with the small (4GB??) amount of
-> pre-accepted memory, which is fine for testing things.
+tree:   https://github.com/intel/tdx.git guest-attest
+head:   7dd2b3e1f9d655ffb17fafb777d77d860b3a42ea
+commit: 28cd09ae55b12e152d390c37224a15c43f7621e5 [5/8] x86/tdx: Add Quote generation support
+config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220720/202207200845.YVJavepg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/28cd09ae55b12e152d390c37224a15c43f7621e5
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-attest
+        git checkout 28cd09ae55b12e152d390c37224a15c43f7621e5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
 
-For us (Google cloud), "1. Deal with that at the host level
-configuration" looks like:
-https://cloud.google.com/compute/docs/images/create-delete-deprecate-private-images#guest-os-features
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-In other words, we have to tag images with "feature tags" to
-distinguish which images have kernels that support which features.
+All warnings (new ones prefixed by >>):
 
-Part of the reason we need to do it this way is that we use a single
-guest firmware (i.e., guest UEFI) that lives outside of the image.
+>> arch/x86/coco/tdx/attest.c:246:6: warning: no previous prototype for function 'terminate_quote_request' [-Wmissing-prototypes]
+   void terminate_quote_request(struct quote_entry *entry)
+        ^
+   arch/x86/coco/tdx/attest.c:246:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void terminate_quote_request(struct quote_entry *entry)
+   ^
+   static 
+   1 warning generated.
 
-These feature tags are a mess to keep track of.
 
-All that being said, I can totally see the upstream perspective being
-"not our problem". It's hard to argue with that :-).
+vim +/terminate_quote_request +246 arch/x86/coco/tdx/attest.c
 
-A few more thoughts:
+   244	
+   245	/* Handles early termination of GetQuote requests */
+ > 246	void terminate_quote_request(struct quote_entry *entry)
+   247	{
+   248		struct tdx_quote_hdr *quote_hdr;
+   249	
+   250		/*
+   251		 * For early termination, if the request is not yet
+   252		 * processed by VMM (GET_QUOTE_IN_FLIGHT), the VMM
+   253		 * still owns the shared buffer, so mark the request
+   254		 * invalid to let quote_callback_handler() handle the
+   255		 * memory cleanup function. If the request is already
+   256		 * processed, then do the cleanup and return.
+   257		 */
+   258	
+   259		mutex_lock(&quote_lock);
+   260		quote_hdr = (struct tdx_quote_hdr *)entry->buf.vmaddr;
+   261		if (quote_hdr->status == GET_QUOTE_IN_FLIGHT) {
+   262			entry->valid = false;
+   263			mutex_unlock(&quote_lock);
+   264			return;
+   265		}
+   266		_del_quote_entry(entry);
+   267		mutex_unlock(&quote_lock);
+   268	}
+   269	
 
-- If the guest-side patches weren't upstream before this patch set to
-handle unaccepted memory, you're all definitely right, that this isn't
-a real issue. (Maybe it still isn't...)
-- Do we anticipate (many) more features for confidential compute in
-the future that require code in both the guest FW and guest kernel? If
-yes, then designing a FW-kernel feature negotiation could be useful
-beyond this situation.
-- Dave's suggestion to "2. Boot some intermediate thing like a
-bootloader that does acceptance ..." is pretty clever! So if upstream
-thinks this FW-kernel negotiation is not a good direction, maybe we
-(Google) can pursue this idea to avoid introducing yet another tag on
-our images.
-
-Thank you all for this discussion.
-
-Thanks,
-Marc
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

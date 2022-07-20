@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EEA57C079
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E174A57C070
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbiGTXF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S231354AbiGTXFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiGTXFW (ORCPT
+        with ESMTP id S230418AbiGTXFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:05:22 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C577A191
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:05:20 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id h145so81806iof.9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:05:20 -0700 (PDT)
+        Wed, 20 Jul 2022 19:05:02 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F6B5B783
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:05:01 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id l14-20020a17090a72ce00b001f20ed3c55dso3652214pjk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:05:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m1T4qbDxhSzNmOGzCQwvKdvIhsg9ftO1mwgvo87Nrw8=;
-        b=bhybBTw1im+DhwPHQWv+PzdM9trpgtKREb+kM6QNvHD05jCfagtV+lxooUJ731yakd
-         AtmTTjzC8ckolKZiHiuVoq5DcUcI7f0G3HBUlfBmed4XPivrb/aOGboWYwHTinfh/++2
-         KRREJxhfTSMu6dTk41fjcd+Bqsc5KPFtBHWAbuwg8IPFwwXIE//5nOy4HCjcrxn47h40
-         mLXHvQIlkmaXgPe8ZDzmvua0rHVH5BFWYJyCkSblCjWPH1/rObx2gAxsel7HdAEjQ3FR
-         fmrAxAKRzPK/ulKi/nMXeHIsh58mE9P7jvbmC3e7oo0ga1aE+dxNq4jKi8+XsEwstDfN
-         YTIw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=agG7UVRQdg8e2EP+3/jBhjlCekFVJFIsZ++hL4DCHhg=;
+        b=cAxN78BrxCxiDW+0kYB8SCmTCYj112kJQWiiFgA+sRye+PEBO5LXbTMgS6KFlk4zVB
+         8n/jhipW4npAqnJIA7tH0t4UDCSUzgXrBMvhIaJ1/CvQ/g36GNRj9P28LNeiU/FQVisl
+         1FLI7Rt77+1Vip5T8Z+WEe223NS7gtX093cO7nJ5j8V6n7f3EkWQawcyijip0M7tzhcR
+         +ntxvecAcLVMJoeAbDk6mYuMYeuNVTvm17RSG7ytutZYjFjt6k64Cye5Q5AK73DhL+te
+         1I3qzpnb4fSqzccgUJ9GnCUuE/gEJXQELqNpdSOE7B7gXOLMLf+Ziy6bdxerlJV8uRi7
+         7/6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m1T4qbDxhSzNmOGzCQwvKdvIhsg9ftO1mwgvo87Nrw8=;
-        b=ixzfURQ7P++xfis3s2NuqO+x/glgZmw07oxU2jqioMo41Gmzqz6e9N5wqQvMQh5dCy
-         CuXjOrNeRhALvcU9pHegqgHq+2ABlhIE+/NyJ1CKZMNut2h8NhlelEwDmTeP7gz/VDIj
-         zsmgu3eJyyGOO9uFMqjis2sv03aMVWkqlfsOPO+y6pd+2x/LmAwUqAjYhmwkxoJUZmZS
-         96GfDYQ7sOq5dGs2cJinQZwgBqgxk+IzJ6NHT54tWkFylzt/Su8NA7jtNDDt9jaVZTT0
-         HndFd/Bs+hoKoiTFo3ErqejdFNxxi/9zVxJ8I7r7Ny1nJrmRWPHDBGHb0A36gPKbd4dD
-         JdMg==
-X-Gm-Message-State: AJIora92YF4KG6T4riu6vuUvQlsq9T/lAkj4VCll0ixZtmwSyw6wix3z
-        fTEzW0NsXnTuvJLmYAIkavb4Ct6dkJrZbjW+7sM30A==
-X-Google-Smtp-Source: AGRyM1vHwHvPWd8988+SD0LKzqKrSlWnqr4l9t8oZmoloK10ndRc8Ai0iTZof6+FZFo8o5tMT3S8rrmuJp1srFev0W4=
-X-Received: by 2002:a05:6602:2f03:b0:678:9c7c:97a5 with SMTP id
- q3-20020a0566022f0300b006789c7c97a5mr18761335iow.32.1658358319643; Wed, 20
- Jul 2022 16:05:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=agG7UVRQdg8e2EP+3/jBhjlCekFVJFIsZ++hL4DCHhg=;
+        b=j83CKdBEWjf0Z6fprGz2LMIzvQF08LUx1Vl+F7wgf/VY0Qd4zYf4W+jwN703/q+QJv
+         d81oAKdiLuetrQNoNkWw3zjzRpx0S7tGmeE6UQTNyQiNV5Fpa6WxyyMN3kX9g5CjxeZd
+         WW0XEU40T8zs3PiSJPgJN8S5Qzs/SDLVJY9nWvowq1Zgvy74E/sPMnTr981hiebtsEd3
+         IxAKc64X4897WJZc/TjZotgqyFFQN7tL1HOGqVymKEPQb3xtU7K13Iazuvi1mNS0bhNx
+         MsqzdP/uYtYltFuXXEL/jBUAqvTZ2UAuvFdgtKTErDaBMFJTpTZOrLNM/LxLJ5muQtBZ
+         esBg==
+X-Gm-Message-State: AJIora88XVuw3ofIRM1EbgvYQjrxhPqVWxEf+umatUs6sey8K2jtklao
+        KqT8k329Abxa1d2TP3iImx2EJQ==
+X-Google-Smtp-Source: AGRyM1vzbnUt8hk1ufGacP/3gRVnEj1puHWMUNJ6iD1mMLKE99yXW4YUsgVDTIT1hwOJnrHXuSYT0A==
+X-Received: by 2002:a17:90a:9409:b0:1f0:e171:f2bd with SMTP id r9-20020a17090a940900b001f0e171f2bdmr7795636pjo.245.1658358301261;
+        Wed, 20 Jul 2022 16:05:01 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id b2-20020a170903228200b0015ee60ef65bsm81899plh.260.2022.07.20.16.04.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 16:05:00 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 23:04:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Santosh Shukla <santosh.shukla@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 5/7] KVM: SVM: Add VNMI support in inject_nmi
+Message-ID: <YtiKGKhrQYp1TAWU@google.com>
+References: <20220709134230.2397-1-santosh.shukla@amd.com>
+ <20220709134230.2397-6-santosh.shukla@amd.com>
+ <Yth2eik6usFvC4vW@google.com>
+ <CALMp9eQ_ygX7P-YKGQh0mZein6LcTM=gMbQpi8HNfm7XaFi36w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220719195628.3415852-1-axelrasmussen@google.com> <PH7PR11MB6353950F607F7B8F274A3550FD8E9@PH7PR11MB6353.namprd11.prod.outlook.com>
-In-Reply-To: <PH7PR11MB6353950F607F7B8F274A3550FD8E9@PH7PR11MB6353.namprd11.prod.outlook.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Wed, 20 Jul 2022 16:04:43 -0700
-Message-ID: <CAJHvVchusMjvhLxYkWpa+iTaHvXYPFHcX7JGP=bW60e_O1jFGA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     "Schaufler, Casey" <casey.schaufler@intel.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Amit, Nadav" <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALMp9eQ_ygX7P-YKGQh0mZein6LcTM=gMbQpi8HNfm7XaFi36w@mail.gmail.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -87,132 +79,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 3:16 PM Schaufler, Casey
-<casey.schaufler@intel.com> wrote:
->
-> > -----Original Message-----
-> > From: Axel Rasmussen <axelrasmussen@google.com>
-> > Sent: Tuesday, July 19, 2022 12:56 PM
-> > To: Alexander Viro <viro@zeniv.linux.org.uk>; Andrew Morton
-> > <akpm@linux-foundation.org>; Dave Hansen
-> > <dave.hansen@linux.intel.com>; Dmitry V . Levin <ldv@altlinux.org>; Gleb
-> > Fotengauer-Malinovskiy <glebfm@altlinux.org>; Hugh Dickins
-> > <hughd@google.com>; Jan Kara <jack@suse.cz>; Jonathan Corbet
-> > <corbet@lwn.net>; Mel Gorman <mgorman@techsingularity.net>; Mike
-> > Kravetz <mike.kravetz@oracle.com>; Mike Rapoport <rppt@kernel.org>;
-> > Amit, Nadav <namit@vmware.com>; Peter Xu <peterx@redhat.com>;
-> > Shuah Khan <shuah@kernel.org>; Suren Baghdasaryan
-> > <surenb@google.com>; Vlastimil Babka <vbabka@suse.cz>; zhangyi
-> > <yi.zhang@huawei.com>
-> > Cc: Axel Rasmussen <axelrasmussen@google.com>; linux-
-> > doc@vger.kernel.org; linux-fsdevel@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-mm@kvack.org; linux-
-> > kselftest@vger.kernel.org
-> > Subject: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine grained
-> > access control
->
-> I assume that leaving the LSM mailing list off of the CC is purely
-> accidental. Please, please include us in the next round.
+On Wed, Jul 20, 2022, Jim Mattson wrote:
+> On Wed, Jul 20, 2022 at 2:41 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Sat, Jul 09, 2022, Santosh Shukla wrote:
+> > > Inject the NMI by setting V_NMI in the VMCB interrupt control. processor
+> > > will clear V_NMI to acknowledge processing has started and will keep the
+> > > V_NMI_MASK set until the processor is done with processing the NMI event.
+> > >
+> > > Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> > > ---
+> > > v2:
+> > > - Added WARN_ON check for vnmi pending.
+> > > - use `get_vnmi_vmcb` to get correct vmcb so to inject vnmi.
+> > >
+> > >  arch/x86/kvm/svm/svm.c | 10 +++++++++-
+> > >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > > index 44c1f2317b45..c73a1809a7c7 100644
+> > > --- a/arch/x86/kvm/svm/svm.c
+> > > +++ b/arch/x86/kvm/svm/svm.c
+> > > @@ -3375,12 +3375,20 @@ static void pre_svm_run(struct kvm_vcpu *vcpu)
+> > >  static void svm_inject_nmi(struct kvm_vcpu *vcpu)
+> > >  {
+> > >       struct vcpu_svm *svm = to_svm(vcpu);
+> > > +     struct vmcb *vmcb = NULL;
+> > > +
+> > > +     ++vcpu->stat.nmi_injections;
+> > > +     if (is_vnmi_enabled(svm)) {
+> > > +             vmcb = get_vnmi_vmcb(svm);
+> > > +             WARN_ON(vmcb->control.int_ctl & V_NMI_PENDING);
+> >
+> > Haven't read the spec, but based on the changelog I assume the flag doesn't get
+> > cleared until the NMI is fully delivered.
+> 
+> Ooh! Is there a spec to read now?!?
 
-Honestly it just hadn't occurred to me, but I'm more than happy to CC
-it on future revisions.
-
->
-> >
-> > This series is based on torvalds/master.
-> >
-> > The series is split up like so:
-> > - Patch 1 is a simple fixup which we should take in any case (even by itself).
-> > - Patches 2-6 add the feature, configurable selftest support, and docs.
-> >
-> > Why not ...?
-> > ============
-> >
-> > - Why not /proc/[pid]/userfaultfd? The proposed use case for this is for one
-> >   process to open a userfaultfd which can intercept another process' page
-> >   faults. This seems to me like exactly what CAP_SYS_PTRACE is for, though,
-> > so I
-> >   think this use case can simply use a syscall without the powers
-> > CAP_SYS_PTRACE
-> >   grants being "too much".
-> >
-> > - Why not use a syscall? Access to syscalls is generally controlled by
-> >   capabilities. We don't have a capability which is used for userfaultfd access
-> >   without also granting more / other permissions as well, and adding a new
-> >   capability was rejected [1].
-> >
-> >     - It's possible a LSM could be used to control access instead. I suspect
-> >       adding a brand new one just for this would be rejected,
->
-> You won't know if you don't ask.
-
-Fair enough - I wonder if MM folks (Andrew, Peter, Nadav especially)
-would find that approach more palatable than /proc/[pid]/userfaultfd?
-Would it make sense from our perspective to propose a userfaultfd- or
-MM-specific LSM for controlling access to certain features?
-
-I remember +Andrea saying Red Hat was also interested in some kind of
-access control mechanism like this. Would one or the other approach be
-more convenient for you?
-
->
-> >       but I think some
-> >       existing ones like SELinux can be used to filter syscall access. Enabling
-> >       SELinux for large production deployments which don't already use it is
-> >       likely to be a huge undertaking though, and I don't think this use case by
-> >       itself is enough to motivate that kind of architectural change.
-> >
-> > Changelog
-> > =========
-> >
-> > v3->v4:
-> >   - Picked up an Acked-by on 5/5.
-> >   - Updated cover letter to cover "why not ...".
-> >   - Refactored userfaultfd_allowed() into userfaultfd_syscall_allowed().
-> > [Peter]
-> >   - Removed obsolete comment from a previous version. [Peter]
-> >   - Refactored userfaultfd_open() in selftest. [Peter]
-> >   - Reworded admin-guide documentation. [Mike, Peter]
-> >   - Squashed 2 commits adding /dev/userfaultfd to selftest and making
-> > selftest
-> >     configurable. [Peter]
-> >   - Added "syscall" test modifier (the default behavior) to selftest. [Peter]
-> >
-> > v2->v3:
-> >   - Rebased onto linux-next/akpm-base, in order to be based on top of the
-> >     run_vmtests.sh refactor which was merged previously.
-> >   - Picked up some Reviewed-by's.
-> >   - Fixed ioctl definition (_IO instead of _IOWR), and stopped using
-> >     compat_ptr_ioctl since it is unneeded for ioctls which don't take a pointer.
-> >   - Removed the "handle_kernel_faults" bool, simplifying the code. The result
-> > is
-> >     logically equivalent, but simpler.
-> >   - Fixed userfaultfd selftest so it returns KSFT_SKIP appropriately.
-> >   - Reworded documentation per Shuah's feedback on v2.
-> >   - Improved example usage for userfaultfd selftest.
-> >
-> > v1->v2:
-> >   - Add documentation update.
-> >   - Test *both* userfaultfd(2) and /dev/userfaultfd via the selftest.
-> >
-> > [1]: https://lore.kernel.org/lkml/686276b9-4530-2045-6bd8-
-> > 170e5943abe4@schaufler-ca.com/T/
-> >
-> > Axel Rasmussen (5):
-> >   selftests: vm: add hugetlb_shared userfaultfd test to run_vmtests.sh
-> >   userfaultfd: add /dev/userfaultfd for fine grained access control
-> >   userfaultfd: selftests: modify selftest to use /dev/userfaultfd
-> >   userfaultfd: update documentation to describe /dev/userfaultfd
-> >   selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
-> >
-> >  Documentation/admin-guide/mm/userfaultfd.rst | 41 +++++++++++-
-> >  Documentation/admin-guide/sysctl/vm.rst      |  3 +
-> >  fs/userfaultfd.c                             | 69 ++++++++++++++++----
-> >  include/uapi/linux/userfaultfd.h             |  4 ++
-> >  tools/testing/selftests/vm/run_vmtests.sh    | 11 +++-
-> >  tools/testing/selftests/vm/userfaultfd.c     | 69 +++++++++++++++++---
-> >  6 files changed, 169 insertions(+), 28 deletions(-)
-> >
-> > --
-> > 2.37.0.170.g444d1eabd0-goog
->
+Apparently not.  I just assumed there's a spec, but I haven't found one.

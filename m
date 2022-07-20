@@ -2,248 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFE357B433
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36EC57B434
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233049AbiGTJux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
+        id S231569AbiGTJy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238585AbiGTJuo (ORCPT
+        with ESMTP id S229523AbiGTJy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:50:44 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2058.outbound.protection.outlook.com [40.107.93.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B473911C18;
-        Wed, 20 Jul 2022 02:50:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ji5sfsRJnLrpQLCTvEahjWb0b2Gz0i9PvtGsulEKqyCLwFE42Tl7mYY6hQLbI2ktP022tNU5CcvFV6co1bfKRnYqN9Kv40nGuLktOfu33NRP3X1zDTZrEj9NOwMhS6akuhu3Y7YNWYTp4DdxJhhTsVk7HHlzCYvsL9KdG7ZIcXNSZbwVZFoI8Ypenj9JhQavwBr8u4UTrjsZ8ECWaccoJtBYX0SkQ1R9rHgz3p+DLNkME/9qqusdomjFBJoYtJgipb6N4sI8OU4Rk+ofJU3/xFpxMrvuE1aHcvA00WugeIbxF3IS0bmBKJeNEHDKE9jn10g0c9qg5iOS8DcxvmDA1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1+E1+w2y/EhSZsZv93Qn3hFoWgYfqyiJXErKsRN0rnw=;
- b=V2NmlZOFTmMKTBt6VC8uaNn2BTPZ4/QnVtqOneka4vlpE3Oti+VwTR2XZrIbPArXwigKf2c0UlSf4kxgG/d6syXWWSpI/Cr01WXhbhnJ2eY4sazZUCfQfNFQVx2/oEWlf16vRZu6mo24UQBSEVAjkNpKgv3EkVFEjYgnMPHxo17JYsZd66zC49e78bXbUZQbMdWHcsc2F3MI5JgdoIIVg1/0bf3KZmixGfW9RH46gND13QCSg9xgqcaxG6+LbzIZPPkk+16KUFBfjVvQlwuWDcaxv6oVODJpIpeDDP4owMsP3fw8cdi0X0hsOjes4h3JWvKfe0dD723gC3uMUZVS8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1+E1+w2y/EhSZsZv93Qn3hFoWgYfqyiJXErKsRN0rnw=;
- b=Mh76pgetdT27mNOAX5ugHQRnWh9XLWMu9Vxgz2Z4NKv9tNhAR/CbajNsjxGzmKBW86Zg+4UChcQ56a9ETJuJTVHoxlmE9yPBDyqiIE8/ijZ11KjnwmovxSaR5jzxtrv9yVJ5kWMILnIMpWJmms97B3FyxphkB+kzQnBaQvdy5mQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
- CH2PR12MB4821.namprd12.prod.outlook.com (2603:10b6:610:c::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5438.19; Wed, 20 Jul 2022 09:50:40 +0000
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::d4af:b726:bc18:e60c]) by DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::d4af:b726:bc18:e60c%6]) with mapi id 15.20.5438.024; Wed, 20 Jul 2022
- 09:50:40 +0000
-Message-ID: <1d7f546f-a497-f580-6439-0a543afb26d8@amd.com>
-Date:   Wed, 20 Jul 2022 16:50:32 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH] KVM: x86: Do not block APIC write for non ICR registers
-Content-Language: en-US
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        pbonzini@redhat.com, mlevitsk@redhat.com, jon.grimm@amd.com,
-        Zeng Guang <guang.zeng@intel.com>
-References: <20220718083913.222140-1-suravee.suthikulpanit@amd.com>
- <YtWYL6mvN72kaDOi@google.com> <40b6f9e6-90c5-ca42-13d7-5e81ff4990c6@amd.com>
-In-Reply-To: <40b6f9e6-90c5-ca42-13d7-5e81ff4990c6@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR03CA0094.apcprd03.prod.outlook.com
- (2603:1096:4:7c::22) To DM8PR12MB5445.namprd12.prod.outlook.com
- (2603:10b6:8:24::7)
+        Wed, 20 Jul 2022 05:54:27 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4718F54CAF
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:54:25 -0700 (PDT)
+Received: from [10.20.42.19] (unknown [10.20.42.19])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxaeDG0NdiPlsqAA--.7769S3;
+        Wed, 20 Jul 2022 17:54:15 +0800 (CST)
+Subject: Re: [PATCH V17 00/13] irqchip: Add LoongArch-related irqchip drivers
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <1658282461-35489-1-git-send-email-lvjianmin@loongson.cn>
+ <CAAhV-H4SA4cgncUNgrb=6UzMuq5-5c1XW=ChR6pSCgo5ykxhwg@mail.gmail.com>
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+Message-ID: <098e4920-f2dc-afc7-824d-bae7d3a260fa@loongson.cn>
+Date:   Wed, 20 Jul 2022 17:54:14 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cb0d49b8-80b2-4426-eb0d-08da6a354dfe
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4821:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nLCUxsSUZd/1QkSsf7/p9CjRqeHNmZVXuZrAoqsCNg5oyQSgfZhEFMhXEPIBGci2cIxZd3786cprhaUU93WBwPhetR7jc7cX+kY/R99wDd906a1JocwKLMWy8ZQx+Cj5kmUyBvda3Cq5hytsnO4eKAOx0+SHiFC9U1/5yqI6+dp4mtYnPLBmeTwdMe3SHGAiAxfd6ZqWNs3yoE7BGNXfULTmI6YkTu7G+b1DpbCgpfcoptKXuEzF4ZJwKy7izi/zCO/mnL5BDi7DT+jUfdCV8t/DOXer1UJwOHjVhMbkQuYOOqjITSVT8ZR2eX6e5oW5EKAHx/uE9867o4fDgxXvRZcrHTzjanaEkX/4UPu0HInOBsra2DICNXjUrTWTUFma9fIACd+O2ZY/C2qflQUTHcyP96wwjJVc/JP8jrIfSBPqaoBiwrbmeRP7bIB4N4QglfszaH92yhJCidN1Zpb7Gu34xhdCnHZ4GC4iQRTunsLtQtzZkQpk3mpmpC2w9DXtLnTSEngbhfzoj9qLzU4VnKg0AWYQ7LbV8ICwezyxz7RqPFRBC2h0Y083Hyf/wWKSezSQWTNkHvbvN0heU8OoLmrSivuofBXz9T/dLVHSSM0IQvagn2jkhsft+n5fJkAEqUU4uQ9ppNgnUFz+I07Mbnh/UlgK1+fLWUFxdrSRuqMJfMHeCBuOUACqkJ7kucWdQbwvCsxhBPQIPNBpkfOhVq/gjbfUTXL4nlW0mgCVfqs5bqdtw1rn46etmbuxWnqh1rNTuYmaG9ylGt9Nfup/jMwqMMTKLD8djIPGVAlXATzJVppjRhszLiJJUR90j7rGMk9Mg2tzsYUIqk8i1lZQBQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(39860400002)(346002)(366004)(6486002)(6916009)(478600001)(31696002)(41300700001)(6666004)(316002)(83380400001)(2616005)(6512007)(53546011)(86362001)(31686004)(26005)(66556008)(186003)(44832011)(66946007)(36756003)(5660300002)(66476007)(8676002)(4326008)(2906002)(8936002)(6506007)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MlFKMXQ4bFNXTmJwRWU0cC9nZDFmbVQ2ZGhSK0MwenhEd0tSeElETVVxdURF?=
- =?utf-8?B?MC9oYTZDMXJOdXVsT3NqYTJuWTBPZlgrVDZyODdXeGZ2MURKMVI0Umdzckww?=
- =?utf-8?B?ZWZCRUdHZ3hKVld0ajRPOGZKVUQ5alo4dEI4NjVENExzU2s5YTFBN1BPVXYy?=
- =?utf-8?B?UTdzQ05Ld3FjUkVhODJzYURteFdVZlBySUdsNHFvdzE4VlY0ODJOSU4vbi9L?=
- =?utf-8?B?VllIaWNHMEJZbDkrYWFoRklBbVV5aUVGSXRuNDlYa1JjcS9vcnpWUit6TDIx?=
- =?utf-8?B?ai9uVXo2ak1GbGZYdDFWTTZ1UGVBaTRiaDY5ZEtyRnB3RDVUQ2RYQ3dKQjZ5?=
- =?utf-8?B?NzZtYjE0bU0wWUI3bDdBOWZ3OU5TZm5JbG9zRVdRKzVzOTZBRkUxYy9oOHlM?=
- =?utf-8?B?VmNzb2FRU0g3T0d6ZzhFNHBFUDNjNUpvdFhBQnhkdVlJVzE4OHR3Q0Q4YUlR?=
- =?utf-8?B?czhQaG54ZnJGTGZIWTZCUGVVV25ENUNoTytYZFhuajhudUpxbG94ZnlLV3JK?=
- =?utf-8?B?Q3JHU1RqbWdickorMVl0VDdYSUtNak5vUWxlYTlwNFJINURqaWROdTIwWEtm?=
- =?utf-8?B?dnVUOXVicHlSQ3JKN3dISW9hTVF4M0RVbFAxSzFUK0tKVDRGWm1zVERDRXJP?=
- =?utf-8?B?cC9taVdscGN3ZkpiU2ZrbUxJWUFyZFQwQ24xNHpoM2xZVXB3L1hNSWFYcFZ5?=
- =?utf-8?B?TFhVb1RLQk04dWJsSVBqRTZmSE5rRnlQT2VoczNHRXFJd21IaUdNbHd0V0Qv?=
- =?utf-8?B?dDVxQVJ6ODdZeXdhdVpRYmN4NlN1ZUdlYTMrZ0EzSkpsTk1xT3lKUVdqeHhK?=
- =?utf-8?B?YTN5S2tQVGxrZDFrQzdqd29DMmdhSkVnUG9TdXhBbng3MFBnWXl5bnZ5eEFo?=
- =?utf-8?B?V1o0UHJOY3NWWlhwRHdQRmhYQ0ppSXlJQVZhOHdhcDV2MGg0M2F4ZEwreFdQ?=
- =?utf-8?B?V0VQaFNrVVA0cVZwOXE3L09qVEErOGJ1SldGT1dvU3h0Vm1HdEQ5UjRpZGxV?=
- =?utf-8?B?bXRXUVVvRFRUVng4R21XQnpybmRURUNTUFFFblUzU2FST0hZNVdwOGk1U3lT?=
- =?utf-8?B?a1ptSVdwd3BXTmN6ZzNOOGRqc204S3VtU0lGV044Z2lEM1JoUk04TCtpdGdB?=
- =?utf-8?B?cWY4WmN1V3RSZFpEOHQ3NWNXajE1YkFPSDdvSWtaMDlPaW1ybWk1cDQxempo?=
- =?utf-8?B?bHlabDFUVGNXWkJac2FuaW00TUs1bmdZZ0YyUlFBZlViOU1JbkVVRTRodHZR?=
- =?utf-8?B?MURoWm5wN1dlbXdPSU9YbmNDRDhBYS9DRXNiVFd5Zms2YWU3RHQrZzB4d3RV?=
- =?utf-8?B?NDlZOGtHWTRRQURNTVBYVTZTY2J4aGM0WGlhL2tsalJhQ2tMcFZPcytQVHlD?=
- =?utf-8?B?MTk3SzhQVGZ5eXJ0NzlYUThaSldTS1UzaXpwbE1kU1BUZjhUWjBudVpOemlK?=
- =?utf-8?B?V25RTGdSMnBGeTZlbG1PV2dmekttcGd2RzUxWDk2b2NJV2RuNjlSbjVsazhR?=
- =?utf-8?B?V2RITjBLUHY1ZTJKYUJDdEE2Si9PUExCNDRQOEpjc2xNME5NNnVFZ0pSL3JN?=
- =?utf-8?B?ZVRqOEkzc3B5VW5VelJKUldvTmdHODA5Z2x1OHdyTDlpMkVTblVkYUxNRnZk?=
- =?utf-8?B?Z0FYNGdYQjJodE1pWldTUTRmamJQSHZYMXdBa2h4V3VmQkZwSHg0eG5yQS9p?=
- =?utf-8?B?M29hUU1QbzZKcmhnTXRtcEFUdzFXSFJiVDlVaFplUk9JY1g4amNZSE1weFZR?=
- =?utf-8?B?eFVFSUw3enF4VDNGNzI3bWx2RkNtTmZncktoS2d5U2JiemptUVFzYVM1WWZj?=
- =?utf-8?B?UzVIbE9odmhRa0VGdXh6enVncFozVWR5S1l6TEhJaWYyaE5JVDZIRXVVd2Rm?=
- =?utf-8?B?RURpQzVCYTBuUTg1YXY2NTl5WUZWSHY4K0VuSDU2UUo5aStmem5hRDdiclNR?=
- =?utf-8?B?Tm1qWGdFNktuRFdBampxTVAwQStORkRjTmpGc3pxZHVMRTVHZVhjOXVXUHpC?=
- =?utf-8?B?azh4TkhVR3dMeXFtWDYyNXFzeTVxSjBKb1BYSStGamROZ3BNbHBjblBLUS9Q?=
- =?utf-8?B?bW92eUNoMEMvR1cydTZhc2NiTk0vVlROWlN1UTNDVmRaK1dqMnIzRnRFUEN1?=
- =?utf-8?Q?fzJO72GgfTxmvmVXjmyoouzU0?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb0d49b8-80b2-4426-eb0d-08da6a354dfe
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 09:50:40.4459
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7dRMaxnzUDWN+v7YO5ZEQ6hfFRV/TRAm/1eBCuICemCn/b/p2PYef2YMoi66tJ6leUtMDBPkGm7KYmbEse/Q+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4821
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhV-H4SA4cgncUNgrb=6UzMuq5-5c1XW=ChR6pSCgo5ykxhwg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxaeDG0NdiPlsqAA--.7769S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3tFy7XrWfXrWDGr45Ar4fXwb_yoWDWFy8pF
+        43C3WaqF48Jry5Xr1xtw48u34Yqw1fJ39rta4xKryIqr9Y9r1qgF1UJFykZFZ7ArW8Wr1j
+        vFWUt3WUGF1UAF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
+        ACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl
+        42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr1UJr1l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
+        MIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo / Sean,
+Hi, Huacai,
 
-Please let me know if you want me to send v2 with changes proposed by Sean.
+I'll address the two issues and submit V18.
 
-Regards,
-Suravee
+Thanks.
 
-On 7/19/22 10:24 AM, Suthikulpanit, Suravee wrote:
-> Sean,
+On 2022/7/20 上午11:22, Huacai Chen wrote:
+> Hi, Marc and Jianmin,
 > 
-> On 7/19/2022 12:28 AM, Sean Christopherson wrote:
->> On Mon, Jul 18, 2022, Suravee Suthikulpanit wrote:
->>> The commit 5413bcba7ed5 ("KVM: x86: Add support for vICR APIC-write
->>> VM-Exits in x2APIC mode") introduces logic to prevent APIC write
->>> for offset other than ICR. This breaks x2AVIC support, which requires
->>> KVM to trap and emulate x2APIC MSR writes.
->>>
->>> Therefore, removes the warning and modify to logic to allow MSR write.
->>>
->>> Fixes: 5413bcba7ed5 ("KVM: x86: Add support for vICR APIC-write VM-Exits in x2APIC mode")
->>
->> This tag is wrong, I believe it should be:
->>
->>    Fixes: 4d1d7942e36a ("KVM: SVM: Introduce logic to (de)activate x2AVIC mode")
->>
->> And that absolutely matters because this should not be backported to older
->> kernels that don't support x2avic.
+> I have done the integrated test on top of V17, together with PCI code
+> and arch code [1]. From my point of view, this series is good enough,
+> except two small issues in patch 10 and patch 12.
 > 
-> The commit 5413bcba7ed5 is the one that modifies the logic in the kvm_apic_write_nodecode().
-> I understand your point that the 5413bcba7ed is committed later than 4d1d7942e36a and being
-> affected by the change. However, if there is a case that only x2AVIC stuff is being backported
-> w/o the virtualize IPI stuff, then this fix is not needed. Hence, I would say the fix is for
-> the 5413bcba7ed5 as specified in the original patch.
+> [1] https://github.com/loongson/linux/commits/loongarch-next
 > 
->>> .....
->>>            */
->>> -        if (WARN_ON_ONCE(offset != APIC_ICR))
->>> +        if (offset == APIC_ICR) {
->>> +            kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
->>> +            trace_kvm_apic_write(APIC_ICR, val);
->>>               return;
->>> -
->>> -        kvm_lapic_msr_read(apic, offset, &val);
->>> -        kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
->>> -        trace_kvm_apic_write(APIC_ICR, val);
->>> +        }
->>> +        kvm_lapic_msr_write(apic, offset, val);
->>
->> Because this lacks the TODO below, what about tweaking this so that there's a
->> single call to kvm_lapic_msr_write()?  gcc-11 even generates more efficient code
->> for this.  Alternatively, the ICR path can be an early return inside a single
->> x2APIC check, but gcc generate identical code and I like making x2APIC+ICR stand
->> out as being truly special.
+> Thanks,
+> Huacai
 > 
-> That sounds good.
 > 
->> Compile tested only.
->>
->> ---
->> From: Sean Christopherson <seanjc@google.com>
->> Date: Mon, 18 Jul 2022 10:16:02 -0700
->> Subject: [PATCH] KVM: x86: Handle trap-like x2APIC accesses for any APIC
->>   register
->>
->> Handle trap-like VM-Exits for all APIC registers when the guest is in
->> x2APIC mode and drop the now-stale WARN that KVM encounters trap-like
->> exits only for ICR.  On Intel, only writes to ICR can be trap-like when
->> APICv and x2APIC are enabled, but AMD's x2AVIC can trap more registers,
->> e.g. LDR and DFR.
->>
->> Fixes: 4d1d7942e36a ("KVM: SVM: Introduce logic to (de)activate x2AVIC mode")
->> Reported-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
->> Cc: Zeng Guang <guang.zeng@intel.com>
->> Cc: Maxim Levitsky <mlevitsk@redhat.com>
->> Signed-off-by: Sean Christopherson <seanjc@google.com>
->> ---
->>   arch/x86/kvm/lapic.c | 21 ++++++++++-----------
->>   1 file changed, 10 insertions(+), 11 deletions(-)
->>
->> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
->> index 9d4f73c4dc02..95bb1ef37a12 100644
->> --- a/arch/x86/kvm/lapic.c
->> +++ b/arch/x86/kvm/lapic.c
->> @@ -2283,21 +2283,20 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
->>       struct kvm_lapic *apic = vcpu->arch.apic;
->>       u64 val;
->>
->> -    if (apic_x2apic_mode(apic)) {
->> -        /*
->> -         * When guest APIC is in x2APIC mode and IPI virtualization
->> -         * is enabled, accessing APIC_ICR may cause trap-like VM-exit
->> -         * on Intel hardware. Other offsets are not possible.
->> -         */
->> -        if (WARN_ON_ONCE(offset != APIC_ICR))
->> -            return;
->> -
->> +    if (apic_x2apic_mode(apic))
->>           kvm_lapic_msr_read(apic, offset, &val);
->> +    else
->> +        val = kvm_lapic_get_reg(apic, offset);
->> +
->> +    /*
->> +     * ICR is a single 64-bit register when x2APIC is enabled.  For legacy
->> +     * xAPIC, ICR writes need to go down the common (slightly slower) path
->> +     * to get the upper half from ICR2.
->> +     */
->> +    if (apic_x2apic_mode(apic) && offset == APIC_ICR) {
->>           kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
->>           trace_kvm_apic_write(APIC_ICR, val);
->>       } else {
->> -        val = kvm_lapic_get_reg(apic, offset);
->> -
->>           /* TODO: optimize to just emulate side effect w/o one more write */
->>           kvm_lapic_reg_write(apic, offset, (u32)val);
->>       }
->>
->> base-commit: 8031d87aa9953ddeb047a5356ebd0b240c30f233
->> -- 
 > 
-> Tested-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> 
-> Suravee
+> On Wed, Jul 20, 2022 at 10:01 AM Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>>
+>> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+>> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+>> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+>> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+>> are already added in the ACPI Specification 6.5(which may be published in
+>> early June this year and the board is reviewing the draft).
+>>
+>> Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+>> work together with LS7A chipsets. The irq chips in LoongArch computers
+>> include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+>> Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller), PCH-PIC
+>> (Main Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+>> in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+>>
+>> CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC are
+>> per-package controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are all
+>> controllers out of CPU (i.e., in chipsets). These controllers (in other
+>> words, irqchips) are linked in a hierarchy way.
+>>
+>> The IPI (Inter-Processor Interrupt) and CPU Local Timer
+>> interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+>> while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+>> gathered by EIOINTC, and then go to to CPUINTC directly.
+>>
+>>   +--------------------------------------------------------+
+>>   |                                                        |
+>>   |         +-----+     +---------+     +-------+          |
+>>   |         | IPI | --> | CPUINTC | <-- | Timer |          |
+>>   |         +-----+     +---------+     +-------+          |
+>>   |                      ^       ^                         |
+>>   |                      |       |                         |
+>>   |               +---------+ +---------+     +-------+    |
+>>   |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
+>>   |               +---------+ +---------+     +-------+    |
+>>   |                ^       ^                               |
+>>   |                |       |                               |
+>>   |         +---------+ +---------+                        |
+>>   |         | PCH-PIC | | PCH-MSI |                        |
+>>   |         +---------+ +---------+                        |
+>>   |           ^     ^           ^                          |
+>>   |           |     |           |                          |
+>>   |   +---------+ +---------+ +---------+                  |
+>>   |   | PCH-LPC | | Devices | | Devices |                  |
+>>   |   +---------+ +---------+ +---------+                  |
+>>   |        ^                                               |
+>>   |        |                                               |
+>>   |   +---------+                                          |
+>>   |   | Devices |                                          |
+>>   |   +---------+                                          |
+>>   |                                                        |
+>>   |                                                        |
+>>   +--------------------------------------------------------+
+>>
+>> The hierarchy model is constructed by parsing irq contronler structures
+>> in MADT.
+>>
+>> Example of irqchip topology in a system with  two chipsets:
+>>
+>>   +------------------------------------------------------------+
+>>   |                                                            |
+>>   |                     +------------------+                   |
+>>   |                     |      CPUINTC     |                   |
+>>   |                     +------------------+                   |
+>>   |                     ^                  ^                   |
+>>   |                     |                  |                   |
+>>   |          +----------+                  +----------+        |
+>>   |          | EIOINTC 0|                  | EIOINTC 1|        |
+>>   |          +----------+                  +----------+        |
+>>   |          ^          ^                  ^          ^        |
+>>   |          |          |                  |          |        |
+>>   | +----------+   +----------+   +----------+    +----------+ |
+>>   | | PCH-PIC 0|   | PCH-MSI 0|   | PCH-PIC 1|    | PCH-MSI 1| |
+>>   | +----------+   +----------+   +----------+    +----------+ |
+>>   |                                                            |
+>>   |                                                            |
+>>   +------------------------------------------------------------+
+>>
+>> For systems with two chipsets, there are tow group(consists of EIOINTC, PCH-PIC and PCH-MSI) irqdomains,
+>> and each group has same node id. So we defined a structure to mantain the relation of node and it's parent irqdomain.
+>>
+>> struct acpi_vector_group {
+>>          int node;
+>>          int pci_segment;
+>>          struct irq_domain *parent;
+>> };
+>>
+>> The initialization and use of acpi_vector_group array are following:
+>>
+>> 1 Entry of struct acpi_vector_group array initialization:
+>>
+>> By parsing MCFG, the node id（from bit44-47 of Base Address）and pci segment are extracted. And from MADT, we have the node id of each EIOINTC.
+>>
+>> entry.node = node id of pci segment
+>> entry.pci_segment = pci segment (only for msi irqdomain)
+>>
+>> By matching node id of entry and EIOINTC to set parent.
+>>
+>> entry.parent = EIOINTC irqdomain(node id of EIOINTC == node id of pci segment)
+>>
+>> 2 Get parent irqdomain for PCH-PIC:
+>>
+>>  From MADT, we have the node id of each PCH-PIC(from bit44-47 of Base Address).
+>> if (node of entry i == node of PCH-PIC)
+>>          return entrys[i].parent;
+>>
+>> 3 Get parent irqdomain for PCH-MSI of pci segment:
+>>
+>>          return entrys[i].parent; (i is the index of msi irqdomain)
+>>
+>> 4 How to select a correct irqdomain to map irq for a device?
+>> For devices using legacy irq behind PCH-PIC, GSI is used to select correct PCH-PIC irqdomain.
+>> For devices using msi irq behind PCH-MSI, the pci segmen of the device is used to select correct PCH-MSI irqdomain.
+>>
+>> V1 -> V2:
+>> 1, Remove queued patches;
+>> 2, Move common logic of DT/ACPI probing to common functions;
+>> 3, Split .suspend()/.resume() functions to separate patches.
+>>
+>> V2 -> V3:
+>> 1, Fix a bug for loongson-pch-pic probe;
+>> 2, Some minor improvements for LPC controller.
+>>
+>> V3 -> V4:
+>> 1, Rework the CPU interrupt controller driver;
+>> 2, Some minor improvements for other controllers.
+>>
+>> V4 -> V5:
+>> 1, Add a description of LoonArch's IRQ model;
+>> 2, Support multiple EIOINTCs in one system;
+>> 3, Some minor improvements for other controllers.
+>>
+>> V5 -> V6:
+>> 1, Attach a fwnode to CPUINTC irq domain;
+>> 2, Use raw spinlock instead of generic spinlock;
+>> 3, Improve the method of restoring EIOINTC state;
+>> 4, Update documentation, comments and commit messages.
+>>
+>> V6 -> V7:
+>> 1, Fix build warnings reported by kernel test robot.
+>>
+>> V7 -> V8:
+>> 1, Add arguments sanity checking for irqchip init functions;
+>> 2, Support Loongson-3C5000 (One NUMA Node includes 4 EIOINTC Node).
+>>
+>> V8 -> V9:
+>> 1, Rebase on 5.17-rc5;
+>> 2, Update cover letter;
+>> 3, Some small improvements.
+>>
+>> V9 -> V10:
+>> 1, Rebase on 5.17-rc6;
+>> 2, Fix build warnings reported by kernel test robot.
+>>
+>> V10 -> V11:
+>> 1, Rebase on 5.18-rc4;
+>> 2, Fix irq affinity setting for EIOINTC;
+>> 3, Fix hwirq allocation failure for EIOINTC.
+>>
+>> V11 -> RFC:
+>> 1, Refactored the way to build irqchip hierarchy topology.
+>>
+>> RFC -> RFC V2:
+>> 1, Move all IO-interrupt related code to driver/irqchip from arch directory.
+>> 2. Add description for an example of two chipsets system.
+>>
+>> RFC V2 -> RFC V3:
+>> 1, Add support for multiple GSI domains
+>> 2, Use ACPI_GENERIC_GSI for GSI handling
+>> 3, Drop suspend-resume stuff
+>> 4, Export fwnode handles instead of irq domain handles
+>>
+>> RFC V3 -> V12:
+>> 1, Address patch attributions of the patch series
+>>
+>> V12 -> V13
+>> 1 Based on 5.19-rc2
+>> 2 Remove arch specified gsi code
+>> 3 Split some 'common' code into the various drivers where they belong.
+>> 4 Allow acpi_gsi_to_irq() to have an arch-specific fallback
+>>
+>> V13 -> V14
+>> 1 Add LoongArch-specified APICs definition
+>> 2 Use the way in CPUINTC driver to call pch-pic and pch-msi entry
+>> 3 Fix compiling and regression issue for OF path
+>>
+>> V14 -> V15
+>> 1 Expose fwnode_handle of CPUINTC domain instead of using get_xxx_irq() for CPUINTC driver
+>> 2 Fix EIOINTC driver: delete parent_data referencing and fix set_affinity bug
+>> 3 Use acpi_disabled for DT and ACPI runtime code path
+>> 4 Fix return type of arch-specific acpi_gsi_to_irq fallback
+>> 5 Fix compile bug tested by kernel test robot
+>>
+>> V15 -> V16
+>>
+>> 1 Merge entry function to make code simpler for cpuintc driver
+>> 2 Provisionally add ACPICA data structures
+>> 3 Drop "Legacy" model support
+>> 4 Fix compiling error
+>>
+>> V16 - V17
+>>
+>> 1 Adjust order of the patch preparing to support multiple bridges
+>> 2 Split the patch removing COMPLE_TEST into pch-pic and pch-msi patches
+>> 3 Change some function name for consistency and remove a redundant blank
+>>
+>> Huacai Chen (6):
+>>    irqchip: Add Loongson PCH LPC controller support
+>>    irqchip/loongson-pch-pic: Add ACPI init support
+>>    irqchip/loongson-pch-msi: Add ACPI init support
+>>    irqchip/loongson-liointc: Add ACPI init support
+>>    irqchip: Add Loongson Extended I/O interrupt controller support
+>>    irqchip: Add LoongArch CPU interrupt controller support
+>>
+>> Jianmin Lv (4):
+>>    genirq/generic_chip: export irq_unmap_generic_chip
+>>    LoongArch: Use ACPI_GENERIC_GSI for gsi handling
+>>    LoongArch: Prepare to support multiple pch-pic and pch-msi irqdomain
+>>    irqchip / ACPI: Introduce ACPI_IRQ_MODEL_LPIC for LoongArch
+>>
+>> Marc Zyngier (3):
+>>    LoongArch: Provisionally add ACPICA data structures
+>>    APCI: irq: Add support for multiple GSI domains
+>>    ACPI: irq: Allow acpi_gsi_to_irq() to have an arch-specific fallback
+>>
+>>   arch/loongarch/Kconfig                      |   1 +
+>>   arch/loongarch/include/asm/acpi.h           | 142 ++++++++++
+>>   arch/loongarch/include/asm/irq.h            |  51 ++--
+>>   arch/loongarch/kernel/acpi.c                |  65 -----
+>>   arch/loongarch/kernel/irq.c                 |  58 +++-
+>>   arch/loongarch/kernel/time.c                |  14 +-
+>>   arch/mips/include/asm/mach-loongson64/irq.h |   2 +-
+>>   drivers/acpi/bus.c                          |   3 +
+>>   drivers/acpi/irq.c                          |  58 ++--
+>>   drivers/irqchip/Kconfig                     |  32 ++-
+>>   drivers/irqchip/Makefile                    |   3 +
+>>   drivers/irqchip/irq-gic-v3.c                |  18 +-
+>>   drivers/irqchip/irq-gic.c                   |  18 +-
+>>   drivers/irqchip/irq-loongarch-cpu.c         | 149 +++++++++++
+>>   drivers/irqchip/irq-loongson-eiointc.c      | 395 ++++++++++++++++++++++++++++
+>>   drivers/irqchip/irq-loongson-liointc.c      | 204 ++++++++------
+>>   drivers/irqchip/irq-loongson-pch-lpc.c      | 205 +++++++++++++++
+>>   drivers/irqchip/irq-loongson-pch-msi.c      | 127 ++++++---
+>>   drivers/irqchip/irq-loongson-pch-pic.c      | 177 ++++++++++---
+>>   include/linux/acpi.h                        |   4 +-
+>>   include/linux/cpuhotplug.h                  |   1 +
+>>   include/linux/irq.h                         |   1 +
+>>   kernel/irq/generic-chip.c                   |   2 +-
+>>   23 files changed, 1451 insertions(+), 279 deletions(-)
+>>   create mode 100644 drivers/irqchip/irq-loongarch-cpu.c
+>>   create mode 100644 drivers/irqchip/irq-loongson-eiointc.c
+>>   create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
+>>
+>> --
+>> 1.8.3.1
+>>
+>>
+

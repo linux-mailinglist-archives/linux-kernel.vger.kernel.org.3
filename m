@@ -2,209 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D482257B3F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0909D57B3F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiGTJes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        id S231623AbiGTJfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiGTJeq (ORCPT
+        with ESMTP id S229712AbiGTJfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:34:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D94E5E323
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658309684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dZJQXt6doKuqhqmCeIdZMEV0KmUXZoYN8P0BVRcFtdM=;
-        b=UJTlWW1wXFjspHs3DAtPLwQB/mCEFIZ+AH1q1i66e7tYbp2IsVuCMPLfaIJQDPzfFwwZgE
-        fYH5gkno+B2CQ5/9Oe/k+51zDC8rHtUD/7/GRLZwlwfWea/7iMWfdB1wvgRabndT920vbT
-        Q2d5O6LzuOCet+Of60jnBy51crNvS0M=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-oktWdLQHME6xgZoBbav73g-1; Wed, 20 Jul 2022 05:34:43 -0400
-X-MC-Unique: oktWdLQHME6xgZoBbav73g-1
-Received: by mail-wr1-f70.google.com with SMTP id q17-20020adfab11000000b0021e4c9ca970so141185wrc.20
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:34:42 -0700 (PDT)
+        Wed, 20 Jul 2022 05:35:17 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0AF1114
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:35:13 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id p6so20449057ljc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NACJil9UlKguZHtyroyXmUl9NgrDukgC0WHDPhOResw=;
+        b=SM+GM6u9YJ9v0kFj0Xv3j5YMyjCQ2yXS8IRm/2iyBj2e5Kk2DMZe8SyB/GIXUXsPZC
+         6LaJniy4VRPs06Edvr2RXGMZ8NJotZZBMkMzK5EpkujY7ishGPmAyeTs06+VsuYGMUln
+         KX4gELH6LgIXFQb09kFP0ssSpfEMeblLXAKZAQhfEA4qveknBr3LNwHoWZOURDHf3bmQ
+         93/tlBqKjQEASmQbTWKis4Ko97lxx/E1QZO4F00Ua8i7/BuBiv/AigBQMWJrx1z9vJm6
+         dMvHgiQWVUT8ivjwhbt35h8WzEc3o7iSWigQIOEFMHthiDiEKc3s5NTO/8n1uutEp0S4
+         mYDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=dZJQXt6doKuqhqmCeIdZMEV0KmUXZoYN8P0BVRcFtdM=;
-        b=r9stHjQdaxotMBS63TDFMjzCnfDq33Aae3InQ4c0awgDiYrbs5VnPB/qk+MdFGK9V8
-         ako4BjwCNt2v5fEHGVO1XdfptJtPNJ+gchsTh4xOn60ZbgpEkQ3ky6rQPr0QewLh/rGl
-         4HzyyyHtF5gHNNRNfEXNXT5K8VriKVZNBk5q9lTpdVBnJm2ZSx0W4KtL1k5fj/eTu2yb
-         sMc/OWYKPqNns73Upfr6c5POQGpVPKNO3lYMU1Hs0WCV2ISzRuf93IvWleNmoTRswW/x
-         dpUQd2s6TWrzjbXC8hco7VilgGwyX9LNxmli7XrvSVpWRlyFwP9KHhWIfLTG9TtPq5uT
-         1SSA==
-X-Gm-Message-State: AJIora/JEWGREqj39vPxWL9NLAl2eoI3k7cY5X7uE5ZXBkVlYzT0XwfD
-        ZxoSWehLdcqfssAbz86wWQ5kQ423gBUEuQotj4QbBle6HxH7C/j1GYZP9wEXnBzXfK8ADgIkwcH
-        L+t5oikW1lpgAWHrwvBceJoqB
-X-Received: by 2002:adf:e889:0:b0:21d:6510:b750 with SMTP id d9-20020adfe889000000b0021d6510b750mr31445079wrm.498.1658309681810;
-        Wed, 20 Jul 2022 02:34:41 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ulf8qkNkDcp6dk1vwhLiwrg1+3SyvqKhWJWE97+JCOnPrgU25PgHyyorDQgXr5DMo4WjCfFQ==
-X-Received: by 2002:adf:e889:0:b0:21d:6510:b750 with SMTP id d9-20020adfe889000000b0021d6510b750mr31445053wrm.498.1658309681533;
-        Wed, 20 Jul 2022 02:34:41 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:e00:8d96:5dba:6bc4:6e89? (p200300cbc7060e008d965dba6bc46e89.dip0.t-ipconnect.de. [2003:cb:c706:e00:8d96:5dba:6bc4:6e89])
-        by smtp.gmail.com with ESMTPSA id n21-20020a05600c4f9500b003a2f2bb72d5sm2347014wmq.45.2022.07.20.02.34.37
+        bh=NACJil9UlKguZHtyroyXmUl9NgrDukgC0WHDPhOResw=;
+        b=k7KqkDuDgz8TjuZCkC+HwublLcrIHRSfc6GeH4W4lg5PA4aZ0zbhCVIExnzdFVRxZy
+         iiSE3kt6X3rigkHqR7hO4opl6pSDi3qnwXgS7vD6IuL6+Ni895zxp3tQwkDqrTDhap3d
+         DJd0cP+Y9JtNL3dIffhN96scJDVR2I04+pKT8DyHEZr5xP/2Br8x+AvydAauprkK+cFY
+         zWLcLeFfxTLqGfGQy6XK6Oa/OfNGIqvifWarsf7RYpBWqVpm5yZBHBwxUV6v2lyA1wvI
+         h+/eCHgyOaqdBGZRjsdhE3pdmMbl9JJEWbi9mToqjWp7Davx367ENIdAdbMIysOl+KJZ
+         GonA==
+X-Gm-Message-State: AJIora9PcuLQFNM/1tQMCAzDK01Dds02m4JihmBtmSGs0Ki5tgiAHB5G
+        vGzZP/QhkIVn07NCoaD/ixtyEQ==
+X-Google-Smtp-Source: AGRyM1vX6yDC10HC1LaQDvYd4QG7y0MZ4kcDXW2RtYD5CaLhPw3VCWvVH17wXXB8ScPl0Ba/qstALQ==
+X-Received: by 2002:a2e:2e0d:0:b0:25d:48a6:827d with SMTP id u13-20020a2e2e0d000000b0025d48a6827dmr17183931lju.323.1658309711633;
+        Wed, 20 Jul 2022 02:35:11 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id k10-20020a2ea26a000000b0025d55600855sm3110038ljm.25.2022.07.20.02.35.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 02:34:41 -0700 (PDT)
-Message-ID: <4216f48f-fdf1-ec1e-b963-6f7fe6ba0f63@redhat.com>
-Date:   Wed, 20 Jul 2022 11:34:37 +0200
+        Wed, 20 Jul 2022 02:35:10 -0700 (PDT)
+Message-ID: <bc99e06b-1aa5-441e-c86f-0fbfb0945d0c@linaro.org>
+Date:   Wed, 20 Jul 2022 11:35:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise
- vmemmap_populate_hugepages()
+Subject: Re: [PATCH v2 3/4] dt-bindings: misc: tmr-inject: Add device-tree
+ binding for TMR Inject
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>, Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
- <20220704112526.2492342-4-chenhuacai@loongson.cn>
- <20220705092937.GA552@willie-the-truck>
- <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com>
- <20220706161736.GC3204@willie-the-truck>
- <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
- <CAAhV-H6EziBQ=3SveRvaPxHfbsGpmYrhVHfuBkpLJXn-t-uTZA@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAAhV-H6EziBQ=3SveRvaPxHfbsGpmYrhVHfuBkpLJXn-t-uTZA@mail.gmail.com>
+To:     Michal Simek <michal.simek@amd.com>,
+        Appana Durga Kedareswara rao 
+        <appana.durga.kedareswara.rao@amd.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, michal.simek@xilinx.com,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org
+Cc:     appanad@amd.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        git@amd.com, git@xilinx.com,
+        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+References: <20220720060016.1646317-1-appana.durga.kedareswara.rao@amd.com>
+ <20220720060016.1646317-4-appana.durga.kedareswara.rao@amd.com>
+ <77e8433f-6cb8-eb32-63d5-414a92d3b874@linaro.org>
+ <f45fccec-4496-19af-0e14-bd626e14c7bd@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <f45fccec-4496-19af-0e14-bd626e14c7bd@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.07.22 14:34, Huacai Chen wrote:
-> Oh, Sudarshan Rajagopalan's Email has changed, Let's update.
+On 20/07/2022 10:26, Michal Simek wrote:
 > 
-> Huacai
 > 
-> On Fri, Jul 8, 2022 at 5:47 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->>
->> +Dan Williams
->> +Sudarshan Rajagopalan
->>
->> On Thu, Jul 7, 2022 at 12:17 AM Will Deacon <will@kernel.org> wrote:
+> On 7/20/22 08:15, Krzysztof Kozlowski wrote:
+>> On 20/07/2022 08:00, Appana Durga Kedareswara rao wrote:
+>>> From: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
 >>>
->>> On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
->>>> On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
->>>>> On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
->>>>>> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
->>>>>> index 33e2a1ceee72..6f2e40bb695d 100644
->>>>>> --- a/mm/sparse-vmemmap.c
->>>>>> +++ b/mm/sparse-vmemmap.c
->>>>>> @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
->>>>>>       return vmemmap_populate_range(start, end, node, altmap, NULL);
->>>>>>  }
->>>>>>
->>>>>> +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
->>>>>> +                                   unsigned long addr, unsigned long next)
->>>>>> +{
->>>>>> +}
->>>>>> +
->>>>>> +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
->>>>>> +                                    unsigned long next)
->>>>>> +{
->>>>>> +     return 0;
->>>>>> +}
->>>>>> +
->>>>>> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
->>>>>> +                                      int node, struct vmem_altmap *altmap)
->>>>>> +{
->>>>>> +     unsigned long addr;
->>>>>> +     unsigned long next;
->>>>>> +     pgd_t *pgd;
->>>>>> +     p4d_t *p4d;
->>>>>> +     pud_t *pud;
->>>>>> +     pmd_t *pmd;
->>>>>> +
->>>>>> +     for (addr = start; addr < end; addr = next) {
->>>>>> +             next = pmd_addr_end(addr, end);
->>>>>> +
->>>>>> +             pgd = vmemmap_pgd_populate(addr, node);
->>>>>> +             if (!pgd)
->>>>>> +                     return -ENOMEM;
->>>>>> +
->>>>>> +             p4d = vmemmap_p4d_populate(pgd, addr, node);
->>>>>> +             if (!p4d)
->>>>>> +                     return -ENOMEM;
->>>>>> +
->>>>>> +             pud = vmemmap_pud_populate(p4d, addr, node);
->>>>>> +             if (!pud)
->>>>>> +                     return -ENOMEM;
->>>>>> +
->>>>>> +             pmd = pmd_offset(pud, addr);
->>>>>> +             if (pmd_none(READ_ONCE(*pmd))) {
->>>>>> +                     void *p;
->>>>>> +
->>>>>> +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
->>>>>> +                     if (p) {
->>>>>> +                             vmemmap_set_pmd(pmd, p, node, addr, next);
->>>>>> +                             continue;
->>>>>> +                     } else if (altmap)
->>>>>> +                             return -ENOMEM; /* no fallback */
->>>>>
->>>>> Why do you return -ENOMEM if 'altmap' here? That seems to be different to
->>>>> what we currently have on arm64 and it's not clear to me why we're happy
->>>>> with an altmap for the pmd case, but not for the pte case.
->>>> The generic version is the same as X86. It seems that ARM64 always
->>>> fallback whether there is an altmap, but X86 only fallback in the no
->>>> altmap case. I don't know the reason of X86, can Dan Williams give
->>>> some explaination?
+>>> The Triple Modular Redundancy(TMR) Inject core provides functional fault
+>>> injection by changing selected MicroBlaze instructions, which provides the
+>>> possibility to verify that the TMR subsystem error detection and fault
+>>> recovery logic is working properly.
 >>>
->>> Right, I think we need to understand the new behaviour here before we adopt
->>> it on arm64.
->> Hi, Dan,
->> Could you please tell us the reason? Thanks.
+>>> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.kedareswara.rao@amd.com>
+>>> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
 >>
->> And Sudarshan,
->> You are the author of adding a fallback mechanism to ARM64,  do you
->> know why ARM64 is different from X86 (only fallback in no altmap
->> case)?
+>> Keep only one SoB.
+> 
+> nit: First of all it is from xilinx.com that's why xilinx.com should be the first.
+> 
+> Just for my understanding about guidance here.
+> Code was developed by Xilinx before acquisition with AMD. And because it was 
+> picked from vendor tree origin xilinx.com was there to keep origin author there. 
+> And upstreaming is done by new company. I can't see nothing wrong on keeping 
+> both emails there but that's why my opinion. Definitely not a problem to remove 
+> one of them but wanted to make sure that we do it properly for all our submissions.
 
-I think that's a purely theoretical issue: I assume that in any case we
-care about, the altmap should be reasonably sized and aligned such that
-this will always succeed.
+It's the same person. No need for two SoBs from the same person. Since
+AMD acquired Xilinx, it holds all copyrights thus @amd.com person does
+not have to include previous SoB. He/She/They has the permission from
+employer to submit it. The second SoB is just redundant - brings no
+actual information. Otherwise please tell me which piece of DCO the
+additional SoB adds/solves (comparing to single SoB - @amd.com)?
 
-To me it even sounds like the best idea to *consistently* fail if there
-is no more space in the altmap, even if we'd have to fallback to PTE
-(again, highly unlikely that this is relevant in practice). Could
-indicate an altmap-size configuration issue.
+Similarly when you change jobs while resending your patch - you do not
+add new SoB but just keep SoB from @previous-company.com.
 
--- 
-Thanks,
 
-David / dhildenb
-
+Best regards,
+Krzysztof

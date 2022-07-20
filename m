@@ -2,70 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BA257BE55
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C4C57BE5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiGTTV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 15:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
+        id S231901AbiGTTXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 15:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiGTTVZ (ORCPT
+        with ESMTP id S229551AbiGTTXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 15:21:25 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5293313D1F;
-        Wed, 20 Jul 2022 12:21:23 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id e15so22259289wro.5;
-        Wed, 20 Jul 2022 12:21:23 -0700 (PDT)
+        Wed, 20 Jul 2022 15:23:52 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A435528A3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:23:52 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q16so14167717pgq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:23:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Pba4QV+WDlzTnMlWTveIRFdhe+8O4jwO+FIoxf/iMRQ=;
-        b=K6/DVHdPticHrv3jCWtIj2BapqRP3uF8GYSfm12e7xSUMzoKgsMV51zpC4DV3Riuow
-         0HYpqe2W/mDGhA5TC7T1PWsUL6AGMQN5kNDHFqVA3eDpL6ouczora+b5TcA//cbZmurE
-         mJeeKmmISoWCXHtrYYk6Z5pux8oU5NvYtZ9iD5gDSZ4xGggmpGwk5HU8fpney8J3h88L
-         DHU68uIz5TDNmCtlfhxcDYEunZhoIocRdQS9ATaOlW9zn94sX/OqsFARuYjJEWAimSos
-         3IpCv96AFt21OIdNmnyL+yUfryx4QKUye1UV1vhmzuhSQv3QJ6qj5TJIQUHiHj+s5qgc
-         18+g==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rYEr3CWt7D7LyMtY/KQgoEUMdbBRKLvSXoaIBCH+uKw=;
+        b=cLeXtxL8A5i621Cmtp30NZvRnlsHMqasoKAmiUkbkF7I0nbcvXY6dMOsi5Y4pV0Gq7
+         1juMoXyZpG0y0mr0OhpOxILnIN1rzdAUY1MyhEZnvwUCCakmVX/71WAxPnYWdAuS6lPU
+         F/UORxjj8kDmIcUxUd8U4DkDKDQ088ny+3HqPkhHuAbS4zdTDhd0evOV6HoWXwOzrHet
+         XPOmiopRaQ060l0zDHisuHeO3XlR+Tu5iKZp6sqvD5fUn4y55jMOGAs3fwyPIGkgSw8L
+         cXdUH+6IbINv3hwQWjKyB9GYr6xcoYAPy6Q6ZbdTGBiRpoUgDHEJAongyM74ELEKOaBN
+         jqIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Pba4QV+WDlzTnMlWTveIRFdhe+8O4jwO+FIoxf/iMRQ=;
-        b=A/95ImZNPVV/uSAg8dXf0TR+LWY6/YJhW1qrbqhMR/A/3ZgRXTz3pMK1DuEkVjEvey
-         f8lHGPjMA/5BcKTyBkb9p/FgL8CtLqpBMgTTUB7TPspNSc6ExpGFnPX+ESfXfNT2pe5h
-         cm0BzY1Pn9Q/hTgBzNvD1h4YISjJYOyZIGMLar7ZqoYGGcv8pNHhc0G4FpNibw4d/ZAK
-         Lce4Q6tIXFgK+Uc37IEM0l6sy6ldpsNs4goXSIaTnxtYIEvt5LPVDuv1OsI7APEFGeHe
-         +jtZEu/XjhaQE97RiOEjeNQy1C7uFVRUsgEmLQM9IJ6FDOaK3WsuZQXKuxaqsMVK4EIk
-         ux5Q==
-X-Gm-Message-State: AJIora/kP0fYbulg3U6kSxLFEqCj93v8WjU7Db5TrUcMuu0ZAJYI8siK
-        T/kR+XrWNzkfzxj5oleKdAYXApDc7QCp7Fqm
-X-Google-Smtp-Source: AGRyM1uLOgnKXZMHCumB7qyLZW7GisJxZ81IMG3yvrEQ8OJV0MtLnu23rAmH5wRc3knjXga+LevNxg==
-X-Received: by 2002:a05:6000:1f0b:b0:21d:6dae:7d04 with SMTP id bv11-20020a0560001f0b00b0021d6dae7d04mr31987220wrb.414.1658344881418;
-        Wed, 20 Jul 2022 12:21:21 -0700 (PDT)
-Received: from X1C7EK5 (joshua.media.unisi.it. [192.167.124.137])
-        by smtp.gmail.com with ESMTPSA id ay1-20020a05600c1e0100b003a03ae64f57sm3530678wmb.8.2022.07.20.12.21.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rYEr3CWt7D7LyMtY/KQgoEUMdbBRKLvSXoaIBCH+uKw=;
+        b=D54Z/vpElPxulE9/cSv/vMt7p6J42WaEj07PNcrhjfzVPQ1fqXl4erhK9W6/wMg7RF
+         Gp9NKeQ6cE+yb644HzBAog6Oy8ZKGAyBld6pWlG7rJFDJY9HF8hVMWUUXPaElCK6dzqd
+         5Lyao8eZnPvY3y2vpdK5QuyDaFLuX1JbfQosjYHiG49aSt9eHUMQs8vsVcfNeItcgxxf
+         Pw29UgcIpVsFLuZMYYL6hzVEDEyudk/3FYhPXwsxMzX4LFgAs+XaPy6MUkvYnwZNVMAj
+         BpZuTu0xRb7NL0wK3Oo6aJb9f+Y2VZnKnx7fZp1na8diKuGiBj9r/5gt+lN4Oap5Y9nx
+         4xKA==
+X-Gm-Message-State: AJIora+d2uC+bPUP3LNPyMkzWOsFYdShVnohKLwT4vOLONXYBzR4Se33
+        DVIHF6T1BlMEzLTVUGYE5aNKvwMvD6UheQ==
+X-Google-Smtp-Source: AGRyM1s3OS9Pbf3tyCbJjBgXJVlqnxlUxUxjW0UMafJ5PdPCVGnrourOUYb1hAv4WKDpNnGR7GKvZg==
+X-Received: by 2002:a05:6a00:22d5:b0:52b:af2:9056 with SMTP id f21-20020a056a0022d500b0052b0af29056mr39885946pfj.80.1658345031222;
+        Wed, 20 Jul 2022 12:23:51 -0700 (PDT)
+Received: from atishp.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090264d700b0016d2e772550sm219902pli.175.2022.07.20.12.23.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 12:21:20 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 21:21:18 +0200
-From:   Ettore Chimenti <ek5.chimenti@gmail.com>
-To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Hector Martin <marcan@marcan.st>, Jean Delvare <jdelvare@suse.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Marco Sogli <marco.sogli@seco.com>
-Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
-Message-ID: <20220720192118.x6ayiar7zmavhauu@X1C7EK5>
-References: <20210626054113.246309-1-marcan@marcan.st>
+        Wed, 20 Jul 2022 12:23:50 -0700 (PDT)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Liu Shaohua <liush@allwinnertech.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Wei Fu <wefu@redhat.com>
+Subject: [PATCH v5 0/4] Add Sstc extension support 
+Date:   Wed, 20 Jul 2022 12:23:38 -0700
+Message-Id: <20220720192342.3428144-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210626054113.246309-1-marcan@marcan.st>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,14 +82,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tested on a SECO SBC-B68 and a UDOO X86.
-The BIOS AML code queries the Embedded Controller over SMBus, 
-respecting the hardware semaphore implementation.
+This series implements Sstc extension support which was ratified recently.
+Before the Sstc extension, an SBI call is necessary to generate timer
+interrupts as only M-mode have access to the timecompare registers. Thus,
+there is significant latency to generate timer interrupts at kernel.
+For virtualized enviornments, its even worse as the KVM handles the SBI call
+and uses a software timer to emulate the timecomapre register. 
 
-I get this line on kernel log and everything works as expected.
-[    7.270172] i801_smbus 0000:00:1f.3: SMBus controller is shared with ACPI AML. This seems safe so far.
+Sstc extension solves both these problems by defining a stimecmp/vstimecmp
+at supervisor (host/guest) level. It allows kernel to program a timer and
+recieve interrupt without supervisor execution enviornment (M-mode/HS mode)
+intervention.
 
-Tested with continous use of i2c-tools (i2cdump) with temperature reads
-in thermal_zone (that triggers AML code).
+KVM directly updates the vstimecmp as well if the guest kernel invokes the SBI
+call instead of updating stimecmp directly. This is required because KVM will
+enable sstc extension if the hardware supports it unless the VMM explicitly
+disables it for that guest. The hardware is expected to compare the
+vstimecmp at every cycle if sstc is enabled and any stale value in vstimecmp
+will lead to spurious timer interrupts. This also helps maintaining the
+backward compatibility with older kernels.
 
-Tested-by: Ettore Chimenti <ek5.chimenti@gmail.com>
+Similary, the M-mode firmware(OpenSBI) uses stimecmp for older kernel
+without sstc support as STIP bit in mip is read only for hardware with sstc. 
+
+The PATCH 1 & 2 enables the basic infrastructure around Sstc extension while
+PATCH 3 lets kernel use the Sstc extension if it is available in hardware.
+PATCH 4 implements the Sstc extension in KVM.
+
+This series has been tested on Qemu(RV32 & RV64) with additional patches in
+Qemu[2]. This series can also be found at [3].
+
+Changes from v4->v5:
+1. Added RB tag.
+2. Changed the pr-format.
+3. Rebased on 5.19-rc7 and kvm-queue.
+4. Moved the henvcfg modification from hardware enable to vcpu_load.
+
+Changes from v3->v4:
+1. Rebased on 5.18-rc6
+2. Unified vstimemp & next_cycles.
+3. Addressed comments in PATCH 3 & 4.
+
+Changes from v2->v3:
+1. Dropped unrelated KVM fixes from this series.
+2. Rebased on 5.18-rc3.
+
+Changes from v1->v2:
+1. Separate the static key from kvm usage
+2. Makde the sstc specific static key local to the driver/clocksource
+3. Moved the vstimecmp update code to the vcpu_timer
+4. Used function pointers instead of static key to invoke vstimecmp vs
+   hrtimer at the run time. This will help in future for migration of vms
+   from/to sstc enabled hardware to non-sstc enabled hardware.
+5. Unified the vstimer & timer to 1 timer as only one of them will be used
+   at runtime.
+
+[1] https://drive.google.com/file/d/1m84Re2yK8m_vbW7TspvevCDR82MOBaSX/view
+[2] https://github.com/atishp04/qemu/tree/sstc_v4
+[3] https://github.com/atishp04/linux/tree/sstc_v5
+
+Atish Patra (4):
+RISC-V: Add SSTC extension CSR details
+RISC-V: Enable sstc extension parsing from DT
+RISC-V: Prefer sstc extension if available
+RISC-V: KVM: Support sstc extension
+
+arch/riscv/include/asm/csr.h            |   5 +
+arch/riscv/include/asm/hwcap.h          |   1 +
+arch/riscv/include/asm/kvm_vcpu_timer.h |   7 ++
+arch/riscv/include/uapi/asm/kvm.h       |   1 +
+arch/riscv/kernel/cpu.c                 |   1 +
+arch/riscv/kernel/cpufeature.c          |   1 +
+arch/riscv/kvm/vcpu.c                   |   7 +-
+arch/riscv/kvm/vcpu_timer.c             | 144 +++++++++++++++++++++++-
+drivers/clocksource/timer-riscv.c       |  24 +++-
+9 files changed, 183 insertions(+), 8 deletions(-)
+
+--
+2.25.1
+

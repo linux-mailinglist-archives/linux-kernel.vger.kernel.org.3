@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDA557AB10
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7236C57AB13
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238133AbiGTAmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 20:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
+        id S238246AbiGTAn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 20:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232544AbiGTAmT (ORCPT
+        with ESMTP id S237934AbiGTAnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:42:19 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8204B5071C
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:42:18 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id v5so1166036wmj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:42:18 -0700 (PDT)
+        Tue, 19 Jul 2022 20:43:24 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2E55A158
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:43:23 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id v5so1166943wmj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:43:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Qdzg5dRrrvZkFJYc/FsK4s6W7dGDoVHBhYE1aXDxorA=;
-        b=qx3XnfIuSVf42uMNXdFmCdTMajg2L9bUAl5SS8urym7r5VLPiZT0qceeOf88X2+XKy
-         mZzsz6gh/+NGWkcN1/UYu4h7ZLrcc2iX1MKCR3lvyfPXeD8E1BgVB0R1AEM0l3uRp5aA
-         /dckGEcilZfmMrkAsxajvj9re2PiGUwhCEjgJygrt77UrWDL1p9lznxagsYOizR40Ctr
-         nWZTb+KsslAtGJB2R31xv4n7tvHL7lxJ0WENnmfIX7IVUzwD+y4XYpzKn8ob1wCV/2Xx
-         9QyZPUWRWmsrp7gynoNXy134I/PZTZkNl0gVo7TCj/COtlf9xZebPQAECT5ZsuXAp9rF
-         OI+A==
+        bh=QWg+c8mfSLpGnrIT5cTIiGQG7DyX5JzzwtgyUHZpsy4=;
+        b=jqtQdn1tESs6xSio7z1YjSW/26bIfOaw5z7wHZpj+pdT81Ta/UTHGpbVlEs9Sq2zLn
+         B2mLSmXn3C/RRz+2cbFEI9l1XjxGUTQJte4YtgctvHz61g6jkQsNu7FmBmXHF/gCFSH2
+         rVFK7tiNdVQo1RRKLuStKCOoADITERFNi096XBVf67ZHzqmvOkubnhMJklhmRhV4BjoM
+         ZSv9Tvp/W7GMgxnPGazX3UUOUAZ8zOjzt71LU4Fir5X0lV/QtEJWlN24s66bHrBt2XUi
+         tS/ZbnfrFkwAjvb6INA84ktcKviA5phfnHAHbUx7fg3D13H1QmBgknoU8WGuA2zfe89d
+         gyhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Qdzg5dRrrvZkFJYc/FsK4s6W7dGDoVHBhYE1aXDxorA=;
-        b=7Yh67kBJonL0wRicoNMUIzvgv1Zy2TH8LpzHYilX0GASYlvW+qgY0W1KSEbjDfF5t2
-         bn5vjefb0uRRCKOiWM5EjO18GVPRGtFwJyhXRlNl+4Vn3OBuotLLS1E3lc9XjQJUBGT7
-         a2VBmt7ppJM5lh1qlLqR0Eh+SMLLk7fZrSfn5JioFkRDXvkOGrZCTh9cxQmPx1oiXYG0
-         rVgIZCMN0s8c+jwBrIt1Qa7Xal9N85lrzbDmV4bjoeQWNI+zHtJZz/puWB1eeLC8MmTj
-         Tnb7DINZ9LS4oSjPNUF8M5z5n9IH9fclL0frU72WZ7k30cqLPPXYT3UzWbXX5CZLNxJP
-         O58w==
-X-Gm-Message-State: AJIora93q5QQxgRPSrHm7cgJv42MM/XZW1p3nx0+5IzKVajbb/vT7IuD
-        dm/mhbPasT6MAe5pPf/APrAwlQ64XchPkydTiaxyzg==
-X-Google-Smtp-Source: AGRyM1vlv37S8QMugy6reFEVuL5KY3LdRVcyMIlMrG9/Qf6nn3kZzbdgMtFBbOX04a4oGrmcowRCsLyN5CDDQ0IIoVA=
-X-Received: by 2002:a7b:ce13:0:b0:3a3:102c:23d3 with SMTP id
- m19-20020a7bce13000000b003a3102c23d3mr1393303wmc.67.1658277736957; Tue, 19
- Jul 2022 17:42:16 -0700 (PDT)
+        bh=QWg+c8mfSLpGnrIT5cTIiGQG7DyX5JzzwtgyUHZpsy4=;
+        b=xCNDsSFMeOy4IjDjXgiryUc1Mp/t3CPuxYJQKYQIoFzN+a00hoCshexT3Ra9KBmA7q
+         vaX6GivXpx4+Ic4MbvThy4pzOEwO0yjmP/4dD6p5V9G/tW26eMoAuEkluI2sibsbjT2z
+         pl9HEb0Rbvb/TBVMDBKNaYYAShUT6pvbt3EGj+mZ2IBtfqMxbhtmdAtKb8QSDAJGOszp
+         pOPdi2YzUrZ1V3nwvvbq4awId2MDtXrE5rR2dVA8K/C1yMyRmraeuMQf/R6Mi/hFPWg/
+         CBjBdNrgE/7burHG+I52vy3WM06YayoVaC4EBumJ0FtVlQVSMMTVK+iMEeLwfSx6RUjP
+         posA==
+X-Gm-Message-State: AJIora8IX3Y2wm0IaSpBlWJIBUsvA+nbJpEnU5VaWUR4Eh1/lPc/kY29
+        yVoJL6t7vzEZ7VFXjsosR1nwJjGryTd31Lah08bfvA==
+X-Google-Smtp-Source: AGRyM1sAdelFgehnBB1OSIKPRvDpxwzFcPb5n9IG7FURM14GgRWav0ZHhwP05+SXl2PlR933ubt3y/muVSJeoxpLRXE=
+X-Received: by 2002:a7b:c8d3:0:b0:3a2:fe0d:ba2e with SMTP id
+ f19-20020a7bc8d3000000b003a2fe0dba2emr1465659wml.115.1658277801389; Tue, 19
+ Jul 2022 17:43:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-17-adrian.hunter@intel.com>
-In-Reply-To: <20220711093218.10967-17-adrian.hunter@intel.com>
+References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-18-adrian.hunter@intel.com>
+In-Reply-To: <20220711093218.10967-18-adrian.hunter@intel.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 17:42:04 -0700
-Message-ID: <CAP-5=fXpFq=zEjQAp7YexBq1t0sQshiK2By8zeKEpfqG3_gjLA@mail.gmail.com>
-Subject: Re: [PATCH 16/35] perf dlfilter: Add machine_pid and vcpu
+Date:   Tue, 19 Jul 2022 17:43:09 -0700
+Message-ID: <CAP-5=fVukKzxtQQFm6PH-ZxNQ-_hVnbYB-LiOek8O8u-8Vbq-Q@mail.gmail.com>
+Subject: Re: [PATCH 17/35] perf auxtrace: Add machine_pid and vcpu to auxtrace_error
 To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@redhat.com>,
@@ -62,7 +62,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,9 +72,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> Add machine_pid and vcpu to struct perf_dlfilter_sample. The 'size' can be
-> used to determine if the values are present, however machine_pid is zero if
-> unused in any case. vcpu should be ignored if machine_pid is zero.
+> Add machine_pid and vcpu to struct perf_record_auxtrace_error. The existing
+> fmt member is used to identify the new format.
+>
+> The new members make it possible to easily differentiate errors from guest
+> machines.
 >
 > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
@@ -84,86 +86,136 @@ Thanks,
 Ian
 
 > ---
->  tools/perf/Documentation/perf-dlfilter.txt | 22 ++++++++++++++++++++++
->  tools/perf/include/perf/perf_dlfilter.h    |  8 ++++++++
->  tools/perf/util/dlfilter.c                 |  2 ++
->  3 files changed, 32 insertions(+)
+>  tools/lib/perf/include/perf/event.h           |  2 ++
+>  tools/perf/util/auxtrace.c                    | 30 +++++++++++++++----
+>  tools/perf/util/auxtrace.h                    |  4 +++
+>  .../scripting-engines/trace-event-python.c    |  4 ++-
+>  tools/perf/util/session.c                     |  4 +++
+>  5 files changed, 37 insertions(+), 7 deletions(-)
 >
-> diff --git a/tools/perf/Documentation/perf-dlfilter.txt b/tools/perf/Documentation/perf-dlfilter.txt
-> index 594f5a5a0c9e..fb22e3b31dc5 100644
-> --- a/tools/perf/Documentation/perf-dlfilter.txt
-> +++ b/tools/perf/Documentation/perf-dlfilter.txt
-> @@ -107,9 +107,31 @@ struct perf_dlfilter_sample {
->         __u64 raw_callchain_nr; /* Number of raw_callchain entries */
->         const __u64 *raw_callchain; /* Refer <linux/perf_event.h> */
->         const char *event;
-> +       __s32 machine_pid;
-> +       __s32 vcpu;
+> diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+> index c2dbd3e88885..556bb06798f2 100644
+> --- a/tools/lib/perf/include/perf/event.h
+> +++ b/tools/lib/perf/include/perf/event.h
+> @@ -279,6 +279,8 @@ struct perf_record_auxtrace_error {
+>         __u64                    ip;
+>         __u64                    time;
+>         char                     msg[MAX_AUXTRACE_ERROR_MSG];
+> +       __u32                    machine_pid;
+> +       __u32                    vcpu;
 >  };
->  ----
 >
-> +Note: 'machine_pid' and 'vcpu' are not original members, but were added together later.
-> +'size' can be used to determine their presence at run time.
-> +PERF_DLFILTER_HAS_MACHINE_PID will be defined if they are present at compile time.
-> +For example:
-> +[source,c]
-> +----
-> +#include <perf/perf_dlfilter.h>
-> +#include <stddef.h>
-> +#include <stdbool.h>
-> +
-> +static inline bool have_machine_pid(const struct perf_dlfilter_sample *sample)
+>  struct perf_record_aux {
+> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+> index 511dd3caa1bc..6edab8a16de6 100644
+> --- a/tools/perf/util/auxtrace.c
+> +++ b/tools/perf/util/auxtrace.c
+> @@ -1189,9 +1189,10 @@ void auxtrace_buffer__free(struct auxtrace_buffer *buffer)
+>         free(buffer);
+>  }
+>
+> -void auxtrace_synth_error(struct perf_record_auxtrace_error *auxtrace_error, int type,
+> -                         int code, int cpu, pid_t pid, pid_t tid, u64 ip,
+> -                         const char *msg, u64 timestamp)
+> +void auxtrace_synth_guest_error(struct perf_record_auxtrace_error *auxtrace_error, int type,
+> +                               int code, int cpu, pid_t pid, pid_t tid, u64 ip,
+> +                               const char *msg, u64 timestamp,
+> +                               pid_t machine_pid, int vcpu)
+>  {
+>         size_t size;
+>
+> @@ -1207,12 +1208,26 @@ void auxtrace_synth_error(struct perf_record_auxtrace_error *auxtrace_error, int
+>         auxtrace_error->ip = ip;
+>         auxtrace_error->time = timestamp;
+>         strlcpy(auxtrace_error->msg, msg, MAX_AUXTRACE_ERROR_MSG);
+> -
+> -       size = (void *)auxtrace_error->msg - (void *)auxtrace_error +
+> -              strlen(auxtrace_error->msg) + 1;
+> +       if (machine_pid) {
+> +               auxtrace_error->fmt = 2;
+> +               auxtrace_error->machine_pid = machine_pid;
+> +               auxtrace_error->vcpu = vcpu;
+> +               size = sizeof(*auxtrace_error);
+> +       } else {
+> +               size = (void *)auxtrace_error->msg - (void *)auxtrace_error +
+> +                      strlen(auxtrace_error->msg) + 1;
+> +       }
+>         auxtrace_error->header.size = PERF_ALIGN(size, sizeof(u64));
+>  }
+>
+> +void auxtrace_synth_error(struct perf_record_auxtrace_error *auxtrace_error, int type,
+> +                         int code, int cpu, pid_t pid, pid_t tid, u64 ip,
+> +                         const char *msg, u64 timestamp)
 > +{
-> +#ifdef PERF_DLFILTER_HAS_MACHINE_PID
-> +       return sample->size >= offsetof(struct perf_dlfilter_sample, vcpu) + sizeof(sample->vcpu);
-> +#else
-> +       return false;
-> +#endif
+> +       auxtrace_synth_guest_error(auxtrace_error, type, code, cpu, pid, tid,
+> +                                  ip, msg, timestamp, 0, -1);
 > +}
-> +----
 > +
->  The perf_dlfilter_fns structure
->  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  int perf_event__synthesize_auxtrace_info(struct auxtrace_record *itr,
+>                                          struct perf_tool *tool,
+>                                          struct perf_session *session,
+> @@ -1662,6 +1677,9 @@ size_t perf_event__fprintf_auxtrace_error(union perf_event *event, FILE *fp)
+>         if (!e->fmt)
+>                 msg = (const char *)&e->time;
 >
-> diff --git a/tools/perf/include/perf/perf_dlfilter.h b/tools/perf/include/perf/perf_dlfilter.h
-> index 3eef03d661b4..a26e2f129f83 100644
-> --- a/tools/perf/include/perf/perf_dlfilter.h
-> +++ b/tools/perf/include/perf/perf_dlfilter.h
-> @@ -9,6 +9,12 @@
->  #include <linux/perf_event.h>
->  #include <linux/types.h>
->
-> +/*
-> + * The following macro can be used to determine if this header defines
-> + * perf_dlfilter_sample machine_pid and vcpu.
-> + */
-> +#define PERF_DLFILTER_HAS_MACHINE_PID
+> +       if (e->fmt >= 2 && e->machine_pid)
+> +               ret += fprintf(fp, " machine_pid %d vcpu %d", e->machine_pid, e->vcpu);
 > +
->  /* Definitions for perf_dlfilter_sample flags */
->  enum {
->         PERF_DLFILTER_FLAG_BRANCH       = 1ULL << 0,
-> @@ -62,6 +68,8 @@ struct perf_dlfilter_sample {
->         __u64 raw_callchain_nr; /* Number of raw_callchain entries */
->         const __u64 *raw_callchain; /* Refer <linux/perf_event.h> */
->         const char *event;
-> +       __s32 machine_pid;
-> +       __s32 vcpu;
->  };
+>         ret += fprintf(fp, " cpu %d pid %d tid %d ip %#"PRI_lx64" code %u: %s\n",
+>                        e->cpu, e->pid, e->tid, e->ip, e->code, msg);
+>         return ret;
+> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
+> index cd0d25c2751c..6a4fbfd34c6b 100644
+> --- a/tools/perf/util/auxtrace.h
+> +++ b/tools/perf/util/auxtrace.h
+> @@ -595,6 +595,10 @@ int auxtrace_index__process(int fd, u64 size, struct perf_session *session,
+>                             bool needs_swap);
+>  void auxtrace_index__free(struct list_head *head);
 >
->  /*
-> diff --git a/tools/perf/util/dlfilter.c b/tools/perf/util/dlfilter.c
-> index db964d5a52af..54e4d4495e00 100644
-> --- a/tools/perf/util/dlfilter.c
-> +++ b/tools/perf/util/dlfilter.c
-> @@ -495,6 +495,8 @@ int dlfilter__do_filter_event(struct dlfilter *d,
->         ASSIGN(misc);
->         ASSIGN(raw_size);
->         ASSIGN(raw_data);
-> +       ASSIGN(machine_pid);
-> +       ASSIGN(vcpu);
+> +void auxtrace_synth_guest_error(struct perf_record_auxtrace_error *auxtrace_error, int type,
+> +                               int code, int cpu, pid_t pid, pid_t tid, u64 ip,
+> +                               const char *msg, u64 timestamp,
+> +                               pid_t machine_pid, int vcpu);
+>  void auxtrace_synth_error(struct perf_record_auxtrace_error *auxtrace_error, int type,
+>                           int code, int cpu, pid_t pid, pid_t tid, u64 ip,
+>                           const char *msg, u64 timestamp);
+> diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
+> index adba01b7d9dd..3367c5479199 100644
+> --- a/tools/perf/util/scripting-engines/trace-event-python.c
+> +++ b/tools/perf/util/scripting-engines/trace-event-python.c
+> @@ -1559,7 +1559,7 @@ static void python_process_auxtrace_error(struct perf_session *session __maybe_u
+>                 msg = (const char *)&e->time;
+>         }
 >
->         if (sample->branch_stack) {
->                 d_sample.brstack_nr = sample->branch_stack->nr;
+> -       t = tuple_new(9);
+> +       t = tuple_new(11);
+>
+>         tuple_set_u32(t, 0, e->type);
+>         tuple_set_u32(t, 1, e->code);
+> @@ -1570,6 +1570,8 @@ static void python_process_auxtrace_error(struct perf_session *session __maybe_u
+>         tuple_set_u64(t, 6, tm);
+>         tuple_set_string(t, 7, msg);
+>         tuple_set_u32(t, 8, cpumode);
+> +       tuple_set_s32(t, 9, e->machine_pid);
+> +       tuple_set_s32(t, 10, e->vcpu);
+>
+>         call_object(handler, t, handler_name);
+>
+> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+> index f3e9fa557bc9..7ea0b91013ea 100644
+> --- a/tools/perf/util/session.c
+> +++ b/tools/perf/util/session.c
+> @@ -895,6 +895,10 @@ static void perf_event__auxtrace_error_swap(union perf_event *event,
+>         event->auxtrace_error.ip   = bswap_64(event->auxtrace_error.ip);
+>         if (event->auxtrace_error.fmt)
+>                 event->auxtrace_error.time = bswap_64(event->auxtrace_error.time);
+> +       if (event->auxtrace_error.fmt >= 2) {
+> +               event->auxtrace_error.machine_pid = bswap_32(event->auxtrace_error.machine_pid);
+> +               event->auxtrace_error.vcpu = bswap_32(event->auxtrace_error.vcpu);
+> +       }
+>  }
+>
+>  static void perf_event__thread_map_swap(union perf_event *event,
 > --
 > 2.25.1
 >

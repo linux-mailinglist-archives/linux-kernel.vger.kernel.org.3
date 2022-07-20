@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE8157BD28
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F4A57BD29
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbiGTRsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
+        id S233688AbiGTRsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiGTRsK (ORCPT
+        with ESMTP id S229690AbiGTRsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:48:10 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2754AD57
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:48:08 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id m8so11278363edd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:48:08 -0700 (PDT)
+        Wed, 20 Jul 2022 13:48:15 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA9852DF8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:48:14 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id x91so24754668ede.1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=GR9U47/8mfP/ckxqrtY0VCAof5NC+fF9d0u+ZbiOF8Q=;
-        b=gN3IKSDZWj8csjNsRFaVOS39Wkf1tNxCdYuiTsFSzqXbBQrsGoDDLtz6wzv8m2sVsc
-         ijezp77Qf8MLVi6cRoh5OaNnRIw2DUC4oNyrH96bKSnqJQJ8p36CRpmrOFrcbu/lb4/s
-         ZDeaYYWMof4PEHHw5vqxq+mkoNpFRdoXoTczA=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=SZl3qX0LM9cd6eczZTP4tcvjVJ6Givuz0Tqtszlu9H0=;
+        b=U13Jza77l6NjL8EvG5WCVxr3nyVQcvJyxXj8Z4nVZMj09m2X/+ACIxCRdKj4DW12uR
+         UGubrBdXaBqXs1FkU7FGZJvt4qrqDXFCBgHEF/GQpJZ3MZ2yqZnt/mw7twUCVF7hBb9K
+         iYzxl7FKWOVd9VdAgTXT39tVVyfN045T6UdO8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=GR9U47/8mfP/ckxqrtY0VCAof5NC+fF9d0u+ZbiOF8Q=;
-        b=U3zMqQsfD8OHUZIenThPgeWYdYFUy1GeirXVX6zGSJ3m20jHZTA41JR7dfIsXv4XZt
-         RUiIlANfupknUeOk94O53DyqfVlGfprVJGMTLexo5SEoxPij/NxPKF++iVjM2fBiYJF9
-         8Db8E4Ww81Ti+752ikJL6rHm3cY+Vp0QbX6f/aRHFhMLT0oc1dlavzorbAAbplSY5Z2Q
-         2u7vmsJAZujrPkO2dr76J8oFoeCcPCvyPQMcLP2CaZRZpW+6eSl9rBJQj/un5N320K5b
-         ULaiHfDNWcJsgYjhJos9+RC/opn7cGAwqO/kKnt0vJLQsQL87xV4JDyo+rgRNxqyC2pk
-         LdEQ==
-X-Gm-Message-State: AJIora/YtOqBmObNFB0xkst5cNhF8pGGd5VUFB5BYzxJi8SMVjKT73ok
-        xnAMO65epPHMT152pysciQFJpke0b5zirA==
-X-Google-Smtp-Source: AGRyM1uyHqHwhrqV+AoRFj4lUURcAahO7Om26arm2nRYJ8z6zCl8BC7AT0zYgAxBL4FjllrwaNSaZQ==
-X-Received: by 2002:a05:6402:e96:b0:43a:f21f:42a0 with SMTP id h22-20020a0564020e9600b0043af21f42a0mr53101566eda.382.1658339287219;
-        Wed, 20 Jul 2022 10:48:07 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=SZl3qX0LM9cd6eczZTP4tcvjVJ6Givuz0Tqtszlu9H0=;
+        b=NyBP8nyXy1va4eVtqmH8R9Hq86PHdCQU7sPxHslfaKFbN+ow3QLeDL3jYNIkm8GUNB
+         NQS3T7ihQ+zJLqjbnXdNKBi2e4V54wEeY3w92XebIgjLQhOmD/M3/Sqc/LxOjgN+1vov
+         IPTtG4lb8RVA1LigMW8LB2tTEUOPlTBnxT0qGrO3jXI2Oh31Tue75w2abWJC6WSzloBc
+         mUHOkb4kydzPuMyQbOv3n5xfL4/GGEOWcLQYGG+MxsKtfUWlpnpz+7WT5dfaHyDRY4Wk
+         f3SjftyAWPH1x76dkd9mVHu4/e5g4trzm+vX/61vHidlxhk8tCTOSZsjdsRbj+/E1spZ
+         iF3Q==
+X-Gm-Message-State: AJIora+brR+eTOZsDHXdVDxJGx1hFIFxBNwXVbi7Tmx7TKtVs7aqZgfq
+        y+qHwdV56cKfKjL8AhJuP5Ijt/yBg+rpQQ==
+X-Google-Smtp-Source: AGRyM1tB9bsQQyqjf8NKoKr2D5bj1ypFQHJvRSBpdPoNp913zxjGBj1fm/UQnXJDZSQiD0TDhMDR1w==
+X-Received: by 2002:a05:6402:354c:b0:43a:dc59:657 with SMTP id f12-20020a056402354c00b0043adc590657mr51070822edd.405.1658339292807;
+        Wed, 20 Jul 2022 10:48:12 -0700 (PDT)
 Received: from localhost ([2620:10d:c092:400::5:d58e])
-        by smtp.gmail.com with ESMTPSA id b16-20020a1709062b5000b00722e57fa051sm8122351ejg.90.2022.07.20.10.48.06
+        by smtp.gmail.com with ESMTPSA id lx23-20020a170906af1700b0072b11cb485asm8036351ejb.208.2022.07.20.10.48.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 10:48:06 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 18:48:06 +0100
+        Wed, 20 Jul 2022 10:48:12 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 18:48:11 +0100
 From:   Chris Down <chris@chrisdown.name>
 To:     linux-kernel@vger.kernel.org
 Cc:     Petr Mladek <pmladek@suse.com>,
@@ -54,11 +54,14 @@ Cc:     Petr Mladek <pmladek@suse.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         John Ogness <john.ogness@linutronix.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: [PATCH v3 0/2] printk: console: Per-console loglevels
-Message-ID: <cover.1658339046.git.chris@chrisdown.name>
+Subject: [PATCH v3 1/2] printk: console: Create console= parser that supports
+ named options
+Message-ID: <732ee897b2bd49ada3f7dee396475c5a2195071b.1658339046.git.chris@chrisdown.name>
+References: <cover.1658339046.git.chris@chrisdown.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1658339046.git.chris@chrisdown.name>
 User-Agent: Mutt/2.2.6 (2022-06-05)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,52 +72,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v3:
+This will be used in the next patch, and for future changes like the
+proposed sync/nothread named options. This avoids having to use sigils
+like "/" to get different semantic meaning for different parts of the
+option string, and helps to make things more human readable and
+easily extensible.
 
-- Update to work with John's kthread patches
-- Remove force_console_loglevel, now we only have global and local levels
-- Remove minimum_console_loglevel control and document how to change it
-- The minimum loglevel is now only honoured on setting global/local level
-- Add ignore_per_console_loglevel
-- Return -EINVAL if trying to set below minimum console level
-- Add parser for named console= options
-- Fix docs around ignore_loglevel: it can be changed at runtime
-- Fix ordering in "in order of authority" docs
-- Remove duplicated default_console_loglevel doc
-- Only warn once on syslog() use
+There are no functional changes for existing console= users.
 
-v2:
+Signed-off-by: Chris Down <chris@chrisdown.name>
+---
+ kernel/printk/printk.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-- Dynamically allocate struct device*
-- Document sysfs attributes in Documentation/ABI/
-- Use sysfs_emit() instead of sprintf() in dev sysfs files
-- Remove WARN_ON() for device_add/IS_ERR(console_class)
-- Remove "soon" comment for kernel.printk
-- Fix !CONFIG_PRINTK build
-- Fix device_unregister() NULL dereference if called before class setup
-- Add new documentation to MAINTAINERS
-
-Chris Down (2):
-  printk: console: Create console= parser that supports named options
-  printk: console: Support console-specific loglevels
-
- Documentation/ABI/testing/sysfs-class-console |  43 +++
- .../admin-guide/kernel-parameters.txt         |  28 +-
- .../admin-guide/per-console-loglevel.rst      |  92 ++++++
- Documentation/admin-guide/serial-console.rst  |  17 +-
- Documentation/core-api/printk-basics.rst      |  35 +-
- Documentation/networking/netconsole.rst       |  17 +
- MAINTAINERS                                   |   3 +
- include/linux/console.h                       |  24 ++
- kernel/printk/console_cmdline.h               |   2 +
- kernel/printk/printk.c                        | 311 +++++++++++++++++-
- kernel/printk/sysctl.c                        |  64 +++-
- 11 files changed, 599 insertions(+), 37 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-class-console
- create mode 100644 Documentation/admin-guide/per-console-loglevel.rst
-
-
-base-commit: 9d882352bac8f2ff3753d691e2dc65fcaf738729
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index b49c6ff6dca0..6094f773ad4a 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -2368,6 +2368,30 @@ static void set_user_specified(struct console_cmdline *c, bool user_specified)
+ 	console_set_on_cmdline = 1;
+ }
+ 
++static void parse_console_cmdline_options(struct console_cmdline *c,
++					  char *options)
++{
++	bool seen_serial_opts = false;
++	char *key;
++
++	while ((key = strsep(&options, ",")) != NULL) {
++		char *value;
++
++		value = strchr(key, ':');
++		if (value)
++			*(value++) = '\0';
++
++		if (!seen_serial_opts && isdigit(key[0]) && !value) {
++			seen_serial_opts = true;
++			c->options = key;
++			continue;
++		}
++
++		pr_err("ignoring invalid console option: '%s%s%s'\n", key,
++		       value ? ":" : "", value ?: "");
++	}
++}
++
+ static int __add_preferred_console(char *name, int idx, char *options,
+ 				   char *brl_options, bool user_specified)
+ {
+@@ -2393,7 +2417,7 @@ static int __add_preferred_console(char *name, int idx, char *options,
+ 	if (!brl_options)
+ 		preferred_console = i;
+ 	strlcpy(c->name, name, sizeof(c->name));
+-	c->options = options;
++	parse_console_cmdline_options(c, options);
+ 	set_user_specified(c, user_specified);
+ 	braille_set_options(c, brl_options);
+ 
 -- 
 2.37.1
 

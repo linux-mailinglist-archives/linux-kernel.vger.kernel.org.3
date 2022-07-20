@@ -2,129 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE07C57BBF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9382657BBF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiGTQvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S235248AbiGTQvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235188AbiGTQv0 (ORCPT
+        with ESMTP id S235002AbiGTQvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:51:26 -0400
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CDCE02C;
-        Wed, 20 Jul 2022 09:51:24 -0700 (PDT)
-Received: by mail-pg1-f173.google.com with SMTP id s206so16918970pgs.3;
-        Wed, 20 Jul 2022 09:51:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uec/oXr/Tjpv6wPvs6IdX7AlVzGoN0KQw6QozY3V18c=;
-        b=z4/IqObr4z+IZlNEVPByOydzTKVwQAf3o89llzUgZqRMJ/S0CCc3CLddZA8NxHC5tG
-         rQxMv/+bUgAr4ayyewsVEb9RFVjM2glydU5w6vylVVx03qXtWj3Jil1p26hjUVFmvTZK
-         NPRE1EOBfMPgHB4vrAyNnothbXUhGdMWVrHoCAsnLGeqsI8AYKxRKGvumu9KIP59s14C
-         AjLczqqRrq2iZ2wXK7FZllGabbDAIr0Lfn7ka9yupDmlCi7TdXf7q4OD9bvzUqBcH+cD
-         nXU2sHhT4oR4WZmKsr8/I3EHxnCxegYNEgPA2ZZc+pHd4RiHcErO2QSMdURpSAbhfn7k
-         dT3g==
-X-Gm-Message-State: AJIora8SWpmPXsIHgQNcGBvvohTQSWdyTNtdILx9nJCm/RdGfBnp0B2j
-        l9WusUPa3qGaJki8aq6I7Fc=
-X-Google-Smtp-Source: AGRyM1uaU2qxU/0Zbhk4YttPSiycxVxEvIcS4KUr9UVGt5nOuB/Cq2h/iI2cdq1mpA+GiAyvhVh8ug==
-X-Received: by 2002:a63:1648:0:b0:41a:49f9:77ae with SMTP id 8-20020a631648000000b0041a49f977aemr8822433pgw.377.1658335883867;
-        Wed, 20 Jul 2022 09:51:23 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:a7e0:78fc:9269:215b? ([2620:15c:211:201:a7e0:78fc:9269:215b])
-        by smtp.gmail.com with ESMTPSA id q6-20020a17090aa00600b001f2128b11a4sm1879933pjp.38.2022.07.20.09.51.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 09:51:23 -0700 (PDT)
-Message-ID: <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
-Date:   Wed, 20 Jul 2022 09:51:21 -0700
+        Wed, 20 Jul 2022 12:51:39 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D598D675BB;
+        Wed, 20 Jul 2022 09:51:35 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:54210)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oECv8-00AUeC-Tm; Wed, 20 Jul 2022 10:51:34 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:40140 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oECv7-002zG9-U8; Wed, 20 Jul 2022 10:51:34 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Olivier Langlois <olivier@trillion01.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        io-uring@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
+        <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
+        <87h7i694ij.fsf_-_@disp2133>
+        <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
+        <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
+        <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
+        <878rw9u6fb.fsf@email.froward.int.ebiederm.org>
+        <303f7772-eb31-5beb-2bd0-4278566591b0@gmail.com>
+        <87ilsg13yz.fsf@email.froward.int.ebiederm.org>
+        <8218f1a245d054c940e25142fd00a5f17238d078.camel@trillion01.com>
+        <a29a1649-5e50-4221-9f44-66a35fbdff80@kernel.dk>
+        <87y1wnrap0.fsf_-_@email.froward.int.ebiederm.org>
+Date:   Wed, 20 Jul 2022 11:51:27 -0500
+In-Reply-To: <87y1wnrap0.fsf_-_@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Wed, 20 Jul 2022 11:49:31 -0500")
+Message-ID: <87mtd3rals.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
-        jason600.groome@gmail.com,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220630195703.10155-1-bvanassche@acm.org>
- <20220630195703.10155-3-bvanassche@acm.org>
- <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
- <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org>
- <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
- <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oECv7-002zG9-U8;;;mid=<87mtd3rals.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+oGLq5krvvMrRh4NiQGwHlLaqBKb8Xk7Q=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;Jens Axboe <axboe@kernel.dk>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 432 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 4.6 (1.1%), b_tie_ro: 3.2 (0.7%), parse: 1.20
+        (0.3%), extract_message_metadata: 11 (2.6%), get_uri_detail_list: 2.1
+        (0.5%), tests_pri_-1000: 10 (2.4%), tests_pri_-950: 1.01 (0.2%),
+        tests_pri_-900: 0.78 (0.2%), tests_pri_-90: 93 (21.6%), check_bayes:
+        91 (21.1%), b_tokenize: 6 (1.3%), b_tok_get_all: 8 (1.9%),
+        b_comp_prob: 1.70 (0.4%), b_tok_touch_all: 73 (16.8%), b_finish: 0.82
+        (0.2%), tests_pri_0: 296 (68.5%), check_dkim_signature: 0.41 (0.1%),
+        check_dkim_adsp: 3.3 (0.8%), poll_dns_idle: 1.92 (0.4%), tests_pri_10:
+        2.7 (0.6%), tests_pri_500: 8 (1.8%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 2/2] coredump: Allow coredumps to pipes to work with io_uring
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 00:47, Geert Uytterhoeven wrote:
-> With more debug options enabled, it prints:
-> 
-> INFO: task kworker/0:7:283 blocked for more than 120 seconds.
->        Not tainted 5.19.0-rc7-salvator-x-00794-g6780eb02b605 #1287
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/0:7     state:D stack:    0 pid:  283 ppid:     2 flags:0x00000008
-> Workqueue: events ata_scsi_dev_rescan
-> Call trace:
->   __switch_to+0xbc/0x124
->   __schedule+0x540/0x71c
->   schedule+0x58/0xa0
->   io_schedule+0x18/0x34
->   blk_mq_get_tag+0x138/0x244
->   __blk_mq_alloc_requests+0x130/0x2f0
->   blk_mq_alloc_request+0x74/0xa8
->   scsi_alloc_request+0x10/0x30
->   __scsi_execute+0x5c/0x18c
->   scsi_vpd_inquiry+0x7c/0xdc
->   scsi_get_vpd_size+0x34/0xa8
->   scsi_get_vpd_buf+0x28/0xf4
->   scsi_attach_vpd+0x44/0x170
->   scsi_rescan_device+0x30/0x98
->   ata_scsi_dev_rescan+0xc8/0xfc
->   process_one_work+0x2e0/0x474
->   worker_thread+0x1cc/0x270
->   kthread+0xd8/0xe8
->   ret_from_fork+0x10/0x20
-> 
-> This doesn't look like it's blocked in the R-Car SATA driver, but on
-> some I/O scheduling event in the block core?
 
-I'm not familiar with the SATA code but from a quick look it seems like 
-the above code is only triggered from inside the ATA error handler 
-(ata_do_eh() -> ata_eh_recover() -> ata_eh_revalidate_and_attach() -> 
-schedule_work(&(ap->scsi_rescan_task) -> ata_scsi_dev_rescan()). It 
-doesn't seem normal to me that the ATA error handler gets invoked during 
-a resume. How about testing the following two code changes?
-* In sd_start_stop_device(), change "return sd_submit_start(sdkp, cmd, 
-sizeof(cmd))" into "sd_submit_start(sdkp, cmd, sizeof(cmd))" and below 
-that call add "flush_work(&sdkp->start_done_work)". This makes 
-sd_start_stop_device() again synchronous. This will learn us whether the 
-behavior change is caused by submitting the START command from another 
-context or by not waiting until the START command has finished.
-* Back out the above change, change "return sd_submit_start(sdkp, cmd, 
-sizeof(cmd))" again into "sd_submit_start(sdkp, cmd, sizeof(cmd))" and 
-below that statement add a call to 
-scsi_run_queue(sdkp->device->request_queue). If this change helps it 
-means that the scsi_run_queue() call is necessary to prevent reordering 
-of the START command with other SCSI commands.
+Now that io_uring like everything else stops for coredumps in
+get_signal the code can once again allow any interruptible
+condition after coredump_wait to interrupt the coredump.
 
-Thanks,
+Clear TIF_NOTIFY_SIGNAL after coredump_wait, to guarantee that
+anything that sets TIF_NOTIFY_SIGNAL before coredump_wait completed
+won't cause the coredumps to interrupted.
 
-Bart.
+With all of the other threads in the process stopped io_uring doesn't
+call task_work_add on the thread running do_coredump.  Combined with
+the clearing of TIF_NOTIFY_SIGNAL this allows processes that use
+io_uring to coredump through pipes.
+
+Restore dump_interrupted to be a simple call to signal_pending
+effectively reverting commit 06af8679449d ("coredump: Limit what can
+interrupt coredumps").  At this point only SIGKILL delivered to the
+coredumping thread should be able to cause signal_pending to return
+true.
+
+A nice followup would be to find a reliable race free way to modify
+task_work_add and probably set_notify_signal to skip setting
+TIF_NOTIFY_SIGNAL once it is clear a task will no longer process
+signals and other interruptible conditions.  That would allow
+TIF_NOTIFY_SIGNAL to be cleared where TIF_SIGPENDING is cleared in
+coredump_zap_process.
+
+To be as certain as possible that this works, I tested this with
+commit 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
+reverted.  Which means that not only is TIF_NOTIFY_SIGNAL prevented
+from stopping coredumps to pipes, the sequence of stopping threads to
+participate in the coredump avoids deadlocks that were possible
+previously.
+
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ fs/coredump.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 67dda77c500f..c06594f56cbb 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -476,7 +476,7 @@ static bool dump_interrupted(void)
+ 	 * but then we need to teach dump_write() to restart and clear
+ 	 * TIF_SIGPENDING.
+ 	 */
+-	return fatal_signal_pending(current) || freezing(current);
++	return signal_pending(current);
+ }
+ 
+ static void wait_for_dump_helpers(struct file *file)
+@@ -589,6 +589,9 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+ 
+ 	old_cred = override_creds(cred);
+ 
++	/* Don't break out of interruptible sleeps */
++	clear_notify_signal();
++
+ 	ispipe = format_corename(&cn, &cprm, &argv, &argc);
+ 
+ 	if (ispipe) {
+-- 
+2.35.3
+

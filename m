@@ -2,175 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B0857BB37
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7174457BB31
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiGTQSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
+        id S237448AbiGTQSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238147AbiGTQSm (ORCPT
+        with ESMTP id S229446AbiGTQSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:18:42 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B0954645;
-        Wed, 20 Jul 2022 09:18:41 -0700 (PDT)
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KEOnnj024923;
-        Wed, 20 Jul 2022 16:18:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=bYXpX/0RNuAoIKJeCGAWX1dKg6CcRfu49bkwpVLssRo=;
- b=NV6Z4B7OE353SJwoM7fm5hxmNGfdCAhYmCLgYR4rDyVj5wzeDw/K9K4Lz+AEEGDffdjX
- crMxp5EPhvt4sRAv72juR6VhC03i0P3opX19z7Nr1J0OvH/fkiLPjWXSoeNey4zBlei8
- lUg5wYMmqD4yi7j4GclDt1vSs4G3l2Z3R1eMjJaAz3EDvHVbvruUT3KYFFFqymyCowB5
- 5UsdBkJSIV9EBiJAxF8p2xkO8/iNLL14zRVej0q6rCX6GQs1dlYn49HTFCMACzZsNvOV
- rRFJ97z+ShL2beKbP08KOSONkZTNJQ0vZ3nkN4qsU2y9rc5O9EtWjb39HO0A9QSzioWl xA== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3hekep93qb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 16:18:35 +0000
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 4B0C214796;
-        Wed, 20 Jul 2022 16:18:35 +0000 (UTC)
-Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 20 Jul 2022 04:17:54 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Wed, 20 Jul 2022 04:17:54 -1200
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 20 Jul 2022 04:17:52 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EmmAhbAEPH1a2WofCRdFwfbJjw+urz7byN1tN3hxHQGqwaQc3Z9wsf2y2CYKzq/atKKGCYAy+mTSAuwE+NPQSD2KQioRz1UstU24tS3IRcbhcKDm3dKhdDr3CtLJgGGJ6NPeRy1LorHnVcAoes4/wWotLP61IBDY6r2G3CBwiE/yRuJBAwPQWRGJAihVBINdzcK83l26gaUxlDQit/qWe8jTSE3UK3t/dI3LEWtm9V/cg+7q0dRe1k23RDGutMG4QvtgGvSUEg4pK3Y+U/BMtB9vKg94ubcUl1SYNeUmAeZ8g/fZP2mdle5oafPPoDlkVHhP74WYgUSo8bL5G8F5mQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bYXpX/0RNuAoIKJeCGAWX1dKg6CcRfu49bkwpVLssRo=;
- b=Ccd3Slr9VcY3hGEi6Appu5iEUmynk8EiL4eTOdmL9PNrylCfBPIUSgCHnfwFPYZQ2UrfmGRVijeQ9KQ1tWVZEarlkXvNXQBn4AOA0uqHaV+8Sitqwu6SbF54wap/bwBcPW5PN+Uu4yeTZnVKxnqYolG0+2plYuym2Ue/OIcPz70cOEcPhKy5t1HiJjeGFYJbx/L6YSb/0GbfwhSGA97G6Q4z8wAAsLgmsicgozHS7KNtlPTyCzFwkUlihvhGgHSoOEbtK1wLiuy7V3SG80JuxP99C5mjFlHdlE13gTifDGSgOcQe1sqMAyKtadEoexINrh0BruHPteqDUTupMVzlWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:154::8)
- by MN0PR84MB3046.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:208:3ce::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Wed, 20 Jul
- 2022 16:17:50 +0000
-Received: from PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::c165:fcd6:a6e7:3f06]) by PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::c165:fcd6:a6e7:3f06%7]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
- 16:17:50 +0000
-From:   "Kani, Toshi" <toshi.kani@hpe.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "rrichter@marvell.com" <rrichter@marvell.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
-Thread-Topic: [PATCH] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
-Thread-Index: AQHYm7smwrVZqUGvIkiseTl/uQAs+q2HJpiAgAA/+tCAAATmAIAABWQQ
-Date:   Wed, 20 Jul 2022 16:17:50 +0000
-Message-ID: <PH7PR84MB18380BBEA0E8C1A4A3721865828E9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20220719220124.760359-1-toshi.kani@hpe.com>
- <YtfsOcWbWREu1NnK@zn.tnic>
- <PH7PR84MB1838CC03943D28806F7DCD8F828E9@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YtgmALzpaR9IHR/F@zn.tnic>
-In-Reply-To: <YtgmALzpaR9IHR/F@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2886ffbd-7f20-4748-aed2-08da6a6b648d
-x-ms-traffictypediagnostic: MN0PR84MB3046:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: E7MuYOcQtNkFVZTAle0aOMjWfJz0J97jhcix2I6qkfbpua7ZM1evgW77VFXXpVWZSGEVbK9gx6cGIfthK2LaeU9b0Hoh5c4FwmZBQzclJM8N+KKLl+zhsqlN7IsDEfj7vccAUFQ4pB+Fyy4rhzDjmPY22WC5Vxm83nN6a8NCkJ48OSId0HlyCMtPvxrH1cYZTuhGkEWfm/a3ctvJY0SYJn7rUoUmDU2FBvj91iBBb1QWTCyeONfDqjKZ3CDDiq13//AI9lx3pa9J/oaHMOLrjo16On3y1AX1jESjIXla62UeEYcnzR2QY2sbnxnCF8Dww8r47mh2Gf0hZtNFpA6RbkiNu2lUnaQ5k75ah6G6q9iTmMbqbrnMq5eQuowwtNm5n7OWKaoq0JsHRtOVg70jS1viAl6zxnrn3WGNQm478Bvy9m5NGlvaUFgqYkcpyDXhiGD0Vlah96iKzKeZGsIz+pITbk69UjDNZe3uR+a3/RYMtl5PWUIZ/T0ClEPYKcRvPMdEmoo+ghhjbD0H2n55zyTj5nRsRVYGKuzYW30/Y3XPUeAVwueTROj9JMgZAkLRF59hmYGxA3yLj8CB36bSwq7LcpuHRT22masgOpTY9PDDQ1rPQkCpw4gDSFmjVRNO8U4DzezHJkd8InlxbHcC3q4u7PRLpO8bdw1EM17q+ad5juEgGfS5E0Zl2zKtYV9m9eshapW0TsfmqxcQU4CYcfliTPSZlXVkaqZcOuvPi8stWi+inRiJK8jAlOL6dcdr1vNhtRcEEgg5B91XlPAT3q418RZmhA4cYkN4dLJCW6o=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(136003)(346002)(39860400002)(396003)(366004)(376002)(4326008)(76116006)(6916009)(26005)(54906003)(9686003)(4744005)(33656002)(478600001)(41300700001)(122000001)(186003)(71200400001)(66556008)(316002)(2906002)(8936002)(83380400001)(5660300002)(82960400001)(6506007)(38100700002)(8676002)(66446008)(64756008)(38070700005)(55016003)(66476007)(7696005)(86362001)(52536014)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WTZoU05jdWhnZDNoRUJuc1l4bGFPN0c0NGJXQ2hab2dKS0hxQ0R1V3grL3Ry?=
- =?utf-8?B?QzV1SDdPNEszWGhxcEdCcmJUUWo0UEFWQ0lDU0FjOFlmbERIZXR4aFQrSlpQ?=
- =?utf-8?B?TjN5NHFReGdlTE1KbnJKRndCVGZ3TU5IZGxucmQzcDJ0NGdEV0thVmQ5M1hZ?=
- =?utf-8?B?aFV2L3d3aXI1MzNQRUEvQlZlUWdpL3ZkV21VZ2REMzBSbnlIc2hUYmZ4VEFq?=
- =?utf-8?B?MUJKRXphaW9UM2h4TmFHMjZJZ3l1YllsZ2VhRFBIY0xBVVFFc3pmVVpsT2ts?=
- =?utf-8?B?aE1MZ0ozWUNDRWNidzl5a1VHOVd2YitxY1pJZ2d6dElJYm1laVoxdUxDZDN4?=
- =?utf-8?B?VVVpTTVkbGhRSzFtRWZFL3ZkNy9YeEVXbzdJSDlMN0hVRTlpR2F2NzBMeW1o?=
- =?utf-8?B?WGJCNXg4WjJNN2pJVnZRODJkRHVpN2Y5c3drSnpiaDBBaDVaVkgwcjhtK1Ur?=
- =?utf-8?B?Q2VrWXo2YnlzcGd6RWQyMnZmR3Q2RitFaUx6ck01SGJBSkJiTjc2bXhaVCtH?=
- =?utf-8?B?ZmhQWWFXb1AwWHk4dFdWQVNxS25ISzRoNVFXYWdtdWd4dCt3SHhMRlY3ZmxW?=
- =?utf-8?B?TGpwdVVDK3NTcmg1S0ZCNk1EV0tOWjhrcGlyd3BtZnZCSnJrMjBMYnNYQlRE?=
- =?utf-8?B?dnptcksxZStGN0ZLejFmbnR2TjhHaDF4ZXFVN0xxK3hzSmtaWUM5WW90UWp5?=
- =?utf-8?B?aWxwMXVibzFyR3dkMm5WSHBtdDBoWWFtbCt1STd3MXZuUm80NlROTUlMN3Vk?=
- =?utf-8?B?ZFlPaFdWV1NzL0pXUHYvdHhKdkp4OHJUUGFxMi9RcXNzVHFEVXk3YTVmTFV0?=
- =?utf-8?B?M2pibCtQZlBrUlAzMi9zYVJXNGd6V202dEZzcFdVQjZtSC8rZm9heHQreFRR?=
- =?utf-8?B?bmZuV09OaGVacWZ3YlNTVDA1Y3M4ZGVtRkt0MHRNdGY1YklXdFhmeWs1bkVG?=
- =?utf-8?B?aUlHMnllMVdYaTZWcHNwY2taanpEcTFFMXJURjlDZjlPN0IyM29VcmVRblJt?=
- =?utf-8?B?OUpMSDJZMEMwamdXY2p1Y1ZNOGZCajBDMXZyRlBaTms5Rjl4dzlSMG9ldGY0?=
- =?utf-8?B?eE1LMUpuYjZ4anFMVjFnWHFhNmFBeHZKbVlEMzIyQWdYODlDK0l6QVVWMUpx?=
- =?utf-8?B?RzdETWwxWFdueWpaRFE3c21LK2dPOG5WRUJJTE1rZ0czZ0xrMUdZWElJMTdP?=
- =?utf-8?B?NlhNWithWU9xZzB1cE5ZS0ozNWlwRFc0SE95L0JoTlg5QzMrejY4Zys1dVdY?=
- =?utf-8?B?RTgyVzZiWWlTYkE4UmRhS2VidUd3amR1NFc3eGRobUdUcWRtRHVxbjk3ZFpN?=
- =?utf-8?B?M2tWbXJiQTlEcnlpb0ZMUnRqV0pIWGk5UThNS0xMeUNsY3VaWnlsWkxSc0ZY?=
- =?utf-8?B?dWptajB3ZXRaYThlOFZGNzlKemdWTEFyNlBFL2ZUd1NRdDI0UUlweGtaSmow?=
- =?utf-8?B?Wk9wcHNybzdGZlhraDRhVWV5dmE0QU5DNEZvSThDSTM2aFI4N0gvZmpMcTBI?=
- =?utf-8?B?elFOMW1aekNmRjBiU1l2eS9yZ0JGOUdCNnNYMm1odGRadXBwM3BSV2VOMitH?=
- =?utf-8?B?NzNBbSt6YVpYMFZNM0wxSm0zcmovVVZqc1NTdGhlTXZxSUZwNFdKUmpzMyts?=
- =?utf-8?B?VnlLbHZ5T1FmZ2RROTRNZkp4eGo5REF1QXZGcC9FWjlEbFcwVFNvMll2RXFv?=
- =?utf-8?B?RXhUOWh5SFZuME8vcTQwRWdEYU80TUNVTzE3RVRXS2tmRDlyRFVwTExXSU42?=
- =?utf-8?B?ZHlBYzRpaSt3YlhuYS9HOWJCZDlVSi9sZ3JLMXN2Zi83WEN2UjFxTWg2VjIr?=
- =?utf-8?B?aUNkOVR6UnQxeUJDMGF4UkZQUzZVejFqdTZWYUZCbEtkS2QwR09vRWhaNzlo?=
- =?utf-8?B?cnQ3Sjg1UnhTNy9zUzFnd0VzUkp5VlJxR2U1dUIxejBJOTJzZkM1Sjg5Zisx?=
- =?utf-8?B?N2hTU2x4Mk1RMWdXU2Nlc2lDSk5hUW8zMStTTDZVck9NM3VYcnJXSSsyUmJk?=
- =?utf-8?B?YVZUNkViMXdsTGVOSnpaT1cva1NBY2tNMWJSZWZsbEZEQ2M5MWlSMXo3R0pH?=
- =?utf-8?B?NmlrdlU3SXhnNDY3QzJTNlBtNXZYTlpJZ2RaUG4zNDZ5SDhTaVFORTBtcGl5?=
- =?utf-8?Q?ZaqX70MBZDLtPWlQh+FzJQWWy?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 20 Jul 2022 12:18:03 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857173CBD4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:18:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658333882; x=1689869882;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PD8parkOBN/qk988ED4eOf8SCsPHOxZ9nlj1lRTxuPU=;
+  b=Bb1Ew+E7dO4MI7NJy4EgijUG3Wf04QF2M3aGZb4e8ThPygOuCoBVCxSn
+   lldb5F0GCQtjSpfG3aw8SKMznnHCc60psJ0ghLQV1+v3tcboL2X393+rh
+   vt+vJ5t1GUjBBuw+vtNIhBbq/wEFdAfyGE45nYYg8o2bFyXXtfGWOvoHn
+   g94uua+oFdluHjs1AoTW9Qt1VZq4kcPvxUTG2KODigY0HTnlfGpLW4BEt
+   fXaqObyoK9KHg45lH8yjlpO9k07Q2MIpxnD3tSEt4PKzjzexh9o5Kfsia
+   ql1bEJQCZeHhmomHm69K0srbtUWXp+yfcZJY0aiSXhjoF+brHJJgOZWbg
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="348515750"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="348515750"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 09:17:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="665923359"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 20 Jul 2022 09:17:42 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id D601A199; Wed, 20 Jul 2022 19:17:51 +0300 (EEST)
+Date:   Wed, 20 Jul 2022 19:17:51 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Kai Huang <kai.huang@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 4/5] x86/mm: Add noalias variants of
+ set_memory_*crypted() functions
+Message-ID: <20220720161751.hqztgi6vdxaif6zf@black.fi.intel.com>
+References: <b4190b5d-89e8-b02f-5ef6-c05047af8166@intel.com>
+ <20220627151257.fhynhvcnpk22kflw@black.fi.intel.com>
+ <fe896ec7-cfce-e8ce-240d-88cca47f8996@intel.com>
+ <6b84f9058ce5e60fdf3e4abd075a2b8f591ccffc.camel@intel.com>
+ <20220705152910.rq2ga25gnw7kuvt5@box.shutemov.name>
+ <5804d4a8-8c5f-5352-8eed-4962e0adca1c@linux.intel.com>
+ <20220719161354.27cak6zy3uws3fvm@black.fi.intel.com>
+ <1f320d34-c467-38fa-17b1-d0c7cde7b0d0@linux.intel.com>
+ <20220719215534.obolreae5dxdk223@black.fi.intel.com>
+ <40131b10-7bff-6672-2f2d-179fdd65c430@linux.intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2886ffbd-7f20-4748-aed2-08da6a6b648d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 16:17:50.7242
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cxTAeaIsce68P3C9oL59aPPnyuQtQ6lSXy6kItJ2y8/tyPjq4rr6pnJm1Aca/K16ow7B1x4QVSQJz63nRxDFZw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR84MB3046
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: P9b_lxdHl3MLJiwoGJTl0sYlF44k5-9J
-X-Proofpoint-ORIG-GUID: P9b_lxdHl3MLJiwoGJTl0sYlF44k5-9J
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_10,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- bulkscore=0 impostorscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
- clxscore=1015 spamscore=0 adultscore=0 mlxlogscore=551 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207200067
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40131b10-7bff-6672-2f2d-179fdd65c430@linux.intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qm9yaXNsYXYgUGV0a292IHdyb3RlOg0KPiBJIHRoaW5rIGl0J2xsIGJlIG1vcmUgdXNlci1mcmll
-bmRseSB0byBwdXQNCj4NCj4gIlBST0MgMSBESU1NIDEiIGZvciBkZXZpY2UNCj4NCj4gYW5kDQo+
-DQo+ICJOQSIgb3Igc28gZm9yIGJhbmsNCj4NCj4gaW5zdGVhZCBvZiBzZXR0aW5nIHRoZSBsYWJl
-bCB0byB0aGUgTlVMTCBzdHJpbmcuDQo+DQo+IEkuZS4sIHJlbGF4IHRoYXQNCj4gDQo+IAlpZiAo
-YmFuayAmJiAqYmFuayAmJiBkZXZpY2UgJiYgKmRldmljZSkNCj4gDQo+IGNoZWNrIHRoZXJlLg0K
-DQpHb29kIGlkZWEuICBJIHdpbGwgc2VuZCBhIHYyIHBhdGNoIHRvIHNldCAiTkEiIGluIGNhc2Ug
-ZGV2aWNlIG9yIGJhbmsNCmlzIG51bGwuDQoNClRoYW5rcywNClRvc2hpDQo=
+On Wed, Jul 20, 2022 at 07:56:04AM -0700, Sathyanarayanan Kuppuswamy wrote:
+> diff --git a/arch/x86/coco/mem.c b/arch/x86/coco/mem.c
+> new file mode 100644
+> index 000000000000..ef76a8accc1e
+> --- /dev/null
+> +++ b/arch/x86/coco/mem.c
+> @@ -0,0 +1,82 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Confidential Computing Decrypted Memory Allocator
+> + *
+> + * Copyright (C) 2022 Intel Corporation, Inc.
+> + *
+> + */
+> +
+> +#undef pr_fmt
+> +#define pr_fmt(fmt)     "cc/mem: " fmt
+> +
+> +#include <linux/export.h>
+> +#include <linux/mm.h>
+> +#include <linux/cc_platform.h>
+> +#include <linux/set_memory.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/dma-mapping.h>
+> +
+> +#include <asm/coco.h>
+> +#include <asm/processor.h>
+> +
+> +#define CC_MEM_DRIVER          "ccmem"
+> +
+> +struct platform_device *mem_pdev;
+
+'static'?
+
+> +dma_addr_t handle;
+
+Hm. How does it work with >1 allocation a time?
+
+> +
+> +/* Allocate decrypted memory of given size */
+> +void *cc_decrypted_alloc(size_t size, gfp_t gfp)
+> +{
+> +       if (!mem_pdev)
+> +               return NULL;
+> +
+> +       return dma_alloc_coherent(&mem_pdev->dev, size, &handle, gfp);
+> +}
+> +
+> +/* Free given decrypted memory */
+> +void cc_decrypted_free(void *addr, size_t size)
+> +{
+> +       if (!mem_pdev)
+> +               return;
+> +
+> +       dma_free_coherent(&mem_pdev->dev, size, addr, handle);
+> +}
+> +
+
+-- 
+ Kirill A. Shutemov

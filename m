@@ -2,104 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFA257B642
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D13357B646
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbiGTMWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
+        id S234048AbiGTMXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiGTMV6 (ORCPT
+        with ESMTP id S229554AbiGTMXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:21:58 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AA2459AA
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:21:57 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 19so20941209ljz.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=czpwbxCojRRusw6HWu6t/8/63T8r2daP9XhqstNyWjk=;
-        b=auK+eK6PVjKmPBaAqEenWTMcrcU9JbnofAZN0uyqSf2puV6NPWZUBZNL3k79dRsS/o
-         hvbRGWrexApWqVgYqKx396U/pigDIHLP8ngbKiungbugJoHtL3dgtngWDdojDWRaeWn2
-         hoKUjKhtzvpIsbkUrezRI2orSAg1+tD3H1J7kNhxJYuZLt6gBeKfXc/ugZQTDv0PwrqV
-         T+uHpDZ1rTrE2cfvvLdy2HkQNPhsUGEVXyHHSqk8U56NCnjCKNuaITTcO4XzU6D+GVRC
-         goalaRtZpjNrM2VDTRolfr6+Bpy/7ge9Eos0hgnL5TTCtXindu1b2Bn3zC2wrjuGnKVS
-         pCvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=czpwbxCojRRusw6HWu6t/8/63T8r2daP9XhqstNyWjk=;
-        b=wzFKcIPVKjcZtBJk8wZCwHywNQddzzuoH6x3sZ4XL/gVyzTKDc26WQpBopTyi9yLdt
-         lYr0EHbTHdpMeRJIsxfRr6tUdEc2LMEpP4gfyz/0vKpU78QNqouxJ1/7WTRvnp4WAB37
-         zMFNkNhRkSMJ69Z16EPirWsZ/qK4+SUIAik15Aax7COu8Yq+smgnM35PbKk1BWAcICKK
-         CW0xIWa2/wZ5m+NTvZ9EIIX84BpQwJtXXVM00YQlWm3zNtJN5n3Q9mCpGszpXstigOZM
-         Vt4yhMJRzJB+Ft8yc4olLm6/y3PB6lYsZyBLH+tEpSX0CUpB92COTZoj8Kt7PXr5R+fM
-         Eh+w==
-X-Gm-Message-State: AJIora/LoF4MC6ydVmAJZPqTPwEB65bv/Cnyv6fwtvMMxMHlOY9du/qx
-        rTG2Z1+jIW0oJTx4MF6yal2Pm5yu6zgIC7Gt
-X-Google-Smtp-Source: AGRyM1s3DxlIhQ64eu+g38+2iFSkaJ0qaJ4gAr+xFlOX31BEZkhO0H6TKdg6l1zPJKqbCm0NeQ3S6Q==
-X-Received: by 2002:a05:651c:a0e:b0:25d:a7b9:762f with SMTP id k14-20020a05651c0a0e00b0025da7b9762fmr11004224ljq.458.1658319716162;
-        Wed, 20 Jul 2022 05:21:56 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056512200c00b00489e38c4fc4sm3777242lfb.276.2022.07.20.05.21.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 05:21:55 -0700 (PDT)
-Message-ID: <b2c4f548-449a-8855-fe68-005566711cae@linaro.org>
-Date:   Wed, 20 Jul 2022 14:21:54 +0200
+        Wed, 20 Jul 2022 08:23:51 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845252C12A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658319830; x=1689855830;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h36jPW6E6Mie2geDwKHg1YrEJh8MgOU21Q9+IAqZbB8=;
+  b=dMTfp4/fZTj6cYLbXU4HVzGBqN09ffRC3r7PMRUn1aECbV3UPZk9bmgt
+   SIFS1OGvGbVUoUQnBiSQUCojJ+Z7UEVPZJvOipNL0zS2wPaHGJruA2CmR
+   uxvKlD6hkxU9M1S0gfOKzmmMKFGBO9DAX5qyDV5/1A2UBCQtCAE7faQ8O
+   THBHZh5xKeCCp+47cuqJcclMmH+wch6TaFV1n2Pinmb2zdHj0Gqd23SYL
+   Pm07pg06eUjET7KZJG2vUvyQwXG9SxHnbUe5IzP1Jbrc50aYfOxn4mRZn
+   9KCBp8y4wC0uPcO+bZqQuHkx6wkgA9HBNStkt6Sd5pS27/KFLv7r0+fQw
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="287921503"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="287921503"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 05:23:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="625644575"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 20 Jul 2022 05:23:36 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oE8jn-0000Tt-Uz;
+        Wed, 20 Jul 2022 12:23:35 +0000
+Date:   Wed, 20 Jul 2022 20:23:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     ckkim <changkon12@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dongjin Kim <tobetter@gmail.com>
+Subject: drivers/power/reset/odroid-reboot.c:141:17: error: 'arm_pm_restart'
+ undeclared; did you mean 'alarm_restart'?
+Message-ID: <202207202023.WNeIJuRZ-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 3/4] dt-bindings: misc: tmr-inject: Add device-tree
- binding for TMR Inject
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>,
-        Appana Durga Kedareswara rao 
-        <appana.durga.kedareswara.rao@amd.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, michal.simek@xilinx.com,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org
-Cc:     appanad@amd.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        git@amd.com, git@xilinx.com,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-References: <20220720060016.1646317-1-appana.durga.kedareswara.rao@amd.com>
- <20220720060016.1646317-4-appana.durga.kedareswara.rao@amd.com>
- <77e8433f-6cb8-eb32-63d5-414a92d3b874@linaro.org>
- <f45fccec-4496-19af-0e14-bd626e14c7bd@amd.com>
- <bc99e06b-1aa5-441e-c86f-0fbfb0945d0c@linaro.org>
- <259a1808-934b-359c-a95f-50d654a48816@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <259a1808-934b-359c-a95f-50d654a48816@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 14:09, Michal Simek wrote:
->> Similarly when you change jobs while resending your patch - you do not
->> add new SoB but just keep SoB from @previous-company.com.
-> 
-> IMHO That would be more questionable when you create changes in origin series 
-> and new employer pays you to do the work.
+tree:   https://github.com/tobetter/linux odroid-5.19.y
+head:   0569e1291a824471ea27c9e90132881c0232a3a0
+commit: 9aa3f0db97ed4d976f3640f69d177bf27e78099d ODROID-COMMON: power:reset: Add odroid support
+date:   9 days ago
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220720/202207202023.WNeIJuRZ-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/tobetter/linux/commit/9aa3f0db97ed4d976f3640f69d177bf27e78099d
+        git remote add tobetter https://github.com/tobetter/linux
+        git fetch --no-tags tobetter odroid-5.19.y
+        git checkout 9aa3f0db97ed4d976f3640f69d177bf27e78099d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-True, when changes happen in between, it gets tricky.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> If it is 3rd party company picking series where upstreaming is not finished you 
-> will expect that 3rd party will add their sob lines there too.
+All errors (new ones prefixed by >>):
 
-Of course, because this is different person. The SoB comes always from a
-person, although he might represent company.
+   drivers/power/reset/odroid-reboot.c:63:6: warning: no previous prototype for 'odroid_card_reset' [-Wmissing-prototypes]
+      63 | void odroid_card_reset(void)
+         |      ^~~~~~~~~~~~~~~~~
+   drivers/power/reset/odroid-reboot.c: In function 'odroid_restart_probe':
+>> drivers/power/reset/odroid-reboot.c:141:17: error: 'arm_pm_restart' undeclared (first use in this function); did you mean 'alarm_restart'?
+     141 |                 arm_pm_restart = do_odroid_restart;
+         |                 ^~~~~~~~~~~~~~
+         |                 alarm_restart
+   drivers/power/reset/odroid-reboot.c:141:17: note: each undeclared identifier is reported only once for each function it appears in
 
-Best regards,
-Krzysztof
+
+vim +141 drivers/power/reset/odroid-reboot.c
+
+    62	
+  > 63	void odroid_card_reset(void)
+    64	{
+    65		int ret = 0;
+    66	
+    67		if ((sd_vqsw == 0) && (sd_vmmc == 0))
+    68			return;
+    69	
+    70		if (sd_vqen == 0) {
+    71			gpio_free(sd_vqsw);
+    72			gpio_free(sd_vmmc);
+    73			ret = gpio_request_one(sd_vqsw,
+    74					GPIOF_OUT_INIT_LOW, "REBOOT");
+    75			CHECK_RET(ret);
+    76			mdelay(10);
+    77			ret = gpio_direction_output(sd_vqsw, 1);
+    78			CHECK_RET(ret);
+    79			ret = gpio_request_one(sd_vmmc,
+    80					GPIOF_OUT_INIT_LOW, "REBOOT");
+    81			CHECK_RET(ret);
+    82			mdelay(10);
+    83			ret = gpio_direction_output(sd_vqsw, 0);
+    84			CHECK_RET(ret);
+    85			ret = gpio_direction_output(sd_vmmc, 1);
+    86			CHECK_RET(ret);
+    87			mdelay(5);
+    88			gpio_free(sd_vqsw);
+    89			gpio_free(sd_vmmc);
+    90		} else {
+    91			gpio_free(sd_vqsw);
+    92			gpio_free(sd_vqen);
+    93			gpio_free(sd_vmmc);
+    94	
+    95			ret = gpio_request_one(sd_vqsw,
+    96					GPIOF_OUT_INIT_LOW, "REBOOT");
+    97			CHECK_RET(ret);
+    98			ret = gpio_request_one(sd_vqen,
+    99					GPIOF_OUT_INIT_LOW, "REBOOT");
+   100			CHECK_RET(ret);
+   101			ret = gpio_request_one(sd_vmmc,
+   102					GPIOF_OUT_INIT_LOW, "REBOOT");
+   103			CHECK_RET(ret);
+   104			mdelay(100);
+   105			ret = gpio_direction_input(sd_vqen);
+   106			CHECK_RET(ret);
+   107			ret = gpio_direction_input(sd_vmmc);
+   108			CHECK_RET(ret);
+   109			ret = gpio_direction_input(sd_vqsw);
+   110			CHECK_RET(ret);
+   111			mdelay(5);
+   112			gpio_free(sd_vqen);
+   113			gpio_free(sd_vmmc);
+   114			gpio_free(sd_vqsw);
+   115		}
+   116	}
+   117	
+   118	static void do_odroid_restart(enum reboot_mode reboot_mode, const char *cmd)
+   119	{
+   120		odroid_card_reset();
+   121		__invoke_psci_fn_smc(psci_function_id_restart,
+   122					0, 0, 0);
+   123	}
+   124	
+   125	static void do_odroid_poweroff(void)
+   126	{
+   127		odroid_card_reset();
+   128	
+   129		__invoke_psci_fn_smc(0x82000042, 1, 0, 0);
+   130		__invoke_psci_fn_smc(psci_function_id_poweroff,
+   131					0, 0, 0);
+   132	}
+   133	
+   134	static int odroid_restart_probe(struct platform_device *pdev)
+   135	{
+   136		struct device_node *of_node;
+   137		u32 id;
+   138	
+   139		if (!of_property_read_u32(pdev->dev.of_node, "sys_reset", &id)) {
+   140			psci_function_id_restart = id;
+ > 141			arm_pm_restart = do_odroid_restart;
+   142		}
+   143	
+   144		if (!of_property_read_u32(pdev->dev.of_node, "sys_poweroff", &id)) {
+   145			psci_function_id_poweroff = id;
+   146			pm_power_off = do_odroid_poweroff;
+   147		}
+   148	
+   149		of_node = pdev->dev.of_node;
+   150	
+   151		sd_vqsw = of_get_named_gpio(of_node, "sd-vqsw", 0);
+   152		if (!gpio_is_valid(sd_vqsw)) sd_vqsw = 0;
+   153	
+   154		sd_vmmc = of_get_named_gpio(of_node, "sd-vmmc", 0);
+   155		if (!gpio_is_valid(sd_vmmc)) sd_vmmc = 0;
+   156	
+   157		sd_vqen = of_get_named_gpio(of_node, "sd-vqen", 0);
+   158		if (!gpio_is_valid(sd_vqen)) sd_vqen = 0;
+   159	
+   160		return 0;
+   161	}
+   162	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

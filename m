@@ -2,129 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE0E57B127
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3839D57B138
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiGTGdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
+        id S231465AbiGTGtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiGTGd3 (ORCPT
+        with ESMTP id S230316AbiGTGoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:33:29 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2272154073;
-        Tue, 19 Jul 2022 23:33:29 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b133so11901866pfb.6;
-        Tue, 19 Jul 2022 23:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ip8sfT3MomUNm29brPu+2k5VsrDURTEoCZs6KvoAjCg=;
-        b=mPCN2m2YAamRuXjOWWlyImJNiFeyt9Ei44tMgjZzOD0xokfqaWnWh0tbE50km4Eq9u
-         gaRLkV6Wbul9wu4a6BAlyq1P6IAJe11QlDd5TJGgVQft0yuno8FMpFEOe9OMGhbQQiXF
-         ovmm3I8q+Vtmunej3wNf5sPEVr7GUPp0uSN9lDzGqtV/8Ll1xU4+P2+7KefkLjQyxztT
-         5Dno5OwJ1iWi3FF1bV6r/RvY/g5k32Zoi5RXelQJNeIz5K19w7BDpIWXnWlyiPR7CmE9
-         WPFM50xagworbq55Zia6FJgqN+QYxveWfeDg/afGny+xCu0hqZ5aA4XfDfODXCY1KMvP
-         543g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ip8sfT3MomUNm29brPu+2k5VsrDURTEoCZs6KvoAjCg=;
-        b=7gDYcp8NE20CITOs9Bysd6pCzOupHrjBIgk8Ul1StDeZciYxNylpe1UtR3zBAiGOtT
-         5YAuZ/1Sn6HdwmeQlIDwbl0E13kQhPIyYV8dnYbyJ4+R1e+CTvAklJtOHGEGl0oas30y
-         MgFyKkO2PKHRfAhlfqNGe663cdX+EacUNd2pNpRFozkHRsijIQ6RY1kGhRXaIMSNyddT
-         sWcSCy5t00R9dPihH9Y+SNa3pRbs4xxKn5jDPGj5aV/nlRYjv7wsZDMLe+ar5KaLBUNW
-         a0262Hd6CzM4JAt3rqVH4yK6AUDYwFdzqSGPT8a59Y1KZJ8bAlw81/uuvzazH66dOT8O
-         cCmg==
-X-Gm-Message-State: AJIora8y18287BKfJ7G5+etPJpeJIvZCBhmLE/fmdBZUdwtJlWlS0mcB
-        jYnXfdw2ZZ1hb2mMhq8sb//JgYHfIvtwCA==
-X-Google-Smtp-Source: AGRyM1vtNy8vx+Z6wiWiOIXPrXleBmIDc6TdHARdlCBAs8Xfi+lhMhhke5DhJORFSz3+rfKvcxJygQ==
-X-Received: by 2002:a63:680a:0:b0:415:aacf:d384 with SMTP id d10-20020a63680a000000b00415aacfd384mr32726461pgc.232.1658298808320;
-        Tue, 19 Jul 2022 23:33:28 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.4])
-        by smtp.gmail.com with ESMTPSA id y11-20020a17090322cb00b0016bf10203fbsm12955793plg.12.2022.07.19.23.33.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 23:33:27 -0700 (PDT)
-From:   zengjx95@gmail.com
-To:     reiserfs-devel@vger.kernel.org
-Cc:     willy@infradead.org, jlayton@kernel.org,
-        damien.lemoal@opensource.wdc.com, jack@suse.cz,
-        edward.shishkin@gmail.com, linux-kernel@vger.kernel.org,
-        Zeng Jingxiang <linuszeng@tencent.com>
-Subject: [PATCH] fs/reiserfs/inode: remove dead code in _get_block_create_0()
-Date:   Wed, 20 Jul 2022 14:33:10 +0800
-Message-Id: <20220720063310.992149-1-zengjx95@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 20 Jul 2022 02:44:11 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A7D42ACE;
+        Tue, 19 Jul 2022 23:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=buEbPj35VBOKwfMS/RY6ZEKeyl1ASTH12iRmqn5wlKI=; b=tAs8wmxKzaPfRWJEnOqN1t6ahZ
+        D7QhCw4w8oRh1hNY3RPCkYfpOpyldLf2EI3TqEwoIQPVOHOxBM3AYw+40YJiu5exXIVCGHZk4AWdi
+        5MWfHQz4yYLZCe3wRLixuMbKfKBhHCmiiui/tkWBFouUEaHa8QTIBKq3DMNJdmD+CrAdD1vDG5RVZ
+        XbucAhRE8BOdAajR+S8lFPCZTjmaJfM8PpGkwvOMtQr+oNrgLR/OtoEiL8bmtQSQqT6KWrWLXAVoq
+        bpjA9Bsb4qWUH2Z4lK4kO7YFa8bGzR97Kszey4V18OORYSpSZ2aUSM+b6nH/txhAC/tOWW+ZOpnBg
+        f1dan0aA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33454)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oE3RD-0003mj-LK; Wed, 20 Jul 2022 07:44:03 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oE3R9-0003gE-F7; Wed, 20 Jul 2022 07:43:59 +0100
+Date:   Wed, 20 Jul 2022 07:43:59 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Alexandru Marginean <alexandru.marginean@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH v2 06/11] net: phylink: Support differing link/interface
+ speed/duplex
+Message-ID: <YtekL4y/XKn1m/V4@shell.armlinux.org.uk>
+References: <20220719235002.1944800-1-sean.anderson@seco.com>
+ <20220719235002.1944800-7-sean.anderson@seco.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719235002.1944800-7-sean.anderson@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zeng Jingxiang <linuszeng@tencent.com>
+On Tue, Jul 19, 2022 at 07:49:56PM -0400, Sean Anderson wrote:
+> This adds support for cases when the link speed or duplex differs from
+> the speed or duplex of the phy interface mode. Such cases can occur when
+> some kind of rate adaptation is occurring.
+> 
+> The following terms are used within this and the following patches. I
+> do not believe the meaning of these terms are uncommon or surprising,
+> but for maximum clarity I would like to be explicit:
+> 
+> - Phy interface mode: the protocol used to communicate between the MAC
+>   or PCS (if used) and the phy. If no phy is in use, this is the same as
+>   the link mode. Each phy interface mode supported by Linux is a member
+>   of phy_interface_t.
+> - Link mode: the protocol used to communicate between the local phy (or
+>   PCS) and the remote phy (or PCS) over the physical medium. Each link
+>   mode supported by Linux is a member of ethtool_link_mode_bit_indices.
+> - Phy interface mode speed: the speed of unidirectional data transfer
+>   over a phy interface mode, including encoding overhead, but excluding
+>   protocol and flow-control overhead. The speed of a phy interface mode
+>   may vary. For example, SGMII may have a speed of 10, 100, or 1000
+>   Mbit/s.
+> - Link mode speed: similarly, the speed of unidirectional data transfer
+>   over a physical medium, including overhead, but excluding protocol and
+>   flow-control overhead. The speed of a link mode is usually fixed, but
+>   some exceptional link modes (such as 2BASE-TL) may vary their speed
+>   depending on the medium characteristics.
+> 
+> Before this patch, phylink assumed that the link mode speed was the same
+> as the phy interface mode speed. This is typically the case; however,
+> some phys have the ability to adapt between differing link mode and phy
+> interface mode speeds. To support these phys, this patch removes this
+> assumption, and adds a separate variable for link speed. Additionally,
+> to support rate adaptation, a MAC may need to have a certain duplex
+> (such as half or full). This may be different from the link's duplex. To
+> keep track of this distunction, this patch adds another variable to
+> track link duplex.
 
-Fix "control flow" issues found by Coverity
-Logically dead code (DEADCODE)
-Execution cannot reach this statement.
+I thought we had decided that using the term "link" in these new members
+was a bad idea.
 
-Assigned_value: Assigning value NULL to p here
-293	char *p = NULL;
-In the following conditional expression, the value of p is always NULL,
-as a result, the kunmap() cannot be executed.
-308	if (p)
-309		kunmap(bh_result->b_page);
+> @@ -925,12 +944,16 @@ static void phylink_mac_pcs_get_state(struct phylink *pl,
+>  	linkmode_zero(state->lp_advertising);
+>  	state->interface = pl->link_config.interface;
+>  	state->an_enabled = pl->link_config.an_enabled;
+> -	if  (state->an_enabled) {
+> +	if (state->an_enabled) {
+> +		state->link_speed = SPEED_UNKNOWN;
+> +		state->link_duplex = DUPLEX_UNKNOWN;
+>  		state->speed = SPEED_UNKNOWN;
+>  		state->duplex = DUPLEX_UNKNOWN;
+>  		state->pause = MLO_PAUSE_NONE;
+>  	} else {
+> -		state->speed =  pl->link_config.speed;
+> +		state->link_speed = pl->link_config.link_speed;
+> +		state->link_duplex = pl->link_config.link_duplex;
+> +		state->speed = pl->link_config.speed;
+>  		state->duplex = pl->link_config.duplex;
+>  		state->pause = pl->link_config.pause;
+>  	}
+> @@ -944,6 +967,9 @@ static void phylink_mac_pcs_get_state(struct phylink *pl,
+>  		pl->mac_ops->mac_pcs_get_state(pl->config, state);
+>  	else
+>  		state->link = 0;
+> +
+> +	state->link_speed = state->speed;
+> +	state->link_duplex = state->duplex;
 
-355	if (p)
-356		kunmap(bh_result->b_page);
+Why do you need to set link_speed and link_duple above if they're always
+copied over here?
 
-366	if (p)
-367		kunmap(bh_result->b_page);
+>  /* The fixed state is... fixed except for the link state,
+> @@ -953,10 +979,17 @@ static void phylink_get_fixed_state(struct phylink *pl,
+>  				    struct phylink_link_state *state)
+>  {
+>  	*state = pl->link_config;
+> -	if (pl->config->get_fixed_state)
+> +	if (pl->config->get_fixed_state) {
+>  		pl->config->get_fixed_state(pl->config, state);
+> -	else if (pl->link_gpio)
+> +		/* FIXME: these should not be updated, but
+> +		 * bcm_sf2_sw_fixed_state does it anyway
+> +		 */
+> +		state->link_speed = state->speed;
+> +		state->link_duplex = state->duplex;
+> +		phylink_state_fill_speed_duplex(state);
 
-Signed-off-by: Zeng Jingxiang <linuszeng@tencent.com>
----
- fs/reiserfs/inode.c | 6 ------
- 1 file changed, 6 deletions(-)
+This looks weird. Why copy state->xxx to state->link_xxx and then copy
+them back to state->xxx in a helper function?
 
-diff --git a/fs/reiserfs/inode.c b/fs/reiserfs/inode.c
-index 0cffe054b78e..d1b0c7645fcb 100644
---- a/fs/reiserfs/inode.c
-+++ b/fs/reiserfs/inode.c
-@@ -305,8 +305,6 @@ static int _get_block_create_0(struct inode *inode, sector_t block,
- 	result = search_for_position_by_key(inode->i_sb, &key, &path);
- 	if (result != POSITION_FOUND) {
- 		pathrelse(&path);
--		if (p)
--			kunmap(bh_result->b_page);
- 		if (result == IO_ERROR)
- 			return -EIO;
- 		/*
-@@ -352,8 +350,6 @@ static int _get_block_create_0(struct inode *inode, sector_t block,
- 		}
- 
- 		pathrelse(&path);
--		if (p)
--			kunmap(bh_result->b_page);
- 		return ret;
- 	}
- 	/* requested data are in direct item(s) */
-@@ -363,8 +359,6 @@ static int _get_block_create_0(struct inode *inode, sector_t block,
- 		 * when it is stored in direct item(s)
- 		 */
- 		pathrelse(&path);
--		if (p)
--			kunmap(bh_result->b_page);
- 		return -ENOENT;
- 	}
- 
 -- 
-2.27.0
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

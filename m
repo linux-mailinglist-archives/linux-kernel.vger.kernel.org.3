@@ -2,45 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C32D57B407
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B28C57B411
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbiGTJlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S231982AbiGTJnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiGTJlH (ORCPT
+        with ESMTP id S231546AbiGTJnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:41:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2428237F3;
-        Wed, 20 Jul 2022 02:41:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D992E1576;
-        Wed, 20 Jul 2022 02:41:05 -0700 (PDT)
-Received: from [10.57.41.17] (unknown [10.57.41.17])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A7E7E3F73D;
-        Wed, 20 Jul 2022 02:41:03 -0700 (PDT)
-Message-ID: <a6928529-b5fd-0f65-b51c-1dca37716b2b@arm.com>
-Date:   Wed, 20 Jul 2022 10:41:02 +0100
+        Wed, 20 Jul 2022 05:43:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F7916391A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:43:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658310179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6RKfphNn3mPOW1MXkGNfh4n+QtAmR71ynMhMeD/fO8E=;
+        b=fOcmHKZyIY5ZrJMDar458RiargpP2dxnDbnrf7o7RZfeXyhkVyfC0uECKsT6Bap2UE2I+8
+        2eCGNuD3PEFyW7rBVLghtBeIEYZjbhAzHGwMWAo4Grz680PbHjCrtzLJH16z7CPm5EDVOK
+        7hIDK+7XRwDWGUvYlzm6fA3cbnvteeo=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-612-2ilFvp8NP9-A6YwBC5l8HQ-1; Wed, 20 Jul 2022 05:42:58 -0400
+X-MC-Unique: 2ilFvp8NP9-A6YwBC5l8HQ-1
+Received: by mail-wr1-f70.google.com with SMTP id l11-20020adfbd8b000000b0021d754b84c5so3041210wrh.17
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:42:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=6RKfphNn3mPOW1MXkGNfh4n+QtAmR71ynMhMeD/fO8E=;
+        b=uMmIfMbSiD/St+Nx9graEXROZf1HkPte/FdXCt8cdc1Hqa/YrtNwrOTZkcbZUIAg6F
+         XJoQHvsX31UUi7P1/thvtiAT5HmwuL/hrXdPRNst3QJqAZSnJzyWwQkm2aXlrZu7TeK1
+         ajnR6wlP0WNT3sxtbw1dEGBDMPVPOxZh0r7ADjZ9mYr509/D9u+RQwvIFioHAIgmKzb4
+         aJ0zfdfky7cQS8BarPfN+8tl24oPkp1a94x//Q96XoRzZWFA38aWD34/UJsKcIRBCQko
+         IumlOQtzRMe1IMwIiESfnmxJqSUbUD1MyTwOE3SFWPNWVeMghMl0CIWPis+6f+4N5SAP
+         OpQw==
+X-Gm-Message-State: AJIora+9yRQfro/IyEn9epnwoYrgjmXBrXvIAyG3osFr1pXbn4xE2kA+
+        EVTIU0N36P1Lpb2oMoPep7dmwAJTf4Wu7b8xOiXd9Lw8jBSo1nfcnzI8DkaZ/q3kOstgUH3mS/a
+        mhQ07hLoxLicOVhHiTgBK9ufD
+X-Received: by 2002:a05:6000:1a88:b0:21d:aa97:cb16 with SMTP id f8-20020a0560001a8800b0021daa97cb16mr30480722wry.97.1658310176899;
+        Wed, 20 Jul 2022 02:42:56 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vLkuZu1Isp50EKcsrNnkjav5J73V5/aUvap3rND17xDst4/UY0s1U6Yu8aeSvpX5+PIIk6cA==
+X-Received: by 2002:a05:6000:1a88:b0:21d:aa97:cb16 with SMTP id f8-20020a0560001a8800b0021daa97cb16mr30480707wry.97.1658310176663;
+        Wed, 20 Jul 2022 02:42:56 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:e00:8d96:5dba:6bc4:6e89? (p200300cbc7060e008d965dba6bc46e89.dip0.t-ipconnect.de. [2003:cb:c706:e00:8d96:5dba:6bc4:6e89])
+        by smtp.gmail.com with ESMTPSA id h12-20020a05600c28cc00b003a325bd8517sm2190898wmd.5.2022.07.20.02.42.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 02:42:56 -0700 (PDT)
+Message-ID: <09d84297-65d5-a3df-fdc0-a7168cdb0798@redhat.com>
+Date:   Wed, 20 Jul 2022 11:42:50 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v2 13/13] coresight: trace-id: Add debug & test macros to
- Trace ID allocation
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, quic_jinlmao@quicinc.com
-References: <20220704081149.16797-1-mike.leach@linaro.org>
- <20220704081149.16797-14-mike.leach@linaro.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220704081149.16797-14-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 01/14] userfaultfd: set dirty and young on
+ writeprotect
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Nick Piggin <npiggin@gmail.com>
+References: <20220718120212.3180-1-namit@vmware.com>
+ <20220718120212.3180-2-namit@vmware.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220718120212.3180-2-namit@vmware.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,122 +96,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/07/2022 09:11, Mike Leach wrote:
-> Adds in a number of pr_debug macros to allow the debugging and test of
-> the trace ID allocation system.
+On 18.07.22 14:01, Nadav Amit wrote:
+> From: Nadav Amit <namit@vmware.com>
 > 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> When userfaultfd makes a PTE writable, it can now change the PTE
+> directly, in some cases, without going triggering a page-fault first.
+> Yet, doing so might leave the PTE that was write-unprotected as old and
+> clean. At least on x86, this would cause a >500 cycles overhead when the
+> PTE is first accessed.
+> 
+> Use MM_CP_WILL_NEED to set the PTE as young and dirty when userfaultfd
+> gets a hint that the page is likely to be used. Avoid changing the PTE
+> to young and dirty in other cases to avoid excessive writeback and
+> messing with the page reclamation logic.
+> 
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Andrew Cooper <andrew.cooper3@citrix.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Nick Piggin <npiggin@gmail.com>
 > ---
->   .../hwtracing/coresight/coresight-trace-id.c  | 33 +++++++++++++++++++
->   1 file changed, 33 insertions(+)
+>  include/linux/mm.h | 2 ++
+>  mm/mprotect.c      | 9 ++++++++-
+>  mm/userfaultfd.c   | 8 ++++++--
+>  3 files changed, 16 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
-> index dac9c89ae00d..841307e0d899 100644
-> --- a/drivers/hwtracing/coresight/coresight-trace-id.c
-> +++ b/drivers/hwtracing/coresight/coresight-trace-id.c
-> @@ -71,6 +71,27 @@ static int coresight_trace_id_find_new_id(struct coresight_trace_id_map *id_map)
->   	return id;
->   }
->   
-> +/* #define TRACE_ID_DEBUG 1 */
-> +#ifdef TRACE_ID_DEBUG
-> +static void coresight_trace_id_dump_table(struct coresight_trace_id_map *id_map,
-> +					  const char *func_name)
-> +{
-> +	/* currently 2 u64s are sufficient to hold all the ids */
-> +	pr_debug("%s id_map::\n", func_name);
-> +	pr_debug("Avial= 0x%016lx%016lx\n", id_map->avail_ids[1], id_map->avail_ids[0]);
-> +	pr_debug("Pend = 0x%016lx%016lx\n", id_map->pend_rel_ids[1], id_map->pend_rel_ids[0]);
-
-minor nit: You may use bitmap_print_to_pagebuf() to print the bitmaps.
-
-> +}
-> +#define DUMP_ID_MAP(map)   coresight_trace_id_dump_table(map, __func__)
-> +#define DUMP_ID_CPU(cpu, id) pr_debug("%s called;  cpu=%d, id=%d\n", __func__, cpu, id)
-> +#define DUMP_ID(id)   pr_debug("%s called; id=%d\n", __func__, id)
-> +#define PERF_SESSION(n) pr_debug("%s perf count %d\n", __func__, n)
-> +#else
-> +#define DUMP_ID_MAP(map)
-> +#define DUMP_ID(id)
-> +#define DUMP_ID_CPU(cpu, id)
-> +#define PERF_SESSION(n)
-> +#endif
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 9cc02a7e503b..4afd75ce5875 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1988,6 +1988,8 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
+>  /* Whether this change is for write protecting */
+>  #define  MM_CP_UFFD_WP                     (1UL << 2) /* do wp */
+>  #define  MM_CP_UFFD_WP_RESOLVE             (1UL << 3) /* Resolve wp */
+> +/* Whether to try to mark entries as dirty as they are to be written */
+> +#define  MM_CP_WILL_NEED		   (1UL << 4)
+>  #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
+>  					    MM_CP_UFFD_WP_RESOLVE)
+>  
+> diff --git a/mm/mprotect.c b/mm/mprotect.c
+> index 996a97e213ad..34c2dfb68c42 100644
+> --- a/mm/mprotect.c
+> +++ b/mm/mprotect.c
+> @@ -82,6 +82,7 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+>  	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
+>  	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
+>  	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
+> +	bool will_need = cp_flags & MM_CP_WILL_NEED;
+>  
+>  	tlb_change_page_size(tlb, PAGE_SIZE);
+>  
+> @@ -172,6 +173,9 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+>  				ptent = pte_clear_uffd_wp(ptent);
+>  			}
+>  
+> +			if (will_need)
+> +				ptent = pte_mkyoung(ptent);
 > +
->   /* release all pending IDs for all current maps & clear CPU associations */
->   static void coresight_trace_id_release_all_pending(void)
->   {
-> @@ -81,6 +102,7 @@ static void coresight_trace_id_release_all_pending(void)
->   		clear_bit(bit, id_map->avail_ids);
->   		clear_bit(bit, id_map->pend_rel_ids);
->   	}
-> +	DUMP_ID_MAP(id_map);
->   
->   	for_each_possible_cpu(cpu) {
->   		if (per_cpu(cpu_ids, cpu).pend_rel) {
-> @@ -126,6 +148,8 @@ static int coresight_trace_id_map_get_cpu_id(int cpu, struct coresight_trace_id_
->   
->   get_cpu_id_out:
->   	spin_unlock_irqrestore(&id_map_lock, flags);
-> +	DUMP_ID_CPU(cpu, id);
-> +	DUMP_ID_MAP(id_map);
->   	return id;
->   }
->   
-> @@ -151,6 +175,8 @@ static void coresight_trace_id_map_put_cpu_id(int cpu, struct coresight_trace_id
->   
->    put_cpu_id_out:
->   	spin_unlock_irqrestore(&id_map_lock, flags);
-> +	DUMP_ID_CPU(cpu, id);
-> +	DUMP_ID_MAP(id_map);
->   }
->   
->   static int coresight_trace_id_map_get_system_id(struct coresight_trace_id_map *id_map)
-> @@ -164,6 +190,8 @@ static int coresight_trace_id_map_get_system_id(struct coresight_trace_id_map *i
->   		coresight_trace_id_set_inuse(id, id_map);
->   	spin_unlock_irqrestore(&id_map_lock, flags);
->   
-> +	DUMP_ID(id);
-> +	DUMP_ID_MAP(id_map);
->   	return id;
->   }
->   
-> @@ -174,6 +202,9 @@ static void coresight_trace_id_map_put_system_id(struct coresight_trace_id_map *
->   	spin_lock_irqsave(&id_map_lock, flags);
->   	coresight_trace_id_clear_inuse(id, id_map);
->   	spin_unlock_irqrestore(&id_map_lock, flags);
-> +
-> +	DUMP_ID(id);
-> +	DUMP_ID_MAP(id_map);
->   }
->   
->   /* API functions */
-> @@ -207,6 +238,7 @@ void coresight_trace_id_perf_start(void)
->   
-	int n;
-
->   	spin_lock_irqsave(&id_map_lock, flags);
->   	perf_cs_etm_session_active++;
-	n = perf_cs_etm_session_active++;
+>  			/*
+>  			 * In some writable, shared mappings, we might want
+>  			 * to catch actual write access -- see
+> @@ -187,8 +191,11 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+>  			 */
+>  			if ((cp_flags & MM_CP_TRY_CHANGE_WRITABLE) &&
+>  			    !pte_write(ptent) &&
 
 
->   	spin_unlock_irqrestore(&id_map_lock, flags);
+Why would we want to check if we can set something writable if it
+already *is* writable? That doesn't make sense to me.
 
-	PERF_SESSION(n);
+> -			    can_change_pte_writable(vma, addr, ptent))
+> +			    can_change_pte_writable(vma, addr, ptent)) {
+>  				ptent = pte_mkwrite(ptent);
+> +				if (will_need)
+> +					ptent = pte_mkdirty(ptent);
+> +			}
 
-Not a good idea to print something from within spin_lock.
+-- 
+Thanks,
 
->   }
->   EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
-> @@ -217,6 +249,7 @@ void coresight_trace_id_perf_stop(void)
->   
->   	spin_lock_irqsave(&id_map_lock, flags);
->   	perf_cs_etm_session_active--;
-> +	PERF_SESSION(perf_cs_etm_session_active);
+David / dhildenb
 
-Same as above.
-
->   	if (!perf_cs_etm_session_active)
->   		coresight_trace_id_release_all_pending();
->   	spin_unlock_irqrestore(&id_map_lock, flags);
-
-Suzuki

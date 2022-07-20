@@ -2,84 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F1757AAE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288E257AAEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235508AbiGTAUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 20:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        id S234056AbiGTAVy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 19 Jul 2022 20:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiGTAUQ (ORCPT
+        with ESMTP id S235812AbiGTAVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:20:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACF53C166;
-        Tue, 19 Jul 2022 17:20:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96B6F61647;
-        Wed, 20 Jul 2022 00:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 013EBC341CA;
-        Wed, 20 Jul 2022 00:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658276414;
-        bh=J0+tDWmV71XXoMFlvH3w595vcx49oyiVwUNFoSLD+ec=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hNImw0ISrQQFbH9E9PQbU9J+tJXQWMTxDR+HsrJFNc7v1ZOmEIyAnIE8Xp9xT2dnU
-         Ur2yHy/z5XNYMP1+4FbWspq/Gu9vf9/lyCdghaS82OMz/K7NU4EtlFkLxAWA/2kzQm
-         eNfgXzhBGSdFaRR0IJRnnrVAo0PmyuVLGFAmjVl7u5Z4nFNFPoCg2xqk24By0uv46J
-         CMr9zbaQj1QQF5Gm0d6sYsFCqDJjlNnvDcP3y9DBIGFPIurEShj01hGys9Mcci9zLA
-         OJOv58W/DQ6OCddQGOqflO/gE+0++o8toMNNws45UyBe8jlrAqdyzPzBG7etxq2gSX
-         uLrekbh8lT8UQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D9C1DE451B7;
-        Wed, 20 Jul 2022 00:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 19 Jul 2022 20:21:51 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28B155082
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:21:50 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26JI5DRD031376
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:21:50 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hdyj6b7s6-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:21:50 -0700
+Received: from twshared34609.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Tue, 19 Jul 2022 17:21:45 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id 53FF5A6298E1; Tue, 19 Jul 2022 17:21:39 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>
+CC:     <daniel@iogearbox.net>, <kernel-team@fb.com>, <jolsa@kernel.org>,
+        <rostedt@goodmis.org>, Song Liu <song@kernel.org>
+Subject: [PATCH v5 bpf-next 0/4] ftrace: host klp and bpf trampoline together
+Date:   Tue, 19 Jul 2022 17:21:22 -0700
+Message-ID: <20220720002126.803253-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: VUxLFHca05Nt_q768b51xJnLdn-nNvza
+X-Proofpoint-ORIG-GUID: VUxLFHca05Nt_q768b51xJnLdn-nNvza
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] r8152: fix a WOL issue
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165827641388.1716.6764396748930335570.git-patchwork-notify@kernel.org>
-Date:   Wed, 20 Jul 2022 00:20:13 +0000
-References: <20220718082120.10957-391-nic_swsd@realtek.com>
-In-Reply-To: <20220718082120.10957-391-nic_swsd@realtek.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-19_10,2022-07-19_01,2022-06-22_01
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Changes v4 => v5:
+1. Cleanup direct_mutex handling in register_ftrace_function.
+   (Steven Rostedt, Petr Mladek).
+2. Various smallish fixes. (Steven Rostedt, Petr Mladek).
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Changes v3 => v4:
+1. Fix build errors for different config. (kernel test robot)
 
-On Mon, 18 Jul 2022 16:21:20 +0800 you wrote:
-> This fixes that the platform is waked by an unexpected packet. The
-> size and range of FIFO is different when the device enters S3 state,
-> so it is necessary to correct some settings when suspending.
-> 
-> Regardless of jumbo frame, set RMS to 1522 and MTPS to MTPS_DEFAULT.
-> Besides, enable MCU_BORW_EN to update the method of calculating the
-> pointer of data. Then, the hardware could get the correct data.
-> 
-> [...]
+Changes v2 => v3:
+1. Major rewrite after discussions with Steven Rostedt. [1]
+2. Remove SHARE_IPMODIFY flag from ftrace code. Instead use the callback
+   function to communicate this information. (Steven)
+3. Add cleanup_direct_functions_after_ipmodify() to clear SHARE_IPMODIFY
+   on the DIRECT ops when the IPMODIFY ops is removed.
 
-Here is the summary with links:
-  - [net] r8152: fix a WOL issue
-    https://git.kernel.org/netdev/net/c/cdf0b86b250f
+Changes v1 => v2:
+1. Fix build errors for different config. (kernel test robot)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Kernel Live Patch (livepatch, or klp) and bpf trampoline are important
+features for modern systems. This set allows the two to work on the same
+kernel function as the same time.
 
+live patch uses ftrace with IPMODIFY, while bpf trampoline use direct
+ftrace. Existing policy does not allow the two to attach to the same kernel
+function. This is changed by fine tuning ftrace IPMODIFY policy, and allows
+one IPMODIFY ftrace_ops and one DIRECT ftrace_ops on the same kernel
+function at the same time. Please see patch 2 and 4 for more details.
 
+Note that, one of the constraint here is to let bpf trampoline use direct
+call when it is not working on the same function as live patch. This is
+achieved by allowing ftrace code to ask bpf trampoline to make changes.
+
+[1] https://lore.kernel.org/all/20220602193706.2607681-2-song@kernel.org/
+
+Jiri Olsa (1):
+  bpf, x64: Allow to use caller address from stack
+
+Song Liu (3):
+  ftrace: Add modify_ftrace_direct_multi_nolock
+  ftrace: Allow IPMODIFY and DIRECT ops on the same function
+  bpf: Support bpf_trampoline on functions with IPMODIFY (e.g.
+    livepatch)
+
+ arch/x86/net/bpf_jit_comp.c |  13 +-
+ include/linux/bpf.h         |  13 ++
+ include/linux/ftrace.h      |  43 +++++
+ kernel/bpf/trampoline.c     | 158 +++++++++++++++--
+ kernel/trace/ftrace.c       | 328 ++++++++++++++++++++++++++++++------
+ 5 files changed, 484 insertions(+), 71 deletions(-)
+
+--
+2.30.2

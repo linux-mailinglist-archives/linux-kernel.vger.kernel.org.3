@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E8A57BE49
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD5657BE4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiGTTLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 15:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        id S232895AbiGTTMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 15:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiGTTLb (ORCPT
+        with ESMTP id S230391AbiGTTME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 15:11:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B089457265
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:11:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 20 Jul 2022 15:12:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4617564F3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:12:03 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59866B821D0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 19:11:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E7EC341CB;
-        Wed, 20 Jul 2022 19:11:24 +0000 (UTC)
-Date:   Wed, 20 Jul 2022 15:11:23 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        Joao Moreira <joao.moreira@intel.com>,
-        Joseph Nuzman <joseph.nuzman@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-Message-ID: <20220720151123.0e5bf61e@gandalf.local.home>
-In-Reply-To: <CAHk-=wjinvfNvp9kQBgiaON1HJtmnfmytruRGR5WmkM4m+ZRVg@mail.gmail.com>
-References: <20220716230344.239749011@linutronix.de>
-        <20220720125736.48164a14@gandalf.local.home>
-        <CAHk-=wh=Yjy=DmGzzGj-ivyx_w45AHh35eDkpGtajaiO+TX38A@mail.gmail.com>
-        <Ytg6UD+0F6zv981o@worktop.programming.kicks-ass.net>
-        <20220720135016.3178ffc6@gandalf.local.home>
-        <CAHk-=wjdQbdQGKkQxxEcWoUp4SRmBWm=3bS20SbaVe8cLgKLgg@mail.gmail.com>
-        <20220720143147.4d8a2f8d@gandalf.local.home>
-        <CAHk-=wjinvfNvp9kQBgiaON1HJtmnfmytruRGR5WmkM4m+ZRVg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6D68B6601A9E;
+        Wed, 20 Jul 2022 20:12:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658344322;
+        bh=kkQwd3wxUQX7bdNBjpHuQW+YDbc3LB9yz4gjn7bhhVI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ji34Swd4CqeHPVvpm1X+yU2XBin6/Wr7YMAsscJLyzrD4WwUqGdMf1XV26jPuByh+
+         Tcnczy7G5BKdVDKontExvx5FngniqAusjeZr5bhwURoGfO1ji4DrLhWZ14C0BiOrPp
+         QRIgfQzQS6yA+ZdxSGtZ04FqK/EIfPy4KYS26QFLQp+d5HxdcIfPybHskLF/yuOBU5
+         aEdxKe+OcaIGwBitla8qIacojqOOOHxRZS8XNuVg564A4UFlLRjcpKCuM7Qtvoa6Xu
+         y4bIKjYVHmTGyerM/ZkaotZlL/FS/fpOhZENWN5dPBu4+ex0dHyb2BheP+ylu6G586
+         tOwsHL9OOWJ8w==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drm/panel-edp: Add panel entry for B120XAN01.0
+Date:   Wed, 20 Jul 2022 15:11:58 -0400
+Message-Id: <20220720191158.1590833-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,46 +59,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Jul 2022 11:43:37 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+Add panel identification entry for the AUO B120XAN01.0 (product ID:
+0x1062) panel.
 
-> So unless somebody has some one-liner workaround, I really suspect the
-> fix is to remove all this. The amount of hackery to make it work in
-> the first place is kind of disgusting anyway.
-> 
-> Since this was a WARN_ONCE(), can you make sure that with this case
-> removed, nothing else triggers?
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Actually, this fixes it too:
+---
+v1: https://lore.kernel.org/all/20220719203857.1488831-3-nfraprado@collabora.com
 
-(and this config boots to completion without warnings).
+Changes in v2:
+- Move entry to the top so it respects the sorting
 
-I'll add this to my full test suite and see if it finishes.
+ drivers/gpu/drm/panel/panel-edp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
--- Steve
+diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+index b3536d8600f4..e85d0c56f4a5 100644
+--- a/drivers/gpu/drm/panel/panel-edp.c
++++ b/drivers/gpu/drm/panel/panel-edp.c
+@@ -1876,6 +1876,7 @@ static const struct panel_delay delay_200_500_e200 = {
+  * Sort first by vendor, then by product ID.
+  */
+ static const struct edp_panel_entry edp_panels[] = {
++	EDP_PANEL_ENTRY('A', 'U', 'O', 0x1062, &delay_200_500_e50, "B120XAN01.0"),
+ 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x405c, &auo_b116xak01.delay, "B116XAK01"),
+ 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x615c, &delay_200_500_e50, "B116XAN06.1"),
+ 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x8594, &delay_200_500_e50, "B133UAN01.0"),
+-- 
+2.37.0
 
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 1f40dad30d50..2dd61d8594f4 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -25,6 +25,7 @@ endif
- ifdef CONFIG_RETHUNK
- RETHUNK_CFLAGS		:= -mfunction-return=thunk-extern
- RETPOLINE_CFLAGS	+= $(RETHUNK_CFLAGS)
-+export RETHUNK_CFLAGS
- endif
- 
- export RETPOLINE_CFLAGS
-diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
-index 2e0aa74ac185..fd96ac1617f7 100644
---- a/drivers/misc/lkdtm/Makefile
-+++ b/drivers/misc/lkdtm/Makefile
-@@ -16,7 +16,7 @@ lkdtm-$(CONFIG_PPC_64S_HASH_MMU)	+= powerpc.o
- KASAN_SANITIZE_rodata.o		:= n
- KASAN_SANITIZE_stackleak.o	:= n
- KCOV_INSTRUMENT_rodata.o	:= n
--CFLAGS_REMOVE_rodata.o		+= $(CC_FLAGS_LTO)
-+CFLAGS_REMOVE_rodata.o		+= $(CC_FLAGS_LTO) $(RETHUNK_CFLAGS)
- 
- OBJCOPYFLAGS :=
- OBJCOPYFLAGS_rodata_objcopy.o	:= \

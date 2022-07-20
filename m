@@ -2,107 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5347757B58D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FA657B594
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiGTLcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S233312AbiGTLdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiGTLcI (ORCPT
+        with ESMTP id S231281AbiGTLdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:32:08 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A507C6EE96
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:32:07 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id e28so29686866lfj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:32:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vE1DDTdSMSu0BCMGaO7at2qVYfDnw/cSZN0qW1IzOb0=;
-        b=BpcMxXscs++dlvbm7hfl4ot+wnp69DZFLoKjSeXRBmwHgptcHIdn9rFi4FjIcHxzUw
-         J3hLmbdBdLRFtBBmtmxK9uC6Itr2nAZoG8KeMxlPspAcTbP5NCFel4xXIf86HGU0Enwh
-         5BXKvg40efoTnDVbSdIiPe9/s1Hrl2Qc32NjQAUg3Zc3spF9RIOMV6gWciM2i37qTKFC
-         nERFQ08mYUOBqIfqQ1NvVYMm7Fk9SvmTDvoNZLAP+AyexsbXgj17YNzSernx56oEh1j9
-         L9UpQSYeuSAe0lbjdQqGW5OoPGWcxG1E1Rx9VL5bcKFzf7Yfe74auYoMPAbal6c2HT4b
-         7z0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vE1DDTdSMSu0BCMGaO7at2qVYfDnw/cSZN0qW1IzOb0=;
-        b=NQBPIanELS8iBlTlGQmRbHKtHvQHerLlyUV4zO2nxl7/hQYI81YbmQOK6Iapwf3UhQ
-         O7LT4vJ9cBdQYmX0w43L7VweV0RmKueRdwgb+wrCoH32nqRNHQwmVTiUwDZ1MOPmdKf1
-         BFVwbGwobwOa9P9Mh+ASvKooAyh0A+1LBgDdtY52a5YjQSyUpP3WQdAui/fF3GFDpfAc
-         /JY0Hwaf4sBYotmleN80TOR2id2GIrZzyVzJlh1NBGmFkv7jpAUP0L4C87FK72MJ67JY
-         H4SKBIFz4ViNu9EIYxswa2uYcIp9WcL7DKUu2XiI+tZh035G7brsGRhsZxmzDhK3V9Qb
-         kAzQ==
-X-Gm-Message-State: AJIora98YFIht8tzFowm5FXE2vP5QSQsAMc6DnER1ouQ+hNi3JbF51BE
-        rcOdXrOvH94yazNHYGjTR674Mw==
-X-Google-Smtp-Source: AGRyM1sdCXMj7pl6v4LR2t+sXr/IRvz5U7a1oGnWWqdjNGPkEPSYrvlTzfVGjLw3GXBIUxnN/Ru9lA==
-X-Received: by 2002:a05:6512:3d0b:b0:48a:55d:e5eb with SMTP id d11-20020a0565123d0b00b0048a055de5ebmr19478436lfv.572.1658316726061;
-        Wed, 20 Jul 2022 04:32:06 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id a27-20020a2eb55b000000b0025d5b505df1sm3166137ljn.136.2022.07.20.04.32.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 04:32:05 -0700 (PDT)
-Message-ID: <d836f94c-4e87-31f6-5c3a-341e802a23a6@linaro.org>
-Date:   Wed, 20 Jul 2022 13:32:04 +0200
+        Wed, 20 Jul 2022 07:33:51 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FCC54073
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CRVWYeTJ3z1mATMRacXFgv811HEmLtg6owA+ofAMlOc=; b=rAWWhbenvX3lCYIk5peTZAJ91c
+        jfmQGbHx/DYjr2zhJVthsEFIJNo8SWyFR0Xl9bU16xkBp7TafZCk6RxBgS9EVDyrSpNatHiFJr/xL
+        oW0w7Wf0t4rxdm+iYzgHe3kDziaBWaz+ekFnGZkD3CGUisxV0hZqtZWkXX6bPNtaZAswx4rnElWmv
+        dxUKwfH8BwtiGsh044imKptuS5RZGyZfhqOXEvoSIMMMKoRCjdqw/bwV8PSZiuQs2k37l0jng45mI
+        49FqRtpEYaswsu+kFq2mFew/Du+4nfbZVEpskiPsrblk/fPMoTthWv7LuvgTzPH44mWeOycI+zxpL
+        7EAvET9g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oE7xI-005JX8-RB; Wed, 20 Jul 2022 11:33:29 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6880C980BBE; Wed, 20 Jul 2022 13:33:28 +0200 (CEST)
+Date:   Wed, 20 Jul 2022 13:33:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     zengjx95@gmail.com
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org,
+        Zeng Jingxiang <linuszeng@tencent.com>
+Subject: Re: [PATCH] kernel/sched/cputime: Fix unused value in
+ cputime_adjust()
+Message-ID: <YtfoCAKfV8PXQz5h@worktop.programming.kicks-ass.net>
+References: <20220720102956.1141634-1-zengjx95@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: net: cdns,macb: Add versal compatible
- string
-Content-Language: en-US
-To:     Harini Katakam <harini.katakam@xilinx.com>,
-        nicolas.ferre@microchip.com, davem@davemloft.net,
-        claudiu.beznea@microchip.com, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michal.simek@xilinx.com, harinikatakamlinux@gmail.com,
-        devicetree@vger.kernel.org, radhey.shyam.pandey@xilinx.com
-References: <20220720112924.1096-1-harini.katakam@xilinx.com>
- <20220720112924.1096-2-harini.katakam@xilinx.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220720112924.1096-2-harini.katakam@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720102956.1141634-1-zengjx95@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 13:29, Harini Katakam wrote:
-> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+On Wed, Jul 20, 2022 at 06:29:56PM +0800, zengjx95@gmail.com wrote:
+> From: Zeng Jingxiang <linuszeng@tencent.com>
 > 
-> Add versal compatible string.
+> Coverity warns uf an unused value:
 > 
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
-> ---
->  Documentation/devicetree/bindings/net/cdns,macb.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> assigned_value: Assign the value of the variable rtime to utime here,
+> but that stored value is overwritten before it can be used.
+> 568	if (stime == 0) {
+> 569		utime = rtime;
+> 570		goto update;
+> 571	}
 > 
-> diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-> index 9c92156869b2..1e9f49bb8249 100644
-> --- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
-> +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-> @@ -22,6 +22,7 @@ properties:
->            - enum:
->                - cdns,zynq-gem         # Xilinx Zynq-7xxx SoC
->                - cdns,zynqmp-gem       # Xilinx Zynq Ultrascale+ MPSoC
-> +              - cdns,versal-gem       # Xilinx Versal
+> value_overwrite: Overwriting previous write to utime with
+> the value of expression rtime - stime.
+> 592	utime = rtime - stime;
 
-Not really ordered by name. Why adding to the end?
+Coverity is being daft, the compiler has a dead-store-elimination pass.
 
-Best regards,
-Krzysztof
+This way the code is more consistent / easier to ready.

@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D6457B1E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0238E57B1E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240089AbiGTHjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S240116AbiGTHji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235565AbiGTHjb (ORCPT
+        with ESMTP id S235565AbiGTHje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:39:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 751E767C89
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658302769;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JRD5gze5iCgumqb7DRzeC17ppeyLAWxOOTxgcR3iPKc=;
-        b=VhYGVJwCvqFptKJJ2roDyh6qwx9yCXmKsXJmSQuSkuTLjhPfpRr1L/2JMX/J0k0EAgsZZA
-        E5EMPV4ZmCZX0Fga6cBBWS71NPpEcbceoQWLkwP+xsw0esvHy0MCSlYfp9cMVQtn+g6pqA
-        rChWMlN8b9u7bGLirKJTB6lUlOBHTeA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-636-FCe16L--PtaFm1MPCTj6kQ-1; Wed, 20 Jul 2022 03:38:43 -0400
-X-MC-Unique: FCe16L--PtaFm1MPCTj6kQ-1
-Received: by mail-wr1-f72.google.com with SMTP id q9-20020adfb189000000b0021e3e7d3242so731302wra.19
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:38:39 -0700 (PDT)
+        Wed, 20 Jul 2022 03:39:34 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D90B68732
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:39:33 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id v15so16405934ljc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:39:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j0ANUNTkZ26RWQnY3pfsOcSO7yiU6627Cy5vXCioKjM=;
+        b=e3ipkMk6gbei7k0d57pbubdR2vAQBIeY1vd8JcfVskwhrXvyIktfprcrNkHZ8/r4B4
+         FmvmCfAuH+/wHOVJNAyo38eBG4ndNTXicZ6lq+owQqKnw0c1F3l2Df/UBO0Q9HSpQdJE
+         KCloIr/YcaJLqYtSYZtwbJ/o2ygTRmHvBODGIbAL3uZ88Ay1rM/5yi7cXSjc9zxWn4dc
+         pYMIXCojfYA0o69nAt0jvMQFvE6S3mGl38qon6btGG8PY2EMEBqUGVPvoGjv2gebDAau
+         VSUtt7UBtO5nQkx+mjS7xe2a0AgmQuAirUGuXEraeeUfVCZ6wV7dpdKr5Wexv60nVGWA
+         FzUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=JRD5gze5iCgumqb7DRzeC17ppeyLAWxOOTxgcR3iPKc=;
-        b=J546P3bVDjeVlNdIrWVLUN/eMG0qa2Tg+wtN+UG2nu4U6DF4Hu3fCx3z06hUCfaQ8b
-         ZFpL92et2JMkNiQtLyyzAK4FuVFHjmDj/S5AZ0JRVp7IvbJ9WNU9TiMV48ujC0LnreC0
-         mQt8ckXpEzbb41eMqjngSGdbVvgjKx3G5hXgU9BFPaM9/wHxIsYhCnmWvhXaJNYri/bD
-         VLb2Qa6BrRRhHd33EE9XMw1GYMpLLcLTLBHQcu/5Tlcu7JmQcarwiXS1jMB7bwRI6trs
-         OQxif7g6bdPBO3HvD7UhS7XlGL3sFxnJJ8PMUsh+f+VjU+gNbivRN8XjaBr/F77Y/bbi
-         Nz+Q==
-X-Gm-Message-State: AJIora8yy6Nk88rqiv/cbROw+iG8Gk9dWGCwWW/N992AyeheO5R31oZ+
-        fxEatkAc7J99UUB9vvDmw1v3AI4LDouq/nbo03QOlIHvDy/l5wSF6Sh4gKOXo6qO9s7jLHm1Bx/
-        BdqXeB5isObiXPuJpLMAwgTfI
-X-Received: by 2002:adf:fb86:0:b0:21e:3cc8:a917 with SMTP id a6-20020adffb86000000b0021e3cc8a917mr5058444wrr.538.1658302717046;
-        Wed, 20 Jul 2022 00:38:37 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sIHxRRulozed77eh09MMR3TpyPXp6QvGSSUylqHFikk73Szma/PVU/ZZnOsW9vrL/e0eKrOA==
-X-Received: by 2002:adf:fb86:0:b0:21e:3cc8:a917 with SMTP id a6-20020adffb86000000b0021e3cc8a917mr5058437wrr.538.1658302716785;
-        Wed, 20 Jul 2022 00:38:36 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:e00:8d96:5dba:6bc4:6e89? (p200300cbc7060e008d965dba6bc46e89.dip0.t-ipconnect.de. [2003:cb:c706:e00:8d96:5dba:6bc4:6e89])
-        by smtp.gmail.com with ESMTPSA id co18-20020a0560000a1200b0021b5861eaf7sm14998954wrb.3.2022.07.20.00.38.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 00:38:36 -0700 (PDT)
-Message-ID: <2551d5bf-63f1-f3f3-0971-930923c4c087@redhat.com>
-Date:   Wed, 20 Jul 2022 09:38:35 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j0ANUNTkZ26RWQnY3pfsOcSO7yiU6627Cy5vXCioKjM=;
+        b=Gc7z/ya4WvmmJPwsq0cXA+sOHaxhoAbeHHoBHGDSE1s9AEXyscxYtgsxpKPNQ/J3tH
+         uF4J23xqC/Q7qRuDxb5WnW9k/0rw6OXmNVgLtj6RnC7fGh7U6nzmlrUEuCzXO6TB0Hla
+         5pUrmGLoqi17cSK+/sHONnjYUOay5mP6MpJK+GZ0Ft+xldGpadXNIKLfEOF9jpiPboyx
+         8I6lAtvyZtq0za7fD6yWrlbxawqIg8eLALi3sHCvt3ZtciKhVgi04y+JvJyJXdU5vZ/M
+         9XIbkzdRw/u8xETSgpzIX6sipjA8R4LEdGf8HCucBa8fFTbU2xc9z4IcsBYptbyW1S0c
+         NVMg==
+X-Gm-Message-State: AJIora/+TLne+2czWy2ZU4vJVvf8WasM9UIHA5/o0pXq4YJuWCNoiMuz
+        BAva9saGGa98IdmQxH/7d5Lip7kqxz3gnH/1yD0=
+X-Google-Smtp-Source: AGRyM1towGeJkXn/nsplStsr2X3bSKxpaLxD52Bok2fNLaYIrNgB1JzBfS7VDIDSp2P/bzPZ62HinJaBN+pLftXYZn4=
+X-Received: by 2002:a2e:a595:0:b0:25d:a8c6:21cc with SMTP id
+ m21-20020a2ea595000000b0025da8c621ccmr9575819ljp.416.1658302772009; Wed, 20
+ Jul 2022 00:39:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] memblock tests: change build options to run-time options
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220714031717.12258-1-remckee0@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220714031717.12258-1-remckee0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220629194632.1117723-1-qais.yousef@arm.com> <20220629194632.1117723-8-qais.yousef@arm.com>
+In-Reply-To: <20220629194632.1117723-8-qais.yousef@arm.com>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Wed, 20 Jul 2022 15:39:20 +0800
+Message-ID: <CAB8ipk9=EEfArTTQ_w10+Df0WqMinFvjbmfFEBLg1zUYcHkOPw@mail.gmail.com>
+Subject: Re: [PATCH 7/7] sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s
+ early exit condition
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,30 +72,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.07.22 05:17, Rebecca Mckeever wrote:
-> Change verbose and movable node build options to run-time options.
-> 
-> Movable node usage:
->     $ ./main -m
-> 
->     Or:
->     $ ./main --movable-node
-> 
-> Verbose usage:
->     $ ./main -v
-> 
->     Or:
->     $ ./main --verbose
-> 
-> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+Hi Qais
 
-LGTM, thanks!
+On Thu, Jun 30, 2022 at 3:48 AM Qais Yousef <qais.yousef@arm.com> wrote:
+>
+> If the utilization of the woken up task is 0, we skip the energy
+> calculation because it has no impact.
+>
+> But if the task is boosted (uclamp_min != 0) will have an impact on task
+> placement and frequency selection. Only skip if the util is truly
+> 0 after applying uclamp values.
+>
+> Change uclamp_task_cpu() signature to avoid unnecessary additional calls
+> to uclamp_eff_get(). feec() is the only user now.
+>
+> Fixes: 732cd75b8c920 ("sched/fair: Select an energy-efficient CPU on task wake-up")
+> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> ---
+>  kernel/sched/fair.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 499ef7a7288c..a112ca45864c 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4057,14 +4057,16 @@ static inline unsigned long task_util_est(struct task_struct *p)
+>  }
+>
+>  #ifdef CONFIG_UCLAMP_TASK
+> -static inline unsigned long uclamp_task_util(struct task_struct *p)
+> +static inline unsigned long uclamp_task_util(struct task_struct *p,
+> +                                            unsigned long uclamp_min,
+> +                                            unsigned long uclamp_max)
+>  {
+> -       return clamp(task_util_est(p),
+> -                    uclamp_eff_value(p, UCLAMP_MIN),
+> -                    uclamp_eff_value(p, UCLAMP_MAX));
+> +       return clamp(task_util_est(p), uclamp_min, uclamp_max);
+>  }
+>  #else
+> -static inline unsigned long uclamp_task_util(struct task_struct *p)
+> +static inline unsigned long uclamp_task_util(struct task_struct *p,
+> +                                            unsigned long uclamp_min,
+> +                                            unsigned long uclamp_max)
+>  {
+>         return task_util_est(p);
+>  }
+> @@ -6913,7 +6915,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>         target = prev_cpu;
+>
+>         sync_entity_load_avg(&p->se);
+> -       if (!task_util_est(p))
+> +       if (!uclamp_task_util(p, p_util_min, p_util_max))
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Is it not enough to just replace the task_util_est with the
+uclamp_task_util? If change the definition of uclamp_task_util,
+that means it have to get task's uclamp first if user want to call the
+function, may increase the code complex farther more?
 
+>                 goto unlock;
+>
+>         for (; pd; pd = pd->next) {
+> --
+> 2.25.1
+>
 
--- 
-Thanks,
-
-David / dhildenb
-
+BR
+---
+xuewen.yan

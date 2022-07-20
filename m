@@ -2,77 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B90057B968
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884DD57B969
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbiGTPSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
+        id S241272AbiGTPUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiGTPSS (ORCPT
+        with ESMTP id S231622AbiGTPUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:18:18 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DE8564C3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:18:17 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id b26so26601131wrc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:18:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XtdCkh5Q9N9knOQNFgtdwyolXJKWft8+CGVuOwEKrH0=;
-        b=tXiU4nSLjpcwpnSJcnt+toLSKL9QSNSCughUnC0e5eI2eeGOGW2fKp6opZwLKyILVX
-         KUV/t+k5DrYVj5dEbntiEe51DmuZGoY/dDGN9d2osYo6W34yk5hJbHf9LgWfpwJtwaad
-         kHJQuFWg/nT55LlisCMEmKrh8jnRXwxWge20GX98gg07Hbl8lwLI8ZhZgrQjeQJhLngq
-         sLc/ojYAKiWsc5KtjNfrk7OT6TA84lGG0chpYhkzXEcWDhYvspDn2A7VMs5dskIbmtPA
-         m5jg/8wDZriLDkAZjDLtcs3cNB6GSftvfjyjG4II7yhq9fY4q4a40/S2sfiS+McWnNQ+
-         /2ww==
+        Wed, 20 Jul 2022 11:20:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBB195A891
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:20:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658330402;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vXIv8z6wgYrxtRmSkO6MksNcPo7L1KXy6iCAgLmfCq8=;
+        b=iC8uzrlGR0mVwwZvh+F6sRaJ6eIm+zREjeMGA2Aq+kPhGnwVoXAs3hv31Lp1ADHE7iTlwE
+        7NF7OYoS5WNQuCo0DfhrIMwVhP5hnAmJ8rMQ2ONwuf61ObFV/KferleHApNSUm+t9oTIx4
+        Po5lfRmh9c9aMDnnnIuMOhhBFFiNfII=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-98-M4XIYVdhPTWE00qg4KO2jQ-1; Wed, 20 Jul 2022 11:20:01 -0400
+X-MC-Unique: M4XIYVdhPTWE00qg4KO2jQ-1
+Received: by mail-wm1-f71.google.com with SMTP id h65-20020a1c2144000000b003a30cae106cso1381907wmh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:20:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XtdCkh5Q9N9knOQNFgtdwyolXJKWft8+CGVuOwEKrH0=;
-        b=ZAY6EIrK9vGqjSHEsrMvCkruCOqsOOVcWv/BdYjGH1mI6Irft0LRePQMzUgdnIGgNw
-         mC8f/XFVRJPSr+yKVi30SF1RKDrGvk6ZPGmCZpSygu+cvhPMi8JCUKaSgsGPWuD6OStu
-         aGGGJsFTmpXaUS42ir7jnGjTIVrdwcTAcRPJBgDHOOO7TBrWA7t76S8e85xaXQxSz5Hj
-         ve08akDzwiQyk+D7zQCheJlBNJYQy/4NeUvltJaX8MkCADqPggLm526M4E6t5BReD1xj
-         TGDpGcp8NlFPhtGFAU8/NTP/L2Yf9pYp7nj4t2lOP6o4KiSWUcu5ZuMbHjGvEvlVphib
-         cEzQ==
-X-Gm-Message-State: AJIora+jz11aFT+HzCjcEG6mORxgpkp9fyVSBuCjpvSiEuGp5Rk0tS4k
-        FJvg4POoIwJ0z6+7Hztv1iP+B6xs5S2M5mL/zpFSpA==
-X-Google-Smtp-Source: AGRyM1t/1aPyh24DcDcKsSeznYH68QBBjLFKbWUi9XLEvmBhoG5IcdTdq+tu0w5B6sTghlijMhxmXxFCGFPIWjkN4Sc=
-X-Received: by 2002:a05:6000:8e:b0:21d:7e97:67ed with SMTP id
- m14-20020a056000008e00b0021d7e9767edmr30000082wrx.343.1658330296042; Wed, 20
- Jul 2022 08:18:16 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=vXIv8z6wgYrxtRmSkO6MksNcPo7L1KXy6iCAgLmfCq8=;
+        b=NJdlkOxAXH5n1etHBLb0WT6NIRTA+ULv/WhnNoa1kxjBSxm3IS3NPpFUaYEdwhwTZV
+         ql4wqPpD03C9cPX17qG509rcEqBzVhl6GNARpZA1pZoXrqETnmBwuh+7+rP4ZoaIfVyh
+         Xc1lAMZf/a0VH+HhMlP++mmfCqgVUohQelGbCFliHym2uXLfhJOEWzWHRZbtH8R7/6aw
+         ssxbHjn9IlHfujki5NwsqM7xZGXs0FsNznB8Vne06eaHahFsOP/3tAmvltZ1NNEDka9W
+         mkg7G9/wnpJ5dZ18KZ7275lTUJPNYecbWokWtvbOefbJIVgUNNhFmvtqfdJWHvqj2ylq
+         mrHQ==
+X-Gm-Message-State: AJIora/CzqEPj3h6bAcFti0U0WPPpp8/U0gzMiIUdBR97JAlHas8i97H
+        mO8CurKvb4kRG4SPd9J71loqh08XzA3TN79dSCthD78R2xKZZa4opNN9P+acg5Fv4Ub3NBpZlGc
+        W1Ib/UjNhGmBZvEyjdOxMoR//
+X-Received: by 2002:a05:6000:1ac8:b0:21d:b7d9:3c03 with SMTP id i8-20020a0560001ac800b0021db7d93c03mr30044896wry.149.1658330400079;
+        Wed, 20 Jul 2022 08:20:00 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vhY4jMlcvydLqIIfpJUjBSd/bdgLq4ERjsnYiBMvxcW+HJNzw85znY51iyKWzZ3ktA+WCuNQ==
+X-Received: by 2002:a05:6000:1ac8:b0:21d:b7d9:3c03 with SMTP id i8-20020a0560001ac800b0021db7d93c03mr30044869wry.149.1658330399812;
+        Wed, 20 Jul 2022 08:19:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:e00:8d96:5dba:6bc4:6e89? (p200300cbc7060e008d965dba6bc46e89.dip0.t-ipconnect.de. [2003:cb:c706:e00:8d96:5dba:6bc4:6e89])
+        by smtp.gmail.com with ESMTPSA id a6-20020a05600c068600b003a2e5caab12sm2576603wmn.47.2022.07.20.08.19.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 08:19:59 -0700 (PDT)
+Message-ID: <23a9d678-487e-5940-4cde-dc53d920fb48@redhat.com>
+Date:   Wed, 20 Jul 2022 17:19:58 +0200
 MIME-Version: 1.0
-References: <20220719223946.176299-1-irogers@google.com> <20220719223946.176299-2-irogers@google.com>
- <ef5125e0-8265-8c16-e904-c95c8ddc2754@maine.edu>
-In-Reply-To: <ef5125e0-8265-8c16-e904-c95c8ddc2754@maine.edu>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 20 Jul 2022 08:18:04 -0700
-Message-ID: <CAP-5=fVU17DxzdOvr0aob6G4HvjianSuWW4Q-QRWQV=Kd8_+jw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] perf: Align user space counter reading with code
-To:     Vince Weaver <vincent.weaver@maine.edu>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 03/14] mm/mprotect: allow exclusive anon pages to be
+ writable
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Nick Piggin <npiggin@gmail.com>
+References: <20220718120212.3180-1-namit@vmware.com>
+ <20220718120212.3180-4-namit@vmware.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220718120212.3180-4-namit@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,80 +96,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 8:06 AM Vince Weaver <vincent.weaver@maine.edu> wrote:
->
-> On Tue, 19 Jul 2022, Ian Rogers wrote:
->
-> > Align the user space counter reading documentation with the code in
-> > perf_mmap__read_self. Previously the documentation was based on the perf
-> > rdpmc test, but now general purpose code is provided by libperf.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  include/uapi/linux/perf_event.h       | 35 +++++++++++++++++----------
-> >  tools/include/uapi/linux/perf_event.h | 35 +++++++++++++++++----------
-> >  2 files changed, 44 insertions(+), 26 deletions(-)
-> >
-> > diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> > index d37629dbad72..6826dabb7e03 100644
-> > --- a/include/uapi/linux/perf_event.h
-> > +++ b/include/uapi/linux/perf_event.h
-> > @@ -538,9 +538,13 @@ struct perf_event_mmap_page {
-> >        *
-> >        *     if (pc->cap_usr_time && enabled != running) {
-> >        *       cyc = rdtsc();
-> > -      *       time_offset = pc->time_offset;
-> >        *       time_mult   = pc->time_mult;
-> >        *       time_shift  = pc->time_shift;
-> > +      *       time_offset = pc->time_offset;
-> > +      *       if (pc->cap_user_time_short) {
-> > +      *         time_cycles = pc->time_cycles;
-> > +      *         time_mask = pc->time_mask;
-> > +      *       }
->
-> From what I've been told, and from what perf_mmap__read_self() actually
-> does, many of these MMAP fields need to be accessed by READ_ONCE()
-> (a GPLv2 only interface) to be correct.
->
-> Should we update perf_event.h to reflect this?  Otherwise it's confusing
-> when the actual code and the documentation in the header don't match like
-> this.  As an example, see the actual code snippets from
-> perf_mmap__read_self()
->
->                 seq = READ_ONCE(pc->lock);
->                 barrier();
->
->                 count->ena = READ_ONCE(pc->time_enabled);
->                 count->run = READ_ONCE(pc->time_running);
->
->                 if (pc->cap_user_time && count->ena != count->run) {
->                         cyc = read_timestamp();
->                         time_mult = READ_ONCE(pc->time_mult);
->                         time_shift = READ_ONCE(pc->time_shift);
->                         time_offset = READ_ONCE(pc->time_offset);
->
->                         if (pc->cap_user_time_short) {
->                                 time_cycles = READ_ONCE(pc->time_cycles);
->                                 time_mask = READ_ONCE(pc->time_mask);
->                         }
->                 }
->
->                 idx = READ_ONCE(pc->index);
->                 cnt = READ_ONCE(pc->offset);
->
-> ...
+On 18.07.22 14:02, Nadav Amit wrote:
+> From: Nadav Amit <namit@vmware.com>
+> 
+> Anonymous pages might have the dirty bit clear, but this should not
+> prevent mprotect from making them writable if they are exclusive.
+> Therefore, skip the test whether the page is dirty in this case.
+> 
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Andrew Cooper <andrew.cooper3@citrix.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Nick Piggin <npiggin@gmail.com>
+> Signed-off-by: Nadav Amit <namit@vmware.com>
+> ---
+>  mm/mprotect.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/mprotect.c b/mm/mprotect.c
+> index 34c2dfb68c42..da5b9bf8204f 100644
+> --- a/mm/mprotect.c
+> +++ b/mm/mprotect.c
+> @@ -45,7 +45,7 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
+>  
+>  	VM_BUG_ON(!(vma->vm_flags & VM_WRITE) || pte_write(pte));
+>  
+> -	if (pte_protnone(pte) || !pte_dirty(pte))
+> +	if (pte_protnone(pte))
+>  		return false;
+>  
+>  	/* Do we need write faults for softdirty tracking? */
+> @@ -66,7 +66,8 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
+>  		page = vm_normal_page(vma, addr, pte);
+>  		if (!page || !PageAnon(page) || !PageAnonExclusive(page))
+>  			return false;
+> -	}
+> +	} else if (!pte_dirty(pte))
+> +		return false;
+>  
+>  	return true;
+>  }
 
-Thanks! So I think what this patch proposes is an improvement,
-specifically it aligns it better with the code and deals with the
-divide by zero. I think what you're asking for makes sense but as you
-point out READ_ONCE probably isn't the correct API for something
-outside the kernel. Given the kernel is now C11:
-https://lwn.net/Articles/885941/
-This opens the possibility of using stdatomic.h, so perhaps we can
-move these variables to more correct atomic types. So, I think we can
-land this and worry about the atomic API in a follow up.
+When I wrote that code, I was wondering how often that would actually
+happen in practice -- and if we care about optimizing that. Do you have
+a gut feeling in which scenarios this would happen and if we care?
 
+If the page is in the swapcache and was swapped out, you'd be requiring
+a writeback even though nobody modified the page and possibly isn't
+going to do so in the near future.
+
+-- 
 Thanks,
-Ian
 
-> Vince
+David / dhildenb
+

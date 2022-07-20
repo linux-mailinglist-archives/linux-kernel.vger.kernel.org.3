@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3938957B565
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF0357B566
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239050AbiGTL2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
+        id S240529AbiGTL2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239877AbiGTL1j (ORCPT
+        with ESMTP id S240058AbiGTL1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:27:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212565465C
+        Wed, 20 Jul 2022 07:27:41 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CF145066
         for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:27:38 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 11:27:35 -0000
+Date:   Wed, 20 Jul 2022 11:27:36 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658316456;
+        s=2020; t=1658316457;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7WY1EL4ELvdohD9t07PDZ7/O9iuNsa4U3p9mfl1wduI=;
-        b=SvXqRFwUjWrpV4SMD33aKviTS/VfN+YQ04G/yQ4/KC813n4MFoOkh9KOfSD1TuUHiQ5MpE
-        UJ26V4dM1CLtKTn3Vw9Zcg7gZBOsh0HDuADFU5BSqkYJuPmjuagq4HIBNJJDNkWLgjrUg6
-        BKmjLq39mnQ629myQJhkTBYWkLpboOQdgN4nq8G8sj4VAs3O+r9WuT/+dMFaJgPI0T1ngK
-        LaK+/IkUgtfKkk5vb0bOozFkJE/sA/GAhm6Jcm8IVFB0fBHm4g2WIX2dJfpEKeDpXba97P
-        q8DjwotJBo2bvIbo2Ep1OwYy7h5YQWnGAy0d+YA+Z0mnm9iZ7UbJVKm0ygamAQ==
+        bh=rG2RuPtB8gt+rnCavTi1rFk6TKhGZh8beIMQwl5wVK4=;
+        b=XBs0Xiz9KvEehMMj1hptz06fx5gxdqK77cum/N4ZP38b06m2byU6JduclRfuB2MfSM7iJ0
+        NBrrunHUSyE2VBKKo1qZ8NNj/PCg1aSXCm7sWUNNG1FyR9+t1Gpl+IkN5hwYZyxUIr+LZ9
+        Tw+KgaNgcVoC08Ac3DpX07lBzrHvyKw6tBFgFsNZmMk6ECwXSyRUzIm6XHKPpb+0T6/qha
+        1QAzotbtxfxftPb3yeoFSWrskFaC3T9ZBVYT0OhSvOyaDzmsDpzSoiiNEy1R1vim8UlUke
+        UmMNsLhcS8P/ev4y2TXJrh7cZim4Drs73vDs/PdElC3tEdnfXdSEEfRjs7cqvQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658316456;
+        s=2020e; t=1658316457;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7WY1EL4ELvdohD9t07PDZ7/O9iuNsa4U3p9mfl1wduI=;
-        b=yBFXTIQGIYsl0JtvlskrcU5uIIQf4wp1NxEBS8UTAzVHzjkKOCGM4ik4i8lyZ10OyfYg+Y
-        asYG+BfTAJ46ZWCQ==
+        bh=rG2RuPtB8gt+rnCavTi1rFk6TKhGZh8beIMQwl5wVK4=;
+        b=IGmfxVrJqqopYPRkBO6El9JmSvIRbvmnpXpAUGopxeR4CgxuwAcy2nj/F1VFAVcO7JVD5v
+        h9QgTa2+gBQP+YBA==
 From:   "irqchip-bot for Jianmin Lv" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] LoongArch: Prepare to support multiple
- pch-pic and pch-msi irqdomain
+Subject: [irqchip: irq/irqchip-next] LoongArch: Use ACPI_GENERIC_GSI for gsi handling
 Cc:     Jianmin Lv <lvjianmin@loongson.cn>, Marc Zyngier <maz@kernel.org>,
         tglx@linutronix.de
-In-Reply-To: <1658314292-35346-7-git-send-email-lvjianmin@loongson.cn>
-References: <1658314292-35346-7-git-send-email-lvjianmin@loongson.cn>
+In-Reply-To: <1658314292-35346-6-git-send-email-lvjianmin@loongson.cn>
+References: <1658314292-35346-6-git-send-email-lvjianmin@loongson.cn>
 MIME-Version: 1.0
-Message-ID: <165831645556.15455.15737204434612577341.tip-bot2@tip-bot2>
+Message-ID: <165831645648.15455.16441428331265427809.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,119 +65,124 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     2dfded47da329a0dd619144a6bb43aefc13a77ba
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/2dfded47da329a0dd619144a6bb43aefc13a77ba
+Commit-ID:     cd057667585411fbecc0c140727177d7d707c63a
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/cd057667585411fbecc0c140727177d7d707c63a
 Author:        Jianmin Lv <lvjianmin@loongson.cn>
-AuthorDate:    Wed, 20 Jul 2022 18:51:25 +08:00
+AuthorDate:    Wed, 20 Jul 2022 18:51:24 +08:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Wed, 20 Jul 2022 12:09:20 +01:00
 
-LoongArch: Prepare to support multiple pch-pic and pch-msi irqdomain
+LoongArch: Use ACPI_GENERIC_GSI for gsi handling
 
-For systems with two chipsets, there are two related pch-pic and
-pch-msi irqdomains, each of which has the same node id as its
-parent irqdomain. So we use a structure to mantain the relation
-of node and it's parent irqdomain as pch irqdomin, the 'pci_segment'
-field is only used to match the pci segment of a pci device when
-setting msi irqdomain for the device.
+For LoongArch, generic gsi code(driver/acpi/irq.c) can be
+reused after following patchs:
 
-struct acpi_vector_group {
-        int node;
-        int pci_segment;
-        struct irq_domain *parent;
-};
+APCI: irq: Add support for multiple GSI domains
+ACPI: irq: Allow acpi_gsi_to_irq() to have an arch-specific fallback
 
-The field 'pci_segment' and 'node' are initialized from MCFG, and
-the parent irqdomain driver will set field 'parent' by matching same
-'node'.
+So, config ACPI_GENERIC_GSI for LoongArch with removing the gsi code
+in arch directory.
 
 Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/1658314292-35346-7-git-send-email-lvjianmin@loongson.cn
+Link: https://lore.kernel.org/r/1658314292-35346-6-git-send-email-lvjianmin@loongson.cn
 ---
- arch/loongarch/include/asm/irq.h |  8 +++++++-
- arch/loongarch/kernel/irq.c      | 38 +++++++++++++++++++++++++++++++-
- 2 files changed, 46 insertions(+)
+ arch/loongarch/Kconfig       |  1 +-
+ arch/loongarch/kernel/acpi.c | 65 +-----------------------------------
+ 2 files changed, 1 insertion(+), 65 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-index ace3ea6..a2540d7 100644
---- a/arch/loongarch/include/asm/irq.h
-+++ b/arch/loongarch/include/asm/irq.h
-@@ -48,6 +48,14 @@ void arch_trigger_cpumask_backtrace(const struct cpumask *mask, bool exclude_sel
- #define MAX_IO_PICS 2
- #define NR_IRQS	(64 + (256 * MAX_IO_PICS))
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 1920d52..fb1e73a 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -2,6 +2,7 @@
+ config LOONGARCH
+ 	bool
+ 	default y
++	select ACPI_GENERIC_GSI if ACPI
+ 	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
+ 	select ARCH_BINFMT_ELF_STATE
+ 	select ARCH_ENABLE_MEMORY_HOTPLUG
+diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
+index bb729ee..03aa145 100644
+--- a/arch/loongarch/kernel/acpi.c
++++ b/arch/loongarch/kernel/acpi.c
+@@ -25,7 +25,6 @@ EXPORT_SYMBOL(acpi_pci_disabled);
+ int acpi_strict = 1; /* We have no workarounds on LoongArch */
+ int num_processors;
+ int disabled_cpus;
+-enum acpi_irq_model_id acpi_irq_model = ACPI_IRQ_MODEL_PLATFORM;
  
-+struct acpi_vector_group {
-+	int node;
-+	int pci_segment;
-+	struct irq_domain *parent;
-+};
-+extern struct acpi_vector_group pch_group[MAX_IO_PICS];
-+extern struct acpi_vector_group msi_group[MAX_IO_PICS];
-+
- #define CORES_PER_EIO_NODE	4
+ u64 acpi_saved_sp;
  
- #define LOONGSON_CPU_UART0_VEC		10 /* CPU UART0 */
-diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
-index b34b8d7..37dd2dc 100644
---- a/arch/loongarch/kernel/irq.c
-+++ b/arch/loongarch/kernel/irq.c
-@@ -31,6 +31,8 @@ struct irq_domain *pch_lpc_domain;
- struct irq_domain *pch_msi_domain[MAX_IO_PICS];
- struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+@@ -33,70 +32,6 @@ u64 acpi_saved_sp;
  
-+struct acpi_vector_group pch_group[MAX_IO_PICS];
-+struct acpi_vector_group msi_group[MAX_IO_PICS];
- /*
-  * 'what should we do if we get a hw irq event on an illegal vector'.
-  * each architecture has to answer this themselves.
-@@ -56,6 +58,41 @@ int arch_show_interrupts(struct seq_file *p, int prec)
- 	return 0;
- }
+ #define PREFIX			"ACPI: "
  
-+static int __init early_pci_mcfg_parse(struct acpi_table_header *header)
-+{
-+	struct acpi_table_mcfg *mcfg;
-+	struct acpi_mcfg_allocation *mptr;
-+	int i, n;
-+
-+	if (header->length < sizeof(struct acpi_table_mcfg))
-+		return -EINVAL;
-+
-+	n = (header->length - sizeof(struct acpi_table_mcfg)) /
-+					sizeof(struct acpi_mcfg_allocation);
-+	mcfg = (struct acpi_table_mcfg *)header;
-+	mptr = (struct acpi_mcfg_allocation *) &mcfg[1];
-+
-+	for (i = 0; i < n; i++, mptr++) {
-+		msi_group[i].pci_segment = mptr->pci_segment;
-+		pch_group[i].node = msi_group[i].node = (mptr->address >> 44) & 0xf;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __init init_vec_parent_group(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < MAX_IO_PICS; i++) {
-+		msi_group[i].pci_segment = -1;
-+		msi_group[i].node = -1;
-+		pch_group[i].node = -1;
-+	}
-+
-+	acpi_table_parse(ACPI_SIG_MCFG, early_pci_mcfg_parse);
-+}
-+
- void __init init_IRQ(void)
+-int acpi_gsi_to_irq(u32 gsi, unsigned int *irqp)
+-{
+-	if (irqp != NULL)
+-		*irqp = acpi_register_gsi(NULL, gsi, -1, -1);
+-	return (*irqp >= 0) ? 0 : -EINVAL;
+-}
+-EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
+-
+-int acpi_isa_irq_to_gsi(unsigned int isa_irq, u32 *gsi)
+-{
+-	if (gsi)
+-		*gsi = isa_irq;
+-	return 0;
+-}
+-
+-/*
+- * success: return IRQ number (>=0)
+- * failure: return < 0
+- */
+-int acpi_register_gsi(struct device *dev, u32 gsi, int trigger, int polarity)
+-{
+-	struct irq_fwspec fwspec;
+-
+-	switch (gsi) {
+-	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
+-		fwspec.fwnode = liointc_domain->fwnode;
+-		fwspec.param[0] = gsi - GSI_MIN_CPU_IRQ;
+-		fwspec.param_count = 1;
+-
+-		return irq_create_fwspec_mapping(&fwspec);
+-
+-	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
+-		if (!pch_lpc_domain)
+-			return -EINVAL;
+-
+-		fwspec.fwnode = pch_lpc_domain->fwnode;
+-		fwspec.param[0] = gsi - GSI_MIN_LPC_IRQ;
+-		fwspec.param[1] = acpi_dev_get_irq_type(trigger, polarity);
+-		fwspec.param_count = 2;
+-
+-		return irq_create_fwspec_mapping(&fwspec);
+-
+-	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
+-		if (!pch_pic_domain[0])
+-			return -EINVAL;
+-
+-		fwspec.fwnode = pch_pic_domain[0]->fwnode;
+-		fwspec.param[0] = gsi - GSI_MIN_PCH_IRQ;
+-		fwspec.param[1] = IRQ_TYPE_LEVEL_HIGH;
+-		fwspec.param_count = 2;
+-
+-		return irq_create_fwspec_mapping(&fwspec);
+-	}
+-
+-	return -EINVAL;
+-}
+-EXPORT_SYMBOL_GPL(acpi_register_gsi);
+-
+-void acpi_unregister_gsi(u32 gsi)
+-{
+-
+-}
+-EXPORT_SYMBOL_GPL(acpi_unregister_gsi);
+-
+ void __init __iomem * __acpi_map_table(unsigned long phys, unsigned long size)
  {
- 	int i;
-@@ -69,6 +106,7 @@ void __init init_IRQ(void)
- 	clear_csr_ecfg(ECFG0_IM);
- 	clear_csr_estat(ESTATF_IP);
  
-+	init_vec_parent_group();
- 	irqchip_init();
- #ifdef CONFIG_SMP
- 	ipi_irq = EXCCODE_IPI - EXCCODE_INT_START;

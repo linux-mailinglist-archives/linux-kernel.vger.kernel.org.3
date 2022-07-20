@@ -2,177 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2B257AAE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3482357AAF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235748AbiGTAVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 20:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S235107AbiGTAYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 20:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiGTAVh (ORCPT
+        with ESMTP id S231751AbiGTAYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:21:37 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC994D16E;
-        Tue, 19 Jul 2022 17:21:35 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 8DEE43200684;
-        Tue, 19 Jul 2022 20:21:31 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 19 Jul 2022 20:21:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1658276491; x=
-        1658362891; bh=BbAJYPKoQCnVnDq1KjWsIixQjPTWuVjYkUPDVJEm99A=; b=R
-        AhsGuoXQLRC6Kzw56gvpnlmnDceKyRc2nSDLmRfsnme2vKufI81QG2DLmo9ZlTR7
-        bpvzaWHGWS0NezXmNU9dW7v/XmQqwXOXQFa3Q5nVD6Z8/nRAnPeUngrjn5nnlowI
-        8JPIMwolQsL6ya9bFUDj1t4Q7x3/58yYGHjRNduZOPkd2JXF1Lm4FmPdZCMq3sCb
-        ros4MCnk0dqHPdbM6YNuspJhVLGugInosEfVEpGGryFEqjYKaLNZ6fj8BANFPcNx
-        8liCcqiJtClM2pC7+PurS40JZj/KTwSErMcqZw/yolk49Ufz3thob9Fi7lnUjPoS
-        agzowQ3wdSYlIhhYCIhWA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658276491; x=
-        1658362891; bh=BbAJYPKoQCnVnDq1KjWsIixQjPTWuVjYkUPDVJEm99A=; b=W
-        trF68sDLIA5z28rks3W9SdvA8KIi1ammSqjjWkzdVWqC4z3rHJYUiMx2qlNIYhw4
-        pa1p9iO6ygTatTc+T0R+M2SjCnvbKXiWgOa2pY93G5QaM2JVo4Xj2hcF6f0345dq
-        m4Wkv+QUo/D2ioS1iYjzjtm34JQNLCKh+1ajEB9kYhwmSvB1oSiMtzZ76wI7jeBc
-        uqWmnmMFXyILti3sMHU+5RVS8nq8d7em7zQGqSxD++8/B/vdCwVfLGtwFJQ8pGw3
-        6wXLFCw3pMg6BOeSnxABsa1xgBVS+em5BOTZrWZJWbNzIqHfkGrOIkNdYIe5UDNw
-        9Euc0g4dvdK8SRRtL6hWg==
-X-ME-Sender: <xms:ikrXYuxhGqeMSa3dy2fsQ3uhvJq1gSbQwWWK5RP20vdul_QUV2nsWg>
-    <xme:ikrXYqTVuw8rvK49riz6OJi5LYi-rv4_yH8gsvzkSqLl7T1MSzhG7aMAXtb8dujm8
-    39ajCEtrHcFeyFlzg>
-X-ME-Received: <xmr:ikrXYgWne5fA-sZKsRJQLx6h76f-7Kkzg-QNR2BxcbkvxikxxlcP2UEq6-lcKwb6WQK54diOuV-Dms6bVNIvx9YiWlGvVpd3La80y9aZjvsj7wkLezIewmfabA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeluddgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:ikrXYkgHNCuPFa5z0cll4yGH6KHe2zzVsnDurC4Ah7LcfeLHD1_OPA>
-    <xmx:ikrXYgCOVYb1YbzVioHy-2Imti6T_ZPCn8cjdzj0mwxaPgYylTlK6Q>
-    <xmx:ikrXYlIS6HgmyVQl2NZpKSJdYalQDd5cYUIXBHJsZ40sPjJjJbCgZQ>
-    <xmx:i0rXYuAQFrfPsWWkka5_1DZ_uOBuS1CuiH3MBWW9efzXZJhgQk2Rhg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 19 Jul 2022 20:21:29 -0400 (EDT)
-Subject: Re: [PATCH] clk: sunxi-ng: Fix H6 RTC clock definition
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>, wens@csie.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, andre.przywara@arm.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220719183725.2605141-1-jernej.skrabec@gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <a7a253a0-1cc3-61e4-ae59-fc299057974a@sholland.org>
-Date:   Tue, 19 Jul 2022 19:21:29 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 19 Jul 2022 20:24:02 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AC85E801
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:24:01 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id bv24so32535wrb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:24:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DH6ylYmRIRurAAknH36JS8D3Dyn+hEB1ror1vSU92OE=;
+        b=RQoQnuQq82XCYWimGQJZgNE5suclIhz3u6jIP+21QRS1gQDC3EAHHMCTJghOz1L6YT
+         8aKgCt5Y5SSW5Oq0YWeyqTg8DbUnpjmS0wr+u6zx3nvIihpeANoJuUOSNzyh1H+6ALyn
+         5Eg0X60Q8eRfqObTdXt9byGE7zi1XGczQ+qyuKV73exvvXczuYp77dv01YjYRThDsyIZ
+         SMJIt80B8VfZhbpueaFw1IrKSZYGr4nE/zKfBdmHHehACE90CXtOcVEt5VtZgg7VKJ6s
+         jJJOq1BthbReu/apbac36kCUCSLKnfT3JPzbko6IZUiPE5dr5KTh6MllOO3Khj54OO5T
+         wWPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DH6ylYmRIRurAAknH36JS8D3Dyn+hEB1ror1vSU92OE=;
+        b=zcZtim0qCFSV9JtivDlFqaClFqLSYdKEntUVNpOzlY0/71Us/sEppl5251ywCQvTLg
+         vm3ENLqT+w0uBI65bvsto82IJaEWJDNnkbVy8Qp4XNESumHFtqg+PlmlM1iSjIvbQdjm
+         /TCaXkizSq4j8CCvl/5cWOe4AC8DPfA3q1NowEQ+1pWnRARwef0wCsylgd/sHcDyTnoL
+         rZdiJOucqTgF4o6/9xw41RCs+whal7vIi0hGyE1k1dyv0NIQS6sXbdCHYX//lNhP3aRt
+         hIlRzE4N3g+IB6xk720Jtj4ZpdA/7/kBAywKC3ypDwx/DuSKRCIcC6LlC2I986GMp7bx
+         8XZw==
+X-Gm-Message-State: AJIora9Y7GjYmGzppwj0XCJXWU+n/sz1aeRuHPuu+a8J2IkOSgaLAtQJ
+        5dBDyCijCnMCM+qov9vKBh5A2YRhcCUKJaS7yss3Xw==
+X-Google-Smtp-Source: AGRyM1tlK1ygCVCbUo6SA22TPENkA2dWMfAg7vYjC8Lf5nfhGckv/no0VYXj+k+lYqXF8+IRdeA8jO8GV0Qd+/id77Q=
+X-Received: by 2002:a05:6000:8e:b0:21d:7e97:67ed with SMTP id
+ m14-20020a056000008e00b0021d7e9767edmr27600763wrx.343.1658276639650; Tue, 19
+ Jul 2022 17:23:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220719183725.2605141-1-jernej.skrabec@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-13-adrian.hunter@intel.com>
+In-Reply-To: <20220711093218.10967-13-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 19 Jul 2022 17:23:47 -0700
+Message-ID: <CAP-5=fU5CHoxybx7U9zjz0S2vZ=vsR6ZmUoaD0ne9YCBQEvF_A@mail.gmail.com>
+Subject: Re: [PATCH 12/35] perf tools: Add guest_cpu to hypervisor threads
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 1:37 PM, Jernej Skrabec wrote:
-> While RTC clock was added in H616 ccu_common list, it was not in H6
-> list. That caused invalid pointer dereference like this:
-> 
-> Unable to handle kernel NULL pointer dereference at virtual address 000000000000020c
-> Mem abort info:
->   ESR = 0x96000004
->   EC = 0x25: DABT (current EL), IL = 32 bits
->   SET = 0, FnV = 0
->   EA = 0, S1PTW = 0
->   FSC = 0x04: level 0 translation fault
-> Data abort info:
->   ISV = 0, ISS = 0x00000004
->   CM = 0, WnR = 0
-> user pgtable: 4k pages, 48-bit VAs, pgdp=000000004d574000
-> [000000000000020c] pgd=0000000000000000, p4d=0000000000000000
-> Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> CPU: 3 PID: 339 Comm: cat Tainted: G    B             5.18.0-rc1+ #1352
-> Hardware name: Tanix TX6 (DT)
-> pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : ccu_gate_is_enabled+0x48/0x74
-> lr : ccu_gate_is_enabled+0x40/0x74
-> sp : ffff80000c0b76d0
-> x29: ffff80000c0b76d0 x28: 00000000016e3600 x27: 0000000000000000
-> x26: 0000000000000000 x25: 0000000000000002 x24: ffff00000952fe08
-> x23: ffff800009611400 x22: ffff00000952fe79 x21: 0000000000000000
-> x20: 0000000000000001 x19: ffff80000aad6f08 x18: 0000000000000000
-> x17: 2d2d2d2d2d2d2d2d x16: 2d2d2d2d2d2d2d2d x15: 2d2d2d2d2d2d2d2d
-> x14: 0000000000000000 x13: 00000000f2f2f2f2 x12: ffff700001816e89
-> x11: 1ffff00001816e88 x10: ffff700001816e88 x9 : dfff800000000000
-> x8 : ffff80000c0b7447 x7 : 0000000000000001 x6 : ffff700001816e88
-> x5 : ffff80000c0b7440 x4 : 0000000000000001 x3 : ffff800008935c50
-> x2 : dfff800000000000 x1 : 0000000000000000 x0 : 000000000000020c
-> Call trace:
->  ccu_gate_is_enabled+0x48/0x74
->  clk_core_is_enabled+0x7c/0x1c0
->  clk_summary_show_subtree+0x1dc/0x334
->  clk_summary_show_subtree+0x250/0x334
->  clk_summary_show_subtree+0x250/0x334
->  clk_summary_show_subtree+0x250/0x334
->  clk_summary_show_subtree+0x250/0x334
->  clk_summary_show+0x90/0xdc
->  seq_read_iter+0x248/0x6d4
->  seq_read+0x17c/0x1fc
->  full_proxy_read+0x90/0xf0
->  vfs_read+0xdc/0x28c
->  ksys_read+0xc8/0x174
->  __arm64_sys_read+0x44/0x5c
->  invoke_syscall+0x60/0x190
->  el0_svc_common.constprop.0+0x7c/0x160
->  do_el0_svc+0x38/0xa0
->  el0_svc+0x68/0x160
->  el0t_64_sync_handler+0x10c/0x140
->  el0t_64_sync+0x18c/0x190
-> Code: d1006260 97e5c981 785e8260 8b0002a0 (b9400000)
-> ---[ end trace 0000000000000000 ]---
-> 
-> Fix that by adding rtc clock to H6 ccu_common list too.
-> 
-> Fixes: 38d321b61bda ("clk: sunxi-ng: h6-r: Add RTC gate clock")
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-
-This bug also got fixed in passing by e1c51d31befc ("clk: sunxi-ng: Deduplicate
-ccu_clks arrays"), but that won't land until 5.20.
-
-Regards,
-Samuel
-
+On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> It is possible to know which guest machine was running at a point in time
+> based on the PID of the currently running host thread. That is, perf
+> identifies guest machines by the PID of the hypervisor.
+>
+> To determine the guest CPU, put it on the hypervisor (QEMU) thread for
+> that VCPU.
+>
+> This is done when processing the id_index which provides the necessary
+> information.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 > ---
->  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c
-> index 29a8c710ae06..b7962e5149a5 100644
-> --- a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c
-> +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c
-> @@ -138,6 +138,7 @@ static struct ccu_common *sun50i_h6_r_ccu_clks[] = {
->  	&r_apb2_rsb_clk.common,
->  	&r_apb1_ir_clk.common,
->  	&r_apb1_w1_clk.common,
-> +	&r_apb1_rtc_clk.common,
->  	&ir_clk.common,
->  	&w1_clk.common,
->  };
-> 
+>  tools/perf/util/session.c | 18 ++++++++++++++++++
+>  tools/perf/util/thread.c  |  1 +
+>  tools/perf/util/thread.h  |  1 +
+>  3 files changed, 20 insertions(+)
+>
+> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+> index 1af981d5ad3c..91a091c35945 100644
+> --- a/tools/perf/util/session.c
+> +++ b/tools/perf/util/session.c
+> @@ -2769,6 +2769,20 @@ static int perf_session__register_guest(struct perf_session *session, pid_t mach
+>         return 0;
+>  }
+>
+> +static int perf_session__set_guest_cpu(struct perf_session *session, pid_t pid,
+> +                                      pid_t tid, int guest_cpu)
+> +{
+> +       struct machine *machine = &session->machines.host;
+> +       struct thread *thread = machine__findnew_thread(machine, pid, tid);
+> +
+> +       if (!thread)
+> +               return -ENOMEM;
+> +       thread->guest_cpu = guest_cpu;
+> +       thread__put(thread);
+> +
+> +       return 0;
+> +}
+> +
+>  int perf_event__process_id_index(struct perf_session *session,
+>                                  union perf_event *event)
+>  {
+> @@ -2845,6 +2859,10 @@ int perf_event__process_id_index(struct perf_session *session,
+>                         last_pid = sid->machine_pid;
+>                         perf_guest = true;
+>                 }
+> +
+> +               ret = perf_session__set_guest_cpu(session, sid->machine_pid, e->tid, e2->vcpu);
+> +               if (ret)
+> +                       return ret;
+>         }
+>         return 0;
+>  }
+> diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
+> index 665e5c0618ed..e3e5427e1c3c 100644
+> --- a/tools/perf/util/thread.c
+> +++ b/tools/perf/util/thread.c
+> @@ -47,6 +47,7 @@ struct thread *thread__new(pid_t pid, pid_t tid)
+>                 thread->tid = tid;
+>                 thread->ppid = -1;
+>                 thread->cpu = -1;
+> +               thread->guest_cpu = -1;
+>                 thread->lbr_stitch_enable = false;
+>                 INIT_LIST_HEAD(&thread->namespaces_list);
+>                 INIT_LIST_HEAD(&thread->comm_list);
+> diff --git a/tools/perf/util/thread.h b/tools/perf/util/thread.h
+> index b066fb30d203..241f300d7d6e 100644
+> --- a/tools/perf/util/thread.h
+> +++ b/tools/perf/util/thread.h
+> @@ -39,6 +39,7 @@ struct thread {
+>         pid_t                   tid;
+>         pid_t                   ppid;
+>         int                     cpu;
+> +       int                     guest_cpu; /* For QEMU thread */
 
+Could we tweak the comments here to be something like:
+
+int cpu;  /* The CPU the thread is currently running on or the CPU of
+the hypervisor thread. */
+int guest_cpu; /* The CPU within a guest (QEMU) that's running. */
+
+Does -1 convey meaning beyond uninitialized, like with the 'any' CPU
+perf_event_open argument?
+
+Thanks,
+Ian
+
+
+>         refcount_t              refcnt;
+>         bool                    comm_set;
+>         int                     comm_len;
+> --
+> 2.25.1
+>

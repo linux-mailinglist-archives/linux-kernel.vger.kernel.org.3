@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6905457BE4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BA257BE55
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbiGTTPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 15:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S230500AbiGTTV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 15:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiGTTPv (ORCPT
+        with ESMTP id S229551AbiGTTVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 15:15:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74B7431354
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658344548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rgr6tBel5eS7x9CZwqZNQr12OSq9bS7PlstJEoUtG4Q=;
-        b=VPgpuvm+eLRXJLQowbNMm6MlYXUM2sfYaid+xn9Z2sXoPFEQcl9ZEGYziyfXgOp7qeZSUG
-        NmWst+Y01Q9HSbTiT8CySCOixkDkt1Q6eQ5oolm63s7gQbi7MA/vy78fzBcVOsDwaSLbQe
-        2p5ucUvmWRyCB9IrT04WnwcL/w0wk9I=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-TNb-dY20PjiOnKGGRQJ8_Q-1; Wed, 20 Jul 2022 15:15:47 -0400
-X-MC-Unique: TNb-dY20PjiOnKGGRQJ8_Q-1
-Received: by mail-qv1-f69.google.com with SMTP id q4-20020a0ce9c4000000b00473004919ddso10030730qvo.16
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:15:47 -0700 (PDT)
+        Wed, 20 Jul 2022 15:21:25 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5293313D1F;
+        Wed, 20 Jul 2022 12:21:23 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id e15so22259289wro.5;
+        Wed, 20 Jul 2022 12:21:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Pba4QV+WDlzTnMlWTveIRFdhe+8O4jwO+FIoxf/iMRQ=;
+        b=K6/DVHdPticHrv3jCWtIj2BapqRP3uF8GYSfm12e7xSUMzoKgsMV51zpC4DV3Riuow
+         0HYpqe2W/mDGhA5TC7T1PWsUL6AGMQN5kNDHFqVA3eDpL6ouczora+b5TcA//cbZmurE
+         mJeeKmmISoWCXHtrYYk6Z5pux8oU5NvYtZ9iD5gDSZ4xGggmpGwk5HU8fpney8J3h88L
+         DHU68uIz5TDNmCtlfhxcDYEunZhoIocRdQS9ATaOlW9zn94sX/OqsFARuYjJEWAimSos
+         3IpCv96AFt21OIdNmnyL+yUfryx4QKUye1UV1vhmzuhSQv3QJ6qj5TJIQUHiHj+s5qgc
+         18+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=rgr6tBel5eS7x9CZwqZNQr12OSq9bS7PlstJEoUtG4Q=;
-        b=1Ksu4CnD9X9K5cfFnP0RIplF+1TkTrJxNN9ZwKEyWGXFAPopydiPdkeCBuxY61bwms
-         6/2ueiQvhTOM0iCFPJliS3NjZ0t/K2eS5EQ7jSXxCCjUKqX928RaHtNdSvRAs+OJ09S3
-         38vNhhXg8MHm4dxMV0+Qj4dp7Nui7is+MNEVJXSHMB6ME/oZsZKQRnIqFFXNP+bnkzu/
-         pG85pDdRmMcRQ5vr0rd8GTvnJRmp9u8AVaCsDgvU/j1b9pOrIyCSywveBTQN3dMJAdF2
-         QOHRl9fB9iJu9s1U4YL0Ex67g8BmORQ45aYgerOTMqQjOLDo6/7osWfeHxawGdeCYHOQ
-         tt2Q==
-X-Gm-Message-State: AJIora8Od937ZfmWNnyK+22jsEPSyWGQ6izfQ6MuYayJg5deyDsu8vXC
-        78GctlG4C958nap6n/7e5icVxUWvyObwVy6wtAqJ7XpwjkGtZf/s/rWC2kRjI1a18BTELZAjFFt
-        5EzVoVvtBckLhILuw5vFAaP/R
-X-Received: by 2002:a05:622a:143:b0:31e:9c61:c1d7 with SMTP id v3-20020a05622a014300b0031e9c61c1d7mr29315915qtw.128.1658344546839;
-        Wed, 20 Jul 2022 12:15:46 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tS8bxsQFfmgmIDJi+MSRJhX0yI039P0+Aey5gXr4aFl2IBE6wVL3S96bkcDl4j9uow306Z/Q==
-X-Received: by 2002:a05:622a:143:b0:31e:9c61:c1d7 with SMTP id v3-20020a05622a014300b0031e9c61c1d7mr29315883qtw.128.1658344546559;
-        Wed, 20 Jul 2022 12:15:46 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
-        by smtp.gmail.com with ESMTPSA id bj30-20020a05620a191e00b006b59f02224asm8568940qkb.60.2022.07.20.12.15.44
+        bh=Pba4QV+WDlzTnMlWTveIRFdhe+8O4jwO+FIoxf/iMRQ=;
+        b=A/95ImZNPVV/uSAg8dXf0TR+LWY6/YJhW1qrbqhMR/A/3ZgRXTz3pMK1DuEkVjEvey
+         f8lHGPjMA/5BcKTyBkb9p/FgL8CtLqpBMgTTUB7TPspNSc6ExpGFnPX+ESfXfNT2pe5h
+         cm0BzY1Pn9Q/hTgBzNvD1h4YISjJYOyZIGMLar7ZqoYGGcv8pNHhc0G4FpNibw4d/ZAK
+         Lce4Q6tIXFgK+Uc37IEM0l6sy6ldpsNs4goXSIaTnxtYIEvt5LPVDuv1OsI7APEFGeHe
+         +jtZEu/XjhaQE97RiOEjeNQy1C7uFVRUsgEmLQM9IJ6FDOaK3WsuZQXKuxaqsMVK4EIk
+         ux5Q==
+X-Gm-Message-State: AJIora/kP0fYbulg3U6kSxLFEqCj93v8WjU7Db5TrUcMuu0ZAJYI8siK
+        T/kR+XrWNzkfzxj5oleKdAYXApDc7QCp7Fqm
+X-Google-Smtp-Source: AGRyM1uLOgnKXZMHCumB7qyLZW7GisJxZ81IMG3yvrEQ8OJV0MtLnu23rAmH5wRc3knjXga+LevNxg==
+X-Received: by 2002:a05:6000:1f0b:b0:21d:6dae:7d04 with SMTP id bv11-20020a0560001f0b00b0021d6dae7d04mr31987220wrb.414.1658344881418;
+        Wed, 20 Jul 2022 12:21:21 -0700 (PDT)
+Received: from X1C7EK5 (joshua.media.unisi.it. [192.167.124.137])
+        by smtp.gmail.com with ESMTPSA id ay1-20020a05600c1e0100b003a03ae64f57sm3530678wmb.8.2022.07.20.12.21.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 12:15:45 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 15:15:44 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Nadav Amit <nadav.amit@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Nick Piggin <npiggin@gmail.com>
-Subject: Re: [RFC PATCH 01/14] userfaultfd: set dirty and young on
- writeprotect
-Message-ID: <YthUYF3invrjlzUc@xz-m1.local>
-References: <20220718120212.3180-1-namit@vmware.com>
- <20220718120212.3180-2-namit@vmware.com>
- <YtcYVMoSRVxRH70Z@xz-m1.local>
- <017facf0-7ef8-3faf-138d-3013a20b37db@redhat.com>
- <Ytf+zIxVPTVXTZdp@xz-m1.local>
- <2b4393ce-95c9-dd3e-8495-058a139e771e@redhat.com>
+        Wed, 20 Jul 2022 12:21:20 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 21:21:18 +0200
+From:   Ettore Chimenti <ek5.chimenti@gmail.com>
+To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Hector Martin <marcan@marcan.st>, Jean Delvare <jdelvare@suse.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Marco Sogli <marco.sogli@seco.com>
+Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
+Message-ID: <20220720192118.x6ayiar7zmavhauu@X1C7EK5>
+References: <20210626054113.246309-1-marcan@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2b4393ce-95c9-dd3e-8495-058a139e771e@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20210626054113.246309-1-marcan@marcan.st>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 05:10:37PM +0200, David Hildenbrand wrote:
-> For pagecache pages it may as well be *plain wrong* to bypass the write
-> fault handler and simply mark pages dirty+map them writable.
+Tested on a SECO SBC-B68 and a UDOO X86.
+The BIOS AML code queries the Embedded Controller over SMBus, 
+respecting the hardware semaphore implementation.
 
-Could you elaborate?
+I get this line on kernel log and everything works as expected.
+[    7.270172] i801_smbus 0000:00:1f.3: SMBus controller is shared with ACPI AML. This seems safe so far.
 
--- 
-Peter Xu
+Tested with continous use of i2c-tools (i2cdump) with temperature reads
+in thermal_zone (that triggers AML code).
 
+Tested-by: Ettore Chimenti <ek5.chimenti@gmail.com>

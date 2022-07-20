@@ -2,98 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F4457BBA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA3F57BBB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbiGTQom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S233222AbiGTQqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiGTQoj (ORCPT
+        with ESMTP id S233067AbiGTQqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:44:39 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D9065D69
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:44:37 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id k16so720749pls.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:44:37 -0700 (PDT)
+        Wed, 20 Jul 2022 12:46:08 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1F34D171;
+        Wed, 20 Jul 2022 09:46:07 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id a5so26910889wrx.12;
+        Wed, 20 Jul 2022 09:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=NKI6wQLzSjuIgXqGP/STBDd/io3ztt1cS6FImLHwFp4=;
-        b=aYf105zHRqcKnwIvd6ekmpqruUyQToVuka3h99YqNWRmFXkZ7ZVHV8oWNskzAvMx2F
-         hflOC9nxBStxjqtxvcltphe6Q5E58yJ1G2iJfhXNEqLsdIUxBz1Jghs5U/OLu3mGUc1a
-         JRrnyPRUFOER4kSZYOrYSqnkSlzR3XQAIIqK13/lyE2A23HrMPyXlZiOV822mKgY0tgd
-         nTwYcdRpttHY+A4wo2bLHxYVFSJL0sIrCNfPF0RyUS+KwJ64AABEJ8yX01Hb9NjXpaI/
-         s6Pf48SWnWTxK6vMsYlo9rnJGzIsPUCTu5j+IdeVl1yrYnYpbPzLMaw748Y0j9AcRKUU
-         ZGfw==
+        bh=AZtADZMgvtkBCIS3LAqwVrSV9dMCa75z9Sz8LnDoOZo=;
+        b=F4eDRekK60FmXBYorH5UrWwF5oNEkE4DQUpDZi9I4zIz/11lNlPFUKupDgG71M7NQK
+         8xShZmQi6qaiKl9QLmJndgt3Wc9jhhBue6t1tFlw24Xu31wXGUUxWii3ZfGFUj1lUbC9
+         m8n50YA56LsA1bse7WSKej5UwEQTHqgPOyBauh0SllvURhifW0qpsNZEqQC9T4KcrfaD
+         dbbRJ3j3FjmE1ltZtXZHsDVJOoutBOTAYt2lg6McVaKMGLDdx8pVF3EG9enVFs0xPMSI
+         eTEQYAxCFNOpIhcjmbQjJi3l0NLQnbE5wFiyOAx3lQOH/MfBSDMHLwq9kAtrGSB3Zvfk
+         lrCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=NKI6wQLzSjuIgXqGP/STBDd/io3ztt1cS6FImLHwFp4=;
-        b=PWtHnFt/guStN7/h8zxo2swVUP2qdq9DogqUsfCnj89nO7XSRoroe0p3SG6scyLu5T
-         B+zJHS4n7iiKZkNo9OV7aIFRmnM8Q1iFE7G9AYFSbp2UVHPb023T6L/sK7Frmpn1EJvc
-         HUGvbFhdf2rzSeazGrS11iXeqZp0S8CJnqbKMq95ta9CO8tC1BHCf7i80nL8OvVklHjR
-         H5Lz263MEXebU56GqJ5YC65dr+xxQy387m8X43nU9iyRIHYuKM9mZ5/WyHgRDEFFq3Dx
-         694XU8rhSwREAbambYsDteLiRvF1RwMHTM5xIoI+m92uNr4HuGOj0l1b2o/5v6LH0oAn
-         0Nhw==
-X-Gm-Message-State: AJIora8ld4aBqx8IGR9ELcX53g+ybULC1T2Zv3k9Hviz/n1uzB6DDqEj
-        03TIqqpP9taunS6CjkIKLW9UFg==
-X-Google-Smtp-Source: AGRyM1utYrsQFWglg8OIUvJRKtR6LVkU7MbzTy7HM7RFQtBExxPfhBWR/u5swtl61L63cUwi4vupQg==
-X-Received: by 2002:a17:90b:3ec1:b0:1f1:edcf:dd2b with SMTP id rm1-20020a17090b3ec100b001f1edcfdd2bmr6535996pjb.156.1658335476747;
-        Wed, 20 Jul 2022 09:44:36 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id k6-20020aa79986000000b00528c22038f5sm14345128pfh.14.2022.07.20.09.44.36
+        bh=AZtADZMgvtkBCIS3LAqwVrSV9dMCa75z9Sz8LnDoOZo=;
+        b=LZ6YxSjWwyeCx3z/GN8Sxy1TBzADlkucbEdD+3Ex5/iDFlIuyopo/OtBLJzFRj7OgK
+         cdKhl87dqIYV4csslInXDnGKTiJ4n+D9XIOWQpAHTi86g9VnsGBVqj2Wlodwv4ka+/le
+         vp1EjgaSTJF/AinOoYMpYz3Ftl6flB5l2YgRnxJoB0sZbzKDlV4iHGWFSMA5EvLIgSFW
+         I4WHfJe261smAKtm2q/8JNOUamO+qNXSOpCo9xw2E+cUGrwkWnso9UDIes+ERdh1usCq
+         heSzi7c191wxevGNNtPpaJsvO5kVtqOgXaQBK9u2NW0/O9vkjw6HbTK6tXdqEdCgjE72
+         37Aw==
+X-Gm-Message-State: AJIora9H1JZtNakhPlJSHDG3pgVo9gV74tk5EzT3xTiaCWc9wbc5uYFs
+        Lep8zx5SEnBmiT/LVFXe+w==
+X-Google-Smtp-Source: AGRyM1sJGR02ktTNDO/5V/8b0J7NeLfgLZAQKhP26fn+FEGkv5+s4DYNVKTfEGxjHlbkqQOROaICnw==
+X-Received: by 2002:adf:f705:0:b0:21d:74fa:c043 with SMTP id r5-20020adff705000000b0021d74fac043mr32474671wrp.77.1658335565829;
+        Wed, 20 Jul 2022 09:46:05 -0700 (PDT)
+Received: from localhost.localdomain ([46.53.253.107])
+        by smtp.gmail.com with ESMTPSA id w7-20020a1cf607000000b003a31f1edfa7sm3038915wmc.41.2022.07.20.09.46.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 09:44:36 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 16:44:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
-Message-ID: <Ytgw8HAsKTmZaubv@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+        Wed, 20 Jul 2022 09:46:04 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 19:46:02 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>, live-patching@vger.kernel.org
+Subject: Re: ftrace_kill() leads to kmalloc-512 UAF
+Message-ID: <YtgxSs79D0r5s4Ch@localhost.localdomain>
+References: <YtgdsW8UBSwCKtQW@localhost.localdomain>
+ <20220720121102.6cac8f1d@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <20220720121102.6cac8f1d@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,51 +74,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022, Chao Peng wrote:
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 230c8ff9659c..bb714c2a4b06 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -914,6 +914,35 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
->  
->  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
->  
-> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
-> +#define KVM_MEM_ATTR_PRIVATE	0x0001
-> +static int kvm_vm_ioctl_set_encrypted_region(struct kvm *kvm, unsigned int ioctl,
-> +					     struct kvm_enc_region *region)
-> +{
-> +	unsigned long start, end;
+On Wed, Jul 20, 2022 at 12:11:02PM -0400, Steven Rostedt wrote:
+> 
+> [ Adding live kernel patching folks ]
+> 
+> On Wed, 20 Jul 2022 18:22:25 +0300
+> Alexey Dobriyan <adobriyan@gmail.com> wrote:
+> 
+> > I'm debugging crash of our product which does live kernel patching together
+> > with ISV security scanner which uses ftrace kprobes to do whatever it does.
+> > 
+> > What happens is that is ftrace ever detects .text change, refuses to patch
+> > and prints a warning with FTRACE_WARN_ON_ONCE() then there is reliable way
+> > to cause UAF on kmalloc-512 cache by trying to register kprobe with
+> > perf_event_open() and then unregistering it by exiting the process.
+> > 
+> > 1) live kernel patching happens, first instruction of some function changes
+> 
+> But live kernel patching uses ftrace to do this, so the question remains,
+> why doesn't ftrace know about this change?
 
-As alluded to in a different reply, because this will track GPAs instead of HVAs,
-the type needs to be "gpa_t", not "unsigned long".  Oh, actually, they need to
-be gfn_t, since those are what gets shoved into the xarray.
+That a line from our product which changes first instruction of the function.
 
-> +	void *entry;
-> +	int r;
-> +
-> +	if (region->size == 0 || region->addr + region->size < region->addr)
-> +		return -EINVAL;
-> +	if (region->addr & (PAGE_SIZE - 1) || region->size & (PAGE_SIZE - 1))
-> +		return -EINVAL;
-> +
-> +	start = region->addr >> PAGE_SHIFT;
-> +	end = (region->addr + region->size - 1) >> PAGE_SHIFT;
-> +
-> +	entry = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION ?
-> +				xa_mk_value(KVM_MEM_ATTR_PRIVATE) : NULL;
-> +
-> +	r = xa_err(xa_store_range(&kvm->mem_attr_array, start, end,
-> +					entry, GFP_KERNEL_ACCOUNT));
+> > 2) kprobe on that function is registered with perf_event_open()
+> > 
+> > 	WARNING: CPU: 5 PID: 2109 at kernel/trace/ftrace.c:1853 ftrace_bug+0x25d/0x270
+> > 	 [<ffffffff811638ed>] ftrace_bug+0x25d/0x270
+> > 	 [<ffffffff81065571>] ftrace_replace_code+0x2b1/0x420
+> > 	 [<ffffffff81163f9a>] ftrace_modify_all_code+0x6a/0xb0
+> > 	 [<ffffffff810656f0>] arch_ftrace_update_code+0x10/0x20
+> > 	 [<ffffffff81164077>] ftrace_run_update_code+0x17/0x70
+> > 	 [<ffffffff81165512>] ftrace_set_hash+0x1c2/0x1f0
+> > 	 [<ffffffff8126fee0>] ? SyS_dup2+0x60/0x60
+> > 	 [<ffffffff8126fee0>] ? SyS_dup2+0x60/0x60
+> > 	 [<ffffffff811655a0>] ftrace_set_filter_ip+0x60/0x70
+> > 	 [<ffffffff8179624c>] arm_kprobe+0x9c/0x140
+> > 	 [<ffffffff81796368>] enable_kprobe+0x78/0xa0
+> > 	 [<ffffffff81187bab>] enable_trace_kprobe+0x7b/0x120
+> > 	 [<ffffffff81797e5f>] kprobe_register+0x2f/0x60
+> > 	 [<ffffffff8118348a>] perf_trace_event_init+0x1aa/0x230
+> > 	 [<ffffffff811836b7>] perf_kprobe_init+0xa7/0xf0
+> > 	 [<ffffffff811a8919>] perf_kprobe_event_init+0x49/0x70
+> > 	 [<ffffffff811aa569>] perf_try_init_event+0x99/0xc0
+> > 	 [<ffffffff811b29f2>] perf_init_event+0x92/0x150
+> > 	 [<ffffffff811b2fa1>] perf_event_alloc+0x4f1/0x910
+> > 	 [<ffffffff811b3789>] SYSC_perf_event_open+0x3c9/0xe50
+> > 	 [<ffffffff811b4679>] SyS_perf_event_open+0x9/0x10
+> > 	 [<ffffffff81799f92>] system_call_fastpath+0x25/0x2a
+> > 	ftrace failed to modify [<ffffffff8126fee0>] SyS_dup+0x0/0x120
+> > 	 actual: e9:4b:50:2e:3f
+> > 
+> 
+> Again, why did the above happen. This is a kernel bug that needs to be
+> fixed. Everything else after this is unimportant, because it's just fall
+> out to the above bug.
 
-IIUC, this series treats memory as shared by default.  I think we should invert
-that and have KVM's ABI be that all guest memory as private by default, i.e.
-require the guest to opt into sharing memory instead of opt out of sharing memory.
-
-And then the xarray would track which regions are shared.
-
-Regarding mem_attr_array, it probably makes sense to explicitly include what it's
-tracking in the name, i.e. name it {private,shared}_mem_array depending on whether
-it's used to track private vs. shared memory.  If we ever need to track metadata
-beyond shared/private then we can tweak the name as needed, e.g. if hardware ever
-supports secondary non-ephemeral encryption keys.
+I'll double check what we (not KLP) do and maybe even what KLP does!

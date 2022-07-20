@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B180D57BF4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0529457BF4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiGTUjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 16:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S230031AbiGTUod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 16:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiGTUjH (ORCPT
+        with ESMTP id S229452AbiGTUoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:39:07 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAF222BD8;
-        Wed, 20 Jul 2022 13:39:06 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id j70so12298766oih.10;
-        Wed, 20 Jul 2022 13:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vYo+qaCAy2kmd+JZb7RtHEZUur+lwWu46ajHEuV1OqQ=;
-        b=Cms7tZx/N8hxMKc1LO+wj2XK+KfkW1Gs9MVfISeLG0g276h3NoQFWxauM+uGYUYFu7
-         1xU/Ca/zZLaN9p8fD1x08wlfZE+9siFYDEiRLQalx/wEOyEu1SFcAy1CXJJvcw8hfNaj
-         2xJn4g5slvN+A3TxN53vVbk7/cT/+0Tdi0drQQIEWWL9LZgAYP/qKF3I4QFsjFVsDQvR
-         KuSWTxCuLFdSiuOmd0AacGgQ/HUIbhYCqVIXLLG4H73OzAENECDtj/NsnazLw2rQgvcg
-         nTblqI5VVZprYEqf4jzI42sl6xv9/vXl6Q9sJFSea3B0oyrH9at6/AkYkUjxq39dN+3A
-         0zRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vYo+qaCAy2kmd+JZb7RtHEZUur+lwWu46ajHEuV1OqQ=;
-        b=3v2ShkPjeR3hdUqiNKOSBzCd+pe0tM3LjmHBlefctgaDOIb07vrhkqexn7S4+Q2XcJ
-         LkawtSqzK+vOZ/jeuL+Zx608ZcHhQlA4PgpNxu+72X3/QrB7NndNIFRzi+tF0kH76Eq1
-         d9GHm8bydfOtHfedoFM8yNsEf28beVetJA3Tzg/4HU4Re6TLxV+wEHwMlsdtHOv3RlUn
-         dDv/bb39Ru35yFVE+8fRwvRK7RTQOIC5iiGY7V6XyRgBHuifiWx0sNbDn0hz0UqGwisb
-         rN4GF5uaqiKXctyxbwqAzNFQhknU693k5cwTLpc/07Jf+4o8+DYAPIvcAf3cWOt2sxQu
-         691g==
-X-Gm-Message-State: AJIora+ybXcPSk1DXVkNEooDZXu+GLQP/nZF7LLz1hXGnPa9DPdAsdvi
-        LYNAaHBqS5gZzFmNl5WY/14=
-X-Google-Smtp-Source: AGRyM1sgnAiJ8RYTiJen6TAfK7Sz31x/EYjbsspnQiUv2MhSTyTWZArmOJb0pp8O3A/wRYL3YPQKyQ==
-X-Received: by 2002:a05:6808:d48:b0:339:b862:3abb with SMTP id w8-20020a0568080d4800b00339b8623abbmr3391898oik.22.1658349546228;
-        Wed, 20 Jul 2022 13:39:06 -0700 (PDT)
-Received: from [10.62.118.143] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id q204-20020aca43d5000000b003351fa55a58sm6895269oia.16.2022.07.20.13.39.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 13:39:05 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <741dc563-4702-2004-4be0-01a578524747@lwfinger.net>
-Date:   Wed, 20 Jul 2022 15:39:03 -0500
+        Wed, 20 Jul 2022 16:44:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CB85006A;
+        Wed, 20 Jul 2022 13:44:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35A7E61CCC;
+        Wed, 20 Jul 2022 20:44:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59BB5C3411E;
+        Wed, 20 Jul 2022 20:44:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658349868;
+        bh=zhiyjAW9l4b4itQWhFUg7rsehAAhronWLWWddtiazk8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=QMa3za9JYFJljN29o+DxJwNZ0EoZ97n3e8Ft1Zbg6C07nib+EiOC4UgvoaxdMS7rl
+         rVQe0ccnOz1wDC4GJ5KHQVIiMh00YPCDHWUAd7OGScLey1N7PiM7dNgNo79aprNtJC
+         2QU5oyJTYVW9ZPhjtEThW+EqhqdAKWIEAi9uKWPMKOkFaQ2VYIgE+CEimV7+FzKuOH
+         YthYPg8f3V3/RMWVAR999jtZwgKgTHUJ9dUsDs18JZAAeVzodPCcfr/R0mbYIscjgo
+         ZGsnm+RVOLtyyAAoyQGMhDlavK5Uh0cQJLB3YkS2nc8HhzTvmdLBdCNHN+umMBX3td
+         1IS41iIE/61Jw==
+Date:   Wed, 20 Jul 2022 15:44:26 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andrey Strachuk <strochuk@ispras.ru>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: Re: [PATCH v2] ACPI/PCI: Remove useless NULL pointer checks
+Message-ID: <20220720204426.GA1655974@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] b43:do not initialise statics to 0.
-Content-Language: en-US
-To:     Xin Gao <gaoxin@cdjrlc.com>, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220720194245.8442-1-gaoxin@cdjrlc.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <20220720194245.8442-1-gaoxin@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720094743.471304-1-strochuk@ispras.ru>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 14:42, Xin Gao wrote:
-> do not initialise statics to 0.
+On Wed, Jul 20, 2022 at 12:47:43PM +0300, Andrey Strachuk wrote:
+> Local variable 'p' is initialized by an address
+> of field of acpi_resource, so it does not make
+> sense to compare 'p' with NULL.
+
+Rewrap to fill 75 columns, which is the typical width of commit logs.
+
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
+> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
 > ---
->   drivers/net/wireless/broadcom/b43/main.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/acpi/pci_link.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/net/wireless/broadcom/b43/main.c b/drivers/net/wireless/broadcom/b43/main.c
-> index 17bcec5f3ff7..5e233d0e06c0 100644
-> --- a/drivers/net/wireless/broadcom/b43/main.c
-> +++ b/drivers/net/wireless/broadcom/b43/main.c
-> @@ -105,7 +105,7 @@ int b43_modparam_verbose = B43_VERBOSITY_DEFAULT;
->   module_param_named(verbose, b43_modparam_verbose, int, 0644);
->   MODULE_PARM_DESC(verbose, "Log message verbosity: 0=error, 1=warn, 2=info(default), 3=debug");
->   
-> -static int b43_modparam_pio = 0;
-> +static int b43_modparam_pio;
->   module_param_named(pio, b43_modparam_pio, int, 0644);
->   MODULE_PARM_DESC(pio, "Use PIO accesses by default: 0=DMA, 1=PIO");
-
-Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
-
-Thanks.
-
-Larry
-
-
+> diff --git a/drivers/acpi/pci_link.c b/drivers/acpi/pci_link.c
+> index 58647051c948..aa1038b8aec4 100644
+> --- a/drivers/acpi/pci_link.c
+> +++ b/drivers/acpi/pci_link.c
+> @@ -95,7 +95,7 @@ static acpi_status acpi_pci_link_check_possible(struct acpi_resource *resource,
+>  	case ACPI_RESOURCE_TYPE_IRQ:
+>  		{
+>  			struct acpi_resource_irq *p = &resource->data.irq;
+> -			if (!p || !p->interrupt_count) {
+> +			if (!p->interrupt_count) {
+>  				acpi_handle_debug(handle,
+>  						  "Blank _PRS IRQ resource\n");
+>  				return AE_OK;
+> @@ -121,7 +121,7 @@ static acpi_status acpi_pci_link_check_possible(struct acpi_resource *resource,
+>  		{
+>  			struct acpi_resource_extended_irq *p =
+>  			    &resource->data.extended_irq;
+> -			if (!p || !p->interrupt_count) {
+> +			if (!p->interrupt_count) {
+>  				acpi_handle_debug(handle,
+>  						  "Blank _PRS EXT IRQ resource\n");
+>  				return AE_OK;
+> @@ -182,7 +182,7 @@ static acpi_status acpi_pci_link_check_current(struct acpi_resource *resource,
+>  	case ACPI_RESOURCE_TYPE_IRQ:
+>  		{
+>  			struct acpi_resource_irq *p = &resource->data.irq;
+> -			if (!p || !p->interrupt_count) {
+> +			if (!p->interrupt_count) {
+>  				/*
+>  				 * IRQ descriptors may have no IRQ# bits set,
+>  				 * particularly those w/ _STA disabled
+> @@ -197,7 +197,7 @@ static acpi_status acpi_pci_link_check_current(struct acpi_resource *resource,
+>  		{
+>  			struct acpi_resource_extended_irq *p =
+>  			    &resource->data.extended_irq;
+> -			if (!p || !p->interrupt_count) {
+> +			if (!p->interrupt_count) {
+>  				/*
+>  				 * extended IRQ descriptors must
+>  				 * return at least 1 IRQ
+> -- 
+> 2.25.1
+> 

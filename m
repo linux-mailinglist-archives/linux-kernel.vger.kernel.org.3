@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A227257B8E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EF857B8ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240651AbiGTOwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S240800AbiGTOwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240484AbiGTOvz (ORCPT
+        with ESMTP id S239908AbiGTOwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:51:55 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1BD60C4;
-        Wed, 20 Jul 2022 07:51:54 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id n185so11013454wmn.4;
-        Wed, 20 Jul 2022 07:51:54 -0700 (PDT)
+        Wed, 20 Jul 2022 10:52:37 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F2A17A8A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:52:35 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id b26so26494109wrc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:52:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hWJt0D8WlzLNWeXn7K6HL06gvW3ykTtIkLO6wHOQlb0=;
-        b=S20B037YO9AhCgpJuVS2t2WXqdydhI/RY6R9dekFJkYMZyMxBUZ57z+ePvegl4Enk+
-         9CmhgqU6KUnhXbpMaOhILToRvS2IkKgn+SsKHKuooUnqQMl73U2iaZNpQ0qpHI9xsN0o
-         wMbMj2bIpXkurujmIsyjZ2Y9e/ShVmviYgzN283mN/BYGPaM7r+iH/4zkGkLraMGlZEf
-         YrlhXFPJzhZpXvseIorZC/+F2MjjGip/n4N8CW+ytQLDc5mHLcxGPitQHOt+PYmW1Gef
-         4mZoSv7YzPT3A466UUGWmQsy26CjVLutc6OIS2wmmXmviu8pZYkD0gCLSdWy7Ram0tv2
-         B3pw==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PUMNzOcke9F/E6l0+nSlaEl2q/BLzsi49G5O8oR/nQk=;
+        b=05e5XLBmfccOHOTn5Xi23vWg8lqNJPD/R1R0dBx9OAM6rEtAjGyDb7fFMs3y3i/7oD
+         /Ok5WoBVNnLuPSv+vaxNoWo7ozHczx628+bmwDooSBy4Ell7vhkiyYtko7XwBb+kbr/R
+         BAjORV2J0Is7Zf5la7TDJ8tdimEtSTjqnhLmTWTo+VkhDV2SDH+8N+fLRE2KY7wZfezY
+         T+8JyFzZ6P9hW/0ZmdZZ/B/Uv/FqGJI9SKb0Tf0iLP0d+exKHiujMl9frRdeNNWZHTAH
+         i9rgvXBSrNV3XeYyu2mF/sA2JpA/OlBjHP/f6HQ3JwqaawYdWHZ7Uly6ofxMlSylDhlx
+         Vy5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hWJt0D8WlzLNWeXn7K6HL06gvW3ykTtIkLO6wHOQlb0=;
-        b=JqZ/2aIuNlB+BKmE/c2EFNibmo2RNJquOsF8Zvdj6rrzr9oDpRCaqqws0g1VyZvZcz
-         BZrS0OiIUvWQHvmFP0Q/O+VC5wfmg5FQerZbrCAxuUzhb88AGKP8rhlsqdMTETg3d5qE
-         28OAGmdfpdvcO6mY0IXELPcyoabRcYq/IpSEHU1XrSC1v8tG1NDZp6Vb4uBZLRYljhcc
-         n55kBt/G3mXBUUR4C3DktAol+PYEhUxA0/SLo08CgmWZKW53ge1I8KxAKoVHjFLk54op
-         pKxHY+vH35W+z5DeuA+vx4a9yr7VLiFAQgXlr0keilLPTiWo5O4OL3pCBlJCCEd39Y5Q
-         QEVw==
-X-Gm-Message-State: AJIora/rVDKFRhXqe9g9O0DDbriWMTQcRR1IGxMIYInN6opOq9M0EGgL
-        T9XchYcWPNWAyhzNk00mWak=
-X-Google-Smtp-Source: AGRyM1uT6RjXmE2Uj4GUddtTNyffWDKagxZ/Tp8i7NXk36rji3Qo8u5ka1qLQxuTQ5wojgS6AAqV5Q==
-X-Received: by 2002:a05:600c:4ed0:b0:3a0:5263:cf09 with SMTP id g16-20020a05600c4ed000b003a05263cf09mr4220022wmq.6.1658328713275;
-        Wed, 20 Jul 2022 07:51:53 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id bi9-20020a05600c3d8900b003a3270735besm2625218wmb.28.2022.07.20.07.51.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 07:51:52 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 15:51:51 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/48] 4.19.253-rc1 review
-Message-ID: <YtgWhz7TqzBBSdB9@debian>
-References: <20220719114518.915546280@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PUMNzOcke9F/E6l0+nSlaEl2q/BLzsi49G5O8oR/nQk=;
+        b=EUE5RSljzcXQFaKafBliAVOAi5Ox3Ohx3jyfi663Lqdfl/CXINpU4LDs4N1n1Pd6rl
+         /ATxUQbdmUezkEIupn6HZ4yofe6Uie/Poe1unRgFjMHctBHtDXTslhO4av7v142gm3IN
+         iFXN/oFWp7ay0zLWUDqtiB4cUwGKyeCClFmiURj31jBQ3s3hfjMsDggaqQjZ6n0VXnCt
+         YIy4jV5BYsoZUUyWi/vFm2+HpJ9VgrV8SejuYoZ5ioQ/1t9anDasblrOi4L8bXPTKxvi
+         e3G4ED9s2HfDLoMSe4fNhg+VnEbnlBtrQV+SCaDQ3xZMdSwmfzF4atg/GYQGy4hwT2bj
+         OfEA==
+X-Gm-Message-State: AJIora+yNuFTILroynVruX5wfHjX++OBwRbF2+ABagv/75y0Km0TR5+v
+        E6d67cA/aiy5B7fY19QNuZ/9kCDWJexc2JwpNwgO
+X-Google-Smtp-Source: AGRyM1vRgjFuWdos6HfR4YAkcb84ehTx76Uq4a7TaHyarDjXm0pNXoiIf0CYV/zUZqhGSCYFaueGHUufPPeJ3RbZVR0=
+X-Received: by 2002:a5d:4f8f:0:b0:21e:4f09:9e15 with SMTP id
+ d15-20020a5d4f8f000000b0021e4f099e15mr1313451wru.55.1658328754216; Wed, 20
+ Jul 2022 07:52:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220707223228.1940249-1-fred@cloudflare.com> <20220707223228.1940249-5-fred@cloudflare.com>
+ <CA+EEuAhfMrg=goGhWxVW2=i4Z7mVN4GvfzettvX8T+tFcOPKCw@mail.gmail.com>
+In-Reply-To: <CA+EEuAhfMrg=goGhWxVW2=i4Z7mVN4GvfzettvX8T+tFcOPKCw@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 20 Jul 2022 10:52:23 -0400
+Message-ID: <CAHC9VhSbKct_hY4UNS0oyqsov9ELxXeQc4rqpRO7AuLKfWrGDA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] selinux: Implement create_user_ns hook
+To:     Karl MacMillan <karl@bigbadwolfsecurity.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, andrii@kernel.org,
+        ast@kernel.org, bpf@vger.kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, daniel@iogearbox.net,
+        ebiederm@xmission.com, eparis@parisplace.org,
+        jackmanb@chromium.org, jmorris@namei.org, john.fastabend@gmail.com,
+        kafai@fb.com, kernel-team@cloudflare.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        revest@chromium.org, selinux@vger.kernel.org, serge@hallyn.com,
+        shuah@kernel.org, songliubraving@fb.com,
+        stephen.smalley.work@gmail.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,37 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, Jul 19, 2022 at 10:42 PM Karl MacMillan
+<karl@bigbadwolfsecurity.com> wrote:
+> On Thu, Jul 7, 2022 at 6:34 PM Frederick Lawler <fred@cloudflare.com> wro=
+te:
+>>
+>> Unprivileged user namespace creation is an intended feature to enable
+>> sandboxing, however this feature is often used to as an initial step to
+>> perform a privilege escalation attack.
+>>
+>> This patch implements a new namespace { userns_create } access control
+>> permission to restrict which domains allow or deny user namespace
+>> creation. This is necessary for system administrators to quickly protect
+>> their systems while waiting for vulnerability patches to be applied.
+>>
+>> This permission can be used in the following way:
+>>
+>>         allow domA_t domB_t : namespace { userns_create };
+>
+>
+> Isn=E2=80=99t this actually domA_t domA_t : namespace . . .
+>
+> I got confused reading this initially trying to figure out what the secon=
+d domain type would be, but looking at the code cleared that up.
 
-On Tue, Jul 19, 2022 at 01:53:37PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.253 release.
-> There are 48 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
-> Anything received after that time might be too late.
+Ah, good catch, thanks Karl!
 
-Build test (gcc version 11.3.1 20220706):
-mips: 63 configs -> no  failure
-arm: 115 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/1519
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+--=20
+paul-moore.com

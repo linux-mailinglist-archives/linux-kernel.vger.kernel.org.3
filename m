@@ -2,139 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F7357B7F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD3557B7FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237215AbiGTNxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 09:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S229695AbiGTN4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 09:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiGTNxV (ORCPT
+        with ESMTP id S229446AbiGTN4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 09:53:21 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2FC564CF;
-        Wed, 20 Jul 2022 06:53:19 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id y4so23845226edc.4;
-        Wed, 20 Jul 2022 06:53:19 -0700 (PDT)
+        Wed, 20 Jul 2022 09:56:52 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1375828E04
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:56:51 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 6so32210743ybc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=v7Ua7Pjztqwug82UBS8PZqoIQdh5WrByyVymA7qNXfY=;
-        b=Nmbr0Ft+AJ1qLYlMHWEXMpaR4XELHNyQAwZbdBWe8fGQhHqGPd1gD6d1KCMogKEBpz
-         Bm7n5gTDnNsGpTpIkaOZ/zXnhVIirBjmDIiHPfE54B8fs3L0ulH52s18KafGlgDihKqD
-         PaL3yw6KG6rnj0ZvTD+0rKFVYgv6JFRs8QlaCeMNV8thMquMeGmS7cdhhzAbqDi04V1y
-         bqXgezBmXgeiTzanu4P8w270e0fjtnEJ0Rdb5mMCD7nIRDUxtqJ86WODqq6wl3rOeexs
-         MpaGTPLcOKjG1JGubt82XE2ZHtNLyqAR7dQDQ01s94CBo8rkf6vBBE6N47hf84cFcPIX
-         X2rA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=74sS3r2yrug0ScpBy8v0d33GcxnZS6cVwGMVPpd8Nkw=;
+        b=lZg+sJm9mzdr/Ghn7doKdM/OikBxhtKyQ1rJBDpZ60LIslmP9FVK3MNRd/ZUGnlv2h
+         eqUGjRZ3m3FSMrMJrqB6McNmspWDw60WfBMb8gYmyZjVm7FQ5pmfFERQ5+1xipL7dQRp
+         C/vxNGYjhUKGFtYJbamPlV+6e5jSbtZVKNefX9DjV1y9v1twlGwavvKNE5HxtVfWgn3+
+         5Tzq9OnzwNLB8q7ZflfIdt+oupkn74MlGQDDtKLIN1ZUdJcZiHR6+ro1+zAo32JpUyMg
+         QBQh1A6NObCKQLwCsHE10Aj35CeAWa5bGDc/AcsiZ1tD3FwHXFowhnT5VErdoAk4KE4y
+         WpmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v7Ua7Pjztqwug82UBS8PZqoIQdh5WrByyVymA7qNXfY=;
-        b=UEiZ1i4ln1A8kJ/SFQEA3pI04zCXCYWzD1TYPBPTe8TDFzjGW39zPjezhGnbtEQVD8
-         GnPE1MvGHKwM3IpkUUQY/Dtlez2kOspL5S2OmGn9ELp15siVIhzSnXe+7x5kcV5IxOTI
-         KGBRrP4EJ3Z2QhUUUIk/sQ054JKMccz4v4npp5d+ZwI1I7loZisrc4YYGdNLpAEwBzaN
-         JoA5K1lOBnREMSvv9mirHgZOkVAA9GpGpqYFeQuaa6mDilVMYjudGeu5V1jZTTL0YRRT
-         k5HGZYXqMdMUoqCTmbaBNCMc346IJ2KwX2HPz/LlnnjBvjpa4DckH3pKHWquerVcvea/
-         Up2w==
-X-Gm-Message-State: AJIora/Cua7UmNh6VI80AxTlG2ZmARZYgglyBc7NNTMaOeMftV5021Qh
-        zLwwqEPhRve2P6dk1BeUMmyugeEv+YTNwA==
-X-Google-Smtp-Source: AGRyM1tM9Guy5xL3TVWbHbE/7jg1cpe+wU1P3TJ2yS6onGuYZEUFHUh9quYHkm8PmlmdDbV86wGfEA==
-X-Received: by 2002:aa7:d788:0:b0:43b:bcbe:64d3 with SMTP id s8-20020aa7d788000000b0043bbcbe64d3mr1108303edq.15.1658325198189;
-        Wed, 20 Jul 2022 06:53:18 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170906718a00b00718e4e64b7bsm7934599ejk.79.2022.07.20.06.53.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 06:53:17 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 16:53:14 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Shawn Guo <shawnguo@kernel.org>, UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [RFC PATCH net-next 0/9] net: pcs: Add support for devices
- probed in the "usual" manner
-Message-ID: <20220720135314.5cjxiifrq5ig4vjb@skbuf>
-References: <2d028102-dd6a-c9f6-9e18-5abf84eb37a1@seco.com>
- <20220719181113.q5jf7mpr7ygeioqw@skbuf>
- <20220711160519.741990-1-sean.anderson@seco.com>
- <20220719152539.i43kdp7nolbp2vnp@skbuf>
- <bec4c9c3-e51b-5623-3cae-6df1a8ce898f@seco.com>
- <20220719153811.izue2q7qff7fjyru@skbuf>
- <2d028102-dd6a-c9f6-9e18-5abf84eb37a1@seco.com>
- <20220719181113.q5jf7mpr7ygeioqw@skbuf>
- <c0a11900-5a31-ca90-220f-74e3380cef8c@seco.com>
- <c0a11900-5a31-ca90-220f-74e3380cef8c@seco.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=74sS3r2yrug0ScpBy8v0d33GcxnZS6cVwGMVPpd8Nkw=;
+        b=eLlR335uupkHNFw1RAu0JiCVdICtpc+S+e3mg9QIQ+u7CBVYpdvMIetE0QpnOrF3yM
+         xNIcSm4HPvY46DTo3/aPVch4JKRclnDZIKpxBbDq9QndWrjACDUuSlmHmW5aUhRdEIZ3
+         Vkm/DdOvQjm3ZSsEu2Jh6EeFutrAl3wBXPbVV5XEa0oDYnXUFBoFwo5E/CIA1/YLKyBd
+         6whauBJATe9mRsxJ1JsOeD61HLM13AWe81fVleDrxLcS9Km1m1x+lXwlfEEKGi9xUu1p
+         H5xdGSlieZ1xrCOF/DJa7aHqrwnlXa3Ex89mzp/H18RvztHOfw7X6URSAm0kG11KUXTq
+         rNIg==
+X-Gm-Message-State: AJIora8nlSdMcYyMElvywc/HadVKQR05WbLDe0TkWYX7YLvPUIh7WqUy
+        ONsA5dlT2ax5/HTuN1eZsQmO/ATklNjjXWKqBVvi+w==
+X-Google-Smtp-Source: AGRyM1s4rPgL16TTnaXFzD6X8/myc/fZcVZ02EDK1/6lhhAvYDHH/E23smJuqnlQNXBsrwA7HkIkUMRwphK7euGW3bM=
+X-Received: by 2002:a25:9208:0:b0:66e:b73f:cdf4 with SMTP id
+ b8-20020a259208000000b0066eb73fcdf4mr36283538ybo.300.1658325410222; Wed, 20
+ Jul 2022 06:56:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0a11900-5a31-ca90-220f-74e3380cef8c@seco.com>
- <c0a11900-5a31-ca90-220f-74e3380cef8c@seco.com>
+References: <20220720081150.22167-1-yangyicong@hisilicon.com> <20220720081150.22167-2-yangyicong@hisilicon.com>
+In-Reply-To: <20220720081150.22167-2-yangyicong@hisilicon.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 20 Jul 2022 15:56:38 +0200
+Message-ID: <CAKfTPtAJrKUXxeU3yZHmiuNPcSL9=QCERCu-xpOQKf==+EWt9g@mail.gmail.com>
+Subject: Re: [RESEND PATCH v5 1/2] sched: Add per_cpu cluster domain info and
+ cpus_share_lowest_cache API
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, juri.lelli@redhat.com,
+        tim.c.chen@linux.intel.com, gautham.shenoy@amd.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, prime.zeng@huawei.com,
+        jonathan.cameron@huawei.com, ego@linux.vnet.ibm.com,
+        srikar@linux.vnet.ibm.com, linuxarm@huawei.com, 21cnbao@gmail.com,
+        guodong.xu@linaro.org, hesham.almatary@huawei.com,
+        john.garry@huawei.com, shenyang39@huawei.com,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        wuyun.abel@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:34:45PM -0400, Sean Anderson wrote:
-> We could do it, but it'd be a pretty big hack. Something like the
-> following. Phylink would need to be modified to grab the lock before
-> every op and check if the PCS is dead or not. This is of course still
-> not optimal, since there's no way to re-attach a PCS once it goes away.
+On Wed, 20 Jul 2022 at 10:14, Yicong Yang <yangyicong@hisilicon.com> wrote:
+>
+> From: Barry Song <song.bao.hua@hisilicon.com>
+>
+> Add per-cpu cluster domain info and cpus_share_lowest_cache() API.
+> This is the preparation for the optimization of select_idle_cpu()
+> on platforms with cluster scheduler level.
 
-You assume it's just phylink who operates on a PCS structure, but if you
-include your search pool to also cover include/linux/pcs/pcs-xpcs.h,
-you'll see a bunch of exported functions which are called directly by
-the client drivers (stmmac, sja1105). At this stage it gets pretty hard
-to validate that drivers won't attempt from any code path to do
-something stupid with a dead PCS. All in all it creates an environment
-with insanely weak guarantees; that's pretty hard to get behind IMO.
+Don't know why but your patchset ended up in my spam. Peterz
+resurected it by replying to patch 2
 
-> IMO a better solution is to use devlink and submit a patch to add
-> notifications which the MAC driver can register for. That way it can
-> find out when the PCS goes away and potentially do something about it
-> (or just let itself get removed).
+>
+> Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
 
-Not sure I understand what connection there is between devlink (device
-links) and PCS {de}registration notifications. We could probably add those
-notifications without any intervention from the device core: we would
-just need to make this new PCS "core" to register an blocking_notifier_call_chain
-to which interested drivers could add their notifier blocks. How a
-certain phylink user is going to determine that "hey, this PCS is
-definitely mine and I can use it" is an open question. In any case, my
-expectation is that we have a notifier chain, we can at least continue
-operating (avoid unbinding the struct device), but essentially move our
-phylink_create/phylink_destroy calls to within those notifier blocks.
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-Again, retrofitting this model to existing drivers, phylink API (and
-maybe even its internal structure) is something that's hard to hop on
-board of; I think it's a solution waiting for a problem, and I don't
-have an interest to develop or even review it.
+
+> ---
+>  include/linux/sched/sd_flags.h |  7 +++++++
+>  include/linux/sched/topology.h |  8 +++++++-
+>  kernel/sched/core.c            | 12 ++++++++++++
+>  kernel/sched/sched.h           |  2 ++
+>  kernel/sched/topology.c        | 15 +++++++++++++++
+>  5 files changed, 43 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
+> index 57bde66d95f7..42ed454e8b18 100644
+> --- a/include/linux/sched/sd_flags.h
+> +++ b/include/linux/sched/sd_flags.h
+> @@ -109,6 +109,13 @@ SD_FLAG(SD_ASYM_CPUCAPACITY_FULL, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
+>   */
+>  SD_FLAG(SD_SHARE_CPUCAPACITY, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
+>
+> +/*
+> + * Domain members share CPU cluster (LLC tags or L2 cache)
+> + *
+> + * NEEDS_GROUPS: Clusters are shared between groups.
+> + */
+> +SD_FLAG(SD_CLUSTER, SDF_NEEDS_GROUPS)
+> +
+>  /*
+>   * Domain members share CPU package resources (i.e. caches)
+>   *
+> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+> index 816df6cc444e..c0d21667ddf3 100644
+> --- a/include/linux/sched/topology.h
+> +++ b/include/linux/sched/topology.h
+> @@ -45,7 +45,7 @@ static inline int cpu_smt_flags(void)
+>  #ifdef CONFIG_SCHED_CLUSTER
+>  static inline int cpu_cluster_flags(void)
+>  {
+> -       return SD_SHARE_PKG_RESOURCES;
+> +       return SD_CLUSTER | SD_SHARE_PKG_RESOURCES;
+>  }
+>  #endif
+>
+> @@ -179,6 +179,7 @@ cpumask_var_t *alloc_sched_domains(unsigned int ndoms);
+>  void free_sched_domains(cpumask_var_t doms[], unsigned int ndoms);
+>
+>  bool cpus_share_cache(int this_cpu, int that_cpu);
+> +bool cpus_share_lowest_cache(int this_cpu, int that_cpu);
+>
+>  typedef const struct cpumask *(*sched_domain_mask_f)(int cpu);
+>  typedef int (*sched_domain_flags_f)(void);
+> @@ -232,6 +233,11 @@ static inline bool cpus_share_cache(int this_cpu, int that_cpu)
+>         return true;
+>  }
+>
+> +static inline bool cpus_share_lowest_cache(int this_cpu, int that_cpu)
+> +{
+> +       return true;
+> +}
+> +
+>  #endif /* !CONFIG_SMP */
+>
+>  #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index a463dbc92fcd..96109ad82694 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -3802,6 +3802,18 @@ bool cpus_share_cache(int this_cpu, int that_cpu)
+>         return per_cpu(sd_llc_id, this_cpu) == per_cpu(sd_llc_id, that_cpu);
+>  }
+>
+> +/*
+> + * Whether CPUs are share lowest cache, which means LLC on non-cluster
+> + * machines and LLC tag or L2 on machines with clusters.
+> + */
+> +bool cpus_share_lowest_cache(int this_cpu, int that_cpu)
+> +{
+> +       if (this_cpu == that_cpu)
+> +               return true;
+> +
+> +       return per_cpu(sd_lowest_cache_id, this_cpu) == per_cpu(sd_lowest_cache_id, that_cpu);
+> +}
+> +
+>  static inline bool ttwu_queue_cond(int cpu)
+>  {
+>         /*
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 73ae32898f25..845cd029d572 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1802,7 +1802,9 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+>  DECLARE_PER_CPU(int, sd_llc_size);
+>  DECLARE_PER_CPU(int, sd_llc_id);
+> +DECLARE_PER_CPU(int, sd_lowest_cache_id);
+>  DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+> +DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+>  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
+> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+> index 8739c2a5a54e..8ab27c0d6d1f 100644
+> --- a/kernel/sched/topology.c
+> +++ b/kernel/sched/topology.c
+> @@ -664,6 +664,8 @@ static void destroy_sched_domains(struct sched_domain *sd)
+>  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+>  DEFINE_PER_CPU(int, sd_llc_size);
+>  DEFINE_PER_CPU(int, sd_llc_id);
+> +DEFINE_PER_CPU(int, sd_lowest_cache_id);
+> +DEFINE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
+>  DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
+>  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
+>  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
+> @@ -689,6 +691,18 @@ static void update_top_cache_domain(int cpu)
+>         per_cpu(sd_llc_id, cpu) = id;
+>         rcu_assign_pointer(per_cpu(sd_llc_shared, cpu), sds);
+>
+> +       sd = lowest_flag_domain(cpu, SD_CLUSTER);
+> +       if (sd)
+> +               id = cpumask_first(sched_domain_span(sd));
+> +       rcu_assign_pointer(per_cpu(sd_cluster, cpu), sd);
+> +
+> +       /*
+> +        * This assignment should be placed after the sd_llc_id as
+> +        * we want this id equals to cluster id on cluster machines
+> +        * but equals to LLC id on non-Cluster machines.
+> +        */
+> +       per_cpu(sd_lowest_cache_id, cpu) = id;
+> +
+>         sd = lowest_flag_domain(cpu, SD_NUMA);
+>         rcu_assign_pointer(per_cpu(sd_numa, cpu), sd);
+>
+> @@ -1532,6 +1546,7 @@ static struct cpumask             ***sched_domains_numa_masks;
+>   */
+>  #define TOPOLOGY_SD_FLAGS              \
+>         (SD_SHARE_CPUCAPACITY   |       \
+> +        SD_CLUSTER             |       \
+>          SD_SHARE_PKG_RESOURCES |       \
+>          SD_NUMA                |       \
+>          SD_ASYM_PACKING)
+> --
+> 2.24.0
+>

@@ -2,136 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F207457B444
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A8A57B44F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbiGTKF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 06:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
+        id S232734AbiGTKL6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 20 Jul 2022 06:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGTKFz (ORCPT
+        with ESMTP id S231133AbiGTKL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 06:05:55 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CD75C9E8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:05:50 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c6so14524082pla.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:05:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=C6Z6JqwqSHD1Pxl7j+M9Xv/wk5TAAqbSiRlE2ihHvyk=;
-        b=U93OjkVXci1r2RHwNOXChSOl29W1H4Aw9ze6/rLApkBNlMNjYWwh/uGvi0LxozP6D1
-         buw7A48b80d75D7Zgy19O3zcN2oJHahtSiCUFvUwcvnYa4f1OmFdEKHPk+Tw++fHpHkO
-         nJcwYvw5klU2ua/Fg/KSvx6R4oIGFl8JrMpq1QE1JU+tjnbuSqLcAXWEGlgkJbcJI2wa
-         QT65DgTUFGOZ6iNbWIzr2cEEtZZ91eZzp7ZlqiItTguX0MP3qxrDuxX7bct5SPyavvoI
-         WdBHfuJQUxq4TbLdmbklReu3rgMbjcfQpQygdILmoCpgUifHRsTbcVeroULUrVqksci+
-         h/dQ==
+        Wed, 20 Jul 2022 06:11:57 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBC2545E8;
+        Wed, 20 Jul 2022 03:11:56 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id l11so31253227ybu.13;
+        Wed, 20 Jul 2022 03:11:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=C6Z6JqwqSHD1Pxl7j+M9Xv/wk5TAAqbSiRlE2ihHvyk=;
-        b=NV2T4pepyF26eBTb4wBO5yCBiIGoPMs/OdFkWpNTaJXQy+HWer3STb4pagEXnqVCIQ
-         WMyi7mwOLb/wSwPFebNorYCQkD3WER+pStVyetMEHk1f09v8+Lsm6OdXfDx7/Ie8TqHP
-         T5LVzF8Gp4Sc2vMT7dongECqQseqVfYvdfeDJ9G12ygCbqOO7DU2/tLhGsM/YEPxwddd
-         hsu3pdWvWYrAgD7kWkHEcG+4oMCAtNfl6V5UKQUfJHTWI17DWhw6TlNsgmYUpsrl2363
-         h6dilnp2dx0ZxTnla+3e3pjx1k99gP7ETDcJU0fOh0dnjhY8eX3swd2YR601IOxi7J/m
-         1A4Q==
-X-Gm-Message-State: AJIora+y0UbJBkim3NSA0UJK6+OBokH2buWCq/OaWxEOhQxXmMLiFUXT
-        7hyKjFOznscA9Cwb66i/s3E=
-X-Google-Smtp-Source: AGRyM1s3ABuJ5Rs4YNmUtYSHTpyCuFYVnS+sK83V2uuFqCcwAy9zWvOS/H0Vol7ECwJ7WWBHG751kw==
-X-Received: by 2002:a17:90b:1c09:b0:1ef:f82c:174b with SMTP id oc9-20020a17090b1c0900b001eff82c174bmr4411389pjb.88.1658311549965;
-        Wed, 20 Jul 2022 03:05:49 -0700 (PDT)
-Received: from ip-172-31-24-42.ap-northeast-1.compute.internal (ec2-35-78-228-6.ap-northeast-1.compute.amazonaws.com. [35.78.228.6])
-        by smtp.gmail.com with ESMTPSA id r5-20020aa79885000000b00525442ac579sm13137201pfl.212.2022.07.20.03.05.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 03:05:49 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 10:05:44 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Christoph Lameter <cl@gentwo.de>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Joe Perches <joe@perches.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Matthew WilCox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 16/16] mm/sl[au]b: check if large object is valid in
- __ksize()
-Message-ID: <YtfTeJrnViCejwC4@ip-172-31-24-42.ap-northeast-1.compute.internal>
-References: <20220712133946.307181-1-42.hyeyoo@gmail.com>
- <20220712133946.307181-17-42.hyeyoo@gmail.com>
- <alpine.DEB.2.22.394.2207121701070.57893@gentwo.de>
- <Ys6Pp6ZPwJTdJvpk@ip-172-31-24-42.ap-northeast-1.compute.internal>
- <alpine.DEB.2.22.394.2207131205590.112646@gentwo.de>
- <CANpmjNPbbugrbCFADy1C7PgaU-4PMd9UK90QiHKS-Md0ocqa3w@mail.gmail.com>
- <alpine.DEB.2.22.394.2207141115050.184626@gentwo.de>
- <CANpmjNPGsqV4FYNq9Q-rUKCEZ3wOJbk3xfcfBks0O-bhFDmYcw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HPxfGl62Grx8smrWYOlzrFoO6DOehrIgEYjXrU1sD0o=;
+        b=xkNsGZGVYeood3x9zDpxV25KOZEQt/cuyR4STO1so5VkHbdXzhJuBYDAxyN+Fl4D0Y
+         TH/W2gcloj/S7SgSRYnlRA2fUYNzmggBYMZoyz4mxr99N17jIfXpXlN2/4dvfEliCCmk
+         Iz3y7pTzSGdPYKtSMUE3N2NibNJHOvLoN3x1t1oE4V5D0mwuYu1LxUaXNkEvNEfsGfp2
+         xWd9YcY2lwBRsRpddxMgM+mCQweh8KLFmE6vhC3mAJLkqpiuuKBBCxe22BeeU/QB1d1x
+         E4VFwDOBQcbvTZwWe9jap7pC/lgrYEyCsMCKC8Pw/RmgYCeVHaOoogtpTnBZw1xElHN8
+         F8bw==
+X-Gm-Message-State: AJIora9F/G3DMIqmSHI6m5bbYjla3POb2ELUDSq3WvpNTvZLIc922hWv
+        WHxkPaP+a4RqTd47rj74Usqd0yZgxjuRDY1DVBLKIEWW
+X-Google-Smtp-Source: AGRyM1t+W3Hm0oVvCSceKj5BBeNajD+cXnrdGlvpODvEOlVC6+3nCFWc6wPhP0rzw9VzQXuULX4Qg/afdDiytzTYfLE=
+X-Received: by 2002:a05:6902:154f:b0:66e:e2d3:ce1 with SMTP id
+ r15-20020a056902154f00b0066ee2d30ce1mr33331218ybu.365.1658311915502; Wed, 20
+ Jul 2022 03:11:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNPGsqV4FYNq9Q-rUKCEZ3wOJbk3xfcfBks0O-bhFDmYcw@mail.gmail.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <CAFv23QmH4ooXJzX9A0CBObrETZgb9sT4dfh03NZA--fKfZnHDA@mail.gmail.com>
+ <87fsixz8cb.wl-maz@kernel.org> <CAFv23Q=O29J4K_bdTi_SuThsEZN_SFNNz+bBPQSA+RGCANm6=w@mail.gmail.com>
+ <CAAd53p7GGjqpo97VP=uXnJQstKzxCf9Si+ZCD98UsbdJ7oS=SA@mail.gmail.com>
+In-Reply-To: <CAAd53p7GGjqpo97VP=uXnJQstKzxCf9Si+ZCD98UsbdJ7oS=SA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 20 Jul 2022 12:11:44 +0200
+Message-ID: <CAJZ5v0jYJxk1B1XORLQkGf=R9HDPbUzAjb3_2GUM0XtfmyXfZA@mail.gmail.com>
+Subject: Re: There are not enough CPU0 APIC IRQs while doing IRQ migration
+ during S3
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     AceLan Kao <acelan.kao@canonical.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 12:30:09PM +0200, Marco Elver wrote:
-> On Thu, 14 Jul 2022 at 11:16, Christoph Lameter <cl@gentwo.de> wrote:
+On Wed, Jul 20, 2022 at 5:16 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> [+Cc Rafael, linux-pm]
+>
+> On Wed, Jul 20, 2022 at 10:53 AM AceLan Kao <acelan.kao@canonical.com> wrote:
 > >
-> > On Wed, 13 Jul 2022, Marco Elver wrote:
-> >
-> > > We shouldn't crash, so it should be WARN(), but also returning
-> > > PAGE_SIZE is bad. The intuition behind returning 0 is to try and make
-> > > the buggy code cause less harm to the rest of the kernel.
+> > Marc Zyngier <maz@kernel.org> 於 2022年7月19日 週二 下午6:48寫道：
 > > >
-> > > >From [1]:
+> > > [- Jason]
 > > >
-> > > > Similarly, if you are able to tell if the passed pointer is not a
-> > > > valid object some other way, you can do something better - namely,
-> > > > return 0. The intuition here is that the caller has a pointer to an
-> > > > invalid object, and wants to use ksize() to determine its size, and
-> > > > most likely access all those bytes. Arguably, at that point the kernel
-> > > > is already in a degrading state. But we can try to not let things get
-> > > > worse by having ksize() return 0, in the hopes that it will stop
-> > > > corrupting more memory. It won't work in all cases, but should avoid
-> > > > things like "s = ksize(obj); touch_all_bytes(obj, s)" where the size
-> > > > bounds the memory accessed corrupting random memory.
-> >
-> > "in the hopes that it will stop corrupting memory"!!!???
-> >
-> > Do a BUG() then and definitely stop all chances of memory corruption.
-> 
-> Fair enough.
-> 
-> Well, I'd also prefer to just kill the kernel. But some people don't
-> like that and want the option to continue running. So a WARN() gives
-> that option, and just have to boot the kernel with panic_on_warn to
-> kill it. There are other warnings in the kernel where we'd better kill
-> the kernel as the chances of corrupting memory are pretty damn high if
-> we hit them. And I still don't quite see why the case here is any more
-> or less special.
-> 
-> If the situation here is exceedingly rare, let's try BUG() and see what breaks?
+> > > On Tue, 19 Jul 2022 06:55:21 +0100,
+> > > AceLan Kao <acelan.kao@canonical.com> wrote:
+> > > >
+> > > > HI all,
+> > > >
+> > > > I encountered an issue while doing S3, it shows below message and then
+> > > > failed to enter S3
+> > > > [  106.731140] CPU 31 has 116 vectors, 85 available. Cannot disable CPU
+> > > > [  106.731551] ACPI: \_PR_.C01F: Found 2 idle states
+> > > > [  106.732610] Error taking CPU31 down: -28
+> > > > [  106.732612] Non-boot CPUs are not disabled
+> > > >
+> > > > CPU: AMD Ryzen Threadripper PRO 3955WX 16-Cores
+> > > > Kernel: v5.19-rc7
+> > > > There are 5 PCI to 4 type-c ports USB cards on the machine, and It
+> > > > wouldn't lead to the issue if only 4 cards are plugged. So, it looks
+> > > > like it can't handle 5 cards, and failed on the IRQ migration.
+> > > >
+> > > > The workaround provided by kaiheng is to release the irq while
+> > > > suspending and request irq while resuming.
+> > > > I'm wondering do we have a better solution for this kind of issue?
+> > > > Thanks.
+> > > >
+> > > > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > > > index edc6881c8a1b..91c79b21cb57 100644
+> > > > --- a/drivers/usb/host/xhci.c
+> > > > +++ b/drivers/usb/host/xhci.c
+> > > > @@ -17,6 +17,7 @@
+> > > > #include <linux/slab.h>
+> > > > #include <linux/dmi.h>
+> > > > #include <linux/dma-mapping.h>
+> > > > +#include <linux/suspend.h>
+> > > >
+> > > > #include "xhci.h"
+> > > > #include "xhci-trace.h"
+> > > > @@ -1079,6 +1080,9 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+> > > >                                __func__);
+> > > >        }
+> > > >
+> > > > +       if (pm_suspend_via_firmware())
+> > > > +               xhci_cleanup_msix(xhci);
+> > >
+> > > I'm a bit clueless when it comes to the combination of x86 and xhci,
+> > > but doesn't this prevent resuming on a xhci interrupt?
+> > The PCI cards provide 4 type-c USB ports, and in the beginning we
+> > found that removing one PCI card fixed the issue, so we were trying to
+> > fix the issue in xhci driver.
+> > The USB ports on the PCI cards can't resume the system from S3 even
+> > without the workaround,
+> > but the USB ports on the rear panel of the motherboard still work with
+> > the workaround.
+>
+> The isn't xHCI specific. The issue here is that CPU0 APIC doesn't have
+> enough IRQ vector for ACPI S3 suspend.
+> Ideally we don't want to tear down IRQs during suspend, but for this
+> case minimizing IRQ numbers means successful S3.
+>
+> So maybe we can have a suspend flow like this:
+> - At the beginning of suspend, check if there's enough free IRQ for
+> CPU0 migration.
+> - If there isn't enough free slots, hint drivers to tear down non-wake
+> IRQs. Maybe use a global variable if we don't want to add a new
+> parameter to current PM ops.
+> - If it's still not enough, abort suspend.
+>
+> For suspend that doesn't unplug CPU like suspend-to-idle, no
+> modification is needed.
+> I wonder if that makes sense?
 
-Let's try BUG() for both conditions and replace it with WARN() later
-if kernel hit those often.
-
-I'll update this patch in next version.
-
-And I have no strong opinion on returning 0, but if kernel hits it a
-lot, I think returning 0 would be more safe as you said.
-
-Thanks,
-Hyeonggon
+Quite probably, IRQs need not be migrated during system suspend, so it
+should be possible to avoid doing that entirely on "hot remove" if it
+is part of the suspend flow.

@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD79C57AD8A
+	by mail.lfdr.de (Postfix) with ESMTP id 704E257AD89
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237719AbiGTCCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S242249AbiGTCCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241689AbiGTCBT (ORCPT
+        with ESMTP id S241688AbiGTCBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 19 Jul 2022 22:01:19 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D14B4B0F0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:01:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A87C152DF1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:01:17 -0700 (PDT)
 Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9DeYddirMYpAA--.14711S9;
-        Wed, 20 Jul 2022 10:01:07 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9DeYddirMYpAA--.14711S10;
+        Wed, 20 Jul 2022 10:01:08 +0800 (CST)
 From:   Jianmin Lv <lvjianmin@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
@@ -25,16 +25,16 @@ Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V17 07/13] irqchip: Add Loongson PCH LPC controller support
-Date:   Wed, 20 Jul 2022 10:00:55 +0800
-Message-Id: <1658282461-35489-8-git-send-email-lvjianmin@loongson.cn>
+Subject: [PATCH V17 08/13] irqchip/loongson-pch-pic: Add ACPI init support
+Date:   Wed, 20 Jul 2022 10:00:56 +0800
+Message-Id: <1658282461-35489-9-git-send-email-lvjianmin@loongson.cn>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1658282461-35489-1-git-send-email-lvjianmin@loongson.cn>
 References: <1658282461-35489-1-git-send-email-lvjianmin@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxn9DeYddirMYpAA--.14711S9
-X-Coremail-Antispam: 1UD129KBjvJXoW3JFW8Ww4xuF1kCrWxZryDtrb_yoWfCFykpF
-        W5Z3y7Xr4UXF4jqr1kCa1UZrWayw1fKayjkan3Ga43Jr9rZryvkF1vyFnruFs8AFWagFya
-        vFsxtFy8uF15A3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: AQAAf9Dxn9DeYddirMYpAA--.14711S10
+X-Coremail-Antispam: 1UD129KBjvJXoWfXr17ZFWrCr1rZr4xWrWkCrg_yoWDCFyDpF
+        W5AwsxXr4UJr1UWry0kw4DZryay34a9a12gay3C3Z3JwnrJryvgF10yF1qkr15AF45AF47
+        Zrs3K3Wj9a1UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUvF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
         w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
         IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
@@ -59,298 +59,343 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Huacai Chen <chenhuacai@loongson.cn>
 
-PCH-LPC stands for "LPC Interrupts" that described in Section 24.3 of
-"Loongson 7A1000 Bridge User Manual". For more information please refer
-Documentation/loongarch/irq-chip-model.rst.
+PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
+Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
+please refer Documentation/loongarch/irq-chip-model.rst.
 
 Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
 Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/irq.h       |   4 +-
- arch/loongarch/kernel/irq.c            |   1 -
- drivers/irqchip/Kconfig                |   8 ++
- drivers/irqchip/Makefile               |   1 +
- drivers/irqchip/irq-loongson-pch-lpc.c | 205 +++++++++++++++++++++++++++++++++
- 5 files changed, 216 insertions(+), 3 deletions(-)
- create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
+ arch/loongarch/include/asm/irq.h            |   5 +-
+ arch/loongarch/kernel/irq.c                 |   1 -
+ arch/mips/include/asm/mach-loongson64/irq.h |   2 +-
+ drivers/irqchip/Kconfig                     |   2 +-
+ drivers/irqchip/irq-loongson-pch-pic.c      | 177 +++++++++++++++++++++++-----
+ 5 files changed, 151 insertions(+), 36 deletions(-)
 
 diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-index a2540d7..76a7b36 100644
+index 76a7b36..9549806 100644
 --- a/arch/loongarch/include/asm/irq.h
 +++ b/arch/loongarch/include/asm/irq.h
-@@ -112,7 +112,7 @@ struct irq_domain *eiointc_acpi_init(struct irq_domain *parent,
- 
- struct irq_domain *htvec_acpi_init(struct irq_domain *parent,
- 					struct acpi_madt_ht_pic *acpi_htvec);
--struct irq_domain *pch_lpc_acpi_init(struct irq_domain *parent,
-+int pch_lpc_acpi_init(struct irq_domain *parent,
+@@ -116,8 +116,9 @@ int pch_lpc_acpi_init(struct irq_domain *parent,
  					struct acpi_madt_lpc_pic *acpi_pchlpc);
  struct irq_domain *pch_msi_acpi_init(struct irq_domain *parent,
  					struct acpi_madt_msi_pic *acpi_pchmsi);
-@@ -129,7 +129,7 @@ struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
+-struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
++int pch_pic_acpi_init(struct irq_domain *parent,
+ 					struct acpi_madt_bio_pic *acpi_pchpic);
++int find_pch_pic(u32 gsi);
  
- extern struct irq_domain *cpu_domain;
+ extern struct acpi_madt_lio_pic *acpi_liointc;
+ extern struct acpi_madt_eio_pic *acpi_eiointc[MAX_IO_PICS];
+@@ -131,7 +132,7 @@ struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
  extern struct irq_domain *liointc_domain;
--extern struct irq_domain *pch_lpc_domain;
-+extern struct fwnode_handle *pch_lpc_handle;
+ extern struct fwnode_handle *pch_lpc_handle;
  extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
- extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+-extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
++extern struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
+ 
+ extern irqreturn_t loongson3_ipi_interrupt(int irq, void *dev);
  
 diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
-index 37dd2dc..181504b 100644
+index 181504b..575b8de 100644
 --- a/arch/loongarch/kernel/irq.c
 +++ b/arch/loongarch/kernel/irq.c
-@@ -27,7 +27,6 @@
- 
+@@ -28,7 +28,6 @@
  struct irq_domain *cpu_domain;
  struct irq_domain *liointc_domain;
--struct irq_domain *pch_lpc_domain;
  struct irq_domain *pch_msi_domain[MAX_IO_PICS];
- struct irq_domain *pch_pic_domain[MAX_IO_PICS];
+-struct irq_domain *pch_pic_domain[MAX_IO_PICS];
  
+ struct acpi_vector_group pch_group[MAX_IO_PICS];
+ struct acpi_vector_group msi_group[MAX_IO_PICS];
+diff --git a/arch/mips/include/asm/mach-loongson64/irq.h b/arch/mips/include/asm/mach-loongson64/irq.h
+index 98ea977..55e0dee 100644
+--- a/arch/mips/include/asm/mach-loongson64/irq.h
++++ b/arch/mips/include/asm/mach-loongson64/irq.h
+@@ -7,7 +7,7 @@
+ #define NR_MIPS_CPU_IRQS	8
+ #define NR_MAX_CHAINED_IRQS	40 /* Chained IRQs means those not directly used by devices */
+ #define NR_IRQS			(NR_IRQS_LEGACY + NR_MIPS_CPU_IRQS + NR_MAX_CHAINED_IRQS + 256)
+-
++#define MAX_IO_PICS		1
+ #define MIPS_CPU_IRQ_BASE 	NR_IRQS_LEGACY
+ 
+ #include <asm/mach-generic/irq.h>
 diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 1f23a6b..c1d527f 100644
+index c1d527f..f62bdec 100644
 --- a/drivers/irqchip/Kconfig
 +++ b/drivers/irqchip/Kconfig
-@@ -591,6 +591,14 @@ config LOONGSON_PCH_MSI
- 	help
- 	  Support for the Loongson PCH MSI Controller.
+@@ -574,7 +574,7 @@ config LOONGSON_HTVEC
  
-+config LOONGSON_PCH_LPC
-+	bool "Loongson PCH LPC Controller"
+ config LOONGSON_PCH_PIC
+ 	bool "Loongson PCH PIC Controller"
+-	depends on MACH_LOONGSON64 || COMPILE_TEST
 +	depends on MACH_LOONGSON64
-+	default (MACH_LOONGSON64 && LOONGARCH)
-+	select IRQ_DOMAIN_HIERARCHY
-+	help
-+	  Support for the Loongson PCH LPC Controller.
+ 	default MACH_LOONGSON64
+ 	select IRQ_DOMAIN_HIERARCHY
+ 	select IRQ_FASTEOI_HIERARCHY_HANDLERS
+diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+index a4eb8a2..b6f1392 100644
+--- a/drivers/irqchip/irq-loongson-pch-pic.c
++++ b/drivers/irqchip/irq-loongson-pch-pic.c
+@@ -33,13 +33,40 @@
+ #define PIC_REG_IDX(irq_id)	((irq_id) / PIC_COUNT_PER_REG)
+ #define PIC_REG_BIT(irq_id)	((irq_id) % PIC_COUNT_PER_REG)
+ 
++static int nr_pics;
 +
- config MST_IRQ
- 	bool "MStar Interrupt Controller"
- 	depends on ARCH_MEDIATEK || ARCH_MSTARV7 || COMPILE_TEST
-diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-index 5b67450..242b8b3 100644
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -108,6 +108,7 @@ obj-$(CONFIG_LOONGSON_HTPIC)		+= irq-loongson-htpic.o
- obj-$(CONFIG_LOONGSON_HTVEC)		+= irq-loongson-htvec.o
- obj-$(CONFIG_LOONGSON_PCH_PIC)		+= irq-loongson-pch-pic.o
- obj-$(CONFIG_LOONGSON_PCH_MSI)		+= irq-loongson-pch-msi.o
-+obj-$(CONFIG_LOONGSON_PCH_LPC)		+= irq-loongson-pch-lpc.o
- obj-$(CONFIG_MST_IRQ)			+= irq-mst-intc.o
- obj-$(CONFIG_SL28CPLD_INTC)		+= irq-sl28cpld.o
- obj-$(CONFIG_MACH_REALTEK_RTL)		+= irq-realtek-rtl.o
-diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
-new file mode 100644
-index 0000000..bf23249
---- /dev/null
-+++ b/drivers/irqchip/irq-loongson-pch-lpc.c
-@@ -0,0 +1,205 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Loongson LPC Interrupt Controller support
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
+ struct pch_pic {
+ 	void __iomem		*base;
+ 	struct irq_domain	*pic_domain;
+ 	u32			ht_vec_base;
+ 	raw_spinlock_t		pic_lock;
++	u32			vec_count;
++	u32			gsi_base;
+ };
+ 
++static struct pch_pic *pch_pic_priv[MAX_IO_PICS];
 +
-+#define pr_fmt(fmt) "lpc: " fmt
++struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
 +
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/irqchip.h>
-+#include <linux/irqchip/chained_irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+
-+/* Registers */
-+#define LPC_INT_CTL		0x00
-+#define LPC_INT_ENA		0x04
-+#define LPC_INT_STS		0x08
-+#define LPC_INT_CLR		0x0c
-+#define LPC_INT_POL		0x10
-+#define LPC_COUNT		16
-+
-+/* LPC_INT_CTL */
-+#define LPC_INT_CTL_EN		BIT(31)
-+
-+struct pch_lpc {
-+	void __iomem		*base;
-+	struct irq_domain	*lpc_domain;
-+	raw_spinlock_t		lpc_lock;
-+	u32			saved_reg_ctl;
-+	u32			saved_reg_ena;
-+	u32			saved_reg_pol;
-+};
-+
-+struct fwnode_handle *pch_lpc_handle;
-+
-+static void lpc_irq_ack(struct irq_data *d)
++int find_pch_pic(u32 gsi)
 +{
-+	unsigned long flags;
-+	struct pch_lpc *priv = d->domain->host_data;
++	int i;
 +
-+	raw_spin_lock_irqsave(&priv->lpc_lock, flags);
-+	writel(0x1 << d->hwirq, priv->base + LPC_INT_CLR);
-+	raw_spin_unlock_irqrestore(&priv->lpc_lock, flags);
-+}
++	/* Find the PCH_PIC that manages this GSI. */
++	for (i = 0; i < MAX_IO_PICS; i++) {
++		struct pch_pic *priv = pch_pic_priv[i];
 +
-+static void lpc_irq_mask(struct irq_data *d)
-+{
-+	unsigned long flags;
-+	struct pch_lpc *priv = d->domain->host_data;
++		if (!priv)
++			return -1;
 +
-+	raw_spin_lock_irqsave(&priv->lpc_lock, flags);
-+	writel(readl(priv->base + LPC_INT_ENA) & (~(0x1 << (d->hwirq))),
-+			priv->base + LPC_INT_ENA);
-+	raw_spin_unlock_irqrestore(&priv->lpc_lock, flags);
-+}
-+
-+static void lpc_irq_unmask(struct irq_data *d)
-+{
-+	unsigned long flags;
-+	struct pch_lpc *priv = d->domain->host_data;
-+
-+	raw_spin_lock_irqsave(&priv->lpc_lock, flags);
-+	writel(readl(priv->base + LPC_INT_ENA) | (0x1 << (d->hwirq)),
-+			priv->base + LPC_INT_ENA);
-+	raw_spin_unlock_irqrestore(&priv->lpc_lock, flags);
-+}
-+
-+static int lpc_irq_set_type(struct irq_data *d, unsigned int type)
-+{
-+	u32 val;
-+	u32 mask = 0x1 << (d->hwirq);
-+	struct pch_lpc *priv = d->domain->host_data;
-+
-+	if (!(type & IRQ_TYPE_LEVEL_MASK))
-+		return 0;
-+
-+	val = readl(priv->base + LPC_INT_POL);
-+
-+	if (type == IRQ_TYPE_LEVEL_HIGH)
-+		val |= mask;
-+	else
-+		val &= ~mask;
-+
-+	writel(val, priv->base + LPC_INT_POL);
-+
-+	return 0;
-+}
-+
-+static const struct irq_chip pch_lpc_irq_chip = {
-+	.name			= "PCH LPC",
-+	.irq_mask		= lpc_irq_mask,
-+	.irq_unmask		= lpc_irq_unmask,
-+	.irq_ack		= lpc_irq_ack,
-+	.irq_set_type		= lpc_irq_set_type,
-+	.flags			= IRQCHIP_SKIP_SET_WAKE,
-+};
-+
-+static void lpc_irq_dispatch(struct irq_desc *desc)
-+{
-+	u32 pending, bit;
-+	struct irq_chip *chip = irq_desc_get_chip(desc);
-+	struct pch_lpc *priv = irq_desc_get_handler_data(desc);
-+
-+	chained_irq_enter(chip, desc);
-+
-+	pending = readl(priv->base + LPC_INT_ENA);
-+	pending &= readl(priv->base + LPC_INT_STS);
-+	if (!pending)
-+		spurious_interrupt();
-+
-+	while (pending) {
-+		bit = __ffs(pending);
-+
-+		generic_handle_domain_irq(priv->lpc_domain, bit);
-+		pending &= ~BIT(bit);
++		if (gsi >= priv->gsi_base && gsi < (priv->gsi_base + priv->vec_count))
++			return i;
 +	}
-+	chained_irq_exit(chip, desc);
++
++	pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
++	return -1;
 +}
 +
-+static int pch_lpc_map(struct irq_domain *d, unsigned int irq,
-+			irq_hw_number_t hw)
+ static void pch_pic_bitset(struct pch_pic *priv, int offset, int bit)
+ {
+ 	u32 reg;
+@@ -139,6 +166,28 @@ static void pch_pic_ack_irq(struct irq_data *d)
+ 	.irq_set_type		= pch_pic_set_type,
+ };
+ 
++static int pch_pic_domain_translate(struct irq_domain *d,
++					struct irq_fwspec *fwspec,
++					unsigned long *hwirq,
++					unsigned int *type)
 +{
-+	irq_set_chip_and_handler(irq, &pch_lpc_irq_chip, handle_level_irq);
++	struct pch_pic *priv = d->host_data;
++	struct device_node *of_node = to_of_node(fwspec->fwnode);
++
++	if (fwspec->param_count < 1)
++		return -EINVAL;
++
++	if (of_node) {
++		*hwirq = fwspec->param[0] + priv->ht_vec_base;
++		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
++	} else {
++		*hwirq = fwspec->param[0] - priv->gsi_base;
++		*type = IRQ_TYPE_NONE;
++	}
++
 +	return 0;
 +}
 +
-+static const struct irq_domain_ops pch_lpc_domain_ops = {
-+	.map 		= pch_lpc_map,
-+	.translate	= irq_domain_translate_twocell,
-+};
-+
-+static void pch_lpc_reset(struct pch_lpc *priv)
-+{
-+	/* Enable the LPC interrupt, bit31: en  bit30: edge */
-+	writel(LPC_INT_CTL_EN, priv->base + LPC_INT_CTL);
-+	writel(0, priv->base + LPC_INT_ENA);
-+	/* Clear all 18-bit interrpt bit */
-+	writel(GENMASK(17, 0), priv->base + LPC_INT_CLR);
-+}
-+
-+static int pch_lpc_disabled(struct pch_lpc *priv)
-+{
-+	return (readl(priv->base + LPC_INT_ENA) == 0xffffffff) &&
-+			(readl(priv->base + LPC_INT_STS) == 0xffffffff);
-+}
-+
-+int __init pch_lpc_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_lpc_pic *acpi_pchlpc)
-+{
-+	int parent_irq;
-+	struct pch_lpc *priv;
-+	struct irq_fwspec fwspec;
-+	struct fwnode_handle *irq_handle;
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	raw_spin_lock_init(&priv->lpc_lock);
-+
-+	priv->base = ioremap(acpi_pchlpc->address, acpi_pchlpc->size);
+ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
+ 			      unsigned int nr_irqs, void *arg)
+ {
+@@ -149,13 +198,13 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
+ 	struct irq_fwspec parent_fwspec;
+ 	struct pch_pic *priv = domain->host_data;
+ 
+-	err = irq_domain_translate_twocell(domain, fwspec, &hwirq, &type);
++	err = pch_pic_domain_translate(domain, fwspec, &hwirq, &type);
+ 	if (err)
+ 		return err;
+ 
+ 	parent_fwspec.fwnode = domain->parent->fwnode;
+ 	parent_fwspec.param_count = 1;
+-	parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
++	parent_fwspec.param[0] = hwirq;
+ 
+ 	err = irq_domain_alloc_irqs_parent(domain, virq, 1, &parent_fwspec);
+ 	if (err)
+@@ -170,7 +219,7 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
+ }
+ 
+ static const struct irq_domain_ops pch_pic_domain_ops = {
+-	.translate	= irq_domain_translate_twocell,
++	.translate	= pch_pic_domain_translate,
+ 	.alloc		= pch_pic_alloc,
+ 	.free		= irq_domain_free_irqs_parent,
+ };
+@@ -180,7 +229,7 @@ static void pch_pic_reset(struct pch_pic *priv)
+ 	int i;
+ 
+ 	for (i = 0; i < PIC_COUNT; i++) {
+-		/* Write vectored ID */
++		/* Write vector ID */
+ 		writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(i));
+ 		/* Hardcode route to HT0 Lo */
+ 		writeb(1, priv->base + PCH_INT_ROUTE(i));
+@@ -198,50 +247,37 @@ static void pch_pic_reset(struct pch_pic *priv)
+ 	}
+ }
+ 
+-static int pch_pic_of_init(struct device_node *node,
+-				struct device_node *parent)
++static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
++			struct irq_domain *parent_domain, struct fwnode_handle *domain_handle,
++			u32 gsi_base)
+ {
+ 	struct pch_pic *priv;
+-	struct irq_domain *parent_domain;
+-	int err;
+ 
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+ 	raw_spin_lock_init(&priv->pic_lock);
+-	priv->base = of_iomap(node, 0);
+-	if (!priv->base) {
+-		err = -ENOMEM;
++	priv->base = ioremap(addr, size);
 +	if (!priv->base)
-+		goto free_priv;
+ 		goto free_priv;
+-	}
+ 
+-	parent_domain = irq_find_host(parent);
+-	if (!parent_domain) {
+-		pr_err("Failed to find the parent domain\n");
+-		err = -ENXIO;
+-		goto iounmap_base;
+-	}
+-
+-	if (of_property_read_u32(node, "loongson,pic-base-vec",
+-				&priv->ht_vec_base)) {
+-		pr_err("Failed to determine pic-base-vec\n");
+-		err = -EINVAL;
+-		goto iounmap_base;
+-	}
++	priv->ht_vec_base = vec_base;
++	priv->vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
++	priv->gsi_base = gsi_base;
+ 
+ 	priv->pic_domain = irq_domain_create_hierarchy(parent_domain, 0,
+-						       PIC_COUNT,
+-						       of_node_to_fwnode(node),
+-						       &pch_pic_domain_ops,
+-						       priv);
++						priv->vec_count, domain_handle,
++						&pch_pic_domain_ops, priv);
 +
-+	if (pch_lpc_disabled(priv)) {
-+		pr_err("Failed to get LPC status\n");
-+		goto iounmap_base;
-+	}
-+
-+	irq_handle = irq_domain_alloc_named_fwnode("lpcintc");
-+	if (!irq_handle) {
-+		pr_err("Unable to allocate domain handle\n");
-+		goto iounmap_base;
-+	}
-+
-+	priv->lpc_domain = irq_domain_create_linear(irq_handle, LPC_COUNT,
-+					&pch_lpc_domain_ops, priv);
-+	if (!priv->lpc_domain) {
-+		pr_err("Failed to create IRQ domain\n");
-+		goto free_irq_handle;
-+	}
-+	pch_lpc_reset(priv);
-+
-+	fwspec.fwnode = parent->fwnode;
-+	fwspec.param[0] = acpi_pchlpc->cascade + GSI_MIN_PCH_IRQ;
-+	fwspec.param[1] = IRQ_TYPE_LEVEL_HIGH;
-+	fwspec.param_count = 2;
-+	parent_irq = irq_create_fwspec_mapping(&fwspec);
-+	irq_set_chained_handler_and_data(parent_irq, lpc_irq_dispatch, priv);
-+
-+	pch_lpc_handle = irq_handle;
-+	return 0;
-+
-+free_irq_handle:
-+	irq_domain_free_fwnode(irq_handle);
-+iounmap_base:
-+	iounmap(priv->base);
-+free_priv:
-+	kfree(priv);
-+
-+	return -ENOMEM;
+ 	if (!priv->pic_domain) {
+ 		pr_err("Failed to create IRQ domain\n");
+-		err = -ENOMEM;
+ 		goto iounmap_base;
+ 	}
+ 
+ 	pch_pic_reset(priv);
++	pch_pic_handle[nr_pics] = domain_handle;
++	pch_pic_priv[nr_pics++] = priv;
+ 
+ 	return 0;
+ 
+@@ -250,7 +286,86 @@ static int pch_pic_of_init(struct device_node *node,
+ free_priv:
+ 	kfree(priv);
+ 
+-	return err;
++	return -EINVAL;
 +}
++
++#ifdef CONFIG_OF
++
++static int pch_pic_of_init(struct device_node *node,
++				struct device_node *parent)
++{
++	int err, vec_base;
++	struct resource res;
++	struct irq_domain *parent_domain;
++
++	if (of_address_to_resource(node, 0, &res))
++		return -EINVAL;
++
++	parent_domain = irq_find_host(parent);
++	if (!parent_domain) {
++		pr_err("Failed to find the parent domain\n");
++		return -ENXIO;
++	}
++
++	if (of_property_read_u32(node, "loongson,pic-base-vec", &vec_base)) {
++		pr_err("Failed to determine pic-base-vec\n");
++		return -EINVAL;
++	}
++
++	err = pch_pic_init(res.start, resource_size(&res), vec_base,
++				parent_domain, of_node_to_fwnode(node), 0);
++	if (err < 0)
++		return err;
++
++	return 0;
+ }
+ 
+ IRQCHIP_DECLARE(pch_pic, "loongson,pch-pic-1.0", pch_pic_of_init);
++
++#endif
++
++#ifdef CONFIG_ACPI
++static int __init
++pch_lpc_parse_madt(union acpi_subtable_headers *header,
++		       const unsigned long end)
++{
++	struct acpi_madt_lpc_pic *pchlpc_entry = (struct acpi_madt_lpc_pic *)header;
++
++	return pch_lpc_acpi_init(pch_pic_priv[0]->pic_domain, pchlpc_entry);
++}
++
++static int __init acpi_cascade_irqdomain_init(void)
++{
++	acpi_table_parse_madt(ACPI_MADT_TYPE_LPC_PIC,
++			      pch_lpc_parse_madt, 0);
++	return 0;
++}
++
++int __init pch_pic_acpi_init(struct irq_domain *parent,
++					struct acpi_madt_bio_pic *acpi_pchpic)
++{
++	int ret, vec_base;
++	struct fwnode_handle *domain_handle;
++
++	vec_base = acpi_pchpic->gsi_base - GSI_MIN_PCH_IRQ;
++
++	domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_pchpic);
++	if (!domain_handle) {
++		pr_err("Unable to allocate domain handle\n");
++		return -ENOMEM;
++	}
++
++	ret = pch_pic_init(acpi_pchpic->address, acpi_pchpic->size,
++				vec_base, parent, domain_handle, acpi_pchpic->gsi_base);
++
++	if (ret < 0) {
++		irq_domain_free_fwnode(domain_handle);
++		return ret;
++	}
++
++	if (acpi_pchpic->id == 0)
++		acpi_cascade_irqdomain_init();
++
++	return ret;
++}
++#endif
 -- 
 1.8.3.1
 

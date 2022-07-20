@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C791057ADED
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8478C57ADDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239514AbiGTCTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
+        id S241016AbiGTCUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240916AbiGTCSG (ORCPT
+        with ESMTP id S236253AbiGTCTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:18:06 -0400
+        Tue, 19 Jul 2022 22:19:06 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8345D61D83
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:18:03 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K02wnY031777;
-        Wed, 20 Jul 2022 02:17:57 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A681B65D77
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:18:09 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K0vEBD017933;
+        Wed, 20 Jul 2022 02:17:58 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : references : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=ec0cHycsDPhyi7HO3m3QKum6pid8nANYMV+OihbOSqY=;
- b=iNpBRFhdtytB2Pnd7ZAcJ2MBfAQaiy9i/froyNMYq4OGqJJcqvIIegF1EuAyoJmJ3C2v
- V31a2TLSSBZgkphx0/Lqvo2hAPKfLTpyUsBzzymsJ4F732Ni8GMTqYOJ2ovz/gTTOAQg
- myF9tTvO9x5GvmsSvnz83AZ6UloVJNYFEY5mQfuXetfApTkznikb/SqXThD5byCyvAxa
- vZa1haY5wax6WTeefuzClJyKWBnPdEzlTePSUh7Re0N0XQCe7UV1bdqmxFqaaRyOtpk2
- u8x4/PgummJ3WKNY8kANEwiAx0kTMKTMmxHa5chpqxw+gUV7IozfDr/d6A0D2E5ZePDr EQ== 
+ bh=lkuQ1EUpKm0+g9aw+h0S71xP6NaSpVP4mEXT3+GupsQ=;
+ b=xc/Gh6BlaTDzAhAxjk8qDvIEr0oE6GVek791qPUZtzmkqM1GflaDZ7wDGwn0rI3MYtEY
+ HQLv81F9Iir9AB13cYKbVEAbw+SzF18JWZ98BtQ+9rLAONwDYJgeJv/89oSngX1zOy2P
+ r/zV4jKK/tcLmgJZ8dg5BRe/Hbu3dE0kR2ok+RpJ/pGsJrMhu3UG2ZwbXiNAT79PtLl7
+ SCvxilu1ZIqNgLy7mbm3yiV6hL8GzgfEtFw7I/siaZs0ObBqvImDBRT4VjPap4aB0Y0C
+ q+m2NMaACS/XIGcDPV8cCruTpNlxCf0vpiryHsbysvSOqcI5cZv7GF1je8oMseIozYP0 qw== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbnvtg6af-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbkx107t0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Jul 2022 02:17:56 +0000
+        Wed, 20 Jul 2022 02:17:57 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26JNHLL4022321;
-        Wed, 20 Jul 2022 02:17:55 GMT
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26JNHLL5022321;
+        Wed, 20 Jul 2022 02:17:56 GMT
 Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1hseann-10
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1hseann-11
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 20 Jul 2022 02:17:55 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rbn2dSA5IytwE5nf2y5OVlAZLwEnoWaqdQdkNhOhHyccgNhNxJa69nOHAHrUoRbnmXChtLVHNLAvo2SeKyzHcrsNm//sb8oj7f5rUzkITEWIDacwrER3GuOGRMEUUMBEu2vadX7r8RSe1UIVWUFaHANupW5jPLsdQqtYSRsTOO25PfF5KSBNlTYvcmx08ANCLrQ5LZMKm95RuoqQN5MtJOPy0r3Zm98mJur/qOrGAPtiHg84C2UQcsCtxbRMJcoFsewozLcBgfxshcY0u6CJf3i5JostGnRBdf8CIQuMk0UPDgRA61849bU/W3M/PWmkeR5dffPKYwIfQMVZfjV/OQ==
+ b=HkwiyiqOrJsVs6my48F92bW3JCM0ZZPI3ZSfCA3LQwhnJW/xwl7uu4fDQHsTzzEiCKg6sZBKpeB2wp3yzFKoOsPtGs9LtlMiBdaw6/QRkbm4kozEb4NRTUZmnZdMlxihBIDD3Lk1Lp2z+yeSofLOiLriG+bGhyutVhFMEhZ2a8zilFL8pP9UC/M6wRubuulJuY36yWpENJPdjyDOzgrYK9IqyB1T39UeQcEQH/7HKoplKJfSA2tBTT5AChGSf1vtrqHrcuZ47/NkWQChvsgFO87Hk8JDMFPHZFokjwV7/RDH0PlSYMswA0OnUBq23/b4bkf2LsGjKQdDmCWV2NcswA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ec0cHycsDPhyi7HO3m3QKum6pid8nANYMV+OihbOSqY=;
- b=RGTEsAfIMMCqFvzfXyQtGXy+I3gCjL6GvfjRd/l6c2Uum+m8PAWqc1SeJv//8bRCJe65cTBYM9psWcAL3eBpsPvaeH0hznEHTTzrAIcbMAImO/m7mmSgLKhxns3FI3APCuh6WSWH/hkJP97kOJ6PTgTshvMsh4O9LjQkvebkOqZ+TqHqx24H/uaSLqsPRrFtFvH28gAjZcGdTndog/Tk8blA8ypPvxGW5/zV1xQY46YCv5bIFja5siSjlHObUzZiaD4y/ZK+Dgd+sd1EOTCBIXpYz1HUp85M5t10e3/j8G5HIkPDpjq8mTEQSBYUqu/XZ4f09BwVSw95z4QAFl0y8w==
+ bh=lkuQ1EUpKm0+g9aw+h0S71xP6NaSpVP4mEXT3+GupsQ=;
+ b=LJTRRTiggQIy2S7ZPxiNX/YHaQcedAJzqfkdLczOGBSHgcxLwC3F+vFsmuAgy/zhBxL3tZCxdl0HvYFF5WXYDW0PQ7owaw6QWMFDtgEt1xacp8rIqgvteGUK7964ibrfdcsQu6sAyp49s2mHiSrCnw82WMG8P6v1UnlL9xha4Q/1mrzkTTzqcytQ0XZHy/o5Im5f+TmxNh81nvJya7hqXgNjTXij6RcI6cljtSL8XxOw/Wh4mpKkKdK1SJ+QBSD4StAw9RGFV4ea6EEfsPoWJVLtfPOPto+1Fobdx+UVnCm5slELDfB51QNjGFzwjPCgVnzLVn/RUtUA8EoGjakkrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ec0cHycsDPhyi7HO3m3QKum6pid8nANYMV+OihbOSqY=;
- b=zSlVUNNRDMxFHwjTHGpjGndFuzIRoUB3pacJzcs4CTBUNqxILzSYnVNAlpESfsOGibo45euHaIUff3F+zWDfI73w1onZNj3l+iDd+64WEuyskN83vG10PzP+y6KaBXA6v3pJ4SyIDRUwjBnR4XP8f77kbKUCAGcwQPA7oH5D6pI=
+ bh=lkuQ1EUpKm0+g9aw+h0S71xP6NaSpVP4mEXT3+GupsQ=;
+ b=a+J5x33BDwjdRtB13Fs4viwsxI9GV5M3jB0apIArKKFdEuuWSYr914AkIBvtLDZXqx7uvxWe0R7IwirZltN/Y51TakpJDA+0fM7x5Al8r2tTSaucglRajxw+jdO5c3rgEqMJ6DCcSkHdl8smQN9MjYfY997OB+uzJO+3wa0QFd8=
 Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
  by IA1PR10MB6243.namprd10.prod.outlook.com (2603:10b6:208:3a1::15) with
  Microsoft SMTP Server (version=TLS1_2,
@@ -69,13 +69,11 @@ To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Hugh Dickins <hughd@google.com>
 CC:     Yu Zhao <yuzhao@google.com>
-Subject: [PATCH v12 18/69] mmap: change zeroing of maple tree in
- __vma_adjust()
-Thread-Topic: [PATCH v12 18/69] mmap: change zeroing of maple tree in
- __vma_adjust()
-Thread-Index: AQHYm97o9eoOtI+y4USPXgtJH4WYmg==
+Subject: [PATCH v12 17/69] mm: remove rb tree.
+Thread-Topic: [PATCH v12 17/69] mm: remove rb tree.
+Thread-Index: AQHYm97okH39uHJdGkOSrdP7FiP5DA==
 Date:   Wed, 20 Jul 2022 02:17:49 +0000
-Message-ID: <20220720021727.17018-19-Liam.Howlett@oracle.com>
+Message-ID: <20220720021727.17018-18-Liam.Howlett@oracle.com>
 References: <20220720021727.17018-1-Liam.Howlett@oracle.com>
 In-Reply-To: <20220720021727.17018-1-Liam.Howlett@oracle.com>
 Accept-Language: en-US
@@ -84,42 +82,42 @@ X-MS-Has-Attach:
 X-MS-TNEF-Correlator: 
 x-mailer: git-send-email 2.35.1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ed3b4bca-4245-4760-0395-08da69f60d10
+x-ms-office365-filtering-correlation-id: 471e4292-c8c4-4a0c-30f5-08da69f60cba
 x-ms-traffictypediagnostic: IA1PR10MB6243:EE_
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /Qpe5GCevVstJQIWBys307yEjI+6Lq1xAj2IJNnCd6gfnZlU69M+Yu5m1IvdZGfBskkyQiRq8YHh9G8u3nD41Uf8v/e2qFDlHKIPDq+OA43JNdV7gk3podWvxoA8tZvlXESOkqVtMReASUz3JP7Lm7JOec6veSOlNk4bHwwewV7JgwDRMmYf1kIFMHVHtsgjMWdiKFzXcPoiPiCf6vGmHMAyS+8Gb5b37rFqvJVnFBrYkfDxpJ4w7HWETFG5YGzHlDg4HuY/uis65N39SEjJX+t73IgGQ5KXjGo2HyK9hy9WnB47vWVrzBFW4oUwigjrcsSkEnNjOwEUU3y7gHfH9OHMmMb8Sau3BWIw/KzXvllZSrTn4LHVzbKjx1yZyDMYNVG17jFG0ElNra0s76NoAA30uBclmRf0ZZCUyezE6jkfvbNsRiwng7TPZ1j49C7hax6KLRyLVATsHU1q2zwQwUMSCXXy3Jq7IeezqVTKBTeyaKAbZ90YDoKfY051gr4AfQpYNrOGW9W6yzpIPqvLZ8UZoFeDleiPDwHUIfhRfplzCHuL9AiX4odjZ0SNTe2S/iKdSVU7/1f3o5cFVjzz1kdJAY/hjrofR7VTyy6CPJZ5xKzZtl/1YcACy/gCE4Ubdmg3RWbeKGNNP3iB8b8MK+qdL0iFwTLV29iUgvkf5lS23JRO0y4L5AyYQe9fB+6MhhtpWXspKKcp2rMt+qrpCKBZEIny6rLzPtlue0oCwA8gFHeKGNwt5Icyqkk9L7gzCnabYDbkssXTUGCyluaXjX1yvxggZWmb/Pef1u3o1dfPoXIuByqaEfqM6Z++UeUgMLR7bWtoeuyHAi0l3tT5/PnDMJqzTNQ+Jp4dvTdiclTA7TlITYrGDgdl1xEus8Jw
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(39860400002)(366004)(136003)(346002)(2906002)(26005)(1076003)(6486002)(91956017)(8676002)(71200400001)(86362001)(8936002)(5660300002)(38100700002)(83380400001)(66476007)(6512007)(36756003)(122000001)(966005)(38070700005)(316002)(478600001)(44832011)(4326008)(64756008)(66946007)(76116006)(186003)(6666004)(66556008)(110136005)(66446008)(6506007)(41300700001)(2616005);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 9SeXAtpYtdtdBcZ1F5p6wLGRnCyPxpTUq54FYitIQCrRHt7BAkVb58XgoyEkIMHn47mxop7Z+ukL6IjcQCj9uStCW6tshkVyNCfOqjtAzeiixACDVOa+ncfhYusSO+wOvnWWpczXzl7gO7JvPl4s79Ids5vfkf3bDCB1aoV5R2tGla2Dn+4Li3mDPSiDCk/IZuJXKlgo+cLBRE6gLID/132SCUJpUtc/36Q9zvCdexYdefdZjK4g2mIBRDuRNigMvaq18gYpC3718v8Hv8jmxALbOvgq7S/b8V/RQJhbS7i7IieAOI0jeUXP0tZQCbPwe5pkRZzv1ZerboZmZeC5bW4+JxFQbz8nkP/C7gTK2GxLCDiJxD4lg0GGIIk0rGZa5CA/1QUDEhmsewYk7W5UrtJb1t5fy0rjc3SxPlceA7OcWsaH8l2DxZkftv/+ObiMMe6SbsvCXsmjilmwb5tFrqLb3HisEpHmnDz/7248Cu7MqtjdXSoSh8I+pZlpUCGrpLbySdKzhvRFZzHkDvYQhEWE8ZsGL6X5cRTgq0ezAaYsg9Y26yHhqT81lOuMudJ3oBBFjS36ZTgcR/7muCe4xu5tc6rCkI+ylaQ0anm55S9rCcgtdQHlU+WWBlCUaAGp467v6MvceVmJMgAU2cKj/6fY9hRkHcPNq+jujFL9BRcrkhvs7czL7RELillJCKpkjMt7RQiRFRz0pROr0C22xDQ6aUNBpI+pXdePZ5IMkRRx86P5WIn0AEp/vHZwehOXy/MWUUYkLrd6lXgbVJbv3aGbE56XzqPNW8nz+XmSKfeRGxF5JjiXpwOK+FuhrxvYUDauYFNpXZ51/peSL+w6eUtOR8nGUR8zglX5rUQT6FdzXmbTdpNh30VABeTZ8dkL
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(39860400002)(366004)(136003)(346002)(2906002)(26005)(1076003)(6486002)(91956017)(8676002)(71200400001)(86362001)(8936002)(5660300002)(38100700002)(83380400001)(66476007)(6512007)(36756003)(122000001)(966005)(38070700005)(316002)(478600001)(44832011)(30864003)(4326008)(64756008)(66946007)(76116006)(186003)(6666004)(66556008)(110136005)(66446008)(6506007)(41300700001)(2616005)(579004)(559001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?1lzrFBHdZFqtJhBHci3ifr/40s0rgWq+giQGy/tVRyMktxMMmk17GLIsvl?=
- =?iso-8859-1?Q?E8eWMrAI21e5nJMBX7kr7xCeP53tcUuxGby6ER+xIJx9zVB5WIzX1LR/kq?=
- =?iso-8859-1?Q?1sgkJQS/aF7t6AqoxvSKGVB/v/eQ3zgocmCiTKViNLwcNUEfjJ1silxNuK?=
- =?iso-8859-1?Q?94KXoVc8n+IJw9YzCckbqyLB0yrQlie98S3ZceRYd/0B4tNL5YoR2y4Rvc?=
- =?iso-8859-1?Q?nXwpD0DCNrBM24owI0F5w+9GRBqeFDHtvFvB4sveWx7w9QR1kAYR/hiDHa?=
- =?iso-8859-1?Q?t8LKp152xiFS6+blFNBT1lMx3u21ccrH9FwMCR/ifxAM69wyq/LwwrdUtu?=
- =?iso-8859-1?Q?PXkiRvw3t8bg6v+/2fGL+H2UzZuB3dKVRnNjdvXqTsnKP+XFOtECeMuIfT?=
- =?iso-8859-1?Q?PIHM7OzerOnrUEchaZBcddYOXjYgbKZIdjm3A0wmz61v5sYPlUbduOQxUk?=
- =?iso-8859-1?Q?x55fpKvPCehnbu4c+RavgYdMdqlTFr9YaOw8q3v6UQInD6bQBhMHvKhKas?=
- =?iso-8859-1?Q?4l6Rpnh4Fl0yda87v0dESSh+K1CRUnnZ45u7+lOgxdo/ILJffpPlRyrUaj?=
- =?iso-8859-1?Q?RuXvdlN2yRURJiRCDiZ/5NAdpKPGGV4oEFBB31w+IfdeoXDH/bFj1UUSN+?=
- =?iso-8859-1?Q?fePRgeNQRqMfsPjFrRkSquhGpuV8FEQi1i/9COMB/G7y42HB0Rw240mT8R?=
- =?iso-8859-1?Q?HGZilAtVpFBbkiGLXisHPZvp6xLqc2814jF1ZKYabqV02luZIBhW1Z9Jd4?=
- =?iso-8859-1?Q?E0+52kpYmNS85Ef8bzC1yJFQ5KZjQLnH+B4Lc96aIs3ZMHUHwmsNkGZ/Na?=
- =?iso-8859-1?Q?2AUhnlWO1jVTjOEB67P3xhzcjygMJIQxfUmEgHWgi6kQZ58JRGnESgjpfs?=
- =?iso-8859-1?Q?lcg7WU65fKHDQ+hQV4EtYUm3X4IYptOx2eRlWvjopqLZ1cFGET0MX/+7lv?=
- =?iso-8859-1?Q?fHX1OeMA/3Uq8F8fSoxov7MXbsWb5fGt4g85q8lABHKHbJapW1mai8w2fU?=
- =?iso-8859-1?Q?TlvPU/9Fh3gVdvZEsx5RtZZhIX3i0GuH7/ueL1sysV58H+uaz7tmD0dg9x?=
- =?iso-8859-1?Q?nX7l+LRrs6ZPWKkav8pQ5JQY5cQT1O59kZKLVGEJ+eB7nGTmcxwaGQO3yn?=
- =?iso-8859-1?Q?tizXrs7XT0rko9kC1MAmBg5GqFpG/z8bSxmscOUva+UTCVLSwTyezQUiwl?=
- =?iso-8859-1?Q?7UPPaIxVZlTTBi4xQUHWTwbzE4+pIRTBAvbia4PkwFDx0uic4396ucRWvb?=
- =?iso-8859-1?Q?kBjyFkFilN//Ow+zChJhM3yfQo86pxSkbdciUN/pLeQ5Mf0YWMWvtqieQJ?=
- =?iso-8859-1?Q?1SI7vW9+7SqgJf7QP3blEqnkIDcx14XhaCB2yNc+n8C+IfmkRwQyuZKgv2?=
- =?iso-8859-1?Q?pnNf3qlV/pNZviEq9FY6PpDruq185/wkduZDann/nFQhsMG6Q16Dan3p7l?=
- =?iso-8859-1?Q?4LSYN7JkXuwEwLFiAFMECQxNzzYPoM/NN+Y44DHA+DOxaPS7NbDTW2dBge?=
- =?iso-8859-1?Q?ld5cWPoF+716wED3MDBGxT5stGHZ3g8mnl8kNEj5Z8k7XTqGs5sVEZ2yor?=
- =?iso-8859-1?Q?GG7hrJ8vuFTWKpdu5kiKZZO2eN0Q7ckjeyUiCeqyeMTXGarOtQl08ACeOT?=
- =?iso-8859-1?Q?2ZOglj/6byKFexs/OCTGjyyUsruVPvTdtWojK/rNA0po4saYPi1RBeLQ?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?dFIX5uzXNB0iTiVoP3Ngxub3nVHElIxP+YQ8Hu43L83gw3PP4++SojK2qy?=
+ =?iso-8859-1?Q?27auffn/s1pbJdlIMpBF/sdVwyCOQl9IObHS6600hviZJHb4/rDWqYeoNm?=
+ =?iso-8859-1?Q?yEvlUDqDAquxrSx1oXgCCwq0ZUTDinh7kpOzRmlvMNVpWLmPNzG92lx0NI?=
+ =?iso-8859-1?Q?qqK6HEdL+Ix7FC56gbwsd21pSGpXxYeGtCSqKbNkgh1vTW2782MSiq34Z5?=
+ =?iso-8859-1?Q?/vWHmcxQRjtc3u8Zwgd6sMZobMx/ygXaGdOmacRemWQCxcQHfNGQPJ5GOr?=
+ =?iso-8859-1?Q?5fFGwdnf3LVA3/K18H+aGW3Z72IaKClkXXNBaR0yZkxy5+Dlz4AmbhhTRx?=
+ =?iso-8859-1?Q?kz9GfQcklPiollEdIjE1Qhr1IgLhKJ1ZBcElW7ledV7QJxLioWEejDmatF?=
+ =?iso-8859-1?Q?I4zw+eaHK9bUkIvCecZI2YRnBlM10ziTcGYWNFMm0VKgjF7eAquqaJeNvr?=
+ =?iso-8859-1?Q?anIwg7oHtIdaChaL4LTPOBJrXxfb77kfdtD3cUniP2SYS4lnDsMIdaWXhN?=
+ =?iso-8859-1?Q?Wg/ie/hH3FfPoMlCguMB+33wvV92foCdnncnDtm4R87b25lJD1/8RsjiFO?=
+ =?iso-8859-1?Q?cAqQrBhrb+pCIZV8EWRbMzJfFCCoAo/sBKJ0hTUFLMKSlu1v5OjEshta1c?=
+ =?iso-8859-1?Q?tx3oDgUKX/XFlpxa7uEUffLoKk98JKgvGM9PKZBboRxlVfpfUxjpXUCEWR?=
+ =?iso-8859-1?Q?2PvY9rVHp/2ce3k2fRhh2VOgl77zPaoA3CLW0FrA6/LmoFE3U5MJQIA23R?=
+ =?iso-8859-1?Q?BHXs3BdW/vAWHtXygwLGSsxOoW/K/RylJmqjcnfx9OYPKaiVFtH7TLt02R?=
+ =?iso-8859-1?Q?xJfhmXKUarsdMzUjyHBkMQqV3soIQMEamEVdaPiSnL/Be09DhgNIhirBcC?=
+ =?iso-8859-1?Q?cPFnhVIPA6soFSGiMBpsJjh7/B2rd1+zXXtvNPJioZLVWJQOBjgitMxw10?=
+ =?iso-8859-1?Q?EvpzvjjSDZDDwC8CzOhWSpAtlrFdrA8UfykSTIbdvy6UItYldcm8nLzN3/?=
+ =?iso-8859-1?Q?E/TJDQfsu662UiZtWIinyKR8VtPXpwNqPVDV9D8JyU9PDc88OOCw7iKBG1?=
+ =?iso-8859-1?Q?iqcNaKA4p1NpBABmz3J2nlsPlSVeb+ALklb+JL6wzKlbUAvyBloFCXmqmG?=
+ =?iso-8859-1?Q?5qjGOk8SuL5Z0/ib3p7Ux11oHabcgMlAfPkTLjhtyW7mSjACrmybaOFu3U?=
+ =?iso-8859-1?Q?LrrCZhA3wPeT1sKhx9iQFjx2ddM93RWiJjFcAt90hiaSH+rDh+8Py95eCy?=
+ =?iso-8859-1?Q?Y9gchgxWykoC1r3+kpH/eF9CQwB4odFgA31f+Q4+lfdLFHjqPgMBImEqmT?=
+ =?iso-8859-1?Q?GUGZ4MplG2XpiFxQ3y/0wvudfa42Coo0xUInEH+Zse+vG6zFCiwG0DKQkt?=
+ =?iso-8859-1?Q?NJrAvoBIeYpwUMDr3py8ZSHeXi5rfILFo+OmHiuoIr3KSjZTBEGdbqP5oB?=
+ =?iso-8859-1?Q?Wa5ZBU50D10RSVCGEELOdSdtzIGAajZFA2JUW2dHjnU/9Vmp58DaJBFbbx?=
+ =?iso-8859-1?Q?TU8PtK27hGyaYsIjChqtq2b8XTt/H7lRh3N5hwc/n4JpEsOOIeqDPwlwsm?=
+ =?iso-8859-1?Q?XStBoviyKUX3dObrqzisBqPGdnv7E4ixo4I5t/vscPj2Aulw+3pbOlTmTE?=
+ =?iso-8859-1?Q?8QWq3tFWw1WeP1hRUy7OrFcZlUVkiNzKcHswZP5Q089ZU1lC+YwGhNkw?=
  =?iso-8859-1?Q?=3D=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -127,23 +125,23 @@ MIME-Version: 1.0
 X-OriginatorOrg: oracle.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed3b4bca-4245-4760-0395-08da69f60d10
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 02:17:49.5405
+X-MS-Exchange-CrossTenant-Network-Message-Id: 471e4292-c8c4-4a0c-30f5-08da69f60cba
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 02:17:49.1812
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Oi1HpsQGmy3vpFtAib4iawXEpLBLcZJYuPHMJyUTs5UAJCgu3x18T8tnFzpVXGszCEAEYUUvP4yZ0nK4KcBTbA==
+X-MS-Exchange-CrossTenant-userprincipalname: sSxOIH0cOwlO/RL0kPi8c32DClanFU8B8tYv+1nwS4ych1ANKtP38hPHP4ncyi4rH7u5YO1e5woUNIYm2DAa8Q==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6243
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-19_10,2022-07-19_01,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 phishscore=0 mlxlogscore=935 suspectscore=0 adultscore=0
+ mlxscore=0 phishscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
  definitions=main-2207200008
-X-Proofpoint-GUID: 42qYb-aen_zRfJwRUmMVBxy0yN_WRNDc
-X-Proofpoint-ORIG-GUID: 42qYb-aen_zRfJwRUmMVBxy0yN_WRNDc
+X-Proofpoint-GUID: 5IsSRYVeBvhDEGlDQ6Wxl4FfpSohvKw3
+X-Proofpoint-ORIG-GUID: 5IsSRYVeBvhDEGlDQ6Wxl4FfpSohvKw3
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -156,18 +154,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 
-Only write to the maple tree if we are not inserting or the insert isn't
-going to overwrite the area to clear.  This avoids spanning writes and
-node coealescing when unnecessary.
+Remove the RB tree and start using the maple tree for vm_area_struct
+tracking.
 
-The change requires a custom search for the linked list addition to find
-the correct VMA for the prev link.
+Drop validate_mm() calls in expand_upwards() and expand_downwards() as the
+lock is not held.
 
-Link: https://lkml.kernel.org/r/20220504011345.662299-3-Liam.Howlett@oracle=
+Link: https://lkml.kernel.org/r/20220504011345.662299-2-Liam.Howlett@oracle=
 .com
-Link: https://lkml.kernel.org/r/20220621204632.3370049-19-Liam.Howlett@orac=
+Link: https://lkml.kernel.org/r/20220621204632.3370049-18-Liam.Howlett@orac=
 le.com
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: David Howells <dhowells@redhat.com>
 Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
@@ -177,90 +174,1325 @@ Cc: Will Deacon <will@kernel.org>
 Cc: Davidlohr Bueso <dave@stgolabs.net>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- mm/mmap.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+ arch/x86/kernel/tboot.c    |   1 -
+ drivers/firmware/efi/efi.c |   1 -
+ include/linux/mm.h         |   2 -
+ include/linux/mm_types.h   |  14 -
+ kernel/fork.c              |   8 -
+ mm/init-mm.c               |   2 -
+ mm/mmap.c                  | 506 ++++++++-----------------------------
+ mm/nommu.c                 |  87 ++-----
+ mm/util.c                  |  10 +-
+ 9 files changed, 144 insertions(+), 487 deletions(-)
 
+diff --git a/arch/x86/kernel/tboot.c b/arch/x86/kernel/tboot.c
+index 71c54ad3868a..3b388330a106 100644
+--- a/arch/x86/kernel/tboot.c
++++ b/arch/x86/kernel/tboot.c
+@@ -96,7 +96,6 @@ void __init tboot_probe(void)
+=20
+ static pgd_t *tboot_pg_dir;
+ static struct mm_struct tboot_mm =3D {
+-	.mm_rb          =3D RB_ROOT,
+ 	.mm_mt          =3D MTREE_INIT_EXT(mm_mt, MM_MT_FLAGS, tboot_mm.mmap_lock=
+),
+ 	.pgd            =3D swapper_pg_dir,
+ 	.mm_users       =3D ATOMIC_INIT(2),
+diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+index 1eddef189d68..07677fde00af 100644
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -57,7 +57,6 @@ static unsigned long __initdata mem_reserve =3D EFI_INVAL=
+ID_TABLE_ADDR;
+ static unsigned long __initdata rt_prop =3D EFI_INVALID_TABLE_ADDR;
+=20
+ struct mm_struct efi_mm =3D {
+-	.mm_rb			=3D RB_ROOT,
+ 	.mm_mt			=3D MTREE_INIT_EXT(mm_mt, MM_MT_FLAGS, efi_mm.mmap_lock),
+ 	.mm_users		=3D ATOMIC_INIT(2),
+ 	.mm_count		=3D ATOMIC_INIT(1),
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 60045508a518..051b503c3fdb 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2668,8 +2668,6 @@ extern int __split_vma(struct mm_struct *, struct vm_=
+area_struct *,
+ extern int split_vma(struct mm_struct *, struct vm_area_struct *,
+ 	unsigned long addr, int new_below);
+ extern int insert_vm_struct(struct mm_struct *, struct vm_area_struct *);
+-extern void __vma_link_rb(struct mm_struct *, struct vm_area_struct *,
+-	struct rb_node **, struct rb_node *);
+ extern void unlink_file_vma(struct vm_area_struct *);
+ extern struct vm_area_struct *copy_vma(struct vm_area_struct **,
+ 	unsigned long addr, unsigned long len, pgoff_t pgoff,
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 47fbff4d4502..8352689457a2 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -405,19 +405,6 @@ struct vm_area_struct {
+=20
+ 	/* linked list of VM areas per task, sorted by address */
+ 	struct vm_area_struct *vm_next, *vm_prev;
+-
+-	struct rb_node vm_rb;
+-
+-	/*
+-	 * Largest free memory gap in bytes to the left of this VMA.
+-	 * Either between this VMA and vma->vm_prev, or between one of the
+-	 * VMAs below us in the VMA rbtree and its ->vm_prev. This helps
+-	 * get_unmapped_area find a free area of the right size.
+-	 */
+-	unsigned long rb_subtree_gap;
+-
+-	/* Second cache line starts here. */
+-
+ 	struct mm_struct *vm_mm;	/* The address space we belong to. */
+=20
+ 	/*
+@@ -483,7 +470,6 @@ struct mm_struct {
+ 	struct {
+ 		struct vm_area_struct *mmap;		/* list of VMAs */
+ 		struct maple_tree mm_mt;
+-		struct rb_root mm_rb;
+ 		u64 vmacache_seqnum;                   /* per-thread vmacache */
+ #ifdef CONFIG_MMU
+ 		unsigned long (*get_unmapped_area) (struct file *filp,
+diff --git a/kernel/fork.c b/kernel/fork.c
+index f575a3bead0e..9f2802eff361 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -581,7 +581,6 @@ static __latent_entropy int dup_mmap(struct mm_struct *=
+mm,
+ 					struct mm_struct *oldmm)
+ {
+ 	struct vm_area_struct *mpnt, *tmp, *prev, **pprev;
+-	struct rb_node **rb_link, *rb_parent;
+ 	int retval;
+ 	unsigned long charge =3D 0;
+ 	LIST_HEAD(uf);
+@@ -608,8 +607,6 @@ static __latent_entropy int dup_mmap(struct mm_struct *=
+mm,
+ 	mm->exec_vm =3D oldmm->exec_vm;
+ 	mm->stack_vm =3D oldmm->stack_vm;
+=20
+-	rb_link =3D &mm->mm_rb.rb_node;
+-	rb_parent =3D NULL;
+ 	pprev =3D &mm->mmap;
+ 	retval =3D ksm_fork(mm, oldmm);
+ 	if (retval)
+@@ -701,10 +698,6 @@ static __latent_entropy int dup_mmap(struct mm_struct =
+*mm,
+ 		tmp->vm_prev =3D prev;
+ 		prev =3D tmp;
+=20
+-		__vma_link_rb(mm, tmp, rb_link, rb_parent);
+-		rb_link =3D &tmp->vm_rb.rb_right;
+-		rb_parent =3D &tmp->vm_rb;
+-
+ 		/* Link the vma into the MT */
+ 		mas.index =3D tmp->vm_start;
+ 		mas.last =3D tmp->vm_end - 1;
+@@ -1128,7 +1121,6 @@ static struct mm_struct *mm_init(struct mm_struct *mm=
+, struct task_struct *p,
+ 	struct user_namespace *user_ns)
+ {
+ 	mm->mmap =3D NULL;
+-	mm->mm_rb =3D RB_ROOT;
+ 	mt_init_flags(&mm->mm_mt, MM_MT_FLAGS);
+ 	mt_set_external_lock(&mm->mm_mt, &mm->mmap_lock);
+ 	mm->vmacache_seqnum =3D 0;
+diff --git a/mm/init-mm.c b/mm/init-mm.c
+index b912b0f2eced..c9327abb771c 100644
+--- a/mm/init-mm.c
++++ b/mm/init-mm.c
+@@ -1,6 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/mm_types.h>
+-#include <linux/rbtree.h>
+ #include <linux/maple_tree.h>
+ #include <linux/rwsem.h>
+ #include <linux/spinlock.h>
+@@ -29,7 +28,6 @@
+  * and size this cpu_bitmask to NR_CPUS.
+  */
+ struct mm_struct init_mm =3D {
+-	.mm_rb		=3D RB_ROOT,
+ 	.mm_mt		=3D MTREE_INIT_EXT(mm_mt, MM_MT_FLAGS, init_mm.mmap_lock),
+ 	.pgd		=3D swapper_pg_dir,
+ 	.mm_users	=3D ATOMIC_INIT(2),
 diff --git a/mm/mmap.c b/mm/mmap.c
-index 71713c661db0..02d2fd90af80 100644
+index ad90839f7f1b..71713c661db0 100644
 --- a/mm/mmap.c
 +++ b/mm/mmap.c
-@@ -614,11 +614,11 @@ static int vma_link(struct mm_struct *mm, struct vm_a=
+@@ -39,7 +39,6 @@
+ #include <linux/audit.h>
+ #include <linux/khugepaged.h>
+ #include <linux/uprobes.h>
+-#include <linux/rbtree_augmented.h>
+ #include <linux/notifier.h>
+ #include <linux/memory.h>
+ #include <linux/printk.h>
+@@ -294,93 +293,6 @@ SYSCALL_DEFINE1(brk, unsigned long, brk)
+ 	return origbrk;
+ }
+=20
+-static inline unsigned long vma_compute_gap(struct vm_area_struct *vma)
+-{
+-	unsigned long gap, prev_end;
+-
+-	/*
+-	 * Note: in the rare case of a VM_GROWSDOWN above a VM_GROWSUP, we
+-	 * allow two stack_guard_gaps between them here, and when choosing
+-	 * an unmapped area; whereas when expanding we only require one.
+-	 * That's a little inconsistent, but keeps the code here simpler.
+-	 */
+-	gap =3D vm_start_gap(vma);
+-	if (vma->vm_prev) {
+-		prev_end =3D vm_end_gap(vma->vm_prev);
+-		if (gap > prev_end)
+-			gap -=3D prev_end;
+-		else
+-			gap =3D 0;
+-	}
+-	return gap;
+-}
+-
+-#ifdef CONFIG_DEBUG_VM_RB
+-static unsigned long vma_compute_subtree_gap(struct vm_area_struct *vma)
+-{
+-	unsigned long max =3D vma_compute_gap(vma), subtree_gap;
+-	if (vma->vm_rb.rb_left) {
+-		subtree_gap =3D rb_entry(vma->vm_rb.rb_left,
+-				struct vm_area_struct, vm_rb)->rb_subtree_gap;
+-		if (subtree_gap > max)
+-			max =3D subtree_gap;
+-	}
+-	if (vma->vm_rb.rb_right) {
+-		subtree_gap =3D rb_entry(vma->vm_rb.rb_right,
+-				struct vm_area_struct, vm_rb)->rb_subtree_gap;
+-		if (subtree_gap > max)
+-			max =3D subtree_gap;
+-	}
+-	return max;
+-}
+-
+-static int browse_rb(struct mm_struct *mm)
+-{
+-	struct rb_root *root =3D &mm->mm_rb;
+-	int i =3D 0, j, bug =3D 0;
+-	struct rb_node *nd, *pn =3D NULL;
+-	unsigned long prev =3D 0, pend =3D 0;
+-
+-	for (nd =3D rb_first(root); nd; nd =3D rb_next(nd)) {
+-		struct vm_area_struct *vma;
+-		vma =3D rb_entry(nd, struct vm_area_struct, vm_rb);
+-		if (vma->vm_start < prev) {
+-			pr_emerg("vm_start %lx < prev %lx\n",
+-				  vma->vm_start, prev);
+-			bug =3D 1;
+-		}
+-		if (vma->vm_start < pend) {
+-			pr_emerg("vm_start %lx < pend %lx\n",
+-				  vma->vm_start, pend);
+-			bug =3D 1;
+-		}
+-		if (vma->vm_start > vma->vm_end) {
+-			pr_emerg("vm_start %lx > vm_end %lx\n",
+-				  vma->vm_start, vma->vm_end);
+-			bug =3D 1;
+-		}
+-		spin_lock(&mm->page_table_lock);
+-		if (vma->rb_subtree_gap !=3D vma_compute_subtree_gap(vma)) {
+-			pr_emerg("free gap %lx, correct %lx\n",
+-			       vma->rb_subtree_gap,
+-			       vma_compute_subtree_gap(vma));
+-			bug =3D 1;
+-		}
+-		spin_unlock(&mm->page_table_lock);
+-		i++;
+-		pn =3D nd;
+-		prev =3D vma->vm_start;
+-		pend =3D vma->vm_end;
+-	}
+-	j =3D 0;
+-	for (nd =3D pn; nd; nd =3D rb_prev(nd))
+-		j++;
+-	if (i !=3D j) {
+-		pr_emerg("backwards %d, forwards %d\n", j, i);
+-		bug =3D 1;
+-	}
+-	return bug ? -1 : i;
+-}
+ #if defined(CONFIG_DEBUG_VM_MAPLE_TREE)
+ extern void mt_validate(struct maple_tree *mt);
+ extern void mt_dump(const struct maple_tree *mt);
+@@ -408,19 +320,25 @@ static void validate_mm_mt(struct mm_struct *mm)
+ 		    (vma->vm_end - 1 !=3D mas.last)) {
+ 			pr_emerg("issue in %s\n", current->comm);
+ 			dump_stack();
+-#ifdef CONFIG_DEBUG_VM
+ 			dump_vma(vma_mt);
+-			pr_emerg("and next in rb\n");
++			pr_emerg("and vm_next\n");
+ 			dump_vma(vma->vm_next);
+-#endif
+ 			pr_emerg("mt piv: %p %lu - %lu\n", vma_mt,
+ 				 mas.index, mas.last);
+ 			pr_emerg("mt vma: %p %lu - %lu\n", vma_mt,
+ 				 vma_mt->vm_start, vma_mt->vm_end);
+-			pr_emerg("rb vma: %p %lu - %lu\n", vma,
++			if (vma->vm_prev) {
++				pr_emerg("ll prev: %p %lu - %lu\n",
++					 vma->vm_prev, vma->vm_prev->vm_start,
++					 vma->vm_prev->vm_end);
++			}
++			pr_emerg("ll vma: %p %lu - %lu\n", vma,
+ 				 vma->vm_start, vma->vm_end);
+-			pr_emerg("rb->next =3D %p %lu - %lu\n", vma->vm_next,
+-					vma->vm_next->vm_start, vma->vm_next->vm_end);
++			if (vma->vm_next) {
++				pr_emerg("ll next: %p %lu - %lu\n",
++					 vma->vm_next, vma->vm_next->vm_start,
++					 vma->vm_next->vm_end);
++			}
+=20
+ 			mt_dump(mas.tree);
+ 			if (vma_mt->vm_end !=3D mas.last + 1) {
+@@ -443,21 +361,6 @@ static void validate_mm_mt(struct mm_struct *mm)
+ 	}
+ 	VM_BUG_ON(vma);
+ }
+-#else
+-#define validate_mm_mt(root) do { } while (0)
+-#endif
+-static void validate_mm_rb(struct rb_root *root, struct vm_area_struct *ig=
+nore)
+-{
+-	struct rb_node *nd;
+-
+-	for (nd =3D rb_first(root); nd; nd =3D rb_next(nd)) {
+-		struct vm_area_struct *vma;
+-		vma =3D rb_entry(nd, struct vm_area_struct, vm_rb);
+-		VM_BUG_ON_VMA(vma !=3D ignore &&
+-			vma->rb_subtree_gap !=3D vma_compute_subtree_gap(vma),
+-			vma);
+-	}
+-}
+=20
+ static void validate_mm(struct mm_struct *mm)
+ {
+@@ -466,7 +369,10 @@ static void validate_mm(struct mm_struct *mm)
+ 	unsigned long highest_address =3D 0;
+ 	struct vm_area_struct *vma =3D mm->mmap;
+=20
++	validate_mm_mt(mm);
++
+ 	while (vma) {
++#ifdef CONFIG_DEBUG_VM_RB
+ 		struct anon_vma *anon_vma =3D vma->anon_vma;
+ 		struct anon_vma_chain *avc;
+=20
+@@ -476,6 +382,7 @@ static void validate_mm(struct mm_struct *mm)
+ 				anon_vma_interval_tree_verify(avc);
+ 			anon_vma_unlock_read(anon_vma);
+ 		}
++#endif
+=20
+ 		highest_address =3D vm_end_gap(vma);
+ 		vma =3D vma->vm_next;
+@@ -490,80 +397,13 @@ static void validate_mm(struct mm_struct *mm)
+ 			  mm->highest_vm_end, highest_address);
+ 		bug =3D 1;
+ 	}
+-	i =3D browse_rb(mm);
+-	if (i !=3D mm->map_count) {
+-		if (i !=3D -1)
+-			pr_emerg("map_count %d rb %d\n", mm->map_count, i);
+-		bug =3D 1;
+-	}
+ 	VM_BUG_ON_MM(bug, mm);
+ }
+-#else
+-#define validate_mm_rb(root, ignore) do { } while (0)
++
++#else /* !CONFIG_DEBUG_VM_MAPLE_TREE */
+ #define validate_mm_mt(root) do { } while (0)
+ #define validate_mm(mm) do { } while (0)
+-#endif
+-
+-RB_DECLARE_CALLBACKS_MAX(static, vma_gap_callbacks,
+-			 struct vm_area_struct, vm_rb,
+-			 unsigned long, rb_subtree_gap, vma_compute_gap)
+-
+-/*
+- * Update augmented rbtree rb_subtree_gap values after vma->vm_start or
+- * vma->vm_prev->vm_end values changed, without modifying the vma's positi=
+on
+- * in the rbtree.
+- */
+-static void vma_gap_update(struct vm_area_struct *vma)
+-{
+-	/*
+-	 * As it turns out, RB_DECLARE_CALLBACKS_MAX() already created
+-	 * a callback function that does exactly what we want.
+-	 */
+-	vma_gap_callbacks_propagate(&vma->vm_rb, NULL);
+-}
+-
+-static inline void vma_rb_insert(struct vm_area_struct *vma,
+-				 struct rb_root *root)
+-{
+-	/* All rb_subtree_gap values must be consistent prior to insertion */
+-	validate_mm_rb(root, NULL);
+-
+-	rb_insert_augmented(&vma->vm_rb, root, &vma_gap_callbacks);
+-}
+-
+-static void __vma_rb_erase(struct vm_area_struct *vma, struct rb_root *roo=
+t)
+-{
+-	/*
+-	 * Note rb_erase_augmented is a fairly large inline function,
+-	 * so make sure we instantiate it only once with our desired
+-	 * augmented rbtree callbacks.
+-	 */
+-	rb_erase_augmented(&vma->vm_rb, root, &vma_gap_callbacks);
+-}
+-
+-static __always_inline void vma_rb_erase_ignore(struct vm_area_struct *vma=
+,
+-						struct rb_root *root,
+-						struct vm_area_struct *ignore)
+-{
+-	/*
+-	 * All rb_subtree_gap values must be consistent prior to erase,
+-	 * with the possible exception of
+-	 *
+-	 * a. the "next" vma being erased if next->vm_start was reduced in
+-	 *    __vma_adjust() -> __vma_unlink()
+-	 * b. the vma being erased in detach_vmas_to_be_unmapped() ->
+-	 *    vma_rb_erase()
+-	 */
+-	validate_mm_rb(root, ignore);
+-
+-	__vma_rb_erase(vma, root);
+-}
+-
+-static __always_inline void vma_rb_erase(struct vm_area_struct *vma,
+-					 struct rb_root *root)
+-{
+-	vma_rb_erase_ignore(vma, root, vma);
+-}
++#endif /* CONFIG_DEBUG_VM_MAPLE_TREE */
+=20
+ /*
+  * vma has some anon_vma assigned, and is already inserted on that
+@@ -597,39 +437,26 @@ anon_vma_interval_tree_post_update_vma(struct vm_area=
+_struct *vma)
+ 		anon_vma_interval_tree_insert(avc, &avc->anon_vma->rb_root);
+ }
+=20
+-static int find_vma_links(struct mm_struct *mm, unsigned long addr,
+-		unsigned long end, struct vm_area_struct **pprev,
+-		struct rb_node ***rb_link, struct rb_node **rb_parent)
++/*
++ * range_has_overlap() - Check the @start - @end range for overlapping VMA=
+s and
++ * sets up a pointer to the previous VMA
++ * @mm: the mm struct
++ * @start: the start address of the range
++ * @end: the end address of the range
++ * @pprev: the pointer to the pointer of the previous VMA
++ *
++ * Returns: True if there is an overlapping VMA, false otherwise
++ */
++static inline
++bool range_has_overlap(struct mm_struct *mm, unsigned long start,
++		       unsigned long end, struct vm_area_struct **pprev)
+ {
+-	struct rb_node **__rb_link, *__rb_parent, *rb_prev;
+-
+-	mmap_assert_locked(mm);
+-	__rb_link =3D &mm->mm_rb.rb_node;
+-	rb_prev =3D __rb_parent =3D NULL;
+-
+-	while (*__rb_link) {
+-		struct vm_area_struct *vma_tmp;
+-
+-		__rb_parent =3D *__rb_link;
+-		vma_tmp =3D rb_entry(__rb_parent, struct vm_area_struct, vm_rb);
++	struct vm_area_struct *existing;
+=20
+-		if (vma_tmp->vm_end > addr) {
+-			/* Fail if an existing vma overlaps the area */
+-			if (vma_tmp->vm_start < end)
+-				return -ENOMEM;
+-			__rb_link =3D &__rb_parent->rb_left;
+-		} else {
+-			rb_prev =3D __rb_parent;
+-			__rb_link =3D &__rb_parent->rb_right;
+-		}
+-	}
+-
+-	*pprev =3D NULL;
+-	if (rb_prev)
+-		*pprev =3D rb_entry(rb_prev, struct vm_area_struct, vm_rb);
+-	*rb_link =3D __rb_link;
+-	*rb_parent =3D __rb_parent;
+-	return 0;
++	MA_STATE(mas, &mm->mm_mt, start, start);
++	existing =3D mas_find(&mas, end - 1);
++	*pprev =3D mas_prev(&mas, 0);
++	return existing ? true : false;
+ }
+=20
+ /*
+@@ -656,8 +483,6 @@ static inline struct vm_area_struct *__vma_next(struct =
+mm_struct *mm,
+  * @start: The start of the range.
+  * @len: The length of the range.
+  * @pprev: pointer to the pointer that will be set to previous vm_area_str=
+uct
+- * @rb_link: the rb_node
+- * @rb_parent: the parent rb_node
+  *
+  * Find all the vm_area_struct that overlap from @start to
+  * @end and munmap them.  Set @pprev to the previous vm_area_struct.
+@@ -666,14 +491,11 @@ static inline struct vm_area_struct *__vma_next(struc=
+t mm_struct *mm,
+  */
+ static inline int
+ munmap_vma_range(struct mm_struct *mm, unsigned long start, unsigned long =
+len,
+-		 struct vm_area_struct **pprev, struct rb_node ***link,
+-		 struct rb_node **parent, struct list_head *uf)
++		 struct vm_area_struct **pprev, struct list_head *uf)
+ {
+-
+-	while (find_vma_links(mm, start, start + len, pprev, link, parent))
++	while (range_has_overlap(mm, start, start + len, pprev))
+ 		if (do_munmap(mm, start, len, uf))
+ 			return -ENOMEM;
+-
+ 	return 0;
+ }
+=20
+@@ -694,30 +516,6 @@ static unsigned long count_vma_pages_range(struct mm_s=
+truct *mm,
+ 	return nr_pages;
+ }
+=20
+-void __vma_link_rb(struct mm_struct *mm, struct vm_area_struct *vma,
+-		struct rb_node **rb_link, struct rb_node *rb_parent)
+-{
+-	/* Update tracking information for the gap following the new vma. */
+-	if (vma->vm_next)
+-		vma_gap_update(vma->vm_next);
+-	else
+-		mm->highest_vm_end =3D vm_end_gap(vma);
+-
+-	/*
+-	 * vma->vm_prev wasn't known when we followed the rbtree to find the
+-	 * correct insertion point for that vma. As a result, we could not
+-	 * update the vma vm_rb parents rb_subtree_gap values on the way down.
+-	 * So, we first insert the vma with a zero rb_subtree_gap value
+-	 * (to be consistent with what we did on the way down), and then
+-	 * immediately update the gap to the correct value. Finally we
+-	 * rebalance the rbtree after all augmented values have been set.
+-	 */
+-	rb_link_node(&vma->vm_rb, rb_parent, rb_link);
+-	vma->rb_subtree_gap =3D 0;
+-	vma_gap_update(vma);
+-	vma_rb_insert(vma, &mm->mm_rb);
+-}
+-
+ static void __vma_link_file(struct vm_area_struct *vma)
+ {
+ 	struct file *file;
+@@ -785,18 +583,8 @@ static inline void vma_mas_szero(struct ma_state *mas,=
+ unsigned long start,
+ 	mas_store_prealloc(mas, NULL);
+ }
+=20
+-static void
+-__vma_link(struct mm_struct *mm, struct vm_area_struct *vma,
+-	struct vm_area_struct *prev, struct rb_node **rb_link,
+-	struct rb_node *rb_parent)
+-{
+-	__vma_link_list(mm, vma, prev);
+-	__vma_link_rb(mm, vma, rb_link, rb_parent);
+-}
+-
+ static int vma_link(struct mm_struct *mm, struct vm_area_struct *vma,
+-			struct vm_area_struct *prev, struct rb_node **rb_link,
+-			struct rb_node *rb_parent)
++			struct vm_area_struct *prev)
+ {
+ 	MA_STATE(mas, &mm->mm_mt, 0, 0);
+ 	struct address_space *mapping =3D NULL;
+@@ -810,7 +598,7 @@ static int vma_link(struct mm_struct *mm, struct vm_are=
+a_struct *vma,
+ 	}
+=20
+ 	vma_mas_store(vma, &mas);
+-	__vma_link(mm, vma, prev, rb_link, rb_parent);
++	__vma_link_list(mm, vma, prev);
+ 	__vma_link_file(vma);
+=20
+ 	if (mapping)
+@@ -823,34 +611,20 @@ static int vma_link(struct mm_struct *mm, struct vm_a=
 rea_struct *vma,
-  * mm's list and the mm tree.  It has already been inserted into the inter=
+=20
+ /*
+  * Helper for vma_adjust() in the split_vma insert case: insert a vma into=
+ the
+- * mm's list and rbtree.  It has already been inserted into the interval t=
+ree.
++ * mm's list and the mm tree.  It has already been inserted into the inter=
 val tree.
   */
  static void __insert_vm_struct(struct mm_struct *mm, struct ma_state *mas,
--			       struct vm_area_struct *vma)
-+		struct vm_area_struct *vma, unsigned long location)
+ 			       struct vm_area_struct *vma)
  {
  	struct vm_area_struct *prev;
+-	struct rb_node **rb_link, *rb_parent;
+-
+-	if (find_vma_links(mm, vma->vm_start, vma->vm_end,
+-			   &prev, &rb_link, &rb_parent))
+-		BUG();
 =20
--	mas_set(mas, vma->vm_start);
-+	mas_set(mas, location);
- 	prev =3D mas_prev(mas, 0);
++	mas_set(mas, vma->vm_start);
++	prev =3D mas_prev(mas, 0);
  	vma_mas_store(vma, mas);
  	__vma_link_list(mm, vma, prev);
-@@ -648,6 +648,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned l=
-ong start,
+-	__vma_link_rb(mm, vma, rb_link, rb_parent);
+ 	mm->map_count++;
+ }
+=20
+-static __always_inline void __vma_unlink(struct mm_struct *mm,
+-						struct vm_area_struct *vma,
+-						struct vm_area_struct *ignore)
+-{
+-	vma_rb_erase_ignore(vma, &mm->mm_rb, ignore);
+-	__vma_unlink_list(mm, vma);
+-	/* Kill the cache */
+-	vmacache_invalidate(mm);
+-}
+-
+ /*
+  * We cannot adjust vm_start, vm_end, vm_pgoff fields of a vma that
+  * is already present in an i_mmap tree without adjusting the tree.
+@@ -863,21 +637,18 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned=
+ long start,
+ 	struct vm_area_struct *expand)
+ {
+ 	struct mm_struct *mm =3D vma->vm_mm;
+-	struct vm_area_struct *next =3D vma->vm_next, *orig_vma =3D vma;
+-	struct vm_area_struct *next_next;
++	struct vm_area_struct *next_next, *next =3D find_vma(mm, vma->vm_end);
++	struct vm_area_struct *orig_vma =3D vma;
+ 	struct address_space *mapping =3D NULL;
+ 	struct rb_root_cached *root =3D NULL;
+ 	struct anon_vma *anon_vma =3D NULL;
+ 	struct file *file =3D vma->vm_file;
+-	bool start_changed =3D false, end_changed =3D false;
++	bool vma_changed =3D false;
+ 	long adjust_next =3D 0;
  	int remove_next =3D 0;
  	MA_STATE(mas, &mm->mm_mt, 0, 0);
  	struct vm_area_struct *exporter =3D NULL, *importer =3D NULL;
-+	unsigned long ll_prev =3D vma->vm_start; /* linked list prev. */
 =20
+-	validate_mm(mm);
+-	validate_mm_mt(mm);
+-
  	if (next && !insert) {
  		if (end >=3D next->vm_end) {
-@@ -775,15 +776,27 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned=
- long start,
+ 			/*
+@@ -1004,21 +775,21 @@ int __vma_adjust(struct vm_area_struct *vma, unsigne=
+d long start,
  	}
 =20
  	if (start !=3D vma->vm_start) {
--		if (vma->vm_start < start)
-+		if ((vma->vm_start < start) &&
-+		    (!insert || (insert->vm_end !=3D start))) {
- 			vma_mas_szero(&mas, vma->vm_start, start);
--		vma_changed =3D true;
-+			VM_WARN_ON(insert && insert->vm_start > vma->vm_start);
-+		} else {
-+			vma_changed =3D true;
-+		}
+-		unsigned long old_start =3D vma->vm_start;
++		if (vma->vm_start < start)
++			vma_mas_szero(&mas, vma->vm_start, start);
++		vma_changed =3D true;
  		vma->vm_start =3D start;
+-		if (old_start < start)
+-			vma_mas_szero(&mas, old_start, start);
+-		start_changed =3D true;
  	}
  	if (end !=3D vma->vm_end) {
--		if (vma->vm_end > end)
--			vma_mas_szero(&mas, end, vma->vm_end);
--		vma_changed =3D true;
-+		if (vma->vm_end > end) {
-+			if (!insert || (insert->vm_start !=3D end)) {
-+				vma_mas_szero(&mas, end, vma->vm_end);
-+				VM_WARN_ON(insert &&
-+					   insert->vm_end < vma->vm_end);
-+			} else if (insert->vm_start =3D=3D end) {
-+				ll_prev =3D vma->vm_end;
-+			}
-+		} else {
-+			vma_changed =3D true;
-+		}
+-		unsigned long old_end =3D vma->vm_end;
++		if (vma->vm_end > end)
++			vma_mas_szero(&mas, end, vma->vm_end);
++		vma_changed =3D true;
  		vma->vm_end =3D end;
- 		if (!next)
- 			mm->highest_vm_end =3D vm_end_gap(vma);
-@@ -830,7 +843,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned l=
-ong start,
- 		 * us to insert it before dropping the locks
+-		if (old_end > end)
+-			vma_mas_szero(&mas, end, old_end);
+-		end_changed =3D true;
++		if (!next)
++			mm->highest_vm_end =3D vm_end_gap(vma);
+ 	}
+=20
+-	if (end_changed || start_changed)
++	if (vma_changed)
+ 		vma_mas_store(vma, &mas);
+=20
+ 	vma->vm_pgoff =3D pgoff;
+@@ -1042,22 +813,12 @@ int __vma_adjust(struct vm_area_struct *vma, unsigne=
+d long start,
+ 		 * Since we have expanded over this vma, the maple tree will
+ 		 * have overwritten by storing the value
+ 		 */
+-		if (remove_next !=3D 3) {
+-			__vma_unlink(mm, next, next);
+-			if (remove_next =3D=3D 2)
+-				__vma_unlink(mm, next_next, next_next);
+-		} else {
+-			/*
+-			 * vma is not before next if they've been
+-			 * swapped.
+-			 *
+-			 * pre-swap() next->vm_start was reduced so
+-			 * tell validate_mm_rb to ignore pre-swap()
+-			 * "next" (which is stored in post-swap()
+-			 * "vma").
+-			 */
+-			__vma_unlink(mm, next, vma);
+-		}
++		__vma_unlink_list(mm, next);
++		if (remove_next =3D=3D 2)
++			__vma_unlink_list(mm, next_next);
++		/* Kill the cache */
++		vmacache_invalidate(mm);
++
+ 		if (file) {
+ 			__remove_shared_vm_struct(next, file, mapping);
+ 			if (remove_next =3D=3D 2)
+@@ -1070,15 +831,6 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned=
+ long start,
  		 * (it may either follow vma or precede it).
  		 */
--		__insert_vm_struct(mm, &mas, insert);
-+		__insert_vm_struct(mm, &mas, insert, ll_prev);
+ 		__insert_vm_struct(mm, &mas, insert);
+-	} else {
+-		if (start_changed)
+-			vma_gap_update(vma);
+-		if (end_changed) {
+-			if (!next)
+-				mm->highest_vm_end =3D vm_end_gap(vma);
+-			else if (!adjust_next)
+-				vma_gap_update(next);
+-		}
  	}
 =20
  	if (anon_vma) {
-@@ -917,6 +930,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned l=
-ong start,
- 	if (insert && file)
+@@ -1106,7 +858,10 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned=
+ long start,
+ 			anon_vma_merge(vma, next);
+ 		mm->map_count--;
+ 		mpol_put(vma_policy(next));
++		if (remove_next !=3D 2)
++			BUG_ON(vma->vm_end < next->vm_end);
+ 		vm_area_free(next);
++
+ 		/*
+ 		 * In mprotect's case 6 (see comments on vma_merge),
+ 		 * we must remove another next too. It would clutter
+@@ -1136,10 +891,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned=
+ long start,
+ 		if (remove_next =3D=3D 2) {
+ 			remove_next =3D 1;
+ 			goto again;
+-		}
+-		else if (next)
+-			vma_gap_update(next);
+-		else {
++		} else if (!next) {
+ 			/*
+ 			 * If remove_next =3D=3D 2 we obviously can't
+ 			 * reach this path.
+@@ -1166,8 +918,6 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned =
+long start,
  		uprobe_mmap(insert);
 =20
-+	mas_destroy(&mas);
  	validate_mm(mm);
+-	validate_mm_mt(mm);
+-
  	return 0;
  }
+=20
+@@ -1320,7 +1070,6 @@ struct vm_area_struct *vma_merge(struct mm_struct *mm=
+,
+ 	struct vm_area_struct *area, *next;
+ 	int err;
+=20
+-	validate_mm_mt(mm);
+ 	/*
+ 	 * We later require that vma->vm_flags =3D=3D vm_flags,
+ 	 * so this tests vma->vm_flags & VM_SPECIAL, too.
+@@ -1396,7 +1145,6 @@ struct vm_area_struct *vma_merge(struct mm_struct *mm=
+,
+ 		khugepaged_enter_vma(area, vm_flags);
+ 		return area;
+ 	}
+-	validate_mm_mt(mm);
+=20
+ 	return NULL;
+ }
+@@ -1566,6 +1314,7 @@ unsigned long do_mmap(struct file *file, unsigned lon=
+g addr,
+ 	vm_flags_t vm_flags;
+ 	int pkey =3D 0;
+=20
++	validate_mm(mm);
+ 	*populate =3D 0;
+=20
+ 	if (!len)
+@@ -1873,10 +1622,8 @@ unsigned long mmap_region(struct file *file, unsigne=
+d long addr,
+ 	struct mm_struct *mm =3D current->mm;
+ 	struct vm_area_struct *vma, *prev, *merge;
+ 	int error;
+-	struct rb_node **rb_link, *rb_parent;
+ 	unsigned long charged =3D 0;
+=20
+-	validate_mm_mt(mm);
+ 	/* Check against address space limit. */
+ 	if (!may_expand_vm(mm, vm_flags, len >> PAGE_SHIFT)) {
+ 		unsigned long nr_pages;
+@@ -1892,8 +1639,8 @@ unsigned long mmap_region(struct file *file, unsigned=
+ long addr,
+ 			return -ENOMEM;
+ 	}
+=20
+-	/* Clear old maps, set up prev, rb_link, rb_parent, and uf */
+-	if (munmap_vma_range(mm, addr, len, &prev, &rb_link, &rb_parent, uf))
++	/* Clear old maps, set up prev and uf */
++	if (munmap_vma_range(mm, addr, len, &prev, uf))
+ 		return -ENOMEM;
+ 	/*
+ 	 * Private writable mapping: check memory availability
+@@ -1991,7 +1738,7 @@ unsigned long mmap_region(struct file *file, unsigned=
+ long addr,
+ 			goto free_vma;
+ 	}
+=20
+-	if (vma_link(mm, vma, prev, rb_link, rb_parent)) {
++	if (vma_link(mm, vma, prev)) {
+ 		error =3D -ENOMEM;
+ 		if (file)
+ 			goto unmap_and_free_vma;
+@@ -2037,7 +1784,6 @@ unsigned long mmap_region(struct file *file, unsigned=
+ long addr,
+=20
+ 	vma_set_page_prot(vma);
+=20
+-	validate_mm_mt(mm);
+ 	return addr;
+=20
+ unmap_and_free_vma:
+@@ -2054,7 +1800,6 @@ unsigned long mmap_region(struct file *file, unsigned=
+ long addr,
+ unacct_error:
+ 	if (charged)
+ 		vm_unacct_memory(charged);
+-	validate_mm_mt(mm);
+ 	return error;
+ }
+=20
+@@ -2409,7 +2154,6 @@ int expand_upwards(struct vm_area_struct *vma, unsign=
+ed long address)
+ 	int error =3D 0;
+ 	MA_STATE(mas, &mm->mm_mt, 0, 0);
+=20
+-	validate_mm_mt(mm);
+ 	if (!(vma->vm_flags & VM_GROWSUP))
+ 		return -EFAULT;
+=20
+@@ -2461,15 +2205,13 @@ int expand_upwards(struct vm_area_struct *vma, unsi=
+gned long address)
+ 			error =3D acct_stack_growth(vma, size, grow);
+ 			if (!error) {
+ 				/*
+-				 * vma_gap_update() doesn't support concurrent
+-				 * updates, but we only hold a shared mmap_lock
+-				 * lock here, so we need to protect against
+-				 * concurrent vma expansions.
+-				 * anon_vma_lock_write() doesn't help here, as
+-				 * we don't guarantee that all growable vmas
+-				 * in a mm share the same root anon vma.
+-				 * So, we reuse mm->page_table_lock to guard
+-				 * against concurrent vma expansions.
++				 * We only hold a shared mmap_lock lock here, so
++				 * we need to protect against concurrent vma
++				 * expansions.  anon_vma_lock_write() doesn't
++				 * help here, as we don't guarantee that all
++				 * growable vmas in a mm share the same root
++				 * anon vma.  So, we reuse mm->page_table_lock
++				 * to guard against concurrent vma expansions.
+ 				 */
+ 				spin_lock(&mm->page_table_lock);
+ 				if (vma->vm_flags & VM_LOCKED)
+@@ -2480,9 +2222,7 @@ int expand_upwards(struct vm_area_struct *vma, unsign=
+ed long address)
+ 				/* Overwrite old entry in mtree. */
+ 				vma_mas_store(vma, &mas);
+ 				anon_vma_interval_tree_post_update_vma(vma);
+-				if (vma->vm_next)
+-					vma_gap_update(vma->vm_next);
+-				else
++				if (!vma->vm_next)
+ 					mm->highest_vm_end =3D vm_end_gap(vma);
+ 				spin_unlock(&mm->page_table_lock);
+=20
+@@ -2492,8 +2232,6 @@ int expand_upwards(struct vm_area_struct *vma, unsign=
+ed long address)
+ 	}
+ 	anon_vma_unlock_write(vma->anon_vma);
+ 	khugepaged_enter_vma(vma, vma->vm_flags);
+-	validate_mm(mm);
+-	validate_mm_mt(mm);
+ 	mas_destroy(&mas);
+ 	return error;
+ }
+@@ -2502,15 +2240,13 @@ int expand_upwards(struct vm_area_struct *vma, unsi=
+gned long address)
+ /*
+  * vma is the first one with address < vma->vm_start.  Have to extend vma.
+  */
+-int expand_downwards(struct vm_area_struct *vma,
+-				   unsigned long address)
++int expand_downwards(struct vm_area_struct *vma, unsigned long address)
+ {
+ 	struct mm_struct *mm =3D vma->vm_mm;
+ 	struct vm_area_struct *prev;
+ 	int error =3D 0;
+ 	MA_STATE(mas, &mm->mm_mt, 0, 0);
+=20
+-	validate_mm(mm);
+ 	address &=3D PAGE_MASK;
+ 	if (address < mmap_min_addr)
+ 		return -EPERM;
+@@ -2552,15 +2288,13 @@ int expand_downwards(struct vm_area_struct *vma,
+ 			error =3D acct_stack_growth(vma, size, grow);
+ 			if (!error) {
+ 				/*
+-				 * vma_gap_update() doesn't support concurrent
+-				 * updates, but we only hold a shared mmap_lock
+-				 * lock here, so we need to protect against
+-				 * concurrent vma expansions.
+-				 * anon_vma_lock_write() doesn't help here, as
+-				 * we don't guarantee that all growable vmas
+-				 * in a mm share the same root anon vma.
+-				 * So, we reuse mm->page_table_lock to guard
+-				 * against concurrent vma expansions.
++				 * We only hold a shared mmap_lock lock here, so
++				 * we need to protect against concurrent vma
++				 * expansions.  anon_vma_lock_write() doesn't
++				 * help here, as we don't guarantee that all
++				 * growable vmas in a mm share the same root
++				 * anon vma.  So, we reuse mm->page_table_lock
++				 * to guard against concurrent vma expansions.
+ 				 */
+ 				spin_lock(&mm->page_table_lock);
+ 				if (vma->vm_flags & VM_LOCKED)
+@@ -2572,7 +2306,6 @@ int expand_downwards(struct vm_area_struct *vma,
+ 				/* Overwrite old entry in mtree. */
+ 				vma_mas_store(vma, &mas);
+ 				anon_vma_interval_tree_post_update_vma(vma);
+-				vma_gap_update(vma);
+ 				spin_unlock(&mm->page_table_lock);
+=20
+ 				perf_event_mmap(vma);
+@@ -2581,7 +2314,6 @@ int expand_downwards(struct vm_area_struct *vma,
+ 	}
+ 	anon_vma_unlock_write(vma->anon_vma);
+ 	khugepaged_enter_vma(vma, vma->vm_flags);
+-	validate_mm(mm);
+ 	mas_destroy(&mas);
+ 	return error;
+ }
+@@ -2714,10 +2446,8 @@ detach_vmas_to_be_unmapped(struct mm_struct *mm, str=
+uct ma_state *mas,
+=20
+ 	insertion_point =3D (prev ? &prev->vm_next : &mm->mmap);
+ 	vma->vm_prev =3D NULL;
+-	mas_set_range(mas, vma->vm_start, end - 1);
+-	mas_store_prealloc(mas, NULL);
++	vma_mas_szero(mas, vma->vm_start, end);
+ 	do {
+-		vma_rb_erase(vma, &mm->mm_rb);
+ 		if (vma->vm_flags & VM_LOCKED)
+ 			mm->locked_vm -=3D vma_pages(vma);
+ 		mm->map_count--;
+@@ -2725,10 +2455,9 @@ detach_vmas_to_be_unmapped(struct mm_struct *mm, str=
+uct ma_state *mas,
+ 		vma =3D vma->vm_next;
+ 	} while (vma && vma->vm_start < end);
+ 	*insertion_point =3D vma;
+-	if (vma) {
++	if (vma)
+ 		vma->vm_prev =3D prev;
+-		vma_gap_update(vma);
+-	} else
++	else
+ 		mm->highest_vm_end =3D prev ? vm_end_gap(prev) : 0;
+ 	tail_vma->vm_next =3D NULL;
+=20
+@@ -2850,11 +2579,7 @@ int __do_munmap(struct mm_struct *mm, unsigned long =
+start, size_t len,
+ 	if (len =3D=3D 0)
+ 		return -EINVAL;
+=20
+-	/*
+-	 * arch_unmap() might do unmaps itself.  It must be called
+-	 * and finish any rbtree manipulation before this code
+-	 * runs and also starts to manipulate the rbtree.
+-	 */
++	 /* arch_unmap() might do unmaps itself.  */
+ 	arch_unmap(mm, start, end);
+=20
+ 	/* Find the first overlapping VMA where start < vma->vm_end */
+@@ -2865,6 +2590,11 @@ int __do_munmap(struct mm_struct *mm, unsigned long =
+start, size_t len,
+ 	if (mas_preallocate(&mas, vma, GFP_KERNEL))
+ 		return -ENOMEM;
+ 	prev =3D vma->vm_prev;
++	/* we have start < vma->vm_end  */
++
++	/* if it doesn't overlap, we have nothing.. */
++	if (vma->vm_start >=3D end)
++		return 0;
+=20
+ 	/*
+ 	 * If we need to split any vma, do it now to save pain later.
+@@ -2925,6 +2655,8 @@ int __do_munmap(struct mm_struct *mm, unsigned long s=
+tart, size_t len,
+ 	/* Fix up all other VM information */
+ 	remove_vma_list(mm, vma);
+=20
++
++	validate_mm(mm);
+ 	return downgrade ? 1 : 0;
+=20
+ map_count_exceeded:
+@@ -3063,11 +2795,11 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, st=
+art, unsigned long, size,
+  *  anonymous maps.  eventually we may be able to do some
+  *  brk-specific accounting here.
+  */
+-static int do_brk_flags(unsigned long addr, unsigned long len, unsigned lo=
+ng flags, struct list_head *uf)
++static int do_brk_flags(unsigned long addr, unsigned long len,
++			unsigned long flags, struct list_head *uf)
+ {
+ 	struct mm_struct *mm =3D current->mm;
+ 	struct vm_area_struct *vma, *prev;
+-	struct rb_node **rb_link, *rb_parent;
+ 	pgoff_t pgoff =3D addr >> PAGE_SHIFT;
+ 	int error;
+ 	unsigned long mapped_addr;
+@@ -3086,8 +2818,8 @@ static int do_brk_flags(unsigned long addr, unsigned =
+long len, unsigned long fla
+ 	if (error)
+ 		return error;
+=20
+-	/* Clear old maps, set up prev, rb_link, rb_parent, and uf */
+-	if (munmap_vma_range(mm, addr, len, &prev, &rb_link, &rb_parent, uf))
++	/* Clear old maps, set up prev and uf */
++	if (munmap_vma_range(mm, addr, len, &prev, uf))
+ 		return -ENOMEM;
+=20
+ 	/* Check against address space limits *after* clearing old maps... */
+@@ -3121,7 +2853,7 @@ static int do_brk_flags(unsigned long addr, unsigned =
+long len, unsigned long fla
+ 	vma->vm_pgoff =3D pgoff;
+ 	vma->vm_flags =3D flags;
+ 	vma->vm_page_prot =3D vm_get_page_prot(flags);
+-	if (vma_link(mm, vma, prev, rb_link, rb_parent))
++	if (vma_link(mm, vma, prev))
+ 		goto no_vma_link;
+=20
+ out:
+@@ -3240,29 +2972,12 @@ void exit_mmap(struct mm_struct *mm)
+ int insert_vm_struct(struct mm_struct *mm, struct vm_area_struct *vma)
+ {
+ 	struct vm_area_struct *prev;
+-	struct rb_node **rb_link, *rb_parent;
+-	unsigned long start =3D vma->vm_start;
+-	struct vm_area_struct *overlap =3D NULL;
+ 	unsigned long charged =3D vma_pages(vma);
+=20
+-	if (find_vma_links(mm, vma->vm_start, vma->vm_end,
+-			   &prev, &rb_link, &rb_parent))
+=20
+-	if (find_vma_intersection(mm, vma->vm_start, vma->vm_end))
++	if (range_has_overlap(mm, vma->vm_start, vma->vm_end, &prev))
+ 		return -ENOMEM;
+=20
+-	overlap =3D mt_find(&mm->mm_mt, &start, vma->vm_end - 1);
+-	if (overlap) {
+-
+-		pr_err("Found vma ending at %lu\n", start - 1);
+-		pr_err("vma : %lu =3D> %lu-%lu\n", (unsigned long)overlap,
+-				overlap->vm_start, overlap->vm_end - 1);
+-#if defined(CONFIG_DEBUG_VM_MAPLE_TREE)
+-		mt_dump(&mm->mm_mt);
+-#endif
+-		BUG();
+-	}
+-
+ 	if ((vma->vm_flags & VM_ACCOUNT) &&
+ 	     security_vm_enough_memory_mm(mm, charged))
+ 		return -ENOMEM;
+@@ -3284,7 +2999,7 @@ int insert_vm_struct(struct mm_struct *mm, struct vm_=
+area_struct *vma)
+ 		vma->vm_pgoff =3D vma->vm_start >> PAGE_SHIFT;
+ 	}
+=20
+-	if (vma_link(mm, vma, prev, rb_link, rb_parent)) {
++	if (vma_link(mm, vma, prev)) {
+ 		vm_unacct_memory(charged);
+ 		return -ENOMEM;
+ 	}
+@@ -3304,9 +3019,7 @@ struct vm_area_struct *copy_vma(struct vm_area_struct=
+ **vmap,
+ 	unsigned long vma_start =3D vma->vm_start;
+ 	struct mm_struct *mm =3D vma->vm_mm;
+ 	struct vm_area_struct *new_vma, *prev;
+-	struct rb_node **rb_link, *rb_parent;
+ 	bool faulted_in_anon_vma =3D true;
+-	unsigned long index =3D addr;
+=20
+ 	validate_mm_mt(mm);
+ 	/*
+@@ -3318,10 +3031,9 @@ struct vm_area_struct *copy_vma(struct vm_area_struc=
+t **vmap,
+ 		faulted_in_anon_vma =3D false;
+ 	}
+=20
+-	if (find_vma_links(mm, addr, addr + len, &prev, &rb_link, &rb_parent))
++	if (range_has_overlap(mm, addr, addr + len, &prev))
+ 		return NULL;	/* should never get here */
+-	if (mt_find(&mm->mm_mt, &index, addr+len - 1))
+-		BUG();
++
+ 	new_vma =3D vma_merge(mm, prev, addr, addr + len, vma->vm_flags,
+ 			    vma->anon_vma, vma->vm_file, pgoff, vma_policy(vma),
+ 			    vma->vm_userfaultfd_ctx, anon_vma_name(vma));
+@@ -3362,12 +3074,16 @@ struct vm_area_struct *copy_vma(struct vm_area_stru=
+ct **vmap,
+ 			get_file(new_vma->vm_file);
+ 		if (new_vma->vm_ops && new_vma->vm_ops->open)
+ 			new_vma->vm_ops->open(new_vma);
+-		vma_link(mm, new_vma, prev, rb_link, rb_parent);
++		if (vma_link(mm, new_vma, prev))
++			goto out_vma_link;
+ 		*need_rmap_locks =3D false;
+ 	}
+ 	validate_mm_mt(mm);
+ 	return new_vma;
+=20
++out_vma_link:
++	if (new_vma->vm_ops && new_vma->vm_ops->close)
++		new_vma->vm_ops->close(new_vma);
+ out_free_mempol:
+ 	mpol_put(vma_policy(new_vma));
+ out_free_vma:
+diff --git a/mm/nommu.c b/mm/nommu.c
+index 5af0b050eba8..f2031f865dbb 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -566,9 +566,9 @@ void vma_mas_remove(struct vm_area_struct *vma, struct =
+ma_state *mas)
+  */
+ static void add_vma_to_mm(struct mm_struct *mm, struct vm_area_struct *vma=
+)
+ {
+-	struct vm_area_struct *pvma, *prev;
+ 	struct address_space *mapping;
+-	struct rb_node **p, *parent, *rb_prev;
++	struct vm_area_struct *prev;
++	MA_STATE(mas, &mm->mm_mt, vma->vm_start, vma->vm_end);
+=20
+ 	BUG_ON(!vma->vm_region);
+=20
+@@ -586,42 +586,10 @@ static void add_vma_to_mm(struct mm_struct *mm, struc=
+t vm_area_struct *vma)
+ 		i_mmap_unlock_write(mapping);
+ 	}
+=20
++	prev =3D mas_prev(&mas, 0);
++	mas_reset(&mas);
+ 	/* add the VMA to the tree */
+-	parent =3D rb_prev =3D NULL;
+-	p =3D &mm->mm_rb.rb_node;
+-	while (*p) {
+-		parent =3D *p;
+-		pvma =3D rb_entry(parent, struct vm_area_struct, vm_rb);
+-
+-		/* sort by: start addr, end addr, VMA struct addr in that order
+-		 * (the latter is necessary as we may get identical VMAs) */
+-		if (vma->vm_start < pvma->vm_start)
+-			p =3D &(*p)->rb_left;
+-		else if (vma->vm_start > pvma->vm_start) {
+-			rb_prev =3D parent;
+-			p =3D &(*p)->rb_right;
+-		} else if (vma->vm_end < pvma->vm_end)
+-			p =3D &(*p)->rb_left;
+-		else if (vma->vm_end > pvma->vm_end) {
+-			rb_prev =3D parent;
+-			p =3D &(*p)->rb_right;
+-		} else if (vma < pvma)
+-			p =3D &(*p)->rb_left;
+-		else if (vma > pvma) {
+-			rb_prev =3D parent;
+-			p =3D &(*p)->rb_right;
+-		} else
+-			BUG();
+-	}
+-
+-	rb_link_node(&vma->vm_rb, parent, p);
+-	rb_insert_color(&vma->vm_rb, &mm->mm_rb);
+-
+-	/* add VMA to the VMA list also */
+-	prev =3D NULL;
+-	if (rb_prev)
+-		prev =3D rb_entry(rb_prev, struct vm_area_struct, vm_rb);
+-
++	vma_mas_store(vma, &mas);
+ 	__vma_link_list(mm, vma, prev);
+ }
+=20
+@@ -634,6 +602,7 @@ static void delete_vma_from_mm(struct vm_area_struct *v=
+ma)
+ 	struct address_space *mapping;
+ 	struct mm_struct *mm =3D vma->vm_mm;
+ 	struct task_struct *curr =3D current;
++	MA_STATE(mas, &vma->vm_mm->mm_mt, 0, 0);
+=20
+ 	mm->map_count--;
+ 	for (i =3D 0; i < VMACACHE_SIZE; i++) {
+@@ -656,8 +625,7 @@ static void delete_vma_from_mm(struct vm_area_struct *v=
+ma)
+ 	}
+=20
+ 	/* remove from the MM's tree and list */
+-	rb_erase(&vma->vm_rb, &mm->mm_rb);
+-
++	vma_mas_remove(vma, &mas);
+ 	__vma_unlink_list(mm, vma);
+ }
+=20
+@@ -681,24 +649,19 @@ static void delete_vma(struct mm_struct *mm, struct v=
+m_area_struct *vma)
+ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
+ {
+ 	struct vm_area_struct *vma;
++	MA_STATE(mas, &mm->mm_mt, addr, addr);
+=20
+ 	/* check the cache first */
+ 	vma =3D vmacache_find(mm, addr);
+ 	if (likely(vma))
+ 		return vma;
+=20
+-	/* trawl the list (there may be multiple mappings in which addr
+-	 * resides) */
+-	for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
+-		if (vma->vm_start > addr)
+-			return NULL;
+-		if (vma->vm_end > addr) {
+-			vmacache_update(addr, vma);
+-			return vma;
+-		}
+-	}
++	vma =3D mas_walk(&mas);
+=20
+-	return NULL;
++	if (vma)
++		vmacache_update(addr, vma);
++
++	return vma;
+ }
+ EXPORT_SYMBOL(find_vma);
+=20
+@@ -730,26 +693,23 @@ static struct vm_area_struct *find_vma_exact(struct m=
+m_struct *mm,
+ {
+ 	struct vm_area_struct *vma;
+ 	unsigned long end =3D addr + len;
++	MA_STATE(mas, &mm->mm_mt, addr, addr);
+=20
+ 	/* check the cache first */
+ 	vma =3D vmacache_find_exact(mm, addr, end);
+ 	if (vma)
+ 		return vma;
+=20
+-	/* trawl the list (there may be multiple mappings in which addr
+-	 * resides) */
+-	for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
+-		if (vma->vm_start < addr)
+-			continue;
+-		if (vma->vm_start > addr)
+-			return NULL;
+-		if (vma->vm_end =3D=3D end) {
+-			vmacache_update(addr, vma);
+-			return vma;
+-		}
+-	}
++	vma =3D mas_walk(&mas);
++	if (!vma)
++		return NULL;
++	if (vma->vm_start !=3D addr)
++		return NULL;
++	if (vma->vm_end !=3D end)
++		return NULL;
+=20
+-	return NULL;
++	vmacache_update(addr, vma);
++	return vma;
+ }
+=20
+ /*
+@@ -1546,6 +1506,7 @@ void exit_mmap(struct mm_struct *mm)
+ 		delete_vma(mm, vma);
+ 		cond_resched();
+ 	}
++	__mt_destroy(&mm->mm_mt);
+ }
+=20
+ int vm_brk(unsigned long addr, unsigned long len)
+diff --git a/mm/util.c b/mm/util.c
+index 0837570c9225..2ffc32294a97 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -288,6 +288,8 @@ void __vma_link_list(struct mm_struct *mm, struct vm_ar=
+ea_struct *vma,
+ 	vma->vm_next =3D next;
+ 	if (next)
+ 		next->vm_prev =3D vma;
++	else
++		mm->highest_vm_end =3D vm_end_gap(vma);
+ }
+=20
+ void __vma_unlink_list(struct mm_struct *mm, struct vm_area_struct *vma)
+@@ -300,8 +302,14 @@ void __vma_unlink_list(struct mm_struct *mm, struct vm=
+_area_struct *vma)
+ 		prev->vm_next =3D next;
+ 	else
+ 		mm->mmap =3D next;
+-	if (next)
++	if (next) {
+ 		next->vm_prev =3D prev;
++	} else {
++		if (prev)
++			mm->highest_vm_end =3D vm_end_gap(prev);
++		else
++			mm->highest_vm_end =3D 0;
++	}
+ }
+=20
+ /* Check if the vma is being used as a stack by this task */
 --=20
 2.35.1

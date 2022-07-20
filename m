@@ -2,169 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769D057BF69
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CE657BF6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiGTVEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 17:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S230220AbiGTVHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 17:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbiGTVEK (ORCPT
+        with ESMTP id S229449AbiGTVHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 17:04:10 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B255D5465B;
-        Wed, 20 Jul 2022 14:04:09 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id k30so25285234edk.8;
-        Wed, 20 Jul 2022 14:04:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qBbFw1ZzXTyz8cXktrqbhLMBulYSHXFcjiUZp1QOwIo=;
-        b=BzFvTJvsKL4FG1GYa6Q+7NtfLeL0wK89LFMMkH2hgRKKLBpLVKGextSPrYHMpGYOYG
-         7xgFo2qzLkOvyOKSCNfhANJ9EXsYd0RET/N6JY7AoYRdDj+gp8+cPVeWZTunQtIV466u
-         ELjgTHv0ByWjKAzdwmL3Mc0fwbnKcE4lGCCjKxQkzJ1L+le9HYxubexI+74koO8snCtY
-         7scvBnIxfxphFqgU8aKbpuMF4VIwE+DhSXmtT8xzxDZk00TFVhj3/FVdvAtfz7kpKAhL
-         I0Ko8aQAKp7FXoahOMFBMWPnsjFnk0/JcfEHpjwfQSbXP0jLfPYQJxuBI5pdc5zFFxx9
-         Go7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qBbFw1ZzXTyz8cXktrqbhLMBulYSHXFcjiUZp1QOwIo=;
-        b=qiF3bWTygdn6n8jkKXu8rqzBzigBQ1v/hgf12QQ39LiR27mYibdZG6VVdKDYWPi5FS
-         Pb2Eqx8E+y1Q8AAo1rXEJ4KasmzWN7Oh7WkhAPArTcqppPB9GQur1B9qS/MGPzNHfGM3
-         yjCF29Vd445gYi515rQn72DTLJk1efBaSk8qzgpMsGy0l0cw93nG5AG9ZGC3E2oAkg8g
-         0DBtHWzRL75mVXO5Ngen5uMSEM5plOcgAAp9KXLTmKEKY6IdqOkXlKN6oTMrhRDajrwn
-         CUuyiMaO2mviapgE7CHIwuZ2uG1DdzD+5Vfr9mmne+vr/cSwGE9KbwIz5z2D0DDp/+f6
-         yfrA==
-X-Gm-Message-State: AJIora/KnOof6E9zvDy3RhGbHSQC5tCDs3CY4d9rGKCUijMSyc0AbiZk
-        uKqk5vWkvl5QPXFvpxAUf/g=
-X-Google-Smtp-Source: AGRyM1sLRHct8gnE6Y0WQhR4/ucqWyzO//vOE3v98s8caAwHN1r02tMVaC3RUG8zErb45zRCYxrTDg==
-X-Received: by 2002:a05:6402:11d3:b0:43a:c43b:7ff9 with SMTP id j19-20020a05640211d300b0043ac43b7ff9mr54388522edw.130.1658351048064;
-        Wed, 20 Jul 2022 14:04:08 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id da24-20020a056402177800b0043bbea24595sm24421edb.31.2022.07.20.14.04.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 14:04:07 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 00:04:05 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun.Ramadoss@microchip.com
-Cc:     andrew@lunn.ch, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
-        linux@armlinux.org.uk, f.fainelli@gmail.com, kuba@kernel.org,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        Woojung.Huh@microchip.com, davem@davemloft.net
-Subject: Re: [RFC Patch net-next 07/10] net: dsa: microchip: apply rgmii tx
- and rx delay in phylink mac config
-Message-ID: <20220720210405.6wv6d3fssopnpm7x@skbuf>
-References: <20220712160308.13253-1-arun.ramadoss@microchip.com>
- <20220712160308.13253-8-arun.ramadoss@microchip.com>
- <20220719102532.ndny6lrcxwwte7gw@skbuf>
- <d4696bc19472e9efd3a5581ea5c3bca201c90580.camel@microchip.com>
+        Wed, 20 Jul 2022 17:07:24 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCC41A07C;
+        Wed, 20 Jul 2022 14:07:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0455BCE22D7;
+        Wed, 20 Jul 2022 21:07:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CF4C3411E;
+        Wed, 20 Jul 2022 21:07:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658351240;
+        bh=KT0MDTe4I14XJ9G4qNy1ibxlgS5Etqvlq1vDOT8v2A8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=QVyfAmegKg5T13oaAgr7O4f1JgcvZEA/5kXb9bsiUJb9gZvXeYWq9E7Nu97KbRNg2
+         C5TKVcDQmkiVshPsnmn5Ecd97Lnq+frt4+11SMn6p7+G2KzSg75JOzc8u9SylZ4SuL
+         hnF/wlSoNiGQQz1cR7bGwwzGnHIUFHL4wOtHGujcNMUX+TuhDcx8y2dXNmENo1PHsL
+         utQje8b0QNAVjiB8Dw2atXzFPBQ1KP8NtyvBlVQTUGMuAHTd4jCr+l+XPRZpFaSPw7
+         IUB1OteLYL8+3+TzM5G/USrli5RixEkf2FjZ3knqnKepx5bkbeXCObbXDuuLZwCjiT
+         1cFkf+58VuzzQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     amit.kumar-mahapatra@xilinx.com
+Cc:     git@amd.com, linux-spi@vger.kernel.org,
+        lakshmi.sai.krishna.potthuri@xilinx.com,
+        linux-kernel@vger.kernel.org, amit.kumar-mahapatra@amd.com,
+        sai.krishna.potthuri@amd.com
+In-Reply-To: <20220713164529.28444-1-amit.kumar-mahapatra@xilinx.com>
+References: <20220713164529.28444-1-amit.kumar-mahapatra@xilinx.com>
+Subject: Re: [PATCH] spi: spi-cadence: Fix SPI NO Slave Select macro definition
+Message-Id: <165835123856.909862.1674350119538638.b4-ty@kernel.org>
+Date:   Wed, 20 Jul 2022 22:07:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4696bc19472e9efd3a5581ea5c3bca201c90580.camel@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 02:51:42PM +0000, Arun.Ramadoss@microchip.com wrote:
-> > Why not all RGMII modes and only these 2? There was a discussion a long
-> > time ago that the "_*ID" values refer to delays applied by an attached PHY.
-> > Here you are refusing to apply RGMII TX delays in the "rgmii" and "rgmii-txid"
-> > modes.
+On Wed, 13 Jul 2022 22:15:29 +0530, Amit Kumar Mahapatra wrote:
+> From: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
 > 
-> I have reused the code of ksz9477 cpu config function and added the dll
-> configuration for lan937x family alone. And understood that if device
-> tree specificies as rgmii_txid then apply the egress delay, for
-> rgmii_rxid apply ingress delay, for rgmii_id apply both.
-> From your comment, I am inferring that apply the mac delay for all the
-> rgmii interface "rgmii*".
-> Can you correct me if am I wrong and bit elaborate on it.
+> Fix SPI NO Slave Select macro definition, when all the SPI CS bits
+> are high which means no slave is selected.
+> 
+> 
 
-What we are trying is to interpret what's written in
-Documentation/devicetree/bindings/net/ethernet-controller.yaml in a way
-that is consistent, even though its wording makes it evident that that
-it was written in simpler times.
+Applied to
 
-There it says:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-      # RX and TX delays are added by the MAC when required
-      - rgmii
+Thanks!
 
-      # RGMII with internal RX and TX delays provided by the PHY,
-      # the MAC should not add the RX or TX delays in this case
-      - rgmii-id
+[1/1] spi: spi-cadence: Fix SPI NO Slave Select macro definition
+      commit: e1502ba41699736c578ba9d61ae6285d49f6921b
 
-      # RGMII with internal RX delay provided by the PHY, the MAC
-      # should not add an RX delay in this case
-      - rgmii-rxid
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-      # RGMII with internal TX delay provided by the PHY, the MAC
-      # should not add an TX delay in this case
-      - rgmii-txid
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-The fact that the PHY adds delays in the directions specified by the
-phy-mode value is established behavior; yet the MAC's behavior is pretty
-much subject to interpretation, and this has resulted in varying
-implementations in drivers.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-The wise words above say that "RX and TX delays are added by the MAC
-when required" - ok but when are they required? Determining this is
-impossible based on the phy-mode alone, since there aren't just 2
-degrees of freedom who may add delays (the PHY and the MAC). There also
-exists the possibility of using serpentine traces (PCB delays), which
-practically speaking, can't be described in phy-mode because then, a
-potential PHY on the same link would also think they're for itself to
-apply.
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-So the modern interpretation of phy-mode is to say that it simply does
-not describe whether a MAC should apply delays in a direction or another.
-
-So a separate set of properties was introduced, "rx-internal-delay-ps"
-and "tx-internal-delay-ps". These have the advantage of being located
-under the OF node of the MAC, and under the OF node of the PHY respectively.
-So it's clearer which side is supposed to configure which delays, and
-you also have finer control over the clock skew.
-
-Initially when Prasanna first tried to upstream the lan937x, we discusssed
-that since it's a new driver, it should support the modern interpretation
-of RGMII delays, and we agreed on that strategy.
-
-Now, with your recent refactoring that makes all switches share the same
-probing logic (and OF node parsing), things are in a bit of a greyer area.
-
-For one thing, you seem to have involuntarily inherited support for dubious
-legacy bindings, such as the "phy-mode under the switch node" that is
-described by commit edecfa98f602 ("net: dsa: microchip: look for
-phy-mode in port nodes").
-
-For another, you've inherited the existing interpretation of RGMII
-delays from the KSZ9477 driver, which is that the driver interprets the
-"phy-mode" as if it's a PHY (when in fact it's a MAC).
-
-The KSZ9477 isn't by far the only MAC driver that applies RGMII delays
-based on the phy-mode string, however in the past we made an effort to
-update existing DSA drivers to the modern interpretation, see commits:
-
-9ca482a246f0 ("net: dsa: sja1105: parse {rx, tx}-internal-delay-ps properties for RGMII delays")
-5654ec78dd7e ("net: dsa: qca8k: rework rgmii delay logic and scan for cpu port 6")
-
-There is a possibility to have a transitioning scheme: if the
-"rx-internal-delay-ps" or "tx-internal-delay-ps" properties are present
-under the MAC OF node, apply delays based on those. Otherwise, apply
-delays based on phy-mode, and warn.
-
-I'd appreciate if you could consider updating the KSZ common driver to
-this interpretation of RGMII delays, so that the modern interpretation
-becomes more widespread, and there are fewer places from which to copy a
-non-standard one.
+Thanks,
+Mark

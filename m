@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883CB57B02A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 07:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900F457B03A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 07:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234336AbiGTFDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 01:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
+        id S235442AbiGTFJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 01:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiGTFDS (ORCPT
+        with ESMTP id S229523AbiGTFJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 01:03:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CAD69F1B;
-        Tue, 19 Jul 2022 22:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RyhzVxMbaoPbL9A0bk3Afb4Ipszyt1fT4jChXme2gxQ=; b=KsBZ6uQJI0GUCu2vNLPOIKty/E
-        Lw2T9B64G6PgVBoSaxdWVIPkaFMCo4m/bG1Ci+rki3dItqIevm/5AEdtFr99wOyOt02J+ygGCNNQ+
-        E1QtxkZ1Hr4jeZBWXn7WNZR/fGDGrzqGKA1YnYTRvR4jK+sUVS/ClKSNxvV3mWpDhD+yjT3t6wAS8
-        y6rv0cNaNgDEnesPoSp0fJZnP5zZ6CtqObut17EQHDARHoVl5P5lFsJQD63ueLWd8gkJV6ikWXh1M
-        19ACAdzoCxFk8w2iCg8ToWtdIKPUnte1X8Nq6X3oBviEn0eJHXIxsoi+pO3R7QhKhSIZlI02c1J0z
-        J/IDJNeQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oE1rf-000N1j-Da; Wed, 20 Jul 2022 05:03:15 +0000
-Date:   Tue, 19 Jul 2022 22:03:15 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH v3 0/8] make statx() return DIO alignment information
-Message-ID: <YteMkySHHFOTKSAW@infradead.org>
-References: <20220616201506.124209-1-ebiggers@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616201506.124209-1-ebiggers@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 01:09:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285426A9E9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 22:09:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEEBBB81E11
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FA0C3411E;
+        Wed, 20 Jul 2022 05:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1658293769;
+        bh=kHEQ6rWqVQlLVoUqDBOXtFkYFKIbonQwo664UOVxj64=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=z6QvdWH4483hsHCjyvFgGpQVDXcX5JtPWU/R3X5Yq57ul2AEL7fAy/VVDdXPIcTyj
+         BhPR37Xy6T7/0orl/fyh1iTsAy4USJsa9M/LmwBxo7/WtcEBMDRFzL6lPVoWLq34sd
+         EgkjmwaLeqfWsacHNj+VBtTBZ0Fe0mBt7B6kmp0U=
+Date:   Tue, 19 Jul 2022 22:09:28 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH v12 00/69] Introducing the Maple Tree
+Message-Id: <20220719220928.4388fccdd59a175b0834d108@linux-foundation.org>
+In-Reply-To: <20220720021727.17018-1-Liam.Howlett@oracle.com>
+References: <20220720021727.17018-1-Liam.Howlett@oracle.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+On Wed, 20 Jul 2022 02:17:37 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
 
-can you resend the series based on the received feedback?
+> This is the v11 + fixes.
+
+Merge into mm-unstable and pushed out, thanks.

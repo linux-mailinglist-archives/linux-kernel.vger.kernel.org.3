@@ -2,147 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EE457B334
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBE957B339
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiGTIru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
+        id S232814AbiGTIt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiGTIrr (ORCPT
+        with ESMTP id S229714AbiGTItW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:47:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BC97D75
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:47:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658306865;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E33i4x0VDithUN2osgw0KYbVHXG0AF/cZ3F5XHu1rls=;
-        b=iXowriGMWC/6RuLS8T4PrR2qOk1eqXUJOelLqZbCpj18k8hrLK0TjRnGpdsONP4lDnKLv/
-        SbVsyuCLAuuYgfqiooBliP+kHDBZktQPlUXNnG6jzEQd9YwEVEd5ApwrChLuCRBQ8yQzAQ
-        CecAmqhfmrjXyNkUcwj38ZODwP6CuZ8=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-195-kbdolvFZOPqkcqU9cHKGlQ-1; Wed, 20 Jul 2022 04:47:44 -0400
-X-MC-Unique: kbdolvFZOPqkcqU9cHKGlQ-1
-Received: by mail-qv1-f70.google.com with SMTP id na10-20020a0562142d4a00b00473fb0f94deso2540999qvb.21
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:47:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=E33i4x0VDithUN2osgw0KYbVHXG0AF/cZ3F5XHu1rls=;
-        b=Y6lVGn0TZWjnbB0PlI9AFjcn/B1isf/lDyjFyxbL52FhvioEr2doXn5R2yIf7Gc3xJ
-         bdCZsA2HiwF0ZUjrWzpNcaqH/ckl877KCXHKF7CGDNoiOfAC9gP6Wao9BNCEDp9ghwhG
-         lmN5vQzzIGoxDoGW+FWiuuwqqz+n0H9DpORfnHST/eTimu220SBiA11bRMF+o4XPHiFY
-         UoY+/lCUJ7ft6KOfKRgFyULCkjuWm0XHI5L8PypFMsyw2gPerlpV0EiwCwB67F+TLdlA
-         WQCqktADQoqTtUbczHqHoR3ls6mPUj27UKpiFdl4Ui0V4GOBHWrt9V1PtOXcW47MK9vg
-         gZrA==
-X-Gm-Message-State: AJIora9BuHjjRE2lT9fJaPtZzsymegg1UAx1NwQNzbaCdnvL4Xz6d35y
-        j9RH8n74y+XQ7O2hBil5y9DEAjgyG0SvzRUjVLd9d2yQBqjiPOE2uhrhsmsmrzJlj9ZRhEtkW3X
-        sq/NpGm+OYymQ6I7oyLmjSFz0
-X-Received: by 2002:a05:620a:712:b0:6b5:e58b:7fa1 with SMTP id 18-20020a05620a071200b006b5e58b7fa1mr9995012qkc.116.1658306864178;
-        Wed, 20 Jul 2022 01:47:44 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vC9K6G7MBlKkHVtVu6hJYTxeEp888lIRV9wLUAqrKNOc0hRrTPQ65UbakaEmBv3ET66teddQ==
-X-Received: by 2002:a05:620a:712:b0:6b5:e58b:7fa1 with SMTP id 18-20020a05620a071200b006b5e58b7fa1mr9995006qkc.116.1658306863971;
-        Wed, 20 Jul 2022 01:47:43 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id i12-20020a37c20c000000b006a6a6f148e6sm15502876qkm.17.2022.07.20.01.47.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 01:47:43 -0700 (PDT)
-Message-ID: <80099b7675300ba24743caffaa2255ac00b26b12.camel@redhat.com>
-Subject: Re: [PATCH v2 00/11] SMM emulation and interrupt shadow fixes
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>, x86@kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>
-Date:   Wed, 20 Jul 2022 11:47:39 +0300
-In-Reply-To: <a866e044713be1ab3f446775934ec15541c39726.camel@redhat.com>
-References: <20220621150902.46126-1-mlevitsk@redhat.com>
-         <a866e044713be1ab3f446775934ec15541c39726.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Wed, 20 Jul 2022 04:49:22 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E7166ACB
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:49:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658306961; x=1689842961;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uIH1pWVWOe5VxfNgXESkyLnBEOvNDU9wIlNkt1K0Vdo=;
+  b=mdYSszlFrf6fVA5oa0clvJq3Kzp0KvjOZX93dO/sp85CAm/+c7ST8sV5
+   59383k6NSujo4kR8DAJWtmbkAv2sJfPi6nwqW49XTTgpHkBpUTh+Byf8p
+   8eRkJW/musZbOCQ9P30xYQhZg4IjcS/3RcpYJF0vdrmIgeyUbp9TkhUUT
+   FFCu1MSieqzd+Wg3PpoTeJCZWIZooxOU4mKwW1u3By0i5KPSFbZoEaXYk
+   og5i9jVI5NorHZOSsVHTTrYX6oYubr9aEfMIOJgAnzArC/OlAPvqFsygu
+   oSh/zkxbty71Fn9rJaM1uRBtd9csI2WGfiUB/dsuZgg2vuig1x3tSSwZs
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="269747240"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="269747240"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 01:49:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="625577174"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 20 Jul 2022 01:49:19 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oE5OR-0000It-Bp;
+        Wed, 20 Jul 2022 08:49:19 +0000
+Date:   Wed, 20 Jul 2022 16:48:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/fpu] BUILD SUCCESS
+ 9f01129382774d98ec21526f13da26a0630ee3d8
+Message-ID: <62d7c167.Cb1ri5iRX3LSzn8x%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-14 at 14:06 +0300, Maxim Levitsky wrote:
-> On Tue, 2022-06-21 at 18:08 +0300, Maxim Levitsky wrote:
-> > This patch series is a result of long debug work to find out why
-> > sometimes guests with win11 secure boot
-> > were failing during boot.
-> > 
-> > During writing a unit test I found another bug, turns out
-> > that on rsm emulation, if the rsm instruction was done in real
-> > or 32 bit mode, KVM would truncate the restored RIP to 32 bit.
-> > 
-> > I also refactored the way we write SMRAM so it is easier
-> > now to understand what is going on.
-> > 
-> > The main bug in this series which I fixed is that we
-> > allowed #SMI to happen during the STI interrupt shadow,
-> > and we did nothing to both reset it on #SMI handler
-> > entry and restore it on RSM.
-> > 
-> > Best regards,
-> >         Maxim Levitsky
-> > 
-> > Maxim Levitsky (11):
-> >   KVM: x86: emulator: em_sysexit should update ctxt->mode
-> >   KVM: x86: emulator: introduce update_emulation_mode
-> >   KVM: x86: emulator: remove assign_eip_near/far
-> >   KVM: x86: emulator: update the emulation mode after rsm
-> >   KVM: x86: emulator: update the emulation mode after CR0 write
-> >   KVM: x86: emulator/smm: number of GPRs in the SMRAM image depends on
-> >     the image format
-> >   KVM: x86: emulator/smm: add structs for KVM's smram layout
-> >   KVM: x86: emulator/smm: use smram struct for 32 bit smram load/restore
-> >   KVM: x86: emulator/smm: use smram struct for 64 bit smram load/restore
-> >   KVM: x86: SVM: use smram structs
-> >   KVM: x86: emulator/smm: preserve interrupt shadow in SMRAM
-> > 
-> >  arch/x86/include/asm/kvm_host.h |   6 -
-> >  arch/x86/kvm/emulate.c          | 305 ++++++++++++++++----------------
-> >  arch/x86/kvm/kvm_emulate.h      | 146 +++++++++++++++
-> >  arch/x86/kvm/svm/svm.c          |  28 +--
-> >  arch/x86/kvm/x86.c              | 162 ++++++++---------
-> >  5 files changed, 394 insertions(+), 253 deletions(-)
-> > 
-> > -- 
-> > 2.26.3
-> > 
-> > 
-> A kind ping on these patches.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/fpu
+branch HEAD: 9f01129382774d98ec21526f13da26a0630ee3d8  intel_idle: Add a new flag to initialize the AMX state
 
-Another kind ping on this patch series.
+elapsed time: 904m
 
-Best regards,
-	Maxim Levitsky
+configs tested: 62
+configs skipped: 2
 
-> 
-> Best regards,
->         Maxim Levitsky
-> 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+powerpc                      ep88xc_defconfig
+arm                      footbridge_defconfig
+x86_64                              defconfig
+sh                        sh7757lcr_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+ia64                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+mips                             allyesconfig
+m68k                             allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64               randconfig-a014-20220718
+x86_64               randconfig-a016-20220718
+x86_64               randconfig-a012-20220718
+x86_64               randconfig-a013-20220718
+x86_64               randconfig-a015-20220718
+x86_64               randconfig-a011-20220718
+i386                 randconfig-a011-20220718
+i386                 randconfig-a013-20220718
+i386                 randconfig-a012-20220718
+i386                 randconfig-a015-20220718
+i386                 randconfig-a014-20220718
+i386                 randconfig-a016-20220718
+s390                 randconfig-r044-20220718
+riscv                randconfig-r042-20220718
+arc                  randconfig-r043-20220718
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
 
+clang tested configs:
+x86_64                        randconfig-k001
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                 randconfig-a004-20220718
+i386                 randconfig-a001-20220718
+i386                 randconfig-a005-20220718
+i386                 randconfig-a006-20220718
+i386                 randconfig-a002-20220718
+i386                 randconfig-a003-20220718
+hexagon              randconfig-r041-20220718
+hexagon              randconfig-r045-20220718
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

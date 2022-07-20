@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBEE57BD46
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D538E57BD4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238140AbiGTRzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
+        id S230026AbiGTR5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237644AbiGTRzN (ORCPT
+        with ESMTP id S229473AbiGTR5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:55:13 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524816375
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:55:12 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id t1so31434340lft.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:55:12 -0700 (PDT)
+        Wed, 20 Jul 2022 13:57:03 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0CB24951;
+        Wed, 20 Jul 2022 10:57:01 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id p26-20020a1c545a000000b003a2fb7c1274so1857780wmi.1;
+        Wed, 20 Jul 2022 10:57:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SbRJ4Pjfsm8LrOT/Xil2d+bMfNBGw/19k+yDI8UKBW8=;
-        b=ZWqCQRfGBGBMunlhZpNm78e1j4poAYODmP81Ui+BrWqtTK///sr+A2CZUjpK0jMGV5
-         PVM8su0HHmqBpGFmFcNVYqwQRtSm5Mqemx5b7wbiLiephByfm+Fq/2QpCxFmE4vgXsLO
-         qHdQLsVfeZjnqKxT9X8+vmQ4iVKlRichL5JUB45JvpLeREN3+WADwM4n2yNHMwHboJwB
-         gUXy36s/Yd+suWnu6EgBKzjuiUydIBdYDhouvJ6GFo5OYSm1a1ticXhvAABSAn1FOKGm
-         7plPFpamXLstJabNU02Sx86oFlPcRQ5digRrN/sNJBBkcMuTWuhOY0t3uJ0iqF1mKO0x
-         1Xkg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yHRPEwie+kv37rjFQaOMTG39vvbswHQIAL5qJKmAXZY=;
+        b=jHHP9ovMBvjF1Tz2XGF2O9uZIGYUh8uL3ccc1JcN0v8LL9vnt/CinMBSagcmUsB0Ha
+         xOMPdfqLVfRR8KBTjUW3q4gJAiq9/Bj+xwq8vM5i2NJGbuUau3prMQFvEfK187IPw3sP
+         ldn0KN2bm3rURRez4YtZRMTE9BhOk8rkB5kG+pW/VAI5cr1aqPSKS04ccEoqIYJR6tVy
+         Zuw3v3nP+Hb8a3vYv7VyQIgdXWHzjqNVBfIr4tnV16bQGFafAwIaR6YmH3qdWmpIj3MM
+         3fM2UpyV4zp2x+GfoPfTe10AJahSclTCRwIrWIwAQ6N64nxC0rG4BGVOnfxlHcdrCw9m
+         qR4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SbRJ4Pjfsm8LrOT/Xil2d+bMfNBGw/19k+yDI8UKBW8=;
-        b=oMHcL+AwJrLd1+AleLWNRuK7YsumyJqjXIygXh28i1eLE6Y0sBic+OlC8IV+0qonf0
-         KmVab5ORMxXWbhh1r5QzvmyZ94UVc4kuavF/32lrH+bInGbVB/BuPj2k7dq6LxgxSphp
-         n3nScYVQw7tA7TtNgHb5ulOZiOwmzjTUNR6y4KPD7MsODiuLwSOh4AmyJ/V5QW7NrD2C
-         sy1fyT6z4nbG4swV0nehQjCxnKnG4l+IpLmtFKF5he6jz2aQaUnEok8ymeBwI4NIJCkQ
-         ZXQv6Xh51dA+zLz+SZUhGa/WBXRgW/GTXVwQbc+Nha2ggWd36Xx4rdUFqtrqhhH9QthH
-         5sGQ==
-X-Gm-Message-State: AJIora9liUV2pWz4u1kUMahyEUQcy5SGDX6ZzpIbHcD3qJQCOk4T/pyk
-        qMJKp+sxXNvqvcLqlKoWbuiNAQ==
-X-Google-Smtp-Source: AGRyM1sBHotd8BveUpOcwz+eBVh5w31a9LXZrwZ/UtTwD42US9+BLaYtcY9jEyZ6OFeBV4Kc7+PHew==
-X-Received: by 2002:ac2:4a86:0:b0:489:c5eb:3403 with SMTP id l6-20020ac24a86000000b00489c5eb3403mr19763715lfp.603.1658339710742;
-        Wed, 20 Jul 2022 10:55:10 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id g5-20020a2ea4a5000000b0025a885a135csm3341410ljm.119.2022.07.20.10.55.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 10:55:10 -0700 (PDT)
-Message-ID: <acecf7a8-7bf1-718f-d990-54a10e92ba1f@linaro.org>
-Date:   Wed, 20 Jul 2022 19:55:08 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yHRPEwie+kv37rjFQaOMTG39vvbswHQIAL5qJKmAXZY=;
+        b=EMrO5uBrQB3xChamH6PnF9txpk3mUXEH8WZqoIZT19muEMEGx1ZoZq3QQaW5wr1h30
+         e+mZGNU5v6QuJ8cMwSZ05k5+Ou4rqNu+NRzLQ9T25y7u8kTglp9UTQKOFCmtlQ9Tx+1T
+         npDMPOAhdjscfk1PqrcLyirSsa+CvyqjtbbDWLlI4lLT6pYVOr9aYqUogHToaBOL+1gM
+         d7jldZ+/C+GFfr34gIYaCF2kyls1VJCcK7H7NSL122VPbvwSKfTEMdm3HceGE/Q1PjVb
+         42raYm4IgY8aSMMo0dloWih4L5kK9n4gxI5+z+y9olNh7ZO0nwWlclx2WvRPRP/n+/0u
+         FiFw==
+X-Gm-Message-State: AJIora+0P0BdKZHTew0ijJ2G3uDOvM1BWXp1933KOxHqVg5+GRyWSI+z
+        p7tjgelnPI8DLbN0pFmkFdiKXbqsemLI01GLLdw=
+X-Google-Smtp-Source: AGRyM1um84Qx2d3VuA14HmTjZeEjFriFAeIWZ5gQkmqsDi89xqJ0we4+Qh4P4848RYr0tzuTinlTksVyONKTxWesIwg=
+X-Received: by 2002:a05:600c:3ac3:b0:3a0:45b6:7efb with SMTP id
+ d3-20020a05600c3ac300b003a045b67efbmr4906657wms.183.1658339820479; Wed, 20
+ Jul 2022 10:57:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] arm64: dts: qcom: Add SKU6 for
- sc7180-trogdor-pazquel-lte-parade
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Henry Sun <henrysun@google.com>,
-        Bob Moragues <moragues@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <20220720025058.1.I5bfba8857ea0d43c747ecdc3a950875abd56927f@changeid>
- <7a04c9af-0ccb-7711-249f-73908fe7ec36@linaro.org>
- <CAD=FV=V1MqQzNxq_L8sGtu2JwAAL_FWKXkw9bhCHcD0DycFMUw@mail.gmail.com>
- <bcbca05e-2b75-a405-b1ea-21b276931a90@linaro.org>
- <CAD=FV=UEt4fcVaFvS8nr7Z0GNYM1T=mz7iUhwg+bBkWtbO4c1g@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=UEt4fcVaFvS8nr7Z0GNYM1T=mz7iUhwg+bBkWtbO4c1g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220719171900.289265-1-robdclark@gmail.com> <20220719171900.289265-10-robdclark@gmail.com>
+ <c5beb186-96d3-59d7-fad8-987bb8125de1@collabora.com>
+In-Reply-To: <c5beb186-96d3-59d7-fad8-987bb8125de1@collabora.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 20 Jul 2022 10:57:21 -0700
+Message-ID: <CAF6AEGusbnsY8fyFetkov5bRPd0vidTyBm8QL7a56TwYZ+NdRQ@mail.gmail.com>
+Subject: Re: [PATCH v2 09/13] drm/gem: Add LRU/shrinker helper
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 19:53, Doug Anderson wrote:
-> 
-> Yeah. I guess it makes more sense with the background knowledge that
-> the different SKUs are:
-> 
-> LTE with physical SIM _and_ eSIM
-> LTE with only a physical SIM
-> WiFi only
-> 
-> ...so both sku4 and sku6 are LTE SKUs. One has the eSIM stuffed and
-> one doesn't. There is a single shared device tree for the two.
+On Tue, Jul 19, 2022 at 11:56 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> On 7/19/22 20:18, Rob Clark wrote:
+> > +void
+> > +drm_gem_lru_move_tail_locked(struct drm_gem_lru *lru, struct drm_gem_object *obj)
+> > +{
+> > +     WARN_ON(!mutex_is_locked(lru->lock));
+>
+> Nit: What about lockdep_assert_held_once(&lru->lock->base)) ?
 
-Above in commit msg would solve all my questions, I guess. :)
+ahh, good point.. I've switched it locally
 
+BR,
+-R
 
-Best regards,
-Krzysztof
+> Otherwise, looks good! I'll use it for the DRM-SHMEM shrinker after
+> completing the work on the dma-buf locks.
+>
+> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>
+> --
+> Best regards,
+> Dmitry

@@ -2,96 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE95F57B6A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B33157B6AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240962AbiGTMnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S239968AbiGTMn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbiGTMnL (ORCPT
+        with ESMTP id S231431AbiGTMn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:43:11 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F006B765
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:43:10 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id r24so3736398plg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=15tbLcWJnTFOdjiV+YtbGdPmkJye0XDVtTNZb1Sk+vw=;
-        b=sNqhFCOSw4ltM2hYbkLQRiwkH1r6tf31fy4ZmdZfxTf4ifpMZpIK/y1O40mgQ3jKne
-         AtjX+V8oEI9Cn+LMjfuwNicV4MHEhMzce8so+25sze9vd6UVgMu8iwUhZhPqwSL3pxRT
-         qmBpLC9uPJF6H1OHGd5PIIbMyZNO/v45ofQ0ANv44OoPIxU2MTMvRcWzQ6nJ6R5oWeIR
-         5lVUWrTT95PoVGTZzSV4mdCYrfkZFT1TdiKBVC7SsIPjovVwvejNkQm+3dwNrSf+si/F
-         VGPteaZnyhwByYePSzROH0DxxgPIpe9LZy5q2bRLneBsmI7iD/e7W39isspEfw0HDDpU
-         I/Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=15tbLcWJnTFOdjiV+YtbGdPmkJye0XDVtTNZb1Sk+vw=;
-        b=Jvmh4HMaVuD0COA63bfgTK3f+lXwrLXI9391+7RDiT8YcSb3pTKVK339JFXNqNL/F4
-         KPO7sAYpYL/aAeQ8QqjXzjU2mtxTHVY2IaQPI+fVz/kAzKjZhyePZj6p3YM3ZBUZiAVX
-         5CRf7wykVeWRA/svN62DaM+TU1TgBR9U+UgS48yj4RTRI1Xf22ekYecIYVKh9AgXqPf8
-         O1pFpG/5uTRRNAb5ZhWITv/RldkEr1wLp1mKKj/FYRc5hV0yAAMlTVhKoP92RB9C9KrC
-         XEuzL3mzSy8yQd2dyKohSka+V0Ulp0HvKK6vOgtvBdr2R164O22GjSerLAXf+CnUU3pD
-         TlHg==
-X-Gm-Message-State: AJIora9i+XEb9pMxGcrfWHDY01mZrP6nMBPsIhazeDtNU4vd4NaCxAe8
-        GSLXiQXOvIMkRGwEWV5tEZhYtA==
-X-Google-Smtp-Source: AGRyM1va+N2XDOi9hafud9V55/wZygh14bVfU4jI1urqtChNNbRXL3V7qDMBcyVC3SAmSIJk7N/u0w==
-X-Received: by 2002:a17:902:ea09:b0:16c:3f7a:adf7 with SMTP id s9-20020a170902ea0900b0016c3f7aadf7mr38898267plg.103.1658320989548;
-        Wed, 20 Jul 2022 05:43:09 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g9-20020a625209000000b0051bc5f4df1csm13398704pfb.154.2022.07.20.05.43.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 05:43:08 -0700 (PDT)
-Message-ID: <e0d6b3a4-4127-e282-ede0-1ca4e1485ece@kernel.dk>
-Date:   Wed, 20 Jul 2022 06:43:07 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: linux-next: build warning after merge of the block tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Wed, 20 Jul 2022 08:43:56 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596B66A9EC
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:43:55 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 672EB2FDF28;
+        Wed, 20 Jul 2022 14:43:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1658321031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gLa9ia/5rkmFJmloGz3UgIhzu9GXQxrE148P7DUdWmg=;
+        b=JIf4yIIXMCXmA0uJ8AZfbBjgcg/BFhHsjVVWLIkYl67wNlp8lVYQC+y/IFiMlVcv3/6E1H
+        9pfFdVYqEPDngZxVTZfuZ6laAYBktzBM5TfbB5ZXFctFnhVWDCRGjEwer2WngzctdTY8Bm
+        Ji2MTKf+SAZaeqZRUqf6ROGMF0P5TccB1YMZ0W/URJjMTsXTz+XPRRkDoa935lS8sisOqD
+        HsTg23dYGEl6Ms89R2XL5rOaot5NdIxQv3dIX2g+Eq0RGgCZrl03iQbpo0PvguPtVZWmzs
+        ClO7Qjz0levsnKCwz/fvlKdoL+lidvmWqIqTgLw06NXvgmEQ2gJRCRxqUNaKdA==
+Message-ID: <9b4e181abab0bec20dae93d35fe962b8167c73c9.camel@svanheule.net>
+Subject: Re: [PATCH v4 3/5] lib/test: Introduce cpumask KUnit test suite
+From:   Sander Vanheule <sander@svanheule.net>
+To:     David Gow <davidgow@google.com>,
+        =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        bp@alien8.de, dave.hansen@linux.intel.com,
+        Marco Elver <elver@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, hpa@zytor.com,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220720133306.5f708750@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220720133306.5f708750@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, tglx@linutronix.de,
+        vschneid@redhat.com, x86@kernel.org, yury.norov@gmail.com,
+        Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 20 Jul 2022 14:43:49 +0200
+In-Reply-To: <CABVgOSkPXBc-PWk1zBZRQ_Tt+Sz1ruFHBj3ixojymZF=Vi4tpQ@mail.gmail.com>
+References: <c96980ec35c3bd23f17c3374bf42c22971545e85.1656777646.git.sander@svanheule.net>
+         <346cb279-8e75-24b0-7d12-9803f2b41c73@riseup.net>
+         <CABVgOSkPXBc-PWk1zBZRQ_Tt+Sz1ruFHBj3ixojymZF=Vi4tpQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 9:33 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
-> 
-> io_uring/net.c: In function 'io_sendzc':
-> io_uring/net.c:980:41: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
->   980 |                                         (u64)zc->buf, zc->len);
->       |                                         ^
-> 
-> Introduced by commit
-> 
->   bb4019de9ea1 ("io_uring: sendzc with fixed buffers")
+Hi David, Ma=C3=ADra,
 
-I pushed a fix for this, thanks Stephen.
+On Wed, 2022-07-20 at 13:24 +0800, David Gow wrote:
+> On Wed, Jul 20, 2022 at 5:31 AM Ma=C3=ADra Canal <mairacanal@riseup.net> =
+wrote:
+> >=20
+> > > Add a basic suite of tests for cpumask, providing some tests for empt=
+y
+> > > and completely filled cpumasks.
+> > >=20
+> > > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >=20
+> > The tests test_cpumask_weight and test_cpumask_last are failing on all
+> > architectures, as can be seen on [1]. Also this test doesn't follow the
+> > standard style for KUnit tests [2].
+> >=20
+> > [1]
+> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-2022071=
+8/testrun/10865066/suite/kunit/tests/
+> > [2] https://docs.kernel.org/dev-tools/kunit/style.html
+> >=20
+> > CC: Brendan Higgins <brendanhiggins@google.com>
+> > CC: David Gow <davidgow@google.com>
+> >=20
+> > Best Regards,
+> > - Ma=C3=ADra Canal
+> >=20
+>=20
+> Hmm... this test passes on the default kunit_tool configs for UML and
+> x86_64, which are all without SMP.
+>=20
+> It looks like the flaw is that, if CONFIG_NR_CPUS is greater than the
+> actual number of CPUs present, then the cpu_possible_mask (correctly)
+> won't be full.
+>=20
+> I'm not sure what the right fix is: but removing the checks for
+> cpu_possible_mask being full is probably the way to go. Unless we want
+> to plumb through some actual detail about the underlying system and
+> check against that, it doesn't make sense. (Or, we could generate an
+> artificial "possilbe_mask" which is always full, and test the cpu
+> against that. But we sort-of already do that with mask_all anyway.)
 
--- 
-Jens Axboe
+The description of cpu_possible_mask does indeed allow for it to not be fil=
+led
+completely.
+
+>=20
+> So, my recommendation for a fix would be:
+> - Get rid of "KUNIT_EXPECT_TRUE(test, cpumask_full(cpu_possible_mask));"
+
+As per the above, I'll remove this (faulty) check.
+
+> - Replace "KUNIT_EXPECT_EQ(test, nr_cpumask_bits - 1,
+> cpumask_last(cpu_possible_mask));" with a KUNIT_EXPECT_GE()
+
+I think we can actually use KUNIT_EXPECT_EQ(test, nr_cpu_ids - 1, ...) here=
+.
+
+Since cpumask_first() on the same mask must return at most nr_cpu_ids - 1 f=
+or a
+valid result, cpumask_last() cannot return anything larger than this value.=
+=20
+This implies that cpu_possible_mask cannot contain gaps if its weight equal=
+s
+nr_cpu_ids (which is checked in test_cpumask_weight).
+
+> - _Maybe_ add some debug logging with the cpumask value being checked,
+> as it's a pain to tell from the expectation failure messages. e.g.,
+> kunit_info(test, "cpu_possible_mask =3D '%*pb[l]'\n",
+> cpumask_pr_args(cpu_possible_mask));
+
+That would be a useful addition, I'll see where I can add it.
+
+Best,
+Sander
+>=20
 

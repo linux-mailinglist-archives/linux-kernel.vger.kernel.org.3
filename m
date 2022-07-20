@@ -2,185 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B28C57B411
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C21C57B413
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbiGTJnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
+        id S237633AbiGTJnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiGTJnC (ORCPT
+        with ESMTP id S231546AbiGTJnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:43:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F7916391A
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658310179;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6RKfphNn3mPOW1MXkGNfh4n+QtAmR71ynMhMeD/fO8E=;
-        b=fOcmHKZyIY5ZrJMDar458RiargpP2dxnDbnrf7o7RZfeXyhkVyfC0uECKsT6Bap2UE2I+8
-        2eCGNuD3PEFyW7rBVLghtBeIEYZjbhAzHGwMWAo4Grz680PbHjCrtzLJH16z7CPm5EDVOK
-        7hIDK+7XRwDWGUvYlzm6fA3cbnvteeo=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-2ilFvp8NP9-A6YwBC5l8HQ-1; Wed, 20 Jul 2022 05:42:58 -0400
-X-MC-Unique: 2ilFvp8NP9-A6YwBC5l8HQ-1
-Received: by mail-wr1-f70.google.com with SMTP id l11-20020adfbd8b000000b0021d754b84c5so3041210wrh.17
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:42:57 -0700 (PDT)
+        Wed, 20 Jul 2022 05:43:12 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7791564E27
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:43:11 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id o16-20020a9d4110000000b0061cac66bd6dso5281161ote.11
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hF1cdP0fG4ahpcF1th7ce9yHarDJkEwd60OZI8Yz/JM=;
+        b=SjKWZuuQRB2pwP7vDhTo+KDBg5Yi5pSxrwyC/ATBKTO7WIRDGizOo1JQdrT1PU0ohS
+         tcLiYjfZsMdsh6xLK6SZtoGXB+w5K0HOj2FJkIPG0GrU1nOBF8cmMi3R8xkoO/x1mXfj
+         hcttI/ijFd+jn7iPrd1QmewFsxL0Jkwnj4HPzAiHo/qvVUcCO1yexdryA4o0jC4d5OqP
+         caEutWl9pwEUYG2n+TIct8O+v4q3CtK7qsb0xja69Q8fnMv+E/VYd+SRNLe2eALoMxVG
+         OV2VraUgQW+IbKi2kjs7hMpqnwyKD/oJpAFqGZqJbv2YIQt5U840qA0KDk/gmrcBbIEM
+         w7yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=6RKfphNn3mPOW1MXkGNfh4n+QtAmR71ynMhMeD/fO8E=;
-        b=uMmIfMbSiD/St+Nx9graEXROZf1HkPte/FdXCt8cdc1Hqa/YrtNwrOTZkcbZUIAg6F
-         XJoQHvsX31UUi7P1/thvtiAT5HmwuL/hrXdPRNst3QJqAZSnJzyWwQkm2aXlrZu7TeK1
-         ajnR6wlP0WNT3sxtbw1dEGBDMPVPOxZh0r7ADjZ9mYr509/D9u+RQwvIFioHAIgmKzb4
-         aJ0zfdfky7cQS8BarPfN+8tl24oPkp1a94x//Q96XoRzZWFA38aWD34/UJsKcIRBCQko
-         IumlOQtzRMe1IMwIiESfnmxJqSUbUD1MyTwOE3SFWPNWVeMghMl0CIWPis+6f+4N5SAP
-         OpQw==
-X-Gm-Message-State: AJIora+9yRQfro/IyEn9epnwoYrgjmXBrXvIAyG3osFr1pXbn4xE2kA+
-        EVTIU0N36P1Lpb2oMoPep7dmwAJTf4Wu7b8xOiXd9Lw8jBSo1nfcnzI8DkaZ/q3kOstgUH3mS/a
-        mhQ07hLoxLicOVhHiTgBK9ufD
-X-Received: by 2002:a05:6000:1a88:b0:21d:aa97:cb16 with SMTP id f8-20020a0560001a8800b0021daa97cb16mr30480722wry.97.1658310176899;
-        Wed, 20 Jul 2022 02:42:56 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vLkuZu1Isp50EKcsrNnkjav5J73V5/aUvap3rND17xDst4/UY0s1U6Yu8aeSvpX5+PIIk6cA==
-X-Received: by 2002:a05:6000:1a88:b0:21d:aa97:cb16 with SMTP id f8-20020a0560001a8800b0021daa97cb16mr30480707wry.97.1658310176663;
-        Wed, 20 Jul 2022 02:42:56 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:e00:8d96:5dba:6bc4:6e89? (p200300cbc7060e008d965dba6bc46e89.dip0.t-ipconnect.de. [2003:cb:c706:e00:8d96:5dba:6bc4:6e89])
-        by smtp.gmail.com with ESMTPSA id h12-20020a05600c28cc00b003a325bd8517sm2190898wmd.5.2022.07.20.02.42.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 02:42:56 -0700 (PDT)
-Message-ID: <09d84297-65d5-a3df-fdc0-a7168cdb0798@redhat.com>
-Date:   Wed, 20 Jul 2022 11:42:50 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hF1cdP0fG4ahpcF1th7ce9yHarDJkEwd60OZI8Yz/JM=;
+        b=s61W6Hrz6tIM3j1cwCgDBLzqmPLhxbtFZdpQ4xjNWj8jj9ThMU1KZoLu7hRiwtzHDh
+         PGToVCNNmX0EtmXtqdqjkDqyZhLgYvlOM81nQV5UegXjtXfr5x6YZVW550zEgINHj3wS
+         jBmFaZi/YTvpdJBuwj51lnccJwOTFUon0LrmoveTrfnJmN/Rpxi68FtBgS90G8G/vIv7
+         Pt2YhoKX7Di17KGtaZtEeayIutq3ZbRBsTG/JjrBXk34E+mWMFI7/zGhh3iqvMqwxM5/
+         C84tvI6YufmIrKMF5idwdUf40VecY3E2IljuvowMwB8CuFXVyHGRNeqGtotOCSvt/gBi
+         BdMA==
+X-Gm-Message-State: AJIora98OBQnDJ1JASTvYQoNDzH3Oc1hQ+RxAObiayGrfPQ/jt4zK5RN
+        /UdLwD2dzWxJvGzpEwPsxezMDj6tJMpXRC88yKOF0xKzAr/PgQ==
+X-Google-Smtp-Source: AGRyM1sUYW8Q7/QlM8hj0ix520Ikjh2NGngg+x3SfVBwcQuDW18v58eaB1hdSzbEONcDJVQjdFasufWYM4tMo1VBtBw=
+X-Received: by 2002:a9d:6ace:0:b0:61c:8270:a04a with SMTP id
+ m14-20020a9d6ace000000b0061c8270a04amr10680774otq.134.1658310190663; Wed, 20
+ Jul 2022 02:43:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 01/14] userfaultfd: set dirty and young on
- writeprotect
-Content-Language: en-US
-To:     Nadav Amit <nadav.amit@gmail.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Nick Piggin <npiggin@gmail.com>
-References: <20220718120212.3180-1-namit@vmware.com>
- <20220718120212.3180-2-namit@vmware.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220718120212.3180-2-namit@vmware.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220719114552.477018590@linuxfoundation.org>
+In-Reply-To: <20220719114552.477018590@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 20 Jul 2022 15:12:59 +0530
+Message-ID: <CA+G9fYubQWYWQLp6oSeLcX62mmgs2JJwxBdSdRDMr5QP1EjftQ@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/71] 5.4.207-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.07.22 14:01, Nadav Amit wrote:
-> From: Nadav Amit <namit@vmware.com>
-> 
-> When userfaultfd makes a PTE writable, it can now change the PTE
-> directly, in some cases, without going triggering a page-fault first.
-> Yet, doing so might leave the PTE that was write-unprotected as old and
-> clean. At least on x86, this would cause a >500 cycles overhead when the
-> PTE is first accessed.
-> 
-> Use MM_CP_WILL_NEED to set the PTE as young and dirty when userfaultfd
-> gets a hint that the page is likely to be used. Avoid changing the PTE
-> to young and dirty in other cases to avoid excessive writeback and
-> messing with the page reclamation logic.
-> 
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Andrew Cooper <andrew.cooper3@citrix.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Yu Zhao <yuzhao@google.com>
-> Cc: Nick Piggin <npiggin@gmail.com>
-> ---
->  include/linux/mm.h | 2 ++
->  mm/mprotect.c      | 9 ++++++++-
->  mm/userfaultfd.c   | 8 ++++++--
->  3 files changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 9cc02a7e503b..4afd75ce5875 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1988,6 +1988,8 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
->  /* Whether this change is for write protecting */
->  #define  MM_CP_UFFD_WP                     (1UL << 2) /* do wp */
->  #define  MM_CP_UFFD_WP_RESOLVE             (1UL << 3) /* Resolve wp */
-> +/* Whether to try to mark entries as dirty as they are to be written */
-> +#define  MM_CP_WILL_NEED		   (1UL << 4)
->  #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
->  					    MM_CP_UFFD_WP_RESOLVE)
->  
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index 996a97e213ad..34c2dfb68c42 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -82,6 +82,7 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
->  	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
->  	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
->  	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
-> +	bool will_need = cp_flags & MM_CP_WILL_NEED;
->  
->  	tlb_change_page_size(tlb, PAGE_SIZE);
->  
-> @@ -172,6 +173,9 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
->  				ptent = pte_clear_uffd_wp(ptent);
->  			}
->  
-> +			if (will_need)
-> +				ptent = pte_mkyoung(ptent);
-> +
->  			/*
->  			 * In some writable, shared mappings, we might want
->  			 * to catch actual write access -- see
-> @@ -187,8 +191,11 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
->  			 */
->  			if ((cp_flags & MM_CP_TRY_CHANGE_WRITABLE) &&
->  			    !pte_write(ptent) &&
+On Tue, 19 Jul 2022 at 17:32, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.207 release.
+> There are 71 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.207-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Why would we want to check if we can set something writable if it
-already *is* writable? That doesn't make sense to me.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> -			    can_change_pte_writable(vma, addr, ptent))
-> +			    can_change_pte_writable(vma, addr, ptent)) {
->  				ptent = pte_mkwrite(ptent);
-> +				if (will_need)
-> +					ptent = pte_mkdirty(ptent);
-> +			}
+## Build
+* kernel: 5.4.207-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 0b5688944207ade9aea3eabc48e296ff5a72a529
+* git describe: v5.4.206-72-g0b5688944207
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+06-72-g0b5688944207
 
--- 
-Thanks,
+## Test Regressions (compared to v5.4.206)
+No test regressions found.
 
-David / dhildenb
+## Metric Regressions (compared to v5.4.206)
+No metric regressions found.
 
+## Test Fixes (compared to v5.4.206)
+No test fixes found.
+
+## Metric Fixes (compared to v5.4.206)
+No metric fixes found.
+
+## Test result summary
+total: 126185, pass: 112707, fail: 727, skip: 11723, xfail: 1028
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 307 total, 307 passed, 0 failed
+* arm64: 61 total, 57 passed, 4 failed
+* i386: 28 total, 26 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 53 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

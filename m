@@ -2,78 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3124257B978
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B2457B977
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbiGTPW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S234524AbiGTPWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiGTPWY (ORCPT
+        with ESMTP id S229742AbiGTPWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:22:24 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E325B057
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:22:22 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id d8so6643988wrp.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=10mCB1p9QXZ5hMNLpf9Atm/lE/ONgYcPbZJGAy+BbTE=;
-        b=q/XN4+moWU6pS26pJaG9um1OtEqOT7theGT9T2njWXp9STAdsitYpJ5YzAGp+8X285
-         vjOcfnmzs6G8P1zgLbACgfOQurgR041A8KRww5yLazluRoQu2p1l3/VL69wLq+VAAJPc
-         pWstZagMyvaVg6dKgXTVT9iC8iwgVNHhD5bwjtGjOH/BKZPfIC6wcll9KuNBL+j6uQdB
-         YjpkPX2fKO0HPXMHQxcNQMmDSBcvjZ0kPY2gbB+LEb3y6nmPlBJ0Ki/hADZGlHEvnM/V
-         sYZXVCx3MbGXBUXvDnWMV9Dpz14gPd/kKVuCZaQ7RSTBO/V/6NKcygwAnzWOMqAmXGuP
-         LVqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=10mCB1p9QXZ5hMNLpf9Atm/lE/ONgYcPbZJGAy+BbTE=;
-        b=atJgCEozSWTzPivGeOKlHnJvi4tfGMEzck08uqVj4aGUOYcF/jIQPIqPXi+zFhJw39
-         mxyeWIqXmJ8vfGTMx/XW6MfLPodeBqarDuG0+QhJb55GDinCz+OGHxHk+Ana763p/UoV
-         UXUSBOz6Xo+DlJXn7rK/Bx3tWzhd6MZPu7Q1vUZYsrTM3ja9WVYXC46a7TA8k7PatE4v
-         wJasY/B7i2bH56qQxbkv/zieyMw6Ms/mo3IheGWDgOtjlaW4s2XNGgFnGtVVqCqSmWQg
-         iGmbkGnbFFj674esN2G7XQGh6JsLUL7bIceud2EDfsNu4KbdO0wmZYlcn87TKkOgX2yD
-         BHpA==
-X-Gm-Message-State: AJIora/tkpMm7W/lsmjLJyCzQFm4UHW6sjm1BFRL9ZeIje4QLmb7wPQG
-        sYsaDRU5i2bYvoketitP5Jlk+F6tK8oUBa3YVrtHgw==
-X-Google-Smtp-Source: AGRyM1sZyA+O8GQAnPRNoGyzb+rUrnlyhsCr7vd7kTawL1/xfzhmiL/vjkD/Kiot4p8KNi5XZrNEnQyye57N26vhykc=
-X-Received: by 2002:a5d:4d8e:0:b0:21d:68d4:56eb with SMTP id
- b14-20020a5d4d8e000000b0021d68d456ebmr30086604wru.40.1658330541254; Wed, 20
- Jul 2022 08:22:21 -0700 (PDT)
+        Wed, 20 Jul 2022 11:22:22 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2072.outbound.protection.outlook.com [40.107.93.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1595A2EF;
+        Wed, 20 Jul 2022 08:22:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ErjJaRjpGSvUhj/Khq1ne8PMbXogimHG2BfdB14/L3n0MwR63Kb5A52yUBkvyY5LrmigXNb/doTvSfb2is7+SoPbv4VLy4maaxc3zAnSSUsdvNpg+ah/gS4kFryVjIoBcfNVTGDxz0tnKH+BeZ/wiMVMDGjYSizHQSmdsQzcA3+XY6yu84gaZ/QwekoJORd344o6RZHfSPsCqIJjqLof1CeKXtiBFa/M2MpqMJirsfM2vlptltjtsGBSFT1FmNcO7sdxJAu8q8pk1aL1pbSJ3tIUACsgH/sQRq7lsGTF/jGIfwIcyt3pSlIvbwOkT8cL4pyvGgobZLcNB3zR76RwrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aqcMFr1jCSEMstv3OyvsERAu7f/lcpHLHDSDkQ1ApFE=;
+ b=ofTxydvaMj8R8l+lW7+WWOp11h1wA52HKcbG21b7pRnn5v5Kte0obtP5nBxr1NJQUD6YuhZfk3B+Q1Fgxo0caTsnm5gMO/SMMYN3zIDSaC46AU/KaqV1cg1i/HteCfxLl57MVnlNkT60zlYY47AqOhzYuLXtxkfSx7ZOQ6DhaYt7VInxJUY/8ZhAIuxdSWQjjYAuWtafQJjf+bfb9SPNNhPlyWoy7tVjmUypp/VaSQYRY7zVMgr/kE6k0zTCPNJ5w0vfmrGiq9EadkLF3v1tOXMsByW8BBk/U+OCL4CHZetJWJD/NXvvGfOAv/yJ3jHEM+q+V4dxc1V8XiK1jlcDdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aqcMFr1jCSEMstv3OyvsERAu7f/lcpHLHDSDkQ1ApFE=;
+ b=WpwXnsiN79IeAOtsPsoHus6alOqCD2Obw42tCFXLlCnduFRUZSQ99jxViIiLK8eEnuGHIdQocHwkJ4BqEr0IcRLqw4sUr9/q39HlyVRYctcn6Ma3DjeE2N4Od8mbG7IftGqQ3Zs/KEnYlUbNU7cpG91sRGUOFw5uGQr56l6EKyQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by BN9PR12MB5305.namprd12.prod.outlook.com (2603:10b6:408:102::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.17; Wed, 20 Jul
+ 2022 15:22:18 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::1143:10a5:987a:7598]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::1143:10a5:987a:7598%6]) with mapi id 15.20.5438.023; Wed, 20 Jul 2022
+ 15:22:18 +0000
+Message-ID: <352edf44-5983-403f-b8f8-5dfbd92ea32d@amd.com>
+Date:   Wed, 20 Jul 2022 10:22:15 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 1/2] suspend: extend S2Idle ops by new notify handler
+Content-Language: en-US
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmytro Maluka <dmy@semihalf.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Dominik Behr <dbehr@google.com>, upstream@semihalf.com,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Sachi King <nakato@nakato.io>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>
+References: <20220707125329.378277-1-jaz@semihalf.com>
+ <20220707125329.378277-2-jaz@semihalf.com>
+ <CAJZ5v0gdCN3P52ko44LQMqWJvDArHxZ7p4aSiQamML7aG_kRAA@mail.gmail.com>
+ <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <CAH76GKO9sxnuLM--x6sg7m3bC_NgvLA94N6jHA-+5gW741-ByQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR14CA0057.namprd14.prod.outlook.com
+ (2603:10b6:610:56::37) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-2-elver@google.com>
- <CACT4Y+aA7QkAsufv6EMQ1O8mZaVd-eNOqRrx2a7qvPR4Tt=izA@mail.gmail.com>
-In-Reply-To: <CACT4Y+aA7QkAsufv6EMQ1O8mZaVd-eNOqRrx2a7qvPR4Tt=izA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 20 Jul 2022 08:22:08 -0700
-Message-ID: <CAP-5=fWKM09_cgOjEyDjLrs5KgvXv1vLbyBgTFAEV0Sr3f_3YA@mail.gmail.com>
-Subject: Re: [PATCH v3 01/14] perf/hw_breakpoint: Add KUnit test for
- constraints accounting
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bbba6f2b-0c3f-4606-648c-08da6a63a259
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5305:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hYHJV2EqD5yo+2NVnasNljmCiA8wTXKBLW2Lm5BpObJ+qED1avfIDcjMBp/naCV8pjEZAy1i/9pkGixJ6yf+yBv9i6ZXhnJ1I1SyZwwDXZEV+dikWUD2Tvc252/uSPInD2Z/N10wV416PuyhKv/KFR/qhW1EsLO8kPdE3mBekKBLIKLtND/7w6ZNOLt/4f8qNBJeEoER8KHyPjdSXxIMSmUepA2az1b/QusJAF/YhDct1BqfTiTnfsgerpDOdAiIekBkg6PJSKLh+XyQYLIWtW/Ka7ZjUA4LGvyfgdBEVwSUPjjvGQAPoKIXEkHYTbTq0l0bvDkBh2sVKPpUVGXiQNr5QYu9LISM4lwoCYb5wI+Brc7eXNn3i6PS6cQN9PUjC2MhPv6qvWmgImCc756sY5j8457MP5U1AQvRWnnBojJ3xuiLkiL7QYWY6xpwbE3bO0QoTwmfkLglEFz8hlsiyfNz7KDat5jYpnnal2M0DhhBlXmwxUIidUp7DBLJcbba37rIBRpj7X2soc0wJOtLJtu9/SZRs/hHnnM3ME/gx5sYPZOkBDGBtcdXp1rfZiXuBqkkNSPljCXu3eYe0CS2YpoFsOVtz1udGr2ddVEbiTl8B9vK3ngtQRrMsS7oSrrTgNQO71TeXRF+n+q1eqnxwTHTjcBJFPXMFqHj/noZxM2bZKsCCb8GApUvI9e1lbxhijAuswGNMbCQMRUkFKjeIDrokDKH9UMqJXPQh8WbhlDXHSp7AY7WrJJcrQOxRUUSUbT8TSOjvJUAlY3kFNk/m5KXgMBz9bge/JcNYzDwgOedwNgRizhTQVKZlngYyKrV90Nj6ii14ATSdm3+WxPsaFhUpV0EK/53KFMqPbX6MA/5lEt0MGb6weTQf10wujP+9xLGF6bpJLUkEAFrEtsjag==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(376002)(346002)(39860400002)(478600001)(6486002)(966005)(186003)(86362001)(66476007)(26005)(2906002)(6506007)(36756003)(8676002)(110136005)(316002)(41300700001)(45080400002)(6666004)(31696002)(54906003)(31686004)(66946007)(4326008)(83380400001)(66556008)(2616005)(6512007)(7416002)(8936002)(5660300002)(15650500001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZXlVMGd5dXlvV21EVU9kalk2TWRpSDFRYTRTd1kyODZ3ME9rQ3dzRThqcURp?=
+ =?utf-8?B?aDV5QXZpVGswVHYxdjJyNmhSTTJiWG01Z0RWQmR2M1J4RTVGUjRrQ1hmZ0dj?=
+ =?utf-8?B?MHRreXQreThwaFhuQndxYkJLRzBxQ0ZoRXpnTkE5cGQyVTlQSldTLzVFK245?=
+ =?utf-8?B?OXd3NGFwR2hqc0w3b0RpRng4SUJocXZadmZORWdZemx2V0c1T2RPZHhGb09D?=
+ =?utf-8?B?Q1JMWjRKdEhtbi9DckovMUxnZ3QyalFONUljTmhpWkhONjRMZVNYMlRHT3lq?=
+ =?utf-8?B?eUxVWUhkdXZnM3JSTXhqb3ZuNWlqU0d0S3ZKYW96RWY4RmxTYnNMd1YwUEhI?=
+ =?utf-8?B?RktUYjlvQW5wczQwREk5WkRncDJNY1Y0TnlISlY1R3VvekxFU3l6cHhTQ3JF?=
+ =?utf-8?B?NnFYeXkyMFlZcWlqSForNHg2Si9pd1F6Z3BEazkxU3hPb0NJa2VsMHpHekxz?=
+ =?utf-8?B?Q2RIUG9OVmovRnpvMTNFcTNEblZYRitqMlBaT0pMMnE0blNrUWcrMURxZ2Rs?=
+ =?utf-8?B?eUhDSXdwZ1dDNWd4WGR0RzNEZ0dnZjZtdENiTHRCMitoZHAzcTE0M3JJMUJF?=
+ =?utf-8?B?am1TUVFjQmdUeEZNQi9QNjQvS2U5Qk1OMUJ2Tjc5NUFWelFWRk9VZHYxc21v?=
+ =?utf-8?B?TkNvRUZYUlA1b3hnVVR0ek1aL2pPRGlnZWppQXZpUllsclB0WWM3ZnFTQk1p?=
+ =?utf-8?B?enJoV3JCTG0rY1J5UWdmbGc2NDkyUXhXQ01wSnNaSyt6eGZRZEErem1MNzd1?=
+ =?utf-8?B?RzNldG1XNDdnMjRTU0dhZnk0d2ZVTXVQc1VDOGtMUEtRNzFYU2thNFRBdlNk?=
+ =?utf-8?B?N0RuMXRSQnZMdXdZVlNpRUtya2dab2haVTRnTUV3dmhCZDIwd3QwaGZEQ3B0?=
+ =?utf-8?B?ZkFaeUZYRFF1aVdZVGhmSzJrdWVCQnc3TGw3MDZzZzJFdFdoUFNqSVkzMzJM?=
+ =?utf-8?B?YXBXdVRlOU42czkvSEpjcUdVTXNaOUFLQVNxS0JLTEdOOHhlMEtkM0JIMlh0?=
+ =?utf-8?B?RW5ub3VrdWxuVDhtMFV4YmdwTlppTm5WY083ZzB2c1IrQTVVQW1KQldwRmwy?=
+ =?utf-8?B?YllEa0p3T0lwOFlPR1VCWmFNNEFSMUlUYTRnSEZmWGZPZnk0QWdaVS9qRFZa?=
+ =?utf-8?B?S2pXT1M3RDNZbXRmV0t2MTRZeEdXVUx4RHNYZ0N2dExHc2dsbW91azhzNyt3?=
+ =?utf-8?B?b2U3MVd5N2doZHNZTGJvNjF3a1hUSStlWTljcCtVZHhRbFVqWGNacjlCSEFW?=
+ =?utf-8?B?UzllOTduRVlCTjZSUlRWWEY0ZmoxMHhXcmovanNzenR2UG1hdTkrNjFWeU04?=
+ =?utf-8?B?NUQrVkJNRVRrRXNEVzRuVWFoVFpVZVdpNmRDMks1VHVlazJyaGcxeE9wbnJP?=
+ =?utf-8?B?RkJEbGRUb0tUb0N0U2hpRWJCSXJtSmlWbHN2d2FwMFloTjFCSUZMbkQxUk1i?=
+ =?utf-8?B?L2k3WFJ1d1M1ZGpJNldlOEZEaWpRdGRPYmV5WTRUbnIvRzRyVlpCZmRtOC9u?=
+ =?utf-8?B?ZCt1ZnVUSDF5ZlRobm9PMHZ2cGNqVzhJOUdDcWNVVTdZVzFBcUY5QWJZMzl1?=
+ =?utf-8?B?Wk9JanhHVytleTZDSGlNU1RFc2hwYkxrUWo2ajRaR3BsV1MwRDJTdFhSWkdD?=
+ =?utf-8?B?d1ZIUGszVndpTkRmZmxpaHprUnZrMkUwcHFNNmJ6UUpjUHRYVTY3VkNvbWM4?=
+ =?utf-8?B?bHNaYjVtYlo5RjhVanpoQ25GTDJqMENBbk54NFU1Nk5WTTk1c0dMaytTSmVx?=
+ =?utf-8?B?SnZ2QWUyZ1pEd3JiNFFudG8yOXBkN3cyTkNSbis3MXMrdlRLMC9Na1ZMaHNu?=
+ =?utf-8?B?VjVYay9SYXVkSlYrZG5aaXQ0dW5Bai9lcDBDZm1DQWFZQWkyak9CVXU1aU0y?=
+ =?utf-8?B?TUh3bEpnVW1mWVI5R1NoSjRZNmZCMEJEWmovMTF2YytDSzJpUk1oMzU0eGd0?=
+ =?utf-8?B?NDZFdzNXUWxDQUhOcExYRzhObENwQk1KVmQ3WFppZ0NHTlJha3dlM3lMU1Ax?=
+ =?utf-8?B?UXV5NmlNMU5zZS8rdFJyOFhxa2p6MlE5MHhCNU5qQXlkN2VuOHdwNGhYYjVK?=
+ =?utf-8?B?c2RXY2MyNEFlcXpOOEdRdnE1dHdoTWwrdUhaTXFPV0dZUHdyUzVaUFdHeVho?=
+ =?utf-8?Q?ygljFS7gH7njJ6lJDoGEuh2jJ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbba6f2b-0c3f-4606-648c-08da6a63a259
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 15:22:18.5982
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vb0OzfTbo5p7Pi3g6afqUv0NEx7sjrdJI+RCDds8QSSODEvuK7q2nrRSRAe+9fxAiPrAGR5ME1+ebji7xbf8+g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5305
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,400 +141,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 8:11 AM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Mon, 4 Jul 2022 at 17:06, Marco Elver <elver@google.com> wrote:
-> >
-> > Add KUnit test for hw_breakpoint constraints accounting, with various
-> > interesting mixes of breakpoint targets (some care was taken to catch
-> > interesting corner cases via bug-injection).
-> >
-> > The test cannot be built as a module because it requires access to
-> > hw_breakpoint_slots(), which is not inlinable or exported on all
-> > architectures.
-> >
-> > Signed-off-by: Marco Elver <elver@google.com>
->
-> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+>> It looks like you want suspend-to-idle to behave like S3 and it won't.
+> 
+> In a way, yes, we compensate for the lack of something like PM1_CNT to
+> trap on for detecting that the guest is suspending.
+> We could instead force the guest to use S3 but IMO it is undesirable,
+> since it generally does make a difference which suspend mode is used
+> in the guest, s2idle or S3, e.g some drivers check which suspend type
+> is used and based on that behaves differently during suspend. One of
+> the example is:
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.18.12%2Fsource%2Fdrivers%2Fgpu%2Fdrm%2Famd%2Famdgpu%2Famdgpu_drv.c%23L2323&amp;data=05%7C01%7Cmario.limonciello%40amd.com%7C7bdd972291324d03847e08da6a51ff4f%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637939197694682503%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=5M1sn3iRybQzSFi3ojQ4YTJuW41DlgJNl5sxbWEvLBQ%3D&amp;reserved=0
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.18.12%2Fsource%2Fdrivers%2Fgpu%2Fdrm%2Famd%2Famdgpu%2Famdgpu_acpi.c%23L1069&amp;data=05%7C01%7Cmario.limonciello%40amd.com%7C7bdd972291324d03847e08da6a51ff4f%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637939197694682503%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=fIrLmZAgpIRPYO4to4uYUoBSEWXmz1lr%2BTnR14kAfvM%3D&amp;reserved=0
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.18.12%2Fsource%2Fdrivers%2Fgpu%2Fdrm%2Famd%2Famdgpu%2Famdgpu_gfx.c%23L583&amp;data=05%7C01%7Cmario.limonciello%40amd.com%7C7bdd972291324d03847e08da6a51ff4f%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637939197694682503%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=SNsbmpV4HrgA%2Bkff4JzRodNDzKvwM5tnkGDvrKO44dc%3D&amp;reserved=0
+> 
 
-Acked-by: Ian Rogers <irogers@google.com>
+Actually I recently was suggesting a change to add this detection to 
+another driver to set a policy and Rafael pushed back.  He's actively 
+removing it from other places in the kernel.
 
-Thanks,
-Ian
+For amdgpu stuff you pointed above, are you wanting to pass through the 
+PCIe GPU device to a guest and then suspend that guest? Or is this just 
+illustrative?
 
-> > ---
-> > v3:
-> > * Don't use raw_smp_processor_id().
-> >
-> > v2:
-> > * New patch.
-> > ---
-> >  kernel/events/Makefile             |   1 +
-> >  kernel/events/hw_breakpoint_test.c | 323 +++++++++++++++++++++++++++++
-> >  lib/Kconfig.debug                  |  10 +
-> >  3 files changed, 334 insertions(+)
-> >  create mode 100644 kernel/events/hw_breakpoint_test.c
-> >
-> > diff --git a/kernel/events/Makefile b/kernel/events/Makefile
-> > index 8591c180b52b..91a62f566743 100644
-> > --- a/kernel/events/Makefile
-> > +++ b/kernel/events/Makefile
-> > @@ -2,4 +2,5 @@
-> >  obj-y := core.o ring_buffer.o callchain.o
-> >
-> >  obj-$(CONFIG_HAVE_HW_BREAKPOINT) += hw_breakpoint.o
-> > +obj-$(CONFIG_HW_BREAKPOINT_KUNIT_TEST) += hw_breakpoint_test.o
-> >  obj-$(CONFIG_UPROBES) += uprobes.o
-> > diff --git a/kernel/events/hw_breakpoint_test.c b/kernel/events/hw_breakpoint_test.c
-> > new file mode 100644
-> > index 000000000000..433c5c45e2a5
-> > --- /dev/null
-> > +++ b/kernel/events/hw_breakpoint_test.c
-> > @@ -0,0 +1,323 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * KUnit test for hw_breakpoint constraints accounting logic.
-> > + *
-> > + * Copyright (C) 2022, Google LLC.
-> > + */
-> > +
-> > +#include <kunit/test.h>
-> > +#include <linux/cpumask.h>
-> > +#include <linux/hw_breakpoint.h>
-> > +#include <linux/kthread.h>
-> > +#include <linux/perf_event.h>
-> > +#include <asm/hw_breakpoint.h>
-> > +
-> > +#define TEST_REQUIRES_BP_SLOTS(test, slots)                                            \
-> > +       do {                                                                            \
-> > +               if ((slots) > get_test_bp_slots()) {                                    \
-> > +                       kunit_skip((test), "Requires breakpoint slots: %d > %d", slots, \
-> > +                                  get_test_bp_slots());                                \
-> > +               }                                                                       \
-> > +       } while (0)
-> > +
-> > +#define TEST_EXPECT_NOSPC(expr) KUNIT_EXPECT_EQ(test, -ENOSPC, PTR_ERR(expr))
-> > +
-> > +#define MAX_TEST_BREAKPOINTS 512
-> > +
-> > +static char break_vars[MAX_TEST_BREAKPOINTS];
-> > +static struct perf_event *test_bps[MAX_TEST_BREAKPOINTS];
-> > +static struct task_struct *__other_task;
-> > +
-> > +static struct perf_event *register_test_bp(int cpu, struct task_struct *tsk, int idx)
-> > +{
-> > +       struct perf_event_attr attr = {};
-> > +
-> > +       if (WARN_ON(idx < 0 || idx >= MAX_TEST_BREAKPOINTS))
-> > +               return NULL;
-> > +
-> > +       hw_breakpoint_init(&attr);
-> > +       attr.bp_addr = (unsigned long)&break_vars[idx];
-> > +       attr.bp_len = HW_BREAKPOINT_LEN_1;
-> > +       attr.bp_type = HW_BREAKPOINT_RW;
-> > +       return perf_event_create_kernel_counter(&attr, cpu, tsk, NULL, NULL);
-> > +}
-> > +
-> > +static void unregister_test_bp(struct perf_event **bp)
-> > +{
-> > +       if (WARN_ON(IS_ERR(*bp)))
-> > +               return;
-> > +       if (WARN_ON(!*bp))
-> > +               return;
-> > +       unregister_hw_breakpoint(*bp);
-> > +       *bp = NULL;
-> > +}
-> > +
-> > +static int get_test_bp_slots(void)
-> > +{
-> > +       static int slots;
-> > +
-> > +       if (!slots)
-> > +               slots = hw_breakpoint_slots(TYPE_DATA);
-> > +
-> > +       return slots;
-> > +}
-> > +
-> > +static void fill_one_bp_slot(struct kunit *test, int *id, int cpu, struct task_struct *tsk)
-> > +{
-> > +       struct perf_event *bp = register_test_bp(cpu, tsk, *id);
-> > +
-> > +       KUNIT_ASSERT_NOT_NULL(test, bp);
-> > +       KUNIT_ASSERT_FALSE(test, IS_ERR(bp));
-> > +       KUNIT_ASSERT_NULL(test, test_bps[*id]);
-> > +       test_bps[(*id)++] = bp;
-> > +}
-> > +
-> > +/*
-> > + * Fills up the given @cpu/@tsk with breakpoints, only leaving @skip slots free.
-> > + *
-> > + * Returns true if this can be called again, continuing at @id.
-> > + */
-> > +static bool fill_bp_slots(struct kunit *test, int *id, int cpu, struct task_struct *tsk, int skip)
-> > +{
-> > +       for (int i = 0; i < get_test_bp_slots() - skip; ++i)
-> > +               fill_one_bp_slot(test, id, cpu, tsk);
-> > +
-> > +       return *id + get_test_bp_slots() <= MAX_TEST_BREAKPOINTS;
-> > +}
-> > +
-> > +static int dummy_kthread(void *arg)
-> > +{
-> > +       return 0;
-> > +}
-> > +
-> > +static struct task_struct *get_other_task(struct kunit *test)
-> > +{
-> > +       struct task_struct *tsk;
-> > +
-> > +       if (__other_task)
-> > +               return __other_task;
-> > +
-> > +       tsk = kthread_create(dummy_kthread, NULL, "hw_breakpoint_dummy_task");
-> > +       KUNIT_ASSERT_FALSE(test, IS_ERR(tsk));
-> > +       __other_task = tsk;
-> > +       return __other_task;
-> > +}
-> > +
-> > +static int get_test_cpu(int num)
-> > +{
-> > +       int cpu;
-> > +
-> > +       WARN_ON(num < 0);
-> > +
-> > +       for_each_online_cpu(cpu) {
-> > +               if (num-- <= 0)
-> > +                       break;
-> > +       }
-> > +
-> > +       return cpu;
-> > +}
-> > +
-> > +/* ===== Test cases ===== */
-> > +
-> > +static void test_one_cpu(struct kunit *test)
-> > +{
-> > +       int idx = 0;
-> > +
-> > +       fill_bp_slots(test, &idx, get_test_cpu(0), NULL, 0);
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +}
-> > +
-> > +static void test_many_cpus(struct kunit *test)
-> > +{
-> > +       int idx = 0;
-> > +       int cpu;
-> > +
-> > +       /* Test that CPUs are independent. */
-> > +       for_each_online_cpu(cpu) {
-> > +               bool do_continue = fill_bp_slots(test, &idx, cpu, NULL, 0);
-> > +
-> > +               TEST_EXPECT_NOSPC(register_test_bp(cpu, NULL, idx));
-> > +               if (!do_continue)
-> > +                       break;
-> > +       }
-> > +}
-> > +
-> > +static void test_one_task_on_all_cpus(struct kunit *test)
-> > +{
-> > +       int idx = 0;
-> > +
-> > +       fill_bp_slots(test, &idx, -1, current, 0);
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +       /* Remove one and adding back CPU-target should work. */
-> > +       unregister_test_bp(&test_bps[0]);
-> > +       fill_one_bp_slot(test, &idx, get_test_cpu(0), NULL);
-> > +}
-> > +
-> > +static void test_two_tasks_on_all_cpus(struct kunit *test)
-> > +{
-> > +       int idx = 0;
-> > +
-> > +       /* Test that tasks are independent. */
-> > +       fill_bp_slots(test, &idx, -1, current, 0);
-> > +       fill_bp_slots(test, &idx, -1, get_other_task(test), 0);
-> > +
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, get_other_task(test), idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), get_other_task(test), idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +       /* Remove one from first task and adding back CPU-target should not work. */
-> > +       unregister_test_bp(&test_bps[0]);
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +}
-> > +
-> > +static void test_one_task_on_one_cpu(struct kunit *test)
-> > +{
-> > +       int idx = 0;
-> > +
-> > +       fill_bp_slots(test, &idx, get_test_cpu(0), current, 0);
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +       /*
-> > +        * Remove one and adding back CPU-target should work; this case is
-> > +        * special vs. above because the task's constraints are CPU-dependent.
-> > +        */
-> > +       unregister_test_bp(&test_bps[0]);
-> > +       fill_one_bp_slot(test, &idx, get_test_cpu(0), NULL);
-> > +}
-> > +
-> > +static void test_one_task_mixed(struct kunit *test)
-> > +{
-> > +       int idx = 0;
-> > +
-> > +       TEST_REQUIRES_BP_SLOTS(test, 3);
-> > +
-> > +       fill_one_bp_slot(test, &idx, get_test_cpu(0), current);
-> > +       fill_bp_slots(test, &idx, -1, current, 1);
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +
-> > +       /* Transition from CPU-dependent pinned count to CPU-independent. */
-> > +       unregister_test_bp(&test_bps[0]);
-> > +       unregister_test_bp(&test_bps[1]);
-> > +       fill_one_bp_slot(test, &idx, get_test_cpu(0), NULL);
-> > +       fill_one_bp_slot(test, &idx, get_test_cpu(0), NULL);
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +}
-> > +
-> > +static void test_two_tasks_on_one_cpu(struct kunit *test)
-> > +{
-> > +       int idx = 0;
-> > +
-> > +       fill_bp_slots(test, &idx, get_test_cpu(0), current, 0);
-> > +       fill_bp_slots(test, &idx, get_test_cpu(0), get_other_task(test), 0);
-> > +
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, get_other_task(test), idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), get_other_task(test), idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +       /* Can still create breakpoints on some other CPU. */
-> > +       fill_bp_slots(test, &idx, get_test_cpu(1), NULL, 0);
-> > +}
-> > +
-> > +static void test_two_tasks_on_one_all_cpus(struct kunit *test)
-> > +{
-> > +       int idx = 0;
-> > +
-> > +       fill_bp_slots(test, &idx, get_test_cpu(0), current, 0);
-> > +       fill_bp_slots(test, &idx, -1, get_other_task(test), 0);
-> > +
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, get_other_task(test), idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), get_other_task(test), idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +       /* Cannot create breakpoints on some other CPU either. */
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(1), NULL, idx));
-> > +}
-> > +
-> > +static void test_task_on_all_and_one_cpu(struct kunit *test)
-> > +{
-> > +       int tsk_on_cpu_idx, cpu_idx;
-> > +       int idx = 0;
-> > +
-> > +       TEST_REQUIRES_BP_SLOTS(test, 3);
-> > +
-> > +       fill_bp_slots(test, &idx, -1, current, 2);
-> > +       /* Transitioning from only all CPU breakpoints to mixed. */
-> > +       tsk_on_cpu_idx = idx;
-> > +       fill_one_bp_slot(test, &idx, get_test_cpu(0), current);
-> > +       fill_one_bp_slot(test, &idx, -1, current);
-> > +
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +
-> > +       /* We should still be able to use up another CPU's slots. */
-> > +       cpu_idx = idx;
-> > +       fill_one_bp_slot(test, &idx, get_test_cpu(1), NULL);
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(1), NULL, idx));
-> > +
-> > +       /* Transitioning back to task target on all CPUs. */
-> > +       unregister_test_bp(&test_bps[tsk_on_cpu_idx]);
-> > +       /* Still have a CPU target breakpoint in get_test_cpu(1). */
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       /* Remove it and try again. */
-> > +       unregister_test_bp(&test_bps[cpu_idx]);
-> > +       fill_one_bp_slot(test, &idx, -1, current);
-> > +
-> > +       TEST_EXPECT_NOSPC(register_test_bp(-1, current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), current, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(0), NULL, idx));
-> > +       TEST_EXPECT_NOSPC(register_test_bp(get_test_cpu(1), NULL, idx));
-> > +}
-> > +
-> > +static struct kunit_case hw_breakpoint_test_cases[] = {
-> > +       KUNIT_CASE(test_one_cpu),
-> > +       KUNIT_CASE(test_many_cpus),
-> > +       KUNIT_CASE(test_one_task_on_all_cpus),
-> > +       KUNIT_CASE(test_two_tasks_on_all_cpus),
-> > +       KUNIT_CASE(test_one_task_on_one_cpu),
-> > +       KUNIT_CASE(test_one_task_mixed),
-> > +       KUNIT_CASE(test_two_tasks_on_one_cpu),
-> > +       KUNIT_CASE(test_two_tasks_on_one_all_cpus),
-> > +       KUNIT_CASE(test_task_on_all_and_one_cpu),
-> > +       {},
-> > +};
-> > +
-> > +static int test_init(struct kunit *test)
-> > +{
-> > +       /* Most test cases want 2 distinct CPUs. */
-> > +       return num_online_cpus() < 2 ? -EINVAL : 0;
-> > +}
-> > +
-> > +static void test_exit(struct kunit *test)
-> > +{
-> > +       for (int i = 0; i < MAX_TEST_BREAKPOINTS; ++i) {
-> > +               if (test_bps[i])
-> > +                       unregister_test_bp(&test_bps[i]);
-> > +       }
-> > +
-> > +       if (__other_task) {
-> > +               kthread_stop(__other_task);
-> > +               __other_task = NULL;
-> > +       }
-> > +}
-> > +
-> > +static struct kunit_suite hw_breakpoint_test_suite = {
-> > +       .name = "hw_breakpoint",
-> > +       .test_cases = hw_breakpoint_test_cases,
-> > +       .init = test_init,
-> > +       .exit = test_exit,
-> > +};
-> > +
-> > +kunit_test_suites(&hw_breakpoint_test_suite);
-> > +
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_AUTHOR("Marco Elver <elver@google.com>");
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 2e24db4bff19..4c87a6edf046 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -2513,6 +2513,16 @@ config STACKINIT_KUNIT_TEST
-> >           CONFIG_GCC_PLUGIN_STRUCTLEAK, CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF,
-> >           or CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
-> >
-> > +config HW_BREAKPOINT_KUNIT_TEST
-> > +       bool "Test hw_breakpoint constraints accounting" if !KUNIT_ALL_TESTS
-> > +       depends on HAVE_HW_BREAKPOINT
-> > +       depends on KUNIT=y
-> > +       default KUNIT_ALL_TESTS
-> > +       help
-> > +         Tests for hw_breakpoint constraints accounting.
-> > +
-> > +         If unsure, say N.
-> > +
-> >  config TEST_UDELAY
-> >         tristate "udelay test driver"
-> >         help
-> > --
-> > 2.37.0.rc0.161.g10f37bed90-goog
-> >
+For a dGPU I would expect it works, but I don't think passing an APU's 
+GPU PCIe endpoint would functionally work (there were bugs reported on 
+this I recall).
+
+That code path you point out only has special handling for APU when 
+headed to S0ix and that's because the GPU driver happens to be where the 
+control point is for some common silicon functions.  If the bug I 
+mentioned about PCIe passthrough of the APU GPU endpoint to the guest is 
+fixed and the guest needs to do s0ix when the host doesn't we're going 
+to have other breakage to worry about because of that common silicon 
+functionality I mentioned.

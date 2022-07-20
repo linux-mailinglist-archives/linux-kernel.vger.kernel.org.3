@@ -2,158 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35CA57B948
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AC957B92E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241180AbiGTPMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
+        id S240235AbiGTPHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiGTPML (ORCPT
+        with ESMTP id S232429AbiGTPHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:12:11 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B313CBE5;
-        Wed, 20 Jul 2022 08:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658329930; x=1689865930;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=q2IlxigBdcwC0dpWUgLpaaCiXj48I0dLaoXRVby3NyA=;
-  b=JVxnA3G31BtwwX7d89ETBKonHVpwhK4I3u2fu7mJk3+lv/F5g+6hMlFI
-   voWmJsThLQ0l5RXtt395CJTthSmFEEBdGsi+WIKvdLBQfX8nbhiXqN9Qe
-   ET1r2bf3pmInDiYPuxddPimaNum33EKgsAH+lFUhKFj3iAXDvMg9CnqO+
-   vbUg1tHuoJbGuxV4ITFJdZzrxtaPSfg7HgpRxUdFv3Yh0+abmruxgGjue
-   629HVUuhoV9SJBPPqHd0Vy74LA1qlNKknRstmM/j/gYARF8cHUiVfdqC0
-   jJC+5Ld3nRSuBOISqtHImJKQsZj3ZHxQBETUIhW6jF55X2aBIpteJWyji
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="285567970"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="285567970"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 08:12:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="595275695"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 20 Jul 2022 08:11:56 -0700
-Date:   Wed, 20 Jul 2022 23:07:06 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
-Message-ID: <20220720150706.GB124133@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
- <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
- <20220719140843.GA84779@chaop.bj.intel.com>
- <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
+        Wed, 20 Jul 2022 11:07:32 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300AC237D6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:07:31 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id tk8so22225173ejc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:07:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QLkLqL61DDqJ9IAVUdmTVDocJg5pLEqlAURJ5AHPPUk=;
+        b=jwiuRcsVxReYTQwzNleS0OK+pJTpyysxB+6naxh1/qIV3RDFn0d/Gah6qlvxG7mYR0
+         +Ae6/nMY7OPLolxegD4LWlydgrTVuRzzVTAiuQHwCiE+AkUiVyb3/6ZBLWYAN2A6T8iR
+         nsCrclsH10l+1H/sy8X2ZWmsfqB6oGWuSZZdQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QLkLqL61DDqJ9IAVUdmTVDocJg5pLEqlAURJ5AHPPUk=;
+        b=l5yIxZTrS0C71G1FuZz1ajBU20u7eEBnatSxPySb5Hw1qvklUDIx1RN+cqQsj2Xibd
+         5fL/CqGhMSgQ1oUd1E/9PNv0qHDueqC6uq6vijyCeLMrf+zhA/cAjSxB94lCxhOQuv3v
+         xNARBCWA75vHvMtqVpWOHNCbrJS0WSNmW6ecounGXm4RRl/P5N3Oulq/LcgmMIrG701v
+         q1m6lgILqgPKP8oCL1kwzWEz7JlrltbqjZJ6kZMCP0BMGed2rTk3ZFn/rjaawg1Znyo0
+         jO9trkNfh/TAMYTqK02uuaXaz0lnS8jzFvRAMX821W8Ho9cNot0YlaQt4V7pvhpegYlb
+         t5ig==
+X-Gm-Message-State: AJIora+xS173hntw67kDC0b0FUWTpPSWpRbnj0+TSn6LsxSEGH9/jW49
+        iQLL4o9eE1fMn8D6MEE1mg26spcMnQL99ZtHKfQ=
+X-Google-Smtp-Source: AGRyM1u9l0aFlxXjpJ2wzlayeq5LDOoMWSyuijFLK8ekwbtcPT+Pn/M1n7v5G0UzgGmTlmQvxbgf4g==
+X-Received: by 2002:a17:907:9803:b0:72e:ec55:b2a5 with SMTP id ji3-20020a170907980300b0072eec55b2a5mr26536973ejc.347.1658329649496;
+        Wed, 20 Jul 2022 08:07:29 -0700 (PDT)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
+        by smtp.gmail.com with ESMTPSA id p14-20020aa7cc8e000000b00435651c4a01sm12444857edt.56.2022.07.20.08.07.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 08:07:28 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso1547714wma.2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:07:28 -0700 (PDT)
+X-Received: by 2002:a05:600c:1549:b0:3a3:2aa2:6f60 with SMTP id
+ f9-20020a05600c154900b003a32aa26f60mr2807595wmg.57.1658329648175; Wed, 20 Jul
+ 2022 08:07:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220720073755.1.Ifab936517646b3876dd31b6e9b1b58a858529e57@changeid>
+ <4cc6a276-4cbe-506a-6425-677c56469645@linaro.org>
+In-Reply-To: <4cc6a276-4cbe-506a-6425-677c56469645@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 20 Jul 2022 08:07:14 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WP22g2ZhyeGeYJcGtQTBeKjinxQRCXicHxeVh-ziC8iA@mail.gmail.com>
+Message-ID: <CAD=FV=WP22g2ZhyeGeYJcGtQTBeKjinxQRCXicHxeVh-ziC8iA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: arm: qcom: Document additional sku6 for
+ sc7180 pazquel
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 04:23:52PM +0200, Gupta, Pankaj wrote:
-> 
-> > > > +bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
-> > > > +{
-> > > > +	return false;
-> > > > +}
-> > > 
-> > > Does this function has to be overriden by SEV and TDX to support the private
-> > > regions?
-> > 
-> > Yes it should be overridden by architectures which want to support it.
-> 
-> o.k
-> > 
-> > > 
-> > > > +
-> > > >    static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
-> > > >    {
-> > > >    	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
-> > > > @@ -4689,6 +4729,22 @@ static long kvm_vm_ioctl(struct file *filp,
-> > > >    		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
-> > > >    		break;
-> > > >    	}
-> > > > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
-> > > > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
-> > > > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
-> > > > +		struct kvm_enc_region region;
-> > > > +
-> > > > +		if (!kvm_arch_private_mem_supported(kvm))
-> > > > +			goto arch_vm_ioctl;
-> > > > +
-> > > > +		r = -EFAULT;
-> > > > +		if (copy_from_user(&region, argp, sizeof(region)))
-> > > > +			goto out;
-> > > > +
-> > > > +		r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
-> > > 
-> > > this is to store private region metadata not only the encrypted region?
-> > 
-> > Correct.
-> 
-> Sorry for not being clear, was suggesting name change of this function from:
-> "kvm_vm_ioctl_set_encrypted_region" to "kvm_vm_ioctl_set_private_region"
+Hi,
 
-Though I don't have strong reason to change it, I'm fine with this and
-this name matches the above kvm_arch_private_mem_supported perfectly.
+On Wed, Jul 20, 2022 at 12:46 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 20/07/2022 09:38, Yunlong Jia wrote:
+> > The difference between sku6 and sku4 is that there is no esim
+> >
+> > Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
+> > ---
+> >
+> >  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> > index 4dd18fbf20b6..aebeefdab27f 100644
+> > --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> > @@ -410,6 +410,7 @@ properties:
+> >        - description: Google Pazquel with LTE and Parade (newest rev)
+> >          items:
+> >            - const: google,pazquel-sku4
+> > +          - const: google,pazquel-sku6
+>
+> This looks wrong, did you test it?
 
-Thanks,
-Chao
-> 
-> > 
-> > > 
-> > > Also, seems same ioctl can be used to put other regions (e.g firmware, later
-> > > maybe DAX backend etc) into private memory?
-> > 
-> > Possibly. Depends on what exactly the semantics is. If just want to set
-> > those regions as private current code already support that.
-> 
-> Agree. Sure!
-> 
-> 
-> Thanks,
-> Pankaj
+Why do you think it's wrong? This patch is adding a second compatible
+string to an existing dts. The only difference between SKU4 and SKU6
+is that one of them has the eSIM component stuffed and the other one
+doesn't. This need not be represented in the dts since the eSIM is
+automatically detected, but it was still stuffed as a SKU strapping so
+the factory could tell whether the missing eSIM was an error or
+intentional.
+
+This is just like the SKU0 vs. SKU2 difference.
+
+Other than the fact that this should be together in one series with
+the dts patch:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

@@ -2,96 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF48D57B314
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1DE57B31B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236666AbiGTIju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S238035AbiGTIlL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 20 Jul 2022 04:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbiGTIjr (ORCPT
+        with ESMTP id S229623AbiGTIlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:39:47 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95F75B046
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:39:46 -0700 (PDT)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LnpvQ5yVhz687nB;
-        Wed, 20 Jul 2022 16:36:18 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 20 Jul 2022 10:39:44 +0200
-Received: from [10.195.32.208] (10.195.32.208) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2375.24; Wed, 20 Jul 2022 09:39:43 +0100
-Message-ID: <3bd9817d-1959-c081-e5d0-8b0e70b3f41e@huawei.com>
-Date:   Wed, 20 Jul 2022 09:39:42 +0100
+        Wed, 20 Jul 2022 04:41:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA6C18E12
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:41:09 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oE5GW-0006PX-0H; Wed, 20 Jul 2022 10:41:08 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oE5GU-0024z2-Ul; Wed, 20 Jul 2022 10:41:06 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oE5GT-0003Nh-Ok; Wed, 20 Jul 2022 10:41:05 +0200
+Message-ID: <60d4233757f3ba931284b06545a820176443472b.camel@pengutronix.de>
+Subject: Re: [PATCH] reset: reset-simple should depends on HAS_IOMEM
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        kernel test robot <lkp@intel.com>
+Date:   Wed, 20 Jul 2022 10:41:05 +0200
+In-Reply-To: <20220719085200.203688-1-ben.dooks@sifive.com>
+References: <202207190150.mf4rb4VG-lkp@intel.com>
+         <20220719085200.203688-1-ben.dooks@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: faddr2line issue
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-CC:     <keescook@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <09df26a9-27af-1276-34c6-820bf7e27da8@huawei.com>
- <3492d341-a681-f344-f5cd-5b1ea3725f31@huawei.com>
- <20220714164136.n2ycc5axt7vtctgs@treble>
- <64da0019-4816-a409-be93-b1cf7021c584@huawei.com>
- <20220720000654.yospyvbrfliy3lrn@treble>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220720000654.yospyvbrfliy3lrn@treble>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.32.208]
-X-ClientProxiedBy: lhreml703-chm.china.huawei.com (10.201.108.52) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 01:06, Josh Poimboeuf wrote:
->> So adding config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT to v5.19-rc2 got it
->> working again for me on arm64. However commit dcea997beed6 ("faddr2line: Fix
->> overlapping text section failures, the sequel") seems to be broken for me,
->> below - this first appeared in rc3. Any idea what the issue could be?
->>
->> $./faddr.sh hisi_sas_sata_done+0x8/0x38
->> hisi_sas_sata_done+0x8/0x38:
->> fs mm ??:0
-> Hm, what does faddr.sh do? 
+Hi Ben,
 
-ah, it's just a wrapper to call scripts/faddr2line with vmlinux and $1 
-(being hisi_sas_sata_done+0x8/0x38, above) args
-
-> Does addr2line also fail?
-
-faddr2line fails, as below.
-
+On Di, 2022-07-19 at 09:52 +0100, Ben Dooks wrote:
+> The reset-simple driver does not build on all architecuters as it requires
+> devm_ioremap_resource() which is only built when CONFIG_HAS_IOMEM is enabled
+> in the kenrel. Fix the following error by depending on CONFIG_HAS_IOMEM:
 > 
-> Can you run
+> drivers/reset/reset-simple.o: in function `reset_simple_probe':
+>  reset-simple.c:(.text+0x3aa): undefined reference to `devm_ioremap_resource'
 > 
->    bash -x scripts/faddr2line <vmlinux or .ko file> hisi_sas_sata_done+0x8/0x38
-> 
-> and share the output?
+> Fixes: e87998582b50 ("reset: allow building of reset simple driver if expert config selected")
 
-on rc3 we get:
+Thank you, I changed this to:
 
-https://raw.githubusercontent.com/hisilicon/kernel-dev/private-topic-sas-5.19-faddr2line-linux-rc3/before2
+Fixes: 18d1909be345 ("reset: allow building of reset simple driver if expert config selected")
 
-With dcea997beed6 reverted on rc3:
+and applied to reset/next.
 
-https://raw.githubusercontent.com/hisilicon/kernel-dev/private-topic-sas-5.19-faddr2line-linux-rc3/after2
-
-This is my branch is you want to see what I have:
-https://github.com/hisilicon/kernel-dev/commits/private-topic-sas-5.19-faddr2line-linux-rc3
-
-Thanks,
-John
+regards
+Philipp

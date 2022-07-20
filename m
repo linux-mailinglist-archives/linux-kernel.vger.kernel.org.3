@@ -2,165 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4516857B3E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159B257B3E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 11:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiGTJb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 05:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S234588AbiGTJbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 05:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbiGTJbR (ORCPT
+        with ESMTP id S232919AbiGTJbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:31:17 -0400
-Received: from smtpproxy21.qq.com (smtpbg703.qq.com [203.205.195.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3452C54CBE
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:31:16 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1658309470tox533d0
-Received: from eureka.localdomain ( [123.124.208.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 20 Jul 2022 17:31:09 +0800 (CST)
-X-QQ-SSF: 01400000002000B0D000000A0000020
-X-QQ-FEAT: Zf2po6e9he4aYUlcKXg5HBZNLlmaErk3YUM5+bv5OQWzmDN/KBJPtIJFWpNwH
-        TC+d2e+s/YjkDXMlwS34CVe5t8Nee/Mrt7dYdXGIJ1B9/1H2LdjrYJY6mr56iQeKjhAZs5E
-        x4hCvPOdpSxR/8HkZXMgCTVL7sbr112w42FcGHHrCvlMZx350X6mGPDvc7EkprPI4J0cJYO
-        oqTfw7EcNflNCDvuI/ATkVfsXqelXU9yJ58xzA83Y+b4I/qeX0JvWMpcpPD6jthLiL8fGDO
-        iMsq8nfR9lMm6HHsIjhN4fWxlg4mMj9tp5NDzPduvGQpQLuGsUuI/KLxMqmjDuv63KPpCj1
-        EW0ir0vPJPupkTpTwPOG4Mni8+PdpHzFPsnOcEe7HcbO+kZemuIgQi90q2khjGH01goGm8c
-        gETk3gXg1rnSYA0D8pSnPQ==
-X-QQ-GoodBg: 1
-From:   Wang You <wangyoua@uniontech.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hch@lst.de, jaegeuk@kernel.org, fio@vger.kernel.org,
-        ming.lei@redhat.com, wangyoua@uniontech.com,
-        wangxiaohua@uniontech.com
-Subject: [PATCH 2/2] block/mq-deadline: Prioritize first request
-Date:   Wed, 20 Jul 2022 17:30:48 +0800
-Message-Id: <20220720093048.225944-3-wangyoua@uniontech.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220720093048.225944-1-wangyoua@uniontech.com>
-References: <20220720093048.225944-1-wangyoua@uniontech.com>
+        Wed, 20 Jul 2022 05:31:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 427725A2C2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658309483;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=44BQ4IyJ/Aqy9TbnKir1Ev2RlYMwItwK5RDWRIabjHU=;
+        b=Lj5JZJJPTzesnNIVc0mmcstB0PTGXmMM9dSlX+ds8xWPpN+EuDYkqkeSoS2XCBRMdxRufa
+        MLvc9HGiFuC1QX+cl/IYGl3ohRUB7jHy0yGw2DnwprIjTfojiEG5p69QlI1NJ3NtLvjFMx
+        HXIKomTaz+jdFU0BPSaoTnEwWRAIl28=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-ZJwfwTGWPnmNM5dE3PQHsA-1; Wed, 20 Jul 2022 05:31:21 -0400
+X-MC-Unique: ZJwfwTGWPnmNM5dE3PQHsA-1
+Received: by mail-qv1-f71.google.com with SMTP id fc20-20020ad44f34000000b00472ff2a85beso9023161qvb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 02:31:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=44BQ4IyJ/Aqy9TbnKir1Ev2RlYMwItwK5RDWRIabjHU=;
+        b=VG/eyHR3SkjlsD33+58GQSHrN+sOGW7i5Zd8uvyJKtSGB0ptRPr9vIms0GjYFzWIQp
+         nAyaff7Kwle7nCdEfpMNRnfdhfj7owPWOZ4cFrDwuFCVBClOQiilq5kq3FUYWy3g87G5
+         efw0My/f2RpxlHg498lt6NP/cY5L4vgBrchX99WnQy6UnXqz4NPxR0N6UltO9rbsfhgY
+         V99Oabc+m4wSTVkizombOgqtaEUgl+792NtbvCBjWdadohnG7oN80zUPu1Op5Y9eZ+h9
+         mQXivSVJNhcUvppG33zxz5krOF4FB59HgJ5fQrd/Au4kfZSfSnZHaeR20OZxLgPpVqg6
+         5xBw==
+X-Gm-Message-State: AJIora/YqFtDQX2nJ38gpKRHuTnAtBt/KF0CGd9r8gYK7exQNt0wwBhx
+        EL3NJa93+xYMkzAtp16Ac2p+O1q6rO866pthjwIdfWQ0C35XcVNyR4yFmAp1VUwh254CGJDIQaK
+        67Mb/beKsJnYN4Cgb0KcxzNxO
+X-Received: by 2002:a05:6214:27ef:b0:473:2465:c2 with SMTP id jt15-20020a05621427ef00b00473246500c2mr28478305qvb.37.1658309480789;
+        Wed, 20 Jul 2022 02:31:20 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1v+B8X8QMtX2b/xtGFp+p1pM8hxjKbQxqsLoXR3e6M832KQzwNkM1/GT7Kxw2CYXadCDt72CA==
+X-Received: by 2002:a05:6214:27ef:b0:473:2465:c2 with SMTP id jt15-20020a05621427ef00b00473246500c2mr28478298qvb.37.1658309480604;
+        Wed, 20 Jul 2022 02:31:20 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id bl13-20020a05620a1a8d00b006b5f8f32a8fsm4887461qkb.114.2022.07.20.02.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 02:31:19 -0700 (PDT)
+Message-ID: <63508f39e42738d145b3534e6768a9a09c9ca37e.camel@redhat.com>
+Subject: Re: [PATCH 0/2] KVM: x86: never write to memory from
+ kvm_vcpu_check_block
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com
+Date:   Wed, 20 Jul 2022 12:31:17 +0300
+In-Reply-To: <20220427173758.517087-1-pbonzini@redhat.com>
+References: <20220427173758.517087-1-pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign9
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function deadline_head_request can select the request located at
-the head from the sector red-black tree of the mq-deadline scheduler,
-dispatch such a request may cause the disk access address to return
-to the head, so as to prevent it from swinging back and forth.
+On Wed, 2022-04-27 at 13:37 -0400, Paolo Bonzini wrote:
+> Maxim reported the following backtrace:
+> 
+> [ 1355.807187]  kvm_vcpu_map+0x159/0x190 [kvm]
+> [ 1355.807628]  nested_svm_vmexit+0x4c/0x7f0 [kvm_amd]
+> [ 1355.808036]  ? kvm_vcpu_block+0x54/0xa0 [kvm]
+> [ 1355.808450]  svm_check_nested_events+0x97/0x390 [kvm_amd]
+> [ 1355.808920]  kvm_check_nested_events+0x1c/0x40 [kvm] 
+> [ 1355.809396]  kvm_arch_vcpu_runnable+0x4e/0x190 [kvm]
+> [ 1355.809892]  kvm_vcpu_check_block+0x4f/0x100 [kvm]
+> [ 1355.811259]  kvm_vcpu_block+0x6b/0xa0 [kvm] 
+> 
+> due to kmap being called in non-sleepable (!TASK_RUNNING) context.
+> Fix it by extending kvm_x86_ops->nested_ops.hv_timer_pending and
+> getting rid of one annoying instance of kvm_check_nested_events.
+> 
+> Paolo
+> 
 
-- The presence of the scheduler batching requests may reduce or
-  even eliminate its ability to fuse and sort, so I sometimes set
-  it to 1.
+Any update on this patch series? Pinging so it is not forgotten.
 
-- This pathc may exacerbate the risk of expire, I don't know if
-  a more absolute expire detection is necessary.
-
-- Tested some disks (mainly rotational disks and some SSDs) with
-  the fio tool (using sync, direct, etc. parameters), the results
-  show that they increase the disk's small sector sequential read
-  and write performance, does this imply that changing
-  nr_sched_batch is reasonable?
-
-The test hardware is:
-Kunpeng-920, HW-SAS3508+(MG04ACA400N * 2), RAID0.
-
-The test command is:
-fio -ioengine=psync -lockmem=1G -buffered=0 -time_based=1 -direct=1
--iodepth=1 -thread -bs=512B -size=110g -numjobs=16 -runtime=300
--group_reporting -name=read -filename=/dev/sdb14
--ioscheduler=mq-deadline -rw=read[,write,rw]
-
-The following is the test data:
-origin/master:
-read iops: 152421       write iops: 136959      rw iops: 54593,54581
-
-nr_sched_batch = 1:
-read iops: 166449       write iops: 139477      rw iops: 55363,55355
-
-nr_sched_batch = 1, use deadline_head_request:
-read iops: 171177       write iops: 184431      rw iops: 56178,56169
-
-Signed-off-by: Wang You <wangyoua@uniontech.com>
----
- block/mq-deadline.c | 42 +++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 39 insertions(+), 3 deletions(-)
-
-diff --git a/block/mq-deadline.c b/block/mq-deadline.c
-index 1a9e835e816c..e155f49d7a70 100644
---- a/block/mq-deadline.c
-+++ b/block/mq-deadline.c
-@@ -344,6 +344,35 @@ deadline_next_request(struct deadline_data *dd, struct dd_per_prio *per_prio,
- 	return rq;
- }
- 
-+static inline struct request *
-+deadline_head_request(struct deadline_data *dd, struct dd_per_prio *per_prio, int data_dir)
-+{
-+	struct rb_node *node = rb_first(&per_prio->sort_list[data_dir]);
-+	struct request *rq;
-+	unsigned long flags;
-+
-+	if (!node)
-+		return NULL;
-+
-+	rq = rb_entry_rq(node);
-+	if (data_dir == DD_READ || !blk_queue_is_zoned(rq->q))
-+		return rq;
-+
-+	/*
-+	 * Look for a write request that can be dispatched, that is one with
-+	 * an unlocked target zone.
-+	 */
-+	spin_lock_irqsave(&dd->zone_lock, flags);
-+	while (rq) {
-+		if (blk_req_can_dispatch_to_zone(rq))
-+			break;
-+		rq = deadline_latter_request(rq);
-+	}
-+	spin_unlock_irqrestore(&dd->zone_lock, flags);
-+
-+	return rq;
-+}
-+
- /*
-  * Returns true if and only if @rq started after @latest_start where
-  * @latest_start is in jiffies.
-@@ -429,13 +458,20 @@ static struct request *__dd_dispatch_request(struct deadline_data *dd,
- 	 * we are not running a batch, find best request for selected data_dir
- 	 */
- 	next_rq = deadline_next_request(dd, per_prio, data_dir);
--	if (deadline_check_fifo(per_prio, data_dir) || !next_rq) {
-+	if (deadline_check_fifo(per_prio, data_dir)) {
- 		/*
- 		 * A deadline has expired, the last request was in the other
--		 * direction, or we have run out of higher-sectored requests.
--		 * Start again from the request with the earliest expiry time.
-+		 * direction. Start again from the request with the earliest
-+		 * expiry time.
- 		 */
- 		rq = deadline_fifo_request(dd, per_prio, data_dir);
-+	} else if (!next_rq) {
-+		/*
-+		 * There is no operation expired, and we have run out of
-+		 * higher-sectored requests. Look for the sector at the head
-+		 * which may reduce disk seek consumption.
-+		 */
-+		rq = deadline_head_request(dd, per_prio, data_dir);
- 	} else {
- 		/*
- 		 * The last req was the same dir and we have a next request in
--- 
-2.27.0
-
-
+Best regards,
+	Maxim Levitsky
 

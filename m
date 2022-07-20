@@ -2,167 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7937F57B4F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899A757B500
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239121AbiGTLDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
+        id S240496AbiGTLES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiGTLDK (ORCPT
+        with ESMTP id S231272AbiGTLEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:03:10 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD63C2A956
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:03:08 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id u5so2555351wrm.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 04:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8Grqol63HiejCmLbuLyNSkrynj326MhV0v8EmmfiIV4=;
-        b=nPj7GVWzBXO4RYQR/h63XBjQoOLHy11LNpwIDH617fHez/Z4MTJbWOc5HpMT4YRg+e
-         sDbHvE89lubQCG58vmGiff60Hdu6aSeXxT4FVFiTBVuaPiI73G+cw4cMRNMIHbWbEQj6
-         nu6WvP6xVn05i4YMeqtsbMKg+63UNW86ItY9lSdO6T6xWDYHAsqrs3Wo+FYTJmKpe6+6
-         orpneVGB4+fzoU0JygohoMMtEx/ppKhL01RMlytCNwZiG6TQZXQD0kfo4p2KWuk1iUGu
-         d5O83WvzfZfqZIJCLZWSU7aWNXFvZKD7f1QWPIDPlXl9iFE+tIZV1PwdGN/mjP4CA6VG
-         vFTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8Grqol63HiejCmLbuLyNSkrynj326MhV0v8EmmfiIV4=;
-        b=EEbLIDhHmgxHoJLnQXQEgVxMjd9YZRfSHtVpdv/ZTwJxYBcp4PdTMhnvP16y21dUYw
-         58OPH3CmC2TSfaLjYiufOmX0eOpxyqzntCF3sCkola2QnevsROxtqt2WOwmDp75Vt1Yh
-         81eBByCt9sFYzvxevHq1Wya3I9laW+gPaxhjh+AbTgzKuUqqL6EpjzQATLfsUMXB0Krj
-         K2SYcfhx1bYOTkgyZK5PnolbVl5zzD4edgEAeCWyoqkHKQmhSOvsQLBePSe5pMBOlW1e
-         SL1sSC/O1yydKXlP6ljQj2pgJfyc8OxlPUaBKrNBXxgU0UZ2ztLKjRQH/Qu960ImMTwe
-         5sSA==
-X-Gm-Message-State: AJIora8VpBrITUxl49oVWvJFkHNPwPe9h6AX8z+jCKUiCXhnYAEeUAgr
-        l8cq6LYBWvciX6uIIlAyAYXfvg==
-X-Google-Smtp-Source: AGRyM1vq+rsgEwuDKC+RyP11nR3PyRH6fD1iFUKSpgZb+K7geNzHvNmZwn7GlV2BbBTx/fyam84hJQ==
-X-Received: by 2002:adf:eace:0:b0:21d:6e90:2bf8 with SMTP id o14-20020adfeace000000b0021d6e902bf8mr28476828wrn.349.1658314987314;
-        Wed, 20 Jul 2022 04:03:07 -0700 (PDT)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id k22-20020a05600c1c9600b003a2e5f536b3sm2300298wms.24.2022.07.20.04.03.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 04:03:05 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-Subject: [RFC] PM: domains: Reverse the order of performance and enabling ops
-Date:   Wed, 20 Jul 2022 14:02:46 +0300
-Message-Id: <20220720110246.762939-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.3
+        Wed, 20 Jul 2022 07:04:16 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040F26D9E1;
+        Wed, 20 Jul 2022 04:04:16 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KAnWmJ008172;
+        Wed, 20 Jul 2022 11:04:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=GXcvdO9ayLwyvlEbvOhdva96oagixi27ayh7cUAUuUU=;
+ b=hWi53BVjgyz15VX0/PO3932NoEIJ8HYcYbcN6g5tORGbQ/pVnA2dABbSZRjO1Lw3KWGj
+ teSA1XDqUtZEAvbB2GObuuyAPty3x5gOmggrUrIFO0mRwl9aI1k0zjwmNiKNnaciM5Ao
+ tjc7bsnF2MiofsMYIDjh5vwzQhEC9kJLskJmZRBoloCrGf6zaUu79V1wwlqrl6CpJzh+
+ uMP0yHO2gvbK+56sjLqGmKI33RT3s+8cumBSICoc4C2AXGlxzmr+yUjO+jPcWmU26LP8
+ qRB8DETNuRQLkjfZdHSlHT7xGx3DBR6EfUgHAmg9b18OksCsO/uvumeGEYV0z9WkVLln FQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hebfv0tf9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 11:04:12 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26KB4Bop015372
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 11:04:12 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Jul 2022 04:04:11 -0700
+Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Jul 2022 04:04:07 -0700
+From:   Satya Priya <quic_c_skakit@quicinc.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-soc@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <robh@kernel.org>,
+        <robh+dt@kernel.org>, <quic_tdas@quicinc.com>,
+        <quic_c_skakit@quicinc.com>
+Subject: [PATCH V6 0/5] Add support for audio clock gating resets for SC7280
+Date:   Wed, 20 Jul 2022 16:33:38 +0530
+Message-ID: <1658315023-3336-1-git-send-email-quic_c_skakit@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 23N64elEEZQwiDmShC013v9JqZSsieqE
+X-Proofpoint-ORIG-GUID: 23N64elEEZQwiDmShC013v9JqZSsieqE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_05,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=726
+ impostorscore=0 malwarescore=0 clxscore=1011 phishscore=0
+ priorityscore=1501 spamscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207200046
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than enabling and then setting the performance state, which usually
-translates into two different levels (voltages) in order to get to the
-one required by the consumer, we could give a chance to the providers to
-cache the performance state needed by the consumer and then, when powering
-on the power domain, the provider could use the cached level instead.
-Also the drop_performance and power_off have to be reversed so that
-when the last active consumer suspends, the level doesn't actually drop
-until the pd is disabled.
+Patches [3], [4] and [5] depend on [1], [2] to be merged first. So, adding
+the cleanup patches also to this series.
 
-For the power domains that do not provide the set_performance, things
-remain unchanged, as does for the power domains that only provide the
-set_performance but do not provide the power_on/off.
+[v6]
+  * Add [1], [2] to handle the regmap overlap of lpasscc and lpass_aon 
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/base/power/domain.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+[v5]
+  * Fix the fail path and add pm_runtime_disable().
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 5a2e0232862e..38647c304b73 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -939,8 +939,8 @@ static int genpd_runtime_suspend(struct device *dev)
- 		return 0;
+[v4]
+  * Fix the "fixes" tag.
 
- 	genpd_lock(genpd);
--	gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
- 	genpd_power_off(genpd, true, 0);
-+	gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
- 	genpd_unlock(genpd);
+[v3]
+  * Remove the maxItems from reg property.
 
- 	return 0;
-@@ -978,9 +978,8 @@ static int genpd_runtime_resume(struct device *dev)
- 		goto out;
+[v2]
+  * Update/fix the YAML for reg property against each compatible.
 
- 	genpd_lock(genpd);
-+	genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
- 	ret = genpd_power_on(genpd, 0);
--	if (!ret)
--		genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
- 	genpd_unlock(genpd);
+[v1]
+  * Add support for clock gating resets for lpass audio clock
+    controller & MCLKs.
 
- 	if (ret)
-@@ -1018,8 +1017,8 @@ static int genpd_runtime_resume(struct device *dev)
- err_poweroff:
- 	if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
- 		genpd_lock(genpd);
--		gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
- 		genpd_power_off(genpd, true, 0);
-+		gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
- 		genpd_unlock(genpd);
- 	}
+Satya Priya (2):
+  dt-bindings: clock: Add "qcom,adsp-pil-mode" property
+  clk: qcom: lpass: Handle the regmap overlap of lpasscc and lpass_aon
 
-@@ -2747,17 +2746,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 	dev->pm_domain->detach = genpd_dev_pm_detach;
- 	dev->pm_domain->sync = genpd_dev_pm_sync;
+Taniya Das (3):
+  dt-bindings: clock: Add resets for LPASS audio clock controller for
+    SC7280
+  dt-bindings: clock: Add support for external MCLKs for LPASS on SC7280
+  clk: qcom: lpass: Add support for resets & external mclk for SC7280
 
--	if (power_on) {
--		genpd_lock(pd);
--		ret = genpd_power_on(pd, 0);
--		genpd_unlock(pd);
--	}
--
--	if (ret) {
--		genpd_remove_device(pd, dev);
--		return -EPROBE_DEFER;
--	}
--
- 	/* Set the default performance state */
- 	pstate = of_get_required_opp_performance_state(dev->of_node, index);
- 	if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
-@@ -2769,6 +2757,18 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 			goto err;
- 		dev_gpd_data(dev)->default_pstate = pstate;
- 	}
-+
-+	if (power_on) {
-+		genpd_lock(pd);
-+		ret = genpd_power_on(pd, 0);
-+		genpd_unlock(pd);
-+	}
-+
-+	if (ret) {
-+		genpd_remove_device(pd, dev);
-+		return -EPROBE_DEFER;
-+	}
-+
- 	return 1;
+ .../bindings/clock/qcom,sc7280-lpasscc.yaml        |  6 +-
+ .../bindings/clock/qcom,sc7280-lpasscorecc.yaml    | 26 ++++++++-
+ drivers/clk/qcom/lpassaudiocc-sc7280.c             | 66 +++++++++++++++++++++-
+ drivers/clk/qcom/lpasscc-sc7280.c                  | 44 ---------------
+ drivers/clk/qcom/lpasscorecc-sc7280.c              | 33 +++++++++++
+ .../dt-bindings/clock/qcom,lpassaudiocc-sc7280.h   |  5 ++
+ .../dt-bindings/clock/qcom,lpasscorecc-sc7280.h    |  2 +
+ 7 files changed, 130 insertions(+), 52 deletions(-)
 
- err:
---
-2.34.3
+-- 
+2.7.4
 

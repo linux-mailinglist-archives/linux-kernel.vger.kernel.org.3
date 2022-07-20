@@ -2,90 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CA757B19B
+	by mail.lfdr.de (Postfix) with ESMTP id 54A3357B19C
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237743AbiGTHU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        id S231382AbiGTHUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbiGTHU1 (ORCPT
+        with ESMTP id S229636AbiGTHU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:20:27 -0400
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3971A599E8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:20:25 -0700 (PDT)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 0054910047FBC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:20:12 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id E40Cox9ycjIMdE40CoaUAX; Wed, 20 Jul 2022 07:20:12 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=ebP4w5IH c=1 sm=1 tr=0 ts=62d7acac
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=RgO8CyIxsXoA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=WBlcUvTkXy1z++HuE9DeN+YXF1eS8u6kceWoGgS/K9c=; b=RBdJHEtN+UbKlz6W50g3TruZ2m
-        5ou5weNxcp6yz5ZIBKbRiZjZeU0J9VkJP3kOnbWt+EDz1+F0yIGRznJjD5zDLEOQCNl4jYM9W66IN
-        CVSrJjd8Pf1pjy4SQTQ2RvaaLBV2YlIBSi60Sg+dsVcjk5lIqzsY45gnD+nlM7EWwF2S5e3QgeRxn
-        YxDoZ+8MFqnIgWCDvzNkV+XFhgGQlIYCgx337O/Qnx8I8mMKRLHugovyj3khyJuiINoBNScjF0aFr
-        bakgfTaShX1dYt/HlXLrIVR8KZiQH2bFXkQgE2n94F7DJ5nju1wJdelViNiP0EYn1A2OGfwgkWuAU
-        7HlWmu0g==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36794 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oE40B-000Dym-GK;
-        Wed, 20 Jul 2022 01:20:11 -0600
-Subject: Re: [PATCH 5.15 000/167] 5.15.56-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220719114656.750574879@linuxfoundation.org>
-In-Reply-To: <20220719114656.750574879@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <f7d32794-b7f3-e7c5-7b0f-3a4f99f354bf@w6rz.net>
-Date:   Wed, 20 Jul 2022 00:20:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 20 Jul 2022 03:20:28 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E4C5A46E;
+        Wed, 20 Jul 2022 00:20:27 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so684737wmb.5;
+        Wed, 20 Jul 2022 00:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q9b/iC1wjOnRSd8FlI4IMa2e7V3PAbT/u3twpIk4R8I=;
+        b=M9+pMCM5G0yo/uxrB/EZ+dsXsdFh3yOyMpjFg6Xu/o8spFbs1tMk7BzoyAiuybHOqP
+         2J7DPHXtCj/IiZFPPCE/JSUd36oebgawpEnoleo7hl1qzbCuGVzT05ZSJnCt/7vBfv1/
+         tH0z7Cpk19dL+Sq/PRsbl4UMFh6evHAmb0YgdrQU/WG7GoBqnOV4wS5k5rKLnZfRTczK
+         ru8f+RSvJhZFBIpVjKacI4Uqcbh/MhHOUT0/vyNYTJqfKguGJNDi59KY5xJgcyVb+IAE
+         dCAoUi09crOekfrGhKuKgVu2D3qd+bGgRjyAGpItKviWCwh2/BN+Fyr4zqGciGC0hpik
+         mRxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q9b/iC1wjOnRSd8FlI4IMa2e7V3PAbT/u3twpIk4R8I=;
+        b=mLf9KOnjc8rXAHFgT+LWUr5mW+HyeCEjUTDPfOFxSoFfVvvhSylw3+RstL/AMxSJna
+         UX8e3Q5AU3HPgtQkZ/rS9ZnqNu3yEWkbHVCU0x4brYcLGv9KhRyXpFtgL0O44W99oSi7
+         9/haLsRHpKDmm1aFyZ85hK+akG0aaGUormFUWrcLkjUq4xsItxyIFVy3Mf4eJwivoLwm
+         CX+TFcyZt/xVgKw7Dyw3vq1fT2hQ90cwI+duyV37I9hqBQ6OVEMtcF48yQWEYCy+W8xl
+         quH9lvu9fAFOAqLr3mDs152+71bop+IQMtwQBcJmrv9NePc7kUgV5svd1zR3GXasCPcK
+         /ddA==
+X-Gm-Message-State: AJIora+G1AXNAumkfYTbz/AZkFfcv1Ocx6IDbiCyiuYgn1aB+EearDpS
+        +Xl2tSHd+6M/Y3tru/G4v8Y=
+X-Google-Smtp-Source: AGRyM1vwAtUKKLML5RWsnJMrsfwK6oLn20E/Eacehn+h8zwlfyM/ve7BFlWGIJXnznEo6GW1SAUc9g==
+X-Received: by 2002:a05:600c:4e8d:b0:3a1:2e4d:1dd2 with SMTP id f13-20020a05600c4e8d00b003a12e4d1dd2mr2553332wmq.85.1658301625724;
+        Wed, 20 Jul 2022 00:20:25 -0700 (PDT)
+Received: from caracal.museclub.art (p200300cf9f4d210014d9122df422c4ba.dip0.t-ipconnect.de. [2003:cf:9f4d:2100:14d9:122d:f422:c4ba])
+        by smtp.googlemail.com with ESMTPSA id u16-20020a05600c00d000b003a31c4f6f74sm1452192wmm.32.2022.07.20.00.20.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 00:20:25 -0700 (PDT)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+To:     eugene.shalygin@gmail.com
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] Remove the deprecated asus_wmi_ec_sensors driver
+Date:   Wed, 20 Jul 2022 09:20:15 +0200
+Message-Id: <20220720072016.102086-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oE40B-000Dym-GK
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:36794
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,26 +70,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 4:52 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.56 release.
-> There are 167 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.56-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Changes in v2: improve commit message.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Eugene Shalygin (1):
+  hwmon: (asus_wmi_ec_sensors) remove driver
 
-Tested-by: Ron Economos <re@w6rz.net>
+ Documentation/hwmon/asus_wmi_ec_sensors.rst |  38 --
+ Documentation/hwmon/index.rst               |   1 -
+ MAINTAINERS                                 |   7 -
+ drivers/hwmon/Kconfig                       |  15 -
+ drivers/hwmon/Makefile                      |   1 -
+ drivers/hwmon/asus_wmi_ec_sensors.c         | 622 --------------------
+ 6 files changed, 684 deletions(-)
+ delete mode 100644 Documentation/hwmon/asus_wmi_ec_sensors.rst
+ delete mode 100644 drivers/hwmon/asus_wmi_ec_sensors.c
+
+-- 
+2.35.1
 

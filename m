@@ -2,92 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D6257BC45
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8295F57BC48
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236991AbiGTRF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
+        id S237384AbiGTRGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiGTRFY (ORCPT
+        with ESMTP id S230296AbiGTRGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:05:24 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A701A3BD;
-        Wed, 20 Jul 2022 10:05:22 -0700 (PDT)
-Received: from [192.168.88.254] (unknown [125.160.97.11])
-        by gnuweeb.org (Postfix) with ESMTPSA id A37FB7E7BE;
-        Wed, 20 Jul 2022 17:05:18 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1658336722;
-        bh=LYOJI2+UfNZDE25n5KqhD1K12E2OjOVvcXgDyuPB4Ds=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=S+udajkXVU/nI1QNQ4TVXM6ADHW1KVZJVPpbvVVnNh9r4ixmQYWS4/PyeCW6MZBnw
-         5utBmSQizJeEU0AlXhcsaULyA7lysMH9icTYUYywrY1kF3W5iDTT8iVxHFkTViGjdw
-         WJ22tKzA5hd1mCiP2Q7SdzxXxwdhfPc8zViBWD9tqEkQqdRTFt09Q+PQuAOaGnGWjK
-         DuJE6/sNfIDOYTl5Punfym6yvbIp1c60t4EHoopN9rZWR1Eki1y7oHwsn7yHKRwMXU
-         WU1A6OTEEG2qWlfqymsOIyWoFJLEn4qKHn1eL+KEcCt6IZS7BY9XH2Zl+myhix5eLP
-         P93t5Rc8oBVwg==
-Message-ID: <ee428948-eaea-49bd-d8a3-c054a57f0094@gnuweeb.org>
-Date:   Thu, 21 Jul 2022 00:05:14 +0700
+        Wed, 20 Jul 2022 13:06:13 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A1C3883
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:06:12 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id b7-20020a17090a12c700b001f20eb82a08so2669513pjg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mxHGrxH+znEL4PRhhQoMwVhj8V9iLKntKa0rkmrwJv4=;
+        b=fbjdnhZvC9kMvbvM6vh8zZy9HlHhttZKk16gK14eiFO7kO/GvZqF55tSu1EGa3IRyn
+         Xs932CjVdzCoN1Xha0K4yCLixViV0VU/msLYPWQgtckwqb4DQ/X1CrGQtQdwN/rOKu2l
+         IZCjoghDzCbTLLjk8RetbSQLcZSxSUvRpsKLKMNvjc1x161i8fuGGaHFHlvxl/yz3w6+
+         LAVy2FbXMFIy9bHp7nWTF7EmFceYnDgw5QRkKFpIWhrHoFmtb+Zl0YatFAxx+R32uXSq
+         4UkR0eSGoms2o1c+B1/5RBi32z/8yNaM+L47J7W4d+KrnOpWb7LWRu6PhP1K1vkFG+E5
+         P4mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mxHGrxH+znEL4PRhhQoMwVhj8V9iLKntKa0rkmrwJv4=;
+        b=baaabNQDLCzYR7TZl7VCQ/irTheO3DFi+K6zQ5CxxGXYYx30nw58/Qw6nuB1+GGdVr
+         RVZngUq2vOelKxtmIiKPLUEOBGtCSozq6sH1kfVg9p1jPIhf9gPDA7CQiaj1e1vS+U55
+         wCc3w0OF2O+W6LzXkUpbx0ymCITZpzQJxQLGZn5NmuaoBYPN9BTPFtgtG7b9+zIXQbt0
+         pDq2HD5JbbTpzn8FQcZR+zulQ0H7SMWBumJxa964NkxcFW3hgAhQI4/M//QXo3c0nxcD
+         O2JdEcsDmRhTXkL0QJsN4QTw5r0UwkZRrxL22MxAwej99D3HZIdQcpiQ071g6DyLeUIt
+         Aovg==
+X-Gm-Message-State: AJIora8uS1lCqxaSFGTqlYVhcTn+VoL1nxFdu75WfQU2iVrUq4MqCPjr
+        YTBvdmmHAKxC75i9lRpn650nyA==
+X-Google-Smtp-Source: AGRyM1solFLAy7ymWlgW+LsLC2BHsNXqOFRXkS+mSO/KJNk/bJkM5O1Crk8ZbcCIbzEVLo5ouruAmw==
+X-Received: by 2002:a17:902:7795:b0:16c:b506:d41b with SMTP id o21-20020a170902779500b0016cb506d41bmr33616432pll.72.1658336772073;
+        Wed, 20 Jul 2022 10:06:12 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id f11-20020a17090a664b00b001ef82e5f5aesm1941383pjm.47.2022.07.20.10.06.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 10:06:11 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 17:06:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kechen Lu <kechenl@nvidia.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, chao.gao@intel.com,
+        vkuznets@redhat.com, somduttar@nvidia.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v4 6/7] KVM: x86: Add a new guest_debug flag forcing
+ exit to userspace
+Message-ID: <Ytg1/zdSPYQ2lYS/@google.com>
+References: <20220622004924.155191-1-kechenl@nvidia.com>
+ <20220622004924.155191-7-kechenl@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 00/17] nolibc: add preliminary self tests
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Pranith Kumar <bobby.prani@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Fernanda Ma'rouf <fernandafmr12@gnuweeb.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-References: <20220719214449.2520-1-w@1wt.eu>
- <67a92005-4e13-909a-1693-dfb86d8114c0@gnuweeb.org>
- <20220720162054.GB4159@1wt.eu>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220720162054.GB4159@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622004924.155191-7-kechenl@nvidia.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 11:20 PM, Willy Tarreau wrote:
-> What I certainly don't want to do is to have to cross-reference IDs
-> with arrays, nor start to stack endless if/else that are even more
-> painful to deal with, or have to renumber everything by hand once in
-> a while.
+On Tue, Jun 21, 2022, Kechen Lu wrote:
+> For debug and test purposes, there are needs to explicitly make
+> instruction triggered exits could be trapped to userspace. Simply
+> add a new flag for guest_debug interface could achieve this.
+> 
+> This patch also fills the userspace accessible field
+> vcpu->run->hw.hardware_exit_reason for userspace to determine the
+> original triggered VM-exits.
 
-Noted.
+This patch belongs in a different series, AFAICT there are no dependencies between
+this and allowing per-vCPU disabling of exits.  Allowing userspace to exit on
+"every" instruction exit is going to be much more controversial, largely because
+it will be difficult for KVM to provide a consistent, robust ABI.  E.g. should
+KVM exit to userspace if an intercepted instruction is encountered by the emualtor?
 
-> But again, I'm open to better proposals. I reached the limits of my
-> imagination there, but I do value the ability to "yyp" one line, change
-> two arguments and gain one extra test for a different combination, and
-> I really do not want to lose that simplicity. Note that for more complex
-> tests, it's trivial to add a dedicated function and that's what was done
-> for getdents64() which also serves as an example.
-
-OK, I understand the reason behind this now. I and Fernanda will try
-to visit this again at around 5.20-rc. *If* we can find a better
-design that matches your requirements, we will send you an RFC to
-improve it too.
-
-Thank you!
-
--- 
-Ammar Faizi
-
-
+TL;DR: drop this patch from the next version.

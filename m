@@ -2,100 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DDF57B1FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1997657B1FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbiGTHpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S229553AbiGTHqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiGTHpl (ORCPT
+        with ESMTP id S232123AbiGTHqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:45:41 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA4021E3C;
-        Wed, 20 Jul 2022 00:45:39 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id o7so28874173lfq.9;
-        Wed, 20 Jul 2022 00:45:39 -0700 (PDT)
+        Wed, 20 Jul 2022 03:46:06 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9B128E1E
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:46:02 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id z25so28904894lfr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:46:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tVPIkcHFbrIBqwWvbgKoMairnWOWXDJLFc+/HEF3fRk=;
-        b=TvwRSCVDrRciTpOnKLMfyHifAJeyTe5WXyx5ysgT2EPtGU05SCryU9kIUgyHW4kqR9
-         EBaLbVU/27CKoVZLHD4EI4UbEJKJuU02+DzFI3TSmKuXYkVRl+soRhLc4NQMyQ4eZa9D
-         Zr2M1A6XuTHZSPLLhQYBdSC9rIgXAcxpYM9YVlXXoMj2HNJs0lqrUyFzfcNe2jKsnOE/
-         RJKNLUgBLZ1Iaza/7BOUpvblYMIj1thXugwy+f81/8tsODb2glK69wBixB3SnotUfGzL
-         Vah626GD6k40pZjo6zpYRoH9/S2sKqMPE7FyvN/hDDPav2Qwc+VwpXP/aBxhmlHCAjJg
-         /Z8A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rfGDHhDs5ltYb1owMNF2GUKMS5QyT/J8E7KfFnt6Mf8=;
+        b=V4vsHS/o630j4/gQSW3XfMxK05Ep0HV8ei0GXoVSgofjWvx6TGwqL1Bz7ZjY1YiAR2
+         JO/UmVuMcM7jG92Jc9HIVZlgQ5Yw6DZnftBru1kChg+si9hsUTP89EmCusOb/3u9A2Q4
+         t/xBSPTwUYZSO79XPxOx1dQwyucxlNfKrc3gY1Ya4gmON8yM8YwcWKiZhj9fY7a/JKSS
+         M8xQrtiqMUs5+0ql1nbYaAEhjYKaUaqi/1wOUEUvO6bib+9dMnwzxBmiqdUbOdYnYTPN
+         TbnEfc8j/7yubbbZJ3MxLGhTaj+N9nTyovCH10vKa3GRYwsfL7hcXp4FnQ4cLHO5gwpm
+         1Buw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tVPIkcHFbrIBqwWvbgKoMairnWOWXDJLFc+/HEF3fRk=;
-        b=WuCmJjwzZdD9gqtQl5EQF45cVp1zIWdcpQKLlyoK5w11OD0cwqrOImD12PGet4rfyU
-         Um3M/Bs0wiTi36/UqPeeSDGgNwsQgVE8wtyij7s/PYA72t0HfP4WJoycWQDqwEz8Aeg2
-         C4BeDHLf/T0m3jvnLnJXc72kHsMejtkDQOiDh0LOda2on5ykBHsIcCxMTcCTN3ICJTl2
-         PDCzRCQV1yruEcEwrj4H7Yq4QVUCvonImNzXbchii0cWtbhI8/qo5j1XvLy7LjwVugYB
-         JvYYik41R6QsfM7gRQ2p7hmKC2024mralpsXuutnoVOjr1naTcvWLmFdcZsu7e6N8wVV
-         m+Kw==
-X-Gm-Message-State: AJIora+GdF2li8uXb/QH5mpWyarSNOH1JhqPNwmCqHl6ClbM/bEVF2tG
-        RxkIR0P3sjPhluW6FG+hhuY/XU8EMz2XsGVf/iY=
-X-Google-Smtp-Source: AGRyM1vVIrLVpzkiPr5QbQtV3lohS4xPfbNPKVz8ES1xANkNSPGUrstUkzAZwc68FHS3SJPGuxGCEjBl1ND2WEO5BNo=
-X-Received: by 2002:a05:6512:23a0:b0:489:d19c:602d with SMTP id
- c32-20020a05651223a000b00489d19c602dmr19783960lfv.89.1658303138187; Wed, 20
- Jul 2022 00:45:38 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rfGDHhDs5ltYb1owMNF2GUKMS5QyT/J8E7KfFnt6Mf8=;
+        b=DTCNFTa/cxuBtQsda9cmIUpV/+VVqLLYaokBkj2rhYFhG5fy445aJ3fuaFrHrp5omU
+         v3pjTJ/KFmnwQpUX2Xob2ef5ykNMSf8q/tw2DOrSnuyuQpLC3IXSXdRMsR0S24YeeGg6
+         XMlLqFdiproG+ZpMiR3HmeRm6KmJ6UJWJIzWesDKFEjjcUP+D1jNfJ4uZhcffRY99/d+
+         fZj9wDdqgxF7euD6NgG2uU+TnJxwf7340QIVuDWVFIf0KEEl1gT/ISxpH2pNBOWu5nV0
+         skfPh4iUFYzDM3dC8MJIOUXtxhFblJvKcjiFubqgbng8dGgTJ1QrjciCRkE1Oyr2DtmD
+         X2cw==
+X-Gm-Message-State: AJIora+M8FImI4vFg/ubuXRuX6MzX/k+hSLW1j5GWLScsxwkgkGheEpx
+        sDpZoWUR1OwELlwe517q0E3HMiQmeDdTa3Wi
+X-Google-Smtp-Source: AGRyM1u2aO7CWLkX60vxePHAaWUtKrw6+FMjM2skH7yJRzFpB+5zsYqQV1YO9RRHE3QVpUJ2KC2hcw==
+X-Received: by 2002:a05:6512:3d8d:b0:489:de37:74c0 with SMTP id k13-20020a0565123d8d00b00489de3774c0mr18715450lfv.527.1658303160979;
+        Wed, 20 Jul 2022 00:46:00 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id v11-20020a05651203ab00b0047f9ef4cb92sm3637518lfp.297.2022.07.20.00.45.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 00:46:00 -0700 (PDT)
+Message-ID: <50336396-0929-4ba0-ac2a-a9a748a76218@linaro.org>
+Date:   Wed, 20 Jul 2022 09:45:59 +0200
 MIME-Version: 1.0
-References: <20220705123705.764-1-xuewen.yan@unisoc.com> <20220711174629.uehfmqegcwn2lqzu@wubuntu>
- <YsyO9GM9mCydaybo@slm.duckdns.org> <c1426573-92a7-9f0d-a6b8-aa612248b9a9@redhat.com>
- <Ys41ZF5TmSnLLNRB@slm.duckdns.org>
-In-Reply-To: <Ys41ZF5TmSnLLNRB@slm.duckdns.org>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Wed, 20 Jul 2022 15:45:27 +0800
-Message-ID: <CAB8ipk-8cbur-m733py-cw4bXCt7gkd8gAOXtKO+-fV1B2EeZw@mail.gmail.com>
-Subject: Re: [PATCH] sched/schedutil: Fix deadlock between cpuset and cpu
- hotplug when using schedutil
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org,
-        ke.wang@unisoc.com, xuewyan@foxmail.com, linux-pm@vger.kernel.org,
-        Lukasz Luba <Lukasz.Luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] arm64: dts: qcom: Add SKU6 for
+ sc7180-trogdor-pazquel-lte-parade
+Content-Language: en-US
+To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220720073604.1.I249596c011ff05da5a95d72fc321e115ef859803@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220720073604.1.I249596c011ff05da5a95d72fc321e115ef859803@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear all
+On 20/07/2022 09:37, Yunlong Jia wrote:
+> SKU6 is LTE(w/o eSIM)+WIFI+Parade
+> 
+> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
+> ---
 
-On Wed, Jul 13, 2022 at 11:20 AM Tejun Heo <tj@kernel.org> wrote:
->
-> On Tue, Jul 12, 2022 at 10:49:57PM -0400, Waiman Long wrote:
-> > > Well, the only thing I can think of is always grabbing cpus_read_lock()
-> > > before grabbing threadgroup_rwsem. Waiman, what do you think?
-> >
-> > That is a possible solution as cpus_read_lock() is rather lightweight. It is
-> > a good practice to acquire it first.
->
-> On a similar note, I think we probably should re-enable percpu operations on
-> threadgroup_rwsem too by default and allow users who are affected by slower
-> write path operations to opt-in. After the new CLONE_INTO_CGROUP which
-> doesn't need the rwsem, we have far fewer write lockers after all.
->
+Didn't you send a v1 already to which I responded? You need to properly
+version your patches and address all comments, not just some.
 
- If there's any patch for me to try? I would be very grateful.
 
-Thanks!
-
----
-xw.yan
+Best regards,
+Krzysztof

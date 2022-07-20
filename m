@@ -2,141 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F8057BF38
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADAE57BF3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiGTUas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 16:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S229800AbiGTUcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 16:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiGTUaq (ORCPT
+        with ESMTP id S229449AbiGTUcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:30:46 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11C315A3C;
-        Wed, 20 Jul 2022 13:30:45 -0700 (PDT)
-Received: from [192.168.192.83] (unknown [50.126.114.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 6E7313F3C0;
-        Wed, 20 Jul 2022 20:30:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658349044;
-        bh=BGEt2HkznZL24U9s42qayMEz611QIKArNki0juuuhFQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=mo7CpljjuC+AVQaJAPR5Wau+gc41VQAzRNFKOx8d+OwVA7oWD/aVhhr7BFB88QmfF
-         uacq1yNK0vNuSQc3C8xY10V8bwekJw5r2RFux0ljP8a8Zq94be/XtCNvw/5ICnLtL9
-         R77uNeu+RFTCz+7z49M9cunb7KKeuy2G0mHTk1vamK4AJmFU1H9gm4SMQzgjVzztSZ
-         yqB6Angro8QXfGizezJY5tZFhZjJ/MmYFGY3axlo80JfT1OZmwu3lmxzmB1lh0wuYy
-         Nu0HmgxWPQjf3V2R9zFNeiK7FrZTuJnRAJ/JF3he42QEhCI1tnd/NzE1tWOF+mTOWH
-         Kr0p5MlyoSsNA==
-Message-ID: <6f32491d-cefa-0a3c-a2e5-3c9cd40ec8a1@canonical.com>
-Date:   Wed, 20 Jul 2022 13:30:40 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] apparmor: test: Remove some casts which are no-longer
- required
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220706100607.75761-1-davidgow@google.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <20220706100607.75761-1-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 16:32:15 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50B14A811;
+        Wed, 20 Jul 2022 13:32:14 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id n13so1340816ilk.1;
+        Wed, 20 Jul 2022 13:32:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=IARPxdpRl8tz+zWVsX1n/ZXaygmNXEXGZkFMJF6ObAk=;
+        b=3s/ug4kRghrVQ77VgjY2w2bhkFl9X+u+J/t3udsyXJUpSp7aMJN6DTeykDaCBqYg+L
+         /LBl7UGevDEj2Vez8sgnLv5Vo5575KAuQ/qhLdCes1T9/9DjkWfiC+euzjhb4D/pCey4
+         kacbonkFWNUXL1irmyaMCkthHc7k+94my/n/vTLgovjG/7lzo0kMGksMji5QrMtRdBD6
+         H0AyiO6jYJ6jn/Mt9o7AG9ntN0GwfOvBskOjiVJLja4Wd9wyWI9j9Z0jyY7o0aEaYrsw
+         iae17KPxsjn7+Cfm0OrJlcF8Grt/3FxqEGta/pk0MqTtLddMf4s6v0xXpEz6xoYO8YDH
+         FrIw==
+X-Gm-Message-State: AJIora+tuZQr8IYqDOz3TAy1h42NNSGUgGlny5o4wXtiXctbO2rhZnng
+        IyZLPwLhVHQ5GOz+3MAl+g==
+X-Google-Smtp-Source: AGRyM1ubB+OJB0nt41EjvMvcdSWrDY1/E3SjI6HEuFBiYbtv0MUvmMFunSkSNpIDqTK5Qp3I+frGTg==
+X-Received: by 2002:a05:6e02:1708:b0:2dc:8201:c2c8 with SMTP id u8-20020a056e02170800b002dc8201c2c8mr19150968ill.185.1658349133716;
+        Wed, 20 Jul 2022 13:32:13 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id z20-20020a05663822b400b00331598832besm8146977jas.25.2022.07.20.13.32.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 13:32:13 -0700 (PDT)
+Received: (nullmailer pid 3925125 invoked by uid 1000);
+        Wed, 20 Jul 2022 20:32:12 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Martyn Welch <martyn.welch@collabora.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Rob Herring <robh+dt@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20220720150007.2168051-2-martyn.welch@collabora.com>
+References: <20220720150007.2168051-1-martyn.welch@collabora.com> <20220720150007.2168051-2-martyn.welch@collabora.com>
+Subject: Re: [PATCH v2 2/3] dt-bindings: arm: fsl: Add MSC SM2S-IMX8PLUS SoM and SM2-MB-EP1 Carrier
+Date:   Wed, 20 Jul 2022 14:32:12 -0600
+Message-Id: <1658349132.217422.3925124.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/6/22 03:06, David Gow wrote:
-> With some of the stricter type checking in KUnit's EXPECT macros
-> removed, several casts in policy_unpack_test are no longer required.
+On Wed, 20 Jul 2022 16:00:04 +0100, Martyn Welch wrote:
+> Add DT compatible strings for a combination of the 14N0600E variant of
+> the MSC SM2S-IMX8PLUS SoM in combination with the SM2-MB-EP1 carrier
+> board.
 > 
-> Remove the unnecessary casts, making the conditions clearer.
-> 
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> Acked-by: John Johansen <john.johansen@canonical.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-
-I have pulled this into apparmor-next
-
+> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
 > ---
 > 
-> This is a rebase and resend of [1], which had been accepted into the
-> AppArmor tree, but eventually conflicted with [2]. Let's push it via the
-> KUnit tree to avoid any further conflicts, as discussed in [3].
+> Changes in v2:
+>   - New addition
 > 
-> Cheers,
-> -- David
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> [1]: https://lore.kernel.org/linux-kselftest/20210513193204.816681-9-davidgow@google.com/
-> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5f91bd9f1e7ad5a2025a2f95a2bc002cb7c9e0f9
-> [3]: https://lore.kernel.org/all/20220405125540.2135d81d@canb.auug.org.au/
-> ---
->   security/apparmor/policy_unpack_test.c | 12 ++++++------
->   1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
-> index 5c18d2f19862..7954cb23d5f2 100644
-> --- a/security/apparmor/policy_unpack_test.c
-> +++ b/security/apparmor/policy_unpack_test.c
-> @@ -177,7 +177,7 @@ static void policy_unpack_test_unpack_array_out_of_bounds(struct kunit *test)
->   
->   	array_size = unpack_array(puf->e, name);
->   
-> -	KUNIT_EXPECT_EQ(test, array_size, (u16)0);
-> +	KUNIT_EXPECT_EQ(test, array_size, 0);
->   	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
->   		puf->e->start + TEST_NAMED_ARRAY_BUF_OFFSET);
->   }
-> @@ -391,10 +391,10 @@ static void policy_unpack_test_unpack_u16_chunk_basic(struct kunit *test)
->   
->   	size = unpack_u16_chunk(puf->e, &chunk);
->   
-> -	KUNIT_EXPECT_PTR_EQ(test, (void *)chunk,
-> +	KUNIT_EXPECT_PTR_EQ(test, chunk,
->   			    puf->e->start + TEST_U16_OFFSET + 2);
-> -	KUNIT_EXPECT_EQ(test, size, (size_t)TEST_U16_DATA);
-> -	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, (void *)(chunk + TEST_U16_DATA));
-> +	KUNIT_EXPECT_EQ(test, size, TEST_U16_DATA);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, (chunk + TEST_U16_DATA));
->   }
->   
->   static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
-> @@ -408,7 +408,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
->   
->   	size = unpack_u16_chunk(puf->e, &chunk);
->   
-> -	KUNIT_EXPECT_EQ(test, size, (size_t)0);
-> +	KUNIT_EXPECT_EQ(test, size, 0);
->   	KUNIT_EXPECT_NULL(test, chunk);
->   	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
->   }
-> @@ -430,7 +430,7 @@ static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_2(
->   
->   	size = unpack_u16_chunk(puf->e, &chunk);
->   
-> -	KUNIT_EXPECT_EQ(test, size, (size_t)0);
-> +	KUNIT_EXPECT_EQ(test, size, 0);
->   	KUNIT_EXPECT_NULL(test, chunk);
->   	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
->   }
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/arm/fsl.yaml:933:111: [warning] line too long (118 > 110 characters) (line-length)
+
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

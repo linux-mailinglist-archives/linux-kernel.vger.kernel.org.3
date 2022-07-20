@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3590457BB96
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F3F57BB9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbiGTQln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
+        id S230368AbiGTQnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiGTQlm (ORCPT
+        with ESMTP id S229437AbiGTQnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:41:42 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD424F670;
-        Wed, 20 Jul 2022 09:41:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ACDF9CE218F;
-        Wed, 20 Jul 2022 16:41:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF5E5C3411E;
-        Wed, 20 Jul 2022 16:41:35 +0000 (UTC)
-Date:   Wed, 20 Jul 2022 12:41:33 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V6 02/16] rv: Add runtime reactors interface
-Message-ID: <20220720124133.3cdd2c44@gandalf.local.home>
-In-Reply-To: <4b5f93e3186b067073c1692d4c2b50d0b42101d5.1658244826.git.bristot@kernel.org>
-References: <cover.1658244826.git.bristot@kernel.org>
-        <4b5f93e3186b067073c1692d4c2b50d0b42101d5.1658244826.git.bristot@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 20 Jul 2022 12:43:15 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19233643F6;
+        Wed, 20 Jul 2022 09:43:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=WlQloxKMSNzYA8huu2dHZOkx95q65YqX8GP/ptxtt8I=; b=L+EJ7oX+O6+3U4HbS+0k0fDH7c
+        T2b90gQbRgb1ukynOljIVqwD/upHXuAptXtzWg1Kjw4MsEQtqQYdtSCDbZSl00D0/kn4qPmhxFh/G
+        35rebU2BpBH6VTXtaJGzdN+IdP35CJqoGbLs8co9VNXe8G9FhmBZyQbUAk1LUFUJ2TpY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oECmt-00AwjJ-DX; Wed, 20 Jul 2022 18:43:03 +0200
+Date:   Wed, 20 Jul 2022 18:43:03 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Mauri Sandberg <maukka@ext.kapsi.fi>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/2] PCI: mvebu: add support for orion5x
+Message-ID: <Ytgwl53POEjWPoeN@lunn.ch>
+References: <20220718202843.6766-1-maukka@ext.kapsi.fi>
+ <20220718202843.6766-4-maukka@ext.kapsi.fi>
+ <CAK8P3a042yoLR0eqt4Bm0KH4X9SJhUsjKDh1S9M+MF6mU1mPNw@mail.gmail.com>
+ <20220719094649.pzyrqdvm3fm5fqh2@pali>
+ <CAK8P3a1RpMQ5zdiH_jkydxDOCm6WyD7qqdN+5T+503tN4SnOqw@mail.gmail.com>
+ <20220720161315.rr4ujakl7akm7pur@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720161315.rr4ujakl7akm7pur@pali>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,29 +65,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 19:27:07 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+> If we have free 256MB in physical address space, then we can implement
+> it easily. It is just changing _size_ argument. I'm not sure how much
+> DDR RAM has Orion, but if only 2GB then we should be fine (remaining 2GB
+> should be enough for all peripherals + 256MB for PCIe config space).
 
-> +/*
-> + * reacting_on interface.
-> + */
-> +static ssize_t reacting_on_read_data(struct file *filp,
-> +				     char __user *user_buf,
-> +				     size_t count, loff_t *ppos)
-> +{
-> +	char *buff;
-> +
-> +	mutex_lock(&rv_interface_lock);
-> +	buff = reacting_on ? "1\n" : "0\n";
-> +	mutex_unlock(&rv_interface_lock);
+All the Orion5x devices i've seen have had small amounts of RAM, 64MB,
+maybe 128M. It seems very unlikely there are any with 2GB for RAM. So
+i don't see a problem with taking 256MB of physical addresses for PCI.
 
-Again, no need for the locks, but perhaps just to keep things sane:
-
-	buf = READ_ONCE(reacting_on) ? "1\n" : "0\n";
-
--- Steve
-
-> +
-> +	return simple_read_from_buffer(user_buf, count, ppos, buff, strlen(buff)+1);
-> +}
-> +
+  Andrew

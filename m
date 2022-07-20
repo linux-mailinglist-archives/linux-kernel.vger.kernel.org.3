@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70C957B32C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D191657B336
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbiGTIoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S232625AbiGTIsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbiGTIoF (ORCPT
+        with ESMTP id S229714AbiGTIsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:44:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E883A509D9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658306641;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qECqlsehCmLLfQXQZF/PgRoF4ORK4DIuQmugTBfeSYs=;
-        b=SFrcRiCyn2nZ6xfWtwE+03anRqepeoqZsOIsolpTbu5+bHnRCUmHj8cUM2i1icgOMKc9T0
-        JTXYmC8BYGU0SNRK5SOPggMqFqM68lfPhUAbTUKGSNVfyLo2NS/YZYygSWzGaaw5/wNhcU
-        GG6ZFiv9LqkeIlxUnk3uf361nxA70SY=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-369-LnL18PI_PK-1zCuTch2X3Q-1; Wed, 20 Jul 2022 04:43:59 -0400
-X-MC-Unique: LnL18PI_PK-1zCuTch2X3Q-1
-Received: by mail-qv1-f71.google.com with SMTP id mh1-20020a056214564100b00472fcc5ae9eso8961999qvb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:43:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=qECqlsehCmLLfQXQZF/PgRoF4ORK4DIuQmugTBfeSYs=;
-        b=ZTwx0BVFFP+X+wz9KxnGISUpZc1XbAKcx51fm0mLzN2lXsRhQTYmSFNJTdHDR1kPrK
-         hqW60DsNAlMUv1GEHtRYt03OeyIMn+eIaMhrFCgXx989jw910jQORmoSPf7zkblNgUXa
-         hePXpnozQMRNjj4S16LlFPFF3u4H8s2FzvWX3dRxP7TISSUf4ps3uy1T20hqu9B2zyHq
-         Z4gZ0QsVcSXwUfYHp0UPf9JGVmaMhbu3cmEaMxqs52LUEAkO/EaOvXStmn1zO4+j+RZM
-         pjvG0uOj1cQ3ZSmP1D9K76qlx5QAyrijyzG7dpdWj8f83gGIrfTUQuNC5SngxCD81TPg
-         +0qA==
-X-Gm-Message-State: AJIora84NMpvOlCNqxaaUZnh09msMnAIzyMXQY8Zc60YlMcz2N6P1gP8
-        tdwYVVu+WFc92/Mgsd3myyRprf98tt1pAveGYl4ANZRp0IXOYFPjG3gCbfvFAw4njXseCTZVWbm
-        FQqRpvcb9wR5TrIez5x6Nf8Sp
-X-Received: by 2002:ac8:5a08:0:b0:31e:fcc6:cbf3 with SMTP id n8-20020ac85a08000000b0031efcc6cbf3mr5627242qta.158.1658306639484;
-        Wed, 20 Jul 2022 01:43:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1unliXYGlJ0PnQQ1w+j+lWuj4ngbiiEP0Nhu86nMpULaf+7XlQOvAIygv6L3z3qYRlac1Ib7w==
-X-Received: by 2002:ac8:5a08:0:b0:31e:fcc6:cbf3 with SMTP id n8-20020ac85a08000000b0031efcc6cbf3mr5627229qta.158.1658306639235;
-        Wed, 20 Jul 2022 01:43:59 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id f12-20020a05620a280c00b006b5e3bf0eb8sm10168451qkp.19.2022.07.20.01.43.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 01:43:58 -0700 (PDT)
-Message-ID: <7458497a8694ba0fbabee28eabf557e6e4406fbe.camel@redhat.com>
-Subject: Re: [PATCH] KVM: nSVM: Pull CS.Base from actual VMCB12 for soft
- int/ex re-injection
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 20 Jul 2022 11:43:55 +0300
-In-Reply-To: <4caa0f67589ae3c22c311ee0e6139496902f2edc.1658159083.git.maciej.szmigiero@oracle.com>
-References: <4caa0f67589ae3c22c311ee0e6139496902f2edc.1658159083.git.maciej.szmigiero@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Wed, 20 Jul 2022 04:48:22 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB42B655A4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658306901; x=1689842901;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IasqClTnDNqtBIVsCFBPwYUp1W56YyQhQSAOONpH8+M=;
+  b=A8RPXslL9oQZQ3ZaBwlZsMB682b0bXq0tnOnjSZcbeWmP1z4n3gvVCxh
+   4IontHhuQFZyEWb18RfFjs+2Nqde36FYaZdtBp3FSh1ruUHCqbqAV4qad
+   ckZTZGvqd+cQdn6x1c80zNRj+IdCvRKHC3HbUZsEwj0iytD0mjJuew6/l
+   JWLmLZVwH1kzLqC2h5xf+qjP9LrKyLKp4fjhA2lBzDS6wmOfeL4aV+lxi
+   aW+ob8YxQvsBg5pglUuJSvmKsI+7Z4MsTO/fpi4BSX5STw4nMb30LaUaZ
+   pEBZ4ze90bR6yp5NYJFGeWUalPFrY2HlItG43fxGaYmUBd1oJwt7CcOq9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="348413823"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="348413823"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 01:48:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="925147659"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Jul 2022 01:48:19 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oE5NT-0000Il-9q;
+        Wed, 20 Jul 2022 08:48:19 +0000
+Date:   Wed, 20 Jul 2022 16:47:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 908fc4c2abdb1835f303cf6827e66676568943e7
+Message-ID: <62d7c125.bNbL0hN5heVtUYVx%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,83 +62,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-18 at 17:47 +0200, Maciej S. Szmigiero wrote:
-> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> 
-> enter_svm_guest_mode() first calls nested_vmcb02_prepare_control() to copy
-> control fields from VMCB12 to the current VMCB, then
-> nested_vmcb02_prepare_save() to perform a similar copy of the save area.
-> 
-> This means that nested_vmcb02_prepare_control() still runs with the
-> previous save area values in the current VMCB so it shouldn't take the L2
-> guest CS.Base from this area.
-> 
-> Explicitly pull CS.Base from the actual VMCB12 instead in
-> enter_svm_guest_mode().
-> 
-> Granted, having a non-zero CS.Base is a very rare thing (and even
-> impossible in 64-bit mode), having it change between nested VMRUNs is
-> probably even rarer, but if it happens it would create a really subtle bug
-> so it's better to fix it upfront.
-> 
-> Fixes: 6ef88d6e36c2 ("KVM: SVM: Re-inject INT3/INTO instead of retrying the instruction")
-> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> ---
->  arch/x86/kvm/svm/nested.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index adf4120b05d90..23252ab821941 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -639,7 +639,8 @@ static bool is_evtinj_nmi(u32 evtinj)
->  }
->  
->  static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
-> -                                         unsigned long vmcb12_rip)
-> +                                         unsigned long vmcb12_rip,
-> +                                         unsigned long vmcb12_csbase)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 908fc4c2abdb1835f303cf6827e66676568943e7  virt: sev-guest: Pass the appropriate argument type to iounmap()
 
-Honestly I don't like that nested_vmcb02_prepare_control starts to grow its parameter list,
-because it kind of defeats the purpose of vmcb12 cache we added back then.
+elapsed time: 722m
 
-I think that it is better to add csbase/rip to vmcb_save_area_cached,
-but I am not 100% sure. What do you think?
+configs tested: 82
+configs skipped: 3
 
-Best regards,
-	Maxim Levitsky
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20220718
+arm                        realview_defconfig
+arm                             rpc_defconfig
+powerpc                     sequoia_defconfig
+powerpc                 mpc837x_rdb_defconfig
+powerpc                    sam440ep_defconfig
+xtensa                    smp_lx200_defconfig
+arm                          pxa3xx_defconfig
+powerpc                       maple_defconfig
+m68k                        m5307c3_defconfig
+powerpc                      ep88xc_defconfig
+arm                      footbridge_defconfig
+x86_64                              defconfig
+sh                        sh7757lcr_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64               randconfig-a014-20220718
+x86_64               randconfig-a016-20220718
+x86_64               randconfig-a012-20220718
+x86_64               randconfig-a013-20220718
+x86_64               randconfig-a015-20220718
+x86_64               randconfig-a011-20220718
+i386                 randconfig-a015-20220718
+i386                 randconfig-a011-20220718
+i386                 randconfig-a012-20220718
+i386                 randconfig-a014-20220718
+i386                 randconfig-a016-20220718
+i386                 randconfig-a013-20220718
+s390                 randconfig-r044-20220718
+riscv                randconfig-r042-20220718
+arc                  randconfig-r043-20220718
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
 
->  {
->         u32 int_ctl_vmcb01_bits = V_INTR_MASKING_MASK;
->         u32 int_ctl_vmcb12_bits = V_TPR_MASK | V_IRQ_INJECTION_BITS_MASK;
-> @@ -711,7 +712,7 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
->         svm->nmi_l1_to_l2 = is_evtinj_nmi(vmcb02->control.event_inj);
->         if (is_evtinj_soft(vmcb02->control.event_inj)) {
->                 svm->soft_int_injected = true;
-> -               svm->soft_int_csbase = svm->vmcb->save.cs.base;
-> +               svm->soft_int_csbase = vmcb12_csbase;
->                 svm->soft_int_old_rip = vmcb12_rip;
->                 if (svm->nrips_enabled)
->                         svm->soft_int_next_rip = svm->nested.ctl.next_rip;
-> @@ -800,7 +801,7 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
->         nested_svm_copy_common_state(svm->vmcb01.ptr, svm->nested.vmcb02.ptr);
->  
->         svm_switch_vmcb(svm, &svm->nested.vmcb02);
-> -       nested_vmcb02_prepare_control(svm, vmcb12->save.rip);
-> +       nested_vmcb02_prepare_control(svm, vmcb12->save.rip, vmcb12->save.cs.base);
->         nested_vmcb02_prepare_save(svm, vmcb12);
->  
->         ret = nested_svm_load_cr3(&svm->vcpu, svm->nested.save.cr3,
-> @@ -1663,7 +1664,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
->         nested_copy_vmcb_control_to_cache(svm, ctl);
->  
->         svm_switch_vmcb(svm, &svm->nested.vmcb02);
-> -       nested_vmcb02_prepare_control(svm, svm->vmcb->save.rip);
-> +       nested_vmcb02_prepare_control(svm, svm->vmcb->save.rip, svm->vmcb->save.cs.base);
->  
->         /*
->          * While the nested guest CR3 is already checked and set by
-> 
+clang tested configs:
+arm                     am200epdkit_defconfig
+riscv                            alldefconfig
+arm                        magician_defconfig
+hexagon                          alldefconfig
+mips                        maltaup_defconfig
+powerpc                     mpc5200_defconfig
+mips                          ath25_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                 randconfig-a004-20220718
+i386                 randconfig-a001-20220718
+i386                 randconfig-a005-20220718
+i386                 randconfig-a006-20220718
+i386                 randconfig-a002-20220718
+i386                 randconfig-a003-20220718
+hexagon              randconfig-r041-20220718
+hexagon              randconfig-r045-20220718
 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

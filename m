@@ -2,140 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEAF57ABBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C85757AB58
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240776AbiGTBNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 21:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S236072AbiGTBKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 21:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240629AbiGTBNK (ORCPT
+        with ESMTP id S231806AbiGTBKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 21:13:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3393965D67;
-        Tue, 19 Jul 2022 18:12:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4DA6B81DE2;
-        Wed, 20 Jul 2022 01:12:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F0BC341C6;
-        Wed, 20 Jul 2022 01:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658279540;
-        bh=se13wqNAU03fkusB034b6xASwBWff55lqW/hoGYd2K0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PDkHxyizi2wjo7VeaiktZ9F4/H5R+EtJyJpf3OZonarB8LCuxq7TUAKLcYWH8bBJc
-         OKr2VNbXY5iMk1EZj+WxHiIGlf/ZaJYTMKsIJHvZsPp38BJTwkNYmdTRoT3LGt515T
-         EsIp55XnFPVSJvMDz11y0qNip2IWUJ4YeQAbtPCeOSH9q8jHxvsbM4KMaTjHMpf7JS
-         QzWbrR8sNFNBtT8Sbauy1zz1Jif6SC7D+VNpNsVdARlwNQLdkxidSJvS9whwyG/Giz
-         wh3pJoTI/NdYhUmSJUB8qN7aZVwM72RA8+y8C6ysW+22EfJ2Bxvgn2BNCk2hb0lqzi
-         c3YlsDqUfbqvw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        pawan.kumar.gupta@linux.intel.com
-Subject: [PATCH AUTOSEL 5.18 24/54] x86/speculation: Fix RSB filling with CONFIG_RETPOLINE=n
-Date:   Tue, 19 Jul 2022 21:10:01 -0400
-Message-Id: <20220720011031.1023305-24-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220720011031.1023305-1-sashal@kernel.org>
-References: <20220720011031.1023305-1-sashal@kernel.org>
+        Tue, 19 Jul 2022 21:10:36 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DDC481FA;
+        Tue, 19 Jul 2022 18:10:34 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id x185so9214025oig.1;
+        Tue, 19 Jul 2022 18:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OU+/gjfai01z34lLexG+BxAsHjhJYkOiU0JxFwo1+l0=;
+        b=NyodhQaxGxiGLbB5IERYcQxMjT7Qg5/9x5cMZ0TFkg/66ju+b2OcGZ4MshzV10NrrQ
+         6j8ZI164SjqC5GMX/CDOgFt0TsBej9cQdwHPQQeOWiGkneTDeDGNgM5GGUqOo5ucvax8
+         WjqUagVgTshsiCNS8RKScg1LauT5E0npbMpsLqSjHO6wNHjt1470+hDM22+f1l3KOg8g
+         1+UrsqZ5KbjrvIlZu/9tXWDiywoXUutB+5BVN1IP49SGrY/cKcgYzWXqJQb2kLKGJkK5
+         5P75SU7BZbkzQZT/r6MM0CHEoaBaLJciCHZrq4WiK2QTP0ouI7qSvzKUImcueiHCL5cB
+         9IPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OU+/gjfai01z34lLexG+BxAsHjhJYkOiU0JxFwo1+l0=;
+        b=WXmOEV3Erxi511IzeIZw3Xd1JZMfynaTDP6m9vIvk847sR292l5eoP5k+ZPL8HYnvW
+         ZVQs0ZKCozzN5y7Htdq8K8OSsNypZkMuBQEjAQRMMAS3Vuw4PT6u8XOBQBzRswTM9PfF
+         ycv1dCxOAV2/v/Hxs67S/8N5rw/mBK2ncIa0bwUaS/JPIVLjs+rZbCgVevV+vWEwwc2v
+         O3JHPcYd3ek55FxRGILP0NjG0eEbdpzSy6ZK0aIA//ZMuPk1OwxeQOqjFQeYkAAuILpA
+         0uNkfQeFKjaOMa42DHb36u/h+dtb+d1CGM0mZcgDEnWp2dDyEqFPjk2P58ELE9gvjnnp
+         KXFw==
+X-Gm-Message-State: AJIora8EayRhELxY+IOvAyERL0OlmPoHsLLdz9fNztOcyCx9y9qUYmUY
+        rbsf1oogtBgDEmZ2SgXdY5c=
+X-Google-Smtp-Source: AGRyM1sE6ufK5TO11SBv0E88cCRLOQPRdJAIDIWjrG1Szk6NVnZTkBr+2+dO79e2SGCY7s8f2MuvkA==
+X-Received: by 2002:a05:6808:f8a:b0:33a:3b5d:d5f5 with SMTP id o10-20020a0568080f8a00b0033a3b5dd5f5mr1164801oiw.287.1658279434127;
+        Tue, 19 Jul 2022 18:10:34 -0700 (PDT)
+Received: from localhost ([2600:1700:7130:4fa0::43])
+        by smtp.gmail.com with ESMTPSA id p13-20020a0568708a0d00b0010cb6fa9166sm8715216oaq.0.2022.07.19.18.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 18:10:33 -0700 (PDT)
+From:   Fae <faenkhauser@gmail.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Fae <faenkhauser@gmail.com>
+Subject: [PATCH] drivers/bluetooth: Add PID of Foxconn bluetooth Adapter
+Date:   Tue, 19 Jul 2022 20:10:02 -0500
+Message-Id: <20220720011002.5221-1-faenkhauser@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+Fixes bluetooth on HP Envy ey0xxx
 
-[ Upstream commit b2620facef4889fefcbf2e87284f34dcd4189bce ]
-
-If a kernel is built with CONFIG_RETPOLINE=n, but the user still wants
-to mitigate Spectre v2 using IBRS or eIBRS, the RSB filling will be
-silently disabled.
-
-There's nothing retpoline-specific about RSB buffer filling.  Remove the
-CONFIG_RETPOLINE guards around it.
-
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/entry/entry_32.S            | 2 --
- arch/x86/entry/entry_64.S            | 2 --
- arch/x86/include/asm/nospec-branch.h | 2 --
- 3 files changed, 6 deletions(-)
+ drivers/bluetooth/btusb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-index 887420844066..e309e7156038 100644
---- a/arch/x86/entry/entry_32.S
-+++ b/arch/x86/entry/entry_32.S
-@@ -698,7 +698,6 @@ SYM_CODE_START(__switch_to_asm)
- 	movl	%ebx, PER_CPU_VAR(__stack_chk_guard)
- #endif
- 
--#ifdef CONFIG_RETPOLINE
- 	/*
- 	 * When switching from a shallower to a deeper call stack
- 	 * the RSB may either underflow or use entries populated
-@@ -707,7 +706,6 @@ SYM_CODE_START(__switch_to_asm)
- 	 * speculative execution to prevent attack.
- 	 */
- 	FILL_RETURN_BUFFER %ebx, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_CTXSW
--#endif
- 
- 	/* Restore flags or the incoming task to restore AC state. */
- 	popfl
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index d8376e5fe1af..024367c81b7e 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -245,7 +245,6 @@ SYM_FUNC_START(__switch_to_asm)
- 	movq	%rbx, PER_CPU_VAR(fixed_percpu_data) + stack_canary_offset
- #endif
- 
--#ifdef CONFIG_RETPOLINE
- 	/*
- 	 * When switching from a shallower to a deeper call stack
- 	 * the RSB may either underflow or use entries populated
-@@ -254,7 +253,6 @@ SYM_FUNC_START(__switch_to_asm)
- 	 * speculative execution to prevent attack.
- 	 */
- 	FILL_RETURN_BUFFER %r12, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_CTXSW
--#endif
- 
- 	/* restore callee-saved registers */
- 	popq	%r15
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index a790109f9337..257d24a67a81 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -111,11 +111,9 @@
-   * monstrosity above, manually.
-   */
- .macro FILL_RETURN_BUFFER reg:req nr:req ftr:req
--#ifdef CONFIG_RETPOLINE
- 	ALTERNATIVE "jmp .Lskip_rsb_\@", "", \ftr
- 	__FILL_RETURN_BUFFER(\reg,\nr,%_ASM_SP)
- .Lskip_rsb_\@:
--#endif
- .endm
- 
- #else /* __ASSEMBLY__ */
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index e25fcd49db70..973d122c738f 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -454,6 +454,9 @@ static const struct usb_device_id blacklist_table[] = {
+ 	{ USB_DEVICE(0x0489, 0xe0c8), .driver_info = BTUSB_MEDIATEK |
+ 						     BTUSB_WIDEBAND_SPEECH |
+ 						     BTUSB_VALID_LE_STATES },
++	{ USB_DEVICE(0x0489, 0xe0e0), .driver_info = BTUSB_MEDIATEK |
++						     BTUSB_WIDEBAND_SPEECH |
++						     BTUSB_VALID_LE_STATES },
+ 	{ USB_DEVICE(0x04ca, 0x3802), .driver_info = BTUSB_MEDIATEK |
+ 						     BTUSB_WIDEBAND_SPEECH |
+ 						     BTUSB_VALID_LE_STATES },
 -- 
-2.35.1
+2.36.1
 

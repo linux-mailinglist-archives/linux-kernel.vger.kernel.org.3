@@ -2,149 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7987F57B0CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE3257B0D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239035AbiGTGGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S239170AbiGTGIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239017AbiGTGGh (ORCPT
+        with ESMTP id S237966AbiGTGIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:06:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E026872B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:06:36 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oE2qu-00026Y-C6; Wed, 20 Jul 2022 08:06:32 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oE2qt-0023uC-Gn; Wed, 20 Jul 2022 08:06:31 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oE2qs-006JuG-Fl; Wed, 20 Jul 2022 08:06:30 +0200
-Date:   Wed, 20 Jul 2022 08:06:27 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: pm_runtime_resume_and_get in .remove callbacks
-Message-ID: <20220720060627.r7ifcxu6uopgsasw@pengutronix.de>
-References: <20220713084739.j4cqab6rfz22nlko@pengutronix.de>
- <CAJZ5v0h4qQoo5uVBLtSFhdVBpD1tpd-SmVzV1dE0+VZMrr-eTA@mail.gmail.com>
+        Wed, 20 Jul 2022 02:08:04 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAE06872B;
+        Tue, 19 Jul 2022 23:08:02 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 9664B5FD30;
+        Wed, 20 Jul 2022 09:08:00 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1658297280;
+        bh=jPmZtSU8mSGJMcL/aUVhmt1r9yC+Cy2vPtW5d7Pmaeo=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=NAIL0hPGnmaH6Z5zRiAaJDKOYlTyS94NhP2JnApnVyBr09iLWdzhorcIUh9PbtPSK
+         8YM572klcFf0LvoM1SKdLeszyIKtKg3tBAzZYGvmYiMeIPvKCAYM0k2In3EqIKNjqM
+         xMF6JLkCyVm1KRPo2Nj593uANC12dYx/Cdy/m5tn00p5JXA8zD0/mSUV1h+jw1oDL3
+         BqsNbIuyYD6fbS2U/ty7d+hJqaA9eYPVqm7sP+yAXO14l7w13Emrl+dcKpbY+FD2tS
+         F2UkfYRs4Y8TP3sBqAvssnOKQ8Gp0/CTPXIxXBwkmhsKwi3D7AiS3zPb52eptyior+
+         FhuF9kKsqJt/Q==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 20 Jul 2022 09:07:59 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 0/3] virtio/vsock: use SO_RCVLOWAT to set
+ POLLIN/POLLRDNORM
+Thread-Topic: [RFC PATCH v1 0/3] virtio/vsock: use SO_RCVLOWAT to set
+ POLLIN/POLLRDNORM
+Thread-Index: AQHYmn4tqUccpAClwkSIQKaYrjmRMa2Fd1UAgAEfggA=
+Date:   Wed, 20 Jul 2022 06:07:47 +0000
+Message-ID: <ac05e1ee-23b3-75e0-f9a4-1056a68934d8@sberdevices.ru>
+References: <c8de13b1-cbd8-e3e0-5728-f3c3648c69f7@sberdevices.ru>
+ <20220719125856.a6bfwrvy66gxxzqe@sgarzare-redhat>
+In-Reply-To: <20220719125856.a6bfwrvy66gxxzqe@sgarzare-redhat>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C98D0D7F5C1ABC439235ABF83F2C9D0B@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7bjlrlae5aaqwhvp"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0h4qQoo5uVBLtSFhdVBpD1tpd-SmVzV1dE0+VZMrr-eTA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/19 23:44:00 #19926989
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---7bjlrlae5aaqwhvp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Rafael,
-
-On Wed, Jul 13, 2022 at 07:47:39PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Jul 13, 2022 at 10:47 AM Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > Hello,
-> >
-> > there is a big bunch of kernel drivers (here:
-> > drivers/i2c/busses/i2c-sprd.c) that have a remove callback that looks as
-> > follows:
-> >
-> >         static int sprd_i2c_remove(struct platform_device *pdev)
-> >         {
-> >                 struct sprd_i2c *i2c_dev =3D platform_get_drvdata(pdev);
-> >                 int ret;
-> >
-> >                 ret =3D pm_runtime_resume_and_get(i2c_dev->dev);
-> >                 if (ret < 0)
-> >                         return ret;
-> >
-> >                 i2c_del_adapter(&i2c_dev->adap);
-> >                 clk_disable_unprepare(i2c_dev->clk);
-> >
-> >                 pm_runtime_put_noidle(i2c_dev->dev);
-> >                 pm_runtime_disable(i2c_dev->dev);
-> >
-> >                 return 0;
-> >         }
-> >
-> > If pm_runtime_resume_and_get fails, the i2c adapter isn't removed, but
-> > as the memory backing i2c_dev goes away---it was allocated using
-> > devm_kzalloc in .probe()---the next i2c action will probably access
-> > freed memory.
-> >
-> > I'm not familiar enough with pm-runtime stuff, but wonder what
-> > can/should be done about that. The obvious (to me) candidates are:
-> >
-> >  - log an error if pm_runtime_resume_and_get() fails, but continue to
-> >    clean up
-> >  - don't check the return value at all
-> >
-> > What do you think?
->=20
-> (1) Use pm_runtime_get_sync() instead of pm_runtime_resume_and_get()
-> and don't check its return value,
->=20
-> or if that is not viable, because something really can run if and only
-> if the device is operational,
->=20
-> (2) do something like
->=20
-> ret =3D pm_runtime_resume_and_get(i2c_dev->dev);
-> i2c_del_adapter(&i2c_dev->adap);
-> if (ret >=3D 0)
->         clk_disable_unprepare(i2c_dev->clk);
->=20
-> pm_runtime_put_noidle(i2c_dev->dev);
-> pm_runtime_disable(i2c_dev->dev);
-
-Why would you not disable the clk if the resume failed?
-
-Is it an option to not call one of the resume variants at all and only
-call pm_runtime_disable()?
-
-Thanks for your input,
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7bjlrlae5aaqwhvp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLXm2AACgkQwfwUeK3K
-7AnUVwf+NJQmrHAC8PO84y3YoH+UcogkLEtujYKH3Szi7UVwc62Vh/Yh3PaBQBDQ
-tanx/cr/pzEbdyXfa5KWFgy+Vwrv3YUzyxsUC51q6CToxsfLgz4Flqc6RG/6WYrv
-QOqtGRmXNqVD+gks9ySlKyecLAoFOyPVOJMARgaxTGBjgOZFIDgrAujm7fVwqvNw
-yKJ2x3c7JEFJV3qFRlHy5C5de/YjKpvUBJdXSeGSfs6in7tLCMIOzDcGsxgPwqic
-NM3V5C6sh9eek/Oq4G1R6n7ld0qz5rr3vPy+6cYGpBdSHb1TSw44HAhb/pVPR1CD
-fvbwJSBm3s+sLHj7lZnEW2NK3F0oJQ==
-=IbjU
------END PGP SIGNATURE-----
-
---7bjlrlae5aaqwhvp--
+T24gMTkuMDcuMjAyMiAxNTo1OCwgU3RlZmFubyBHYXJ6YXJlbGxhIHdyb3RlOg0KPiBPbiBNb24s
+IEp1bCAxOCwgMjAyMiBhdCAwODoxMjo1MkFNICswMDAwLCBBcnNlbml5IEtyYXNub3Ygd3JvdGU6
+DQo+PiBIZWxsbywNCj4+DQo+PiBkdXJpbmcgbXkgZXhwZXJpbWVudHMgd2l0aCB6ZXJvY29weSBy
+ZWNlaXZlLCBpIGZvdW5kLCB0aGF0IGluIHNvbWUNCj4+IGNhc2VzLCBwb2xsKCkgaW1wbGVtZW50
+YXRpb24gdmlvbGF0ZXMgUE9TSVg6IHdoZW4gc29ja2V0IGhhcyBub24tDQo+PiBkZWZhdWx0IFNP
+X1JDVkxPV0FUKGUuZy4gbm90IDEpLCBwb2xsKCkgd2lsbCBhbHdheXMgc2V0IFBPTExJTiBhbmQN
+Cj4+IFBPTExSRE5PUk0gYml0cyBpbiAncmV2ZW50cycgZXZlbiBudW1iZXIgb2YgYnl0ZXMgYXZh
+aWxhYmxlIHRvIHJlYWQNCj4+IG9uIHNvY2tldCBpcyBzbWFsbGVyIHRoYW4gU09fUkNWTE9XQVQg
+dmFsdWUuIEluIHRoaXMgY2FzZSx1c2VyIHNlZXMNCj4+IFBPTExJTiBmbGFnIGFuZCB0aGVuIHRy
+aWVzIHRvIHJlYWQgZGF0YShmb3IgZXhhbXBsZSB1c2luZ8KgICdyZWFkKCknDQo+PiBjYWxsKSwg
+YnV0IHJlYWQgY2FsbCB3aWxsIGJlIGJsb2NrZWQsIGJlY2F1c2XCoCBTT19SQ1ZMT1dBVCBsb2dp
+YyBpcw0KPj4gc3VwcG9ydGVkIGluIGRlcXVldWUgbG9vcCBpbiBhZl92c29jay5jLiBCdXQgdGhl
+IHNhbWUgdGltZSzCoCBQT1NJWA0KPj4gcmVxdWlyZXMgdGhhdDoNCj4+DQo+PiAiUE9MTElOwqDC
+oMKgwqAgRGF0YSBvdGhlciB0aGFuIGhpZ2gtcHJpb3JpdHkgZGF0YSBtYXkgYmUgcmVhZCB3aXRo
+b3V0DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoCBibG9ja2luZy4NCj4+IFBPTExSRE5PUk0gTm9y
+bWFsIGRhdGEgbWF5IGJlIHJlYWQgd2l0aG91dCBibG9ja2luZy4iDQo+Pg0KPj4gU2VlIGh0dHBz
+Oi8vd3d3Lm9wZW4tc3RkLm9yZy9qdGMxL3NjMjIvb3Blbi9uNDIxNy5wZGYsIHBhZ2UgMjkzLg0K
+Pj4NCj4+IFNvLCB3ZSBoYXZlLCB0aGF0IHBvbGwoKSBzeXNjYWxsIHJldHVybnMgUE9MTElOLCBi
+dXQgcmVhZCBjYWxsIHdpbGwNCj4+IGJlIGJsb2NrZWQuDQo+Pg0KPj4gQWxzbyBpbiBtYW4gcGFn
+ZSBzb2NrZXQoNykgaSBmb3VuZCB0aGF0Og0KPj4NCj4+ICJTaW5jZSBMaW51eCAyLjYuMjgsIHNl
+bGVjdCgyKSwgcG9sbCgyKSwgYW5kIGVwb2xsKDcpIGluZGljYXRlIGENCj4+IHNvY2tldCBhcyBy
+ZWFkYWJsZSBvbmx5IGlmIGF0IGxlYXN0IFNPX1JDVkxPV0FUIGJ5dGVzIGFyZSBhdmFpbGFibGUu
+Ig0KPj4NCj4+IEkgY2hlY2tlZCBUQ1AgY2FsbGJhY2sgZm9yIHBvbGwoKShuZXQvaXB2NC90Y3Au
+YywgdGNwX3BvbGwoKSksIGl0DQo+PiB1c2VzIFNPX1JDVkxPV0FUIHZhbHVlIHRvIHNldCBQT0xM
+SU4gYml0LCBhbHNvIGkndmUgdGVzdGVkIFRDUCB3aXRoDQo+PiB0aGlzIGNhc2UgZm9yIFRDUCBz
+b2NrZXQsIGl0IHdvcmtzIGFzIFBPU0lYIHJlcXVpcmVkLg0KPiANCj4gSSB0cmllZCB0byBsb29r
+IGF0IHRoZSBjb2RlIGFuZCBpdCBzZWVtcyB0aGF0IG9ubHkgVENQIGNvbXBsaWVzIHdpdGggaXQg
+b3IgYW0gSSB3cm9uZz8NClllcywgaSBjaGVja2VkIEFGX1VOSVgsIGl0IGFsc28gZG9uJ3QgY2Fy
+ZSBhYm91dCB0aGF0LiBJdCBjYWxscyBza2JfcXVldWVfZW1wdHkoKSB0aGF0IG9mDQpjb3Vyc2Ug
+aWdub3JlcyBTT19SQ1ZMT1dBVC4NCj4gDQo+Pg0KPj4gSSd2ZSBhZGRlZCBzb21lIGZpeGVzIHRv
+IGFmX3Zzb2NrLmMgYW5kIHZpcnRpb190cmFuc3BvcnRfY29tbW9uLmMsDQo+PiB0ZXN0IGlzIGFs
+c28gaW1wbGVtZW50ZWQuDQo+Pg0KPj4gV2hhdCBkbyBZb3UgdGhpbmsgZ3V5cz8NCj4gDQo+IE5p
+Y2UsIHRoYW5rcyBmb3IgZml4aW5nIHRoaXMgYW5kIGZvciB0aGUgdGVzdCENCj4gDQo+IEkgbGVm
+dCBzb21lIGNvbW1lbnRzLCBidXQgSSB0aGluayB0aGUgc2VyaWVzIGlzIGZpbmUgaWYgd2Ugd2ls
+bCBzdXBwb3J0IGl0IGluIGFsbCB0cmFuc3BvcnRzLg0KQWNrDQo+IA0KPiBJJ2QganVzdCBsaWtl
+IHRvIHVuZGVyc3RhbmQgaWYgaXQncyBqdXN0IFRDUCBjb21wbHlpbmcgd2l0aCBpdCBvciBJJ20g
+bWlzc2luZyBzb21lIGNoZWNrIGluY2x1ZGVkIGluIHRoZSBzb2NrZXQgbGF5ZXIgdGhhdCB3ZSBj
+b3VsZCByZXVzZS4NClNlZW1zIHNvY2tfcG9sbCgpIHdoaWNoIGlzIHNvY2tldCBsYXllciBlbnRy
+eSBwb2ludCBmb3IgcG9sbCgpIGRvZXNuJ3QgY29udGFpbiBhbnkgc3VjaCBjaGVja3MNCj4gDQo+
+IEBEYXZpZCwgQEpha3ViLCBAUGFvbG8sIGFueSBhZHZpY2U/DQo+IA0KPiBUaGFua3MsDQo+IFN0
+ZWZhbm8NCj4gDQoNClBTOiBtb3Jlb3ZlciwgaSBmb3VuZCBvbmUgbW9yZSBpbnRlcmVzdGluZyB0
+aGluZyB3aXRoIFRDUCBhbmQgcG9sbDogVENQIHJlY2VpdmUgbG9naWMgd2FrZXMgdXAgcG9sbCB3
+YWl0ZXINCm9ubHkgd2hlbiBudW1iZXIgb2YgYXZhaWxhYmxlIGJ5dGVzID4gU09fUkNWTE9XQVQu
+IEUuZy4gaXQgcHJldmVudHMgInNwdXJpb3VzIiB3YWtlIHVwcywgd2hlbiBwb2xsIHdpbGwgYmUN
+Cndva2VuIHVwIGJlY2F1c2UgbmV3IGRhdGEgYXJyaXZlZCwgYnV0IFBPTExJTiB0byBhbGxvdyB1
+c2VyIGRlcXVldWUgdGhpcyBkYXRhIHdvbid0IGJlIHNldChhcyBhbW91bnQgb2YgZGF0YQ0KaXMg
+dG9vIHNtYWxsKS4NClNlZSB0Y3BfZGF0YV9yZWFkeSgpIGluIG5ldC9pcHY0L3RjcF9pbnB1dC5j
+DQoNClRoYW5rcw0K

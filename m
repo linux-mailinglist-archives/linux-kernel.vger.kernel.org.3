@@ -2,79 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0777257BB4E
+	by mail.lfdr.de (Postfix) with ESMTP id CF89757BB50
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240692AbiGTQVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
+        id S240807AbiGTQVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235366AbiGTQUr (ORCPT
+        with ESMTP id S235145AbiGTQVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:20:47 -0400
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3031845050;
-        Wed, 20 Jul 2022 09:20:46 -0700 (PDT)
-Received: by mail-pj1-f47.google.com with SMTP id s18-20020a17090aa11200b001f1e9e2438cso2561314pjp.2;
-        Wed, 20 Jul 2022 09:20:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EtY/SeORzLrSCr1jdA4Qjx8UUc6ri7seQlaa4SBenzg=;
-        b=SJ9ADJYohcx8f3T1z2IBbwrkkE3K5hXg6tsSiA+RweNl7q3wA67GwE4/0pqbCxT1O0
-         sSUlA3SAzH8MpU5F+v7xGQrAhx1svURrx1phy9vG9DyhQVHiSbvxxkBARIZCu5iAL/T8
-         idLeFk2FgXKOpuW8oySrA4nq7jfmCRaxcsTv+ir3ntV4sOZ0lEqwDRYgIQzgCHd185FR
-         lz9Kj3dODd5NHuy86cDN2WDjgs/w73S+CsQarugd4C8cjFYSOLBBRFyB6xsE912ZNdMN
-         7k3DRYQkL9XG+6fgqbKuuQjRHPRUWH0TpLPSuqQC248cO2szAlKb8AYNwjwEWyaHp6Xx
-         31Sg==
-X-Gm-Message-State: AJIora/ZdWKaUaFtYZSZlYXYoZXeZbwLN9TN5C95YFwOB/cSNZM0dZN1
-        22X8q05+FiaoMcJeEyGbuEw=
-X-Google-Smtp-Source: AGRyM1tO6LqwlGx+Ff4fF8RhH1idbq59pDQaFMUGQaaFg4pls5nHFvUtysp2E3y/dodMidWO7zTV+Q==
-X-Received: by 2002:a17:903:244d:b0:16c:52f1:d12 with SMTP id l13-20020a170903244d00b0016c52f10d12mr40268309pls.44.1658334045300;
-        Wed, 20 Jul 2022 09:20:45 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:a7e0:78fc:9269:215b? ([2620:15c:211:201:a7e0:78fc:9269:215b])
-        by smtp.gmail.com with ESMTPSA id u16-20020a170903125000b001690d398401sm14465600plh.88.2022.07.20.09.20.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 09:20:44 -0700 (PDT)
-Message-ID: <21e7c959-6365-8029-d26d-985ff888333e@acm.org>
-Date:   Wed, 20 Jul 2022 09:20:42 -0700
+        Wed, 20 Jul 2022 12:21:14 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 356A8491E9;
+        Wed, 20 Jul 2022 09:21:10 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 26KGKsKX004192;
+        Wed, 20 Jul 2022 18:20:54 +0200
+Date:   Wed, 20 Jul 2022 18:20:54 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Pranith Kumar <bobby.prani@gmail.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Fernanda Ma'rouf" <fernandafmr12@gnuweeb.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: Re: [PATCH 00/17] nolibc: add preliminary self tests
+Message-ID: <20220720162054.GB4159@1wt.eu>
+References: <20220719214449.2520-1-w@1wt.eu>
+ <67a92005-4e13-909a-1693-dfb86d8114c0@gnuweeb.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] block: Introduce nr_sched_batch sys interface
-Content-Language: en-US
-To:     Wang You <wangyoua@uniontech.com>, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hch@lst.de, jaegeuk@kernel.org, fio@vger.kernel.org,
-        ming.lei@redhat.com, wangxiaohua@uniontech.com
-References: <20220720093048.225944-1-wangyoua@uniontech.com>
- <20220720093048.225944-2-wangyoua@uniontech.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220720093048.225944-2-wangyoua@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67a92005-4e13-909a-1693-dfb86d8114c0@gnuweeb.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 02:30, Wang You wrote:
-> The function of this patch is to add an nr_sched_batch interface under
-> /sys/block/sdx/queue/, which can be used to set the number of batching
-> requests. Of course, the default value is nr_requests and will follow
-> nr_request when it has not been changed.
+On Wed, Jul 20, 2022 at 11:03:58PM +0700, Ammar Faizi wrote:
+> On 7/20/22 4:44 AM, Willy Tarreau wrote:
+> > I'm obviously interested in comments, but really, I don't want to
+> > overdesign something for a first step, it remains a very modest test
+> > program and I'd like that it remains easy to hack on it and to contribute
+> > new tests that are deemed useful.
+> 
+> I personally hate how the test framework mandates:
+> 
+>   "There must be exactly one test per line."
 
-How can reducing the number of batched requests increase performance?
+I know, that's a design choice that makes them trivial to add, because
+it's the compiler that assigns the test IDs, and it comes with a non
+negligible benefit.
 
-Please provide performance numbers.
+> which makes the test case, for example, one long liner like this:
+> 
+>   if ((p1 = p2 = sbrk(4096)) != (void *)-1) p2 = sbrk(-4096); EXPECT_SYSZR(1, (p2 == (void *)-1) || p2 == p1); break;
+> 
+> that's ugly and hard to read. Can we get rid of this "one test per line" rule?
 
-Thanks,
+If you find a better solution, I'm open. What I certainly don't want
+to do is to have to cross-reference IDs with arrays, nor start to stack
+endless if/else that are even more painful to deal with, or have to
+renumber everything by hand once in a while.
 
-Bart.
+> It would be great if we followed the documented coding style that says:
+> 
+>    "Statements longer than 80 columns should be broken into sensible chunks,
+>     unless exceeding 80 columns significantly increases readability and does
+>     not hide information." [1]
+
+Admittedly this is not core code but debugging code running in userland
+to help developers spot bugs in their code which is somewhere else and
+well maintained. I personally think that the tradeoff is positive here,
+i.e. non-pretty but easily hackable short tests that encourage additions
+and variations. The ease of adding tests allowed me to create 71 of them
+in a single afternoon and two of them brought me bugs in existing code,
+which I think is efficient. But I'm not fond of the approach either, I
+just couldn't produce anything as efficient that was prettier, but I'm
+quite open to being proven wrong by an alternate proposal.
+
+> What we have here doesn't really increase the readability at all. Maybe
+> it's too late for 5.20, just for next in case we want to fix it.
+
+The goal was not to increase *readability* but *writability*. We're
+still missing test for most syscalls and I would like them to be added
+quickly so that we can continue to add tested code. The readability I
+care about is understanding the output. When I'm seeing:
+
+  ...
+  29 execve_root = -1 EACCES               [OK]
+  30 getdents64_root = -1 EBADF           [FAIL]
+  31 getdents64_null = -1 EBADF  != (-1 ENOTDIR) [FAIL]
+  32 gettimeofday_null = 0                 [OK]
+  ...
+
+on riscv64, I don't have to search long to figure that we did something
+wrong with getdents64() on this arch and that the error path works
+differently. Similarly, this on mips:
+
+  8 kill_CONT = 0                          [OK]
+  9 kill_BADPID = -1 ESRCH                 [OK]
+  10 sbrkdo_page_fault(): sending SIGSEGV to init for invalid read access from 0000000a
+  epc = 0000000a in init[400000+4000]
+  ra  = 0000000a in init[400000+4000]
+  Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+
+tells me that sbrk() definitely doesn't work there.
+
+In both cases I know what and where to look without even having to *read*
+that test. This does matter to me, as a developer of the component subject
+to the test.
+
+But again, I'm open to better proposals. I reached the limits of my
+imagination there, but I do value the ability to "yyp" one line, change
+two arguments and gain one extra test for a different combination, and
+I really do not want to lose that simplicity. Note that for more complex
+tests, it's trivial to add a dedicated function and that's what was done
+for getdents64() which also serves as an example.
+
+Willy

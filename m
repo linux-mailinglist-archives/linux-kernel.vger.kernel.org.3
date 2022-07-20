@@ -2,63 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD7C57BF41
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 543C357BF47
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiGTUhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 16:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S230116AbiGTUjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 16:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGTUhJ (ORCPT
+        with ESMTP id S229441AbiGTUjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:37:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B69418E1E;
-        Wed, 20 Jul 2022 13:37:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12ACE61CBB;
-        Wed, 20 Jul 2022 20:37:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4630DC3411E;
-        Wed, 20 Jul 2022 20:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658349427;
-        bh=7PpBRv20MvSwwE36jMplF6JP0iKXxREOK8LZEaor688=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jMAx2T3KOeZbhoBtYHqIwmEVTobmpeXTtp999f/G+GjFUkZPwlQBR+OBog38tBgJU
-         q1LOLTUmlq6cBIZmoM7azA/nb0LXgzjM3AV/YmfrZOAZI+THEjnWIfOgAPfx7AQWXc
-         5BCjiLggpScM0Zx1Ml7T5/hCU7TTOw+U0rMkAyV2DRHHK81ZQrLninPD15othpv4HB
-         2VWsRzC11A7tk9m/n28R4+d2liQywt8OB4SvK2x4FdvRqBTAjSFCYKmCV9s/ZqOXMx
-         D1XIGIT1Ci3jMSu05hNJxs93f3TRymkZFCwpfaWboobEzGH2BpMyWUR6/wD+FGwts4
-         1FtgbYp8na7iQ==
-Date:   Wed, 20 Jul 2022 15:37:05 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two
- funcs
-Message-ID: <20220720203705.GA1654821@bhelgaas>
+        Wed, 20 Jul 2022 16:39:05 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BE722BD8;
+        Wed, 20 Jul 2022 13:39:04 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KJl6r2014142;
+        Wed, 20 Jul 2022 20:38:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=gIdugH+55bFyS9VknlUvUKaNXLWzY0rcHSyRa7HyBE0=;
+ b=FHDDV8G2zqo9BMPvMw9hiacY7hhqUm70kksq6snbFhbraiP1h6xZ3HJMwBRZ7udrsnxr
+ DJ78mnw8cF+5nsi4MH4h0XeaUScHtCc6UNgL9zMSkGh6RT0BUrK3S9VxhK3Nqzar1AT/
+ 5XjkK7mqTJnzO8ZPhCQvSru3K9uiNoUPu8y8qYc9z+0pAa4rtaPPT34r1HvAUrwE1gvX
+ a12ioFAU9y06j+PWF99BCra0oKqZ22QTLeMF/HCDCET51pLrtLR4sKSCnM/JrMdVELAJ
+ iDl2DuEk3NKAhMFApf/z0ViDdBIP0jIJ4der8oo7xv909knaqdbVRJLjp9K4gb8dMqsB Kg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hebfv23b4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 20:38:52 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26KKcgw8003698
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 20:38:42 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Jul 2022 13:38:42 -0700
+Received: from [10.216.25.31] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 20 Jul
+ 2022 13:38:35 -0700
+Message-ID: <b19c361f-025b-db02-debe-8b4bbe1369dd@quicinc.com>
+Date:   Thu, 21 Jul 2022 02:08:32 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718224033.GA1450714@bhelgaas>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [Freedreno] [PATCH v2 3/7] drm/msm: Fix cx collapse issue during
+ recovery
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+CC:     Doug Anderson <dianders@chromium.org>, Sean Paul <sean@poorly.run>,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <1657346375-1461-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220709112837.v2.3.I4ac27a0b34ea796ce0f938bb509e257516bc6f57@changeid>
+ <CAD=FV=U=J+yf6Qu0VgJ8A5Lhs_s8Fszw=Oa0XUny5XT-5z56xQ@mail.gmail.com>
+ <1299312f-e614-e4e2-72cb-fd7fb99922ce@quicinc.com>
+ <CAF6AEGvjD3LRm40mPr4n+jzx71WmwYpVWizUDLct9cgafjFRyw@mail.gmail.com>
+ <3c150bc9-68a0-7a35-6511-f80a42e8945b@quicinc.com>
+ <CAF6AEGsQqE+5iE-=ja96wS6EMN1K1PzCa2fRA6DvQWwyqBq3NA@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAF6AEGsQqE+5iE-=ja96wS6EMN1K1PzCa2fRA6DvQWwyqBq3NA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: YpunemG9jq14pdX051AANsyRZ7PHCHlY
+X-Proofpoint-ORIG-GUID: YpunemG9jq14pdX051AANsyRZ7PHCHlY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_12,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ impostorscore=0 malwarescore=0 clxscore=1011 phishscore=0
+ priorityscore=1501 spamscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207200083
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,45 +102,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 05:40:33PM -0500, Bjorn Helgaas wrote:
-> On Mon, Jul 18, 2022 at 01:14:25PM -0500, Bjorn Helgaas wrote:
-> > ...
-> 
-> > So I think brcm_pcie_setup() does initialization that doesn't depend
-> > on the link or any downstream devices, and brcm_pcie_start_link() does
-> > things that depend on the link being up.  Right?
-> > 
-> > If so, "start_link" might be a slight misnomer since AFAICT
-> > brcm_pcie_start_link() doesn't do anything to initiate link-up except
-> > maybe deasserting fundamental reset.  Some drivers start the LTSSM or
-> > explicitly enable link training, but brcm_pcie_start_link() doesn't
-> > seem to do anything like that.
-> > 
-> > brcm_pcie_start_link() still does brcm_pcie_set_outbound_win().  Does
-> > that really depend on the link being up?  If that only affects the
-> > Root Port, maybe it could be done before link-up?
-> 
-> What about the /* PCIe->SCB endian mode for BAR */ thing?  Does that
-> depend on the link being up?
-> 
-> And the "Refclk from RC should be gated with CLKREQ#" part?  Does that
-> depend on the link being up?
-> 
-> It seems obvious that brcm_pcie_set_ssc() and reading the negotiated
-> link speed and width depend on the link being up.
+On 7/20/2022 11:36 PM, Rob Clark wrote:
+> On Tue, Jul 12, 2022 at 12:15 PM Akhil P Oommen
+> <quic_akhilpo@quicinc.com> wrote:
+>> On 7/12/2022 10:14 PM, Rob Clark wrote:
+>>> On Mon, Jul 11, 2022 at 10:05 PM Akhil P Oommen
+>>> <quic_akhilpo@quicinc.com> wrote:
+>>>> On 7/12/2022 4:52 AM, Doug Anderson wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On Fri, Jul 8, 2022 at 11:00 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>>>>>> There are some hardware logic under CX domain. For a successful
+>>>>>> recovery, we should ensure cx headswitch collapses to ensure all the
+>>>>>> stale states are cleard out. This is especially true to for a6xx family
+>>>>>> where we can GMU co-processor.
+>>>>>>
+>>>>>> Currently, cx doesn't collapse due to a devlink between gpu and its
+>>>>>> smmu. So the *struct gpu device* needs to be runtime suspended to ensure
+>>>>>> that the iommu driver removes its vote on cx gdsc.
+>>>>>>
+>>>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>>>>>> ---
+>>>>>>
+>>>>>> (no changes since v1)
+>>>>>>
+>>>>>>     drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 16 ++++++++++++++--
+>>>>>>     drivers/gpu/drm/msm/msm_gpu.c         |  2 --
+>>>>>>     2 files changed, 14 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>>>>> index 4d50110..7ed347c 100644
+>>>>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>>>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>>>>> @@ -1278,8 +1278,20 @@ static void a6xx_recover(struct msm_gpu *gpu)
+>>>>>>             */
+>>>>>>            gmu_write(&a6xx_gpu->gmu, REG_A6XX_GMU_GMU_PWR_COL_KEEPALIVE, 0);
+>>>>>>
+>>>>>> -       gpu->funcs->pm_suspend(gpu);
+>>>>>> -       gpu->funcs->pm_resume(gpu);
+>>>>>> +       /*
+>>>>>> +        * Now drop all the pm_runtime usage count to allow cx gdsc to collapse.
+>>>>>> +        * First drop the usage count from all active submits
+>>>>>> +        */
+>>>>>> +       for (i = gpu->active_submits; i > 0; i--)
+>>>>>> +               pm_runtime_put(&gpu->pdev->dev);
+>>>>>> +
+>>>>>> +       /* And the final one from recover worker */
+>>>>>> +       pm_runtime_put_sync(&gpu->pdev->dev);
+>>>>>> +
+>>>>>> +       for (i = gpu->active_submits; i > 0; i--)
+>>>>>> +               pm_runtime_get(&gpu->pdev->dev);
+>>>>>> +
+>>>>>> +       pm_runtime_get_sync(&gpu->pdev->dev);
+>>>>> In response to v1, Rob suggested pm_runtime_force_suspend/resume().
+>>>>> Those seem like they would work to me, too. Why not use them?
+>>>> Quoting my previous response which I seem to have sent only to Freedreno
+>>>> list:
+>>>>
+>>>> "I believe it is supposed to be used only during system sleep state
+>>>> transitions. Btw, we don't want pm_runtime_get() calls from elsewhere to
+>>>> fail by disabling RPM here."
+>>> The comment about not wanting other runpm calls to fail is valid.. but
+>>> that is also solveable, ie. by holding a lock around runpm calls.
+>>> Which I think we need to do anyways, otherwise looping over
+>>> gpu->active_submits is racey..
+>>>
+>>> I think pm_runtime_force_suspend/resume() is the least-bad option.. or
+>>> at least I'm not seeing any obvious alternative that is better
+>>>
+>>> BR,
+>>> -R
+>> We are holding gpu->lock here which will block further submissions from
+>> scheduler. Will active_submits still race?
+>>
+>> It is possible that there is another thread which successfully completed
+>> pm_runtime_get() and while it access the hardware, we pulled the plug on
+>> regulator/clock here. That will result in obvious device crash. So I can
+>> think of 2 solutions:
+>>
+>> 1. wrap *every* pm_runtime_get/put with a mutex. Something like:
+>>               mutex_lock();
+>>               pm_runtime_get();
+>>               < ... access hardware here >>
+>>               pm_runtime_put();
+>>               mutex_unlock();
+>>
+>> 2. Drop runtime votes from every submit in recover worker and wait/poll
+>> for regulator to collapse in case there are transient votes on
+>> regulator  from other threads/subsystems.
+>>
+>> Option (2) seems simpler to me.  What do you think?
+>>
+> But I think without #1 you could still be racing w/ some other path
+> that touches the hw, like devfreq, right.  They could be holding a
+> runpm ref, so even if you loop over active_submits decrementing the
+> runpm ref, it still doesn't drop to zero
+>
+> BR,
+> -R
+Yes, you are right. There could be some transient votes from other 
+threads/drivers/subsystem. This is the reason we need to poll for cx 
+gdsc collapse in the next patch.Even with #1, it is difficult to 
+coordinate with smmu driver and close to impossible with tz/hyp.
 
-Can we close on this?  Splitting into
-
-  (a) stuff that can be initialized before the link is available and
-  (b) stuff that depends on the link
-
-makes good sense, but then (b) should only contain stuff that actually
-depends on the link.
-
-The "PCIe->SCB endian mode for BAR" *sounds* like something related to
-the primary side of the RP, not the link.
-
-Not sure about "Refclk from RC".  RC would certainly be primary side,
-but ASPM has to do with secondary (link) side.
-
-Bjorn
+-Akhil.

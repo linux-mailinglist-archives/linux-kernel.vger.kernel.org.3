@@ -2,130 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2CA57B54F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF52757B555
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239629AbiGTLWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
+        id S232646AbiGTLYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239179AbiGTLWs (ORCPT
+        with ESMTP id S230405AbiGTLYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:22:48 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D002953D37;
-        Wed, 20 Jul 2022 04:22:47 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KAnVXc019353;
-        Wed, 20 Jul 2022 11:22:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=4TSEcRdRMkrGcJYLT1rCWgoMhn5j5pqG4lhzkQEFWQQ=;
- b=NNc6ypdmbeMpQsDJMfuePjZ8E1Lk8dLv4NHc+mNA1QCYkCESm32t8piF8pCfrF9uwREM
- ERP4o0ag98GnIgrb+zZH83aO3AKnUofbxWicY4+pD6Y9CugqrO7zqPzQAtNn7dmMdXHb
- H+JzD0Nm1jxUFDF0hGRXMLl5R1aJp3auxVeJ53xJnZ5vRXW9UW2G4oXqnDeaHyILrW4E
- HzsQyoi1rWRc+9yL9Q0fUKn0LnzaKT3t/IQanYr3CLPWgwWxfZg4P6h0GAwJHjyHfF6Z
- j+2rObnrbGaTr4g7tzw4OJYBTuMLAxKRzpamZq7LPONVbsEOFzIAFAzTIYm0BkwbEZgp CA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hdsmu3cka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 11:22:44 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26KBMiAH002323
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 11:22:44 GMT
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Jul 2022 04:22:43 -0700
-Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 20 Jul 2022 04:22:40 -0700
-From:   Satya Priya <quic_c_skakit@quicinc.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_tdas@quicinc.com>, <quic_c_skakit@quicinc.com>
-Subject: [PATCH V3 2/2] arm64: dts: qcom: sc7280: Update lpassaudio clock controller for resets
-Date:   Wed, 20 Jul 2022 16:52:24 +0530
-Message-ID: <1658316144-16520-3-git-send-email-quic_c_skakit@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1658316144-16520-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1658316144-16520-1-git-send-email-quic_c_skakit@quicinc.com>
+        Wed, 20 Jul 2022 07:24:32 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB9E52FE7;
+        Wed, 20 Jul 2022 04:24:30 -0700 (PDT)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LntYT5pg4z687NT;
+        Wed, 20 Jul 2022 19:21:01 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 20 Jul 2022 13:24:27 +0200
+Received: from localhost (10.81.205.121) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 20 Jul
+ 2022 12:24:26 +0100
+Date:   Wed, 20 Jul 2022 12:24:23 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Li, Ming" <ming4.li@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alison Schofield <alison.schofield@intel.com>,
+        "Vishal Verma" <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH V14 3/7] PCI/DOE: Add DOE mailbox support functions
+Message-ID: <20220720122423.00004ea6@Huawei.com>
+In-Reply-To: <YtcC9qYo1lOGZ/83@iweiny-desk3>
+References: <20220715030424.462963-1-ira.weiny@intel.com>
+        <20220715030424.462963-4-ira.weiny@intel.com>
+        <20220719173553.000067c6@Huawei.com>
+        <YtcC9qYo1lOGZ/83@iweiny-desk3>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: wTOizOwsryM4LYlCd6pdHRI91QPI90_g
-X-Proofpoint-ORIG-GUID: wTOizOwsryM4LYlCd6pdHRI91QPI90_g
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_05,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- malwarescore=0 spamscore=0 clxscore=1015 adultscore=0 mlxlogscore=963
- impostorscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207200047
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.205.121]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taniya Das <quic_tdas@quicinc.com>
+On Tue, 19 Jul 2022 12:16:06 -0700
+Ira Weiny <ira.weiny@intel.com> wrote:
 
-The lpass audio supports TX/RX/WSA block resets. Also to keep
-consistency update lpasscore to lpass_core.
+> On Tue, Jul 19, 2022 at 05:35:53PM +0100, Jonathan Cameron wrote:
+> > On Thu, 14 Jul 2022 20:04:20 -0700
+> > ira.weiny@intel.com wrote:
+> >   
+> > > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > 
+> > > Introduced in a PCIe r6.0, sec 6.30, DOE provides a config space based
+> > > mailbox with standard protocol discovery.  Each mailbox is accessed
+> > > through a DOE Extended Capability.
+> > > 
+> > > Each DOE mailbox must support the DOE discovery protocol in addition to
+> > > any number of additional protocols.
+> > > 
+> > > Define core PCIe functionality to manage a single PCIe DOE mailbox at a
+> > > defined config space offset.  Functionality includes iterating,
+> > > creating, query of supported protocol, and task submission.  Destruction
+> > > of the mailboxes is device managed.
+> > > 
+> > > Cc: "Li, Ming" <ming4.li@intel.com>
+> > > Cc: Bjorn Helgaas <helgaas@kernel.org>
+> > > Cc: Matthew Wilcox <willy@infradead.org>
+> > > Acked-by: Bjorn Helgaas <helgaas@kernel.org>
+> > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > Co-developed-by: Ira Weiny <ira.weiny@intel.com>
+> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>  
+> > Hi Ira,
+> > 
+> > Thanks for persisting with this!
+> > 
+> > So, I think this works, but there is at least one 'sleep' I can't
+> > see a purpose for.  I think it's just a left over from refactoring.
+> > 
+> > A few other more trivial things inline.
+> > 
+> > Thanks,
+> > 
+> > Jonathan
+> > 
+> >   
+> > >   
+> > >>  # Endpoint library must be initialized before its users  
+> > >  obj-$(CONFIG_PCI_ENDPOINT)	+= endpoint/
+> > > diff --git a/drivers/pci/doe.c b/drivers/pci/doe.c
+> > > new file mode 100644
+> > > index 000000000000..12c3762be22f
+> > > --- /dev/null
+> > > +++ b/drivers/pci/doe.c
+> > > @@ -0,0 +1,546 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Data Object Exchange
+> > > + *	PCIe r6.0, sec 6.30 DOE
+> > > + *
+> > > + * Copyright (C) 2021 Huawei
+> > > + *	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > + *
+> > > + * Copyright (C) 2022 Intel Corporation
+> > > + *	Ira Weiny <ira.weiny@intel.com>
+> > > + */
+> > > +
+> > > +#define dev_fmt(fmt) "DOE: " fmt
+> > > +
+> > > +#include <linux/bitfield.h>
+> > > +#include <linux/delay.h>
+> > > +#include <linux/jiffies.h>
+> > > +#include <linux/mutex.h>
+> > > +#include <linux/pci.h>
+> > > +#include <linux/pci-doe.h>
+> > > +#include <linux/workqueue.h>
+> > > +
+> > > +#define PCI_DOE_PROTOCOL_DISCOVERY 0
+> > > +
+> > > +#define PCI_DOE_BUSY_MAX_RETRIES 16  
+> > Left over from removed code.  
+> 
+> I think Dan may have taken these.  If so I'll send a clean up.  If not I can
+> spin.  Let me check.
+> 
+Absolutely. All tiny improvements, so fine to go in next cycle given late timing.
 
-Fixes: 9499240d15f2 ("arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio clock controllers")
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
----
-Changes since v3:
- - Remove the status="disabled" from lpasscc node.
+> > > +/**
+> > > + * pci_doe_supports_prot() - Return if the DOE instance supports the given
+> > > + *			     protocol
+> > > + * @doe_mb: DOE mailbox capability to query
+> > > + * @vid: Protocol Vendor ID
+> > > + * @type: Protocol type
+> > > + *
+> > > + * RETURNS: True if the DOE mailbox supports the protocol specified
+> > > + */
+> > > +bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type)
+> > > +{
+> > > +	unsigned long index;
+> > > +	void *entry;
+> > > +
+> > > +	/* The discovery protocol must always be supported */
+> > > +	if (vid == PCI_VENDOR_ID_PCI_SIG && type == PCI_DOE_PROTOCOL_DISCOVERY)
+> > > +		return true;  
+> > 
+> > Given how cheap this look up is now it's all in xarray, we could drop this
+> > 'optimization'.  I'm fairly sure the discovery protocol will always be
+> > discovered (spec says it must be returned when calling itself as the fist
+> > protocol).  
+> 
+> No we can't because this is called before the xarray is populated with the
+> discovery protocol.  This was actually added not as an optimization but to
+> allow the discovery protocol to run through the common query path.
+> 
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Ah.  I was too lazy to check if that was the case :)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 71735bb..c641f0b 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2184,6 +2184,7 @@
- 			power-domains = <&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
- 			#clock-cells = <1>;
- 			#power-domain-cells = <1>;
-+			#reset-cells = <1>;
- 		};
- 
- 		lpass_aon: clock-controller@3380000 {
-@@ -2191,13 +2192,13 @@
- 			reg = <0 0x03380000 0 0x30000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>,
- 			       <&rpmhcc RPMH_CXO_CLK_A>,
--			       <&lpasscore LPASS_CORE_CC_CORE_CLK>;
-+			       <&lpass_core LPASS_CORE_CC_CORE_CLK>;
- 			clock-names = "bi_tcxo", "bi_tcxo_ao", "iface";
- 			#clock-cells = <1>;
- 			#power-domain-cells = <1>;
- 		};
- 
--		lpasscore: clock-controller@3900000 {
-+		lpass_core: clock-controller@3900000 {
- 			compatible = "qcom,sc7280-lpasscorecc";
- 			reg = <0 0x03900000 0 0x50000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>;
--- 
-2.7.4
-
+Jonathan

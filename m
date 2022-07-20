@@ -2,88 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AF457BD73
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E28F257BD75
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235930AbiGTSJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
+        id S233408AbiGTSL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbiGTSJo (ORCPT
+        with ESMTP id S230090AbiGTSLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:09:44 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27AC6A9CC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:09:40 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-10d8880d055so2688184fac.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:09:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kunDZr9Y6JPcq1sMuH+ey+Qiy1eRk3ubp6HPIIz1jJw=;
-        b=ANXR3JC3bxQuM5b1p6u7etTiV20lIiUw5xrAcZXH2blgV8GU4hVbmqn8azULJyavSE
-         G6pEUsd7GbEoOApiowJ+a0vtVo5x94YuJz3mIrEUij9dvTM9tEx2V0n7YYkoLNFjvOXl
-         ANkERijHrfMwW3qnJFLnj9pAAwUFijGN6E5syDVTrGG6Fo+p7xwMyRcyVhGXilO3FA25
-         30MRaSbmnOyzX8DGm5cE5pXXXTNsFTDrm1UX9CkkmPiuZ4EEoBl4fkzfA3M1k76B+uV9
-         QvbcexQyslF1JqQyGGRGRdSv8xc+aNnUPiIb4ZGkdos6z9O4TOEtqP4xNMIEaq7wlRRP
-         aLtg==
+        Wed, 20 Jul 2022 14:11:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49A973B955
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658340683;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J19kfipQoHZOcixHPVK0+w19cOCQBsO+YkDTCU5/NKk=;
+        b=OzxMaWhcbjcGJDmujUyMIVmb2ygd2vA8+Py+Hmj0Scr4sZr3zTRrCemicea5h92qSoegHv
+        02KC6RNL4vZofBAZkq4e4Yw/LlIQL9WaPacelW/Hzi6c+8N256xUUclQhPekYG9P4ywd4t
+        c+8TA/Pj9GUjVfuKxMl+V0iDrAovQqU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-14U4ABYkO6iMuLjGwObEPQ-1; Wed, 20 Jul 2022 14:11:22 -0400
+X-MC-Unique: 14U4ABYkO6iMuLjGwObEPQ-1
+Received: by mail-wm1-f71.google.com with SMTP id z20-20020a1c4c14000000b003a3020da654so1102211wmf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:11:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kunDZr9Y6JPcq1sMuH+ey+Qiy1eRk3ubp6HPIIz1jJw=;
-        b=TY1cfWKiC3Akwu29wXbF5i14Xj+hVTjUsHMGhWyWwIUXufYFJeRkYybvtqHUL+zdYN
-         TSYLAtPOLCSL1wXF5gZ8PWsTeK0C1DkWoZ+3xATwD57HltTnc08SDxHRQfDjCWc8F7/8
-         aLxaDbRuuliVXg1BEJo4gkyMnmCb1+1i4s9X5KBFfbNt0iTbbFNaPNfBVLrfkyTMkZc4
-         y3dHiS+CVEo2ur6V+6+B3fMQ07x4pJm0ZhGxuTlKafYUZORtgd0mTm46h4vyQU/O8QiM
-         H3DOmXoNpipzUFLXRbSSNmZeCuzLJzaG1ozho57xnnOu5iTf+RN7zLzbSDBSY78pN0Fo
-         ySTA==
-X-Gm-Message-State: AJIora8w2HL+5BxqTrCPH4Epyx3R3k/Y9pA0Ba/6DkE9fA8S6aubFZCt
-        MlFQfbzae88UbDYyyCqnbUHahA==
-X-Google-Smtp-Source: AGRyM1spLCSSGvcDq6EqyJa5L/lKOksPme/eYbhxC3RUtEb3eGUglOjAIey/25NHx59vWCn2UekbYg==
-X-Received: by 2002:a05:6870:468f:b0:10d:3fb6:bf89 with SMTP id a15-20020a056870468f00b0010d3fb6bf89mr3221549oap.176.1658340579832;
-        Wed, 20 Jul 2022 11:09:39 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id r131-20020acac189000000b0032e548d96e0sm1603602oif.23.2022.07.20.11.09.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 11:09:39 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     sboyd@codeaurora.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        newbie13xd@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: (subset) [PATCH v4 1/2] dt-bindings: arm: qcom: Document lg,judyln and lg,judyp devices
-Date:   Wed, 20 Jul 2022 13:09:37 -0500
-Message-Id: <165834057116.2095894.6261608097150637601.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220626164536.16011-1-newbie13xd@gmail.com>
-References: <20220626164536.16011-1-newbie13xd@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=J19kfipQoHZOcixHPVK0+w19cOCQBsO+YkDTCU5/NKk=;
+        b=JHU/a065nLdnt/JbhNaJ8TWFwVhxMOPdMTtFUBWPjSnQvgYDGCHGefAwEw5yJxdH7G
+         J2RsKtwdlvgcP8XfoOB9I/qPInqEFjQ837PgVDnSwWXBMD3qwnCSQB+IPMNRe/SKnYLJ
+         A8lVpLWyRDpTxkn2WGBC/tKUR6isQv2QKWGsp8mx1DIBhe4iNoQ8T0kPhjt8v62Dye+U
+         iadzPl7Qoz3zUNqm5HCEwUTqubV92TePnNwHGH7v3zaYGUu47o5SOxYlHlG5RXym4IRP
+         XJE7yqGelgj97N7ej9By1AeGi1FXouW9jh0yr71BiiaQaZ7oA2mSSn1rLdVkJFuLF2Uz
+         EbqQ==
+X-Gm-Message-State: AJIora+LKtCQG6njzkHfHkRG8LiX8BBM7pWbmaLqqWoTSUkVRIFtIZ3w
+        SnYHzQvUUHQSYGiqs99qmuyxGMdDkAMYzAvRfrijoxIblz4W+qjsjfmTG7uZ/jO9EdrDx8SYgZt
+        Hr81heJ0punNQ9+vEtyA0g2wp
+X-Received: by 2002:a5d:6b09:0:b0:21e:2eb6:2d03 with SMTP id v9-20020a5d6b09000000b0021e2eb62d03mr7709842wrw.684.1658340680823;
+        Wed, 20 Jul 2022 11:11:20 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t+RPY7OrL5ClIPGayUaOxuBGC/vAsMkUZh9pSms3wOqtib+ulGOoTI3DS06KcDyzfJNlbHLw==
+X-Received: by 2002:a5d:6b09:0:b0:21e:2eb6:2d03 with SMTP id v9-20020a5d6b09000000b0021e2eb62d03mr7709823wrw.684.1658340680567;
+        Wed, 20 Jul 2022 11:11:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:e00:8d96:5dba:6bc4:6e89? (p200300cbc7060e008d965dba6bc46e89.dip0.t-ipconnect.de. [2003:cb:c706:e00:8d96:5dba:6bc4:6e89])
+        by smtp.gmail.com with ESMTPSA id l14-20020adff48e000000b0021d7ad6b9fdsm16603709wro.57.2022.07.20.11.11.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 11:11:20 -0700 (PDT)
+Message-ID: <f33b1f78-6556-bc93-ec3c-2632669b5c35@redhat.com>
+Date:   Wed, 20 Jul 2022 20:11:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 01/14] userfaultfd: set dirty and young on
+ writeprotect
+Content-Language: en-US
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Linux MM <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Nick Piggin <npiggin@gmail.com>
+References: <20220718120212.3180-1-namit@vmware.com>
+ <20220718120212.3180-2-namit@vmware.com>
+ <09d84297-65d5-a3df-fdc0-a7168cdb0798@redhat.com>
+ <99AFB0A0-B2F8-420A-8164-1705EC14B255@vmware.com>
+ <97e82e31-2411-501e-d401-d175eb24642f@redhat.com>
+ <18EDDBB1-255A-475F-812A-8CA947493EC8@vmware.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <18EDDBB1-255A-475F-812A-8CA947493EC8@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 26 Jun 2022 12:45:36 -0400, Stefan Hansson wrote:
-> Add binding documentation for the LG G7 and LG V35 smartphones
-> which are based on Snapdragon 845 (sdm845).
+On 20.07.22 20:09, Nadav Amit wrote:
+> On Jul 20, 2022, at 11:00 AM, David Hildenbrand <david@redhat.com> wrote:
 > 
+>> My patch review skills have seen better days. I thought you'd be
+>> removing the pte_write() check ... :( Tired eyes ...
+>>
+>>> Having said that, I do notice now that pte_mkdirty() should not be done
+>>> only this condition is fulfilled. Instead we should just have
+>>> something like:
+>>>
+>>> if (will_need) {
+>>> ptent = pte_mkyoung(ptent);
+>>> if (pte_write(ptent))
+>>> ptent = pte_mkdirty(ptent);
+>>> }
+>>
+>> As can_change_pte_writable() will fail if it stumbles over a !pte_dirty
+>> page in current code ... so I assume you would have that code before the
+>> actual pte_mkwrite() logic, correct?
 > 
+> No, I thought this should go after for 2 reasons:
+> 
+> 1. You want to allow the PTE to be made writable following the
+> can_change_pte_writable().
+> 
+> 2. You do not want to set a non-writable PTE as dirty, especially since it
+> might then be used to determine that the PTE can become writable. Doing so
+> would circumvent cases in which set_page_dirty() needs to be called and
+> break things down.
 
-Applied, thanks!
+The I'm confused how can_change_pte_writable() would ever allow for
+that. Best to show me the code :)
 
-[1/2] dt-bindings: arm: qcom: Document lg,judyln and lg,judyp devices
-      commit: 1ef5a4d1d03cfcdb6ea24bece9e9c63ce97764fe
-
-Best regards,
 -- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+Thanks,
+
+David / dhildenb
+

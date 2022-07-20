@@ -2,120 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C2457BFA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D96257BFAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbiGTVeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 17:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S229963AbiGTVgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 17:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiGTVeQ (ORCPT
+        with ESMTP id S229532AbiGTVgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 17:34:16 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52A961DB8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:34:14 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l14-20020a17090a72ce00b001f20ed3c55dso3472495pjk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:34:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1zPvOAfNQSKYRymm+iaox5ob/omLNCeEyMBAD2pYWSM=;
-        b=pnrNrarI97nFqDUBSLy8dacdW2PdHQo4VN3LHAYfHJRkO7veBaIQV1oXbkiQDgU5L8
-         jOlrBSmzg2EiIBTXZEGliLbzlMeaVv+5wvj3bX+uJ84DvL9NZrC1fHXfxnzKgTHWJ/zD
-         DQuIIiEpiSemJ9USa5UEKmZzi65rop/ZduyQf2tv7UDSgwe3HbwkWhLo0nLI4F6DUk2Q
-         csQdHcG8Sr5ga7DcgoSOmD3ln/lVAY2prGrH9ciqBlHbYuyBKIgDkyfblKR7Loj4ZKhY
-         0G0eTkhkmPyl7PmuwQm9u0pjp7sxd7RqTsU73kqty2uV269PiWCygQCE3mzvgTQFfF3x
-         LMHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=1zPvOAfNQSKYRymm+iaox5ob/omLNCeEyMBAD2pYWSM=;
-        b=fAcRyZqmp6ND97EFNwWokvRbAD+LPZCiMJxgzZ2hk3nyikUXep1kl5yxnCNLFJII4g
-         G1F+feoCgncqXsI1WhjFqS43pciXINabtJQTIme4XgP/tUYJPdeOjfGJs9UY03qOEJtg
-         sQQ7OUgWQt7bpDElUq7FDs6cPuDRIAvU1QuFlYiJv+/fGwWyVt7D3DpdkNZGWyV7W41Y
-         xovyy3/Ms5VEj6GF9OLFaPj3cgmkoib/1+D+YVRp8j6u/86uyURhs/ft9/gNeWfU1BRL
-         2ti1O+Ul5fPnba0wkp25+Gj5pymCfBsAC0TBNR9QZ1jNiTA+uRgcmINFy9nOfDAcKvY9
-         /2Gw==
-X-Gm-Message-State: AJIora/7+4xbqOG62aYPqbmenorzDoMQ236DNSJPwYt/J8eGc71CvTJY
-        rLDVTM6uwe9eicv8Gycal7Rduw==
-X-Google-Smtp-Source: AGRyM1vAdYfw9RIxDHrYdR6qtPxUT9OHkYPEAy5IdYgfrX7zq3OBl0MJqfUaJ/gA3DXc5mEUZoUFfg==
-X-Received: by 2002:a17:902:9692:b0:16c:4f81:b7 with SMTP id n18-20020a170902969200b0016c4f8100b7mr40889241plp.92.1658352854058;
-        Wed, 20 Jul 2022 14:34:14 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id r18-20020a170902be1200b0016784c93f23sm24799pls.197.2022.07.20.14.34.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 14:34:13 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 21:34:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH] KVM: nSVM: Pull CS.Base from actual VMCB12 for soft
- int/ex re-injection
-Message-ID: <Yth00gK0DWjukLgq@google.com>
-References: <4caa0f67589ae3c22c311ee0e6139496902f2edc.1658159083.git.maciej.szmigiero@oracle.com>
- <7458497a8694ba0fbabee28eabf557e6e4406fbe.camel@redhat.com>
- <d311c92a-d753-3584-d662-7d82b2fc1e50@maciej.szmigiero.name>
+        Wed, 20 Jul 2022 17:36:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6331F2C5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 14:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=pBly/RcMnnqar2Q10nf85mwKMvO+4aD4A0MydXAxm1A=; b=huYq9eF2cD7yraAZoWOnmj2JK1
+        ceavaMLgJcDAuNsxb8KZIwh8oGtfOZYvU+haSjR7OuBUWbKZ4bDu2APQGKsxYUVkKwwXvuTVg+nDX
+        Jxn06L5jj8NZEy0hPF2yGhHlFFihJG6xGveEVIYPKLarQXIKXjsyqNJ+BuZsyM8dUV3JY9SsMc6S3
+        biTOMMKSNXqqIzWNNeAaZKclkyERicyqBEFaXbUmRZC9H5UfYlRdnXE14AZVyCLF8qeaw4E7xUr9V
+        CgY8T4CqaK2k4omm6B3NVHaT/wVUYl9qDTwfsar7NOdNEELfgJLVwRQgHYBcnK75nbZH0xgLnPOSP
+        cbz6Ik1g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEHMY-00EoaY-3e; Wed, 20 Jul 2022 21:36:10 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D3F26980BBE; Wed, 20 Jul 2022 23:36:08 +0200 (CEST)
+Date:   Wed, 20 Jul 2022 23:36:08 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+Message-ID: <Yth1SHozzxY0al7Y@worktop.programming.kicks-ass.net>
+References: <20220716230344.239749011@linutronix.de>
+ <20220720125736.48164a14@gandalf.local.home>
+ <CAHk-=wh=Yjy=DmGzzGj-ivyx_w45AHh35eDkpGtajaiO+TX38A@mail.gmail.com>
+ <Ytg6UD+0F6zv981o@worktop.programming.kicks-ass.net>
+ <20220720135016.3178ffc6@gandalf.local.home>
+ <CAHk-=wjdQbdQGKkQxxEcWoUp4SRmBWm=3bS20SbaVe8cLgKLgg@mail.gmail.com>
+ <202207201219.8EA905372@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d311c92a-d753-3584-d662-7d82b2fc1e50@maciej.szmigiero.name>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202207201219.8EA905372@keescook>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022, Maciej S. Szmigiero wrote:
-> On 20.07.2022 10:43, Maxim Levitsky wrote:
-> > On Mon, 2022-07-18 at 17:47 +0200, Maciej S. Szmigiero wrote:
-> > > Fixes: 6ef88d6e36c2 ("KVM: SVM: Re-inject INT3/INTO instead of retrying the instruction")
-> > > Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> > > ---
-> > >   arch/x86/kvm/svm/nested.c | 9 +++++----
-> > >   1 file changed, 5 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> > > index adf4120b05d90..23252ab821941 100644
-> > > --- a/arch/x86/kvm/svm/nested.c
-> > > +++ b/arch/x86/kvm/svm/nested.c
-> > > @@ -639,7 +639,8 @@ static bool is_evtinj_nmi(u32 evtinj)
-> > >   }
-> > >   static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
-> > > -                                         unsigned long vmcb12_rip)
-> > > +                                         unsigned long vmcb12_rip,
-> > > +                                         unsigned long vmcb12_csbase)
+On Wed, Jul 20, 2022 at 12:36:38PM -0700, Kees Cook wrote:
+> On Wed, Jul 20, 2022 at 11:07:26AM -0700, Linus Torvalds wrote:
+> > On Wed, Jul 20, 2022 at 10:50 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> > >
+> > > [    2.464117] missing return thunk: lkdtm_rodata_do_nothing+0x0/0x8-lkdtm_rodata_do_nothing+0x5/0x8: e9 00 00 00 00
 > > 
-> > Honestly I don't like that nested_vmcb02_prepare_control starts to grow its parameter list,
-> > because it kind of defeats the purpose of vmcb12 cache we added back then.
-> > 
-> > I think that it is better to add csbase/rip to vmcb_save_area_cached,
-> > but I am not 100% sure. What do you think?
+> > Well, that looks like a "jmp" instruction that has never been relocated.
 > 
-> This function has only 3 parameters now, so they fit well into registers
-> without taking any extra memory (even assuming it won't get inlined).
+> Peter, Josh, and I drilled down into this recently[1] and discussed
+> some solutions[2].
 > 
-> If in the future more parameters need to be added to this function
-> (which may or may not happen) then they all can be moved to, for example,
-> vmcb_ctrl_area_cached.
+> This test is doing what's expected: it needed an arch-agnostic way to do
+> a "return", and when the way to do that changed, it also changed (which
+> would normally be good, but in this case broke it). It's been happily
+> being used as part of the per-section architectural behavior testing[3]
+> of execution-vs-expected-memory-permissions for quite a long while now.
+> 
+> I'd rather not remove it (or do it dynamically) since the point is to
+> test what has been generated by the toolchain/build process and stuffed
+> into the .rodata section. i.e. making sure gadgets there can't be
+> executed, that the boot-time section permission-setting works correctly,
+> etc. Before the retbleed mitigation, this test worked for all
+> architectures; I'd hate to regress it. :(
+> 
+> -Kees
+> 
+> [1] https://lore.kernel.org/lkml/Ys66hwtFcGbYmoiZ@hirez.programming.kicks-ass.net/
+> [2] https://lore.kernel.org/lkml/20220713213133.455599-1-keescook@chromium.org/
+> [3] e.g. https://linux.kernelci.org/test/plan/id/62d61ee8ef31e0f0faa39bff/
 
-I don't think Maxim is concerned about the size, rather that we have a dedicated
-struct for snapshotting select save state and aren't using it.
+Josh posted this:
 
-IIRC, I deliberately avoided using the "cache" because the main/original purpose
-of the cache is to avoid TOCTOU issues.  And because RIP and CS.base aren't checked,
-there's no need to throw them in the cache.
+  https://lkml.kernel.org/r/8ec0039712f252693049c70ed3891d39a2357112.1658155446.git.jpoimboe@kernel.org
+
+which I picked up today; barring robot fail I'll push it to x86/urgent
+tomorrow.

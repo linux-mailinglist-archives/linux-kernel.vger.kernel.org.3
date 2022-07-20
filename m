@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E028457AB06
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DF157AB08
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 02:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237533AbiGTAhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 20:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S237583AbiGTAh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 20:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiGTAhM (ORCPT
+        with ESMTP id S233950AbiGTAhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 20:37:12 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDED4BD10
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:37:11 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id a5so23902727wrx.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:37:11 -0700 (PDT)
+        Tue, 19 Jul 2022 20:37:54 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD77A4E862
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:37:53 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id e15so18688020wro.5
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 17:37:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=V0PYLmnrHVGb/fEMdvljKjnfHXOxiDFIAmN3LqpuHZg=;
-        b=lsL8XtGr4K9lSPudD9dZ2nWbEtXLzl7AXIb7DGBd4G0qUZdKxgThtETNx/BeLWtlOm
-         RXXbXI4rSHP9jkxEnPSNCwXti6RAvr01MosdQq/NW5541VIDZoBu1Hzy/jRM7m2sjX4S
-         S/IV6s3t4H8ZGpYsIj8UOdcruPeZgLNRk9de2YlKSQ01heBawSqs5lVXWwiiKnsEzR/q
-         4wd29NPHWIGDka8VHn0eHOLKDx1WEzXPxW23ZMlzEpBctGBa6+SFtrRdytZGO39hRfBW
-         Ut/F7JONLXFooabApVWAJ72gnP0A4UjaHK4GdxfhbuEW4U4ZV9yodPf+7UCJAxs1L4dv
-         rx9w==
+        bh=hgH1tvYEEyqwJwI8paE3cVCRS3k0UqWKM/aSARN/AlY=;
+        b=IHQFVbJ2j/kFQMtawDxdtL48gU6cv5afOPcRO0W2ZDG5pvEKlX77+broRNagpeQ7La
+         tEchT3E2a3zgqhdunNjx6KwUOvtdxW8bl0mjfc6+tOu7AVrxNqxjdEh9NtQhroPxNp3X
+         173CTmYSLmwd7ZQNwaE7taU8Dj+FSIIn3iblCA0qS0tT3j9XER/csO/qwIcwD+YcpLqJ
+         xv/XM84JfIBzAYedh7zwIdilNxafsYZBB+FEJ7+7nuw6BUWTbcfsXjtbzsD8qRpNrOmW
+         ziNSJcC0KK+eZ4UPpHocVz7n+90suqMa6Cbovi1DzSEf26qGg7hz0ELGrC/eLL16/7YQ
+         Xcpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=V0PYLmnrHVGb/fEMdvljKjnfHXOxiDFIAmN3LqpuHZg=;
-        b=NBS7e7unOnFFzLfX/zupwGXyx7cRRL5ZIertQs6c4tqbVpvXG7oUTLAEZ8hAqc5+xt
-         gF5jr5p9vR4UExwqw3GDFcKoHkcy7tcKLA/S/eB9stkzD1f+mKuCtPtGUmCi8scGx0vf
-         ChhQYU/STlgcMPyxO/oZt8npCSiM3u3B9IjF5K14uYoGIhYsixqM8uFUbQH8H7BVSlXG
-         pE72LMbXKy502S40E6Ymj5YKpkUSRfnQYfsGB92lo00ohU3efpI3DqkXiex92Ru8X4wz
-         cVq6X8+L9z0zqbMoNA5u1dfPQ9u9det7W3BYCYI3xQIr4g68msEIzMeP92JjTIBjppV1
-         MVEg==
-X-Gm-Message-State: AJIora+QvayvrSh8lezp/c6vi87U5mmAw/6uR2pwr5ZMmlwrSlf61ugT
-        Pc0ajBtVsgmmxmvCKFhE8HfUFddYeyzE3XVP19LJDQ==
-X-Google-Smtp-Source: AGRyM1t38kromuQVuwamWeriQrLtJqP3GfY2A3DIwLLesXKdQKo0y2EbOmN20GAxUmhMpx63D+Bc2OiU+WI4yrYRp24=
-X-Received: by 2002:a5d:6a4c:0:b0:21e:46d4:6eec with SMTP id
- t12-20020a5d6a4c000000b0021e46d46eecmr1618956wrw.375.1658277429903; Tue, 19
- Jul 2022 17:37:09 -0700 (PDT)
+        bh=hgH1tvYEEyqwJwI8paE3cVCRS3k0UqWKM/aSARN/AlY=;
+        b=u1MgHYxODv4Smuf4nD6WN34eXoWtUj9466rORkboSpFgX7Fxp8O4f0VeLHPnqZcGuG
+         pcsNVDLz+n3VXipM+rUbOUvVS/8J9GYl7FDQ1wzbAMlsnknBRORif69Yo56KbHLb4q10
+         v4BcmNiqhBt0dFh5ViJFFPH4AW64lLxxXkpnWjN6lsco828fWnXRVcMbmQqxR/pweg84
+         70HdRmIGGaYgnhB3xL6rc1fP1tcrln2rdjmxQrW7dY8THg+rK6YVbv5UrX6nAI5rpkJp
+         3ysIyqhjQYOJxWpgslKzHJfvEJDOJJJv3d5UKjS+yw5EX1lNou/6sbs58XBbH8wuRSJB
+         3K0w==
+X-Gm-Message-State: AJIora/GlH0fxTS5x8D9s68GrX/j2BmFAJBimQ0JmOYiqif1j7otPnks
+        tVj1d2oDG8/4jXAJlpo29/aY/TqqzlZHqCsPp2grWA==
+X-Google-Smtp-Source: AGRyM1vBIk0Bn9MU6iede+X74KkkMjq/dsZs7yta7t6pINmUxXjkocvZi/cehVzzSEMz5IxQGmQxmEM1tG8297o+viA=
+X-Received: by 2002:a5d:4d8e:0:b0:21d:68d4:56eb with SMTP id
+ b14-20020a5d4d8e000000b0021d68d456ebmr27742751wru.40.1658277472130; Tue, 19
+ Jul 2022 17:37:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-14-adrian.hunter@intel.com>
-In-Reply-To: <20220711093218.10967-14-adrian.hunter@intel.com>
+References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-15-adrian.hunter@intel.com>
+In-Reply-To: <20220711093218.10967-15-adrian.hunter@intel.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 17:36:57 -0700
-Message-ID: <CAP-5=fXTTbzjsV=SWLXpdNLkK=5bVuCyEQH8bPw_Q6izgoJR6A@mail.gmail.com>
-Subject: Re: [PATCH 13/35] perf tools: Add machine_pid and vcpu to perf_sample
+Date:   Tue, 19 Jul 2022 17:37:40 -0700
+Message-ID: <CAP-5=fW2UaXJbDB7_YMWCQBEzJLVyBCOCx=tQv-0Ku-iyf-=+A@mail.gmail.com>
+Subject: Re: [PATCH 14/35] perf tools: Use sample->machine_pid to find guest machine
 To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@redhat.com>,
@@ -62,7 +62,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,16 +72,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Jul 11, 2022 at 2:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
-> When parsing a sample with a sample ID, copy machine_pid and vcpu from
-> perf_sample_id to perf_sample.
->
-> Note, machine_pid will be zero when unused, so only a non-zero value
-> represents a guest machine. vcpu should be ignored if machine_pid is zero.
->
-> Note also, machine_pid is used with events that have come from injecting a
-> guest perf.data file, however guest events recorded on the host (i.e. using
-> perf kvm) have the (QEMU) hypervisor process pid to identify them - refer
-> machines__find_for_cpumode().
+> If machine_pid is set, use it to find the guest machine.
 >
 > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 
@@ -91,64 +82,24 @@ Thanks,
 Ian
 
 > ---
->  tools/perf/util/event.h  |  2 ++
->  tools/perf/util/evlist.c | 14 +++++++++++++-
->  tools/perf/util/evsel.c  |  1 +
->  3 files changed, 16 insertions(+), 1 deletion(-)
+>  tools/perf/util/session.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/perf/util/event.h b/tools/perf/util/event.h
-> index cdd72e05fd28..a660f304f83c 100644
-> --- a/tools/perf/util/event.h
-> +++ b/tools/perf/util/event.h
-> @@ -148,6 +148,8 @@ struct perf_sample {
->         u64 code_page_size;
->         u64 cgroup;
->         u32 flags;
-> +       u32 machine_pid;
-> +       u32 vcpu;
->         u16 insn_len;
->         u8  cpumode;
->         u16 misc;
-> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> index 03fbe151b0c4..64f5a8074c0c 100644
-> --- a/tools/perf/util/evlist.c
-> +++ b/tools/perf/util/evlist.c
-> @@ -1507,10 +1507,22 @@ int evlist__start_workload(struct evlist *evlist)
->  int evlist__parse_sample(struct evlist *evlist, union perf_event *event, struct perf_sample *sample)
->  {
->         struct evsel *evsel = evlist__event2evsel(evlist, event);
-> +       int ret;
+> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+> index 91a091c35945..f3e9fa557bc9 100644
+> --- a/tools/perf/util/session.c
+> +++ b/tools/perf/util/session.c
+> @@ -1418,7 +1418,9 @@ static struct machine *machines__find_for_cpumode(struct machines *machines,
+>              (sample->cpumode == PERF_RECORD_MISC_GUEST_USER))) {
+>                 u32 pid;
 >
->         if (!evsel)
->                 return -EFAULT;
-> -       return evsel__parse_sample(evsel, event, sample);
-> +       ret = evsel__parse_sample(evsel, event, sample);
-> +       if (ret)
-> +               return ret;
-> +       if (perf_guest && sample->id) {
-> +               struct perf_sample_id *sid = evlist__id2sid(evlist, sample->id);
-> +
-> +               if (sid) {
-> +                       sample->machine_pid = sid->machine_pid;
-> +                       sample->vcpu = sid->vcpu.cpu;
-> +               }
-> +       }
-> +       return 0;
->  }
->
->  int evlist__parse_sample_timestamp(struct evlist *evlist, union perf_event *event, u64 *timestamp)
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index 9a30ccb7b104..14396ea5a968 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -2365,6 +2365,7 @@ int evsel__parse_sample(struct evsel *evsel, union perf_event *event,
->         data->misc    = event->header.misc;
->         data->id = -1ULL;
->         data->data_src = PERF_MEM_DATA_SRC_NONE;
-> +       data->vcpu = -1;
->
->         if (event->header.type != PERF_RECORD_SAMPLE) {
->                 if (!evsel->core.attr.sample_id_all)
+> -               if (event->header.type == PERF_RECORD_MMAP
+> +               if (sample->machine_pid)
+> +                       pid = sample->machine_pid;
+> +               else if (event->header.type == PERF_RECORD_MMAP
+>                     || event->header.type == PERF_RECORD_MMAP2)
+>                         pid = event->mmap.pid;
+>                 else
 > --
 > 2.25.1
 >

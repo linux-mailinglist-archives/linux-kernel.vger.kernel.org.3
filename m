@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAC157B936
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0389D57B91E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240809AbiGTPKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S232954AbiGTPCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233075AbiGTPKJ (ORCPT
+        with ESMTP id S232220AbiGTPCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:10:09 -0400
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322EB289;
-        Wed, 20 Jul 2022 08:10:05 -0700 (PDT)
+        Wed, 20 Jul 2022 11:02:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9E453D0B;
+        Wed, 20 Jul 2022 08:02:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3KSfFl2VG3+nl2ie2xVTPjp2f54MPugBn50jpJsYfJo=; b=XObB/kq1bhuNwm1c6HUL6FB8sh
-        z8rOB1C7g4wZvj07laYvfxG2DY2MnojaeTKNmXxzVbcyqeE9V5FZ2kK0YthxP0PYejXXSdrhF1+ro
-        hyD1vCQrSq4uXqske8gw5pvlYmf8VDTFLCNO/rBXYYE67bEC9QWnzllLhAgXdwipIlWxGIne6GdWj
-        vHs6DqZ0ZZCA8LribtVf1kBTnsEVzd1MOXLbVvlBdFyotRYcyFhfvUUq3vC3QG9wG2OY3AsVOlBx1
-        /35s2vkVSpHfXA+G9WpE0gW0l0eQ7cknirPF7GgVOKO4q2j+CRqavBJYBCjuFkfaju/xMjUabCkoJ
-        khIejlHA==;
-Received: from [2600:1700:4830:1658::fb2] (port=48190)
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <david@lechnology.com>)
-        id 1oEBCJ-0002vx-FK;
-        Wed, 20 Jul 2022 11:01:19 -0400
-Message-ID: <0e63b732-57ba-e7b3-3b2e-1e75bebba7d2@lechnology.com>
-Date:   Wed, 20 Jul 2022 10:01:17 -0500
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tsZFbCOwOTa4oL/6rESxgKwXoLmWNvHKzpr9YmtZRaE=; b=qEp4AJK/ZMf2KCQNeSIMBOFd+r
+        MvznfKwn6C4jvzlfMfVXM3sprf0yDb4V0L1LL90AxHGUTk228C8mq6jkL5GhSbqyPOrl54GdBdRlJ
+        mPUy7x8FH+mM5e6Y+piFeWpmNUfUB/MCkae2iU+WAoElccNFkGQS/d/ADd2t1idqR71GhY1alOLfk
+        UgjBwLO/w1b+bKgTB2ogiF1TeQkTJ6txDrTuZv0EBYnHB1dER8gTpPqd/PhxEfUT04UqoIuRQSmGe
+        kVb0tfmk6vacAajpHhPNzQbqOgJxeuWoL/bkIyYoKvNhZuIE8pZdvcae4fzuFF9ORJqOtUa1jbr+n
+        EgHu4xiQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEBDA-00EYbB-PB; Wed, 20 Jul 2022 15:02:04 +0000
+Date:   Wed, 20 Jul 2022 16:02:04 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     viro@zeniv.linux.org.uk, hughd@google.com,
+        akpm@linux-foundation.org, hch@infradead.org,
+        hsiangkao@linux.alibaba.com, yang.yang29@zte.com.cn,
+        axboe@kernel.dk, yangerkun@huawei.com, johannes.thumshirn@wdc.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Ran Xiaokai <ran.xiaokai@zte.com.cn>
+Subject: Re: [PATCH] fs: drop_caches: skip dropping pagecache which is always
+ dirty
+Message-ID: <YtgY7CEWvcqywK1/@casper.infradead.org>
+References: <20220720022118.1495752-1-yang.yang29@zte.com.cn>
+ <YtdwULpWfSR3JI/u@casper.infradead.org>
+ <62d79a79.1c69fb81.e4cba.37f5@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] MAINTAINERS: add header file to TI DAVINCI SERIES CLOCK
- DRIVER
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220720110026.9173-1-lukas.bulwahn@gmail.com>
-From:   David Lechner <david@lechnology.com>
-In-Reply-To: <20220720110026.9173-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62d79a79.1c69fb81.e4cba.37f5@mx.google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 6:00 AM, Lukas Bulwahn wrote:
-> While creating a patch submission on the davinci clock drivers, I noticed
-> that the header file include/linux/clk/davinci.h belongs to the section
-> TI DAVINCI SERIES CLOCK DRIVER.
+On Wed, Jul 20, 2022 at 06:02:32AM +0000, CGEL wrote:
+> On Wed, Jul 20, 2022 at 04:02:40AM +0100, Matthew Wilcox wrote:
+> > On Wed, Jul 20, 2022 at 02:21:19AM +0000, cgel.zte@gmail.com wrote:
+> > > From: Yang Yang <yang.yang29@zte.com.cn>
+> > > 
+> > > Pagecache of some kind of fs has PG_dirty bit set once it was
+> > > allocated, so it can't be dropped. These fs include ramfs and
+> > > tmpfs. This can make drop_pagecache_sb() more efficient.
+> > 
+> > Why do we want to make drop_pagecache_sb() more efficient?
 > 
-> Add a file entry for this header file in TI DAVINCI SERIES CLOCK DRIVER.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
+> Some users may use drop_caches besides testing or debugging.
 
-Reviewed-by: David Lechner <david@lechnology.com>
+This is a terrible reason.
 
+> For example, some systems will create a lot of pagecache when boot up
+> while reading bzImage, ramdisk, docker images etc. Most of this pagecache
+> is useless after boot up. It may has a longterm negative effects for the
+> workload when trigger page reclaim. It is especially harmful when trigger
+> direct_reclaim or we need allocate pages in atomic context. So users may
+> chose to drop_caches after boot up.
+
+If that's actually a problem, work on fixing that.

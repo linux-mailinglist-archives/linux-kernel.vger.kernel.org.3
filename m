@@ -2,150 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0D257BE1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E8957BE1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiGTSws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S229954AbiGTSyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiGTSwm (ORCPT
+        with ESMTP id S231350AbiGTSyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:52:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C02948C8F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:52:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB3426199D
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 18:52:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E43C3411E;
-        Wed, 20 Jul 2022 18:52:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658343160;
-        bh=GCDUfLB7H+z3SYkt1egzk1J5ZvWGPLsC7cxT/eSNkNk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fYS0qQr8pQDEM7YmELk7Pwi49Oc5RmKt/wQVx4ema8Qh4kM19y5SV6b9rLDgTHB7e
-         zz4ohCy8OGMDr1Z2PXyjzjXVV6pnggMtEM/D895O6IAqEPYaHFf+/0iMrJ0MkxqobI
-         HpvCYb1kqEyce29M+KMk+9ugzfK96CgxTD27j0Nk8OHVJJTjlsKd36HYYl4DvbeG1f
-         1sG+qvZsCRCHT8vSs/vsaWdELt0DuLr4SCwQ5Qr3XCCnQxUJ9uMnDRA3gcdQOr2NgX
-         jlTqTHyw8BOQqNw84BwG4T5Xx78xKxS8fmkdMKiorZAS72McZeiY945myd/zfuVIGM
-         Qg1sEfJGIh6Uw==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] ASoC: Intel: avs: Mark avs_path_module_type_create() as noinline
-Date:   Wed, 20 Jul 2022 11:52:28 -0700
-Message-Id: <20220720185228.3182663-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.1
+        Wed, 20 Jul 2022 14:54:21 -0400
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1454B0F0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:54:20 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id EEpmoHJmwGWJJEEpmovpQ1; Wed, 20 Jul 2022 20:54:19 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 20 Jul 2022 20:54:19 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <92540bf4-f2de-0aae-d764-ce6edfda1ab1@wanadoo.fr>
+Date:   Wed, 20 Jul 2022 20:54:09 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+Content-Language: en-US
+To:     aouledameur@baylibre.com
+Cc:     amitk@kernel.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, fparent@baylibre.com,
+        hsinyi@chromium.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        matthias.bgg@gmail.com, michael.kao@mediatek.com,
+        rafael@kernel.org, robh+dt@kernel.org, rui.zhang@intel.com
+References: <20220720181854.547881-1-aouledameur@baylibre.com>
+ <20220720181854.547881-5-aouledameur@baylibre.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220720181854.547881-5-aouledameur@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building ARCH=arm64 allmodconfig with clang, there is a warning
-about high stack usage in avs_path_create(), which breaks the build due
-to CONFIG_WERROR=y:
+Le 20/07/2022 à 20:18, Amjad Ouled-Ameur a écrit :
+> Provide thermal zone to read thermal sensor in the SoC. We can read all the
+> thermal sensors value in the SoC by the node /sys/class/thermal/
+> 
+> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+> on the first read of sensor that often are bogus values.
+> This can avoid following warning on boot:
+> 
+>    thermal thermal_zone6: failed to read out thermal zone (-13)
+> 
+> Signed-off-by: default avatarMichael Kao <michael.kao-NuS5LvNUpcJWk0Htik3J/w@public.gmane.org>
+> Signed-off-by: default avatarHsin-Yi Wang <hsinyi-F7+t8E8rja9g9hUCZPvPmw@public.gmane.org>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
+> Tested-by: Amjad Ouled-Ameur <aouledameur-rdvid1DuHRBWk0Htik3J/w@public.gmane.org>
+> ---
+>   drivers/thermal/mtk_thermal.c | 100 ++++++++++++++++++++++++++--------
+>   1 file changed, 76 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index 1dc276f8c4f1..79b14ce1a08d 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
+>   
+>   struct mtk_thermal;
+>   
+> +struct mtk_thermal_zone {
+> +	struct mtk_thermal *mt;
+> +	int id;
+> +};
+> +
+>   struct thermal_bank_cfg {
+>   	unsigned int num_sensors;
+>   	const int *sensors;
+> @@ -709,6 +714,32 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
+>   		mutex_unlock(&mt->lock);
+>   }
+>   
+> +static u32 _get_sensor_temp(struct mtk_thermal *mt, int id)
+> +{
+> +	u32 raw;
+> +	int temp;
+> +
+> +	const struct mtk_thermal_data *conf = mt->conf;
+> +
+> +	raw = readl(mt->thermal_base + conf->msr[id]);
+> +
+> +	if (mt->conf->version == MTK_THERMAL_V1)
+> +		temp = raw_to_mcelsius_v1(mt, id, raw);
+> +	else
+> +		temp = raw_to_mcelsius_v2(mt, id, raw);
+> +
+> +	/*
+> +	 * The first read of a sensor often contains very high bogus
+> +	 * temperature value. Filter these out so that the system does
+> +	 * not immediately shut down.
+> +	 */
+> +
+> +	if (temp > 200000)
+> +		return  -EAGAIN;
 
-  sound/soc/intel/avs/path.c:815:18: error: stack frame size (2176) exceeds limit (2048) in 'avs_path_create' [-Werror,-Wframe-larger-than]
-  struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
-                   ^
-  1 error generated.
+This function returns a u32. Is it ok to return -EAGAIN?
 
-This warning is also visible with allmodconfig on other architectures.
-The minimum set of configs that triggers this on top of ARCH=arm64
-allnoconfig:
+There is also 2 spaces here...
 
-  CONFIG_COMPILE_TEST=y
-  CONFIG_FORTIFY_SOURCE=y
-  CONFIG_KASAN=y
-  CONFIG_PCI=y
-  CONFIG_SOUND=y
-  CONFIG_SND=y
-  CONFIG_SND_SOC=y
-  CONFIG_SND_SOC_INTEL_AVS=y
+> +	else
+> +		return	temp;
 
-When CONFIG_FORTIFY_SOURCE is enabled, memcmp() (called from
-guid_equal()) becomes a wrapper to do compile time checking, which
-interacts poorly with inlining plus CONFIG_KASAN=y.
+... and a tab here.
 
-With ARCH=arm64 allmodconfig + CONFIG_KASAN=n + CONFIG_FRAME_WARN=128,
-the stack usage is much better:
+> +}
+> +
+>   /**
+>    * mtk_thermal_bank_temperature - get the temperature of a bank
+>    * @bank:	The bank
+> @@ -721,26 +752,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   	struct mtk_thermal *mt = bank->mt;
+>   	const struct mtk_thermal_data *conf = mt->conf;
+>   	int i, temp = INT_MIN, max = INT_MIN;
+> -	u32 raw;
+>   
+>   	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+> -		raw = readl(mt->thermal_base + conf->msr[i]);
+> -
+> -		if (mt->conf->version == MTK_THERMAL_V1) {
+> -			temp = raw_to_mcelsius_v1(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		} else {
+> -			temp = raw_to_mcelsius_v2(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		}
+> -
+> -		/*
+> -		 * The first read of a sensor often contains very high bogus
+> -		 * temperature value. Filter these out so that the system does
+> -		 * not immediately shut down.
+> -		 */
+> -		if (temp > 200000)
+> -			temp = 0;
+> +		temp = _get_sensor_temp(mt, i);
 
-  sound/soc/intel/avs/path.c:815:18: warning: stack frame size (624) exceeds limit (128) in 'avs_path_create' [-Wframe-larger-than]
-  struct avs_path *avs_path_create(struct avs_dev *adev, u32 dma_id,
-                   ^
-  sound/soc/intel/avs/path.c:873:5: warning: stack frame size (144) exceeds limit (128) in 'avs_path_bind' [-Wframe-larger-than]
-  int avs_path_bind(struct avs_path *path)
-      ^
-  2 warnings generated.
+Is it ok if _get_sensor_temp() returns -EAGAIN?
 
-To avoid this warning, mark avs_path_module_type_create() as
-noinline_for_stack, which redistributes the stack usage across multiple
-functions, regardless of CONFIG_KASAN.
+>   
+>   		if (temp > max)
+>   			max = temp;
+> @@ -751,7 +765,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   
+>   static int mtk_read_temp(void *data, int *temperature)
+>   {
+> -	struct mtk_thermal *mt = data;
+> +	struct mtk_thermal_zone *tz = data;
+> +	struct mtk_thermal *mt = tz->mt;
+>   	int i;
+>   	int tempmax = INT_MIN;
+>   
+> @@ -770,10 +785,28 @@ static int mtk_read_temp(void *data, int *temperature)
+>   	return 0;
+>   }
+>   
+> +static int mtk_read_sensor_temp(void *data, int *temperature)
+> +{
+> +	struct mtk_thermal_zone *tz = data;
+> +	struct mtk_thermal *mt = tz->mt;
+> +	int id = tz->id - 1;
+> +
+> +	if (id < 0)
+> +		return  -EACCES;
 
-With ARCH=arm64 allmodconfig + CONFIG_FRAME_WARN=128, the warnings show:
+2 spaces.
 
-  avs_path_create():             192
-  avs_path_bind():               272
-  avs_path_module_type_create(): 416
-  avs_mux_create():              160
-  avs_updown_mix_create():       160
-  avs_aec_create():              176
-  avs_asrc_create():             144
+> +
+> +	*temperature = _get_sensor_temp(mt, id);
 
-With ARCH=arm64 allmodconfig + CONFIG_FRAME_WARN=128 + CONFIG_KASAN=n,
-the warnings show:
+If _get_sensor_temp() returns -EAGAIN, should this be propagated to the 
+caller?
 
-  avs_path_create():             192
-  avs_path_bind():               144
-  avs_path_module_type_create(): 416
-  avs_mux_create():              176
-  avs_updown_mix_create():       176
-  avs_src_create():              144
-  avs_aec_create():              192
-  avs_asrc_create():             144
-  avs_wov_create():              144
+> +
+> +	return 0;
+> +}
+> +
+>   static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+>   	.get_temp = mtk_read_temp,
+>   };
+>   
+> +static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
+> +	.get_temp = mtk_read_sensor_temp,
+> +};
+> +
+>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>   				  u32 apmixed_phys_base, u32 auxadc_phys_base,
+>   				  int ctrl_id)
+> @@ -1072,6 +1105,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   	u64 auxadc_phys_base, apmixed_phys_base;
+>   	struct thermal_zone_device *tzdev;
+>   	void __iomem *apmixed_base, *auxadc_base;
+> +	struct mtk_thermal_zone *tz;
+>   
+>   	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>   	if (!mt)
+> @@ -1161,11 +1195,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   
+>   	platform_set_drvdata(pdev, mt);
+>   
+> -	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+> -						     &mtk_thermal_ops);
+> -	if (IS_ERR(tzdev)) {
+> -		ret = PTR_ERR(tzdev);
+> -		goto err_disable_clk_peri_therm;
+> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+> +		tz = kmalloc(sizeof(*tz), GFP_KERNEL);
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1642
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- sound/soc/intel/avs/path.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Should this memory allocation be a devm_kmalloc(), or is this memory 
+freed at some point by the framework?
 
-diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
-index 3d46dd5e5bc4..ec2aa0001f91 100644
---- a/sound/soc/intel/avs/path.c
-+++ b/sound/soc/intel/avs/path.c
-@@ -449,7 +449,8 @@ static int avs_modext_create(struct avs_dev *adev, struct avs_path_module *mod)
- 	return ret;
- }
- 
--static int avs_path_module_type_create(struct avs_dev *adev, struct avs_path_module *mod)
-+static noinline_for_stack int avs_path_module_type_create(struct avs_dev *adev,
-+							  struct avs_path_module *mod)
- {
- 	const guid_t *type = &mod->template->cfg_ext->type;
- 
+(I don't know the thermal_zone API and the patch has no kfree())
 
-base-commit: ff6992735ade75aae3e35d16b17da1008d753d28
--- 
-2.37.1
+CJ
+
+> +		if (!tz)
+> +			return -ENOMEM;
+> +
+> +		tz->mt = mt;
+> +		tz->id = i;
+> +
+> +		tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i, tz, (i == 0) ?
+> +							     &mtk_thermal_ops :
+> +							     &mtk_thermal_sensor_ops);
+> +
+> +		if (IS_ERR(tzdev)) {
+> +			if (PTR_ERR(tzdev) == -ENODEV) {
+> +				dev_warn(&pdev->dev,
+> +					 "sensor %d not registered in thermal zone in dt\n", i);
+> +				continue;
+> +			}
+> +			if (PTR_ERR(tzdev) == -EACCES) {
+> +				ret = PTR_ERR(tzdev);
+> +				goto err_disable_clk_peri_therm;
+> +			}
+> +		}
+>   	}
+>   
+>   	ret = devm_thermal_add_hwmon_sysfs(tzdev);
 

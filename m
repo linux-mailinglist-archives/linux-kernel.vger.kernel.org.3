@@ -2,256 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D6357BD7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E5357BD7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235927AbiGTSNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S238276AbiGTSNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234284AbiGTSNb (ORCPT
+        with ESMTP id S236252AbiGTSNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:13:31 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A739643C2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:13:29 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id v1so6072649ilg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:13:29 -0700 (PDT)
+        Wed, 20 Jul 2022 14:13:43 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B30165D7D;
+        Wed, 20 Jul 2022 11:13:42 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id n12so14408761wrc.8;
+        Wed, 20 Jul 2022 11:13:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=S+VXSDukK/OTHYC9Ft1p/BhMJLNvQaxCO1/JBdZMGJs=;
-        b=hYQeNc+oyCrGVU4f9RAI8Nn50VyYg4YpCSGf7qKSdKgOQUDa+FnT43nLvhTSSWz8AA
-         M85+Q0y+QcgIiM8soJhZUTxkB+M8asRc6yYzV62rRye0c/TGTveat0r2cMg4k2VYPkVa
-         2wsqFiC9mSm8XnUpWpfHhFUXgJL51CX5k7hvzZ4jKSg0+kRG0zDscIy+IVUJtJveNs+E
-         XahYG609Djq33GFdY+zC3sUCOa3N9ZbZ0lFXp2xMUfvdVeRi529XGfeZAZITF6vx5Sje
-         mRwU239C/ilIokBmvZtFMEakGmJoeIu9hGjUVQdgAwrtryY4bKLtiB+JjLM5YhbdnH2E
-         4A1Q==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5LukrXp7Co7uGUlwQKh4k3CtbJ6qok1w1ecgOSE/NhA=;
+        b=EJ0NNqR7uzooGBM/Nz5kGkkws9Ha/pvhYQjO/XhRL5N8BCDAQCH9XpzYlxJT7GIUGz
+         Vo71h/yMCvnmqLK2ZknAunJn90vauRUI5pccmeQ5l1+Mo3skiYGretzGgbrfM/eMVJ40
+         jB6oOYG0Ni82faiKxaMS40ZogP+TLi6Tli47Ik5CCQd9qq2gVKDqjaUuVLvpoC+G5iUa
+         lfJ1O2lFaBFmEurG4BYi2dD+uzkI77hZxMBCvd7WDyy+9Gen94gzKMGAJprDJZXuwgLf
+         NIBkvSEH2Jyo2eFO0KevCmvv62IFyJfoy09moCDv7v0FXdgIytEY/97mvfISZH/ewy8W
+         ng5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=S+VXSDukK/OTHYC9Ft1p/BhMJLNvQaxCO1/JBdZMGJs=;
-        b=I9GRSzvTLAxxQzs6mfBTirqNfRYMjNsFuMUNvxmDGYx+QONtXHG2uGhTj+kJrl75VQ
-         coWFEgNLG43CbVKcmVWkO5yx9Spsg2ZhrIswfgX53aph2c8V4/74fHVkddB4RQA2LeDR
-         MMps7tl4c5dSCm1vAmJWN/2Ljq4tJoosF2O3D3K1R/7hLMeamWLnX6wbIAhQ6Z3+oO/L
-         T2ZeoE6L8Rl576/XqNjRE3H6R3ND4fH3fzYrBqIsk8u+FvL1etiPalDwDrFlL+/Su91C
-         MiwIRu/A85zFR5F6V+w3maJFI0kOhldnU2s9g9MWWFWC1B5Xig88WtOco8KrPoLQmXNl
-         WVzQ==
-X-Gm-Message-State: AJIora+0Z7wRL8tLfGqVknMnbXtZfhfoG4o1vKcbfC08s1z3sbe7sksT
-        HuVohZiYWuEMfhXYp6inFZAUYA==
-X-Google-Smtp-Source: AGRyM1v0IJKF0tr2iNyZHtKrEfIRLGpdvqdFhEbVEGnVlASdYTKp002nRoONGTP3htZ4Rv84nDfFbQ==
-X-Received: by 2002:a05:6e02:16c7:b0:2dd:d67:f39d with SMTP id 7-20020a056e0216c700b002dd0d67f39dmr1293394ilx.316.1658340808839;
-        Wed, 20 Jul 2022 11:13:28 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id d6-20020a92d5c6000000b002dc0ddef9cfsm7126181ilq.73.2022.07.20.11.13.28
+        bh=5LukrXp7Co7uGUlwQKh4k3CtbJ6qok1w1ecgOSE/NhA=;
+        b=MorNKj52BqRXggZR3nTBOjok1TIbDXiaNLbIUMoVk79+3gh+jenJRxUQAktYEfjVwn
+         1zKB0vQ9l7mqPhtxI60TAtoppvHILjzwOs/F0VimTMozy5HC3PRbnhJfFsZXFzmwL8x2
+         RS7E3dHpcebz88HzO71dxWmeEs1mwpEnp7MqVmW5VJ1j5dn8HBZwr4MWxsq9NMbRPI0J
+         cyRQwvKkCAEizn/KCz7Q7OcxbbgZCH+FiYh8NblnSAVRnw1ujSsw2FCfnV7gR5+LbH0e
+         se6fXnEpn9Iofuqe4KTPgCX7nvDQqnaKkVsEOBj/EhG3VsKKtx35P0gJoRqbXRk77iLn
+         DJ+g==
+X-Gm-Message-State: AJIora9XCDcjSWGBgcYuawwiW48JlfLcmHEgabPsWPJ3zx4n36VI+RLp
+        8OgXhdmjYuJcqd4TlKD9DcA=
+X-Google-Smtp-Source: AGRyM1sYf0GyVKs6sPI8vNn2iaV/h41VtqCv5qZu5Hg/3oDz+aIbNR9y5NIkml2ugL1Ie/rTYtiU8Q==
+X-Received: by 2002:a5d:6149:0:b0:21d:6ba7:6095 with SMTP id y9-20020a5d6149000000b0021d6ba76095mr31477059wrt.680.1658340820757;
+        Wed, 20 Jul 2022 11:13:40 -0700 (PDT)
+Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
+        by smtp.gmail.com with ESMTPSA id r9-20020a05600c2c4900b003a02cbf862esm3208832wmg.13.2022.07.20.11.13.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 11:13:28 -0700 (PDT)
-Message-ID: <299889df-db40-e0e2-6bc6-d9eb784ebe89@kernel.dk>
-Date:   Wed, 20 Jul 2022 12:13:27 -0600
+        Wed, 20 Jul 2022 11:13:40 -0700 (PDT)
+Message-ID: <3cdbcfe5-bb7e-2677-730f-f250e2d33f0c@gmail.com>
+Date:   Wed, 20 Jul 2022 21:13:39 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [LKP] Re: [io_uring] 584b0180f0:
- phoronix-test-suite.fio.SequentialWrite.IO_uring.Yes.Yes.1MB.DefaultTestDirectory.mb_s
- -10.2% regression
+Subject: Re: [RFC] UCLogic: Filtering unsupported HUION tablets
 Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Yin Fengwei <fengwei.yin@intel.com>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com
-References: <20220527092432.GE11731@xsang-OptiPlex-9020>
- <2085bfef-a91c-8adb-402b-242e8c5d5c55@kernel.dk>
- <0d60aa42-a519-12ad-3c69-72ed12398865@intel.com>
- <26d913ea-7aa0-467d-4caf-a93f8ca5b3ff@kernel.dk>
- <9df150bb-f4fd-7857-aea8-b2c7a06a8791@intel.com>
- <7146c853-0ff8-3c92-c872-ce6615baab40@kernel.dk>
- <81af5cdf-1a13-db2c-7b7b-cfd86f1271e6@intel.com>
- <74d1f308-de03-fd5e-b7f0-0e17980f988e@kernel.dk>
- <2ec953da-78fd-df01-44cf-6f33a5e40864@intel.com>
- <f5d20f6c-5363-231b-b208-b577a59b4ae9@kernel.dk>
-In-Reply-To: <f5d20f6c-5363-231b-b208-b577a59b4ae9@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220718172953.6817-1-jose.exposito89@gmail.com>
+ <5d4ef0df-083f-a00e-fb41-1ce1df6e9473@gmail.com>
+ <20220720173656.GA3725@elementary>
+ <47970684-1158-cee8-9ff5-d7dca70a54ae@gmail.com>
+ <20220720175444.GA10744@elementary>
+From:   Nikolai Kondrashov <spbnick@gmail.com>
+In-Reply-To: <20220720175444.GA10744@elementary>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 11:24 AM, Jens Axboe wrote:
-> On 7/19/22 2:58 AM, Yin Fengwei wrote:
->> Hi Jens,
->>
->> On 7/19/2022 10:29 AM, Jens Axboe wrote:
->>> I'll poke at this tomorrow.
->>
->> Just FYI. Another finding (test is based on commit 584b0180f0):
->> If the code block is put to different function, the fio performance result is
->> different:
+On 7/20/22 20:54, José Expósito wrote:
+> Hi!
 > 
-> I think this turned out to be a little bit of a goose chase. What's
-> happening here is that later kernels defer the file assignment, which
-> means it isn't set if a request is queued with IOSQE_ASYNC. That in
-> turn, for writes, means that we don't hash it on io-wq insertion, and
-> then it doesn't get serialized with other writes to that file.
+> On Wed, Jul 20, 2022 at 08:45:55PM +0300, Nikolai Kondrashov wrote:
+>> On 7/20/22 20:36, José Expósito wrote:
+>>> I don't know about any broken device handled by the driver, so there is
+>>> no need to add new code yet :)
+>>> I'll try to keep an eye on DIGImend's issue tracker now that the code
+>>> present in the upstream kernel is being released by many distros.
+>>
+>> If you have the time, backporting your changes to digimend-kernel-drivers
+>> would get you feedback much faster :)
+>>
+>> I can do a release once we get the code in.
 > 
-> I'll come up with a patch for this that you can test.
+> I already opened a PR a few months ago:
+> https://github.com/DIGImend/digimend-kernel-drivers/pull/598
+> 
+> But more code has been merged since then. I'll try to backport the
+> latest changes this weekend and ping you on GitHub once it is
+> ready for review again.
 
-Can you try this? It's against 5.19-rc7.
+Ah, sorry, I rarely look at DIGImend notifications 🙈
 
+Could you send me an email once you got something ready for review?
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index a01ea49f3017..34758e95990a 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -2015,6 +2015,64 @@ static inline void io_arm_ltimeout(struct io_kiocb *req)
- 		__io_arm_ltimeout(req);
- }
- 
-+static bool io_bdev_nowait(struct block_device *bdev)
-+{
-+	return !bdev || blk_queue_nowait(bdev_get_queue(bdev));
-+}
-+
-+/*
-+ * If we tracked the file through the SCM inflight mechanism, we could support
-+ * any file. For now, just ensure that anything potentially problematic is done
-+ * inline.
-+ */
-+static bool __io_file_supports_nowait(struct file *file, umode_t mode)
-+{
-+	if (S_ISBLK(mode)) {
-+		if (IS_ENABLED(CONFIG_BLOCK) &&
-+		    io_bdev_nowait(I_BDEV(file->f_mapping->host)))
-+			return true;
-+		return false;
-+	}
-+	if (S_ISSOCK(mode))
-+		return true;
-+	if (S_ISREG(mode)) {
-+		if (IS_ENABLED(CONFIG_BLOCK) &&
-+		    io_bdev_nowait(file->f_inode->i_sb->s_bdev) &&
-+		    file->f_op != &io_uring_fops)
-+			return true;
-+		return false;
-+	}
-+
-+	/* any ->read/write should understand O_NONBLOCK */
-+	if (file->f_flags & O_NONBLOCK)
-+		return true;
-+	return file->f_mode & FMODE_NOWAIT;
-+}
-+
-+static inline bool io_file_supports_nowait(struct io_kiocb *req)
-+{
-+	return req->flags & REQ_F_SUPPORT_NOWAIT;
-+}
-+
-+/*
-+ * If we tracked the file through the SCM inflight mechanism, we could support
-+ * any file. For now, just ensure that anything potentially problematic is done
-+ * inline.
-+ */
-+static unsigned int io_file_get_flags(struct file *file)
-+{
-+	umode_t mode = file_inode(file)->i_mode;
-+	unsigned int res = 0;
-+
-+	if (S_ISREG(mode))
-+		res |= FFS_ISREG;
-+	if (__io_file_supports_nowait(file, mode))
-+		res |= FFS_NOWAIT;
-+	if (io_file_need_scm(file))
-+		res |= FFS_SCM;
-+	return res;
-+}
-+
- static void io_prep_async_work(struct io_kiocb *req)
- {
- 	const struct io_op_def *def = &io_op_defs[req->opcode];
-@@ -2031,6 +2089,9 @@ static void io_prep_async_work(struct io_kiocb *req)
- 	if (req->flags & REQ_F_FORCE_ASYNC)
- 		req->work.flags |= IO_WQ_WORK_CONCURRENT;
- 
-+	if (req->file && !io_req_ffs_set(req))
-+		req->flags |= io_file_get_flags(req->file) << REQ_F_SUPPORT_NOWAIT_BIT;
-+
- 	if (req->flags & REQ_F_ISREG) {
- 		if (def->hash_reg_file || (ctx->flags & IORING_SETUP_IOPOLL))
- 			io_wq_hash_work(&req->work, file_inode(req->file));
-@@ -3556,64 +3617,6 @@ static void io_iopoll_req_issued(struct io_kiocb *req, unsigned int issue_flags)
- 	}
- }
- 
--static bool io_bdev_nowait(struct block_device *bdev)
--{
--	return !bdev || blk_queue_nowait(bdev_get_queue(bdev));
--}
--
--/*
-- * If we tracked the file through the SCM inflight mechanism, we could support
-- * any file. For now, just ensure that anything potentially problematic is done
-- * inline.
-- */
--static bool __io_file_supports_nowait(struct file *file, umode_t mode)
--{
--	if (S_ISBLK(mode)) {
--		if (IS_ENABLED(CONFIG_BLOCK) &&
--		    io_bdev_nowait(I_BDEV(file->f_mapping->host)))
--			return true;
--		return false;
--	}
--	if (S_ISSOCK(mode))
--		return true;
--	if (S_ISREG(mode)) {
--		if (IS_ENABLED(CONFIG_BLOCK) &&
--		    io_bdev_nowait(file->f_inode->i_sb->s_bdev) &&
--		    file->f_op != &io_uring_fops)
--			return true;
--		return false;
--	}
--
--	/* any ->read/write should understand O_NONBLOCK */
--	if (file->f_flags & O_NONBLOCK)
--		return true;
--	return file->f_mode & FMODE_NOWAIT;
--}
--
--/*
-- * If we tracked the file through the SCM inflight mechanism, we could support
-- * any file. For now, just ensure that anything potentially problematic is done
-- * inline.
-- */
--static unsigned int io_file_get_flags(struct file *file)
--{
--	umode_t mode = file_inode(file)->i_mode;
--	unsigned int res = 0;
--
--	if (S_ISREG(mode))
--		res |= FFS_ISREG;
--	if (__io_file_supports_nowait(file, mode))
--		res |= FFS_NOWAIT;
--	if (io_file_need_scm(file))
--		res |= FFS_SCM;
--	return res;
--}
--
--static inline bool io_file_supports_nowait(struct io_kiocb *req)
--{
--	return req->flags & REQ_F_SUPPORT_NOWAIT;
--}
--
- static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	struct kiocb *kiocb = &req->rw.kiocb;
-
--- 
-Jens Axboe
-
+Thank you!
+Nick

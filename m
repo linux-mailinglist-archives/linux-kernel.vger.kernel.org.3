@@ -2,75 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CFD57B56C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BD257B56F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240704AbiGTL25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S233058AbiGTL3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240786AbiGTL2n (ORCPT
+        with ESMTP id S232817AbiGTL31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:28:43 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDD0F71BEB;
-        Wed, 20 Jul 2022 04:28:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=TYIgg
-        /PlbP29w5F1405EGzWjJvpb6kd30y4NImKnpHs=; b=d/huU6sylnBBJTLL6VeKC
-        tjJqbC0bRkhI1A4MBf/Vs+kbW3wVYqmGHkEy93Xf+1wFemNv09aj9Z+j5A/1iy/b
-        zG0LfNdmr4YksUcIaCs1oqGLEOczv0I9OB+DliQk0Gb1kbDID159xz3kko49mJYn
-        7M7Q6b96VRI1lqCFLXrPKQ=
-Received: from localhost.localdomain (unknown [112.97.48.93])
-        by smtp1 (Coremail) with SMTP id GdxpCgCHwpa25tdizLSKPQ--.259S2;
+        Wed, 20 Jul 2022 07:29:27 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6AE72BFE;
+        Wed, 20 Jul 2022 04:29:00 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LntjN51RFzKFR8;
         Wed, 20 Jul 2022 19:27:52 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] dt-bindings: arm: msm: Fix typo in comment
-Date:   Wed, 20 Jul 2022 19:27:48 +0800
-Message-Id: <20220720112748.17752-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgD3_9P35tdirQrsAw--.10258S3;
+        Wed, 20 Jul 2022 19:28:56 +0800 (CST)
+Subject: Re: [PATCH] block: remove unnecessary type castings
+To:     Paolo VALENTE <paolo.valente@unimore.it>,
+        Yu Zhe <yuzhe@nfschina.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, liqiong@nfschina.com
+References: <20220706053529.15952-1-yuzhe@nfschina.com>
+ <F4182887-F9F8-4527-B575-02D6BF56D4C4@unimore.it>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <0cf959c5-ce17-4fbe-3498-661b01dfd49a@huaweicloud.com>
+Date:   Wed, 20 Jul 2022 19:28:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <F4182887-F9F8-4527-B575-02D6BF56D4C4@unimore.it>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgCHwpa25tdizLSKPQ--.259S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7GrWkAF4UAryrJF17WryDKFg_yoW8JrWxpa
-        yxCrnrGF97W3W3W397XF18AFW5Cry8C3y0kF1Utr1Dtrn8Ca4SqFySgw1FyF1xAFWkCFy8
-        XF40gr4jv3yqkr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRnSd9UUUUU=
-X-Originating-IP: [112.97.48.93]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJRlEZGAJpI+oUQAAsn
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgD3_9P35tdirQrsAw--.10258S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7KrykWr1DGr1fWw1DCryDZFb_yoW8KFW8pa
+        4UW3W5CF47trs3WFW8t3Wjvr9aqwnakry7K3Wv9a4Yyr9rCr1IqFs0vF1FkF9Y9F43Cr4f
+        Zr1jgry5Zrsaq3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix typo in the comment
+ÔÚ 2022/07/20 19:19, Paolo VALENTE Ð´µÀ:
+> 
+> 
+>> Il giorno 6 lug 2022, alle ore 07:35, Yu Zhe <yuzhe@nfschina.com> ha scritto:
+>>
+>> remove unnecessary void* type castings.
+>>
+> 
+> Thanks for improving BFQ code. Which commit made these casts unnecessary?
+> 
+> Paolo
+Hi!
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- Documentation/devicetree/bindings/arm/msm/qcom,saw2.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I already posted a similar patch:
 
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,saw2.txt b/Documentation/devicetree/bindings/arm/msm/qcom,saw2.txt
-index 94d50a949be1..c0e3c3a42bea 100644
---- a/Documentation/devicetree/bindings/arm/msm/qcom,saw2.txt
-+++ b/Documentation/devicetree/bindings/arm/msm/qcom,saw2.txt
-@@ -10,7 +10,7 @@ system, notifying them when a low power state is entered or exited.
- Multiple revisions of the SAW hardware are supported using these Device Nodes.
- SAW2 revisions differ in the register offset and configuration data. Also, the
- same revision of the SAW in different SoCs may have different configuration
--data due the the differences in hardware capabilities. Hence the SoC name, the
-+data due the differences in hardware capabilities. Hence the SoC name, the
- version of the SAW hardware in that SoC and the distinction between cpu (big
- or Little) or cache, may be needed to uniquely identify the SAW register
- configuration and initialization data. The compatible string is used to
--- 
-2.25.1
+https://lore.kernel.org/all/20220528095958.270455-5-yukuai3@huawei.com/
+
+It's waiting for the concurrent sync io patchset.
+
+Thanks,
+Kuai
+> 
+> 
+>> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+>> ---
+>> block/bfq-wf2q.c   | 6 +++---
+>> block/blk-iocost.c | 2 +-
+>> 2 files changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+>> index f8eb340381cf..2a666b100bcb 100644
+>> --- a/block/bfq-wf2q.c
+>> +++ b/block/bfq-wf2q.c
+>> @@ -474,7 +474,7 @@ static void bfq_active_insert(struct bfq_service_tree *st,
+>> #ifdef CONFIG_BFQ_GROUP_IOSCHED
+>> 	sd = entity->sched_data;
+>> 	bfqg = container_of(sd, struct bfq_group, sched_data);
+>> -	bfqd = (struct bfq_data *)bfqg->bfqd;
+>> +	bfqd = bfqg->bfqd;
+>> #endif
+>> 	if (bfqq)
+>> 		list_add(&bfqq->bfqq_list, &bfqq->bfqd->active_list);
+>> @@ -573,7 +573,7 @@ static void bfq_active_extract(struct bfq_service_tree *st,
+>> #ifdef CONFIG_BFQ_GROUP_IOSCHED
+>> 	sd = entity->sched_data;
+>> 	bfqg = container_of(sd, struct bfq_group, sched_data);
+>> -	bfqd = (struct bfq_data *)bfqg->bfqd;
+>> +	bfqd = bfqg->bfqd;
+>> #endif
+>> 	if (bfqq)
+>> 		list_del(&bfqq->bfqq_list);
+>> @@ -719,7 +719,7 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
+>> 		else {
+>> 			sd = entity->my_sched_data;
+>> 			bfqg = container_of(sd, struct bfq_group, sched_data);
+>> -			bfqd = (struct bfq_data *)bfqg->bfqd;
+>> +			bfqd = bfqg->bfqd;
+>> 		}
+>> #endif
+>>
+>> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+>> index 33a11ba971ea..117181a69b7a 100644
+>> --- a/block/blk-iocost.c
+>> +++ b/block/blk-iocost.c
+>> @@ -1430,7 +1430,7 @@ static int iocg_wake_fn(struct wait_queue_entry *wq_entry, unsigned mode,
+>> 			int flags, void *key)
+>> {
+>> 	struct iocg_wait *wait = container_of(wq_entry, struct iocg_wait, wait);
+>> -	struct iocg_wake_ctx *ctx = (struct iocg_wake_ctx *)key;
+>> +	struct iocg_wake_ctx *ctx = key;
+>> 	u64 cost = abs_cost_to_cost(wait->abs_cost, ctx->hw_inuse);
+>>
+>> 	ctx->vbudget -= cost;
+>> -- 
+>> 2.11.0
+>>
+> 
+> .
+> 
 

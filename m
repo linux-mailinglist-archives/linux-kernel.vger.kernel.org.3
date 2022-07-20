@@ -2,148 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D809B57BFA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8157257BFA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiGTVc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 17:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S230510AbiGTVeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 17:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiGTVcZ (ORCPT
+        with ESMTP id S230473AbiGTVeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 17:32:25 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC5F5C37A;
-        Wed, 20 Jul 2022 14:32:24 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id v185so15346197ioe.11;
-        Wed, 20 Jul 2022 14:32:24 -0700 (PDT)
+        Wed, 20 Jul 2022 17:34:13 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60815E827;
+        Wed, 20 Jul 2022 14:34:11 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id bf13so17563116pgb.11;
+        Wed, 20 Jul 2022 14:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uMfaOA0dCEc0Y+KHogJz6qUXZ7HQhYeRsFa6pE/6Lrg=;
+        b=I4S2BEsq+qf/F8h6DXcChhNMrWg2GnRu4T21dhs2/9eKsdDDg4ILkGPrKSi6C/QHOp
+         R5Jf4nK3KkRiw9ZAwZOWU3GaXvNpJdD50gb6RAqEx97hf87X3wncNfNZYyVDLyoG8Wd7
+         JV8ppRJ1na+MyCMA1khbMIOFJwpt7bbTzriz5noYklCdLdRqToyAwKrJP1/9mli8Sm3M
+         Q7OLuu7ZrDOTDm0A2NxZEWLHL5qGtRmlPpWycmSoiCW4rDJAbS26dN42vfnXv4/nzRtI
+         n1Vd0sc+lTN45FkCLqUELvXK7aNwQcSrn/O005csGodfGCAs3+r253sZl2/ObBZ2JT+j
+         IYxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aEhi57WmV6vrOiB/vf1RLTBq1jdQw+2dkpgn4DkEspM=;
-        b=KECqqnQt1FQp2iPwXYYB1wmPsQ5Y0NHMLC+BPljX+Yx9qYQTolnHGYs+P1dveO2mGC
-         hQMBpIcyMcJPblWQwe/dKZDqgrTltyhzulC2CfiJIEzDj6doZAkiLo3lB0tMfBEbuybU
-         TEawyGi41fHDcyUcpIkmGNXVvOXulxegsDc1PwY831h/VCgu9IH7C/aTMhV1U8PGG7q0
-         5cbA2a+DHJ2hq0myw7CzKCU0t8LnJB9k4dx/EUCvkjruKboK8hLPkDE2FB/oLJxMhXlK
-         pDmpnk04Ayjz24z7Vd5eiEyocrDdAfFjjl21GxwzSkMEPmZmLAtqLll6Vmx4FRpEX5ju
-         kFyg==
-X-Gm-Message-State: AJIora/lTRylZcnA/9ZzNx5vtD3P58pihXYJh7ahyK++GCxc7HY0Pk0q
-        TdUanArWrtQPMV5BxRuFBg==
-X-Google-Smtp-Source: AGRyM1uRk1cUUMfIOOuBQo+vOAc//HNUMNLhFImebvXMMdzLHV6+08VwDde0y0o6nFy2RZAn5Ji8bQ==
-X-Received: by 2002:a5d:8582:0:b0:669:835f:48b0 with SMTP id f2-20020a5d8582000000b00669835f48b0mr18271339ioj.146.1658352743669;
-        Wed, 20 Jul 2022 14:32:23 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id d4-20020a0566022d4400b00678e1d1b2c7sm141866iow.0.2022.07.20.14.32.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 14:32:23 -0700 (PDT)
-Received: (nullmailer pid 4017951 invoked by uid 1000);
-        Wed, 20 Jul 2022 21:32:21 -0000
-Date:   Wed, 20 Jul 2022 15:32:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-Cc:     "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@st.com" <alexandre.torgue@st.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "tomase@xilinx.com" <tomase@xilinx.com>,
-        "benjamin.gaignard@st.com" <benjamin.gaignard@st.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "fabio.estevam@nxp.com" <fabio.estevam@nxp.com>,
-        "loic.pallardy@st.com" <loic.pallardy@st.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 0/2] dt-bindings: Intorduce domain-controller
-Message-ID: <20220720213221.GA3987398-robh@kernel.org>
-References: <cover.1657187536.git.oleksii_moisieiev@epam.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uMfaOA0dCEc0Y+KHogJz6qUXZ7HQhYeRsFa6pE/6Lrg=;
+        b=2D02PPuqrDBRDaSwQ+CCBH8MupYEnWphV2RHhp6R2fpmfuZo8Teht9E5A3z/OPzftY
+         LBJPbOz6QawY2c8058FGniTfR3jY4zW4ytoRq6IOf6xeY2JZooVASlgEUNFuBgGg9z4S
+         aemYiHMtHp5qn4DGksrrFpcpokWk7FETnfIqjrLgWWSBIVoR1QuQpgR9gQwJeU0/wRIh
+         Ik6dlQjInzeCiEdkvJFvZABVCh+5EM5Ef8y6/v1RbuPFgn3SaDjUAhJD4mklD4EK2vv8
+         DsWf6PTw3kXLGIMdKHOOYIe4ucJBOBCAjjpw3mD1iMLkl/QQVwRqZ7ABqzltiDnt91q6
+         evBg==
+X-Gm-Message-State: AJIora+4RD4RfTzI2kbUxrGSDU2y343c6ImvgsIlBh+I8LgGLigAJAqb
+        Jg4Pkz0t21f3kd5zex2RZMA=
+X-Google-Smtp-Source: AGRyM1skqVnD1rvn6wErTlZ7qIMObRpv1ckGwpRu3TdyNjEQr+sq4mOpzbxayS902JpSkLbBS9YNjQ==
+X-Received: by 2002:a63:8743:0:b0:41a:6f6b:db7b with SMTP id i64-20020a638743000000b0041a6f6bdb7bmr3116562pge.594.1658352851261;
+        Wed, 20 Jul 2022 14:34:11 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id r3-20020a63a543000000b0040d1eb90d67sm12157419pgu.93.2022.07.20.14.34.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 14:34:10 -0700 (PDT)
+Message-ID: <3cf519d2-9ffa-1337-935e-4a617a0eab16@gmail.com>
+Date:   Wed, 20 Jul 2022 14:34:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1657187536.git.oleksii_moisieiev@epam.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two
+ funcs
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Jim Quinlan <james.quinlan@broadcom.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <CA+-6iNz8DTjAMXnWuOd=0W=qa6J4uD03oH3RJezEk1WxaUN1NA@mail.gmail.com>
+ <20220719200332.GA1552587@bhelgaas>
+ <CA+-6iNzn=JsG=xU2BxagyfeUMZ13p9yg=y+_wVcsAaZ0NgEvKg@mail.gmail.com>
+ <CAL_JsqLm5pWFNLMYjRXrBNYumOd0Vdyaxj0+PGnABQbjA6bDBQ@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAL_JsqLm5pWFNLMYjRXrBNYumOd0Vdyaxj0+PGnABQbjA6bDBQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 10:25:08AM +0000, Oleksii Moisieiev wrote:
-> Introducing the domain controller provider/consumenr bindngs which allow to
-> divided system on chip into multiple domains that can be used to select
-> by who hardware blocks could be accessed.
-> A domain could be a cluster of CPUs, a group of hardware blocks or the
-> set of devices, passed-through to the Guest in the virtualized systems.
+On 7/20/22 09:18, Rob Herring wrote:
+> On Wed, Jul 20, 2022 at 8:53 AM Jim Quinlan <james.quinlan@broadcom.com> wrote:
+>>
+>> On Tue, Jul 19, 2022 at 4:03 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>>
+>>> On Tue, Jul 19, 2022 at 09:08:48AM -0400, Jim Quinlan wrote:
+>>>> On Mon, Jul 18, 2022 at 6:40 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>>>> On Mon, Jul 18, 2022 at 02:56:03PM -0400, Jim Quinlan wrote:
+>>>>>> On Mon, Jul 18, 2022 at 2:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>>>>>> On Sat, Jul 16, 2022 at 06:24:49PM -0400, Jim Quinlan wrote:
+>>>>>>>> Currently, the function does the setup for establishing PCIe link-up
+>>>>>>>> with the downstream device, and it does the actual link-up as well.
+>>>>>>>> The calling sequence is (roughly) the following in the probe:
+>>>>>>>>
+>>>>>>>> -> brcm_pcie_probe()
+>>>>>>>>     -> brcm_pcie_setup();                       /* Set-up and link-up */
+>>>>>>>>     -> pci_host_probe(bridge);
+>>>>>>>>
+>>>>>>>> This commit splits the setup function in two: brcm_pcie_setup(), which only
+>>>>>>>> does the set-up, and brcm_pcie_start_link(), which only does the link-up.
+>>>>>>>> The reason why we are doing this is to lay a foundation for subsequent
+>>>>>>>> commits so that we can turn on any power regulators, as described in the
+>>>>>>>> root port's DT node, prior to doing link-up.
+>>>>>>>
+>>>>>>> All drivers that care about power regulators turn them on before
+>>>>>>> link-up, but typically those regulators are described directly under
+>>>>>>> the host bridge itself.
+>>>>>>
+>>>>>> Actually, what you describe is what I proposed with my v1 back in Nov 2020.
+>>>>>> The binding commit message said,
+>>>>>>
+>>>>>>     "Quite similar to the regulator bindings found in
+>>>>>>     "rockchip-pcie-host.txt", this allows optional regulators to be
+>>>>>>     attached and controlled by the PCIe RC driver."
+>>>>>>
+>>>>>>> IIUC the difference here is that you have regulators described under
+>>>>>>> Root Ports (not the host bridge/Root Complex itself), so you don't
+>>>>>>> know about them until you've enumerated the Root Ports.
+>>>>>>> brcm_pcie_probe() can't turn them on directly because it doesn't know
+>>>>>>> what Root Ports are present and doesn't know about regulators below
+>>>>>>> them.
+>>>>>>
+>>>>>> The reviewer's requested me to move the regulator node(s)
+>>>>>> elsewhere, and at some point later it was requested to be placed
+>>>>>> under the Root Port driver.  I would love to return them under the
+>>>>>> host bridge, just say the word!
+>>>>>
+>>>>> Actually, I think my understanding is wrong.  Even though the PCI core
+>>>>> hasn't enumerated the Root Port as a pci_dev, brcm_pcie_setup() knows
+>>>>> about it and should be able to look up the regulators and turn them
+>>>>> on.
+>>>>
+>>>> One can do this with
+>>>>         regulator_bulk_get(NULL, ...);
+>>>>
+>>>> However, MarkB did not like the idea of a driver getting the
+>>>> regulator from the global DT namespace [1].
+>>>>
+>>>> For the RC driver, one  cannot invoke  regulator_bulk_get(dev, ...)
+>>>> if there is not a direct child regulator node.  One needs to use the
+>>>> Port driver device.  The Port driver device does not exist at this
+>>>> point unless one tries to prematurely create it; I tried this and it
+>>>> was a mess to say the least.
+>>>>
+>>>>> Can you dig up the previous discussion about why the regulators need
+>>>>> to be under the Root Port and why they can't be turned on before
+>>>>> calling pci_host_probe()?
+>>>>
+>>>> RobH did not want the regulators to be under the RC as he said their
+>>>> DT location should resemble the HW [2].  The consensus evolved to
+>>>> place it under the port driver, which can provide a general
+>>>> mechanism for turning on regulators anywhere in the PCIe tree.
+>>>
+>>> I don't want to redesign this whole thing.  I just want a crisp
+>>> rationale for the commit log.
+>>>
+>>> All other drivers (exynos, imx6, rw-rockchip, histb, qcom, tegra194,
+>>> tegra, rockchip-host) have regulators for downstream PCIe power
+>>> directly under the RC.  If putting the regulators under an RP instead
+>>> is the direction of the future, I guess that might be OK, and I guess
+>>> the reasons are:
+>>>
+>>>   1) Slot or device power regulators that are logically below the RP
+>>>      should be described that way in the DT.
+>>>
+>>>   2) Associating regulators with a RP allows the possibility of
+>>>      selectively controlling power to slots/devices below the RP,
+>>>      e.g., to power down devices below RP A when suspending while
+>>>      leaving wakeup devices below RP B powered up.
+>>>
+>>> I think in your case the motivating reason is 2).
+>>>
+>>> Your commit log for "Add mechanism to turn on subdev regulators"
+>>> suggests that you want some user control of endpoint power, e.g., via
+>>> sysfs, but I don't see that implemented yet except possibly via a
+>>> "remove" file that would unbind the driver and remove the entire
+>>> device.
+>> Hi Bjorn,
+>>
+>> Initially we wanted to (a) turn on any regulator found under the RC
+>> node and (b) allow the possibility of the regulator to control the
+>> EP's power. From the feedback, we realized early on that neither of
+>> these were going to fly, so we conceded both requests and just wanted
+>> to turn on standard PCIe regulators.  Upon reading the aforementioned
+>> commit message I realize that there are a couple of leftover sentences
+>> from these early days that must be removed.
+>>
+>> I think when I submitted v1 of the original series that only the
+>> rockchip driver had regulators under the RC.   And my recollection was
+>> that this was accepted but there was apprehension of this turning into
+>> the "standard" way of turning on such regulators,  as the location of
+>> the regulator nodes was in question.
+>>
+>> In short, I would be quite content  to follow the existing examples.
+> 
+> The existing examples are, in general, incomplete and only work for
+> the simplest cases.
+> 
+> There's 2 cases to consider here. The first is standard slots with
+> standard PCIe signals (e.g. PERST#) and voltage rails. The 2nd is
+> either non-standard slots or just soldered down devices which could
+> have any number of device specific resources. In the latter case,
+> those resources need to go into the node for the device. For the
+> former case (which we are discussing here), putting the resources in
+> the upstream (side of the link) node is fine. That's the root port
+> node(s) or switch port nodes. However, since most host bridges are a
+> single RP and don't put the RP node in DT, we've ended up with these
+> properties in host bridge nodes. That's fine as long as it's a single
+> RP and device. When it is not, we need to do something different. The
+> only way this scales is putting resources in the port nodes as those
+> are what have a 1:1 relationship to slots. If that's supported, then
+> the simple cases are also easily supported with if the resources are
+> not found in the port node/device, then look for them in the parent
+> node. That's also the path for how we get the handling of PERST out of
+> every host bridge driver.
 
-'domain' is entirely to ambiguous. We have clock domains, power domains, 
-interrupt domains, etc. already. This needs to be specific about what is 
-controlled/provided.
-
-> 
-> Device controllers are typically used to set the permissions of the hardware
-> block. The contents of the domain configuration properties are defined by the
-> binding for the individual domain controller device.
-> 
-> The device controller conception in the virtualized systems is to set
-> the device configuration for SCMI (System Control and Management
-> Interface) which controls clocks/power-domains/resets etc from the
-> Firmware. This configuratio sets the device_id to set the device permissions
-> for the Fimware using BASE_SET_DEVICE_PERMISSIONS message (see 4.2.2.10 of [0]).
-> There is no BASE_GET_DEVICE_PERMISSIONS call in SCMI and the way to
-> determine device_id is not covered by the specification.
-> Device permissions management described in DEN 0056, Section 4.2.2.10 [0].
-> Given parameter should set the device_id, needed to set device
-> permissions in the Firmware.
-> This property is used by trusted Agent (which is hypervisor in our case)
-> to set permissions for the devices, passed-through to the non-trusted
-> Agents. Trusted Agent will use device-perms to set the Device
-> permissions for the Firmware (See Section 4.2.2.10 [0] for details).
-> Agents concept is described in Section 4.2.1 [0].
-> 
-> Domains in Device-tree node example:
-> usb@e6590000
-> {
->     domain-0 = <&scmi 19>; //Set domain id 19 to usb node
-
-Don't use this pinctrl construct with a number suffix. That was entirely 
-because 1 pinctrl entry needed to reference an arbitrary number of 
-nodes. Follow the standard producer/consumer pattern where each entry is 
-a phandle with arg cells. You've mostly done that, but we don't need 
-'domain-0', 'domain-1', etc.
-
->     clocks = <&scmi_clock 3>, <&scmi_clock 2>;
->     resets = <&scmi_reset 10>, <&scmi_reset 9>;
->     power-domains = <&scmi_power 0>;
-> };
-> 
-> &scmi {
->     #domain-cells = <1>;
-> }
-> 
-> All mentioned bindings are going to be processed by XEN SCMI mediator
-> feature, which is responsible to redirect SCMI calls from guests to the
-> firmware, and not going be passed to the guests.
-> 
-> Domain-controller provider/consumenr concept was taken from the bus
-> controller framework patch series, provided in the following thread:
-> [1].
-> 
-> I think we can cooperate with the bus controller framework developers
-> and produce the common binding, which will fit the requirements of both
-> features
-> 
-> Also, I think that binding can also be used for STM32 ETZPC bus
-> controller feature, proposed in the following thread: [2].
-
-Hopefully someone speaks up. If not, then rejecting past proposals must 
-have been the right decision. Must not really have been needed...
-
-Rob
+This has me confused now, are you suggesting that we pursue what Jim has put together here as a series which describes the regulators in the PCIe end-point device DT node, or that given that we have a single RC single RP configuration it is somewhat acceptable to describe regulators in the PCIe RC node?
+-- 
+Florian

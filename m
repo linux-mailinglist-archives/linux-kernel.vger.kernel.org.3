@@ -2,91 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6CF57BF60
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECD457BF61
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 22:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiGTU4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 16:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
+        id S230000AbiGTU6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 16:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiGTU4k (ORCPT
+        with ESMTP id S229452AbiGTU6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:56:40 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF75A51A0C
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 13:56:39 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id k16so1323185pls.8
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 13:56:39 -0700 (PDT)
+        Wed, 20 Jul 2022 16:58:21 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826785247E
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 13:58:19 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id bp17so32280024lfb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 13:58:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=mHaGFbnLm/HHSB9m9KzlAPd69oojkOy770c7wzvC1Fw=;
-        b=P9USMlKdzsb6njhud8gzcwJukaFuFSGmGAYxzQU/GCU008LOZ63VA9e0MkfMPtgKec
-         qeaK4ORAkYC0bKMqWCKiKS3Nm/PkyrAEkClB0AEDZbX1M/QWBmxl7yGfsfgMvQtzIbEr
-         /a8XKGlQp5F3LZzA6DZYH6i8umf/xfdWPFgOVTIjliC6AiAdx2bFnMdE+T6e1U86tk41
-         OKrqhQTjAujSOe5ccqPuga+Nfn65vzYXhf3n6+R6y8Lki1+aKx6atpeGNulYldt0NDv0
-         BndVaLXlEe0s2UHHf6qOsoaOVQZscy8FavFcA6Bt+djdXmcCdfej6hsYvGT6Ck6NdlrH
-         Ixhg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p9K+b21nsVD0iIafTdhhey9+rdLrDC0j6+lROpOC8dU=;
+        b=iF/zzHxsHZq4RK7nVcQ8w/7uTDq+Bc545ccz6AHB6ro67LPjDmKJC04ocWy27p4zC1
+         Upeo0KVa3gU07eHedBoDLcyoItlaJMZDcGmOBq4buS1Eh1IiS/1X+ChBumtmACXIVlqH
+         xZ/NPX00rKO2Xcz38TR+GpMeTStVJvjx9dfhH0lNuS6m3TKW2b8Le7lk4Io/g6IzFzAP
+         qDr0e/W9HrUrVlPaWi4SKnwaHYV849rXK3p+km08JiFADsWBUL23m+6IM4Yuxkl74Pbd
+         6T5lz8IOiUDE3vm+AGZYcSGpjMRmTSy2DapQ+C6qpCLFfhFvd0D6pvGizZo2Z67ziXy+
+         4xew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=mHaGFbnLm/HHSB9m9KzlAPd69oojkOy770c7wzvC1Fw=;
-        b=qGQWriGFjMF8RRaR/eJXoULYEFdwYAcRsoks51OuRvuEqCLC9kRZ1wXFtVXP4KDJoJ
-         69QH0nkJBCQuOpj1/KDyqUyalIJo9rb5xIaq9pE4+8N79i+w3U6Jf5Si0uBQNkUXfmRw
-         L1WvXlXWYROQ3yIfEegIqWI7vBwFusKoLp8a9yDSECCKC+jWwj0hGCe/DuqBTmLXj7nY
-         IeDl4Ri/8nXqZ+rfxV7jeogFporeUmL78NKNJFk1DKgypjciJ0wokSQAyOCGHti/P/pQ
-         1GHGJvqbYNnau6hZZawqJzcEf3ATaw8Zi0cMl4VMbwFblBSjeushPtYIk+vtp7tuezEe
-         lMgQ==
-X-Gm-Message-State: AJIora9sdudE6lCLaZwAUve8cANpLVGcn4cLh66Y2QEuKulUanhX5a4o
-        5LDgc1xYvVBYYwHH2ax98zA=
-X-Google-Smtp-Source: AGRyM1s4n0/ZegBQV/OS265a+KNNVpjLj6yr1o0p2xY9RssykRbBmwqz6QKEv5S208C6V/fggJ6pqg==
-X-Received: by 2002:a17:90a:e68c:b0:1f2:124d:1143 with SMTP id s12-20020a17090ae68c00b001f2124d1143mr7404851pjy.22.1658350598955;
-        Wed, 20 Jul 2022 13:56:38 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.113])
-        by smtp.gmail.com with ESMTPSA id b15-20020a170902d50f00b0016bc947c5b7sm18458plg.38.2022.07.20.13.56.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Jul 2022 13:56:38 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [RFC PATCH 01/14] userfaultfd: set dirty and young on
- writeprotect
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <468a7114-7541-0d5e-c1fc-083bbb95e78d@redhat.com>
-Date:   Wed, 20 Jul 2022 13:56:35 -0700
-Cc:     Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p9K+b21nsVD0iIafTdhhey9+rdLrDC0j6+lROpOC8dU=;
+        b=w9GWSVNX0+hhSF9/+48HQNPFngWcsgLiyp6xdZ4EWSfQ+p1t7pJijJO68qDXk8b6Nc
+         sfxTnK0pQoFdGlQrN4mCXcShxXyQ54qFf1n0xgHpKhN93TMMTAfGxe9e7mPRyyChZgSe
+         5VFWVkCEtX6F3bbbEhEE4VG8StIGApn7M/zhmuM8JkxtzxKxaYKXZMoItjF2OprUDSgo
+         aV+i965a+17x6Z8Fyh2rapDMzftsQ0YBqPAU3BR2tch9nqcdm8c1dSFkNEfv+FWJhlfS
+         wLfVbkBojdOsy93Jl2qFzWz2V1vUeP9LsFkB65DTLfR/V/fnICaZx4nXLoytvuFI8s7o
+         /d0Q==
+X-Gm-Message-State: AJIora9dMGIyHYf+ENtXbO+Idk+YvCyr1KBksURDhJgpOV31GGhC+EQj
+        P+WpMPuf1qXatKoTUR3V0KTbvbBhGj4aE6ZVdLdH3g==
+X-Google-Smtp-Source: AGRyM1sKt/3cQ2pBHQuQLFuzpoS1zPyNNo8gcVM36a9a2V4uS+dppxJoeaLyCuOmvmQSpoN+vxJYQuKGTGfEnagiq8Y=
+X-Received: by 2002:a05:6512:2216:b0:489:48b6:f8cd with SMTP id
+ h22-20020a056512221600b0048948b6f8cdmr19110063lfu.267.1658350697753; Wed, 20
+ Jul 2022 13:58:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220624173656.2033256-1-jthoughton@google.com>
+ <20220624173656.2033256-21-jthoughton@google.com> <YtGUARcBHxLU0axU@xz-m1.local>
+ <CADrL8HXYab_VJS=Y0h2OSiCrj2pYbDJME2P=Tsn9jcDRbcqR1g@mail.gmail.com> <YtGh46Jr0EGpqW7s@xz-m1.local>
+In-Reply-To: <YtGh46Jr0EGpqW7s@xz-m1.local>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 20 Jul 2022 13:58:06 -0700
+Message-ID: <CADrL8HX1YbDArmPsGUH+7b6dNxDa3Xo+fd5npGgz=RFehSw6iA@mail.gmail.com>
+Subject: Re: [RFC PATCH 20/26] hugetlb: add support for high-granularity UFFDIO_CONTINUE
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Nick Piggin <npiggin@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F56D4014-7FE2-4C60-9CFA-A7E7B684098B@gmail.com>
-References: <20220718120212.3180-1-namit@vmware.com>
- <20220718120212.3180-2-namit@vmware.com> <YtcYVMoSRVxRH70Z@xz-m1.local>
- <017facf0-7ef8-3faf-138d-3013a20b37db@redhat.com>
- <Ytf+zIxVPTVXTZdp@xz-m1.local>
- <2b4393ce-95c9-dd3e-8495-058a139e771e@redhat.com>
- <YthUYF3invrjlzUc@xz-m1.local>
- <69022bad-d6f1-d830-224d-eb8e5c90d5c7@redhat.com>
- <YthcC78q1hdd7mNT@xz-m1.local>
- <4ad140b5-1d5b-2486-0893-7886a9cdfd76@redhat.com>
- <95320077-52CF-4CB0-92F9-523E1AE74A3D@gmail.com>
- <468a7114-7541-0d5e-c1fc-083bbb95e78d@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mina Almasry <almasrymina@google.com>,
+        Jue Wang <juew@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,139 +77,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jul 20, 2022, at 1:38 PM, David Hildenbrand <david@redhat.com> wrote:
+On Fri, Jul 15, 2022 at 10:20 AM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Fri, Jul 15, 2022 at 09:58:10AM -0700, James Houghton wrote:
+> > On Fri, Jul 15, 2022 at 9:21 AM Peter Xu <peterx@redhat.com> wrote:
+> > >
+> > > On Fri, Jun 24, 2022 at 05:36:50PM +0000, James Houghton wrote:
+> > > > The changes here are very similar to the changes made to
+> > > > hugetlb_no_page, where we do a high-granularity page table walk and
+> > > > do accounting slightly differently because we are mapping only a piece
+> > > > of a page.
+> > > >
+> > > > Signed-off-by: James Houghton <jthoughton@google.com>
+> > > > ---
+> > > >  fs/userfaultfd.c        |  3 +++
+> > > >  include/linux/hugetlb.h |  6 +++--
+> > > >  mm/hugetlb.c            | 54 +++++++++++++++++++++-----------------
+> > > >  mm/userfaultfd.c        | 57 +++++++++++++++++++++++++++++++----------
+> > > >  4 files changed, 82 insertions(+), 38 deletions(-)
+> > > >
+> > > > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> > > > index e943370107d0..77c1b8a7d0b9 100644
+> > > > --- a/fs/userfaultfd.c
+> > > > +++ b/fs/userfaultfd.c
+> > > > @@ -245,6 +245,9 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
+> > > >       if (!ptep)
+> > > >               goto out;
+> > > >
+> > > > +     if (hugetlb_hgm_enabled(vma))
+> > > > +             goto out;
+> > > > +
+> > >
+> > > This is weird.  It means we'll never wait for sub-page mapping enabled
+> > > vmas.  Why?
+> > >
+> >
+> > `ret` is true in this case, so we're actually *always* waiting.
+>
+> Aha!  Then I think that's another problem, sorry. :) See Below.
+>
+> >
+> > > Not to mention hugetlb_hgm_enabled() currently is simply VM_SHARED, so it
+> > > means we'll stop waiting for all shared hugetlbfs uffd page faults..
+> > >
+> > > I'd expect in the in-house postcopy tests you should see vcpu threads
+> > > spinning on the page faults until it's serviced.
+> > >
+> > > IMO we still need to properly wait when the pgtable doesn't have the
+> > > faulted address covered.  For sub-page mapping it'll probably need to walk
+> > > into sub-page levels.
+> >
+> > Ok, SGTM. I'll do that for the next version. I'm not sure of the
+> > consequences of returning `true` here when we should be returning
+> > `false`.
+>
+> We've put ourselves onto the wait queue, if another concurrent
+> UFFDIO_CONTINUE happened and pte is already installed, I think this thread
+> could be waiting forever on the next schedule().
+>
+> The solution should be the same - walking the sub-page pgtable would work,
+> afaict.
+>
+> [...]
+>
+> > > > @@ -6239,14 +6241,16 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+> > > >        * registered, we firstly wr-protect a none pte which has no page cache
+> > > >        * page backing it, then access the page.
+> > > >        */
+> > > > -     if (!huge_pte_none_mostly(huge_ptep_get(dst_pte)))
+> > > > +     if (!hugetlb_pte_none_mostly(dst_hpte))
+> > > >               goto out_release_unlock;
+> > > >
+> > > > -     if (vm_shared) {
+> > > > -             page_dup_file_rmap(page, true);
+> > > > -     } else {
+> > > > -             ClearHPageRestoreReserve(page);
+> > > > -             hugepage_add_new_anon_rmap(page, dst_vma, dst_addr);
+> > > > +     if (new_mapping) {
+> > >
+> > > IIUC you wanted to avoid the mapcount accountings when it's the sub-page
+> > > that was going to be mapped.
+> > >
+> > > Is it a must we get this only from the caller?  Can we know we're doing
+> > > sub-page mapping already here and make a decision with e.g. dst_hpte?
+> > >
+> > > It looks weird to me to pass this explicitly from the caller, especially
+> > > that's when we don't really have the pgtable lock so I'm wondering about
+> > > possible race conditions too on having stale new_mapping values.
+> >
+> > The only way to know what the correct value for `new_mapping` should
+> > be is to know if we had to change the hstate-level P*D to non-none to
+> > service this UFFDIO_CONTINUE request. I'll see if there is a nice way
+> > to do that check in `hugetlb_mcopy_atomic_pte`.
+> > Right now there is no
+>
+> Would "new_mapping = dest_hpte->shift != huge_page_shift(hstate)" work (or
+> something alike)?
 
-> On 20.07.22 22:22, Nadav Amit wrote:
->> On Jul 20, 2022, at 12:55 PM, David Hildenbrand <david@redhat.com> =
-wrote:
->>=20
->>> On 20.07.22 21:48, Peter Xu wrote:
->>>> On Wed, Jul 20, 2022 at 09:33:35PM +0200, David Hildenbrand wrote:
->>>>> On 20.07.22 21:15, Peter Xu wrote:
->>>>>> On Wed, Jul 20, 2022 at 05:10:37PM +0200, David Hildenbrand =
-wrote:
->>>>>>> For pagecache pages it may as well be *plain wrong* to bypass =
-the write
->>>>>>> fault handler and simply mark pages dirty+map them writable.
->>>>>>=20
->>>>>> Could you elaborate?
->>>>>=20
->>>>> Write-fault handling for some filesystems (that even require this
->>>>> "slow path") is a bit special.
->>>>>=20
->>>>> For example, do_shared_fault() might have to call page_mkwrite().
->>>>>=20
->>>>> AFAIK file systems use that for lazy allocation of disk blocks.
->>>>> If you simply go ahead and map a !dirty pagecache page writable
->>>>> and mark it dirty, it will not trigger page_mkwrite() and you =
-might
->>>>> end up corrupting data.
->>>>>=20
->>>>> That's why we the old change_pte_range() code never touched
->>>>> anything if the pte wasn't already dirty.
->>>>=20
->>>> I don't think that pte_dirty() check was for the pagecache code. =
-For any fs
->>>> that has page_mkwrite() defined, it'll already have =
-vma_wants_writenotify()
->>>> return 1, so we'll never try to add write bit, hence we'll never =
-even try
->>>> to check pte_dirty().
->>>=20
->>> I might be too tired, but the whole reason we had this magic before =
-my
->>> commit in place was only for the pagecache.
->>>=20
->>> With vma_wants_writenotify()=3D0 you can directly map the pages =
-writable
->>> and don't have to do these advanced checks here. In a writable
->>> MAP_SHARED VMA you'll already have pte_write().
->>>=20
->>> We only get !pte_write() in case we have vma_wants_writenotify()=3D1 =
-...
->>>=20
->>> try_change_writable =3D vma_wants_writenotify(vma, =
-vma->vm_page_prot);
->>>=20
->>> and that's the code that checked the dirty bit after all to decide =
---
->>> amongst other things -- if we can simply map it writable without =
-going
->>> via the write fault handler and triggering do_shared_fault() .
->>>=20
->>> See crazy/ugly FOLL_FORCE code in GUP that similarly checks the =
-dirty bit.
->>=20
->> I thought you want to get rid of it at least for anonymous pages. No?
->=20
-> Yes. Especially for any MAP_PRIVATE mappings.
->=20
-> If you want to write to something that's not mapped writable in a
-> MAP_PRIVATE mapping it
-> a) Has to be an exclusive anonymous page
-> b) The pte has to be dirty
+This works in the hugetlb_fault case, because in the hugetlb_fault
+case, we install the largest PTE possible. If we are mapping a page
+for the first time, we will use an hstate-sized PTE. But for
+UFFDIO_CONTINUE, we may be installing a 4K PTE as the first PTE for
+the whole hpage.
 
-Do you need both conditions to be true? I thought (a) is sufficient (if
-the soft-dirty and related checks succeed).
+>
+> > race, because we synchronize on the per-hpage mutex.
+>
+> Yeah not familiar with that mutex enough to tell, as long as that mutex
+> guarantees no pgtable update (hmm, then why we need the pgtable lock
+> here???) then it looks fine.
 
->=20
-> In any other case, you clearly missed to COW or the modifications =
-might
-> get lost if the PTE is not dirty.
->=20
-> MAP_SHARED is a bit more involved. But whether the pte is dirty might =
-be
-> good enough ... but this needs a lot more care.
->=20
->>> But yeah, it's all confusing so I might just be wrong regarding
->>> pagecache pages.
->>=20
->> Just to note: I am not very courageous and I did not intend to change
->> condition for when non-anonymous pages are set as writable. That=E2=80=99=
-s the
->> reason I did not change the dirty for non-writable non-anonymous =
-entries (as
->> Peter said). And that=E2=80=99s the reason that setting the dirty bit =
-(at least as I
->> should have done it) is only performed after we made the decision on =
-the
->> write-bit.
->=20
-> Good. As long as we stick to anonymous pages I roughly know what we we
-> can and cannot do at this point :)
->=20
->=20
-> The problem I see is that detection whether we can write requires the
-> dirty bit ... and whether to set the dirty bit requires the =
-information
-> whether we can write.
->=20
-> Again, for anonymous pages we should be able to relax the "dirty"
-> requirement when detecting whether we can write.
+Let me take a closer look at this. I'll have a more detailed
+explanation for the next version of the RFC.
 
-That=E2=80=99s all I wanted to do there.
+>
+> [...]
+>
+> > > > @@ -335,12 +337,16 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+> > > >       copied = 0;
+> > > >       page = NULL;
+> > > >       vma_hpagesize = vma_kernel_pagesize(dst_vma);
+> > > > +     if (use_hgm)
+> > > > +             vma_altpagesize = PAGE_SIZE;
+> > >
+> > > Do we need to check the "len" to know whether we should use sub-page
+> > > mapping or original hpage size?  E.g. any old UFFDIO_CONTINUE code will
+> > > still want the old behavior I think.
+> >
+> > I think that's a fair point; however, if we enable HGM and the address
+> > and len happen to be hstate-aligned
+>
+> The address can, but len (note! not "end" here) cannot?
 
->=20
->> IOW, after you made your decision about the write-bit, then and only =
-then
->> you may be able to set the dirty bit for writable entries. Since the =
-entry
->> is already writeable (i.e., can be written without a fault later =
-directly
->> from userspace), there should be no concern of correctness when you =
-set it.
->=20
-> That makes sense to me. What keeps confusing me are architectures with
-> and without a hw-managed dirty bit ... :)
+They both (dst_start and len) need to be hpage-aligned, otherwise we
+won't be able to install hstate-sized PTEs. Like if we're installing
+4K at the beginning of a 1G hpage, we can't install a PUD, because we
+only want to install that 4K.
 
-I don=E2=80=99t know which arch you have in your mind. But the moment a =
-PTE is
-writable, then marking it logically/architecturally as dirty should be
-fine.
+>
+> > , we basically do the same thing as
+> > if HGM wasn't enabled. It could be a minor performance optimization to
+> > do `vma_altpagesize=vma_hpagesize` in that case, but in terms of how
+> > the page tables are set up, the end result would be the same.
+>
+> Thanks,
 
-But=E2=80=A6 if the Exclusive check is not good enough for private+anon =
-without
-the =E2=80=9Clogical=E2=80=9D dirty bit, then there would be a problem.=20=
+Thanks!
 
-
-
+>
+> --
+> Peter Xu
+>

@@ -2,151 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4835157B686
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862D857B688
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240306AbiGTMeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S240603AbiGTMe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240316AbiGTMeI (ORCPT
+        with ESMTP id S240392AbiGTMeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:34:08 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A066248E86
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:34:07 -0700 (PDT)
+        Wed, 20 Jul 2022 08:34:23 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2EB4C604
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:34:21 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id m16so23540380edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:34:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658320447; x=1689856447;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=m8UE94lm120xwp+UQ1DIKklBTjA1TqoSZvLkoilB/is=;
-  b=aEv1Xx4rbOhr/3eQCnfCnHL328UVkV9K/3g3JQDVqmpMiGnV4K5v1gxY
-   SLUkqvvFjaIx7nufsl1sT4tCsqRzlEx6TdQiweF3nMe/nU0ukOwo3ZrlA
-   feiQNeACpbQMdgxSLa2AqXy8hOIiAgWd4KKU9Wr3Xet80XDAql5nF1iaP
-   M=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 Jul 2022 05:34:07 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 05:34:07 -0700
-Received: from [10.216.42.116] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 20 Jul
- 2022 05:34:03 -0700
-Message-ID: <d95c4715-c194-759b-b698-c548a771f27c@quicinc.com>
-Date:   Wed, 20 Jul 2022 18:03:59 +0530
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uIYaOKnGTI6IaoJhWifZ4SiRGVTMle5OSaSjE78z0Pg=;
+        b=wvdTKSubSEHMIv5MXsfGa0LD1H1qK+hEz5plUx6Hma+J7WYlLzVf3zAgymt+yt/oOV
+         SbgmpahLzVtQjxqC2A+GK+L+KrBqoCPvW5HLxLIwBQ0aMKBzl/07sYbwp72mC7jYP9og
+         HFGvNobDRVc0cAT3KXcb8yhOsVwbBS/nouHsPTWnM4wR6evw0cTryoNlr3tbrwP93u7R
+         iQSnYWDQkFsXhTMBihJbOSXJezhsz1hv4QH/U/xiDJOpv8VJ/fUEkKGui1J4jR4DLC0J
+         xHFXhGFnRWapPf4ceBZ1qL3Tb8KJgksIbzJtibds1veIzbDKZPYSUembLDemmtI8duXd
+         /uRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uIYaOKnGTI6IaoJhWifZ4SiRGVTMle5OSaSjE78z0Pg=;
+        b=JFgfuHlnGexzqH/WycXva9UbKNl/LJ0qHhTq9vClOe2aHlFpQl87/X4Uo6N3QIB0l+
+         vbIHM21vOP+sotEQamHbwVzepnkjEmUjJTXOODJrGdxQoSElaKf6IEPvuG/Udg4dmVJo
+         YH+ivDNrCdlug1ND9NcYXbSYo1+WuLU1h8lfNtnMkeVPDg1Cb98sReQW9TOZn0O/AukF
+         O606WyNuxrI3PWfWPb8eCB+5gAZWBACy3mMlggQ3Hm20c1ALwQvhEIvKbzndxVV3xfvD
+         SF7jlgsA5YAT8p6sO/1JL3Ys9sLtg3M6dbjKJQbbjhhR7NzQ90nTHL5CFeVtMG815P4S
+         6BbQ==
+X-Gm-Message-State: AJIora9j6hLA2Bd6RmGu27BmP91UnYdlPVSoDuaINxXBE/TBHnvS2j1I
+        p64KW8J5K7D/jEXyFhA+wWjFD1M1rC0iWqZPT8gJFQ==
+X-Google-Smtp-Source: AGRyM1vYNpocDSDeJHp+beLbFY41ylyc6maLeu5hJB6UoOewK4ZqF0CPMbnmZLDF3MJcw5XgmeWdMSNBB1EKvFcHuRc=
+X-Received: by 2002:a05:6402:26d6:b0:43a:daa5:9f12 with SMTP id
+ x22-20020a05640226d600b0043adaa59f12mr49599534edd.408.1658320460114; Wed, 20
+ Jul 2022 05:34:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5] devcoredump : Serialize devcd_del work
-Content-Language: en-US
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     Johannes Berg <johannes@sipsolutions.net>
-CC:     <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
-        <sboyd@kernel.org>, <rafael@kernel.org>, <keescook@chromium.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <1653660220-19197-1-git-send-email-quic_mojha@quicinc.com>
- <YrmsggY7L6E+LWJ+@kroah.com>
- <50bb39d7-8207-31e2-0a7d-99c5d2b3c8a8@quicinc.com>
-In-Reply-To: <50bb39d7-8207-31e2-0a7d-99c5d2b3c8a8@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1658236876.git.william.gray@linaro.org> <f87e58791ce74917feba8a6b32bc78df51e71ba2.1658236877.git.william.gray@linaro.org>
+In-Reply-To: <f87e58791ce74917feba8a6b32bc78df51e71ba2.1658236877.git.william.gray@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 20 Jul 2022 14:34:09 +0200
+Message-ID: <CAMRc=Mf6OMkhkogwj0ULDDX5=fzUv-2i3i+LonLg9-vL_r2MxA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] gpio: 104-idi-48: Implement and utilize register structures
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        John Hentges <jhentges@accesio.com>,
+        Jay Dolan <jay.dolan@accesio.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gentle reminder for review.
+On Tue, Jul 19, 2022 at 5:14 PM William Breathitt Gray
+<william.gray@linaro.org> wrote:
+>
+> Reduce magic numbers and improve code readability by implementing and
+> utilizing named register data structures. The 104-IDI-48 device features
+> an Intel 8255 compatible GPIO interface, so the i8255 GPIO module is
+> selected and utilized as well.
+>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Cc: John Hentges <jhentges@accesio.com>
+> Cc: Jay Dolan <jay.dolan@accesio.com>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+> ---
 
--Mukesh
+William,
 
-On 7/1/2022 8:23 PM, Mukesh Ojha wrote:
-> Thanks @greg.
-> 
-> Hi @johannes,
-> 
-> Could you review this patch?
-> 
-> -Mukesh
-> 
-> On 6/27/2022 6:41 PM, Greg KH wrote:
->> On Fri, May 27, 2022 at 07:33:40PM +0530, Mukesh Ojha wrote:
->>> In following scenario(diagram), when one thread X running 
->>> dev_coredumpm()
->>> adds devcd device to the framework which sends uevent notification to
->>> userspace and another thread Y reads this uevent and call to
->>> devcd_data_write() which eventually try to delete the queued timer that
->>> is not initialized/queued yet.
->>>
->>> So, debug object reports some warning and in the meantime, timer is
->>> initialized and queued from X path. and from Y path, it gets 
->>> reinitialized
->>> again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
->>>
->>> To fix this, introduce mutex and a boolean flag to serialize the 
->>> behaviour.
->>>
->>>       cpu0(X)                            cpu1(Y)
->>>
->>>      dev_coredump() uevent sent to user space
->>>      device_add()  ======================> user space process Y reads 
->>> the
->>>                                            uevents writes to devcd fd
->>>                                            which results into writes to
->>>
->>>                                           devcd_data_write()
->>>                                             mod_delayed_work()
->>>                                               try_to_grab_pending()
->>>                                                 del_timer()
->>>                                                   debug_assert_init()
->>>     INIT_DELAYED_WORK()
->>>     schedule_delayed_work()
->>>                                                     debug_object_fixup()
->>>                                                       
->>> timer_fixup_assert_init()
->>>                                                         timer_setup()
->>>                                                           
->>> do_init_timer()
->>>                                                         /*
->>>                                                          Above call 
->>> reinitializes
->>>                                                          the timer to
->>>                                                          
->>> timer->entry.pprev=NULL
->>>                                                          and this 
->>> will be checked
->>>                                                          later in 
->>> timer_pending() call.
->>>                                                         */
->>>                                                   timer_pending()
->>>                                                    
->>> !hlist_unhashed_lockless(&timer->entry)
->>>                                                      !h->pprev
->>>                                                  /*
->>>                                                    del_timer() checks 
->>> h->pprev and finds
->>>                                                    it to be NULL due 
->>> to which
->>>                                                    
->>> try_to_grab_pending() stucks.
->>>                                                  */
->>>
->>> Link: 
->>> https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/ 
->>>
->>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->>> ---
->>
->> I need an ack from the devcoredump maintainer before I can take this...
->>
->> thanks,
->>
->> greg k-h
+This patch doesn't apply to my gpio/for-next branch. Would you mind
+rebasing your series on top of it?
+
+Thanks!
+Bart
